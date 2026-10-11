@@ -238,6 +238,20 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
           _saveNow();
           context.pop();
         },
+        onChangeDifficulty: () async {
+          final ok = await showAppAlert(
+            context,
+            title: 'Discard this board?',
+            message: 'Your moves and time on this picture are thrown away so you can pick another mode or board size. Stars and records stay.',
+            confirmLabel: 'Discard',
+            destructive: true,
+          );
+          if (!ok || !mounted || !ctx.mounted) return;
+          Navigator.pop(ctx);
+          await ref.read(progressProvider.notifier).discard(widget.puzzleId);
+          if (!mounted) return;
+          context.pushReplacement('/play/${widget.puzzleId}');
+        },
       ),
     ).then((_) => _ctrl.resume());
   }
@@ -583,7 +597,8 @@ class _Booster extends StatelessWidget {
 }
 
 class _PauseSheet extends ConsumerWidget {
-  const _PauseSheet({required this.onResume, required this.onRestart, required this.onQuit});
+  const _PauseSheet({required this.onResume, required this.onRestart, required this.onQuit, required this.onChangeDifficulty});
+  final VoidCallback onChangeDifficulty;
   final VoidCallback onResume;
   final VoidCallback onRestart;
   final VoidCallback onQuit;
@@ -611,6 +626,8 @@ class _PauseSheet extends ConsumerWidget {
           BigButton(label: 'Resume', icon: CupertinoIcons.play_fill, onTap: onResume),
           const SizedBox(height: 10),
           BigButton(label: 'Shuffle and restart', kind: ButtonKind.secondary, icon: CupertinoIcons.shuffle, onTap: onRestart),
+          const SizedBox(height: 10),
+          BigButton(label: 'Change mode or board', kind: ButtonKind.secondary, icon: CupertinoIcons.slider_horizontal_3, onTap: onChangeDifficulty),
           const SizedBox(height: 10),
           BigButton(label: 'Save & quit', kind: ButtonKind.ghost, onTap: onQuit),
         ],

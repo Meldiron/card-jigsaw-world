@@ -195,6 +195,15 @@ void main() {
     await tester.tap(find.byIcon(CupertinoIcons.pause_fill), warnIfMissed: false);
     await settle(tester, 900);
     await shot(tester, '11_pause');
+    // Discard the board from the pause menu, land on the difficulty screen, start again.
+    await tapText(tester, 'Change mode or board', ms: 800);
+    await shot(tester, '11d_discard_alert');
+    await tapText(tester, 'Discard', ms: 1200);
+    await shot(tester, '11e_difficulty_after_discard');
+    await tester.tap(find.textContaining('Play'), warnIfMissed: false);
+    await settle(tester, 1500);
+    await tester.tap(find.byIcon(CupertinoIcons.pause_fill), warnIfMissed: false);
+    await settle(tester, 900);
     await tapText(tester, 'Resume', ms: 800);
 
     // Solve the board optimally by sending each misplaced card home.
