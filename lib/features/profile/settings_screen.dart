@@ -75,6 +75,14 @@ class SettingsScreen extends ConsumerWidget {
           group('Account', [
             _NavRow(icon: CupertinoIcons.person_crop_circle, label: isGuest ? 'Sign in or create account' : 'Manage account', onTap: () => context.push('/account')),
             _NavRow(
+              icon: CupertinoIcons.gift,
+              label: 'Redeem a gift code',
+              onTap: () async {
+                final opened = await ref.read(purchaseServiceProvider).presentCodeRedemptionSheet();
+                if (!opened && context.mounted) showToast(context, 'Gift codes can be redeemed on iPhone and iPad through the App Store.', icon: CupertinoIcons.gift);
+              },
+            ),
+            _NavRow(
               icon: CupertinoIcons.bag,
               label: 'Restore purchases',
               onTap: () async {

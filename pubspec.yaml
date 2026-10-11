@@ -52,6 +52,7 @@ dependencies:
   flutter_blurhash: ^0.9.1
   in_app_purchase: ^3.3.1
   sign_in_with_apple: ^8.2.0
+  in_app_purchase_storekit: ^0.4.13+1
 
 dev_dependencies:
   flutter_test:

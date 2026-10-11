@@ -142,3 +142,34 @@ store/screenshots/iphone-6.9/*.png
 store/review/subscription-review.png
 store/promo/vip-promotional-1024.png
 ```
+
+## VIP gift codes (subscription offer codes)
+
+`tools/store/offer_codes.py` manages Apple's native subscription offer codes.
+Two free offers exist in App Store Connect: "VIP Monthly gift" (1 month free)
+and "VIP Yearly gift" (1 year free), open to new, existing and expired
+subscribers. Codes are *custom codes* with a redemption limit of 1 and no end
+date, which makes each one single-use and valid until redeemed or deactivated.
+(One-time-use codes were ruled out: Apple requires batches of at least 500,
+caps them at six months and only allows them once the app is Ready for Sale.)
+
+Apple refuses to create codes while the app is not live and the subscriptions
+are not approved (`OFFER_CODE_APP_STATE_INVALID`). Once version 1.7.0 and the
+VIP subscriptions are approved, run:
+
+```
+venv/bin/python tools/store/offer_codes.py codes monthly 10
+venv/bin/python tools/store/offer_codes.py codes yearly 10
+venv/bin/python tools/store/offer_codes.py list
+```
+
+Codes and their redemption links are saved to `secrets/vip-offer-codes.json`
+(git-ignored). Players redeem them in the app (Store > "Have a gift code?" or
+Settings > "Redeem a gift code"), through the App Store app, or by opening
+`https://apps.apple.com/redeem?ctx=offercodes&id=6821644423&code=<CODE>`.
+Codes take up to an hour to become redeemable after creation.
+
+App Store Connect pages: monthly offers at
+https://appstoreconnect.apple.com/apps/6821644423/distribution/subscriptions/6821645754
+and yearly at https://appstoreconnect.apple.com/apps/6821644423/distribution/subscriptions/6821646642
+(section "Offer Codes").

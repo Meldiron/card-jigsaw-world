@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io' show Platform;
 
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/enums.dart' as enums;
 import 'package:flutter/foundation.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 
 /// Product identifiers as configured in App Store Connect / Products.storekit.
 class ProductIds {
@@ -124,6 +126,21 @@ class PurchaseService {
       return await _iap.buyConsumable(purchaseParam: param);
     } catch (e) {
       _events.add(PurchaseFailed('$e', productId: product.id));
+      return false;
+    }
+  }
+
+  /// Opens the App Store sheet where a player types a VIP gift code (an
+  /// App Store Connect subscription offer code). The resulting subscription
+  /// transaction arrives on the purchase stream like any other purchase and is
+  /// verified server-side before VIP is granted. iOS and macOS only.
+  Future<bool> presentCodeRedemptionSheet() async {
+    if (kIsWeb || !(Platform.isIOS || Platform.isMacOS)) return false;
+    try {
+      await _iap.getPlatformAddition<InAppPurchaseStoreKitPlatformAddition>().presentCodeRedemptionSheet();
+      return true;
+    } catch (e) {
+      _events.add(PurchaseFailed('Could not open the code sheet: $e'));
       return false;
     }
   }

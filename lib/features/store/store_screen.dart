@@ -172,6 +172,13 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
     showToast(context, 'Added ${p.title}', icon: AppIcons.check);
   }
 
+  Future<void> _redeemCode() async {
+    final opened = await ref.read(purchaseServiceProvider).presentCodeRedemptionSheet();
+    if (!opened && mounted) {
+      showToast(context, 'Gift codes can be redeemed on iPhone and iPad through the App Store.', icon: CupertinoIcons.gift);
+    }
+  }
+
   Future<void> _buyVip(String productId) async {
     if (_buying) return;
     final products = ref.read(productsProvider).value ?? const {};
@@ -279,6 +286,7 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
             busy: _buying,
             onBuyMonthly: () => _buyVip(ProductIds.vipMonthly),
             onBuyYearly: () => _buyVip(ProductIds.vipYearly),
+            onRedeem: _redeemCode,
           ),
           const SizedBox(height: 16),
           Center(
@@ -305,6 +313,7 @@ class _VipCard extends StatelessWidget {
     required this.busy,
     required this.onBuyMonthly,
     required this.onBuyYearly,
+    required this.onRedeem,
   });
   final bool isVip;
   final DateTime? vipUntil;
@@ -313,6 +322,7 @@ class _VipCard extends StatelessWidget {
   final bool busy;
   final VoidCallback onBuyMonthly;
   final VoidCallback onBuyYearly;
+  final VoidCallback onRedeem;
 
   @override
   Widget build(BuildContext context) {
@@ -368,6 +378,23 @@ class _VipCard extends StatelessWidget {
             const SizedBox(height: 10),
             BigButton(label: 'Yearly · $yearlyPrice · 7 days free', kind: ButtonKind.ghostLight, loading: busy, onTap: onBuyYearly),
           ],
+          const SizedBox(height: 14),
+          Center(
+            child: Pressable(
+              onTap: onRedeem,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(CupertinoIcons.gift, size: 16, color: fg.withValues(alpha: 0.75)),
+                    const SizedBox(width: 6),
+                    Text('Have a gift code? Redeem it', style: TextStyle(color: fg.withValues(alpha: 0.85), fontSize: 13, fontWeight: FontWeight.w600)),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
