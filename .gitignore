@@ -70,3 +70,6 @@ secrets/*
 
 # Raw simulator captures for store screenshots (regenerate with flutter drive)
 store/raw/
+
+# TestFlight feedback ledger and screenshots (tester emails, keep private)
+store/feedback/

@@ -13,6 +13,7 @@ import '../../state/progress.dart';
 import '../../state/rewards.dart';
 import '../../state/settings.dart';
 import '../../state/social.dart';
+import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 
@@ -136,7 +137,8 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
     final tiers = BoardSpec.tiers(_mode);
 
     return Scaffold(
-      appBar: AppBar(
+      extendBodyBehindAppBar: true,
+      appBar: GlassAppBar(
         leading: Padding(
           padding: const EdgeInsets.only(left: 12),
           child: RoundIconButton(icon: CupertinoIcons.back, size: 38, onTap: () => context.pop()),
@@ -146,12 +148,13 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
       body: puzzle == null
           ? const Loader()
           : SafeArea(
+              top: false,
               child: Column(
                 children: [
                   Expanded(
                     child: SingleChildScrollView(
                       physics: const BouncingScrollPhysics(),
-                      padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
+                      padding: EdgeInsets.fromLTRB(20, MediaQuery.paddingOf(context).top + kToolbarHeight + 4, 20, 12),
                       child: Column(
                         children: [
                           // Preview with the cut overlay of the chosen mode and tier.
@@ -395,7 +398,10 @@ class _ModePreview extends CustomPainter {
       GameMode.hexagons => (3, 3),
     };
     final tiling = Tiling.of(mode, cols, rows);
-    final area = mode == GameMode.cards ? Rect.fromLTWH(6, 0, size.width - 12, size.height) : Offset.zero & size;
+    final box = mode == GameMode.cards ? Rect.fromLTWH(6, 0, size.width - 12, size.height) : Offset.zero & size;
+    // Regular cells, centred in the icon box.
+    final fitted = tiling.fit(box.size, box.width / box.height);
+    final area = Rect.fromCenter(center: box.center, width: fitted.width, height: fitted.height);
     for (var s = 0; s < tiling.cells; s++) {
       final poly = tiling.polygon(s, area.size);
       final path = Path()..moveTo(poly.first.dx + area.left, poly.first.dy + area.top);
@@ -438,11 +444,15 @@ class _CutOverlay extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.5;
     final tiling = spec.tiling;
+    // Same proportions as the real board, centred over the preview: regular
+    // hexagons and triangles, grids following the picture within limits.
+    final fitted = tiling.fit(size, size.width / size.height);
+    final origin = Offset((size.width - fitted.width) / 2, (size.height - fitted.height) / 2);
     for (var s = 0; s < tiling.cells; s++) {
-      final poly = tiling.polygon(s, size);
-      final path = Path()..moveTo(poly.first.dx, poly.first.dy);
+      final poly = tiling.polygon(s, fitted);
+      final path = Path()..moveTo(poly.first.dx + origin.dx, poly.first.dy + origin.dy);
       for (final v in poly.skip(1)) {
-        path.lineTo(v.dx, v.dy);
+        path.lineTo(v.dx + origin.dx, v.dy + origin.dy);
       }
       path.close();
       canvas.drawPath(path, p);

@@ -11,6 +11,7 @@ import '../../models/models.dart';
 import '../../state/achievements.dart';
 import '../../state/auth.dart';
 import '../../state/profile.dart';
+import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 import 'avatar_picker.dart';
@@ -27,8 +28,8 @@ class ProfileScreen extends ConsumerWidget {
         title: const Text('Your name'),
         content: Padding(padding: const EdgeInsets.only(top: 10), child: CupertinoTextField(controller: controller, autofocus: true, maxLength: 20)),
         actions: [
-          CupertinoDialogAction(onPressed: () => Navigator.pop(ctx), child: const Text('Keep name')),
-          CupertinoDialogAction(isDefaultAction: true, onPressed: () => Navigator.pop(ctx, controller.text.trim()), child: const Text('Save name')),
+          CupertinoDialogAction(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
+          CupertinoDialogAction(isDefaultAction: true, onPressed: () => Navigator.pop(ctx, controller.text.trim()), child: const Text('Save')),
         ],
       ),
     );
@@ -55,17 +56,15 @@ class ProfileScreen extends ConsumerWidget {
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
-          SliverToBoxAdapter(
-            child: SafeArea(
-              bottom: false,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
-                child: Row(
-                  children: [
-                    Expanded(child: Text('Profile', style: Theme.of(context).textTheme.headlineLarge)),
-                    RoundIconButton(icon: CupertinoIcons.gear_alt_fill, onTap: () => context.go('/profile/settings')),
-                  ],
-                ),
+          GlassSliverHeader(
+            height: 52,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 4),
+              child: Row(
+                children: [
+                  Expanded(child: Text('Profile', style: Theme.of(context).textTheme.headlineLarge)),
+                  RoundIconButton(icon: CupertinoIcons.gear_alt_fill, onTap: () => context.go('/profile/settings')),
+                ],
               ),
             ),
           ),

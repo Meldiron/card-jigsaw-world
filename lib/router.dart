@@ -89,4 +89,14 @@ Page<T> _fade<T>(Widget child, GoRouterState s) => CustomTransitionPage<T>(
       transitionDuration: const Duration(milliseconds: 320),
       transitionsBuilder: (_, a, _, c) => FadeTransition(opacity: CurveTween(curve: Curves.easeOut).animate(a), child: c),
     );
-Page<T> _sheet<T>(Widget child, GoRouterState s) => CupertinoPage<T>(key: s.pageKey, child: child, fullscreenDialog: true);
+Page<T> _sheet<T>(Widget child, GoRouterState s) => _SheetPage<T>(key: s.pageKey, child: child);
+
+/// iOS stacked sheet (UISheetPresentationController look): slides up to just
+/// below the status bar, the page behind scales back, drag down to dismiss.
+class _SheetPage<T> extends Page<T> {
+  const _SheetPage({required this.child, super.key});
+  final Widget child;
+
+  @override
+  Route<T> createRoute(BuildContext context) => CupertinoSheetRoute<T>(settings: this, scrollableBuilder: (_, _) => child);
+}

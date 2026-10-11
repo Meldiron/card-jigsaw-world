@@ -57,14 +57,22 @@ class AuthRepository {
   /// [nonce] is the raw (unhashed) nonce whose SHA-256 was handed to Apple.
   /// When a session already exists (a guest), Appwrite links the Apple identity
   /// to that user instead of creating a new one, so progress carries over.
-  Future<models.User> signInWithAppleIdToken({required String idToken, required String nonce, String? name}) async {
-    await _account.createIdTokenSession(
-      provider: enums.IdTokenProvider.apple,
-      idToken: idToken,
-      nonce: nonce,
-      name: (name == null || name.trim().isEmpty) ? null : name.trim(),
-    );
-    return _account.get();
+  /// Returns the signed-in user and whether an existing account was used
+  /// instead of the current guest.
+  Future<({models.User user, bool switched})> signInWithAppleIdToken({required String idToken, required String nonce, String? name}) async {
+    final cleanName = (name == null || name.trim().isEmpty) ? null : name.trim();
+    try {
+      await _account.createIdTokenSession(provider: enums.IdTokenProvider.apple, idToken: idToken, nonce: nonce, name: cleanName);
+      return (user: await _account.get(), switched: false);
+    } on AppwriteException catch (e) {
+      // 409: this Apple ID already belongs to another account, so it cannot be
+      // linked to the current guest. Drop the guest session and sign in to the
+      // existing account instead; that is what a returning player expects.
+      if (e.code != 409) rethrow;
+      await signOut();
+      await _account.createIdTokenSession(provider: enums.IdTokenProvider.apple, idToken: idToken, nonce: nonce, name: cleanName);
+      return (user: await _account.get(), switched: true);
+    }
   }
 
   Future<void> signOut() async {

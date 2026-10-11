@@ -1,0 +1,382 @@
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
+
+import '../core/theme/tokens.dart';
+
+/// iOS bar material: the content behind is blurred and slightly saturated,
+/// then tinted with the surface colour. Used for the tab bar, headers and
+/// sheets so chrome reads as the same glass everywhere.
+///
+/// Flutter cannot reach UIKit's Liquid Glass from Dart (see
+/// docs/native-ui.md); this reproduces the blur, vibrancy and tint of
+/// `UIBlurEffect.systemChromeMaterial`, which is what the bars looked like up
+/// to iOS 18 and what iOS 26 falls back to when "Reduce transparency" is on.
+class GlassSurface extends StatelessWidget {
+  const GlassSurface({
+    super.key,
+    required this.child,
+    this.visible = true,
+    this.opacity,
+    this.sigma = 24,
+    this.borderRadius,
+    this.hairline,
+  });
+
+  final Widget child;
+
+  /// When false the surface is fully transparent (nothing drawn, no blur)
+  /// so a bar sitting over nothing stays invisible, like iOS bars do at the
+  /// top of a scroll view. The change is animated.
+  final bool visible;
+
+  /// Tint alpha; defaults depend on brightness.
+  final double? opacity;
+  final double sigma;
+  final BorderRadius? borderRadius;
+
+  /// Which side gets the 1px separator. `null` means none.
+  final Border? hairline;
+
+  static Color tintColor(BuildContext context) => context.isDark ? const Color(0xFF1C1C22) : Colors.white;
+
+  static double defaultOpacity(BuildContext context) => context.isDark ? 0.62 : 0.72;
+
+  /// Blur plus a mild saturation boost, which is what gives system bars their
+  /// vibrancy compared with a plain blur.
+  static ImageFilter filter(double sigma) {
+    const s = 1.35;
+    const r = 0.213, g = 0.715, b = 0.072;
+    return ImageFilter.compose(
+      outer: ImageFilter.blur(sigmaX: sigma, sigmaY: sigma, tileMode: TileMode.mirror),
+      inner: const ColorFilter.matrix(<double>[
+        r + (1 - r) * s, g - g * s, b - b * s, 0, 0,
+        r - r * s, g + (1 - g) * s, b - b * s, 0, 0,
+        r - r * s, g - g * s, b + (1 - b) * s, 0, 0,
+        0, 0, 0, 1, 0,
+      ]),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final tint = tintColor(context);
+    final alpha = opacity ?? defaultOpacity(context);
+    return TweenAnimationBuilder<double>(
+      tween: Tween(end: visible ? 1 : 0),
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeOut,
+      child: child,
+      builder: (context, t, child) {
+        if (t <= 0.01) return child!;
+        final box = DecoratedBox(
+          decoration: BoxDecoration(
+            color: tint.withValues(alpha: alpha * t),
+            borderRadius: borderRadius,
+            border: hairline == null ? null : _scaledBorder(hairline!, t),
+          ),
+          child: child,
+        );
+        return ClipRRect(
+          borderRadius: borderRadius ?? BorderRadius.zero,
+          child: BackdropFilter(filter: filter(sigma * t), child: box),
+        );
+      },
+    );
+  }
+
+  static Border _scaledBorder(Border b, double t) {
+    BorderSide s(BorderSide side) => side == BorderSide.none ? side : side.copyWith(color: side.color.withValues(alpha: side.color.a * t));
+    return Border(top: s(b.top), bottom: s(b.bottom), left: s(b.left), right: s(b.right));
+  }
+}
+
+/// Reports whether a vertical scrollable in the enclosing Scaffold has
+/// content scrolled under the top edge. Same rule Material's AppBar uses.
+class ScrolledUnder extends StatefulWidget {
+  const ScrolledUnder({super.key, required this.builder});
+  final Widget Function(BuildContext context, bool scrolledUnder) builder;
+
+  @override
+  State<ScrolledUnder> createState() => _ScrolledUnderState();
+}
+
+class _ScrolledUnderState extends State<ScrolledUnder> {
+  ScrollNotificationObserverState? _observer;
+  bool _under = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _observer?.removeListener(_handle);
+    _observer = ScrollNotificationObserver.maybeOf(context);
+    _observer?.addListener(_handle);
+  }
+
+  @override
+  void dispose() {
+    _observer?.removeListener(_handle);
+    super.dispose();
+  }
+
+  void _handle(ScrollNotification n) {
+    if (n.depth != 0 || n.metrics.axis != Axis.vertical) return;
+    if (n is! ScrollUpdateNotification && n is! ScrollMetricsNotification && n is! OverscrollNotification && n is! ScrollEndNotification) return;
+    final under = n.metrics.extentBefore > 0;
+    if (under != _under) setState(() => _under = under);
+  }
+
+  @override
+  Widget build(BuildContext context) => widget.builder(context, _under);
+}
+
+/// Top app bar with the iOS treatment: transparent while the list is at the
+/// top, glass with a hairline once content scrolls beneath it. Use together
+/// with `Scaffold.extendBodyBehindAppBar: true`; the body then receives the
+/// bar height as `MediaQuery.padding.top`.
+class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const GlassAppBar({super.key, this.title, this.leading, this.actions, this.centerTitle = true});
+  final Widget? title;
+  final Widget? leading;
+  final List<Widget>? actions;
+  final bool centerTitle;
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return AppBar(
+      title: title,
+      leading: leading,
+      actions: actions,
+      centerTitle: centerTitle,
+      backgroundColor: Colors.transparent,
+      scrolledUnderElevation: 0,
+      flexibleSpace: ScrolledUnder(
+        builder: (context, under) => GlassSurface(
+          visible: under,
+          hairline: Border(bottom: BorderSide(color: c.stroke, width: 0.5)),
+          child: const SizedBox.expand(),
+        ),
+      ),
+    );
+  }
+}
+
+/// A pinned header for `CustomScrollView`s. Sits in the safe area, turns
+/// into glass as soon as the slivers below scroll under it.
+class GlassSliverHeader extends StatelessWidget {
+  const GlassSliverHeader({super.key, required this.height, required this.child});
+
+  /// Content height, excluding the status bar.
+  final double height;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final top = MediaQuery.paddingOf(context).top;
+    return SliverPersistentHeader(
+      pinned: true,
+      delegate: _GlassHeaderDelegate(extent: height + top, top: top, child: child),
+    );
+  }
+}
+
+class _GlassHeaderDelegate extends SliverPersistentHeaderDelegate {
+  const _GlassHeaderDelegate({required this.extent, required this.top, required this.child});
+  final double extent;
+  final double top;
+  final Widget child;
+
+  @override
+  double get minExtent => extent;
+  @override
+  double get maxExtent => extent;
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    final c = context.colors;
+    // `overlapsContent` only reports overlap from preceding slivers; for a
+    // pinned header at the top the signal is its own shrink offset.
+    return GlassSurface(
+      visible: overlapsContent || shrinkOffset > 0,
+      hairline: Border(bottom: BorderSide(color: c.stroke, width: 0.5)),
+      child: Padding(padding: EdgeInsets.only(top: top), child: SizedBox(height: extent - top, child: child)),
+    );
+  }
+
+  @override
+  bool shouldRebuild(_GlassHeaderDelegate old) => old.extent != extent || old.top != top || old.child != child;
+}
+
+/// Floating glass tab bar in the iOS 26 shape: a capsule inset from the
+/// screen edges, hovering above the home indicator, content scrolling under
+/// it. The selected tab gets a soft tinted pill.
+///
+/// Give the hosting Scaffold `extendBody: true`; the bar's slot is
+/// transparent so the page continues underneath.
+class GlassTabBar extends StatelessWidget {
+  const GlassTabBar({super.key, required this.items, required this.currentIndex, required this.onTap});
+  final List<GlassTabItem> items;
+  final int currentIndex;
+  final ValueChanged<int> onTap;
+
+  static const double barHeight = 60;
+  static const double sideInset = 16;
+
+  /// Gap between the capsule and the screen bottom for a given safe inset.
+  static double bottomGap(double safeBottom) => safeBottom > 0 ? safeBottom - 6 : 12;
+
+  /// Height of the Scaffold slot the bar occupies (`extendBody` pages get
+  /// this as `MediaQuery.padding.bottom`).
+  static double slotHeight(double safeBottom) => barHeight + bottomGap(safeBottom) + 8;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final safe = MediaQuery.paddingOf(context).bottom;
+    final bottom = bottomGap(safe);
+    final isDark = context.isDark;
+    const radius = BorderRadius.all(Radius.circular(barHeight / 2));
+    return SizedBox(
+      height: barHeight + bottom + 8,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(sideInset, 8, sideInset, bottom),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: radius,
+            boxShadow: [
+              BoxShadow(color: Colors.black.withValues(alpha: isDark ? 0.45 : 0.10), blurRadius: 22, offset: const Offset(0, 8)),
+              BoxShadow(color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04), blurRadius: 2, offset: const Offset(0, 1)),
+            ],
+          ),
+          child: GlassSurface(
+            borderRadius: radius,
+            hairline: Border.all(color: isDark ? Colors.white.withValues(alpha: 0.10) : Colors.black.withValues(alpha: 0.06), width: 0.5),
+            child: LayoutBuilder(
+              builder: (context, cons) {
+                final n = items.length;
+                final cell = cons.maxWidth / n;
+                return Stack(
+                  children: [
+                    AnimatedPositioned(
+                      duration: const Duration(milliseconds: 260),
+                      curve: Curves.easeOutCubic,
+                      left: cell * currentIndex + 5,
+                      top: 6,
+                      bottom: 6,
+                      width: cell - 10,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(color: context.accent.withValues(alpha: isDark ? 0.18 : 0.10), borderRadius: radius),
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        for (var i = 0; i < n; i++)
+                          Expanded(
+                            child: Semantics(
+                              button: true,
+                              selected: i == currentIndex,
+                              label: items[i].label,
+                              child: GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onTap: () => onTap(i),
+                                child: _TabCell(item: items[i], selected: i == currentIndex, tintColor: c.card),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class GlassTabItem {
+  const GlassTabItem({required this.icon, required this.activeIcon, required this.label, this.badge = false});
+  final IconData icon;
+  final IconData activeIcon;
+  final String label;
+  final bool badge;
+}
+
+class _TabCell extends StatelessWidget {
+  const _TabCell({required this.item, required this.selected, required this.tintColor});
+  final GlassTabItem item;
+  final bool selected;
+  final Color tintColor;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final color = selected ? context.accent : c.textSecondary;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Icon(selected ? item.activeIcon : item.icon, color: color, size: 23),
+            if (item.badge)
+              Positioned(
+                right: -4,
+                top: -2,
+                child: Container(
+                  width: 8,
+                  height: 8,
+                  decoration: BoxDecoration(color: Brand.live, shape: BoxShape.circle, border: Border.all(color: tintColor, width: 1.5)),
+                ),
+              ),
+          ],
+        ),
+        const SizedBox(height: 3),
+        Text(item.label, style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w600, color: color, letterSpacing: -0.1)),
+      ],
+    );
+  }
+}
+
+/// Surface for content-sized modal sheets: rounded top, glass, grabber and
+/// home-indicator inset, matching iOS 26 partial-height sheets.
+class GlassSheet extends StatelessWidget {
+  const GlassSheet({super.key, required this.child, this.grabber = true});
+  final Widget child;
+  final bool grabber;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final isDark = context.isDark;
+    const radius = BorderRadius.vertical(top: Radius.circular(28));
+    return GlassSurface(
+      borderRadius: radius,
+      sigma: 30,
+      opacity: isDark ? 0.80 : 0.84,
+      hairline: Border.all(color: isDark ? Colors.white.withValues(alpha: 0.12) : Colors.white.withValues(alpha: 0.7), width: 0.5),
+      child: Padding(
+        padding: EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (grabber)
+              Padding(
+                padding: const EdgeInsets.only(top: 8, bottom: 6),
+                child: Container(width: 36, height: 5, decoration: BoxDecoration(color: c.textTertiary.withValues(alpha: 0.45), borderRadius: BorderRadius.circular(999))),
+              )
+            else
+              const SizedBox(height: 14),
+            child,
+          ],
+        ),
+      ),
+    );
+  }
+}

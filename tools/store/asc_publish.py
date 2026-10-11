@@ -1118,6 +1118,84 @@ def cmd_testflight(s: Store) -> None:
 # ---------------------------------------------------------------------------
 
 
+FEEDBACK_DIR = ROOT / "store" / "feedback"
+FEEDBACK_LEDGER = FEEDBACK_DIR / "resolved.json"
+
+
+def _feedback_items(s: Store) -> list[dict]:
+    items = []
+    for kind in ("betaFeedbackScreenshotSubmissions", "betaFeedbackCrashSubmissions"):
+        for it in s.c.get_list(f"/v1/apps/{APP_ID}/{kind}", {"limit": 200}):
+            it["_kind"] = kind
+            items.append(it)
+    items.sort(key=lambda i: attr(i, "createdDate") or "")
+    return items
+
+
+def _ledger() -> dict:
+    return json.loads(FEEDBACK_LEDGER.read_text()) if FEEDBACK_LEDGER.exists() else {}
+
+
+def cmd_feedback(s: Store) -> int:
+    """List TestFlight feedback (screenshots and crashes) that is not yet
+    resolved; `--resolve ID[,ID] --note TEXT` deletes those items from App Store
+    Connect (Apple has no "resolved" state, deletion is the native way to close
+    feedback) and records them in store/feedback/resolved.json so they can
+    still be looked up later."""
+    args = s.opts
+    ledger = _ledger()
+    items = _feedback_items(s)
+    if args.resolve:
+        wanted = [x.strip() for x in args.resolve.split(",") if x.strip()]
+        by_id = {i["id"]: i for i in items}
+        for fid in wanted:
+            it = by_id.get(fid)
+            if not it:
+                log(f"  {fid}: not found on Apple (already deleted?)")
+                continue
+            a = it["attributes"]
+            ledger[fid] = {
+                "kind": it["_kind"], "createdDate": a.get("createdDate"), "email": a.get("email"),
+                "device": f"{a.get('deviceModel')} iOS {a.get('osVersion')}", "comment": a.get("comment"),
+                "resolvedAt": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "note": args.note or "",
+                "screenshots": [str(p.relative_to(ROOT)) for p in _save_feedback_shots(it)],
+            }
+            if s.c.dry_run:
+                log(f"  {fid}: would delete on Apple")
+            else:
+                s.c.request("DELETE", f"/v1/{it['_kind']}/{fid}")
+                log(f"  {fid}: resolved and deleted on Apple")
+        FEEDBACK_DIR.mkdir(parents=True, exist_ok=True)
+        FEEDBACK_LEDGER.write_text(json.dumps(ledger, indent=2, ensure_ascii=False) + "\n")
+        return 0
+    open_items = [i for i in items if i["id"] not in ledger]
+    log(f"== feedback: {len(open_items)} open, {len(ledger)} resolved")
+    for it in open_items:
+        a = it["attributes"]
+        kind = "crash" if "Crash" in it["_kind"] else "screenshot"
+        shots = _save_feedback_shots(it)
+        log(f"  {it['id']}  {a.get('createdDate', '')[:16]}  {kind}  {a.get('email')}  {a.get('deviceModel')} iOS {a.get('osVersion')}")
+        log(f"      {a.get('comment') or (a.get('crashLog') or '')[:160]!r}")
+        for p in shots:
+            log(f"      {p.relative_to(ROOT)}")
+    return 0
+
+
+def _save_feedback_shots(it: dict) -> list[Path]:
+    out = []
+    folder = FEEDBACK_DIR / it["id"]
+    for n, shot in enumerate(attr(it, "screenshots") or []):
+        url = shot.get("url")
+        if not url:
+            continue
+        folder.mkdir(parents=True, exist_ok=True)
+        path = folder / f"{n + 1}.png"
+        if not path.exists():
+            path.write_bytes(requests.get(url, timeout=60).content)
+        out.append(path)
+    return out
+
+
 def cmd_status(s: Store, categories: bool = False) -> None:
     log("== status")
     app = s.app()
@@ -1498,7 +1576,7 @@ COMMANDS: dict[str, Callable[[Store], Any]] = {
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("command", choices=[*COMMANDS, "status", "audit", "all"],
+    parser.add_argument("command", choices=[*COMMANDS, "status", "audit", "feedback", "all"],
                         help="`all` runs: " + ", ".join(ALL_ORDER))
     parser.add_argument("--dry-run", action="store_true", help="print every request instead of sending it")
     parser.add_argument("--verbose", "-v", action="store_true", help="also print GET requests")
@@ -1510,6 +1588,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--version", metavar="X.Y.Z", help="with `release`: the App Store version (default: pubspec.yaml)")
     parser.add_argument("--auto-release", action="store_true", help="with `release`: go live automatically after approval (default: manual release)")
     parser.add_argument("--yes", action="store_true", help="with `submit`: really submit (without it only a preview is printed)")
+    parser.add_argument("--resolve", metavar="ID[,ID]", help="with `feedback`: resolve these items (deletes them on Apple, records them locally)")
+    parser.add_argument("--note", metavar="TEXT", help="with `feedback --resolve`: what was done about it")
     parser.add_argument("--without-iap", action="store_true", help="with `submit`: proceed even if ready products are not in the submission")
     args = parser.parse_args(argv)
 
@@ -1529,6 +1609,8 @@ def main(argv: list[str] | None = None) -> int:
             cmd_status(store, categories=args.categories)
         elif args.command == "audit":
             return cmd_audit(store)
+        elif args.command == "feedback":
+            return cmd_feedback(store)
         elif args.command == "all":
             for name in ALL_ORDER:
                 COMMANDS[name](store)

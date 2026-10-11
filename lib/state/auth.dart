@@ -40,9 +40,12 @@ class AuthNotifier extends AsyncNotifier<models.User?> {
   /// Native Sign in with Apple: the credential comes from the system sheet,
   /// Appwrite verifies the ID token and either links it to the current guest
   /// or signs the returning player into their existing account.
-  Future<void> signInWithApple({required String idToken, required String nonce, String? name}) async {
-    final user = await _repo.signInWithAppleIdToken(idToken: idToken, nonce: nonce, name: name);
-    state = AsyncData(user);
+  /// Returns true when the player was signed in to an existing account
+  /// (the guest progress on this device is left behind in that case).
+  Future<bool> signInWithApple({required String idToken, required String nonce, String? name}) async {
+    final result = await _repo.signInWithAppleIdToken(idToken: idToken, nonce: nonce, name: name);
+    state = AsyncData(result.user);
+    return result.switched;
   }
 
   Future<void> signOut() async {

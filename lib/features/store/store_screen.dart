@@ -15,6 +15,7 @@ import '../../models/models.dart';
 import '../../state/profile.dart';
 import '../../state/purchases.dart';
 import '../../state/settings.dart';
+import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 import '../ads/house_ads.dart';
@@ -213,7 +214,8 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
     final adsLeft = profile?.adsLeftToday ?? Profile.adsPerDay;
     final isVip = profile?.isVip ?? false;
     return Scaffold(
-      appBar: AppBar(
+      extendBodyBehindAppBar: true,
+      appBar: GlassAppBar(
         title: const Text('Store'),
         leading: Padding(padding: const EdgeInsets.only(left: 12), child: RoundIconButton(icon: CupertinoIcons.xmark, size: 38, onTap: () => context.pop())),
         actions: [
@@ -231,7 +233,7 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
       ),
       body: ListView(
         physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
+        padding: EdgeInsets.fromLTRB(20, MediaQuery.paddingOf(context).top + kToolbarHeight + 8, 20, 32),
         children: [
           // Free coins via bonus video, limited per day.
           SoftCard(

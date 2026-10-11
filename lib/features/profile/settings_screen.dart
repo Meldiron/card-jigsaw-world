@@ -9,6 +9,7 @@ import '../../state/profile.dart';
 import '../../state/purchases.dart';
 import '../../state/settings.dart';
 import '../../data/purchases.dart';
+import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 
@@ -47,13 +48,14 @@ class SettingsScreen extends ConsumerWidget {
         );
 
     return Scaffold(
-      appBar: AppBar(
+      extendBodyBehindAppBar: true,
+      appBar: GlassAppBar(
         title: const Text('Settings'),
         leading: Padding(padding: const EdgeInsets.only(left: 12), child: RoundIconButton(icon: CupertinoIcons.back, size: 38, onTap: () => context.pop())),
       ),
       body: ListView(
         physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.only(bottom: 40),
+        padding: EdgeInsets.only(top: MediaQuery.paddingOf(context).top + kToolbarHeight, bottom: 40),
         children: [
           group('Appearance', [
             _SegRow(

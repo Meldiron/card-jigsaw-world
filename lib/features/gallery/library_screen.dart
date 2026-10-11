@@ -65,7 +65,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
           return CustomScrollView(
             physics: const BouncingScrollPhysics(),
             slivers: [
-              const SliverToBoxAdapter(child: HeaderBar(title: 'Library')),
+              const HeaderBar(title: 'Library'),
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),

@@ -62,7 +62,7 @@ simulator, and a Python 3 with Pillow (`pip install pillow`).
    ```sh
    export PATH="$HOME/flutter/bin:$PATH"
    xcrun simctl boot D03644FB-6169-4E87-8E0F-CCFC884FBE78   # iPhone 17 Pro Max
-   flutter drive --driver=test_driver/store_screenshots.dart \
+   flutter drive --dart-define=CJW_MUTE=true --driver=test_driver/store_screenshots.dart \
      --target=integration_test/store_screenshots_test.dart \
      -d D03644FB-6169-4E87-8E0F-CCFC884FBE78
    ```

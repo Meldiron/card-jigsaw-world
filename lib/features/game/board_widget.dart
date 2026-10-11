@@ -46,6 +46,11 @@ class _BoardWidgetState extends State<BoardWidget> {
   Tiling get tiling => widget.state.board.tiling;
   Size get boardSize => Size(widget.width, widget.height);
 
+  /// The part of the picture the board shows: a centre crop with the board's
+  /// aspect, so hexagons and triangles keep their regular shape whatever the
+  /// picture's proportions (the peek overlay uses the same `BoxFit.cover`).
+  Rect get imageCrop => tiling.crop(Size(widget.image.width.toDouble(), widget.image.height.toDouble()), boardSize);
+
   /// Destination cells of the dragged group if dropped on the hovered slot.
   Set<int> _hoverTargets() {
     final d = _dragSlot, h = _hoverSlot;
@@ -153,7 +158,7 @@ class _BoardWidgetState extends State<BoardWidget> {
     Widget child = _CardFace(
       image: widget.image,
       polygon: localPoly,
-      source: tiling.sourceRect(card, Size(widget.image.width.toDouble(), widget.image.height.toDouble())),
+      source: tiling.sourceRect(card, imageCrop),
       locked: locked,
       gap: gap,
       radius: radius,

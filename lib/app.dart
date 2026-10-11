@@ -7,6 +7,7 @@ import 'core/theme/app_theme.dart';
 import 'router.dart';
 import 'state/catalog.dart';
 import 'state/settings.dart';
+import 'widgets/ui.dart';
 
 class CardJigsawApp extends ConsumerStatefulWidget {
   const CardJigsawApp({super.key});
@@ -63,6 +64,7 @@ class _CardJigsawAppState extends ConsumerState<CardJigsawApp> with WidgetsBindi
     return MaterialApp.router(
       title: 'Card Jigsaw World',
       debugShowCheckedModeBanner: false,
+      scaffoldMessengerKey: appMessengerKey,
       theme: AppTheme.light(),
       darkTheme: AppTheme.dark(),
       themeMode: settings.themeMode,
@@ -72,7 +74,15 @@ class _CardJigsawAppState extends ConsumerState<CardJigsawApp> with WidgetsBindi
         final mq = MediaQuery.of(context);
         return MediaQuery(
           data: mq.copyWith(textScaler: mq.textScaler.clamp(minScaleFactor: 0.9, maxScaleFactor: 1.2)),
-          child: child!,
+          // Toast host: a Scaffold above the Navigator shows the root
+          // messenger's snack bars over every route, sheet and the tab bar.
+          // Page Scaffolds register with the inner messenger instead, so a
+          // toast is drawn once.
+          child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            backgroundColor: Colors.transparent,
+            body: ScaffoldMessenger(child: child!),
+          ),
         );
       },
     );

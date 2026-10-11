@@ -76,7 +76,7 @@ class _SocialScreenState extends ConsumerState<SocialScreen> {
     return Scaffold(
       body: Column(
         children: [
-          const HeaderBar(title: 'Social'),
+          const HeaderBar(title: 'Social', sliver: false),
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 10, 20, 12),
             child: Row(
@@ -119,7 +119,7 @@ class _Leaderboard extends ConsumerWidget {
           onRefresh: () async => ref.invalidate(leaderboardProvider),
           child: ListView.builder(
             physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
+            padding: EdgeInsets.fromLTRB(20, 0, 20, MediaQuery.paddingOf(context).bottom + 16),
             itemCount: list.length + 1,
             itemBuilder: (_, i) {
               if (i == 0) {
@@ -137,7 +137,7 @@ class _Leaderboard extends ConsumerWidget {
                             children: [
                               Text('Crystal League', style: Theme.of(context).textTheme.titleLarge),
                               const SizedBox(height: 2),
-                              Text(myRank >= 0 ? 'You are #${myRank + 1} of ${list.length} · Ranked by XP · real players only' : 'Ranked by XP · real players only', style: TextStyle(color: c.textSecondary, fontSize: 12.5)),
+                              Text(myRank >= 0 ? 'You are #${myRank + 1} of ${list.length} · Ranked by XP this season' : 'Ranked by XP this season', style: TextStyle(color: c.textSecondary, fontSize: 12.5)),
                             ],
                           ),
                         ),
@@ -196,7 +196,7 @@ class _Friends extends ConsumerWidget {
     final me = ref.watch(currentUserIdProvider);
     return ListView(
       physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
+      padding: EdgeInsets.fromLTRB(20, 0, 20, MediaQuery.paddingOf(context).bottom + 16),
       children: [
         SoftCard(
           padding: const EdgeInsets.all(16),

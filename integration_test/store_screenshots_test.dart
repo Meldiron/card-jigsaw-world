@@ -1,6 +1,6 @@
 // Captures the raw App Store marketing screens (live Appwrite backend).
 // Meant for the iPhone 17 Pro Max simulator (6.9", 1320x2868):
-//   flutter drive --driver=test_driver/store_screenshots.dart \
+//   flutter drive --dart-define=CJW_MUTE=true --driver=test_driver/store_screenshots.dart \
 //     --target=integration_test/store_screenshots_test.dart \
 //     -d D03644FB-6169-4E87-8E0F-CCFC884FBE78
 // Output lands in store/raw/. Then run tools/store/compose_screenshots.py.
@@ -51,6 +51,13 @@ void main() {
   Future<void> ensurePack(WidgetTester tester) async {
     for (var attempt = 0; attempt < 3; attempt++) {
       if (find.textContaining('tap any picture').evaluate().isNotEmpty) return;
+      // A scrolled pack grid hides the header text, and its in-progress tile
+      // carries a "Continue" badge that the label sweep below would tap.
+      if (find.byType(Scrollable).evaluate().isNotEmpty) {
+        await tester.fling(find.byType(Scrollable).first, const Offset(0, 6000), 4000, warnIfMissed: false);
+        await settle(tester, 1200);
+        if (find.textContaining('tap any picture').evaluate().isNotEmpty) return;
+      }
       await binding.takeScreenshot('zz_diag_not_pack_$attempt');
       for (final label in ['Got it', 'Continue', 'Collect', 'Claim', 'Not now', 'Close', 'OK', 'Done']) {
         if (find.text(label).evaluate().isNotEmpty) {
@@ -122,10 +129,35 @@ void main() {
     if (find.text('Got it').evaluate().isNotEmpty) await tapText(tester, 'Got it');
   }
 
+  /// Reaches a tab by label, popping pushed pages (back / close) until the
+  /// tab bar is visible. Returns false when it never shows up.
+  Future<bool> goTab(WidgetTester tester, String label) async {
+    for (var i = 0; i < 4; i++) {
+      if (find.text(label).evaluate().isNotEmpty) {
+        await tapText(tester, label, ms: 2000);
+        return true;
+      }
+      await binding.takeScreenshot('zz_diag_no_tab_${label.toLowerCase()}_$i');
+      for (final icon in [CupertinoIcons.xmark, CupertinoIcons.back]) {
+        if (find.byIcon(icon).evaluate().isNotEmpty) {
+          await tester.tap(find.byIcon(icon).first, warnIfMissed: false);
+          await settle(tester, 1200);
+          break;
+        }
+      }
+    }
+    return false;
+  }
+
   Future<void> quitGame(WidgetTester tester) async {
-    await tester.tap(find.byIcon(CupertinoIcons.pause_fill), warnIfMissed: false);
-    await settle(tester, 800);
-    await tapText(tester, 'Save & quit', ms: 2500);
+    // The pause sheet slides in; a tap that lands before it settles hits the
+    // barrier and only closes the sheet, so retry while the HUD is still up.
+    for (var attempt = 0; attempt < 3 && find.byIcon(CupertinoIcons.pause_fill).evaluate().isNotEmpty; attempt++) {
+      await tester.tap(find.byIcon(CupertinoIcons.pause_fill), warnIfMissed: false);
+      await settle(tester, 1200);
+      if (find.text('Save & quit').evaluate().isEmpty) continue;
+      await tapText(tester, 'Save & quit', ms: 2500);
+    }
     await ensurePack(tester);
   }
 
@@ -155,6 +187,12 @@ void main() {
       await settle(tester, 1000);
     }
     await shot(tester, '01_home');
+
+    // Content-sized glass sheet (piggy bank).
+    await tapText(tester, 'Piggy bank', ms: 1200);
+    await shot(tester, '18_sheet_piggy');
+    await tester.tapAt(const Offset(220, 80));
+    await settle(tester, 1000);
 
     // Daily calendar of the current month.
     await tapText(tester, 'Library', ms: 3000);
@@ -191,8 +229,13 @@ void main() {
     await solveUntil(tester);
     await settle(tester, 2500);
     await shot(tester, '06_complete');
-    await tapText(tester, 'Back to pack', ms: 2500);
-    await ensurePack(tester);
+    if (find.text('Back to pack').evaluate().isNotEmpty) {
+      await tapText(tester, 'Back to pack', ms: 2500);
+      await ensurePack(tester);
+    } else {
+      // Board logic in flux: leave through the pause menu instead.
+      await quitGame(tester);
+    }
 
     // Hexagons and triangles (one card selected so the highlight shows).
     for (final (mode, title, name) in [('Hexagons', 'Fjord View', '07_game_hexagons'), ('Triangles', 'Snowy Peaks', '08_game_triangles')]) {
@@ -227,6 +270,12 @@ void main() {
     // Achievements (profile, scrolled).
     await tapText(tester, 'Profile', ms: 2500);
     await shot(tester, '13_profile');
+
+    // System alert: rename.
+    await tester.tap(find.byIcon(CupertinoIcons.pencil).first, warnIfMissed: false);
+    await settle(tester, 1200);
+    await shot(tester, '19_rename_alert');
+    await tapText(tester, 'Cancel', ms: 1000);
     await tester.fling(find.byType(CustomScrollView).last, const Offset(0, -900), 2000);
     await settle(tester, 1500);
     await shot(tester, '14_achievements');
@@ -252,6 +301,29 @@ void main() {
       }
       await shot(tester, name);
       await quitGame(tester);
+    }
+
+    // Dark variants of the tab bar, the sheet and the alert. Best effort:
+    // a miss here must not discard the captures above.
+    try {
+      if (await goTab(tester, 'Home')) {
+        await shot(tester, '20_home_dark');
+        await tapText(tester, 'Piggy bank', ms: 1200);
+        await shot(tester, '21_sheet_piggy_dark');
+        await tester.tapAt(const Offset(220, 80));
+        await settle(tester, 1000);
+      }
+      if (await goTab(tester, 'Profile')) {
+        // The tab is still scrolled to the achievements; bring the name row back.
+        await tester.fling(find.byType(CustomScrollView).last, const Offset(0, 3000), 3000, warnIfMissed: false);
+        await settle(tester, 1200);
+        await tester.tap(find.byIcon(CupertinoIcons.pencil).first, warnIfMissed: false);
+        await settle(tester, 1200);
+        await shot(tester, '22_rename_alert_dark');
+        await tapText(tester, 'Cancel', ms: 1000);
+      }
+    } catch (e) {
+      await binding.takeScreenshot('zz_diag_dark_extras_failed');
     }
   }, timeout: const Timeout(Duration(minutes: 14)));
 }

@@ -84,8 +84,58 @@ abstract class Tiling {
     return best;
   }
 
-  /// Picture region that belongs to [card] (its home cell in image space).
-  Rect sourceRect(int card, Size image) => cellBounds(card, image);
+  // ---- sizing ------------------------------------------------------------
+
+  /// Rectangular grids follow the picture's aspect, but never beyond this
+  /// range: a panorama or a handscroll (one catalogue painting is 900×21 px)
+  /// would otherwise collapse the board into a strip.
+  static const minGridAspect = 0.6;
+  static const maxGridAspect = 1.5;
+
+  /// Width ÷ height at which every cell keeps its intended shape (regular
+  /// hexagons, equilateral triangles), or null when the board may take any
+  /// aspect (rectangular grids).
+  double? get naturalAspect => null;
+
+  /// Aspect the board takes for a picture of [imageAspect]. The picture is
+  /// centre-cropped to it (see [crop]), so the cells are cut from the part
+  /// of the picture the board shows.
+  double boardAspect(double imageAspect) {
+    final natural = naturalAspect;
+    if (natural != null) return natural;
+    if (!imageAspect.isFinite || imageAspect <= 0) return 3 / 4;
+    return imageAspect.clamp(minGridAspect, maxGridAspect);
+  }
+
+  /// Largest board of [boardAspect] that fits inside [available].
+  Size fit(Size available, double imageAspect) {
+    final aspect = boardAspect(imageAspect);
+    final maxW = math.max(0.0, available.width), maxH = math.max(0.0, available.height);
+    var w = maxW, h = w / aspect;
+    if (h > maxH) {
+      h = maxH;
+      w = h * aspect;
+    }
+    return Size(w, h);
+  }
+
+  /// Centre crop of [image] with the aspect of [board]: the part of the
+  /// picture the cells are cut from (the same crop as `BoxFit.cover`).
+  Rect crop(Size image, Size board) {
+    if (board.width <= 0 || board.height <= 0 || image.width <= 0 || image.height <= 0) return Offset.zero & image;
+    final aspect = board.width / board.height;
+    var w = image.width, h = image.height;
+    if (image.width / image.height > aspect) {
+      w = image.height * aspect;
+    } else {
+      h = image.width / aspect;
+    }
+    return Rect.fromLTWH((image.width - w) / 2, (image.height - h) / 2, w, h);
+  }
+
+  /// Picture region that belongs to [card]: its home cell laid out over the
+  /// picture [crop] (see [crop]).
+  Rect sourceRect(int card, Rect crop) => cellBounds(card, crop.size).shift(crop.topLeft);
 
   /// Representative cell size, used to scale gutters and corner radii.
   double cellSize(Size size) {
@@ -215,6 +265,11 @@ class TriangleTiling extends Tiling {
   double _tw(Size s) => 2 * s.width / (cols + 1);
   double _th(Size s) => s.height / rows;
 
+  /// Equilateral when a triangle's height is √3/2 of its base: the strip is
+  /// (cols + 1) / 2 bases wide and `rows` heights tall.
+  @override
+  double get naturalAspect => (cols + 1) / (rows * math.sqrt(3));
+
   @override
   Rect cellBounds(int slot, Size size) {
     final tw = _tw(size), th = _th(size);
@@ -290,6 +345,11 @@ class HexTiling extends Tiling {
 
   double _hw(Size s) => s.width / (cols + 0.5);
   double _hh(Size s) => s.height / (0.75 * rows + 0.25);
+
+  /// Regular when a hexagon is √3/2 as wide as it is tall: the honeycomb is
+  /// (cols + ½) widths across and (¾·rows + ¼) heights down.
+  @override
+  double get naturalAspect => (cols + 0.5) * math.sqrt(3) / 2 / (0.75 * rows + 0.25);
 
   Offset _center(int slot, Size size) {
     final hw = _hw(size), hh = _hh(size);

@@ -1,5 +1,5 @@
 // Drives the real app (live Appwrite backend) and captures screenshots.
-// Run: flutter drive --driver=test_driver/integration_test.dart \
+// Run: flutter drive --dart-define=CJW_MUTE=true --driver=test_driver/integration_test.dart \
 //        --target=integration_test/screenshots_test.dart -d <simulator>
 import 'package:card_jigsaw_world/app.dart';
 import 'package:card_jigsaw_world/core/sfx.dart';
@@ -231,13 +231,26 @@ void main() {
     await tester.tap(find.byIcon(CupertinoIcons.pause_fill), warnIfMissed: false);
     await settle(tester, 800);
     await tapText(tester, 'Save & quit', ms: 2000);
-    for (final (mode, title) in [('Squares', 'Green Valley'), ('Triangles', 'Snowy Peaks'), ('Hexagons', 'Fjord View')]) {
+    // The last entry picks the smallest honeycomb (Cozy 3x4), which once
+    // collapsed into a strip on a handscroll picture and must stay regular.
+    for (final (mode, title, tier) in [
+      ('Squares', 'Green Valley', null),
+      ('Triangles', 'Snowy Peaks', null),
+      ('Hexagons', 'Fjord View', null),
+      ('Hexagons', 'Canyon Glow', '3x4'),
+    ]) {
       await tester.dragUntilVisible(find.text(title), find.byType(Scrollable).first, const Offset(0, -150));
       await settle(tester, 500);
       await tapText(tester, title, ms: 3000);
       if (find.text(mode).evaluate().isEmpty) break;
       await tapText(tester, mode, ms: 800);
-      await shot(tester, '26_difficulty_${mode.toLowerCase()}');
+      final suffix = tier == null ? mode.toLowerCase() : '${mode.toLowerCase()}_$tier';
+      if (tier != null) {
+        await tester.dragUntilVisible(find.text(tier), find.byType(Scrollable).first, const Offset(0, -200));
+        await settle(tester, 600);
+        await tapText(tester, tier);
+      }
+      await shot(tester, '26_difficulty_$suffix');
       await tester.tap(find.textContaining('Play'), warnIfMissed: false);
       await settle(tester, 6000);
       if (find.text('Got it').evaluate().isNotEmpty) await tapText(tester, 'Got it');
@@ -248,7 +261,7 @@ void main() {
         await tester.tapAt(rect.center);
         await settle(tester, 500);
       }
-      await shot(tester, '27_game_${mode.toLowerCase()}');
+      await shot(tester, '27_game_$suffix');
       await tester.tap(find.byIcon(CupertinoIcons.pause_fill), warnIfMissed: false);
       await settle(tester, 800);
       await tapText(tester, 'Save & quit', ms: 2000);

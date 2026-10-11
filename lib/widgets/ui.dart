@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import '../core/haptics.dart';
 import '../core/sfx.dart';
 import '../core/theme/tokens.dart';
+import 'glass.dart';
 import 'icons.dart';
 
 /// A tappable surface that scales down slightly while pressed (iOS-style).
@@ -518,25 +519,47 @@ class Chip2 extends StatelessWidget {
   }
 }
 
-/// Modal bottom sheet helper with native-feeling styling.
+/// Content-sized modal sheet in the iOS 26 style: glass surface, grabber,
+/// light dim behind it, drag or tap outside to dismiss. For full-height
+/// modals (Store, Wheel, Account) the router uses a CupertinoSheetRoute.
 Future<T?> showAppSheet<T>(BuildContext context, {required WidgetBuilder builder, bool scrollable = false, bool dismissible = true}) {
   return showModalBottomSheet<T>(
     context: context,
     isScrollControlled: true,
     useSafeArea: true,
+    // Root navigator: the sheet must cover the floating tab bar, which lives
+    // above the tab shell's body.
+    useRootNavigator: true,
     isDismissible: dismissible,
     enableDrag: dismissible,
-    backgroundColor: context.colors.card,
-    builder: (ctx) => Padding(padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(ctx).bottom), child: builder(ctx)),
+    backgroundColor: Colors.transparent,
+    elevation: 0,
+    showDragHandle: false,
+    shape: const RoundedRectangleBorder(),
+    clipBehavior: Clip.none,
+    barrierColor: Colors.black.withValues(alpha: 0.32),
+    builder: (ctx) => GlassSheet(
+      grabber: dismissible,
+      child: Padding(padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(ctx).bottom), child: builder(ctx)),
+    ),
   );
 }
 
+/// Root messenger; `CardJigsawApp` hosts a Scaffold above the Navigator for
+/// it, so toasts float over every route, sheet barrier and the tab bar.
+final appMessengerKey = GlobalKey<ScaffoldMessengerState>();
+
 void showToast(BuildContext context, String message, {IconData? icon, Widget? leading}) {
-  final messenger = ScaffoldMessenger.maybeOf(context);
+  final messenger = appMessengerKey.currentState ?? ScaffoldMessenger.maybeOf(context);
   if (messenger == null) return;
   messenger.hideCurrentSnackBar();
   final fg = context.isDark ? context.colors.textPrimary : Colors.white;
+  // Lift the toast 12pt above the floating tab bar (the host Scaffold is
+  // above the tab shell, so the bar's slot is not in its insets).
+  final safe = MediaQuery.viewPaddingOf(context).bottom;
+  final lift = GlassTabBar.bottomGap(safe) + GlassTabBar.barHeight + 12 - safe;
   messenger.showSnackBar(SnackBar(
+    margin: EdgeInsets.fromLTRB(16, 0, 16, lift),
     content: Row(
       children: [
         if (leading != null) ...[leading, const SizedBox(width: 10)] else if (icon != null) ...[Icon(icon, size: 20, color: fg), const SizedBox(width: 10)],

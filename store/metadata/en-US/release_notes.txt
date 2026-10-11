@@ -1,10 +1,9 @@
-Version 1.7.0
+Version 1.7.1
 
-- Four tilings: Cards, Squares, Triangles and Hexagons, each with its own difficulty ladder and reward multiplier.
-- Daily puzzle packs for every month back to January 2023. The current month is free.
-- World-day live events with themed packs.
-- 24 achievement families and 55 avatars.
-- Home Screen widgets with today's daily picture and a "One last game?" shortcut on the app icon.
-- Sign in with Apple.
-- VIP with a 7-day free trial on both the monthly and the yearly plan.
-- Store purchases are now verified server-side.
+- Native look: system alerts, stacked sheets for the Store, Wheel and Account, and a floating glass tab bar and headers that content scrolls beneath.
+- Hexagon and triangle boards keep their true shape on every picture; a few extreme pictures no longer collapse the board.
+- Sign in with Apple now signs you in to your existing account instead of showing an error.
+- Picture complete: Replay and Next puzzle buttons share the row evenly.
+- Profile rename alert uses Cancel and Save.
+- League card wording tidied.
+- VIP gift codes can be redeemed from the Store and Settings.

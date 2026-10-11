@@ -31,7 +31,8 @@ if [ "$WIPE" = 1 ]; then
   xcrun devicectl device uninstall app --device "$UDID" "$BUNDLE_ID" >/dev/null 2>&1 || true
 fi
 if [ "$MODE" = debug ]; then
-  exec flutter run -d "$UDID"
+  # QA runs are silent; release installs keep sound.
+  exec flutter run -d "$UDID" --dart-define=CJW_MUTE=true
 fi
 [ "$BUILD" = 0 ] || flutter build ios --release
 for attempt in 1 2 3; do

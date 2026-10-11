@@ -10,6 +10,7 @@ import '../../data/repositories.dart';
 import '../../state/auth.dart';
 import '../../state/progress.dart';
 import '../../state/social.dart';
+import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 
@@ -68,7 +69,8 @@ class _MyPuzzlesScreenState extends ConsumerState<MyPuzzlesScreen> {
     final mine = ref.watch(myPuzzlesProvider);
     final progress = ref.watch(progressProvider).value ?? {};
     return Scaffold(
-      appBar: AppBar(
+      extendBodyBehindAppBar: true,
+      appBar: GlassAppBar(
         title: const Text('My Puzzles'),
         leading: Padding(padding: const EdgeInsets.only(left: 12), child: RoundIconButton(icon: CupertinoIcons.back, size: 38, onTap: () => context.pop())),
       ),
@@ -80,7 +82,7 @@ class _MyPuzzlesScreenState extends ConsumerState<MyPuzzlesScreen> {
           slivers: [
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
+                padding: EdgeInsets.fromLTRB(20, MediaQuery.paddingOf(context).top + kToolbarHeight + 8, 20, 0),
                 child: BigButton(label: _uploading ? 'Uploading…' : 'Add photo', icon: CupertinoIcons.plus, loading: _uploading, onTap: _uploading ? null : _choose),
               ),
             ),

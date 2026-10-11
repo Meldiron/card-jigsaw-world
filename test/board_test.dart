@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:card_jigsaw_world/game/board.dart';
@@ -185,6 +186,104 @@ void main() {
           expect((back.$1, back.$2), (-d.$1, -d.$2));
         }
       }
+    });
+
+    test('every tier of every mode fits a phone board area with sane cells', () {
+      // Portrait phone play area (iPhone 15 Pro minus HUD and boosters) and
+      // a spread of picture shapes, including the 900×21 handscroll that
+      // collapsed the hexagons 3x4 board into a strip.
+      const area = Size(369, 450);
+      const pictures = [900 / 21, 3 / 4, 1.0, 16 / 9, 9 / 16, 2 / 3];
+      for (final mode in GameMode.values) {
+        for (final t in BoardSpec.tiers(mode)) {
+          for (final aspect in pictures) {
+            final why = '${mode.code} ${t.code} picture $aspect';
+            final size = t.tiling.fit(area, aspect);
+            expect(size.width, lessThanOrEqualTo(area.width + 0.01), reason: why);
+            expect(size.height, lessThanOrEqualTo(area.height + 0.01), reason: why);
+            expect(math.max(size.width, size.height), greaterThanOrEqualTo(math.min(area.width, area.height) - 0.01), reason: '$why fills the area');
+            expect(size.width, greaterThan(200), reason: '$why is not a strip');
+            expect(size.height, greaterThan(200), reason: '$why is not a strip');
+            final cell = t.tiling.cellSize(size);
+            expect(cell, greaterThan(22), reason: '$why cells are tappable');
+          }
+        }
+      }
+    });
+
+    test('hexagons are regular and triangles equilateral at the natural aspect', () {
+      for (final t in BoardSpec.tiers(GameMode.hexagons)) {
+        final hex = t.tiling;
+        for (final aspect in [900 / 21, 3 / 4, 16 / 9]) {
+          final size = hex.fit(const Size(369, 450), aspect);
+          for (var s = 0; s < hex.cells; s++) {
+            final c = hex.cellCenter(s, size);
+            final radii = [for (final v in hex.polygon(s, size)) (v - c).distance];
+            for (final r in radii) {
+              expect(r, closeTo(radii.first, 1e-6), reason: '${t.code} slot $s at $aspect');
+            }
+            final b = hex.cellBounds(s, size);
+            expect(b.width / b.height, closeTo(math.sqrt(3) / 2, 1e-6), reason: '${t.code} slot $s width:height');
+          }
+        }
+      }
+      for (final t in BoardSpec.tiers(GameMode.triangles)) {
+        final tri = t.tiling;
+        final size = tri.fit(const Size(369, 450), 3 / 4);
+        for (var s = 0; s < tri.cells; s++) {
+          final p = tri.polygon(s, size);
+          final sides = [for (var i = 0; i < 3; i++) (p[(i + 1) % 3] - p[i]).distance];
+          for (final side in sides) {
+            expect(side, closeTo(sides.first, 1e-6), reason: '${t.code} slot $s');
+          }
+        }
+      }
+    });
+
+    test('rectangular grids follow the picture but never collapse', () {
+      for (final mode in [GameMode.cards, GameMode.squares]) {
+        final t = BoardSpec.tiers(mode)[1].tiling;
+        expect(t.naturalAspect, isNull);
+        expect(t.boardAspect(3 / 4), closeTo(3 / 4, 1e-9), reason: 'a normal picture is kept as is');
+        expect(t.boardAspect(900 / 21), Tiling.maxGridAspect);
+        expect(t.boardAspect(21 / 900), Tiling.minGridAspect);
+        expect(t.boardAspect(double.nan), closeTo(3 / 4, 1e-9));
+        final strip = t.fit(const Size(369, 450), 900 / 21);
+        expect(strip.height, greaterThan(200));
+      }
+    });
+
+    test('picture crop has the board aspect, sits inside the picture and holds every cell', () {
+      const image = Size(1400, 33); // the handscroll after decoding at 1400 px wide
+      const portrait = Size(900, 1200);
+      for (final mode in GameMode.values) {
+        for (final t in BoardSpec.tiers(mode)) {
+          for (final img in [image, portrait]) {
+            final tiling = t.tiling;
+            final board = tiling.fit(const Size(369, 450), img.width / img.height);
+            final crop = tiling.crop(img, board);
+            final why = '${mode.code} ${t.code} on $img';
+            expect(crop.width / crop.height, closeTo(board.width / board.height, 1e-6), reason: why);
+            expect(crop.left, greaterThanOrEqualTo(-0.01), reason: why);
+            expect(crop.top, greaterThanOrEqualTo(-0.01), reason: why);
+            expect(crop.right, lessThanOrEqualTo(img.width + 0.01), reason: why);
+            expect(crop.bottom, lessThanOrEqualTo(img.height + 0.01), reason: why);
+            // Centred: equal margins on the cropped axis.
+            expect(crop.left, closeTo(img.width - crop.right, 1e-6), reason: why);
+            expect(crop.top, closeTo(img.height - crop.bottom, 1e-6), reason: why);
+            for (var s = 0; s < tiling.cells; s++) {
+              final src = tiling.sourceRect(s, crop);
+              expect(src.left, greaterThanOrEqualTo(crop.left - 0.01), reason: '$why slot $s');
+              expect(src.top, greaterThanOrEqualTo(crop.top - 0.01), reason: '$why slot $s');
+              expect(src.right, lessThanOrEqualTo(crop.right + 0.01), reason: '$why slot $s');
+              expect(src.bottom, lessThanOrEqualTo(crop.bottom + 0.01), reason: '$why slot $s');
+            }
+          }
+        }
+      }
+      // A 3:4 picture on a 3:4 cards board is used whole.
+      final cards = const GridSpec(3, 4, 'Easy').tiling;
+      expect(cards.crop(portrait, cards.fit(const Size(300, 400), 3 / 4)), Offset.zero & portrait);
     });
 
     test('geometry: cells cover the board and hit-testing finds centres', () {

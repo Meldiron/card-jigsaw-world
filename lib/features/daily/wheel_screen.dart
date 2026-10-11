@@ -11,6 +11,7 @@ import '../../core/haptics.dart';
 import '../../core/sfx.dart';
 import '../../core/theme/tokens.dart';
 import '../../state/profile.dart';
+import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 
@@ -130,7 +131,7 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
     final tickets = profile?.tickets ?? 0;
     final canSpin = tickets >= Economy.wheelSpinTickets && !_spinning;
     return Scaffold(
-      appBar: AppBar(
+      appBar: GlassAppBar(
         title: const Text('Lucky Wheel'),
         leading: Padding(padding: const EdgeInsets.only(left: 12), child: RoundIconButton(icon: CupertinoIcons.xmark, size: 38, onTap: () => context.pop())),
       ),

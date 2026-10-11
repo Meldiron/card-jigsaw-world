@@ -269,15 +269,13 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                 Expanded(
                   child: LayoutBuilder(
                     builder: (context, cons) {
-                      final maxW = cons.maxWidth - 24;
-                      final maxH = cons.maxHeight - 16;
-                      final aspect = image.value == null ? 3 / 4 : image.value!.width / image.value!.height;
-                      var w = maxW;
-                      var h = w / aspect;
-                      if (h > maxH) {
-                        h = maxH;
-                        w = h * aspect;
-                      }
+                      // The tiling decides the board's proportions: honeycombs
+                      // and triangle strips keep regular cells and crop the
+                      // picture; rectangular grids follow the picture within
+                      // sane limits (a 900×21 handscroll must not become a strip).
+                      final imageAspect = image.value == null ? 3 / 4 : image.value!.width / image.value!.height;
+                      final fitted = state.board.tiling.fit(Size(cons.maxWidth - 24, cons.maxHeight - 16), imageAspect);
+                      final w = fitted.width, h = fitted.height;
                       return Center(
                         child: image.when(
                           loading: () => SizedBox(
@@ -710,9 +708,10 @@ class _CompletionOverlay extends StatelessWidget {
                 const SizedBox(height: 14),
                 Row(
                   children: [
+                    // Equal widths so neither label truncates on a 393 pt phone.
                     Expanded(child: BigButton(label: 'Replay', kind: ButtonKind.secondary, icon: CupertinoIcons.arrow_counterclockwise, onTap: onReplay)),
                     const SizedBox(width: 10),
-                    Expanded(flex: 2, child: BigButton(label: 'Next puzzle', icon: CupertinoIcons.arrow_right, onTap: onNext)),
+                    Expanded(child: BigButton(label: 'Next puzzle', icon: CupertinoIcons.arrow_right, onTap: onNext)),
                   ],
                 ).animate().fadeIn(delay: 1100.ms),
                 const SizedBox(height: 8),

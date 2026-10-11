@@ -12,6 +12,7 @@ import '../../models/models.dart';
 import '../../state/catalog.dart';
 import '../../state/profile.dart';
 import '../../state/progress.dart';
+import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 
@@ -70,12 +71,14 @@ class PackScreen extends ConsumerWidget {
             expandedHeight: 280,
             pinned: true,
             stretch: true,
-            backgroundColor: c.canvas,
+            backgroundColor: Colors.transparent,
+            scrolledUnderElevation: 0,
             leading: Padding(
               padding: const EdgeInsets.only(left: 12),
               child: RoundIconButton(icon: CupertinoIcons.back, size: 38, onTap: () => context.pop()),
             ),
-            flexibleSpace: FlexibleSpaceBar(
+            flexibleSpace: _CollapsedGlass(
+              child: FlexibleSpaceBar(
               stretchModes: const [StretchMode.zoomBackground],
               background: Stack(
                 fit: StackFit.expand,
@@ -110,6 +113,7 @@ class PackScreen extends ConsumerWidget {
                   ),
                 ],
               ),
+            ),
             ),
           ),
           SliverToBoxAdapter(
@@ -263,6 +267,30 @@ class PackScreen extends ConsumerWidget {
   static String _gridCodeFor(PuzzleProgress pr) {
     final mode = GameMode.fromCode(pr.mode);
     return BoardCode.toPath(BoardSpec.fromCells(mode, pr.gridSize).fullCode);
+  }
+}
+
+/// Once the cover has collapsed into a plain bar it becomes glass, with the
+/// top of the picture blurred behind the title.
+class _CollapsedGlass extends StatelessWidget {
+  const _CollapsedGlass({required this.child});
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return LayoutBuilder(
+      builder: (context, cons) {
+        final collapsed = cons.maxHeight <= MediaQuery.paddingOf(context).top + kToolbarHeight + 1;
+        return Stack(
+          fit: StackFit.expand,
+          children: [
+            child,
+            GlassSurface(visible: collapsed, hairline: Border(bottom: BorderSide(color: c.stroke, width: 0.5)), child: const SizedBox.expand()),
+          ],
+        );
+      },
+    );
   }
 }
 

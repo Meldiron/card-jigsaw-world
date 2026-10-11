@@ -17,6 +17,7 @@ import '../../state/auth.dart';
 import '../../state/profile.dart';
 import '../../state/progress.dart';
 import '../../state/social.dart';
+import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 
@@ -97,11 +98,11 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
       // Apple only sends the name on the first authorization, never in the token.
       final name = [credential.givenName, credential.familyName].whereType<String>().where((s) => s.isNotEmpty).join(' ');
       setState(() => _busy = true);
-      await ref.read(authProvider.notifier).signInWithApple(idToken: idToken, nonce: nonce, name: name);
+      final switched = await ref.read(authProvider.notifier).signInWithApple(idToken: idToken, nonce: nonce, name: name);
       _afterAuth();
       if (!mounted) return;
       Haptics.success();
-      showToast(context, 'Signed in with Apple. Your progress is saved.', icon: AppIcons.check);
+      showToast(context, switched ? 'Welcome back. Signed in to your existing account.' : 'Signed in with Apple. Your progress is saved.', icon: AppIcons.check);
       context.pop();
     } on SignInWithAppleAuthorizationException catch (e) {
       if (e.code == AuthorizationErrorCode.canceled) return;
@@ -125,13 +126,14 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
     final profile = ref.watch(profileProvider).value;
     final isGuest = ref.watch(isGuestProvider);
     return Scaffold(
-      appBar: AppBar(
+      extendBodyBehindAppBar: true,
+      appBar: GlassAppBar(
         title: const Text('Account'),
         leading: Padding(padding: const EdgeInsets.only(left: 12), child: RoundIconButton(icon: CupertinoIcons.xmark, size: 38, onTap: () => context.pop())),
       ),
       body: ListView(
         physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.fromLTRB(20, 8, 20, 40),
+        padding: EdgeInsets.fromLTRB(20, MediaQuery.paddingOf(context).top + kToolbarHeight + 8, 20, 40),
         children: [
           if (!isGuest) ...[
             SoftCard(

@@ -6,6 +6,11 @@ class Sfx {
   Sfx._();
   static final Sfx instance = Sfx._();
 
+  /// `--dart-define=CJW_MUTE=true` silences music and effects for QA runs
+  /// (simulator screenshot passes, development on a Mac). Never set in
+  /// release builds.
+  static const bool muted = bool.fromEnvironment('CJW_MUTE');
+
   bool soundEnabled = true;
   bool musicEnabled = true;
 
@@ -34,7 +39,7 @@ class Sfx {
   }
 
   Future<void> _play(String name, {double volume = 1}) async {
-    if (!soundEnabled || _pool.isEmpty) return;
+    if (muted || !soundEnabled || _pool.isEmpty) return;
     try {
       final p = _pool[_next++ % _pool.length];
       await p.stop();
@@ -56,7 +61,7 @@ class Sfx {
   void spin() => _play('spin', volume: 0.8);
 
   Future<void> startMusic() async {
-    if (!musicEnabled) return;
+    if (muted || !musicEnabled) return;
     try {
       _music ??= AudioPlayer()..setReleaseMode(ReleaseMode.loop);
       if (_music!.state == PlayerState.playing) return;

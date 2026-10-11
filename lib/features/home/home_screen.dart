@@ -52,6 +52,7 @@ class HomeScreen extends ConsumerWidget {
 
     return Scaffold(
       body: RefreshIndicator.adaptive(
+        edgeOffset: MediaQuery.paddingOf(context).top + HeaderBar.height,
         onRefresh: () async {
           ref.invalidate(packsProvider);
           ref.invalidate(allPuzzlesProvider);
@@ -60,7 +61,7 @@ class HomeScreen extends ConsumerWidget {
         child: CustomScrollView(
           physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
           slivers: [
-            const SliverToBoxAdapter(child: HeaderBar(title: 'Card Jigsaw World')),
+            const HeaderBar(title: 'Card Jigsaw World'),
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),

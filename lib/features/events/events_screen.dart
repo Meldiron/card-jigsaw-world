@@ -34,6 +34,7 @@ class EventsScreen extends ConsumerWidget {
 
     return Scaffold(
       body: RefreshIndicator.adaptive(
+        edgeOffset: MediaQuery.paddingOf(context).top + HeaderBar.height,
         onRefresh: () async {
           ref.invalidate(eventsProvider);
           ref.invalidate(eventProgressProvider);
@@ -41,7 +42,7 @@ class EventsScreen extends ConsumerWidget {
         child: CustomScrollView(
           physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
           slivers: [
-            const SliverToBoxAdapter(child: HeaderBar(title: 'Events')),
+            const HeaderBar(title: 'Events'),
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),

@@ -25,7 +25,7 @@ Cards that belong next to each other **snap together anywhere on the board** and
 | Content | 120 library packs, 97 event packs and 46 monthly packs (5,079 puzzles), every image with a stored BlurHash so galleries show blurred colour before the picture arrives. Featured starters: Wild Nature (free), Animal Friends, Cozy Kitchen, City Lights, Land of Fire & Ice (ticket pack), Masterpieces (Cleveland Museum of Art, CC0), Deep Space (NASA), Autumn Harvest (seasonal) |
 | Events | Daily goals (coins) and weekly goals (tickets) with one-tap Play shortcuts and claimable rewards; world-day events (97 across Oct 2026 to Dec 2027, one to three per week, each running from three days before the day to four days after) with a dedicated themed pack, shown up to three days before they open |
 | Avatars and achievements | 55 avatars: 4 free, 28 for coins, 23 earned through 24 achievement families; multi-step families upgrade the same avatar with silver, gold and double rings |
-| Social | League leaderboard by XP (real players only: profiles with at least one solved puzzle), friends by friend code, native Sign in with Apple (ID token session, no browser redirect) |
+| Social | League leaderboard by XP (only profiles with at least one solved puzzle appear), friends by friend code, native Sign in with Apple (ID token session, no browser redirect) |
 | Account | Instant guest play (anonymous session) with a generated display name such as "Brave Otter", upgrade to email account without losing progress, sign in / out |
 | My Puzzles | Upload your own photos to Appwrite Storage and play them as puzzles |
 | Store | Coin and ticket bundles, two hint packs and VIP, which unlocks every pack including past monthly packs (sandbox purchases until StoreKit is wired) |
@@ -129,7 +129,7 @@ Tests:
 
 ```bash
 flutter test                                                 # board engine unit tests
-flutter drive --driver=test_driver/integration_test.dart \
+flutter drive --dart-define=CJW_MUTE=true --driver=test_driver/integration_test.dart \
   --target=integration_test/screenshots_test.dart -d <simulator-id>   # walks the app and writes screenshots/
 ```
 
