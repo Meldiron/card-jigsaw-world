@@ -150,3 +150,7 @@ CI runs analysis, tests and unsigned builds on every push. Publishing a GitHub r
 ## License
 
 MIT, see `LICENSE`. Puzzle images are hotlinked from their sources under their own licences (`docs/content-sources.md`).
+
+## Shipping
+
+The path from a USB-connected iPhone to the App Store is described in [docs/release-flow.md](docs/release-flow.md): `tools/dev/device.sh` installs on the phone, `tools/dev/release.sh` cuts a release that lands in TestFlight automatically, and the `Submit to App Store` workflow files the review when you decide to.

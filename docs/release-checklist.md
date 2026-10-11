@@ -44,6 +44,10 @@ See `docs/purchases.md` for product ids and the verification function. In short:
 - **Sign in with Apple**: already configured. Appwrite console > Auth > Social providers > Apple has **Native sign-in** on with bundle id `com.matejbaco.cardjigsawworld`; the app holds the `com.apple.developer.applesignin` entitlement. Xcode registers the capability on the App ID on the first signed build (automatic signing). If you manage the App ID by hand, tick **Sign in with Apple** on it in the Apple Developer portal. Browser sign-in (service id, key, team id) is not needed. Google and Facebook are intentionally off for now.
 - **Push notifications** for the daily reminder are not wired yet.
 
+## Day-to-day
+
+See `docs/release-flow.md`: `tools/dev/device.sh` for the phone, `tools/dev/release.sh X.Y.Z` for TestFlight, the `Submit to App Store` workflow for review.
+
 ## After approval
 
 - **VIP gift codes**: Apple only lets us mint offer codes once the app is live and the subscriptions are approved. Run `tools/store/offer_codes.py codes monthly 10` and `codes yearly 10` then (see `tools/store/README.md`). The offers themselves already exist.

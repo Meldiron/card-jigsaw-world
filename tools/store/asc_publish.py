@@ -7,10 +7,14 @@ updates only what differs, so it is safe to run again after a partial failure.
     asc_publish.py all --dry-run          # print every request, send nothing
     asc_publish.py status                 # what exists in App Store Connect
     asc_publish.py audit                  # submission checklist, no writes
+    asc_publish.py testflight --build 103 # wait for build 103, add to the groups, beta review
+    asc_publish.py release --version 1.7.0 --build 103   # prepare the App Store version
+    asc_publish.py submit --yes           # create and submit the review submission
 
 Reads metadata from store/metadata (see tools/store/README.md). Credentials:
-the team API key secrets/AuthKey_9QC72A5QMN.p8 and the Issuer ID from the
-environment variable ASC_ISSUER_ID or secrets/app-store-connect-issuer-id.txt.
+the team API key secrets/AuthKey_9QC72A5QMN.p8 (override with ASC_KEY_ID and
+ASC_KEY_PATH) and the Issuer ID from the environment variable ASC_ISSUER_ID or
+secrets/app-store-connect-issuer-id.txt.
 """
 
 from __future__ import annotations
@@ -43,10 +47,11 @@ SCREENSHOT_DIR = ROOT / "store" / "screenshots" / "iphone-6.9"
 
 APP_ID = "6821644423"
 BUNDLE_ID = "com.matejbaco.cardjigsawworld"
-KEY_ID = "9QC72A5QMN"
-KEY_PATH = ROOT / "secrets" / f"AuthKey_{KEY_ID}.p8"
+KEY_ID = os.environ.get("ASC_KEY_ID", "").strip() or "9QC72A5QMN"
+KEY_PATH = Path(os.environ.get("ASC_KEY_PATH", "").strip() or ROOT / "secrets" / f"AuthKey_{KEY_ID}.p8").expanduser()
 ISSUER_FILE = ROOT / "secrets" / "app-store-connect-issuer-id.txt"
-VERSION_STRING = "1.7.0"
+VERSION_STRING = "1.7.0"  # `release` and `submit` replace this with the version they work on
+PUBSPEC = ROOT / "pubspec.yaml"
 PLATFORM = "IOS"
 LOCALE = "en-US"  # replaced at startup by the app's primaryLocale (en-GB for this app); metadata stays in store/metadata/en-US
 BASE_TERRITORY = "USA"
@@ -54,6 +59,10 @@ SCREENSHOT_TYPE = "APP_IPHONE_67"
 BETA_GROUP_NAME = "Public testers"
 NOTIFICATIONS_URL = "https://cjw-verify-purchase.fra.appwrite.run/notifications"  # verify-purchase Appwrite Function
 EDITABLE_VERSION_STATES = ("PREPARE_FOR_SUBMISSION", "DEVELOPER_REJECTED", "REJECTED", "METADATA_REJECTED", "INVALID_BINARY")
+# Review submissions that are still open (not yet sent to Apple, or sent and not finished).
+PENDING_SUBMISSION_STATES = ("READY_FOR_REVIEW", "UNRESOLVED_ISSUES")
+ACTIVE_SUBMISSION_STATES = ("WAITING_FOR_REVIEW", "IN_REVIEW")
+BUILD_POLL_SECONDS = 30
 
 API = "https://api.appstoreconnect.apple.com"
 
@@ -131,6 +140,30 @@ def same_price(a: Any, b: Any) -> bool:
 
 def log(msg: str) -> None:
     print(msg, flush=True)
+
+
+def pubspec_version() -> str:
+    """The marketing version from pubspec.yaml (`1.7.0+10` -> `1.7.0`)."""
+    for line in PUBSPEC.read_text(encoding="utf-8").splitlines():
+        if line.startswith("version:"):
+            return line.split(":", 1)[1].strip().split("+", 1)[0]
+    sys.exit(f"no `version:` line in {PUBSPEC}")
+
+
+def read_whats_new(path_arg: str | None) -> str | None:
+    """Text for whatsNew: the file given with --whats-new-file, else release_notes.txt.
+    An empty file means "do not touch whatsNew" and returns None."""
+    if path_arg is None:
+        return read_text("release_notes.txt")
+    path = Path(path_arg).expanduser()
+    if not path.exists():
+        sys.exit(f"--whats-new-file: {path} does not exist")
+    text = path.read_text(encoding="utf-8").strip()
+    if not text:
+        log(f"  {path.name} is empty; leaving what's new untouched")
+        return None
+    check_limit("release_notes", text)
+    return text
 
 
 # ---------------------------------------------------------------------------
@@ -270,9 +303,12 @@ class Client:
         if p.endswith("/appCategories"):
             return self._dry_list([])
         if p.endswith("/v1/builds"):
-            return self._dry_list([{"id": "DRY-build", "type": "builds",
-                                    "attributes": {"version": "0", "processingState": "VALID", "uploadedDate": "dry-run",
+            number = (params or {}).get("filter[version]", "0")
+            return self._dry_list([{"id": f"DRY-build-{number}", "type": "builds",
+                                    "attributes": {"version": str(number), "processingState": "VALID", "uploadedDate": "dry-run",
                                                    "usesNonExemptEncryption": None}}])
+        if p.endswith("/appStoreVersions"):
+            return self._dry_list([])
         # Single resources answered by to-one relationship endpoints.
         single = ("ageRatingDeclaration", "appStoreReviewDetail", "appPriceSchedule", "appAvailabilityV2",
                   "iapPriceSchedule", "inAppPurchaseAvailability", "appStoreReviewScreenshot",
@@ -391,12 +427,25 @@ def territory_of(res: dict) -> str | None:
     return (((res.get("relationships") or {}).get("territory") or {}).get("data") or {}).get("id")
 
 
+def related_id(res: dict | None, name: str) -> str | None:
+    """Id of a to-one relationship when the response carries it inline."""
+    return ((((res or {}).get("relationships") or {}).get(name) or {}).get("data") or {}).get("id")
+
+
+def version_state(version: dict | None) -> str | None:
+    return attr(version, "appVersionState") or attr(version, "appStoreState")
+
+
 class Store:
     """Everything the subcommands share: client, cached lookups and metadata."""
 
-    def __init__(self, client: Client):
+    def __init__(self, client: Client, opts: argparse.Namespace | None = None):
         self.c = client
+        self.opts = opts or argparse.Namespace()
         self._cache: dict[str, Any] = {}
+
+    def opt(self, name: str, default: Any = None) -> Any:
+        return getattr(self.opts, name, default)
 
     def cached(self, key: str, fn: Callable[[], Any]) -> Any:
         if key not in self._cache:
@@ -431,21 +480,25 @@ class Store:
         version = self.cached("version", find)
         if version is None and create:
             # Only one editable version can exist per platform. If there is one
-            # (for example the "1.0" App Store Connect creates with the app), rename it.
-            editable = [v for v in self.c.get_list(f"/v1/apps/{APP_ID}/appStoreVersions", {"filter[platform]": PLATFORM})
-                        if (attr(v, "appVersionState") or attr(v, "appStoreState")) in EDITABLE_VERSION_STATES]
-            if editable:
-                old = editable[0]
-                log(f"  appStoreVersion {attr(old, 'versionString')} ({attr(old, 'appVersionState')}): renaming to {VERSION_STRING}")
+            # (for example the "1.0" App Store Connect creates with the app, or
+            # a rejected version), rename it; when the newest version is past
+            # editing (in review, approved, live) a new version is created.
+            old = self.editable_version()
+            if old:
+                log(f"  appStoreVersion {attr(old, 'versionString')} ({version_state(old)}): renaming to {VERSION_STRING}")
                 version = self.c.update("appStoreVersions", old["id"], {"versionString": VERSION_STRING})
                 if not version.get("attributes"):
                     version = {**old, "attributes": {**(old.get("attributes") or {}), "versionString": VERSION_STRING}}
             else:
+                newest = self.all_versions()[-1] if self.all_versions() else None
+                if newest:
+                    log(f"  newest appStoreVersion {attr(newest, 'versionString')} is {version_state(newest)}, not editable")
                 log(f"  appStoreVersion {VERSION_STRING}: creating")
                 version = self.c.create("appStoreVersions",
                                         {"platform": PLATFORM, "versionString": VERSION_STRING, "copyright": read_text("copyright.txt")},
                                         {"app": rel("apps", APP_ID)})
             self._cache["version"] = version
+            self._cache.pop("versions", None)
         return version
 
     def version_localization(self, version: dict, create: bool = False) -> dict | None:
@@ -460,11 +513,56 @@ class Store:
             self._cache[key] = loc
         return loc
 
+    def all_versions(self) -> list[dict]:
+        return self.cached("versions", lambda: self.c.get_list(f"/v1/apps/{APP_ID}/appStoreVersions", {"filter[platform]": PLATFORM}))
+
+    def editable_version(self) -> dict | None:
+        """The one appStoreVersion per platform that can still be changed, if any."""
+        return next((v for v in self.all_versions() if version_state(v) in EDITABLE_VERSION_STATES), None)
+
     def latest_build(self) -> dict | None:
         def find() -> dict | None:
             builds = self.c.get_list("/v1/builds", {"filter[app]": APP_ID, "sort": "-uploadedDate", "limit": 5}, limit=5)
             return builds[0] if builds else None
         return self.cached("build", find)
+
+    def build_by_number(self, number: str) -> dict | None:
+        builds = self.c.get_list("/v1/builds", {"filter[app]": APP_ID, "filter[version]": number, "sort": "-uploadedDate", "limit": 5}, limit=5)
+        return builds[0] if builds else None
+
+    def latest_valid_build(self, marketing_version: str | None = None) -> dict | None:
+        """Newest processed build; with `marketing_version`, only builds of that
+        pre-release version (falls back to the newest valid build of any version)."""
+        params = {"filter[app]": APP_ID, "filter[processingState]": "VALID", "sort": "-uploadedDate", "limit": 5}
+        if marketing_version:
+            builds = self.c.get_list("/v1/builds", {**params, "filter[preReleaseVersion.version]": marketing_version}, limit=5)
+            if builds:
+                return builds[0]
+            log(f"  no processed build of version {marketing_version}; using the newest processed build instead")
+        builds = self.c.get_list("/v1/builds", params, limit=5)
+        return builds[0] if builds else None
+
+    def wait_for_build(self, number: str, timeout_minutes: float) -> dict:
+        """Poll until build `number` exists and is processed (VALID). Exits on
+        INVALID / FAILED or when the timeout passes."""
+        deadline = time.time() + timeout_minutes * 60
+        last_state = None
+        while True:
+            build = self.build_by_number(number)
+            state = attr(build, "processingState") if build else None
+            if state != last_state:
+                log(f"  build {number}: {state or 'not visible yet'}")
+                last_state = state
+            if state == "VALID":
+                self._cache["build"] = build
+                return build
+            if state in ("INVALID", "FAILED"):
+                sys.exit(f"build {number} finished processing as {state}; check the email from App Store Connect for the reason")
+            if self.c.dry_run:
+                return build or {"id": f"DRY-build-{number}", "type": "builds", "attributes": {"version": number, "processingState": "VALID"}}
+            if time.time() >= deadline:
+                sys.exit(f"build {number} did not reach VALID within {timeout_minutes:g} minutes (last state: {state or 'not visible'})")
+            time.sleep(BUILD_POLL_SECONDS)
 
     # -- uploads ------------------------------------------------------------
 
@@ -598,8 +696,15 @@ def version_localization_attrs() -> dict:
     return fields
 
 
-def cmd_version(s: Store) -> None:
-    log("== version")
+def sync_version_metadata(s: Store, whats_new: str | None = None, only_whats_new: bool = False) -> tuple[dict, str]:
+    """Copyright and the primary-locale localization of the current version.
+
+    `whats_new` replaces release_notes.txt; None leaves whatsNew alone. With
+    `only_whats_new` an existing localization gets just whatsNew (a brand new
+    one is still filled completely, since Apple requires description and
+    keywords before the version can be submitted). Returns the version and a
+    word describing what happened to whatsNew (updated / untouched / rejected)."""
+    whats_new_result = "updated"
     version = s.version(create=True)
     assert version
     copyright_ = read_text("copyright.txt")
@@ -608,18 +713,38 @@ def cmd_version(s: Store) -> None:
         s.c.update("appStoreVersions", version["id"], {"copyright": copyright_})
     else:
         log("  copyright: up to date")
+    existed = s.version_localization(version) is not None
     loc = s.version_localization(version, create=True)
     assert loc
     fields = version_localization_attrs()
+    if whats_new is not None:
+        fields["whatsNew"] = whats_new
+    if only_whats_new and existed:
+        fields = {"whatsNew": fields["whatsNew"]} if whats_new is not None else {}
+    elif whats_new is None and only_whats_new:
+        fields.pop("whatsNew")
+    if "whatsNew" not in fields:
+        whats_new_result = "untouched"
+    if not fields:
+        log(f"  appStoreVersionLocalization {LOCALE}: nothing to change")
+        return version, whats_new_result
     try:
         s.c.upsert("appStoreVersionLocalizations", loc, fields, label=f"appStoreVersionLocalization {LOCALE}")
     except ApiError as err:
-        if err.mentions("whatsNew", "what's new"):
+        if err.mentions("whatsNew", "what's new") and "whatsNew" in fields:
             log("  Apple rejected whatsNew (first version of the app); retrying without it")
             fields.pop("whatsNew")
-            s.c.upsert("appStoreVersionLocalizations", loc, fields, label=f"appStoreVersionLocalization {LOCALE}")
+            whats_new_result = "rejected by Apple (first version has no what's new)"
+            if fields:
+                s.c.upsert("appStoreVersionLocalizations", loc, fields, label=f"appStoreVersionLocalization {LOCALE}")
         else:
             raise
+    return version, whats_new_result
+
+
+def cmd_version(s: Store) -> None:
+    log("== version")
+    sync_version_metadata(s)
 
 
 def cmd_age_rating(s: Store) -> None:
@@ -924,29 +1049,52 @@ def cmd_testflight(s: Store) -> None:
     if link:
         log(f"  public TestFlight link: {link}")
 
-    build = s.latest_build()
+    wanted = s.opt("build") or os.environ.get("ASC_BUILD_NUMBER", "").strip() or None
+    if wanted:
+        log(f"  waiting for build {wanted} to finish processing (up to {s.opt('timeout', 40):g} min)")
+        build = s.wait_for_build(str(wanted), float(s.opt("timeout", 40)))
+    else:
+        build = s.latest_build()
     if build is None:
         log("  no build uploaded yet; skipping build metadata (run tools/store/upload_build.sh, then this again)")
         return
     bid = build["id"]
-    log(f"  latest build {attr(build, 'version')} ({attr(build, 'processingState')}, uploaded {attr(build, 'uploadedDate')})")
+    log(f"  {'build' if wanted else 'latest build'} {attr(build, 'version')} ({attr(build, 'processingState')}, uploaded {attr(build, 'uploadedDate')})")
     if attr(build, "usesNonExemptEncryption") is not False:
         log("  build: setting usesNonExemptEncryption=false")
         s.c.update("builds", bid, {"usesNonExemptEncryption": False})
     else:
         log("  build: usesNonExemptEncryption already false")
-    blocs = s.c.get_list(f"/v1/builds/{bid}/betaBuildLocalizations")
-    bloc = next((l for l in blocs if attr(l, "locale") == LOCALE), None)
-    whats_new = {"whatsNew": read_text("release_notes.txt")}
-    s.c.upsert("betaBuildLocalizations", bloc, whats_new if bloc else {**whats_new, "locale": LOCALE},
-               {"build": rel("builds", bid)}, label=f"betaBuildLocalization {LOCALE}",
-               refetch=lambda: next((l for l in s.c.get_list(f"/v1/builds/{bid}/betaBuildLocalizations") if attr(l, "locale") == LOCALE), None))
+    whats_new_text = read_whats_new(s.opt("whats_new_file"))
+    if whats_new_text is not None:
+        blocs = s.c.get_list(f"/v1/builds/{bid}/betaBuildLocalizations")
+        bloc = next((l for l in blocs if attr(l, "locale") == LOCALE), None)
+        whats_new = {"whatsNew": whats_new_text}
+        s.c.upsert("betaBuildLocalizations", bloc, whats_new if bloc else {**whats_new, "locale": LOCALE},
+                   {"build": rel("builds", bid)}, label=f"betaBuildLocalization {LOCALE}",
+                   refetch=lambda: next((l for l in s.c.get_list(f"/v1/builds/{bid}/betaBuildLocalizations") if attr(l, "locale") == LOCALE), None))
     in_group = {b["id"] for b in s.c.get_list(f"/v1/betaGroups/{group['id']}/builds")}
     if bid in in_group:
         log("  build already in the public group")
     else:
         log(f"  adding build to '{BETA_GROUP_NAME}'")
         s.c.request("POST", f"/v1/betaGroups/{group['id']}/relationships/builds", rel_many("builds", [bid]))
+
+    # Internal groups (App Store Connect users) can install a build straight
+    # away, without Beta App Review. Groups that get every build automatically
+    # need nothing; the others get the build added by hand here.
+    for g in groups:
+        if not attr(g, "isInternalGroup"):
+            continue
+        name = attr(g, "name")
+        if attr(g, "hasAccessToAllBuilds"):
+            log(f"  internal group {name}: has access to all builds (installable now)")
+            continue
+        if bid in {b["id"] for b in s.c.get_list(f"/v1/betaGroups/{g['id']}/builds")}:
+            log(f"  internal group {name}: build already added (installable now)")
+            continue
+        s.c.request("POST", f"/v1/betaGroups/{g['id']}/relationships/builds", rel_many("builds", [bid]))
+        log(f"  internal group {name}: build added (installable now)")
 
     # External testers (the public link) can only install a build that has passed
     # Beta App Review. Submit the build unless it already has a submission.
@@ -1010,13 +1158,21 @@ def cmd_status(s: Store, categories: bool = False) -> None:
             log(f"    {cat['id']}: {', '.join(subs)}")
 
 
+AuditRow = tuple[str, str, str, str]  # state, what, detail, section ("store" or "testflight")
+
+
 def cmd_audit(s: Store) -> int:
     """Checklist for App Store submission and a public TestFlight link. Read-only."""
     log("== audit")
-    rows: list[tuple[str, str, str]] = []
+    return _print_audit(audit_rows(s))
+
+
+def audit_rows(s: Store) -> list[AuditRow]:
+    rows: list[AuditRow] = []
+    section = "store"
 
     def row(state: str, what: str, detail: str = "") -> None:
-        rows.append((state, what, detail))
+        rows.append((state, what, detail, section))
 
     def ok_if(cond: Any, what: str, detail: str = "") -> None:
         row("OK" if cond else "MISSING", what, detail)
@@ -1024,7 +1180,7 @@ def cmd_audit(s: Store) -> int:
     app = s.app()
     ok_if(app, "app record", f"{attr(app, 'name')} {attr(app, 'bundleId')}" if app else f"GET /v1/apps/{APP_ID} returned nothing")
     if not app and not s.c.dry_run:
-        return _print_audit(rows)
+        return rows
 
     info = s.app_info()
     rels = info.get("relationships") or {}
@@ -1113,6 +1269,7 @@ def cmd_audit(s: Store) -> int:
             row("OK" if n_offer else "MISSING", f"    {pid} introductory offer (1 week free)")
 
     # TestFlight
+    section = "testflight"
     blocs = s.c.get_list(f"/v1/apps/{APP_ID}/betaAppLocalizations")
     bloc = next((l for l in blocs if attr(l, "locale") == LOCALE), None)
     ok_if(bloc and attr(bloc, "feedbackEmail"), "TestFlight feedback email (betaAppLocalization)")
@@ -1135,18 +1292,189 @@ def cmd_audit(s: Store) -> int:
     if public and build:
         in_group = {b["id"] for b in s.c.get_list(f"/v1/betaGroups/{public[0]['id']}/builds")}
         ok_if(build["id"] in in_group, "  latest build in the public group")
+    section = "store"
     row("N/A", "App privacy (data collection) questionnaire", "no public API; fill in App Store Connect > App Privacy")
     row("N/A", "Paid Applications agreement, banking and tax", "no public API; App Store Connect > Business")
-    return _print_audit(rows)
+    return rows
 
 
-def _print_audit(rows: list[tuple[str, str, str]]) -> int:
+def _print_audit(rows: list[AuditRow]) -> int:
     missing = 0
-    for state, what, detail in rows:
+    for state, what, detail, _section in rows:
         missing += state == "MISSING"
         log(f"  [{state:7}] {what}" + (f"  - {detail}" if detail else ""))
     log(f"  {missing} missing item(s)")
     return 1 if missing else 0
+
+
+# ---------------------------------------------------------------------------
+# App Store release: version + build, then the review submission
+# ---------------------------------------------------------------------------
+
+
+def cmd_release(s: Store) -> None:
+    """Prepare the App Store version: find or create it, set the release type,
+    attach the build, write what's new (and the full localization when new)."""
+    global VERSION_STRING
+    VERSION_STRING = s.opt("version") or pubspec_version()
+    log(f"== release {VERSION_STRING}")
+    existing = s.version()
+    if existing and version_state(existing) not in EDITABLE_VERSION_STATES:
+        sys.exit(f"appStoreVersion {VERSION_STRING} is {version_state(existing)} and can no longer be changed; "
+                 "bump the version in pubspec.yaml or pass --version")
+    whats_new = read_whats_new(s.opt("whats_new_file"))
+    version, whats_new_result = sync_version_metadata(s, whats_new, only_whats_new=True)
+    vid = version["id"]
+
+    # MANUAL: an approved version waits for a human to press "Release this version".
+    release_type = "AFTER_APPROVAL" if s.opt("auto_release") else "MANUAL"
+    if attr(version, "releaseType") == release_type:
+        log(f"  releaseType: {release_type}, up to date")
+    else:
+        log(f"  releaseType: {attr(version, 'releaseType')} -> {release_type}")
+        s.c.update("appStoreVersions", vid, {"releaseType": release_type})
+
+    number = s.opt("build") or os.environ.get("ASC_BUILD_NUMBER", "").strip() or None
+    if number:
+        build = s.build_by_number(str(number))
+        if build is None:
+            sys.exit(f"build {number} is not in App Store Connect (run `testflight --build {number}` to wait for it)")
+        if attr(build, "processingState") != "VALID":
+            sys.exit(f"build {number} is {attr(build, 'processingState')}, not VALID; cannot attach it")
+    else:
+        build = s.latest_valid_build(VERSION_STRING)
+        if build is None:
+            sys.exit("no processed build to attach; upload one first")
+    attached = s.c.get_one(f"/v1/appStoreVersions/{vid}/build")
+    if attached and attached["id"] == build["id"]:
+        log(f"  build {attr(build, 'version')}: already attached")
+    else:
+        log(f"  build: attaching {attr(build, 'version')}" + (f" (replacing {attr(attached, 'version')})" if attached else ""))
+        s.c.request("PATCH", f"/v1/appStoreVersions/{vid}/relationships/build", rel("builds", build["id"]))
+
+    log(f"  summary: appStoreVersion {VERSION_STRING} ({version_state(version) or 'new'}) id={vid}, build {attr(build, 'version')}, "
+        f"releaseType {release_type}, what's new {whats_new_result}")
+    log("  next: `submit` (preview) then `submit --yes` to send it to App Review")
+
+
+ITEM_RELATIONSHIPS = ("appStoreVersion", "inAppPurchaseVersion", "subscriptionVersion", "subscriptionGroupVersion")
+
+
+def submission_items(s: Store, submission: dict) -> dict[str, list[str]]:
+    """relationship name -> ids already in the submission."""
+    out: dict[str, list[str]] = {k: [] for k in ITEM_RELATIONSHIPS}
+    for item in s.c.get_list(f"/v1/reviewSubmissions/{submission['id']}/items", {"include": ",".join(ITEM_RELATIONSHIPS)}):
+        for name in ITEM_RELATIONSHIPS:
+            id_ = related_id(item, name)
+            if id_:
+                out[name].append(id_)
+    return out
+
+
+def cmd_submit(s: Store) -> int:
+    """Send the editable version (with its in-app purchases) to App Review.
+
+    App Store Connect keeps one open review submission per app. Products that
+    were pressed "Submit for Review" in App Store Connect are already items in
+    it; the API only exposes the link from an item to its product, not the
+    other way round, so products still missing are reported for the console."""
+    global VERSION_STRING
+    log("== submit")
+    version = s.editable_version()
+    if version is None:
+        if not s.c.dry_run:
+            sys.exit("no editable appStoreVersion; run `release` first")
+        version = s.version(create=True)
+    VERSION_STRING = attr(version, "versionString")
+    vid = version["id"]
+    attached = s.c.get_one(f"/v1/appStoreVersions/{vid}/build")
+    log(f"  appStoreVersion {VERSION_STRING} ({version_state(version)}), build {attr(attached, 'version') if attached else 'NONE'}, "
+        f"releaseType {attr(version, 'releaseType')}")
+
+    missing = [what for state, what, _d, section in audit_rows(s) if state == "MISSING" and section == "store"]
+    if missing:
+        for what in missing:
+            log(f"  MISSING: {what.strip()}")
+        if s.c.dry_run:
+            log("  (dry run: a real run would stop here)")
+        else:
+            sys.exit(f"refusing to submit: {len(missing)} required item(s) missing; see `audit`")
+    else:
+        log("  audit: every required item is present")
+
+    submissions = s.c.get_list(f"/v1/apps/{APP_ID}/reviewSubmissions")
+    active = [r for r in submissions if attr(r, "state") in ACTIVE_SUBMISSION_STATES]
+    if active:
+        r = active[0]
+        log(f"  review submission {r['id']} is already {attr(r, 'state')} (submitted {attr(r, 'submittedDate')}); nothing to do")
+        return 0
+    pending = [r for r in submissions if attr(r, "state") in PENDING_SUBMISSION_STATES]
+    submission = pending[0] if pending else None
+    items = submission_items(s, submission) if submission else {k: [] for k in ITEM_RELATIONSHIPS}
+    if submission:
+        log(f"  open review submission {submission['id']} ({attr(submission, 'state')}) with "
+            f"{sum(len(v) for v in items.values())} item(s)")
+    else:
+        log("  no open review submission; one will be created")
+
+    # Products that should go to review with this version.
+    iap_by_id = {p["id"]: attr(p, "productId") for p in s.c.get_list(f"/v1/apps/{APP_ID}/inAppPurchasesV2") if attr(p, "state") == "READY_TO_SUBMIT"}
+    sub_by_id: dict[str, str] = {}
+    for g in s.c.get_list(f"/v1/apps/{APP_ID}/subscriptionGroups"):
+        for sub in s.c.get_list(f"/v1/subscriptionGroups/{g['id']}/subscriptions"):
+            if attr(sub, "state") == "READY_TO_SUBMIT":
+                sub_by_id[sub["id"]] = attr(sub, "productId")
+    covered_iaps = {related_id(s.c.get_one(f"/v1/inAppPurchaseVersions/{v}", {"include": "inAppPurchase"}), "inAppPurchase")
+                    for v in items["inAppPurchaseVersion"]}
+    covered_subs = {related_id(s.c.get_one(f"/v1/subscriptionVersions/{v}", {"include": "subscription"}), "subscription")
+                    for v in items["subscriptionVersion"]}
+    version_in = vid in items["appStoreVersion"]
+    log(f"  item appStoreVersion {VERSION_STRING}: {'already in the submission' if version_in else 'will be added'}")
+    for id_, pid in iap_by_id.items():
+        log(f"  item in-app purchase {pid}: {'in the submission' if id_ in covered_iaps else 'NOT in the submission'}")
+    for id_, pid in sub_by_id.items():
+        log(f"  item subscription {pid}: {'in the submission' if id_ in covered_subs else 'NOT in the submission'}")
+    if items["subscriptionGroupVersion"]:
+        log(f"  item subscription group: in the submission ({len(items['subscriptionGroupVersion'])})")
+    absent = [pid for id_, pid in {**iap_by_id, **sub_by_id}.items() if id_ not in covered_iaps | covered_subs]
+    if absent:
+        log(f"  {len(absent)} product(s) are READY_TO_SUBMIT but not in the submission: {', '.join(absent)}")
+        log("  the API cannot add them (no product -> version link); open each product in App Store Connect and press"
+            " 'Submit for Review', which adds it to the open submission, then rerun")
+        if not s.opt("without_iap") and not s.c.dry_run:
+            sys.exit("refusing to submit without them; pass --without-iap to submit the app alone")
+
+    if not s.opt("yes"):
+        log("  preview only: rerun with --yes to create the item(s) above and submit for review")
+        return 0
+
+    if submission is None:
+        log("  reviewSubmission: creating")
+        try:
+            submission = s.c.create("reviewSubmissions", {"platform": PLATFORM}, {"app": rel("apps", APP_ID)})
+        except ApiError as err:
+            if err.status != 409:
+                raise
+            log(f"  Apple refused a new submission (409: {err}); looking for the open one again")
+            pending = [r for r in s.c.get_list(f"/v1/apps/{APP_ID}/reviewSubmissions") if attr(r, "state") in PENDING_SUBMISSION_STATES]
+            if not pending:
+                raise
+            submission = pending[0]
+    sid = submission["id"]
+    if not version_in:
+        log(f"  reviewSubmissionItem: adding appStoreVersion {VERSION_STRING}")
+        try:
+            s.c.create("reviewSubmissionItems", None,
+                       {"reviewSubmission": rel("reviewSubmissions", sid), "appStoreVersion": rel("appStoreVersions", vid)})
+        except ApiError as err:
+            if err.status != 409:
+                raise
+            log(f"  Apple says the version is already part of the submission (409: {err})")
+    log(f"  reviewSubmission {sid}: submitting")
+    result = s.c.update("reviewSubmissions", sid, {"submitted": True})
+    log(f"  submitted: state {attr(result, 'state') or 'unknown'}; follow it in App Store Connect > App Review")
+    log("  after approval the version waits for a manual release (releaseType MANUAL) unless `release --auto-release` was used")
+    return 0
 
 
 # ---------------------------------------------------------------------------
@@ -1163,6 +1491,8 @@ COMMANDS: dict[str, Callable[[Store], Any]] = {
     "subscriptions": cmd_subscriptions,
     "review-info": cmd_review_info,
     "testflight": cmd_testflight,
+    "release": cmd_release,
+    "submit": cmd_submit,
 }
 
 
@@ -1173,10 +1503,18 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--dry-run", action="store_true", help="print every request instead of sending it")
     parser.add_argument("--verbose", "-v", action="store_true", help="also print GET requests")
     parser.add_argument("--categories", action="store_true", help="with `status`: list App Store category ids")
+    parser.add_argument("--build", metavar="N", help="build number: `testflight` waits for it, `release` attaches it "
+                        "(default: env ASC_BUILD_NUMBER, else the latest build)")
+    parser.add_argument("--timeout", type=float, default=40, metavar="MIN", help="with `testflight --build`: minutes to wait for processing (default 40)")
+    parser.add_argument("--whats-new-file", metavar="PATH", help="text for what's new instead of release_notes.txt; an empty file leaves it untouched")
+    parser.add_argument("--version", metavar="X.Y.Z", help="with `release`: the App Store version (default: pubspec.yaml)")
+    parser.add_argument("--auto-release", action="store_true", help="with `release`: go live automatically after approval (default: manual release)")
+    parser.add_argument("--yes", action="store_true", help="with `submit`: really submit (without it only a preview is printed)")
+    parser.add_argument("--without-iap", action="store_true", help="with `submit`: proceed even if ready products are not in the submission")
     args = parser.parse_args(argv)
 
     client = Client(dry_run=args.dry_run, verbose=args.verbose)
-    store = Store(client)
+    store = Store(client, args)
     if args.dry_run:
         log(f"dry run: nothing is sent. Issuer ID loaded, key {KEY_ID}, app {APP_ID} ({BUNDLE_ID})")
     global LOCALE
@@ -1195,7 +1533,8 @@ def main(argv: list[str] | None = None) -> int:
             for name in ALL_ORDER:
                 COMMANDS[name](store)
         else:
-            COMMANDS[args.command](store)
+            rc = COMMANDS[args.command](store)
+            return int(rc or 0)
     except ApiError as err:
         log(f"error: {err}")
         return 1

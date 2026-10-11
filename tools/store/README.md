@@ -10,7 +10,7 @@ missing and updates what differs, so it can be rerun after a partial failure.
 
 | What | Where |
 | --- | --- |
-| Team API key `9QC72A5QMN` (role App Manager or Admin) | `secrets/AuthKey_9QC72A5QMN.p8` (never committed) |
+| Team API key `9QC72A5QMN` (role App Manager or Admin) | `secrets/AuthKey_9QC72A5QMN.p8` (never committed); env vars `ASC_KEY_ID` and `ASC_KEY_PATH` override the id and the path (used by CI) |
 | Issuer ID | env var `ASC_ISSUER_ID`, or the file `secrets/app-store-connect-issuer-id.txt` |
 
 To find the Issuer ID: App Store Connect > Users and Access > Integrations >
@@ -48,13 +48,23 @@ Below, `asc` stands for `.venv/bin/python tools/store/asc_publish.py`.
 | `iap` | the eight consumables from `subscriptions/consumables.json` (`/v2/inAppPurchases`), localizations, USD price equalised to all territories through `inAppPurchasePricePoints/{id}/equalizations`, availability, optional review screenshot |
 | `subscriptions` | group `VIP` and its localization, `vip_monthly` / `vip_yearly` attributes and localizations, one `subscriptionPrices` per territory from `subscriptionPricePoints/{id}/equalizations`, one `subscriptionIntroductoryOffers` (1 week free) per territory, review screenshot, promotional image, availability |
 | `review-info` | `appStoreReviewDetails`: contact from `review_contact.json` and `review_notes.txt` |
-| `testflight` | `betaAppLocalizations` (feedback email, what to test, URLs), `betaAppReviewDetails`, `betaLicenseAgreements`, the latest build's `usesNonExemptEncryption=false` and what-to-test text, and an external `betaGroups` "Public testers" with a public link containing the latest build |
+| `testflight` | `betaAppLocalizations` (feedback email, what to test, URLs), `betaAppReviewDetails`, `betaLicenseAgreements`, the build's `usesNonExemptEncryption=false` and what-to-test text, the build added to the external `betaGroups` "Public testers" (public link) and to every internal group that does not already get all builds, then a `betaAppReviewSubmissions` for the build. `--build N` waits for build N to appear and finish processing (30 s polls, `--timeout` minutes, default 40; fails on INVALID/FAILED); without it the latest build is used. `--whats-new-file PATH` replaces `release_notes.txt` as the what-to-test text (an empty file leaves it untouched). `ASC_BUILD_NUMBER` is the env fallback for `--build` |
+| `release` | the `appStoreVersions` record for `--version X.Y.Z` (default: `pubspec.yaml`): found, renamed from the one editable version, or created when the newest version is already in review or live; `releaseType` MANUAL (approved versions wait for a click in App Store Connect; `--auto-release` for AFTER_APPROVAL); the build attached (`--build N`, else the newest processed build of that version); the primary-locale localization with what's new from `release_notes.txt` or `--whats-new-file` (a new localization gets description, keywords, URLs too; Apple's refusal of what's new on a first version is tolerated) |
+| `submit` | the review submission: reuses the app's open `reviewSubmissions` (the one App Store Connect fills when a product is "submitted for review") or creates one, adds the `appStoreVersion` item, checks that every READY_TO_SUBMIT in-app purchase and subscription is an item, then sets `submitted: true`. Without `--yes` it only prints what would be submitted. Refuses while the audit lists a missing store item or a ready product is not in the submission (`--without-iap` to override the latter) |
 | `status` | prints what exists; `--categories` also lists the category ids |
 | `audit` | read-only checklist (OK / MISSING / N/A) for submission and for a public TestFlight link; exit code 1 while something is missing |
-| `all` | `app-info`, `version`, `age-rating`, `price-free`, `screenshots`, `iap`, `subscriptions`, `review-info`, `testflight`, in that order |
+| `all` | `app-info`, `version`, `age-rating`, `price-free`, `screenshots`, `iap`, `subscriptions`, `review-info`, `testflight`, in that order (never `release` or `submit`) |
 
 Every subcommand accepts `--dry-run`, which prints each request (method, URL,
 JSON body) instead of sending it, and `-v` to also print GET requests.
+
+Note on products in review submissions: the API links a submission item to an
+`inAppPurchaseVersions` / `subscriptionVersions` record, but nothing links a
+product to its version record. `submit` can therefore tell which products are
+already in the open submission (they get there when "Submit for Review" is
+pressed on the product's page in App Store Connect, which is what happened for
+the eight consumables and the VIP group) but cannot add a missing one itself;
+it names the missing products and stops.
 
 Locale: the app's `primaryLocale` in App Store Connect is `en-GB`. The script
 reads it from the app record and writes every localization to that locale; the
@@ -93,6 +103,31 @@ asc audit                        # everything should be OK or N/A
 
 `asc all` runs the same steps without the upload. Rerunning any step is safe.
 
+## Release flow
+
+1. **Local device**: develop and test with `flutter run`; bump `version:` in
+   `pubspec.yaml` (the `+N` build number only matters for hand uploads).
+2. **GitHub release**: publish a release with tag `vX.Y.Z` (the release body
+   becomes the TestFlight "what to test" text).
+3. **TestFlight, automatic**: the `Release to TestFlight` workflow archives,
+   uploads the build as `100 + run number`, waits for Apple to process it,
+   runs `asc testflight --build N --whats-new-file <release body>`: export
+   compliance, what to test, the build in "Public testers" and the internal
+   groups, Beta App Review submitted. Internal testers can install at once;
+   the public link works once Beta App Review passes.
+4. **Submit to App Store, manual**: run the `Submit to App Store` workflow
+   (Actions > Submit to App Store > Run workflow) with the version and,
+   optionally, the build number. It runs `asc release --version X.Y.Z
+   [--build N]` then `asc submit --yes`. Nothing else ever submits the app for
+   review. Locally the same is `asc release --version X.Y.Z --build N`, then
+   `asc submit` to preview and `asc submit --yes` to send.
+5. **Approve**: Apple reviews the version together with the products in the
+   same submission.
+6. **Release, manual**: the version is created with `releaseType` MANUAL, so
+   after approval it sits in Pending Developer Release until someone presses
+   "Release this version" in App Store Connect. Pass `--auto-release` to
+   `release` (locally) if a version should go live by itself.
+
 ## Uploading a build
 
 `tools/store/upload_build.sh` runs `flutter build ios --release --no-codesign`
@@ -122,9 +157,12 @@ the key was added.
   gameplay content; no tracking, no third-party advertising).
 - **Agreements**: Paid Applications agreement, banking and tax forms
   (App Store Connect > Business).
-- **Submitting**: attach the processed build to version 1.7.0 and submit the
-  version together with the in-app purchases and subscriptions
-  (they are submitted with the first version that uses them).
+- **Products in the review submission**: press "Submit for Review" on each
+  in-app purchase and subscription page once, which puts it into the app's
+  open review submission; `asc submit` then submits them with the version
+  (the API cannot add them, see the note above).
+- **Releasing**: after approval, press "Release this version" (the version
+  uses manual release).
 - **Sandbox tester** for verifying purchases on a device:
   Users and Access > Sandbox.
 

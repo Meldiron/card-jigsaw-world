@@ -1,10 +1,11 @@
 name: Release to TestFlight
 
-# Publishing a GitHub release (tag like v1.7.0) builds a signed iOS archive
-# and uploads it to App Store Connect. The build lands in TestFlight only;
-# attaching it to an App Store version and submitting for review stays a
-# deliberate manual step in App Store Connect. Version = tag,
-# build number = 100 + run number.
+# Publishing a GitHub release (tag like v1.7.0) builds a signed iOS archive,
+# uploads it to App Store Connect, waits for processing, adds the build to
+# the TestFlight groups and submits it to Beta App Review. The build lands in
+# TestFlight only; attaching it to an App Store version and submitting for
+# App Review is the separate, human-started "Submit to App Store" workflow.
+# Version = tag, build number = 100 + run number.
 
 on:
   release:
@@ -106,6 +107,27 @@ jobs:
           xcrun altool --upload-app --type ios --file "$IPA" \
             --apiKey ${{ secrets.APP_STORE_CONNECT_KEY_ID }} \
             --apiIssuer ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+
+      - name: Add to TestFlight group and submit for beta review
+        # Waits for Apple to process the build (polls every 30 s, up to 40 min),
+        # marks it export-compliant, writes the release notes as "what to test",
+        # adds it to the "Public testers" and internal groups and submits it
+        # to Beta App Review. The release body may be empty (workflow_dispatch);
+        # an empty file leaves the previous what-to-test text in place.
+        timeout-minutes: 45
+        continue-on-error: false
+        env:
+          ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+          ASC_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          RELEASE_BODY: ${{ github.event.release.body }}
+        run: |
+          python3 -m pip install -q --user --break-system-packages pyjwt cryptography requests
+          WHATS_NEW=$(mktemp)
+          printf '%s' "$RELEASE_BODY" > "$WHATS_NEW"
+          export ASC_KEY_PATH=~/private_keys/AuthKey_${ASC_KEY_ID}.p8
+          python3 tools/store/asc_publish.py testflight \
+            --build ${{ steps.ver.outputs.build }} \
+            --whats-new-file "$WHATS_NEW"
 
       - uses: actions/upload-artifact@v4
         with:

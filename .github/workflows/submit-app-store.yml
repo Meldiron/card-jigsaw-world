@@ -1,0 +1,56 @@
+name: Submit to App Store
+
+# The only path that submits the app to App Review, and it is always started
+# by a human (workflow_dispatch; nothing triggers it automatically). It takes
+# a build that is already processed in App Store Connect (uploaded by
+# "Release to TestFlight"), attaches it to the App Store version, sets the
+# release type to MANUAL and submits the version together with the open
+# review submission (in-app purchases, subscriptions). After Apple approves
+# it, the version still waits for "Release this version" in App Store Connect.
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "App Store version to submit (e.g. 1.7.0)"
+        required: true
+      build:
+        description: "Build number to attach (default: latest processed build of that version)"
+        required: false
+
+jobs:
+  submit:
+    name: Attach build and submit for review
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+      ASC_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Python dependencies
+        run: python3 -m pip install -q --user --break-system-packages pyjwt cryptography requests
+
+      - name: Install App Store Connect API key
+        run: |
+          mkdir -p ~/private_keys
+          echo "${{ secrets.APP_STORE_CONNECT_API_KEY_P8 }}" | base64 --decode > ~/private_keys/AuthKey_${ASC_KEY_ID}.p8
+          chmod 600 ~/private_keys/AuthKey_${ASC_KEY_ID}.p8
+
+      - name: Prepare the App Store version
+        run: |
+          export ASC_KEY_PATH=~/private_keys/AuthKey_${ASC_KEY_ID}.p8
+          BUILD="${{ github.event.inputs.build }}"
+          python3 tools/store/asc_publish.py release \
+            --version "${{ github.event.inputs.version }}" \
+            ${BUILD:+--build "$BUILD"}
+
+      - name: Submit for App Review
+        run: |
+          export ASC_KEY_PATH=~/private_keys/AuthKey_${ASC_KEY_ID}.p8
+          python3 tools/store/asc_publish.py submit --yes
+
+      - name: Remove the API key
+        if: always()
+        run: rm -f ~/private_keys/AuthKey_${ASC_KEY_ID}.p8
