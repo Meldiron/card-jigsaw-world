@@ -40,5 +40,5 @@ See `docs/purchases.md` for product ids and the verification function. In short:
 
 ## Other optional setup
 
-- **OAuth sign-in**: Appwrite console > Auth > Settings: enable Apple, Google and Facebook with their client ids and secrets; the buttons in the app already call them.
+- **Sign in with Apple**: already configured. Appwrite console > Auth > Social providers > Apple has **Native sign-in** on with bundle id `io.almostapps.cardJigsawWorld`; the app holds the `com.apple.developer.applesignin` entitlement. Xcode registers the capability on the App ID on the first signed build (automatic signing). If you manage the App ID by hand, tick **Sign in with Apple** on it in the Apple Developer portal. Browser sign-in (service id, key, team id) is not needed. Google and Facebook are intentionally off for now.
 - **Push notifications** for the daily reminder are not wired yet.

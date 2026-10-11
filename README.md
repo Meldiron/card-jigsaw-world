@@ -25,7 +25,7 @@ Cards that belong next to each other **snap together anywhere on the board** and
 | Content | 120 library packs, 97 event packs and 46 monthly packs (5,079 puzzles), every image with a stored BlurHash so galleries show blurred colour before the picture arrives. Featured starters: Wild Nature (free), Animal Friends, Cozy Kitchen, City Lights, Land of Fire & Ice (ticket pack), Masterpieces (Cleveland Museum of Art, CC0), Deep Space (NASA), Autumn Harvest (seasonal) |
 | Events | Daily goals (coins) and weekly goals (tickets) with one-tap Play shortcuts and claimable rewards; world-day events (97 across Oct 2026 to Dec 2027, one to three per week, each running from three days before the day to four days after) with a dedicated themed pack, shown up to three days before they open |
 | Avatars and achievements | 55 avatars: 4 free, 28 for coins, 23 earned through 24 achievement families; multi-step families upgrade the same avatar with silver, gold and double rings |
-| Social | League leaderboard by XP (real players only: profiles with at least one solved puzzle), friends by friend code, Facebook / Apple / Google sign-in buttons via Appwrite OAuth2 |
+| Social | League leaderboard by XP (real players only: profiles with at least one solved puzzle), friends by friend code, native Sign in with Apple (ID token session, no browser redirect) |
 | Account | Instant guest play (anonymous session) with a generated display name such as "Brave Otter", upgrade to email account without losing progress, sign in / out |
 | My Puzzles | Upload your own photos to Appwrite Storage and play them as puzzles |
 | Store | Coin and ticket bundles, two hint packs and VIP, which unlocks every pack including past monthly packs (sandbox purchases until StoreKit is wired) |
@@ -100,7 +100,7 @@ Project `6acb4de5003e38d5ebd9` in region `fra`, endpoint `https://fra.cloud.appw
 
 | Resource | Purpose |
 |---|---|
-| Auth | Anonymous sessions for instant play; email/password; OAuth2 providers (Apple, Google, Facebook) ready to enable in the console |
+| Auth | Anonymous sessions for instant play; email/password; native Sign in with Apple via `createIdTokenSession` (Google and Facebook can be added later) |
 | `cjw.profiles` | Coins, tickets, hints, XP, level, piggy bank, streak, unlocked packs, stats. Row id = user id, public read for leaderboard |
 | `cjw.packs`, `cjw.puzzles`, `cjw.events` | Catalog, public read. Featured packs seeded from `docs/seed-catalog.json`; monthly daily packs (puzzles carry a `date`) from `docs/seed-daily-packs.json` |
 | `cjw.progress` | Per-user, per-puzzle board layout, moves, time, stars, best scores |
@@ -138,7 +138,7 @@ Regenerate launcher icons after editing `assets/icon/icon.png` with `dart run fl
 ## Roadmap / not yet wired
 
 - StoreKit / Play Billing (purchases are sandboxed; the store credits coins locally).
-- OAuth providers need app ids and secrets in the Appwrite console. Facebook friend import depends on it.
+- Sign in with Apple needs the capability on the App ID in the Apple Developer portal (Xcode adds it automatically with the entitlement) and native sign-in enabled on the Apple provider in the Appwrite console with the bundle id listed. No secret, key or team id is required for the native flow.
 - Push notifications for daily reminders (toggle exists in settings).
 - An Appwrite Function to validate economy writes server-side and to proxy a keyed image API (Pexels) for fresh packs.
 - Web build: add the production hostname as a Web platform in Appwrite.

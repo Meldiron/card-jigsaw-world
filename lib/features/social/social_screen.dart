@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../core/haptics.dart';
 import '../../core/theme/tokens.dart';
@@ -195,7 +194,6 @@ class _Friends extends ConsumerWidget {
     final c = context.colors;
     final friends = ref.watch(friendsProvider);
     final me = ref.watch(currentUserIdProvider);
-    final isGuest = ref.watch(isGuestProvider);
     return ListView(
       physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
@@ -230,14 +228,6 @@ class _Friends extends ConsumerWidget {
               ),
               const SizedBox(height: 12),
               BigButton(label: 'Add friend by code', icon: AppIcons.addFriend, height: 48, onTap: onAdd),
-              const SizedBox(height: 8),
-              BigButton(
-                label: 'Find Facebook friends',
-                kind: ButtonKind.secondary,
-                icon: AppIcons.friends,
-                height: 48,
-                onTap: () => isGuest ? context.push('/account') : showToast(context, 'Connect Facebook in Account to find friends', icon: AppIcons.friends),
-              ),
             ],
           ),
         ),

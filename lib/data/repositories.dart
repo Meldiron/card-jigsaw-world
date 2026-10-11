@@ -53,8 +53,18 @@ class AuthRepository {
     return _account.get();
   }
 
-  Future<void> signInWithOAuth(enums.OAuthProvider provider) async {
-    await _account.createOAuth2Session(provider: provider);
+  /// Exchanges an Apple ID token obtained on device for an Appwrite session.
+  /// [nonce] is the raw (unhashed) nonce whose SHA-256 was handed to Apple.
+  /// When a session already exists (a guest), Appwrite links the Apple identity
+  /// to that user instead of creating a new one, so progress carries over.
+  Future<models.User> signInWithAppleIdToken({required String idToken, required String nonce, String? name}) async {
+    await _account.createIdTokenSession(
+      provider: enums.IdTokenProvider.apple,
+      idToken: idToken,
+      nonce: nonce,
+      name: (name == null || name.trim().isEmpty) ? null : name.trim(),
+    );
+    return _account.get();
   }
 
   Future<void> signOut() async {

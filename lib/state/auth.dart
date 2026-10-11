@@ -1,4 +1,3 @@
-import 'package:appwrite/enums.dart' as enums;
 import 'package:appwrite/models.dart' as models;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -38,10 +37,12 @@ class AuthNotifier extends AsyncNotifier<models.User?> {
     state = AsyncData(user);
   }
 
-  Future<void> signInWithProvider(enums.OAuthProvider provider) async {
-    await _repo.signInWithOAuth(provider);
-    final user = await _repo.currentUser();
-    if (user != null) state = AsyncData(user);
+  /// Native Sign in with Apple: the credential comes from the system sheet,
+  /// Appwrite verifies the ID token and either links it to the current guest
+  /// or signs the returning player into their existing account.
+  Future<void> signInWithApple({required String idToken, required String nonce, String? name}) async {
+    final user = await _repo.signInWithAppleIdToken(idToken: idToken, nonce: nonce, name: name);
+    state = AsyncData(user);
   }
 
   Future<void> signOut() async {

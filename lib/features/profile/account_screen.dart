@@ -1,9 +1,15 @@
+import 'dart:convert';
+import 'dart:io' show Platform;
+import 'dart:math';
+
 import 'package:appwrite/appwrite.dart';
-import 'package:appwrite/enums.dart' as enums;
+import 'package:crypto/crypto.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:go_router/go_router.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../core/haptics.dart';
 import '../../core/theme/tokens.dart';
@@ -71,18 +77,46 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
     }
   }
 
-  Future<void> _oauth(enums.OAuthProvider provider) async {
+  Future<void> _apple() async {
     setState(() => _error = null);
+    // Apple receives the SHA-256 of a fresh random nonce; Appwrite receives the
+    // raw value and checks it against the token, which blocks replayed tokens.
+    final random = Random.secure();
+    final nonce = base64UrlEncode(List<int>.generate(32, (_) => random.nextInt(256)));
+    final hashedNonce = sha256.convert(utf8.encode(nonce)).toString();
     try {
-      await ref.read(authProvider.notifier).signInWithProvider(provider);
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: const [AppleIDAuthorizationScopes.email, AppleIDAuthorizationScopes.fullName],
+        nonce: hashedNonce,
+      );
+      final idToken = credential.identityToken;
+      if (idToken == null) {
+        setState(() => _error = 'Apple did not return a sign-in token. Please try again.');
+        return;
+      }
+      // Apple only sends the name on the first authorization, never in the token.
+      final name = [credential.givenName, credential.familyName].whereType<String>().where((s) => s.isNotEmpty).join(' ');
+      setState(() => _busy = true);
+      await ref.read(authProvider.notifier).signInWithApple(idToken: idToken, nonce: nonce, name: name);
       _afterAuth();
-      if (mounted) context.pop();
+      if (!mounted) return;
+      Haptics.success();
+      showToast(context, 'Signed in with Apple. Your progress is saved.', icon: AppIcons.check);
+      context.pop();
+    } on SignInWithAppleAuthorizationException catch (e) {
+      if (e.code == AuthorizationErrorCode.canceled) return;
+      setState(() => _error = 'Sign in with Apple failed (${e.code.name}). Please try again.');
     } on AppwriteException catch (e) {
-      setState(() => _error = '${provider.name} sign-in is not configured yet (${e.message}). Enable it in the Appwrite console under Auth → Settings.');
+      setState(() => _error = e.message ?? 'Sign in with Apple failed. Please try again.');
     } catch (e) {
       setState(() => _error = e.toString());
+    } finally {
+      if (mounted) setState(() => _busy = false);
     }
   }
+
+  /// Sign in with Apple is only offered where the system sheet exists.
+  bool get _appleAvailable => !kIsWeb && (Platform.isIOS || Platform.isMacOS);
 
   @override
   Widget build(BuildContext context) {
@@ -167,24 +201,19 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(child: _Social(label: 'Apple', icon: Icons.apple, onTap: () => _oauth(enums.OAuthProvider.apple))),
-                const SizedBox(width: 8),
-                Expanded(child: _Social(label: 'Google', icon: Icons.g_mobiledata_rounded, onTap: () => _oauth(enums.OAuthProvider.google))),
-                const SizedBox(width: 8),
-                Expanded(child: _Social(label: 'Facebook', icon: Icons.facebook, color: const Color(0xFF1877F2), onTap: () => _oauth(enums.OAuthProvider.facebook))),
-              ],
-            ),
-            const SizedBox(height: 18),
-            Row(
-              children: [
-                Expanded(child: Divider(color: c.stroke)),
-                Padding(padding: const EdgeInsets.symmetric(horizontal: 12), child: Text('or with email', style: TextStyle(color: c.textTertiary, fontWeight: FontWeight.w500, fontSize: 12))),
-                Expanded(child: Divider(color: c.stroke)),
-              ],
-            ),
+            if (_appleAvailable) ...[
+              const SizedBox(height: 16),
+              _AppleButton(onTap: _busy ? null : _apple),
+              const SizedBox(height: 18),
+              Row(
+                children: [
+                  Expanded(child: Divider(color: c.stroke)),
+                  Padding(padding: const EdgeInsets.symmetric(horizontal: 12), child: Text('or with email', style: TextStyle(color: c.textTertiary, fontWeight: FontWeight.w500, fontSize: 12))),
+                  Expanded(child: Divider(color: c.stroke)),
+                ],
+              ),
+            ] else
+              const SizedBox(height: 16),
             const SizedBox(height: 14),
             CupertinoSlidingSegmentedControl<bool>(
               groupValue: _signUp,
@@ -221,27 +250,31 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
   }
 }
 
-class _Social extends StatelessWidget {
-  const _Social({required this.label, required this.icon, required this.onTap, this.color});
-  final String label;
-  final IconData icon;
-  final VoidCallback onTap;
-  final Color? color;
+/// Black "Continue with Apple" button following Apple's Human Interface
+/// Guidelines (black fill, white logo and label, 44pt minimum height).
+class _AppleButton extends StatelessWidget {
+  const _AppleButton({required this.onTap});
+  final VoidCallback? onTap;
   @override
   Widget build(BuildContext context) {
-    final c = context.colors;
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    final bg = dark ? Colors.white : Colors.black;
+    final fg = dark ? Colors.black : Colors.white;
     return Pressable(
       onTap: onTap,
-      child: Container(
-        height: 50,
-        decoration: BoxDecoration(color: c.card, borderRadius: BorderRadius.circular(Radii.md), border: Border.all(color: c.stroke)),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, color: color ?? c.textPrimary, size: 22),
-            const SizedBox(width: 6),
-            Text(label, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
-          ],
+      child: Opacity(
+        opacity: onTap == null ? 0.6 : 1,
+        child: Container(
+          height: 50,
+          decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(Radii.md)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.apple, color: fg, size: 24),
+              const SizedBox(width: 8),
+              Text('Continue with Apple', style: TextStyle(color: fg, fontWeight: FontWeight.w600, fontSize: 15)),
+            ],
+          ),
         ),
       ),
     );
