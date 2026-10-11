@@ -1,0 +1,10 @@
+Version 1.7.0
+
+- Four tilings: Cards, Squares, Triangles and Hexagons, each with its own difficulty ladder and reward multiplier.
+- Daily puzzle packs for every month back to January 2023. The current month is free.
+- World-day live events with themed packs.
+- 24 achievement families and 55 avatars.
+- Home Screen widgets with today's daily picture and a "One last game?" shortcut on the app icon.
+- Sign in with Apple.
+- VIP with a 7-day free trial on both the monthly and the yearly plan.
+- Store purchases are now verified server-side.

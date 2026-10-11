@@ -1,0 +1,11 @@
+Thanks for testing Card Jigsaw World 1.7.0. Please try:
+
+1. Play today's daily puzzle from Home and finish it.
+2. Open Library, pick a pack and play one board in each mode: Cards, Squares, Triangles, Hexagons.
+3. Drag a card next to its neighbour so they snap into a group, then move the group.
+4. Open the Store (tap the coin balance on Home) and start the VIP free trial with your Sandbox Apple ID. The VIP badge should appear on Home within a few seconds.
+5. Profile > Settings > Account: Sign in with Apple. Your coins and progress should stay.
+6. Add the Card Jigsaw World widget to your Home Screen and tap it; it should open today's puzzle.
+7. Long-press the app icon and tap "One last game?".
+
+Anything that crashes, freezes, shows a wrong balance or a picture that does not load: use the TestFlight feedback button with a screenshot.

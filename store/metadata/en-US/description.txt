@@ -1,0 +1,34 @@
+Card Jigsaw World is a picture puzzle with a twist. Every photo is cut into cards and shuffled across a board. Tap a card and then the spot where it belongs, or drag it there. Cards that belong next to each other snap together anywhere on the board and move as one group. A card that lands in its true spot locks into the picture. Fewer moves earn more stars.
+
+WHAT YOU PLAY
+- Four ways to cut a picture: cards, squares, triangles and hexagons. Each mode has its own difficulty ladder and a reward multiplier.
+- Difficulty tiers that unlock as you level up, from a quick 3x3 to boards that fill an evening.
+- A daily puzzle every day, with monthly packs going back to January 2023. The current month is free.
+- Curated packs: museum paintings, wildlife, deep space, cities, kitchens, seasons and more. Every picture shows its author and licence.
+- World-day live events with a themed pack, open for a few days around each date.
+- Your own photos, turned into puzzles.
+
+HELPERS
+Peek, Hint and Magic Lock for stubborn boards. Undo is always free. Leave any board and resume it later.
+
+PROGRESS AND REWARDS
+- Coins, tickets and hints are earned by playing: level rewards, daily goals, weekly goals, a daily gift streak and a piggy bank that fills with every completed puzzle.
+- Spin the Lucky Wheel for coins or hints.
+- 24 achievement families and 55 avatars to collect.
+- A league leaderboard and friend codes to compare progress with people you know.
+
+ON IPHONE
+- Home Screen widgets show today's daily picture. Tap to play.
+- A "One last game?" shortcut on the app icon opens today's puzzle.
+- Light and dark mode, with music, sound and haptics you can switch off.
+
+NO ACCOUNT NEEDED
+Start as a guest in one tap. Sign in with Apple or create an email account whenever you want your progress on more than one device.
+
+VIP
+VIP unlocks every pack, including past monthly packs, and turns off the game's own store promotions. Monthly and yearly plans both begin with a 7-day free trial. Payment is charged to your Apple ID account when the trial ends or at confirmation of purchase. The subscription renews automatically unless it is cancelled at least 24 hours before the end of the current period. Manage or cancel it in your App Store account settings.
+
+No third-party ads, no tracking, no analytics SDKs.
+
+Privacy policy: https://github.com/Meldiron/card-jigsaw-world/blob/main/docs/privacy-policy.md
+Terms of use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/

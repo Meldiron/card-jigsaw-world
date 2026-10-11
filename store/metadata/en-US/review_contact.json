@@ -1,0 +1,8 @@
+{
+  "_note": "Fill in before running `asc_publish.py review-info`. These values are sent to App Review only and are not public.",
+  "contactFirstName": "Matej",
+  "contactLastName": "Baco",
+  "contactPhone": "[+country phone number]",
+  "contactEmail": "matej@appwrite.io",
+  "demoAccountRequired": false
+}

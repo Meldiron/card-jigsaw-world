@@ -1,0 +1,7 @@
+{
+  "_note": "App Store Connect appCategories ids. Check with `asc_publish.py status --categories` if an id is rejected.",
+  "primaryCategory": "GAMES",
+  "primarySubcategoryOne": "GAMES_PUZZLE",
+  "primarySubcategoryTwo": "GAMES_FAMILY",
+  "secondaryCategory": "ENTERTAINMENT"
+}

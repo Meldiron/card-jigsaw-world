@@ -1,7 +1,10 @@
 name: Release to TestFlight
 
-# Publishing a GitHub release (tag like v1.6.0) builds a signed iOS archive
-# and uploads it to TestFlight. Version = tag, build number = run number.
+# Publishing a GitHub release (tag like v1.7.0) builds a signed iOS archive
+# and uploads it to App Store Connect. The build lands in TestFlight only;
+# attaching it to an App Store version and submitting for review stays a
+# deliberate manual step in App Store Connect. Version = tag,
+# build number = 100 + run number.
 
 on:
   release:
@@ -38,8 +41,11 @@ jobs:
           INPUT="${{ github.event.inputs.version }}"
           if [ -n "$INPUT" ]; then V="$INPUT"; elif [ -n "$TAG" ]; then V="${TAG#v}"; else V=$(grep '^version:' pubspec.yaml | sed 's/version: //; s/+.*//'); fi
           echo "version=$V" >> "$GITHUB_OUTPUT"
-          echo "build=${{ github.run_number }}" >> "$GITHUB_OUTPUT"
-          echo "Version $V build ${{ github.run_number }}"
+          # Build numbers must only ever go up for a version. Offset the run
+          # number so CI builds always sit above builds uploaded by hand.
+          B=$((100 + ${{ github.run_number }}))
+          echo "build=$B" >> "$GITHUB_OUTPUT"
+          echo "Version $V build $B"
 
       - name: Install App Store Connect API key
         run: |
@@ -63,27 +69,35 @@ jobs:
       - name: Prepare Xcode build settings
         run: flutter build ios --config-only --release --build-name=${{ steps.ver.outputs.version }} --build-number=${{ steps.ver.outputs.build }}
 
-      - name: Archive (Xcode manages App Store profiles with the API key)
+      - name: Install App Store profiles and switch to manual signing
+        # The API key cannot use Xcode cloud signing, so the archive is signed
+        # with the imported Apple Distribution certificate and the App Store
+        # profiles created in the developer portal (tools/store/install_profiles.py
+        # downloads them; tools/store/ci_manual_signing.py points the Release
+        # configurations at them). The repo keeps automatic signing for local builds.
+        env:
+          ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+          ASC_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
         run: |
+          python3 -m pip install -q --user pyjwt cryptography
+          ASC_KEY_PATH=~/private_keys/AuthKey_${ASC_KEY_ID}.p8 python3 tools/store/install_profiles.py
+          python3 tools/store/ci_manual_signing.py
+
+      - name: Archive
+        run: |
+          set -o pipefail
           xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release \
             -destination 'generic/platform=iOS' \
             -archivePath build/Runner.xcarchive \
-            -allowProvisioningUpdates \
-            -authenticationKeyPath ~/private_keys/AuthKey_${{ secrets.APP_STORE_CONNECT_KEY_ID }}.p8 \
-            -authenticationKeyID ${{ secrets.APP_STORE_CONNECT_KEY_ID }} \
-            -authenticationKeyIssuerID ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }} \
-            archive | xcpretty || (echo "archive failed" && exit 1)
+            archive 2>&1 | grep -E "error:|warning: .*(sign|profile)|ARCHIVE (SUCCEEDED|FAILED)|^\*\*" || true
+          test -d build/Runner.xcarchive/Products/Applications/Runner.app
 
       - name: Export IPA
         run: |
           xcodebuild -exportArchive \
             -archivePath build/Runner.xcarchive \
             -exportOptionsPlist ios/ExportOptions.plist \
-            -exportPath build/ipa \
-            -allowProvisioningUpdates \
-            -authenticationKeyPath ~/private_keys/AuthKey_${{ secrets.APP_STORE_CONNECT_KEY_ID }}.p8 \
-            -authenticationKeyID ${{ secrets.APP_STORE_CONNECT_KEY_ID }} \
-            -authenticationKeyIssuerID ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+            -exportPath build/ipa
           ls -la build/ipa
 
       - name: Upload to TestFlight

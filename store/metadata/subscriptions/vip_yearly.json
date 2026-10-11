@@ -1,0 +1,19 @@
+{
+  "productId": "vip_yearly",
+  "appStoreId": "6821646642",
+  "referenceName": "VIP Yearly",
+  "subscriptionPeriod": "ONE_YEAR",
+  "groupLevel": 1,
+  "familySharable": false,
+  "price": { "currency": "USD", "customerPrice": "14.99", "baseTerritory": "USA" },
+  "introductoryOffer": { "offerMode": "FREE_TRIAL", "duration": "ONE_WEEK", "numberOfPeriods": 1 },
+  "localizations": {
+    "en-US": {
+      "name": "VIP Yearly",
+      "description": "Every pack and every past month, all year"
+    }
+  },
+  "reviewNote": "Auto-renewable yearly subscription with a 7-day free trial, same entitlement as VIP Monthly (every pack including past monthly daily packs, no house ads). Both plans sit in the VIP group at the same level, so switching between them is a crossgrade. The grant is applied server-side by our Appwrite Function after verifying the signed transaction; during review it runs against the Sandbox environment. Test: Home > tap coin balance > Store > Yearly, confirm with a Sandbox Apple ID.",
+  "reviewScreenshot": "store/review/subscription-review.png",
+  "promotionalImage": "store/promo/vip-promotional-1024.png"
+}

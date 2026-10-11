@@ -60,9 +60,13 @@ functions/*/node_modules/
 .env.*
 
 # Signing material and API keys (never commit)
-secrets/
+secrets/*
 *.p8
 *.p12
 *.cer
 *.certSigningRequest
 *.mobileprovision
+!secrets/app-store-connect-issuer-id.txt
+
+# Raw simulator captures for store screenshots (regenerate with flutter drive)
+store/raw/
