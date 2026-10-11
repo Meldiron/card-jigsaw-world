@@ -1,5 +1,5 @@
 {
-  "_note": "Apple age rating questionnaire. Family-friendly puzzle game: nothing to declare. Review `lootBox` and `gamblingSimulated` yourself if you consider the ticket-priced Lucky Wheel a randomised item mechanic.",
+  "_note": "Apple age rating questionnaire. lootBox=true because the ticket-priced Lucky Wheel pays random coins or hints and tickets can be bought.",
   "alcoholTobaccoOrDrugUseOrReferences": "NONE",
   "contests": "NONE",
   "gamblingSimulated": "NONE",
@@ -16,7 +16,7 @@
   "advertising": false,
   "gambling": false,
   "healthOrWellnessTopics": false,
-  "lootBox": false,
+  "lootBox": true,
   "messagingAndChat": false,
   "parentalControls": false,
   "socialMedia": false,

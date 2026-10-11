@@ -1,6 +1,6 @@
 # Support
 
-Card Jigsaw World is made by one person. Questions and bug reports go to **[support email]**. Replies usually take a day or two.
+Card Jigsaw World is made by one person. Questions and bug reports go to **support@almostapps.eu**. Replies usually take a day or two.
 
 ## Frequently asked questions
 

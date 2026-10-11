@@ -106,7 +106,7 @@ class SettingsScreen extends ConsumerWidget {
           ]),
           group('About', [
             _NavRow(icon: CupertinoIcons.doc_text, label: 'Image credits and licences', onTap: () => _showCredits(context)),
-            _NavRow(icon: CupertinoIcons.question_circle, label: 'Support', onTap: () => showToast(context, 'support@almostapps.io', icon: AppIcons.mail)),
+            _NavRow(icon: CupertinoIcons.question_circle, label: 'Support', onTap: () => showToast(context, 'support@almostapps.eu', icon: AppIcons.mail)),
             const _InfoRow(label: 'Version', value: '1.6.0 (9)'),
           ]),
         ],

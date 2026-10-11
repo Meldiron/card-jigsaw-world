@@ -65,6 +65,6 @@ If this policy changes, the new version will be published at this address and th
 
 ## Contact
 
-[support email]
+support@almostapps.eu
 
 Matej Baco, Slovakia
