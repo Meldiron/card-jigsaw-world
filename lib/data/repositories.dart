@@ -1,0 +1,359 @@
+import 'dart:convert';
+
+import 'package:appwrite/appwrite.dart';
+import 'package:appwrite/enums.dart' as enums;
+import 'package:appwrite/models.dart' as models;
+import 'package:crypto/crypto.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../core/appwrite.dart';
+import '../models/models.dart';
+
+const _db = AppwriteConfig.databaseId;
+
+String deterministicId(String a, String b) => md5.convert(utf8.encode('$a:$b')).toString();
+
+// ---------------------------------------------------------------------------
+// Auth
+// ---------------------------------------------------------------------------
+class AuthRepository {
+  AuthRepository(this._account);
+  final Account _account;
+
+  Future<models.User?> currentUser() async {
+    try {
+      return await _account.get();
+    } on AppwriteException catch (e) {
+      if (e.code == 401) return null;
+      rethrow;
+    }
+  }
+
+  Future<models.User> signInAnonymously() async {
+    await _account.createAnonymousSession();
+    return _account.get();
+  }
+
+  Future<models.User> signUp({required String email, required String password, required String name}) async {
+    await _account.create(userId: ID.unique(), email: email, password: password, name: name);
+    await _account.createEmailPasswordSession(email: email, password: password);
+    return _account.get();
+  }
+
+  /// Converts the current anonymous session into a permanent account.
+  Future<models.User> linkAnonymous({required String email, required String password, required String name}) async {
+    await _account.updateEmail(email: email, password: password);
+    if (name.trim().isNotEmpty) await _account.updateName(name: name.trim());
+    return _account.get();
+  }
+
+  Future<models.User> signIn({required String email, required String password}) async {
+    await _account.createEmailPasswordSession(email: email, password: password);
+    return _account.get();
+  }
+
+  Future<void> signInWithOAuth(enums.OAuthProvider provider) async {
+    await _account.createOAuth2Session(provider: provider);
+  }
+
+  Future<void> signOut() async {
+    try {
+      await _account.deleteSession(sessionId: 'current');
+    } on AppwriteException catch (e) {
+      if (e.code != 401) rethrow;
+    }
+  }
+
+  Future<void> updateName(String name) => _account.updateName(name: name);
+  Future<void> updatePrefs(Map<String, dynamic> prefs) => _account.updatePrefs(prefs: prefs);
+}
+
+// ---------------------------------------------------------------------------
+// Profile + economy
+// ---------------------------------------------------------------------------
+class ProfileRepository {
+  ProfileRepository(this._tables);
+  final TablesDB _tables;
+
+  Future<Profile?> fetch(String userId) async {
+    try {
+      final row = await _tables.getRow(databaseId: _db, tableId: AppwriteConfig.profiles, rowId: userId);
+      return Profile.fromRow(row.$id, row.data);
+    } on AppwriteException catch (e) {
+      if (e.code == 404) return null;
+      rethrow;
+    }
+  }
+
+  Future<Profile> create(String userId, {String? name}) async {
+    final p = Profile.guest(userId).copyWith(displayName: name?.trim().isNotEmpty == true ? name!.trim() : 'Player');
+    final row = await _tables.createRow(
+      databaseId: _db,
+      tableId: AppwriteConfig.profiles,
+      rowId: userId,
+      data: p.toData(),
+      permissions: [
+        Permission.read(Role.any()),
+        Permission.update(Role.user(userId)),
+        Permission.delete(Role.user(userId)),
+      ],
+    );
+    return Profile.fromRow(row.$id, row.data);
+  }
+
+  Future<Profile> fetchOrCreate(String userId, {String? name}) async =>
+      (await fetch(userId)) ?? await create(userId, name: name);
+
+  Future<Profile> update(String userId, Map<String, dynamic> patch) async {
+    final row = await _tables.updateRow(databaseId: _db, tableId: AppwriteConfig.profiles, rowId: userId, data: patch);
+    return Profile.fromRow(row.$id, row.data);
+  }
+
+  Future<Profile?> findByUserId(String userId) => fetch(userId);
+
+  Future<List<Profile>> leaderboard({int limit = 50}) async {
+    final res = await _tables.listRows(
+      databaseId: _db,
+      tableId: AppwriteConfig.profiles,
+      queries: [Query.greaterThan('puzzlesCompleted', 0), Query.orderDesc('xp'), Query.limit(limit)],
+    );
+    return res.rows.map((r) => Profile.fromRow(r.$id, r.data)).toList();
+  }
+
+  Future<void> logLedger(String userId, {required int amount, required String currency, required String reason, int? balanceAfter}) async {
+    try {
+      await _tables.createRow(
+        databaseId: _db,
+        tableId: AppwriteConfig.ledger,
+        rowId: ID.unique(),
+        data: {'userId': userId, 'amount': amount, 'currency': currency, 'reason': reason, 'balanceAfter': balanceAfter},
+        permissions: [Permission.read(Role.user(userId))],
+      );
+    } catch (e) {
+      debugPrint('ledger failed: $e');
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Catalog (packs, puzzles, events)
+// ---------------------------------------------------------------------------
+class CatalogRepository {
+  CatalogRepository(this._tables);
+  final TablesDB _tables;
+
+  Future<List<Pack>> packs() async {
+    final res = await _tables.listRows(
+      databaseId: _db,
+      tableId: AppwriteConfig.packs,
+      queries: [Query.orderAsc('sortOrder'), Query.limit(200)],
+    );
+    return res.rows.map((r) => Pack.fromRow(r.$id, r.data)).toList();
+  }
+
+  Future<List<Puzzle>> puzzles(String packId) async {
+    final res = await _tables.listRows(
+      databaseId: _db,
+      tableId: AppwriteConfig.puzzles,
+      queries: [Query.equal('packId', packId), Query.orderAsc('sortOrder'), Query.limit(200)],
+    );
+    return res.rows.map((r) => Puzzle.fromRow(r.$id, r.data)).toList();
+  }
+
+  /// Loads the whole catalog (featured packs + every daily puzzle) in pages.
+  Future<List<Puzzle>> allPuzzles() async {
+    final out = <Puzzle>[];
+    String? cursor;
+    while (true) {
+      final res = await _tables.listRows(
+        databaseId: _db,
+        tableId: AppwriteConfig.puzzles,
+        queries: [Query.orderAsc('\$id'), Query.limit(500), if (cursor != null) Query.cursorAfter(cursor)],
+      );
+      out.addAll(res.rows.map((r) => Puzzle.fromRow(r.$id, r.data)));
+      if (res.rows.length < 500) break;
+      cursor = res.rows.last.$id;
+    }
+    out.sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
+    return out;
+  }
+
+  Future<Puzzle?> puzzle(String id) async {
+    try {
+      final row = await _tables.getRow(databaseId: _db, tableId: AppwriteConfig.puzzles, rowId: id);
+      return Puzzle.fromRow(row.$id, row.data);
+    } on AppwriteException catch (e) {
+      if (e.code == 404) return null;
+      rethrow;
+    }
+  }
+
+  Future<List<GameEvent>> events() async {
+    final res = await _tables.listRows(
+      databaseId: _db,
+      tableId: AppwriteConfig.events,
+      queries: [Query.orderAsc('endAt'), Query.limit(50)],
+    );
+    return res.rows.map((r) => GameEvent.fromRow(r.$id, r.data)).toList();
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Progress
+// ---------------------------------------------------------------------------
+class ProgressRepository {
+  ProgressRepository(this._tables);
+  final TablesDB _tables;
+
+  Future<List<PuzzleProgress>> forUser(String userId) async {
+    final res = await _tables.listRows(
+      databaseId: _db,
+      tableId: AppwriteConfig.progress,
+      queries: [Query.equal('userId', userId), Query.limit(500)],
+    );
+    return res.rows.map((r) => PuzzleProgress.fromRow(r.$id, r.data)).toList();
+  }
+
+  Future<PuzzleProgress> upsert(String userId, String puzzleId, Map<String, dynamic> data) async {
+    final id = deterministicId(userId, puzzleId);
+    final row = await _tables.upsertRow(
+      databaseId: _db,
+      tableId: AppwriteConfig.progress,
+      rowId: id,
+      data: {'userId': userId, 'puzzleId': puzzleId, ...data},
+      permissions: [
+        Permission.read(Role.user(userId)),
+        Permission.update(Role.user(userId)),
+        Permission.delete(Role.user(userId)),
+      ],
+    );
+    return PuzzleProgress.fromRow(row.$id, row.data);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Social: friends + event progress
+// ---------------------------------------------------------------------------
+class SocialRepository {
+  SocialRepository(this._tables);
+  final TablesDB _tables;
+
+  Future<List<Friend>> friends(String userId) async {
+    final res = await _tables.listRows(
+      databaseId: _db,
+      tableId: AppwriteConfig.friends,
+      queries: [Query.equal('userId', userId), Query.limit(200)],
+    );
+    return res.rows.map((r) => Friend.fromRow(r.$id, r.data)).toList();
+  }
+
+  Future<Friend> addFriend(String userId, Profile friend) async {
+    final row = await _tables.upsertRow(
+      databaseId: _db,
+      tableId: AppwriteConfig.friends,
+      rowId: deterministicId(userId, friend.userId),
+      data: {
+        'userId': userId,
+        'friendId': friend.userId,
+        'friendName': friend.displayName,
+        'friendAvatar': friend.avatar,
+        'status': 'accepted',
+      },
+      permissions: [Permission.read(Role.user(userId)), Permission.update(Role.user(userId)), Permission.delete(Role.user(userId))],
+    );
+    return Friend.fromRow(row.$id, row.data);
+  }
+
+  Future<void> removeFriend(String rowId) =>
+      _tables.deleteRow(databaseId: _db, tableId: AppwriteConfig.friends, rowId: rowId);
+
+  Future<Map<String, EventProgress>> eventProgress(String userId) async {
+    final res = await _tables.listRows(
+      databaseId: _db,
+      tableId: AppwriteConfig.eventProgress,
+      queries: [Query.equal('userId', userId), Query.limit(100)],
+    );
+    return {for (final r in res.rows) r.data['eventId'].toString(): EventProgress.fromRow(r.$id, r.data)};
+  }
+
+  /// Community progress is the sum of every player's progress on this event.
+  Future<int> communityProgress(String eventId) async {
+    try {
+      final res = await _tables.listRows(
+        databaseId: _db,
+        tableId: AppwriteConfig.eventProgress,
+        queries: [Query.equal('eventId', eventId), Query.limit(1000), Query.select(['progress'])],
+      );
+      return res.rows.fold<int>(0, (sum, r) => sum + ((r.data['progress'] as num?)?.toInt() ?? 0));
+    } catch (e) {
+      debugPrint('communityProgress failed: $e');
+      return 0;
+    }
+  }
+
+  Future<EventProgress> upsertEventProgress(String userId, String eventId, {required int progress, bool claimed = false}) async {
+    final row = await _tables.upsertRow(
+      databaseId: _db,
+      tableId: AppwriteConfig.eventProgress,
+      rowId: deterministicId(userId, eventId),
+      data: {'userId': userId, 'eventId': eventId, 'progress': progress, 'claimed': claimed},
+      permissions: [Permission.read(Role.users()), Permission.update(Role.user(userId)), Permission.delete(Role.user(userId))],
+    );
+    return EventProgress.fromRow(row.$id, row.data);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// User uploads (My Puzzles)
+// ---------------------------------------------------------------------------
+class UploadRepository {
+  UploadRepository(this._storage, this._tables);
+  final Storage _storage;
+  final TablesDB _tables;
+
+  Future<List<MyPuzzle>> list(String userId) async {
+    final res = await _tables.listRows(
+      databaseId: _db,
+      tableId: AppwriteConfig.myPuzzles,
+      queries: [Query.equal('userId', userId), Query.orderDesc('\$createdAt'), Query.limit(100)],
+    );
+    return res.rows.map((r) => MyPuzzle.fromRow(r.$id, r.data)).toList();
+  }
+
+  Future<MyPuzzle> upload(String userId, {required Uint8List bytes, required String filename, String? title}) async {
+    final file = await _storage.createFile(
+      bucketId: AppwriteConfig.userUploadsBucket,
+      fileId: ID.unique(),
+      file: InputFile.fromBytes(bytes: bytes, filename: filename),
+      permissions: [Permission.read(Role.any()), Permission.delete(Role.user(userId))],
+    );
+    final row = await _tables.createRow(
+      databaseId: _db,
+      tableId: AppwriteConfig.myPuzzles,
+      rowId: ID.unique(),
+      data: {'userId': userId, 'fileId': file.$id, 'title': title ?? 'My photo'},
+      permissions: [Permission.read(Role.user(userId)), Permission.update(Role.user(userId)), Permission.delete(Role.user(userId))],
+    );
+    return MyPuzzle.fromRow(row.$id, row.data);
+  }
+
+  Future<void> delete(MyPuzzle p) async {
+    try {
+      await _storage.deleteFile(bucketId: AppwriteConfig.userUploadsBucket, fileId: p.fileId);
+    } catch (_) {}
+    await _tables.deleteRow(databaseId: _db, tableId: AppwriteConfig.myPuzzles, rowId: p.id);
+  }
+
+  static String imageUrl(String fileId) => AppwriteConfig.fileViewUrl(AppwriteConfig.userUploadsBucket, fileId);
+}
+
+// ---------------------------------------------------------------------------
+// Providers
+// ---------------------------------------------------------------------------
+final authRepositoryProvider = Provider((ref) => AuthRepository(ref.watch(accountProvider)));
+final profileRepositoryProvider = Provider((ref) => ProfileRepository(ref.watch(tablesProvider)));
+final catalogRepositoryProvider = Provider((ref) => CatalogRepository(ref.watch(tablesProvider)));
+final progressRepositoryProvider = Provider((ref) => ProgressRepository(ref.watch(tablesProvider)));
+final socialRepositoryProvider = Provider((ref) => SocialRepository(ref.watch(tablesProvider)));
+final uploadRepositoryProvider = Provider((ref) => UploadRepository(ref.watch(storageProvider), ref.watch(tablesProvider)));
