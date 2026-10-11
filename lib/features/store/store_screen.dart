@@ -186,7 +186,7 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
       showToast(context, 'The App Store is not available right now. Try again later.', icon: AppIcons.time);
       return;
     }
-    if (!await _sandboxConfirm('Card Jigsaw VIP', productId == ProductIds.vipYearly ? '\$39.99 / year' : '\$4.99 / month after a 7-day trial')) return;
+    if (!await _sandboxConfirm('Card Jigsaw VIP', productId == ProductIds.vipYearly ? '\$14.99 / year after a 7-day trial' : '\$2.99 / month after a 7-day trial')) return;
     await ref.read(profileProvider.notifier).setVip(true);
     if (!mounted) return;
     Sfx.instance.win();
@@ -274,8 +274,8 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
           _VipCard(
             isVip: isVip,
             vipUntil: profile?.vipExpiresAt,
-            monthlyPrice: products[ProductIds.vipMonthly]?.price ?? '\$4.99',
-            yearlyPrice: products[ProductIds.vipYearly]?.price ?? '\$39.99',
+            monthlyPrice: products[ProductIds.vipMonthly]?.price ?? '\$2.99',
+            yearlyPrice: products[ProductIds.vipYearly]?.price ?? '\$14.99',
             busy: _buying,
             onBuyMonthly: () => _buyVip(ProductIds.vipMonthly),
             onBuyYearly: () => _buyVip(ProductIds.vipYearly),
@@ -366,7 +366,7 @@ class _VipCard extends StatelessWidget {
             const SizedBox(height: 6),
             Text('7 days free, then $monthlyPrice/month', style: TextStyle(color: fg.withValues(alpha: 0.7), fontSize: 12)),
             const SizedBox(height: 10),
-            BigButton(label: 'Yearly · $yearlyPrice', kind: ButtonKind.ghost, loading: busy, onTap: onBuyYearly),
+            BigButton(label: 'Yearly · $yearlyPrice · 7 days free', kind: ButtonKind.ghost, loading: busy, onTap: onBuyYearly),
           ],
         ],
       ),

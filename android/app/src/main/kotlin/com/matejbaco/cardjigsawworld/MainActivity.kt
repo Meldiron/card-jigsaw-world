@@ -1,4 +1,4 @@
-package io.almostapps.card_jigsaw_world
+package com.matejbaco.cardjigsawworld
 
 import io.flutter.embedding.android.FlutterActivity
 

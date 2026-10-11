@@ -88,7 +88,7 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>io.almostapps.cardJigsawWorld</string>
+			<string>com.matejbaco.cardjigsawworld</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>cardjigsaw</string>

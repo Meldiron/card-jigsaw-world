@@ -16,7 +16,7 @@ import { SignedDataVerifier, Environment } from '@apple/app-store-server-library
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const BUNDLE_ID = process.env.APPLE_BUNDLE_ID || 'io.almostapps.cardJigsawWorld';
+const BUNDLE_ID = process.env.APPLE_BUNDLE_ID || 'com.matejbaco.cardjigsawworld';
 const APP_APPLE_ID = process.env.APPLE_APP_ID ? Number(process.env.APPLE_APP_ID) : undefined;
 const ENVIRONMENT = (process.env.APPLE_ENVIRONMENT || 'Sandbox') === 'Production' ? Environment.PRODUCTION : Environment.SANDBOX;
 const DB = process.env.APPWRITE_DATABASE_ID || 'cjw';

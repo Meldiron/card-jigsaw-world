@@ -14,8 +14,8 @@ Payment runs through StoreKit 2 (`in_app_purchase` plugin). Nothing is granted o
 | `tickets_15` | consumable | 15 tickets | $4.99 |
 | `hints_5` | consumable | 5 hints | $0.99 |
 | `hints_15` | consumable | 15 hints | $2.49 |
-| `vip_monthly` | auto-renewable, group `VIP` | VIP until `expiresDate`; 7-day free introductory offer | $4.99 / month |
-| `vip_yearly` | auto-renewable, group `VIP` | VIP until `expiresDate` | $39.99 / year |
+| `vip_monthly` | auto-renewable, group `VIP` | VIP until `expiresDate`; 7-day free introductory offer | $2.99 / month (Apple price-point equalised per country) |
+| `vip_yearly` | auto-renewable, group `VIP` | VIP until `expiresDate`; 7-day free introductory offer | $14.99 / year (Apple price-point equalised per country) |
 
 The store screen shows the localised App Store price once products load; the table prices are the fallbacks.
 
@@ -34,7 +34,8 @@ The store screen shows the localised App Store price once products load; the tab
 
 | Variable | Value |
 |---|---|
-| `APPLE_BUNDLE_ID` | `io.almostapps.cardJigsawWorld` |
+| `APPLE_BUNDLE_ID` | `com.matejbaco.cardjigsawworld` |
+| `APPLE_APP_ID` | `6821644423` |
 | `APPLE_APP_ID` | the app's numeric Apple ID from App Store Connect (required for Production) |
 | `APPLE_ENVIRONMENT` | `Sandbox` while testing, `Production` once live (sandbox receipts still verify, the function falls back automatically) |
 | `APPWRITE_DATABASE_ID` | `cjw` |
@@ -48,7 +49,7 @@ The execution URL (`/v1/functions/verify-purchase/executions`) is not a public e
 ## Manual setup checklist (App Store Connect)
 
 1. Accept the Paid Applications agreement and fill in banking and tax forms.
-2. Create the eight consumables with the ids above and the subscription group `VIP` with `vip_monthly` (7-day free introductory offer) and `vip_yearly`; add localisations and screenshots; submit them with the first build.
+2. Create the eight consumables with the ids above and the subscription group `VIP` with `vip_monthly` and `vip_yearly` (both with a 7-day free introductory offer); the yearly`; add localisations and screenshots; submit them with the first build.
 3. Create sandbox tester accounts for testing on devices.
 4. Set the function variables above and enable the function domain; paste the notification URL into App Store Connect.
 
@@ -57,3 +58,14 @@ The execution URL (`/v1/functions/verify-purchase/executions`) is not a public e
 - Simulator: the Runner scheme references `ios/Runner/Products.storekit`, so debug runs use local StoreKit testing with fake products; transactions are signed by Xcode and the function cannot verify them (expect "Transaction could not be verified"). Use Xcode's Transaction Manager to inspect them.
 - Device with a sandbox tester account: purchases are real sandbox transactions and verify end to end with `APPLE_ENVIRONMENT=Sandbox`.
 - Debug builds without any store (plain simulator with no StoreKit config) fall back to a dialog titled "Sandbox purchase (debug build)" that grants items locally. This path is compiled out of release builds.
+
+
+## Public endpoint
+
+The function has the generated domain `https://cjw-verify-purchase.fra.appwrite.run` and execute access `any`, which is required for unauthenticated calls from Apple. `/verify` still refuses requests without an Appwrite user session. App Store Server Notifications (V2) must point to:
+
+```
+https://cjw-verify-purchase.fra.appwrite.run/notifications
+```
+
+Set it in App Store Connect > App > App Information > App Store Server Notifications, for both Production and Sandbox URLs.

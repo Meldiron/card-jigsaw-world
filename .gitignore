@@ -58,3 +58,11 @@ functions/*/node_modules/
 *.mobileprovision
 .env
 .env.*
+
+# Signing material and API keys (never commit)
+secrets/
+*.p8
+*.p12
+*.cer
+*.certSigningRequest
+*.mobileprovision
