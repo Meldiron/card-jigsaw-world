@@ -1107,8 +1107,15 @@ def cmd_testflight(s: Store) -> None:
         if s.c.dry_run:
             log("  beta app review: would submit the build")
         else:
-            r = s.c.create("betaAppReviewSubmissions", None, {"build": rel("builds", bid)})
-            log(f"  beta app review: submitted ({attr(r, 'betaReviewState')}); the public link works once Apple approves it")
+            try:
+                r = s.c.create("betaAppReviewSubmissions", None, {"build": rel("builds", bid)})
+                log(f"  beta app review: submitted ({attr(r, 'betaReviewState')}); the public link works once Apple approves it")
+            except ApiError as e:
+                if e.status == 422 and any("ANOTHER_BUILD_IN_REVIEW" in (x.get("code") or "") for x in e.errors):
+                    # Apple reviews one build per version; this build inherits that approval.
+                    log("  beta app review: another build of this version is already in review; this build follows it automatically")
+                else:
+                    raise
     else:
         log(f"  beta app review: external state {ext_state}, nothing to submit")
 
