@@ -15,9 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: latest-stable
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
@@ -93,9 +90,6 @@ jobs:
     needs: analyze-and-test
     steps:
       - uses: actions/checkout@v4
-      - uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: latest-stable
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
