@@ -196,7 +196,7 @@ class PackScreen extends ConsumerWidget {
                         context.push('/play/${p.id}');
                       }
                     },
-                  ).animate().fadeIn(delay: (20 * i).ms, duration: 220.ms);
+                  );
                 }, childCount: list.length),
               ),
             ),

@@ -5,10 +5,13 @@ import 'package:card_jigsaw_world/app.dart';
 import 'package:card_jigsaw_world/core/sfx.dart';
 import 'package:card_jigsaw_world/data/local_store.dart';
 import 'package:card_jigsaw_world/features/game/board_widget.dart';
+import 'package:card_jigsaw_world/features/game/game_screen.dart';
+import 'package:card_jigsaw_world/game/board.dart';
 import 'package:card_jigsaw_world/state/settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -37,6 +40,62 @@ void main() {
     await settle(tester, ms);
   }
 
+  /// Assembles a fused group on the live board: the cards that belong at
+  /// [homes] (home slots, a pattern around the first one) are brought into
+  /// that formation somewhere else on the board, by tap-tap moves. Best
+  /// effort: picks the first anchor where every card and target is a free
+  /// single, and returns whether the group formed.
+  Future<bool> buildShape(WidgetTester tester, List<int> homes) async {
+    final bf = find.byType(BoardWidget);
+    if (bf.evaluate().isEmpty) return false;
+    final rect = tester.getRect(bf.first);
+    Board board() => tester.widget<BoardWidget>(bf.first).state.board;
+    final tiling = board().tiling;
+    Offset center(int slot) => rect.topLeft + tiling.cellCenter(slot, rect.size);
+    // The pattern moved from the first home onto [base]. Triangles keep
+    // plain column/row offsets (a neighbour changes orientation, which the
+    // lattice delta refuses); the other tilings use lattice deltas.
+    int? shifted(int base, int h) {
+      if (tiling is TriangleTiling) {
+        final c = tiling.col(base) + tiling.col(h) - tiling.col(homes.first), r = tiling.row(base) + tiling.row(h) - tiling.row(homes.first);
+        return tiling.inBounds(c, r) ? r * tiling.cols + c : null;
+      }
+      final d = tiling.delta(homes.first, h);
+      return d == null ? null : tiling.apply(base, d.$1, d.$2);
+    }
+
+    bool single(Board b, int slot) => !b.isLocked(slot) && b.groupOf(slot).length == 1;
+    for (var s = 0; s < board().cells; s++) {
+      final b = board();
+      if (!single(b, s)) continue;
+      final c = b.slots[s];
+      if (tiling.classOf(c) != tiling.classOf(homes.first) || tiling.delta(c, s) == null) continue;
+      final cards = <int>[], targets = <int>[];
+      var ok = true;
+      for (final h in homes) {
+        final ck = shifted(c, h), tk = shifted(s, h);
+        if (ck == null || tk == null || ck == tk) {
+          ok = false;
+          break;
+        }
+        cards.add(ck);
+        targets.add(tk);
+      }
+      if (!ok) continue;
+      if (cards.any((k) => !single(b, b.slotOfCard(k))) || targets.any((t) => !single(b, t))) continue;
+      for (var k = 1; k < homes.length; k++) {
+        final from = board().slotOfCard(cards[k]);
+        if (from == targets[k]) continue;
+        await tester.tapAt(center(from));
+        await settle(tester, 250);
+        await tester.tapAt(center(targets[k]));
+        await settle(tester, 700);
+      }
+      if (board().groupOf(targets.first).length >= homes.length) return true;
+    }
+    return false;
+  }
+
   testWidgets('capture screens', (tester) async {
     SharedPreferences.setMockInitialValues({});
     final store = await LocalStore.open();
@@ -55,16 +114,19 @@ void main() {
     await settle(tester, 5000); // let catalog + images load
     await shot(tester, '02_home');
 
-    // Daily gift sheet via the streak card's Claim button.
-    await tapText(tester, 'Claim');
-    await shot(tester, '03_daily_gift');
-    if (find.textContaining('Claim day').evaluate().isNotEmpty) {
-      await tester.tap(find.textContaining('Claim day'), warnIfMissed: false);
-      await settle(tester, 1500);
-      await shot(tester, '03b_daily_gift_claimed');
+    // Daily gift sheet via the streak card's Claim button (absent when this
+    // user already claimed today, e.g. on a second run of the day).
+    if (find.text('Claim').evaluate().isNotEmpty) {
+      await tapText(tester, 'Claim');
+      await shot(tester, '03_daily_gift');
+      if (find.textContaining('Claim day').evaluate().isNotEmpty) {
+        await tester.tap(find.textContaining('Claim day'), warnIfMissed: false);
+        await settle(tester, 1500);
+        await shot(tester, '03b_daily_gift_claimed');
+      }
+      await tester.tapAt(const Offset(200, 60));
+      await settle(tester, 800);
     }
-    await tester.tapAt(const Offset(200, 60));
-    await settle(tester, 800);
 
     // Library + this month's daily pack (calendar view).
     await tapText(tester, 'Library', ms: 3000);
@@ -198,6 +260,18 @@ void main() {
     await shot(tester, '15b_events_live');
     await tapText(tester, 'Social', ms: 3000);
     await shot(tester, '16_social_league');
+    // Another player's profile from a league row, with its statistics.
+    final rows = find.textContaining(RegExp(r'^\d+ XP$'));
+    if (rows.evaluate().length > 1) {
+      await tester.tap(rows.at(1), warnIfMissed: false);
+      await settle(tester, 3000);
+      await shot(tester, '16b_player_profile');
+      await tester.fling(find.byType(ListView).last, const Offset(0, -700), 2000);
+      await settle(tester, 1200);
+      await shot(tester, '16c_player_profile_stats');
+      await tester.tap(find.byIcon(CupertinoIcons.back).first, warnIfMissed: false);
+      await settle(tester, 1200);
+    }
     await tapText(tester, 'Friends', ms: 1500);
     await shot(tester, '17_social_friends');
     await tapText(tester, 'Profile', ms: 2000);
@@ -236,12 +310,41 @@ void main() {
     await tapText(tester, 'Save & quit', ms: 2000);
     // The last entry picks the smallest honeycomb (Cozy 3x4), which once
     // collapsed into a strip on a handscroll picture and must stay regular.
-    for (final (mode, title, tier) in [
-      ('Squares', 'Green Valley', null),
-      ('Triangles', 'Snowy Peaks', null),
-      ('Hexagons', 'Fjord View', null),
-      ('Hexagons', 'Canyon Glow', '3x4'),
+    // Each mode also assembles fused groups of telling shapes (an L and a T
+    // in squares, a row of three triangles, a bent chain of hexagons) so the
+    // group outline can be checked around concave and shared corners.
+    String? squaresPuzzleId;
+    for (final (mode, title, tier, shapes) in <(String, String, String?, List<(String, List<int>)>)>[
+      ('Squares', 'Green Valley', null, [('L', [0, 1, 4]), ('T', [0, 1, 2, 5])]),
+      ('Triangles', 'Snowy Peaks', null, [('row3', [0, 1, 2])]),
+      ('Hexagons', 'Canyon Glow', null, [('bent', [0, 1, 5])]),
+      ('Hexagons', 'Rolling Hills', '3x4', const []),
     ]) {
+      // Back on the pack page? Capture whatever is there otherwise and try
+      // to get back (a dialog, the game screen or a sheet may linger).
+      if (find.byType(Scrollable).evaluate().isEmpty) {
+        await shot(tester, 'debug_before_${mode.toLowerCase()}');
+        if (find.byIcon(CupertinoIcons.back).evaluate().isNotEmpty) {
+          await tester.tap(find.byIcon(CupertinoIcons.back).first, warnIfMissed: false);
+        } else {
+          await tester.tapAt(const Offset(200, 60));
+        }
+        await settle(tester, 2000);
+        if (find.byType(Scrollable).evaluate().isEmpty) {
+          await tapText(tester, 'Library', ms: 2500);
+          await tapText(tester, 'Wild Nature', ms: 3000);
+        }
+      }
+      // The catalog is live; a picture that is no longer in the pack is skipped.
+      var found = false;
+      for (var i = 0; i < 12 && !found; i++) {
+        found = find.text(title).evaluate().isNotEmpty;
+        if (!found) {
+          await tester.drag(find.byType(Scrollable).first, const Offset(0, -300));
+          await settle(tester, 300);
+        }
+      }
+      if (!found) continue;
       await tester.dragUntilVisible(find.text(title), find.byType(Scrollable).first, const Offset(0, -150));
       await settle(tester, 500);
       await tapText(tester, title, ms: 3000);
@@ -265,34 +368,56 @@ void main() {
         await shot(tester, '27_game_$suffix');
         await tester.tapAt(rect.center); // deselect
         await settle(tester, 300);
-        // Build one group in this tiling: find a free cell with a cell to its
-        // right, and move the picture-right neighbour of its card there.
-        final board = tester.widget<BoardWidget>(bf.first).state.board;
-        final tiling = board.tiling;
-        Offset center(int slot) => rect.topLeft + tiling.cellCenter(slot, rect.size);
-        for (var s = 0; s < board.cells; s++) {
-          final right = tiling.col(s) < tiling.cols - 1 ? s + 1 : null;
-          if (right == null || board.isLocked(s) || board.isLocked(right)) continue;
-          final card = board.slots[s];
-          if (tiling.col(card) >= tiling.cols - 1) continue;
-          final from = board.slotOfCard(card + 1);
-          if (from == right || board.groupOf(from).length > 1) continue;
-          await tester.tapAt(center(from));
-          await settle(tester, 300);
-          await tester.tapAt(center(right));
-          await settle(tester, 900);
-          break;
+        if (shapes.isEmpty) {
+          // Build one group in this tiling: find a free cell with a cell to its
+          // right, and move the picture-right neighbour of its card there.
+          final board = tester.widget<BoardWidget>(bf.first).state.board;
+          final tiling = board.tiling;
+          Offset center(int slot) => rect.topLeft + tiling.cellCenter(slot, rect.size);
+          for (var s = 0; s < board.cells; s++) {
+            final right = tiling.col(s) < tiling.cols - 1 ? s + 1 : null;
+            if (right == null || board.isLocked(s) || board.isLocked(right)) continue;
+            final card = board.slots[s];
+            if (tiling.col(card) >= tiling.cols - 1) continue;
+            final from = board.slotOfCard(card + 1);
+            if (from == right || board.groupOf(from).length > 1) continue;
+            await tester.tapAt(center(from));
+            await settle(tester, 300);
+            await tester.tapAt(center(right));
+            await settle(tester, 900);
+            break;
+          }
+          await shot(tester, '27b_game_group_$suffix');
         }
-        await shot(tester, '27b_game_group_$suffix');
+        for (final (name, homes) in shapes) {
+          final built = await buildShape(tester, homes);
+          await shot(tester, '27b_game_group_${suffix}_$name${built ? '' : '_partial'}');
+        }
+        if (mode == 'Squares') squaresPuzzleId = tester.widget<GameScreen>(find.byType(GameScreen)).puzzleId;
       }
       await tester.tap(find.byIcon(CupertinoIcons.pause_fill), warnIfMissed: false);
       await settle(tester, 800);
       await tapText(tester, 'Save & quit', ms: 2000);
+    }
+    // The difficulty screen of a picture with a board in progress: the
+    // choice is pinned, Continue is primary and Discard progress reopens it.
+    if (squaresPuzzleId != null) {
+      GoRouter.of(tester.element(find.byIcon(CupertinoIcons.back).first)).push('/play/$squaresPuzzleId');
+      await settle(tester, 3000);
+      await shot(tester, '26b_difficulty_in_progress');
+      if (find.text('Discard progress').evaluate().isNotEmpty) {
+        await tapText(tester, 'Discard progress', ms: 800);
+        await shot(tester, '26c_discard_alert');
+        await tapText(tester, 'Discard', ms: 1500);
+        await shot(tester, '26d_difficulty_discarded');
+      }
+      await tester.tap(find.byIcon(CupertinoIcons.back).first, warnIfMissed: false);
+      await settle(tester, 1200);
     }
     // Profile achievements + avatar picker.
     await tapText(tester, 'Profile', ms: 2000);
     await tester.fling(find.byType(CustomScrollView).last, const Offset(0, -900), 2000);
     await settle(tester, 1500);
     await shot(tester, '28_achievements');
-  }, timeout: const Timeout(Duration(minutes: 12)));
+  }, timeout: const Timeout(Duration(minutes: 16)));
 }

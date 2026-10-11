@@ -23,6 +23,7 @@ import '../../widgets/ui.dart';
 /// that leads there. Two formats:
 ///
 /// * Rewarded: a timed full-screen card. The reward is granted only after the
+///   full countdown, never by tapping the offer early;
 ///   countdown completes (or the player taps the offer). Capped per day on the
 ///   profile so blocking requests does not reset it.
 /// * Interstitial ("break"): shown after a completed puzzle, closable after a
@@ -258,7 +259,13 @@ class _HouseAdScreenState extends ConsumerState<HouseAdScreen> {
   }
 
   void _cta() {
-    // Tapping the offer counts as a completed view.
+    if (widget.rewarded && !_done) {
+      // Opening the offer early must not short-circuit the reward: the store
+      // opens on top while this card and its timer stay underneath, and the
+      // coins are only collectable once the countdown has finished.
+      openCreative(context, ref, widget.creative);
+      return;
+    }
     Navigator.of(context).pop(widget.rewarded ? true : null);
     openCreative(context, ref, widget.creative);
   }

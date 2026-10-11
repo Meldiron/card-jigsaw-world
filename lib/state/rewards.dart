@@ -48,6 +48,29 @@ class LevelRewards {
 
   /// Next few rewards after [level] for the "what's coming" list.
   static List<LevelReward> upcoming(int level, {int count = 3}) => List.generate(count, (i) => forLevel(level + 1 + i));
+
+  /// Level reached with [xp] lifetime experience. This is the single source
+  /// of truth: the HUD, the profile, league rows and the `level` column
+  /// written to the profile row all derive from the XP with this function,
+  /// so no two screens can ever disagree about a player's level.
+  static int levelForXp(int xp) {
+    var level = 1, remaining = xp;
+    while (remaining >= Profile.xpForLevel(level)) {
+      remaining -= Profile.xpForLevel(level);
+      level++;
+    }
+    return level;
+  }
+
+  /// Experience gathered since the current level was reached.
+  static int xpIntoLevel(int xp) {
+    var level = 1, remaining = xp;
+    while (remaining >= Profile.xpForLevel(level)) {
+      remaining -= Profile.xpForLevel(level);
+      level++;
+    }
+    return remaining;
+  }
 }
 
 /// A goal with a claim key that is stored on the profile once claimed.

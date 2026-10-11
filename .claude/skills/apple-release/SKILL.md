@@ -27,6 +27,9 @@ iterates by build number only.**
 Run scripts with the venv python that has pyjwt/requests (see tools/store/README.md)
 or plain python3 with those packages installed. Credentials live in `secrets/`.
 
+## Every build also updates the web site
+After `tools/dev/testflight.sh` always run `tools/dev/deploy-web.sh` so https://card-jigsaw-world.appwrite.network ships the same commit (owner rule, 2026-10-12). Both can run in parallel only if the Flutter builds do not overlap; run the web deploy after the device/TestFlight build finishes.
+
 ## Before every upload
 1. `git status` clean, main pushed, analyzer and tests green, QA runs silent
    (`--dart-define=CJW_MUTE=true`).

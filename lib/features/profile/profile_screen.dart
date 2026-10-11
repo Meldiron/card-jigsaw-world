@@ -1,14 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/haptics.dart';
 import '../../core/sfx.dart';
 import '../../core/theme/tokens.dart';
-import '../../game/game_controller.dart' show formatDuration;
-import '../../game/modes.dart';
 import '../../models/models.dart';
 import '../../state/achievements.dart';
 import '../../state/auth.dart';
@@ -168,7 +165,7 @@ class ProfileScreen extends ConsumerWidget {
             ),
           ),
           const SliverToBoxAdapter(child: SectionHeader(title: 'Statistics', subtitle: 'Everything you have played so far')),
-          const SliverToBoxAdapter(child: Padding(padding: EdgeInsets.symmetric(horizontal: 20), child: _Statistics())),
+          SliverToBoxAdapter(child: Padding(padding: const EdgeInsets.symmetric(horizontal: 20), child: StatisticsSection(stats: ref.watch(playerStatsProvider)))),
           SliverToBoxAdapter(
             child: SectionHeader(
               title: 'Achievements',
@@ -180,7 +177,7 @@ class ProfileScreen extends ConsumerWidget {
             sliver: SliverList.separated(
               itemCount: achievements.length,
               separatorBuilder: (_, _) => const SizedBox(height: 10),
-              itemBuilder: (_, i) => _AchievementCard(status: achievements[i]).animate().fadeIn(delay: (25 * i).ms),
+              itemBuilder: (_, i) => _AchievementCard(status: achievements[i]),
             ),
           ),
           const SliverToBoxAdapter(child: SectionHeader(title: 'More')),
@@ -259,124 +256,6 @@ class _BigStat extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-/// Two-column grid of small stat tiles plus a per-mode table.
-class _Statistics extends ConsumerWidget {
-  const _Statistics();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final c = context.colors;
-    final s = ref.watch(playerStatsProvider);
-    final tiles = <(IconData, Color?, String, String)>[
-      (AppIcons.puzzle, null, '${s.solved}', 'Puzzles solved'),
-      (AppIcons.star, Brand.star, '${s.perfect}', '3-star solves'),
-      (AppIcons.star, Brand.star, '${s.stars}', 'Stars collected'),
-      (AppIcons.streak, null, '${s.streak}', 'Current streak'),
-      (AppIcons.streak, null, '${s.longestStreak}', 'Longest streak'),
-      (AppIcons.level, null, 'LV ${s.level}', '${s.xp} XP'),
-      (AppIcons.swaps, null, _n(s.moves), 'Moves made'),
-      (AppIcons.time, null, formatPlayTime(s.seconds), 'Time played'),
-      (AppIcons.hint, Brand.hint, '${s.hints}', 'Hints used'),
-      (AppIcons.peek, null, '${s.peeks}', 'Peeks used'),
-      (AppIcons.magic, null, '${s.magic}', 'Magic used'),
-      (AppIcons.library, null, '${s.packsCompleted}/${s.packsTotal}', 'Packs completed'),
-      (AppIcons.events, null, '${s.eventsCompleted}', 'Events completed'),
-    ];
-    return Column(
-      children: [
-        GridView.builder(
-          padding: EdgeInsets.zero,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 10, crossAxisSpacing: 10, mainAxisExtent: 64),
-          itemCount: tiles.length,
-          itemBuilder: (_, i) {
-            final t = tiles[i];
-            return SoftCard(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Row(
-                children: [
-                  Container(
-                    width: 34,
-                    height: 34,
-                    decoration: BoxDecoration(shape: BoxShape.circle, color: c.boardBackground),
-                    child: Icon(t.$1, size: 17, color: t.$2 ?? context.accent),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(t.$3, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16, letterSpacing: -0.3)),
-                        Text(t.$4, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 11, color: c.textSecondary)),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-        const SizedBox(height: 10),
-        SoftCard(
-          padding: const EdgeInsets.fromLTRB(14, 12, 14, 6),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  const Expanded(child: Text('By mode', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14))),
-                  Text('Solved · Best time', style: TextStyle(fontSize: 11, color: c.textTertiary, fontWeight: FontWeight.w500)),
-                ],
-              ),
-              const SizedBox(height: 4),
-              for (final m in GameMode.values)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6),
-                  child: Row(
-                    children: [
-                      Icon(_modeIcon(m), size: 16, color: c.textSecondary),
-                      const SizedBox(width: 8),
-                      Expanded(child: Text(m.label, style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w500))),
-                      Text('${s.solvedByMode[m] ?? 0}', style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600)),
-                      SizedBox(
-                        width: 72,
-                        child: Text(
-                          s.bestSecondsByMode[m] == null ? '—' : formatDuration(s.bestSecondsByMode[m]!),
-                          textAlign: TextAlign.right,
-                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: c.textSecondary, fontFeatures: const [FontFeature.tabularFigures()]),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  static IconData _modeIcon(GameMode m) => switch (m) {
-        GameMode.cards => Icons.style_rounded,
-        GameMode.squares => Icons.grid_view_rounded,
-        GameMode.triangles => Icons.change_history_rounded,
-        GameMode.hexagons => Icons.hexagon_rounded,
-      };
-
-  /// Thousands separator for big counters.
-  static String _n(int v) {
-    final s = v.toString();
-    final b = StringBuffer();
-    for (var i = 0; i < s.length; i++) {
-      if (i > 0 && (s.length - i) % 3 == 0) b.write(',');
-      b.write(s[i]);
-    }
-    return b.toString();
   }
 }
 

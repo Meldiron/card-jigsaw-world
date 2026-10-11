@@ -168,7 +168,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
       'bestSeconds': bestSeconds,
       'completedAt': DateTime.now().toUtc().toIso8601String(),
     });
-    final reward = await ref.read(profileProvider.notifier).recordCompletion(cells: _spec.cells, stars: stars, firstTime: firstTime, mode: _spec.mode);
+    final reward = await ref.read(profileProvider.notifier).recordCompletion(cells: _spec.cells, stars: stars, firstTime: firstTime, mode: _spec.mode, moves: s.moves, seconds: s.elapsed);
     var coins = reward.coins;
     if (daily != null && daily.id == widget.puzzleId && firstTime) {
       await ref.read(profileProvider.notifier).addCoins(50, reason: 'daily-puzzle');
@@ -544,8 +544,8 @@ class _BoosterBar extends StatelessWidget {
         children: [
           _Booster(icon: AppIcons.undo, label: 'Undo', cost: const Text('free'), enabled: canUndo, onTap: onUndo),
           _Booster(icon: AppIcons.peek, label: 'Peek', cost: Amount(currency: Currency.coins, value: Economy.peekCostCoins, size: 11, fontSize: 10, weight: FontWeight.w700), enabled: playing, onTap: onPeek),
-          _Booster(icon: AppIcons.hint, label: 'Hint', cost: hints > 0 ? Text('$hints left') : Amount(currency: Currency.coins, value: Economy.hintCostCoins, size: 11, fontSize: 10, weight: FontWeight.w700), enabled: playing, onTap: onHint, accent: hints > 0),
           _Booster(icon: AppIcons.magic, label: 'Magic', cost: Amount(currency: Currency.coins, value: Economy.magicLockCostCoins, size: 11, fontSize: 10, weight: FontWeight.w700), enabled: playing, onTap: onMagic),
+          _Booster(icon: AppIcons.hint, label: 'Hint', cost: hints > 0 ? Text('$hints left') : Amount(currency: Currency.coins, value: Economy.hintCostCoins, size: 11, fontSize: 10, weight: FontWeight.w700), enabled: playing, onTap: onHint, accent: hints > 0),
         ],
       ),
     );

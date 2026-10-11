@@ -1,0 +1,136 @@
+import 'dart:io';
+import 'dart:ui' as ui;
+
+import 'package:appwrite/models.dart' as models;
+import 'package:card_jigsaw_world/core/theme/app_theme.dart';
+import 'package:card_jigsaw_world/data/local_store.dart';
+import 'package:card_jigsaw_world/features/game/difficulty_screen.dart';
+import 'package:card_jigsaw_world/models/models.dart';
+import 'package:card_jigsaw_world/state/auth.dart';
+import 'package:card_jigsaw_world/state/profile.dart';
+import 'package:card_jigsaw_world/state/progress.dart';
+import 'package:card_jigsaw_world/state/settings.dart';
+import 'package:card_jigsaw_world/state/social.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class _NoAuth extends AuthNotifier {
+  @override
+  Future<models.User?> build() async => null;
+}
+
+class _GuestProfile extends ProfileNotifier {
+  @override
+  Future<Profile> build() async => Profile.guest('local');
+}
+
+class _SavedProgress extends ProgressNotifier {
+  _SavedProgress(this.rows);
+  final Map<String, PuzzleProgress> rows;
+  @override
+  Future<Map<String, PuzzleProgress>> build() async => rows;
+}
+
+/// The pre-game screen offline: the rewards row lays out at 320 pt without
+/// overflowing, and a board in progress pins the choice behind Continue /
+/// Discard progress until the save is thrown away.
+void main() {
+  Future<void> settle(WidgetTester tester, [int frames = 8]) async {
+    for (var i = 0; i < frames; i++) {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
+  }
+
+  Future<GlobalKey> pumpScreen(WidgetTester tester, {required double width, required double height, Map<String, PuzzleProgress> progress = const {}}) async {
+    tester.view.physicalSize = Size(width, height);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    SharedPreferences.setMockInitialValues({});
+    final store = await LocalStore.open();
+    final key = GlobalKey();
+    await tester.pumpWidget(ProviderScope(
+      overrides: [
+        localStoreProvider.overrideWithValue(store),
+        authProvider.overrideWith(_NoAuth.new),
+        profileProvider.overrideWith(_GuestProfile.new),
+        progressProvider.overrideWith(() => _SavedProgress(progress)),
+        resolvedPuzzleProvider.overrideWith((ref, id) => Puzzle.custom(id: id, title: 'Test picture', imageUrl: '')),
+      ],
+      child: RepaintBoundary(
+        key: key,
+        child: MaterialApp(theme: AppTheme.light(), home: const DifficultyScreen(puzzleId: 'p1')),
+      ),
+    ));
+    await settle(tester, 12);
+    return key;
+  }
+
+  Future<void> dump(WidgetTester tester, GlobalKey key, String name) async {
+    final boundary = key.currentContext!.findRenderObject()! as RenderRepaintBoundary;
+    await tester.runAsync(() async {
+      final img = await boundary.toImage();
+      final png = (await img.toByteData(format: ui.ImageByteFormat.png))!;
+      final dir = Directory(Platform.environment['CJW_RENDER_DIR'] ?? 'build/board_shapes');
+      await dir.create(recursive: true);
+      await File('${dir.path}/$name.png').writeAsBytes(png.buffer.asUint8List());
+    });
+  }
+
+  for (final (w, h) in [(320.0, 700.0), (402.0, 874.0)]) {
+    testWidgets('rewards row fits at ${w.toInt()} pt', (tester) async {
+      final key = await pumpScreen(tester, width: w, height: h);
+      expect(find.text('Choose a mode'), findsOneWidget);
+      // Scroll the rewards card into view.
+      await tester.drag(find.byType(SingleChildScrollView), const Offset(0, -900));
+      await settle(tester);
+      expect(find.text('Rewards'), findsOneWidget);
+      expect(find.textContaining('up to '), findsOneWidget);
+      expect(find.textContaining(' XP'), findsOneWidget);
+      expect(find.text('+5'), findsOneWidget);
+      expect(find.textContaining('· Play'), findsOneWidget);
+      expect(find.text('Discard progress'), findsNothing);
+      await dump(tester, key, 'difficulty_${w.toInt()}');
+      expect(tester.takeException(), isNull, reason: 'no layout overflow');
+    });
+  }
+
+  testWidgets('a saved board pins the choice; Discard progress reopens it', (tester) async {
+    final saved = PuzzleProgress.fromRow('r1', {
+      'userId': 'local',
+      'puzzleId': 'p1',
+      'gridSize': 20,
+      'mode': 'squares',
+      'layout': List.generate(20, (i) => (i + 1) % 20).join(','),
+      'moves': 7,
+      'elapsedSeconds': 40,
+    });
+    expect(saved.inProgress, isTrue);
+    final key = await pumpScreen(tester, width: 402, height: 874, progress: {'p1': saved});
+    expect(find.textContaining('Continue · 7 moves in'), findsOneWidget);
+    expect(find.text('Discard progress'), findsOneWidget);
+    expect(find.textContaining('board is in progress'), findsOneWidget);
+    await dump(tester, key, 'difficulty_in_progress');
+    // Mode tiles do not react while the save exists.
+    await tester.tap(find.text('Hexagons'));
+    await settle(tester);
+    expect(find.textContaining('A squares 4x5 board is in progress'), findsOneWidget);
+
+    await tester.tap(find.text('Discard progress'));
+    await settle(tester);
+    expect(find.text('Discard progress?'), findsOneWidget);
+    await dump(tester, key, 'difficulty_discard_alert');
+    await tester.tap(find.text('Discard'));
+    await settle(tester, 15);
+    expect(find.text('Discard progress'), findsNothing);
+    expect(find.textContaining('· Play'), findsOneWidget);
+    expect(find.text('Every mode cuts the picture differently. Trickier shapes pay more.'), findsOneWidget);
+    // The choice is open again: another mode can be picked.
+    await tester.tap(find.text('Hexagons'));
+    await settle(tester);
+    expect(find.textContaining('hexagons · Play'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+}

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
@@ -82,7 +83,10 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
   Profile get _p => state.value ?? Profile.guest('local');
 
   /// Applies an optimistic patch locally and persists it in the background.
+  /// Any change to `xp` also rewrites the mirrored `level` column, derived
+  /// with [LevelRewards.levelForXp], so other players read the same level.
   Future<void> _apply(Map<String, dynamic> patch) async {
+    if (patch.containsKey('xp')) patch = {...patch, 'level': LevelRewards.levelForXp((patch['xp'] as num?)?.toInt() ?? 0)};
     final current = _p;
     final merged = {...current.toData(), ...patch};
     final next = Profile.fromRow(current.id, merged);
@@ -295,21 +299,24 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
     return true;
   }
 
-  /// Called when a puzzle is completed; returns the rewards granted.
-  Future<({int coins, int xp, bool levelUp, int level})> recordCompletion({required int cells, required int stars, required bool firstTime, GameMode mode = GameMode.cards}) async {
+  /// Called when a puzzle is completed; returns the rewards granted. [moves]
+  /// and [seconds] are the finishing session's numbers, added to the public
+  /// aggregates on the profile row.
+  Future<({int coins, int xp, bool levelUp, int level})> recordCompletion({
+    required int cells,
+    required int stars,
+    required bool firstTime,
+    GameMode mode = GameMode.cards,
+    int moves = 0,
+    int seconds = 0,
+  }) async {
     final p = _p;
     var coins = Economy.completionCoins(cells, stars, mode: mode);
     final xpGain = Economy.completionXp(cells, stars, mode: mode);
     if (!firstTime) coins = (coins * 0.4).round();
-    var xp = p.xp + xpGain;
-    var level = p.level;
-    var into = p.xpIntoLevel + xpGain;
-    var levelUp = false;
-    while (into >= Profile.xpForLevel(level)) {
-      into -= Profile.xpForLevel(level);
-      level++;
-      levelUp = true;
-    }
+    final xp = p.xp + xpGain;
+    final level = LevelRewards.levelForXp(xp);
+    final levelUp = level > p.level;
     var levelBonus = 0, levelTickets = 0, levelHints = 0;
     for (var l = p.level + 1; l <= level; l++) {
       final r = LevelRewards.forLevel(l);
@@ -325,6 +332,9 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
       'piggyCoins': min(Profile.piggyCapacity, p.piggyCoins + Economy.piggyPerPuzzle),
       'puzzlesCompleted': p.puzzlesCompleted + (firstTime ? 1 : 0),
       'totalStars': p.totalStars + (firstTime ? stars : 0),
+      'totalMoves': p.totalMoves + max(0, moves),
+      'totalSeconds': p.totalSeconds + max(0, seconds),
+      'solvedByMode': jsonEncode({...p.solvedByMode, mode.code: (p.solvedByMode[mode.code] ?? 0) + 1}),
       if (levelTickets > 0) 'tickets': p.tickets + levelTickets,
       if (levelHints > 0) 'hints': p.hints + levelHints,
     });

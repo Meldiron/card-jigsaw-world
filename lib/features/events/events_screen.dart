@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -103,7 +102,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
                     for (var i = 0; i < active.length; i++)
                       Padding(
                         padding: EdgeInsets.fromLTRB(20, i == 0 ? 0 : 12, 20, 0),
-                        child: _EventCard(event: active[i], progress: eventProgress[active[i].id]).animate().fadeIn(delay: (50 * i).ms),
+                        child: _EventCard(event: active[i], progress: eventProgress[active[i].id]),
                       ),
                     if (active.isEmpty)
                       Padding(

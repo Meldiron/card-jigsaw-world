@@ -143,9 +143,66 @@ class _BoardWidgetState extends State<BoardWidget> {
 
   static List<Offset> _local(List<Offset> poly, Rect bounds) => [for (final p in poly) p - bounds.topLeft];
 
-  bool _onGroupBoundary(Board board, int slot, int k, int groupId) {
-    final around = tiling.cornerNeighbours(slot, k);
-    return around.length + 1 < tiling.vertexValence || around.any((s) => board.groupIdOf(s) != groupId);
+  static double _norm(double a) {
+    while (a <= -math.pi) {
+      a += 2 * math.pi;
+    }
+    while (a > math.pi) {
+      a -= 2 * math.pi;
+    }
+    return a;
+  }
+
+  /// Angular wedge `(start, span)` of cell [s] at its vertex [v], with the
+  /// span positive clockwise on screen; null when [v] is not a vertex of [s].
+  (double, double)? _wedge(int s, Offset v) {
+    final poly = tiling.polygon(s, boardSize);
+    for (var i = 0; i < poly.length; i++) {
+      if ((poly[i] - v).distance > 0.01) continue;
+      final a = poly[(i - 1 + poly.length) % poly.length] - v, b = poly[(i + 1) % poly.length] - v;
+      final ta = math.atan2(a.dy, a.dx), tb = math.atan2(b.dy, b.dx);
+      final sweep = _norm(tb - ta);
+      return sweep > 0 ? (ta, sweep) : (tb, -sweep);
+    }
+    return null;
+  }
+
+  /// The group's fan at vertex [k] of [slot]: the contiguous run of group
+  /// cells around that vertex that includes this cell, as an angular range.
+  /// Its two bounding rays are the open edges the outline follows into and
+  /// out of the vertex, so every cell on the fan can draw the exact band
+  /// (straight, rounded concave or rounded convex) through its own clip.
+  /// Null where this cell has no fused edge at the vertex (an ordinary
+  /// rounded corner) or where the group surrounds the vertex completely.
+  _Fan? _fan(Board board, int slot, int k, int groupId, List<bool> fused) {
+    final n = fused.length;
+    if (!fused[(k - 1 + n) % n] && !fused[k]) return null;
+    final v = tiling.polygon(slot, boardSize)[k];
+    var (start, span) = _wedge(slot, v)!;
+    final others = <(double, double)>[
+      for (final s in tiling.cornerNeighbours(slot, k))
+        if (board.groupIdOf(s) == groupId) ?_wedge(s, v),
+    ];
+    var grew = true;
+    while (grew && span < 2 * math.pi - 1e-3) {
+      grew = false;
+      for (var i = 0; i < others.length; i++) {
+        final w = others[i];
+        if (_norm(w.$1 + w.$2 - start).abs() < 1e-3) {
+          start = w.$1;
+          span += w.$2;
+        } else if (_norm(start + span - w.$1).abs() < 1e-3) {
+          span += w.$2;
+        } else {
+          continue;
+        }
+        others.removeAt(i);
+        grew = true;
+        break;
+      }
+    }
+    if (span >= 2 * math.pi - 1e-3) return null;
+    return _Fan(_norm(start), span);
   }
 
   Widget _buildCard(int slot, double gap, double radius, {required bool dragging, required bool selected, required _Hover hovered}) {
@@ -166,14 +223,9 @@ class _BoardWidgetState extends State<BoardWidget> {
     // its size.
     final groupId = board.groupIdOf(slot);
     final fusedEdges = [for (final n in tiling.edgeNeighbours(slot)) n != null && board.groupIdOf(n) == groupId];
-    // A vertex between two fused edges that still lies on the group's
-    // boundary (a cell around it is outside the group, or off the board):
-    // the neighbours' strokes stop there, so this cell fills the corner.
-    final n = fusedEdges.length;
-    final corners = [
-      for (var k = 0; k < n; k++)
-        fusedEdges[(k - 1 + n) % n] && fusedEdges[k] && _onGroupBoundary(board, slot, k, groupId),
-    ];
+    // Where the group's outline passes a vertex of this cell next to a fused
+    // edge, the cell needs to know how the group continues around it.
+    final fans = [for (var k = 0; k < fusedEdges.length; k++) _fan(board, slot, k, groupId, fusedEdges)];
 
     Widget child = _CardFace(
       image: widget.image,
@@ -187,7 +239,8 @@ class _BoardWidgetState extends State<BoardWidget> {
       lift: dragging ? 1.0 : (selected ? 0.5 : 0),
       cardStyle: widget.cardStyle,
       fusedEdges: fusedEdges,
-      corners: corners,
+      fans: fans,
+      gutterHalf: gap / 2,
       grouped: grouped,
     );
     if (justLocked || justJoined) {
@@ -257,6 +310,33 @@ class _BoardWidgetState extends State<BoardWidget> {
 
 enum _Hover { none, ok, blocked }
 
+/// The group's angular coverage around one vertex of a card: a run of
+/// [span] radians clockwise on screen from [start], bounded by the two open
+/// edges that leave the vertex (rays [d1] and [d2]). More than a half turn
+/// is a concave corner of the group's outline, less than a half turn a
+/// convex corner shared by two fused cells, exactly a half turn a straight
+/// stretch passing the vertex.
+class _Fan {
+  const _Fan(this.start, this.span);
+  final double start;
+  final double span;
+
+  bool get concave => span > math.pi + 1e-3;
+  bool get convex => span < math.pi - 1e-3;
+  double get end => start + span;
+  Offset get d1 => Offset(math.cos(start), math.sin(start));
+  Offset get d2 => Offset(math.cos(end), math.sin(end));
+
+  /// Inward normals of the two open edges (angles).
+  double get n1 => start + math.pi / 2;
+  double get n2 => end - math.pi / 2;
+
+  @override
+  bool operator ==(Object other) => other is _Fan && (other.start - start).abs() < 1e-9 && (other.span - span).abs() < 1e-9;
+  @override
+  int get hashCode => Object.hash(start, span);
+}
+
 /// Limits hit-testing to the cell's polygon so overlapping bounding boxes
 /// (triangles, hexagons) route taps to the right card.
 class _PolygonHitTest extends SingleChildRenderObjectWidget {
@@ -325,7 +405,8 @@ class _CardFace extends StatelessWidget {
     required this.lift,
     required this.cardStyle,
     required this.fusedEdges,
-    required this.corners,
+    required this.fans,
+    required this.gutterHalf,
     required this.grouped,
   });
 
@@ -340,13 +421,21 @@ class _CardFace extends StatelessWidget {
   final double lift;
   final CardStyle cardStyle;
   final List<bool> fusedEdges;
-  final List<bool> corners;
+  final List<_Fan?> fans;
+  final double gutterHalf;
   final bool grouped;
 
   static const _selectionStroke = 5.6;
 
   /// Drawn at twice this inside the clip, so 2 px show.
   static const _groupStroke = 4.0;
+
+  /// Fused edges reach this far past the cell edge so two abutting clips
+  /// overlap by a pixel: antialiasing on a diagonal seam (triangles,
+  /// hexagons) otherwise lets the background show through as a hairline.
+  /// The picture is continuous across a fused edge, so the overdraw shows
+  /// the right pixels.
+  static const _overlap = 0.5;
 
   /// Flat darkening over cards that are not in place yet.
   static const _dim = 0.16;
@@ -366,7 +455,7 @@ class _CardFace extends StatelessWidget {
       builder: (_, lockT, _) => TweenAnimationBuilder<_EdgeInsets>(
         // Each edge's gutter slides shut as the card snaps to its group, in
         // step with the card's own move.
-        tween: _EdgeInsetsTween(end: _EdgeInsets([for (final fused in fusedEdges) fused ? 0.0 : half])),
+        tween: _EdgeInsetsTween(end: _EdgeInsets([for (final fused in fusedEdges) fused ? -_overlap : half])),
         duration: const Duration(milliseconds: 280),
         curve: Curves.easeOutCubic,
         builder: (_, insets, _) {
@@ -403,7 +492,8 @@ class _CardFace extends StatelessWidget {
               insets: insets.values,
               radius: radius,
               fusedEdges: fusedEdges,
-              corners: corners,
+              fans: fans,
+              gutterHalf: gutterHalf,
               borderColor: cardStyle == CardStyle.classic ? c.cardFace : Colors.transparent,
               borderWidth: cardStyle == CardStyle.classic ? math.max(1.5, gap * 0.55) * (1 - lockT) : 0,
               shadow: lockT > 0.95 || lift == 0 ? null : Colors.black.withValues(alpha: (0.25 + 0.2 * lift) * (1 - lockT)),
@@ -463,7 +553,8 @@ class _CardPainter extends CustomPainter {
     required this.insets,
     required this.radius,
     required this.fusedEdges,
-    required this.corners,
+    required this.fans,
+    required this.gutterHalf,
     required this.borderColor,
     required this.borderWidth,
     required this.shadow,
@@ -485,8 +576,12 @@ class _CardPainter extends CustomPainter {
   final double radius;
   final List<bool> fusedEdges;
 
-  /// Vertices between two fused edges that lie on the group's boundary.
-  final List<bool> corners;
+  /// How the group continues around each vertex (see [_Fan]); null where
+  /// the vertex needs no special treatment.
+  final List<_Fan?> fans;
+
+  /// Half the gutter: the inset of every open edge once the card is at rest.
+  final double gutterHalf;
   final Color borderColor;
   final double borderWidth;
   final Color? shadow;
@@ -543,27 +638,179 @@ class _CardPainter extends CustomPainter {
     return Offset(p1.dx + t * (p2.dx - p1.dx), p1.dy + t * (p2.dy - p1.dy));
   }
 
-  /// Closed shape path: shrunk polygon with corners rounded where neither
-  /// adjoining edge is fused to a locked neighbour.
+  /// Closed shape path: shrunk polygon with corners rounded where both
+  /// adjoining edges are open, and half of a rounded corner where this cell
+  /// and a fused neighbour share a convex corner of the group (the 120°
+  /// corners of two triangles), so the group's corners all look alike.
   Path _shape(List<Offset> pts) {
     final n = pts.length;
     final path = Path();
+    void to(Offset p, {required bool first}) => first ? path.moveTo(p.dx, p.dy) : path.lineTo(p.dx, p.dy);
     for (var i = 0; i < n; i++) {
       final prev = pts[(i - 1 + n) % n], cur = pts[i], next = pts[(i + 1) % n];
+      final prevOpen = !fusedEdges[(i - 1 + n) % n], curOpen = !fusedEdges[i];
+      if (prevOpen != curOpen) {
+        final cc = _convexCorner(pts, i, incoming: prevOpen);
+        if (cc != null) {
+          if (prevOpen) {
+            to(cc.t, first: i == 0);
+            path.quadraticBezierTo(cc.ctrl.dx, cc.ctrl.dy, cc.q.dx, cc.q.dy);
+          } else {
+            to(cc.q, first: i == 0);
+            path.quadraticBezierTo(cc.ctrl.dx, cc.ctrl.dy, cc.t.dx, cc.t.dy);
+          }
+          continue;
+        }
+      }
+      if (!(prevOpen && curOpen) && fans[i] != null && !fans[i]!.convex) {
+        _concaveCorner(path, pts, i, start: i == 0);
+        continue;
+      }
       final r = _cornerRadius(pts, i);
       if (r <= 0.5) {
-        i == 0 ? path.moveTo(cur.dx, cur.dy) : path.lineTo(cur.dx, cur.dy);
+        to(cur, first: i == 0);
         continue;
       }
       final inDir = (cur - prev) / (cur - prev).distance;
       final outDir = (next - cur) / (next - cur).distance;
-      final a = cur - inDir * r;
+      to(cur - inDir * r, first: i == 0);
       final b = cur + outDir * r;
-      i == 0 ? path.moveTo(a.dx, a.dy) : path.lineTo(a.dx, a.dy);
       path.quadraticBezierTo(cur.dx, cur.dy, b.dx, b.dy);
     }
     path.close();
     return path;
+  }
+
+  /// Perpendicular foot of [v] on the line through [a] and [b].
+  static Offset _foot(Offset a, Offset b, Offset v) {
+    final d = b - a;
+    final len2 = d.dx * d.dx + d.dy * d.dy;
+    if (len2 == 0) return a;
+    return a + d * (((v - a).dx * d.dx + (v - a).dy * d.dy) / len2);
+  }
+
+  /// A convex corner of the group shared with the fused neighbour at vertex
+  /// [i] (the fan there spans less than a half turn): the corner [p] of the
+  /// group's inset outline, the tangent point [t] on this cell's open edge
+  /// and the midpoint [q] of the rounded corner, which lies on the shared
+  /// edge where the neighbour's half of the curve takes over. Null when the
+  /// corner is not of that kind or too tight to round.
+  ({Offset t, Offset ctrl, Offset q})? _convexCorner(List<Offset> pts, int i, {required bool incoming}) {
+    final fan = fans[i];
+    if (fan == null || !fan.convex) return null;
+    final n = pts.length;
+    final v = polygon[i];
+    final h = gutterHalf;
+    final l1 = v + Offset(math.cos(fan.n1), math.sin(fan.n1)) * h, l2 = v + Offset(math.cos(fan.n2), math.sin(fan.n2)) * h;
+    final p = _intersect(l1, l1 + fan.d1, l2, l2 + fan.d2);
+    if (p == null) return null;
+    // Which of the fan's rays is this cell's own open edge?
+    final e = (incoming ? polygon[(i - 1 + n) % n] : polygon[(i + 1) % n]) - v;
+    if (e.distance == 0) return null;
+    final u = e / e.distance;
+    final ownIsFirst = u.dx * fan.d1.dx + u.dy * fan.d1.dy >= u.dx * fan.d2.dx + u.dy * fan.d2.dy;
+    final own = ownIsFirst ? fan.d1 : fan.d2, far = ownIsFirst ? fan.d2 : fan.d1;
+    final r = math.min(radius, e.distance / 2.2);
+    // The rounding must reach past the shared edge into this cell.
+    if (r <= (p - pts[i]).distance + 0.5) return null;
+    final t = p + own * r, t2 = p + far * r;
+    // The curve's midpoint sits on the shared edge; push it across by the
+    // overlap like every other fused edge, so the two clips meet without
+    // an antialiasing seam.
+    final bisector = own + far;
+    var across = Offset(-bisector.dy, bisector.dx) / bisector.distance;
+    if (across.dx * own.dx + across.dy * own.dy > 0) across = -across;
+    final q = (t + p * 2 + t2) / 4 + across * _CardFace._overlap;
+    return (t: t, ctrl: (t + p) / 2, q: q);
+  }
+
+  /// Distance from [q] to the ray from [v] in direction [d] (unit).
+  static double _rayDist(Offset q, Offset v, Offset d) {
+    final w = q - v;
+    if (w.dx * d.dx + w.dy * d.dy <= 0) return w.distance;
+    return (w.dx * d.dy - w.dy * d.dx).abs();
+  }
+
+  /// Distance from [q] to the group's boundary near the fan's vertex [v]:
+  /// the nearer of its two open rays.
+  static double _boundaryDist(Offset q, Offset v, _Fan fan) => math.min(_rayDist(q, v, fan.d1), _rayDist(q, v, fan.d2));
+
+  /// Where, walking from [from] towards [to] along a fused edge, the cell
+  /// leaves the gutter band of the group's boundary (distance [h]).
+  static Offset _cutPoint(Offset from, Offset to, Offset v, _Fan fan, double h) {
+    if (_boundaryDist(from, v, fan) >= h) return from;
+    if (_boundaryDist(to, v, fan) < h) return to;
+    var lo = 0.0, hi = 1.0;
+    for (var k = 0; k < 24; k++) {
+      final mid = (lo + hi) / 2;
+      if (_boundaryDist(from + (to - from) * mid, v, fan) < h) {
+        lo = mid;
+      } else {
+        hi = mid;
+      }
+    }
+    return from + (to - from) * ((lo + hi) / 2);
+  }
+
+  /// Appends this cell's part of the group's inset boundary around the
+  /// vertex [i] of a concave (or straight) fan: the lines parallel to the
+  /// two open edges at the gutter inset, joined by an arc of that radius
+  /// around the vertex. Every cell on the fan traces the same curve, so the
+  /// pieces meet exactly on the fused edges and the picture, the card
+  /// border and the accent all follow one continuous rounded outline; the
+  /// vertex itself (and a middle cell's tip) stays inside the gutter.
+  void _concaveCorner(Path path, List<Offset> pts, int i, {required bool start}) {
+    final fan = fans[i]!;
+    final n = pts.length;
+    final v = polygon[i];
+    final h = gutterHalf;
+    final prev = pts[(i - 1 + n) % n], cur = pts[i], next = pts[(i + 1) % n];
+    final prevOpen = !fusedEdges[(i - 1 + n) % n], curOpen = !fusedEdges[i];
+    // Where the curve enters along the incoming edge and leaves along the
+    // outgoing one: the tangent foot on an open (already inset) edge, the
+    // crossing of the gutter band on a fused edge.
+    final a = prevOpen ? _foot(prev, cur, v) : _cutPoint(cur, prev, v, fan, h);
+    final b = curOpen ? _foot(cur, next, v) : _cutPoint(cur, next, v, fan, h);
+    // Angles measured from the fan's first ray, and the curve's tangent
+    // there (in the direction of growing angle).
+    double u(Offset p) {
+      var t = math.atan2(p.dy, p.dx) - fan.start;
+      while (t < 0) {
+        t += 2 * math.pi;
+      }
+      while (t >= 2 * math.pi) {
+        t -= 2 * math.pi;
+      }
+      return t;
+    }
+
+    final lo = math.pi / 2, hi = math.max(lo, fan.span - math.pi / 2);
+    Offset tangent(double t) {
+      if (t < lo) return -fan.d1;
+      if (t > hi) return fan.d2;
+      return Offset(-math.sin(fan.start + t), math.cos(fan.start + t));
+    }
+
+    final ua = u(a - v), ub = u(b - v);
+    final dir = ub >= ua ? 1.0 : -1.0;
+    // Ends on a fused edge carry on by the overlap so the neighbour's
+    // overdraw never covers the last half pixel of this cell's stroke.
+    final a0 = prevOpen ? a : a - tangent(ua) * (dir * _CardFace._overlap);
+    final b0 = curOpen ? b : b + tangent(ub) * (dir * _CardFace._overlap);
+    start ? path.moveTo(a0.dx, a0.dy) : path.lineTo(a0.dx, a0.dy);
+    if (a0 != a) path.lineTo(a.dx, a.dy);
+    // The arc between the two parallel lines, as far as it runs through
+    // this cell.
+    final s = ua.clamp(lo, hi), e = ub.clamp(lo, hi);
+    if ((e - s).abs() > 1e-6) path.arcTo(Rect.fromCircle(center: v, radius: h), fan.start + s, e - s, false);
+    path.lineTo(b.dx, b.dy);
+    if (b0 != b) path.lineTo(b0.dx, b0.dy);
+  }
+
+  /// Unit vector from [from] to [to] (zero when they coincide).
+  static Offset _unit(Offset from, Offset to) {
+    final d = to - from;
+    return d.distance == 0 ? Offset.zero : d / d.distance;
   }
 
   /// Corner radius used by [_shape] at vertex [i] (0 where an adjoining edge
@@ -576,9 +823,11 @@ class _CardPainter extends CustomPainter {
   }
 
   /// The open (non-fused) edges as stroke runs: rounded where two open edges
-  /// meet, and overshooting by [ext] where an open edge meets a fused one so
-  /// the runs of neighbouring cells join without a notch (the clip trims the
-  /// overshoot). With nothing fused this is the whole rounded shape.
+  /// meet. Where an open edge meets a fused one the run ends at the foot of
+  /// the vertex on the edge (where a concave corner's arc takes over, see
+  /// [_fanBand]) or follows this cell's half of a shared convex corner; with
+  /// no fan known it overshoots by [ext] so the neighbour's run meets it.
+  /// With nothing fused this is the whole rounded shape.
   Path _outline(List<Offset> pts, double ext) {
     final n = pts.length;
     if (!fusedEdges.contains(true)) return _shape(pts);
@@ -603,49 +852,44 @@ class _CardPainter extends CustomPainter {
         }
         down = true;
       } else if (prevOpen) {
-        final inDir = (cur - prev) / (cur - prev).distance;
-        final e = cur + inDir * ext;
-        down ? path.lineTo(e.dx, e.dy) : path.moveTo(e.dx, e.dy);
+        // An open run ends at a fused edge.
+        final cc = _convexCorner(pts, i, incoming: true);
+        if (cc != null) {
+          down ? path.lineTo(cc.t.dx, cc.t.dy) : path.moveTo(cc.t.dx, cc.t.dy);
+          path.quadraticBezierTo(cc.ctrl.dx, cc.ctrl.dy, cc.q.dx, cc.q.dy);
+          final e = cc.q + _unit(cc.ctrl, cc.q) * _CardFace._overlap;
+          path.lineTo(e.dx, e.dy);
+        } else if (fans[i] != null) {
+          _concaveCorner(path, pts, i, start: !down);
+        } else {
+          final inDir = (cur - prev) / (cur - prev).distance;
+          final e = cur + inDir * ext;
+          down ? path.lineTo(e.dx, e.dy) : path.moveTo(e.dx, e.dy);
+        }
         down = false;
       } else if (curOpen) {
-        final outDir = (next - cur) / (next - cur).distance;
-        final e = cur - outDir * ext;
-        path.moveTo(e.dx, e.dy);
+        // An open run starts at a fused edge.
+        final cc = _convexCorner(pts, i, incoming: false);
+        if (cc != null) {
+          final s = cc.q - _unit(cc.q, cc.ctrl) * _CardFace._overlap;
+          path.moveTo(s.dx, s.dy);
+          path.lineTo(cc.q.dx, cc.q.dy);
+          path.quadraticBezierTo(cc.ctrl.dx, cc.ctrl.dy, cc.t.dx, cc.t.dy);
+        } else if (fans[i] != null) {
+          _concaveCorner(path, pts, i, start: true);
+        } else {
+          final outDir = (next - cur) / (next - cur).distance;
+          final e = cur - outDir * ext;
+          path.moveTo(e.dx, e.dy);
+        }
         down = true;
+      } else if (fans[i] != null && !fans[i]!.convex) {
+        // Both edges fused: only the corner curve passes through this cell.
+        _concaveCorner(path, pts, i, start: true);
+        down = false;
       }
     }
     return path;
-  }
-
-  /// Band fill at a vertex between two fused edges where the group boundary
-  /// turns: the square (grid) or disc sector (triangles) of radius [r] that
-  /// a continuous stroke along the group's outside would leave there.
-  Path _cornerPatch(List<Offset> pts, int k, double r) {
-    final n = pts.length;
-    final v = pts[k];
-    final u1 = (pts[(k - 1 + n) % n] - v), u2 = (pts[(k + 1) % n] - v);
-    if (u1.distance == 0 || u2.distance == 0) return Path();
-    final a = u1 / u1.distance, b = u2 / u2.distance;
-    final cosAngle = a.dx * b.dx + a.dy * b.dy;
-    final path = Path()..moveTo(v.dx, v.dy);
-    if (cosAngle < 0.1) {
-      // Right angle or wider: the parallelogram spanned by the two edges.
-      final p = v + a * r, q = v + a * r + b * r, s = v + b * r;
-      path
-        ..lineTo(p.dx, p.dy)
-        ..lineTo(q.dx, q.dy)
-        ..lineTo(s.dx, s.dy);
-    } else {
-      // Acute: a sector, approximated by a short polyline.
-      const steps = 4;
-      for (var i = 0; i <= steps; i++) {
-        final t = i / steps;
-        final d = a * (1 - t) + b * t;
-        final p = v + d / d.distance * r;
-        path.lineTo(p.dx, p.dy);
-      }
-    }
-    return path..close();
   }
 
   @override
@@ -657,12 +901,20 @@ class _CardPainter extends CustomPainter {
     }
     canvas.save();
     canvas.clipPath(shape);
-    // The image slice always maps to the full cell bounds; the clip trims the gutter.
-    canvas.drawImageRect(image, source, Offset.zero & size, Paint()..filterQuality = FilterQuality.medium);
-    if (tint != null) canvas.drawRect(Offset.zero & size, Paint()..color = tint!);
-    // One flat layer over the whole clip: cards not yet in place sit a touch
-    // darker, and the picture brightens as it locks.
-    if (dim > 0) canvas.drawRect(Offset.zero & size, Paint()..color = Colors.black.withValues(alpha: dim));
+    // The image slice maps to the cell bounds plus a pixel of overdraw (the
+    // neighbouring picture, which is what shows across a fused edge); the
+    // clip trims the gutter and everything beyond the shape.
+    const over = 1.0;
+    final dest = (Offset.zero & size).inflate(over);
+    final sx = source.width / size.width, sy = source.height / size.height;
+    final src = Rect.fromLTRB(source.left - over * sx, source.top - over * sy, source.right + over * sx, source.bottom + over * sy);
+    // Cards not yet in place sit a touch darker, and the picture brightens
+    // as it locks. The dim is part of the image draw (not a layer on top)
+    // so the overlap zone of two fused cells is never darkened twice.
+    final imagePaint = Paint()..filterQuality = FilterQuality.medium;
+    if (dim > 0) imagePaint.colorFilter = ColorFilter.mode(Colors.black.withValues(alpha: dim), BlendMode.srcATop);
+    canvas.drawImageRect(image, src, dest, imagePaint);
+    if (tint != null) canvas.drawRect(dest, Paint()..color = tint!);
     // Strokes are drawn at twice the width inside the clip, so exactly half
     // shows: the visible band hugs the edge without bleeding into the gutter.
     if (borderWidth > 0) {
@@ -677,13 +929,6 @@ class _CardPainter extends CustomPainter {
         ..strokeWidth = outlineWidth
         ..color = outline!);
     }
-    for (var k = 0; k < corners.length; k++) {
-      if (!corners[k]) continue;
-      if (borderWidth > 0) canvas.drawPath(_cornerPatch(pts, k, borderWidth), Paint()..color = borderColor);
-      if (outline != null && outlineWidth > 0 && outlineOuterOnly) {
-        canvas.drawPath(_cornerPatch(pts, k, outlineWidth / 2), Paint()..color = outline!);
-      }
-    }
     canvas.restore();
   }
 
@@ -694,7 +939,8 @@ class _CardPainter extends CustomPainter {
       o.radius != radius ||
       !_sameList(o.insets, insets) ||
       !_sameList(o.fusedEdges, fusedEdges) ||
-      !_sameList(o.corners, corners) ||
+      !_sameList(o.fans, fans) ||
+      o.gutterHalf != gutterHalf ||
       !_sameList(o.polygon, polygon) ||
       o.tint != tint ||
       o.outline != outline ||
@@ -704,7 +950,7 @@ class _CardPainter extends CustomPainter {
       o.borderWidth != borderWidth ||
       o.shadow != shadow;
 
-  static bool _sameList(List<Object> a, List<Object> b) {
+  static bool _sameList(List<Object?> a, List<Object?> b) {
     if (a.length != b.length) return false;
     for (var i = 0; i < a.length; i++) {
       if (a[i] != b[i]) return false;

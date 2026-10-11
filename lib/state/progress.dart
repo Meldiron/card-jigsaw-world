@@ -86,6 +86,12 @@ class ProgressNotifier extends AsyncNotifier<Map<String, PuzzleProgress>> {
       debugPrint('progress save failed: $e');
     }
   }
+
+  /// Throws away the saved board of a picture so a new mode or size can be
+  /// chosen. Records (stars, best moves and time) and the lifetime totals
+  /// stay; only the session in progress is dropped.
+  Future<void> discard(String puzzleId) =>
+      save(puzzleId, {'layout': '', 'moves': 0, 'elapsedSeconds': 0, 'hintsUsed': 0});
 }
 
 final progressProvider = AsyncNotifierProvider<ProgressNotifier, Map<String, PuzzleProgress>>(ProgressNotifier.new);

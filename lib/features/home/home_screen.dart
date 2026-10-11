@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -228,10 +227,7 @@ class HomeScreen extends ConsumerWidget {
                       childAspectRatio: 0.78,
                     ),
                     delegate: SliverChildBuilderDelegate(
-                      (_, i) => PackCard(pack: list[i], onTap: () => context.push('/library/pack/${list[i].id}'))
-                          .animate()
-                          .fadeIn(delay: (40 * i).ms, duration: 300.ms)
-                          .slideY(begin: 0.06, curve: Curves.easeOut),
+                      (_, i) => PackCard(pack: list[i], onTap: () => context.push('/library/pack/${list[i].id}')),
                       childCount: list.length.clamp(0, 6),
                     ),
                   ),

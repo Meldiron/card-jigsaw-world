@@ -1,10 +1,9 @@
 Version 1.7.0
 
-- New ticket icon and cobalt accent.
-- Puzzles never start with a piece already in place; loose pieces are slightly dimmed and light up as they lock.
-- Joined pieces fuse into one shape with a blue outline, in every mode.
-- "View picture" on the finish screen shows your completed photo in full.
-- Signing in to an existing account now merges your progress; when both saves matter you choose which coins and level to keep.
-- Fully three-starred packs get a star badge next to the check.
-- Break offers are rarer and close faster.
-- Also playable on the web at card-jigsaw-world.appwrite.network (purchases stay on iPhone).
+- Rewarded offers only pay out after the full countdown.
+- Level is now the same everywhere, derived from XP.
+- Difficulty screen: real picture preview and dimensions, cleaner rewards row, and a Discard progress option.
+- Group outlines are one clean shape in every mode; Hint moved to the last toolbar slot.
+- Faster screens: no staggered animations on lists.
+- Friend profiles show statistics.
+- Pictures: no people, no repeats, portrait or square only, at least 20 per pack; new AI and Abstract categories (arriving as the catalogue is rebuilt).

@@ -1,6 +1,9 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+
+import '../state/rewards.dart';
 
 int _i(dynamic v, [int d = 0]) => v is num ? v.toInt() : (v is String ? int.tryParse(v) ?? d : d);
 String _s(dynamic v, [String d = '']) => v?.toString() ?? d;
@@ -35,7 +38,6 @@ class Profile {
     required this.tickets,
     required this.hints,
     required this.xp,
-    required this.level,
     required this.piggyCoins,
     required this.streak,
     required this.lastDailyClaim,
@@ -55,6 +57,9 @@ class Profile {
     this.longestStreak = 0,
     this.lastStreakRestore,
     this.claimedAchievements = const [],
+    this.totalMoves = 0,
+    this.totalSeconds = 0,
+    this.solvedByMode = const {},
   }) : vipFlag = isVip;
 
   final String id;
@@ -65,7 +70,6 @@ class Profile {
   final int tickets;
   final int hints;
   final int xp;
-  final int level;
   final int piggyCoins;
   final int streak;
   final DateTime? lastDailyClaim;
@@ -94,6 +98,17 @@ class Profile {
   /// Achievement step keys whose reward was claimed, e.g. `solver:2`.
   final List<String> claimedAchievements;
 
+  /// Public aggregates bumped on every solve so other players can see them
+  /// (progress rows are owner-only): moves and seconds spent on boards that
+  /// were finished, and finished boards per mode code (replays included).
+  final int totalMoves;
+  final int totalSeconds;
+  final Map<String, int> solvedByMode;
+
+  /// Derived from [xp] with [LevelRewards.levelForXp]; the stored `level`
+  /// column is only a mirror for queries and older clients.
+  int get level => LevelRewards.levelForXp(xp);
+
   static const piggyCapacity = 500;
   static const adsPerDay = 5;
 
@@ -113,7 +128,6 @@ class Profile {
         tickets: _i(d['tickets']),
         hints: _i(d['hints']),
         xp: _i(d['xp']),
-        level: _i(d['level'], 1),
         piggyCoins: _i(d['piggyCoins']),
         streak: _i(d['streak']),
         lastDailyClaim: _dt(d['lastDailyClaim']),
@@ -133,7 +147,22 @@ class Profile {
         longestStreak: _i(d['longestStreak']),
         lastStreakRestore: _dt(d['lastStreakRestore']),
         claimedAchievements: List<String>.from(d['claimedAchievements'] ?? const []),
+        totalMoves: _i(d['totalMoves']),
+        totalSeconds: _i(d['totalSeconds']),
+        solvedByMode: _modeCounts(d['solvedByMode']),
       );
+
+  /// `{"cards":3,"hexagons":1}` stored as a short JSON string.
+  static Map<String, int> _modeCounts(dynamic raw) {
+    if (raw is Map) return {for (final e in raw.entries) e.key.toString(): _i(e.value)};
+    final s = raw?.toString();
+    if (s == null || s.isEmpty) return const {};
+    try {
+      final decoded = jsonDecode(s);
+      if (decoded is Map) return {for (final e in decoded.entries) e.key.toString(): _i(e.value)};
+    } catch (_) {}
+    return const {};
+  }
 
   factory Profile.guest(String userId) => Profile(
         id: userId,
@@ -144,7 +173,6 @@ class Profile {
         tickets: 3,
         hints: 3,
         xp: 0,
-        level: 1,
         piggyCoins: 0,
         streak: 0,
         lastDailyClaim: null,
@@ -182,6 +210,9 @@ class Profile {
         'longestStreak': longestStreak,
         'lastStreakRestore': lastStreakRestore?.toUtc().toIso8601String(),
         'claimedAchievements': claimedAchievements,
+        'totalMoves': totalMoves,
+        'totalSeconds': totalSeconds,
+        'solvedByMode': solvedByMode.isEmpty ? null : jsonEncode(solvedByMode),
       };
 
   Profile copyWith({
@@ -191,7 +222,6 @@ class Profile {
     int? tickets,
     int? hints,
     int? xp,
-    int? level,
     int? piggyCoins,
     int? streak,
     DateTime? lastDailyClaim,
@@ -211,7 +241,6 @@ class Profile {
         tickets: tickets ?? this.tickets,
         hints: hints ?? this.hints,
         xp: xp ?? this.xp,
-        level: level ?? this.level,
         piggyCoins: piggyCoins ?? this.piggyCoins,
         streak: streak ?? this.streak,
         lastDailyClaim: lastDailyClaim ?? this.lastDailyClaim,
@@ -231,17 +260,14 @@ class Profile {
         longestStreak: longestStreak,
         lastStreakRestore: lastStreakRestore,
         claimedAchievements: claimedAchievements,
+        totalMoves: totalMoves,
+        totalSeconds: totalSeconds,
+        solvedByMode: solvedByMode,
       );
 
-  /// XP needed to reach the next level grows gently.
+  /// XP needed to go from [level] to the next one; grows gently.
   static int xpForLevel(int level) => 100 + (level - 1) * 60;
-  int get xpIntoLevel {
-    var remaining = xp;
-    for (var l = 1; l < level; l++) {
-      remaining -= xpForLevel(l);
-    }
-    return remaining.clamp(0, xpForLevel(level));
-  }
+  int get xpIntoLevel => LevelRewards.xpIntoLevel(xp);
   double get levelProgress => xpIntoLevel / xpForLevel(level);
 
   bool get dailyAvailable {

@@ -1,20 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/theme/tokens.dart';
 import '../../state/achievements.dart';
 import '../../state/auth.dart';
+import '../../state/social.dart';
 import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
-import '../../state/social.dart';
+import '../profile/stats.dart';
 
-/// Read-only profile of another player: identity, headline numbers and the
-/// achievement tiers they have claimed. Profiles are public, so this works
-/// for league rows and friends alike.
+/// Read-only profile of another player: identity, headline numbers, the
+/// public statistics and the achievement tiers they have claimed. Profiles
+/// are public, so this works for league rows and friends alike; progress
+/// rows are not, so the Statistics section shows the profile's aggregates
+/// (the same widget as the own profile, minus the owner-only tiles).
 class PlayerScreen extends ConsumerWidget {
   const PlayerScreen({super.key, required this.userId});
   final String userId;
@@ -111,6 +113,12 @@ class PlayerScreen extends ConsumerWidget {
                   _BigStat(icon: AppIcons.xp, value: '${p.xp}', label: 'XP'),
                 ],
               ),
+              SectionHeader(
+                padding: const EdgeInsets.fromLTRB(0, 28, 0, 12),
+                title: 'Statistics',
+                subtitle: isMe ? 'Everything you have played so far' : 'Everything ${p.displayName} has played so far',
+              ),
+              StatisticsSection(stats: isMe ? ref.watch(playerStatsProvider) : PlayerStats.fromProfile(p)),
               SectionHeader(padding: const EdgeInsets.fromLTRB(0, 28, 0, 12), title: 'Achievements', subtitle: badges.isEmpty ? 'Nothing claimed yet' : '${badges.length} of ${achievementFamilies.length} families claimed'),
               if (badges.isEmpty)
                 const EmptyState(icon: AppIcons.level, title: 'No badges yet', message: 'Claimed achievement tiers show up here.')
@@ -123,7 +131,7 @@ class PlayerScreen extends ConsumerWidget {
                   itemCount: badges.length,
                   itemBuilder: (_, i) {
                     final b = badges.values.elementAt(i);
-                    return _BadgeTile(family: b.family, tier: b.tier).animate().fadeIn(delay: (25 * i).ms);
+                    return _BadgeTile(family: b.family, tier: b.tier);
                   },
                 ),
             ],
