@@ -26,7 +26,10 @@ class Economy {
   static int streakRestoreTickets(int longest) => (3 + longest ~/ 7).clamp(3, 10);
 
   static const avatarCoins = 900;
-  static const piggyPerPuzzle = 25;
+
+  /// Piggy bank: +5 coins per solved picture, holds up to [piggyCapacity].
+  static const piggyPerPuzzle = 5;
+  static const piggyCapacity = Profile.piggyCapacity;
   static const adRewardCoins = 40;
 
   static const dailyRewards = <({int coins, int tickets, int hints})>[
@@ -186,6 +189,7 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
   Future<bool> claimGoal(Goal goal) async {
     final p = _p;
     if (!goal.done || p.claimedGoals.contains(goal.key)) return false;
+    if (goal.vipOnly && !p.isVip) return false;
     final claimed = [...p.claimedGoals, goal.key];
     // Keep the list short: drop keys older than ~3 weeks by trimming length.
     final trimmed = claimed.length > 60 ? claimed.sublist(claimed.length - 60) : claimed;

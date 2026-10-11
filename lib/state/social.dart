@@ -5,6 +5,7 @@ import '../data/repositories.dart';
 import '../models/models.dart';
 import 'auth.dart';
 import 'catalog.dart';
+import 'profile.dart';
 
 final friendsProvider = FutureProvider<List<Friend>>((ref) async {
   final userId = ref.watch(currentUserIdProvider);
@@ -23,6 +24,28 @@ final leaderboardProvider = FutureProvider<List<Profile>>((ref) async {
   } catch (e) {
     debugPrint('leaderboard failed: $e');
     return const [];
+  }
+});
+
+/// Another player's public profile (profiles are readable by anyone).
+final playerProfileProvider = FutureProvider.family<Profile?, String>((ref, userId) async {
+  final me = ref.watch(currentUserIdProvider);
+  if (userId == me) {
+    final mine = ref.watch(profileProvider).value;
+    if (mine != null) return mine;
+  }
+  return ref.watch(profileRepositoryProvider).findByUserId(userId);
+});
+
+/// Lifetime count of a ledger reason for the signed-in player (peeks, magic).
+final ledgerCountProvider = FutureProvider.family<int, String>((ref, reason) async {
+  final userId = ref.watch(currentUserIdProvider);
+  if (userId == null) return 0;
+  try {
+    return await ref.watch(profileRepositoryProvider).ledgerCount(userId, reason);
+  } catch (e) {
+    debugPrint('ledger count failed: $e');
+    return 0;
   }
 });
 

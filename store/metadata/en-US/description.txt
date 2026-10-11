@@ -12,7 +12,7 @@ HELPERS
 Peek, Hint and Magic Lock for stubborn boards. Undo is always free. Leave any board and resume it later.
 
 PROGRESS AND REWARDS
-- Coins, tickets and hints are earned by playing: level rewards, daily goals, weekly goals, a daily gift streak and a piggy bank that fills with every completed puzzle.
+- Coins, tickets and hints are earned by playing: level rewards, daily quests, weekly quests, a daily gift streak and a piggy bank that fills with every completed puzzle.
 - Spin the Lucky Wheel for coins or hints.
 - 24 achievement families and 55 avatars to collect.
 - A league leaderboard and friend codes to compare progress with people you know.
@@ -26,7 +26,7 @@ NO ACCOUNT NEEDED
 Start as a guest in one tap. Sign in with Apple or create an email account whenever you want your progress on more than one device.
 
 VIP
-VIP unlocks every pack, including past monthly packs, and turns off the game's own store promotions. Monthly and yearly plans both begin with a 7-day free trial. Payment is charged to your Apple ID account when the trial ends or at confirmation of purchase. The subscription renews automatically unless it is cancelled at least 24 hours before the end of the current period. Manage or cancel it in your App Store account settings.
+VIP unlocks every pack, including past monthly packs, adds a fourth daily quest and a sixth weekly quest, pays 500 bonus coins every week, allows unlimited My Puzzles uploads and turns off the game's own store promotions. Monthly and yearly plans both begin with a 7-day free trial. Payment is charged to your Apple ID account when the trial ends or at confirmation of purchase. The subscription renews automatically unless it is cancelled at least 24 hours before the end of the current period. Manage or cancel it in your App Store account settings.
 
 No third-party ads, no tracking, no analytics SDKs.
 

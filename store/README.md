@@ -4,7 +4,7 @@ Everything in this folder is generated. Edit the sources under `tools/store/`
 and the capture test, then rerun; do not hand-edit the PNGs.
 
 Design rules: flat neutral backgrounds (light grey `#F2F2F4` or near-black),
-one accent (`#4F46E5` indigo), colour only from the puzzle photos, system
+one accent (`#2F4FBF` cobalt), colour only from the puzzle photos, system
 font (SF Pro), no gradients, no emoji.
 
 ## Layout

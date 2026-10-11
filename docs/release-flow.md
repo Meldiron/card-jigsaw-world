@@ -4,8 +4,8 @@ One path from a USB-connected iPhone to the App Store, with exactly two human
 decisions: when to cut a release, and when to submit to App Review.
 
 ```
-local iPhone  ──►  GitHub release  ──►  TestFlight  ──►  App Review  ──►  App Store
-tools/dev/device.sh   tools/dev/release.sh   automatic          manual workflow   manual click
+local iPhone  ──►  TestFlight build  ──►  App Review  ──►  App Store  ──►  GitHub release
+tools/dev/device.sh  tools/dev/testflight.sh   manual workflow   manual click   tag-store-release.sh
 ```
 
 ## 1. Local testing over USB
@@ -25,27 +25,29 @@ widgets and StoreKit (sandbox) all work on the device.
 tests, a syntax check of the Appwrite function, and unsigned iOS, Android and
 web builds. Nothing is published.
 
-## 3. Cutting a release → TestFlight (automatic)
+## 3. TestFlight builds (automatic, no review after the first)
 
 ```
-tools/dev/release.sh 1.8.0                 # notes from store/metadata/en-US/release_notes.txt
-tools/dev/release.sh 1.8.0 --notes FILE
+tools/dev/testflight.sh        # next build of the current version, from main
 ```
 
-The script bumps `pubspec.yaml`, runs analyze and tests, commits, tags
-`v1.8.0`, pushes and publishes a GitHub release. Publishing the release starts
-`Release to TestFlight` (`.github/workflows/release-testflight.yml`), which:
+Apple reviews the **first build of each version string** for external testers
+(1 to 7 days) and lets later builds of the same version through on their own.
+So the version in `pubspec.yaml` stays the same for the whole cycle and only
+the build number rises (100 + workflow run number). `Release to TestFlight`
+(`.github/workflows/release-testflight.yml`) archives, signs, uploads, waits
+for processing, writes `store/metadata/en-US/release_notes.txt` as "what to
+test", adds the build to the internal and public groups and submits Beta App
+Review only when the version has none yet.
 
-1. downloads the App Store provisioning profiles and switches the Release
-   configurations to manual signing with the distribution certificate;
-2. archives, exports and uploads the build (build number = 100 + run number,
-   always above hand-uploaded builds);
-3. waits for Apple to process it, writes the release notes as the build's
-   "what to test", adds it to the internal tester group (installable at once)
-   and to "Public testers", and submits it to Beta App Review (the public link
-   only works for builds that passed it).
+Starting the next cycle after an App Store release:
 
-The same workflow can be started by hand from the Actions tab.
+```
+tools/dev/release.sh 1.8.0     # bumps pubspec, commits, pushes, first build
+```
+
+Expired builds and the one-time review live on Apple's side; the publish
+script's `audit` shows them.
 
 ## 4. Submitting to App Review (manual, one click)
 
@@ -60,6 +62,15 @@ Applications agreement must be completed in App Store Connect; neither has an
 API. `asc_publish.py audit` lists everything else.
 
 ## 5. Going live (manual)
+
+After pressing Release in App Store Connect, record it in GitHub:
+
+```
+tools/dev/tag-store-release.sh 1.7.0
+```
+
+Tags and GitHub releases mark App Store releases only, never TestFlight cuts.
+
 
 Because the version uses manual release, approval does not publish. In App
 Store Connect open the approved version and press **Release this version**.

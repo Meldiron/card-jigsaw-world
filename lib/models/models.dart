@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 int _i(dynamic v, [int d = 0]) => v is num ? v.toInt() : (v is String ? int.tryParse(v) ?? d : d);
@@ -92,7 +94,7 @@ class Profile {
   /// Achievement step keys whose reward was claimed, e.g. `solver:2`.
   final List<String> claimedAchievements;
 
-  static const piggyCapacity = 600;
+  static const piggyCapacity = 500;
   static const adsPerDay = 5;
 
   /// Rewarded videos still available today.
@@ -434,6 +436,9 @@ class PuzzleProgress {
     required this.bestSeconds,
     required this.completedAt,
     this.mode = 'cards',
+    this.totalMoves = 0,
+    this.totalSeconds = 0,
+    this.totalHints = 0,
   });
 
   final String id;
@@ -451,6 +456,11 @@ class PuzzleProgress {
   final int? bestMoves;
   final int? bestSeconds;
   final DateTime? completedAt;
+  /// Lifetime totals across every session on this picture (replays included).
+  /// Older rows have none of these; they fall back to the last session's numbers.
+  final int totalMoves;
+  final int totalSeconds;
+  final int totalHints;
 
   factory PuzzleProgress.fromRow(String id, Map<String, dynamic> d) {
     List<int>? layout;
@@ -473,8 +483,31 @@ class PuzzleProgress {
       bestSeconds: d['bestSeconds'] == null ? null : _i(d['bestSeconds']),
       completedAt: _dt(d['completedAt']),
       mode: _s(d['mode'], 'cards'),
+      totalMoves: max(_i(d['totalMoves']), _i(d['moves'])),
+      totalSeconds: max(_i(d['totalSeconds']), _i(d['elapsedSeconds'])),
+      totalHints: max(_i(d['totalHints']), _i(d['hintsUsed'])),
     );
   }
+
+  /// Row data for caching and upserts (same keys as the Appwrite table).
+  Map<String, dynamic> toData() => {
+        'userId': userId,
+        'puzzleId': puzzleId,
+        'gridSize': gridSize,
+        'layout': layout?.join(','),
+        'moves': moves,
+        'elapsedSeconds': elapsedSeconds,
+        'hintsUsed': hintsUsed,
+        'completed': completed,
+        'stars': stars,
+        'bestMoves': bestMoves,
+        'bestSeconds': bestSeconds,
+        'completedAt': completedAt?.toUtc().toIso8601String(),
+        'mode': mode,
+        'totalMoves': totalMoves,
+        'totalSeconds': totalSeconds,
+        'totalHints': totalHints,
+      };
 
   bool get inProgress => !completed && layout != null && layout!.isNotEmpty;
 }

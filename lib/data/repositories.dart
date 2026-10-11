@@ -139,6 +139,16 @@ class ProfileRepository {
     return res.rows.map((r) => Profile.fromRow(r.$id, r.data)).toList();
   }
 
+  /// How many ledger entries the player has with [reason] (e.g. `peek`).
+  Future<int> ledgerCount(String userId, String reason) async {
+    final res = await _tables.listRows(
+      databaseId: _db,
+      tableId: AppwriteConfig.ledger,
+      queries: [Query.equal('userId', userId), Query.equal('reason', reason), Query.limit(1), Query.select(['\$id'])],
+    );
+    return res.total;
+  }
+
   Future<void> logLedger(String userId, {required int amount, required String currency, required String reason, int? balanceAfter}) async {
     try {
       await _tables.createRow(

@@ -1,9 +1,11 @@
-Version 1.7.1
+Version 1.7.0
 
-- Native look: system alerts, stacked sheets for the Store, Wheel and Account, and a floating glass tab bar and headers that content scrolls beneath.
-- Hexagon and triangle boards keep their true shape on every picture; a few extreme pictures no longer collapse the board.
-- Sign in with Apple now signs you in to your existing account instead of showing an error.
-- Picture complete: Replay and Next puzzle buttons share the row evenly.
-- Profile rename alert uses Cancel and Save.
-- League card wording tidied.
-- VIP gift codes can be redeemed from the Store and Settings.
+- New cobalt accent across the app.
+- Quests: the Events tab is now Quests, with daily and weekly quests, time left until reset, and an extra quest for VIP members. Live events now ask you to finish every picture in the pack.
+- Triangles now snap together like every other mode, and connected pieces look the same in cards, squares, triangles and hexagons.
+- Finish screen shows your progress through the pack and says "Back to pack" after the last picture.
+- Library: Unlocked filter, finished packs get a check and a star bar, pack pages show solved pictures with progress bars.
+- Tap any friend or league player to see their profile and badges. Removing a friend and unlocking a pack now ask first.
+- Profile: a Statistics section with solves, stars, streaks, time played, moves and per-mode records. A dot on the Profile tab when a badge is ready to claim.
+- Piggy bank fills 5 coins per picture up to 500. Lucky Wheel jackpot celebration. Clearer buttons showing what each action costs.
+- Modern glass alerts everywhere, readable offer buttons, and smaller fixes.

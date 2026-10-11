@@ -1,15 +1,14 @@
 name: Release to TestFlight
 
-# Publishing a GitHub release (tag like v1.7.0) builds a signed iOS archive,
-# uploads it to App Store Connect, waits for processing, adds the build to
-# the TestFlight groups and submits it to Beta App Review. The build lands in
-# TestFlight only; attaching it to an App Store version and submitting for
-# App Review is the separate, human-started "Submit to App Store" workflow.
-# Version = tag, build number = 100 + run number.
+# Started by hand (tools/dev/testflight.sh or the Actions tab). Builds a signed
+# archive and uploads it to App Store Connect as a TestFlight build of the
+# version in pubspec.yaml (or the `version` input). Apple reviews the first
+# build of a version for external testers; later builds of the same version
+# reach them without another review, so the version string changes only when
+# a new App Store release cycle starts (tools/dev/release.sh). Build number =
+# 100 + run number.
 
 on:
-  release:
-    types: [published]
   workflow_dispatch:
     inputs:
       version:
@@ -38,9 +37,8 @@ jobs:
       - name: Resolve version
         id: ver
         run: |
-          TAG="${{ github.event.release.tag_name }}"
           INPUT="${{ github.event.inputs.version }}"
-          if [ -n "$INPUT" ]; then V="$INPUT"; elif [ -n "$TAG" ]; then V="${TAG#v}"; else V=$(grep '^version:' pubspec.yaml | sed 's/version: //; s/+.*//'); fi
+          if [ -n "$INPUT" ]; then V="$INPUT"; else V=$(grep '^version:' pubspec.yaml | sed 's/version: //; s/+.*//'); fi
           echo "version=$V" >> "$GITHUB_OUTPUT"
           # Build numbers must only ever go up for a version. Offset the run
           # number so CI builds always sit above builds uploaded by hand.
@@ -109,25 +107,19 @@ jobs:
             --apiIssuer ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
 
       - name: Add to TestFlight group and submit for beta review
-        # Waits for Apple to process the build (polls every 30 s, up to 40 min),
-        # marks it export-compliant, writes the release notes as "what to test",
-        # adds it to the "Public testers" and internal groups and submits it
-        # to Beta App Review. The release body may be empty (workflow_dispatch);
-        # an empty file leaves the previous what-to-test text in place.
+        # Waits for Apple to process the build, marks it export-compliant,
+        # writes store/metadata/en-US/release_notes.txt as "what to test", adds
+        # the build to the internal and public groups and submits it to Beta
+        # App Review when this version has no approved build yet.
         timeout-minutes: 45
-        continue-on-error: false
         env:
           ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
           ASC_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
-          RELEASE_BODY: ${{ github.event.release.body }}
         run: |
           python3 -m pip install -q --user --break-system-packages pyjwt cryptography requests
-          WHATS_NEW=$(mktemp)
-          printf '%s' "$RELEASE_BODY" > "$WHATS_NEW"
-          export ASC_KEY_PATH=~/private_keys/AuthKey_${ASC_KEY_ID}.p8
-          python3 tools/store/asc_publish.py testflight \
+          ASC_KEY_PATH=~/private_keys/AuthKey_${ASC_KEY_ID}.p8 python3 tools/store/asc_publish.py testflight \
             --build ${{ steps.ver.outputs.build }} \
-            --whats-new-file "$WHATS_NEW"
+            --whats-new-file store/metadata/en-US/release_notes.txt
 
       - uses: actions/upload-artifact@v4
         with:

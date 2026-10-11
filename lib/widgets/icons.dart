@@ -30,6 +30,9 @@ class AppIcons {
   static const home = CupertinoIcons.house_fill;
   static const library = CupertinoIcons.square_grid_2x2_fill;
   static const events = Icons.redeem_rounded;
+  /// Quests tab (daily and weekly quests plus live events).
+  static const quests = CupertinoIcons.flag_fill;
+  static const questsOutline = CupertinoIcons.flag;
   static const social = CupertinoIcons.person_2_fill;
   static const profile = CupertinoIcons.person_crop_circle_fill;
 

@@ -5,11 +5,13 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/haptics.dart';
 import '../../core/sfx.dart';
+import '../../state/achievements.dart';
 import '../../state/profile.dart';
 import '../../state/settings.dart';
 import '../../widgets/glass.dart';
+import '../../widgets/icons.dart';
 
-/// Bottom tab shell: Home · Library · Events · Social · Profile.
+/// Bottom tab shell: Home · Library · Quests · Social · Profile.
 ///
 /// The tab bar is a floating glass capsule (iOS 26). The body extends under
 /// it, so every tab's scroll view pads its end with
@@ -36,12 +38,14 @@ class _HomeShellState extends ConsumerState<HomeShell> {
   Widget build(BuildContext context) {
     final profile = ref.watch(profileProvider).value;
     final dailyReady = profile?.dailyAvailable ?? false;
+    // Profile dot: an achievement reward is waiting to be claimed.
+    final rewardReady = ref.watch(achievementsProvider.select((list) => list.any((a) => a.done)));
     final tabs = [
       GlassTabItem(icon: CupertinoIcons.house, activeIcon: CupertinoIcons.house_fill, label: 'Home', badge: dailyReady),
       const GlassTabItem(icon: CupertinoIcons.square_grid_2x2, activeIcon: CupertinoIcons.square_grid_2x2_fill, label: 'Library'),
-      const GlassTabItem(icon: CupertinoIcons.gift, activeIcon: CupertinoIcons.gift_fill, label: 'Events'),
+      const GlassTabItem(icon: AppIcons.questsOutline, activeIcon: AppIcons.quests, label: 'Quests'),
       const GlassTabItem(icon: CupertinoIcons.person_2, activeIcon: CupertinoIcons.person_2_fill, label: 'Social'),
-      const GlassTabItem(icon: CupertinoIcons.person_crop_circle, activeIcon: CupertinoIcons.person_crop_circle_fill, label: 'Profile'),
+      GlassTabItem(icon: CupertinoIcons.person_crop_circle, activeIcon: CupertinoIcons.person_crop_circle_fill, label: 'Profile', badge: rewardReady),
     ];
     return Scaffold(
       extendBody: true,

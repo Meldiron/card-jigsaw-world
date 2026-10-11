@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math' as math;
 
+import 'package:confetti/confetti.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -27,7 +28,7 @@ class _Segment {
 }
 
 /// Balance: a spin costs 1 Ticket, and a Ticket is worth roughly 150 Coins
-/// (it opens a piggy bank of up to 600 Coins, premium packs cost 3).
+/// (it opens a piggy bank of up to 500 Coins, premium packs cost 3).
 /// Expected value per spin:
 ///   coins  = (60·5 + 90·4 + 120·4 + 150·3 + 200·2 + 300·1.5 + 500·0.5) / 22 ≈ 122
 ///   hints  = 2 hints (≈120 Coins at the 60-Coin hint price) × 2/22      ≈  11
@@ -38,7 +39,7 @@ const _segments = [
   _Segment('60', Currency.coins, Color(0xFFD97706), coins: 60, weight: 5),
   _Segment('90', Currency.coins, Color(0xFF64748B), coins: 90, weight: 4),
   _Segment('120', Currency.coins, Color(0xFF0F9D8F), coins: 120, weight: 4),
-  _Segment('2', Currency.hints, Color(0xFF4F46E5), hints: 2, weight: 2),
+  _Segment('2', Currency.hints, Brand.accent, hints: 2, weight: 2),
   _Segment('150', Currency.coins, Color(0xFFB45309), coins: 150, weight: 3),
   _Segment('200', Currency.coins, Color(0xFF475569), coins: 200, weight: 2),
   _Segment('300', Currency.coins, Color(0xFF0B7A70), coins: 300, weight: 1.5),
@@ -54,6 +55,8 @@ class WheelScreen extends ConsumerStatefulWidget {
 
 class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProviderStateMixin {
   late final AnimationController _c = AnimationController(vsync: this, duration: const Duration(milliseconds: 4200));
+  /// Jackpot burst from the wheel centre.
+  late final ConfettiController _confetti = ConfettiController(duration: const Duration(milliseconds: 900));
   double _from = 0;
   double _to = 0;
   bool _spinning = false;
@@ -77,6 +80,7 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
   @override
   void dispose() {
     _c.dispose();
+    _confetti.dispose();
     super.dispose();
   }
 
@@ -116,7 +120,12 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
       if (won.hints > 0) await n.addHints(won.hints, reason: 'wheel');
       if (!mounted) return;
       Sfx.instance.win();
-      Haptics.success();
+      if (won.jackpot) {
+        Haptics.heavy();
+        _confetti.play();
+      } else {
+        Haptics.success();
+      }
       setState(() {
         _spinning = false;
         _result = won;
@@ -130,6 +139,7 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
     final profile = ref.watch(profileProvider).value;
     final tickets = profile?.tickets ?? 0;
     final canSpin = tickets >= Economy.wheelSpinTickets && !_spinning;
+    final jackpot = _result?.jackpot ?? false;
     return Scaffold(
       appBar: GlassAppBar(
         title: const Text('Lucky Wheel'),
@@ -174,6 +184,30 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
                           decoration: BoxDecoration(color: c.card, shape: BoxShape.circle, border: Border.all(color: c.stroke)),
                           child: Icon(AppIcons.wheel, size: 30, color: context.accent),
                         ),
+                        if (jackpot)
+                          // Glow pulse on the whole wheel when the jackpot lands.
+                          IgnorePointer(
+                            child: Container(
+                              width: size + 20,
+                              height: size + 20,
+                              decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: Brand.coin, width: 4)),
+                            )
+                                .animate(onPlay: (ctrl) => ctrl.repeat(count: 3))
+                                .fadeIn(duration: 200.ms)
+                                .scale(begin: const Offset(0.96, 0.96), end: const Offset(1.06, 1.06), duration: 600.ms, curve: Curves.easeOut)
+                                .fadeOut(delay: 300.ms, duration: 300.ms),
+                          ),
+                        ConfettiWidget(
+                          confettiController: _confetti,
+                          blastDirectionality: BlastDirectionality.explosive,
+                          emissionFrequency: 0.6,
+                          numberOfParticles: 18,
+                          maxBlastForce: 24,
+                          minBlastForce: 8,
+                          gravity: 0.25,
+                          shouldLoop: false,
+                          colors: [Brand.coin, Brand.coinDeep, context.accent, Colors.white],
+                        ),
                         Positioned(
                           top: -4,
                           child: Transform.rotate(
@@ -199,26 +233,26 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
                       const SizedBox(width: 10),
                       if (_result!.coins > 0) Amount(currency: Currency.coins, value: _result!.coins, size: 20),
                       if (_result!.hints > 0) Amount(currency: Currency.hints, value: _result!.hints, size: 20),
-                      if (_result!.jackpot) ...[const SizedBox(width: 8), Chip2(label: 'Jackpot', color: context.accent, foreground: Colors.white)],
+                      if (jackpot) ...[const SizedBox(width: 8), const Chip2(label: 'Jackpot', color: Brand.coin, foreground: Color(0xFF2A1F00))],
                     ],
                   ),
-                ).animate().fadeIn(),
+                ).animate().fadeIn().then().scale(begin: const Offset(1, 1), end: jackpot ? const Offset(1.08, 1.08) : const Offset(1, 1), duration: 220.ms, curve: Curves.easeOut).then().scale(begin: const Offset(1, 1), end: jackpot ? const Offset(1 / 1.08, 1 / 1.08) : const Offset(1, 1), duration: 260.ms, curve: Curves.easeOutBack),
               ),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
               child: Column(
                 children: [
-                  BigButton(
-                    label: 'Spin for ${Economy.wheelSpinTickets} ticket',
-                    icon: CupertinoIcons.sparkles,
-                    kind: ButtonKind.primary,
+                  BigButton.cost(
+                    label: 'Spin for',
+                    currency: Currency.tickets,
+                    amount: Economy.wheelSpinTickets,
                     onTap: canSpin ? _spin : null,
                   ),
                   if (tickets < Economy.wheelSpinTickets) ...[
                     const SizedBox(height: 8),
                     BigButton(label: 'Get tickets', kind: ButtonKind.secondary, onTap: () => context.push('/store')),
                     const SizedBox(height: 8),
-                    Text('Earn tickets from weekly goals, level-ups and events.', textAlign: TextAlign.center, style: TextStyle(color: c.textSecondary, fontSize: 12.5)),
+                    Text('Earn tickets from weekly quests, level-ups and events.', textAlign: TextAlign.center, style: TextStyle(color: c.textSecondary, fontSize: 12.5)),
                   ] else ...[
                     const SizedBox(height: 8),
                     Text('Jackpot: 500 coins', style: TextStyle(color: c.textTertiary, fontSize: 12, fontWeight: FontWeight.w600)),
@@ -233,13 +267,12 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
   }
 }
 
-IconData _glyph(_Segment s) => s.jackpot
-    ? Icons.workspace_premium_rounded
-    : switch (s.kind) {
-        Currency.coins => Icons.monetization_on_rounded,
-        Currency.tickets => Icons.confirmation_number_rounded,
-        Currency.hints => Icons.lightbulb_rounded,
-      };
+/// Segment glyph: the jackpot is coins too, so it carries the coin mark.
+IconData _glyph(_Segment s) => switch (s.kind) {
+      Currency.coins => Icons.monetization_on_rounded,
+      Currency.tickets => Icons.confirmation_number_rounded,
+      Currency.hints => Icons.lightbulb_rounded,
+    };
 
 class _WheelPainter extends CustomPainter {
   _WheelPainter({required this.dark, required this.ring, required this.tick});

@@ -30,6 +30,16 @@ The store screen shows the localised App Store price once products load; the tab
 
 `Profile.isVip` is true while `vipExpiresAt` is in the future (or while the debug `isVip` flag is set).
 
+## VIP benefits
+
+What `isVip` unlocks in the app (keep this list, the `_VipCard` bullets in `lib/features/store/store_screen.dart` and the VIP paragraph of `store/metadata/en-US/description.txt` in sync):
+
+- Every pack unlocked, including past monthly daily packs (`ProfileNotifier.isUnlocked`).
+- A fourth daily quest and a sixth weekly quest (`Goals.daily` / `Goals.weekly` mark the last entry `vipOnly`; non-VIP players see it as a locked card that opens the Store VIP card, and `claimGoal` refuses it). The free counts are `Goals.dailyFree = 3` and `Goals.weeklyFree = 5`.
+- No bonus videos (house promotions) anywhere.
+- Unlimited My Puzzles uploads.
+- +500 coins every week.
+
 ## Function configuration (Appwrite console → Functions → verify-purchase)
 
 | Variable | Value |

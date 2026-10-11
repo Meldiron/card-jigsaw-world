@@ -43,6 +43,18 @@ class PackScreen extends ConsumerWidget {
     final priceValue = pack.priceTickets > 0 ? pack.priceTickets : pack.priceCoins;
 
     Future<void> unlock() async {
+      final balance = priceCurrency == Currency.tickets ? (profile?.tickets ?? 0) : (profile?.coins ?? 0);
+      final unit = priceCurrency == Currency.tickets ? 'Ticket' : 'Coin';
+      final amount = '$priceValue $unit${priceValue == 1 ? '' : 's'}';
+      if (balance >= priceValue) {
+        final sure = await showAppAlert(
+          context,
+          title: 'Unlock ${pack.name}?',
+          message: 'This costs $amount. You have $balance.',
+          confirmLabel: 'Pay $amount',
+        );
+        if (!sure || !context.mounted) return;
+      }
       final ok = await profileN.unlockPack(pack);
       if (!context.mounted) return;
       if (ok) {
@@ -54,7 +66,7 @@ class PackScreen extends ConsumerWidget {
         final needTickets = pack.priceTickets > 0;
         showToast(
           context,
-          needTickets ? 'Not enough Tickets. Finish weekly goals or level up to earn more.' : 'Not enough Coins. Play more puzzles or visit the store.',
+          needTickets ? 'Not enough Tickets. Finish weekly quests or level up to earn more.' : 'Not enough Coins. Play more puzzles or visit the store.',
           leading: const CoinIcon(size: 20),
         );
         context.push('/store');
@@ -126,9 +138,9 @@ class PackScreen extends ConsumerWidget {
                   const SizedBox(height: 14),
                   Row(
                     children: [
-                      _Stat(label: pack.isDaily ? 'Available' : 'Puzzles', value: pack.isDaily ? '$available/${list.length}' : '${list.length}'),
-                      _Stat(label: 'Solved', value: '$done'),
-                      _Stat(label: 'Stars', value: '$stars/${list.length * 3}', last: true),
+                      _Stat(label: pack.isDaily ? 'Available' : 'Puzzles', value: pack.isDaily ? '$available/${list.length}' : '${list.length}', progress: pack.isDaily ? _ratio(available, list.length) : null),
+                      _Stat(label: 'Solved', value: '$done/${list.length}', progress: _ratio(done, list.length)),
+                      _Stat(label: 'Stars', value: '$stars/${list.length * 3}', progress: _ratio(stars, list.length * 3), color: Brand.star, last: true),
                     ],
                   ),
                   const SizedBox(height: 16),
@@ -261,6 +273,8 @@ class PackScreen extends ConsumerWidget {
     return '${d.inMinutes}m';
   }
 
+  static double _ratio(int a, int b) => b == 0 ? 0 : (a / b).clamp(0.0, 1.0);
+
   static String _monthName(int m) => const ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][m - 1];
 
   /// Route path for resuming a saved board (mode + ladder entry by cell count).
@@ -349,9 +363,12 @@ class _AccessCard extends StatelessWidget {
 }
 
 class _Stat extends StatelessWidget {
-  const _Stat({required this.label, required this.value, this.last = false});
+  const _Stat({required this.label, required this.value, this.progress, this.color, this.last = false});
   final String label;
   final String value;
+  /// 0..1 fill of the thin bar under the label; null keeps the space empty.
+  final double? progress;
+  final Color? color;
   final bool last;
   @override
   Widget build(BuildContext context) {
@@ -359,12 +376,14 @@ class _Stat extends StatelessWidget {
     return Expanded(
       child: Container(
         margin: EdgeInsets.only(right: last ? 0 : 8),
-        padding: const EdgeInsets.symmetric(vertical: 10),
+        padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
         decoration: BoxDecoration(color: c.card, borderRadius: BorderRadius.circular(Radii.md), border: Border.all(color: c.stroke)),
         child: Column(
           children: [
             Text(value, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 18, letterSpacing: -0.3)),
             Text(label, style: TextStyle(color: c.textSecondary, fontSize: 11.5)),
+            const SizedBox(height: 8),
+            if (progress != null) ProgressBar(value: progress!, height: 3, color: color) else const SizedBox(height: 3),
           ],
         ),
       ),
@@ -393,7 +412,7 @@ class _PuzzleTile extends StatelessWidget {
         decoration: BoxDecoration(
           color: c.card,
           borderRadius: BorderRadius.circular(Radii.md),
-          border: Border.all(color: puzzle.isToday ? Brand.live : c.stroke, width: puzzle.isToday ? 1.5 : 1),
+          border: Border.all(color: c.stroke),
         ),
         child: Stack(
           fit: StackFit.expand,
@@ -422,6 +441,22 @@ class _PuzzleTile extends StatelessWidget {
               ),
             if (started)
               const Positioned(left: 6, top: 6, child: Chip2(label: 'Continue', onImage: true)),
+            // Today's outline sits just inside the clip so its corners follow
+            // the tile's radius exactly instead of being shaved by the clip.
+            if (puzzle.isToday)
+              Positioned.fill(
+                child: IgnorePointer(
+                  child: Padding(
+                    padding: const EdgeInsets.all(1),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(Radii.md - 1),
+                        border: Border.all(color: context.accent, width: 2),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             if (!dateLocked)
               Positioned(
                 left: 0,

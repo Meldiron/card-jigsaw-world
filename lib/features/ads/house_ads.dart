@@ -90,7 +90,7 @@ const _creatives = <Creative>[
   Creative(id: 'hints-15', kind: CreativeKind.hints, headline: 'Stuck on a card?', body: '15 hints show exactly where a card belongs.', cta: 'Get 15 hints', route: '/store', price: '\$2.49'),
   Creative(id: 'piggy', kind: CreativeKind.piggy, headline: 'Your piggy bank is filling up', body: 'Every finished puzzle adds 25 coins. Open it with one ticket.', cta: 'See piggy bank', route: '/home'),
   Creative(id: 'monthly', kind: CreativeKind.monthly, headline: 'One new picture every day', body: 'This month’s album is free. Past months come with VIP.', cta: 'Open this month', route: '/library'),
-  Creative(id: 'events', kind: CreativeKind.event, headline: 'A new world-day event every week', body: 'Themed packs that open for seven days. Finish five for a ticket.', cta: 'See events', route: '/events'),
+  Creative(id: 'events', kind: CreativeKind.event, headline: 'A new world-day event every week', body: 'Themed packs that open for seven days. Finish every picture for a ticket.', cta: 'See events', route: '/events'),
 ];
 
 /// Picks a creative for the player's state; never repeats the last one.
@@ -302,7 +302,7 @@ class _HouseAdScreenState extends ConsumerState<HouseAdScreen> {
                         Text(c.price!, style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 13, fontWeight: FontWeight.w600)),
                       ],
                       const SizedBox(height: 20),
-                      BigButton(label: c.cta, kind: ButtonKind.dark, onTap: _cta),
+                      _OfferButton(label: c.cta, onTap: _cta),
                       if (widget.rewarded) ...[
                         const SizedBox(height: 10),
                         AnimatedOpacity(
@@ -334,6 +334,30 @@ class _HouseAdScreenState extends ConsumerState<HouseAdScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// The offer CTA. The ad always sits on a dark scrim whatever the app theme,
+/// so the button is a fixed white pill with near-black ink: `ButtonKind.dark`
+/// follows the theme and in dark mode paints white text on a white fill.
+class _OfferButton extends StatelessWidget {
+  const _OfferButton({required this.label, required this.onTap});
+  final String label;
+  final VoidCallback onTap;
+
+  static const _ink = Color(0xFF111118);
+
+  @override
+  Widget build(BuildContext context) {
+    return Pressable(
+      onTap: onTap,
+      child: Container(
+        height: 52,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(Radii.md)),
+        child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(color: _ink, fontSize: 16, fontWeight: FontWeight.w700)),
       ),
     );
   }

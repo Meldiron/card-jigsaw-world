@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 /// provide the colour; chrome stays out of their way.
 class Brand {
   /// Single accent used for primary actions, selection and links.
-  static const accent = Color(0xFF4F46E5);
-  static const accentDark = Color(0xFF6366F1);
+  static const accent = Color(0xFF2F4FBF);
+  static const accentDark = Color(0xFF7C9AFF);
 
   /// Semantic colours. Used small (icons, badges), never as large fills.
   static const coin = Color(0xFFE0A200);
@@ -110,7 +110,7 @@ class AppColors extends ThemeExtension<AppColors> {
     shadow: Color(0x0F101020),
     success: Brand.success,
     danger: Brand.danger,
-    accentTint: Color(0xFFEEEDFC),
+    accentTint: Color(0xFFE9EEFB),
   );
 
   static const dark = AppColors(
@@ -126,7 +126,7 @@ class AppColors extends ThemeExtension<AppColors> {
     shadow: Color(0x55000000),
     success: Color(0xFF4ADE80),
     danger: Color(0xFFF87171),
-    accentTint: Color(0xFF24233A),
+    accentTint: Color(0xFF1C2440),
   );
 
   @override

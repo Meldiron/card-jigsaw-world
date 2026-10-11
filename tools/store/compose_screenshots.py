@@ -8,7 +8,7 @@ Usage (from the repo root, with Pillow installed):
 Each slide is a flat neutral canvas (1320x2868, the 6.9" iPhone size), a short
 headline and optional subhead at the top, and the raw capture inside a rounded
 dark device-like frame. Colour comes only from the puzzle photos; the single
-accent is the app's indigo (0xFF4F46E5), used for the small kicker label.
+accent is the app's cobalt (0xFF2F4FBF), used for the small kicker label.
 
 Edit SLIDES below to change copy, order or source captures, then rerun.
 """
@@ -33,7 +33,7 @@ INK_ON_LIGHT = (17, 24, 39)
 MUTED_ON_LIGHT = (107, 114, 128)
 INK_ON_DARK = (245, 245, 247)
 MUTED_ON_DARK = (161, 161, 170)
-ACCENT = (0x4F, 0x46, 0xE5)
+ACCENT = (0x2F, 0x4F, 0xBF)
 FRAME = (28, 28, 30)
 FRAME_EDGE_ON_LIGHT = (205, 205, 210)
 FRAME_EDGE_ON_DARK = (62, 62, 66)

@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
-# Cut a release: bump the version, write release notes, tag, and publish a
-# GitHub release. Publishing the release triggers .github/workflows/
-# release-testflight.yml, which uploads the build to TestFlight, adds it to the
-# public tester group and submits it to Beta App Review. Nothing reaches the
-# App Store from here; that is the separate "Submit to App Store" workflow.
+# Start a NEW version cycle. Use it only after the previous version shipped to
+# the App Store (or was abandoned): it bumps pubspec.yaml to X.Y.Z, commits,
+# pushes and sends the first TestFlight build of the new version, which Apple
+# then reviews once for external testers. Day-to-day builds use
+# tools/dev/testflight.sh instead and keep the version string.
 #
-#   tools/dev/release.sh 1.8.0                      notes from store/metadata/en-US/release_notes.txt
-#   tools/dev/release.sh 1.8.0 --notes notes.md     notes from a file
-#   tools/dev/release.sh 1.8.0 --dry-run
+#   tools/dev/release.sh 1.8.0 [--notes FILE] [--dry-run]
 set -euo pipefail
 cd "$(dirname "$0")/../.."
 VERSION="${1:-}"; shift || true
@@ -24,7 +22,7 @@ done
 [ -z "$(git status --porcelain)" ] || { echo "working tree is not clean; commit or stash first" >&2; exit 1; }
 CURRENT=$(grep '^version:' pubspec.yaml | sed 's/version: //')
 BUILD=$(( ${CURRENT#*+} + 1 ))
-echo "pubspec $CURRENT -> $VERSION+$BUILD, tag v$VERSION, notes from $NOTES"
+echo "pubspec $CURRENT -> $VERSION+$BUILD (new cycle), notes from $NOTES"
 [ "$DRY" = 0 ] || exit 0
 export PATH="$HOME/flutter/bin:$PATH"
 sed -i '' "s/^version: .*/version: $VERSION+$BUILD/" pubspec.yaml
@@ -32,8 +30,6 @@ if [ "$NOTES" != store/metadata/en-US/release_notes.txt ]; then cp "$NOTES" stor
 flutter analyze --fatal-infos --fatal-warnings
 flutter test
 git add pubspec.yaml store/metadata/en-US/release_notes.txt
-git commit -q -m "Release $VERSION"
-git tag -a "v$VERSION" -m "Card Jigsaw World $VERSION"
-git push -q origin main "v$VERSION"
-gh release create "v$VERSION" --title "Card Jigsaw World $VERSION" --notes-file store/metadata/en-US/release_notes.txt
-echo "Release published. Watch: gh run list --workflow 'Release to TestFlight'"
+git commit -q -m "Start $VERSION"
+git push -q origin main
+exec tools/dev/testflight.sh

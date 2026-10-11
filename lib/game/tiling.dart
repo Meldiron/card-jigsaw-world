@@ -40,9 +40,14 @@ abstract class Tiling {
   Iterable<int> neighbours(int slot);
 
   /// Direction from [a] to [b] when they are edge-neighbours, else null.
+  ///
+  /// This describes which edge the two cells share, so two cards join when
+  /// `direction(slotA, slotB) == direction(cardA, cardB)`. It is not a move
+  /// delta: a triangle's neighbours all have the opposite orientation, so
+  /// [delta] (which rejects orientation changes) must not be used here.
   (int, int)? direction(int a, int b) {
     for (final n in neighbours(a)) {
-      if (n == b) return delta(a, b);
+      if (n == b) return (col(b) - col(a), row(b) - row(a));
     }
     return null;
   }
@@ -329,6 +334,17 @@ class HexTiling extends Tiling {
       final n = apply(slot, d.$1, d.$2);
       if (n != null) yield n;
     }
+  }
+
+  /// Axial, not offset: in odd-r coordinates the column step of a diagonal
+  /// edge depends on the row's parity, so offset deltas would not match
+  /// between two different rows.
+  @override
+  (int, int)? direction(int a, int b) {
+    for (final d in _dirs) {
+      if (apply(a, d.$1, d.$2) == b) return d;
+    }
+    return null;
   }
 
   /// Polygon vertices start at the lower-right corner (30°) and go clockwise

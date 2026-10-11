@@ -187,8 +187,8 @@ void main() {
     await tester.tapAt(const Offset(200, 60));
     await settle(tester, 800);
 
-    // Events, Social, Profile, Settings.
-    await tapText(tester, 'Events', ms: 3000);
+    // Quests, Social, Profile, Settings.
+    await tapText(tester, 'Quests', ms: 3000);
     await shot(tester, '15_events');
     await tester.fling(find.byType(CustomScrollView).last, const Offset(0, -2200), 2500);
     await settle(tester, 2500);
@@ -254,14 +254,34 @@ void main() {
       await tester.tap(find.textContaining('Play'), warnIfMissed: false);
       await settle(tester, 6000);
       if (find.text('Got it').evaluate().isNotEmpty) await tapText(tester, 'Got it');
-      // Make one group: pick an unlocked card and tap its home neighbour is mode-specific; just select a card.
       final bf = find.byType(BoardWidget);
       if (bf.evaluate().isNotEmpty) {
         final rect = tester.getRect(bf.first);
         await tester.tapAt(rect.center);
         await settle(tester, 500);
+        await shot(tester, '27_game_$suffix');
+        await tester.tapAt(rect.center); // deselect
+        await settle(tester, 300);
+        // Build one group in this tiling: find a free cell with a cell to its
+        // right, and move the picture-right neighbour of its card there.
+        final board = tester.widget<BoardWidget>(bf.first).state.board;
+        final tiling = board.tiling;
+        Offset center(int slot) => rect.topLeft + tiling.cellCenter(slot, rect.size);
+        for (var s = 0; s < board.cells; s++) {
+          final right = tiling.col(s) < tiling.cols - 1 ? s + 1 : null;
+          if (right == null || board.isLocked(s) || board.isLocked(right)) continue;
+          final card = board.slots[s];
+          if (tiling.col(card) >= tiling.cols - 1) continue;
+          final from = board.slotOfCard(card + 1);
+          if (from == right || board.groupOf(from).length > 1) continue;
+          await tester.tapAt(center(from));
+          await settle(tester, 300);
+          await tester.tapAt(center(right));
+          await settle(tester, 900);
+          break;
+        }
+        await shot(tester, '27b_game_group_$suffix');
       }
-      await shot(tester, '27_game_$suffix');
       await tester.tap(find.byIcon(CupertinoIcons.pause_fill), warnIfMissed: false);
       await settle(tester, 800);
       await tapText(tester, 'Save & quit', ms: 2000);

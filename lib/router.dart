@@ -15,6 +15,7 @@ import 'features/profile/account_screen.dart';
 import 'features/profile/my_puzzles_screen.dart';
 import 'features/profile/profile_screen.dart';
 import 'features/profile/settings_screen.dart';
+import 'features/social/player_screen.dart';
 import 'features/social/social_screen.dart';
 import 'features/store/store_screen.dart';
 import 'state/settings.dart';
@@ -74,9 +75,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         parentNavigatorKey: _rootKey,
         pageBuilder: (c, s) => _fade(GameScreen(puzzleId: s.pathParameters['puzzleId']!, gridCode: s.pathParameters['grid']!), s),
       ),
-      GoRoute(path: '/store', parentNavigatorKey: _rootKey, pageBuilder: (c, s) => _sheet(const StoreScreen(), s)),
+      GoRoute(path: '/store', parentNavigatorKey: _rootKey, pageBuilder: (c, s) => _sheet(StoreScreen(showVip: s.uri.queryParameters['vip'] == '1'), s)),
       GoRoute(path: '/wheel', parentNavigatorKey: _rootKey, pageBuilder: (c, s) => _sheet(const WheelScreen(), s)),
       GoRoute(path: '/account', parentNavigatorKey: _rootKey, pageBuilder: (c, s) => _sheet(const AccountScreen(), s)),
+      GoRoute(path: '/player/:userId', parentNavigatorKey: _rootKey, pageBuilder: (c, s) => _cupertino(PlayerScreen(userId: s.pathParameters['userId']!), s)),
     ],
   );
 });

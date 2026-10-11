@@ -241,6 +241,35 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     ).then((_) => _ctrl.resume());
   }
 
+  /// Where the player stands in this puzzle's pack once this one counts as
+  /// solved, and the next unsolved puzzle after it (wrapping round), or null
+  /// when this was the last one left.
+  _PackProgress _packProgress(Puzzle puzzle, GameState state) {
+    final all = ref.watch(allPuzzlesProvider).value ?? const <Puzzle>[];
+    final progress = ref.watch(progressProvider).value ?? const <String, PuzzleProgress>{};
+    final packs = ref.watch(packsProvider).value ?? const <Pack>[];
+    final list = all.where((p) => p.packId == puzzle.packId).toList()..sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
+    bool solved(Puzzle p) => p.id == puzzle.id || progress[p.id]?.completed == true;
+    int stars(Puzzle p) => p.id == puzzle.id ? math.max(state.stars, progress[p.id]?.stars ?? 0) : (progress[p.id]?.stars ?? 0);
+    final idx = list.indexWhere((p) => p.id == puzzle.id);
+    Puzzle? next;
+    for (var k = 1; k < list.length && idx >= 0; k++) {
+      final candidate = list[(idx + k) % list.length];
+      if (!solved(candidate) && !candidate.isLockedByDate) {
+        next = candidate;
+        break;
+      }
+    }
+    final pack = packs.where((p) => p.id == puzzle.packId).firstOrNull;
+    return _PackProgress(
+      name: pack?.name,
+      solved: list.where(solved).length,
+      total: list.length,
+      stars: list.fold<int>(0, (sum, p) => sum + stars(p)),
+      next: next,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
@@ -374,19 +403,17 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
               puzzle: puzzle,
               state: state,
               reward: _reward,
+              pack: _packProgress(puzzle, state),
               onReplay: () {
                 _completionHandled = false;
                 setState(() => _reward = null);
                 _ctrl.restart();
               },
-              onNext: () async {
+              onNext: (next) async {
                 await maybeShowInterstitial(context, ref);
                 if (!context.mounted) return;
-                final all = ref.read(allPuzzlesProvider).value ?? const <Puzzle>[];
-                final pack = all.where((p) => p.packId == puzzle.packId).toList();
-                final idx = pack.indexWhere((p) => p.id == puzzle.id);
-                if (idx >= 0 && idx + 1 < pack.length) {
-                  context.pushReplacement('/game/${pack[idx + 1].id}/${widget.gridCode}');
+                if (next != null) {
+                  context.pushReplacement('/game/${next.id}/${widget.gridCode}');
                 } else {
                   context.pop();
                 }
@@ -628,19 +655,37 @@ class _TutorialOverlay extends StatelessWidget {
   }
 }
 
+/// Standing in the pack shown on the completion screen.
+class _PackProgress {
+  const _PackProgress({required this.name, required this.solved, required this.total, required this.stars, required this.next});
+  final String? name;
+  final int solved;
+  final int total;
+  final int stars;
+
+  /// Next unsolved puzzle in the pack, or null when every puzzle is solved.
+  final Puzzle? next;
+
+  bool get complete => total > 0 && solved >= total;
+}
+
 /// Completion: the picture is revealed full-bleed with rewards and next actions.
 class _CompletionOverlay extends StatelessWidget {
-  const _CompletionOverlay({required this.puzzle, required this.state, required this.reward, required this.onReplay, required this.onNext, required this.onHome});
+  const _CompletionOverlay({required this.puzzle, required this.state, required this.reward, required this.pack, required this.onReplay, required this.onNext, required this.onHome});
   final Puzzle puzzle;
   final GameState state;
   final ({int coins, int xp, bool levelUp, int level})? reward;
+  final _PackProgress pack;
   final VoidCallback onReplay;
-  final VoidCallback onNext;
+  final void Function(Puzzle? next) onNext;
   final VoidCallback onHome;
 
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
+    // The pack is finished (or nothing unsolved is playable): the primary
+    // action returns to the pack instead of promising a next puzzle.
+    final backIsPrimary = pack.next == null;
     return Positioned.fill(
       child: Container(
         color: Colors.black.withValues(alpha: 0.5),
@@ -685,6 +730,27 @@ class _CompletionOverlay extends StatelessWidget {
                           _RewardStat(icon: Icon(AppIcons.time, size: 22, color: c.textSecondary), label: 'Time', value: formatDuration(state.elapsed)),
                         ],
                       ),
+                      if (pack.total > 0) ...[
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                '${pack.solved} of ${pack.total} solved${pack.name != null ? ' · ${pack.name}' : ''}',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: c.textSecondary),
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Icon(AppIcons.star, size: 13, color: Brand.star),
+                            const SizedBox(width: 4),
+                            Text('${pack.stars}/${pack.total * 3}', style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: c.textPrimary)),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        ProgressBar(value: pack.solved / pack.total, height: 4),
+                      ],
                       if (reward?.levelUp == true) ...[
                         const SizedBox(height: 14),
                         Container(
@@ -711,11 +777,21 @@ class _CompletionOverlay extends StatelessWidget {
                     // Equal widths so neither label truncates on a 393 pt phone.
                     Expanded(child: BigButton(label: 'Replay', kind: ButtonKind.secondary, icon: CupertinoIcons.arrow_counterclockwise, onTap: onReplay)),
                     const SizedBox(width: 10),
-                    Expanded(child: BigButton(label: 'Next puzzle', icon: CupertinoIcons.arrow_right, onTap: onNext)),
+                    Expanded(
+                      child: backIsPrimary
+                          ? BigButton(label: 'Back to pack', icon: CupertinoIcons.square_grid_2x2, onTap: onHome)
+                          : BigButton(label: 'Next puzzle', icon: CupertinoIcons.arrow_right, onTap: () => onNext(pack.next)),
+                    ),
                   ],
                 ).animate().fadeIn(delay: 1100.ms),
                 const SizedBox(height: 8),
-                Pressable(onTap: onHome, child: const Padding(padding: EdgeInsets.all(10), child: Text('Back to pack', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700)))),
+                if (backIsPrimary)
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(pack.complete ? 'Every picture in this pack is solved' : 'Nothing else to play here yet', style: TextStyle(color: Colors.white.withValues(alpha: 0.75), fontWeight: FontWeight.w600)),
+                  )
+                else
+                  Pressable(onTap: onHome, child: const Padding(padding: EdgeInsets.all(10), child: Text('Back to pack', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700)))),
               ],
             ),
           ),

@@ -194,6 +194,12 @@ void main() {
     await tester.tapAt(const Offset(220, 80));
     await settle(tester, 1000);
 
+    // Lucky Wheel sheet (spin button, segment glyphs).
+    await tapText(tester, 'Wheel', ms: 2000);
+    await shot(tester, '23_wheel');
+    await tester.tap(find.byIcon(CupertinoIcons.xmark).first, warnIfMissed: false);
+    await settle(tester, 1200);
+
     // Daily calendar of the current month.
     await tapText(tester, 'Library', ms: 3000);
     await shot(tester, '02_library');
@@ -249,8 +255,8 @@ void main() {
       await quitGame(tester);
     }
 
-    // Events and the league.
-    await tapText(tester, 'Events', ms: 3500);
+    // Quests and the league.
+    await tapText(tester, 'Quests', ms: 3500);
     await shot(tester, '09_events');
     await tapText(tester, 'Social', ms: 3500);
     await shot(tester, '10_social_league');

@@ -26,7 +26,9 @@ import '../ads/house_ads.dart';
 /// builds without a store (plain simulator) a clearly labelled sandbox
 /// dialog stands in so the flow can still be exercised.
 class StoreScreen extends ConsumerStatefulWidget {
-  const StoreScreen({super.key});
+  const StoreScreen({super.key, this.showVip = false});
+  /// Opens scrolled to the VIP card (`/store?vip=1`).
+  final bool showVip;
   @override
   ConsumerState<StoreScreen> createState() => _StoreScreenState();
 }
@@ -35,6 +37,7 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
   bool _adBusy = false;
   bool _buying = false;
   StreamSubscription<PurchaseEvent>? _events;
+  final _vipKey = GlobalKey();
 
   @override
   void initState() {
@@ -42,6 +45,12 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
     final service = ref.read(purchaseServiceProvider);
     service.start();
     _events = service.events.listen(_onPurchaseEvent);
+    if (widget.showVip) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final ctx = _vipKey.currentContext;
+        if (ctx != null) Scrollable.ensureVisible(ctx, duration: const Duration(milliseconds: 450), curve: Curves.easeOutCubic, alignment: 0.1);
+      });
+    }
   }
 
   @override
@@ -129,21 +138,14 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
   /// Unreachable in release builds.
   Future<bool> _sandboxConfirm(String title, String price) async {
     if (!kDebugMode) return false;
-    final ok = await showCupertinoDialog<bool>(
-      context: context,
-      builder: (ctx) => CupertinoAlertDialog(
-        title: const Text('Sandbox purchase (debug build)'),
-        content: Padding(
-          padding: const EdgeInsets.only(top: 8),
-          child: Text('$title for $price.\n\nNo store is available on this device. This debug-only checkout grants the item locally so the flow can be tested.'),
-        ),
-        actions: [
-          CupertinoDialogAction(onPressed: () => Navigator.pop(ctx, false), child: const Text('Not now')),
-          CupertinoDialogAction(isDefaultAction: true, onPressed: () => Navigator.pop(ctx, true), child: const Text('Buy')),
-        ],
-      ),
+    final ok = await showAppAlert(
+      context,
+      title: 'Sandbox purchase (debug build)',
+      message: '$title for $price.\n\nNo store is available on this device. This debug-only checkout grants the item locally so the flow can be tested.',
+      cancelLabel: 'Not now',
+      confirmLabel: 'Buy',
     );
-    return ok == true && mounted;
+    return ok && mounted;
   }
 
   bool get _storeAvailable => ref.read(storeAvailableProvider).value ?? false;
@@ -246,13 +248,7 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Row(
-                        children: [
-                          Text('Free coins', style: Theme.of(context).textTheme.titleLarge),
-                          const SizedBox(width: 8),
-                          Amount(currency: Currency.coins, value: Economy.adRewardCoins, prefix: '+', size: 15, fontSize: 13.5),
-                        ],
-                      ),
+                      Text('Free coins', style: Theme.of(context).textTheme.titleLarge),
                       const SizedBox(height: 3),
                       Text('Watch a 15-second offer', style: TextStyle(color: c.textSecondary, fontSize: 13.5)),
                       const SizedBox(height: 2),
@@ -261,26 +257,25 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
                   ),
                 ),
                 const SizedBox(width: 12),
-                BigButton(
-                  label: adsLeft > 0 ? 'Watch' : 'Back tomorrow',
-                  height: 40,
-                  expand: false,
-                  onTap: _adBusy || adsLeft <= 0 ? null : _watchAd,
-                ),
+                if (adsLeft > 0)
+                  BigButton.cost(label: 'Watch', currency: Currency.coins, amount: Economy.adRewardCoins, amountPrefix: '+', height: 40, expand: false, onTap: _adBusy ? null : _watchAd)
+                else
+                  const BigButton(label: 'Back tomorrow', height: 40, expand: false),
               ],
             ),
           ),
           const SectionHeader(title: 'Coins', subtitle: 'Unlock packs and boosters', padding: EdgeInsets.fromLTRB(0, 24, 0, 12)),
-          _FreeNote(text: 'Free coins: daily goals, the daily gift, level-ups, the piggy bank and the Lucky Wheel.', route: '/events'),
+          _FreeNote(text: 'Free coins: daily quests, the daily gift, level-ups, the piggy bank (${Economy.piggyPerPuzzle} per picture, up to ${Profile.piggyCapacity}) and the Lucky Wheel.', route: '/events'),
           _ProductGrid(products: _coinProducts, onBuy: _buy, priceOf: (p) => _price(p, products), busy: _buying),
           const SectionHeader(title: 'Tickets', subtitle: 'Premium packs and the piggy bank', padding: EdgeInsets.fromLTRB(0, 24, 0, 12)),
-          _FreeNote(text: 'Free tickets: weekly goals, world-day events and every third level.', route: '/events'),
+          _FreeNote(text: 'Free tickets: weekly quests, world-day events and every third level.', route: '/events'),
           _ProductGrid(products: _ticketProducts, onBuy: _buy, priceOf: (p) => _price(p, products), busy: _buying),
           const SectionHeader(title: 'Hints', subtitle: 'Show a card its place', padding: EdgeInsets.fromLTRB(0, 24, 0, 12)),
           _FreeNote(text: 'Free hints: the daily gift on even days, every second level and the Lucky Wheel.', route: '/home'),
           _ProductGrid(products: _boosterProducts, onBuy: _buy, priceOf: (p) => _price(p, products), busy: _buying),
           const SizedBox(height: 24),
           _VipCard(
+            key: _vipKey,
             isVip: isVip,
             vipUntil: profile?.vipExpiresAt,
             monthlyPrice: products[ProductIds.vipMonthly]?.price ?? '\$2.99',
@@ -308,6 +303,7 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
 
 class _VipCard extends StatelessWidget {
   const _VipCard({
+    super.key,
     required this.isVip,
     required this.vipUntil,
     required this.monthlyPrice,
@@ -353,6 +349,7 @@ class _VipCard extends StatelessWidget {
           const SizedBox(height: 14),
           for (final line in const [
             'Every pack and every past monthly pack unlocked',
+            'A 4th daily quest and a 6th weekly quest',
             'No bonus videos, ever',
             'Unlimited My Puzzles uploads',
             '+500 coins every week',
@@ -503,6 +500,10 @@ class _ProductGrid extends StatelessWidget {
     final c = context.colors;
     return GridView.builder(
       shrinkWrap: true,
+      // A nested scroll view inherits the status-bar and home-indicator
+      // insets as padding unless told otherwise; that was the empty band
+      // under each free-currency note.
+      padding: EdgeInsets.zero,
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 12, crossAxisSpacing: 12, childAspectRatio: 1.08),
       itemCount: products.length,

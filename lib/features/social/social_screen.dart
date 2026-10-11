@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../core/haptics.dart';
 import '../../core/theme/tokens.dart';
@@ -26,26 +27,29 @@ class _SocialScreenState extends ConsumerState<SocialScreen> {
 
   Future<void> _addFriend() async {
     final controller = TextEditingController();
-    final code = await showCupertinoDialog<String>(
-      context: context,
-      builder: (ctx) => CupertinoAlertDialog(
-        title: const Text('Add friend by code'),
-        content: Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: Column(
-            children: [
-              const Text('Paste the code your friend shared. Yours is on the Friends tab.'),
-              const SizedBox(height: 10),
-              CupertinoTextField(controller: controller, placeholder: 'Friend code', autofocus: true, autocorrect: false),
-            ],
-          ),
+    final c = context.colors;
+    final ok = await showAppAlert(
+      context,
+      title: 'Add friend by code',
+      message: 'Paste the code your friend shared. Yours is on the Friends tab.',
+      confirmLabel: 'Add friend',
+      cancelLabel: 'Not now',
+      canConfirm: () => controller.text.trim().isNotEmpty,
+      child: CupertinoTextField(
+        controller: controller,
+        placeholder: 'Friend code',
+        autofocus: true,
+        autocorrect: false,
+        style: TextStyle(fontFamily: 'Menlo', fontSize: 13.5, color: c.textPrimary),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: BoxDecoration(
+          color: c.boardBackground,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: c.stroke),
         ),
-        actions: [
-          CupertinoDialogAction(onPressed: () => Navigator.pop(ctx), child: const Text('Not now')),
-          CupertinoDialogAction(isDefaultAction: true, onPressed: () => Navigator.pop(ctx, controller.text.trim()), child: const Text('Add friend')),
-        ],
       ),
     );
+    final code = ok ? controller.text.trim() : null;
     if (code == null || code.isEmpty || !mounted) return;
     final me = ref.read(currentUserIdProvider);
     if (me == null) return;
@@ -87,8 +91,14 @@ class _SocialScreenState extends ConsumerState<SocialScreen> {
                   backgroundColor: c.boardBackground,
                   thumbColor: c.card,
                   children: const {
-                    0: Padding(padding: EdgeInsets.symmetric(horizontal: 10), child: Text('League', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13))),
-                    1: Padding(padding: EdgeInsets.symmetric(horizontal: 10), child: Text('Friends', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13))),
+                    0: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Text('League', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+                    ),
+                    1: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Text('Friends', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+                    ),
                   },
                   onValueChanged: (v) => setState(() => _tab = v ?? 0),
                 ),
@@ -137,7 +147,10 @@ class _Leaderboard extends ConsumerWidget {
                             children: [
                               Text('Crystal League', style: Theme.of(context).textTheme.titleLarge),
                               const SizedBox(height: 2),
-                              Text(myRank >= 0 ? 'You are #${myRank + 1} of ${list.length} · Ranked by XP this season' : 'Ranked by XP this season', style: TextStyle(color: c.textSecondary, fontSize: 12.5)),
+                              Text(
+                                myRank >= 0 ? 'You are #${myRank + 1} of ${list.length} · Ranked by XP this season' : 'Ranked by XP this season',
+                                style: TextStyle(color: c.textSecondary, fontSize: 12.5),
+                              ),
                             ],
                           ),
                         ),
@@ -151,30 +164,35 @@ class _Leaderboard extends ConsumerWidget {
               final isMe = p.userId == me;
               return Padding(
                 padding: const EdgeInsets.only(bottom: 8),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: isMe ? c.accentTint : c.card,
-                    borderRadius: BorderRadius.circular(Radii.md),
-                    border: Border.all(color: isMe ? context.accent : c.stroke),
-                  ),
-                  child: Row(
-                    children: [
-                      _RankBadge(rank: rank),
-                      const SizedBox(width: 10),
-                      AvatarCircle(avatarKey: p.avatar, size: 38),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(isMe ? '${p.displayName} (you)' : p.displayName, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
-                            _SubStats(level: p.level, solved: p.puzzlesCompleted, stars: p.totalStars),
-                          ],
+                child: Pressable(
+                  onTap: () => context.push('/player/${p.userId}'),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: isMe ? c.accentTint : c.card,
+                      borderRadius: BorderRadius.circular(Radii.md),
+                      border: Border.all(color: isMe ? context.accent : c.stroke),
+                    ),
+                    child: Row(
+                      children: [
+                        _RankBadge(rank: rank),
+                        const SizedBox(width: 10),
+                        AvatarCircle(avatarKey: p.avatar, size: 38),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(isMe ? '${p.displayName} (you)' : p.displayName, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
+                              _SubStats(level: p.level, solved: p.puzzlesCompleted, stars: p.totalStars),
+                            ],
+                          ),
                         ),
-                      ),
-                      Text('${p.xp} XP', style: const TextStyle(fontWeight: FontWeight.w600)),
-                    ],
+                        Text('${p.xp} XP', style: const TextStyle(fontWeight: FontWeight.w600)),
+                        const SizedBox(width: 6),
+                        Icon(CupertinoIcons.chevron_right, size: 14, color: c.textTertiary),
+                      ],
+                    ),
                   ),
                 ).animate().fadeIn(delay: (30 * i).ms),
               );
@@ -186,11 +204,34 @@ class _Leaderboard extends ConsumerWidget {
   }
 }
 
-class _Friends extends ConsumerWidget {
+class _Friends extends ConsumerStatefulWidget {
   const _Friends({required this.onAdd});
   final VoidCallback onAdd;
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_Friends> createState() => _FriendsState();
+}
+
+class _FriendsState extends ConsumerState<_Friends> {
+  /// Rows swiped away and confirmed; hidden at once while the delete runs.
+  final _removed = <String>{};
+
+  Future<void> _remove(Friend f) async {
+    setState(() => _removed.add(f.id));
+    try {
+      await ref.read(socialRepositoryProvider).removeFriend(f.id);
+    } catch (_) {
+      if (mounted) {
+        setState(() => _removed.remove(f.id));
+        showToast(context, 'Could not remove friend. Check your connection and try again.', icon: AppIcons.signal);
+      }
+      return;
+    }
+    ref.invalidate(friendsProvider);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final onAdd = widget.onAdd;
     final c = context.colors;
     final friends = ref.watch(friendsProvider);
     final me = ref.watch(currentUserIdProvider);
@@ -211,7 +252,12 @@ class _Friends extends ConsumerWidget {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                       decoration: BoxDecoration(color: c.boardBackground, borderRadius: BorderRadius.circular(10)),
-                      child: Text(me ?? '—', maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontFamily: 'Menlo', fontSize: 12.5, fontWeight: FontWeight.w600)),
+                      child: Text(
+                        me ?? '—',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontFamily: 'Menlo', fontSize: 12.5, fontWeight: FontWeight.w600),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -239,7 +285,7 @@ class _Friends extends ConsumerWidget {
               ? const EmptyState(icon: AppIcons.wave, title: 'No friends yet', message: 'Share your code, or add a friend by theirs, to compare stars.')
               : Column(
                   children: [
-                    for (final f in list)
+                    for (final f in list.where((f) => !_removed.contains(f.id)))
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8),
                         child: Dismissible(
@@ -251,10 +297,14 @@ class _Friends extends ConsumerWidget {
                             decoration: BoxDecoration(color: c.danger, borderRadius: BorderRadius.circular(Radii.md)),
                             child: const Icon(CupertinoIcons.trash, color: Colors.white),
                           ),
-                          onDismissed: (_) async {
-                            await ref.read(socialRepositoryProvider).removeFriend(f.id);
-                            ref.invalidate(friendsProvider);
-                          },
+                          confirmDismiss: (_) => showAppAlert(
+                            context,
+                            title: 'Remove friend?',
+                            message: '${f.name} will leave your friends list. You can add them again with their code.',
+                            confirmLabel: 'Remove',
+                            destructive: true,
+                          ),
+                          onDismissed: (_) => _remove(f),
                           child: _FriendRow(friend: f),
                         ),
                       ),
@@ -276,24 +326,33 @@ class _FriendRow extends ConsumerWidget {
       future: ref.read(profileRepositoryProvider).findByUserId(friend.friendId),
       builder: (_, snap) {
         final p = snap.data;
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-          decoration: BoxDecoration(color: c.card, borderRadius: BorderRadius.circular(Radii.md), border: Border.all(color: c.stroke)),
-          child: Row(
-            children: [
-              AvatarCircle(avatarKey: p?.avatar ?? friend.avatar, size: 38),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(p?.displayName ?? friend.name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
-                    if (p == null) Text('Loading…', style: TextStyle(fontSize: 11.5, color: c.textSecondary)) else _SubStats(level: p.level, solved: p.puzzlesCompleted, stars: p.totalStars),
-                  ],
+        return Pressable(
+          onTap: () => context.push('/player/${friend.friendId}'),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            decoration: BoxDecoration(
+              color: c.card,
+              borderRadius: BorderRadius.circular(Radii.md),
+              border: Border.all(color: c.stroke),
+            ),
+            child: Row(
+              children: [
+                AvatarCircle(avatarKey: p?.avatar ?? friend.avatar, size: 38),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(p?.displayName ?? friend.name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
+                      if (p == null) Text('Loading…', style: TextStyle(fontSize: 11.5, color: c.textSecondary)) else _SubStats(level: p.level, solved: p.puzzlesCompleted, stars: p.totalStars),
+                    ],
+                  ),
                 ),
-              ),
-              if (p != null) Text('${p.xp} XP', style: const TextStyle(fontWeight: FontWeight.w600)),
-            ],
+                if (p != null) Text('${p.xp} XP', style: const TextStyle(fontWeight: FontWeight.w600)),
+                const SizedBox(width: 6),
+                Icon(CupertinoIcons.chevron_right, size: 14, color: c.textTertiary),
+              ],
+            ),
           ),
         );
       },
@@ -307,13 +366,21 @@ class _RankBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    final medal = switch (rank) { 1 => const Color(0xFFE0A200), 2 => const Color(0xFFA3A8B5), 3 => const Color(0xFFC27C4A), _ => null };
+    final medal = switch (rank) {
+      1 => const Color(0xFFE0A200),
+      2 => const Color(0xFFA3A8B5),
+      3 => const Color(0xFFC27C4A),
+      _ => null,
+    };
     return Container(
       width: 30,
       height: 30,
       alignment: Alignment.center,
       decoration: BoxDecoration(color: medal ?? c.boardBackground, shape: BoxShape.circle),
-      child: Text('$rank', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: medal != null ? Colors.white : c.textSecondary)),
+      child: Text(
+        '$rank',
+        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: medal != null ? Colors.white : c.textSecondary),
+      ),
     );
   }
 }

@@ -40,14 +40,21 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
         ),
         data: (list) {
           final hasEvents = list.any((p) => p.hasWindow && !p.isExpired);
-          final categories = ['All', if (hasEvents) 'Events', 'Daily', 'Started', ...{for (final p in list) if (!p.isDaily && !p.hasWindow) p.category}];
+          // VIP opens everything, so the "Unlocked" chip only helps everyone else.
+          final showUnlocked = profile != null && !profile.isVip;
+          final categories = ['All', if (showUnlocked) 'Unlocked', if (hasEvents) 'Events', 'Daily', 'Started', ...{for (final p in list) if (!p.isDaily && !p.hasWindow) p.category}];
+          final inAllOrder = [
+            ...list.where((p) => !p.isDaily && !p.hasWindow),
+            ...list.where((p) => p.hasWindow && p.isLive),
+            ...list.where((p) => p.isDaily),
+          ];
           List<Pack> filtered;
           if (_filter == 'All') {
-            filtered = [
-              ...list.where((p) => !p.isDaily && !p.hasWindow),
-              ...list.where((p) => p.hasWindow && p.isLive),
-              ...list.where((p) => p.isDaily),
-            ];
+            filtered = inAllOrder;
+          } else if (_filter == 'Unlocked') {
+            // Same rule as the pack page: free, current month, bought, live event.
+            final profileN = ref.read(profileProvider.notifier);
+            filtered = inAllOrder.where(profileN.isUnlocked).toList();
           } else if (_filter == 'Events') {
             filtered = [
               ...list.where((p) => p.hasWindow && p.isLive),
@@ -123,7 +130,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
                 ),
               ),
               if (filtered.isEmpty)
-                SliverToBoxAdapter(child: EmptyState(icon: AppIcons.library, title: _filter == 'Started' ? 'No puzzles in progress' : 'Nothing here yet', message: _filter == 'Started' ? 'Boards you leave unfinished show up here. Open a pack to start one.' : 'New packs arrive with events and every month.'))
+                SliverToBoxAdapter(child: EmptyState(icon: AppIcons.library, title: _filter == 'Started' ? 'No puzzles in progress' : (_filter == 'Unlocked' ? 'Nothing unlocked yet' : 'Nothing here yet'), message: _filter == 'Started' ? 'Boards you leave unfinished show up here. Open a pack to start one.' : (_filter == 'Unlocked' ? 'Packs you can play right now show up here.' : 'New packs arrive with events and every month.')))
               else
                 SliverPadding(
                   padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),

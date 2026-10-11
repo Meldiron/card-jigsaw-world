@@ -111,7 +111,27 @@ class BigButton extends StatelessWidget {
     this.expand = true,
     this.height = 52,
     this.loading = false,
-  });
+  })  : currency = null,
+        amount = null,
+        amountPrefix = '';
+
+  /// A button for an action that costs or pays [currency]: the label is
+  /// followed by the currency mark and the amount ("Open for [ticket] 1").
+  /// The one style for every spend in the app: wheel spin, piggy bank, tier
+  /// and pack unlocks, boosters.
+  const BigButton.cost({
+    super.key,
+    required this.label,
+    required Currency this.currency,
+    required int this.amount,
+    this.amountPrefix = '',
+    this.onTap,
+    this.kind = ButtonKind.primary,
+    this.expand = true,
+    this.height = 52,
+    this.loading = false,
+  })  : icon = null,
+        trailing = null;
 
   final String label;
   final VoidCallback? onTap;
@@ -121,6 +141,9 @@ class BigButton extends StatelessWidget {
   final bool expand;
   final double height;
   final bool loading;
+  final Currency? currency;
+  final int? amount;
+  final String amountPrefix;
 
   @override
   Widget build(BuildContext context) {
@@ -138,8 +161,10 @@ class BigButton extends StatelessWidget {
         bg = Brand.coin;
         fg = const Color(0xFF2A1F00);
       case ButtonKind.dark:
+        // Inverted surface: white on dark themes, ink on light ones, so the
+        // label must be the opposite of the fill, not the theme's text colour.
         bg = context.isDark ? Colors.white : c.textPrimary;
-        fg = context.isDark ? c.textPrimary : Colors.white;
+        fg = context.isDark ? const Color(0xFF111827) : Colors.white;
       case ButtonKind.secondary:
         bg = c.accentTint;
         fg = context.accent;
@@ -161,7 +186,10 @@ class BigButton extends StatelessWidget {
           SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2.2, color: fg))
         else ...[
           if (icon != null) ...[Icon(icon, color: fg, size: 19), const SizedBox(width: 8)],
-          Flexible(child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, letterSpacing: -0.2, color: fg))),
+          if (currency != null)
+            Flexible(child: CostLabel(label: label, currency: currency!, amount: amount!, prefix: amountPrefix, color: fg, fontSize: 16))
+          else
+            Flexible(child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, letterSpacing: -0.2, color: fg))),
           if (trailing != null) ...[const SizedBox(width: 8), trailing!],
         ],
       ],
@@ -177,6 +205,37 @@ class BigButton extends StatelessWidget {
           child: content,
         ),
       ),
+    );
+  }
+}
+
+/// "Label [currency mark] amount" for anything that costs or pays coins,
+/// tickets or hints. Used inside [BigButton.cost]; also usable on its own in
+/// rows and sheets so prices read the same everywhere.
+class CostLabel extends StatelessWidget {
+  const CostLabel({super.key, required this.label, required this.currency, required this.amount, this.prefix = '', this.color, this.fontSize = 15, this.iconSize});
+  final String label;
+  final Currency currency;
+  final int amount;
+  /// E.g. "+" for a payout.
+  final String prefix;
+  final Color? color;
+  final double fontSize;
+  final double? iconSize;
+
+  @override
+  Widget build(BuildContext context) {
+    final fg = color ?? context.colors.textPrimary;
+    final mark = iconSize ?? fontSize * 1.15;
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Flexible(child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.w600, letterSpacing: -0.2, color: fg))),
+        SizedBox(width: fontSize * 0.5),
+        currencyIcon(currency, size: mark),
+        SizedBox(width: fontSize * 0.3),
+        Text('$prefix${AnimatedCounter._fmt(amount)}', style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.w800, letterSpacing: -0.2, color: fg)),
+      ],
     );
   }
 }
@@ -301,11 +360,13 @@ class AnimatedCounter extends StatelessWidget {
 
 /// Section title with optional trailing action.
 class SectionHeader extends StatelessWidget {
-  const SectionHeader({super.key, required this.title, this.subtitle, this.action, this.onAction, this.padding = const EdgeInsets.fromLTRB(20, 28, 20, 12)});
+  const SectionHeader({super.key, required this.title, this.subtitle, this.action, this.onAction, this.trailing, this.padding = const EdgeInsets.fromLTRB(20, 28, 20, 12)});
   final String title;
   final String? subtitle;
   final String? action;
   final VoidCallback? onAction;
+  /// Widget on the right instead of the text [action] (e.g. a countdown chip).
+  final Widget? trailing;
   final EdgeInsetsGeometry padding;
 
   @override
@@ -328,7 +389,9 @@ class SectionHeader extends StatelessWidget {
               ],
             ),
           ),
-          if (action != null)
+          if (trailing != null)
+            Padding(padding: const EdgeInsets.only(bottom: 2), child: trailing!)
+          else if (action != null)
             Pressable(
               onTap: onAction,
               child: Padding(
@@ -645,6 +708,207 @@ class ListRow extends StatelessWidget {
             ),
             trailing ?? Icon(CupertinoIcons.chevron_right, size: 16, color: c.textTertiary),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// iOS 26 style alert: a glass card with a large radius, title, optional
+/// message and child (e.g. an [AlertTextField]), and one or two actions.
+/// Returns true when the confirm action was tapped. Use it for every
+/// confirmation in the app so they all look the same. With a text field
+/// child the card rises above the keyboard.
+Future<bool> showAppAlert(
+  BuildContext context, {
+  required String title,
+  String? message,
+  Widget? child,
+  String confirmLabel = 'OK',
+  String? cancelLabel = 'Cancel',
+  bool destructive = false,
+  bool Function()? canConfirm,
+}) async {
+  final result = await showGeneralDialog<bool>(
+    context: context,
+    useRootNavigator: true,
+    barrierDismissible: cancelLabel != null,
+    barrierLabel: 'Dismiss',
+    barrierColor: Colors.black.withValues(alpha: 0.28),
+    transitionDuration: const Duration(milliseconds: 240),
+    transitionBuilder: (ctx, anim, _, widget) {
+      final curved = CurvedAnimation(parent: anim, curve: Curves.easeOutCubic, reverseCurve: Curves.easeIn);
+      return FadeTransition(opacity: curved, child: ScaleTransition(scale: Tween(begin: 1.06, end: 1.0).animate(curved), child: widget));
+    },
+    pageBuilder: (ctx, _, _) => _AppAlert(
+      title: title,
+      message: message,
+      confirmLabel: confirmLabel,
+      cancelLabel: cancelLabel,
+      destructive: destructive,
+      canConfirm: canConfirm,
+      child: child,
+    ),
+  );
+  return result ?? false;
+}
+
+/// Text field styled for [showAppAlert]: rounded 12, filled, no outline, in
+/// the iOS 26 alert idiom. Pass the same [controller] you read after the
+/// alert resolves.
+class AlertTextField extends StatelessWidget {
+  const AlertTextField({
+    super.key,
+    required this.controller,
+    this.placeholder,
+    this.autofocus = true,
+    this.maxLength,
+    this.textCapitalization = TextCapitalization.none,
+    this.autocorrect = false,
+    this.onChanged,
+    this.onSubmitted,
+    this.keyboardType,
+    this.textInputAction = TextInputAction.done,
+  });
+  final TextEditingController controller;
+  final String? placeholder;
+  final bool autofocus;
+  final int? maxLength;
+  final TextCapitalization textCapitalization;
+  final bool autocorrect;
+  final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onSubmitted;
+  final TextInputType? keyboardType;
+  final TextInputAction textInputAction;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final fill = context.isDark ? Colors.white.withValues(alpha: 0.08) : Colors.black.withValues(alpha: 0.05);
+    return CupertinoTextField(
+      controller: controller,
+      placeholder: placeholder,
+      autofocus: autofocus,
+      maxLength: maxLength,
+      textCapitalization: textCapitalization,
+      autocorrect: autocorrect,
+      onChanged: onChanged,
+      onSubmitted: onSubmitted,
+      keyboardType: keyboardType,
+      textInputAction: textInputAction,
+      textAlign: TextAlign.center,
+      cursorColor: context.accent,
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      style: TextStyle(fontSize: 16, color: c.textPrimary, letterSpacing: -0.2),
+      placeholderStyle: TextStyle(fontSize: 16, color: c.textTertiary, letterSpacing: -0.2),
+      decoration: BoxDecoration(color: fill, borderRadius: BorderRadius.circular(12)),
+    );
+  }
+}
+
+class _AppAlert extends StatelessWidget {
+  const _AppAlert({required this.title, this.message, this.child, required this.confirmLabel, this.cancelLabel, required this.destructive, this.canConfirm});
+  final String title;
+  final String? message;
+  final Widget? child;
+  final String confirmLabel;
+  final String? cancelLabel;
+  final bool destructive;
+  final bool Function()? canConfirm;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final isDark = context.isDark;
+    final inset = MediaQuery.viewInsetsOf(context).bottom;
+    final hairline = isDark ? Colors.white.withValues(alpha: 0.16) : Colors.black.withValues(alpha: 0.14);
+    const radius = 28.0;
+    return AnimatedPadding(
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeOut,
+      padding: EdgeInsets.only(bottom: inset),
+      child: SafeArea(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 290),
+            child: Material(
+              type: MaterialType.transparency,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(radius),
+                  boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: isDark ? 0.5 : 0.16), blurRadius: 40, offset: const Offset(0, 16))],
+                ),
+                child: GlassSurface(
+                  sigma: 36,
+                  opacity: isDark ? 0.78 : 0.86,
+                  borderRadius: BorderRadius.circular(radius),
+                  hairline: Border.all(color: isDark ? Colors.white.withValues(alpha: 0.14) : Colors.white.withValues(alpha: 0.8), width: 0.5),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(22, 26, 22, 22),
+                        child: Column(
+                          children: [
+                            Text(title, textAlign: TextAlign.center, style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700, color: c.textPrimary, letterSpacing: -0.3, height: 1.25)),
+                            if (message != null) ...[
+                              const SizedBox(height: 6),
+                              Text(message!, textAlign: TextAlign.center, style: TextStyle(fontSize: 13.5, height: 1.4, color: c.textSecondary)),
+                            ],
+                            if (child != null) ...[const SizedBox(height: 16), child!],
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 0.5, child: ColoredBox(color: hairline)),
+                      SizedBox(
+                        height: 50,
+                        child: Row(
+                          children: [
+                            if (cancelLabel != null) ...[
+                              Expanded(child: _AlertAction(label: cancelLabel!, onTap: () => Navigator.of(context).pop(false))),
+                              SizedBox(width: 0.5, child: ColoredBox(color: hairline)),
+                            ],
+                            Expanded(
+                              child: _AlertAction(
+                                label: confirmLabel,
+                                bold: true,
+                                color: destructive ? c.danger : null,
+                                onTap: () {
+                                  if (canConfirm != null && !canConfirm!()) return;
+                                  Navigator.of(context).pop(true);
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _AlertAction extends StatelessWidget {
+  const _AlertAction({required this.label, required this.onTap, this.bold = false, this.color});
+  final String label;
+  final VoidCallback onTap;
+  final bool bold;
+  final Color? color;
+  @override
+  Widget build(BuildContext context) {
+    return Pressable(
+      onTap: onTap,
+      scale: 0.98,
+      sound: false,
+      child: SizedBox.expand(
+        child: Center(
+          child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 16.5, fontWeight: bold ? FontWeight.w700 : FontWeight.w500, color: color ?? context.accent, letterSpacing: -0.2)),
         ),
       ),
     );
