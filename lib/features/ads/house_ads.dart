@@ -36,16 +36,16 @@ class HouseAdPolicy {
   static const rewardedDuration = Duration(seconds: 15);
 
   /// Interstitial close button appears after this delay (industry norm 3–5 s).
-  static const interstitialCloseDelay = Duration(seconds: 3);
+  static const interstitialCloseDelay = Duration(seconds: 5);
 
   /// Interstitial cadence (Gamigion / AdReact norms, tuned down because a
   /// self-promo earns nothing per impression): every Nth completion AND at
   /// least [minGap] apart, at most [maxPerSession] per app session, never in
   /// the first few puzzles of a player's life, and not within
   /// [rewardedShield] of a rewarded view.
-  static const everyNthCompletion = 6;
-  static const minGap = Duration(minutes: 6);
-  static const maxPerSession = 2;
+  static const everyNthCompletion = 3;
+  static const minGap = Duration(minutes: 3);
+  static const maxPerSession = 1000;
   static const skipFirstCompletions = 3;
   static const rewardedShield = Duration(minutes: 10);
 
@@ -154,10 +154,12 @@ Future<void> maybeShowInterstitial(BuildContext context, WidgetRef ref) async {
   store.completionsSinceAd = store.completionsSinceAd + 1;
   if (profile?.isVip == true) return;
   if (store.lifetimeCompletions <= HouseAdPolicy.skipFirstCompletions) return;
-  if (store.completionsSinceAd < HouseAdPolicy.everyNthCompletion) return;
   if (HouseAdPolicy.interstitialsThisSession >= HouseAdPolicy.maxPerSession) return;
+  // A break follows every Nth completion, or the current one when the last
+  // break is more than [minGap] ago (first completion of a session counts).
   final last = store.lastInterstitialAt;
-  if (last != null && DateTime.now().difference(last) < HouseAdPolicy.minGap) return;
+  final gapElapsed = last == null || DateTime.now().difference(last) >= HouseAdPolicy.minGap;
+  if (store.completionsSinceAd < HouseAdPolicy.everyNthCompletion && !gapElapsed) return;
   final rewarded = store.lastRewardedAt;
   if (rewarded != null && DateTime.now().difference(rewarded) < HouseAdPolicy.rewardedShield) return;
   store.completionsSinceAd = 0;

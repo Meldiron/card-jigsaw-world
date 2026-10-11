@@ -10,7 +10,7 @@ The game runs no ad network. Every "ad" slot promotes something sold in the app 
 | Interstitial | After a completed puzzle, on Next puzzle / Back to pack | Skip in 5 s, then X and "No thanks" | none |
 | Banner | Home, above Featured packs | dismissible per session | none |
 
-Interstitial cadence: every 6th completion, at least 6 minutes apart, at most 2 per session, never in the player's first 3 puzzles, suppressed for 10 minutes after a rewarded view, never for VIP. All numbers live in `HouseAdPolicy` in `lib/features/ads/house_ads.dart`.
+Interstitial cadence: every 3rd completion, or right after the current one when the previous break is more than 3 minutes old, no per-session cap, never in the player's first 3 puzzles, suppressed for 10 minutes after a rewarded view, never for VIP. All numbers live in `HouseAdPolicy` in `lib/features/ads/house_ads.dart`.
 
 ## Creatives
 
