@@ -952,7 +952,7 @@ def cmd_testflight(s: Store) -> None:
     # Beta App Review. Submit the build unless it already has a submission.
     detail = s.c.get_one(f"/v1/builds/{bid}/buildBetaDetail")
     ext_state = attr(detail, "externalBuildState") if detail else None
-    submission = s.c.get_one(f"/v1/builds/{bid}/betaAppReviewSubmission", allow_404=True)
+    submission = s.c.get_one(f"/v1/builds/{bid}/betaAppReviewSubmission")
     if submission:
         log(f"  beta app review: {attr(submission, 'betaReviewState')} (external state {ext_state})")
     elif ext_state == "READY_FOR_BETA_SUBMISSION":
