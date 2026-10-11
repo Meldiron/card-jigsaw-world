@@ -16,15 +16,26 @@ void main() {
       }
     });
 
-    test('every mode and tier starts with no pre-joined pair and at most one lucky card', () {
+    test('every tier of every mode starts with zero locked cards and zero joined pairs', () {
       for (final mode in GameMode.values) {
         for (final t in BoardSpec.tiers(mode)) {
-          for (var seed = 0; seed < 12; seed++) {
+          for (var seed = 0; seed < 60; seed++) {
             final b = Board.shuffled(t, seed: seed);
-            expect(b.joinCount, 0, reason: '${mode.code} ${t.code} seed $seed');
-            expect(b.lockedCount, lessThanOrEqualTo(t.cells >= 12 ? 0 : 1), reason: '${mode.code} ${t.code} seed $seed');
+            final why = '${mode.code} ${t.code} seed $seed';
+            expect(b.lockedCount, 0, reason: why);
+            expect(b.joinCount, 0, reason: why);
+            expect(b.floatingGroups, 0, reason: why);
+            expect(List<int>.of(b.slots)..sort(), List.generate(t.cells, (i) => i), reason: '$why is a permutation');
           }
         }
+      }
+    });
+
+    test('unseeded shuffles are also derangements without joins', () {
+      for (var i = 0; i < 20; i++) {
+        final b = Board.shuffled(BoardSpec.tiers(GameMode.values[i % 4])[i % 8]);
+        expect(b.lockedCount, 0);
+        expect(b.joinCount, 0);
       }
     });
 
@@ -284,6 +295,32 @@ void main() {
       // A 3:4 picture on a 3:4 cards board is used whole.
       final cards = const GridSpec(3, 4, 'Easy').tiling;
       expect(cards.crop(portrait, cards.fit(const Size(300, 400), 3 / 4)), Offset.zero & portrait);
+    });
+
+    test('corner neighbours: every cell around an interior vertex, fewer on the board edge', () {
+      const size = Size(300, 400);
+      for (final mode in GameMode.values) {
+        final t = BoardSpec.tiers(mode)[3].tiling;
+        var interior = 0;
+        for (var s = 0; s < t.cells; s++) {
+          final poly = t.polygon(s, size);
+          for (var k = 0; k < poly.length; k++) {
+            final around = t.cornerNeighbours(s, k);
+            expect(around.contains(s), isFalse);
+            expect(around.length + 1, lessThanOrEqualTo(t.vertexValence), reason: '${mode.code} slot $s vertex $k');
+            if (around.length + 1 == t.vertexValence) interior++;
+            for (final n in around) {
+              expect(t.polygon(n, size).any((p) => (p - poly[k]).distance < 1e-6), isTrue, reason: '${mode.code} $n shares vertex $k of $s');
+            }
+            // Edge neighbours adjoining the vertex always share it.
+            final e = t.edgeNeighbours(s);
+            for (final n in [e[(k - 1 + poly.length) % poly.length], e[k]]) {
+              if (n != null) expect(around, contains(n));
+            }
+          }
+        }
+        expect(interior, greaterThan(0), reason: '${mode.code} has interior vertices');
+      }
     });
 
     test('geometry: cells cover the board and hit-testing finds centres', () {

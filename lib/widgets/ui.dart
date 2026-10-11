@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 import '../core/haptics.dart';
 import '../core/sfx.dart';
+import '../core/platform.dart';
 import '../core/theme/tokens.dart';
 import 'glass.dart';
 import 'icons.dart';
@@ -232,7 +233,7 @@ class CostLabel extends StatelessWidget {
       children: [
         Flexible(child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.w600, letterSpacing: -0.2, color: fg))),
         SizedBox(width: fontSize * 0.5),
-        currencyIcon(currency, size: mark),
+        currencyIcon(currency, size: mark, mono: fg.computeLuminance() > 0.8),
         SizedBox(width: fontSize * 0.3),
         Text('$prefix${AnimatedCounter._fmt(amount)}', style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.w800, letterSpacing: -0.2, color: fg)),
       ],
@@ -453,7 +454,7 @@ class NetImage extends StatelessWidget {
     Widget img = url.isEmpty
         ? Container(color: c.boardBackground)
         : CachedNetworkImage(
-            imageUrl: url,
+            imageUrl: proxiedImageUrl(url),
             fit: fit,
             width: width,
             height: height,

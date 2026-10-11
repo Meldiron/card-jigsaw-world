@@ -27,6 +27,11 @@ final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     navigatorKey: _rootKey,
     initialLocation: onboarded ? '/home' : '/welcome',
+    // Unknown paths (typed URLs on web, stale links) land on Home instead of
+    // the framework's error page. `/auth/callback` is reserved for the
+    // Appwrite OAuth redirect; until its handler is registered it also
+    // falls back here.
+    onException: (context, state, router) => router.go(onboarded ? '/home' : '/welcome'),
     redirect: (context, state) {
       // Widget deep links arrive as /play/<id>; let them through even for new installs.
       if (!onboarded && state.uri.path.startsWith('/play/')) {
@@ -78,6 +83,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/store', parentNavigatorKey: _rootKey, pageBuilder: (c, s) => _sheet(StoreScreen(showVip: s.uri.queryParameters['vip'] == '1'), s)),
       GoRoute(path: '/wheel', parentNavigatorKey: _rootKey, pageBuilder: (c, s) => _sheet(const WheelScreen(), s)),
       GoRoute(path: '/account', parentNavigatorKey: _rootKey, pageBuilder: (c, s) => _sheet(const AccountScreen(), s)),
+      GoRoute(path: '/auth/callback', parentNavigatorKey: _rootKey, pageBuilder: (c, s) => _fade(AuthCallbackScreen(query: s.uri.queryParameters), s)),
       GoRoute(path: '/player/:userId', parentNavigatorKey: _rootKey, pageBuilder: (c, s) => _cupertino(PlayerScreen(userId: s.pathParameters['userId']!), s)),
     ],
   );

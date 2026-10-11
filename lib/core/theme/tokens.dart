@@ -13,7 +13,7 @@ class Brand {
   /// Semantic colours. Used small (icons, badges), never as large fills.
   static const coin = Color(0xFFE0A200);
   static const coinDeep = Color(0xFFB97800);
-  static const ticket = Color(0xFF0F9D8F);
+  static const ticket = Color(0xFF14B8A6);
   static const hint = Color(0xFFF59E0B);
   static const success = Color(0xFF16A34A);
   static const danger = Color(0xFFDC2626);

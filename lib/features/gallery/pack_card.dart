@@ -56,10 +56,17 @@ class PackCard extends ConsumerWidget {
                     child: Chip2(label: pack.category, icon: AppIcons.category(pack.category), onImage: true),
                   ),
                   if (complete && !showLock)
-                    const Positioned(
+                    Positioned(
                       right: 8,
                       top: 8,
-                      child: _DoneBadge(),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // Every picture solved with three stars: a star badge next to the check.
+                          if (maxStars > 0 && stars >= maxStars) ...[const _DoneBadge.perfect(), const SizedBox(width: 6)],
+                          const _DoneBadge(),
+                        ],
+                      ),
                     ),
                   if (showLock)
                     Positioned(
@@ -139,15 +146,19 @@ class PackCard extends ConsumerWidget {
 }
 
 /// Green check shown on the cover once every picture in the pack is solved.
+/// Green check for a pack with every picture solved; the star variant sits
+/// next to it when every picture also has three stars (100 percent).
 class _DoneBadge extends StatelessWidget {
-  const _DoneBadge();
+  const _DoneBadge() : perfect = false;
+  const _DoneBadge.perfect() : perfect = true;
+  final bool perfect;
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 26,
       height: 26,
-      decoration: BoxDecoration(color: Brand.success, shape: BoxShape.circle, border: Border.all(color: Colors.white.withValues(alpha: 0.9), width: 1.5)),
-      child: const Icon(CupertinoIcons.checkmark, size: 14, color: Colors.white),
+      decoration: BoxDecoration(color: perfect ? Brand.star : Brand.success, shape: BoxShape.circle, border: Border.all(color: Colors.white.withValues(alpha: 0.9), width: 1.5)),
+      child: Icon(perfect ? CupertinoIcons.star_fill : CupertinoIcons.checkmark, size: perfect ? 13 : 14, color: Colors.white),
     );
   }
 }

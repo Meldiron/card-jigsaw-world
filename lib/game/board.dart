@@ -258,22 +258,23 @@ class Board {
     return Board(spec, next);
   }
 
-  /// Builds a shuffled board. No card starts in place (for tiny boards at
-  /// most one), and no two picture-neighbours start next to each other, so
-  /// the player never finds a pre-made group on the table. Cards only move
-  /// within their placement class (triangle orientation).
+  /// Builds a shuffled board. No card ever starts in place and no two
+  /// picture-neighbours start next to each other, so the player never finds
+  /// a locked card or a pre-made group on the table. Cards only move within
+  /// their placement class (triangle orientation).
+  ///
+  /// Random permutations are tried first; if none is clean, a derangement is
+  /// repaired by targeted swaps until every join is broken. Only as a last
+  /// resort does the board keep a join. It never keeps a fixed point.
   factory Board.shuffled(BoardSpec spec, {int? seed}) {
     final rng = Random(seed);
     final tiling = spec.tiling;
     final n = spec.cells;
-    final maxFixed = n >= 12 ? 0 : 1;
     final classes = List.generate(tiling.classCount, (_) => <int>[]);
     for (var s = 0; s < n; s++) {
       classes[tiling.classOf(s)].add(s);
     }
-    Board? best;
-    var bestJoins = 1 << 30;
-    for (var attempt = 0; attempt < 2000; attempt++) {
+    List<int> random() {
       final perm = List<int>.filled(n, 0);
       for (final cls in classes) {
         final cards = List<int>.from(cls)..shuffle(rng);
@@ -281,26 +282,117 @@ class Board {
           perm[cls[i]] = cards[i];
         }
       }
-      if (_fixedPoints(perm) > maxFixed) continue;
-      final b = Board(spec, perm);
-      final joins = b.joinCount;
-      if (joins == 0) return b;
+      return perm;
+    }
+
+    for (var attempt = 0; attempt < 400; attempt++) {
+      final perm = random();
+      if (_fixedPoints(perm) == 0 && _joins(tiling, perm) == 0) return Board(spec, perm);
+    }
+    List<int>? best;
+    var bestJoins = 1 << 30;
+    for (var round = 0; round < 24; round++) {
+      final perm = random();
+      _derange(perm, classes, rng);
+      final joins = _breakJoins(perm, tiling, classes, rng);
+      if (joins == 0) return Board(spec, perm);
       if (joins < bestJoins) {
         bestJoins = joins;
-        best = b;
+        best = perm;
       }
     }
-    return best ?? Board(spec, _cycleWithinClasses(classes, n));
+    return Board(spec, best!);
   }
 
-  static List<int> _cycleWithinClasses(List<List<int>> classes, int n) {
-    final perm = List<int>.filled(n, 0);
+  /// Removes every fixed point by swapping it with another slot of its class.
+  /// Swapping a fixed point `i` with any `j` of the same class leaves neither
+  /// fixed: `perm[j]` cannot be `i` (that is `perm[i]`), and `i != j`.
+  static void _derange(List<int> perm, List<List<int>> classes, Random rng) {
+    final classOf = <int, List<int>>{};
     for (final cls in classes) {
-      for (var i = 0; i < cls.length; i++) {
-        perm[cls[i]] = cls[(i + 1) % cls.length];
+      for (final s in cls) {
+        classOf[s] = cls;
       }
     }
-    return perm;
+    for (var i = 0; i < perm.length; i++) {
+      if (perm[i] != i) continue;
+      final cls = classOf[i]!;
+      if (cls.length < 2) continue;
+      var j = cls[rng.nextInt(cls.length)];
+      while (j == i) {
+        j = cls[rng.nextInt(cls.length)];
+      }
+      final t = perm[i];
+      perm[i] = perm[j];
+      perm[j] = t;
+    }
+  }
+
+  /// Local search: swap one end of a joined pair with a random slot of its
+  /// class whenever that keeps the permutation a derangement and does not add
+  /// joins. Returns the number of joins left.
+  static int _breakJoins(List<int> perm, Tiling tiling, List<List<int>> classes, Random rng) {
+    final classOf = <int, List<int>>{};
+    for (final cls in classes) {
+      for (final s in cls) {
+        classOf[s] = cls;
+      }
+    }
+    bool joinedAt(int a, int b) => tiling.direction(perm[a], perm[b]) == tiling.direction(a, b);
+    int joinsAround(int x, int y) {
+      var c = 0;
+      for (final nb in tiling.neighbours(x)) {
+        if (joinedAt(x, nb)) c++;
+      }
+      for (final nb in tiling.neighbours(y)) {
+        if (nb != x && joinedAt(y, nb)) c++;
+      }
+      return c;
+    }
+
+    var joins = _joins(tiling, perm);
+    for (var iter = 0; iter < 4000 && joins > 0; iter++) {
+      // Pick a random joined edge and one of its ends.
+      int? x;
+      var seen = 0;
+      for (var s = 0; s < perm.length; s++) {
+        for (final nb in tiling.neighbours(s)) {
+          if (nb > s && joinedAt(s, nb)) {
+            seen++;
+            if (rng.nextInt(seen) == 0) x = rng.nextBool() ? s : nb;
+          }
+        }
+      }
+      if (x == null) break;
+      final cls = classOf[x]!;
+      if (cls.length < 2) break;
+      var y = cls[rng.nextInt(cls.length)];
+      if (y == x) continue;
+      if (perm[y] == x || perm[x] == y) continue; // the swap would fix a card in place
+      final before = joinsAround(x, y);
+      final t = perm[x];
+      perm[x] = perm[y];
+      perm[y] = t;
+      final after = joinsAround(x, y);
+      if (after > before || (after == before && rng.nextInt(4) != 0)) {
+        perm[y] = perm[x];
+        perm[x] = t;
+        continue;
+      }
+      joins += after - before;
+    }
+    return joins;
+  }
+
+  /// Joined edges of a raw permutation (each pair once).
+  static int _joins(Tiling tiling, List<int> perm) {
+    var c = 0;
+    for (var s = 0; s < perm.length; s++) {
+      for (final nb in tiling.neighbours(s)) {
+        if (nb > s && tiling.direction(perm[s], perm[nb]) == tiling.direction(s, nb)) c++;
+      }
+    }
+    return c;
   }
 
   static int _fixedPoints(List<int> p) {

@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
 import '../../core/haptics.dart';
+import '../../core/platform.dart';
 import '../../core/sfx.dart';
 import '../../core/theme/tokens.dart';
 import '../../data/purchases.dart';
@@ -25,6 +26,10 @@ import '../ads/house_ads.dart';
 /// `verify-purchase` Appwrite Function before anything is granted. In debug
 /// builds without a store (plain simulator) a clearly labelled sandbox
 /// dialog stands in so the flow can still be exercised.
+///
+/// On web there is no store: a notice card replaces the price grids and the
+/// VIP buy buttons, while the free sources (bonus video, quests, piggy bank)
+/// stay. Earned currency is saved to the account like on iPhone.
 class StoreScreen extends ConsumerStatefulWidget {
   const StoreScreen({super.key, this.showVip = false});
   /// Opens scrolled to the VIP card (`/store?vip=1`).
@@ -42,9 +47,11 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
   @override
   void initState() {
     super.initState();
-    final service = ref.read(purchaseServiceProvider);
-    service.start();
-    _events = service.events.listen(_onPurchaseEvent);
+    if (ref.read(platformCapsProvider).purchases) {
+      final service = ref.read(purchaseServiceProvider);
+      service.start();
+      _events = service.events.listen(_onPurchaseEvent);
+    }
     if (widget.showVip) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         final ctx = _vipKey.currentContext;
@@ -176,6 +183,10 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
   }
 
   Future<void> _redeemCode() async {
+    if (!ref.read(platformCapsProvider).giftCodes) {
+      showToast(context, 'Gift codes can be redeemed on iPhone and iPad through the App Store.', icon: CupertinoIcons.gift);
+      return;
+    }
     final opened = await ref.read(purchaseServiceProvider).presentCodeRedemptionSheet();
     if (!opened && mounted) {
       showToast(context, 'Gift codes can be redeemed on iPhone and iPad through the App Store.', icon: CupertinoIcons.gift);
@@ -211,8 +222,9 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
   Widget build(BuildContext context) {
     final c = context.colors;
     final profile = ref.watch(profileProvider).value;
-    final products = ref.watch(productsProvider).value ?? const <String, ProductDetails>{};
-    final storeUp = ref.watch(storeAvailableProvider).value ?? false;
+    final caps = ref.watch(platformCapsProvider);
+    final products = caps.purchases ? (ref.watch(productsProvider).value ?? const <String, ProductDetails>{}) : const <String, ProductDetails>{};
+    final storeUp = caps.purchases && (ref.watch(storeAvailableProvider).value ?? false);
     final adsLeft = profile?.adsLeftToday ?? Profile.adsPerDay;
     final isVip = profile?.isVip ?? false;
     return Scaffold(
@@ -237,6 +249,10 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
         physics: const BouncingScrollPhysics(),
         padding: EdgeInsets.fromLTRB(20, MediaQuery.paddingOf(context).top + kToolbarHeight + 8, 20, 32),
         children: [
+          if (!caps.purchases) ...[
+            const StoreWebNotice(),
+            const SizedBox(height: 12),
+          ],
           // Free coins via bonus video, limited per day.
           SoftCard(
             padding: const EdgeInsets.fromLTRB(16, 14, 14, 14),
@@ -266,13 +282,13 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
           ),
           const SectionHeader(title: 'Coins', subtitle: 'Unlock packs and boosters', padding: EdgeInsets.fromLTRB(0, 24, 0, 12)),
           _FreeNote(text: 'Free coins: daily quests, the daily gift, level-ups, the piggy bank (${Economy.piggyPerPuzzle} per picture, up to ${Profile.piggyCapacity}) and the Lucky Wheel.', route: '/events'),
-          _ProductGrid(products: _coinProducts, onBuy: _buy, priceOf: (p) => _price(p, products), busy: _buying),
+          if (caps.purchases) _ProductGrid(products: _coinProducts, onBuy: _buy, priceOf: (p) => _price(p, products), busy: _buying),
           const SectionHeader(title: 'Tickets', subtitle: 'Premium packs and the piggy bank', padding: EdgeInsets.fromLTRB(0, 24, 0, 12)),
           _FreeNote(text: 'Free tickets: weekly quests, world-day events and every third level.', route: '/events'),
-          _ProductGrid(products: _ticketProducts, onBuy: _buy, priceOf: (p) => _price(p, products), busy: _buying),
+          if (caps.purchases) _ProductGrid(products: _ticketProducts, onBuy: _buy, priceOf: (p) => _price(p, products), busy: _buying),
           const SectionHeader(title: 'Hints', subtitle: 'Show a card its place', padding: EdgeInsets.fromLTRB(0, 24, 0, 12)),
           _FreeNote(text: 'Free hints: the daily gift on even days, every second level and the Lucky Wheel.', route: '/home'),
-          _ProductGrid(products: _boosterProducts, onBuy: _buy, priceOf: (p) => _price(p, products), busy: _buying),
+          if (caps.purchases) _ProductGrid(products: _boosterProducts, onBuy: _buy, priceOf: (p) => _price(p, products), busy: _buying),
           const SizedBox(height: 24),
           _VipCard(
             key: _vipKey,
@@ -281,6 +297,7 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
             monthlyPrice: products[ProductIds.vipMonthly]?.price ?? '\$2.99',
             yearlyPrice: products[ProductIds.vipYearly]?.price ?? '\$14.99',
             busy: _buying,
+            purchasable: caps.purchases,
             onBuyMonthly: () => _buyVip(ProductIds.vipMonthly),
             onBuyYearly: () => _buyVip(ProductIds.vipYearly),
             onRedeem: _redeemCode,
@@ -288,11 +305,46 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
           const SizedBox(height: 16),
           Center(
             child: Text(
-              storeUp
-                  ? 'Payment is handled by the App Store. Subscriptions renew automatically and can be cancelled in your Apple ID settings.'
-                  : (kDebugMode ? 'Store unavailable on this device. Debug sandbox purchases grant items locally.' : 'The App Store is not available right now.'),
+              !caps.purchases
+                  ? 'VIP and bundles are sold in the iPhone app. A VIP subscription bought there is active here too.'
+                  : storeUp
+                      ? 'Payment is handled by the App Store. Subscriptions renew automatically and can be cancelled in your Apple ID settings.'
+                      : (kDebugMode ? 'Store unavailable on this device. Debug sandbox purchases grant items locally.' : 'The App Store is not available right now.'),
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 11.5, color: c.textTertiary),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Web notice at the top of the store: no purchases here, but everything
+/// earned is saved to the account.
+class StoreWebNotice extends StatelessWidget {
+  const StoreWebNotice({super.key});
+
+  static const message = 'Purchases are available in the iPhone app. Coins, tickets and hints you earn here are saved to your account.';
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return SoftCard(
+      padding: const EdgeInsets.fromLTRB(14, 14, 16, 14),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const IconTile(icon: CupertinoIcons.device_phone_portrait, size: 34, radius: 10),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Web version', style: Theme.of(context).textTheme.titleMedium),
+                const SizedBox(height: 3),
+                Text(message, style: TextStyle(fontSize: 13.5, height: 1.4, color: c.textSecondary)),
+              ],
             ),
           ),
         ],
@@ -309,6 +361,7 @@ class _VipCard extends StatelessWidget {
     required this.monthlyPrice,
     required this.yearlyPrice,
     required this.busy,
+    this.purchasable = true,
     required this.onBuyMonthly,
     required this.onBuyYearly,
     required this.onRedeem,
@@ -318,6 +371,9 @@ class _VipCard extends StatelessWidget {
   final String monthlyPrice;
   final String yearlyPrice;
   final bool busy;
+  /// False on web: the benefits stay as information, the buy buttons and the
+  /// gift-code link are replaced by an "Available on iPhone" label.
+  final bool purchasable;
   final VoidCallback onBuyMonthly;
   final VoidCallback onBuyYearly;
   final VoidCallback onRedeem;
@@ -370,6 +426,14 @@ class _VipCard extends StatelessWidget {
               vipUntil != null ? 'VIP is active until ${vipUntil!.day}.${vipUntil!.month}.${vipUntil!.year}. Thank you for supporting the game.' : 'VIP is active. Thank you for supporting the game.',
               style: TextStyle(color: fg.withValues(alpha: 0.7), fontSize: 13),
             )
+          else if (!purchasable)
+            Row(
+              children: [
+                const Chip2(label: 'Available on iPhone', icon: CupertinoIcons.device_phone_portrait, color: Color(0x22FFFFFF), foreground: fg),
+                const SizedBox(width: 10),
+                Expanded(child: Text('From $monthlyPrice/month after a 7-day trial.', style: TextStyle(color: fg.withValues(alpha: 0.7), fontSize: 12))),
+              ],
+            )
           else ...[
             BigButton(label: 'Start 7-day free trial', kind: ButtonKind.gold, loading: busy, onTap: onBuyMonthly),
             const SizedBox(height: 6),
@@ -377,23 +441,25 @@ class _VipCard extends StatelessWidget {
             const SizedBox(height: 10),
             BigButton(label: 'Yearly · $yearlyPrice · 7 days free', kind: ButtonKind.ghostLight, loading: busy, onTap: onBuyYearly),
           ],
-          const SizedBox(height: 14),
-          Center(
-            child: Pressable(
-              onTap: onRedeem,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(CupertinoIcons.gift, size: 16, color: fg.withValues(alpha: 0.75)),
-                    const SizedBox(width: 6),
-                    Text('Have a gift code? Redeem it', style: TextStyle(color: fg.withValues(alpha: 0.85), fontSize: 13, fontWeight: FontWeight.w600)),
-                  ],
+          if (purchasable) ...[
+            const SizedBox(height: 14),
+            Center(
+              child: Pressable(
+                onTap: onRedeem,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(CupertinoIcons.gift, size: 16, color: fg.withValues(alpha: 0.75)),
+                      const SizedBox(width: 6),
+                      Text('Have a gift code? Redeem it', style: TextStyle(color: fg.withValues(alpha: 0.85), fontSize: 13, fontWeight: FontWeight.w600)),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
+          ],
         ],
       ),
     );

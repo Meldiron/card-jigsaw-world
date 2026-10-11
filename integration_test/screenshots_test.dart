@@ -153,6 +153,9 @@ void main() {
     }
     await settle(tester, 2500);
     await shot(tester, '11b_complete');
+    await tapText(tester, 'View picture', ms: 900);
+    await shot(tester, '11c_complete_view');
+    await tapText(tester, 'Back to results', ms: 900);
     await tapText(tester, 'Back to pack', ms: 2000);
 
     // Store (full-screen modal) from the home header coin pill.

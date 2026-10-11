@@ -1,11 +1,10 @@
 Version 1.7.0
 
-- New cobalt accent across the app.
-- Quests: the Events tab is now Quests, with daily and weekly quests, time left until reset, and an extra quest for VIP members. Live events now ask you to finish every picture in the pack.
-- Triangles now snap together like every other mode, and connected pieces look the same in cards, squares, triangles and hexagons.
-- Finish screen shows your progress through the pack and says "Back to pack" after the last picture.
-- Library: Unlocked filter, finished packs get a check and a star bar, pack pages show solved pictures with progress bars.
-- Tap any friend or league player to see their profile and badges. Removing a friend and unlocking a pack now ask first.
-- Profile: a Statistics section with solves, stars, streaks, time played, moves and per-mode records. A dot on the Profile tab when a badge is ready to claim.
-- Piggy bank fills 5 coins per picture up to 500. Lucky Wheel jackpot celebration. Clearer buttons showing what each action costs.
-- Modern glass alerts everywhere, readable offer buttons, and smaller fixes.
+- New ticket icon and cobalt accent.
+- Puzzles never start with a piece already in place; loose pieces are slightly dimmed and light up as they lock.
+- Joined pieces fuse into one shape with a blue outline, in every mode.
+- "View picture" on the finish screen shows your completed photo in full.
+- Signing in to an existing account now merges your progress; when both saves matter you choose which coins and level to keep.
+- Fully three-starred packs get a star badge next to the check.
+- Break offers are rarer and close faster.
+- Also playable on the web at card-jigsaw-world.appwrite.network (purchases stay on iPhone).

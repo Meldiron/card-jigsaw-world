@@ -63,6 +63,46 @@ abstract class Tiling {
   /// Neighbour across each polygon edge (edge k runs from vertex k to k+1).
   List<int?> edgeNeighbours(int slot);
 
+  /// Number of cells that meet at an interior vertex: 4 on a grid, 6 on a
+  /// triangle strip, 3 in a honeycomb. A vertex with fewer is on the board's
+  /// edge.
+  int get vertexValence;
+
+  /// Other cells touching vertex [k] of [slot] (edge-neighbours included).
+  /// Derived from the geometry, so one implementation serves every tiling.
+  List<int> cornerNeighbours(int slot, int k) {
+    final key = '$mode:${cols}x$rows';
+    final table = _cornerCache.putIfAbsent(key, () => List<List<List<int>>?>.filled(cells, null));
+    return (table[slot] ??= _computeCorners(slot))[k];
+  }
+
+  static final _cornerCache = <String, List<List<List<int>>?>>{};
+
+  List<List<int>> _computeCorners(int slot) {
+    final size = Size(cols * 64.0, rows * 64.0);
+    final own = polygon(slot, size);
+    // Cells around a vertex are at most three edge-steps apart (triangles).
+    final seen = <int>{slot};
+    var frontier = <int>[slot];
+    for (var depth = 0; depth < 3; depth++) {
+      final next = <int>[];
+      for (final s in frontier) {
+        for (final n in neighbours(s)) {
+          if (seen.add(n)) next.add(n);
+        }
+      }
+      frontier = next;
+    }
+    final polys = {for (final s in seen) if (s != slot) s: polygon(s, size)};
+    return [
+      for (final v in own)
+        [
+          for (final e in polys.entries)
+            if (e.value.any((p) => (p - v).distanceSquared < 1e-6)) e.key,
+        ],
+    ];
+  }
+
   Offset cellCenter(int slot, Size size) {
     final p = polygon(slot, size);
     var x = 0.0, y = 0.0;
@@ -212,6 +252,9 @@ class GridTiling extends Tiling {
   List<int?> edgeNeighbours(int slot) => [apply(slot, 0, -1), apply(slot, 1, 0), apply(slot, 0, 1), apply(slot, -1, 0)];
 
   @override
+  int get vertexValence => 4;
+
+  @override
   int? slotAt(Offset point, Size size) {
     final c = (point.dx / (size.width / cols)).floor();
     final r = (point.dy / (size.height / rows)).floor();
@@ -266,6 +309,9 @@ class TriangleTiling extends Tiling {
     final vertical = isUp(slot) ? (r < rows - 1 ? slot + cols : null) : (r > 0 ? slot - cols : null);
     return [vertical, c < cols - 1 ? slot + 1 : null, c > 0 ? slot - 1 : null];
   }
+
+  @override
+  int get vertexValence => 6;
 
   double _tw(Size s) => 2 * s.width / (cols + 1);
   double _th(Size s) => s.height / rows;
@@ -358,6 +404,9 @@ class HexTiling extends Tiling {
         apply(slot, 1, -1), // NE
         apply(slot, 1, 0), // E
       ];
+
+  @override
+  int get vertexValence => 3;
 
   double _hw(Size s) => s.width / (cols + 0.5);
   double _hh(Size s) => s.height / (0.75 * rows + 0.25);

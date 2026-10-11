@@ -1,13 +1,15 @@
 {
-    "name": "card_jigsaw_world",
-    "short_name": "card_jigsaw_world",
-    "start_url": ".",
+    "name": "Card Jigsaw World",
+    "short_name": "Card Jigsaw",
+    "start_url": "/",
+    "scope": "/",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#F6F6F8",
+    "theme_color": "#2F4FBF",
+    "description": "A calm card-swapping picture puzzle. Swap cards until the picture is whole, one new puzzle every day.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
+    "categories": ["games", "entertainment"],
     "icons": [
         {
             "src": "icons/Icon-192.png",

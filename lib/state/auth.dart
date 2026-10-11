@@ -1,4 +1,5 @@
 import 'package:appwrite/models.dart' as models;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/repositories.dart';
@@ -12,6 +13,9 @@ class AuthNotifier extends AsyncNotifier<models.User?> {
     try {
       final user = await repo.currentUser();
       if (user != null) return user;
+      // The web OAuth callback is about to create the real session; a
+      // throwaway guest here would only get in its way.
+      if (isOAuthCallback) return null;
       return await repo.signInAnonymously();
     } catch (e) {
       // Offline or backend unreachable: continue as a local guest.
@@ -20,6 +24,9 @@ class AuthNotifier extends AsyncNotifier<models.User?> {
   }
 
   AuthRepository get _repo => ref.read(authRepositoryProvider);
+
+  /// True while the web app is loading on `/auth/callback` (path or hash routing).
+  static bool get isOAuthCallback => kIsWeb && (Uri.base.path.contains('/auth/callback') || Uri.base.fragment.contains('/auth/callback'));
 
   Future<void> signUp({required String email, required String password, required String name}) async {
     final current = state.value;
@@ -46,6 +53,24 @@ class AuthNotifier extends AsyncNotifier<models.User?> {
     final result = await _repo.signInWithAppleIdToken(idToken: idToken, nonce: nonce, name: name);
     state = AsyncData(result.user);
     return result.switched;
+  }
+
+  /// Web OAuth redirect: the callback brings a token; this turns it into a
+  /// session (the guest session, if any, is replaced).
+  Future<models.User> signInWithToken({required String userId, required String secret}) async {
+    // Appwrite refuses a token session while another session is active, and
+    // whatever session is here (the guest, or a stale one) is being replaced.
+    await _repo.signOut();
+    final user = await _repo.createSessionFromToken(userId: userId, secret: secret);
+    state = AsyncData(user);
+    return user;
+  }
+
+  /// Re-reads the session after the page reloaded (web OAuth callback) and
+  /// returns the user, falling back to a fresh guest.
+  Future<models.User?> refresh() async {
+    await retry();
+    return state.value;
   }
 
   Future<void> signOut() async {

@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io' show Platform;
-
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/enums.dart' as enums;
 import 'package:flutter/foundation.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
+
+import '../core/platform.dart';
 
 /// Product identifiers as configured in App Store Connect / Products.storekit.
 class ProductIds {
@@ -81,11 +81,17 @@ class RestoreFinished extends PurchaseEvent {
 /// Wraps the `in_app_purchase` plugin (StoreKit 2 on iOS) and verifies every
 /// completed transaction with the `verify-purchase` Appwrite Function, which
 /// applies the grant server-side.
+///
+/// On web (no plugin implementation) every method is a safe no-op:
+/// [start] does nothing, [isAvailable] is false, [queryProducts] is empty,
+/// [presentCodeRedemptionSheet] returns false. `InAppPurchase.instance` is
+/// never read there.
 class PurchaseService {
   PurchaseService(this._client);
 
   final Client _client;
-  final _iap = InAppPurchase.instance;
+  // Lazy so the plugin singleton is only touched where it exists.
+  late final InAppPurchase _iap = InAppPurchase.instance;
   final _events = StreamController<PurchaseEvent>.broadcast();
   StreamSubscription<List<PurchaseDetails>>? _sub;
   bool _started = false;
@@ -96,7 +102,7 @@ class PurchaseService {
 
   /// Idempotent: enables StoreKit 2 and starts listening to the purchase stream.
   Future<void> start() async {
-    if (_started) return;
+    if (_started || !supportsPurchases) return;
     _started = true;
     // StoreKit 2 is the default transport in in_app_purchase_storekit 0.4+,
     // so verificationData.serverVerificationData is the signed JWS transaction.
@@ -104,6 +110,7 @@ class PurchaseService {
   }
 
   Future<bool> isAvailable() async {
+    if (!supportsPurchases) return false;
     try {
       return await _iap.isAvailable();
     } catch (_) {
@@ -112,12 +119,17 @@ class PurchaseService {
   }
 
   Future<Map<String, ProductDetails>> queryProducts() async {
+    if (!supportsPurchases) return const {};
     final res = await _iap.queryProductDetails(ProductIds.all);
     if (res.notFoundIDs.isNotEmpty) debugPrint('Products not found: ${res.notFoundIDs}');
     return {for (final p in res.productDetails) p.id: p};
   }
 
   Future<bool> buy(ProductDetails product) async {
+    if (!supportsPurchases) {
+      _events.add(PurchaseFailed(purchasesOnIphoneMessage, productId: product.id));
+      return false;
+    }
     final param = PurchaseParam(productDetails: product);
     try {
       if (ProductIds.isSubscription(product.id)) {
@@ -135,7 +147,7 @@ class PurchaseService {
   /// transaction arrives on the purchase stream like any other purchase and is
   /// verified server-side before VIP is granted. iOS and macOS only.
   Future<bool> presentCodeRedemptionSheet() async {
-    if (kIsWeb || !(Platform.isIOS || Platform.isMacOS)) return false;
+    if (!supportsGiftCodes) return false;
     try {
       await _iap.getPlatformAddition<InAppPurchaseStoreKitPlatformAddition>().presentCodeRedemptionSheet();
       return true;
@@ -146,6 +158,10 @@ class PurchaseService {
   }
 
   Future<void> restorePurchases() async {
+    if (!supportsPurchases) {
+      _events.add(const RestoreFinished(0));
+      return;
+    }
     _restoring = true;
     _restoredCount = 0;
     try {

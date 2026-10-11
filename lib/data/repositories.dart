@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/appwrite.dart';
 import '../models/models.dart';
+import 'web_redirect.dart' as web_redirect;
 
 const _db = AppwriteConfig.databaseId;
 
@@ -75,6 +76,31 @@ class AuthRepository {
     }
   }
 
+  /// Web: leaves the page for the provider's sign-in and comes back to
+  /// [success] with `userId` and `secret` in the query (or to [failure]).
+  /// This is Appwrite's OAuth token flow in a full-page redirect rather than
+  /// the SDK's popup, so it works without third-party cookies: the session
+  /// is created afterwards with [createSessionFromToken], whose response
+  /// carries the fallback cookie the browser SDK stores. An active guest
+  /// session is linked to the identity when the browser sends its cookie;
+  /// if the identity already belongs to another user Appwrite redirects to
+  /// [failure] (user_already_exists) and the caller drops the guest session
+  /// and redirects again.
+  void signInWithOAuthRedirect({required enums.OAuthProvider provider, required String success, required String failure}) {
+    final url = Uri.parse('${AppwriteConfig.endpoint}/account/tokens/oauth2/${provider.value}').replace(queryParameters: {
+      'project': AppwriteConfig.projectId,
+      'success': success,
+      'failure': failure,
+    });
+    web_redirect.navigateTo(url.toString());
+  }
+
+  /// Second half of the redirect flow: turns the returned token into a session.
+  Future<models.User> createSessionFromToken({required String userId, required String secret}) async {
+    await _account.createSession(userId: userId, secret: secret);
+    return _account.get();
+  }
+
   Future<void> signOut() async {
     try {
       await _account.deleteSession(sessionId: 'current');
@@ -122,6 +148,17 @@ class ProfileRepository {
 
   Future<Profile> fetchOrCreate(String userId, {String? name}) async =>
       (await fetch(userId)) ?? await create(userId, name: name);
+
+  /// The profile with its last-written time (for the save merge).
+  Future<({Profile profile, DateTime? updatedAt})?> fetchWithMeta(String userId) async {
+    try {
+      final row = await _tables.getRow(databaseId: _db, tableId: AppwriteConfig.profiles, rowId: userId);
+      return (profile: Profile.fromRow(row.$id, row.data), updatedAt: DateTime.tryParse(row.$updatedAt));
+    } on AppwriteException catch (e) {
+      if (e.code == 404) return null;
+      rethrow;
+    }
+  }
 
   Future<Profile> update(String userId, Map<String, dynamic> patch) async {
     final row = await _tables.updateRow(databaseId: _db, tableId: AppwriteConfig.profiles, rowId: userId, data: patch);
@@ -241,6 +278,23 @@ class ProgressRepository {
       queries: [Query.equal('userId', userId), Query.limit(500)],
     );
     return res.rows.map((r) => PuzzleProgress.fromRow(r.$id, r.data)).toList();
+  }
+
+  /// Every row with its last-written time (for the save merge).
+  Future<List<({PuzzleProgress row, DateTime? updatedAt})>> forUserWithMeta(String userId) async {
+    final out = <({PuzzleProgress row, DateTime? updatedAt})>[];
+    String? cursor;
+    while (true) {
+      final res = await _tables.listRows(
+        databaseId: _db,
+        tableId: AppwriteConfig.progress,
+        queries: [Query.equal('userId', userId), Query.orderAsc('\$id'), Query.limit(500), if (cursor != null) Query.cursorAfter(cursor)],
+      );
+      out.addAll(res.rows.map((r) => (row: PuzzleProgress.fromRow(r.$id, r.data), updatedAt: DateTime.tryParse(r.$updatedAt))));
+      if (res.rows.length < 500) break;
+      cursor = res.rows.last.$id;
+    }
+    return out;
   }
 
   Future<PuzzleProgress> upsert(String userId, String puzzleId, Map<String, dynamic> data) async {

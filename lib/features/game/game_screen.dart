@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math' as math;
+import 'dart:ui' as ui;
 
 import 'package:confetti/confetti.dart';
 import 'package:flutter/cupertino.dart';
@@ -401,6 +402,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
           if (state.status == GameStatus.won && image.hasValue)
             _CompletionOverlay(
               puzzle: puzzle,
+              image: image.requireValue,
               state: state,
               reward: _reward,
               pack: _packProgress(puzzle, state),
@@ -669,10 +671,22 @@ class _PackProgress {
   bool get complete => total > 0 && solved >= total;
 }
 
-/// Completion: the picture is revealed full-bleed with rewards and next actions.
-class _CompletionOverlay extends StatelessWidget {
-  const _CompletionOverlay({required this.puzzle, required this.state, required this.reward, required this.pack, required this.onReplay, required this.onNext, required this.onHome});
+/// Completion: the picture is revealed with rewards and next actions. A
+/// "View picture" pill swaps the results for the finished photo on its own,
+/// with one way forward kept at the bottom so nobody gets stuck.
+class _CompletionOverlay extends StatefulWidget {
+  const _CompletionOverlay({
+    required this.puzzle,
+    required this.image,
+    required this.state,
+    required this.reward,
+    required this.pack,
+    required this.onReplay,
+    required this.onNext,
+    required this.onHome,
+  });
   final Puzzle puzzle;
+  final ui.Image image;
   final GameState state;
   final ({int coins, int xp, bool levelUp, int level})? reward;
   final _PackProgress pack;
@@ -681,122 +695,248 @@ class _CompletionOverlay extends StatelessWidget {
   final VoidCallback onHome;
 
   @override
+  State<_CompletionOverlay> createState() => _CompletionOverlayState();
+}
+
+class _CompletionOverlayState extends State<_CompletionOverlay> {
+  static const _swap = Duration(milliseconds: 250);
+
+  /// Target mode; the picture layer stays mounted until its fade-out ends.
+  bool _viewing = false;
+  bool _pictureMounted = false;
+
+  void _view() => setState(() {
+        _viewing = true;
+        _pictureMounted = true;
+      });
+
+  void _results() => setState(() => _viewing = false);
+
+  @override
   Widget build(BuildContext context) {
+    final puzzle = widget.puzzle, state = widget.state, reward = widget.reward, pack = widget.pack;
     final c = context.colors;
     // The pack is finished (or nothing unsolved is playable): the primary
     // action returns to the pack instead of promising a next puzzle.
     final backIsPrimary = pack.next == null;
-    return Positioned.fill(
-      child: Container(
-        color: Colors.black.withValues(alpha: 0.5),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 24, 20, 16),
-            child: Column(
-              children: [
-                const Spacer(),
-                Text('Picture complete', style: Theme.of(context).textTheme.displaySmall?.copyWith(color: Colors.white))
-                    .animate()
-                    .fadeIn(delay: 300.ms)
-                    .slideY(begin: 0.3, curve: Curves.easeOutBack),
-                const SizedBox(height: 6),
-                Text(puzzle.title, style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontWeight: FontWeight.w700, fontSize: 15)).animate().fadeIn(delay: 400.ms),
-                const SizedBox(height: 18),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+    final credit = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(AppIcons.credit, size: 12, color: _viewing ? Colors.white.withValues(alpha: 0.7) : c.textTertiary),
+        const SizedBox(width: 5),
+        Flexible(
+          child: Text(
+            '${puzzle.author} · ${puzzle.source}',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(fontSize: 11.5, color: _viewing ? Colors.white.withValues(alpha: 0.7) : c.textTertiary),
+          ),
+        ),
+      ],
+    );
+
+    final results = Container(
+      color: Colors.black.withValues(alpha: 0.5),
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
+          child: Column(
+            children: [
+              // Sits under the HUD rather than over its title.
+              const SizedBox(height: 92),
+              _OverlayPill(icon: CupertinoIcons.eye, label: 'View picture', onTap: _view).animate().fadeIn(delay: 700.ms),
+              const Spacer(),
+              Text('Picture complete', style: Theme.of(context).textTheme.displaySmall?.copyWith(color: Colors.white))
+                  .animate()
+                  .fadeIn(delay: 300.ms)
+                  .slideY(begin: 0.3, curve: Curves.easeOutBack),
+              const SizedBox(height: 6),
+              Text(puzzle.title, style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontWeight: FontWeight.w700, fontSize: 15)).animate().fadeIn(delay: 400.ms),
+              const SizedBox(height: 18),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  for (var i = 0; i < 3; i++)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 6),
+                      child: Icon(
+                        i < state.stars ? CupertinoIcons.star_fill : CupertinoIcons.star,
+                        size: i == 1 ? 54 : 42,
+                        color: i < state.stars ? Brand.star : Colors.white.withValues(alpha: 0.4),
+                      ).animate().scale(delay: (500 + i * 180).ms, begin: const Offset(0, 0), curve: Curves.elasticOut, duration: 700.ms),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 22),
+              SoftCard(
+                padding: const EdgeInsets.all(18),
+                child: Column(
                   children: [
-                    for (var i = 0; i < 3; i++)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 6),
-                        child: Icon(
-                          i < state.stars ? CupertinoIcons.star_fill : CupertinoIcons.star,
-                          size: i == 1 ? 54 : 42,
-                          color: i < state.stars ? Brand.star : Colors.white.withValues(alpha: 0.4),
-                        ).animate().scale(delay: (500 + i * 180).ms, begin: const Offset(0, 0), curve: Curves.elasticOut, duration: 700.ms),
-                      ),
-                  ],
-                ),
-                const SizedBox(height: 22),
-                SoftCard(
-                  padding: const EdgeInsets.all(18),
-                  child: Column(
-                    children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        _RewardStat(icon: const CoinIcon(size: 22), label: 'Coins', value: reward == null ? '…' : '+${reward.coins}'),
+                        _RewardStat(icon: Icon(AppIcons.xp, size: 22, color: context.accent), label: 'XP', value: reward == null ? '…' : '+${reward.xp}'),
+                        _RewardStat(icon: Icon(AppIcons.swaps, size: 22, color: c.textSecondary), label: 'Moves', value: '${state.moves}', sub: 'par ${state.par}'),
+                        _RewardStat(icon: Icon(AppIcons.time, size: 22, color: c.textSecondary), label: 'Time', value: formatDuration(state.elapsed)),
+                      ],
+                    ),
+                    if (pack.total > 0) ...[
+                      const SizedBox(height: 16),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          _RewardStat(icon: const CoinIcon(size: 22), label: 'Coins', value: reward == null ? '…' : '+${reward!.coins}'),
-                          _RewardStat(icon: Icon(AppIcons.xp, size: 22, color: context.accent), label: 'XP', value: reward == null ? '…' : '+${reward!.xp}'),
-                          _RewardStat(icon: Icon(AppIcons.swaps, size: 22, color: c.textSecondary), label: 'Moves', value: '${state.moves}', sub: 'par ${state.par}'),
-                          _RewardStat(icon: Icon(AppIcons.time, size: 22, color: c.textSecondary), label: 'Time', value: formatDuration(state.elapsed)),
+                          Expanded(
+                            child: Text(
+                              '${pack.solved} of ${pack.total} solved${pack.name != null ? ' · ${pack.name}' : ''}',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: c.textSecondary),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Icon(AppIcons.star, size: 13, color: Brand.star),
+                          const SizedBox(width: 4),
+                          Text('${pack.stars}/${pack.total * 3}', style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: c.textPrimary)),
                         ],
                       ),
-                      if (pack.total > 0) ...[
-                        const SizedBox(height: 16),
-                        Row(
+                      const SizedBox(height: 8),
+                      ProgressBar(value: pack.solved / pack.total, height: 4),
+                    ],
+                    if (reward?.levelUp == true) ...[
+                      const SizedBox(height: 14),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                        decoration: BoxDecoration(color: c.accentTint, borderRadius: BorderRadius.circular(Radii.md)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Expanded(
-                              child: Text(
-                                '${pack.solved} of ${pack.total} solved${pack.name != null ? ' · ${pack.name}' : ''}',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: c.textSecondary),
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            Icon(AppIcons.star, size: 13, color: Brand.star),
-                            const SizedBox(width: 4),
-                            Text('${pack.stars}/${pack.total * 3}', style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: c.textPrimary)),
+                            Icon(AppIcons.crown, size: 20, color: context.accent),
+                            const SizedBox(width: 8),
+                            Text('Level ${reward!.level} reached', style: TextStyle(fontWeight: FontWeight.w600, color: context.accent)),
                           ],
                         ),
-                        const SizedBox(height: 8),
-                        ProgressBar(value: pack.solved / pack.total, height: 4),
-                      ],
-                      if (reward?.levelUp == true) ...[
-                        const SizedBox(height: 14),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                          decoration: BoxDecoration(color: c.accentTint, borderRadius: BorderRadius.circular(Radii.md)),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(AppIcons.crown, size: 20, color: context.accent),
-                              const SizedBox(width: 8),
-                              Text('Level ${reward!.level} reached', style: TextStyle(fontWeight: FontWeight.w600, color: context.accent)),
-                            ],
-                          ),
-                        ).animate().fadeIn(),
-                      ],
-                      const SizedBox(height: 10),
-                      Row(mainAxisAlignment: MainAxisAlignment.center, children: [Icon(AppIcons.credit, size: 12, color: c.textTertiary), const SizedBox(width: 5), Flexible(child: Text('${puzzle.author} · ${puzzle.source}', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 11.5, color: c.textTertiary)))]),
+                      ).animate().fadeIn(),
                     ],
-                  ),
-                ).animate().fadeIn(delay: 900.ms).slideY(begin: 0.2, curve: Curves.easeOut),
-                const SizedBox(height: 14),
-                Row(
-                  children: [
-                    // Equal widths so neither label truncates on a 393 pt phone.
-                    Expanded(child: BigButton(label: 'Replay', kind: ButtonKind.secondary, icon: CupertinoIcons.arrow_counterclockwise, onTap: onReplay)),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: backIsPrimary
-                          ? BigButton(label: 'Back to pack', icon: CupertinoIcons.square_grid_2x2, onTap: onHome)
-                          : BigButton(label: 'Next puzzle', icon: CupertinoIcons.arrow_right, onTap: () => onNext(pack.next)),
-                    ),
+                    const SizedBox(height: 10),
+                    credit,
                   ],
-                ).animate().fadeIn(delay: 1100.ms),
-                const SizedBox(height: 8),
-                if (backIsPrimary)
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Text(pack.complete ? 'Every picture in this pack is solved' : 'Nothing else to play here yet', style: TextStyle(color: Colors.white.withValues(alpha: 0.75), fontWeight: FontWeight.w600)),
-                  )
-                else
-                  Pressable(onTap: onHome, child: const Padding(padding: EdgeInsets.all(10), child: Text('Back to pack', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700)))),
-              ],
-            ),
+                ),
+              ).animate().fadeIn(delay: 900.ms).slideY(begin: 0.2, curve: Curves.easeOut),
+              const SizedBox(height: 14),
+              Row(
+                children: [
+                  // Equal widths so neither label truncates on a 393 pt phone.
+                  Expanded(child: BigButton(label: 'Replay', kind: ButtonKind.secondary, icon: CupertinoIcons.arrow_counterclockwise, onTap: widget.onReplay)),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: backIsPrimary
+                        ? BigButton(label: 'Back to pack', icon: CupertinoIcons.square_grid_2x2, onTap: widget.onHome)
+                        : BigButton(label: 'Next puzzle', icon: CupertinoIcons.arrow_right, onTap: () => widget.onNext(pack.next)),
+                  ),
+                ],
+              ).animate().fadeIn(delay: 1100.ms),
+              const SizedBox(height: 8),
+              if (backIsPrimary)
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Text(pack.complete ? 'Every picture in this pack is solved' : 'Nothing else to play here yet', style: TextStyle(color: Colors.white.withValues(alpha: 0.75), fontWeight: FontWeight.w600)),
+                )
+              else
+                Pressable(onTap: widget.onHome, child: const Padding(padding: EdgeInsets.all(10), child: Text('Back to pack', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700)))),
+            ],
           ),
         ),
       ),
+    );
+
+    // The photo on its own: no scrim, gutters or borders. A tap anywhere
+    // brings the results back; the primary action stays within reach.
+    final picture = GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: _results,
+      child: Container(
+        color: Colors.black,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Center(child: RawImage(image: widget.image, fit: BoxFit.contain, filterQuality: FilterQuality.medium)),
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
+                child: Column(
+                  children: [
+                    _OverlayPill(icon: CupertinoIcons.list_bullet, label: 'Back to results', onTap: _results),
+                    const Spacer(),
+                    credit,
+                    const SizedBox(height: 10),
+                    backIsPrimary
+                        ? _OverlayPill(icon: CupertinoIcons.square_grid_2x2, label: 'Back to pack', primary: true, onTap: widget.onHome)
+                        : _OverlayPill(icon: CupertinoIcons.arrow_right, label: 'Next puzzle', primary: true, onTap: () => widget.onNext(pack.next)),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    return Positioned.fill(
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          IgnorePointer(
+            ignoring: _viewing,
+            child: AnimatedOpacity(opacity: _viewing ? 0 : 1, duration: _swap, curve: Curves.easeOut, child: results),
+          ),
+          if (_pictureMounted)
+            IgnorePointer(
+              ignoring: !_viewing,
+              child: AnimatedOpacity(
+                opacity: _viewing ? 1 : 0,
+                duration: _swap,
+                curve: Curves.easeOut,
+                onEnd: () {
+                  if (!_viewing && mounted) setState(() => _pictureMounted = false);
+                },
+                child: AnimatedScale(scale: _viewing ? 1 : 0.96, duration: _swap, curve: Curves.easeOut, child: picture),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Compact pill over the finished picture: frosted glass, or solid accent
+/// for the one primary action.
+class _OverlayPill extends StatelessWidget {
+  const _OverlayPill({required this.icon, required this.label, required this.onTap, this.primary = false});
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+  final bool primary;
+
+  @override
+  Widget build(BuildContext context) {
+    final row = Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 17, color: Colors.white),
+        const SizedBox(width: 7),
+        Text(label, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 14)),
+      ],
+    );
+    const padding = EdgeInsets.symmetric(horizontal: 16, vertical: 10);
+    return Pressable(
+      onTap: onTap,
+      child: primary
+          ? Container(
+              padding: padding,
+              decoration: BoxDecoration(color: context.accent, borderRadius: BorderRadius.circular(Radii.pill)),
+              child: row,
+            )
+          : Glass(dark: true, radius: Radii.pill, padding: padding, opacity: 0.45, child: row),
     );
   }
 }

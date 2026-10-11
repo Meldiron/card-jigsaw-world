@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/platform.dart';
 import '../../core/theme/tokens.dart';
 import '../../state/auth.dart';
 import '../../state/profile.dart';
@@ -22,6 +23,7 @@ class SettingsScreen extends ConsumerWidget {
     final s = ref.watch(settingsProvider);
     final n = ref.read(settingsProvider.notifier);
     final isGuest = ref.watch(isGuestProvider);
+    final caps = ref.watch(platformCapsProvider);
 
     Widget group(String title, List<Widget> rows) => Padding(
           padding: const EdgeInsets.fromLTRB(20, 18, 20, 0),
@@ -72,11 +74,14 @@ class SettingsScreen extends ConsumerWidget {
           ]),
           group('Gameplay', [
             _SwitchRow(icon: CupertinoIcons.time, label: 'Show timer', value: s.showTimer, onChanged: n.setShowTimer),
-            _SwitchRow(icon: CupertinoIcons.bell_fill, label: 'Daily reminders', value: s.notifications, onChanged: n.setNotifications),
+            // Reminders are not wired on web, so the switch is hidden there.
+            if (caps.notifications) _SwitchRow(icon: CupertinoIcons.bell_fill, label: 'Daily reminders', value: s.notifications, onChanged: n.setNotifications),
           ]),
           group('Account', [
             _NavRow(icon: CupertinoIcons.person_crop_circle, label: isGuest ? 'Sign in or create account' : 'Manage account', onTap: () => context.push('/account')),
-            _NavRow(
+            // Gift codes and restores go through StoreKit; both rows are
+            // hidden where there is no store (web).
+            if (caps.purchases) _NavRow(
               icon: CupertinoIcons.gift,
               label: 'Redeem a gift code',
               onTap: () async {
@@ -84,7 +89,7 @@ class SettingsScreen extends ConsumerWidget {
                 if (!opened && context.mounted) showToast(context, 'Gift codes can be redeemed on iPhone and iPad through the App Store.', icon: CupertinoIcons.gift);
               },
             ),
-            _NavRow(
+            if (caps.purchases) _NavRow(
               icon: CupertinoIcons.bag,
               label: 'Restore purchases',
               onTap: () async {

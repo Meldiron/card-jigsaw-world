@@ -3,6 +3,7 @@ import 'dart:io' show Platform;
 import 'dart:math';
 
 import 'package:appwrite/appwrite.dart';
+import 'package:appwrite/enums.dart' as enums;
 import 'package:crypto/crypto.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,13 +14,33 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../core/haptics.dart';
 import '../../core/theme/tokens.dart';
+import '../../data/repositories.dart';
 import '../../state/auth.dart';
+import '../../state/merge.dart';
+import '../../state/merge_flow.dart';
 import '../../state/profile.dart';
 import '../../state/progress.dart';
+import '../../state/settings.dart';
 import '../../state/social.dart';
 import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
+import 'merge_sheet.dart';
+
+/// Toast for what happened to the guest save after a sign-in.
+String mergeMessage(MergeOutcome? outcome, {required String signedIn}) => switch (outcome) {
+      null || MergeOutcome.linked => signedIn,
+      MergeOutcome.keptAccount => 'Welcome back. Your newer progress was kept.',
+      MergeOutcome.keptGuest => 'Welcome back. Your progress on this device was added to your account.',
+    };
+
+/// Where the web OAuth redirect comes back to. Matches the URL strategy in
+/// use: with hash routing the path lives in the fragment.
+({String success, String failure}) oauthCallbackUrls() {
+  final origin = Uri.base.origin;
+  final base = Uri.base.fragment.isNotEmpty ? '$origin/#/auth/callback' : '$origin/auth/callback';
+  return (success: base, failure: '$base?error=1');
+}
 
 /// Account: sign up (links the guest session so progress is kept), sign in,
 /// social providers via Appwrite OAuth2, and sign out.
@@ -52,6 +73,26 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
     ref.invalidate(myPuzzlesProvider);
   }
 
+  /// The guest save on this device, taken before a sign-in can switch the
+  /// session to another account. Null when not a guest or nothing to keep.
+  Future<SaveSnapshot?> _guestSnapshot() async {
+    final user = ref.read(authProvider).value;
+    if (user == null || user.email.isNotEmpty) return null;
+    return ref.read(saveMergeProvider).snapshot(user.$id);
+  }
+
+  /// Combines the guest save into the account that is now signed in.
+  Future<MergeOutcome?> _merge(SaveSnapshot? guest) async {
+    if (guest == null) return null;
+    final user = ref.read(authProvider).value;
+    if (user == null) return null;
+    return ref.read(saveMergeProvider).mergeInto(
+      user.$id,
+      guest,
+      ask: (g, a) => mounted ? showMergeSheet(context, device: g, account: a) : Future.value(MergeChoice.account),
+    );
+  }
+
   Future<void> _submit() async {
     setState(() {
       _busy = true;
@@ -59,15 +100,19 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
     });
     try {
       final auth = ref.read(authProvider.notifier);
+      MergeOutcome? outcome;
       if (_signUp) {
         await auth.signUp(email: _email.text.trim(), password: _password.text, name: _name.text.trim());
       } else {
+        // Signing in from a guest switches accounts; carry the guest save over.
+        final guest = await _guestSnapshot();
         await auth.signIn(email: _email.text.trim(), password: _password.text);
+        outcome = await _merge(guest);
       }
       _afterAuth();
       if (!mounted) return;
       Haptics.success();
-      showToast(context, _signUp ? 'Account created. Your progress is saved.' : 'Welcome back.', icon: AppIcons.check);
+      showToast(context, _signUp ? 'Account created. Your progress is saved.' : mergeMessage(outcome, signedIn: 'Welcome back.'), icon: AppIcons.check);
       context.pop();
     } on AppwriteException catch (e) {
       setState(() => _error = e.message ?? 'Something went wrong');
@@ -78,7 +123,36 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
     }
   }
 
+  /// Web: no system sheet, so the browser goes to Apple through Appwrite and
+  /// comes back to `/auth/callback`. The guest save is parked in local
+  /// storage first because the page reloads.
+  Future<void> _appleWeb() async {
+    setState(() {
+      _busy = true;
+      _error = null;
+    });
+    try {
+      final merge = ref.read(saveMergeProvider);
+      final guest = await _guestSnapshot();
+      if (guest != null) {
+        await merge.storePending(guest);
+      } else {
+        await merge.clearPending();
+      }
+      final urls = oauthCallbackUrls();
+      ref.read(authRepositoryProvider).signInWithOAuthRedirect(provider: enums.OAuthProvider.apple, success: urls.success, failure: urls.failure);
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _busy = false;
+          _error = e.toString();
+        });
+      }
+    }
+  }
+
   Future<void> _apple() async {
+    if (kIsWeb) return _appleWeb();
     setState(() => _error = null);
     // Apple receives the SHA-256 of a fresh random nonce; Appwrite receives the
     // raw value and checks it against the token, which blocks replayed tokens.
@@ -98,11 +172,13 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
       // Apple only sends the name on the first authorization, never in the token.
       final name = [credential.givenName, credential.familyName].whereType<String>().where((s) => s.isNotEmpty).join(' ');
       setState(() => _busy = true);
+      final guest = await _guestSnapshot();
       final switched = await ref.read(authProvider.notifier).signInWithApple(idToken: idToken, nonce: nonce, name: name);
+      final outcome = switched ? await _merge(guest) : null;
       _afterAuth();
       if (!mounted) return;
       Haptics.success();
-      showToast(context, switched ? 'Welcome back. Signed in to your existing account.' : 'Signed in with Apple. Your progress is saved.', icon: AppIcons.check);
+      showToast(context, mergeMessage(outcome, signedIn: 'Signed in with Apple. Your progress is saved.'), icon: AppIcons.check);
       context.pop();
     } on SignInWithAppleAuthorizationException catch (e) {
       if (e.code == AuthorizationErrorCode.canceled) return;
@@ -116,8 +192,9 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
     }
   }
 
-  /// Sign in with Apple is only offered where the system sheet exists.
-  bool get _appleAvailable => !kIsWeb && (Platform.isIOS || Platform.isMacOS);
+  /// Sign in with Apple: the system sheet on Apple platforms, an OAuth
+  /// redirect on the web.
+  bool get _appleAvailable => kIsWeb || Platform.isIOS || Platform.isMacOS;
 
   @override
   Widget build(BuildContext context) {
@@ -277,6 +354,118 @@ class _AppleButton extends StatelessWidget {
               Text('Continue with Apple', style: TextStyle(color: fg, fontWeight: FontWeight.w600, fontSize: 15)),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+
+/// Landing page of the web OAuth redirect (`/auth/callback`). Turns the
+/// returned token into a session, merges the guest save parked before the
+/// redirect, and goes home. A `user_already_exists` failure on the first
+/// attempt means the Apple ID belongs to another account: the guest session
+/// is dropped and the redirect runs once more to sign into that account.
+class AuthCallbackScreen extends ConsumerStatefulWidget {
+  const AuthCallbackScreen({super.key, required this.query});
+  final Map<String, String> query;
+  @override
+  ConsumerState<AuthCallbackScreen> createState() => _AuthCallbackScreenState();
+}
+
+class _AuthCallbackScreenState extends ConsumerState<AuthCallbackScreen> {
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _run());
+  }
+
+  void _invalidate() {
+    ref.invalidate(profileProvider);
+    ref.invalidate(progressProvider);
+    ref.invalidate(friendsProvider);
+    ref.invalidate(myPuzzlesProvider);
+  }
+
+  Future<void> _run() async {
+    final merge = ref.read(saveMergeProvider);
+    final auth = ref.read(authProvider.notifier);
+    final repo = ref.read(authRepositoryProvider);
+    final pending = merge.pending();
+    try {
+      if (widget.query.containsKey('error')) {
+        if (kIsWeb && pending != null && pending.attempt == 1) {
+          await repo.signOut();
+          await merge.storePending(pending.snapshot, attempt: 2);
+          final urls = oauthCallbackUrls();
+          repo.signInWithOAuthRedirect(provider: enums.OAuthProvider.apple, success: urls.success, failure: urls.failure);
+          return;
+        }
+        await merge.clearPending();
+        await auth.refresh();
+        if (mounted) setState(() => _error = 'Sign in with Apple did not complete. Please try again.');
+        return;
+      }
+      final userId = widget.query['userId'], secret = widget.query['secret'];
+      final user = userId != null && secret != null ? await auth.signInWithToken(userId: userId, secret: secret) : await auth.refresh();
+      if (user == null) {
+        await merge.clearPending();
+        if (mounted) setState(() => _error = 'Could not reach the game server. Please try again.');
+        return;
+      }
+      MergeOutcome? outcome;
+      if (pending != null) {
+        outcome = await merge.mergeInto(
+          user.$id,
+          pending.snapshot,
+          ask: (g, a) => mounted ? showMergeSheet(context, device: g, account: a) : Future.value(MergeChoice.account),
+        );
+      }
+      await merge.clearPending();
+      _invalidate();
+      if (!ref.read(settingsProvider).onboarded) ref.read(settingsProvider.notifier).setOnboarded();
+      if (!mounted) return;
+      showToast(context, mergeMessage(outcome, signedIn: 'Signed in with Apple. Your progress is saved.'), icon: AppIcons.check);
+      context.go('/home');
+    } on AppwriteException catch (e) {
+      await merge.clearPending();
+      if (mounted) setState(() => _error = e.message ?? 'Sign in failed. Please try again.');
+    } catch (e) {
+      await merge.clearPending();
+      if (mounted) setState(() => _error = e.toString());
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return Scaffold(
+      backgroundColor: c.canvas,
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: _error == null
+              ? Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Loader(),
+                    const SizedBox(height: 14),
+                    Text('Signing you in', style: TextStyle(color: c.textSecondary, fontWeight: FontWeight.w500)),
+                  ],
+                )
+              : ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 360),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(_error!, textAlign: TextAlign.center, style: TextStyle(color: c.textPrimary, height: 1.4)),
+                      const SizedBox(height: 18),
+                      BigButton(label: 'Back to the game', onTap: () => context.go('/home')),
+                    ],
+                  ),
+                ),
         ),
       ),
     );

@@ -51,3 +51,26 @@ See `docs/release-flow.md`: `tools/dev/device.sh` for the phone, `tools/dev/rele
 ## After approval
 
 - **VIP gift codes**: Apple only lets us mint offer codes once the app is live and the subscriptions are approved. Run `tools/store/offer_codes.py codes monthly 10` and `codes yearly 10` then (see `tools/store/README.md`). The offers themselves already exist.
+
+## Sign in with Apple in the browser (web build)
+
+Native sign-in needs no secrets, but the web build uses Apple's redirect flow,
+which Appwrite calls "Browser sign-in". Apple only lets these be created in
+the developer portal (no API), so three manual steps:
+
+1. developer.apple.com > Certificates, Identifiers & Profiles > Identifiers >
+   **+** > Services IDs. Identifier `com.matejbaco.cardjigsawworld.signin`,
+   description "Card Jigsaw World Web". Enable **Sign in with Apple**,
+   Configure: primary App ID `com.matejbaco.cardjigsawworld`, domain
+   `fra.cloud.appwrite.io`, return URL
+   `https://fra.cloud.appwrite.io/v1/account/sessions/oauth2/callback/apple/6acb4de5003e38d5ebd9`.
+2. Keys > **+** > name "Card Jigsaw World Sign in with Apple", tick Sign in
+   with Apple, configure with the same primary App ID, register, download the
+   `.p8` once. Note the Key ID.
+3. Send the Services ID, Key ID and the `.p8` file (team id is `C24QP73SQM`);
+   it gets stored in `secrets/` and the Apple provider is switched to
+   "Browser sign-in" enabled with `asc_publish.py`'s sibling command or the
+   Appwrite console (Auth > Social providers > Apple).
+
+Until then the web build shows the Apple button but the redirect fails with
+`project_provider_disabled`; email sign-in works.

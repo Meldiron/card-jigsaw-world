@@ -236,41 +236,54 @@ class _CoinPainter extends CustomPainter {
 
 /// Teal admission ticket with notched sides.
 class TicketIcon extends StatelessWidget {
-  const TicketIcon({super.key, this.size = 18});
+  const TicketIcon({super.key, this.size = 18, this.mono = false});
   final double size;
+  /// White silhouette for accent-coloured buttons.
+  final bool mono;
   @override
-  Widget build(BuildContext context) => CustomPaint(size: Size(size * 1.25, size), painter: _TicketPainter());
+  Widget build(BuildContext context) => CustomPaint(size: Size(size * 0.8, size), painter: _TicketPainter(mono));
 }
 
+/// Upright pass with notches top and bottom, a star and a short tear line.
 class _TicketPainter extends CustomPainter {
+  _TicketPainter(this.mono);
+  final bool mono;
+
   @override
   void paint(Canvas canvas, Size size) {
     final w = size.width, h = size.height;
-    final rect = RRect.fromRectAndRadius(Rect.fromLTWH(0, h * 0.14, w, h * 0.72), Radius.circular(h * 0.16));
-    final notch = h * 0.16;
-    final body = Path()..addRRect(rect);
+    final r = Rect.fromLTWH(w * 0.08, h * 0.06, w * 0.84, h * 0.88);
+    final body = Path()..addRRect(RRect.fromRectAndRadius(r, Radius.circular(r.width * 0.22)));
+    final n = r.width * 0.2;
     final holes = Path()
-      ..addOval(Rect.fromCircle(center: Offset(0, h / 2), radius: notch))
-      ..addOval(Rect.fromCircle(center: Offset(w, h / 2), radius: notch));
+      ..addOval(Rect.fromCircle(center: Offset(r.center.dx, r.top), radius: n))
+      ..addOval(Rect.fromCircle(center: Offset(r.center.dx, r.bottom), radius: n));
     final shape = Path.combine(PathOperation.difference, body, holes);
-    canvas.drawPath(
-      shape,
-      Paint()..shader = const LinearGradient(colors: [Color(0xFF34D3C4), Color(0xFF1E9E93)], begin: Alignment.topLeft, end: Alignment.bottomRight).createShader(Offset.zero & size),
-    );
-    // Perforation line
-    final dash = Paint()
-      ..color = Colors.white.withValues(alpha: 0.85)
-      ..strokeWidth = math.max(1, h * 0.08);
-    final x = w * 0.66;
-    for (var y = h * 0.24; y < h * 0.82; y += h * 0.16) {
-      canvas.drawLine(Offset(x, y), Offset(x, y + h * 0.08), dash);
+    canvas.drawPath(shape, Paint()..color = mono ? Colors.white : Brand.ticket);
+    final ink = mono ? const Color(0xFF0F766E) : Colors.white;
+    canvas.drawPath(_star(Offset(w / 2, h * 0.44), w * 0.24), Paint()..color = ink);
+    final line = Paint()
+      ..color = ink.withValues(alpha: mono ? 0.55 : 0.85)
+      ..strokeWidth = math.max(1, h * 0.05)
+      ..strokeCap = StrokeCap.round;
+    for (var x = w * 0.26; x < w * 0.78; x += w * 0.16) {
+      canvas.drawLine(Offset(x, h * 0.72), Offset(x + w * 0.08, h * 0.72), line);
     }
-    canvas.drawRRect(RRect.fromRectAndRadius(Rect.fromLTWH(w * 0.16, h * 0.36, w * 0.36, h * 0.1), Radius.circular(h * 0.05)), Paint()..color = Colors.white.withValues(alpha: 0.9));
-    canvas.drawRRect(RRect.fromRectAndRadius(Rect.fromLTWH(w * 0.16, h * 0.54, w * 0.26, h * 0.1), Radius.circular(h * 0.05)), Paint()..color = Colors.white.withValues(alpha: 0.6));
+  }
+
+  Path _star(Offset c, double r) {
+    final p = Path();
+    for (var i = 0; i < 10; i++) {
+      final a = -math.pi / 2 + i * math.pi / 5;
+      final rr = i.isEven ? r : r * 0.45;
+      final o = Offset(c.dx + rr * math.cos(a), c.dy + rr * math.sin(a));
+      i == 0 ? p.moveTo(o.dx, o.dy) : p.lineTo(o.dx, o.dy);
+    }
+    return p..close();
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter o) => false;
+  bool shouldRepaint(covariant _TicketPainter o) => o.mono != mono;
 }
 
 /// Amber bulb mark for hints.
@@ -286,9 +299,11 @@ class HintIcon extends StatelessWidget {
       );
 }
 
-Widget currencyIcon(Currency c, {double size = 18}) => switch (c) {
+/// [mono] draws the ticket as a white silhouette for accent buttons; coins
+/// and hints keep their own colours, which already read well on the accent.
+Widget currencyIcon(Currency c, {double size = 18, bool mono = false}) => switch (c) {
       Currency.coins => CoinIcon(size: size),
-      Currency.tickets => TicketIcon(size: size),
+      Currency.tickets => TicketIcon(size: size, mono: mono),
       Currency.hints => HintIcon(size: size),
     };
 

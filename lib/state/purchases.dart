@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
 import '../core/appwrite.dart';
+import '../core/platform.dart';
 import '../data/purchases.dart';
 
 final purchaseServiceProvider = Provider<PurchaseService>((ref) {
@@ -13,6 +14,7 @@ final purchaseServiceProvider = Provider<PurchaseService>((ref) {
 /// Whether the platform store can be used (false on simulators without a
 /// StoreKit configuration, and on web).
 final storeAvailableProvider = FutureProvider<bool>((ref) async {
+  if (!supportsPurchases) return false;
   final service = ref.watch(purchaseServiceProvider);
   await service.start();
   return service.isAvailable();

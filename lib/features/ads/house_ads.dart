@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/haptics.dart';
+import '../../core/platform.dart';
 import '../../core/sfx.dart';
 import '../../core/theme/tokens.dart';
 import '../../models/models.dart';
@@ -34,16 +35,16 @@ class HouseAdPolicy {
   static const rewardedDuration = Duration(seconds: 15);
 
   /// Interstitial close button appears after this delay (industry norm 3–5 s).
-  static const interstitialCloseDelay = Duration(seconds: 5);
+  static const interstitialCloseDelay = Duration(seconds: 3);
 
   /// Interstitial cadence (Gamigion / AdReact norms, tuned down because a
   /// self-promo earns nothing per impression): every Nth completion AND at
   /// least [minGap] apart, at most [maxPerSession] per app session, never in
   /// the first few puzzles of a player's life, and not within
   /// [rewardedShield] of a rewarded view.
-  static const everyNthCompletion = 4;
-  static const minGap = Duration(minutes: 4);
-  static const maxPerSession = 3;
+  static const everyNthCompletion = 6;
+  static const minGap = Duration(minutes: 6);
+  static const maxPerSession = 2;
   static const skipFirstCompletions = 3;
   static const rewardedShield = Duration(minutes: 10);
 
@@ -79,6 +80,22 @@ class Creative {
   final String cta;
   final String route;
   final String? price;
+
+  /// The CTA opens the store to buy something. On web, where nothing can be
+  /// bought, these CTAs show the "available on iPhone" toast instead.
+  bool get sellsPurchase => route == '/store';
+}
+
+/// Runs a creative's CTA: opens its route, or on web, when it leads to a
+/// purchase, shows the "available on iPhone" toast. Returns true when the
+/// route was opened.
+bool openCreative(BuildContext context, WidgetRef ref, Creative creative) {
+  if (creative.sellsPurchase && !ref.read(platformCapsProvider).purchases) {
+    showToast(context, purchasesOnIphoneMessage, icon: CupertinoIcons.device_phone_portrait);
+    return false;
+  }
+  context.push(creative.route);
+  return true;
 }
 
 const _creatives = <Creative>[
@@ -243,7 +260,7 @@ class _HouseAdScreenState extends ConsumerState<HouseAdScreen> {
   void _cta() {
     // Tapping the offer counts as a completed view.
     Navigator.of(context).pop(widget.rewarded ? true : null);
-    context.push(widget.creative.route);
+    openCreative(context, ref, widget.creative);
   }
 
   @override
@@ -466,7 +483,7 @@ class _HouseBannerState extends ConsumerState<HouseBanner> {
               ),
             ),
             const SizedBox(width: 8),
-            BigButton(label: 'Go VIP', kind: ButtonKind.gold, height: 36, expand: false, onTap: () => context.push(c.route)),
+            BigButton(label: 'Go VIP', kind: ButtonKind.gold, height: 36, expand: false, onTap: () => openCreative(context, ref, c)),
             const SizedBox(width: 4),
             Pressable(
               onTap: () => setState(() => _dismissedThisSession = true),
