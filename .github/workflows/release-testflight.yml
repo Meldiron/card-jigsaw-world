@@ -79,7 +79,7 @@ jobs:
           ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
           ASC_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
         run: |
-          python3 -m pip install -q --user pyjwt cryptography
+          python3 -m pip install -q --user --break-system-packages pyjwt cryptography
           ASC_KEY_PATH=~/private_keys/AuthKey_${ASC_KEY_ID}.p8 python3 tools/store/install_profiles.py
           python3 tools/store/ci_manual_signing.py
 
