@@ -102,7 +102,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
               trailing: Amount(currency: Currency.coins, value: cost, size: 18, color: Colors.white),
               onTap: () async {
                 final ok = await ref.read(profileProvider.notifier).unlockTier(_mode, tierIndex);
-                if (!ctx.mounted) return;
+                if (!ctx.mounted || !mounted) return;
                 Navigator.pop(ctx);
                 if (ok) {
                   Sfx.instance.coin();
@@ -252,7 +252,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                               scrollDirection: Axis.horizontal,
                               physics: const BouncingScrollPhysics(),
                               itemCount: tiers.length,
-                              separatorBuilder: (_, __) => const SizedBox(width: 8),
+                              separatorBuilder: (_, _) => const SizedBox(width: 8),
                               itemBuilder: (_, i) {
                                 final t = tiers[i];
                                 final selected = t == _spec;

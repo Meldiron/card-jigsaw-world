@@ -5,7 +5,10 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/theme/tokens.dart';
 import '../../state/auth.dart';
+import '../../state/profile.dart';
+import '../../state/purchases.dart';
 import '../../state/settings.dart';
+import '../../data/purchases.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 
@@ -71,12 +74,32 @@ class SettingsScreen extends ConsumerWidget {
           ]),
           group('Account', [
             _NavRow(icon: CupertinoIcons.person_crop_circle, label: isGuest ? 'Sign in or create account' : 'Manage account', onTap: () => context.push('/account')),
-            _NavRow(icon: CupertinoIcons.bag, label: 'Restore purchases', onTap: () => showToast(context, 'No purchases to restore yet', icon: AppIcons.receipt)),
+            _NavRow(
+              icon: CupertinoIcons.bag,
+              label: 'Restore purchases',
+              onTap: () async {
+                showToast(context, 'Restoring purchases…', icon: AppIcons.receipt);
+                final service = ref.read(purchaseServiceProvider);
+                await service.start();
+                final sub = service.events.listen((e) {
+                  if (!context.mounted) return;
+                  if (e is RestoreFinished) {
+                    ref.read(profileProvider.notifier).refresh();
+                    showToast(context, e.count > 0 ? 'Purchases restored' : 'No purchases to restore', icon: AppIcons.receipt);
+                  } else if (e is PurchaseFailed) {
+                    showToast(context, e.message, icon: AppIcons.receipt);
+                  }
+                });
+                await service.restorePurchases();
+                await Future.delayed(const Duration(seconds: 1));
+                await sub.cancel();
+              },
+            ),
           ]),
           group('About', [
             _NavRow(icon: CupertinoIcons.doc_text, label: 'Image credits and licences', onTap: () => _showCredits(context)),
             _NavRow(icon: CupertinoIcons.question_circle, label: 'Support', onTap: () => showToast(context, 'support@almostapps.io', icon: AppIcons.mail)),
-            const _InfoRow(label: 'Version', value: '1.5.0 (8)'),
+            const _InfoRow(label: 'Version', value: '1.6.0 (9)'),
           ]),
         ],
       ),

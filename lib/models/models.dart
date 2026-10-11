@@ -42,7 +42,9 @@ class Profile {
     required this.puzzlesCompleted,
     required this.totalStars,
     this.country,
-    this.isVip = false,
+    bool isVip = false,
+    this.vipExpiresAt,
+    this.appleOriginalTransactionId,
     this.claimedGoals = const [],
     this.adsToday = 0,
     this.adsDate,
@@ -51,7 +53,7 @@ class Profile {
     this.longestStreak = 0,
     this.lastStreakRestore,
     this.claimedAchievements = const [],
-  });
+  }) : vipFlag = isVip;
 
   final String id;
   final String userId;
@@ -70,7 +72,14 @@ class Profile {
   final int puzzlesCompleted;
   final int totalStars;
   final String? country;
-  final bool isVip;
+  /// Manually set VIP flag (debug sandbox / console). Real subscriptions set
+  /// [vipExpiresAt] through the verify-purchase function.
+  final bool vipFlag;
+  final DateTime? vipExpiresAt;
+  final String? appleOriginalTransactionId;
+
+  /// VIP is active while the flag is set or the subscription has not expired.
+  bool get isVip => vipFlag || (vipExpiresAt != null && vipExpiresAt!.isAfter(DateTime.now()));
   final List<String> claimedGoals;
   final int adsToday;
   final DateTime? adsDate;
@@ -112,6 +121,8 @@ class Profile {
         totalStars: _i(d['totalStars']),
         country: d['country']?.toString(),
         isVip: _b(d['isVip']),
+        vipExpiresAt: _dt(d['vipExpiresAt']),
+        appleOriginalTransactionId: d['appleOriginalTransactionId']?.toString(),
         claimedGoals: List<String>.from(d['claimedGoals'] ?? const []),
         adsToday: _i(d['adsToday']),
         adsDate: _dt(d['adsDate']),
@@ -158,7 +169,9 @@ class Profile {
         'puzzlesCompleted': puzzlesCompleted,
         'totalStars': totalStars,
         'country': country,
-        'isVip': isVip,
+        'isVip': vipFlag,
+        'vipExpiresAt': vipExpiresAt?.toUtc().toIso8601String(),
+        'appleOriginalTransactionId': appleOriginalTransactionId,
         'claimedGoals': claimedGoals,
         'adsToday': adsToday,
         'adsDate': adsDate?.toUtc().toIso8601String(),
@@ -205,7 +218,9 @@ class Profile {
         puzzlesCompleted: puzzlesCompleted ?? this.puzzlesCompleted,
         totalStars: totalStars ?? this.totalStars,
         country: country,
-        isVip: isVip,
+        isVip: vipFlag,
+        vipExpiresAt: vipExpiresAt,
+        appleOriginalTransactionId: appleOriginalTransactionId,
         claimedGoals: claimedGoals,
         adsToday: adsToday,
         adsDate: adsDate,

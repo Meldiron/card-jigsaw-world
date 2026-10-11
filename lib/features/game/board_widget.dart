@@ -313,7 +313,7 @@ class _CardFace extends StatelessWidget {
       tween: Tween(end: locked ? 1 : 0),
       duration: const Duration(milliseconds: 420),
       curve: Curves.easeOutCubic,
-      builder: (_, lockT, __) {
+      builder: (_, lockT, _) {
         final inset = gap / 2 * (1 - lockT);
         final r = radius * (1 - lockT);
         return CustomPaint(
@@ -595,7 +595,7 @@ class _PulseRingState extends State<_PulseRing> with SingleTickerProviderStateMi
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _c,
-      builder: (_, __) => CustomPaint(painter: _PulsePainter(polygon: widget.polygon, color: widget.color, t: _c.value)),
+      builder: (_, _) => CustomPaint(painter: _PulsePainter(polygon: widget.polygon, color: widget.color, t: _c.value)),
     );
   }
 }

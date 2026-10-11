@@ -161,7 +161,7 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
                         ),
                         AnimatedBuilder(
                           animation: _c,
-                          builder: (_, __) => Transform.rotate(
+                          builder: (_, _) => Transform.rotate(
                             angle: _angle,
                             child: CustomPaint(size: Size.square(size), painter: _WheelPainter(dark: context.isDark, ring: c.card, tick: c.stroke)),
                           ),

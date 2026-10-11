@@ -1,5 +1,4 @@
 import '../game/board.dart';
-import '../game/modes.dart';
 import '../models/models.dart';
 
 /// Rewards granted when a level is reached, and the goal definitions.

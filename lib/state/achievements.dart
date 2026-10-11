@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../game/board.dart';
-import '../game/modes.dart';
 import '../models/models.dart';
 import '../widgets/icons.dart';
 import 'profile.dart';
@@ -36,7 +35,7 @@ class AchievementFamily {
   /// Description for a step, given its threshold.
   final String Function(int threshold) describe;
   final List<AchievementStep> steps;
-  final int Function(_Facts f) progress;
+  final int Function(AchievementFacts f) progress;
 }
 
 class AchievementStatus {
@@ -56,8 +55,8 @@ class AchievementStatus {
 }
 
 /// Derived numbers every family reads from.
-class _Facts {
-  _Facts(this.profile, this.done, this.friends);
+class AchievementFacts {
+  AchievementFacts(this.profile, this.done, this.friends);
   final Profile profile;
   final List<PuzzleProgress> done;
   final int friends;
@@ -123,7 +122,7 @@ final achievementsProvider = Provider<List<AchievementStatus>>((ref) {
   final profile = ref.watch(profileProvider).value ?? Profile.guest('local');
   final progress = ref.watch(progressProvider).value ?? const <String, PuzzleProgress>{};
   final friends = ref.watch(friendsProvider).value?.length ?? 0;
-  final facts = _Facts(profile, progress.values.where((p) => p.completed).toList(), friends);
+  final facts = AchievementFacts(profile, progress.values.where((p) => p.completed).toList(), friends);
   return [
     for (final f in achievementFamilies)
       () {

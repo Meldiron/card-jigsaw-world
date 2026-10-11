@@ -278,7 +278,7 @@ class AnimatedCounter extends StatelessWidget {
       tween: Tween(end: value.toDouble()),
       duration: const Duration(milliseconds: 600),
       curve: Curves.easeOutCubic,
-      builder: (_, v, __) => Text(_fmt(v.round()), style: style),
+      builder: (_, v, _) => Text(_fmt(v.round()), style: style),
     );
   }
 
@@ -390,8 +390,8 @@ class NetImage extends StatelessWidget {
             height: height,
             alignment: alignment,
             fadeInDuration: const Duration(milliseconds: 250),
-            placeholder: (_, __) => blurhash != null && blurhash!.length >= 6 ? BlurHash(hash: blurhash!, color: c.boardBackground) : const _Shimmer(),
-            errorWidget: (_, __, ___) => blurhash != null && blurhash!.length >= 6
+            placeholder: (_, _) => blurhash != null && blurhash!.length >= 6 ? BlurHash(hash: blurhash!, color: c.boardBackground) : const _Shimmer(),
+            errorWidget: (_, _, _) => blurhash != null && blurhash!.length >= 6
                 ? BlurHash(hash: blurhash!, color: c.boardBackground)
                 : Container(color: c.boardBackground, child: Icon(CupertinoIcons.photo, color: c.textTertiary)),
           );
@@ -419,7 +419,7 @@ class _ShimmerState extends State<_Shimmer> with SingleTickerProviderStateMixin 
     final c = context.colors;
     return AnimatedBuilder(
       animation: _c,
-      builder: (_, __) => DecoratedBox(
+      builder: (_, _) => DecoratedBox(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment(-1 + _c.value * 3, 0),
@@ -473,7 +473,7 @@ class ProgressBar extends StatelessWidget {
               tween: Tween(end: value.clamp(0, 1)),
               duration: const Duration(milliseconds: 700),
               curve: Curves.easeOutCubic,
-              builder: (_, v, __) => FractionallySizedBox(
+              builder: (_, v, _) => FractionallySizedBox(
                 widthFactor: v,
                 alignment: Alignment.centerLeft,
                 child: Container(decoration: BoxDecoration(color: fill, borderRadius: BorderRadius.circular(height))),

@@ -87,6 +87,6 @@ Page<T> _fade<T>(Widget child, GoRouterState s) => CustomTransitionPage<T>(
       key: s.pageKey,
       child: child,
       transitionDuration: const Duration(milliseconds: 320),
-      transitionsBuilder: (_, a, __, c) => FadeTransition(opacity: CurveTween(curve: Curves.easeOut).animate(a), child: c),
+      transitionsBuilder: (_, a, _, c) => FadeTransition(opacity: CurveTween(curve: Curves.easeOut).animate(a), child: c),
     );
 Page<T> _sheet<T>(Widget child, GoRouterState s) => CupertinoPage<T>(key: s.pageKey, child: child, fullscreenDialog: true);

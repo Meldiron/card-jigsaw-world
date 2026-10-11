@@ -153,8 +153,8 @@ Future<void> maybeShowInterstitial(BuildContext context, WidgetRef ref) async {
       opaque: true,
       fullscreenDialog: true,
       transitionDuration: const Duration(milliseconds: 260),
-      pageBuilder: (_, __, ___) => HouseAdScreen(creative: creative, coverUrl: cover, rewarded: false),
-      transitionsBuilder: (_, a, __, child) => FadeTransition(opacity: a, child: child),
+      pageBuilder: (_, _, _) => HouseAdScreen(creative: creative, coverUrl: cover, rewarded: false),
+      transitionsBuilder: (_, a, _, child) => FadeTransition(opacity: a, child: child),
     ),
   );
 }
@@ -168,8 +168,8 @@ Future<bool> showRewardedHouseAd(BuildContext context, WidgetRef ref, {required 
       opaque: true,
       fullscreenDialog: true,
       transitionDuration: const Duration(milliseconds: 260),
-      pageBuilder: (_, __, ___) => HouseAdScreen(creative: creative, coverUrl: cover, rewarded: true, rewardCoins: rewardCoins),
-      transitionsBuilder: (_, a, __, child) => FadeTransition(opacity: a, child: child),
+      pageBuilder: (_, _, _) => HouseAdScreen(creative: creative, coverUrl: cover, rewarded: true, rewardCoins: rewardCoins),
+      transitionsBuilder: (_, a, _, child) => FadeTransition(opacity: a, child: child),
     ),
   );
   if (result == true) ref.read(localStoreProvider).lastRewardedAt = DateTime.now();
@@ -370,7 +370,7 @@ class _CountdownChip extends StatelessWidget {
                     TweenAnimationBuilder<double>(
                       tween: Tween(end: progress),
                       duration: const Duration(milliseconds: 900),
-                      builder: (_, v, __) => CircularProgressIndicator(value: v, strokeWidth: 2.5, color: Colors.white, backgroundColor: Colors.white24),
+                      builder: (_, v, _) => CircularProgressIndicator(value: v, strokeWidth: 2.5, color: Colors.white, backgroundColor: Colors.white24),
                     ),
                   Icon(done ? Icons.close_rounded : null, size: 16, color: Colors.white),
                   if (!done) Text('$left', style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w700)),

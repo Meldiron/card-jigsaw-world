@@ -86,7 +86,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
                     padding: const EdgeInsets.fromLTRB(20, 12, 20, 6),
                     physics: const BouncingScrollPhysics(),
                     itemCount: categories.length,
-                    separatorBuilder: (_, __) => const SizedBox(width: 8),
+                    separatorBuilder: (_, _) => const SizedBox(width: 8),
                     itemBuilder: (_, i) {
                       final cat = categories[i];
                       final selected = cat == _filter;

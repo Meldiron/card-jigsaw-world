@@ -143,7 +143,7 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
   }
 
   Future<void> setIdentity({String? name, String? avatar}) =>
-      _apply({if (name != null) 'displayName': name, if (avatar != null) 'avatar': avatar});
+      _apply({'displayName': ?name, 'avatar': ?avatar});
 
   Future<bool> unlockPack(Pack pack) async {
     if (_p.unlockedPacks.contains(pack.id)) return true;
@@ -168,6 +168,8 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
     return _p.isVip || pack.isCurrentMonth || pack.isFree || (pack.priceCoins == 0 && pack.priceTickets == 0) || _p.unlockedPacks.contains(pack.id);
   }
 
+  /// Debug-only sandbox toggle. Real VIP comes from verified App Store
+  /// subscriptions (`vipExpiresAt`), applied by the verify-purchase function.
   Future<void> setVip(bool vip) => _apply({'isVip': vip});
 
   /// Records a rewarded video. Returns false when today's allowance is used up.

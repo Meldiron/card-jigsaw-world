@@ -1,0 +1,196 @@
+{
+  "identifier": "EE62BB0E-65CA-4FDE-935C-4B8F269B0AE0",
+  "nonRenewingSubscriptions": [],
+  "products": [
+    {
+      "displayPrice": "0.99",
+      "familyShareable": false,
+      "internalID": "5599CB30-5F0B-4D54-B4B1-75EDC8AD59A8",
+      "localizations": [
+        {
+          "description": "1,000 coins",
+          "displayName": "1,000 coins",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "coins_1000",
+      "referenceName": "1,000 coins",
+      "type": "Consumable"
+    },
+    {
+      "displayPrice": "2.99",
+      "familyShareable": false,
+      "internalID": "F49D37BD-1F5F-4A33-B58A-CBA25BAFF767",
+      "localizations": [
+        {
+          "description": "3,000 coins",
+          "displayName": "3,000 coins",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "coins_3000",
+      "referenceName": "3,000 coins",
+      "type": "Consumable"
+    },
+    {
+      "displayPrice": "4.99",
+      "familyShareable": false,
+      "internalID": "1E4B888F-71DF-42D0-B1C0-3480AF0A83BC",
+      "localizations": [
+        {
+          "description": "5,500 coins",
+          "displayName": "5,500 coins",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "coins_5500",
+      "referenceName": "5,500 coins",
+      "type": "Consumable"
+    },
+    {
+      "displayPrice": "9.99",
+      "familyShareable": false,
+      "internalID": "512C3901-E2BE-4542-82BC-C9ED5989F44E",
+      "localizations": [
+        {
+          "description": "12,000 coins",
+          "displayName": "12,000 coins",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "coins_12000",
+      "referenceName": "12,000 coins",
+      "type": "Consumable"
+    },
+    {
+      "displayPrice": "1.99",
+      "familyShareable": false,
+      "internalID": "9E53E6C3-28A7-484F-BDC8-EC0113A9B943",
+      "localizations": [
+        {
+          "description": "5 tickets",
+          "displayName": "5 tickets",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "tickets_5",
+      "referenceName": "5 tickets",
+      "type": "Consumable"
+    },
+    {
+      "displayPrice": "4.99",
+      "familyShareable": false,
+      "internalID": "4DB22042-57BE-49C5-A194-31C5A276EC2C",
+      "localizations": [
+        {
+          "description": "15 tickets",
+          "displayName": "15 tickets",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "tickets_15",
+      "referenceName": "15 tickets",
+      "type": "Consumable"
+    },
+    {
+      "displayPrice": "0.99",
+      "familyShareable": false,
+      "internalID": "70399064-9614-4E2C-AC66-3BFFF1E3F249",
+      "localizations": [
+        {
+          "description": "5 hints",
+          "displayName": "5 hints",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "hints_5",
+      "referenceName": "5 hints",
+      "type": "Consumable"
+    },
+    {
+      "displayPrice": "2.49",
+      "familyShareable": false,
+      "internalID": "891385AC-4ADE-45A8-9608-FA718722C93F",
+      "localizations": [
+        {
+          "description": "15 hints",
+          "displayName": "15 hints",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "hints_15",
+      "referenceName": "15 hints",
+      "type": "Consumable"
+    }
+  ],
+  "settings": {
+    "_applicationInternalID": "",
+    "_developerTeamID": "C24QP73SQM",
+    "_failTransactionsEnabled": false,
+    "_lastSynchronizedDate": 0,
+    "_locale": "en_US",
+    "_storefront": "USA",
+    "_storeKitErrors": []
+  },
+  "subscriptionGroups": [
+    {
+      "id": "2082C419-E6D7-4BA1-859E-86ECB73980C0",
+      "localizations": [],
+      "name": "VIP",
+      "subscriptions": [
+        {
+          "adHocOffers": [],
+          "codeOffers": [],
+          "displayPrice": "4.99",
+          "familyShareable": false,
+          "groupNumber": 1,
+          "internalID": "7C4D6C90-AD1B-4DB2-AAD1-3C7AEB09F256",
+          "introductoryOffer": {
+            "internalID": "CA2E06BF-3C80-479C-AD15-951DD95117DF",
+            "paymentMode": "free",
+            "subscriptionPeriod": "P1W"
+          },
+          "localizations": [
+            {
+              "description": "Every pack unlocked, no interruptions",
+              "displayName": "VIP Monthly",
+              "locale": "en_US"
+            }
+          ],
+          "productID": "vip_monthly",
+          "recurringSubscriptionPeriod": "P1M",
+          "referenceName": "VIP Monthly",
+          "subscriptionGroupID": "2082C419-E6D7-4BA1-859E-86ECB73980C0",
+          "type": "RecurringSubscription",
+          "winbackOffers": []
+        },
+        {
+          "adHocOffers": [],
+          "codeOffers": [],
+          "displayPrice": "39.99",
+          "familyShareable": false,
+          "groupNumber": 2,
+          "internalID": "FE223D8E-B03A-4F98-89CE-D5FD0FF0CE79",
+          "introductoryOffer": null,
+          "localizations": [
+            {
+              "description": "Every pack unlocked, no interruptions",
+              "displayName": "VIP Yearly",
+              "locale": "en_US"
+            }
+          ],
+          "productID": "vip_yearly",
+          "recurringSubscriptionPeriod": "P1Y",
+          "referenceName": "VIP Yearly",
+          "subscriptionGroupID": "2082C419-E6D7-4BA1-859E-86ECB73980C0",
+          "type": "RecurringSubscription",
+          "winbackOffers": []
+        }
+      ]
+    }
+  ],
+  "version": {
+    "major": 4,
+    "minor": 0
+  }
+}
