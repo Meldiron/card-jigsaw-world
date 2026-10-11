@@ -366,7 +366,7 @@ class _VipCard extends StatelessWidget {
             const SizedBox(height: 6),
             Text('7 days free, then $monthlyPrice/month', style: TextStyle(color: fg.withValues(alpha: 0.7), fontSize: 12)),
             const SizedBox(height: 10),
-            BigButton(label: 'Yearly · $yearlyPrice · 7 days free', kind: ButtonKind.ghost, loading: busy, onTap: onBuyYearly),
+            BigButton(label: 'Yearly · $yearlyPrice · 7 days free', kind: ButtonKind.ghostLight, loading: busy, onTap: onBuyYearly),
           ],
         ],
       ),

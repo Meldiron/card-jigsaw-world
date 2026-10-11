@@ -96,7 +96,7 @@ class SoftCard extends StatelessWidget {
   }
 }
 
-enum ButtonKind { primary, secondary, ghost, coral, gold, teal, dark }
+enum ButtonKind { primary, secondary, ghost, ghostLight, coral, gold, teal, dark }
 
 /// The CTA button. Solid fills, no gradients.
 class BigButton extends StatelessWidget {
@@ -146,6 +146,11 @@ class BigButton extends StatelessWidget {
         bg = Colors.transparent;
         fg = c.textPrimary;
         border = Border.all(color: c.stroke);
+      case ButtonKind.ghostLight:
+        // For always-dark surfaces such as the VIP card.
+        bg = Colors.transparent;
+        fg = Colors.white;
+        border = Border.all(color: Colors.white.withValues(alpha: 0.45));
     }
     final content = Row(
       mainAxisSize: expand ? MainAxisSize.max : MainAxisSize.min,
