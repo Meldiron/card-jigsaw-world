@@ -1012,7 +1012,8 @@ def cmd_audit(s: Store) -> int:
 
     info = s.app_info()
     rels = info.get("relationships") or {}
-    ok_if(((rels.get("primaryCategory") or {}).get("data")), "primary category")
+    primary = ((rels.get("primaryCategory") or {}).get("data")) or s.c.get_one(f"/v1/appInfos/{info['id']}/primaryCategory")
+    ok_if(primary, "primary category", primary["id"] if primary else None)
     locs = s.c.get_list(f"/v1/appInfos/{info['id']}/appInfoLocalizations")
     loc = next((l for l in locs if attr(l, "locale") == LOCALE), None)
     ok_if(loc and attr(loc, "name"), f"app name ({LOCALE})")
@@ -1044,8 +1045,9 @@ def cmd_audit(s: Store) -> int:
             for key in ("contactFirstName", "contactLastName", "contactPhone", "contactEmail"):
                 ok_if(attr(detail, key), f"  {key}")
             row("OK" if attr(detail, "notes") else "N/A", "  review notes (optional)")
-        build_rel = ((version.get("relationships") or {}).get("build") or {}).get("data")
-        ok_if(build_rel, "build attached to the version", "select a build in App Store Connect or PATCH appStoreVersions/{id}/relationships/build")
+        build_rel = ((version.get("relationships") or {}).get("build") or {}).get("data") or s.c.get_one(f"/v1/appStoreVersions/{version['id']}/build")
+        ok_if(build_rel, "build attached to the version",
+              f"build {attr(build_rel, 'version')}" if build_rel and build_rel.get("attributes") else "select a build in App Store Connect or PATCH appStoreVersions/{id}/relationships/build")
 
     schedule = s.c.get_one(f"/v1/apps/{APP_ID}/appPriceSchedule")
     described = s.describe_price_schedule(schedule) if schedule and not s.c.dry_run else ""
