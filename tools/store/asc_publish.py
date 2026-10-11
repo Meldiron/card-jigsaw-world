@@ -948,6 +948,22 @@ def cmd_testflight(s: Store) -> None:
         log(f"  adding build to '{BETA_GROUP_NAME}'")
         s.c.request("POST", f"/v1/betaGroups/{group['id']}/relationships/builds", rel_many("builds", [bid]))
 
+    # External testers (the public link) can only install a build that has passed
+    # Beta App Review. Submit the build unless it already has a submission.
+    detail = s.c.get_one(f"/v1/builds/{bid}/buildBetaDetail")
+    ext_state = attr(detail, "externalBuildState") if detail else None
+    submission = s.c.get_one(f"/v1/builds/{bid}/betaAppReviewSubmission", allow_404=True)
+    if submission:
+        log(f"  beta app review: {attr(submission, 'betaReviewState')} (external state {ext_state})")
+    elif ext_state == "READY_FOR_BETA_SUBMISSION":
+        if s.c.dry_run:
+            log("  beta app review: would submit the build")
+        else:
+            r = s.c.create("betaAppReviewSubmissions", None, {"build": rel("builds", bid)})
+            log(f"  beta app review: submitted ({attr(r, 'betaReviewState')}); the public link works once Apple approves it")
+    else:
+        log(f"  beta app review: external state {ext_state}, nothing to submit")
+
 
 # ---------------------------------------------------------------------------
 # Read-only commands
