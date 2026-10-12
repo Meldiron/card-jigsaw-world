@@ -1,8 +1,8 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-12T15:07:38",
-"msg": "Content: checkpoint (168 verified, 3 fixed, 56 audited, 65 pending)",
+"at": "2026-10-12T15:13:28",
+"msg": "Content: checkpoint (171 verified, 5 fixed, 51 audited, 65 pending)",
 "ok": true,
 "pushed": true,
 "stage": "committed"
@@ -710,8 +710,8 @@
 },
 "daily-2025": {
 "added": 0,
-"at": "2026-10-12T15:08:36",
-"last_step": "pool 82 usable",
+"at": "2026-10-12T15:37:11",
+"last_step": "pool 77 usable",
 "puzzles": null,
 "removed": 0,
 "status": "pending"
@@ -849,15 +849,16 @@
 "status": "verified"
 },
 "daily-2025-12": {
-"added": 23,
-"at": "2026-10-12T15:09:58",
+"added": 27,
+"at": "2026-10-12T15:18:10",
 "category": "Daily",
+"issues": 0,
 "kind": "daily",
-"last_step": "apply",
+"last_step": "verify",
 "name": "December 2025",
 "puzzles": 31,
-"removed": 27,
-"status": "fixed"
+"removed": 31,
+"status": "verified"
 },
 "daily-2026-01": {
 "added": 0,
@@ -1081,13 +1082,14 @@
 },
 "evpack-book-day-2027": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T15:34:58",
 "category": "Event",
 "kind": "event",
+"last_step": "pool 59 usable",
 "name": "World Book Day",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "evpack-cat-day-2027": {
 "added": 0,
@@ -1246,15 +1248,16 @@
 "status": "pending"
 },
 "evpack-earth-day-2027": {
-"added": 21,
-"at": "2026-10-12T15:12:22",
+"added": 25,
+"at": "2026-10-12T15:14:35",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "reject 2 weak",
+"last_step": "verify",
 "name": "Earth Day",
 "puzzles": 21,
-"removed": 14,
-"status": "audited"
+"removed": 18,
+"status": "verified"
 },
 "evpack-easter-2027": {
 "added": 26,
@@ -1357,15 +1360,16 @@
 "status": "pending"
 },
 "evpack-fries-2027": {
-"added": 19,
-"at": "2026-10-12T15:13:09",
+"added": 21,
+"at": "2026-10-12T15:13:49",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "apply",
+"last_step": "verify",
 "name": "National French Fry Day",
 "puzzles": 24,
-"removed": 9,
-"status": "fixed"
+"removed": 11,
+"status": "verified"
 },
 "evpack-grandparents-2027": {
 "added": 0,
@@ -1557,13 +1561,14 @@
 },
 "evpack-moon-day-2027": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T15:14:26",
 "category": "Event",
 "kind": "event",
+"last_step": "reject 8 weak",
 "name": "Moon Day",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "evpack-mothers-day-2027": {
 "added": 0,
@@ -1601,34 +1606,38 @@
 },
 "evpack-new-year-2027": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T15:33:40",
 "category": "Event",
 "kind": "event",
+"last_step": "pool 17 usable",
 "name": "New Year's Day",
 "puzzles": null,
 "removed": 0,
 "status": "pending"
 },
 "evpack-new-years-eve-2026": {
-"added": 0,
-"at": "2026-10-12T15:05:34",
+"added": 23,
+"at": "2026-10-12T15:27:07",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "pool 28 usable",
+"last_step": "verify",
 "name": "New Year's Eve",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 13,
+"status": "verified"
 },
 "evpack-new-years-eve-2027": {
-"added": 0,
-"at": "2026-10-12T02:04:57",
+"added": 24,
+"at": "2026-10-12T15:27:36",
 "category": "Event",
+"issues": 0,
 "kind": "event",
+"last_step": "verify",
 "name": "New Year's Eve",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 10,
+"status": "verified"
 },
 "evpack-oceans-2027": {
 "added": 24,
@@ -2246,15 +2255,16 @@
 "status": "verified"
 },
 "pack-classic-cars": {
-"added": 0,
-"at": "2026-10-12T15:11:02",
+"added": 23,
+"at": "2026-10-12T15:34:06",
 "category": "Vintage",
+"issues": 0,
 "kind": "library",
-"last_step": "pool 21 usable",
+"last_step": "verify",
 "name": "Classic Cars",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 19,
+"status": "verified"
 },
 "pack-cocktails": {
 "added": 21,
@@ -2270,10 +2280,10 @@
 },
 "pack-coffee-shops": {
 "added": 0,
-"at": "2026-10-12T15:13:17",
+"at": "2026-10-12T15:37:08",
 "category": "Food",
 "kind": "library",
-"last_step": "pool 20 usable",
+"last_step": "pool 75 usable",
 "name": "Coffee Shops",
 "puzzles": null,
 "removed": 0,
@@ -2281,10 +2291,10 @@
 },
 "pack-cozy-interiors": {
 "added": 0,
-"at": "2026-10-12T10:35:26",
+"at": "2026-10-12T15:37:38",
 "category": "Vintage",
 "kind": "library",
-"last_step": "reject 11 off-theme",
+"last_step": "pool 10 usable",
 "name": "Cozy Interiors",
 "puzzles": null,
 "removed": 0,
@@ -2872,14 +2882,14 @@
 },
 "pack-portraits": {
 "added": 0,
-"at": "2026-10-12T15:13:02",
+"at": "2026-10-12T15:31:44",
 "category": "Art",
 "kind": "library",
-"last_step": "pool 3 usable",
+"last_step": "reject 1 text",
 "name": "Portraits",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "pack-prague": {
 "added": 0,

@@ -1,0 +1,13 @@
+{
+ "id": "evpack-book-day-2027", "name": "World Book Day", "category": "Event",
+ "description": "A limited pack for World Book Day (23 April 2027). Baroque abbey libraries, grand reading rooms and bookshops, quills and leather bindings, Shakespeare's Stratford, Don Quixote's windmills and Sant Jordi roses, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2, "accent_from_cover": true,
+ "sources": ["commons"],
+ "topics": ["Admont Abbey Library", "Strahov Monastery Library", "Trinity College Library Long Room", "Abbey Library of Saint Gall", "Real Gabinete Português de Leitura",
+  "Biblioteca Joanina", "Stuttgart City Library", "Tianjin Binhai Library", "El Ateneo Grand Splendid", "Livraria Lello",
+  "Wiblingen Abbey library", "Melk Abbey library", "Austrian National Library State Hall", "George Peabody Library", "Mafra Palace library",
+  "Old leather-bound books", "Quill and inkwell", "Fountain pen nib", "Little Free Library", "Consuegra windmills",
+  "Shakespeare's Birthplace", "Anne Hathaway's Cottage", "Red roses bouquet", "Casa Batlló roof"],
+ "more_topics": ["Waldsassen Abbey library", "Klementinum library", "Rijksmuseum library", "Handschriftenlesesaal", "Bookshelf in old library",
+  "Antique book spines", "Stack of old books", "Reading room dome", "Bibliotheca Alexandrina"]
+}

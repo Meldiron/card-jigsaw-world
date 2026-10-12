@@ -2,14 +2,17 @@
  "id": "evpack-fries-2027",
  "name": "National French Fry Day",
  "category": "Event",
- "description": "A limited pack for National French Fry Day (13 July 2027). Belgian frites, poutine, fish and chips, curly and sweet potato fries, steak frites and the potatoes they start from, playable for one week.",
+ "description": "A limited pack for National French Fry Day (13 July 2027). Classic, curly, sweet potato and chili cheese fries, fish and chips, steak frites, patatas bravas, rösti and the potato plants it all starts from, playable for one week.",
  "kind": "event",
  "target": 24,
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
  "accent_from_cover": true,
- "sources": ["commons", "openverse"],
+ "sources": [
+  "commons",
+  "openverse"
+ ],
  "quality_deepcat": "Quality images of food",
  "topics": [
   "French fries",

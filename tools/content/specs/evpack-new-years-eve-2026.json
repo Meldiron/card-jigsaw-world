@@ -2,7 +2,7 @@
  "id": "evpack-new-years-eve-2026",
  "name": "New Year's Eve",
  "category": "Event",
- "description": "A limited pack for New Year's Eve (31 December 2026). Fireworks over Sydney, London, Dubai and Edinburgh, champagne, confetti, sparklers and midnight clocks, playable for one week.",
+ "description": "A limited pack for New Year's Eve (31 December 2026). Fireworks over Sydney, London, Prague and Singapore, champagne, sparklers, glitter, oliebollen, toshikoshi soba and midnight clocks, playable for one week.",
  "kind": "event",
  "target": 24,
  "per_topic": 1,
@@ -52,6 +52,12 @@
   "fireworks Moscow",
   "fireworks Paris",
   "champagne bucket",
-  "party popper"
+  "party popper",
+  "toshikoshi soba",
+  "Berliner Pfannkuchen",
+  "Feuerzangenbowle",
+  "raclette",
+  "bonshō temple bell",
+  "hourglass"
  ]
 }

@@ -1,0 +1,8 @@
+{
+ "id": "evpack-new-years-eve-2027",
+ "name": "New Year's Eve",
+ "category": "Event",
+ "kind": "event",
+ "description": "A limited pack for New Year's Eve (31 December 2027). Fireworks over Sydney, London, Prague and Singapore, champagne, sparklers, glitter, oliebollen, toshikoshi soba and midnight clocks, playable for one week.",
+ "note": "clone of evpack-new-years-eve-2026; content comes from `run.sh clone evpack-new-years-eve-2026 evpack-new-years-eve-2027`"
+}

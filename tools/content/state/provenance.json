@@ -11141,6 +11141,50 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Water_droplet_on_water_lily_leaf_01.jpg/1280px-Water_droplet_on_water_lily_leaf_01.jpg"
 },
+"daily-2025-12-28": {
+"at": "2026-10-12",
+"author": "George Chernilevsky",
+"licence": "Public domain",
+"packId": "daily-2025-12",
+"page": "https://commons.wikimedia.org/wiki/File:Sunflower_head_2015_G2.jpg",
+"provider": "commons",
+"replaced": "https://picsum.photos/id/700/900/1200",
+"source": "Wikimedia Commons, Public domain",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Sunflower_head_2015_G2.jpg/1280px-Sunflower_head_2015_G2.jpg"
+},
+"daily-2025-12-29": {
+"at": "2026-10-12",
+"author": "Htanaungg",
+"licence": "CC BY-SA 4.0",
+"packId": "daily-2025-12",
+"page": "https://commons.wikimedia.org/wiki/File:Sakura_Tokyo_2026.jpg",
+"provider": "commons",
+"replaced": "https://openaccess-cdn.clevelandart.org/1949.187.2/1949.187.2_web.jpg",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Sakura_Tokyo_2026.jpg/1280px-Sakura_Tokyo_2026.jpg"
+},
+"daily-2025-12-30": {
+"at": "2026-10-12",
+"author": "Dominicus Johannes Bergsma",
+"licence": "CC BY-SA 4.0",
+"packId": "daily-2025-12",
+"page": "https://commons.wikimedia.org/wiki/File:Camellia_%C3%97_williamsii_%27Jury%27s_Yellow%27._Locatie,_Tuinreservaat_Jonker_vallei_02.jpg",
+"provider": "commons",
+"replaced": "https://picsum.photos/id/849/900/1200",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Camellia_%C3%97_williamsii_%27Jury%27s_Yellow%27._Locatie%2C_Tuinreservaat_Jonker_vallei_02.jpg/1280px-Camellia_%C3%97_williamsii_%27Jury%27s_Yellow%27._Locatie%2C_Tuinreservaat_Jonker_vallei_02.jpg"
+},
+"daily-2025-12-31": {
+"at": "2026-10-12",
+"author": "Infrogmation of New Orleans",
+"licence": "CC BY 2.0",
+"packId": "daily-2025-12",
+"page": "https://commons.wikimedia.org/wiki/File:Thanksgiving_Cupcakes_Turkey_Squirrel.jpg",
+"provider": "commons",
+"replaced": "https://openaccess-cdn.clevelandart.org/2015.466/2015.466_web.jpg",
+"source": "Wikimedia Commons, CC BY 2.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Thanksgiving_Cupcakes_Turkey_Squirrel.jpg/1280px-Thanksgiving_Cupcakes_Turkey_Squirrel.jpg"
+},
 "p-0020b7818a06": {
 "at": "2026-10-12",
 "author": "Bill Ingalls",
@@ -12186,6 +12230,17 @@
 "topic": "Cacao flower",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Theobroma_cacao_flowers_at_Kunnathurpadi_%284%29.jpg/1280px-Theobroma_cacao_flowers_at_Kunnathurpadi_%284%29.jpg"
 },
+"p-0825090ce466": {
+"at": "2026-10-12",
+"author": "Auckland Museum  Collections from Auckland, Aotearoa New Zealand",
+"licence": "CC BY 2.0",
+"packId": "evpack-new-years-eve-2026",
+"page": "https://commons.wikimedia.org/wiki/File:Pocket_watch_(48709167638).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "pocket watch",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Pocket_watch_%2848709167638%29.jpg/1280px-Pocket_watch_%2848709167638%29.jpg"
+},
 "p-082914330d8f": {
 "at": "2026-10-12",
 "author": "Hans Hillewaert",
@@ -12251,6 +12306,18 @@
 "source": "Wikimedia Commons, CC0",
 "topic": "Matsumoto Castle",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Close-up_view_of_the_main_keep_from_the_southwest%2C_Matsumoto_Castle%2C_2016.jpg/1280px-Close-up_view_of_the_main_keep_from_the_southwest%2C_Matsumoto_Castle%2C_2016.jpg"
+},
+"p-087785f7b45d": {
+"at": "2026-10-12",
+"author": "Donald Trung Quoc Don (Ch\u1eef H\u00e1n: \u5fb5\u570b\u55ae) - Wikimedia Commons - \u00a9 CC BY-SA 4.0 International.(W",
+"clonedFrom": "evpack-new-years-eve-2026",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-new-years-eve-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Oreo_oliebollen,_Provenierswijk,_Rotterdam_(2020)_01.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "oliebollen",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Oreo_oliebollen%2C_Provenierswijk%2C_Rotterdam_%282020%29_01.jpg/1280px-Oreo_oliebollen%2C_Provenierswijk%2C_Rotterdam_%282020%29_01.jpg"
 },
 "p-088238358150": {
 "at": "2026-10-12",
@@ -12845,6 +12912,17 @@
 "topic": "cupcakes",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Cran-Raspberry_Cupcake_%284357512712%29.jpg/1280px-Cran-Raspberry_Cupcake_%284357512712%29.jpg"
 },
+"p-0cf11be86b39": {
+"at": "2026-10-12",
+"author": "Karelj",
+"licence": "CC0",
+"packId": "evpack-new-years-eve-2026",
+"page": "https://commons.wikimedia.org/wiki/File:Prague_Firework_2013_4742.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "fireworks Prague",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Prague_Firework_2013_4742.jpg/1280px-Prague_Firework_2013_4742.jpg"
+},
 "p-0d3b729c88d0": {
 "at": "2026-10-12",
 "author": "chris-hayes",
@@ -12877,6 +12955,17 @@
 "source": "Wikimedia Commons, CC BY 2.0",
 "topic": "Rosa moyesii",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Rosa_moyesii_Geranium_%2829187632862%29.jpg/1280px-Rosa_moyesii_Geranium_%2829187632862%29.jpg"
+},
+"p-0d6c9d4f9eba": {
+"at": "2026-10-12",
+"author": "Robert Jaarsma",
+"licence": "CC BY 2.5",
+"packId": "pack-classic-cars",
+"page": "https://commons.wikimedia.org/wiki/File:Citro%C3%ABn_2cv_engine.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.5",
+"topic": "Citro\u00ebn 2CV",
+"url": "https://upload.wikimedia.org/wikipedia/commons/9/95/Citro%C3%ABn_2cv_engine.jpg"
 },
 "p-0d752ff9405a": {
 "at": "2026-10-12",
@@ -13300,6 +13389,18 @@
 "source": "Wikimedia Commons, Public domain",
 "topic": "Klimt Attersee painting",
 "url": "https://upload.wikimedia.org/wikipedia/commons/7/7e/Klimt_-_Fruit_Trees%2C_1901.jpg"
+},
+"p-1074bfa0b71b": {
+"at": "2026-10-12",
+"author": "Tony Hisgett from Birmingham, UK",
+"clonedFrom": "evpack-new-years-eve-2026",
+"licence": "CC BY 2.0",
+"packId": "evpack-new-years-eve-2027",
+"page": "https://commons.wikimedia.org/wiki/File:London_New_Year_2016_Fireworks_7_(24066111052).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "fireworks London",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/London_New_Year_2016_Fireworks_7_%2824066111052%29.jpg/1280px-London_New_Year_2016_Fireworks_7_%2824066111052%29.jpg"
 },
 "p-108580f40c6c": {
 "at": "2026-10-12",
@@ -13968,6 +14069,18 @@
 "source": "Wikimedia Commons, CC BY 3.0",
 "topic": "Zion Canyon",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Afternoon_In_Zion_Canyon_%2871564507%29.jpeg/1280px-Afternoon_In_Zion_Canyon_%2871564507%29.jpeg"
+},
+"p-1575e43bac9c": {
+"at": "2026-10-12",
+"author": "Michelle Grewe",
+"clonedFrom": "evpack-new-years-eve-2026",
+"licence": "CC0",
+"packId": "evpack-new-years-eve-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Silver_Chunk_Glitter_2.png",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "glitter",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Silver_Chunk_Glitter_2.png/1280px-Silver_Chunk_Glitter_2.png"
 },
 "p-158114206b19": {
 "at": "2026-10-12",
@@ -15823,6 +15936,18 @@
 "topic": "baklava",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/%D0%91%D0%B0%D0%BA%D0%BB%D0%B0%D0%B2%D0%B0-_%D1%81%D0%B0%D1%80%D0%B0%D1%98%D0%BA%D0%B0.jpg/1280px-%D0%91%D0%B0%D0%BA%D0%BB%D0%B0%D0%B2%D0%B0-_%D1%81%D0%B0%D1%80%D0%B0%D1%98%D0%BA%D0%B0.jpg"
 },
+"p-219b4d79bbfc": {
+"at": "2026-10-12",
+"author": "Hannes Grobe",
+"clonedFrom": "evpack-new-years-eve-2026",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-new-years-eve-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Zwiebel-1900a_hg.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "pocket watch",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Zwiebel-1900a_hg.jpg/1280px-Zwiebel-1900a_hg.jpg"
+},
 "p-21a7041b7416": {
 "at": "2026-10-12",
 "author": "Jeremy Keith from Brighton & Hove, United Kingdom",
@@ -16240,6 +16365,17 @@
 "topic": "paella pan",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Paella_Valenciana_tradicional.jpg/1280px-Paella_Valenciana_tradicional.jpg"
 },
+"p-2511e12faf4d": {
+"at": "2026-10-12",
+"author": "pom'.",
+"licence": "CC BY-SA",
+"packId": "pack-classic-cars",
+"page": "https://www.flickr.com/photos/146832554@N06/51599778563",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, CC BY-SA",
+"topic": "Renault 4CV",
+"url": "https://live.staticflickr.com/65535/51599778563_91fc2ef436_b.jpg"
+},
 "p-251384004f7f": {
 "at": "2026-10-12",
 "author": "KV MEHSHAN",
@@ -16261,6 +16397,17 @@
 "source": "Wikimedia Commons, CC BY 2.0",
 "topic": "bokeh lights",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Bokeh_lights_-_by_Henry_S%C3%B6derlund_%2853421541846%29.jpg/1280px-Bokeh_lights_-_by_Henry_S%C3%B6derlund_%2853421541846%29.jpg"
+},
+"p-255ab09544ac": {
+"at": "2026-10-12",
+"author": "R. Steven Rainwater from Dallas, US",
+"licence": "CC BY-SA 2.0",
+"packId": "pack-classic-cars",
+"page": "https://commons.wikimedia.org/wiki/File:Cadillac_classic_tail_fin.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 2.0",
+"topic": "Cadillac 1959 tail fin",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Cadillac_classic_tail_fin.jpg/1280px-Cadillac_classic_tail_fin.jpg"
 },
 "p-25676fef4c27": {
 "at": "2026-10-12",
@@ -16418,6 +16565,17 @@
 "source": "flickr via Openverse, Public Domain Mark",
 "topic": "AI-generated rainbow",
 "url": "https://live.staticflickr.com/65535/53623588851_b9bc9d01b3_b.jpg"
+},
+"p-267bbc098e54": {
+"at": "2026-10-12",
+"author": "Gnangarra",
+"licence": "CC BY 2.5 au",
+"packId": "pack-classic-cars",
+"page": "https://commons.wikimedia.org/wiki/File:Port-Whiteman_car_run_gnangarra_104.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.5 au",
+"topic": "classic car hood ornament",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Port-Whiteman_car_run_gnangarra_104.jpg/1280px-Port-Whiteman_car_run_gnangarra_104.jpg"
 },
 "p-26983f2b5dda": {
 "at": "2026-10-12",
@@ -16751,6 +16909,17 @@
 "topic": "Kronborg Castle",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Kronborg_Castle_03.jpg/1280px-Kronborg_Castle_03.jpg"
 },
+"p-298bc312cde7": {
+"at": "2026-10-12",
+"author": "Donald Trung Quoc Don (Ch\u1eef H\u00e1n: \u5fb5\u570b\u55ae) - Wikimedia Commons - \u00a9 CC BY-SA 4.0 International.(W",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-new-years-eve-2026",
+"page": "https://commons.wikimedia.org/wiki/File:Oreo_oliebollen,_Provenierswijk,_Rotterdam_(2020)_01.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "oliebollen",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Oreo_oliebollen%2C_Provenierswijk%2C_Rotterdam_%282020%29_01.jpg/1280px-Oreo_oliebollen%2C_Provenierswijk%2C_Rotterdam_%282020%29_01.jpg"
+},
 "p-29a8a7040b4d": {
 "at": "2026-10-12",
 "author": "Chainwit.",
@@ -16850,6 +17019,17 @@
 "topic": "Punkva Caves",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Punkevn%C3%AD-jeskyn%C4%9B-Baldach%C3%BDn2013.jpg/1280px-Punkevn%C3%AD-jeskyn%C4%9B-Baldach%C3%BDn2013.jpg"
 },
+"p-29ed3e9c2e62": {
+"at": "2026-10-12",
+"author": "D-44203",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-fries-2027",
+"page": "https://commons.wikimedia.org/wiki/File:DB_Currywurst_mit_Pommes.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Currywurst with fries",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/DB_Currywurst_mit_Pommes.jpg/1280px-DB_Currywurst_mit_Pommes.jpg"
+},
 "p-29f26ec06676": {
 "at": "2026-10-12",
 "author": "Dennis G. Jarvis",
@@ -16926,6 +17106,17 @@
 "source": "Wikimedia Commons, CC BY-SA 2.0",
 "topic": "Goldfish",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Carassius_auratus_%285410364191%29.jpg/1280px-Carassius_auratus_%285410364191%29.jpg"
+},
+"p-2ac4819db39b": {
+"at": "2026-10-12",
+"author": "Thomas's Pics",
+"licence": "CC BY 2.0",
+"packId": "pack-classic-cars",
+"page": "https://commons.wikimedia.org/wiki/File:Chrysler_Imperial_Hood_Mascot_(9906741394).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "classic car hood ornament",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Chrysler_Imperial_Hood_Mascot_%289906741394%29.jpg/1280px-Chrysler_Imperial_Hood_Mascot_%289906741394%29.jpg"
 },
 "p-2acb6a30b020": {
 "at": "2026-10-12",
@@ -17338,6 +17529,14 @@
 "topic": "lupin beans",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Lupins_in_Pacific_Northwest_Washington.png/1280px-Lupins_in_Pacific_Northwest_Washington.png"
 },
+"p-2d63bf7ee826": {
+"at": "2026-10-12",
+"author": "Tricia Gray",
+"clonedFrom": "evpack-new-years-eve-2026",
+"packId": "evpack-new-years-eve-2027",
+"source": "stocksnap via Openverse, CC CC0",
+"url": "https://cdn.stocksnap.io/img-thumbs/960w/WLMBCCBJEQ.jpg"
+},
 "p-2db20b66d24c": {
 "at": "2026-10-12",
 "author": "meowy.nason",
@@ -17473,6 +17672,18 @@
 "topic": "AI-generated elephant",
 "url": "https://live.staticflickr.com/65535/53607220657_c95cbb36db_b.jpg"
 },
+"p-2e74df0d4529": {
+"at": "2026-10-12",
+"author": "David Vega",
+"clonedFrom": "evpack-new-years-eve-2026",
+"licence": "CC BY 2.0",
+"packId": "evpack-new-years-eve-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Disco_Ball_David_Vega.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "disco ball",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Disco_Ball_David_Vega.jpg/1280px-Disco_Ball_David_Vega.jpg"
+},
 "p-2e77d23a022a": {
 "at": "2026-10-12",
 "author": "Diego Delso",
@@ -17605,6 +17816,17 @@
 "source": "flickr via Openverse, Public Domain Mark",
 "topic": "AI-generated cyberpunk",
 "url": "https://live.staticflickr.com/65535/52312388067_d0df010e62_b.jpg"
+},
+"p-2f3710b99bf0": {
+"at": "2026-10-12",
+"author": "Neil",
+"licence": "CC BY 2.0",
+"packId": "pack-classic-cars",
+"page": "https://commons.wikimedia.org/wiki/File:Ford_Model_T_(30124538658).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "Ford Model T",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Ford_Model_T_%2830124538658%29.jpg/1280px-Ford_Model_T_%2830124538658%29.jpg"
 },
 "p-2f3878189094": {
 "at": "2026-10-12",
@@ -17751,6 +17973,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "Ad\u00e9lie penguin",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Hope_Bay-2016-Trinity_Peninsula%E2%80%93Ad%C3%A9lie_penguin_%28Pygoscelis_adeliae%29_04.jpg/1280px-Hope_Bay-2016-Trinity_Peninsula%E2%80%93Ad%C3%A9lie_penguin_%28Pygoscelis_adeliae%29_04.jpg"
+},
+"p-3059a8edba01": {
+"at": "2026-10-12",
+"author": "Redsimon at English Wikipedia",
+"licence": "CC BY 2.5",
+"packId": "pack-classic-cars",
+"page": "https://commons.wikimedia.org/wiki/File:Cadillac_Sedan_de_Ville_1959_finlight.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.5",
+"topic": "Cadillac 1959 tail fin",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Cadillac_Sedan_de_Ville_1959_finlight.jpg/1280px-Cadillac_Sedan_de_Ville_1959_finlight.jpg"
 },
 "p-3061d5a52003": {
 "at": "2026-10-12",
@@ -17919,6 +18152,17 @@
 "topic": "Utagawa Kuniyoshi cats print",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Kuniyoshi_Utagawa%2C_Stingrays.jpg/1280px-Kuniyoshi_Utagawa%2C_Stingrays.jpg"
 },
+"p-31cc03f7a1f3": {
+"at": "2026-10-12",
+"author": "Thomas's Pics",
+"licence": "CC BY 2.0",
+"packId": "pack-classic-cars",
+"page": "https://commons.wikimedia.org/wiki/File:Fiat_500_(8132327220).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "Fiat 500 classic",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Fiat_500_%288132327220%29.jpg/1280px-Fiat_500_%288132327220%29.jpg"
+},
 "p-31d3d5e4e80c": {
 "at": "2026-10-12",
 "author": "Michelle Spencer",
@@ -18049,6 +18293,17 @@
 "topic": "candle flame macro",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/A_Red_Candle%E2%80%99s_flame.jpg/1280px-A_Red_Candle%E2%80%99s_flame.jpg"
 },
+"p-32b013dac848": {
+"at": "2026-10-12",
+"author": "Damian B Oh",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-classic-cars",
+"page": "https://commons.wikimedia.org/wiki/File:1951_MG_TD_Midget_Replica_(14).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "MG TD Midget",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/1951_MG_TD_Midget_Replica_%2814%29.jpg/1280px-1951_MG_TD_Midget_Replica_%2814%29.jpg"
+},
 "p-32baa2f2a19f": {
 "at": "2026-10-12",
 "author": "Marc-Lautenbacher",
@@ -18116,6 +18371,18 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "yellow tulips bouquet",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Bukiet_%C5%BC%C3%B3%C5%82tych_tulipan%C3%B3w_-_2023.04.08.jpg/1280px-Bukiet_%C5%BC%C3%B3%C5%82tych_tulipan%C3%B3w_-_2023.04.08.jpg"
+},
+"p-33686a778ac1": {
+"at": "2026-10-12",
+"author": "Carsten Stiller",
+"clonedFrom": "evpack-new-years-eve-2026",
+"licence": "CC BY 2.0",
+"packId": "evpack-new-years-eve-2027",
+"page": "https://commons.wikimedia.org/wiki/File:2013-09-28_Jena_Balloon_(10002541813).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "gold balloons",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/2013-09-28_Jena_Balloon_%2810002541813%29.jpg/1280px-2013-09-28_Jena_Balloon_%2810002541813%29.jpg"
 },
 "p-337136f067ca": {
 "at": "2026-10-12",
@@ -18604,6 +18871,17 @@
 "source": "Wikimedia Commons, Public domain",
 "topic": "Large Magellanic Cloud",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Infrared-Radio_Image_of_the_Large_Magellanic_Cloud_%282022-027%29.png/1280px-Infrared-Radio_Image_of_the_Large_Magellanic_Cloud_%282022-027%29.png"
+},
+"p-37e0c23572ee": {
+"at": "2026-10-12",
+"author": "Zala",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-classic-cars",
+"page": "https://commons.wikimedia.org/wiki/File:Citro%C3%ABn_DS_21_MnW_02.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Citro\u00ebn DS",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Citro%C3%ABn_DS_21_MnW_02.jpg/1280px-Citro%C3%ABn_DS_21_MnW_02.jpg"
 },
 "p-37e3c924b17b": {
 "at": "2026-10-12",
@@ -19393,6 +19671,17 @@
 "topic": "wildflower meadow summer",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Alpine_wildflowers_flower_meadow_hurricane_ridge_summer_c_bubar_june_27_2014_%2817297573076%29.jpg/1280px-Alpine_wildflowers_flower_meadow_hurricane_ridge_summer_c_bubar_june_27_2014_%2817297573076%29.jpg"
 },
+"p-3d646b967730": {
+"at": "2026-10-12",
+"author": "David Kitto",
+"licence": "CC0",
+"packId": "pack-classic-cars",
+"page": "https://www.flickr.com/photos/43371449@N00/51540350401",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, CC0",
+"topic": "Morris Mini Cooper classic",
+"url": "https://live.staticflickr.com/65535/51540350401_76d0ef659b_b.jpg"
+},
 "p-3d702f69fa99": {
 "at": "2026-10-12",
 "author": "NASA/METI/AIST/Japan Space Systems, and U.S./Japan ASTER Science Team",
@@ -19893,6 +20182,18 @@
 "topic": "Lavandula stoechas French lavender",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/2017-04-06_French_lavender_%28Rosmaninho-maior%29%2C_Malh%C3%A3o%2C_Albufeira_%281%29.JPG/1280px-2017-04-06_French_lavender_%28Rosmaninho-maior%29%2C_Malh%C3%A3o%2C_Albufeira_%281%29.JPG"
 },
+"p-402cd190ebb4": {
+"at": "2026-10-12",
+"author": "William Cho.",
+"clonedFrom": "evpack-new-years-eve-2026",
+"licence": "CC BY-SA 2.0",
+"packId": "evpack-new-years-eve-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Photomontage_of_the_Marina_Bay_Sands_and_the_Merlion_with_fireworks,_Singapore_-_20100524.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 2.0",
+"topic": "fireworks Singapore",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Photomontage_of_the_Marina_Bay_Sands_and_the_Merlion_with_fireworks%2C_Singapore_-_20100524.jpg/1280px-Photomontage_of_the_Marina_Bay_Sands_and_the_Merlion_with_fireworks%2C_Singapore_-_20100524.jpg"
+},
 "p-402ef63511b3": {
 "at": "2026-10-12",
 "author": "JIP",
@@ -20319,6 +20620,18 @@
 "topic": "yellow-eyed penguin",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Megadyptes_antipodes_-Oamaru%2C_New_Zealand-8.jpg/1280px-Megadyptes_antipodes_-Oamaru%2C_New_Zealand-8.jpg"
 },
+"p-4333ffd49b32": {
+"at": "2026-10-12",
+"author": "Kjetil Ree",
+"clonedFrom": "evpack-new-years-eve-2026",
+"licence": "CC BY-SA 3.0",
+"packId": "evpack-new-years-eve-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Champagne_cooler_-_2013-12-26_at_19-32-22.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "champagne bucket",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Champagne_cooler_-_2013-12-26_at_19-32-22.jpg/1280px-Champagne_cooler_-_2013-12-26_at_19-32-22.jpg"
+},
 "p-4334bc195870": {
 "at": "2026-10-12",
 "author": "John B Fotograf\u00eda",
@@ -20496,6 +20809,18 @@
 "source": "Wikimedia Commons, Public domain",
 "topic": "Dasht-e Kavir Landsat",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Dasht-e_Kavir.jpg/1280px-Dasht-e_Kavir.jpg"
+},
+"p-44e4c71e81b6": {
+"at": "2026-10-12",
+"author": "Studio Sarah Lou",
+"clonedFrom": "evpack-new-years-eve-2026",
+"licence": "CC BY 2.0",
+"packId": "evpack-new-years-eve-2027",
+"page": "https://commons.wikimedia.org/wiki/File:NYE_Fireworks,_Sydney_AU_(4274847006).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "fireworks Sydney",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/NYE_Fireworks%2C_Sydney_AU_%284274847006%29.jpg/1280px-NYE_Fireworks%2C_Sydney_AU_%284274847006%29.jpg"
 },
 "p-44e4c9beac63": {
 "at": "2026-10-12",
@@ -21160,6 +21485,17 @@
 "topic": "Levens Hall topiary",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Towering_topiary%2C_Levens_Hall_-_geograph.org.uk_-_3342893.jpg/1280px-Towering_topiary%2C_Levens_Hall_-_geograph.org.uk_-_3342893.jpg"
 },
+"p-4a49820424ea": {
+"at": "2026-10-12",
+"author": "Asturio Cantabrio",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-new-years-eve-2026",
+"page": "https://commons.wikimedia.org/wiki/File:Kyouou-ji_bell_2025-06_ac_(2).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "bonsh\u014d temple bell",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Kyouou-ji_bell_2025-06_ac_%282%29.jpg/1280px-Kyouou-ji_bell_2025-06_ac_%282%29.jpg"
+},
 "p-4a60cbb8d972": {
 "at": "2026-10-12",
 "author": "NASA Hubble",
@@ -21802,6 +22138,17 @@
 "source": "Wikimedia Commons, CC BY 4.0",
 "topic": "star trails over mountains",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Star_trails_over_La_Silla_%2820130617_la_silla-cc%29.jpg/1280px-Star_trails_over_La_Silla_%2820130617_la_silla-cc%29.jpg"
+},
+"p-4f69789df09f": {
+"at": "2026-10-12",
+"author": "ilovebutter from Houston, TX, USA",
+"licence": "CC BY 2.0",
+"packId": "pack-classic-cars",
+"page": "https://commons.wikimedia.org/wiki/File:Trabant_601_S_of_Trabi_Safari_in_Dresden_2.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "Trabant 601",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Trabant_601_S_of_Trabi_Safari_in_Dresden_2.jpg/1280px-Trabant_601_S_of_Trabi_Safari_in_Dresden_2.jpg"
 },
 "p-4f8d74a35aa3": {
 "at": "2026-10-12",
@@ -22484,6 +22831,17 @@
 "topic": "AI-generated robot",
 "url": "https://live.staticflickr.com/65535/53510456115_e71c42e212_b.jpg"
 },
+"p-544567f9f818": {
+"at": "2026-10-12",
+"author": "George Chernilevsky",
+"licence": "Public domain",
+"packId": "evpack-new-years-eve-2026",
+"page": "https://commons.wikimedia.org/wiki/File:Christmas_decorations_2017_G1.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "tinsel",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Christmas_decorations_2017_G1.jpg/1280px-Christmas_decorations_2017_G1.jpg"
+},
 "p-544f090d2ffd": {
 "at": "2026-10-12",
 "author": "George Chernilevsky",
@@ -22683,6 +23041,17 @@
 "topic": "sunflower pollen macro",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Sunflowers_Patch_%2810386518905%29.jpg/1280px-Sunflowers_Patch_%2810386518905%29.jpg"
 },
+"p-55bfcc4da57e": {
+"at": "2026-10-12",
+"author": "Twdragon",
+"licence": "CC BY-SA 3.0",
+"packId": "evpack-new-years-eve-2026",
+"page": "https://commons.wikimedia.org/wiki/File:Star_Trek_fans_convent_2008_-_Fireworks.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "fireworks Moscow",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Star_Trek_fans_convent_2008_-_Fireworks.jpg/1280px-Star_Trek_fans_convent_2008_-_Fireworks.jpg"
+},
 "p-55ef93b67b29": {
 "at": "2026-10-12",
 "author": "Dmitry Brant",
@@ -22816,6 +23185,18 @@
 "source": "flickr via Openverse, Public Domain Mark",
 "topic": "AI-generated dinosaur",
 "url": "https://live.staticflickr.com/65535/53596117195_3ae14db8da_b.jpg"
+},
+"p-56b8ef57148e": {
+"at": "2026-10-12",
+"author": "Koreller",
+"clonedFrom": "evpack-new-years-eve-2026",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-new-years-eve-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Mus%C3%A9e_d%27histoire_de_Nantes_-_152_-_Sablier_de_trente_minutes.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "hourglass",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Mus%C3%A9e_d%27histoire_de_Nantes_-_152_-_Sablier_de_trente_minutes.jpg/1280px-Mus%C3%A9e_d%27histoire_de_Nantes_-_152_-_Sablier_de_trente_minutes.jpg"
 },
 "p-56b9283aba8f": {
 "at": "2026-10-12",
@@ -23104,6 +23485,17 @@
 "topic": "flower rangoli petals",
 "url": "https://pd.w.org/2022/10/63633f7cbd058886.16614543-1536x2048.jpg"
 },
+"p-58bbd11c13f5": {
+"at": "2026-10-12",
+"author": "Triple-green",
+"licence": "CC BY",
+"packId": "pack-classic-cars",
+"page": "https://www.flickr.com/photos/66451944@N03/52088232158",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, CC BY",
+"topic": "Jaguar XK120",
+"url": "https://live.staticflickr.com/65535/52088232158_701802f558_b.jpg"
+},
 "p-58c911a12571": {
 "at": "2026-10-12",
 "author": "ABruszik",
@@ -23235,6 +23627,17 @@
 "source": "Wikimedia Commons, CC BY-SA 3.0",
 "topic": "rainforest canopy walkway",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Canopy_walkway%2C_Kakum_Nationalpark_1.jpg/1280px-Canopy_walkway%2C_Kakum_Nationalpark_1.jpg"
+},
+"p-597c5d957d33": {
+"at": "2026-10-12",
+"author": "This photo was taken by Anton Zelenov. Please credit this with\u00a0: Photo\u00a0: Anton Zelenov in ",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-classic-cars",
+"page": "https://commons.wikimedia.org/wiki/File:A_classic_Citro%C3%ABn_2CV_parked_on_a_street_in_Belgrade,_Serbia..jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Citro\u00ebn 2CV",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/A_classic_Citro%C3%ABn_2CV_parked_on_a_street_in_Belgrade%2C_Serbia..jpg/1280px-A_classic_Citro%C3%ABn_2CV_parked_on_a_street_in_Belgrade%2C_Serbia..jpg"
 },
 "p-59a8aa53a7aa": {
 "at": "2026-10-12",
@@ -23434,6 +23837,18 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "Oeschinensee",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Oeschinensee_view_with_turquoise_water_and_a_bird_flying.jpg/1280px-Oeschinensee_view_with_turquoise_water_and_a_bird_flying.jpg"
+},
+"p-5afe7c348d1f": {
+"at": "2026-10-12",
+"author": "Auckland Museum  Collections from Auckland, Aotearoa New Zealand",
+"clonedFrom": "evpack-new-years-eve-2026",
+"licence": "CC BY 2.0",
+"packId": "evpack-new-years-eve-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Pocket_watch_(48709167638).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "pocket watch",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Pocket_watch_%2848709167638%29.jpg/1280px-Pocket_watch_%2848709167638%29.jpg"
 },
 "p-5b0de0422a87": {
 "at": "2026-10-12",
@@ -23786,6 +24201,17 @@
 "source": "Wikimedia Commons, Public domain",
 "topic": "Stenella frontalis",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Stenella_frontalis%2C_Georgia.jpg/1280px-Stenella_frontalis%2C_Georgia.jpg"
+},
+"p-5dba0f4e7c8a": {
+"at": "2026-10-12",
+"author": "Stephanie Macleod",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-earth-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Moraine_Lake_and_Deltaform_Mountain.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Moraine Lake",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Moraine_Lake_and_Deltaform_Mountain.jpg/1280px-Moraine_Lake_and_Deltaform_Mountain.jpg"
 },
 "p-5dd26e795535": {
 "at": "2026-10-12",
@@ -24410,6 +24836,18 @@
 "topic": "happy quokka Rottnest Island",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Quokka_-_Happy_Local_-_panoramio.jpg/1280px-Quokka_-_Happy_Local_-_panoramio.jpg"
 },
+"p-62ce02f2c8f8": {
+"at": "2026-10-12",
+"author": "Akifuku55",
+"clonedFrom": "evpack-new-years-eve-2026",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-new-years-eve-2027",
+"page": "https://commons.wikimedia.org/wiki/File:NishinsobabyAkiraFukuda01.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "toshikoshi soba",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/NishinsobabyAkiraFukuda01.jpg/1280px-NishinsobabyAkiraFukuda01.jpg"
+},
 "p-62ce633fc70a": {
 "at": "2026-10-12",
 "author": "Huoadg5888Minor edits made by Subsidiary account",
@@ -24697,6 +25135,17 @@
 "source": "flickr via Openverse, CC0",
 "topic": "AI-generated mountains",
 "url": "https://live.staticflickr.com/65535/53017112796_06f10a1dae_b.jpg"
+},
+"p-6581c3d48b07": {
+"at": "2026-10-12",
+"author": "Acabashi",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-classic-cars",
+"page": "https://commons.wikimedia.org/wiki/File:1972_Jaguar_E-Type_Series_3_Coupe_at_Capel_Manor,_Enfield,_London,_England.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Jaguar E-Type",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/1972_Jaguar_E-Type_Series_3_Coupe_at_Capel_Manor%2C_Enfield%2C_London%2C_England.jpg/1280px-1972_Jaguar_E-Type_Series_3_Coupe_at_Capel_Manor%2C_Enfield%2C_London%2C_England.jpg"
 },
 "p-658444250459": {
 "at": "2026-10-12",
@@ -25243,6 +25692,17 @@
 "topic": "Chocolate mousse",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Chocolate_mousse_-_stonesoup.jpg/1280px-Chocolate_mousse_-_stonesoup.jpg"
 },
+"p-6906283015e9": {
+"at": "2026-10-12",
+"author": "pom'.",
+"licence": "CC BY-SA",
+"packId": "pack-classic-cars",
+"page": "https://www.flickr.com/photos/146832554@N06/52761375971",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, CC BY-SA",
+"topic": "Porsche 356",
+"url": "https://live.staticflickr.com/65535/52761375971_869c93fc66_b.jpg"
+},
 "p-6913d15f5a6a": {
 "at": "2026-10-12",
 "author": "Bill Ingalls",
@@ -25319,6 +25779,17 @@
 "source": "Wikimedia Commons, CC BY 4.0",
 "topic": "cat:Kaleidoscope patterns",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Lilac_Flower_Kaleidoscope.jpg/1280px-Lilac_Flower_Kaleidoscope.jpg"
+},
+"p-699124d68439": {
+"at": "2026-10-12",
+"author": "Evaengler",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-new-years-eve-2026",
+"page": "https://commons.wikimedia.org/wiki/File:2_Manhattan_cocktails,_bird%27s_eye_view.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "cocktails",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/2_Manhattan_cocktails%2C_bird%27s_eye_view.jpg/1280px-2_Manhattan_cocktails%2C_bird%27s_eye_view.jpg"
 },
 "p-699baf25d0c2": {
 "at": "2026-10-12",
@@ -25609,6 +26080,17 @@
 "topic": "Delicate Arch",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Delicate_Arch_April_2021_%282%29.jpg/1280px-Delicate_Arch_April_2021_%282%29.jpg"
 },
+"p-6ba5329036e5": {
+"at": "2026-10-12",
+"author": "Alec Gamoff",
+"licence": "CC BY 2.0",
+"packId": "evpack-earth-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Vinicuna_mountain_colors.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "Rainbow Mountain Vinicunca",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Vinicuna_mountain_colors.jpg/1280px-Vinicuna_mountain_colors.jpg"
+},
 "p-6ba86907d274": {
 "at": "2026-10-12",
 "author": "Pavel Kirillov from St.Petersburg, Russia",
@@ -25630,6 +26112,18 @@
 "source": "Wikimedia Commons, CC BY 3.0",
 "topic": "misty pine forest",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Sunny_Woods_%28142742141%29.jpeg/1280px-Sunny_Woods_%28142742141%29.jpeg"
+},
+"p-6bd395ceb8c8": {
+"at": "2026-10-12",
+"author": "Agnieszka Kwiecie\u0144, Nova",
+"clonedFrom": "evpack-new-years-eve-2026",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-new-years-eve-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Oxalis_deppei_Szczawik_Deppego_2020-09-20_01.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Gl\u00fccksklee",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Oxalis_deppei_Szczawik_Deppego_2020-09-20_01.jpg/1280px-Oxalis_deppei_Szczawik_Deppego_2020-09-20_01.jpg"
 },
 "p-6beaf2c326d6": {
 "at": "2026-10-12",
@@ -26962,6 +27456,17 @@
 "source": "Wikimedia Commons, CC BY-SA 2.0",
 "topic": "Ancient oak forest",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Ancient_Oak_in_Mellington_Wood_-_geograph.org.uk_-_6325862.jpg/1280px-Ancient_Oak_in_Mellington_Wood_-_geograph.org.uk_-_6325862.jpg"
+},
+"p-746b6764f74e": {
+"at": "2026-10-12",
+"author": "Artaxerxes",
+"licence": "CC BY 4.0",
+"packId": "pack-classic-cars",
+"page": "https://commons.wikimedia.org/wiki/File:1957_Chevrolet_Bel_Air_Townsman_The_Putney_Diner_133_Main_Street_Putney_VT_September_2026_01.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "Chevrolet Bel Air 1957",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/1957_Chevrolet_Bel_Air_Townsman_The_Putney_Diner_133_Main_Street_Putney_VT_September_2026_01.jpg/1280px-1957_Chevrolet_Bel_Air_Townsman_The_Putney_Diner_133_Main_Street_Putney_VT_September_2026_01.jpg"
 },
 "p-7477af33c7e8": {
 "at": "2026-10-12",
@@ -29785,6 +30290,18 @@
 "topic": "chickpeas bowl",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Curry_in_a_Hurry_Chickpea_Bowl_%2851383382685%29.jpg/1280px-Curry_in_a_Hurry_Chickpea_Bowl_%2851383382685%29.jpg"
 },
+"p-87d439418e80": {
+"at": "2026-10-12",
+"author": "Colin Smith",
+"clonedFrom": "evpack-new-years-eve-2026",
+"licence": "CC BY-SA 2.0",
+"packId": "evpack-new-years-eve-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Streamers_-_geograph.org.uk_-_2978358.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 2.0",
+"topic": "streamers",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Streamers_-_geograph.org.uk_-_2978358.jpg/1280px-Streamers_-_geograph.org.uk_-_2978358.jpg"
+},
 "p-87e39796baed": {
 "at": "2026-10-12",
 "author": "chris-hayes",
@@ -30272,6 +30789,17 @@
 "topic": "Honeycomb with honey",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Apis_mellifera_carnica_worker_honeycomb_3.jpg/1280px-Apis_mellifera_carnica_worker_honeycomb_3.jpg"
 },
+"p-8b9e6b357ef6": {
+"at": "2026-10-12",
+"author": "Jan Fidler from Prague, Czech Republic",
+"licence": "CC BY 2.0",
+"packId": "evpack-new-years-eve-2026",
+"page": "https://commons.wikimedia.org/wiki/File:Prague_New_Year_fireworks_-_Flickr_-_prague.czech.photo.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "fireworks Prague",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Prague_New_Year_fireworks_-_Flickr_-_prague.czech.photo.jpg/1280px-Prague_New_Year_fireworks_-_Flickr_-_prague.czech.photo.jpg"
+},
 "p-8ba280100887": {
 "at": "2026-10-12",
 "author": "Jeff Schmaltz, MODIS Land Rapid Response Team, NASA GSFC",
@@ -30493,6 +31021,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "kitten in basket",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/%E0%A6%AE%E0%A7%87%E0%A6%95%E0%A7%81%E0%A7%B0%E0%A7%80_cat.jpg/1280px-%E0%A6%AE%E0%A7%87%E0%A6%95%E0%A7%81%E0%A7%B0%E0%A7%80_cat.jpg"
+},
+"p-8cc119421a86": {
+"at": "2026-10-12",
+"author": "Michelle Grewe",
+"licence": "CC0",
+"packId": "evpack-new-years-eve-2026",
+"page": "https://commons.wikimedia.org/wiki/File:Silver_Chunk_Glitter_2.png",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "glitter",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Silver_Chunk_Glitter_2.png/1280px-Silver_Chunk_Glitter_2.png"
 },
 "p-8cd7082cf30a": {
 "at": "2026-10-12",
@@ -31724,6 +32263,17 @@
 "topic": "Phi Phi Islands beach",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Isla_Ko_Phi_Phi_Don%2C_Tailandia%2C_2013-08-19%2C_DD_03.JPG/1280px-Isla_Ko_Phi_Phi_Don%2C_Tailandia%2C_2013-08-19%2C_DD_03.JPG"
 },
+"p-95474cf33f68": {
+"at": "2026-10-12",
+"author": "Dheera Venkatraman from San Francisco",
+"licence": "CC BY-SA 2.0",
+"packId": "evpack-earth-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Eclipse_seen_from_the_Painted_Hills_of_Oregon_(35915318274).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 2.0",
+"topic": "Painted Hills Oregon",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Eclipse_seen_from_the_Painted_Hills_of_Oregon_%2835915318274%29.jpg/1280px-Eclipse_seen_from_the_Painted_Hills_of_Oregon_%2835915318274%29.jpg"
+},
 "p-956f12535d98": {
 "at": "2026-10-12",
 "author": "Oleg Yunakov",
@@ -31823,6 +32373,17 @@
 "source": "Wikimedia Commons, Public domain",
 "topic": "Long March launch",
 "url": "https://upload.wikimedia.org/wikipedia/commons/2/2f/The_Launch_of_Long_March_3B_Rocket.jpg"
+},
+"p-95d1eed2f3d3": {
+"at": "2026-10-12",
+"author": "RegionVisitor90",
+"licence": "CC0",
+"packId": "evpack-new-years-eve-2026",
+"page": "https://commons.wikimedia.org/wiki/File:Cross_Keys_Hotel,_Cavan_20260330-120417.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "champagne",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Cross_Keys_Hotel%2C_Cavan_20260330-120417.jpg/1280px-Cross_Keys_Hotel%2C_Cavan_20260330-120417.jpg"
 },
 "p-95d679881236": {
 "at": "2026-10-12",
@@ -32646,6 +33207,17 @@
 "topic": "AI-generated lion",
 "url": "https://live.staticflickr.com/65535/53629618942_6b212f78aa_b.jpg"
 },
+"p-9bd7363e2457": {
+"at": "2026-10-12",
+"author": "William Cho.",
+"licence": "CC BY-SA 2.0",
+"packId": "evpack-new-years-eve-2026",
+"page": "https://commons.wikimedia.org/wiki/File:Photomontage_of_the_Marina_Bay_Sands_and_the_Merlion_with_fireworks,_Singapore_-_20100524.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 2.0",
+"topic": "fireworks Singapore",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Photomontage_of_the_Marina_Bay_Sands_and_the_Merlion_with_fireworks%2C_Singapore_-_20100524.jpg/1280px-Photomontage_of_the_Marina_Bay_Sands_and_the_Merlion_with_fireworks%2C_Singapore_-_20100524.jpg"
+},
 "p-9be71cc54f6a": {
 "at": "2026-10-12",
 "author": "Hans Hillewaert",
@@ -33132,6 +33704,17 @@
 "topic": "Papua rainforest",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/River_in_West_New_Britain_Province_-_Papua_New_Guinea.jpg/1280px-River_in_West_New_Britain_Province_-_Papua_New_Guinea.jpg"
 },
+"p-9f169dc689bf": {
+"at": "2026-10-12",
+"author": "Agnieszka Kwiecie\u0144, Nova",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-new-years-eve-2026",
+"page": "https://commons.wikimedia.org/wiki/File:Oxalis_deppei_Szczawik_Deppego_2020-09-20_01.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Gl\u00fccksklee",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Oxalis_deppei_Szczawik_Deppego_2020-09-20_01.jpg/1280px-Oxalis_deppei_Szczawik_Deppego_2020-09-20_01.jpg"
+},
 "p-9f2b3213a832": {
 "at": "2026-10-12",
 "author": "Serrierj / AI",
@@ -33198,6 +33781,17 @@
 "source": "flickr via Openverse, Public Domain Mark",
 "topic": "AI-generated neon city",
 "url": "https://live.staticflickr.com/65535/52313497778_c0a0d3cbf8_b.jpg"
+},
+"p-9f66cb87f2d1": {
+"at": "2026-10-12",
+"author": "Akifuku55",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-new-years-eve-2026",
+"page": "https://commons.wikimedia.org/wiki/File:NishinsobabyAkiraFukuda01.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "toshikoshi soba",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/NishinsobabyAkiraFukuda01.jpg/1280px-NishinsobabyAkiraFukuda01.jpg"
 },
 "p-9f960e5d0116": {
 "at": "2026-10-12",
@@ -34097,6 +34691,17 @@
 "topic": "Chicago skyline night",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Chicago_skyline_at_night_from_360_Chicago_observation_deck_%2849713358626%29.jpg/1280px-Chicago_skyline_at_night_from_360_Chicago_observation_deck_%2849713358626%29.jpg"
 },
+"p-a58556641a8e": {
+"at": "2026-10-12",
+"author": "Ermell",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-classic-cars",
+"page": "https://commons.wikimedia.org/wiki/File:Austin-Healey_3000_Mk_III_6170846-PSD.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Austin-Healey 3000",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Austin-Healey_3000_Mk_III_6170846-PSD.jpg/1280px-Austin-Healey_3000_Mk_III_6170846-PSD.jpg"
+},
 "p-a5aa0e5123bf": {
 "at": "2026-10-12",
 "author": "Einaz80",
@@ -34251,6 +34856,18 @@
 "topic": "Lake Bled island church",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Lake_Bled_panorama_with_island_church_Slovenia_2025.jpg/1280px-Lake_Bled_panorama_with_island_church_Slovenia_2025.jpg"
 },
+"p-a6e04f9e596c": {
+"at": "2026-10-12",
+"author": "Leonard von Bibra",
+"clonedFrom": "evpack-new-years-eve-2026",
+"licence": "CC0",
+"packId": "evpack-new-years-eve-2027",
+"page": "https://stocksnap.io/photo/dark-light-FAHVD1I4K9",
+"provider": "openverse:stocksnap",
+"source": "stocksnap via Openverse, CC0",
+"topic": "sparklers",
+"url": "https://cdn.stocksnap.io/img-thumbs/960w/FAHVD1I4K9.jpg"
+},
 "p-a6e2daa57fe8": {
 "at": "2026-10-12",
 "author": "chris-hayes",
@@ -34350,6 +34967,18 @@
 "topic": "Sch\u00f6nbrunn gardens",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Privy_garden_Sch%C3%B6nbrunn_winter.jpg/1280px-Privy_garden_Sch%C3%B6nbrunn_winter.jpg"
 },
+"p-a79f59b16740": {
+"at": "2026-10-12",
+"author": "Asturio Cantabrio",
+"clonedFrom": "evpack-new-years-eve-2026",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-new-years-eve-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Kyouou-ji_bell_2025-06_ac_(2).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "bonsh\u014d temple bell",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Kyouou-ji_bell_2025-06_ac_%282%29.jpg/1280px-Kyouou-ji_bell_2025-06_ac_%282%29.jpg"
+},
 "p-a7a5b058c64d": {
 "at": "2026-10-12",
 "author": "Author:Gemini AI / AI",
@@ -34371,6 +35000,18 @@
 "source": "Wikimedia Commons, CC BY-SA 3.0",
 "topic": "Aoraki Mount Cook",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Aoraki-Mount_Cook_from_Tasman_Lake_outlet.jpg/1280px-Aoraki-Mount_Cook_from_Tasman_Lake_outlet.jpg"
+},
+"p-a7b686905c43": {
+"at": "2026-10-12",
+"author": "RegionVisitor90",
+"clonedFrom": "evpack-new-years-eve-2026",
+"licence": "CC0",
+"packId": "evpack-new-years-eve-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Cross_Keys_Hotel,_Cavan_20260330-120417.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "champagne",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Cross_Keys_Hotel%2C_Cavan_20260330-120417.jpg/1280px-Cross_Keys_Hotel%2C_Cavan_20260330-120417.jpg"
 },
 "p-a7d9e50c773a": {
 "at": "2026-10-12",
@@ -35477,6 +36118,17 @@
 "topic": "Lena delta Landsat",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Lena_River_Delta_-_Landsat_2000.jpg/1280px-Lena_River_Delta_-_Landsat_2000.jpg"
 },
+"p-aff60942130a": {
+"at": "2026-10-12",
+"author": "Tony Hisgett from Birmingham, UK",
+"licence": "CC BY 2.0",
+"packId": "evpack-new-years-eve-2026",
+"page": "https://commons.wikimedia.org/wiki/File:London_New_Year_2016_Fireworks_7_(24066111052).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "fireworks London",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/London_New_Year_2016_Fireworks_7_%2824066111052%29.jpg/1280px-London_New_Year_2016_Fireworks_7_%2824066111052%29.jpg"
+},
 "p-b02c1ce23b9f": {
 "at": "2026-10-12",
 "author": "Svy123",
@@ -36296,6 +36948,28 @@
 "topic": "sparkling violetear",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Sparkling_violetear_%28Colibri_coruscans_coruscans%29_Caldas.jpg/1280px-Sparkling_violetear_%28Colibri_coruscans_coruscans%29_Caldas.jpg"
 },
+"p-b59a63132765": {
+"at": "2026-10-12",
+"author": "Daderot",
+"licence": "CC0",
+"packId": "evpack-fries-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Chicken_thigh_sandwich,_Turkish,_with_hash_browns_-_San_Francisco.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "Hash browns",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Chicken_thigh_sandwich%2C_Turkish%2C_with_hash_browns_-_San_Francisco.jpg/1280px-Chicken_thigh_sandwich%2C_Turkish%2C_with_hash_browns_-_San_Francisco.jpg"
+},
+"p-b5c99612f861": {
+"at": "2026-10-12",
+"author": "Hannes Grobe",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-new-years-eve-2026",
+"page": "https://commons.wikimedia.org/wiki/File:Zwiebel-1900a_hg.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "pocket watch",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Zwiebel-1900a_hg.jpg/1280px-Zwiebel-1900a_hg.jpg"
+},
 "p-b5e5c0938c28": {
 "at": "2026-10-12",
 "author": "Gustav Klimt",
@@ -36484,6 +37158,17 @@
 "source": "Wikimedia Commons, Public domain (AI-generated)",
 "topic": "cat:AI-generated seas",
 "url": "https://upload.wikimedia.org/wikipedia/commons/2/27/Lehen_%28euskal_mitologia%29_-_Midjourney_AI_bertsioa.png"
+},
+"p-b6d5485b89ae": {
+"at": "2026-10-12",
+"author": "Studio Sarah Lou",
+"licence": "CC BY 2.0",
+"packId": "evpack-new-years-eve-2026",
+"page": "https://commons.wikimedia.org/wiki/File:NYE_Fireworks,_Sydney_AU_(4274847006).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "fireworks Sydney",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/NYE_Fireworks%2C_Sydney_AU_%284274847006%29.jpg/1280px-NYE_Fireworks%2C_Sydney_AU_%284274847006%29.jpg"
 },
 "p-b756ccad3fa8": {
 "at": "2026-10-12",
@@ -37053,6 +37738,18 @@
 "topic": "Annapurna",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Poon_hill_and_Mt._Annapurna.jpg/1280px-Poon_hill_and_Mt._Annapurna.jpg"
 },
+"p-bb198d224e04": {
+"at": "2026-10-12",
+"author": "Karelj",
+"clonedFrom": "evpack-new-years-eve-2026",
+"licence": "CC0",
+"packId": "evpack-new-years-eve-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Prague_Firework_2013_4742.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "fireworks Prague",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Prague_Firework_2013_4742.jpg/1280px-Prague_Firework_2013_4742.jpg"
+},
 "p-bb2e0d81b66a": {
 "at": "2026-10-12",
 "author": "Tak1701d",
@@ -37419,6 +38116,17 @@
 "topic": "kaleidoscope flowers",
 "url": "https://live.staticflickr.com/65535/51285722594_2e7e89aa86_b.jpg"
 },
+"p-be5bd765a663": {
+"at": "2026-10-12",
+"author": "David Vega",
+"licence": "CC BY 2.0",
+"packId": "evpack-new-years-eve-2026",
+"page": "https://commons.wikimedia.org/wiki/File:Disco_Ball_David_Vega.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "disco ball",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Disco_Ball_David_Vega.jpg/1280px-Disco_Ball_David_Vega.jpg"
+},
 "p-be65bb75686a": {
 "at": "2026-10-12",
 "author": "Robin White",
@@ -37563,6 +38271,17 @@
 "source": "Wikimedia Commons, CC BY 2.0",
 "topic": "Boletus edulis mushroom",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Boletus_edulis_%2815660458292%29.jpg/1280px-Boletus_edulis_%2815660458292%29.jpg"
+},
+"p-bf1dd6dd3967": {
+"at": "2026-10-12",
+"author": "35mmMan",
+"licence": "CC BY 2.0",
+"packId": "pack-classic-cars",
+"page": "https://commons.wikimedia.org/wiki/File:FIAT_500_-_30701734136.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "Fiat 500 classic",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/FIAT_500_-_30701734136.jpg/1280px-FIAT_500_-_30701734136.jpg"
 },
 "p-bf271c174107": {
 "at": "2026-10-12",
@@ -38454,6 +39173,14 @@
 "source": "Wikimedia Commons, CC BY 4.0",
 "topic": "caracal",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Caracal_caracal_caracal_186538043.jpg/1280px-Caracal_caracal_caracal_186538043.jpg"
+},
+"p-c4767d2387d2": {
+"at": "2026-10-12",
+"author": "Pierre Blach\u00e9",
+"clonedFrom": "evpack-new-years-eve-2026",
+"packId": "evpack-new-years-eve-2027",
+"source": "flickr via Openverse, CC CC0",
+"url": "https://live.staticflickr.com/65535/51541894248_4c67793f98_b.jpg"
 },
 "p-c47c23341cfa": {
 "at": "2026-10-12",
@@ -39396,6 +40123,18 @@
 "topic": "European hedgehog",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Erinaceus_europaeus_3.JPG/1280px-Erinaceus_europaeus_3.JPG"
 },
+"p-cb8150f35fb2": {
+"at": "2026-10-12",
+"author": "Evaengler",
+"clonedFrom": "evpack-new-years-eve-2026",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-new-years-eve-2027",
+"page": "https://commons.wikimedia.org/wiki/File:2_Manhattan_cocktails,_bird%27s_eye_view.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "cocktails",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/2_Manhattan_cocktails%2C_bird%27s_eye_view.jpg/1280px-2_Manhattan_cocktails%2C_bird%27s_eye_view.jpg"
+},
 "p-cb8572777189": {
 "at": "2026-10-12",
 "author": "Sergey Ayukov",
@@ -40010,6 +40749,17 @@
 "topic": "alpine ibex",
 "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/326466091/original.jpeg"
 },
+"p-cf3cc8fdfc0a": {
+"at": "2026-10-12",
+"author": "Calreyn88",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-classic-cars",
+"page": "https://commons.wikimedia.org/wiki/File:Aston_Martin_DB5_Volante_1.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Aston Martin DB5",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Aston_Martin_DB5_Volante_1.jpg/1280px-Aston_Martin_DB5_Volante_1.jpg"
+},
 "p-cf4725475004": {
 "at": "2026-10-12",
 "author": "SUBARUsti2020hk",
@@ -40166,6 +40916,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "sea anemone",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/An%C3%A9mona_magn%C3%ADfica_%28Heteractis_magnifica%29%2C_mar_Rojo%2C_Egipto%2C_2023-04-19%2C_DD_35.jpg/1280px-An%C3%A9mona_magn%C3%ADfica_%28Heteractis_magnifica%29%2C_mar_Rojo%2C_Egipto%2C_2023-04-19%2C_DD_35.jpg"
+},
+"p-d08896baa59c": {
+"at": "2026-10-12",
+"author": "Leonard von Bibra",
+"licence": "CC0",
+"packId": "evpack-new-years-eve-2026",
+"page": "https://stocksnap.io/photo/dark-light-FAHVD1I4K9",
+"provider": "openverse:stocksnap",
+"source": "stocksnap via Openverse, CC0",
+"topic": "sparklers",
+"url": "https://cdn.stocksnap.io/img-thumbs/960w/FAHVD1I4K9.jpg"
 },
 "p-d0a36a0803e8": {
 "at": "2026-10-12",
@@ -40431,6 +41192,17 @@
 "topic": "AI-generated owl",
 "url": "https://live.staticflickr.com/65535/52313502363_b64c3c4eb6_b.jpg"
 },
+"p-d2d16a997b06": {
+"at": "2026-10-12",
+"author": "Colin Smith",
+"licence": "CC BY-SA 2.0",
+"packId": "evpack-new-years-eve-2026",
+"page": "https://commons.wikimedia.org/wiki/File:Streamers_-_geograph.org.uk_-_2978358.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 2.0",
+"topic": "streamers",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Streamers_-_geograph.org.uk_-_2978358.jpg/1280px-Streamers_-_geograph.org.uk_-_2978358.jpg"
+},
 "p-d2e24c378b1a": {
 "at": "2026-10-12",
 "author": "NASA",
@@ -40497,6 +41269,17 @@
 "topic": "cheese platter grapes",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Veeno_platter.jpg/1280px-Veeno_platter.jpg"
 },
+"p-d3a746eaebbc": {
+"at": "2026-10-12",
+"author": "Artaxerxes",
+"licence": "CC BY 4.0",
+"packId": "pack-classic-cars",
+"page": "https://commons.wikimedia.org/wiki/File:1957_Chevrolet_Bel_Air_Townsman_The_Putney_Diner_133_Main_Street_Putney_VT_September_2026_04.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "Chevrolet Bel Air 1957",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/1957_Chevrolet_Bel_Air_Townsman_The_Putney_Diner_133_Main_Street_Putney_VT_September_2026_04.jpg/1280px-1957_Chevrolet_Bel_Air_Townsman_The_Putney_Diner_133_Main_Street_Putney_VT_September_2026_04.jpg"
+},
 "p-d3b42088f271": {
 "at": "2026-10-12",
 "author": "Charles J. Sharp",
@@ -40507,6 +41290,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "peach-faced lovebird",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Rosy-faced_lovebird_%28Agapornis_roseicollis_roseicollis%29.jpg/1280px-Rosy-faced_lovebird_%28Agapornis_roseicollis_roseicollis%29.jpg"
+},
+"p-d3c12f48f3d5": {
+"at": "2026-10-12",
+"author": "ahisgett",
+"licence": "CC BY",
+"packId": "pack-classic-cars",
+"page": "https://www.flickr.com/photos/37804979@N00/30906946094",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, CC BY",
+"topic": "BMW Isetta",
+"url": "https://live.staticflickr.com/478/30906946094_de83b07bff_b.jpg"
 },
 "p-d3e3085c355e": {
 "at": "2026-10-12",
@@ -41032,6 +41826,17 @@
 "source": "Wikimedia Commons, CC BY-SA 2.0",
 "topic": "Scottish fold kitten",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Silver_tabby_Scottish_Fold_Kitten.jpg/1280px-Silver_tabby_Scottish_Fold_Kitten.jpg"
+},
+"p-d727e5d6705a": {
+"at": "2026-10-12",
+"author": "Yann Caradec from Paris, France",
+"licence": "CC BY-SA 2.0",
+"packId": "evpack-new-years-eve-2026",
+"page": "https://commons.wikimedia.org/wiki/File:2012_Fireworks_on_Eiffel_Tower_24.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 2.0",
+"topic": "fireworks Paris",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/2012_Fireworks_on_Eiffel_Tower_24.jpg/1280px-2012_Fireworks_on_Eiffel_Tower_24.jpg"
 },
 "p-d75ab67dc3c0": {
 "at": "2026-10-12",
@@ -42480,6 +43285,18 @@
 "topic": "Marqueyssac gardens",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Marqueyssac._2019%288%29.jpg/1280px-Marqueyssac._2019%288%29.jpg"
 },
+"p-e25e2455cc55": {
+"at": "2026-10-12",
+"author": "Jan Fidler from Prague, Czech Republic",
+"clonedFrom": "evpack-new-years-eve-2026",
+"licence": "CC BY 2.0",
+"packId": "evpack-new-years-eve-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Prague_New_Year_fireworks_-_Flickr_-_prague.czech.photo.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "fireworks Prague",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Prague_New_Year_fireworks_-_Flickr_-_prague.czech.photo.jpg/1280px-Prague_New_Year_fireworks_-_Flickr_-_prague.czech.photo.jpg"
+},
 "p-e27549e7267c": {
 "at": "2026-10-12",
 "author": "Sunshinehoney10",
@@ -42513,6 +43330,18 @@
 "topic": "cat:Photoelasticity",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Photoelasticity_-_Clear_CD_case_centre.jpg/1280px-Photoelasticity_-_Clear_CD_case_centre.jpg"
 },
+"p-e2e2a7125cb2": {
+"at": "2026-10-12",
+"author": "Twdragon",
+"clonedFrom": "evpack-new-years-eve-2026",
+"licence": "CC BY-SA 3.0",
+"packId": "evpack-new-years-eve-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Star_Trek_fans_convent_2008_-_Fireworks.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "fireworks Moscow",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Star_Trek_fans_convent_2008_-_Fireworks.jpg/1280px-Star_Trek_fans_convent_2008_-_Fireworks.jpg"
+},
 "p-e316ae6c7ead": {
 "at": "2026-10-12",
 "author": "Andy Reago & Chrissy McClarren",
@@ -42523,6 +43352,17 @@
 "source": "Wikimedia Commons, CC BY 2.0",
 "topic": "northern saw-whet owl",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Northern_Saw-whet_Owl_%2831782265242%29.jpg/1280px-Northern_Saw-whet_Owl_%2831782265242%29.jpg"
+},
+"p-e3179981ed56": {
+"at": "2026-10-12",
+"author": "Derstuff",
+"licence": "CC0",
+"packId": "pack-classic-cars",
+"page": "https://commons.wikimedia.org/wiki/File:Citro%C3%ABn_DS_rallye-car_front.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "Citro\u00ebn DS",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Citro%C3%ABn_DS_rallye-car_front.jpg/1280px-Citro%C3%ABn_DS_rallye-car_front.jpg"
 },
 "p-e32cb1233b11": {
 "at": "2026-10-12",
@@ -42689,6 +43529,17 @@
 "topic": "AI-generated dragon",
 "url": "https://live.staticflickr.com/65535/52305562045_2db468a025_b.jpg"
 },
+"p-e448b0d66313": {
+"at": "2026-10-12",
+"author": "Kjetil Ree",
+"licence": "CC BY-SA 3.0",
+"packId": "evpack-new-years-eve-2026",
+"page": "https://commons.wikimedia.org/wiki/File:Champagne_cooler_-_2013-12-26_at_19-32-22.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "champagne bucket",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Champagne_cooler_-_2013-12-26_at_19-32-22.jpg/1280px-Champagne_cooler_-_2013-12-26_at_19-32-22.jpg"
+},
 "p-e46166ebbe52": {
 "at": "2026-10-12",
 "author": "Sandra Aceng",
@@ -42722,6 +43573,17 @@
 "source": "Wikimedia Commons, CC BY 4.0",
 "topic": "Sachertorte",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Sachertorte_at_Hotel_Sacher_2024.jpg/1280px-Sachertorte_at_Hotel_Sacher_2024.jpg"
+},
+"p-e4996582a771": {
+"at": "2026-10-12",
+"author": "Koreller",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-new-years-eve-2026",
+"page": "https://commons.wikimedia.org/wiki/File:Mus%C3%A9e_d%27histoire_de_Nantes_-_152_-_Sablier_de_trente_minutes.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "hourglass",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Mus%C3%A9e_d%27histoire_de_Nantes_-_152_-_Sablier_de_trente_minutes.jpg/1280px-Mus%C3%A9e_d%27histoire_de_Nantes_-_152_-_Sablier_de_trente_minutes.jpg"
 },
 "p-e499826bb99c": {
 "at": "2026-10-12",
@@ -44972,6 +45834,18 @@
 "topic": "scarlet macaw",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Scharlachara_%28Ara_macao%29.jpg/1280px-Scharlachara_%28Ara_macao%29.jpg"
 },
+"p-f42d2647e052": {
+"at": "2026-10-12",
+"author": "George Chernilevsky",
+"clonedFrom": "evpack-new-years-eve-2026",
+"licence": "Public domain",
+"packId": "evpack-new-years-eve-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Christmas_decorations_2017_G1.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "tinsel",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Christmas_decorations_2017_G1.jpg/1280px-Christmas_decorations_2017_G1.jpg"
+},
 "p-f46f45b89b3d": {
 "at": "2026-10-12",
 "author": "Dirk Vorderstra\u00dfe",
@@ -45215,6 +46089,17 @@
 "source": "Wikimedia Commons, CC BY 2.0",
 "topic": "yellow-headed amazon",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Amazona_oratrix_-Baltimore_Aquarium%2C_USA-8b.jpg/1280px-Amazona_oratrix_-Baltimore_Aquarium%2C_USA-8b.jpg"
+},
+"p-f65bca4f4ea2": {
+"at": "2026-10-12",
+"author": "Carsten Stiller",
+"licence": "CC BY 2.0",
+"packId": "evpack-new-years-eve-2026",
+"page": "https://commons.wikimedia.org/wiki/File:2013-09-28_Jena_Balloon_(10002541813).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "gold balloons",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/2013-09-28_Jena_Balloon_%2810002541813%29.jpg/1280px-2013-09-28_Jena_Balloon_%2810002541813%29.jpg"
 },
 "p-f66e73ee396e": {
 "at": "2026-10-12",
@@ -46423,6 +47308,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "orange gerbera daisy flower",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Orange_Daisy_sepals.jpg/1280px-Orange_Daisy_sepals.jpg"
+},
+"p-fedca0875114": {
+"at": "2026-10-12",
+"author": "Denverbabushka",
+"licence": "CC BY-SA 3.0",
+"packId": "evpack-earth-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Pamukkale_2_4_Commons.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "Pamukkale travertines",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Pamukkale_2_4_Commons.jpg/1280px-Pamukkale_2_4_Commons.jpg"
 },
 "p-fee83630052c": {
 "at": "2026-10-12",
