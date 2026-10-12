@@ -1,0 +1,9 @@
+{
+ "id": "ai-robots", "name": "AI Robots and Machines", "category": "AI",
+ "description": "Battle droids, robot helpers, silver mechanical owls, a clockwork dove and steampunk towers built by text-to-image models. Every picture is AI-generated and in the public domain.",
+ "kind": "ai", "pool": "ai-all", "price": "coins", "priceCoins": 600, "sortOrder": 2016,
+ "target": 24, "per_topic": 1, "fetch_per_topic": 20, "author_cap": 9, "min_short": 900,
+ "sources": ["openverse"], "openverse_category": "photograph", "accent_from_cover": true,
+ "topics": ["AI-generated robot", "AI-generated robots", "AI-generated droid", "AI-generated mech", "AI-generated cyborg", "AI-generated steampunk",
+            "AI-generated machine", "AI-generated mechanical", "AI-generated clockwork", "AI-generated automaton", "AI-generated humanoid robot", "AI-generated robotic"]
+}

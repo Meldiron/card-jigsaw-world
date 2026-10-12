@@ -1,0 +1,9 @@
+{
+ "id": "ai-forests", "name": "AI Forests", "category": "AI",
+ "description": "Blazing autumn woods, misty pines, jungle rivers and glowing trees painted by text-to-image models. Every picture is AI-generated and in the public domain.",
+ "kind": "ai", "pool": "ai-all", "price": "free", "sortOrder": 2015,
+ "target": 24, "per_topic": 1, "fetch_per_topic": 20, "author_cap": 10, "min_short": 900,
+ "sources": ["openverse"], "openverse_category": "photograph", "accent_from_cover": true,
+ "topics": ["AI-generated autumn", "AI-generated fall", "AI-generated woods", "AI-generated jungle", "AI-generated rainforest", "AI-generated tree",
+            "AI-generated foliage", "AI-generated pine", "AI-generated bamboo", "AI-generated oak", "AI-generated woodland", "AI-generated swamp"]
+}

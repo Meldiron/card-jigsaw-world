@@ -197,6 +197,18 @@
 "pack": "evpack-mental-health-2026",
 "reason": "weak"
 },
+"https://cdn.stocksnap.io/img-thumbs/960w/28UU2941TO.jpg": {
+"at": "2026-10-12",
+"label": "evpack-health-2027-05",
+"pack": "evpack-health-2027",
+"reason": "quality"
+},
+"https://cdn.stocksnap.io/img-thumbs/960w/2A9D21B35B.jpg": {
+"at": "2026-10-12",
+"label": "c1552",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://cdn.stocksnap.io/img-thumbs/960w/3GIIOPRB4I.jpg": {
 "at": "2026-10-12",
 "label": "evpack-valentines-2027-01",
@@ -327,6 +339,12 @@
 "at": "2026-10-12",
 "label": "pack-bridges-01",
 "pack": "pack-bridges",
+"reason": "weak"
+},
+"https://cdn.stocksnap.io/img-thumbs/960w/F7VEF59WGR.jpg": {
+"at": "2026-10-12",
+"label": "c1545",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://cdn.stocksnap.io/img-thumbs/960w/FJGTBRV4UI.jpg": {
@@ -581,6 +599,12 @@
 "pack": "evpack-mental-health-2026",
 "reason": "quality"
 },
+"https://cdn.stocksnap.io/img-thumbs/960w/VROE918EPC.jpg": {
+"at": "2026-10-12",
+"label": "c1548",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://cdn.stocksnap.io/img-thumbs/960w/VWWBOFQBGZ.jpg": {
 "at": "2026-10-12",
 "label": "pack-rainy-streets-08",
@@ -598,6 +622,12 @@
 "label": "evpack-bean-day-2027-08",
 "pack": "evpack-bean-day-2027",
 "reason": "off-theme"
+},
+"https://cdn.stocksnap.io/img-thumbs/960w/WOBV6IVUD0.jpg": {
+"at": "2026-10-12",
+"label": "c1541",
+"pack": "daily-2024-02",
+"reason": "weak"
 },
 "https://cdn.stocksnap.io/img-thumbs/960w/WVZCIHMHYT.jpg": {
 "at": "2026-10-12",
@@ -675,6 +705,12 @@
 "at": "2026-10-12",
 "label": "pack-classic-cars-08",
 "pack": "pack-classic-cars",
+"reason": "weak"
+},
+"https://cdn.stocksnap.io/img-thumbs/960w/ZUPY8Y2NZM.jpg": {
+"at": "2026-10-12",
+"label": "c1633",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://iiif.micr.io/Bbhjh/full/!2000,2000/0/default.jpg": {
@@ -1127,6 +1163,18 @@
 "pack": "pack-planets",
 "reason": "people"
 },
+"https://images-assets.nasa.gov/image/9514774/9514774~medium.jpg": {
+"at": "2026-10-12",
+"label": "c1443",
+"pack": "daily-2024-02",
+"reason": "text"
+},
+"https://images-assets.nasa.gov/image/9700401/9700401~medium.jpg": {
+"at": "2026-10-12",
+"label": "c1479",
+"pack": "daily-2024-02",
+"reason": "text"
+},
 "https://images-assets.nasa.gov/image/GSFC_20171208_Archive_e000054/GSFC_20171208_Archive_e000054~orig.jpg": {
 "at": "2026-10-12",
 "label": "pack-nebulae-19",
@@ -1337,6 +1385,12 @@
 "pack": "pack-nebulae",
 "reason": "landscape"
 },
+"https://images-assets.nasa.gov/image/PIA04220/PIA04220~medium.jpg": {
+"at": "2026-10-12",
+"label": "c1480",
+"pack": "daily-2024-02",
+"reason": "text"
+},
 "https://images-assets.nasa.gov/image/PIA04220/PIA04220~orig.jpg": {
 "at": "2026-10-12",
 "label": "pack-nebulae-04",
@@ -1439,6 +1493,12 @@
 "pack": "deep-space",
 "reason": "landscape"
 },
+"https://images-assets.nasa.gov/image/PIA05983/PIA05983~medium.jpg": {
+"at": "2026-10-12",
+"label": "c1463",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://images-assets.nasa.gov/image/PIA06594/PIA06594~orig.jpg": {
 "at": "2026-10-12",
 "label": "deep-space-nasa-pia06594",
@@ -1492,6 +1552,12 @@
 "label": "pack-galaxies-08",
 "pack": "pack-galaxies",
 "reason": "landscape"
+},
+"https://images-assets.nasa.gov/image/PIA09109/PIA09109~medium.jpg": {
+"at": "2026-10-12",
+"label": "c1441",
+"pack": "daily-2024-02",
+"reason": "text"
 },
 "https://images-assets.nasa.gov/image/PIA09178/PIA09178~medium.jpg": {
 "at": "2026-10-12",
@@ -2057,6 +2123,12 @@
 "pack": "evpack-thanksgiving-2026",
 "reason": "weak"
 },
+"https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTExL2ZsNTE2NjY5OTkyNTctaW1hZ2UuanBn.jpg": {
+"at": "2026-10-12",
+"label": "evpack-health-2027-07",
+"pack": "evpack-health-2027",
+"reason": "quality"
+},
 "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTExL2ZsNzA2NTUzNzM4NS1pbWFnZS5qcGc.jpg": {
 "at": "2026-10-12",
 "label": "pack-desert-dunes-15",
@@ -2122,6 +2194,12 @@
 "label": "c81",
 "pack": "abstract-kaleidoscope",
 "reason": "off-theme"
+},
+"https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTEyL2FpYzEwNTc0LWltYWdlLmpwZw.jpg": {
+"at": "2026-10-12",
+"label": "c1586",
+"pack": "daily-2024-02",
+"reason": "weak"
 },
 "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTEyL2FpYzcyODgyLWltYWdlLmpwZw.jpg": {
 "at": "2026-10-12",
@@ -2249,6 +2327,12 @@
 "pack": "evpack-vegan-2026",
 "reason": "weak"
 },
+"https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL2ZsMjY5NDIwODYxNTktaW1hZ2Uta3liZWw0aTMuanBn.jpg": {
+"at": "2026-10-12",
+"label": "c1635",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL2ZyYW5pbWFsX2ZveF9jdXRlXzk1NzM4Ni1pbWFnZS1reWJjOHFzaC5qcGc.jpg": {
 "at": "2026-10-12",
 "label": "evpack-animal-day-2026-03",
@@ -2351,6 +2435,12 @@
 "pack": "pack-lavender",
 "reason": "weak"
 },
+"https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL3B4NzY0MzU4LWltYWdlLWt6MmU5Z3p2LmpwZw.jpg": {
+"at": "2026-10-12",
+"label": "c1598",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL3NrNDIwOS1pbWFnZS1rd3Z1azV1NC5qcGc.jpg": {
 "at": "2026-10-12",
 "label": "pack-deer-04",
@@ -2361,6 +2451,12 @@
 "at": "2026-10-12",
 "label": "evpack-kindness-2026-07",
 "pack": "evpack-kindness-2026",
+"reason": "people"
+},
+"https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvZmYyNzg1LWltYWdlLWt3dnluNmJoLmpwZw.jpg": {
+"at": "2026-10-12",
+"label": "evpack-health-2027-08",
+"pack": "evpack-health-2027",
 "reason": "people"
 },
 "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvZmYyODgyLWltYWdlLWt3dnltbDluLmpwZw.jpg": {
@@ -2525,6 +2621,18 @@
 "pack": "daily-2026-01",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/106582089/original.jpg": {
+"at": "2026-10-12",
+"label": "c1396",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/107571538/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1241",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/108322689/original.jpg": {
 "at": "2026-10-12",
 "label": "c90",
@@ -2567,6 +2675,12 @@
 "pack": "evpack-oceans-2027",
 "reason": "quality"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/112176341/original.jpg": {
+"at": "2026-10-12",
+"label": "c1403",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/112621555/original.jpg": {
 "at": "2026-10-12",
 "label": "c906",
@@ -2589,6 +2703,24 @@
 "at": "2026-10-12",
 "label": "c149",
 "pack": "daily-2026-01",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/114415099/original.jpg": {
+"at": "2026-10-12",
+"label": "c1521",
+"pack": "daily-2024-02",
+"reason": "people"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/114415103/original.jpg": {
+"at": "2026-10-12",
+"label": "c1520",
+"pack": "daily-2024-02",
+"reason": "people"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/11508381/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1147",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/115676759/original.jpg": {
@@ -2621,11 +2753,23 @@
 "pack": "daily-2026-01",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/1187532/original.jpg": {
+"at": "2026-10-12",
+"label": "c1199",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/119254033/original.jpeg": {
 "at": "2026-10-12",
 "label": "c59",
 "pack": "daily-2026-01",
 "reason": "people"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/119396510/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1265",
+"pack": "daily-2024-02",
+"reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/120338827/original.jpg": {
 "at": "2026-10-12",
@@ -2645,16 +2789,52 @@
 "pack": "daily-2026-01",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/1236552/original.": {
+"at": "2026-10-12",
+"label": "c1293",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/123755174/original.jpg": {
+"at": "2026-10-12",
+"label": "c1223",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/12567789/original.jpg": {
+"at": "2026-10-12",
+"label": "c1421",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/128226286/original.jpg": {
 "at": "2026-10-12",
 "label": "pack-sea-life-18",
 "pack": "pack-sea-life",
 "reason": "duplicate"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/128699067/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1165",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/129657798/original.jpeg": {
 "at": "2026-10-12",
-"label": "c554",
-"pack": "daily-2025-01",
+"label": "c1358",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/130404197/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1303",
+"pack": "daily-2024-02",
+"reason": "quality"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/13096684/original.jpg": {
+"at": "2026-10-12",
+"label": "c1384",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/133826593/original.jpeg": {
@@ -2719,8 +2899,8 @@
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/142507133/original.jpeg": {
 "at": "2026-10-12",
-"label": "c96",
-"pack": "evpack-oceans-2027",
+"label": "c1211",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/144203243/original.jpeg": {
@@ -2734,6 +2914,12 @@
 "label": "c849",
 "pack": "daily-2023-10",
 "reason": "people"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/14486422/original.jpg": {
+"at": "2026-10-12",
+"label": "c1409",
+"pack": "daily-2024-02",
+"reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/145734366/original.jpeg": {
 "at": "2026-10-12",
@@ -2765,11 +2951,23 @@
 "pack": "daily-2026-01",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/149259485/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1269",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/151885919/original.jpg": {
 "at": "2026-10-12",
 "label": "c316",
 "pack": "daily-2026-01",
 "reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/152630214/original.jpg": {
+"at": "2026-10-12",
+"label": "c1193",
+"pack": "daily-2024-02",
+"reason": "quality"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/152696121/original.jpeg": {
 "at": "2026-10-12",
@@ -2777,10 +2975,22 @@
 "pack": "evpack-st-patricks-2027",
 "reason": "quality"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/152732558/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1415",
+"pack": "daily-2024-02",
+"reason": "people"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/15424906/original.jpg": {
 "at": "2026-10-12",
 "label": "c860",
 "pack": "daily-2023-10",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/155071570/original.jpg": {
+"at": "2026-10-12",
+"label": "c1283",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/155641197/original.jpeg": {
@@ -2799,6 +3009,12 @@
 "at": "2026-10-12",
 "label": "c912",
 "pack": "daily-2023-10",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/158091629/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1254",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/158147313/original.jpeg": {
@@ -2855,6 +3071,12 @@
 "pack": "daily-2023-10",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/165996711/original.jpg": {
+"at": "2026-10-12",
+"label": "c1156",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/166810894/original.jpg": {
 "at": "2026-10-12",
 "label": "c890",
@@ -2865,6 +3087,12 @@
 "at": "2026-10-12",
 "label": "c426",
 "pack": "daily-2026-01",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/169360078/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1200",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/170249993/original.jpg": {
@@ -2885,6 +3113,18 @@
 "pack": "daily-2026-01",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/172084763/original.jpg": {
+"at": "2026-10-12",
+"label": "c1295",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/172084952/original.jpg": {
+"at": "2026-10-12",
+"label": "c1298",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/174927616/original.jpeg": {
 "at": "2026-10-12",
 "label": "c275",
@@ -2895,6 +3135,12 @@
 "at": "2026-10-12",
 "label": "c188",
 "pack": "daily-2026-01",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/175153791/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1214",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/175156157/original.jpeg": {
@@ -2933,6 +3179,12 @@
 "pack": "daily-2026-01",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/177668027/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1404",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/17767241/original.jpg": {
 "at": "2026-10-12",
 "label": "c488",
@@ -2943,6 +3195,12 @@
 "at": "2026-10-12",
 "label": "c387",
 "pack": "daily-2026-01",
+"reason": "people"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/178878897/original.jpg": {
+"at": "2026-10-12",
+"label": "c1255",
+"pack": "daily-2024-02",
 "reason": "people"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/180716534/original.jpg": {
@@ -2963,11 +3221,23 @@
 "pack": "daily-2026-01",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/181619558/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1288",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/181639940/original.jpeg": {
 "at": "2026-10-12",
 "label": "c380",
 "pack": "daily-2026-01",
 "reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/182158399/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1227",
+"pack": "daily-2024-02",
+"reason": "people"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/183974578/original.jpg": {
 "at": "2026-10-12",
@@ -3053,6 +3323,12 @@
 "pack": "daily-2023-10",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/189541572/original.jpg": {
+"at": "2026-10-12",
+"label": "c1522",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/190297485/original.jpeg": {
 "at": "2026-10-12",
 "label": "c123",
@@ -3095,6 +3371,12 @@
 "pack": "daily-2023-10",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/202616529/original.jpg": {
+"at": "2026-10-12",
+"label": "c1243",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/203158716/original.jpeg": {
 "at": "2026-10-12",
 "label": "c871",
@@ -3125,16 +3407,40 @@
 "pack": "daily-2023-10",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/20535817/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1198",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/206467206/original.jpeg": {
 "at": "2026-10-12",
 "label": "c266",
 "pack": "daily-2026-01",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/206590841/original.jpg": {
+"at": "2026-10-12",
+"label": "c1267",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/208476433/original.jpg": {
 "at": "2026-10-12",
 "label": "c329",
 "pack": "daily-2026-01",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/209077976/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1278",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/211943010/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1407",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/21227754/original.jpg": {
@@ -3172,6 +3478,12 @@
 "label": "c913",
 "pack": "daily-2023-11",
 "reason": "similar"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/218520762/original.jpg": {
+"at": "2026-10-12",
+"label": "c1271",
+"pack": "daily-2024-02",
+"reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/219062054/original.jpeg": {
 "at": "2026-10-12",
@@ -3221,6 +3533,18 @@
 "pack": "daily-2026-01",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/223355423/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1364",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/223383211/original.jpg": {
+"at": "2026-10-12",
+"label": "c1381",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/223561123/original.jpeg": {
 "at": "2026-10-12",
 "label": "c457",
@@ -3251,6 +3575,18 @@
 "pack": "daily-2026-01",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/227650923/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1258",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/227777524/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1170",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/229622787/original.jpeg": {
 "at": "2026-10-12",
 "label": "c493",
@@ -3269,6 +3605,12 @@
 "pack": "evpack-st-patricks-2027",
 "reason": "similar"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/230579077/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1413",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/231676071/original.jpg": {
 "at": "2026-10-12",
 "label": "c881",
@@ -3279,6 +3621,12 @@
 "at": "2026-10-12",
 "label": "c880",
 "pack": "daily-2023-10",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/232556976/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1178",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/232765211/original.jpeg": {
@@ -3433,8 +3781,8 @@
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/256173406/original.jpeg": {
 "at": "2026-10-12",
-"label": "c521",
-"pack": "daily-2026-01",
+"label": "c1345",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/257181629/original.jpeg": {
@@ -3485,10 +3833,22 @@
 "pack": "daily-2023-10",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/262922536/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1268",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/263037512/original.jpg": {
 "at": "2026-10-12",
 "label": "c400",
 "pack": "daily-2026-01",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/264446323/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1205",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/264928794/original.jpeg": {
@@ -3569,11 +3929,23 @@
 "pack": "daily-2023-10",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/278480100/original.jpg": {
+"at": "2026-10-12",
+"label": "c1174",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/28289004/original.jpeg": {
 "at": "2026-10-12",
 "label": "c802",
 "pack": "daily-2023-10",
 "reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/283512035/original.jpg": {
+"at": "2026-10-12",
+"label": "c1524",
+"pack": "daily-2024-02",
+"reason": "people"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/288728613/original.jpg": {
 "at": "2026-10-12",
@@ -3611,10 +3983,22 @@
 "pack": "pack-pandas",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/292967167/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1523",
+"pack": "daily-2024-02",
+"reason": "people"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/293129369/original.jpeg": {
 "at": "2026-10-12",
 "label": "c260",
 "pack": "daily-2025-01",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/294543128/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1281",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/2956687/original.jpg": {
@@ -3639,6 +4023,12 @@
 "at": "2026-10-12",
 "label": "c448",
 "pack": "daily-2026-01",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/29714904/original.jpg": {
+"at": "2026-10-12",
+"label": "c1208",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/29727479/original.jpg": {
@@ -3683,16 +4073,28 @@
 "pack": "evpack-oceans-2027",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/302572817/original.jpg": {
+"at": "2026-10-12",
+"label": "c1277",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/303110408/original.jpeg": {
 "at": "2026-10-12",
-"label": "c513",
-"pack": "daily-2026-01",
+"label": "c1239",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/303227216/original.jpeg": {
 "at": "2026-10-12",
 "label": "c117",
 "pack": "daily-2026-01",
+"reason": "people"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/304089999/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1328",
+"pack": "daily-2024-02",
 "reason": "people"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/304157319/original.jpg": {
@@ -3713,6 +4115,12 @@
 "pack": "evpack-oceans-2027",
 "reason": "people"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/307026691/original.jpg": {
+"at": "2026-10-12",
+"label": "c1204",
+"pack": "daily-2024-02",
+"reason": "quality"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/307189266/original.jpg": {
 "at": "2026-10-12",
 "label": "c109",
@@ -3723,6 +4131,12 @@
 "at": "2026-10-12",
 "label": "c111",
 "pack": "pack-pandas",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/307917047/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1279",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/307936/original.JPG": {
@@ -3742,6 +4156,12 @@
 "label": "c901",
 "pack": "daily-2023-10",
 "reason": "people"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/310177542/original.jpg": {
+"at": "2026-10-12",
+"label": "c1366",
+"pack": "daily-2024-02",
+"reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/31039689/original.jpeg": {
 "at": "2026-10-12",
@@ -3765,6 +4185,12 @@
 "at": "2026-10-12",
 "label": "c840",
 "pack": "daily-2023-10",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/312887873/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1417",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/313364758/original.jpeg": {
@@ -3809,6 +4235,12 @@
 "pack": "daily-2023-10",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/318274823/original.jpg": {
+"at": "2026-10-12",
+"label": "c1342",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/3187694/original.jpg": {
 "at": "2026-10-12",
 "label": "c793",
@@ -3831,6 +4263,18 @@
 "at": "2026-10-12",
 "label": "c482",
 "pack": "daily-2026-01",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/320735326/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1173",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/322050681/original.jpg": {
+"at": "2026-10-12",
+"label": "c1338",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/32352930/original.jpg": {
@@ -3875,6 +4319,12 @@
 "pack": "daily-2023-10",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/329738638/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1146",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/330573556/original.jpeg": {
 "at": "2026-10-12",
 "label": "c489",
@@ -3891,6 +4341,12 @@
 "at": "2026-10-12",
 "label": "c177",
 "pack": "daily-2026-01",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/331496879/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1164",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/332108710/original.jpg": {
@@ -3913,8 +4369,8 @@
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/339629692/original.jpeg": {
 "at": "2026-10-12",
-"label": "c75",
-"pack": "pack-foxes",
+"label": "c1162",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/340815347/original.jpeg": {
@@ -3933,6 +4389,12 @@
 "at": "2026-10-12",
 "label": "c390",
 "pack": "daily-2026-01",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/342955528/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1158",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/342973634/original.jpg": {
@@ -3985,8 +4447,14 @@
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/347282517/original.jpeg": {
 "at": "2026-10-12",
-"label": "c98",
-"pack": "evpack-oceans-2027",
+"label": "c1216",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/347533942/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1354",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/347567213/original.jpg": {
@@ -4011,6 +4479,12 @@
 "at": "2026-10-12",
 "label": "c172",
 "pack": "daily-2026-01",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/348993097/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1195",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/349593933/original.jpeg": {
@@ -4049,6 +4523,12 @@
 "pack": "daily-2023-10",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/358752975/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1245",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/359157408/original.jpg": {
 "at": "2026-10-12",
 "label": "c75",
@@ -4065,6 +4545,12 @@
 "at": "2026-10-12",
 "label": "c114",
 "pack": "daily-2026-01",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/361534973/original.jpg": {
+"at": "2026-10-12",
+"label": "c1312",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/361574395/original.jpg": {
@@ -4115,6 +4601,12 @@
 "pack": "daily-2025-01",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/366398495/original.jpg": {
+"at": "2026-10-12",
+"label": "c1336",
+"pack": "daily-2024-02",
+"reason": "similar"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/366422603/original.jpeg": {
 "at": "2026-10-12",
 "label": "c197",
@@ -4131,6 +4623,12 @@
 "at": "2026-10-12",
 "label": "c204",
 "pack": "daily-2026-01",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/368366290/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1428",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/368390710/original.jpeg": {
@@ -4165,8 +4663,8 @@
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/375653853/original.jpg": {
 "at": "2026-10-12",
-"label": "c240",
-"pack": "daily-2026-01",
+"label": "c1307",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/375708307/original.jpg": {
@@ -4211,6 +4709,12 @@
 "pack": "daily-2026-01",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/379427208/original.jpg": {
+"at": "2026-10-12",
+"label": "c1297",
+"pack": "daily-2024-02",
+"reason": "people"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/379676292/original.jpeg": {
 "at": "2026-10-12",
 "label": "c914",
@@ -4229,6 +4733,12 @@
 "pack": "daily-2025-01",
 "reason": "off-theme"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/384467373/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1225",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/38573346/original.jpg": {
 "at": "2026-10-12",
 "label": "c44",
@@ -4241,10 +4751,22 @@
 "pack": "pack-pandas",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/386086709/original.jpg": {
+"at": "2026-10-12",
+"label": "c1187",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/38741354/original.jpg": {
 "at": "2026-10-12",
 "label": "c148",
 "pack": "daily-2026-01",
+"reason": "people"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/388885356/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1215",
+"pack": "daily-2024-02",
 "reason": "people"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/390541626/original.jpg": {
@@ -4264,6 +4786,12 @@
 "label": "c478",
 "pack": "daily-2026-01",
 "reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/393050011/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1397",
+"pack": "daily-2024-02",
+"reason": "quality"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/39318586/original.jpg": {
 "at": "2026-10-12",
@@ -4313,6 +4841,12 @@
 "pack": "daily-2023-10",
 "reason": "quality"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/396967605/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1353",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/397674922/original.jpeg": {
 "at": "2026-10-12",
 "label": "c455",
@@ -4357,14 +4891,20 @@
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/402169139/original.jpeg": {
 "at": "2026-10-12",
-"label": "c225",
-"pack": "daily-2026-01",
+"label": "c1320",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/402476486/original.jpg": {
 "at": "2026-10-12",
-"label": "c224",
-"pack": "daily-2026-01",
+"label": "c1319",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/403478189/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1330",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/404151453/original.jpeg": {
@@ -4372,6 +4912,12 @@
 "label": "pack-snowy-peaks-10",
 "pack": "pack-snowy-peaks",
 "reason": "off-theme"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/404206896/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1276",
+"pack": "daily-2024-02",
+"reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/404914229/original.jpg": {
 "at": "2026-10-12",
@@ -4421,6 +4967,30 @@
 "pack": "daily-2026-01",
 "reason": "off-theme"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/413074193/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1323",
+"pack": "daily-2024-02",
+"reason": "people"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/414632507/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1260",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/415037011/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1213",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/415391766/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1234",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/41552988/original.jpeg": {
 "at": "2026-10-12",
 "label": "c234",
@@ -4443,6 +5013,12 @@
 "at": "2026-10-12",
 "label": "c529",
 "pack": "daily-2026-01",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/416440297/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1322",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/4166461/original.jpg": {
@@ -4487,16 +5063,46 @@
 "pack": "pack-horses",
 "reason": "off-theme"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/422597742/original.jpg": {
+"at": "2026-10-12",
+"label": "c1280",
+"pack": "daily-2024-02",
+"reason": "text"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/422864447/original.jpeg": {
 "at": "2026-10-12",
 "label": "c125",
 "pack": "daily-2026-01",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/423308404/original.jpg": {
+"at": "2026-10-12",
+"label": "c1321",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/423478793/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1184",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/423738215/original.jpeg": {
 "at": "2026-10-12",
 "label": "c161",
 "pack": "evpack-oceans-2027",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/423746004/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1181",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/424363852/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1376",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/42472187/original.jpg": {
@@ -4519,8 +5125,14 @@
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/427518255/original.jpg": {
 "at": "2026-10-12",
-"label": "c110",
-"pack": "daily-2025-01",
+"label": "c1331",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/42759701/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1380",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/427842552/original.jpeg": {
@@ -4547,6 +5159,18 @@
 "pack": "daily-2026-01",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/432328302/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1231",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/433506842/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1399",
+"pack": "daily-2024-02",
+"reason": "people"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/433847941/original.jpeg": {
 "at": "2026-10-12",
 "label": "c495",
@@ -4563,6 +5187,12 @@
 "at": "2026-10-12",
 "label": "c52",
 "pack": "daily-2026-01",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/440353133/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1315",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/44071800/original.jpeg": {
@@ -4583,11 +5213,23 @@
 "pack": "daily-2026-01",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/441762846/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1318",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/442841893/original.jpeg": {
 "at": "2026-10-12",
 "label": "c80",
 "pack": "pack-pandas",
 "reason": "off-theme"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/44406509/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1360",
+"pack": "daily-2024-02",
+"reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/444202060/original.jpeg": {
 "at": "2026-10-12",
@@ -4619,6 +5261,12 @@
 "pack": "daily-2026-01",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/446427618/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1186",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/446614647/original.jpeg": {
 "at": "2026-10-12",
 "label": "c156",
@@ -4645,8 +5293,8 @@
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/449750989/original.jpg": {
 "at": "2026-10-12",
-"label": "c522",
-"pack": "daily-2026-01",
+"label": "c1346",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/4503898/original.jpg": {
@@ -4709,6 +5357,12 @@
 "pack": "pack-foxes",
 "reason": "off-theme"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/455116787/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1282",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/455337432/original.jpg": {
 "at": "2026-10-12",
 "label": "c143",
@@ -4717,9 +5371,9 @@
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/455658057/original.jpeg": {
 "at": "2026-10-12",
-"label": "c63",
-"pack": "pack-pandas",
-"reason": "off-theme"
+"label": "c1142",
+"pack": "daily-2024-02",
+"reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/456044336/original.jpg": {
 "at": "2026-10-12",
@@ -4727,16 +5381,34 @@
 "pack": "daily-2023-10",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/456115727/original.jpg": {
+"at": "2026-10-12",
+"label": "c1177",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/456566622/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1153",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/456903283/original.jpeg": {
 "at": "2026-10-12",
-"label": "c48",
-"pack": "daily-2026-01",
+"label": "c1390",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/458319716/original.jpg": {
 "at": "2026-10-12",
 "label": "c301",
 "pack": "daily-2026-01",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/459955704/original.jpg": {
+"at": "2026-10-12",
+"label": "c1175",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/460533607/original.jpeg": {
@@ -4759,8 +5431,14 @@
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/462604200/original.jpg": {
 "at": "2026-10-12",
-"label": "c120",
-"pack": "daily-2025-01",
+"label": "c1349",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/462807899/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1294",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/462915670/original.jpg": {
@@ -4795,8 +5473,14 @@
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/467081563/original.jpg": {
 "at": "2026-10-12",
-"label": "c47",
-"pack": "daily-2026-01",
+"label": "c1389",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/467609205/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1296",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/469765018/original.jpg": {
@@ -4805,16 +5489,28 @@
 "pack": "daily-2026-01",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/469833814/original.jpg": {
+"at": "2026-10-12",
+"label": "c1154",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/470237671/original.jpg": {
 "at": "2026-10-12",
-"label": "c551",
-"pack": "daily-2025-01",
+"label": "c1355",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/471754161/original.jpg": {
 "at": "2026-10-12",
 "label": "c118",
 "pack": "daily-2026-01",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/471899593/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1410",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/473255123/original.jpg": {
@@ -4839,6 +5535,12 @@
 "at": "2026-10-12",
 "label": "daily-2025-04-08",
 "pack": "daily-2025-04",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/476912808/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1197",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/477049519/original.jpeg": {
@@ -4907,6 +5609,12 @@
 "pack": "daily-2023-10",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/488217906/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1375",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/489140310/original.jpeg": {
 "at": "2026-10-12",
 "label": "c58",
@@ -4943,6 +5651,12 @@
 "pack": "daily-2026-01",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/494889451/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1209",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/498494259/original.jpeg": {
 "at": "2026-10-12",
 "label": "c221",
@@ -4955,10 +5669,28 @@
 "pack": "daily-2026-01",
 "reason": "similar"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/504207680/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1337",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/50690461/original.jpg": {
+"at": "2026-10-12",
+"label": "c1202",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/507528217/original.jpg": {
 "at": "2026-10-12",
 "label": "c469",
 "pack": "daily-2026-01",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/509874247/original.jpg": {
+"at": "2026-10-12",
+"label": "c1382",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/510237685/original.jpg": {
@@ -4985,10 +5717,28 @@
 "pack": "daily-2026-01",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/517281614/original.jpg": {
+"at": "2026-10-12",
+"label": "c1420",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/518698976/original.jpg": {
 "at": "2026-10-12",
 "label": "c396",
 "pack": "daily-2026-01",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/518946555/original.jpg": {
+"at": "2026-10-12",
+"label": "c1422",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/519515616/original.jpg": {
+"at": "2026-10-12",
+"label": "c1289",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/520137042/original.jpg": {
@@ -5027,10 +5777,22 @@
 "pack": "evpack-oceans-2027",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/525976155/original.jpg": {
+"at": "2026-10-12",
+"label": "c1219",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/528504096/original.jpg": {
 "at": "2026-10-12",
 "label": "c112",
 "pack": "evpack-oceans-2027",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/52857882/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1264",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/529485385/original.jpg": {
@@ -5063,10 +5825,22 @@
 "pack": "evpack-oceans-2027",
 "reason": "similar"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/53286309/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1306",
+"pack": "daily-2024-02",
+"reason": "quality"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/535574862/original.jpg": {
 "at": "2026-10-12",
 "label": "c212",
 "pack": "daily-2026-01",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/536767459/original.jpg": {
+"at": "2026-10-12",
+"label": "c1224",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/536774361/original.jpg": {
@@ -5093,6 +5867,12 @@
 "pack": "daily-2026-01",
 "reason": "people"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/538390221/original.jpg": {
+"at": "2026-10-12",
+"label": "c1291",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/541045025/original.jpg": {
 "at": "2026-10-12",
 "label": "c181",
@@ -5111,6 +5891,18 @@
 "pack": "evpack-oceans-2027",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/545556150/original.jpg": {
+"at": "2026-10-12",
+"label": "c1383",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/54597333/original.jpg": {
+"at": "2026-10-12",
+"label": "c1411",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/546711706/original.jpg": {
 "at": "2026-10-12",
 "label": "c83",
@@ -5121,6 +5913,18 @@
 "at": "2026-10-12",
 "label": "c875",
 "pack": "daily-2023-10",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/547700535/original.jpg": {
+"at": "2026-10-12",
+"label": "c1292",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/54777126/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1274",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/548133509/original.jpg": {
@@ -5137,8 +5941,8 @@
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/55876587/original.jpeg": {
 "at": "2026-10-12",
-"label": "c97",
-"pack": "evpack-oceans-2027",
+"label": "c1217",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/55968074/original.jpeg": {
@@ -5153,11 +5957,41 @@
 "pack": "evpack-oceans-2027",
 "reason": "quality"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/564471617/original.jpg": {
+"at": "2026-10-12",
+"label": "c1365",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/56699919/original.jpeg": {
 "at": "2026-10-12",
 "label": "c464",
 "pack": "daily-2026-01",
 "reason": "people"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/567609835/original.jpg": {
+"at": "2026-10-12",
+"label": "c1203",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/56939603/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1290",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/569983404/original.jpg": {
+"at": "2026-10-12",
+"label": "c1161",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/571082369/original.jpg": {
+"at": "2026-10-12",
+"label": "c1270",
+"pack": "daily-2024-02",
+"reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/572490695/original.jpg": {
 "at": "2026-10-12",
@@ -5175,6 +6009,12 @@
 "at": "2026-10-12",
 "label": "c893",
 "pack": "daily-2023-10",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/5772022/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1256",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/579211425/original.jpg": {
@@ -5207,6 +6047,12 @@
 "pack": "daily-2026-01",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/587286912/original.jpg": {
+"at": "2026-10-12",
+"label": "c1339",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/587461817/original.jpg": {
 "at": "2026-10-12",
 "label": "c258",
@@ -5219,10 +6065,22 @@
 "pack": "daily-2026-01",
 "reason": "people"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/588986676/original.jpg": {
+"at": "2026-10-12",
+"label": "c1369",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/590157101/original.jpg": {
 "at": "2026-10-12",
 "label": "c125",
 "pack": "evpack-oceans-2027",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/590389045/original.jpg": {
+"at": "2026-10-12",
+"label": "c1299",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/591020787/original.jpg": {
@@ -5243,11 +6101,41 @@
 "pack": "daily-2023-10",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/593110224/original.jpg": {
+"at": "2026-10-12",
+"label": "c1370",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/593163641/original.jpg": {
+"at": "2026-10-12",
+"label": "c1368",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/59317455/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1316",
+"pack": "daily-2024-02",
+"reason": "people"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/593378040/original.jpg": {
 "at": "2026-10-12",
 "label": "c59",
 "pack": "pack-lavender",
 "reason": "off-theme"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/593684050/original.jpg": {
+"at": "2026-10-12",
+"label": "c1387",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/594512538/original.jpg": {
+"at": "2026-10-12",
+"label": "c1402",
+"pack": "daily-2024-02",
+"reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/594648179/original.jpg": {
 "at": "2026-10-12",
@@ -5261,6 +6149,12 @@
 "pack": "daily-2025-01",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/597996867/original.jpg": {
+"at": "2026-10-12",
+"label": "c1418",
+"pack": "daily-2024-02",
+"reason": "people"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/598909812/original.jpg": {
 "at": "2026-10-12",
 "label": "c90",
@@ -5269,14 +6163,20 @@
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/600504311/original.jpg": {
 "at": "2026-10-12",
-"label": "c262",
-"pack": "daily-2026-01",
+"label": "c1249",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/60162512/original.jpeg": {
 "at": "2026-10-12",
 "label": "c280",
 "pack": "daily-2026-01",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/602681537/original.jpg": {
+"at": "2026-10-12",
+"label": "c1309",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/604593774/original.jpg": {
@@ -5321,10 +6221,22 @@
 "pack": "daily-2026-01",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/607513211/original.jpg": {
+"at": "2026-10-12",
+"label": "c1305",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/608957188/original.jpg": {
 "at": "2026-10-12",
 "label": "c552",
 "pack": "daily-2025-01",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/609257333/original.jpg": {
+"at": "2026-10-12",
+"label": "c1236",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/610946229/original.jpg": {
@@ -5338,6 +6250,12 @@
 "label": "c190",
 "pack": "daily-2026-01",
 "reason": "people"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/611611348/original.jpg": {
+"at": "2026-10-12",
+"label": "c1341",
+"pack": "daily-2024-02",
+"reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/611843246/original.jpg": {
 "at": "2026-10-12",
@@ -5357,16 +6275,34 @@
 "pack": "evpack-oceans-2027",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/612667423/original.jpg": {
+"at": "2026-10-12",
+"label": "c1426",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/613222911/original.jpg": {
+"at": "2026-10-12",
+"label": "c1185",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/613289267/original.jpg": {
 "at": "2026-10-12",
-"label": "c520",
-"pack": "daily-2026-01",
+"label": "c1344",
+"pack": "daily-2024-02",
 "reason": "similar"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/614648527/original.jpg": {
 "at": "2026-10-12",
 "label": "c525",
 "pack": "daily-2026-01",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/615310751/original.jpg": {
+"at": "2026-10-12",
+"label": "c1371",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/615751840/original.jpg": {
@@ -5379,6 +6315,12 @@
 "at": "2026-10-12",
 "label": "daily-2025-04-08",
 "pack": "daily-2025-04",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/620886475/original.jpg": {
+"at": "2026-10-12",
+"label": "c1221",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/621304173/original.jpg": {
@@ -5419,14 +6361,20 @@
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/62287584/original.jpeg": {
 "at": "2026-10-12",
-"label": "c261",
-"pack": "daily-2026-01",
+"label": "c1248",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/6241987/original.jpg": {
 "at": "2026-10-12",
 "label": "c364",
 "pack": "daily-2026-01",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/624431639/original.jpg": {
+"at": "2026-10-12",
+"label": "c1212",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/628026762/original.jpg": {
@@ -5467,14 +6415,14 @@
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/633024814/original.jpg": {
 "at": "2026-10-12",
-"label": "c65",
-"pack": "pack-pandas",
+"label": "c1143",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/633025510/original.jpg": {
 "at": "2026-10-12",
-"label": "c62",
-"pack": "pack-pandas",
+"label": "c1141",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/633028127/original.jpg": {
@@ -5488,6 +6436,18 @@
 "label": "c445",
 "pack": "daily-2026-01",
 "reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/63928368/original.jpg": {
+"at": "2026-10-12",
+"label": "c1167",
+"pack": "daily-2024-02",
+"reason": "people"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/64074167/original.jpg": {
+"at": "2026-10-12",
+"label": "c1179",
+"pack": "daily-2024-02",
+"reason": "quality"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/641834762/original.jpg": {
 "at": "2026-10-12",
@@ -5531,6 +6491,12 @@
 "pack": "daily-2026-01",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/648562978/original.jpg": {
+"at": "2026-10-12",
+"label": "c1286",
+"pack": "daily-2024-02",
+"reason": "people"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/64904778/original.jpg": {
 "at": "2026-10-12",
 "label": "c174",
@@ -5555,10 +6521,22 @@
 "pack": "daily-2026-01",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/652280967/original.jpg": {
+"at": "2026-10-12",
+"label": "c1327",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/653613215/original.jpg": {
 "at": "2026-10-12",
 "label": "c546",
 "pack": "daily-2026-01",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/655088555/original.jpg": {
+"at": "2026-10-12",
+"label": "c1261",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/655934950/original.jpg": {
@@ -5591,6 +6569,18 @@
 "pack": "daily-2026-01",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/662264328/original.jpg": {
+"at": "2026-10-12",
+"label": "c1304",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/66234376/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1401",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/663368289/original.jpg": {
 "at": "2026-10-12",
 "label": "c530",
@@ -5615,6 +6605,18 @@
 "pack": "daily-2026-01",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/66727135/original.jpg": {
+"at": "2026-10-12",
+"label": "c1348",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/669752297/original.jpg": {
+"at": "2026-10-12",
+"label": "c1244",
+"pack": "daily-2024-02",
+"reason": "people"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/672250706/original.jpg": {
 "at": "2026-10-12",
 "label": "c420",
@@ -5633,10 +6635,28 @@
 "pack": "daily-2026-01",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/676550494/original.jpg": {
+"at": "2026-10-12",
+"label": "c1252",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/679397304/original.jpg": {
+"at": "2026-10-12",
+"label": "c1325",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/680653783/original.jpg": {
 "at": "2026-10-12",
 "label": "c376",
 "pack": "daily-2026-01",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/681097678/original.jpg": {
+"at": "2026-10-12",
+"label": "c1235",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/681107785/original.jpg": {
@@ -5665,14 +6685,26 @@
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/684687308/original.jpg": {
 "at": "2026-10-12",
-"label": "c239",
-"pack": "daily-2026-01",
+"label": "c1313",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/687454061/original.jpg": {
 "at": "2026-10-12",
 "label": "c827",
 "pack": "daily-2023-10",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/690011364/original.jpg": {
+"at": "2026-10-12",
+"label": "c1169",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/69880245/original.jpg": {
+"at": "2026-10-12",
+"label": "c1424",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/700293072/original.jpg": {
@@ -5683,8 +6715,8 @@
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/701010480/original.jpg": {
 "at": "2026-10-12",
-"label": "c111",
-"pack": "daily-2026-01",
+"label": "c1333",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/70972854/original.jpg": {
@@ -5713,8 +6745,8 @@
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/714356983/original.jpg": {
 "at": "2026-10-12",
-"label": "c112",
-"pack": "daily-2026-01",
+"label": "c1332",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/71468161/original.jpg": {
@@ -5821,8 +6853,14 @@
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/744346109/original.jpg": {
 "at": "2026-10-12",
-"label": "c49",
-"pack": "daily-2026-01",
+"label": "c1391",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/747240856/original.jpg": {
+"at": "2026-10-12",
+"label": "c1394",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/75472425/original.jpeg": {
@@ -5849,6 +6887,24 @@
 "pack": "daily-2026-01",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/76315203/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1329",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/76936558/original.jpg": {
+"at": "2026-10-12",
+"label": "c1423",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/7719228/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1259",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/77798566/original.jpeg": {
 "at": "2026-10-12",
 "label": "c184",
@@ -5867,10 +6923,16 @@
 "pack": "daily-2026-01",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/80009413/original.jpeg": {
+"at": "2026-10-12",
+"label": "c1190",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/80480255/original.jpg": {
 "at": "2026-10-12",
-"label": "c553",
-"pack": "daily-2025-01",
+"label": "c1357",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/8048060/original.jpeg": {
@@ -5884,6 +6946,12 @@
 "label": "c470",
 "pack": "daily-2026-01",
 "reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/81431463/original.jpg": {
+"at": "2026-10-12",
+"label": "c1284",
+"pack": "daily-2024-02",
+"reason": "people"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/8167978/original.jpeg": {
 "at": "2026-10-12",
@@ -5901,6 +6969,12 @@
 "at": "2026-10-12",
 "label": "c534",
 "pack": "daily-2026-01",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/84409560/original.jpg": {
+"at": "2026-10-12",
+"label": "c1233",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/8533192/original.jpg": {
@@ -5938,6 +7012,12 @@
 "label": "c477",
 "pack": "daily-2026-01",
 "reason": "people"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/89731359/original.jpg": {
+"at": "2026-10-12",
+"label": "c1400",
+"pack": "daily-2024-02",
+"reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/91394317/original.jpg": {
 "at": "2026-10-12",
@@ -5987,6 +7067,12 @@
 "pack": "pack-snowy-peaks",
 "reason": "off-theme"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/99735202/original.jpg": {
+"at": "2026-10-12",
+"label": "c1272",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://live.staticflickr.com/111/312613118_6e864d1437_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-kittens-03",
@@ -6010,6 +7096,12 @@
 "label": "pack-vineyards-01",
 "pack": "pack-vineyards",
 "reason": "quality"
+},
+"https://live.staticflickr.com/1449/25718994470_11696fc429_b.jpg": {
+"at": "2026-10-12",
+"label": "c1532",
+"pack": "daily-2024-02",
+"reason": "people"
 },
 "https://live.staticflickr.com/1478/25718985660_53ebc3edb4_b.jpg": {
 "at": "2026-10-12",
@@ -6185,6 +7277,12 @@
 "pack": "pack-ice-cream",
 "reason": "people"
 },
+"https://live.staticflickr.com/1946/46240076891_944808343f_b.jpg": {
+"at": "2026-10-12",
+"label": "c1534",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://live.staticflickr.com/203/493532944_147b58f783_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-tropical-beaches-08",
@@ -6310,6 +7408,12 @@
 "label": "pack-whales-13",
 "pack": "pack-whales",
 "reason": "text"
+},
+"https://live.staticflickr.com/2947/15386528716_ee2d3ea86a_b.jpg": {
+"at": "2026-10-12",
+"label": "c1629",
+"pack": "daily-2024-02",
+"reason": "quality"
 },
 "https://live.staticflickr.com/2947/15414246172_1c3e7ba373_b.jpg": {
 "at": "2026-10-12",
@@ -6449,6 +7553,12 @@
 "pack": "pack-steam-trains",
 "reason": "quality"
 },
+"https://live.staticflickr.com/3809/13629269363_201170daaa_b.jpg": {
+"at": "2026-10-12",
+"label": "c1618",
+"pack": "daily-2024-02",
+"reason": "quality"
+},
 "https://live.staticflickr.com/3862/14565339775_f9fe80cd81_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-big-cats-18",
@@ -6574,6 +7684,12 @@
 "label": "evpack-smile-day-2026-05",
 "pack": "evpack-smile-day-2026",
 "reason": "people"
+},
+"https://live.staticflickr.com/430/19055103869_27241d062a_b.jpg": {
+"at": "2026-10-12",
+"label": "c1607",
+"pack": "daily-2024-02",
+"reason": "quality"
 },
 "https://live.staticflickr.com/4346/36851176140_5cb60b4b9d_b.jpg": {
 "at": "2026-10-12",
@@ -7097,11 +8213,23 @@
 "pack": "pack-temples",
 "reason": "people"
 },
+"https://live.staticflickr.com/65535/50544300106_59d276bc3f_b.jpg": {
+"at": "2026-10-12",
+"label": "c1602",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://live.staticflickr.com/65535/50545835212_269099b1cc_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-autumn-parks-19",
 "pack": "pack-autumn-parks",
 "reason": "off-theme"
+},
+"https://live.staticflickr.com/65535/50881945338_e0203edc10_b.jpg": {
+"at": "2026-10-12",
+"label": "c1604",
+"pack": "daily-2024-02",
+"reason": "weak"
 },
 "https://live.staticflickr.com/65535/50882405972_51f215e2ee_b.jpg": {
 "at": "2026-10-12",
@@ -7301,6 +8429,12 @@
 "pack": "pack-pandas",
 "reason": "weak"
 },
+"https://live.staticflickr.com/65535/51300858335_4bdc41e5fd_b.jpg": {
+"at": "2026-10-12",
+"label": "evpack-health-2027-09",
+"pack": "evpack-health-2027",
+"reason": "people"
+},
 "https://live.staticflickr.com/65535/51301943385_e24905b33a_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-harbours-03",
@@ -7321,8 +8455,8 @@
 },
 "https://live.staticflickr.com/65535/51307949275_7caa99f732_b.jpg": {
 "at": "2026-10-12",
-"label": "pack-lighthouses-03",
-"pack": "pack-lighthouses",
+"label": "c1640",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://live.staticflickr.com/65535/51308570728_1d491f6db7_b.jpg": {
@@ -7342,6 +8476,12 @@
 "label": "pack-skylines-02",
 "pack": "pack-skylines",
 "reason": "off-theme"
+},
+"https://live.staticflickr.com/65535/51313309416_715080c5a8_b.jpg": {
+"at": "2026-10-12",
+"label": "evpack-health-2027-10",
+"pack": "evpack-health-2027",
+"reason": "text"
 },
 "https://live.staticflickr.com/65535/51314432963_bebd49da78_b.jpg": {
 "at": "2026-10-12",
@@ -7805,6 +8945,12 @@
 "pack": "pack-moroccan-souks",
 "reason": "people"
 },
+"https://live.staticflickr.com/65535/51413819042_8f0fd92a1d_b.jpg": {
+"at": "2026-10-12",
+"label": "c1614",
+"pack": "daily-2024-02",
+"reason": "text"
+},
 "https://live.staticflickr.com/65535/51416343662_1a92b5e85b_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-pandas-19",
@@ -7930,6 +9076,12 @@
 "label": "pack-caves-19",
 "pack": "pack-caves",
 "reason": "people"
+},
+"https://live.staticflickr.com/65535/51443542076_36b699bea6_b.jpg": {
+"at": "2026-10-12",
+"label": "c1609",
+"pack": "daily-2024-02",
+"reason": "weak"
 },
 "https://live.staticflickr.com/65535/51444246477_526c54a906_b.jpg": {
 "at": "2026-10-12",
@@ -8429,6 +9581,12 @@
 "pack": "evpack-thanksgiving-2026",
 "reason": "people"
 },
+"https://live.staticflickr.com/65535/51582967020_30879289f0_b.jpg": {
+"at": "2026-10-12",
+"label": "c1600",
+"pack": "daily-2024-02",
+"reason": "text"
+},
 "https://live.staticflickr.com/65535/51588294392_8f5275c767_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-whales-03",
@@ -8729,6 +9887,12 @@
 "pack": "pack-castles",
 "reason": "off-theme"
 },
+"https://live.staticflickr.com/65535/51648061859_147fe3995e_b.jpg": {
+"at": "2026-10-12",
+"label": "c1627",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://live.staticflickr.com/65535/51649659771_42c9c7f666_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-jungle-02",
@@ -8993,6 +10157,12 @@
 "pack": "pack-patagonia",
 "reason": "text"
 },
+"https://live.staticflickr.com/65535/51702376691_1a3b9088fd_b.jpg": {
+"at": "2026-10-12",
+"label": "c1595",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://live.staticflickr.com/65535/51702567921_afa8182086_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-patagonia-08",
@@ -9113,6 +10283,12 @@
 "pack": "pack-vineyards",
 "reason": "off-theme"
 },
+"https://live.staticflickr.com/65535/51732500593_d410b12ec4_b.jpg": {
+"at": "2026-10-12",
+"label": "c1549",
+"pack": "daily-2024-02",
+"reason": "text"
+},
 "https://live.staticflickr.com/65535/51733157376_ddca036d25_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-jungle-04",
@@ -9197,6 +10373,12 @@
 "pack": "pack-pastries",
 "reason": "people"
 },
+"https://live.staticflickr.com/65535/51758594142_5af2313d80_b.jpg": {
+"at": "2026-10-12",
+"label": "c1573",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://live.staticflickr.com/65535/51760081650_73fbf19629_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-pastries-13",
@@ -9250,6 +10432,12 @@
 "label": "pack-birds-of-prey-08",
 "pack": "pack-birds-of-prey",
 "reason": "people"
+},
+"https://live.staticflickr.com/65535/51772269712_c5a6924562_b.jpg": {
+"at": "2026-10-12",
+"label": "c1511",
+"pack": "daily-2024-02",
+"reason": "weak"
 },
 "https://live.staticflickr.com/65535/51774336271_6777992f12_b.jpg": {
 "at": "2026-10-12",
@@ -9352,6 +10540,12 @@
 "label": "evpack-un-day-2026-05",
 "pack": "evpack-un-day-2026",
 "reason": "text"
+},
+"https://live.staticflickr.com/65535/51810007962_b765e7d71c_b.jpg": {
+"at": "2026-10-12",
+"label": "c1612",
+"pack": "daily-2024-02",
+"reason": "similar"
 },
 "https://live.staticflickr.com/65535/51813841042_663c4a0c11_b.jpg": {
 "at": "2026-10-12",
@@ -9623,10 +10817,22 @@
 "pack": "pack-castles",
 "reason": "weak"
 },
+"https://live.staticflickr.com/65535/51872517927_e0252957bf_b.jpg": {
+"at": "2026-10-12",
+"label": "evpack-health-2027-02",
+"pack": "evpack-health-2027",
+"reason": "quality"
+},
 "https://live.staticflickr.com/65535/51872580467_b62aba95b7_b.jpg": {
 "at": "2026-10-12",
 "label": "evpack-universal-childrens-2026-08",
 "pack": "evpack-universal-childrens-2026",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/51874121465_96d5da3104_b.jpg": {
+"at": "2026-10-12",
+"label": "evpack-health-2027-01",
+"pack": "evpack-health-2027",
 "reason": "people"
 },
 "https://live.staticflickr.com/65535/51875664607_a913d034bd_b.jpg": {
@@ -9664,6 +10870,12 @@
 "label": "evpack-valentines-2027-02",
 "pack": "evpack-valentines-2027",
 "reason": "people"
+},
+"https://live.staticflickr.com/65535/51882553607_5381d2993e_b.jpg": {
+"at": "2026-10-12",
+"label": "c1619",
+"pack": "daily-2024-02",
+"reason": "weak"
 },
 "https://live.staticflickr.com/65535/51883323549_ec32d80543_b.jpg": {
 "at": "2026-10-12",
@@ -10363,8 +11575,8 @@
 },
 "https://live.staticflickr.com/65535/51976132477_b83d446124_b.jpg": {
 "at": "2026-10-12",
-"label": "pack-lighthouses-02",
-"pack": "pack-lighthouses",
+"label": "c1639",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://live.staticflickr.com/65535/51981572197_cd0566f2cf_b.jpg": {
@@ -10469,6 +11681,12 @@
 "pack": "pack-volcanoes",
 "reason": "off-theme"
 },
+"https://live.staticflickr.com/65535/51999742185_46d32765aa_b.jpg": {
+"at": "2026-10-12",
+"label": "c1601",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://live.staticflickr.com/65535/51999754237_2e089c9da3_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-owls-10",
@@ -10552,6 +11770,12 @@
 "label": "evpack-polar-bear-2027-01",
 "pack": "evpack-polar-bear-2027",
 "reason": "off-theme"
+},
+"https://live.staticflickr.com/65535/52019405602_517841e563_b.jpg": {
+"at": "2026-10-12",
+"label": "c1621",
+"pack": "daily-2024-02",
+"reason": "quality"
 },
 "https://live.staticflickr.com/65535/52020585746_3daf7bd08e_b.jpg": {
 "at": "2026-10-12",
@@ -11333,6 +12557,12 @@
 "pack": "pack-foxes",
 "reason": "text"
 },
+"https://live.staticflickr.com/65535/52211560627_578c9f947c_b.jpg": {
+"at": "2026-10-12",
+"label": "c1543",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://live.staticflickr.com/65535/52212519229_a534d7d39a_b.jpg": {
 "at": "2026-10-12",
 "label": "evpack-oceans-2027-09",
@@ -11609,10 +12839,34 @@
 "pack": "pack-deer",
 "reason": "off-theme"
 },
+"https://live.staticflickr.com/65535/52250793032_b170757494_b.jpg": {
+"at": "2026-10-12",
+"label": "c1584",
+"pack": "daily-2024-02",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/52250793092_1fa508c924_b.jpg": {
+"at": "2026-10-12",
+"label": "c1585",
+"pack": "daily-2024-02",
+"reason": "people"
+},
 "https://live.staticflickr.com/65535/52251479337_6e5e774608_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-parrots-06",
 "pack": "pack-parrots",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/52252051694_5df4659538_b.jpg": {
+"at": "2026-10-12",
+"label": "c1583",
+"pack": "daily-2024-02",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/52252051784_d244991a8c_b.jpg": {
+"at": "2026-10-12",
+"label": "c1582",
+"pack": "daily-2024-02",
 "reason": "people"
 },
 "https://live.staticflickr.com/65535/52252470268_3cd07a19e8_b.jpg": {
@@ -11669,6 +12923,12 @@
 "pack": "pack-wild-roses",
 "reason": "people"
 },
+"https://live.staticflickr.com/65535/52262327711_e342abbcd3_b.jpg": {
+"at": "2026-10-12",
+"label": "c1561",
+"pack": "daily-2024-02",
+"reason": "text"
+},
 "https://live.staticflickr.com/65535/52263560794_97c1393e02_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-canyons-07",
@@ -11704,6 +12964,12 @@
 "label": "pack-wild-roses-04",
 "pack": "pack-wild-roses",
 "reason": "off-theme"
+},
+"https://live.staticflickr.com/65535/52266596466_ee90d43318_b.jpg": {
+"at": "2026-10-12",
+"label": "c1593",
+"pack": "daily-2024-02",
+"reason": "people"
 },
 "https://live.staticflickr.com/65535/52269406219_771e1040bc_b.jpg": {
 "at": "2026-10-12",
@@ -11758,6 +13024,12 @@
 "label": "pack-rice-terraces-07",
 "pack": "pack-rice-terraces",
 "reason": "people"
+},
+"https://live.staticflickr.com/65535/52272731310_c01c21e729_b.jpg": {
+"at": "2026-10-12",
+"label": "evpack-health-2027-14",
+"pack": "evpack-health-2027",
+"reason": "quality"
 },
 "https://live.staticflickr.com/65535/52274503640_69036c8683_b.jpg": {
 "at": "2026-10-12",
@@ -11824,6 +13096,12 @@
 "label": "pack-libraries-10",
 "pack": "pack-libraries",
 "reason": "people"
+},
+"https://live.staticflickr.com/65535/52290840510_23752bb529_b.jpg": {
+"at": "2026-10-12",
+"label": "evpack-health-2027-12",
+"pack": "evpack-health-2027",
+"reason": "quality"
 },
 "https://live.staticflickr.com/65535/52291048333_f738fd751f_b.jpg": {
 "at": "2026-10-12",
@@ -12064,6 +13342,12 @@
 "label": "p-ae23555740d7",
 "pack": "ai-cats",
 "reason": "text"
+},
+"https://live.staticflickr.com/65535/52316931056_474ef068e9_b.jpg": {
+"at": "2026-10-12",
+"label": "c1518",
+"pack": "daily-2024-02",
+"reason": "similar"
 },
 "https://live.staticflickr.com/65535/52319603481_07524f30c7_b.jpg": {
 "at": "2026-10-12",
@@ -12430,6 +13714,12 @@
 "label": "pack-staircases-18",
 "pack": "pack-staircases",
 "reason": "quality"
+},
+"https://live.staticflickr.com/65535/52395511791_fd09a415d0_b.jpg": {
+"at": "2026-10-12",
+"label": "c1597",
+"pack": "daily-2024-02",
+"reason": "weak"
 },
 "https://live.staticflickr.com/65535/52395903096_8bf37357cf_b.jpg": {
 "at": "2026-10-12",
@@ -12875,6 +14165,12 @@
 "pack": "pack-birds-of-prey",
 "reason": "off-theme"
 },
+"https://live.staticflickr.com/65535/52470383146_6d1c664005_b.jpg": {
+"at": "2026-10-12",
+"label": "c1626",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://live.staticflickr.com/65535/52483207165_635a29cfcb_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-sea-cliffs-04",
@@ -12982,6 +14278,12 @@
 "label": "c945",
 "pack": "daily-2023-10",
 "reason": "people"
+},
+"https://live.staticflickr.com/65535/52511905639_6ed0f079d2_b.jpg": {
+"at": "2026-10-12",
+"label": "c1630",
+"pack": "daily-2024-02",
+"reason": "quality"
 },
 "https://live.staticflickr.com/65535/52512401221_d1fa06d582_b.jpg": {
 "at": "2026-10-12",
@@ -13126,6 +14428,12 @@
 "label": "evpack-pi-day-2027-07",
 "pack": "evpack-pi-day-2027",
 "reason": "weak"
+},
+"https://live.staticflickr.com/65535/52523757098_98917c43cf_b.jpg": {
+"at": "2026-10-12",
+"label": "evpack-health-2027-13",
+"pack": "evpack-health-2027",
+"reason": "quality"
 },
 "https://live.staticflickr.com/65535/52524765132_7802b81ab8_b.jpg": {
 "at": "2026-10-12",
@@ -13385,6 +14693,12 @@
 "pack": "pack-pandas",
 "reason": "off-theme"
 },
+"https://live.staticflickr.com/65535/52571025224_0e7e563017_b.jpg": {
+"at": "2026-10-12",
+"label": "c1513",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://live.staticflickr.com/65535/52571403819_65d55a6e71_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-pastries-20",
@@ -13396,6 +14710,18 @@
 "label": "pack-penguins-11",
 "pack": "pack-penguins",
 "reason": "off-theme"
+},
+"https://live.staticflickr.com/65535/52574316282_b7fc111748_b.jpg": {
+"at": "2026-10-12",
+"label": "evpack-health-2027-06",
+"pack": "evpack-health-2027",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/52575104624_300f707247_b.jpg": {
+"at": "2026-10-12",
+"label": "evpack-health-2027-03",
+"pack": "evpack-health-2027",
+"reason": "people"
 },
 "https://live.staticflickr.com/65535/52575720493_b41710db36_b.jpg": {
 "at": "2026-10-12",
@@ -13474,6 +14800,12 @@
 "label": "pack-whales-18",
 "pack": "pack-whales",
 "reason": "off-theme"
+},
+"https://live.staticflickr.com/65535/52585471622_936c7262e8_b.jpg": {
+"at": "2026-10-12",
+"label": "evpack-health-2027-04",
+"pack": "evpack-health-2027",
+"reason": "quality"
 },
 "https://live.staticflickr.com/65535/52586819420_e4d6bc42c4_b.jpg": {
 "at": "2026-10-12",
@@ -13973,6 +15305,12 @@
 "pack": "evpack-valentines-2027",
 "reason": "weak"
 },
+"https://live.staticflickr.com/65535/52686278800_ae531dfd4b_b.jpg": {
+"at": "2026-10-12",
+"label": "c1622",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://live.staticflickr.com/65535/52687755632_640b311547_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-gardens-02",
@@ -14039,6 +15377,12 @@
 "pack": "pack-moroccan-souks",
 "reason": "people"
 },
+"https://live.staticflickr.com/65535/52723155244_774359a1ae_b.jpg": {
+"at": "2026-10-12",
+"label": "c1613",
+"pack": "daily-2024-02",
+"reason": "quality"
+},
 "https://live.staticflickr.com/65535/52724009644_3f69a90ae7_b.jpg": {
 "at": "2026-10-12",
 "label": "evpack-coffee-2026-04",
@@ -14050,6 +15394,18 @@
 "label": "pack-misty-forests-15",
 "pack": "pack-misty-forests",
 "reason": "weak"
+},
+"https://live.staticflickr.com/65535/52727629551_5673aabaf3_b.jpg": {
+"at": "2026-10-12",
+"label": "c1588",
+"pack": "daily-2024-02",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52727884204_92f334052a_b.jpg": {
+"at": "2026-10-12",
+"label": "c1590",
+"pack": "daily-2024-02",
+"reason": "text"
 },
 "https://live.staticflickr.com/65535/52734366238_8c2664a0de_b.jpg": {
 "at": "2026-10-12",
@@ -14109,6 +15465,12 @@
 "at": "2026-10-12",
 "label": "pack-frogs-17",
 "pack": "pack-frogs",
+"reason": "weak"
+},
+"https://live.staticflickr.com/65535/52762016147_1df50f962d_b.jpg": {
+"at": "2026-10-12",
+"label": "c1133",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://live.staticflickr.com/65535/52769896534_dfff87c5a5_b.jpg": {
@@ -14321,11 +15683,23 @@
 "pack": "pack-fairytale-villages",
 "reason": "weak"
 },
+"https://live.staticflickr.com/65535/53012396011_63dd9afe7e_b.jpg": {
+"at": "2026-10-12",
+"label": "c1625",
+"pack": "daily-2024-02",
+"reason": "quality"
+},
 "https://live.staticflickr.com/65535/53012427681_8584d825e5_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-fairytale-villages-02",
 "pack": "pack-fairytale-villages",
 "reason": "weak"
+},
+"https://live.staticflickr.com/65535/53021331394_c5a010a14d_b.jpg": {
+"at": "2026-10-12",
+"label": "c1531",
+"pack": "daily-2024-02",
+"reason": "text"
 },
 "https://live.staticflickr.com/65535/53030456069_9a4a7e5fbf_b.jpg": {
 "at": "2026-10-12",
@@ -14435,6 +15809,12 @@
 "pack": "pack-fairytale-villages",
 "reason": "weak"
 },
+"https://live.staticflickr.com/65535/53037708711_0cfce9e74f_b.jpg": {
+"at": "2026-10-12",
+"label": "c1514",
+"pack": "daily-2024-02",
+"reason": "similar"
+},
 "https://live.staticflickr.com/65535/53038769371_2e779380e4_b.jpg": {
 "at": "2026-10-12",
 "label": "evpack-teachers-2026-14",
@@ -14452,6 +15832,12 @@
 "label": "evpack-teachers-2026-12",
 "pack": "evpack-teachers-2026",
 "reason": "weak"
+},
+"https://live.staticflickr.com/65535/53041070329_d155dab48c_b.jpg": {
+"at": "2026-10-12",
+"label": "c1624",
+"pack": "daily-2024-02",
+"reason": "quality"
 },
 "https://live.staticflickr.com/65535/53047186825_a0b1b4aa08_b.jpg": {
 "at": "2026-10-12",
@@ -14632,6 +16018,12 @@
 "label": "pack-starry-nights-10",
 "pack": "pack-starry-nights",
 "reason": "off-theme"
+},
+"https://live.staticflickr.com/65535/53179128224_1e6ea53c44_b.jpg": {
+"at": "2026-10-12",
+"label": "evpack-health-2027-11",
+"pack": "evpack-health-2027",
+"reason": "people"
 },
 "https://live.staticflickr.com/65535/53201078518_86911a90b7_b.jpg": {
 "at": "2026-10-12",
@@ -14903,6 +16295,12 @@
 "pack": "pack-iceland-roads",
 "reason": "off-theme"
 },
+"https://live.staticflickr.com/65535/53517212697_0b4d0f78d1_b.jpg": {
+"at": "2026-10-12",
+"label": "c1509",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://live.staticflickr.com/65535/53527380811_e54711f918_b.jpg": {
 "at": "2026-10-12",
 "label": "c1091",
@@ -15005,6 +16403,12 @@
 "pack": "ai-food",
 "reason": "people"
 },
+"https://live.staticflickr.com/65535/53553923392_380057a224_b.jpg": {
+"at": "2026-10-12",
+"label": "p-7228ed35ca64",
+"pack": "ai-forests",
+"reason": "similar"
+},
 "https://live.staticflickr.com/65535/53558945029_4469a01dfb_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-london-13",
@@ -15021,6 +16425,24 @@
 "at": "2026-10-12",
 "label": "pack-prague-02",
 "pack": "pack-prague",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/53560615891_d4be574a03_b.jpg": {
+"at": "2026-10-12",
+"label": "c1814",
+"pack": "ai-dinosaurs",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/53560814248_2f49c8c1a5_b.jpg": {
+"at": "2026-10-12",
+"label": "p-cd3c92a2e924",
+"pack": "ai-dinosaurs",
+"reason": "similar"
+},
+"https://live.staticflickr.com/65535/53562225511_087ebe8c47_b.jpg": {
+"at": "2026-10-12",
+"label": "c1862",
+"pack": "ai-forests",
 "reason": "people"
 },
 "https://live.staticflickr.com/65535/53562489084_27b3912587_b.jpg": {
@@ -15041,6 +16463,12 @@
 "pack": "pack-london",
 "reason": "people"
 },
+"https://live.staticflickr.com/65535/53566719490_52e1a4de76_b.jpg": {
+"at": "2026-10-12",
+"label": "c1813",
+"pack": "ai-dinosaurs",
+"reason": "quality"
+},
 "https://live.staticflickr.com/65535/53568706699_5e4295e9e8_b.jpg": {
 "at": "2026-10-12",
 "label": "c1211",
@@ -15051,6 +16479,12 @@
 "at": "2026-10-12",
 "label": "c1576",
 "pack": "ai-flowers",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/53573713592_049c918a51_b.jpg": {
+"at": "2026-10-12",
+"label": "c1863",
+"pack": "ai-forests",
 "reason": "people"
 },
 "https://live.staticflickr.com/65535/53574474402_6e84f1fff6_b.jpg": {
@@ -15179,6 +16613,24 @@
 "pack": "evpack-pi-day-2027",
 "reason": "text"
 },
+"https://live.staticflickr.com/65535/53598023851_ef1fd60866_b.jpg": {
+"at": "2026-10-12",
+"label": "c1835",
+"pack": "ai-dinosaurs",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/53598353794_654ec56b0f_b.jpg": {
+"at": "2026-10-12",
+"label": "c1834",
+"pack": "ai-dinosaurs",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/53598483060_a2c3b7ce7f_b.jpg": {
+"at": "2026-10-12",
+"label": "c1833",
+"pack": "ai-dinosaurs",
+"reason": "people"
+},
 "https://live.staticflickr.com/65535/53598562301_00c60a751a_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-skylines-07",
@@ -15190,6 +16642,36 @@
 "label": "pack-skylines-08",
 "pack": "pack-skylines",
 "reason": "weak"
+},
+"https://live.staticflickr.com/65535/53598972742_a27bb34f1a_b.jpg": {
+"at": "2026-10-12",
+"label": "c1845",
+"pack": "ai-forests",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/53598972747_67350d8f40_b.jpg": {
+"at": "2026-10-12",
+"label": "c1853",
+"pack": "ai-forests",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/53598972782_8beb25e2bc_b.jpg": {
+"at": "2026-10-12",
+"label": "c1825",
+"pack": "ai-dinosaurs",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/53600176159_7cf36b7698_b.jpg": {
+"at": "2026-10-12",
+"label": "c1826",
+"pack": "ai-dinosaurs",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/53600304130_148215a6e9_b.jpg": {
+"at": "2026-10-12",
+"label": "c1844",
+"pack": "ai-forests",
+"reason": "people"
 },
 "https://live.staticflickr.com/65535/53601070912_56265b3865_b.jpg": {
 "at": "2026-10-12",
@@ -15207,6 +16689,12 @@
 "at": "2026-10-12",
 "label": "c1528",
 "pack": "ai-food",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/53601938921_a888cbd3a4_b.jpg": {
+"at": "2026-10-12",
+"label": "c1827",
+"pack": "ai-dinosaurs",
 "reason": "people"
 },
 "https://live.staticflickr.com/65535/53602282864_4edd80dfc9_b.jpg": {
@@ -15227,6 +16715,18 @@
 "pack": "ai-birds",
 "reason": "people"
 },
+"https://live.staticflickr.com/65535/53603986256_85de677020_b.jpg": {
+"at": "2026-10-12",
+"label": "c1831",
+"pack": "ai-dinosaurs",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/53604201753_6bfd9a401b_b.jpg": {
+"at": "2026-10-12",
+"label": "c1830",
+"pack": "ai-dinosaurs",
+"reason": "people"
+},
 "https://live.staticflickr.com/65535/53604201783_0bfeb1528a_b.jpg": {
 "at": "2026-10-12",
 "label": "c1261",
@@ -15243,6 +16743,30 @@
 "at": "2026-10-12",
 "label": "c1080",
 "pack": "ai-wild-animals",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/53607220677_8cd345ecbf_b.jpg": {
+"at": "2026-10-12",
+"label": "c1859",
+"pack": "ai-forests",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/53608303993_3fbef8d03f_b.jpg": {
+"at": "2026-10-12",
+"label": "c1858",
+"pack": "ai-forests",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/53608304308_52336d7683_b.jpg": {
+"at": "2026-10-12",
+"label": "c1861",
+"pack": "ai-forests",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/53608553125_9c3a1f14fd_b.jpg": {
+"at": "2026-10-12",
+"label": "c1860",
+"pack": "ai-forests",
 "reason": "people"
 },
 "https://live.staticflickr.com/65535/53609258692_16e028fe51_b.jpg": {
@@ -15275,10 +16799,22 @@
 "pack": "ai-space",
 "reason": "people"
 },
+"https://live.staticflickr.com/65535/53617090796_476b820574_b.jpg": {
+"at": "2026-10-12",
+"label": "c1832",
+"pack": "ai-dinosaurs",
+"reason": "people"
+},
 "https://live.staticflickr.com/65535/53617426179_03b61f56f0_b.jpg": {
 "at": "2026-10-12",
 "label": "c1301",
 "pack": "ai-future-worlds",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/53617537030_c0d3aa42d0_b.jpg": {
+"at": "2026-10-12",
+"label": "c1829",
+"pack": "ai-dinosaurs",
 "reason": "people"
 },
 "https://live.staticflickr.com/65535/53617880301_ee429b95f5_b.jpg": {
@@ -15303,6 +16839,12 @@
 "at": "2026-10-12",
 "label": "c1713",
 "pack": "ai-oceans",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/53619470189_4ac6de3a74_b.jpg": {
+"at": "2026-10-12",
+"label": "c1828",
+"pack": "ai-dinosaurs",
 "reason": "people"
 },
 "https://live.staticflickr.com/65535/53619577980_e7cd2032cc_b.jpg": {
@@ -15347,6 +16889,12 @@
 "pack": "ai-oceans",
 "reason": "people"
 },
+"https://live.staticflickr.com/65535/53623588466_9b22b2a0a7_b.jpg": {
+"at": "2026-10-12",
+"label": "c1050",
+"pack": "ai-dinosaurs",
+"reason": "people"
+},
 "https://live.staticflickr.com/65535/53623793498_803b59f1e5_b.jpg": {
 "at": "2026-10-12",
 "label": "c1704",
@@ -15359,10 +16907,28 @@
 "pack": "ai-oceans",
 "reason": "people"
 },
+"https://live.staticflickr.com/65535/53624033785_abf33dee62_b.jpg": {
+"at": "2026-10-12",
+"label": "c1053",
+"pack": "ai-dinosaurs",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/53628801388_317e74655c_b.jpg": {
+"at": "2026-10-12",
+"label": "c1850",
+"pack": "ai-forests",
+"reason": "people"
+},
 "https://live.staticflickr.com/65535/53630716593_844584c057_b.jpg": {
 "at": "2026-10-12",
 "label": "c1068",
 "pack": "ai-wild-animals",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/53630716923_63c4613711_b.jpg": {
+"at": "2026-10-12",
+"label": "c1807",
+"pack": "ai-dinosaurs",
 "reason": "people"
 },
 "https://live.staticflickr.com/65535/53631665680_8978405144_b.jpg": {
@@ -16067,6 +17633,12 @@
 "pack": "pack-libraries",
 "reason": "people"
 },
+"https://live.staticflickr.com/65535/53748591924_55797fccda_b.jpg": {
+"at": "2026-10-12",
+"label": "c1610",
+"pack": "daily-2024-02",
+"reason": "people"
+},
 "https://live.staticflickr.com/65535/53750946387_da32a80710_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-amsterdam-14",
@@ -16097,6 +17669,12 @@
 "pack": "pack-street-food",
 "reason": "people"
 },
+"https://live.staticflickr.com/65535/53791421200_30054593c1_b.jpg": {
+"at": "2026-10-12",
+"label": "c110",
+"pack": "evpack-halloween-2026",
+"reason": "quality"
+},
 "https://live.staticflickr.com/65535/53798149946_ae98604d70_b.jpg": {
 "at": "2026-10-12",
 "label": "evpack-teachers-2026-11",
@@ -16114,6 +17692,12 @@
 "label": "evpack-mental-health-2026-04",
 "pack": "evpack-mental-health-2026",
 "reason": "weak"
+},
+"https://live.staticflickr.com/65535/53813984565_32b5aaa80b_b.jpg": {
+"at": "2026-10-12",
+"label": "c1643",
+"pack": "daily-2024-02",
+"reason": "quality"
 },
 "https://live.staticflickr.com/65535/53817330829_6435661396_b.jpg": {
 "at": "2026-10-12",
@@ -16385,6 +17969,18 @@
 "pack": "pack-vineyards",
 "reason": "text"
 },
+"https://live.staticflickr.com/65535/54051657108_535959274f_b.jpg": {
+"at": "2026-10-12",
+"label": "c1515",
+"pack": "daily-2024-02",
+"reason": "similar"
+},
+"https://live.staticflickr.com/65535/54051854180_c851dc8baf_b.jpg": {
+"at": "2026-10-12",
+"label": "c1516",
+"pack": "daily-2024-02",
+"reason": "similar"
+},
 "https://live.staticflickr.com/65535/54058180215_c97b8b5379_b.jpg": {
 "at": "2026-10-12",
 "label": "daily-2024-01-12",
@@ -16563,6 +18159,12 @@
 "at": "2026-10-12",
 "label": "evpack-halloween-2026-11",
 "pack": "evpack-halloween-2026",
+"reason": "weak"
+},
+"https://live.staticflickr.com/65535/54129437102_3fe7761ba3_b.jpg": {
+"at": "2026-10-12",
+"label": "c1605",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://live.staticflickr.com/65535/54150268567_8a64fd7ace_b.jpg": {
@@ -16895,6 +18497,18 @@
 "pack": "pack-elephants",
 "reason": "off-theme"
 },
+"https://live.staticflickr.com/65535/54300976792_759935e714_b.jpg": {
+"at": "2026-10-12",
+"label": "c1556",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
+"https://live.staticflickr.com/65535/54306926248_2a70c22c75_b.jpg": {
+"at": "2026-10-12",
+"label": "c1591",
+"pack": "daily-2024-02",
+"reason": "people"
+},
 "https://live.staticflickr.com/65535/54312085444_0178b258f8_b.jpg": {
 "at": "2026-10-12",
 "label": "evpack-teachers-2026-05",
@@ -16912,6 +18526,12 @@
 "label": "pack-sailing-15",
 "pack": "pack-sailing",
 "reason": "quality"
+},
+"https://live.staticflickr.com/65535/54348820930_9b81b41199_b.jpg": {
+"at": "2026-10-12",
+"label": "c1592",
+"pack": "daily-2024-02",
+"reason": "weak"
 },
 "https://live.staticflickr.com/65535/54352354185_3412039fbe_b.jpg": {
 "at": "2026-10-12",
@@ -17303,6 +18923,12 @@
 "pack": "pack-misty-forests",
 "reason": "off-theme"
 },
+"https://live.staticflickr.com/65535/54589818712_39a0d1fd35_b.jpg": {
+"at": "2026-10-12",
+"label": "c1533",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://live.staticflickr.com/65535/54590372256_314279fbc8_b.jpg": {
 "at": "2026-10-12",
 "label": "evpack-un-day-2026-10",
@@ -17459,6 +19085,12 @@
 "pack": "pack-gardens",
 "reason": "weak"
 },
+"https://live.staticflickr.com/65535/55387274992_4b0498a757_b.jpg": {
+"at": "2026-10-12",
+"label": "c1606",
+"pack": "daily-2024-02",
+"reason": "people"
+},
 "https://live.staticflickr.com/65535/55395868776_eb06cc4a4f_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-gardens-07",
@@ -17494,6 +19126,12 @@
 "label": "pack-harbours-18",
 "pack": "pack-harbours",
 "reason": "off-theme"
+},
+"https://live.staticflickr.com/7105/13618449844_a1769f1789_b.jpg": {
+"at": "2026-10-12",
+"label": "c1553",
+"pack": "daily-2024-02",
+"reason": "weak"
 },
 "https://live.staticflickr.com/7105/27229074644_7dd3d587d1_b.jpg": {
 "at": "2026-10-12",
@@ -20663,6 +22301,12 @@
 "pack": "daily-2024-01",
 "reason": "weak"
 },
+"https://openaccess-cdn.clevelandart.org/1966.31.7/1966.31.7_web.jpg": {
+"at": "2026-10-12",
+"label": "daily-2024-03-25",
+"pack": "daily-2024-03",
+"reason": "weak"
+},
 "https://openaccess-cdn.clevelandart.org/1966.352/1966.352_web.jpg": {
 "at": "2026-10-12",
 "label": "pack-vintage-posters-03",
@@ -21310,6 +22954,12 @@
 "label": "daily-2025-05-31",
 "pack": "daily-2025-05",
 "reason": "people"
+},
+"https://openaccess-cdn.clevelandart.org/1977.118/1977.118_web.jpg": {
+"at": "2026-10-12",
+"label": "daily-2024-05-24",
+"pack": "daily-2024-05",
+"reason": "quality"
 },
 "https://openaccess-cdn.clevelandart.org/1977.120/1977.120_web.jpg": {
 "at": "2026-10-12",
@@ -24233,11 +25883,35 @@
 "pack": "daily-2026-02",
 "reason": "people"
 },
+"https://pd.w.org/2022/02/611620275e58b8395.58888879-1536x2048.jpeg": {
+"at": "2026-10-12",
+"label": "c1547",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://pd.w.org/2022/06/39562a68ff7475d87.71584083-1366x2048.jpg": {
 "at": "2026-10-12",
 "label": "pack-alpine-lakes-03",
 "pack": "pack-alpine-lakes",
 "reason": "weak"
+},
+"https://pd.w.org/2022/08/3562eaf1d5d0c0c2.71947692-1536x2048.jpeg": {
+"at": "2026-10-12",
+"label": "c1646",
+"pack": "daily-2024-02",
+"reason": "similar"
+},
+"https://pd.w.org/2022/08/46662eaf33a153307.55913512-1536x2048.jpeg": {
+"at": "2026-10-12",
+"label": "c1647",
+"pack": "daily-2024-02",
+"reason": "similar"
+},
+"https://pd.w.org/2022/08/53362ebc7445eed91.24779695-1536x2048.jpeg": {
+"at": "2026-10-12",
+"label": "c1648",
+"pack": "daily-2024-02",
+"reason": "similar"
 },
 "https://pd.w.org/2022/08/71162ff93e01cba81.28861700-1536x2048.jpg": {
 "at": "2026-10-12",
@@ -24274,6 +25948,12 @@
 "label": "pack-fruit-markets-02",
 "pack": "pack-fruit-markets",
 "reason": "text"
+},
+"https://pd.w.org/2023/02/41763ef33e0776ad0.72438005-1536x2048.jpg": {
+"at": "2026-10-12",
+"label": "c1599",
+"pack": "daily-2024-02",
+"reason": "weak"
 },
 "https://picsum.photos/id/0/900/1200": {
 "at": "2026-10-12",
@@ -28205,6 +29885,12 @@
 "pack": "pack-bridges",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/2/27/Rolling_hills_and_green_fields_stretch_out_near_Burnside_-_geograph.org.uk_-_7807802.jpg": {
+"at": "2026-10-12",
+"label": "c59",
+"pack": "pack-rolling-hills",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/2/2a/Truefitt_%26_Hill_products.jpg": {
 "at": "2026-10-12",
 "label": "c41",
@@ -28277,11 +29963,23 @@
 "pack": "ai-future-worlds",
 "reason": "text"
 },
+"https://upload.wikimedia.org/wikipedia/commons/3/3a/Isaac_Asimovs_robot_by_Vishchun.png": {
+"at": "2026-10-12",
+"label": "p-6387d2a5d76c",
+"pack": "ai-robots",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/3/3a/Starship_full_stack.jpg": {
 "at": "2026-10-12",
 "label": "c169",
 "pack": "pack-rockets",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/3/3c/Farm_and_garden_annual_%2815766157134%29.jpg": {
+"at": "2026-10-12",
+"label": "c1131",
+"pack": "daily-2024-02",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/3/3c/Fresh_Lansones_Fruit_Displayed_in_Wicker_Baskets.jpg": {
 "at": "2026-10-12",
@@ -28499,6 +30197,12 @@
 "pack": "daily-2023-11",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/6/60/Classroom_of_the_future.jpg": {
+"at": "2026-10-12",
+"label": "c645",
+"pack": "ai-robots",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/6/60/El_Escorn%C3%A1u.png": {
 "at": "2026-10-12",
 "label": "c835",
@@ -28528,6 +30232,12 @@
 "label": "c827",
 "pack": "ai-myths-monsters",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/6/63/Young_maple_leaves.jpg": {
+"at": "2026-10-12",
+"label": "c89",
+"pack": "evpack-halloween-2026",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/6/67/Team_of_shire_horses_owned_by_Thomas_Williams%2C_Llwyd_Coed_Bach%2C_Llanllyfni_%281450531%29.jpg": {
 "at": "2026-10-12",
@@ -28829,6 +30539,12 @@
 "pack": "pack-galaxies",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/a/a5/ChatGPT_image_of_a_moonlit_forest.jpg": {
+"at": "2026-10-12",
+"label": "p-7b69144c6b38",
+"pack": "ai-forests",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/a/a6/Americana_1920_Boa.jpg": {
 "at": "2026-10-12",
 "label": "c76",
@@ -28871,6 +30587,12 @@
 "pack": "abstract-fluid-ink",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/a/ad/Batalla_de_l%27A%C3%ADnsa.png": {
+"at": "2026-10-12",
+"label": "c333",
+"pack": "ai-robots",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/a/ae/%E6%89%87%E5%AD%90%E5%85%A5%E3%82%8C.jpg": {
 "at": "2026-10-12",
 "label": "c124",
@@ -28901,6 +30623,12 @@
 "pack": "abstract-macro-textures",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/b/b0/Bot_pic_IA.png": {
+"at": "2026-10-12",
+"label": "c355",
+"pack": "ai-robots",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/b/b2/Grana_Padano_cheese_%286881412280%29.jpg": {
 "at": "2026-10-12",
 "label": "c468",
@@ -28917,6 +30645,12 @@
 "at": "2026-10-12",
 "label": "c814",
 "pack": "ai-myths-monsters",
+"reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/b/b7/Science_fantasy_%E2%80%93_cyborg_elf_sending_the_swarm_of_orbs.png": {
+"at": "2026-10-12",
+"label": "c527",
+"pack": "ai-robots",
 "reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/b/b8/Copper_Canyon_railroad%2C_Creel%2C_Mexico_-_panoramio_%283%29.jpg": {
@@ -29099,6 +30833,12 @@
 "pack": "ai-future-worlds",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/d/d6/The_Cotswold_Way_ascending_Shenberrow_Hill_-_geograph.org.uk_-_4092721.jpg": {
+"at": "2026-10-12",
+"label": "c06",
+"pack": "pack-rolling-hills",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/d/d7/Aurora_borealis_over_Haroldswick_-_geograph.org.uk_-_8211487.jpg": {
 "at": "2026-10-12",
 "label": "c14",
@@ -29217,6 +30957,12 @@
 "at": "2026-10-12",
 "label": "c817",
 "pack": "ai-myths-monsters",
+"reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/f/f5/Female_cyborg.png": {
+"at": "2026-10-12",
+"label": "c637",
+"pack": "ai-robots",
 "reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/f/f6/Carmen%C3%A7o_%28%C3%A9sser_mitol%C3%B2gic%29_-_IA_Midjourney_versi%C3%B3_1.png": {
@@ -29633,6 +31379,12 @@
 "pack": "evpack-water-day-2027",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Tarantula_%28Theraphosidae%29_%2827080144695%29.jpg/1280px-Tarantula_%28Theraphosidae%29_%2827080144695%29.jpg": {
+"at": "2026-10-12",
+"label": "c79",
+"pack": "evpack-halloween-2026",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/%C5%A0kocjan_Caves%2C_Slovenia%2C_20240502_1156_7504.jpg/1280px-%C5%A0kocjan_Caves%2C_Slovenia%2C_20240502_1156_7504.jpg": {
 "at": "2026-10-12",
 "label": "c05",
@@ -29823,6 +31575,12 @@
 "at": "2026-10-12",
 "label": "c41",
 "pack": "pack-impressionists",
+"reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Texel_-_Molwerk_-_Field_with_Daffodils_-_Narcissus_08.jpg/1280px-Texel_-_Molwerk_-_Field_with_Daffodils_-_Narcissus_08.jpg": {
+"at": "2026-10-12",
+"label": "c1132",
+"pack": "daily-2024-02",
 "reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Titan_IVB_launch_with_Cassini-Huygens_on_Board.jpg/1280px-Titan_IVB_launch_with_Cassini-Huygens_on_Board.jpg": {
@@ -30163,9 +31921,9 @@
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Terracotta_aryballos_%28perfume_vase%29_in_the_form_of_a_hedgehog_MET_DP112910.jpg/1280px-Terracotta_aryballos_%28perfume_vase%29_in_the_form_of_a_hedgehog_MET_DP112910.jpg": {
 "at": "2026-10-12",
-"label": "c1042",
-"pack": "daily-2023-12",
-"reason": "weak"
+"label": "c104",
+"pack": "evpack-childrens-book-2027",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Vincent_van_Gogh_-_Rozen.jpg/1280px-Vincent_van_Gogh_-_Rozen.jpg": {
 "at": "2026-10-12",
@@ -30220,6 +31978,12 @@
 "label": "c56",
 "pack": "evpack-christmas-2026",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Malacosoma_castrense_caterpillar_%28top_view%29_-_Kulna.jpg/1280px-Malacosoma_castrense_caterpillar_%28top_view%29_-_Kulna.jpg": {
+"at": "2026-10-12",
+"label": "c107",
+"pack": "evpack-childrens-book-2027",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Parterre_Sud_-_Ch%C3%A2teau_de_Versailles_-_P1050322-P1050333.jpg/1280px-Parterre_Sud_-_Ch%C3%A2teau_de_Versailles_-_P1050322-P1050333.jpg": {
 "at": "2026-10-12",
@@ -30472,6 +32236,12 @@
 "label": "c106",
 "pack": "abstract-fluid-ink",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Munnar_Plantation_hills.jpg/1280px-Munnar_Plantation_hills.jpg": {
+"at": "2026-10-12",
+"label": "c36",
+"pack": "pack-rolling-hills",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Natural_History_with_Anecdotes_%28Miles_1895%29_-_Orangutan_illustration.jpg/1280px-Natural_History_with_Anecdotes_%28Miles_1895%29_-_Orangutan_illustration.jpg": {
 "at": "2026-10-12",
@@ -30754,6 +32524,12 @@
 "label": "c78",
 "pack": "pack-hummingbirds",
 "reason": "text"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Myrtus_communis_L._subsp._communis_-_52505076353.png/1280px-Myrtus_communis_L._subsp._communis_-_52505076353.png": {
+"at": "2026-10-12",
+"label": "c53",
+"pack": "pack-rolling-hills",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Paule_Baudouin_2016.jpg/1280px-Paule_Baudouin_2016.jpg": {
 "at": "2026-10-12",
@@ -31097,6 +32873,12 @@
 "pack": "pack-horses",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Chocolate_Hills_of_Bohol%2C_Philippines_%E2%80%93_A_Natural_Geological_Wonder.jpg/1280px-Chocolate_Hills_of_Bohol%2C_Philippines_%E2%80%93_A_Natural_Geological_Wonder.jpg": {
+"at": "2026-10-12",
+"label": "c34",
+"pack": "pack-rolling-hills",
+"reason": "similar"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cymbidium_Boutons_s%C3%A8ve_FR_2013.jpg/1280px-Cymbidium_Boutons_s%C3%A8ve_FR_2013.jpg": {
 "at": "2026-10-12",
 "label": "c13",
@@ -31132,6 +32914,12 @@
 "label": "c68",
 "pack": "pack-gardens-art",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Landscape_of_Tuscany_2.jpg/1280px-Landscape_of_Tuscany_2.jpg": {
+"at": "2026-10-12",
+"label": "c05",
+"pack": "pack-rolling-hills",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Proton_Zvezda_crop.jpg/1280px-Proton_Zvezda_crop.jpg": {
 "at": "2026-10-12",
@@ -31307,6 +33095,12 @@
 "pack": "pack-parrots",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Crow_8.jpg/1280px-Crow_8.jpg": {
+"at": "2026-10-12",
+"label": "c95",
+"pack": "evpack-halloween-2026",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Cueva_del_Drach_Mallorca_01.jpg/1280px-Cueva_del_Drach_Mallorca_01.jpg": {
 "at": "2026-10-12",
 "label": "c81",
@@ -31451,6 +33245,12 @@
 "pack": "pack-foxes",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Blooming_compass_plants_-_Flint_Hills_Kansas_-_panoramio.jpg/1280px-Blooming_compass_plants_-_Flint_Hills_Kansas_-_panoramio.jpg": {
+"at": "2026-10-12",
+"label": "c29",
+"pack": "pack-rolling-hills",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Mesquite_Flat_Sand_Dunes_%2817490656231%29.jpg/1280px-Mesquite_Flat_Sand_Dunes_%2817490656231%29.jpg": {
 "at": "2026-10-12",
 "label": "c18",
@@ -31462,6 +33262,12 @@
 "label": "c28",
 "pack": "pack-lighthouses",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Witch%27s_broom_on_Protea_IMG_7329.jpg/1280px-Witch%27s_broom_on_Protea_IMG_7329.jpg": {
+"at": "2026-10-12",
+"label": "c105",
+"pack": "evpack-halloween-2026",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Young_Hare%2C_by_Albrecht_D%C3%BCrer_%282%29.jpg/1280px-Young_Hare%2C_by_Albrecht_D%C3%BCrer_%282%29.jpg": {
 "at": "2026-10-12",
@@ -31541,6 +33347,12 @@
 "pack": "abstract-light-leaks",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Skeleton_%2812446436494%29.jpg/1280px-Skeleton_%2812446436494%29.jpg": {
+"at": "2026-10-12",
+"label": "c101",
+"pack": "evpack-halloween-2026",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Steller%27s_Jay%2C_Lake_Louise%2C_Alberta.jpg/1280px-Steller%27s_Jay%2C_Lake_Louise%2C_Alberta.jpg": {
 "at": "2026-10-12",
 "label": "c18",
@@ -31558,6 +33370,12 @@
 "label": "c34",
 "pack": "pack-parrots",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Wasp_colony.jpg/1280px-Wasp_colony.jpg": {
+"at": "2026-10-12",
+"label": "c115",
+"pack": "evpack-halloween-2026",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/2018_Silvesterkl%C3%A4use_Urn%C3%A4sch_-_033.jpg/1280px-2018_Silvesterkl%C3%A4use_Urn%C3%A4sch_-_033.jpg": {
 "at": "2026-10-12",
@@ -31997,6 +33815,12 @@
 "pack": "evpack-childrens-book-2027",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Tarantula_on_oil_lamp.jpg/1280px-Tarantula_on_oil_lamp.jpg": {
+"at": "2026-10-12",
+"label": "c81",
+"pack": "evpack-halloween-2026",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Terraced_rice_fields_at_Rey_Mindu%2C_Sikkim.jpg/1280px-Terraced_rice_fields_at_Rey_Mindu%2C_Sikkim.jpg": {
 "at": "2026-10-12",
 "label": "c34",
@@ -32200,6 +34024,12 @@
 "label": "c15",
 "pack": "pack-gardens-art",
 "reason": "quality"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Arson_fires_at_Flint_Hills_National_Wildlife_Refuge_in_Kansas_%2854265900027%29.jpg/1280px-Arson_fires_at_Flint_Hills_National_Wildlife_Refuge_in_Kansas_%2854265900027%29.jpg": {
+"at": "2026-10-12",
+"label": "c31",
+"pack": "pack-rolling-hills",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Cherry_tree_in_bloom.jpg/1280px-Cherry_tree_in_bloom.jpg": {
 "at": "2026-10-12",
@@ -32464,6 +34294,12 @@
 "label": "c43",
 "pack": "evpack-hot-tea-2027",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Spider_web_in_Huasteca_Potosina%2C_Mexico.jpg/1280px-Spider_web_in_Huasteca_Potosina%2C_Mexico.jpg": {
+"at": "2026-10-12",
+"label": "c90",
+"pack": "evpack-halloween-2026",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Three_kittens_playing_in_a_basket_with_grass._Chromolithogra_Wellcome_V0020501.jpg/1280px-Three_kittens_playing_in_a_basket_with_grass._Chromolithogra_Wellcome_V0020501.jpg": {
 "at": "2026-10-12",
@@ -32951,6 +34787,12 @@
 "pack": "evpack-yoga-2027",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Shelby_Spring_Fling%2C_Abe_Martin_Lodge%2C_Nashville%2C_IN_-_14219537376.jpg/1280px-Shelby_Spring_Fling%2C_Abe_Martin_Lodge%2C_Nashville%2C_IN_-_14219537376.jpg": {
+"at": "2026-10-12",
+"label": "c60",
+"pack": "pack-rolling-hills",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Sk%C3%B3gafoss%2C_Iceland%2C_20230501_1449_3980.jpg/1280px-Sk%C3%B3gafoss%2C_Iceland%2C_20230501_1449_3980.jpg": {
 "at": "2026-10-12",
 "label": "c54",
@@ -33106,6 +34948,12 @@
 "label": "c131",
 "pack": "daily-2023-01",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Spider_Cobweb_%28blue%29.jpg/1280px-Spider_Cobweb_%28blue%29.jpg": {
+"at": "2026-10-12",
+"label": "c92",
+"pack": "evpack-halloween-2026",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Starship_full_stack_with_Jeep.jpg/1280px-Starship_full_stack_with_Jeep.jpg": {
 "at": "2026-10-12",
@@ -33634,6 +35482,12 @@
 "label": "c129",
 "pack": "abstract-fluid-ink",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Accademia_-_Trasporto_della_Santa_Casa_di_Loreto_by_Giambattista_Tiepolo.jpg/1280px-Accademia_-_Trasporto_della_Santa_Casa_di_Loreto_by_Giambattista_Tiepolo.jpg": {
+"at": "2026-10-12",
+"label": "c42",
+"pack": "pack-rolling-hills",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Blooming_sunflower_at_Thune_lands%2C_Bobonong.jpg/1280px-Blooming_sunflower_at_Thune_lands%2C_Bobonong.jpg": {
 "at": "2026-10-12",
@@ -34306,6 +36160,12 @@
 "label": "c50",
 "pack": "pack-lavender",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Remnants_of_the_Eifel_Aqueduct_at_Rheinbach%2C_Germany_%288114115279%29.jpg/1280px-Remnants_of_the_Eifel_Aqueduct_at_Rheinbach%2C_Germany_%288114115279%29.jpg": {
+"at": "2026-10-12",
+"label": "c56",
+"pack": "pack-rolling-hills",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/STS-133_%28Discovery%29_on_Launch_Complex_39A.jpg/1280px-STS-133_%28Discovery%29_on_Launch_Complex_39A.jpg": {
 "at": "2026-10-12",
@@ -35189,6 +37049,12 @@
 "pack": "evpack-christmas-2026",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Vitoria_-_Lasarte_-_Colina_con_pino_-BT-_03.jpg/1280px-Vitoria_-_Lasarte_-_Colina_con_pino_-BT-_03.jpg": {
+"at": "2026-10-12",
+"label": "c49",
+"pack": "pack-rolling-hills",
+"reason": "similar"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/%E2%80%9CPlastic_History%E2%80%9D_%28Transfiguration%29%2C_8%E2%80%9Dx%210%E2%80%9D%2C_poured_acrylic_on_photo%2C_Tyler_Turkle%2C_1985.jpg/1280px-%E2%80%9CPlastic_History%E2%80%9D_%28Transfiguration%29%2C_8%E2%80%9Dx%210%E2%80%9D%2C_poured_acrylic_on_photo%2C_Tyler_Turkle%2C_1985.jpg": {
 "at": "2026-10-12",
 "label": "c65",
@@ -35272,6 +37138,12 @@
 "label": "c56",
 "pack": "pack-foxes",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Rolling_the_square%2C_Walls_Hill_-_geograph.org.uk_-_6462089.jpg/1280px-Rolling_the_square%2C_Walls_Hill_-_geograph.org.uk_-_6462089.jpg": {
+"at": "2026-10-12",
+"label": "c58",
+"pack": "pack-rolling-hills",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/SKA_site%2C_South_Africa_2014_03.jpg/1280px-SKA_site%2C_South_Africa_2014_03.jpg": {
 "at": "2026-10-12",
@@ -35425,9 +37297,9 @@
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Sorrel_Hill%2C_Co._Wicklow.jpg/1280px-Sorrel_Hill%2C_Co._Wicklow.jpg": {
 "at": "2026-10-12",
-"label": "c86",
-"pack": "evpack-hot-tea-2027",
-"reason": "off-theme"
+"label": "c27",
+"pack": "pack-rolling-hills",
+"reason": "similar"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Split_Rock_Lighthouse_%2816351908157%29.jpg/1280px-Split_Rock_Lighthouse_%2816351908157%29.jpg": {
 "at": "2026-10-12",
@@ -36149,6 +38021,12 @@
 "pack": "daily-2024-01",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Target%27s_Halloween_display_-_scary_skeleton_decorations%21.jpg/1280px-Target%27s_Halloween_display_-_scary_skeleton_decorations%21.jpg": {
+"at": "2026-10-12",
+"label": "c99",
+"pack": "evpack-halloween-2026",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/The_Blue_Marble_White_Balancing.jpg/1280px-The_Blue_Marble_White_Balancing.jpg": {
 "at": "2026-10-12",
 "label": "c199",
@@ -36565,9 +38443,9 @@
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Blue_Marble_Eastern_Hemisphere.jpg/1280px-Blue_Marble_Eastern_Hemisphere.jpg": {
 "at": "2026-10-12",
-"label": "c133",
-"pack": "deep-space",
-"reason": "similar"
+"label": "c111",
+"pack": "evpack-childrens-book-2027",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Bonsai_kitten.jpg/1280px-Bonsai_kitten.jpg": {
 "at": "2026-10-12",
@@ -36769,9 +38647,9 @@
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Cosmos_sulphureus_buds_and_flower_at_Kadavoor.jpg/1280px-Cosmos_sulphureus_buds_and_flower_at_Kadavoor.jpg": {
 "at": "2026-10-12",
-"label": "c26",
-"pack": "evpack-smile-day-2026",
-"reason": "similar"
+"label": "c1127",
+"pack": "daily-2024-02",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Daytime_Dynamo_Rocket_Launch_%289214316379%29.jpg/1280px-Daytime_Dynamo_Rocket_Launch_%289214316379%29.jpg": {
 "at": "2026-10-12",
@@ -36959,6 +38837,12 @@
 "pack": "daily-2023-01",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Miniatuur_armstoel%2C_BK-16729.jpg/1280px-Miniatuur_armstoel%2C_BK-16729.jpg": {
+"at": "2026-10-12",
+"label": "c122",
+"pack": "evpack-childrens-book-2027",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Orange_sweet.jpg/1280px-Orange_sweet.jpg": {
 "at": "2026-10-12",
 "label": "c64",
@@ -36982,6 +38866,12 @@
 "label": "c343",
 "pack": "daily-2023-01",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Soup_Joumou.jpg/1280px-Soup_Joumou.jpg": {
+"at": "2026-10-12",
+"label": "c85",
+"pack": "evpack-halloween-2026",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Vincent_van_Gogh_-_Corridor_in_the_Asylum.jpg/1280px-Vincent_van_Gogh_-_Corridor_in_the_Asylum.jpg": {
 "at": "2026-10-12",
@@ -37215,6 +39105,12 @@
 "at": "2026-10-12",
 "label": "c96",
 "pack": "abstract-light-leaks",
+"reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Greimerath_BW_2018-07-29_14-00-18.jpg/1280px-Greimerath_BW_2018-07-29_14-00-18.jpg": {
+"at": "2026-10-12",
+"label": "c54",
+"pack": "pack-rolling-hills",
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Jaskinia_Postojna%2C_S%C5%82owenia%2C_20240503_1017_8060.jpg/1280px-Jaskinia_Postojna%2C_S%C5%82owenia%2C_20240503_1017_8060.jpg": {
@@ -37462,6 +39358,12 @@
 "label": "c40",
 "pack": "pack-barcelona",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Flint_Hills_Scenic_Byway_-_Little_John_Creek_Valley_-_NARA_-_7718393.jpg/1280px-Flint_Hills_Scenic_Byway_-_Little_John_Creek_Valley_-_NARA_-_7718393.jpg": {
+"at": "2026-10-12",
+"label": "c32",
+"pack": "pack-rolling-hills",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Giant_Panda_%28Ailuropoda_melanoleuca%29_-_Chapultepec_Zoo_-_Mexico_2024_%283%29.jpg/1280px-Giant_Panda_%28Ailuropoda_melanoleuca%29_-_Chapultepec_Zoo_-_Mexico_2024_%283%29.jpg": {
 "at": "2026-10-12",
@@ -37913,6 +39815,12 @@
 "pack": "evpack-bean-day-2027",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Umbria_201904_%2848967762271%29.jpg/1280px-Umbria_201904_%2848967762271%29.jpg": {
+"at": "2026-10-12",
+"label": "c20",
+"pack": "pack-rolling-hills",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/A_Roe-buck_%28small_kind_of_deer%29_of_3_years_old_in_the_fenced_meadow_at_Hoge_Veluwe_Arnhem-Schaarsbergen_-_panoramio.jpg/1280px-A_Roe-buck_%28small_kind_of_deer%29_of_3_years_old_in_the_fenced_meadow_at_Hoge_Veluwe_Arnhem-Schaarsbergen_-_panoramio.jpg": {
 "at": "2026-10-12",
 "label": "c74",
@@ -38189,6 +40097,12 @@
 "pack": "pack-northern-lights",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Teter_Rock.jpg/1280px-Teter_Rock.jpg": {
+"at": "2026-10-12",
+"label": "c30",
+"pack": "pack-rolling-hills",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/View_of_the_Blautopf_%28spring%29_in_Blaubeuren%2C_Baden-W%C3%BCrrtemberg.jpg/1280px-View_of_the_Blautopf_%28spring%29_in_Blaubeuren%2C_Baden-W%C3%BCrrtemberg.jpg": {
 "at": "2026-10-12",
 "label": "c12",
@@ -38266,6 +40180,12 @@
 "label": "c338",
 "pack": "daily-2023-01",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Umbria_201904_%2848967765231%29.jpg/1280px-Umbria_201904_%2848967765231%29.jpg": {
+"at": "2026-10-12",
+"label": "c21",
+"pack": "pack-rolling-hills",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Woody_Puppy.jpg/1280px-Woody_Puppy.jpg": {
 "at": "2026-10-12",
@@ -38368,6 +40288,12 @@
 "label": "c57",
 "pack": "evpack-coffee-2026",
 "reason": "text"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Peak_district_13.jpg/1280px-Peak_district_13.jpg": {
+"at": "2026-10-12",
+"label": "c15",
+"pack": "pack-rolling-hills",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Plants_in_the_Dolomites_at_Lake_Sorapis_07.jpg/1280px-Plants_in_the_Dolomites_at_Lake_Sorapis_07.jpg": {
 "at": "2026-10-12",
@@ -38482,6 +40408,12 @@
 "label": "c11",
 "pack": "pack-pandas",
 "reason": "quality"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Santa_Maria_di_Loreto_%28Rome%29_-_dome.jpg/1280px-Santa_Maria_di_Loreto_%28Rome%29_-_dome.jpg": {
+"at": "2026-10-12",
+"label": "c44",
+"pack": "pack-rolling-hills",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Veil_Nebula_%28Heic0712g%29.jpg/1280px-Veil_Nebula_%28Heic0712g%29.jpg": {
 "at": "2026-10-12",
@@ -38884,6 +40816,12 @@
 "label": "c213",
 "pack": "pack-rockets",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Skeleton_%2812446390574%29.jpg/1280px-Skeleton_%2812446390574%29.jpg": {
+"at": "2026-10-12",
+"label": "c100",
+"pack": "evpack-halloween-2026",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Tea_set_%28AM_1981.194-20%29.jpg/1280px-Tea_set_%28AM_1981.194-20%29.jpg": {
 "at": "2026-10-12",
@@ -40049,6 +41987,12 @@
 "pack": "evpack-food-day-2026",
 "reason": "text"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Cosmos_field.jpg/1280px-Cosmos_field.jpg": {
+"at": "2026-10-12",
+"label": "c1124",
+"pack": "daily-2024-02",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Fischer%27s_and_Masked_lovebirds_2.jpg/1280px-Fischer%27s_and_Masked_lovebirds_2.jpg": {
 "at": "2026-10-12",
 "label": "c66",
@@ -40186,6 +42130,12 @@
 "label": "c66",
 "pack": "pack-gardens",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/%D0%9F%D0%B8%D0%BA_%D0%A2%D0%B0%D0%BB%D0%B3%D0%B0%D1%80_%D0%B7%D0%B0%D0%BF%D0%BE%D0%B2%D0%B5%D0%B4%D0%BD%D0%B8%D0%BA.jpg/1280px-%D0%9F%D0%B8%D0%BA_%D0%A2%D0%B0%D0%BB%D0%B3%D0%B0%D1%80_%D0%B7%D0%B0%D0%BF%D0%BE%D0%B2%D0%B5%D0%B4%D0%BD%D0%B8%D0%BA.jpg": {
+"at": "2026-10-12",
+"label": "c13",
+"pack": "pack-rolling-hills",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/2021-09-28_12_38_56_Yellow_Birch_bark_along_the_Cove_Trail_around_Spring_Lake_in_Berlin%2C_Rensselaer_County%2C_New_York.jpg/1280px-2021-09-28_12_38_56_Yellow_Birch_bark_along_the_Cove_Trail_around_Spring_Lake_in_Berlin%2C_Rensselaer_County%2C_New_York.jpg": {
 "at": "2026-10-12",
@@ -40955,6 +42905,12 @@
 "pack": "pack-jungle",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/The_Dales_Way_Link_Path%2C_The_Pine_Woods%2C_Harrogate_-_geograph.org.uk_-_8095989.jpg/1280px-The_Dales_Way_Link_Path%2C_The_Pine_Woods%2C_Harrogate_-_geograph.org.uk_-_8095989.jpg": {
+"at": "2026-10-12",
+"label": "c08",
+"pack": "pack-rolling-hills",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Vana_Tallinna_t%C3%A4navatest._Suurt%C3%BCki_Tallinn.jpg/1280px-Vana_Tallinna_t%C3%A4navatest._Suurt%C3%BCki_Tallinn.jpg": {
 "at": "2026-10-12",
 "label": "c93",
@@ -41134,6 +43090,12 @@
 "label": "c83",
 "pack": "pack-horses",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Umbria_201904_%2848967213693%29.jpg/1280px-Umbria_201904_%2848967213693%29.jpg": {
+"at": "2026-10-12",
+"label": "c19",
+"pack": "pack-rolling-hills",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Wavy_drapery_in_Ruakuri_Cave.jpg/1280px-Wavy_drapery_in_Ruakuri_Cave.jpg": {
 "at": "2026-10-12",
@@ -41723,6 +43685,12 @@
 "pack": "pack-lavender",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Mini_Adam%E2%80%99s_peak_%2818%29.jpg/1280px-Mini_Adam%E2%80%99s_peak_%2818%29.jpg": {
+"at": "2026-10-12",
+"label": "c12",
+"pack": "pack-rolling-hills",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Oia_Santorini_Blue_Domes.jpg/1280px-Oia_Santorini_Blue_Domes.jpg": {
 "at": "2026-10-12",
 "label": "c299",
@@ -41837,6 +43805,12 @@
 "pack": "pack-wild-roses",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Santa_Maria_di_Loreto_%28Rome%29_-_Dome.jpg/1280px-Santa_Maria_di_Loreto_%28Rome%29_-_Dome.jpg": {
+"at": "2026-10-12",
+"label": "c43",
+"pack": "pack-rolling-hills",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Snow_Leopard_by_Trisha_2.jpg/1280px-Snow_Leopard_by_Trisha_2.jpg": {
 "at": "2026-10-12",
 "label": "c699",
@@ -41895,6 +43869,12 @@
 "at": "2026-10-12",
 "label": "c36",
 "pack": "pack-jungle",
+"reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Greimerath_BW_2018-07-29_14-00-40.jpg/1280px-Greimerath_BW_2018-07-29_14-00-40.jpg": {
+"at": "2026-10-12",
+"label": "c55",
+"pack": "pack-rolling-hills",
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Himalayan_Mountains_-_Envisat.jpg/1280px-Himalayan_Mountains_-_Envisat.jpg": {
@@ -42057,6 +44037,12 @@
 "at": "2026-10-12",
 "label": "c32",
 "pack": "pack-caves",
+"reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Wasserturm_Burg_Hohenzollern_04.jpg/1280px-Wasserturm_Burg_Hohenzollern_04.jpg": {
+"at": "2026-10-12",
+"label": "c97",
+"pack": "evpack-childrens-book-2027",
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Webb%27s_First_Deep_Field_%28NIRCam_Compass_Image%29_%282022-038-01G7JJTZJTA8BY731JS2S7P5SZ%29.png/1280px-Webb%27s_First_Deep_Field_%28NIRCam_Compass_Image%29_%282022-038-01G7JJTZJTA8BY731JS2S7P5SZ%29.png": {
@@ -43541,6 +45527,12 @@
 "pack": "pack-misty-forests",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gnarled_tree_%2840223577732%29.jpg/1280px-Gnarled_tree_%2840223577732%29.jpg": {
+"at": "2026-10-12",
+"label": "c108",
+"pack": "evpack-halloween-2026",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Perro_Perla.jpg/1280px-Perro_Perla.jpg": {
 "at": "2026-10-12",
 "label": "c20",
@@ -43641,6 +45633,12 @@
 "at": "2026-10-12",
 "label": "c26",
 "pack": "evpack-easter-2027",
+"reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Blake_Hill%2C_Shibden_Dale%2C_Halifax_-_geograph.org.uk_-_7771912.jpg/1280px-Blake_Hill%2C_Shibden_Dale%2C_Halifax_-_geograph.org.uk_-_7771912.jpg": {
+"at": "2026-10-12",
+"label": "c10",
+"pack": "pack-rolling-hills",
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/C%26C_30_Mark_I_sailboat_Mary_Brown_6270.jpg/1280px-C%26C_30_Mark_I_sailboat_Mary_Brown_6270.jpg": {
@@ -43756,6 +45754,12 @@
 "label": "c21",
 "pack": "abstract-fluid-ink",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/THE_CHOCOLATE_HILLS.jpg/1280px-THE_CHOCOLATE_HILLS.jpg": {
+"at": "2026-10-12",
+"label": "c33",
+"pack": "pack-rolling-hills",
+"reason": "similar"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/The_beginning_and_the_end_of_burning_incense_sticks.jpg/1280px-The_beginning_and_the_end_of_burning_incense_sticks.jpg": {
 "at": "2026-10-12",
@@ -43889,6 +45893,12 @@
 "pack": "daily-2025-01",
 "reason": "text"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Boundary_Stone%2C_Foxes%27_Holt._Cosdon_Hill%2C_Dartmoor_-_geograph.org.uk_-_6259421.jpg/1280px-Boundary_Stone%2C_Foxes%27_Holt._Cosdon_Hill%2C_Dartmoor_-_geograph.org.uk_-_6259421.jpg": {
+"at": "2026-10-12",
+"label": "c39",
+"pack": "pack-rolling-hills",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Ferdinand_von_Wright_-_Rough-Legged_Buzzard_-_A_I_616-14_-_Finnish_National_Gallery.jpg/1280px-Ferdinand_von_Wright_-_Rough-Legged_Buzzard_-_A_I_616-14_-_Finnish_National_Gallery.jpg": {
 "at": "2026-10-12",
 "label": "c60",
@@ -43918,6 +45928,12 @@
 "label": "c33",
 "pack": "pack-bridges",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Myrtus_communis_L._subsp._communis_-_52504998480.png/1280px-Myrtus_communis_L._subsp._communis_-_52504998480.png": {
+"at": "2026-10-12",
+"label": "c50",
+"pack": "pack-rolling-hills",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Rufous-tailed_hummingbird_%28Amazilia_tzacatl_fuscicaudata%29_male_Las_Tangaras_2.jpg/1280px-Rufous-tailed_hummingbird_%28Amazilia_tzacatl_fuscicaudata%29_male_Las_Tangaras_2.jpg": {
 "at": "2026-10-12",
@@ -44903,6 +46919,12 @@
 "pack": "pack-canyons",
 "reason": "text"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Wasserturm_Burg_Hohenzollern_02.jpg/1280px-Wasserturm_Burg_Hohenzollern_02.jpg": {
+"at": "2026-10-12",
+"label": "c94",
+"pack": "evpack-childrens-book-2027",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Blue_Top_Milk_Drop_%288168129655%29.jpg/1280px-Blue_Top_Milk_Drop_%288168129655%29.jpg": {
 "at": "2026-10-12",
 "label": "c72",
@@ -45125,6 +47147,12 @@
 "pack": "evpack-childrens-book-2027",
 "reason": "text"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Myrtus_communis_L._subsp._communis_-_52504031287.png/1280px-Myrtus_communis_L._subsp._communis_-_52504031287.png": {
+"at": "2026-10-12",
+"label": "c52",
+"pack": "pack-rolling-hills",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Platanthera_chlorantha_%28flowers%29.jpg/1280px-Platanthera_chlorantha_%28flowers%29.jpg": {
 "at": "2026-10-12",
 "label": "c77",
@@ -45154,6 +47182,12 @@
 "label": "c48",
 "pack": "pack-cherry-blossom",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/A_view_from_The_Dales_Way%2C_Grassington_-_geograph.org.uk_-_8040284.jpg/1280px-A_view_from_The_Dales_Way%2C_Grassington_-_geograph.org.uk_-_8040284.jpg": {
+"at": "2026-10-12",
+"label": "c09",
+"pack": "pack-rolling-hills",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Berbard_F_Eilers-Kleurscheidingsnegatieven-Westertoren-010186003639.jpg/1280px-Berbard_F_Eilers-Kleurscheidingsnegatieven-Westertoren-010186003639.jpg": {
 "at": "2026-10-12",
@@ -45479,6 +47513,12 @@
 "pack": "pack-tulip-fields",
 "reason": "quality"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Vaughan_Williams_and_Holst_walking_in_the_Malvern_Hills_1921.jpg/1280px-Vaughan_Williams_and_Holst_walking_in_the_Malvern_Hills_1921.jpg": {
+"at": "2026-10-12",
+"label": "c22",
+"pack": "pack-rolling-hills",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Vest%C3%ADbul_de_la_casa_Calvet_-_20240220_182125.jpg/1280px-Vest%C3%ADbul_de_la_casa_Calvet_-_20240220_182125.jpg": {
 "at": "2026-10-12",
 "label": "c64",
@@ -45609,6 +47649,12 @@
 "at": "2026-10-12",
 "label": "c104",
 "pack": "abstract-geometric-minimal",
+"reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/A_colony_of_bat_directly_behind_Basic_Education_Younde.jpg/1280px-A_colony_of_bat_directly_behind_Basic_Education_Younde.jpg": {
+"at": "2026-10-12",
+"label": "c116",
+"pack": "evpack-halloween-2026",
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Bremen_Statue_Bremer_Stadtmusikanten_03.jpg/1280px-Bremen_Statue_Bremer_Stadtmusikanten_03.jpg": {
@@ -46547,6 +48593,12 @@
 "pack": "pack-farm-life",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Tarantula.identification.jpg/1280px-Tarantula.identification.jpg": {
+"at": "2026-10-12",
+"label": "c80",
+"pack": "evpack-halloween-2026",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Valais_Blacknose_Sheep_-_Zermatt%2C_Switzerland_-_August_13%2C_2022.jpg/1280px-Valais_Blacknose_Sheep_-_Zermatt%2C_Switzerland_-_August_13%2C_2022.jpg": {
 "at": "2026-10-12",
 "label": "c67",
@@ -46579,8 +48631,8 @@
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Detalles_del_castillo_de_Neuschwanstein%2C_F%C3%BCssen%2C_Alemania%2C_2012-10-07%2C_DD_10.jpg/1280px-Detalles_del_castillo_de_Neuschwanstein%2C_F%C3%BCssen%2C_Alemania%2C_2012-10-07%2C_DD_10.jpg": {
 "at": "2026-10-12",
-"label": "c334",
-"pack": "daily-2023-01",
+"label": "p-0da78a37b943",
+"pack": "evpack-childrens-book-2027",
 "reason": "similar"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Divine_Statues_of_Gods_and_Goddesses_near_Lakshman_Jhula_34.jpg/1280px-Divine_Statues_of_Gods_and_Goddesses_near_Lakshman_Jhula_34.jpg": {
@@ -46805,6 +48857,12 @@
 "pack": "pack-foxes",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Witch%27s_brooms_in_Miukki%2C_Tornio_20250417_001.jpg/1280px-Witch%27s_brooms_in_Miukki%2C_Tornio_20250417_001.jpg": {
+"at": "2026-10-12",
+"label": "c104",
+"pack": "evpack-halloween-2026",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/20220915.Frauenkirche_Dresden.-011.jpg/1280px-20220915.Frauenkirche_Dresden.-011.jpg": {
 "at": "2026-10-12",
 "label": "c74",
@@ -46978,6 +49036,12 @@
 "label": "c157",
 "pack": "pack-nebulae",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Pumpkin_soup_with_groundnuts_and_nutritious_spices_served_in_a_clay_pot.jpg/1280px-Pumpkin_soup_with_groundnuts_and_nutritious_spices_served_in_a_clay_pot.jpg": {
+"at": "2026-10-12",
+"label": "c82",
+"pack": "evpack-halloween-2026",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Water_droplets_on_an_Orange_Jasmine_%28Murraya_paniculata%29_flower.jpg/1280px-Water_droplets_on_an_Orange_Jasmine_%28Murraya_paniculata%29_flower.jpg": {
 "at": "2026-10-12",
@@ -47555,6 +49619,12 @@
 "pack": "pack-bridges",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Vitoria_-_Lasarte_-_Colina_con_pino_-BT-_04.jpg/1280px-Vitoria_-_Lasarte_-_Colina_con_pino_-BT-_04.jpg": {
+"at": "2026-10-12",
+"label": "c46",
+"pack": "pack-rolling-hills",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Wildpark_Schloss_Tambach_Sakerfalke-20240908-RM-110721.jpg/1280px-Wildpark_Schloss_Tambach_Sakerfalke-20240908-RM-110721.jpg": {
 "at": "2026-10-12",
 "label": "c33",
@@ -47692,6 +49762,12 @@
 "label": "c14",
 "pack": "evpack-oceans-2027",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Schneeeule_Bubo_scandiacus_Grugapark_2013.jpg/1280px-Schneeeule_Bubo_scandiacus_Grugapark_2013.jpg": {
+"at": "2026-10-12",
+"label": "c1073",
+"pack": "daily-2024-02",
+"reason": "similar"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Un_g%C3%A9ant_tranquille%2C_%C3%A9l%C3%A9phant_aper%C3%A7u_au_parc_national_de_Tarangire.jpg/1280px-Un_g%C3%A9ant_tranquille%2C_%C3%A9l%C3%A9phant_aper%C3%A7u_au_parc_national_de_Tarangire.jpg": {
 "at": "2026-10-12",
@@ -47969,6 +50045,12 @@
 "pack": "pack-jungle",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Crete_Senesi_Sunset_-_Saltafabbro%2C_Siena%2C_Italy_-_July_4%2C_2009.jpg/1280px-Crete_Senesi_Sunset_-_Saltafabbro%2C_Siena%2C_Italy_-_July_4%2C_2009.jpg": {
+"at": "2026-10-12",
+"label": "c03",
+"pack": "pack-rolling-hills",
+"reason": "similar"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Cup_of_Rooibos_in_Poznan.jpg/1280px-Cup_of_Rooibos_in_Poznan.jpg": {
 "at": "2026-10-12",
 "label": "c111",
@@ -48148,6 +50230,12 @@
 "label": "c53",
 "pack": "pack-horses",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Zentralbibliothek_Z%C3%BCrich_-_Schloss_Eltz_-_991160152339705501.jpg/1280px-Zentralbibliothek_Z%C3%BCrich_-_Schloss_Eltz_-_991160152339705501.jpg": {
+"at": "2026-10-12",
+"label": "c91",
+"pack": "evpack-childrens-book-2027",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/%E6%84%9B%E6%9F%93%E6%9B%BC%E8%8D%BC%E7%BE%85-Aizen_Mandala_MET_DP-12232-002.jpg/1280px-%E6%84%9B%E6%9F%93%E6%9B%BC%E8%8D%BC%E7%BE%85-Aizen_Mandala_MET_DP-12232-002.jpg": {
 "at": "2026-10-12",
@@ -48959,6 +51047,12 @@
 "pack": "abstract-kaleidoscope",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/20220427_171933_Arkeologi_Museoa_of_Bilbao.jpg/1280px-20220427_171933_Arkeologi_Museoa_of_Bilbao.jpg": {
+"at": "2026-10-12",
+"label": "c48",
+"pack": "pack-rolling-hills",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Amsterdam_-_Herengracht_-_Museum_Willet-Holthuysen_-_End_of_the_Stairs_in_the_basement.jpg/1280px-Amsterdam_-_Herengracht_-_Museum_Willet-Holthuysen_-_End_of_the_Stairs_in_the_basement.jpg": {
 "at": "2026-10-12",
 "label": "c04",
@@ -49282,6 +51376,12 @@
 "label": "c88",
 "pack": "pack-hummingbirds",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Ightham_Mote_Gnarled_Tree.jpg/1280px-Ightham_Mote_Gnarled_Tree.jpg": {
+"at": "2026-10-12",
+"label": "c107",
+"pack": "evpack-halloween-2026",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Kelder_3_rooster_naar_trapgat_-_Nijmegen_-_20167216_-_RCE.jpg/1280px-Kelder_3_rooster_naar_trapgat_-_Nijmegen_-_20167216_-_RCE.jpg": {
 "at": "2026-10-12",
@@ -49733,6 +51833,12 @@
 "pack": "evpack-hot-tea-2027",
 "reason": "text"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Hill_of_grace_wineyard.jpg/1280px-Hill_of_grace_wineyard.jpg": {
+"at": "2026-10-12",
+"label": "c38",
+"pack": "pack-rolling-hills",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Jalebi_in_fair.jpg/1280px-Jalebi_in_fair.jpg": {
 "at": "2026-10-12",
 "label": "c07",
@@ -49762,6 +51868,12 @@
 "label": "c112",
 "pack": "pack-impressionists",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Myrtus_communis_L._subsp._communis_-_52504792664.png/1280px-Myrtus_communis_L._subsp._communis_-_52504792664.png": {
+"at": "2026-10-12",
+"label": "c51",
+"pack": "pack-rolling-hills",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Nelumbo_nucifera-IMG_5613.jpg/1280px-Nelumbo_nucifera-IMG_5613.jpg": {
 "at": "2026-10-12",
@@ -50549,6 +52661,12 @@
 "pack": "daily-2023-01",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Wasserturm_Burg_Hohenzollern_01.jpg/1280px-Wasserturm_Burg_Hohenzollern_01.jpg": {
+"at": "2026-10-12",
+"label": "c95",
+"pack": "evpack-childrens-book-2027",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Adelies_on_berg_and_beach.jpg/1280px-Adelies_on_berg_and_beach.jpg": {
 "at": "2026-10-12",
 "label": "c64",
@@ -50932,6 +53050,12 @@
 "label": "c18",
 "pack": "pack-waterfalls",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Kilos_Crow_Lisbon.jpg/1280px-Kilos_Crow_Lisbon.jpg": {
+"at": "2026-10-12",
+"label": "c94",
+"pack": "evpack-halloween-2026",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Mourning_Cloak_%28Nymphalis_antiopa%29_-_Kitchener%2C_Ontario.jpg/1280px-Mourning_Cloak_%28Nymphalis_antiopa%29_-_Kitchener%2C_Ontario.jpg": {
 "at": "2026-10-12",
@@ -51371,6 +53495,12 @@
 "pack": "land-of-fire-ice",
 "reason": "quality"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Loreto_veduta_06.jpg/1280px-Loreto_veduta_06.jpg": {
+"at": "2026-10-12",
+"label": "c45",
+"pack": "pack-rolling-hills",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Macaron_d%27Amiens_02.jpg/1280px-Macaron_d%27Amiens_02.jpg": {
 "at": "2026-10-12",
 "label": "c695",
@@ -51435,6 +53565,12 @@
 "at": "2026-10-12",
 "label": "c692",
 "pack": "daily-2025-07",
+"reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Zabawki_Muzeum_Etnograficzne_w_Warszawie_2015-02-28_02.jpg/1280px-Zabawki_Muzeum_Etnograficzne_w_Warszawie_2015-02-28_02.jpg": {
+"at": "2026-10-12",
+"label": "p-cbe6be5e4119",
+"pack": "evpack-childrens-book-2027",
 "reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/African_Chameleon_moving_along_the_edge_of_a_concrete_pavement._03.jpg/1280px-African_Chameleon_moving_along_the_edge_of_a_concrete_pavement._03.jpg": {
@@ -51815,6 +53951,12 @@
 "pack": "daily-2025-07",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Wasserturm_Burg_Hohenzollern_03.jpg/1280px-Wasserturm_Burg_Hohenzollern_03.jpg": {
+"at": "2026-10-12",
+"label": "c96",
+"pack": "evpack-childrens-book-2027",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Wooden_ruler_used_for_measuring_cloth_in_a_Bangalore_tailor_shop.jpg/1280px-Wooden_ruler_used_for_measuring_cloth_in_a_Bangalore_tailor_shop.jpg": {
 "at": "2026-10-12",
 "label": "c63",
@@ -51994,6 +54136,12 @@
 "label": "c254",
 "pack": "daily-2023-01",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/%D0%A1%D0%BB%D1%96%D0%B4_%D0%91%D0%BE%D1%80%D1%81%D1%83%D0%BA%D0%B0_%28Meles_Meles%29.jpg/1280px-%D0%A1%D0%BB%D1%96%D0%B4_%D0%91%D0%BE%D1%80%D1%81%D1%83%D0%BA%D0%B0_%28Meles_Meles%29.jpg": {
+"at": "2026-10-12",
+"label": "c116",
+"pack": "evpack-childrens-book-2027",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/2018-09-24_a_Vulpes_zerda_in_Tokyo.jpg/1280px-2018-09-24_a_Vulpes_zerda_in_Tokyo.jpg": {
 "at": "2026-10-12",

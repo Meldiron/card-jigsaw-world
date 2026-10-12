@@ -1,0 +1,9 @@
+{
+ "id": "ai-little-creatures", "name": "AI Little Creatures", "category": "AI",
+ "description": "Fluffy bunnies, rain-soaked frogs, puppies and other small animals as text-to-image models picture them. Every picture is AI-generated and in the public domain.",
+ "kind": "ai", "pool": "ai-all", "price": "free", "sortOrder": 2017,
+ "target": 24, "per_topic": 1, "fetch_per_topic": 20, "author_cap": 10, "min_short": 900,
+ "sources": ["openverse"], "openverse_category": "photograph", "accent_from_cover": true,
+ "topics": ["AI-generated dog", "AI-generated puppy", "AI-generated frog", "AI-generated bunny", "AI-generated mouse", "AI-generated squirrel",
+            "AI-generated hamster", "AI-generated hedgehog", "AI-generated chick", "AI-generated lizard", "AI-generated chameleon", "AI-generated animal"]
+}

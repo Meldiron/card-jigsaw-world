@@ -1,8 +1,8 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-12T12:46:26",
-"msg": "Content: checkpoint (103 verified, 4 fixed, 71 audited, 102 pending)",
+"at": "2026-10-12T13:07:23",
+"msg": "Content: checkpoint (114 verified, 4 fixed, 74 audited, 92 pending)",
 "ok": true,
 "pushed": true,
 "stage": "committed"
@@ -94,8 +94,8 @@
 },
 "ai-all": {
 "added": 0,
-"at": "2026-10-12T11:58:44",
-"last_step": "pool 734 usable",
+"at": "2026-10-12T13:08:22",
+"last_step": "pool 1115 usable",
 "puzzles": null,
 "removed": 0,
 "status": "pending"
@@ -148,6 +148,18 @@
 "removed": 3,
 "status": "verified"
 },
+"ai-dinosaurs": {
+"added": 21,
+"at": "2026-10-12T13:09:50",
+"category": "AI",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "AI Dinosaur Worlds",
+"puzzles": 20,
+"removed": 1,
+"status": "verified"
+},
 "ai-dream-machines": {
 "added": 24,
 "at": "2026-10-12T12:38:53",
@@ -196,6 +208,18 @@
 "removed": 2,
 "status": "verified"
 },
+"ai-forests": {
+"added": 22,
+"at": "2026-10-12T13:14:59",
+"category": "AI",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "AI Forests",
+"puzzles": 20,
+"removed": 2,
+"status": "verified"
+},
 "ai-future-worlds": {
 "added": 25,
 "at": "2026-10-12T12:32:01",
@@ -230,6 +254,18 @@
 "name": "AI Ocean Dreams",
 "puzzles": 21,
 "removed": 2,
+"status": "verified"
+},
+"ai-robots": {
+"added": 21,
+"at": "2026-10-12T13:14:59",
+"category": "AI",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "AI Robots and Machines",
+"puzzles": 20,
+"removed": 1,
 "status": "verified"
 },
 "ai-space": {
@@ -461,48 +497,52 @@
 "status": "verified"
 },
 "daily-2024-02": {
-"added": 0,
-"at": "2026-10-12T13:05:41",
+"added": 23,
+"at": "2026-10-12T13:16:17",
 "category": "Daily",
+"issues": 0,
 "kind": "daily",
-"last_step": "pool 363 usable",
+"last_step": "pool 60 usable",
 "name": "February 2024",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 29,
+"removed": 23,
+"status": "verified"
 },
 "daily-2024-03": {
-"added": 0,
-"at": "2026-10-12T10:24:21",
+"added": 29,
+"at": "2026-10-12T13:13:41",
 "category": "Daily",
+"issues": 0,
 "kind": "daily",
-"last_step": "reject 2 weak",
+"last_step": "verify",
 "name": "March 2024",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 31,
+"removed": 29,
+"status": "verified"
 },
 "daily-2024-04": {
-"added": 0,
-"at": "2026-10-12T10:24:21",
+"added": 25,
+"at": "2026-10-12T13:14:22",
 "category": "Daily",
+"issues": 0,
 "kind": "daily",
-"last_step": "reject 2 weak",
+"last_step": "verify",
 "name": "April 2024",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 30,
+"removed": 25,
+"status": "verified"
 },
 "daily-2024-05": {
-"added": 0,
-"at": "2026-10-12T10:24:22",
+"added": 26,
+"at": "2026-10-12T13:15:39",
 "category": "Daily",
+"issues": 0,
 "kind": "daily",
-"last_step": "reject 1 people",
+"last_step": "verify",
 "name": "May 2024",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 31,
+"removed": 26,
+"status": "verified"
 },
 "daily-2024-06": {
 "added": 0,
@@ -976,15 +1016,16 @@
 "status": "pending"
 },
 "evpack-childrens-book-2027": {
-"added": 0,
-"at": "2026-10-12T13:01:48",
+"added": 23,
+"at": "2026-10-12T13:09:45",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "pool 43 usable",
+"last_step": "verify",
 "name": "International Children's Book Day",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 21,
+"removed": 16,
+"status": "verified"
 },
 "evpack-childrens-day-2027": {
 "added": 0,
@@ -1239,15 +1280,15 @@
 "status": "pending"
 },
 "evpack-halloween-2026": {
-"added": 10,
-"at": "2026-10-12T13:02:46",
+"added": 19,
+"at": "2026-10-12T13:10:03",
 "category": "Event",
 "kind": "event",
-"last_step": "pool 15 usable",
+"last_step": "apply",
 "name": "Halloween",
-"puzzles": 14,
-"removed": 10,
-"status": "audited"
+"puzzles": 21,
+"removed": 12,
+"status": "fixed"
 },
 "evpack-halloween-2027": {
 "added": 0,
@@ -1281,13 +1322,14 @@
 },
 "evpack-health-2027": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T13:10:03",
 "category": "Event",
 "kind": "event",
+"last_step": "reject 7 quality",
 "name": "World Health Day",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "evpack-heart-day-2027": {
 "added": 0,
@@ -2039,10 +2081,10 @@
 },
 "pack-castles": {
 "added": 0,
-"at": "2026-10-12T12:59:42",
+"at": "2026-10-12T13:14:43",
 "category": "Architecture",
 "kind": "library",
-"last_step": "pool 14 usable",
+"last_step": "pool 67 usable",
 "name": "Castles",
 "puzzles": null,
 "removed": 0,
@@ -2777,15 +2819,15 @@
 "status": "verified"
 },
 "pack-rolling-hills": {
-"added": 0,
-"at": "2026-10-12T03:23:05",
+"added": 16,
+"at": "2026-10-12T13:09:37",
 "category": "Nature",
 "kind": "library",
-"last_step": "pool 41 usable",
+"last_step": "apply",
 "name": "Rolling Hills",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 16,
+"removed": 12,
+"status": "fixed"
 },
 "pack-rome": {
 "added": 0,
