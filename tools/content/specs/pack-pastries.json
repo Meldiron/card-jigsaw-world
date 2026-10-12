@@ -8,14 +8,48 @@
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
- "sources": ["commons"],
+ "sources": [
+  "commons",
+  "openverse"
+ ],
  "quality_deepcat": "Quality images of food",
  "topics": [
-  "Croissants", "Pain au chocolat", "Kanelbulle", "Baklava", "Éclairs", "Mille-feuille",
-  "Danish pastry", "Kouign-amann", "Paris-Brest", "Fruit tart", "Cannoli", "Sfogliatella",
-  "Churros", "Profiteroles", "Apple turnover", "Berliner doughnut", "Kolache", "Trdelník",
-  "Rugelach", "Palmier pastry", "Canelé", "Religieuse pastry", "Madeleines", "Bougatsa",
-  "Egg tart", "Melonpan", "Strawberry tart"
+  "Croissants",
+  "Pain au chocolat",
+  "Kanelbulle",
+  "Baklava",
+  "Éclairs",
+  "Mille-feuille",
+  "Danish pastry",
+  "Kouign-amann",
+  "Paris-Brest",
+  "Fruit tart",
+  "Cannoli",
+  "Sfogliatella",
+  "Churros",
+  "Profiteroles",
+  "Apple turnover",
+  "Berliner doughnut",
+  "Kolache",
+  "Trdelník",
+  "Rugelach",
+  "Palmier pastry",
+  "Canelé",
+  "Religieuse pastry",
+  "Madeleines",
+  "Bougatsa",
+  "Egg tart",
+  "Melonpan",
+  "Strawberry tart"
  ],
- "more_topics": ["Napoleon pastry", "Cream puffs", "Linzer torte", "Pastizzi", "Börek", "Fig tart", "Raspberry tartlet", "Brioche"]
+ "more_topics": [
+  "Napoleon pastry",
+  "Cream puffs",
+  "Linzer torte",
+  "Pastizzi",
+  "Börek",
+  "Fig tart",
+  "Raspberry tartlet",
+  "Brioche"
+ ]
 }

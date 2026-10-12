@@ -8,15 +8,46 @@
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
- "sources": ["commons"],
- "topics": [
-  "Pantheon Rome", "St. Peter's Basilica dome", "Spanish Steps", "Roman Forum",
-  "Castel Sant'Angelo", "Santa Maria Maggiore", "Sant'Ivo alla Sapienza", "Archbasilica of St. John Lateran",
-  "Trastevere street", "Temple of Hercules Victor", "Pyramid of Cestius", "Baths of Caracalla",
-  "Palazzo della Civiltà Italiana", "Via Appia Antica", "Theatre of Marcellus", "Piazza del Campidoglio",
-  "Rome rooftops domes", "Sant'Agnese in Agone", "Quartiere Coppedè", "Trajan's Market",
-  "Colosseum arches", "Pantheon dome oculus", "St. Peter's Square colonnade", "Santa Maria in Cosmedin",
-  "Villa Borghese gardens", "Aurelian Walls"
+ "sources": [
+  "commons",
+  "openverse"
  ],
- "more_topics": ["Basilica of San Clemente", "Palazzo Farnese", "Circus Maximus", "Temple of Saturn", "Santa Maria della Pace cloister", "Rome Tiber bridge", "Giardino degli Aranci", "Santo Stefano Rotondo"]
+ "topics": [
+  "Pantheon Rome",
+  "St. Peter's Basilica dome",
+  "Spanish Steps",
+  "Roman Forum",
+  "Castel Sant'Angelo",
+  "Santa Maria Maggiore",
+  "Sant'Ivo alla Sapienza",
+  "Archbasilica of St. John Lateran",
+  "Trastevere street",
+  "Temple of Hercules Victor",
+  "Pyramid of Cestius",
+  "Baths of Caracalla",
+  "Palazzo della Civiltà Italiana",
+  "Via Appia Antica",
+  "Theatre of Marcellus",
+  "Piazza del Campidoglio",
+  "Rome rooftops domes",
+  "Sant'Agnese in Agone",
+  "Quartiere Coppedè",
+  "Trajan's Market",
+  "Colosseum arches",
+  "Pantheon dome oculus",
+  "St. Peter's Square colonnade",
+  "Santa Maria in Cosmedin",
+  "Villa Borghese gardens",
+  "Aurelian Walls"
+ ],
+ "more_topics": [
+  "Basilica of San Clemente",
+  "Palazzo Farnese",
+  "Circus Maximus",
+  "Temple of Saturn",
+  "Santa Maria della Pace cloister",
+  "Rome Tiber bridge",
+  "Giardino degli Aranci",
+  "Santo Stefano Rotondo"
+ ]
 }

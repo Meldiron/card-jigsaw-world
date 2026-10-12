@@ -1,0 +1,20 @@
+{
+ "id": "pack-fairytale-villages",
+ "name": "Fairytale Villages",
+ "category": "Travel",
+ "description": "Half-timbered lanes, flower boxes and storybook rooftops in Colmar, Hallstatt, Rothenburg, Český Krumlov and more.",
+ "kind": "library",
+ "target": 24,
+ "per_topic": 1,
+ "fetch_per_topic": 4,
+ "author_cap": 2,
+ "sources": ["commons"],
+ "topics": [
+  "Hallstatt", "Colmar Petite Venise", "Riquewihr", "Eguisheim", "Rothenburg ob der Tauber Plönlein",
+  "Dinkelsbühl", "Cochem", "Monschau", "Bacharach", "Český Krumlov",
+  "Giethoorn", "Gruyères", "Bibury Arlington Row", "Castle Combe", "Alberobello trulli",
+  "Civita di Bagnoregio", "Shirakawa-go gassho houses", "Óbidos Portugal", "Annecy old town canal", "Telč square houses",
+  "Quedlinburg half-timbered", "Mittenwald painted houses", "Hobbiton", "Gengenbach", "Kaysersberg"
+ ],
+ "more_topics": ["Sighișoara", "Goslar", "Wernigerode", "Staithes", "Ribe Denmark", "Holašovice", "Bamberg Little Venice", "Oberammergau Lüftlmalerei", "Tübingen old town", "Petite France Strasbourg", "Bad Wimpfen", "Michelstadt", "Saint-Cirq-Lapopie", "Rocamadour"]
+}

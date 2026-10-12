@@ -8,15 +8,46 @@
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
- "sources": ["commons"],
- "topics": [
-  "Sagrada Família interior", "Sagrada Família stained glass", "Sagrada Família towers", "Casa Batlló roof",
-  "Park Güell dragon fountain", "Park Güell Hypostyle Room", "Palau de la Música Catalana", "Hospital de Sant Pau",
-  "Barcelona Cathedral", "Santa Maria del Mar Barcelona", "Arc de Triomf Barcelona", "Torre Glòries",
-  "Palau Güell chimneys", "Casa Amatller", "Casa de les Punxes", "Magic Fountain of Montjuïc",
-  "Pont del Bisbe", "Temple Expiatori del Sagrat Cor Tibidabo", "Casa Milà rooftop", "Casa Calvet",
-  "Palau Nacional Montjuïc", "Mercat de Santa Caterina roof", "Casa Lleó Morera", "Barcelona Cathedral cloister",
-  "Park Güell mosaic bench", "Casa Vicens"
+ "sources": [
+  "commons",
+  "openverse"
  ],
- "more_topics": ["Teatre-Museu Sant Pau pavilion", "Palau de la Generalitat Barcelona", "Barcelona Gothic Quarter street", "Casa Batlló staircase", "Santa Maria del Pi", "Monestir de Pedralbes cloister", "Font de Canaletes", "Barcelona Modernisme balcony"]
+ "topics": [
+  "Sagrada Família interior",
+  "Sagrada Família stained glass",
+  "Sagrada Família towers",
+  "Casa Batlló roof",
+  "Park Güell dragon fountain",
+  "Park Güell Hypostyle Room",
+  "Palau de la Música Catalana",
+  "Hospital de Sant Pau",
+  "Barcelona Cathedral",
+  "Santa Maria del Mar Barcelona",
+  "Arc de Triomf Barcelona",
+  "Torre Glòries",
+  "Palau Güell chimneys",
+  "Casa Amatller",
+  "Casa de les Punxes",
+  "Magic Fountain of Montjuïc",
+  "Pont del Bisbe",
+  "Temple Expiatori del Sagrat Cor Tibidabo",
+  "Casa Milà rooftop",
+  "Casa Calvet",
+  "Palau Nacional Montjuïc",
+  "Mercat de Santa Caterina roof",
+  "Casa Lleó Morera",
+  "Barcelona Cathedral cloister",
+  "Park Güell mosaic bench",
+  "Casa Vicens"
+ ],
+ "more_topics": [
+  "Teatre-Museu Sant Pau pavilion",
+  "Palau de la Generalitat Barcelona",
+  "Barcelona Gothic Quarter street",
+  "Casa Batlló staircase",
+  "Santa Maria del Pi",
+  "Monestir de Pedralbes cloister",
+  "Font de Canaletes",
+  "Barcelona Modernisme balcony"
+ ]
 }

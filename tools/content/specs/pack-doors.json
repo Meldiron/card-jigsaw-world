@@ -8,14 +8,45 @@
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
- "sources": ["commons"],
- "topics": [
-  "Georgian door Dublin", "Chefchaouen blue door", "Zanzibar carved door", "Sidi Bou Said blue door",
-  "Romanesque portal church", "door ironwork hinges", "carved wooden door Bhaktapur", "Burano painted house door",
-  "studded wooden door", "Art Nouveau door Riga", "carved door Tbilisi", "brass door knocker",
-  "Valletta door", "Fes door zellige", "Jaipur palace door", "Lisbon azulejo door",
-  "Paris porte cochère", "New Orleans French Quarter door", "Charleston door", "Gothic church door",
-  "Maramureș wooden gate", "Mdina door Malta", "Oman carved door", "Isfahan wooden door", "Rhodes old town door"
+ "sources": [
+  "commons",
+  "openverse"
  ],
- "more_topics": ["Bhutan dzong door", "Kyoto wooden door", "Cotswolds cottage door", "Antigua Guatemala door", "Cartagena colonial door", "Galle Fort door", "Lalibela church door", "Baroque portal Prague"]
+ "topics": [
+  "Georgian door Dublin",
+  "Chefchaouen blue door",
+  "Zanzibar carved door",
+  "Sidi Bou Said blue door",
+  "Romanesque portal church",
+  "door ironwork hinges",
+  "carved wooden door Bhaktapur",
+  "Burano painted house door",
+  "studded wooden door",
+  "Art Nouveau door Riga",
+  "carved door Tbilisi",
+  "brass door knocker",
+  "Valletta door",
+  "Fes door zellige",
+  "Jaipur palace door",
+  "Lisbon azulejo door",
+  "Paris porte cochère",
+  "New Orleans French Quarter door",
+  "Charleston door",
+  "Gothic church door",
+  "Maramureș wooden gate",
+  "Mdina door Malta",
+  "Oman carved door",
+  "Isfahan wooden door",
+  "Rhodes old town door"
+ ],
+ "more_topics": [
+  "Bhutan dzong door",
+  "Kyoto wooden door",
+  "Cotswolds cottage door",
+  "Antigua Guatemala door",
+  "Cartagena colonial door",
+  "Galle Fort door",
+  "Lalibela church door",
+  "Baroque portal Prague"
+ ]
 }

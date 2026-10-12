@@ -8,13 +8,47 @@
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
- "sources": ["commons"],
- "topics": [
-  "Mojito", "Margarita cocktail", "Negroni", "Aperol Spritz", "Old Fashioned cocktail", "Piña colada",
-  "Cosmopolitan cocktail", "Daiquiri", "Mai Tai", "Moscow Mule", "Tequila Sunrise", "Blue Lagoon cocktail",
-  "Caipirinha", "Manhattan cocktail", "Whiskey sour", "Espresso martini", "Pisco sour", "Sangria",
-  "Hugo spritz", "Gin and tonic", "Mint julep", "Singapore Sling", "Paloma cocktail", "Bellini cocktail",
-  "Kir Royale", "Cuba libre", "Zombie cocktail"
+ "sources": [
+  "commons",
+  "openverse"
  ],
- "more_topics": ["Tom Collins", "Long Island iced tea", "Hurricane cocktail", "French 75", "Sidecar cocktail", "Bramble cocktail", "Aviation cocktail", "Tiki cocktail"]
+ "topics": [
+  "Mojito",
+  "Margarita cocktail",
+  "Negroni",
+  "Aperol Spritz",
+  "Old Fashioned cocktail",
+  "Piña colada",
+  "Cosmopolitan cocktail",
+  "Daiquiri",
+  "Mai Tai",
+  "Moscow Mule",
+  "Tequila Sunrise",
+  "Blue Lagoon cocktail",
+  "Caipirinha",
+  "Manhattan cocktail",
+  "Whiskey sour",
+  "Espresso martini",
+  "Pisco sour",
+  "Sangria",
+  "Hugo spritz",
+  "Gin and tonic",
+  "Mint julep",
+  "Singapore Sling",
+  "Paloma cocktail",
+  "Bellini cocktail",
+  "Kir Royale",
+  "Cuba libre",
+  "Zombie cocktail"
+ ],
+ "more_topics": [
+  "Tom Collins",
+  "Long Island iced tea",
+  "Hurricane cocktail",
+  "French 75",
+  "Sidecar cocktail",
+  "Bramble cocktail",
+  "Aviation cocktail",
+  "Tiki cocktail"
+ ]
 }

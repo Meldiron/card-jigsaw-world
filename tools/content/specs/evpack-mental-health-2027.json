@@ -3,6 +3,6 @@
  "name": "World Mental Health Day",
  "category": "Event",
  "kind": "event",
- "description": "A limited pack for World Mental Health Day (10 October 2027). Lotus flowers, moss gardens, bamboo groves, lavender fields, stone cairns, koi ponds and other quiet, calming scenes, playable for one week.",
+ "description": "A limited pack for World Mental Health Day (10 October 2027). Lotus flowers, moss gardens, lavender fields, stone cairns, koi ponds, Japanese tea gardens and other quiet, calming scenes, playable for one week.",
  "note": "clone of evpack-mental-health-2026; content comes from `run.sh clone evpack-mental-health-2026 evpack-mental-health-2027`"
 }

@@ -5,14 +5,31 @@
  "fetch_per_topic": 5,
  "author_cap": 3,
  "sources": [
+  "nga",
+  "rijks",
   "commons"
  ],
  "commons_quality": false,
  "id": "pack-still-life",
  "name": "Still Life",
  "category": "Art",
- "description": "Painted flowers, fruit and tableware, from Dutch bouquets and Chardin's kitchens to Cézanne's apples and Van Gogh's irises.",
+ "description": "Painted flowers, fruit and tableware, from Dutch bouquets and Coorte's asparagus to Cézanne's apples and Manet's crystal vase.",
  "topics": [
+  "still life",
+  "vase of flowers",
+  "flowers in a vase",
+  "still life with fruit",
+  "still life with flowers",
+  "flowers",
+  "fruit",
+  "grapes",
+  "roses",
+  "tulips",
+  "peaches",
+  "lemons",
+  "strawberries",
+  "bouquet",
+  "peonies",
   "still life flowers oil painting 17th century",
   "Jan van Huysum flowers painting",
   "Cézanne still life apples painting",
@@ -54,5 +71,8 @@
   "Eugène Delacroix flowers painting",
   "Francisco de Zurbarán still life",
   "Alexander Adriaenssen still life"
+ ],
+ "nga_classes": [
+  "Painting"
  ]
 }

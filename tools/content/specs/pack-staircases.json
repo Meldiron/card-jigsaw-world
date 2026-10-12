@@ -8,14 +8,44 @@
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
- "sources": ["commons"],
- "topics": [
-  "Bramante Staircase", "Vatican Museums spiral staircase", "Loretto Chapel staircase", "Tulip Stairs Queen's House",
-  "Chambord double staircase", "Blois Castle spiral staircase", "Scala Contarini del Bovolo", "Pozzo di San Patrizio",
-  "Initiation Well Sintra", "Chand Baori stepwell", "Rani ki vav", "Horta Museum staircase",
-  "Hôtel Tassel staircase", "16th Avenue Tiled Steps", "lighthouse spiral staircase", "spiral staircase from above",
-  "Art Nouveau staircase Riga", "Wendeltreppe", "Treppenhaus Jugendstil", "escalier en colimaçon",
-  "Melk Abbey spiral staircase", "Reichstag dome ramp", "baroque grand staircase", "stone spiral staircase tower"
+ "sources": [
+  "commons",
+  "openverse"
  ],
- "more_topics": ["Treppenhaus", "spiral staircase museum", "wooden staircase", "helical staircase", "Escalier d'honneur", "Wendeltreppe Turm", "Royal Palace of Caserta staircase", "Lello bookshop staircase"]
+ "topics": [
+  "Bramante Staircase",
+  "Vatican Museums spiral staircase",
+  "Loretto Chapel staircase",
+  "Tulip Stairs Queen's House",
+  "Chambord double staircase",
+  "Blois Castle spiral staircase",
+  "Scala Contarini del Bovolo",
+  "Pozzo di San Patrizio",
+  "Initiation Well Sintra",
+  "Chand Baori stepwell",
+  "Rani ki vav",
+  "Horta Museum staircase",
+  "Hôtel Tassel staircase",
+  "16th Avenue Tiled Steps",
+  "lighthouse spiral staircase",
+  "spiral staircase from above",
+  "Art Nouveau staircase Riga",
+  "Wendeltreppe",
+  "Treppenhaus Jugendstil",
+  "escalier en colimaçon",
+  "Melk Abbey spiral staircase",
+  "Reichstag dome ramp",
+  "baroque grand staircase",
+  "stone spiral staircase tower"
+ ],
+ "more_topics": [
+  "Treppenhaus",
+  "spiral staircase museum",
+  "wooden staircase",
+  "helical staircase",
+  "Escalier d'honneur",
+  "Wendeltreppe Turm",
+  "Royal Palace of Caserta staircase",
+  "Lello bookshop staircase"
+ ]
 }

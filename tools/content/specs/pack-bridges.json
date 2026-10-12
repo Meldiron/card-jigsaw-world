@@ -8,15 +8,48 @@
  "per_topic": 1,
  "fetch_per_topic": 5,
  "author_cap": 2,
- "sources": ["commons"],
- "topics": [
-  "Golden Gate Bridge tower", "Tower Bridge London", "Charles Bridge Prague", "Ponte Vecchio Florence",
-  "Rialto Bridge Venice", "Brooklyn Bridge tower", "Stari Most Mostar", "Glenfinnan Viaduct",
-  "Millau Viaduct", "Pont du Gard", "Kintai Bridge", "Puente Nuevo Ronda",
-  "Forth Bridge", "Sydney Harbour Bridge", "Széchenyi Chain Bridge", "Khaju Bridge Isfahan",
-  "Kapellbrücke Lucerne", "Rakotzbrücke", "Bixby Creek Bridge", "Erasmusbrug Rotterdam",
-  "Krämerbrücke Erfurt", "Shinkyo Bridge Nikko", "Ponte della Maddalena", "Puente de Alcántara",
-  "Clifton Suspension Bridge", "covered bridge Vermont", "Bridge of Sighs Venice", "Pont Neuf Paris"
+ "sources": [
+  "commons",
+  "openverse"
  ],
- "more_topics": ["Si-o-se-pol", "Zakim Bridge", "Helix Bridge Singapore", "Landwasser Viaduct", "Ponte Sisto Rome", "Old Bridge Heidelberg", "Puente de Vizcaya", "Pont Valentré Cahors"]
+ "topics": [
+  "Golden Gate Bridge tower",
+  "Tower Bridge London",
+  "Charles Bridge Prague",
+  "Ponte Vecchio Florence",
+  "Rialto Bridge Venice",
+  "Brooklyn Bridge tower",
+  "Stari Most Mostar",
+  "Glenfinnan Viaduct",
+  "Millau Viaduct",
+  "Pont du Gard",
+  "Kintai Bridge",
+  "Puente Nuevo Ronda",
+  "Forth Bridge",
+  "Sydney Harbour Bridge",
+  "Széchenyi Chain Bridge",
+  "Khaju Bridge Isfahan",
+  "Kapellbrücke Lucerne",
+  "Rakotzbrücke",
+  "Bixby Creek Bridge",
+  "Erasmusbrug Rotterdam",
+  "Krämerbrücke Erfurt",
+  "Shinkyo Bridge Nikko",
+  "Ponte della Maddalena",
+  "Puente de Alcántara",
+  "Clifton Suspension Bridge",
+  "covered bridge Vermont",
+  "Bridge of Sighs Venice",
+  "Pont Neuf Paris"
+ ],
+ "more_topics": [
+  "Si-o-se-pol",
+  "Zakim Bridge",
+  "Helix Bridge Singapore",
+  "Landwasser Viaduct",
+  "Ponte Sisto Rome",
+  "Old Bridge Heidelberg",
+  "Puente de Vizcaya",
+  "Pont Valentré Cahors"
+ ]
 }

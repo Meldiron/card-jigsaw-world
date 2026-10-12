@@ -8,13 +8,46 @@
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
- "sources": ["commons"],
- "topics": [
-  "Angkor Wat", "Ta Prohm", "Sensō-ji pagoda", "Wat Arun", "Wat Rong Khun", "Wat Phra Kaew",
-  "Shwedagon Pagoda", "Bagan temples", "Temple of Heaven Beijing", "Golden Temple Amritsar", "Prambanan", "Paro Taktsang",
-  "Potala Palace", "Tōdai-ji", "Nikkō Tōshō-gū", "Itsukushima Shrine", "Bulguksa", "Temple of Hephaestus",
-  "Karnak hypostyle hall", "Philae temple", "Lotus Temple Delhi", "Wat Chedi Luang", "Jogyesa", "Wat Benchamabophit",
-  "Hampi Vittala Temple", "Kek Lok Si"
+ "sources": [
+  "commons",
+  "openverse"
  ],
- "more_topics": ["Pha That Luang", "Wat Xieng Thong", "Haeinsa", "Temple of Poseidon Sounion", "Byōdō-in", "Nanzen-ji Sanmon", "Thien Mu Pagoda", "Tiger's Nest monastery"]
+ "topics": [
+  "Angkor Wat",
+  "Ta Prohm",
+  "Sensō-ji pagoda",
+  "Wat Arun",
+  "Wat Rong Khun",
+  "Wat Phra Kaew",
+  "Shwedagon Pagoda",
+  "Bagan temples",
+  "Temple of Heaven Beijing",
+  "Golden Temple Amritsar",
+  "Prambanan",
+  "Paro Taktsang",
+  "Potala Palace",
+  "Tōdai-ji",
+  "Nikkō Tōshō-gū",
+  "Itsukushima Shrine",
+  "Bulguksa",
+  "Temple of Hephaestus",
+  "Karnak hypostyle hall",
+  "Philae temple",
+  "Lotus Temple Delhi",
+  "Wat Chedi Luang",
+  "Jogyesa",
+  "Wat Benchamabophit",
+  "Hampi Vittala Temple",
+  "Kek Lok Si"
+ ],
+ "more_topics": [
+  "Pha That Luang",
+  "Wat Xieng Thong",
+  "Haeinsa",
+  "Temple of Poseidon Sounion",
+  "Byōdō-in",
+  "Nanzen-ji Sanmon",
+  "Thien Mu Pagoda",
+  "Tiger's Nest monastery"
+ ]
 }

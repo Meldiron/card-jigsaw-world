@@ -8,16 +8,48 @@
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
- "sources": ["commons"],
+ "sources": [
+  "commons",
+  "openverse"
+ ],
  "quality_deepcat": "Quality images of food",
  "topics": [
-  "fruit stall market", "La Boqueria fruit", "Naschmarkt fruit stand", "Provence market fruit",
-  "Rialto market Venice fruit", "Campo de' Fiori market fruit", "Mercado Central Valencia fruit", "rambutan market",
-  "mangosteen market", "durian stall", "citrus fruit market", "cherries market stall",
-  "pomegranates market stall", "dates market", "dried fruit bazaar", "apples market crates",
-  "berries market punnets", "watermelons market", "bananas market", "papaya market",
-  "figs market", "peaches market", "mangoes market", "lychee market", "strawberries market stall",
-  "persimmons market", "plums market"
+  "fruit stall market",
+  "La Boqueria fruit",
+  "Naschmarkt fruit stand",
+  "Provence market fruit",
+  "Rialto market Venice fruit",
+  "Campo de' Fiori market fruit",
+  "Mercado Central Valencia fruit",
+  "rambutan market",
+  "mangosteen market",
+  "durian stall",
+  "citrus fruit market",
+  "cherries market stall",
+  "pomegranates market stall",
+  "dates market",
+  "dried fruit bazaar",
+  "apples market crates",
+  "berries market punnets",
+  "watermelons market",
+  "bananas market",
+  "papaya market",
+  "figs market",
+  "peaches market",
+  "mangoes market",
+  "lychee market",
+  "strawberries market stall",
+  "persimmons market",
+  "plums market"
  ],
- "more_topics": ["dragon fruit market", "oranges market stall", "grapes market stall", "kiwi fruit market", "pineapples market", "Mercado de San Miguel fruit", "Bangkok fruit market", "farmers market fruit"]
+ "more_topics": [
+  "dragon fruit market",
+  "oranges market stall",
+  "grapes market stall",
+  "kiwi fruit market",
+  "pineapples market",
+  "Mercado de San Miguel fruit",
+  "Bangkok fruit market",
+  "farmers market fruit"
+ ]
 }

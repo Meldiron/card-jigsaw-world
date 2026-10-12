@@ -8,14 +8,45 @@
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
- "sources": ["commons"],
- "topics": [
-  "Grand Canal Venice", "St Mark's Basilica", "Doge's Palace", "Santa Maria della Salute",
-  "San Giorgio Maggiore", "Campanile di San Marco", "Burano houses", "Murano glass",
-  "Venice gondolas moored", "Ca' d'Oro", "Torre dell'Orologio Venice", "Venice canal houses",
-  "Fondaco dei Tedeschi", "Arsenale Venice gate", "Basilica dei Frari", "Venice chimneys",
-  "Teatro La Fenice", "Ca' Rezzonico", "Rio di San Barnaba", "Torcello",
-  "Venice mooring poles", "Venetian Gothic windows", "Rialto Bridge", "Venice canal reflection", "San Zaccaria Venice"
+ "sources": [
+  "commons",
+  "openverse"
  ],
- "more_topics": ["Venice at dusk", "Palazzo Dario", "Venice lagoon", "Santi Giovanni e Paolo Venice", "Venice rooftops", "Burano canal", "Ca' Pesaro", "Venice side canal"]
+ "topics": [
+  "Grand Canal Venice",
+  "St Mark's Basilica",
+  "Doge's Palace",
+  "Santa Maria della Salute",
+  "San Giorgio Maggiore",
+  "Campanile di San Marco",
+  "Burano houses",
+  "Murano glass",
+  "Venice gondolas moored",
+  "Ca' d'Oro",
+  "Torre dell'Orologio Venice",
+  "Venice canal houses",
+  "Fondaco dei Tedeschi",
+  "Arsenale Venice gate",
+  "Basilica dei Frari",
+  "Venice chimneys",
+  "Teatro La Fenice",
+  "Ca' Rezzonico",
+  "Rio di San Barnaba",
+  "Torcello",
+  "Venice mooring poles",
+  "Venetian Gothic windows",
+  "Rialto Bridge",
+  "Venice canal reflection",
+  "San Zaccaria Venice"
+ ],
+ "more_topics": [
+  "Venice at dusk",
+  "Palazzo Dario",
+  "Venice lagoon",
+  "Santi Giovanni e Paolo Venice",
+  "Venice rooftops",
+  "Burano canal",
+  "Ca' Pesaro",
+  "Venice side canal"
+ ]
 }

@@ -8,15 +8,46 @@
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
- "sources": ["commons"],
- "topics": [
-  "Admont Abbey library", "Strahov Library", "Wiblingen Abbey library", "Trinity College Library Long Room",
-  "Stuttgart City Library", "Tianjin Binhai Library", "Royal Portuguese Reading Room", "Biblioteca Joanina Coimbra",
-  "Mafra Palace library", "Austrian National Library State Hall", "Melk Abbey library", "Library of Congress Main Reading Room",
-  "George Peabody Library", "Radcliffe Camera", "Klementinum library", "Abbey library of Saint Gall",
-  "El Escorial library", "Salle Labrouste", "Bibliothèque Sainte-Geneviève", "National Library of Finland",
-  "Palafoxiana Library", "Metten Abbey library", "Waldsassen Abbey library", "Schussenried Abbey library",
-  "John Rylands Library", "Codrington Library"
+ "sources": [
+  "commons",
+  "openverse"
  ],
- "more_topics": ["Seattle Central Library", "Philological Library Berlin", "Stockholm Public Library", "Rijksmuseum Cuypers library", "Kremsmünster Abbey library", "Ottobeuren Abbey library", "Bibliotheca Augusta Wolfenbüttel", "Handelingenkamer library The Hague"]
+ "topics": [
+  "Admont Abbey library",
+  "Strahov Library",
+  "Wiblingen Abbey library",
+  "Trinity College Library Long Room",
+  "Stuttgart City Library",
+  "Tianjin Binhai Library",
+  "Royal Portuguese Reading Room",
+  "Biblioteca Joanina Coimbra",
+  "Mafra Palace library",
+  "Austrian National Library State Hall",
+  "Melk Abbey library",
+  "Library of Congress Main Reading Room",
+  "George Peabody Library",
+  "Radcliffe Camera",
+  "Klementinum library",
+  "Abbey library of Saint Gall",
+  "El Escorial library",
+  "Salle Labrouste",
+  "Bibliothèque Sainte-Geneviève",
+  "National Library of Finland",
+  "Palafoxiana Library",
+  "Metten Abbey library",
+  "Waldsassen Abbey library",
+  "Schussenried Abbey library",
+  "John Rylands Library",
+  "Codrington Library"
+ ],
+ "more_topics": [
+  "Seattle Central Library",
+  "Philological Library Berlin",
+  "Stockholm Public Library",
+  "Rijksmuseum Cuypers library",
+  "Kremsmünster Abbey library",
+  "Ottobeuren Abbey library",
+  "Bibliotheca Augusta Wolfenbüttel",
+  "Handelingenkamer library The Hague"
+ ]
 }

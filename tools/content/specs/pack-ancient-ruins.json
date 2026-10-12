@@ -1,0 +1,21 @@
+{
+ "id": "pack-ancient-ruins",
+ "name": "Ancient Ruins",
+ "category": "Travel",
+ "description": "Weathered temples, columns and lost cities, from Petra and Ephesus to Angkor, Tikal and Machu Picchu.",
+ "kind": "library",
+ "target": 24,
+ "per_topic": 1,
+ "fetch_per_topic": 4,
+ "author_cap": 2,
+ "sources": ["commons"],
+ "topics": [
+  "Parthenon Athens", "Temple of Hephaestus Athens", "Colosseum interior arena", "Temple of Saturn Roman Forum", "Petra Al-Khazneh Treasury",
+  "Petra Ad Deir Monastery", "Baalbek Temple of Bacchus", "Jerash Oval Plaza columns", "Library of Celsus Ephesus", "Temple of Apollo Didyma",
+  "Leptis Magna", "Machu Picchu", "Chichen Itza El Castillo", "Tikal Temple I", "Palenque Temple of the Inscriptions",
+  "Angkor Wat", "Ta Prohm tree roots", "Bagan temples", "Wat Mahathat Ayutthaya", "Karnak hypostyle hall columns",
+  "Temple of Philae", "Temple of Poseidon Sounion", "Paestum Temple of Neptune", "Temple of Concordia Agrigento", "Mesa Verde Cliff Palace",
+  "Volubilis Roman ruins", "Hampi Vittala temple"
+ ],
+ "more_topics": ["Segesta temple", "Delphi Tholos", "Dougga Capitol", "Timgad arch", "Stonehenge", "Great Zimbabwe ruins", "Persepolis columns", "Pompeii Forum", "Uxmal Pyramid of the Magician", "Polonnaruwa", "Beng Mealea", "Wat Chaiwatthanaram", "Aspendos theatre", "Hierapolis"]
+}

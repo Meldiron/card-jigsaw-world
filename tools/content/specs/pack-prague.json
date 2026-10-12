@@ -8,15 +8,46 @@
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
- "sources": ["commons"],
- "topics": [
-  "Prague Astronomical Clock", "Old Town Bridge Tower", "Prague Castle", "Golden Lane Prague",
-  "Dancing House", "Vyšehrad Basilica", "Spanish Synagogue Prague", "Jubilee Synagogue Prague",
-  "Municipal House Prague", "Prague main railway station hall", "St. Nicholas Church Malá Strana", "Loreta Prague",
-  "Petřín Lookout Tower", "Wallenstein Garden", "Vrtba Garden", "Prague rooftops",
-  "Nerudova street", "Malá Strana Bridge Tower", "Old Town Hall Prague", "Matthias Gate Prague Castle",
-  "Troja Palace", "Hvězda Summer Palace", "Queen Anne's Summer Palace Prague", "Rudolfinum",
-  "National Theatre Prague", "National Museum Prague"
+ "sources": [
+  "commons",
+  "openverse"
  ],
- "more_topics": ["Powder Tower Prague", "Kampa Island Prague", "Prague Castle Third Courtyard", "Church of St. Ludmila Prague", "Prague Vltava embankment", "Hanavský pavilon", "Břevnov Monastery", "Church of St. Francis of Assisi Prague"]
+ "topics": [
+  "Prague Astronomical Clock",
+  "Old Town Bridge Tower",
+  "Prague Castle",
+  "Golden Lane Prague",
+  "Dancing House",
+  "Vyšehrad Basilica",
+  "Spanish Synagogue Prague",
+  "Jubilee Synagogue Prague",
+  "Municipal House Prague",
+  "Prague main railway station hall",
+  "St. Nicholas Church Malá Strana",
+  "Loreta Prague",
+  "Petřín Lookout Tower",
+  "Wallenstein Garden",
+  "Vrtba Garden",
+  "Prague rooftops",
+  "Nerudova street",
+  "Malá Strana Bridge Tower",
+  "Old Town Hall Prague",
+  "Matthias Gate Prague Castle",
+  "Troja Palace",
+  "Hvězda Summer Palace",
+  "Queen Anne's Summer Palace Prague",
+  "Rudolfinum",
+  "National Theatre Prague",
+  "National Museum Prague"
+ ],
+ "more_topics": [
+  "Powder Tower Prague",
+  "Kampa Island Prague",
+  "Prague Castle Third Courtyard",
+  "Church of St. Ludmila Prague",
+  "Prague Vltava embankment",
+  "Hanavský pavilon",
+  "Břevnov Monastery",
+  "Church of St. Francis of Assisi Prague"
+ ]
 }

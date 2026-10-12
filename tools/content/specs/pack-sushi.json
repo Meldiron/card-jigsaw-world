@@ -8,13 +8,46 @@
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
- "sources": ["commons"],
+ "sources": [
+  "commons",
+  "openverse"
+ ],
  "quality_deepcat": "Quality images of food",
  "topics": [
-  "nigiri sushi", "maki sushi", "sashimi platter", "salmon nigiri", "tuna nigiri", "uni sushi",
-  "ikura gunkan", "temaki", "chirashi", "inari sushi", "California roll", "tamago sushi",
-  "ebi nigiri", "unagi nigiri", "futomaki", "oshizushi", "sushi boat", "sushi bento",
-  "temari sushi", "salmon sashimi", "toro", "uramaki", "dragon roll", "rainbow roll", "hosomaki"
+  "nigiri sushi",
+  "maki sushi",
+  "sashimi platter",
+  "salmon nigiri",
+  "tuna nigiri",
+  "uni sushi",
+  "ikura gunkan",
+  "temaki",
+  "chirashi",
+  "inari sushi",
+  "California roll",
+  "tamago sushi",
+  "ebi nigiri",
+  "unagi nigiri",
+  "futomaki",
+  "oshizushi",
+  "sushi boat",
+  "sushi bento",
+  "temari sushi",
+  "salmon sashimi",
+  "toro",
+  "uramaki",
+  "dragon roll",
+  "rainbow roll",
+  "hosomaki"
  ],
- "more_topics": ["kaiten sushi", "sushi set", "saba sushi", "hamachi sashimi", "kappa maki", "gunkan maki", "sushi rice", "makizushi"]
+ "more_topics": [
+  "kaiten sushi",
+  "sushi set",
+  "saba sushi",
+  "hamachi sashimi",
+  "kappa maki",
+  "gunkan maki",
+  "sushi rice",
+  "makizushi"
+ ]
 }

@@ -8,14 +8,47 @@
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
- "sources": ["commons"],
- "topics": [
-  "Neuschwanstein Castle", "Hohenzollern Castle", "Burg Eltz", "Bran Castle", "Château de Chambord",
-  "Mont-Saint-Michel", "Eilean Donan Castle", "Alcázar of Segovia", "Pena Palace Sintra", "Hluboká Castle",
-  "Bojnice Castle", "Malbork Castle", "Himeji Castle", "Matsumoto Castle", "Château de Chenonceau",
-  "Corvin Castle", "Moszna Castle", "Lichtenstein Castle Württemberg", "Schwerin Castle", "Peleș Castle",
-  "Bodiam Castle", "Kronborg Castle", "Trakai Island Castle", "Český Krumlov Castle tower", "Conwy Castle",
-  "Château de Pierrefonds", "Reichsburg Cochem"
+ "sources": [
+  "commons",
+  "openverse"
  ],
- "more_topics": ["Castillo de Coca", "Castello Sforzesco", "Edinburgh Castle", "Predjama Castle", "Kasteel de Haar", "Frederiksborg Castle", "Castle of Good Hope", "Spiš Castle"]
+ "topics": [
+  "Neuschwanstein Castle",
+  "Hohenzollern Castle",
+  "Burg Eltz",
+  "Bran Castle",
+  "Château de Chambord",
+  "Mont-Saint-Michel",
+  "Eilean Donan Castle",
+  "Alcázar of Segovia",
+  "Pena Palace Sintra",
+  "Hluboká Castle",
+  "Bojnice Castle",
+  "Malbork Castle",
+  "Himeji Castle",
+  "Matsumoto Castle",
+  "Château de Chenonceau",
+  "Corvin Castle",
+  "Moszna Castle",
+  "Lichtenstein Castle Württemberg",
+  "Schwerin Castle",
+  "Peleș Castle",
+  "Bodiam Castle",
+  "Kronborg Castle",
+  "Trakai Island Castle",
+  "Český Krumlov Castle tower",
+  "Conwy Castle",
+  "Château de Pierrefonds",
+  "Reichsburg Cochem"
+ ],
+ "more_topics": [
+  "Castillo de Coca",
+  "Castello Sforzesco",
+  "Edinburgh Castle",
+  "Predjama Castle",
+  "Kasteel de Haar",
+  "Frederiksborg Castle",
+  "Castle of Good Hope",
+  "Spiš Castle"
+ ]
 }

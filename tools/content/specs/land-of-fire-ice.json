@@ -1,0 +1,20 @@
+{
+ "id": "land-of-fire-ice",
+ "name": "Land of Fire & Ice",
+ "category": "Premium",
+ "description": "Iceland's glaciers, iceberg lagoons, waterfalls, lava fields, geysers and black-sand beaches.",
+ "kind": "library",
+ "target": 24,
+ "per_topic": 1,
+ "fetch_per_topic": 4,
+ "author_cap": 2,
+ "sources": ["commons"],
+ "topics": [
+  "Jökulsárlón icebergs", "Diamond Beach Breiðamerkursandur ice", "Skógafoss", "Gullfoss", "Svartifoss basalt columns",
+  "Kirkjufell Kirkjufellsfoss", "Strokkur geyser eruption", "Hverir Námafjall fumaroles", "Landmannalaugar rhyolite mountains", "Vatnajökull ice cave",
+  "Fagradalsfjall eruption lava", "Geldingadalir lava", "Eldhraun moss lava field", "Dyrhólaey arch", "Kerið crater lake",
+  "Hraunfossar", "Goðafoss", "Aldeyjarfoss", "Stuðlagil canyon", "Sólheimajökull glacier",
+  "Brúarfoss", "aurora borealis Iceland", "Reynisfjara basalt columns", "Hengifoss"
+ ],
+ "more_topics": ["Dettifoss", "Gljúfrabúi", "Mývatn Dimmuborgir", "Krafla Leirhnjúkur", "Holuhraun eruption", "Þingvellir Silfra", "Hvítserkur", "Fjallsárlón glacier lagoon", "Breiðamerkurjökull", "Vestrahorn Stokksnes", "Seltún Krýsuvík geothermal", "Grjótagjá"]
+}

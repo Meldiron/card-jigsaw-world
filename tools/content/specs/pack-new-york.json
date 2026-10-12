@@ -8,15 +8,47 @@
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
- "sources": ["commons"],
- "topics": [
-  "Chrysler Building", "Empire State Building", "Flatiron Building", "Brooklyn Bridge",
-  "One World Trade Center", "Vessel Hudson Yards", "Grand Central Terminal", "Oculus World Trade Center",
-  "Woolworth Building", "Bow Bridge Central Park", "Central Park autumn", "Manhattan Bridge DUMBO",
-  "SoHo cast-iron building", "Brooklyn brownstones", "Washington Square Arch", "City Hall subway station",
-  "Rockefeller Center", "Guggenheim Museum New York", "High Line New York", "Little Island New York",
-  "Queensboro Bridge", "Cathedral of St. John the Divine", "Trinity Church Manhattan", "Coney Island Wonder Wheel",
-  "Unisphere", "New York fire escapes", "56 Leonard Street"
+ "sources": [
+  "commons",
+  "openverse"
  ],
- "more_topics": ["Hearst Tower", "Dakota building", "Radio City Music Hall", "Manhattan skyline", "Jefferson Market Library", "Gapstow Bridge", "Belvedere Castle", "Hell Gate Bridge"]
+ "topics": [
+  "Chrysler Building",
+  "Empire State Building",
+  "Flatiron Building",
+  "Brooklyn Bridge",
+  "One World Trade Center",
+  "Vessel Hudson Yards",
+  "Grand Central Terminal",
+  "Oculus World Trade Center",
+  "Woolworth Building",
+  "Bow Bridge Central Park",
+  "Central Park autumn",
+  "Manhattan Bridge DUMBO",
+  "SoHo cast-iron building",
+  "Brooklyn brownstones",
+  "Washington Square Arch",
+  "City Hall subway station",
+  "Rockefeller Center",
+  "Guggenheim Museum New York",
+  "High Line New York",
+  "Little Island New York",
+  "Queensboro Bridge",
+  "Cathedral of St. John the Divine",
+  "Trinity Church Manhattan",
+  "Coney Island Wonder Wheel",
+  "Unisphere",
+  "New York fire escapes",
+  "56 Leonard Street"
+ ],
+ "more_topics": [
+  "Hearst Tower",
+  "Dakota building",
+  "Radio City Music Hall",
+  "Manhattan skyline",
+  "Jefferson Market Library",
+  "Gapstow Bridge",
+  "Belvedere Castle",
+  "Hell Gate Bridge"
+ ]
 }

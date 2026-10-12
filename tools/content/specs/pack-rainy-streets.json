@@ -8,14 +8,44 @@
  "per_topic": 1,
  "fetch_per_topic": 5,
  "author_cap": 2,
- "sources": ["commons"],
- "topics": [
-  "wet street night reflections", "wet cobblestones rain", "rain on window city lights", "puddle reflection building",
-  "rainy street Tokyo night", "rain Shinjuku", "rainy street Paris", "Hong Kong neon rain",
-  "wet asphalt neon", "rainy alley lanterns Kyoto", "rain Venice", "raindrops on glass",
-  "rain street lamp night", "wet pavement reflection", "rainy street London night", "rainy street lights",
-  "rain Seoul alley", "rainy street Taipei", "wet street Ginza", "rainy cobbled lane",
-  "rain puddle reflection night", "rainy night tram", "wet road lights", "street after rain"
+ "sources": [
+  "commons",
+  "openverse"
  ],
- "more_topics": ["raindrops window", "rain umbrella shop", "rain soaked square", "rainy harbour lights", "wet stone steps", "rain on car window", "rain over rooftops", "Rainy day street"]
+ "topics": [
+  "wet street night reflections",
+  "wet cobblestones rain",
+  "rain on window city lights",
+  "puddle reflection building",
+  "rainy street Tokyo night",
+  "rain Shinjuku",
+  "rainy street Paris",
+  "Hong Kong neon rain",
+  "wet asphalt neon",
+  "rainy alley lanterns Kyoto",
+  "rain Venice",
+  "raindrops on glass",
+  "rain street lamp night",
+  "wet pavement reflection",
+  "rainy street London night",
+  "rainy street lights",
+  "rain Seoul alley",
+  "rainy street Taipei",
+  "wet street Ginza",
+  "rainy cobbled lane",
+  "rain puddle reflection night",
+  "rainy night tram",
+  "wet road lights",
+  "street after rain"
+ ],
+ "more_topics": [
+  "raindrops window",
+  "rain umbrella shop",
+  "rain soaked square",
+  "rainy harbour lights",
+  "wet stone steps",
+  "rain on car window",
+  "rain over rooftops",
+  "Rainy day street"
+ ]
 }

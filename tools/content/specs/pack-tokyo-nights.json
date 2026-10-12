@@ -8,14 +8,44 @@
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
- "sources": ["commons"],
- "topics": [
-  "Tokyo Tower night", "Tokyo Skytree night", "Rainbow Bridge night", "Shinjuku skyline night",
-  "Tokyo Station night", "Shibuya night", "Tokyo Gate Bridge night", "Odaiba night",
-  "Roppongi Hills night", "Mode Gakuen Cocoon Tower", "Tokyo Metropolitan Government Building night", "Kaminarimon night",
-  "Akihabara night", "Ginza night", "Tokyo International Forum", "Tokyo Bay night",
-  "Sumida River night", "Nihonbashi night", "Marunouchi night", "Shiodome night",
-  "Chidorigafuchi night", "Rikugien illumination", "Shuto Expressway night", "Tokyo night view"
+ "sources": [
+  "commons",
+  "openverse"
  ],
- "more_topics": ["Tokyo night skyline", "Sensō-ji night", "Zōjō-ji Tokyo Tower night", "Tokyo Dome City night", "Yebisu Garden Place night", "Toyosu night", "Kachidoki Bridge night", "Tokyo night illumination"]
+ "topics": [
+  "Tokyo Tower night",
+  "Tokyo Skytree night",
+  "Rainbow Bridge night",
+  "Shinjuku skyline night",
+  "Tokyo Station night",
+  "Shibuya night",
+  "Tokyo Gate Bridge night",
+  "Odaiba night",
+  "Roppongi Hills night",
+  "Mode Gakuen Cocoon Tower",
+  "Tokyo Metropolitan Government Building night",
+  "Kaminarimon night",
+  "Akihabara night",
+  "Ginza night",
+  "Tokyo International Forum",
+  "Tokyo Bay night",
+  "Sumida River night",
+  "Nihonbashi night",
+  "Marunouchi night",
+  "Shiodome night",
+  "Chidorigafuchi night",
+  "Rikugien illumination",
+  "Shuto Expressway night",
+  "Tokyo night view"
+ ],
+ "more_topics": [
+  "Tokyo night skyline",
+  "Sensō-ji night",
+  "Zōjō-ji Tokyo Tower night",
+  "Tokyo Dome City night",
+  "Yebisu Garden Place night",
+  "Toyosu night",
+  "Kachidoki Bridge night",
+  "Tokyo night illumination"
+ ]
 }

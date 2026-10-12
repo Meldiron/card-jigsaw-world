@@ -1,0 +1,21 @@
+{
+ "id": "city-lights",
+ "name": "City Lights",
+ "category": "Travel",
+ "description": "Skylines, bridges, towers and canals lit up at dusk and after dark, from Lisbon to Hong Kong.",
+ "kind": "library",
+ "target": 24,
+ "per_topic": 1,
+ "fetch_per_topic": 4,
+ "author_cap": 2,
+ "sources": ["commons"],
+ "topics": [
+  "Hong Kong skyline night", "Shanghai Pudong skyline night", "Tower Bridge night", "Charles Bridge Prague night", "Ponte Vecchio Florence night",
+  "Eiffel Tower night", "Brooklyn Bridge night", "Hungarian Parliament Building night", "Chain Bridge Budapest night", "Burj Khalifa night",
+  "Marina Bay Sands night", "Supertree Grove night", "Sydney Opera House night", "Petronas Towers night", "Empire State Building night",
+  "Golden Gate Bridge night", "Elbphilharmonie blue hour", "Speicherstadt Hamburg blue hour", "Rialto Bridge night", "Dresden Frauenkirche night",
+  "Taipei 101 night", "Tokyo Tower night", "Lisbon Santa Justa Lift night", "Tallinn old town night", "Amsterdam canal night",
+  "Stockholm Gamla stan blue hour", "Pont Alexandre III night", "Chicago skyline night"
+ ],
+ "more_topics": ["Dubai Marina night", "Lotte World Tower night", "Shibuya night", "Moscow Kremlin night", "Bruges canal night", "Strasbourg Petite France night", "Porto Ribeira night", "Old Town Square Prague night", "Istanbul Galata Tower night", "Manhattan skyline blue hour", "CN Tower night", "Fernsehturm Berlin night"]
+}

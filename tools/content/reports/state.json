@@ -1,8 +1,8 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-12T10:09:45",
-"msg": "Content: checkpoint (32 verified, 5 fixed, 20 audited, 208 pending)",
+"at": "2026-10-12T10:27:37",
+"msg": "Content: checkpoint (36 verified, 6 fixed, 47 audited, 177 pending)",
 "ok": true,
 "pushed": true,
 "stage": "committed"
@@ -81,13 +81,14 @@
 },
 "city-lights": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:31:44",
 "category": "Travel",
 "kind": "library",
+"last_step": "reject 39 off-theme",
 "name": "City Lights",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "cozy-kitchen": {
 "added": 16,
@@ -211,10 +212,10 @@
 },
 "daily-2023-10": {
 "added": 17,
-"at": "2026-10-12T10:24:19",
+"at": "2026-10-12T10:36:42",
 "category": "Daily",
 "kind": "daily",
-"last_step": "reject 5 similar",
+"last_step": "reject 17 weak",
 "name": "October 2023",
 "puzzles": 31,
 "removed": 23,
@@ -244,10 +245,10 @@
 },
 "daily-2024-01": {
 "added": 0,
-"at": "2026-10-12T10:24:20",
+"at": "2026-10-12T10:34:56",
 "category": "Daily",
 "kind": "daily",
-"last_step": "reject 6 weak",
+"last_step": "pool 60 usable",
 "name": "January 2024",
 "puzzles": null,
 "removed": 0,
@@ -376,33 +377,36 @@
 },
 "daily-2025-01": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:27:36",
 "category": "Daily",
 "kind": "daily",
+"last_step": "reject 7 weak",
 "name": "January 2025",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "daily-2025-02": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:27:37",
 "category": "Daily",
 "kind": "daily",
+"last_step": "reject 8 weak",
 "name": "February 2025",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "daily-2025-03": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:27:38",
 "category": "Daily",
 "kind": "daily",
+"last_step": "reject 9 weak",
 "name": "March 2025",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "daily-2025-04": {
 "added": 0,
@@ -1124,28 +1128,28 @@
 "status": "pending"
 },
 "evpack-mental-health-2026": {
-"added": 24,
-"at": "2026-10-12T10:27:21",
+"added": 25,
+"at": "2026-10-12T10:27:53",
 "category": "Event",
-"issues": 1,
+"issues": 0,
 "kind": "event",
-"last_step": "verify failed",
+"last_step": "verify",
 "name": "World Mental Health Day",
 "puzzles": 24,
-"removed": 14,
-"status": "fixed"
+"removed": 15,
+"status": "verified"
 },
 "evpack-mental-health-2027": {
-"added": 24,
-"at": "2026-10-12T10:26:49",
+"added": 48,
+"at": "2026-10-12T10:28:35",
 "category": "Event",
-"issues": 2,
+"issues": 0,
 "kind": "event",
-"last_step": "verify failed",
+"last_step": "verify",
 "name": "World Mental Health Day",
 "puzzles": 24,
-"removed": 14,
-"status": "fixed"
+"removed": 38,
+"status": "verified"
 },
 "evpack-moon-day-2027": {
 "added": 0,
@@ -1608,13 +1612,14 @@
 },
 "land-of-fire-ice": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:33:05",
 "category": "Premium",
 "kind": "library",
+"last_step": "reject 3 weak",
 "name": "Land of Fire & Ice",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "masterpieces": {
 "added": 17,
@@ -1653,13 +1658,14 @@
 },
 "pack-ancient-ruins": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:33:38",
 "category": "Travel",
 "kind": "library",
+"last_step": "reject 10 weak",
 "name": "Ancient Ruins",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "pack-autumn-parks": {
 "added": 0,
@@ -1674,13 +1680,14 @@
 },
 "pack-bali-temples": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:34:07",
 "category": "Travel",
 "kind": "library",
+"last_step": "reject 3 weak",
 "name": "Bali Temples",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "pack-barcelona": {
 "added": 0,
@@ -1807,13 +1814,14 @@
 },
 "pack-classic-cars": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:34:58",
 "category": "Vintage",
 "kind": "library",
+"last_step": "reject 9 weak",
 "name": "Classic Cars",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "pack-cocktails": {
 "added": 0,
@@ -1839,13 +1847,14 @@
 },
 "pack-cozy-interiors": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:35:26",
 "category": "Vintage",
 "kind": "library",
+"last_step": "reject 11 off-theme",
 "name": "Cozy Interiors",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "pack-deer": {
 "added": 23,
@@ -1918,13 +1927,14 @@
 },
 "pack-fairytale-villages": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:36:08",
 "category": "Travel",
 "kind": "library",
+"last_step": "reject 16 weak",
 "name": "Fairytale Villages",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "pack-farm-life": {
 "added": 22,
@@ -2005,13 +2015,14 @@
 },
 "pack-harbours": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:36:45",
 "category": "Travel",
 "kind": "library",
+"last_step": "reject 11 weak",
 "name": "Harbours",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "pack-horses": {
 "added": 0,

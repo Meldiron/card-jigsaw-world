@@ -1,0 +1,20 @@
+{
+ "id": "pack-cozy-interiors",
+ "name": "Cozy Interiors",
+ "category": "Vintage",
+ "description": "Wood-panelled parlours, tiled stoves, farmhouse kitchens and fireside corners in historic homes.",
+ "kind": "library",
+ "target": 24,
+ "per_topic": 1,
+ "fetch_per_topic": 4,
+ "author_cap": 2,
+ "sources": ["commons"],
+ "topics": [
+  "Stube interior wood panelled", "kakelugn tiled stove", "farmhouse kitchen open-air museum", "Victorian parlour interior", "Biedermeier room interior",
+  "log cabin interior fireplace", "inglenook fireplace", "cottage interior hearth", "Bauernstube", "Hälsingland farmhouse interior painted",
+  "Gamla Linköping interior", "Skansen interior", "Ballenberg house interior", "Petronella Oortman dollhouse", "Delft tiles kitchen interior",
+  "Victorian kitchen range", "home library interior wood", "attic bedroom wooden", "tatami room Japanese house", "riad interior Marrakech",
+  "Wirtshaus Gaststube interior", "Carl Larsson Sundborn interior", "Rococo room interior", "tea room interior antique"
+ ],
+ "more_topics": ["Frilandsmuseet interior", "Den Gamle By interior", "Seurasaari interior", "Beamish museum interior", "period room museum", "farmhouse living room museum", "Tyrolean stove room", "Zaanse Schans house interior", "Biedermeier furniture", "old pharmacy interior", "rustic kitchen copper pots", "Arts and Crafts interior"]
+}

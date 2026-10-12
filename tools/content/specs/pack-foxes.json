@@ -9,6 +9,7 @@
  "fetch_per_topic": 4,
  "author_cap": 2,
  "sources": [
+  "inat",
   "commons"
  ],
  "commons_quality": true,
