@@ -5,7 +5,8 @@
  "fetch_per_topic": 5,
  "author_cap": 4,
  "sources": [
-  "commons"
+  "commons",
+  "nga"
  ],
  "commons_quality": false,
  "id": "pack-gardens-art",
@@ -58,5 +59,8 @@
   "walled garden painting",
   "garden watercolor Edwardian",
   "Frederick Carl Frieseke garden painting"
+ ],
+ "nga_classes": [
+  "Painting"
  ]
 }

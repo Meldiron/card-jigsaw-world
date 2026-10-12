@@ -1,7 +1,7 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-12T11:16:19",
+"at": "2026-10-12T11:37:13",
 "msg": "Content: checkpoint (56 verified, 3 fixed, 72 audited, 137 pending)",
 "ok": true,
 "pushed": true,
@@ -35,14 +35,14 @@
 },
 "abstract-kaleidoscope": {
 "added": 0,
-"at": "2026-10-12T11:07:33",
+"at": "2026-10-12T12:01:06",
 "category": "Abstract",
 "kind": "new",
-"last_step": "newpack",
+"last_step": "reject 1 similar",
 "name": "Kaleidoscope",
 "puzzles": 0,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "abstract-light-leaks": {
 "added": 24,
@@ -70,8 +70,16 @@
 },
 "ai-all": {
 "added": 0,
-"at": "2026-10-12T11:14:31",
-"last_step": "pool 725 usable",
+"at": "2026-10-12T11:58:44",
+"last_step": "pool 734 usable",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"ai-dreamscapes": {
+"added": 0,
+"at": "2026-10-12T12:06:56",
+"last_step": "pool 876 usable",
 "puzzles": null,
 "removed": 0,
 "status": "pending"
@@ -101,15 +109,16 @@
 "status": "verified"
 },
 "city-lights": {
-"added": 0,
-"at": "2026-10-12T11:09:34",
+"added": 22,
+"at": "2026-10-12T12:02:02",
 "category": "Travel",
+"issues": 0,
 "kind": "library",
-"last_step": "pool 18 usable",
+"last_step": "verify",
 "name": "City Lights",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 42,
+"status": "verified"
 },
 "cozy-kitchen": {
 "added": 16,
@@ -244,15 +253,16 @@
 "status": "verified"
 },
 "daily-2023-11": {
-"added": 0,
-"at": "2026-10-12T10:24:20",
+"added": 24,
+"at": "2026-10-12T11:59:34",
 "category": "Daily",
+"issues": 0,
 "kind": "daily",
-"last_step": "reject 1 weak",
+"last_step": "verify",
 "name": "November 2023",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 30,
+"removed": 26,
+"status": "verified"
 },
 "daily-2023-12": {
 "added": 0,
@@ -267,10 +277,10 @@
 },
 "daily-2024-01": {
 "added": 0,
-"at": "2026-10-12T11:05:08",
+"at": "2026-10-12T11:57:43",
 "category": "Daily",
 "kind": "daily",
-"last_step": "pool 96 usable",
+"last_step": "pool 92 usable",
 "name": "January 2024",
 "puzzles": null,
 "removed": 0,
@@ -397,120 +407,139 @@
 "removed": 0,
 "status": "audited"
 },
-"daily-2025-01": {
+"daily-2025": {
 "added": 0,
-"at": "2026-10-12T10:45:18",
-"category": "Daily",
-"kind": "daily",
-"last_step": "reject 2 people",
-"name": "January 2025",
+"at": "2026-10-12T11:55:16",
+"last_step": "pool 194 usable",
 "puzzles": null,
 "removed": 0,
-"status": "audited"
+"status": "pending"
+},
+"daily-2025-01": {
+"added": 32,
+"at": "2026-10-12T11:58:47",
+"category": "Daily",
+"issues": 0,
+"kind": "daily",
+"last_step": "verify",
+"name": "January 2025",
+"puzzles": 31,
+"removed": 32,
+"status": "verified"
 },
 "daily-2025-02": {
-"added": 0,
-"at": "2026-10-12T10:27:37",
+"added": 27,
+"at": "2026-10-12T12:00:10",
 "category": "Daily",
+"issues": 0,
 "kind": "daily",
-"last_step": "reject 8 weak",
+"last_step": "verify",
 "name": "February 2025",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 28,
+"removed": 27,
+"status": "verified"
 },
 "daily-2025-03": {
-"added": 0,
-"at": "2026-10-12T10:27:38",
+"added": 31,
+"at": "2026-10-12T12:00:47",
 "category": "Daily",
+"issues": 0,
 "kind": "daily",
-"last_step": "reject 9 weak",
+"last_step": "verify",
 "name": "March 2025",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 31,
+"removed": 31,
+"status": "verified"
 },
 "daily-2025-04": {
-"added": 0,
-"at": "2026-10-12T10:38:56",
+"added": 30,
+"at": "2026-10-12T12:01:42",
 "category": "Daily",
+"issues": 0,
 "kind": "daily",
-"last_step": "reject 6 weak",
+"last_step": "verify",
 "name": "April 2025",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 30,
+"removed": 30,
+"status": "verified"
 },
 "daily-2025-05": {
-"added": 0,
-"at": "2026-10-12T10:38:57",
+"added": 28,
+"at": "2026-10-12T12:02:36",
 "category": "Daily",
+"issues": 0,
 "kind": "daily",
-"last_step": "reject 5 weak",
+"last_step": "verify",
 "name": "May 2025",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 31,
+"removed": 28,
+"status": "verified"
 },
 "daily-2025-06": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T11:55:30",
 "category": "Daily",
 "kind": "daily",
+"last_step": "reject 9 weak",
 "name": "June 2025",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "daily-2025-07": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T11:55:32",
 "category": "Daily",
 "kind": "daily",
+"last_step": "reject 11 weak",
 "name": "July 2025",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "daily-2025-08": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T11:55:35",
 "category": "Daily",
 "kind": "daily",
+"last_step": "reject 9 weak",
 "name": "August 2025",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "daily-2025-09": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T11:55:39",
 "category": "Daily",
 "kind": "daily",
+"last_step": "reject 11 weak",
 "name": "September 2025",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "daily-2025-10": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T11:55:42",
 "category": "Daily",
 "kind": "daily",
+"last_step": "reject 7 weak",
 "name": "October 2025",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "daily-2025-11": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T11:55:44",
 "category": "Daily",
 "kind": "daily",
+"last_step": "reject 7 weak",
 "name": "November 2025",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "daily-2025-12": {
 "added": 0,
@@ -624,15 +653,16 @@
 "status": "pending"
 },
 "deep-space": {
-"added": 0,
-"at": "2026-10-12T04:35:29",
+"added": 18,
+"at": "2026-10-12T12:07:02",
 "category": "Space",
+"issues": 5,
 "kind": "library",
-"last_step": "pool 101 usable",
+"last_step": "verify failed",
 "name": "Deep Space",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 15,
+"status": "fixed"
 },
 "evpack-animal-day-2026": {
 "added": 24,
@@ -791,25 +821,28 @@
 "status": "pending"
 },
 "evpack-christmas-2026": {
-"added": 0,
-"at": "2026-10-12T11:03:39",
+"added": 21,
+"at": "2026-10-12T11:41:38",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "pool 52 usable",
+"last_step": "verify",
 "name": "Christmas",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 11,
+"status": "verified"
 },
 "evpack-christmas-2027": {
-"added": 0,
-"at": "2026-10-12T02:04:57",
+"added": 24,
+"at": "2026-10-12T11:41:45",
 "category": "Event",
+"issues": 0,
 "kind": "event",
+"last_step": "verify",
 "name": "Christmas",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 14,
+"status": "verified"
 },
 "evpack-coffee-2026": {
 "added": 24,
@@ -857,9 +890,10 @@
 },
 "evpack-diwali-2026": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T11:55:07",
 "category": "Event",
 "kind": "event",
+"last_step": "pool 15 usable",
 "name": "Diwali",
 "puzzles": null,
 "removed": 0,
@@ -897,10 +931,10 @@
 },
 "evpack-easter-2027": {
 "added": 0,
-"at": "2026-10-12T11:12:49",
+"at": "2026-10-12T11:39:38",
 "category": "Event",
 "kind": "event",
-"last_step": "pool 35 usable",
+"last_step": "reject 5 similar",
 "name": "Easter",
 "puzzles": null,
 "removed": 0,
@@ -937,15 +971,16 @@
 "status": "pending"
 },
 "evpack-fathers-day-2027": {
-"added": 0,
-"at": "2026-10-12T11:13:24",
+"added": 24,
+"at": "2026-10-12T12:02:57",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "pool 44 usable",
+"last_step": "verify",
 "name": "Father's Day",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 14,
+"status": "verified"
 },
 "evpack-food-day-2026": {
 "added": 35,
@@ -1625,13 +1660,14 @@
 },
 "evpack-yoga-2027": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T12:03:27",
 "category": "Event",
 "kind": "event",
+"last_step": "reject 3 off-theme",
 "name": "International Yoga Day",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "evpack-youth-2027": {
 "added": 0,
@@ -1724,15 +1760,16 @@
 "status": "audited"
 },
 "pack-barcelona": {
-"added": 0,
-"at": "2026-10-12T11:13:32",
+"added": 19,
+"at": "2026-10-12T12:01:24",
 "category": "Cities",
+"issues": 0,
 "kind": "library",
-"last_step": "pool 16 usable",
+"last_step": "verify",
 "name": "Barcelona",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 15,
+"status": "verified"
 },
 "pack-big-cats": {
 "added": 23,
@@ -1758,15 +1795,16 @@
 "status": "verified"
 },
 "pack-botanical": {
-"added": 0,
-"at": "2026-10-12T11:15:50",
+"added": 21,
+"at": "2026-10-12T12:00:22",
 "category": "Art",
+"issues": 0,
 "kind": "library",
-"last_step": "reject 22 weak",
+"last_step": "verify",
 "name": "Botanical Prints",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 17,
+"status": "verified"
 },
 "pack-bridges": {
 "added": 0,
@@ -2373,15 +2411,16 @@
 "status": "verified"
 },
 "pack-pandas": {
-"added": 0,
-"at": "2026-10-12T11:07:39",
+"added": 23,
+"at": "2026-10-12T11:55:25",
 "category": "Animals",
+"issues": 0,
 "kind": "library",
-"last_step": "reject 13 weak",
+"last_step": "verify",
 "name": "Pandas",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 22,
+"removed": 21,
+"status": "verified"
 },
 "pack-paris": {
 "added": 0,
@@ -2395,15 +2434,16 @@
 "status": "audited"
 },
 "pack-parrots": {
-"added": 0,
-"at": "2026-10-12T03:36:32",
+"added": 23,
+"at": "2026-10-12T11:57:48",
 "category": "Animals",
+"issues": 0,
 "kind": "library",
-"last_step": "pool 83 usable",
+"last_step": "verify",
 "name": "Parrots",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 19,
+"status": "verified"
 },
 "pack-pastries": {
 "added": 0,
@@ -2428,15 +2468,16 @@
 "status": "audited"
 },
 "pack-penguins": {
-"added": 0,
-"at": "2026-10-12T03:25:48",
+"added": 18,
+"at": "2026-10-12T11:59:01",
 "category": "Animals",
+"issues": 0,
 "kind": "library",
-"last_step": "pool 67 usable",
+"last_step": "verify",
 "name": "Penguins",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 14,
+"status": "verified"
 },
 "pack-planets": {
 "added": 0,
@@ -2471,15 +2512,16 @@
 "status": "audited"
 },
 "pack-puppies": {
-"added": 0,
-"at": "2026-10-12T03:14:32",
+"added": 24,
+"at": "2026-10-12T12:00:46",
 "category": "Animals",
+"issues": 0,
 "kind": "library",
-"last_step": "pool 76 usable",
+"last_step": "verify",
 "name": "Puppies",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 20,
+"status": "verified"
 },
 "pack-rainy-streets": {
 "added": 0,
@@ -2690,15 +2732,16 @@
 "status": "audited"
 },
 "pack-sunflowers": {
-"added": 0,
-"at": "2026-10-12T04:19:02",
+"added": 20,
+"at": "2026-10-12T12:02:14",
 "category": "Flowers",
+"issues": 0,
 "kind": "library",
-"last_step": "pool 48 usable",
+"last_step": "verify",
 "name": "Sunflowers",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 16,
+"status": "verified"
 },
 "pack-sunsets": {
 "added": 0,
@@ -2787,15 +2830,16 @@
 "status": "pending"
 },
 "pack-tulip-fields": {
-"added": 0,
-"at": "2026-10-12T04:09:59",
+"added": 15,
+"at": "2026-10-12T12:03:49",
 "category": "Flowers",
+"issues": 0,
 "kind": "library",
-"last_step": "pool 68 usable",
+"last_step": "verify",
 "name": "Tulip Fields",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 11,
+"status": "verified"
 },
 "pack-venice": {
 "added": 0,
@@ -2864,15 +2908,16 @@
 "status": "pending"
 },
 "pack-wild-roses": {
-"added": 0,
-"at": "2026-10-12T04:16:06",
+"added": 25,
+"at": "2026-10-12T12:05:29",
 "category": "Flowers",
+"issues": 0,
 "kind": "library",
-"last_step": "pool 88 usable",
+"last_step": "verify",
 "name": "Wild Roses",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 21,
+"status": "verified"
 },
 "pack-windmills": {
 "added": 0,

@@ -498,5 +498,7 @@
   "Pluto New Horizons",
   "Jupiter Juno",
   "Saturn hexagon"
- ]
+ ],
+ "quality_deepcat": "Quality images",
+ "_note3": "quality_deepcat 'Quality images' works around commons_search's quality pass returning nothing (its OR-incategory query matches 0 files); deepcategory on the QI tree does work."
 }

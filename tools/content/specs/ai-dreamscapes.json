@@ -1,7 +1,41 @@
 {
- "id": "ai-dreamscapes", "name": "AI Dreamscapes", "category": "AI",
- "description": "Imagined landscapes from text-to-image models: floating islands, glowing forests and impossible skies. AI-generated, public domain.",
- "kind": "ai", "price": "free", "target": 24, "fetch_per_topic": 40, "author_cap": 3, "category_limit": 200,
- "sources": ["commons"], "accent_from_cover": true,
- "topics": ["cat:AI-generated images of nature", "cat:AI-generated utopias"]
+ "id": "ai-dreamscapes",
+ "name": "AI Dreamscapes",
+ "category": "AI",
+ "description": "Imagined landscapes from text-to-image models: floating islands, glowing forests, crystal valleys and impossible skies. Every picture is AI-generated and in the public domain.",
+ "kind": "ai",
+ "pool": "ai-all",
+ "price": "free",
+ "sortOrder": 2000,
+ "target": 24,
+ "per_topic": 1,
+ "fetch_per_topic": 20,
+ "author_cap": 8,
+ "min_short": 900,
+ "sources": [
+  "openverse"
+ ],
+ "openverse_category": "photograph",
+ "accent_from_cover": true,
+ "topics": [
+  "AI-generated forest",
+  "AI-generated waterfall",
+  "AI-generated mountains",
+  "AI-generated fantasy",
+  "AI-generated nature",
+  "AI-generated sunset",
+  "AI-generated river",
+  "AI-generated landscape",
+  "AI-generated valley",
+  "AI-generated lake",
+  "AI-generated trees",
+  "AI-generated meadow",
+  "AI-generated aurora",
+  "AI-generated sky",
+  "AI-generated cave",
+  "AI-generated canyon",
+  "AI-generated desert",
+  "AI-generated volcano"
+ ],
+ "_note": "Shared pool ai-all. Openverse topics carry 'AI-generated' so puzzle titles say so; only CC0 / Public Domain Mark candidates are picked (by hand, --no-auto). Commons picks come from the ai-all category candidates."
 }

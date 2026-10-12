@@ -2,7 +2,7 @@
  "id": "pack-puppies",
  "name": "Puppies",
  "category": "Animals",
- "description": "Retriever, beagle, corgi, husky and spaniel puppies at their roundest.",
+ "description": "Retriever, beagle, corgi, spaniel and Dalmatian puppies at their roundest.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
@@ -54,5 +54,6 @@
   "Irish setter puppy",
   "puppy sleeping",
   "puppies litter"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/%22Bill%22_-_Cocker_spaniel_anglais_1.jpg/1280px-%22Bill%22_-_Cocker_spaniel_anglais_1.jpg"
 }

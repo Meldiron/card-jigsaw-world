@@ -1,0 +1,14 @@
+{
+ "id": "evpack-childrens-book-2027", "name": "International Children's Book Day", "category": "Event",
+ "description": "A limited pack for International Children's Book Day (2 April 2027). Fairy-tale castles, storybook houses, teddy bears, toy trains and the animals of classic children's stories, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2, "accent_from_cover": true,
+ "sources": ["commons"],
+ "topics": ["Neuschwanstein Castle", "Hans Christian Andersen House Odense", "Bremen Town Musicians statue", "Hobbiton Movie Set", "Green Gables Heritage Place",
+  "Moominworld Naantali", "Sababurg Castle", "Gingerbread house", "Teddy bear", "Rocking horse",
+  "Wooden toy train", "Wooden toy blocks", "Wax crayons", "Treasure chest", "Mute swan cygnets",
+  "European rabbit", "Fly agaric mushroom", "Snowy owl", "Water lily", "Garden peas in pod",
+  "Honeycomb with honey", "Hot air balloon", "Nyhavn Copenhagen", "Hill Top Beatrix Potter", "Lichtenstein Castle",
+  "Tabby cat"],
+ "more_topics": ["Eltz Castle", "Hohenzollern Castle", "Toy sailboat", "Spinning top toy", "Marbles toy", "Kaleidoscope toy",
+  "Common nightingale", "Red fox cub", "Hedgehog", "Badger", "Carousel horses"]
+}

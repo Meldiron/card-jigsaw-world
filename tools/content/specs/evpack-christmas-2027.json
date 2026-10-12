@@ -1,0 +1,8 @@
+{
+ "id": "evpack-christmas-2027",
+ "name": "Christmas",
+ "category": "Event",
+ "kind": "event",
+ "description": "A limited pack for Christmas (25 December 2027). Decorated trees, baubles, gingerbread, poinsettias, holly, mistletoe, a reindeer and festive bakes from stollen to Christmas pudding, playable for one week.",
+ "note": "clone of evpack-christmas-2026; content comes from `run.sh clone evpack-christmas-2026 evpack-christmas-2027`"
+}

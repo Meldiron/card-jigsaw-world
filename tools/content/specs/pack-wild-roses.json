@@ -2,7 +2,7 @@
  "id": "pack-wild-roses",
  "name": "Wild Roses",
  "category": "Flowers",
- "description": "Dog roses, rugosas, sweet briars and burnet roses on the hedge, with their hips in autumn.",
+ "description": "Dog roses, rugosas, burnet roses and field roses in bloom, with their bright hips in autumn.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
@@ -53,5 +53,6 @@
   "Rosa wichuraiana",
   "Rosa rugosa alba",
   "Rosa corymbifera"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Beach_Rose_Rosa_rugosa_Two_Flowers.jpg/1280px-Beach_Rose_Rosa_rugosa_Two_Flowers.jpg"
 }

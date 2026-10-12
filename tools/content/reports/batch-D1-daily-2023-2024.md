@@ -68,3 +68,9 @@ month (auto-fill's round-robin ignores the topics of kept puzzles and repeated a
 - daily-2023-08: replaced 23 (people 12, landscape 6, text 1, weak 4) + 6 kept ones (weak 5: flat sunset sea, fog bridge, road on flat sky, jellyfish in plain blue, cable cars in fog; similar 1: fireworks also in evpack-new-years-eve-2026); 31/31 dates; verified.
 - daily-2023-09: replaced 24 (people 14, landscape 2, text 3, weak 5) + 5 weak kept ones (town under pale sky, hazy beach, single-tone canopy, typewriter on flat boards, grey misty rooftops); 30/30 dates; verified.
 - daily-2023-10: replaced 23 (people 13, landscape 5, text 2, weak 3) + 12 more (weak 6: hazy valley, swings, orange haze, grass bokeh, horses under flat sky, stave church over graves; similar 6: second Jupiter, second fiddlehead, three extra waterfalls); 31/31 dates; verified.
+
+## Resume (2026-10-12, after pause)
+
+Pool grown with unpooled `daily-2024` topics (spec `sources` now `["commons", "openverse"]`, Openverse asks for tall/square only); `recover daily-2023` re-fetched 21 of 26 throttled candidates. Before each apply the remaining candidates are checked against the live catalogue (exact URL, same Commons file, perceptual hash) with a read-only scratchpad script; hits (so far only images D2 already placed in daily-2025) are rejected as `similar` for the month, which keeps the other pack's row untouched.
+
+- daily-2023-11: replaced 24 in place (people 14, landscape 3, text 1, weak 6, from the review pass); 26 candidates rejected from the pool (people 5, quality 1, weak 18, similar 2) + 2 already in daily-2025; 30/30 dates; verified.

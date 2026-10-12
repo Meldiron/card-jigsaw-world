@@ -2,14 +2,17 @@
  "id": "evpack-fathers-day-2027",
  "name": "Father's Day",
  "category": "Event",
- "description": "A limited pack for Father's Day (20 June 2027). Workshop tools, neckties, wristwatches, fishing flies, barbecues, campfires and classic cars, playable for one week.",
+ "description": "A limited pack for Father's Day (20 June 2027). Pocket watches, fishing reels, pocket knives, brogues, fountain pens, campfires, barbecues and a toolbox, playable for one week.",
  "kind": "event",
  "target": 24,
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
  "accent_from_cover": true,
- "sources": ["commons", "openverse"],
+ "sources": [
+  "commons",
+  "openverse"
+ ],
  "topics": [
   "Hand tools on pegboard wall",
   "Wooden workbench with tools",

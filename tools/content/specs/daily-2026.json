@@ -3,10 +3,10 @@
  "_note": "D2 shared spec for daily-2025-xx and daily-2026-xx. No name/description on purpose: finalize would overwrite the month names ('January 2025'). Own pool 'daily-2025' so D2 never writes D1's daily-2023 pool concurrently.",
  "pool": "daily-2025",
  "sources": [
-  "inat"
+  "commons"
  ],
  "per_topic": 1,
- "fetch_per_topic": 5,
+ "fetch_per_topic": 3,
  "author_cap": 3,
  "topics": [
   "Svartifoss",
@@ -499,5 +499,7 @@
   "jack-o'-lantern",
   "diya lamps"
  ],
- "_note2": "daily-2026.json runs the iNaturalist species topics into the shared D2 pool; daily-2025.json runs Commons/Openverse topics."
+ "_note2": "daily-2026.json runs the places / art / space topics through Commons into the shared D2 pool (sources were inat, which does not index landmarks); daily-2025.json runs animals, plants, food and objects through Commons.",
+ "quality_deepcat": "Quality images",
+ "_note3": "quality_deepcat 'Quality images' works around commons_search's quality pass returning nothing (its OR-incategory query matches 0 files); deepcategory on the QI tree does work."
 }

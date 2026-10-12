@@ -5,13 +5,16 @@
  "fetch_per_topic": 5,
  "author_cap": 3,
  "sources": [
+  "nga",
+  "met",
+  "rijks",
   "commons"
  ],
  "commons_quality": false,
  "id": "pack-botanical",
  "name": "Botanical Prints",
  "category": "Art",
- "description": "Botanical plates by Redouté, Thornton, Besler, Merian, Ehret and Marianne North, from tulips and lilies to orchids and passion flowers.",
+ "description": "Botanical plates and flower studies by Redouté, Thornton, Merian, Weinmann, Fitch and Haeckel, from tulips and orchids to lotus, protea and thistle.",
  "topics": [
   "Robert John Thornton Temple of Flora plate",
   "Pierre-Joseph Redouté rose plate",
@@ -54,6 +57,24 @@
   "Redouté lily plate",
   "botanical illustration peony 19th century",
   "Pomologia fruit plate",
-  "Deutschlands Flora in Abbildungen plate"
- ]
+  "Deutschlands Flora in Abbildungen plate",
+  "Four Peonies and a Crown Imperial",
+  "Bouquet of Flowers with Insects",
+  "Iris ochroleuca",
+  "East Indian Lotus",
+  "Thistle with Insects",
+  "Pink Roses",
+  "Fantastic Flowers",
+  "Weinmann",
+  "Plantae selectae",
+  "tulip",
+  "rose",
+  "passion flower",
+  "peony"
+ ],
+ "nga_classes": [
+  "Drawing",
+  "Print"
+ ],
+ "cover": "https://api.nga.gov/iiif/d51561e4-3c5e-4150-92d5-625c7f586bee/full/!2000,2000/0/default.jpg"
 }
