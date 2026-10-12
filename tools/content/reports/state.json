@@ -1,8 +1,8 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-12T22:38:56",
-"msg": "Content: checkpoint (265 verified, 3 fixed, 21 audited, 9 pending)",
+"at": "2026-10-12T23:08:59",
+"msg": "Content: checkpoint (275 verified, 0 fixed, 15 audited, 8 pending)",
 "ok": true,
 "pushed": true,
 "stage": "committed"
@@ -1799,10 +1799,10 @@
 },
 "evpack-peace-2027": {
 "added": 0,
-"at": "2026-10-12T23:06:43",
+"at": "2026-10-12T23:10:35",
 "category": "Event",
 "kind": "event",
-"last_step": "pool 26 usable",
+"last_step": "pool 40 usable",
 "name": "International Day of Peace",
 "puzzles": null,
 "removed": 0,
@@ -3124,10 +3124,10 @@
 },
 "pack-rainy-streets": {
 "added": 0,
-"at": "2026-10-12T23:05:13",
+"at": "2026-10-12T23:10:16",
 "category": "Cities",
 "kind": "library",
-"last_step": "reject 6 weak",
+"last_step": "pool 29 usable",
 "name": "Rainy Streets",
 "puzzles": null,
 "removed": 0,
@@ -3336,10 +3336,10 @@
 },
 "pack-street-food": {
 "added": 0,
-"at": "2026-10-12T23:08:01",
+"at": "2026-10-12T23:11:20",
 "category": "Food",
 "kind": "library",
-"last_step": "pool 46 usable",
+"last_step": "reject 26 weak",
 "name": "Street Food",
 "puzzles": null,
 "removed": 0,
@@ -3464,10 +3464,10 @@
 },
 "pack-venice": {
 "added": 0,
-"at": "2026-10-12T23:07:17",
+"at": "2026-10-12T23:10:01",
 "category": "Cities",
 "kind": "library",
-"last_step": "reject 6 off-theme",
+"last_step": "pool 67 usable",
 "name": "Venice",
 "puzzles": null,
 "removed": 0,
@@ -3475,10 +3475,10 @@
 },
 "pack-vineyards": {
 "added": 0,
-"at": "2026-10-12T23:07:16",
+"at": "2026-10-12T23:10:50",
 "category": "Travel",
 "kind": "library",
-"last_step": "pool 15 usable",
+"last_step": "pool 36 usable",
 "name": "Vineyards",
 "puzzles": null,
 "removed": 0,

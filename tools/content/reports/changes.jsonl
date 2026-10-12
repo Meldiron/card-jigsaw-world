@@ -11883,3 +11883,5 @@
 {"puzzle": "p-9c9d15b377ad", "title": "Scuol church on the rocks", "event": "retitle", "at": "2026-10-12T23:03:55"}
 {"puzzle": "p-fc9be8541eaa", "title": "Bosco Gurin church", "event": "retitle", "at": "2026-10-12T23:03:56"}
 {"pack": "pack-swiss-villages", "fields": ["description", "imageCount"], "event": "pack-update", "at": "2026-10-12T23:03:57"}
+{"pack": "pack-street-food", "puzzle": "pack-street-food-01", "url": "https://live.staticflickr.com/65535/51782912476_895b31e09d_b.jpg", "reason": "people", "event": "delete", "at": "2026-10-12T23:11:30"}
+{"pack": "pack-street-food", "puzzle": "pack-street-food-02", "url": "https://live.staticflickr.com/65535/53488280000_1751bf5621_b.jpg", "reason": "people", "event": "delete", "at": "2026-10-12T23:11:30"}
