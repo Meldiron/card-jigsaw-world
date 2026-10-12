@@ -18,6 +18,8 @@ def select_candidates(pool, spec, kept_metas, kept_authors, need, picks=(), auto
     chosen, chosen_metas, authors = [], list(kept_metas), dict(kept_authors)
     def ok_to_add(c):
         if state.is_rejected(c['url'], spec['id'], rejected): return False
+        # Appwrite string columns are 512 chars; such URLs would abort apply mid-run.
+        if len(c['url']) > 512 or len(c.get('thumb') or '') > 512: return False
         if c.get('status') != 'ok': return False
         m = _meta_ok(c['url'])
         if not m: return False
