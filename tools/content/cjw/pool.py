@@ -180,6 +180,10 @@ def nice_title(c, fallback, taken=()):
         base = topic[0].upper() + topic[1:]
     elif c.get('provider') in ('cma', 'nasa') and c.get('title'):
         base = _clean(c['title'])
+    elif c.get('provider') == 'inat' and c.get('title'):
+        # iNaturalist: the species' common name ('Monarch'), falling back to the
+        # scientific name only when no common name exists.
+        t = c['title'].strip(); base = t[0].upper() + t[1:]
     elif topic and c.get('provider') in sources.TOPIC_TITLED:
         base = topic[0].upper() + topic[1:]
     elif c.get('provider') in sources.OBJECT_TITLED and c.get('title'):

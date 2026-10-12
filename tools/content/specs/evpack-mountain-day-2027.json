@@ -3,7 +3,7 @@
  "name": "International Mountain Day",
  "category": "Event",
  "kind": "event",
- "description": "A limited pack for International Mountain Day (11 December 2027). Famous peaks from the Matterhorn, K2 and Ama Dablam to Fitz Roy, Half Dome and Aoraki, with alpine ibex and edelweiss, playable for one week.",
+ "description": "A limited pack for International Mountain Day (11 December 2027). Famous peaks from the Matterhorn, K2 and Ama Dablam to Half Dome, Kirkjufell and the Lofoten, with alpine ibex and edelweiss, playable for one week.",
  "note": "clone of evpack-mountain-day-2026; content comes from `run.sh clone evpack-mountain-day-2026 evpack-mountain-day-2027`",
  "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Matterhorn_at_nightfall.jpg/1280px-Matterhorn_at_nightfall.jpg"
 }

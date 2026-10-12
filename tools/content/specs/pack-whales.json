@@ -2,7 +2,7 @@
  "id": "pack-whales",
  "name": "Whales & Dolphins",
  "category": "Oceans",
- "description": "Humpbacks, orcas, belugas, gray whales and bottlenose and spinner dolphins in the open sea.",
+ "description": "Humpbacks, orcas, belugas, gray whales and bottlenose and spotted dolphins in the open sea.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
@@ -58,5 +58,6 @@
   "Stenella frontalis",
   "Lagenorhynchus obliquidens",
   "Sousa chinensis"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/OCNMS_Orca_breaching_%2850040737978%29.jpg/1280px-OCNMS_Orca_breaching_%2850040737978%29.jpg"
 }

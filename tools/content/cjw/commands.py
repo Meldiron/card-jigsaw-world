@@ -1,5 +1,5 @@
 import argparse, json, sys
-from . import catalog, imagecache, audit as audit_mod, specs, pool as pool_mod, writer, sheet, state, filters, sources, checkpoint
+from . import api, catalog, imagecache, audit as audit_mod, specs, pool as pool_mod, writer, sheet, state, filters, sources, checkpoint
 from .paths import CACHE
 
 def cmd_dump(a):
@@ -227,6 +227,15 @@ def cmd_sources(a):
           'Stock licences (Pexels, Pixabay, Unsplash, Flickr Commons) also need owner review and "allow_licences"; '
           'see docs/content-sources.md.')
 
+
+def cmd_retitle(a):
+    """Rename one puzzle (titles come from search topics and are sometimes inexact)."""
+    title = ' '.join(a.title).strip()
+    if not title: raise SystemExit('empty title')
+    api.update_row('puzzles', a.puzzle, {'title': title[:90]})
+    state.log('retitle', puzzle=a.puzzle, title=title[:90])
+    print(f'{a.puzzle}: "{title[:90]}"')
+
 def main(argv):
     ap = argparse.ArgumentParser(prog='cli.py')
     sub = ap.add_subparsers(dest='cmd', required=True)
@@ -244,6 +253,7 @@ def main(argv):
     p = sub.add_parser('summary'); p.add_argument('-v', '--verbose', action='store_true'); p.set_defaults(f=cmd_summary)
     p = sub.add_parser('plan'); p.set_defaults(f=cmd_plan)
     p = sub.add_parser('verify'); p.add_argument('pack', nargs='+'); p.set_defaults(f=cmd_verify)
+    p = sub.add_parser('retitle'); p.add_argument('puzzle'); p.add_argument('title', nargs='+'); p.set_defaults(f=cmd_retitle)
     p = sub.add_parser('resume'); p.add_argument('--prefix'); p.add_argument('--batch'); p.add_argument('--next', type=int, default=10); p.add_argument('--auto', action='store_true'); p.set_defaults(f=cmd_resume)
     p = sub.add_parser('checkpoint'); p.add_argument('-m', '--message'); p.set_defaults(f=cmd_checkpoint)
     p = sub.add_parser('status'); p.add_argument('pack', nargs='+'); p.set_defaults(f=cmd_status)

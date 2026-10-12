@@ -86,3 +86,8 @@ do not run git yourself.
   timeout, simply run it again: finished topics are cheap to repeat. Do not start background jobs
   with monitors; every wake-up costs the shared API budget, which is what stopped the first wave.
 - Read each contact sheet once; decide; move on. Keep report entries to one line per pack.
+
+## Titles (added during the resume)
+
+Puzzle titles come from the search topic. iNaturalist pictures are now titled with the species' common name. If a title is wrong (wrong species, filename-like, scientific name), fix it with
+`tools/content/run.sh retitle PUZZLE_ID New title`.

@@ -7031,15 +7031,15 @@
 },
 "daily-2024-12-01": {
 "at": "2026-10-12",
-"author": "Peter Waycik",
-"licence": "CC BY",
+"author": "Stephen James McWilliam",
+"licence": "CC0",
 "packId": "daily-2024-12",
-"page": "https://www.inaturalist.org/observations/117920786",
-"photo_page": "https://www.inaturalist.org/photos/199186621",
+"page": "https://www.inaturalist.org/observations/39509809",
+"photo_page": "https://www.inaturalist.org/photos/62692356",
 "provider": "inat",
-"replaced": "https://openaccess-cdn.clevelandart.org/2007.275/2007.275_web.jpg",
-"source": "iNaturalist, CC BY",
-"url": "https://inaturalist-open-data.s3.amazonaws.com/photos/199186621/original.jpg"
+"replaced": "https://inaturalist-open-data.s3.amazonaws.com/photos/199186621/original.jpg",
+"source": "iNaturalist, CC0",
+"url": "https://inaturalist-open-data.s3.amazonaws.com/photos/62692356/original.jpg"
 },
 "daily-2024-12-02": {
 "at": "2026-10-12",
@@ -7124,6 +7124,18 @@
 "source": "iNaturalist, CC BY",
 "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/263285330/original.jpg"
 },
+"daily-2024-12-09": {
+"at": "2026-10-12",
+"author": "Peter Andersen",
+"licence": "CC BY",
+"packId": "daily-2024-12",
+"page": "https://www.inaturalist.org/observations/342870450",
+"photo_page": "https://www.inaturalist.org/photos/624506421",
+"provider": "inat",
+"replaced": "https://picsum.photos/id/81/900/1200",
+"source": "iNaturalist, CC BY",
+"url": "https://inaturalist-open-data.s3.amazonaws.com/photos/624506421/original.jpg"
+},
 "daily-2024-12-10": {
 "at": "2026-10-12",
 "author": "Jacek Pietruszewski",
@@ -7185,15 +7197,15 @@
 },
 "daily-2024-12-15": {
 "at": "2026-10-12",
-"author": "Blake Ross",
+"author": "Jacek Pietruszewski",
 "licence": "CC BY",
 "packId": "daily-2024-12",
-"page": "https://www.inaturalist.org/observations/142265972",
-"photo_page": "https://www.inaturalist.org/photos/243875921",
+"page": "https://www.inaturalist.org/observations/73632006",
+"photo_page": "https://www.inaturalist.org/photos/120234952",
 "provider": "inat",
-"replaced": "https://picsum.photos/id/353/900/1200",
+"replaced": "https://inaturalist-open-data.s3.amazonaws.com/photos/243875921/original.jpg",
 "source": "iNaturalist, CC BY",
-"url": "https://inaturalist-open-data.s3.amazonaws.com/photos/243875921/original.jpg"
+"url": "https://inaturalist-open-data.s3.amazonaws.com/photos/120234952/original.jpeg"
 },
 "daily-2024-12-16": {
 "at": "2026-10-12",
@@ -7292,27 +7304,26 @@
 },
 "daily-2024-12-24": {
 "at": "2026-10-12",
-"author": "Alan Rockefeller",
+"author": "krossbow",
 "licence": "CC BY",
 "packId": "daily-2024-12",
-"page": "https://www.inaturalist.org/observations/134803286",
-"photo_page": "https://www.inaturalist.org/photos/229884566",
-"provider": "inat",
-"replaced": "https://openaccess-cdn.clevelandart.org/1982.162/1982.162_web.jpg",
-"source": "iNaturalist, CC BY",
-"url": "https://inaturalist-open-data.s3.amazonaws.com/photos/229884566/original.jpg"
+"page": "https://www.flickr.com/photos/13194817@N00/52437372065",
+"provider": "openverse:flickr",
+"replaced": "https://inaturalist-open-data.s3.amazonaws.com/photos/229884566/original.jpg",
+"source": "flickr via Openverse, CC BY",
+"url": "https://live.staticflickr.com/65535/52437372065_e810dd4003_b.jpg"
 },
 "daily-2024-12-25": {
 "at": "2026-10-12",
-"author": "Mal Wilkinson",
+"author": "sarahalder",
 "licence": "CC BY",
 "packId": "daily-2024-12",
-"page": "https://www.inaturalist.org/observations/375944266",
-"photo_page": "https://www.inaturalist.org/photos/687321571",
+"page": "https://www.inaturalist.org/observations/386125628",
+"photo_page": "https://www.inaturalist.org/photos/706950281",
 "provider": "inat",
-"replaced": "https://picsum.photos/id/345/900/1200",
+"replaced": "https://inaturalist-open-data.s3.amazonaws.com/photos/687321571/original.jpg",
 "source": "iNaturalist, CC BY",
-"url": "https://inaturalist-open-data.s3.amazonaws.com/photos/687321571/original.jpg"
+"url": "https://inaturalist-open-data.s3.amazonaws.com/photos/706950281/original.jpg"
 },
 "daily-2024-12-26": {
 "at": "2026-10-12",
@@ -7328,15 +7339,15 @@
 },
 "daily-2024-12-27": {
 "at": "2026-10-12",
-"author": "Paulo Mascaretti",
+"author": "Liviu Chiriac",
 "licence": "CC0",
 "packId": "daily-2024-12",
-"page": "https://www.inaturalist.org/observations/183077606",
-"photo_page": "https://www.inaturalist.org/photos/319339139",
+"page": "https://www.inaturalist.org/observations/334087579",
+"photo_page": "https://www.inaturalist.org/photos/606626842",
 "provider": "inat",
-"replaced": "https://picsum.photos/id/930/900/1200",
+"replaced": "https://inaturalist-open-data.s3.amazonaws.com/photos/319339139/original.jpg",
 "source": "iNaturalist, CC0",
-"url": "https://inaturalist-open-data.s3.amazonaws.com/photos/319339139/original.jpg"
+"url": "https://inaturalist-open-data.s3.amazonaws.com/photos/606626842/original.jpg"
 },
 "daily-2024-12-28": {
 "at": "2026-10-12",
@@ -7361,6 +7372,30 @@
 "replaced": "https://picsum.photos/id/277/900/1200",
 "source": "iNaturalist, CC BY",
 "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/478333229/original.jpg"
+},
+"daily-2024-12-30": {
+"at": "2026-10-12",
+"author": "Kate McAlpine",
+"licence": "CC BY",
+"packId": "daily-2024-12",
+"page": "https://www.inaturalist.org/observations/209362067",
+"photo_page": "https://www.inaturalist.org/photos/370503946",
+"provider": "inat",
+"replaced": "https://openaccess-cdn.clevelandart.org/1979.43/1979.43_web.jpg",
+"source": "iNaturalist, CC BY",
+"url": "https://inaturalist-open-data.s3.amazonaws.com/photos/370503946/original.jpeg"
+},
+"daily-2024-12-31": {
+"at": "2026-10-12",
+"author": "Dan Wrench",
+"licence": "CC BY",
+"packId": "daily-2024-12",
+"page": "https://www.inaturalist.org/observations/302911489",
+"photo_page": "https://www.inaturalist.org/photos/545929627",
+"provider": "inat",
+"replaced": "https://picsum.photos/id/548/900/1200",
+"source": "iNaturalist, CC BY",
+"url": "https://inaturalist-open-data.s3.amazonaws.com/photos/545929627/original.jpg"
 },
 "daily-2025-01-01": {
 "at": "2026-10-12",
@@ -9962,6 +9997,303 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/20250831_wood_duck_keeney_cove_PD206218.jpg/1280px-20250831_wood_duck_keeney_cove_PD206218.jpg"
 },
+"daily-2025-09-02": {
+"at": "2026-10-12",
+"author": "Abrget47j",
+"licence": "CC BY-SA 3.0",
+"packId": "daily-2025-09",
+"page": "https://commons.wikimedia.org/wiki/File:PlitviceWaterfall.jpg",
+"provider": "commons",
+"replaced": "https://openaccess-cdn.clevelandart.org/1966.208/1966.208_web.jpg",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/PlitviceWaterfall.jpg/1280px-PlitviceWaterfall.jpg"
+},
+"daily-2025-09-04": {
+"at": "2026-10-12",
+"author": "Vincent van Gogh",
+"licence": "Public domain",
+"packId": "daily-2025-09",
+"page": "https://commons.wikimedia.org/wiki/File:Bloeiend_amandeltakje_in_een_glas_-_s0184V1962_-_Van_Gogh_Museum.jpg",
+"provider": "commons",
+"replaced": "https://openaccess-cdn.clevelandart.org/1975.11.b/1975.11.b_web.jpg",
+"source": "Wikimedia Commons, Public domain",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Bloeiend_amandeltakje_in_een_glas_-_s0184V1962_-_Van_Gogh_Museum.jpg/1280px-Bloeiend_amandeltakje_in_een_glas_-_s0184V1962_-_Van_Gogh_Museum.jpg"
+},
+"daily-2025-09-05": {
+"at": "2026-10-12",
+"author": "Rhododendrites",
+"licence": "CC BY-SA 4.0",
+"packId": "daily-2025-09",
+"page": "https://commons.wikimedia.org/wiki/File:Blue_jay_in_PP_(30960).jpg",
+"provider": "commons",
+"replaced": "https://picsum.photos/id/1071/900/1200",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Blue_jay_in_PP_%2830960%29.jpg/1280px-Blue_jay_in_PP_%2830960%29.jpg"
+},
+"daily-2025-09-06": {
+"at": "2026-10-12",
+"author": "OdeToAutumn",
+"licence": "CC BY-SA 4.0",
+"packId": "daily-2025-09",
+"page": "https://commons.wikimedia.org/wiki/File:Loaves_of_Bread.jpg",
+"provider": "commons",
+"replaced": "https://openaccess-cdn.clevelandart.org/1962.257.2/1962.257.2_web.jpg",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Loaves_of_Bread.jpg/1280px-Loaves_of_Bread.jpg"
+},
+"daily-2025-09-07": {
+"at": "2026-10-12",
+"author": "Diego Delso",
+"licence": "CC BY-SA 4.0",
+"packId": "daily-2025-09",
+"page": "https://commons.wikimedia.org/wiki/File:Coral_oreja_de_elefante_(Amplexidiscus_fenestrafer),_Nosy_Kalakajoro,_Madagascar,_2025-09-14,_DD_90.jpg",
+"provider": "commons",
+"replaced": "https://picsum.photos/id/892/900/1200",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Coral_oreja_de_elefante_%28Amplexidiscus_fenestrafer%29%2C_Nosy_Kalakajoro%2C_Madagascar%2C_2025-09-14%2C_DD_90.jpg/1280px-Coral_oreja_de_elefante_%28Amplexidiscus_fenestrafer%29%2C_Nosy_Kalakajoro%2C_Madagascar%2C_2025-09-14%2C_DD_90.jpg"
+},
+"daily-2025-09-08": {
+"at": "2026-10-12",
+"author": "Charles J. Sharp",
+"licence": "CC BY-SA 4.0",
+"packId": "daily-2025-09",
+"page": "https://commons.wikimedia.org/wiki/File:Sarus_crane_(Grus_antigone).jpg",
+"provider": "commons",
+"replaced": "https://openaccess-cdn.clevelandart.org/1997.308/1997.308_web.jpg",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Sarus_crane_%28Grus_antigone%29.jpg/1280px-Sarus_crane_%28Grus_antigone%29.jpg"
+},
+"daily-2025-09-09": {
+"at": "2026-10-12",
+"author": "Giles Laurent",
+"licence": "CC BY-SA 4.0",
+"packId": "daily-2025-09",
+"page": "https://commons.wikimedia.org/wiki/File:007_Greater_flamingos_courtship_display_in_the_Camargue_during_mating_season_Photo_by_Giles_Laurent.jpg",
+"provider": "commons",
+"replaced": "https://picsum.photos/id/420/900/1200",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/007_Greater_flamingos_courtship_display_in_the_Camargue_during_mating_season_Photo_by_Giles_Laurent.jpg/1280px-007_Greater_flamingos_courtship_display_in_the_Camargue_during_mating_season_Photo_by_Giles_Laurent.jpg"
+},
+"daily-2025-09-10": {
+"at": "2026-10-12",
+"author": "Charles J. Sharp",
+"licence": "CC BY-SA 4.0",
+"packId": "daily-2025-09",
+"page": "https://commons.wikimedia.org/wiki/File:Eurasian_hoopoe_(Upupa_epops)_juvenile_in_nest_box_2.jpg",
+"provider": "commons",
+"replaced": "https://openaccess-cdn.clevelandart.org/2017.100/2017.100_web.jpg",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Eurasian_hoopoe_%28Upupa_epops%29_juvenile_in_nest_box_2.jpg/1280px-Eurasian_hoopoe_%28Upupa_epops%29_juvenile_in_nest_box_2.jpg"
+},
+"daily-2025-09-11": {
+"at": "2026-10-12",
+"author": "Charles J. Sharp",
+"licence": "CC BY-SA 4.0",
+"packId": "daily-2025-09",
+"page": "https://commons.wikimedia.org/wiki/File:Pied_kingfisher_(Ceryle_rudis_leucomelanurus)_female.jpg",
+"provider": "commons",
+"replaced": "https://picsum.photos/id/38/900/1200",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Pied_kingfisher_%28Ceryle_rudis_leucomelanurus%29_female.jpg/1280px-Pied_kingfisher_%28Ceryle_rudis_leucomelanurus%29_female.jpg"
+},
+"daily-2025-09-12": {
+"at": "2026-10-12",
+"author": "H. Zell",
+"licence": "CC BY-SA 3.0",
+"packId": "daily-2025-09",
+"page": "https://commons.wikimedia.org/wiki/File:Trichoglossus_forsteni_forsteni_-_Karlsruhe_Zoo_02.jpg",
+"provider": "commons",
+"replaced": "https://openaccess-cdn.clevelandart.org/1974.30/1974.30_web.jpg",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Trichoglossus_forsteni_forsteni_-_Karlsruhe_Zoo_02.jpg/1280px-Trichoglossus_forsteni_forsteni_-_Karlsruhe_Zoo_02.jpg"
+},
+"daily-2025-09-13": {
+"at": "2026-10-12",
+"author": "Giles Laurent",
+"licence": "CC BY-SA 4.0",
+"packId": "daily-2025-09",
+"page": "https://commons.wikimedia.org/wiki/File:108_Hyacinth_macaw_eating_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg",
+"provider": "commons",
+"replaced": "https://picsum.photos/id/362/900/1200",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/108_Hyacinth_macaw_eating_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg/1280px-108_Hyacinth_macaw_eating_in_Encontro_das_%C3%81guas_State_Park_Photo_by_Giles_Laurent.jpg"
+},
+"daily-2025-09-14": {
+"at": "2026-10-12",
+"author": "Bdx",
+"licence": "CC0",
+"packId": "daily-2025-09",
+"page": "https://commons.wikimedia.org/wiki/File:Stall_at_the_market_of_Struga,_2026_4.jpg",
+"provider": "commons",
+"replaced": "https://openaccess-cdn.clevelandart.org/1969.52/1969.52_web.jpg",
+"source": "Wikimedia Commons, CC0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Stall_at_the_market_of_Struga%2C_2026_4.jpg/1280px-Stall_at_the_market_of_Struga%2C_2026_4.jpg"
+},
+"daily-2025-09-15": {
+"at": "2026-10-12",
+"author": "Godot13",
+"licence": "CC BY-SA 4.0",
+"packId": "daily-2025-09",
+"page": "https://commons.wikimedia.org/wiki/File:SouthShetland-2016-Livingston_Island_(Hannah_Point)%E2%80%93Gentoo_penguin_(Pygoscelis_papua)_05.jpg",
+"provider": "commons",
+"replaced": "https://picsum.photos/id/271/900/1200",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/SouthShetland-2016-Livingston_Island_%28Hannah_Point%29%E2%80%93Gentoo_penguin_%28Pygoscelis_papua%29_05.jpg/1280px-SouthShetland-2016-Livingston_Island_%28Hannah_Point%29%E2%80%93Gentoo_penguin_%28Pygoscelis_papua%29_05.jpg"
+},
+"daily-2025-09-16": {
+"at": "2026-10-12",
+"author": "E bailey",
+"licence": "CC BY-SA 4.0",
+"packId": "daily-2025-09",
+"page": "https://commons.wikimedia.org/wiki/File:Gal%C3%A1pagos_giant_tortoise,_head_profile_(Chelonoidis_niger_hoodensis).jpg",
+"provider": "commons",
+"replaced": "https://openaccess-cdn.clevelandart.org/1958.28/1958.28_web.jpg",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Gal%C3%A1pagos_giant_tortoise%2C_head_profile_%28Chelonoidis_niger_hoodensis%29.jpg/1280px-Gal%C3%A1pagos_giant_tortoise%2C_head_profile_%28Chelonoidis_niger_hoodensis%29.jpg"
+},
+"daily-2025-09-17": {
+"at": "2026-10-12",
+"author": "\u6c60\u7530\u6b63\u6a39 (talk)masaki ikeda",
+"licence": "Public domain",
+"packId": "daily-2025-09",
+"page": "https://commons.wikimedia.org/wiki/File:Tree_frog2.jpg",
+"provider": "commons",
+"replaced": "https://picsum.photos/id/839/900/1200",
+"source": "Wikimedia Commons, Public domain",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Tree_frog2.jpg/1280px-Tree_frog2.jpg"
+},
+"daily-2025-09-18": {
+"at": "2026-10-12",
+"author": "AndrewHorne (talk)",
+"licence": "Public domain",
+"packId": "daily-2025-09",
+"page": "https://commons.wikimedia.org/wiki/File:Havasu_Falls_Winter.JPG",
+"provider": "commons",
+"replaced": "https://openaccess-cdn.clevelandart.org/1981.64/1981.64_web.jpg",
+"source": "Wikimedia Commons, Public domain",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Havasu_Falls_Winter.JPG/1280px-Havasu_Falls_Winter.JPG"
+},
+"daily-2025-09-19": {
+"at": "2026-10-12",
+"author": "Llez",
+"licence": "CC BY-SA 3.0",
+"packId": "daily-2025-09",
+"page": "https://commons.wikimedia.org/wiki/File:Schloss_Lichtenstein_(W%C3%BCrttemberg)_-_Augusten-Bastion_-_01.jpg",
+"provider": "commons",
+"replaced": "https://picsum.photos/id/450/900/1200",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Schloss_Lichtenstein_%28W%C3%BCrttemberg%29_-_Augusten-Bastion_-_01.jpg/1280px-Schloss_Lichtenstein_%28W%C3%BCrttemberg%29_-_Augusten-Bastion_-_01.jpg"
+},
+"daily-2025-09-20": {
+"at": "2026-10-12",
+"author": "Julia Kostecka",
+"licence": "CC BY 2.0",
+"packId": "daily-2025-09",
+"page": "https://commons.wikimedia.org/wiki/File:C%C3%B3rdoba_Spain_-_Mezquita_de_C%C3%B3rdoba_-_Cathedral_of_Our_Lady_of_the_Assumption_-_Arches_and_Pillars.6_(18376378919).jpg",
+"provider": "commons",
+"replaced": "https://openaccess-cdn.clevelandart.org/1980.268/1980.268_web.jpg",
+"source": "Wikimedia Commons, CC BY 2.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/C%C3%B3rdoba_Spain_-_Mezquita_de_C%C3%B3rdoba_-_Cathedral_of_Our_Lady_of_the_Assumption_-_Arches_and_Pillars.6_%2818376378919%29.jpg/1280px-C%C3%B3rdoba_Spain_-_Mezquita_de_C%C3%B3rdoba_-_Cathedral_of_Our_Lady_of_the_Assumption_-_Arches_and_Pillars.6_%2818376378919%29.jpg"
+},
+"daily-2025-09-21": {
+"at": "2026-10-12",
+"author": "Laurens R. Krol",
+"licence": "CC BY 4.0",
+"packId": "daily-2025-09",
+"page": "https://commons.wikimedia.org/wiki/File:2018-09-22_Iran,_Shiraz,_Nasir_al-Mulk_Mosque_(winter_prayer_hall)_(2).jpg",
+"provider": "commons",
+"replaced": "https://picsum.photos/id/826/900/1200",
+"source": "Wikimedia Commons, CC BY 4.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/2018-09-22_Iran%2C_Shiraz%2C_Nasir_al-Mulk_Mosque_%28winter_prayer_hall%29_%282%29.jpg/1280px-2018-09-22_Iran%2C_Shiraz%2C_Nasir_al-Mulk_Mosque_%28winter_prayer_hall%29_%282%29.jpg"
+},
+"daily-2025-09-22": {
+"at": "2026-10-12",
+"author": "Daderot",
+"licence": "CC0",
+"packId": "daily-2025-09",
+"page": "https://commons.wikimedia.org/wiki/File:Falls_-_Oirase_Mountain_Stream_-_Towada,_Aomori_-_DSC01226.jpg",
+"provider": "commons",
+"replaced": "https://openaccess-cdn.clevelandart.org/1962.279.47.b/1962.279.47.b_web.jpg",
+"source": "Wikimedia Commons, CC0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Falls_-_Oirase_Mountain_Stream_-_Towada%2C_Aomori_-_DSC01226.jpg/1280px-Falls_-_Oirase_Mountain_Stream_-_Towada%2C_Aomori_-_DSC01226.jpg"
+},
+"daily-2025-09-23": {
+"at": "2026-10-12",
+"author": "Elena.laps",
+"licence": "CC BY-SA 4.0",
+"packId": "daily-2025-09",
+"page": "https://commons.wikimedia.org/wiki/File:Skylight_and_ceiling_at_Palau_de_la_m%C3%BAsica_catalana.jpg",
+"provider": "commons",
+"replaced": "https://picsum.photos/id/184/900/1200",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Skylight_and_ceiling_at_Palau_de_la_m%C3%BAsica_catalana.jpg/1280px-Skylight_and_ceiling_at_Palau_de_la_m%C3%BAsica_catalana.jpg"
+},
+"daily-2025-09-24": {
+"at": "2026-10-12",
+"author": "DrThneed",
+"licence": "CC BY 4.0",
+"packId": "daily-2025-09",
+"page": "https://commons.wikimedia.org/wiki/File:Lapins_cherries_in_bowl.jpg",
+"provider": "commons",
+"replaced": "https://openaccess-cdn.clevelandart.org/2022.432/2022.432_web.jpg",
+"source": "Wikimedia Commons, CC BY 4.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Lapins_cherries_in_bowl.jpg/1280px-Lapins_cherries_in_bowl.jpg"
+},
+"daily-2025-09-25": {
+"at": "2026-10-12",
+"author": "Diego Delso",
+"licence": "CC BY-SA 4.0",
+"packId": "daily-2025-09",
+"page": "https://commons.wikimedia.org/wiki/File:Peces_payaso_(Amphiprion_bicinctus)_en_una_an%C3%A9mona_magn%C3%ADfica_(Heteractis_magnifica),_mar_Rojo,_Egipto,_2023-04-17,_DD_44.jpg",
+"provider": "commons",
+"replaced": "https://picsum.photos/id/13/900/1200",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Peces_payaso_%28Amphiprion_bicinctus%29_en_una_an%C3%A9mona_magn%C3%ADfica_%28Heteractis_magnifica%29%2C_mar_Rojo%2C_Egipto%2C_2023-04-17%2C_DD_44.jpg/1280px-Peces_payaso_%28Amphiprion_bicinctus%29_en_una_an%C3%A9mona_magn%C3%ADfica_%28Heteractis_magnifica%29%2C_mar_Rojo%2C_Egipto%2C_2023-04-17%2C_DD_44.jpg"
+},
+"daily-2025-09-26": {
+"at": "2026-10-12",
+"author": "F. C. Franklin",
+"licence": "CC BY-SA 3.0",
+"packId": "daily-2025-09",
+"page": "https://commons.wikimedia.org/wiki/File:Carduelis_carduelis_in_sunshine_2.jpg",
+"provider": "commons",
+"replaced": "https://openaccess-cdn.clevelandart.org/1916.785/1916.785_web.jpg",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Carduelis_carduelis_in_sunshine_2.jpg/1280px-Carduelis_carduelis_in_sunshine_2.jpg"
+},
+"daily-2025-09-27": {
+"at": "2026-10-12",
+"author": "Leo za1",
+"licence": "CC BY-SA 3.0",
+"packId": "daily-2025-09",
+"page": "https://commons.wikimedia.org/wiki/File:Iguana-001.jpg",
+"provider": "commons",
+"replaced": "https://openaccess-cdn.clevelandart.org/1934.218/1934.218_web.jpg",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Iguana-001.jpg/1280px-Iguana-001.jpg"
+},
+"daily-2025-09-28": {
+"at": "2026-10-12",
+"author": "This Photo was taken by Timothy A. Gonsalves.  Feel free to use my photos, but please ment",
+"licence": "CC BY-SA 4.0",
+"packId": "daily-2025-09",
+"page": "https://commons.wikimedia.org/wiki/File:Peacock_Perched_Kaveri_Srirangapatna_Jul22_D72_24638.jpg",
+"provider": "commons",
+"replaced": "https://openaccess-cdn.clevelandart.org/1967.126/1967.126_web.jpg",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Peacock_Perched_Kaveri_Srirangapatna_Jul22_D72_24638.jpg/1280px-Peacock_Perched_Kaveri_Srirangapatna_Jul22_D72_24638.jpg"
+},
+"daily-2025-09-30": {
+"at": "2026-10-12",
+"author": "Jakub Ha\u0142un",
+"licence": "CC BY 4.0",
+"packId": "daily-2025-09",
+"page": "https://commons.wikimedia.org/wiki/File:Fratercula_arctica,_Borgarfj%C3%B6r%C3%B0ur_eystri,_Iceland,_20240717_0918_1251.jpg",
+"provider": "commons",
+"replaced": "https://openaccess-cdn.clevelandart.org/1951.454/1951.454_web.jpg",
+"source": "Wikimedia Commons, CC BY 4.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Fratercula_arctica%2C_Borgarfj%C3%B6r%C3%B0ur_eystri%2C_Iceland%2C_20240717_0918_1251.jpg/1280px-Fratercula_arctica%2C_Borgarfj%C3%B6r%C3%B0ur_eystri%2C_Iceland%2C_20240717_0918_1251.jpg"
+},
 "p-0020b7818a06": {
 "at": "2026-10-12",
 "author": "Bill Ingalls",
@@ -10820,6 +11152,17 @@
 "topic": "llama farm",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Llama_at_the_Farm_%285822418491%29_%282%29.jpg/1280px-Llama_at_the_Farm_%285822418491%29_%282%29.jpg"
 },
+"p-06f3e645597c": {
+"at": "2026-10-12",
+"author": "Ximonic (Simo R\u00e4s\u00e4nen)",
+"licence": "CC BY-SA 3.0",
+"packId": "evpack-mountain-day-2026",
+"page": "https://commons.wikimedia.org/wiki/File:Cloudy_Sm%C3%A5tindan_from_Litlandstabben,_Moskenes%C3%B8ya,_Lofoten,_Norway,_2015_September.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "Lofoten",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Cloudy_Sm%C3%A5tindan_from_Litlandstabben%2C_Moskenes%C3%B8ya%2C_Lofoten%2C_Norway%2C_2015_September.jpg/1280px-Cloudy_Sm%C3%A5tindan_from_Litlandstabben%2C_Moskenes%C3%B8ya%2C_Lofoten%2C_Norway%2C_2015_September.jpg"
+},
 "p-06f47e7e6cf3": {
 "at": "2026-10-12",
 "author": "chris-hayes",
@@ -11522,6 +11865,17 @@
 "source": "Wikimedia Commons, CC BY 2.0",
 "topic": "Rosa moyesii",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Rosa_moyesii_Geranium_%2829187632862%29.jpg/1280px-Rosa_moyesii_Geranium_%2829187632862%29.jpg"
+},
+"p-0d7900df937c": {
+"at": "2026-10-12",
+"author": "Carina Gsottbauer",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-whales",
+"page": "https://commons.wikimedia.org/wiki/File:2024-08-11_Blue_whale_Isfjord_Svalbard_05.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "blue whale",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/2024-08-11_Blue_whale_Isfjord_Svalbard_05.jpg/1280px-2024-08-11_Blue_whale_Isfjord_Svalbard_05.jpg"
 },
 "p-0da6f3132dac": {
 "at": "2026-10-12",
@@ -12981,6 +13335,17 @@
 "topic": "wheel of cheese",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Meule_du_Plateau_cheese_wheels_in_the_ripening_cellar%2C_Terre_de_fromages%2C_Herve%2C_2025.jpg/1280px-Meule_du_Plateau_cheese_wheels_in_the_ripening_cellar%2C_Terre_de_fromages%2C_Herve%2C_2025.jpg"
 },
+"p-194346f668f2": {
+"at": "2026-10-12",
+"author": "gomagoti",
+"licence": "CC BY-SA 2.0",
+"packId": "evpack-pet-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Dog_park_photos_(14293097988).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 2.0",
+"topic": "Dalmatian dog",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Dog_park_photos_%2814293097988%29.jpg/1280px-Dog_park_photos_%2814293097988%29.jpg"
+},
 "p-19932f2faad3": {
 "at": "2026-10-12",
 "author": "Marie-Lan Ta\u00ff Pamart",
@@ -13002,6 +13367,18 @@
 "source": "Wikimedia Commons, CC BY-SA 2.0",
 "topic": "sunflower close up bloom",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Helianthus_grosseserratus_SAWTOOTH_SUNFLOWER_%283333949600%29.jpg/1280px-Helianthus_grosseserratus_SAWTOOTH_SUNFLOWER_%283333949600%29.jpg"
+},
+"p-19b49dcc6f2e": {
+"at": "2026-10-12",
+"author": "Yaron Budowski",
+"licence": "CC BY",
+"packId": "pack-whales",
+"page": "https://www.inaturalist.org/observations/34447844",
+"photo_page": "https://www.inaturalist.org/photos/54217811",
+"provider": "inat",
+"source": "iNaturalist, CC BY",
+"topic": "Tursiops truncatus",
+"url": "https://inaturalist-open-data.s3.amazonaws.com/photos/54217811/original.jpeg"
 },
 "p-19bb42cb88e1": {
 "at": "2026-10-12",
@@ -13448,6 +13825,17 @@
 "topic": "AI-generated floral",
 "url": "https://live.staticflickr.com/65535/53442370875_a241d9725f_b.jpg"
 },
+"p-1cbecd564fdc": {
+"at": "2026-10-12",
+"author": "Larry D. Moore",
+"licence": "CC BY 4.0",
+"packId": "pack-whales",
+"page": "https://commons.wikimedia.org/wiki/File:Humpback_alaska_jumping.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "humpback whale Alaska",
+"url": "https://upload.wikimedia.org/wikipedia/commons/9/90/Humpback_alaska_jumping.jpg"
+},
 "p-1cc2b51b2557": {
 "at": "2026-10-12",
 "author": "chris-hayes",
@@ -13648,6 +14036,17 @@
 "source": "iNaturalist, CC BY",
 "topic": "Otocyon megalotis",
 "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/85928706/original.jpeg"
+},
+"p-1e1120adcbc4": {
+"at": "2026-10-12",
+"author": "Photo by Robert Pitman.",
+"licence": "Public domain",
+"packId": "pack-whales",
+"page": "https://commons.wikimedia.org/wiki/File:Type_C_Orcas_2.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "orca",
+"url": "https://upload.wikimedia.org/wikipedia/commons/c/c0/Type_C_Orcas_2.jpg"
 },
 "p-1e2232db765e": {
 "at": "2026-10-12",
@@ -14801,6 +15200,17 @@
 "topic": "flat white coffee",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/FlatwhiteAUCK.jpg/1280px-FlatwhiteAUCK.jpg"
 },
+"p-27bd4f519937": {
+"at": "2026-10-12",
+"author": "StoppedTime",
+"licence": "CC0",
+"packId": "evpack-pet-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Senior_broken_blue_Holland_Lop.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "Holland Lop rabbit",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Senior_broken_blue_Holland_Lop.jpg/1280px-Senior_broken_blue_Holland_Lop.jpg"
+},
 "p-27d18504260d": {
 "at": "2026-10-12",
 "author": "Kaburamata",
@@ -15175,6 +15585,17 @@
 "topic": "Lavandula multifida",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Lavandula_multifida.jpg/1280px-Lavandula_multifida.jpg"
 },
+"p-2ac1fd6fed37": {
+"at": "2026-10-12",
+"author": "Eva Rinaldi",
+"licence": "CC BY-SA 2.0",
+"packId": "evpack-pet-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Carassius_auratus_(5410364191).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 2.0",
+"topic": "Goldfish",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Carassius_auratus_%285410364191%29.jpg/1280px-Carassius_auratus_%285410364191%29.jpg"
+},
 "p-2acb6a30b020": {
 "at": "2026-10-12",
 "author": "Marco Zanoli (sidonius)",
@@ -15263,6 +15684,17 @@
 "topic": "Japanese garden pond Kyoto",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Garden_-_Toji_-_Kyoto%2C_Japan_-_DSC07077.jpg/1280px-Garden_-_Toji_-_Kyoto%2C_Japan_-_DSC07077.jpg"
 },
+"p-2bad9eb11871": {
+"at": "2026-10-12",
+"author": "Shreya.Bhopal",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-pet-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Cockatiel_02.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Cockatiel",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Cockatiel_02.jpg/1280px-Cockatiel_02.jpg"
+},
 "p-2bc6b1ede227": {
 "at": "2026-10-12",
 "author": "Chris Olszewski",
@@ -15284,6 +15716,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "heart-shaped leaf",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/A_heart-shaped_leaf_in_the_UAC_botanical_garden_-_01.jpg/1280px-A_heart-shaped_leaf_in_the_UAC_botanical_garden_-_01.jpg"
+},
+"p-2be625d01d35": {
+"at": "2026-10-12",
+"author": "Jos\u00e9 Ligero Loarte",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-cathedrals",
+"page": "https://commons.wikimedia.org/wiki/File:Escaleras_a_la_Catedral_--_2023_--_Burgos,_Castilla_y_Le%C3%B3n,_Espa%C3%B1a.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Burgos Cathedral",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Escaleras_a_la_Catedral_--_2023_--_Burgos%2C_Castilla_y_Le%C3%B3n%2C_Espa%C3%B1a.jpg/1280px-Escaleras_a_la_Catedral_--_2023_--_Burgos%2C_Castilla_y_Le%C3%B3n%2C_Espa%C3%B1a.jpg"
 },
 "p-2bec02b29337": {
 "at": "2026-10-12",
@@ -15688,6 +16131,17 @@
 "topic": "blue morpho butterfly",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Morfo_azul_%28Morpho_peleides%29%2C_Mariposario_de_Icod_de_los_Vinos%2C_Tenerife%2C_Espa%C3%B1a%2C_2012-12-13%2C_DD_01.jpg/1280px-Morfo_azul_%28Morpho_peleides%29%2C_Mariposario_de_Icod_de_los_Vinos%2C_Tenerife%2C_Espa%C3%B1a%2C_2012-12-13%2C_DD_01.jpg"
 },
+"p-2e8402f00218": {
+"at": "2026-10-12",
+"author": "This Photo was taken by Timothy A. Gonsalves.  Feel free to use my photos, but please ment",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-pet-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Head_Right_Husky_Dog_Show_2026_Ooty_May26_A7CR_10797.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Siberian Husky",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Head_Right_Husky_Dog_Show_2026_Ooty_May26_A7CR_10797.jpg/1280px-Head_Right_Husky_Dog_Show_2026_Ooty_May26_A7CR_10797.jpg"
+},
 "p-2e87701e7b6d": {
 "at": "2026-10-12",
 "author": "Mark Pellegrini",
@@ -15754,6 +16208,17 @@
 "source": "National Gallery of Art, Washington, CC0",
 "topic": "flowers in a vase",
 "url": "https://api.nga.gov/iiif/216ca5a4-e3f0-4458-9e73-5b901a9ac19e/full/!2000,2000/0/default.jpg"
+},
+"p-2f0146b08fba": {
+"at": "2026-10-12",
+"author": "Slyronit",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-pet-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Beagle_barking.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Beagle",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Beagle_barking.jpg/1280px-Beagle_barking.jpg"
 },
 "p-2f09a42af266": {
 "at": "2026-10-12",
@@ -16632,6 +17097,17 @@
 "source": "Wikimedia Commons, Public domain",
 "topic": "Large Magellanic Cloud",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Infrared-Radio_Image_of_the_Large_Magellanic_Cloud_%282022-027%29.png/1280px-Infrared-Radio_Image_of_the_Large_Magellanic_Cloud_%282022-027%29.png"
+},
+"p-37f4065c9b8a": {
+"at": "2026-10-12",
+"author": "Hugh Llewelyn from Keynsham, UK",
+"licence": "CC BY-SA 2.0",
+"packId": "pack-cathedrals",
+"page": "https://commons.wikimedia.org/wiki/File:Exeter_Cathedral_(St._Peter)_(15382428135).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 2.0",
+"topic": "Exeter Cathedral vault",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Exeter_Cathedral_%28St._Peter%29_%2815382428135%29.jpg/1280px-Exeter_Cathedral_%28St._Peter%29_%2815382428135%29.jpg"
 },
 "p-380aa04d8009": {
 "at": "2026-10-12",
@@ -17611,6 +18087,17 @@
 "topic": "Lavandula dentata",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Lavandula_dentata_kz01.jpg/1280px-Lavandula_dentata_kz01.jpg"
 },
+"p-3f722fae3931": {
+"at": "2026-10-12",
+"author": "Versions111",
+"licence": "CC BY 4.0",
+"packId": "pack-whales",
+"page": "https://commons.wikimedia.org/wiki/File:Beluga_Whale_02.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "beluga whale",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Beluga_Whale_02.jpg/1280px-Beluga_Whale_02.jpg"
+},
 "p-3f759aa491aa": {
 "at": "2026-10-12",
 "author": "Jackiron21 / AI",
@@ -18034,6 +18521,17 @@
 "topic": "love padlocks",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Love_padlocks_in_Chaves_%281%29.jpg/1280px-Love_padlocks_in_Chaves_%281%29.jpg"
 },
+"p-41ce42e6a720": {
+"at": "2026-10-12",
+"author": "Roberto Vasarri",
+"licence": "Public domain",
+"packId": "evpack-pet-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Shiba_inu_taiki.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Shiba Inu",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Shiba_inu_taiki.jpg/1280px-Shiba_inu_taiki.jpg"
+},
 "p-4203b93323cc": {
 "at": "2026-10-12",
 "author": "Giles Laurent",
@@ -18079,6 +18577,17 @@
 "topic": "Colored pencils",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Colored_wood_pencils_36.jpg/1280px-Colored_wood_pencils_36.jpg"
 },
+"p-42728a585838": {
+"at": "2026-10-12",
+"author": "H. Zell",
+"licence": "CC BY-SA 3.0",
+"packId": "pack-whales",
+"page": "https://commons.wikimedia.org/wiki/File:Tursiops_truncatus_-_Loro_Parque_02.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "Tursiops truncatus",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Tursiops_truncatus_-_Loro_Parque_02.jpg/1280px-Tursiops_truncatus_-_Loro_Parque_02.jpg"
+},
 "p-428f759b2327": {
 "at": "2026-10-12",
 "author": "Pauline E",
@@ -18090,6 +18599,18 @@
 "source": "Wikimedia Commons, CC BY-SA 2.0",
 "topic": "robin holly",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Robin_in_holly_-_geograph.org.uk_-_3834839.jpg/1280px-Robin_in_holly_-_geograph.org.uk_-_3834839.jpg"
+},
+"p-42b3354ddd26": {
+"at": "2026-10-12",
+"author": "Dan Vickers",
+"licence": "CC BY",
+"packId": "pack-whales",
+"page": "https://www.inaturalist.org/observations/257537944",
+"photo_page": "https://www.inaturalist.org/photos/462019549",
+"provider": "inat",
+"source": "iNaturalist, CC BY",
+"topic": "Balaenoptera musculus",
+"url": "https://inaturalist-open-data.s3.amazonaws.com/photos/462019549/original.jpg"
 },
 "p-42d951b22bdf": {
 "at": "2026-10-12",
@@ -18688,6 +19209,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "Pumpkin soup",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/20240929_Komemade_Thai_Soup_Pumpkin_anagoria.jpg/1280px-20240929_Komemade_Thai_Soup_Pumpkin_anagoria.jpg"
+},
+"p-485e75cd2378": {
+"at": "2026-10-12",
+"author": "Bluerasberry",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-pet-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Napoleon_chinchilla_in_box.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Chinchilla",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Napoleon_chinchilla_in_box.jpg/1280px-Napoleon_chinchilla_in_box.jpg"
 },
 "p-486c8e18fa6d": {
 "at": "2026-10-12",
@@ -19498,6 +20030,18 @@
 "topic": "AI-generated fruit",
 "url": "https://live.staticflickr.com/65535/53587504468_9c03e15814_b.jpg"
 },
+"p-4fd768e07ce9": {
+"at": "2026-10-12",
+"author": "Sula Vanderplank",
+"licence": "CC BY",
+"packId": "pack-whales",
+"page": "https://www.inaturalist.org/observations/203348086",
+"photo_page": "https://www.inaturalist.org/photos/359266718",
+"provider": "inat",
+"source": "iNaturalist, CC BY",
+"topic": "Lagenorhynchus obliquidens",
+"url": "https://inaturalist-open-data.s3.amazonaws.com/photos/359266718/original.jpg"
+},
 "p-4fe1942b660f": {
 "at": "2026-10-12",
 "author": "chris-hayes",
@@ -19575,6 +20119,18 @@
 "topic": "Mount Shasta",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Mount_Shasta_as_seen_from_Lake_Siskiyou-2886.jpg/1280px-Mount_Shasta_as_seen_from_Lake_Siskiyou-2886.jpg"
 },
+"p-502b2bc164cc": {
+"at": "2026-10-12",
+"author": "Anna Stavenskaya",
+"clonedFrom": "evpack-mountain-day-2026",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-mountain-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Forest_Annapurna.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Annapurna",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Forest_Annapurna.jpg/1280px-Forest_Annapurna.jpg"
+},
 "p-50396bf07ef2": {
 "at": "2026-10-12",
 "author": "Photograph by Mike Peel (www.mikepeel.net).",
@@ -19642,6 +20198,18 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "Dyed Easter eggs",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/%D0%A8%D0%B0%D1%80%D0%B5%D0%BD%D0%B8_%D0%B2%D0%B5%D0%BB%D0%B8%D0%B3%D0%B4%D0%B5%D0%BD%D1%81%D0%BA%D0%B8_%D1%98%D0%B0%D1%98%D1%86%D0%B0.jpg/1280px-%D0%A8%D0%B0%D1%80%D0%B5%D0%BD%D0%B8_%D0%B2%D0%B5%D0%BB%D0%B8%D0%B3%D0%B4%D0%B5%D0%BD%D1%81%D0%BA%D0%B8_%D1%98%D0%B0%D1%98%D1%86%D0%B0.jpg"
+},
+"p-51210a5d87dc": {
+"at": "2026-10-12",
+"author": "berrybbenson",
+"licence": "CC0",
+"packId": "pack-whales",
+"page": "https://www.inaturalist.org/observations/180218212",
+"photo_page": "https://www.inaturalist.org/photos/313886216",
+"provider": "inat",
+"source": "iNaturalist, CC0",
+"topic": "Megaptera novaeangliae",
+"url": "https://inaturalist-open-data.s3.amazonaws.com/photos/313886216/original.jpg"
 },
 "p-51226ed5deb3": {
 "at": "2026-10-12",
@@ -19797,6 +20365,17 @@
 "topic": "Tarkine rainforest Tasmania",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Large_tree_in_the_Dismal_swamp%2C_Tarkine_forest_adventures%2C_Tasmania.jpeg/1280px-Large_tree_in_the_Dismal_swamp%2C_Tarkine_forest_adventures%2C_Tasmania.jpeg"
 },
+"p-52034948f00c": {
+"at": "2026-10-12",
+"author": "Sbrisia",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-pet-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Maine_Coon_tabby_.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Maine Coon",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Maine_Coon_tabby_.jpg/1280px-Maine_Coon_tabby_.jpg"
+},
 "p-5210d944f96c": {
 "at": "2026-10-12",
 "author": "RL0919",
@@ -19819,6 +20398,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "aurora Finnish Lapland",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Aurora_Boreal_Marco_Brotto-38.jpg/1280px-Aurora_Boreal_Marco_Brotto-38.jpg"
+},
+"p-523e4c0c3fd2": {
+"at": "2026-10-12",
+"author": "Wschlitz",
+"licence": "CC BY 4.0",
+"packId": "evpack-pet-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Juvenile_Female_Mesocricetus_auratus_in_Pet_Store_enclosure,_Illinois,_USA.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "Syrian hamster",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Juvenile_Female_Mesocricetus_auratus_in_Pet_Store_enclosure%2C_Illinois%2C_USA.jpg/1280px-Juvenile_Female_Mesocricetus_auratus_in_Pet_Store_enclosure%2C_Illinois%2C_USA.jpg"
 },
 "p-524733ada2ed": {
 "at": "2026-10-12",
@@ -19863,6 +20453,17 @@
 "source": "Wikimedia Commons, CC BY-SA 3.0",
 "topic": "baked beans",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Baked_beans_in_tomato_sauce.jpg/1280px-Baked_beans_in_tomato_sauce.jpg"
+},
+"p-52e777ffdcb9": {
+"at": "2026-10-12",
+"author": "Miranda.Kopetzky",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-mountain-day-2026",
+"page": "https://commons.wikimedia.org/wiki/File:Grossglockner_1972.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Grossglockner",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Grossglockner_1972.jpg/1280px-Grossglockner_1972.jpg"
 },
 "p-52f882b29f3a": {
 "at": "2026-10-12",
@@ -20053,6 +20654,18 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "Vegetable basket",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Blackcurrant_in_basket_2021_G1.jpg/1280px-Blackcurrant_in_basket_2021_G1.jpg"
+},
+"p-545ab1cd66dc": {
+"at": "2026-10-12",
+"author": "Julia Henning",
+"licence": "CC BY",
+"packId": "pack-whales",
+"page": "https://www.inaturalist.org/observations/302227130",
+"photo_page": "https://www.inaturalist.org/photos/544662171",
+"provider": "inat",
+"source": "iNaturalist, CC BY",
+"topic": "Megaptera novaeangliae",
+"url": "https://inaturalist-open-data.s3.amazonaws.com/photos/544662171/original.jpg"
 },
 "p-547fc8ff95bf": {
 "at": "2026-10-12",
@@ -21234,6 +21847,17 @@
 "source": "Wikimedia Commons, CC BY-SA 3.0",
 "topic": "Bernese mountain dog puppy",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/%D0%91%D0%B5%D1%80%D0%BD%D1%81%D0%BA%D0%B8%D0%B9_%D0%B7%D0%B5%D0%BD%D0%B5%D0%BD%D1%85%D1%83%D0%BD%D0%B4--_2014-05-06_23-38.jpg/1280px-%D0%91%D0%B5%D1%80%D0%BD%D1%81%D0%BA%D0%B8%D0%B9_%D0%B7%D0%B5%D0%BD%D0%B5%D0%BD%D1%85%D1%83%D0%BD%D0%B4--_2014-05-06_23-38.jpg"
+},
+"p-5d79e70366c2": {
+"at": "2026-10-12",
+"author": "NOAA - Greg McFall",
+"licence": "Public domain",
+"packId": "pack-whales",
+"page": "https://commons.wikimedia.org/wiki/File:Stenella_frontalis,_Georgia.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Stenella frontalis",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Stenella_frontalis%2C_Georgia.jpg/1280px-Stenella_frontalis%2C_Georgia.jpg"
 },
 "p-5dd26e795535": {
 "at": "2026-10-12",
@@ -22826,6 +23450,17 @@
 "topic": "elephant drinking",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Elephant_drinking_%2851662164136%29.jpg/1280px-Elephant_drinking_%2851662164136%29.jpg"
 },
+"p-6a89626522e7": {
+"at": "2026-10-12",
+"author": "Lilly M  real name: Ma\u0142gorzata Mi\u0142aszewska",
+"licence": "CC BY-SA 3.0",
+"packId": "evpack-pet-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Welsh_Corgi_Pembroke_WPR_Kamien_07_10_07.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "Pembroke Welsh Corgi",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Welsh_Corgi_Pembroke_WPR_Kamien_07_10_07.jpg/1280px-Welsh_Corgi_Pembroke_WPR_Kamien_07_10_07.jpg"
+},
 "p-6acd40bb27c4": {
 "at": "2026-10-12",
 "author": "Myrabella",
@@ -23258,6 +23893,17 @@
 "topic": "cat:Images generated by ChatGPT",
 "url": "https://upload.wikimedia.org/wikipedia/commons/3/35/Mallorn_forest_AI_generated.jpg"
 },
+"p-6dc520de81df": {
+"at": "2026-10-12",
+"author": "Butterflye222",
+"licence": "CC0",
+"packId": "evpack-pet-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Red_point_siamese_cat.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "Siamese cat",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Red_point_siamese_cat.jpg/1280px-Red_point_siamese_cat.jpg"
+},
 "p-6dc5d5ec42c3": {
 "at": "2026-10-12",
 "author": "\u042e. \u0413\u0443\u0449\u0435\u043d\u043a\u043e",
@@ -23335,6 +23981,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "Hook Lighthouse",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Hook_Lighthouse_01.jpg/1280px-Hook_Lighthouse_01.jpg"
+},
+"p-6e42e6e8a210": {
+"at": "2026-10-12",
+"author": "Stanislav Stelmakhovich",
+"licence": "CC0",
+"packId": "pack-whales",
+"page": "https://commons.wikimedia.org/wiki/File:Close_view_of_a_gray_whale%E2%80%99s_broad_back.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "gray whale",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Close_view_of_a_gray_whale%E2%80%99s_broad_back.jpg/1280px-Close_view_of_a_gray_whale%E2%80%99s_broad_back.jpg"
 },
 "p-6e452198be5c": {
 "at": "2026-10-12",
@@ -23590,6 +24247,17 @@
 "topic": "Black Forest fog trees",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Sonnenstrahlen_im_Nebel.jpg/1280px-Sonnenstrahlen_im_Nebel.jpg"
 },
+"p-6fc9f2775c7d": {
+"at": "2026-10-12",
+"author": "Lolaref",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-pet-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Border_collie_blue_merle.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Border Collie",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Border_collie_blue_merle.jpg/1280px-Border_collie_blue_merle.jpg"
+},
 "p-6fd7e6e7cd8b": {
 "at": "2026-10-12",
 "author": "Tyseria",
@@ -23612,6 +24280,18 @@
 "source": "Wikimedia Commons, CC BY-SA 3.0",
 "topic": "Dew drops on spider web",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Dew_on_spider_web.jpg/1280px-Dew_on_spider_web.jpg"
+},
+"p-700e697e6170": {
+"at": "2026-10-12",
+"author": "steve b",
+"licence": "CC0",
+"packId": "pack-whales",
+"page": "https://www.inaturalist.org/observations/262736564",
+"photo_page": "https://www.inaturalist.org/photos/471861531",
+"provider": "inat",
+"source": "iNaturalist, CC0",
+"topic": "Eschrichtius robustus",
+"url": "https://inaturalist-open-data.s3.amazonaws.com/photos/471861531/original.jpeg"
 },
 "p-70280287f8f2": {
 "at": "2026-10-12",
@@ -24067,6 +24747,17 @@
 "topic": "bookshelf",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Bookcase_-_Stadtgarten_Karlsruhe.jpg/1280px-Bookcase_-_Stadtgarten_Karlsruhe.jpg"
 },
+"p-7391dab5e6a8": {
+"at": "2026-10-12",
+"author": "Kate Bathurst",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-mountain-day-2026",
+"page": "https://commons.wikimedia.org/wiki/File:Terraced_farms_in_the_Himalayas.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Annapurna",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Terraced_farms_in_the_Himalayas.jpg/1280px-Terraced_farms_in_the_Himalayas.jpg"
+},
 "p-73a4f5dfcc11": {
 "at": "2026-10-12",
 "author": "Josep M. Gracia",
@@ -24389,6 +25080,18 @@
 "source": "Wikimedia Commons, Public domain",
 "topic": "Monet Nymph\u00e9as 1907",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Monet_w1707.jpg/1280px-Monet_w1707.jpg"
+},
+"p-766ea6d31a92": {
+"at": "2026-10-12",
+"author": "Michal Klajban",
+"clonedFrom": "evpack-mountain-day-2026",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-mountain-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Sealy_Tarns_Track,_Aoraki_-_Mount_Cook_National_Park,_New_Zealand.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Aoraki Mount Cook",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Sealy_Tarns_Track%2C_Aoraki_-_Mount_Cook_National_Park%2C_New_Zealand.jpg/1280px-Sealy_Tarns_Track%2C_Aoraki_-_Mount_Cook_National_Park%2C_New_Zealand.jpg"
 },
 "p-76770ae18473": {
 "at": "2026-10-12",
@@ -25023,6 +25726,18 @@
 "source": "Wikimedia Commons, Public domain (AI-generated)",
 "topic": "cat:Images generated by ChatGPT",
 "url": "https://upload.wikimedia.org/wikipedia/commons/a/a5/ChatGPT_image_of_a_moonlit_forest.jpg"
+},
+"p-7b6b21bcf923": {
+"at": "2026-10-12",
+"author": "Ximonic (Simo R\u00e4s\u00e4nen)",
+"clonedFrom": "evpack-mountain-day-2026",
+"licence": "CC BY-SA 3.0",
+"packId": "evpack-mountain-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Cloudy_Sm%C3%A5tindan_from_Litlandstabben,_Moskenes%C3%B8ya,_Lofoten,_Norway,_2015_September.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "Lofoten",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Cloudy_Sm%C3%A5tindan_from_Litlandstabben%2C_Moskenes%C3%B8ya%2C_Lofoten%2C_Norway%2C_2015_September.jpg/1280px-Cloudy_Sm%C3%A5tindan_from_Litlandstabben%2C_Moskenes%C3%B8ya%2C_Lofoten%2C_Norway%2C_2015_September.jpg"
 },
 "p-7b6f8a443183": {
 "at": "2026-10-12",
@@ -26980,6 +27695,17 @@
 "topic": "AI-generated swan",
 "url": "https://live.staticflickr.com/65535/53564330183_74641d9ef6_b.jpg"
 },
+"p-892448b8368d": {
+"at": "2026-10-12",
+"author": "Georgi.petrov66",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-pet-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Hermann%27s_tortoise_boettgeri_-_Testudo_hermanni_-_%D0%A8%D0%B8%D0%BF%D0%BE%D0%BE%D0%BF%D0%B0%D1%88%D0%B0%D1%82%D0%B0_%D0%BA%D0%BE%D1%81%D1%82%D0%B5%D0%BD%D1%83%D1%80%D0%BA%D0%B0.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Hermann's tortoise",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Hermann%27s_tortoise_boettgeri_-_Testudo_hermanni_-_%D0%A8%D0%B8%D0%BF%D0%BE%D0%BE%D0%BF%D0%B0%D1%88%D0%B0%D1%82%D0%B0_%D0%BA%D0%BE%D1%81%D1%82%D0%B5%D0%BD%D1%83%D1%80%D0%BA%D0%B0.jpg/1280px-Hermann%27s_tortoise_boettgeri_-_Testudo_hermanni_-_%D0%A8%D0%B8%D0%BF%D0%BE%D0%BE%D0%BF%D0%B0%D1%88%D0%B0%D1%82%D0%B0_%D0%BA%D0%BE%D1%81%D1%82%D0%B5%D0%BD%D1%83%D1%80%D0%BA%D0%B0.jpg"
+},
 "p-8925bbc697df": {
 "at": "2026-10-12",
 "author": "Josh Rokman - AI Images",
@@ -27098,6 +27824,18 @@
 "topic": "Cabo Gir\u00e3o",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Vista_de_Funchal_desde_Cabo_Gir%C3%A3o%2C_Madeira%2C_Portugal%2C_2019-05-30%2C_DD_60.jpg/1280px-Vista_de_Funchal_desde_Cabo_Gir%C3%A3o%2C_Madeira%2C_Portugal%2C_2019-05-30%2C_DD_60.jpg"
 },
+"p-8ac36e746b42": {
+"at": "2026-10-12",
+"author": "Andrew Conboy",
+"licence": "CC BY",
+"packId": "pack-whales",
+"page": "https://www.inaturalist.org/observations/23244543",
+"photo_page": "https://www.inaturalist.org/photos/36046575",
+"provider": "inat",
+"source": "iNaturalist, CC BY",
+"topic": "Stenella frontalis",
+"url": "https://inaturalist-open-data.s3.amazonaws.com/photos/36046575/original.jpg"
+},
 "p-8ada2237d587": {
 "at": "2026-10-12",
 "author": "Kritzolina",
@@ -27153,6 +27891,18 @@
 "source": "Wikimedia Commons, Public domain (AI-generated)",
 "topic": "cat:Images generated by DALL-E",
 "url": "https://upload.wikimedia.org/wikipedia/commons/f/fc/DALL%C2%B7E_2025-03-05_14.14.11_-_A_futuristic_space_scene_showing_thousands_of_space_parasols_located_at_the_Lagrange_point%2C_forming_a_vast_solar_shield._Each_parasol_is_hexagonal_wit.webp"
+},
+"p-8b4916e7a01e": {
+"at": "2026-10-12",
+"author": "Bill Levine",
+"licence": "CC BY",
+"packId": "pack-whales",
+"page": "https://www.inaturalist.org/observations/134767478",
+"photo_page": "https://www.inaturalist.org/photos/229765988",
+"provider": "inat",
+"source": "iNaturalist, CC BY",
+"topic": "Tursiops truncatus",
+"url": "https://inaturalist-open-data.s3.amazonaws.com/photos/229765988/original.jpeg"
 },
 "p-8b524610e19e": {
 "at": "2026-10-12",
@@ -27566,6 +28316,17 @@
 "topic": "Devon Rex kitten",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Devon_Rex_Tortoiseshell.jpg/1280px-Devon_Rex_Tortoiseshell.jpg"
 },
+"p-8e39cb93edd6": {
+"at": "2026-10-12",
+"author": "Johannnes89",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-pet-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Golden_Retriever_2020_3.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Golden Retriever",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Golden_Retriever_2020_3.jpg/1280px-Golden_Retriever_2020_3.jpg"
+},
 "p-8e747d1869d2": {
 "at": "2026-10-12",
 "author": "SDXL with Fooocus / Stable Diffusion",
@@ -27897,6 +28658,17 @@
 "source": "Wikimedia Commons, CC BY-SA 2.0",
 "topic": "lavender field",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Lavender_field_Sutton.jpg/1280px-Lavender_field_Sutton.jpg"
+},
+"p-90a662092bdd": {
+"at": "2026-10-12",
+"author": "Egidio Di Bianca",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-cathedrals",
+"page": "https://commons.wikimedia.org/wiki/File:Il_soffitto_del_Duomo_di_Pisa_nel_2019.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Pisa Cathedral",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Il_soffitto_del_Duomo_di_Pisa_nel_2019.jpg/1280px-Il_soffitto_del_Duomo_di_Pisa_nel_2019.jpg"
 },
 "p-90a67eb20aad": {
 "at": "2026-10-12",
@@ -28606,6 +29378,28 @@
 "source": "Wikimedia Commons, Public domain",
 "topic": "Milky Way Joshua Tree",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Night_sky_of_Joshua_Tree_National_Park_%2835429277372%29.jpg/1280px-Night_sky_of_Joshua_Tree_National_Park_%2835429277372%29.jpg"
+},
+"p-96812cf7ad51": {
+"at": "2026-10-12",
+"author": "Fernando",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-cathedrals",
+"page": "https://commons.wikimedia.org/wiki/File:FP_Toledo_Cathedral_2025_-_Ambulatory.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Toledo Cathedral",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/FP_Toledo_Cathedral_2025_-_Ambulatory.jpg/1280px-FP_Toledo_Cathedral_2025_-_Ambulatory.jpg"
+},
+"p-968405abe80d": {
+"at": "2026-10-12",
+"author": "Smash the Iron Cage",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-cathedrals",
+"page": "https://commons.wikimedia.org/wiki/File:Washington_National_Cathedral_(8).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Washington National Cathedral",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Washington_National_Cathedral_%288%29.jpg/1280px-Washington_National_Cathedral_%288%29.jpg"
 },
 "p-968b79b757dc": {
 "at": "2026-10-12",
@@ -30028,6 +30822,17 @@
 "topic": "Mars Valles Marineris",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Eastern_Valles_Marineris_on_Mars_%2828713934477%29.jpg/1280px-Eastern_Valles_Marineris_on_Mars_%2828713934477%29.jpg"
 },
+"p-a14c14184f05": {
+"at": "2026-10-12",
+"author": "Bmatulis",
+"licence": "CC BY 3.0",
+"packId": "pack-whales",
+"page": "https://commons.wikimedia.org/wiki/File:Atlantic_Spotted_Dolphin.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 3.0",
+"topic": "dolphin underwater",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Atlantic_Spotted_Dolphin.jpg/1280px-Atlantic_Spotted_Dolphin.jpg"
+},
 "p-a154bfa4ef4c": {
 "at": "2026-10-12",
 "author": "Averater",
@@ -30093,6 +30898,17 @@
 "source": "Wikimedia Commons, CC BY 3.0",
 "topic": "European rabbit",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Oryctolagus_cuniculus_Rcdo.jpg/1280px-Oryctolagus_cuniculus_Rcdo.jpg"
+},
+"p-a1c3ea3ed7a3": {
+"at": "2026-10-12",
+"author": "National Marine Sanctuaries",
+"licence": "Public domain",
+"packId": "pack-whales",
+"page": "https://commons.wikimedia.org/wiki/File:OCNMS_Orca_breaching_(50040737978).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "orca breaching",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/OCNMS_Orca_breaching_%2850040737978%29.jpg/1280px-OCNMS_Orca_breaching_%2850040737978%29.jpg"
 },
 "p-a2082f7b1131": {
 "at": "2026-10-12",
@@ -31786,6 +32602,18 @@
 "topic": "saker falcon",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Faucon_sacr%C3%A9_%28Falco_cherrug%29.jpg/1280px-Faucon_sacr%C3%A9_%28Falco_cherrug%29.jpg"
 },
+"p-aefb52fee3b6": {
+"at": "2026-10-12",
+"author": "steve b",
+"licence": "CC0",
+"packId": "pack-whales",
+"page": "https://www.inaturalist.org/observations/200461669",
+"photo_page": "https://www.inaturalist.org/photos/353680517",
+"provider": "inat",
+"source": "iNaturalist, CC0",
+"topic": "Orcinus orca",
+"url": "https://inaturalist-open-data.s3.amazonaws.com/photos/353680517/original.jpeg"
+},
 "p-af1880589924": {
 "at": "2026-10-12",
 "author": "Midjourney AI / AI",
@@ -32342,6 +33170,18 @@
 "topic": "Atlantic puffin",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Fratercula_arctica%2C_Borgarfj%C3%B6r%C3%B0ur_eystri%2C_Iceland%2C_20240717_0939_1344.jpg/1280px-Fratercula_arctica%2C_Borgarfj%C3%B6r%C3%B0ur_eystri%2C_Iceland%2C_20240717_0939_1344.jpg"
 },
+"p-b34098e062f6": {
+"at": "2026-10-12",
+"author": "Addshore",
+"licence": "CC BY",
+"packId": "pack-whales",
+"page": "https://www.inaturalist.org/observations/164781521",
+"photo_page": "https://www.inaturalist.org/photos/285157309",
+"provider": "inat",
+"source": "iNaturalist, CC BY",
+"topic": "Stenella frontalis",
+"url": "https://inaturalist-open-data.s3.amazonaws.com/photos/285157309/original.jpeg"
+},
 "p-b340bb890f17": {
 "at": "2026-10-12",
 "author": "H. Zell",
@@ -32536,6 +33376,17 @@
 "source": "flickr via Openverse, Public Domain Mark",
 "topic": "AI-generated forest",
 "url": "https://live.staticflickr.com/65535/52313617819_3b94519c19_b.jpg"
+},
+"p-b533d30e28d5": {
+"at": "2026-10-12",
+"author": "Swaggyswimmer",
+"licence": "CC0",
+"packId": "evpack-pet-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Leopard_Gecko.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "Leopard gecko",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Leopard_Gecko.jpg/1280px-Leopard_Gecko.jpg"
 },
 "p-b550bb943e3a": {
 "at": "2026-10-12",
@@ -32848,6 +33699,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "barfi",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Assorted_Sweets_-_Mehsana_-_Gujarat_-_1.jpg/1280px-Assorted_Sweets_-_Mehsana_-_Gujarat_-_1.jpg"
+},
+"p-b7fba867766c": {
+"at": "2026-10-12",
+"author": "TheRanchKeeper",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-pet-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:A_small_kitten_on_a_small_broken_brink_of_a_tree_lying_on_the_ground_and_kitten_is_looking_into_the_camera.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Kitten",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/A_small_kitten_on_a_small_broken_brink_of_a_tree_lying_on_the_ground_and_kitten_is_looking_into_the_camera.jpg/1280px-A_small_kitten_on_a_small_broken_brink_of_a_tree_lying_on_the_ground_and_kitten_is_looking_into_the_camera.jpg"
 },
 "p-b81727f4f046": {
 "at": "2026-10-12",
@@ -33360,6 +34222,17 @@
 "topic": "milk tea cup",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Morning_breakfast_with_a_cup_of_milk_tea_and_biscuits_%28%E0%A6%8F%E0%A6%95_%E0%A6%95%E0%A6%BE%E0%A6%AA_%E0%A6%A6%E0%A7%81%E0%A6%A7_%E0%A6%9A%E0%A6%BE_%E0%A6%93_%E0%A6%AC%E0%A6%BF%E0%A6%B8%E0%A7%8D%E0%A6%95%E0%A7%81%E0%A6%9F%E0%A7%87%E0%A6%B0_%E0%A6%B8%E0%A6%BE%E0%A6%A5%E0%A7%87_%E0%A6%B8%E0%A6%95%E0%A6%BE%E0%A6%B2%E0%A7%87%E0%A6%B0_%E0%A6%A8%E0%A6%BE%E0%A6%B8%E0%A7%8D%E0%A6%A4%E0%A6%BE%29.jpg/1280px-thumbnail.jpg"
 },
+"p-bc21b6054146": {
+"at": "2026-10-12",
+"author": "Dalila Dalprat Sousa Santos",
+"licence": "CC BY-SA 3.0",
+"packId": "evpack-pet-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Ra%C3%A7a_dachshund_,_Teckel..JPG",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "Dachshund",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Ra%C3%A7a_dachshund_%2C_Teckel..JPG/1280px-Ra%C3%A7a_dachshund_%2C_Teckel..JPG"
+},
 "p-bc608038ea0e": {
 "at": "2026-10-12",
 "author": "Ugpics",
@@ -33616,6 +34489,17 @@
 "source": "Wikimedia Commons, CC0",
 "topic": "Callisto moon",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Callisto_moon_1.png/1280px-Callisto_moon_1.png"
+},
+"p-beb4e7a54f1c": {
+"at": "2026-10-12",
+"author": "Charles J. Sharp",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-pet-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Yellow-fronted_canary_(Crithagra_mozambica_tando).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Canary bird",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Yellow-fronted_canary_%28Crithagra_mozambica_tando%29.jpg/1280px-Yellow-fronted_canary_%28Crithagra_mozambica_tando%29.jpg"
 },
 "p-beb96aa7d103": {
 "at": "2026-10-12",
@@ -34354,6 +35238,18 @@
 "topic": "Mount Assiniboine lake",
 "url": "https://upload.wikimedia.org/wikipedia/commons/0/0c/Mount_Sam.jpg"
 },
+"p-c3970a107a46": {
+"at": "2026-10-12",
+"author": "Kate Bathurst",
+"clonedFrom": "evpack-mountain-day-2026",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-mountain-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Terraced_farms_in_the_Himalayas.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Annapurna",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Terraced_farms_in_the_Himalayas.jpg/1280px-Terraced_farms_in_the_Himalayas.jpg"
+},
 "p-c3ae47ff0d1c": {
 "at": "2026-10-12",
 "author": "George Stubbs",
@@ -34474,6 +35370,18 @@
 "source": "Wikimedia Commons, CC BY 4.0",
 "topic": "caracal",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Caracal_caracal_caracal_186538043.jpg/1280px-Caracal_caracal_caracal_186538043.jpg"
+},
+"p-c47c23341cfa": {
+"at": "2026-10-12",
+"author": "Afsar Nayakkan",
+"licence": "CC BY",
+"packId": "pack-whales",
+"page": "https://www.inaturalist.org/observations/340613362",
+"photo_page": "https://www.inaturalist.org/photos/619877926",
+"provider": "inat",
+"source": "iNaturalist, CC BY",
+"topic": "Sousa chinensis",
+"url": "https://inaturalist-open-data.s3.amazonaws.com/photos/619877926/original.jpg"
 },
 "p-c4906b36a870": {
 "at": "2026-10-12",
@@ -34829,6 +35737,17 @@
 "topic": "AI-generated butterfly",
 "url": "https://live.staticflickr.com/65535/54700902467_1654f06508_b.jpg"
 },
+"p-c72b9aef2418": {
+"at": "2026-10-12",
+"author": "Julian Lupyan",
+"licence": "Public domain",
+"packId": "pack-cathedrals",
+"page": "https://commons.wikimedia.org/wiki/File:Saint_Alexander_Nevsky_Cathedral,_North_Fa%C3%A7ade_(Upper).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Alexander Nevsky Cathedral Sofia",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Saint_Alexander_Nevsky_Cathedral%2C_North_Fa%C3%A7ade_%28Upper%29.jpg/1280px-Saint_Alexander_Nevsky_Cathedral%2C_North_Fa%C3%A7ade_%28Upper%29.jpg"
+},
 "p-c7457371a40d": {
 "at": "2026-10-12",
 "author": "ZoAnn Macon",
@@ -35183,6 +36102,17 @@
 "topic": "lemons yellow bowl",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Cosmos_sulphureus_in_Kadavoor.jpg/1280px-Cosmos_sulphureus_in_Kadavoor.jpg"
 },
+"p-c9878a5f995c": {
+"at": "2026-10-12",
+"author": "National Marine Sanctuaries",
+"licence": "Public domain",
+"packId": "pack-whales",
+"page": "https://commons.wikimedia.org/wiki/File:HIHWNMS_-_humpback_-_NOAAPermit14682_(27703859660).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "humpback whale Hawaii",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/HIHWNMS_-_humpback_-_NOAAPermit14682_%2827703859660%29.jpg/1280px-HIHWNMS_-_humpback_-_NOAAPermit14682_%2827703859660%29.jpg"
+},
 "p-c9ac1849658d": {
 "at": "2026-10-12",
 "author": "Abigail Becker",
@@ -35316,6 +36246,17 @@
 "topic": "European hedgehog",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Erinaceus_europaeus_3.JPG/1280px-Erinaceus_europaeus_3.JPG"
 },
+"p-cb8572777189": {
+"at": "2026-10-12",
+"author": "Sergey Ayukov",
+"licence": "CC BY-SA 3.0",
+"packId": "evpack-pet-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Betta_Splendens,_male.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "Betta splendens",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Betta_Splendens%2C_male.jpg/1280px-Betta_Splendens%2C_male.jpg"
+},
 "p-cb8b3e13b0a6": {
 "at": "2026-10-12",
 "author": "LBM1948",
@@ -35448,6 +36389,17 @@
 "source": "flickr via Openverse, Public Domain Mark",
 "topic": "AI-generated fish",
 "url": "https://live.staticflickr.com/65535/52304929106_06be54f20b_b.jpg"
+},
+"p-ccac4b57faa5": {
+"at": "2026-10-12",
+"author": "Kidfly182",
+"licence": "CC BY 4.0",
+"packId": "pack-cathedrals",
+"page": "https://commons.wikimedia.org/wiki/File:St._Patrick%27s_Cathedral_August_2024.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "St. Patrick's Cathedral New York",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/St._Patrick%27s_Cathedral_August_2024.jpg/1280px-St._Patrick%27s_Cathedral_August_2024.jpg"
 },
 "p-ccb3ca254ff1": {
 "at": "2026-10-12",
@@ -35784,6 +36736,18 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "Sinharaja rainforest",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Sinharaja_Rainforest_FA0089B0-CB0A-4C72-8506-4111D6EEAC99.jpg/1280px-Sinharaja_Rainforest_FA0089B0-CB0A-4C72-8506-4111D6EEAC99.jpg"
+},
+"p-cedf711741f6": {
+"at": "2026-10-12",
+"author": "Miranda.Kopetzky",
+"clonedFrom": "evpack-mountain-day-2026",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-mountain-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Grossglockner_1972.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Grossglockner",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Grossglockner_1972.jpg/1280px-Grossglockner_1972.jpg"
 },
 "p-cef0a1e16929": {
 "at": "2026-10-12",
@@ -37626,6 +38590,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "Tibetan singing bowl",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Singing_bowl_of_%22La_Gendroni%C3%A9re%22.jpg/1280px-Singing_bowl_of_%22La_Gendroni%C3%A9re%22.jpg"
+},
+"p-de68039f9a1d": {
+"at": "2026-10-12",
+"author": "Anna Stavenskaya",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-mountain-day-2026",
+"page": "https://commons.wikimedia.org/wiki/File:Forest_Annapurna.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Annapurna",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Forest_Annapurna.jpg/1280px-Forest_Annapurna.jpg"
 },
 "p-de6943dc178b": {
 "at": "2026-10-12",
@@ -39607,6 +40582,17 @@
 "topic": "AI-generated bird",
 "url": "https://live.staticflickr.com/65535/52315104687_4e87a7ed5d_b.jpg"
 },
+"p-ee57d35b150b": {
+"at": "2026-10-12",
+"author": "Michal Klajban",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-mountain-day-2026",
+"page": "https://commons.wikimedia.org/wiki/File:Sealy_Tarns_Track,_Aoraki_-_Mount_Cook_National_Park,_New_Zealand.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Aoraki Mount Cook",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Sealy_Tarns_Track%2C_Aoraki_-_Mount_Cook_National_Park%2C_New_Zealand.jpg/1280px-Sealy_Tarns_Track%2C_Aoraki_-_Mount_Cook_National_Park%2C_New_Zealand.jpg"
+},
 "p-ee605229d729": {
 "at": "2026-10-12",
 "author": "FranHogan",
@@ -40163,6 +41149,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "gaiwan tea",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Longjing_tea_after_steeping.jpg/1280px-Longjing_tea_after_steeping.jpg"
+},
+"p-f306da143bf2": {
+"at": "2026-10-12",
+"author": "Laurona94",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-pet-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:220620_-_guinea_pig_-_Laura_Pernigoni.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Guinea pig",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/220620_-_guinea_pig_-_Laura_Pernigoni.jpg/1280px-220620_-_guinea_pig_-_Laura_Pernigoni.jpg"
 },
 "p-f3401d8e3224": {
 "at": "2026-10-12",
@@ -40794,6 +41791,18 @@
 "topic": "Max Liebermann Wannsee garden painting",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Max_Liebermann_Die_Birkenallee_im_Wannseegarten.jpg/1280px-Max_Liebermann_Die_Birkenallee_im_Wannseegarten.jpg"
 },
+"p-f8760bad5f27": {
+"at": "2026-10-12",
+"author": "Sydney Dragon",
+"licence": "CC BY",
+"packId": "pack-whales",
+"page": "https://www.inaturalist.org/observations/84337058",
+"photo_page": "https://www.inaturalist.org/photos/138603473",
+"provider": "inat",
+"source": "iNaturalist, CC BY",
+"topic": "Tursiops truncatus",
+"url": "https://inaturalist-open-data.s3.amazonaws.com/photos/138603473/original.jpg"
+},
 "p-f87b214a6fa1": {
 "at": "2026-10-12",
 "author": "Lajmmoore",
@@ -41223,6 +42232,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "monarch butterfly flower",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Monarch_Butterfly_in_Madison_Square_Park_2019-10-01_21-05.jpg/1280px-Monarch_Butterfly_in_Madison_Square_Park_2019-10-01_21-05.jpg"
+},
+"p-fc53e3dd88eb": {
+"at": "2026-10-12",
+"author": "R. Henrik Nilsson",
+"licence": "CC BY 4.0",
+"packId": "evpack-pet-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:British_shorthair_house_cat_Mio_5_months_old.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "British Shorthair",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/British_shorthair_house_cat_Mio_5_months_old.jpg/1280px-British_shorthair_house_cat_Mio_5_months_old.jpg"
 },
 "p-fc60d9dfaaf0": {
 "at": "2026-10-12",

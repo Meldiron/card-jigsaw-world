@@ -188,3 +188,8 @@ smoke, topographic, paper collage, brutalist concrete, stained glass, neon lines
 fractals, crystal macro, glitch, dunes, water ripples, frost, rust. Search Commons with the
 material/phenomenon words ("ink in water macro", "fractal flame", "paper marbling", "hoarfrost
 macro") and reject anything representational.
+
+## Titles (added during the resume)
+
+Puzzle titles come from the search topic. iNaturalist pictures are now titled with the species' common name. If a title is wrong (wrong species, filename-like, scientific name), fix it with
+`tools/content/run.sh retitle PUZZLE_ID New title`.
