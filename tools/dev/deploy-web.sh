@@ -10,7 +10,7 @@ export PATH="$HOME/flutter/bin:$PATH"
 PROJECT=6acb4de5003e38d5ebd9; SITE=card-jigsaw-world; EP=https://fra.cloud.appwrite.io/v1
 KEY=$(cat secrets/appwrite-sites-key.txt)
 if [ "${1:-}" != "--no-build" ]; then
-  flutter build web --release --base-href /
+  flutter build web --release --base-href / --no-web-resources-cdn
 fi
 [ -f build/web/index.html ] || { echo "build/web/index.html missing" >&2; exit 1; }
 TAR=$(mktemp -t cjw-web).tar.gz
