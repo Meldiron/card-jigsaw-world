@@ -2,7 +2,7 @@
  "id": "pack-hot-air-balloons",
  "name": "Hot Air Balloons",
  "category": "Travel",
- "description": "Striped, checkered and rainbow envelopes rising over Cappadocia, Albuquerque, Bristol and the Rockies.",
+ "description": "Rainbow envelopes, burner flames and balloons drifting over Cappadocia, Bagan and the Rockies.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
@@ -55,7 +55,20 @@
   "Heißluftballon",
   "globo aerostático",
   "Taitung hot air balloon festival",
-  "Montgolfiade"
+  "Montgolfiade",
+  "fairy chimneys hot air balloon",
+  "Pigeon Valley Cappadocia",
+  "Old Bagan balloons",
+  "inside hot air balloon",
+  "hot air balloon Masai Mara",
+  "hot air balloon from below",
+  "Göreme sunrise balloons",
+  "hot air balloon Serengeti",
+  "Red Valley Cappadocia balloons",
+  "Bagan temples balloon sunrise",
+  "balloon over Luxor temples",
+  "hot air balloon envelope pattern"
  ],
- "allow_words": []
+ "allow_words": [],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Inside_of_a_hot_air_balloon.jpg/1280px-Inside_of_a_hot_air_balloon.jpg"
 }

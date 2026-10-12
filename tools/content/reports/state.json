@@ -1,8 +1,8 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-12T18:08:02",
-"msg": "Content: checkpoint (206 verified, 3 fixed, 50 audited, 36 pending)",
+"at": "2026-10-12T18:10:34",
+"msg": "Content: checkpoint (207 verified, 3 fixed, 49 audited, 36 pending)",
 "ok": true,
 "pushed": true,
 "stage": "committed"
@@ -46,15 +46,16 @@
 "status": "verified"
 },
 "abstract-dunes": {
-"added": 0,
-"at": "2026-10-12T18:07:11",
+"added": 22,
+"at": "2026-10-12T18:36:49",
 "category": "Abstract",
+"issues": 0,
 "kind": "new",
-"last_step": "pool 33 usable",
+"last_step": "verify",
 "name": "Dunes",
-"puzzles": 0,
-"removed": 0,
-"status": "pending"
+"puzzles": 21,
+"removed": 1,
+"status": "verified"
 },
 "abstract-fluid-ink": {
 "added": 23,
@@ -67,6 +68,17 @@
 "puzzles": 21,
 "removed": 2,
 "status": "verified"
+},
+"abstract-fractals": {
+"added": 0,
+"at": "2026-10-12T18:36:56",
+"category": "Abstract",
+"kind": "new",
+"last_step": "newpack",
+"name": "Fractals",
+"puzzles": 0,
+"removed": 0,
+"status": "pending"
 },
 "abstract-geometric-minimal": {
 "added": 31,
@@ -746,8 +758,8 @@
 },
 "daily-2025": {
 "added": 0,
-"at": "2026-10-12T18:08:34",
-"last_step": "pool 126 usable",
+"at": "2026-10-12T18:34:50",
+"last_step": "pool 137 usable",
 "puzzles": null,
 "removed": 0,
 "status": "pending"
@@ -946,10 +958,10 @@
 },
 "daily-2026-05": {
 "added": 0,
-"at": "2026-10-12T12:32:57",
+"at": "2026-10-12T18:28:21",
 "category": "Daily",
 "kind": "daily",
-"last_step": "reject 9 weak",
+"last_step": "reject 18 weak",
 "name": "May 2026",
 "puzzles": null,
 "removed": 0,
@@ -1071,15 +1083,16 @@
 "status": "verified"
 },
 "evpack-beach-day-2027": {
-"added": 0,
-"at": "2026-10-12T18:07:05",
+"added": 25,
+"at": "2026-10-12T18:32:05",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "pool 16 usable",
+"last_step": "verify",
 "name": "National Beach Day",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 15,
+"status": "verified"
 },
 "evpack-bean-day-2027": {
 "added": 25,
@@ -1106,15 +1119,15 @@
 "status": "verified"
 },
 "evpack-bicycle-2027": {
-"added": 0,
-"at": "2026-10-12T18:05:00",
+"added": 29,
+"at": "2026-10-12T18:37:32",
 "category": "Event",
 "kind": "event",
-"last_step": "pool 28 usable",
+"last_step": "apply",
 "name": "World Bicycle Day",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 19,
+"status": "fixed"
 },
 "evpack-biodiversity-2027": {
 "added": 0,
@@ -1140,10 +1153,10 @@
 },
 "evpack-cat-day-2027": {
 "added": 0,
-"at": "2026-10-12T16:46:12",
+"at": "2026-10-12T18:34:21",
 "category": "Event",
 "kind": "event",
-"last_step": "reject 2 similar",
+"last_step": "pool 16 usable",
 "name": "International Cat Day",
 "puzzles": null,
 "removed": 0,
@@ -1475,14 +1488,16 @@
 "status": "pending"
 },
 "evpack-happiness-2027": {
-"added": 0,
-"at": "2026-10-12T02:04:57",
+"added": 23,
+"at": "2026-10-12T18:30:17",
 "category": "Event",
+"issues": 0,
 "kind": "event",
+"last_step": "verify",
 "name": "International Day of Happiness",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 13,
+"status": "verified"
 },
 "evpack-health-2027": {
 "added": 24,
@@ -1922,14 +1937,14 @@
 },
 "evpack-thanksgiving-2026": {
 "added": 0,
-"at": "2026-10-12T18:07:59",
+"at": "2026-10-12T18:36:19",
 "category": "Event",
 "kind": "event",
-"last_step": "pool 25 usable",
+"last_step": "pool 32 usable",
 "name": "Thanksgiving",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "evpack-thanksgiving-2027": {
 "added": 0,
@@ -2571,15 +2586,16 @@
 "status": "verified"
 },
 "pack-hot-air-balloons": {
-"added": 0,
-"at": "2026-10-12T18:10:25",
+"added": 15,
+"at": "2026-10-12T18:23:58",
 "category": "Travel",
+"issues": 0,
 "kind": "library",
-"last_step": "pool 21 usable",
+"last_step": "verify",
 "name": "Hot Air Balloons",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 20,
+"removed": 15,
+"status": "verified"
 },
 "pack-hummingbirds": {
 "added": 20,
@@ -2607,10 +2623,10 @@
 },
 "pack-iceland-roads": {
 "added": 0,
-"at": "2026-10-12T10:38:02",
+"at": "2026-10-12T18:29:59",
 "category": "Travel",
 "kind": "library",
-"last_step": "reject 13 off-theme",
+"last_step": "pool 15 usable",
 "name": "Iceland Roads",
 "puzzles": null,
 "removed": 0,
@@ -2641,10 +2657,10 @@
 },
 "pack-istanbul": {
 "added": 0,
-"at": "2026-10-12T10:04:50",
+"at": "2026-10-12T18:37:26",
 "category": "Cities",
 "kind": "library",
-"last_step": "reject 2 weak",
+"last_step": "reject 1 text",
 "name": "Istanbul",
 "puzzles": null,
 "removed": 0,
@@ -3127,15 +3143,16 @@
 "status": "verified"
 },
 "pack-seascapes": {
-"added": 0,
-"at": "2026-10-12T18:08:29",
+"added": 24,
+"at": "2026-10-12T18:27:16",
 "category": "Art",
+"issues": 0,
 "kind": "library",
-"last_step": "reject 1 weak",
+"last_step": "verify",
 "name": "Seascapes",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 20,
+"status": "verified"
 },
 "pack-skylines": {
 "added": 0,

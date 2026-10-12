@@ -3,7 +3,7 @@
  "target": 24,
  "per_topic": 1,
  "fetch_per_topic": 5,
- "author_cap": 3,
+ "author_cap": 12,
  "sources": [
   "commons",
   "nga"
@@ -71,7 +71,16 @@
   "Monet Port-Domois",
   "Monet Manneporte painting",
   "Aivazovsky moonlit night painting",
-  "Hiroshige Bishu print sea"
+  "Hiroshige Bishu print sea",
+  "Hiroshige Kazusa Province",
+  "Hiroshige Awa Province",
+  "Hiroshige Sagami Province",
+  "Hiroshige Iki Province",
+  "Hiroshige Noto Province",
+  "Hiroshige Izu Province",
+  "cat:Paintings of lighthouses",
+  "cat:Paintings of Étretat by Claude Monet",
+  "cat:Marine paintings by Ivan Aivazovsky"
  ],
  "nga_classes": [
   "Painting"

@@ -2,14 +2,17 @@
  "id": "evpack-beach-day-2027",
  "name": "National Beach Day",
  "category": "Event",
- "description": "A limited pack for National Beach Day (30 August 2027). Seashells, sandcastles, beach huts, lifeguard towers, palm-fringed coves and tide pools, playable for one week.",
+ "description": "A limited pack for National Beach Day (30 August 2027). Striped deck chairs, seashells, sandcastles, beach huts, lifeguard towers, palm-fringed coves and tide pools, playable for one week.",
  "kind": "event",
  "target": 24,
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
  "accent_from_cover": true,
- "sources": ["commons", "openverse"],
+ "sources": [
+  "commons",
+  "openverse"
+ ],
  "topics": [
   "Seashells on sand",
   "Sandcastle",

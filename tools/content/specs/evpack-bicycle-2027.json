@@ -3,10 +3,10 @@
  "description": "A limited pack for World Bicycle Day (3 June 2027). Vintage roadsters and penny-farthings, cargo and folding bikes, Dutch bike racks, bells, chains and spoked wheels, playable for one week.",
  "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2, "accent_from_cover": true,
  "sources": ["commons", "openverse"], "openverse_category": "photograph",
- "topics": ["Penny-farthing", "Vintage bicycle", "Dutch roadster bicycle", "Bicycle with flower basket", "Bicycles Amsterdam canal",
-  "Bicycle parking Amsterdam", "Copenhagen bicycles", "Road racing bicycle", "Fixed-gear bicycle", "Cargo bike bakfiets",
-  "Tandem bicycle", "Brompton folding bicycle", "Mountain bike", "BMX bike", "Draisine Laufmaschine",
-  "Bicycle bell", "Bicycle chain sprocket", "Bicycle wheel spokes", "Brooks leather saddle", "Velib bike sharing station",
+ "topics": ["Penny-farthing", "Vintage bicycle", "Bicycle Utrecht", "Bicycle with flower basket", "Bicycles Amsterdam canal",
+  "Bicycle parking Amsterdam", "Copenhagen bicycles", "Racing bicycle", "Fixed-gear bicycle", "Cargo bike bakfiets",
+  "Tandem bicycle", "Folding bicycle", "Mountain bike", "BMX bike", "Dandy horse",
+  "Bicycle bell", "Bicycle chain sprocket", "Bicycle wheel spokes", "Bicycle saddle", "Velib bike sharing station",
   "Bicycle museum", "Tricycle", "Old bicycle against wall", "Bicycle repair workshop"],
- "more_topics": ["Bicycle Utrecht", "Kyoto bicycle", "Vintage bicycle headlamp", "Bicycle frame", "Bicycle rack", "Velodrome track"]
+ "more_topics": ["Bicycle with basket", "Gazelle bicycle", "Old bicycle", "Bicycle in snow", "Bicycle with flowers", "Kyoto bicycle", "Vintage bicycle headlamp", "Bicycle frame", "Bicycle rack", "Velodrome track"]
 }
