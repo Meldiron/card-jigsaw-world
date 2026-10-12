@@ -1,0 +1,20 @@
+{
+ "id": "pack-kyoto",
+ "name": "Kyoto",
+ "category": "Travel",
+ "description": "Temples, torii gates, pagodas, moss gardens and red maples across Kyoto, from Kinkaku-ji to Arashiyama.",
+ "kind": "library",
+ "target": 24,
+ "per_topic": 1,
+ "fetch_per_topic": 4,
+ "author_cap": 2,
+ "sources": ["commons"],
+ "topics": [
+  "Kinkaku-ji", "Ginkaku-ji", "Kiyomizu-dera", "Fushimi Inari-taisha torii", "Arashiyama bamboo grove",
+  "Tō-ji pagoda", "Yasaka Pagoda Hōkan-ji", "Heian Shrine", "Byōdō-in Phoenix Hall", "Ryōan-ji rock garden",
+  "Tenryū-ji garden", "Nanzen-ji aqueduct Suirokaku", "Eikan-dō autumn", "Tōfuku-ji Tsūtenkyō", "Daigo-ji Bentendo",
+  "Shimogamo Shrine", "Nijō Castle", "Saihō-ji moss garden", "Sanzen-in Ohara", "Kōdai-ji",
+  "Gion Shirakawa", "Kibune Shrine lanterns", "Jōjakkō-ji", "Kyoto Imperial Palace"
+ ],
+ "more_topics": ["Ninenzaka", "Philosopher's Path Kyoto", "Kamigamo Shrine", "Katsura Imperial Villa", "Ōkōchi Sansō", "Shōren-in", "Nishi Hongan-ji", "Higashi Hongan-ji", "Daitoku-ji", "Kurama-dera", "Hōnen-in", "Chion-in", "Ninna-ji pagoda", "Kyoto momiji"]
+}

@@ -1,0 +1,20 @@
+{
+ "id": "pack-islands",
+ "name": "Islands",
+ "category": "Travel",
+ "description": "Turquoise lagoons, sea stacks and green peaks from Bora Bora, Palau's Rock Islands, Ha Long Bay, the Seychelles and more.",
+ "kind": "library",
+ "target": 24,
+ "per_topic": 1,
+ "fetch_per_topic": 4,
+ "author_cap": 2,
+ "sources": ["commons"],
+ "topics": [
+  "Bora Bora", "Moorea", "Maldives atoll aerial", "Rock Islands Palau", "Ha Long Bay islets",
+  "Phi Phi Islands", "El Nido Palawan", "Isola Bella Taormina", "Mont Saint-Michel", "Skellig Michael",
+  "Lofoten islands Reine", "Whitehaven Beach Whitsunday Islands", "Anse Source d'Argent La Digue", "Bartolomé Island Galápagos", "Faraglioni Capri",
+  "Mljet island", "Ball's Pyramid Lord Howe Island", "Pakleni islands Hvar", "Stromboli island", "Raja Ampat islands",
+  "Pitons Saint Lucia", "Fernando de Noronha", "Sveti Stefan", "Aitutaki lagoon", "Le Morne Brabant Mauritius"
+ ],
+ "more_topics": ["Koh Nang Yuan", "Kauai Na Pali coast", "Isle of Skye Old Man of Storr", "Sark island", "Gozo Azure Window", "Elafonisi", "Navagio beach Zakynthos", "Faroe Islands Mykines", "Sentinel Rock Lofoten", "Phang Nga Bay islands", "Koh Hong Krabi", "Tiwi Islands", "Saint Kilda Hirta", "Formentera"]
+}

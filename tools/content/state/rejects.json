@@ -935,6 +935,12 @@
 "pack": "pack-istanbul",
 "reason": "text"
 },
+"https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA2L3Vwd2s1ODg2NTk3NS13aWtpbWVkaWEtaW1hZ2Uta293cmxhNzUuanBn.jpg": {
+"at": "2026-10-12",
+"label": "pack-islands-19",
+"pack": "pack-islands",
+"reason": "off-theme"
+},
 "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA2L3Vwd2s2MTY0NDYxMS13aWtpbWVkaWEtaW1hZ2Uta293cmk5NzQuanBn.jpg": {
 "at": "2026-10-12",
 "label": "evpack-mountain-day-2026-14",
@@ -1037,6 +1043,12 @@
 "pack": "evpack-thanksgiving-2026",
 "reason": "text"
 },
+"https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTExL3Nta2ttczIxNC1pbWFnZS5qcGc.jpg": {
+"at": "2026-10-12",
+"label": "pack-iceland-roads-16",
+"pack": "pack-iceland-roads",
+"reason": "off-theme"
+},
 "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTExL3VtZXN2a3NuZ2czMDAwLWltYWdlLmpwZw.jpg": {
 "at": "2026-10-12",
 "label": "pack-ancient-ruins-03",
@@ -1132,6 +1144,12 @@
 "label": "evpack-animal-day-2026-03",
 "pack": "evpack-animal-day-2026",
 "reason": "quality"
+},
+"https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL2ZyYXdheV90YXJnZXRfdHJhdmVsX2JhY2tncm91bmQtaW1hZ2Uta3liYzVsb3guanBn.jpg": {
+"at": "2026-10-12",
+"label": "pack-kyoto-09",
+"pack": "pack-kyoto",
+"reason": "weak"
 },
 "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL2ZyZWVyYW5nZXBleGVsczAzNzQwLWltYWdlLWt3dnd5bjNyLmpwZw.jpg": {
 "at": "2026-10-12",
@@ -1289,6 +1307,12 @@
 "pack": "evpack-mountain-day-2026",
 "reason": "quality"
 },
+"https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvdXB3azYxODk4OTgxLXdpa2ltZWRpYS1pbWFnZS1rb3dqeHcxay5qcGc.jpg": {
+"at": "2026-10-12",
+"label": "pack-iceland-roads-02",
+"pack": "pack-iceland-roads",
+"reason": "off-theme"
+},
 "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvdXB3azYxOTAwMzUzLXdpa2ltZWRpYS1pbWFnZS1rb3dqdG1hNi5qcGc.jpg": {
 "at": "2026-10-12",
 "label": "pack-bridges-03",
@@ -1300,6 +1324,12 @@
 "label": "pack-desert-dunes-13",
 "pack": "pack-desert-dunes",
 "reason": "quality"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/108322689/original.jpg": {
+"at": "2026-10-12",
+"label": "c90",
+"pack": "pack-foxes",
+"reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/128226286/original.jpg": {
 "at": "2026-10-12",
@@ -1331,6 +1361,12 @@
 "pack": "pack-sea-life",
 "reason": "people"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/204030970/original.jpeg": {
+"at": "2026-10-12",
+"label": "c89",
+"pack": "pack-foxes",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/225650119/original.jpg": {
 "at": "2026-10-12",
 "label": "evpack-st-patricks-2027-08",
@@ -1359,6 +1395,12 @@
 "at": "2026-10-12",
 "label": "pack-sea-life-11",
 "pack": "pack-sea-life",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/267557262/original.jpg": {
+"at": "2026-10-12",
+"label": "c92",
+"pack": "pack-foxes",
 "reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/27157353/original.jpg": {
@@ -1396,6 +1438,18 @@
 "label": "pack-sea-life-10",
 "pack": "pack-sea-life",
 "reason": "quality"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/326154905/original.jpeg": {
+"at": "2026-10-12",
+"label": "c95",
+"pack": "pack-foxes",
+"reason": "people"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/339629692/original.jpeg": {
+"at": "2026-10-12",
+"label": "c75",
+"pack": "pack-foxes",
+"reason": "weak"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/342973634/original.jpg": {
 "at": "2026-10-12",
@@ -1439,6 +1493,12 @@
 "pack": "pack-sea-life",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/391508200/original.jpeg": {
+"at": "2026-10-12",
+"label": "c91",
+"pack": "pack-foxes",
+"reason": "weak"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/394263447/original.jpg": {
 "at": "2026-10-12",
 "label": "pack-snowy-peaks-14",
@@ -1450,6 +1510,12 @@
 "label": "evpack-st-patricks-2027-03",
 "pack": "evpack-st-patricks-2027",
 "reason": "similar"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/402141650/original.jpg": {
+"at": "2026-10-12",
+"label": "c82",
+"pack": "pack-foxes",
+"reason": "off-theme"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/404151453/original.jpeg": {
 "at": "2026-10-12",
@@ -1481,6 +1547,42 @@
 "pack": "pack-sea-life",
 "reason": "text"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/455067138/original.jpeg": {
+"at": "2026-10-12",
+"label": "c74",
+"pack": "pack-foxes",
+"reason": "off-theme"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/579211425/original.jpg": {
+"at": "2026-10-12",
+"label": "c99",
+"pack": "pack-foxes",
+"reason": "people"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/610946229/original.jpg": {
+"at": "2026-10-12",
+"label": "c93",
+"pack": "pack-foxes",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/655934950/original.jpg": {
+"at": "2026-10-12",
+"label": "c98",
+"pack": "pack-foxes",
+"reason": "off-theme"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/67422216/original.jpg": {
+"at": "2026-10-12",
+"label": "c80",
+"pack": "pack-foxes",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/721061107/original.jpg": {
+"at": "2026-10-12",
+"label": "c81",
+"pack": "pack-foxes",
+"reason": "off-theme"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/82050113/original.jpg": {
 "at": "2026-10-12",
 "label": "pack-sea-life-20",
@@ -1498,6 +1600,18 @@
 "label": "pack-snowy-peaks-13",
 "pack": "pack-snowy-peaks",
 "reason": "people"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/85929562/original.jpeg": {
+"at": "2026-10-12",
+"label": "c73",
+"pack": "pack-foxes",
+"reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/93201620/original.jpg": {
+"at": "2026-10-12",
+"label": "c87",
+"pack": "pack-foxes",
+"reason": "off-theme"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/99565669/original.jpg": {
 "at": "2026-10-12",
@@ -1769,6 +1883,12 @@
 "pack": "pack-ancient-ruins",
 "reason": "weak"
 },
+"https://live.staticflickr.com/2950/15412498325_6d42a5726b_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-windmills-01",
+"pack": "pack-windmills",
+"reason": "text"
+},
 "https://live.staticflickr.com/2950/33533206705_f32e392964_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-ice-cream-05",
@@ -1997,6 +2117,12 @@
 "pack": "pack-parrots",
 "reason": "people"
 },
+"https://live.staticflickr.com/4364/36406132524_be2f05ff7c_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-islands-01",
+"pack": "pack-islands",
+"reason": "weak"
+},
 "https://live.staticflickr.com/4365/36400308224_780a15b284_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-harbours-08",
@@ -2110,6 +2236,12 @@
 "label": "pack-sunsets-03",
 "pack": "pack-sunsets",
 "reason": "people"
+},
+"https://live.staticflickr.com/5483/14561369974_9aa825cf69_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-windmills-02",
+"pack": "pack-windmills",
+"reason": "text"
 },
 "https://live.staticflickr.com/55/147234242_66486d77e0_b.jpg": {
 "at": "2026-10-12",
@@ -2309,6 +2441,12 @@
 "pack": "pack-kittens",
 "reason": "people"
 },
+"https://live.staticflickr.com/65535/48017514382_1b4d42e0f1_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-hot-air-balloons-04",
+"pack": "pack-hot-air-balloons",
+"reason": "text"
+},
 "https://live.staticflickr.com/65535/49166822028_ed35c0240f_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-lavender-04",
@@ -2351,6 +2489,12 @@
 "pack": "evpack-volunteer-2026",
 "reason": "weak"
 },
+"https://live.staticflickr.com/65535/49959673862_ef8c33fc94_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-windmills-13",
+"pack": "pack-windmills",
+"reason": "text"
+},
 "https://live.staticflickr.com/65535/50065201762_6664fe9caa_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-sunsets-08",
@@ -2391,6 +2535,12 @@
 "at": "2026-10-12",
 "label": "evpack-education-2027-06",
 "pack": "evpack-education-2027",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/50981523956_6040d4a02b_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-kyoto-06",
+"pack": "pack-kyoto",
 "reason": "people"
 },
 "https://live.staticflickr.com/65535/51142839055_b682cc79be_b.jpg": {
@@ -2446,6 +2596,12 @@
 "label": "pack-harbours-07",
 "pack": "pack-harbours",
 "reason": "text"
+},
+"https://live.staticflickr.com/65535/51285442276_a65af79b16_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-windmills-08",
+"pack": "pack-windmills",
+"reason": "off-theme"
 },
 "https://live.staticflickr.com/65535/51285507645_f4c4093143_b.jpg": {
 "at": "2026-10-12",
@@ -2560,6 +2716,18 @@
 "label": "pack-harbours-03",
 "pack": "pack-harbours",
 "reason": "weak"
+},
+"https://live.staticflickr.com/65535/51306553646_ef2b96898f_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-hot-air-balloons-01",
+"pack": "pack-hot-air-balloons",
+"reason": "quality"
+},
+"https://live.staticflickr.com/65535/51308570728_1d491f6db7_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-windmills-07",
+"pack": "pack-windmills",
+"reason": "off-theme"
 },
 "https://live.staticflickr.com/65535/51309516465_b8d809a421_b.jpg": {
 "at": "2026-10-12",
@@ -3041,11 +3209,23 @@
 "pack": "evpack-universal-childrens-2026",
 "reason": "people"
 },
+"https://live.staticflickr.com/65535/51432384552_6504feddcf_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-windmills-17",
+"pack": "pack-windmills",
+"reason": "weak"
+},
 "https://live.staticflickr.com/65535/51432779692_a31956d133_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-misty-forests-14",
 "pack": "pack-misty-forests",
 "reason": "off-theme"
+},
+"https://live.staticflickr.com/65535/51433381298_0712310976_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-windmills-16",
+"pack": "pack-windmills",
+"reason": "weak"
 },
 "https://live.staticflickr.com/65535/51434416729_1905fb6f23_b.jpg": {
 "at": "2026-10-12",
@@ -3250,6 +3430,12 @@
 "label": "pack-volcanoes-15",
 "pack": "pack-volcanoes",
 "reason": "people"
+},
+"https://live.staticflickr.com/65535/51532939893_c0e75b3c38_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-iceland-roads-03",
+"pack": "pack-iceland-roads",
+"reason": "weak"
 },
 "https://live.staticflickr.com/65535/51533618220_5b8600c467_b.jpg": {
 "at": "2026-10-12",
@@ -3593,6 +3779,66 @@
 "pack": "pack-rainy-streets",
 "reason": "people"
 },
+"https://live.staticflickr.com/65535/51633001862_9269a5bc81_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-hot-air-balloons-13",
+"pack": "pack-hot-air-balloons",
+"reason": "similar"
+},
+"https://live.staticflickr.com/65535/51633004722_7ee88c62e1_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-hot-air-balloons-12",
+"pack": "pack-hot-air-balloons",
+"reason": "weak"
+},
+"https://live.staticflickr.com/65535/51633027472_ca3610a7d9_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-hot-air-balloons-14",
+"pack": "pack-hot-air-balloons",
+"reason": "weak"
+},
+"https://live.staticflickr.com/65535/51633826996_ce8d815339_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-hot-air-balloons-19",
+"pack": "pack-hot-air-balloons",
+"reason": "weak"
+},
+"https://live.staticflickr.com/65535/51634051133_bca8a116b4_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-hot-air-balloons-11",
+"pack": "pack-hot-air-balloons",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/51634052888_e1e1b85faf_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-hot-air-balloons-05",
+"pack": "pack-hot-air-balloons",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/51634481139_eaef96982a_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-hot-air-balloons-10",
+"pack": "pack-hot-air-balloons",
+"reason": "weak"
+},
+"https://live.staticflickr.com/65535/51634499039_af0a511592_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-hot-air-balloons-20",
+"pack": "pack-hot-air-balloons",
+"reason": "weak"
+},
+"https://live.staticflickr.com/65535/51634511959_ca5b36bf02_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-hot-air-balloons-17",
+"pack": "pack-hot-air-balloons",
+"reason": "quality"
+},
+"https://live.staticflickr.com/65535/51634694835_40957dbb82_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-hot-air-balloons-07",
+"pack": "pack-hot-air-balloons",
+"reason": "text"
+},
 "https://live.staticflickr.com/65535/51635727696_673c69dd64_b.jpg": {
 "at": "2026-10-12",
 "label": "evpack-forests-2027-04",
@@ -3676,6 +3922,18 @@
 "label": "evpack-new-year-2027-01",
 "pack": "evpack-new-year-2027",
 "reason": "off-theme"
+},
+"https://live.staticflickr.com/65535/51656718543_d7df0220b1_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-windmills-20",
+"pack": "pack-windmills",
+"reason": "similar"
+},
+"https://live.staticflickr.com/65535/51657167139_766e6e95b3_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-windmills-18",
+"pack": "pack-windmills",
+"reason": "similar"
 },
 "https://live.staticflickr.com/65535/51658939763_1aa89ca373_b.jpg": {
 "at": "2026-10-12",
@@ -3832,6 +4090,12 @@
 "label": "evpack-pizza-2027-07",
 "pack": "evpack-pizza-2027",
 "reason": "people"
+},
+"https://live.staticflickr.com/65535/51698178758_3016cd3475_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-hot-air-balloons-02",
+"pack": "pack-hot-air-balloons",
+"reason": "quality"
 },
 "https://live.staticflickr.com/65535/51698741557_6b9702f84b_b.jpg": {
 "at": "2026-10-12",
@@ -4085,6 +4349,12 @@
 "pack": "evpack-un-day-2026",
 "reason": "text"
 },
+"https://live.staticflickr.com/65535/51770440679_2d0fe259f2_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-kyoto-03",
+"pack": "pack-kyoto",
+"reason": "weak"
+},
 "https://live.staticflickr.com/65535/51771520115_a3e059494b_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-birds-of-prey-08",
@@ -4163,6 +4433,12 @@
 "pack": "evpack-mental-health-2026",
 "reason": "weak"
 },
+"https://live.staticflickr.com/65535/51803093920_964d1d3faf_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-kyoto-07",
+"pack": "pack-kyoto",
+"reason": "people"
+},
 "https://live.staticflickr.com/65535/51805813348_c728466d60_b.jpg": {
 "at": "2026-10-12",
 "label": "evpack-happiness-2027-08",
@@ -4210,6 +4486,12 @@
 "label": "pack-london-07",
 "pack": "pack-london",
 "reason": "text"
+},
+"https://live.staticflickr.com/65535/51827609303_edc13e8efd_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-islands-17",
+"pack": "pack-islands",
+"reason": "off-theme"
 },
 "https://live.staticflickr.com/65535/51828271865_d454aa3397_b.jpg": {
 "at": "2026-10-12",
@@ -4276,6 +4558,12 @@
 "label": "evpack-winter-solstice-2026-03",
 "pack": "evpack-winter-solstice-2026",
 "reason": "quality"
+},
+"https://live.staticflickr.com/65535/51840778558_270ce67f82_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-islands-20",
+"pack": "pack-islands",
+"reason": "off-theme"
 },
 "https://live.staticflickr.com/65535/51841586445_1540001594_b.jpg": {
 "at": "2026-10-12",
@@ -4883,17 +5171,41 @@
 "pack": "pack-snowy-peaks",
 "reason": "off-theme"
 },
+"https://live.staticflickr.com/65535/51931035881_11f572d3e9_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-kyoto-11",
+"pack": "pack-kyoto",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/51932844747_67a453ab30_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-islands-07",
+"pack": "pack-islands",
+"reason": "weak"
+},
 "https://live.staticflickr.com/65535/51934144777_cef5696fae_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-kittens-01",
 "pack": "pack-kittens",
 "reason": "off-theme"
 },
+"https://live.staticflickr.com/65535/51934151974_564753cd15_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-islands-08",
+"pack": "pack-islands",
+"reason": "weak"
+},
 "https://live.staticflickr.com/65535/51934386248_7c7260cab6_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-barcelona-10",
 "pack": "pack-barcelona",
 "reason": "similar"
+},
+"https://live.staticflickr.com/65535/51934442620_996e2b445b_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-islands-06",
+"pack": "pack-islands",
+"reason": "weak"
 },
 "https://live.staticflickr.com/65535/51936612564_a02a57990d_b.jpg": {
 "at": "2026-10-12",
@@ -5555,6 +5867,12 @@
 "pack": "evpack-squirrel-2027",
 "reason": "similar"
 },
+"https://live.staticflickr.com/65535/52089167004_e0c7622266_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-windmills-04",
+"pack": "pack-windmills",
+"reason": "weak"
+},
 "https://live.staticflickr.com/65535/52094907111_f855b9ddb3_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-puppies-05",
@@ -5638,6 +5956,12 @@
 "label": "pack-istanbul-19",
 "pack": "pack-istanbul",
 "reason": "people"
+},
+"https://live.staticflickr.com/65535/52131620226_d69bd53236_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-islands-03",
+"pack": "pack-islands",
+"reason": "quality"
 },
 "https://live.staticflickr.com/65535/52134005867_9e019bc47c_b.jpg": {
 "at": "2026-10-12",
@@ -6215,6 +6539,18 @@
 "pack": "pack-canyons",
 "reason": "people"
 },
+"https://live.staticflickr.com/65535/52264134389_cb8c4b0033_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-islands-18",
+"pack": "pack-islands",
+"reason": "weak"
+},
+"https://live.staticflickr.com/65535/52264173541_7bdc5c8f7d_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-kyoto-05",
+"pack": "pack-kyoto",
+"reason": "people"
+},
 "https://live.staticflickr.com/65535/52265179403_e9bb902e86_b.jpg": {
 "at": "2026-10-12",
 "label": "evpack-new-years-eve-2026-06",
@@ -6268,6 +6604,12 @@
 "label": "pack-temples-08",
 "pack": "pack-temples",
 "reason": "similar"
+},
+"https://live.staticflickr.com/65535/52277641760_92423b69b3_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-kyoto-12",
+"pack": "pack-kyoto",
+"reason": "people"
 },
 "https://live.staticflickr.com/65535/52278740452_8b07500099_b.jpg": {
 "at": "2026-10-12",
@@ -6335,6 +6677,12 @@
 "pack": "pack-libraries",
 "reason": "people"
 },
+"https://live.staticflickr.com/65535/52302813829_76b3a67d8f_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-kyoto-08",
+"pack": "pack-kyoto",
+"reason": "people"
+},
 "https://live.staticflickr.com/65535/52303704013_4639ccd9b6_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-sunsets-20",
@@ -6393,6 +6741,12 @@
 "at": "2026-10-12",
 "label": "evpack-un-day-2026-06",
 "pack": "evpack-un-day-2026",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/52320133702_42cb8efb7b_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-windmills-06",
+"pack": "pack-windmills",
 "reason": "people"
 },
 "https://live.staticflickr.com/65535/52327181725_22cee58703_b.jpg": {
@@ -6587,6 +6941,12 @@
 "pack": "evpack-bean-day-2027",
 "reason": "off-theme"
 },
+"https://live.staticflickr.com/65535/52366576925_f142f16205_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-windmills-10",
+"pack": "pack-windmills",
+"reason": "quality"
+},
 "https://live.staticflickr.com/65535/52367790973_41d18f7361_b.jpg": {
 "at": "2026-10-12",
 "label": "evpack-education-2027-14",
@@ -6597,6 +6957,12 @@
 "at": "2026-10-12",
 "label": "evpack-education-2027-08",
 "pack": "evpack-education-2027",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/52372145221_293aafbb6f_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-kyoto-04",
+"pack": "pack-kyoto",
 "reason": "people"
 },
 "https://live.staticflickr.com/65535/52372746517_88b153fbfe_b.jpg": {
@@ -6735,6 +7101,12 @@
 "at": "2026-10-12",
 "label": "pack-sea-cliffs-10",
 "pack": "pack-sea-cliffs",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/52408258845_44ecbbbdea_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-kyoto-13",
+"pack": "pack-kyoto",
 "reason": "people"
 },
 "https://live.staticflickr.com/65535/52418338674_f510837523_b.jpg": {
@@ -6923,11 +7295,35 @@
 "pack": "pack-libraries",
 "reason": "people"
 },
+"https://live.staticflickr.com/65535/52456728447_77712a7887_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-islands-13",
+"pack": "pack-islands",
+"reason": "off-theme"
+},
 "https://live.staticflickr.com/65535/52456957163_06c4cb312e_b.jpg": {
 "at": "2026-10-12",
 "label": "evpack-new-years-eve-2026-07",
 "pack": "evpack-new-years-eve-2026",
 "reason": "weak"
+},
+"https://live.staticflickr.com/65535/52457252721_7ced2706df_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-islands-11",
+"pack": "pack-islands",
+"reason": "off-theme"
+},
+"https://live.staticflickr.com/65535/52457519474_f4bdc5c327_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-islands-12",
+"pack": "pack-islands",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/52457702435_6b62db2599_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-islands-14",
+"pack": "pack-islands",
+"reason": "off-theme"
 },
 "https://live.staticflickr.com/65535/52459337773_4d57b34c4f_b.jpg": {
 "at": "2026-10-12",
@@ -7979,6 +8375,12 @@
 "pack": "pack-big-cats",
 "reason": "text"
 },
+"https://live.staticflickr.com/65535/52749501744_cb5ba6d394_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-iceland-roads-05",
+"pack": "pack-iceland-roads",
+"reason": "off-theme"
+},
 "https://live.staticflickr.com/65535/52750657381_d30551ccdd_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-lisbon-10",
@@ -8045,6 +8447,18 @@
 "pack": "pack-cherry-blossom",
 "reason": "weak"
 },
+"https://live.staticflickr.com/65535/52795255511_6b5a82425d_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-iceland-roads-14",
+"pack": "pack-iceland-roads",
+"reason": "off-theme"
+},
+"https://live.staticflickr.com/65535/52795496214_416612bbea_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-iceland-roads-10",
+"pack": "pack-iceland-roads",
+"reason": "off-theme"
+},
 "https://live.staticflickr.com/65535/52812606266_d9b98350a4_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-rome-11",
@@ -8110,6 +8524,18 @@
 "label": "evpack-tea-day-2026-02",
 "pack": "evpack-tea-day-2026",
 "reason": "people"
+},
+"https://live.staticflickr.com/65535/52945003119_af150b928e_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-islands-15",
+"pack": "pack-islands",
+"reason": "weak"
+},
+"https://live.staticflickr.com/65535/52945246860_088d3154c9_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-islands-16",
+"pack": "pack-islands",
+"reason": "weak"
 },
 "https://live.staticflickr.com/65535/52960066515_603c31f8bf_b.jpg": {
 "at": "2026-10-12",
@@ -8327,6 +8753,12 @@
 "pack": "pack-misty-forests",
 "reason": "off-theme"
 },
+"https://live.staticflickr.com/65535/53067838384_232df130ff_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-islands-05",
+"pack": "pack-islands",
+"reason": "people"
+},
 "https://live.staticflickr.com/65535/53098518980_1a54d11d3e_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-lavender-14",
@@ -8465,6 +8897,12 @@
 "pack": "pack-frogs",
 "reason": "people"
 },
+"https://live.staticflickr.com/65535/53469539167_cddaa999ee_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-iceland-roads-08",
+"pack": "pack-iceland-roads",
+"reason": "off-theme"
+},
 "https://live.staticflickr.com/65535/53473377650_121f877deb_b.jpg": {
 "at": "2026-10-12",
 "label": "evpack-pi-day-2027-11",
@@ -8494,6 +8932,18 @@
 "label": "evpack-education-2027-02",
 "pack": "evpack-education-2027",
 "reason": "text"
+},
+"https://live.staticflickr.com/65535/53500246723_891094dd19_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-iceland-roads-06",
+"pack": "pack-iceland-roads",
+"reason": "off-theme"
+},
+"https://live.staticflickr.com/65535/53504176286_20fdb320cf_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-iceland-roads-07",
+"pack": "pack-iceland-roads",
+"reason": "off-theme"
 },
 "https://live.staticflickr.com/65535/53558945029_4469a01dfb_b.jpg": {
 "at": "2026-10-12",
@@ -8549,6 +8999,12 @@
 "pack": "pack-elephants",
 "reason": "off-theme"
 },
+"https://live.staticflickr.com/65535/53578351463_2c35348e29_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-iceland-roads-01",
+"pack": "pack-iceland-roads",
+"reason": "weak"
+},
 "https://live.staticflickr.com/65535/53590685007_e828c1b511_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-puppies-19",
@@ -8601,6 +9057,18 @@
 "at": "2026-10-12",
 "label": "pack-london-06",
 "pack": "pack-london",
+"reason": "weak"
+},
+"https://live.staticflickr.com/65535/53620249121_3d8c481435_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-islands-10",
+"pack": "pack-islands",
+"reason": "quality"
+},
+"https://live.staticflickr.com/65535/53631665680_8978405144_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-islands-04",
+"pack": "pack-islands",
 "reason": "weak"
 },
 "https://live.staticflickr.com/65535/53632446841_7d0f46b2a5_b.jpg": {
@@ -8885,6 +9353,12 @@
 "pack": "pack-kittens",
 "reason": "weak"
 },
+"https://live.staticflickr.com/65535/54039887448_6aa8f42de1_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-iceland-roads-15",
+"pack": "pack-iceland-roads",
+"reason": "off-theme"
+},
 "https://live.staticflickr.com/65535/54041082289_7e5683259d_b.jpg": {
 "at": "2026-10-12",
 "label": "evpack-food-day-2026-14",
@@ -8921,10 +9395,34 @@
 "pack": "pack-autumn-parks",
 "reason": "weak"
 },
+"https://live.staticflickr.com/65535/54068411329_a856b4948a_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-iceland-roads-09",
+"pack": "pack-iceland-roads",
+"reason": "off-theme"
+},
+"https://live.staticflickr.com/65535/54068541430_27fea0a8d9_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-iceland-roads-12",
+"pack": "pack-iceland-roads",
+"reason": "off-theme"
+},
 "https://live.staticflickr.com/65535/54076702417_c873bb6259_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-volcanoes-10",
 "pack": "pack-volcanoes",
+"reason": "off-theme"
+},
+"https://live.staticflickr.com/65535/54080438489_594889f52e_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-iceland-roads-13",
+"pack": "pack-iceland-roads",
+"reason": "off-theme"
+},
+"https://live.staticflickr.com/65535/54081182947_4ba6757ba3_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-iceland-roads-11",
+"pack": "pack-iceland-roads",
 "reason": "off-theme"
 },
 "https://live.staticflickr.com/65535/54083695725_d2b6e2c149_b.jpg": {
@@ -9357,6 +9855,18 @@
 "at": "2026-10-12",
 "label": "evpack-happiness-2027-03",
 "pack": "evpack-happiness-2027",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/54400679277_15b84bc9f1_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-kyoto-01",
+"pack": "pack-kyoto",
+"reason": "weak"
+},
+"https://live.staticflickr.com/65535/54401928095_b70c577088_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-kyoto-02",
+"pack": "pack-kyoto",
 "reason": "people"
 },
 "https://live.staticflickr.com/65535/54409228382_8780599cdf_b.jpg": {
@@ -9941,6 +10451,12 @@
 "pack": "pack-birds-of-prey",
 "reason": "off-theme"
 },
+"https://live.staticflickr.com/8644/29708245542_3ed6d5d2c0_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-islands-02",
+"pack": "pack-islands",
+"reason": "quality"
+},
 "https://live.staticflickr.com/8669/16143951435_6f18d1eb37_b.jpg": {
 "at": "2026-10-12",
 "label": "evpack-christmas-2026-05",
@@ -10125,6 +10641,12 @@
 "at": "2026-10-12",
 "label": "daily-2024-08-02",
 "pack": "daily-2024-08",
+"reason": "landscape"
+},
+"https://openaccess-cdn.clevelandart.org/1916.1053/1916.1053_web.jpg": {
+"at": "2026-10-12",
+"label": "daily-2025-04-21",
+"pack": "daily-2025-04",
 "reason": "landscape"
 },
 "https://openaccess-cdn.clevelandart.org/1916.1055/1916.1055_web.jpg": {
@@ -10427,6 +10949,12 @@
 "pack": "pack-vintage-posters",
 "reason": "quality"
 },
+"https://openaccess-cdn.clevelandart.org/1923.223/1923.223_web.jpg": {
+"at": "2026-10-12",
+"label": "daily-2025-04-30",
+"pack": "daily-2025-04",
+"reason": "people"
+},
 "https://openaccess-cdn.clevelandart.org/1923.31/1923.31_web.jpg": {
 "at": "2026-10-12",
 "label": "pack-gardens-art-02",
@@ -10481,10 +11009,22 @@
 "pack": "pack-renaissance",
 "reason": "people"
 },
+"https://openaccess-cdn.clevelandart.org/1925.1338/1925.1338_web.jpg": {
+"at": "2026-10-12",
+"label": "daily-2025-05-01",
+"pack": "daily-2025-05",
+"reason": "people"
+},
 "https://openaccess-cdn.clevelandart.org/1925.632/1925.632_web.jpg": {
 "at": "2026-10-12",
 "label": "pack-renaissance-17",
 "pack": "pack-renaissance",
+"reason": "people"
+},
+"https://openaccess-cdn.clevelandart.org/1925.78/1925.78_web.jpg": {
+"at": "2026-10-12",
+"label": "daily-2025-05-07",
+"pack": "daily-2025-05",
 "reason": "people"
 },
 "https://openaccess-cdn.clevelandart.org/1925.801/1925.801_web.jpg": {
@@ -10600,6 +11140,12 @@
 "label": "daily-2023-10-07",
 "pack": "daily-2023-10",
 "reason": "people"
+},
+"https://openaccess-cdn.clevelandart.org/1929.465/1929.465_web.jpg": {
+"at": "2026-10-12",
+"label": "daily-2025-04-25",
+"pack": "daily-2025-04",
+"reason": "landscape"
 },
 "https://openaccess-cdn.clevelandart.org/1929.536/1929.536_web.jpg": {
 "at": "2026-10-12",
@@ -10973,6 +11519,12 @@
 "pack": "pack-dutch-masters",
 "reason": "landscape"
 },
+"https://openaccess-cdn.clevelandart.org/1942.638/1942.638_web.jpg": {
+"at": "2026-10-12",
+"label": "daily-2025-04-29",
+"pack": "daily-2025-04",
+"reason": "people"
+},
 "https://openaccess-cdn.clevelandart.org/1942.641/1942.641_web.jpg": {
 "at": "2026-10-12",
 "label": "pack-dutch-masters-03",
@@ -11056,6 +11608,12 @@
 "label": "daily-2024-12-28",
 "pack": "daily-2024-12",
 "reason": "landscape"
+},
+"https://openaccess-cdn.clevelandart.org/1944.89/1944.89_web.jpg": {
+"at": "2026-10-12",
+"label": "daily-2025-04-03",
+"pack": "daily-2025-04",
+"reason": "people"
 },
 "https://openaccess-cdn.clevelandart.org/1944.90/1944.90_web.jpg": {
 "at": "2026-10-12",
@@ -11819,6 +12377,12 @@
 "pack": "daily-2024-12",
 "reason": "text"
 },
+"https://openaccess-cdn.clevelandart.org/1962.279.340.b/1962.279.340.b_web.jpg": {
+"at": "2026-10-12",
+"label": "daily-2025-05-05",
+"pack": "daily-2025-05",
+"reason": "text"
+},
 "https://openaccess-cdn.clevelandart.org/1962.279.4.b/1962.279.4.b_web.jpg": {
 "at": "2026-10-12",
 "label": "daily-2024-09-09",
@@ -11854,6 +12418,12 @@
 "label": "daily-2023-04-28",
 "pack": "daily-2023-04",
 "reason": "landscape"
+},
+"https://openaccess-cdn.clevelandart.org/1962.37/1962.37_web.jpg": {
+"at": "2026-10-12",
+"label": "daily-2025-05-19",
+"pack": "daily-2025-05",
+"reason": "people"
 },
 "https://openaccess-cdn.clevelandart.org/1963.262/1963.262_web.jpg": {
 "at": "2026-10-12",
@@ -11913,6 +12483,12 @@
 "at": "2026-10-12",
 "label": "pack-botanical-15",
 "pack": "pack-botanical",
+"reason": "landscape"
+},
+"https://openaccess-cdn.clevelandart.org/1964.371.7/1964.371.7_web.jpg": {
+"at": "2026-10-12",
+"label": "daily-2025-05-21",
+"pack": "daily-2025-05",
 "reason": "landscape"
 },
 "https://openaccess-cdn.clevelandart.org/1964.371.8/1964.371.8_web.jpg": {
@@ -12239,6 +12815,12 @@
 "pack": "daily-2023-06",
 "reason": "people"
 },
+"https://openaccess-cdn.clevelandart.org/1972.119/1972.119_web.jpg": {
+"at": "2026-10-12",
+"label": "daily-2025-05-27",
+"pack": "daily-2025-05",
+"reason": "landscape"
+},
 "https://openaccess-cdn.clevelandart.org/1972.121/1972.121_web.jpg": {
 "at": "2026-10-12",
 "label": "daily-2024-04-04",
@@ -12437,11 +13019,29 @@
 "pack": "daily-2024-03",
 "reason": "text"
 },
+"https://openaccess-cdn.clevelandart.org/1976.56.b/1976.56.b_web.jpg": {
+"at": "2026-10-12",
+"label": "daily-2025-04-09",
+"pack": "daily-2025-04",
+"reason": "landscape"
+},
+"https://openaccess-cdn.clevelandart.org/1976.97.1/1976.97.1_web.jpg": {
+"at": "2026-10-12",
+"label": "daily-2025-05-31",
+"pack": "daily-2025-05",
+"reason": "people"
+},
 "https://openaccess-cdn.clevelandart.org/1977.120/1977.120_web.jpg": {
 "at": "2026-10-12",
 "label": "daily-2024-05-02",
 "pack": "daily-2024-05",
 "reason": "people"
+},
+"https://openaccess-cdn.clevelandart.org/1977.123/1977.123_web.jpg": {
+"at": "2026-10-12",
+"label": "daily-2025-05-17",
+"pack": "daily-2025-05",
+"reason": "landscape"
 },
 "https://openaccess-cdn.clevelandart.org/1977.128/1977.128_web.jpg": {
 "at": "2026-10-12",
@@ -12551,6 +13151,12 @@
 "pack": "daily-2024-12",
 "reason": "people"
 },
+"https://openaccess-cdn.clevelandart.org/1979.46/1979.46_web.jpg": {
+"at": "2026-10-12",
+"label": "daily-2025-04-13",
+"pack": "daily-2025-04",
+"reason": "landscape"
+},
 "https://openaccess-cdn.clevelandart.org/1979.78.1/1979.78.1_web.jpg": {
 "at": "2026-10-12",
 "label": "daily-2024-12-02",
@@ -12647,10 +13253,22 @@
 "pack": "pack-still-life",
 "reason": "landscape"
 },
+"https://openaccess-cdn.clevelandart.org/1980.284/1980.284_web.jpg": {
+"at": "2026-10-12",
+"label": "daily-2025-04-15",
+"pack": "daily-2025-04",
+"reason": "landscape"
+},
 "https://openaccess-cdn.clevelandart.org/1980.286/1980.286_web.jpg": {
 "at": "2026-10-12",
 "label": "daily-2023-04-22",
 "pack": "daily-2023-04",
+"reason": "people"
+},
+"https://openaccess-cdn.clevelandart.org/1980.287/1980.287_web.jpg": {
+"at": "2026-10-12",
+"label": "daily-2025-05-25",
+"pack": "daily-2025-05",
 "reason": "people"
 },
 "https://openaccess-cdn.clevelandart.org/1980.288/1980.288_web.jpg": {
@@ -12737,6 +13355,12 @@
 "pack": "daily-2023-08",
 "reason": "people"
 },
+"https://openaccess-cdn.clevelandart.org/1982.68.1/1982.68.1_web.jpg": {
+"at": "2026-10-12",
+"label": "daily-2025-05-11",
+"pack": "daily-2025-05",
+"reason": "landscape"
+},
 "https://openaccess-cdn.clevelandart.org/1982.68.3/1982.68.3_web.jpg": {
 "at": "2026-10-12",
 "label": "daily-2023-08-26",
@@ -12767,11 +13391,23 @@
 "pack": "masterpieces",
 "reason": "landscape"
 },
+"https://openaccess-cdn.clevelandart.org/1983.19/1983.19_web.jpg": {
+"at": "2026-10-12",
+"label": "pack-kyoto-15",
+"pack": "pack-kyoto",
+"reason": "landscape"
+},
 "https://openaccess-cdn.clevelandart.org/1983.198/1983.198_web.jpg": {
 "at": "2026-10-12",
 "label": "pack-impressionists-11",
 "pack": "pack-impressionists",
 "reason": "people"
+},
+"https://openaccess-cdn.clevelandart.org/1983.3/1983.3_web.jpg": {
+"at": "2026-10-12",
+"label": "daily-2025-05-09",
+"pack": "daily-2025-05",
+"reason": "landscape"
 },
 "https://openaccess-cdn.clevelandart.org/1983.70/1983.70_web.jpg": {
 "at": "2026-10-12",
@@ -12881,6 +13517,12 @@
 "pack": "daily-2024-05",
 "reason": "weak"
 },
+"https://openaccess-cdn.clevelandart.org/1985.56/1985.56_web.jpg": {
+"at": "2026-10-12",
+"label": "daily-2025-05-03",
+"pack": "daily-2025-05",
+"reason": "landscape"
+},
 "https://openaccess-cdn.clevelandart.org/1985.8/1985.8_web.jpg": {
 "at": "2026-10-12",
 "label": "pack-renaissance-08",
@@ -12971,6 +13613,18 @@
 "pack": "pack-gardens-art",
 "reason": "people"
 },
+"https://openaccess-cdn.clevelandart.org/1987.39/1987.39_web.jpg": {
+"at": "2026-10-12",
+"label": "pack-kyoto-16",
+"pack": "pack-kyoto",
+"reason": "people"
+},
+"https://openaccess-cdn.clevelandart.org/1987.40/1987.40_web.jpg": {
+"at": "2026-10-12",
+"label": "pack-kyoto-14",
+"pack": "pack-kyoto",
+"reason": "landscape"
+},
 "https://openaccess-cdn.clevelandart.org/1987.54/1987.54_web.jpg": {
 "at": "2026-10-12",
 "label": "pack-seascapes-07",
@@ -13025,6 +13679,12 @@
 "pack": "daily-2024-02",
 "reason": "people"
 },
+"https://openaccess-cdn.clevelandart.org/1989.334/1989.334_web.jpg": {
+"at": "2026-10-12",
+"label": "daily-2025-04-05",
+"pack": "daily-2025-04",
+"reason": "people"
+},
 "https://openaccess-cdn.clevelandart.org/1989.339/1989.339_web.jpg": {
 "at": "2026-10-12",
 "label": "daily-2024-04-28",
@@ -13047,6 +13707,12 @@
 "at": "2026-10-12",
 "label": "daily-2023-02-20",
 "pack": "daily-2023-02",
+"reason": "people"
+},
+"https://openaccess-cdn.clevelandart.org/1989.344/1989.344_web.jpg": {
+"at": "2026-10-12",
+"label": "daily-2025-05-15",
+"pack": "daily-2025-05",
 "reason": "people"
 },
 "https://openaccess-cdn.clevelandart.org/1989.45.a/1989.45.a_web.jpg": {
@@ -13277,6 +13943,12 @@
 "pack": "pack-oil-landscapes",
 "reason": "landscape"
 },
+"https://openaccess-cdn.clevelandart.org/1997.247.c/1997.247.c_web.jpg": {
+"at": "2026-10-12",
+"label": "daily-2025-04-23",
+"pack": "daily-2025-04",
+"reason": "landscape"
+},
 "https://openaccess-cdn.clevelandart.org/1997.247.g/1997.247.g_web.jpg": {
 "at": "2026-10-12",
 "label": "daily-2023-12-12",
@@ -13403,6 +14075,12 @@
 "pack": "daily-2024-02",
 "reason": "people"
 },
+"https://openaccess-cdn.clevelandart.org/1999.173/1999.173_web.jpg": {
+"at": "2026-10-12",
+"label": "daily-2025-05-13",
+"pack": "daily-2025-05",
+"reason": "people"
+},
 "https://openaccess-cdn.clevelandart.org/1999.260.e/1999.260.e_web.jpg": {
 "at": "2026-10-12",
 "label": "daily-2023-10-05",
@@ -13450,6 +14128,12 @@
 "label": "daily-2025-01-21",
 "pack": "daily-2025-01",
 "reason": "landscape"
+},
+"https://openaccess-cdn.clevelandart.org/2000.67/2000.67_web.jpg": {
+"at": "2026-10-12",
+"label": "daily-2025-05-23",
+"pack": "daily-2025-05",
+"reason": "people"
 },
 "https://openaccess-cdn.clevelandart.org/2001.161/2001.161_web.jpg": {
 "at": "2026-10-12",
@@ -13499,6 +14183,12 @@
 "pack": "daily-2024-01",
 "reason": "people"
 },
+"https://openaccess-cdn.clevelandart.org/2003.113.b/2003.113.b_web.jpg": {
+"at": "2026-10-12",
+"label": "daily-2025-05-29",
+"pack": "daily-2025-05",
+"reason": "people"
+},
 "https://openaccess-cdn.clevelandart.org/2003.113/2003.113_web.jpg": {
 "at": "2026-10-12",
 "label": "daily-2025-02-14",
@@ -13515,6 +14205,12 @@
 "at": "2026-10-12",
 "label": "daily-2024-08-23",
 "pack": "daily-2024-08",
+"reason": "people"
+},
+"https://openaccess-cdn.clevelandart.org/2003.125/2003.125_web.jpg": {
+"at": "2026-10-12",
+"label": "daily-2025-04-19",
+"pack": "daily-2025-04",
 "reason": "people"
 },
 "https://openaccess-cdn.clevelandart.org/2003.134.a/2003.134.a_web.jpg": {
@@ -13612,6 +14308,12 @@
 "label": "masterpieces-cma163456",
 "pack": "masterpieces",
 "reason": "landscape"
+},
+"https://openaccess-cdn.clevelandart.org/2005.1.a/2005.1.a_web.jpg": {
+"at": "2026-10-12",
+"label": "daily-2025-04-07",
+"pack": "daily-2025-04",
+"reason": "people"
 },
 "https://openaccess-cdn.clevelandart.org/2005.202/2005.202_web.jpg": {
 "at": "2026-10-12",
@@ -13713,6 +14415,12 @@
 "at": "2026-10-12",
 "label": "daily-2024-05-14",
 "pack": "daily-2024-05",
+"reason": "people"
+},
+"https://openaccess-cdn.clevelandart.org/2009.315/2009.315_web.jpg": {
+"at": "2026-10-12",
+"label": "daily-2025-04-17",
+"pack": "daily-2025-04",
 "reason": "people"
 },
 "https://openaccess-cdn.clevelandart.org/2009.318/2009.318_web.jpg": {
@@ -13943,6 +14651,24 @@
 "pack": "daily-2023-12",
 "reason": "weak"
 },
+"https://openaccess-cdn.clevelandart.org/2015.481/2015.481_web.jpg": {
+"at": "2026-10-12",
+"label": "pack-kyoto-19",
+"pack": "pack-kyoto",
+"reason": "landscape"
+},
+"https://openaccess-cdn.clevelandart.org/2015.512/2015.512_web.jpg": {
+"at": "2026-10-12",
+"label": "pack-kyoto-18",
+"pack": "pack-kyoto",
+"reason": "off-theme"
+},
+"https://openaccess-cdn.clevelandart.org/2015.513/2015.513_web.jpg": {
+"at": "2026-10-12",
+"label": "pack-kyoto-20",
+"pack": "pack-kyoto",
+"reason": "off-theme"
+},
 "https://openaccess-cdn.clevelandart.org/2015.516/2015.516_web.jpg": {
 "at": "2026-10-12",
 "label": "daily-2023-05-12",
@@ -13954,6 +14680,12 @@
 "label": "masterpieces-cma86110",
 "pack": "masterpieces",
 "reason": "quality"
+},
+"https://openaccess-cdn.clevelandart.org/2015.594/2015.594_web.jpg": {
+"at": "2026-10-12",
+"label": "pack-kyoto-17",
+"pack": "pack-kyoto",
+"reason": "off-theme"
 },
 "https://openaccess-cdn.clevelandart.org/2016.218/2016.218_web.jpg": {
 "at": "2026-10-12",
@@ -14021,6 +14753,12 @@
 "pack": "daily-2023-12",
 "reason": "people"
 },
+"https://openaccess-cdn.clevelandart.org/2018.143/2018.143_web.jpg": {
+"at": "2026-10-12",
+"label": "daily-2025-04-27",
+"pack": "daily-2025-04",
+"reason": "people"
+},
 "https://openaccess-cdn.clevelandart.org/2018.146/2018.146_web.jpg": {
 "at": "2026-10-12",
 "label": "daily-2024-09-01",
@@ -14049,6 +14787,12 @@
 "at": "2026-10-12",
 "label": "daily-2023-04-14",
 "pack": "daily-2023-04",
+"reason": "people"
+},
+"https://openaccess-cdn.clevelandart.org/2018.163/2018.163_web.jpg": {
+"at": "2026-10-12",
+"label": "daily-2025-04-01",
+"pack": "daily-2025-04",
 "reason": "people"
 },
 "https://openaccess-cdn.clevelandart.org/2018.164/2018.164_web.jpg": {
@@ -14741,6 +15485,18 @@
 "pack": "city-lights",
 "reason": "off-theme"
 },
+"https://picsum.photos/id/113/900/1200": {
+"at": "2026-10-12",
+"label": "daily-2025-05-28",
+"pack": "daily-2025-05",
+"reason": "weak"
+},
+"https://picsum.photos/id/114/900/1200": {
+"at": "2026-10-12",
+"label": "daily-2025-05-22",
+"pack": "daily-2025-05",
+"reason": "weak"
+},
 "https://picsum.photos/id/12/900/1200": {
 "at": "2026-10-12",
 "label": "daily-2024-05-25",
@@ -14945,6 +15701,12 @@
 "pack": "daily-2024-05",
 "reason": "weak"
 },
+"https://picsum.photos/id/198/900/1200": {
+"at": "2026-10-12",
+"label": "daily-2025-04-20",
+"pack": "daily-2025-04",
+"reason": "weak"
+},
 "https://picsum.photos/id/199/900/1200": {
 "at": "2026-10-12",
 "label": "daily-2024-10-22",
@@ -15058,6 +15820,12 @@
 "label": "pack-cozy-interiors-09",
 "pack": "pack-cozy-interiors",
 "reason": "off-theme"
+},
+"https://picsum.photos/id/239/900/1200": {
+"at": "2026-10-12",
+"label": "daily-2025-04-08",
+"pack": "daily-2025-04",
+"reason": "people"
 },
 "https://picsum.photos/id/24/900/1200": {
 "at": "2026-10-12",
@@ -15371,6 +16139,12 @@
 "pack": "daily-2023-03",
 "reason": "weak"
 },
+"https://picsum.photos/id/351/900/1200": {
+"at": "2026-10-12",
+"label": "daily-2025-04-04",
+"pack": "daily-2025-04",
+"reason": "people"
+},
 "https://picsum.photos/id/353/900/1200": {
 "at": "2026-10-12",
 "label": "daily-2024-12-15",
@@ -15401,6 +16175,12 @@
 "pack": "daily-2023-06",
 "reason": "people"
 },
+"https://picsum.photos/id/365/900/1200": {
+"at": "2026-10-12",
+"label": "daily-2025-05-30",
+"pack": "daily-2025-05",
+"reason": "weak"
+},
 "https://picsum.photos/id/367/900/1200": {
 "at": "2026-10-12",
 "label": "daily-2024-01-22",
@@ -15413,11 +16193,23 @@
 "pack": "daily-2023-06",
 "reason": "people"
 },
+"https://picsum.photos/id/371/900/1200": {
+"at": "2026-10-12",
+"label": "daily-2025-05-08",
+"pack": "daily-2025-05",
+"reason": "text"
+},
 "https://picsum.photos/id/372/900/1200": {
 "at": "2026-10-12",
 "label": "daily-2023-09-16",
 "pack": "daily-2023-09",
 "reason": "weak"
+},
+"https://picsum.photos/id/375/900/1200": {
+"at": "2026-10-12",
+"label": "daily-2025-04-28",
+"pack": "daily-2025-04",
+"reason": "people"
 },
 "https://picsum.photos/id/381/900/1200": {
 "at": "2026-10-12",
@@ -15454,6 +16246,12 @@
 "label": "city-lights-p392",
 "pack": "city-lights",
 "reason": "off-theme"
+},
+"https://picsum.photos/id/395/900/1200": {
+"at": "2026-10-12",
+"label": "daily-2025-04-22",
+"pack": "daily-2025-04",
+"reason": "people"
 },
 "https://picsum.photos/id/397/900/1200": {
 "at": "2026-10-12",
@@ -15911,6 +16709,18 @@
 "pack": "daily-2024-10",
 "reason": "weak"
 },
+"https://picsum.photos/id/54/900/1200": {
+"at": "2026-10-12",
+"label": "daily-2025-05-24",
+"pack": "daily-2025-05",
+"reason": "people"
+},
+"https://picsum.photos/id/542/900/1200": {
+"at": "2026-10-12",
+"label": "daily-2025-04-16",
+"pack": "daily-2025-04",
+"reason": "weak"
+},
 "https://picsum.photos/id/544/900/1200": {
 "at": "2026-10-12",
 "label": "daily-2025-03-01",
@@ -15987,6 +16797,18 @@
 "at": "2026-10-12",
 "label": "daily-2023-10-24",
 "pack": "daily-2023-10",
+"reason": "weak"
+},
+"https://picsum.photos/id/585/900/1200": {
+"at": "2026-10-12",
+"label": "daily-2025-04-10",
+"pack": "daily-2025-04",
+"reason": "people"
+},
+"https://picsum.photos/id/586/900/1200": {
+"at": "2026-10-12",
+"label": "daily-2025-05-14",
+"pack": "daily-2025-05",
 "reason": "weak"
 },
 "https://picsum.photos/id/594/900/1200": {
@@ -16097,6 +16919,12 @@
 "pack": "daily-2024-10",
 "reason": "weak"
 },
+"https://picsum.photos/id/633/900/1200": {
+"at": "2026-10-12",
+"label": "daily-2025-05-06",
+"pack": "daily-2025-05",
+"reason": "people"
+},
 "https://picsum.photos/id/634/900/1200": {
 "at": "2026-10-12",
 "label": "daily-2024-11-17",
@@ -16120,6 +16948,12 @@
 "label": "daily-2024-06-28",
 "pack": "daily-2024-06",
 "reason": "weak"
+},
+"https://picsum.photos/id/646/900/1200": {
+"at": "2026-10-12",
+"label": "daily-2025-05-10",
+"pack": "daily-2025-05",
+"reason": "people"
 },
 "https://picsum.photos/id/65/900/1200": {
 "at": "2026-10-12",
@@ -16179,6 +17013,12 @@
 "at": "2026-10-12",
 "label": "daily-2023-07-30",
 "pack": "daily-2023-07",
+"reason": "people"
+},
+"https://picsum.photos/id/670/900/1200": {
+"at": "2026-10-12",
+"label": "daily-2025-04-14",
+"pack": "daily-2025-04",
 "reason": "people"
 },
 "https://picsum.photos/id/671/900/1200": {
@@ -16325,6 +17165,12 @@
 "pack": "daily-2024-02",
 "reason": "people"
 },
+"https://picsum.photos/id/738/900/1200": {
+"at": "2026-10-12",
+"label": "daily-2025-04-18",
+"pack": "daily-2025-04",
+"reason": "weak"
+},
 "https://picsum.photos/id/744/900/1200": {
 "at": "2026-10-12",
 "label": "daily-2023-08-07",
@@ -16372,6 +17218,12 @@
 "label": "daily-2023-03-30",
 "pack": "daily-2023-03",
 "reason": "people"
+},
+"https://picsum.photos/id/774/900/1200": {
+"at": "2026-10-12",
+"label": "daily-2025-05-26",
+"pack": "daily-2025-05",
+"reason": "weak"
 },
 "https://picsum.photos/id/778/900/1200": {
 "at": "2026-10-12",
@@ -16499,6 +17351,12 @@
 "pack": "daily-2023-10",
 "reason": "weak"
 },
+"https://picsum.photos/id/822/900/1200": {
+"at": "2026-10-12",
+"label": "daily-2025-05-16",
+"pack": "daily-2025-05",
+"reason": "people"
+},
 "https://picsum.photos/id/825/900/1200": {
 "at": "2026-10-12",
 "label": "daily-2025-02-21",
@@ -16595,6 +17453,12 @@
 "pack": "daily-2023-07",
 "reason": "weak"
 },
+"https://picsum.photos/id/868/900/1200": {
+"at": "2026-10-12",
+"label": "daily-2025-04-02",
+"pack": "daily-2025-04",
+"reason": "weak"
+},
 "https://picsum.photos/id/875/900/1200": {
 "at": "2026-10-12",
 "label": "daily-2023-08-05",
@@ -16671,6 +17535,12 @@
 "at": "2026-10-12",
 "label": "daily-2023-08-03",
 "pack": "daily-2023-08",
+"reason": "weak"
+},
+"https://picsum.photos/id/9/900/1200": {
+"at": "2026-10-12",
+"label": "daily-2025-04-06",
+"pack": "daily-2025-04",
 "reason": "weak"
 },
 "https://picsum.photos/id/90/900/1200": {
@@ -16773,6 +17643,12 @@
 "at": "2026-10-12",
 "label": "daily-2024-09-24",
 "pack": "daily-2024-09",
+"reason": "weak"
+},
+"https://picsum.photos/id/962/900/1200": {
+"at": "2026-10-12",
+"label": "daily-2025-04-26",
+"pack": "daily-2025-04",
 "reason": "weak"
 },
 "https://picsum.photos/id/965/900/1200": {
@@ -17213,6 +18089,12 @@
 "pack": "pack-farm-life",
 "reason": "quality"
 },
+"https://upload.wikimedia.org/wikipedia/commons/c/cf/Genus_vulpes.jpg": {
+"at": "2026-10-12",
+"label": "c53",
+"pack": "pack-foxes",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/d/d4/Horse_grazing_in_a_paddock_off_Lincoln_Road%2C_Northborough_-_geograph.org.uk_-_8018488.jpg": {
 "at": "2026-10-12",
 "label": "c45",
@@ -17517,6 +18399,12 @@
 "at": "2026-10-12",
 "label": "c12",
 "pack": "evpack-hot-tea-2027",
+"reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Platin_fox_fur_cape_1.jpg/1280px-Platin_fox_fur_cape_1.jpg": {
+"at": "2026-10-12",
+"label": "c55",
+"pack": "pack-foxes",
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Prunus_incisa_%27Kojo-no-mai%27_-_Hillier_Gardens_-_Romsey%2C_Hampshire%2C_England_-_DSC04351.jpg/1280px-Prunus_incisa_%27Kojo-no-mai%27_-_Hillier_Gardens_-_Romsey%2C_Hampshire%2C_England_-_DSC04351.jpg": {
@@ -18317,6 +19205,12 @@
 "pack": "evpack-forests-2027",
 "reason": "quality"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Cape_Fox_%28Vulpes_chama%29_pup_..._%2851001309858%29.jpg/1280px-Cape_Fox_%28Vulpes_chama%29_pup_..._%2851001309858%29.jpg": {
+"at": "2026-10-12",
+"label": "c57",
+"pack": "pack-foxes",
+"reason": "similar"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/General-Noble-a-giant-sequoia-tree-in-Converse-Basin-Grove-1892-firstcut.jpg/1280px-General-Noble-a-giant-sequoia-tree-in-Converse-Basin-Grove-1892-firstcut.jpg": {
 "at": "2026-10-12",
 "label": "c02",
@@ -18845,6 +19739,12 @@
 "pack": "evpack-forests-2027",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Fennek_Vulpes_zerda_Zoo_Augsburg-04.jpg/1280px-Fennek_Vulpes_zerda_Zoo_Augsburg-04.jpg": {
+"at": "2026-10-12",
+"label": "c84",
+"pack": "pack-foxes",
+"reason": "similar"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Fragment_of_a_Post_Medieval%2C_17th_century%2C_tin_glazed_ceramic_bowl_from_Montelupo%2C_AD.1600-1700._%28FindID_777961%29.jpg/1280px-Fragment_of_a_Post_Medieval%2C_17th_century%2C_tin_glazed_ceramic_bowl_from_Montelupo%2C_AD.1600-1700._%28FindID_777961%29.jpg": {
 "at": "2026-10-12",
 "label": "c44",
@@ -19271,6 +20171,12 @@
 "pack": "pack-birds-of-prey",
 "reason": "quality"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Dusicyon_vetulus_%28Brazil%29_fur_skin.jpg/1280px-Dusicyon_vetulus_%28Brazil%29_fur_skin.jpg": {
+"at": "2026-10-12",
+"label": "c59",
+"pack": "pack-foxes",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Facade-notre-dame-paris-ciel-bleu.JPG/1280px-Facade-notre-dame-paris-ciel-bleu.JPG": {
 "at": "2026-10-12",
 "label": "c66",
@@ -19600,6 +20506,12 @@
 "label": "c19",
 "pack": "evpack-bean-day-2027",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Platin_fox_fur_cape_2.jpg/1280px-Platin_fox_fur_cape_2.jpg": {
+"at": "2026-10-12",
+"label": "c56",
+"pack": "pack-foxes",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/SKA_site%2C_South_Africa_2014_03.jpg/1280px-SKA_site%2C_South_Africa_2014_03.jpg": {
 "at": "2026-10-12",
@@ -20272,6 +21184,12 @@
 "label": "c08",
 "pack": "masterpieces",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Vulpes_zerda_by_DaijuAzuma.jpg/1280px-Vulpes_zerda_by_DaijuAzuma.jpg": {
+"at": "2026-10-12",
+"label": "c86",
+"pack": "pack-foxes",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Como_-_Duomo_1895.JPG/1280px-Como_-_Duomo_1895.JPG": {
 "at": "2026-10-12",
@@ -25025,6 +25943,12 @@
 "pack": "pack-waterfalls",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Vixen_Geyser_2017_03.jpg/1280px-Vixen_Geyser_2017_03.jpg": {
+"at": "2026-10-12",
+"label": "c63",
+"pack": "pack-foxes",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/%D0%9F%D0%BE%D0%B9%D0%BC%D0%B0_%D0%98%D1%80%D1%82%D1%8B%D1%88%D0%B0_%D0%B1%D0%BE%D0%BB%D0%BE%D1%82%D0%BD%D0%B0%D1%8F_%D1%81%D0%BE%D0%B2%D0%B0_%284%29.jpg/1280px-%D0%9F%D0%BE%D0%B9%D0%BC%D0%B0_%D0%98%D1%80%D1%82%D1%8B%D1%88%D0%B0_%D0%B1%D0%BE%D0%BB%D0%BE%D1%82%D0%BD%D0%B0%D1%8F_%D1%81%D0%BE%D0%B2%D0%B0_%284%29.jpg": {
 "at": "2026-10-12",
 "label": "c24",
@@ -25573,8 +26497,8 @@
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Vulpes_lagopus_in_Iceland_%28cropped_3%29.jpg/1280px-Vulpes_lagopus_in_Iceland_%28cropped_3%29.jpg": {
 "at": "2026-10-12",
-"label": "c720",
-"pack": "daily-2023-10",
+"label": "p-175d35cca155",
+"pack": "pack-foxes",
 "reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Caff%C3%A8_sospeso_%28suspended_coffee%29_at_Gran_Caff%C3%A8_Gambrinus%2C_Naples%2C_Italy.jpg/1280px-Caff%C3%A8_sospeso_%28suspended_coffee%29_at_Gran_Caff%C3%A8_Gambrinus%2C_Naples%2C_Italy.jpg": {

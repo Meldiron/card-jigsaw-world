@@ -1,8 +1,8 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-12T10:27:37",
-"msg": "Content: checkpoint (36 verified, 6 fixed, 47 audited, 177 pending)",
+"at": "2026-10-12T10:37:05",
+"msg": "Content: checkpoint (38 verified, 4 fixed, 58 audited, 166 pending)",
 "ok": true,
 "pushed": true,
 "stage": "committed"
@@ -199,27 +199,27 @@
 "status": "verified"
 },
 "daily-2023-09": {
-"added": 27,
-"at": "2026-10-12T10:02:11",
+"added": 29,
+"at": "2026-10-12T10:37:24",
 "category": "Daily",
-"issues": 2,
+"issues": 0,
 "kind": "daily",
-"last_step": "verify failed",
+"last_step": "verify",
 "name": "September 2023",
 "puzzles": 30,
-"removed": 29,
-"status": "fixed"
+"removed": 31,
+"status": "verified"
 },
 "daily-2023-10": {
-"added": 17,
-"at": "2026-10-12T10:36:42",
+"added": 30,
+"at": "2026-10-12T10:37:41",
 "category": "Daily",
 "kind": "daily",
-"last_step": "reject 17 weak",
+"last_step": "apply",
 "name": "October 2023",
 "puzzles": 31,
-"removed": 23,
-"status": "audited"
+"removed": 39,
+"status": "fixed"
 },
 "daily-2023-11": {
 "added": 0,
@@ -410,23 +410,25 @@
 },
 "daily-2025-04": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:38:56",
 "category": "Daily",
 "kind": "daily",
+"last_step": "reject 6 weak",
 "name": "April 2025",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "daily-2025-05": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:38:57",
 "category": "Daily",
 "kind": "daily",
+"last_step": "reject 5 weak",
 "name": "May 2025",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "daily-2025-06": {
 "added": 0,
@@ -1400,10 +1402,10 @@
 },
 "evpack-teachers-2026": {
 "added": 0,
-"at": "2026-10-12T02:55:07",
+"at": "2026-10-12T10:39:09",
 "category": "Event",
 "kind": "event",
-"last_step": "pool 109 usable",
+"last_step": "pool 116 usable",
 "name": "World Teachers' Day",
 "puzzles": null,
 "removed": 0,
@@ -1531,10 +1533,10 @@
 },
 "evpack-water-day-2027": {
 "added": 0,
-"at": "2026-10-12T10:25:35",
+"at": "2026-10-12T10:38:32",
 "category": "Event",
 "kind": "event",
-"last_step": "pool 24 usable",
+"last_step": "pool 38 usable",
 "name": "World Water Day",
 "puzzles": null,
 "removed": 0,
@@ -1949,15 +1951,16 @@
 "status": "verified"
 },
 "pack-foxes": {
-"added": 0,
-"at": "2026-10-12T10:17:59",
+"added": 23,
+"at": "2026-10-12T10:39:09",
 "category": "Animals",
+"issues": 0,
 "kind": "library",
-"last_step": "reject 6 weak",
+"last_step": "verify",
 "name": "Foxes",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 19,
+"status": "verified"
 },
 "pack-frogs": {
 "added": 0,
@@ -2037,13 +2040,14 @@
 },
 "pack-hot-air-balloons": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:37:31",
 "category": "Travel",
 "kind": "library",
+"last_step": "reject 5 weak",
 "name": "Hot Air Balloons",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "pack-hummingbirds": {
 "added": 0,
@@ -2069,13 +2073,14 @@
 },
 "pack-iceland-roads": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:38:02",
 "category": "Travel",
 "kind": "library",
+"last_step": "reject 13 off-theme",
 "name": "Iceland Roads",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "pack-impressionists": {
 "added": 0,
@@ -2090,13 +2095,14 @@
 },
 "pack-islands": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:38:30",
 "category": "Travel",
 "kind": "library",
+"last_step": "reject 8 weak",
 "name": "Islands",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "pack-istanbul": {
 "added": 0,
@@ -2143,13 +2149,14 @@
 },
 "pack-kyoto": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:39:03",
 "category": "Travel",
 "kind": "library",
+"last_step": "reject 3 weak",
 "name": "Kyoto",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "pack-lavender": {
 "added": 0,
@@ -2818,13 +2825,14 @@
 },
 "pack-windmills": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:37:19",
 "category": "Architecture",
 "kind": "library",
+"last_step": "reject 3 weak",
 "name": "Windmills",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "pack-winter-scenes": {
 "added": 0,

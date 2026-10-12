@@ -61,5 +61,7 @@
   "Vulpes corsac",
   "Sechuran fox",
   "Darwin's fox"
- ]
+ ],
+ "cover": "https://inaturalist-open-data.s3.amazonaws.com/photos/738296801/original.jpg",
+ "accent_from_cover": true
 }
