@@ -15,14 +15,19 @@ enum GameMode {
   static GameMode fromCode(String? code) => values.firstWhere((m) => m.code == code, orElse: () => GameMode.cards);
 }
 
-/// Route / storage code for a board: `cards:3x4`, `hexagons:5x6`. The legacy
-/// form without a mode (`3x4`) means cards.
+/// Route / storage code for a board: `cards:3x4`, `hexagons:5x7`, and with
+/// the difficulty tier it was picked from, `squares:4x6t2`. The tier lets a
+/// board follow the next picture's proportions (the layout is chosen per
+/// picture, see `BoardSpec.forPicture`). The legacy form without a mode
+/// (`3x4`) means cards.
 class BoardCode {
   BoardCode._();
 
-  static String encode(GameMode mode, int cols, int rows) => '${mode.code}:${cols}x$rows';
+  static String encode(GameMode mode, int cols, int rows, {int tier = -1}) => '${mode.code}:${cols}x$rows${tier >= 0 ? 't$tier' : ''}';
 
-  static ({GameMode mode, int cols, int rows}) decode(String code) {
+  static final _grid = RegExp(r'^(\d+)(?:x(\d+))?(?:[t\-](\d+))?$');
+
+  static ({GameMode mode, int cols, int rows, int? tier}) decode(String code) {
     var mode = GameMode.cards;
     var grid = code;
     final i = code.indexOf(':');
@@ -30,10 +35,12 @@ class BoardCode {
       mode = GameMode.fromCode(code.substring(0, i));
       grid = code.substring(i + 1);
     }
-    final parts = grid.split('x');
-    final cols = int.tryParse(parts[0]) ?? 4;
-    final rows = parts.length > 1 ? int.tryParse(parts[1]) ?? cols : cols;
-    return (mode: mode, cols: cols, rows: rows);
+    final m = _grid.firstMatch(grid.trim());
+    if (m == null) return (mode: mode, cols: 4, rows: 4, tier: null);
+    final cols = int.tryParse(m.group(1)!) ?? 4;
+    final rows = m.group(2) == null ? cols : int.tryParse(m.group(2)!) ?? cols;
+    final tier = m.group(3) == null ? null : int.tryParse(m.group(3)!);
+    return (mode: mode, cols: cols, rows: rows, tier: tier);
   }
 
   /// URL-safe variant (colon is awkward in path segments).

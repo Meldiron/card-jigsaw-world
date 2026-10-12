@@ -12,6 +12,7 @@ import '../../core/platform.dart';
 import '../../core/sfx.dart';
 import '../../core/theme/tokens.dart';
 import '../../game/board.dart';
+import '../../game/image_loader.dart';
 import '../../models/models.dart';
 import '../../state/profile.dart';
 import '../../state/progress.dart';
@@ -24,11 +25,14 @@ import '../../widgets/ui.dart';
 
 /// Pre-game screen: preview with the cut overlay, mode picker, board picker
 /// with reward preview, play button. This is the only place the cut preview
-/// lives. The preview frame takes the aspect the real board will have for
-/// this picture (see [Tiling.boardAspect]) and the overlay is the real
-/// tiling, so what is shown is what gets dealt. While a board is in
-/// progress the choice is frozen on the saved mode and size: Continue
-/// resumes it, Discard progress throws it away and reopens the choice.
+/// lives. Each tier's columns and rows are chosen for this picture's
+/// proportions ([BoardSpec.forPicture]) from the same decoded image the
+/// game uses, the preview frame takes the aspect the real board will have
+/// (see [Tiling.boardAspect]) and the overlay is the real tiling, so what is
+/// shown is what gets dealt and the tier labels name the real board. While
+/// a board is in progress the choice is frozen on the saved mode and size:
+/// Continue resumes it, Discard progress throws it away and reopens the
+/// choice.
 class DifficultyScreen extends ConsumerStatefulWidget {
   const DifficultyScreen({super.key, required this.puzzleId, this.initialGrid, this.initialMode});
   final String puzzleId;
@@ -46,7 +50,9 @@ class DifficultyScreen extends ConsumerStatefulWidget {
 
 class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
   late GameMode _mode;
-  late BoardSpec _spec;
+
+  /// Selected tier (index into the ladder); its size follows the picture.
+  late int _tier;
 
   /// Decoded picture size (full resolution), once the image is in.
   Size? _imageSize;
@@ -62,15 +68,13 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
     final decoded = hasGrid ? BoardSpec.fromCode(grid) : null;
     final modeArg = widget.initialMode;
     _mode = modeArg != null && modeArg.isNotEmpty ? GameMode.fromCode(modeArg) : (decoded?.mode ?? GameMode.cards);
-    if (decoded != null && decoded.mode == _mode) {
-      _spec = decoded.tierIndex >= 0 ? decoded : BoardSpec.fromCells(_mode, decoded.cells);
-    } else if (decoded != null) {
-      // A legacy grid like 5x5 with a different mode: pick the same ladder step.
-      final idx = GridSpec.tiers.indexWhere((t) => t.cells == decoded.cells);
-      _spec = BoardSpec.tiers(_mode)[idx < 0 ? 2 : idx];
+    if (decoded != null) {
+      // A code names its tier (legacy codes such as 5x5 map onto the ladder
+      // step they were); the same step is kept for another mode.
+      _tier = decoded.tierIndex < 0 ? 2 : decoded.tierIndex;
     } else {
       final idx = GridSpec.tiers.indexWhere((t) => t.cells == ref.read(settingsProvider).defaultGrid);
-      _spec = BoardSpec.tiers(_mode)[idx < 0 ? 2 : idx];
+      _tier = idx < 0 ? 2 : idx;
     }
   }
 
@@ -116,7 +120,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
     return '$w × $h · $orientation';
   }
 
-  Future<void> _discard(PuzzleProgress saved) async {
+  Future<void> _discard(PuzzleProgress saved, BoardSpec savedSpec) async {
     final ok = await showAppAlert(
       context,
       title: 'Discard progress?',
@@ -127,8 +131,8 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
     if (!ok || !mounted) return;
     // Keep the saved mode and size selected so the screen does not jump.
     setState(() {
-      _mode = GameMode.fromCode(saved.mode);
-      _spec = BoardSpec.fromCells(_mode, saved.gridSize);
+      _mode = savedSpec.mode;
+      _tier = savedSpec.tierIndex < 0 ? 2 : savedSpec.tierIndex;
     });
     await ref.read(progressProvider.notifier).discard(widget.puzzleId);
     if (!mounted) return;
@@ -139,11 +143,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
   void _pickMode(GameMode m) {
     if (m == _mode) return;
     Haptics.selection();
-    final idx = _spec.tierIndex < 0 ? 2 : _spec.tierIndex;
-    setState(() {
-      _mode = m;
-      _spec = BoardSpec.tiers(m)[idx];
-    });
+    setState(() => _mode = m);
   }
 
   Future<void> _offerUnlock(int tierIndex, BoardSpec t) async {
@@ -187,7 +187,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                 if (ok) {
                   Sfx.instance.coin();
                   Haptics.success();
-                  setState(() => _spec = t);
+                  setState(() => _tier = tierIndex);
                   showToast(context, '${t.label} boards unlocked for ${_mode.label.toLowerCase()}', icon: AppIcons.unlock);
                 } else {
                   showToast(context, 'Not enough coins. Visit the store or play more puzzles.', leading: const CoinIcon(size: 20));
@@ -211,16 +211,32 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
     final profile = ref.watch(profileProvider).value;
     final profileN = ref.read(profileProvider.notifier);
     if (puzzle != null) _resolveImage(puzzle);
+    // Boards are laid out for the picture's proportions, read from the same
+    // decode the game uses so the preview and the deal always agree. Until
+    // it is in, the full-size picture's dimensions (or 3:4) stand in.
+    final decoded = puzzle == null || puzzle.imageUrl.isEmpty ? null : ref.watch(puzzleImageProvider(puzzle.imageUrl)).value;
+    final known = decoded != null;
+    final imageAspect = decoded != null
+        ? decoded.width / decoded.height
+        : (_imageSize == null ? BoardSpec.referenceAspect : _imageSize!.width / _imageSize!.height);
     // A saved board pins the choice to what was dealt; the state fields keep
-    // the player's own pick for after a discard.
-    final saved = progress != null && progress.inProgress ? progress : null;
-    final mode = saved != null ? GameMode.fromCode(saved.mode) : _mode;
-    final spec = saved != null ? BoardSpec.fromCells(mode, saved.gridSize) : _spec;
+    // the player's own pick for after a discard. A save whose board this
+    // picture no longer deals (an older layout) cannot be resumed: it is
+    // left to be replaced by the next game.
+    final savedRow = progress != null && progress.inProgress ? progress : null;
+    BoardSpec? savedSpec;
+    if (savedRow != null) {
+      final m = GameMode.fromCode(savedRow.mode);
+      savedSpec = BoardSpec.fromSaved(m, savedRow.gridSize, imageAspect) ?? (known ? null : BoardSpec.fromCells(m, savedRow.gridSize));
+      if (savedSpec != null && known && !Board.isValidLayout(savedSpec, savedRow.layout)) savedSpec = null;
+    }
+    final saved = savedSpec != null ? savedRow : null;
+    final mode = saved != null ? savedSpec!.mode : _mode;
+    final tiers = BoardSpec.tiers(mode, imageAspect);
+    final spec = saved != null ? savedSpec! : tiers[_tier.clamp(0, tiers.length - 1)];
     final coins = Economy.completionCoins(spec.cells, 3, mode: mode);
     final xp = Economy.completionXp(spec.cells, 3, mode: mode);
     final maxTier = LevelRewards.maxTierIndex(profile?.level ?? 1) + 1;
-    final tiers = BoardSpec.tiers(mode);
-    final imageAspect = _imageSize == null ? 3 / 4 : _imageSize!.width / _imageSize!.height;
     final boardAspect = spec.tiling.boardAspect(imageAspect);
 
     return Scaffold(
@@ -387,7 +403,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                                       ? () => _offerUnlock(i, t)
                                       : () {
                                           Haptics.selection();
-                                          setState(() => _spec = t);
+                                          setState(() => _tier = i);
                                         },
                                   child: Opacity(
                                     opacity: saved != null && !selected ? 0.45 : 1,
@@ -484,7 +500,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                             context.pushReplacement('/game/${widget.puzzleId}/${BoardCode.toPath(spec.fullCode)}');
                           },
                         ),
-                        if (saved != null) ...[const SizedBox(height: 8), BigButton(label: 'Discard progress', kind: ButtonKind.ghost, icon: CupertinoIcons.trash, onTap: () => _discard(saved))],
+                        if (saved != null) ...[const SizedBox(height: 8), BigButton(label: 'Discard progress', kind: ButtonKind.ghost, icon: CupertinoIcons.trash, onTap: () => _discard(saved, spec))],
                       ],
                     ),
                   ),

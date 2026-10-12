@@ -14,10 +14,13 @@ import '../../state/settings.dart';
 /// Cards animate between slots. Correctly adjacent cards form groups: the
 /// gutter closes on every edge shared with a member of the same group, so the
 /// group reads as one piece, and a floating group carries an accent border
-/// along its outer edges and moves as one when dragged. Cards locked in place
-/// lose border, shadow and the accent, and cards not yet in place sit a touch
-/// darker, so the picture lights up as it completes. One code path serves all
-/// four modes: every edge only asks who is on the other side.
+/// along its outer edges and moves as one when dragged. Cards not yet in
+/// place keep rounded corners, the gutter and a light frame and sit a touch
+/// darker; a card in place (alone or in a cluster) fills its whole cell edge
+/// to edge with square corners and no frame, so it visibly becomes part of
+/// the finished picture. One code path serves all four modes, including the
+/// half pieces along the edges of triangle and hexagon boards: every edge
+/// only asks who is on the other side.
 class BoardWidget extends StatefulWidget {
   const BoardWidget({
     super.key,
@@ -51,8 +54,8 @@ class _BoardWidgetState extends State<BoardWidget> {
   Size get boardSize => Size(widget.width, widget.height);
 
   /// The part of the picture the board shows: a centre crop with the board's
-  /// aspect, so hexagons and triangles keep their regular shape whatever the
-  /// picture's proportions (the peek overlay uses the same `BoxFit.cover`).
+  /// aspect (the whole picture when the board could take its proportions;
+  /// the peek overlay uses the same `BoxFit.cover`).
   Rect get imageCrop => tiling.crop(Size(widget.image.width.toDouble(), widget.image.height.toDouble()), boardSize);
 
   /// Destination cells of the dragged group if dropped on the hovered slot.
@@ -224,8 +227,12 @@ class _BoardWidgetState extends State<BoardWidget> {
     final groupId = board.groupIdOf(slot);
     final fusedEdges = [for (final n in tiling.edgeNeighbours(slot)) n != null && board.groupIdOf(n) == groupId];
     // Where the group's outline passes a vertex of this cell next to a fused
-    // edge, the cell needs to know how the group continues around it.
-    final fans = [for (var k = 0; k < fusedEdges.length; k++) _fan(board, slot, k, groupId, fusedEdges)];
+    // edge, the cell needs to know how the group continues around it. Cards
+    // in place fill their cell edge to edge with square corners, so they
+    // need none of that.
+    final fans = locked
+        ? List<_Fan?>.filled(fusedEdges.length, null)
+        : [for (var k = 0; k < fusedEdges.length; k++) _fan(board, slot, k, groupId, fusedEdges)];
 
     Widget child = _CardFace(
       image: widget.image,
@@ -379,16 +386,19 @@ class _RenderPolygonHitTest extends RenderProxyBox {
   }
 }
 
-/// Paints one card: its slice of the image with border, shadow and state
+/// Paints one card: its slice of the image with frame, shadow and state
 /// outline. The same treatment applies to every tiling:
 ///
-/// * free: gutter, border (classic style), soft shadow, a slight dim;
+/// * free: rounded corners, the gutter, a light frame with a dark hairline
+///   outside it (classic style; it reads on dark and light pictures and on
+///   both board colours), a slight dim;
 /// * grouped: the gutter closes towards members of the same group and a
 ///   2 px accent border runs along the group's outer edges;
 /// * selected / dragged: ink outline along the outer edges, lift (shadow +
 ///   scale);
-/// * locked: full brightness, no border, shadow or accent; the gutter closes
-///   towards other locked cards.
+/// * locked (in place, alone or in a cluster): fills its whole cell edge to
+///   edge with square corners, full brightness, no frame, shadow or accent,
+///   so it visibly becomes part of the finished picture.
 ///
 /// The dim is one flat overlay clipped to the card's own shape. Fused cards
 /// abut exactly, so a group darkens evenly with no seam or double layer.
@@ -442,12 +452,18 @@ class _CardFace extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final c = context.colors;
     // The edge colour is "ink": near-black on the light theme (where the card
-    // border is white) and white on the dark theme (where the border is dark
-    // grey), so it always contrasts with the border.
+    // frame is white) and white on the dark theme (where the frame is a
+    // softer grey), so it always contrasts with the frame.
     final ink = context.isDark ? Colors.white : const Color(0xFF111118);
     final half = gap / 2;
+    // Frame of a card not yet in place: a light band with a dark hairline
+    // just outside it. The light band shows on dark pictures and the dark
+    // board, the hairline on light pictures and the light board.
+    final classic = cardStyle == CardStyle.classic;
+    final frame = context.isDark ? const Color(0xFFA9AEB9) : Colors.white;
+    final edge = Colors.black.withValues(alpha: context.isDark ? 0.55 : 0.22);
+    final frameWidth = math.max(2.0, gap * 0.38);
     return TweenAnimationBuilder<double>(
       tween: Tween(end: locked ? 1 : 0),
       duration: const Duration(milliseconds: 420),
@@ -455,7 +471,7 @@ class _CardFace extends StatelessWidget {
       builder: (_, lockT, _) => TweenAnimationBuilder<_EdgeInsets>(
         // Each edge's gutter slides shut as the card snaps to its group, in
         // step with the card's own move.
-        tween: _EdgeInsetsTween(end: _EdgeInsets([for (final fused in fusedEdges) fused ? -_overlap : half])),
+        tween: _EdgeInsetsTween(end: _EdgeInsets([for (final fused in fusedEdges) fused ? -_overlap : (locked ? 0.0 : half)])),
         duration: const Duration(milliseconds: 280),
         curve: Curves.easeOutCubic,
         builder: (_, insets, _) {
@@ -490,12 +506,13 @@ class _CardFace extends StatelessWidget {
               polygon: polygon,
               source: source,
               insets: insets.values,
-              radius: radius,
+              radius: radius * (1 - lockT),
               fusedEdges: fusedEdges,
               fans: fans,
               gutterHalf: gutterHalf,
-              borderColor: cardStyle == CardStyle.classic ? c.cardFace : Colors.transparent,
-              borderWidth: cardStyle == CardStyle.classic ? math.max(1.5, gap * 0.55) * (1 - lockT) : 0,
+              borderColor: classic ? frame : Colors.transparent,
+              borderWidth: classic ? frameWidth * (1 - lockT) : 0,
+              edgeColor: classic ? edge.withValues(alpha: edge.a * (1 - lockT)) : null,
               shadow: lockT > 0.95 || lift == 0 ? null : Colors.black.withValues(alpha: (0.25 + 0.2 * lift) * (1 - lockT)),
               shadowBlur: 10 + lift * 20,
               shadowDy: 4 + lift * 10,
@@ -557,6 +574,7 @@ class _CardPainter extends CustomPainter {
     required this.gutterHalf,
     required this.borderColor,
     required this.borderWidth,
+    required this.edgeColor,
     required this.shadow,
     required this.shadowBlur,
     required this.shadowDy,
@@ -584,6 +602,9 @@ class _CardPainter extends CustomPainter {
   final double gutterHalf;
   final Color borderColor;
   final double borderWidth;
+
+  /// Hairline along the outside of the frame (null: none).
+  final Color? edgeColor;
   final Color? shadow;
   final double shadowBlur;
   final double shadowDy;
@@ -918,10 +939,17 @@ class _CardPainter extends CustomPainter {
     // Strokes are drawn at twice the width inside the clip, so exactly half
     // shows: the visible band hugs the edge without bleeding into the gutter.
     if (borderWidth > 0) {
-      canvas.drawPath(_outline(pts, borderWidth * 2), Paint()
+      final run = _outline(pts, borderWidth * 2);
+      canvas.drawPath(run, Paint()
         ..style = PaintingStyle.stroke
         ..strokeWidth = borderWidth * 2
         ..color = borderColor);
+      if (edgeColor != null && edgeColor!.a > 0) {
+        canvas.drawPath(run, Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2
+          ..color = edgeColor!);
+      }
     }
     if (outline != null && outlineWidth > 0) {
       canvas.drawPath(outlineOuterOnly ? _outline(pts, outlineWidth) : shape, Paint()
@@ -948,6 +976,7 @@ class _CardPainter extends CustomPainter {
       o.outlineOuterOnly != outlineOuterOnly ||
       o.dim != dim ||
       o.borderWidth != borderWidth ||
+      o.edgeColor != edgeColor ||
       o.shadow != shadow;
 
   static bool _sameList(List<Object?> a, List<Object?> b) {

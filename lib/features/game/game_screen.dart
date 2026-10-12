@@ -38,8 +38,12 @@ class GameScreen extends ConsumerStatefulWidget {
 }
 
 class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObserver {
-  late final BoardSpec _spec = BoardSpec.fromCode(widget.gridCode);
+  /// The board being played. It starts from the route code and is settled
+  /// for the picture once the picture is decoded (see [_fitToPicture]).
+  late BoardSpec _spec = BoardSpec.fromCode(widget.gridCode);
   GameArgs? _args;
+  bool _fitted = false;
+  GameArgs? _listening;
   StreamSubscription<GameEventKind>? _sub;
   Timer? _saveDebounce;
   final _confetti = ConfettiController(duration: const Duration(seconds: 2));
@@ -52,20 +56,61 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    final existing = ref.read(puzzleProgressProvider(widget.puzzleId));
-    final resume = existing != null && existing.inProgress && existing.gridSize == _spec.cells && existing.mode == _spec.mode.code;
-    _args = GameArgs(
-      puzzleId: widget.puzzleId,
-      spec: _spec,
-      layout: resume ? existing.layout : null,
-      moves: resume ? existing.moves : 0,
-      elapsed: resume ? existing.elapsedSeconds : 0,
-      hintsUsed: resume ? existing.hintsUsed : 0,
-    );
+    _args = _argsFor(_spec, resume: true);
     _showTutorial = !ref.read(settingsProvider).tutorialSeen;
+    WidgetsBinding.instance.addPostFrameCallback((_) => _listen());
+  }
+
+  /// Session arguments for [spec], resuming the saved board when [resume]
+  /// and the save is for this mode and piece count.
+  GameArgs _argsFor(BoardSpec spec, {required bool resume, int session = 0}) {
+    final existing = ref.read(puzzleProgressProvider(widget.puzzleId));
+    final ok = resume && existing != null && existing.inProgress && existing.gridSize == spec.cells && existing.mode == spec.mode.code;
+    return GameArgs(
+      puzzleId: widget.puzzleId,
+      spec: spec,
+      layout: ok ? existing.layout : null,
+      moves: ok ? existing.moves : 0,
+      elapsed: ok ? existing.elapsedSeconds : 0,
+      hintsUsed: ok ? existing.hintsUsed : 0,
+      session: session,
+    );
+  }
+
+  /// Settles the board for the decoded picture, once. Layouts follow the
+  /// picture's proportions, so a board picked on the difficulty screen
+  /// already matches (the same decode), while the next picture of a pack or
+  /// a board resumed from Home gets the size its tier has for this picture.
+  /// A save resumes only when this picture still deals its board; older
+  /// saves (a layout that changed) start fresh.
+  void _fitToPicture(ui.Image image) {
+    if (_fitted) return;
+    _fitted = true;
+    final aspect = image.width / image.height;
+    final current = _args!;
+    var next = _spec.fitTo(aspect);
+    var resume = false;
+    if (current.layout != null) {
+      final saved = BoardSpec.fromSaved(_spec.mode, _spec.cells, aspect);
+      if (saved != null && Board.isValidLayout(saved, current.layout)) {
+        next = saved;
+        resume = true;
+      }
+    }
+    if (next == _spec && resume == (current.layout != null)) return;
+    _spec = next;
+    _args = _argsFor(next, resume: resume, session: current.session + 1);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _sub = ref.read(gameControllerProvider(_args!).notifier).events.listen(_onEvent);
+      if (mounted) _listen();
     });
+  }
+
+  /// Follows the events of the current session's controller.
+  void _listen() {
+    if (_args == null || _args == _listening) return;
+    _sub?.cancel();
+    _listening = _args;
+    _sub = ref.read(gameControllerProvider(_args!).notifier).events.listen(_onEvent);
   }
 
   @override
@@ -126,7 +171,9 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   }
 
   void _saveNow() {
-    if (_args == null || !mounted) return;
+    // Nothing to save before the board is settled for the picture (and a
+    // save then could overwrite the one being resumed).
+    if (_args == null || !mounted || !_fitted) return;
     final s = ref.read(gameControllerProvider(_args!));
     if (s.status == GameStatus.won) return;
     ref.read(progressProvider.notifier).save(widget.puzzleId, {
@@ -295,6 +342,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
       return Scaffold(appBar: AppBar(leading: const BackButton()), body: const Loader());
     }
     final image = ref.watch(puzzleImageProvider(puzzle.imageUrl));
+    if (image.hasValue) _fitToPicture(image.requireValue);
     final state = ref.watch(gameControllerProvider(_args!));
 
     return Scaffold(
@@ -429,7 +477,8 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                 await maybeShowInterstitial(context, ref);
                 if (!context.mounted) return;
                 if (next != null) {
-                  context.pushReplacement('/game/${next.id}/${widget.gridCode}');
+                  // Same mode and tier; the next picture settles its own size.
+                  context.pushReplacement('/game/${next.id}/${BoardCode.toPath(_spec.fullCode)}');
                 } else {
                   context.pop();
                 }

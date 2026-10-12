@@ -5,6 +5,7 @@ import 'package:appwrite/models.dart' as models;
 import 'package:card_jigsaw_world/core/theme/app_theme.dart';
 import 'package:card_jigsaw_world/data/local_store.dart';
 import 'package:card_jigsaw_world/features/game/difficulty_screen.dart';
+import 'package:card_jigsaw_world/game/board.dart';
 import 'package:card_jigsaw_world/models/models.dart';
 import 'package:card_jigsaw_world/state/auth.dart';
 import 'package:card_jigsaw_world/state/profile.dart';
@@ -96,6 +97,23 @@ void main() {
       expect(tester.takeException(), isNull, reason: 'no layout overflow');
     });
   }
+
+  testWidgets('tier tiles name the boards dealt for the picture, in every mode', (tester) async {
+    final key = await pumpScreen(tester, width: 402, height: 874);
+    for (final mode in GameMode.values) {
+      await tester.tap(find.text(mode.label));
+      await settle(tester);
+      // No picture in this test: the 3:4 reference ladder is shown.
+      final tiers = BoardSpec.tiers(mode, BoardSpec.referenceAspect);
+      for (final t in tiers.take(3)) {
+        expect(find.text(t.code), findsWidgets, reason: '${mode.code} ${t.label} shows ${t.code}');
+      }
+      final relaxed = tiers[2];
+      expect(find.textContaining('${relaxed.cells} '), findsWidgets, reason: 'the Play button counts the pieces of ${relaxed.fullCode}');
+      await dump(tester, key, 'difficulty_mode_${mode.code}');
+    }
+    expect(tester.takeException(), isNull);
+  });
 
   testWidgets('a saved board pins the choice; Discard progress reopens it', (tester) async {
     final saved = PuzzleProgress.fromRow('r1', {

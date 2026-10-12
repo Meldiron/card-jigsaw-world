@@ -132,7 +132,9 @@ void main() {
 
     test('sending every misplaced card home solves within par for every mode', () {
       for (final mode in GameMode.values) {
-        for (final t in [BoardSpec.tiers(mode)[1], BoardSpec.tiers(mode)[5]]) {
+        for (final t in {
+          for (final a in [9 / 16, 3 / 4, 1.0]) ...[BoardSpec.tiers(mode, a)[0], BoardSpec.tiers(mode, a)[1], BoardSpec.tiers(mode, a)[5]],
+        }) {
           for (var seed = 0; seed < 8; seed++) {
             var b = Board.shuffled(t, seed: seed);
             final par = b.par;
@@ -167,32 +169,56 @@ void main() {
       expect(tri.neighbours(0).length, lessThan(3));
     });
 
-    test('triangles keep orientation parity on shuffle and moves', () {
+    test('triangles keep orientation and shape on shuffle and moves', () {
       final spec = BoardSpec.tiers(GameMode.triangles)[3];
       final tiling = spec.tiling as TriangleTiling;
       for (var seed = 0; seed < 20; seed++) {
         final b = Board.shuffled(spec, seed: seed);
         for (var s = 0; s < b.cells; s++) {
           expect(tiling.isUp(s), tiling.isUp(b.slots[s]), reason: 'seed $seed slot $s');
+          expect(tiling.classOf(s), tiling.classOf(b.slots[s]), reason: 'seed $seed slot $s');
         }
-        // Odd-parity deltas are rejected; even ones keep parity.
+        // Slot 0 is the top-left half: it cannot move onto a whole
+        // triangle; two rows down is the next half of its shape.
         expect(b.moveGroup(0, 1, 0), isNull);
-        final shifted = b.moveGroup(0, 2, 0) ?? b.moveGroup(0, 1, 1);
+        final shifted = b.moveGroup(0, 0, 2) ?? b.moveGroup(0, 0, 4);
         if (shifted != null) {
           for (var s = 0; s < shifted.cells; s++) {
-            expect(tiling.isUp(s), tiling.isUp(shifted.slots[s]));
+            expect(tiling.classOf(s), tiling.classOf(shifted.slots[s]));
+          }
+        }
+      }
+    });
+
+    test('group moves keep every displaced card in a slot of its own shape', () {
+      for (final mode in [GameMode.triangles, GameMode.hexagons]) {
+        for (final spec in BoardSpec.tiers(mode, 0.75)) {
+          final t = spec.tiling;
+          for (var seed = 0; seed < 5; seed++) {
+            var b = Board.shuffled(spec, seed: seed);
+            final rng = math.Random(seed);
+            for (var step = 0; step < 60; step++) {
+              final from = rng.nextInt(b.cells), to = rng.nextInt(b.cells);
+              final next = b.moveTo(from, to);
+              if (next == null) continue;
+              b = next;
+              for (var s = 0; s < b.cells; s++) {
+                expect(t.classOf(b.slots[s]), t.classOf(s), reason: '${spec.fullCode} seed $seed step $step slot $s');
+              }
+            }
           }
         }
       }
     });
 
     test('hexagon neighbours are symmetric and directions are consistent', () {
-      final hex = Tiling.of(GameMode.hexagons, 5, 6);
+      final hex = Tiling.of(GameMode.hexagons, 5, 7);
       for (var s = 0; s < hex.cells; s++) {
         for (final n in hex.neighbours(s)) {
           expect(hex.neighbours(n).contains(s), isTrue, reason: '$s <-> $n');
           final d = hex.direction(s, n)!;
-          expect(hex.apply(s, d.$1, d.$2), n);
+          // A move by that step lands there only between pieces of one shape.
+          expect(hex.apply(s, d.$1, d.$2), hex.classOf(s) == hex.classOf(n) ? n : isNull);
           final back = hex.direction(n, s)!;
           expect((back.$1, back.$2), (-d.$1, -d.$2));
         }
@@ -222,27 +248,33 @@ void main() {
       }
     });
 
-    test('hexagons are regular and triangles equilateral at the natural aspect', () {
+    test('whole hexagons are regular and whole triangles equilateral on a board of their natural aspect', () {
       for (final t in BoardSpec.tiers(GameMode.hexagons)) {
         final hex = t.tiling;
-        for (final aspect in [900 / 21, 3 / 4, 16 / 9]) {
-          final size = hex.fit(const Size(369, 450), aspect);
-          for (var s = 0; s < hex.cells; s++) {
-            final c = hex.cellCenter(s, size);
-            final radii = [for (final v in hex.polygon(s, size)) (v - c).distance];
-            for (final r in radii) {
-              expect(r, closeTo(radii.first, 1e-6), reason: '${t.code} slot $s at $aspect');
-            }
-            final b = hex.cellBounds(s, size);
-            expect(b.width / b.height, closeTo(math.sqrt(3) / 2, 1e-6), reason: '${t.code} slot $s width:height');
+        final size = hex.fit(const Size(369, 450), hex.naturalAspect);
+        var whole = 0;
+        for (var s = 0; s < hex.cells; s++) {
+          final poly = hex.polygon(s, size);
+          if (poly.length != 6) continue;
+          whole++;
+          final c = hex.cellCenter(s, size);
+          final radii = [for (final v in poly) (v - c).distance];
+          for (final r in radii) {
+            expect(r, closeTo(radii.first, 1e-6), reason: '${t.code} slot $s');
           }
+          final b = hex.cellBounds(s, size);
+          expect(b.width / b.height, closeTo(math.sqrt(3) / 2, 1e-6), reason: '${t.code} slot $s width:height');
         }
+        expect(whole, greaterThan(0), reason: t.code);
       }
       for (final t in BoardSpec.tiers(GameMode.triangles)) {
         final tri = t.tiling;
-        final size = tri.fit(const Size(369, 450), 3 / 4);
+        final size = tri.fit(const Size(369, 450), tri.naturalAspect);
         for (var s = 0; s < tri.cells; s++) {
           final p = tri.polygon(s, size);
+          final b = tri.cellBounds(s, size);
+          // Whole triangles only (halves and fused edge pieces are narrower).
+          if (b.width < size.width / ((tri as TriangleTiling).steps) * 1.9) continue;
           final sides = [for (var i = 0; i < 3; i++) (p[(i + 1) % 3] - p[i]).distance];
           for (final side in sides) {
             expect(side, closeTo(sides.first, 1e-6), reason: '${t.code} slot $s');
@@ -251,16 +283,18 @@ void main() {
       }
     });
 
-    test('rectangular grids follow the picture but never collapse', () {
+    test('rectangular grids keep their cell shape and crop the picture instead', () {
       for (final mode in [GameMode.cards, GameMode.squares]) {
-        final t = BoardSpec.tiers(mode)[1].tiling;
-        expect(t.naturalAspect, isNull);
-        expect(t.boardAspect(3 / 4), closeTo(3 / 4, 1e-9), reason: 'a normal picture is kept as is');
-        expect(t.boardAspect(900 / 21), Tiling.maxGridAspect);
-        expect(t.boardAspect(21 / 900), Tiling.minGridAspect);
-        expect(t.boardAspect(double.nan), closeTo(3 / 4, 1e-9));
-        final strip = t.fit(const Size(369, 450), 900 / 21);
-        expect(strip.height, greaterThan(200));
+        for (final spec in BoardSpec.tiers(mode)) {
+          final t = spec.tiling as GridTiling;
+          final (lo, hi) = t.aspectRange;
+          for (final a in [900 / 21, 3 / 4, 1.0, 21 / 900, double.nan]) {
+            final b = t.boardAspect(a);
+            expect(b, inInclusiveRange(lo - 1e-9, hi + 1e-9), reason: '${spec.code} on $a');
+          }
+          final strip = t.fit(const Size(369, 450), 900 / 21);
+          expect(strip.height, greaterThan(150), reason: '${spec.code}: a handscroll does not collapse the board');
+        }
       }
     });
 
@@ -292,8 +326,9 @@ void main() {
           }
         }
       }
-      // A 3:4 picture on a 3:4 cards board is used whole.
-      final cards = const GridSpec(3, 4, 'Easy').tiling;
+      // A 3:4 picture on a 3x3 cards board (cards a touch narrower than 5:7)
+      // is used whole.
+      final cards = const GridSpec(3, 3, 'Cozy').tiling;
       expect(cards.crop(portrait, cards.fit(const Size(300, 400), 3 / 4)), Offset.zero & portrait);
     });
 

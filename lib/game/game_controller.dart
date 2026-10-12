@@ -90,7 +90,7 @@ class GameState {
 /// Parameters for a game session: which puzzle, which grid, and optionally a
 /// saved layout to resume from.
 class GameArgs {
-  const GameArgs({required this.puzzleId, required this.spec, this.layout, this.moves = 0, this.elapsed = 0, this.hintsUsed = 0});
+  const GameArgs({required this.puzzleId, required this.spec, this.layout, this.moves = 0, this.elapsed = 0, this.hintsUsed = 0, this.session = 0});
   final String puzzleId;
   final BoardSpec spec;
   final List<int>? layout;
@@ -98,10 +98,15 @@ class GameArgs {
   final int elapsed;
   final int hintsUsed;
 
+  /// Distinguishes sessions on the same board (the game screen bumps it when
+  /// it settles the board for the loaded picture), so each gets its own
+  /// controller.
+  final int session;
+
   @override
-  bool operator ==(Object other) => other is GameArgs && other.puzzleId == puzzleId && other.spec == spec;
+  bool operator ==(Object other) => other is GameArgs && other.puzzleId == puzzleId && other.spec == spec && other.session == session;
   @override
-  int get hashCode => Object.hash(puzzleId, spec);
+  int get hashCode => Object.hash(puzzleId, spec, session);
 }
 
 /// Events the UI reacts to with sound/haptics/particles.
@@ -123,11 +128,16 @@ class GameController extends Notifier<GameState> {
       _peekTimer?.cancel();
       _events.close();
     });
-    final restore = args.layout != null && args.layout!.length == args.spec.cells;
+    // A save only resumes when it still describes this board: the right
+    // length, a permutation, every card in a slot of its own shape. Saves
+    // from before a layout changed start fresh instead.
+    final restore = Board.isValidLayout(args.spec, args.layout);
     final board = restore ? Board(args.spec, args.layout!) : Board.shuffled(args.spec);
     final par = restore ? args.moves + board.par : board.par;
     _startTimer();
-    return _fresh(board, par: max(par, 1), moves: args.moves, elapsed: args.elapsed, hintsUsed: args.hintsUsed);
+    return restore
+        ? _fresh(board, par: max(par, 1), moves: args.moves, elapsed: args.elapsed, hintsUsed: args.hintsUsed)
+        : _fresh(board, par: max(par, 1));
   }
 
   GameState _fresh(Board board, {required int par, int moves = 0, int elapsed = 0, int hintsUsed = 0}) => GameState(
