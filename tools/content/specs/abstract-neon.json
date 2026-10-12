@@ -1,8 +1,8 @@
 {
  "id": "abstract-neon",
- "name": "Neon Lines",
+ "name": "Light Art",
  "category": "Abstract",
- "description": "Glowing tubes, LED strips and light installations drawing lines through the dark.",
+ "description": "Light installations, LED tunnels, infinity rooms, lantern festivals and illuminated Ferris wheels glowing in the dark.",
  "kind": "abstract",
  "price": "coins",
  "priceCoins": 600,
@@ -45,5 +45,20 @@
  ],
  "category_depth": 1,
  "category_limit": 200,
- "openverse_category": "photograph"
+ "openverse_category": "photograph",
+ "_retheme": "Widened from 'Neon Lines': fewer than 20 usable portrait neon-line images on Commons and Openverse; light art and light festivals fill the theme.",
+ "more_topics": [
+  "cat:Light art",
+  "cat:Amsterdam Light Festival",
+  "cat:Ferris wheels at night",
+  "cat:Festival of Lights (Berlin)",
+  "cat:Vivid Sydney",
+  "cat:Illuminations",
+  "cat:Lantern festivals",
+  "light festival installation",
+  "Lichtfestival",
+  "Fête des Lumières Lyon",
+  "Christmas light tunnel",
+  "lantern festival"
+ ]
 }

@@ -1,8 +1,8 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-12T22:08:52",
-"msg": "Content: checkpoint (258 verified, 3 fixed, 26 audited, 10 pending)",
+"at": "2026-10-12T22:38:56",
+"msg": "Content: checkpoint (265 verified, 3 fixed, 21 audited, 9 pending)",
 "ok": true,
 "pushed": true,
 "stage": "committed"
@@ -155,14 +155,14 @@
 },
 "abstract-neon": {
 "added": 0,
-"at": "2026-10-12T22:37:31",
+"at": "2026-10-12T22:40:25",
 "category": "Abstract",
 "kind": "new",
-"last_step": "pool 52 usable",
+"last_step": "reject 1 quality",
 "name": "Neon Lines",
 "puzzles": 0,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "abstract-paper-collage": {
 "added": 28,
@@ -1570,10 +1570,10 @@
 },
 "evpack-heart-day-2027": {
 "added": 0,
-"at": "2026-10-12T22:36:46",
+"at": "2026-10-12T22:41:05",
 "category": "Event",
 "kind": "event",
-"last_step": "pool 27 usable",
+"last_step": "pool 71 usable",
 "name": "World Heart Day",
 "puzzles": null,
 "removed": 0,
@@ -1652,10 +1652,10 @@
 },
 "evpack-lunar-new-year-2027": {
 "added": 0,
-"at": "2026-10-12T22:37:22",
+"at": "2026-10-12T22:40:17",
 "category": "Event",
 "kind": "event",
-"last_step": "pool 75 usable",
+"last_step": "reject 7 similar",
 "name": "Lunar New Year",
 "puzzles": null,
 "removed": 0,
@@ -3094,10 +3094,10 @@
 },
 "pack-prague": {
 "added": 0,
-"at": "2026-10-12T22:38:37",
+"at": "2026-10-12T22:40:10",
 "category": "Cities",
 "kind": "library",
-"last_step": "pool 102 usable",
+"last_step": "reject 1 weak",
 "name": "Prague",
 "puzzles": null,
 "removed": 0,
@@ -3304,15 +3304,15 @@
 "status": "verified"
 },
 "pack-steam-trains": {
-"added": 0,
-"at": "2026-10-12T22:38:16",
+"added": 20,
+"at": "2026-10-12T22:41:03",
 "category": "Vintage",
 "kind": "library",
-"last_step": "pool 55 usable",
+"last_step": "apply",
 "name": "Steam Trains",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 16,
+"status": "fixed"
 },
 "pack-still-life": {
 "added": 26,
