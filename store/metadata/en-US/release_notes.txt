@@ -1,9 +1,11 @@
 Version 1.7.0
 
-- Rewarded offers only pay out after the full countdown.
-- Level is now the same everywhere, derived from XP.
-- Difficulty screen: real picture preview and dimensions, cleaner rewards row, and a Discard progress option.
-- Group outlines are one clean shape in every mode; Hint moved to the last toolbar slot.
-- Faster screens: no staggered animations on lists.
-- Friend profiles show statistics.
-- Pictures: no people, no repeats, portrait or square only, at least 20 per pack; new AI and Abstract categories (arriving as the catalogue is rebuilt).
+- Squares are always square and Cards are always card-shaped; board sizes follow each picture's shape.
+- Triangles and Hexagons show the whole picture, with half pieces along the edges.
+- Pieces in their right spot sit edge to edge without a frame; loose cards have a clearer frame.
+- Live event and daily month cards show progress and completion ticks.
+- Achievements: ready to claim on top, finished at the bottom.
+- Every screen leaves room above the tab bar.
+- New prices: packs from 2,000 coins, boosters cost more, and every store bundle gives much more.
+- VIP members claim 500 bonus coins every week from Quests.
+- Fixed pictures that sometimes failed to appear.
