@@ -31,25 +31,31 @@ def select_candidates(pool, spec, kept_metas, kept_authors, need, picks=(), auto
     rejected = rejected or {}
     by_key = {c['key']: c for c in pool['candidates']}
     chosen, chosen_metas, authors = [], list(kept_metas), dict(kept_authors)
+    reason = ['']
     def ok_to_add(c):
-        if state.is_rejected(c['url'], spec['id'], rejected): return False
+        def no(why):
+            reason[0] = why
+            return False
+        if state.is_rejected(c['url'], spec['id'], rejected): return no('rejected earlier')
         # Appwrite string columns are 512 chars; such URLs would abort apply mid-run.
-        if len(c['url']) > 512 or len(c.get('thumb') or '') > 512: return False
-        if c.get('status') != 'ok': return False
-        if c.get('hotlink') is False: return False      # e.g. Pixabay: must be re-hosted first, the app hotlinks
+        if len(c['url']) > 512 or len(c.get('thumb') or '') > 512: return no('URL longer than 512 characters')
+        if c.get('status') != 'ok': return no(f"candidate status {c.get('status')}")
+        if c.get('hotlink') is False: return no('host forbids hotlinking (re-host first)')      # e.g. Pixabay
         m = _meta_ok(c['url'])
-        if not m: return False
-        if m['w'] > m['h'] or min(m['w'], m['h']) < filters.MIN_SHORT_HARD: return False
+        if not m: return no('image could not be downloaded or read')
+        if m['w'] > m['h']: return no(f"landscape {m['w']}x{m['h']}")
+        if min(m['w'], m['h']) < filters.MIN_SHORT_HARD: return no(f"too small {m['w']}x{m['h']}")
         for km in chosen_metas:
             sim, why = imagecache.similar(m, km)
-            if sim: return False
-        if authors.get(c['author'], 0) >= spec['author_cap'] and spec['author_cap'] > 0: return False
+            if sim: return no(f'too similar to a picture already chosen ({why})')
+        if authors.get(c['author'], 0) >= spec['author_cap'] and spec['author_cap'] > 0:
+            return no(f"photographer limit: {spec['author_cap']} per pack for {c['author']}")
         return m
     for k in picks:
         c = by_key.get(k)
         if not c: print('  unknown pick', k); continue
         m = ok_to_add(c)
-        if not m: print('  pick rejected by checks', k, c.get('why', '')); continue
+        if not m: print('  pick rejected by checks', k, '-', reason[0]); continue
         chosen.append(c); chosen_metas.append(m); authors[c['author']] = authors.get(c['author'], 0) + 1
     if auto:
         topics = []

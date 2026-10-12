@@ -212,7 +212,7 @@
   ]
  },
  "L4": {
-  "report": "batch-L4-travel-vintage.md",
+  "report": "batch-L4.md",
   "packs": [
    "city-lights",
    "land-of-fire-ice",
@@ -290,7 +290,7 @@
   ]
  },
  "D2": {
-  "report": "batch-D2-daily-2025-2026.md",
+  "report": "batch-D2-daily.md",
   "packs": [
    "daily-2025-01",
    "daily-2025-02",
