@@ -9,7 +9,10 @@
  "fetch_per_topic": 4,
  "author_cap": 2,
  "accent_from_cover": true,
- "sources": ["nasa", "commons"],
+ "sources": [
+  "nasa",
+  "commons"
+ ],
  "topics": [
   "Full moon",
   "Crescent moon",
@@ -39,15 +42,13 @@
   "Apollo 11 launch"
  ],
  "more_topics": [
-  "Mare Imbrium",
-  "Apollo landing site",
-  "Lunar terminator",
-  "Moon from Apollo 17",
-  "Waxing gibbous moon",
-  "Moon jellyfish",
+  "Mooncakes",
+  "Moon gate garden",
+  "Japanese moon bridge",
+  "Artemis I SLS rocket",
   "Space Shuttle launch",
-  "Artemis SLS rocket",
-  "Kennedy Space Center launch pad",
-  "Lunar Reconnaissance Orbiter"
+  "Lunar module museum",
+  "Waxing gibbous moon",
+  "Moon jellyfish Aurelia aurita"
  ]
 }
