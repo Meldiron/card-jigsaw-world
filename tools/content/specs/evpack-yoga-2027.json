@@ -9,7 +9,10 @@
  "fetch_per_topic": 4,
  "author_cap": 2,
  "accent_from_cover": true,
- "sources": ["commons", "openverse"],
+ "sources": [
+  "commons",
+  "openverse"
+ ],
  "topics": [
   "Sacred lotus flower Nelumbo nucifera",
   "Tibetan singing bowl",
@@ -39,15 +42,15 @@
   "Sandalwood"
  ],
  "more_topics": [
-  "Lotus pond",
-  "Tea light candles",
-  "Pebbles balanced",
-  "Ayurveda spices",
-  "Chai tea cup",
+  "Yoga mat",
+  "Meditation garden",
   "Moss garden Kyoto",
+  "Tea light candles",
   "Temple bell",
-  "Bodhi tree leaves",
-  "Mandala sand art",
-  "Lavender field"
+  "Ficus religiosa leaf",
+  "Ayurvedic spices",
+  "Masala chai",
+  "Lotus pond",
+  "Wind chime"
  ]
 }

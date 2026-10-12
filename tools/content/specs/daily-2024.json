@@ -5,8 +5,7 @@
  "description": "One pleasant, varied picture for every day of the month.",
  "pool": "daily-2023",
  "sources": [
-  "commons",
-  "openverse"
+  "inat"
  ],
  "per_topic": 2,
  "fetch_per_topic": 6,

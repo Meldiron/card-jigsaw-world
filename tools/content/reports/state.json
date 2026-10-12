@@ -1,14 +1,25 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-12T12:16:28",
-"msg": "Content: checkpoint (85 verified, 3 fixed, 70 audited, 114 pending)",
+"at": "2026-10-12T12:37:19",
+"msg": "Content: checkpoint (97 verified, 4 fixed, 73 audited, 102 pending)",
 "ok": true,
 "pushed": true,
 "stage": "committed"
 }
 },
 "packs": {
+"abstract-bokeh": {
+"added": 0,
+"at": "2026-10-12T12:41:41",
+"category": "Abstract",
+"kind": "new",
+"last_step": "newpack",
+"name": "Bokeh",
+"puzzles": 0,
+"removed": 0,
+"status": "pending"
+},
 "abstract-fluid-ink": {
 "added": 23,
 "at": "2026-10-12T02:13:54",
@@ -34,15 +45,16 @@
 "status": "verified"
 },
 "abstract-kaleidoscope": {
-"added": 20,
-"at": "2026-10-12T12:17:47",
+"added": 23,
+"at": "2026-10-12T12:41:35",
 "category": "Abstract",
+"issues": 0,
 "kind": "new",
-"last_step": "reject 1 quality",
+"last_step": "verify",
 "name": "Kaleidoscope",
-"puzzles": 20,
-"removed": 0,
-"status": "audited"
+"puzzles": 21,
+"removed": 2,
+"status": "verified"
 },
 "abstract-light-leaks": {
 "added": 24,
@@ -66,6 +78,18 @@
 "name": "Macro Textures",
 "puzzles": 24,
 "removed": 0,
+"status": "verified"
+},
+"ai-abstract": {
+"added": 23,
+"at": "2026-10-12T12:42:45",
+"category": "AI",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "AI Abstract",
+"puzzles": 20,
+"removed": 3,
 "status": "verified"
 },
 "ai-all": {
@@ -100,6 +124,18 @@
 "removed": 3,
 "status": "verified"
 },
+"ai-dream-machines": {
+"added": 24,
+"at": "2026-10-12T12:38:53",
+"category": "AI",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "AI Dream Machines",
+"puzzles": 22,
+"removed": 2,
+"status": "verified"
+},
 "ai-dreamscapes": {
 "added": 25,
 "at": "2026-10-12T12:13:50",
@@ -110,6 +146,18 @@
 "name": "AI Dreamscapes",
 "puzzles": 24,
 "removed": 1,
+"status": "verified"
+},
+"ai-food": {
+"added": 23,
+"at": "2026-10-12T12:46:00",
+"category": "AI",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "AI Food Fantasies",
+"puzzles": 21,
+"removed": 2,
 "status": "verified"
 },
 "ai-future-worlds": {
@@ -354,11 +402,11 @@
 },
 "daily-2024-01": {
 "added": 28,
-"at": "2026-10-12T12:34:11",
+"at": "2026-10-12T12:42:50",
 "category": "Daily",
 "issues": 0,
 "kind": "daily",
-"last_step": "verify",
+"last_step": "pool 36 usable",
 "name": "January 2024",
 "puzzles": 31,
 "removed": 28,
@@ -366,10 +414,10 @@
 },
 "daily-2024-02": {
 "added": 0,
-"at": "2026-10-12T10:24:21",
+"at": "2026-10-12T12:44:56",
 "category": "Daily",
 "kind": "daily",
-"last_step": "reject 1 people",
+"last_step": "pool 62 usable",
 "name": "February 2024",
 "puzzles": null,
 "removed": 0,
@@ -487,8 +535,8 @@
 },
 "daily-2025": {
 "added": 0,
-"at": "2026-10-12T12:32:02",
-"last_step": "pool 70 usable",
+"at": "2026-10-12T12:41:36",
+"last_step": "pool 29 usable",
 "puzzles": null,
 "removed": 0,
 "status": "pending"
@@ -1140,9 +1188,10 @@
 },
 "evpack-halloween-2026": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T12:39:11",
 "category": "Event",
 "kind": "event",
+"last_step": "pool 11 usable",
 "name": "Halloween",
 "puzzles": null,
 "removed": 0,
@@ -1750,10 +1799,10 @@
 },
 "evpack-yoga-2027": {
 "added": 0,
-"at": "2026-10-12T12:37:15",
+"at": "2026-10-12T12:37:54",
 "category": "Event",
 "kind": "event",
-"last_step": "pool 69 usable",
+"last_step": "reject 2 similar",
 "name": "International Yoga Day",
 "puzzles": null,
 "removed": 0,
@@ -1770,14 +1819,14 @@
 "status": "pending"
 },
 "land-of-fire-ice": {
-"added": 0,
-"at": "2026-10-12T12:37:09",
+"added": 19,
+"at": "2026-10-12T12:37:35",
 "category": "Premium",
 "kind": "library",
-"last_step": "reject 8 similar",
+"last_step": "reject 2 weak",
 "name": "Land of Fire & Ice",
-"puzzles": null,
-"removed": 0,
+"puzzles": 24,
+"removed": 8,
 "status": "audited"
 },
 "masterpieces": {
@@ -1899,10 +1948,10 @@
 },
 "pack-bridges": {
 "added": 11,
-"at": "2026-10-12T12:32:14",
+"at": "2026-10-12T12:39:15",
 "category": "Architecture",
 "kind": "library",
-"last_step": "apply",
+"last_step": "pool 14 usable",
 "name": "Bridges",
 "puzzles": 13,
 "removed": 18,
@@ -2176,10 +2225,10 @@
 },
 "pack-gardens-art": {
 "added": 0,
-"at": "2026-10-12T12:28:39",
+"at": "2026-10-12T12:45:17",
 "category": "Art",
 "kind": "library",
-"last_step": "reject 1 off-theme",
+"last_step": "pool 20 usable",
 "name": "Gardens in Art",
 "puzzles": null,
 "removed": 0,
@@ -2400,15 +2449,16 @@
 "status": "pending"
 },
 "pack-misty-forests": {
-"added": 13,
-"at": "2026-10-12T12:37:15",
+"added": 16,
+"at": "2026-10-12T12:37:39",
 "category": "Nature",
+"issues": 0,
 "kind": "library",
-"last_step": "reject 3 weak",
+"last_step": "verify",
 "name": "Misty Forests",
-"puzzles": 20,
-"removed": 13,
-"status": "audited"
+"puzzles": 22,
+"removed": 14,
+"status": "verified"
 },
 "pack-moroccan-souks": {
 "added": 0,
@@ -2422,15 +2472,16 @@
 "status": "audited"
 },
 "pack-nebulae": {
-"added": 0,
-"at": "2026-10-12T04:41:09",
+"added": 24,
+"at": "2026-10-12T12:38:52",
 "category": "Space",
+"issues": 0,
 "kind": "library",
-"last_step": "pool 147 usable",
+"last_step": "verify",
 "name": "Nebulae",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 20,
+"status": "verified"
 },
 "pack-new-york": {
 "added": 0,

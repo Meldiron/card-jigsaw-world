@@ -2,7 +2,7 @@
  "id": "pack-misty-forests",
  "name": "Misty Forests",
  "category": "Nature",
- "description": "Fog drifting between beeches, spruces and redwoods, from the Black Forest to the Pacific Northwest.",
+ "description": "Fog drifting between beeches, pines, spruces and redwoods, from the Black Forest to California.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
@@ -53,5 +53,6 @@
   "fog forest sun rays",
   "misty fir forest",
   "forest fog Tatra"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Foggy_autumn_forest_in_the_morning_2.jpg/1280px-Foggy_autumn_forest_in_the_morning_2.jpg"
 }

@@ -1,0 +1,10 @@
+{
+ "id": "ai-flowers", "name": "AI Flowers", "category": "AI",
+ "description": "Roses, sunflowers, lotus blossoms and glass petals grown by text-to-image models. Every picture is AI-generated and in the public domain.",
+ "kind": "ai", "pool": "ai-all", "price": "coins", "priceCoins": 400, "sortOrder": 2010,
+ "target": 24, "per_topic": 1, "fetch_per_topic": 20, "author_cap": 12, "min_short": 900,
+ "sources": ["openverse"], "openverse_category": "photograph", "accent_from_cover": true,
+ "topics": ["AI-generated flowers", "AI-generated flower", "AI-generated rose", "AI-generated sunflower", "AI-generated tulip", "AI-generated lotus",
+            "AI-generated orchid", "AI-generated garden", "AI-generated bouquet", "AI-generated cherry blossom", "AI-generated lily", "AI-generated daisy",
+            "AI-generated poppy", "AI-generated plant", "AI-generated mushroom", "AI-generated cactus"]
+}

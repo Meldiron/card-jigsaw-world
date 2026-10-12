@@ -1,0 +1,10 @@
+{
+ "id": "ai-food", "name": "AI Food Fantasies", "category": "AI",
+ "description": "Towering burgers, glossy desserts, fruit explosions and impossible dishes cooked up by text-to-image models. Every picture is AI-generated and in the public domain.",
+ "kind": "ai", "pool": "ai-all", "price": "coins", "priceCoins": 400, "sortOrder": 2009,
+ "target": 24, "per_topic": 1, "fetch_per_topic": 20, "author_cap": 12, "min_short": 900,
+ "sources": ["openverse"], "openverse_category": "photograph", "accent_from_cover": true,
+ "topics": ["AI-generated food", "AI-generated burger", "AI-generated pizza", "AI-generated cake", "AI-generated dessert", "AI-generated fruit",
+            "AI-generated sushi", "AI-generated coffee", "AI-generated breakfast", "AI-generated ice cream", "AI-generated cocktail", "AI-generated drink",
+            "AI-generated chocolate", "AI-generated sandwich", "AI-generated pasta", "AI-generated bread"]
+}

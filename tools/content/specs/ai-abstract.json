@@ -1,0 +1,10 @@
+{
+ "id": "ai-abstract", "name": "AI Abstract", "category": "AI",
+ "description": "Shards of colour, swirling forms and bold geometric patterns from text-to-image models. Every picture is AI-generated and in the public domain.",
+ "kind": "ai", "pool": "ai-all", "price": "free", "sortOrder": 2008,
+ "target": 24, "per_topic": 1, "fetch_per_topic": 20, "author_cap": 10, "min_short": 900,
+ "sources": ["openverse"], "openverse_category": "photograph", "accent_from_cover": true,
+ "topics": ["AI-generated abstract", "AI-generated pattern", "AI-generated fractal", "AI-generated texture", "AI-generated colorful",
+            "AI-generated geometric", "AI-generated psychedelic", "AI-generated swirl", "AI-generated kaleidoscope", "AI-generated mandala",
+            "AI-generated abstract art", "AI-generated colors"]
+}
