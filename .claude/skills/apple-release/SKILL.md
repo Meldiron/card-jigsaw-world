@@ -55,3 +55,21 @@ After `tools/dev/testflight.sh` always run `tools/dev/deploy-web.sh` so https://
 
 ## Related docs
 `docs/release-flow.md`, `docs/release-checklist.md`, `tools/store/README.md`.
+
+## Renaming in-app purchases while they sit in a review draft
+If products were added to the app's open review submission ("Submit for Review" on the products in App
+Store Connect), their en-GB localization (customer name and description) is locked: PATCH and DELETE
+fail with 409 "version is not editable", even though the localization says PREPARE_FOR_SUBMISSION.
+`asc_publish.py iap` still updates reference names and review notes. To change the customer text:
+for each product, DELETE its `reviewSubmissionItems/{id}` (the item that points at its
+`inAppPurchaseVersion`), PATCH the `inAppPurchaseLocalizations/{id}`, then POST a new
+`reviewSubmissionItems` with relationships `reviewSubmission` + `inAppPurchaseVersion`. The draft is
+never submitted by this. Done this way for the 2026-10-12 amount change (all 8 consumables).
+
+## Payment function deploys
+The repo's API keys cannot deploy functions. Package with
+`COPYFILE_DISABLE=1 tar --exclude node_modules -czf verify-purchase.tar.gz -C functions/verify-purchase .`
+and create the deployment through the Appwrite MCP (`functions_create_deployment`, base64 content,
+`activate: true`, entrypoint `src/main.js`, commands `npm install`), then check
+`https://cjw-verify-purchase.fra.appwrite.run/health`. Deploy the function before a build that shows
+new amounts, so the server never credits less than the app displays.
