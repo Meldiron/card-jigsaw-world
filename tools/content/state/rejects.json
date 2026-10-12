@@ -23125,9 +23125,9 @@
 },
 "https://live.staticflickr.com/65535/53052761267_94cbfdb6a6_b.jpg": {
 "at": "2026-10-12",
-"label": "c101",
-"pack": "daily-2025-01",
-"reason": "weak"
+"label": "c90",
+"pack": "evpack-mothers-day-2027",
+"reason": "people"
 },
 "https://live.staticflickr.com/65535/53059637244_44ce31ed3e_b.jpg": {
 "at": "2026-10-12",
@@ -40769,6 +40769,12 @@
 "pack": "evpack-education-2027",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/e/ec/Ifugao_Rice_Terraces_historical_marker.jpg": {
+"at": "2026-10-12",
+"label": "c20",
+"pack": "pack-rice-terraces",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/e/ee/2003-07-26_18-27-45_Germany_Baden-W%C3%BCrttemberg_Meersburg.jpg": {
 "at": "2026-10-12",
 "label": "c19",
@@ -41663,6 +41669,12 @@
 "pack": "evpack-forests-2027",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Lavande_en_gerbe_sur_le_march%C3%A9_de_Sault.jpg/1280px-Lavande_en_gerbe_sur_le_march%C3%A9_de_Sault.jpg": {
+"at": "2026-10-12",
+"label": "c47",
+"pack": "evpack-mothers-day-2027",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Louvre_Pyramid_from_the_Pavillon_Sully_%288448656768%29.jpg/1280px-Louvre_Pyramid_from_the_Pavillon_Sully_%288448656768%29.jpg": {
 "at": "2026-10-12",
 "label": "c48",
@@ -42053,6 +42065,12 @@
 "pack": "deep-space",
 "reason": "text"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Lathyrus_odoratus_2022-05-29_9981.jpg/1280px-Lathyrus_odoratus_2022-05-29_9981.jpg": {
+"at": "2026-10-12",
+"label": "c28",
+"pack": "evpack-mothers-day-2027",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Monteverde_Cloud_Forest_02.jpg/1280px-Monteverde_Cloud_Forest_02.jpg": {
 "at": "2026-10-12",
 "label": "c21",
@@ -42349,8 +42367,8 @@
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Spool%2C_Yarn%2C_Needle_case.jpg/1280px-Spool%2C_Yarn%2C_Needle_case.jpg": {
 "at": "2026-10-12",
-"label": "c1108",
-"pack": "daily-2025-11",
+"label": "c87",
+"pack": "evpack-mothers-day-2027",
 "reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Sunflower_in_Bloom_07.jpg/1280px-Sunflower_in_Bloom_07.jpg": {
@@ -42537,6 +42555,12 @@
 "at": "2026-10-12",
 "label": "c26",
 "pack": "evpack-mountain-day-2026",
+"reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Pancakes_with_berries%2C_plus_avocado_-_London%2C_UK.jpg/1280px-Pancakes_with_berries%2C_plus_avocado_-_London%2C_UK.jpg": {
+"at": "2026-10-12",
+"label": "c73",
+"pack": "evpack-mothers-day-2027",
 "reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Pea_Green_-_Flickr_-_CAJC%2C_in_the_PNW.jpg/1280px-Pea_Green_-_Flickr_-_CAJC%2C_in_the_PNW.jpg": {
@@ -43348,6 +43372,12 @@
 "label": "c04",
 "pack": "pack-canyons",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Lythrum_salicaria_flowers_-_Kulna.jpg/1280px-Lythrum_salicaria_flowers_-_Kulna.jpg": {
+"at": "2026-10-12",
+"label": "c92",
+"pack": "evpack-mothers-day-2027",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Masala_Tea_1.jpg/1280px-Masala_Tea_1.jpg": {
 "at": "2026-10-12",
@@ -44747,6 +44777,12 @@
 "pack": "evpack-childrens-book-2027",
 "reason": "text"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Macaron_d%27Amiens_06.jpg/1280px-Macaron_d%27Amiens_06.jpg": {
+"at": "2026-10-12",
+"label": "c66",
+"pack": "evpack-mothers-day-2027",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Mandelbrot_Set_Image_115.png/1280px-Mandelbrot_Set_Image_115.png": {
 "at": "2026-10-12",
 "label": "c58",
@@ -44788,6 +44824,12 @@
 "label": "c67",
 "pack": "pack-sea-life",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Pink_Roses_%2866528%29.jpg/1280px-Pink_Roses_%2866528%29.jpg": {
+"at": "2026-10-12",
+"label": "c09",
+"pack": "evpack-mothers-day-2027",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Platanthera_chlorantha_LC0278.jpg/1280px-Platanthera_chlorantha_LC0278.jpg": {
 "at": "2026-10-12",
@@ -46421,6 +46463,12 @@
 "pack": "evpack-pet-day-2027",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Advent_floristry_0748.jpg/1280px-Advent_floristry_0748.jpg": {
+"at": "2026-10-12",
+"label": "c39",
+"pack": "evpack-mothers-day-2027",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Bryce_Canyon_Hoodoos_4_edit.JPG/1280px-Bryce_Canyon_Hoodoos_4_edit.JPG": {
 "at": "2026-10-12",
 "label": "c12",
@@ -46551,6 +46599,12 @@
 "at": "2026-10-12",
 "label": "c34",
 "pack": "evpack-tea-day-2026",
+"reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Yarn_ball_craft.jpg/1280px-Yarn_ball_craft.jpg": {
+"at": "2026-10-12",
+"label": "c89",
+"pack": "evpack-mothers-day-2027",
 "reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/%E8%BB%9B%E7%93%A3%E8%98%AD%E5%B1%AC_Zygopetalum_Blackii_-%E9%A6%99%E6%B8%AF%E8%98%AD%E8%8A%B1%E7%AF%80_Hong_Kong_Orchid_Festival-_%2839710836390%29.jpg/1280px-%E8%BB%9B%E7%93%A3%E8%98%AD%E5%B1%AC_Zygopetalum_Blackii_-%E9%A6%99%E6%B8%AF%E8%98%AD%E8%8A%B1%E7%AF%80_Hong_Kong_Orchid_Festival-_%2839710836390%29.jpg": {
@@ -47359,8 +47413,8 @@
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Terraced_rice_fields_at_Rey_Mindu%2C_Sikkim.jpg/1280px-Terraced_rice_fields_at_Rey_Mindu%2C_Sikkim.jpg": {
 "at": "2026-10-12",
-"label": "c34",
-"pack": "evpack-food-day-2026",
+"label": "c35",
+"pack": "pack-rice-terraces",
 "reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Torres_del_Paine%2C_cascada_5.jpg/1280px-Torres_del_Paine%2C_cascada_5.jpg": {
@@ -47368,6 +47422,12 @@
 "label": "c04",
 "pack": "pack-patagonia",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Watering_can_is_positioned_near_garden_flowers_ready_for_use_in_outdoor_planting.jpg/1280px-Watering_can_is_positioned_near_garden_flowers_ready_for_use_in_outdoor_planting.jpg": {
+"at": "2026-10-12",
+"label": "c91",
+"pack": "evpack-mothers-day-2027",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/%D0%9F%D1%82%D0%B8%D1%86%D1%8B_%D0%93%D0%B0%D0%BD%D0%BD%D0%BE%D0%B2%D0%B5%D1%80%D1%81%D0%BA%D0%BE%D0%B3%D0%BE_%D0%B7%D0%BE%D0%BE%D0%BF%D0%B0%D1%80%D0%BA%D0%B0_07.jpg/1280px-%D0%9F%D1%82%D0%B8%D1%86%D1%8B_%D0%93%D0%B0%D0%BD%D0%BD%D0%BE%D0%B2%D0%B5%D1%80%D1%81%D0%BA%D0%BE%D0%B3%D0%BE_%D0%B7%D0%BE%D0%BE%D0%BF%D0%B0%D1%80%D0%BA%D0%B0_07.jpg": {
 "at": "2026-10-12",
@@ -47542,6 +47602,12 @@
 "label": "c44",
 "pack": "abstract-light-leaks",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Sepilok_Bed_and_Breakfast_20190706_152544.jpg/1280px-Sepilok_Bed_and_Breakfast_20190706_152544.jpg": {
+"at": "2026-10-12",
+"label": "c51",
+"pack": "evpack-mothers-day-2027",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Shogetsu_S040_3.jpg/1280px-Shogetsu_S040_3.jpg": {
 "at": "2026-10-12",
@@ -48307,9 +48373,9 @@
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Manet_Bouquet_de_pivoines.jpg/1280px-Manet_Bouquet_de_pivoines.jpg": {
 "at": "2026-10-12",
-"label": "c67",
-"pack": "pack-impressionists",
-"reason": "weak"
+"label": "c06",
+"pack": "evpack-mothers-day-2027",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Marwari_Breed_goat_in_Thar_Desert_farmhouse.jpg/1280px-Marwari_Breed_goat_in_Thar_Desert_farmhouse.jpg": {
 "at": "2026-10-12",
@@ -54257,6 +54323,12 @@
 "pack": "pack-foxes",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Ranunculus_auricomus_kz12.jpg/1280px-Ranunculus_auricomus_kz12.jpg": {
+"at": "2026-10-12",
+"label": "c17",
+"pack": "evpack-mothers-day-2027",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Rolling_the_square%2C_Walls_Hill_-_geograph.org.uk_-_6462089.jpg/1280px-Rolling_the_square%2C_Walls_Hill_-_geograph.org.uk_-_6462089.jpg": {
 "at": "2026-10-12",
 "label": "c58",
@@ -54971,6 +55043,12 @@
 "pack": "evpack-un-day-2026",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Afternoon_Tea_MET_DP814196.jpg/1280px-Afternoon_Tea_MET_DP814196.jpg": {
+"at": "2026-10-12",
+"label": "c54",
+"pack": "evpack-mothers-day-2027",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Barfi_-_Indian_sweet.jpg/1280px-Barfi_-_Indian_sweet.jpg": {
 "at": "2026-10-12",
 "label": "c51",
@@ -55253,6 +55331,12 @@
 "pack": "pack-libraries",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Sault_bouquets_de_lavande.jpg/1280px-Sault_bouquets_de_lavande.jpg": {
+"at": "2026-10-12",
+"label": "c48",
+"pack": "evpack-mothers-day-2027",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Scala_dei_Turchi_%2837992991776%29.jpg/1280px-Scala_dei_Turchi_%2837992991776%29.jpg": {
 "at": "2026-10-12",
 "label": "c58",
@@ -55522,6 +55606,12 @@
 "label": "c12",
 "pack": "pack-moroccan-souks",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/1_yuanyang_rice_terrace_paozhuzhai_2012.jpg/1280px-1_yuanyang_rice_terrace_paozhuzhai_2012.jpg": {
+"at": "2026-10-12",
+"label": "c14",
+"pack": "pack-rice-terraces",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/2008-10-18_Mount_Shuksan_IMG_3722.jpg/1280px-2008-10-18_Mount_Shuksan_IMG_3722.jpg": {
 "at": "2026-10-12",
@@ -55883,6 +55973,12 @@
 "pack": "pack-amsterdam",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Jatiluwih_Rice_Terrace_-_Subak_Jatiluwih_01.jpg/1280px-Jatiluwih_Rice_Terrace_-_Subak_Jatiluwih_01.jpg": {
+"at": "2026-10-12",
+"label": "c05",
+"pack": "pack-rice-terraces",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Kalikuning_Bridge_on_The_Slopes_of_Mount_Merapi.jpg/1280px-Kalikuning_Bridge_on_The_Slopes_of_Mount_Merapi.jpg": {
 "at": "2026-10-12",
 "label": "c82",
@@ -56051,6 +56147,12 @@
 "pack": "evpack-happiness-2027",
 "reason": "text"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Batad_Rice_Terraces_2.jpg/1280px-Batad_Rice_Terraces_2.jpg": {
+"at": "2026-10-12",
+"label": "c30",
+"pack": "pack-rice-terraces",
+"reason": "similar"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Brighton_Dorset_Gardens_glass_3.jpg/1280px-Brighton_Dorset_Gardens_glass_3.jpg": {
 "at": "2026-10-12",
 "label": "c102",
@@ -56206,6 +56308,12 @@
 "label": "c95",
 "pack": "pack-kyoto",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Shortbread_Hearts.jpg/1280px-Shortbread_Hearts.jpg": {
+"at": "2026-10-12",
+"label": "c58",
+"pack": "evpack-mothers-day-2027",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Squirrel_Zinnia_Janif.jpg/1280px-Squirrel_Zinnia_Janif.jpg": {
 "at": "2026-10-12",
@@ -57257,6 +57365,12 @@
 "pack": "pack-islands",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Rice_terraces_in_Tegallalang_4.jpg/1280px-Rice_terraces_in_Tegallalang_4.jpg": {
+"at": "2026-10-12",
+"label": "c02",
+"pack": "pack-rice-terraces",
+"reason": "similar"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/STS-79_Rollout_-_GPN-2000-000967.jpg/1280px-STS-79_Rollout_-_GPN-2000-000967.jpg": {
 "at": "2026-10-12",
 "label": "c89",
@@ -57519,6 +57633,12 @@
 "at": "2026-10-12",
 "label": "c91",
 "pack": "pack-castles",
+"reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Advent_floristry_971.JPG/1280px-Advent_floristry_971.JPG": {
+"at": "2026-10-12",
+"label": "c40",
+"pack": "evpack-mothers-day-2027",
 "reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/At_New_York_City_2023_032.jpg/1280px-At_New_York_City_2023_032.jpg": {
@@ -59155,9 +59275,9 @@
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Callyspongia_vaginalis_%28Branching_Vase_Sponge_-_pink_variation%29.jpg/1280px-Callyspongia_vaginalis_%28Branching_Vase_Sponge_-_pink_variation%29.jpg": {
 "at": "2026-10-12",
-"label": "c32",
-"pack": "evpack-kindness-2026",
-"reason": "off-theme"
+"label": "c11",
+"pack": "evpack-mothers-day-2027",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/DSC00421_%2833614495376%29.jpg/1280px-DSC00421_%2833614495376%29.jpg": {
 "at": "2026-10-12",
@@ -60181,8 +60301,8 @@
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Chocolate_artesanal_%282%29.jpg/1280px-Chocolate_artesanal_%282%29.jpg": {
 "at": "2026-10-12",
-"label": "c27",
-"pack": "evpack-kindness-2026",
+"label": "c68",
+"pack": "evpack-mothers-day-2027",
 "reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Delta_and_Homochitto_national_forests%2C_Mississippi_LOC_96681278.jpg/1280px-Delta_and_Homochitto_national_forests%2C_Mississippi_LOC_96681278.jpg": {
@@ -62435,6 +62555,12 @@
 "pack": "evpack-new-years-eve-2026",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Pink_hydrangea_in_Z%C3%BCrich.jpg/1280px-Pink_hydrangea_in_Z%C3%BCrich.jpg": {
+"at": "2026-10-12",
+"label": "c23",
+"pack": "evpack-mothers-day-2027",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Quokka_at_ESEAP_Conference_2024.jpg/1280px-Quokka_at_ESEAP_Conference_2024.jpg": {
 "at": "2026-10-12",
 "label": "c116",
@@ -62632,6 +62758,12 @@
 "label": "c110",
 "pack": "pack-winter-scenes",
 "reason": "quality"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Phalaenopsis_July_2020-2.jpg/1280px-Phalaenopsis_July_2020-2.jpg": {
+"at": "2026-10-12",
+"label": "c35",
+"pack": "evpack-mothers-day-2027",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Saint_Margaret_protestant_church_in_Riquewihr_04.jpg/1280px-Saint_Margaret_protestant_church_in_Riquewihr_04.jpg": {
 "at": "2026-10-12",
@@ -63635,6 +63767,12 @@
 "pack": "pack-frogs",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Vintage_double_stranded_pearl_necklace.jpg/1280px-Vintage_double_stranded_pearl_necklace.jpg": {
+"at": "2026-10-12",
+"label": "c82",
+"pack": "evpack-mothers-day-2027",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Welsh_Corgi_%282023-07-21%29_E911a_01.jpg/1280px-Welsh_Corgi_%282023-07-21%29_E911a_01.jpg": {
 "at": "2026-10-12",
 "label": "c23",
@@ -64295,11 +64433,23 @@
 "pack": "pack-renaissance",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Longsheng_rice_terraces_87887-Longsheng_%2849040769276%29.jpg/1280px-Longsheng_rice_terraces_87887-Longsheng_%2849040769276%29.jpg": {
+"at": "2026-10-12",
+"label": "c18",
+"pack": "pack-rice-terraces",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Makali_and_Kofta_by_Alushi.jpg/1280px-Makali_and_Kofta_by_Alushi.jpg": {
 "at": "2026-10-12",
 "label": "c87",
 "pack": "evpack-vegan-2026",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Malva_moschata_Mitterbach_02.jpg/1280px-Malva_moschata_Mitterbach_02.jpg": {
+"at": "2026-10-12",
+"label": "c93",
+"pack": "evpack-mothers-day-2027",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Marine_chronometer%2C_Stockholm%2C_1845%2C_TM44861_-_Tekniska_museet_-_Stockholm%2C_Sweden_-_DSC01400.JPG/1280px-Marine_chronometer%2C_Stockholm%2C_1845%2C_TM44861_-_Tekniska_museet_-_Stockholm%2C_Sweden_-_DSC01400.JPG": {
 "at": "2026-10-12",
@@ -64714,6 +64864,12 @@
 "label": "c40",
 "pack": "evpack-remembrance-2026",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Jatiluwih_Rice_Terrace_-_Subak_Jatiluwih_13.jpg/1280px-Jatiluwih_Rice_Terrace_-_Subak_Jatiluwih_13.jpg": {
+"at": "2026-10-12",
+"label": "c07",
+"pack": "pack-rice-terraces",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Kasteel_van_Zellaer.jpg/1280px-Kasteel_van_Zellaer.jpg": {
 "at": "2026-10-12",
@@ -66121,8 +66277,8 @@
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Orchid_in_pot.jpg/1280px-Orchid_in_pot.jpg": {
 "at": "2026-10-12",
-"label": "c243",
-"pack": "daily-2023-01",
+"label": "c33",
+"pack": "evpack-mothers-day-2027",
 "reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Ottawa_Tulip_Festival_IMG_1042_%28509262022%29.jpg/1280px-Ottawa_Tulip_Festival_IMG_1042_%28509262022%29.jpg": {
@@ -66479,6 +66635,12 @@
 "pack": "evpack-thanksgiving-2026",
 "reason": "text"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Dianthus_caryophyllus_in_China_%2816%29.jpg/1280px-Dianthus_caryophyllus_in_China_%2816%29.jpg": {
+"at": "2026-10-12",
+"label": "c02",
+"pack": "evpack-mothers-day-2027",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Eggs_from_the_common_frog_%28Rana_temporaria%29_up_close.jpg/1280px-Eggs_from_the_common_frog_%28Rana_temporaria%29_up_close.jpg": {
 "at": "2026-10-12",
 "label": "c14",
@@ -66586,6 +66748,12 @@
 "label": "c79",
 "pack": "evpack-bean-day-2027",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Water_truck_watering_flowers.jpg/1280px-Water_truck_watering_flowers.jpg": {
+"at": "2026-10-12",
+"label": "c94",
+"pack": "evpack-mothers-day-2027",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/X3.08_Tr%C3%BCmmelbachtal.jpg/1280px-X3.08_Tr%C3%BCmmelbachtal.jpg": {
 "at": "2026-10-12",
@@ -67480,6 +67648,12 @@
 "label": "c56",
 "pack": "pack-fairytale-villages",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Jatiluwih_Rice_Terrace_-_Subak_Jatiluwih_11.jpg/1280px-Jatiluwih_Rice_Terrace_-_Subak_Jatiluwih_11.jpg": {
+"at": "2026-10-12",
+"label": "c06",
+"pack": "pack-rice-terraces",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Kendama_toy.jpg/1280px-Kendama_toy.jpg": {
 "at": "2026-10-12",
@@ -69007,8 +69181,8 @@
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Phalaenopsis_keiki.jpg/1280px-Phalaenopsis_keiki.jpg": {
 "at": "2026-10-12",
-"label": "c245",
-"pack": "daily-2023-01",
+"label": "c34",
+"pack": "evpack-mothers-day-2027",
 "reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Pont_Neuf%2C_Paris_21_February_2016.jpg/1280px-Pont_Neuf%2C_Paris_21_February_2016.jpg": {
@@ -69561,6 +69735,12 @@
 "at": "2026-10-12",
 "label": "c88",
 "pack": "pack-ancient-ruins",
+"reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/K%C3%B6lnerEulen2020_04.jpg/1280px-K%C3%B6lnerEulen2020_04.jpg": {
+"at": "2026-10-12",
+"label": "c46",
+"pack": "evpack-mothers-day-2027",
 "reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Koski_Muumimaailmassa.jpg/1280px-Koski_Muumimaailmassa.jpg": {
@@ -72383,6 +72563,12 @@
 "pack": "evpack-book-day-2027",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Dianthus_caryophyllus_in_China.jpg/1280px-Dianthus_caryophyllus_in_China.jpg": {
+"at": "2026-10-12",
+"label": "c03",
+"pack": "evpack-mothers-day-2027",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Eclipse_seen_from_the_Painted_Hills_of_Oregon_%2835915318274%29.jpg/1280px-Eclipse_seen_from_the_Painted_Hills_of_Oregon_%2835915318274%29.jpg": {
 "at": "2026-10-12",
 "label": "p-95474cf33f68",
@@ -73007,6 +73193,12 @@
 "pack": "pack-renaissance",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Perfume_bottles_%28ittr%29.jpg/1280px-Perfume_bottles_%28ittr%29.jpg": {
+"at": "2026-10-12",
+"label": "c86",
+"pack": "evpack-mothers-day-2027",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Rishop_Pine_forest_at_6_mile%2C_Rishop_05.jpg/1280px-Rishop_Pine_forest_at_6_mile%2C_Rishop_05.jpg": {
 "at": "2026-10-12",
 "label": "c108",
@@ -73193,6 +73385,12 @@
 "pack": "evpack-smile-day-2026",
 "reason": "quality"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/William_Nierenberg_Rose_Garden.jpg/1280px-William_Nierenberg_Rose_Garden.jpg": {
+"at": "2026-10-12",
+"label": "c42",
+"pack": "evpack-mothers-day-2027",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/14-06-30-colmar-by-RalfR-063.jpg/1280px-14-06-30-colmar-by-RalfR-063.jpg": {
 "at": "2026-10-12",
 "label": "c62",
@@ -73210,6 +73408,12 @@
 "label": "c51",
 "pack": "pack-tiles",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Batad_Rice_Terraces_3.jpg/1280px-Batad_Rice_Terraces_3.jpg": {
+"at": "2026-10-12",
+"label": "c31",
+"pack": "pack-rice-terraces",
+"reason": "similar"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Boston%2C_as_the_Eagle_and_the_Wild_Goose_See_It.jpg/1280px-Boston%2C_as_the_Eagle_and_the_Wild_Goose_See_It.jpg": {
 "at": "2026-10-12",
@@ -75851,6 +76055,12 @@
 "pack": "abstract-kaleidoscope",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Advent_floristry_3878.JPG/1280px-Advent_floristry_3878.JPG": {
+"at": "2026-10-12",
+"label": "c37",
+"pack": "evpack-mothers-day-2027",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Ajuga_reptans_Paslieres_2013-05-09_n01.jpg/1280px-Ajuga_reptans_Paslieres_2013-05-09_n01.jpg": {
 "at": "2026-10-12",
 "label": "c22",
@@ -78407,6 +78617,12 @@
 "pack": "pack-tropical-beaches",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Kunzite_%26_Pearl_Necklace_%284739787816%29.jpg/1280px-Kunzite_%26_Pearl_Necklace_%284739787816%29.jpg": {
+"at": "2026-10-12",
+"label": "c79",
+"pack": "evpack-mothers-day-2027",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Lava_Lamp_%288661684036%29.jpg/1280px-Lava_Lamp_%288661684036%29.jpg": {
 "at": "2026-10-12",
 "label": "c06",
@@ -80219,6 +80435,12 @@
 "pack": "abstract-bokeh",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Breakfast_In_Bed.jpg/1280px-Breakfast_In_Bed.jpg": {
+"at": "2026-10-12",
+"label": "c52",
+"pack": "evpack-mothers-day-2027",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Coffee_bean_roasted_PhilippinesB.jpg/1280px-Coffee_bean_roasted_PhilippinesB.jpg": {
 "at": "2026-10-12",
 "label": "c91",
@@ -81221,6 +81443,12 @@
 "pack": "pack-butterflies",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Queen_Of_The_Hill_%28224953169%29.jpeg/1280px-Queen_Of_The_Hill_%28224953169%29.jpeg": {
+"at": "2026-10-12",
+"label": "c19",
+"pack": "pack-rice-terraces",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Round_the_Yule_Log_-_p131.png/1280px-Round_the_Yule_Log_-_p131.png": {
 "at": "2026-10-12",
 "label": "c61",
@@ -81495,6 +81723,12 @@
 "at": "2026-10-12",
 "label": "c107",
 "pack": "pack-new-york",
+"reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Berry_Bliss_Panckaes_%2828954625606%29.jpg/1280px-Berry_Bliss_Panckaes_%2828954625606%29.jpg": {
+"at": "2026-10-12",
+"label": "c72",
+"pack": "evpack-mothers-day-2027",
 "reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Bessen_van_een_Ophiopogon_planiscapus_%27Niger%27._28-02-2023._%28d.j.b%29.jpg/1280px-Bessen_van_een_Ophiopogon_planiscapus_%27Niger%27._28-02-2023._%28d.j.b%29.jpg": {
@@ -83849,6 +84083,12 @@
 "pack": "daily-2025-06",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Sweet_Pea%28Lathyrus_odoratus%29.jpg/1280px-Sweet_Pea%28Lathyrus_odoratus%29.jpg": {
+"at": "2026-10-12",
+"label": "c27",
+"pack": "evpack-mothers-day-2027",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Wall_decoration_of_The_Angel_of_Amsterdam_city%2C_in_the_Jordaan_district_in_Amsterdam_center_from_photographer%2C_Fons_Heijnsbroek.jpg/1280px-Wall_decoration_of_The_Angel_of_Amsterdam_city%2C_in_the_Jordaan_district_in_Amsterdam_center_from_photographer%2C_Fons_Heijnsbroek.jpg": {
 "at": "2026-10-12",
 "label": "c105",
@@ -83965,8 +84205,8 @@
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Hydrangea_petiolaris_%28klimhortensia%29%2C_05-03-2024._%28actm.%29_01.jpg/1280px-Hydrangea_petiolaris_%28klimhortensia%29%2C_05-03-2024._%28actm.%29_01.jpg": {
 "at": "2026-10-12",
-"label": "c1140",
-"pack": "daily-2026-01",
+"label": "c22",
+"pack": "evpack-mothers-day-2027",
 "reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Interieur%2C_overzicht_van_de_bibliotheek%2C_op_de_hoofdverdieping%2C_na_herstel_van_de_geschilderde_decoratie_-_Amsterdam_-_20534998_-_RCE.jpg/1280px-Interieur%2C_overzicht_van_de_bibliotheek%2C_op_de_hoofdverdieping%2C_na_herstel_van_de_geschilderde_decoratie_-_Amsterdam_-_20534998_-_RCE.jpg": {
@@ -85925,6 +86165,12 @@
 "pack": "pack-whales",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Edelwicke_%28Lathyrus_odoratus%29_Bl%C3%BCte_focus_stack-20200628-RM-175552.jpg/1280px-Edelwicke_%28Lathyrus_odoratus%29_Bl%C3%BCte_focus_stack-20200628-RM-175552.jpg": {
+"at": "2026-10-12",
+"label": "c25",
+"pack": "evpack-mothers-day-2027",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/El_Escorial_109.jpg/1280px-El_Escorial_109.jpg": {
 "at": "2026-10-12",
 "label": "c100",
@@ -85941,6 +86187,12 @@
 "at": "2026-10-12",
 "label": "c55",
 "pack": "pack-cathedrals",
+"reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Fresh_strawberry_roll_cake_-_Ikigai_Coffee_2024-03-31.jpg/1280px-Fresh_strawberry_roll_cake_-_Ikigai_Coffee_2024-03-31.jpg": {
+"at": "2026-10-12",
+"label": "c61",
+"pack": "evpack-mothers-day-2027",
 "reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Gateway_Bklyn_North_35.jpg/1280px-Gateway_Bklyn_North_35.jpg": {
@@ -87821,6 +88073,12 @@
 "pack": "pack-lisbon",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/China_-_Longji_Dragon-back_Terraces_23_%28140906773%29.jpg/1280px-China_-_Longji_Dragon-back_Terraces_23_%28140906773%29.jpg": {
+"at": "2026-10-12",
+"label": "c15",
+"pack": "pack-rice-terraces",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Cloisters%2C_Mosteiro_dos_Jer%C3%B3nimos%2C_Lisbon%2C_Portugal_julesvernex2-5.jpg/1280px-Cloisters%2C_Mosteiro_dos_Jer%C3%B3nimos%2C_Lisbon%2C_Portugal_julesvernex2-5.jpg": {
 "at": "2026-10-12",
 "label": "c07",
@@ -89227,9 +89485,9 @@
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/A_bouquet_of_white_and_red_two-tone_tulips_in_a_basket.jpg/1280px-A_bouquet_of_white_and_red_two-tone_tulips_in_a_basket.jpg": {
 "at": "2026-10-12",
-"label": "c63",
-"pack": "evpack-kindness-2026",
-"reason": "similar"
+"label": "c14",
+"pack": "evpack-mothers-day-2027",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Allegorische_Skulpturen_in_der_Klosterbibliothek_Wiblingen._02.jpg/1280px-Allegorische_Skulpturen_in_der_Klosterbibliothek_Wiblingen._02.jpg": {
 "at": "2026-10-12",
@@ -89815,9 +90073,9 @@
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/World%27s_Largest_Twine_Ball%2C_Darwin%2C_Minnesota_2021-07-22.jpg/1280px-World%27s_Largest_Twine_Ball%2C_Darwin%2C_Minnesota_2021-07-22.jpg": {
 "at": "2026-10-12",
-"label": "c1109",
-"pack": "daily-2025-11",
-"reason": "off-theme"
+"label": "c88",
+"pack": "evpack-mothers-day-2027",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Yellow-billed_Stork_Breeding_Juvenile_Lupande_Jul23_A7R_06393.jpg/1280px-Yellow-billed_Stork_Breeding_Juvenile_Lupande_Jul23_A7R_06393.jpg": {
 "at": "2026-10-12",
@@ -89941,8 +90199,8 @@
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Macaron_d%27Amiens_02.jpg/1280px-Macaron_d%27Amiens_02.jpg": {
 "at": "2026-10-12",
-"label": "c695",
-"pack": "daily-2025-07",
+"label": "c63",
+"pack": "evpack-mothers-day-2027",
 "reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Magellanic_Penguins_%285540855829%29.jpg/1280px-Magellanic_Penguins_%285540855829%29.jpg": {
@@ -90106,6 +90364,12 @@
 "label": "c37",
 "pack": "evpack-friendship-2027",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Buttercup_Ranunculus_100x.jpg/1280px-Buttercup_Ranunculus_100x.jpg": {
+"at": "2026-10-12",
+"label": "c18",
+"pack": "evpack-mothers-day-2027",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Danish_pastry%2C_Copenhagen.jpg/1280px-Danish_pastry%2C_Copenhagen.jpg": {
 "at": "2026-10-12",
@@ -90453,6 +90717,12 @@
 "at": "2026-10-12",
 "label": "c89",
 "pack": "pack-waterfalls",
+"reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Advent_floristry_41.jpg/1280px-Advent_floristry_41.jpg": {
+"at": "2026-10-12",
+"label": "c38",
+"pack": "evpack-mothers-day-2027",
 "reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Alc%C3%A1zar%2C_Segovia%2C_Espa%C3%B1a%2C_2024-06-14%2C_DD_71.jpg/1280px-Alc%C3%A1zar%2C_Segovia%2C_Espa%C3%B1a%2C_2024-06-14%2C_DD_71.jpg": {
@@ -90910,6 +91180,12 @@
 "label": "c08",
 "pack": "pack-castles",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Water_Droplets_on_Rice_Plant_in_Batad%2C_Banaue%2C_Ifugao%2C_Philippines.jpg/1280px-Water_Droplets_on_Rice_Plant_in_Batad%2C_Banaue%2C_Ifugao%2C_Philippines.jpg": {
+"at": "2026-10-12",
+"label": "c12",
+"pack": "pack-rice-terraces",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Wooden_ruler_used_for_measuring_cloth_in_a_Bangalore_tailor_shop.jpg/1280px-Wooden_ruler_used_for_measuring_cloth_in_a_Bangalore_tailor_shop.jpg": {
 "at": "2026-10-12",
@@ -91505,6 +91781,18 @@
 "pack": "pack-sea-life",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Port_of_Call_bed_%26_breakfast%2C_Ford_St%2C_Hermit_Park%2C_Queensland%2C_Australia.jpg/1280px-Port_of_Call_bed_%26_breakfast%2C_Ford_St%2C_Hermit_Park%2C_Queensland%2C_Australia.jpg": {
+"at": "2026-10-12",
+"label": "c50",
+"pack": "evpack-mothers-day-2027",
+"reason": "text"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Rice_terrace_of_Tegallalan_200507-4.jpg/1280px-Rice_terrace_of_Tegallalan_200507-4.jpg": {
+"at": "2026-10-12",
+"label": "c04",
+"pack": "pack-rice-terraces",
+"reason": "similar"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Royal_Palace_of_Ajuda.jpg/1280px-Royal_Palace_of_Ajuda.jpg": {
 "at": "2026-10-12",
 "label": "c69",
@@ -91929,6 +92217,12 @@
 "at": "2026-10-12",
 "label": "c96",
 "pack": "evpack-new-year-2027",
+"reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Afternoon_Tea_%2854650025672%29.jpg/1280px-Afternoon_Tea_%2854650025672%29.jpg": {
+"at": "2026-10-12",
+"label": "c55",
+"pack": "evpack-mothers-day-2027",
 "reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/American_Rainbow_Flag_%2818598455344%29.jpg/1280px-American_Rainbow_Flag_%2818598455344%29.jpg": {
@@ -92591,6 +92885,12 @@
 "pack": "daily-2026-03",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Ranunculus%2C_Obere_Weide%2C_Waldenburg_202005.jpg/1280px-Ranunculus%2C_Obere_Weide%2C_Waldenburg_202005.jpg": {
+"at": "2026-10-12",
+"label": "c19",
+"pack": "evpack-mothers-day-2027",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Saint-Tropez%2C_Var%2C_France_-_Flickr_-_pom%27..jpg/1280px-Saint-Tropez%2C_Var%2C_France_-_Flickr_-_pom%27..jpg": {
 "at": "2026-10-12",
 "label": "c100",
@@ -92926,6 +93226,12 @@
 "label": "c138",
 "pack": "pack-libraries",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Jatiluwih_Rice_Terrace_-_Subak_Jatiluwih_17.jpg/1280px-Jatiluwih_Rice_Terrace_-_Subak_Jatiluwih_17.jpg": {
+"at": "2026-10-12",
+"label": "c08",
+"pack": "pack-rice-terraces",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Kaleidoscope_%2826957658152%29.jpg/1280px-Kaleidoscope_%2826957658152%29.jpg": {
 "at": "2026-10-12",
@@ -94300,6 +94606,12 @@
 "label": "c102",
 "pack": "evpack-water-day-2027",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Chocolate_artesanal_%286%29.jpg/1280px-Chocolate_artesanal_%286%29.jpg": {
+"at": "2026-10-12",
+"label": "c69",
+"pack": "evpack-mothers-day-2027",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Cochem%2C_Germany_postcard_%2816999406359%29.jpg/1280px-Cochem%2C_Germany_postcard_%2816999406359%29.jpg": {
 "at": "2026-10-12",
