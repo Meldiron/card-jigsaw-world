@@ -126,6 +126,8 @@ Read every contact sheet you produce. Look at each cell and reject:
 - the same scene twice (watch the author under each thumbnail: same author + same subject = same scene);
 - anything that does not obviously match the pack name; images where the subject is a speck;
 - flat images (half sky, half water, blurred backgrounds dominate), dark/underexposed images.
+- line drawings, sketches, pale prints and single-tone artworks on plain paper (one colour plus
+  thin lines is unsolvable); reason `quality`.
 
 Prefer explicit `--pick` lists over auto-fill for anything the owner will see first (covers,
 event packs). After `apply`, read the final puzzles sheet; the job is not done until that sheet is

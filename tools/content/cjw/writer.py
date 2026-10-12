@@ -191,7 +191,8 @@ def new_pack(spec, snap, sort_order=None):
                 isFree=price == 'free', isPremium=bool(spec.get('premium', False)), isSeasonal=False,
                 sortOrder=spec.get('sortOrder', sort_order if sort_order is not None else 500), accent=spec.get('accent') or '#475569', emoji='')
     if spec['id'] in packs:
-        api.update_row('packs', spec['id'], {k: v for k, v in data.items() if k in ('name', 'category', 'description', 'priceCoins', 'priceTickets', 'isFree', 'sortOrder')})
+        # prices of existing packs belong to the economy (app side); only set them on create
+        api.update_row('packs', spec['id'], {k: v for k, v in data.items() if k in ('name', 'category', 'description', 'sortOrder')})
         state.log('pack-meta', pack=spec['id'])
     else:
         data.update(coverUrl='', imageCount=0)

@@ -13,7 +13,8 @@ never use git, never edit code under `tools/content/cjw` (report bugs in your re
    `run.sh reject PACK p03 p07 --reason people` (reasons: people, text, landscape, duplicate,
    quality = global; off-theme, weak, similar = this pack only). Be strict: a tiny person, a hand, a
    reflection, a painted figure, a sign, a page of text, the same scene twice, a picture that does
-   not clearly show the pack's subject, a dark or flat picture: all out.
+   not clearly show the pack's subject, a dark or flat picture, a line drawing or pale single-tone
+   artwork on plain paper: all out.
 2. Write `tools/content/specs/PACK.json` (keep `id`, `name`, `category` unless re-theming):
    a real one-sentence `description` (no emoji, no marketing fluff), 24–30 specific `topics`
    (proper nouns, species, dishes, named places; what a search engine understands), optional

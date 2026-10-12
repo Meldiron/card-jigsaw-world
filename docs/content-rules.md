@@ -40,6 +40,9 @@ reports the ones that do not. The pack-making workflow that enforces them is the
 - **Clear subject**: one obvious thing to look at, in focus, filling a good part of the frame.
 - **Colour variety**: several distinct colour regions so cards can be sorted by colour; avoid
   monochrome or one-tone images and black-and-white photos.
+- **No line drawings or sketches**: faint ink or pencil lines on plain paper, prints with large blank
+  areas, and pale single-tone artworks are near impossible to solve (owner feedback 2026-10-12, a
+  Cleveland ink drawing on beige paper). Reject them as `quality` even when the subject fits.
 - **Detail everywhere**: texture or edges in every region. Reject images where more than about half
   of the frame is flat sky, water, wall or bokeh (the tools compute a `flat` score; above 0.55 is
   rejected automatically).
