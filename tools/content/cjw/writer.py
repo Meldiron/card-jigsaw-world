@@ -25,7 +25,7 @@ def _meta_ok(url):
     m = imagecache.fetch(url)
     return m if m.get('ok') else None
 
-def select_candidates(pool, spec, kept_metas, kept_authors, need, picks=(), auto=True, rejected=None):
+def select_candidates(pool, spec, kept_metas, kept_authors, need, picks=(), auto=True, rejected=None, taken=frozenset()):
     # picks are always honoured first; auto-fill round-robins over topics
     """Return ordered candidate list honouring explicit picks, topic round-robin, dup and author caps."""
     rejected = rejected or {}
@@ -37,6 +37,7 @@ def select_candidates(pool, spec, kept_metas, kept_authors, need, picks=(), auto
             reason[0] = why
             return False
         if state.is_rejected(c['url'], spec['id'], rejected): return no('rejected earlier')
+        if c['url'] in taken: return no('already used in another pack')
         # Appwrite string columns are 512 chars; such URLs would abort apply mid-run.
         if len(c['url']) > 2000: return no('source URL longer than 2000 characters')   # rows store our own URLs; sourceUrl holds 2000
         if c.get('status') != 'ok': return no(f"candidate status {c.get('status')}")
@@ -102,7 +103,9 @@ def apply(spec, snap, target=None, picks=(), auto=True, dry=False, daily=False):
         need = len(removed)
     else:
         need = max(0, target - len(kept))
-    chosen = select_candidates(pool, spec, kept_metas, kept_authors, need, picks, auto, rejected)
+    # pictures used anywhere else in the catalogue (twin event years share theirs on purpose via clone)
+    taken = {p['imageUrl'] for p in catalog.load(refresh=True)['puzzles'] if p['packId'] != pack_id}
+    chosen = select_candidates(pool, spec, kept_metas, kept_authors, need, picks, auto, rejected, taken)
     print(f'{pack_id}: {len(puzzles)} puzzles, remove {len(removed)}, keep {len(kept)}, need {need}, chosen {len(chosen)}')
     if dry:
         for c in chosen: print('   +', c['key'], c.get('topic'), c['author'], c['url'])
