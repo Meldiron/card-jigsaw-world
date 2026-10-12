@@ -2,7 +2,7 @@
  "id": "evpack-new-year-2027",
  "name": "New Year's Day",
  "category": "Event",
- "description": "A limited pack for New Year's Day (1 January 2027). First sunrises, Japanese kagami mochi and kadomatsu, lucky pigs and clovers, Rose Parade floats and New Year dishes from around the world, playable for one week.",
+ "description": "A limited pack for New Year's Day (1 January 2027). Winter sunrises, Japanese kagami mochi, kadomatsu and daruma, a lucky ladybird, winter flowers and berries, and New Year dishes from osechi to Hoppin' John, playable for one week.",
  "kind": "event",
  "target": 24,
  "per_topic": 1,
@@ -46,6 +46,13 @@
   "black-eyed peas",
   "lentils",
   "daruma dolls",
-  "ema plaques"
- ]
+  "ema plaques",
+  "Mount Fuji sunrise",
+  "Adonis amurensis",
+  "Nandina domestica",
+  "Sarcandra glabra",
+  "sunrise sea",
+  "kumquat"
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Kagami_mochi_%2824323490125%29.jpg/1280px-Kagami_mochi_%2824323490125%29.jpg"
 }

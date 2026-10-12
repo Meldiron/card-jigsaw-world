@@ -3,7 +3,7 @@
  "target": 24,
  "per_topic": 1,
  "fetch_per_topic": 5,
- "author_cap": 3,
+ "author_cap": 4,
  "sources": [
   "commons",
   "nga"
@@ -12,7 +12,7 @@
  "id": "pack-portraits",
  "name": "Animals in Art",
  "category": "Art",
- "description": "Painted and printed animals: Dürer's hare, Stubbs's horses, Hondecoeter's birds, Jakuchu's roosters, Koson's owls and Audubon's plates.",
+ "description": "Painted and printed animals: Marc's blue horses, Hondecoeter's hen, Barraband's parrots, Gould's hummingbirds, Seba's sloth and Haeckel's jellyfish.",
  "topics": [
   "Dürer Young Hare",
   "George Stubbs horse painting",
@@ -21,10 +21,6 @@
   "Franz Marc horse painting",
   "Franz Marc deer painting",
   "Henri Rousseau tiger painting",
-  "Ito Jakuchu rooster painting",
-  "Hokusai carp print",
-  "Hiroshige eagle print",
-  "Hiroshige cat print",
   "Edwin Landseer dog painting",
   "Rosa Bonheur lion painting",
   "Paulus Potter bull painting",
@@ -36,9 +32,6 @@
   "Archibald Thorburn bird painting",
   "Bruno Liljefors fox painting",
   "Jan Fyt dog painting",
-  "Utagawa Kuniyoshi cats print",
-  "Kawanabe Kyosai crow",
-  "Ohara Koson owl print",
   "Edward Lear parrot lithograph",
   "John Gould hummingbird lithograph",
   "Gustave Courbet deer painting",
@@ -54,14 +47,21 @@
   "Maria Sibylla Merian plate",
   "Bruno Liljefors eagle painting",
   "Thorburn ptarmigan",
-  "Joseph Wolf lithograph",
-  "Edward Lear owl",
   "Carl Reichert dog painting",
   "Alfred Brunel de Neuville cats painting",
-  "Frans Snyders animals painting"
+  "Frans Snyders animals painting",
+  "Jacques Barraband parrot",
+  "Ustad Mansur painting",
+  "Ernst Haeckel Discomedusae",
+  "Albertus Seba plate",
+  "Joseph Wolf lithograph",
+  "Haeckel Trochilidae",
+  "Edward Lear owl",
+  "Blue Jay"
  ],
  "nga_classes": [
   "Print",
   "Painting"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Marc%2C_Franz_-_Blue_Horse_I_-_Google_Art_Project.jpg/1280px-Marc%2C_Franz_-_Blue_Horse_I_-_Google_Art_Project.jpg"
 }

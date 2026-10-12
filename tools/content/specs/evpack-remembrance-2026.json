@@ -1,13 +1,47 @@
 {
- "id": "evpack-remembrance-2026", "name": "Remembrance Day", "category": "Event",
+ "id": "evpack-remembrance-2026",
+ "name": "Remembrance Day",
+ "category": "Event",
  "description": "A limited pack for Remembrance Day (11 November 2026). Red poppies, poppy wreaths, memorials, eternal flames and candles of remembrance, playable for one week.",
- "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2,
- "sources": ["commons"],
- "topics": ["remembrance poppy wreath", "Flanders poppy field red", "Cenotaph Whitehall poppy wreaths", "war memorial poppy wreaths stone", "Tomb of the Unknown Soldier eternal flame Paris",
-  "Menin Gate Ypres memorial", "Tyne Cot cemetery headstones", "remembrance poppy lapel pin", "ceramic poppies Tower of London", "candle flame remembrance",
-  "wooden crosses poppies field of remembrance", "brass bugle", "laurel wreath bronze memorial", "Vimy Ridge memorial", "Thiepval memorial arches",
-  "red poppy flower macro", "Australian War Memorial pool of reflection", "commemorative candle lantern", "poppies gravestone", "corn poppy flower close up",
-  "Peace Tower Ottawa", "Arlington cemetery headstones rows", "poppy wreath cross wooden", "red poppies bouquet", "Shrine of Remembrance Melbourne",
-  "Last Post ceremony bugles wreaths", "stone memorial cross poppies", "poppy field sunset"],
- "more_topics": ["Edinburgh Scott Monument poppies", "Cenotaph London", "military medals ribbons", "remembrance garden crosses", "poppy seed head", "red poppy single stem", "Canadian National War Memorial", "Brookwood military cemetery"]
+ "kind": "event",
+ "target": 24,
+ "per_topic": 1,
+ "fetch_per_topic": 4,
+ "author_cap": 2,
+ "sources": [
+  "commons",
+  "openverse"
+ ],
+ "topics": [
+  "poppy wreath",
+  "poppy field",
+  "Cenotaph Whitehall",
+  "war memorial",
+  "Tomb of the Unknown Soldier",
+  "Menin Gate",
+  "Tyne Cot",
+  "ceramic poppies",
+  "remembrance crosses",
+  "bugle",
+  "Vimy Memorial",
+  "Thiepval Memorial",
+  "Australian War Memorial",
+  "Papaver rhoeas",
+  "National War Memorial Ottawa",
+  "Arlington National Cemetery",
+  "Shrine of Remembrance",
+  "war cemetery",
+  "eternal flame",
+  "memorial candle",
+  "military medals",
+  "poppy seed head"
+ ],
+ "more_topics": [
+  "Brookwood Military Cemetery",
+  "red poppies",
+  "poppy wreaths",
+  "Commonwealth war graves",
+  "Douaumont ossuary",
+  "Scottish National War Memorial"
+ ]
 }

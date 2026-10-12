@@ -1,8 +1,8 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-12T15:37:41",
-"msg": "Content: checkpoint (177 verified, 3 fixed, 51 audited, 61 pending)",
+"at": "2026-10-12T15:43:15",
+"msg": "Content: checkpoint (177 verified, 4 fixed, 50 audited, 61 pending)",
 "ok": true,
 "pushed": true,
 "stage": "committed"
@@ -20,6 +20,17 @@
 "puzzles": 24,
 "removed": 0,
 "status": "verified"
+},
+"abstract-brutalist": {
+"added": 0,
+"at": "2026-10-12T16:05:27",
+"category": "Abstract",
+"kind": "new",
+"last_step": "newpack",
+"name": "Brutalist Concrete",
+"puzzles": 0,
+"removed": 0,
+"status": "pending"
 },
 "abstract-fluid-ink": {
 "added": 23,
@@ -82,15 +93,16 @@
 "status": "verified"
 },
 "abstract-paper-collage": {
-"added": 0,
-"at": "2026-10-12T15:39:51",
+"added": 28,
+"at": "2026-10-12T16:05:19",
 "category": "Abstract",
+"issues": 0,
 "kind": "new",
-"last_step": "pool 84 usable",
+"last_step": "verify",
 "name": "Paper Collage & Torn Paper",
-"puzzles": 0,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 4,
+"status": "verified"
 },
 "abstract-smoke": {
 "added": 22,
@@ -710,8 +722,8 @@
 },
 "daily-2025": {
 "added": 0,
-"at": "2026-10-12T15:37:11",
-"last_step": "pool 77 usable",
+"at": "2026-10-12T16:07:37",
+"last_step": "pool 47 usable",
 "puzzles": null,
 "removed": 0,
 "status": "pending"
@@ -861,26 +873,27 @@
 "status": "verified"
 },
 "daily-2026-01": {
+"added": 28,
+"at": "2026-10-12T15:53:49",
+"category": "Daily",
+"issues": 0,
+"kind": "daily",
+"last_step": "verify",
+"name": "January 2026",
+"puzzles": 31,
+"removed": 29,
+"status": "verified"
+},
+"daily-2026-02": {
 "added": 27,
-"at": "2026-10-12T15:37:56",
+"at": "2026-10-12T16:04:55",
 "category": "Daily",
 "kind": "daily",
 "last_step": "apply",
-"name": "January 2026",
-"puzzles": 31,
+"name": "February 2026",
+"puzzles": 28,
 "removed": 28,
 "status": "fixed"
-},
-"daily-2026-02": {
-"added": 0,
-"at": "2026-10-12T12:32:51",
-"category": "Daily",
-"kind": "daily",
-"last_step": "reject 4 weak",
-"name": "February 2026",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
 },
 "daily-2026-03": {
 "added": 0,
@@ -1081,15 +1094,16 @@
 "status": "pending"
 },
 "evpack-book-day-2027": {
-"added": 0,
-"at": "2026-10-12T15:34:58",
+"added": 23,
+"at": "2026-10-12T15:44:51",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "pool 59 usable",
+"last_step": "verify",
 "name": "World Book Day",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 21,
+"removed": 16,
+"status": "verified"
 },
 "evpack-cat-day-2027": {
 "added": 0,
@@ -1205,13 +1219,14 @@
 },
 "evpack-dance-2027": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T16:03:29",
 "category": "Event",
 "kind": "event",
+"last_step": "pool 47 usable",
 "name": "International Dance Day",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "evpack-diwali-2026": {
 "added": 24,
@@ -1351,13 +1366,14 @@
 },
 "evpack-friendship-2027": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T15:51:04",
 "category": "Event",
 "kind": "event",
+"last_step": "reject 1 weak",
 "name": "International Day of Friendship",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "evpack-fries-2027": {
 "added": 21,
@@ -1560,15 +1576,16 @@
 "status": "verified"
 },
 "evpack-moon-day-2027": {
-"added": 0,
-"at": "2026-10-12T15:40:56",
+"added": 25,
+"at": "2026-10-12T15:50:43",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "reject 23 weak",
+"last_step": "verify",
 "name": "Moon Day",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 15,
+"status": "verified"
 },
 "evpack-mothers-day-2027": {
 "added": 0,
@@ -1605,15 +1622,16 @@
 "status": "verified"
 },
 "evpack-new-year-2027": {
-"added": 0,
-"at": "2026-10-12T15:38:31",
+"added": 22,
+"at": "2026-10-12T16:05:56",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "pool 31 usable",
+"last_step": "verify",
 "name": "New Year's Day",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 23,
+"removed": 13,
+"status": "verified"
 },
 "evpack-new-years-eve-2026": {
 "added": 23,
@@ -2279,26 +2297,28 @@
 "status": "verified"
 },
 "pack-coffee-shops": {
-"added": 22,
-"at": "2026-10-12T15:38:36",
+"added": 23,
+"at": "2026-10-12T15:43:40",
 "category": "Food",
+"issues": 0,
 "kind": "library",
-"last_step": "reject 1 people",
+"last_step": "verify",
 "name": "Coffee Shops",
 "puzzles": 24,
-"removed": 18,
-"status": "audited"
+"removed": 19,
+"status": "verified"
 },
 "pack-cozy-interiors": {
-"added": 0,
-"at": "2026-10-12T15:42:27",
+"added": 23,
+"at": "2026-10-12T16:03:42",
 "category": "Vintage",
+"issues": 0,
 "kind": "library",
-"last_step": "pool 20 usable",
+"last_step": "verify",
 "name": "Cozy Interiors",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 22,
+"removed": 13,
+"status": "verified"
 },
 "pack-deer": {
 "added": 23,
@@ -2325,10 +2345,10 @@
 },
 "pack-doors": {
 "added": 0,
-"at": "2026-10-12T10:03:20",
+"at": "2026-10-12T16:01:38",
 "category": "Architecture",
 "kind": "library",
-"last_step": "reject 4 weak",
+"last_step": "pool 29 usable",
 "name": "Doors of the World",
 "puzzles": null,
 "removed": 0,
@@ -2881,15 +2901,16 @@
 "status": "verified"
 },
 "pack-portraits": {
-"added": 0,
-"at": "2026-10-12T15:41:43",
+"added": 24,
+"at": "2026-10-12T15:44:51",
 "category": "Art",
+"issues": 0,
 "kind": "library",
-"last_step": "reject 3 off-theme",
+"last_step": "verify",
 "name": "Portraits",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 20,
+"status": "verified"
 },
 "pack-prague": {
 "added": 0,

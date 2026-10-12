@@ -2,7 +2,7 @@
  "id": "evpack-moon-day-2027",
  "name": "Moon Day",
  "category": "Event",
- "description": "A limited pack for Moon Day (20 July 2027). The full Moon, lunar craters, Earthrise, the Saturn V rocket, the lunar module, eclipses and moonlit nights, playable for one week.",
+ "description": "A limited pack for Moon Day (20 July 2027). The lunar module, Earthrise, Tycho crater, Moon rocks, Saturn V and Artemis rockets, luna moths, moonflowers, mooncakes and moon bridges, playable for one week.",
  "kind": "event",
  "target": 24,
  "per_topic": 1,
@@ -50,5 +50,6 @@
   "Lunar module museum",
   "Waxing gibbous moon",
   "Moon jellyfish Aurelia aurita"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Space_Shuttle_Discovery_under_a_full_moon%2C_03-11-09.jpg/1280px-Space_Shuttle_Discovery_under_a_full_moon%2C_03-11-09.jpg"
 }

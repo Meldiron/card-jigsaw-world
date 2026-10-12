@@ -1,0 +1,12 @@
+{
+ "id": "evpack-dance-2027", "name": "International Dance Day", "category": "Event",
+ "description": "A limited pack for International Dance Day (29 April 2027). Pointe shoes and tutus, castanets and fans, the great opera and ballet houses, Prague's Dancing House, Caminito and the courtship dances of cranes and peacocks, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2, "accent_from_cover": true,
+ "sources": ["commons"],
+ "topics": ["Pointe shoes", "Ballet tutu", "Palais Garnier grand staircase", "Palais Garnier auditorium", "Bolshoi Theatre", "Teatro alla Scala",
+  "Mariinsky Theatre", "Vienna State Opera", "Teatro Colón", "Sydney Opera House", "Dancing House Prague", "Caminito La Boca",
+  "Castanets", "Spanish hand fan", "Flamenco dress", "Tap shoes", "Disco ball", "Gramophone",
+  "Jukebox", "Indian peafowl display", "Red-crowned crane", "Great Gallery Schönbrunn Palace", "Ghungroo ankle bells", "Tango shoes"],
+ "more_topics": ["Estates Theatre Prague", "Teatro La Fenice", "Opera house chandelier", "Theatre stage curtain", "Ballroom chandelier",
+  "Lyrebird", "Western parotia", "Sharp-tailed grouse lek", "Maracas", "Accordion"]
+}
