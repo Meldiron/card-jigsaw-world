@@ -1,8 +1,8 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-12T16:40:34",
-"msg": "Content: checkpoint (189 verified, 3 fixed, 47 audited, 55 pending)",
+"at": "2026-10-12T17:07:54",
+"msg": "Content: checkpoint (194 verified, 3 fixed, 57 audited, 40 pending)",
 "ok": true,
 "pushed": true,
 "stage": "committed"
@@ -909,14 +909,14 @@
 "status": "verified"
 },
 "daily-2026-03": {
-"added": 0,
-"at": "2026-10-12T17:07:28",
+"added": 26,
+"at": "2026-10-12T17:08:05",
 "category": "Daily",
 "kind": "daily",
-"last_step": "reject 1 similar",
+"last_step": "reject 2 weak",
 "name": "March 2026",
-"puzzles": null,
-"removed": 0,
+"puzzles": 31,
+"removed": 26,
 "status": "audited"
 },
 "daily-2026-04": {
@@ -1080,13 +1080,14 @@
 },
 "evpack-bee-day-2027": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T17:10:04",
 "category": "Event",
 "kind": "event",
+"last_step": "reject 3 weak",
 "name": "World Bee Day",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "evpack-bicycle-2027": {
 "added": 0,
@@ -1567,15 +1568,16 @@
 "status": "pending"
 },
 "evpack-may-day-2027": {
-"added": 0,
-"at": "2026-10-12T17:06:28",
+"added": 24,
+"at": "2026-10-12T17:08:50",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "pool 92 usable",
+"last_step": "verify",
 "name": "May Day",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 14,
+"status": "verified"
 },
 "evpack-mental-health-2026": {
 "added": 25,
@@ -2522,10 +2524,10 @@
 },
 "pack-harbours": {
 "added": 0,
-"at": "2026-10-12T17:06:09",
+"at": "2026-10-12T17:09:57",
 "category": "Travel",
 "kind": "library",
-"last_step": "pool 43 usable",
+"last_step": "pool 52 usable",
 "name": "Harbours",
 "puzzles": null,
 "removed": 0,
