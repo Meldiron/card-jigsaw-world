@@ -1,0 +1,8 @@
+{
+ "id": "evpack-un-day-2027",
+ "name": "United Nations Day",
+ "category": "Event",
+ "kind": "event",
+ "description": "A limited pack for United Nations Day (24 October 2027). Flags of the member states, a white dove, an olive branch, the UN headquarters and landmarks from every continent, playable for one week.",
+ "note": "clone of evpack-un-day-2026; content comes from `run.sh clone evpack-un-day-2026 evpack-un-day-2027`"
+}

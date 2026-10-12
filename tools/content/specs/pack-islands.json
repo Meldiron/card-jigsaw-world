@@ -2,7 +2,7 @@
  "id": "pack-islands",
  "name": "Islands",
  "category": "Travel",
- "description": "Turquoise lagoons, sea stacks and green peaks from Bora Bora, Palau's Rock Islands, Ha Long Bay, the Seychelles and more.",
+ "description": "Turquoise lagoons, sea stacks and green peaks, from Navagio and Phang Nga Bay to Palau's Rock Islands, Raja Ampat and Bora Bora.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
@@ -53,6 +53,12 @@
   "Koh Hong Krabi",
   "Tiwi Islands",
   "Saint Kilda Hirta",
-  "Formentera"
+  "Formentera",
+  "Ko Tapu James Bond Island",
+  "Bled island",
+  "Santorini caldera Nea Kameni",
+  "Lord Howe Island lagoon",
+  "Kastellorizo",
+  "Tahaa"
  ]
 }

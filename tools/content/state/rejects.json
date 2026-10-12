@@ -18923,6 +18923,12 @@
 "pack": "pack-frogs",
 "reason": "weak"
 },
+"https://live.staticflickr.com/65535/52205387941_fbf716fd98_b.jpg": {
+"at": "2026-10-12",
+"label": "pack-tiles-18",
+"pack": "pack-tiles",
+"reason": "weak"
+},
 "https://live.staticflickr.com/65535/52205406253_df05c6ef60_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-tiles-19",
@@ -39185,6 +39191,12 @@
 "pack": "abstract-kaleidoscope",
 "reason": "quality"
 },
+"https://upload.wikimedia.org/wikipedia/commons/a/a6/Hagia_Sophia_Floor_Tiles%2C_Trebizond.jpg": {
+"at": "2026-10-12",
+"label": "c110",
+"pack": "pack-tiles",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/a/a6/Halo_of_the_Sombrero_Galaxy_%282020-08-4629%29.png": {
 "at": "2026-10-12",
 "label": "c67",
@@ -40066,6 +40078,12 @@
 "label": "c85",
 "pack": "pack-gardens",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Atomium_2005_2_%C2%A9Marie-Fran%C3%A7oise_Plissart.jpg/1280px-Atomium_2005_2_%C2%A9Marie-Fran%C3%A7oise_Plissart.jpg": {
+"at": "2026-10-12",
+"label": "c220",
+"pack": "evpack-un-day-2026",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Basilica_Cistern_Constantinople_2007.jpg/1280px-Basilica_Cistern_Constantinople_2007.jpg": {
 "at": "2026-10-12",
@@ -41255,6 +41273,12 @@
 "pack": "daily-2023-12",
 "reason": "quality"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Jiva%2C_Itchan_Kala_26.jpg/1280px-Jiva%2C_Itchan_Kala_26.jpg": {
+"at": "2026-10-12",
+"label": "c31",
+"pack": "pack-tiles",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Kagami_mochi_display_at_Nijiya_Market.jpg/1280px-Kagami_mochi_display_at_Nijiya_Market.jpg": {
 "at": "2026-10-12",
 "label": "c07",
@@ -41452,6 +41476,12 @@
 "label": "c08",
 "pack": "evpack-fathers-day-2027",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Kite_museum_weifang_2010_06_06.jpg/1280px-Kite_museum_weifang_2010_06_06.jpg": {
+"at": "2026-10-12",
+"label": "p-948401054f24",
+"pack": "evpack-childrens-day-2027",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Knut_Lundstr%C3%B6m%2C_Mouvement_Symphonique%2C_op_46_-_Allegro_ma_non_Troppo%2C_Paris.jpg/1280px-Knut_Lundstr%C3%B6m%2C_Mouvement_Symphonique%2C_op_46_-_Allegro_ma_non_Troppo%2C_Paris.jpg": {
 "at": "2026-10-12",
@@ -42143,6 +42173,12 @@
 "pack": "daily-2025-09",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Atomium%2C_Bruselas%2C_B%C3%A9lgica%2C_2021-12-15%2C_DD_157-159_HDR.jpg/1280px-Atomium%2C_Bruselas%2C_B%C3%A9lgica%2C_2021-12-15%2C_DD_157-159_HDR.jpg": {
+"at": "2026-10-12",
+"label": "c218",
+"pack": "evpack-un-day-2026",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Blue_bow_tie_with_white_hearts_in_Israel%2C_May_2024_21.jpg/1280px-Blue_bow_tie_with_white_hearts_in_Israel%2C_May_2024_21.jpg": {
 "at": "2026-10-12",
 "label": "c130",
@@ -42244,6 +42280,12 @@
 "label": "c01",
 "pack": "evpack-hot-tea-2027",
 "reason": "text"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Mosaic_floor_in_the_House_of_the_Fountains_with_fish%2C_geometric_pattern_and_labyrinths%2C_Conimbriga%2C_Lusitania%2C_Portugal_%2813006357933%29.jpg/1280px-Mosaic_floor_in_the_House_of_the_Fountains_with_fish%2C_geometric_pattern_and_labyrinths%2C_Conimbriga%2C_Lusitania%2C_Portugal_%2813006357933%29.jpg": {
+"at": "2026-10-12",
+"label": "c78",
+"pack": "pack-tiles",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Praha_2009-12-26-50.jpg/1280px-Praha_2009-12-26-50.jpg": {
 "at": "2026-10-12",
@@ -43852,6 +43894,12 @@
 "label": "c60",
 "pack": "pack-northern-lights",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Abu_dhabi%2C_Moschea_dello_Sceicco_Zayed%2C_pannelli_ceramici_in_stile_tradizionale_ottomano_10.jpg/1280px-Abu_dhabi%2C_Moschea_dello_Sceicco_Zayed%2C_pannelli_ceramici_in_stile_tradizionale_ottomano_10.jpg": {
+"at": "2026-10-12",
+"label": "c215",
+"pack": "evpack-un-day-2026",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Apple_pie_4.jpg/1280px-Apple_pie_4.jpg": {
 "at": "2026-10-12",
@@ -45503,6 +45551,12 @@
 "pack": "evpack-mountain-day-2026",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Abu_dhabi%2C_Moschea_dello_Sceicco_Zayed%2C_loggiati%2C_2.jpg/1280px-Abu_dhabi%2C_Moschea_dello_Sceicco_Zayed%2C_loggiati%2C_2.jpg": {
+"at": "2026-10-12",
+"label": "c214",
+"pack": "evpack-un-day-2026",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Assercay_Tee_05.jpg/1280px-Assercay_Tee_05.jpg": {
 "at": "2026-10-12",
 "label": "c114",
@@ -45778,6 +45832,12 @@
 "label": "c56",
 "pack": "pack-portraits",
 "reason": "quality"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Exterior_of_the_Leaning_Tower_%28Pisa%29_in_April_2023.4.jpg/1280px-Exterior_of_the_Leaning_Tower_%28Pisa%29_in_April_2023.4.jpg": {
+"at": "2026-10-12",
+"label": "c209",
+"pack": "evpack-un-day-2026",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Fugenzo_P297_9.jpg/1280px-Fugenzo_P297_9.jpg": {
 "at": "2026-10-12",
@@ -46587,6 +46647,12 @@
 "at": "2026-10-12",
 "label": "c57",
 "pack": "evpack-mental-health-2026",
+"reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Temple_of_Heaven_-_Hall_of_Prayer_for_Good_Harvests_02.jpg/1280px-Temple_of_Heaven_-_Hall_of_Prayer_for_Good_Harvests_02.jpg": {
+"at": "2026-10-12",
+"label": "c213",
+"pack": "evpack-un-day-2026",
 "reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Tomato_plant_2026_G2.jpg/1280px-Tomato_plant_2026_G2.jpg": {
@@ -47440,6 +47506,12 @@
 "label": "c43",
 "pack": "evpack-health-2027",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Exterior_of_the_Leaning_Tower_%28Pisa%29_at_night.jpg/1280px-Exterior_of_the_Leaning_Tower_%28Pisa%29_at_night.jpg": {
+"at": "2026-10-12",
+"label": "c208",
+"pack": "evpack-un-day-2026",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Flickr_-_lo.tangelini_-_Sault.jpg/1280px-Flickr_-_lo.tangelini_-_Sault.jpg": {
 "at": "2026-10-12",
@@ -49517,6 +49589,12 @@
 "pack": "evpack-chocolate-2027",
 "reason": "quality"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Kaugummiautomat_Wartburgstra%C3%9Fe%2C_April_2025_-_Gro%C3%9F.jpg/1280px-Kaugummiautomat_Wartburgstra%C3%9Fe%2C_April_2025_-_Gro%C3%9F.jpg": {
+"at": "2026-10-12",
+"label": "c97",
+"pack": "evpack-childrens-day-2027",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Leopard_In_Tree.jpg/1280px-Leopard_In_Tree.jpg": {
 "at": "2026-10-12",
 "label": "c1010",
@@ -50045,6 +50123,12 @@
 "pack": "evpack-bicycle-2027",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Delftware_souvenir_shop_with_Delftware_door.jpg/1280px-Delftware_souvenir_shop_with_Delftware_door.jpg": {
+"at": "2026-10-12",
+"label": "c54",
+"pack": "pack-tiles",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/ESEAP_Quokka%2C_Kaohsiung%2C_2026_%2801%29.jpg/1280px-ESEAP_Quokka%2C_Kaohsiung%2C_2026_%2801%29.jpg": {
 "at": "2026-10-12",
 "label": "c119",
@@ -50237,6 +50321,12 @@
 "pack": "evpack-un-day-2026",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Dar_Mennebi%2C_zelliges_et_nids_d%27abeille_B335222103_02_FP7952829.jpg/1280px-Dar_Mennebi%2C_zelliges_et_nids_d%27abeille_B335222103_02_FP7952829.jpg": {
+"at": "2026-10-12",
+"label": "c34",
+"pack": "pack-tiles",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Egon_Schiele_-_Small_Tree_in_Late_Autumn_-_Google_Art_Project.jpg/1280px-Egon_Schiele_-_Small_Tree_in_Late_Autumn_-_Google_Art_Project.jpg": {
 "at": "2026-10-12",
 "label": "c49",
@@ -50410,6 +50500,12 @@
 "label": "c88",
 "pack": "pack-birds-of-prey",
 "reason": "quality"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Casa_Battl%C3%B3_Barcelona_mosaics_exterieur_sunroof_28.jpg/1280px-Casa_Battl%C3%B3_Barcelona_mosaics_exterieur_sunroof_28.jpg": {
+"at": "2026-10-12",
+"label": "c97",
+"pack": "pack-tiles",
+"reason": "similar"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Coelogyne_asperata_in_Papua_%28cropped%29.jpg/1280px-Coelogyne_asperata_in_Papua_%28cropped%29.jpg": {
 "at": "2026-10-12",
@@ -52559,6 +52655,12 @@
 "pack": "pack-autumn-parks",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Ferris_Wheel_and_Moon_Together_in_the_Annual_Fair_at_Vidisha.jpg/1280px-Ferris_Wheel_and_Moon_Together_in_the_Annual_Fair_at_Vidisha.jpg": {
+"at": "2026-10-12",
+"label": "p-298aef8a23b2",
+"pack": "evpack-childrens-day-2027",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Gasoline_Rainbow.jpg/1280px-Gasoline_Rainbow.jpg": {
 "at": "2026-10-12",
 "label": "c110",
@@ -54487,9 +54589,9 @@
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Mosaics_of_Park_G%C3%BCell_Barcelona_27.jpg/1280px-Mosaics_of_Park_G%C3%BCell_Barcelona_27.jpg": {
 "at": "2026-10-12",
-"label": "c28",
-"pack": "evpack-art-day-2027",
-"reason": "similar"
+"label": "c105",
+"pack": "pack-tiles",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Natolin_%283555933152%29.jpg/1280px-Natolin_%283555933152%29.jpg": {
 "at": "2026-10-12",
@@ -56999,6 +57101,12 @@
 "pack": "evpack-dance-2027",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Pompeii_Ruins_Mosaic_Floor_%2848440880816%29.jpg/1280px-Pompeii_Ruins_Mosaic_Floor_%2848440880816%29.jpg": {
+"at": "2026-10-12",
+"label": "c83",
+"pack": "pack-tiles",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Richenbach_Einband_Brown.jpg/1280px-Richenbach_Einband_Brown.jpg": {
 "at": "2026-10-12",
 "label": "c61",
@@ -57461,6 +57569,12 @@
 "pack": "daily-2026-01",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Abu_dhabi%2C_Moschea_dello_Sceicco_Zayed%2C_pannelli_ceramici_in_stile_tradizionale_ottomano_02.jpg/1280px-Abu_dhabi%2C_Moschea_dello_Sceicco_Zayed%2C_pannelli_ceramici_in_stile_tradizionale_ottomano_02.jpg": {
+"at": "2026-10-12",
+"label": "c217",
+"pack": "evpack-un-day-2026",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Artesan%C3%ADas_en_Barrancas_del_Cobre%2C_Chihuahua.jpg/1280px-Artesan%C3%ADas_en_Barrancas_del_Cobre%2C_Chihuahua.jpg": {
 "at": "2026-10-12",
 "label": "c45",
@@ -57634,6 +57748,12 @@
 "label": "c15",
 "pack": "pack-cocktails",
 "reason": "text"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Blue_and_white_mosque_lamp._Iznik%2C_glazed._From_Sokollu%2C_Mehmed_Pasha_Mosque%2C_Kadirg%2C_Istanbul%2C_Turkey._1510-1515_CE._Museum_of_Islamic_Art_%28Tiled_Kiosk%29%2C_Istanbul.jpg/1280px-thumbnail.jpg": {
+"at": "2026-10-12",
+"label": "c19",
+"pack": "pack-tiles",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Burg_Eltz_121.jpg/1280px-Burg_Eltz_121.jpg": {
 "at": "2026-10-12",
@@ -58739,6 +58859,12 @@
 "pack": "evpack-new-years-eve-2026",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Abu_dhabi%2C_Moschea_dello_Sceicco_Zayed%2C_pannelli_ceramici_in_stile_tradizionale_ottomano_09.jpg/1280px-Abu_dhabi%2C_Moschea_dello_Sceicco_Zayed%2C_pannelli_ceramici_in_stile_tradizionale_ottomano_09.jpg": {
+"at": "2026-10-12",
+"label": "c216",
+"pack": "evpack-un-day-2026",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Allas-Champagne_Church_Stained_Glass_2.JPG/1280px-Allas-Champagne_Church_Stained_Glass_2.JPG": {
 "at": "2026-10-12",
 "label": "c13",
@@ -58894,6 +59020,12 @@
 "label": "c26",
 "pack": "deep-space",
 "reason": "text"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Tour_%28Pise%29.jpg/1280px-Tour_%28Pise%29.jpg": {
+"at": "2026-10-12",
+"label": "c207",
+"pack": "evpack-un-day-2026",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Trail_to_Grand_Teton_9-11_%2816265441483%29.jpg/1280px-Trail_to_Grand_Teton_9-11_%2816265441483%29.jpg": {
 "at": "2026-10-12",
@@ -59057,6 +59189,12 @@
 "pack": "pack-islands",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Ravenna%2C_Mausoleo_di_Galla_Placidia%2C_Mosaic_008.JPG/1280px-Ravenna%2C_Mausoleo_di_Galla_Placidia%2C_Mosaic_008.JPG": {
+"at": "2026-10-12",
+"label": "c94",
+"pack": "pack-tiles",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Refraction_apple.jpg/1280px-Refraction_apple.jpg": {
 "at": "2026-10-12",
 "label": "c93",
@@ -59139,6 +59277,12 @@
 "at": "2026-10-12",
 "label": "c89",
 "pack": "evpack-forests-2027",
+"reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Atomium%2C_Bruselas%2C_B%C3%A9lgica%2C_2021-12-15%2C_DD_160-162_HDR.jpg/1280px-Atomium%2C_Bruselas%2C_B%C3%A9lgica%2C_2021-12-15%2C_DD_160-162_HDR.jpg": {
+"at": "2026-10-12",
+"label": "c219",
+"pack": "evpack-un-day-2026",
 "reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Documentary_view_of_the_Magellan_spacecraft_during_checkout_at_Martin_Marietta_Denver_%28S88-50418%29.jpg/1280px-Documentary_view_of_the_Magellan_spacecraft_during_checkout_at_Martin_Marietta_Denver_%28S88-50418%29.jpg": {
@@ -60533,6 +60677,12 @@
 "pack": "pack-bridges",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Casa_Battl%C3%B3_Barcelona_mosaics_exterieur_sunroof_29.jpg/1280px-Casa_Battl%C3%B3_Barcelona_mosaics_exterieur_sunroof_29.jpg": {
+"at": "2026-10-12",
+"label": "c99",
+"pack": "pack-tiles",
+"reason": "similar"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Cheddar_Gorge_-_geograph.org.uk_-_6734258.jpg/1280px-Cheddar_Gorge_-_geograph.org.uk_-_6734258.jpg": {
 "at": "2026-10-12",
 "label": "c89",
@@ -60647,11 +60797,23 @@
 "pack": "pack-starry-nights",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Roman_Mosaic_floor_from_House_of_the_Ephebe%2C_Pompeii_%2848451775112%29.jpg/1280px-Roman_Mosaic_floor_from_House_of_the_Ephebe%2C_Pompeii_%2848451775112%29.jpg": {
+"at": "2026-10-12",
+"label": "c82",
+"pack": "pack-tiles",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Takikawa_Lantern_Festival%2C_Hokkaido%3B_February_2025_%2806%29.jpg/1280px-Takikawa_Lantern_Festival%2C_Hokkaido%3B_February_2025_%2806%29.jpg": {
 "at": "2026-10-12",
 "label": "c56",
 "pack": "evpack-mental-health-2026",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Temple_of_Heaven_Seoul2.jpg/1280px-Temple_of_Heaven_Seoul2.jpg": {
+"at": "2026-10-12",
+"label": "c211",
+"pack": "evpack-un-day-2026",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Tren_Ecologico_de_la_selva4.JPG/1280px-Tren_Ecologico_de_la_selva4.JPG": {
 "at": "2026-10-12",
@@ -61623,6 +61785,12 @@
 "at": "2026-10-12",
 "label": "c188",
 "pack": "pack-rockets",
+"reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Lisbon_%2848158793047%29.jpg/1280px-Lisbon_%2848158793047%29.jpg": {
+"at": "2026-10-12",
+"label": "c48",
+"pack": "pack-tiles",
 "reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/London_fruit_exchange_-_panoramio.jpg/1280px-London_fruit_exchange_-_panoramio.jpg": {
@@ -66635,6 +66803,12 @@
 "pack": "pack-canyons",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Summer_2023_Lisbon_Lisboa_16.jpg/1280px-Summer_2023_Lisbon_Lisboa_16.jpg": {
+"at": "2026-10-12",
+"label": "c49",
+"pack": "pack-tiles",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/The_Abuja_Velodrome_02.jpg/1280px-The_Abuja_Velodrome_02.jpg": {
 "at": "2026-10-12",
 "label": "c101",
@@ -68231,6 +68405,12 @@
 "pack": "abstract-macro-textures",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/The_prayer_hall_of_Badshahi_Mosque.jpg/1280px-The_prayer_hall_of_Badshahi_Mosque.jpg": {
+"at": "2026-10-12",
+"label": "c25",
+"pack": "pack-tiles",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Zebra_Longwing_chrysalis_-_Heliconius_charithonia%2C_Arthur_Marshall_Loxahatchee_National_Wildlife_Refuge%2C_Boynton_Beach%2C_Florida%2C_February_9%2C_2022_%2853049118450%29.jpg/1280px-thumbnail.jpg": {
 "at": "2026-10-12",
 "label": "c47",
@@ -68687,6 +68867,12 @@
 "pack": "pack-manuscripts",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Sandcastle_sculpture_%284856466479%29.jpg/1280px-Sandcastle_sculpture_%284856466479%29.jpg": {
+"at": "2026-10-12",
+"label": "p-48b876618cd0",
+"pack": "evpack-childrens-day-2027",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Siberian_Tiger_enjoying_snow_59.jpg/1280px-Siberian_Tiger_enjoying_snow_59.jpg": {
 "at": "2026-10-12",
 "label": "c07",
@@ -68854,6 +69040,12 @@
 "label": "c65",
 "pack": "pack-caves",
 "reason": "quality"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Azulejos%2C_tiled_facade%2C_house_front%2C_Lisbon_%2849649713612%29.jpg/1280px-Azulejos%2C_tiled_facade%2C_house_front%2C_Lisbon_%2849649713612%29.jpg": {
+"at": "2026-10-12",
+"label": "c51",
+"pack": "pack-tiles",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Boston%2C_as_the_Eagle_and_the_Wild_Goose_See_It.jpg/1280px-Boston%2C_as_the_Eagle_and_the_Wild_Goose_See_It.jpg": {
 "at": "2026-10-12",
@@ -70535,6 +70727,12 @@
 "pack": "abstract-crystal",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/St_Kilda_-_Hirta_-_Coastline_east_of_Village_Bay_-_geograph.org.uk_-_6892289.jpg/1280px-St_Kilda_-_Hirta_-_Coastline_east_of_Village_Bay_-_geograph.org.uk_-_6892289.jpg": {
+"at": "2026-10-12",
+"label": "p-8e5e9366875e",
+"pack": "pack-islands",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Til_Ko_Laddu.jpg/1280px-Til_Ko_Laddu.jpg": {
 "at": "2026-10-12",
 "label": "c44",
@@ -71063,6 +71261,12 @@
 "pack": "abstract-paper-collage",
 "reason": "quality"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/ART_NOUVEAU._Uitzonderlijke_objecten_met_een_verhaal._BELvue_museum_31.jpg/1280px-ART_NOUVEAU._Uitzonderlijke_objecten_met_een_verhaal._BELvue_museum_31.jpg": {
+"at": "2026-10-12",
+"label": "c67",
+"pack": "pack-tiles",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Android_Ice_Cream_Sandwich_Sculpture_01.jpg/1280px-Android_Ice_Cream_Sandwich_Sculpture_01.jpg": {
 "at": "2026-10-12",
 "label": "c20",
@@ -71073,6 +71277,12 @@
 "at": "2026-10-12",
 "label": "c72",
 "pack": "abstract-macro-textures",
+"reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Blue_and_white_mosque_lamp._Circa_1505_CE._Iznik%2C_glazed._Museum_of_Islamic_Art_%28Tiled_Kiosk%29%2C_Istanbul%2C_Turkey.jpg/1280px-Blue_and_white_mosque_lamp._Circa_1505_CE._Iznik%2C_glazed._Museum_of_Islamic_Art_%28Tiled_Kiosk%29%2C_Istanbul%2C_Turkey.jpg": {
+"at": "2026-10-12",
+"label": "c20",
+"pack": "pack-tiles",
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Cassiopeia_A_infrared_echo_%28complete%29.jpg/1280px-Cassiopeia_A_infrared_echo_%28complete%29.jpg": {
@@ -71121,6 +71331,12 @@
 "at": "2026-10-12",
 "label": "c14",
 "pack": "evpack-new-years-eve-2026",
+"reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/La_cour_de_la_madrasa_Bou_Inaniya_-_A49923S.jpg/1280px-La_cour_de_la_madrasa_Bou_Inaniya_-_A49923S.jpg": {
+"at": "2026-10-12",
+"label": "c41",
+"pack": "pack-tiles",
 "reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Mount_Taranaki_from_the_air.jpg/1280px-Mount_Taranaki_from_the_air.jpg": {
@@ -71921,6 +72137,12 @@
 "pack": "pack-cherry-blossom",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Ha_Ha_Toy_%E2%80%93_Tin_Wind_Up_%E2%80%93_High_Wheel_Robot_%E2%80%93_Ebony_%26_Ivory.jpg/1280px-Ha_Ha_Toy_%E2%80%93_Tin_Wind_Up_%E2%80%93_High_Wheel_Robot_%E2%80%93_Ebony_%26_Ivory.jpg": {
+"at": "2026-10-12",
+"label": "c39",
+"pack": "evpack-childrens-day-2027",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Himalayan_Salt_Lamp.jpg/1280px-Himalayan_Salt_Lamp.jpg": {
 "at": "2026-10-12",
 "label": "c61",
@@ -72539,6 +72761,12 @@
 "pack": "pack-foxes",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/%27Carpe_Diem%27_skeleton_mosaic_from_the_triclinium_-_dining_room_-_of_the_House_of_the_Faun%2C_Pompeii.jpg/1280px-%27Carpe_Diem%27_skeleton_mosaic_from_the_triclinium_-_dining_room_-_of_the_House_of_the_Faun%2C_Pompeii.jpg": {
+"at": "2026-10-12",
+"label": "c86",
+"pack": "pack-tiles",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/20250914_cedar_waxwing_casa208934.jpg/1280px-20250914_cedar_waxwing_casa208934.jpg": {
 "at": "2026-10-12",
 "label": "c1299",
@@ -72778,6 +73006,12 @@
 "label": "c29",
 "pack": "pack-bridges",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Campanile_D%C3%B4me_-_Pise_%28IT52%29_-_2022-08-31_-_20.jpg/1280px-Campanile_D%C3%B4me_-_Pise_%28IT52%29_-_2022-08-31_-_20.jpg": {
+"at": "2026-10-12",
+"label": "c206",
+"pack": "evpack-un-day-2026",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Carduelis_carduelis_facing_sun.jpg/1280px-Carduelis_carduelis_facing_sun.jpg": {
 "at": "2026-10-12",
@@ -74375,6 +74609,12 @@
 "pack": "pack-planets",
 "reason": "text"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Tredegar_delftware_tiles-014.jpg/1280px-Tredegar_delftware_tiles-014.jpg": {
+"at": "2026-10-12",
+"label": "c52",
+"pack": "pack-tiles",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Vernal_Fall_August_2007.jpg/1280px-Vernal_Fall_August_2007.jpg": {
 "at": "2026-10-12",
 "label": "c52",
@@ -74645,6 +74885,12 @@
 "pack": "pack-gardens",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/ART_NOUVEAU._Uitzonderlijke_objecten_met_een_verhaal._BELvue_museum_34.jpg/1280px-ART_NOUVEAU._Uitzonderlijke_objecten_met_een_verhaal._BELvue_museum_34.jpg": {
+"at": "2026-10-12",
+"label": "c69",
+"pack": "pack-tiles",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Bull_relief_fresco_archmus_Heraklion.jpg/1280px-Bull_relief_fresco_archmus_Heraklion.jpg": {
 "at": "2026-10-12",
 "label": "c32",
@@ -74734,6 +74980,12 @@
 "label": "c32",
 "pack": "evpack-remembrance-2026",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/National_Yo-Yo_Museum_-_Chico%2C_CA_-_DSC03083.JPG/1280px-National_Yo-Yo_Museum_-_Chico%2C_CA_-_DSC03083.JPG": {
+"at": "2026-10-12",
+"label": "c112",
+"pack": "evpack-childrens-day-2027",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Nubian_ibex_eating_in_Mitzpe_Ramon_%2840397%29.jpg/1280px-Nubian_ibex_eating_in_Mitzpe_Ramon_%2840397%29.jpg": {
 "at": "2026-10-12",
@@ -76565,6 +76817,12 @@
 "pack": "daily-2023-01",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Matchbox_No._65_1967_Claas_Combine_Harvester_01.jpg/1280px-Matchbox_No._65_1967_Claas_Combine_Harvester_01.jpg": {
+"at": "2026-10-12",
+"label": "c117",
+"pack": "evpack-childrens-day-2027",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Mezquita_de_Nuruosmaniye%2C_Estambul%2C_Turqu%C3%ADa%2C_2024-09-29%2C_DD_17.jpg/1280px-Mezquita_de_Nuruosmaniye%2C_Estambul%2C_Turqu%C3%ADa%2C_2024-09-29%2C_DD_17.jpg": {
 "at": "2026-10-12",
 "label": "c80",
@@ -77026,6 +77284,12 @@
 "label": "c57",
 "pack": "evpack-health-2027",
 "reason": "text"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Mosaic_floor_depicting_Aphrodite_holding_a_mirror_which_she_has_taken_from_an_open_box_on_a_table%2C_from_a_room_in_a_Roman_Villa_in_Colonia_Augusta_Achaica_Patrensis%2C_2nd_century_AD%2C_Archaeological_Museum_of_Patras%2C_Greece_%2853638985852%29.jpg/1280px-thumbnail.jpg": {
+"at": "2026-10-12",
+"label": "c77",
+"pack": "pack-tiles",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Mundelsheim_-_Seelhofen_-_Panoramastra%C3%9Fe_-_Fenster_mit_buntem_LED-Netz_defokussiert_%281%29.jpg/1280px-Mundelsheim_-_Seelhofen_-_Panoramastra%C3%9Fe_-_Fenster_mit_buntem_LED-Netz_defokussiert_%281%29.jpg": {
 "at": "2026-10-12",
@@ -77573,6 +77837,12 @@
 "pack": "pack-cozy-interiors",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Delft_tiles_01.jpg/1280px-Delft_tiles_01.jpg": {
+"at": "2026-10-12",
+"label": "c53",
+"pack": "pack-tiles",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Disco_ball_with_reflections_102.JPG/1280px-Disco_ball_with_reflections_102.JPG": {
 "at": "2026-10-12",
 "label": "c56",
@@ -77891,6 +78161,12 @@
 "pack": "pack-cherry-blossom",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/P%C3%A9kin_Temple_of_Heaven_in_2011_%281%29.jpg/1280px-P%C3%A9kin_Temple_of_Heaven_in_2011_%281%29.jpg": {
+"at": "2026-10-12",
+"label": "c212",
+"pack": "evpack-un-day-2026",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Rhodochrosite_Argentina.jpg/1280px-Rhodochrosite_Argentina.jpg": {
 "at": "2026-10-12",
 "label": "c89",
@@ -77974,6 +78250,12 @@
 "label": "c82",
 "pack": "abstract-macro-textures",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Ferris_wheel_night.jpg/1280px-Ferris_wheel_night.jpg": {
+"at": "2026-10-12",
+"label": "c100",
+"pack": "evpack-childrens-day-2027",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Gousses_de_Vigna_radiata.jpg/1280px-Gousses_de_Vigna_radiata.jpg": {
 "at": "2026-10-12",
@@ -79619,6 +79901,12 @@
 "pack": "pack-winter-scenes",
 "reason": "quality"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Pompeii_Mosaic_Floor_Tile_%289809435133%29.jpg/1280px-Pompeii_Mosaic_Floor_Tile_%289809435133%29.jpg": {
+"at": "2026-10-12",
+"label": "c85",
+"pack": "pack-tiles",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Red_Easter_Lily.jpg/1280px-Red_Easter_Lily.jpg": {
 "at": "2026-10-12",
 "label": "c77",
@@ -79774,6 +80062,12 @@
 "label": "c746",
 "pack": "daily-2025-07",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/June21_2004-Wazir_Khan_Mosque_Lahore1.jpeg/1280px-June21_2004-Wazir_Khan_Mosque_Lahore1.jpeg": {
+"at": "2026-10-12",
+"label": "c26",
+"pack": "pack-tiles",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Mesen_Island_of_Ireland_Peace_Parc_%2848%29_-_310836_-_onroerenderfgoed.jpg/1280px-Mesen_Island_of_Ireland_Peace_Parc_%2848%29_-_310836_-_onroerenderfgoed.jpg": {
 "at": "2026-10-12",
@@ -80398,6 +80692,12 @@
 "label": "c692",
 "pack": "daily-2023-10",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Docks_Bruxsel_-_LEGO_Giraffe_%282024-10-19%29.jpg/1280px-Docks_Bruxsel_-_LEGO_Giraffe_%282024-10-19%29.jpg": {
+"at": "2026-10-12",
+"label": "c10",
+"pack": "evpack-childrens-day-2027",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Go%C3%B0afoss_in_2024_03.jpg/1280px-Go%C3%B0afoss_in_2024_03.jpg": {
 "at": "2026-10-12",
@@ -81299,6 +81599,12 @@
 "pack": "evpack-tea-day-2026",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Ca_d_Oro_cavana_Venezia.jpg/1280px-Ca_d_Oro_cavana_Venezia.jpg": {
+"at": "2026-10-12",
+"label": "c88",
+"pack": "pack-tiles",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Caff%C3%A8_sospeso_%28suspended_coffee%29_at_Gran_Caff%C3%A8_Gambrinus%2C_Naples%2C_Italy.jpg/1280px-Caff%C3%A8_sospeso_%28suspended_coffee%29_at_Gran_Caff%C3%A8_Gambrinus%2C_Naples%2C_Italy.jpg": {
 "at": "2026-10-12",
 "label": "c76",
@@ -81671,6 +81977,12 @@
 "pack": "city-lights",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Inside_the_Blue_Mosque%2C_Istanbul_-_panoramio.jpg/1280px-Inside_the_Blue_Mosque%2C_Istanbul_-_panoramio.jpg": {
+"at": "2026-10-12",
+"label": "c16",
+"pack": "pack-tiles",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Iridium-1_Launch_%2832312419215%29.jpg/1280px-Iridium-1_Launch_%2832312419215%29.jpg": {
 "at": "2026-10-12",
 "label": "c20",
@@ -81815,6 +82127,12 @@
 "pack": "evpack-love-your-pet-2027",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Casa_del_Cinghiale_I_%28Pompeii%29%2C_mosaic_floor._%2815732228548%29.jpg/1280px-Casa_del_Cinghiale_I_%28Pompeii%29%2C_mosaic_floor._%2815732228548%29.jpg": {
+"at": "2026-10-12",
+"label": "c84",
+"pack": "pack-tiles",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Coimbra_Biblioteca_Joanina_908.jpg/1280px-Coimbra_Biblioteca_Joanina_908.jpg": {
 "at": "2026-10-12",
 "label": "c24",
@@ -81904,6 +82222,12 @@
 "label": "c112",
 "pack": "pack-lighthouses",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/St_James_Boroughbridge_%28147%29.JPG/1280px-St_James_Boroughbridge_%28147%29.JPG": {
+"at": "2026-10-12",
+"label": "c60",
+"pack": "pack-tiles",
+"reason": "similar"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Subgroup_of_Oh%3B_S4_blue_red%3B_example_solid.png/1280px-Subgroup_of_Oh%3B_S4_blue_red%3B_example_solid.png": {
 "at": "2026-10-12",
@@ -82846,6 +83170,12 @@
 "label": "c11",
 "pack": "pack-autumn-parks",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/ART_NOUVEAU._Uitzonderlijke_objecten_met_een_verhaal._BELvue_museum_33.jpg/1280px-ART_NOUVEAU._Uitzonderlijke_objecten_met_een_verhaal._BELvue_museum_33.jpg": {
+"at": "2026-10-12",
+"label": "c68",
+"pack": "pack-tiles",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Amsterdam_-_Bloemgracht_56.jpg/1280px-Amsterdam_-_Bloemgracht_56.jpg": {
 "at": "2026-10-12",
@@ -83831,6 +84161,12 @@
 "pack": "evpack-bicycle-2027",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Two_tiles_from_Pugin%27s_stove_of_the_1851_Great_Exhibition%2C_V%26A_-_2025-05-15.jpg/1280px-Two_tiles_from_Pugin%27s_stove_of_the_1851_Great_Exhibition%2C_V%26A_-_2025-05-15.jpg": {
+"at": "2026-10-12",
+"label": "c64",
+"pack": "pack-tiles",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Vank_Cathedral_02.jpg/1280px-Vank_Cathedral_02.jpg": {
 "at": "2026-10-12",
 "label": "c692",
@@ -84118,6 +84454,12 @@
 "label": "c118",
 "pack": "abstract-topographic",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mosaic_floor_in_the_House_of_the_Fountains_with_fish%2C_geometric_pattern_and_labyrinths%2C_Conimbriga%2C_Lusitania%2C_Portugal_%2813006211135%29.jpg/1280px-Mosaic_floor_in_the_House_of_the_Fountains_with_fish%2C_geometric_pattern_and_labyrinths%2C_Conimbriga%2C_Lusitania%2C_Portugal_%2813006211135%29.jpg": {
+"at": "2026-10-12",
+"label": "c79",
+"pack": "pack-tiles",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Moscow_-_2026_-_Entrance_to_St._Basil%27s_Cathedral_on_Vasilyevsky_Descent1.jpg/1280px-Moscow_-_2026_-_Entrance_to_St._Basil%27s_Cathedral_on_Vasilyevsky_Descent1.jpg": {
 "at": "2026-10-12",
@@ -84711,6 +85053,12 @@
 "at": "2026-10-12",
 "label": "c51",
 "pack": "pack-libraries",
+"reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Lotfollah_mosque%2C_isfahan_%281%29.jpg/1280px-Lotfollah_mosque%2C_isfahan_%281%29.jpg": {
+"at": "2026-10-12",
+"label": "c21",
+"pack": "pack-tiles",
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Madison%2C_WI_04-12-2011_070_%286787266944%29.jpg/1280px-Madison%2C_WI_04-12-2011_070_%286787266944%29.jpg": {

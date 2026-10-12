@@ -11,7 +11,7 @@
  "id": "pack-tiles",
  "name": "Tiles & Mosaics",
  "category": "Patterns",
- "description": "Iznik and Isfahan tilework, Moroccan zellige, Portuguese azulejos, Roman floors, Gaudí's trencadís and Victorian encaustic tiles.",
+ "description": "Iznik panels, Isfahan, Lahore and Khiva tilework, Moroccan zellige, azulejos, Roman and Cosmatesque floors, Byzantine gold mosaic, Gaudí's trencadís and Victorian encaustic tiles.",
  "topics": [
   "Iznik tile panel",
   "Rüstem Pasha Mosque tiles",
@@ -63,5 +63,6 @@
   "Mexican tiles",
   "Mettlach tiles",
   "Umayyad Mosque mosaic"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Haft-rang_tilework._Shah_Mosque_%28Isfahan%29.jpg/1280px-Haft-rang_tilework._Shah_Mosque_%28Isfahan%29.jpg"
 }

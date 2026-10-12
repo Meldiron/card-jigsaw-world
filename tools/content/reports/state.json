@@ -1,8 +1,8 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-12T19:38:33",
-"msg": "Content: checkpoint (219 verified, 3 fixed, 45 audited, 29 pending)",
+"at": "2026-10-12T20:38:40",
+"msg": "Content: checkpoint (224 verified, 5 fixed, 41 audited, 26 pending)",
 "ok": true,
 "pushed": true,
 "stage": "committed"
@@ -1192,14 +1192,14 @@
 },
 "evpack-childrens-day-2027": {
 "added": 24,
-"at": "2026-10-12T20:38:21",
+"at": "2026-10-12T20:41:34",
 "category": "Event",
 "kind": "event",
-"last_step": "apply",
+"last_step": "pool 27 usable",
 "name": "International Children's Day",
 "puzzles": 24,
 "removed": 14,
-"status": "fixed"
+"status": "audited"
 },
 "evpack-chocolate-2027": {
 "added": 24,
@@ -1968,25 +1968,28 @@
 "status": "verified"
 },
 "evpack-un-day-2026": {
-"added": 22,
-"at": "2026-10-12T20:37:21",
+"added": 24,
+"at": "2026-10-12T20:39:38",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "reject 2 quality",
+"last_step": "verify",
 "name": "United Nations Day",
-"puzzles": 22,
+"puzzles": 24,
 "removed": 14,
-"status": "audited"
+"status": "verified"
 },
 "evpack-un-day-2027": {
-"added": 0,
-"at": "2026-10-12T02:04:57",
+"added": 24,
+"at": "2026-10-12T20:40:12",
 "category": "Event",
+"issues": 0,
 "kind": "event",
+"last_step": "verify",
 "name": "United Nations Day",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 14,
+"status": "verified"
 },
 "evpack-universal-childrens-2026": {
 "added": 0,
@@ -2659,14 +2662,15 @@
 },
 "pack-islands": {
 "added": 24,
-"at": "2026-10-12T20:38:22",
+"at": "2026-10-12T20:38:42",
 "category": "Travel",
+"issues": 0,
 "kind": "library",
-"last_step": "apply",
+"last_step": "verify",
 "name": "Islands",
-"puzzles": 25,
-"removed": 19,
-"status": "fixed"
+"puzzles": 24,
+"removed": 20,
+"status": "verified"
 },
 "pack-istanbul": {
 "added": 19,
@@ -2718,10 +2722,10 @@
 },
 "pack-kyoto": {
 "added": 0,
-"at": "2026-10-12T10:39:03",
+"at": "2026-10-12T20:41:25",
 "category": "Travel",
 "kind": "library",
-"last_step": "reject 3 weak",
+"last_step": "pool 28 usable",
 "name": "Kyoto",
 "puzzles": null,
 "removed": 0,
@@ -3319,15 +3323,16 @@
 "status": "verified"
 },
 "pack-tiles": {
-"added": 0,
-"at": "2026-10-12T20:38:27",
+"added": 24,
+"at": "2026-10-12T20:41:16",
 "category": "Patterns",
+"issues": 0,
 "kind": "library",
-"last_step": "pool 102 usable",
+"last_step": "verify",
 "name": "Tiles & Mosaics",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 25,
+"removed": 19,
+"status": "verified"
 },
 "pack-tokyo-nights": {
 "added": 0,

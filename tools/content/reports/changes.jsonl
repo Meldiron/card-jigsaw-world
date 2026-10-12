@@ -9396,3 +9396,119 @@
 {"puzzle": "p-4a298802583a", "title": "Beigoma spinning tops", "event": "retitle", "at": "2026-10-12T20:38:36"}
 {"puzzle": "p-4cb85ab5dc9c", "title": "Carp streamers", "event": "retitle", "at": "2026-10-12T20:38:37"}
 {"puzzle": "p-12037cca3295", "title": "Giant ice cream cone", "event": "retitle", "at": "2026-10-12T20:38:37"}
+{"puzzle": "p-a72958e6b573", "title": "Brick playhouse", "event": "retitle", "at": "2026-10-12T20:38:38"}
+{"puzzle": "p-6afe1424020a", "title": "Balloons", "event": "retitle", "at": "2026-10-12T20:38:38"}
+{"pack": "pack-islands", "puzzle": "p-8e5e9366875e", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/St_Kilda_-_Hirta_-_Coastline_east_of_Village_Bay_-_geograph.org.uk_-_6892289.jpg/1280px-St_Kilda_-_Hirta_-_Coastline_east_of_Village_Bay_-_geograph.org.uk_-_6892289.jpg", "reason": "weak", "event": "delete", "at": "2026-10-12T20:38:38"}
+{"puzzle": "p-948401054f24", "title": "Butterfly kites", "event": "retitle", "at": "2026-10-12T20:38:39"}
+{"pack": "pack-islands", "fields": ["imageCount"], "event": "pack-update", "at": "2026-10-12T20:38:39"}
+{"puzzle": "p-965509391b3c", "title": "Yo-yo", "event": "retitle", "at": "2026-10-12T20:38:39"}
+{"puzzle": "pack-islands-09", "title": "Lagoon islets from above", "event": "retitle", "at": "2026-10-12T20:38:39"}
+{"puzzle": "p-d89505c07fb9", "title": "Toy hot rod", "event": "retitle", "at": "2026-10-12T20:38:40"}
+{"puzzle": "p-3d5811ee6c69", "title": "Paper boat", "event": "retitle", "at": "2026-10-12T20:38:40"}
+{"puzzle": "p-7ed3a9e2c535", "title": "Robby the Robot toy", "event": "retitle", "at": "2026-10-12T20:38:41"}
+{"pack": "evpack-childrens-day-2027", "fields": ["accent", "imageCount"], "event": "pack-update", "at": "2026-10-12T20:38:42"}
+{"pack": "pack-islands", "fields": ["description", "imageCount"], "event": "pack-update", "at": "2026-10-12T20:38:51"}
+{"pack": "evpack-un-day-2026", "puzzle": "p-bca1fd128a2e", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/20200110_Temple_of_Heaven-1.jpg/1280px-20200110_Temple_of_Heaven-1.jpg", "topic": "Temple of Heaven", "event": "create", "at": "2026-10-12T20:39:02"}
+{"pack": "evpack-un-day-2026", "puzzle": "p-7f86dad5bf49", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/The_Atomium%2C_Brussels_-_54578545913.jpg/1280px-The_Atomium%2C_Brussels_-_54578545913.jpg", "topic": "Atomium", "event": "create", "at": "2026-10-12T20:39:02"}
+{"pack": "evpack-un-day-2026", "fields": ["imageCount"], "event": "pack-update", "at": "2026-10-12T20:39:03"}
+{"puzzle": "p-4b1ba75ab69f", "title": "Al-Khazneh, Petra", "event": "retitle", "at": "2026-10-12T20:39:21"}
+{"puzzle": "p-1d460cc07066", "title": "Bronze vat, Forbidden City", "event": "retitle", "at": "2026-10-12T20:39:22"}
+{"puzzle": "p-61167dbed52d", "title": "White dove", "event": "retitle", "at": "2026-10-12T20:39:22"}
+{"puzzle": "p-61ea32ab68fa", "title": "Flags of the member states", "event": "retitle", "at": "2026-10-12T20:39:23"}
+{"puzzle": "p-aacfa2ef3fb9", "title": "Church of Saint George, Lalibela", "event": "retitle", "at": "2026-10-12T20:39:23"}
+{"puzzle": "p-ae56a6b75040", "title": "Moai on Easter Island", "event": "retitle", "at": "2026-10-12T20:39:24"}
+{"puzzle": "p-c8173c349f3b", "title": "Olive branch", "event": "retitle", "at": "2026-10-12T20:39:24"}
+{"puzzle": "p-db0a0bd29820", "title": "Antique globe", "event": "retitle", "at": "2026-10-12T20:39:25"}
+{"puzzle": "p-e4c70396a50f", "title": "Great Sphinx of Giza", "event": "retitle", "at": "2026-10-12T20:39:25"}
+{"puzzle": "p-1b1e9412def6", "title": "Dome of Saint Basil's Cathedral", "event": "retitle", "at": "2026-10-12T20:39:26"}
+{"puzzle": "p-4c95dd4ed869", "title": "Big Ben, London", "event": "retitle", "at": "2026-10-12T20:39:26"}
+{"pack": "evpack-un-day-2026", "fields": ["description", "imageCount"], "event": "pack-update", "at": "2026-10-12T20:39:35"}
+{"pack": "evpack-un-day-2027", "puzzle": "evpack-un-day-2027-01", "url": "https://live.staticflickr.com/641/33393023431_977ccd76f9_b.jpg", "reason": "replaced by clone of evpack-un-day-2026", "event": "delete", "at": "2026-10-12T20:39:42"}
+{"pack": "evpack-un-day-2027", "puzzle": "evpack-un-day-2027-02", "url": "https://live.staticflickr.com/65535/51971389356_2daf0e91e2_b.jpg", "reason": "replaced by clone of evpack-un-day-2026", "event": "delete", "at": "2026-10-12T20:39:42"}
+{"pack": "evpack-un-day-2027", "puzzle": "evpack-un-day-2027-03", "url": "https://live.staticflickr.com/65535/52584493288_ba2d3823ca_b.jpg", "reason": "replaced by clone of evpack-un-day-2026", "event": "delete", "at": "2026-10-12T20:39:42"}
+{"pack": "evpack-un-day-2027", "puzzle": "evpack-un-day-2027-04", "url": "https://live.staticflickr.com/65535/51486973343_d56644b3cd_b.jpg", "reason": "replaced by clone of evpack-un-day-2026", "event": "delete", "at": "2026-10-12T20:39:43"}
+{"pack": "evpack-un-day-2027", "puzzle": "evpack-un-day-2027-05", "url": "https://live.staticflickr.com/65535/51458750810_e80ab0db09_b.jpg", "reason": "replaced by clone of evpack-un-day-2026", "event": "delete", "at": "2026-10-12T20:39:43"}
+{"pack": "evpack-un-day-2027", "puzzle": "evpack-un-day-2027-06", "url": "https://live.staticflickr.com/65535/51928987147_36359dbfc1_b.jpg", "reason": "replaced by clone of evpack-un-day-2026", "event": "delete", "at": "2026-10-12T20:39:43"}
+{"pack": "evpack-un-day-2027", "puzzle": "evpack-un-day-2027-07", "url": "https://live.staticflickr.com/65535/51808649763_35861b4833_b.jpg", "reason": "replaced by clone of evpack-un-day-2026", "event": "delete", "at": "2026-10-12T20:39:44"}
+{"pack": "evpack-un-day-2027", "puzzle": "evpack-un-day-2027-08", "url": "https://live.staticflickr.com/65535/51633577185_153ded78b1_b.jpg", "reason": "replaced by clone of evpack-un-day-2026", "event": "delete", "at": "2026-10-12T20:39:44"}
+{"pack": "evpack-un-day-2027", "puzzle": "evpack-un-day-2027-09", "url": "https://live.staticflickr.com/65535/52374632173_54b845cd63_b.jpg", "reason": "replaced by clone of evpack-un-day-2026", "event": "delete", "at": "2026-10-12T20:39:44"}
+{"pack": "evpack-un-day-2027", "puzzle": "evpack-un-day-2027-10", "url": "https://live.staticflickr.com/65535/52497456006_4835415950_b.jpg", "reason": "replaced by clone of evpack-un-day-2026", "event": "delete", "at": "2026-10-12T20:39:46"}
+{"pack": "evpack-un-day-2027", "puzzle": "evpack-un-day-2027-11", "url": "https://live.staticflickr.com/65535/52097303510_fb0271ae35_b.jpg", "reason": "replaced by clone of evpack-un-day-2026", "event": "delete", "at": "2026-10-12T20:39:46"}
+{"pack": "evpack-un-day-2027", "puzzle": "evpack-un-day-2027-12", "url": "https://live.staticflickr.com/65535/51350699068_37fd673f8e_b.jpg", "reason": "replaced by clone of evpack-un-day-2026", "event": "delete", "at": "2026-10-12T20:39:46"}
+{"pack": "evpack-un-day-2027", "puzzle": "evpack-un-day-2027-13", "url": "https://live.staticflickr.com/65535/52641306148_9dc3153723_b.jpg", "reason": "replaced by clone of evpack-un-day-2026", "event": "delete", "at": "2026-10-12T20:39:47"}
+{"pack": "evpack-un-day-2027", "puzzle": "evpack-un-day-2027-14", "url": "https://live.staticflickr.com/65535/52679893203_b37af76160_b.jpg", "reason": "replaced by clone of evpack-un-day-2026", "event": "delete", "at": "2026-10-12T20:39:47"}
+{"src": "evpack-un-day-2026", "dst": "evpack-un-day-2027", "count": 24, "event": "clone", "at": "2026-10-12T20:39:56"}
+{"pack": "evpack-un-day-2027", "fields": ["blurhash", "coverUrl", "imageCount"], "event": "pack-update", "at": "2026-10-12T20:39:57"}
+{"pack": "evpack-un-day-2027", "fields": ["description", "imageCount"], "event": "pack-update", "at": "2026-10-12T20:40:10"}
+{"pack": "pack-tiles", "puzzle": "pack-tiles-01", "url": "https://openaccess-cdn.clevelandart.org/2018.278/2018.278_web.jpg", "reason": "landscape", "event": "delete", "at": "2026-10-12T20:40:18"}
+{"pack": "pack-tiles", "puzzle": "pack-tiles-02", "url": "https://openaccess-cdn.clevelandart.org/1961.38.b/1961.38.b_web.jpg", "reason": "landscape", "event": "delete", "at": "2026-10-12T20:40:18"}
+{"pack": "pack-tiles", "puzzle": "pack-tiles-03", "url": "https://openaccess-cdn.clevelandart.org/1980.238.2/1980.238.2_web.jpg", "reason": "landscape", "event": "delete", "at": "2026-10-12T20:40:19"}
+{"pack": "pack-tiles", "puzzle": "pack-tiles-04", "url": "https://openaccess-cdn.clevelandart.org/1961.38.a/1961.38.a_web.jpg", "reason": "landscape", "event": "delete", "at": "2026-10-12T20:40:19"}
+{"pack": "pack-tiles", "puzzle": "pack-tiles-05", "url": "https://openaccess-cdn.clevelandart.org/1980.238.1/1980.238.1_web.jpg", "reason": "landscape", "event": "delete", "at": "2026-10-12T20:40:19"}
+{"pack": "pack-tiles", "puzzle": "pack-tiles-06", "url": "https://openaccess-cdn.clevelandart.org/1940.738/1940.738_web.jpg", "reason": "people", "event": "delete", "at": "2026-10-12T20:40:19"}
+{"pack": "pack-tiles", "puzzle": "pack-tiles-07", "url": "https://openaccess-cdn.clevelandart.org/1989.45.a/1989.45.a_web.jpg", "reason": "landscape", "event": "delete", "at": "2026-10-12T20:40:20"}
+{"pack": "pack-tiles", "puzzle": "pack-tiles-08", "url": "https://openaccess-cdn.clevelandart.org/1958.412/1958.412_web.jpg", "reason": "off-theme", "event": "delete", "at": "2026-10-12T20:40:20"}
+{"pack": "pack-tiles", "puzzle": "pack-tiles-09", "url": "https://openaccess-cdn.clevelandart.org/1989.45.b/1989.45.b_web.jpg", "reason": "landscape", "event": "delete", "at": "2026-10-12T20:40:20"}
+{"pack": "pack-tiles", "puzzle": "pack-tiles-10", "url": "https://openaccess-cdn.clevelandart.org/1980.238/1980.238_web.jpg", "reason": "people", "event": "delete", "at": "2026-10-12T20:40:21"}
+{"pack": "pack-tiles", "puzzle": "pack-tiles-11", "url": "https://openaccess-cdn.clevelandart.org/2012.184/2012.184_web.jpg", "reason": "landscape", "event": "delete", "at": "2026-10-12T20:40:21"}
+{"pack": "pack-tiles", "puzzle": "pack-tiles-12", "url": "https://openaccess-cdn.clevelandart.org/2009.48/2009.48_web.jpg", "reason": "landscape", "event": "delete", "at": "2026-10-12T20:40:21"}
+{"pack": "pack-tiles", "puzzle": "pack-tiles-13", "url": "https://openaccess-cdn.clevelandart.org/1942.1432/1942.1432_web.jpg", "reason": "landscape", "event": "delete", "at": "2026-10-12T20:40:22"}
+{"pack": "pack-tiles", "puzzle": "pack-tiles-14", "url": "https://live.staticflickr.com/648/31588859661_1d688c0093_b.jpg", "reason": "people", "event": "delete", "at": "2026-10-12T20:40:22"}
+{"pack": "pack-tiles", "puzzle": "pack-tiles-15", "url": "https://live.staticflickr.com/65535/51788907065_a1a4fccf1c_b.jpg", "reason": "weak", "event": "delete", "at": "2026-10-12T20:40:22"}
+{"pack": "pack-tiles", "puzzle": "pack-tiles-16", "url": "https://live.staticflickr.com/3928/15387146986_8476004e3f_b.jpg", "reason": "weak", "event": "delete", "at": "2026-10-12T20:40:22"}
+{"pack": "pack-tiles", "puzzle": "pack-tiles-19", "url": "https://live.staticflickr.com/65535/52205406253_df05c6ef60_b.jpg", "reason": "similar", "event": "delete", "at": "2026-10-12T20:40:23"}
+{"pack": "pack-tiles", "puzzle": "pack-tiles-20", "url": "https://live.staticflickr.com/65535/51823589391_16621de40d_b.jpg", "reason": "off-theme", "event": "delete", "at": "2026-10-12T20:40:23"}
+{"pack": "pack-tiles", "puzzle": "p-81a4b625f8c2", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Haft-rang_tilework._Shah_Mosque_%28Isfahan%29.jpg/1280px-Haft-rang_tilework._Shah_Mosque_%28Isfahan%29.jpg", "topic": "Shah Mosque Isfahan tilework", "event": "create", "at": "2026-10-12T20:40:23"}
+{"pack": "pack-tiles", "puzzle": "p-cc41241f8571", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/%C3%87inili_K%C3%B6%C5%9Fk_Museum_Polychrome_Tile_Iznik_in_2018_03_549.jpg/1280px-%C3%87inili_K%C3%B6%C5%9Fk_Museum_Polychrome_Tile_Iznik_in_2018_03_549.jpg", "topic": "Iznik tile panel", "event": "create", "at": "2026-10-12T20:40:24"}
+{"pack": "pack-tiles", "puzzle": "p-fa63dca476ef", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Tile_panel_for_a_P%26O_ship%2C_V%26A_London_02.jpg/1280px-Tile_panel_for_a_P%26O_ship%2C_V%26A_London_02.jpg", "topic": "Iznik tile panel", "event": "create", "at": "2026-10-12T20:40:24"}
+{"pack": "pack-tiles", "puzzle": "p-5e18412c5c68", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Portugal%2C_Lisbon%2C_Gulbenkian_Museum%2C_Iznik_Tile_Panel_%2852593873131%29.jpg/1280px-Portugal%2C_Lisbon%2C_Gulbenkian_Museum%2C_Iznik_Tile_Panel_%2852593873131%29.jpg", "topic": "Iznik tile panel", "event": "create", "at": "2026-10-12T20:40:24"}
+{"pack": "pack-tiles", "puzzle": "p-87ae1f5f8318", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Sheikh_Lotfollah_Mosque_Shamseh.jpg/1280px-Sheikh_Lotfollah_Mosque_Shamseh.jpg", "topic": "Sheikh Lotfollah Mosque dome tiles", "event": "create", "at": "2026-10-12T20:40:24"}
+{"pack": "pack-tiles", "puzzle": "p-911eb835a5fb", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Tile_art_at_Wazir_khan_Mosque.jpg/1280px-Tile_art_at_Wazir_khan_Mosque.jpg", "topic": "Wazir Khan Mosque tiles", "event": "create", "at": "2026-10-12T20:40:25"}
+{"pack": "pack-tiles", "puzzle": "p-5634a694faa9", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Wazir_khan_mosque%2C_tile_art1.jpg/1280px-Wazir_khan_mosque%2C_tile_art1.jpg", "topic": "Wazir Khan Mosque tiles", "event": "create", "at": "2026-10-12T20:40:25"}
+{"pack": "pack-tiles", "puzzle": "p-359dab8eef24", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Tilework%2C_Pakistan%2C_Multan%2C_16th_century_AD%2C_glazed_earthenware_-_Linden-Museum_-_Stuttgart%2C_Germany_-_DSC03892.jpg/1280px-Tilework%2C_Pakistan%2C_Multan%2C_16th_century_AD%2C_glazed_earthenware_-_Linden-Museum_-_Stuttgart%2C_Germany_-_DSC03892.jpg", "topic": "Multan tilework", "event": "create", "at": "2026-10-12T20:40:25"}
+{"pack": "pack-tiles", "puzzle": "p-eded05fd4f96", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Khiva-Madrasa_Muhammad_Aminxon_%283%29.jpg/1280px-Khiva-Madrasa_Muhammad_Aminxon_%283%29.jpg", "topic": "Khiva majolica tiles", "event": "create", "at": "2026-10-12T20:40:26"}
+{"pack": "pack-tiles", "puzzle": "p-99d970d25a1f", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/D%C3%A9cor_du_mausol%C3%A9e_Pakhlavan_Makhmoud_%28Khiva%2C_Ouzb%C3%A9kistan%29_%285587021552%29.jpg/1280px-D%C3%A9cor_du_mausol%C3%A9e_Pakhlavan_Makhmoud_%28Khiva%2C_Ouzb%C3%A9kistan%29_%285587021552%29.jpg", "topic": "Khiva majolica tiles", "event": "create", "at": "2026-10-12T20:40:26"}
+{"pack": "pack-tiles", "puzzle": "p-866b5ce75b7e", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Zellige_dar_benkhadra.JPG/1280px-Zellige_dar_benkhadra.JPG", "topic": "Moroccan zellige", "event": "create", "at": "2026-10-12T20:40:26"}
+{"pack": "pack-tiles", "puzzle": "p-37f77d44c4e9", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Mosa%C3%AFc_in_the_Ben_Youssef_Madrasa%2C_Morocco_%282%29.jpg/1280px-Mosa%C3%AFc_in_the_Ben_Youssef_Madrasa%2C_Morocco_%282%29.jpg", "topic": "Moroccan zellige", "event": "create", "at": "2026-10-12T20:40:27"}
+{"pack": "pack-tiles", "puzzle": "p-b7fa51af484f", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Azulejos%2C_Braga%2C_Portugal_03.jpg/1280px-Azulejos%2C_Braga%2C_Portugal_03.jpg", "topic": "Portuguese azulejos pattern", "event": "create", "at": "2026-10-12T20:40:27"}
+{"pack": "pack-tiles", "puzzle": "p-d689e1017a35", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Delft_tile_panel%2C_V%26A_London.jpg/1280px-Delft_tile_panel%2C_V%26A_London.jpg", "topic": "Delft tile", "event": "create", "at": "2026-10-12T20:40:27"}
+{"pack": "pack-tiles", "puzzle": "p-6b9ac8a478b5", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/All_Saints_Church%2C_Middle_Claydon%2C_Bucks%2C_England_-_chancel_floor_tiles.jpg/1280px-All_Saints_Church%2C_Middle_Claydon%2C_Bucks%2C_England_-_chancel_floor_tiles.jpg", "topic": "Victorian encaustic tiles floor", "event": "create", "at": "2026-10-12T20:40:28"}
+{"pack": "pack-tiles", "puzzle": "p-a0a132b0ffaa", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/ART_NOUVEAU._Uitzonderlijke_objecten_met_een_verhaal._BELvue_museum_35.jpg/1280px-ART_NOUVEAU._Uitzonderlijke_objecten_met_een_verhaal._BELvue_museum_35.jpg", "topic": "Art Nouveau tiles", "event": "create", "at": "2026-10-12T20:40:28"}
+{"pack": "pack-tiles", "puzzle": "p-774e45b774c3", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/MuseoConstituciones18.JPG/1280px-MuseoConstituciones18.JPG", "topic": "Talavera tile Puebla", "event": "create", "at": "2026-10-12T20:40:28"}
+{"pack": "pack-tiles", "puzzle": "p-0fa167dc42fd", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Gaziantep_Achaeological_Museum_Floor_Roman_Bath_in_2007_0173b.jpg/1280px-Gaziantep_Achaeological_Museum_Floor_Roman_Bath_in_2007_0173b.jpg", "topic": "Roman mosaic floor geometric", "event": "create", "at": "2026-10-12T20:40:29"}
+{"pack": "pack-tiles", "puzzle": "p-1bbc23292307", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Antakya_Archaeological_Museum_Geometric_mosaic_C_in_2019_33.jpg/1280px-Antakya_Archaeological_Museum_Geometric_mosaic_C_in_2019_33.jpg", "topic": "Antioch mosaic geometric", "event": "create", "at": "2026-10-12T20:40:29"}
+{"pack": "pack-tiles", "puzzle": "p-eec136e8feac", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Santa_Maria_in_Trastevere_Cosmatesque_floors_05.jpg/1280px-Santa_Maria_in_Trastevere_Cosmatesque_floors_05.jpg", "topic": "Cosmatesque floor", "event": "create", "at": "2026-10-12T20:40:29"}
+{"pack": "pack-tiles", "puzzle": "p-98ec3bf987ca", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Mausoleum_of_Galla_Placidia_mosaics.jpg/1280px-Mausoleum_of_Galla_Placidia_mosaics.jpg", "topic": "Galla Placidia mosaic ceiling", "event": "create", "at": "2026-10-12T20:40:29"}
+{"pack": "pack-tiles", "puzzle": "p-66b3c6e3e045", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Aachen_30.jpg/1280px-Aachen_30.jpg", "topic": "Byzantine mosaic ornament", "event": "create", "at": "2026-10-12T20:40:30"}
+{"pack": "pack-tiles", "puzzle": "p-e1cf6b897f86", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Casa_Battl%C3%B3_Barcelona_exterieur_mosaics_08.jpg/1280px-Casa_Battl%C3%B3_Barcelona_exterieur_mosaics_08.jpg", "topic": "Gaud\u00ed trencad\u00eds mosaic", "event": "create", "at": "2026-10-12T20:40:30"}
+{"pack": "pack-tiles", "puzzle": "p-938fb190fb12", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Casa_Batllo-paviment_hidraulic.jpg/1280px-Casa_Batllo-paviment_hidraulic.jpg", "topic": "Casa Batll\u00f3 mosaic", "event": "create", "at": "2026-10-12T20:40:30"}
+{"pack": "pack-tiles", "fields": ["blurhash", "coverUrl", "description", "imageCount"], "event": "pack-update", "at": "2026-10-12T20:40:31"}
+{"pack": "pack-tiles", "puzzle": "pack-tiles-18", "url": "https://live.staticflickr.com/65535/52205387941_fbf716fd98_b.jpg", "reason": "weak", "event": "delete", "at": "2026-10-12T20:40:45"}
+{"pack": "pack-tiles", "fields": ["imageCount"], "event": "pack-update", "at": "2026-10-12T20:40:46"}
+{"puzzle": "pack-tiles-17", "title": "Meander Mosaic Floor", "event": "retitle", "at": "2026-10-12T20:40:58"}
+{"puzzle": "p-81a4b625f8c2", "title": "Haft-rang Tilework, Shah Mosque", "event": "retitle", "at": "2026-10-12T20:40:59"}
+{"puzzle": "p-cc41241f8571", "title": "Iznik Pomegranate Tiles", "event": "retitle", "at": "2026-10-12T20:40:59"}
+{"puzzle": "p-fa63dca476ef", "title": "De Morgan Tile Panel for a P&O Ship", "event": "retitle", "at": "2026-10-12T20:41:00"}
+{"puzzle": "p-5e18412c5c68", "title": "Iznik Tile Panel, Gulbenkian Museum", "event": "retitle", "at": "2026-10-12T20:41:01"}
+{"puzzle": "p-87ae1f5f8318", "title": "Sheikh Lotfollah Dome", "event": "retitle", "at": "2026-10-12T20:41:01"}
+{"puzzle": "p-911eb835a5fb", "title": "Wazir Khan Mosque Tile Art", "event": "retitle", "at": "2026-10-12T20:41:02"}
+{"puzzle": "p-5634a694faa9", "title": "Wazir Khan Mosque Star Tiles", "event": "retitle", "at": "2026-10-12T20:41:03"}
+{"puzzle": "p-359dab8eef24", "title": "Multan Tilework", "event": "retitle", "at": "2026-10-12T20:41:03"}
+{"puzzle": "p-eded05fd4f96", "title": "Muhammad Amin Khan Madrasa, Khiva", "event": "retitle", "at": "2026-10-12T20:41:04"}
+{"puzzle": "p-99d970d25a1f", "title": "Pahlavan Mahmud Mausoleum, Khiva", "event": "retitle", "at": "2026-10-12T20:41:04"}
+{"puzzle": "p-866b5ce75b7e", "title": "Zellige, Dar Benkhadra", "event": "retitle", "at": "2026-10-12T20:41:05"}
+{"puzzle": "p-37f77d44c4e9", "title": "Zellige, Ben Youssef Madrasa", "event": "retitle", "at": "2026-10-12T20:41:05"}
+{"puzzle": "p-b7fa51af484f", "title": "Azulejos, Braga", "event": "retitle", "at": "2026-10-12T20:41:06"}
+{"puzzle": "p-d689e1017a35", "title": "Delft Tile Panel", "event": "retitle", "at": "2026-10-12T20:41:06"}
+{"puzzle": "p-6b9ac8a478b5", "title": "Encaustic Floor, Middle Claydon", "event": "retitle", "at": "2026-10-12T20:41:07"}
+{"puzzle": "p-a0a132b0ffaa", "title": "Art Nouveau Tile Panel", "event": "retitle", "at": "2026-10-12T20:41:07"}
+{"puzzle": "p-774e45b774c3", "title": "Talavera Parrot Panel", "event": "retitle", "at": "2026-10-12T20:41:08"}
+{"puzzle": "p-0fa167dc42fd", "title": "Roman Bath Mosaic, Gaziantep", "event": "retitle", "at": "2026-10-12T20:41:09"}
+{"puzzle": "p-1bbc23292307", "title": "Antioch Geometric Mosaic", "event": "retitle", "at": "2026-10-12T20:41:09"}
+{"puzzle": "p-eec136e8feac", "title": "Cosmatesque Floor, Santa Maria in Trastevere", "event": "retitle", "at": "2026-10-12T20:41:10"}
+{"puzzle": "p-98ec3bf987ca", "title": "Galla Placidia Mosaics", "event": "retitle", "at": "2026-10-12T20:41:10"}
+{"puzzle": "p-66b3c6e3e045", "title": "Aachen Cathedral Mosaic", "event": "retitle", "at": "2026-10-12T20:41:11"}
+{"puzzle": "p-e1cf6b897f86", "title": "Casa Batll\u00f3 Trencad\u00eds", "event": "retitle", "at": "2026-10-12T20:41:11"}
+{"puzzle": "p-938fb190fb12", "title": "Casa Batll\u00f3 Hydraulic Floor", "event": "retitle", "at": "2026-10-12T20:41:12"}
+{"pack": "pack-tiles", "fields": ["blurhash", "coverUrl", "description", "imageCount"], "event": "pack-update", "at": "2026-10-12T20:41:13"}
+{"pack": "pack-vintage-posters", "fields": ["blurhash", "description", "imageCount", "name"], "event": "pack-update", "at": "2026-10-12T20:41:35"}
