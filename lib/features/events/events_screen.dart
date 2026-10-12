@@ -16,8 +16,10 @@ import '../../state/profile.dart';
 import '../../state/progress.dart';
 import '../../state/rewards.dart';
 import '../../state/social.dart';
+import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
+import '../gallery/pack_progress.dart';
 import '../home/header_bar.dart';
 
 /// Quests tab: daily quests, weekly quests, then live events.
@@ -133,7 +135,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
                 );
               },
             ),
-            SliverToBoxAdapter(child: SizedBox(height: MediaQuery.paddingOf(context).bottom + 24)),
+            SliverToBoxAdapter(child: SizedBox(height: GlassTabBar.scrollEndPadding(context))),
           ],
         ),
       ),
@@ -309,14 +311,13 @@ class _EventCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final c = context.colors;
     // A pack event asks for every picture in its pack (N of N). The counts
-    // come from the catalog and the player's own progress rows; the backend
-    // counter is the fallback for events without a pack (community goals).
-    final packId = event.packId;
-    final packPuzzles = packId == null || packId.isEmpty ? const <Puzzle>[] : (ref.watch(packPuzzlesProvider(packId)).value ?? const <Puzzle>[]);
-    final isPackQuest = packPuzzles.isNotEmpty;
-    final solved = ref.watch(progressProvider).value ?? const <String, PuzzleProgress>{};
-    final target = isPackQuest ? packPuzzles.length : event.goal;
-    final value = isPackQuest ? packPuzzles.where((p) => solved[p.id]?.completed == true).length : (progress?.progress ?? 0);
+    // come from packProgressProvider, the same source as the library cards;
+    // the backend counter is the fallback for events without a pack
+    // (community goals).
+    final pack = _packProgress(ref, event);
+    final isPackQuest = pack != null;
+    final target = isPackQuest ? pack.total : event.goal;
+    final value = isPackQuest ? pack.solved : (progress?.progress ?? 0);
     final done = value >= target;
     final claimed = progress?.claimed ?? false;
     final description = isPackQuest ? 'Finish all $target pictures in the ${event.name} pack while the event is live.' : event.description;
@@ -356,6 +357,7 @@ class _EventCard extends ConsumerWidget {
                   top: 12,
                   child: Chip2(label: leftLabel, icon: AppIcons.eventType(event.type), onImage: true),
                 ),
+                if (isPackQuest && pack.complete) Positioned(right: 14, top: 12, child: PackDoneBadges(progress: pack)),
                 Positioned(
                   left: 16,
                   bottom: 12,
@@ -372,13 +374,16 @@ class _EventCard extends ConsumerWidget {
               children: [
                 Text(description, style: TextStyle(color: c.textSecondary, fontSize: 13.5, height: 1.4)),
                 const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Expanded(child: ProgressBar(value: target == 0 ? 0 : value / target, height: 8, color: done ? c.success : null)),
-                    const SizedBox(width: 10),
-                    Text('$value / $target', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
-                  ],
-                ),
+                if (isPackQuest)
+                  PackProgressLine(progress: pack, height: 8, fontSize: 13)
+                else
+                  Row(
+                    children: [
+                      Expanded(child: ProgressBar(value: target == 0 ? 0 : value / target, height: 8, color: done ? c.success : null)),
+                      const SizedBox(width: 10),
+                      Text('$value / $target', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+                    ],
+                  ),
                 if (community != null) ...[
                   const SizedBox(height: 8),
                   Row(
@@ -432,6 +437,8 @@ class _UpcomingRow extends ConsumerWidget {
     final c = context.colors;
     final d = event.startsIn;
     final opens = d.inDays > 0 ? 'Opens in ${d.inDays}d ${d.inHours % 24}h' : 'Opens in ${d.inHours}h ${d.inMinutes % 60}m';
+    final pack = _packProgress(ref, event);
+    final showPack = pack != null;
     return Pressable(
       onTap: event.packId == null ? null : () => context.go('/library/pack/${event.packId}'),
       scale: 0.99,
@@ -439,7 +446,17 @@ class _UpcomingRow extends ConsumerWidget {
         padding: const EdgeInsets.fromLTRB(12, 10, 14, 10),
         child: Row(
           children: [
-            SizedBox(width: 52, height: 52, child: NetImage(url: event.coverUrl, radius: 10, blurhash: _coverHash(ref, event))),
+            SizedBox(
+              width: 52,
+              height: 52,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  NetImage(url: event.coverUrl, radius: 10, blurhash: _coverHash(ref, event)),
+                  if (showPack && pack.complete) Positioned(right: 3, top: 3, child: PackDoneBadges(progress: pack, size: 18)),
+                ],
+              ),
+            ),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
@@ -448,6 +465,10 @@ class _UpcomingRow extends ConsumerWidget {
                   Text(event.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
                   const SizedBox(height: 3),
                   Text(event.description, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12.5, color: c.textSecondary)),
+                  if (showPack) ...[
+                    const SizedBox(height: 6),
+                    PackProgressLine(progress: pack, height: 4),
+                  ],
                 ],
               ),
             ),
@@ -460,6 +481,16 @@ class _UpcomingRow extends ConsumerWidget {
   }
 }
 
+
+/// Progress through the event's pack, or null for events without one
+/// (community goals) and while its pictures are not in the catalogue.
+PackProgress? _packProgress(WidgetRef ref, GameEvent event) {
+  final packId = event.packId;
+  if (packId == null || packId.isEmpty) return null;
+  final pictures = ref.watch(packPuzzlesProvider(packId)).value ?? const <Puzzle>[];
+  if (pictures.isEmpty) return null;
+  return ref.watch(packProgressProvider(packId));
+}
 
 /// The event cover is its pack cover, so reuse the pack's BlurHash.
 String? _coverHash(WidgetRef ref, GameEvent event) {

@@ -7,23 +7,32 @@ import '../../models/models.dart';
 import '../../state/catalog.dart';
 import '../../state/profile.dart';
 import '../../state/progress.dart';
+import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 import '../home/header_bar.dart';
 import 'pack_card.dart';
 
-/// Library: every pack grouped by category chips, plus "My puzzles" entry.
-class LibraryScreen extends ConsumerStatefulWidget {
-  const LibraryScreen({super.key});
+/// The Library's selected category chip. Other tabs set it before switching
+/// to the Library, e.g. Home's "All months" opens it on Daily.
+class LibraryFilter extends Notifier<String> {
+  static const all = 'All';
+  static const daily = 'Daily';
+
   @override
-  ConsumerState<LibraryScreen> createState() => _LibraryScreenState();
+  String build() => all;
+
+  void select(String filter) => state = filter;
 }
 
-class _LibraryScreenState extends ConsumerState<LibraryScreen> {
-  String _filter = 'All';
+final libraryFilterProvider = NotifierProvider<LibraryFilter, String>(LibraryFilter.new);
+
+/// Library: every pack grouped by category chips, plus "My puzzles" entry.
+class LibraryScreen extends ConsumerWidget {
+  const LibraryScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final c = context.colors;
     final packs = ref.watch(packsProvider);
     final progress = ref.watch(progressProvider).value ?? {};
@@ -42,32 +51,35 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
           final hasEvents = list.any((p) => p.hasWindow && !p.isExpired);
           // VIP opens everything, so the "Unlocked" chip only helps everyone else.
           final showUnlocked = profile != null && !profile.isVip;
-          final categories = ['All', if (showUnlocked) 'Unlocked', if (hasEvents) 'Events', 'Daily', 'Started', ...{for (final p in list) if (!p.isDaily && !p.hasWindow) p.category}];
+          final categories = [LibraryFilter.all, if (showUnlocked) 'Unlocked', if (hasEvents) 'Events', LibraryFilter.daily, 'Started', ...{for (final p in list) if (!p.isDaily && !p.hasWindow) p.category}];
+          // A chip that is no longer offered (e.g. Events after the last one ended) falls back to All.
+          final selected = ref.watch(libraryFilterProvider);
+          final filter = categories.contains(selected) ? selected : LibraryFilter.all;
           final inAllOrder = [
             ...list.where((p) => !p.isDaily && !p.hasWindow),
             ...list.where((p) => p.hasWindow && p.isLive),
             ...list.where((p) => p.isDaily),
           ];
           List<Pack> filtered;
-          if (_filter == 'All') {
+          if (filter == LibraryFilter.all) {
             filtered = inAllOrder;
-          } else if (_filter == 'Unlocked') {
+          } else if (filter == 'Unlocked') {
             // Same rule as the pack page: free, current month, bought, live event.
             final profileN = ref.read(profileProvider.notifier);
             filtered = inAllOrder.where(profileN.isUnlocked).toList();
-          } else if (_filter == 'Events') {
+          } else if (filter == 'Events') {
             filtered = [
               ...list.where((p) => p.hasWindow && p.isLive),
               ...list.where((p) => p.hasWindow && p.isUpcoming),
             ];
-          } else if (_filter == 'Daily') {
+          } else if (filter == 'Daily') {
             filtered = list.where((p) => p.isDaily).toList();
-          } else if (_filter == 'Started') {
+          } else if (filter == 'Started') {
             final all = ref.watch(allPuzzlesProvider).value ?? const <Puzzle>[];
             final startedPacks = all.where((p) => progress[p.id]?.inProgress == true).map((p) => p.packId).toSet();
             filtered = list.where((p) => startedPacks.contains(p.id)).toList();
           } else {
-            filtered = list.where((p) => p.category == _filter).toList();
+            filtered = list.where((p) => p.category == filter).toList();
           }
           return CustomScrollView(
             physics: const BouncingScrollPhysics(),
@@ -96,9 +108,9 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
                     separatorBuilder: (_, _) => const SizedBox(width: 8),
                     itemBuilder: (_, i) {
                       final cat = categories[i];
-                      final selected = cat == _filter;
+                      final selected = cat == filter;
                       return Pressable(
-                        onTap: () => setState(() => _filter = cat),
+                        onTap: () => ref.read(libraryFilterProvider.notifier).select(cat),
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 180),
                           padding: const EdgeInsets.symmetric(horizontal: 14),
@@ -130,10 +142,10 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
                 ),
               ),
               if (filtered.isEmpty)
-                SliverToBoxAdapter(child: EmptyState(icon: AppIcons.library, title: _filter == 'Started' ? 'No puzzles in progress' : (_filter == 'Unlocked' ? 'Nothing unlocked yet' : 'Nothing here yet'), message: _filter == 'Started' ? 'Boards you leave unfinished show up here. Open a pack to start one.' : (_filter == 'Unlocked' ? 'Packs you can play right now show up here.' : 'New packs arrive with events and every month.')))
+                SliverToBoxAdapter(child: EmptyState(icon: AppIcons.library, title: filter == 'Started' ? 'No puzzles in progress' : (filter == 'Unlocked' ? 'Nothing unlocked yet' : 'Nothing here yet'), message: filter == 'Started' ? 'Boards you leave unfinished show up here. Open a pack to start one.' : (filter == 'Unlocked' ? 'Packs you can play right now show up here.' : 'New packs arrive with events and every month.')))
               else
                 SliverPadding(
-                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
                   sliver: SliverGrid(
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 12, crossAxisSpacing: 12, childAspectRatio: 0.78),
                     delegate: SliverChildBuilderDelegate(
@@ -142,7 +154,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
                     ),
                   ),
                 ),
-              SliverToBoxAdapter(child: SizedBox(height: MediaQuery.paddingOf(context).bottom + 12)),
+              SliverToBoxAdapter(child: SizedBox(height: GlassTabBar.scrollEndPadding(context))),
             ],
           );
         },

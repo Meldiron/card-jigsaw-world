@@ -210,7 +210,7 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
       ),
       body: ListView(
         physics: const BouncingScrollPhysics(),
-        padding: EdgeInsets.fromLTRB(20, MediaQuery.paddingOf(context).top + kToolbarHeight + 8, 20, 40),
+        padding: EdgeInsets.fromLTRB(20, MediaQuery.paddingOf(context).top + kToolbarHeight + 8, 20, GlassTabBar.scrollEndPadding(context)),
         children: [
           if (!isGuest) ...[
             SoftCard(
@@ -239,18 +239,15 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
                     kind: ButtonKind.ghost,
                     icon: CupertinoIcons.square_arrow_right,
                     onTap: () async {
-                      final ok = await showCupertinoDialog<bool>(
-                        context: context,
-                        builder: (ctx) => CupertinoAlertDialog(
-                          title: const Text('Sign out?'),
-                          content: const Text('You will continue as a guest. Progress saved to this account stays safe.'),
-                          actions: [
-                            CupertinoDialogAction(onPressed: () => Navigator.pop(ctx, false), child: const Text('Stay signed in')),
-                            CupertinoDialogAction(isDestructiveAction: true, onPressed: () => Navigator.pop(ctx, true), child: const Text('Sign out')),
-                          ],
-                        ),
+                      final ok = await showAppAlert(
+                        context,
+                        title: 'Sign out?',
+                        message: 'You will continue as a guest. Progress saved to this account stays safe.',
+                        cancelLabel: 'Stay signed in',
+                        confirmLabel: 'Sign out',
+                        destructive: true,
                       );
-                      if (ok != true) return;
+                      if (!ok) return;
                       await ref.read(authProvider.notifier).signOut();
                       _afterAuth();
                       if (context.mounted) context.pop();

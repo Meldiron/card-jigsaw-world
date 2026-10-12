@@ -50,7 +50,7 @@ class PlayerScreen extends ConsumerWidget {
           final top = MediaQuery.paddingOf(context).top + kToolbarHeight;
           return ListView(
             physics: const BouncingScrollPhysics(),
-            padding: EdgeInsets.fromLTRB(20, top + 12, 20, MediaQuery.paddingOf(context).bottom + 28),
+            padding: EdgeInsets.fromLTRB(20, top + 12, 20, GlassTabBar.scrollEndPadding(context)),
             children: [
               SoftCard(
                 padding: const EdgeInsets.all(16),

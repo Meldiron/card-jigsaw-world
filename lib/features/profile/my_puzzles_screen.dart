@@ -90,7 +90,7 @@ class _MyPuzzlesScreenState extends ConsumerState<MyPuzzlesScreen> {
               const SliverFillRemaining(hasScrollBody: false, child: EmptyState(icon: AppIcons.camera, title: 'No photos yet', message: 'Turn pets, trips and family into card puzzles. Photos stay private to your account.'))
             else
               SliverPadding(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
+                padding: EdgeInsets.fromLTRB(20, 16, 20, GlassTabBar.scrollEndPadding(context)),
                 sliver: SliverGrid(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 12, crossAxisSpacing: 12, childAspectRatio: 0.78),
                   delegate: SliverChildBuilderDelegate(
@@ -101,17 +101,15 @@ class _MyPuzzlesScreenState extends ConsumerState<MyPuzzlesScreen> {
                       return Pressable(
                         onTap: () => context.push('/play/${m.id}'),
                         onLongPress: () async {
-                          final ok = await showCupertinoDialog<bool>(
-                            context: context,
-                            builder: (ctx) => CupertinoAlertDialog(
-                              title: const Text('Delete photo?'),
-                              actions: [
-                                CupertinoDialogAction(onPressed: () => Navigator.pop(ctx, false), child: const Text('Keep')),
-                                CupertinoDialogAction(isDestructiveAction: true, onPressed: () => Navigator.pop(ctx, true), child: const Text('Delete photo')),
-                              ],
-                            ),
+                          final ok = await showAppAlert(
+                            context,
+                            title: 'Delete photo?',
+                            message: 'The photo and its puzzle are removed from your account.',
+                            cancelLabel: 'Keep',
+                            confirmLabel: 'Delete photo',
+                            destructive: true,
                           );
-                          if (ok == true) {
+                          if (ok) {
                             await ref.read(uploadRepositoryProvider).delete(m);
                             ref.invalidate(myPuzzlesProvider);
                           }

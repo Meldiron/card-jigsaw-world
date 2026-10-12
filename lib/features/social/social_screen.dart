@@ -10,6 +10,7 @@ import '../../data/repositories.dart';
 import '../../models/models.dart';
 import '../../state/auth.dart';
 import '../../state/social.dart';
+import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 import '../home/header_bar.dart';
@@ -128,7 +129,7 @@ class _Leaderboard extends ConsumerWidget {
           onRefresh: () async => ref.invalidate(leaderboardProvider),
           child: ListView.builder(
             physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
-            padding: EdgeInsets.fromLTRB(20, 0, 20, MediaQuery.paddingOf(context).bottom + 16),
+            padding: EdgeInsets.fromLTRB(20, 0, 20, GlassTabBar.scrollEndPadding(context)),
             itemCount: list.length + 1,
             itemBuilder: (_, i) {
               if (i == 0) {
@@ -236,7 +237,7 @@ class _FriendsState extends ConsumerState<_Friends> {
     final me = ref.watch(currentUserIdProvider);
     return ListView(
       physics: const BouncingScrollPhysics(),
-      padding: EdgeInsets.fromLTRB(20, 0, 20, MediaQuery.paddingOf(context).bottom + 16),
+      padding: EdgeInsets.fromLTRB(20, 0, 20, GlassTabBar.scrollEndPadding(context)),
       children: [
         SoftCard(
           padding: const EdgeInsets.all(16),

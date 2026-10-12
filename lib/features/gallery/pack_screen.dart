@@ -15,6 +15,7 @@ import '../../state/progress.dart';
 import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
+import 'pack_progress.dart';
 
 /// Pack detail: image hero, access state, and a grid of puzzles with stars.
 /// Daily (monthly) packs render as a calendar; past months need VIP or coins.
@@ -36,8 +37,7 @@ class PackScreen extends ConsumerWidget {
     final profile = ref.watch(profileProvider).value;
     final unlocked = profile != null && profileN.isUnlocked(pack);
     final list = puzzles.value ?? const <Puzzle>[];
-    final done = list.where((p) => progress[p.id]?.completed == true).length;
-    final stars = list.fold<int>(0, (s, p) => s + (progress[p.id]?.stars ?? 0));
+    final packProgress = ref.watch(packProgressProvider(packId));
     final available = list.where((p) => !p.isLockedByDate).length;
     final priceCurrency = pack.priceTickets > 0 ? Currency.tickets : Currency.coins;
     final priceValue = pack.priceTickets > 0 ? pack.priceTickets : pack.priceCoins;
@@ -139,8 +139,8 @@ class PackScreen extends ConsumerWidget {
                   Row(
                     children: [
                       _Stat(label: pack.isDaily ? 'Available' : 'Puzzles', value: pack.isDaily ? '$available/${list.length}' : '${list.length}', progress: pack.isDaily ? _ratio(available, list.length) : null),
-                      _Stat(label: 'Solved', value: '$done/${list.length}', progress: _ratio(done, list.length)),
-                      _Stat(label: 'Stars', value: '$stars/${list.length * 3}', progress: _ratio(stars, list.length * 3), color: Brand.star, last: true),
+                      _Stat(label: 'Solved', value: '${packProgress.solved}/${packProgress.total}', progress: packProgress.solvedRatio),
+                      _Stat(label: 'Stars', value: '${packProgress.stars}/${packProgress.maxStars}', progress: packProgress.starRatio, color: Brand.star, last: true),
                     ],
                   ),
                   const SizedBox(height: 16),
@@ -162,7 +162,7 @@ class PackScreen extends ConsumerWidget {
             loading: () => const SliverToBoxAdapter(child: Padding(padding: EdgeInsets.all(40), child: Loader())),
             error: (e, _) => const SliverToBoxAdapter(child: EmptyState(icon: AppIcons.signal, title: 'Pictures did not load', message: 'Check your connection and pull to try again.')),
             data: (list) => SliverPadding(
-              padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
+              padding: EdgeInsets.fromLTRB(20, 20, 20, GlassTabBar.scrollEndPadding(context)),
               sliver: SliverGrid(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: pack.isDaily ? 4 : 3,

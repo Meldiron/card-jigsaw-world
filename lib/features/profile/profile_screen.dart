@@ -10,15 +10,46 @@ import '../../models/models.dart';
 import '../../state/achievements.dart';
 import '../../state/auth.dart';
 import '../../state/profile.dart';
+import '../../state/progress.dart';
 import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
+import 'achievement_order.dart';
 import 'avatar_picker.dart';
 import 'stats.dart';
 
 /// Profile: identity, stats, achievements and shortcuts.
-class ProfileScreen extends ConsumerWidget {
+class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+  /// Achievement order, fixed while the player is on the screen so a card
+  /// never moves under the finger after a claim. Recomputed when the page
+  /// comes back into view: another tab or a page pushed on top hides it,
+  /// which turns its tickers off.
+  List<String>? _achievementOrder;
+  bool _visible = true;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final visible = TickerMode.valuesOf(context).enabled;
+    if (visible && !_visible) _achievementOrder = null;
+    _visible = visible;
+  }
+
+  /// The live statuses in the frozen order. The order is only fixed once the
+  /// progress rows have settled, so it is not taken from an empty save.
+  List<AchievementStatus> _orderedAchievements(List<AchievementStatus> live) {
+    final order = _achievementOrder ?? achievementOrder(live);
+    final rows = ref.read(progressProvider);
+    if (_achievementOrder == null && (rows.hasValue || rows.hasError)) _achievementOrder = order;
+    return applyAchievementOrder(live, order);
+  }
 
   Future<void> _editName(BuildContext context, WidgetRef ref, Profile p) async {
     final controller = TextEditingController(text: p.displayName);
@@ -47,13 +78,13 @@ class ProfileScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final c = context.colors;
     final profile = ref.watch(profileProvider).value;
     final user = ref.watch(authProvider).value;
     final isGuest = ref.watch(isGuestProvider);
     if (profile == null) return const Scaffold(body: Loader());
-    final achievements = ref.watch(achievementsProvider);
+    final achievements = _orderedAchievements(ref.watch(achievementsProvider));
     final totalSteps = achievements.fold<int>(0, (s, a) => s + a.family.steps.length);
     final claimedSteps = achievements.fold<int>(0, (s, a) => s + a.claimedSteps);
     final readyToClaim = achievements.where((a) => a.done).length;
@@ -177,7 +208,7 @@ class ProfileScreen extends ConsumerWidget {
             sliver: SliverList.separated(
               itemCount: achievements.length,
               separatorBuilder: (_, _) => const SizedBox(height: 10),
-              itemBuilder: (_, i) => _AchievementCard(status: achievements[i]),
+              itemBuilder: (_, i) => _AchievementCard(key: ValueKey(achievements[i].family.id), status: achievements[i]),
             ),
           ),
           const SliverToBoxAdapter(child: SectionHeader(title: 'More')),
@@ -200,7 +231,7 @@ class ProfileScreen extends ConsumerWidget {
               ),
             ),
           ),
-          SliverToBoxAdapter(child: SizedBox(height: MediaQuery.paddingOf(context).bottom + 28)),
+          SliverToBoxAdapter(child: SizedBox(height: GlassTabBar.scrollEndPadding(context))),
         ],
       ),
     );
@@ -260,7 +291,7 @@ class _BigStat extends StatelessWidget {
 }
 
 class _AchievementCard extends ConsumerWidget {
-  const _AchievementCard({required this.status});
+  const _AchievementCard({super.key, required this.status});
   final AchievementStatus status;
 
   Future<void> _claim(BuildContext context, WidgetRef ref) async {

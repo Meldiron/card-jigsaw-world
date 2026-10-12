@@ -67,9 +67,11 @@ simulator, because it is all drawn by Flutter.
 
 ## Rules kept
 
-- No emoji, no gradients; the only colour in chrome is the indigo accent on
+- No emoji, no gradients; the only colour in chrome is the cobalt accent on
   the selected tab and default buttons.
 - Alerts keep platform order: Cancel left, confirm right (bold).
-- Pages that scroll under a bar pad their first and last item with
-  `MediaQuery.paddingOf(context).top` / `.bottom`; the Scaffold sets both to
-  the bar heights when `extendBody` / `extendBodyBehindAppBar` is on.
+- Pages that scroll under a bar pad their first item with
+  `MediaQuery.paddingOf(context).top`. Every scrollable page ends with
+  `GlassTabBar.scrollEndPadding(context)`: the floating tab bar's height plus
+  a margin under the tab bar, otherwise the home-indicator inset plus a
+  margin, so the last row is never hidden.

@@ -57,7 +57,7 @@ class SettingsScreen extends ConsumerWidget {
       ),
       body: ListView(
         physics: const BouncingScrollPhysics(),
-        padding: EdgeInsets.only(top: MediaQuery.paddingOf(context).top + kToolbarHeight, bottom: 40),
+        padding: EdgeInsets.only(top: MediaQuery.paddingOf(context).top + kToolbarHeight, bottom: GlassTabBar.scrollEndPadding(context)),
         children: [
           group('Appearance', [
             _SegRow(

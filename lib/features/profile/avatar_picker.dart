@@ -58,18 +58,15 @@ class _AvatarPickerState extends ConsumerState<AvatarPicker> {
     }
     final def = AppIcons.avatar(key);
     if (def.source == AvatarSource.coins) {
-      final ok = await showCupertinoDialog<bool>(
-        context: context,
-        builder: (ctx) => CupertinoAlertDialog(
-          title: Text('Buy ${def.name}?'),
-          content: Padding(padding: const EdgeInsets.only(top: 8), child: Text('${Economy.avatarCoins} coins. Yours to keep.')),
-          actions: [
-            CupertinoDialogAction(onPressed: () => Navigator.pop(ctx, false), child: const Text('Not now')),
-            CupertinoDialogAction(isDefaultAction: true, onPressed: () => Navigator.pop(ctx, true), child: const Text('Buy avatar')),
-          ],
-        ),
+      final ok = await showAppAlert(
+        context,
+        title: 'Buy ${def.name}?',
+        message: 'Yours to keep.',
+        child: const Amount(currency: Currency.coins, value: Economy.avatarCoins, size: 20, fontSize: 17, weight: FontWeight.w700),
+        cancelLabel: 'Not now',
+        confirmLabel: 'Buy avatar',
       );
-      if (ok != true || !mounted) return;
+      if (!ok || !mounted) return;
       final bought = await n.unlockAvatar(key);
       if (!mounted) return;
       if (bought) {
@@ -78,7 +75,7 @@ class _AvatarPickerState extends ConsumerState<AvatarPicker> {
         await n.setIdentity(avatar: key);
         if (mounted) showToast(context, '${def.name} is yours', icon: AppIcons.check);
       } else {
-        showToast(context, 'Not enough coins. Visit the store or finish goals.', leading: const CoinIcon(size: 20));
+        showToast(context, 'Not enough coins. Visit the store or finish quests.', leading: const CoinIcon(size: 20));
         context.push('/store');
       }
       return;

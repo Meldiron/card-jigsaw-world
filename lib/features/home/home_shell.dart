@@ -14,9 +14,9 @@ import '../../widgets/icons.dart';
 /// Bottom tab shell: Home · Library · Quests · Social · Profile.
 ///
 /// The tab bar is a floating glass capsule (iOS 26). The body extends under
-/// it, so every tab's scroll view pads its end with
-/// `MediaQuery.paddingOf(context).bottom`, which the Scaffold sets to the bar
-/// height.
+/// it, so every tab's scroll view (and every page pushed inside a tab) pads
+/// its end with `GlassTabBar.scrollEndPadding(context)`, which clears the
+/// bar; [GlassTabBarScope] marks the area the bar covers.
 class HomeShell extends ConsumerStatefulWidget {
   const HomeShell({super.key, required this.shell});
   final StatefulNavigationShell shell;
@@ -49,7 +49,7 @@ class _HomeShellState extends ConsumerState<HomeShell> {
     ];
     return Scaffold(
       extendBody: true,
-      body: widget.shell,
+      body: GlassTabBarScope(child: widget.shell),
       bottomNavigationBar: GlassTabBar(
         items: tabs,
         currentIndex: widget.shell.currentIndex,

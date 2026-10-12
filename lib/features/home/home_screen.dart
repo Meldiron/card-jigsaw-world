@@ -16,7 +16,10 @@ import '../../widgets/ui.dart';
 import '../ads/house_ads.dart';
 import '../daily/daily_reward_sheet.dart';
 import '../daily/piggy_sheet.dart';
+import '../../widgets/glass.dart';
+import '../gallery/library_screen.dart';
 import '../gallery/pack_card.dart';
+import '../gallery/pack_progress.dart';
 import 'header_bar.dart';
 
 /// Home: today's puzzle, quick actions, streak, level, continue, months, packs.
@@ -164,7 +167,7 @@ class HomeScreen extends ConsumerWidget {
               ),
               SliverToBoxAdapter(
                 child: SizedBox(
-                  height: 150,
+                  height: _CoverTile.size,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -185,12 +188,15 @@ class HomeScreen extends ConsumerWidget {
                   title: 'Daily puzzles',
                   subtitle: 'A new picture every day',
                   action: 'All months',
-                  onAction: () => context.go('/library'),
+                  onAction: () {
+                    ref.read(libraryFilterProvider.notifier).select(LibraryFilter.daily);
+                    context.go('/library');
+                  },
                 ),
               ),
               SliverToBoxAdapter(
                 child: SizedBox(
-                  height: 150,
+                  height: _CoverTile.size,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -208,7 +214,14 @@ class HomeScreen extends ConsumerWidget {
             ],
             const SliverToBoxAdapter(child: HouseBanner()),
             SliverToBoxAdapter(
-              child: SectionHeader(title: 'Featured packs', action: 'See all', onAction: () => context.go('/library')),
+              child: SectionHeader(
+                title: 'Featured packs',
+                action: 'See all',
+                onAction: () {
+                  ref.read(libraryFilterProvider.notifier).select(LibraryFilter.all);
+                  context.go('/library');
+                },
+              ),
             ),
             packs.when(
               loading: () => const SliverToBoxAdapter(child: Padding(padding: EdgeInsets.all(40), child: Loader())),
@@ -218,7 +231,7 @@ class HomeScreen extends ConsumerWidget {
               data: (all) {
                 final list = all.where((p) => !p.isDaily).toList();
                 return SliverPadding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   sliver: SliverGrid(
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
@@ -234,7 +247,7 @@ class HomeScreen extends ConsumerWidget {
                 );
               },
             ),
-            SliverToBoxAdapter(child: SizedBox(height: MediaQuery.paddingOf(context).bottom + 12)),
+            SliverToBoxAdapter(child: SizedBox(height: GlassTabBar.scrollEndPadding(context))),
           ],
         ),
       ),
@@ -555,7 +568,8 @@ class _RewardChip extends StatelessWidget {
   }
 }
 
-/// Month tile for the daily puzzle row.
+/// Month tile for the daily puzzle row: cover, name and the same progress
+/// line and completion badges as the library cards.
 class _MonthCard extends ConsumerWidget {
   const _MonthCard({required this.pack, required this.current, required this.onTap});
   final Pack pack;
@@ -564,59 +578,18 @@ class _MonthCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final c = context.colors;
-    final puzzles = ref.watch(packPuzzlesProvider(pack.id)).value ?? const <Puzzle>[];
-    final progress = ref.watch(progressProvider).value ?? {};
-    final done = puzzles.where((p) => progress[p.id]?.completed == true).length;
-    final total = puzzles.isEmpty ? pack.imageCount : puzzles.length;
-    return Pressable(
+    final progress = ref.watch(packProgressProvider(pack.id));
+    return _CoverTile(
+      pack: pack,
+      progress: progress,
+      chip: current ? const Chip2(label: 'This month', color: Brand.live, foreground: Colors.white) : null,
       onTap: onTap,
-      child: Container(
-        width: 132,
-        clipBehavior: Clip.antiAlias,
-        decoration: BoxDecoration(
-          color: c.boardBackground,
-          borderRadius: BorderRadius.circular(Radii.lg),
-          border: Border.all(color: c.stroke),
-        ),
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            NetImage(url: pack.coverUrl, blurhash: pack.blurhash),
-            DecoratedBox(decoration: BoxDecoration(gradient: Brand.scrim(strength: 0.8))),
-            if (current)
-              const Positioned(left: 8, top: 8, child: Chip2(label: 'This month', color: Brand.live, foreground: Colors.white)),
-            Positioned(
-              left: 10,
-              right: 10,
-              bottom: 10,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(pack.name, maxLines: 1, overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 14, letterSpacing: -0.2)),
-                  const SizedBox(height: 5),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ProgressBar(value: total == 0 ? 0 : done / total, height: 4, color: Colors.white, background: Colors.white.withValues(alpha: 0.3)),
-                      ),
-                      const SizedBox(width: 6),
-                      Text('$done/$total', style: const TextStyle(color: Colors.white, fontSize: 10.5, fontWeight: FontWeight.w600)),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
 
-/// Image-first tile for a live event pack.
-class _EventPackCard extends StatelessWidget {
+/// Image-first tile for a live event pack, with the pack's progress.
+class _EventPackCard extends ConsumerWidget {
   const _EventPackCard({required this.pack, required this.onTap});
   final Pack pack;
   final VoidCallback onTap;
@@ -631,12 +604,38 @@ class _EventPackCard extends StatelessWidget {
   }
 
   @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final progress = ref.watch(packProgressProvider(pack.id));
+    return _CoverTile(
+      pack: pack,
+      progress: progress,
+      chip: Chip2(label: _endsIn, color: Brand.live, foreground: Colors.white),
+      nameLines: 2,
+      onTap: onTap,
+    );
+  }
+}
+
+/// Square cover tile shared by the Home event and month rows: picture with
+/// a scrim, a status chip top left, the completion badges top right, and the
+/// name over the pack's progress line.
+class _CoverTile extends StatelessWidget {
+  const _CoverTile({required this.pack, required this.progress, required this.onTap, this.chip, this.nameLines = 1});
+  final Pack pack;
+  final PackProgress progress;
+  final Widget? chip;
+  final int nameLines;
+  final VoidCallback onTap;
+
+  static const double size = 150;
+
+  @override
   Widget build(BuildContext context) {
     final c = context.colors;
     return Pressable(
       onTap: onTap,
       child: Container(
-        width: 150,
+        width: size,
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
           color: c.boardBackground,
@@ -648,7 +647,23 @@ class _EventPackCard extends StatelessWidget {
           children: [
             NetImage(url: pack.coverUrl, blurhash: pack.blurhash),
             DecoratedBox(decoration: BoxDecoration(gradient: Brand.scrim(strength: 0.8))),
-            Positioned(left: 8, top: 8, child: Chip2(label: _endsIn, color: Brand.live, foreground: Colors.white)),
+            Positioned(
+              left: 8,
+              top: 8,
+              right: 8,
+              child: Row(
+                children: [
+                  // The chip yields to the badges on a narrow tile instead of overlapping them.
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: chip == null ? const SizedBox.shrink() : FittedBox(fit: BoxFit.scaleDown, alignment: Alignment.centerLeft, child: chip),
+                    ),
+                  ),
+                  if (progress.complete) ...[const SizedBox(width: 6), PackDoneBadges(progress: progress, size: 22)],
+                ],
+              ),
+            ),
             Positioned(
               left: 10,
               right: 10,
@@ -656,10 +671,10 @@ class _EventPackCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(pack.name, maxLines: 2, overflow: TextOverflow.ellipsis,
+                  Text(pack.name, maxLines: nameLines, overflow: TextOverflow.ellipsis,
                       style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 14, letterSpacing: -0.2, height: 1.15)),
-                  const SizedBox(height: 3),
-                  Text('${pack.imageCount} puzzles', style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 11, fontWeight: FontWeight.w500)),
+                  const SizedBox(height: 6),
+                  PackProgressLine(progress: progress, onImage: true, height: 4, fontSize: 10.5),
                 ],
               ),
             ),

@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -233,6 +234,21 @@ class GlassTabBar extends StatelessWidget {
   /// this as `MediaQuery.padding.bottom`).
   static double slotHeight(double safeBottom) => barHeight + bottomGap(safeBottom) + 8;
 
+  /// End padding for every scrolling page: enough for the last row to
+  /// scroll fully clear of the floating tab bar (pages inside the tab
+  /// shell, pushed ones included) or of the home indicator (full-screen
+  /// routes and sheets), plus [margin]. Use it as the bottom padding of the
+  /// list instead of reading `MediaQuery.padding.bottom` by hand.
+  static double scrollEndPadding(BuildContext context, {double margin = 16}) {
+    final reported = MediaQuery.paddingOf(context).bottom;
+    if (!GlassTabBarScope.covers(context)) return reported + margin;
+    // Inside the shell the Scaffold reports the bar's slot as the bottom
+    // padding; the slot is recomputed from the raw view inset as well, so a
+    // page still clears the bar where a nested widget consumed that padding.
+    final safe = MediaQueryData.fromView(View.of(context)).padding.bottom;
+    return math.max(reported, slotHeight(safe)) + margin;
+  }
+
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
@@ -298,6 +314,20 @@ class GlassTabBar extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Marks the part of the tree the floating [GlassTabBar] hovers over: the
+/// tab shell's body, so every branch page and the routes pushed inside a
+/// branch. Full-screen routes and sheets on the root navigator sit outside
+/// it. Read through [GlassTabBar.scrollEndPadding].
+class GlassTabBarScope extends InheritedWidget {
+  const GlassTabBarScope({super.key, required super.child});
+
+  /// Whether [context] sits under the floating tab bar.
+  static bool covers(BuildContext context) => context.getInheritedWidgetOfExactType<GlassTabBarScope>() != null;
+
+  @override
+  bool updateShouldNotify(GlassTabBarScope oldWidget) => false;
 }
 
 class GlassTabItem {
