@@ -2,12 +2,12 @@
  "id": "pack-london",
  "name": "London",
  "category": "Cities",
- "description": "Tower Bridge, St Paul's dome, Victorian market halls, red phone boxes and painted Notting Hill terraces.",
+ "description": "Big Ben, Tower Bridge, St Paul's dome, Leadenhall Market, the Kew pagoda and painted Notting Hill terraces.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
  "fetch_per_topic": 4,
- "author_cap": 2,
+ "author_cap": 3,
  "sources": [
   "commons",
   "openverse"
@@ -48,5 +48,6 @@
   "Victoria and Albert Museum",
   "Horniman Museum",
   "St Martin-in-the-Fields"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Big_Ben_Elizabeth_Tower_London_2023_01.jpg/1280px-Big_Ben_Elizabeth_Tower_London_2023_01.jpg"
 }

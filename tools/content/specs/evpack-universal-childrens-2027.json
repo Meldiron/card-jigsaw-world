@@ -1,0 +1,8 @@
+{
+ "id": "evpack-universal-childrens-2027",
+ "name": "Universal Children's Day",
+ "category": "Event",
+ "kind": "event",
+ "description": "A limited pack for Universal Children's Day (20 November 2027). Balloons, building bricks, a carousel, tin robots, a pinwheel, a birthday cake, a playground slide and other toys and treats, playable for one week.",
+ "note": "clone of evpack-universal-childrens-2026; content comes from `run.sh clone evpack-universal-childrens-2026 evpack-universal-childrens-2027`"
+}

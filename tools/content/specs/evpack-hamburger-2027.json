@@ -1,0 +1,11 @@
+{
+ "id": "evpack-hamburger-2027", "name": "National Hamburger Day", "category": "Event",
+ "description": "A limited pack for National Hamburger Day (28 May 2027). Cheeseburgers, smash burgers, sliders and veggie burgers, fish and tuna burgers, loco moco and Hamburg steak, with onion rings, pickles, coleslaw and milkshakes on the side, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2, "accent_from_cover": true,
+ "sources": ["commons", "openverse"], "openverse_category": "photograph", "quality_deepcat": "Quality images of food",
+ "topics": ["Cheeseburger", "Bacon cheeseburger", "Double cheeseburger", "Veggie burger", "Smash burger", "Slider burgers",
+  "Hamburger and fries", "Burgers on the grill", "Mushroom Swiss burger", "Chicken burger", "Fish burger", "Lamb burger",
+  "Juicy Lucy", "Loco moco", "Hamburg steak", "Rice burger", "Sesame seed bun", "Onion rings",
+  "Dill pickles", "Sliced tomatoes", "Cheddar cheese", "Milkshake", "Coleslaw", "American diner interior"],
+ "more_topics": ["Gourmet burger", "Burger with egg", "Avocado burger", "Pulled pork burger", "Brioche bun", "Grilled onions"]
+}

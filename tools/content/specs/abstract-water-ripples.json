@@ -10,7 +10,8 @@
  "accent_from_cover": true,
  "target": 24,
  "sources": [
-  "commons"
+  "commons",
+  "openverse"
  ],
  "commons_quality": true,
  "per_topic": 2,
@@ -44,5 +45,6 @@
   "water abstract"
  ],
  "category_depth": 1,
- "category_limit": 200
+ "category_limit": 200,
+ "openverse_category": "photograph"
 }

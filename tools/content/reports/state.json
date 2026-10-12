@@ -70,15 +70,27 @@
 "status": "verified"
 },
 "abstract-fractals": {
+"added": 25,
+"at": "2026-10-12T21:34:46",
+"category": "Abstract",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "Fractals",
+"puzzles": 24,
+"removed": 1,
+"status": "verified"
+},
+"abstract-frost": {
 "added": 0,
-"at": "2026-10-12T19:03:34",
+"at": "2026-10-12T21:37:01",
 "category": "Abstract",
 "kind": "new",
-"last_step": "reject 11 similar",
-"name": "Fractals",
+"last_step": "pool 8 usable",
+"name": "Frost & Ice",
 "puzzles": 0,
 "removed": 0,
-"status": "audited"
+"status": "pending"
 },
 "abstract-geometric-minimal": {
 "added": 31,
@@ -969,59 +981,64 @@
 "status": "verified"
 },
 "daily-2026-06": {
-"added": 0,
-"at": "2026-10-12T21:11:01",
+"added": 28,
+"at": "2026-10-12T21:21:55",
 "category": "Daily",
+"issues": 0,
 "kind": "daily",
-"last_step": "reject 2 quality",
+"last_step": "verify",
 "name": "June 2026",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 30,
+"removed": 28,
+"status": "verified"
 },
 "daily-2026-07": {
-"added": 0,
-"at": "2026-10-12T12:53:17",
+"added": 27,
+"at": "2026-10-12T21:23:34",
 "category": "Daily",
+"issues": 0,
 "kind": "daily",
-"last_step": "reject 6 weak",
+"last_step": "verify",
 "name": "July 2026",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 31,
+"removed": 27,
+"status": "verified"
 },
 "daily-2026-08": {
-"added": 0,
-"at": "2026-10-12T12:53:19",
+"added": 26,
+"at": "2026-10-12T21:25:02",
 "category": "Daily",
+"issues": 0,
 "kind": "daily",
-"last_step": "reject 9 weak",
+"last_step": "verify",
 "name": "August 2026",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 31,
+"removed": 26,
+"status": "verified"
 },
 "daily-2026-09": {
-"added": 0,
-"at": "2026-10-12T12:53:20",
+"added": 28,
+"at": "2026-10-12T21:26:13",
 "category": "Daily",
+"issues": 0,
 "kind": "daily",
-"last_step": "reject 12 weak",
+"last_step": "verify",
 "name": "September 2026",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 30,
+"removed": 28,
+"status": "verified"
 },
 "daily-2026-10": {
-"added": 0,
-"at": "2026-10-12T12:53:22",
+"added": 28,
+"at": "2026-10-12T21:27:08",
 "category": "Daily",
+"issues": 0,
 "kind": "daily",
-"last_step": "reject 11 weak",
+"last_step": "verify",
 "name": "October 2026",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 31,
+"removed": 28,
+"status": "verified"
 },
 "deep-space": {
 "added": 24,
@@ -1370,15 +1387,16 @@
 "status": "verified"
 },
 "evpack-families-2027": {
-"added": 0,
-"at": "2026-10-12T21:11:06",
+"added": 25,
+"at": "2026-10-12T21:18:12",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "pool 61 usable",
+"last_step": "verify",
 "name": "International Day of Families",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 15,
+"status": "verified"
 },
 "evpack-fathers-day-2027": {
 "added": 24,
@@ -1488,14 +1506,16 @@
 "status": "verified"
 },
 "evpack-hamburger-2027": {
-"added": 0,
-"at": "2026-10-12T02:04:57",
+"added": 26,
+"at": "2026-10-12T21:30:06",
 "category": "Event",
+"issues": 0,
 "kind": "event",
+"last_step": "verify",
 "name": "National Hamburger Day",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 16,
+"status": "verified"
 },
 "evpack-happiness-2027": {
 "added": 23,
@@ -1663,13 +1683,14 @@
 },
 "evpack-mothers-day-2027": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T21:38:27",
 "category": "Event",
 "kind": "event",
+"last_step": "pool 67 usable",
 "name": "Mother's Day",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "evpack-mountain-day-2026": {
 "added": 26,
@@ -1996,25 +2017,28 @@
 "status": "verified"
 },
 "evpack-universal-childrens-2026": {
-"added": 0,
-"at": "2026-10-12T21:11:08",
+"added": 23,
+"at": "2026-10-12T21:13:52",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "reject 4 weak",
+"last_step": "verify",
 "name": "Universal Children's Day",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 23,
+"removed": 14,
+"status": "verified"
 },
 "evpack-universal-childrens-2027": {
-"added": 0,
-"at": "2026-10-12T02:04:57",
+"added": 23,
+"at": "2026-10-12T21:14:20",
 "category": "Event",
+"issues": 0,
 "kind": "event",
+"last_step": "verify",
 "name": "Universal Children's Day",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 23,
+"removed": 14,
+"status": "verified"
 },
 "evpack-valentines-2027": {
 "added": 0,
@@ -2027,30 +2051,35 @@
 "status": "pending"
 },
 "evpack-vegan-2026": {
-"added": 0,
-"at": "2026-10-12T02:04:57",
+"added": 17,
+"at": "2026-10-12T21:34:29",
 "category": "Event",
+"issues": 0,
 "kind": "event",
+"last_step": "verify",
 "name": "World Vegan Day",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 7,
+"status": "verified"
 },
 "evpack-vegan-2027": {
-"added": 0,
-"at": "2026-10-12T02:04:57",
+"added": 24,
+"at": "2026-10-12T21:34:48",
 "category": "Event",
+"issues": 0,
 "kind": "event",
+"last_step": "verify",
 "name": "World Vegan Day",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 14,
+"status": "verified"
 },
 "evpack-volunteer-2026": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T21:38:31",
 "category": "Event",
 "kind": "event",
+"last_step": "pool 23 usable",
 "name": "International Volunteer Day",
 "puzzles": null,
 "removed": 0,
@@ -2786,15 +2815,16 @@
 "status": "verified"
 },
 "pack-london": {
-"added": 0,
-"at": "2026-10-12T21:11:02",
+"added": 21,
+"at": "2026-10-12T21:25:13",
 "category": "Cities",
+"issues": 0,
 "kind": "library",
-"last_step": "pool 67 usable",
+"last_step": "verify",
 "name": "London",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 22,
+"removed": 19,
+"status": "verified"
 },
 "pack-manuscripts": {
 "added": 24,
@@ -2846,25 +2876,26 @@
 },
 "pack-new-york": {
 "added": 0,
-"at": "2026-10-12T10:07:10",
+"at": "2026-10-12T21:38:44",
 "category": "Cities",
 "kind": "library",
-"last_step": "reject 3 weak",
+"last_step": "reject 51 weak",
 "name": "New York",
 "puzzles": null,
 "removed": 0,
 "status": "audited"
 },
 "pack-night-markets": {
-"added": 0,
-"at": "2026-10-12T21:11:09",
+"added": 21,
+"at": "2026-10-12T21:23:52",
 "category": "Travel",
+"issues": 0,
 "kind": "library",
-"last_step": "pool 17 usable",
+"last_step": "verify",
 "name": "Night Markets",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 23,
+"removed": 16,
+"status": "verified"
 },
 "pack-northern-lights": {
 "added": 19,
@@ -2973,15 +3004,16 @@
 "status": "audited"
 },
 "pack-patagonia": {
-"added": 0,
-"at": "2026-10-12T10:40:33",
+"added": 23,
+"at": "2026-10-12T21:33:57",
 "category": "Travel",
+"issues": 0,
 "kind": "library",
-"last_step": "reject 1 weak",
+"last_step": "verify",
 "name": "Patagonia",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 23,
+"removed": 20,
+"status": "verified"
 },
 "pack-penguins": {
 "added": 18,
@@ -3067,10 +3099,10 @@
 },
 "pack-rice-terraces": {
 "added": 0,
-"at": "2026-10-12T10:40:57",
+"at": "2026-10-12T21:37:47",
 "category": "Travel",
 "kind": "library",
-"last_step": "reject 4 weak",
+"last_step": "pool 20 usable",
 "name": "Rice Terraces",
 "puzzles": null,
 "removed": 0,

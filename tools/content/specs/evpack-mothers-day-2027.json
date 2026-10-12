@@ -1,0 +1,11 @@
+{
+ "id": "evpack-mothers-day-2027", "name": "Mother's Day", "category": "Event",
+ "description": "A limited pack for Mother's Day (9 May 2027). Carnations, peonies, roses and tulips, breakfast in bed, afternoon tea, strawberry cake and other small gifts, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2, "accent_from_cover": true,
+ "sources": ["commons", "openverse"], "openverse_category": "photograph",
+ "topics": ["Pink carnations", "Peony bouquet", "Pink roses", "Tulip bouquet", "Ranunculus", "Hydrangea",
+  "Sweet peas", "Gerbera", "Phalaenopsis orchid", "Florist shop", "Rose garden", "Lavender bunches",
+  "Breakfast in bed", "Afternoon tea", "Heart-shaped cookies", "Strawberry cake", "Macarons", "Box of chocolates",
+  "Pancakes with berries", "Porcelain teacup", "Pearl necklace", "Perfume bottles", "Yarn balls", "Watering can with flowers"],
+ "more_topics": ["Flower bouquet", "Cupcakes", "Scented candles", "Tea roses", "Freesia", "Alstroemeria"]
+}

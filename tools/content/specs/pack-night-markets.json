@@ -2,7 +2,7 @@
  "id": "pack-night-markets",
  "name": "Night Markets",
  "category": "Travel",
- "description": "Red lanterns, skewer stalls, dumplings and sizzling street food from the night markets of Taipei, Hong Kong, Bangkok and Hoi An.",
+ "description": "Red lanterns, skewer stalls, dumplings and sweet street snacks from the night markets of Taipei, Hong Kong, Kuala Lumpur and Hoi An.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
@@ -52,6 +52,7 @@
   "pineapple cake",
   "Thai street food",
   "Penang street food",
-  "Gurney Drive"
+  "Gurney Drive",
+  "Hoi An lanterns"
  ]
 }

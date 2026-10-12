@@ -1,7 +1,7 @@
 {
  "id": "evpack-families-2027", "name": "International Day of Families", "category": "Event",
  "description": "A limited pack for International Day of Families (15 May 2027). Animal families from swans with cygnets to elephants with calves, nests full of chicks, and family homes with a table set for everyone, playable for one week.",
- "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2, "accent_from_cover": true,
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2, "accent_from_cover": true, "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Asian_elephant_calf_nursing_from_its_mother_in_Jim_Corbett_National_Park.jpg/1280px-Asian_elephant_calf_nursing_from_its_mother_in_Jim_Corbett_National_Park.jpg",
  "sources": ["commons", "openverse"], "openverse_category": "photograph",
  "topics": ["Mute swan with cygnets", "Mallard with ducklings", "Elephant calf with mother", "Emperor penguin chick", "Lion cubs", "Meerkat family",
   "Bird nest with eggs", "Baby birds in nest", "Red fox cubs", "Hen with chicks", "Ewe with lambs", "Mare and foal",

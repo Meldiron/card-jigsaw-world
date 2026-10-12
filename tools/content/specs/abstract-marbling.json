@@ -9,7 +9,8 @@
  "accent_from_cover": true,
  "target": 24,
  "sources": [
-  "commons"
+  "commons",
+  "openverse"
  ],
  "commons_quality": true,
  "per_topic": 2,
@@ -41,5 +42,6 @@
   "marbled paper pattern"
  ],
  "category_depth": 0,
- "category_limit": 200
+ "category_limit": 200,
+ "openverse_category": "photograph"
 }

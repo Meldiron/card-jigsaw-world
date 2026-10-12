@@ -1,0 +1,8 @@
+{
+ "id": "evpack-vegan-2027",
+ "name": "World Vegan Day",
+ "category": "Event",
+ "kind": "event",
+ "description": "A limited pack for World Vegan Day (1 November 2027). Tofu bowls, falafel, chana masala, koshari, guacamole, figs, dragon fruit, jackfruit and market vegetables, all plant-based, playable for one week.",
+ "note": "clone of evpack-vegan-2026; content comes from `run.sh clone evpack-vegan-2026 evpack-vegan-2027`"
+}

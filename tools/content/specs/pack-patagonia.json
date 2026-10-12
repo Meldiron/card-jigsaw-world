@@ -2,7 +2,7 @@
  "id": "pack-patagonia",
  "name": "Patagonia",
  "category": "Travel",
- "description": "Granite spires, glaciers and wind-bent forests of the far south: Torres del Paine, Fitz Roy, Perito Moreno and the Marble Caves.",
+ "description": "Granite spires, glaciers and wind-bent forests of the far south: Torres del Paine, Fitz Roy, Cerro Torre and the Marble Caves.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
@@ -51,6 +51,7 @@
   "Bariloche Llao Llao",
   "Lago Grey icebergs",
   "Patagonian steppe",
-  "Valle Francés"
+  "Valle Francés",
+  "Capilla de Mármol"
  ]
 }
