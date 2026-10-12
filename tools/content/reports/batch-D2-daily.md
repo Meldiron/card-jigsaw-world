@@ -25,3 +25,4 @@ Tooling notes: `commons_search(quality=True)` without `quality_cat` returns 0 fi
 - daily-2026-02: replaced 28 (people 16, landscape 4, weak 4; similar 4: the first apply put 7 birds of prey in the month, 4 swapped for other subjects); 28/28 dates; verified.
 - daily-2026-03: replaced 28 (people 11, landscape 4, weak 13 incl. 2 after the first apply: dark stag in plantation, starling on a flat wall); 31/31 dates; new picks checked live against the whole catalogue; 5 titles cleaned (featured-picture category picks); verified.
 - daily-2026-04: replaced 25 (people 9, landscape 2, text 2, weak 12 incl. 1 kept dull forest-road photo); 30/30 dates; 18 titles cleaned; verified. Note: apply silently skips a pick over the spec's author_cap (3), so 04-30 needed a second pass.
+- daily-2026-05: replaced 29 (people 10, landscape 8, text 1, weak 10 incl. 1 kept flat sea-surface frame); 31/31 dates; 24 titles cleaned; verified.

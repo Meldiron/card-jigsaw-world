@@ -7,7 +7,7 @@
  "target": 24,
  "per_topic": 1,
  "fetch_per_topic": 4,
- "author_cap": 2,
+ "author_cap": 4,
  "sources": [
   "commons",
   "openverse"
@@ -49,5 +49,6 @@
   "Haydarpaşa station",
   "Turkish tiles Iznik",
   "Eyüp Sultan Mosque"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Columns_and_dome_of_New_Mosque%2C_Istanbul.jpg/1280px-Columns_and_dome_of_New_Mosque%2C_Istanbul.jpg"
 }

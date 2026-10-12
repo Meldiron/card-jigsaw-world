@@ -2,7 +2,7 @@
  "id": "evpack-thanksgiving-2026",
  "name": "Thanksgiving",
  "category": "Event",
- "description": "A limited pack for Thanksgiving (26 November 2026). Roast turkey, pumpkin pie, cranberries, cornucopias, gourds and autumn harvest tables, playable for one week.",
+ "description": "A limited pack for Thanksgiving (26 November 2026). Wild turkeys, pumpkin, pecan and apple pies, stuffing, cranberries, corn, squash soups, sweet potatoes and acorns, playable for one week.",
  "kind": "event",
  "target": 24,
  "per_topic": 1,
@@ -55,6 +55,8 @@
   "flint corn",
   "roasted turkey",
   "glass gem corn",
-  "maple leaves"
- ]
+  "maple leaves",
+  "pumpkins"
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Meleagris_gallopavo_displaying_at_Deer_Island_Open_Space_Preserve.jpg/1280px-Meleagris_gallopavo_displaying_at_Deer_Island_Open_Space_Preserve.jpg"
 }

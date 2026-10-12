@@ -2,14 +2,17 @@
  "id": "evpack-cat-day-2027",
  "name": "International Cat Day",
  "category": "Event",
- "description": "A limited pack for International Cat Day (8 August 2027). Maine Coons, Siamese, Bengals, tabbies, calicos, kittens and a few wild cousins, playable for one week.",
+ "description": "A limited pack for International Cat Day (8 August 2027). Maine Coons, Sphynx, Devon Rex, Scottish Folds, tabbies, calicos and tuxedos, plus a lioness, a tiger, a serval and a lynx, playable for one week.",
  "kind": "event",
  "target": 24,
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
  "accent_from_cover": true,
- "sources": ["commons", "openverse"],
+ "sources": [
+  "commons",
+  "openverse"
+ ],
  "quality_deepcat": "Quality images of animals",
  "topics": [
   "Maine Coon cat",

@@ -1,0 +1,9 @@
+{
+ "id": "evpack-thanksgiving-2027",
+ "name": "Thanksgiving",
+ "category": "Event",
+ "kind": "event",
+ "description": "A limited pack for Thanksgiving (25 November 2027). Wild turkeys, pumpkin, pecan and apple pies, stuffing, cranberries, corn, squash soups, sweet potatoes and acorns, playable for one week.",
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Meleagris_gallopavo_displaying_at_Deer_Island_Open_Space_Preserve.jpg/1280px-Meleagris_gallopavo_displaying_at_Deer_Island_Open_Space_Preserve.jpg",
+ "note": "clone of evpack-thanksgiving-2026; content comes from `run.sh clone evpack-thanksgiving-2026 evpack-thanksgiving-2027`"
+}
