@@ -9821,3 +9821,9 @@
 {"puzzle": "p-9dce8179ab1c", "title": "Tajine and plates", "event": "retitle", "at": "2026-10-12T21:08:39"}
 {"puzzle": "p-f4056da96dae", "title": "Pompom straw hats, Chefchaouen", "event": "retitle", "at": "2026-10-12T21:08:40"}
 {"puzzle": "p-a71bae48be4a", "title": "Bags and fabrics, Chefchaouen", "event": "retitle", "at": "2026-10-12T21:08:41"}
+{"puzzle": "p-301f61fde632", "title": "Pottery shop", "event": "retitle", "at": "2026-10-12T21:08:41"}
+{"puzzle": "p-dab9f635a3f6", "title": "Carpet shop", "event": "retitle", "at": "2026-10-12T21:08:42"}
+{"puzzle": "p-9ce008fc30f0", "title": "Lantern on a rooftop", "event": "retitle", "at": "2026-10-12T21:08:42"}
+{"puzzle": "p-9a1d830cdcb5", "title": "Fondouk courtyard with pottery", "event": "retitle", "at": "2026-10-12T21:08:43"}
+{"puzzle": "p-bd4552dbbb89", "title": "Djellabas, Chefchaouen", "event": "retitle", "at": "2026-10-12T21:08:44"}
+{"pack": "pack-moroccan-souks", "fields": ["blurhash", "coverUrl", "imageCount"], "event": "pack-update", "at": "2026-10-12T21:08:51"}

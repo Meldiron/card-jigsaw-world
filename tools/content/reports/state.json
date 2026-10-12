@@ -1,8 +1,8 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-12T20:38:40",
-"msg": "Content: checkpoint (224 verified, 5 fixed, 41 audited, 26 pending)",
+"at": "2026-10-12T21:08:44",
+"msg": "Content: checkpoint (233 verified, 4 fixed, 39 audited, 20 pending)",
 "ok": true,
 "pushed": true,
 "stage": "committed"
@@ -970,10 +970,10 @@
 },
 "daily-2026-06": {
 "added": 0,
-"at": "2026-10-12T21:08:35",
+"at": "2026-10-12T21:11:01",
 "category": "Daily",
 "kind": "daily",
-"last_step": "pool 257 usable",
+"last_step": "reject 2 quality",
 "name": "June 2026",
 "puzzles": null,
 "removed": 0,
@@ -1371,10 +1371,10 @@
 },
 "evpack-families-2027": {
 "added": 0,
-"at": "2026-10-12T21:08:14",
+"at": "2026-10-12T21:11:06",
 "category": "Event",
 "kind": "event",
-"last_step": "pool 37 usable",
+"last_step": "pool 61 usable",
 "name": "International Day of Families",
 "puzzles": null,
 "removed": 0,
@@ -1997,10 +1997,10 @@
 },
 "evpack-universal-childrens-2026": {
 "added": 0,
-"at": "2026-10-12T21:08:21",
+"at": "2026-10-12T21:11:08",
 "category": "Event",
 "kind": "event",
-"last_step": "reject 3 similar",
+"last_step": "reject 4 weak",
 "name": "Universal Children's Day",
 "puzzles": null,
 "removed": 0,
@@ -2787,10 +2787,10 @@
 },
 "pack-london": {
 "added": 0,
-"at": "2026-10-12T21:08:35",
+"at": "2026-10-12T21:11:02",
 "category": "Cities",
 "kind": "library",
-"last_step": "pool 43 usable",
+"last_step": "pool 67 usable",
 "name": "London",
 "puzzles": null,
 "removed": 0,
@@ -2822,14 +2822,15 @@
 },
 "pack-moroccan-souks": {
 "added": 22,
-"at": "2026-10-12T21:08:16",
+"at": "2026-10-12T21:08:53",
 "category": "Travel",
+"issues": 0,
 "kind": "library",
-"last_step": "apply",
+"last_step": "verify",
 "name": "Moroccan Souks",
 "puzzles": 23,
 "removed": 19,
-"status": "fixed"
+"status": "verified"
 },
 "pack-nebulae": {
 "added": 24,
@@ -2856,10 +2857,10 @@
 },
 "pack-night-markets": {
 "added": 0,
-"at": "2026-10-12T10:40:09",
+"at": "2026-10-12T21:11:09",
 "category": "Travel",
 "kind": "library",
-"last_step": "reject 4 weak",
+"last_step": "pool 17 usable",
 "name": "Night Markets",
 "puzzles": null,
 "removed": 0,
