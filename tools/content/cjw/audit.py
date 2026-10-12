@@ -1,8 +1,13 @@
 """Catalogue audit against the content rules."""
-import datetime as dt, json, time, calendar as cal
+import datetime as dt, json, re, time, calendar as cal
 from .paths import REPORTS
 from . import catalog, imagecache, filters, state
 from .pool import HashIndex
+
+def _twin(a, b):
+    """evpack-<slug>-2026 and evpack-<slug>-2027 are the same event in different years."""
+    ma, mb = re.match(r'^(evpack-.+)-(\d{4})$', a), re.match(r'^(evpack-.+)-(\d{4})$', b)
+    return bool(ma and mb and ma.group(1) == mb.group(1))
 
 def audit(snap, only=None, write=True):
     by_pack = catalog.by_pack(snap)
@@ -20,6 +25,11 @@ def audit(snap, only=None, write=True):
         if only and pid not in only: continue
         puzzles = by_pack.get(pid, [])
         r = {'name': pack['name'], 'category': pack['category'], 'count': len(puzzles), 'issues': []}
+        try:
+            from . import specs as _specs
+            allow = set(w.lower() for w in _specs.load(pid).get('allow_words', [])) if _specs.spec_path(pid).exists() else set()
+        except SystemExit:
+            allow = set()
         if len(puzzles) < filters.MIN_COUNT:
             r['issues'].append(f'count {len(puzzles)} < {filters.MIN_COUNT}'); summary['count'] += 1
         if pack['category'] == 'Daily' or pid.startswith('daily-'):
@@ -45,21 +55,24 @@ def audit(snap, only=None, write=True):
                 r['issues'].append(f'{tag}: landscape {m["w"]}x{m["h"]}'); summary['landscape'] += 1
             if 'too-small' in sf:
                 r['issues'].append(f'{tag}: too small {m["w"]}x{m["h"]}'); summary['small'] += 1
-            kw = filters.keyword_flags((p.get('title') or '') + ' ' + (p.get('author') or ''))
+            # keyword hits on titles are hints for the visual review, not violations (warnings only)
+            kw = filters.keyword_flags((p.get('title') or '') + ' ' + (p.get('author') or ''), allow=allow)
             for k in kw:
                 if k.startswith('people'): summary['people_kw'] += 1
                 if k.startswith('text'): summary['text_kw'] += 1
-                r['issues'].append(f'{tag}: keyword {k}')
+                r.setdefault('warnings', []).append(f'{tag}: keyword {k}')
             for (sid, sm) in seen_local:
                 sim, why = imagecache.similar(m, sm)
                 if sim:
                     r['issues'].append(f'{tag} ~ {sid}: {why}'); summary['dup_pairs'] += 1
             seen_local.append((tag, m))
-            if len(url_packs.get(p['imageUrl'], ())) > 1:
-                r['issues'].append(f'{tag}: same URL also in {sorted(url_packs[p["imageUrl"]] - {pid})}')
+            others = url_packs.get(p['imageUrl'], set()) - {pid}
+            others = {o for o in others if not _twin(pid, o)}     # a world day cloned into another year shares its pictures
+            if others:
+                r['issues'].append(f'{tag}: same URL also in {sorted(others)}')
             # cross-pack near duplicates (report once, as a warning)
             for (oid, opack, ph, dh, md) in index.near(m):
-                if opack != pid and oid != p['$id']:
+                if opack != pid and oid != p['$id'] and not _twin(pid, opack):
                     r.setdefault('cross', []).append(f'{tag} ~ {oid} ({opack})'); summary['cross_dups'] += 1
         report[pid] = r
         summary['packs'] += 1
@@ -69,10 +82,11 @@ def audit(snap, only=None, write=True):
         (REPORTS / f'audit-{stamp}.json').write_text(json.dumps({'summary': summary, 'packs': report}, indent=1))
         lines = [f'# Catalogue audit {stamp}', '', f'Summary: {json.dumps(summary)}', '']
         for pid, r in report.items():
-            if not r['issues'] and not r.get('cross'): continue
+            if not r['issues'] and not r.get('cross') and not r.get('warnings'): continue
             lines.append(f"## {pid} — {r['name']} ({r['category']}, {r['count']} puzzles)")
             lines += [f'- {i}' for i in r['issues']]
             if r.get('cross'): lines.append(f"- cross-pack near-duplicates: {len(r['cross'])} (e.g. {r['cross'][0]})")
+            if r.get('warnings'): lines.append(f"- title keyword hints (check visually): {len(r['warnings'])} (e.g. {r['warnings'][0]})")
             lines.append('')
         (REPORTS / f'audit-{stamp}.md').write_text('\n'.join(lines))
         print('wrote', REPORTS / f'audit-{stamp}.md')

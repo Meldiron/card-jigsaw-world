@@ -52,3 +52,14 @@ Prices untouched. Re-themed packs keep their id and category.
   "Fabritius", Van Gogh corridor with a figure, Friedrich paintings with shepherd/hunter).
 - Spec `author_cap` raised to 4 (several Van Gogh / Monet works are the point of the pack).
 - Tool note: the first `pool` run lost all 110 candidates to Commons HTTP 429; `recover` restored 77.
+- `verify`: Ensor "Garden of the Rousseau Family" flagged by the title keyword; replaced with Bosschaert's
+  niche bouquet. Verified, 24 puzzles.
+
+### pack-dutch-masters — Dutch Masters (Art) — final 24, verified
+- Removed 18 (people 11, landscape 7). Kept Kalf and van Beyeren.
+- Added 22: van Huysum, Ruysch, Bosschaert, Coorte, de Heem, Marseus van Schrieck, Mignon (2), van der Ast,
+  Ruisdael waterfall, Potter cattle, Claesz (2), Heda, Peeters, Beert (2), de Bray, Marrel, Haverman, Verelst,
+  de Ring. 39 candidates rejected (framed gallery photos, Jane023 detail crops of one Oosterwijck, Cézanne,
+  Snyders market with a woman, red-carpet photo, second versions of the same bouquet).
+- Two picks were the same files already used in Masterpieces (verify caught them); swapped for the other
+  van Huysum and Ruysch.

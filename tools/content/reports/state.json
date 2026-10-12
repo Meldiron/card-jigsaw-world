@@ -1,37 +1,48 @@
 {
-"meta": {},
+"meta": {
+"last_checkpoint": {
+"at": "2026-10-12T02:05:50",
+"msg": "Content: pack-making pipeline, rules, skill, first repaired packs",
+"ok": true,
+"pushed": true,
+"stage": "committed"
+}
+},
 "packs": {
 "abstract-fluid-ink": {
 "added": 23,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T02:13:54",
 "category": "Abstract",
+"issues": 0,
 "kind": "library",
-"last_step": "apply (seeded from log)",
+"last_step": "verify",
 "name": "Ink & Dye",
-"puzzles": null,
+"puzzles": 21,
 "removed": 2,
-"status": "fixed"
+"status": "verified"
 },
 "abstract-geometric-minimal": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T02:15:49",
 "category": "Abstract",
 "kind": "library",
+"last_step": "reject 2 weak",
 "name": "Geometric Minimal",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "animal-friends": {
 "added": 14,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T02:06:47",
 "category": "Animals",
+"issues": 0,
 "kind": "library",
-"last_step": "apply (seeded from log)",
+"last_step": "verify",
 "name": "Animal Friends",
-"puzzles": null,
+"puzzles": 24,
 "removed": 8,
-"status": "fixed"
+"status": "verified"
 },
 "autumn-harvest": {
 "added": 0,
@@ -585,15 +596,16 @@
 "status": "pending"
 },
 "evpack-bean-day-2027": {
-"added": 24,
-"at": "2026-10-12T02:04:57",
+"added": 25,
+"at": "2026-10-12T02:06:28",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "apply (seeded from log)",
+"last_step": "verify",
 "name": "National Bean Day",
-"puzzles": null,
-"removed": 14,
-"status": "fixed"
+"puzzles": 24,
+"removed": 15,
+"status": "verified"
 },
 "evpack-bee-day-2027": {
 "added": 0,
@@ -706,25 +718,28 @@
 "status": "pending"
 },
 "evpack-coffee-2026": {
-"added": 22,
-"at": "2026-10-12T02:04:57",
+"added": 24,
+"at": "2026-10-12T02:16:52",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "apply (seeded from log)",
+"last_step": "verify",
 "name": "International Coffee Day",
-"puzzles": null,
-"removed": 14,
-"status": "fixed"
+"puzzles": 23,
+"removed": 15,
+"status": "verified"
 },
 "evpack-coffee-2027": {
-"added": 0,
-"at": "2026-10-12T02:04:57",
+"added": 23,
+"at": "2026-10-12T02:18:20",
 "category": "Event",
+"issues": 0,
 "kind": "event",
+"last_step": "verify",
 "name": "International Coffee Day",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 23,
+"removed": 14,
+"status": "verified"
 },
 "evpack-croissant-2027": {
 "added": 0,
@@ -958,14 +973,16 @@
 "status": "pending"
 },
 "evpack-hot-tea-2027": {
-"added": 0,
-"at": "2026-10-12T02:04:57",
+"added": 22,
+"at": "2026-10-12T02:08:11",
 "category": "Event",
+"issues": 0,
 "kind": "event",
+"last_step": "verify",
 "name": "National Hot Tea Day",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 12,
+"status": "verified"
 },
 "evpack-independence-day-2027": {
 "added": 0,
@@ -1228,25 +1245,28 @@
 "status": "pending"
 },
 "evpack-smile-day-2026": {
-"added": 19,
-"at": "2026-10-12T02:04:57",
+"added": 29,
+"at": "2026-10-12T02:17:43",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "apply (seeded from log)",
+"last_step": "verify",
 "name": "World Smile Day",
-"puzzles": null,
-"removed": 14,
-"status": "fixed"
+"puzzles": 24,
+"removed": 19,
+"status": "verified"
 },
 "evpack-smile-day-2027": {
-"added": 0,
-"at": "2026-10-12T02:04:57",
+"added": 24,
+"at": "2026-10-12T02:18:20",
 "category": "Event",
+"issues": 0,
 "kind": "event",
+"last_step": "verify",
 "name": "World Smile Day",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 14,
+"status": "verified"
 },
 "evpack-squirrel-2027": {
 "added": 0,
@@ -1300,9 +1320,10 @@
 },
 "evpack-teachers-2026": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T02:28:19",
 "category": "Event",
 "kind": "event",
+"last_step": "pool 15 usable",
 "name": "World Teachers' Day",
 "puzzles": null,
 "removed": 0,
@@ -1519,27 +1540,28 @@
 "status": "pending"
 },
 "masterpieces": {
-"added": 16,
-"at": "2026-10-12T02:05:41",
+"added": 17,
+"at": "2026-10-12T02:06:04",
 "category": "Art",
-"issues": 1,
+"issues": 0,
 "kind": "library",
-"last_step": "verify failed",
+"last_step": "verify",
 "name": "Masterpieces",
 "puzzles": 24,
-"removed": 14,
-"status": "fixed"
+"removed": 15,
+"status": "verified"
 },
 "pack-alpine-lakes": {
 "added": 19,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T02:07:10",
 "category": "Nature",
+"issues": 0,
 "kind": "library",
-"last_step": "apply (seeded from log)",
+"last_step": "verify",
 "name": "Alpine Lakes",
-"puzzles": null,
+"puzzles": 25,
 "removed": 14,
-"status": "fixed"
+"status": "verified"
 },
 "pack-amsterdam": {
 "added": 0,
@@ -1744,9 +1766,10 @@
 },
 "pack-desert-dunes": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T02:36:05",
 "category": "Nature",
 "kind": "library",
+"last_step": "pool 26 usable",
 "name": "Desert Dunes",
 "puzzles": null,
 "removed": 0,
@@ -1763,14 +1786,16 @@
 "status": "pending"
 },
 "pack-dutch-masters": {
-"added": 0,
-"at": "2026-10-12T02:04:57",
+"added": 25,
+"at": "2026-10-12T02:14:22",
 "category": "Art",
+"issues": 0,
 "kind": "library",
+"last_step": "verify",
 "name": "Dutch Masters",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 21,
+"status": "verified"
 },
 "pack-earth-orbit": {
 "added": 0,
@@ -2153,14 +2178,16 @@
 "status": "pending"
 },
 "pack-owls": {
-"added": 0,
-"at": "2026-10-12T02:04:57",
+"added": 22,
+"at": "2026-10-12T02:29:31",
 "category": "Animals",
+"issues": 0,
 "kind": "library",
+"last_step": "verify",
 "name": "Owls",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 18,
+"status": "verified"
 },
 "pack-pandas": {
 "added": 0,
@@ -2593,14 +2620,16 @@
 "status": "pending"
 },
 "pack-waterfalls": {
-"added": 0,
-"at": "2026-10-12T02:04:57",
+"added": 13,
+"at": "2026-10-12T02:11:35",
 "category": "Nature",
+"issues": 0,
 "kind": "library",
+"last_step": "verify",
 "name": "Waterfalls",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 9,
+"status": "verified"
 },
 "pack-whales": {
 "added": 0,
@@ -2644,14 +2673,15 @@
 },
 "wild-nature": {
 "added": 5,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T02:05:48",
 "category": "Nature",
+"issues": 0,
 "kind": "library",
-"last_step": "apply (seeded from log)",
+"last_step": "verify",
 "name": "Wild Nature",
-"puzzles": null,
+"puzzles": 24,
 "removed": 5,
-"status": "fixed"
+"status": "verified"
 }
 }
 }

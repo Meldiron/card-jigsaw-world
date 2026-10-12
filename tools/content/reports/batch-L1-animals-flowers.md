@@ -67,3 +67,12 @@ again. Suggest `cjw/pool.py` retry 429s (or exclude them from `have`) and back o
 - Added 13 from Commons: zebra x2, meerkat, clownfish in anemone, flamingo, hawk, koala, red
   squirrel, polar bear x2, Iberian lynx, rabbit, panther chameleon.
 - Final count 24. Description kept ("Furry, feathery and fierce friends from around the world.").
+
+### pack-owls (Owls)
+- Removed 18 of 20: 2 people (owl on glove, woman holding owl), 6 quality (gilgit2 caption bar), 3 off-theme
+  (owl butterfly, coin, feather), 5 weak (dark/speck), plus 2 later (screech owl on a glove, barn owl with watermark).
+- Added 22: great grey owl x2, little owl, long-eared owl x2, short-eared owl, northern saw-whet, spotted owl,
+  Ural owl, spectacled owl, Eurasian pygmy owl, Eurasian scops owl, Indian eagle-owl x2, northern hawk-owl,
+  western screech owl chick, eastern screech owl, snowy owl in flight, barn owl in flight, African wood owl,
+  brown fish owl.
+- Final count 24, verified. Description: "Barn, snowy, eagle and pygmy owls, mostly staring straight back at you."

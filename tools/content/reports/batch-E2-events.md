@@ -36,3 +36,10 @@ recovered with it before any apply. Later pools ran with the paced fetcher.
 - Removed 14 (people 3, off-theme 11: the pack was coffee beans). Pool 123 candidates after recover; rejected candidates: people 10, text 3, off-theme 11 (coffee, cocoa, vanilla), weak 50.
 - Added 24 by explicit pick: kidney, pinto, cannellini, borlotti, lima, black-eyed and lupin beans, long beans, bean pods and flowers, falafel, hummus, baked beans, bean salad, dal thali, minestrone, lentil soup, pulses stall.
 - Final count 24. Cover: red kidney beans (first puzzle).
+- verify: the audit keyword filter flagged the title "Scarlet runner beans" (people:runner) although the image is a bean pod; swapped it for lima bean flowers (c74) and renamed the topic. Tooling note: `audit` does not honour the spec's `allow_words`, so plant names like "runner bean" cannot be used as topics.
+
+### evpack-hot-tea-2027 (National Hot Tea Day)
+- Removed 11 (text 1, off-theme 4, quality 2, weak 4); kept 3 (tea glass on sill, mug with tea bag, ceramic cup).
+- Pool 118 candidates (after recover); rejected: people 4, text 9, off-theme 25 (museum pots with scale rulers, moorland, mint plants, iced drinks), quality 1, weak 12, similar 3.
+- Added 21: jasmine pearls, samovars, yixing teapot, milk tea cups, hibiscus petals, porcelain cups, green/oolong/white tea leaves, gaiwan, darjeeling cups, tea bag cup, afternoon tea pour.
+- Final count 24, verified.

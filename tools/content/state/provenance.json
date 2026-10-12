@@ -1,4 +1,49 @@
 {
+"p-0076ffc7945a": {
+"at": "2026-10-12",
+"author": "Tenacious Unicorn Ranch",
+"clonedFrom": "evpack-smile-day-2026",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-smile-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Tenacious_Unicorn_Ranch_alpaca_3.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "alpaca",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Tenacious_Unicorn_Ranch_alpaca_3.jpg/1280px-Tenacious_Unicorn_Ranch_alpaca_3.jpg"
+},
+"p-0151902dca8f": {
+"at": "2026-10-12",
+"author": "Jamou",
+"licence": "CC BY-SA 3.0",
+"packId": "evpack-smile-day-2026",
+"page": "https://commons.wikimedia.org/wiki/File:Gerbera_orange.JPG",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "orange gerbera",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Gerbera_orange.JPG/1280px-Gerbera_orange.JPG"
+},
+"p-01c71ab39220": {
+"at": "2026-10-12",
+"author": "Billjones94",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-hot-tea-2027",
+"page": "https://commons.wikimedia.org/wiki/File:A_cup_of_tea_in_West_Bengal.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "darjeeling tea cup",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/A_cup_of_tea_in_West_Bengal.jpg/1280px-A_cup_of_tea_in_West_Bengal.jpg"
+},
+"p-025e6d1ec254": {
+"at": "2026-10-12",
+"author": "David J. Fred",
+"licence": "CC BY-SA 2.5",
+"packId": "evpack-hot-tea-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Darjeeling-tea-first-flush-leaf-dry.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 2.5",
+"topic": "tea leaves drying",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Darjeeling-tea-first-flush-leaf-dry.jpg/1280px-Darjeeling-tea-first-flush-leaf-dry.jpg"
+},
 "p-02d25ec5ce1a": {
 "at": "2026-10-12",
 "author": "Grand-Duc",
@@ -21,6 +66,29 @@
 "topic": "cat:Bandhani",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Doubledot_orange.jpg/1280px-Doubledot_orange.jpg"
 },
+"p-0375075e70ef": {
+"at": "2026-10-12",
+"author": "ajay_suresh",
+"clonedFrom": "evpack-coffee-2026",
+"licence": "CC0",
+"packId": "evpack-coffee-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Moka_Pot_(55013301353).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "moka pot stovetop espresso maker",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Moka_Pot_%2855013301353%29.jpg/1280px-Moka_Pot_%2855013301353%29.jpg"
+},
+"p-0418223f4e57": {
+"at": "2026-10-12",
+"author": "Giles Laurent",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-smile-day-2026",
+"page": "https://commons.wikimedia.org/wiki/File:003_Greater_flamingo_close-up_in_the_Camargue_Photo_by_Giles_Laurent.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "flamingo",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/003_Greater_flamingo_close-up_in_the_Camargue_Photo_by_Giles_Laurent.jpg/1280px-003_Greater_flamingo_close-up_in_the_Camargue_Photo_by_Giles_Laurent.jpg"
+},
 "p-0442a40d498e": {
 "at": "2026-10-12",
 "author": "ResidentAlice",
@@ -42,6 +110,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "honeycomb honey",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Capped_Honey.jpg/1280px-Capped_Honey.jpg"
+},
+"p-04c0687f745b": {
+"at": "2026-10-12",
+"author": "Simon Pietersz Verelst",
+"licence": "Public domain",
+"packId": "pack-dutch-masters",
+"page": "https://commons.wikimedia.org/wiki/File:Simon_pietersz_verelst_a_rose_an_anemone_and_a_sprig_of_rowan_in_a_gla091832).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Simon Verelst flowers",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Simon_pietersz_verelst_a_rose_an_anemone_and_a_sprig_of_rowan_in_a_gla091832%29.jpg/1280px-Simon_pietersz_verelst_a_rose_an_anemone_and_a_sprig_of_rowan_in_a_gla091832%29.jpg"
 },
 "p-052908397194": {
 "at": "2026-10-12",
@@ -120,6 +199,41 @@
 "topic": "sunflower close up bloom",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Sunflower_in_Bloom_02.jpg/1280px-Sunflower_in_Bloom_02.jpg"
 },
+"p-0c1528b2c708": {
+"at": "2026-10-12",
+"author": "HendrixHammer",
+"clonedFrom": "evpack-smile-day-2026",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-smile-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Colourful_helium_balloons_(2013)_-_2.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "colourful balloons",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Colourful_helium_balloons_%282013%29_-_2.jpg/1280px-Colourful_helium_balloons_%282013%29_-_2.jpg"
+},
+"p-0c8a4af6f570": {
+"at": "2026-10-12",
+"author": "Brassluff",
+"clonedFrom": "evpack-smile-day-2026",
+"licence": "CC0",
+"packId": "evpack-smile-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Rear_view_of_the_Rainbow_Swirled_Lollipop.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "rainbow swirl lollipop",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Rear_view_of_the_Rainbow_Swirled_Lollipop.jpg/1280px-Rear_view_of_the_Rainbow_Swirled_Lollipop.jpg"
+},
+"p-0e39f61fac4e": {
+"at": "2026-10-12",
+"author": "Gary Todd",
+"licence": "CC0",
+"packId": "evpack-hot-tea-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Samovar,_Russia.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "samovar",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Samovar%2C_Russia.jpg/1280px-Samovar%2C_Russia.jpg"
+},
 "p-0ed1eb5686de": {
 "at": "2026-10-12",
 "author": "Ryan Hodnett",
@@ -164,6 +278,17 @@
 "topic": "cat:Oil sheen",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Oil_sheen_pavement.jpg/1280px-Oil_sheen_pavement.jpg"
 },
+"p-110f7d33d8c0": {
+"at": "2026-10-12",
+"author": "Ambrosius Bosschaert",
+"licence": "Public domain",
+"packId": "masterpieces",
+"page": "https://commons.wikimedia.org/wiki/File:Ambrosius_Bosschaert_the_Elder_-_A_still_life_of_tulips,_moss-roses,_lily-of-the-valley_and_other_flowers.Jpeg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Bosschaert flower still life",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Ambrosius_Bosschaert_the_Elder_-_A_still_life_of_tulips%2C_moss-roses%2C_lily-of-the-valley_and_other_flowers.Jpeg/1280px-Ambrosius_Bosschaert_the_Elder_-_A_still_life_of_tulips%2C_moss-roses%2C_lily-of-the-valley_and_other_flowers.Jpeg"
+},
 "p-130f26455873": {
 "at": "2026-10-12",
 "author": "And\u014d Hiroshige (1797 \u2013 12 October 1858)",
@@ -197,6 +322,18 @@
 "topic": "Lauterbrunnen valley Staubbach",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Staubbachfall_im_Lauterbrunnental.jpg/1280px-Staubbachfall_im_Lauterbrunnental.jpg"
 },
+"p-145e9dd8e290": {
+"at": "2026-10-12",
+"author": "Beno\u00eet Prieur",
+"clonedFrom": "evpack-smile-day-2026",
+"licence": "CC0",
+"packId": "evpack-smile-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Macarons_de_chez_Bouillet_en_juin_2023.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "macarons",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Macarons_de_chez_Bouillet_en_juin_2023.jpg/1280px-Macarons_de_chez_Bouillet_en_juin_2023.jpg"
+},
 "p-14f3e97c489d": {
 "at": "2026-10-12",
 "author": "Kolforn (Kolforn) I'd appreciate if you could mail me (Kolforn@gmail.com) if you want to u",
@@ -219,6 +356,17 @@
 "topic": "Siberian tiger snow",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Siberian_Tiger_enjoying_snow_58.jpg/1280px-Siberian_Tiger_enjoying_snow_58.jpg"
 },
+"p-15f772654370": {
+"at": "2026-10-12",
+"author": "Pieter Claesz",
+"licence": "Public domain",
+"packId": "pack-dutch-masters",
+"page": "https://commons.wikimedia.org/wiki/File:Pieter_Claesz_-_Still_life_with_roemer_and_fallen_tazza.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Pieter Claesz still life",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Pieter_Claesz_-_Still_life_with_roemer_and_fallen_tazza.jpg/1280px-Pieter_Claesz_-_Still_life_with_roemer_and_fallen_tazza.jpg"
+},
 "p-16b65874d4db": {
 "at": "2026-10-12",
 "author": "Takeaway",
@@ -229,6 +377,18 @@
 "source": "Wikimedia Commons, CC BY-SA 3.0",
 "topic": "latte art rosetta cappuccino",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Latte_art_cappuccino.jpg/1280px-Latte_art_cappuccino.jpg"
+},
+"p-16cb38597dc0": {
+"at": "2026-10-12",
+"author": "Mike Prince from Bangalore, India",
+"clonedFrom": "evpack-smile-day-2026",
+"licence": "CC BY 2.0",
+"packId": "evpack-smile-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Indo-Pacific_Bottlenose_Dolphin_(5799714117).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "bottlenose dolphin",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Indo-Pacific_Bottlenose_Dolphin_%285799714117%29.jpg/1280px-Indo-Pacific_Bottlenose_Dolphin_%285799714117%29.jpg"
 },
 "p-1747a798ea27": {
 "at": "2026-10-12",
@@ -251,6 +411,29 @@
 "source": "Wikimedia Commons, CC BY 2.0",
 "topic": "cup of coffee beans",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Coffee_-_IMG_7290_%2831883992764%29.jpg/1280px-Coffee_-_IMG_7290_%2831883992764%29.jpg"
+},
+"p-17a0e915be25": {
+"at": "2026-10-12",
+"author": "Ryan Hodnett",
+"clonedFrom": "evpack-smile-day-2026",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-smile-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Neurocolpus_nubilus_on_Ox-eye_Daisy_(Leucanthemum_vulgare)_-_London,_Ontario_2015-06-19.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "daisy flower macro",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Neurocolpus_nubilus_on_Ox-eye_Daisy_%28Leucanthemum_vulgare%29_-_London%2C_Ontario_2015-06-19.jpg/1280px-Neurocolpus_nubilus_on_Ox-eye_Daisy_%28Leucanthemum_vulgare%29_-_London%2C_Ontario_2015-06-19.jpg"
+},
+"p-17c333cae8de": {
+"at": "2026-10-12",
+"author": "Jakub Ha\u0142un",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-waterfalls",
+"page": "https://commons.wikimedia.org/wiki/File:Gullfoss,_Iceland,_20230501_0945_3795.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Gullfoss",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Gullfoss%2C_Iceland%2C_20230501_0945_3795.jpg/1280px-Gullfoss%2C_Iceland%2C_20230501_0945_3795.jpg"
 },
 "p-19950af8377e": {
 "at": "2026-10-12",
@@ -285,6 +468,17 @@
 "topic": "dal lentil curry",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Dal_bhat_tarkari_%28rice_and_curry%29.jpg/1280px-Dal_bhat_tarkari_%28rice_and_curry%29.jpg"
 },
+"p-1ab9c65b5b41": {
+"at": "2026-10-12",
+"author": "King of Hearts",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-waterfalls",
+"page": "https://commons.wikimedia.org/wiki/File:Yosemite_Falls_Trail_May_2011_003.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Yosemite Falls",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Yosemite_Falls_Trail_May_2011_003.jpg/1280px-Yosemite_Falls_Trail_May_2011_003.jpg"
+},
 "p-1b0edc954f7a": {
 "at": "2026-10-12",
 "author": "Diego Delso",
@@ -296,6 +490,17 @@
 "topic": "hedgehog",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Damisela_domin%C3%B3_%28Dascyllus_trimaculatus%29_en_una_an%C3%A9mona_magn%C3%ADfica_%28Heteractis_magnifica%29%2C_mar_Rojo%2C_Egipto%2C_2023-04-18%2C_DD_113.jpg/1280px-Damisela_domin%C3%B3_%28Dascyllus_trimaculatus%29_en_una_an%C3%A9mona_magn%C3%ADfica_%28Heteractis_magnifica%29%2C_mar_Rojo%2C_Egipto%2C_2023-04-18%2C_DD_113.jpg"
 },
+"p-1bdcbb9c6a2d": {
+"at": "2026-10-12",
+"author": "Sumeet Moghe",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-owls",
+"page": "https://commons.wikimedia.org/wiki/File:Indian_eagle_owl_in_its_rocky_habitat.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Indian eagle-owl",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Indian_eagle_owl_in_its_rocky_habitat.jpg/1280px-Indian_eagle_owl_in_its_rocky_habitat.jpg"
+},
 "p-1c078da360b9": {
 "at": "2026-10-12",
 "author": "Tylwyth Eldar",
@@ -306,6 +511,29 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "Amur leopard",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/EcoZonia_-_Panthera_pardus_orientalis_29.jpg/1280px-EcoZonia_-_Panthera_pardus_orientalis_29.jpg"
+},
+"p-1d3ee9a87502": {
+"at": "2026-10-12",
+"author": "Jkafader",
+"clonedFrom": "evpack-coffee-2026",
+"licence": "CC BY-SA 3.0",
+"packId": "evpack-coffee-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Coffee_Beans_in_a_Cooling_Tray.JPG",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "coffee roasting beans tray",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Coffee_Beans_in_a_Cooling_Tray.JPG/1280px-Coffee_Beans_in_a_Cooling_Tray.JPG"
+},
+"p-2076b0118e14": {
+"at": "2026-10-12",
+"author": "Naturalistonadirtroad",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-owls",
+"page": "https://commons.wikimedia.org/wiki/File:Western_Screech_Owl_chick_in_Granite,_MT.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "western screech owl",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Western_Screech_Owl_chick_in_Granite%2C_MT.jpg/1280px-Western_Screech_Owl_chick_in_Granite%2C_MT.jpg"
 },
 "p-21a7041b7416": {
 "at": "2026-10-12",
@@ -329,6 +557,17 @@
 "topic": "cat:Tie-dye",
 "url": "https://upload.wikimedia.org/wikipedia/commons/0/05/TIE-DYE%28CRUMPLE%29_METHOD.JPG"
 },
+"p-2425b35a4da4": {
+"at": "2026-10-12",
+"author": "Osias Beert",
+"licence": "Public domain",
+"packId": "pack-dutch-masters",
+"page": "https://commons.wikimedia.org/wiki/File:Osias_Beert_-_Vase_of_flowers_in_a_stone_niche.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Osias Beert still life",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Osias_Beert_-_Vase_of_flowers_in_a_stone_niche.jpg/1280px-Osias_Beert_-_Vase_of_flowers_in_a_stone_niche.jpg"
+},
 "p-250f6aaac6fc": {
 "at": "2026-10-12",
 "author": "Eruperti",
@@ -339,6 +578,18 @@
 "source": "Wikimedia Commons, CC0",
 "topic": "paella pan",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Paella_Valenciana_tradicional.jpg/1280px-Paella_Valenciana_tradicional.jpg"
+},
+"p-2570d16148f5": {
+"at": "2026-10-12",
+"author": "M.O. Stevens",
+"clonedFrom": "evpack-coffee-2026",
+"licence": "CC BY-SA 3.0",
+"packId": "evpack-coffee-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Coffee_beans_at_Longbottom_-_Hillsboro,_Oregon.JPG",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "coffee beans burlap sack",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Coffee_beans_at_Longbottom_-_Hillsboro%2C_Oregon.JPG/1280px-Coffee_beans_at_Longbottom_-_Hillsboro%2C_Oregon.JPG"
 },
 "p-26983f2b5dda": {
 "at": "2026-10-12",
@@ -351,6 +602,18 @@
 "topic": "Coffea flower blossom",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/20210529_Coffea_arabica_blossom_011.jpg/1280px-20210529_Coffea_arabica_blossom_011.jpg"
 },
+"p-27a682c21437": {
+"at": "2026-10-12",
+"author": "Pakoire",
+"clonedFrom": "evpack-coffee-2026",
+"licence": "CC0",
+"packId": "evpack-coffee-2027",
+"page": "https://commons.wikimedia.org/wiki/File:FlatwhiteAUCK.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "flat white coffee",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/FlatwhiteAUCK.jpg/1280px-FlatwhiteAUCK.jpg"
+},
 "p-294b77a5c772": {
 "at": "2026-10-12",
 "author": "lumoplank",
@@ -361,6 +624,17 @@
 "source": "Wikimedia Commons, CC0",
 "topic": "Mount Cook Hooker Valley",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Aoraki_-_Mount_Cook_National_Park%2C_summer_-_Aorakisummer9394.jpg/1280px-Aoraki_-_Mount_Cook_National_Park%2C_summer_-_Aorakisummer9394.jpg"
+},
+"p-2a791fe75ac2": {
+"at": "2026-10-12",
+"author": "Nikhilb239",
+"licence": "CC BY 3.0",
+"packId": "pack-waterfalls",
+"page": "https://commons.wikimedia.org/wiki/File:Jog_Falls_05092016.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 3.0",
+"topic": "Jog Falls",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Jog_Falls_05092016.jpg/1280px-Jog_Falls_05092016.jpg"
 },
 "p-2c124fae78d0": {
 "at": "2026-10-12",
@@ -417,6 +691,18 @@
 "topic": "lupin beans",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Lupins_in_Pacific_Northwest_Washington.png/1280px-Lupins_in_Pacific_Northwest_Washington.png"
 },
+"p-2db5a489b044": {
+"at": "2026-10-12",
+"author": "K\u0131z\u0131ldeniz",
+"clonedFrom": "evpack-coffee-2026",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-coffee-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Raw_coffee_beans_2.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "green coffee beans unroasted",
+"url": "https://upload.wikimedia.org/wikipedia/commons/1/18/Raw_coffee_beans_2.jpg"
+},
 "p-2e87701e7b6d": {
 "at": "2026-10-12",
 "author": "Mark Pellegrini",
@@ -427,6 +713,17 @@
 "source": "Wikimedia Commons, CC BY-SA 2.5",
 "topic": "Amur leopard",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/MP-panthera_pardus_orientalis_2.jpg/1280px-MP-panthera_pardus_orientalis_2.jpg"
+},
+"p-2f54f5c1c8d1": {
+"at": "2026-10-12",
+"author": "Margaretha Haverman",
+"licence": "CC0",
+"packId": "pack-dutch-masters",
+"page": "https://commons.wikimedia.org/wiki/File:A_Vase_of_Flowers_MET_DP-15788-001.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "Hans Bollongier flowers",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/A_Vase_of_Flowers_MET_DP-15788-001.jpg/1280px-A_Vase_of_Flowers_MET_DP-15788-001.jpg"
 },
 "p-2f6aa5b379b3": {
 "at": "2026-10-12",
@@ -449,6 +746,18 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "ring-tailed lemur",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/ZSL_London_-_Ring-tailed_lemur_%2801%29.jpg/1280px-ZSL_London_-_Ring-tailed_lemur_%2801%29.jpg"
+},
+"p-3335dbc547c5": {
+"at": "2026-10-12",
+"author": "Aw58",
+"clonedFrom": "evpack-smile-day-2026",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-smile-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Bukiet_%C5%BC%C3%B3%C5%82tych_tulipan%C3%B3w_-_2023.04.08.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "yellow tulips bouquet",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Bukiet_%C5%BC%C3%B3%C5%82tych_tulipan%C3%B3w_-_2023.04.08.jpg/1280px-Bukiet_%C5%BC%C3%B3%C5%82tych_tulipan%C3%B3w_-_2023.04.08.jpg"
 },
 "p-34c3495b7db4": {
 "at": "2026-10-12",
@@ -505,6 +814,18 @@
 "topic": "mandrill",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Mandrill_Mandrillus_sphinx_Zoo_Augsburg-15.jpg/1280px-Mandrill_Mandrillus_sphinx_Zoo_Augsburg-15.jpg"
 },
+"p-38cd2066f4d2": {
+"at": "2026-10-12",
+"author": "NPS Photo",
+"clonedFrom": "evpack-smile-day-2026",
+"licence": "Public domain",
+"packId": "evpack-smile-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:File-Gaillardia_pulchella_-_native;-Alternate_names-_Firewheel,_Indian_blanket,_girasol_rojo;-Blooms_May_-_August;-This_brightly_(62c8dce4-c442-44b5-9454-f6da22f25ca2).JPG",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "sunflower field blooming",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/File-Gaillardia_pulchella_-_native%3B-Alternate_names-_Firewheel%2C_Indian_blanket%2C_girasol_rojo%3B-Blooms_May_-_August%3B-This_brightly_%2862c8dce4-c442-44b5-9454-f6da22f25ca2%29.JPG/1280px-thumbnail.jpg"
+},
 "p-3c7bf4c94c10": {
 "at": "2026-10-12",
 "author": "Sirzerp",
@@ -515,6 +836,17 @@
 "source": "Wikimedia Commons, CC BY-SA 3.0",
 "topic": "cat:Ferrofluids",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Ferrofluid_lens_picture_of_a_magnetic_anti-vortex..jpg/1280px-Ferrofluid_lens_picture_of_a_magnetic_anti-vortex..jpg"
+},
+"p-3d7c06ab58bd": {
+"at": "2026-10-12",
+"author": "Ambrosius Bosschaert",
+"licence": "CC0",
+"packId": "pack-dutch-masters",
+"page": "https://commons.wikimedia.org/wiki/File:Ambrosius_Bosschaert,_Bouquet_of_Flowers_in_a_Glass_Vase,_1621,_NGA_94743.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "Ambrosius Bosschaert bouquet",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Ambrosius_Bosschaert%2C_Bouquet_of_Flowers_in_a_Glass_Vase%2C_1621%2C_NGA_94743.jpg/1280px-Ambrosius_Bosschaert%2C_Bouquet_of_Flowers_in_a_Glass_Vase%2C_1621%2C_NGA_94743.jpg"
 },
 "p-3dbec5095962": {
 "at": "2026-10-12",
@@ -538,6 +870,28 @@
 "topic": "lentil soup bowl",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Red_lentil_%26_preserved_lemon_soup_bowl.jpg/1280px-Red_lentil_%26_preserved_lemon_soup_bowl.jpg"
 },
+"p-3f80240ebaef": {
+"at": "2026-10-12",
+"author": "Diego Delso",
+"licence": "CC BY-SA 3.0",
+"packId": "pack-owls",
+"page": "https://commons.wikimedia.org/wiki/File:Carabo_lap%C3%B3n_(Strix_nebulosa),_Tierpark_Hellabrunn,_M%C3%BAnich,_Alemania,_2012-06-17,_DD_01.JPG",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "great grey owl",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Carabo_lap%C3%B3n_%28Strix_nebulosa%29%2C_Tierpark_Hellabrunn%2C_M%C3%BAnich%2C_Alemania%2C_2012-06-17%2C_DD_01.JPG/1280px-Carabo_lap%C3%B3n_%28Strix_nebulosa%29%2C_Tierpark_Hellabrunn%2C_M%C3%BAnich%2C_Alemania%2C_2012-06-17%2C_DD_01.JPG"
+},
+"p-400f1f24cdfa": {
+"at": "2026-10-12",
+"author": "Paul Korecky",
+"licence": "CC BY-SA 2.0",
+"packId": "pack-owls",
+"page": "https://commons.wikimedia.org/wiki/File:2017-05-21_AT_Wien_22_Donaustadt,_Blumeng%C3%A4rten_Hirschstetten,_Strix_uralensis_(50980109687).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 2.0",
+"topic": "Ural owl",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/2017-05-21_AT_Wien_22_Donaustadt%2C_Blumeng%C3%A4rten_Hirschstetten%2C_Strix_uralensis_%2850980109687%29.jpg/1280px-2017-05-21_AT_Wien_22_Donaustadt%2C_Blumeng%C3%A4rten_Hirschstetten%2C_Strix_uralensis_%2850980109687%29.jpg"
+},
 "p-402ef63511b3": {
 "at": "2026-10-12",
 "author": "JIP",
@@ -560,6 +914,18 @@
 "topic": "cat:Paint splashes",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Ink%26dye52_-_Jordan_Mudrack_-_Flickr_photo_close-up_of_inks%2C_dyes%2C_paints%2C_wet_mediums_forming_and_making_abstract_shapes%2C_patterns_and_images.jpg/1280px-Ink%26dye52_-_Jordan_Mudrack_-_Flickr_photo_close-up_of_inks%2C_dyes%2C_paints%2C_wet_mediums_forming_and_making_abstract_shapes%2C_patterns_and_images.jpg"
 },
+"p-4203b93323cc": {
+"at": "2026-10-12",
+"author": "Giles Laurent",
+"clonedFrom": "evpack-smile-day-2026",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-smile-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:003_Greater_flamingo_close-up_in_the_Camargue_Photo_by_Giles_Laurent.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "flamingo",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/003_Greater_flamingo_close-up_in_the_Camargue_Photo_by_Giles_Laurent.jpg/1280px-003_Greater_flamingo_close-up_in_the_Camargue_Photo_by_Giles_Laurent.jpg"
+},
 "p-43a05327e7de": {
 "at": "2026-10-12",
 "author": "Henri Rousseau",
@@ -581,6 +947,17 @@
 "source": "Wikimedia Commons, Public domain",
 "topic": "zebra close-up",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Two_zebras_eating_hay_in_Hamilton_Zoo_close-up.jpg/1280px-Two_zebras_eating_hay_in_Hamilton_Zoo_close-up.jpg"
+},
+"p-444f83815735": {
+"at": "2026-10-12",
+"author": "Mtlchung",
+"licence": "CC BY-SA 3.0",
+"packId": "evpack-smile-day-2026",
+"page": "https://commons.wikimedia.org/wiki/File:Golden_Retriever_puppy_2010.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "golden retriever puppy",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Golden_Retriever_puppy_2010.jpg/1280px-Golden_Retriever_puppy_2010.jpg"
 },
 "p-453e12480459": {
 "at": "2026-10-12",
@@ -615,6 +992,28 @@
 "topic": "sunflower close up bloom",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Tournesol_Macro.jpg/1280px-Tournesol_Macro.jpg"
 },
+"p-49420988c77f": {
+"at": "2026-10-12",
+"author": "Jan van Huysum",
+"licence": "CC0",
+"packId": "pack-dutch-masters",
+"page": "https://commons.wikimedia.org/wiki/File:Jan_van_Huysum,_Still_Life_with_Flowers_and_Fruit,_c._1715,_NGA_96655.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "Jan van Huysum flowers painting",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Jan_van_Huysum%2C_Still_Life_with_Flowers_and_Fruit%2C_c._1715%2C_NGA_96655.jpg/1280px-Jan_van_Huysum%2C_Still_Life_with_Flowers_and_Fruit%2C_c._1715%2C_NGA_96655.jpg"
+},
+"p-49f4f14b9b9b": {
+"at": "2026-10-12",
+"author": "Mr. Botanical",
+"licence": "CC BY-SA 3.0",
+"packId": "evpack-hot-tea-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Gui_Hua_Oolong.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "oolong tea leaves",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Gui_Hua_Oolong.jpg/1280px-Gui_Hua_Oolong.jpg"
+},
 "p-4a658aa11400": {
 "at": "2026-10-12",
 "author": "Cuklev",
@@ -625,6 +1024,29 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "falafel",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/%D0%A4%D0%B0%D0%BB%D0%B0%D1%84%D0%B5%D0%BB.jpg/1280px-%D0%A4%D0%B0%D0%BB%D0%B0%D1%84%D0%B5%D0%BB.jpg"
+},
+"p-4cacbf82312b": {
+"at": "2026-10-12",
+"author": "ResidentAlice",
+"clonedFrom": "evpack-smile-day-2026",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-smile-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Leucanthemum_flowers_-_macro.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "daisy flower macro",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Leucanthemum_flowers_-_macro.jpg/1280px-Leucanthemum_flowers_-_macro.jpg"
+},
+"p-4d153d1eda8d": {
+"at": "2026-10-12",
+"author": "Zinneke",
+"licence": "CC BY-SA 3.0",
+"packId": "pack-waterfalls",
+"page": "https://commons.wikimedia.org/wiki/File:De_Svartifoss_2012-07.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "Svartifoss",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/De_Svartifoss_2012-07.jpg/1280px-De_Svartifoss_2012-07.jpg"
 },
 "p-4dbd71030ec3": {
 "at": "2026-10-12",
@@ -637,6 +1059,17 @@
 "topic": "zebra close-up",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Dorsal_Stripe_Details_on_a_Plains_Zebra.jpg/1280px-Dorsal_Stripe_Details_on_a_Plains_Zebra.jpg"
 },
+"p-4dd9d2ca9b9e": {
+"at": "2026-10-12",
+"author": "Milo\u0161 Juri\u0161i\u0107",
+"licence": "CC BY-SA 3.0",
+"packId": "evpack-hot-tea-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Samovar_02.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "samovar",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Samovar_02.jpg/1280px-Samovar_02.jpg"
+},
 "p-4e2e8c43db42": {
 "at": "2026-10-12",
 "author": "DimiTalen",
@@ -647,6 +1080,17 @@
 "source": "Wikimedia Commons, CC0",
 "topic": "wheel of cheese",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Meule_du_Plateau_cheese_wheels_in_the_ripening_cellar%2C_Terre_de_fromages%2C_Herve%2C_2025.jpg/1280px-Meule_du_Plateau_cheese_wheels_in_the_ripening_cellar%2C_Terre_de_fromages%2C_Herve%2C_2025.jpg"
+},
+"p-4eca4bbf5c6a": {
+"at": "2026-10-12",
+"author": "Clara Peeters",
+"licence": "Public domain",
+"packId": "pack-dutch-masters",
+"page": "https://commons.wikimedia.org/wiki/File:A_Still_Life_Of_Flowers_In_a_Roemer_(Peeters).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Clara Peeters still life",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/A_Still_Life_Of_Flowers_In_a_Roemer_%28Peeters%29.jpg/1280px-A_Still_Life_Of_Flowers_In_a_Roemer_%28Peeters%29.jpg"
 },
 "p-4ee94450098c": {
 "at": "2026-10-12",
@@ -681,6 +1125,18 @@
 "topic": "mountain tarn",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Mountain_Tarn%2C_Hartz_Mountains_National_Park%2C_Southern_Tasmania.jpg/1280px-Mountain_Tarn%2C_Hartz_Mountains_National_Park%2C_Southern_Tasmania.jpg"
 },
+"p-50823d22005d": {
+"at": "2026-10-12",
+"author": "D. Sharon Pruitt from Hill Air Force Base, Utah, USA",
+"clonedFrom": "evpack-smile-day-2026",
+"licence": "CC BY 2.0",
+"packId": "evpack-smile-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Ice_cream_cone.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "ice cream cone sprinkles",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Ice_cream_cone.jpg/1280px-Ice_cream_cone.jpg"
+},
 "p-509d61c3d07d": {
 "at": "2026-10-12",
 "author": "\u09a6\u09bf\u09ac\u09cd\u09af \u09a6\u09a4\u09cd\u09a4",
@@ -702,6 +1158,17 @@
 "source": "Wikimedia Commons, CC0",
 "topic": "Fantin-Latour roses painting",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Henri_Fantin-Latour_-_Roses_and_Lilies_MET_DT9200.jpg/1280px-Henri_Fantin-Latour_-_Roses_and_Lilies_MET_DT9200.jpg"
+},
+"p-513ab61cb9ba": {
+"at": "2026-10-12",
+"author": "Paulus Potter",
+"licence": "Public domain",
+"packId": "pack-dutch-masters",
+"page": "https://commons.wikimedia.org/wiki/File:Paulus_Potter_Pasture.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Paulus Potter cattle painting",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Paulus_Potter_Pasture.jpg/1280px-Paulus_Potter_Pasture.jpg"
 },
 "p-529f87cc452b": {
 "at": "2026-10-12",
@@ -736,6 +1203,17 @@
 "topic": "white tiger",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/White_tiger_at_Bali_Safari_and_Marine_Park_1.jpg/1280px-White_tiger_at_Bali_Safari_and_Marine_Park_1.jpg"
 },
+"p-5713af850bb5": {
+"at": "2026-10-12",
+"author": "Jacob Marrel",
+"licence": "Public domain",
+"packId": "pack-dutch-masters",
+"page": "https://commons.wikimedia.org/wiki/File:Jacob_Marrel_-_Tulips_and_violets_in_a_vase,_with_a_shell,_a_lizard,_a_dragonfly,_a_bee_and_a_wasp,_on_a_ledge.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Jacob Marrel tulip",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Jacob_Marrel_-_Tulips_and_violets_in_a_vase%2C_with_a_shell%2C_a_lizard%2C_a_dragonfly%2C_a_bee_and_a_wasp%2C_on_a_ledge.jpg/1280px-Jacob_Marrel_-_Tulips_and_violets_in_a_vase%2C_with_a_shell%2C_a_lizard%2C_a_dragonfly%2C_a_bee_and_a_wasp%2C_on_a_ledge.jpg"
+},
 "p-57fa53d5776e": {
 "at": "2026-10-12",
 "author": "EvanProdromou",
@@ -757,6 +1235,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "Lake Antorno",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Lago_di_Antorno_%282%29.jpg/1280px-Lago_di_Antorno_%282%29.jpg"
+},
+"p-59b5321c322d": {
+"at": "2026-10-12",
+"author": "Grace789",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-hot-tea-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Dried_red_tea_hibiscus_flowers,_April_2023.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "hibiscus tea red",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Dried_red_tea_hibiscus_flowers%2C_April_2023.jpg/1280px-Dried_red_tea_hibiscus_flowers%2C_April_2023.jpg"
 },
 "p-5af94aa8f40a": {
 "at": "2026-10-12",
@@ -791,6 +1280,18 @@
 "topic": "Irish coffee glass",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Irish_coffee_glass.jpg/1280px-Irish_coffee_glass.jpg"
 },
+"p-5d08f003d0af": {
+"at": "2026-10-12",
+"author": "Eh\u00e9catl Cabrera",
+"clonedFrom": "evpack-smile-day-2026",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-smile-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Crayones_de_colores.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "crayons",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Crayones_de_colores.jpg/1280px-Crayones_de_colores.jpg"
+},
 "p-5dd976fd95e1": {
 "at": "2026-10-12",
 "author": "Jordan Mudrack Photography",
@@ -812,6 +1313,18 @@
 "source": "Wikimedia Commons, CC0",
 "topic": "moka pot stovetop espresso maker",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Moka_Pot_%2855013301353%29.jpg/1280px-Moka_Pot_%2855013301353%29.jpg"
+},
+"p-5f78a67e00ce": {
+"at": "2026-10-12",
+"author": "Takeaway",
+"clonedFrom": "evpack-coffee-2026",
+"licence": "CC BY-SA 3.0",
+"packId": "evpack-coffee-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Latte_art_cappuccino.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "latte art rosetta cappuccino",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Latte_art_cappuccino.jpg/1280px-Latte_art_cappuccino.jpg"
 },
 "p-60586f3e1120": {
 "at": "2026-10-12",
@@ -845,6 +1358,17 @@
 "source": "Wikimedia Commons, CC BY 3.0",
 "topic": "happy quokka Rottnest Island",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Quokka_-_Happy_Local_-_panoramio.jpg/1280px-Quokka_-_Happy_Local_-_panoramio.jpg"
+},
+"p-6455b4a9e743": {
+"at": "2026-10-12",
+"author": "Heribert Dezeo",
+"licence": "CC BY-SA 3.0",
+"packId": "pack-waterfalls",
+"page": "https://commons.wikimedia.org/wiki/File:Salto_Angel_-_Kerepakupai_Ven%C3%A1.JPG",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "Angel Falls",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Salto_Angel_-_Kerepakupai_Ven%C3%A1.JPG/1280px-Salto_Angel_-_Kerepakupai_Ven%C3%A1.JPG"
 },
 "p-679b4e6ec3a3": {
 "at": "2026-10-12",
@@ -901,6 +1425,52 @@
 "topic": "tree frog",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Oriental_honey_buzzard_Mudumalai_Mar21_DSC01405.jpg/1280px-Oriental_honey_buzzard_Mudumalai_Mar21_DSC01405.jpg"
 },
+"p-69cc9dc677e2": {
+"at": "2026-10-12",
+"author": "Rifat R",
+"clonedFrom": "evpack-smile-day-2026",
+"licence": "CC BY 4.0",
+"packId": "evpack-smile-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Close-up_of_a_Common_Sunflower.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "sunflower close up bloom",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Close-up_of_a_Common_Sunflower.jpg/1280px-Close-up_of_a_Common_Sunflower.jpg"
+},
+"p-6a1d8f702a80": {
+"at": "2026-10-12",
+"author": "Tisha Mukherjee",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-owls",
+"page": "https://commons.wikimedia.org/wiki/File:Brown_Hawk-Owl_in_Kuldiha_Wildlife_Sanctuary_March_2025_by_Tisha_Mukherjee_01.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "northern hawk-owl",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Brown_Hawk-Owl_in_Kuldiha_Wildlife_Sanctuary_March_2025_by_Tisha_Mukherjee_01.jpg/1280px-Brown_Hawk-Owl_in_Kuldiha_Wildlife_Sanctuary_March_2025_by_Tisha_Mukherjee_01.jpg"
+},
+"p-6a449711f8cd": {
+"at": "2026-10-12",
+"author": "Acediscovery",
+"licence": "CC BY 4.0",
+"packId": "pack-waterfalls",
+"page": "https://commons.wikimedia.org/wiki/File:Iguazu-Falls-January-2013-6.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "Iguazu Falls",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Iguazu-Falls-January-2013-6.jpg/1280px-Iguazu-Falls-January-2013-6.jpg"
+},
+"p-6a4adee1d8d6": {
+"at": "2026-10-12",
+"author": "George E. Koronaios",
+"clonedFrom": "evpack-smile-day-2026",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-smile-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Yellow_tulips_in_a_basket.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "yellow tulips bouquet",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Yellow_tulips_in_a_basket.jpg/1280px-Yellow_tulips_in_a_basket.jpg"
+},
 "p-6af1af76f285": {
 "at": "2026-10-12",
 "author": "Stephan Sprinz",
@@ -944,6 +1514,40 @@
 "source": "Wikimedia Commons, CC0",
 "topic": "Ethiopian jebena coffee pot",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Jebena.jpg/1280px-Jebena.jpg"
+},
+"p-6d1ba4117394": {
+"at": "2026-10-12",
+"author": "\ucc45\uc77d\ub294\ub2ec\ud33d",
+"clonedFrom": "evpack-coffee-2026",
+"licence": "CC BY-SA 3.0",
+"packId": "evpack-coffee-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Flat_White_2.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "flat white coffee",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Flat_White_2.jpg/1280px-Flat_White_2.jpg"
+},
+"p-6dc980cf194e": {
+"at": "2026-10-12",
+"author": "Viraj87",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-hot-tea-2027",
+"page": "https://commons.wikimedia.org/wiki/File:A_cup_of_tea_on_Darjeeling_tea_fields.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "darjeeling tea cup",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/A_cup_of_tea_on_Darjeeling_tea_fields.jpg/1280px-A_cup_of_tea_on_Darjeeling_tea_fields.jpg"
+},
+"p-6e122fdcbb2b": {
+"at": "2026-10-12",
+"author": "Ermell",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-smile-day-2026",
+"page": "https://commons.wikimedia.org/wiki/File:Burano_Hausfassade_W%C3%A4sche-20090315-RM-113043.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Burano houses",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Burano_Hausfassade_W%C3%A4sche-20090315-RM-113043.jpg/1280px-Burano_Hausfassade_W%C3%A4sche-20090315-RM-113043.jpg"
 },
 "p-6edba8784d5f": {
 "at": "2026-10-12",
@@ -1000,6 +1604,39 @@
 "topic": "Monet Water Lilies painting",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Monet_-_Water_Lilies%2C_ca._1914%E2%80%931917.jpg/1280px-Monet_-_Water_Lilies%2C_ca._1914%E2%80%931917.jpg"
 },
+"p-710bcf201df9": {
+"at": "2026-10-12",
+"author": "Payton Walton",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-hot-tea-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Hibiscus_Tea,_High_Tea_at_the_Savoy_Hotel.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "english afternoon tea pot",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Hibiscus_Tea%2C_High_Tea_at_the_Savoy_Hotel.jpg/1280px-Hibiscus_Tea%2C_High_Tea_at_the_Savoy_Hotel.jpg"
+},
+"p-712529b691f2": {
+"at": "2026-10-12",
+"author": "Olaf Oliviero Riemer",
+"licence": "CC BY-SA 3.0",
+"packId": "pack-owls",
+"page": "https://commons.wikimedia.org/wiki/File:Pulsatrix_perspicillata_-_Weltvogelpark_Walsrode_2010.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "spectacled owl",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Pulsatrix_perspicillata_-_Weltvogelpark_Walsrode_2010.jpg/1280px-Pulsatrix_perspicillata_-_Weltvogelpark_Walsrode_2010.jpg"
+},
+"p-72918125aa07": {
+"at": "2026-10-12",
+"author": "Abraham Mignon",
+"licence": "Public domain",
+"packId": "pack-dutch-masters",
+"page": "https://commons.wikimedia.org/wiki/File:Abraham_Mignon_-_Flower_still_life_SK-A-267.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Abraham Mignon flowers",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Abraham_Mignon_-_Flower_still_life_SK-A-267.jpg/1280px-Abraham_Mignon_-_Flower_still_life_SK-A-267.jpg"
+},
 "p-72c4feeed304": {
 "at": "2026-10-12",
 "author": "Senthiaathavan",
@@ -1022,6 +1659,28 @@
 "topic": "cat:Bandhani",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Bandhani_%288357739114%29.jpg/1280px-Bandhani_%288357739114%29.jpg"
 },
+"p-735c46e4da29": {
+"at": "2026-10-12",
+"author": "Jacob van Ruisdael",
+"licence": "Public domain",
+"packId": "pack-dutch-masters",
+"page": "https://commons.wikimedia.org/wiki/File:Westphalian_Landscape_by_Jacob_van_Ruisdael,_c._1660,_Allentown_Art_Museum.png",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Jacob van Ruisdael landscape",
+"url": "https://upload.wikimedia.org/wikipedia/commons/d/df/Westphalian_Landscape_by_Jacob_van_Ruisdael%2C_c._1660%2C_Allentown_Art_Museum.png"
+},
+"p-74178e0e3e51": {
+"at": "2026-10-12",
+"author": "Shixart1985",
+"licence": "CC BY 2.0",
+"packId": "evpack-coffee-2026",
+"page": "https://commons.wikimedia.org/wiki/File:Morning_breakfast_spread_featuring_croissant,_donut,_and_fresh_juice_at_a_cozy_cafe.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "cafe table croissant coffee cup",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Morning_breakfast_spread_featuring_croissant%2C_donut%2C_and_fresh_juice_at_a_cozy_cafe.jpg/1280px-Morning_breakfast_spread_featuring_croissant%2C_donut%2C_and_fresh_juice_at_a_cozy_cafe.jpg"
+},
 "p-76770ae18473": {
 "at": "2026-10-12",
 "author": "Michael Van Woert, NOAA NESDIS, ORA",
@@ -1032,6 +1691,17 @@
 "source": "Wikimedia Commons, Public domain",
 "topic": "emperor penguin chick",
 "url": "https://upload.wikimedia.org/wikipedia/commons/8/8e/Kaiserpinguinjunges.jpg"
+},
+"p-769dbc3e9a7a": {
+"at": "2026-10-12",
+"author": "HendrixHammer",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-smile-day-2026",
+"page": "https://commons.wikimedia.org/wiki/File:Colourful_helium_balloons_(2013)_-_2.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "colourful balloons",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Colourful_helium_balloons_%282013%29_-_2.jpg/1280px-Colourful_helium_balloons_%282013%29_-_2.jpg"
 },
 "p-78ed4b0f1bc6": {
 "at": "2026-10-12",
@@ -1110,6 +1780,29 @@
 "topic": "tiger cub",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Tiger_Cub_in_the_light.jpg/1280px-Tiger_Cub_in_the_light.jpg"
 },
+"p-7b6f8a443183": {
+"at": "2026-10-12",
+"author": "Bowerbirdaus",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-owls",
+"page": "https://commons.wikimedia.org/wiki/File:Eastern_Barn_owl_,_Australia.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "barn owl in flight",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Eastern_Barn_owl_%2C_Australia.jpg/1280px-Eastern_Barn_owl_%2C_Australia.jpg"
+},
+"p-7ba56df15b10": {
+"at": "2026-10-12",
+"author": "Ermell",
+"clonedFrom": "evpack-smile-day-2026",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-smile-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Burano_Hausfassade_W%C3%A4sche-20090315-RM-113043.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Burano houses",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Burano_Hausfassade_W%C3%A4sche-20090315-RM-113043.jpg/1280px-Burano_Hausfassade_W%C3%A4sche-20090315-RM-113043.jpg"
+},
 "p-7ba8faee728f": {
 "at": "2026-10-12",
 "author": "Ando Hiroshige",
@@ -1131,6 +1824,40 @@
 "source": "Wikimedia Commons, CC BY-SA 3.0",
 "topic": "latte art rosetta cappuccino",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Cappuccino_.jpg/1280px-Cappuccino_.jpg"
+},
+"p-7e5f646a6983": {
+"at": "2026-10-12",
+"author": "Dounai",
+"licence": "CC BY-SA 3.0",
+"packId": "pack-waterfalls",
+"page": "https://commons.wikimedia.org/wiki/File:Huangguoshu_Waterfall.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "Huangguoshu waterfall",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Huangguoshu_Waterfall.jpg/1280px-Huangguoshu_Waterfall.jpg"
+},
+"p-7eb14972c9d1": {
+"at": "2026-10-12",
+"author": "Zinnmann",
+"clonedFrom": "evpack-coffee-2026",
+"licence": "CC BY-SA 3.0",
+"packId": "evpack-coffee-2027",
+"page": "https://commons.wikimedia.org/wiki/File:20210529_Coffea_arabica_blossom_011.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "Coffea flower blossom",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/20210529_Coffea_arabica_blossom_011.jpg/1280px-20210529_Coffea_arabica_blossom_011.jpg"
+},
+"p-7f86dbe6a1d7": {
+"at": "2026-10-12",
+"author": "Jan Davidsz. de Heem",
+"licence": "Public domain",
+"packId": "pack-dutch-masters",
+"page": "https://commons.wikimedia.org/wiki/File:Jan_Davidsz_de_Heem_-_Still_life_of_flowers_in_a_glass_vase_with_insects_and_fruits_in_a_stone_niche_l22036-58kpv-01-t1.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Jan Davidsz de Heem still life",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Jan_Davidsz_de_Heem_-_Still_life_of_flowers_in_a_glass_vase_with_insects_and_fruits_in_a_stone_niche_l22036-58kpv-01-t1.jpg/1280px-Jan_Davidsz_de_Heem_-_Still_life_of_flowers_in_a_glass_vase_with_insects_and_fruits_in_a_stone_niche_l22036-58kpv-01-t1.jpg"
 },
 "p-7fc355d6050d": {
 "at": "2026-10-12",
@@ -1164,6 +1891,73 @@
 "source": "Wikimedia Commons, CC BY 2.0",
 "topic": "Lake Louise Canada",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Canada_-_Alberta_-_Lake_Louise_-_41627603170.jpg/1280px-Canada_-_Alberta_-_Lake_Louise_-_41627603170.jpg"
+},
+"p-80e2345bec19": {
+"at": "2026-10-12",
+"author": "Gaurav Dhwaj Khadka",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-hot-tea-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Milk_tea_and_a_glass_of_water.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "milk tea cup",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Milk_tea_and_a_glass_of_water.jpg/1280px-Milk_tea_and_a_glass_of_water.jpg"
+},
+"p-81a21df96132": {
+"at": "2026-10-12",
+"author": "Illarion Kalashnikov",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-hot-tea-2027",
+"page": "https://commons.wikimedia.org/wiki/File:2026.09.02_Lichte_Porzellan_Tea_Cup,_Saucer_%26_Plate_05.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "porcelain tea cup saucer",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/2026.09.02_Lichte_Porzellan_Tea_Cup%2C_Saucer_%26_Plate_05.jpg/1280px-2026.09.02_Lichte_Porzellan_Tea_Cup%2C_Saucer_%26_Plate_05.jpg"
+},
+"p-81b7194186dd": {
+"at": "2026-10-12",
+"author": "Chenspec",
+"clonedFrom": "evpack-smile-day-2026",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-smile-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Yellow_rubber_duck_in_Rishon_Lezion,_August_2024_04.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "yellow rubber duck",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Yellow_rubber_duck_in_Rishon_Lezion%2C_August_2024_04.jpg/1280px-Yellow_rubber_duck_in_Rishon_Lezion%2C_August_2024_04.jpg"
+},
+"p-8300f9bd74c3": {
+"at": "2026-10-12",
+"author": "Tisha Mukherjee",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-owls",
+"page": "https://commons.wikimedia.org/wiki/File:Collared_Scops-Owl_by_Tisha_Mukherjee_02.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Eurasian scops owl",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Collared_Scops-Owl_by_Tisha_Mukherjee_02.jpg/1280px-Collared_Scops-Owl_by_Tisha_Mukherjee_02.jpg"
+},
+"p-831ac498867f": {
+"at": "2026-10-12",
+"author": "Mike Prince from Bangalore, India",
+"licence": "CC BY 2.0",
+"packId": "evpack-smile-day-2026",
+"page": "https://commons.wikimedia.org/wiki/File:Indo-Pacific_Bottlenose_Dolphin_(5799714117).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "bottlenose dolphin",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Indo-Pacific_Bottlenose_Dolphin_%285799714117%29.jpg/1280px-Indo-Pacific_Bottlenose_Dolphin_%285799714117%29.jpg"
+},
+"p-832aedc23f29": {
+"at": "2026-10-12",
+"author": "Adriaen Coorte",
+"licence": "Public domain",
+"packId": "pack-dutch-masters",
+"page": "https://commons.wikimedia.org/wiki/File:Adriaen_Coorte_-_Still_life_with_peach_and_two_apricots_-_sold_1-dec-2009.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Adriaen Coorte still life",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Adriaen_Coorte_-_Still_life_with_peach_and_two_apricots_-_sold_1-dec-2009.jpg/1280px-Adriaen_Coorte_-_Still_life_with_peach_and_two_apricots_-_sold_1-dec-2009.jpg"
 },
 "p-83754e53e26c": {
 "at": "2026-10-12",
@@ -1209,6 +2003,17 @@
 "topic": "ink drops water",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/One_Last_Drink_-_Flickr_-_erix.jpg/1280px-One_Last_Drink_-_Flickr_-_erix.jpg"
 },
+"p-8757bb20030a": {
+"at": "2026-10-12",
+"author": "Pieter Claesz",
+"licence": "Public domain",
+"packId": "pack-dutch-masters",
+"page": "https://commons.wikimedia.org/wiki/File:Pieter_Claesz_-_still_life_with_roemer_and_langoustine.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Pieter Claesz still life",
+"url": "https://upload.wikimedia.org/wikipedia/commons/1/11/Pieter_Claesz_-_still_life_with_roemer_and_langoustine.jpg"
+},
 "p-87c100d6826e": {
 "at": "2026-10-12",
 "author": "Compassionate Action for Animals from Minneapolis, MN, USA",
@@ -1219,6 +2024,59 @@
 "source": "Wikimedia Commons, CC BY-SA 2.0",
 "topic": "chickpeas bowl",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Curry_in_a_Hurry_Chickpea_Bowl_%2851383382685%29.jpg/1280px-Curry_in_a_Hurry_Chickpea_Bowl_%2851383382685%29.jpg"
+},
+"p-88c9e00d5e83": {
+"at": "2026-10-12",
+"author": "Thesupermat",
+"licence": "Public domain",
+"packId": "pack-dutch-masters",
+"page": "https://commons.wikimedia.org/wiki/File:Paris_-_Mus%C3%A9e_du_Louvre_-_Abraham_Mignon_-_La_Belle_Carafe_-_INV_1556_-_001.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Abraham Mignon flowers",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Paris_-_Mus%C3%A9e_du_Louvre_-_Abraham_Mignon_-_La_Belle_Carafe_-_INV_1556_-_001.jpg/1280px-Paris_-_Mus%C3%A9e_du_Louvre_-_Abraham_Mignon_-_La_Belle_Carafe_-_INV_1556_-_001.jpg"
+},
+"p-894bb8abf5ac": {
+"at": "2026-10-12",
+"author": "markolaz",
+"clonedFrom": "evpack-coffee-2026",
+"packId": "evpack-coffee-2027",
+"source": "flickr via Openverse, CC BY",
+"url": "https://live.staticflickr.com/65535/52135392054_89f69a845f_b.jpg"
+},
+"p-8a79c60d110b": {
+"at": "2026-10-12",
+"author": "Charles J. Sharp",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-owls",
+"page": "https://commons.wikimedia.org/wiki/File:Eurasian_pygmy_owl_(Glaucidium_passerinum)_Bia%C5%82owieza_2.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Eurasian pygmy owl",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Eurasian_pygmy_owl_%28Glaucidium_passerinum%29_Bia%C5%82owieza_2.jpg/1280px-Eurasian_pygmy_owl_%28Glaucidium_passerinum%29_Bia%C5%82owieza_2.jpg"
+},
+"p-8a7e9971ca50": {
+"at": "2026-10-12",
+"author": "Peter K Burian",
+"licence": "CC BY 4.0",
+"packId": "pack-owls",
+"page": "https://commons.wikimedia.org/wiki/File:Eastern_screech_owl_1431.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "eastern screech owl",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Eastern_screech_owl_1431.jpg/1280px-Eastern_screech_owl_1431.jpg"
+},
+"p-8c3e358430eb": {
+"at": "2026-10-12",
+"author": "A S M Jobaer",
+"clonedFrom": "evpack-smile-day-2026",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-smile-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Sunflower_in_Bloom_02.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "sunflower close up bloom",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Sunflower_in_Bloom_02.jpg/1280px-Sunflower_in_Bloom_02.jpg"
 },
 "p-8c41a78e10f6": {
 "at": "2026-10-12",
@@ -1253,6 +2111,29 @@
 "topic": "Monet Rouen Cathedral painting",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Claude_Monet_-_Rouen_Cathedral%2C_Facade_%28Sunset%29.JPG/1280px-Claude_Monet_-_Rouen_Cathedral%2C_Facade_%28Sunset%29.JPG"
 },
+"p-8e206024cba7": {
+"at": "2026-10-12",
+"author": "GorillaWarfare",
+"clonedFrom": "evpack-coffee-2026",
+"licence": "CC BY-SA 1.0",
+"packId": "evpack-coffee-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Coffee_pour_over_using_Hario_cone.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 1.0",
+"topic": "pour over coffee dripper V60",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Coffee_pour_over_using_Hario_cone.jpg/1280px-Coffee_pour_over_using_Hario_cone.jpg"
+},
+"p-8e2e3d93d684": {
+"at": "2026-10-12",
+"author": "Ring, Pieter de",
+"licence": "PDM-owner",
+"packId": "pack-dutch-masters",
+"page": "https://commons.wikimedia.org/wiki/File:Still_Life_with_Fruit_and_Lobster_(SM_sg999).png",
+"provider": "commons",
+"source": "Wikimedia Commons, PDM-owner",
+"topic": "Pieter de Ring still life",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Still_Life_with_Fruit_and_Lobster_%28SM_sg999%29.png/1280px-Still_Life_with_Fruit_and_Lobster_%28SM_sg999%29.png"
+},
 "p-8f63989c3e9d": {
 "at": "2026-10-12",
 "author": "Vincent van Gogh",
@@ -1264,6 +2145,30 @@
 "topic": "Van Gogh Irises vase painting",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Van_Gogh_-_Vase_mit_Iris_vor_gelbem_Hintergrund.jpeg/1280px-Van_Gogh_-_Vase_mit_Iris_vor_gelbem_Hintergrund.jpeg"
 },
+"p-905ae6cc8907": {
+"at": "2026-10-12",
+"author": "Mannivu",
+"clonedFrom": "evpack-coffee-2026",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-coffee-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Irish_Coffee_layers.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Irish coffee glass",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Irish_Coffee_layers.jpg/1280px-Irish_Coffee_layers.jpg"
+},
+"p-9117e5d39473": {
+"at": "2026-10-12",
+"author": "O.Mustafin",
+"clonedFrom": "evpack-coffee-2026",
+"licence": "CC0",
+"packId": "evpack-coffee-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Jebena_Axum.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "Ethiopian jebena coffee pot",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Jebena_Axum.jpg/1280px-Jebena_Axum.jpg"
+},
 "p-91a69e6f389c": {
 "at": "2026-10-12",
 "author": "M0tty",
@@ -1274,6 +2179,40 @@
 "source": "Wikimedia Commons, CC BY-SA 3.0",
 "topic": "chocolate truffles",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Chocolate_truffle_-_Godiva_02.jpg/1280px-Chocolate_truffle_-_Godiva_02.jpg"
+},
+"p-920f1e65b1b8": {
+"at": "2026-10-12",
+"author": "Diego Delso",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-owls",
+"page": "https://commons.wikimedia.org/wiki/File:B%C3%BAho_chico_(Asio_otus),_Arcos_de_la_Frontera,_C%C3%A1diz,_Espa%C3%B1a,_2015-12-08,_DD_05.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "long-eared owl",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/B%C3%BAho_chico_%28Asio_otus%29%2C_Arcos_de_la_Frontera%2C_C%C3%A1diz%2C_Espa%C3%B1a%2C_2015-12-08%2C_DD_05.jpg/1280px-B%C3%BAho_chico_%28Asio_otus%29%2C_Arcos_de_la_Frontera%2C_C%C3%A1diz%2C_Espa%C3%B1a%2C_2015-12-08%2C_DD_05.jpg"
+},
+"p-923f65b6d535": {
+"at": "2026-10-12",
+"author": "Balthasar van der Ast",
+"licence": "Public domain",
+"packId": "pack-dutch-masters",
+"page": "https://commons.wikimedia.org/wiki/File:Balthasar_van_der_Ast_-_Stilleven_met_bloemen_-_SK-A-2103_-_Rijksmuseum.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Balthasar van der Ast still life",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Balthasar_van_der_Ast_-_Stilleven_met_bloemen_-_SK-A-2103_-_Rijksmuseum.jpg/1280px-Balthasar_van_der_Ast_-_Stilleven_met_bloemen_-_SK-A-2103_-_Rijksmuseum.jpg"
+},
+"p-92588533b178": {
+"at": "2026-10-12",
+"author": "Dimple Bheemani",
+"clonedFrom": "evpack-smile-day-2026",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-smile-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Gerbera_daisies.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "orange gerbera daisy flower",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Gerbera_daisies.jpg/1280px-Gerbera_daisies.jpg"
 },
 "p-944be4f0c78e": {
 "at": "2026-10-12",
@@ -1319,6 +2258,53 @@
 "topic": "Carel Fabritius Goldfinch",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Carel_fabritius%2C_il_cardellino%2C_1654%2C_02.jpg/1280px-Carel_fabritius%2C_il_cardellino%2C_1654%2C_02.jpg"
 },
+"p-986178e137d1": {
+"at": "2026-10-12",
+"author": "Sandra Aceng",
+"clonedFrom": "evpack-smile-day-2026",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-smile-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Vibrant_Sunflower_in_Full_Bloom_03.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "sunflower close up bloom",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Vibrant_Sunflower_in_Full_Bloom_03.jpg/1280px-Vibrant_Sunflower_in_Full_Bloom_03.jpg"
+},
+"p-99abe939e495": {
+"at": "2026-10-12",
+"author": "Gaurav Dhwaj Khadka",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-hot-tea-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Matka_Milk_Tea.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "milk tea cup",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Matka_Milk_Tea.jpg/1280px-Matka_Milk_Tea.jpg"
+},
+"p-9aed799b3868": {
+"at": "2026-10-12",
+"author": "Mtlchung",
+"clonedFrom": "evpack-smile-day-2026",
+"licence": "CC BY-SA 3.0",
+"packId": "evpack-smile-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Golden_Retriever_puppy_2010.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "golden retriever puppy",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Golden_Retriever_puppy_2010.jpg/1280px-Golden_Retriever_puppy_2010.jpg"
+},
+"p-9b5769462826": {
+"at": "2026-10-12",
+"author": "Daderot",
+"clonedFrom": "evpack-coffee-2026",
+"licence": "CC0",
+"packId": "evpack-coffee-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Tea_and_Coffee_Service,_c._1820,_Denuelle_Porcelain_Manufactory,_Paris,_porcelain,_enamel,_gilding_-_Art_Institute_of_Chicago_-_DSC09838.JPG",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "coffee cup saucer porcelain",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Tea_and_Coffee_Service%2C_c._1820%2C_Denuelle_Porcelain_Manufactory%2C_Paris%2C_porcelain%2C_enamel%2C_gilding_-_Art_Institute_of_Chicago_-_DSC09838.JPG/1280px-Tea_and_Coffee_Service%2C_c._1820%2C_Denuelle_Porcelain_Manufactory%2C_Paris%2C_porcelain%2C_enamel%2C_gilding_-_Art_Institute_of_Chicago_-_DSC09838.JPG"
+},
 "p-9c2e615207d2": {
 "at": "2026-10-12",
 "author": "Fumikas Sagisavas",
@@ -1362,6 +2348,17 @@
 "source": "Wikimedia Commons, CC0",
 "topic": "minestrone",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Minestrone_-365photo_%2822529519967%29.jpg/1280px-Minestrone_-365photo_%2822529519967%29.jpg"
+},
+"p-9def767ce666": {
+"at": "2026-10-12",
+"author": "Fumikas Sagisavas",
+"licence": "CC0",
+"packId": "evpack-hot-tea-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Dried_mint_leaves_tea.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "tea leaves drying",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Dried_mint_leaves_tea.jpg/1280px-Dried_mint_leaves_tea.jpg"
 },
 "p-9e3d051bd978": {
 "at": "2026-10-12",
@@ -1407,6 +2404,17 @@
 "topic": "wheel of cheese",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Gruyere_suisse_meules_MIN_Rungis.jpg/1280px-Gruyere_suisse_meules_MIN_Rungis.jpg"
 },
+"p-a0b515e42e8a": {
+"at": "2026-10-12",
+"author": "Jan van Huysum",
+"licence": "CC0",
+"packId": "pack-dutch-masters",
+"page": "https://commons.wikimedia.org/wiki/File:Jan_van_Huysum,_Flowers_in_an_Urn,_c._1720-1722,_NGA_56255.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "Jan van Huysum flowers painting",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Jan_van_Huysum%2C_Flowers_in_an_Urn%2C_c._1720-1722%2C_NGA_56255.jpg/1280px-Jan_van_Huysum%2C_Flowers_in_an_Urn%2C_c._1720-1722%2C_NGA_56255.jpg"
+},
 "p-a16db5c19c46": {
 "at": "2026-10-12",
 "author": "Ramkumar Kalyani",
@@ -1417,6 +2425,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "cat:Bandhani",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Bandhani_dyeing_method.jpg/1280px-Bandhani_dyeing_method.jpg"
+},
+"p-a19c204ff34f": {
+"at": "2026-10-12",
+"author": "Ivan ideia",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-owls",
+"page": "https://commons.wikimedia.org/wiki/File:%D0%9F%D0%BE%D0%B9%D0%BC%D0%B0_%D0%98%D1%80%D1%82%D1%8B%D1%88%D0%B0_%D0%B1%D0%BE%D0%BB%D0%BE%D1%82%D0%BD%D0%B0%D1%8F_%D1%81%D0%BE%D0%B2%D0%B0_(2).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "short-eared owl",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/%D0%9F%D0%BE%D0%B9%D0%BC%D0%B0_%D0%98%D1%80%D1%82%D1%8B%D1%88%D0%B0_%D0%B1%D0%BE%D0%BB%D0%BE%D1%82%D0%BD%D0%B0%D1%8F_%D1%81%D0%BE%D0%B2%D0%B0_%282%29.jpg/1280px-%D0%9F%D0%BE%D0%B9%D0%BC%D0%B0_%D0%98%D1%80%D1%82%D1%8B%D1%88%D0%B0_%D0%B1%D0%BE%D0%BB%D0%BE%D1%82%D0%BD%D0%B0%D1%8F_%D1%81%D0%BE%D0%B2%D0%B0_%282%29.jpg"
 },
 "p-a30b3f3324c2": {
 "at": "2026-10-12",
@@ -1439,6 +2458,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "panther chameleon",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Furcifer_pardalis_003.jpg/1280px-Furcifer_pardalis_003.jpg"
+},
+"p-a52c9a7caa95": {
+"at": "2026-10-12",
+"author": "Tess Mattew",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-hot-tea-2027",
+"page": "https://commons.wikimedia.org/wiki/File:2025.03.27_Vintage_English_Porcelain_QUEEN%27s_ROSINA_Bone_China_Cup_and_Saucer_Strawberry_01.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "porcelain tea cup saucer",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/2025.03.27_Vintage_English_Porcelain_QUEEN%27s_ROSINA_Bone_China_Cup_and_Saucer_Strawberry_01.jpg/1280px-2025.03.27_Vintage_English_Porcelain_QUEEN%27s_ROSINA_Bone_China_Cup_and_Saucer_Strawberry_01.jpg"
 },
 "p-a53f6115ff1e": {
 "at": "2026-10-12",
@@ -1506,6 +2536,17 @@
 "topic": "giant panda eating bamboo",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Panda_eating_bamboo_in_Panda_Base.jpg/1280px-Panda_eating_bamboo_in_Panda_Base.jpg"
 },
+"p-a961de6cfa70": {
+"at": "2026-10-12",
+"author": "Dhivya Bharathi Official",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-hot-tea-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Tea,_butter_and_chocolate_biscuit.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "tea and biscuits",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Tea%2C_butter_and_chocolate_biscuit.jpg/1280px-Tea%2C_butter_and_chocolate_biscuit.jpg"
+},
 "p-a9bdd8c769d9": {
 "at": "2026-10-12",
 "author": "Peachyeung316",
@@ -1517,6 +2558,17 @@
 "topic": "bowl of pho",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/A_Bowl_of_Vietnamese_Beef_Noodle_Soup_at_Sham_Shui_Po.jpg/1280px-A_Bowl_of_Vietnamese_Beef_Noodle_Soup_at_Sham_Shui_Po.jpg"
 },
+"p-a9dbe6884d42": {
+"at": "2026-10-12",
+"author": "Dguendel",
+"licence": "CC BY 4.0",
+"packId": "pack-dutch-masters",
+"page": "https://commons.wikimedia.org/wiki/File:Kassel,_Gem%C3%A4ldegalerie_Alte_Meister,_Rachel_Ruysch,_Blumenstillleben_am_Waldboden.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "Rachel Ruysch flowers painting",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Kassel%2C_Gem%C3%A4ldegalerie_Alte_Meister%2C_Rachel_Ruysch%2C_Blumenstillleben_am_Waldboden.jpg/1280px-Kassel%2C_Gem%C3%A4ldegalerie_Alte_Meister%2C_Rachel_Ruysch%2C_Blumenstillleben_am_Waldboden.jpg"
+},
 "p-a9e47d048344": {
 "at": "2026-10-12",
 "author": "Abujoy",
@@ -1527,6 +2579,17 @@
 "source": "Wikimedia Commons, CC BY-SA 3.0",
 "topic": "Sri Lankan leopard",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Panthera_pardus_kotiya_3-Parc_des_f%C3%A9lins.JPG/1280px-Panthera_pardus_kotiya_3-Parc_des_f%C3%A9lins.JPG"
+},
+"p-aa4d2220cce1": {
+"at": "2026-10-12",
+"author": "Forest Service, USDA",
+"licence": "Public domain",
+"packId": "pack-owls",
+"page": "https://commons.wikimedia.org/wiki/File:Eastern_Screech_Owl_-_April_2019_(32789641337).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "eastern screech owl",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Eastern_Screech_Owl_-_April_2019_%2832789641337%29.jpg/1280px-Eastern_Screech_Owl_-_April_2019_%2832789641337%29.jpg"
 },
 "p-aa853cb59ff2": {
 "at": "2026-10-12",
@@ -1550,6 +2613,28 @@
 "topic": "Moraine Lake",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Lake_Moraine_with_logs_%289309191805%29.jpg/1280px-Lake_Moraine_with_logs_%289309191805%29.jpg"
 },
+"p-ae0b879bad43": {
+"at": "2026-10-12",
+"author": "Eh\u00e9catl Cabrera",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-smile-day-2026",
+"page": "https://commons.wikimedia.org/wiki/File:Crayones_de_colores.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "crayons",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Crayones_de_colores.jpg/1280px-Crayones_de_colores.jpg"
+},
+"p-af712d94104b": {
+"at": "2026-10-12",
+"author": "Bernard DUPONT from FRANCE",
+"licence": "CC BY-SA 2.0",
+"packId": "pack-owls",
+"page": "https://commons.wikimedia.org/wiki/File:African_Wood_Owl_(Strix_woodfordii)_captive_..._(32170976033).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 2.0",
+"topic": "African wood owl",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/African_Wood_Owl_%28Strix_woodfordii%29_captive_..._%2832170976033%29.jpg/1280px-African_Wood_Owl_%28Strix_woodfordii%29_captive_..._%2832170976033%29.jpg"
+},
 "p-afafb750d0a8": {
 "at": "2026-10-12",
 "author": "H. Zell",
@@ -1572,6 +2657,41 @@
 "topic": "Asiatic lion",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Le%C3%B3n_%28Panthera_leo%29%2C_parque_nacional_de_Tarangire%2C_Tanzania%2C_2024-05-25%2C_DD_68.jpg/1280px-Le%C3%B3n_%28Panthera_leo%29%2C_parque_nacional_de_Tarangire%2C_Tanzania%2C_2024-05-25%2C_DD_68.jpg"
 },
+"p-b0c8f86baa3e": {
+"at": "2026-10-12",
+"author": "Miraethiopia",
+"clonedFrom": "evpack-coffee-2026",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-coffee-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Ethiopian_coffee_ceremony_jebena_and_finjan.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Ethiopian jebena coffee pot",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Ethiopian_coffee_ceremony_jebena_and_finjan.jpg/1280px-Ethiopian_coffee_ceremony_jebena_and_finjan.jpg"
+},
+"p-b0ff7c4a9059": {
+"at": "2026-10-12",
+"author": "Falk Lademann from F\u00e4llanden, Switzerland",
+"licence": "CC BY 2.0",
+"packId": "pack-waterfalls",
+"page": "https://commons.wikimedia.org/wiki/File:Langfoss_Etne.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "Langfoss",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Langfoss_Etne.jpg/1280px-Langfoss_Etne.jpg"
+},
+"p-b298c55c84f5": {
+"at": "2026-10-12",
+"author": "Ahsan Younas",
+"clonedFrom": "evpack-coffee-2026",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-coffee-2027",
+"page": "https://commons.wikimedia.org/wiki/File:A_beautiful_view_of_Marina_from_Palm_with_coffee.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "latte art rosetta cappuccino",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/A_beautiful_view_of_Marina_from_Palm_with_coffee.jpg/1280px-A_beautiful_view_of_Marina_from_Palm_with_coffee.jpg"
+},
 "p-b2d2a7ef033f": {
 "at": "2026-10-12",
 "author": "SKsiddhartthan",
@@ -1582,6 +2702,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "orange gerbera daisy flower",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Orange_Daisy_sepals.jpg/1280px-Orange_Daisy_sepals.jpg"
+},
+"p-b4d28f850220": {
+"at": "2026-10-12",
+"author": "Stephan Sprinz",
+"licence": "CC BY 4.0",
+"packId": "pack-owls",
+"page": "https://commons.wikimedia.org/wiki/File:Snowy_Owl_on_Banks_Island_06.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "snowy owl in flight",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Snowy_Owl_on_Banks_Island_06.jpg/1280px-Snowy_Owl_on_Banks_Island_06.jpg"
 },
 "p-b6107a1d5a2d": {
 "at": "2026-10-12",
@@ -1594,6 +2725,17 @@
 "topic": "Oeschinensee",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Oeschinensee_in_autumn.jpg/1280px-Oeschinensee_in_autumn.jpg"
 },
+"p-b69d98e7ed96": {
+"at": "2026-10-12",
+"author": "Wuzyprod",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-hot-tea-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Mint_from_Senegal_07.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "green tea leaves fresh",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Mint_from_Senegal_07.jpg/1280px-Mint_from_Senegal_07.jpg"
+},
 "p-b756ccad3fa8": {
 "at": "2026-10-12",
 "author": "George E. Koronaios",
@@ -1604,6 +2746,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "yellow tulips bouquet",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Yellow_tulips_in_a_basket.jpg/1280px-Yellow_tulips_in_a_basket.jpg"
+},
+"p-b76d67dda81c": {
+"at": "2026-10-12",
+"author": "Tenacious Unicorn Ranch",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-smile-day-2026",
+"page": "https://commons.wikimedia.org/wiki/File:Tenacious_Unicorn_Ranch_alpaca_3.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "alpaca",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Tenacious_Unicorn_Ranch_alpaca_3.jpg/1280px-Tenacious_Unicorn_Ranch_alpaca_3.jpg"
 },
 "p-b81727f4f046": {
 "at": "2026-10-12",
@@ -1638,6 +2791,17 @@
 "topic": "tiramisu dessert",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Purezza%27s_Legendary_Tiramisu_-_Purezza_2024-12-17.jpg/1280px-Purezza%27s_Legendary_Tiramisu_-_Purezza_2024-12-17.jpg"
 },
+"p-bafde61598d9": {
+"at": "2026-10-12",
+"author": "Drsssuresh1961",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-owls",
+"page": "https://commons.wikimedia.org/wiki/File:Indian_eagle-owl,_Bhigwan_7.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Indian eagle-owl",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Indian_eagle-owl%2C_Bhigwan_7.jpg/1280px-Indian_eagle-owl%2C_Bhigwan_7.jpg"
+},
 "p-bb57fada4d95": {
 "at": "2026-10-12",
 "author": "Luka Peternel",
@@ -1660,6 +2824,28 @@
 "topic": "Gosausee",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/1957-09-28_Gosausee_vom_Steiglweg_Gamsfeldgruppe.jpg/1280px-1957-09-28_Gosausee_vom_Steiglweg_Gamsfeldgruppe.jpg"
 },
+"p-bbcf1f60edf6": {
+"at": "2026-10-12",
+"author": "Ryan Hodnett",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-waterfalls",
+"page": "https://commons.wikimedia.org/wiki/File:V%C3%B8ringsfossen_-_Eidfjord,_Norway_2021-07-25_(01).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "V\u00f8ringsfossen",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/V%C3%B8ringsfossen_-_Eidfjord%2C_Norway_2021-07-25_%2801%29.jpg/1280px-V%C3%B8ringsfossen_-_Eidfjord%2C_Norway_2021-07-25_%2801%29.jpg"
+},
+"p-bbf9fcb2c277": {
+"at": "2026-10-12",
+"author": "HridoyKundu",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-hot-tea-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Morning_breakfast_with_a_cup_of_milk_tea_and_biscuits_(%E0%A6%8F%E0%A6%95_%E0%A6%95%E0%A6%BE%E0%A6%AA_%E0%A6%A6%E0%A7%81%E0%A6%A7_%E0%A6%9A%E0%A6%BE_%E0%A6%93_%E0%A6%AC%E0%A6%BF%E0%A6%B8%E0%A7%8D%E0%A6%95%E0%A7%81%E0%A6%9F%E0%A7%87%E0%A6%B0_%E0%A6%B8%E0%A6%BE%E0%A6%A5%E0%A7%87_%E0%A6%B8%E0%A6%95%E0%A6%BE%E0%A6%B2%E0%A7%87%E0%A6%B0_%E0%A6%A8%E0%A6%BE%E0%A6%B8%E0%A7%8D%E0%A6%A4%E0%A6%BE).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "milk tea cup",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Morning_breakfast_with_a_cup_of_milk_tea_and_biscuits_%28%E0%A6%8F%E0%A6%95_%E0%A6%95%E0%A6%BE%E0%A6%AA_%E0%A6%A6%E0%A7%81%E0%A6%A7_%E0%A6%9A%E0%A6%BE_%E0%A6%93_%E0%A6%AC%E0%A6%BF%E0%A6%B8%E0%A7%8D%E0%A6%95%E0%A7%81%E0%A6%9F%E0%A7%87%E0%A6%B0_%E0%A6%B8%E0%A6%BE%E0%A6%A5%E0%A7%87_%E0%A6%B8%E0%A6%95%E0%A6%BE%E0%A6%B2%E0%A7%87%E0%A6%B0_%E0%A6%A8%E0%A6%BE%E0%A6%B8%E0%A7%8D%E0%A6%A4%E0%A6%BE%29.jpg/1280px-thumbnail.jpg"
+},
 "p-bdbb26c181b3": {
 "at": "2026-10-12",
 "author": "Diego Delso",
@@ -1681,6 +2867,18 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "spice market stall",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Old_Dubai_Spice_Souq_01.jpg/1280px-Old_Dubai_Spice_Souq_01.jpg"
+},
+"p-c050887ee51f": {
+"at": "2026-10-12",
+"author": "Craig L Whiteside",
+"clonedFrom": "evpack-smile-day-2026",
+"licence": "CC BY 3.0",
+"packId": "evpack-smile-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Quokka_-_Happy_Local_-_panoramio.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 3.0",
+"topic": "happy quokka Rottnest Island",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Quokka_-_Happy_Local_-_panoramio.jpg/1280px-Quokka_-_Happy_Local_-_panoramio.jpg"
 },
 "p-c0ab38effcf3": {
 "at": "2026-10-12",
@@ -1748,6 +2946,29 @@
 "topic": "cat:Ferrofluids",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Ferrofluid_in_Magnetic_field.jpg/1280px-Ferrofluid_in_Magnetic_field.jpg"
 },
+"p-c5057d40649f": {
+"at": "2026-10-12",
+"author": "Grullab",
+"clonedFrom": "evpack-coffee-2026",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-coffee-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Jebena-Eritrea.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Ethiopian jebena coffee pot",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Jebena-Eritrea.jpg/1280px-Jebena-Eritrea.jpg"
+},
+"p-c541e55da3bf": {
+"at": "2026-10-12",
+"author": "Miguel Mendez",
+"licence": "CC BY 2.0",
+"packId": "pack-waterfalls",
+"page": "https://commons.wikimedia.org/wiki/File:Vernal_Fall_(20597439054).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "Vernal Fall",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Vernal_Fall_%2820597439054%29.jpg/1280px-Vernal_Fall_%2820597439054%29.jpg"
+},
 "p-c5acf7403407": {
 "at": "2026-10-12",
 "author": "albinfo",
@@ -1769,6 +2990,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "bowl of ramen",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/A_bowl_of_ramen_in_Osaka%2C_Japan.jpg/1280px-A_bowl_of_ramen_in_Osaka%2C_Japan.jpg"
+},
+"p-c801bf6c63f5": {
+"at": "2026-10-12",
+"author": "Tuxyso",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-owls",
+"page": "https://commons.wikimedia.org/wiki/File:Bartkauz-Wildpark-Bad-Mergentheim-2022.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "great grey owl",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Bartkauz-Wildpark-Bad-Mergentheim-2022.jpg/1280px-Bartkauz-Wildpark-Bad-Mergentheim-2022.jpg"
 },
 "p-c8026e20b8c6": {
 "at": "2026-10-12",
@@ -1836,6 +3068,17 @@
 "topic": "European hedgehog",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Erinaceus_europaeus_3.JPG/1280px-Erinaceus_europaeus_3.JPG"
 },
+"p-cc870e29cc06": {
+"at": "2026-10-12",
+"author": "PagesAndPathsPH",
+"licence": "CC0",
+"packId": "evpack-hot-tea-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Lagundi_Tea_05.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "tea bag in cup",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Lagundi_Tea_05.jpg/1280px-Lagundi_Tea_05.jpg"
+},
 "p-cd3d5079c21b": {
 "at": "2026-10-12",
 "author": "Desmont4joy",
@@ -1847,6 +3090,64 @@
 "topic": "cat:Tie-dye",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/DOUBLE_SPIRAL.jpg/1280px-DOUBLE_SPIRAL.jpg"
 },
+"p-cd928172eff1": {
+"at": "2026-10-12",
+"author": "O.Mustafin",
+"clonedFrom": "evpack-coffee-2026",
+"licence": "CC0",
+"packId": "evpack-coffee-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Jebena.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "Ethiopian jebena coffee pot",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Jebena.jpg/1280px-Jebena.jpg"
+},
+"p-cdd636f2e81c": {
+"at": "2026-10-12",
+"author": "Shixart1985",
+"clonedFrom": "evpack-coffee-2026",
+"licence": "CC BY 2.0",
+"packId": "evpack-coffee-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Morning_breakfast_spread_featuring_croissant,_donut,_and_fresh_juice_at_a_cozy_cafe.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "cafe table croissant coffee cup",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Morning_breakfast_spread_featuring_croissant%2C_donut%2C_and_fresh_juice_at_a_cozy_cafe.jpg/1280px-Morning_breakfast_spread_featuring_croissant%2C_donut%2C_and_fresh_juice_at_a_cozy_cafe.jpg"
+},
+"p-ce04adaaa279": {
+"at": "2026-10-12",
+"author": "Osias Beert",
+"licence": "Public domain",
+"packId": "pack-dutch-masters",
+"page": "https://commons.wikimedia.org/wiki/File:Osias_Beert_(I)_-_Oysters_on_a_pewter_plate,_sweetmeats_and_biscuits_in_a_silver_tazza,_two_fa%C3%A7on-de-venise_wine_glasses_and_an_orange_in_a_niche.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Osias Beert still life",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Osias_Beert_%28I%29_-_Oysters_on_a_pewter_plate%2C_sweetmeats_and_biscuits_in_a_silver_tazza%2C_two_fa%C3%A7on-de-venise_wine_glasses_and_an_orange_in_a_niche.jpg/1280px-Osias_Beert_%28I%29_-_Oysters_on_a_pewter_plate%2C_sweetmeats_and_biscuits_in_a_silver_tazza%2C_two_fa%C3%A7on-de-venise_wine_glasses_and_an_orange_in_a_niche.jpg"
+},
+"p-cec77f0d27bb": {
+"at": "2026-10-12",
+"author": "lenarc",
+"clonedFrom": "evpack-coffee-2026",
+"licence": "CC BY-SA 3.0",
+"packId": "evpack-coffee-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Cappuccino_.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "latte art rosetta cappuccino",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Cappuccino_.jpg/1280px-Cappuccino_.jpg"
+},
+"p-cecfdc22680a": {
+"at": "2026-10-12",
+"author": "Willem Claesz. Heda",
+"licence": "Public domain",
+"packId": "pack-dutch-masters",
+"page": "https://commons.wikimedia.org/wiki/File:Willem_Claesz._Heda_-_Still-Life_with_Gilt_Goblet_(detail)_-_WGA11237.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Willem Claesz Heda still life",
+"url": "https://upload.wikimedia.org/wikipedia/commons/5/50/Willem_Claesz._Heda_-_Still-Life_with_Gilt_Goblet_%28detail%29_-_WGA11237.jpg"
+},
 "p-cf1a5821a5d8": {
 "at": "2026-10-12",
 "author": "Albinfo",
@@ -1857,6 +3158,29 @@
 "source": "Wikimedia Commons, CC BY-SA 3.0",
 "topic": "snow leopard",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/ZooZ%C3%BCrich_Uncia_uncia_84.jpg/1280px-ZooZ%C3%BCrich_Uncia_uncia_84.jpg"
+},
+"p-cfd2958f6781": {
+"at": "2026-10-12",
+"author": "Daniel Case",
+"clonedFrom": "evpack-coffee-2026",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-coffee-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Coffee_cherries_on_bush_at_Fairview_Estate,_Kiambu,_KE.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Coffea arabica red coffee cherries",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Coffee_cherries_on_bush_at_Fairview_Estate%2C_Kiambu%2C_KE.jpg/1280px-Coffee_cherries_on_bush_at_Fairview_Estate%2C_Kiambu%2C_KE.jpg"
+},
+"p-d0da5b8c1616": {
+"at": "2026-10-12",
+"author": "Illarion Kalashnikov",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-hot-tea-2027",
+"page": "https://commons.wikimedia.org/wiki/File:2026.09.02_Lichte_Porzellan_Tea_Cup,_Saucer_%26_Plate_02.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "porcelain tea cup saucer",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/2026.09.02_Lichte_Porzellan_Tea_Cup%2C_Saucer_%26_Plate_02.jpg/1280px-2026.09.02_Lichte_Porzellan_Tea_Cup%2C_Saucer_%26_Plate_02.jpg"
 },
 "p-d15f21426163": {
 "at": "2026-10-12",
@@ -1880,6 +3204,17 @@
 "topic": "affogato ice cream espresso",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Cremorne_Hotel%2C_Malvern_20250513-131431.jpg/1280px-Cremorne_Hotel%2C_Malvern_20250513-131431.jpg"
 },
+"p-d21975ec6233": {
+"at": "2026-10-12",
+"author": "Olympic National Park",
+"licence": "Public domain",
+"packId": "pack-owls",
+"page": "https://commons.wikimedia.org/wiki/File:Spotted_owl_forest_bird_NPS_Photo_(22509631557).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "spotted owl",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Spotted_owl_forest_bird_NPS_Photo_%2822509631557%29.jpg/1280px-Spotted_owl_forest_bird_NPS_Photo_%2822509631557%29.jpg"
+},
 "p-d447198d3422": {
 "at": "2026-10-12",
 "author": "Cl\u00e9ment Bardot",
@@ -1902,6 +3237,29 @@
 "topic": "lupin beans",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Altramuces-San_Isidro.jpg/1280px-Altramuces-San_Isidro.jpg"
 },
+"p-d587758441ef": {
+"at": "2026-10-12",
+"author": "JalilArfaoui",
+"clonedFrom": "evpack-smile-day-2026",
+"licence": "CC BY 3.0",
+"packId": "evpack-smile-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Burano_2_houses_blue_orange.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 3.0",
+"topic": "Burano houses",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Burano_2_houses_blue_orange.jpg/1280px-Burano_2_houses_blue_orange.jpg"
+},
+"p-d5fef761f510": {
+"at": "2026-10-12",
+"author": "Difference engine",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-hot-tea-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Jin_Xuan_oolong_tea.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "oolong tea leaves",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Jin_Xuan_oolong_tea.jpg/1280px-Jin_Xuan_oolong_tea.jpg"
+},
 "p-d8593e7cf20c": {
 "at": "2026-10-12",
 "author": "Basile Morin",
@@ -1912,6 +3270,25 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "meerkat standing",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Standing_meerkat_looking_aside.jpg/1280px-Standing_meerkat_looking_aside.jpg"
+},
+"p-d8e4c410b85c": {
+"at": "2026-10-12",
+"author": "Markus Spiske",
+"clonedFrom": "evpack-coffee-2026",
+"packId": "evpack-coffee-2027",
+"source": "stocksnap via Openverse, CC CC0",
+"url": "https://cdn.stocksnap.io/img-thumbs/960w/1N3M5Q9LTG.jpg"
+},
+"p-da43ef89dc05": {
+"at": "2026-10-12",
+"author": "JalilArfaoui",
+"licence": "CC BY 3.0",
+"packId": "evpack-smile-day-2026",
+"page": "https://commons.wikimedia.org/wiki/File:Burano_2_houses_blue_orange.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 3.0",
+"topic": "Burano houses",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Burano_2_houses_blue_orange.jpg/1280px-Burano_2_houses_blue_orange.jpg"
 },
 "p-da44cfb2aadc": {
 "at": "2026-10-12",
@@ -1979,6 +3356,18 @@
 "topic": "Lago di Braies Dolomites",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Lago_di_Braies%2C_Dolomite%2C_South_Tyrol%2C_Italy10.jpg/1280px-Lago_di_Braies%2C_Dolomite%2C_South_Tyrol%2C_Italy10.jpg"
 },
+"p-de8ba78de308": {
+"at": "2026-10-12",
+"author": "jules / stone soup",
+"clonedFrom": "evpack-coffee-2026",
+"licence": "CC BY 2.0",
+"packId": "evpack-coffee-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Irish_coffee_glass.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "Irish coffee glass",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Irish_coffee_glass.jpg/1280px-Irish_coffee_glass.jpg"
+},
 "p-dea1763401fb": {
 "at": "2026-10-12",
 "author": "Jordan Mudrack Photography",
@@ -2001,6 +3390,17 @@
 "topic": "Caumasee",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Caumasee_in_October_2017_01.jpg/1280px-Caumasee_in_October_2017_01.jpg"
 },
+"p-e0015c89219f": {
+"at": "2026-10-12",
+"author": "Dirck de Bray (Holland, circa 1635-1694)",
+"licence": "Public domain",
+"packId": "pack-dutch-masters",
+"page": "https://commons.wikimedia.org/wiki/File:Flowers_in_a_Glass_Vase_LACMA_M.2009.106.4.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Dirck de Bray flowers",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Flowers_in_a_Glass_Vase_LACMA_M.2009.106.4.jpg/1280px-Flowers_in_a_Glass_Vase_LACMA_M.2009.106.4.jpg"
+},
 "p-e27549e7267c": {
 "at": "2026-10-12",
 "author": "Sunshinehoney10",
@@ -2022,6 +3422,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "kingfisher bird perched",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Perched_Dimorphic_Dwarf_Kingfisher.jpg/1280px-Perched_Dimorphic_Dwarf_Kingfisher.jpg"
+},
+"p-e316ae6c7ead": {
+"at": "2026-10-12",
+"author": "Andy Reago & Chrissy McClarren",
+"licence": "CC BY 2.0",
+"packId": "pack-owls",
+"page": "https://commons.wikimedia.org/wiki/File:Northern_Saw-whet_Owl_(31782265242).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "northern saw-whet owl",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Northern_Saw-whet_Owl_%2831782265242%29.jpg/1280px-Northern_Saw-whet_Owl_%2831782265242%29.jpg"
 },
 "p-e46166ebbe52": {
 "at": "2026-10-12",
@@ -2067,6 +3478,50 @@
 "topic": "lima beans",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Phaseolus_lunatus_%28Gousses%29.jpg/1280px-Phaseolus_lunatus_%28Gousses%29.jpg"
 },
+"p-e909a4dd7255": {
+"at": "2026-10-12",
+"author": "Usernet123u",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-hot-tea-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Oolong_Tea_wrapped_tea_balls.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "oolong tea leaves",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Oolong_Tea_wrapped_tea_balls.jpg/1280px-Oolong_Tea_wrapped_tea_balls.jpg"
+},
+"p-e9ac08de2859": {
+"at": "2026-10-12",
+"author": "Dguendel",
+"licence": "CC BY 4.0",
+"packId": "pack-dutch-masters",
+"page": "https://commons.wikimedia.org/wiki/File:Leipzig,_Museum_der_bildenden_K%C3%BCnste,_Rachel_Ruysch,_Stillleben_mit_Blumen_und_Fr%C3%BCchten.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "Rachel Ruysch flowers painting",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Leipzig%2C_Museum_der_bildenden_K%C3%BCnste%2C_Rachel_Ruysch%2C_Stillleben_mit_Blumen_und_Fr%C3%BCchten.jpg/1280px-Leipzig%2C_Museum_der_bildenden_K%C3%BCnste%2C_Rachel_Ruysch%2C_Stillleben_mit_Blumen_und_Fr%C3%BCchten.jpg"
+},
+"p-ea27d81a2976": {
+"at": "2026-10-12",
+"author": "Ravikiran vilas jadhav",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-bean-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Flower_of_Lima_beans.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "lima beans",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Flower_of_Lima_beans.jpg/1280px-Flower_of_Lima_beans.jpg"
+},
+"p-ea4f0532dde9": {
+"at": "2026-10-12",
+"author": "Skander zarrad",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-owls",
+"page": "https://commons.wikimedia.org/wiki/File:Chev%C3%AAche_d%27Ath%C3%A9na_-_Menzel_Bouzaien_-_tunisie_2.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "little owl Athene noctua",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Chev%C3%AAche_d%27Ath%C3%A9na_-_Menzel_Bouzaien_-_tunisie_2.jpg/1280px-Chev%C3%AAche_d%27Ath%C3%A9na_-_Menzel_Bouzaien_-_tunisie_2.jpg"
+},
 "p-ec9cfafb6d64": {
 "at": "2026-10-12",
 "author": "Piercetheorganist",
@@ -2077,6 +3532,25 @@
 "source": "Wikimedia Commons, Public domain",
 "topic": "orange gerbera daisy flower",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Gerbera-daisy.JPG/1280px-Gerbera-daisy.JPG"
+},
+"p-ece70896dd7d": {
+"at": "2026-10-12",
+"author": "Jakub Ha\u0142un",
+"licence": "CC BY 4.0",
+"packId": "pack-waterfalls",
+"page": "https://commons.wikimedia.org/wiki/File:Sk%C3%B3gafoss_Waterfall,_Iceland,_20240720_1321_2984.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "Sk\u00f3gafoss",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Sk%C3%B3gafoss_Waterfall%2C_Iceland%2C_20240720_1321_2984.jpg/1280px-Sk%C3%B3gafoss_Waterfall%2C_Iceland%2C_20240720_1321_2984.jpg"
+},
+"p-ed8a01802e4f": {
+"at": "2026-10-12",
+"author": "Brodie Vissers",
+"clonedFrom": "evpack-coffee-2026",
+"packId": "evpack-coffee-2027",
+"source": "stocksnap via Openverse, CC CC0",
+"url": "https://cdn.stocksnap.io/img-thumbs/960w/K2TTUNXYCW.jpg"
 },
 "p-edd6941650f9": {
 "at": "2026-10-12",
@@ -2100,6 +3574,17 @@
 "topic": "tacos plate",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Fish_tacos_with_lemonade.jpg/1280px-Fish_tacos_with_lemonade.jpg"
 },
+"p-ee9459a5cdc5": {
+"at": "2026-10-12",
+"author": "Jkafader",
+"licence": "CC BY-SA 3.0",
+"packId": "evpack-coffee-2026",
+"page": "https://commons.wikimedia.org/wiki/File:Coffee_Beans_in_a_Cooling_Tray.JPG",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "coffee roasting beans tray",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Coffee_Beans_in_a_Cooling_Tray.JPG/1280px-Coffee_Beans_in_a_Cooling_Tray.JPG"
+},
 "p-ef1b361eee06": {
 "at": "2026-10-12",
 "author": "\u20ac Van 3000 from belgium belgikske belgiquistan - United Tribes ov Europe",
@@ -2121,6 +3606,50 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "Plitvice Lakes waterfall",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Plitvice_Waterfalls.jpg/1280px-Plitvice_Waterfalls.jpg"
+},
+"p-f01f17c1ffaf": {
+"at": "2026-10-12",
+"author": "R\u00fcdiger Stehn from Kiel, Deutschland",
+"licence": "CC BY-SA 2.0",
+"packId": "pack-waterfalls",
+"page": "https://commons.wikimedia.org/wiki/File:Norwegen_1998_(084)_Steinsdalsfossen_(34123473755).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 2.0",
+"topic": "Steinsdalsfossen",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Norwegen_1998_%28084%29_Steinsdalsfossen_%2834123473755%29.jpg/1280px-Norwegen_1998_%28084%29_Steinsdalsfossen_%2834123473755%29.jpg"
+},
+"p-f1c6f4cbdbea": {
+"at": "2026-10-12",
+"author": "XUJIE HUAZANG",
+"licence": "CC BY 4.0",
+"packId": "evpack-hot-tea-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Chengqi-suifangzhuyuan-cover.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "yixing clay teapot",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Chengqi-suifangzhuyuan-cover.jpg/1280px-Chengqi-suifangzhuyuan-cover.jpg"
+},
+"p-f2e6094ba212": {
+"at": "2026-10-12",
+"author": "Difference engine",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-hot-tea-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Longjing_tea_after_steeping.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "gaiwan tea",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Longjing_tea_after_steeping.jpg/1280px-Longjing_tea_after_steeping.jpg"
+},
+"p-f3e6dba7609f": {
+"at": "2026-10-12",
+"author": "Alexey Komarov",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-waterfalls",
+"page": "https://commons.wikimedia.org/wiki/File:Grande_Cascade_de_Gavarnie_10_August_2019.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Gavarnie waterfall",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Grande_Cascade_de_Gavarnie_10_August_2019.jpg/1280px-Grande_Cascade_de_Gavarnie_10_August_2019.jpg"
 },
 "p-f4e2a28a9caf": {
 "at": "2026-10-12",
@@ -2155,6 +3684,29 @@
 "topic": "tacos plate",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Tacos_Campechanos.jpg/1280px-Tacos_Campechanos.jpg"
 },
+"p-f8b36d9ee760": {
+"at": "2026-10-12",
+"author": "Beno\u00eet Prieur",
+"licence": "CC0",
+"packId": "evpack-smile-day-2026",
+"page": "https://commons.wikimedia.org/wiki/File:Macarons_de_chez_Bouillet_en_juin_2023.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "macarons",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Macarons_de_chez_Bouillet_en_juin_2023.jpg/1280px-Macarons_de_chez_Bouillet_en_juin_2023.jpg"
+},
+"p-f8e8f087b9a1": {
+"at": "2026-10-12",
+"author": "Jamou",
+"clonedFrom": "evpack-smile-day-2026",
+"licence": "CC BY-SA 3.0",
+"packId": "evpack-smile-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Gerbera_orange.JPG",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "orange gerbera",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Gerbera_orange.JPG/1280px-Gerbera_orange.JPG"
+},
 "p-f946e7e3508b": {
 "at": "2026-10-12",
 "author": "CaCo789",
@@ -2176,6 +3728,17 @@
 "source": "Wikimedia Commons, Public domain",
 "topic": "Van Gogh Sunflowers painting",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Vincent_Willem_van_Gogh%2C_Dutch_-_Sunflowers_-_Google_Art_Project.jpg/1280px-Vincent_Willem_van_Gogh%2C_Dutch_-_Sunflowers_-_Google_Art_Project.jpg"
+},
+"p-fb0810de8c9a": {
+"at": "2026-10-12",
+"author": "\u041c\u0430\u043a\u0441\u0430\u044279",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-owls",
+"page": "https://commons.wikimedia.org/wiki/File:%D0%A3%D1%88%D0%B0%D1%81%D1%82%D0%B0%D1%8F_%D1%81%D0%BE%D0%B2%D0%B0.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "long-eared owl",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/%D0%A3%D1%88%D0%B0%D1%81%D1%82%D0%B0%D1%8F_%D1%81%D0%BE%D0%B2%D0%B0.jpg/1280px-%D0%A3%D1%88%D0%B0%D1%81%D1%82%D0%B0%D1%8F_%D1%81%D0%BE%D0%B2%D0%B0.jpg"
 },
 "p-fbace940cfb1": {
 "at": "2026-10-12",
@@ -2221,6 +3784,17 @@
 "topic": "orange gerbera daisy flower",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Gerbera_daisies.jpg/1280px-Gerbera_daisies.jpg"
 },
+"p-fccb9f164599": {
+"at": "2026-10-12",
+"author": "ZiemowitJ",
+"licence": "CC BY 4.0",
+"packId": "pack-owls",
+"page": "https://commons.wikimedia.org/wiki/File:Ketupa_bosonoga2.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "brown fish owl",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Ketupa_bosonoga2.jpg/1280px-Ketupa_bosonoga2.jpg"
+},
 "p-fd28d795dab0": {
 "at": "2026-10-12",
 "author": "AHMED AIT ETTAJER",
@@ -2231,5 +3805,28 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "pulses market",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/5158_rabat_el_geza.jpg/1280px-5158_rabat_el_geza.jpg"
+},
+"p-fed2c6533f03": {
+"at": "2026-10-12",
+"author": "SKsiddhartthan",
+"clonedFrom": "evpack-smile-day-2026",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-smile-day-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Orange_Daisy_sepals.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "orange gerbera daisy flower",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Orange_Daisy_sepals.jpg/1280px-Orange_Daisy_sepals.jpg"
+},
+"p-ff21150c618e": {
+"at": "2026-10-12",
+"author": "Otto Marseus van Schrieck",
+"licence": "Public domain",
+"packId": "pack-dutch-masters",
+"page": "https://commons.wikimedia.org/wiki/File:Otto_Marseus_van_Schrieck_-_A_forest_floor_still_life_with_various_living_things_(1660).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Otto Marseus van Schrieck forest floor",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Otto_Marseus_van_Schrieck_-_A_forest_floor_still_life_with_various_living_things_%281660%29.jpg/1280px-Otto_Marseus_van_Schrieck_-_A_forest_floor_still_life_with_various_living_things_%281660%29.jpg"
 }
 }

@@ -40,3 +40,16 @@ retries 429 with backoff and re-evaluates `bad` fetch failures on re-run.
 
 ## Per pack results
 
+### evpack-coffee-2026 / evpack-coffee-2027
+- Removed 11 of 14 (people 4, text 3, quality 2, off-theme 1, weak 1); kept 3 (espresso on stool, Chemex, latte art on wood).
+- Pool: 3 rounds (first two lost most candidates to Commons 429s, recovered with the helper / `recover`). Candidate rejects: people 11 (hands pouring, barista, statue, portraits), text 6, similar 6, weak 8, off-theme 10.
+- Added 20: latte art x3, coffee cherries, green beans, bean sacks, Irish coffee x2, Coffea blossom, Ethiopian jebena x4 (different pots/scenes), blue moka pot, pour-over, gilded cup, flat white x2, roaster drum, cafe flat-lay.
+- Final 23 (one affogato removed on the final sheet for a blurred person at the edge). `verify` clean.
+- Cloned to evpack-coffee-2027 (23). `verify` reports only the 23 clone same-URL notes.
+
+### evpack-smile-day-2026 / evpack-smile-day-2027
+- Removed all 14 (people 9, text 1, quality 1, off-theme 3). Re-themed through smiling animals, sunflowers, smiley treats and cheerful colours.
+- Pool: 2 rounds (the "smiling X" phrasing returned nothing on Commons; plain nouns in `more_topics` fixed it). Candidate rejects: people 8, text 5, quality 4, similar 9, weak 14, off-theme 9.
+- Added 24: quokka, puppy, alpacas, dolphins, flamingo, sprinkle ice cream, rubber duck, swirl lollipop, macarons, balloons in sky, crayons, gerberas x3, sunflowers x3, blanket flower, tulips x2, daisies x2, Burano facades x2.
+- Final 24, `verify` clean. Cloned to evpack-smile-day-2027 (24; verify shows only clone same-URL notes).
+
