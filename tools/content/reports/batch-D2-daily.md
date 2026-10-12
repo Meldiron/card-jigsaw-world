@@ -23,3 +23,4 @@ Tooling notes: `commons_search(quality=True)` without `quality_cat` returns 0 fi
 - daily-2025-12: replaced 27 (people 10, landscape 6, weak 11: flat sea and sky frames, ink landscape, dark painted interior, mist); 31/31 dates; verified.
 - daily-2026-01: replaced 28 (people 16, landscape 2, text 1, weak 9: flat sky and sea, night fireworks on black, dark interiors); 31/31 dates; verified.
 - daily-2026-02: replaced 28 (people 16, landscape 4, weak 4; similar 4: the first apply put 7 birds of prey in the month, 4 swapped for other subjects); 28/28 dates; verified.
+- daily-2026-03: replaced 28 (people 11, landscape 4, weak 13 incl. 2 after the first apply: dark stag in plantation, starling on a flat wall); 31/31 dates; new picks checked live against the whole catalogue; 5 titles cleaned (featured-picture category picks); verified.

@@ -2,12 +2,12 @@
  "id": "pack-fruit-markets",
  "name": "Fruit Markets",
  "category": "Food",
- "description": "Market stalls piled with citrus, cherries, pomegranates, mangoes and berries, from Valencia and Vienna to Bangkok.",
+ "description": "Market stalls piled with pomegranates, rambutans, kiwis, apricots, soursops and punnets of berries, from La Boqueria to Funchal.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
  "fetch_per_topic": 4,
- "author_cap": 2,
+ "author_cap": 4,
  "sources": [
   "commons",
   "openverse"
@@ -68,5 +68,6 @@
   "passion fruit market",
   "quinces market",
   "physalis market"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Barquettes_de_fruits_au_march%C3%A9_d%27Apt.jpg/1280px-Barquettes_de_fruits_au_march%C3%A9_d%27Apt.jpg"
 }

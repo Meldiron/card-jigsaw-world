@@ -1,8 +1,8 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-12T17:07:54",
-"msg": "Content: checkpoint (194 verified, 3 fixed, 57 audited, 40 pending)",
+"at": "2026-10-12T17:10:37",
+"msg": "Content: checkpoint (195 verified, 3 fixed, 57 audited, 39 pending)",
 "ok": true,
 "pushed": true,
 "stage": "committed"
@@ -34,15 +34,27 @@
 "status": "verified"
 },
 "abstract-crystal": {
+"added": 24,
+"at": "2026-10-12T17:30:52",
+"category": "Abstract",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "Crystal Macro",
+"puzzles": 24,
+"removed": 0,
+"status": "verified"
+},
+"abstract-dunes": {
 "added": 0,
-"at": "2026-10-12T17:00:21",
+"at": "2026-10-12T17:31:14",
 "category": "Abstract",
 "kind": "new",
-"last_step": "reject 10 weak",
-"name": "Crystal Macro",
+"last_step": "newpack",
+"name": "Dunes",
 "puzzles": 0,
 "removed": 0,
-"status": "audited"
+"status": "pending"
 },
 "abstract-fluid-ink": {
 "added": 23,
@@ -734,8 +746,8 @@
 },
 "daily-2025": {
 "added": 0,
-"at": "2026-10-12T17:06:58",
-"last_step": "pool 109 usable",
+"at": "2026-10-12T17:32:14",
+"last_step": "pool 111 usable",
 "puzzles": null,
 "removed": 0,
 "status": "pending"
@@ -909,22 +921,23 @@
 "status": "verified"
 },
 "daily-2026-03": {
-"added": 26,
-"at": "2026-10-12T17:08:05",
+"added": 28,
+"at": "2026-10-12T17:17:41",
 "category": "Daily",
+"issues": 0,
 "kind": "daily",
-"last_step": "reject 2 weak",
+"last_step": "verify",
 "name": "March 2026",
 "puzzles": 31,
-"removed": 26,
-"status": "audited"
+"removed": 28,
+"status": "verified"
 },
 "daily-2026-04": {
 "added": 0,
-"at": "2026-10-12T12:32:55",
+"at": "2026-10-12T17:32:53",
 "category": "Daily",
 "kind": "daily",
-"last_step": "reject 11 weak",
+"last_step": "reject 9 weak",
 "name": "April 2026",
 "puzzles": null,
 "removed": 0,
@@ -1046,10 +1059,10 @@
 },
 "evpack-autumn-2027": {
 "added": 0,
-"at": "2026-10-12T16:45:27",
+"at": "2026-10-12T17:32:45",
 "category": "Event",
 "kind": "event",
-"last_step": "reject 1 similar",
+"last_step": "pool 63 usable",
 "name": "Autumn Equinox",
 "puzzles": null,
 "removed": 0,
@@ -1080,10 +1093,10 @@
 },
 "evpack-bee-day-2027": {
 "added": 0,
-"at": "2026-10-12T17:10:04",
+"at": "2026-10-12T17:36:22",
 "category": "Event",
 "kind": "event",
-"last_step": "reject 3 weak",
+"last_step": "pool 43 usable",
 "name": "World Bee Day",
 "puzzles": null,
 "removed": 0,
@@ -1310,13 +1323,14 @@
 },
 "evpack-education-2027": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T17:29:29",
 "category": "Event",
 "kind": "event",
+"last_step": "reject 3 similar",
 "name": "International Day of Education",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "evpack-environment-2027": {
 "added": 0,
@@ -1855,10 +1869,10 @@
 },
 "evpack-tea-day-2026": {
 "added": 0,
-"at": "2026-10-12T17:04:49",
+"at": "2026-10-12T17:34:46",
 "category": "Event",
 "kind": "event",
-"last_step": "pool 41 usable",
+"last_step": "reject 1 off-theme",
 "name": "International Tea Day",
 "puzzles": null,
 "removed": 0,
@@ -2476,15 +2490,16 @@
 "status": "verified"
 },
 "pack-fruit-markets": {
-"added": 0,
-"at": "2026-10-12T16:58:47",
+"added": 21,
+"at": "2026-10-12T17:13:14",
 "category": "Food",
+"issues": 0,
 "kind": "library",
-"last_step": "reject 1 quality",
+"last_step": "verify",
 "name": "Fruit Markets",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 22,
+"removed": 19,
+"status": "verified"
 },
 "pack-galaxies": {
 "added": 25,
@@ -2523,15 +2538,16 @@
 "status": "verified"
 },
 "pack-harbours": {
-"added": 0,
-"at": "2026-10-12T17:09:57",
+"added": 22,
+"at": "2026-10-12T17:30:37",
 "category": "Travel",
+"issues": 0,
 "kind": "library",
-"last_step": "pool 52 usable",
+"last_step": "verify",
 "name": "Harbours",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 22,
+"removed": 20,
+"status": "verified"
 },
 "pack-horses": {
 "added": 26,
@@ -2547,10 +2563,10 @@
 },
 "pack-hot-air-balloons": {
 "added": 0,
-"at": "2026-10-12T10:37:31",
+"at": "2026-10-12T17:36:58",
 "category": "Travel",
 "kind": "library",
-"last_step": "reject 5 weak",
+"last_step": "pool 17 usable",
 "name": "Hot Air Balloons",
 "puzzles": null,
 "removed": 0,
@@ -2570,10 +2586,10 @@
 },
 "pack-ice-cream": {
 "added": 0,
-"at": "2026-10-12T10:04:16",
+"at": "2026-10-12T17:33:47",
 "category": "Food",
 "kind": "library",
-"last_step": "reject 1 weak",
+"last_step": "reject 2 text",
 "name": "Ice Cream",
 "puzzles": null,
 "removed": 0,
@@ -2985,15 +3001,16 @@
 "status": "audited"
 },
 "pack-renaissance": {
-"added": 0,
-"at": "2026-10-12T16:28:37",
+"added": 24,
+"at": "2026-10-12T17:13:36",
 "category": "Art",
+"issues": 0,
 "kind": "library",
-"last_step": "reject 1 people",
+"last_step": "verify",
 "name": "Renaissance",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 20,
+"status": "verified"
 },
 "pack-rice-terraces": {
 "added": 0,
@@ -3101,9 +3118,10 @@
 },
 "pack-seascapes": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T17:37:20",
 "category": "Art",
 "kind": "library",
+"last_step": "pool 34 usable",
 "name": "Seascapes",
 "puzzles": null,
 "removed": 0,

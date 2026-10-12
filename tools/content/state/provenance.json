@@ -11847,14 +11847,14 @@
 },
 "daily-2026-03-11": {
 "at": "2026-10-12",
-"author": "Marie-Lan Ta\u00ff Pamart",
-"licence": "CC BY 4.0",
+"author": "Tuxyso",
+"licence": "CC BY-SA 3.0",
 "packId": "daily-2026-03",
-"page": "https://commons.wikimedia.org/wiki/File:Sturnus_vulgaris_at_nest_Chastel_20190422_t134203.jpg",
+"page": "https://commons.wikimedia.org/wiki/File:Amurtiger-Zoo-Muenster.jpg",
 "provider": "commons",
-"replaced": "https://openaccess-cdn.clevelandart.org/1999.260.k/1999.260.k_web.jpg",
-"source": "Wikimedia Commons, CC BY 4.0",
-"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Sturnus_vulgaris_at_nest_Chastel_20190422_t134203.jpg/1280px-Sturnus_vulgaris_at_nest_Chastel_20190422_t134203.jpg"
+"replaced": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Sturnus_vulgaris_at_nest_Chastel_20190422_t134203.jpg/1280px-Sturnus_vulgaris_at_nest_Chastel_20190422_t134203.jpg",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Amurtiger-Zoo-Muenster.jpg/1280px-Amurtiger-Zoo-Muenster.jpg"
 },
 "daily-2026-03-12": {
 "at": "2026-10-12",
@@ -12001,14 +12001,14 @@
 },
 "daily-2026-03-27": {
 "at": "2026-10-12",
-"author": "Robrocket82",
-"licence": "CC BY 4.0",
+"author": "Cuklev",
+"licence": "CC BY-SA 4.0",
 "packId": "daily-2026-03",
-"page": "https://commons.wikimedia.org/wiki/File:Red_Deer_stag_in_Lady_Canning%E2%80%99s_plantation.jpg",
+"page": "https://commons.wikimedia.org/wiki/File:%D0%A2%D0%B0%D0%B2%D1%87%D0%B5_%D0%93%D1%80%D0%B0%D0%B2%D1%87%D0%B5.jpg",
 "provider": "commons",
-"replaced": "https://openaccess-cdn.clevelandart.org/1984.41/1984.41_web.jpg",
-"source": "Wikimedia Commons, CC BY 4.0",
-"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Red_Deer_stag_in_Lady_Canning%E2%80%99s_plantation.jpg/1280px-Red_Deer_stag_in_Lady_Canning%E2%80%99s_plantation.jpg"
+"replaced": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Red_Deer_stag_in_Lady_Canning%E2%80%99s_plantation.jpg/1280px-Red_Deer_stag_in_Lady_Canning%E2%80%99s_plantation.jpg",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/%D0%A2%D0%B0%D0%B2%D1%87%D0%B5_%D0%93%D1%80%D0%B0%D0%B2%D1%87%D0%B5.jpg/1280px-%D0%A2%D0%B0%D0%B2%D1%87%D0%B5_%D0%93%D1%80%D0%B0%D0%B2%D1%87%D0%B5.jpg"
 },
 "daily-2026-03-29": {
 "at": "2026-10-12",
@@ -12558,6 +12558,17 @@
 "topic": "Brouwersgracht",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Brouwersgracht_pakhuis%2C_foto_2.JPG/1280px-Brouwersgracht_pakhuis%2C_foto_2.JPG"
 },
+"p-037b9c4f25f0": {
+"at": "2026-10-12",
+"author": "Ross Dunn",
+"licence": "CC BY-SA 2.0",
+"packId": "pack-fruit-markets",
+"page": "https://commons.wikimedia.org/wiki/File:Byward_Market_(35011596394).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 2.0",
+"topic": "physalis market",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Byward_Market_%2835011596394%29.jpg/1280px-Byward_Market_%2835011596394%29.jpg"
+},
 "p-03aa1c844a90": {
 "at": "2026-10-12",
 "author": "Josh Rokman - AI Images",
@@ -12645,6 +12656,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "daisy flower macro",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Leucanthemum_flowers_-_macro.jpg/1280px-Leucanthemum_flowers_-_macro.jpg"
+},
+"p-046614d14385": {
+"at": "2026-10-12",
+"author": "Parent G\u00e9ry",
+"licence": "CC BY-SA 3.0",
+"packId": "abstract-crystal",
+"page": "https://commons.wikimedia.org/wiki/File:B%C3%A9ryl_var._aigue-marine,_mica_var._muscovite,_tourmaline_var._schorl_(Pakistan)_2.JPG",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "tourmaline crystal",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/B%C3%A9ryl_var._aigue-marine%2C_mica_var._muscovite%2C_tourmaline_var._schorl_%28Pakistan%29_2.JPG/1280px-B%C3%A9ryl_var._aigue-marine%2C_mica_var._muscovite%2C_tourmaline_var._schorl_%28Pakistan%29_2.JPG"
 },
 "p-048b57cd8c37": {
 "at": "2026-10-12",
@@ -12955,6 +12977,17 @@
 "topic": "Praia do Sancho",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Praia_do_Sancho_-_A_mais_bonita_do_mundo.jpg/1280px-Praia_do_Sancho_-_A_mais_bonita_do_mundo.jpg"
 },
+"p-06888ce51824": {
+"at": "2026-10-12",
+"author": "Tanya Dedyukhina",
+"licence": "CC BY 3.0",
+"packId": "pack-renaissance",
+"page": "https://commons.wikimedia.org/wiki/File:Frederiksborg_castle_-_panoramio_(11).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 3.0",
+"topic": "Frederiksborg Castle",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Frederiksborg_castle_-_panoramio_%2811%29.jpg/1280px-Frederiksborg_castle_-_panoramio_%2811%29.jpg"
+},
 "p-0690af3e67bb": {
 "at": "2026-10-12",
 "author": "H. Zell",
@@ -13077,6 +13110,17 @@
 "topic": "AI-generated cosmos",
 "url": "https://live.staticflickr.com/65535/52316215733_6240715900_b.jpg"
 },
+"p-07216d501023": {
+"at": "2026-10-12",
+"author": "Penarc",
+"licence": "CC BY-SA 3.0",
+"packId": "pack-fruit-markets",
+"page": "https://commons.wikimedia.org/wiki/File:Actinidia_KIWI_02.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "kiwi fruit market",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Actinidia_KIWI_02.jpg/1280px-Actinidia_KIWI_02.jpg"
+},
 "p-075f82f975a7": {
 "at": "2026-10-12",
 "author": "Rolf Zemp",
@@ -13087,6 +13131,17 @@
 "source": "Wikimedia Commons, CC BY-SA 3.0",
 "topic": "K2",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/K2-above-Bottleneck.jpg/1280px-K2-above-Bottleneck.jpg"
+},
+"p-07663f86bbad": {
+"at": "2026-10-12",
+"author": "Seydou221",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-fruit-markets",
+"page": "https://commons.wikimedia.org/wiki/File:March%C3%A9_de_fruits_01.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "march\u00e9 fruits",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/March%C3%A9_de_fruits_01.jpg/1280px-March%C3%A9_de_fruits_01.jpg"
 },
 "p-077135d8df58": {
 "at": "2026-10-12",
@@ -13590,6 +13645,17 @@
 "topic": "Cowslip Primula veris",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Primula_veris_%28inflorescense%29.jpg/1280px-Primula_veris_%28inflorescense%29.jpg"
 },
+"p-0aaadb1dfaa6": {
+"at": "2026-10-12",
+"author": "MrPanyGoff",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-renaissance",
+"page": "https://commons.wikimedia.org/wiki/File:San_Pietro_in_Montorio_-_Rome.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Tempietto San Pietro in Montorio",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/San_Pietro_in_Montorio_-_Rome.jpg/1280px-San_Pietro_in_Montorio_-_Rome.jpg"
+},
 "p-0ab901eb836b": {
 "at": "2026-10-12",
 "author": "Diego Delso",
@@ -13657,6 +13723,17 @@
 "topic": "silver fox",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Silver_fox_at_ZAO_kitsune_mura.jpg/1280px-Silver_fox_at_ZAO_kitsune_mura.jpg"
 },
+"p-0af9e6d73e7e": {
+"at": "2026-10-12",
+"author": "Txllxt TxllxT",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-renaissance",
+"page": "https://commons.wikimedia.org/wiki/File:Litomy%C5%A1l_-_Renaissance_Chateau_Litomy%C5%A1l_1568_by_Giovanni_Battista_Aostalli_de_Sala_%26_Ulrico_Aostalli_de_Sala_-_Chateau_Litomy%C5%A1l_from_east_side_-_Castle_chapel_-_Sgraffito_wall_decoration_01.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Litomy\u0161l castle sgraffito",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Litomy%C5%A1l_-_Renaissance_Chateau_Litomy%C5%A1l_1568_by_Giovanni_Battista_Aostalli_de_Sala_%26_Ulrico_Aostalli_de_Sala_-_Chateau_Litomy%C5%A1l_from_east_side_-_Castle_chapel_-_Sgraffito_wall_decoration_01.jpg/1280px-thumbnail.jpg"
+},
 "p-0affeaa48566": {
 "at": "2026-10-12",
 "author": "chris-hayes",
@@ -13689,6 +13766,17 @@
 "source": "Wikimedia Commons, CC BY 4.0",
 "topic": "green anole",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Anolis_carolinensis_199379365.jpg/1280px-Anolis_carolinensis_199379365.jpg"
+},
+"p-0b0fe541d6ae": {
+"at": "2026-10-12",
+"author": "Derek Harper",
+"licence": "CC BY-SA 2.0",
+"packId": "pack-harbours",
+"page": "https://commons.wikimedia.org/wiki/File:Mevagissey_Harbour_-_geograph.org.uk_-_5266508.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 2.0",
+"topic": "Mevagissey harbour",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Mevagissey_Harbour_-_geograph.org.uk_-_5266508.jpg/1280px-Mevagissey_Harbour_-_geograph.org.uk_-_5266508.jpg"
 },
 "p-0b23c8b4b497": {
 "at": "2026-10-12",
@@ -14001,6 +14089,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "Dinkelsb\u00fchl",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Bastion_beim_Faulturm%2C_Dr.-Martin-Luther-Stra%C3%9Fe_29_%28Dinkelsb%C3%BChl%29_Ansbach_1.jpg/1280px-Bastion_beim_Faulturm%2C_Dr.-Martin-Luther-Stra%C3%9Fe_29_%28Dinkelsb%C3%BChl%29_Ansbach_1.jpg"
+},
+"p-0d4282bccf9f": {
+"at": "2026-10-12",
+"author": "Mihail Verbal",
+"licence": "CC BY 4.0",
+"packId": "pack-fruit-markets",
+"page": "https://commons.wikimedia.org/wiki/File:%D0%92%D0%B8%D0%B4%D0%BE%D0%B2%D0%B8_%D0%BE%D0%B2%D0%BE%D1%88%D1%98%D0%B5._%D0%92%D0%B8%D1%82%D0%B0%D0%BC%D0%B8%D0%BD%D0%B8.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "pomegranates market stall",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/%D0%92%D0%B8%D0%B4%D0%BE%D0%B2%D0%B8_%D0%BE%D0%B2%D0%BE%D1%88%D1%98%D0%B5._%D0%92%D0%B8%D1%82%D0%B0%D0%BC%D0%B8%D0%BD%D0%B8.jpg/1280px-%D0%92%D0%B8%D0%B4%D0%BE%D0%B2%D0%B8_%D0%BE%D0%B2%D0%BE%D1%88%D1%98%D0%B5._%D0%92%D0%B8%D1%82%D0%B0%D0%BC%D0%B8%D0%BD%D0%B8.jpg"
 },
 "p-0d5143622872": {
 "at": "2026-10-12",
@@ -14346,6 +14445,17 @@
 "topic": "Temple of Philae",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Temple_of_Isis%2C_Philae_Temple_Complex%2C_Agilkia_Island%2C_Aswan%2C_AG%2C_EGY_%2848026884476%29.jpg/1280px-Temple_of_Isis%2C_Philae_Temple_Complex%2C_Agilkia_Island%2C_Aswan%2C_AG%2C_EGY_%2848026884476%29.jpg"
 },
+"p-0f6a21442fab": {
+"at": "2026-10-12",
+"author": "Gi\u00e5m",
+"licence": "CC BY 2.0",
+"packId": "pack-fruit-markets",
+"page": "https://commons.wikimedia.org/wiki/File:Fruits_de_saison_au_march%C3%A9_d%27Apt.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "march\u00e9 fruits",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Fruits_de_saison_au_march%C3%A9_d%27Apt.jpg/1280px-Fruits_de_saison_au_march%C3%A9_d%27Apt.jpg"
+},
 "p-0f7dcc3ac93e": {
 "at": "2026-10-12",
 "author": "Biswarup Ganguly",
@@ -14468,6 +14578,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "cat:Oil sheen",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Oil_sheen_pavement.jpg/1280px-Oil_sheen_pavement.jpg"
+},
+"p-1059ce3b0ebb": {
+"at": "2026-10-12",
+"author": "Giladtop",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-harbours",
+"page": "https://commons.wikimedia.org/wiki/File:Henningsv%C3%A6r_marina.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Henningsv\u00e6r harbour",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Henningsv%C3%A6r_marina.jpg/1280px-Henningsv%C3%A6r_marina.jpg"
 },
 "p-106a1ccd1a4b": {
 "at": "2026-10-12",
@@ -14702,6 +14823,17 @@
 "topic": "Tycho crater",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Tycho_crater_4119_h2.jpg/1280px-Tycho_crater_4119_h2.jpg"
 },
+"p-121194549d43": {
+"at": "2026-10-12",
+"author": "Dionysos1970",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-harbours",
+"page": "https://commons.wikimedia.org/wiki/File:Peggy%27s_Cove_3774.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Peggy's Cove",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Peggy%27s_Cove_3774.jpg/1280px-Peggy%27s_Cove_3774.jpg"
+},
 "p-127170a061ef": {
 "at": "2026-10-12",
 "author": "Manukrishnan80",
@@ -14801,6 +14933,17 @@
 "source": "Wikimedia Commons, CC BY 2.0",
 "topic": "Jupiter Great Red Spot",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Jupiter_-_Great_Red_Spot_-_Nasa%E2%80%99s_Juno_PJ7_%2851227577464%29.png/1280px-Jupiter_-_Great_Red_Spot_-_Nasa%E2%80%99s_Juno_PJ7_%2851227577464%29.png"
+},
+"p-1329ab7fdb76": {
+"at": "2026-10-12",
+"author": "Daniel Villafruela.",
+"licence": "CC BY-SA 3.0",
+"packId": "pack-renaissance",
+"page": "https://commons.wikimedia.org/wiki/File:Granada-La_Alhambra-13-Cuerpo_de_viviendas_del_Palacio_de_Carlos_V-20110920.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "Palace of Charles V Granada",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Granada-La_Alhambra-13-Cuerpo_de_viviendas_del_Palacio_de_Carlos_V-20110920.jpg/1280px-Granada-La_Alhambra-13-Cuerpo_de_viviendas_del_Palacio_de_Carlos_V-20110920.jpg"
 },
 "p-1340e978b90e": {
 "at": "2026-10-12",
@@ -15502,6 +15645,17 @@
 "source": "Wikimedia Commons, CC0",
 "topic": "Rainbow chard",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Organic_Swiss_chard_bunches.jpg/1280px-Organic_Swiss_chard_bunches.jpg"
+},
+"p-16b37b4aec72": {
+"at": "2026-10-12",
+"author": "Wojsyl",
+"licence": "CC BY-SA 3.0",
+"packId": "pack-harbours",
+"page": "https://commons.wikimedia.org/wiki/File:Greece_Symi.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "Symi harbour",
+"url": "https://upload.wikimedia.org/wikipedia/commons/2/28/Greece_Symi.jpg"
 },
 "p-16b65874d4db": {
 "at": "2026-10-12",
@@ -18361,6 +18515,17 @@
 "topic": "Red roses bouquet",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Red_rose_bouquet.JPG/1280px-Red_rose_bouquet.JPG"
 },
+"p-293de23bc01a": {
+"at": "2026-10-12",
+"author": "Ymblanter",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-renaissance",
+"page": "https://commons.wikimedia.org/wiki/File:Blois_Spiral_staircase_of_the_Ch%C3%A2teau_de_Blois_seen_from_the_inner_yard.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Ch\u00e2teau de Blois staircase",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Blois_Spiral_staircase_of_the_Ch%C3%A2teau_de_Blois_seen_from_the_inner_yard.jpg/1280px-Blois_Spiral_staircase_of_the_Ch%C3%A2teau_de_Blois_seen_from_the_inner_yard.jpg"
+},
 "p-294b77a5c772": {
 "at": "2026-10-12",
 "author": "lumoplank",
@@ -18747,6 +18912,17 @@
 "topic": "Ch\u00e2teau de Chenonceau",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Ch%C3%A2teau_de_Chenonceau_-_est_%28Chenonceaux%29_%282%29.jpg/1280px-Ch%C3%A2teau_de_Chenonceau_-_est_%28Chenonceaux%29_%282%29.jpg"
 },
+"p-2b6103079511": {
+"at": "2026-10-12",
+"author": "Ivar Leidus",
+"licence": "CC BY-SA 4.0",
+"packId": "abstract-crystal",
+"page": "https://commons.wikimedia.org/wiki/File:Stibnite_-_Herja_mine,_Maramures,_Romania.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "stibnite",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Stibnite_-_Herja_mine%2C_Maramures%2C_Romania.jpg/1280px-Stibnite_-_Herja_mine%2C_Maramures%2C_Romania.jpg"
+},
 "p-2b6e50817540": {
 "at": "2026-10-12",
 "author": "Mark Dumont",
@@ -18779,6 +18955,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "Cockatiel",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Cockatiel_02.jpg/1280px-Cockatiel_02.jpg"
+},
+"p-2bb28ada6b76": {
+"at": "2026-10-12",
+"author": "Terryngari",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-fruit-markets",
+"page": "https://commons.wikimedia.org/wiki/File:A_vegetable_stall_in_the_outskirts_of_Nairobi,_Kenya._Showcasing_a_variety_of_fruits.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "oranges market stall",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/A_vegetable_stall_in_the_outskirts_of_Nairobi%2C_Kenya._Showcasing_a_variety_of_fruits.jpg/1280px-A_vegetable_stall_in_the_outskirts_of_Nairobi%2C_Kenya._Showcasing_a_variety_of_fruits.jpg"
 },
 "p-2bc6b1ede227": {
 "at": "2026-10-12",
@@ -19490,6 +19677,17 @@
 "topic": "Sangria",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Sangria_nasjonaldrikk_i_Spania.jpg/1280px-Sangria_nasjonaldrikk_i_Spania.jpg"
 },
+"p-2f94ec031f06": {
+"at": "2026-10-12",
+"author": "Alchemist-hp,Richard Bartz, further modifications by Poke2001",
+"licence": "CC BY-SA 3.0",
+"packId": "abstract-crystal",
+"page": "https://commons.wikimedia.org/wiki/File:Bismuth_crystal_artificial.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "bismuth crystal",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Bismuth_crystal_artificial.jpg/1280px-Bismuth_crystal_artificial.jpg"
+},
 "p-2f9f0b647f9f": {
 "at": "2026-10-12",
 "author": "Claude Monet",
@@ -19534,6 +19732,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "gulab jamun",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Gulab_Jamun_%28Indian_Doughnuts%29.JPG/1280px-Gulab_Jamun_%28Indian_Doughnuts%29.JPG"
+},
+"p-2fb4cc24d754": {
+"at": "2026-10-12",
+"author": "Masha Milshina",
+"licence": "CC BY 4.0",
+"packId": "abstract-crystal",
+"page": "https://commons.wikimedia.org/wiki/File:Crazy_Lace_Agate_03.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "agate slice",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Crazy_Lace_Agate_03.jpg/1280px-Crazy_Lace_Agate_03.jpg"
 },
 "p-2ff661890d78": {
 "at": "2026-10-12",
@@ -20422,6 +20631,17 @@
 "topic": "Thurston lava tube",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Thurston_Lava_Tube._Hawaii_Volcanoes_National_Park_%28503989%29_%2822218198281%29.jpg/1280px-Thurston_Lava_Tube._Hawaii_Volcanoes_National_Park_%28503989%29_%2822218198281%29.jpg"
 },
+"p-36b5e546f1d0": {
+"at": "2026-10-12",
+"author": "Berthold Werner",
+"licence": "CC BY-SA 3.0",
+"packId": "pack-renaissance",
+"page": "https://commons.wikimedia.org/wiki/File:Spain_Andalusia_Granada_BW_2015-10-25_16-18-11.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "Palace of Charles V Granada",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Spain_Andalusia_Granada_BW_2015-10-25_16-18-11.jpg/1280px-Spain_Andalusia_Granada_BW_2015-10-25_16-18-11.jpg"
+},
 "p-36b77c6320b7": {
 "at": "2026-10-12",
 "author": "Dominique Jacholke",
@@ -20565,6 +20785,17 @@
 "source": "Wikimedia Commons, CC BY 2.0",
 "topic": "Annecy old town canal",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Canal_%40_Old_Town_%40_Annecy_%2836027842213%29.jpg/1280px-Canal_%40_Old_Town_%40_Annecy_%2836027842213%29.jpg"
+},
+"p-37b08ece71cb": {
+"at": "2026-10-12",
+"author": "Ivar Leidus",
+"licence": "CC BY-SA 4.0",
+"packId": "abstract-crystal",
+"page": "https://commons.wikimedia.org/wiki/File:Fluorite_-_Diana_Maria_mine,_Rogerley_quarry,_Stanhope,_County_Durham,_England.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "fluorite",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Fluorite_-_Diana_Maria_mine%2C_Rogerley_quarry%2C_Stanhope%2C_County_Durham%2C_England.jpg/1280px-Fluorite_-_Diana_Maria_mine%2C_Rogerley_quarry%2C_Stanhope%2C_County_Durham%2C_England.jpg"
 },
 "p-37d7c253fffe": {
 "at": "2026-10-12",
@@ -21087,6 +21318,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "harpy eagle",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Harpia_%28Harpia_harpyja%29.JPG/1280px-Harpia_%28Harpia_harpyja%29.JPG"
+},
+"p-3b638edc4a01": {
+"at": "2026-10-12",
+"author": "Rajani Gairshail",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-fruit-markets",
+"page": "https://commons.wikimedia.org/wiki/File:Dried_apricots_for_sale_at_Kargil_Market,_Ladakh,_India,2.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "apricots market",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Dried_apricots_for_sale_at_Kargil_Market%2C_Ladakh%2C_India%2C2.jpg/1280px-Dried_apricots_for_sale_at_Kargil_Market%2C_Ladakh%2C_India%2C2.jpg"
 },
 "p-3b694ec057be": {
 "at": "2026-10-12",
@@ -22309,6 +22551,28 @@
 "topic": "Lena Delta",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/FLOODS_ALONG_THE_LENA_RIVER.500m.jpg/1280px-FLOODS_ALONG_THE_LENA_RIVER.500m.jpg"
 },
+"p-41b01ce021c5": {
+"at": "2026-10-12",
+"author": "Jordiferrer",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-harbours",
+"page": "https://commons.wikimedia.org/wiki/File:2016_-_Portofino_05.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Portofino harbour",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/2016_-_Portofino_05.jpg/1280px-2016_-_Portofino_05.jpg"
+},
+"p-41b0b21c8bad": {
+"at": "2026-10-12",
+"author": "Gerd Eichmann",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-harbours",
+"page": "https://commons.wikimedia.org/wiki/File:Svolv%C3%A6r-16-Segelboote-2019-gje.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Svolv\u00e6r harbour",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Svolv%C3%A6r-16-Segelboote-2019-gje.jpg/1280px-Svolv%C3%A6r-16-Segelboote-2019-gje.jpg"
+},
 "p-41c5a40017ae": {
 "at": "2026-10-12",
 "author": "Joseolgon",
@@ -22715,6 +22979,17 @@
 "topic": "flower still life",
 "url": "https://api.nga.gov/iiif/1534dd35-2609-4ca4-b4e5-3eda9575695e/full/!2000,2000/0/default.jpg"
 },
+"p-44eadf4f713e": {
+"at": "2026-10-12",
+"author": "Nicholas Gemini",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-fruit-markets",
+"page": "https://commons.wikimedia.org/wiki/File:Mercat_de_la_Boqueria_14.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "La Boqueria fruit",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Mercat_de_la_Boqueria_14.jpg/1280px-Mercat_de_la_Boqueria_14.jpg"
+},
 "p-44f5cfa6bd5a": {
 "at": "2026-10-12",
 "author": "Gsimonov",
@@ -22892,6 +23167,17 @@
 "topic": "Mandarinfish",
 "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/287836388/original.jpeg"
 },
+"p-462dc2de28c1": {
+"at": "2026-10-12",
+"author": "Oursana",
+"licence": "CC0",
+"packId": "pack-renaissance",
+"page": "https://commons.wikimedia.org/wiki/File:Palazzo_Chiericati_(Vicenza)_-_ground_floor.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "Palazzo Chiericati Vicenza",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Palazzo_Chiericati_%28Vicenza%29_-_ground_floor.jpg/1280px-Palazzo_Chiericati_%28Vicenza%29_-_ground_floor.jpg"
+},
 "p-46448c0ae380": {
 "at": "2026-10-12",
 "author": "Laszlo1801",
@@ -22913,6 +23199,17 @@
 "source": "Wikimedia Commons, CC BY 2.5",
 "topic": "Prunus serrulata Kanzan",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Prunus_serrulata_Kanzan_blossom_Jardin_des_Plantes_2013-04-21.jpg/1280px-Prunus_serrulata_Kanzan_blossom_Jardin_des_Plantes_2013-04-21.jpg"
+},
+"p-467dd1db84bc": {
+"at": "2026-10-12",
+"author": "Rosholinux",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-harbours",
+"page": "https://commons.wikimedia.org/wiki/File:Rovinj_2.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Rovinj harbour",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Rovinj_2.jpg/1280px-Rovinj_2.jpg"
 },
 "p-46969a56fb2f": {
 "at": "2026-10-12",
@@ -24543,6 +24840,17 @@
 "topic": "Dyed Easter eggs",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/%D0%A8%D0%B0%D1%80%D0%B5%D0%BD%D0%B8_%D0%B2%D0%B5%D0%BB%D0%B8%D0%B3%D0%B4%D0%B5%D0%BD%D1%81%D0%BA%D0%B8_%D1%98%D0%B0%D1%98%D1%86%D0%B0.jpg/1280px-%D0%A8%D0%B0%D1%80%D0%B5%D0%BD%D0%B8_%D0%B2%D0%B5%D0%BB%D0%B8%D0%B3%D0%B4%D0%B5%D0%BD%D1%81%D0%BA%D0%B8_%D1%98%D0%B0%D1%98%D1%86%D0%B0.jpg"
 },
+"p-50f0ebe3bfa5": {
+"at": "2026-10-12",
+"author": "Tony Hisgett from Birmingham, UK",
+"licence": "CC BY 2.0",
+"packId": "pack-harbours",
+"page": "https://commons.wikimedia.org/wiki/File:Fishing_boats_at_Marsaxlokk_6_(6946296999).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "Marsaxlokk luzzu boats",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Fishing_boats_at_Marsaxlokk_6_%286946296999%29.jpg/1280px-Fishing_boats_at_Marsaxlokk_6_%286946296999%29.jpg"
+},
 "p-5102e43f71d9": {
 "at": "2026-10-12",
 "author": "DragonMaster4131",
@@ -25122,6 +25430,17 @@
 "topic": "Eisriesenwelt",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Eisriesenwelt_ijsheuvel.jpg/1280px-Eisriesenwelt_ijsheuvel.jpg"
 },
+"p-548384a406f9": {
+"at": "2026-10-12",
+"author": "Alessio Sbarbaro User_talk:Yoggysot",
+"licence": "CC BY-SA 3.0",
+"packId": "pack-harbours",
+"page": "https://commons.wikimedia.org/wiki/File:Camogli_marina_10.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "Camogli harbour",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Camogli_marina_10.jpg/1280px-Camogli_marina_10.jpg"
+},
 "p-54874a98e930": {
 "at": "2026-10-12",
 "author": "John O'Neill",
@@ -25199,6 +25518,17 @@
 "topic": "AI-generated glass",
 "url": "https://live.staticflickr.com/65535/52305393613_58e882e0cc_b.jpg"
 },
+"p-55025a202f32": {
+"at": "2026-10-12",
+"author": "claralieu",
+"licence": "CC BY 2.0",
+"packId": "abstract-crystal",
+"page": "https://commons.wikimedia.org/wiki/File:Geode_Reference_-16.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "cat:Geodes",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Geode_Reference_-16.jpg/1280px-Geode_Reference_-16.jpg"
+},
 "p-55040649837a": {
 "at": "2026-10-12",
 "author": "Walter Gehr",
@@ -25265,6 +25595,17 @@
 "source": "flickr via Openverse, Public Domain Mark",
 "topic": "AI-generated ship",
 "url": "https://live.staticflickr.com/65535/52318965079_2edbe50631_b.jpg"
+},
+"p-5568219fa7b4": {
+"at": "2026-10-12",
+"author": "claralieu",
+"licence": "CC BY 2.0",
+"packId": "abstract-crystal",
+"page": "https://commons.wikimedia.org/wiki/File:Geode_Reference_-11.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "cat:Quartz geodes",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Geode_Reference_-11.jpg/1280px-Geode_Reference_-11.jpg"
 },
 "p-5574d9a9e26e": {
 "at": "2026-10-12",
@@ -25422,6 +25763,17 @@
 "topic": "Norwegian Fjord horse",
 "url": "https://upload.wikimedia.org/wikipedia/commons/8/82/Mane_Fjord_horse.jpg"
 },
+"p-564632e8cc25": {
+"at": "2026-10-12",
+"author": "Hanc Tomasz",
+"licence": "CC BY-SA 3.0",
+"packId": "pack-renaissance",
+"page": "https://commons.wikimedia.org/wiki/File:Zamo%C5%9B%C4%87_Ratusz_-_panoramio.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "Zamo\u015b\u0107 town hall",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Zamo%C5%9B%C4%87_Ratusz_-_panoramio.jpg/1280px-Zamo%C5%9B%C4%87_Ratusz_-_panoramio.jpg"
+},
 "p-568d0bfc32ed": {
 "at": "2026-10-12",
 "author": "Haoreima",
@@ -25577,6 +25929,17 @@
 "topic": "Jacob Marrel tulip",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Jacob_Marrel_-_Tulips_and_violets_in_a_vase%2C_with_a_shell%2C_a_lizard%2C_a_dragonfly%2C_a_bee_and_a_wasp%2C_on_a_ledge.jpg/1280px-Jacob_Marrel_-_Tulips_and_violets_in_a_vase%2C_with_a_shell%2C_a_lizard%2C_a_dragonfly%2C_a_bee_and_a_wasp%2C_on_a_ledge.jpg"
 },
+"p-57349498231f": {
+"at": "2026-10-12",
+"author": "Masha Milshina",
+"licence": "CC BY 4.0",
+"packId": "abstract-crystal",
+"page": "https://commons.wikimedia.org/wiki/File:Vanadinite_crystals.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "vanadinite",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Vanadinite_crystals.jpg/1280px-Vanadinite_crystals.jpg"
+},
 "p-57372fed1479": {
 "at": "2026-10-12",
 "author": "Raheel125",
@@ -25697,6 +26060,17 @@
 "source": "Wikimedia Commons, Public domain",
 "topic": "Caspian Sea from space",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/2004_satelllite_picture_of_the_Caucaus_and_the_Caspian_Sea.jpg/1280px-2004_satelllite_picture_of_the_Caucaus_and_the_Caspian_Sea.jpg"
+},
+"p-5813b9de9461": {
+"at": "2026-10-12",
+"author": "Andrewrabbott",
+"licence": "CC BY-SA 3.0",
+"packId": "pack-harbours",
+"page": "https://commons.wikimedia.org/wiki/File:Bilf%C3%A6rgen_in_%C3%85lesund_harbour.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "\u00c5lesund harbour",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Bilf%C3%A6rgen_in_%C3%85lesund_harbour.jpg/1280px-Bilf%C3%A6rgen_in_%C3%85lesund_harbour.jpg"
 },
 "p-58189d594959": {
 "at": "2026-10-12",
@@ -26306,6 +26680,17 @@
 "topic": "Emily Carr forest painting",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Emily_Carr_%281931%E2%80%9332%29_Forest%2C_British_Columbia.jpg/1280px-Emily_Carr_%281931%E2%80%9332%29_Forest%2C_British_Columbia.jpg"
 },
+"p-5b99ef8016d5": {
+"at": "2026-10-12",
+"author": "Didier Descouens",
+"licence": "CC BY-SA 4.0",
+"packId": "abstract-crystal",
+"page": "https://commons.wikimedia.org/wiki/File:Elbaite.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "cat:Quality images by Archaeodontosaurus mineralogy",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Elbaite.jpg/1280px-Elbaite.jpg"
+},
 "p-5ba2e5e0db49": {
 "at": "2026-10-12",
 "author": "Adrian Farwell",
@@ -26371,6 +26756,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "Chalk pastels",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Colored_chalks_-_pastel_colors_in_Israel%2C_May_2024_04.jpg/1280px-Colored_chalks_-_pastel_colors_in_Israel%2C_May_2024_04.jpg"
+},
+"p-5c1d113f91d2": {
+"at": "2026-10-12",
+"author": "James St. John",
+"licence": "CC BY 2.0",
+"packId": "abstract-crystal",
+"page": "https://commons.wikimedia.org/wiki/File:Calcite_crystals_(Gibraltar_Island,_Lake_Erie,_Ohio,_USA)_2.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "calcite crystal",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Calcite_crystals_%28Gibraltar_Island%2C_Lake_Erie%2C_Ohio%2C_USA%29_2.jpg/1280px-Calcite_crystals_%28Gibraltar_Island%2C_Lake_Erie%2C_Ohio%2C_USA%29_2.jpg"
 },
 "p-5c3cc6bd8c47": {
 "at": "2026-10-12",
@@ -27014,6 +27410,17 @@
 "topic": "heart stone",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Portugal_-_Algarve_-_Alvor_-_heart_of_stones_%2825853219935%29.jpg/1280px-Portugal_-_Algarve_-_Alvor_-_heart_of_stones_%2825853219935%29.jpg"
 },
+"p-60dd4d67a981": {
+"at": "2026-10-12",
+"author": "QCA7",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-renaissance",
+"page": "https://commons.wikimedia.org/wiki/File:Mitte_-_Town_Hall_of_Bremen_-_20200820192321.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Bremen Town Hall",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Mitte_-_Town_Hall_of_Bremen_-_20200820192321.jpg/1280px-Mitte_-_Town_Hall_of_Bremen_-_20200820192321.jpg"
+},
 "p-60fde5a1aee3": {
 "at": "2026-10-12",
 "author": "Jakub Ha\u0142un",
@@ -27403,6 +27810,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "Hyacinths",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Blue_Hyacinth.jpg/1280px-Blue_Hyacinth.jpg"
+},
+"p-6395cc081d67": {
+"at": "2026-10-12",
+"author": "Ji-Elle",
+"licence": "CC BY-SA 4.0",
+"packId": "abstract-crystal",
+"page": "https://commons.wikimedia.org/wiki/File:C%C3%A9lestine-Vall%C3%A9e_de_la_Sofia_(Madagascar).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "celestine",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/C%C3%A9lestine-Vall%C3%A9e_de_la_Sofia_%28Madagascar%29.jpg/1280px-C%C3%A9lestine-Vall%C3%A9e_de_la_Sofia_%28Madagascar%29.jpg"
 },
 "p-639e6e4dbc0c": {
 "at": "2026-10-12",
@@ -28713,6 +29131,17 @@
 "source": "Wikimedia Commons, CC BY 4.0",
 "topic": "Bagan temples",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Bagan_Temple_1.jpg/1280px-Bagan_Temple_1.jpg"
+},
+"p-6c173aa5ee9c": {
+"at": "2026-10-12",
+"author": "Tournasol7",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-renaissance",
+"page": "https://commons.wikimedia.org/wiki/File:St_Andrew_basilica_in_Mantua_(18).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Basilica of Sant'Andrea Mantua",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/St_Andrew_basilica_in_Mantua_%2818%29.jpg/1280px-St_Andrew_basilica_in_Mantua_%2818%29.jpg"
 },
 "p-6c1ffa0c3bb2": {
 "at": "2026-10-12",
@@ -30568,6 +30997,17 @@
 "topic": "chestnut-breasted coronet",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Chestnut-breasted_Coronet_JCB.jpg/1280px-Chestnut-breasted_Coronet_JCB.jpg"
 },
+"p-76e29f69e4eb": {
+"at": "2026-10-12",
+"author": "Marie-Lan Ta\u00ff Pamart",
+"licence": "CC BY 4.0",
+"packId": "abstract-crystal",
+"page": "https://commons.wikimedia.org/wiki/File:Amethyst_sceptre_on_quartz_Caillois_Donation_MNHN.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "amethyst",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Amethyst_sceptre_on_quartz_Caillois_Donation_MNHN.jpg/1280px-Amethyst_sceptre_on_quartz_Caillois_Donation_MNHN.jpg"
+},
 "p-76e472fe7b22": {
 "at": "2026-10-12",
 "author": "Earth Science and Remote Sensing Unit, Lyndon B. Johnson Space Center",
@@ -32401,6 +32841,17 @@
 "topic": "Lavandula angustifolia",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/%28MHNT%29_Bombus_pascuorum_on_Lavandula_angustifolia.jpg/1280px-%28MHNT%29_Bombus_pascuorum_on_Lavandula_angustifolia.jpg"
 },
+"p-816cc3381b1d": {
+"at": "2026-10-12",
+"author": "-jkb-",
+"licence": "CC BY-SA 3.0",
+"packId": "pack-harbours",
+"page": "https://commons.wikimedia.org/wiki/File:Malta_13_dhajsa.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "Marsaxlokk luzzu boats",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Malta_13_dhajsa.jpg/1280px-Malta_13_dhajsa.jpg"
+},
 "p-8173fab6f4cf": {
 "at": "2026-10-12",
 "author": "FingerWiki",
@@ -32522,6 +32973,28 @@
 "source": "Wikimedia Commons, CC BY 2.0",
 "topic": "sunset over lake reflection",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Sunset_over_Lake_Ganoga.jpg/1280px-Sunset_over_Lake_Ganoga.jpg"
+},
+"p-8292aca73ece": {
+"at": "2026-10-12",
+"author": "Mongolo1984",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-renaissance",
+"page": "https://commons.wikimedia.org/wiki/File:Tempio_di_Santa_Maria_della_Consolazione_(Todi)_24.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Santa Maria della Consolazione Todi",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Tempio_di_Santa_Maria_della_Consolazione_%28Todi%29_24.jpg/1280px-Tempio_di_Santa_Maria_della_Consolazione_%28Todi%29_24.jpg"
+},
+"p-82b1a24b723d": {
+"at": "2026-10-12",
+"author": "ho visto nina volare from Italy",
+"licence": "CC BY-SA 2.0",
+"packId": "pack-harbours",
+"page": "https://commons.wikimedia.org/wiki/File:Camogli_2014_(15233551256).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 2.0",
+"topic": "Camogli harbour",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Camogli_2014_%2815233551256%29.jpg/1280px-Camogli_2014_%2815233551256%29.jpg"
 },
 "p-82d51b33b70c": {
 "at": "2026-10-12",
@@ -33489,6 +33962,17 @@
 "topic": "AI-generated city",
 "url": "https://live.staticflickr.com/65535/53401787310_f949d02b36_b.jpg"
 },
+"p-884f44b590ea": {
+"at": "2026-10-12",
+"author": "Ken Bagnall",
+"licence": "CC BY-SA 2.0",
+"packId": "pack-harbours",
+"page": "https://commons.wikimedia.org/wiki/File:Crail_,_Harbour_-_geograph.org.uk_-_2231331.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 2.0",
+"topic": "Crail harbour",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Crail_%2C_Harbour_-_geograph.org.uk_-_2231331.jpg/1280px-Crail_%2C_Harbour_-_geograph.org.uk_-_2231331.jpg"
+},
 "p-888fe0f29dc4": {
 "at": "2026-10-12",
 "author": "Daderot",
@@ -34296,6 +34780,17 @@
 "topic": "Harbor seal",
 "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/331671523/original.jpeg"
 },
+"p-8e003efb6c08": {
+"at": "2026-10-12",
+"author": "Didier Descouens",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-renaissance",
+"page": "https://commons.wikimedia.org/wiki/File:Chiesa_di_San_Zaccaria_Venezia.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "San Zaccaria Venice facade",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Chiesa_di_San_Zaccaria_Venezia.jpg/1280px-Chiesa_di_San_Zaccaria_Venezia.jpg"
+},
 "p-8e0ff37e14ab": {
 "at": "2026-10-12",
 "author": "SpaceX",
@@ -34351,6 +34846,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "Golden Retriever",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Golden_Retriever_2020_3.jpg/1280px-Golden_Retriever_2020_3.jpg"
+},
+"p-8e415ecd2253": {
+"at": "2026-10-12",
+"author": "Unknown",
+"licence": "CC0",
+"packId": "pack-harbours",
+"page": "https://www.rawpixel.com/image/6045324/free-public-domain-cc0-photo",
+"provider": "openverse:rawpixel",
+"source": "rawpixel via Openverse, CC0",
+"topic": "Saint-Tropez harbour",
+"url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL2ZyeWFjaHRzX2JvYXRzX3NlYV9oYXJib3VyLWltYWdlLWt5Y2VzdWE1LmpwZw.jpg"
 },
 "p-8e747d1869d2": {
 "at": "2026-10-12",
@@ -34749,6 +35255,17 @@
 "source": "Wikimedia Commons, Public domain",
 "topic": "fog spruce forest",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/20221209_FS_RW_Monongahela_Greenbrier_Gaudineer_RedSpruce_0003_%2854103685030%29.jpg/1280px-20221209_FS_RW_Monongahela_Greenbrier_Gaudineer_RedSpruce_0003_%2854103685030%29.jpg"
+},
+"p-907bffbecd36": {
+"at": "2026-10-12",
+"author": "Daniele Napolitano",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-renaissance",
+"page": "https://commons.wikimedia.org/wiki/File:Bergamo,_Cappella_Colleoni_2021.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Cappella Colleoni Bergamo",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Bergamo%2C_Cappella_Colleoni_2021.jpg/1280px-Bergamo%2C_Cappella_Colleoni_2021.jpg"
 },
 "p-9085e2dbf7a6": {
 "at": "2026-10-12",
@@ -35259,6 +35776,17 @@
 "source": "Wikimedia Commons, CC0",
 "topic": "Falcon Heavy launch",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Falcon_Heavy_Demo_Mission_%2839337245145%29.jpg/1280px-Falcon_Heavy_Demo_Mission_%2839337245145%29.jpg"
+},
+"p-93b264ca2371": {
+"at": "2026-10-12",
+"author": "olgite",
+"licence": "CC BY 2.0",
+"packId": "pack-renaissance",
+"page": "https://commons.wikimedia.org/wiki/File:Frederiksborg_Castle_-_window_03.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "Frederiksborg Castle",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Frederiksborg_Castle_-_window_03.jpg/1280px-Frederiksborg_Castle_-_window_03.jpg"
 },
 "p-93b54724ec3f": {
 "at": "2026-10-12",
@@ -35802,6 +36330,17 @@
 "source": "National Gallery of Art, Washington, CC0",
 "topic": "vase of flowers",
 "url": "https://api.nga.gov/iiif/d96730f9-b64b-47dc-bce9-27f670375816/full/!2000,2000/0/default.jpg"
+},
+"p-970358a4df0a": {
+"at": "2026-10-12",
+"author": "Zairon",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-renaissance",
+"page": "https://commons.wikimedia.org/wiki/File:Chambord_Ch%C3%A2teau_de_Chambord_Wendeltreppe_3.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Ch\u00e2teau de Chambord staircase",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Chambord_Ch%C3%A2teau_de_Chambord_Wendeltreppe_3.jpg/1280px-Chambord_Ch%C3%A2teau_de_Chambord_Wendeltreppe_3.jpg"
 },
 "p-970d436f73c3": {
 "at": "2026-10-12",
@@ -37487,6 +38026,28 @@
 "topic": "orca breaching",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/OCNMS_Orca_breaching_%2850040737978%29.jpg/1280px-OCNMS_Orca_breaching_%2850040737978%29.jpg"
 },
+"p-a1d0effe373c": {
+"at": "2026-10-12",
+"author": "Steve",
+"licence": "CC BY-SA 2.0",
+"packId": "pack-fruit-markets",
+"page": "https://commons.wikimedia.org/wiki/File:RambutanFruit.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 2.0",
+"topic": "rambutan market",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/RambutanFruit.jpg/1280px-RambutanFruit.jpg"
+},
+"p-a1f94602fd4d": {
+"at": "2026-10-12",
+"author": "JJ Harrison (https://www.jjharrison.com.au/)",
+"licence": "CC BY-SA 4.0",
+"packId": "abstract-crystal",
+"page": "https://commons.wikimedia.org/wiki/File:Aragonite_crystal_-_Los_Molinillos,_Ceunca,_Spain_-_4x3.6x3.5cm_100g.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "aragonite",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Aragonite_crystal_-_Los_Molinillos%2C_Ceunca%2C_Spain_-_4x3.6x3.5cm_100g.jpg/1280px-Aragonite_crystal_-_Los_Molinillos%2C_Ceunca%2C_Spain_-_4x3.6x3.5cm_100g.jpg"
+},
 "p-a2082f7b1131": {
 "at": "2026-10-12",
 "author": "Andrew Hill",
@@ -37674,6 +38235,17 @@
 "topic": "S\u00f3lheimaj\u00f6kull glacier",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/S%C3%B3lheimaj%C3%B6kull_iceland_hdsr_2019_10_18_9999_331.jpg/1280px-S%C3%B3lheimaj%C3%B6kull_iceland_hdsr_2019_10_18_9999_331.jpg"
 },
+"p-a3b75d701bab": {
+"at": "2026-10-12",
+"author": "Dagvidur",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-harbours",
+"page": "https://commons.wikimedia.org/wiki/File:Skip_Samherja-Vilhelm_%C3%9Eorsteinsson_EA_11_20210404_114549.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Skagen harbour",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Skip_Samherja-Vilhelm_%C3%9Eorsteinsson_EA_11_20210404_114549.jpg/1280px-Skip_Samherja-Vilhelm_%C3%9Eorsteinsson_EA_11_20210404_114549.jpg"
+},
 "p-a3c0aa54e912": {
 "at": "2026-10-12",
 "author": "Ramjchandran",
@@ -37819,6 +38391,17 @@
 "source": "National Gallery of Art, Washington, CC0",
 "topic": "Thistle with Insects",
 "url": "https://api.nga.gov/iiif/0ea96c95-28dd-4314-8051-4a5a7ad326f6/full/!2000,2000/0/default.jpg"
+},
+"p-a44b62849bed": {
+"at": "2026-10-12",
+"author": "Ed Uthman from Houston, TX, USA",
+"licence": "CC BY 2.0",
+"packId": "abstract-crystal",
+"page": "https://commons.wikimedia.org/wiki/File:Gypsum_v._Selenite_(4739680750).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "selenite",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Gypsum_v._Selenite_%284739680750%29.jpg/1280px-Gypsum_v._Selenite_%284739680750%29.jpg"
 },
 "p-a45f589994dc": {
 "at": "2026-10-12",
@@ -38141,6 +38724,17 @@
 "topic": "Austin-Healey 3000",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Austin-Healey_3000_Mk_III_6170846-PSD.jpg/1280px-Austin-Healey_3000_Mk_III_6170846-PSD.jpg"
 },
+"p-a58d9edc3c8a": {
+"at": "2026-10-12",
+"author": "Chad Knutsen",
+"licence": "CC BY-SA 4.0",
+"packId": "abstract-crystal",
+"page": "https://commons.wikimedia.org/wiki/File:Native_Copper_from_Michigan.png",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "native copper",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Native_Copper_from_Michigan.png/1280px-Native_Copper_from_Michigan.png"
+},
 "p-a5aa0e5123bf": {
 "at": "2026-10-12",
 "author": "Einaz80",
@@ -38217,6 +38811,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "Chess set",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/World_Chess_Set_Box.jpg/1280px-World_Chess_Set_Box.jpg"
+},
+"p-a5e4e51c512a": {
+"at": "2026-10-12",
+"author": "Jakub Ha\u0142un",
+"licence": "CC BY 4.0",
+"packId": "pack-harbours",
+"page": "https://commons.wikimedia.org/wiki/File:Piran_harbour,_Slovenia,_20240504_1650_8669.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "Piran harbour",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Piran_harbour%2C_Slovenia%2C_20240504_1650_8669.jpg/1280px-Piran_harbour%2C_Slovenia%2C_20240504_1650_8669.jpg"
 },
 "p-a5e6734329cf": {
 "at": "2026-10-12",
@@ -38573,6 +39178,17 @@
 "source": "Wikimedia Commons, CC BY-SA 2.0",
 "topic": "Prunus speciosa",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/%E5%B9%B3%E9%87%8E%E5%8C%82%E6%AB%BB_Cerasus_speciosa_Hirano-odora_-%E6%97%A5%E6%9C%AC%E4%BA%AC%E9%83%BD%E6%A4%8D%E7%89%A9%E5%9C%92_Kyoto_Botanical_Garden%2C_Japan-_%2826888279997%29.jpg/1280px-%E5%B9%B3%E9%87%8E%E5%8C%82%E6%AB%BB_Cerasus_speciosa_Hirano-odora_-%E6%97%A5%E6%9C%AC%E4%BA%AC%E9%83%BD%E6%A4%8D%E7%89%A9%E5%9C%92_Kyoto_Botanical_Garden%2C_Japan-_%2826888279997%29.jpg"
+},
+"p-a83082a4093f": {
+"at": "2026-10-12",
+"author": "Alice Wiegand",
+"licence": "CC BY-SA 3.0",
+"packId": "pack-fruit-markets",
+"page": "https://commons.wikimedia.org/wiki/File:S%C3%BCdfr%C3%BCchte.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "kiwi fruit market",
+"url": "https://upload.wikimedia.org/wikipedia/commons/9/94/S%C3%BCdfr%C3%BCchte.jpg"
 },
 "p-a8327e1b407c": {
 "at": "2026-10-12",
@@ -39259,6 +39875,17 @@
 "topic": "Patatas bravas",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Plato_de_patatas_bravas.jpg/1280px-Plato_de_patatas_bravas.jpg"
 },
+"p-ace0e8c147f0": {
+"at": "2026-10-12",
+"author": "Alexander Baxevanis",
+"licence": "CC BY 2.0",
+"packId": "pack-fruit-markets",
+"page": "https://commons.wikimedia.org/wiki/File:Fruit_%26_Veg,_Mercado_dos_Lavradores,_Funchal_-_Nov_2010.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "Mercado dos Lavradores fruit",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Fruit_%26_Veg%2C_Mercado_dos_Lavradores%2C_Funchal_-_Nov_2010.jpg/1280px-Fruit_%26_Veg%2C_Mercado_dos_Lavradores%2C_Funchal_-_Nov_2010.jpg"
+},
 "p-ad484b506de7": {
 "at": "2026-10-12",
 "author": "Pamkelso",
@@ -39745,6 +40372,17 @@
 "source": "Wikimedia Commons, CC BY 4.0",
 "topic": "Fishing reel",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Fishing_reel_Nevskaya_2026_G1.jpg/1280px-Fishing_reel_Nevskaya_2026_G1.jpg"
+},
+"p-b04ec516fb62": {
+"at": "2026-10-12",
+"author": "Thomas Spann",
+"licence": "CC BY 2.0",
+"packId": "abstract-crystal",
+"page": "https://commons.wikimedia.org/wiki/File:Apophyllite_(13156416344).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "apophyllite",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Apophyllite_%2813156416344%29.jpg/1280px-Apophyllite_%2813156416344%29.jpg"
 },
 "p-b0515b199613": {
 "at": "2026-10-12",
@@ -41086,6 +41724,17 @@
 "topic": "tomatoes vine",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Tomato_growing_close-up_2024.jpg/1280px-Tomato_growing_close-up_2024.jpg"
 },
+"p-b881ce9ab1a1": {
+"at": "2026-10-12",
+"author": "Gordon Hatton",
+"licence": "CC BY-SA 2.0",
+"packId": "pack-harbours",
+"page": "https://commons.wikimedia.org/wiki/File:Tobermory_harbour_front_from_above_-_geograph.org.uk_-_1818949.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 2.0",
+"topic": "Tobermory Mull harbour",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Tobermory_harbour_front_from_above_-_geograph.org.uk_-_1818949.jpg/1280px-Tobermory_harbour_front_from_above_-_geograph.org.uk_-_1818949.jpg"
+},
 "p-b897e7a80c0e": {
 "at": "2026-10-12",
 "author": "Wicki",
@@ -42153,6 +42802,17 @@
 "topic": "door ironwork hinges",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Doors_from_Gannat%2C_V%26A_London.jpg/1280px-Doors_from_Gannat%2C_V%26A_London.jpg"
 },
+"p-bfe2b816ee89": {
+"at": "2026-10-12",
+"author": "Aulaverde",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-fruit-markets",
+"page": "https://commons.wikimedia.org/wiki/File:Mercado_Minorista_de_Pucallpa_frutas_13.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "mercado frutas",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Mercado_Minorista_de_Pucallpa_frutas_13.jpg/1280px-Mercado_Minorista_de_Pucallpa_frutas_13.jpg"
+},
 "p-c00c5315f962": {
 "at": "2026-10-12",
 "author": "Jess Wood",
@@ -42687,6 +43347,17 @@
 "topic": "pumpkin display",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Giant_Pumpkin_Display_%2822385578682%29.jpg/1280px-Giant_Pumpkin_Display_%2822385578682%29.jpg"
 },
+"p-c2b12fb26d49": {
+"at": "2026-10-12",
+"author": "Brendan gibat",
+"licence": "CC BY 4.0",
+"packId": "abstract-crystal",
+"page": "https://commons.wikimedia.org/wiki/File:Bismuth_photo_stack_large_view.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "cat:Bismuth crystals",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Bismuth_photo_stack_large_view.jpg/1280px-Bismuth_photo_stack_large_view.jpg"
+},
 "p-c2b417f300fb": {
 "at": "2026-10-12",
 "author": "Subhrajyoti07",
@@ -42988,6 +43659,17 @@
 "topic": "Starship launch",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Starship_SN9_Open_Rear_Flap.jpg/1280px-Starship_SN9_Open_Rear_Flap.jpg"
 },
+"p-c401bb537706": {
+"at": "2026-10-12",
+"author": "Moleskine",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-renaissance",
+"page": "https://commons.wikimedia.org/wiki/File:Villa_Barbaro_(Maser)_Front.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Villa Barbaro Maser",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Villa_Barbaro_%28Maser%29_Front.jpg/1280px-Villa_Barbaro_%28Maser%29_Front.jpg"
+},
 "p-c402dad5e983": {
 "at": "2026-10-12",
 "author": "Espen Skibbuvollen",
@@ -43140,6 +43822,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "Rosa woodsii",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Tuinen_Mien_Ruys_%28d.j.b.%29_24.jpg/1280px-Tuinen_Mien_Ruys_%28d.j.b.%29_24.jpg"
+},
+"p-c50fac8e3c21": {
+"at": "2026-10-12",
+"author": "Didier Descouens",
+"licence": "CC BY-SA 3.0",
+"packId": "abstract-crystal",
+"page": "https://commons.wikimedia.org/wiki/File:Cerusite_Les_Frages.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "cat:Quality images by Archaeodontosaurus mineralogy",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Cerusite_Les_Frages.jpg/1280px-Cerusite_Les_Frages.jpg"
 },
 "p-c5208013d5fd": {
 "at": "2026-10-12",
@@ -44070,6 +44763,17 @@
 "topic": "AI-generated rose",
 "url": "https://live.staticflickr.com/65535/53438029064_a12e7a7eba_b.jpg"
 },
+"p-ca837ae4b230": {
+"at": "2026-10-12",
+"author": "Fernando",
+"licence": "CC BY-SA 2.0",
+"packId": "pack-renaissance",
+"page": "https://commons.wikimedia.org/wiki/File:Esquina_Casa_de_las_Conchas_(32460351547).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 2.0",
+"topic": "Casa de las Conchas Salamanca",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Esquina_Casa_de_las_Conchas_%2832460351547%29.jpg/1280px-Esquina_Casa_de_las_Conchas_%2832460351547%29.jpg"
+},
 "p-cab96015d21d": {
 "at": "2026-10-12",
 "author": "Jemini 26",
@@ -44525,6 +45229,17 @@
 "topic": "red deer Richmond Park",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Red_Deer_Cervus_Elaphus_in_Richmond_Park_2024_01.jpg/1280px-Red_Deer_Cervus_Elaphus_in_Richmond_Park_2024_01.jpg"
 },
+"p-cd7ccffe4780": {
+"at": "2026-10-12",
+"author": "Giladtop",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-harbours",
+"page": "https://commons.wikimedia.org/wiki/File:Hamn%C3%B8y_-_The_village_in_red.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Hamn\u00f8y",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Hamn%C3%B8y_-_The_village_in_red.jpg/1280px-Hamn%C3%B8y_-_The_village_in_red.jpg"
+},
 "p-cd82bfada527": {
 "at": "2026-10-12",
 "author": "Josh Rokman - AI Images",
@@ -44862,6 +45577,17 @@
 "topic": "buche de Noel yule log cake",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Buche_de_noel_hk.jpg/1280px-Buche_de_noel_hk.jpg"
 },
+"p-cf5b9d69e9ac": {
+"at": "2026-10-12",
+"author": "Diego Delso",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-renaissance",
+"page": "https://commons.wikimedia.org/wiki/File:Real_Monasterio_de_San_Lorenzo_de_El_Escorial,_Madrid,_Espa%C3%B1a,_2025-12-30,_DD_04.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Old Sacristy San Lorenzo Florence",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Real_Monasterio_de_San_Lorenzo_de_El_Escorial%2C_Madrid%2C_Espa%C3%B1a%2C_2025-12-30%2C_DD_04.jpg/1280px-Real_Monasterio_de_San_Lorenzo_de_El_Escorial%2C_Madrid%2C_Espa%C3%B1a%2C_2025-12-30%2C_DD_04.jpg"
+},
 "p-cf6266d4b057": {
 "at": "2026-10-12",
 "author": "\u00c9douard Manet",
@@ -45063,6 +45789,17 @@
 "topic": "bibimbap",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Bibimbap_y_guarniciones.jpg/1280px-Bibimbap_y_guarniciones.jpg"
 },
+"p-d0c2b3af9159": {
+"at": "2026-10-12",
+"author": "Mutney",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-harbours",
+"page": "https://commons.wikimedia.org/wiki/File:Crab_Rock_apartments_and_the_harbour,_The_Warren,_St_Ives,_Cornwall_-_April_2021.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "St Ives harbour Cornwall",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Crab_Rock_apartments_and_the_harbour%2C_The_Warren%2C_St_Ives%2C_Cornwall_-_April_2021.jpg/1280px-Crab_Rock_apartments_and_the_harbour%2C_The_Warren%2C_St_Ives%2C_Cornwall_-_April_2021.jpg"
+},
 "p-d0da5b8c1616": {
 "at": "2026-10-12",
 "author": "Illarion Kalashnikov",
@@ -45118,6 +45855,17 @@
 "source": "flickr via Openverse, CC0",
 "topic": "AI-generated rose",
 "url": "https://live.staticflickr.com/65535/53437714241_9d78c03127_b.jpg"
+},
+"p-d134e63c5f02": {
+"at": "2026-10-12",
+"author": "Zairon",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-renaissance",
+"page": "https://commons.wikimedia.org/wiki/File:Azay-le-Rideaux_Ch%C3%A2teau_d%27Azay-le-Rideau_Nordseite_Portal.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Ch\u00e2teau d'Azay-le-Rideau",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Azay-le-Rideaux_Ch%C3%A2teau_d%27Azay-le-Rideau_Nordseite_Portal.jpg/1280px-Azay-le-Rideaux_Ch%C3%A2teau_d%27Azay-le-Rideau_Nordseite_Portal.jpg"
 },
 "p-d14760a861ea": {
 "at": "2026-10-12",
@@ -45247,6 +45995,17 @@
 "source": "flickr via Openverse, Public Domain Mark",
 "topic": "AI-generated shark",
 "url": "https://live.staticflickr.com/65535/53534093758_c404751a49_b.jpg"
+},
+"p-d2477556eab2": {
+"at": "2026-10-12",
+"author": "Animalculum",
+"licence": "CC BY 4.0",
+"packId": "abstract-crystal",
+"page": "https://commons.wikimedia.org/wiki/File:Opal,_Musee_de_Mineralogie,_Paris,_2025.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "opal",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Opal%2C_Musee_de_Mineralogie%2C_Paris%2C_2025.jpg/1280px-Opal%2C_Musee_de_Mineralogie%2C_Paris%2C_2025.jpg"
 },
 "p-d258686a2958": {
 "at": "2026-10-12",
@@ -45458,6 +46217,17 @@
 "topic": "peach-faced lovebird",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Rosy-faced_lovebird_%28Agapornis_roseicollis_roseicollis%29.jpg/1280px-Rosy-faced_lovebird_%28Agapornis_roseicollis_roseicollis%29.jpg"
 },
+"p-d3bb6db85419": {
+"at": "2026-10-12",
+"author": "claralieu",
+"licence": "CC BY 2.0",
+"packId": "abstract-crystal",
+"page": "https://commons.wikimedia.org/wiki/File:Geode_Reference_-2.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "cat:Geodes",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Geode_Reference_-2.jpg/1280px-Geode_Reference_-2.jpg"
+},
 "p-d3c12f48f3d5": {
 "at": "2026-10-12",
 "author": "ahisgett",
@@ -45468,6 +46238,17 @@
 "source": "flickr via Openverse, CC BY",
 "topic": "BMW Isetta",
 "url": "https://live.staticflickr.com/478/30906946094_de83b07bff_b.jpg"
+},
+"p-d3cfa3c72499": {
+"at": "2026-10-12",
+"author": "Stefano Mazzone Geno\u2026",
+"licence": "CC BY-SA 3.0",
+"packId": "pack-harbours",
+"page": "https://commons.wikimedia.org/wiki/File:Anatre_a_Portofino_-_panoramio.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "Portofino harbour",
+"url": "https://upload.wikimedia.org/wikipedia/commons/6/6f/Anatre_a_Portofino_-_panoramio.jpg"
 },
 "p-d3e3085c355e": {
 "at": "2026-10-12",
@@ -46016,6 +46797,17 @@
 "topic": "Camping tent in forest",
 "url": "https://cdn.stocksnap.io/img-thumbs/960w/IKBXXLK3HN.jpg"
 },
+"p-d6f81e855523": {
+"at": "2026-10-12",
+"author": "b\u00f6hringer friedrich",
+"licence": "CC BY-SA 2.5",
+"packId": "pack-fruit-markets",
+"page": "https://commons.wikimedia.org/wiki/File:Mercat_de_la_Boqueria_Sant_Josep_27.JPG",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 2.5",
+"topic": "La Boqueria fruit",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Mercat_de_la_Boqueria_Sant_Josep_27.JPG/1280px-Mercat_de_la_Boqueria_Sant_Josep_27.JPG"
+},
 "p-d70c0310353d": {
 "at": "2026-10-12",
 "author": "Oksana Sorochan",
@@ -46181,6 +46973,17 @@
 "topic": "Santiago Rusi\u00f1ol garden painting",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Santiago_Rusi%C3%B1ol_-_Gardens_of_the_Generalife_-_Google_Art_Project_%288AF4AAxKEZmchg%29.jpg/1280px-Santiago_Rusi%C3%B1ol_-_Gardens_of_the_Generalife_-_Google_Art_Project_%288AF4AAxKEZmchg%29.jpg"
 },
+"p-d7b957e41254": {
+"at": "2026-10-12",
+"author": "Chabe01",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-renaissance",
+"page": "https://commons.wikimedia.org/wiki/File:Cath%C3%A9drale_Santa_Maria_Fiore_-_Florence_(IT52)_-_2022-08-31_-_54.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Florence Cathedral dome Brunelleschi",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Cath%C3%A9drale_Santa_Maria_Fiore_-_Florence_%28IT52%29_-_2022-08-31_-_54.jpg/1280px-Cath%C3%A9drale_Santa_Maria_Fiore_-_Florence_%28IT52%29_-_2022-08-31_-_54.jpg"
+},
 "p-d7c147a03e64": {
 "at": "2026-10-12",
 "author": "chris-hayes",
@@ -46268,6 +47071,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "meerkat standing",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Standing_meerkat_looking_aside.jpg/1280px-Standing_meerkat_looking_aside.jpg"
+},
+"p-d8707bade595": {
+"at": "2026-10-12",
+"author": "Staselnik",
+"licence": "CC BY-SA 3.0",
+"packId": "pack-renaissance",
+"page": "https://commons.wikimedia.org/wiki/File:Dome_of_Saint_Peter%27s_Basilica_(exterior).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "St Peter's Basilica dome Rome",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Dome_of_Saint_Peter%27s_Basilica_%28exterior%29.jpg/1280px-Dome_of_Saint_Peter%27s_Basilica_%28exterior%29.jpg"
 },
 "p-d8740f0f397e": {
 "at": "2026-10-12",
@@ -46611,6 +47425,17 @@
 "topic": "Asiatic lion",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Lion_%28Panthera_leo%29_male_6y.jpg/1280px-Lion_%28Panthera_leo%29_male_6y.jpg"
 },
+"p-db590ac67497": {
+"at": "2026-10-12",
+"author": "Aulaverde",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-fruit-markets",
+"page": "https://commons.wikimedia.org/wiki/File:Mercado_Minorista_de_Pucallpa_frutas_2.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "mercado frutas",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Mercado_Minorista_de_Pucallpa_frutas_2.jpg/1280px-Mercado_Minorista_de_Pucallpa_frutas_2.jpg"
+},
 "p-db5aab26ec8e": {
 "at": "2026-10-12",
 "author": "caroline legg",
@@ -46644,6 +47469,17 @@
 "topic": "Mount Everest",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Everest_kalapatthar.jpg/1280px-Everest_kalapatthar.jpg"
 },
+"p-db89fcdc7556": {
+"at": "2026-10-12",
+"author": "Kondephy",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-harbours",
+"page": "https://commons.wikimedia.org/wiki/File:Cobh_Harbour_Cathedral.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Cobh harbour",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Cobh_Harbour_Cathedral.jpg/1280px-Cobh_Harbour_Cathedral.jpg"
+},
 "p-db9ed64ca00f": {
 "at": "2026-10-12",
 "author": "Th\u00e1bata Utsumi da Silveira Teles",
@@ -46676,6 +47512,17 @@
 "source": "Wikimedia Commons, CC0",
 "topic": "Carousel horses",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Moscow%2C_New_Arbat%2C_carousel_May_2026_08.jpg/1280px-Moscow%2C_New_Arbat%2C_carousel_May_2026_08.jpg"
+},
+"p-dbd29e31dd9a": {
+"at": "2026-10-12",
+"author": "Gzen92",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-renaissance",
+"page": "https://commons.wikimedia.org/wiki/File:Ch%C3%A2teau_de_Chenonceau_-_chapelle_(Chenonceaux).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Ch\u00e2teau de Chenonceau",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Ch%C3%A2teau_de_Chenonceau_-_chapelle_%28Chenonceaux%29.jpg/1280px-Ch%C3%A2teau_de_Chenonceau_-_chapelle_%28Chenonceaux%29.jpg"
 },
 "p-dbfaa1e33251": {
 "at": "2026-10-12",
@@ -48074,6 +48921,17 @@
 "topic": "notebook pencil",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Llibreta%2C_bol%C3%ADgrafs_i_llapis.jpg/1280px-Llibreta%2C_bol%C3%ADgrafs_i_llapis.jpg"
 },
+"p-e49b373ca602": {
+"at": "2026-10-12",
+"author": "Gi\u00e5m",
+"licence": "CC BY 2.0",
+"packId": "pack-fruit-markets",
+"page": "https://commons.wikimedia.org/wiki/File:Barquettes_de_fruits_au_march%C3%A9_d%27Apt.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "march\u00e9 fruits",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Barquettes_de_fruits_au_march%C3%A9_d%27Apt.jpg/1280px-Barquettes_de_fruits_au_march%C3%A9_d%27Apt.jpg"
+},
 "p-e4b1f7fc948d": {
 "at": "2026-10-12",
 "author": "Charles J. Sharp",
@@ -48106,6 +48964,17 @@
 "source": "Wikimedia Commons, CC BY-SA 3.0",
 "topic": "cat:Palouse",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/00-04-20%2C_steptoe_butte_-_panoramio.jpg/1280px-00-04-20%2C_steptoe_butte_-_panoramio.jpg"
+},
+"p-e4d494dc63fb": {
+"at": "2026-10-12",
+"author": "EHALAM BorG 600M",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-fruit-markets",
+"page": "https://commons.wikimedia.org/wiki/File:HK_WTSD_%E7%89%9B%E6%B1%A0%E7%81%A3%E6%9D%91_Ngau_Chi_Wan_Village_%E8%A1%97%E5%B8%82_food_market_shop_%E7%94%9F%E6%9E%9C_fruit_May_2022_Px3_11.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "mangosteen market",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/HK_WTSD_%E7%89%9B%E6%B1%A0%E7%81%A3%E6%9D%91_Ngau_Chi_Wan_Village_%E8%A1%97%E5%B8%82_food_market_shop_%E7%94%9F%E6%9E%9C_fruit_May_2022_Px3_11.jpg/1280px-HK_WTSD_%E7%89%9B%E6%B1%A0%E7%81%A3%E6%9D%91_Ngau_Chi_Wan_Village_%E8%A1%97%E5%B8%82_food_market_shop_%E7%94%9F%E6%9E%9C_fruit_May_2022_Px3_11.jpg"
 },
 "p-e4d4ff4aba5e": {
 "at": "2026-10-12",
@@ -48305,6 +49174,17 @@
 "source": "Wikimedia Commons, CC BY-SA 3.0",
 "topic": "architecture minimal colour sky",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Eleven_Days_Before_The_Hurricane_%28206715847%29.jpeg/1280px-Eleven_Days_Before_The_Hurricane_%28206715847%29.jpeg"
+},
+"p-e5f2c779b67b": {
+"at": "2026-10-12",
+"author": "Owobusingye",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-fruit-markets",
+"page": "https://commons.wikimedia.org/wiki/File:Fruits_on_display_including_passion_fruits,_oranges_and_tangerine_in_the_market.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "tangerines market",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Fruits_on_display_including_passion_fruits%2C_oranges_and_tangerine_in_the_market.jpg/1280px-Fruits_on_display_including_passion_fruits%2C_oranges_and_tangerine_in_the_market.jpg"
 },
 "p-e5f6921fa3de": {
 "at": "2026-10-12",
@@ -48560,6 +49440,17 @@
 "topic": "grapes on vine autumn",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Nicolini_Ranch_-_Carignan_-_planted_1930s_and_1950.jpg/1280px-Nicolini_Ranch_-_Carignan_-_planted_1930s_and_1950.jpg"
 },
+"p-e7b38a51a558": {
+"at": "2026-10-12",
+"author": "Nanosmile",
+"licence": "CC BY 2.0 de",
+"packId": "pack-harbours",
+"page": "https://commons.wikimedia.org/wiki/File:Henningsvaer_2.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0 de",
+"topic": "Henningsv\u00e6r harbour",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Henningsvaer_2.jpg/1280px-Henningsvaer_2.jpg"
+},
 "p-e7e8deb08929": {
 "at": "2026-10-12",
 "author": "H. Zell",
@@ -48640,6 +49531,17 @@
 "topic": "library bookshelves old",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Spiral_staircase_in_Old_Library_%2841187462195%29.jpg/1280px-Spiral_staircase_in_Old_Library_%2841187462195%29.jpg"
 },
+"p-e87c23f64ff1": {
+"at": "2026-10-12",
+"author": "Rama",
+"licence": "CC BY-SA 3.0 fr",
+"packId": "abstract-crystal",
+"page": "https://commons.wikimedia.org/wiki/File:Agate-MCG_91225-P4150832-black.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0 fr",
+"topic": "agate slice",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Agate-MCG_91225-P4150832-black.jpg/1280px-Agate-MCG_91225-P4150832-black.jpg"
+},
 "p-e87f90f4fd7a": {
 "at": "2026-10-12",
 "author": "Midjourney AI / AI",
@@ -48650,6 +49552,17 @@
 "source": "Wikimedia Commons, Public domain (AI-generated)",
 "topic": "cat:AI-generated mythology",
 "url": "https://upload.wikimedia.org/wikipedia/commons/d/de/Sugaar_%28euskal_mitologia%29_-_Midjourney_AI_bertsioa.png"
+},
+"p-e8aa19123b0f": {
+"at": "2026-10-12",
+"author": "Scott Bauer, USDA",
+"licence": "Public domain",
+"packId": "pack-fruit-markets",
+"page": "https://commons.wikimedia.org/wiki/File:Apricot.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "apricots market",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Apricot.jpg/1280px-Apricot.jpg"
 },
 "p-e8d1787ef41a": {
 "at": "2026-10-12",
@@ -49350,6 +50263,17 @@
 "topic": "Amazon river jungle",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/4_day_trip_to_La_Selva_Lodge_on_the_Napo_River_in_the_Amazon_jungle_of_E._Ecuador_-_%2826260587264%29.jpg/1280px-4_day_trip_to_La_Selva_Lodge_on_the_Napo_River_in_the_Amazon_jungle_of_E._Ecuador_-_%2826260587264%29.jpg"
 },
+"p-ecfe49d43bf7": {
+"at": "2026-10-12",
+"author": "\u00d8yvind Holmstad",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-fruit-markets",
+"page": "https://commons.wikimedia.org/wiki/File:Market_in_San_Pedro_del_Pinatar_in_Spain_2016_-_albaricoques.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "apricots market",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Market_in_San_Pedro_del_Pinatar_in_Spain_2016_-_albaricoques.jpg/1280px-Market_in_San_Pedro_del_Pinatar_in_Spain_2016_-_albaricoques.jpg"
+},
 "p-ed0423f16f82": {
 "at": "2026-10-12",
 "author": "Chafidwahyu",
@@ -49863,6 +50787,17 @@
 "topic": "heart balloon",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/%D0%A1%D0%B5%D1%80%D0%B4%D0%B5%D1%87%D0%BA%D0%B8_%D0%B8_%D0%BE%D1%82%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F.jpg/1280px-%D0%A1%D0%B5%D1%80%D0%B4%D0%B5%D1%87%D0%BA%D0%B8_%D0%B8_%D0%BE%D1%82%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F.jpg"
 },
+"p-efd9c4951938": {
+"at": "2026-10-12",
+"author": "Aulaverde",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-fruit-markets",
+"page": "https://commons.wikimedia.org/wiki/File:Mercado_Minorista_de_Pucallpa_frutas_11.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "mercado frutas",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Mercado_Minorista_de_Pucallpa_frutas_11.jpg/1280px-Mercado_Minorista_de_Pucallpa_frutas_11.jpg"
+},
 "p-efe773139eea": {
 "at": "2026-10-12",
 "author": "Brandon Antonio Segura Torres & Priscilla Vieto Bonilla",
@@ -49917,6 +50852,17 @@
 "source": "Wikimedia Commons, CC BY-SA 2.0",
 "topic": "Steinsdalsfossen",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Norwegen_1998_%28084%29_Steinsdalsfossen_%2834123473755%29.jpg/1280px-Norwegen_1998_%28084%29_Steinsdalsfossen_%2834123473755%29.jpg"
+},
+"p-f04abb02aeed": {
+"at": "2026-10-12",
+"author": "Jamain",
+"licence": "CC BY-SA 4.0",
+"packId": "abstract-crystal",
+"page": "https://commons.wikimedia.org/wiki/File:Sulphur_J1.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "sulphur crystals",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Sulphur_J1.jpg/1280px-Sulphur_J1.jpg"
 },
 "p-f04d87a0f59c": {
 "at": "2026-10-12",
@@ -50640,6 +51586,17 @@
 "topic": "sunflower field blooming",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/File-Gaillardia_pulchella_-_native%3B-Alternate_names-_Firewheel%2C_Indian_blanket%2C_girasol_rojo%3B-Blooms_May_-_August%3B-This_brightly_%2862c8dce4-c442-44b5-9454-f6da22f25ca2%29.JPG/1280px-thumbnail.jpg"
 },
+"p-f4fc358ef50e": {
+"at": "2026-10-12",
+"author": "Marta Kawecka",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-renaissance",
+"page": "https://commons.wikimedia.org/wiki/File:Ch%C3%A2teau_d%27Azay-le-Rideau_en_avril.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Ch\u00e2teau d'Azay-le-Rideau",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Ch%C3%A2teau_d%27Azay-le-Rideau_en_avril.jpg/1280px-Ch%C3%A2teau_d%27Azay-le-Rideau_en_avril.jpg"
+},
 "p-f5033f6d3e76": {
 "at": "2026-10-12",
 "author": "NASA/JPL-Caltech/MSSS/SwRI/Kevin M. Gill",
@@ -50741,6 +51698,17 @@
 "topic": "Taman Negara rainforest",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Lubuk_Simpon_in_Taman_Negara.jpg/1280px-Lubuk_Simpon_in_Taman_Negara.jpg"
 },
+"p-f5c817059883": {
+"at": "2026-10-12",
+"author": "Masha Milshina",
+"licence": "CC BY 4.0",
+"packId": "abstract-crystal",
+"page": "https://commons.wikimedia.org/wiki/File:Cuprite_crystals.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "cuprite",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Cuprite_crystals.jpg/1280px-Cuprite_crystals.jpg"
+},
 "p-f5dafd3a8458": {
 "at": "2026-10-12",
 "author": "John B Fotograf\u00eda",
@@ -50806,6 +51774,17 @@
 "source": "Wikimedia Commons, CC0",
 "topic": "Jan van Huysum flowers painting",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Jan_van_Huysum%2C_Flowers_in_an_Urn%2C_c._1720-1722%2C_NGA_56255.jpg/1280px-Jan_van_Huysum%2C_Flowers_in_an_Urn%2C_c._1720-1722%2C_NGA_56255.jpg"
+},
+"p-f637bfaeb08a": {
+"at": "2026-10-12",
+"author": "Aulaverde",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-fruit-markets",
+"page": "https://commons.wikimedia.org/wiki/File:Mercado_Minorista_de_Pucallpa_frutas_8.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "mercado frutas",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Mercado_Minorista_de_Pucallpa_frutas_8.jpg/1280px-Mercado_Minorista_de_Pucallpa_frutas_8.jpg"
 },
 "p-f63e942fc5cc": {
 "at": "2026-10-12",
@@ -51423,6 +52402,17 @@
 "source": "Wikimedia Commons, CC BY 2.0",
 "topic": "pumpkins market",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Pumpkins_galore_%288083328403%29.jpg/1280px-Pumpkins_galore_%288083328403%29.jpg"
+},
+"p-fa7f9f6880ae": {
+"at": "2026-10-12",
+"author": "CARLOS TEIXIDOR CADENAS",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-renaissance",
+"page": "https://commons.wikimedia.org/wiki/File:El_templete_de_San_Pietro_in_Montorio,_obra_de_Bramante._Real_Academia_de_Espa%C3%B1a_en_Roma._Italia.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Tempietto San Pietro in Montorio",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/El_templete_de_San_Pietro_in_Montorio%2C_obra_de_Bramante._Real_Academia_de_Espa%C3%B1a_en_Roma._Italia.jpg/1280px-El_templete_de_San_Pietro_in_Montorio%2C_obra_de_Bramante._Real_Academia_de_Espa%C3%B1a_en_Roma._Italia.jpg"
 },
 "p-faad6c70bf05": {
 "at": "2026-10-12",
@@ -52189,6 +53179,17 @@
 "source": "Wikimedia Commons, CC BY-SA 3.0",
 "topic": "red panda Cincinnati Zoo",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/RedPandaDescent.JPG/1280px-RedPandaDescent.JPG"
+},
+"p-fecc069e9d5c": {
+"at": "2026-10-12",
+"author": "Animalculum",
+"licence": "CC BY 4.0",
+"packId": "abstract-crystal",
+"page": "https://commons.wikimedia.org/wiki/File:Wulfenite,_Musee_de_Mineralogie,_Paris,_2025.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "wulfenite",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Wulfenite%2C_Musee_de_Mineralogie%2C_Paris%2C_2025.jpg/1280px-Wulfenite%2C_Musee_de_Mineralogie%2C_Paris%2C_2025.jpg"
 },
 "p-fed2c6533f03": {
 "at": "2026-10-12",
