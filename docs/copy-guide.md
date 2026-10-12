@@ -2,7 +2,11 @@
 
 Voice: calm, warm, precise. A good friend who knows the game. No hype, no exclamation stacks, no "awesome".
 
-Terms (always these, always this case): Coins, Tickets, Hints, puzzle, pack, board, card, group, lock, daily puzzle, daily gift, streak, level, VIP, Lucky Wheel, piggy bank, goals, events.
+Terms (always these, always this case): Coins, Tickets, Hints, puzzle, pack, board, card, group, lock, daily puzzle, daily gift, streak, level, VIP, Lucky Wheel, piggy bank, quests, events.
+
+- **Quests** is the tab and the word for the daily and weekly tasks ("Daily quests", "Weekly quests"). Do not say "goals" in the UI; the code still calls them `Goal`/`Goals`.
+- **Events** are the world-day event packs ("Live events" on the Quests tab and Home).
+- Known leftover: the avatar picker toast still says "finish goals"; change it to "finish quests" with the next app change.
 
 CTAs start with a verb and name the outcome:
 - Play · Continue · Replay · Next puzzle · Unlock for 400 (with coin icon) · Go VIP · Claim 60 coins · Spin for 1 ticket · Open piggy bank · Save progress · Create account · Sign in · Watch video

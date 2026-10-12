@@ -73,3 +73,6 @@ store/raw/
 
 # TestFlight feedback ledger and screenshots (tester emails, keep private)
 store/feedback/
+
+# local Python tooling venv (tools/store, tools/content)
+.venv/

@@ -1,0 +1,146 @@
+# Card Jigsaw World — project instructions for Claude Code
+
+Flutter card-swapping picture puzzle game (iOS first, web secondary, Android builds in CI only) with an
+Appwrite backend. Owner: Matej Bačo (GitHub `Meldiron`). Read this file fully before any work; the
+skills under `.claude/skills/` hold the detailed workflows.
+
+## Skills (load them when the task matches)
+
+| Skill | Use for |
+| --- | --- |
+| `.claude/skills/testflight-feedback/` | Pulling TestFlight feedback, fixing it, QA, shipping a build, resolving items on Apple |
+| `.claude/skills/apple-release/` | Any build, TestFlight push, version bump, App Store submission |
+| `.claude/skills/pack-making/` | Picture packs: adding, repairing, auditing, sources, licences |
+
+## Owner rules (non-negotiable, learned from feedback)
+
+- **Design**: no emojis anywhere, no vivid gradients, neutral professional look, colour comes from the
+  photos. One accent: cobalt `Brand.accent` 0xFF2F4FBF (dark 0xFF7C9AFF) in `lib/core/theme/tokens.dart`.
+  Icons only from `lib/widgets/icons.dart` (CoinIcon, TicketIcon = upright "pass" design, HintIcon,
+  AppIcons). Native iOS 26 feel: glass bars/sheets (`lib/widgets/glass.dart`), every confirmation via
+  `showAppAlert` and every sheet via `showAppSheet` in `lib/widgets/ui.dart`. Costs on buttons use
+  `BigButton.cost` / `CostLabel` (currency icon + amount). See `docs/native-ui.md`.
+- **Copy**: calm, precise, short; terms and CTA style in `docs/copy-guide.md`. The `/events` tab is
+  called **Quests**: daily quests, weekly quests and the world-day "Live events" section.
+- **QA is silent**: never start the app without `--dart-define=CJW_MUTE=true` (or `tools/dev/qa.sh`).
+  The owner does not want to hear the game's music while you work.
+- **QA the exact user path**: when fixing a reported problem, reproduce and verify the path the user
+  described (e.g. Home > Continue > puzzle > pause menu), with a simulator screenshot you have looked
+  at. Describing a fix on a screen the user never reaches is not a fix.
+- **Every build also redeploys the web site** (`tools/dev/deploy-web.sh`) from the same commit.
+- **Versioning**: one version string per App Store cycle; TestFlight builds only bump the build number.
+  Details in the apple-release skill. Never bump the version for a TestFlight cut.
+- **Resolve feedback** on Apple after fixing it (`asc_publish.py feedback --resolve`), so items are not
+  fixed twice.
+- **Subagents run on Opus** (`model: "opus"` on every Agent call).
+- **Long multi-agent jobs**: watch the active account's 5-hour usage and pause everything when it
+  passes the threshold the owner sets (default 50%): run `tools/dev/usage-watch.sh <LIMIT>` in the
+  background; it exits when the limit is crossed, then stop the agents, push a checkpoint, tell the
+  owner. Keep worker counts modest (4 to 5): many parallel downloads saturated the owner's internet.
+- **Installing on the owner's iPhone**: `tools/dev/device.sh` works over Wi-Fi (the phone is paired;
+  UDID 00008110-000024E63650401E). `--wipe` reinstalls fresh (onboarding), `--no-build` pushes the
+  last build. Release builds keep sound; debug runs are muted.
+- **Commits**: `git -c user.name="Matej Bačo" -c user.email="matej@appwrite.io" commit ...`, push to
+  `origin main` (public repo `Meldiron/card-jigsaw-world`). End messages with the Co-Authored-By
+  trailer the harness gives you. Never `git add -A` while another agent works in the repo; add paths.
+
+## Toolchain
+
+- Flutter 3.47 at `~/flutter` (not on PATH): `export PATH="$HOME/flutter/bin:$PATH"`.
+- Gates before any build: `flutter analyze --fatal-infos --fatal-warnings` and `flutter test`.
+- Simulators: iPhone 17 Pro `CDD7317C-19D6-486D-B258-8AB8A607297D` (QA), iPhone 17 Pro Max
+  `D03644FB-6169-4E87-8E0F-CCFC884FBE78` (App Store 6.9" screenshots).
+- Screenshot QA: `tools/dev/qa.sh shots` = `flutter drive --dart-define=CJW_MUTE=true
+  --driver=test_driver/integration_test.dart --target=integration_test/screenshots_test.dart -d <pro>`
+  → `screenshots/*.png`. Store captures: `test_driver/store_screenshots.dart` +
+  `integration_test/store_screenshots_test.dart` → `store/raw/`. Extra suites:
+  `integration_test/social_profile_test.dart`, `merge_sheet_test.dart`.
+  Quirks: capture is in-app (host `simctl io screenshot` fires too late); uninstall the app before a
+  second same-day run (`xcrun simctl uninstall <udid> com.matejbaco.cardjigsawworld`, the daily gift is
+  otherwise already claimed); a stuck "Open in Card Jigsaw?" prompt needs a simulator reboot; started
+  puzzles resume directly, so tests needing the difficulty screen open an untouched picture.
+- Board shape harness: `flutter test test/board_widget_test.dart` renders fused-group shapes for all
+  modes to `build/board_shapes/`.
+- Python helpers (store tooling, content): `python3 -m venv .venv && .venv/bin/pip install -r
+  tools/content/requirements.txt` once (`.venv/` is git-ignored), then `.venv/bin/python
+  tools/store/asc_publish.py ...`.
+
+## Code map
+
+- `lib/game/`: `board.dart` (permutation board; shuffle is a derangement with zero joined pairs),
+  `tiling.dart` (Grid/Triangle/Hex tilings, `fit`/`crop`, `boardAspect`, neighbours, vertex geometry),
+  `modes.dart` (cards ×1.0, squares ×1.15, triangles ×1.35, hexagons ×1.5; route code
+  `<mode>-CxR`), `image_loader.dart`.
+- `lib/features/game/`: `board_widget.dart` (one render path for all modes: unplaced pieces dimmed
+  16%, joined groups fused with a cobalt outer outline, locked clusters fused without outline),
+  `game_screen.dart` (HUD, toolbar Undo/Peek/Magic/Hint, pause sheet with "Change mode or board",
+  completion overlay with pack progress and "View picture"), `difficulty_screen.dart` (real-aspect
+  preview, rewards chips, Discard progress).
+- `lib/state/`: `profile.dart` (`Economy` constants, VIP, piggy 5/picture up to 500), `rewards.dart`
+  (level curve `LevelRewards.levelForXp`, daily 3 + 1 VIP / weekly 5 + 1 VIP quests), `achievements.dart`,
+  `progress.dart`, `merge.dart` + `merge_flow.dart` (guest→account save merge), `auth.dart`, `social.dart`.
+- `lib/features/ads/house_ads.dart`: house ads only (no ad network). Break offer every 3rd completion
+  or when the last break is 3+ minutes old, closable after 5 s, rewarded 15 s; the offer CTA never
+  skips the rewarded countdown.
+- `lib/data/purchases.dart`: StoreKit products (coins_1000/3000/5500/12000, tickets_5/15, hints_5/15,
+  vip_monthly/yearly), verified server-side by the `verify-purchase` function.
+- `lib/core/platform.dart`: web capability flags, `proxiedImageUrl` for CORS-blocked hosts.
+  `lib/core/sfx.dart`: `CJW_MUTE`.
+- Routes (`lib/router.dart`): /welcome /home /library /library/pack/:packId /events (Quests) /social
+  /profile (+settings, account, my-puzzles) /play/:puzzleId (difficulty) /game/:puzzleId/:grid /store
+  /wheel /auth/callback /player/:userId.
+
+## Backend (Appwrite Cloud)
+
+- Endpoint `https://fra.cloud.appwrite.io/v1`, project `6acb4de5003e38d5ebd9`, database `cjw`
+  (tables profiles, packs, puzzles, progress, events, event_progress, friends, ledger, my_puzzles,
+  purchases). Profiles are readable by anyone; `level` mirrors XP; aggregates `totalMoves`,
+  `totalSeconds`, `solvedByMode` are public.
+- Functions: `verify-purchase` (StoreKit 2 JWS verification, grants, App Store Server Notifications at
+  `https://cjw-verify-purchase.fra.appwrite.run/notifications`; secret vars can only be updated with
+  `secret: true`), `image-proxy` (`https://cjw-img.fra.appwrite.run/?u=<encoded>`, allow-listed hosts).
+- Site `card-jigsaw-world` → https://card-jigsaw-world.appwrite.network (static, fallback index.html),
+  deployed by `tools/dev/deploy-web.sh` (chunked upload). Web build hides purchases, gift codes,
+  widgets; Apple sign-in on web uses the OAuth redirect `/auth/callback` (browser sign-in still needs a
+  Services ID + key from the owner, see `docs/release-checklist.md`).
+- Auth: anonymous guests, email, native Sign in with Apple (`createIdTokenSession`, nonce flow; falls
+  back to the existing account on 409). Google/Facebook intentionally removed.
+- Appwrite MCP: pass `project_id` as the top-level call parameter, not inside `arguments`.
+
+## App Store / TestFlight
+
+- Bundle `com.matejbaco.cardjigsawworld` (widget `.DailyWidget`), team `C24QP73SQM`, app id
+  `6821644423`, primary locale en-GB, iPhone only. Current cycle: version **1.7.0**; builds 103 and 108
+  passed Beta App Review, so later 1.7.0 builds reach public testers without review.
+- Groups: "Internal testers" (all builds instantly), "Public testers"
+  (https://testflight.apple.com/join/7nPCfg6A).
+- Subscriptions: vip_monthly 6821645754 ($2.99), vip_yearly 6821646642 ($14.99), both 1-week trial;
+  eight consumables (see `lib/data/purchases.dart`). Gift offer codes exist ("VIP Monthly gift", "VIP Yearly
+  gift"); single-use codes can only be minted after the app is live (`tools/store/offer_codes.py`).
+- `tools/store/asc_publish.py`: `audit`, `status`, `feedback [--resolve IDS --note TEXT]`,
+  `testflight`, `release`, `submit`, metadata/screenshots/iap/subscriptions commands. Docs:
+  `tools/store/README.md`, `docs/release-flow.md`, `docs/release-checklist.md`.
+- Not yet done (owner): App Privacy questionnaire, Paid Applications agreement, App Store submission.
+
+## Secrets
+
+`secrets/` is git-ignored (only `app-store-connect-issuer-id.txt` is tracked): App Store Connect key
+`AuthKey_9QC72A5QMN.p8`, distribution `Certificates.p12` + password, Appwrite keys
+(`appwrite-api-key.txt` rows/tables scopes, `appwrite-sites-key.txt`), `content-keys.env` (Openverse
+client). Never print or commit their values. GitHub Actions has the signing secrets.
+
+## Work that may be running in parallel
+
+A picture-catalogue repair may be running in another session (Opus workers under the pack-making
+skill, state in `tools/content/reports/state.json`, checkpoints pushed every 30 minutes). If it is:
+do not edit `tools/content/**`, the pack-making skill or content docs, do not stop those agents, and
+leave these four TestFlight feedback items open (they are the content work's):
+AAX-tfwxcKgwk8WC7ZmPEIM, AFs4NDzzaDynNOI55qyTIkM, ANO-zfTaIYOjY-ueQhFp1QM, AEkB37H2zKX9inL57pfg2gE.
+Pull before you push; their checkpoints commit only their own paths.
+
+## Docs index
+
+`docs/native-ui.md` (glass components), `docs/copy-guide.md`, `docs/house-ads.md`,
+`docs/purchases.md`, `docs/web.md`, `docs/release-flow.md`, `docs/release-checklist.md`,
+`docs/content-rules.md`, `docs/content-sources.md`, `store/README.md` (store assets),
+`tools/store/README.md`, `README.md`.
