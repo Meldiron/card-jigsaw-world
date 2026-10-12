@@ -14,9 +14,9 @@ import 'settings.dart';
 
 /// Economy rules in one place so UI and backend stay consistent.
 class Economy {
-  static const hintCostCoins = 60;
-  static const magicLockCostCoins = 120;
-  static const peekCostCoins = 30;
+  static const hintCostCoins = 150;
+  static const magicLockCostCoins = 300;
+  static const peekCostCoins = 75;
   static const piggyOpenTickets = 1;
   static const wheelSpinTickets = 1;
 

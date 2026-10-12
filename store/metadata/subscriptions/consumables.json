@@ -51,20 +51,20 @@
       "reviewNote": "Consumable. Adds 30 tickets after server-side verification."
     },
     {
-      "referenceName": "Hints 40 (hints_5)",
+      "referenceName": "Hints 16 (hints_5)",
       "productId": "hints_5",
-      "name": "40 hints",
+      "name": "16 hints",
       "description": "Reveal where a card belongs",
       "customerPrice": "0.99",
-      "reviewNote": "Consumable. Adds 40 hints after server-side verification. A hint moves one card to its true spot."
+      "reviewNote": "Consumable. Adds 16 hints after server-side verification. A hint moves one card to its true spot."
     },
     {
-      "referenceName": "Hints 120 (hints_15)",
+      "referenceName": "Hints 48 (hints_15)",
       "productId": "hints_15",
-      "name": "120 hints",
+      "name": "48 hints",
       "description": "Hints for the biggest boards",
       "customerPrice": "2.49",
-      "reviewNote": "Consumable. Adds 120 hints after server-side verification."
+      "reviewNote": "Consumable. Adds 48 hints after server-side verification."
     }
   ]
 }

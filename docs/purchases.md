@@ -14,8 +14,8 @@ Apple product ids cannot be renamed, so the number in a consumable id is histori
 | `coins_12000` | consumable | 30,000 coins | $9.99 |
 | `tickets_5` | consumable | 10 tickets | $1.99 |
 | `tickets_15` | consumable | 30 tickets | $4.99 |
-| `hints_5` | consumable | 40 hints | $0.99 |
-| `hints_15` | consumable | 120 hints | $2.49 |
+| `hints_5` | consumable | 16 hints | $0.99 |
+| `hints_15` | consumable | 48 hints | $2.49 |
 | `vip_monthly` | auto-renewable, group `VIP` | VIP until `expiresDate`; 7-day free introductory offer | $2.99 / month (Apple price-point equalised per country) |
 | `vip_yearly` | auto-renewable, group `VIP` | VIP until `expiresDate`; 7-day free introductory offer | $14.99 / year (Apple price-point equalised per country) |
 

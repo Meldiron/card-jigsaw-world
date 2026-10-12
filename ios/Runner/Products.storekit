@@ -99,12 +99,12 @@
       "localizations": [
         {
           "description": "5 hints",
-          "displayName": "40 hints",
+          "displayName": "16 hints",
           "locale": "en_US"
         }
       ],
       "productID": "hints_5",
-      "referenceName": "40 hints",
+      "referenceName": "16 hints",
       "type": "Consumable"
     },
     {
@@ -114,12 +114,12 @@
       "localizations": [
         {
           "description": "15 hints",
-          "displayName": "120 hints",
+          "displayName": "48 hints",
           "locale": "en_US"
         }
       ],
       "productID": "hints_15",
-      "referenceName": "120 hints",
+      "referenceName": "48 hints",
       "type": "Consumable"
     }
   ],

@@ -135,6 +135,10 @@ void main() {
     await shot(tester, '04b_library_daily');
     await tapText(tester, 'October 2026', ms: 4000);
     await shot(tester, '04c_daily_month');
+    // The last row of the month grid must clear the floating tab bar.
+    await tester.fling(find.byType(Scrollable).first, const Offset(0, -3000), 3000);
+    await settle(tester, 1500);
+    await shot(tester, '04e_daily_month_bottom');
     await tester.tap(find.byIcon(CupertinoIcons.back).first, warnIfMissed: false);
     await settle(tester, 1200);
     // An older month is locked for non-VIP players.
@@ -148,9 +152,10 @@ void main() {
     // Open first puzzle tile via its title.
     await tapText(tester, 'Hidden Waterfall', ms: 4000);
     await shot(tester, '06_difficulty');
-    await tester.dragUntilVisible(find.text('3x3'), find.byType(Scrollable).first, const Offset(0, -200));
+    // Board sizes now depend on the picture's shape; pick the tier by name.
+    await tester.dragUntilVisible(find.text('Cozy'), find.byType(Scrollable).first, const Offset(0, -200));
     await settle(tester, 600);
-    await tapText(tester, '3x3');
+    await tapText(tester, 'Cozy');
     await settle(tester, 500);
     await tester.tap(find.textContaining('Play'), warnIfMissed: false);
     await settle(tester, 6000);
@@ -229,11 +234,29 @@ void main() {
     await tapText(tester, 'Back to results', ms: 900);
     await tapText(tester, 'Back to pack', ms: 2000);
 
-    // Store (full-screen modal) from the home header coin pill.
+    // Home after a solved picture: live-event and daily-month cards show
+    // pack progress like the library cards.
     await tapText(tester, 'Home', ms: 2000);
+    final homeScroll = find.byWidgetPredicate((w) => w is Scrollable && w.axisDirection == AxisDirection.down).first;
+    if (find.text('Live events').evaluate().isEmpty) {
+      await tester.dragUntilVisible(find.text('Live events'), homeScroll, const Offset(0, -150));
+    }
+    await tester.ensureVisible(find.text('Live events'));
+    await tester.drag(homeScroll, const Offset(0, -260));
+    await settle(tester, 1500);
+    await shot(tester, '02c_home_events_daily');
+    await tester.fling(homeScroll, const Offset(0, 3000), 3000);
+    await settle(tester, 1000);
+
+    // Store (full-screen modal) from the home header coin pill.
     await tester.tap(find.byIcon(CupertinoIcons.plus).last, warnIfMissed: false);
     await settle(tester, 1500);
     await shot(tester, '12_store');
+    await tester.fling(find.byType(Scrollable).first, const Offset(0, -4000), 3000);
+    await settle(tester, 1500);
+    await shot(tester, '12d_store_bottom');
+    await tester.fling(find.byType(Scrollable).first, const Offset(0, 4000), 3000);
+    await settle(tester, 1200);
     // Rewarded house ad: open, capture, then close early (reward forfeited).
     if (find.text('Watch').evaluate().isNotEmpty) {
       await tapText(tester, 'Watch', ms: 2500);
@@ -264,6 +287,9 @@ void main() {
     // Quests, Social, Profile, Settings.
     await tapText(tester, 'Quests', ms: 3000);
     await shot(tester, '15_events');
+    await tester.fling(find.byType(CustomScrollView).last, const Offset(0, -700), 2000);
+    await settle(tester, 1500);
+    await shot(tester, '15a_weekly_quests');
     await tester.fling(find.byType(CustomScrollView).last, const Offset(0, -2200), 2500);
     await settle(tester, 2500);
     await shot(tester, '15b_events_live');
@@ -304,10 +330,10 @@ void main() {
     await tapText(tester, 'Wild Nature', ms: 3000);
     await shot(tester, '24_pack_dark');
     await tapText(tester, 'Hidden Waterfall', ms: 3000);
-    if (find.text('4x4').evaluate().isNotEmpty) {
-      await tester.dragUntilVisible(find.text('4x4'), find.byType(Scrollable).first, const Offset(0, -200));
+    if (find.text('Easy').evaluate().isNotEmpty) {
+      await tester.dragUntilVisible(find.text('Easy'), find.byType(Scrollable).first, const Offset(0, -200));
       await settle(tester, 600);
-      await tapText(tester, '4x4');
+      await tapText(tester, 'Easy');
       await tester.tap(find.textContaining('Play'), warnIfMissed: false);
     }
     await settle(tester, 6000);
@@ -327,7 +353,7 @@ void main() {
       ('Squares', 'Green Valley', null, [('L', [0, 1, 4]), ('T', [0, 1, 2, 5])]),
       ('Triangles', 'Snowy Peaks', null, [('row3', [0, 1, 2])]),
       ('Hexagons', 'Canyon Glow', null, [('bent', [0, 1, 5])]),
-      ('Hexagons', 'Rolling Hills', '3x4', const []),
+      ('Hexagons', 'Rolling Hills', 'Cozy', const []),
     ]) {
       // Back on the pack page? Capture whatever is there otherwise and try
       // to get back (a dialog, the game screen or a sheet may linger).

@@ -1,6 +1,5 @@
 import 'dart:math' as math;
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -19,6 +18,7 @@ import '../../state/progress.dart';
 import '../../state/rewards.dart';
 import '../../state/settings.dart';
 import '../../state/social.dart';
+import '../../widgets/cached_url_image.dart';
 import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
@@ -98,7 +98,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
     _resolvedUrl = url;
     _stopListening();
     _imageSize = null;
-    final stream = CachedNetworkImageProvider(proxiedImageUrl(url)).resolve(ImageConfiguration.empty);
+    final stream = CachedUrlImage(proxiedImageUrl(url)).resolve(ImageConfiguration.empty);
     final listener = ImageStreamListener((info, _) {
       final size = Size(info.image.width.toDouble(), info.image.height.toDouble());
       info.dispose();

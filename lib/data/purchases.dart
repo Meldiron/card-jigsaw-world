@@ -38,7 +38,7 @@ class ProductGrant {
   final int tickets;
   final int hints;
 
-  /// "2,500 coins", "10 tickets", "40 hints".
+  /// "2,500 coins", "10 tickets", "16 hints".
   String get label => [
         if (coins > 0) '${groupThousands(coins)} coins',
         if (tickets > 0) '${groupThousands(tickets)} ticket${tickets == 1 ? '' : 's'}',
@@ -67,8 +67,8 @@ class StoreProducts {
     ProductIds.coins12000: ProductGrant(coins: 30000),
     ProductIds.tickets5: ProductGrant(tickets: 10),
     ProductIds.tickets15: ProductGrant(tickets: 30),
-    ProductIds.hints5: ProductGrant(hints: 40),
-    ProductIds.hints15: ProductGrant(hints: 120),
+    ProductIds.hints5: ProductGrant(hints: 16),
+    ProductIds.hints15: ProductGrant(hints: 48),
   };
 
   /// USD customer prices (consumables.json and vip_*.json `customerPrice`).

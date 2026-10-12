@@ -6,7 +6,6 @@ import 'package:confetti/confetti.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -22,6 +21,7 @@ import '../../state/profile.dart';
 import '../../state/progress.dart';
 import '../../state/settings.dart';
 import '../../state/social.dart';
+import '../../widgets/hash_image.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 import '../ads/house_ads.dart';
@@ -379,7 +379,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                                 if (puzzle.blurhash != null)
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(16),
-                                    child: Opacity(opacity: 0.6, child: BlurHash(hash: puzzle.blurhash!, color: c.boardBackground)),
+                                    child: Opacity(opacity: 0.6, child: HashImage(hash: puzzle.blurhash!, color: c.boardBackground)),
                                   ),
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.center,

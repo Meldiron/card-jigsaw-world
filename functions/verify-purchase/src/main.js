@@ -33,8 +33,8 @@ const GRANTS = {
   coins_12000: { coins: 30000 },
   tickets_5: { tickets: 10 },
   tickets_15: { tickets: 30 },
-  hints_5: { hints: 40 },
-  hints_15: { hints: 120 },
+  hints_5: { hints: 16 },
+  hints_15: { hints: 48 },
   vip_monthly: { vip: true },
   vip_yearly: { vip: true },
 };

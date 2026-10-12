@@ -1,7 +1,5 @@
 import 'dart:ui';
 
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +7,9 @@ import '../core/haptics.dart';
 import '../core/sfx.dart';
 import '../core/platform.dart';
 import '../core/theme/tokens.dart';
+import 'cached_url_image.dart';
 import 'glass.dart';
+import 'hash_image.dart';
 import 'icons.dart';
 
 /// A tappable surface that scales down slightly while pressed (iOS-style).
@@ -451,19 +451,35 @@ class NetImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
+    final hasHash = blurhash != null && blurhash!.length >= 6;
     Widget img = url.isEmpty
         ? Container(color: c.boardBackground)
-        : CachedNetworkImage(
-            imageUrl: proxiedImageUrl(url),
+        : Image(
+            image: CachedUrlImage(proxiedImageUrl(url)),
             fit: fit,
             width: width,
             height: height,
             alignment: alignment,
-            fadeInDuration: const Duration(milliseconds: 250),
-            placeholder: (_, _) => blurhash != null && blurhash!.length >= 6 ? BlurHash(hash: blurhash!, color: c.boardBackground) : const _Shimmer(),
-            errorWidget: (_, _, _) => blurhash != null && blurhash!.length >= 6
-                ? BlurHash(hash: blurhash!, color: c.boardBackground)
-                : Container(color: c.boardBackground, child: Icon(CupertinoIcons.photo, color: c.textTertiary)),
+            gaplessPlayback: true,
+            frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+              if (wasSynchronouslyLoaded) return child;
+              return Stack(
+                fit: StackFit.passthrough,
+                children: [
+                  // A BlurHash is static, so it can stay under the picture;
+                  // the animated shimmer goes away once the picture is in.
+                  if (frame == null || hasHash) Positioned.fill(child: hasHash ? HashImage(hash: blurhash!, color: c.boardBackground) : const _Shimmer()),
+                  AnimatedOpacity(opacity: frame == null ? 0 : 1, duration: const Duration(milliseconds: 250), curve: Curves.easeOut, child: child),
+                ],
+              );
+            },
+            errorBuilder: (_, _, _) => SizedBox(
+              width: width,
+              height: height,
+              child: hasHash
+                  ? HashImage(hash: blurhash!, color: c.boardBackground)
+                  : Container(color: c.boardBackground, child: Icon(CupertinoIcons.photo, color: c.textTertiary)),
+            ),
           );
     if (radius > 0) img = ClipRRect(borderRadius: BorderRadius.circular(radius), child: img);
     return img;

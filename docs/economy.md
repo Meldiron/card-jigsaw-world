@@ -134,8 +134,8 @@ cheap farming trick to worry about; replays pay 40% and are not worth farming.
   pack. 500 coins is the anchor: a 10-ticket pack is then worth 5,000 coins, just above the best coin
   packs, which is where premium packs belong. The wheel returns about a quarter of a ticket's value: it
   is a fun way to spend spare tickets, never an investment (it never pays tickets).
-- **Hints: 60 coins each**, because the game sells one for 60 coins whenever a player has none left
-  (`useHint`). That is 36 seconds of play.
+- **Hints: 150 coins each**, because the game sells one for 150 coins whenever a player has none left
+  (`useHint`). That is about 90 seconds of play.
 - **Money**: after this change one dollar buys 2,500 to 3,000 coins, so an hour of regular play is worth
   about $2, a standard pack $0.95 and a showcase pack $1.98.
 
@@ -146,9 +146,9 @@ cheap farming trick to worry about; replays pay 40% and are not worth farming.
 | Coin packs (92) | **2,000 to 5,000** coins (was 300 to 900) | `packs.priceCoins` |
 | Past monthly albums (46) | **2,800 to 3,100** coins (was 400); the current month is free | `packs.priceCoins`, category Daily |
 | Ticket packs (15) | **8, 10 or 12** tickets (was 2 to 4) | `packs.priceTickets` |
-| Hint when none are left | 60 coins | `Economy.hintCostCoins` |
-| Magic Lock | 120 coins | `Economy.magicLockCostCoins` |
-| Peek | 30 coins | `Economy.peekCostCoins` |
+| Hint when none are left | 150 coins (was 60) | `Economy.hintCostCoins` |
+| Magic Lock | 300 coins (was 120) | `Economy.magicLockCostCoins` |
+| Peek | 75 coins (was 30) | `Economy.peekCostCoins` |
 | Early board tier (before its level) | `600 + 300 x tier`: 1,500 / 1,800 / 2,100 / 2,400 / 2,700 for tiers 3 to 7 (levels 2, 3, 5, 7, 10) | `Economy.tierUnlockCoins` |
 | Avatars (28 for coins) | 900 coins each, 25,200 for all | `Economy.avatarCoins` |
 | Lucky Wheel spin | 1 ticket | `Economy.wheelSpinTickets` |
@@ -250,7 +250,7 @@ being added) was picked up as plus, 3,300: the rule works for packs that arrive 
 ## 7. What purchases give
 
 Prices stay as they are; the amounts change. Every bundle is worth about the same per dollar, counting
-a ticket as 500 coins and a hint as 60 coins, and the bigger bundles add up to about a fifth more.
+a ticket as 500 coins and a hint as 150 coins, and the bigger bundles add up to about a fifth more.
 
 | Product id (fixed on Apple) | Price | Before | **After** | Coin value per dollar | Reads as |
 |---|---|---|---|---|---|
@@ -260,14 +260,14 @@ a ticket as 500 coins and a hint as 60 coins, and the bigger bundles add up to a
 | `coins_12000` | $9.99 | 12,000 coins | **30,000 coins** | 3,003 (+18%) | about nine packs, five hours of play |
 | `tickets_5` | $1.99 | 5 tickets | **10 tickets** | 2,513 | most premium packs, or ten spins |
 | `tickets_15` | $4.99 | 15 tickets | **30 tickets** | 3,006 (+19%) | two to three premium packs |
-| `hints_5` | $0.99 | 5 hints | **40 hints** | 2,424 | |
-| `hints_15` | $2.49 | 15 hints | **120 hints** | 2,892 (+15%) | |
+| `hints_5` | $0.99 | 5 hints | **16 hints** | 2,424 | |
+| `hints_15` | $2.49 | 15 hints | **48 hints** | 2,892 (+15%) | |
 | `vip_monthly` / `vip_yearly` | $2.99 / $14.99 | VIP | unchanged | | every pack |
 
-Why hints jump so much: the game already sells a hint for 60 coins whenever a player has none, so 5 hints
-for $0.99 was worth 300 coins while the same dollar bought 1,000 (now 2,500) coins. A hint bundle that
-is worse than buying coins and letting the game spend them is not worth offering. If the owner would
-rather keep hint bundles small, raise `Economy.hintCostCoins` first (see section 9) and scale these down.
+Why hint bundles grow: the game sells a hint for 150 coins whenever a player has none (60 before the
+owner approved the booster prices on 2026-10-12), so 5 hints for $0.99 was worth far less than the same
+dollar spent on coins. A hint bundle that is worse than buying coins and letting the game spend them is
+not worth offering, so the bundles are sized to the same value per dollar as coins.
 
 The three places that hold the amounts now agree and are checked by `test/economy_test.dart`:
 `StoreProducts.grants` in `lib/data/purchases.dart` (store screen, house ads, the debug sandbox),
@@ -314,10 +314,9 @@ the new server only gets more than it shows, which is harmless.
 - **Level-ups pay about a fifth of all coins forever** (100 + 25 x level, while the XP per level grows by
   60). That is the main reason earnings feel generous; the owner asked for price changes only, so it is
   untouched.
-- **Boosters, avatars and early board tiers are now cheap** next to packs: a hint is 36 seconds of play,
-  an avatar 9 minutes, an early 6x6 tier 24 minutes. Consider roughly x2.5 (hint 150, Magic Lock 300,
-  Peek 75, avatar 2,500) in `Economy` (lib/state/profile.dart); hint bundles above would then be
-  generous rather than fair.
+- **Boosters were raised x2.5** (owner approved, 2026-10-12): hint 150, Magic Lock 300, Peek 75. Avatars
+  (9 minutes of play) and early board tiers (24 minutes for an early 6x6 tier) are still cheap next to
+  packs; raising them is a separate decision.
 - **Event rewards (300 coins + 1 ticket) are small**: three minutes of play for finishing about 22
   pictures in a week. Left as is (earnings).
 - **The Lucky Wheel returns about a quarter of a ticket's value** (122 coins + 0.18 hints for a ticket
