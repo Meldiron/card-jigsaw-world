@@ -2,7 +2,7 @@
  "id": "evpack-youth-2027",
  "name": "International Youth Day",
  "category": "Event",
- "description": "A limited pack for International Youth Day (12 August 2027). Skateboards, sneakers, electric guitars, headphones, surfboards, skate parks and the gear of growing up, playable for one week.",
+ "description": "A limited pack for International Youth Day (12 August 2027). Skateboards, sneakers, electric guitars, drum kits, arcade machines, bubble tea, backpacks and campus quads, playable for one week.",
  "kind": "event",
  "target": 24,
  "per_topic": 1,
@@ -52,5 +52,6 @@
   "Volleyball",
   "Cassette tapes",
   "Amusement park roller coaster"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Nike_shoes_2.jpg/1280px-Nike_shoes_2.jpg"
 }

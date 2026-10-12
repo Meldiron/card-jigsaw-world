@@ -2,7 +2,7 @@
  "id": "abstract-water-ripples",
  "name": "Water Ripples & Reflections",
  "category": "Abstract",
- "description": "Rippled water bending light and colour into moving abstract patterns.",
+ "description": "Pool caustics, rippled reflections, sunlit shallows and sparkling lakes: water bending light and colour into patterns.",
  "kind": "abstract",
  "price": "coins",
  "priceCoins": 400,
@@ -46,5 +46,20 @@
  ],
  "category_depth": 1,
  "category_limit": 200,
- "openverse_category": "photograph"
+ "openverse_category": "photograph",
+ "more_topics": [
+  "cat:Caustic networks",
+  "cat:Caustics (optics)",
+  "cat:Quality abstract photos",
+  "cat:Abstract nature photography",
+  "water reflection abstract",
+  "rippled reflection",
+  "distorted reflection water",
+  "swimming pool ripples",
+  "water caustics",
+  "reflection colours canal",
+  "lake ripples sunset",
+  "rippling water light"
+ ],
+ "cover": "https://cdn.stocksnap.io/img-thumbs/960w/O35EUL4NXJ.jpg"
 }

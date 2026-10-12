@@ -2,7 +2,7 @@
  "id": "pack-rome",
  "name": "Rome",
  "category": "Cities",
- "description": "The Colosseum and Pantheon, Baroque domes and piazzas, ancient temples and the ochre lanes of Trastevere.",
+ "description": "The Colosseum and the Pantheon's oculus, Baroque domes by Borromini, ancient temples, the Appian Way and Castel Sant'Angelo on the Tiber.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
@@ -55,5 +55,6 @@
   "Galleria Sciarra",
   "Altare della Patria",
   "Ponte Sant'Angelo"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Oculus_Phanteon_Rome_04_2016_6449.jpg/1280px-Oculus_Phanteon_Rome_04_2016_6449.jpg"
 }

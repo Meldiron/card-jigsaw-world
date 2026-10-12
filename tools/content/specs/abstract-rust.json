@@ -2,7 +2,7 @@
  "id": "abstract-rust",
  "name": "Rust & Patina",
  "category": "Abstract",
- "description": "Corroded steel, flaking paint and verdigris: metal and paint surfaces weathered into colour.",
+ "description": "Rusted iron plates, flaking paint, corroded doors and green copper patina: metal and paint weathered into colour.",
  "kind": "abstract",
  "price": "coins",
  "priceCoins": 600,
@@ -48,5 +48,6 @@
  ],
  "category_depth": 1,
  "category_limit": 200,
- "openverse_category": "photograph"
+ "openverse_category": "photograph",
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Minas_de_Riotinto%2C_Zarandas_14.jpg/1280px-Minas_de_Riotinto%2C_Zarandas_14.jpg"
 }

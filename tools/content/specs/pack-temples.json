@@ -2,7 +2,7 @@
  "id": "pack-temples",
  "name": "Temples",
  "category": "Architecture",
- "description": "Angkor's towers, golden stupas, red torii and pagodas, Himalayan monasteries and the columns of ancient Greece and Egypt.",
+ "description": "Golden chedis, red torii and pagodas, Himalayan monasteries, carved Indian halls and the columns of ancient Greece and Egypt.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
@@ -48,7 +48,26 @@
   "Byōdō-in",
   "Nanzen-ji Sanmon",
   "Thien Mu Pagoda",
-  "Tiger's Nest monastery"
+  "Tiger's Nest monastery",
+  "Fushimi Inari-taisha",
+  "Meenakshi Temple",
+  "Borobudur",
+  "Wat Pho",
+  "Brihadeeswarar Temple",
+  "Abu Simbel",
+  "Erechtheion",
+  "Wat Rong Suea Ten",
+  "Yakushi-ji",
+  "Jokhang",
+  "Kiyomizu-dera",
+  "Swayambhunath",
+  "Wat Phra That Doi Suthep",
+  "Luxor Temple",
+  "Edfu Temple",
+  "Temple of Literature Hanoi",
+  "Wat Phra Singh",
+  "Hsinbyume Pagoda"
  ],
- "quality_deepcat": "Quality images of architecture"
+ "quality_deepcat": "Quality images of architecture",
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Gran_Palacio%2C_Bangkok%2C_Tailandia%2C_2013-08-22%2C_DD_18.jpg/1280px-Gran_Palacio%2C_Bangkok%2C_Tailandia%2C_2013-08-22%2C_DD_18.jpg"
 }
