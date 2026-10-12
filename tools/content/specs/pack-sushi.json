@@ -1,0 +1,20 @@
+{
+ "id": "pack-sushi",
+ "name": "Sushi",
+ "category": "Food",
+ "description": "Nigiri, maki, sashimi, temari and chirashi, from salmon and tuna to sea urchin and glistening salmon roe.",
+ "kind": "library",
+ "target": 24,
+ "per_topic": 1,
+ "fetch_per_topic": 4,
+ "author_cap": 2,
+ "sources": ["commons"],
+ "quality_deepcat": "Quality images of food",
+ "topics": [
+  "nigiri sushi", "maki sushi", "sashimi platter", "salmon nigiri", "tuna nigiri", "uni sushi",
+  "ikura gunkan", "temaki", "chirashi", "inari sushi", "California roll", "tamago sushi",
+  "ebi nigiri", "unagi nigiri", "futomaki", "oshizushi", "sushi boat", "sushi bento",
+  "temari sushi", "salmon sashimi", "toro", "uramaki", "dragon roll", "rainbow roll", "hosomaki"
+ ],
+ "more_topics": ["kaiten sushi", "sushi set", "saba sushi", "hamachi sashimi", "kappa maki", "gunkan maki", "sushi rice", "makizushi"]
+}

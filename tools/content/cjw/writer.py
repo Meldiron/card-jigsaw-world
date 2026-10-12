@@ -6,6 +6,21 @@ from .pool import load_pool, save_pool, nice_title, HashIndex
 def puzzle_id_for(url, pack_id=''):
     return 'p-' + hashlib.sha1((pack_id + '|' + url).encode()).hexdigest()[:12]
 
+# Extra attribution fields some opt-in providers carry (photographer page, Unsplash download_location, ...).
+_EXTRA_PROV = ('author_url', 'photo_page', 'download_location', 'object_id')
+
+def _prov_extra(c):
+    return {k: c[k] for k in _EXTRA_PROV if c.get(k)}
+
+def _on_used(c):
+    """Provider hook when a candidate becomes a puzzle (Unsplash download ping); never fails the apply."""
+    if c.get('provider') not in ('unsplash',): return
+    try:
+        from . import sources
+        sources.on_used(c)
+    except Exception as e:
+        print('  provider hook failed:', str(e)[:80])
+
 def _meta_ok(url):
     m = imagecache.fetch(url)
     return m if m.get('ok') else None
@@ -21,6 +36,7 @@ def select_candidates(pool, spec, kept_metas, kept_authors, need, picks=(), auto
         # Appwrite string columns are 512 chars; such URLs would abort apply mid-run.
         if len(c['url']) > 512 or len(c.get('thumb') or '') > 512: return False
         if c.get('status') != 'ok': return False
+        if c.get('hotlink') is False: return False      # e.g. Pixabay: must be re-hosted first, the app hotlinks
         m = _meta_ok(c['url'])
         if not m: return False
         if m['w'] > m['h'] or min(m['w'], m['h']) < filters.MIN_SHORT_HARD: return False
@@ -95,7 +111,8 @@ def apply(spec, snap, target=None, picks=(), auto=True, dry=False, daily=False):
             data = dict(title=nice_title(c, c.get('topic', 'Daily picture')), imageUrl=c['url'], thumbUrl=c['thumb'] or c['url'],
                         author=c['author'][:96], source=c['source'][:128], accent=m['accent'], blurhash=m['blurhash'])
             api.update_row('puzzles', p['$id'], data)
-            state.add_provenance(p['$id'], dict(url=c['url'], author=c['author'], licence=c['licence'], source=c['source'], page=c.get('page', ''), provider=c['provider'], packId=pack_id, replaced=p['imageUrl'], at=time.strftime('%Y-%m-%d')))
+            state.add_provenance(p['$id'], dict(url=c['url'], author=c['author'], licence=c['licence'], source=c['source'], page=c.get('page', ''), provider=c['provider'], packId=pack_id, replaced=p['imageUrl'], at=time.strftime('%Y-%m-%d'), **_prov_extra(c)))
+            _on_used(c)
             state.log('replace', pack=pack_id, puzzle=p['$id'], old=p['imageUrl'], new=c['url'], reason=rejected[p['imageUrl']]['reason'])
             c['status'] = 'used'; created.append(p['$id'])
         leftover = removed[len(chosen):]
@@ -120,7 +137,8 @@ def apply(spec, snap, target=None, picks=(), auto=True, dry=False, daily=False):
                     api.update_row('puzzles', pid, data)
                 else:
                     raise
-            state.add_provenance(pid, dict(url=c['url'], author=c['author'], licence=c['licence'], source=c['source'], page=c.get('page', ''), provider=c['provider'], packId=pack_id, topic=c.get('topic', ''), at=time.strftime('%Y-%m-%d')))
+            state.add_provenance(pid, dict(url=c['url'], author=c['author'], licence=c['licence'], source=c['source'], page=c.get('page', ''), provider=c['provider'], packId=pack_id, topic=c.get('topic', ''), at=time.strftime('%Y-%m-%d'), **_prov_extra(c)))
+            _on_used(c)
             state.log('create', pack=pack_id, puzzle=pid, url=c['url'], topic=c.get('topic', ''))
             c['status'] = 'used'; created.append(pid); order += 1
     save_pool(pool)

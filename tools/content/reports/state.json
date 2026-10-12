@@ -1,8 +1,8 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-12T10:06:53",
-"msg": "Content: checkpoint (29 verified, 4 fixed, 18 audited, 214 pending)",
+"at": "2026-10-12T10:09:45",
+"msg": "Content: checkpoint (32 verified, 5 fixed, 20 audited, 208 pending)",
 "ok": true,
 "pushed": true,
 "stage": "committed"
@@ -34,12 +34,24 @@
 "status": "verified"
 },
 "abstract-light-leaks": {
+"added": 24,
+"at": "2026-10-12T10:25:09",
+"category": "Abstract",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "Light Leaks & Prisms",
+"puzzles": 24,
+"removed": 0,
+"status": "verified"
+},
+"abstract-macro-textures": {
 "added": 0,
-"at": "2026-10-12T09:56:50",
+"at": "2026-10-12T10:25:29",
 "category": "Abstract",
 "kind": "new",
 "last_step": "newpack",
-"name": "Light Leaks & Prisms",
+"name": "Macro Textures",
 "puzzles": 0,
 "removed": 0,
 "status": "pending"
@@ -58,13 +70,14 @@
 },
 "autumn-harvest": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:20:05",
 "category": "Seasonal",
 "kind": "library",
+"last_step": "reject 8 weak",
 "name": "Autumn Harvest",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "city-lights": {
 "added": 0,
@@ -78,15 +91,15 @@
 },
 "cozy-kitchen": {
 "added": 16,
-"at": "2026-10-12T10:09:40",
+"at": "2026-10-12T10:09:42",
 "category": "Food",
-"issues": 1,
+"issues": 0,
 "kind": "library",
-"last_step": "apply",
+"last_step": "verify",
 "name": "Cozy Kitchen",
 "puzzles": 24,
 "removed": 20,
-"status": "fixed"
+"status": "verified"
 },
 "daily-2023-01": {
 "added": 28,
@@ -198,10 +211,10 @@
 },
 "daily-2023-10": {
 "added": 17,
-"at": "2026-10-12T10:02:57",
+"at": "2026-10-12T10:24:19",
 "category": "Daily",
 "kind": "daily",
-"last_step": "reject 1 text",
+"last_step": "reject 5 similar",
 "name": "October 2023",
 "puzzles": 31,
 "removed": 23,
@@ -209,144 +222,157 @@
 },
 "daily-2023-11": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:24:20",
 "category": "Daily",
 "kind": "daily",
+"last_step": "reject 1 weak",
 "name": "November 2023",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "daily-2023-12": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:24:20",
 "category": "Daily",
 "kind": "daily",
+"last_step": "reject 2 weak",
 "name": "December 2023",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "daily-2024-01": {
 "added": 0,
-"at": "2026-10-12T10:08:41",
+"at": "2026-10-12T10:24:20",
 "category": "Daily",
 "kind": "daily",
-"last_step": "pool 28 usable",
+"last_step": "reject 6 weak",
 "name": "January 2024",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "daily-2024-02": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:24:21",
 "category": "Daily",
 "kind": "daily",
+"last_step": "reject 1 people",
 "name": "February 2024",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "daily-2024-03": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:24:21",
 "category": "Daily",
 "kind": "daily",
+"last_step": "reject 2 weak",
 "name": "March 2024",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "daily-2024-04": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:24:21",
 "category": "Daily",
 "kind": "daily",
+"last_step": "reject 2 weak",
 "name": "April 2024",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "daily-2024-05": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:24:22",
 "category": "Daily",
 "kind": "daily",
+"last_step": "reject 1 people",
 "name": "May 2024",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "daily-2024-06": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:24:22",
 "category": "Daily",
 "kind": "daily",
+"last_step": "reject 4 weak",
 "name": "June 2024",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "daily-2024-07": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:24:22",
 "category": "Daily",
 "kind": "daily",
+"last_step": "reject 1 people",
 "name": "July 2024",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "daily-2024-08": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:24:23",
 "category": "Daily",
 "kind": "daily",
+"last_step": "reject 3 weak",
 "name": "August 2024",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "daily-2024-09": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:24:23",
 "category": "Daily",
 "kind": "daily",
+"last_step": "reject 1 people",
 "name": "September 2024",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "daily-2024-10": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:24:24",
 "category": "Daily",
 "kind": "daily",
+"last_step": "reject 6 weak",
 "name": "October 2024",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "daily-2024-11": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:24:24",
 "category": "Daily",
 "kind": "daily",
+"last_step": "reject 2 weak",
 "name": "November 2024",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "daily-2024-12": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:24:24",
 "category": "Daily",
 "kind": "daily",
+"last_step": "reject 4 weak",
 "name": "December 2024",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "daily-2025-01": {
 "added": 0,
@@ -914,15 +940,16 @@
 "status": "verified"
 },
 "evpack-forests-2027": {
-"added": 0,
-"at": "2026-10-12T09:48:25",
+"added": 23,
+"at": "2026-10-12T10:14:49",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "reject 5 weak",
+"last_step": "verify",
 "name": "International Day of Forests",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 13,
+"status": "verified"
 },
 "evpack-friendship-2027": {
 "added": 0,
@@ -1097,25 +1124,28 @@
 "status": "pending"
 },
 "evpack-mental-health-2026": {
-"added": 0,
-"at": "2026-10-12T03:10:30",
+"added": 24,
+"at": "2026-10-12T10:27:21",
 "category": "Event",
+"issues": 1,
 "kind": "event",
-"last_step": "pool 56 usable",
+"last_step": "verify failed",
 "name": "World Mental Health Day",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 14,
+"status": "fixed"
 },
 "evpack-mental-health-2027": {
-"added": 0,
-"at": "2026-10-12T02:04:57",
+"added": 24,
+"at": "2026-10-12T10:26:49",
 "category": "Event",
+"issues": 2,
 "kind": "event",
+"last_step": "verify failed",
 "name": "World Mental Health Day",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 14,
+"status": "fixed"
 },
 "evpack-moon-day-2027": {
 "added": 0,
@@ -1189,13 +1219,14 @@
 },
 "evpack-oceans-2027": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:20:20",
 "category": "Event",
 "kind": "event",
+"last_step": "reject 3 weak",
 "name": "World Oceans Day",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "evpack-peace-2027": {
 "added": 0,
@@ -1496,13 +1527,14 @@
 },
 "evpack-water-day-2027": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:25:35",
 "category": "Event",
 "kind": "event",
+"last_step": "pool 24 usable",
 "name": "World Water Day",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "evpack-wetlands-2027": {
 "added": 0,
@@ -1610,10 +1642,10 @@
 },
 "pack-amsterdam": {
 "added": 0,
-"at": "2026-10-12T09:59:01",
+"at": "2026-10-12T10:25:13",
 "category": "Cities",
 "kind": "library",
-"last_step": "reject 2 off-theme",
+"last_step": "pool 27 usable",
 "name": "Amsterdam",
 "puzzles": null,
 "removed": 0,
@@ -1895,26 +1927,27 @@
 "status": "pending"
 },
 "pack-farm-life": {
-"added": 0,
-"at": "2026-10-12T10:06:57",
+"added": 22,
+"at": "2026-10-12T10:17:23",
 "category": "Animals",
+"issues": 0,
 "kind": "library",
-"last_step": "reject 13 weak",
+"last_step": "verify",
 "name": "Farm Life",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 18,
+"status": "verified"
 },
 "pack-foxes": {
 "added": 0,
-"at": "2026-10-12T03:39:30",
+"at": "2026-10-12T10:17:59",
 "category": "Animals",
 "kind": "library",
-"last_step": "pool 44 usable",
+"last_step": "reject 6 weak",
 "name": "Foxes",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "pack-frogs": {
 "added": 0,
@@ -2035,14 +2068,14 @@
 },
 "pack-impressionists": {
 "added": 0,
-"at": "2026-10-12T02:43:04",
+"at": "2026-10-12T10:20:16",
 "category": "Art",
 "kind": "library",
-"last_step": "pool 76 usable",
+"last_step": "reject 1 quality",
 "name": "Impressionists",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "pack-islands": {
 "added": 0,
@@ -2367,13 +2400,14 @@
 },
 "pack-prague": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:20:58",
 "category": "Cities",
 "kind": "library",
+"last_step": "reject 2 weak",
 "name": "Prague",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "pack-puppies": {
 "added": 0,
@@ -2388,13 +2422,14 @@
 },
 "pack-rainy-streets": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:21:27",
 "category": "Cities",
 "kind": "library",
+"last_step": "reject 3 weak",
 "name": "Rainy Streets",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "pack-renaissance": {
 "added": 0,
@@ -2440,13 +2475,14 @@
 },
 "pack-rome": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:21:57",
 "category": "Cities",
 "kind": "library",
+"last_step": "reject 6 off-theme",
 "name": "Rome",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "pack-sailing": {
 "added": 0,
@@ -2513,13 +2549,14 @@
 },
 "pack-skylines": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:22:24",
 "category": "Cities",
 "kind": "library",
+"last_step": "reject 7 weak",
 "name": "Skylines",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "pack-snowy-peaks": {
 "added": 0,
@@ -2534,13 +2571,14 @@
 },
 "pack-staircases": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:23:06",
 "category": "Architecture",
 "kind": "library",
+"last_step": "reject 1 weak",
 "name": "Staircases",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "pack-starry-nights": {
 "added": 0,
@@ -2575,13 +2613,14 @@
 },
 "pack-street-food": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:23:29",
 "category": "Food",
 "kind": "library",
+"last_step": "reject 1 text",
 "name": "Street Food",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "pack-sunflowers": {
 "added": 0,
@@ -2607,13 +2646,14 @@
 },
 "pack-sushi": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:23:51",
 "category": "Food",
 "kind": "library",
+"last_step": "reject 1 similar",
 "name": "Sushi",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "pack-swiss-villages": {
 "added": 0,
@@ -2627,13 +2667,14 @@
 },
 "pack-temples": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:24:27",
 "category": "Architecture",
 "kind": "library",
+"last_step": "reject 2 weak",
 "name": "Temples",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "pack-textiles": {
 "added": 0,
@@ -2657,13 +2698,14 @@
 },
 "pack-tokyo-nights": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:24:55",
 "category": "Cities",
 "kind": "library",
+"last_step": "reject 1 weak",
 "name": "Tokyo Nights",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "pack-tropical-beaches": {
 "added": 0,
@@ -2689,13 +2731,14 @@
 },
 "pack-venice": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:25:30",
 "category": "Cities",
 "kind": "library",
+"last_step": "reject 1 weak",
 "name": "Venice",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "pack-vineyards": {
 "added": 0,

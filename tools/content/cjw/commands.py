@@ -216,6 +216,17 @@ def cmd_status(a):
         rej = sum(1 for p in puzzles if state.is_rejected(p['imageUrl'], pid))
         print(f'{pid}: {len(puzzles)} puzzles ({rej} rejected pending), pool {len(pool["candidates"])} / {ok} usable; openverse budget {sources.openverse_budget_left()}')
 
+def cmd_sources(a):
+    """Every picture provider: active or not (key present / keyless), licence policy, one live health check."""
+    rows = sources.health(names=a.name or None, refresh=a.refresh, live=not a.offline)
+    w = max([len(r[0]) for r in rows] + [8]) + 2
+    print(f"{'provider':<{w}}{'status':<42}{'licence policy':<54}health")
+    for name, active, status, policy, text in rows:
+        print(f'{name:<{w}}{status[:40]:<42}{policy[:52]:<54}{text}')
+    print('\nA spec opts in by listing providers in "sources" (default ["commons"]). Keys: secrets/content-keys.env. '
+          'Stock licences (Pexels, Pixabay, Unsplash, Flickr Commons) also need owner review and "allow_licences"; '
+          'see docs/content-sources.md.')
+
 def main(argv):
     ap = argparse.ArgumentParser(prog='cli.py')
     sub = ap.add_subparsers(dest='cmd', required=True)
@@ -236,5 +247,6 @@ def main(argv):
     p = sub.add_parser('resume'); p.add_argument('--prefix'); p.add_argument('--batch'); p.add_argument('--next', type=int, default=10); p.add_argument('--auto', action='store_true'); p.set_defaults(f=cmd_resume)
     p = sub.add_parser('checkpoint'); p.add_argument('-m', '--message'); p.set_defaults(f=cmd_checkpoint)
     p = sub.add_parser('status'); p.add_argument('pack', nargs='+'); p.set_defaults(f=cmd_status)
+    p = sub.add_parser('sources'); p.add_argument('name', nargs='*'); p.add_argument('--refresh', action='store_true'); p.add_argument('--offline', action='store_true'); p.set_defaults(f=cmd_sources)
     a = ap.parse_args(argv)
     a.f(a)

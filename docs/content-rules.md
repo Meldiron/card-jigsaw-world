@@ -26,6 +26,15 @@ reports the ones that do not. The pack-making workflow that enforces them is the
    puzzle. AI-generated images are stored with their generator and prompter and are never
    presented as human-made.
 
+   **Stock-site licences need the owner's review first.** The Pexels License, Pixabay Content
+   License, Unsplash License (new API sources, not the legacy Picsum packs) and Flickr Commons' "no
+   known copyright restrictions" are not CC licences, and the free Flickr API key is non-commercial.
+   The tool keeps `pexels`, `pixabay`, `unsplash`, `flickr` and `flickr-commons` inactive until their
+   key is in `secrets/content-keys.env`, and drops their licences unless a spec lists them in
+   `allow_licences`. No pack may use these sources or set `allow_licences` until the owner has
+   reviewed and approved that licence (and, for Pixabay, a re-hosting plan: Pixabay forbids
+   permanent hotlinking).
+
 ## Quality rules (what makes a picture a good puzzle)
 
 - **Clear subject**: one obvious thing to look at, in focus, filling a good part of the frame.

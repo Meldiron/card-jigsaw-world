@@ -58,5 +58,7 @@
   "Anglo-Nubian goat",
   "pygmy goat",
   "Alpine goat"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Poule_-_t%C3%AAte.jpg/1280px-Poule_-_t%C3%AAte.jpg",
+ "accent_from_cover": true
 }

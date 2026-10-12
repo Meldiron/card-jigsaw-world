@@ -1,0 +1,21 @@
+{
+ "id": "pack-skylines",
+ "name": "Skylines",
+ "category": "Cities",
+ "description": "Towers of glass and steel from Shanghai, Hong Kong and Dubai to Chicago, Toronto and Singapore, by day and after dark.",
+ "kind": "library",
+ "target": 24,
+ "per_topic": 1,
+ "fetch_per_topic": 5,
+ "author_cap": 2,
+ "sources": ["commons"],
+ "topics": [
+  "Lujiazui skyline", "Hong Kong skyline", "Dubai Marina skyline", "Burj Khalifa", "Chicago skyline",
+  "Marina Bay skyline", "Frankfurt skyline", "Toronto skyline CN Tower", "Shinjuku skyscrapers", "Lotte World Tower",
+  "Petronas Towers", "Sydney skyline", "Panama City skyline", "Benidorm skyline", "La Défense skyscrapers",
+  "Canary Wharf skyline", "Moscow International Business Center", "Doha skyline", "Shenzhen skyline", "Canton Tower",
+  "Melbourne skyline", "Vancouver skyline", "Seattle skyline Space Needle", "Taipei 101", "Bangkok skyline",
+  "Miami skyline", "Rotterdam skyline"
+ ],
+ "more_topics": ["São Paulo skyline", "Abu Dhabi skyline", "Ho Chi Minh City skyline", "Jakarta skyline", "Tel Aviv skyline", "Warsaw skyline", "Los Angeles skyline", "Brisbane skyline"]
+}

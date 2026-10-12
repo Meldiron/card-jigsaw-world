@@ -16,6 +16,7 @@
   cli.py clone SRC DST                copy all puzzles of SRC into DST (same world day, other year)
   cli.py recover [POOL...]            re-fetch candidates lost to HTTP 429 throttling
   cli.py summary [-v]                 totals from reports/changes.jsonl
+  cli.py sources [NAME...] [--refresh] [--offline]   picture providers: active?, licence policy, live health (cached 10 min)
 """
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))

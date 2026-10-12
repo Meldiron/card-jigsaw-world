@@ -56,8 +56,11 @@ When a theme cannot satisfy the rules (needs people or text), keep the pack id a
 
 ## Rate limits
 
-Commons is shared by all workers: one pack at a time, no parallel pools. Openverse has 190
-requests per day for everyone: do not add `"openverse"` to `sources` unless your brief says so.
+Commons is shared by all workers: one pack at a time, no parallel pools. Openverse now runs on a
+verified registered client (about 9,800 requests per day shared by everyone, 100 per minute), so it
+may be added to `sources` where it fits. Run `tools/content/run.sh sources` to see which providers are
+active and read the skill's Sources section for which ones suit which pack. For art prefer `nga` and
+`rijks` (IIIF, sized renditions) over `met`, whose images are multi-megabyte originals.
 
 ## Throttling (added after the first wave)
 

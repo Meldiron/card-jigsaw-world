@@ -48,7 +48,10 @@ def catalogue_index(snap, only_packs=None):
 def _passes_prefilter(c, spec, catalogue_urls, rejected):
     if c['url'] in catalogue_urls: return 'in-catalogue'
     if state.is_rejected(c['url'], spec['id'], rejected): return 'rejected-before'
-    if not filters.licence_ok(c['licence']): return 'licence'
+    for alt in c.get('alt_urls') or ():          # same file under its default rendition URL (opt-in commons_width)
+        if alt in catalogue_urls: return 'in-catalogue'
+        if state.is_rejected(alt, spec['id'], rejected): return 'rejected-before'
+    if not filters.licence_ok(c['licence']) and c['licence'] not in (spec.get('allow_licences') or ()): return 'licence'
     fl = filters.keyword_flags(c['text'] + ' ' + c['title'], allow=spec.get('allow_words', []))
     if fl: return ';'.join(sorted(fl))
     if c['w'] and c['h']:
@@ -60,19 +63,27 @@ def _passes_prefilter(c, spec, catalogue_urls, rejected):
 def search_topic(topic, spec):
     """Run the spec's sources for one topic. Returns candidates in preference order."""
     found = []
+    wide = {'width': spec['commons_width']} if spec.get('commons_width') else {}     # opt-in larger Commons renditions
     if topic.startswith('cat:'):
-        return sources.commons_category_deep(topic[4:], limit=spec.get('category_limit', 300), depth=spec.get('category_depth', 2))
+        return sources.commons_category_deep(topic[4:], limit=spec.get('category_limit', 300), depth=spec.get('category_depth', 2), **wide)
     for src in spec['sources']:
         if src == 'commons':
             if spec['commons_quality']:
-                found += [dict(c, quality=True) for c in sources.commons_search(topic, limit=40, extra=spec['commons_extra'], quality_cat=spec.get('quality_deepcat'))]
-            found += sources.commons_search(topic, limit=40, quality=False, extra=spec['commons_extra'])
+                found += [dict(c, quality=True) for c in sources.commons_search(topic, limit=40, extra=spec['commons_extra'], quality_cat=spec.get('quality_deepcat'), **wide)]
+            found += sources.commons_search(topic, limit=40, quality=False, extra=spec['commons_extra'], **wide)
         elif src == 'openverse':
             found += sources.openverse_search(topic, category=spec['openverse_category'])
         elif src == 'cma':
             found += sources.cma_search(topic)
         elif src == 'nasa':
             found += sources.nasa_search(topic)
+        elif src in sources.OPT_IN:
+            try:
+                found += sources.search_opt_in(src, topic, spec)
+            except Exception as e:
+                print(f'  {src} error', str(e)[:100])
+        else:
+            print(f'  unknown source {src!r} (see run.sh sources)')
     # de-dup by url, keep first
     seen, out = set(), []
     for c in found:
@@ -168,6 +179,10 @@ def nice_title(c, fallback, taken=()):
     elif topic and c.get('provider', '').startswith(('commons', 'openverse')):
         base = topic[0].upper() + topic[1:]
     elif c.get('provider') in ('cma', 'nasa') and c.get('title'):
+        base = _clean(c['title'])
+    elif topic and c.get('provider') in sources.TOPIC_TITLED:
+        base = topic[0].upper() + topic[1:]
+    elif c.get('provider') in sources.OBJECT_TITLED and c.get('title'):
         base = _clean(c['title'])
     if not base:
         base = _clean(c.get('title') or '') or (fallback[0].upper() + fallback[1:] if fallback else 'Picture')

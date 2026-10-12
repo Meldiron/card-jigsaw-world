@@ -25,15 +25,49 @@ The rules are in `docs/content-rules.md`; this skill is the procedure.
 Plus the puzzle-quality rules: one clear subject, several distinct colours, detail in every
 region (no big flat sky/water/wall), sharp, no borders or watermarks, >= 900 px short side.
 
-## Sources (what to use for what)
+## Sources
 
-| Need | Source | Notes |
+Every picture provider the tool knows, permanently recorded here. `tools/content/run.sh sources` prints
+the same list with live status (active or not, licence policy, one health request each, cached 10 min).
+A spec only uses the providers named in its `"sources"` list (default `["commons"]`), in that order.
+API keys and client credentials live in `secrets/content-keys.env` (git-ignored, `KEY=VALUE` lines, an
+empty value switches the source off). Openverse uses `OPENVERSE_CLIENT_ID` / `OPENVERSE_CLIENT_SECRET`
+of a verified client registered to matejbaco2000@gmail.com. Never print or commit key values.
+
+| Provider id | Good for | Licence policy (enforced) | Key / credential | Rate limit and pacing |
+| --- | --- | --- | --- | --- |
+| `commons` | Everything photographic: places, landscapes, architecture, animals, plants, food, objects; PD-Art museum uploads of paintings; AI and abstract packs (`cat:` topics) | CC0, PD, CC BY, CC BY-SA; NC/ND rejected; personality-rights files skipped | none | No daily limit with our User-Agent; downloads paced 0.7 s across all workers, 429s retried. 1280 px renditions / 960 px thumbs (Wikimedia standard thumbnail steps; spec `commons_width: 1920` opts into larger) |
+| `openverse` | Extra photo variety from Flickr, StockSnap, rawpixel, iNaturalist hosts; landscapes, architecture, still subjects | CC0, PDM, CC BY, CC BY-SA | `OPENVERSE_CLIENT_ID` + `OPENVERSE_CLIENT_SECRET` (registered, verified client; bearer token cached until expiry) | Registered: 10,000 requests/day (tool budget 9,800), 100/min burst, 0.7 s spacing. Without credentials: anonymous 190/day shared by all workers |
+| `met` | Paintings, still lifes, flowers in art, decorative arts, ceramics, textiles | CC0, only `isPublicDomain` objects | none | 0.1 s spacing (Met allows 80 req/s); one request per object, objects cached 60 days; URL is the original image (often 3000-6000 px, several MB) |
+| `nga` | Paintings, prints, drawings, landscapes in art (`nga_classes: ["Painting"]` keeps paintings only) | CC0, only `openaccess = 1` images | none | Open data CSVs (~170 MB) downloaded once into the cache, search is local (no API calls); IIIF `!2000,2000` renditions |
+| `rijks` | Dutch Golden Age paintings, flower and botanical drawings, Delftware, prints | Public domain / CC0 as stated per image | none | 0.5 s spacing; 1 search + 3 resolution requests per object (cached 60 days), so ~30-45 s per topic |
+| `inat` | Animals, birds, insects, butterflies, flowers, fungi, plants: species names (`Danaus plexippus`, `snowy owl`) | CC0 or CC BY per photo, research grade only | none | 1 request/s across all workers (iNaturalist guidance); `original` photos up to 2048 px |
+| `cma` | Fallback for art; small renditions (~700-900 px) | CC0 | none | 0.6 s spacing |
+| `nasa` | Space, Earth from orbit, planets, nebulae | Public domain (NASA) | none | 0.6 s spacing; many landscape images, fetch more |
+| `pexels` | Stock photos (inactive) | Pexels License: needs owner review + spec `allow_licences` | `PEXELS_API_KEY` (empty) | 1 s spacing |
+| `pixabay` | Stock photos (inactive) | Pixabay Content License: owner review + `allow_licences`; no permanent hotlinking, so `apply` refuses these until re-hosted | `PIXABAY_API_KEY` (empty) | 1 s spacing |
+| `unsplash` | Stock photos (inactive) | Unsplash License: owner review + `allow_licences`; photographer and `download_location` recorded, `apply` pings it | `UNSPLASH_ACCESS_KEY` (empty) | 1 s spacing; demo apps 50 requests/hour |
+| `flickr` | Flickr photos under CC BY, CC BY-SA, CC0, PDM (inactive) | CC licences pass; the free API key is non-commercial: owner review first | `FLICKR_API_KEY` (empty) | 1 s spacing |
+| `flickr-commons` | Flickr Commons archives (inactive) | "No known copyright restrictions": owner review + `allow_licences` | `FLICKR_API_KEY` (empty) | 1 s spacing |
+
+Which sources to put in a spec:
+
+| Kind of pack | `"sources"` | Notes |
 | --- | --- | --- |
-| Photos of places, animals, plants, food, objects | Wikimedia Commons search (`commons`) | Quality/Featured images first, then plain search; 1280 px renditions, CC BY-SA mostly. The main engine: no daily limit with a proper User-Agent. |
-| Extra photo variety | Openverse (`openverse`) | Only 190 anonymous requests/day for the whole session, shared by all workers. Use it only for a topic Commons cannot serve. |
-| Paintings, prints, textiles | Commons search with terms like `painting`, `oil on canvas`, artist names (PD-Art uploads from museums at high resolution); CMA (`cma`) as fallback (its renditions are only ~700 px wide) | Reject figures, portraits and manuscript pages. |
-| Space | NASA (`nasa`) | Many NASA images are landscape; fetch more than you need. |
-| AI-generated art | Commons categories (`cat:Category name` topics) under *AI-generated images by subject/artstyle/software* | Licence shows as "Public domain" (PD-algorithm) or CC; author = prompter + generator. |
+| Animals, birds, insects, butterflies, flowers, fungi | `["inat", "commons"]` | Topics as species (scientific or common names). iNaturalist photos often show a hand or a finger holding the animal: reject `people` on the sheet. |
+| Paintings, still lifes, art, botanical art | `["met", "nga", "rijks", "cma", "commons"]` (pick 2-3) | Topics as subjects ("still life flowers", "tulip", "seascape"); museum titles become puzzle titles. Reject figures, portraits, text, and dark varnished canvases. |
+| Space | `["nasa", "commons"]` | |
+| Landscapes, mountains, lakes, cities, architecture, travel | `["commons", "openverse"]` | Commons quality images first; Openverse adds variety. |
+| Food, objects, patterns, events, daily packs | `["commons"]`, optionally `"openverse"` | |
+| AI and Abstract categories | `["commons"]` with `cat:` topics | |
+| Stock photo packs | none | `pexels`, `pixabay`, `unsplash`, `flickr`, `flickr-commons` stay inactive (no keys) and need the owner's licence review before any pack uses them (`docs/content-rules.md`). |
+
+Excluded on purpose: Europeana and Smithsonian Open Access (the owner decided against them). Blocked:
+the Art Institute of Chicago and Library of Congress image servers sit behind Cloudflare challenges and
+refuse automated downloads, so they cannot be used.
+
+Optional spec fields for sources: `source_limit` (results per topic per provider), `nga_classes`,
+`commons_width` (1920 or 3840 renditions instead of 1280), `allow_licences` (owner-approved licences only).
 
 ## Pack spec (tools/content/specs/<packId>.json)
 
@@ -72,6 +106,7 @@ tools/content/run.sh apply PACK --pick c02 c05 ... [--no-auto] [--target 24] [--
 tools/content/run.sh sheet PACK --puzzles-only # final check: read it again
 tools/content/run.sh newpack PACK              # create the pack row for a new spec (before pool/apply)
 tools/content/run.sh status PACK ...           # counts, pool size, openverse budget
+tools/content/run.sh sources                   # providers: active?, licence policy, live health
 ```
 
 Reject reasons: `people`, `text`, `landscape`, `duplicate`, `quality` (global: the image is never
@@ -105,6 +140,17 @@ updates it automatically (`reject` → audited, `apply`/`clone` → fixed, `veri
 log in `reports/changes.jsonl`, rejections in `state/rejects.json`, provenance in
 `state/provenance.json`. All commands are idempotent (re-running `apply` on a finished pack
 changes nothing; `newpack` updates instead of duplicating).
+
+If the scratch folder is gone (reboot, new machine): progress is safe in git
+(`tools/content/reports/state.json`, rejects and provenance); only the download cache and the venv
+lived in the temporary scratch folder. Recreate them and point `tools/content/.local-env` at them:
+
+```
+python3 -m venv ~/.venvs/cjw-content && ~/.venvs/cjw-content/bin/pip install -r tools/content/requirements.txt
+# .local-env: export CJW_PY=~/.venvs/cjw-content/bin/python ; export CJW_CONTENT_CACHE=~/.cache/cjw-content
+```
+
+The cache refills itself on the next runs (NGA data and thumbnails download again).
 
 To resume after an interruption:
 

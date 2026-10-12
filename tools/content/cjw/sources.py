@@ -32,12 +32,53 @@ def _cand(**kw):
 
 # ---------------- Wikimedia Commons ----------------
 # Commons only renders a fixed list of thumbnail widths for anonymous clients (960 and 1280 work).
+# Wikimedia's standard thumbnail steps (production, Commons since January 2026): the imageinfo API rounds
+# other widths up to the next step and direct hotlinks of other widths are rejected, so every width we ask
+# for is one of these. https://www.mediawiki.org/wiki/Common_thumbnail_sizes and
+# https://www.mediawiki.org/wiki/Manual:$wgThumbnailSteps
+WM_STEPS = (20, 40, 60, 120, 250, 330, 500, 960, 1280, 1920, 3840)
+
+def wm_step(width):
+    """Smallest standard Wikimedia thumbnail width >= width (3840 at most)."""
+    w = int(width or 0)
+    for s in WM_STEPS:
+        if s >= w: return s
+    return WM_STEPS[-1]
+
+# The default request stays iiurlwidth=1200: the API rounds it up to the 1280 step, so the URLs are already
+# standard-step renditions (verified on 150 files, 1100-1500 px originals: identical to asking for 1280).
+# Asking for 1280 explicitly would only change the reported thumbwidth/thumbheight (1200 -> 1280) and with it
+# the prefilter's size check, so the default path keeps 1200 and existing pools/caches behave exactly as before.
+COMMONS_REQUEST = 1200
+COMMONS_WIDTH = wm_step(COMMONS_REQUEST)     # 1280: the rendition the default URLs point at
+COMMONS_THUMB = 960
+
+def commons_rendition(url, width):
+    """Rewrite an upload.wikimedia.org original or thumbnail URL (jpeg/png) to the standard-step
+    thumbnail for `width`. Other URLs are returned unchanged. Commons never upscales: only use widths
+    below the original width."""
+    u = _canon(url)
+    m = (re.match(r'^(https://upload\.wikimedia\.org/wikipedia/commons)/thumb/([0-9a-f]/[0-9a-f]{2})/([^/]+)/\d+px-[^/]+$', u)
+         or re.match(r'^(https://upload\.wikimedia\.org/wikipedia/commons)/([0-9a-f]/[0-9a-f]{2})/([^/]+)$', u))
+    if not m or not re.search(r'\.(jpe?g|png)$', m.group(3), re.I): return url
+    base, h, name = m.groups()
+    return f'{base}/thumb/{h}/{name}/{wm_step(width)}px-{name}'
+
 def _canon(u):
     u = u.split('?')[0].replace('https://thumb.wikimedia.org/', 'https://upload.wikimedia.org/')
     return u
 
 def _small(u):
     return re.sub(r'/1280px-', '/960px-', u) if '/1280px-' in u else u
+
+def _wide(c):
+    """Opt-in wider rendition (spec commons_width): 960 px thumb, and remember the default 1280 px URL so
+    rejections and catalogue matches recorded under that URL still apply."""
+    if '/thumb/' in c['url']:
+        c['thumb'] = commons_rendition(c['url'], COMMONS_THUMB)
+        if (c.get('orig_w') or 0) > COMMONS_WIDTH:
+            c['alt_urls'] = [commons_rendition(c['url'], COMMONS_WIDTH)]
+    return c
 
 def _author(a):
     a = (a or '').strip()
@@ -55,9 +96,10 @@ def _ai_tag(cand, categories):
         cand['ai'] = True
     return cand
 
-def commons_search(query, limit=40, offset=0, quality=True, min_h=1000, extra='', quality_cat=None):
+def commons_search(query, limit=40, offset=0, quality=True, min_h=1000, extra='', quality_cat=None, width=None):
     """Search Commons files. quality=True restricts to Quality/Featured images (curated, usually well composed);
-    quality_cat='Quality images of food' uses that curated tree (deepcategory) instead."""
+    quality_cat='Quality images of food' uses that curated tree (deepcategory) instead.
+    width (opt-in, e.g. 1920) asks for a larger standard-step rendition instead of the default 1280."""
     q = query
     if quality and quality_cat:
         q = f'({query}) deepcategory:"{quality_cat}"'
@@ -65,7 +107,7 @@ def commons_search(query, limit=40, offset=0, quality=True, min_h=1000, extra=''
         q = f'({query}) (incategory:"Quality images" OR incategory:"Featured pictures on Wikimedia Commons" OR incategory:"Valued images")'
     q += f' filetype:bitmap fileh:>{min_h} {extra}'
     params = dict(action='query', generator='search', gsrsearch=q, gsrnamespace=6, gsrlimit=limit, gsroffset=offset,
-                  prop='imageinfo', iiprop='url|size|extmetadata|mime', iiurlwidth=1200, iiextmetadatafilter='LicenseShortName|Artist|ImageDescription|Categories|Restrictions|ObjectName|Credit',
+                  prop='imageinfo', iiprop='url|size|extmetadata|mime', iiurlwidth=wm_step(width) if width else COMMONS_REQUEST, iiextmetadatafilter='LicenseShortName|Artist|ImageDescription|Categories|Restrictions|ObjectName|Credit',
                   format='json', formatversion=2)
     url = 'https://commons.wikimedia.org/w/api.php?' + urllib.parse.urlencode(params)
     try:
@@ -93,6 +135,7 @@ def commons_search(query, limit=40, offset=0, quality=True, min_h=1000, extra=''
                          source=f'Wikimedia Commons, {lic}', licence=lic, page=ii.get('descriptionurl', ''),
                          title=title, text=' '.join([title, desc, g('Categories'), g('ObjectName')]),
                          w=tw, h=th, orig_w=w, orig_h=h, provider='commons', commons_title=p['title']))
+        if width: _wide(out[-1])
         _ai_tag(out[-1], g('Categories'))
     return out
 
@@ -115,21 +158,21 @@ def commons_subcats(cat, depth=1, _seen=None):
         out += commons_subcats(t, depth - 1, _seen)
     return out
 
-def commons_category_deep(cat, limit=300, depth=2, per_cat=120):
+def commons_category_deep(cat, limit=300, depth=2, per_cat=120, width=None):
     """Files of a category and its subcategories (depth levels), de-duplicated."""
     cats = [cat if cat.startswith('Category:') else 'Category:' + cat] + commons_subcats(cat, depth)
     seen, out = set(), []
     for c in cats:
         if len(out) >= limit: break
-        for f in commons_category(c, limit=per_cat):
+        for f in commons_category(c, limit=per_cat, **({'width': width} if width else {})):
             if f['url'] in seen: continue
             seen.add(f['url']); out.append(f)
     return out
 
-def commons_category(cat, limit=200, cont=None):
+def commons_category(cat, limit=200, cont=None, width=None):
     """List files in a Commons category (one page) with metadata."""
     params = dict(action='query', generator='categorymembers', gcmtitle=cat if cat.startswith('Category:') else 'Category:' + cat,
-                  gcmtype='file', gcmlimit=min(limit, 50), prop='imageinfo', iiprop='url|size|extmetadata|mime', iiurlwidth=1200,
+                  gcmtype='file', gcmlimit=min(limit, 50), prop='imageinfo', iiprop='url|size|extmetadata|mime', iiurlwidth=wm_step(width) if width else COMMONS_REQUEST,
                   iiextmetadatafilter='LicenseShortName|Artist|ImageDescription|Categories|Restrictions|ObjectName|Credit',
                   format='json', formatversion=2)
     out, seen_cont = [], cont
@@ -156,6 +199,7 @@ def commons_category(cat, limit=200, cont=None):
                              title=title, text=' '.join([title, g('ImageDescription'), g('Categories'), g('ObjectName')]),
                              w=ii.get('thumbwidth', ii.get('width', 0)), h=ii.get('thumbheight', ii.get('height', 0)),
                              orig_w=ii.get('width', 0), orig_h=ii.get('height', 0), provider='commons', commons_title=p['title']))
+            if width: _wide(out[-1])
             _ai_tag(out[-1], g('Categories'))
         seen_cont = d.get('continue', {}).get('gcmcontinue')
         if not seen_cont: break
@@ -165,10 +209,64 @@ def commons_category(cat, limit=200, cont=None):
 BUDGET = CACHE / 'openverse-budget.json'
 DAILY_LIMIT = 190
 
+# Registered client (OPENVERSE_CLIENT_ID + OPENVERSE_CLIENT_SECRET in secrets/content-keys.env): OAuth2
+# client-credentials bearer token, cached until shortly before expiry. Openverse's registered tier is
+# 10,000 requests/day sustained and 100/min burst ("oauth2_client_credentials_*" in Openverse's
+# api/conf/settings/rest_framework.py); it applies only once the registration email is verified, until
+# then the client gets anonymous limits. Without the two values the anonymous path below is unchanged.
+OV_TOKEN_URL = 'https://api.openverse.org/v1/auth_tokens/token/'
+OV_TOKEN_FILE = CACHE / 'openverse-token.json'
+OV_REGISTERED_DAILY = 10000 - 200          # registered sustained limit minus a safety margin
+OV_REGISTERED_DELAY = 0.7                  # 100/min burst -> at most ~86/min across all workers
+
+def _ov_creds():
+    cid, sec = keys.get('OPENVERSE_CLIENT_ID'), keys.get('OPENVERSE_CLIENT_SECRET')
+    return (cid, sec) if cid and sec else None
+
+def _ov_token(fetch=True):
+    """Cached token info {access_token, expires_at, verified, ...} or None (no credentials / failure).
+    fetch=False never touches the network (used for budget display)."""
+    creds = _ov_creds()
+    if not creds: return None
+    tag = hashlib.sha1(creds[0].encode()).hexdigest()[:12]
+    with locked('openverse-token'):
+        try: info = json.loads(OV_TOKEN_FILE.read_text())
+        except Exception: info = {}
+        if info.get('client') != tag: info = {}
+        fresh = info.get('expires_at', 0) > time.time() + 300
+        if not fetch: return info if fresh else (info and {'verified': info.get('verified', False)}) or None
+        if not fresh:
+            body = urllib.parse.urlencode(dict(grant_type='client_credentials', client_id=creds[0], client_secret=creds[1])).encode()
+            req = urllib.request.Request(OV_TOKEN_URL, data=body, method='POST',
+                                         headers=dict(UA, **{'Content-Type': 'application/x-www-form-urlencoded'}))
+            try:
+                with urllib.request.urlopen(req, timeout=30) as r:
+                    tok = json.load(r)
+            except Exception as e:
+                print('  openverse: token request failed (' + (f'http {e.code}' if isinstance(e, urllib.error.HTTPError) else type(e).__name__) + '), using anonymous access')
+                return None
+            info = {'client': tag, 'access_token': tok['access_token'], 'expires_at': time.time() + int(tok.get('expires_in') or 3600)}
+        if not info.get('verified') and time.time() - info.get('checked_at', 0) > 600:
+            try:      # registered limits apply only after the email is verified
+                rl, _ = _http_json('https://api.openverse.org/v1/rate_limit/', delay=OV_REGISTERED_DELAY, retries=0,
+                                   headers={'Authorization': 'Bearer ' + info['access_token']})
+                info.update(verified=bool(rl.get('verified')), model=rl.get('rate_limit_model'), checked_at=time.time())
+            except Exception:
+                info.setdefault('verified', False); info['checked_at'] = time.time()
+        tmp = OV_TOKEN_FILE.with_name(OV_TOKEN_FILE.name + f'.{os.getpid()}.tmp')
+        tmp.write_text(json.dumps(info)); os.chmod(tmp, 0o600); tmp.replace(OV_TOKEN_FILE)
+        return info
+
+def openverse_daily_limit():
+    """190 anonymous; the registered tier (minus margin) once a verified client token exists."""
+    if not _ov_creds(): return DAILY_LIMIT
+    info = _ov_token(fetch=False)
+    return OV_REGISTERED_DAILY if info and info.get('verified') else DAILY_LIMIT
+
 def openverse_budget_left():
     today = dt.date.today().isoformat()
     b = json.loads(BUDGET.read_text()) if BUDGET.exists() else {}
-    return DAILY_LIMIT - b.get(today, 0)
+    return openverse_daily_limit() - b.get(today, 0)
 
 def _openverse_spend():
     with locked('openverse'):
@@ -184,8 +282,17 @@ def openverse_search(query, page=1, category='photograph', aspect='tall,square')
                   mature='false', page_size=20, page=page)
     url = 'https://api.openverse.org/v1/images/?' + urllib.parse.urlencode(params)
     _openverse_spend()
+    tok = _ov_token() if _ov_creds() else None
     try:
-        d = _get_json(url, host_delay=3.2)
+        if tok:
+            try:
+                d, _ = _http_json(url, delay=OV_REGISTERED_DELAY, retries=1, headers={'Authorization': 'Bearer ' + tok['access_token']})
+            except urllib.error.HTTPError as e:
+                if e.code != 401: raise
+                OV_TOKEN_FILE.unlink(missing_ok=True)          # revoked or expired early: anonymous this time
+                d = _get_json(url, host_delay=3.2)
+        else:
+            d = _get_json(url, host_delay=3.2)
     except urllib.error.HTTPError as e:
         print('  openverse http', e.code); return []
     except Exception as e:
@@ -250,3 +357,649 @@ def nasa_search(query, page=1, page_size=50):
     return out
 
 PROVIDERS = {'commons': commons_search, 'openverse': openverse_search, 'cma': cma_search, 'nasa': nasa_search}
+
+# =====================================================================================================
+# Opt-in providers (October 2026). A spec uses them only by naming them in its "sources" list; nothing
+# below changes the providers above or the default sources. Licence policy, attribution and limits are
+# documented in docs/content-sources.md; `run.sh sources` shows which ones are active.
+# =====================================================================================================
+import csv, fcntl, hashlib, os, shutil, sys
+from . import keys
+
+PROVIDER_CACHE = CACHE / 'providers'
+
+def _pdir(name):
+    d = PROVIDER_CACHE / name
+    d.mkdir(parents=True, exist_ok=True)
+    return d
+
+def _xpace(host, delay):
+    """Cross-process spacing of API calls to one host, so parallel workers share a provider's rate limit."""
+    if delay <= 0: return
+    d = _pdir('_pace')
+    safe = re.sub(r'[^a-z0-9.-]', '_', host.lower())
+    with (d / (safe + '.lock')).open('w') as lk:
+        fcntl.flock(lk, fcntl.LOCK_EX)
+        try:
+            try: last = float((d / safe).read_text() or 0)
+            except Exception: last = 0.0
+            start = max(time.time(), last + delay)
+            (d / safe).write_text(repr(start))
+        finally:
+            fcntl.flock(lk, fcntl.LOCK_UN)
+    wait = start - time.time()
+    if wait > 0: time.sleep(wait)
+
+def _http_json(url, delay=1.0, headers=None, timeout=40, retries=2):
+    """GET JSON with per-host cross-process pacing, extra headers and a short 429/503 back-off.
+    Returns (data, response headers). Error messages never contain the URL (keys travel in some URLs)."""
+    host = urllib.parse.urlparse(url).netloc
+    h = dict(UA); h.update(headers or {})
+    for attempt in range(retries + 1):
+        _xpace(host, delay)
+        try:
+            with urllib.request.urlopen(urllib.request.Request(url, headers=h), timeout=timeout) as r:
+                return json.load(r), r.headers
+        except urllib.error.HTTPError as e:
+            if e.code in (429, 503) and attempt < retries:
+                try: wait = float(e.headers.get('Retry-After', '10'))
+                except ValueError: wait = 10.0
+                time.sleep(min(max(wait, 3.0), 60.0)); continue
+            raise
+
+def _disk_json(provider, key, fn, max_age_days=60):
+    """Cache fn() (JSON-serialisable) on disk per provider; failures are not cached."""
+    p = _pdir(provider) / (hashlib.sha1(str(key).encode()).hexdigest()[:20] + '.json')
+    if p.exists() and time.time() - p.stat().st_mtime < max_age_days * 86400:
+        try: return json.loads(p.read_text())
+        except Exception: pass
+    v = fn()
+    tmp = p.with_name(p.name + f'.{os.getpid()}.tmp')
+    tmp.write_text(json.dumps(v)); tmp.replace(p)
+    return v
+
+def _err(provider, e):
+    msg = f'http {e.code}' if isinstance(e, urllib.error.HTTPError) else str(e)[:100]
+    print(f'  {provider} error', msg)
+
+def norm_licence(s):
+    """Licence URL or code -> 'CC0' / 'Public domain' / 'CC BY 4.0' / 'CC BY-SA 3.0' / 'CC BY' ...; '' if not free."""
+    s = (s or '').strip().lower()
+    if 'publicdomain/zero' in s or s in ('cc0', 'cc-0', 'cc0-1.0'): return 'CC0'
+    if 'publicdomain/mark' in s or s in ('pdm', 'pd', 'public domain'): return 'Public domain'
+    m = re.search(r'licenses/(by|by-sa)/(\d\.\d)', s)
+    if m: return ('CC BY' if m.group(1) == 'by' else 'CC BY-SA') + ' ' + m.group(2)
+    return {'cc-by': 'CC BY', 'by': 'CC BY', 'cc-by-sa': 'CC BY-SA', 'by-sa': 'CC BY-SA'}.get(s, '')
+
+def _fit(w, h, box):
+    """Size of a w x h image scaled to fit a box x box square (never upscaled)."""
+    try: w, h = int(w or 0), int(h or 0)
+    except (TypeError, ValueError): return 0, 0
+    if not w or not h: return 0, 0
+    s = min(1.0, box / max(w, h))
+    return int(round(w * s)), int(round(h * s))
+
+def _wider_than_tall(w, h, slack=1.02):
+    try: return float(w) > float(h) * slack
+    except (TypeError, ValueError): return False
+
+# ---------------- Wikimedia Commons: batched imageinfo ----------------
+_II_PROPS = 'LicenseShortName|Artist|ImageDescription|Categories|Restrictions|ObjectName|Credit'
+
+def commons_imageinfo(titles, width=None):
+    """Metadata + standard-step rendition for many Commons files: one request per 50 titles
+    (prop=imageinfo&titles=A|B|...), never one call per file. Returns {title: candidate}; files with
+    a non-free licence, personality-rights restrictions or a non-bitmap type are left out."""
+    titles = list(dict.fromkeys('File:' + t.removeprefix('File:').replace('_', ' ') for t in titles if t))
+    out = {}
+    for i in range(0, len(titles), 50):
+        params = dict(action='query', titles='|'.join(titles[i:i + 50]), prop='imageinfo', iiprop='url|size|extmetadata|mime',
+                      iiurlwidth=wm_step(width) if width else COMMONS_REQUEST, iiextmetadatafilter=_II_PROPS,
+                      format='json', formatversion=2)
+        try:
+            d = _get_json('https://commons.wikimedia.org/w/api.php?' + urllib.parse.urlencode(params))
+        except Exception as e:
+            print('  commons error', str(e)[:100]); continue
+        for p in d.get('query', {}).get('pages', []):
+            ii = (p.get('imageinfo') or [None])[0]
+            if not ii: continue
+            em = ii.get('extmetadata', {})
+            g = lambda k: _strip(em.get(k, {}).get('value', ''))
+            lic = g('LicenseShortName')
+            if not filters.licence_ok(lic) or 'personality' in g('Restrictions').lower(): continue
+            if ii.get('mime') not in ('image/jpeg', 'image/png', 'image/webp'): continue
+            thumb = _canon(ii.get('thumburl') or ii['url'])
+            title = re.sub(r'\.(jpe?g|png|webp)$', '', p['title'].removeprefix('File:'), flags=re.I).replace('_', ' ')
+            c = _cand(url=thumb, thumb=_small(thumb), author=_author(g('Artist') or g('Credit')),
+                      source=f'Wikimedia Commons, {lic}', licence=lic, page=ii.get('descriptionurl', ''), title=title,
+                      text=' '.join([title, g('ImageDescription'), g('Categories'), g('ObjectName')]),
+                      w=ii.get('thumbwidth', ii.get('width', 0)), h=ii.get('thumbheight', ii.get('height', 0)),
+                      orig_w=ii.get('width', 0), orig_h=ii.get('height', 0), provider='commons', commons_title=p['title'])
+            if width: _wide(c)
+            out[p['title']] = _ai_tag(c, g('Categories'))
+    return out
+
+# ---------------- The Metropolitan Museum of Art Open Access (CC0, keyless) ----------------
+# /v1/search was retired on 2026-10-01; /v1.1/search is paginated (offset + limit <= 10,000).
+# The Met asks for at most 80 requests/s; we stay far below (0.1 s spacing). Only the original image is
+# large: "primaryImageSmall" (web-large) is ~600 px, so url = original (often 3000-6000 px, several MB).
+MET_API = 'https://collectionapi.metmuseum.org/public/collection'
+
+def _met_object(oid):
+    return _disk_json('met', oid, lambda: _http_json(f'{MET_API}/v1/objects/{oid}', delay=0.1)[0])
+
+def met_search(query, limit=24, offset=0, scan=60):
+    try:
+        d, _ = _http_json(f'{MET_API}/v1.1/search?' + urllib.parse.urlencode(
+            dict(q=query, hasImages='true', isPublicDomain='true', offset=offset, limit=scan)), delay=0.1)
+    except Exception as e:
+        _err('met', e); return []
+    out = []
+    for oid in d.get('objectIDs') or []:
+        if len(out) >= limit: break
+        try:
+            o = _met_object(oid)
+        except Exception as e:
+            _err('met', e); continue
+        img = o.get('primaryImage') or ''
+        if o.get('isPublicDomain') is not True or not img.startswith('https://'): continue
+        dims = next((m.get('elementMeasurements') or {} for m in o.get('measurements') or []
+                     if (m.get('elementMeasurements') or {}).get('Height') and (m.get('elementMeasurements') or {}).get('Width')), {})
+        if dims and _wider_than_tall(dims['Width'], dims['Height']): continue      # physically landscape
+        tags = ' '.join(t.get('term', '') for t in o.get('tags') or [])
+        out.append(_cand(url=urllib.parse.quote(img, safe=':/%?=&'), thumb=urllib.parse.quote(o.get('primaryImageSmall') or img, safe=':/%?=&'),
+                         author=o.get('artistDisplayName') or o.get('culture') or 'Unknown artist',
+                         source='The Metropolitan Museum of Art, CC0', licence='CC0', page=o.get('objectURL', ''),
+                         title=o.get('title') or '', provider='met', object_id=oid,
+                         text=' '.join([o.get('title') or '', o.get('objectName') or '', o.get('classification') or '',
+                                        o.get('medium') or '', o.get('department') or '', o.get('culture') or '', tags])))
+    return out
+
+# ---------------- National Gallery of Art, Washington (open data, CC0, keyless) ----------------
+# The NGA publishes its collection as CSV on GitHub. Both files (~170 MB) are downloaded once into the
+# content cache and joined into a compact index of open-access primary images; search runs locally.
+NGA_RAW = 'https://raw.githubusercontent.com/NationalGalleryOfArt/opendata/main/data/'
+NGA_MAX_AGE = 30 * 86400
+NGA_BOX = 2000
+_NGA = None
+
+def _nga_download(name, dest):
+    print(f'  nga: downloading {name} (once; cached in {dest.parent})', flush=True)
+    tmp = dest.with_name(dest.name + f'.{os.getpid()}.part')
+    with urllib.request.urlopen(urllib.request.Request(NGA_RAW + name, headers=UA), timeout=600) as r, tmp.open('wb') as f:
+        shutil.copyfileobj(r, f, 1 << 20)
+    tmp.replace(dest)
+
+def nga_index(refresh=False):
+    """[objectid, title, attribution, date, medium, classification, iiif base, w, h, assistive text] rows."""
+    global _NGA
+    if _NGA is not None and not refresh: return _NGA
+    d = _pdir('nga'); idx = d / 'index.json'
+    with locked('nga-index'):
+        if refresh or not idx.exists() or time.time() - idx.stat().st_mtime > NGA_MAX_AGE:
+            for name in ('objects.csv', 'published_images.csv'):
+                f = d / name
+                if refresh or not f.exists() or time.time() - f.stat().st_mtime > NGA_MAX_AGE:
+                    _nga_download(name, f)
+            csv.field_size_limit(sys.maxsize)
+            imgs = {}
+            with (d / 'published_images.csv').open(newline='', encoding='utf-8') as f:
+                for r in csv.DictReader(f):
+                    if (r.get('openaccess') or '').strip() != '1' or r.get('viewtype') != 'primary': continue
+                    try: w, h, seq = int(r['width']), int(r['height']), int(r.get('sequence') or 0)
+                    except (TypeError, ValueError): continue
+                    oid = r.get('depictstmsobjectid')
+                    if not oid or not (r.get('iiifurl') or '').startswith('https://'): continue
+                    if oid in imgs and imgs[oid][3] <= seq: continue
+                    box = NGA_BOX
+                    if (r.get('maxpixels') or '').strip().isdigit(): box = min(box, int(r['maxpixels']))
+                    fw, fh = _fit(w, h, box)
+                    imgs[oid] = (r['iiifurl'].rstrip('/'), fw, fh, seq, (r.get('assistivetext') or '').strip(), box)
+            rows = []
+            with (d / 'objects.csv').open(newline='', encoding='utf-8') as f:
+                for r in csv.DictReader(f):
+                    im = imgs.get(r.get('objectid'))
+                    if not im: continue
+                    cls = ' / '.join(x for x in (r.get('classification'), r.get('subclassification'), r.get('visualbrowserclassification')) if x)
+                    rows.append([r['objectid'], r.get('title') or '', r.get('attribution') or '', r.get('displaydate') or '',
+                                 r.get('medium') or '', cls, im[0], im[1], im[2], im[4], im[5]])
+            tmp = idx.with_name(idx.name + f'.{os.getpid()}.tmp')
+            tmp.write_text(json.dumps(rows)); tmp.replace(idx)
+            print(f'  nga: index built, {len(rows)} open-access objects with images', flush=True)
+        _NGA = json.loads(idx.read_text())
+    return _NGA
+
+def _word_res(query):
+    words = [w for w in re.findall(r"[a-z0-9']+", (query or '').lower()) if len(w) > 1]
+    res = []
+    for w in words:
+        stem = w[:-1] if len(w) > 3 and w.endswith('s') and not w.endswith('ss') else w
+        res.append(re.compile(r'\b' + re.escape(stem) + r'(s|es)?\b'))
+    return res
+
+def nga_search(query, limit=40, classes=None, portrait_only=True):
+    """All query words must appear in title, classification, medium or the image description; title hits rank first."""
+    res = _word_res(query)
+    if not res: return []
+    try:
+        rows = nga_index()
+    except Exception as e:
+        _err('nga', e); return []
+    want = [c.lower() for c in (classes or [])]
+    scored = []
+    for r in rows:
+        oid, title, attr, date, medium, cls, iiif, w, h, alt, box = r
+        if portrait_only and w > h: continue
+        if want and not any(c in cls.lower() for c in want): continue
+        t = title.lower(); hay = ' '.join([t, cls.lower(), medium.lower(), alt.lower()])
+        if not all(rx.search(hay) for rx in res): continue
+        scored.append((-sum(1 for rx in res if rx.search(t)), -h, r))
+    scored.sort(key=lambda x: (x[0], x[1]))
+    out = []
+    for _, _, r in scored[:limit]:
+        oid, title, attr, date, medium, cls, iiif, w, h, alt, box = r
+        out.append(_cand(url=f'{iiif}/full/!{box},{box}/0/default.jpg', thumb=f'{iiif}/full/!960,960/0/default.jpg',
+                         author=attr or 'Unknown artist', source='National Gallery of Art, Washington, CC0', licence='CC0',
+                         page=f'https://www.nga.gov/collection/art-object-page.{oid}.html', title=title,
+                         text=' '.join([title, cls, medium, alt]), w=w, h=h, provider='nga', object_id=oid))
+    return out
+
+# ---------------- iNaturalist (research-grade observation photos, CC0 / CC BY per photo, keyless) ----------------
+# iNaturalist asks API users for about 1 request per second (and well under 10,000 per day).
+# Open-licence photos live in the AWS open-data bucket; "original" is at most 2048 px on the long side.
+INAT_API = 'https://api.inaturalist.org/v1/observations'
+INAT_LICENCES = {'cc0': 'CC0', 'cc-by': 'CC BY'}
+
+def inat_search(query, limit=30, page=1, photos_per_obs=1):
+    base = dict(photo_license='cc0,cc-by', quality_grade='research', order_by='votes', photos='true',
+                per_page=min(max(limit * 2, 10), 200), page=page)
+    d = None
+    for k in ('taxon_name', 'q'):            # taxon (scientific or common name) first, then free text
+        try:
+            d, _ = _http_json(INAT_API + '?' + urllib.parse.urlencode(dict(base, **{k: query})), delay=1.0)
+        except Exception as e:
+            _err('inat', e); return []
+        if d.get('total_results'): break
+    out = []
+    for o in (d or {}).get('results', []):
+        user = o.get('user') or {}
+        taxon = o.get('taxon') or {}
+        kept = 0
+        for p in o.get('photos') or []:
+            if kept >= photos_per_obs or len(out) >= limit: break
+            lic = INAT_LICENCES.get((p.get('license_code') or '').lower())
+            dims = p.get('original_dimensions') or {}
+            u = p.get('url') or ''
+            if not lic or not u.startswith('https://') or '/square.' not in u: continue
+            w, h = dims.get('width') or 0, dims.get('height') or 0
+            if w and h and w > h: continue
+            kept += 1
+            common = taxon.get('preferred_common_name') or ''
+            out.append(_cand(url=u.replace('/square.', '/original.'), thumb=u.replace('/square.', '/large.'),
+                             author=user.get('name') or user.get('login') or 'Unknown', source=f'iNaturalist, {lic}', licence=lic,
+                             page=f"https://www.inaturalist.org/observations/{o.get('id')}", title=common or taxon.get('name') or '',
+                             text=' '.join([common, taxon.get('name') or '', o.get('species_guess') or '', o.get('description') or '']),
+                             w=w, h=h, provider='inat', photo_page=f"https://www.inaturalist.org/photos/{p.get('id')}",
+                             author_login=user.get('login') or ''))
+        if len(out) >= limit: break
+    return out
+
+# ---------------- Rijksmuseum (linked-data search, public domain images, keyless) ----------------
+# Search returns object ids; each object resolves in three Linked Art hops (object -> VisualItem ->
+# DigitalObject) to a Micrio IIIF image. Resolutions are cached on disk; 0.5 s spacing per host.
+RIJKS_SEARCH = 'https://data.rijksmuseum.nl/search/collection'
+_EN = 'http://vocab.getty.edu/aat/300388277'
+
+def _rijks_ld(url):
+    return _http_json(url, delay=0.5, headers={'Accept': 'application/ld+json'})[0]
+
+def _ld(xs):
+    """Only the dict nodes of a JSON-LD list (some nodes are bare id strings)."""
+    return [x for x in (xs if isinstance(xs, list) else [xs] if xs else []) if isinstance(x, dict)]
+
+def _is_en(n):
+    return any(l.get('id') == _EN for l in _ld(n.get('language')))
+
+def _rijks_names(o):
+    names = [n for n in _ld(o.get('identified_by')) if n.get('type') == 'Name' and n.get('content')]
+    return [n['content'] for n in names if _is_en(n)], [n['content'] for n in names]
+
+def _notation_en(nodes):
+    return ' '.join(n.get('@value', '') for c in _ld(nodes) for n in _ld(c.get('notation')) if n.get('@language') == 'en')
+
+def _rijks_resolve(oid):
+    def fetch():
+        o = _rijks_ld(oid)
+        dims = {}
+        for dm in _ld(o.get('dimension')):
+            lab = _notation_en(dm.get('classified_as')).lower()
+            if 'width' in lab: dims.setdefault('w', dm.get('value'))
+            elif 'height' in lab: dims.setdefault('h', dm.get('value'))
+        if dims.get('w') and dims.get('h') and _wider_than_tall(dims['w'], dims['h']):
+            return {'skip': 'landscape'}
+        en, allnames = _rijks_names(o)
+        title = (en or allnames or [''])[0]
+        prod = o.get('produced_by') if isinstance(o.get('produced_by'), dict) else {}
+        refs = [r for r in _ld(prod.get('referred_to_by')) if r.get('content')]
+        author = next((r['content'] for r in refs if _is_en(r)), None) or (refs[0]['content'] if refs else '') or 'Unknown artist'
+        if author.strip().lower() in ('anoniem', 'anonymous'): author = 'Anonymous'
+        texts, page = [], ''
+        for s in _ld(o.get('subject_of')):
+            for part in _ld(s.get('part')):
+                if part.get('content'): texts.append(part['content'])
+                for pp in _ld(part.get('part')):
+                    if pp.get('content'): texts.append(pp['content'])
+            if s.get('content'): texts.append(s['content'])
+            for dc in _ld(s.get('digitally_carried_by')):
+                for ap in _ld(dc.get('access_point')):
+                    if 'rijksmuseum.nl' in ap.get('id', '') and not page: page = ap['id']
+        page = page.replace('/nl/collectie/object/', '/en/collection/object/')
+        kind = _notation_en(o.get('classified_as'))
+        vi_id = next((v.get('id') for v in _ld(o.get('shows')) if v.get('id')), None)
+        if not vi_id: return {'skip': 'no visual item'}
+        vi = _rijks_ld(vi_id)
+        lic = ''
+        for right in _ld(vi.get('subject_to')):
+            for c in _ld(right.get('classified_as')):
+                lic = lic or norm_licence(c.get('id', ''))
+        if not lic: return {'skip': 'licence'}
+        do_id = next((v.get('id') for v in _ld(vi.get('digitally_shown_by')) if v.get('id')), None)
+        if not do_id: return {'skip': 'no image'}
+        do = _rijks_ld(do_id)
+        ap = next((a.get('id') for a in _ld(do.get('access_point')) if '/full/' in (a.get('id') or '')), '')
+        if not ap.startswith('https://'): return {'skip': 'no iiif'}
+        return dict(iiif=ap.split('/full/')[0], title=title, author=author, licence=lic, page=page or oid,
+                    text=' '.join([' '.join(allnames), kind, ' '.join(texts)])[:4000])
+    return _disk_json('rijks', oid, fetch)
+
+def rijks_search(query, limit=20, fields=('title', 'description')):
+    ids = []
+    for field in fields:                      # title matches first, then description matches
+        if len(ids) >= limit * 3: break
+        try:
+            d, _ = _http_json(RIJKS_SEARCH + '?' + urllib.parse.urlencode({field: query, 'imageAvailable': 'true'}),
+                              delay=0.5, headers={'Accept': 'application/ld+json'})
+        except Exception as e:
+            _err('rijks', e); continue
+        ids += [it['id'] for it in _ld(d.get('orderedItems')) if it.get('id') and it['id'] not in ids]
+    out = []
+    for oid in ids:
+        if len(out) >= limit: break
+        try:
+            r = _rijks_resolve(oid)
+        except Exception as e:
+            _err('rijks', e); continue
+        if r.get('skip'): continue
+        out.append(_cand(url=f"{r['iiif']}/full/!2000,2000/0/default.jpg", thumb=f"{r['iiif']}/full/!960,960/0/default.jpg",
+                         author=r['author'], source=f"Rijksmuseum, {r['licence']}", licence=r['licence'], page=r['page'],
+                         title=r['title'], text=r['text'], provider='rijks', object_id=oid))
+    return out
+
+# ---------------- Keyed stock sources (inactive unless the key is in secrets/content-keys.env) ----------------
+# Their licences are not CC: a pack may use them only after the owner has reviewed the licence and the spec
+# lists it in "allow_licences" (see docs/content-rules.md). Flickr CC licences pass the normal filter.
+def pexels_search(query, limit=30, page=1):
+    key = keys.get('PEXELS_API_KEY')
+    if not key: return []
+    try:
+        d, _ = _http_json('https://api.pexels.com/v1/search?' + urllib.parse.urlencode(
+            dict(query=query, orientation='portrait', per_page=min(max(limit, 5), 80), page=page)), delay=1.0, headers={'Authorization': key})
+    except Exception as e:
+        _err('pexels', e); return []
+    out = []
+    for p in d.get('photos') or []:
+        orig = (p.get('src') or {}).get('original') or ''
+        if not orig.startswith('https://'): continue
+        w, h = _fit(p.get('width'), p.get('height'), 2000)
+        out.append(_cand(url=orig + '?auto=compress&cs=tinysrgb&fit=max&w=2000&h=2000', thumb=orig + '?auto=compress&cs=tinysrgb&fit=max&w=960&h=960',
+                         author=p.get('photographer') or 'Unknown', source='Pexels, Pexels License', licence='Pexels License',
+                         page=p.get('url') or '', title=p.get('alt') or '', text=p.get('alt') or '', w=w, h=h, provider='pexels',
+                         author_url=p.get('photographer_url') or ''))
+    return out
+
+def pixabay_search(query, limit=30, page=1):
+    """Pixabay forbids permanent hotlinking: candidates carry hotlink=False and need re-hosting before use."""
+    key = keys.get('PIXABAY_API_KEY')
+    if not key: return []
+    try:
+        d, _ = _http_json('https://pixabay.com/api/?' + urllib.parse.urlencode(
+            dict(key=key, q=query[:100], image_type='photo', orientation='vertical', safesearch='true',
+                 per_page=min(max(limit, 3), 200), page=page)), delay=1.0)
+    except Exception as e:
+        _err('pixabay', e); return []
+    out = []
+    for p in d.get('hits') or []:
+        u = p.get('largeImageURL') or ''
+        if not u.startswith('https://'): continue
+        w, h = _fit(p.get('imageWidth'), p.get('imageHeight'), 1280)
+        out.append(_cand(url=u, thumb=p.get('webformatURL') or u, author=p.get('user') or 'Unknown',
+                         source='Pixabay, Pixabay Content License', licence='Pixabay Content License', page=p.get('pageURL') or '',
+                         title=p.get('tags') or '', text=p.get('tags') or '', w=w, h=h, provider='pixabay', hotlink=False))
+    return out
+
+def _unsplash_headers(key):
+    return {'Authorization': f'Client-ID {key}', 'Accept-Version': 'v1'}
+
+def unsplash_search(query, limit=30, page=1):
+    """Unsplash API guidelines: hotlink images.unsplash.com URLs, credit the photographer, and ping
+    download_location when a photo is used (writer calls on_used)."""
+    key = keys.get('UNSPLASH_ACCESS_KEY')
+    if not key: return []
+    try:
+        d, _ = _http_json('https://api.unsplash.com/search/photos?' + urllib.parse.urlencode(
+            dict(query=query, orientation='portrait', content_filter='high', per_page=min(max(limit, 5), 30), page=page)),
+            delay=1.0, headers=_unsplash_headers(key))
+    except Exception as e:
+        _err('unsplash', e); return []
+    out = []
+    for p in d.get('results') or []:
+        raw = (p.get('urls') or {}).get('raw') or ''
+        if not raw.startswith('https://'): continue
+        sep = '&' if '?' in raw else '?'
+        user = p.get('user') or {}
+        w, h = _fit(p.get('width'), p.get('height'), 2000)
+        text = ' '.join(x for x in (p.get('alt_description'), p.get('description')) if x)
+        out.append(_cand(url=f'{raw}{sep}fm=jpg&q=80&fit=max&w=2000&h=2000', thumb=f'{raw}{sep}fm=jpg&q=80&fit=max&w=960&h=960',
+                         author=user.get('name') or user.get('username') or 'Unknown', source='Unsplash, Unsplash License',
+                         licence='Unsplash License', page=(p.get('links') or {}).get('html') or '', title=p.get('alt_description') or '',
+                         text=text, w=w, h=h, provider='unsplash', author_url=(user.get('links') or {}).get('html') or '',
+                         download_location=(p.get('links') or {}).get('download_location') or ''))
+    return out
+
+FLICKR_API = 'https://api.flickr.com/services/rest/'
+FLICKR_LICENCES = {'4': 'CC BY 2.0', '5': 'CC BY-SA 2.0', '9': 'CC0', '10': 'Public domain',
+                   '7': 'No known copyright restrictions (Flickr Commons)'}
+
+def _flickr(query, limit, page, commons):
+    key = keys.get('FLICKR_API_KEY')
+    if not key: return []
+    params = dict(method='flickr.photos.search', api_key=key, text=query, content_type=1, media='photos', safe_search=1,
+                  sort='relevance', extras='license,owner_name,url_k,url_h,url_b,url_c,description,tags',
+                  per_page=min(max(limit * 2, 10), 250), page=page, format='json', nojsoncallback=1)
+    if commons: params['is_commons'] = 'true'
+    else: params['license'] = '4,5,9,10'
+    name = 'flickr-commons' if commons else 'flickr'
+    try:
+        d, _ = _http_json(FLICKR_API + '?' + urllib.parse.urlencode(params), delay=1.0)
+    except Exception as e:
+        _err(name, e); return []
+    if d.get('stat') != 'ok':
+        print(f"  {name} error", str(d.get('message') or d.get('stat'))[:100]); return []
+    out = []
+    for p in (d.get('photos') or {}).get('photo') or []:
+        lic = FLICKR_LICENCES.get(str(p.get('license')))
+        if not lic: continue
+        size = next((s for s in ('k', 'h', 'b') if p.get(f'url_{s}')), None)
+        if not size: continue
+        w, h = int(p.get(f'width_{size}') or 0), int(p.get(f'height_{size}') or 0)
+        if w and h and w > h: continue
+        desc = (p.get('description') or {}).get('_content', '') if isinstance(p.get('description'), dict) else ''
+        out.append(_cand(url=p[f'url_{size}'], thumb=p.get('url_c') or p.get('url_b') or p[f'url_{size}'],
+                         author=p.get('ownername') or 'Unknown', source=f'Flickr, {lic}', licence=lic,
+                         page=f"https://www.flickr.com/photos/{p.get('owner')}/{p.get('id')}", title=p.get('title') or '',
+                         text=' '.join([p.get('title') or '', _strip(desc), p.get('tags') or '']), w=w, h=h, provider=name))
+        if len(out) >= limit: break
+    return out
+
+def flickr_search(query, limit=30, page=1):
+    return _flickr(query, limit, page, commons=False)
+
+def flickr_commons_search(query, limit=30, page=1):
+    return _flickr(query, limit, page, commons=True)
+
+def on_used(c):
+    """Provider hooks when a candidate becomes a puzzle (Unsplash: ping download_location)."""
+    if c.get('provider') == 'unsplash' and c.get('download_location'):
+        key = keys.get('UNSPLASH_ACCESS_KEY')
+        if key:
+            _http_json(c['download_location'], delay=1.0, headers=_unsplash_headers(key), retries=1)
+
+# ---------------- Registry of opt-in providers ----------------
+# name -> (search function, key env var or None, licence policy, default results per topic)
+OPT_IN = {
+    'met': (met_search, None, 'CC0 (public-domain objects only)', 24),
+    'nga': (nga_search, None, 'CC0 (open-access images only)', 40),
+    'inat': (inat_search, None, 'CC0 / CC BY per photo, research grade', 30),
+    'rijks': (rijks_search, None, 'Public domain / CC0 per image', 20),
+    'pexels': (pexels_search, 'PEXELS_API_KEY', 'Pexels License: owner review + allow_licences', 30),
+    'pixabay': (pixabay_search, 'PIXABAY_API_KEY', 'Pixabay License: owner review, must re-host', 30),
+    'unsplash': (unsplash_search, 'UNSPLASH_ACCESS_KEY', 'Unsplash License: owner review + allow_licences', 30),
+    'flickr': (flickr_search, 'FLICKR_API_KEY', 'CC0 / PDM / CC BY / BY-SA; key terms need review', 30),
+    'flickr-commons': (flickr_commons_search, 'FLICKR_API_KEY', 'No known restrictions: owner review + allow_licences', 30),
+}
+# How pool.nice_title names puzzles: museum objects keep their own title, photos take the topic.
+OBJECT_TITLED = ('met', 'nga', 'rijks')
+TOPIC_TITLED = ('inat', 'pexels', 'pixabay', 'unsplash', 'flickr', 'flickr-commons')
+
+def provider_active(name):
+    fn, key, _, _ = OPT_IN[name]
+    return key is None or keys.has(key)
+
+def search_opt_in(name, topic, spec):
+    """Run one opt-in provider for a pool topic. Spec options: source_limit (results per topic),
+    nga_classes (e.g. ["Painting", "Drawing"])."""
+    fn, key, _, default_limit = OPT_IN[name]
+    if not provider_active(name):
+        return []
+    limit = int(spec.get('source_limit') or default_limit)
+    if name == 'nga':
+        return fn(topic, limit=limit, classes=spec.get('nga_classes'))
+    return fn(topic, limit=limit)
+
+PROVIDERS.update({k: v[0] for k, v in OPT_IN.items()})
+
+# ---------------- `run.sh sources`: provider list, activity, licence policy, live health ----------------
+BUILTIN = {      # name -> (key env var or None, licence policy, note)
+    'commons': (None, 'CC0 / PD / CC BY / CC BY-SA (NC, ND rejected)', 'default source'),
+    'openverse': (None, 'CC0 / PDM / CC BY / CC BY-SA', 'registered client 9,800/day, anonymous 190/day'),
+    'cma': (None, 'CC0', 'renditions ~700-900 px'),
+    'nasa': (None, 'Public domain (NASA)', ''),
+}
+HEALTH_FILE = CACHE / 'sources-health.json'
+HEALTH_TTL = 600
+
+def all_providers():
+    return list(BUILTIN) + list(OPT_IN)
+
+def provider_status(name):
+    """(active, status text, licence policy)."""
+    if name in BUILTIN:
+        key, policy, note = BUILTIN[name]
+        st = 'active (keyless)'
+        if name == 'openverse':
+            st = ('active (registered)' if _ov_creds() else 'active (anonymous)') + f', {openverse_budget_left()}/{openverse_daily_limit()} today'
+        return True, st, policy
+    fn, key, policy, _ = OPT_IN[name]
+    if key is None: return True, 'active (keyless)', policy
+    if keys.has(key): return True, 'active (key set)', policy
+    return False, f'inactive (no {key})', policy
+
+def _probe(name):
+    """One tiny live request. Returns detail text; raises on failure."""
+    q = urllib.parse.urlencode
+    if name == 'commons':
+        d = _get_json('https://commons.wikimedia.org/w/api.php?action=query&meta=siteinfo&siprop=general&format=json&formatversion=2')
+        return d['query']['general']['sitename']
+    if name == 'openverse':
+        tok = _ov_token() if _ov_creds() else None
+        if tok:           # registered client: the rate_limit endpoint costs no search budget
+            rl, _ = _http_json('https://api.openverse.org/v1/rate_limit/', delay=OV_REGISTERED_DELAY, retries=0,
+                               headers={'Authorization': 'Bearer ' + tok['access_token']})
+            used = f", {rl['requests_today']} requests today" if rl.get('requests_today') is not None else ''
+            return f"registered client, {rl.get('rate_limit_model')} tier, verified={rl.get('verified')}{used}"
+        if _ov_creds(): return 'token request failed; anonymous fallback active'
+        if openverse_budget_left() <= 0: return 'not probed: daily budget used up'
+        _openverse_spend()
+        d = _get_json('https://api.openverse.org/v1/images/?' + q(dict(q='tulip', page_size=1)), host_delay=3.2)
+        return f"{d.get('result_count')} results for 'tulip' (1 request of the daily budget)"
+    if name == 'cma':
+        d = _get_json('https://openaccess-api.clevelandart.org/api/artworks/?' + q(dict(q='tulip', cc0=1, has_image=1, limit=1)))
+        return f"{(d.get('info') or {}).get('total')} artworks for 'tulip'"
+    if name == 'nasa':
+        d = _get_json('https://images-api.nasa.gov/search?' + q(dict(q='nebula', media_type='image', page_size=1)))
+        return f"{d['collection']['metadata']['total_hits']} images for 'nebula'"
+    if name == 'met':
+        d, _ = _http_json(f'{MET_API}/v1.1/search?' + q(dict(q='tulip', hasImages='true', isPublicDomain='true', limit=1)), delay=0.1)
+        return f"{d.get('total')} objects for 'tulip'"
+    if name == 'nga':
+        req = urllib.request.Request(NGA_RAW + 'published_images.csv', headers=UA, method='HEAD')
+        with urllib.request.urlopen(req, timeout=30) as r:
+            size = int(r.headers.get('Content-Length') or 0)
+        idx = _pdir('nga') / 'index.json'
+        local = f'index cached {time.strftime("%Y-%m-%d", time.localtime(idx.stat().st_mtime))}' if idx.exists() else 'index not built yet (first search downloads ~170 MB)'
+        return f'open data CSV reachable ({size / 1e6:.0f} MB); {local}'
+    if name == 'inat':
+        d, _ = _http_json(INAT_API + '?' + q(dict(taxon_name='Danaus plexippus', photo_license='cc0,cc-by', quality_grade='research', per_page=1)), delay=1.0)
+        return f"{d.get('total_results')} observations for 'Danaus plexippus'"
+    if name == 'rijks':
+        d, _ = _http_json(RIJKS_SEARCH + '?' + q(dict(title='tulip', imageAvailable='true')), delay=0.5, headers={'Accept': 'application/ld+json'})
+        return f"{(d.get('partOf') or {}).get('totalItems')} objects for 'tulip'"
+    if name == 'pexels':
+        d, _ = _http_json('https://api.pexels.com/v1/search?' + q(dict(query='tulip', per_page=1)), delay=1.0, headers={'Authorization': keys.get('PEXELS_API_KEY')})
+        return f"{d.get('total_results')} photos for 'tulip'"
+    if name == 'pixabay':
+        d, _ = _http_json('https://pixabay.com/api/?' + q(dict(key=keys.get('PIXABAY_API_KEY'), q='tulip', per_page=3)), delay=1.0)
+        return f"{d.get('totalHits')} photos for 'tulip'"
+    if name == 'unsplash':
+        d, _ = _http_json('https://api.unsplash.com/search/photos?' + q(dict(query='tulip', per_page=1)), delay=1.0, headers=_unsplash_headers(keys.get('UNSPLASH_ACCESS_KEY')))
+        return f"{d.get('total')} photos for 'tulip'"
+    if name in ('flickr', 'flickr-commons'):
+        params = dict(method='flickr.photos.search', api_key=keys.get('FLICKR_API_KEY'), text='tulip', per_page=1, format='json', nojsoncallback=1)
+        params.update({'is_commons': 'true'} if name == 'flickr-commons' else {'license': '4,5,9,10'})
+        d, _ = _http_json(FLICKR_API + '?' + q(params), delay=1.0)
+        if d.get('stat') != 'ok': raise RuntimeError(d.get('message') or 'flickr error')
+        return f"{(d.get('photos') or {}).get('total')} photos for 'tulip'"
+    return 'no probe'
+
+def health(names=None, refresh=False, live=True):
+    """[(name, active, status, policy, health text)]; live probes are cached for 10 minutes."""
+    names = names or all_providers()
+    with locked('sources-health'):
+        try: cache = json.loads(HEALTH_FILE.read_text())
+        except Exception: cache = {}
+    rows = []
+    for n in names:
+        active, status, policy = provider_status(n)
+        if not active:
+            rows.append((n, active, status, policy, 'skipped (no key)')); continue
+        if not live:
+            rows.append((n, active, status, policy, 'not checked (--offline)')); continue
+        hit = cache.get(n)
+        if hit and not refresh and time.time() - hit['at'] < HEALTH_TTL:
+            rows.append((n, active, status, policy, f"{hit['text']} (cached {int(time.time() - hit['at'])} s ago)")); continue
+        t0 = time.time()
+        try:
+            detail = _probe(n)
+            text = f'ok {int((time.time() - t0) * 1000)} ms: {detail}'
+        except urllib.error.HTTPError as e:
+            text = f'FAIL http {e.code}'
+        except Exception as e:
+            text = f'FAIL {type(e).__name__}: {str(e)[:80]}'
+        cache[n] = {'at': time.time(), 'text': text}
+        rows.append((n, active, status, policy, text))
+    with locked('sources-health'):
+        try: cur = json.loads(HEALTH_FILE.read_text())
+        except Exception: cur = {}
+        cur.update({n: cache[n] for n in names if n in cache})
+        HEALTH_FILE.write_text(json.dumps(cur))
+    return rows

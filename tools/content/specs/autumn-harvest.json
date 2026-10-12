@@ -1,0 +1,20 @@
+{
+ "id": "autumn-harvest",
+ "name": "Autumn Harvest",
+ "category": "Seasonal",
+ "description": "Pumpkins, apples, squash, hay bales, chestnuts and golden leaves from the autumn harvest. Free during the Autumn Harvest event.",
+ "kind": "library",
+ "target": 24,
+ "per_topic": 1,
+ "fetch_per_topic": 4,
+ "author_cap": 2,
+ "sources": ["commons"],
+ "topics": [
+  "pumpkin patch", "pumpkins harvest pile", "Cucurbita maxima squash", "ornamental gourds", "Hokkaido pumpkin",
+  "apples basket", "apple tree fruit autumn", "pears on tree", "quince fruit Cydonia oblonga", "persimmons on tree Diospyros kaki",
+  "pomegranate fruit", "sweet chestnuts Castanea sativa", "walnuts Juglans regia", "hazelnuts Corylus avellana", "rose hips Rosa canina",
+  "Boletus edulis mushroom", "grapes on vine autumn", "hay bales field", "maize cobs dried", "wheat sheaf",
+  "Erntedank harvest festival display", "fallen leaves maple autumn", "Acer palmatum autumn leaves", "sunflower heads seeds"
+ ],
+ "more_topics": ["elderberries Sambucus nigra", "plums Prunus domestica tree", "cranberries Vaccinium macrocarpon", "farm stand pumpkins", "autumn forest floor leaves", "acorns Quercus", "beech leaves autumn", "squash market display", "corn field autumn", "orchard autumn apples"]
+}

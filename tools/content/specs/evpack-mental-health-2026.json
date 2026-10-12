@@ -2,7 +2,7 @@
  "id": "evpack-mental-health-2026",
  "name": "World Mental Health Day",
  "category": "Event",
- "description": "A limited pack for World Mental Health Day (10 October 2026). Zen stones, raked gardens, tea bowls, candles, moss, lotus flowers and other quiet calming scenes, playable for one week.",
+ "description": "A limited pack for World Mental Health Day (10 October 2026). Lotus flowers, moss gardens, bamboo groves, lavender fields, stone cairns, koi ponds and other quiet, calming scenes, playable for one week.",
  "kind": "event",
  "target": 24,
  "per_topic": 1,
@@ -66,5 +66,6 @@
   "wisteria",
   "tulip field",
   "forest stream"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/2018_Lotus_and_Water_Lily_Festival_%28246d349e-7d65-4bd6-8e53-dfcc1dde0e7d%29.jpg/1280px-2018_Lotus_and_Water_Lily_Festival_%28246d349e-7d65-4bd6-8e53-dfcc1dde0e7d%29.jpg"
 }

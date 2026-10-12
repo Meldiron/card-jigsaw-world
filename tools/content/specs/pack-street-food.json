@@ -1,0 +1,21 @@
+{
+ "id": "pack-street-food",
+ "name": "Street Food",
+ "category": "Food",
+ "description": "Satay skewers, bánh mì, tacos al pastor, takoyaki, dumplings and other favourites from stalls and food carts worldwide.",
+ "kind": "library",
+ "target": 24,
+ "per_topic": 1,
+ "fetch_per_topic": 4,
+ "author_cap": 2,
+ "sources": ["commons"],
+ "quality_deepcat": "Quality images of food",
+ "topics": [
+  "satay skewers", "pad thai", "bánh mì", "tacos al pastor", "falafel", "döner kebab",
+  "takoyaki", "yakitori", "pani puri", "samosa", "gua bao", "dim sum",
+  "arepas", "empanadas", "currywurst", "gözleme", "jianbing", "okonomiyaki",
+  "elote", "pupusa", "fish and chips", "poffertjes", "Belgian fries", "pho",
+  "vada pav", "lángos", "shawarma", "roasted chestnuts"
+ ],
+ "more_topics": ["xiaolongbao", "kati roll", "jerk chicken", "pierogi", "bunny chow", "tteokbokki", "baozi", "souvlaki"]
+}

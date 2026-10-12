@@ -56,6 +56,14 @@
   "cat:Bokeh light painting",
   "Lichtspur Langzeitbelichtung",
   "light orb photography",
-  "Newton's rings"
- ]
+  "Newton's rings",
+  "cat:Prisms (optics)",
+  "cat:Refraction",
+  "cat:Light trails",
+  "cat:Intentional camera movement",
+  "cat:Iridescence",
+  "cat:Lasers",
+  "cat:Optical fibers"
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Light_dispersion_of_a_mercury-vapor_lamp_with_a_flint_glass_prism_IPNr%C2%B00125.jpg/1280px-Light_dispersion_of_a_mercury-vapor_lamp_with_a_flint_glass_prism_IPNr%C2%B00125.jpg"
 }
