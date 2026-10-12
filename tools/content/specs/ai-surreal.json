@@ -1,0 +1,34 @@
+{
+ "id": "ai-surreal",
+ "name": "AI Jewelled Menagerie",
+ "category": "AI",
+ "description": "Pearl swans, sapphire lions, glass eagles and strawberry elephants: animals imagined as precious sculptures by text-to-image models. Every picture is AI-generated and in the public domain.",
+ "kind": "ai",
+ "pool": "ai-all",
+ "price": "tickets",
+ "priceTickets": 2,
+ "sortOrder": 2018,
+ "target": 24,
+ "per_topic": 1,
+ "fetch_per_topic": 20,
+ "author_cap": 20,
+ "min_short": 900,
+ "sources": [
+  "openverse"
+ ],
+ "openverse_category": "photograph",
+ "accent_from_cover": true,
+ "topics": [
+  "AI-generated surreal",
+  "AI-generated surrealism",
+  "AI-generated jewelry",
+  "AI-generated clock",
+  "AI-generated retro",
+  "AI-generated steampunk art",
+  "AI-generated candy",
+  "AI-generated sculpture",
+  "AI-generated watercolor",
+  "AI-generated gothic"
+ ],
+ "_note": "Kept id ai-surreal (pool run under it); re-themed to jewelled animal sculptures, the only surreal set with enough clean images."
+}

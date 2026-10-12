@@ -49,3 +49,26 @@ Openverse (Flickr CC0 uploads by chris-hayes, Josh Rokman - AI Images, John B Fo
 - ai-dinosaurs ("AI Dinosaur Worlds"): new, 20, all Openverse from one AI account (Josh Rokman - AI Images, CC0/PDM; no other clean dinosaur art exists, author_cap raised to 21, near-duplicates removed by eye); 15 people candidates rejected (every mammoth scene had cavemen, subway crowds), 1 border (quality), 1 similar lightning T-rex; 2 tickets (premium pack); cover triceratops island; verified.
 - ai-forests: new, 20 (19 Openverse: walmarc04 autumn woods capped at 10, Josh Rokman jungles, plus 1 chris-hayes forest); 10 people candidates rejected (hikers, figures, faces made of foliage), 1 similar (second tent-and-lightning), 1 removed for 800 px (quality); free; cover autumn road; verified.
 - ai-robots (renamed "AI Robots and Machines"): new, 20 (16 Openverse: walmarc04 droids, chris-hayes silver owls and steampunk towers; 4 Commons incl. Rupert Breheny's mechanical dove); 5 people candidates rejected (cyborg woman, classroom, battle), 1 removed for 800 px; 600 coins; verified.
+- ai-little-creatures: new, 20 (19 Openverse: chris-hayes bunnies, raccoons, guinea pigs; Josh Rokman frogs, lizard; 1 Commons DALL-E 3 cartoon hamster); 2 rejected (frog over a crowd, album cover with people/text); every Openverse dog/puppy/rabbit result failed the prefilter; free; cover raccoon in knitted hat; verified.
+- ai-surreal (re-themed "AI Jewelled Menagerie", id kept because the pool step had already registered it): new, 20, all Openverse CC0/PDM from the Josh Rokman AI account (sapphire lion, pearl swans, glass eagle, strawberry elephant; near-identical swan/toucan variants left out); 2 tickets; cover sapphire lion; verified.
+- ai-winter: abandoned, no pack row. Only ~8 clean winter images exist (the 105 Commons "winterscapes with Wikipedia-esque globes" carry the Wikipedia logo and are logo-filtered); spec kept with a note, state stays pending.
+- ai-neon-nights: new, 20 (19 Openverse: chris-hayes neon streets, cars and puddles, Josh Rokman neon sunflower and shoe, John B anvil sparks, storm, gas station; 1 Commons DALL-E glowing library); 16 people candidates rejected (feet in puddles, figures under neon flowers, geisha prints, a glowing pool with bathers); author_cap 14; 700 coins; cover neon sunflower; verified.
+
+## Summary (2026-10-12)
+
+20 AI packs verified, sortOrder 2000-2019, 426 puzzles in total, every one Public domain / CC0 / Public Domain Mark
+with an AI marker in its author, source or title (provenance audit: 294 PDM, 92 PD, 40 CC0; 0 flagged). Prices: 6 free,
+12 coin packs (400-700), 2 ticket packs (ai-dinosaurs, ai-surreal). Counts: 24 x6 (dreamscapes, wild-animals, birds,
+myths-monsters, future-worlds), 22 x2, 21 x2, 20 x10. Open for the owner:
+
+- Square covers: 13 packs (abstract, birds, butterflies, dinosaurs, dream-machines, forests, little-creatures,
+  neon-nights, oceans, robots, space, surreal, wild-animals) have no portrait image at all, because every Openverse AI
+  upload is 1024x1024 and the few portrait Commons AI files show people, text or coats of arms.
+- DALL-E 2 signature: images by chris-hayes (Openverse) and several Commons DALL-E 2 files carry DALL-E 2's small
+  five-colour signature strip in the bottom-right corner. Kept (it marks the image as AI-made and removing them would
+  push most packs below 20); say if it should count as a watermark.
+- Single-author packs: ai-dinosaurs and ai-surreal come entirely from one Openverse AI account (author_cap raised), with
+  near-duplicates removed by eye.
+- Tooling (not changed): Openverse candidates are not AI-tagged like Commons ones (`_ai_tag` only runs for Commons), so
+  their source reads "flickr via Openverse, <licence>" without "(AI-generated)". Worked around by writing Openverse
+  topics as "AI-generated <subject>", which become the puzzle titles; a source suffix would be cleaner.

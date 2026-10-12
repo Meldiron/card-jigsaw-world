@@ -1,8 +1,8 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-12T13:07:23",
-"msg": "Content: checkpoint (114 verified, 4 fixed, 74 audited, 92 pending)",
+"at": "2026-10-12T13:16:32",
+"msg": "Content: checkpoint (122 verified, 6 fixed, 69 audited, 90 pending)",
 "ok": true,
 "pushed": true,
 "stage": "committed"
@@ -10,15 +10,16 @@
 },
 "packs": {
 "abstract-bokeh": {
-"added": 0,
-"at": "2026-10-12T13:06:30",
+"added": 24,
+"at": "2026-10-12T13:22:50",
 "category": "Abstract",
+"issues": 0,
 "kind": "new",
-"last_step": "reject 1 similar",
+"last_step": "verify",
 "name": "Bokeh",
-"puzzles": 0,
+"puzzles": 24,
 "removed": 0,
-"status": "audited"
+"status": "verified"
 },
 "abstract-fluid-ink": {
 "added": 23,
@@ -80,6 +81,17 @@
 "removed": 0,
 "status": "verified"
 },
+"abstract-smoke": {
+"added": 0,
+"at": "2026-10-12T13:22:55",
+"category": "Abstract",
+"kind": "new",
+"last_step": "newpack",
+"name": "Smoke & Vapour",
+"puzzles": 0,
+"removed": 0,
+"status": "pending"
+},
 "ai-abstract": {
 "added": 23,
 "at": "2026-10-12T12:42:45",
@@ -94,11 +106,11 @@
 },
 "ai-all": {
 "added": 0,
-"at": "2026-10-12T13:08:22",
-"last_step": "pool 1115 usable",
+"at": "2026-10-12T13:30:16",
+"last_step": "shared image pool, not a pack",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "skipped"
 },
 "ai-birds": {
 "added": 25,
@@ -232,6 +244,18 @@
 "removed": 1,
 "status": "verified"
 },
+"ai-little-creatures": {
+"added": 20,
+"at": "2026-10-12T13:18:30",
+"category": "AI",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "AI Little Creatures",
+"puzzles": 20,
+"removed": 0,
+"status": "verified"
+},
 "ai-myths-monsters": {
 "added": 25,
 "at": "2026-10-12T12:26:06",
@@ -242,6 +266,18 @@
 "name": "AI Myths and Monsters",
 "puzzles": 24,
 "removed": 1,
+"status": "verified"
+},
+"ai-neon-nights": {
+"added": 20,
+"at": "2026-10-12T13:28:22",
+"category": "AI",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "AI Neon Nights",
+"puzzles": 20,
+"removed": 0,
 "status": "verified"
 },
 "ai-oceans": {
@@ -280,6 +316,18 @@
 "removed": 1,
 "status": "verified"
 },
+"ai-surreal": {
+"added": 20,
+"at": "2026-10-12T13:25:53",
+"category": "AI",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "AI Jewelled Menagerie",
+"puzzles": 20,
+"removed": 0,
+"status": "verified"
+},
 "ai-wild-animals": {
 "added": 24,
 "at": "2026-10-12T12:13:45",
@@ -291,6 +339,14 @@
 "puzzles": 24,
 "removed": 0,
 "status": "verified"
+},
+"ai-winter": {
+"added": 0,
+"at": "2026-10-12T13:30:16",
+"last_step": "abandoned: too few clean AI winter images",
+"puzzles": null,
+"removed": 0,
+"status": "skipped"
 },
 "animal-friends": {
 "added": 14,
@@ -498,11 +554,11 @@
 },
 "daily-2024-02": {
 "added": 23,
-"at": "2026-10-12T13:16:17",
+"at": "2026-10-12T13:30:41",
 "category": "Daily",
 "issues": 0,
 "kind": "daily",
-"last_step": "pool 60 usable",
+"last_step": "pool 340 usable",
 "name": "February 2024",
 "puzzles": 29,
 "removed": 23,
@@ -546,10 +602,10 @@
 },
 "daily-2024-06": {
 "added": 0,
-"at": "2026-10-12T10:24:22",
+"at": "2026-10-12T13:32:23",
 "category": "Daily",
 "kind": "daily",
-"last_step": "reject 4 weak",
+"last_step": "reject 3 weak",
 "name": "June 2024",
 "puzzles": null,
 "removed": 0,
@@ -623,8 +679,8 @@
 },
 "daily-2025": {
 "added": 0,
-"at": "2026-10-12T13:04:59",
-"last_step": "pool 74 usable",
+"at": "2026-10-12T13:35:22",
+"last_step": "pool 79 usable",
 "puzzles": null,
 "removed": 0,
 "status": "pending"
@@ -702,25 +758,26 @@
 "status": "verified"
 },
 "daily-2025-07": {
-"added": 32,
-"at": "2026-10-12T13:06:30",
+"added": 35,
+"at": "2026-10-12T13:19:08",
 "category": "Daily",
+"issues": 0,
 "kind": "daily",
-"last_step": "apply",
+"last_step": "verify",
 "name": "July 2025",
 "puzzles": 31,
-"removed": 35,
-"status": "fixed"
+"removed": 38,
+"status": "verified"
 },
 "daily-2025-08": {
-"added": 0,
-"at": "2026-10-12T11:55:35",
+"added": 23,
+"at": "2026-10-12T13:36:22",
 "category": "Daily",
 "kind": "daily",
-"last_step": "reject 9 weak",
+"last_step": "reject 2 weak",
 "name": "August 2025",
-"puzzles": null,
-"removed": 0,
+"puzzles": 31,
+"removed": 27,
 "status": "audited"
 },
 "daily-2025-09": {
@@ -1280,25 +1337,28 @@
 "status": "pending"
 },
 "evpack-halloween-2026": {
-"added": 19,
-"at": "2026-10-12T13:10:03",
+"added": 22,
+"at": "2026-10-12T13:19:54",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "apply",
+"last_step": "verify",
 "name": "Halloween",
-"puzzles": 21,
+"puzzles": 24,
 "removed": 12,
-"status": "fixed"
+"status": "verified"
 },
 "evpack-halloween-2027": {
-"added": 0,
-"at": "2026-10-12T02:04:57",
+"added": 24,
+"at": "2026-10-12T13:20:30",
 "category": "Event",
+"issues": 0,
 "kind": "event",
+"last_step": "verify",
 "name": "Halloween",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 14,
+"status": "verified"
 },
 "evpack-hamburger-2027": {
 "added": 0,
@@ -1322,10 +1382,10 @@
 },
 "evpack-health-2027": {
 "added": 0,
-"at": "2026-10-12T13:10:03",
+"at": "2026-10-12T13:35:44",
 "category": "Event",
 "kind": "event",
-"last_step": "reject 7 quality",
+"last_step": "pool 62 usable",
 "name": "World Health Day",
 "puzzles": null,
 "removed": 0,
@@ -1355,19 +1415,21 @@
 },
 "evpack-independence-day-2027": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T13:27:56",
 "category": "Event",
 "kind": "event",
+"last_step": "reject 7 weak",
 "name": "Independence Day",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "evpack-kindness-2026": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T13:37:16",
 "category": "Event",
 "kind": "event",
+"last_step": "pool 56 usable",
 "name": "World Kindness Day",
 "puzzles": null,
 "removed": 0,
@@ -1590,15 +1652,16 @@
 "status": "pending"
 },
 "evpack-pride-2027": {
-"added": 0,
-"at": "2026-10-12T12:48:20",
+"added": 21,
+"at": "2026-10-12T13:27:39",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "reject 2 weak",
+"last_step": "verify",
 "name": "Pride Day",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 11,
+"status": "verified"
 },
 "evpack-remembrance-2026": {
 "added": 0,
@@ -2080,14 +2143,15 @@
 "status": "verified"
 },
 "pack-castles": {
-"added": 0,
-"at": "2026-10-12T13:14:43",
+"added": 24,
+"at": "2026-10-12T13:37:18",
 "category": "Architecture",
+"issues": 1,
 "kind": "library",
-"last_step": "pool 67 usable",
+"last_step": "reject 1 similar",
 "name": "Castles",
-"puzzles": null,
-"removed": 0,
+"puzzles": 24,
+"removed": 20,
 "status": "audited"
 },
 "pack-cathedrals": {
@@ -2436,14 +2500,16 @@
 "status": "audited"
 },
 "pack-japanese-prints": {
-"added": 0,
-"at": "2026-10-12T02:04:57",
+"added": 23,
+"at": "2026-10-12T13:36:25",
 "category": "Art",
+"issues": 0,
 "kind": "library",
+"last_step": "verify",
 "name": "Japanese Prints",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 19,
+"status": "verified"
 },
 "pack-jungle": {
 "added": 26,
@@ -2819,15 +2885,15 @@
 "status": "verified"
 },
 "pack-rolling-hills": {
-"added": 16,
-"at": "2026-10-12T13:09:37",
+"added": 21,
+"at": "2026-10-12T13:36:05",
 "category": "Nature",
 "kind": "library",
-"last_step": "apply",
+"last_step": "reject 7 off-theme",
 "name": "Rolling Hills",
-"puzzles": 16,
+"puzzles": 21,
 "removed": 12,
-"status": "fixed"
+"status": "audited"
 },
 "pack-rome": {
 "added": 0,

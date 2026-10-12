@@ -5,7 +5,7 @@
  "description": "One pleasant, varied picture for every day of the month.",
  "pool": "daily-2023",
  "sources": [
-  "nga"
+  "inat"
  ],
  "per_topic": 2,
  "fetch_per_topic": 6,
@@ -296,8 +296,5 @@
   "classic car Havana",
   "narrowboat",
   "dhow"
- ],
- "nga_classes": [
-  "Painting"
  ]
 }

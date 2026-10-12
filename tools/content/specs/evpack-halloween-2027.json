@@ -1,0 +1,9 @@
+{
+ "id": "evpack-halloween-2027",
+ "name": "Halloween",
+ "category": "Event",
+ "kind": "event",
+ "description": "A limited pack for Halloween (31 October 2027). Carved jack-o'-lanterns, pumpkins and gourds, a fruit bat, a barn owl, a tarantula, cobwebs, fly agaric, a haunted-looking house and spooky bakes, playable for one week.",
+ "note": "clone of evpack-halloween-2026; content comes from `run.sh clone evpack-halloween-2026 evpack-halloween-2027`",
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Giant_Pumpkin_Display_%2822385578682%29.jpg/1280px-Giant_Pumpkin_Display_%2822385578682%29.jpg"
+}

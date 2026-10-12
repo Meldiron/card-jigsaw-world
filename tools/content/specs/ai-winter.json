@@ -1,0 +1,39 @@
+{
+ "id": "ai-winter",
+ "name": "AI Winter Wonderland",
+ "category": "AI",
+ "description": "Snowy forests, frozen lakes, ice castles and glowing Christmas trees conjured by text-to-image models. Every picture is AI-generated and in the public domain.",
+ "kind": "ai",
+ "pool": "ai-all",
+ "price": "coins",
+ "priceCoins": 400,
+ "sortOrder": 2018,
+ "target": 24,
+ "per_topic": 1,
+ "fetch_per_topic": 20,
+ "author_cap": 10,
+ "min_short": 900,
+ "sources": [
+  "openverse"
+ ],
+ "openverse_category": "photograph",
+ "accent_from_cover": true,
+ "topics": [
+  "AI-generated winter",
+  "AI-generated snow",
+  "AI-generated christmas",
+  "AI-generated christmas tree",
+  "AI-generated ice",
+  "AI-generated frozen",
+  "AI-generated snowman",
+  "AI-generated snowflake",
+  "AI-generated igloo",
+  "AI-generated polar bear",
+  "AI-generated reindeer",
+  "AI-generated arctic",
+  "AI-generated glacier",
+  "AI-generated iceberg",
+  "AI-generated snowy"
+ ],
+ "_note": "Abandoned: only about 8 clean, people-free winter images exist on Commons and Openverse (the Wikipedia-globe winterscapes are logo-filtered). No pack row created."
+}

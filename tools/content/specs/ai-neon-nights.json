@@ -1,0 +1,9 @@
+{
+ "id": "ai-neon-nights", "name": "AI Neon Nights", "category": "AI",
+ "description": "Rain-slicked neon streets, glowing signs of colour, storms and fire after dark, all lit up by text-to-image models. Every picture is AI-generated and in the public domain.",
+ "kind": "ai", "pool": "ai-all", "price": "coins", "priceCoins": 700, "sortOrder": 2019,
+ "target": 24, "per_topic": 1, "fetch_per_topic": 20, "author_cap": 14, "min_short": 900,
+ "sources": ["openverse"], "openverse_category": "photograph", "accent_from_cover": true,
+ "topics": ["AI-generated night", "AI-generated neon", "AI-generated rain", "AI-generated japan", "AI-generated tokyo", "AI-generated storm",
+            "AI-generated fire", "AI-generated light", "AI-generated lights", "AI-generated glow", "AI-generated midnight"]
+}

@@ -2,7 +2,7 @@
  "id": "evpack-halloween-2026",
  "name": "Halloween",
  "category": "Event",
- "description": "A limited pack for Halloween (31 October 2026). Carved jack-o'-lanterns, pumpkin patches, black cats, bats, cobwebs, candy and haunted houses, playable for one week.",
+ "description": "A limited pack for Halloween (31 October 2026). Carved jack-o'-lanterns, pumpkins and gourds, a fruit bat, a barn owl, a tarantula, cobwebs, fly agaric, a haunted-looking house and spooky bakes, playable for one week.",
  "kind": "event",
  "target": 24,
  "per_topic": 1,
@@ -52,5 +52,6 @@
   "pumpkin pie",
   "Halloween candy",
   "pumpkin display"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Giant_Pumpkin_Display_%2822385578682%29.jpg/1280px-Giant_Pumpkin_Display_%2822385578682%29.jpg"
 }

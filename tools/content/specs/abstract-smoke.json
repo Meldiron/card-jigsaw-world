@@ -10,7 +10,8 @@
  "accent_from_cover": true,
  "target": 24,
  "sources": [
-  "commons"
+  "commons",
+  "openverse"
  ],
  "commons_quality": true,
  "per_topic": 2,
@@ -41,5 +42,19 @@
   "smoke texture"
  ],
  "category_depth": 1,
- "category_limit": 200
+ "category_limit": 200,
+ "more_topics": [
+  "colored smoke abstract",
+  "smoke art photography",
+  "smoke bomb colors",
+  "rainbow smoke",
+  "incense smoke abstract",
+  "smoke swirls colorful",
+  "smoke trails",
+  "abstract smoke color",
+  "smoke grenade colorful",
+  "holi colour powder cloud",
+  "ink smoke abstract",
+  "smoke waves"
+ ]
 }

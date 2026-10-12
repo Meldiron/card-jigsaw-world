@@ -9,9 +9,11 @@
  "fetch_per_topic": 4,
  "author_cap": 2,
  "accent_from_cover": true,
- "sources": ["commons", "openverse"],
+ "sources": [
+  "commons",
+  "openverse"
+ ],
  "topics": [
-  "Fireworks",
   "American flag waving",
   "Liberty Bell",
   "Independence Hall Philadelphia",
@@ -33,7 +35,6 @@
   "Monument Valley",
   "Delicate Arch",
   "Barbecue ribs",
-  "Sparklers",
   "Old North Church Boston",
   "USS Constitution",
   "Mount Rainier"

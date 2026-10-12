@@ -11,7 +11,7 @@
  "id": "pack-japanese-prints",
  "name": "Japanese Prints",
  "category": "Art",
- "description": "Ukiyo-e woodblock prints by Hiroshige, Hokusai, Koson and Jakuchu: whirlpools, cranes, carp, blossoms and snowy views.",
+ "description": "Woodblock prints and scroll paintings by Hiroshige, Hokusai, Koson, Kuniyoshi, Kyosai and Jakuchu: cranes, carp, crows, owls, a tiger and snowy views.",
  "topics": [
   "Hiroshige Plum Garden Kameido",
   "Hiroshige Naruto whirlpool",
@@ -53,5 +53,6 @@
   "Keisai Eisen Kiso print",
   "Kono Bairei bird print",
   "Hiroshige Meguro print"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/7/72/Hokusai_%281834%29_Peonies_and_Canary%2C_MFAB_21.10228.jpg"
 }

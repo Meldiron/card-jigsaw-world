@@ -2,14 +2,17 @@
  "id": "evpack-pride-2027",
  "name": "Pride Day",
  "category": "Event",
- "description": "A limited pack for Pride Day (28 June 2027). Rainbow flags, rainbow birds, painted houses, colour pencils, prisms and every other colour of the spectrum, playable for one week.",
+ "description": "A limited pack for Pride Day (28 June 2027). Rainbow flags, rainbow birds, Burano's painted houses, colour pencils, rainbow cake, bismuth crystals and every other colour of the spectrum, playable for one week.",
  "kind": "event",
  "target": 24,
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
  "accent_from_cover": true,
- "sources": ["commons", "openverse"],
+ "sources": [
+  "commons",
+  "openverse"
+ ],
  "topics": [
   "Rainbow flag waving",
   "Rainbow lorikeet",
@@ -40,14 +43,13 @@
  ],
  "more_topics": [
   "Colorful kites",
-  "Tulip fields Netherlands",
-  "Rainbow trout",
   "Chalk pastels",
-  "Paint palette",
+  "Watercolor paint palette",
   "Colorful balloons",
-  "Danxia landform Zhangye",
+  "Glass marbles",
+  "Rainbow bee-eater",
   "Opal gemstone",
-  "Colourful glass marbles",
-  "Rainbow bee-eater"
- ]
+  "Zhangye Danxia"
+ ],
+ "cover": "https://live.staticflickr.com/65535/51302958120_4f25c327f4_b.jpg"
 }
