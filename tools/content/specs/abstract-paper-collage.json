@@ -10,7 +10,8 @@
  "accent_from_cover": true,
  "target": 24,
  "sources": [
-  "commons"
+  "commons",
+  "openverse"
  ],
  "commons_quality": true,
  "per_topic": 2,
@@ -46,5 +47,21 @@
   "torn poster layers wall"
  ],
  "category_depth": 1,
- "category_limit": 200
+ "category_limit": 200,
+ "more_topics": [
+  "quilling",
+  "origami paper colorful",
+  "folded paper pattern",
+  "colored paper texture",
+  "layered paper art",
+  "paper cutting art",
+  "torn paper texture",
+  "paper sculpture abstract",
+  "cat:Quilling",
+  "cat:Paper art",
+  "cat:Paper sculptures",
+  "rainbow paper",
+  "paper fan pattern",
+  "Kurt Schwitters collage"
+ ]
 }

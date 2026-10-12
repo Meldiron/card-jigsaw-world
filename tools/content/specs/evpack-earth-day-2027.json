@@ -1,0 +1,12 @@
+{
+ "id": "evpack-earth-day-2027", "name": "Earth Day", "category": "Event",
+ "description": "A limited pack for Earth Day (22 April 2027). The planet from orbit and its natural wonders: canyons, glaciers, lava, hot springs, reefs, dunes and waterfalls, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2, "accent_from_cover": true,
+ "sources": ["commons"], "quality_deepcat": "Quality images of landscapes",
+ "topics": ["The Blue Marble", "Earthrise Apollo 8", "Antelope Canyon", "Grand Canyon", "Perito Moreno Glacier", "Vatnajökull ice cave",
+  "Kilauea lava flow", "Grand Prismatic Spring", "Zhangye Danxia", "Uluru", "Sossusvlei dunes", "Great Barrier Reef coral",
+  "Ha Long Bay", "Iguazu Falls", "Plitvice Lakes", "Giant's Causeway", "Fly Geyser", "Salar de Uyuni",
+  "Socotra dragon blood tree", "Avenue of the Baobabs", "Victoria Falls", "Matterhorn", "Mount Fuji", "Amazon rainforest"],
+ "more_topics": ["Skaftafell Svartifoss", "Wave Arizona Coyote Buttes", "Torres del Paine", "Moraine Lake", "Cappadocia fairy chimneys",
+  "Tianzi Mountains Zhangjiajie", "Jökulsárlón icebergs", "Painted Hills Oregon", "Bryce Canyon hoodoos", "Earth from the International Space Station"]
+}
