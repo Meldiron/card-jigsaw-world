@@ -53,5 +53,7 @@
   "hog deer",
   "Eld's deer",
   "red deer velvet antlers"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Red_deer_stag_2009_denmark.jpg/1280px-Red_deer_stag_2009_denmark.jpg",
+ "accent_from_cover": true
 }

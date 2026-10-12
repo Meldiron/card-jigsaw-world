@@ -1,0 +1,22 @@
+{
+ "id": "pack-cathedrals",
+ "name": "Cathedrals",
+ "category": "Architecture",
+ "description": "Gothic vaults, rose windows, striped marble naves and onion domes from Chartres and Cologne to Seville and Moscow.",
+ "kind": "library",
+ "target": 24,
+ "per_topic": 1,
+ "fetch_per_topic": 4,
+ "author_cap": 2,
+ "sources": ["commons"],
+ "topics": [
+  "Cologne Cathedral", "Chartres Cathedral stained glass", "Reims Cathedral", "Amiens Cathedral nave",
+  "Milan Cathedral", "Florence Cathedral", "St. Vitus Cathedral Prague", "Saint Basil's Cathedral",
+  "Seville Cathedral", "Burgos Cathedral", "León Cathedral stained glass", "Salisbury Cathedral",
+  "Gloucester Cathedral cloister", "Ely Cathedral octagon", "Strasbourg Cathedral", "Ulm Minster",
+  "St. Stephen's Cathedral Vienna roof", "Orvieto Cathedral façade", "Monreale Cathedral mosaics", "Alexander Nevsky Cathedral Sofia",
+  "Washington National Cathedral", "St. Patrick's Cathedral New York", "York Minster", "Exeter Cathedral vault",
+  "St. Mary's Basilica Kraków", "Matthias Church Budapest", "Wells Cathedral scissor arches"
+ ],
+ "more_topics": ["Lincoln Cathedral", "Pisa Cathedral", "Speyer Cathedral", "Christ Church Cathedral Dublin", "Mexico City Metropolitan Cathedral", "Toledo Cathedral", "Canterbury Cathedral", "Regensburg Cathedral"]
+}

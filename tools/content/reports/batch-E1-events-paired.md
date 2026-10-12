@@ -53,3 +53,6 @@ retries 429 with backoff and re-evaluates `bad` fetch failures on re-run.
 - Added 24: quokka, puppy, alpacas, dolphins, flamingo, sprinkle ice cream, rubber duck, swirl lollipop, macarons, balloons in sky, crayons, gerberas x3, sunflowers x3, blanket flower, tulips x2, daisies x2, Burano facades x2.
 - Final 24, `verify` clean. Cloned to evpack-smile-day-2027 (24; verify shows only clone same-URL notes).
 
+
+### evpack-animal-day-2026 / evpack-animal-day-2027
+- Resumed at 15 (earlier pass removed 13: people 1, text 4, quality 4, weak/off-theme 4). Removed 1 more (weak: grey heron titled "African elephant", duplicate topic title); candidate rejects: lion cub with blood x2 (weak), snowy owl sign (text), panda drawing, owl sign, polar bear pelt, museum orangutan (off-theme). Added 10 by pick: red panda, toucan, giraffe, Bengal tiger, snowy owl, scarlet macaw, zebra, grey wolf, polar bear, puffin. Description no longer promises sea turtles. Final 24, verified; cloned to 2027 (24, verified) with a 2027 spec carrying the real description (also applied to coffee-2027 and smile-day-2027, which had "Pictures themed around the day").

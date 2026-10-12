@@ -35,3 +35,7 @@ Sourcing notes (apply to every pack below):
 - Tool bug: `apply` aborts mid-run on an imageUrl longer than 512 chars (Appwrite limit); it
   should skip such candidates (or shorten via the 960px rendition).
 
+
+### Continuation (second AB1 worker, 2026-10-12)
+
+- abstract-geometric-minimal — "Geometric Minimal" (400 coins) — 24 verified. Removed 7 (3 weak: palm shadow, street facades; 1 similar: second FingerWiki stair; 2 off-theme: Kandinsky, organic Heijnsbroek; 1 border: framed van Doesburg); added 7 via new topics (cat:Suprematism, Popova, Delaunay rythme, Muralla Roja) + Jules Verne Times facades (author_cap 5). Description widened to name the paintings; cover van Doesburg Composition XX (portrait).

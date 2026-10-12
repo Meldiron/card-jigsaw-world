@@ -1,0 +1,8 @@
+{
+ "id": "evpack-coffee-2027",
+ "name": "International Coffee Day",
+ "category": "Event",
+ "kind": "event",
+ "description": "A limited pack for International Coffee Day (1 October 2027). Espresso, latte art, roasted beans, coffee cherries, moka pots and cezves from the world of coffee, playable for one week.",
+ "note": "clone of evpack-coffee-2026; content comes from `run.sh clone evpack-coffee-2026 evpack-coffee-2027`"
+}

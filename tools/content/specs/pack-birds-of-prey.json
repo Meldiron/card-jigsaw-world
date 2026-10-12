@@ -54,5 +54,7 @@
   "hen harrier",
   "lappet-faced vulture",
   "Egyptian vulture"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Sarcoramphus_papa_in_Panama.jpg/1280px-Sarcoramphus_papa_in_Panama.jpg",
+ "accent_from_cover": true
 }

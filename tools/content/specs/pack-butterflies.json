@@ -53,5 +53,7 @@
   "meadow brown butterfly",
   "speckled wood butterfly",
   "cabbage white butterfly"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/2012-07-20_15-33-53-Danaus_plexippus.jpg/1280px-2012-07-20_15-33-53-Danaus_plexippus.jpg",
+ "accent_from_cover": true
 }

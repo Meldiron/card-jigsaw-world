@@ -1,0 +1,22 @@
+{
+ "id": "pack-istanbul",
+ "name": "Istanbul",
+ "category": "Cities",
+ "description": "Mosque domes and minarets, Iznik-tiled halls, Ottoman palaces and the colourful houses of Balat above the Bosphorus.",
+ "kind": "library",
+ "target": 24,
+ "per_topic": 1,
+ "fetch_per_topic": 4,
+ "author_cap": 2,
+ "sources": ["commons"],
+ "topics": [
+  "Hagia Sophia exterior", "Blue Mosque Istanbul", "Süleymaniye Mosque", "Rüstem Pasha Mosque tiles",
+  "Topkapı Palace tiles", "Topkapı Palace Harem", "Dolmabahçe Palace", "Basilica Cistern columns",
+  "Galata Tower", "Ortaköy Mosque", "Maiden's Tower", "Grand Bazaar Istanbul ceiling",
+  "Turkish mosaic lamps", "Emirgan tulips", "New Mosque Istanbul", "Fountain of Sultan Ahmed III",
+  "Balat houses Istanbul", "Beylerbeyi Palace", "Mihrimah Sultan Mosque Edirnekapı", "Şakirin Mosque",
+  "Sokollu Mehmed Pasha Mosque", "Yıldız Palace", "Istanbul Archaeology Museum building", "Nuruosmaniye Mosque",
+  "Kılıç Ali Pasha Mosque", "Bosphorus Bridge"
+ ],
+ "more_topics": ["Fatih Mosque", "Çırağan Palace", "Hagia Irene", "Istanbul minaret", "Galata Bridge", "Haydarpaşa station", "Turkish tiles Iznik", "Eyüp Sultan Mosque"]
+}

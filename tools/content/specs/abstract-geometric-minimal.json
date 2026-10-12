@@ -2,7 +2,7 @@
  "id": "abstract-geometric-minimal",
  "name": "Geometric Minimal",
  "category": "Abstract",
- "description": "Facades, stairs and walls reduced to clean shapes, hard shadows and blocks of colour.",
+ "description": "Mondrian grids, suprematist shapes and facades reduced to clean lines, hard shadows and blocks of colour.",
  "kind": "abstract",
  "price": "coins",
  "priceCoins": 400,
@@ -15,7 +15,7 @@
  "commons_quality": true,
  "per_topic": 2,
  "fetch_per_topic": 5,
- "author_cap": 3,
+ "author_cap": 5,
  "topics": [
   "cat:Minimalist buildings",
   "cat:Suprematist paintings",
@@ -59,7 +59,17 @@
   "van Doesburg composition",
   "Malevich suprematism",
   "facade abstract colour blocks",
-  "architecture minimal colour sky"
+  "architecture minimal colour sky",
+  "cat:La Muralla Roja",
+  "cat:Suprematism",
+  "cat:Paintings by Lyubov Popova",
+  "cat:Paintings by Olga Rozanova",
+  "cat:Paintings by Ivan Kliun",
+  "Malevich suprematist composition",
+  "Robert Delaunay rythme",
+  "colourful stairs minimal",
+  "cat:Hard-edge painting",
+  "pastel facade minimal"
  ],
- "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Piet_Mondriaan%2C_1930_-_Mondrian_Composition_II_in_Red%2C_Blue%2C_and_Yellow.jpg/1280px-Piet_Mondriaan%2C_1930_-_Mondrian_Composition_II_in_Red%2C_Blue%2C_and_Yellow.jpg"
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Theo_van_Doesburg_Composition_XX.jpg/1280px-Theo_van_Doesburg_Composition_XX.jpg"
 }

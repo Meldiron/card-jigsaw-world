@@ -1,0 +1,22 @@
+{
+ "id": "pack-lisbon",
+ "name": "Lisbon",
+ "category": "Cities",
+ "description": "Yellow trams, tiled façades, Manueline cloisters and terracotta rooftops tumbling down the hills of Alfama to the Tagus.",
+ "kind": "library",
+ "target": 24,
+ "per_topic": 1,
+ "fetch_per_topic": 4,
+ "author_cap": 2,
+ "sources": ["commons"],
+ "topics": [
+  "Belém Tower", "Jerónimos Monastery cloister", "Santa Justa Lift", "Alfama rooftops",
+  "Lisbon azulejo façade", "Rua Augusta Arch", "São Jorge Castle", "Lisbon Cathedral",
+  "Elevador da Bica", "Elevador da Glória", "Ponte 25 de Abril", "Rossio railway station",
+  "calçada portuguesa Lisbon", "Miradouro de Santa Luzia", "Carmo Convent ruins", "Estrela Basilica",
+  "Igreja de São Roque Lisbon", "National Pantheon Lisbon", "Ajuda National Palace", "National Tile Museum Lisbon",
+  "Palácio Fronteira azulejos", "Gare do Oriente", "Lisbon tram 28", "Pastel de nata",
+  "Jerónimos Monastery", "Mouraria Lisbon street"
+ ],
+ "more_topics": ["Bairro Alto street", "MAAT Lisbon", "Lisbon Funicular", "Casa dos Bicos", "Basilica dos Mártires", "Igreja de Santa Engrácia", "Cais das Colunas Lisbon", "Lisbon tiled building"]
+}

@@ -1,0 +1,22 @@
+{
+ "id": "pack-ice-cream",
+ "name": "Ice Cream",
+ "category": "Food",
+ "description": "Gelato counters, sundaes, sorbets, popsicles and frozen treats from Italian kulfi to Korean bingsu.",
+ "kind": "library",
+ "target": 24,
+ "per_topic": 1,
+ "fetch_per_topic": 4,
+ "author_cap": 2,
+ "sources": ["commons"],
+ "quality_deepcat": "Quality images of food",
+ "allow_words": [],
+ "topics": [
+  "gelato display", "gelato cone", "ice cream sundae", "banana split", "sorbet scoops",
+  "ice cream sandwich", "mochi ice cream", "kulfi", "dondurma", "spumoni", "Neapolitan ice cream",
+  "soft serve ice cream", "matcha ice cream", "ice cream with berries", "frozen yogurt", "popsicles",
+  "raspberry sorbet", "pistachio gelato", "chocolate ice cream", "ice cream cake", "baked Alaska",
+  "Eisbecher", "bingsu", "halo-halo", "granita", "paletas", "lemon sorbet"
+ ],
+ "more_topics": ["strawberry ice cream", "vanilla ice cream", "coupe Danemark", "Spaghettieis", "ice cream waffle cone", "stracciatella gelato", "mango sorbet", "melon sorbet"]
+}

@@ -1,0 +1,8 @@
+{
+ "id": "evpack-smile-day-2027",
+ "name": "World Smile Day",
+ "category": "Event",
+ "kind": "event",
+ "description": "A limited pack for World Smile Day (1 October 2027). Smiling animals, sunflowers, smiley-face treats, balloons and other cheerful colourful things, playable for one week.",
+ "note": "clone of evpack-smile-day-2026; content comes from `run.sh clone evpack-smile-day-2026 evpack-smile-day-2027`"
+}

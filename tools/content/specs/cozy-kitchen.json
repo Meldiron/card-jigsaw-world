@@ -1,0 +1,22 @@
+{
+ "id": "cozy-kitchen",
+ "name": "Cozy Kitchen",
+ "category": "Food",
+ "description": "Home kitchen comforts: fresh bread, berry bowls, simmering pots, warm bakes and cups of coffee and tea.",
+ "kind": "library",
+ "target": 24,
+ "per_topic": 1,
+ "fetch_per_topic": 4,
+ "author_cap": 2,
+ "sources": ["commons"],
+ "quality_deepcat": "Quality images of food",
+ "topics": [
+  "Sourdough bread loaf", "Cinnamon rolls", "Apple pie", "Pancakes with berries", "Jam jars",
+  "Cast iron skillet", "Copper pots", "Spice jars", "Pumpkin soup", "Chocolate chip cookies",
+  "Blueberry muffins", "Teapot and teacups", "Mortar and pestle spices", "Lemon tart", "Honey jar honeycomb",
+  "Garlic bulbs", "Basket of eggs", "Waffles with fruit", "Porridge with berries", "Moka pot coffee",
+  "Fresh pasta", "Beef stew", "Cappuccino cup", "Bread rolls basket", "Plum cake", "Hot chocolate",
+  "Gingerbread cookies", "Kitchen herbs"
+ ],
+ "more_topics": ["Apple strudel", "Banana bread", "Scones with jam", "Muesli bowl", "Tomato sauce pot", "Cheese board", "Croissants", "Braided bread"]
+}

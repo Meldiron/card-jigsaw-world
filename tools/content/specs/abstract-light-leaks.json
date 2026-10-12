@@ -22,7 +22,6 @@
   "cat:Dispersion in prisms",
   "cat:Caustics (optics)",
   "cat:Images with sensor reflections",
-  "cat:Thin-film interference",
   "cat:Diffraction gratings",
   "light painting abstract",
   "light painting spiral",
@@ -33,13 +32,30 @@
   "light trails abstract",
   "laser light abstract",
   "fibre optic",
-  "soap film interference",
   "holographic foil",
   "CD diffraction",
   "rainbow caustics",
   "light streaks long exposure",
-  "chromatic abstract light"
+  "chromatic abstract light",
+  "cat:Photoelasticity",
+  "birefringence polarized light plastic",
+  "dichroic glass",
+  "cat:Light painting"
  ],
  "category_depth": 0,
- "category_limit": 200
+ "category_limit": 200,
+ "more_topics": [
+  "cat:Lens flares",
+  "cat:Fiber optic lamps",
+  "suncatcher rainbow light",
+  "polarized light stress plastic",
+  "cat:Light painting photography",
+  "long exposure light abstract",
+  "cat:Rainbow colors",
+  "light refraction abstract",
+  "cat:Bokeh light painting",
+  "Lichtspur Langzeitbelichtung",
+  "light orb photography",
+  "Newton's rings"
+ ]
 }

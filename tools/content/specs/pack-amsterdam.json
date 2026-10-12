@@ -1,0 +1,22 @@
+{
+ "id": "pack-amsterdam",
+ "name": "Amsterdam",
+ "category": "Cities",
+ "description": "Gabled canal houses, arched bridges, church towers and houseboats along the Herengracht, Prinsengracht and Amstel.",
+ "kind": "library",
+ "target": 24,
+ "per_topic": 1,
+ "fetch_per_topic": 4,
+ "author_cap": 2,
+ "sources": ["commons"],
+ "topics": [
+  "Herengracht Amsterdam", "Keizersgracht Amsterdam", "Prinsengracht Westerkerk", "Bloemgracht Amsterdam",
+  "Reguliersgracht Amsterdam", "Magere Brug Amsterdam", "Rijksmuseum Amsterdam", "Amsterdam Centraal station",
+  "Zuiderkerk Amsterdam", "Montelbaanstoren", "Munttoren Amsterdam", "De Gooyer windmill",
+  "Oude Kerk Amsterdam", "Begijnhof Amsterdam", "Damrak houses Amsterdam", "Amsterdam houseboats",
+  "Amstel river Amsterdam", "Brouwersgracht", "Leidsegracht", "Groenburgwal Amsterdam",
+  "Amsterdam canal houses gables", "Basilica of Saint Nicholas Amsterdam", "Schreierstoren", "Royal Palace Amsterdam",
+  "Amsterdam canal at night", "Rijksmuseum library"
+ ],
+ "more_topics": ["Singel Amsterdam", "Jordaan Amsterdam", "Westerkerk tower", "Amsterdam canal autumn", "Blauwbrug Amsterdam", "Amsterdam Stadsschouwburg", "Hortus Botanicus Amsterdam", "Amsterdam canal bridge bicycles"]
+}

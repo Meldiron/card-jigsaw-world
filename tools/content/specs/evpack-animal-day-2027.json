@@ -1,0 +1,8 @@
+{
+ "id": "evpack-animal-day-2027",
+ "name": "World Animal Day",
+ "category": "Event",
+ "kind": "event",
+ "description": "A limited pack for World Animal Day (4 October 2027). Portraits of animals from every continent, from red pandas and toucans to elephants and polar bears, playable for one week.",
+ "note": "clone of evpack-animal-day-2026; content comes from `run.sh clone evpack-animal-day-2026 evpack-animal-day-2027`"
+}

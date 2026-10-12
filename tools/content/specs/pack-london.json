@@ -1,0 +1,21 @@
+{
+ "id": "pack-london",
+ "name": "London",
+ "category": "Cities",
+ "description": "Tower Bridge, St Paul's dome, Victorian market halls, red phone boxes and painted Notting Hill terraces.",
+ "kind": "library",
+ "target": 24,
+ "per_topic": 1,
+ "fetch_per_topic": 4,
+ "author_cap": 2,
+ "sources": ["commons"],
+ "topics": [
+  "Tower Bridge", "St Paul's Cathedral dome", "Tower of London White Tower", "Westminster Abbey",
+  "Natural History Museum London", "Leadenhall Market", "30 St Mary Axe", "Lloyd's building",
+  "London Eye", "Neal's Yard", "Notting Hill houses", "Royal Albert Hall",
+  "St Pancras station", "Kew Gardens Palm House", "Kew Pagoda", "Liberty London building",
+  "Hampton Court Palace", "Barbican Estate", "Little Venice London", "red telephone box London",
+  "St Dunstan-in-the-East", "Strawberry Hill House", "Westminster Cathedral", "Tate Modern", "Kensington Palace"
+ ],
+ "more_topics": ["Buckingham Palace", "Somerset House", "Admiralty Arch", "Brompton Oratory", "Covent Garden market building", "Victoria and Albert Museum", "Horniman Museum", "St Martin-in-the-Fields"]
+}

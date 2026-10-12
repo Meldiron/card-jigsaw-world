@@ -51,3 +51,19 @@ sky/sea frames, monochrome ink sketches, dark interiors, laptops/desks and bokeh
 paintings that also had figures were logged as people (global reject) rather than landscape.
 
 ## Apply pass
+
+Shared pool: `daily-2024.json` now sets `"pool": "daily-2023"`, so every daily year draws from one pool and the
+pool's `used` status keeps pictures unique across months. Pool review before applying: 667 candidates, 602 usable;
+8 already used elsewhere in the catalogue (similar), 329 rejected on the sheets (people 48, text 14, quality 45,
+weak 135, similar 87), leaving 265. Top-ups after the first apply use explicit `--pick` from topics not yet in the
+month (auto-fill's round-robin ignores the topics of kept puzzles and repeated a month's subjects).
+
+- daily-2023-01: replaced 22 in place (people 11, landscape 7, weak 4) + 3 weak kept ones (flat lake, hazy valley, dark painting); 31/31 dates; verified. Exact dup of its 01-27 lake in daily-2025-07 (01) is removed on the 2025 side.
+- daily-2023-02: replaced 17 (people 12, landscape 1, text 1, weak 3) + 5 weak kept ones (rain-on-glass bokeh, pale harbour painting, traffic glare, half mist, two-tone bridge underside); 28/28 dates; verified.
+- daily-2023-03: replaced 26 (people 14, landscape 6, text 3, weak 3) + 3 weak kept ones (bokeh cactus macro, half cloud, half flat sea); 31/31 dates; verified.
+- daily-2023-04: replaced 24 (people 11, landscape 6, text 1, weak 6) + 3 weak kept ones (hazy boulders, Ferris wheel on flat sky, foggy railway); 30/30 dates; verified.
+- daily-2023-05: replaced 23 (people 9, landscape 5, weak 9) + 5 kept ones (weak 4: half cloud, sepia pier on flat sky, faded railway, half flat sky; people 1: mandala painting with figures); 31/31 dates; verified.
+- daily-2023-06: replaced 18 (people 9, landscape 3, weak 6) + 5 kept ones (people 2: figure by parked cars, ground crew by an aircraft tug; weak 3: flat sea aerial, flat beige painting background, half sky); 30/30 dates; verified.
+- daily-2023-07: replaced 25 (people 13, landscape 5, text 2, weak 5) + 5 kept ones (weak 4: flat haze/sunset frames; people 1: London street with pedestrians); 31/31 dates; verified.
+- daily-2023-08: replaced 23 (people 12, landscape 6, text 1, weak 4) + 6 kept ones (weak 5: flat sunset sea, fog bridge, road on flat sky, jellyfish in plain blue, cable cars in fog; similar 1: fireworks also in evpack-new-years-eve-2026); 31/31 dates; verified.
+- daily-2023-09: replaced 24 (people 14, landscape 2, text 3, weak 5) + 5 weak kept ones (town under pale sky, hazy beach, single-tone canopy, typewriter on flat boards, grey misty rooftops); 30/30 dates; verified.

@@ -1,0 +1,15 @@
+{
+ "id": "evpack-forests-2027", "name": "International Day of Forests", "category": "Event",
+ "description": "A limited pack for International Day of Forests (21 March 2027). Redwoods, beech woods, bamboo groves, rainforests, mossy glens and the mushrooms and ferns of the forest floor, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2, "accent_from_cover": true,
+ "sources": ["commons"],
+ "topics": ["Hallerbos bluebell forest", "Giant sequoia grove", "Coast redwood forest", "Arashiyama bamboo grove", "Hoh Rainforest",
+  "Beech forest in autumn", "Birch forest", "Larch forest in autumn", "Black Forest spruce", "Białowieża Forest",
+  "Monteverde cloud forest", "Daintree Rainforest", "Mangrove forest", "Fanal laurel forest Madeira", "Wistman's Wood",
+  "Yakushima moss forest", "Snowy spruce forest", "Fly agaric mushroom", "Forest ferns", "Moss covered tree roots",
+  "Pine cone on forest floor", "Beech forest in spring", "Muir Woods", "Bavarian Forest National Park", "Tarkine rainforest Tasmania",
+  "Valdivian temperate rainforest", "Ancient oak forest", "Aspen grove in autumn", "Forest stream with moss"],
+ "more_topics": ["Redwood National Park", "Olympic National Park forest", "Sequoia National Park", "Fontainebleau forest", "Hainich beech forest",
+  "Jasmund beech forest", "Scots pine forest", "Fir forest in fog", "Great Smoky Mountains autumn forest", "Puzzlewood",
+  "Bracket fungus on tree trunk", "Forest floor moss", "Sugar maple forest autumn", "Atlantic Forest Brazil"]
+}
