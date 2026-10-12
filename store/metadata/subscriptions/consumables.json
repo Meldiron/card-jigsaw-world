@@ -1,70 +1,70 @@
 {
-  "_note": "Eight consumables. Prices are USD; the script picks the matching App Store price point and equalises it across territories. Display name <= 30, description <= 45. reviewScreenshot is optional (set to a PNG path to upload one).",
+  "_note": "Eight consumables. Product ids are fixed on Apple and their numbers are historical: the amount each one grants is in lib/data/purchases.dart (StoreProducts.grants) and functions/verify-purchase/src/main.js (GRANTS); test/economy_test.dart checks that the three agree. Prices are USD; the script picks the matching App Store price point and equalises it across territories. Display name <= 30, description <= 45. reviewScreenshot is optional (set to a PNG path to upload one).",
   "reviewScreenshot": "store/review/iap-review.png",
   "products": [
     {
-      "referenceName": "Coins 1000",
+      "referenceName": "Coins 2,500 (coins_1000)",
       "productId": "coins_1000",
-      "name": "1,000 coins",
-      "description": "Unlock packs and boosters",
+      "name": "2,500 coins",
+      "description": "Enough for a standard pack",
       "customerPrice": "0.99",
-      "reviewNote": "Consumable. Adds 1,000 coins to the player's balance once our Appwrite Function has verified the signed transaction (Sandbox during review). Coins buy puzzle packs, past monthly packs, avatars and boosters."
+      "reviewNote": "Consumable. Adds 2,500 coins to the player's balance once our Appwrite Function has verified the signed transaction (Sandbox during review). Coins buy puzzle packs, past monthly packs, avatars and boosters. The product id is historical; the amount is 2,500."
     },
     {
-      "referenceName": "Coins 3000",
+      "referenceName": "Coins 8,000 (coins_3000)",
       "productId": "coins_3000",
-      "name": "3,000 coins",
-      "description": "Up to seven packs or 25 magic locks",
+      "name": "8,000 coins",
+      "description": "Up to three packs or 66 Magic Locks",
       "customerPrice": "2.99",
-      "reviewNote": "Consumable. Adds 3,000 coins after server-side verification."
+      "reviewNote": "Consumable. Adds 8,000 coins after server-side verification."
     },
     {
-      "referenceName": "Coins 5500",
+      "referenceName": "Coins 14,000 (coins_5500)",
       "productId": "coins_5500",
-      "name": "5,500 coins",
-      "description": "Big bundle, 10 percent extra",
+      "name": "14,000 coins",
+      "description": "Big bundle with 11 percent extra",
       "customerPrice": "4.99",
-      "reviewNote": "Consumable. Adds 5,500 coins after server-side verification."
+      "reviewNote": "Consumable. Adds 14,000 coins after server-side verification."
     },
     {
-      "referenceName": "Coins 12000",
+      "referenceName": "Coins 30,000 (coins_12000)",
       "productId": "coins_12000",
-      "name": "12,000 coins",
-      "description": "Best value coin bundle",
+      "name": "30,000 coins",
+      "description": "Best value, 18 percent extra",
       "customerPrice": "9.99",
-      "reviewNote": "Consumable. Adds 12,000 coins after server-side verification."
+      "reviewNote": "Consumable. Adds 30,000 coins after server-side verification."
     },
     {
-      "referenceName": "Tickets 5",
+      "referenceName": "Tickets 10 (tickets_5)",
       "productId": "tickets_5",
-      "name": "5 tickets",
-      "description": "Lucky Wheel spins and ticket packs",
+      "name": "10 tickets",
+      "description": "Most premium packs or ten wheel spins",
       "customerPrice": "1.99",
-      "reviewNote": "Consumable. Adds 5 tickets after server-side verification. Tickets pay for Lucky Wheel spins, ticket-priced packs and streak restores."
+      "reviewNote": "Consumable. Adds 10 tickets after server-side verification. Tickets pay for premium (ticket-priced) packs, Lucky Wheel spins, opening the piggy bank and streak restores."
     },
     {
-      "referenceName": "Tickets 15",
+      "referenceName": "Tickets 30 (tickets_15)",
       "productId": "tickets_15",
-      "name": "15 tickets",
-      "description": "Three times the spins",
+      "name": "30 tickets",
+      "description": "Premium packs, spins and piggy banks",
       "customerPrice": "4.99",
-      "reviewNote": "Consumable. Adds 15 tickets after server-side verification."
+      "reviewNote": "Consumable. Adds 30 tickets after server-side verification."
     },
     {
-      "referenceName": "Hints 5",
+      "referenceName": "Hints 40 (hints_5)",
       "productId": "hints_5",
-      "name": "5 hints",
+      "name": "40 hints",
       "description": "Reveal where a card belongs",
       "customerPrice": "0.99",
-      "reviewNote": "Consumable. Adds 5 hints after server-side verification. A hint moves one card to its true spot."
+      "reviewNote": "Consumable. Adds 40 hints after server-side verification. A hint moves one card to its true spot."
     },
     {
-      "referenceName": "Hints 15",
+      "referenceName": "Hints 120 (hints_15)",
       "productId": "hints_15",
-      "name": "15 hints",
+      "name": "120 hints",
       "description": "Hints for the biggest boards",
       "customerPrice": "2.49",
-      "reviewNote": "Consumable. Adds 15 hints after server-side verification."
+      "reviewNote": "Consumable. Adds 120 hints after server-side verification."
     }
   ]
 }

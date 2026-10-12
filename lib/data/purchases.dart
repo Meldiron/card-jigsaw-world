@@ -9,6 +9,8 @@ import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 import '../core/platform.dart';
 
 /// Product identifiers as configured in App Store Connect / Products.storekit.
+/// Apple ids cannot be renamed, so the number in a consumable id is
+/// historical: [StoreProducts.grants] says what each one gives.
 class ProductIds {
   ProductIds._();
   static const coins1000 = 'coins_1000';
@@ -27,6 +29,112 @@ class ProductIds {
   static const all = {...consumables, ...subscriptions};
 
   static bool isSubscription(String id) => subscriptions.contains(id);
+}
+
+/// What one consumable purchase gives.
+class ProductGrant {
+  const ProductGrant({this.coins = 0, this.tickets = 0, this.hints = 0});
+  final int coins;
+  final int tickets;
+  final int hints;
+
+  /// "2,500 coins", "10 tickets", "40 hints".
+  String get label => [
+        if (coins > 0) '${groupThousands(coins)} coins',
+        if (tickets > 0) '${groupThousands(tickets)} ticket${tickets == 1 ? '' : 's'}',
+        if (hints > 0) '${groupThousands(hints)} hint${hints == 1 ? '' : 's'}',
+      ].join(', ');
+}
+
+/// The store catalogue in one place: what each product gives and the USD
+/// price shown until StoreKit returns the localised one.
+///
+/// Three places must agree on the grants (test/economy_test.dart checks
+/// them): this table (what the app shows), `GRANTS` in
+/// `functions/verify-purchase/src/main.js` (what the server credits) and
+/// `store/metadata/subscriptions/consumables.json` (App Store names and
+/// prices). The amounts come from the economy model in docs/economy.md:
+/// every bundle is worth about the same per dollar, counting a ticket as
+/// [ticketCoinValue] coins and a hint as its in-game price of 60 coins, and
+/// the bigger bundles add up to about a fifth more.
+class StoreProducts {
+  StoreProducts._();
+
+  static const grants = <String, ProductGrant>{
+    ProductIds.coins1000: ProductGrant(coins: 2500),
+    ProductIds.coins3000: ProductGrant(coins: 8000),
+    ProductIds.coins5500: ProductGrant(coins: 14000),
+    ProductIds.coins12000: ProductGrant(coins: 30000),
+    ProductIds.tickets5: ProductGrant(tickets: 10),
+    ProductIds.tickets15: ProductGrant(tickets: 30),
+    ProductIds.hints5: ProductGrant(hints: 40),
+    ProductIds.hints15: ProductGrant(hints: 120),
+  };
+
+  /// USD customer prices (consumables.json and vip_*.json `customerPrice`).
+  static const usdPrices = <String, String>{
+    ProductIds.coins1000: '0.99',
+    ProductIds.coins3000: '2.99',
+    ProductIds.coins5500: '4.99',
+    ProductIds.coins12000: '9.99',
+    ProductIds.tickets5: '1.99',
+    ProductIds.tickets15: '4.99',
+    ProductIds.hints5: '0.99',
+    ProductIds.hints15: '2.49',
+    ProductIds.vipMonthly: '2.99',
+    ProductIds.vipYearly: '14.99',
+  };
+
+  /// Length of the free introductory offer on both VIP plans.
+  static const vipTrialDays = 7;
+
+  /// What a ticket is worth in coins in the economy model: it opens a full
+  /// piggy bank (500 coins), and a 10-ticket pack sits just above the
+  /// 5,000-coin showcase packs.
+  static const ticketCoinValue = 500;
+
+  static ProductGrant grant(String id) => grants[id] ?? const ProductGrant();
+
+  /// "$0.99": the fallback shown until the App Store price loads.
+  static String price(String id) => '\$${usdPrices[id] ?? ''}';
+
+  /// Extra coins per dollar a coin bundle gives over the smallest one, in
+  /// whole percent rounded down (so a badge never overstates it).
+  static int coinBonusPercent(String id) {
+    final base = grant(ProductIds.coins1000).coins / double.parse(usdPrices[ProductIds.coins1000]!);
+    final perDollar = grant(id).coins / double.parse(usdPrices[id]!);
+    return ((perDollar / base - 1) * 100).floor();
+  }
+
+  /// "7 days free, then $2.99/month".
+  static String vipTrialLine([String? monthlyPrice]) => '$vipTrialDays days free, then ${monthlyPrice ?? price(ProductIds.vipMonthly)}/month';
+}
+
+/// Pack prices as set by `tools/store/apply_pack_prices.py` (docs/economy.md,
+/// "Pack prices"). Prices live in the `packs` rows; these mirror the policy
+/// for copy such as the house ads. test/economy_test.dart compares them with
+/// the script.
+class PackPricePolicy {
+  PackPricePolicy._();
+  static const minCoins = 1000;
+  static const maxCoins = 5000;
+
+  /// A 24-picture pack on the standard tier.
+  static const standardPackCoins = 2400;
+
+  /// Ticket packs cost 8, 10 or 12 tickets (two fewer for small packs).
+  static const ticketPackTickets = [8, 10, 12];
+}
+
+/// 12000 -> "12,000".
+String groupThousands(int v) {
+  final s = v.abs().toString();
+  final b = StringBuffer(v < 0 ? '-' : '');
+  for (var i = 0; i < s.length; i++) {
+    if (i > 0 && (s.length - i) % 3 == 0) b.write(',');
+    b.write(s[i]);
+  }
+  return b.toString();
 }
 
 /// What the server granted for a verified purchase.

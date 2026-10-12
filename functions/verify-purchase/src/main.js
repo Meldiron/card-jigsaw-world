@@ -21,15 +21,20 @@ const APP_APPLE_ID = process.env.APPLE_APP_ID ? Number(process.env.APPLE_APP_ID)
 const ENVIRONMENT = (process.env.APPLE_ENVIRONMENT || 'Sandbox') === 'Production' ? Environment.PRODUCTION : Environment.SANDBOX;
 const DB = process.env.APPWRITE_DATABASE_ID || 'cjw';
 
+// What each product grants. Apple product ids cannot be renamed, so the number
+// in a consumable id is historical. Keep in sync with StoreProducts.grants in
+// lib/data/purchases.dart and store/metadata/subscriptions/consumables.json
+// (test/economy_test.dart checks all three); the amounts are explained in
+// docs/economy.md.
 const GRANTS = {
-  coins_1000: { coins: 1000 },
-  coins_3000: { coins: 3000 },
-  coins_5500: { coins: 5500 },
-  coins_12000: { coins: 12000 },
-  tickets_5: { tickets: 5 },
-  tickets_15: { tickets: 15 },
-  hints_5: { hints: 5 },
-  hints_15: { hints: 15 },
+  coins_1000: { coins: 2500 },
+  coins_3000: { coins: 8000 },
+  coins_5500: { coins: 14000 },
+  coins_12000: { coins: 30000 },
+  tickets_5: { tickets: 10 },
+  tickets_15: { tickets: 30 },
+  hints_5: { hints: 40 },
+  hints_15: { hints: 120 },
   vip_monthly: { vip: true },
   vip_yearly: { vip: true },
 };

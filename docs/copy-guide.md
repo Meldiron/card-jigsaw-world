@@ -8,7 +8,7 @@ Terms (always these, always this case): Coins, Tickets, Hints, puzzle, pack, boa
 - **Events** are the world-day event packs ("Live events" on the Quests tab and Home).
 
 CTAs start with a verb and name the outcome:
-- Play · Continue · Replay · Next puzzle · Unlock for 400 (with coin icon) · Go VIP · Claim 60 coins · Spin for 1 ticket · Open piggy bank · Save progress · Create account · Sign in · Watch video
+- Play · Continue · Replay · Next puzzle · Unlock for 2,400 (with coin icon) · Go VIP · Claim 60 coins · Spin for 1 ticket · Open piggy bank · Save progress · Create account · Sign in · Watch video
 - Never "OK", "Submit", "Yes". Dialog buttons name the action: "Delete photo" / "Keep".
 
 Status lines are short noun phrases: "Ready to claim", "Back tomorrow", "3 of 5 left today", "Opens in 2d 5h", "Ends in 3d", "Claimed", "Solved · 3 stars".

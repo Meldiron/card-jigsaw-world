@@ -127,10 +127,10 @@ skills under `.claude/skills/` hold the detailed workflows.
   `docs/purchases.md`), `lib/data/purchases.dart` (what the store screen shows) and
   `store/metadata/subscriptions/consumables.json` (App Store names and descriptions, pushed with
   `asc_publish.py iap`). Product ids such as `coins_1000` cannot be renamed on Apple; keep them.
-- **Pack prices** live in the `packs` rows (`priceCoins`, `priceTickets`, `isFree`). The content
-  tool creates new packs at 400 coins or 3 tickets and no longer touches prices of existing packs. If
-  you change the price policy, write it down in `docs/` and tell the owner, so packs created later by
-  the content session get the same policy.
+- **Pack prices** live in the `packs` rows (`priceCoins`, `priceTickets`, `isFree`). The policy and the
+  earnings model behind it are in `docs/economy.md`; `tools/store/apply_pack_prices.py` applies it
+  (dry run by default, `--apply` writes). The content tool creates new packs at 400 coins or 3 tickets
+  and never touches existing prices, so re-run the script after every content session.
 
 ## Secrets
 

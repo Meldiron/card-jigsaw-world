@@ -83,9 +83,9 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
           Sfx.instance.coin();
           Haptics.success();
           final parts = [
-            if (g.coins > 0) '${_fmt(g.coins)} coins',
-            if (g.tickets > 0) '${g.tickets} ticket${g.tickets == 1 ? '' : 's'}',
-            if (g.hints > 0) '${g.hints} hint${g.hints == 1 ? '' : 's'}',
+            if (g.coins > 0) '${groupThousands(g.coins)} coins',
+            if (g.tickets > 0) '${groupThousands(g.tickets)} ticket${g.tickets == 1 ? '' : 's'}',
+            if (g.hints > 0) '${groupThousands(g.hints)} hint${g.hints == 1 ? '' : 's'}',
           ];
           showToast(context, 'Added ${parts.join(', ')}', icon: AppIcons.check);
         }
@@ -99,16 +99,6 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
       case RestoreFinished():
         setState(() => _buying = false);
     }
-  }
-
-  static String _fmt(int v) {
-    final s = v.toString();
-    final b = StringBuffer();
-    for (var i = 0; i < s.length; i++) {
-      if (i > 0 && (s.length - i) % 3 == 0) b.write(',');
-      b.write(s[i]);
-    }
-    return b.toString();
   }
 
   static String _date(DateTime d) => '${d.day}.${d.month}.${d.year}';
@@ -173,9 +163,10 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
     }
     if (!await _sandboxConfirm(p.title, p.price)) return;
     final n = ref.read(profileProvider.notifier);
-    if (p.coins > 0) await n.addCoins(p.coins, reason: 'sandbox:${p.id}');
-    if (p.tickets > 0) await n.addTickets(p.tickets, reason: 'sandbox:${p.id}');
-    if (p.hints > 0) await n.addHints(p.hints, reason: 'sandbox:${p.id}');
+    final g = p.grant;
+    if (g.coins > 0) await n.addCoins(g.coins, reason: 'sandbox:${p.id}');
+    if (g.tickets > 0) await n.addTickets(g.tickets, reason: 'sandbox:${p.id}');
+    if (g.hints > 0) await n.addHints(g.hints, reason: 'sandbox:${p.id}');
     if (!mounted) return;
     Sfx.instance.coin();
     Haptics.success();
@@ -207,7 +198,8 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
       showToast(context, 'The App Store is not available right now. Try again later.', icon: AppIcons.time);
       return;
     }
-    if (!await _sandboxConfirm('Card Jigsaw VIP', productId == ProductIds.vipYearly ? '\$14.99 / year after a 7-day trial' : '\$2.99 / month after a 7-day trial')) return;
+    final trial = 'after a ${StoreProducts.vipTrialDays}-day trial';
+    if (!await _sandboxConfirm('Card Jigsaw VIP', productId == ProductIds.vipYearly ? '${StoreProducts.price(ProductIds.vipYearly)} / year $trial' : '${StoreProducts.price(ProductIds.vipMonthly)} / month $trial')) return;
     await ref.read(profileProvider.notifier).setVip(true);
     if (!mounted) return;
     Sfx.instance.win();
@@ -247,7 +239,8 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
       ),
       body: ListView(
         physics: const BouncingScrollPhysics(),
-        padding: EdgeInsets.fromLTRB(20, MediaQuery.paddingOf(context).top + kToolbarHeight + 8, 20, 32),
+        // The store is a sheet: the end padding clears the home indicator.
+        padding: EdgeInsets.fromLTRB(20, MediaQuery.paddingOf(context).top + kToolbarHeight + 8, 20, GlassTabBar.scrollEndPadding(context)),
         children: [
           if (!caps.purchases) ...[
             const StoreWebNotice(),
@@ -284,7 +277,7 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
           _FreeNote(text: 'Free coins: daily quests, the daily gift, level-ups, the piggy bank (${Economy.piggyPerPuzzle} per picture, up to ${Profile.piggyCapacity}) and the Lucky Wheel.', route: '/events'),
           if (caps.purchases) _ProductGrid(products: _coinProducts, onBuy: _buy, priceOf: (p) => _price(p, products), busy: _buying),
           const SectionHeader(title: 'Tickets', subtitle: 'Premium packs and the piggy bank', padding: EdgeInsets.fromLTRB(0, 24, 0, 12)),
-          _FreeNote(text: 'Free tickets: weekly quests, world-day events and every third level.', route: '/events'),
+          _FreeNote(text: 'Free tickets: the daily gift, weekly quests, world-day events and every third level.', route: '/events'),
           if (caps.purchases) _ProductGrid(products: _ticketProducts, onBuy: _buy, priceOf: (p) => _price(p, products), busy: _buying),
           const SectionHeader(title: 'Hints', subtitle: 'Show a card its place', padding: EdgeInsets.fromLTRB(0, 24, 0, 12)),
           _FreeNote(text: 'Free hints: the daily gift on even days, every second level and the Lucky Wheel.', route: '/home'),
@@ -294,8 +287,8 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
             key: _vipKey,
             isVip: isVip,
             vipUntil: profile?.vipExpiresAt,
-            monthlyPrice: products[ProductIds.vipMonthly]?.price ?? '\$2.99',
-            yearlyPrice: products[ProductIds.vipYearly]?.price ?? '\$14.99',
+            monthlyPrice: products[ProductIds.vipMonthly]?.price ?? StoreProducts.price(ProductIds.vipMonthly),
+            yearlyPrice: products[ProductIds.vipYearly]?.price ?? StoreProducts.price(ProductIds.vipYearly),
             busy: _buying,
             purchasable: caps.purchases,
             onBuyMonthly: () => _buyVip(ProductIds.vipMonthly),
@@ -431,15 +424,15 @@ class _VipCard extends StatelessWidget {
               children: [
                 const Chip2(label: 'Available on iPhone', icon: CupertinoIcons.device_phone_portrait, color: Color(0x22FFFFFF), foreground: fg),
                 const SizedBox(width: 10),
-                Expanded(child: Text('From $monthlyPrice/month after a 7-day trial.', style: TextStyle(color: fg.withValues(alpha: 0.7), fontSize: 12))),
+                Expanded(child: Text('From $monthlyPrice/month after a ${StoreProducts.vipTrialDays}-day trial.', style: TextStyle(color: fg.withValues(alpha: 0.7), fontSize: 12))),
               ],
             )
           else ...[
-            BigButton(label: 'Start 7-day free trial', kind: ButtonKind.gold, loading: busy, onTap: onBuyMonthly),
+            BigButton(label: 'Start ${StoreProducts.vipTrialDays}-day free trial', kind: ButtonKind.gold, loading: busy, onTap: onBuyMonthly),
             const SizedBox(height: 6),
-            Text('7 days free, then $monthlyPrice/month', style: TextStyle(color: fg.withValues(alpha: 0.7), fontSize: 12)),
+            Text(StoreProducts.vipTrialLine(monthlyPrice), style: TextStyle(color: fg.withValues(alpha: 0.7), fontSize: 12)),
             const SizedBox(height: 10),
-            BigButton(label: 'Yearly · $yearlyPrice · 7 days free', kind: ButtonKind.ghostLight, loading: busy, onTap: onBuyYearly),
+            BigButton(label: 'Yearly · $yearlyPrice · ${StoreProducts.vipTrialDays} days free', kind: ButtonKind.ghostLight, loading: busy, onTap: onBuyYearly),
           ],
           if (purchasable) ...[
             const SizedBox(height: 14),
@@ -453,7 +446,7 @@ class _VipCard extends StatelessWidget {
                     children: [
                       Icon(CupertinoIcons.gift, size: 16, color: fg.withValues(alpha: 0.75)),
                       const SizedBox(width: 6),
-                      Text('Have a gift code? Redeem it', style: TextStyle(color: fg.withValues(alpha: 0.85), fontSize: 13, fontWeight: FontWeight.w600)),
+                      Flexible(child: Text('Have a gift code? Redeem it', style: TextStyle(color: fg.withValues(alpha: 0.85), fontSize: 13, fontWeight: FontWeight.w600))),
                     ],
                   ),
                 ),
@@ -468,31 +461,32 @@ class _VipCard extends StatelessWidget {
 
 enum _Art { coin, coins, coinsLarge, coinsHuge, ticket, tickets, hints, hintsLarge }
 
+/// A store tile. Amounts and fallback prices come from [StoreProducts], the
+/// one table the server grant and the App Store metadata are checked against.
 class _Product {
-  const _Product(this.id, this.title, this.price, {this.coins = 0, this.tickets = 0, this.hints = 0, this.art = _Art.coin, this.badge});
+  const _Product(this.id, {this.art = _Art.coin, this.badge});
   final String id;
-  final String title;
-  final String price;
-  final int coins;
-  final int tickets;
-  final int hints;
   final _Art art;
   final String? badge;
+
+  ProductGrant get grant => StoreProducts.grant(id);
+  String get title => grant.label;
+  String get price => StoreProducts.price(id);
 }
 
-const _coinProducts = [
-  _Product(ProductIds.coins1000, '1,000 coins', '\$0.99', coins: 1000, art: _Art.coin),
-  _Product(ProductIds.coins3000, '3,000 coins', '\$2.99', coins: 3000, art: _Art.coins, badge: 'Popular'),
-  _Product(ProductIds.coins5500, '5,500 coins', '\$4.99', coins: 5500, art: _Art.coinsLarge, badge: '+10%'),
-  _Product(ProductIds.coins12000, '12,000 coins', '\$9.99', coins: 12000, art: _Art.coinsHuge, badge: 'Best value'),
+final _coinProducts = [
+  const _Product(ProductIds.coins1000, art: _Art.coin),
+  const _Product(ProductIds.coins3000, art: _Art.coins, badge: 'Popular'),
+  _Product(ProductIds.coins5500, art: _Art.coinsLarge, badge: '+${StoreProducts.coinBonusPercent(ProductIds.coins5500)}%'),
+  const _Product(ProductIds.coins12000, art: _Art.coinsHuge, badge: 'Best value'),
 ];
 const _ticketProducts = [
-  _Product(ProductIds.tickets5, '5 tickets', '\$1.99', tickets: 5, art: _Art.ticket),
-  _Product(ProductIds.tickets15, '15 tickets', '\$4.99', tickets: 15, art: _Art.tickets, badge: 'Popular'),
+  _Product(ProductIds.tickets5, art: _Art.ticket),
+  _Product(ProductIds.tickets15, art: _Art.tickets, badge: 'Popular'),
 ];
 const _boosterProducts = [
-  _Product(ProductIds.hints5, '5 hints', '\$0.99', hints: 5, art: _Art.hints),
-  _Product(ProductIds.hints15, '15 hints', '\$2.49', hints: 15, art: _Art.hintsLarge, badge: 'Popular'),
+  _Product(ProductIds.hints5, art: _Art.hints),
+  _Product(ProductIds.hints15, art: _Art.hintsLarge, badge: 'Popular'),
 ];
 
 /// Product artwork: stacked currency marks whose count grows with the bundle.

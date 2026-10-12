@@ -9,12 +9,12 @@
       "localizations": [
         {
           "description": "1,000 coins",
-          "displayName": "1,000 coins",
+          "displayName": "2,500 coins",
           "locale": "en_US"
         }
       ],
       "productID": "coins_1000",
-      "referenceName": "1,000 coins",
+      "referenceName": "2,500 coins",
       "type": "Consumable"
     },
     {
@@ -24,12 +24,12 @@
       "localizations": [
         {
           "description": "3,000 coins",
-          "displayName": "3,000 coins",
+          "displayName": "8,000 coins",
           "locale": "en_US"
         }
       ],
       "productID": "coins_3000",
-      "referenceName": "3,000 coins",
+      "referenceName": "8,000 coins",
       "type": "Consumable"
     },
     {
@@ -39,12 +39,12 @@
       "localizations": [
         {
           "description": "5,500 coins",
-          "displayName": "5,500 coins",
+          "displayName": "14,000 coins",
           "locale": "en_US"
         }
       ],
       "productID": "coins_5500",
-      "referenceName": "5,500 coins",
+      "referenceName": "14,000 coins",
       "type": "Consumable"
     },
     {
@@ -54,12 +54,12 @@
       "localizations": [
         {
           "description": "12,000 coins",
-          "displayName": "12,000 coins",
+          "displayName": "30,000 coins",
           "locale": "en_US"
         }
       ],
       "productID": "coins_12000",
-      "referenceName": "12,000 coins",
+      "referenceName": "30,000 coins",
       "type": "Consumable"
     },
     {
@@ -69,12 +69,12 @@
       "localizations": [
         {
           "description": "5 tickets",
-          "displayName": "5 tickets",
+          "displayName": "10 tickets",
           "locale": "en_US"
         }
       ],
       "productID": "tickets_5",
-      "referenceName": "5 tickets",
+      "referenceName": "10 tickets",
       "type": "Consumable"
     },
     {
@@ -84,12 +84,12 @@
       "localizations": [
         {
           "description": "15 tickets",
-          "displayName": "15 tickets",
+          "displayName": "30 tickets",
           "locale": "en_US"
         }
       ],
       "productID": "tickets_15",
-      "referenceName": "15 tickets",
+      "referenceName": "30 tickets",
       "type": "Consumable"
     },
     {
@@ -99,12 +99,12 @@
       "localizations": [
         {
           "description": "5 hints",
-          "displayName": "5 hints",
+          "displayName": "40 hints",
           "locale": "en_US"
         }
       ],
       "productID": "hints_5",
-      "referenceName": "5 hints",
+      "referenceName": "40 hints",
       "type": "Consumable"
     },
     {
@@ -114,12 +114,12 @@
       "localizations": [
         {
           "description": "15 hints",
-          "displayName": "15 hints",
+          "displayName": "120 hints",
           "locale": "en_US"
         }
       ],
       "productID": "hints_15",
-      "referenceName": "15 hints",
+      "referenceName": "120 hints",
       "type": "Consumable"
     }
   ],

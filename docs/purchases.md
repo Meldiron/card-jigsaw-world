@@ -4,20 +4,30 @@ Payment runs through StoreKit 2 (`in_app_purchase` plugin). Nothing is granted o
 
 ## Products
 
+Apple product ids cannot be renamed, so the number in a consumable id is historical. The grants below come from the economy model in `docs/economy.md` (section 7): every bundle is worth about the same per dollar, counting a ticket as 500 coins and a hint as 60.
+
 | Product id | Type | Grant | Placeholder price |
 |---|---|---|---|
-| `coins_1000` | consumable | 1,000 coins | $0.99 |
-| `coins_3000` | consumable | 3,000 coins | $2.99 |
-| `coins_5500` | consumable | 5,500 coins | $4.99 |
-| `coins_12000` | consumable | 12,000 coins | $9.99 |
-| `tickets_5` | consumable | 5 tickets | $1.99 |
-| `tickets_15` | consumable | 15 tickets | $4.99 |
-| `hints_5` | consumable | 5 hints | $0.99 |
-| `hints_15` | consumable | 15 hints | $2.49 |
+| `coins_1000` | consumable | 2,500 coins | $0.99 |
+| `coins_3000` | consumable | 8,000 coins | $2.99 |
+| `coins_5500` | consumable | 14,000 coins | $4.99 |
+| `coins_12000` | consumable | 30,000 coins | $9.99 |
+| `tickets_5` | consumable | 10 tickets | $1.99 |
+| `tickets_15` | consumable | 30 tickets | $4.99 |
+| `hints_5` | consumable | 40 hints | $0.99 |
+| `hints_15` | consumable | 120 hints | $2.49 |
 | `vip_monthly` | auto-renewable, group `VIP` | VIP until `expiresDate`; 7-day free introductory offer | $2.99 / month (Apple price-point equalised per country) |
 | `vip_yearly` | auto-renewable, group `VIP` | VIP until `expiresDate`; 7-day free introductory offer | $14.99 / year (Apple price-point equalised per country) |
 
 The store screen shows the localised App Store price once products load; the table prices are the fallbacks.
+
+### Changing what a purchase gives
+
+Three places hold the amounts and `test/economy_test.dart` fails unless they agree:
+
+1. `StoreProducts.grants` and `StoreProducts.usdPrices` in `lib/data/purchases.dart`: what the store screen, the house ads and the debug sandbox show.
+2. `GRANTS` in `functions/verify-purchase/src/main.js`: what the server credits. Redeploy the function (below) before the build that shows new amounts ships.
+3. `store/metadata/subscriptions/consumables.json`: App Store display names (30 characters), descriptions (45) and review notes, pushed with `.venv/bin/python tools/store/asc_publish.py iap` (try `--dry-run` first).
 
 ## Flow
 
@@ -38,7 +48,7 @@ What `isVip` unlocks in the app (keep this list, the `_VipCard` bullets in `lib/
 - A fourth daily quest and a sixth weekly quest (`Goals.daily` / `Goals.weekly` mark the last entry `vipOnly`; non-VIP players see it as a locked card that opens the Store VIP card, and `claimGoal` refuses it). The free counts are `Goals.dailyFree = 3` and `Goals.weeklyFree = 5`.
 - No bonus videos (house promotions) anywhere.
 - Unlimited My Puzzles uploads.
-- +500 coins every week.
+- +500 coins every week: a VIP-only entry at the end of `Goals.weekly` ("VIP weekly bonus", key `w<monday>:vipbonus`, amount `Goals.vipWeeklyBonus`), always complete and claimed once per week from the Quests tab.
 
 ## Function configuration (Appwrite console → Functions → verify-purchase)
 
@@ -50,7 +60,13 @@ What `isVip` unlocks in the app (keep this list, the `_VipCard` bullets in `lib/
 | `APPLE_ENVIRONMENT` | `Sandbox` while testing, `Production` once live (sandbox receipts still verify, the function falls back automatically) |
 | `APPWRITE_DATABASE_ID` | `cjw` |
 
-Runtime Node 22, entrypoint `src/main.js`, build command `npm install`, scopes `rows.read`, `rows.write`, `users.read`, execute permission `users`. Deploy by zipping `functions/verify-purchase` (without `node_modules`) and creating a deployment, or via the Appwrite CLI `appwrite push functions`.
+Runtime Node 22, entrypoint `src/main.js`, build command `npm install`, scopes `rows.read`, `rows.write`, `users.read`, execute permission `users`. Deploy by packing `functions/verify-purchase` (without `node_modules`) and creating a deployment:
+
+```
+COPYFILE_DISABLE=1 tar --exclude node_modules -czf /tmp/verify-purchase.tar.gz -C functions/verify-purchase .
+```
+
+The API keys in `secrets/` have no function scope, so create the deployment with the Appwrite MCP (`appwrite_call_tool`, `project_id: "6acb4de5003e38d5ebd9"`, `tool_name: "functions_create_deployment"`, `confirm_write: true`, arguments `{function_id: "verify-purchase", code: {filename: "code.tar.gz", content: <base64 of the tarball>, encoding: "base64", mime_type: "application/gzip"}, activate: true, entrypoint: "src/main.js", commands: "npm install"}`) or upload the tarball in Console > Functions > verify-purchase > Deployments. With a key that has `functions.write`, `tools/dev/appwrite_upload.py <endpoint> <project> <key> /functions/verify-purchase/deployments /tmp/verify-purchase.tar.gz true` works too. Check `https://cjw-verify-purchase.fra.appwrite.run/health` answers `{"ok":true}` afterwards.
 
 ### App Store Server Notifications
 

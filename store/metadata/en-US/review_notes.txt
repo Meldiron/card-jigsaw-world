@@ -6,7 +6,7 @@ No account is required. The first launch creates an anonymous guest session on o
 PURCHASES
 In-app purchases are StoreKit 2 consumables (coins, tickets, hints) and two auto-renewable subscriptions in the "VIP" group (vip_monthly, vip_yearly), both with a 7-day free introductory offer. Nothing is granted on the device: each finished transaction is sent to our Appwrite Function "verify-purchase", which verifies Apple's signed transaction (JWS) against Apple Root CA G3 and applies the grant once. During review the function runs in the Sandbox environment, so sandbox purchases made with a Sandbox Apple ID verify end to end and credit the account within a few seconds.
 
-How to test a purchase: on Home tap the coin balance (or any "Get coins" / "Go VIP" card) to open the Store, choose "1,000 coins" or "Go VIP", and confirm with a Sandbox Apple ID. The balance at the top of the screen updates after verification. "Restore purchases" is in Profile > Settings > Account.
+How to test a purchase: on Home tap the coin balance (or any "Get coins" / "Go VIP" card) to open the Store, choose "2,500 coins" or "Go VIP", and confirm with a Sandbox Apple ID. The balance at the top of the screen updates after verification. "Restore purchases" is in Profile > Settings > Account.
 
 ADS
 There is no ad network and no third-party SDK for ads or analytics. The "rewarded video" and interstitial cards are house ads: short, closable promotions of the game's own in-app store. They never appear for VIP players.

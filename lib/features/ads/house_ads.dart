@@ -11,6 +11,7 @@ import '../../core/haptics.dart';
 import '../../core/platform.dart';
 import '../../core/sfx.dart';
 import '../../core/theme/tokens.dart';
+import '../../data/purchases.dart';
 import '../../models/models.dart';
 import '../../state/catalog.dart';
 import '../../state/profile.dart';
@@ -23,8 +24,7 @@ import '../../widgets/ui.dart';
 /// that leads there. Two formats:
 ///
 /// * Rewarded: a timed full-screen card. The reward is granted only after the
-///   full countdown, never by tapping the offer early;
-///   countdown completes (or the player taps the offer). Capped per day on the
+///   full countdown, never by tapping the offer early. Capped per day on the
 ///   profile so blocking requests does not reset it.
 /// * Interstitial ("break"): shown after a completed puzzle, closable after a
 ///   short delay, frequency-capped and never shown to VIP members.
@@ -99,17 +99,42 @@ bool openCreative(BuildContext context, WidgetRef ref, Creative creative) {
   return true;
 }
 
-const _creatives = <Creative>[
-  Creative(id: 'vip-all', kind: CreativeKind.vip, headline: 'Every pack. No breaks.', body: 'VIP opens every pack and every past month, and removes these cards.', cta: 'Start free trial', route: '/store', price: '7 days free, then \$4.99/month'),
-  Creative(id: 'vip-months', kind: CreativeKind.vip, headline: 'Three years of daily puzzles', body: 'All 46 monthly albums are included with VIP.', cta: 'Go VIP', route: '/store', price: '7 days free'),
-  Creative(id: 'coins-3000', kind: CreativeKind.coins, headline: 'Running low on coins?', body: '3,000 coins unlock up to seven packs or 25 magic locks.', cta: 'Get 3,000 coins', route: '/store', price: '\$2.99'),
-  Creative(id: 'coins-1000', kind: CreativeKind.coins, headline: 'A pack a day', body: '1,000 coins covers two monthly albums or a themed pack.', cta: 'Get 1,000 coins', route: '/store', price: '\$0.99'),
-  Creative(id: 'tickets-5', kind: CreativeKind.tickets, headline: 'Spin the Lucky Wheel', body: 'Five tickets: five spins, or one premium pack and the piggy bank.', cta: 'Get 5 tickets', route: '/store', price: '\$1.99'),
-  Creative(id: 'hints-15', kind: CreativeKind.hints, headline: 'Stuck on a card?', body: '15 hints show exactly where a card belongs.', cta: 'Get 15 hints', route: '/store', price: '\$2.49'),
-  Creative(id: 'piggy', kind: CreativeKind.piggy, headline: 'Your piggy bank is filling up', body: 'Every finished puzzle adds 25 coins. Open it with one ticket.', cta: 'See piggy bank', route: '/home'),
+/// Every amount and price in the copy comes from the store catalogue
+/// ([StoreProducts]), the pack price policy and [Economy], so a change to a
+/// bundle or a price cannot leave an ad promising the old numbers.
+final houseCreatives = <Creative>[
+  Creative(id: 'vip-all', kind: CreativeKind.vip, headline: 'Every pack. No breaks.', body: 'VIP opens every pack and every past month, and removes these cards.', cta: 'Start free trial', route: '/store', price: StoreProducts.vipTrialLine()),
+  Creative(id: 'vip-months', kind: CreativeKind.vip, headline: 'Three years of daily puzzles', body: 'All 46 monthly albums are included with VIP.', cta: 'Go VIP', route: '/store', price: '${StoreProducts.vipTrialDays} days free'),
+  _coinsCreative('coins-3000', ProductIds.coins3000, headline: 'Running low on coins?', body: (n) {
+    final packs = n ~/ PackPricePolicy.standardPackCoins;
+    return '${groupThousands(n)} coins unlock up to ${_count(packs)} packs or ${n ~/ Economy.magicLockCostCoins} Magic Locks.';
+  }),
+  _coinsCreative('coins-1000', ProductIds.coins1000, headline: 'One more pack', body: (n) => '${groupThousands(n)} coins unlock a standard 24-picture pack.'),
+  Creative(
+    id: 'tickets-5',
+    kind: CreativeKind.tickets,
+    headline: 'Tickets open premium packs',
+    body: '${_tickets.label} open most premium packs, or give ${_count(_tickets.tickets ~/ Economy.wheelSpinTickets)} Lucky Wheel spins.',
+    cta: 'Get ${_tickets.label}',
+    route: '/store',
+    price: StoreProducts.price(ProductIds.tickets5),
+  ),
+  Creative(id: 'hints-15', kind: CreativeKind.hints, headline: 'Stuck on a card?', body: '${groupThousands(_hints.hints)} hints show exactly where a card belongs.', cta: 'Get ${_hints.label}', route: '/store', price: StoreProducts.price(ProductIds.hints15)),
+  Creative(id: 'piggy', kind: CreativeKind.piggy, headline: 'Your piggy bank is filling up', body: 'Every finished puzzle adds ${Economy.piggyPerPuzzle} coins, up to ${Profile.piggyCapacity}. Open it with one ticket.', cta: 'See piggy bank', route: '/home'),
   Creative(id: 'monthly', kind: CreativeKind.monthly, headline: 'One new picture every day', body: 'This month’s album is free. Past months come with VIP.', cta: 'Open this month', route: '/library'),
   Creative(id: 'events', kind: CreativeKind.event, headline: 'A new world-day event every week', body: 'Themed packs that open for seven days. Finish every picture for a ticket.', cta: 'See events', route: '/events'),
 ];
+
+ProductGrant get _tickets => StoreProducts.grant(ProductIds.tickets5);
+ProductGrant get _hints => StoreProducts.grant(ProductIds.hints15);
+
+Creative _coinsCreative(String id, String productId, {required String headline, required String Function(int coins) body}) {
+  final grant = StoreProducts.grant(productId);
+  return Creative(id: id, kind: CreativeKind.coins, headline: headline, body: body(grant.coins), cta: 'Get ${grant.label}', route: '/store', price: StoreProducts.price(productId));
+}
+
+/// Small counts in words ("three packs"), larger ones as digits.
+String _count(int n) => const ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'].elementAtOrNull(n) ?? groupThousands(n);
 
 /// Picks a creative for the player's state; never repeats the last one.
 Creative pickCreative(WidgetRef ref) {
@@ -117,13 +142,13 @@ Creative pickCreative(WidgetRef ref) {
   final p = ref.read(profileProvider).value;
   final pool = <Creative>[];
   if (p != null) {
-    if (p.coins < 200) pool.addAll(_creatives.where((c) => c.kind == CreativeKind.coins));
-    if (p.hints == 0) pool.addAll(_creatives.where((c) => c.kind == CreativeKind.hints));
-    if (p.tickets == 0) pool.addAll(_creatives.where((c) => c.kind == CreativeKind.tickets));
-    if (p.puzzlesCompleted >= 10 && !p.isVip) pool.addAll(_creatives.where((c) => c.kind == CreativeKind.vip));
-    if (p.piggyCoins >= Profile.piggyCapacity * 0.6) pool.addAll(_creatives.where((c) => c.kind == CreativeKind.piggy));
+    if (p.coins < 200) pool.addAll(houseCreatives.where((c) => c.kind == CreativeKind.coins));
+    if (p.hints == 0) pool.addAll(houseCreatives.where((c) => c.kind == CreativeKind.hints));
+    if (p.tickets == 0) pool.addAll(houseCreatives.where((c) => c.kind == CreativeKind.tickets));
+    if (p.puzzlesCompleted >= 10 && !p.isVip) pool.addAll(houseCreatives.where((c) => c.kind == CreativeKind.vip));
+    if (p.piggyCoins >= Profile.piggyCapacity * 0.6) pool.addAll(houseCreatives.where((c) => c.kind == CreativeKind.piggy));
   }
-  if (pool.isEmpty) pool.addAll(_creatives.where((c) => !(p?.isVip ?? false) || c.kind != CreativeKind.vip));
+  if (pool.isEmpty) pool.addAll(houseCreatives.where((c) => !(p?.isVip ?? false) || c.kind != CreativeKind.vip));
   final candidates = pool.where((c) => c.id != store.lastCreativeId).toList();
   final list = candidates.isEmpty ? pool : candidates;
   final pick = list[Random().nextInt(list.length)];
@@ -242,18 +267,18 @@ class _HouseAdScreenState extends ConsumerState<HouseAdScreen> {
 
   Future<void> _close() async {
     if (widget.rewarded && !_done) {
-      final leave = await showCupertinoDialog<bool>(
-        context: context,
-        builder: (ctx) => CupertinoAlertDialog(
-          title: const Text('Close and lose the reward?'),
-          content: Padding(padding: const EdgeInsets.only(top: 8), child: Text('${_left}s left to earn ${widget.rewardCoins} coins.')),
-          actions: [
-            CupertinoDialogAction(isDefaultAction: true, onPressed: () => Navigator.pop(ctx, false), child: const Text('Keep watching')),
-            CupertinoDialogAction(isDestructiveAction: true, onPressed: () => Navigator.pop(ctx, true), child: const Text('Close')),
-          ],
-        ),
+      // The countdown keeps running underneath. Leaving early never pays:
+      // the card closes with no reward even if the timer ran out while the
+      // alert was open.
+      final leave = await showAppAlert(
+        context,
+        title: 'Close and lose the reward?',
+        message: '${_left}s left to earn ${widget.rewardCoins} coins.',
+        cancelLabel: 'Keep watching',
+        confirmLabel: 'Close',
+        destructive: true,
       );
-      if (leave != true || !mounted) return;
+      if (!leave || !mounted) return;
       Navigator.of(context).pop(false);
       return;
     }
@@ -467,7 +492,7 @@ class _HouseBannerState extends ConsumerState<HouseBanner> {
   Widget build(BuildContext context) {
     final profile = ref.watch(profileProvider).value;
     if (_dismissedThisSession || profile == null || profile.isVip) return const SizedBox.shrink();
-    _creative ??= _creatives.firstWhere((c) => c.kind == CreativeKind.vip);
+    _creative ??= houseCreatives.firstWhere((c) => c.kind == CreativeKind.vip);
     final c = _creative!;
     final colors = context.colors;
     return Padding(
