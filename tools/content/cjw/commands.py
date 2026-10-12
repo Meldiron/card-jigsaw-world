@@ -168,7 +168,23 @@ def cmd_resume(a):
     if not st['packs']:
         st = checkpoint.plan(catalog.load())
     print('board:', checkpoint.board(st), '| last checkpoint:', st['meta'].get('last_checkpoint', {}).get('at', 'never'))
-    todo = [(pid, e) for pid, e in sorted(st['packs'].items()) if e['status'] in ('pending', 'audited') and (not a.prefix or pid.startswith(a.prefix))]
+    from .paths import REPORTS
+    batch = None
+    if a.batch:
+        batches = json.loads((REPORTS / 'batches.json').read_text())
+        batch = batches.get(a.batch)
+        if not batch: raise SystemExit(f'unknown batch {a.batch}; see reports/batches.json')
+        if batch.get('note'): print('batch note:', batch['note'])
+        print('batch report file: reports/' + batch['report'])
+    def in_scope(pid):
+        if batch:
+            if 'packs' in batch: return pid in batch['packs']
+            return pid.startswith(batch['prefix'])
+        return not a.prefix or pid.startswith(a.prefix)
+    if batch and 'packs' in batch:
+        done = [pid for pid in batch['packs'] if st['packs'].get(pid, {}).get('status') in ('fixed', 'verified')]
+        print(f"batch {a.batch}: {len(done)} of {len(batch['packs'])} packs fixed/verified")
+    todo = [(pid, e) for pid, e in sorted(st['packs'].items()) if e['status'] in ('pending', 'audited') and in_scope(pid)]
     print(f'{len(todo)} packs still to finish; next {min(a.next, len(todo))}:')
     for pid, e in todo[:a.next]:
         has_spec = specs.spec_path(pid).exists()
@@ -217,7 +233,7 @@ def main(argv):
     p = sub.add_parser('summary'); p.add_argument('-v', '--verbose', action='store_true'); p.set_defaults(f=cmd_summary)
     p = sub.add_parser('plan'); p.set_defaults(f=cmd_plan)
     p = sub.add_parser('verify'); p.add_argument('pack', nargs='+'); p.set_defaults(f=cmd_verify)
-    p = sub.add_parser('resume'); p.add_argument('--prefix'); p.add_argument('--next', type=int, default=10); p.add_argument('--auto', action='store_true'); p.set_defaults(f=cmd_resume)
+    p = sub.add_parser('resume'); p.add_argument('--prefix'); p.add_argument('--batch'); p.add_argument('--next', type=int, default=10); p.add_argument('--auto', action='store_true'); p.set_defaults(f=cmd_resume)
     p = sub.add_parser('checkpoint'); p.add_argument('-m', '--message'); p.set_defaults(f=cmd_checkpoint)
     p = sub.add_parser('status'); p.add_argument('pack', nargs='+'); p.set_defaults(f=cmd_status)
     a = ap.parse_args(argv)

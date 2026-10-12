@@ -72,3 +72,14 @@ adding topics. Do not write your own fetchers and do not change the User-Agent.
 updated by the CLI; `run.sh resume --prefix <yourprefix>` shows what is left. Run `run.sh verify PACK`
 as the last step of every pack. The coordinator commits and pushes `tools/content` every 30 minutes;
 do not run git yourself.
+
+## Resuming and budget (added after the overnight interruption)
+
+- `tools/content/run.sh resume --batch <B> --next 40` lists your batch's remaining packs with their
+  last step, whether a spec exists and how many usable candidates the pool has. Continue each pack
+  from that state; everything is idempotent (re-running `pool` only adds, `apply` only fills, `verify`
+  only marks).
+- Run `pool`, `recover` and `apply` in the FOREGROUND (Bash timeout 600000). If a pool run hits the
+  timeout, simply run it again: finished topics are cheap to repeat. Do not start background jobs
+  with monitors; every wake-up costs the shared API budget, which is what stopped the first wave.
+- Read each contact sheet once; decide; move on. Keep report entries to one line per pack.
