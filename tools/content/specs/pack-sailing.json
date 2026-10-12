@@ -2,7 +2,7 @@
  "id": "pack-sailing",
  "name": "Sailing",
  "category": "Oceans",
- "description": "Tall ships, racing yachts, dinghies and classic wooden sailboats under full canvas.",
+ "description": "Tall ships, schooners, cruising yachts and their rigging, moored in harbour or under full sail.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
@@ -63,5 +63,6 @@
   "sailboat Brittany",
   "sailboat Norway fjord",
   "sailing Lake Constance"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/00_2162_Rigging_of_the_four-masted_barque_Viking.jpg/1280px-00_2162_Rigging_of_the_four-masted_barque_Viking.jpg"
 }

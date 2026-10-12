@@ -1,8 +1,8 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-12T13:16:32",
-"msg": "Content: checkpoint (122 verified, 6 fixed, 69 audited, 90 pending)",
+"at": "2026-10-12T13:37:27",
+"msg": "Content: checkpoint (131 verified, 3 fixed, 69 audited, 87 pending)",
 "ok": true,
 "pushed": true,
 "stage": "committed"
@@ -554,11 +554,11 @@
 },
 "daily-2024-02": {
 "added": 23,
-"at": "2026-10-12T13:30:41",
+"at": "2026-10-12T13:44:08",
 "category": "Daily",
 "issues": 0,
 "kind": "daily",
-"last_step": "pool 340 usable",
+"last_step": "pool 413 usable",
 "name": "February 2024",
 "puzzles": 29,
 "removed": 23,
@@ -679,8 +679,8 @@
 },
 "daily-2025": {
 "added": 0,
-"at": "2026-10-12T13:35:22",
-"last_step": "pool 79 usable",
+"at": "2026-10-12T13:45:10",
+"last_step": "pool 43 usable",
 "puzzles": null,
 "removed": 0,
 "status": "pending"
@@ -770,15 +770,15 @@
 "status": "verified"
 },
 "daily-2025-08": {
-"added": 23,
-"at": "2026-10-12T13:36:22",
+"added": 29,
+"at": "2026-10-12T13:46:13",
 "category": "Daily",
 "kind": "daily",
-"last_step": "reject 2 weak",
+"last_step": "apply",
 "name": "August 2025",
 "puzzles": 31,
-"removed": 27,
-"status": "audited"
+"removed": 37,
+"status": "fixed"
 },
 "daily-2025-09": {
 "added": 0,
@@ -1382,10 +1382,10 @@
 },
 "evpack-health-2027": {
 "added": 0,
-"at": "2026-10-12T13:35:44",
+"at": "2026-10-12T13:44:20",
 "category": "Event",
 "kind": "event",
-"last_step": "pool 62 usable",
+"last_step": "reject 2 similar",
 "name": "World Health Day",
 "puzzles": null,
 "removed": 0,
@@ -1425,25 +1425,28 @@
 "status": "audited"
 },
 "evpack-kindness-2026": {
-"added": 0,
-"at": "2026-10-12T13:37:16",
+"added": 24,
+"at": "2026-10-12T13:44:54",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "pool 56 usable",
+"last_step": "verify",
 "name": "World Kindness Day",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 14,
+"status": "verified"
 },
 "evpack-kindness-2027": {
-"added": 0,
-"at": "2026-10-12T02:04:57",
+"added": 24,
+"at": "2026-10-12T13:45:25",
 "category": "Event",
+"issues": 0,
 "kind": "event",
+"last_step": "verify",
 "name": "World Kindness Day",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 14,
+"status": "verified"
 },
 "evpack-literacy-2027": {
 "added": 0,
@@ -2143,16 +2146,16 @@
 "status": "verified"
 },
 "pack-castles": {
-"added": 24,
-"at": "2026-10-12T13:37:18",
+"added": 25,
+"at": "2026-10-12T13:43:37",
 "category": "Architecture",
-"issues": 1,
+"issues": 0,
 "kind": "library",
-"last_step": "reject 1 similar",
+"last_step": "verify",
 "name": "Castles",
 "puzzles": 24,
-"removed": 20,
-"status": "audited"
+"removed": 21,
+"status": "verified"
 },
 "pack-cathedrals": {
 "added": 0,
@@ -2885,15 +2888,16 @@
 "status": "verified"
 },
 "pack-rolling-hills": {
-"added": 21,
-"at": "2026-10-12T13:36:05",
+"added": 24,
+"at": "2026-10-12T13:44:04",
 "category": "Nature",
+"issues": 0,
 "kind": "library",
-"last_step": "reject 7 off-theme",
+"last_step": "verify",
 "name": "Rolling Hills",
-"puzzles": 21,
-"removed": 12,
-"status": "audited"
+"puzzles": 20,
+"removed": 16,
+"status": "verified"
 },
 "pack-rome": {
 "added": 0,
@@ -2907,15 +2911,16 @@
 "status": "audited"
 },
 "pack-sailing": {
-"added": 0,
-"at": "2026-10-12T04:19:58",
+"added": 20,
+"at": "2026-10-12T13:45:56",
 "category": "Oceans",
+"issues": 0,
 "kind": "library",
-"last_step": "pool 85 usable",
+"last_step": "verify",
 "name": "Sailing",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 22,
+"removed": 18,
+"status": "verified"
 },
 "pack-santorini": {
 "added": 0,
@@ -2941,14 +2946,14 @@
 },
 "pack-sea-cliffs": {
 "added": 0,
-"at": "2026-10-12T04:31:10",
+"at": "2026-10-12T13:46:15",
 "category": "Oceans",
 "kind": "library",
-"last_step": "pool 126 usable",
+"last_step": "reject 1 people",
 "name": "Sea Cliffs",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "pack-sea-life": {
 "added": 0,

@@ -2,7 +2,7 @@
  "id": "pack-rolling-hills",
  "name": "Rolling Hills",
  "category": "Nature",
- "description": "Soft green and gold hills in Tuscany, the Palouse, the Cotswolds and the Moravian fields.",
+ "description": "Soft green and gold hills in Tuscany, the Palouse, Wales, Ireland, the Peak District and the Chocolate Hills.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
@@ -63,5 +63,6 @@
   "Hobbiton landscape",
   "Exmoor hills",
   "Mendip Hills"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Palouse_fields_10187.jpg/1280px-Palouse_fields_10187.jpg"
 }

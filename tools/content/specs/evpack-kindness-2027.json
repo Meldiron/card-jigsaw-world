@@ -1,0 +1,8 @@
+{
+ "id": "evpack-kindness-2027",
+ "name": "World Kindness Day",
+ "category": "Event",
+ "kind": "event",
+ "description": "A limited pack for World Kindness Day (13 November 2027). Wrapped gifts, bouquets, heart-shaped treats, warm drinks, honey and jam, a birdhouse and other small tokens of kindness, playable for one week.",
+ "note": "clone of evpack-kindness-2026; content comes from `run.sh clone evpack-kindness-2026 evpack-kindness-2027`"
+}
