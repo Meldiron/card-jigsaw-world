@@ -2,14 +2,17 @@
  "id": "evpack-cheeseburger-2027",
  "name": "National Cheeseburger Day",
  "category": "Event",
- "description": "A limited pack for National Cheeseburger Day (15 September 2027). Cheeseburgers stacked every way, the cheeses, buns, pickles and tomatoes inside, and the onion rings and milkshakes beside them, playable for one week.",
+ "description": "A limited pack for National Cheeseburger Day (15 September 2027). Cheeseburgers stacked every way, the cheeses, patties, pickles, onions and tomatoes inside, and the onion rings, coleslaw and ketchup beside them, playable for one week.",
  "kind": "event",
  "target": 24,
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
  "accent_from_cover": true,
- "sources": ["commons", "openverse"],
+ "sources": [
+  "commons",
+  "openverse"
+ ],
  "quality_deepcat": "Quality images of food",
  "topics": [
   "Cheeseburger",
@@ -50,5 +53,6 @@
   "Grilled onions",
   "Pulled pork sandwich",
   "Chocolate milkshake"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Cultivated_hamburger%2C_2013.jpg/1280px-Cultivated_hamburger%2C_2013.jpg"
 }

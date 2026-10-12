@@ -2,7 +2,7 @@
  "id": "pack-paris",
  "name": "Paris",
  "category": "Cities",
- "description": "The Eiffel Tower, Sainte-Chapelle's glass, Haussmann balconies, covered passages and the domes of Sacré-Cœur and the Invalides.",
+ "description": "The Eiffel Tower, Notre-Dame, Sacré-Cœur, covered passages, Haussmann balconies and the domes of the Panthéon and the Invalides.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
@@ -48,6 +48,15 @@
   "Petit Palais",
   "Paris rooftops",
   "Le Marais street",
-  "Square du Vert-Galant"
- ]
+  "Square du Vert-Galant",
+  "Institut du monde arabe facade",
+  "Parc des Buttes-Chaumont",
+  "Moulin de la Galette",
+  "Saint-Sulpice Paris",
+  "Pont Neuf",
+  "Castel Béranger",
+  "Hôtel de Sully",
+  "Église de la Madeleine"
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Cath%C3%A9drale_Notre_Dame%2C_Paris_30_September_2015.jpg/1280px-Cath%C3%A9drale_Notre_Dame%2C_Paris_30_September_2015.jpg"
 }

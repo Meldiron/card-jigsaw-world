@@ -1,0 +1,9 @@
+{
+ "id": "evpack-volunteer-2027",
+ "name": "International Volunteer Day",
+ "category": "Event",
+ "kind": "event",
+ "description": "A limited pack for International Volunteer Day (5 December 2027). Community gardens, garden tools, seedlings, insect hotels, nest boxes, knitted mittens, a pot of soup and a little free library, playable for one week.",
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Rusty_Garden_Tools_Lay_Flat_%2850937465362%29.jpg/1280px-Rusty_Garden_Tools_Lay_Flat_%2850937465362%29.jpg",
+ "note": "clone of evpack-volunteer-2026; content comes from `run.sh clone evpack-volunteer-2026 evpack-volunteer-2027`"
+}

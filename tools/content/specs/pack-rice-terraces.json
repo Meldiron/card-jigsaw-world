@@ -2,7 +2,7 @@
  "id": "pack-rice-terraces",
  "name": "Rice Terraces",
  "category": "Travel",
- "description": "Stepped paddies carved into hillsides in Bali, Yunnan, Banaue, Sapa and Guangxi, flooded, green or golden.",
+ "description": "Stepped paddies carved into hillsides in Banaue, Bali, Sapa, Guangxi and rural Japan, flooded, green or golden.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
@@ -52,6 +52,13 @@
   "rice terraces sunset",
   "flooded rice terraces",
   "golden rice terraces harvest",
-  "Ella rice terraces"
+  "Ella rice terraces",
+  "Batad",
+  "Banaue",
+  "Sapa terraces",
+  "Subak Bali",
+  "cat:Rice terraces in Bali",
+  "cat:Rice terraces in Japan",
+  "cat:Rice terraces in Vietnam"
  ]
 }

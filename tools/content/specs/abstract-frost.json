@@ -2,7 +2,7 @@
  "id": "abstract-frost",
  "name": "Frost & Ice",
  "category": "Abstract",
- "description": "Hoarfrost feathers, frozen bubbles and ice crystals photographed at close range.",
+ "description": "Snowflakes, frost ferns on window panes, hoarfrost feathers and glacier ice, photographed at close range.",
  "kind": "abstract",
  "price": "free",
  "sortOrder": 3018,
@@ -44,5 +44,6 @@
  ],
  "category_depth": 1,
  "category_limit": 200,
- "openverse_category": "photograph"
+ "openverse_category": "photograph",
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/2/28/Snowflake_macro_photography_1_%28cropped%29.jpg"
 }

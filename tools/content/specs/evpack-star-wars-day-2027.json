@@ -1,0 +1,10 @@
+{
+ "id": "evpack-star-wars-day-2027", "name": "Star Wars Day", "category": "Event",
+ "description": "A limited pack for Star Wars Day (4 May 2027). Nebulae, galaxies and ringed planets, plus the real deserts, islands, forests and palaces where the saga was filmed, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2, "accent_from_cover": true, "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Pillars_of_Creation_%28NIRCam_Image%29.png/1280px-Pillars_of_Creation_%28NIRCam_Image%29.png",
+ "sources": ["nasa", "commons"], "openverse_category": "photograph",
+ "topics": ["Skellig Michael", "Hotel Sidi Driss Matmata", "Ksar Ouled Soltane", "Villa del Balbianello", "Plaza de España Seville", "Tikal Temple I",
+  "Wadi Rum", "Salar de Uyuni", "Jedediah Smith Redwoods", "Puzzlewood", "Hardangerjøkulen", "Reggia di Caserta staircase",
+  "Death Valley sand dunes", "Mount Etna lava", "Saturn rings", "Jupiter Great Red Spot", "Andromeda Galaxy", "Pillars of Creation"],
+ "more_topics": ["Carina Nebula", "Orion Nebula", "Mars surface", "Lava flow Hawaii", "Grand Canyon of the Yellowstone", "Ait Benhaddou"]
+}
