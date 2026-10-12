@@ -2,7 +2,7 @@
  "id": "pack-kyoto",
  "name": "Kyoto",
  "category": "Travel",
- "description": "Temples, torii gates, pagodas, moss gardens and red maples across Kyoto, from Kinkaku-ji to Arashiyama.",
+ "description": "Torii gates, pagodas, temple halls and red maples across Kyoto, from Kinkaku-ji and Fushimi Inari to Tōfuku-ji.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
@@ -52,6 +52,10 @@
   "Hōnen-in",
   "Chion-in",
   "Ninna-ji pagoda",
-  "Kyoto momiji"
+  "Kyoto momiji",
+  "Sanjūsangen-dō",
+  "Kennin-ji",
+  "Tōfuku-ji autumn",
+  "Rurikō-in"
  ]
 }

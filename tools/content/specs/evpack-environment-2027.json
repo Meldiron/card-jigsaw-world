@@ -1,0 +1,11 @@
+{
+ "id": "evpack-environment-2027", "name": "World Environment Day", "category": "Event",
+ "description": "A limited pack for World Environment Day (5 June 2027). Mangroves, bogs, rice terraces, meadows and lotus ponds, wind turbines, solar panels, green roofs and vertical forests, and the animals that depend on healthy habitats, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2, "accent_from_cover": true, "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Fratercula_arctica%2C_Borgarfj%C3%B6r%C3%B0ur_eystri%2C_Iceland%2C_20240717_1207_1970.jpg/1280px-Fratercula_arctica%2C_Borgarfj%C3%B6r%C3%B0ur_eystri%2C_Iceland%2C_20240717_1207_1970.jpg",
+ "sources": ["commons", "openverse"], "openverse_category": "photograph",
+ "topics": ["Mangrove forest", "Sphagnum bog", "Reed bed wetland", "Kelp forest", "Banaue rice terraces", "Wildflower meadow",
+  "Perito Moreno Glacier", "Beaver dam", "Wind turbine", "Solar panels", "Green roof", "Bosco Verticale",
+  "Recycling bins", "Compost heap", "Rain barrel", "Tree seedling", "Tree nursery saplings", "Allotment garden",
+  "Chelonia mydas", "Ursus maritimus", "Danaus plexippus", "Pongo pygmaeus", "Ailuropoda melanoleuca", "Panthera uncia"],
+ "more_topics": ["Fratercula arctica", "Ara macao", "Vulpes lagopus", "Recycled glass bottles", "Rainforest canopy", "Lotus pond", "Vertical garden", "Moss forest floor", "Rainforest canopy", "Erinaceus europaeus", "Coral reef fish", "Hedgerow"]
+}

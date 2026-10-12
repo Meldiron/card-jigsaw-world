@@ -1,6 +1,6 @@
 {
  "id": "evpack-childrens-day-2027", "name": "International Children's Day", "category": "Event",
- "description": "A limited pack for International Children's Day (1 June 2027). Toys, sweets and places to play: carp streamers, nesting dolls, building bricks, crayons, soap bubbles, sandcastles, treehouses and playgrounds, playable for one week.",
+ "description": "A limited pack for International Children's Day (1 June 2027). Toys, sweets and places to play: carp streamers, nesting dolls, building bricks, crayons, tin robots, gummy bears, piñatas, treehouses and playgrounds, playable for one week.",
  "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2, "accent_from_cover": true,
  "sources": ["commons", "openverse"], "openverse_category": "photograph",
  "topics": ["Koinobori", "Matryoshka doll", "Lego bricks", "Wax crayons", "Soap bubbles", "Sandcastle",

@@ -970,10 +970,10 @@
 },
 "daily-2026-06": {
 "added": 0,
-"at": "2026-10-12T12:32:58",
+"at": "2026-10-12T21:08:35",
 "category": "Daily",
 "kind": "daily",
-"last_step": "reject 7 weak",
+"last_step": "pool 257 usable",
 "name": "June 2026",
 "puzzles": null,
 "removed": 0,
@@ -1191,15 +1191,16 @@
 "status": "verified"
 },
 "evpack-childrens-day-2027": {
-"added": 24,
-"at": "2026-10-12T20:41:34",
+"added": 27,
+"at": "2026-10-12T20:42:28",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "pool 27 usable",
+"last_step": "verify",
 "name": "International Children's Day",
 "puzzles": 24,
-"removed": 14,
-"status": "audited"
+"removed": 17,
+"status": "verified"
 },
 "evpack-chocolate-2027": {
 "added": 24,
@@ -1357,24 +1358,27 @@
 "status": "verified"
 },
 "evpack-environment-2027": {
-"added": 0,
-"at": "2026-10-12T02:04:57",
+"added": 25,
+"at": "2026-10-12T21:01:23",
 "category": "Event",
+"issues": 0,
 "kind": "event",
+"last_step": "verify",
 "name": "World Environment Day",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 15,
+"status": "verified"
 },
 "evpack-families-2027": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T21:08:14",
 "category": "Event",
 "kind": "event",
+"last_step": "pool 37 usable",
 "name": "International Day of Families",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "evpack-fathers-day-2027": {
 "added": 24,
@@ -1993,13 +1997,14 @@
 },
 "evpack-universal-childrens-2026": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T21:08:21",
 "category": "Event",
 "kind": "event",
+"last_step": "reject 3 similar",
 "name": "Universal Children's Day",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "evpack-universal-childrens-2027": {
 "added": 0,
@@ -2721,15 +2726,16 @@
 "status": "verified"
 },
 "pack-kyoto": {
-"added": 0,
-"at": "2026-10-12T20:41:25",
+"added": 23,
+"at": "2026-10-12T20:58:44",
 "category": "Travel",
+"issues": 0,
 "kind": "library",
-"last_step": "pool 28 usable",
+"last_step": "verify",
 "name": "Kyoto",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 23,
+"removed": 20,
+"status": "verified"
 },
 "pack-lavender": {
 "added": 18,
@@ -2768,22 +2774,23 @@
 "status": "verified"
 },
 "pack-lisbon": {
-"added": 0,
-"at": "2026-10-12T10:06:03",
+"added": 24,
+"at": "2026-10-12T21:03:26",
 "category": "Cities",
+"issues": 0,
 "kind": "library",
-"last_step": "reject 5 weak",
+"last_step": "verify",
 "name": "Lisbon",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 15,
+"status": "verified"
 },
 "pack-london": {
 "added": 0,
-"at": "2026-10-12T10:06:45",
+"at": "2026-10-12T21:08:35",
 "category": "Cities",
 "kind": "library",
-"last_step": "reject 1 weak",
+"last_step": "pool 43 usable",
 "name": "London",
 "puzzles": null,
 "removed": 0,
@@ -2814,15 +2821,15 @@
 "status": "verified"
 },
 "pack-moroccan-souks": {
-"added": 0,
-"at": "2026-10-12T10:39:27",
+"added": 22,
+"at": "2026-10-12T21:08:16",
 "category": "Travel",
 "kind": "library",
-"last_step": "reject 3 weak",
+"last_step": "apply",
 "name": "Moroccan Souks",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 23,
+"removed": 19,
+"status": "fixed"
 },
 "pack-nebulae": {
 "added": 24,
@@ -3392,14 +3399,16 @@
 "status": "audited"
 },
 "pack-vintage-posters": {
-"added": 0,
-"at": "2026-10-12T02:04:57",
+"added": 25,
+"at": "2026-10-12T20:51:25",
 "category": "Vintage",
+"issues": 0,
 "kind": "library",
+"last_step": "verify",
 "name": "Vintage Posters",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 21,
+"status": "verified"
 },
 "pack-volcanoes": {
 "added": 24,

@@ -3,7 +3,7 @@
  "target": 24,
  "per_topic": 1,
  "fetch_per_topic": 5,
- "author_cap": 3,
+ "author_cap": 8,
  "sources": [
   "commons"
  ],
@@ -11,7 +11,7 @@
  "id": "pack-vintage-posters",
  "name": "Antique Glass & Crystal",
  "category": "Vintage",
- "description": "Tiffany, Gallé, Lalique, Loetz and Murano glass, cut crystal, millefiori paperweights and ancient Roman glass.",
+ "description": "Tiffany lamps and Favrile vases, Gallé and Daum cameo glass, Loetz, Steuben and Venetian glass, Roman bottles, ruby goblets and millefiori paperweights.",
  "topics": [
   "Tiffany Favrile glass vase",
   "Tiffany lamp",
@@ -60,5 +60,6 @@
   "crystal chandelier antique",
   "antique glass bottle",
   "cameo glass vase museum"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Tulip_table_lamp_-_Tiffany_Studios_%2849353484268%29.jpg/1280px-Tulip_table_lamp_-_Tiffany_Studios_%2849353484268%29.jpg"
 }
