@@ -1,8 +1,8 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-12T11:07:08",
-"msg": "Content: checkpoint (55 verified, 4 fixed, 71 audited, 137 pending)",
+"at": "2026-10-12T11:09:28",
+"msg": "Content: checkpoint (56 verified, 3 fixed, 72 audited, 137 pending)",
 "ok": true,
 "pushed": true,
 "stage": "committed"
@@ -70,8 +70,8 @@
 },
 "ai-all": {
 "added": 0,
-"at": "2026-10-12T10:50:33",
-"last_step": "pool 681 usable",
+"at": "2026-10-12T11:14:31",
+"last_step": "pool 725 usable",
 "puzzles": null,
 "removed": 0,
 "status": "pending"
@@ -102,10 +102,10 @@
 },
 "city-lights": {
 "added": 0,
-"at": "2026-10-12T10:31:44",
+"at": "2026-10-12T11:09:34",
 "category": "Travel",
 "kind": "library",
-"last_step": "reject 39 off-theme",
+"last_step": "pool 18 usable",
 "name": "City Lights",
 "puzzles": null,
 "removed": 0,
@@ -524,10 +524,10 @@
 },
 "daily-2026-01": {
 "added": 0,
-"at": "2026-10-12T11:08:48",
+"at": "2026-10-12T11:15:16",
 "category": "Daily",
 "kind": "daily",
-"last_step": "pool 213 usable",
+"last_step": "reject 53 weak",
 "name": "January 2026",
 "puzzles": null,
 "removed": 0,
@@ -897,10 +897,10 @@
 },
 "evpack-easter-2027": {
 "added": 0,
-"at": "2026-10-12T11:05:29",
+"at": "2026-10-12T11:12:49",
 "category": "Event",
 "kind": "event",
-"last_step": "pool 21 usable",
+"last_step": "pool 35 usable",
 "name": "Easter",
 "puzzles": null,
 "removed": 0,
@@ -938,10 +938,10 @@
 },
 "evpack-fathers-day-2027": {
 "added": 0,
-"at": "2026-10-12T11:06:36",
+"at": "2026-10-12T11:13:24",
 "category": "Event",
 "kind": "event",
-"last_step": "pool 32 usable",
+"last_step": "pool 44 usable",
 "name": "Father's Day",
 "puzzles": null,
 "removed": 0,
@@ -1725,10 +1725,10 @@
 },
 "pack-barcelona": {
 "added": 0,
-"at": "2026-10-12T09:59:41",
+"at": "2026-10-12T11:13:32",
 "category": "Cities",
 "kind": "library",
-"last_step": "reject 4 weak",
+"last_step": "pool 16 usable",
 "name": "Barcelona",
 "puzzles": null,
 "removed": 0,
@@ -1759,10 +1759,10 @@
 },
 "pack-botanical": {
 "added": 0,
-"at": "2026-10-12T11:03:55",
+"at": "2026-10-12T11:15:50",
 "category": "Art",
 "kind": "library",
-"last_step": "reject 1 landscape",
+"last_step": "reject 22 weak",
 "name": "Botanical Prints",
 "puzzles": null,
 "removed": 0,

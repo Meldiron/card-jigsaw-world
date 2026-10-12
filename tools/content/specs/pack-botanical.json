@@ -5,7 +5,7 @@
  "fetch_per_topic": 5,
  "author_cap": 3,
  "sources": [
-  "rijks"
+  "commons"
  ],
  "commons_quality": false,
  "id": "pack-botanical",
