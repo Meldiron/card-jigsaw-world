@@ -9,7 +9,8 @@
  "fetch_per_topic": 4,
  "author_cap": 2,
  "sources": [
-  "commons"
+  "commons",
+  "openverse"
  ],
  "quality_deepcat": "Quality images of landscapes",
  "price": "free",
@@ -44,12 +45,13 @@
   "foggy woodland Netherlands"
  ],
  "more_topics": [
-  "fog in forest Germany",
-  "misty forest Poland",
-  "fog forest Vosges",
-  "foggy forest Sweden",
-  "forest mist Ardennes",
-  "misty forest Romania",
-  "fog in the woods Belgium"
+  "foggy forest morning",
+  "mist in the forest autumn",
+  "fog spruce forest",
+  "misty redwoods",
+  "foggy beech forest autumn",
+  "fog forest sun rays",
+  "misty fir forest",
+  "forest fog Tatra"
  ]
 }

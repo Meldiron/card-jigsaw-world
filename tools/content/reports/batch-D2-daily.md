@@ -14,3 +14,4 @@ Tooling notes: `commons_search(quality=True)` without `quality_cat` returns 0 fi
 - daily-2025-03: replaced 31 (people 13, landscape 4, text 2, weak 12 incl. 2 kept flat-sky landscapes and 1 stoat on flat bokeh); 31/31 dates; verified.
 - daily-2025-04: replaced 30 (people 15, landscape 6, weak 9 incl. 1 kept misty forest, 1 cardinal on flat bokeh, 1 stoat carrying prey); 30/30 dates; verified.
 - daily-2025-05: replaced 28 (people 13, landscape 6, text 2, weak 7 incl. 1 kept frosted-berries frame on flat haze, 1 snapshot of poppies on asphalt); 31/31 dates; verified.
+- daily-2025-06: replaced 28 (people 13, landscape 6, weak 9: desk/laptop shots, flat sky and sea gradients, phone bokeh, dark interior); 30/30 dates; verified.

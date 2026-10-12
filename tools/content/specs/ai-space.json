@@ -1,0 +1,10 @@
+{
+ "id": "ai-space", "name": "AI Deep Space", "category": "AI",
+ "description": "Ringed planets, cosmic eyes, starships and glowing nebulae from text-to-image models. Every picture is AI-generated and in the public domain.",
+ "kind": "ai", "pool": "ai-all", "price": "coins", "priceCoins": 500, "sortOrder": 2006,
+ "target": 24, "per_topic": 1, "fetch_per_topic": 20, "author_cap": 10, "min_short": 900,
+ "sources": ["openverse"], "openverse_category": "photograph", "accent_from_cover": true,
+ "topics": ["AI-generated nebula", "AI-generated cosmos", "AI-generated universe", "AI-generated stars", "AI-generated earth", "AI-generated black hole",
+            "AI-generated solar system", "AI-generated comet", "AI-generated eclipse", "AI-generated saturn", "AI-generated outer space",
+            "AI-generated starship", "AI-generated exoplanet", "AI-generated milky way", "AI-generated planets", "AI-generated cosmic"]
+}

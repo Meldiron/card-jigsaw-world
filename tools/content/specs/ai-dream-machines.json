@@ -1,0 +1,10 @@
+{
+ "id": "ai-dream-machines", "name": "AI Dream Machines", "category": "AI",
+ "description": "Neon supercars, retro racers, motorbikes and flying machines straight out of text-to-image models. Every picture is AI-generated and in the public domain.",
+ "kind": "ai", "pool": "ai-all", "price": "coins", "priceCoins": 700, "sortOrder": 2007,
+ "target": 24, "per_topic": 1, "fetch_per_topic": 20, "author_cap": 10, "min_short": 900,
+ "sources": ["openverse"], "openverse_category": "photograph", "accent_from_cover": true,
+ "topics": ["AI-generated car", "AI-generated sports car", "AI-generated motorcycle", "AI-generated truck", "AI-generated vintage car",
+            "AI-generated race car", "AI-generated supercar", "AI-generated train", "AI-generated airplane", "AI-generated ship",
+            "AI-generated boat", "AI-generated bicycle", "AI-generated hot rod", "AI-generated van", "AI-generated locomotive", "AI-generated submarine"]
+}

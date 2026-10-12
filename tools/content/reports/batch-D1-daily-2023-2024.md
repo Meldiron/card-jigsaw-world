@@ -75,3 +75,4 @@ Pool grown with unpooled `daily-2024` topics (spec `sources` now `["commons", "o
 
 - daily-2023-11: replaced 24 in place (people 14, landscape 3, text 1, weak 6, from the review pass); 26 candidates rejected from the pool (people 5, quality 1, weak 18, similar 2) + 2 already in daily-2025; 30/30 dates; verified.
 - daily-2023-12: replaced 24 in place (people 11, landscape 4, weak 9: review-pass reasons incl. flat sky gradient and flat underwater frame); pool candidates rejected: people 1, text 2, quality 1, weak 14, similar 1; 31/31 dates; verified.
+- daily-2024-01: replaced 28 in place (people 13: review pass 12 + horse-cart painting; landscape 3; weak 5; quality 1: chestnut photo with corner watermark; plus the review pass's 6 others); pool candidates rejected: quality 4 (3 unlabelled AI-looking bison renders, 1 black-and-white), text 1, weak 17 (2 of them URLs over the 512-char column), similar 2; 31/31 dates; verified.

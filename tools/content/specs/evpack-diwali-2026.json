@@ -2,7 +2,7 @@
  "id": "evpack-diwali-2026",
  "name": "Diwali",
  "category": "Event",
- "description": "A limited pack for Diwali (8 November 2026). Lit clay diyas, rangoli patterns, marigold garlands, sweets, sparklers and illuminated temples, playable for one week.",
+ "description": "A limited pack for Diwali (8 November 2026). Clay diyas and brass lamps, rangoli patterns, marigolds, sweets from jalebi to kaju katli, sparklers, a star lantern and the Golden Temple, playable for one week.",
  "kind": "event",
  "target": 24,
  "per_topic": 1,
@@ -74,6 +74,10 @@
   "toran",
   "clay lamps",
   "diyas",
-  "akash kandil"
+  "akash kandil",
+  "kuthuvilakku",
+  "deepam",
+  "Akshardham Delhi night",
+  "Karthigai Deepam"
  ]
 }

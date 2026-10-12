@@ -1,8 +1,8 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-12T12:07:16",
-"msg": "Content: checkpoint (75 verified, 4 fixed, 69 audited, 122 pending)",
+"at": "2026-10-12T12:16:28",
+"msg": "Content: checkpoint (85 verified, 3 fixed, 70 audited, 114 pending)",
 "ok": true,
 "pushed": true,
 "stage": "committed"
@@ -34,13 +34,13 @@
 "status": "verified"
 },
 "abstract-kaleidoscope": {
-"added": 0,
-"at": "2026-10-12T12:01:06",
+"added": 20,
+"at": "2026-10-12T12:17:47",
 "category": "Abstract",
 "kind": "new",
-"last_step": "reject 1 similar",
+"last_step": "reject 1 quality",
 "name": "Kaleidoscope",
-"puzzles": 0,
+"puzzles": 20,
 "removed": 0,
 "status": "audited"
 },
@@ -76,13 +76,29 @@
 "removed": 0,
 "status": "pending"
 },
+"ai-birds": {
+"added": 25,
+"at": "2026-10-12T12:23:47",
+"category": "AI",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "AI Birds",
+"puzzles": 24,
+"removed": 1,
+"status": "verified"
+},
 "ai-cats": {
-"added": 0,
-"at": "2026-10-12T12:16:03",
-"last_step": "pool 932 usable",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"added": 23,
+"at": "2026-10-12T12:19:11",
+"category": "AI",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "AI Cats",
+"puzzles": 20,
+"removed": 3,
+"status": "verified"
 },
 "ai-dreamscapes": {
 "added": 25,
@@ -93,6 +109,42 @@
 "last_step": "verify",
 "name": "AI Dreamscapes",
 "puzzles": 24,
+"removed": 1,
+"status": "verified"
+},
+"ai-future-worlds": {
+"added": 25,
+"at": "2026-10-12T12:32:01",
+"category": "AI",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "AI Future Worlds",
+"puzzles": 24,
+"removed": 1,
+"status": "verified"
+},
+"ai-myths-monsters": {
+"added": 25,
+"at": "2026-10-12T12:26:06",
+"category": "AI",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "AI Myths and Monsters",
+"puzzles": 24,
+"removed": 1,
+"status": "verified"
+},
+"ai-space": {
+"added": 21,
+"at": "2026-10-12T12:35:57",
+"category": "AI",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "AI Deep Space",
+"puzzles": 20,
 "removed": 1,
 "status": "verified"
 },
@@ -301,15 +353,16 @@
 "status": "verified"
 },
 "daily-2024-01": {
-"added": 0,
-"at": "2026-10-12T12:09:23",
+"added": 28,
+"at": "2026-10-12T12:34:11",
 "category": "Daily",
+"issues": 0,
 "kind": "daily",
-"last_step": "pool 74 usable",
+"last_step": "verify",
 "name": "January 2024",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 31,
+"removed": 28,
+"status": "verified"
 },
 "daily-2024-02": {
 "added": 0,
@@ -434,8 +487,8 @@
 },
 "daily-2025": {
 "added": 0,
-"at": "2026-10-12T12:12:34",
-"last_step": "pool 38 usable",
+"at": "2026-10-12T12:32:02",
+"last_step": "pool 70 usable",
 "puzzles": null,
 "removed": 0,
 "status": "pending"
@@ -501,15 +554,16 @@
 "status": "verified"
 },
 "daily-2025-06": {
-"added": 0,
-"at": "2026-10-12T12:13:35",
+"added": 28,
+"at": "2026-10-12T12:34:11",
 "category": "Daily",
+"issues": 0,
 "kind": "daily",
-"last_step": "reject 2 similar",
+"last_step": "verify",
 "name": "June 2025",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 30,
+"removed": 28,
+"status": "verified"
 },
 "daily-2025-07": {
 "added": 0,
@@ -568,20 +622,21 @@
 },
 "daily-2025-12": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T12:32:48",
 "category": "Daily",
 "kind": "daily",
+"last_step": "reject 11 weak",
 "name": "December 2025",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "daily-2026-01": {
 "added": 0,
-"at": "2026-10-12T11:15:16",
+"at": "2026-10-12T12:32:50",
 "category": "Daily",
 "kind": "daily",
-"last_step": "reject 53 weak",
+"last_step": "reject 9 weak",
 "name": "January 2026",
 "puzzles": null,
 "removed": 0,
@@ -589,53 +644,58 @@
 },
 "daily-2026-02": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T12:32:51",
 "category": "Daily",
 "kind": "daily",
+"last_step": "reject 4 weak",
 "name": "February 2026",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "daily-2026-03": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T12:32:53",
 "category": "Daily",
 "kind": "daily",
+"last_step": "reject 11 weak",
 "name": "March 2026",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "daily-2026-04": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T12:32:55",
 "category": "Daily",
 "kind": "daily",
+"last_step": "reject 11 weak",
 "name": "April 2026",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "daily-2026-05": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T12:32:57",
 "category": "Daily",
 "kind": "daily",
+"last_step": "reject 9 weak",
 "name": "May 2026",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "daily-2026-06": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T12:32:58",
 "category": "Daily",
 "kind": "daily",
+"last_step": "reject 7 weak",
 "name": "June 2026",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "daily-2026-07": {
 "added": 0,
@@ -915,25 +975,28 @@
 "status": "pending"
 },
 "evpack-diwali-2026": {
-"added": 0,
-"at": "2026-10-12T12:11:17",
+"added": 24,
+"at": "2026-10-12T12:31:28",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "reject 2 similar",
+"last_step": "verify",
 "name": "Diwali",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 10,
+"status": "verified"
 },
 "evpack-diwali-2027": {
-"added": 0,
-"at": "2026-10-12T02:04:57",
+"added": 24,
+"at": "2026-10-12T12:32:08",
 "category": "Event",
+"issues": 0,
 "kind": "event",
+"last_step": "verify",
 "name": "Diwali",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 10,
+"status": "verified"
 },
 "evpack-dog-day-2027": {
 "added": 0,
@@ -1687,10 +1750,10 @@
 },
 "evpack-yoga-2027": {
 "added": 0,
-"at": "2026-10-12T12:03:27",
+"at": "2026-10-12T12:37:15",
 "category": "Event",
 "kind": "event",
-"last_step": "reject 3 off-theme",
+"last_step": "pool 69 usable",
 "name": "International Yoga Day",
 "puzzles": null,
 "removed": 0,
@@ -1708,10 +1771,10 @@
 },
 "land-of-fire-ice": {
 "added": 0,
-"at": "2026-10-12T10:33:05",
+"at": "2026-10-12T12:37:09",
 "category": "Premium",
 "kind": "library",
-"last_step": "reject 3 weak",
+"last_step": "reject 8 similar",
 "name": "Land of Fire & Ice",
 "puzzles": null,
 "removed": 0,
@@ -1835,15 +1898,15 @@
 "status": "verified"
 },
 "pack-bridges": {
-"added": 0,
-"at": "2026-10-12T12:14:43",
+"added": 11,
+"at": "2026-10-12T12:32:14",
 "category": "Architecture",
 "kind": "library",
-"last_step": "pool 27 usable",
+"last_step": "apply",
 "name": "Bridges",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 13,
+"removed": 18,
+"status": "fixed"
 },
 "pack-butterflies": {
 "added": 17,
@@ -2100,25 +2163,27 @@
 "status": "verified"
 },
 "pack-gardens": {
-"added": 0,
-"at": "2026-10-12T12:16:23",
+"added": 25,
+"at": "2026-10-12T12:17:43",
 "category": "Nature",
+"issues": 0,
 "kind": "library",
-"last_step": "reject 4 weak",
+"last_step": "verify",
 "name": "Gardens",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 21,
+"status": "verified"
 },
 "pack-gardens-art": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T12:28:39",
 "category": "Art",
 "kind": "library",
+"last_step": "reject 1 off-theme",
 "name": "Gardens in Art",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "pack-harbours": {
 "added": 0,
@@ -2233,15 +2298,16 @@
 "status": "pending"
 },
 "pack-jungle": {
-"added": 0,
-"at": "2026-10-12T03:28:14",
+"added": 26,
+"at": "2026-10-12T12:19:31",
 "category": "Nature",
+"issues": 0,
 "kind": "library",
-"last_step": "pool 82 usable",
+"last_step": "verify",
 "name": "Jungle",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 22,
+"status": "verified"
 },
 "pack-kittens": {
 "added": 20,
@@ -2290,15 +2356,16 @@
 "status": "audited"
 },
 "pack-lighthouses": {
-"added": 0,
-"at": "2026-10-12T04:14:59",
+"added": 24,
+"at": "2026-10-12T12:21:18",
 "category": "Oceans",
+"issues": 0,
 "kind": "library",
-"last_step": "pool 136 usable",
+"last_step": "verify",
 "name": "Lighthouses",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 12,
+"status": "verified"
 },
 "pack-lisbon": {
 "added": 0,
@@ -2333,15 +2400,15 @@
 "status": "pending"
 },
 "pack-misty-forests": {
-"added": 0,
-"at": "2026-10-12T02:48:07",
+"added": 13,
+"at": "2026-10-12T12:37:15",
 "category": "Nature",
 "kind": "library",
-"last_step": "pool 23 usable",
+"last_step": "reject 3 weak",
 "name": "Misty Forests",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 20,
+"removed": 13,
+"status": "audited"
 },
 "pack-moroccan-souks": {
 "added": 0,

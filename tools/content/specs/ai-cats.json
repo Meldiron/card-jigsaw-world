@@ -1,6 +1,6 @@
 {
  "id": "ai-cats", "name": "AI Cats", "category": "AI",
- "description": "Kittens, tabbies, fluffy Persians and a few cats in very odd situations, all imagined by text-to-image models. Every picture is AI-generated and in the public domain.",
+ "description": "Tabbies, fluffy Persians, clockwork cats and a few tigers and lions, all imagined by text-to-image models. Every picture is AI-generated and in the public domain.",
  "kind": "ai", "pool": "ai-all", "price": "free", "sortOrder": 2002,
  "target": 24, "per_topic": 1, "fetch_per_topic": 20, "author_cap": 9, "min_short": 900,
  "sources": ["openverse"], "openverse_category": "photograph", "accent_from_cover": true,

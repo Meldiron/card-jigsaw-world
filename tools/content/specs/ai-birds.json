@@ -1,0 +1,10 @@
+{
+ "id": "ai-birds", "name": "AI Birds", "category": "AI",
+ "description": "Owls, parrots, peacocks, hummingbirds and other birds dreamed up by text-to-image models. Every picture is AI-generated and in the public domain.",
+ "kind": "ai", "pool": "ai-all", "price": "free", "sortOrder": 2003,
+ "target": 24, "per_topic": 1, "fetch_per_topic": 20, "author_cap": 10, "min_short": 900,
+ "sources": ["openverse"], "openverse_category": "photograph", "accent_from_cover": true,
+ "topics": ["AI-generated owl", "AI-generated bird", "AI-generated parrot", "AI-generated eagle", "AI-generated hummingbird", "AI-generated peacock",
+            "AI-generated flamingo", "AI-generated penguin", "AI-generated swan", "AI-generated toucan", "AI-generated duck", "AI-generated hawk",
+            "AI-generated robin", "AI-generated crow", "AI-generated birds", "AI-generated macaw", "AI-generated kingfisher", "AI-generated rooster"]
+}

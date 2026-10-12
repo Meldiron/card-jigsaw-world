@@ -1,0 +1,10 @@
+{
+ "id": "ai-future-worlds", "name": "AI Future Worlds", "category": "AI",
+ "description": "Domed cities on Mars, solarpunk trams, vertical farms and neon streets: tomorrow as text-to-image models picture it. Every picture is AI-generated and in the public domain.",
+ "kind": "ai", "pool": "ai-all", "price": "coins", "priceCoins": 600, "sortOrder": 2005,
+ "target": 24, "per_topic": 1, "fetch_per_topic": 20, "author_cap": 10, "min_short": 900,
+ "sources": ["openverse"], "openverse_category": "photograph", "accent_from_cover": true,
+ "topics": ["AI-generated futuristic city", "AI-generated city", "AI-generated cyberpunk", "AI-generated sci-fi", "AI-generated spaceship",
+            "AI-generated planet", "AI-generated space", "AI-generated galaxy", "AI-generated robot", "AI-generated futuristic",
+            "AI-generated skyscraper", "AI-generated space station", "AI-generated astronaut", "AI-generated moon", "AI-generated rocket", "AI-generated android"]
+}

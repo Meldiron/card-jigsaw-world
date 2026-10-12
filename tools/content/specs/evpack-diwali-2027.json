@@ -1,0 +1,8 @@
+{
+ "id": "evpack-diwali-2027",
+ "name": "Diwali",
+ "category": "Event",
+ "kind": "event",
+ "description": "A limited pack for Diwali (29 October 2027). Clay diyas and brass lamps, rangoli patterns, marigolds, sweets from jalebi to kaju katli, sparklers, a star lantern and the Golden Temple, playable for one week.",
+ "note": "clone of evpack-diwali-2026; content comes from `run.sh clone evpack-diwali-2026 evpack-diwali-2027`"
+}

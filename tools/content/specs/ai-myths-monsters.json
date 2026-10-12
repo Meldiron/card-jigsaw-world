@@ -1,0 +1,10 @@
+{
+ "id": "ai-myths-monsters", "name": "AI Myths and Monsters", "category": "AI",
+ "description": "Sea serpents, fire foxes, forest spirits and friendly beasts from folklore, as text-to-image models imagine them. Every picture is AI-generated and in the public domain.",
+ "kind": "ai", "pool": "ai-all", "price": "coins", "priceCoins": 600, "sortOrder": 2004,
+ "target": 24, "per_topic": 1, "fetch_per_topic": 20, "author_cap": 10, "min_short": 900,
+ "sources": ["openverse"], "openverse_category": "photograph", "accent_from_cover": true,
+ "topics": ["AI-generated monster", "AI-generated creature", "AI-generated unicorn", "AI-generated phoenix", "AI-generated griffin",
+            "AI-generated kraken", "AI-generated yeti", "AI-generated mythical creature", "AI-generated beast", "AI-generated sea monster",
+            "AI-generated chimera", "AI-generated pegasus", "AI-generated fantasy creature", "AI-generated alien creature"]
+}
