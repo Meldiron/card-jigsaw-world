@@ -1,8 +1,8 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-12T14:28:47",
-"msg": "Content: checkpoint (159 verified, 3 fixed, 58 audited, 70 pending)",
+"at": "2026-10-12T14:37:35",
+"msg": "Content: checkpoint (164 verified, 3 fixed, 55 audited, 69 pending)",
 "ok": true,
 "pushed": true,
 "stage": "committed"
@@ -698,8 +698,8 @@
 },
 "daily-2025": {
 "added": 0,
-"at": "2026-10-12T14:29:33",
-"last_step": "pool 70 usable",
+"at": "2026-10-12T14:37:37",
+"last_step": "pool 47 usable",
 "puzzles": null,
 "removed": 0,
 "status": "pending"
@@ -994,10 +994,10 @@
 },
 "evpack-art-day-2027": {
 "added": 0,
-"at": "2026-10-12T14:35:00",
+"at": "2026-10-12T14:41:33",
 "category": "Event",
 "kind": "event",
-"last_step": "pool 15 usable",
+"last_step": "pool 30 usable",
 "name": "World Art Day",
 "puzzles": null,
 "removed": 0,
@@ -1118,15 +1118,16 @@
 "status": "pending"
 },
 "evpack-chocolate-2027": {
-"added": 0,
-"at": "2026-10-12T14:15:25",
+"added": 24,
+"at": "2026-10-12T14:40:54",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "reject 2 weak",
+"last_step": "verify",
 "name": "World Chocolate Day",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 14,
+"status": "verified"
 },
 "evpack-christmas-2026": {
 "added": 21,
@@ -1342,13 +1343,14 @@
 },
 "evpack-fries-2027": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T14:41:39",
 "category": "Event",
 "kind": "event",
+"last_step": "reject 3 weak",
 "name": "National French Fry Day",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "evpack-grandparents-2027": {
 "added": 0,
@@ -1594,10 +1596,10 @@
 },
 "evpack-new-years-eve-2026": {
 "added": 0,
-"at": "2026-10-12T14:28:56",
+"at": "2026-10-12T14:42:32",
 "category": "Event",
 "kind": "event",
-"last_step": "pool 17 usable",
+"last_step": "pool 32 usable",
 "name": "New Year's Eve",
 "puzzles": null,
 "removed": 0,
@@ -2240,10 +2242,10 @@
 },
 "pack-cocktails": {
 "added": 0,
-"at": "2026-10-12T14:33:11",
+"at": "2026-10-12T14:39:44",
 "category": "Food",
 "kind": "library",
-"last_step": "pool 16 usable",
+"last_step": "pool 32 usable",
 "name": "Cocktails",
 "puzzles": null,
 "removed": 0,

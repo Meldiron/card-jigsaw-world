@@ -2633,6 +2633,12 @@
 "pack": "evpack-kindness-2026",
 "reason": "people"
 },
+"https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvZmYxNTgxNi1pbWFnZS1rd3Z4NDV6MS5qcGc.jpg": {
+"at": "2026-10-12",
+"label": "evpack-fries-2027-10",
+"pack": "evpack-fries-2027",
+"reason": "people"
+},
 "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvZmYyNzg1LWltYWdlLWt3dnluNmJoLmpwZw.jpg": {
 "at": "2026-10-12",
 "label": "evpack-health-2027-08",
@@ -13301,6 +13307,18 @@
 "pack": "pack-sushi",
 "reason": "text"
 },
+"https://live.staticflickr.com/65535/51378284123_14eb14aa94_b.jpg": {
+"at": "2026-10-12",
+"label": "evpack-fries-2027-06",
+"pack": "evpack-fries-2027",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/51379062060_1935579015_b.jpg": {
+"at": "2026-10-12",
+"label": "evpack-fries-2027-05",
+"pack": "evpack-fries-2027",
+"reason": "text"
+},
 "https://live.staticflickr.com/65535/51381553881_df112ac465_b.jpg": {
 "at": "2026-10-12",
 "label": "evpack-smile-day-2026-13",
@@ -13426,6 +13444,12 @@
 "label": "pack-starry-nights-05",
 "pack": "pack-starry-nights",
 "reason": "quality"
+},
+"https://live.staticflickr.com/65535/51398227902_009c85401d_b.jpg": {
+"at": "2026-10-12",
+"label": "evpack-fries-2027-02",
+"pack": "evpack-fries-2027",
+"reason": "people"
 },
 "https://live.staticflickr.com/65535/51401813644_34b3d85e46_b.jpg": {
 "at": "2026-10-12",
@@ -16246,6 +16270,12 @@
 "label": "pack-owls-02",
 "pack": "pack-owls",
 "reason": "quality"
+},
+"https://live.staticflickr.com/65535/51966379481_328ce9d412_b.jpg": {
+"at": "2026-10-12",
+"label": "evpack-fries-2027-01",
+"pack": "evpack-fries-2027",
+"reason": "weak"
 },
 "https://live.staticflickr.com/65535/51966620575_387a53e2f9_b.jpg": {
 "at": "2026-10-12",
@@ -21173,6 +21203,12 @@
 "pack": "pack-frogs",
 "reason": "people"
 },
+"https://live.staticflickr.com/65535/53435761267_3ca20a5728_b.jpg": {
+"at": "2026-10-12",
+"label": "evpack-fries-2027-07",
+"pack": "evpack-fries-2027",
+"reason": "weak"
+},
 "https://live.staticflickr.com/65535/53436790957_24c25b2087_b.jpg": {
 "at": "2026-10-12",
 "label": "c1563",
@@ -22817,6 +22853,12 @@
 "pack": "pack-sailing",
 "reason": "quality"
 },
+"https://live.staticflickr.com/65535/53833086852_e55d3e8a3e_b.jpg": {
+"at": "2026-10-12",
+"label": "evpack-fries-2027-14",
+"pack": "evpack-fries-2027",
+"reason": "people"
+},
 "https://live.staticflickr.com/65535/53840451408_30feab54e7_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-santorini-15",
@@ -23674,6 +23716,12 @@
 "label": "evpack-coffee-2026-13",
 "pack": "evpack-coffee-2026",
 "reason": "text"
+},
+"https://live.staticflickr.com/65535/54373749893_b152dc812b_b.jpg": {
+"at": "2026-10-12",
+"label": "evpack-fries-2027-08",
+"pack": "evpack-fries-2027",
+"reason": "off-theme"
 },
 "https://live.staticflickr.com/65535/54374983247_ba070ffcd9_b.jpg": {
 "at": "2026-10-12",
@@ -31241,6 +31289,12 @@
 "pack": "pack-rolling-hills",
 "reason": "weak"
 },
+"https://pd.w.org/2022/07/94062c82c96092b97.25805783-1536x2048.jpg": {
+"at": "2026-10-12",
+"label": "evpack-fries-2027-12",
+"pack": "evpack-fries-2027",
+"reason": "weak"
+},
 "https://pd.w.org/2022/08/3562eaf1d5d0c0c2.71947692-1536x2048.jpeg": {
 "at": "2026-10-12",
 "label": "c1646",
@@ -37355,6 +37409,12 @@
 "pack": "pack-rockets",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Chocolate_Fondue_Fountain.jpg/1280px-Chocolate_Fondue_Fountain.jpg": {
+"at": "2026-10-12",
+"label": "p-3538907630e7",
+"pack": "evpack-chocolate-2027",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Conditioned_Variation_in_Heart_Rate_During_Static_Breath-Holds_in_the_Bottlenose_Dolphin_%28Tursiops_truncatus%29_%E2%80%93_examples_of_instantaneous_heart_rate_%28ifH%29_responses.jpg/1280px-thumbnail.jpg": {
 "at": "2026-10-12",
 "label": "c75",
@@ -37651,9 +37711,9 @@
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Inside_of_a_tiramisu_cake.jpg/1280px-Inside_of_a_tiramisu_cake.jpg": {
 "at": "2026-10-12",
-"label": "c36",
-"pack": "evpack-coffee-2026",
-"reason": "weak"
+"label": "c100",
+"pack": "evpack-chocolate-2027",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/J21_195_Turmuhrwerk.jpg/1280px-J21_195_Turmuhrwerk.jpg": {
 "at": "2026-10-12",
@@ -38074,6 +38134,12 @@
 "label": "c10",
 "pack": "pack-caves",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Chocolate_Fondue_Maker.jpg/1280px-Chocolate_Fondue_Maker.jpg": {
+"at": "2026-10-12",
+"label": "c66",
+"pack": "evpack-chocolate-2027",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Close-up_view_of_fire_damage_to_Timberline_Lodge%2C_Mt._Hood_National_Forest.jpg/1280px-Close-up_view_of_fire_damage_to_Timberline_Lodge%2C_Mt._Hood_National_Forest.jpg": {
 "at": "2026-10-12",
@@ -40841,6 +40907,12 @@
 "pack": "pack-castles",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Trick_or_Tea_%2834310783231%29.jpg/1280px-Trick_or_Tea_%2834310783231%29.jpg": {
+"at": "2026-10-12",
+"label": "c61",
+"pack": "evpack-chocolate-2027",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Varadero_Beach_4_%283196865294%29.jpg/1280px-Varadero_Beach_4_%283196865294%29.jpg": {
 "at": "2026-10-12",
 "label": "c38",
@@ -43091,6 +43163,12 @@
 "pack": "pack-tropical-beaches",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Histoire_artistique_des_ordres_mendiants_89.jpg/1280px-Histoire_artistique_des_ordres_mendiants_89.jpg": {
+"at": "2026-10-12",
+"label": "c85",
+"pack": "evpack-chocolate-2027",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Leopard_In_Tree.jpg/1280px-Leopard_In_Tree.jpg": {
 "at": "2026-10-12",
 "label": "c1010",
@@ -43216,6 +43294,12 @@
 "label": "c1043",
 "pack": "daily-2023-12",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Histoire_artistique_des_ordres_mendiants_19.jpg/1280px-Histoire_artistique_des_ordres_mendiants_19.jpg": {
+"at": "2026-10-12",
+"label": "c86",
+"pack": "evpack-chocolate-2027",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Illuminated_wooden_shelf_with_many_glass_jars_containing_cookies_for_sale_in_Tokyo.jpg/1280px-Illuminated_wooden_shelf_with_many_glass_jars_containing_cookies_for_sale_in_Tokyo.jpg": {
 "at": "2026-10-12",
@@ -45647,6 +45731,12 @@
 "pack": "cozy-kitchen",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Chocolate_Strawberry.jpg/1280px-Chocolate_Strawberry.jpg": {
+"at": "2026-10-12",
+"label": "c63",
+"pack": "evpack-chocolate-2027",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Corn_Snake_Skin_Under_UV_Illumination.jpg/1280px-Corn_Snake_Skin_Under_UV_Illumination.jpg": {
 "at": "2026-10-12",
 "label": "c71",
@@ -46097,6 +46187,12 @@
 "pack": "pack-earth-orbit",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Ice_cream_%28Bartoszyce%29.jpg/1280px-Ice_cream_%28Bartoszyce%29.jpg": {
+"at": "2026-10-12",
+"label": "c70",
+"pack": "evpack-chocolate-2027",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Kitagawa_Utamaro_-_Ehon_Mushi_Erami_-_Google_Art_Project.jpg/1280px-Kitagawa_Utamaro_-_Ehon_Mushi_Erami_-_Google_Art_Project.jpg": {
 "at": "2026-10-12",
 "label": "c91",
@@ -46468,6 +46564,12 @@
 "label": "c39",
 "pack": "pack-misty-forests",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Histoire_artistique_des_ordres_mendiants_51.jpg/1280px-Histoire_artistique_des_ordres_mendiants_51.jpg": {
+"at": "2026-10-12",
+"label": "c88",
+"pack": "evpack-chocolate-2027",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/ISS047-E-68517_-_View_of_Iran.jpg/1280px-ISS047-E-68517_-_View_of_Iran.jpg": {
 "at": "2026-10-12",
@@ -47062,6 +47164,12 @@
 "label": "c188",
 "pack": "daily-2023-01",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Histoire_artistique_des_ordres_mendiants_173.jpg/1280px-Histoire_artistique_des_ordres_mendiants_173.jpg": {
+"at": "2026-10-12",
+"label": "c87",
+"pack": "evpack-chocolate-2027",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Miniatuur_armstoel%2C_BK-16729.jpg/1280px-Miniatuur_armstoel%2C_BK-16729.jpg": {
 "at": "2026-10-12",
@@ -48418,6 +48526,12 @@
 "label": "c59",
 "pack": "evpack-pride-2027",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Bistro_Jeanty_-_Sarah_Stierch_-_May_2018_04.jpg/1280px-Bistro_Jeanty_-_Sarah_Stierch_-_May_2018_04.jpg": {
+"at": "2026-10-12",
+"label": "c57",
+"pack": "evpack-chocolate-2027",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Chocolate_artesanal_%282%29.jpg/1280px-Chocolate_artesanal_%282%29.jpg": {
 "at": "2026-10-12",
@@ -49933,9 +50047,9 @@
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Cocoa_67.jpg/1280px-Cocoa_67.jpg": {
 "at": "2026-10-12",
-"label": "c94",
-"pack": "evpack-bean-day-2027",
-"reason": "off-theme"
+"label": "p-4715876feead",
+"pack": "evpack-chocolate-2027",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Dani%C3%ABl_Seghers_and_Cornelis_Schut_%28I%29_-_Saint_Ignatius_in_a_cartouche_with_flowers_and_cherubs.jpg/1280px-Dani%C3%ABl_Seghers_and_Cornelis_Schut_%28I%29_-_Saint_Ignatius_in_a_cartouche_with_flowers_and_cherubs.jpg": {
 "at": "2026-10-12",
@@ -50926,6 +51040,12 @@
 "label": "c90",
 "pack": "abstract-smoke",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Brigadeiro_metro_station_%28Linha_2-Verde%29%2C_SP%2C_2025-11-18_%2814%29.jpg/1280px-Brigadeiro_metro_station_%28Linha_2-Verde%29%2C_SP%2C_2025-11-18_%2814%29.jpg": {
+"at": "2026-10-12",
+"label": "c74",
+"pack": "evpack-chocolate-2027",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Dione_vanillae_incarnata_%28Gulf_Fritillary%29.jpg/1280px-Dione_vanillae_incarnata_%28Gulf_Fritillary%29.jpg": {
 "at": "2026-10-12",
@@ -55395,6 +55515,12 @@
 "at": "2026-10-12",
 "label": "c174",
 "pack": "pack-rockets",
+"reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/A_slice_of_white_chocolate_cake%2C_January_2009.jpg/1280px-A_slice_of_white_chocolate_cake%2C_January_2009.jpg": {
+"at": "2026-10-12",
+"label": "c26",
+"pack": "evpack-chocolate-2027",
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Andes_35to46S_69to74W_Topo_Rainbow_Zebra_1428.jpg/1280px-Andes_35to46S_69to74W_Topo_Rainbow_Zebra_1428.jpg": {
@@ -63439,9 +63565,9 @@
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Hot_Chocolate_drinks.jpg/1280px-Hot_Chocolate_drinks.jpg": {
 "at": "2026-10-12",
-"label": "c36",
-"pack": "evpack-kindness-2026",
-"reason": "similar"
+"label": "c38",
+"pack": "evpack-chocolate-2027",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Huahua_sitting_on_the_ground.jpg/1280px-Huahua_sitting_on_the_ground.jpg": {
 "at": "2026-10-12",
@@ -64546,6 +64672,12 @@
 "label": "c90",
 "pack": "cozy-kitchen",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Brownies_in_the_Clock_Tower_MET_DP877038.jpg/1280px-Brownies_in_the_Clock_Tower_MET_DP877038.jpg": {
+"at": "2026-10-12",
+"label": "c48",
+"pack": "evpack-chocolate-2027",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Claude_Monet_Bouquet_of_Sunflowers.jpg/1280px-Claude_Monet_Bouquet_of_Sunflowers.jpg": {
 "at": "2026-10-12",
@@ -69124,6 +69256,12 @@
 "label": "c21",
 "pack": "pack-wild-roses",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Royce%27_Chocolate_-_Bangkok_-_2018-11-05_%282%29.jpg/1280px-Royce%27_Chocolate_-_Bangkok_-_2018-11-05_%282%29.jpg": {
+"at": "2026-10-12",
+"label": "c19",
+"pack": "evpack-chocolate-2027",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/S%C3%A3o_Paulo_-_Simba_Safari_02.jpg/1280px-S%C3%A3o_Paulo_-_Simba_Safari_02.jpg": {
 "at": "2026-10-12",

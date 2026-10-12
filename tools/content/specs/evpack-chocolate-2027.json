@@ -2,14 +2,17 @@
  "id": "evpack-chocolate-2027",
  "name": "World Chocolate Day",
  "category": "Event",
- "description": "A limited pack for World Chocolate Day (7 July 2027). Cacao pods, cocoa beans, truffles, brownies, Sachertorte, hot chocolate and Belgian pralines, playable for one week.",
+ "description": "A limited pack for World Chocolate Day (7 July 2027). Cacao pods and flowers, cocoa beans, truffles, Sachertorte, brownies, brigadeiros, churros with hot chocolate and a molten chocolate pudding, playable for one week.",
  "kind": "event",
  "target": 24,
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
  "accent_from_cover": true,
- "sources": ["commons", "openverse"],
+ "sources": [
+  "commons",
+  "openverse"
+ ],
  "quality_deepcat": "Quality images of food",
  "topics": [
   "Cacao pods on tree",
