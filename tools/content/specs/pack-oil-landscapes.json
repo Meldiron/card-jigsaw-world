@@ -11,7 +11,7 @@
  "id": "pack-oil-landscapes",
  "name": "Landscapes in Oil",
  "category": "Art",
- "description": "Landscapes in oil by Shishkin, Klimt, Van Gogh, Bierstadt, Durand and Rousseau: forests, poplars, waterfalls and jungles.",
+ "description": "Landscapes in oil by Thomson, Bierstadt, Shishkin, Kuindzhi, Klimt, Hodler, Gallen-Kallela, Carr and Cézanne: forests, waterfalls, lakes and autumn trees.",
  "topics": [
   "Ivan Shishkin forest painting",
   "Shishkin In the Wild North",
@@ -62,5 +62,6 @@
   "Düsseldorf school landscape painting",
   "Lars Hertervig painting",
   "Corot trees painting"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Tom_Thomson_Soft_Maple_in_Autumn.jpg/1280px-Tom_Thomson_Soft_Maple_in_Autumn.jpg"
 }

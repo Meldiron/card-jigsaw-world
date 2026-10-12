@@ -1,8 +1,8 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-12T14:16:29",
-"msg": "Content: checkpoint (153 verified, 7 fixed, 60 audited, 70 pending)",
+"at": "2026-10-12T14:28:47",
+"msg": "Content: checkpoint (159 verified, 3 fixed, 58 audited, 70 pending)",
 "ok": true,
 "pushed": true,
 "stage": "committed"
@@ -82,15 +82,27 @@
 "status": "verified"
 },
 "abstract-smoke": {
+"added": 22,
+"at": "2026-10-12T14:31:26",
+"category": "Abstract",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "Smoke & Vapour",
+"puzzles": 22,
+"removed": 0,
+"status": "verified"
+},
+"abstract-topographic": {
 "added": 0,
-"at": "2026-10-12T14:15:22",
+"at": "2026-10-12T14:31:33",
 "category": "Abstract",
 "kind": "new",
-"last_step": "reject 2 weak",
-"name": "Smoke & Vapour",
+"last_step": "newpack",
+"name": "Topographic",
 "puzzles": 0,
 "removed": 0,
-"status": "audited"
+"status": "pending"
 },
 "ai-abstract": {
 "added": 23,
@@ -686,8 +698,8 @@
 },
 "daily-2025": {
 "added": 0,
-"at": "2026-10-12T14:15:52",
-"last_step": "pool 105 usable",
+"at": "2026-10-12T14:29:33",
+"last_step": "pool 70 usable",
 "puzzles": null,
 "removed": 0,
 "status": "pending"
@@ -801,15 +813,16 @@
 "status": "verified"
 },
 "daily-2025-10": {
-"added": 0,
-"at": "2026-10-12T11:55:42",
+"added": 28,
+"at": "2026-10-12T14:30:58",
 "category": "Daily",
+"issues": 0,
 "kind": "daily",
-"last_step": "reject 7 weak",
+"last_step": "verify",
 "name": "October 2025",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 31,
+"removed": 28,
+"status": "verified"
 },
 "daily-2025-11": {
 "added": 0,
@@ -981,13 +994,14 @@
 },
 "evpack-art-day-2027": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T14:35:00",
 "category": "Event",
 "kind": "event",
+"last_step": "pool 15 usable",
 "name": "World Art Day",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "evpack-autumn-2027": {
 "added": 0,
@@ -1127,15 +1141,15 @@
 "status": "verified"
 },
 "evpack-christmas-2027": {
-"added": 24,
-"at": "2026-10-12T11:41:45",
+"added": 48,
+"at": "2026-10-12T14:32:04",
 "category": "Event",
 "issues": 0,
 "kind": "event",
 "last_step": "verify",
 "name": "Christmas",
 "puzzles": 24,
-"removed": 14,
+"removed": 38,
 "status": "verified"
 },
 "evpack-coffee-2026": {
@@ -1195,15 +1209,15 @@
 "status": "verified"
 },
 "evpack-diwali-2027": {
-"added": 24,
-"at": "2026-10-12T12:32:08",
+"added": 48,
+"at": "2026-10-12T14:32:27",
 "category": "Event",
 "issues": 0,
 "kind": "event",
 "last_step": "verify",
 "name": "Diwali",
 "puzzles": 24,
-"removed": 10,
+"removed": 34,
 "status": "verified"
 },
 "evpack-dog-day-2027": {
@@ -1359,15 +1373,15 @@
 "status": "verified"
 },
 "evpack-halloween-2027": {
-"added": 24,
-"at": "2026-10-12T13:20:30",
+"added": 48,
+"at": "2026-10-12T14:32:48",
 "category": "Event",
 "issues": 0,
 "kind": "event",
 "last_step": "verify",
 "name": "Halloween",
 "puzzles": 24,
-"removed": 14,
+"removed": 38,
 "status": "verified"
 },
 "evpack-hamburger-2027": {
@@ -1449,15 +1463,15 @@
 "status": "verified"
 },
 "evpack-kindness-2027": {
-"added": 24,
-"at": "2026-10-12T13:45:25",
+"added": 48,
+"at": "2026-10-12T14:33:14",
 "category": "Event",
 "issues": 0,
 "kind": "event",
 "last_step": "verify",
 "name": "World Kindness Day",
 "puzzles": 24,
-"removed": 14,
+"removed": 38,
 "status": "verified"
 },
 "evpack-literacy-2027": {
@@ -1557,15 +1571,15 @@
 "status": "verified"
 },
 "evpack-mountain-day-2027": {
-"added": 48,
-"at": "2026-10-12T14:17:42",
+"added": 72,
+"at": "2026-10-12T14:33:42",
 "category": "Event",
 "issues": 0,
 "kind": "event",
 "last_step": "verify",
 "name": "International Mountain Day",
 "puzzles": 24,
-"removed": 38,
+"removed": 62,
 "status": "verified"
 },
 "evpack-new-year-2027": {
@@ -1580,9 +1594,10 @@
 },
 "evpack-new-years-eve-2026": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T14:28:56",
 "category": "Event",
 "kind": "event",
+"last_step": "pool 17 usable",
 "name": "New Year's Eve",
 "puzzles": null,
 "removed": 0,
@@ -1621,15 +1636,16 @@
 "status": "pending"
 },
 "evpack-pet-day-2027": {
-"added": 0,
-"at": "2026-10-12T14:28:31",
+"added": 24,
+"at": "2026-10-12T14:30:01",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "reject 2 off-theme",
+"last_step": "verify",
 "name": "National Pet Day",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 14,
+"status": "verified"
 },
 "evpack-photography-2027": {
 "added": 0,
@@ -2046,15 +2062,16 @@
 "status": "verified"
 },
 "pack-ancient-ruins": {
-"added": 0,
-"at": "2026-10-12T14:24:57",
+"added": 24,
+"at": "2026-10-12T14:30:35",
 "category": "Travel",
+"issues": 0,
 "kind": "library",
-"last_step": "reject 16 weak",
+"last_step": "verify",
 "name": "Ancient Ruins",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 20,
+"status": "verified"
 },
 "pack-autumn-parks": {
 "added": 20,
@@ -2070,10 +2087,10 @@
 },
 "pack-bali-temples": {
 "added": 0,
-"at": "2026-10-12T10:34:07",
+"at": "2026-10-12T14:33:32",
 "category": "Travel",
 "kind": "library",
-"last_step": "reject 3 weak",
+"last_step": "pool 20 usable",
 "name": "Bali Temples",
 "puzzles": null,
 "removed": 0,
@@ -2223,10 +2240,10 @@
 },
 "pack-cocktails": {
 "added": 0,
-"at": "2026-10-12T10:02:01",
+"at": "2026-10-12T14:33:11",
 "category": "Food",
 "kind": "library",
-"last_step": "reject 3 weak",
+"last_step": "pool 16 usable",
 "name": "Cocktails",
 "puzzles": null,
 "removed": 0,
@@ -2706,14 +2723,16 @@
 "status": "verified"
 },
 "pack-oil-landscapes": {
-"added": 0,
-"at": "2026-10-12T02:04:57",
+"added": 26,
+"at": "2026-10-12T14:37:06",
 "category": "Art",
+"issues": 0,
 "kind": "library",
+"last_step": "verify",
 "name": "Landscapes in Oil",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 22,
+"status": "verified"
 },
 "pack-old-maps": {
 "added": 0,

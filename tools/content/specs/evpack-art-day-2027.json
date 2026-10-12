@@ -1,0 +1,11 @@
+{
+ "id": "evpack-art-day-2027", "name": "World Art Day", "category": "Event",
+ "description": "A limited pack for World Art Day (15 April 2027). Paint palettes, brushes and pigments, Monet's garden at Giverny, stained glass, mosaics and tiles, and flower still lifes by the Dutch masters, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2, "accent_from_cover": true,
+ "sources": ["commons"], "nga_classes": ["Painting"],
+ "topics": ["Artist palette with oil paint", "Watercolor paint box", "Paint brushes", "Colored pencils", "Soft pastels", "Pigment powder",
+  "Oil paint tubes", "Giverny Monet garden Japanese bridge", "Sainte-Chapelle stained glass", "Park Güell mosaic", "Azulejos Porto", "Murano glass",
+  "Hundertwasserhaus Vienna", "Guggenheim Museum Bilbao", "Louvre Pyramid", "Vinci Tuscany",
+  "flower still life", "Jan van Huysum", "Rachel Ruysch", "Ambrosius Bosschaert", "fruit still life", "Delftware vase"],
+ "more_topics": ["Easel in artist studio", "Pottery glaze ceramics", "Mosaic tiles", "Stained glass rose window", "Chalk pastels", "Ink and brush calligraphy set"]
+}

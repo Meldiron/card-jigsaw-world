@@ -1,0 +1,51 @@
+{
+ "id": "pack-bali-temples",
+ "name": "Bali Temples",
+ "category": "Travel",
+ "description": "Split gates, tiered meru shrines, lotus ponds and carved stone at Bali's temples, from Tanah Lot to Ulun Danu Bratan.",
+ "kind": "library",
+ "target": 24,
+ "per_topic": 1,
+ "fetch_per_topic": 4,
+ "author_cap": 2,
+ "sources": [
+  "commons",
+  "openverse"
+ ],
+ "topics": [
+  "Pura Ulun Danu Bratan",
+  "Tanah Lot temple",
+  "Pura Luhur Uluwatu",
+  "Pura Besakih",
+  "Tirta Empul temple",
+  "Pura Taman Ayun",
+  "Goa Gajah",
+  "Gunung Kawi temple",
+  "Tirta Gangga water palace",
+  "Pura Taman Saraswati Ubud",
+  "Pura Lempuyang Luhur",
+  "Pura Ulun Danu Batur",
+  "Pura Kehen",
+  "Pura Goa Lawah",
+  "Pura Puseh Batubulan",
+  "Pura Dalem Ubud",
+  "Pura Meduwe Karang",
+  "Pura Beji Sangsit",
+  "Taman Ujung water palace",
+  "Pura Rambut Siwi",
+  "Pura Batu Bolong",
+  "Pura Luhur Batukaru",
+  "Pura Gunung Lebah",
+  "candi bentar split gate Bali",
+  "meru pagoda Bali temple",
+  "Balinese temple stone carving"
+ ],
+ "more_topics": [
+  "Pura Penataran Sasih",
+  "Pura Dalem Taman Kaja",
+  "kori agung temple gate Bali",
+  "Pura Desa Ubud",
+  "Pura Tamblingan",
+  "Pura Pulaki"
+ ]
+}
