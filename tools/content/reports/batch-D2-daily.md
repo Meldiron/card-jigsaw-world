@@ -22,3 +22,4 @@ Tooling notes: `commons_search(quality=True)` without `quality_cat` returns 0 fi
 - daily-2025-11: replaced 26 (people 9, landscape 7, text 2, weak 8 incl. 1 kept near-monochrome snowy forest); 30/30 dates; verified.
 - daily-2025-12: replaced 27 (people 10, landscape 6, weak 11: flat sea and sky frames, ink landscape, dark painted interior, mist); 31/31 dates; verified.
 - daily-2026-01: replaced 28 (people 16, landscape 2, text 1, weak 9: flat sky and sea, night fireworks on black, dark interiors); 31/31 dates; verified.
+- daily-2026-02: replaced 28 (people 16, landscape 4, weak 4; similar 4: the first apply put 7 birds of prey in the month, 4 swapped for other subjects); 28/28 dates; verified.

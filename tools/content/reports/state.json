@@ -1,8 +1,8 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-12T15:43:15",
-"msg": "Content: checkpoint (177 verified, 4 fixed, 50 audited, 61 pending)",
+"at": "2026-10-12T16:07:46",
+"msg": "Content: checkpoint (185 verified, 4 fixed, 46 audited, 58 pending)",
 "ok": true,
 "pushed": true,
 "stage": "committed"
@@ -722,8 +722,8 @@
 },
 "daily-2025": {
 "added": 0,
-"at": "2026-10-12T16:07:37",
-"last_step": "pool 47 usable",
+"at": "2026-10-12T16:12:30",
+"last_step": "pool 66 usable",
 "puzzles": null,
 "removed": 0,
 "status": "pending"
@@ -885,15 +885,16 @@
 "status": "verified"
 },
 "daily-2026-02": {
-"added": 27,
-"at": "2026-10-12T16:04:55",
+"added": 28,
+"at": "2026-10-12T16:13:18",
 "category": "Daily",
+"issues": 0,
 "kind": "daily",
-"last_step": "apply",
+"last_step": "verify",
 "name": "February 2026",
 "puzzles": 28,
-"removed": 28,
-"status": "fixed"
+"removed": 29,
+"status": "verified"
 },
 "daily-2026-03": {
 "added": 0,
@@ -1219,10 +1220,10 @@
 },
 "evpack-dance-2027": {
 "added": 0,
-"at": "2026-10-12T16:03:29",
+"at": "2026-10-12T16:08:52",
 "category": "Event",
 "kind": "event",
-"last_step": "pool 47 usable",
+"last_step": "reject 13 weak",
 "name": "International Dance Day",
 "puzzles": null,
 "removed": 0,
@@ -1745,9 +1746,10 @@
 },
 "evpack-remembrance-2026": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T16:09:26",
 "category": "Event",
 "kind": "event",
+"last_step": "pool 12 usable",
 "name": "Remembrance Day",
 "puzzles": null,
 "removed": 0,
@@ -2344,15 +2346,16 @@
 "status": "fixed"
 },
 "pack-doors": {
-"added": 0,
-"at": "2026-10-12T16:01:38",
+"added": 12,
+"at": "2026-10-12T16:11:14",
 "category": "Architecture",
+"issues": 0,
 "kind": "library",
-"last_step": "pool 29 usable",
+"last_step": "verify",
 "name": "Doors of the World",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 8,
+"status": "verified"
 },
 "pack-dutch-masters": {
 "added": 25,
@@ -2392,10 +2395,10 @@
 },
 "pack-fairytale-villages": {
 "added": 0,
-"at": "2026-10-12T10:36:08",
+"at": "2026-10-12T16:10:49",
 "category": "Travel",
 "kind": "library",
-"last_step": "reject 16 weak",
+"last_step": "pool 25 usable",
 "name": "Fairytale Villages",
 "puzzles": null,
 "removed": 0,
@@ -2439,10 +2442,10 @@
 },
 "pack-fruit-markets": {
 "added": 0,
-"at": "2026-10-12T10:03:52",
+"at": "2026-10-12T16:12:55",
 "category": "Food",
 "kind": "library",
-"last_step": "reject 1 weak",
+"last_step": "pool 6 usable",
 "name": "Fruit Markets",
 "puzzles": null,
 "removed": 0,
@@ -2948,13 +2951,14 @@
 },
 "pack-renaissance": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T16:12:59",
 "category": "Art",
 "kind": "library",
+"last_step": "reject 6 similar",
 "name": "Renaissance",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "pack-rice-terraces": {
 "added": 0,
