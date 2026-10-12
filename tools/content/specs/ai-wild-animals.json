@@ -1,0 +1,10 @@
+{
+ "id": "ai-wild-animals", "name": "AI Wild Animals", "category": "AI",
+ "description": "Lions, foxes, bears, elephants and other wild animals as text-to-image models picture them. Every picture is AI-generated and in the public domain.",
+ "kind": "ai", "pool": "ai-all", "price": "coins", "priceCoins": 500, "sortOrder": 2001,
+ "target": 24, "per_topic": 1, "fetch_per_topic": 20, "author_cap": 8, "min_short": 900,
+ "sources": ["openverse"], "openverse_category": "photograph", "accent_from_cover": true,
+ "topics": ["AI-generated lion", "AI-generated tiger", "AI-generated elephant", "AI-generated fox", "AI-generated wolf", "AI-generated bear",
+            "AI-generated deer", "AI-generated giraffe", "AI-generated zebra", "AI-generated leopard", "AI-generated monkey", "AI-generated rabbit",
+            "AI-generated panda", "AI-generated horse", "AI-generated raccoon", "AI-generated koala", "AI-generated hedgehog", "AI-generated otter"]
+}

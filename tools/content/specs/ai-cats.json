@@ -1,0 +1,10 @@
+{
+ "id": "ai-cats", "name": "AI Cats", "category": "AI",
+ "description": "Kittens, tabbies, fluffy Persians and a few cats in very odd situations, all imagined by text-to-image models. Every picture is AI-generated and in the public domain.",
+ "kind": "ai", "pool": "ai-all", "price": "free", "sortOrder": 2002,
+ "target": 24, "per_topic": 1, "fetch_per_topic": 20, "author_cap": 9, "min_short": 900,
+ "sources": ["openverse"], "openverse_category": "photograph", "accent_from_cover": true,
+ "topics": ["AI-generated cat", "AI-generated kitten", "AI-generated cats", "AI-generated kitty", "AI-generated tabby", "AI-generated black cat",
+            "AI-generated persian cat", "AI-generated siamese", "AI-generated cat portrait", "AI-generated maine coon", "AI-generated feline",
+            "dall-e cat", "midjourney cat", "stable diffusion cat"]
+}

@@ -23,3 +23,14 @@ Workaround used: purged the 231 `http 429` candidates and their meta files from 
 then pre-warmed the meta/thumb cache sequentially with exponential backoff on 429 (scratchpad `warm.py`, using the
 tooling as a library, no code changes) before re-running `pool ai-all`, which then only hits the cache.
 
+
+## Step 2 - themed packs (shared pool `ai-all`, picks by hand with `apply --no-auto --pick`)
+
+Sources: Commons AI categories (only `Public domain` / `CC0` files tagged AI by the tool) and Openverse (registered client;
+only `CC0` / `Public Domain Mark` results whose title or tags name an AI generator). Openverse topics are written as
+"AI-generated <subject>", so those puzzle titles say AI-generated; Commons puzzles carry "<prompter> / <generator>" and
+"(AI-generated)" in author/source. Commons alone holds only ~150 clean, people-free, portrait/square AI images, so
+Openverse (Flickr CC0 uploads by chris-hayes, Josh Rokman - AI Images, John B Fotografia, walmarc04, ...) does most of the work.
+
+- ai-dreamscapes: new, 24 added (16 Openverse CC0/PDM, 8 Commons PD), 0 removed, free, cover Kaer sidi (portrait), verified.
+- ai-wild-animals: new, 24 added (19 Openverse, 5 Commons), 16 people candidates rejected, 500 coins, all square (no clean portrait animal image exists; cover tiger), verified. ai-dreamscapes: p09 swapped (tiny figure in a boat), still 24, re-verified.

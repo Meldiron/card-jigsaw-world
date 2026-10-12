@@ -3240,6 +3240,275 @@
 "source": "flickr via Openverse, CC BY",
 "url": "https://live.staticflickr.com/65535/52745976639_1cd3798933_b.jpg"
 },
+"daily-2023-12-01": {
+"at": "2026-10-12",
+"author": "Martin Falbisoner",
+"licence": "CC BY-SA 3.0",
+"packId": "daily-2023-12",
+"page": "https://commons.wikimedia.org/wiki/File:Bald_Eagle_Head_sq.jpg",
+"provider": "commons",
+"replaced": "https://picsum.photos/id/92/900/1200",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Bald_Eagle_Head_sq.jpg/1280px-Bald_Eagle_Head_sq.jpg"
+},
+"daily-2023-12-02": {
+"at": "2026-10-12",
+"author": "Nasser Halaweh",
+"licence": "CC BY",
+"packId": "daily-2023-12",
+"page": "https://www.inaturalist.org/photos/18710616",
+"provider": "openverse:inaturalist",
+"replaced": "https://openaccess-cdn.clevelandart.org/1916.930/1916.930_web.jpg",
+"source": "inaturalist via Openverse, CC BY",
+"url": "https://inaturalist-open-data.s3.amazonaws.com/photos/18710616/original.jpg"
+},
+"daily-2023-12-03": {
+"at": "2026-10-12",
+"author": "gillfoto",
+"licence": "CC BY-SA 4.0",
+"packId": "daily-2023-12",
+"page": "https://commons.wikimedia.org/wiki/File:Zion_Narrows_89.jpg",
+"provider": "commons",
+"replaced": "https://picsum.photos/id/14/900/1200",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Zion_Narrows_89.jpg/1280px-Zion_Narrows_89.jpg"
+},
+"daily-2023-12-04": {
+"at": "2026-10-12",
+"author": "Polishchuk.pavlo.",
+"licence": "CC BY-SA 4.0",
+"packId": "daily-2023-12",
+"page": "https://commons.wikimedia.org/wiki/File:Scottish_Fold_Cat.jpg",
+"provider": "commons",
+"replaced": "https://openaccess-cdn.clevelandart.org/1958.425/1958.425_web.jpg",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Scottish_Fold_Cat.jpg/1280px-Scottish_Fold_Cat.jpg"
+},
+"daily-2023-12-05": {
+"at": "2026-10-12",
+"author": "Cecilia Arguelo",
+"licence": "CC0",
+"packId": "daily-2023-12",
+"page": "https://www.inaturalist.org/observations/184207098",
+"photo_page": "https://www.inaturalist.org/photos/321512589",
+"provider": "inat",
+"replaced": "https://picsum.photos/id/412/900/1200",
+"source": "iNaturalist, CC0",
+"url": "https://inaturalist-open-data.s3.amazonaws.com/photos/321512589/original.jpg"
+},
+"daily-2023-12-06": {
+"at": "2026-10-12",
+"author": "psyberartist",
+"licence": "CC BY 2.0",
+"packId": "daily-2023-12",
+"page": "https://commons.wikimedia.org/wiki/File:So_cute1_(8587765522).jpg",
+"provider": "commons",
+"replaced": "https://openaccess-cdn.clevelandart.org/1945.38/1945.38_web.jpg",
+"source": "Wikimedia Commons, CC BY 2.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/So_cute1_%288587765522%29.jpg/1280px-So_cute1_%288587765522%29.jpg"
+},
+"daily-2023-12-07": {
+"at": "2026-10-12",
+"author": "Gzzz",
+"licence": "CC BY-SA 3.0",
+"packId": "daily-2023-12",
+"page": "https://commons.wikimedia.org/wiki/File:Chute_d%27eau_Lauterbrunnental.JPG",
+"provider": "commons",
+"replaced": "https://picsum.photos/id/218/900/1200",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Chute_d%27eau_Lauterbrunnental.JPG/1280px-Chute_d%27eau_Lauterbrunnental.JPG"
+},
+"daily-2023-12-08": {
+"at": "2026-10-12",
+"author": "Mira Meijer Burgers' Zoo",
+"licence": "CC BY-SA 4.0",
+"packId": "daily-2023-12",
+"page": "https://commons.wikimedia.org/wiki/File:Peleides_blue_morpho_(Morpho_peleides).jpg",
+"provider": "commons",
+"replaced": "https://openaccess-cdn.clevelandart.org/1989.342/1989.342_web.jpg",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Peleides_blue_morpho_%28Morpho_peleides%29.jpg/1280px-Peleides_blue_morpho_%28Morpho_peleides%29.jpg"
+},
+"daily-2023-12-09": {
+"at": "2026-10-12",
+"author": "Bonnie Semmling",
+"licence": "CC BY",
+"packId": "daily-2023-12",
+"page": "https://www.inaturalist.org/observations/81379670",
+"photo_page": "https://www.inaturalist.org/photos/133473561",
+"provider": "inat",
+"replaced": "https://picsum.photos/id/129/900/1200",
+"source": "iNaturalist, CC BY",
+"url": "https://inaturalist-open-data.s3.amazonaws.com/photos/133473561/original.jpeg"
+},
+"daily-2023-12-10": {
+"at": "2026-10-12",
+"author": "\u041a\u043e\u043d\u0441\u0442\u0430\u043d\u0442\u0438\u043d \u0421\u0435\u043b\u0438\u0432\u0451\u0440\u0441\u0442\u043e\u0432",
+"licence": "CC BY",
+"packId": "daily-2023-12",
+"page": "https://www.inaturalist.org/observations/149123662",
+"photo_page": "https://www.inaturalist.org/photos/256917304",
+"provider": "inat",
+"replaced": "https://openaccess-cdn.clevelandart.org/2015.474/2015.474_web.jpg",
+"source": "iNaturalist, CC BY",
+"url": "https://inaturalist-open-data.s3.amazonaws.com/photos/256917304/original.jpg"
+},
+"daily-2023-12-11": {
+"at": "2026-10-12",
+"author": "World Wildlife",
+"licence": "CC0",
+"packId": "daily-2023-12",
+"page": "https://stocksnap.io/photo/leopard-nature-BNH6HA19CY",
+"provider": "openverse:stocksnap",
+"replaced": "https://picsum.photos/id/0/900/1200",
+"source": "stocksnap via Openverse, CC0",
+"url": "https://cdn.stocksnap.io/img-thumbs/960w/BNH6HA19CY.jpg"
+},
+"daily-2023-12-12": {
+"at": "2026-10-12",
+"author": "Jhonatan Matheus",
+"licence": "CC BY",
+"packId": "daily-2023-12",
+"page": "https://www.inaturalist.org/observations/367037940",
+"photo_page": "https://www.inaturalist.org/photos/670255740",
+"provider": "inat",
+"replaced": "https://openaccess-cdn.clevelandart.org/1997.247.g/1997.247.g_web.jpg",
+"source": "iNaturalist, CC BY",
+"url": "https://inaturalist-open-data.s3.amazonaws.com/photos/670255740/original.jpg"
+},
+"daily-2023-12-14": {
+"at": "2026-10-12",
+"author": "MurielBendel",
+"licence": "CC BY-SA 4.0",
+"packId": "daily-2023-12",
+"page": "https://commons.wikimedia.org/wiki/File:Alsophila_tricolor_Ponga_Puketi_Forest_Trail_NZ_1.jpg",
+"provider": "commons",
+"replaced": "https://openaccess-cdn.clevelandart.org/1979.27.2.15/1979.27.2.15_web.jpg",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Alsophila_tricolor_Ponga_Puketi_Forest_Trail_NZ_1.jpg/1280px-Alsophila_tricolor_Ponga_Puketi_Forest_Trail_NZ_1.jpg"
+},
+"daily-2023-12-16": {
+"at": "2026-10-12",
+"author": "Joeb",
+"licence": "CC BY",
+"packId": "daily-2023-12",
+"page": "https://www.inaturalist.org/observations/332310879",
+"photo_page": "https://www.inaturalist.org/photos/603051079",
+"provider": "inat",
+"replaced": "https://openaccess-cdn.clevelandart.org/1926.165/1926.165_web.jpg",
+"source": "iNaturalist, CC BY",
+"url": "https://inaturalist-open-data.s3.amazonaws.com/photos/603051079/original.jpg"
+},
+"daily-2023-12-17": {
+"at": "2026-10-12",
+"author": "Kritzolina",
+"licence": "CC BY-SA 4.0",
+"packId": "daily-2023-12",
+"page": "https://commons.wikimedia.org/wiki/File:Tulpe_%27Strong_Gold%27_im_botanischen_Garten_in_M%C3%BCnchen_01.jpg",
+"provider": "commons",
+"replaced": "https://openaccess-cdn.clevelandart.org/2018.135/2018.135_web.jpg",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Tulpe_%27Strong_Gold%27_im_botanischen_Garten_in_M%C3%BCnchen_01.jpg/1280px-Tulpe_%27Strong_Gold%27_im_botanischen_Garten_in_M%C3%BCnchen_01.jpg"
+},
+"daily-2023-12-18": {
+"at": "2026-10-12",
+"author": "Mankdhay rahman",
+"licence": "CC BY-SA 4.0",
+"packId": "daily-2023-12",
+"page": "https://commons.wikimedia.org/wiki/File:Pongo_Pygmaeus_wrumbii.jpg",
+"provider": "commons",
+"replaced": "https://openaccess-cdn.clevelandart.org/1958.20/1958.20_web.jpg",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Pongo_Pygmaeus_wrumbii.jpg/1280px-Pongo_Pygmaeus_wrumbii.jpg"
+},
+"daily-2023-12-20": {
+"at": "2026-10-12",
+"author": "blondinrikard",
+"licence": "CC BY",
+"packId": "daily-2023-12",
+"page": "https://www.flickr.com/photos/44093058@N06/52625847527",
+"provider": "openverse:flickr",
+"replaced": "https://openaccess-cdn.clevelandart.org/1985.258/1985.258_web.jpg",
+"source": "flickr via Openverse, CC BY",
+"url": "https://live.staticflickr.com/65535/52625847527_c2fcd383f5_b.jpg"
+},
+"daily-2023-12-21": {
+"at": "2026-10-12",
+"author": "Gauravggs",
+"licence": "CC BY-SA 4.0",
+"packId": "daily-2023-12",
+"page": "https://commons.wikimedia.org/wiki/File:Pink_and_purple_dahlia_flower_with_insect_2019.jpg",
+"provider": "commons",
+"replaced": "https://picsum.photos/id/847/900/1200",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Pink_and_purple_dahlia_flower_with_insect_2019.jpg/1280px-Pink_and_purple_dahlia_flower_with_insect_2019.jpg"
+},
+"daily-2023-12-22": {
+"at": "2026-10-12",
+"author": "Marta Boro\u0144",
+"licence": "CC BY 2.0",
+"packId": "daily-2023-12",
+"page": "https://commons.wikimedia.org/wiki/File:Coccinella_septempunctata_-_Biedronka_siedmiokropka_-_Seven-spot_ladybird_(35985069425).jpg",
+"provider": "commons",
+"replaced": "https://openaccess-cdn.clevelandart.org/1992.315/1992.315_web.jpg",
+"source": "Wikimedia Commons, CC BY 2.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Coccinella_septempunctata_-_Biedronka_siedmiokropka_-_Seven-spot_ladybird_%2835985069425%29.jpg/1280px-Coccinella_septempunctata_-_Biedronka_siedmiokropka_-_Seven-spot_ladybird_%2835985069425%29.jpg"
+},
+"daily-2023-12-24": {
+"at": "2026-10-12",
+"author": "jerry2018",
+"licence": "CC BY",
+"packId": "daily-2023-12",
+"page": "https://www.inaturalist.org/photos/23135992",
+"provider": "openverse:inaturalist",
+"replaced": "https://openaccess-cdn.clevelandart.org/2004.1.35/2004.1.35_web.jpg",
+"source": "inaturalist via Openverse, CC BY",
+"url": "https://inaturalist-open-data.s3.amazonaws.com/photos/23135992/original.jpg"
+},
+"daily-2023-12-26": {
+"at": "2026-10-12",
+"author": "Uoaei1",
+"licence": "CC BY-SA 4.0",
+"packId": "daily-2023-12",
+"page": "https://commons.wikimedia.org/wiki/File:Lilium_martagon_Tauerntal_01.jpg",
+"provider": "commons",
+"replaced": "https://openaccess-cdn.clevelandart.org/1960.79/1960.79_web.jpg",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Lilium_martagon_Tauerntal_01.jpg/1280px-Lilium_martagon_Tauerntal_01.jpg"
+},
+"daily-2023-12-27": {
+"at": "2026-10-12",
+"author": "Saichetan57",
+"licence": "CC BY-SA 4.0",
+"packId": "daily-2023-12",
+"page": "https://commons.wikimedia.org/wiki/File:Hedgehog-04.jpg",
+"provider": "commons",
+"replaced": "https://picsum.photos/id/848/900/1200",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Hedgehog-04.jpg/1280px-Hedgehog-04.jpg"
+},
+"daily-2023-12-28": {
+"at": "2026-10-12",
+"author": "Arlucio C. Ribeiro Filho",
+"licence": "CC BY 4.0",
+"packId": "daily-2023-12",
+"page": "https://commons.wikimedia.org/wiki/File:Ramphastos_toco_133802868.jpeg",
+"provider": "commons",
+"replaced": "https://openaccess-cdn.clevelandart.org/1969.132/1969.132_web.jpg",
+"source": "Wikimedia Commons, CC BY 4.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/a/ac/Ramphastos_toco_133802868.jpeg"
+},
+"daily-2023-12-30": {
+"at": "2026-10-12",
+"author": "Quartl",
+"licence": "CC BY-SA 3.0",
+"packId": "daily-2023-12",
+"page": "https://commons.wikimedia.org/wiki/File:Calopteryx_splendens_qtl4.jpg",
+"provider": "commons",
+"replaced": "https://openaccess-cdn.clevelandart.org/1977.37/1977.37_web.jpg",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Calopteryx_splendens_qtl4.jpg/1280px-Calopteryx_splendens_qtl4.jpg"
+},
 "daily-2025-01-01": {
 "at": "2026-10-12",
 "author": "Matt Berger",
@@ -4954,6 +5223,28 @@
 "topic": "gentoo penguin Falklands",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gentoo_penguin_%2851051932447%29.jpg/1280px-Gentoo_penguin_%2851051932447%29.jpg"
 },
+"p-00ee6783f038": {
+"at": "2026-10-12",
+"author": "Diego Delso",
+"licence": "CC BY-SA 3.0",
+"packId": "pack-caves",
+"page": "https://commons.wikimedia.org/wiki/File:Cueva_del_Rey_Salomon-Tasmania-Australia11.JPG",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "Carlsbad Caverns",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Cueva_del_Rey_Salomon-Tasmania-Australia11.JPG/1280px-Cueva_del_Rey_Salomon-Tasmania-Australia11.JPG"
+},
+"p-00f4a1efeb7a": {
+"at": "2026-10-12",
+"author": "Accurimbono",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-caves",
+"page": "https://commons.wikimedia.org/wiki/File:Grotte_di_Frasassi_17.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Frasassi Caves",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Grotte_di_Frasassi_17.jpg/1280px-Grotte_di_Frasassi_17.jpg"
+},
 "p-00f5c8f85548": {
 "at": "2026-10-12",
 "author": "lwolfartist",
@@ -4976,6 +5267,17 @@
 "source": "National Gallery of Art, Washington, CC0",
 "topic": "Bend in the Road",
 "url": "https://api.nga.gov/iiif/ed2aa02e-6875-48dc-bcc9-d31f2a1e496f/full/!2000,2000/0/default.jpg"
+},
+"p-01422d6e3b58": {
+"at": "2026-10-12",
+"author": "Josh Rokman",
+"licence": "Public Domain Mark",
+"packId": "ai-wild-animals",
+"page": "https://www.flickr.com/photos/65622352@N00/53441708942",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, Public Domain Mark",
+"topic": "AI-generated volcano",
+"url": "https://live.staticflickr.com/65535/53441708942_2c7e48f277_b.jpg"
 },
 "p-0151902dca8f": {
 "at": "2026-10-12",
@@ -5059,6 +5361,17 @@
 "topic": "tea leaves drying",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Darjeeling-tea-first-flush-leaf-dry.jpg/1280px-Darjeeling-tea-first-flush-leaf-dry.jpg"
 },
+"p-0269dfcc31c6": {
+"at": "2026-10-12",
+"author": "Local Group Survey Team and T.A. Rector (University of Alaska Anchorage)",
+"licence": "CC BY 4.0",
+"packId": "pack-galaxies",
+"page": "https://commons.wikimedia.org/wiki/File:Panorama_of_Spiral_Galaxy,_M33_(noao-m33lgs_ubvIha).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "Triangulum Galaxy",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Panorama_of_Spiral_Galaxy%2C_M33_%28noao-m33lgs_ubvIha%29.jpg/1280px-Panorama_of_Spiral_Galaxy%2C_M33_%28noao-m33lgs_ubvIha%29.jpg"
+},
 "p-0296ff984e82": {
 "at": "2026-10-12",
 "author": "Tarvo Metspalu",
@@ -5080,6 +5393,17 @@
 "source": "Wikimedia Commons, CC BY-SA 3.0 de",
 "topic": "daisy flower macro",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Bellis_perennis_twin_Macro_2.jpg/1280px-Bellis_perennis_twin_Macro_2.jpg"
+},
+"p-0315819243c2": {
+"at": "2026-10-12",
+"author": "Josh Rokman - AI Images",
+"licence": "Public Domain Mark",
+"packId": "ai-wild-animals",
+"page": "https://www.flickr.com/photos/200044612@N04/53564578100",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, Public Domain Mark",
+"topic": "AI-generated tiger",
+"url": "https://live.staticflickr.com/65535/53564578100_be4f53e9fb_b.jpg"
 },
 "p-034f95b445d9": {
 "at": "2026-10-12",
@@ -5158,6 +5482,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "flamingo",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/003_Greater_flamingo_close-up_in_the_Camargue_Photo_by_Giles_Laurent.jpg/1280px-003_Greater_flamingo_close-up_in_the_Camargue_Photo_by_Giles_Laurent.jpg"
+},
+"p-0427141300e3": {
+"at": "2026-10-12",
+"author": "Rose Abrams",
+"licence": "CC BY 4.0",
+"packId": "pack-caves",
+"page": "https://commons.wikimedia.org/wiki/File:Cave_near_Guilin_4.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "Reed Flute Cave",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Cave_near_Guilin_4.jpg/1280px-Cave_near_Guilin_4.jpg"
 },
 "p-043de1ff8f32": {
 "at": "2026-10-12",
@@ -5359,6 +5694,17 @@
 "topic": "llama farm",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Llama_at_the_Farm_%285822418491%29_%282%29.jpg/1280px-Llama_at_the_Farm_%285822418491%29_%282%29.jpg"
 },
+"p-077bb66cb95d": {
+"at": "2026-10-12",
+"author": "\u0544\u0561\u0580\u056b \u0531\u057e\u0565\u057f\u056b\u057d\u0575\u0561\u0576",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-easter-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Dyed_Easter_eggs.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Dyed Easter eggs",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Dyed_Easter_eggs.jpg/1280px-Dyed_Easter_eggs.jpg"
+},
 "p-07a8a3c1dffa": {
 "at": "2026-10-12",
 "author": "jules",
@@ -5472,6 +5818,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "monarch butterfly flower",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Monarch_Butterfly_in_Madison_Square_Park_2019-10-01_21-05.jpg/1280px-Monarch_Butterfly_in_Madison_Square_Park_2019-10-01_21-05.jpg"
+},
+"p-0a2098020ce3": {
+"at": "2026-10-12",
+"author": "RohanDavid",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-caves",
+"page": "https://commons.wikimedia.org/wiki/File:Jenolan_caves_2.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Jenolan Caves",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Jenolan_caves_2.jpg/1280px-Jenolan_caves_2.jpg"
 },
 "p-0ac1e6fa348c": {
 "at": "2026-10-12",
@@ -5663,6 +6020,17 @@
 "topic": "pine cone macro",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Pine_cone_%28abstract%29_%28Explored%29_-_Flickr_-_Real_Cowboys_Drive_Cadillacs.jpg/1280px-Pine_cone_%28abstract%29_%28Explored%29_-_Flickr_-_Real_Cowboys_Drive_Cadillacs.jpg"
 },
+"p-0e01d68a2328": {
+"at": "2026-10-12",
+"author": "European Space Agency",
+"licence": "CC BY-SA 3.0 igo",
+"packId": "pack-earth-orbit",
+"page": "https://commons.wikimedia.org/wiki/File:Snow-kissed_Alps.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0 igo",
+"topic": "Alps from space",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Snow-kissed_Alps.jpg/1280px-Snow-kissed_Alps.jpg"
+},
 "p-0e13320629b7": {
 "at": "2026-10-12",
 "author": "Ryan Hodnett",
@@ -5695,6 +6063,17 @@
 "source": "Wikimedia Commons, CC0",
 "topic": "samovar",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Samovar%2C_Russia.jpg/1280px-Samovar%2C_Russia.jpg"
+},
+"p-0e64aab9ded7": {
+"at": "2026-10-12",
+"author": "Roman Eisele",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-autumn-parks",
+"page": "https://commons.wikimedia.org/wiki/File:Stuttgart_-_Plieningen_-_Hohenheim_-_Hohenheimer_G%C3%A4rten_-_R%C3%B6misches_Wirtshaus_%C3%BCber_Teich_(1).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Englischer Garten autumn",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Stuttgart_-_Plieningen_-_Hohenheim_-_Hohenheimer_G%C3%A4rten_-_R%C3%B6misches_Wirtshaus_%C3%BCber_Teich_%281%29.jpg/1280px-Stuttgart_-_Plieningen_-_Hohenheim_-_Hohenheimer_G%C3%A4rten_-_R%C3%B6misches_Wirtshaus_%C3%BCber_Teich_%281%29.jpg"
 },
 "p-0e70ce75ff48": {
 "at": "2026-10-12",
@@ -5751,6 +6130,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "daisy flower macro",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Neurocolpus_nubilus_on_Ox-eye_Daisy_%28Leucanthemum_vulgare%29_-_London%2C_Ontario_2015-06-19.jpg/1280px-Neurocolpus_nubilus_on_Ox-eye_Daisy_%28Leucanthemum_vulgare%29_-_London%2C_Ontario_2015-06-19.jpg"
+},
+"p-0f26e384c979": {
+"at": "2026-10-12",
+"author": "John B Fotograf\u00eda",
+"licence": "Public Domain Mark",
+"packId": "ai-wild-animals",
+"page": "https://www.flickr.com/photos/23895243@N05/53637665286",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, Public Domain Mark",
+"topic": "AI-generated tiger",
+"url": "https://live.staticflickr.com/65535/53637665286_011584ffa9_b.jpg"
 },
 "p-0f53214f6c74": {
 "at": "2026-10-12",
@@ -5885,6 +6275,17 @@
 "source": "Wikimedia Commons, CC BY 2.0",
 "topic": "Garibaldi fish",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Garibaldi_fish_closeup.jpg/1280px-Garibaldi_fish_closeup.jpg"
+},
+"p-118a13dfcd52": {
+"at": "2026-10-12",
+"author": "NASA/JPL-Caltech",
+"licence": "Public domain (NASA)",
+"packId": "pack-galaxies",
+"page": "https://images.nasa.gov/details/PIA15426",
+"provider": "nasa",
+"source": "NASA Image and Video Library, public domain",
+"topic": "Sombrero Galaxy",
+"url": "https://images-assets.nasa.gov/image/PIA15426/PIA15426~medium.jpg"
 },
 "p-11c91f76c5c5": {
 "at": "2026-10-12",
@@ -6110,6 +6511,17 @@
 "topic": "American bullfrog",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/20260831_american_bullfrog_pleasant_valley_wildlife_sanctuary_PD06806.jpg/1280px-20260831_american_bullfrog_pleasant_valley_wildlife_sanctuary_PD06806.jpg"
 },
+"p-155613c6e932": {
+"at": "2026-10-12",
+"author": "Vanessa Kay",
+"licence": "CC BY 3.0",
+"packId": "pack-canyons",
+"page": "https://commons.wikimedia.org/wiki/File:Afternoon_In_Zion_Canyon_(71564507).jpeg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 3.0",
+"topic": "Zion Canyon",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Afternoon_In_Zion_Canyon_%2871564507%29.jpeg/1280px-Afternoon_In_Zion_Canyon_%2871564507%29.jpeg"
+},
 "p-158114206b19": {
 "at": "2026-10-12",
 "author": "Axel Tschentscher",
@@ -6199,6 +6611,17 @@
 "topic": "Arashiyama bamboo grove",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Bamboo_Grove%2C_Arashiyama%2C_Kyoto%2C_Japan.jpg/1280px-Bamboo_Grove%2C_Arashiyama%2C_Kyoto%2C_Japan.jpg"
 },
+"p-168e366f3fef": {
+"at": "2026-10-12",
+"author": "chris-hayes",
+"licence": "Public Domain Mark",
+"packId": "ai-wild-animals",
+"page": "https://www.flickr.com/photos/162244249@N03/52319096635",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, Public Domain Mark",
+"topic": "AI-generated horse",
+"url": "https://live.staticflickr.com/65535/52319096635_5d7830b331_b.jpg"
+},
 "p-169262d85a7a": {
 "at": "2026-10-12",
 "author": "\u0410\u043d\u0434\u0440\u0435\u0439 \u0420\u043e\u043c\u0430\u043d\u0435\u043d\u043a\u043e",
@@ -6254,6 +6677,17 @@
 "source": "Wikimedia Commons, CC BY 2.0",
 "topic": "bottlenose dolphin",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Indo-Pacific_Bottlenose_Dolphin_%285799714117%29.jpg/1280px-Indo-Pacific_Bottlenose_Dolphin_%285799714117%29.jpg"
+},
+"p-16eff30e42db": {
+"at": "2026-10-12",
+"author": "Eljay",
+"licence": "CC BY 2.0",
+"packId": "evpack-easter-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Simnel_cake_2023.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "Simnel cake",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Simnel_cake_2023.jpg/1280px-Simnel_cake_2023.jpg"
 },
 "p-1747a798ea27": {
 "at": "2026-10-12",
@@ -6367,6 +6801,17 @@
 "topic": "sunflower close up bloom",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Helianthus_grosseserratus_SAWTOOTH_SUNFLOWER_%283333949600%29.jpg/1280px-Helianthus_grosseserratus_SAWTOOTH_SUNFLOWER_%283333949600%29.jpg"
 },
+"p-19bb42cb88e1": {
+"at": "2026-10-12",
+"author": "Tanlingyin",
+"licence": "CC BY-SA 3.0",
+"packId": "pack-caves",
+"page": "https://commons.wikimedia.org/wiki/File:Blue_Grotto,_Capri,_Italy.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "Blue Grotto Capri",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Blue_Grotto%2C_Capri%2C_Italy.jpg/1280px-Blue_Grotto%2C_Capri%2C_Italy.jpg"
+},
 "p-19c203c99102": {
 "at": "2026-10-12",
 "author": "Matti Blume",
@@ -6412,6 +6857,28 @@
 "topic": "still life",
 "url": "https://api.nga.gov/iiif/6b41150f-3c75-4dc6-aacb-399d4bcc5a3b/full/!2000,2000/0/default.jpg"
 },
+"p-1a217ecaf95b": {
+"at": "2026-10-12",
+"author": "BeeBringer / AI",
+"licence": "CC0",
+"packId": "ai-dreamscapes",
+"page": "https://commons.wikimedia.org/wiki/File:Hypnotherapy_represented_by_a_deer_from_which_the_brain_grows.png",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0 (AI-generated)",
+"topic": "cat:AI-generated seas",
+"url": "https://upload.wikimedia.org/wikipedia/commons/b/b7/Hypnotherapy_represented_by_a_deer_from_which_the_brain_grows.png"
+},
+"p-1a48d16d8e46": {
+"at": "2026-10-12",
+"author": "European Space Agency",
+"licence": "Attribution",
+"packId": "pack-earth-orbit",
+"page": "https://commons.wikimedia.org/wiki/File:Earth_from_Space-_Cloud-free_Iceland_ESA509442.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Attribution",
+"topic": "Iceland from space",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Earth_from_Space-_Cloud-free_Iceland_ESA509442.jpg/1280px-Earth_from_Space-_Cloud-free_Iceland_ESA509442.jpg"
+},
 "p-1a6b40228844": {
 "at": "2026-10-12",
 "author": "Whitney",
@@ -6423,6 +6890,17 @@
 "source": "Wikimedia Commons, CC BY 2.0",
 "topic": "Christmas stollen",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Stollen_with_candied_fruits.jpg/1280px-Stollen_with_candied_fruits.jpg"
+},
+"p-1a6b5995c4fd": {
+"at": "2026-10-12",
+"author": "NASA/JPL-Caltech/STScI",
+"licence": "Public domain (NASA)",
+"packId": "pack-galaxies",
+"page": "https://images.nasa.gov/details/PIA11796",
+"provider": "nasa",
+"source": "NASA Image and Video Library, public domain",
+"topic": "Messier 101",
+"url": "https://images-assets.nasa.gov/image/PIA11796/PIA11796~medium.jpg"
 },
 "p-1a7e9dc89d8e": {
 "at": "2026-10-12",
@@ -6468,6 +6946,17 @@
 "topic": "Friesian horse",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/A_Friesian_horse.jpg/1280px-A_Friesian_horse.jpg"
 },
+"p-1b671d15f560": {
+"at": "2026-10-12",
+"author": "chris-hayes",
+"licence": "Public Domain Mark",
+"packId": "ai-wild-animals",
+"page": "https://www.flickr.com/photos/162244249@N03/52319077879",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, Public Domain Mark",
+"topic": "AI-generated horse",
+"url": "https://live.staticflickr.com/65535/52319077879_8fb5f235b1_b.jpg"
+},
 "p-1b6d119da111": {
 "at": "2026-10-12",
 "author": "Rudolphous (talk)",
@@ -6490,6 +6979,17 @@
 "source": "iNaturalist, CC BY",
 "topic": "Clown triggerfish",
 "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/556853091/original.jpg"
+},
+"p-1b9cb1694f56": {
+"at": "2026-10-12",
+"author": "Daderot",
+"licence": "CC0",
+"packId": "pack-caves",
+"page": "https://commons.wikimedia.org/wiki/File:Luray_Caverns_-_Luray,_Virginia_-_DSC00633.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "Luray Caverns",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Luray_Caverns_-_Luray%2C_Virginia_-_DSC00633.jpg/1280px-Luray_Caverns_-_Luray%2C_Virginia_-_DSC00633.jpg"
 },
 "p-1baaf3739138": {
 "at": "2026-10-12",
@@ -6558,6 +7058,17 @@
 "topic": "scarlet macaw",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Ara_macao_qtl1.jpg/1280px-Ara_macao_qtl1.jpg"
 },
+"p-1c3bf84c84d4": {
+"at": "2026-10-12",
+"author": "John B Fotograf\u00eda",
+"licence": "Public Domain Mark",
+"packId": "ai-wild-animals",
+"page": "https://www.flickr.com/photos/23895243@N05/53384368325",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, Public Domain Mark",
+"topic": "AI-generated river",
+"url": "https://live.staticflickr.com/65535/53384368325_f9bff57d8a_b.jpg"
+},
 "p-1c43b0b2a60d": {
 "at": "2026-10-12",
 "author": "dconvertini",
@@ -6568,6 +7079,17 @@
 "source": "Wikimedia Commons, CC BY-SA 2.0",
 "topic": "White Sands National Park dunes",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/White_Sands_National_Park%2C_New_Mexico%2C_USA_5-2024_34.jpg/1280px-White_Sands_National_Park%2C_New_Mexico%2C_USA_5-2024_34.jpg"
+},
+"p-1cc2b51b2557": {
+"at": "2026-10-12",
+"author": "chris-hayes",
+"licence": "Public Domain Mark",
+"packId": "ai-dreamscapes",
+"page": "https://www.flickr.com/photos/162244249@N03/52313612579",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, Public Domain Mark",
+"topic": "AI-generated sunset",
+"url": "https://live.staticflickr.com/65535/52313612579_9b3eb7ece3_b.jpg"
 },
 "p-1cda7c6021f2": {
 "at": "2026-10-12",
@@ -6714,6 +7236,17 @@
 "topic": "squirrel eating nut",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/American_squirrel_eating_nut%2C_13_Jun_2013.JPG/1280px-American_squirrel_eating_nut%2C_13_Jun_2013.JPG"
 },
+"p-1e889ebeac7a": {
+"at": "2026-10-12",
+"author": "Guilhem Vellut from Annecy, France",
+"licence": "CC BY 2.0",
+"packId": "pack-autumn-parks",
+"page": "https://commons.wikimedia.org/wiki/File:Rikugien_Garden_@_Komagome_(11165919906).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "Rikugien autumn",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Rikugien_Garden_%40_Komagome_%2811165919906%29.jpg/1280px-Rikugien_Garden_%40_Komagome_%2811165919906%29.jpg"
+},
 "p-1ed842dcf5e1": {
 "at": "2026-10-12",
 "author": "Ericj",
@@ -6736,6 +7269,28 @@
 "topic": "Prunus jamasakura",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Prunus_jamasakura_%27Kenrokuen-Kumagai%27_01.jpg/1280px-Prunus_jamasakura_%27Kenrokuen-Kumagai%27_01.jpg"
 },
+"p-1f211fe62b29": {
+"at": "2026-10-12",
+"author": "Kaesza / AI",
+"licence": "Public domain",
+"packId": "ai-wild-animals",
+"page": "https://commons.wikimedia.org/wiki/File:Jaguar_Azul.png",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain (AI-generated)",
+"topic": "cat:AI-generated cats",
+"url": "https://upload.wikimedia.org/wikipedia/commons/c/c2/Jaguar_Azul.png"
+},
+"p-1f4b8dd48edc": {
+"at": "2026-10-12",
+"author": "Houss 2020",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-caves",
+"page": "https://commons.wikimedia.org/wiki/File:Grotte_de_CLAMOUSSE_11.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Grotte de Clamouse",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Grotte_de_CLAMOUSSE_11.jpg/1280px-Grotte_de_CLAMOUSSE_11.jpg"
+},
 "p-1f6f700d5efa": {
 "at": "2026-10-12",
 "author": "Laika ac from USA",
@@ -6757,6 +7312,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "elephant walking savanna",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Front_view_of_elephant_in_Northern_Mara_Conservancy%2C_Kenya.jpg/1280px-Front_view_of_elephant_in_Northern_Mara_Conservancy%2C_Kenya.jpg"
+},
+"p-1fee36785d50": {
+"at": "2026-10-12",
+"author": "Jesse Allen",
+"licence": "Public domain",
+"packId": "pack-earth-orbit",
+"page": "https://commons.wikimedia.org/wiki/File:Lake_Eyre_Filling_Peaks.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Lake Eyre satellite",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Lake_Eyre_Filling_Peaks.jpg/1280px-Lake_Eyre_Filling_Peaks.jpg"
 },
 "p-1ff179a37367": {
 "at": "2026-10-12",
@@ -6836,6 +7402,17 @@
 "topic": "red cabbage cross section",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Red_cabbage_jm154679.jpg/1280px-Red_cabbage_jm154679.jpg"
 },
+"p-2106fe95fe7a": {
+"at": "2026-10-12",
+"author": "DALL-E 2 / AI",
+"licence": "Public domain",
+"packId": "ai-wild-animals",
+"page": "https://commons.wikimedia.org/wiki/File:DALL%C2%B7E_2022-07-29_09.42.17_-_photograph_of_a_polar_bear_in_the_desert.png",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain (AI-generated)",
+"topic": "cat:Images generated by DALL-E",
+"url": "https://upload.wikimedia.org/wikipedia/commons/0/0d/DALL%C2%B7E_2022-07-29_09.42.17_-_photograph_of_a_polar_bear_in_the_desert.png"
+},
 "p-210cfdadbee6": {
 "at": "2026-10-12",
 "author": "Travel Photographer",
@@ -6847,6 +7424,17 @@
 "source": "stocksnap via Openverse, CC0",
 "topic": "decorated Christmas tree lights",
 "url": "https://cdn.stocksnap.io/img-thumbs/960w/FVS2NUPG8D.jpg"
+},
+"p-211da5aac1c8": {
+"at": "2026-10-12",
+"author": "chris-hayes",
+"licence": "Public Domain Mark",
+"packId": "ai-dreamscapes",
+"page": "https://www.flickr.com/photos/162244249@N03/52312391642",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, Public Domain Mark",
+"topic": "AI-generated forest",
+"url": "https://live.staticflickr.com/65535/52312391642_5daab4cbec_b.jpg"
 },
 "p-2142958d355d": {
 "at": "2026-10-12",
@@ -6870,6 +7458,17 @@
 "source": "Wikimedia Commons, CC BY-SA 3.0",
 "topic": "common frog Rana temporaria",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Rana_temporaria%2C_Common_Frog%2C_Enfield.JPG/1280px-Rana_temporaria%2C_Common_Frog%2C_Enfield.JPG"
+},
+"p-216e0155c7a2": {
+"at": "2026-10-12",
+"author": "Josh Rokman - AI Images",
+"licence": "Public Domain Mark",
+"packId": "ai-wild-animals",
+"page": "https://www.flickr.com/photos/200044612@N04/53568706934",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, Public Domain Mark",
+"topic": "AI-generated giraffe",
+"url": "https://live.staticflickr.com/65535/53568706934_9c60260a97_b.jpg"
 },
 "p-2187e009985b": {
 "at": "2026-10-12",
@@ -7025,6 +7624,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "protractor",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Clear_Protractor_01.jpg/1280px-Clear_Protractor_01.jpg"
+},
+"p-2379ffbcd723": {
+"at": "2026-10-12",
+"author": "AndrewKPepper",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-canyons",
+"page": "https://commons.wikimedia.org/wiki/File:Canyon_de_Chelly_03.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Canyon de Chelly",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Canyon_de_Chelly_03.jpg/1280px-Canyon_de_Chelly_03.jpg"
 },
 "p-238af9df83e6": {
 "at": "2026-10-12",
@@ -7205,6 +7815,17 @@
 "topic": "Leidsegracht",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Leidsegracht_1.JPG/1280px-Leidsegracht_1.JPG"
 },
+"p-271ec2936e08": {
+"at": "2026-10-12",
+"author": "John B Fotograf\u00eda",
+"licence": "Public Domain Mark",
+"packId": "ai-dreamscapes",
+"page": "https://www.flickr.com/photos/23895243@N05/53380852148",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, Public Domain Mark",
+"topic": "AI-generated forest",
+"url": "https://live.staticflickr.com/65535/53380852148_338138fb33_b.jpg"
+},
 "p-272af2566d59": {
 "at": "2026-10-12",
 "author": "Adam Court",
@@ -7215,6 +7836,17 @@
 "source": "Wikimedia Commons, CC BY 2.0",
 "topic": "Wistman's Wood",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Wistman%27s_Wood_%2826071131250%29.jpg/1280px-Wistman%27s_Wood_%2826071131250%29.jpg"
+},
+"p-272cbf88cb64": {
+"at": "2026-10-12",
+"author": "NASA, ESA and K. Cook (Lawrence Livermore National Laboratory, USA)",
+"licence": "Public domain",
+"packId": "pack-galaxies",
+"page": "https://commons.wikimedia.org/wiki/File:NGC_4921_by_HST.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "NGC 4921",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/NGC_4921_by_HST.jpg/1280px-NGC_4921_by_HST.jpg"
 },
 "p-277d8fd1921f": {
 "at": "2026-10-12",
@@ -7316,6 +7948,17 @@
 "topic": "Mount Cook Hooker Valley",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Aoraki_-_Mount_Cook_National_Park%2C_summer_-_Aorakisummer9394.jpg/1280px-Aoraki_-_Mount_Cook_National_Park%2C_summer_-_Aorakisummer9394.jpg"
 },
+"p-294ca8c8e3b8": {
+"at": "2026-10-12",
+"author": "Guillaume Baviere from Uppsala, Sweden",
+"licence": "CC BY-SA 2.0",
+"packId": "pack-canyons",
+"page": "https://commons.wikimedia.org/wiki/File:Spain_2013-08-01_(9727053026).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 2.0",
+"topic": "Ordesa Canyon",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Spain_2013-08-01_%289727053026%29.jpg/1280px-Spain_2013-08-01_%289727053026%29.jpg"
+},
 "p-29676337fe24": {
 "at": "2026-10-12",
 "author": "\u963f\u6a4b HQ",
@@ -7348,6 +7991,28 @@
 "source": "Wikimedia Commons, CC BY 2.0",
 "topic": "Pancakes with berries",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Pavlova_%2844659545570%29.jpg/1280px-Pavlova_%2844659545570%29.jpg"
+},
+"p-29e2e60642e3": {
+"at": "2026-10-12",
+"author": "chris-hayes",
+"licence": "Public Domain Mark",
+"packId": "ai-wild-animals",
+"page": "https://www.flickr.com/photos/162244249@N03/52313628460",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, Public Domain Mark",
+"topic": "AI-generated nature",
+"url": "https://live.staticflickr.com/65535/52313628460_99a1df4a9c_b.jpg"
+},
+"p-29e39198b0ae": {
+"at": "2026-10-12",
+"author": "Ben Sk\u00e1la, Benfoto",
+"licence": "CC BY-SA 3.0",
+"packId": "pack-caves",
+"page": "https://commons.wikimedia.org/wiki/File:Punkevn%C3%AD-jeskyn%C4%9B-Baldach%C3%BDn2013.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "Punkva Caves",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Punkevn%C3%AD-jeskyn%C4%9B-Baldach%C3%BDn2013.jpg/1280px-Punkevn%C3%AD-jeskyn%C4%9B-Baldach%C3%BDn2013.jpg"
 },
 "p-2a2b99275d5c": {
 "at": "2026-10-12",
@@ -7393,6 +8058,17 @@
 "topic": "Lavandula multifida",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Lavandula_multifida.jpg/1280px-Lavandula_multifida.jpg"
 },
+"p-2ad6448ef2ac": {
+"at": "2026-10-12",
+"author": "::::=UT=::::",
+"licence": "CC BY-SA 3.0",
+"packId": "pack-autumn-parks",
+"page": "https://commons.wikimedia.org/wiki/File:5_Chome_Nij%C5%8D%C5%8Djiminami,_Nara-shi,_Nara-ken_630-8012,_Japan_-_panoramio.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "Nara Park autumn",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/5_Chome_Nij%C5%8D%C5%8Djiminami%2C_Nara-shi%2C_Nara-ken_630-8012%2C_Japan_-_panoramio.jpg/1280px-5_Chome_Nij%C5%8D%C5%8Djiminami%2C_Nara-shi%2C_Nara-ken_630-8012%2C_Japan_-_panoramio.jpg"
+},
 "p-2ad6703eb518": {
 "at": "2026-10-12",
 "author": "Basile Morin",
@@ -7425,6 +8101,17 @@
 "source": "Wikimedia Commons, CC BY 2.0",
 "topic": "Jacob sheep",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Jacob_Sheep_at_the_Cinci_Zoo.jpg/1280px-Jacob_Sheep_at_the_Cinci_Zoo.jpg"
+},
+"p-2bc6b1ede227": {
+"at": "2026-10-12",
+"author": "Chris Olszewski",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-easter-2027",
+"page": "https://commons.wikimedia.org/wiki/File:%C5%9Awi%C4%99conka,_Blessing_Easter_Baskets,_2024,_02.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "\u015awi\u0119conka basket",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/%C5%9Awi%C4%99conka%2C_Blessing_Easter_Baskets%2C_2024%2C_02.jpg/1280px-%C5%9Awi%C4%99conka%2C_Blessing_Easter_Baskets%2C_2024%2C_02.jpg"
 },
 "p-2bec02b29337": {
 "at": "2026-10-12",
@@ -7528,6 +8215,17 @@
 "topic": "Chow Chow puppy",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Gismo_the_Chow_Chow_puppy.jpg/1280px-Gismo_the_Chow_Chow_puppy.jpg"
 },
+"p-2cf08d082586": {
+"at": "2026-10-12",
+"author": "Cjorsch",
+"licence": "CC BY-SA 3.0",
+"packId": "evpack-easter-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Homemade_Hot_Cross_Buns.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "Hot cross buns",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Homemade_Hot_Cross_Buns.jpg/1280px-Homemade_Hot_Cross_Buns.jpg"
+},
 "p-2d2b6269990c": {
 "at": "2026-10-12",
 "author": "Claude Monet",
@@ -7539,6 +8237,17 @@
 "topic": "Monet Poplars painting",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Claude_Monet_-_Poplars%2C_Philadelphia.JPG/1280px-Claude_Monet_-_Poplars%2C_Philadelphia.JPG"
 },
+"p-2d43de846f41": {
+"at": "2026-10-12",
+"author": "NASA and The Hubble Heritage Team (STScI/AURA)",
+"licence": "Public domain",
+"packId": "pack-galaxies",
+"page": "https://commons.wikimedia.org/wiki/File:Whirpool_Galaxy.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Messier 51",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Whirpool_Galaxy.jpg/1280px-Whirpool_Galaxy.jpg"
+},
 "p-2d4b4b7faeb4": {
 "at": "2026-10-12",
 "author": "Txllxt TxllxT",
@@ -7549,6 +8258,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "van Doesburg composition",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Amsterdam_-_Stedelijk_Museum_-_Theo_van_Doesburg_%281883-1931%29_-_Counter-Composition_V_%28A_567%29_1924.jpg/1280px-Amsterdam_-_Stedelijk_Museum_-_Theo_van_Doesburg_%281883-1931%29_-_Counter-Composition_V_%28A_567%29_1924.jpg"
+},
+"p-2d50a7760899": {
+"at": "2026-10-12",
+"author": "NASA Goddard Space Flight Center from Greenbelt, MD, USA",
+"licence": "Public domain",
+"packId": "pack-earth-orbit",
+"page": "https://commons.wikimedia.org/wiki/File:Yukon_Delta_-_Flickr_-_NASA_Goddard_Photo_and_Video.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Yukon delta Landsat",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Yukon_Delta_-_Flickr_-_NASA_Goddard_Photo_and_Video.jpg/1280px-Yukon_Delta_-_Flickr_-_NASA_Goddard_Photo_and_Video.jpg"
 },
 "p-2d62f64c5768": {
 "at": "2026-10-12",
@@ -7618,6 +8338,17 @@
 "topic": "Vulpes vulpes",
 "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/738296801/original.jpg"
 },
+"p-2e701185420f": {
+"at": "2026-10-12",
+"author": "Josh Rokman - AI Images",
+"licence": "Public Domain Mark",
+"packId": "ai-wild-animals",
+"page": "https://www.flickr.com/photos/200044612@N04/53607220657",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, Public Domain Mark",
+"topic": "AI-generated elephant",
+"url": "https://live.staticflickr.com/65535/53607220657_c95cbb36db_b.jpg"
+},
 "p-2e77d23a022a": {
 "at": "2026-10-12",
 "author": "Diego Delso",
@@ -7639,6 +8370,17 @@
 "source": "Wikimedia Commons, CC BY-SA 2.5",
 "topic": "Amur leopard",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/MP-panthera_pardus_orientalis_2.jpg/1280px-MP-panthera_pardus_orientalis_2.jpg"
+},
+"p-2ef70abe1842": {
+"at": "2026-10-12",
+"author": "DALLE2 / AI",
+"licence": "Public domain",
+"packId": "ai-wild-animals",
+"page": "https://commons.wikimedia.org/wiki/File:DALL.E2_-_Looking_at_a_Rudolph_deer_thru_the_peepholes_-_variant_1.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain (AI-generated)",
+"topic": "cat:Images generated by DALL-E",
+"url": "https://upload.wikimedia.org/wikipedia/commons/5/5e/DALL.E2_-_Looking_at_a_Rudolph_deer_thru_the_peepholes_-_variant_1.jpg"
 },
 "p-2ef9a854b68c": {
 "at": "2026-10-12",
@@ -7798,6 +8540,17 @@
 "topic": "apples basket",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/%27Basket_of_Apples%27_by_Levi_Wells_Prentice%2C_Dayton_Art_Institute.JPG/1280px-%27Basket_of_Apples%27_by_Levi_Wells_Prentice%2C_Dayton_Art_Institute.JPG"
 },
+"p-31028c28a62f": {
+"at": "2026-10-12",
+"author": "Jason Zhang",
+"licence": "CC BY-SA 3.0",
+"packId": "pack-canyons",
+"page": "https://commons.wikimedia.org/wiki/File:Tiger_Leaping_Gorge_from_above,_August_2018_(2).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "Tiger Leaping Gorge",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Tiger_Leaping_Gorge_from_above%2C_August_2018_%282%29.jpg/1280px-Tiger_Leaping_Gorge_from_above%2C_August_2018_%282%29.jpg"
+},
 "p-312c9551da97": {
 "at": "2026-10-12",
 "author": "Enrique \u00cd\u00f1iguez Rodr\u00edguez (Qoan)",
@@ -7808,6 +8561,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "fountain pen nib",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Inoxcrom_Wall_Street._Nib._M.jpg/1280px-Inoxcrom_Wall_Street._Nib._M.jpg"
+},
+"p-31650828600d": {
+"at": "2026-10-12",
+"author": "Adam Block",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-galaxies",
+"page": "https://commons.wikimedia.org/wiki/File:NGC_2207_%26_IC_2163_(Adam_Block).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "NGC 2207 IC 2163",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/NGC_2207_%26_IC_2163_%28Adam_Block%29.jpg/1280px-NGC_2207_%26_IC_2163_%28Adam_Block%29.jpg"
 },
 "p-317011f703b7": {
 "at": "2026-10-12",
@@ -7932,6 +8696,17 @@
 "topic": "cat:Concrete art",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Kunst_von_Ivo_Ringe_St._Yves_2016.jpg/1280px-Kunst_von_Ivo_Ringe_St._Yves_2016.jpg"
 },
+"p-34a35a963a52": {
+"at": "2026-10-12",
+"author": "Rose Abrams",
+"licence": "CC BY 4.0",
+"packId": "pack-caves",
+"page": "https://commons.wikimedia.org/wiki/File:Cave_near_Guilin_6.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "Reed Flute Cave",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Cave_near_Guilin_6.jpg/1280px-Cave_near_Guilin_6.jpg"
+},
 "p-34c3495b7db4": {
 "at": "2026-10-12",
 "author": "D. Sharon Pruitt from Hill Air Force Base, Utah, USA",
@@ -8020,6 +8795,17 @@
 "topic": "Blausee Switzerland",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Blausee_Forest.jpg/1280px-Blausee_Forest.jpg"
 },
+"p-36b43f85dfd7": {
+"at": "2026-10-12",
+"author": "Robert Linsdell from St. Andrews, Canada",
+"licence": "CC BY 2.0",
+"packId": "pack-caves",
+"page": "https://commons.wikimedia.org/wiki/File:Thurston_Lava_Tube._Hawaii_Volcanoes_National_Park_(503989)_(22218198281).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "Thurston lava tube",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Thurston_Lava_Tube._Hawaii_Volcanoes_National_Park_%28503989%29_%2822218198281%29.jpg/1280px-Thurston_Lava_Tube._Hawaii_Volcanoes_National_Park_%28503989%29_%2822218198281%29.jpg"
+},
 "p-36b77c6320b7": {
 "at": "2026-10-12",
 "author": "Dominique Jacholke",
@@ -8030,6 +8816,17 @@
 "source": "Wikimedia Commons, CC BY-SA 3.0",
 "topic": "Maine Coon kitten",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Maine_Coon_Fallen_Angel_of_Canadian_Summer_02.jpg/1280px-Maine_Coon_Fallen_Angel_of_Canadian_Summer_02.jpg"
+},
+"p-36d6f56fb6fa": {
+"at": "2026-10-12",
+"author": "Takeshi Kuboki from Amagasaki, Japan",
+"licence": "CC BY 2.0",
+"packId": "pack-autumn-parks",
+"page": "https://commons.wikimedia.org/wiki/File:Autumn_foliage_2012_(8252565415).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "Arashiyama autumn",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Autumn_foliage_2012_%288252565415%29.jpg/1280px-Autumn_foliage_2012_%288252565415%29.jpg"
 },
 "p-36d95ca2d607": {
 "at": "2026-10-12",
@@ -8075,6 +8872,17 @@
 "topic": "red panda eating bamboo",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Panda_eating_bamboo_leaves.jpg/1280px-Panda_eating_bamboo_leaves.jpg"
 },
+"p-37d98740c2f6": {
+"at": "2026-10-12",
+"author": "IMAGE: ESA, NASA, NASA-JPL, Caltech, Christopher Clark (STScI), S. Kim (Sejong University)",
+"licence": "Public domain",
+"packId": "pack-galaxies",
+"page": "https://commons.wikimedia.org/wiki/File:Infrared-Radio_Image_of_the_Large_Magellanic_Cloud_(2022-027).png",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Large Magellanic Cloud",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Infrared-Radio_Image_of_the_Large_Magellanic_Cloud_%282022-027%29.png/1280px-Infrared-Radio_Image_of_the_Large_Magellanic_Cloud_%282022-027%29.png"
+},
 "p-380aa04d8009": {
 "at": "2026-10-12",
 "author": "Marigold352",
@@ -8119,6 +8927,17 @@
 "topic": "hourglass",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Hourglass_.jpg/1280px-Hourglass_.jpg"
 },
+"p-38b233e30a2b": {
+"at": "2026-10-12",
+"author": "Bff",
+"licence": "CC BY-SA 3.0",
+"packId": "evpack-easter-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Easter_eggs20100403_37.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "Dyed Easter eggs",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Easter_eggs20100403_37.jpg/1280px-Easter_eggs20100403_37.jpg"
+},
 "p-38cd2066f4d2": {
 "at": "2026-10-12",
 "author": "NPS Photo",
@@ -8153,6 +8972,17 @@
 "topic": "cat:Steel wool spinning",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/TouchSensitive_%283855576699%29.jpg/1280px-TouchSensitive_%283855576699%29.jpg"
 },
+"p-393934b92f64": {
+"at": "2026-10-12",
+"author": "Dick Thomas Johnson from Tokyo, Japan",
+"licence": "CC BY 2.0",
+"packId": "pack-autumn-parks",
+"page": "https://commons.wikimedia.org/wiki/File:Meiji_Jingu_Gaien_Ginkgo_Festival_(53440769967).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "ginkgo avenue Meiji Jingu Gaien autumn",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Meiji_Jingu_Gaien_Ginkgo_Festival_%2853440769967%29.jpg/1280px-Meiji_Jingu_Gaien_Ginkgo_Festival_%2853440769967%29.jpg"
+},
 "p-394705fdd4d3": {
 "at": "2026-10-12",
 "author": "Michael Garlick",
@@ -8175,6 +9005,28 @@
 "topic": "cat:Geometric abstract paintings",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/W._Kandinsky_-_Bild_mit_rotem_Fleck.jpg/1280px-W._Kandinsky_-_Bild_mit_rotem_Fleck.jpg"
 },
+"p-3a11a968d786": {
+"at": "2026-10-12",
+"author": "Wannamed",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-caves",
+"page": "https://commons.wikimedia.org/wiki/File:Iced_Light.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Vatnaj\u00f6kull ice cave",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Iced_Light.jpg/1280px-Iced_Light.jpg"
+},
+"p-3a18f7dce1f9": {
+"at": "2026-10-12",
+"author": "Apple Intelligence Image Playground / AI",
+"licence": "Public domain",
+"packId": "ai-dreamscapes",
+"page": "https://commons.wikimedia.org/wiki/File:AppleIntelligenceLandscape.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain (AI-generated)",
+"topic": "cat:AI-generated images of nature",
+"url": "https://upload.wikimedia.org/wikipedia/commons/6/6f/AppleIntelligenceLandscape.jpg"
+},
 "p-3a3f45c83b81": {
 "at": "2026-10-12",
 "author": "OlafJanssen",
@@ -8186,6 +9038,17 @@
 "topic": "Leather brogue shoes",
 "url": "https://upload.wikimedia.org/wikipedia/commons/c/c2/Pair_of_semi_brogues_from_Allen_Edmonds_shoe_company.jpg"
 },
+"p-3a460ba924a7": {
+"at": "2026-10-12",
+"author": "Jim Osley",
+"licence": "CC BY-SA 2.0",
+"packId": "pack-autumn-parks",
+"page": "https://commons.wikimedia.org/wiki/File:Hyde_Park_,_autumn_leaves_-_geograph.org.uk_-_7902766.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 2.0",
+"topic": "Hyde Park autumn",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Hyde_Park_%2C_autumn_leaves_-_geograph.org.uk_-_7902766.jpg/1280px-Hyde_Park_%2C_autumn_leaves_-_geograph.org.uk_-_7902766.jpg"
+},
 "p-3aadeff0e910": {
 "at": "2026-10-12",
 "author": "Ian Simmonds",
@@ -8196,6 +9059,17 @@
 "source": "Wikimedia Commons, CC0",
 "topic": "Golden Gate Bridge night",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Long_Exposure_of_Golden_Gate_Bridge.jpg/1280px-Long_Exposure_of_Golden_Gate_Bridge.jpg"
+},
+"p-3b2846223803": {
+"at": "2026-10-12",
+"author": "DALL-E 3 in Bing. Prompt: Make an image of a glamphant / AI",
+"licence": "Public domain",
+"packId": "ai-wild-animals",
+"page": "https://commons.wikimedia.org/wiki/File:Glamphant.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain (AI-generated)",
+"topic": "cat:Images generated by DALL-E",
+"url": "https://upload.wikimedia.org/wikipedia/commons/f/f6/Glamphant.jpg"
 },
 "p-3b4150284a17": {
 "at": "2026-10-12",
@@ -8308,6 +9182,17 @@
 "topic": "Tokyo Tower night",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Tokyo_Tower_at_night_1.JPG/1280px-Tokyo_Tower_at_night_1.JPG"
 },
+"p-3c7fa869169a": {
+"at": "2026-10-12",
+"author": "Dmirty Fisenko fisenkodv",
+"licence": "CC0",
+"packId": "pack-canyons",
+"page": "https://commons.wikimedia.org/wiki/File:Lower_Antelope_Canyon_(Unsplash).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "Lower Antelope Canyon",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Lower_Antelope_Canyon_%28Unsplash%29.jpg/1280px-Lower_Antelope_Canyon_%28Unsplash%29.jpg"
+},
 "p-3c831abbd3f8": {
 "at": "2026-10-12",
 "author": "Diego Delso",
@@ -8319,6 +9204,17 @@
 "topic": "Sossusvlei dunes",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Duna_en_Sossusvlei%2C_Namibia%2C_2018-08-06%2C_DD_003.jpg/1280px-Duna_en_Sossusvlei%2C_Namibia%2C_2018-08-06%2C_DD_003.jpg"
 },
+"p-3cc331521559": {
+"at": "2026-10-12",
+"author": "NASA",
+"licence": "Public domain",
+"packId": "pack-earth-orbit",
+"page": "https://commons.wikimedia.org/wiki/File:ISS-49_Lake_Urmia,_northwestern_Iran.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Earth from ISS",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/ISS-49_Lake_Urmia%2C_northwestern_Iran.jpg/1280px-ISS-49_Lake_Urmia%2C_northwestern_Iran.jpg"
+},
 "p-3d160e1cd56d": {
 "at": "2026-10-12",
 "author": "Khizar.mashhadi",
@@ -8329,6 +9225,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "Blautopf spring",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Spillway_blautopf.jpg/1280px-Spillway_blautopf.jpg"
+},
+"p-3d178ae03e96": {
+"at": "2026-10-12",
+"author": "chris-hayes",
+"licence": "Public Domain Mark",
+"packId": "ai-wild-animals",
+"page": "https://www.flickr.com/photos/162244249@N03/52304208877",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, Public Domain Mark",
+"topic": "AI-generated raccoon",
+"url": "https://live.staticflickr.com/65535/52304208877_e7888edefd_b.jpg"
 },
 "p-3d1c06424944": {
 "at": "2026-10-12",
@@ -8352,6 +9259,17 @@
 "source": "Wikimedia Commons, CC0",
 "topic": "paella pan",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Paella_Valenciana_tradicional.jpg/1280px-Paella_Valenciana_tradicional.jpg"
+},
+"p-3d380fb5488c": {
+"at": "2026-10-12",
+"author": "The SINGG Survey Team and NOIRLab/NSF/AURA/",
+"licence": "CC BY 4.0",
+"packId": "pack-galaxies",
+"page": "https://commons.wikimedia.org/wiki/File:NGC_5236_(M83),_SINGG_Survey_(noao-J1337-29_crop1).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "Southern Pinwheel Galaxy M83",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/NGC_5236_%28M83%29%2C_SINGG_Survey_%28noao-J1337-29_crop1%29.jpg/1280px-NGC_5236_%28M83%29%2C_SINGG_Survey_%28noao-J1337-29_crop1%29.jpg"
 },
 "p-3d5273c6ffc3": {
 "at": "2026-10-12",
@@ -8532,6 +9450,17 @@
 "topic": "Amazon milk frog",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Milk_Frog_%28Trachycephalus_resinifictrix%29.jpg/1280px-Milk_Frog_%28Trachycephalus_resinifictrix%29.jpg"
 },
+"p-3e8b7c06a3d8": {
+"at": "2026-10-12",
+"author": "Arths-at",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-easter-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Easter_eggs_in_Austria_Ostereierdekor.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Easter egg tree",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Easter_eggs_in_Austria_Ostereierdekor.jpg/1280px-Easter_eggs_in_Austria_Ostereierdekor.jpg"
+},
 "p-3e9debb15bff": {
 "at": "2026-10-12",
 "author": "KimonBerlin",
@@ -8621,6 +9550,17 @@
 "topic": "Lagoon Nebula",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Lagoon_Nebula_%28Visible-light_View%29_%282018-21-4150%29.png/1280px-Lagoon_Nebula_%28Visible-light_View%29_%282018-21-4150%29.png"
 },
+"p-3fbba28a7fda": {
+"at": "2026-10-12",
+"author": "chris-hayes",
+"licence": "Public Domain Mark",
+"packId": "ai-dreamscapes",
+"page": "https://www.flickr.com/photos/162244249@N03/52313495048",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, Public Domain Mark",
+"topic": "AI-generated sunset",
+"url": "https://live.staticflickr.com/65535/52313495048_fe4f8ac450_b.jpg"
+},
 "p-3fc84de16e43": {
 "at": "2026-10-12",
 "author": "Janet Hudson",
@@ -8631,6 +9571,17 @@
 "source": "Wikimedia Commons, CC BY 2.0",
 "topic": "Lemon tart",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Lemon_Apricot_Flower_Tart_on_tray.jpg/1280px-Lemon_Apricot_Flower_Tart_on_tray.jpg"
+},
+"p-3ff59c5a8dcc": {
+"at": "2026-10-12",
+"author": "Roman Eisele",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-autumn-parks",
+"page": "https://commons.wikimedia.org/wiki/File:Schwetzingen_-_Schlossgarten_-_Moschee_-_Ansicht_%C3%BCber_den_Moscheeweiher_im_Herbst_1.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "autumn park pond reflection",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Schwetzingen_-_Schlossgarten_-_Moschee_-_Ansicht_%C3%BCber_den_Moscheeweiher_im_Herbst_1.jpg/1280px-Schwetzingen_-_Schlossgarten_-_Moschee_-_Ansicht_%C3%BCber_den_Moscheeweiher_im_Herbst_1.jpg"
 },
 "p-400f1f24cdfa": {
 "at": "2026-10-12",
@@ -8653,6 +9604,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "moss garden Kyoto",
 "url": "https://upload.wikimedia.org/wikipedia/commons/1/13/Ryoanji_1975_2.jpg"
+},
+"p-401ef0c0a9a4": {
+"at": "2026-10-12",
+"author": "Ermell",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-easter-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Zeegendorf_Osterbrunnen-20120401-RM-083836.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Osterbrunnen Easter fountain",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Zeegendorf_Osterbrunnen-20120401-RM-083836.jpg/1280px-Zeegendorf_Osterbrunnen-20120401-RM-083836.jpg"
 },
 "p-402023c38093": {
 "at": "2026-10-12",
@@ -8697,6 +9659,17 @@
 "source": "Wikimedia Commons, CC BY 2.0",
 "topic": "cat:Paint splashes",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Ink%26dye52_-_Jordan_Mudrack_-_Flickr_photo_close-up_of_inks%2C_dyes%2C_paints%2C_wet_mediums_forming_and_making_abstract_shapes%2C_patterns_and_images.jpg/1280px-Ink%26dye52_-_Jordan_Mudrack_-_Flickr_photo_close-up_of_inks%2C_dyes%2C_paints%2C_wet_mediums_forming_and_making_abstract_shapes%2C_patterns_and_images.jpg"
+},
+"p-407f28108d8c": {
+"at": "2026-10-12",
+"author": "NASA/JPL-Caltech/Harvard-Smithsonian CfA/NOAO/AURA",
+"licence": "Public domain (NASA)",
+"packId": "pack-galaxies",
+"page": "https://images.nasa.gov/details/PIA06854",
+"provider": "nasa",
+"source": "NASA Image and Video Library, public domain",
+"topic": "Antennae Galaxies",
+"url": "https://images-assets.nasa.gov/image/PIA06854/PIA06854~medium.jpg"
 },
 "p-40a436dc3c8c": {
 "at": "2026-10-12",
@@ -8947,6 +9920,28 @@
 "topic": "broad-billed hummingbird",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Broad-billed_Hummingbird_%2853202198096%29.jpg/1280px-Broad-billed_Hummingbird_%2853202198096%29.jpg"
 },
+"p-44052a076add": {
+"at": "2026-10-12",
+"author": "Martin Falbisoner",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-autumn-parks",
+"page": "https://commons.wikimedia.org/wiki/File:Eikan-do_Zenrin-ji,_November_2016_-02.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Eikando autumn",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Eikan-do_Zenrin-ji%2C_November_2016_-02.jpg/1280px-Eikan-do_Zenrin-ji%2C_November_2016_-02.jpg"
+},
+"p-4407fb6c24fe": {
+"at": "2026-10-12",
+"author": "Janet Hudson",
+"licence": "CC BY 2.0",
+"packId": "evpack-easter-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Spring_Break_Cookies_with_colourful_chocolate_eggs.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "Chocolate Easter eggs",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Spring_Break_Cookies_with_colourful_chocolate_eggs.jpg/1280px-Spring_Break_Cookies_with_colourful_chocolate_eggs.jpg"
+},
 "p-444f83815735": {
 "at": "2026-10-12",
 "author": "Mtlchung",
@@ -8968,6 +9963,17 @@
 "source": "Wikimedia Commons, CC0",
 "topic": "Eiffel Tower night",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Eiffel_Tower_at_night%2C_Paris_24_June_2021_01.jpg/1280px-Eiffel_Tower_at_night%2C_Paris_24_June_2021_01.jpg"
+},
+"p-44e295c22a23": {
+"at": "2026-10-12",
+"author": "USGS EROS Data Center Satellite Systems Branch.",
+"licence": "Public domain",
+"packId": "pack-earth-orbit",
+"page": "https://commons.wikimedia.org/wiki/File:Dasht-e_Kavir.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Dasht-e Kavir Landsat",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Dasht-e_Kavir.jpg/1280px-Dasht-e_Kavir.jpg"
 },
 "p-453e12480459": {
 "at": "2026-10-12",
@@ -9002,6 +10008,17 @@
 "topic": "Caillebotte yellow roses painting",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Cailebotte_-_Nature_Morte.jpg/1280px-Cailebotte_-_Nature_Morte.jpg"
 },
+"p-4585c6231a22": {
+"at": "2026-10-12",
+"author": "T.A.Rector (NRAO/AUI/NSF and NOIRLab/NSF/AURA) and M.Hanna (NOIRLab/NSF/AURA)",
+"licence": "CC BY 4.0",
+"packId": "pack-galaxies",
+"page": "https://commons.wikimedia.org/wiki/File:M33_optical-radio_(noao-m33_oar).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "Triangulum Galaxy",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/M33_optical-radio_%28noao-m33_oar%29.jpg/1280px-M33_optical-radio_%28noao-m33_oar%29.jpg"
+},
 "p-460882d22eac": {
 "at": "2026-10-12",
 "author": "Wekezolin",
@@ -9023,6 +10040,17 @@
 "source": "Wikimedia Commons, CC0",
 "topic": "Mondrian composition",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Composition%2C_1921_-_Piet_Mondrian%2C_MET_DT4479.jpg/1280px-Composition%2C_1921_-_Piet_Mondrian%2C_MET_DT4479.jpg"
+},
+"p-46244904d9c2": {
+"at": "2026-10-12",
+"author": "Hanc Tomasz",
+"licence": "CC BY-SA 3.0",
+"packId": "pack-caves",
+"page": "https://commons.wikimedia.org/wiki/File:Baradla-_barlang_-_panoramio.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "Baradla cave",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Baradla-_barlang_-_panoramio.jpg/1280px-Baradla-_barlang_-_panoramio.jpg"
 },
 "p-4625d4743f73": {
 "at": "2026-10-12",
@@ -9057,6 +10085,17 @@
 "source": "Wikimedia Commons, CC BY 2.5",
 "topic": "Prunus serrulata Kanzan",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Prunus_serrulata_Kanzan_blossom_Jardin_des_Plantes_2013-04-21.jpg/1280px-Prunus_serrulata_Kanzan_blossom_Jardin_des_Plantes_2013-04-21.jpg"
+},
+"p-469c352f97ee": {
+"at": "2026-10-12",
+"author": "chris-hayes",
+"licence": "Public Domain Mark",
+"packId": "ai-dreamscapes",
+"page": "https://www.flickr.com/photos/162244249@N03/52315102777",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, Public Domain Mark",
+"topic": "AI-generated forest",
+"url": "https://live.staticflickr.com/65535/52315102777_dd2d6a62bc_b.jpg"
 },
 "p-46a55a7addac": {
 "at": "2026-10-12",
@@ -9190,6 +10229,17 @@
 "topic": "P\u00e8re David's deer",
 "url": "https://upload.wikimedia.org/wikipedia/commons/6/68/Pere_Davids_Deer_female.jpg"
 },
+"p-4938412a0a64": {
+"at": "2026-10-12",
+"author": "Diego Delso",
+"licence": "CC BY-SA 3.0",
+"packId": "pack-canyons",
+"page": "https://commons.wikimedia.org/wiki/File:Al-Siq,_Petra,_Jordan7.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "Siq Petra",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Al-Siq%2C_Petra%2C_Jordan7.jpg/1280px-Al-Siq%2C_Petra%2C_Jordan7.jpg"
+},
 "p-49420988c77f": {
 "at": "2026-10-12",
 "author": "Jan van Huysum",
@@ -9245,6 +10295,17 @@
 "source": "Wikimedia Commons, CC BY-SA 3.0",
 "topic": "oolong tea leaves",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Gui_Hua_Oolong.jpg/1280px-Gui_Hua_Oolong.jpg"
+},
+"p-4a60cbb8d972": {
+"at": "2026-10-12",
+"author": "NASA Hubble",
+"licence": "CC BY 2.0",
+"packId": "pack-galaxies",
+"page": "https://commons.wikimedia.org/wiki/File:Caldwell_12_-_2.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "Fireworks Galaxy NGC 6946",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Caldwell_12_-_2.jpg/1280px-Caldwell_12_-_2.jpg"
 },
 "p-4a658aa11400": {
 "at": "2026-10-12",
@@ -9334,6 +10395,17 @@
 "source": "Wikimedia Commons, CC BY-SA 3.0",
 "topic": "green-winged macaw",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Ara_chloropterus_qtl1.jpg/1280px-Ara_chloropterus_qtl1.jpg"
+},
+"p-4ce5bdf11c1f": {
+"at": "2026-10-12",
+"author": "Nepomuko",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-canyons",
+"page": "https://commons.wikimedia.org/wiki/File:BuckskinGulch.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Buckskin Gulch",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/BuckskinGulch.jpg/1280px-BuckskinGulch.jpg"
 },
 "p-4d153d1eda8d": {
 "at": "2026-10-12",
@@ -9490,6 +10562,17 @@
 "topic": "sunflower close up bloom",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Close-up_of_a_Common_Sunflower.jpg/1280px-Close-up_of_a_Common_Sunflower.jpg"
 },
+"p-4f0a884adfb6": {
+"at": "2026-10-12",
+"author": "Dall E / DALL-E",
+"licence": "Public domain",
+"packId": "ai-dreamscapes",
+"page": "https://commons.wikimedia.org/wiki/File:Portrayal_of_a_dreamlike_image_of_an_isolated_Dreamhouse.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain (AI-generated)",
+"topic": "house",
+"url": "https://upload.wikimedia.org/wikipedia/commons/b/b4/Portrayal_of_a_dreamlike_image_of_an_isolated_Dreamhouse.jpg"
+},
 "p-4f0d6e912804": {
 "at": "2026-10-12",
 "author": "Alfonsopazphoto",
@@ -9600,6 +10683,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "lima beans",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Lima_bean_%28Assam%29.jpg/1280px-Lima_bean_%28Assam%29.jpg"
+},
+"p-50e4aec9ec44": {
+"at": "2026-10-12",
+"author": "Viktorija N. Ivanov",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-easter-2027",
+"page": "https://commons.wikimedia.org/wiki/File:%D0%A8%D0%B0%D1%80%D0%B5%D0%BD%D0%B8_%D0%B2%D0%B5%D0%BB%D0%B8%D0%B3%D0%B4%D0%B5%D0%BD%D1%81%D0%BA%D0%B8_%D1%98%D0%B0%D1%98%D1%86%D0%B0.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Dyed Easter eggs",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/%D0%A8%D0%B0%D1%80%D0%B5%D0%BD%D0%B8_%D0%B2%D0%B5%D0%BB%D0%B8%D0%B3%D0%B4%D0%B5%D0%BD%D1%81%D0%BA%D0%B8_%D1%98%D0%B0%D1%98%D1%86%D0%B0.jpg/1280px-%D0%A8%D0%B0%D1%80%D0%B5%D0%BD%D0%B8_%D0%B2%D0%B5%D0%BB%D0%B8%D0%B3%D0%B4%D0%B5%D0%BD%D1%81%D0%BA%D0%B8_%D1%98%D0%B0%D1%98%D1%86%D0%B0.jpg"
 },
 "p-51226ed5deb3": {
 "at": "2026-10-12",
@@ -9791,6 +10885,17 @@
 "topic": "Highland cow",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Highland_cattle_calf-20170520-RM-112548.jpg/1280px-Highland_cattle_calf-20170520-RM-112548.jpg"
 },
+"p-547fc8ff95bf": {
+"at": "2026-10-12",
+"author": "Arie M. den Toom",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-caves",
+"page": "https://commons.wikimedia.org/wiki/File:Eisriesenwelt_ijsheuvel.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Eisriesenwelt",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Eisriesenwelt_ijsheuvel.jpg/1280px-Eisriesenwelt_ijsheuvel.jpg"
+},
 "p-54874a98e930": {
 "at": "2026-10-12",
 "author": "John O'Neill",
@@ -9801,6 +10906,17 @@
 "source": "Wikimedia Commons, CC BY-SA 3.0",
 "topic": "Floriade Canberra tulips",
 "url": "https://upload.wikimedia.org/wikipedia/commons/e/ea/Tulipa_suaveolens_floriade_to_Canberra.jpg"
+},
+"p-54af097b82d8": {
+"at": "2026-10-12",
+"author": "Kgbo",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-easter-2027",
+"page": "https://commons.wikimedia.org/wiki/File:%C5%9Awi%C4%99conka,_Blessing_Easter_Baskets,_2024,_01.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "\u015awi\u0119conka basket",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/%C5%9Awi%C4%99conka%2C_Blessing_Easter_Baskets%2C_2024%2C_01.jpg/1280px-%C5%9Awi%C4%99conka%2C_Blessing_Easter_Baskets%2C_2024%2C_01.jpg"
 },
 "p-54af48b21327": {
 "at": "2026-10-12",
@@ -10000,6 +11116,17 @@
 "topic": "Prunus subhirtella Autumnalis",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Prunus_subhirtella_Autumnalis_11zz.jpg/1280px-Prunus_subhirtella_Autumnalis_11zz.jpg"
 },
+"p-5801859d9e39": {
+"at": "2026-10-12",
+"author": "NASA",
+"licence": "Public domain",
+"packId": "pack-earth-orbit",
+"page": "https://commons.wikimedia.org/wiki/File:2004_satelllite_picture_of_the_Caucaus_and_the_Caspian_Sea.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Caspian Sea from space",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/2004_satelllite_picture_of_the_Caucaus_and_the_Caspian_Sea.jpg/1280px-2004_satelllite_picture_of_the_Caucaus_and_the_Caspian_Sea.jpg"
+},
 "p-58279adb11b0": {
 "at": "2026-10-12",
 "author": "Bruno Spatuzzi",
@@ -10010,6 +11137,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "Lake Antorno",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Lago_di_Antorno_%282%29.jpg/1280px-Lago_di_Antorno_%282%29.jpg"
+},
+"p-58415d142115": {
+"at": "2026-10-12",
+"author": "::::=UT=::::",
+"licence": "CC BY-SA 3.0",
+"packId": "pack-autumn-parks",
+"page": "https://commons.wikimedia.org/wiki/File:Noboriojicho,_Nara,_Nara_Prefecture_630-8213,_Japan_-_panoramio_(6).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "Nara Park autumn",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Noboriojicho%2C_Nara%2C_Nara_Prefecture_630-8213%2C_Japan_-_panoramio_%286%29.jpg/1280px-Noboriojicho%2C_Nara%2C_Nara_Prefecture_630-8213%2C_Japan_-_panoramio_%286%29.jpg"
 },
 "p-585a1d3a1d06": {
 "at": "2026-10-12",
@@ -10032,6 +11170,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "abstract architecture detail",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Detail_of_Vasco_da_Gama_Bridge%2C_Parque_Tejo%2C_Lisbon%2C_Portugal_julesvernex2.jpg/1280px-Detail_of_Vasco_da_Gama_Bridge%2C_Parque_Tejo%2C_Lisbon%2C_Portugal_julesvernex2.jpg"
+},
+"p-588e31bcdca0": {
+"at": "2026-10-12",
+"author": "chris-hayes",
+"licence": "Public Domain Mark",
+"packId": "ai-wild-animals",
+"page": "https://www.flickr.com/photos/162244249@N03/52329560097",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, Public Domain Mark",
+"topic": "AI-generated bear",
+"url": "https://live.staticflickr.com/65535/52329560097_ce03ba8de6_b.jpg"
 },
 "p-58e7f379f40f": {
 "at": "2026-10-12",
@@ -10176,6 +11325,17 @@
 "source": "Wikimedia Commons, Public domain",
 "topic": "Monet Poplars painting",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Claude_Monet_-_Poplars_%28Autumn%29_II.JPG/1280px-Claude_Monet_-_Poplars_%28Autumn%29_II.JPG"
+},
+"p-5ba2e5e0db49": {
+"at": "2026-10-12",
+"author": "Adrian Farwell",
+"licence": "CC BY 3.0",
+"packId": "pack-autumn-parks",
+"page": "https://commons.wikimedia.org/wiki/File:Autumn_Colours_at_Stourhead_-_panoramio.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 3.0",
+"topic": "Stourhead autumn",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Autumn_Colours_at_Stourhead_-_panoramio.jpg/1280px-Autumn_Colours_at_Stourhead_-_panoramio.jpg"
 },
 "p-5bddc265ea14": {
 "at": "2026-10-12",
@@ -10331,6 +11491,28 @@
 "topic": "Bernese mountain dog puppy",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/%D0%91%D0%B5%D1%80%D0%BD%D1%81%D0%BA%D0%B8%D0%B9_%D0%B7%D0%B5%D0%BD%D0%B5%D0%BD%D1%85%D1%83%D0%BD%D0%B4--_2014-05-06_23-38.jpg/1280px-%D0%91%D0%B5%D1%80%D0%BD%D1%81%D0%BA%D0%B8%D0%B9_%D0%B7%D0%B5%D0%BD%D0%B5%D0%BD%D1%85%D1%83%D0%BD%D0%B4--_2014-05-06_23-38.jpg"
 },
+"p-5dd26e795535": {
+"at": "2026-10-12",
+"author": ", , and the LEGUS team",
+"licence": "Public domain",
+"packId": "pack-galaxies",
+"page": "https://commons.wikimedia.org/wiki/File:NGC_3627_(2018-27-4166).png",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "NGC 3627",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/NGC_3627_%282018-27-4166%29.png/1280px-NGC_3627_%282018-27-4166%29.png"
+},
+"p-5dd2a1efa997": {
+"at": "2026-10-12",
+"author": "Schreckgespenst",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-caves",
+"page": "https://commons.wikimedia.org/wiki/File:Grotta_Gigante_La_Palma.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Grotta Gigante",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Grotta_Gigante_La_Palma.jpg/1280px-Grotta_Gigante_La_Palma.jpg"
+},
 "p-5dd976fd95e1": {
 "at": "2026-10-12",
 "author": "Jordan Mudrack Photography",
@@ -10385,6 +11567,17 @@
 "source": "Wikimedia Commons, CC BY-SA 3.0 us",
 "topic": "palomino horse",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Horse_headshot_4397.jpg/1280px-Horse_headshot_4397.jpg"
+},
+"p-5e90371d6301": {
+"at": "2026-10-12",
+"author": "Dall E / DALL-E",
+"licence": "Public domain",
+"packId": "ai-dreamscapes",
+"page": "https://commons.wikimedia.org/wiki/File:ThereResoundedOnHathegKlaThatTerriblePealOfThunderWhichAwakedTheGoodCottersOfThePlains.png",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain (AI-generated)",
+"topic": "clouds",
+"url": "https://upload.wikimedia.org/wikipedia/commons/d/db/ThereResoundedOnHathegKlaThatTerriblePealOfThunderWhichAwakedTheGoodCottersOfThePlains.png"
 },
 "p-5e9f8aa0eab5": {
 "at": "2026-10-12",
@@ -10465,6 +11658,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "zebra",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Zebra_at_Pilanesberg_National_Park_5.jpg/1280px-Zebra_at_Pilanesberg_National_Park_5.jpg"
+},
+"p-5f9c492556a9": {
+"at": "2026-10-12",
+"author": "Josh Rokman - AI Images",
+"licence": "Public Domain Mark",
+"packId": "ai-dreamscapes",
+"page": "https://www.flickr.com/photos/200044612@N04/53636404918",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, Public Domain Mark",
+"topic": "AI-generated sunset",
+"url": "https://live.staticflickr.com/65535/53636404918_0e4ddfdb65_b.jpg"
 },
 "p-60178dcd2e2e": {
 "at": "2026-10-12",
@@ -10567,6 +11771,17 @@
 "topic": "pampas fox",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Zorro_de_campo_%28Lycalopex_gymnocercus%29_juvenil%2C_Uruguay%2C_2019.jpg/1280px-Zorro_de_campo_%28Lycalopex_gymnocercus%29_juvenil%2C_Uruguay%2C_2019.jpg"
 },
+"p-6154b44866cc": {
+"at": "2026-10-12",
+"author": "NASA",
+"licence": "Public domain",
+"packId": "pack-earth-orbit",
+"page": "https://commons.wikimedia.org/wiki/File:Bahamas_2009.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Bahamas from space",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Bahamas_2009.jpg/1280px-Bahamas_2009.jpg"
+},
 "p-616b112ed8d4": {
 "at": "2026-10-12",
 "author": "Luca Davenport-Thomas",
@@ -10578,6 +11793,17 @@
 "source": "iNaturalist, CC BY",
 "topic": "Giant kelp",
 "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/317807543/original.jpeg"
+},
+"p-61a3bb145bcf": {
+"at": "2026-10-12",
+"author": "Miomir Magdevski",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-canyons",
+"page": "https://commons.wikimedia.org/wiki/File:Bridge_over_the_Tara_river,_near_%C5%BDabljak,_Montenegro_07.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Tara River Canyon",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Bridge_over_the_Tara_river%2C_near_%C5%BDabljak%2C_Montenegro_07.jpg/1280px-Bridge_over_the_Tara_river%2C_near_%C5%BDabljak%2C_Montenegro_07.jpg"
 },
 "p-61bfcc521acc": {
 "at": "2026-10-12",
@@ -10679,6 +11905,17 @@
 "topic": "corgi puppy",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Fawn_and_white_Welsh_Corgi_puppy_standing_on_rear_legs_and_sticking_out_the_tongue.jpg/1280px-Fawn_and_white_Welsh_Corgi_puppy_standing_on_rear_legs_and_sticking_out_the_tongue.jpg"
 },
+"p-63898eb55038": {
+"at": "2026-10-12",
+"author": "Changku88",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-easter-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Blue_Hyacinth.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Hyacinths",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Blue_Hyacinth.jpg/1280px-Blue_Hyacinth.jpg"
+},
 "p-63adaf020258": {
 "at": "2026-10-12",
 "author": "U.S. Fish and Wildlife Service - Midwest Region",
@@ -10745,6 +11982,28 @@
 "topic": "Forest ferns",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Giant_fern_forest_6.jpg/1280px-Giant_fern_forest_6.jpg"
 },
+"p-654b96448c52": {
+"at": "2026-10-12",
+"author": "walmarc04",
+"licence": "CC0",
+"packId": "ai-dreamscapes",
+"page": "https://www.flickr.com/photos/30924550@N04/53017020791",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, CC0",
+"topic": "AI-generated sky",
+"url": "https://live.staticflickr.com/65535/53017020791_dac7692a6a_b.jpg"
+},
+"p-654ca0f0f02b": {
+"at": "2026-10-12",
+"author": "Kora27",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-easter-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Ostertradition_in_Deutschland_2H1A9626WI.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Easter egg tree",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Ostertradition_in_Deutschland_2H1A9626WI.jpg/1280px-Ostertradition_in_Deutschland_2H1A9626WI.jpg"
+},
 "p-6562e8a032ee": {
 "at": "2026-10-12",
 "author": "Zairon",
@@ -10766,6 +12025,28 @@
 "source": "Wikimedia Commons, CC BY-SA 3.0",
 "topic": "black-throated mango",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Female_Black-throated_Mango_%28Anthracothorax_nigricollis%29.jpg/1280px-Female_Black-throated_Mango_%28Anthracothorax_nigricollis%29.jpg"
+},
+"p-65763c60d812": {
+"at": "2026-10-12",
+"author": "walmarc04",
+"licence": "CC0",
+"packId": "ai-dreamscapes",
+"page": "https://www.flickr.com/photos/30924550@N04/53017112796",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, CC0",
+"topic": "AI-generated mountains",
+"url": "https://live.staticflickr.com/65535/53017112796_06f10a1dae_b.jpg"
+},
+"p-658444250459": {
+"at": "2026-10-12",
+"author": "NASA image courtesy Jeff Schmaltz, MODIS Land Rapid Response Team at NASA GSFC.",
+"licence": "Public domain",
+"packId": "pack-earth-orbit",
+"page": "https://commons.wikimedia.org/wiki/File:Phytoplankton_Bloom_off_Ireland.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "phytoplankton bloom satellite",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Phytoplankton_Bloom_off_Ireland.jpg/1280px-Phytoplankton_Bloom_off_Ireland.jpg"
 },
 "p-6584560124f2": {
 "at": "2026-10-12",
@@ -10800,6 +12081,17 @@
 "source": "Wikimedia Commons, CC BY 2.0",
 "topic": "cat:Steel wool spinning",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/SmashMouth_%283855579791%29.jpg/1280px-SmashMouth_%283855579791%29.jpg"
+},
+"p-6635632495dc": {
+"at": "2026-10-12",
+"author": "Zairon",
+"licence": "CC BY 4.0",
+"packId": "pack-canyons",
+"page": "https://commons.wikimedia.org/wiki/File:La_Palud-sur-Verdon_Gorges_du_Verdon_18.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "Verdon Gorge",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/La_Palud-sur-Verdon_Gorges_du_Verdon_18.jpg/1280px-La_Palud-sur-Verdon_Gorges_du_Verdon_18.jpg"
 },
 "p-6684be12a8db": {
 "at": "2026-10-12",
@@ -10915,6 +12207,17 @@
 "topic": "moss garden Kyoto",
 "url": "https://upload.wikimedia.org/wikipedia/commons/1/13/Ryoanji_1975_2.jpg"
 },
+"p-67ce2de07a02": {
+"at": "2026-10-12",
+"author": "Andrea Luck",
+"licence": "CC BY 2.0",
+"packId": "deep-space",
+"page": "https://commons.wikimedia.org/wiki/File:Jupiter_-_Great_Red_Spot_-_Nasa%E2%80%99s_Juno_PJ7_(51227577464).png",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "Jupiter Great Red Spot",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Jupiter_-_Great_Red_Spot_-_Nasa%E2%80%99s_Juno_PJ7_%2851227577464%29.png/1280px-Jupiter_-_Great_Red_Spot_-_Nasa%E2%80%99s_Juno_PJ7_%2851227577464%29.png"
+},
 "p-67dee27aa5d3": {
 "at": "2026-10-12",
 "author": "Eddieccw",
@@ -10970,6 +12273,17 @@
 "topic": "Hospital de Sant Pau",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Barcelona_-_Carrer_de_Cartagena_-_View_WNW_on_Entrance_to_Hospital_de_la_Santa_Creu_i_Sant_Pau_1902-13_by_Llu%C3%ADs_Dom%C3%A8nech_i_Montaner.jpg/1280px-Barcelona_-_Carrer_de_Cartagena_-_View_WNW_on_Entrance_to_Hospital_de_la_Santa_Creu_i_Sant_Pau_1902-13_by_Llu%C3%ADs_Dom%C3%A8nech_i_Montaner.jpg"
 },
+"p-68668ce026e5": {
+"at": "2026-10-12",
+"author": "NASA / Johns Hopkins University Applied Physics Laboratory / Southwest Research Institute",
+"licence": "Public domain",
+"packId": "deep-space",
+"page": "https://commons.wikimedia.org/wiki/File:Pluto-Charon-v2-10-1-15.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Pluto New Horizons",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Pluto-Charon-v2-10-1-15.jpg/1280px-Pluto-Charon-v2-10-1-15.jpg"
+},
 "p-686dca237785": {
 "at": "2026-10-12",
 "author": "Deinodactyla",
@@ -10992,6 +12306,17 @@
 "topic": "cannellini beans",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/White_kidney_beans_%281%29.jpg/1280px-White_kidney_beans_%281%29.jpg"
 },
+"p-6895e39996e4": {
+"at": "2026-10-12",
+"author": "Krzysztof Golik",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-canyons",
+"page": "https://commons.wikimedia.org/wiki/File:Gorges_du_Tarn_02.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Gorges du Tarn",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Gorges_du_Tarn_02.jpg/1280px-Gorges_du_Tarn_02.jpg"
+},
 "p-68a45146fc97": {
 "at": "2026-10-12",
 "author": "Salicyna",
@@ -11002,6 +12327,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "Rosa carolina",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Rosa_carolina_2017-05-23_1389.jpg/1280px-Rosa_carolina_2017-05-23_1389.jpg"
+},
+"p-68a88ec260ff": {
+"at": "2026-10-12",
+"author": "ESA/Hubble & NASA, O. Graur, S. W. Jha, A. Filippenko",
+"licence": "CC BY 4.0",
+"packId": "pack-galaxies",
+"page": "https://commons.wikimedia.org/wiki/File:Revisiting_an_old_beauty_(potw2444a).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "NGC 4414",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Revisiting_an_old_beauty_%28potw2444a%29.jpg/1280px-Revisiting_an_old_beauty_%28potw2444a%29.jpg"
 },
 "p-68adae22cc56": {
 "at": "2026-10-12",
@@ -11127,6 +12463,17 @@
 "topic": "Magellanic penguin",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Magellanic_penguin_at_SF_Zoo.jpg/1280px-Magellanic_penguin_at_SF_Zoo.jpg"
 },
+"p-69eba1b7c073": {
+"at": "2026-10-12",
+"author": "NASA, ESA, the Hubble Heritage Team (STScI/AURA), A. Nota (ESA/STScI), and the Westerlund ",
+"licence": "CC BY 4.0",
+"packId": "deep-space",
+"page": "https://commons.wikimedia.org/wiki/File:Westerlund_2_(HST_image)_(potm2512b).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "Westerlund 2",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Westerlund_2_%28HST_image%29_%28potm2512b%29.jpg/1280px-Westerlund_2_%28HST_image%29_%28potm2512b%29.jpg"
+},
 "p-69fca6e52b5b": {
 "at": "2026-10-12",
 "author": "W.carter",
@@ -11183,6 +12530,17 @@
 "topic": "elephant drinking",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Elephant_drinking_%2851662164136%29.jpg/1280px-Elephant_drinking_%2851662164136%29.jpg"
 },
+"p-6acd40bb27c4": {
+"at": "2026-10-12",
+"author": "Myrabella",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-easter-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Chocolate_easter_egg.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Chocolate Easter eggs",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Chocolate_easter_egg.jpg/1280px-Chocolate_easter_egg.jpg"
+},
 "p-6ad14270cea6": {
 "at": "2026-10-12",
 "author": "Peter Trimming",
@@ -11215,6 +12573,17 @@
 "source": "Wikimedia Commons, CC BY 4.0",
 "topic": "European rabbit",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Kaninchen_auf_Norderney_01.jpg/1280px-Kaninchen_auf_Norderney_01.jpg"
+},
+"p-6b3b79c3cde6": {
+"at": "2026-10-12",
+"author": "Chris Olszewski",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-easter-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Mazurek_cake,_Polish_Easter_food_in_Brisbane,_2025.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Mazurek cake",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Mazurek_cake%2C_Polish_Easter_food_in_Brisbane%2C_2025.jpg/1280px-Mazurek_cake%2C_Polish_Easter_food_in_Brisbane%2C_2025.jpg"
 },
 "p-6ba86907d274": {
 "at": "2026-10-12",
@@ -11350,6 +12719,17 @@
 "topic": "flat white coffee",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Flat_White_2.jpg/1280px-Flat_White_2.jpg"
 },
+"p-6d3d1a89c68e": {
+"at": "2026-10-12",
+"author": "Balon Greyjoy",
+"licence": "CC0",
+"packId": "pack-canyons",
+"page": "https://commons.wikimedia.org/wiki/File:20190417_Taroko_Gorge-22.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "Taroko Gorge",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/20190417_Taroko_Gorge-22.jpg/1280px-20190417_Taroko_Gorge-22.jpg"
+},
 "p-6d79ad5e6cf1": {
 "at": "2026-10-12",
 "author": "British 19th Century",
@@ -11372,6 +12752,17 @@
 "source": "Wikimedia Commons, CC0",
 "topic": "Monet V\u00e9theuil painting",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/View_of_V%C3%A9theuil_MET_DT1895.jpg/1280px-View_of_V%C3%A9theuil_MET_DT1895.jpg"
+},
+"p-6dc4189d493e": {
+"at": "2026-10-12",
+"author": "ChatGPT image generator / ChatGPT",
+"licence": "Public domain",
+"packId": "ai-dreamscapes",
+"page": "https://commons.wikimedia.org/wiki/File:Mallorn_forest_AI_generated.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain (AI-generated)",
+"topic": "cat:Images generated by ChatGPT",
+"url": "https://upload.wikimedia.org/wikipedia/commons/3/35/Mallorn_forest_AI_generated.jpg"
 },
 "p-6dc980cf194e": {
 "at": "2026-10-12",
@@ -11605,6 +12996,17 @@
 "topic": "Shaving brush and safety razor",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Shaving-Set.jpg/1280px-Shaving-Set.jpg"
 },
+"p-70aabee86aa7": {
+"at": "2026-10-12",
+"author": "Josh Rokman - AI Images",
+"licence": "Public Domain Mark",
+"packId": "ai-dreamscapes",
+"page": "https://www.flickr.com/photos/200044612@N04/53568582663",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, Public Domain Mark",
+"topic": "AI-generated crystal cave",
+"url": "https://live.staticflickr.com/65535/53568582663_e7e0ef1be9_b.jpg"
+},
 "p-70c22040ef8f": {
 "at": "2026-10-12",
 "author": "Vanadium Erbium",
@@ -11638,6 +13040,17 @@
 "source": "Wikimedia Commons, Public domain",
 "topic": "Monet Water Lilies painting",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Monet_-_Water_Lilies%2C_ca._1914%E2%80%931917.jpg/1280px-Monet_-_Water_Lilies%2C_ca._1914%E2%80%931917.jpg"
+},
+"p-710523139d94": {
+"at": "2026-10-12",
+"author": "Josh Rokman - AI Images",
+"licence": "Public Domain Mark",
+"packId": "ai-dreamscapes",
+"page": "https://www.flickr.com/photos/200044612@N04/53565428212",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, Public Domain Mark",
+"topic": "AI-generated desert",
+"url": "https://live.staticflickr.com/65535/53565428212_54c3054f5e_b.jpg"
 },
 "p-710bcf201df9": {
 "at": "2026-10-12",
@@ -11716,6 +13129,17 @@
 "source": "stocksnap via Openverse, CC0",
 "topic": "Cast iron skillet",
 "url": "https://cdn.stocksnap.io/img-thumbs/960w/AWIJ3PXKJE.jpg"
+},
+"p-7234a3bdc417": {
+"at": "2026-10-12",
+"author": "Andre Hospers",
+"licence": "CC BY 4.0",
+"packId": "pack-caves",
+"page": "https://commons.wikimedia.org/wiki/File:Dong_Hoi_Phong_Nha_grotten_(89098).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "Phong Nha cave",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Dong_Hoi_Phong_Nha_grotten_%2889098%29.jpg/1280px-Dong_Hoi_Phong_Nha_grotten_%2889098%29.jpg"
 },
 "p-7280ff1bac2d": {
 "at": "2026-10-12",
@@ -11850,6 +13274,17 @@
 "topic": "bookshelf",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Bookcase_-_Stadtgarten_Karlsruhe.jpg/1280px-Bookcase_-_Stadtgarten_Karlsruhe.jpg"
 },
+"p-73d4629c3222": {
+"at": "2026-10-12",
+"author": "Lucas L\u00f6ffler",
+"licence": "Public domain",
+"packId": "pack-canyons",
+"page": "https://commons.wikimedia.org/wiki/File:USA_Antelope-Canyon.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Lower Antelope Canyon",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/USA_Antelope-Canyon.jpg/1280px-USA_Antelope-Canyon.jpg"
+},
 "p-73e9a4ef0420": {
 "at": "2026-10-12",
 "author": "FranHogan",
@@ -11918,6 +13353,17 @@
 "topic": "chalkboard",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Spherical-conic-chalkboard.jpg/1280px-Spherical-conic-chalkboard.jpg"
 },
+"p-751847d8a315": {
+"at": "2026-10-12",
+"author": "SaierriMuinoaTumulo2024 / DALL-E",
+"licence": "Public domain",
+"packId": "ai-dreamscapes",
+"page": "https://commons.wikimedia.org/wiki/File:DALL%C2%B7E_2025-02-14_19.10.26_-_A_breathtaking_landscape_featuring_endless_green_plains_interspersed_with_dense_forests_and_small_waterfalls._In_the_distance,_towering_snow-capped_mo.webp",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain (AI-generated)",
+"topic": "cat:Images generated by DALL-E",
+"url": "https://upload.wikimedia.org/wikipedia/commons/f/fb/DALL%C2%B7E_2025-02-14_19.10.26_-_A_breathtaking_landscape_featuring_endless_green_plains_interspersed_with_dense_forests_and_small_waterfalls._In_the_distance%2C_towering_snow-capped_mo.webp"
+},
 "p-7577b7bbed6e": {
 "at": "2026-10-12",
 "author": "Arashiyama.",
@@ -11928,6 +13374,17 @@
 "source": "Wikimedia Commons, CC BY-SA 3.0",
 "topic": "Shinjuku Gyoen cherry blossom",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Edohikan_%28Prunus_pendula_Maxim_f._ascendens_Ohwi%29_in_Shinjuku_Gyoen%2C_Tokyo%2C_Japan_-_20110404-01.jpg/1280px-Edohikan_%28Prunus_pendula_Maxim_f._ascendens_Ohwi%29_in_Shinjuku_Gyoen%2C_Tokyo%2C_Japan_-_20110404-01.jpg"
+},
+"p-758c8b8ba834": {
+"at": "2026-10-12",
+"author": "Warren Poole",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-canyons",
+"page": "https://commons.wikimedia.org/wiki/File:Looking_to_Garden_of_Eden_(Kings_Canyon_(Watarrka_National_Park)).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Kings Canyon Watarrka",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Looking_to_Garden_of_Eden_%28Kings_Canyon_%28Watarrka_National_Park%29%29.jpg/1280px-Looking_to_Garden_of_Eden_%28Kings_Canyon_%28Watarrka_National_Park%29%29.jpg"
 },
 "p-75a9bd885c9b": {
 "at": "2026-10-12",
@@ -11950,6 +13407,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "Sagrada Fam\u00edlia towers",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Nativity_towers%2C_Sagrada_Familia%2C_Barcelona_%28Ank_Kumar%29_05.jpg/1280px-Nativity_towers%2C_Sagrada_Familia%2C_Barcelona_%28Ank_Kumar%29_05.jpg"
+},
+"p-75cb1071786f": {
+"at": "2026-10-12",
+"author": "Thomas Fuhrmann",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-caves",
+"page": "https://commons.wikimedia.org/wiki/File:Jomblang_Cave_-_Indonesia_04.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Hang En cave",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Jomblang_Cave_-_Indonesia_04.jpg/1280px-Jomblang_Cave_-_Indonesia_04.jpg"
 },
 "p-765159fe1c2f": {
 "at": "2026-10-12",
@@ -12027,6 +13495,17 @@
 "source": "Wikimedia Commons, CC BY-SA 3.0",
 "topic": "chestnut-breasted coronet",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Chestnut-breasted_Coronet_JCB.jpg/1280px-Chestnut-breasted_Coronet_JCB.jpg"
+},
+"p-76e472fe7b22": {
+"at": "2026-10-12",
+"author": "Earth Science and Remote Sensing Unit, Lyndon B. Johnson Space Center",
+"licence": "Public domain",
+"packId": "pack-earth-orbit",
+"page": "https://commons.wikimedia.org/wiki/File:ISS032-E-11122_-_View_of_Egypt.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Nile at night ISS",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/ISS032-E-11122_-_View_of_Egypt.jpg/1280px-ISS032-E-11122_-_View_of_Egypt.jpg"
 },
 "p-7762910735a6": {
 "at": "2026-10-12",
@@ -12229,6 +13708,17 @@
 "topic": "latte art rosetta cappuccino",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/A_beautiful_view_of_Marina_from_Palm_with_coffee.jpg/1280px-A_beautiful_view_of_Marina_from_Palm_with_coffee.jpg"
 },
+"p-7a737f72b7f1": {
+"at": "2026-10-12",
+"author": "Francesc Fort",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-easter-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Mona_de_Pasqua_-_Val%C3%A8ncia_ciutat_2024.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Mona de Pascua",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Mona_de_Pasqua_-_Val%C3%A8ncia_ciutat_2024.jpg/1280px-Mona_de_Pasqua_-_Val%C3%A8ncia_ciutat_2024.jpg"
+},
 "p-7a7c4699c04c": {
 "at": "2026-10-12",
 "author": "Chandapiwa Malema",
@@ -12274,6 +13764,17 @@
 "topic": "Sagrada Fam\u00edlia interior",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Sagrada_Familia_March_2015-9a.jpg/1280px-Sagrada_Familia_March_2015-9a.jpg"
 },
+"p-7b13d664d5ba": {
+"at": "2026-10-12",
+"author": "Zairon",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-canyons",
+"page": "https://commons.wikimedia.org/wiki/File:Namibia_Fischfluss-Canyon_49.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Fish River Canyon",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Namibia_Fischfluss-Canyon_49.jpg/1280px-Namibia_Fischfluss-Canyon_49.jpg"
+},
 "p-7b6f8a443183": {
 "at": "2026-10-12",
 "author": "Bowerbirdaus",
@@ -12307,6 +13808,28 @@
 "source": "Wikimedia Commons, Public domain",
 "topic": "Hiroshige Plum Garden Kameido",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Ando_Hiroshige_-_Plum_Garden%2C_Kameido_-_Google_Art_Project.jpg/1280px-Ando_Hiroshige_-_Plum_Garden%2C_Kameido_-_Google_Art_Project.jpg"
+},
+"p-7bb6788f8deb": {
+"at": "2026-10-12",
+"author": "lumoplank",
+"licence": "CC0",
+"packId": "pack-autumn-parks",
+"page": "https://commons.wikimedia.org/wiki/File:Tofuku-ji,_Kyoto_-_Tofukuji6622.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "Tofukuji autumn",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Tofuku-ji%2C_Kyoto_-_Tofukuji6622.jpg/1280px-Tofuku-ji%2C_Kyoto_-_Tofukuji6622.jpg"
+},
+"p-7bcb0b3081b0": {
+"at": "2026-10-12",
+"author": "European Space Agency",
+"licence": "Attribution",
+"packId": "pack-earth-orbit",
+"page": "https://commons.wikimedia.org/wiki/File:Earth_from_Space-_Manicouagan_crater_ESA516463.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Attribution",
+"topic": "Manicouagan crater from space",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Earth_from_Space-_Manicouagan_crater_ESA516463.jpg/1280px-Earth_from_Space-_Manicouagan_crater_ESA516463.jpg"
 },
 "p-7bcca816853d": {
 "at": "2026-10-12",
@@ -12342,6 +13865,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "cheese platter grapes",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Veeno_platter.jpg/1280px-Veeno_platter.jpg"
+},
+"p-7bf70dc6f92d": {
+"at": "2026-10-12",
+"author": "\u0418\u0441\u043b\u0430\u043c \u041c\u0438\u0440\u0441\u0430\u0438\u0442\u043e\u0432",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-canyons",
+"page": "https://commons.wikimedia.org/wiki/File:%D0%94%D0%BE%D1%80%D0%BE%D0%B3%D0%B0_%D0%B2_%D0%A7%D0%B0%D1%80%D1%8B%D0%BD%D1%81%D0%BA%D0%BE%D0%BC_%D0%BA%D0%B0%D0%BD%D1%8C%D0%BE%D0%BD%D0%B5.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Charyn Canyon",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/%D0%94%D0%BE%D1%80%D0%BE%D0%B3%D0%B0_%D0%B2_%D0%A7%D0%B0%D1%80%D1%8B%D0%BD%D1%81%D0%BA%D0%BE%D0%BC_%D0%BA%D0%B0%D0%BD%D1%8C%D0%BE%D0%BD%D0%B5.jpg/1280px-%D0%94%D0%BE%D1%80%D0%BE%D0%B3%D0%B0_%D0%B2_%D0%A7%D0%B0%D1%80%D1%8B%D0%BD%D1%81%D0%BA%D0%BE%D0%BC_%D0%BA%D0%B0%D0%BD%D1%8C%D0%BE%D0%BD%D0%B5.jpg"
 },
 "p-7c0771657c3a": {
 "at": "2026-10-12",
@@ -12444,6 +13978,17 @@
 "source": "Wikimedia Commons, CC BY-SA 3.0",
 "topic": "latte art rosetta cappuccino",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Cappuccino_.jpg/1280px-Cappuccino_.jpg"
+},
+"p-7db03a769a61": {
+"at": "2026-10-12",
+"author": "Fiona Shields",
+"licence": "CC BY 2.0",
+"packId": "evpack-easter-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Hot_cross_bun_loaf.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "Hot cross buns",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Hot_cross_bun_loaf.jpg/1280px-Hot_cross_bun_loaf.jpg"
 },
 "p-7dc9318500a1": {
 "at": "2026-10-12",
@@ -12578,6 +14123,17 @@
 "topic": "lichen macro",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Pixie_Cup_Lichen_%28Cladonia_sp.%29_-_Algonquin_Provincial_Park%2C_Ontario_2015-09-24_%2802%29.jpg/1280px-Pixie_Cup_Lichen_%28Cladonia_sp.%29_-_Algonquin_Provincial_Park%2C_Ontario_2015-09-24_%2802%29.jpg"
 },
+"p-8065ab1a44e7": {
+"at": "2026-10-12",
+"author": "U.S. Geological Survey",
+"licence": "Public domain",
+"packId": "pack-canyons",
+"page": "https://commons.wikimedia.org/wiki/File:Waimea_Canyon_(13935160059).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Waimea Canyon",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Waimea_Canyon_%2813935160059%29.jpg/1280px-Waimea_Canyon_%2813935160059%29.jpg"
+},
 "p-80713c53c3ba": {
 "at": "2026-10-12",
 "author": "https://www.pop.culture.gouv.fr/notice/mnr/MNR00205",
@@ -12622,6 +14178,17 @@
 "source": "Wikimedia Commons, CC BY 2.0",
 "topic": "Lake Louise Canada",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Canada_-_Alberta_-_Lake_Louise_-_41627603170.jpg/1280px-Canada_-_Alberta_-_Lake_Louise_-_41627603170.jpg"
+},
+"p-80d4640bb9ce": {
+"at": "2026-10-12",
+"author": "ESO",
+"licence": "CC BY 4.0",
+"packId": "pack-galaxies",
+"page": "https://commons.wikimedia.org/wiki/File:Galaxy_NGC_1232.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "NGC 1232",
+"url": "https://upload.wikimedia.org/wikipedia/commons/b/b6/Galaxy_NGC_1232.jpg"
 },
 "p-80e2345bec19": {
 "at": "2026-10-12",
@@ -12822,6 +14389,17 @@
 "topic": "Van Gogh Cypresses painting 1889",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Vincent_van_Gogh_Cypresses_1889.jpg/1280px-Vincent_van_Gogh_Cypresses_1889.jpg"
 },
+"p-83f36fbc9d04": {
+"at": "2026-10-12",
+"author": "NASA",
+"licence": "Public domain",
+"packId": "pack-earth-orbit",
+"page": "https://commons.wikimedia.org/wiki/File:PersianGulf_vue_satellite_du_golfe_persique.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Persian Gulf from space",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/PersianGulf_vue_satellite_du_golfe_persique.jpg/1280px-PersianGulf_vue_satellite_du_golfe_persique.jpg"
+},
 "p-840503127fd6": {
 "at": "2026-10-12",
 "author": "Alberto Alcal\u00e1",
@@ -12844,6 +14422,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "ruby-throated hummingbird",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Male_Ruby-Throated_Hummingbird_Hovering.jpg/1280px-Male_Ruby-Throated_Hummingbird_Hovering.jpg"
+},
+"p-84759821ba20": {
+"at": "2026-10-12",
+"author": "Ermell",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-easter-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Adelsdorf_Osterbrunnen-20120406-RM-103648.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Osterbrunnen Easter fountain",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Adelsdorf_Osterbrunnen-20120406-RM-103648.jpg/1280px-Adelsdorf_Osterbrunnen-20120406-RM-103648.jpg"
 },
 "p-847b6e8f692d": {
 "at": "2026-10-12",
@@ -12956,6 +14545,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "Daintree Rainforest",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Complex_mesophyll_vine_forest_Daintree_National_Park_Queensland_1986_IMG_0057.jpg/1280px-Complex_mesophyll_vine_forest_Daintree_National_Park_Queensland_1986_IMG_0057.jpg"
+},
+"p-8740262c9c33": {
+"at": "2026-10-12",
+"author": "ChatGPT (OpenAI) 5.5 / AI",
+"licence": "Public domain",
+"packId": "ai-dreamscapes",
+"page": "https://commons.wikimedia.org/wiki/File:Ilustraci%C3%B3n_de_%C3%A1rbol_longevo.png",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain (AI-generated)",
+"topic": "cat:AI-generated images of nature",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Ilustraci%C3%B3n_de_%C3%A1rbol_longevo.png/1280px-Ilustraci%C3%B3n_de_%C3%A1rbol_longevo.png"
 },
 "p-874c64634dbc": {
 "at": "2026-10-12",
@@ -13110,6 +14710,17 @@
 "source": "Wikimedia Commons, CC0",
 "topic": "wild rose bee",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Honey_bee_on_pink_wild_rose.jpg/1280px-Honey_bee_on_pink_wild_rose.jpg"
+},
+"p-899de0d15741": {
+"at": "2026-10-12",
+"author": "Christian David",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-canyons",
+"page": "https://commons.wikimedia.org/wiki/File:Two_Bridges_on_the_Navajo_Loop_Trail,_Bryce_Canyon_National_Park,_Utah.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Bryce Canyon hoodoos",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Two_Bridges_on_the_Navajo_Loop_Trail%2C_Bryce_Canyon_National_Park%2C_Utah.jpg/1280px-Two_Bridges_on_the_Navajo_Loop_Trail%2C_Bryce_Canyon_National_Park%2C_Utah.jpg"
 },
 "p-8a6fc30a5c60": {
 "at": "2026-10-12",
@@ -13456,6 +15067,17 @@
 "topic": "Hot chocolate",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Hot_Chocolate_%28Unsplash%29.jpg/1280px-Hot_Chocolate_%28Unsplash%29.jpg"
 },
+"p-8fbce7116def": {
+"at": "2026-10-12",
+"author": "Ray Swi-hymn from Sijhih-Taipei, Taiwan",
+"licence": "CC BY-SA 2.0",
+"packId": "pack-autumn-parks",
+"page": "https://commons.wikimedia.org/wiki/File:20171030_Kenrokuen_2013_(38095344255).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 2.0",
+"topic": "Kenrokuen autumn",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/20171030_Kenrokuen_2013_%2838095344255%29.jpg/1280px-20171030_Kenrokuen_2013_%2838095344255%29.jpg"
+},
 "p-8ffd3341b352": {
 "at": "2026-10-12",
 "author": "Kelvinsong",
@@ -13466,6 +15088,17 @@
 "source": "Wikimedia Commons, CC0",
 "topic": "cat:Dispersion in prisms",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Prism_flat_rainbow_%28cropped%29.jpg/1280px-Prism_flat_rainbow_%28cropped%29.jpg"
+},
+"p-90153373d15e": {
+"at": "2026-10-12",
+"author": "Josh Rokman - AI Images",
+"licence": "Public Domain Mark",
+"packId": "ai-dreamscapes",
+"page": "https://www.flickr.com/photos/200044612@N04/53574780563",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, Public Domain Mark",
+"topic": "AI-generated desert",
+"url": "https://live.staticflickr.com/65535/53574780563_92d97e58f3_b.jpg"
 },
 "p-9034413ec135": {
 "at": "2026-10-12",
@@ -13859,6 +15492,17 @@
 "topic": "Cinnamon rolls",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Cinnamon_bun.jpg/1280px-Cinnamon_bun.jpg"
 },
+"p-9637be6c3abe": {
+"at": "2026-10-12",
+"author": "Dirtsc",
+"licence": "CC BY-SA 3.0",
+"packId": "pack-canyons",
+"page": "https://commons.wikimedia.org/wiki/File:Artist_Point_view_of_Yellowstone_Canyon_08.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "Grand Canyon of the Yellowstone",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Artist_Point_view_of_Yellowstone_Canyon_08.jpg/1280px-Artist_Point_view_of_Yellowstone_Canyon_08.jpg"
+},
 "p-963e7a93115a": {
 "at": "2026-10-12",
 "author": "Bean appreciator",
@@ -14104,6 +15748,17 @@
 "topic": "tulip field windmill",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Wooden_Shoe_Tulip_Farm_-_DPLA_-_1ad3c257c0393dc35772c2f5ebefd847.jpg/1280px-Wooden_Shoe_Tulip_Farm_-_DPLA_-_1ad3c257c0393dc35772c2f5ebefd847.jpg"
 },
+"p-9a8589521269": {
+"at": "2026-10-12",
+"author": "Krzysztof Pop\u0142awski",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-autumn-parks",
+"page": "https://commons.wikimedia.org/wiki/File:Rybaczowka_Park_Wygoda_Sosnowiec.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "autumn park pond reflection",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Rybaczowka_Park_Wygoda_Sosnowiec.jpg/1280px-Rybaczowka_Park_Wygoda_Sosnowiec.jpg"
+},
 "p-9a8b118d2665": {
 "at": "2026-10-12",
 "author": "Slyronit",
@@ -14125,6 +15780,17 @@
 "source": "Wikimedia Commons, CC BY 4.0",
 "topic": "Mangrove roots in water",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/%28Rhizophora_in_New_Caledonia%29_-_DPLA_-_e8dbeca3697a8622cd3a4851f58d9fdf.jpg/1280px-%28Rhizophora_in_New_Caledonia%29_-_DPLA_-_e8dbeca3697a8622cd3a4851f58d9fdf.jpg"
+},
+"p-9abdbf9e0089": {
+"at": "2026-10-12",
+"author": "Sergiy Galyonkin from Raleigh, USA",
+"licence": "CC BY-SA 2.0",
+"packId": "pack-caves",
+"page": "https://commons.wikimedia.org/wiki/File:Cuevas_del_Drach_(35791156341).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 2.0",
+"topic": "Cuevas del Drach",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Cuevas_del_Drach_%2835791156341%29.jpg/1280px-Cuevas_del_Drach_%2835791156341%29.jpg"
 },
 "p-9ac901b40c8e": {
 "at": "2026-10-12",
@@ -14149,6 +15815,17 @@
 "source": "Wikimedia Commons, CC BY-SA 3.0",
 "topic": "golden retriever puppy",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Golden_Retriever_puppy_2010.jpg/1280px-Golden_Retriever_puppy_2010.jpg"
+},
+"p-9af545cdefdc": {
+"at": "2026-10-12",
+"author": "Luk~commonswiki",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-caves",
+"page": "https://commons.wikimedia.org/wiki/File:Fingal%27s_Cave,_Staffa_Island_11.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Fingal s Cave",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Fingal%27s_Cave%2C_Staffa_Island_11.jpg/1280px-Fingal%27s_Cave%2C_Staffa_Island_11.jpg"
 },
 "p-9b5769462826": {
 "at": "2026-10-12",
@@ -14184,6 +15861,17 @@
 "source": "Wikimedia Commons, CC BY 2.0",
 "topic": "fox vixen",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Vigilant_Vixen_%2835606881551%29.jpg/1280px-Vigilant_Vixen_%2835606881551%29.jpg"
+},
+"p-9bd07267383c": {
+"at": "2026-10-12",
+"author": "Josh Rokman - AI Images",
+"licence": "Public Domain Mark",
+"packId": "ai-wild-animals",
+"page": "https://www.flickr.com/photos/200044612@N04/53629618942",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, Public Domain Mark",
+"topic": "AI-generated lion",
+"url": "https://live.staticflickr.com/65535/53629618942_6b212f78aa_b.jpg"
 },
 "p-9be71cc54f6a": {
 "at": "2026-10-12",
@@ -14373,6 +16061,17 @@
 "topic": "margherita pizza",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Pizza_Margarita.jpg/1280px-Pizza_Margarita.jpg"
 },
+"p-9f018c2ea6ee": {
+"at": "2026-10-12",
+"author": "chris-hayes",
+"licence": "Public Domain Mark",
+"packId": "ai-dreamscapes",
+"page": "https://www.flickr.com/photos/162244249@N03/52313612259",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, Public Domain Mark",
+"topic": "AI-generated fantasy",
+"url": "https://live.staticflickr.com/65535/52313612259_66c835ab85_b.jpg"
+},
 "p-9f10a08c43ef": {
 "at": "2026-10-12",
 "author": "Myrabella",
@@ -14406,6 +16105,17 @@
 "source": "Wikimedia Commons, CC BY 2.0",
 "topic": "cat:Light painting",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/-i---i-_%2819377762948%29.jpg/1280px--i---i-_%2819377762948%29.jpg"
+},
+"p-9fcb60c73204": {
+"at": "2026-10-12",
+"author": "\u0423\u0447\u0451\u043d\u044b\u0439 \u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-easter-2027",
+"page": "https://commons.wikimedia.org/wiki/File:%D0%A8%D0%BE%D0%BA%D0%BE%D0%BB%D0%B0%D0%B4%D0%BD%D1%8B%D0%B5_%D0%BA%D1%83%D0%BB%D0%B8%D1%87%D0%B8.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Kulich Easter bread",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/%D0%A8%D0%BE%D0%BA%D0%BE%D0%BB%D0%B0%D0%B4%D0%BD%D1%8B%D0%B5_%D0%BA%D1%83%D0%BB%D0%B8%D1%87%D0%B8.jpg/1280px-%D0%A8%D0%BE%D0%BA%D0%BE%D0%BB%D0%B0%D0%B4%D0%BD%D1%8B%D0%B5_%D0%BA%D1%83%D0%BB%D0%B8%D1%87%D0%B8.jpg"
 },
 "p-9fdc4f521d3d": {
 "at": "2026-10-12",
@@ -14505,6 +16215,17 @@
 "source": "Wikimedia Commons, CC BY-SA 2.0",
 "topic": "pencil shavings macro",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Sharp_%5EEdge_-_Flickr_-_ElleFlorio.jpg/1280px-Sharp_%5EEdge_-_Flickr_-_ElleFlorio.jpg"
+},
+"p-a2f4d6842235": {
+"at": "2026-10-12",
+"author": "NASA image courtesy Jeff Schmaltz, MODIS Land Rapid Response Team at NASA GSFC",
+"licence": "Public domain",
+"packId": "pack-earth-orbit",
+"page": "https://commons.wikimedia.org/wiki/File:Dennis_2005-07-07_1550Z.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "hurricane from space",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Dennis_2005-07-07_1550Z.jpg/1280px-Dennis_2005-07-07_1550Z.jpg"
 },
 "p-a30b3f3324c2": {
 "at": "2026-10-12",
@@ -14730,6 +16451,17 @@
 "topic": "Chicago skyline night",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Chicago_skyline_at_night_from_360_Chicago_observation_deck_%2849713358626%29.jpg/1280px-Chicago_skyline_at_night_from_360_Chicago_observation_deck_%2849713358626%29.jpg"
 },
+"p-a5b17bb29e85": {
+"at": "2026-10-12",
+"author": "walmarc04",
+"licence": "CC0",
+"packId": "ai-dreamscapes",
+"page": "https://www.flickr.com/photos/30924550@N04/53016528257",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, CC0",
+"topic": "AI-generated mountains",
+"url": "https://live.staticflickr.com/65535/53016528257_63b4d7d759_b.jpg"
+},
 "p-a5cf4003d301": {
 "at": "2026-10-12",
 "author": "KimonBerlin",
@@ -14752,6 +16484,28 @@
 "topic": "moose bull",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Bull_Moose_%2848882445631%29.jpg/1280px-Bull_Moose_%2848882445631%29.jpg"
 },
+"p-a62d134cb598": {
+"at": "2026-10-12",
+"author": "Agnes Monkelbaan",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-easter-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Narcis_T%C3%AAte_%C3%A0_T%C3%AAte_(Narcissus)._07-03-2021_(actm.)_01.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Daffodils",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Narcis_T%C3%AAte_%C3%A0_T%C3%AAte_%28Narcissus%29._07-03-2021_%28actm.%29_01.jpg/1280px-Narcis_T%C3%AAte_%C3%A0_T%C3%AAte_%28Narcissus%29._07-03-2021_%28actm.%29_01.jpg"
+},
+"p-a6a41a36a241": {
+"at": "2026-10-12",
+"author": "Daderot",
+"licence": "CC0",
+"packId": "pack-caves",
+"page": "https://commons.wikimedia.org/wiki/File:Luray_Caverns_-_Luray,_Virginia_-_DSC01111.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "Luray Caverns",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Luray_Caverns_-_Luray%2C_Virginia_-_DSC01111.jpg/1280px-Luray_Caverns_-_Luray%2C_Virginia_-_DSC01111.jpg"
+},
 "p-a6ae8a0ba17e": {
 "at": "2026-10-12",
 "author": "Jacob Rus",
@@ -14762,6 +16516,28 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "chalkboard",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Spherical-conic-chalkboard.jpg/1280px-Spherical-conic-chalkboard.jpg"
+},
+"p-a6b645bf7aff": {
+"at": "2026-10-12",
+"author": "LeavXC",
+"licence": "CC BY-SA 3.0",
+"packId": "pack-canyons",
+"page": "https://commons.wikimedia.org/wiki/File:Three_cliffs_Zion_National_Park.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "Zion Canyon",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Three_cliffs_Zion_National_Park.jpg/1280px-Three_cliffs_Zion_National_Park.jpg"
+},
+"p-a6b905930270": {
+"at": "2026-10-12",
+"author": "John B Fotograf\u00eda",
+"licence": "Public Domain Mark",
+"packId": "ai-dreamscapes",
+"page": "https://www.flickr.com/photos/23895243@N05/53384368335",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, Public Domain Mark",
+"topic": "AI-generated autumn forest",
+"url": "https://live.staticflickr.com/65535/53384368335_9063dd1c6a_b.jpg"
 },
 "p-a6bafbd674a2": {
 "at": "2026-10-12",
@@ -14830,6 +16606,17 @@
 "topic": "polar bear",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Oso_polar_%28Ursus_maritimus%29%2C_Tierpark_Hellabrunn%2C_M%C3%BAnich%2C_Alemania%2C_2012-06-17%2C_DD_05.JPG/1280px-Oso_polar_%28Ursus_maritimus%29%2C_Tierpark_Hellabrunn%2C_M%C3%BAnich%2C_Alemania%2C_2012-06-17%2C_DD_05.JPG"
 },
+"p-a7f38f171893": {
+"at": "2026-10-12",
+"author": "Liya Pyatakova",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-easter-2027",
+"page": "https://commons.wikimedia.org/wiki/File:%D0%9F%D0%B0%D1%81%D1%85%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9_%D0%BA%D1%83%D0%BB%D0%B8%D1%87.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Kulich Easter bread",
+"url": "https://upload.wikimedia.org/wikipedia/commons/a/a1/%D0%9F%D0%B0%D1%81%D1%85%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9_%D0%BA%D1%83%D0%BB%D0%B8%D1%87.jpg"
+},
 "p-a82c2dee9b23": {
 "at": "2026-10-12",
 "author": "\u963f\u6a4b HQ",
@@ -14895,6 +16682,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "tree bark macro",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Rinde_003_2025_06_05.jpg/1280px-Rinde_003_2025_06_05.jpg"
+},
+"p-a946c5e74780": {
+"at": "2026-10-12",
+"author": "European Space Agency",
+"licence": "Attribution",
+"packId": "pack-earth-orbit",
+"page": "https://commons.wikimedia.org/wiki/File:Earth_from_Space-_Southern_Patagonian_Ice_Field_ESA25105629.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Attribution",
+"topic": "Patagonia glaciers from space",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Earth_from_Space-_Southern_Patagonian_Ice_Field_ESA25105629.jpg/1280px-Earth_from_Space-_Southern_Patagonian_Ice_Field_ESA25105629.jpg"
 },
 "p-a95784234e4e": {
 "at": "2026-10-12",
@@ -15005,6 +16803,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "pomegranate fruit",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/%D0%A1%D1%85%D0%BE%D0%BB%D0%B0%D1%80%D0%B8%2C_%D0%B3%D1%80%D0%B0%D0%BD%D0%B0%D1%82.jpg/1280px-%D0%A1%D1%85%D0%BE%D0%BB%D0%B0%D1%80%D0%B8%2C_%D0%B3%D1%80%D0%B0%D0%BD%D0%B0%D1%82.jpg"
+},
+"p-aa3c6a86f56e": {
+"at": "2026-10-12",
+"author": "NASA",
+"licence": "Public domain",
+"packId": "pack-earth-orbit",
+"page": "https://commons.wikimedia.org/wiki/File:Mississippi_delta_from_space.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Mississippi delta satellite",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Mississippi_delta_from_space.jpg/1280px-Mississippi_delta_from_space.jpg"
 },
 "p-aa4d2220cce1": {
 "at": "2026-10-12",
@@ -15173,6 +16982,17 @@
 "topic": "Robert John Thornton Temple of Flora plate",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Amgueddfa_Cymru_-_The_China_Limodoron_-_132003.jpeg/1280px-Amgueddfa_Cymru_-_The_China_Limodoron_-_132003.jpeg"
 },
+"p-aea577071b65": {
+"at": "2026-10-12",
+"author": "Jakub Ha\u0142un",
+"licence": "CC BY 4.0",
+"packId": "pack-caves",
+"page": "https://commons.wikimedia.org/wiki/File:%C5%A0kocjan_Caves,_Slovenia,_20240502_1207_7566.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "\u0160kocjan Caves",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/%C5%A0kocjan_Caves%2C_Slovenia%2C_20240502_1207_7566.jpg/1280px-%C5%A0kocjan_Caves%2C_Slovenia%2C_20240502_1207_7566.jpg"
+},
 "p-aec327275b9e": {
 "at": "2026-10-12",
 "author": "M2545",
@@ -15183,6 +17003,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "wisteria",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Wisteria_USA.jpg/1280px-Wisteria_USA.jpg"
+},
+"p-aec52203a368": {
+"at": "2026-10-12",
+"author": "Zachi Evenor",
+"licence": "CC BY 2.0",
+"packId": "evpack-easter-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Narcissus-tazetta-2014-Zachi-Evenor.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "Daffodils",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Narcissus-tazetta-2014-Zachi-Evenor.jpg/1280px-Narcissus-tazetta-2014-Zachi-Evenor.jpg"
 },
 "p-aef6b0392d06": {
 "at": "2026-10-12",
@@ -15228,6 +17059,17 @@
 "topic": "snow leopard",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Panthera_uncia_-_Zoo_Karlsruhe_01.jpg/1280px-Panthera_uncia_-_Zoo_Karlsruhe_01.jpg"
 },
+"p-afcfc516e762": {
+"at": "2026-10-12",
+"author": "Image credit: NASA, CSA, ESA, F. Belfiore (European Southern Observatory \u2013 Germany), J. Le",
+"licence": "CC0",
+"packId": "pack-galaxies",
+"page": "https://commons.wikimedia.org/wiki/File:Messier_64_(2026).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "Black Eye Galaxy",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Messier_64_%282026%29.jpg/1280px-Messier_64_%282026%29.jpg"
+},
 "p-afd713b812d4": {
 "at": "2026-10-12",
 "author": "Krzysztof Ziarnek, Kenraiz",
@@ -15260,6 +17102,17 @@
 "source": "Wikimedia Commons, CC0",
 "topic": "African grey parrot",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Psittacus_erithacus_cucumber.jpg/1280px-Psittacus_erithacus_cucumber.jpg"
+},
+"p-aff537a431b9": {
+"at": "2026-10-12",
+"author": "none (Landsat)",
+"licence": "Public domain",
+"packId": "pack-earth-orbit",
+"page": "https://commons.wikimedia.org/wiki/File:Lena_River_Delta_-_Landsat_2000.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Lena delta Landsat",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Lena_River_Delta_-_Landsat_2000.jpg/1280px-Lena_River_Delta_-_Landsat_2000.jpg"
 },
 "p-b035a882700f": {
 "at": "2026-10-12",
@@ -15315,6 +17168,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "Asiatic lion",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Le%C3%B3n_%28Panthera_leo%29%2C_parque_nacional_de_Tarangire%2C_Tanzania%2C_2024-05-25%2C_DD_68.jpg/1280px-Le%C3%B3n_%28Panthera_leo%29%2C_parque_nacional_de_Tarangire%2C_Tanzania%2C_2024-05-25%2C_DD_68.jpg"
+},
+"p-b0c2c7639e51": {
+"at": "2026-10-12",
+"author": "Shixart1985",
+"licence": "CC BY 2.0",
+"packId": "evpack-easter-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Happy_chicks_lively_gathered_in_a_cozy_box_filled_with_straw.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "Domestic chicks",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Happy_chicks_lively_gathered_in_a_cozy_box_filled_with_straw.jpg/1280px-Happy_chicks_lively_gathered_in_a_cozy_box_filled_with_straw.jpg"
 },
 "p-b0c8f86baa3e": {
 "at": "2026-10-12",
@@ -15393,6 +17257,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "notebook pencil",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Llibreta%2C_bol%C3%ADgrafs_i_llapis.jpg/1280px-Llibreta%2C_bol%C3%ADgrafs_i_llapis.jpg"
+},
+"p-b196172cbdb5": {
+"at": "2026-10-12",
+"author": "NASA, ESA, CSA, STScI",
+"licence": "Public domain",
+"packId": "deep-space",
+"page": "https://commons.wikimedia.org/wiki/File:Cartwheel_Galaxy_(MIRI).png",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Cartwheel Galaxy Webb",
+"url": "https://upload.wikimedia.org/wikipedia/commons/9/9c/Cartwheel_Galaxy_%28MIRI%29.png"
 },
 "p-b1a9fa79c917": {
 "at": "2026-10-12",
@@ -15585,6 +17460,17 @@
 "topic": "monarch butterfly",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/2012-07-20_15-33-53-Danaus_plexippus.jpg/1280px-2012-07-20_15-33-53-Danaus_plexippus.jpg"
 },
+"p-b4b6838a7632": {
+"at": "2026-10-12",
+"author": "Thomas Fuhrmann",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-canyons",
+"page": "https://commons.wikimedia.org/wiki/File:Peru_-_Colca_Canyon_04.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Colca Canyon",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Peru_-_Colca_Canyon_04.jpg/1280px-Peru_-_Colca_Canyon_04.jpg"
+},
 "p-b4d28f850220": {
 "at": "2026-10-12",
 "author": "Stephan Sprinz",
@@ -15617,6 +17503,17 @@
 "source": "Wikimedia Commons, CC BY 2.0",
 "topic": "california ground squirrel",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Two_Otospermophilus_beecheyi_eating.jpg/1280px-Two_Otospermophilus_beecheyi_eating.jpg"
+},
+"p-b57e7ecbdfa0": {
+"at": "2026-10-12",
+"author": "This Photo was taken by Wolfgang Moroder.    Feel free to use my photos, but please mentio",
+"licence": "CC BY-SA 3.0",
+"packId": "pack-canyons",
+"page": "https://commons.wikimedia.org/wiki/File:Colorado_river_horseshoe_bend_turn3.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "Horseshoe Bend",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Colorado_river_horseshoe_bend_turn3.jpg/1280px-Colorado_river_horseshoe_bend_turn3.jpg"
 },
 "p-b58f859e8413": {
 "at": "2026-10-12",
@@ -15685,6 +17582,17 @@
 "topic": "Bia\u0142owie\u017ca Forest",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/7246_June_2021_in_Bia%C5%82owie%C5%BCa_Forest.jpg/1280px-7246_June_2021_in_Bia%C5%82owie%C5%BCa_Forest.jpg"
 },
+"p-b6708f2e999d": {
+"at": "2026-10-12",
+"author": "Martin Pettitt from Bury St Edmunds, UK",
+"licence": "CC BY 2.0",
+"packId": "pack-autumn-parks",
+"page": "https://commons.wikimedia.org/wiki/File:Sheffield_Park_%26_Garden_22-10-2010_(5120493438).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "Sheffield Park Garden autumn",
+"url": "https://upload.wikimedia.org/wikipedia/commons/e/e6/Sheffield_Park_%26_Garden_22-10-2010_%285120493438%29.jpg"
+},
 "p-b69d98e7ed96": {
 "at": "2026-10-12",
 "author": "Wuzyprod",
@@ -15695,6 +17603,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "green tea leaves fresh",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Mint_from_Senegal_07.jpg/1280px-Mint_from_Senegal_07.jpg"
+},
+"p-b6c7eee30725": {
+"at": "2026-10-12",
+"author": "Image:   National Aeronautics and Space Administration  (a U.S. federal government agency;",
+"licence": "Public domain",
+"packId": "pack-galaxies",
+"page": "https://commons.wikimedia.org/wiki/File:NGC_7318_taken_by_James_Webb_Space_Telescope_(cropped).png",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Stephan s Quintet",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/NGC_7318_taken_by_James_Webb_Space_Telescope_%28cropped%29.png/1280px-NGC_7318_taken_by_James_Webb_Space_Telescope_%28cropped%29.png"
 },
 "p-b756ccad3fa8": {
 "at": "2026-10-12",
@@ -16041,6 +17960,28 @@
 "topic": "Rosa setigera",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Rosa_setigera.jpg/1280px-Rosa_setigera.jpg"
 },
+"p-bd14c2b37970": {
+"at": "2026-10-12",
+"author": "Josh Rokman - AI Images",
+"licence": "Public Domain Mark",
+"packId": "ai-wild-animals",
+"page": "https://www.flickr.com/photos/200044612@N04/53641770095",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, Public Domain Mark",
+"topic": "AI-generated giraffe",
+"url": "https://live.staticflickr.com/65535/53641770095_55a3922042_b.jpg"
+},
+"p-bd32fd7aab21": {
+"at": "2026-10-12",
+"author": "Colin Park",
+"licence": "CC BY-SA 2.0",
+"packId": "pack-autumn-parks",
+"page": "https://commons.wikimedia.org/wiki/File:Stourhead_Gardens_-_Garden_Lake_and_autumn_colours_-_geograph.org.uk_-_6469949.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 2.0",
+"topic": "Stourhead autumn",
+"url": "https://upload.wikimedia.org/wikipedia/commons/2/22/Stourhead_Gardens_-_Garden_Lake_and_autumn_colours_-_geograph.org.uk_-_6469949.jpg"
+},
 "p-bd6201bc1f86": {
 "at": "2026-10-12",
 "author": "S\u00f6nke Biehl",
@@ -16052,6 +17993,17 @@
 "topic": "Fassade abstrakt",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Palme_%28192157365%29.jpeg/1280px-Palme_%28192157365%29.jpeg"
 },
+"p-bda32e9593dd": {
+"at": "2026-10-12",
+"author": "Josh Rokman - AI Images",
+"licence": "Public Domain Mark",
+"packId": "ai-wild-animals",
+"page": "https://www.flickr.com/photos/200044612@N04/53558016197",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, Public Domain Mark",
+"topic": "AI-generated tiger",
+"url": "https://live.staticflickr.com/65535/53558016197_f333716fdc_b.jpg"
+},
 "p-bdb4ce59c798": {
 "at": "2026-10-12",
 "author": "Mk2010",
@@ -16062,6 +18014,17 @@
 "source": "Wikimedia Commons, CC BY-SA 3.0",
 "topic": "Swiss army knife",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Victorinox_Swiss_Army_Signature_Lite_Pocket_Knife.JPG/1280px-Victorinox_Swiss_Army_Signature_Lite_Pocket_Knife.JPG"
+},
+"p-bdb6567c2c68": {
+"at": "2026-10-12",
+"author": "Josh Rokman - AI Images",
+"licence": "Public Domain Mark",
+"packId": "ai-wild-animals",
+"page": "https://www.flickr.com/photos/200044612@N04/53551126587",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, Public Domain Mark",
+"topic": "AI-generated lion",
+"url": "https://live.staticflickr.com/65535/53551126587_cd59aefee1_b.jpg"
 },
 "p-bdbb26c181b3": {
 "at": "2026-10-12",
@@ -16187,6 +18150,17 @@
 "topic": "Noriker horse",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Grasende_Noriker-Stute_Bretten.JPG/1280px-Grasende_Noriker-Stute_Bretten.JPG"
 },
+"p-c04d618ff5b5": {
+"at": "2026-10-12",
+"author": "James Petts",
+"licence": "CC BY-SA 2.0",
+"packId": "evpack-easter-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Napoleonic_(Faberg%C3%A9_egg)_-_detail.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 2.0",
+"topic": "Faberg\u00e9 egg",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Napoleonic_%28Faberg%C3%A9_egg%29_-_detail.jpg/1280px-Napoleonic_%28Faberg%C3%A9_egg%29_-_detail.jpg"
+},
 "p-c050887ee51f": {
 "at": "2026-10-12",
 "author": "Craig L Whiteside",
@@ -16288,6 +18262,17 @@
 "topic": "Walter Hood Fitch illustration",
 "url": "https://upload.wikimedia.org/wikipedia/commons/b/b7/Flora_Antarctica_Plate_XXVI.XXVII.jpg"
 },
+"p-c17a08ab0121": {
+"at": "2026-10-12",
+"author": "Thecheeseistalking99",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-caves",
+"page": "https://commons.wikimedia.org/wiki/File:Fingals_cave_water_view.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Fingal s Cave",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Fingals_cave_water_view.jpg/1280px-Fingals_cave_water_view.jpg"
+},
 "p-c1c988df2a77": {
 "at": "2026-10-12",
 "author": "EgorovaSvetlana",
@@ -16343,6 +18328,17 @@
 "topic": "succulent plants",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Succulents_-_Photo_by_Giovanni_Ussi_4.jpg/1280px-Succulents_-_Photo_by_Giovanni_Ussi_4.jpg"
 },
+"p-c210bea4e980": {
+"at": "2026-10-12",
+"author": "ESO",
+"licence": "CC BY 4.0",
+"packId": "pack-galaxies",
+"page": "https://commons.wikimedia.org/wiki/File:Phot-37e-98-hires.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "NGC 1232",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Phot-37e-98-hires.jpg/1280px-Phot-37e-98-hires.jpg"
+},
 "p-c2129e6dd2f2": {
 "at": "2026-10-12",
 "author": "Mila Chibireva",
@@ -16389,6 +18385,17 @@
 "topic": "fruit",
 "url": "https://api.nga.gov/iiif/1316a088-4ba7-45c2-92d2-545bd78a7420/full/!2000,2000/0/default.jpg"
 },
+"p-c2944f560978": {
+"at": "2026-10-12",
+"author": "Andrea Luck",
+"licence": "CC BY 2.0",
+"packId": "deep-space",
+"page": "https://commons.wikimedia.org/wiki/File:Saturn,_Mimas_and_Dione_-_Cassini,_2009_(51675198099).png",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "Saturn Cassini",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Saturn%2C_Mimas_and_Dione_-_Cassini%2C_2009_%2851675198099%29.png/1280px-Saturn%2C_Mimas_and_Dione_-_Cassini%2C_2009_%2851675198099%29.png"
+},
 "p-c2b417f300fb": {
 "at": "2026-10-12",
 "author": "Subhrajyoti07",
@@ -16423,6 +18430,17 @@
 "topic": "vase of flowers",
 "url": "https://api.nga.gov/iiif/a89bbeac-f07f-443e-9246-fec5a55eeb19/full/!2000,2000/0/default.jpg"
 },
+"p-c2f0c170827a": {
+"at": "2026-10-12",
+"author": "663highland",
+"licence": "CC BY 2.5",
+"packId": "pack-autumn-parks",
+"page": "https://commons.wikimedia.org/wiki/File:Tofukuji_Kyoto02bs4272.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.5",
+"topic": "Tofukuji autumn",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Tofukuji_Kyoto02bs4272.jpg/1280px-Tofukuji_Kyoto02bs4272.jpg"
+},
 "p-c2ff6d550f48": {
 "at": "2026-10-12",
 "author": "Joe Mabel",
@@ -16434,6 +18452,17 @@
 "source": "Wikimedia Commons, CC BY-SA 3.0",
 "topic": "Japanese tea house garden",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Japanese_Garden_-_Seattle_-_teahouse_01.jpg/1280px-Japanese_Garden_-_Seattle_-_teahouse_01.jpg"
+},
+"p-c32bd8ae82e6": {
+"at": "2026-10-12",
+"author": "Mark Nakasone from Glasgow, Scotland, United Kingdom",
+"licence": "CC BY 2.0",
+"packId": "pack-caves",
+"page": "https://commons.wikimedia.org/wiki/File:Nerja%27s_cave_(34800966990).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "Nerja cave",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Nerja%27s_cave_%2834800966990%29.jpg/1280px-Nerja%27s_cave_%2834800966990%29.jpg"
 },
 "p-c35af9d9f3a8": {
 "at": "2026-10-12",
@@ -16623,6 +18652,17 @@
 "topic": "Vernal Fall",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Vernal_Fall_%2820597439054%29.jpg/1280px-Vernal_Fall_%2820597439054%29.jpg"
 },
+"p-c5871582a4b0": {
+"at": "2026-10-12",
+"author": "NASA, ESA, and the Hubble Heritage Team (STScI/AURA)",
+"licence": "Public domain",
+"packId": "pack-galaxies",
+"page": "https://commons.wikimedia.org/wiki/File:Star_birth_in_Messier_83_(captured_by_the_Hubble_Space_Telescope).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Southern Pinwheel Galaxy M83",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Star_birth_in_Messier_83_%28captured_by_the_Hubble_Space_Telescope%29.jpg/1280px-Star_birth_in_Messier_83_%28captured_by_the_Hubble_Space_Telescope%29.jpg"
+},
 "p-c5acf7403407": {
 "at": "2026-10-12",
 "author": "albinfo",
@@ -16644,6 +18684,17 @@
 "source": "Wikimedia Commons, CC BY 2.0",
 "topic": "rufous hummingbird",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Rufous_Hummingbird_%2853085931550%29.jpg/1280px-Rufous_Hummingbird_%2853085931550%29.jpg"
+},
+"p-c5d05aafa73b": {
+"at": "2026-10-12",
+"author": "NASA/ESA - The Hubble Legacy Archive (HLA): Space Telescope Science Institute (STScI), the",
+"licence": "Public domain",
+"packId": "pack-galaxies",
+"page": "https://commons.wikimedia.org/wiki/File:369_NGC_6744_WFC3_438_555_814_Wiki.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "NGC 6744",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/369_NGC_6744_WFC3_438_555_814_Wiki.jpg/1280px-369_NGC_6744_WFC3_438_555_814_Wiki.jpg"
 },
 "p-c5d994690457": {
 "at": "2026-10-12",
@@ -16823,6 +18874,17 @@
 "topic": "Water drop splash",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Blue_Yellow_Splash_%288567623655%29.jpg/1280px-Blue_Yellow_Splash_%288567623655%29.jpg"
 },
+"p-c8fccf866b74": {
+"at": "2026-10-12",
+"author": "Josh Rokman - AI Images",
+"licence": "Public Domain Mark",
+"packId": "ai-dreamscapes",
+"page": "https://www.flickr.com/photos/200044612@N04/53633522717",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, Public Domain Mark",
+"topic": "AI-generated desert",
+"url": "https://live.staticflickr.com/65535/53633522717_fb969aa00b_b.jpg"
+},
 "p-c920c28b0b0a": {
 "at": "2026-10-12",
 "author": "Hartmann Linge",
@@ -16855,6 +18917,39 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "Karst spring source",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Jelovica_karst_spring_04.jpg/1280px-Jelovica_karst_spring_04.jpg"
+},
+"p-c96a0c03bcd7": {
+"at": "2026-10-12",
+"author": "Bahatur / Dream by WOMBO",
+"licence": "Public domain",
+"packId": "ai-dreamscapes",
+"page": "https://commons.wikimedia.org/wiki/File:Kaer_sidi.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain (AI-generated)",
+"topic": "cat:Images generated by Dream by WOMBO",
+"url": "https://upload.wikimedia.org/wikipedia/commons/1/1e/Kaer_sidi.jpg"
+},
+"p-c96d904af1f5": {
+"at": "2026-10-12",
+"author": "Laitche",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-autumn-parks",
+"page": "https://commons.wikimedia.org/wiki/File:Scenery_of_Shinji_pond_at_Expo%E2%80%9970_Commemorative_Park_in_Osaka.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "autumn park pond reflection",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Scenery_of_Shinji_pond_at_Expo%E2%80%9970_Commemorative_Park_in_Osaka.jpg/1280px-Scenery_of_Shinji_pond_at_Expo%E2%80%9970_Commemorative_Park_in_Osaka.jpg"
+},
+"p-c97d310a319a": {
+"at": "2026-10-12",
+"author": "Arthomnix",
+"licence": "CC0",
+"packId": "pack-galaxies",
+"page": "https://commons.wikimedia.org/wiki/File:NGC_7496_JWST_MIRI.png",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "NGC 7496 Webb",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/NGC_7496_JWST_MIRI.png/1280px-NGC_7496_JWST_MIRI.png"
 },
 "p-c9846273f9c5": {
 "at": "2026-10-12",
@@ -16932,6 +19027,17 @@
 "source": "Wikimedia Commons, CC BY-SA 3.0",
 "topic": "European hedgehog",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Erinaceus_europaeus_3.JPG/1280px-Erinaceus_europaeus_3.JPG"
+},
+"p-cb8b3e13b0a6": {
+"at": "2026-10-12",
+"author": "LBM1948",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-caves",
+"page": "https://commons.wikimedia.org/wiki/File:Jenolan_Caves_21.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Jenolan Caves",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Jenolan_Caves_21.jpg/1280px-Jenolan_Caves_21.jpg"
 },
 "p-cb9afe7828fc": {
 "at": "2026-10-12",
@@ -17334,6 +19440,17 @@
 "topic": "spotted owl",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Spotted_owl_forest_bird_NPS_Photo_%2822509631557%29.jpg/1280px-Spotted_owl_forest_bird_NPS_Photo_%2822509631557%29.jpg"
 },
+"p-d26ab170a8d5": {
+"at": "2026-10-12",
+"author": "Envisat satellite, European Space Agency",
+"licence": "CC BY-SA 3.0 igo",
+"packId": "pack-earth-orbit",
+"page": "https://commons.wikimedia.org/wiki/File:Phytoplankton_bloom_captured_by_Envisat.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0 igo",
+"topic": "phytoplankton bloom satellite",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Phytoplankton_bloom_captured_by_Envisat.jpg/1280px-Phytoplankton_bloom_captured_by_Envisat.jpg"
+},
 "p-d29f8fcdaadd": {
 "at": "2026-10-12",
 "author": "Index Librorum Permissorum",
@@ -17356,6 +19473,17 @@
 "source": "Wikimedia Commons, CC BY 3.0",
 "topic": "Snowy spruce forest",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Snowy_winter_landscape._Riisitunturi%2C_Posio%2C_Finland._-_panoramio.jpg/1280px-Snowy_winter_landscape._Riisitunturi%2C_Posio%2C_Finland._-_panoramio.jpg"
+},
+"p-d2e24c378b1a": {
+"at": "2026-10-12",
+"author": "NASA",
+"licence": "Public domain",
+"packId": "pack-earth-orbit",
+"page": "https://commons.wikimedia.org/wiki/File:ISS-36_Nighttime_image_of_parts_of_Italy.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Italy at night ISS",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/ISS-36_Nighttime_image_of_parts_of_Italy.jpg/1280px-ISS-36_Nighttime_image_of_parts_of_Italy.jpg"
 },
 "p-d31cfa5b0072": {
 "at": "2026-10-12",
@@ -17592,6 +19720,17 @@
 "topic": "sparkling violetear",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Colibri_coruscans_%2828126979119%29.jpg/1280px-Colibri_coruscans_%2828126979119%29.jpg"
 },
+"p-d64b60185904": {
+"at": "2026-10-12",
+"author": "Jerzy Strzelecki",
+"licence": "CC BY 3.0",
+"packId": "pack-caves",
+"page": "https://commons.wikimedia.org/wiki/File:Punkevni_jeskynie04(js).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 3.0",
+"topic": "Punkva Caves",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Punkevni_jeskynie04%28js%29.jpg/1280px-Punkevni_jeskynie04%28js%29.jpg"
+},
 "p-d66905b0ca44": {
 "at": "2026-10-12",
 "author": "Jon Sullivan",
@@ -17782,6 +19921,17 @@
 "topic": "Hawksbill sea turtle",
 "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/473621558/original.jpeg"
 },
+"p-d8dac43a2cad": {
+"at": "2026-10-12",
+"author": "Carsten Frenzl from Deutschland",
+"licence": "CC BY 2.0",
+"packId": "pack-galaxies",
+"page": "https://commons.wikimedia.org/wiki/File:Messier_81_(51251685822).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "Bode s Galaxy M81",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Messier_81_%2851251685822%29.jpg/1280px-Messier_81_%2851251685822%29.jpg"
+},
 "p-d8e4c410b85c": {
 "at": "2026-10-12",
 "author": "Markus Spiske",
@@ -17878,6 +20028,28 @@
 "topic": "island fox",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/San_Clemente_Island_Fox_%28Urocyon_littoralis_clementae%29_at_Santa_Barbara_Zoo_2016-01-27.jpg/1280px-San_Clemente_Island_Fox_%28Urocyon_littoralis_clementae%29_at_Santa_Barbara_Zoo_2016-01-27.jpg"
 },
+"p-da7ba1468721": {
+"at": "2026-10-12",
+"author": "john.purvis",
+"licence": "CC0",
+"packId": "pack-galaxies",
+"page": "https://commons.wikimedia.org/wiki/File:Hubble_Legacy_Archive_Data_Arp_273_(40821075522).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC0",
+"topic": "Arp 273",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Hubble_Legacy_Archive_Data_Arp_273_%2840821075522%29.jpg/1280px-Hubble_Legacy_Archive_Data_Arp_273_%2840821075522%29.jpg"
+},
+"p-dadea93cf2ca": {
+"at": "2026-10-12",
+"author": "NASA Goddard Space Flight Center from Greenbelt, MD, USA",
+"licence": "Public domain",
+"packId": "pack-earth-orbit",
+"page": "https://commons.wikimedia.org/wiki/File:The_Aral_Sea_-_Flickr_-_NASA_Goddard_Photo_and_Video.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Aral Sea from space",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/The_Aral_Sea_-_Flickr_-_NASA_Goddard_Photo_and_Video.jpg/1280px-The_Aral_Sea_-_Flickr_-_NASA_Goddard_Photo_and_Video.jpg"
+},
 "p-db012125e213": {
 "at": "2026-10-12",
 "author": "H. Zell",
@@ -17899,6 +20071,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "Asiatic lion",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Lion_%28Panthera_leo%29_male_6y.jpg/1280px-Lion_%28Panthera_leo%29_male_6y.jpg"
+},
+"p-dc0beb61750d": {
+"at": "2026-10-12",
+"author": "King of Hearts",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-canyons",
+"page": "https://commons.wikimedia.org/wiki/File:Lower_Antelope_Canyon_November_2018_013.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Antelope Canyon",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Lower_Antelope_Canyon_November_2018_013.jpg/1280px-Lower_Antelope_Canyon_November_2018_013.jpg"
 },
 "p-dc1ff48811c6": {
 "at": "2026-10-12",
@@ -17922,6 +20105,17 @@
 "source": "Wikimedia Commons, CC BY 4.0",
 "topic": "Kunekune pig",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/2_KuneKune_Pigs_Sleeping.jpg/1280px-2_KuneKune_Pigs_Sleeping.jpg"
+},
+"p-dc427d8c5112": {
+"at": "2026-10-12",
+"author": "European Space Agency",
+"licence": "CC BY-SA 3.0 igo",
+"packId": "pack-earth-orbit",
+"page": "https://commons.wikimedia.org/wiki/File:Big_Island,_Hawaii.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0 igo",
+"topic": "Hawaii from space",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Big_Island%2C_Hawaii.jpg/1280px-Big_Island%2C_Hawaii.jpg"
 },
 "p-dc43341d634a": {
 "at": "2026-10-12",
@@ -17955,6 +20149,17 @@
 "source": "Wikimedia Commons, CC0",
 "topic": "Antelope Canyon",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Antelope_canyon_%28Unsplash%29.jpg/1280px-Antelope_canyon_%28Unsplash%29.jpg"
+},
+"p-dcc03563617e": {
+"at": "2026-10-12",
+"author": "NASA",
+"licence": "Public domain (NASA)",
+"packId": "pack-earth-orbit",
+"page": "https://images.nasa.gov/details/STS100-716-176",
+"provider": "nasa",
+"source": "NASA Image and Video Library, public domain",
+"topic": "Lake Powell from space",
+"url": "https://images-assets.nasa.gov/image/STS100-716-176/STS100-716-176~medium.jpg"
 },
 "p-dcc52542378d": {
 "at": "2026-10-12",
@@ -18179,6 +20384,17 @@
 "topic": "Dirck de Bray flowers",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Flowers_in_a_Glass_Vase_LACMA_M.2009.106.4.jpg/1280px-Flowers_in_a_Glass_Vase_LACMA_M.2009.106.4.jpg"
 },
+"p-e021808c78e7": {
+"at": "2026-10-12",
+"author": "Kaesza / AI",
+"licence": "Public domain",
+"packId": "ai-wild-animals",
+"page": "https://commons.wikimedia.org/wiki/File:MORCEGO_ORIGIN%C3%81RIO.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain (AI-generated)",
+"topic": "cat:AI-generated images of nature",
+"url": "https://upload.wikimedia.org/wikipedia/commons/6/6a/MORCEGO_ORIGIN%C3%81RIO.jpg"
+},
 "p-e02babb63084": {
 "at": "2026-10-12",
 "author": "marsupium photography",
@@ -18212,6 +20428,17 @@
 "topic": "cocker spaniel puppy",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/%22Bill%22_-_Cocker_spaniel_anglais_1.jpg/1280px-%22Bill%22_-_Cocker_spaniel_anglais_1.jpg"
 },
+"p-e0e3abd7a50a": {
+"at": "2026-10-12",
+"author": "John B Fotograf\u00eda",
+"licence": "Public Domain Mark",
+"packId": "ai-wild-animals",
+"page": "https://www.flickr.com/photos/23895243@N05/53644989264",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, Public Domain Mark",
+"topic": "AI-generated elephant",
+"url": "https://live.staticflickr.com/65535/53644989264_be17ddc105_b.jpg"
+},
 "p-e0fe64cd336a": {
 "at": "2026-10-12",
 "author": "Jan van Huysum",
@@ -18234,6 +20461,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "Apollo butterfly Parnassius",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Parnassius_mnemosyne_-_Dumanl%C4%B1_apollo_10.jpg/1280px-Parnassius_mnemosyne_-_Dumanl%C4%B1_apollo_10.jpg"
+},
+"p-e15a8386049f": {
+"at": "2026-10-12",
+"author": "NASA Hubble",
+"licence": "CC BY 2.0",
+"packId": "deep-space",
+"page": "https://commons.wikimedia.org/wiki/File:Caldwell_11_-_1.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "Bubble Nebula",
+"url": "https://upload.wikimedia.org/wikipedia/commons/1/10/Caldwell_11_-_1.jpg"
 },
 "p-e18e904ce59f": {
 "at": "2026-10-12",
@@ -18267,6 +20505,17 @@
 "source": "Wikimedia Commons, CC0",
 "topic": "two kittens",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/August_Kittens_2.jpg/1280px-August_Kittens_2.jpg"
+},
+"p-e22382888470": {
+"at": "2026-10-12",
+"author": "ESA/Hubble & NASA, W. D. Vacca",
+"licence": "CC BY 4.0",
+"packId": "pack-galaxies",
+"page": "https://commons.wikimedia.org/wiki/File:The_smouldering_heart_of_a_celestial_cigar_(potw2537a).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "Cigar Galaxy M82",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/The_smouldering_heart_of_a_celestial_cigar_%28potw2537a%29.jpg/1280px-The_smouldering_heart_of_a_celestial_cigar_%28potw2537a%29.jpg"
 },
 "p-e22c7ae41167": {
 "at": "2026-10-12",
@@ -18367,6 +20616,17 @@
 "topic": "Water mill wheel",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Solva_Woollen_Mill_-_Water_Wheel_-_geograph.org.uk_-_7007110.jpg/1280px-Solva_Woollen_Mill_-_Water_Wheel_-_geograph.org.uk_-_7007110.jpg"
 },
+"p-e3edfcb156ef": {
+"at": "2026-10-12",
+"author": "Ji-Elle",
+"licence": "CC BY-SA 4.0",
+"packId": "evpack-easter-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Easter_egg-Ukraine_(British_Museum).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Pysanky eggs",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Easter_egg-Ukraine_%28British_Museum%29.jpg/1280px-Easter_egg-Ukraine_%28British_Museum%29.jpg"
+},
 "p-e46166ebbe52": {
 "at": "2026-10-12",
 "author": "Sandra Aceng",
@@ -18423,6 +20683,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "abstract architecture detail",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Fa%C3%A7ade_detail_of_Pal%C3%A1cio_da_Justi%C3%A7a%2C_Lisbon%2C_Portugal_julesvernex2.jpg/1280px-Fa%C3%A7ade_detail_of_Pal%C3%A1cio_da_Justi%C3%A7a%2C_Lisbon%2C_Portugal_julesvernex2.jpg"
+},
+"p-e51d3a950ac7": {
+"at": "2026-10-12",
+"author": "Jesse Allen",
+"licence": "Public domain",
+"packId": "pack-earth-orbit",
+"page": "https://commons.wikimedia.org/wiki/File:Phytoplanton_Bloom_in_the_Great_Barrier_Reef.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Great Barrier Reef from space",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Phytoplanton_Bloom_in_the_Great_Barrier_Reef.jpg/1280px-Phytoplanton_Bloom_in_the_Great_Barrier_Reef.jpg"
 },
 "p-e529d47cbbf6": {
 "at": "2026-10-12",
@@ -18669,6 +20940,17 @@
 "topic": "oolong tea leaves",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Oolong_Tea_wrapped_tea_balls.jpg/1280px-Oolong_Tea_wrapped_tea_balls.jpg"
 },
+"p-e92a36ba21bb": {
+"at": "2026-10-12",
+"author": "Pseudopanax at English Wikipedia",
+"licence": "Public domain",
+"packId": "pack-caves",
+"page": "https://commons.wikimedia.org/wiki/File:Drapery_in_Ruakuri_Cave_lit_up_from_below.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Ruakuri Cave",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Drapery_in_Ruakuri_Cave_lit_up_from_below.jpg/1280px-Drapery_in_Ruakuri_Cave_lit_up_from_below.jpg"
+},
 "p-e94c18bf5eb1": {
 "at": "2026-10-12",
 "author": "Samsule2",
@@ -18826,6 +21108,17 @@
 "topic": "pygmy goat",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Pygmy_goat_in_Nice.jpg/1280px-Pygmy_goat_in_Nice.jpg"
 },
+"p-ea5dab6516c7": {
+"at": "2026-10-12",
+"author": "chris-hayes",
+"licence": "Public Domain Mark",
+"packId": "ai-wild-animals",
+"page": "https://www.flickr.com/photos/162244249@N03/52319078054",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, Public Domain Mark",
+"topic": "AI-generated horse",
+"url": "https://live.staticflickr.com/65535/52319078054_f8496662cd_b.jpg"
+},
 "p-eab95ee3bf17": {
 "at": "2026-10-12",
 "author": "Suicasmo",
@@ -18870,6 +21163,17 @@
 "topic": "Rub al Khali dunes",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Crest_of_dune_in_Abu_Dhabi.jpg/1280px-Crest_of_dune_in_Abu_Dhabi.jpg"
 },
+"p-eb2edb597532": {
+"at": "2026-10-12",
+"author": "NinjaRobotPirate",
+"licence": "CC BY 4.0",
+"packId": "evpack-easter-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Pink_hyacinth_close-up.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "Hyacinths",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Pink_hyacinth_close-up.jpg/1280px-Pink_hyacinth_close-up.jpg"
+},
 "p-eb3b89f056fd": {
 "at": "2026-10-12",
 "author": "JosepMGracia",
@@ -18903,6 +21207,17 @@
 "topic": "Ragdoll kitten",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Ragdoll_kitten_on_the_prowl_2017_%28cropped_2022%29.jpg/1280px-Ragdoll_kitten_on_the_prowl_2017_%28cropped_2022%29.jpg"
 },
+"p-ebfe1cf0498c": {
+"at": "2026-10-12",
+"author": "Guilhem Vellut from Annecy, France",
+"licence": "CC BY 2.0",
+"packId": "pack-autumn-parks",
+"page": "https://commons.wikimedia.org/wiki/File:Toro_lantern_@_Rikugien_Garden_@_Komagome_(11165912014).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 2.0",
+"topic": "Rikugien autumn",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Toro_lantern_%40_Rikugien_Garden_%40_Komagome_%2811165912014%29.jpg/1280px-Toro_lantern_%40_Rikugien_Garden_%40_Komagome_%2811165912014%29.jpg"
+},
 "p-ec9cfafb6d64": {
 "at": "2026-10-12",
 "author": "Piercetheorganist",
@@ -18924,6 +21239,17 @@
 "source": "Wikimedia Commons, CC BY 4.0",
 "topic": "Sk\u00f3gafoss",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Sk%C3%B3gafoss_Waterfall%2C_Iceland%2C_20240720_1321_2984.jpg/1280px-Sk%C3%B3gafoss_Waterfall%2C_Iceland%2C_20240720_1321_2984.jpg"
+},
+"p-ed48acd9d5d6": {
+"at": "2026-10-12",
+"author": "Bbb",
+"licence": "CC BY-SA 1.0",
+"packId": "pack-autumn-parks",
+"page": "https://commons.wikimedia.org/wiki/File:Monopterus_Herbst.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 1.0",
+"topic": "Englischer Garten autumn",
+"url": "https://upload.wikimedia.org/wikipedia/commons/c/cf/Monopterus_Herbst.jpg"
 },
 "p-ed5f66d4e787": {
 "at": "2026-10-12",
@@ -18965,6 +21291,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "grey fox",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Grey_fox_%28Urocyon_cinereoargenteus_fraterculus%29_Peten.jpg/1280px-Grey_fox_%28Urocyon_cinereoargenteus_fraterculus%29_Peten.jpg"
+},
+"p-edcef72acb18": {
+"at": "2026-10-12",
+"author": "Earth Science and Remote Sensing Unit, Lyndon B. Johnson Space Center",
+"licence": "Public domain",
+"packId": "pack-earth-orbit",
+"page": "https://commons.wikimedia.org/wiki/File:ISS040-E-21805_-_View_of_Earth.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Sinai Peninsula from space",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/ISS040-E-21805_-_View_of_Earth.jpg/1280px-ISS040-E-21805_-_View_of_Earth.jpg"
 },
 "p-edd6941650f9": {
 "at": "2026-10-12",
@@ -19010,6 +21347,17 @@
 "topic": "tacos plate",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Fish_tacos_with_lemonade.jpg/1280px-Fish_tacos_with_lemonade.jpg"
 },
+"p-ee74f3d9db45": {
+"at": "2026-10-12",
+"author": "NASA image created by Jesse Allen, using data provided courtesy of NASA/GSFC/METI/ERSDAC/J",
+"licence": "Public domain",
+"packId": "pack-earth-orbit",
+"page": "https://commons.wikimedia.org/wiki/File:Dubaiworld_ast_2009036_lrg.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Dubai Palm Islands from space",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Dubaiworld_ast_2009036_lrg.jpg/1280px-Dubaiworld_ast_2009036_lrg.jpg"
+},
 "p-ee9045ab3a89": {
 "at": "2026-10-12",
 "author": "Tangopaso",
@@ -19043,6 +21391,17 @@
 "source": "Wikimedia Commons, CC BY-SA 3.0",
 "topic": "European hedgehog",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Erinaceus_europaeus_3.JPG/1280px-Erinaceus_europaeus_3.JPG"
+},
+"p-eede182efb79": {
+"at": "2026-10-12",
+"author": "Ikonact",
+"licence": "CC BY-SA 3.0",
+"packId": "evpack-easter-2027",
+"page": "https://commons.wikimedia.org/wiki/File:Bg-easter-eggs.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0",
+"topic": "Pysanky eggs",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Bg-easter-eggs.jpg/1280px-Bg-easter-eggs.jpg"
 },
 "p-eef0e65e5764": {
 "at": "2026-10-12",
@@ -19176,6 +21535,17 @@
 "topic": "Birman kitten",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/ELECTRA_Aslan%27s_Bliss%2APL.JPG/1280px-ELECTRA_Aslan%27s_Bliss%2APL.JPG"
 },
+"p-f12e542b47f2": {
+"at": "2026-10-12",
+"author": "SSRO/PROMPT and NOIRLab/NSF/AURA",
+"licence": "CC BY 4.0",
+"packId": "pack-galaxies",
+"page": "https://commons.wikimedia.org/wiki/File:Barred_Spiral_Galaxy_NGC_1365_(noao-ngc1365).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "NGC 1365",
+"url": "https://upload.wikimedia.org/wikipedia/commons/d/da/Barred_Spiral_Galaxy_NGC_1365_%28noao-ngc1365%29.jpg"
+},
 "p-f172af685c3f": {
 "at": "2026-10-12",
 "author": "Salicyna",
@@ -19288,6 +21658,17 @@
 "topic": "gaiwan tea",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Longjing_tea_after_steeping.jpg/1280px-Longjing_tea_after_steeping.jpg"
 },
+"p-f341c1a55dd8": {
+"at": "2026-10-12",
+"author": "chris-hayes",
+"licence": "Public Domain Mark",
+"packId": "ai-dreamscapes",
+"page": "https://www.flickr.com/photos/162244249@N03/52305453920",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, Public Domain Mark",
+"topic": "AI-generated sunset",
+"url": "https://live.staticflickr.com/65535/52305453920_7de91c96cf_b.jpg"
+},
 "p-f37a9c8541ff": {
 "at": "2026-10-12",
 "author": "Krzysztof Ziarnek, Kenraiz",
@@ -19331,6 +21712,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "scarlet macaw",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Scharlachara_%28Ara_macao%29.jpg/1280px-Scharlachara_%28Ara_macao%29.jpg"
+},
+"p-f4832ea11ecc": {
+"at": "2026-10-12",
+"author": "Forest Service Alaska Region, USDA",
+"licence": "Public domain",
+"packId": "pack-caves",
+"page": "https://commons.wikimedia.org/wiki/File:200240302-FS-EG-IceCave-0001_(54091429940).jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain",
+"topic": "Mendenhall ice cave",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/200240302-FS-EG-IceCave-0001_%2854091429940%29.jpg/1280px-200240302-FS-EG-IceCave-0001_%2854091429940%29.jpg"
 },
 "p-f4e2a28a9caf": {
 "at": "2026-10-12",
@@ -19376,6 +21768,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "holly berries",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Holly_berries_and_leaves.jpg/1280px-Holly_berries_and_leaves.jpg"
+},
+"p-f56565af0a66": {
+"at": "2026-10-12",
+"author": "chris-hayes",
+"licence": "Public Domain Mark",
+"packId": "ai-wild-animals",
+"page": "https://www.flickr.com/photos/162244249@N03/52304207847",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, Public Domain Mark",
+"topic": "AI-generated lion",
+"url": "https://live.staticflickr.com/65535/52304207847_751cf6bed3_b.jpg"
 },
 "p-f5be293dc10a": {
 "at": "2026-10-12",
@@ -19454,6 +21857,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "Rosa pimpinellifolia burnet rose",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Rosa_spinosissima_R%C3%B3%C5%BCa_g%C4%99stokolczasta_2019-05-19_01.jpg/1280px-Rosa_spinosissima_R%C3%B3%C5%BCa_g%C4%99stokolczasta_2019-05-19_01.jpg"
+},
+"p-f70980c523ee": {
+"at": "2026-10-12",
+"author": "chris-hayes",
+"licence": "Public Domain Mark",
+"packId": "ai-dreamscapes",
+"page": "https://www.flickr.com/photos/162244249@N03/52305533385",
+"provider": "openverse:flickr",
+"source": "flickr via Openverse, Public Domain Mark",
+"topic": "AI-generated sky",
+"url": "https://live.staticflickr.com/65535/52305533385_f124c3c6c1_b.jpg"
 },
 "p-f723dd0c434f": {
 "at": "2026-10-12",
@@ -19599,6 +22013,17 @@
 "topic": "orange gerbera",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Gerbera_orange.JPG/1280px-Gerbera_orange.JPG"
 },
+"p-f8f6734f3112": {
+"at": "2026-10-12",
+"author": "ESO",
+"licence": "CC BY 4.0",
+"packId": "pack-galaxies",
+"page": "https://commons.wikimedia.org/wiki/File:NGC1097_-_ESO_-_eso0438d.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "NGC 1097",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/NGC1097_-_ESO_-_eso0438d.jpg/1280px-NGC1097_-_ESO_-_eso0438d.jpg"
+},
 "p-f8f97a22c8d6": {
 "at": "2026-10-12",
 "author": "TAPAS KUMAR HALDER",
@@ -19662,6 +22087,17 @@
 "packId": "evpack-animal-day-2027",
 "source": "flickr via Openverse, CC BY",
 "url": "https://live.staticflickr.com/65535/52042943121_bfa4075654_b.jpg"
+},
+"p-f968e227030a": {
+"at": "2026-10-12",
+"author": "OPENAI DALL-E2 / AI",
+"licence": "Public domain",
+"packId": "ai-wild-animals",
+"page": "https://commons.wikimedia.org/wiki/File:A_new_hybrid_species_%22Zebra-Giraffe%22_spotted_in_African_Safari_during_golden_hour.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Public domain (AI-generated)",
+"topic": "cat:Images generated by DALL-E",
+"url": "https://upload.wikimedia.org/wikipedia/commons/4/40/A_new_hybrid_species_%22Zebra-Giraffe%22_spotted_in_African_Safari_during_golden_hour.jpg"
 },
 "p-f97a3b834490": {
 "at": "2026-10-12",
@@ -19830,6 +22266,17 @@
 "topic": "monarch butterfly flower",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Monarch_Butterfly_in_Madison_Square_Park_2019-10-01_21-05.jpg/1280px-Monarch_Butterfly_in_Madison_Square_Park_2019-10-01_21-05.jpg"
 },
+"p-fc60d9dfaaf0": {
+"at": "2026-10-12",
+"author": "European Space Agency",
+"licence": "CC BY-SA 3.0 igo",
+"packId": "pack-earth-orbit",
+"page": "https://commons.wikimedia.org/wiki/File:Cloud-free_Egypt_and_the_Nile_River.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 3.0 igo",
+"topic": "Nile delta from space",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Cloud-free_Egypt_and_the_Nile_River.jpg/1280px-Cloud-free_Egypt_and_the_Nile_River.jpg"
+},
 "p-fc7e309794cf": {
 "at": "2026-10-12",
 "author": "Claude Monet",
@@ -19840,6 +22287,17 @@
 "source": "Wikimedia Commons, Public domain",
 "topic": "Monet Belle-\u00cele painting",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Claude_Monet_-_Rocks_at_Belle-lle%2C_Port-Domois_-_Google_Art_Project.jpg/1280px-Claude_Monet_-_Rocks_at_Belle-lle%2C_Port-Domois_-_Google_Art_Project.jpg"
+},
+"p-fc8b5bf88a91": {
+"at": "2026-10-12",
+"author": "Jakub Ha\u0142un",
+"licence": "CC BY 4.0",
+"packId": "pack-caves",
+"page": "https://commons.wikimedia.org/wiki/File:Jaskinia_Postojna,_S%C5%82owenia,_20240503_1040_8113.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY 4.0",
+"topic": "Postojna Cave",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Jaskinia_Postojna%2C_S%C5%82owenia%2C_20240503_1040_8113.jpg/1280px-Jaskinia_Postojna%2C_S%C5%82owenia%2C_20240503_1040_8113.jpg"
 },
 "p-fc8dab26d278": {
 "at": "2026-10-12",
@@ -19895,6 +22353,17 @@
 "source": "Wikimedia Commons, CC BY 4.0",
 "topic": "brown fish owl",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Ketupa_bosonoga2.jpg/1280px-Ketupa_bosonoga2.jpg"
+},
+"p-fcd49ea9ff46": {
+"at": "2026-10-12",
+"author": "European Space Agency / CNES",
+"licence": "Attribution",
+"packId": "pack-earth-orbit",
+"page": "https://commons.wikimedia.org/wiki/File:Gobabed_vu_par_le_satellite_Sentinel_2.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, Attribution",
+"topic": "Namib desert from space",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Gobabed_vu_par_le_satellite_Sentinel_2.jpg/1280px-Gobabed_vu_par_le_satellite_Sentinel_2.jpg"
 },
 "p-fcd97133242c": {
 "at": "2026-10-12",
@@ -19996,6 +22465,17 @@
 "source": "Wikimedia Commons, CC BY-SA 4.0",
 "topic": "Torre Gl\u00f2ries",
 "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Barcelona_March_2015-2a.jpg/1280px-Barcelona_March_2015-2a.jpg"
+},
+"p-fd435b7246ff": {
+"at": "2026-10-12",
+"author": "Martin Falbisoner",
+"licence": "CC BY-SA 4.0",
+"packId": "pack-autumn-parks",
+"page": "https://commons.wikimedia.org/wiki/File:Eikan-do_Zenrin-ji,_November_2016_-04.jpg",
+"provider": "commons",
+"source": "Wikimedia Commons, CC BY-SA 4.0",
+"topic": "Eikando autumn",
+"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Eikan-do_Zenrin-ji%2C_November_2016_-04.jpg/1280px-Eikan-do_Zenrin-ji%2C_November_2016_-04.jpg"
 },
 "p-fdba79df4a0d": {
 "at": "2026-10-12",

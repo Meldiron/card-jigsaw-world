@@ -1,8 +1,8 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-12T11:37:13",
-"msg": "Content: checkpoint (56 verified, 3 fixed, 72 audited, 137 pending)",
+"at": "2026-10-12T12:07:16",
+"msg": "Content: checkpoint (75 verified, 4 fixed, 69 audited, 122 pending)",
 "ok": true,
 "pushed": true,
 "stage": "committed"
@@ -76,13 +76,37 @@
 "removed": 0,
 "status": "pending"
 },
-"ai-dreamscapes": {
+"ai-cats": {
 "added": 0,
-"at": "2026-10-12T12:06:56",
-"last_step": "pool 876 usable",
+"at": "2026-10-12T12:16:03",
+"last_step": "pool 932 usable",
 "puzzles": null,
 "removed": 0,
 "status": "pending"
+},
+"ai-dreamscapes": {
+"added": 25,
+"at": "2026-10-12T12:13:50",
+"category": "AI",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "AI Dreamscapes",
+"puzzles": 24,
+"removed": 1,
+"status": "verified"
+},
+"ai-wild-animals": {
+"added": 24,
+"at": "2026-10-12T12:13:45",
+"category": "AI",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "AI Wild Animals",
+"puzzles": 24,
+"removed": 0,
+"status": "verified"
 },
 "animal-friends": {
 "added": 14,
@@ -265,22 +289,23 @@
 "status": "verified"
 },
 "daily-2023-12": {
-"added": 0,
-"at": "2026-10-12T10:24:20",
+"added": 24,
+"at": "2026-10-12T12:10:54",
 "category": "Daily",
+"issues": 0,
 "kind": "daily",
-"last_step": "reject 2 weak",
+"last_step": "verify",
 "name": "December 2023",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 31,
+"removed": 24,
+"status": "verified"
 },
 "daily-2024-01": {
 "added": 0,
-"at": "2026-10-12T11:57:43",
+"at": "2026-10-12T12:09:23",
 "category": "Daily",
 "kind": "daily",
-"last_step": "pool 92 usable",
+"last_step": "pool 74 usable",
 "name": "January 2024",
 "puzzles": null,
 "removed": 0,
@@ -409,8 +434,8 @@
 },
 "daily-2025": {
 "added": 0,
-"at": "2026-10-12T11:55:16",
-"last_step": "pool 194 usable",
+"at": "2026-10-12T12:12:34",
+"last_step": "pool 38 usable",
 "puzzles": null,
 "removed": 0,
 "status": "pending"
@@ -477,10 +502,10 @@
 },
 "daily-2025-06": {
 "added": 0,
-"at": "2026-10-12T11:55:30",
+"at": "2026-10-12T12:13:35",
 "category": "Daily",
 "kind": "daily",
-"last_step": "reject 9 weak",
+"last_step": "reject 2 similar",
 "name": "June 2025",
 "puzzles": null,
 "removed": 0,
@@ -653,16 +678,16 @@
 "status": "pending"
 },
 "deep-space": {
-"added": 18,
-"at": "2026-10-12T12:07:02",
+"added": 24,
+"at": "2026-10-12T12:07:50",
 "category": "Space",
-"issues": 5,
+"issues": 0,
 "kind": "library",
-"last_step": "verify failed",
+"last_step": "verify",
 "name": "Deep Space",
 "puzzles": 24,
-"removed": 15,
-"status": "fixed"
+"removed": 21,
+"status": "verified"
 },
 "evpack-animal-day-2026": {
 "added": 24,
@@ -792,13 +817,14 @@
 },
 "evpack-childrens-book-2027": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T12:14:47",
 "category": "Event",
 "kind": "event",
+"last_step": "reject 3 quality",
 "name": "International Children's Book Day",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "evpack-childrens-day-2027": {
 "added": 0,
@@ -890,14 +916,14 @@
 },
 "evpack-diwali-2026": {
 "added": 0,
-"at": "2026-10-12T11:55:07",
+"at": "2026-10-12T12:11:17",
 "category": "Event",
 "kind": "event",
-"last_step": "pool 15 usable",
+"last_step": "reject 2 similar",
 "name": "Diwali",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "evpack-diwali-2027": {
 "added": 0,
@@ -930,15 +956,16 @@
 "status": "pending"
 },
 "evpack-easter-2027": {
-"added": 0,
-"at": "2026-10-12T11:39:38",
+"added": 26,
+"at": "2026-10-12T12:14:26",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "reject 5 similar",
+"last_step": "verify",
 "name": "Easter",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 16,
+"status": "verified"
 },
 "evpack-education-2027": {
 "added": 0,
@@ -1738,15 +1765,16 @@
 "status": "audited"
 },
 "pack-autumn-parks": {
-"added": 0,
-"at": "2026-10-12T03:19:58",
+"added": 20,
+"at": "2026-10-12T12:09:29",
 "category": "Nature",
+"issues": 0,
 "kind": "library",
-"last_step": "pool 69 usable",
+"last_step": "verify",
 "name": "Autumn Parks",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 16,
+"status": "verified"
 },
 "pack-bali-temples": {
 "added": 0,
@@ -1808,10 +1836,10 @@
 },
 "pack-bridges": {
 "added": 0,
-"at": "2026-10-12T10:00:14",
+"at": "2026-10-12T12:14:43",
 "category": "Architecture",
 "kind": "library",
-"last_step": "reject 4 weak",
+"last_step": "pool 27 usable",
 "name": "Bridges",
 "puzzles": null,
 "removed": 0,
@@ -1830,15 +1858,16 @@
 "status": "verified"
 },
 "pack-canyons": {
-"added": 0,
-"at": "2026-10-12T03:12:45",
+"added": 22,
+"at": "2026-10-12T12:10:49",
 "category": "Nature",
+"issues": 0,
 "kind": "library",
-"last_step": "pool 99 usable",
+"last_step": "verify",
 "name": "Canyons",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 18,
+"status": "verified"
 },
 "pack-castles": {
 "added": 0,
@@ -1863,15 +1892,16 @@
 "status": "audited"
 },
 "pack-caves": {
-"added": 0,
-"at": "2026-10-12T03:34:45",
+"added": 27,
+"at": "2026-10-12T12:13:02",
 "category": "Nature",
+"issues": 0,
 "kind": "library",
-"last_step": "pool 103 usable",
+"last_step": "verify",
 "name": "Caves",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 23,
+"status": "verified"
 },
 "pack-cherry-blossom": {
 "added": 20,
@@ -1976,15 +2006,16 @@
 "status": "verified"
 },
 "pack-earth-orbit": {
-"added": 0,
-"at": "2026-10-12T04:58:31",
+"added": 26,
+"at": "2026-10-12T12:14:51",
 "category": "Space",
+"issues": 0,
 "kind": "library",
-"last_step": "pool 130 usable",
+"last_step": "verify",
 "name": "Earth from Orbit",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 22,
+"status": "verified"
 },
 "pack-elephants": {
 "added": 19,
@@ -2057,26 +2088,27 @@
 "status": "audited"
 },
 "pack-galaxies": {
-"added": 0,
-"at": "2026-10-12T04:46:53",
+"added": 25,
+"at": "2026-10-12T12:16:11",
 "category": "Space",
+"issues": 0,
 "kind": "library",
-"last_step": "pool 95 usable",
+"last_step": "verify",
 "name": "Galaxies",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 21,
+"status": "verified"
 },
 "pack-gardens": {
 "added": 0,
-"at": "2026-10-12T03:50:18",
+"at": "2026-10-12T12:16:23",
 "category": "Nature",
 "kind": "library",
-"last_step": "pool 134 usable",
+"last_step": "reject 4 weak",
 "name": "Gardens",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "pack-gardens-art": {
 "added": 0,

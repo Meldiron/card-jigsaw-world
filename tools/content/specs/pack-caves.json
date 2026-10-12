@@ -2,7 +2,7 @@
  "id": "pack-caves",
  "name": "Caves",
  "category": "Nature",
- "description": "Stalactites, ice caves, glowworms and sea caves from Slovenia to Vietnam.",
+ "description": "Stalactite halls, blue ice caves, a sea grotto and sunlit chambers from Slovenia to Vietnam.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
@@ -64,5 +64,6 @@
   "Lewis and Clark Caverns",
   "Mulu caves Deer Cave",
   "Bisevo Blue Cave"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Blue_Grotto%2C_Capri%2C_Italy.jpg/1280px-Blue_Grotto%2C_Capri%2C_Italy.jpg"
 }
