@@ -1,8 +1,8 @@
 {
  "id": "pack-rainy-streets",
- "name": "Rainy Streets",
+ "name": "After the Rain",
  "category": "Cities",
- "description": "Rain-slicked cobblestones, neon and lamplight mirrored in puddles, and city lights blurred through wet windows.",
+ "description": "Rain-slicked streets, lamplight on wet cobblestones and landmarks mirrored in puddles, from Paris and London to Lisbon and Singapore.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
@@ -36,7 +36,11 @@
   "rain puddle reflection night",
   "rainy night tram",
   "wet road lights",
-  "street after rain"
+  "street after rain",
+  "cat:Reflections in puddles",
+  "cat:Wet streets",
+  "puddle reflection church",
+  "reflection in puddle tower"
  ],
  "more_topics": [
   "raindrops window",
@@ -47,5 +51,6 @@
   "rain on car window",
   "rain over rooftops",
   "Rainy day street"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Reflet-tour-Eiffel-Paris-Luc-Viatour.jpg/1280px-Reflet-tour-Eiffel-Paris-Luc-Viatour.jpg"
 }

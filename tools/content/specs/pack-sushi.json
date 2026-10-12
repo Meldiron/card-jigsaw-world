@@ -2,7 +2,7 @@
  "id": "pack-sushi",
  "name": "Sushi",
  "category": "Food",
- "description": "Nigiri, maki, sashimi, temari and chirashi, from salmon and tuna to sea urchin and glistening salmon roe.",
+ "description": "Nigiri, maki, gunkan, sashimi and kaisendon, from tuna and salmon to sea urchin and glistening salmon roe.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
@@ -48,6 +48,16 @@
   "kappa maki",
   "gunkan maki",
   "sushi rice",
-  "makizushi"
+  "makizushi",
+  "Nigirizushi",
+  "kaisendon",
+  "sashimi",
+  "sushi rolls",
+  "omakase",
+  "tekkamaki",
+  "ikura",
+  "chutoro",
+  "aburi sushi",
+  "sushi plate"
  ]
 }

@@ -8,14 +8,46 @@
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
- "sources": ["commons", "openverse"],
- "topics": [
-  "Kinderdijk windmills", "Zaanse Schans windmills", "Consuegra windmills", "Mykonos windmills",
-  "Campo de Criptana windmills", "Molen De Adriaan Haarlem", "Molen de Valk Leiden", "Wimbledon windmill",
-  "Cley windmill", "Pitstone windmill", "Saxtead Green post mill", "Brill windmill",
-  "Moulin de Daudet Fontvieille", "Öland windmill", "Bockwindmühle", "Holländerwindmühle",
-  "Rhodes windmills Mandraki", "Lasithi windmills", "Fuerteventura windmill", "Moulin Blute-Fin Montmartre",
-  "Schiedam windmills", "De Schoolmeester windmill", "Texel windmill", "Bourn windmill", "Molen De Roos Delft"
+ "sources": [
+  "commons",
+  "openverse"
  ],
- "more_topics": ["Dutch windmill tulips", "Windmühle Kirchwerder", "Moulin de Pierre", "Windmill sails", "Holgate windmill", "Chillenden windmill", "Paltrockmühle", "smock mill"]
+ "topics": [
+  "Kinderdijk windmills",
+  "Zaanse Schans windmills",
+  "Consuegra windmills",
+  "Mykonos windmills",
+  "Campo de Criptana windmills",
+  "Molen De Adriaan Haarlem",
+  "Molen de Valk Leiden",
+  "Wimbledon windmill",
+  "Cley windmill",
+  "Pitstone windmill",
+  "Saxtead Green post mill",
+  "Brill windmill",
+  "Moulin de Daudet Fontvieille",
+  "Öland windmill",
+  "Bockwindmühle",
+  "Holländerwindmühle",
+  "Rhodes windmills Mandraki",
+  "Lasithi windmills",
+  "Fuerteventura windmill",
+  "Moulin Blute-Fin Montmartre",
+  "Schiedam windmills",
+  "De Schoolmeester windmill",
+  "Texel windmill",
+  "Bourn windmill",
+  "Molen De Roos Delft"
+ ],
+ "more_topics": [
+  "Dutch windmill tulips",
+  "Windmühle Kirchwerder",
+  "Moulin de Pierre",
+  "Windmill sails",
+  "Holgate windmill",
+  "Chillenden windmill",
+  "Paltrockmühle",
+  "smock mill"
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Consuegra-Molinos-2.jpg/1280px-Consuegra-Molinos-2.jpg"
 }

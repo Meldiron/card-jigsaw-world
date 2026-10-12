@@ -2,14 +2,17 @@
  "id": "evpack-peace-2027",
  "name": "International Day of Peace",
  "category": "Event",
- "description": "A limited pack for the International Day of Peace (21 September 2027). White doves, olive branches, paper cranes, peace pagodas, the Peace Palace, quiet gardens and calm water, playable for one week.",
+ "description": "A limited pack for the International Day of Peace (21 September 2027). Doves, olive trees, paper cranes, the Peace Palace and Hiroshima memorial, peace bells, torii gates, swans and quiet flowers, playable for one week.",
  "kind": "event",
  "target": 24,
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
  "accent_from_cover": true,
- "sources": ["commons", "openverse"],
+ "sources": [
+  "commons",
+  "openverse"
+ ],
  "topics": [
   "White dove",
   "Olive branch",
@@ -49,5 +52,6 @@
   "Mountain reflection lake",
   "Stone cairn",
   "Moss garden"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Orizuru_Paper_Crane_at_Kadoma_Praza.jpg/1280px-Orizuru_Paper_Crane_at_Kadoma_Praza.jpg"
 }

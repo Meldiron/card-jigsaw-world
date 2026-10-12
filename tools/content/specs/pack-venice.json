@@ -7,7 +7,7 @@
  "target": 24,
  "per_topic": 1,
  "fetch_per_topic": 4,
- "author_cap": 4,
+ "author_cap": 5,
  "sources": [
   "commons",
   "openverse"
@@ -48,5 +48,6 @@
   "Burano canal",
   "Ca' Pesaro",
   "Venice side canal"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/%28Venice%29_Palazzo_Zulian_Priuli_-_Facade_on_Canal_Grande.jpg/1280px-%28Venice%29_Palazzo_Zulian_Priuli_-_Facade_on_Canal_Grande.jpg"
 }

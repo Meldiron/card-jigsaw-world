@@ -201,6 +201,17 @@
 "removed": 1,
 "status": "verified"
 },
+"abstract-water-ripples": {
+"added": 0,
+"at": "2026-10-12T23:38:13",
+"category": "Abstract",
+"kind": "new",
+"last_step": "pool 17 usable",
+"name": "Water Ripples & Reflections",
+"puzzles": 0,
+"removed": 0,
+"status": "pending"
+},
 "ai-abstract": {
 "added": 23,
 "at": "2026-10-12T12:42:45",
@@ -1798,15 +1809,16 @@
 "status": "verified"
 },
 "evpack-peace-2027": {
-"added": 0,
-"at": "2026-10-12T23:10:35",
+"added": 25,
+"at": "2026-10-12T23:33:40",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "pool 40 usable",
+"last_step": "verify",
 "name": "International Day of Peace",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 15,
+"status": "verified"
 },
 "evpack-pet-day-2027": {
 "added": 24,
@@ -1821,15 +1833,16 @@
 "status": "verified"
 },
 "evpack-photography-2027": {
-"added": 0,
-"at": "2026-10-12T16:47:50",
+"added": 22,
+"at": "2026-10-12T23:33:38",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "reject 4 weak",
+"last_step": "verify",
 "name": "World Photography Day",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 12,
+"status": "verified"
 },
 "evpack-pi-day-2027": {
 "added": 0,
@@ -2157,11 +2170,13 @@
 },
 "evpack-wildlife-2027": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T23:38:47",
 "category": "Event",
+"issues": 8,
 "kind": "event",
+"last_step": "pool 55 usable",
 "name": "World Wildlife Day",
-"puzzles": null,
+"puzzles": 14,
 "removed": 0,
 "status": "pending"
 },
@@ -2213,10 +2228,10 @@
 },
 "evpack-youth-2027": {
 "added": 0,
-"at": "2026-10-12T16:48:05",
+"at": "2026-10-12T23:38:48",
 "category": "Event",
 "kind": "event",
-"last_step": "reject 2 weak",
+"last_step": "pool 38 usable",
 "name": "International Youth Day",
 "puzzles": null,
 "removed": 0,
@@ -3123,15 +3138,16 @@
 "status": "verified"
 },
 "pack-rainy-streets": {
-"added": 0,
-"at": "2026-10-12T23:10:16",
+"added": 22,
+"at": "2026-10-12T23:15:48",
 "category": "Cities",
+"issues": 0,
 "kind": "library",
-"last_step": "pool 29 usable",
+"last_step": "verify",
 "name": "Rainy Streets",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 18,
+"status": "verified"
 },
 "pack-renaissance": {
 "added": 24,
@@ -3183,10 +3199,10 @@
 },
 "pack-rome": {
 "added": 0,
-"at": "2026-10-12T10:21:57",
+"at": "2026-10-12T23:34:59",
 "category": "Cities",
 "kind": "library",
-"last_step": "reject 6 off-theme",
+"last_step": "reject 1 people",
 "name": "Rome",
 "puzzles": null,
 "removed": 0,
@@ -3335,15 +3351,16 @@
 "status": "verified"
 },
 "pack-street-food": {
-"added": 0,
-"at": "2026-10-12T23:11:20",
+"added": 23,
+"at": "2026-10-12T23:13:00",
 "category": "Food",
+"issues": 0,
 "kind": "library",
-"last_step": "reject 26 weak",
+"last_step": "verify",
 "name": "Street Food",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 19,
+"status": "verified"
 },
 "pack-sunflowers": {
 "added": 20,
@@ -3370,15 +3387,16 @@
 "status": "verified"
 },
 "pack-sushi": {
-"added": 0,
-"at": "2026-10-12T10:23:51",
+"added": 21,
+"at": "2026-10-12T23:26:26",
 "category": "Food",
+"issues": 0,
 "kind": "library",
-"last_step": "reject 1 similar",
+"last_step": "verify",
 "name": "Sushi",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 23,
+"removed": 15,
+"status": "verified"
 },
 "pack-swiss-villages": {
 "added": 24,
@@ -3394,10 +3412,10 @@
 },
 "pack-temples": {
 "added": 0,
-"at": "2026-10-12T10:24:27",
+"at": "2026-10-12T23:38:54",
 "category": "Architecture",
 "kind": "library",
-"last_step": "reject 2 weak",
+"last_step": "reject 52 weak",
 "name": "Temples",
 "puzzles": null,
 "removed": 0,
@@ -3428,15 +3446,16 @@
 "status": "verified"
 },
 "pack-tokyo-nights": {
-"added": 0,
-"at": "2026-10-12T10:24:55",
+"added": 21,
+"at": "2026-10-12T23:33:03",
 "category": "Cities",
+"issues": 0,
 "kind": "library",
-"last_step": "reject 1 weak",
+"last_step": "verify",
 "name": "Tokyo Nights",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 23,
+"removed": 15,
+"status": "verified"
 },
 "pack-tropical-beaches": {
 "added": 22,
@@ -3463,26 +3482,28 @@
 "status": "verified"
 },
 "pack-venice": {
-"added": 0,
-"at": "2026-10-12T23:10:01",
+"added": 25,
+"at": "2026-10-12T23:15:47",
 "category": "Cities",
+"issues": 0,
 "kind": "library",
-"last_step": "pool 67 usable",
+"last_step": "verify",
 "name": "Venice",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 21,
+"status": "verified"
 },
 "pack-vineyards": {
-"added": 0,
-"at": "2026-10-12T23:10:50",
+"added": 22,
+"at": "2026-10-12T23:15:43",
 "category": "Travel",
+"issues": 0,
 "kind": "library",
-"last_step": "pool 36 usable",
+"last_step": "verify",
 "name": "Vineyards",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 18,
+"status": "verified"
 },
 "pack-vintage-posters": {
 "added": 25,
@@ -3545,15 +3566,16 @@
 "status": "verified"
 },
 "pack-windmills": {
-"added": 0,
-"at": "2026-10-12T10:37:19",
+"added": 17,
+"at": "2026-10-12T23:35:55",
 "category": "Architecture",
+"issues": 0,
 "kind": "library",
-"last_step": "reject 3 weak",
+"last_step": "verify",
 "name": "Windmills",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 25,
+"removed": 12,
+"status": "verified"
 },
 "pack-winter-scenes": {
 "added": 26,

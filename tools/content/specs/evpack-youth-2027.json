@@ -9,7 +9,10 @@
  "fetch_per_topic": 4,
  "author_cap": 2,
  "accent_from_cover": true,
- "sources": ["commons", "openverse"],
+ "sources": [
+  "commons",
+  "openverse"
+ ],
  "topics": [
   "Skateboard",
   "Skatepark bowl",
@@ -18,7 +21,7 @@
   "Drum kit",
   "Headphones",
   "Vinyl records",
-  "Instant camera",
+  "Cassette tapes",
   "Surfboards",
   "BMX bicycle",
   "Roller skates",
@@ -28,10 +31,10 @@
   "Game controller",
   "Arcade machine",
   "Bubble tea",
-  "Ferris wheel",
+  "Roller coaster",
   "Climbing wall holds",
   "Backpack",
-  "Treehouse",
+  "Microscope",
   "Bowling pins",
   "Longboard",
   "University library",
