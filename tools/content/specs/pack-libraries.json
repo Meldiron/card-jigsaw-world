@@ -48,6 +48,19 @@
   "Kremsmünster Abbey library",
   "Ottobeuren Abbey library",
   "Bibliotheca Augusta Wolfenbüttel",
-  "Handelingenkamer library The Hague"
- ]
+  "Handelingenkamer library The Hague",
+  "Boston Public Library Bates Hall",
+  "New York Public Library Rose Main Reading Room",
+  "State Library Victoria La Trobe Reading Room",
+  "Picton Reading Room Liverpool",
+  "Altenburg Abbey library",
+  "Kremsmünster library",
+  "Seitenstetten Abbey library",
+  "Biblioteca Angelica",
+  "Bibliothèque Mazarine",
+  "Library of Parliament Ottawa",
+  "Real Gabinete Português de Leitura bookshelves",
+  "Stiftsbibliothek Sankt Gallen"
+ ],
+ "quality_deepcat": "Quality images of libraries"
 }

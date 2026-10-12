@@ -1,7 +1,7 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-12T19:09:15",
+"at": "2026-10-12T19:38:33",
 "msg": "Content: checkpoint (219 verified, 3 fixed, 45 audited, 29 pending)",
 "ok": true,
 "pushed": true,
@@ -1133,10 +1133,10 @@
 },
 "evpack-biodiversity-2027": {
 "added": 0,
-"at": "2026-10-12T18:51:03",
+"at": "2026-10-12T20:07:38",
 "category": "Event",
 "kind": "event",
-"last_step": "pool 27 usable",
+"last_step": "pool 50 usable",
 "name": "International Day for Biodiversity",
 "puzzles": null,
 "removed": 0,
@@ -1967,14 +1967,14 @@
 },
 "evpack-un-day-2026": {
 "added": 0,
-"at": "2026-10-12T19:05:31",
+"at": "2026-10-12T20:07:55",
 "category": "Event",
 "kind": "event",
-"last_step": "pool 11 usable",
+"last_step": "reject 2 weak",
 "name": "United Nations Day",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "evpack-un-day-2027": {
 "added": 0,
@@ -2633,10 +2633,10 @@
 },
 "pack-iceland-roads": {
 "added": 0,
-"at": "2026-10-12T19:04:16",
+"at": "2026-10-12T20:08:16",
 "category": "Travel",
 "kind": "library",
-"last_step": "reject 1 weak",
+"last_step": "pool 26 usable",
 "name": "Iceland Roads",
 "puzzles": null,
 "removed": 0,
@@ -2738,10 +2738,10 @@
 },
 "pack-libraries": {
 "added": 0,
-"at": "2026-10-12T19:03:53",
+"at": "2026-10-12T20:08:20",
 "category": "Architecture",
 "kind": "library",
-"last_step": "pool 35 usable",
+"last_step": "reject 1 text",
 "name": "Libraries",
 "puzzles": null,
 "removed": 0,
@@ -3303,15 +3303,15 @@
 "status": "audited"
 },
 "pack-textiles": {
-"added": 0,
-"at": "2026-10-12T18:54:48",
+"added": 22,
+"at": "2026-10-12T20:08:16",
 "category": "Patterns",
 "kind": "library",
-"last_step": "reject 2 similar",
+"last_step": "apply",
 "name": "Textiles",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 18,
+"status": "fixed"
 },
 "pack-tiles": {
 "added": 0,
