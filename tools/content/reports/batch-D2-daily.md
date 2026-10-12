@@ -19,3 +19,4 @@ Tooling notes: `commons_search(quality=True)` without `quality_cat` returns 0 fi
 - daily-2025-08: replaced 33 (people 9, landscape 8, text 1, weak 11 incl. 2 kept ones: tinted HDR moor, Persian carpet with inscriptions; replaced picks 4 blocked by the author cap); 31/31 dates; verified.
 - daily-2025-09: replaced 27 (people 10, landscape 6, weak 11: flat sky/sea frames, sunset haze, dull ink paintings); 30/30 dates; verified.
 - daily-2025-10: replaced 28 (people 15, landscape 4, text 1, weak 8 incl. 1 kept blurred macaque close-up); 31/31 dates; verified.
+- daily-2025-11: replaced 26 (people 9, landscape 7, text 2, weak 8 incl. 1 kept near-monochrome snowy forest); 30/30 dates; verified.

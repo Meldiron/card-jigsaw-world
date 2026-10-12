@@ -3,7 +3,7 @@
  "target": 24,
  "per_topic": 1,
  "fetch_per_topic": 5,
- "author_cap": 3,
+ "author_cap": 10,
  "sources": [
   "commons"
  ],

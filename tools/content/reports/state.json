@@ -1,8 +1,8 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-12T14:43:24",
-"msg": "Content: checkpoint (165 verified, 3 fixed, 55 audited, 68 pending)",
+"at": "2026-10-12T15:07:38",
+"msg": "Content: checkpoint (168 verified, 3 fixed, 56 audited, 65 pending)",
 "ok": true,
 "pushed": true,
 "stage": "committed"
@@ -710,8 +710,8 @@
 },
 "daily-2025": {
 "added": 0,
-"at": "2026-10-12T15:01:40",
-"last_step": "pool 56 usable",
+"at": "2026-10-12T15:08:36",
+"last_step": "pool 82 usable",
 "puzzles": null,
 "removed": 0,
 "status": "pending"
@@ -837,26 +837,27 @@
 "status": "verified"
 },
 "daily-2025-11": {
-"added": 23,
-"at": "2026-10-12T14:49:48",
+"added": 26,
+"at": "2026-10-12T15:09:48",
 "category": "Daily",
+"issues": 0,
 "kind": "daily",
-"last_step": "reject 1 weak",
+"last_step": "verify",
 "name": "November 2025",
 "puzzles": 30,
-"removed": 25,
-"status": "audited"
+"removed": 28,
+"status": "verified"
 },
 "daily-2025-12": {
-"added": 0,
-"at": "2026-10-12T12:32:48",
+"added": 23,
+"at": "2026-10-12T15:09:58",
 "category": "Daily",
 "kind": "daily",
-"last_step": "reject 11 weak",
+"last_step": "apply",
 "name": "December 2025",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 31,
+"removed": 27,
+"status": "fixed"
 },
 "daily-2026-01": {
 "added": 0,
@@ -1245,14 +1246,14 @@
 "status": "pending"
 },
 "evpack-earth-day-2027": {
-"added": 0,
-"at": "2026-10-12T15:05:41",
+"added": 21,
+"at": "2026-10-12T15:12:22",
 "category": "Event",
 "kind": "event",
-"last_step": "pool 28 usable",
+"last_step": "reject 2 weak",
 "name": "Earth Day",
-"puzzles": null,
-"removed": 0,
+"puzzles": 21,
+"removed": 14,
 "status": "audited"
 },
 "evpack-easter-2027": {
@@ -1356,15 +1357,15 @@
 "status": "pending"
 },
 "evpack-fries-2027": {
-"added": 0,
-"at": "2026-10-12T14:41:39",
+"added": 19,
+"at": "2026-10-12T15:13:09",
 "category": "Event",
 "kind": "event",
-"last_step": "reject 3 weak",
+"last_step": "apply",
 "name": "National French Fry Day",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 9,
+"status": "fixed"
 },
 "evpack-grandparents-2027": {
 "added": 0,
@@ -2246,32 +2247,33 @@
 },
 "pack-classic-cars": {
 "added": 0,
-"at": "2026-10-12T10:34:58",
+"at": "2026-10-12T15:11:02",
 "category": "Vintage",
 "kind": "library",
-"last_step": "reject 9 weak",
+"last_step": "pool 21 usable",
 "name": "Classic Cars",
 "puzzles": null,
 "removed": 0,
 "status": "audited"
 },
 "pack-cocktails": {
-"added": 15,
-"at": "2026-10-12T15:07:32",
+"added": 21,
+"at": "2026-10-12T15:07:55",
 "category": "Food",
+"issues": 0,
 "kind": "library",
-"last_step": "reject 4 weak",
+"last_step": "verify",
 "name": "Cocktails",
-"puzzles": 18,
+"puzzles": 24,
 "removed": 17,
-"status": "audited"
+"status": "verified"
 },
 "pack-coffee-shops": {
 "added": 0,
-"at": "2026-10-12T10:02:48",
+"at": "2026-10-12T15:13:17",
 "category": "Food",
 "kind": "library",
-"last_step": "reject 8 weak",
+"last_step": "pool 20 usable",
 "name": "Coffee Shops",
 "puzzles": null,
 "removed": 0,
@@ -2752,15 +2754,16 @@
 "status": "verified"
 },
 "pack-old-maps": {
-"added": 0,
-"at": "2026-10-12T15:07:07",
+"added": 25,
+"at": "2026-10-12T15:12:07",
 "category": "Vintage",
+"issues": 0,
 "kind": "library",
-"last_step": "reject 1 text",
+"last_step": "verify",
 "name": "Old Maps",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 21,
+"status": "verified"
 },
 "pack-orchids": {
 "added": 20,
@@ -2869,9 +2872,10 @@
 },
 "pack-portraits": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T15:13:02",
 "category": "Art",
 "kind": "library",
+"last_step": "pool 3 usable",
 "name": "Portraits",
 "puzzles": null,
 "removed": 0,
