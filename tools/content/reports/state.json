@@ -1,8 +1,8 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-12T16:13:26",
-"msg": "Content: checkpoint (187 verified, 3 fixed, 46 audited, 57 pending)",
+"at": "2026-10-12T16:24:11",
+"msg": "Content: checkpoint (188 verified, 3 fixed, 47 audited, 55 pending)",
 "ok": true,
 "pushed": true,
 "stage": "committed"
@@ -22,12 +22,24 @@
 "status": "verified"
 },
 "abstract-brutalist": {
+"added": 25,
+"at": "2026-10-12T16:29:18",
+"category": "Abstract",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "Brutalist Concrete",
+"puzzles": 24,
+"removed": 1,
+"status": "verified"
+},
+"abstract-crystal": {
 "added": 0,
-"at": "2026-10-12T16:05:27",
+"at": "2026-10-12T16:29:35",
 "category": "Abstract",
 "kind": "new",
 "last_step": "newpack",
-"name": "Brutalist Concrete",
+"name": "Crystal Macro",
 "puzzles": 0,
 "removed": 0,
 "status": "pending"
@@ -1368,10 +1380,10 @@
 },
 "evpack-friendship-2027": {
 "added": 0,
-"at": "2026-10-12T16:18:08",
+"at": "2026-10-12T16:28:44",
 "category": "Event",
 "kind": "event",
-"last_step": "reject 1 duplicate",
+"last_step": "reject 3 similar",
 "name": "International Day of Friendship",
 "puzzles": null,
 "removed": 0,
@@ -1748,10 +1760,10 @@
 },
 "evpack-remembrance-2026": {
 "added": 16,
-"at": "2026-10-12T16:23:38",
+"at": "2026-10-12T16:34:52",
 "category": "Event",
 "kind": "event",
-"last_step": "reject 3 quality",
+"last_step": "pool 16 usable",
 "name": "Remembrance Day",
 "puzzles": 22,
 "removed": 8,
@@ -2397,10 +2409,10 @@
 },
 "pack-fairytale-villages": {
 "added": 0,
-"at": "2026-10-12T16:18:29",
+"at": "2026-10-12T16:33:33",
 "category": "Travel",
 "kind": "library",
-"last_step": "pool 37 usable",
+"last_step": "reject 2 off-theme",
 "name": "Fairytale Villages",
 "puzzles": null,
 "removed": 0,
@@ -2444,10 +2456,10 @@
 },
 "pack-fruit-markets": {
 "added": 0,
-"at": "2026-10-12T16:22:45",
+"at": "2026-10-12T16:28:56",
 "category": "Food",
 "kind": "library",
-"last_step": "pool 24 usable",
+"last_step": "reject 1 text",
 "name": "Fruit Markets",
 "puzzles": null,
 "removed": 0,
@@ -2953,10 +2965,10 @@
 },
 "pack-renaissance": {
 "added": 0,
-"at": "2026-10-12T16:20:58",
+"at": "2026-10-12T16:28:37",
 "category": "Art",
 "kind": "library",
-"last_step": "reject 5 similar",
+"last_step": "reject 1 people",
 "name": "Renaissance",
 "puzzles": null,
 "removed": 0,
