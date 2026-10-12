@@ -2,13 +2,14 @@
  "id": "pack-horses",
  "name": "Horses",
  "category": "Animals",
- "description": "Friesians, Arabians, Icelandics, wild Camargue greys and foals in the paddock.",
+ "description": "Arabians, Friesians, Haflingers, Fjord horses, Camargue greys, wild Przewalski's horses and foals in the meadow.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
  "sources": [
+  "inat",
   "commons"
  ],
  "commons_quality": true,
@@ -47,12 +48,17 @@
  ],
  "more_topics": [
   "Hanoverian horse",
-  "Quarter horse",
-  "Thoroughbred horse",
   "Marwari horse",
   "Connemara pony",
   "Highland pony",
-  "Falabella",
-  "Knabstrupper"
- ]
+  "Knabstrupper",
+  "Arabian horse grey",
+  "Dartmoor pony",
+  "New Forest pony",
+  "Fell pony",
+  "Sorraia horse",
+  "feral horse Equus caballus"
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/NDA_Shariha_Bint_Shanah_22.jpg/1280px-NDA_Shariha_Bint_Shanah_22.jpg",
+ "accent_from_cover": true
 }

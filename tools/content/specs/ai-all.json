@@ -98,5 +98,8 @@
   "cat:AI-generated images by Leonardo AI",
   "cat:Whatever set (2024)",
   "cat:AI-generated images"
- ]
+ ],
+ "commons_quality": false,
+ "commons_extra": "deepcategory:\"AI-generated images\" filew:<1300",
+ "_note": "Shared pool for all ai-* packs. Search topics are restricted to the AI-generated images tree via commons_extra; cat: topics list AI categories directly."
 }

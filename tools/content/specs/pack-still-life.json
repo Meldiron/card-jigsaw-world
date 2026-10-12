@@ -13,7 +13,7 @@
  "id": "pack-still-life",
  "name": "Still Life",
  "category": "Art",
- "description": "Painted flowers, fruit and tableware, from Dutch bouquets and Coorte's asparagus to Cézanne's apples and Manet's crystal vase.",
+ "description": "Painted flowers, fruit and tableware from four centuries: Dutch bouquets, Coorte's strawberries, Meléndez's figs and Monet's Jerusalem artichoke flowers.",
  "topics": [
   "still life",
   "vase of flowers",
@@ -74,5 +74,6 @@
  ],
  "nga_classes": [
   "Painting"
- ]
+ ],
+ "cover": "https://api.nga.gov/iiif/6b41150f-3c75-4dc6-aacb-399d4bcc5a3b/full/!2000,2000/0/default.jpg"
 }

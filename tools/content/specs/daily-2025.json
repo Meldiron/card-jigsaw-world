@@ -6,7 +6,7 @@
   "commons"
  ],
  "per_topic": 1,
- "fetch_per_topic": 5,
+ "fetch_per_topic": 3,
  "author_cap": 3,
  "topics": [
   "jaguar",

@@ -54,5 +54,7 @@
   "Wallace's flying frog",
   "moor frog blue",
   "Jackson's chameleon portrait"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Dendrobates_tinctorius_var._azureus_-_Karlsruhe_Zoo_02.jpg/1280px-Dendrobates_tinctorius_var._azureus_-_Karlsruhe_Zoo_02.jpg",
+ "accent_from_cover": true
 }

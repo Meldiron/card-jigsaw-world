@@ -3,15 +3,16 @@
  "target": 24,
  "per_topic": 1,
  "fetch_per_topic": 5,
- "author_cap": 6,
+ "author_cap": 8,
  "sources": [
-  "commons"
+  "commons",
+  "nga"
  ],
  "commons_quality": false,
  "id": "pack-impressionists",
  "name": "Impressionists",
  "category": "Art",
- "description": "Monet, Renoir, Pissarro, Sisley and Caillebotte painting water lilies, poplars, orchards, cathedrals and vases of flowers.",
+ "description": "Monet, Renoir, Manet, Morisot, Cézanne, Signac and Boudin: water lilies, poplars, Rouen Cathedral, harbours and vases of flowers.",
  "topics": [
   "Monet Water Lilies painting",
   "Monet Rouen Cathedral painting",
@@ -63,5 +64,8 @@
   "Henri-Edmond Cross pines painting",
   "Monet tulip fields painting",
   "Guillaumin Crozant painting"
+ ],
+ "nga_classes": [
+  "Painting"
  ]
 }

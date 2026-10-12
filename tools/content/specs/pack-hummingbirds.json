@@ -2,7 +2,7 @@
  "id": "pack-hummingbirds",
  "name": "Hummingbirds",
  "category": "Animals",
- "description": "Violetears, sylphs, coquettes and ruby-throats hovering at flowers.",
+ "description": "Violetears, sylphs, sabrewings, racket-tails and ruby-throats, perched and hovering at flowers.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
@@ -53,5 +53,7 @@
   "sword-billed hummingbird",
   "giant hummingbird",
   "hummingbird nest"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/069_Fiery-throated_hummingbird_in_Los_Quetzales_National_Park_Photo_by_Giles_Laurent.jpg/1280px-069_Fiery-throated_hummingbird_in_Los_Quetzales_National_Park_Photo_by_Giles_Laurent.jpg",
+ "accent_from_cover": true
 }

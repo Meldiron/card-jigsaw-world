@@ -8,13 +8,51 @@
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
- "sources": ["commons"],
- "topics": [
-  "Hallstatt", "Colmar Petite Venise", "Riquewihr", "Eguisheim", "Rothenburg ob der Tauber Plönlein",
-  "Dinkelsbühl", "Cochem", "Monschau", "Bacharach", "Český Krumlov",
-  "Giethoorn", "Gruyères", "Bibury Arlington Row", "Castle Combe", "Alberobello trulli",
-  "Civita di Bagnoregio", "Shirakawa-go gassho houses", "Óbidos Portugal", "Annecy old town canal", "Telč square houses",
-  "Quedlinburg half-timbered", "Mittenwald painted houses", "Hobbiton", "Gengenbach", "Kaysersberg"
+ "sources": [
+  "commons",
+  "openverse"
  ],
- "more_topics": ["Sighișoara", "Goslar", "Wernigerode", "Staithes", "Ribe Denmark", "Holašovice", "Bamberg Little Venice", "Oberammergau Lüftlmalerei", "Tübingen old town", "Petite France Strasbourg", "Bad Wimpfen", "Michelstadt", "Saint-Cirq-Lapopie", "Rocamadour"]
+ "topics": [
+  "Hallstatt",
+  "Colmar Petite Venise",
+  "Riquewihr",
+  "Eguisheim",
+  "Rothenburg ob der Tauber Plönlein",
+  "Dinkelsbühl",
+  "Cochem",
+  "Monschau",
+  "Bacharach",
+  "Český Krumlov",
+  "Giethoorn",
+  "Gruyères",
+  "Bibury Arlington Row",
+  "Castle Combe",
+  "Alberobello trulli",
+  "Civita di Bagnoregio",
+  "Shirakawa-go gassho houses",
+  "Óbidos Portugal",
+  "Annecy old town canal",
+  "Telč square houses",
+  "Quedlinburg half-timbered",
+  "Mittenwald painted houses",
+  "Hobbiton",
+  "Gengenbach",
+  "Kaysersberg"
+ ],
+ "more_topics": [
+  "Sighișoara",
+  "Goslar",
+  "Wernigerode",
+  "Staithes",
+  "Ribe Denmark",
+  "Holašovice",
+  "Bamberg Little Venice",
+  "Oberammergau Lüftlmalerei",
+  "Tübingen old town",
+  "Petite France Strasbourg",
+  "Bad Wimpfen",
+  "Michelstadt",
+  "Saint-Cirq-Lapopie",
+  "Rocamadour"
+ ]
 }

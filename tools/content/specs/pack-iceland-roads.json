@@ -8,13 +8,48 @@
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
- "sources": ["commons"],
- "topics": [
-  "Route 1 Iceland", "Hringvegur", "Iceland Ring Road lava field", "F-road Iceland highlands", "Fjallabaksleið",
-  "F208 Iceland", "Kjalvegur Kjölur road", "Sprengisandsleið", "Öxi pass Route 939", "Fjarðarheiði road Seyðisfjörður",
-  "Seyðisfjörður rainbow street", "Kirkjufell road Snæfellsnes", "Route 61 Westfjords", "Hvalfjörður road", "Landmannalaugar road",
-  "Iceland gravel road", "one-lane bridge Iceland", "Iceland road winter snow", "Námaskarð road Mývatn", "Stokksnes road Vestrahorn",
-  "Strandir road Iceland", "Borgarfjörður eystri road", "Iceland road mountains", "Eldhraun road moss"
+ "sources": [
+  "commons",
+  "openverse"
  ],
- "more_topics": ["Iceland highway", "road in Iceland", "Iceland road curve", "Djúpivogur road", "Hellisheiði road", "Skeiðarársandur road", "Route 54 Iceland", "Route 85 Iceland", "Iceland road fjord", "Þjóðvegur 1", "Dynjandisheiði", "Hrafnseyrarheiði"]
+ "topics": [
+  "Route 1 Iceland",
+  "Hringvegur",
+  "Iceland Ring Road lava field",
+  "F-road Iceland highlands",
+  "Fjallabaksleið",
+  "F208 Iceland",
+  "Kjalvegur Kjölur road",
+  "Sprengisandsleið",
+  "Öxi pass Route 939",
+  "Fjarðarheiði road Seyðisfjörður",
+  "Seyðisfjörður rainbow street",
+  "Kirkjufell road Snæfellsnes",
+  "Route 61 Westfjords",
+  "Hvalfjörður road",
+  "Landmannalaugar road",
+  "Iceland gravel road",
+  "one-lane bridge Iceland",
+  "Iceland road winter snow",
+  "Námaskarð road Mývatn",
+  "Stokksnes road Vestrahorn",
+  "Strandir road Iceland",
+  "Borgarfjörður eystri road",
+  "Iceland road mountains",
+  "Eldhraun road moss"
+ ],
+ "more_topics": [
+  "Iceland highway",
+  "road in Iceland",
+  "Iceland road curve",
+  "Djúpivogur road",
+  "Hellisheiði road",
+  "Skeiðarársandur road",
+  "Route 54 Iceland",
+  "Route 85 Iceland",
+  "Iceland road fjord",
+  "Þjóðvegur 1",
+  "Dynjandisheiði",
+  "Hrafnseyrarheiði"
+ ]
 }

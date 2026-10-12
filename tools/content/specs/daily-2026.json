@@ -3,7 +3,7 @@
  "_note": "D2 shared spec for daily-2025-xx and daily-2026-xx. No name/description on purpose: finalize would overwrite the month names ('January 2025'). Own pool 'daily-2025' so D2 never writes D1's daily-2023 pool concurrently.",
  "pool": "daily-2025",
  "sources": [
-  "commons"
+  "inat"
  ],
  "per_topic": 1,
  "fetch_per_topic": 5,
@@ -498,5 +498,6 @@
   "advent wreath",
   "jack-o'-lantern",
   "diya lamps"
- ]
+ ],
+ "_note2": "daily-2026.json runs the iNaturalist species topics into the shared D2 pool; daily-2025.json runs Commons/Openverse topics."
 }

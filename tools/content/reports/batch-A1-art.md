@@ -63,3 +63,8 @@ Prices untouched. Re-themed packs keep their id and category.
   Snyders market with a woman, red-carpet photo, second versions of the same bouquet).
 - Two picks were the same files already used in Masterpieces (verify caught them); swapped for the other
   van Huysum and Ruysch.
+
+## Wave 2 (museum sources: NGA, Rijksmuseum)
+
+- pack-impressionists — verified, 24: removed all 20 old (people 12, landscape 7, quality 1) plus 2 new picks with borders (quality); added 19 Commons PD-Art (Monet x8, Renoir x5, Manet, Morisot, Caillebotte, Signac x2, Twachtman) and 5 NGA (Cézanne x2, Morisot Peonies, Boudin, Redon); 92 candidates rejected (framed gallery shots, photos, figures, repeat Rouen/Poplars/Belle-Île views); spec sources commons+nga, author_cap 8.
+- pack-still-life — verified, 24: removed all 20 old (landscape 8, people 5, quality 4, text 1, weak 2) plus 2 picks with statues or relief figures (people); added 24 from NGA (22 paintings: Meléndez, Coorte x2, Binoit, Bosschaert, Roesen, Monet, Redon, Vallotton, Brueghel workshop, de Heem, Morel, Eelkema, American folk) and Rijksmuseum; 26 candidates rejected (dark varnish, statues, prints, ceramics); spec sources nga+rijks+commons, cover Binoit tulips.

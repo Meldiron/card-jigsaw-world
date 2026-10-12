@@ -9,7 +9,10 @@
  "fetch_per_topic": 4,
  "author_cap": 2,
  "accent_from_cover": true,
- "sources": ["commons"],
+ "sources": [
+  "inat",
+  "commons"
+ ],
  "quality_deepcat": "Quality images of animals",
  "topics": [
   "Green sea turtle",
@@ -53,6 +56,15 @@
   "Tide pool",
   "Gorgonian sea fan",
   "Butterflyfish",
-  "Leafy seadragon"
+  "Leafy seadragon",
+  "Mantis shrimp",
+  "Pufferfish",
+  "Crinoid feather star",
+  "Frogfish",
+  "Linckia laevigata blue sea star",
+  "Clown triggerfish",
+  "Bluespotted ribbontail ray",
+  "Spanish dancer nudibranch",
+  "Garibaldi fish"
  ]
 }

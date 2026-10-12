@@ -8,14 +8,47 @@
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
- "sources": ["commons"],
- "topics": [
-  "hot air balloons Cappadocia", "Albuquerque International Balloon Fiesta", "Bristol International Balloon Fiesta", "hot air balloon inflation envelope", "hot air balloon burner flame",
-  "hot air balloon night glow", "hot air balloon basket", "hot air balloons Bagan", "hot air balloon Luxor", "balloon festival Château-d'Œx",
-  "hot air balloons Teotihuacan", "Lorraine Mondial Air Ballons", "hot air balloon colourful envelope", "Montgolfière", "hot air balloon over vineyards",
-  "hot air balloon over lake", "hot air balloon Göreme", "Leon International Balloon Festival", "hot air balloon reflection", "special shape hot air balloon",
-  "hot air balloon inside envelope", "Ballonfestival", "hot air balloon mountains", "Warsteiner Montgolfiade"
+ "sources": [
+  "commons",
+  "openverse"
  ],
- "more_topics": ["Saga International Balloon Fiesta", "Canberra Balloon Spectacular", "Putrajaya balloon fiesta", "hot air balloon sunrise", "hot air balloon landing field", "hot air balloons Uçhisar", "hot air balloon festival Hungary", "Mondial Air Ballons Chambley", "Albuquerque mass ascension", "hot air balloon close up"],
+ "topics": [
+  "hot air balloons Cappadocia",
+  "Albuquerque International Balloon Fiesta",
+  "Bristol International Balloon Fiesta",
+  "hot air balloon inflation envelope",
+  "hot air balloon burner flame",
+  "hot air balloon night glow",
+  "hot air balloon basket",
+  "hot air balloons Bagan",
+  "hot air balloon Luxor",
+  "balloon festival Château-d'Œx",
+  "hot air balloons Teotihuacan",
+  "Lorraine Mondial Air Ballons",
+  "hot air balloon colourful envelope",
+  "Montgolfière",
+  "hot air balloon over vineyards",
+  "hot air balloon over lake",
+  "hot air balloon Göreme",
+  "Leon International Balloon Festival",
+  "hot air balloon reflection",
+  "special shape hot air balloon",
+  "hot air balloon inside envelope",
+  "Ballonfestival",
+  "hot air balloon mountains",
+  "Warsteiner Montgolfiade"
+ ],
+ "more_topics": [
+  "Saga International Balloon Fiesta",
+  "Canberra Balloon Spectacular",
+  "Putrajaya balloon fiesta",
+  "hot air balloon sunrise",
+  "hot air balloon landing field",
+  "hot air balloons Uçhisar",
+  "hot air balloon festival Hungary",
+  "Mondial Air Ballons Chambley",
+  "Albuquerque mass ascension",
+  "hot air balloon close up"
+ ],
  "allow_words": []
 }

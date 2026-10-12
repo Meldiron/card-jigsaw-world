@@ -1,0 +1,8 @@
+{
+ "id": "evpack-teachers-2027",
+ "name": "World Teachers' Day",
+ "category": "Event",
+ "kind": "event",
+ "description": "A limited pack for World Teachers' Day (5 October 2027). Old books, globes, coloured pencils, abacuses, school bells, historic schoolhouses and grand libraries, playable for one week.",
+ "note": "clone of evpack-teachers-2026; content comes from `run.sh clone evpack-teachers-2026 evpack-teachers-2027`"
+}

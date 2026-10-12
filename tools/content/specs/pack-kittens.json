@@ -2,7 +2,7 @@
  "id": "pack-kittens",
  "name": "Kittens",
  "category": "Animals",
- "description": "Tabby, ginger, Maine Coon and Siamese kittens, wide-eyed and mid-pounce.",
+ "description": "Tabby, ginger, Maine Coon, Siamese and Scottish Fold kittens, wide-eyed or curled up asleep.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
@@ -53,5 +53,7 @@
   "kitten yawning",
   "kitten climbing",
   "kitten portrait"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Siberian_black_tabby_blotched_cat_01.jpg/1280px-Siberian_black_tabby_blotched_cat_01.jpg",
+ "accent_from_cover": true
 }

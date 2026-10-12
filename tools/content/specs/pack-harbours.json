@@ -8,13 +8,51 @@
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
- "sources": ["commons"],
- "topics": [
-  "Nyhavn Copenhagen", "Bryggen Bergen", "Portofino harbour", "Vernazza harbour", "Camogli harbour",
-  "Honfleur Vieux Bassin", "Mevagissey harbour", "Portree harbour", "Tobermory Mull harbour", "St Ives harbour Cornwall",
-  "Reine Lofoten", "Henningsvær harbour", "Ålesund harbour", "Lunenburg Nova Scotia waterfront", "Peggy's Cove",
-  "Rovinj harbour", "Piran harbour", "Collioure harbour", "Marina Corricella Procida", "Marsaxlokk luzzu boats",
-  "Essaouira harbour blue boats", "Symi harbour", "Nafplio harbour", "Gloucester Massachusetts fishing boats", "Stavanger Vågen harbour"
+ "sources": [
+  "commons",
+  "openverse"
  ],
- "more_topics": ["Cobh harbour", "Kinsale harbour", "Mousehole harbour", "Polperro harbour", "Ystad harbour", "Skagen harbour", "Stonehaven harbour", "Crail harbour", "Kalk Bay harbour", "Boothbay Harbor", "Hydra harbour", "Kotor marina", "Saint-Tropez harbour", "Portree"]
+ "topics": [
+  "Nyhavn Copenhagen",
+  "Bryggen Bergen",
+  "Portofino harbour",
+  "Vernazza harbour",
+  "Camogli harbour",
+  "Honfleur Vieux Bassin",
+  "Mevagissey harbour",
+  "Portree harbour",
+  "Tobermory Mull harbour",
+  "St Ives harbour Cornwall",
+  "Reine Lofoten",
+  "Henningsvær harbour",
+  "Ålesund harbour",
+  "Lunenburg Nova Scotia waterfront",
+  "Peggy's Cove",
+  "Rovinj harbour",
+  "Piran harbour",
+  "Collioure harbour",
+  "Marina Corricella Procida",
+  "Marsaxlokk luzzu boats",
+  "Essaouira harbour blue boats",
+  "Symi harbour",
+  "Nafplio harbour",
+  "Gloucester Massachusetts fishing boats",
+  "Stavanger Vågen harbour"
+ ],
+ "more_topics": [
+  "Cobh harbour",
+  "Kinsale harbour",
+  "Mousehole harbour",
+  "Polperro harbour",
+  "Ystad harbour",
+  "Skagen harbour",
+  "Stonehaven harbour",
+  "Crail harbour",
+  "Kalk Bay harbour",
+  "Boothbay Harbor",
+  "Hydra harbour",
+  "Kotor marina",
+  "Saint-Tropez harbour",
+  "Portree"
+ ]
 }

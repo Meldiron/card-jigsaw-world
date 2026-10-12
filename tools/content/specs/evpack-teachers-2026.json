@@ -2,7 +2,7 @@
  "id": "evpack-teachers-2026",
  "name": "World Teachers' Day",
  "category": "Event",
- "description": "A limited pack for World Teachers' Day (5 October 2026). Apples, chalk, globes, pencils, old school desks and historic schoolhouses, playable for one week.",
+ "description": "A limited pack for World Teachers' Day (5 October 2026). Old books, globes, coloured pencils, abacuses, school bells, historic schoolhouses and grand libraries, playable for one week.",
  "kind": "event",
  "target": 24,
  "per_topic": 1,
@@ -68,5 +68,6 @@
   "bookshelf library",
   "old schoolhouse",
   "classroom museum"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Old_Books_06.JPG/1280px-Old_Books_06.JPG"
 }

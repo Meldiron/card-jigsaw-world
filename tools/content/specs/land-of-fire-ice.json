@@ -8,13 +8,48 @@
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
- "sources": ["commons"],
- "topics": [
-  "Jökulsárlón icebergs", "Diamond Beach Breiðamerkursandur ice", "Skógafoss", "Gullfoss", "Svartifoss basalt columns",
-  "Kirkjufell Kirkjufellsfoss", "Strokkur geyser eruption", "Hverir Námafjall fumaroles", "Landmannalaugar rhyolite mountains", "Vatnajökull ice cave",
-  "Fagradalsfjall eruption lava", "Geldingadalir lava", "Eldhraun moss lava field", "Dyrhólaey arch", "Kerið crater lake",
-  "Hraunfossar", "Goðafoss", "Aldeyjarfoss", "Stuðlagil canyon", "Sólheimajökull glacier",
-  "Brúarfoss", "aurora borealis Iceland", "Reynisfjara basalt columns", "Hengifoss"
+ "sources": [
+  "commons",
+  "openverse"
  ],
- "more_topics": ["Dettifoss", "Gljúfrabúi", "Mývatn Dimmuborgir", "Krafla Leirhnjúkur", "Holuhraun eruption", "Þingvellir Silfra", "Hvítserkur", "Fjallsárlón glacier lagoon", "Breiðamerkurjökull", "Vestrahorn Stokksnes", "Seltún Krýsuvík geothermal", "Grjótagjá"]
+ "topics": [
+  "Jökulsárlón icebergs",
+  "Diamond Beach Breiðamerkursandur ice",
+  "Skógafoss",
+  "Gullfoss",
+  "Svartifoss basalt columns",
+  "Kirkjufell Kirkjufellsfoss",
+  "Strokkur geyser eruption",
+  "Hverir Námafjall fumaroles",
+  "Landmannalaugar rhyolite mountains",
+  "Vatnajökull ice cave",
+  "Fagradalsfjall eruption lava",
+  "Geldingadalir lava",
+  "Eldhraun moss lava field",
+  "Dyrhólaey arch",
+  "Kerið crater lake",
+  "Hraunfossar",
+  "Goðafoss",
+  "Aldeyjarfoss",
+  "Stuðlagil canyon",
+  "Sólheimajökull glacier",
+  "Brúarfoss",
+  "aurora borealis Iceland",
+  "Reynisfjara basalt columns",
+  "Hengifoss"
+ ],
+ "more_topics": [
+  "Dettifoss",
+  "Gljúfrabúi",
+  "Mývatn Dimmuborgir",
+  "Krafla Leirhnjúkur",
+  "Holuhraun eruption",
+  "Þingvellir Silfra",
+  "Hvítserkur",
+  "Fjallsárlón glacier lagoon",
+  "Breiðamerkurjökull",
+  "Vestrahorn Stokksnes",
+  "Seltún Krýsuvík geothermal",
+  "Grjótagjá"
+ ]
 }

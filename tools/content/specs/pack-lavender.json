@@ -2,13 +2,14 @@
  "id": "pack-lavender",
  "name": "Lavender",
  "category": "Flowers",
- "description": "Lavender rows in Provence and Hokkaido, and single spikes with bees on them.",
+ "description": "Lavender rows in Provence, French and English lavender in close-up, and spikes visited by bees and butterflies.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
  "sources": [
+  "inat",
   "commons"
  ],
  "commons_quality": true,
@@ -47,10 +48,14 @@
  ],
  "more_topics": [
   "Lavandula pedunculata",
-  "lavender Mont Ventoux",
+  "Lavandula viridis",
+  "Lavandula lanata",
+  "Lavandula × intermedia",
+  "Lavandula stoechas",
   "lavender Luberon",
-  "lavender field Norfolk",
-  "lavender Cotswold",
-  "lavender bumblebee"
- ]
+  "lavender bumblebee",
+  "Lavandula angustifolia"
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/6/61/%C3%89poque_de_maturit%C3%A9_%289384049855%29.jpg",
+ "accent_from_cover": true
 }

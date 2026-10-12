@@ -1,0 +1,14 @@
+{
+ "id": "evpack-easter-2027", "name": "Easter", "category": "Event",
+ "description": "A limited pack for Easter (28 March 2027). Painted pysanky and Sorbian eggs, egg fountains, Easter breads and cakes, lilies, daffodils, lambs and chicks, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2, "accent_from_cover": true,
+ "sources": ["commons"],
+ "topics": ["Pysanky eggs", "Sorbian Easter eggs", "Dyed Easter eggs", "Easter egg tree", "Osterbrunnen Easter fountain",
+  "Hot cross buns", "Kulich Easter bread", "Paskha", "Colomba pasquale", "Simnel cake",
+  "Tsoureki with red eggs", "Chocolate Easter bunny", "Chocolate Easter eggs", "Easter lamb cake", "Easter lilies",
+  "Daffodils", "Pussy willow catkins", "Easter palms Vilnius", "Fabergé egg", "Lamb in spring meadow",
+  "European rabbit in grass", "Domestic chicks", "Hyacinths", "Święconka basket", "Mazurek cake",
+  "Pastiera napoletana", "Mona de Pascua", "Cascarones"],
+ "more_topics": ["Easter eggs in nest", "Decorated goose eggs", "Kraslice", "Painted Easter eggs basket", "Easter bread braided",
+  "Narcissus pseudonarcissus", "Tulips in spring", "Spring primroses", "Lamb", "Hen with chicks", "Magnolia blossom", "Easter wreath"]
+}
