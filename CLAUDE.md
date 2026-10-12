@@ -121,6 +121,15 @@ skills under `.claude/skills/` hold the detailed workflows.
   `testflight`, `release`, `submit`, metadata/screenshots/iap/subscriptions commands. Docs:
   `tools/store/README.md`, `docs/release-flow.md`, `docs/release-checklist.md`.
 - Not yet done (owner): App Privacy questionnaire, Paid Applications agreement, App Store submission.
+- **Changing what a purchase gives** (coins, tickets, hints per product): three places must agree:
+  `functions/verify-purchase/src/main.js` (server grant, then redeploy the function as in
+  `docs/purchases.md`), `lib/data/purchases.dart` (what the store screen shows) and
+  `store/metadata/subscriptions/consumables.json` (App Store names and descriptions, pushed with
+  `asc_publish.py iap`). Product ids such as `coins_1000` cannot be renamed on Apple; keep them.
+- **Pack prices** live in the `packs` rows (`priceCoins`, `priceTickets`, `isFree`). The content
+  tool creates new packs at 400 coins or 3 tickets and no longer touches prices of existing packs. If
+  you change the price policy, write it down in `docs/` and tell the owner, so packs created later by
+  the content session get the same policy.
 
 ## Secrets
 
@@ -134,8 +143,10 @@ client). Never print or commit their values. GitHub Actions has the signing secr
 A picture-catalogue repair may be running in another session (Opus workers under the pack-making
 skill, state in `tools/content/reports/state.json`, checkpoints pushed every 30 minutes). If it is:
 do not edit `tools/content/**`, the pack-making skill or content docs, do not stop those agents, and
-leave these four TestFlight feedback items open (they are the content work's):
-AAX-tfwxcKgwk8WC7ZmPEIM, AFs4NDzzaDynNOI55qyTIkM, ANO-zfTaIYOjY-ueQhFp1QM, AEkB37H2zKX9inL57pfg2gE.
+leave these five TestFlight feedback items open (they are the content work's):
+AAX-tfwxcKgwk8WC7ZmPEIM, AFs4NDzzaDynNOI55qyTIkM, ANO-zfTaIYOjY-ueQhFp1QM, AEkB37H2zKX9inL57pfg2gE,
+AOZ2T5f4FZgO6tNrSO3BovQ (picture quality). Every other open item, including pack prices and the
+economy model, is app work.
 Pull before you push; their checkpoints commit only their own paths.
 
 ## Docs index
