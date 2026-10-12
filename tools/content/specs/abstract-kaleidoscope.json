@@ -10,7 +10,8 @@
  "accent_from_cover": true,
  "target": 24,
  "sources": [
-  "commons"
+  "commons",
+  "openverse"
  ],
  "commons_quality": true,
  "per_topic": 2,

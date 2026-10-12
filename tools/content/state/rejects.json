@@ -22519,9 +22519,9 @@
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Red_Panda_in_Pozna%C5%84_zoo.jpg/1280px-Red_Panda_in_Pozna%C5%84_zoo.jpg": {
 "at": "2026-10-12",
-"label": "c134",
-"pack": "daily-2023-01",
-"reason": "weak"
+"label": "c15",
+"pack": "pack-pandas",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/School_Desk_Design.png/1280px-School_Desk_Design.png": {
 "at": "2026-10-12",
@@ -22769,6 +22769,12 @@
 "pack": "pack-butterflies",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Ailurus_fulgens_Red_Panda.JPG/1280px-Ailurus_fulgens_Red_Panda.JPG": {
+"at": "2026-10-12",
+"label": "c34",
+"pack": "pack-pandas",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Erawan_Waterfall_-_Kanchanaburi_10.jpg/1280px-Erawan_Waterfall_-_Kanchanaburi_10.jpg": {
 "at": "2026-10-12",
 "label": "c115",
@@ -22780,6 +22786,12 @@
 "label": "c78",
 "pack": "pack-hummingbirds",
 "reason": "text"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Paule_Baudouin_2016.jpg/1280px-Paule_Baudouin_2016.jpg": {
+"at": "2026-10-12",
+"label": "c55",
+"pack": "pack-pandas",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/PhareCapFerret%2BPilat-byRundvald.jpg/1280px-PhareCapFerret%2BPilat-byRundvald.jpg": {
 "at": "2026-10-12",
@@ -22887,6 +22899,12 @@
 "at": "2026-10-12",
 "label": "c70",
 "pack": "pack-amsterdam",
+"reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Giant_Panda_at_Chengdu_Panda_Base_-_Sichuan%2C_China_-_16_March_2009.jpg/1280px-Giant_Panda_at_Chengdu_Panda_Base_-_Sichuan%2C_China_-_16_March_2009.jpg": {
+"at": "2026-10-12",
+"label": "c06",
+"pack": "pack-pandas",
 "reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Hirosaki_Castle_at_night_201804.jpg/1280px-Hirosaki_Castle_at_night_201804.jpg": {
@@ -23207,6 +23225,12 @@
 "pack": "pack-amsterdam",
 "reason": "quality"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/HK_%E6%B8%AF%E5%B3%B6_%E5%8D%97%E5%8D%80_Southern_District_%E9%BB%83%E7%AB%B9%E5%9D%91_Wong_Chuk_Hang_%E9%A6%99%E6%B8%AF%E6%B5%B7%E6%B4%8B%E5%85%AC%E5%9C%92_Ocean_Park_%E4%BA%9E%E6%B4%B2%E5%8B%95%E7%89%A9%E5%A4%A9%E5%9C%B0_Amazing_Asian_Animals_April_2023_Px3_09.jpg/1280px-HK_%E6%B8%AF%E5%B3%B6_%E5%8D%97%E5%8D%80_Southern_District_%E9%BB%83%E7%AB%B9%E5%9D%91_Wong_Chuk_Hang_%E9%A6%99%E6%B8%AF%E6%B5%B7%E6%B4%8B%E5%85%AC%E5%9C%92_Ocean_Park_%E4%BA%9E%E6%B4%B2%E5%8B%95%E7%89%A9%E5%A4%A9%E5%9C%B0_Amazing_Asian_Animals_April_2023_Px3_09.jpg": {
+"at": "2026-10-12",
+"label": "c51",
+"pack": "pack-pandas",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Lavandula_lanata_kz03.jpg/1280px-Lavandula_lanata_kz03.jpg": {
 "at": "2026-10-12",
 "label": "c58",
@@ -23361,6 +23385,18 @@
 "at": "2026-10-12",
 "label": "c03",
 "pack": "animal-friends",
+"reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Fresh_snow_%28Explore_2021-01-07%29_-_Flickr_-_nillamaria.jpg/1280px-Fresh_snow_%28Explore_2021-01-07%29_-_Flickr_-_nillamaria.jpg": {
+"at": "2026-10-12",
+"label": "c17",
+"pack": "pack-pandas",
+"reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Giant_Panda_%28Ailuropoda_melanoleuca%29_-_Chapultepec_Zoo_-_Mexico_2024_%282%29.jpg/1280px-Giant_Panda_%28Ailuropoda_melanoleuca%29_-_Chapultepec_Zoo_-_Mexico_2024_%282%29.jpg": {
+"at": "2026-10-12",
+"label": "c37",
+"pack": "pack-pandas",
 "reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Guillaume_II_en_Suisse_-_les_ours_de_Berne_-_btv1b90211861.jpg/1280px-Guillaume_II_en_Suisse_-_les_ours_de_Berne_-_btv1b90211861.jpg": {
@@ -24197,6 +24233,12 @@
 "pack": "abstract-macro-textures",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Equus_a._asinus%2C_Neuss_%28DE%29_--_2023_--_0082.jpg/1280px-Equus_a._asinus%2C_Neuss_%28DE%29_--_2023_--_0082.jpg": {
+"at": "2026-10-12",
+"label": "c10",
+"pack": "pack-pandas",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Flamingo_bird_statue.jpg/1280px-Flamingo_bird_statue.jpg": {
 "at": "2026-10-12",
 "label": "c119",
@@ -24544,6 +24586,12 @@
 "label": "c54",
 "pack": "evpack-forests-2027",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Ailuropoda_melanoleuca_in_Ouwehands_Dierenpark_01.jpg/1280px-Ailuropoda_melanoleuca_in_Ouwehands_Dierenpark_01.jpg": {
+"at": "2026-10-12",
+"label": "c31",
+"pack": "pack-pandas",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Amanogawa_P107_15.jpg/1280px-Amanogawa_P107_15.jpg": {
 "at": "2026-10-12",
@@ -25277,6 +25325,12 @@
 "pack": "cozy-kitchen",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/You_Aspired_to_Climb_To_Great_Heights_-_Flickr_-_Los_Paseos.jpg/1280px-You_Aspired_to_Climb_To_Great_Heights_-_Flickr_-_Los_Paseos.jpg": {
+"at": "2026-10-12",
+"label": "c40",
+"pack": "pack-pandas",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/1._Met_up_with_Sharon_Pincott_in_Hwange.jpg/1280px-1._Met_up_with_Sharon_Pincott_in_Hwange.jpg": {
 "at": "2026-10-12",
 "label": "c53",
@@ -25337,6 +25391,12 @@
 "pack": "abstract-geometric-minimal",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Red_Panda_%2820679728704%29.jpg/1280px-Red_Panda_%2820679728704%29.jpg": {
+"at": "2026-10-12",
+"label": "c21",
+"pack": "pack-pandas",
+"reason": "similar"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Swirl_ink%C3%97paper_40CM_%C3%9745cm_2025.jpg/1280px-Swirl_ink%C3%97paper_40CM_%C3%9745cm_2025.jpg": {
 "at": "2026-10-12",
 "label": "c20",
@@ -25365,6 +25425,12 @@
 "at": "2026-10-12",
 "label": "c344",
 "pack": "daily-2023-01",
+"reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Ailuropoda_melanoleuca_Giant_Panda1.JPG/1280px-Ailuropoda_melanoleuca_Giant_Panda1.JPG": {
+"at": "2026-10-12",
+"label": "c28",
+"pack": "pack-pandas",
 "reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Alberobello_-_Trulli_del_Rione_Monti_-_10.jpg/1280px-Alberobello_-_Trulli_del_Rione_Monti_-_10.jpg": {
@@ -25455,6 +25521,12 @@
 "at": "2026-10-12",
 "label": "c122",
 "pack": "abstract-fluid-ink",
+"reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/CLOUDS_CLIMBING_OVER_THE_HILLS_OF_REBILD_-_Flickr_-_kunst.ftf.jpg/1280px-CLOUDS_CLIMBING_OVER_THE_HILLS_OF_REBILD_-_Flickr_-_kunst.ftf.jpg": {
+"at": "2026-10-12",
+"label": "c39",
+"pack": "pack-pandas",
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/European_Brown_Hare_-_Lepus_europaeus4.jpg/1280px-European_Brown_Hare_-_Lepus_europaeus4.jpg": {
@@ -25895,6 +25967,18 @@
 "pack": "evpack-forests-2027",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/QinChengHouShan_LongYinXiaZhanDao.jpg/1280px-QinChengHouShan_LongYinXiaZhanDao.jpg": {
+"at": "2026-10-12",
+"label": "c12",
+"pack": "pack-pandas",
+"reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Red-tailed_Hawk_%28315-366%29_-_Flickr_-_timsackton.jpg/1280px-Red-tailed_Hawk_%28315-366%29_-_Flickr_-_timsackton.jpg": {
+"at": "2026-10-12",
+"label": "c47",
+"pack": "pack-pandas",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/-2019-11-16_White_Horse%2C_Hillside_Norfolk_Shire_Horse_Centre%2C_West_Runton_%281%29.JPG/1280px--2019-11-16_White_Horse%2C_Hillside_Norfolk_Shire_Horse_Centre%2C_West_Runton_%281%29.JPG": {
 "at": "2026-10-12",
 "label": "c28",
@@ -25953,6 +26037,12 @@
 "at": "2026-10-12",
 "label": "c04",
 "pack": "pack-lavender",
+"reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Giant_Panda_%28Ailuropoda_melanoleuca%29_-_Chapultepec_Zoo_-_Mexico_2024.jpg/1280px-Giant_Panda_%28Ailuropoda_melanoleuca%29_-_Chapultepec_Zoo_-_Mexico_2024.jpg": {
+"at": "2026-10-12",
+"label": "c36",
+"pack": "pack-pandas",
 "reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Happy_the_Barn_Owl_on_flight_trials_%285658045444%29.jpg/1280px-Happy_the_Barn_Owl_on_flight_trials_%285658045444%29.jpg": {
@@ -26309,6 +26399,12 @@
 "pack": "animal-friends",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/HK_%E6%B8%AF%E5%B3%B6_%E5%8D%97%E5%8D%80_Southern_District_%E9%BB%83%E7%AB%B9%E5%9D%91_Wong_Chuk_Hang_%E9%A6%99%E6%B8%AF%E6%B5%B7%E6%B4%8B%E5%85%AC%E5%9C%92_Ocean_Park_%E4%BA%9E%E6%B4%B2%E5%8B%95%E7%89%A9%E5%A4%A9%E5%9C%B0_Amazing_Asian_Animals_April_2023_Px3_05.jpg/1280px-HK_%E6%B8%AF%E5%B3%B6_%E5%8D%97%E5%8D%80_Southern_District_%E9%BB%83%E7%AB%B9%E5%9D%91_Wong_Chuk_Hang_%E9%A6%99%E6%B8%AF%E6%B5%B7%E6%B4%8B%E5%85%AC%E5%9C%92_Ocean_Park_%E4%BA%9E%E6%B4%B2%E5%8B%95%E7%89%A9%E5%A4%A9%E5%9C%B0_Amazing_Asian_Animals_April_2023_Px3_05.jpg": {
+"at": "2026-10-12",
+"label": "c50",
+"pack": "pack-pandas",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Kitten_-_Siamese_Mix_3.jpg/1280px-Kitten_-_Siamese_Mix_3.jpg": {
 "at": "2026-10-12",
 "label": "c14",
@@ -26331,6 +26427,12 @@
 "at": "2026-10-12",
 "label": "c505",
 "pack": "daily-2023-01",
+"reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Giant_Panda_%28Ailuropoda_melanoleuca%29_-_Chapultepec_Zoo_-_Mexico_2024_%283%29.jpg/1280px-Giant_Panda_%28Ailuropoda_melanoleuca%29_-_Chapultepec_Zoo_-_Mexico_2024_%283%29.jpg": {
+"at": "2026-10-12",
+"label": "c35",
+"pack": "pack-pandas",
 "reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Informele_kimono_voor_een_vrouw_Vrouwen_kimono_met_geometrisch_patroon%2C_AK-RAK-2009-3-23.jpg/1280px-Informele_kimono_voor_een_vrouw_Vrouwen_kimono_met_geometrisch_patroon%2C_AK-RAK-2009-3-23.jpg": {
@@ -26915,6 +27017,12 @@
 "pack": "evpack-food-day-2026",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Pandas%21%21_%28GIANT_PANDA-WOLONG-SICHUAN-CHINA%29_%282151388796%29.jpg/1280px-Pandas%21%21_%28GIANT_PANDA-WOLONG-SICHUAN-CHINA%29_%282151388796%29.jpg": {
+"at": "2026-10-12",
+"label": "c11",
+"pack": "pack-pandas",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Vizcaya_Museum_and_Gardens_South_Tower_Circular_Staircase%2C_A_View_From_Below.jpg/1280px-Vizcaya_Museum_and_Gardens_South_Tower_Circular_Staircase%2C_A_View_From_Below.jpg": {
 "at": "2026-10-12",
 "label": "c180",
@@ -26944,6 +27052,12 @@
 "label": "c102",
 "pack": "abstract-light-leaks",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Capitole_Toulouse_-_Salle_des_Illustres_-_La_Belle_Paule_par_Henri_Rachou.jpg/1280px-Capitole_Toulouse_-_Salle_des_Illustres_-_La_Belle_Paule_par_Henri_Rachou.jpg": {
+"at": "2026-10-12",
+"label": "c53",
+"pack": "pack-pandas",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Dactylorhiza_fuchsii_Mariazell_01.JPG/1280px-Dactylorhiza_fuchsii_Mariazell_01.JPG": {
 "at": "2026-10-12",
@@ -27125,6 +27239,12 @@
 "pack": "pack-orchids",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Red-shouldered_Hawk_%28Buteo_lineatus%29_-_Flickr_-_jkirkhart35.jpg/1280px-Red-shouldered_Hawk_%28Buteo_lineatus%29_-_Flickr_-_jkirkhart35.jpg": {
+"at": "2026-10-12",
+"label": "c48",
+"pack": "pack-pandas",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/S%C3%A3o_Bento_Monastery%2C_S%C3%A3o_Paulo_downtown%2C_Brazil.jpg/1280px-S%C3%A3o_Bento_Monastery%2C_S%C3%A3o_Paulo_downtown%2C_Brazil.jpg": {
 "at": "2026-10-12",
 "label": "c94",
@@ -27183,6 +27303,12 @@
 "at": "2026-10-12",
 "label": "c08",
 "pack": "evpack-forests-2027",
+"reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Ailuropoda_melanoleuca_in_Ouwehands_Dierenpark_03.jpg/1280px-Ailuropoda_melanoleuca_in_Ouwehands_Dierenpark_03.jpg": {
+"at": "2026-10-12",
+"label": "c32",
+"pack": "pack-pandas",
 "reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Badain_Jaran_Desert_Visible_%26_Near_IR.jpg/1280px-Badain_Jaran_Desert_Visible_%26_Near_IR.jpg": {
@@ -28139,6 +28265,12 @@
 "pack": "evpack-coffee-2026",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Giant_Panda_with_a_Pink_Crate_--_National_Zoo_NW_Washington_DC_November_2017.jpg/1280px-Giant_Panda_with_a_Pink_Crate_--_National_Zoo_NW_Washington_DC_November_2017.jpg": {
+"at": "2026-10-12",
+"label": "c27",
+"pack": "pack-pandas",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Heirloom_tomatoes_collected_from_the_farm.jpg/1280px-Heirloom_tomatoes_collected_from_the_farm.jpg": {
 "at": "2026-10-12",
 "label": "c116",
@@ -28369,8 +28501,8 @@
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Ardea_cinerea%2C_Krefeld_%28DE%29_--_2024_--_0240.jpg/1280px-Ardea_cinerea%2C_Krefeld_%28DE%29_--_2024_--_0240.jpg": {
 "at": "2026-10-12",
-"label": "c33",
-"pack": "pack-farm-life",
+"label": "c09",
+"pack": "pack-pandas",
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Building_Painting_6252.JPG/1280px-Building_Painting_6252.JPG": {
@@ -28768,6 +28900,12 @@
 "label": "c271",
 "pack": "daily-2023-01",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Autumn_is_here_-_Flickr_-_It%27s_No_Game.jpg/1280px-Autumn_is_here_-_Flickr_-_It%27s_No_Game.jpg": {
+"at": "2026-10-12",
+"label": "c46",
+"pack": "pack-pandas",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Ban_Gioc_waterfalls_3.jpg/1280px-Ban_Gioc_waterfalls_3.jpg": {
 "at": "2026-10-12",
@@ -30005,6 +30143,12 @@
 "pack": "daily-2023-01",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Sepia_com%C3%BAn_%28Sepia_officinalis%29%2C_Parque_natural_de_la_Arr%C3%A1bida%2C_Portugal%2C_2021-09-07%2C_DD_04.jpg/1280px-Sepia_com%C3%BAn_%28Sepia_officinalis%29%2C_Parque_natural_de_la_Arr%C3%A1bida%2C_Portugal%2C_2021-09-07%2C_DD_04.jpg": {
+"at": "2026-10-12",
+"label": "c45",
+"pack": "pack-pandas",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Serval_in_Drusillas_Park_2024-12-18.jpg/1280px-Serval_in_Drusillas_Park_2024-12-18.jpg": {
 "at": "2026-10-12",
 "label": "c10",
@@ -30075,6 +30219,12 @@
 "at": "2026-10-12",
 "label": "c85",
 "pack": "abstract-light-leaks",
+"reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Snow_-_Flickr_-_Guwashi999.jpg/1280px-Snow_-_Flickr_-_Guwashi999.jpg": {
+"at": "2026-10-12",
+"label": "c18",
+"pack": "pack-pandas",
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/The_tree_looking_for.jpg/1280px-The_tree_looking_for.jpg": {
@@ -30653,6 +30803,12 @@
 "pack": "pack-farm-life",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/EXPLORED%2C_10-06-14%2C_Lion_Cub_-_Flickr_-_tvdflickr.jpg/1280px-EXPLORED%2C_10-06-14%2C_Lion_Cub_-_Flickr_-_tvdflickr.jpg": {
+"at": "2026-10-12",
+"label": "c23",
+"pack": "pack-pandas",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/El_Capitan_Yosemite_Edith_Irvine.jpg/1280px-El_Capitan_Yosemite_Edith_Irvine.jpg": {
 "at": "2026-10-12",
 "label": "c695",
@@ -30814,6 +30970,12 @@
 "label": "c86",
 "pack": "pack-horses",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Spring_Snow_-_Flickr_-_scubadive67.jpg/1280px-Spring_Snow_-_Flickr_-_scubadive67.jpg": {
+"at": "2026-10-12",
+"label": "c19",
+"pack": "pack-pandas",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Vase_of_Flowers_A15108.jpg/1280px-Vase_of_Flowers_A15108.jpg": {
 "at": "2026-10-12",
@@ -31699,8 +31861,8 @@
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Starr-180312-0634-Sphaeropteris_cooperi-frond_unfurling-Kahikinui-Maui_%2841196349832%29.jpg/1280px-Starr-180312-0634-Sphaeropteris_cooperi-frond_unfurling-Kahikinui-Maui_%2841196349832%29.jpg": {
 "at": "2026-10-12",
-"label": "c35",
-"pack": "evpack-mental-health-2026",
+"label": "daily-2023-10-10",
+"pack": "daily-2023-10",
 "reason": "similar"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/A_Goose_and_a_Gander_with_their_Goslings_Honking_in_Alarm_as_Two_Foxes_with_their_Cubs_Emerge_from_the_Rushes_MET_DP819917.jpg/1280px-A_Goose_and_a_Gander_with_their_Goslings_Honking_in_Alarm_as_Two_Foxes_with_their_Cubs_Emerge_from_the_Rushes_MET_DP819917.jpg": {
@@ -32279,6 +32441,12 @@
 "pack": "pack-foxes",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/%D0%9E%D0%BB%D0%B5%D0%BD%D1%8C_%D0%B7_%D0%BA%D0%BB%D0%B5%D0%BD%D0%BE%D0%B2%D0%B8%D0%BC_%D0%BB%D0%B8%D1%81%D1%82%D0%BA%D0%BE%D0%BC.jpg/1280px-%D0%9E%D0%BB%D0%B5%D0%BD%D1%8C_%D0%B7_%D0%BA%D0%BB%D0%B5%D0%BD%D0%BE%D0%B2%D0%B8%D0%BC_%D0%BB%D0%B8%D1%81%D1%82%D0%BA%D0%BE%D0%BC.jpg": {
+"at": "2026-10-12",
+"label": "c44",
+"pack": "pack-pandas",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/%D0%9F%D0%BE%D0%B9%D0%BC%D0%B0_%D0%98%D1%80%D1%82%D1%8B%D1%88%D0%B0_%D0%B1%D0%BE%D0%BB%D0%BE%D1%82%D0%BD%D0%B0%D1%8F_%D1%81%D0%BE%D0%B2%D0%B0_%284%29.jpg/1280px-%D0%9F%D0%BE%D0%B9%D0%BC%D0%B0_%D0%98%D1%80%D1%82%D1%8B%D1%88%D0%B0_%D0%B1%D0%BE%D0%BB%D0%BE%D1%82%D0%BD%D0%B0%D1%8F_%D1%81%D0%BE%D0%B2%D0%B0_%284%29.jpg": {
 "at": "2026-10-12",
 "label": "c24",
@@ -32380,6 +32548,12 @@
 "label": "c346",
 "pack": "daily-2023-01",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Ailurus_fulgens_in_Ouwehands_Dierenpark_02.jpg/1280px-Ailurus_fulgens_in_Ouwehands_Dierenpark_02.jpg": {
+"at": "2026-10-12",
+"label": "c33",
+"pack": "pack-pandas",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Irish_Coffee_in_Kerava.jpg/1280px-Irish_Coffee_in_Kerava.jpg": {
 "at": "2026-10-12",
@@ -32542,6 +32716,12 @@
 "label": "c23",
 "pack": "pack-butterflies",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Huahua_sitting_on_the_ground.jpg/1280px-Huahua_sitting_on_the_ground.jpg": {
+"at": "2026-10-12",
+"label": "c41",
+"pack": "pack-pandas",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Seljalandsfoss%2C_Iceland%2C_20230501_1329_3938.jpg/1280px-Seljalandsfoss%2C_Iceland%2C_20230501_1329_3938.jpg": {
 "at": "2026-10-12",
@@ -32902,6 +33082,12 @@
 "label": "c464",
 "pack": "daily-2023-01",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Iguana_Climbing_-_E78_2426_-_Flickr_-_Kevin_Crosby.jpg/1280px-Iguana_Climbing_-_E78_2426_-_Flickr_-_Kevin_Crosby.jpg": {
+"at": "2026-10-12",
+"label": "c38",
+"pack": "pack-pandas",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Larix_decidua_forest_in_autumn_%2821972157399%29.jpg/1280px-Larix_decidua_forest_in_autumn_%2821972157399%29.jpg": {
 "at": "2026-10-12",
@@ -33797,6 +33983,12 @@
 "pack": "abstract-macro-textures",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Red_Panda_just_chillin.jpg/1280px-Red_Panda_just_chillin.jpg": {
+"at": "2026-10-12",
+"label": "c22",
+"pack": "pack-pandas",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Vegetables_stall_in_a_local_market_08.jpg/1280px-Vegetables_stall_in_a_local_market_08.jpg": {
 "at": "2026-10-12",
 "label": "c77",
@@ -34031,6 +34223,12 @@
 "pack": "pack-farm-life",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Galapagos_Giant_Tortoise_-_Flickr_-_kuhnmi.jpg/1280px-Galapagos_Giant_Tortoise_-_Flickr_-_kuhnmi.jpg": {
+"at": "2026-10-12",
+"label": "c01",
+"pack": "pack-pandas",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Gelato_Bilancia.jpg/1280px-Gelato_Bilancia.jpg": {
 "at": "2026-10-12",
 "label": "c68",
@@ -34042,6 +34240,12 @@
 "label": "c04",
 "pack": "daily-2023-01",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Red_Panda_Navigating_the_High_Himalayan_Canopy_%28Captured_at_the_Himalayan_Zoological_Park%2C_Sikkim.%29.jpg/1280px-Red_Panda_Navigating_the_High_Himalayan_Canopy_%28Captured_at_the_Himalayan_Zoological_Park%2C_Sikkim.%29.jpg": {
+"at": "2026-10-12",
+"label": "c14",
+"pack": "pack-pandas",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Tokay_Gecko_%28Gekko_gecko%29_2.jpg/1280px-Tokay_Gecko_%28Gekko_gecko%29_2.jpg": {
 "at": "2026-10-12",
@@ -34276,6 +34480,12 @@
 "label": "c77",
 "pack": "pack-horses",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/HK_%E6%B8%AF%E5%B3%B6_%E5%8D%97%E5%8D%80_Southern_District_%E9%BB%83%E7%AB%B9%E5%9D%91_Wong_Chuk_Hang_%E9%A6%99%E6%B8%AF%E6%B5%B7%E6%B4%8B%E5%85%AC%E5%9C%92_Ocean_Park_%E4%BA%9E%E6%B4%B2%E5%8B%95%E7%89%A9%E5%A4%A9%E5%9C%B0_Amazing_Asian_Animals_April_2023_Px3_26.jpg/1280px-HK_%E6%B8%AF%E5%B3%B6_%E5%8D%97%E5%8D%80_Southern_District_%E9%BB%83%E7%AB%B9%E5%9D%91_Wong_Chuk_Hang_%E9%A6%99%E6%B8%AF%E6%B5%B7%E6%B4%8B%E5%85%AC%E5%9C%92_Ocean_Park_%E4%BA%9E%E6%B4%B2%E5%8B%95%E7%89%A9%E5%A4%A9%E5%9C%B0_Amazing_Asian_Animals_April_2023_Px3_26.jpg": {
+"at": "2026-10-12",
+"label": "c52",
+"pack": "pack-pandas",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Kirchardt_-_Bockschaft_-_Dorfkern_-_Weinbergstr._1_-_Fenster_Mitte_%281%29.jpg/1280px-Kirchardt_-_Bockschaft_-_Dorfkern_-_Weinbergstr._1_-_Fenster_Mitte_%281%29.jpg": {
 "at": "2026-10-12",

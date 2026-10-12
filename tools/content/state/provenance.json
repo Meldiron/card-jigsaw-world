@@ -2762,14 +2762,14 @@
 },
 "daily-2023-10-10": {
 "at": "2026-10-12",
-"author": "Forest and Kim Starr",
-"licence": "CC BY 3.0 us",
+"author": "Pete Tillman",
+"licence": "CC BY-SA",
 "packId": "daily-2023-10",
-"page": "https://commons.wikimedia.org/wiki/File:Starr-180312-0634-Sphaeropteris_cooperi-frond_unfurling-Kahikinui-Maui_(41196349832).jpg",
-"provider": "commons",
-"replaced": "https://picsum.photos/id/274/900/1200",
-"source": "Wikimedia Commons, CC BY 3.0 us",
-"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Starr-180312-0634-Sphaeropteris_cooperi-frond_unfurling-Kahikinui-Maui_%2841196349832%29.jpg/1280px-Starr-180312-0634-Sphaeropteris_cooperi-frond_unfurling-Kahikinui-Maui_%2841196349832%29.jpg"
+"page": "https://www.flickr.com/photos/29050464@N06/52042867228",
+"provider": "openverse:flickr",
+"replaced": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Starr-180312-0634-Sphaeropteris_cooperi-frond_unfurling-Kahikinui-Maui_%2841196349832%29.jpg/1280px-Starr-180312-0634-Sphaeropteris_cooperi-frond_unfurling-Kahikinui-Maui_%2841196349832%29.jpg",
+"source": "flickr via Openverse, CC BY-SA",
+"url": "https://live.staticflickr.com/65535/52042867228_1fef57a06d_b.jpg"
 },
 "daily-2023-10-11": {
 "at": "2026-10-12",

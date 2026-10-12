@@ -9,6 +9,7 @@
  "fetch_per_topic": 4,
  "author_cap": 2,
  "sources": [
+  "inat",
   "commons"
  ],
  "commons_quality": true,
@@ -46,11 +47,15 @@
   "red panda Zoo Vienna"
  ],
  "more_topics": [
+  "Ailuropoda melanoleuca",
+  "Ailurus fulgens",
+  "Ailurus fulgens styani",
   "giant panda Edinburgh Zoo",
-  "giant panda Adelaide Zoo",
   "giant panda Pairi Daiza",
   "giant panda Beauval",
-  "red panda Himalaya",
-  "red panda Chester Zoo"
+  "red panda Chester Zoo",
+  "giant panda Smithsonian National Zoo",
+  "giant panda Zoo Atlanta",
+  "giant panda Schönbrunn"
  ]
 }

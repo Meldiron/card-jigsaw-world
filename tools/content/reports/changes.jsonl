@@ -2109,3 +2109,6 @@
 {"pack": "abstract-macro-textures", "fields": ["accent", "blurhash", "coverUrl", "imageCount"], "event": "pack-update", "at": "2026-10-12T11:06:47"}
 {"pack": "abstract-macro-textures", "fields": ["accent", "imageCount"], "event": "pack-update", "at": "2026-10-12T11:07:01"}
 {"pack": "pack-orchids", "fields": ["accent", "blurhash", "coverUrl", "imageCount"], "event": "pack-update", "at": "2026-10-12T11:07:02"}
+{"pack": "daily-2023-10", "puzzle": "daily-2023-10-10", "old": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Starr-180312-0634-Sphaeropteris_cooperi-frond_unfurling-Kahikinui-Maui_%2841196349832%29.jpg/1280px-Starr-180312-0634-Sphaeropteris_cooperi-frond_unfurling-Kahikinui-Maui_%2841196349832%29.jpg", "new": "https://live.staticflickr.com/65535/52042867228_1fef57a06d_b.jpg", "reason": "similar", "event": "replace", "at": "2026-10-12T11:07:27"}
+{"pack": "daily-2023-10", "fields": ["imageCount"], "event": "pack-update", "at": "2026-10-12T11:07:29"}
+{"pack": "abstract-kaleidoscope", "category": "Abstract", "event": "pack-create", "at": "2026-10-12T11:07:33"}
