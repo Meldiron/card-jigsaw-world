@@ -61,15 +61,19 @@ TABLE = "packs"
 
 # Economy model, steady state of the regular player (1 hour a day, 5x5
 # boards): coins earned per hour of play, all sources included, and free
-# tickets per week. See docs/economy.md, "Model results".
-REGULAR_COINS_PER_HOUR = 6000
+# tickets per week. See docs/economy.md, "Model results". 6000 until
+# 2026-10-13, when the owner lowered the coins for finishing a puzzle.
+REGULAR_COINS_PER_HOUR = 3500
 REGULAR_TICKETS_PER_WEEK = 16
 REFERENCE_PICTURES = 24  # a full library pack
 
-# Hours of regular play a 24-picture pack of each tier costs.
-TIER_HOURS = {"standard": 0.40, "plus": 0.55, "special": 0.70, "showcase": 0.85}
-# Coins per picture: hours x coins per hour / 24 -> 100, 137.5, 175, 212.5.
-COINS_PER_PICTURE = {t: h * REGULAR_COINS_PER_HOUR / REFERENCE_PICTURES for t, h in TIER_HOURS.items()}
+# Price of a 24-picture pack per tier, in coins (set 2026-10-12 and kept when
+# earnings were lowered, so a pack now costs more play time).
+TIER_PACK_COINS = {"standard": 2400, "plus": 3300, "special": 4200, "showcase": 5100}
+# Coins per picture -> 100, 137.5, 175, 212.5.
+COINS_PER_PICTURE = {t: c / REFERENCE_PICTURES for t, c in TIER_PACK_COINS.items()}
+# Hours of regular play a 24-picture pack of each tier costs (for reports only).
+TIER_HOURS = {t: round(c / REGULAR_COINS_PER_HOUR, 2) for t, c in TIER_PACK_COINS.items()}
 MIN_COINS = 1000  # owner: no coin pack below 1,000
 MAX_COINS = 5000  # owner: nice packs up to 5,000
 ROUND_COINS = 100

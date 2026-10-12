@@ -5,11 +5,13 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/haptics.dart';
 import '../../core/sfx.dart';
+import '../../data/purchases.dart';
 import '../../state/achievements.dart';
 import '../../state/profile.dart';
 import '../../state/settings.dart';
 import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
+import '../../widgets/ui.dart';
 
 /// Bottom tab shell: Home · Library · Quests · Social · Profile.
 ///
@@ -26,6 +28,8 @@ class HomeShell extends ConsumerStatefulWidget {
 }
 
 class _HomeShellState extends ConsumerState<HomeShell> {
+  bool _vipBonusChecked = false;
+
   @override
   void initState() {
     super.initState();
@@ -34,9 +38,22 @@ class _HomeShellState extends ConsumerState<HomeShell> {
     });
   }
 
+  /// VIP members get their weekly bonus once a week when the app opens.
+  Future<void> _payVipBonus() async {
+    final paid = await ref.read(profileProvider.notifier).claimVipWeeklyBonus();
+    if (paid > 0 && mounted) {
+      Sfx.instance.coin();
+      showToast(context, 'VIP weekly bonus: ${groupThousands(paid)} coins', leading: const CoinIcon(size: 20));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final profile = ref.watch(profileProvider).value;
+    if (!_vipBonusChecked && profile != null && profile.isVip) {
+      _vipBonusChecked = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) => _payVipBonus());
+    }
     final dailyReady = profile?.dailyAvailable ?? false;
     // Profile dot: an achievement reward is waiting to be claimed.
     final rewardReady = ref.watch(achievementsProvider.select((list) => list.any((a) => a.done)));

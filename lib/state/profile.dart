@@ -43,10 +43,16 @@ class Economy {
     (coins: 400, tickets: 2, hints: 2),
   ];
 
+  /// Coins per card for a finished board (3.2 until 2026-10-13; the owner found it too generous).
+  static const coinsPerCard = 1.2;
+
+  /// Share of the coins paid again when a solved picture is replayed (0.4 until 2026-10-13).
+  static const replayCoinShare = 0.25;
+
   /// Coins awarded for finishing a board of [cells] cards with [stars].
   /// Harder tilings multiply the payout.
   static int completionCoins(int cells, int stars, {GameMode mode = GameMode.cards}) {
-    final base = (cells * 3.2).round();
+    final base = (cells * coinsPerCard).round();
     return ((base + (stars - 1) * (base ~/ 3)) * mode.multiplier).round();
   }
 
@@ -203,6 +209,21 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
     return true;
   }
 
+  /// Pays the VIP weekly bonus once per week; returns the coins paid (0 when
+  /// the player is not VIP or already got this week's bonus).
+  Future<int> claimVipWeeklyBonus() async {
+    final p = _p;
+    if (!p.isVip || p.id == 'local') return 0;
+    final key = Goals.vipBonusKey(DateTime.now());
+    if (p.claimedGoals.contains(key)) return 0;
+    final claimed = [...p.claimedGoals, key];
+    final trimmed = claimed.length > 60 ? claimed.sublist(claimed.length - 60) : claimed;
+    const bonus = Goals.vipWeeklyBonus;
+    await _apply({'claimedGoals': trimmed, 'coins': p.coins + bonus});
+    _ledger(bonus, 'coins', 'vip-weekly', p.coins + bonus);
+    return bonus;
+  }
+
   /// Daily reward: streak day index (0-6) determines the reward.
   Future<({int coins, int tickets, int hints, int day})?> claimDaily() async {
     final p = _p;
@@ -313,7 +334,7 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
     final p = _p;
     var coins = Economy.completionCoins(cells, stars, mode: mode);
     final xpGain = Economy.completionXp(cells, stars, mode: mode);
-    if (!firstTime) coins = (coins * 0.4).round();
+    if (!firstTime) coins = (coins * Economy.replayCoinShare).round();
     final xp = p.xp + xpGain;
     final level = LevelRewards.levelForXp(xp);
     final levelUp = level > p.level;

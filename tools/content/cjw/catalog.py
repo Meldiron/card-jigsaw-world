@@ -6,10 +6,22 @@ from .lock import locked
 
 SNAP = CACHE / 'catalog.json'
 
+def normalise(rows, kind):
+    """Rows point at our Appwrite Storage copies; the tool keys everything (image cache, rejects,
+    duplicates, provenance) on the original source URL. Swap it in and keep the hosted URL aside."""
+    for r in rows:
+        if kind == 'puzzles':
+            r['hostedImageUrl'] = r.get('imageUrl')
+            if r.get('sourceUrl'): r['imageUrl'] = r['sourceUrl']
+        else:
+            r['hostedCoverUrl'] = r.get('coverUrl')
+            if r.get('coverSourceUrl'): r['coverUrl'] = r['coverSourceUrl']
+    return rows
+
 def dump():
-    packs = api.list_rows('packs')
-    puzzles = api.list_rows('puzzles')
-    events = api.list_rows('events')
+    packs = normalise(api.list_rows('packs'), 'packs')
+    puzzles = normalise(api.list_rows('puzzles'), 'puzzles')
+    events = normalise(api.list_rows('events'), 'events')
     snap = {'at': time.strftime('%Y-%m-%dT%H:%M:%S'), 'packs': packs, 'puzzles': puzzles, 'events': events}
     with locked('catalog'):
         SNAP.write_text(json.dumps(snap))
@@ -34,10 +46,10 @@ def pack_index(snap):
 def refresh_pack(snap, pack_id):
     """Re-read one pack and its puzzles from the server into the snapshot (and save, merge-safe)."""
     try:
-        pack = api.get_row('packs', pack_id)
+        pack = normalise([api.get_row('packs', pack_id)], 'packs')[0]
     except RuntimeError:
         pack = None
-    puzzles = api.list_rows('puzzles', [api.q('equal', pack_id, attribute='packId')])
+    puzzles = normalise(api.list_rows('puzzles', [api.q('equal', pack_id, attribute='packId')]), 'puzzles')
     with locked('catalog'):
         snap = json.loads(SNAP.read_text()) if SNAP.exists() else snap
         snap['packs'] = [p for p in snap['packs'] if p['$id'] != pack_id]

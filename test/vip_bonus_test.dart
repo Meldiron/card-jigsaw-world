@@ -2,16 +2,16 @@ import 'package:card_jigsaw_world/state/rewards.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('VIP weekly bonus is a VIP-only weekly quest worth 500 coins, keyed per week', () {
-    final a = Goals.weekly(const [], DateTime(2026, 10, 12));
-    final b = Goals.weekly(const [], DateTime(2026, 10, 19));
-    final bonusA = a.last;
-    expect(bonusA.vipOnly, isTrue);
-    expect(bonusA.done, isTrue);
-    expect(bonusA.coins, Goals.vipWeeklyBonus);
-    expect(bonusA.coins, 500);
-    expect(bonusA.key, isNot(b.last.key));
-    // free players still get exactly the first five weekly quests
-    expect(a.where((g) => !g.vipOnly).length, Goals.weeklyFree);
+  test('VIP has exactly one extra weekly quest; the weekly bonus is not a quest', () {
+    final week = Goals.weekly(const [], DateTime(2026, 10, 12));
+    expect(week.length, Goals.weeklyFree + 1);
+    expect(week.where((g) => g.vipOnly).length, 1);
+    expect(week.any((g) => g.key.endsWith(':vipbonus')), isFalse);
+  });
+
+  test('the VIP bonus is paid once per week', () {
+    expect(Goals.vipWeeklyBonus, 500);
+    expect(Goals.vipBonusKey(DateTime(2026, 10, 12)), Goals.vipBonusKey(DateTime(2026, 10, 18)));
+    expect(Goals.vipBonusKey(DateTime(2026, 10, 12)), isNot(Goals.vipBonusKey(DateTime(2026, 10, 19))));
   });
 }

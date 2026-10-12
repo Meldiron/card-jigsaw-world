@@ -660,15 +660,27 @@ class _CutOverlay extends CustomPainter {
     // two ever differ, the tiling is still centred in the board's proportions.
     final fitted = tiling.fit(size, imageAspect);
     final origin = Offset((size.width - fitted.width) / 2, (size.height - fitted.height) / 2);
+    // Only the cuts inside the picture: edges on the board's outline are left
+    // to the frame's own rounded border, which a square outline would cross
+    // at the corners.
+    const eps = 0.5;
+    bool onOutline(Offset a, Offset b) =>
+        (a.dx.abs() < eps && b.dx.abs() < eps) ||
+        ((a.dx - fitted.width).abs() < eps && (b.dx - fitted.width).abs() < eps) ||
+        (a.dy.abs() < eps && b.dy.abs() < eps) ||
+        ((a.dy - fitted.height).abs() < eps && (b.dy - fitted.height).abs() < eps);
+    final path = Path();
     for (var s = 0; s < tiling.cells; s++) {
       final poly = tiling.polygon(s, fitted);
-      final path = Path()..moveTo(poly.first.dx + origin.dx, poly.first.dy + origin.dy);
-      for (final v in poly.skip(1)) {
-        path.lineTo(v.dx + origin.dx, v.dy + origin.dy);
+      for (var i = 0; i < poly.length; i++) {
+        final a = poly[i], b = poly[(i + 1) % poly.length];
+        if (onOutline(a, b)) continue;
+        path
+          ..moveTo(a.dx + origin.dx, a.dy + origin.dy)
+          ..lineTo(b.dx + origin.dx, b.dy + origin.dy);
       }
-      path.close();
-      canvas.drawPath(path, p);
     }
+    canvas.drawPath(path, p);
   }
 
   @override

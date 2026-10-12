@@ -195,3 +195,14 @@ macro") and reject anything representational.
 
 Puzzle titles come from the search topic. iNaturalist pictures are now titled with the species' common name. If a title is wrong (wrong species, filename-like, scientific name), fix it with
 `tools/content/run.sh retitle PUZZLE_ID New title`.
+
+
+## Pictures are self-hosted
+
+Rows never reference third-party images (owner rule, 2026-10-13). `apply`, `clone` and cover updates
+upload each picture to the Appwrite Storage bucket `puzzle-images` first (`cjw/host.py`, key in
+`secrets/appwrite-storage-key.txt`) and write our `/view` and `/preview` URLs; the original address goes
+to `sourceUrl` / `coverSourceUrl`. The catalogue snapshot swaps the source URL back into `imageUrl` /
+`coverUrl`, so rejects, duplicates and the image cache keep working on source addresses. After any manual
+row edit, run `tools/content/run.sh host` (or `--pack ID`) to host anything that slipped through. Source
+URLs may now be up to 2000 characters (the old 512 limit applied to row URLs).

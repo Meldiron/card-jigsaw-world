@@ -27,6 +27,11 @@ skills under `.claude/skills/` hold the detailed workflows.
 - **QA the exact user path**: when fixing a reported problem, reproduce and verify the path the user
   described (e.g. Home > Continue > puzzle > pause menu), with a simulator screenshot you have looked
   at. Describing a fix on a screen the user never reaches is not a fix.
+- **Pictures are self-hosted** (owner rule, 2026-10-13): every catalogue picture and cover is served
+  from the Appwrite Storage bucket `puzzle-images` (`/view` for the game, `/preview?width=600` for tiles,
+  `/preview?width=1080` for covers). Never write a third-party image URL to the database. The content
+  tool hosts each pick on apply (`tools/content/cjw/host.py`); `tools/content/run.sh host` migrates
+  anything left. The original address stays in `sourceUrl` (puzzles) / `coverSourceUrl` (packs, events).
 - **Every build also redeploys the web site** (`tools/dev/deploy-web.sh`) from the same commit.
 - **Versioning**: one version string per App Store cycle; TestFlight builds only bump the build number.
   Details in the apple-release skill. Never bump the version for a TestFlight cut.
@@ -136,7 +141,8 @@ skills under `.claude/skills/` hold the detailed workflows.
 
 `secrets/` is git-ignored (only `app-store-connect-issuer-id.txt` is tracked): App Store Connect key
 `AuthKey_9QC72A5QMN.p8`, distribution `Certificates.p12` + password, Appwrite keys
-(`appwrite-api-key.txt` rows/tables scopes, `appwrite-sites-key.txt`), `content-keys.env` (Openverse
+(`appwrite-api-key.txt` rows/tables scopes, `appwrite-storage-key.txt` files/rows scopes for picture
+hosting, `appwrite-sites-key.txt`), `content-keys.env` (Openverse
 client). Never print or commit their values. GitHub Actions has the signing secrets.
 
 ## Work that may be running in parallel

@@ -242,6 +242,7 @@ class _BoardWidgetState extends State<BoardWidget> {
       gap: gap,
       radius: radius,
       selected: selected || dragging,
+      dragging: dragging,
       hovered: hovered,
       lift: dragging ? 1.0 : (selected ? 0.5 : 0),
       cardStyle: widget.cardStyle,
@@ -411,6 +412,7 @@ class _CardFace extends StatelessWidget {
     required this.gap,
     required this.radius,
     required this.selected,
+    this.dragging = false,
     required this.hovered,
     required this.lift,
     required this.cardStyle,
@@ -427,6 +429,11 @@ class _CardFace extends StatelessWidget {
   final double gap;
   final double radius;
   final bool selected;
+
+  /// Picked up under the finger: square corners, no gutter, frame or dim, and
+  /// the outline outside the picture, so every pixel up to the corners shows
+  /// while the player looks for its spot (owner feedback 2026-10-13).
+  final bool dragging;
   final _Hover hovered;
   final double lift;
   final CardStyle cardStyle;
@@ -436,6 +443,9 @@ class _CardFace extends StatelessWidget {
   final bool grouped;
 
   static const _selectionStroke = 5.6;
+
+  /// Outline of a dragged card, drawn entirely outside its picture.
+  static const _dragStroke = 2.5;
 
   /// Drawn at twice this inside the clip, so 2 px show.
   static const _groupStroke = 4.0;
@@ -471,7 +481,7 @@ class _CardFace extends StatelessWidget {
       builder: (_, lockT, _) => TweenAnimationBuilder<_EdgeInsets>(
         // Each edge's gutter slides shut as the card snaps to its group, in
         // step with the card's own move.
-        tween: _EdgeInsetsTween(end: _EdgeInsets([for (final fused in fusedEdges) fused ? -_overlap : (locked ? 0.0 : half)])),
+        tween: _EdgeInsetsTween(end: _EdgeInsets([for (final fused in fusedEdges) fused ? -_overlap : (locked || dragging ? 0.0 : half)])),
         duration: const Duration(milliseconds: 280),
         curve: Curves.easeOutCubic,
         builder: (_, insets, _) {
@@ -506,13 +516,13 @@ class _CardFace extends StatelessWidget {
               polygon: polygon,
               source: source,
               insets: insets.values,
-              radius: radius * (1 - lockT),
+              radius: dragging ? 0 : radius * (1 - lockT),
               fusedEdges: fusedEdges,
               fans: fans,
               gutterHalf: gutterHalf,
               borderColor: classic ? frame : Colors.transparent,
-              borderWidth: classic ? frameWidth * (1 - lockT) : 0,
-              edgeColor: classic ? edge.withValues(alpha: edge.a * (1 - lockT)) : null,
+              borderWidth: classic && !dragging ? frameWidth * (1 - lockT) : 0,
+              edgeColor: classic && !dragging ? edge.withValues(alpha: edge.a * (1 - lockT)) : null,
               shadow: lockT > 0.95 || lift == 0 ? null : Colors.black.withValues(alpha: (0.25 + 0.2 * lift) * (1 - lockT)),
               shadowBlur: 10 + lift * 20,
               shadowDy: 4 + lift * 10,
@@ -521,10 +531,11 @@ class _CardFace extends StatelessWidget {
                   : hovered == _Hover.blocked
                       ? Colors.black.withValues(alpha: 0.35)
                       : null,
-              dim: _dim * (1 - lockT),
+              dim: dragging ? 0 : _dim * (1 - lockT),
               outline: outline,
-              outlineWidth: stroke,
+              outlineWidth: dragging ? _dragStroke : stroke,
               outlineOuterOnly: outerOnly,
+              outlineOutside: dragging,
             ),
           );
         },
@@ -583,6 +594,7 @@ class _CardPainter extends CustomPainter {
     required this.outline,
     required this.outlineWidth,
     required this.outlineOuterOnly,
+    this.outlineOutside = false,
   });
 
   final ui.Image image;
@@ -614,6 +626,9 @@ class _CardPainter extends CustomPainter {
   final double dim;
   final Color? outline;
   final double outlineWidth;
+
+  /// Draw the outline just outside the shape instead of inside it.
+  final bool outlineOutside;
 
   /// Whether the outline follows only the open (non-fused) edges, so a fused
   /// group gets one border around its outside; otherwise the whole shape.
@@ -951,13 +966,25 @@ class _CardPainter extends CustomPainter {
           ..color = edgeColor!);
       }
     }
-    if (outline != null && outlineWidth > 0) {
+    if (outline != null && outlineWidth > 0 && !outlineOutside) {
       canvas.drawPath(outlineOuterOnly ? _outline(pts, outlineWidth) : shape, Paint()
         ..style = PaintingStyle.stroke
         ..strokeWidth = outlineWidth
         ..color = outline!);
     }
     canvas.restore();
+    if (outline != null && outlineWidth > 0 && outlineOutside) {
+      // Twice the width, clipped to everything outside the shape: the band
+      // hugs the picture without covering a pixel of it.
+      final outside = Path.combine(PathOperation.difference, Path()..addRect((Offset.zero & size).inflate(outlineWidth * 2)), shape);
+      canvas.save();
+      canvas.clipPath(outside);
+      canvas.drawPath(outlineOuterOnly ? _outline(pts, 0) : shape, Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = outlineWidth * 2
+        ..color = outline!);
+      canvas.restore();
+    }
   }
 
   @override
@@ -973,6 +1000,7 @@ class _CardPainter extends CustomPainter {
       o.tint != tint ||
       o.outline != outline ||
       o.outlineWidth != outlineWidth ||
+      o.outlineOutside != outlineOutside ||
       o.outlineOuterOnly != outlineOuterOnly ||
       o.dim != dim ||
       o.borderWidth != borderWidth ||

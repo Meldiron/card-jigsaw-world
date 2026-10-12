@@ -228,6 +228,18 @@ def cmd_sources(a):
           'see docs/content-sources.md.')
 
 
+def cmd_host(a):
+    """Copy every catalogue picture and cover into Appwrite Storage and point the rows at it."""
+    from . import host
+    from .paths import REPORTS
+    snap = catalog.load(refresh=True)
+    done, failures = host.migrate(snap, pack=a.pack, workers=a.workers, dry=a.dry)
+    if failures:
+        import json as _j
+        (REPORTS / 'host-failures.json').write_text(_j.dumps([{'table': t, 'id': i, 'src': s, 'kind': k, 'error': e} for (t, i, s, k), e in failures], indent=1))
+        print('  failures written to reports/host-failures.json')
+
+
 def cmd_retitle(a):
     """Rename one puzzle (titles come from search topics and are sometimes inexact)."""
     title = ' '.join(a.title).strip()
@@ -240,6 +252,7 @@ def main(argv):
     ap = argparse.ArgumentParser(prog='cli.py')
     sub = ap.add_subparsers(dest='cmd', required=True)
     sub.add_parser('dump').set_defaults(f=cmd_dump)
+    p = sub.add_parser('host'); p.add_argument('--pack'); p.add_argument('--workers', type=int, default=4); p.add_argument('--dry', action='store_true'); p.set_defaults(f=cmd_host)
     p = sub.add_parser('scan'); p.add_argument('--pack'); p.add_argument('--force', action='store_true'); p.add_argument('--workers', type=int, default=8); p.set_defaults(f=cmd_scan)
     p = sub.add_parser('audit'); p.add_argument('--pack', nargs='*'); p.add_argument('--refresh', action='store_true'); p.set_defaults(f=cmd_audit)
     p = sub.add_parser('pool'); p.add_argument('pack'); p.add_argument('--topic', nargs='*'); p.add_argument('--more', action='store_true'); p.add_argument('--fetch', type=int); p.set_defaults(f=cmd_pool)

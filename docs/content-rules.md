@@ -72,3 +72,14 @@ use `Daily`.
 Keep prices consistent with neighbours in the same category: free starter packs (`isFree`),
 coin packs 300–900 coins, ticket packs 2–4 tickets for premium subjects. New AI and Abstract packs
 follow the same spread (about a third free, most 400–800 coins, one or two ticket packs).
+
+
+## Hosting (owner rule, 2026-10-13)
+
+The app never loads a picture from a third party. Every picture and cover is downloaded once, normalised
+to a JPEG of at most 1200 px wide (quality 86) and stored in the Appwrite Storage bucket `puzzle-images`
+under an id derived from its source URL. Rows point at our endpoints: `imageUrl` = `/view`, `thumbUrl` =
+`/preview?width=600&quality=80`, pack and event `coverUrl` = `/preview?width=1080&quality=82`. The source
+address stays in `sourceUrl` / `coverSourceUrl` for attribution, rejects and duplicate checks.
+`tools/content/cli.py apply` hosts its picks itself; `cli.py host [--pack ID]` migrates anything left
+(idempotent; `reports/host-failures.json` lists sources that could not be fetched).

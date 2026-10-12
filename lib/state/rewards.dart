@@ -111,8 +111,12 @@ class Goals {
   static const dailyFree = 3;
   static const weeklyFree = 5;
 
-  /// Coins VIP members claim once a week from the weekly quest list.
+  /// Coins VIP members get once a week (paid when the app opens, not a quest:
+  /// VIP has exactly one extra weekly quest).
   static const vipWeeklyBonus = 500;
+
+  /// Marks the week's VIP bonus as paid (stored with the claimed quests).
+  static String vipBonusKey(DateTime now) => '${weekKey(now)}:vipbonus';
 
   /// Daily goals rotate a mode challenge so every tiling gets played.
   static List<Goal> daily(Iterable<PuzzleProgress> all, DateTime now) {
@@ -139,9 +143,6 @@ class Goals {
       Goal(key: '$k:big3', title: 'Finish 3 boards of 5x5 or bigger', progress: week.where((p) => p.gridSize >= 25).length, target: 3, coins: 0, tickets: 2, icon: 'bigBoard', minCells: 25),
       Goal(key: '$k:modes', title: 'Play every mode once', progress: {for (final p in week) p.mode}.length, target: GameMode.values.length, coins: 0, tickets: 2, icon: 'puzzle'),
       Goal(key: '$k:hex2', title: 'Finish 2 hexagon boards', progress: week.where((p) => p.mode == GameMode.hexagons.code).length, target: 2, coins: 0, tickets: 1, icon: 'puzzle', mode: GameMode.hexagons, vipOnly: true),
-      // The VIP weekly bonus promised on the VIP card and in the App Store
-      // description: always complete, claimable once per week.
-      Goal(key: '$k:vipbonus', title: 'VIP weekly bonus', progress: 1, target: 1, coins: vipWeeklyBonus, icon: 'vip', vipOnly: true),
     ];
   }
 

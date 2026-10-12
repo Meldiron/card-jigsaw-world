@@ -99,6 +99,29 @@ bool openCreative(BuildContext context, WidgetRef ref, Creative creative) {
   return true;
 }
 
+const _tabRoots = {'/home', '/library', '/events', '/social', '/profile'};
+
+/// Opens [creative]'s destination from inside a game: the game and its menus
+/// close and the player lands on the offer itself (a tab, or the store on top
+/// of Home). Returns false when the offer cannot open here (purchases on the
+/// web), so the caller carries on as if no button had been tapped.
+bool leaveGameForCreative(BuildContext context, WidgetRef ref, Creative creative) {
+  if (creative.sellsPurchase && !ref.read(platformCapsProvider).purchases) {
+    showToast(context, purchasesOnIphoneMessage, icon: CupertinoIcons.device_phone_portrait);
+    return false;
+  }
+  final router = GoRouter.of(context);
+  final route = creative.route;
+  final path = Uri.parse(route).path;
+  if (_tabRoots.contains(path)) {
+    router.go(route);
+  } else {
+    router.go('/home');
+    WidgetsBinding.instance.addPostFrameCallback((_) => router.push(route));
+  }
+  return true;
+}
+
 /// Every amount and price in the copy comes from the store catalogue
 /// ([StoreProducts]), the pack price policy and [Economy], so a change to a
 /// bundle or a price cannot leave an ad promising the old numbers.
@@ -171,29 +194,31 @@ Creative pickCreative(WidgetRef ref) {
 }
 
 /// Records a completion and shows an interstitial when the cadence allows.
-/// Returns after the ad is closed (or immediately when none is shown).
-Future<void> maybeShowInterstitial(BuildContext context, WidgetRef ref) async {
+/// Returns after the ad is closed (or immediately when none is shown). When
+/// the player tapped the offer, returns its creative: the caller should leave
+/// the game for it ([leaveGameForCreative]) instead of moving on.
+Future<Creative?> maybeShowInterstitial(BuildContext context, WidgetRef ref) async {
   final store = ref.read(localStoreProvider);
   final profile = ref.read(profileProvider).value;
   store.lifetimeCompletions = store.lifetimeCompletions + 1;
   store.completionsSinceAd = store.completionsSinceAd + 1;
-  if (profile?.isVip == true) return;
-  if (store.lifetimeCompletions <= HouseAdPolicy.skipFirstCompletions) return;
-  if (HouseAdPolicy.interstitialsThisSession >= HouseAdPolicy.maxPerSession) return;
+  if (profile?.isVip == true) return null;
+  if (store.lifetimeCompletions <= HouseAdPolicy.skipFirstCompletions) return null;
+  if (HouseAdPolicy.interstitialsThisSession >= HouseAdPolicy.maxPerSession) return null;
   // A break follows every Nth completion, or the current one when the last
   // break is more than [minGap] ago (first completion of a session counts).
   final last = store.lastInterstitialAt;
   final gapElapsed = last == null || DateTime.now().difference(last) >= HouseAdPolicy.minGap;
-  if (store.completionsSinceAd < HouseAdPolicy.everyNthCompletion && !gapElapsed) return;
+  if (store.completionsSinceAd < HouseAdPolicy.everyNthCompletion && !gapElapsed) return null;
   final rewarded = store.lastRewardedAt;
-  if (rewarded != null && DateTime.now().difference(rewarded) < HouseAdPolicy.rewardedShield) return;
+  if (rewarded != null && DateTime.now().difference(rewarded) < HouseAdPolicy.rewardedShield) return null;
   store.completionsSinceAd = 0;
   store.lastInterstitialAt = DateTime.now();
   HouseAdPolicy.interstitialsThisSession++;
   final creative = pickCreative(ref);
   final cover = pickCover(ref, creative);
-  if (!context.mounted) return;
-  await Navigator.of(context, rootNavigator: true).push(
+  if (!context.mounted) return null;
+  final result = await Navigator.of(context, rootNavigator: true).push<Object?>(
     PageRouteBuilder(
       opaque: true,
       fullscreenDialog: true,
@@ -202,7 +227,11 @@ Future<void> maybeShowInterstitial(BuildContext context, WidgetRef ref) async {
       transitionsBuilder: (_, a, _, child) => FadeTransition(opacity: a, child: child),
     ),
   );
+  return result == _ctaTapped ? creative : null;
 }
+
+/// Pop result of an interstitial whose offer button was tapped.
+const _ctaTapped = 'cta';
 
 /// Shows the rewarded card. Returns true when the reward was earned.
 Future<bool> showRewardedHouseAd(BuildContext context, WidgetRef ref, {required int rewardCoins}) async {
@@ -293,8 +322,14 @@ class _HouseAdScreenState extends ConsumerState<HouseAdScreen> {
       openCreative(context, ref, widget.creative);
       return;
     }
-    Navigator.of(context).pop(widget.rewarded ? true : null);
-    openCreative(context, ref, widget.creative);
+    if (widget.rewarded) {
+      Navigator.of(context).pop(true);
+      openCreative(context, ref, widget.creative);
+      return;
+    }
+    // An ad break between puzzles: the game decides where to go (it leaves the
+    // puzzle for the offer instead of moving on to the next one).
+    Navigator.of(context).pop(_ctaTapped);
   }
 
   @override

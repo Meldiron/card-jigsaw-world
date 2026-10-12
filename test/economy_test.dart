@@ -94,7 +94,7 @@ void main() {
     test('the app mirrors the script', () {
       expect(constant('MIN_COINS'), PackPricePolicy.minCoins);
       expect(constant('MAX_COINS'), PackPricePolicy.maxCoins);
-      final perPicture = tierShare('TIER_HOURS', 'standard') * constant('REGULAR_COINS_PER_HOUR') / constant('REFERENCE_PICTURES');
+      final perPicture = tierShare('TIER_PACK_COINS', 'standard') / constant('REFERENCE_PICTURES');
       expect((24 * perPicture / 100).round() * 100, PackPricePolicy.standardPackCoins);
       final tickets = constant('REGULAR_TICKETS_PER_WEEK');
       expect([for (final t in ['standard', 'plus', 'special']) (tierShare('TICKET_TIER_WEEKS', t) * tickets).round()], PackPricePolicy.ticketPackTickets);

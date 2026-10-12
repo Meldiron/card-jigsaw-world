@@ -2,6 +2,7 @@
 """Card Jigsaw World content CLI. Run with the venv python that has Pillow, numpy, requests.
 
   cli.py dump                         snapshot the live catalogue into the cache
+  cli.py host [--pack ID] [--dry]     copy pictures and covers into Appwrite Storage, rows point there
   cli.py scan [--pack ID] [--all]     download + hash + measure images of catalogue puzzles
   cli.py audit [--pack ID]            report rule violations per pack (writes reports/audit-<date>.md)
   cli.py pool PACK [--topics N]       source candidates for a pack from its spec

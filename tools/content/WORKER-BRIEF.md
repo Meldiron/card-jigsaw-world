@@ -92,3 +92,6 @@ do not run git yourself.
 
 Puzzle titles come from the search topic. iNaturalist pictures are now titled with the species' common name. If a title is wrong (wrong species, filename-like, scientific name), fix it with
 `tools/content/run.sh retitle PUZZLE_ID New title`.
+
+- Pictures are self-hosted: `apply` uploads every pick to our Appwrite Storage and writes our URLs. Never
+  write image URLs into rows by hand; if you must edit a row, run `tools/content/run.sh host --pack PACK`.

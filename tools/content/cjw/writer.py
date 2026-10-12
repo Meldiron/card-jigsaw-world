@@ -1,6 +1,6 @@
 """Create / replace puzzles and keep pack rows consistent (imageCount, cover, blurhash, accent)."""
 import hashlib, time
-from . import api, catalog, imagecache, state, filters, checkpoint
+from . import host, api, catalog, imagecache, state, filters, checkpoint
 from .pool import load_pool, save_pool, nice_title, HashIndex
 
 def puzzle_id_for(url, pack_id=''):
@@ -38,7 +38,7 @@ def select_candidates(pool, spec, kept_metas, kept_authors, need, picks=(), auto
             return False
         if state.is_rejected(c['url'], spec['id'], rejected): return no('rejected earlier')
         # Appwrite string columns are 512 chars; such URLs would abort apply mid-run.
-        if len(c['url']) > 512 or len(c.get('thumb') or '') > 512: return no('URL longer than 512 characters')
+        if len(c['url']) > 2000: return no('source URL longer than 2000 characters')   # rows store our own URLs; sourceUrl holds 2000
         if c.get('status') != 'ok': return no(f"candidate status {c.get('status')}")
         if c.get('hotlink') is False: return no('host forbids hotlinking (re-host first)')      # e.g. Pixabay
         m = _meta_ok(c['url'])
@@ -114,7 +114,7 @@ def apply(spec, snap, target=None, picks=(), auto=True, dry=False, daily=False):
         # replace in place: keep ids, dates and sort order
         for p, c in zip(removed, chosen):
             m = _meta_ok(c['url'])
-            data = dict(title=nice_title(c, c.get('topic', 'Daily picture')), imageUrl=c['url'], thumbUrl=c['thumb'] or c['url'],
+            data = dict(title=nice_title(c, c.get('topic', 'Daily picture')), **host.puzzle_urls(c['url']),
                         author=c['author'][:96], source=c['source'][:128], accent=m['accent'], blurhash=m['blurhash'])
             api.update_row('puzzles', p['$id'], data)
             state.add_provenance(p['$id'], dict(url=c['url'], author=c['author'], licence=c['licence'], source=c['source'], page=c.get('page', ''), provider=c['provider'], packId=pack_id, replaced=p['imageUrl'], at=time.strftime('%Y-%m-%d'), **_prov_extra(c)))
@@ -134,7 +134,7 @@ def apply(spec, snap, target=None, picks=(), auto=True, dry=False, daily=False):
             m = _meta_ok(c['url'])
             pid = puzzle_id_for(c['url'], pack_id)
             title = nice_title(c, pack['name'] if str(c.get('topic', '')).startswith('cat:') else c.get('topic', pack['name']), taken); taken.add(title)
-            data = dict(packId=pack_id, title=title, imageUrl=c['url'], thumbUrl=c['thumb'] or c['url'],
+            data = dict(packId=pack_id, title=title, **host.puzzle_urls(c['url']),
                         author=c['author'][:96], source=c['source'][:128], sortOrder=order, accent=accent, blurhash=m['blurhash'])
             try:
                 api.create_row('puzzles', data, row_id=pid)
@@ -167,8 +167,9 @@ def finalize_pack(spec, snap, accent=None):
     if not cover:
         cover = pack.get('coverUrl') if pack.get('coverUrl') in urls else (urls[0] if urls else '')
     data = {'imageCount': len(puzzles)}
-    if cover and cover != pack.get('coverUrl'):
-        data['coverUrl'] = cover
+    # covers are always served from our storage; re-host a cover that still points elsewhere
+    if cover and (cover != pack.get('coverUrl') or not host.is_hosted(pack.get('hostedCoverUrl') or '')):
+        data.update(host.cover_fields(cover))
     m = imagecache.load_meta(cover) if cover else None
     if m and m.get('ok'):
         if m['blurhash'] != pack.get('blurhash'): data['blurhash'] = m['blurhash']
@@ -183,7 +184,7 @@ def finalize_pack(spec, snap, accent=None):
         state.log('pack-update', pack=pack_id, fields=sorted(data))
     if pack.get('eventId') and ('coverUrl' in data or 'accent' in data):
         try:
-            ev = {k: v for k, v in data.items() if k in ('coverUrl', 'accent')}
+            ev = {k: v for k, v in data.items() if k in ('coverUrl', 'coverSourceUrl', 'accent')}
             api.update_row('events', pack['eventId'], ev)
         except RuntimeError as e:
             print('  event update failed', str(e)[:100])
@@ -220,8 +221,8 @@ def clone(src_id, dst_id, snap):
     prov = state.provenance()
     for i, p in enumerate(src):
         pid = puzzle_id_for(p['imageUrl'], dst_id)
-        data = {k: p.get(k) for k in ('title', 'imageUrl', 'thumbUrl', 'author', 'source', 'accent', 'blurhash')}
-        data.update(packId=dst_id, sortOrder=i)
+        data = {k: p.get(k) for k in ('title', 'author', 'source', 'accent', 'blurhash')}
+        data.update(host.puzzle_urls(p['imageUrl']), packId=dst_id, sortOrder=i)
         try:
             api.create_row('puzzles', data, row_id=pid)
         except RuntimeError as e:

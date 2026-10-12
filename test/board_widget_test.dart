@@ -451,4 +451,30 @@ void main() {
       await dump(tester, 'placed_selected_${mode.code}_dark', await render(tester, single, width: w, height: h, image: image, dark: true, selected: sel));
     }
   });
+
+  testWidgets('dragged card: square corners, no frame, outline outside the picture', (tester) async {
+    const area = Size(360, 460);
+    final image = picture(900, 1200);
+    for (final mode in [GameMode.cards, GameMode.hexagons]) {
+      final spec = BoardSpec.forPicture(mode, 2, 0.75);
+      final tiling = spec.tiling;
+      final size = tiling.fit(area, 0.75);
+      final w = size.width.roundToDouble(), h = size.height.roundToDouble();
+      final board = boardWithPlaced(spec, const {});
+      await render(tester, board, width: w, height: h, image: image, dark: true);
+      final origin = tester.getTopLeft(find.byType(BoardWidget));
+      final slot = spec.cells ~/ 2;
+      final gesture = await tester.startGesture(origin + tiling.cellCenter(slot, Size(w, h)));
+      await gesture.moveBy(const Offset(18, 10));
+      await tester.pump();
+      await gesture.moveBy(const Offset(18, 10));
+      await tester.pump(const Duration(milliseconds: 400));
+      final boundary = tester.renderObject<RenderRepaintBoundary>(find.ancestor(of: find.byType(BoardWidget), matching: find.byType(RepaintBoundary)).first);
+      late ui.Image shot;
+      await tester.runAsync(() async => shot = await boundary.toImage());
+      await dump(tester, 'dragging_${mode.code}_dark', shot);
+      await gesture.cancel();
+      await tester.pumpAndSettle();
+    }
+  });
 }

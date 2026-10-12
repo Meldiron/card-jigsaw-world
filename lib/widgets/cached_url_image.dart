@@ -36,11 +36,16 @@ class CachedUrlImage extends ImageProvider<CachedUrlImage> {
   }
 
   static Future<ui.Codec> _load(CachedUrlImage key, ImageDecoderCallback decode) async {
-    final file = await DefaultCacheManager().getSingleFile(key.url);
-    final bytes = await file.readAsBytes();
-    if (bytes.isEmpty) throw StateError('Empty image file for ${key.url}');
-    final buffer = await ui.ImmutableBuffer.fromUint8List(bytes);
-    return decode(buffer);
+    try {
+      final file = await DefaultCacheManager().getSingleFile(key.url);
+      final bytes = await file.readAsBytes();
+      if (bytes.isEmpty) throw StateError('Empty image file for ${key.url}');
+      final buffer = await ui.ImmutableBuffer.fromUint8List(bytes);
+      return await decode(buffer);
+    } catch (e) {
+      debugPrint('CachedUrlImage failed: ${key.url} -> $e');
+      rethrow;
+    }
   }
 
   @override

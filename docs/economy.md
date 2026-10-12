@@ -6,7 +6,9 @@ gold and tickets, update pack prices and what purchases give, keep the prices").
 
 ## In one paragraph
 
-A player earns about **6,000 coins per hour of play** (5,000 to 7,000 depending on how they play, and
+*Update 2026-10-13: finishing a puzzle now pays 1.2 coins per card (was 3.2) and replays pay 25% (was 40%), so a regular player earns about **3,500 coins per hour**; see "Lower puzzle rewards" at the end. The numbers below are the model before that change.*
+
+A player earned about **6,000 coins per hour of play** (5,000 to 7,000 depending on how they play, and
 more in the first week), and about **15 to 18 tickets per week whatever they play**, because tickets come
 from logging in (daily gift, weekly quests), not from playing longer. Before this change a pack cost 300
 to 900 coins, which is 3 to 9 minutes of play, and a ticket pack cost 2 to 4 tickets, about two days of
@@ -505,3 +507,23 @@ if __name__ == '__main__':
 ```
 
 </details>
+
+
+## Lower puzzle rewards (owner request, 2026-10-13)
+
+`Economy.coinsPerCard` 3.2 -> 1.2 and `Economy.replayCoinShare` 0.4 -> 0.25; stars still add a third per
+star above one and modes still multiply. Pack prices stay as set on 2026-10-12, so a pack now costs more
+play time (`tools/store/apply_pack_prices.py` keeps `TIER_PACK_COINS` and records
+`REGULAR_COINS_PER_HOUR = 3500`).
+
+| Board (3 stars, first time) | Before | After |
+|---|---|---|
+| Cards 4x4 (16) | 85 | 31 |
+| Cards 6x6 (36) | 191 | 71 |
+| Squares 4x5 (20) | 122 | 46 |
+| Triangles Easy (28) | 202 | 76 |
+| Hexagons Easy (38) | 303 | 114 |
+| Hexagons largest (112) | 894 | 333 |
+
+Regular player: boards 27,300 -> 10,200 coins a week; all sources 41,400 -> 24,300 a week (about 5,900 ->
+3,500 coins per hour); a standard 2,400-coin pack goes from about 25 to about 40 minutes of play.

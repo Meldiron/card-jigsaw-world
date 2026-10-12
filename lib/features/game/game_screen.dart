@@ -474,8 +474,9 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                 _ctrl.restart();
               },
               onNext: (next) async {
-                await maybeShowInterstitial(context, ref);
+                final offer = await maybeShowInterstitial(context, ref);
                 if (!context.mounted) return;
+                if (offer != null && leaveGameForCreative(context, ref, offer)) return;
                 if (next != null) {
                   // Same mode and tier; the next picture settles its own size.
                   context.pushReplacement('/game/${next.id}/${BoardCode.toPath(_spec.fullCode)}');
@@ -484,8 +485,10 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                 }
               },
               onHome: () async {
-                await maybeShowInterstitial(context, ref);
-                if (context.mounted) context.pop();
+                final offer = await maybeShowInterstitial(context, ref);
+                if (!context.mounted) return;
+                if (offer != null && leaveGameForCreative(context, ref, offer)) return;
+                context.pop();
               },
             ),
         ],
