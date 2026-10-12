@@ -16,3 +16,4 @@ Tooling notes: `commons_search(quality=True)` without `quality_cat` returns 0 fi
 - daily-2025-05: replaced 28 (people 13, landscape 6, text 2, weak 7 incl. 1 kept frosted-berries frame on flat haze, 1 snapshot of poppies on asphalt); 31/31 dates; verified.
 - daily-2025-06: replaced 28 (people 13, landscape 6, weak 9: desk/laptop shots, flat sky and sea gradients, phone bokeh, dark interior); 30/30 dates; verified.
 - daily-2025-07: replaced 38 (people 10, landscape 7, weak 11; similar 10: after the first apply the month held 5 waterfalls and 4 Isfahan tile interiors, so 7 were swapped for animals and art, 3 more for distinct subjects); 31/31 dates; verified.
+- daily-2025-08: replaced 33 (people 9, landscape 8, text 1, weak 11 incl. 2 kept ones: tinted HDR moor, Persian carpet with inscriptions; replaced picks 4 blocked by the author cap); 31/31 dates; verified.

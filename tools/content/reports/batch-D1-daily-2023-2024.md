@@ -83,3 +83,5 @@ Pool growth note: Commons downloads were taking ~20-30 s each (429 back-off with
 - daily-2024-03: replaced 29 in place (review pass: people 16, landscape 2, text 3, weak 6, plus 1 more; weak 1 added now: faded Shitao landscape); 31/31 dates; verified.
 - daily-2024-04: replaced 25 in place (review pass: people 14, landscape 2, weak 7, plus 2 more); 30/30 dates; verified.
 - daily-2024-05: replaced 26 in place (review pass: people 11, landscape 3, text 2, weak 3, plus 6 more; quality 1: kept Cropsey painting was 630x893, under the 640 px floor); 31/31 dates; verified.
+- daily-2024-06: replaced 26 in place (review pass: people 11, landscape 4, text 1, weak 3, plus 4 more; weak 3 added now: leaf on bokeh, spoonbill on flat dark water, toucan on plain grey); pool review of ~480 new iNaturalist/NGA/Commons candidates during this month: people 37, text 1, quality 7, weak 393 (shared pool); 30/30 dates; verified.
+- daily-2024-07: replaced 31 in place (review pass: people 18, landscape 1, weak 4, plus 5 more; weak 4 added now: cloud-only sky, misty valley, fog beach, lynx spider); 31/31 dates; verified.

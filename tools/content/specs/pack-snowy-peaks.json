@@ -2,7 +2,7 @@
  "id": "pack-snowy-peaks",
  "name": "Snowy Peaks",
  "category": "Mountains",
- "description": "White summits from the Matterhorn and Mont Blanc to Denali and Ama Dablam.",
+ "description": "White summits from the Matterhorn and the Eiger to Everest, Fitz Roy and Ama Dablam.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
@@ -57,15 +57,16 @@
   "Mount Kazbek"
  ],
  "more_topics": [
-  "Dent Blanche",
-  "Mount Olympus snow",
-  "Mount Damavand",
-  "Ushba",
+  "Eiger north face",
+  "Jungfrau",
+  "Mount Fuji snow",
+  "Denali",
+  "Mont Blanc massif",
   "Cerro Torre",
   "Mount Taranaki snow",
-  "Schreckhorn",
-  "Watzmann",
-  "Monte Rosa",
-  "Dom Mischabel"
- ]
+  "Ushba",
+  "Dent Blanche",
+  "Monte Rosa"
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/MtAmadablam.jpg/1280px-MtAmadablam.jpg"
 }
