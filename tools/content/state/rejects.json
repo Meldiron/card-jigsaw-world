@@ -2231,6 +2231,12 @@
 "pack": "pack-nebulae",
 "reason": "landscape"
 },
+"https://images-assets.nasa.gov/image/PIA17563/PIA17563~medium.jpg": {
+"at": "2026-10-13",
+"label": "evpack-star-wars-day-2027-08",
+"pack": "evpack-star-wars-day-2027",
+"reason": "similar"
+},
 "https://images-assets.nasa.gov/image/PIA20695/PIA20695~medium.jpg": {
 "at": "2026-10-12",
 "label": "pack-galaxies-11",
@@ -20567,6 +20573,12 @@
 "pack": "ai-dream-machines",
 "reason": "similar"
 },
+"https://live.staticflickr.com/65535/52305501893_683ecf5b12_b.jpg": {
+"at": "2026-10-13",
+"label": "p-87e39796baed",
+"pack": "ai-myths-monsters",
+"reason": "quality"
+},
 "https://live.staticflickr.com/65535/52306065816_c056a0a230_b.jpg": {
 "at": "2026-10-12",
 "label": "c72",
@@ -22516,6 +22528,12 @@
 "label": "pack-birds-of-prey-17",
 "pack": "pack-birds-of-prey",
 "reason": "off-theme"
+},
+"https://live.staticflickr.com/65535/52577252341_6825d90303_b.jpg": {
+"at": "2026-10-13",
+"label": "pack-birds-of-prey-16",
+"pack": "pack-birds-of-prey",
+"reason": "quality"
 },
 "https://live.staticflickr.com/65535/52577313853_05945bc6fb_b.jpg": {
 "at": "2026-10-12",
@@ -37481,6 +37499,12 @@
 "pack": "daily-2024-06",
 "reason": "people"
 },
+"https://picsum.photos/id/456/900/1200": {
+"at": "2026-10-13",
+"label": "daily-2025-07-01",
+"pack": "daily-2025-07",
+"reason": "similar"
+},
 "https://picsum.photos/id/457/900/1200": {
 "at": "2026-10-12",
 "label": "pack-rolling-hills-12",
@@ -38620,6 +38644,12 @@
 "label": "evpack-diwali-2026-10",
 "pack": "evpack-diwali-2026",
 "reason": "off-theme"
+},
+"https://picsum.photos/id/78/900/1200": {
+"at": "2026-10-13",
+"label": "daily-2026-03-06",
+"pack": "daily-2026-03",
+"reason": "similar"
 },
 "https://picsum.photos/id/780/900/1200": {
 "at": "2026-10-12",
@@ -41436,10 +41466,10 @@
 "reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/a/a6/Binhai_library_sphere.jpg": {
-"at": "2026-10-12",
-"label": "c12",
-"pack": "evpack-literacy-2027",
-"reason": "off-theme"
+"at": "2026-10-13",
+"label": "p-68639a083346",
+"pack": "evpack-book-day-2027",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/a/a6/El_mundo_f%C3%ADsico%2C_1882_%22Im%C3%A1genes_sim%C3%A9tricas_ormadas_en_el_kaleidoscopio%22_%284052585448%29.jpg": {
 "at": "2026-10-12",
@@ -42604,6 +42634,12 @@
 "label": "c161",
 "pack": "abstract-marbling",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/f/f8/Marbled_paper_-_Book%2C_Divers_Ornements%2C_l%27Epoque_Louis_XV%2C_1699%E2%80%931769_%28CH_18222875%29_%28cropped%29.jpg": {
+"at": "2026-10-13",
+"label": "c213",
+"pack": "abstract-marbling",
+"reason": "similar"
 },
 "https://upload.wikimedia.org/wikipedia/commons/f/f8/Ubari_and_Murzuq_sand_seas%2C_Libya_ESA237892.jpg": {
 "at": "2026-10-12",
@@ -50027,6 +50063,12 @@
 "pack": "abstract-topographic",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Buenos_Aires_-_El_Ateneo_164.jpg/1280px-Buenos_Aires_-_El_Ateneo_164.jpg": {
+"at": "2026-10-13",
+"label": "p-e90c3ebe0f2f",
+"pack": "evpack-book-day-2027",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Caballito_de_mar_com%C3%BAn_%28Hippocampus_hippocampus%29%2C_Parque_natural_de_la_Arr%C3%A1bida%2C_Portugal%2C_2020-07-21%2C_DD_74.jpg/1280px-Caballito_de_mar_com%C3%BAn_%28Hippocampus_hippocampus%29%2C_Parque_natural_de_la_Arr%C3%A1bida%2C_Portugal%2C_2020-07-21%2C_DD_74.jpg": {
 "at": "2026-10-12",
 "label": "c25",
@@ -50212,6 +50254,12 @@
 "label": "c07",
 "pack": "pack-whales",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Scarlet_Macaw_Phoenix_Zoo_Mar23_A7R_04528.jpg/1280px-Scarlet_Macaw_Phoenix_Zoo_Mar23_A7R_04528.jpg": {
+"at": "2026-10-13",
+"label": "p-fbb6fb62acb6",
+"pack": "pack-parrots",
+"reason": "similar"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Shieldbug_larvae-Tongass-AM-013_%2852503087729%29.jpg/1280px-Shieldbug_larvae-Tongass-AM-013_%2852503087729%29.jpg": {
 "at": "2026-10-12",
@@ -51262,6 +51310,12 @@
 "label": "c33",
 "pack": "pack-tokyo-nights",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Twee_dekselvazen_Balustervormige_dekselpot_met_fazanten_op_een_rots_bij_een_hek_en_bloeiende_planten%2C_AK-NM-6467-A.jpg/1280px-Twee_dekselvazen_Balustervormige_dekselpot_met_fazanten_op_een_rots_bij_een_hek_en_bloeiende_planten%2C_AK-NM-6467-A.jpg": {
+"at": "2026-10-13",
+"label": "p-524733ada2ed",
+"pack": "pack-manuscripts",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Ueno_Zoo_currently_no_Giant_Pandas.jpg/1280px-Ueno_Zoo_currently_no_Giant_Pandas.jpg": {
 "at": "2026-10-12",
@@ -54870,10 +54924,10 @@
 "reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Melopsittacus_undulatus_%28Budgerigar%29_%2848719365878%29.jpg/1280px-Melopsittacus_undulatus_%28Budgerigar%29_%2848719365878%29.jpg": {
-"at": "2026-10-12",
-"label": "c62",
-"pack": "evpack-pet-day-2027",
-"reason": "weak"
+"at": "2026-10-13",
+"label": "daily-2026-06-10",
+"pack": "daily-2026-06",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/New_Zealand_Nugget_Point_%282295103444%29.jpg/1280px-New_Zealand_Nugget_Point_%282295103444%29.jpg": {
 "at": "2026-10-12",
@@ -61013,6 +61067,12 @@
 "pack": "abstract-dunes",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Buenos_Aires_ksiegarnia_El_Ateneo_10.jpg/1280px-Buenos_Aires_ksiegarnia_El_Ateneo_10.jpg": {
+"at": "2026-10-13",
+"label": "p-bbac0ea9cae6",
+"pack": "evpack-book-day-2027",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Buniya_Ko_Laddu.jpg/1280px-Buniya_Ko_Laddu.jpg": {
 "at": "2026-10-12",
 "label": "c45",
@@ -61558,6 +61618,12 @@
 "label": "c57",
 "pack": "evpack-new-years-eve-2026",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Classic_cameras_seneca_view_camera_2_%283368272189%29.jpg/1280px-Classic_cameras_seneca_view_camera_2_%283368272189%29.jpg": {
+"at": "2026-10-13",
+"label": "p-177efc78537d",
+"pack": "evpack-photography-2027",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Corn_Snake_Skin_Under_UV_Illumination.jpg/1280px-Corn_Snake_Skin_Under_UV_Illumination.jpg": {
 "at": "2026-10-12",
@@ -70218,10 +70284,10 @@
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Dublin_Trinity_College_Library_Long_Room_10.jpg/1280px-Dublin_Trinity_College_Library_Long_Room_10.jpg": {
-"at": "2026-10-12",
-"label": "c10",
-"pack": "pack-libraries",
-"reason": "weak"
+"at": "2026-10-13",
+"label": "p-3668dd782302",
+"pack": "evpack-book-day-2027",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Ein_Blattsalat_der_Sorte_Lollo_Rosso_auf_dem_Linke_Hof.jpg/1280px-Ein_Blattsalat_der_Sorte_Lollo_Rosso_auf_dem_Linke_Hof.jpg": {
 "at": "2026-10-12",
@@ -71716,6 +71782,12 @@
 "label": "c173",
 "pack": "evpack-universal-childrens-2026",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Melopsittacus_undulatus_%28Budgerigar%29_%2848719367453%29.jpg/1280px-Melopsittacus_undulatus_%28Budgerigar%29_%2848719367453%29.jpg": {
+"at": "2026-10-13",
+"label": "p-c641c87613c0",
+"pack": "pack-parrots",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Nativity_towers%2C_Sagrada_Familia%2C_Barcelona_01.jpg/1280px-Nativity_towers%2C_Sagrada_Familia%2C_Barcelona_01.jpg": {
 "at": "2026-10-12",
@@ -77987,6 +78059,12 @@
 "pack": "pack-sailing",
 "reason": "quality"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Mystery_watch.jpg/1280px-Mystery_watch.jpg": {
+"at": "2026-10-13",
+"label": "p-9331af6c5e48",
+"pack": "evpack-fathers-day-2027",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Neist_Point_Lighthouse_-_view_from_E.jpg/1280px-Neist_Point_Lighthouse_-_view_from_E.jpg": {
 "at": "2026-10-12",
 "label": "c46",
@@ -81189,6 +81267,12 @@
 "at": "2026-10-12",
 "label": "c32",
 "pack": "evpack-childrens-book-2027",
+"reason": "quality"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Fishing_reel_Nevskaya_2026_G2.jpg/1280px-Fishing_reel_Nevskaya_2026_G2.jpg": {
+"at": "2026-10-13",
+"label": "p-1774dc5045de",
+"pack": "evpack-fathers-day-2027",
 "reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Frost_flowers_on_bus_shelter_in_Brastad_2.jpg/1280px-Frost_flowers_on_bus_shelter_in_Brastad_2.jpg": {
@@ -86765,6 +86849,12 @@
 "pack": "evpack-forests-2027",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Booted_Racket-tail_%2832885209377%29.jpg/1280px-Booted_Racket-tail_%2832885209377%29.jpg": {
+"at": "2026-10-13",
+"label": "p-46c6cb23f62e",
+"pack": "pack-hummingbirds",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Cheddar_Gorge._Car_park_at_the_reservoirs_-_geograph.org.uk_-_4628585.jpg/1280px-Cheddar_Gorge._Car_park_at_the_reservoirs_-_geograph.org.uk_-_4628585.jpg": {
 "at": "2026-10-12",
 "label": "c90",
@@ -90305,6 +90395,12 @@
 "pack": "pack-lisbon",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Shaving-Set.jpg/1280px-Shaving-Set.jpg": {
+"at": "2026-10-13",
+"label": "p-70a4e586fdff",
+"pack": "evpack-fathers-day-2027",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Sheraton_Denarau_beach_side_view.jpg/1280px-Sheraton_Denarau_beach_side_view.jpg": {
 "at": "2026-10-12",
 "label": "c93",
@@ -90436,6 +90532,12 @@
 "label": "p-771800626888",
 "pack": "abstract-stained-glass",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Black-throated_Mango_%28Anthracothorax_nigricollis%29-5.jpg/1280px-Black-throated_Mango_%28Anthracothorax_nigricollis%29-5.jpg": {
+"at": "2026-10-13",
+"label": "p-82efcd5899b4",
+"pack": "pack-hummingbirds",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Bottle_of_L%27Aimant_perfume_-_Coty_-1927-1.jpg/1280px-Bottle_of_L%27Aimant_perfume_-_Coty_-1927-1.jpg": {
 "at": "2026-10-12",
@@ -91008,10 +91110,10 @@
 "reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Inoxcrom_ID._Nib._M_%28sepia_ink%29.jpg/1280px-Inoxcrom_ID._Nib._M_%28sepia_ink%29.jpg": {
-"at": "2026-10-12",
-"label": "c36",
-"pack": "evpack-fathers-day-2027",
-"reason": "weak"
+"at": "2026-10-13",
+"label": "p-a4105f7e75cc",
+"pack": "evpack-book-day-2027",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Inwood_Butterfly_Sanctuary_Street_Tree_Bed_with_sunflowers.jpg/1280px-Inwood_Butterfly_Sanctuary_Street_Tree_Bed_with_sunflowers.jpg": {
 "at": "2026-10-12",
@@ -92640,10 +92742,10 @@
 "reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Replica_of_St._Galler_Globus_at_Abbey_Library_of_St._Gallen_3.jpg/1280px-Replica_of_St._Galler_Globus_at_Abbey_Library_of_St._Gallen_3.jpg": {
-"at": "2026-10-12",
-"label": "c05",
-"pack": "evpack-literacy-2027",
-"reason": "off-theme"
+"at": "2026-10-13",
+"label": "p-27aa5a1a8a65",
+"pack": "evpack-book-day-2027",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Ro%C5%A1ki_Slap%2C_Krka_National_Park%2C_Croatia_-_panoramio_%2815%29.jpg/1280px-Ro%C5%A1ki_Slap%2C_Krka_National_Park%2C_Croatia_-_panoramio_%2815%29.jpg": {
 "at": "2026-10-12",
@@ -94294,6 +94396,12 @@
 "label": "c30",
 "pack": "pack-london",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Mafra%27s_Convent_-_Palace_-_Biblioth%C3%A9que-Detail-_%2850180495698%29.jpg/1280px-Mafra%27s_Convent_-_Palace_-_Biblioth%C3%A9que-Detail-_%2850180495698%29.jpg": {
+"at": "2026-10-13",
+"label": "p-322eaca6e745",
+"pack": "evpack-book-day-2027",
+"reason": "similar"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Paella_Marinera_1.jpg/1280px-Paella_Marinera_1.jpg": {
 "at": "2026-10-12",
@@ -96084,9 +96192,9 @@
 "reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Kornhaus_G%C3%B6ppingen_2019_003.jpg/1280px-Kornhaus_G%C3%B6ppingen_2019_003.jpg": {
-"at": "2026-10-12",
-"label": "c15",
-"pack": "pack-libraries",
+"at": "2026-10-13",
+"label": "p-7b07194d13b7",
+"pack": "evpack-book-day-2027",
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Kundasang_Sabah_Vegetable-Market-07.jpg/1280px-Kundasang_Sabah_Vegetable-Market-07.jpg": {
@@ -101332,6 +101440,12 @@
 "label": "c94",
 "pack": "evpack-winter-solstice-2026",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Chicago_in_2022_Parking_levels_in_Marina_City_%2852051545100%29.jpg/1280px-Chicago_in_2022_Parking_levels_in_Marina_City_%2852051545100%29.jpg": {
+"at": "2026-10-13",
+"label": "p-47a39280f374",
+"pack": "abstract-brutalist",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Common_crab_spider_%28Xysticus_cristatus%29_female_with_prey_Carniolan_honey_bee_%28Apis_melifera_carnica%29.jpg/1280px-Common_crab_spider_%28Xysticus_cristatus%29_female_with_prey_Carniolan_honey_bee_%28Apis_melifera_carnica%29.jpg": {
 "at": "2026-10-12",

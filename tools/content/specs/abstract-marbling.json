@@ -2,7 +2,7 @@
  "id": "abstract-marbling",
  "name": "Marbling",
  "category": "Abstract",
- "description": "Combed paper marbling, ebru and suminagashi next to the veins of real marble and onyx.",
+ "description": "Combed, snail and stone paper marbling and Turkish ebru next to the veins and bands of real marble, onyx and agate.",
  "kind": "abstract",
  "price": "free",
  "sortOrder": 3012,
@@ -43,5 +43,22 @@
  ],
  "category_depth": 0,
  "category_limit": 200,
- "openverse_category": "photograph"
+ "openverse_category": "photograph",
+ "more_topics": [
+  "Rosso Levanto marble",
+  "verde antico marble",
+  "Brazilian onyx",
+  "marble polished surface",
+  "cat:Marble samples",
+  "agate slice",
+  "marbled paper",
+  "nonpareil marbled paper",
+  "Turkish marbled paper",
+  "ebru painting",
+  "paper marbling pattern",
+  "Carrara marble texture",
+  "breccia marble",
+  "Portoro marble",
+  "marbling art"
+ ]
 }
