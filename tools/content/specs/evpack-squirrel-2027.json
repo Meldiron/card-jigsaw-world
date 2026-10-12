@@ -1,0 +1,13 @@
+{
+ "id": "evpack-squirrel-2027", "name": "Squirrel Appreciation Day", "category": "Event",
+ "description": "A limited pack for Squirrel Appreciation Day (21 January 2027). Red, grey, fox, giant and ground squirrels plus chipmunks and the nuts they hoard, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2,
+ "sources": ["commons"], "quality_deepcat": "Quality images of animals",
+ "topics": ["red squirrel winter ear tufts", "eastern grey squirrel", "fox squirrel", "american red squirrel", "douglas squirrel", "indian giant squirrel malabar",
+  "siberian chipmunk", "eastern chipmunk", "flying squirrel", "abert's squirrel", "black squirrel melanistic", "squirrel eating nut",
+  "squirrel in snow", "squirrel on tree trunk", "squirrel autumn leaves", "squirrel hazelnut", "squirrel pine cone", "california ground squirrel",
+  "golden-mantled ground squirrel", "pallas's squirrel", "prevost's squirrel", "variegated squirrel", "acorns oak", "hazelnuts in shell",
+  "walnuts shell", "sciurus vulgaris", "sciurus carolinensis", "red-bellied squirrel", "grey squirrel winter", "squirrel feeding birdfeeder"],
+ "more_topics": ["cape ground squirrel", "arctic ground squirrel", "finlayson's squirrel", "japanese squirrel", "tufted ground squirrel",
+  "squirrel drey nest", "chestnuts", "pine nuts cone", "squirrel tail bushy", "squirrel portrait close-up"]
+}

@@ -1,0 +1,12 @@
+{
+ "id": "evpack-kindness-2026", "name": "World Kindness Day", "category": "Event",
+ "description": "A limited pack for World Kindness Day (13 November 2026). Wrapped gifts, bouquets, heart-shaped treats, warm drinks, blankets and other small tokens of kindness, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2,
+ "sources": ["commons"],
+ "topics": ["wrapped gift box ribbon bow", "bouquet of flowers wrapped paper", "heart shaped cookies icing", "heart shaped stone pebble", "knitted blanket mug tea", "red heart balloon",
+  "basket of red apples", "box of chocolates assorted", "pink roses bouquet", "hot chocolate marshmallows mug", "teddy bear plush", "lit candle warm light",
+  "heart shaped leaf", "lavender bouquet ribbon", "honey jar wooden dipper", "stacked wrapped presents colourful", "love padlocks bridge colourful", "cupcakes pink frosting hearts",
+  "tulips bouquet colourful", "origami paper hearts", "sunflowers in vase", "wooden birdhouse garden", "knitted scarf wool colourful", "homemade jam jars",
+  "freshly baked cookies plate", "picnic basket blanket", "paper hearts garland string", "daisy bouquet jar"],
+ "more_topics": ["heart shaped pancakes berries", "gift bag tissue paper", "red roses single stem", "warm socks knitted wool", "flower crown daisies", "cinnamon rolls plate", "heart shaped waffle", "macarons gift box"]
+}

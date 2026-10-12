@@ -1,0 +1,12 @@
+{
+ "id": "evpack-thanksgiving-2026", "name": "Thanksgiving", "category": "Event",
+ "description": "A limited pack for Thanksgiving (26 November 2026). Roast turkey, pumpkin pie, cranberries, cornucopias, gourds and autumn harvest tables, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2,
+ "sources": ["commons"], "quality_deepcat": "Quality images of food",
+ "topics": ["roast turkey platter", "pumpkin pie slice whipped cream", "cranberry sauce bowl", "cornucopia harvest fruit vegetables", "autumn maple leaves red orange", "pecan pie",
+  "mashed potatoes gravy bowl", "corn on the cob husks", "acorn squash halves", "sweet potato casserole marshmallows", "apple pie lattice crust", "autumn harvest basket apples",
+  "decorative gourds squash colourful", "wild turkey bird feathers", "bread stuffing dish", "green bean casserole", "dinner rolls basket", "autumn candle centerpiece table",
+  "orange pumpkins stacked", "hay bales pumpkins autumn", "dried corn stalks indian corn", "apple cider mug cinnamon sticks", "fresh cranberries bowl", "pumpkin bread loaf",
+  "autumn wreath front door", "pecans bowl nuts", "butternut squash soup bowl", "roasted brussels sprouts", "maple syrup bottle pancakes"],
+ "more_topics": ["cranberry bog harvest", "oak leaves acorns autumn", "turkey roasting pan vegetables", "pumpkin cheesecake", "autumn table setting plates", "red apples basket orchard", "sunflower seed head dried", "chestnuts roasted"]
+}

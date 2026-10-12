@@ -1,0 +1,13 @@
+{
+ "id": "evpack-lunar-new-year-2027", "name": "Lunar New Year", "category": "Event",
+ "description": "A limited pack for Lunar New Year (6 February 2027). Red lanterns, dragons, red envelopes, dumplings, plum blossom and temples for the Year of the Goat, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2,
+ "sources": ["commons"],
+ "topics": ["red paper lanterns hanging", "chinese dragon dance head", "red envelopes hongbao", "jiaozi dumplings bamboo steamer", "plum blossom branch", "chinese temple red roof",
+  "firecrackers red string", "kumquat tree pot", "nian gao rice cake", "tangyuan sweet rice balls", "lion dance head costume", "chinese knot red tassel",
+  "lantern festival lanterns night", "chinese paper cutting red", "spring rolls plate", "peach blossom branch", "incense coils temple", "goat zodiac figurine",
+  "chinese pagoda night lights", "sky lanterns pingxi", "tray of togetherness candied", "steamed whole fish dish", "narcissus flowers bowl", "chinese new year decorations red gold",
+  "jade carving", "chinese porcelain vase red", "forbidden city red door studs", "longevity noodles", "red lantern string night street", "chinese fan red"],
+ "more_topics": ["mandarin oranges bowl", "chinese silk embroidery", "dragon sculpture temple", "lucky bamboo", "dumplings pleated", "sweet rice cake",
+  "drum chinese red", "chinese tea set red", "red silk fabric", "golden ingot ornament", "chinese lantern lotus", "temple roof dragon ornament"]
+}

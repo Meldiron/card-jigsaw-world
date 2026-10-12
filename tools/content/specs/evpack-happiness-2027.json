@@ -1,0 +1,13 @@
+{
+ "id": "evpack-happiness-2027", "name": "International Day of Happiness", "category": "Event",
+ "description": "A limited pack for International Day of Happiness (20 March 2027). Sunflowers, bright balloons, puppies, ice cream, rainbows and sunlit meadows, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2,
+ "sources": ["commons"],
+ "topics": ["sunflower field", "colourful balloons", "golden retriever puppy", "ice cream cone", "rainbow sky", "sunlit meadow wildflowers",
+  "daisies field", "bright tulips", "confetti colourful", "hot air balloons", "lemons yellow", "kitten playing",
+  "gerbera daisies colourful", "cotton candy", "sprinkles donut", "cherry blossom", "soap bubbles", "poppy field red",
+  "butterfly on flower", "lavender field", "colourful umbrellas", "macarons colourful", "beach ball", "pinwheel colourful",
+  "rubber duck yellow", "puppy playing grass", "dog on beach", "lollipops colourful", "gumball machine", "smiley sun flower"],
+ "more_topics": ["yellow flowers field", "rainbow lorikeet", "jelly beans", "sunrise meadow", "balloons sky", "dandelion seed head sun",
+  "kids kite colourful", "fruit salad bowl", "sunflower close-up bee", "labrador puppy", "yellow duckling", "cupcakes colourful"]
+}

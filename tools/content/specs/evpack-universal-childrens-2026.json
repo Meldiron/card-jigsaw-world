@@ -1,0 +1,12 @@
+{
+ "id": "evpack-universal-childrens-2026", "name": "Universal Children's Day", "category": "Event",
+ "description": "A limited pack for Universal Children's Day (20 November 2026). Kites, balloons, crayons, wooden toys, teddy bears, playgrounds and carousels, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2,
+ "sources": ["commons"],
+ "topics": ["colourful kites flying sky", "bunch of colourful balloons", "wax crayons box colourful", "wooden toy train", "teddy bear plush toy", "playground slide colourful",
+  "playground swing set", "yellow rubber ducks", "colourful wooden building blocks", "wooden spinning top", "paper boat origami", "colourful pinwheel toy",
+  "Lego bricks pile colourful", "rocking horse wooden", "sandcastle beach bucket spade", "soap bubbles floating", "jigsaw puzzle pieces colourful", "toy cars collection",
+  "plush toys shelf", "glass marbles colourful", "carousel merry-go-round horses", "wooden alphabet blocks", "dollhouse miniature rooms", "kite festival colourful kites",
+  "gummy bears candy", "balloon animals twisted", "ferris wheel colourful", "paper lanterns colourful", "tricycle red children's"],
+ "more_topics": ["wooden toy animals", "colourful beach balls", "plastic toy dinosaurs", "skipping rope", "toy robot tin", "matryoshka nesting dolls", "bouncy castle inflatable", "wooden puzzle shapes"]
+}

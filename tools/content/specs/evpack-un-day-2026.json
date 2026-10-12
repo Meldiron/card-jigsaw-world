@@ -1,0 +1,13 @@
+{
+ "id": "evpack-un-day-2026", "name": "United Nations Day", "category": "Event",
+ "description": "A limited pack for United Nations Day (24 October 2026). Flags of many nations, globes, doves, olive branches and landmarks from every continent, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2,
+ "sources": ["commons"],
+ "topics": ["row of national flags flagpoles", "United Nations headquarters flags New York", "Palais des Nations Geneva flags alley", "antique globe world map",
+  "white dove flying", "olive branch olives tree", "Eiffel Tower Paris", "Taj Mahal Agra", "Great Wall of China tower", "Statue of Liberty",
+  "Sydney Opera House sails", "Christ the Redeemer Rio", "Pyramids of Giza sphinx", "Colosseum Rome", "Big Ben Elizabeth Tower London",
+  "Moai statues Easter Island", "Petra Treasury Jordan", "Angkor Wat temple towers", "Burj Khalifa Dubai", "Kremlin Saint Basil's Cathedral",
+  "Tokyo Tower", "Kinkaku-ji Golden Pavilion Kyoto", "Blue Mosque Istanbul minarets", "Table Mountain Cape Town", "Neuschwanstein Castle",
+  "Machu Picchu terraces", "Hagia Sophia", "Brandenburg Gate Berlin"],
+ "more_topics": ["colourful bunting international flags", "Chichen Itza pyramid", "Parthenon Athens", "Mount Fuji pagoda", "Wat Arun Bangkok", "Sagrada Familia towers", "CN Tower Toronto", "Blue Domes Santorini"]
+}

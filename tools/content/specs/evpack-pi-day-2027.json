@@ -1,0 +1,13 @@
+{
+ "id": "evpack-pi-day-2027", "name": "Pi Day", "category": "Event",
+ "description": "A limited pack for Pi Day (14 March 2027). Apple, cherry, pecan, key lime and pork pies, tarts, galettes and other perfectly round things, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2,
+ "sources": ["commons"], "quality_deepcat": "Quality images of food",
+ "topics": ["apple pie lattice", "cherry pie", "pumpkin pie whole", "pecan pie", "key lime pie", "lemon meringue pie",
+  "blueberry pie", "pork pie", "quiche lorraine", "tarte tatin", "mince pies", "galette rustic fruit",
+  "custard tart", "banoffee pie", "strawberry pie", "peach pie", "chicken pot pie", "meat pie",
+  "steak and kidney pie", "pie crust crimped", "cinnamon rolls", "glazed donut", "cheese wheel", "rose window stained glass round",
+  "ferris wheel", "chartres labyrinth", "pie slice plate", "rhubarb pie", "chess pie", "shoofly pie"],
+ "more_topics": ["cream pie", "pumpkin pie slice", "pie tin baked", "linzer torte", "bakewell tart", "treacle tart", "pie with ice cream",
+  "round cake top view", "bicycle wheel spokes", "mandala round", "pie lattice crust close", "tourtiere"]
+}

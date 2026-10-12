@@ -1,0 +1,13 @@
+{
+ "id": "evpack-education-2027", "name": "International Day of Education", "category": "Event",
+ "description": "A limited pack for International Day of Education (24 January 2027). Libraries, book stacks, globes, pencils, microscopes and school buildings, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2,
+ "sources": ["commons"],
+ "topics": ["stack of old books", "library bookshelves", "vintage globe", "colored pencils", "school building brick", "chalk sticks blackboard",
+  "abacus", "microscope", "fountain pen inkwell", "apple on books", "trinity college library long room", "bodleian library",
+  "wooden school desk", "crayons box", "alphabet blocks wooden", "yellow school bus", "graduation cap", "paper planes",
+  "school backpack", "bookshop shelves", "watercolour paint brushes", "geometry compass ruler", "library of celsus ephesus", "stationery pencils sharpener",
+  "lecture hall empty", "stirling library", "stuttgart city library", "george peabody library", "strahov monastery library", "owl symbol wisdom"],
+ "more_topics": ["book spines colourful", "reading room library", "telescope brass", "chemistry flasks", "world map globe antique", "quill pen parchment",
+  "pencil shavings", "notebook spiral", "ruler protractor", "open book pages", "library ladder shelves", "schoolhouse red"]
+}

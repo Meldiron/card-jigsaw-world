@@ -1,0 +1,13 @@
+{
+ "id": "evpack-tea-day-2026", "name": "International Tea Day", "category": "Event",
+ "description": "A limited pack for International Tea Day (15 December 2026). Matcha bowls, tea plantations, teapots from Japan, China, Morocco and Turkey, loose leaves and afternoon tea, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2,
+ "sources": ["commons"], "quality_deepcat": "Quality images of food",
+ "topics": ["matcha tea bowl bamboo whisk", "tea plantation terraces Cameron Highlands", "Darjeeling tea garden rows", "loose leaf tea varieties bowls", "Japanese cast iron teapot tetsubin",
+  "Chinese gaiwan tea set", "masala chai cup spices", "Moroccan mint tea glasses silver teapot", "afternoon tea scones tiered stand", "Turkish tea tulip glass",
+  "Russian samovar brass", "Yixing clay teapot", "fresh tea leaves Camellia sinensis", "tea plucking basket green leaves", "chamomile tea cup flowers",
+  "bubble tea tapioca pearls", "porcelain teacup saucer floral", "jasmine tea flowers", "rooibos tea cup", "pu-erh tea cake brick",
+  "Camellia sinensis flower", "vintage tea tins caddies", "iced tea lemon glass", "hibiscus tea red glass", "Tibetan butter tea bowl",
+  "Kenyan tea fields green", "silver tea strainer", "Sri Lanka tea estate hills"],
+ "more_topics": ["green tea cup leaves", "earl grey tea cup bergamot", "tea eggs", "Japanese tea house garden", "teapot kettle stove", "ginger lemon tea", "tea bags assorted", "Assam tea garden"]
+}

@@ -1,0 +1,12 @@
+{
+ "id": "evpack-mountain-day-2026", "name": "International Mountain Day", "category": "Event",
+ "description": "A limited pack for International Mountain Day (11 December 2026). Famous peaks from the Matterhorn and Ama Dablam to Fitz Roy and Mount Fuji, with alpine lakes, ibex and edelweiss, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2,
+ "sources": ["commons"], "quality_deepcat": "Quality images of landscapes",
+ "topics": ["Matterhorn peak Zermatt", "Ama Dablam peak Himalaya", "Mount Fuji snow cap", "Kirkjufell mountain Iceland", "Eiger north face", "Mount Assiniboine lake",
+  "Torres del Paine towers", "Tre Cime di Lavaredo Dolomites", "Aoraki Mount Cook", "K2 mountain", "Mount Everest summit", "Kilimanjaro snow summit",
+  "Grand Teton peaks", "Half Dome Yosemite", "Mount Rainier wildflowers meadow", "Monte Fitz Roy Patagonia", "Machapuchare fishtail peak", "Alpamayo peak Peru",
+  "Mont Blanc massif glacier", "Huangshan granite peaks pines", "Zhangjiajie sandstone pillars", "Seceda ridge Dolomites", "Mount Hood Oregon", "alpine ibex rocks",
+  "edelweiss flower alpine", "alpine hut mountain pasture", "Cerro Torre Patagonia", "Lofoten mountain peaks fjord", "Mount Shuksan Picture Lake", "Dachstein glacier peaks"],
+ "more_topics": ["Annapurna south face", "Mount Taranaki", "Grossglockner peak", "Piz Bernina", "Table Mountain cable car", "mountain goat cliff", "Denali peak Alaska", "Mount Kinabalu summit", "Ben Nevis Scotland", "Cradle Mountain Tasmania"]
+}

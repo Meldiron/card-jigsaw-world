@@ -1,0 +1,2657 @@
+{
+"meta": {},
+"packs": {
+"abstract-fluid-ink": {
+"added": 23,
+"at": "2026-10-12T02:04:57",
+"category": "Abstract",
+"kind": "library",
+"last_step": "apply (seeded from log)",
+"name": "Ink & Dye",
+"puzzles": null,
+"removed": 2,
+"status": "fixed"
+},
+"abstract-geometric-minimal": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Abstract",
+"kind": "library",
+"name": "Geometric Minimal",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"animal-friends": {
+"added": 14,
+"at": "2026-10-12T02:04:57",
+"category": "Animals",
+"kind": "library",
+"last_step": "apply (seeded from log)",
+"name": "Animal Friends",
+"puzzles": null,
+"removed": 8,
+"status": "fixed"
+},
+"autumn-harvest": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Seasonal",
+"kind": "library",
+"name": "Autumn Harvest",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"city-lights": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Travel",
+"kind": "library",
+"name": "City Lights",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"cozy-kitchen": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Food",
+"kind": "library",
+"name": "Cozy Kitchen",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2023-01": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "January 2023",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2023-02": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "February 2023",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2023-03": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "March 2023",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2023-04": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "April 2023",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2023-05": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "May 2023",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2023-06": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "June 2023",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2023-07": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "July 2023",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2023-08": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "August 2023",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2023-09": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "September 2023",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2023-10": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "October 2023",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2023-11": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "November 2023",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2023-12": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "December 2023",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2024-01": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "January 2024",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2024-02": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "February 2024",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2024-03": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "March 2024",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2024-04": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "April 2024",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2024-05": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "May 2024",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2024-06": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "June 2024",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2024-07": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "July 2024",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2024-08": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "August 2024",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2024-09": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "September 2024",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2024-10": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "October 2024",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2024-11": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "November 2024",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2024-12": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "December 2024",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2025-01": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "January 2025",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2025-02": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "February 2025",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2025-03": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "March 2025",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2025-04": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "April 2025",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2025-05": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "May 2025",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2025-06": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "June 2025",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2025-07": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "July 2025",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2025-08": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "August 2025",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2025-09": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "September 2025",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2025-10": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "October 2025",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2025-11": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "November 2025",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2025-12": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "December 2025",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2026-01": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "January 2026",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2026-02": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "February 2026",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2026-03": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "March 2026",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2026-04": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "April 2026",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2026-05": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "May 2026",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2026-06": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "June 2026",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2026-07": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "July 2026",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2026-08": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "August 2026",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2026-09": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "September 2026",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"daily-2026-10": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Daily",
+"kind": "daily",
+"name": "October 2026",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"deep-space": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Space",
+"kind": "library",
+"name": "Deep Space",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-animal-day-2026": {
+"added": 14,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"last_step": "apply (seeded from log)",
+"name": "World Animal Day",
+"puzzles": null,
+"removed": 13,
+"status": "fixed"
+},
+"evpack-animal-day-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "World Animal Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-art-day-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "World Art Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-autumn-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "Autumn Equinox",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-beach-day-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "National Beach Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-bean-day-2027": {
+"added": 24,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"last_step": "apply (seeded from log)",
+"name": "National Bean Day",
+"puzzles": null,
+"removed": 14,
+"status": "fixed"
+},
+"evpack-bee-day-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "World Bee Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-bicycle-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "World Bicycle Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-biodiversity-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "International Day for Biodiversity",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-book-day-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "World Book Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-cat-day-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "International Cat Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-cheeseburger-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "National Cheeseburger Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-childrens-book-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "International Children's Book Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-childrens-day-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "International Children's Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-chocolate-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "World Chocolate Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-christmas-2026": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "Christmas",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-christmas-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "Christmas",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-coffee-2026": {
+"added": 22,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"last_step": "apply (seeded from log)",
+"name": "International Coffee Day",
+"puzzles": null,
+"removed": 14,
+"status": "fixed"
+},
+"evpack-coffee-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "International Coffee Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-croissant-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "National Croissant Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-dance-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "International Dance Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-diwali-2026": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "Diwali",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-diwali-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "Diwali",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-dog-day-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "International Dog Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-earth-day-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "Earth Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-easter-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "Easter",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-education-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "International Day of Education",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-environment-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "World Environment Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-families-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "International Day of Families",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-fathers-day-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "Father's Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-food-day-2026": {
+"added": 24,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"last_step": "apply (seeded from log)",
+"name": "World Food Day",
+"puzzles": null,
+"removed": 14,
+"status": "fixed"
+},
+"evpack-food-day-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "World Food Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-forests-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "International Day of Forests",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-friendship-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "International Day of Friendship",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-fries-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "National French Fry Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-grandparents-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "Grandparents Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-halloween-2026": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "Halloween",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-halloween-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "Halloween",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-hamburger-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "National Hamburger Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-happiness-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "International Day of Happiness",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-health-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "World Health Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-heart-day-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "World Heart Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-hot-tea-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "National Hot Tea Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-independence-day-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "Independence Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-kindness-2026": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "World Kindness Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-kindness-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "World Kindness Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-literacy-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "International Literacy Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-love-your-pet-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "Love Your Pet Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-lunar-new-year-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "Lunar New Year",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-may-day-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "May Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-mental-health-2026": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "World Mental Health Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-mental-health-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "World Mental Health Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-moon-day-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "Moon Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-mothers-day-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "Mother's Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-mountain-day-2026": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "International Mountain Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-mountain-day-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "International Mountain Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-new-year-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "New Year's Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-new-years-eve-2026": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "New Year's Eve",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-new-years-eve-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "New Year's Eve",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-oceans-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "World Oceans Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-peace-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "International Day of Peace",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-pet-day-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "National Pet Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-photography-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "World Photography Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-pi-day-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "Pi Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-pizza-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "National Pizza Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-polar-bear-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "International Polar Bear Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-pride-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "Pride Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-remembrance-2026": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "Remembrance Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-remembrance-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "Remembrance Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-smile-day-2026": {
+"added": 19,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"last_step": "apply (seeded from log)",
+"name": "World Smile Day",
+"puzzles": null,
+"removed": 14,
+"status": "fixed"
+},
+"evpack-smile-day-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "World Smile Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-squirrel-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "Squirrel Appreciation Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-st-patricks-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "St Patrick's Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-star-wars-day-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "Star Wars Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-tea-day-2026": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "International Tea Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-tea-day-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "International Tea Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-teachers-2026": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "World Teachers' Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-teachers-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "World Teachers' Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-thanksgiving-2026": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "Thanksgiving",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-thanksgiving-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "Thanksgiving",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-un-day-2026": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "United Nations Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-un-day-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "United Nations Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-universal-childrens-2026": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "Universal Children's Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-universal-childrens-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "Universal Children's Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-valentines-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "Valentine's Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-vegan-2026": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "World Vegan Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-vegan-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "World Vegan Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-volunteer-2026": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "International Volunteer Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-volunteer-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "International Volunteer Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-water-day-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "World Water Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-wetlands-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "World Wetlands Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-wildlife-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "World Wildlife Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-winter-solstice-2026": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "Winter Solstice",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-winter-solstice-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "Winter Solstice",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-womens-day-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "International Women's Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-yoga-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "International Yoga Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"evpack-youth-2027": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Event",
+"kind": "event",
+"name": "International Youth Day",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"land-of-fire-ice": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Premium",
+"kind": "library",
+"name": "Land of Fire & Ice",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"masterpieces": {
+"added": 16,
+"at": "2026-10-12T02:05:41",
+"category": "Art",
+"issues": 1,
+"kind": "library",
+"last_step": "verify failed",
+"name": "Masterpieces",
+"puzzles": 24,
+"removed": 14,
+"status": "fixed"
+},
+"pack-alpine-lakes": {
+"added": 19,
+"at": "2026-10-12T02:04:57",
+"category": "Nature",
+"kind": "library",
+"last_step": "apply (seeded from log)",
+"name": "Alpine Lakes",
+"puzzles": null,
+"removed": 14,
+"status": "fixed"
+},
+"pack-amsterdam": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Cities",
+"kind": "library",
+"name": "Amsterdam",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-ancient-ruins": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Travel",
+"kind": "library",
+"name": "Ancient Ruins",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-autumn-parks": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Nature",
+"kind": "library",
+"name": "Autumn Parks",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-bali-temples": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Travel",
+"kind": "library",
+"name": "Bali Temples",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-barcelona": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Cities",
+"kind": "library",
+"name": "Barcelona",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-big-cats": {
+"added": 23,
+"at": "2026-10-12T02:04:57",
+"category": "Animals",
+"kind": "library",
+"last_step": "apply (seeded from log)",
+"name": "Big Cats",
+"puzzles": null,
+"removed": 20,
+"status": "fixed"
+},
+"pack-birds-of-prey": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Animals",
+"kind": "library",
+"name": "Birds of Prey",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-botanical": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Art",
+"kind": "library",
+"name": "Botanical Prints",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-bridges": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Architecture",
+"kind": "library",
+"name": "Bridges",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-butterflies": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Animals",
+"kind": "library",
+"name": "Butterflies",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-canyons": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Nature",
+"kind": "library",
+"name": "Canyons",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-castles": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Architecture",
+"kind": "library",
+"name": "Castles",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-cathedrals": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Architecture",
+"kind": "library",
+"name": "Cathedrals",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-caves": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Nature",
+"kind": "library",
+"name": "Caves",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-cherry-blossom": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Flowers",
+"kind": "library",
+"name": "Cherry Blossom",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-classic-cars": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Vintage",
+"kind": "library",
+"name": "Classic Cars",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-cocktails": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Food",
+"kind": "library",
+"name": "Cocktails",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-coffee-shops": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Food",
+"kind": "library",
+"name": "Coffee Shops",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-cozy-interiors": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Vintage",
+"kind": "library",
+"name": "Cozy Interiors",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-deer": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Animals",
+"kind": "library",
+"name": "Deer",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-desert-dunes": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Nature",
+"kind": "library",
+"name": "Desert Dunes",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-doors": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Architecture",
+"kind": "library",
+"name": "Doors of the World",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-dutch-masters": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Art",
+"kind": "library",
+"name": "Dutch Masters",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-earth-orbit": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Space",
+"kind": "library",
+"name": "Earth from Orbit",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-elephants": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Animals",
+"kind": "library",
+"name": "Elephants",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-fairytale-villages": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Travel",
+"kind": "library",
+"name": "Fairytale Villages",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-farm-life": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Animals",
+"kind": "library",
+"name": "Farm Life",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-foxes": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Animals",
+"kind": "library",
+"name": "Foxes",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-frogs": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Animals",
+"kind": "library",
+"name": "Frogs & Reptiles",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-fruit-markets": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Food",
+"kind": "library",
+"name": "Fruit Markets",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-galaxies": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Space",
+"kind": "library",
+"name": "Galaxies",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-gardens": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Nature",
+"kind": "library",
+"name": "Gardens",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-gardens-art": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Art",
+"kind": "library",
+"name": "Gardens in Art",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-harbours": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Travel",
+"kind": "library",
+"name": "Harbours",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-horses": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Animals",
+"kind": "library",
+"name": "Horses",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-hot-air-balloons": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Travel",
+"kind": "library",
+"name": "Hot Air Balloons",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-hummingbirds": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Animals",
+"kind": "library",
+"name": "Hummingbirds",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-ice-cream": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Food",
+"kind": "library",
+"name": "Ice Cream",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-iceland-roads": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Travel",
+"kind": "library",
+"name": "Iceland Roads",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-impressionists": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Art",
+"kind": "library",
+"name": "Impressionists",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-islands": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Travel",
+"kind": "library",
+"name": "Islands",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-istanbul": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Cities",
+"kind": "library",
+"name": "Istanbul",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-japanese-prints": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Art",
+"kind": "library",
+"name": "Japanese Prints",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-jungle": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Nature",
+"kind": "library",
+"name": "Jungle",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-kittens": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Animals",
+"kind": "library",
+"name": "Kittens",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-kyoto": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Travel",
+"kind": "library",
+"name": "Kyoto",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-lavender": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Flowers",
+"kind": "library",
+"name": "Lavender",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-libraries": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Architecture",
+"kind": "library",
+"name": "Libraries",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-lighthouses": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Oceans",
+"kind": "library",
+"name": "Lighthouses",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-lisbon": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Cities",
+"kind": "library",
+"name": "Lisbon",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-london": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Cities",
+"kind": "library",
+"name": "London",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-manuscripts": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Art",
+"kind": "library",
+"name": "Medieval Manuscripts",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-misty-forests": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Nature",
+"kind": "library",
+"name": "Misty Forests",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-moroccan-souks": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Travel",
+"kind": "library",
+"name": "Moroccan Souks",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-nebulae": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Space",
+"kind": "library",
+"name": "Nebulae",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-new-york": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Cities",
+"kind": "library",
+"name": "New York",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-night-markets": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Travel",
+"kind": "library",
+"name": "Night Markets",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-northern-lights": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Nature",
+"kind": "library",
+"name": "Northern Lights",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-oil-landscapes": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Art",
+"kind": "library",
+"name": "Landscapes in Oil",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-old-maps": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Vintage",
+"kind": "library",
+"name": "Old Maps",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-orchids": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Flowers",
+"kind": "library",
+"name": "Orchids",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-owls": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Animals",
+"kind": "library",
+"name": "Owls",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-pandas": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Animals",
+"kind": "library",
+"name": "Pandas",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-paris": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Cities",
+"kind": "library",
+"name": "Paris",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-parrots": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Animals",
+"kind": "library",
+"name": "Parrots",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-pastries": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Food",
+"kind": "library",
+"name": "Pastries",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-patagonia": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Travel",
+"kind": "library",
+"name": "Patagonia",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-penguins": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Animals",
+"kind": "library",
+"name": "Penguins",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-planets": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Space",
+"kind": "library",
+"name": "Planets",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-portraits": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Art",
+"kind": "library",
+"name": "Portraits",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-prague": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Cities",
+"kind": "library",
+"name": "Prague",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-puppies": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Animals",
+"kind": "library",
+"name": "Puppies",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-rainy-streets": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Cities",
+"kind": "library",
+"name": "Rainy Streets",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-renaissance": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Art",
+"kind": "library",
+"name": "Renaissance",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-rice-terraces": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Travel",
+"kind": "library",
+"name": "Rice Terraces",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-rockets": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Space",
+"kind": "library",
+"name": "Rockets",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-rolling-hills": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Nature",
+"kind": "library",
+"name": "Rolling Hills",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-rome": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Cities",
+"kind": "library",
+"name": "Rome",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-sailing": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Oceans",
+"kind": "library",
+"name": "Sailing",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-santorini": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Travel",
+"kind": "library",
+"name": "Santorini",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-scottish-highlands": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Travel",
+"kind": "library",
+"name": "Scottish Highlands",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-sea-cliffs": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Oceans",
+"kind": "library",
+"name": "Sea Cliffs",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-sea-life": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Oceans",
+"kind": "library",
+"name": "Sea Life",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-seascapes": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Art",
+"kind": "library",
+"name": "Seascapes",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-skylines": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Cities",
+"kind": "library",
+"name": "Skylines",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-snowy-peaks": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Mountains",
+"kind": "library",
+"name": "Snowy Peaks",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-staircases": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Architecture",
+"kind": "library",
+"name": "Staircases",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-starry-nights": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Nature",
+"kind": "library",
+"name": "Starry Nights",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-steam-trains": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Vintage",
+"kind": "library",
+"name": "Steam Trains",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-still-life": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Art",
+"kind": "library",
+"name": "Still Life",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-street-food": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Food",
+"kind": "library",
+"name": "Street Food",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-sunflowers": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Flowers",
+"kind": "library",
+"name": "Sunflowers",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-sunsets": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Nature",
+"kind": "library",
+"name": "Sunsets",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-sushi": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Food",
+"kind": "library",
+"name": "Sushi",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-swiss-villages": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Travel",
+"kind": "library",
+"name": "Swiss Villages",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-temples": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Architecture",
+"kind": "library",
+"name": "Temples",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-textiles": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Patterns",
+"kind": "library",
+"name": "Textiles",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-tiles": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Patterns",
+"kind": "library",
+"name": "Tiles & Mosaics",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-tokyo-nights": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Cities",
+"kind": "library",
+"name": "Tokyo Nights",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-tropical-beaches": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Oceans",
+"kind": "library",
+"name": "Tropical Beaches",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-tulip-fields": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Flowers",
+"kind": "library",
+"name": "Tulip Fields",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-venice": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Cities",
+"kind": "library",
+"name": "Venice",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-vineyards": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Travel",
+"kind": "library",
+"name": "Vineyards",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-vintage-posters": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Vintage",
+"kind": "library",
+"name": "Vintage Posters",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-volcanoes": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Nature",
+"kind": "library",
+"name": "Volcanoes",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-waterfalls": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Nature",
+"kind": "library",
+"name": "Waterfalls",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-whales": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Oceans",
+"kind": "library",
+"name": "Whales",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-wild-roses": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Flowers",
+"kind": "library",
+"name": "Wild Roses",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-windmills": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Architecture",
+"kind": "library",
+"name": "Windmills",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"pack-winter-scenes": {
+"added": 0,
+"at": "2026-10-12T02:04:57",
+"category": "Art",
+"kind": "library",
+"name": "Winter Scenes",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"wild-nature": {
+"added": 5,
+"at": "2026-10-12T02:04:57",
+"category": "Nature",
+"kind": "library",
+"last_step": "apply (seeded from log)",
+"name": "Wild Nature",
+"puzzles": null,
+"removed": 5,
+"status": "fixed"
+}
+}
+}

@@ -1,0 +1,13 @@
+{
+ "id": "evpack-croissant-2027", "name": "National Croissant Day", "category": "Event",
+ "description": "A limited pack for National Croissant Day (30 January 2027). Butter croissants, pain au chocolat, almond croissants, bakery trays and viennoiserie, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2,
+ "sources": ["commons"], "quality_deepcat": "Quality images of food",
+ "topics": ["butter croissant", "croissant on plate", "pain au chocolat", "croissant with jam and coffee", "almond croissant", "bakery display croissants",
+  "croissant dough lamination", "croissant basket", "croissants baking tray", "cronut", "croissant sandwich ham cheese", "pain aux raisins",
+  "kouign amann", "brioche", "viennoiserie", "croissant breakfast table", "chocolate croissant", "puff pastry",
+  "croissant and orange juice", "croissant flaky layers", "pistachio croissant", "croissant cross section", "croissant with strawberries", "danish pastry",
+  "palmier", "chocolatine", "french breakfast croissant", "croissant with butter", "croissant stuffed", "croissant crescent shape"],
+ "more_topics": ["bakery pastries tray", "boulangerie pastries", "croissant dough rolling", "croissant au beurre", "croissant frangipane",
+  "pastry basket breakfast", "croissant ham", "savoury croissant", "mini croissants", "croissant honey"]
+}

@@ -1,0 +1,13 @@
+{
+ "id": "evpack-valentines-2027", "name": "Valentine's Day", "category": "Event",
+ "description": "A limited pack for Valentine's Day (14 February 2027). Red roses, heart-shaped chocolates, love letters, pink tulips, balloons and sweets, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2,
+ "sources": ["commons"],
+ "topics": ["red roses bouquet", "single red rose", "heart shaped chocolates box", "pink tulips bouquet", "heart shaped cookies icing", "envelope wax seal letter",
+  "red heart balloons", "pink macarons", "chocolate dipped strawberries", "pink peonies", "heart confetti", "candles romantic table",
+  "heart shaped lollipop", "rose petals", "red velvet cake", "heart shaped leaf", "pink ranunculus", "knitted heart ornament",
+  "champagne glasses roses", "love locks bridge padlocks", "gift box red ribbon", "pink roses close-up", "heart shaped stone", "heart cake pink",
+  "anthurium red flower", "bleeding heart flower", "lovebirds pair", "two swans heart", "chocolate truffles", "red heart candy"],
+ "more_topics": ["rose bud dew", "pink carnations", "red tulips", "heart garland paper", "raspberry heart cake", "pink cupcakes",
+  "red gerbera", "heart shaped box", "valentine cookies", "red roses petals bath", "pink hydrangea", "heart shaped pretzel"]
+}

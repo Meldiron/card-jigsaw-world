@@ -1,0 +1,18 @@
+{
+ "id": "pack-alpine-lakes",
+ "name": "Alpine Lakes",
+ "category": "Nature",
+ "description": "Still mountain lakes in turquoise, jade and steel blue, framed by peaks and pines.",
+ "kind": "library",
+ "target": 24,
+ "topics": [
+  "Lake Bled island church", "Lago di Braies Dolomites", "Eibsee Zugspitze lake", "Oeschinensee", "Lac Blanc Chamonix",
+  "Lake Louise Canada", "Moraine Lake", "Lago di Carezza", "Lake Misurina Dolomites", "Blausee Switzerland",
+  "Königssee", "Obersee Berchtesgaden", "Lake Sorapis", "Seealpsee Appenzell", "Lago di Sorapis turquoise",
+  "glacial lake reflection mountains", "alpine lake sunrise peaks", "mountain tarn", "Caumasee", "Lac de Gaube Pyrenees",
+  "Lake Wakatipu New Zealand", "Lake Matheson reflection", "Gosausee", "Lake Antorno"
+ ],
+ "per_topic": 1,
+ "fetch_per_topic": 4,
+ "author_cap": 2
+}

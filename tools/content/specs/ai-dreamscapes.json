@@ -1,0 +1,7 @@
+{
+ "id": "ai-dreamscapes", "name": "AI Dreamscapes", "category": "AI",
+ "description": "Imagined landscapes from text-to-image models: floating islands, glowing forests and impossible skies. AI-generated, public domain.",
+ "kind": "ai", "price": "free", "target": 24, "fetch_per_topic": 40, "author_cap": 3, "category_limit": 200,
+ "sources": ["commons"], "accent_from_cover": true,
+ "topics": ["cat:AI-generated images of nature", "cat:AI-generated utopias"]
+}

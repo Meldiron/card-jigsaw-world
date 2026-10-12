@@ -1,0 +1,13 @@
+{
+ "id": "evpack-wildlife-2027", "name": "World Wildlife Day", "category": "Event",
+ "description": "A limited pack for World Wildlife Day (3 March 2027). Elephants, tigers, pandas, toucans, orangutans, sea turtles and other wild animals in their habitats, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2,
+ "sources": ["commons"], "quality_deepcat": "Quality images of animals",
+ "topics": ["african elephant", "bengal tiger", "giant panda", "toco toucan", "orangutan", "green sea turtle",
+  "red fox", "snow leopard", "giraffe", "mountain gorilla", "zebra", "koala",
+  "bald eagle", "red panda", "jaguar", "hippopotamus", "meerkat", "macaw scarlet",
+  "chameleon", "rhinoceros", "wolf", "lemur ring-tailed", "kingfisher", "humpback whale tail",
+  "sloth", "owl eagle owl", "bison", "iguana", "fennec fox", "hummingbird"],
+ "more_topics": ["leopard tree", "lynx", "sea otter", "penguin emperor", "flamingo", "puffin", "moose", "capybara", "pangolin", "deer stag",
+  "monarch butterfly", "tree frog red-eyed"]
+}

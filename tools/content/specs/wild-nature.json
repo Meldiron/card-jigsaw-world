@@ -1,0 +1,23 @@
+{
+ "id": "wild-nature",
+ "name": "Wild Nature",
+ "category": "Nature",
+ "description": "Waterfalls, fjords, canyons and mountain valleys from Iceland to Patagonia: the free starter pack.",
+ "kind": "library",
+ "price": "free",
+ "target": 24,
+ "per_topic": 1,
+ "fetch_per_topic": 4,
+ "author_cap": 2,
+ "sources": ["commons"],
+ "quality_deepcat": "Quality images of landscapes",
+ "topics": [
+  "Skógafoss waterfall", "Seljalandsfoss waterfall", "Geirangerfjord", "Lofoten mountains Reine", "Yosemite Valley El Capitan",
+  "Zion Narrows canyon", "Antelope Canyon", "Tre Cime di Lavaredo Dolomites", "Plitvice Lakes waterfall", "Milford Sound New Zealand",
+  "Lauterbrunnen valley Staubbach", "Torres del Paine", "Quiraing Isle of Skye", "Glencoe Scotland valley", "Múlafossur waterfall Faroe",
+  "Kirkjufell Iceland", "Fitz Roy Patagonia", "Iguazu Falls", "Matterhorn Zermatt", "Bridalveil Fall Yosemite",
+  "Watkins Glen gorge", "Grand Canyon South Rim", "Nærøyfjord", "Dettifoss waterfall", "Mount Cook Hooker Valley",
+  "Verdon Gorge", "Krka waterfalls", "Lake Bled island"
+ ],
+ "more_topics": ["Gullfoss", "Rhine Falls Schaffhausen", "Sognefjord", "Half Dome Yosemite", "Bryce Canyon hoodoos", "Vestrahorn Iceland", "Lago di Braies"]
+}

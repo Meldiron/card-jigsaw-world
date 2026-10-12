@@ -96,6 +96,27 @@ Prefer explicit `--pick` lists over auto-fill for anything the owner will see fi
 event packs). After `apply`, read the final puzzles sheet; the job is not done until that sheet is
 clean and the count is >= 20.
 
+## Durable progress and resuming
+
+`tools/content/reports/state.json` is the checkpoint: one entry per pack (`status` pending →
+audited → fixed → verified, `removed`/`added`/`puzzles` counts, `last_step`, timestamp). The CLI
+updates it automatically (`reject` → audited, `apply`/`clone` → fixed, `verify` → verified,
+`newpack` → pending). Per-pack logs are in `tools/content/reports/packs/<packId>.log`, the global
+log in `reports/changes.jsonl`, rejections in `state/rejects.json`, provenance in
+`state/provenance.json`. All commands are idempotent (re-running `apply` on a finished pack
+changes nothing; `newpack` updates instead of duplicating).
+
+To resume after an interruption:
+
+```
+tools/content/run.sh resume                 # board + next pending/audited packs with their last step
+tools/content/run.sh resume --prefix evpack- --next 20 --auto   # also builds pools for packs that have a spec but no pool
+```
+
+then continue each listed pack from its `last_step` with the per-pack pipeline above, finish with
+`run.sh verify PACK`, and every ~10 packs or 30 minutes run `run.sh checkpoint` (commits and pushes
+only `tools/content`, this skill and the two content docs; never other paths).
+
 ## Batching etiquette
 
 - Workers share Commons, Appwrite and the state files; keep one pack at a time per worker and do

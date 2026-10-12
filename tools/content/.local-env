@@ -1,0 +1,3 @@
+# Session-local settings for run.sh (safe to commit: no secrets). Adjust if the venv moves.
+export CJW_CONTENT_CACHE=/private/tmp/claude-501/-Users-matejbaco-Desktop-card-jigsaw-world/84a5a9d1-99d6-42b6-b2f4-69b0d07f144b/scratchpad/content-cache
+export CJW_PY=/private/tmp/claude-501/-Users-matejbaco-Desktop-card-jigsaw-world/84a5a9d1-99d6-42b6-b2f4-69b0d07f144b/scratchpad/venv/bin/python

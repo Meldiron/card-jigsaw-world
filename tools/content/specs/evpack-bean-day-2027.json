@@ -1,0 +1,13 @@
+{
+ "id": "evpack-bean-day-2027", "name": "National Bean Day", "category": "Event",
+ "description": "A limited pack for National Bean Day (6 January 2027). Kidney beans, chickpeas, lentils, edamame, bean pods and the dishes made from them, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2,
+ "sources": ["commons"], "quality_deepcat": "Quality images of food",
+ "topics": ["red kidney beans", "black beans dried", "chickpeas bowl", "green beans fresh", "red lentils", "pinto beans",
+  "edamame pods", "soybeans", "broad beans fava pods", "runner bean flowers", "bean pods on plant", "hummus plate",
+  "baked beans", "falafel", "chili con carne bowl", "feijoada", "mung beans", "black-eyed peas",
+  "cannellini beans", "borlotti beans", "dal lentil curry", "bean sprouts", "adzuki beans", "bean salad",
+  "lima beans", "tofu", "green lentils", "navy beans", "yellow split peas", "scarlet runner beans"],
+ "more_topics": ["legumes mix jars", "pulses market", "coffee beans roasted", "cocoa beans", "vanilla beans pods", "white bean soup",
+  "minestrone", "refried beans", "bean stew", "lentil soup bowl", "peas in pod", "lupin beans"]
+}

@@ -1,0 +1,13 @@
+{
+ "id": "evpack-volunteer-2026", "name": "International Volunteer Day", "category": "Event",
+ "description": "A limited pack for International Volunteer Day (5 December 2026). Community gardens, freshly planted trees, donation baskets, seedlings and well-used garden tools, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2,
+ "sources": ["commons"],
+ "topics": ["community garden raised beds vegetables", "tree sapling freshly planted soil", "garden tools spade fork rake wall", "galvanised watering can flowers", "food donation basket cans",
+  "seedling trays greenhouse", "wooden wheelbarrow garden", "vegetable harvest basket courgettes tomatoes", "wooden beehives garden", "bird feeder garden birds",
+  "colourful flower beds park", "tomato plants stakes garden", "gardening gloves trowel pots", "stacked firewood pile", "potted herbs windowsill",
+  "rain barrel garden", "colourful recycling bins", "knitted hats pile colourful wool", "folded blankets stack", "allotment garden plots sheds",
+  "sunflowers garden fence", "young apple tree orchard", "compost heap pumpkin vines", "garden shed tools inside", "flower pots terracotta stacked",
+  "planted flower boxes window", "kale cabbage vegetable garden rows", "fresh eggs basket straw"],
+ "more_topics": ["lavender plants garden path", "garden hose reel", "pumpkins garden harvest", "first aid kit red", "water well hand pump village", "strawberry plants garden", "rose bushes garden", "wooden bench garden flowers"]
+}

@@ -1,0 +1,12 @@
+{
+ "id": "evpack-vegan-2026", "name": "World Vegan Day", "category": "Event",
+ "description": "A limited pack for World Vegan Day (1 November 2026). Avocado toast, buddha bowls, lentil dal, falafel, fresh vegetables and fruit, all plant-based, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2,
+ "sources": ["commons"], "quality_deepcat": "Quality images of food",
+ "topics": ["avocado toast", "buddha bowl vegetables quinoa", "tofu vegetable stir fry", "lentil dal bowl", "hummus bowl chickpeas olive oil", "falafel balls plate",
+  "vegetable curry coconut", "ratatouille vegetables", "acai bowl fruit toppings", "green smoothie glass", "kale salad bowl", "roasted vegetables tray",
+  "vegetable spring rolls rice paper", "mixed berries bowl", "mushroom risotto", "edamame soybeans bowl", "fruit platter tropical", "nuts and seeds bowls",
+  "mango sticky rice", "stuffed bell peppers vegetarian", "pumpkin soup bowl", "guacamole bowl", "vegetable sushi avocado cucumber roll", "oatmeal porridge berries",
+  "coconut halves", "jackfruit fruit", "fresh vegetables market stall", "chia pudding fruit"],
+ "more_topics": ["vegan burger plant based", "pasta tomato basil", "sweet potato fries", "lentil soup bowl", "colourful salad bowl", "watermelon slices", "grilled corn on the cob", "vegetable paella"]
+}

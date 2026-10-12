@@ -1,0 +1,13 @@
+{
+ "id": "evpack-hot-tea-2027", "name": "National Hot Tea Day", "category": "Event",
+ "description": "A limited pack for National Hot Tea Day (12 January 2027). Steaming cups, teapots, matcha, chai, loose leaves and tea gardens, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2,
+ "sources": ["commons"],
+ "topics": ["cup of black tea steaming", "matcha bowl bamboo whisk", "masala chai cup", "teapot and teacup", "loose leaf tea tin", "green tea leaves fresh",
+  "tea plantation bushes rows", "moroccan mint tea glass", "turkish tea tulip glass", "gaiwan tea", "oolong tea leaves", "chamomile tea cup flowers",
+  "samovar", "tetsubin cast iron teapot", "yixing clay teapot", "milk tea cup", "tea bag in cup", "jasmine tea pearls",
+  "lemon tea cup slice", "japanese tea set", "hibiscus tea red", "porcelain tea cup saucer", "darjeeling tea cup", "tea and biscuits",
+  "ginger tea honey", "tea leaves drying", "rooibos tea", "earl grey tea bergamot", "tea strainer silver", "english afternoon tea pot"],
+ "more_topics": ["chrysanthemum tea", "butter tea tibet", "tea caddy", "tea whisk chasen", "tea house interior", "tea bricks pu-erh",
+  "herbal tea infusion", "tea cup with steam", "tea garden terrace", "ceylon tea cup", "tea spoon leaves", "thermos tea mug winter"]
+}

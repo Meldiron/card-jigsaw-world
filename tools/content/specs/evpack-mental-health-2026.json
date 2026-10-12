@@ -1,0 +1,13 @@
+{
+ "id": "evpack-mental-health-2026", "name": "World Mental Health Day", "category": "Event",
+ "description": "A limited pack for World Mental Health Day (10 October 2026). Zen stones, raked gardens, tea bowls, candles, moss, lotus flowers and other quiet calming scenes, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2,
+ "sources": ["commons"],
+ "topics": ["stacked zen stones cairn", "Japanese zen garden raked gravel", "matcha tea bowl bamboo whisk", "lavender field rows", "tea light candle flame",
+  "pink lotus flower bloom", "chamomile tea cup flowers", "dried lavender bundle", "bonsai tree juniper", "incense sticks smoke", "Tibetan singing bowl",
+  "moss covered forest floor", "Arashiyama bamboo grove path", "waterfall mossy rocks forest", "cherry blossom branch close up", "reading armchair window plants",
+  "forest path morning mist", "fern fiddlehead unfurling", "dandelion seed head macro", "koi pond carp", "pink water lily pond", "sand ripples dunes pattern",
+  "wildflower meadow summer", "knitted blanket mug cocoa", "hot spring onsen stones steam", "succulent plants pots windowsill", "Japanese tea ceremony teapot cup",
+  "candles lanterns warm light"],
+ "more_topics": ["cup of green tea leaves", "orchid flower white", "smooth pebbles beach", "lotus pond leaves", "rain drops window", "white sheets bed morning light", "monstera plant leaves", "hammock garden trees"]
+}

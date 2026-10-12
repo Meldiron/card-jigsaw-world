@@ -1,0 +1,13 @@
+{
+ "id": "evpack-polar-bear-2027", "name": "International Polar Bear Day", "category": "Event",
+ "description": "A limited pack for International Polar Bear Day (27 February 2027). Polar bears on sea ice, cubs, Arctic foxes, icebergs, snowy owls and northern lights, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2,
+ "sources": ["commons"], "quality_deepcat": "Quality images of animals",
+ "topics": ["polar bear portrait", "polar bear on sea ice", "polar bear cub", "polar bear swimming", "polar bear walking snow", "polar bear mother cubs",
+  "polar bear zoo water", "polar bear shaking water", "polar bear lying ice", "polar bear standing", "arctic fox white", "snowy owl",
+  "iceberg arctic", "svalbard glacier", "walrus", "harp seal pup", "beluga whale", "arctic hare",
+  "northern lights snow", "pack ice arctic", "ptarmigan winter", "musk ox", "reindeer snow", "sea ice floes",
+  "ursus maritimus", "polar bear paw", "polar bear yawning", "polar bear churchill manitoba", "polar bear sleeping", "arctic tundra snow"],
+ "more_topics": ["polar bear face close", "bearded seal", "ringed seal", "narwhal", "arctic ice cave", "greenland icebergs", "snow petrel",
+  "polar bear rolling snow", "polar bear ranua", "polar bear wilhelma", "ice crystals", "frozen fjord"]
+}

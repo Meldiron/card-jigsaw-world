@@ -1,0 +1,13 @@
+{
+ "id": "evpack-pizza-2027", "name": "National Pizza Day", "category": "Event",
+ "description": "A limited pack for National Pizza Day (9 February 2027). Margherita, pepperoni, deep dish, calzone, wood-fired ovens and pizza dough, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2,
+ "sources": ["commons"], "quality_deepcat": "Quality images of food",
+ "topics": ["margherita pizza", "neapolitan pizza", "pepperoni pizza", "pizza oven fire wood", "pizza dough flour", "mozzarella basil tomato",
+  "quattro formaggi pizza", "pizza marinara", "calzone", "chicago deep dish pizza", "sicilian pizza square", "pizza funghi mushroom",
+  "pizza prosciutto arugula", "pizza bianca", "pizza capricciosa", "pizza diavola", "focaccia rosemary", "pizza peel wooden",
+  "pizza cutter wheel", "san marzano tomatoes sauce", "pizza al taglio", "detroit style pizza", "pizza with olives", "pizza quattro stagioni",
+  "vegetable pizza peppers", "pizza fritta", "pizza cornicione crust", "mini pizzas", "pizza oven dome", "pizza slice plate"],
+ "more_topics": ["flatbread pizza", "pizza hawaiian", "pizza salami", "pizza tomato basil", "pizza whole table", "pizzeria oven brick",
+  "pizza box open", "pizza toppings ingredients", "burrata pizza", "pizza rucola"]
+}

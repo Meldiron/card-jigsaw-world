@@ -1,0 +1,42 @@
+{
+ "id": "abstract-bokeh",
+ "name": "Bokeh",
+ "category": "Abstract",
+ "description": "City lights, fairy lights and rain-wet windows melted into soft discs of colour.",
+ "kind": "abstract",
+ "price": "free",
+ "sortOrder": 3005,
+ "accent_from_cover": true,
+ "target": 24,
+ "sources": [
+  "commons"
+ ],
+ "commons_quality": true,
+ "per_topic": 2,
+ "fetch_per_topic": 5,
+ "author_cap": 3,
+ "topics": [
+  "cat:Bokeh with blur disks",
+  "cat:Featured photographs of bokeh",
+  "bokeh lights",
+  "bokeh Lichter",
+  "Christmas lights bokeh",
+  "bokeh night city",
+  "defocused lights",
+  "fairy lights bokeh",
+  "bokeh abstract",
+  "out of focus lights night",
+  "bokeh circles",
+  "bokeh street night",
+  "bokeh rain window",
+  "bokeh colourful lights",
+  "unscharfe Lichter nacht",
+  "bokeh traffic",
+  "bokeh garland",
+  "bokeh sparkle",
+  "bokeh water drops lights",
+  "bokeh neon"
+ ],
+ "category_depth": 0,
+ "category_limit": 200
+}

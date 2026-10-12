@@ -1,0 +1,211 @@
+"""Create / replace puzzles and keep pack rows consistent (imageCount, cover, blurhash, accent)."""
+import hashlib, time
+from . import api, catalog, imagecache, state, filters, checkpoint
+from .pool import load_pool, save_pool, nice_title, HashIndex
+
+def puzzle_id_for(url, pack_id=''):
+    return 'p-' + hashlib.sha1((pack_id + '|' + url).encode()).hexdigest()[:12]
+
+def _meta_ok(url):
+    m = imagecache.fetch(url)
+    return m if m.get('ok') else None
+
+def select_candidates(pool, spec, kept_metas, kept_authors, need, picks=(), auto=True, rejected=None):
+    # picks are always honoured first; auto-fill round-robins over topics
+    """Return ordered candidate list honouring explicit picks, topic round-robin, dup and author caps."""
+    rejected = rejected or {}
+    by_key = {c['key']: c for c in pool['candidates']}
+    chosen, chosen_metas, authors = [], list(kept_metas), dict(kept_authors)
+    def ok_to_add(c):
+        if state.is_rejected(c['url'], spec['id'], rejected): return False
+        if c.get('status') != 'ok': return False
+        m = _meta_ok(c['url'])
+        if not m: return False
+        if m['w'] > m['h'] or min(m['w'], m['h']) < filters.MIN_SHORT_HARD: return False
+        for km in chosen_metas:
+            sim, why = imagecache.similar(m, km)
+            if sim: return False
+        if authors.get(c['author'], 0) >= spec['author_cap'] and spec['author_cap'] > 0: return False
+        return m
+    for k in picks:
+        c = by_key.get(k)
+        if not c: print('  unknown pick', k); continue
+        m = ok_to_add(c)
+        if not m: print('  pick rejected by checks', k, c.get('why', '')); continue
+        chosen.append(c); chosen_metas.append(m); authors[c['author']] = authors.get(c['author'], 0) + 1
+    if auto:
+        topics = []
+        for c in pool['candidates']:
+            if c.get('topic') not in topics: topics.append(c.get('topic'))
+        # shared pools (daily years, ai-all): start the round-robin at a pack-specific point so successive
+        # packs draw from different topics instead of all taking the first ones in spec order
+        import random
+        random.Random(spec['id']).shuffle(topics)
+        per_topic = {t: [c for c in pool['candidates'] if c.get('topic') == t and c not in chosen] for t in topics}
+        progress = True
+        while len(chosen) < need and progress:
+            progress = False
+            for t in topics:
+                if len(chosen) >= need: break
+                while per_topic[t]:
+                    c = per_topic[t].pop(0)
+                    m = ok_to_add(c)
+                    if m:
+                        chosen.append(c); chosen_metas.append(m); authors[c['author']] = authors.get(c['author'], 0) + 1
+                        progress = True; break
+    return chosen
+
+def apply(spec, snap, target=None, picks=(), auto=True, dry=False, daily=False):
+    pack_id = spec['id']
+    target = target or spec['target']
+    snap = catalog.refresh_pack(snap, pack_id)
+    packs = catalog.pack_index(snap)
+    pack = packs.get(pack_id)
+    if not pack: raise SystemExit(f'pack {pack_id} does not exist; run newpack first')
+    puzzles = catalog.by_pack(snap).get(pack_id, [])
+    rejected = state.rejects()
+    pool = load_pool(spec['pool'])
+    removed, kept = [], []
+    for p in puzzles:
+        if state.is_rejected(p['imageUrl'], pack_id, rejected):
+            removed.append(p)
+        else:
+            kept.append(p)
+    kept_metas = [m for m in (imagecache.load_meta(p['imageUrl']) for p in kept) if m and m.get('ok')]
+    kept_authors = {}
+    for p in kept: kept_authors[p.get('author') or ''] = kept_authors.get(p.get('author') or '', 0) + 1
+    if daily:
+        need = len(removed)
+    else:
+        need = max(0, target - len(kept))
+    chosen = select_candidates(pool, spec, kept_metas, kept_authors, need, picks, auto, rejected)
+    print(f'{pack_id}: {len(puzzles)} puzzles, remove {len(removed)}, keep {len(kept)}, need {need}, chosen {len(chosen)}')
+    if dry:
+        for c in chosen: print('   +', c['key'], c.get('topic'), c['author'], c['url'])
+        for p in removed: print('   -', p['$id'], rejected[p['imageUrl']]['reason'])
+        return
+    accent = spec.get('accent') or pack.get('accent') or '#475569'
+    created = []
+    if daily:
+        # replace in place: keep ids, dates and sort order
+        for p, c in zip(removed, chosen):
+            m = _meta_ok(c['url'])
+            data = dict(title=nice_title(c, c.get('topic', 'Daily picture')), imageUrl=c['url'], thumbUrl=c['thumb'] or c['url'],
+                        author=c['author'][:96], source=c['source'][:128], accent=m['accent'], blurhash=m['blurhash'])
+            api.update_row('puzzles', p['$id'], data)
+            state.add_provenance(p['$id'], dict(url=c['url'], author=c['author'], licence=c['licence'], source=c['source'], page=c.get('page', ''), provider=c['provider'], packId=pack_id, replaced=p['imageUrl'], at=time.strftime('%Y-%m-%d')))
+            state.log('replace', pack=pack_id, puzzle=p['$id'], old=p['imageUrl'], new=c['url'], reason=rejected[p['imageUrl']]['reason'])
+            c['status'] = 'used'; created.append(p['$id'])
+        leftover = removed[len(chosen):]
+        if leftover:
+            print(f'  WARNING {len(leftover)} daily puzzles still violate (no candidates): ' + ', '.join(p['$id'] for p in leftover))
+    else:
+        for p in removed:
+            api.delete_row('puzzles', p['$id'])
+            state.log('delete', pack=pack_id, puzzle=p['$id'], url=p['imageUrl'], reason=rejected[p['imageUrl']]['reason'])
+        order = max([p.get('sortOrder') or 0 for p in kept] + [-1]) + 1
+        taken = {p.get('title') for p in kept}
+        for c in chosen:
+            m = _meta_ok(c['url'])
+            pid = puzzle_id_for(c['url'], pack_id)
+            title = nice_title(c, pack['name'] if str(c.get('topic', '')).startswith('cat:') else c.get('topic', pack['name']), taken); taken.add(title)
+            data = dict(packId=pack_id, title=title, imageUrl=c['url'], thumbUrl=c['thumb'] or c['url'],
+                        author=c['author'][:96], source=c['source'][:128], sortOrder=order, accent=accent, blurhash=m['blurhash'])
+            try:
+                api.create_row('puzzles', data, row_id=pid)
+            except RuntimeError as e:
+                if '409' in str(e):
+                    api.update_row('puzzles', pid, data)
+                else:
+                    raise
+            state.add_provenance(pid, dict(url=c['url'], author=c['author'], licence=c['licence'], source=c['source'], page=c.get('page', ''), provider=c['provider'], packId=pack_id, topic=c.get('topic', ''), at=time.strftime('%Y-%m-%d')))
+            state.log('create', pack=pack_id, puzzle=pid, url=c['url'], topic=c.get('topic', ''))
+            c['status'] = 'used'; created.append(pid); order += 1
+    save_pool(pool)
+    snap = catalog.refresh_pack(snap, pack_id)
+    finalize_pack(spec, snap, accent)
+    n = len(catalog.by_pack(snap).get(pack_id, []))
+    checkpoint.update(pack_id, status='fixed', step='apply', removed=len(removed), added=len(created), puzzles=n)
+    print(f'  done: {len(removed)} removed, {len(created)} added, pack now has {n} puzzles')
+    if n < filters.MIN_COUNT and not daily:
+        print(f'  WARNING pack below {filters.MIN_COUNT}; build more candidates (cli.py pool {pack_id} --more)')
+    return snap
+
+def finalize_pack(spec, snap, accent=None):
+    """Sync imageCount, cover, blurhash and accent on the pack (and its event row)."""
+    pack_id = spec['id']
+    pack = catalog.pack_index(snap)[pack_id]
+    puzzles = catalog.by_pack(snap).get(pack_id, [])
+    urls = [p['imageUrl'] for p in puzzles]
+    cover = spec.get('cover') if spec.get('cover') in urls else None
+    if not cover:
+        cover = pack.get('coverUrl') if pack.get('coverUrl') in urls else (urls[0] if urls else '')
+    data = {'imageCount': len(puzzles)}
+    if cover and cover != pack.get('coverUrl'):
+        data['coverUrl'] = cover
+    m = imagecache.load_meta(cover) if cover else None
+    if m and m.get('ok'):
+        if m['blurhash'] != pack.get('blurhash'): data['blurhash'] = m['blurhash']
+        if not pack.get('accent') or spec.get('accent_from_cover'):
+            data['accent'] = m['accent']
+    if accent and accent != pack.get('accent') and 'accent' not in data and spec.get('accent'):
+        data['accent'] = accent
+    for k in ('name', 'description'):
+        if spec.get(k) and spec[k] != pack.get(k): data[k] = spec[k][:256 if k == 'description' else 64]
+    if data:
+        api.update_row('packs', pack_id, data)
+        state.log('pack-update', pack=pack_id, fields=sorted(data))
+    if pack.get('eventId') and ('coverUrl' in data or 'accent' in data):
+        try:
+            ev = {k: v for k, v in data.items() if k in ('coverUrl', 'accent')}
+            api.update_row('events', pack['eventId'], ev)
+        except RuntimeError as e:
+            print('  event update failed', str(e)[:100])
+
+def new_pack(spec, snap, sort_order=None):
+    """Create (or update metadata of) a pack row from a spec. Idempotent."""
+    packs = catalog.pack_index(snap)
+    price = spec.get('price', 'coins')
+    data = dict(name=spec['name'][:64], category=spec['category'][:32], description=spec.get('description', '')[:256],
+                priceCoins=spec.get('priceCoins', 400 if price == 'coins' else 0), priceTickets=spec.get('priceTickets', 3 if price == 'tickets' else 0),
+                isFree=price == 'free', isPremium=bool(spec.get('premium', False)), isSeasonal=False,
+                sortOrder=spec.get('sortOrder', sort_order if sort_order is not None else 500), accent=spec.get('accent') or '#475569', emoji='')
+    if spec['id'] in packs:
+        api.update_row('packs', spec['id'], {k: v for k, v in data.items() if k in ('name', 'category', 'description', 'priceCoins', 'priceTickets', 'isFree', 'sortOrder')})
+        state.log('pack-meta', pack=spec['id'])
+    else:
+        data.update(coverUrl='', imageCount=0)
+        api.create_row('packs', data, row_id=spec['id'])
+        state.log('pack-create', pack=spec['id'], category=spec['category'])
+        checkpoint.update(spec['id'], status='pending', step='newpack', kind='new', name=spec['name'], category=spec['category'], puzzles=0)
+    return catalog.refresh_pack(snap, spec['id'])
+
+
+def clone(src_id, dst_id, snap):
+    """Replace every puzzle of dst with copies of src's puzzles (used for the same world day in another year)."""
+    snap = catalog.refresh_pack(snap, src_id); snap = catalog.refresh_pack(snap, dst_id)
+    packs = catalog.pack_index(snap)
+    if src_id not in packs or dst_id not in packs: raise SystemExit('both packs must exist')
+    src = catalog.by_pack(snap).get(src_id, []); old = catalog.by_pack(snap).get(dst_id, [])
+    if len(src) < filters.MIN_COUNT: raise SystemExit(f'{src_id} has only {len(src)} puzzles; fix it first')
+    for p in old:
+        api.delete_row('puzzles', p['$id']); state.log('delete', pack=dst_id, puzzle=p['$id'], url=p['imageUrl'], reason=f'replaced by clone of {src_id}')
+    prov = state.provenance()
+    for i, p in enumerate(src):
+        pid = puzzle_id_for(p['imageUrl'], dst_id)
+        data = {k: p.get(k) for k in ('title', 'imageUrl', 'thumbUrl', 'author', 'source', 'accent', 'blurhash')}
+        data.update(packId=dst_id, sortOrder=i)
+        try:
+            api.create_row('puzzles', data, row_id=pid)
+        except RuntimeError as e:
+            if '409' in str(e): api.update_row('puzzles', pid, data)
+            else: raise
+        rec = dict(prov.get(p['$id'], {'url': p['imageUrl'], 'author': p.get('author'), 'source': p.get('source')}))
+        rec.update(packId=dst_id, clonedFrom=src_id, at=time.strftime('%Y-%m-%d'))
+        state.add_provenance(pid, rec)
+    state.log('clone', src=src_id, dst=dst_id, count=len(src))
+    snap = catalog.refresh_pack(snap, dst_id)
+    spec = {'id': dst_id, 'cover': packs[src_id].get('coverUrl'), 'accent': packs[src_id].get('accent')}
+    finalize_pack(spec, snap)
+    checkpoint.update(dst_id, status='fixed', step=f'clone from {src_id}', removed=len(old), added=len(src), puzzles=len(src))
+    print(f'cloned {len(src)} puzzles {src_id} -> {dst_id}')

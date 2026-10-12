@@ -1,0 +1,12 @@
+{
+ "id": "evpack-winter-solstice-2026", "name": "Winter Solstice", "category": "Event",
+ "description": "A limited pack for Winter Solstice (21 December 2026). Stonehenge at sunrise, Yule logs, candles in snow, frost, icicles, holly and the low midwinter sun, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2,
+ "sources": ["commons"],
+ "topics": ["Stonehenge winter sunrise", "Newgrange passage tomb entrance", "Yule log burning fireplace", "candles in snow lantern", "snow covered pine trees", "frost patterns window glass",
+  "icicles hanging roof", "hoarfrost branches macro", "holly berries snow", "mistletoe berries", "low winter sun snow field trees", "northern cardinal snow",
+  "frozen lake ice patterns", "snowflake macro crystal", "evergreen wreath pinecones", "bonfire sparks night", "orange clove pomander", "European robin snow",
+  "rowan berries snow", "aurora borealis snow forest", "red deer snow forest", "pine cones snow branch", "birch trees snow forest", "mulled wine glass spices",
+  "alpenglow snow mountains sunset", "winter sunset bare trees", "snowy owl winter", "hot chocolate cinnamon mug winter"],
+ "more_topics": ["sun dog halo winter", "ice crystals macro", "snow covered fir branch", "winter berries red frost", "frozen waterfall ice", "log cabin snow night", "reindeer snow", "candle wreath advent"]
+}

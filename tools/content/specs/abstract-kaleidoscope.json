@@ -1,0 +1,43 @@
+{
+ "id": "abstract-kaleidoscope",
+ "name": "Kaleidoscope",
+ "category": "Abstract",
+ "description": "Mirrored, radial and mandala-like patterns that repeat in every direction.",
+ "kind": "abstract",
+ "price": "coins",
+ "priceCoins": 600,
+ "sortOrder": 3004,
+ "accent_from_cover": true,
+ "target": 24,
+ "sources": [
+  "commons"
+ ],
+ "commons_quality": true,
+ "per_topic": 2,
+ "fetch_per_topic": 5,
+ "author_cap": 3,
+ "topics": [
+  "cat:Kaleidoscope patterns",
+  "cat:Computer-generated mandalas",
+  "cat:Modern mandalas",
+  "cat:Teleidoscopes",
+  "kaleidoscope",
+  "kaleidoscopic",
+  "Kaleidoskop",
+  "mandala pattern",
+  "symmetrical pattern abstract",
+  "mirrored pattern",
+  "radial symmetry abstract",
+  "kaleidoscope flower",
+  "kaleidoscope photo",
+  "mandala colourful",
+  "mirror symmetry abstract",
+  "kaleidoscope digital",
+  "symmetric fractal mandala",
+  "kaleidoscope view",
+  "rotational symmetry pattern",
+  "mandala art digital"
+ ],
+ "category_depth": 0,
+ "category_limit": 200
+}

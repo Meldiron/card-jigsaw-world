@@ -1,0 +1,4813 @@
+{
+ "summary": {
+  "packs": 262,
+  "violating": 215,
+  "count": 110,
+  "landscape": 618,
+  "dup_pairs": 100,
+  "people_kw": 388,
+  "text_kw": 61,
+  "small": 646,
+  "unscanned": 0,
+  "cross_dups": 834,
+  "rejected_pending": 0
+ },
+ "packs": {
+  "animal-friends": {
+   "name": "Animal Friends",
+   "category": "Animals",
+   "count": 18,
+   "issues": [
+    "count 18 < 20"
+   ]
+  },
+  "pack-big-cats": {
+   "name": "Big Cats",
+   "category": "Animals",
+   "count": 20,
+   "issues": []
+  },
+  "pack-owls": {
+   "name": "Owls",
+   "category": "Animals",
+   "count": 20,
+   "issues": []
+  },
+  "pack-horses": {
+   "name": "Horses",
+   "category": "Animals",
+   "count": 20,
+   "issues": [
+    "pack-horses-17 ~ pack-horses-16: same scene (phash 12, colour 16)"
+   ],
+   "cross": [
+    "pack-horses-13 ~ evpack-mountain-day-2026-07 (evpack-mountain-day-2026)",
+    "pack-horses-13 ~ evpack-friendship-2027-10 (evpack-friendship-2027)",
+    "pack-horses-17 ~ pack-temples-15 (pack-temples)"
+   ]
+  },
+  "pack-butterflies": {
+   "name": "Butterflies",
+   "category": "Animals",
+   "count": 20,
+   "issues": []
+  },
+  "pack-puppies": {
+   "name": "Puppies",
+   "category": "Animals",
+   "count": 20,
+   "issues": []
+  },
+  "pack-kittens": {
+   "name": "Kittens",
+   "category": "Animals",
+   "count": 20,
+   "issues": []
+  },
+  "pack-elephants": {
+   "name": "Elephants",
+   "category": "Animals",
+   "count": 20,
+   "issues": []
+  },
+  "pack-penguins": {
+   "name": "Penguins",
+   "category": "Animals",
+   "count": 20,
+   "issues": [
+    "pack-penguins-17 ~ pack-penguins-15: near-duplicate (phash 0, dhash 1)"
+   ]
+  },
+  "pack-hummingbirds": {
+   "name": "Hummingbirds",
+   "category": "Animals",
+   "count": 20,
+   "issues": []
+  },
+  "pack-parrots": {
+   "name": "Parrots",
+   "category": "Animals",
+   "count": 20,
+   "issues": []
+  },
+  "pack-foxes": {
+   "name": "Foxes",
+   "category": "Animals",
+   "count": 20,
+   "issues": [
+    "pack-foxes-09 ~ pack-foxes-04: near-duplicate (phash 2, dhash 0)",
+    "pack-foxes-10 ~ pack-foxes-05: near-duplicate (phash 0, dhash 0)",
+    "pack-foxes-12 ~ pack-foxes-02: near-duplicate (phash 4, dhash 5)",
+    "pack-foxes-13 ~ pack-foxes-02: near-duplicate (phash 2, dhash 1)",
+    "pack-foxes-13 ~ pack-foxes-12: near-duplicate (phash 4, dhash 6)",
+    "pack-foxes-14 ~ pack-foxes-02: near-duplicate (phash 2, dhash 6)",
+    "pack-foxes-14 ~ pack-foxes-12: near-duplicate (phash 2, dhash 1)",
+    "pack-foxes-14 ~ pack-foxes-13: near-duplicate (phash 2, dhash 5)",
+    "pack-foxes-15 ~ pack-foxes-03: near-duplicate (phash 8, dhash 11)",
+    "pack-foxes-17 ~ pack-foxes-16: near-duplicate (phash 0, dhash 1)"
+   ]
+  },
+  "pack-deer": {
+   "name": "Deer",
+   "category": "Animals",
+   "count": 20,
+   "issues": [
+    "pack-deer-02: too small 683x1024",
+    "pack-deer-03: too small 683x1024",
+    "pack-deer-03 ~ pack-deer-02: near-duplicate (phash 6, dhash 7)",
+    "pack-deer-04: too small 684x1024",
+    "pack-deer-11 ~ pack-deer-09: same scene (phash 14, colour 9)"
+   ],
+   "cross": [
+    "pack-deer-06 ~ daily-2023-11-24 (daily-2023-11)",
+    "pack-deer-06 ~ evpack-star-wars-day-2027-11 (evpack-star-wars-day-2027)"
+   ]
+  },
+  "pack-farm-life": {
+   "name": "Farm Life",
+   "category": "Animals",
+   "count": 20,
+   "issues": [
+    "pack-farm-life-20: keyword people:man"
+   ]
+  },
+  "pack-birds-of-prey": {
+   "name": "Birds of Prey",
+   "category": "Animals",
+   "count": 20,
+   "issues": []
+  },
+  "pack-frogs": {
+   "name": "Frogs & Reptiles",
+   "category": "Animals",
+   "count": 20,
+   "issues": []
+  },
+  "pack-pandas": {
+   "name": "Pandas",
+   "category": "Animals",
+   "count": 20,
+   "issues": [
+    "pack-pandas-03: keyword unwanted:missile",
+    "pack-pandas-14: keyword unwanted:missile"
+   ]
+  },
+  "pack-castles": {
+   "name": "Castles",
+   "category": "Architecture",
+   "count": 20,
+   "issues": []
+  },
+  "pack-cathedrals": {
+   "name": "Cathedrals",
+   "category": "Architecture",
+   "count": 20,
+   "issues": [
+    "pack-cathedrals-17: too small 621x893",
+    "pack-cathedrals-18: too small 615x893",
+    "pack-cathedrals-19: too small 636x893",
+    "pack-cathedrals-20: too small 622x893",
+    "pack-cathedrals-20: keyword unwanted:funeral"
+   ]
+  },
+  "pack-bridges": {
+   "name": "Bridges",
+   "category": "Architecture",
+   "count": 20,
+   "issues": [
+    "pack-bridges-03: too small 683x1024"
+   ],
+   "cross": [
+    "pack-bridges-17 ~ daily-2023-02-07 (daily-2023-02)"
+   ]
+  },
+  "pack-doors": {
+   "name": "Doors of the World",
+   "category": "Architecture",
+   "count": 20,
+   "issues": [
+    "pack-doors-17: too small 661x1024",
+    "pack-doors-17 ~ pack-doors-09: near-duplicate (phash 0, dhash 0)"
+   ],
+   "cross": [
+    "pack-doors-07 ~ daily-2026-03-06 (daily-2026-03)"
+   ]
+  },
+  "pack-staircases": {
+   "name": "Staircases",
+   "category": "Architecture",
+   "count": 20,
+   "issues": [
+    "pack-staircases-04: keyword people:man",
+    "pack-staircases-05: keyword people:man"
+   ]
+  },
+  "pack-temples": {
+   "name": "Temples",
+   "category": "Architecture",
+   "count": 20,
+   "issues": [
+    "pack-temples-14: landscape 900x695",
+    "pack-temples-14: too small 900x695",
+    "pack-temples-15: landscape 1263x838",
+    "pack-temples-16: landscape 900x852",
+    "pack-temples-17: too small 618x900",
+    "pack-temples-18: too small 621x900",
+    "pack-temples-19: too small 676x900"
+   ],
+   "cross": [
+    "pack-temples-15 ~ daily-2024-08-10 (daily-2024-08)",
+    "pack-temples-15 ~ daily-2024-06-19 (daily-2024-06)",
+    "pack-temples-15 ~ daily-2024-05-16 (daily-2024-05)",
+    "pack-temples-15 ~ pack-horses-17 (pack-horses)",
+    "pack-temples-17 ~ daily-2026-07-27 (daily-2026-07)",
+    "pack-temples-17 ~ daily-2025-07-24 (daily-2025-07)",
+    "pack-temples-17 ~ daily-2024-03-19 (daily-2024-03)"
+   ]
+  },
+  "pack-windmills": {
+   "name": "Windmills",
+   "category": "Architecture",
+   "count": 20,
+   "issues": []
+  },
+  "pack-libraries": {
+   "name": "Libraries",
+   "category": "Architecture",
+   "count": 20,
+   "issues": []
+  },
+  "masterpieces": {
+   "name": "Masterpieces",
+   "category": "Art",
+   "count": 22,
+   "issues": [
+    "masterpieces-cma115067: too small 657x893",
+    "masterpieces-cma130391: too small 685x900",
+    "masterpieces-cma314466: too small 678x900",
+    "masterpieces-cma109628: landscape 1263x837",
+    "masterpieces-cma170895: too small 693x900",
+    "masterpieces-cma127953: keyword people:family",
+    "masterpieces-cma136510: landscape 900x419",
+    "masterpieces-cma136510: too small 900x419",
+    "masterpieces-cma151298: landscape 750x605",
+    "masterpieces-cma151298: too small 750x605",
+    "masterpieces-cma84371: landscape 900x800",
+    "masterpieces-cma163456: landscape 900x555",
+    "masterpieces-cma163456: too small 900x555",
+    "masterpieces-cma108180: landscape 750x673",
+    "masterpieces-cma108180: too small 750x673",
+    "masterpieces-cma74228: landscape 900x721",
+    "masterpieces-cma142642: landscape 1263x596",
+    "masterpieces-cma142642: too small 1263x596",
+    "masterpieces-cma141639: landscape 900x562",
+    "masterpieces-cma141639: too small 900x562",
+    "masterpieces-cma120286: landscape 900x654",
+    "masterpieces-cma120286: too small 900x654",
+    "masterpieces-cma86110: too small 460x900",
+    "masterpieces-cma134072: landscape 1179x893",
+    "masterpieces-cma148698: too small 402x900",
+    "masterpieces-cma150693: too small 456x893"
+   ]
+  },
+  "pack-dutch-masters": {
+   "name": "Dutch Masters",
+   "category": "Art",
+   "count": 20,
+   "issues": [
+    "pack-dutch-masters-03: landscape 1179x893",
+    "pack-dutch-masters-04: landscape 1184x893",
+    "pack-dutch-masters-04: keyword unwanted:dead",
+    "pack-dutch-masters-05: landscape 1263x816",
+    "pack-dutch-masters-07: landscape 1239x893",
+    "pack-dutch-masters-09: too small 672x893",
+    "pack-dutch-masters-09: keyword people:officer",
+    "pack-dutch-masters-10: landscape 1184x893",
+    "pack-dutch-masters-11: too small 646x893",
+    "pack-dutch-masters-12: landscape 1183x893",
+    "pack-dutch-masters-13: landscape 1263x892",
+    "pack-dutch-masters-14: too small 698x900",
+    "pack-dutch-masters-15: landscape 1133x893",
+    "pack-dutch-masters-15: keyword people:woman",
+    "pack-dutch-masters-16: too small 688x893",
+    "pack-dutch-masters-17: keyword people:hand,portrait,woman",
+    "pack-dutch-masters-18: landscape 900x759",
+    "pack-dutch-masters-19: landscape 1113x893",
+    "pack-dutch-masters-19: keyword people:christ",
+    "pack-dutch-masters-20: landscape 900x705"
+   ],
+   "cross": [
+    "pack-dutch-masters-08 ~ daily-2026-08-16 (daily-2026-08)",
+    "pack-dutch-masters-08 ~ daily-2026-06-07 (daily-2026-06)",
+    "pack-dutch-masters-08 ~ daily-2024-08-14 (daily-2024-08)",
+    "pack-dutch-masters-08 ~ daily-2023-11-30 (daily-2023-11)",
+    "pack-dutch-masters-08 ~ evpack-childrens-book-2027-14 (evpack-childrens-book-2027)",
+    "pack-dutch-masters-08 ~ pack-impressionists-06 (pack-impressionists)",
+    "pack-dutch-masters-08 ~ pack-old-maps-19 (pack-old-maps)",
+    "pack-dutch-masters-12 ~ pack-still-life-11 (pack-still-life)",
+    "pack-dutch-masters-20 ~ daily-2024-03-25 (daily-2024-03)"
+   ]
+  },
+  "pack-impressionists": {
+   "name": "Impressionists",
+   "category": "Art",
+   "count": 20,
+   "issues": [
+    "pack-impressionists-02: landscape 900x640",
+    "pack-impressionists-02: too small 900x640",
+    "pack-impressionists-03: landscape 900x664",
+    "pack-impressionists-03: too small 900x664",
+    "pack-impressionists-04: landscape 900x720",
+    "pack-impressionists-05: landscape 900x679",
+    "pack-impressionists-05: too small 900x679",
+    "pack-impressionists-06: too small 625x900",
+    "pack-impressionists-07: landscape 750x625",
+    "pack-impressionists-07: too small 750x625",
+    "pack-impressionists-08: keyword people:girl,peasant",
+    "pack-impressionists-09: landscape 900x643",
+    "pack-impressionists-09: too small 900x643",
+    "pack-impressionists-10: too small 641x893",
+    "pack-impressionists-11: too small 666x893",
+    "pack-impressionists-12: too small 684x893",
+    "pack-impressionists-13: landscape 900x687",
+    "pack-impressionists-13: too small 900x687",
+    "pack-impressionists-16: keyword people:self-portrait",
+    "pack-impressionists-17: landscape 900x691",
+    "pack-impressionists-17: too small 900x691",
+    "pack-impressionists-18: landscape 1263x796",
+    "pack-impressionists-18: keyword people:bathers",
+    "pack-impressionists-19: too small 694x900",
+    "pack-impressionists-19: keyword people:wedding",
+    "pack-impressionists-20: landscape 900x600",
+    "pack-impressionists-20: too small 900x600"
+   ],
+   "cross": [
+    "pack-impressionists-06 ~ daily-2026-04-06 (daily-2026-04)",
+    "pack-impressionists-06 ~ daily-2023-11-30 (daily-2023-11)",
+    "pack-impressionists-06 ~ evpack-childrens-book-2027-14 (evpack-childrens-book-2027)",
+    "pack-impressionists-06 ~ evpack-heart-day-2027-07 (evpack-heart-day-2027)",
+    "pack-impressionists-06 ~ pack-dutch-masters-08 (pack-dutch-masters)",
+    "pack-impressionists-06 ~ pack-old-maps-19 (pack-old-maps)"
+   ]
+  },
+  "pack-japanese-prints": {
+   "name": "Japanese Prints",
+   "category": "Art",
+   "count": 20,
+   "issues": [
+    "pack-japanese-prints-01: landscape 900x601",
+    "pack-japanese-prints-01: too small 900x601",
+    "pack-japanese-prints-02: too small 613x900",
+    "pack-japanese-prints-03: too small 605x900",
+    "pack-japanese-prints-04: too small 627x900",
+    "pack-japanese-prints-05: too small 629x900",
+    "pack-japanese-prints-06: too small 605x900",
+    "pack-japanese-prints-07: landscape 900x601",
+    "pack-japanese-prints-07: too small 900x601",
+    "pack-japanese-prints-08: too small 605x900",
+    "pack-japanese-prints-09: too small 620x900",
+    "pack-japanese-prints-10: landscape 900x600",
+    "pack-japanese-prints-10: too small 900x600",
+    "pack-japanese-prints-11: too small 612x900",
+    "pack-japanese-prints-12: landscape 900x606",
+    "pack-japanese-prints-12: too small 900x606",
+    "pack-japanese-prints-13: too small 640x900",
+    "pack-japanese-prints-13 ~ pack-japanese-prints-05: near-duplicate (phash 8, dhash 21)",
+    "pack-japanese-prints-14: too small 640x900",
+    "pack-japanese-prints-15: too small 625x900",
+    "pack-japanese-prints-16: too small 640x900",
+    "pack-japanese-prints-16 ~ pack-japanese-prints-04: same scene (phash 12, colour 16)",
+    "pack-japanese-prints-17: too small 625x900",
+    "pack-japanese-prints-18: too small 625x900",
+    "pack-japanese-prints-19: landscape 900x618",
+    "pack-japanese-prints-19: too small 900x618",
+    "pack-japanese-prints-20: too small 615x900",
+    "pack-japanese-prints-20 ~ pack-japanese-prints-14: near-duplicate (phash 4, dhash 15)"
+   ]
+  },
+  "pack-still-life": {
+   "name": "Still Life",
+   "category": "Art",
+   "count": 20,
+   "issues": [
+    "pack-still-life-01: landscape 1121x893",
+    "pack-still-life-02: landscape 1247x893",
+    "pack-still-life-03: too small 664x893",
+    "pack-still-life-04: landscape 1077x893",
+    "pack-still-life-04: keyword unwanted:dead",
+    "pack-still-life-05: too small 635x893",
+    "pack-still-life-06: landscape 900x749",
+    "pack-still-life-07: too small 682x893",
+    "pack-still-life-08: too small 677x893",
+    "pack-still-life-09: too small 672x893",
+    "pack-still-life-10: too small 618x893",
+    "pack-still-life-11: landscape 750x622",
+    "pack-still-life-11: too small 750x622",
+    "pack-still-life-12: too small 642x893",
+    "pack-still-life-12: keyword people:child",
+    "pack-still-life-13: keyword text:advertising",
+    "pack-still-life-15: too small 607x893",
+    "pack-still-life-16: too small 672x893",
+    "pack-still-life-17: landscape 1156x893",
+    "pack-still-life-18: keyword people:boys",
+    "pack-still-life-19: landscape 1263x887",
+    "pack-still-life-20: landscape 900x673",
+    "pack-still-life-20: too small 900x673"
+   ],
+   "cross": [
+    "pack-still-life-11 ~ pack-dutch-masters-12 (pack-dutch-masters)"
+   ]
+  },
+  "pack-portraits": {
+   "name": "Portraits",
+   "category": "Art",
+   "count": 20,
+   "issues": [
+    "pack-portraits-01: keyword people:self-portrait",
+    "pack-portraits-02: keyword people:man,portrait",
+    "pack-portraits-03: landscape 900x882",
+    "pack-portraits-03: keyword people:portrait",
+    "pack-portraits-04: keyword people:man,portrait",
+    "pack-portraits-04 ~ pack-portraits-01: same palette and layout (colour 8, phash 26)",
+    "pack-portraits-05: keyword people:portrait",
+    "pack-portraits-07: keyword people:man,portrait",
+    "pack-portraits-07 ~ pack-portraits-01: same scene (phash 12, colour 15)",
+    "pack-portraits-07 ~ pack-portraits-06: same palette and layout (colour 8, phash 16)",
+    "pack-portraits-08: keyword people:portrait",
+    "pack-portraits-09: keyword people:man,portrait",
+    "pack-portraits-09 ~ pack-portraits-01: same scene (phash 12, colour 7)",
+    "pack-portraits-09 ~ pack-portraits-07: same scene (phash 14, colour 16)",
+    "pack-portraits-10: too small 693x893",
+    "pack-portraits-10: keyword people:portrait",
+    "pack-portraits-11: too small 670x893",
+    "pack-portraits-11: keyword people:man,portrait",
+    "pack-portraits-12: too small 663x900",
+    "pack-portraits-12: keyword people:man,portrait",
+    "pack-portraits-13: too small 670x893",
+    "pack-portraits-13: keyword people:portrait",
+    "pack-portraits-14: too small 670x893",
+    "pack-portraits-14: keyword people:portrait",
+    "pack-portraits-15: too small 670x893",
+    "pack-portraits-15: keyword people:officer,portrait",
+    "pack-portraits-16: keyword people:man,portrait",
+    "pack-portraits-17: too small 698x893",
+    "pack-portraits-17: keyword people:portrait",
+    "pack-portraits-18: too small 670x893",
+    "pack-portraits-18: keyword people:man,portrait",
+    "pack-portraits-19: too small 665x893",
+    "pack-portraits-19: keyword people:portrait",
+    "pack-portraits-20: too small 662x893",
+    "pack-portraits-20: keyword people:portrait"
+   ],
+   "cross": [
+    "pack-portraits-06 ~ evpack-womens-day-2027-09 (evpack-womens-day-2027)",
+    "pack-portraits-06 ~ evpack-womens-day-2027-12 (evpack-womens-day-2027)",
+    "pack-portraits-06 ~ evpack-womens-day-2027-13 (evpack-womens-day-2027)",
+    "pack-portraits-07 ~ evpack-womens-day-2027-09 (evpack-womens-day-2027)",
+    "pack-portraits-07 ~ evpack-womens-day-2027-12 (evpack-womens-day-2027)",
+    "pack-portraits-07 ~ evpack-womens-day-2027-13 (evpack-womens-day-2027)"
+   ]
+  },
+  "pack-seascapes": {
+   "name": "Seascapes",
+   "category": "Art",
+   "count": 20,
+   "issues": [
+    "pack-seascapes-01: landscape 1235x893",
+    "pack-seascapes-02: landscape 1144x893",
+    "pack-seascapes-03: too small 669x900",
+    "pack-seascapes-04: landscape 1099x893",
+    "pack-seascapes-05: landscape 1263x840",
+    "pack-seascapes-06: landscape 900x610",
+    "pack-seascapes-06: too small 900x610",
+    "pack-seascapes-07: landscape 1165x893",
+    "pack-seascapes-08: landscape 899x893",
+    "pack-seascapes-08: keyword people:man,woman",
+    "pack-seascapes-09: too small 650x893",
+    "pack-seascapes-09: keyword people:portrait",
+    "pack-seascapes-10: landscape 1260x893",
+    "pack-seascapes-11: landscape 1239x893",
+    "pack-seascapes-12: landscape 900x644",
+    "pack-seascapes-12: too small 900x644",
+    "pack-seascapes-13: too small 696x893",
+    "pack-seascapes-13: keyword people:portrait"
+   ]
+  },
+  "pack-botanical": {
+   "name": "Botanical Prints",
+   "category": "Art",
+   "count": 20,
+   "issues": [
+    "pack-botanical-01: landscape 750x607",
+    "pack-botanical-01: too small 750x607",
+    "pack-botanical-01: keyword text:magazine",
+    "pack-botanical-02: landscape 750x627",
+    "pack-botanical-02: too small 750x627",
+    "pack-botanical-02: keyword text:magazine",
+    "pack-botanical-03: too small 688x900",
+    "pack-botanical-04: too small 616x893",
+    "pack-botanical-05: too small 687x893",
+    "pack-botanical-06: too small 618x900",
+    "pack-botanical-07: landscape 900x693",
+    "pack-botanical-07: too small 900x693",
+    "pack-botanical-08: too small 675x900",
+    "pack-botanical-09: too small 683x893",
+    "pack-botanical-10: landscape 900x714",
+    "pack-botanical-11: too small 668x900",
+    "pack-botanical-12: too small 615x900",
+    "pack-botanical-12 ~ pack-botanical-06: same palette and layout (colour 8, phash 28)",
+    "pack-botanical-13: too small 672x900",
+    "pack-botanical-14: too small 637x900",
+    "pack-botanical-15: landscape 1263x892",
+    "pack-botanical-16: too small 659x893",
+    "pack-botanical-17: too small 696x900",
+    "pack-botanical-18: too small 607x893",
+    "pack-botanical-19: landscape 900x771",
+    "pack-botanical-20: too small 694x893"
+   ],
+   "cross": [
+    "pack-botanical-03 ~ pack-gardens-art-20 (pack-gardens-art)",
+    "pack-botanical-03 ~ pack-old-maps-09 (pack-old-maps)",
+    "pack-botanical-12 ~ evpack-dance-2027-11 (evpack-dance-2027)",
+    "pack-botanical-12 ~ pack-vintage-posters-12 (pack-vintage-posters)",
+    "pack-botanical-16 ~ daily-2026-06-15 (daily-2026-06)",
+    "pack-botanical-16 ~ daily-2024-12-26 (daily-2024-12)",
+    "pack-botanical-16 ~ evpack-mothers-day-2027-10 (evpack-mothers-day-2027)",
+    "pack-botanical-16 ~ pack-gardens-art-07 (pack-gardens-art)",
+    "pack-botanical-16 ~ pack-gardens-art-20 (pack-gardens-art)",
+    "pack-botanical-16 ~ pack-old-maps-05 (pack-old-maps)",
+    "pack-botanical-16 ~ pack-old-maps-09 (pack-old-maps)",
+    "pack-botanical-16 ~ pack-vintage-posters-12 (pack-vintage-posters)",
+    "pack-botanical-20 ~ daily-2026-03-29 (daily-2026-03)"
+   ]
+  },
+  "pack-manuscripts": {
+   "name": "Medieval Manuscripts",
+   "category": "Art",
+   "count": 12,
+   "issues": [
+    "count 12 < 20",
+    "pack-manuscripts-01: keyword text:manuscripts",
+    "pack-manuscripts-02: keyword text:manuscripts",
+    "pack-manuscripts-03: keyword text:manuscripts",
+    "pack-manuscripts-04: too small 666x1024",
+    "pack-manuscripts-04: keyword text:manuscripts",
+    "pack-manuscripts-05: keyword text:manuscripts",
+    "pack-manuscripts-06: keyword text:manuscripts",
+    "pack-manuscripts-07: keyword text:manuscripts",
+    "pack-manuscripts-08: keyword text:manuscripts",
+    "pack-manuscripts-09: keyword text:manuscripts",
+    "pack-manuscripts-10: keyword text:manuscripts",
+    "pack-manuscripts-11: keyword text:manuscripts",
+    "pack-manuscripts-12: keyword text:manuscripts"
+   ],
+   "cross": [
+    "pack-manuscripts-02 ~ evpack-valentines-2027-01 (evpack-valentines-2027)",
+    "pack-manuscripts-08 ~ daily-2024-10-01 (daily-2024-10)",
+    "pack-manuscripts-08 ~ evpack-pet-day-2027-05 (evpack-pet-day-2027)",
+    "pack-manuscripts-08 ~ pack-starry-nights-15 (pack-starry-nights)",
+    "pack-manuscripts-08 ~ pack-starry-nights-19 (pack-starry-nights)",
+    "pack-manuscripts-11 ~ daily-2026-04-20 (daily-2026-04)",
+    "pack-manuscripts-11 ~ evpack-pet-day-2027-05 (evpack-pet-day-2027)"
+   ]
+  },
+  "pack-renaissance": {
+   "name": "Renaissance",
+   "category": "Art",
+   "count": 20,
+   "issues": [
+    "pack-renaissance-01: keyword people:family",
+    "pack-renaissance-02: landscape 900x899",
+    "pack-renaissance-02: keyword people:child",
+    "pack-renaissance-03: landscape 900x627",
+    "pack-renaissance-03: too small 900x627",
+    "pack-renaissance-03: keyword unwanted:battle",
+    "pack-renaissance-03: keyword people:nudes",
+    "pack-renaissance-06: landscape 1263x830",
+    "pack-renaissance-07: too small 690x893",
+    "pack-renaissance-07: keyword people:madonna",
+    "pack-renaissance-08: too small 627x900",
+    "pack-renaissance-08: keyword people:child,madonna",
+    "pack-renaissance-09: too small 654x900",
+    "pack-renaissance-09: keyword people:madonna",
+    "pack-renaissance-10: landscape 900x701",
+    "pack-renaissance-10: keyword people:child,madonna",
+    "pack-renaissance-11: keyword people:child,madonna",
+    "pack-renaissance-12: too small 654x893",
+    "pack-renaissance-12: keyword people:child,madonna",
+    "pack-renaissance-13: too small 614x893",
+    "pack-renaissance-13: keyword people:child,madonna",
+    "pack-renaissance-14: landscape 900x701",
+    "pack-renaissance-14: keyword people:child,madonna",
+    "pack-renaissance-14 ~ pack-renaissance-10: near-duplicate (phash 0, dhash 0)",
+    "pack-renaissance-15: too small 650x893",
+    "pack-renaissance-15: keyword people:child,madonna",
+    "pack-renaissance-16: landscape 1207x893",
+    "pack-renaissance-16: keyword people:child,madonna",
+    "pack-renaissance-17: keyword people:madonna",
+    "pack-renaissance-18: too small 670x893",
+    "pack-renaissance-18: keyword people:child,madonna",
+    "pack-renaissance-20: too small 630x893",
+    "pack-renaissance-20: keyword people:madonna"
+   ],
+   "cross": [
+    "pack-renaissance-03 ~ daily-2026-09-29 (daily-2026-09)",
+    "pack-renaissance-03 ~ daily-2025-11-13 (daily-2025-11)",
+    "pack-renaissance-03 ~ daily-2025-03-08 (daily-2025-03)",
+    "pack-renaissance-03 ~ daily-2025-01-09 (daily-2025-01)",
+    "pack-renaissance-03 ~ daily-2024-05-06 (daily-2024-05)",
+    "pack-renaissance-03 ~ daily-2023-12-24 (daily-2023-12)",
+    "pack-renaissance-03 ~ daily-2023-11-10 (daily-2023-11)",
+    "pack-renaissance-03 ~ daily-2023-07-23 (daily-2023-07)",
+    "pack-renaissance-03 ~ pack-oil-landscapes-17 (pack-oil-landscapes)",
+    "pack-renaissance-06 ~ daily-2024-11-28 (daily-2024-11)",
+    "pack-renaissance-13 ~ daily-2026-10-25 (daily-2026-10)",
+    "pack-renaissance-13 ~ daily-2026-09-29 (daily-2026-09)",
+    "pack-renaissance-13 ~ daily-2026-05-04 (daily-2026-05)",
+    "pack-renaissance-13 ~ daily-2025-11-13 (daily-2025-11)",
+    "pack-renaissance-13 ~ daily-2025-03-08 (daily-2025-03)",
+    "pack-renaissance-13 ~ daily-2025-01-09 (daily-2025-01)",
+    "pack-renaissance-13 ~ daily-2024-10-25 (daily-2024-10)",
+    "pack-renaissance-13 ~ daily-2024-05-06 (daily-2024-05)",
+    "pack-renaissance-13 ~ daily-2023-12-24 (daily-2023-12)",
+    "pack-renaissance-13 ~ daily-2023-11-10 (daily-2023-11)",
+    "pack-renaissance-13 ~ daily-2023-07-23 (daily-2023-07)"
+   ]
+  },
+  "pack-oil-landscapes": {
+   "name": "Landscapes in Oil",
+   "category": "Art",
+   "count": 20,
+   "issues": [
+    "pack-oil-landscapes-01: landscape 1166x893",
+    "pack-oil-landscapes-02: landscape 900x619",
+    "pack-oil-landscapes-02: too small 900x619",
+    "pack-oil-landscapes-03: landscape 1235x893",
+    "pack-oil-landscapes-04: landscape 900x605",
+    "pack-oil-landscapes-04: too small 900x605",
+    "pack-oil-landscapes-05: landscape 1057x893",
+    "pack-oil-landscapes-06: landscape 900x654",
+    "pack-oil-landscapes-06: too small 900x654",
+    "pack-oil-landscapes-07: landscape 750x627",
+    "pack-oil-landscapes-07: too small 750x627",
+    "pack-oil-landscapes-08: landscape 1173x893",
+    "pack-oil-landscapes-09: landscape 1263x851",
+    "pack-oil-landscapes-10: landscape 1263x832",
+    "pack-oil-landscapes-11: landscape 1095x893",
+    "pack-oil-landscapes-12: landscape 1263x875",
+    "pack-oil-landscapes-13: landscape 900x658",
+    "pack-oil-landscapes-13: too small 900x658",
+    "pack-oil-landscapes-14: landscape 900x643",
+    "pack-oil-landscapes-14: too small 900x643",
+    "pack-oil-landscapes-15: landscape 900x681",
+    "pack-oil-landscapes-15: too small 900x681",
+    "pack-oil-landscapes-16: landscape 900x686",
+    "pack-oil-landscapes-16: too small 900x686",
+    "pack-oil-landscapes-17: too small 635x893",
+    "pack-oil-landscapes-18: landscape 1133x893",
+    "pack-oil-landscapes-20: landscape 1263x828"
+   ],
+   "cross": [
+    "pack-oil-landscapes-17 ~ pack-renaissance-03 (pack-renaissance)"
+   ]
+  },
+  "pack-winter-scenes": {
+   "name": "Winter Scenes",
+   "category": "Art",
+   "count": 20,
+   "issues": [
+    "pack-winter-scenes-01: landscape 1190x893",
+    "pack-winter-scenes-02: landscape 1122x893",
+    "pack-winter-scenes-03: landscape 1263x815",
+    "pack-winter-scenes-04: too small 625x893",
+    "pack-winter-scenes-06: landscape 900x731",
+    "pack-winter-scenes-07: too small 677x893",
+    "pack-winter-scenes-08: landscape 900x642",
+    "pack-winter-scenes-08: too small 900x642",
+    "pack-winter-scenes-09: landscape 1263x879",
+    "pack-winter-scenes-10: landscape 900x689",
+    "pack-winter-scenes-10: too small 900x689",
+    "pack-winter-scenes-11: landscape 900x609",
+    "pack-winter-scenes-11: too small 900x609",
+    "pack-winter-scenes-12: landscape 900x735",
+    "pack-winter-scenes-13: too small 618x893",
+    "pack-winter-scenes-14: too small 699x893",
+    "pack-winter-scenes-15: landscape 1214x893",
+    "pack-winter-scenes-16: landscape 900x710",
+    "pack-winter-scenes-17: landscape 900x793",
+    "pack-winter-scenes-17: keyword people:gentlemen",
+    "pack-winter-scenes-18: too small 689x900",
+    "pack-winter-scenes-19: landscape 900x793",
+    "pack-winter-scenes-19: keyword people:woman",
+    "pack-winter-scenes-19 ~ pack-winter-scenes-17: same palette and layout (colour 7, phash 24)",
+    "pack-winter-scenes-20: landscape 900x626",
+    "pack-winter-scenes-20: too small 900x626"
+   ],
+   "cross": [
+    "pack-winter-scenes-17 ~ pack-jungle-12 (pack-jungle)",
+    "pack-winter-scenes-18 ~ daily-2023-07-05 (daily-2023-07)"
+   ]
+  },
+  "pack-gardens-art": {
+   "name": "Gardens in Art",
+   "category": "Art",
+   "count": 20,
+   "issues": [
+    "pack-gardens-art-01: landscape 1231x893",
+    "pack-gardens-art-02: too small 683x893",
+    "pack-gardens-art-03: too small 689x900",
+    "pack-gardens-art-04: landscape 1138x893",
+    "pack-gardens-art-05: too small 655x900",
+    "pack-gardens-art-05: keyword people:women",
+    "pack-gardens-art-06: too small 637x893",
+    "pack-gardens-art-07: too small 606x893",
+    "pack-gardens-art-08: too small 625x900",
+    "pack-gardens-art-10: landscape 1263x884",
+    "pack-gardens-art-11: too small 675x900",
+    "pack-gardens-art-12: landscape 900x723",
+    "pack-gardens-art-13: too small 654x900",
+    "pack-gardens-art-13: keyword people:women",
+    "pack-gardens-art-14: landscape 900x750",
+    "pack-gardens-art-15: too small 629x900",
+    "pack-gardens-art-16: too small 608x900",
+    "pack-gardens-art-16: keyword people:girls",
+    "pack-gardens-art-17: landscape 900x750",
+    "pack-gardens-art-18: landscape 1263x862",
+    "pack-gardens-art-19: landscape 1102x893",
+    "pack-gardens-art-20: landscape 1101x893"
+   ],
+   "cross": [
+    "pack-gardens-art-07 ~ evpack-mothers-day-2027-10 (evpack-mothers-day-2027)",
+    "pack-gardens-art-07 ~ pack-botanical-16 (pack-botanical)",
+    "pack-gardens-art-08 ~ daily-2024-12-06 (daily-2024-12)",
+    "pack-gardens-art-20 ~ pack-botanical-03 (pack-botanical)",
+    "pack-gardens-art-20 ~ pack-botanical-16 (pack-botanical)",
+    "pack-gardens-art-20 ~ pack-old-maps-09 (pack-old-maps)",
+    "pack-gardens-art-20 ~ pack-vintage-posters-12 (pack-vintage-posters)"
+   ]
+  },
+  "pack-tokyo-nights": {
+   "name": "Tokyo Nights",
+   "category": "Cities",
+   "count": 17,
+   "issues": [
+    "count 17 < 20",
+    "pack-tokyo-nights-16: too small 607x900",
+    "pack-tokyo-nights-17: too small 613x900",
+    "pack-tokyo-nights-17 ~ pack-tokyo-nights-16: near-duplicate (phash 6, dhash 4)"
+   ]
+  },
+  "pack-paris": {
+   "name": "Paris",
+   "category": "Cities",
+   "count": 20,
+   "issues": []
+  },
+  "pack-new-york": {
+   "name": "New York",
+   "category": "Cities",
+   "count": 20,
+   "issues": [
+    "pack-new-york-02 ~ pack-new-york-01: near-duplicate (phash 0, dhash 0)"
+   ]
+  },
+  "pack-venice": {
+   "name": "Venice",
+   "category": "Cities",
+   "count": 20,
+   "issues": [],
+   "cross": [
+    "pack-venice-14 ~ daily-2023-06-12 (daily-2023-06)"
+   ]
+  },
+  "pack-london": {
+   "name": "London",
+   "category": "Cities",
+   "count": 20,
+   "issues": []
+  },
+  "pack-rome": {
+   "name": "Rome",
+   "category": "Cities",
+   "count": 20,
+   "issues": []
+  },
+  "pack-istanbul": {
+   "name": "Istanbul",
+   "category": "Cities",
+   "count": 20,
+   "issues": [
+    "pack-istanbul-15: too small 683x1024",
+    "pack-istanbul-16: too small 679x1024",
+    "pack-istanbul-17: too small 681x1024"
+   ]
+  },
+  "pack-amsterdam": {
+   "name": "Amsterdam",
+   "category": "Cities",
+   "count": 20,
+   "issues": [
+    "pack-amsterdam-01: too small 596x1024",
+    "pack-amsterdam-14 ~ pack-amsterdam-09: near-duplicate (phash 0, dhash 0)"
+   ]
+  },
+  "pack-barcelona": {
+   "name": "Barcelona",
+   "category": "Cities",
+   "count": 20,
+   "issues": []
+  },
+  "pack-prague": {
+   "name": "Prague",
+   "category": "Cities",
+   "count": 20,
+   "issues": [
+    "pack-prague-15 ~ pack-prague-10: near-duplicate (phash 22, dhash 6)"
+   ],
+   "cross": [
+    "pack-prague-10 ~ pack-galaxies-07 (pack-galaxies)"
+   ]
+  },
+  "pack-lisbon": {
+   "name": "Lisbon",
+   "category": "Cities",
+   "count": 15,
+   "issues": [
+    "count 15 < 20",
+    "pack-lisbon-15: landscape 900x606",
+    "pack-lisbon-15: too small 900x606"
+   ]
+  },
+  "pack-rainy-streets": {
+   "name": "Rainy Streets",
+   "category": "Cities",
+   "count": 20,
+   "issues": []
+  },
+  "pack-skylines": {
+   "name": "Skylines",
+   "category": "Cities",
+   "count": 20,
+   "issues": []
+  },
+  "daily-2026-10": {
+   "name": "October 2026",
+   "category": "Daily",
+   "count": 31,
+   "issues": [
+    "daily-2026-10-01: landscape 1163x893",
+    "daily-2026-10-01: keyword text:calligraphy",
+    "daily-2026-10-03: keyword people:woman",
+    "daily-2026-10-05: landscape 1251x893",
+    "daily-2026-10-07: landscape 1263x779",
+    "daily-2026-10-11: too small 664x900",
+    "daily-2026-10-13: too small 617x900",
+    "daily-2026-10-15: landscape 1196x893",
+    "daily-2026-10-15: keyword people:man",
+    "daily-2026-10-17: keyword people:woman",
+    "daily-2026-10-21: landscape 1263x835",
+    "daily-2026-10-23: landscape 1262x893",
+    "daily-2026-10-23: keyword people:child",
+    "daily-2026-10-25: landscape 900x805",
+    "daily-2026-10-27: too small 613x900",
+    "daily-2026-10-29: keyword people:portrait,woman",
+    "daily-2026-10-31: landscape 1117x893"
+   ],
+   "cross": [
+    "daily-2026-10-09 ~ daily-2025-11-25 (daily-2025-11)",
+    "daily-2026-10-09 ~ evpack-animal-day-2026-08 (evpack-animal-day-2026)",
+    "daily-2026-10-16 ~ daily-2024-03-22 (daily-2024-03)",
+    "daily-2026-10-25 ~ daily-2026-09-29 (daily-2026-09)",
+    "daily-2026-10-25 ~ daily-2026-05-04 (daily-2026-05)",
+    "daily-2026-10-25 ~ daily-2025-11-13 (daily-2025-11)",
+    "daily-2026-10-25 ~ daily-2025-08-25 (daily-2025-08)",
+    "daily-2026-10-25 ~ daily-2025-06-19 (daily-2025-06)",
+    "daily-2026-10-25 ~ daily-2025-05-15 (daily-2025-05)",
+    "daily-2026-10-25 ~ daily-2025-03-08 (daily-2025-03)",
+    "daily-2026-10-25 ~ daily-2025-01-09 (daily-2025-01)",
+    "daily-2026-10-25 ~ daily-2024-10-25 (daily-2024-10)",
+    "daily-2026-10-25 ~ daily-2024-05-06 (daily-2024-05)",
+    "daily-2026-10-25 ~ daily-2024-02-10 (daily-2024-02)",
+    "daily-2026-10-25 ~ daily-2023-12-24 (daily-2023-12)",
+    "daily-2026-10-25 ~ daily-2023-11-10 (daily-2023-11)",
+    "daily-2026-10-25 ~ daily-2023-07-23 (daily-2023-07)",
+    "daily-2026-10-25 ~ evpack-remembrance-2027-01 (evpack-remembrance-2027)",
+    "daily-2026-10-25 ~ pack-renaissance-13 (pack-renaissance)",
+    "daily-2026-10-26 ~ deep-space-nasa-pia02879 (deep-space)",
+    "daily-2026-10-26 ~ daily-2023-08-09 (daily-2023-08)",
+    "daily-2026-10-26 ~ pack-planets-15 (pack-planets)"
+   ]
+  },
+  "daily-2026-09": {
+   "name": "September 2026",
+   "category": "Daily",
+   "count": 30,
+   "issues": [
+    "daily-2026-09-01: landscape 750x738",
+    "daily-2026-09-03: landscape 900x808",
+    "daily-2026-09-05: too small 627x893",
+    "daily-2026-09-05: keyword people:child",
+    "daily-2026-09-07: landscape 1263x711",
+    "daily-2026-09-09: keyword people:man",
+    "daily-2026-09-13: too small 609x893",
+    "daily-2026-09-13: keyword text:page",
+    "daily-2026-09-15: too small 690x900",
+    "daily-2026-09-17: landscape 750x657",
+    "daily-2026-09-17: too small 750x657",
+    "daily-2026-09-19: landscape 939x893",
+    "daily-2026-09-19: keyword people:portrait",
+    "daily-2026-09-21: landscape 1263x652",
+    "daily-2026-09-21: too small 1263x652",
+    "daily-2026-09-23: landscape 1263x892",
+    "daily-2026-09-25: keyword people:putti",
+    "daily-2026-09-27: keyword people:boy",
+    "daily-2026-09-29: landscape 900x805"
+   ],
+   "cross": [
+    "daily-2026-09-13 ~ daily-2026-07-31 (daily-2026-07)",
+    "daily-2026-09-13 ~ daily-2025-02-20 (daily-2025-02)",
+    "daily-2026-09-13 ~ daily-2024-09-07 (daily-2024-09)",
+    "daily-2026-09-13 ~ daily-2024-06-29 (daily-2024-06)",
+    "daily-2026-09-13 ~ daily-2023-09-11 (daily-2023-09)",
+    "daily-2026-09-13 ~ daily-2023-08-20 (daily-2023-08)",
+    "daily-2026-09-13 ~ daily-2023-07-07 (daily-2023-07)",
+    "daily-2026-09-13 ~ daily-2023-07-31 (daily-2023-07)",
+    "daily-2026-09-25 ~ daily-2023-02-07 (daily-2023-02)",
+    "daily-2026-09-29 ~ daily-2026-10-25 (daily-2026-10)",
+    "daily-2026-09-29 ~ daily-2026-05-04 (daily-2026-05)",
+    "daily-2026-09-29 ~ daily-2025-11-13 (daily-2025-11)",
+    "daily-2026-09-29 ~ daily-2025-08-25 (daily-2025-08)",
+    "daily-2026-09-29 ~ daily-2025-06-19 (daily-2025-06)",
+    "daily-2026-09-29 ~ daily-2025-05-15 (daily-2025-05)",
+    "daily-2026-09-29 ~ daily-2025-03-08 (daily-2025-03)",
+    "daily-2026-09-29 ~ daily-2025-01-09 (daily-2025-01)",
+    "daily-2026-09-29 ~ daily-2024-10-25 (daily-2024-10)",
+    "daily-2026-09-29 ~ daily-2024-05-06 (daily-2024-05)",
+    "daily-2026-09-29 ~ daily-2024-02-10 (daily-2024-02)",
+    "daily-2026-09-29 ~ daily-2023-12-24 (daily-2023-12)",
+    "daily-2026-09-29 ~ daily-2023-11-10 (daily-2023-11)",
+    "daily-2026-09-29 ~ daily-2023-07-23 (daily-2023-07)",
+    "daily-2026-09-29 ~ evpack-remembrance-2027-01 (evpack-remembrance-2027)",
+    "daily-2026-09-29 ~ pack-renaissance-03 (pack-renaissance)",
+    "daily-2026-09-29 ~ pack-renaissance-13 (pack-renaissance)"
+   ]
+  },
+  "daily-2026-08": {
+   "name": "August 2026",
+   "category": "Daily",
+   "count": 31,
+   "issues": [
+    "daily-2026-08-02: landscape 1263x748",
+    "daily-2026-08-04: landscape 1263x886",
+    "daily-2026-08-06: keyword people:portrait",
+    "daily-2026-08-10: landscape 900x677",
+    "daily-2026-08-10: too small 900x677",
+    "daily-2026-08-10: keyword text:calligraphy",
+    "daily-2026-08-12: landscape 1087x893",
+    "daily-2026-08-16: landscape 900x625",
+    "daily-2026-08-16: too small 900x625",
+    "daily-2026-08-16: keyword people:women",
+    "daily-2026-08-18: landscape 750x640",
+    "daily-2026-08-18: too small 750x640",
+    "daily-2026-08-20: too small 698x900",
+    "daily-2026-08-22: landscape 1263x662",
+    "daily-2026-08-22: too small 1263x662",
+    "daily-2026-08-24: landscape 1156x893",
+    "daily-2026-08-26: too small 651x900",
+    "daily-2026-08-26: keyword people:women",
+    "daily-2026-08-28: landscape 1079x893"
+   ],
+   "cross": [
+    "daily-2026-08-10 ~ daily-2026-03-11 (daily-2026-03)",
+    "daily-2026-08-10 ~ daily-2023-10-05 (daily-2023-10)",
+    "daily-2026-08-16 ~ pack-dutch-masters-08 (pack-dutch-masters)",
+    "daily-2026-08-22 ~ daily-2023-10-28 (daily-2023-10)",
+    "daily-2026-08-26 ~ evpack-diwali-2026-03 (evpack-diwali-2026)"
+   ]
+  },
+  "daily-2026-07": {
+   "name": "July 2026",
+   "category": "Daily",
+   "count": 31,
+   "issues": [
+    "daily-2026-07-03: landscape 1263x697",
+    "daily-2026-07-03: too small 1263x697",
+    "daily-2026-07-05: landscape 1263x817",
+    "daily-2026-07-05: keyword people:child",
+    "daily-2026-07-07: landscape 1257x893",
+    "daily-2026-07-07: keyword people:couple,portrait",
+    "daily-2026-07-09: too small 650x900",
+    "daily-2026-07-11: landscape 900x615",
+    "daily-2026-07-11: too small 900x615",
+    "daily-2026-07-11: keyword text:page",
+    "daily-2026-07-15: keyword people:children,figures,woman",
+    "daily-2026-07-21: landscape 900x633",
+    "daily-2026-07-21: too small 900x633",
+    "daily-2026-07-23: too small 685x893",
+    "daily-2026-07-24: too small 640x900",
+    "daily-2026-07-25: too small 602x900",
+    "daily-2026-07-27: landscape 900x717",
+    "daily-2026-07-27: keyword people:figures",
+    "daily-2026-07-29: keyword people:child",
+    "daily-2026-07-31: too small 605x893",
+    "daily-2026-07-31: keyword text:page"
+   ],
+   "cross": [
+    "daily-2026-07-25 ~ pack-rolling-hills-10 (pack-rolling-hills)",
+    "daily-2026-07-27 ~ daily-2025-07-24 (daily-2025-07)",
+    "daily-2026-07-27 ~ daily-2024-03-19 (daily-2024-03)",
+    "daily-2026-07-27 ~ daily-2023-04-11 (daily-2023-04)",
+    "daily-2026-07-27 ~ pack-temples-17 (pack-temples)",
+    "daily-2026-07-27 ~ pack-rolling-hills-01 (pack-rolling-hills)",
+    "daily-2026-07-31 ~ daily-2026-09-13 (daily-2026-09)",
+    "daily-2026-07-31 ~ daily-2025-05-05 (daily-2025-05)",
+    "daily-2026-07-31 ~ daily-2025-02-20 (daily-2025-02)",
+    "daily-2026-07-31 ~ daily-2024-09-07 (daily-2024-09)",
+    "daily-2026-07-31 ~ daily-2024-09-09 (daily-2024-09)",
+    "daily-2026-07-31 ~ daily-2024-06-29 (daily-2024-06)",
+    "daily-2026-07-31 ~ daily-2023-09-11 (daily-2023-09)",
+    "daily-2026-07-31 ~ daily-2023-08-20 (daily-2023-08)",
+    "daily-2026-07-31 ~ daily-2023-07-31 (daily-2023-07)"
+   ]
+  },
+  "daily-2026-06": {
+   "name": "June 2026",
+   "category": "Daily",
+   "count": 30,
+   "issues": [
+    "daily-2026-06-01: landscape 750x621",
+    "daily-2026-06-01: too small 750x621",
+    "daily-2026-06-03: too small 629x893",
+    "daily-2026-06-04: landscape 1077x893",
+    "daily-2026-06-05: landscape 1213x893",
+    "daily-2026-06-07: landscape 900x629",
+    "daily-2026-06-07: too small 900x629",
+    "daily-2026-06-07: keyword people:party",
+    "daily-2026-06-09: landscape 900x864",
+    "daily-2026-06-11: too small 673x900",
+    "daily-2026-06-13: landscape 1085x893",
+    "daily-2026-06-15: landscape 750x631",
+    "daily-2026-06-15: too small 750x631",
+    "daily-2026-06-17: too small 642x900",
+    "daily-2026-06-17: keyword people:portrait",
+    "daily-2026-06-19: too small 696x893",
+    "daily-2026-06-21: landscape 750x708",
+    "daily-2026-06-21: keyword people:peasants",
+    "daily-2026-06-23: landscape 1263x760",
+    "daily-2026-06-25: landscape 900x628",
+    "daily-2026-06-25: too small 900x628",
+    "daily-2026-06-27: landscape 750x664",
+    "daily-2026-06-27: too small 750x664",
+    "daily-2026-06-29: too small 693x893"
+   ],
+   "cross": [
+    "daily-2026-06-07 ~ pack-dutch-masters-08 (pack-dutch-masters)",
+    "daily-2026-06-15 ~ pack-botanical-16 (pack-botanical)"
+   ]
+  },
+  "daily-2026-05": {
+   "name": "May 2026",
+   "category": "Daily",
+   "count": 31,
+   "issues": [
+    "daily-2026-05-02: landscape 900x748",
+    "daily-2026-05-04: landscape 900x805",
+    "daily-2026-05-06: too small 668x893",
+    "daily-2026-05-08: landscape 1263x705",
+    "daily-2026-05-10: too small 661x900",
+    "daily-2026-05-12: landscape 900x662",
+    "daily-2026-05-12: too small 900x662",
+    "daily-2026-05-12: keyword people:player",
+    "daily-2026-05-14: landscape 900x797",
+    "daily-2026-05-16: too small 632x900",
+    "daily-2026-05-16: keyword people:couple",
+    "daily-2026-05-18: landscape 900x668",
+    "daily-2026-05-18: too small 900x668",
+    "daily-2026-05-18: keyword unwanted:battle,war",
+    "daily-2026-05-20: keyword people:portrait",
+    "daily-2026-05-22: landscape 900x842",
+    "daily-2026-05-26: too small 670x893",
+    "daily-2026-05-28: landscape 900x724",
+    "daily-2026-05-30: too small 659x900",
+    "daily-2026-05-30: keyword people:christ,infant",
+    "daily-2026-05-30: keyword unwanted:icon"
+   ],
+   "cross": [
+    "daily-2026-05-02 ~ daily-2023-03-29 (daily-2023-03)",
+    "daily-2026-05-04 ~ daily-2026-10-25 (daily-2026-10)",
+    "daily-2026-05-04 ~ daily-2026-09-29 (daily-2026-09)",
+    "daily-2026-05-04 ~ daily-2025-11-13 (daily-2025-11)",
+    "daily-2026-05-04 ~ daily-2025-06-19 (daily-2025-06)",
+    "daily-2026-05-04 ~ daily-2025-03-08 (daily-2025-03)",
+    "daily-2026-05-04 ~ daily-2025-01-09 (daily-2025-01)",
+    "daily-2026-05-04 ~ daily-2024-10-25 (daily-2024-10)",
+    "daily-2026-05-04 ~ daily-2024-05-06 (daily-2024-05)",
+    "daily-2026-05-04 ~ daily-2024-02-10 (daily-2024-02)",
+    "daily-2026-05-04 ~ daily-2023-12-24 (daily-2023-12)",
+    "daily-2026-05-04 ~ daily-2023-11-10 (daily-2023-11)",
+    "daily-2026-05-04 ~ daily-2023-07-23 (daily-2023-07)",
+    "daily-2026-05-04 ~ daily-2023-05-20 (daily-2023-05)",
+    "daily-2026-05-04 ~ evpack-remembrance-2027-01 (evpack-remembrance-2027)",
+    "daily-2026-05-04 ~ pack-renaissance-13 (pack-renaissance)",
+    "daily-2026-05-26 ~ daily-2024-10-17 (daily-2024-10)",
+    "daily-2026-05-26 ~ daily-2024-07-04 (daily-2024-07)",
+    "daily-2026-05-26 ~ daily-2023-05-04 (daily-2023-05)"
+   ]
+  },
+  "daily-2026-04": {
+   "name": "April 2026",
+   "category": "Daily",
+   "count": 30,
+   "issues": [
+    "daily-2026-04-02: too small 649x893",
+    "daily-2026-04-06: too small 673x893",
+    "daily-2026-04-08: too small 650x893",
+    "daily-2026-04-08: keyword people:peasants",
+    "daily-2026-04-10: landscape 1263x756",
+    "daily-2026-04-14: landscape 750x653",
+    "daily-2026-04-14: too small 750x653",
+    "daily-2026-04-15: too small 614x900",
+    "daily-2026-04-16: too small 662x900",
+    "daily-2026-04-16: keyword text:calligraphy",
+    "daily-2026-04-20: too small 661x893",
+    "daily-2026-04-20: keyword people:man,portrait",
+    "daily-2026-04-22: too small 652x893",
+    "daily-2026-04-24: too small 630x893",
+    "daily-2026-04-26: landscape 1178x893",
+    "daily-2026-04-26: keyword people:family",
+    "daily-2026-04-28: landscape 900x668",
+    "daily-2026-04-28: too small 900x668",
+    "daily-2026-04-28: keyword people:christ",
+    "daily-2026-04-30: landscape 900x834"
+   ],
+   "cross": [
+    "daily-2026-04-06 ~ pack-impressionists-06 (pack-impressionists)",
+    "daily-2026-04-19 ~ daily-2025-06-03 (daily-2025-06)",
+    "daily-2026-04-20 ~ pack-manuscripts-11 (pack-manuscripts)"
+   ]
+  },
+  "daily-2026-03": {
+   "name": "March 2026",
+   "category": "Daily",
+   "count": 31,
+   "issues": [
+    "daily-2026-03-01: too small 698x900",
+    "daily-2026-03-01: keyword people:woman",
+    "daily-2026-03-05: keyword people:seller",
+    "daily-2026-03-07: landscape 1263x834",
+    "daily-2026-03-09: too small 608x900",
+    "daily-2026-03-11: landscape 1263x870",
+    "daily-2026-03-11: keyword text:calligraphy",
+    "daily-2026-03-13: landscape 900x630",
+    "daily-2026-03-13: too small 900x630",
+    "daily-2026-03-15: keyword people:women",
+    "daily-2026-03-17: landscape 900x772",
+    "daily-2026-03-19: landscape 900x626",
+    "daily-2026-03-19: too small 900x626",
+    "daily-2026-03-21: landscape 900x739",
+    "daily-2026-03-27: too small 694x893",
+    "daily-2026-03-31: keyword people:portrait"
+   ],
+   "cross": [
+    "daily-2026-03-06 ~ pack-doors-07 (pack-doors)",
+    "daily-2026-03-11 ~ daily-2026-08-10 (daily-2026-08)",
+    "daily-2026-03-11 ~ daily-2023-10-05 (daily-2023-10)",
+    "daily-2026-03-15 ~ daily-2024-08-16 (daily-2024-08)",
+    "daily-2026-03-19 ~ daily-2024-09-07 (daily-2024-09)",
+    "daily-2026-03-19 ~ daily-2024-06-29 (daily-2024-06)",
+    "daily-2026-03-26 ~ pack-rolling-hills-12 (pack-rolling-hills)",
+    "daily-2026-03-27 ~ daily-2024-08-26 (daily-2024-08)",
+    "daily-2026-03-27 ~ daily-2023-07-21 (daily-2023-07)",
+    "daily-2026-03-29 ~ pack-botanical-20 (pack-botanical)"
+   ]
+  },
+  "daily-2026-02": {
+   "name": "February 2026",
+   "category": "Daily",
+   "count": 28,
+   "issues": [
+    "daily-2026-02-01: too small 661x900",
+    "daily-2026-02-01: keyword people:portrait",
+    "daily-2026-02-03: landscape 931x893",
+    "daily-2026-02-05: landscape 750x707",
+    "daily-2026-02-05: keyword people:portrait,woman",
+    "daily-2026-02-07: landscape 900x893",
+    "daily-2026-02-09: landscape 900x846",
+    "daily-2026-02-11: landscape 1143x893",
+    "daily-2026-02-17: landscape 900x605",
+    "daily-2026-02-17: too small 900x605",
+    "daily-2026-02-19: landscape 750x744",
+    "daily-2026-02-21: too small 641x893",
+    "daily-2026-02-23: too small 602x893",
+    "daily-2026-02-24: keyword people:self-portrait",
+    "daily-2026-02-25: too small 680x900",
+    "daily-2026-02-25: keyword people:women",
+    "daily-2026-02-27: landscape 900x635",
+    "daily-2026-02-27: too small 900x635",
+    "daily-2026-02-27: keyword unwanted:battle"
+   ],
+   "cross": [
+    "daily-2026-02-09 ~ daily-2025-03-08 (daily-2025-03)",
+    "daily-2026-02-09 ~ daily-2023-12-24 (daily-2023-12)",
+    "daily-2026-02-09 ~ pack-kyoto-19 (pack-kyoto)",
+    "daily-2026-02-17 ~ pack-textiles-14 (pack-textiles)",
+    "daily-2026-02-24 ~ daily-2024-11-06 (daily-2024-11)",
+    "daily-2026-02-25 ~ daily-2024-11-20 (daily-2024-11)"
+   ]
+  },
+  "daily-2026-01": {
+   "name": "January 2026",
+   "category": "Daily",
+   "count": 31,
+   "issues": [
+    "daily-2026-01-02: landscape 900x711",
+    "daily-2026-01-04: keyword people:child",
+    "daily-2026-01-06: too small 670x893",
+    "daily-2026-01-08: keyword unwanted:icon",
+    "daily-2026-01-10: too small 667x900",
+    "daily-2026-01-12: landscape 900x749",
+    "daily-2026-01-14: landscape 1206x893",
+    "daily-2026-01-16: landscape 750x678",
+    "daily-2026-01-16: too small 750x678",
+    "daily-2026-01-16: keyword people:christ",
+    "daily-2026-01-20: landscape 1194x893",
+    "daily-2026-01-22: landscape 750x687",
+    "daily-2026-01-22: too small 750x687",
+    "daily-2026-01-22: keyword people:man",
+    "daily-2026-01-24: landscape 900x897",
+    "daily-2026-01-26: too small 682x900",
+    "daily-2026-01-28: landscape 1263x792",
+    "daily-2026-01-28: keyword people:peasants",
+    "daily-2026-01-30: too small 617x900"
+   ],
+   "cross": [
+    "daily-2026-01-12 ~ evpack-hot-tea-2027-10 (evpack-hot-tea-2027)",
+    "daily-2026-01-18 ~ daily-2025-06-18 (daily-2025-06)"
+   ]
+  },
+  "daily-2025-12": {
+   "name": "December 2025",
+   "category": "Daily",
+   "count": 31,
+   "issues": [
+    "daily-2025-12-01: landscape 1263x651",
+    "daily-2025-12-01: too small 1263x651",
+    "daily-2025-12-03: too small 656x893",
+    "daily-2025-12-03: keyword people:child",
+    "daily-2025-12-07: landscape 1263x762",
+    "daily-2025-12-09: landscape 1263x773",
+    "daily-2025-12-09: keyword people:fisherman",
+    "daily-2025-12-11: too small 640x900",
+    "daily-2025-12-13: landscape 900x698",
+    "daily-2025-12-13: too small 900x698",
+    "daily-2025-12-15: landscape 750x637",
+    "daily-2025-12-15: too small 750x637",
+    "daily-2025-12-19: too small 664x893",
+    "daily-2025-12-21: keyword people:veteran",
+    "daily-2025-12-25: too small 669x893",
+    "daily-2025-12-27: too small 693x893",
+    "daily-2025-12-29: landscape 1203x893"
+   ],
+   "cross": [
+    "daily-2025-12-02 ~ deep-space-nasa-gsfc-20171208-archiv (deep-space)",
+    "daily-2025-12-02 ~ daily-2025-08-20 (daily-2025-08)",
+    "daily-2025-12-02 ~ daily-2024-07-07 (daily-2024-07)",
+    "daily-2025-12-02 ~ pack-rockets-11 (pack-rockets)",
+    "daily-2025-12-29 ~ daily-2025-09-26 (daily-2025-09)",
+    "daily-2025-12-31 ~ daily-2023-05-06 (daily-2023-05)"
+   ]
+  },
+  "daily-2025-11": {
+   "name": "November 2025",
+   "category": "Daily",
+   "count": 30,
+   "issues": [
+    "daily-2025-11-01: landscape 900x641",
+    "daily-2025-11-01: too small 900x641",
+    "daily-2025-11-03: landscape 1233x893",
+    "daily-2025-11-05: landscape 1258x893",
+    "daily-2025-11-07: landscape 1263x761",
+    "daily-2025-11-09: landscape 1241x893",
+    "daily-2025-11-11: landscape 1204x893",
+    "daily-2025-11-13: landscape 900x805",
+    "daily-2025-11-15: landscape 1155x893",
+    "daily-2025-11-16: landscape 900x751",
+    "daily-2025-11-17: landscape 1138x893",
+    "daily-2025-11-19: too small 675x893",
+    "daily-2025-11-21: too small 699x893",
+    "daily-2025-11-23: landscape 1191x893",
+    "daily-2025-11-25: too small 602x900",
+    "daily-2025-11-25: keyword text:page",
+    "daily-2025-11-27: too small 650x893",
+    "daily-2025-11-29: landscape 750x625",
+    "daily-2025-11-29: too small 750x625"
+   ],
+   "cross": [
+    "daily-2025-11-13 ~ daily-2026-10-25 (daily-2026-10)",
+    "daily-2025-11-13 ~ daily-2026-09-29 (daily-2026-09)",
+    "daily-2025-11-13 ~ daily-2026-05-04 (daily-2026-05)",
+    "daily-2025-11-13 ~ daily-2025-08-25 (daily-2025-08)",
+    "daily-2025-11-13 ~ daily-2025-06-19 (daily-2025-06)",
+    "daily-2025-11-13 ~ daily-2025-05-15 (daily-2025-05)",
+    "daily-2025-11-13 ~ daily-2025-03-08 (daily-2025-03)",
+    "daily-2025-11-13 ~ daily-2025-01-09 (daily-2025-01)",
+    "daily-2025-11-13 ~ daily-2024-10-25 (daily-2024-10)",
+    "daily-2025-11-13 ~ daily-2024-05-06 (daily-2024-05)",
+    "daily-2025-11-13 ~ daily-2024-02-10 (daily-2024-02)",
+    "daily-2025-11-13 ~ daily-2023-12-24 (daily-2023-12)",
+    "daily-2025-11-13 ~ daily-2023-11-10 (daily-2023-11)",
+    "daily-2025-11-13 ~ daily-2023-07-23 (daily-2023-07)",
+    "daily-2025-11-13 ~ evpack-remembrance-2027-01 (evpack-remembrance-2027)",
+    "daily-2025-11-13 ~ pack-renaissance-03 (pack-renaissance)",
+    "daily-2025-11-13 ~ pack-renaissance-13 (pack-renaissance)",
+    "daily-2025-11-13 ~ pack-textiles-12 (pack-textiles)",
+    "daily-2025-11-25 ~ daily-2026-10-09 (daily-2026-10)",
+    "daily-2025-11-25 ~ daily-2025-05-05 (daily-2025-05)",
+    "daily-2025-11-25 ~ daily-2025-02-20 (daily-2025-02)",
+    "daily-2025-11-25 ~ daily-2024-09-09 (daily-2024-09)"
+   ]
+  },
+  "daily-2025-10": {
+   "name": "October 2025",
+   "category": "Daily",
+   "count": 31,
+   "issues": [
+    "daily-2025-10-02: too small 682x900",
+    "daily-2025-10-08: too small 673x900",
+    "daily-2025-10-10: keyword text:page",
+    "daily-2025-10-12: landscape 900x715",
+    "daily-2025-10-14: landscape 1219x893",
+    "daily-2025-10-18: too small 601x893",
+    "daily-2025-10-18: keyword text:page",
+    "daily-2025-10-20: landscape 1263x887",
+    "daily-2025-10-22: too small 626x900",
+    "daily-2025-10-24: too small 693x893",
+    "daily-2025-10-24: keyword people:portrait",
+    "daily-2025-10-26: too small 673x893",
+    "daily-2025-10-26: keyword people:child",
+    "daily-2025-10-28: landscape 1263x830",
+    "daily-2025-10-30: keyword people:man"
+   ],
+   "cross": [
+    "daily-2025-10-24 ~ evpack-pet-day-2027-05 (evpack-pet-day-2027)"
+   ]
+  },
+  "daily-2025-09": {
+   "name": "September 2025",
+   "category": "Daily",
+   "count": 30,
+   "issues": [
+    "daily-2025-09-02: landscape 1191x893",
+    "daily-2025-09-04: landscape 1113x893",
+    "daily-2025-09-04: keyword people:figures",
+    "daily-2025-09-06: too small 671x893",
+    "daily-2025-09-08: too small 642x900",
+    "daily-2025-09-10: keyword people:portrait",
+    "daily-2025-09-18: landscape 1078x893",
+    "daily-2025-09-22: too small 662x900",
+    "daily-2025-09-24: landscape 900x618",
+    "daily-2025-09-24: too small 900x618",
+    "daily-2025-09-26: landscape 1126x893",
+    "daily-2025-09-26: keyword people:christ,woman",
+    "daily-2025-09-27: landscape 900x663",
+    "daily-2025-09-27: too small 900x663"
+   ],
+   "cross": [
+    "daily-2025-09-04 ~ daily-2025-03-22 (daily-2025-03)",
+    "daily-2025-09-26 ~ daily-2025-12-29 (daily-2025-12)"
+   ]
+  },
+  "daily-2025-08": {
+   "name": "August 2025",
+   "category": "Daily",
+   "count": 31,
+   "issues": [
+    "daily-2025-08-01: landscape 1226x893",
+    "daily-2025-08-03: too small 601x900",
+    "daily-2025-08-05: keyword people:portrait",
+    "daily-2025-08-07: keyword people:man,woman",
+    "daily-2025-08-09: landscape 900x659",
+    "daily-2025-08-09: too small 900x659",
+    "daily-2025-08-13: too small 690x893",
+    "daily-2025-08-13: keyword people:portrait,woman",
+    "daily-2025-08-17: landscape 900x649",
+    "daily-2025-08-17: too small 900x649",
+    "daily-2025-08-19: landscape 1202x893",
+    "daily-2025-08-21: landscape 1263x638",
+    "daily-2025-08-21: too small 1263x638",
+    "daily-2025-08-23: landscape 900x630",
+    "daily-2025-08-23: too small 900x630",
+    "daily-2025-08-25: landscape 900x818",
+    "daily-2025-08-27: keyword people:soldiers",
+    "daily-2025-08-29: landscape 900x612",
+    "daily-2025-08-29: too small 900x612"
+   ],
+   "cross": [
+    "daily-2025-08-20 ~ deep-space-nasa-gsfc-20171208-archiv (deep-space)",
+    "daily-2025-08-20 ~ daily-2025-12-02 (daily-2025-12)",
+    "daily-2025-08-20 ~ pack-rockets-11 (pack-rockets)",
+    "daily-2025-08-25 ~ daily-2026-10-25 (daily-2026-10)",
+    "daily-2025-08-25 ~ daily-2026-09-29 (daily-2026-09)",
+    "daily-2025-08-25 ~ daily-2025-11-13 (daily-2025-11)",
+    "daily-2025-08-25 ~ daily-2025-06-19 (daily-2025-06)",
+    "daily-2025-08-25 ~ daily-2025-03-08 (daily-2025-03)",
+    "daily-2025-08-25 ~ daily-2025-01-09 (daily-2025-01)",
+    "daily-2025-08-25 ~ daily-2024-02-10 (daily-2024-02)",
+    "daily-2025-08-25 ~ daily-2023-11-10 (daily-2023-11)"
+   ]
+  },
+  "daily-2025-07": {
+   "name": "July 2025",
+   "category": "Daily",
+   "count": 31,
+   "issues": [
+    "daily-2025-07-02: landscape 1263x838",
+    "daily-2025-07-04: landscape 1196x893",
+    "daily-2025-07-04: keyword text:calligraphy",
+    "daily-2025-07-06: too small 675x900",
+    "daily-2025-07-06: keyword people:man",
+    "daily-2025-07-08: landscape 1079x893",
+    "daily-2025-07-12: landscape 900x630",
+    "daily-2025-07-12: too small 900x630",
+    "daily-2025-07-14: too small 617x900",
+    "daily-2025-07-16: landscape 900x747",
+    "daily-2025-07-20: too small 663x900",
+    "daily-2025-07-22: keyword people:portrait,woman",
+    "daily-2025-07-24: landscape 1154x893",
+    "daily-2025-07-26: landscape 900x676",
+    "daily-2025-07-26: too small 900x676",
+    "daily-2025-07-28: too small 667x900",
+    "daily-2025-07-30: keyword people:portrait,woman"
+   ],
+   "cross": [
+    "daily-2025-07-01 ~ daily-2023-01-27 (daily-2023-01)",
+    "daily-2025-07-02 ~ daily-2023-05-16 (daily-2023-05)",
+    "daily-2025-07-14 ~ daily-2024-10-17 (daily-2024-10)",
+    "daily-2025-07-24 ~ daily-2026-07-27 (daily-2026-07)",
+    "daily-2025-07-24 ~ daily-2024-03-19 (daily-2024-03)",
+    "daily-2025-07-24 ~ pack-temples-17 (pack-temples)",
+    "daily-2025-07-26 ~ evpack-smile-day-2027-10 (evpack-smile-day-2027)"
+   ]
+  },
+  "daily-2025-06": {
+   "name": "June 2025",
+   "category": "Daily",
+   "count": 30,
+   "issues": [
+    "daily-2025-06-02: landscape 1209x893",
+    "daily-2025-06-06: landscape 900x732",
+    "daily-2025-06-08: landscape 900x729",
+    "daily-2025-06-12: too small 614x900",
+    "daily-2025-06-14: landscape 1263x835",
+    "daily-2025-06-16: too small 618x893",
+    "daily-2025-06-19: landscape 900x805",
+    "daily-2025-06-20: landscape 900x602",
+    "daily-2025-06-20: too small 900x602",
+    "daily-2025-06-22: keyword people:woman",
+    "daily-2025-06-24: too small 655x900",
+    "daily-2025-06-26: landscape 1203x893",
+    "daily-2025-06-26: keyword people:family",
+    "daily-2025-06-26: keyword text:page",
+    "daily-2025-06-28: landscape 900x647",
+    "daily-2025-06-28: too small 900x647"
+   ],
+   "cross": [
+    "daily-2025-06-03 ~ daily-2026-04-19 (daily-2026-04)",
+    "daily-2025-06-03 ~ daily-2025-05-22 (daily-2025-05)",
+    "daily-2025-06-03 ~ pack-nebulae-09 (pack-nebulae)",
+    "daily-2025-06-05 ~ deep-space-nasa-pia02879 (deep-space)",
+    "daily-2025-06-05 ~ daily-2024-01-30 (daily-2024-01)",
+    "daily-2025-06-05 ~ daily-2023-08-09 (daily-2023-08)",
+    "daily-2025-06-05 ~ daily-2023-05-27 (daily-2023-05)",
+    "daily-2025-06-05 ~ pack-planets-15 (pack-planets)",
+    "daily-2025-06-18 ~ daily-2026-01-18 (daily-2026-01)",
+    "daily-2025-06-19 ~ daily-2026-10-25 (daily-2026-10)",
+    "daily-2025-06-19 ~ daily-2026-09-29 (daily-2026-09)",
+    "daily-2025-06-19 ~ daily-2026-05-04 (daily-2026-05)",
+    "daily-2025-06-19 ~ daily-2025-11-13 (daily-2025-11)",
+    "daily-2025-06-19 ~ daily-2025-08-25 (daily-2025-08)",
+    "daily-2025-06-19 ~ daily-2025-05-15 (daily-2025-05)",
+    "daily-2025-06-19 ~ daily-2025-03-08 (daily-2025-03)",
+    "daily-2025-06-19 ~ daily-2025-01-09 (daily-2025-01)",
+    "daily-2025-06-19 ~ daily-2024-10-25 (daily-2024-10)",
+    "daily-2025-06-19 ~ daily-2024-05-06 (daily-2024-05)",
+    "daily-2025-06-19 ~ daily-2024-02-10 (daily-2024-02)",
+    "daily-2025-06-19 ~ daily-2023-12-24 (daily-2023-12)",
+    "daily-2025-06-19 ~ daily-2023-11-10 (daily-2023-11)",
+    "daily-2025-06-19 ~ daily-2023-07-23 (daily-2023-07)"
+   ]
+  },
+  "daily-2025-05": {
+   "name": "May 2025",
+   "category": "Daily",
+   "count": 31,
+   "issues": [
+    "daily-2025-05-01: too small 640x900",
+    "daily-2025-05-03: landscape 1078x893",
+    "daily-2025-05-05: too small 601x900",
+    "daily-2025-05-05: keyword text:page",
+    "daily-2025-05-07: keyword people:boy",
+    "daily-2025-05-09: landscape 900x875",
+    "daily-2025-05-09: keyword people:family",
+    "daily-2025-05-11: landscape 750x637",
+    "daily-2025-05-11: too small 750x637",
+    "daily-2025-05-13: too small 664x893",
+    "daily-2025-05-13: keyword people:portrait",
+    "daily-2025-05-15: landscape 900x674",
+    "daily-2025-05-15: too small 900x674",
+    "daily-2025-05-17: landscape 1263x797",
+    "daily-2025-05-19: landscape 1180x893",
+    "daily-2025-05-21: landscape 1162x893",
+    "daily-2025-05-25: too small 619x893",
+    "daily-2025-05-27: landscape 1263x831"
+   ],
+   "cross": [
+    "daily-2025-05-05 ~ daily-2026-07-31 (daily-2026-07)",
+    "daily-2025-05-05 ~ daily-2025-11-25 (daily-2025-11)",
+    "daily-2025-05-05 ~ daily-2024-09-09 (daily-2024-09)",
+    "daily-2025-05-05 ~ daily-2024-08-20 (daily-2024-08)",
+    "daily-2025-05-11 ~ daily-2023-09-17 (daily-2023-09)",
+    "daily-2025-05-15 ~ daily-2026-10-25 (daily-2026-10)",
+    "daily-2025-05-15 ~ daily-2026-09-29 (daily-2026-09)",
+    "daily-2025-05-15 ~ daily-2025-11-13 (daily-2025-11)",
+    "daily-2025-05-15 ~ daily-2025-06-19 (daily-2025-06)",
+    "daily-2025-05-15 ~ daily-2025-03-08 (daily-2025-03)",
+    "daily-2025-05-15 ~ daily-2025-01-09 (daily-2025-01)",
+    "daily-2025-05-15 ~ daily-2024-05-06 (daily-2024-05)",
+    "daily-2025-05-15 ~ daily-2023-12-24 (daily-2023-12)",
+    "daily-2025-05-15 ~ daily-2023-11-10 (daily-2023-11)",
+    "daily-2025-05-22 ~ daily-2025-06-03 (daily-2025-06)"
+   ]
+  },
+  "daily-2025-04": {
+   "name": "April 2025",
+   "category": "Daily",
+   "count": 30,
+   "issues": [
+    "daily-2025-04-01: too small 645x900",
+    "daily-2025-04-03: too small 676x900",
+    "daily-2025-04-03: keyword people:child",
+    "daily-2025-04-05: landscape 900x708",
+    "daily-2025-04-07: too small 612x900",
+    "daily-2025-04-09: landscape 900x671",
+    "daily-2025-04-09: too small 900x671",
+    "daily-2025-04-13: landscape 900x835",
+    "daily-2025-04-15: landscape 1263x693",
+    "daily-2025-04-15: too small 1263x693",
+    "daily-2025-04-17: too small 685x893",
+    "daily-2025-04-21: landscape 1211x893",
+    "daily-2025-04-23: landscape 900x630",
+    "daily-2025-04-23: too small 900x630",
+    "daily-2025-04-25: landscape 1073x893",
+    "daily-2025-04-27: too small 604x900",
+    "daily-2025-04-27: keyword people:woman",
+    "daily-2025-04-29: keyword people:portrait",
+    "daily-2025-04-30: landscape 1059x893"
+   ],
+   "cross": [
+    "daily-2025-04-01 ~ daily-2024-08-14 (daily-2024-08)",
+    "daily-2025-04-29 ~ daily-2024-08-26 (daily-2024-08)"
+   ]
+  },
+  "daily-2025-03": {
+   "name": "March 2025",
+   "category": "Daily",
+   "count": 31,
+   "issues": [
+    "daily-2025-03-02: landscape 900x605",
+    "daily-2025-03-02: too small 900x605",
+    "daily-2025-03-04: too small 690x900",
+    "daily-2025-03-04: keyword people:portraits",
+    "daily-2025-03-08: landscape 900x805",
+    "daily-2025-03-10: landscape 1195x893",
+    "daily-2025-03-11: too small 617x900",
+    "daily-2025-03-12: too small 678x900",
+    "daily-2025-03-14: landscape 1134x893",
+    "daily-2025-03-18: keyword people:woman",
+    "daily-2025-03-20: landscape 894x893",
+    "daily-2025-03-22: landscape 1094x893",
+    "daily-2025-03-22: keyword people:figures",
+    "daily-2025-03-24: too small 682x893",
+    "daily-2025-03-24: keyword people:portrait,woman",
+    "daily-2025-03-26: too small 606x893",
+    "daily-2025-03-28: landscape 900x839",
+    "daily-2025-03-30: too small 603x893"
+   ],
+   "cross": [
+    "daily-2025-03-01 ~ pack-lighthouses-02 (pack-lighthouses)",
+    "daily-2025-03-08 ~ daily-2026-10-25 (daily-2026-10)",
+    "daily-2025-03-08 ~ daily-2026-09-29 (daily-2026-09)",
+    "daily-2025-03-08 ~ daily-2026-05-04 (daily-2026-05)",
+    "daily-2025-03-08 ~ daily-2026-02-09 (daily-2026-02)",
+    "daily-2025-03-08 ~ daily-2025-11-13 (daily-2025-11)",
+    "daily-2025-03-08 ~ daily-2025-08-25 (daily-2025-08)",
+    "daily-2025-03-08 ~ daily-2025-06-19 (daily-2025-06)",
+    "daily-2025-03-08 ~ daily-2025-05-15 (daily-2025-05)",
+    "daily-2025-03-08 ~ daily-2025-01-09 (daily-2025-01)",
+    "daily-2025-03-08 ~ daily-2024-10-25 (daily-2024-10)",
+    "daily-2025-03-08 ~ daily-2024-05-06 (daily-2024-05)",
+    "daily-2025-03-08 ~ daily-2024-02-10 (daily-2024-02)",
+    "daily-2025-03-08 ~ daily-2023-12-24 (daily-2023-12)",
+    "daily-2025-03-08 ~ daily-2023-11-10 (daily-2023-11)",
+    "daily-2025-03-08 ~ daily-2023-07-23 (daily-2023-07)",
+    "daily-2025-03-08 ~ pack-renaissance-03 (pack-renaissance)",
+    "daily-2025-03-08 ~ pack-renaissance-13 (pack-renaissance)",
+    "daily-2025-03-22 ~ daily-2025-09-04 (daily-2025-09)",
+    "daily-2025-03-22 ~ daily-2023-11-16 (daily-2023-11)"
+   ]
+  },
+  "daily-2025-02": {
+   "name": "February 2025",
+   "category": "Daily",
+   "count": 28,
+   "issues": [
+    "daily-2025-02-02: too small 693x893",
+    "daily-2025-02-02: keyword people:child,woman",
+    "daily-2025-02-04: landscape 900x696",
+    "daily-2025-02-04: too small 900x696",
+    "daily-2025-02-06: landscape 1248x893",
+    "daily-2025-02-08: landscape 900x617",
+    "daily-2025-02-08: too small 900x617",
+    "daily-2025-02-10: too small 644x900",
+    "daily-2025-02-12: landscape 1153x893",
+    "daily-2025-02-14: landscape 900x659",
+    "daily-2025-02-14: too small 900x659",
+    "daily-2025-02-16: landscape 1100x893",
+    "daily-2025-02-18: keyword people:portrait",
+    "daily-2025-02-20: too small 601x893",
+    "daily-2025-02-20: keyword text:page",
+    "daily-2025-02-22: too small 624x900",
+    "daily-2025-02-24: landscape 1263x690",
+    "daily-2025-02-24: too small 1263x690"
+   ],
+   "cross": [
+    "daily-2025-02-20 ~ daily-2026-09-13 (daily-2026-09)",
+    "daily-2025-02-20 ~ daily-2026-07-31 (daily-2026-07)",
+    "daily-2025-02-20 ~ daily-2025-11-25 (daily-2025-11)",
+    "daily-2025-02-20 ~ daily-2024-09-07 (daily-2024-09)",
+    "daily-2025-02-20 ~ daily-2024-09-09 (daily-2024-09)",
+    "daily-2025-02-20 ~ daily-2023-09-11 (daily-2023-09)",
+    "daily-2025-02-20 ~ daily-2023-08-20 (daily-2023-08)"
+   ]
+  },
+  "daily-2025-01": {
+   "name": "January 2025",
+   "category": "Daily",
+   "count": 31,
+   "issues": [
+    "daily-2025-01-01: landscape 1263x863",
+    "daily-2025-01-05: too small 671x900",
+    "daily-2025-01-07: landscape 1149x893",
+    "daily-2025-01-09: landscape 900x805",
+    "daily-2025-01-13: landscape 986x893",
+    "daily-2025-01-15: too small 660x893",
+    "daily-2025-01-17: landscape 1055x893",
+    "daily-2025-01-17: keyword people:women",
+    "daily-2025-01-19: too small 609x893",
+    "daily-2025-01-21: landscape 900x893",
+    "daily-2025-01-23: landscape 1263x692",
+    "daily-2025-01-23: too small 1263x692",
+    "daily-2025-01-23: keyword people:children",
+    "daily-2025-01-25: landscape 750x611",
+    "daily-2025-01-25: too small 750x611",
+    "daily-2025-01-27: landscape 1243x893"
+   ],
+   "cross": [
+    "daily-2025-01-09 ~ daily-2026-10-25 (daily-2026-10)",
+    "daily-2025-01-09 ~ daily-2026-09-29 (daily-2026-09)",
+    "daily-2025-01-09 ~ daily-2026-05-04 (daily-2026-05)",
+    "daily-2025-01-09 ~ daily-2025-11-13 (daily-2025-11)",
+    "daily-2025-01-09 ~ daily-2025-08-25 (daily-2025-08)",
+    "daily-2025-01-09 ~ daily-2025-06-19 (daily-2025-06)",
+    "daily-2025-01-09 ~ daily-2025-05-15 (daily-2025-05)",
+    "daily-2025-01-09 ~ daily-2025-03-08 (daily-2025-03)",
+    "daily-2025-01-09 ~ daily-2024-10-25 (daily-2024-10)",
+    "daily-2025-01-09 ~ daily-2024-05-06 (daily-2024-05)",
+    "daily-2025-01-09 ~ daily-2024-02-10 (daily-2024-02)",
+    "daily-2025-01-09 ~ daily-2023-12-24 (daily-2023-12)",
+    "daily-2025-01-09 ~ daily-2023-11-10 (daily-2023-11)",
+    "daily-2025-01-09 ~ daily-2023-07-23 (daily-2023-07)",
+    "daily-2025-01-09 ~ evpack-remembrance-2027-01 (evpack-remembrance-2027)",
+    "daily-2025-01-09 ~ pack-renaissance-03 (pack-renaissance)",
+    "daily-2025-01-09 ~ pack-renaissance-13 (pack-renaissance)",
+    "daily-2025-01-12 ~ deep-space-nasa-pia02879 (deep-space)",
+    "daily-2025-01-12 ~ daily-2023-08-09 (daily-2023-08)",
+    "daily-2025-01-12 ~ pack-planets-15 (pack-planets)",
+    "daily-2025-01-28 ~ deep-space-nasa-gsfc-20171208-archiv (deep-space)",
+    "daily-2025-01-28 ~ daily-2024-10-24 (daily-2024-10)",
+    "daily-2025-01-28 ~ pack-rockets-11 (pack-rockets)",
+    "daily-2025-01-31 ~ pack-textiles-19 (pack-textiles)"
+   ]
+  },
+  "daily-2024-12": {
+   "name": "December 2024",
+   "category": "Daily",
+   "count": 31,
+   "issues": [
+    "daily-2024-12-01: landscape 983x893",
+    "daily-2024-12-02: landscape 1263x645",
+    "daily-2024-12-02: too small 1263x645",
+    "daily-2024-12-04: landscape 974x893",
+    "daily-2024-12-06: too small 674x893",
+    "daily-2024-12-08: landscape 900x606",
+    "daily-2024-12-08: too small 900x606",
+    "daily-2024-12-10: landscape 900x889",
+    "daily-2024-12-14: landscape 1263x757",
+    "daily-2024-12-16: keyword people:self-portrait",
+    "daily-2024-12-18: keyword people:man,portrait",
+    "daily-2024-12-20: landscape 900x860",
+    "daily-2024-12-24: landscape 1173x893",
+    "daily-2024-12-26: too small 617x893",
+    "daily-2024-12-26: keyword text:page",
+    "daily-2024-12-28: landscape 1111x893",
+    "daily-2024-12-30: too small 652x900"
+   ],
+   "cross": [
+    "daily-2024-12-06 ~ pack-gardens-art-08 (pack-gardens-art)",
+    "daily-2024-12-26 ~ daily-2024-05-10 (daily-2024-05)",
+    "daily-2024-12-26 ~ evpack-dance-2027-11 (evpack-dance-2027)",
+    "daily-2024-12-26 ~ pack-botanical-16 (pack-botanical)"
+   ]
+  },
+  "daily-2024-11": {
+   "name": "November 2024",
+   "category": "Daily",
+   "count": 30,
+   "issues": [
+    "daily-2024-11-02: landscape 900x897",
+    "daily-2024-11-06: too small 654x893",
+    "daily-2024-11-08: landscape 900x674",
+    "daily-2024-11-08: too small 900x674",
+    "daily-2024-11-10: landscape 900x676",
+    "daily-2024-11-10: too small 900x676",
+    "daily-2024-11-12: too small 619x893",
+    "daily-2024-11-14: landscape 1106x893",
+    "daily-2024-11-16: too small 663x900",
+    "daily-2024-11-18: keyword people:portrait,woman",
+    "daily-2024-11-20: too small 680x900",
+    "daily-2024-11-20: keyword people:women",
+    "daily-2024-11-26: too small 689x893",
+    "daily-2024-11-28: keyword people:man,portrait",
+    "daily-2024-11-30: too small 606x900"
+   ],
+   "cross": [
+    "daily-2024-11-03 ~ deep-space-nasa-gsfc-20171208-archiv (deep-space)",
+    "daily-2024-11-03 ~ deep-space-nasa-pia07902 (deep-space)",
+    "daily-2024-11-03 ~ pack-rockets-11 (pack-rockets)",
+    "daily-2024-11-06 ~ daily-2026-02-24 (daily-2026-02)",
+    "daily-2024-11-20 ~ daily-2026-02-25 (daily-2026-02)",
+    "daily-2024-11-26 ~ daily-2023-11-04 (daily-2023-11)",
+    "daily-2024-11-26 ~ daily-2023-05-04 (daily-2023-05)",
+    "daily-2024-11-28 ~ evpack-pet-day-2027-05 (evpack-pet-day-2027)",
+    "daily-2024-11-28 ~ pack-renaissance-06 (pack-renaissance)",
+    "daily-2024-11-28 ~ pack-starry-nights-14 (pack-starry-nights)"
+   ]
+  },
+  "daily-2024-10": {
+   "name": "October 2024",
+   "category": "Daily",
+   "count": 31,
+   "issues": [
+    "daily-2024-10-03: too small 602x900",
+    "daily-2024-10-05: keyword people:child",
+    "daily-2024-10-07: too small 625x893",
+    "daily-2024-10-09: keyword people:portrait",
+    "daily-2024-10-11: landscape 1109x893",
+    "daily-2024-10-12: too small 669x893",
+    "daily-2024-10-12: keyword people:portrait,woman",
+    "daily-2024-10-15: too small 613x893",
+    "daily-2024-10-17: too small 677x893",
+    "daily-2024-10-19: keyword people:portrait",
+    "daily-2024-10-21: landscape 1263x852",
+    "daily-2024-10-23: keyword unwanted:icon",
+    "daily-2024-10-25: landscape 900x805",
+    "daily-2024-10-27: landscape 1187x893",
+    "daily-2024-10-29: keyword people:woman",
+    "daily-2024-10-31: landscape 1219x893"
+   ],
+   "cross": [
+    "daily-2024-10-01 ~ daily-2023-07-21 (daily-2023-07)",
+    "daily-2024-10-01 ~ pack-manuscripts-08 (pack-manuscripts)",
+    "daily-2024-10-13 ~ daily-2023-03-13 (daily-2023-03)",
+    "daily-2024-10-13 ~ daily-2023-01-08 (daily-2023-01)",
+    "daily-2024-10-17 ~ daily-2026-05-26 (daily-2026-05)",
+    "daily-2024-10-17 ~ daily-2025-07-14 (daily-2025-07)",
+    "daily-2024-10-17 ~ daily-2023-05-04 (daily-2023-05)",
+    "daily-2024-10-24 ~ deep-space-nasa-gsfc-20171208-archiv (deep-space)",
+    "daily-2024-10-24 ~ daily-2025-01-28 (daily-2025-01)",
+    "daily-2024-10-24 ~ pack-rockets-11 (pack-rockets)",
+    "daily-2024-10-25 ~ daily-2026-10-25 (daily-2026-10)",
+    "daily-2024-10-25 ~ daily-2026-09-29 (daily-2026-09)",
+    "daily-2024-10-25 ~ daily-2026-05-04 (daily-2026-05)",
+    "daily-2024-10-25 ~ daily-2025-11-13 (daily-2025-11)",
+    "daily-2024-10-25 ~ daily-2025-06-19 (daily-2025-06)",
+    "daily-2024-10-25 ~ daily-2025-03-08 (daily-2025-03)",
+    "daily-2024-10-25 ~ daily-2025-01-09 (daily-2025-01)",
+    "daily-2024-10-25 ~ daily-2024-05-06 (daily-2024-05)",
+    "daily-2024-10-25 ~ daily-2024-02-10 (daily-2024-02)",
+    "daily-2024-10-25 ~ daily-2023-12-24 (daily-2023-12)",
+    "daily-2024-10-25 ~ daily-2023-11-10 (daily-2023-11)",
+    "daily-2024-10-25 ~ daily-2023-07-23 (daily-2023-07)",
+    "daily-2024-10-25 ~ daily-2023-05-20 (daily-2023-05)",
+    "daily-2024-10-25 ~ evpack-remembrance-2027-01 (evpack-remembrance-2027)",
+    "daily-2024-10-25 ~ pack-renaissance-13 (pack-renaissance)"
+   ]
+  },
+  "daily-2024-09": {
+   "name": "September 2024",
+   "category": "Daily",
+   "count": 30,
+   "issues": [
+    "daily-2024-09-01: landscape 900x645",
+    "daily-2024-09-01: too small 900x645",
+    "daily-2024-09-03: landscape 1045x893",
+    "daily-2024-09-05: landscape 964x893",
+    "daily-2024-09-07: too small 600x893",
+    "daily-2024-09-07: keyword text:page",
+    "daily-2024-09-09: too small 605x893",
+    "daily-2024-09-09: keyword text:page",
+    "daily-2024-09-11: landscape 1263x841",
+    "daily-2024-09-13: too small 604x900",
+    "daily-2024-09-15: too small 679x893",
+    "daily-2024-09-15: keyword people:family",
+    "daily-2024-09-19: keyword people:self-portrait",
+    "daily-2024-09-21: landscape 981x893",
+    "daily-2024-09-23: too small 682x900",
+    "daily-2024-09-25: too small 686x893",
+    "daily-2024-09-27: landscape 900x658",
+    "daily-2024-09-27: too small 900x658"
+   ],
+   "cross": [
+    "daily-2024-09-04 ~ deep-space-nasa-pia02879 (deep-space)",
+    "daily-2024-09-04 ~ daily-2023-08-09 (daily-2023-08)",
+    "daily-2024-09-04 ~ pack-planets-15 (pack-planets)",
+    "daily-2024-09-07 ~ daily-2026-09-13 (daily-2026-09)",
+    "daily-2024-09-07 ~ daily-2026-07-31 (daily-2026-07)",
+    "daily-2024-09-07 ~ daily-2026-03-19 (daily-2026-03)",
+    "daily-2024-09-07 ~ daily-2025-02-20 (daily-2025-02)",
+    "daily-2024-09-07 ~ daily-2024-06-29 (daily-2024-06)",
+    "daily-2024-09-07 ~ daily-2023-09-11 (daily-2023-09)",
+    "daily-2024-09-07 ~ daily-2023-08-20 (daily-2023-08)",
+    "daily-2024-09-07 ~ daily-2023-07-31 (daily-2023-07)",
+    "daily-2024-09-09 ~ daily-2026-07-31 (daily-2026-07)",
+    "daily-2024-09-09 ~ daily-2025-11-25 (daily-2025-11)",
+    "daily-2024-09-09 ~ daily-2025-05-05 (daily-2025-05)",
+    "daily-2024-09-09 ~ daily-2025-02-20 (daily-2025-02)",
+    "daily-2024-09-09 ~ daily-2023-08-20 (daily-2023-08)"
+   ]
+  },
+  "daily-2024-08": {
+   "name": "August 2024",
+   "category": "Daily",
+   "count": 31,
+   "issues": [
+    "daily-2024-08-02: landscape 1144x893",
+    "daily-2024-08-06: landscape 900x649",
+    "daily-2024-08-06: too small 900x649",
+    "daily-2024-08-08: landscape 947x893",
+    "daily-2024-08-08: keyword people:fisherman",
+    "daily-2024-08-10: too small 601x893",
+    "daily-2024-08-10: keyword text:page",
+    "daily-2024-08-12: landscape 1216x893",
+    "daily-2024-08-14: landscape 900x608",
+    "daily-2024-08-14: too small 900x608",
+    "daily-2024-08-16: landscape 1263x874",
+    "daily-2024-08-18: landscape 965x893",
+    "daily-2024-08-22: landscape 900x601",
+    "daily-2024-08-22: too small 900x601",
+    "daily-2024-08-23: landscape 900x775",
+    "daily-2024-08-24: landscape 900x898",
+    "daily-2024-08-26: too small 639x893",
+    "daily-2024-08-30: landscape 900x717",
+    "daily-2024-08-30: keyword people:family"
+   ],
+   "cross": [
+    "daily-2024-08-08 ~ evpack-tea-day-2027-12 (evpack-tea-day-2027)",
+    "daily-2024-08-10 ~ evpack-mothers-day-2027-10 (evpack-mothers-day-2027)",
+    "daily-2024-08-10 ~ pack-temples-15 (pack-temples)",
+    "daily-2024-08-14 ~ daily-2025-04-01 (daily-2025-04)",
+    "daily-2024-08-14 ~ pack-dutch-masters-08 (pack-dutch-masters)",
+    "daily-2024-08-16 ~ daily-2026-03-15 (daily-2026-03)",
+    "daily-2024-08-20 ~ daily-2025-05-05 (daily-2025-05)",
+    "daily-2024-08-26 ~ daily-2026-03-27 (daily-2026-03)",
+    "daily-2024-08-26 ~ daily-2025-04-29 (daily-2025-04)"
+   ]
+  },
+  "daily-2024-07": {
+   "name": "July 2024",
+   "category": "Daily",
+   "count": 31,
+   "issues": [
+    "daily-2024-07-01: too small 608x893",
+    "daily-2024-07-03: landscape 900x871",
+    "daily-2024-07-04: too small 671x893",
+    "daily-2024-07-05: keyword people:man,portrait",
+    "daily-2024-07-09: landscape 900x836",
+    "daily-2024-07-11: landscape 900x683",
+    "daily-2024-07-11: too small 900x683",
+    "daily-2024-07-13: landscape 900x736",
+    "daily-2024-07-17: too small 672x893",
+    "daily-2024-07-19: keyword people:self-portrait",
+    "daily-2024-07-21: too small 668x893",
+    "daily-2024-07-21: keyword people:man",
+    "daily-2024-07-25: too small 636x893",
+    "daily-2024-07-25: keyword people:child",
+    "daily-2024-07-27: too small 610x900",
+    "daily-2024-07-29: too small 626x900",
+    "daily-2024-07-29: keyword people:woman",
+    "daily-2024-07-31: keyword people:portrait,woman"
+   ],
+   "cross": [
+    "daily-2024-07-04 ~ daily-2026-05-26 (daily-2026-05)",
+    "daily-2024-07-04 ~ daily-2023-05-04 (daily-2023-05)",
+    "daily-2024-07-07 ~ deep-space-nasa-gsfc-20171208-archiv (deep-space)",
+    "daily-2024-07-07 ~ daily-2025-12-02 (daily-2025-12)",
+    "daily-2024-07-07 ~ pack-rockets-11 (pack-rockets)",
+    "daily-2024-07-09 ~ evpack-tea-day-2027-12 (evpack-tea-day-2027)",
+    "daily-2024-07-21 ~ deep-space-nasa-pia07903 (deep-space)",
+    "daily-2024-07-21 ~ daily-2023-11-24 (daily-2023-11)"
+   ]
+  },
+  "daily-2024-06": {
+   "name": "June 2024",
+   "category": "Daily",
+   "count": 30,
+   "issues": [
+    "daily-2024-06-01: landscape 1263x889",
+    "daily-2024-06-03: too small 664x900",
+    "daily-2024-06-05: landscape 1107x893",
+    "daily-2024-06-07: landscape 900x626",
+    "daily-2024-06-07: too small 900x626",
+    "daily-2024-06-09: too small 615x900",
+    "daily-2024-06-13: landscape 750x657",
+    "daily-2024-06-13: too small 750x657",
+    "daily-2024-06-15: keyword people:portrait,woman",
+    "daily-2024-06-17: too small 686x900",
+    "daily-2024-06-17: keyword people:portrait",
+    "daily-2024-06-19: landscape 900x617",
+    "daily-2024-06-19: too small 900x617",
+    "daily-2024-06-21: too small 661x900",
+    "daily-2024-06-21: keyword people:figure",
+    "daily-2024-06-23: too small 601x900",
+    "daily-2024-06-25: landscape 1190x893",
+    "daily-2024-06-27: landscape 1263x718",
+    "daily-2024-06-27: keyword people:figures",
+    "daily-2024-06-29: too small 611x893"
+   ],
+   "cross": [
+    "daily-2024-06-05 ~ daily-2023-11-30 (daily-2023-11)",
+    "daily-2024-06-05 ~ evpack-childrens-book-2027-14 (evpack-childrens-book-2027)",
+    "daily-2024-06-05 ~ evpack-dance-2027-02 (evpack-dance-2027)",
+    "daily-2024-06-19 ~ pack-temples-15 (pack-temples)",
+    "daily-2024-06-29 ~ daily-2026-09-13 (daily-2026-09)",
+    "daily-2024-06-29 ~ daily-2026-07-31 (daily-2026-07)",
+    "daily-2024-06-29 ~ daily-2026-03-19 (daily-2026-03)",
+    "daily-2024-06-29 ~ daily-2024-09-07 (daily-2024-09)",
+    "daily-2024-06-29 ~ daily-2023-09-11 (daily-2023-09)",
+    "daily-2024-06-29 ~ daily-2023-08-20 (daily-2023-08)",
+    "daily-2024-06-29 ~ daily-2023-07-07 (daily-2023-07)",
+    "daily-2024-06-29 ~ daily-2023-07-31 (daily-2023-07)"
+   ]
+  },
+  "daily-2024-05": {
+   "name": "May 2024",
+   "category": "Daily",
+   "count": 31,
+   "issues": [
+    "daily-2024-05-02: too small 623x893",
+    "daily-2024-05-04: landscape 900x651",
+    "daily-2024-05-04: too small 900x651",
+    "daily-2024-05-06: landscape 900x805",
+    "daily-2024-05-08: landscape 750x724",
+    "daily-2024-05-14: keyword people:man,portrait",
+    "daily-2024-05-15: too small 681x900",
+    "daily-2024-05-16: too small 617x893",
+    "daily-2024-05-16: keyword text:page",
+    "daily-2024-05-20: too small 667x893",
+    "daily-2024-05-20: keyword people:child",
+    "daily-2024-05-22: too small 668x893",
+    "daily-2024-05-24: too small 630x893",
+    "daily-2024-05-26: landscape 1263x777",
+    "daily-2024-05-28: keyword people:woman"
+   ],
+   "cross": [
+    "daily-2024-05-06 ~ daily-2026-10-25 (daily-2026-10)",
+    "daily-2024-05-06 ~ daily-2026-09-29 (daily-2026-09)",
+    "daily-2024-05-06 ~ daily-2026-05-04 (daily-2026-05)",
+    "daily-2024-05-06 ~ daily-2025-11-13 (daily-2025-11)",
+    "daily-2024-05-06 ~ daily-2025-06-19 (daily-2025-06)",
+    "daily-2024-05-06 ~ daily-2025-05-15 (daily-2025-05)",
+    "daily-2024-05-06 ~ daily-2025-03-08 (daily-2025-03)",
+    "daily-2024-05-06 ~ daily-2025-01-09 (daily-2025-01)",
+    "daily-2024-05-06 ~ daily-2024-10-25 (daily-2024-10)",
+    "daily-2024-05-06 ~ daily-2024-02-10 (daily-2024-02)",
+    "daily-2024-05-06 ~ daily-2023-12-24 (daily-2023-12)",
+    "daily-2024-05-06 ~ daily-2023-11-10 (daily-2023-11)",
+    "daily-2024-05-06 ~ daily-2023-07-23 (daily-2023-07)",
+    "daily-2024-05-06 ~ evpack-remembrance-2027-01 (evpack-remembrance-2027)",
+    "daily-2024-05-06 ~ pack-renaissance-03 (pack-renaissance)",
+    "daily-2024-05-06 ~ pack-renaissance-13 (pack-renaissance)",
+    "daily-2024-05-10 ~ daily-2024-12-26 (daily-2024-12)",
+    "daily-2024-05-16 ~ pack-temples-15 (pack-temples)"
+   ]
+  },
+  "daily-2024-04": {
+   "name": "April 2024",
+   "category": "Daily",
+   "count": 30,
+   "issues": [
+    "daily-2024-04-02: too small 688x893",
+    "daily-2024-04-04: keyword people:portrait,woman",
+    "daily-2024-04-06: landscape 1168x893",
+    "daily-2024-04-08: too small 609x893",
+    "daily-2024-04-08: keyword people:man,portrait",
+    "daily-2024-04-10: too small 671x900",
+    "daily-2024-04-12: landscape 900x620",
+    "daily-2024-04-12: too small 900x620",
+    "daily-2024-04-14: too small 671x893",
+    "daily-2024-04-18: landscape 1025x893",
+    "daily-2024-04-22: landscape 1263x769",
+    "daily-2024-04-26: too small 656x900",
+    "daily-2024-04-28: landscape 900x740",
+    "daily-2024-04-30: keyword people:portrait"
+   ]
+  },
+  "daily-2024-03": {
+   "name": "March 2024",
+   "category": "Daily",
+   "count": 31,
+   "issues": [
+    "daily-2024-03-03: too small 608x900",
+    "daily-2024-03-05: keyword people:portrait,woman",
+    "daily-2024-03-07: keyword people:woman",
+    "daily-2024-03-09: landscape 900x673",
+    "daily-2024-03-09: too small 900x673",
+    "daily-2024-03-11: landscape 961x893",
+    "daily-2024-03-13: landscape 900x726",
+    "daily-2024-03-13: keyword people:wedding",
+    "daily-2024-03-15: too small 653x900",
+    "daily-2024-03-15: keyword people:lovers",
+    "daily-2024-03-17: landscape 900x610",
+    "daily-2024-03-17: too small 900x610",
+    "daily-2024-03-19: too small 652x893",
+    "daily-2024-03-21: too small 668x900",
+    "daily-2024-03-21: keyword people:woman",
+    "daily-2024-03-23: too small 620x893",
+    "daily-2024-03-26: landscape 1263x702",
+    "daily-2024-03-27: too small 666x900",
+    "daily-2024-03-29: too small 616x893",
+    "daily-2024-03-31: keyword people:family"
+   ],
+   "cross": [
+    "daily-2024-03-19 ~ daily-2026-07-27 (daily-2026-07)",
+    "daily-2024-03-19 ~ daily-2025-07-24 (daily-2025-07)",
+    "daily-2024-03-19 ~ daily-2023-04-11 (daily-2023-04)",
+    "daily-2024-03-19 ~ evpack-tea-day-2027-13 (evpack-tea-day-2027)",
+    "daily-2024-03-19 ~ pack-temples-17 (pack-temples)",
+    "daily-2024-03-22 ~ deep-space-nasa-pia02879 (deep-space)",
+    "daily-2024-03-22 ~ daily-2026-10-16 (daily-2026-10)",
+    "daily-2024-03-22 ~ daily-2023-08-09 (daily-2023-08)",
+    "daily-2024-03-22 ~ daily-2023-05-27 (daily-2023-05)",
+    "daily-2024-03-22 ~ pack-planets-15 (pack-planets)",
+    "daily-2024-03-25 ~ pack-dutch-masters-20 (pack-dutch-masters)"
+   ]
+  },
+  "daily-2024-02": {
+   "name": "February 2024",
+   "category": "Daily",
+   "count": 29,
+   "issues": [
+    "daily-2024-02-05: keyword people:man",
+    "daily-2024-02-06: too small 627x893",
+    "daily-2024-02-08: too small 657x893",
+    "daily-2024-02-08: keyword people:family",
+    "daily-2024-02-10: landscape 900x805",
+    "daily-2024-02-12: landscape 1263x831",
+    "daily-2024-02-14: landscape 900x600",
+    "daily-2024-02-14: too small 900x600",
+    "daily-2024-02-16: landscape 900x674",
+    "daily-2024-02-16: too small 900x674",
+    "daily-2024-02-18: landscape 987x893",
+    "daily-2024-02-20: landscape 900x689",
+    "daily-2024-02-20: too small 900x689",
+    "daily-2024-02-22: too small 659x893",
+    "daily-2024-02-26: too small 645x893",
+    "daily-2024-02-28: landscape 900x831"
+   ],
+   "cross": [
+    "daily-2024-02-10 ~ daily-2026-10-25 (daily-2026-10)",
+    "daily-2024-02-10 ~ daily-2026-09-29 (daily-2026-09)",
+    "daily-2024-02-10 ~ daily-2026-05-04 (daily-2026-05)",
+    "daily-2024-02-10 ~ daily-2025-11-13 (daily-2025-11)",
+    "daily-2024-02-10 ~ daily-2025-08-25 (daily-2025-08)",
+    "daily-2024-02-10 ~ daily-2025-06-19 (daily-2025-06)",
+    "daily-2024-02-10 ~ daily-2025-03-08 (daily-2025-03)",
+    "daily-2024-02-10 ~ daily-2025-01-09 (daily-2025-01)",
+    "daily-2024-02-10 ~ daily-2024-10-25 (daily-2024-10)",
+    "daily-2024-02-10 ~ daily-2024-05-06 (daily-2024-05)",
+    "daily-2024-02-10 ~ daily-2023-12-24 (daily-2023-12)",
+    "daily-2024-02-10 ~ daily-2023-11-10 (daily-2023-11)",
+    "daily-2024-02-10 ~ daily-2023-07-23 (daily-2023-07)",
+    "daily-2024-02-12 ~ daily-2023-01-28 (daily-2023-01)",
+    "daily-2024-02-28 ~ evpack-tea-day-2027-12 (evpack-tea-day-2027)"
+   ]
+  },
+  "daily-2024-01": {
+   "name": "January 2024",
+   "category": "Daily",
+   "count": 31,
+   "issues": [
+    "daily-2024-01-03: too small 688x900",
+    "daily-2024-01-11: landscape 750x630",
+    "daily-2024-01-11: too small 750x630",
+    "daily-2024-01-13: landscape 961x893",
+    "daily-2024-01-21: too small 609x900",
+    "daily-2024-01-21: keyword people:baby",
+    "daily-2024-01-23: too small 617x893",
+    "daily-2024-01-23: keyword people:brother",
+    "daily-2024-01-29: landscape 900x772",
+    "daily-2024-01-31: landscape 1116x893"
+   ],
+   "cross": [
+    "daily-2024-01-30 ~ daily-2025-06-05 (daily-2025-06)"
+   ]
+  },
+  "daily-2023-12": {
+   "name": "December 2023",
+   "category": "Daily",
+   "count": 31,
+   "issues": [
+    "daily-2023-12-02: landscape 1246x893",
+    "daily-2023-12-04: landscape 1263x866",
+    "daily-2023-12-06: landscape 1138x893",
+    "daily-2023-12-08: too small 676x893",
+    "daily-2023-12-10: keyword people:figure",
+    "daily-2023-12-12: landscape 900x628",
+    "daily-2023-12-12: too small 900x628",
+    "daily-2023-12-16: landscape 750x625",
+    "daily-2023-12-16: too small 750x625",
+    "daily-2023-12-18: landscape 900x651",
+    "daily-2023-12-18: too small 900x651",
+    "daily-2023-12-20: landscape 900x644",
+    "daily-2023-12-20: too small 900x644",
+    "daily-2023-12-20: keyword people:hand",
+    "daily-2023-12-22: landscape 1263x668",
+    "daily-2023-12-22: too small 1263x668",
+    "daily-2023-12-22: keyword people:women",
+    "daily-2023-12-24: landscape 900x805",
+    "daily-2023-12-28: too small 646x893",
+    "daily-2023-12-30: landscape 900x893"
+   ],
+   "cross": [
+    "daily-2023-12-24 ~ daily-2026-10-25 (daily-2026-10)",
+    "daily-2023-12-24 ~ daily-2026-09-29 (daily-2026-09)",
+    "daily-2023-12-24 ~ daily-2026-05-04 (daily-2026-05)",
+    "daily-2023-12-24 ~ daily-2026-02-09 (daily-2026-02)",
+    "daily-2023-12-24 ~ daily-2025-11-13 (daily-2025-11)",
+    "daily-2023-12-24 ~ daily-2025-06-19 (daily-2025-06)",
+    "daily-2023-12-24 ~ daily-2025-05-15 (daily-2025-05)",
+    "daily-2023-12-24 ~ daily-2025-03-08 (daily-2025-03)",
+    "daily-2023-12-24 ~ daily-2025-01-09 (daily-2025-01)",
+    "daily-2023-12-24 ~ daily-2024-10-25 (daily-2024-10)",
+    "daily-2023-12-24 ~ daily-2024-05-06 (daily-2024-05)",
+    "daily-2023-12-24 ~ daily-2024-02-10 (daily-2024-02)",
+    "daily-2023-12-24 ~ daily-2023-11-10 (daily-2023-11)",
+    "daily-2023-12-24 ~ daily-2023-07-23 (daily-2023-07)",
+    "daily-2023-12-24 ~ evpack-remembrance-2027-01 (evpack-remembrance-2027)",
+    "daily-2023-12-24 ~ pack-renaissance-03 (pack-renaissance)",
+    "daily-2023-12-24 ~ pack-renaissance-13 (pack-renaissance)",
+    "daily-2023-12-27 ~ daily-2023-07-08 (daily-2023-07)"
+   ]
+  },
+  "daily-2023-11": {
+   "name": "November 2023",
+   "category": "Daily",
+   "count": 30,
+   "issues": [
+    "daily-2023-11-02: landscape 750x682",
+    "daily-2023-11-02: too small 750x682",
+    "daily-2023-11-04: landscape 1263x844",
+    "daily-2023-11-08: landscape 900x610",
+    "daily-2023-11-08: too small 900x610",
+    "daily-2023-11-08: keyword people:portrait",
+    "daily-2023-11-10: landscape 900x805",
+    "daily-2023-11-12: landscape 900x729",
+    "daily-2023-11-14: too small 690x893",
+    "daily-2023-11-16: landscape 1105x893",
+    "daily-2023-11-16: keyword people:figures",
+    "daily-2023-11-18: too small 673x900",
+    "daily-2023-11-18: keyword people:child",
+    "daily-2023-11-20: keyword people:portrait",
+    "daily-2023-11-22: keyword people:player",
+    "daily-2023-11-26: landscape 1193x893",
+    "daily-2023-11-26: keyword people:woman",
+    "daily-2023-11-28: landscape 900x705",
+    "daily-2023-11-28: keyword text:calligraphy",
+    "daily-2023-11-30: landscape 900x789",
+    "daily-2023-11-30: keyword text:page"
+   ],
+   "cross": [
+    "daily-2023-11-04 ~ daily-2024-11-26 (daily-2024-11)",
+    "daily-2023-11-04 ~ daily-2023-05-04 (daily-2023-05)",
+    "daily-2023-11-10 ~ daily-2026-10-25 (daily-2026-10)",
+    "daily-2023-11-10 ~ daily-2026-09-29 (daily-2026-09)",
+    "daily-2023-11-10 ~ daily-2026-05-04 (daily-2026-05)",
+    "daily-2023-11-10 ~ daily-2025-11-13 (daily-2025-11)",
+    "daily-2023-11-10 ~ daily-2025-08-25 (daily-2025-08)",
+    "daily-2023-11-10 ~ daily-2025-06-19 (daily-2025-06)",
+    "daily-2023-11-10 ~ daily-2025-05-15 (daily-2025-05)",
+    "daily-2023-11-10 ~ daily-2025-03-08 (daily-2025-03)",
+    "daily-2023-11-10 ~ daily-2025-01-09 (daily-2025-01)",
+    "daily-2023-11-10 ~ daily-2024-10-25 (daily-2024-10)",
+    "daily-2023-11-10 ~ daily-2024-05-06 (daily-2024-05)",
+    "daily-2023-11-10 ~ daily-2024-02-10 (daily-2024-02)",
+    "daily-2023-11-10 ~ daily-2023-12-24 (daily-2023-12)",
+    "daily-2023-11-10 ~ daily-2023-07-23 (daily-2023-07)",
+    "daily-2023-11-10 ~ evpack-remembrance-2027-01 (evpack-remembrance-2027)",
+    "daily-2023-11-10 ~ pack-renaissance-03 (pack-renaissance)",
+    "daily-2023-11-10 ~ pack-renaissance-13 (pack-renaissance)",
+    "daily-2023-11-16 ~ daily-2025-03-22 (daily-2025-03)",
+    "daily-2023-11-24 ~ daily-2024-07-21 (daily-2024-07)",
+    "daily-2023-11-24 ~ evpack-star-wars-day-2027-11 (evpack-star-wars-day-2027)",
+    "daily-2023-11-24 ~ pack-deer-06 (pack-deer)",
+    "daily-2023-11-30 ~ daily-2024-06-05 (daily-2024-06)",
+    "daily-2023-11-30 ~ evpack-childrens-book-2027-14 (evpack-childrens-book-2027)",
+    "daily-2023-11-30 ~ evpack-dance-2027-02 (evpack-dance-2027)",
+    "daily-2023-11-30 ~ evpack-heart-day-2027-07 (evpack-heart-day-2027)",
+    "daily-2023-11-30 ~ pack-lighthouses-10 (pack-lighthouses)",
+    "daily-2023-11-30 ~ pack-dutch-masters-08 (pack-dutch-masters)",
+    "daily-2023-11-30 ~ pack-impressionists-06 (pack-impressionists)",
+    "daily-2023-11-30 ~ pack-old-maps-19 (pack-old-maps)"
+   ]
+  },
+  "daily-2023-10": {
+   "name": "October 2023",
+   "category": "Daily",
+   "count": 31,
+   "issues": [
+    "daily-2023-10-01: too small 676x893",
+    "daily-2023-10-03: too small 668x893",
+    "daily-2023-10-05: landscape 900x610",
+    "daily-2023-10-05: too small 900x610",
+    "daily-2023-10-05: keyword text:calligraphy",
+    "daily-2023-10-07: keyword people:woman",
+    "daily-2023-10-09: keyword people:portraits",
+    "daily-2023-10-11: landscape 900x714",
+    "daily-2023-10-13: too small 644x900",
+    "daily-2023-10-15: landscape 750x694",
+    "daily-2023-10-15: too small 750x694",
+    "daily-2023-10-17: landscape 900x723",
+    "daily-2023-10-19: landscape 1106x893",
+    "daily-2023-10-19: keyword people:figures",
+    "daily-2023-10-21: too small 682x893",
+    "daily-2023-10-23: too small 698x893",
+    "daily-2023-10-23: keyword unwanted:dead",
+    "daily-2023-10-23: keyword people:christ",
+    "daily-2023-10-25: too small 619x900",
+    "daily-2023-10-27: landscape 900x863",
+    "daily-2023-10-28: landscape 1263x662",
+    "daily-2023-10-28: too small 1263x662",
+    "daily-2023-10-29: too small 610x900",
+    "daily-2023-10-31: keyword people:man,portrait"
+   ],
+   "cross": [
+    "daily-2023-10-05 ~ daily-2026-08-10 (daily-2026-08)",
+    "daily-2023-10-05 ~ daily-2026-03-11 (daily-2026-03)",
+    "daily-2023-10-28 ~ daily-2026-08-22 (daily-2026-08)"
+   ]
+  },
+  "daily-2023-09": {
+   "name": "September 2023",
+   "category": "Daily",
+   "count": 30,
+   "issues": [
+    "daily-2023-09-01: too small 622x900",
+    "daily-2023-09-03: landscape 900x709",
+    "daily-2023-09-04: keyword people:girl",
+    "daily-2023-09-05: too small 679x893",
+    "daily-2023-09-07: landscape 750x618",
+    "daily-2023-09-07: too small 750x618",
+    "daily-2023-09-11: too small 632x893",
+    "daily-2023-09-11: keyword text:page",
+    "daily-2023-09-13: landscape 900x664",
+    "daily-2023-09-13: too small 900x664",
+    "daily-2023-09-15: too small 674x893",
+    "daily-2023-09-15: keyword people:portrait",
+    "daily-2023-09-17: landscape 900x765",
+    "daily-2023-09-19: landscape 900x638",
+    "daily-2023-09-19: too small 900x638",
+    "daily-2023-09-21: landscape 900x851",
+    "daily-2023-09-23: keyword people:portrait,woman",
+    "daily-2023-09-25: landscape 1263x642",
+    "daily-2023-09-25: too small 1263x642",
+    "daily-2023-09-25: keyword people:party",
+    "daily-2023-09-27: landscape 900x636",
+    "daily-2023-09-27: too small 900x636",
+    "daily-2023-09-29: too small 601x893",
+    "daily-2023-09-29: keyword text:page"
+   ],
+   "cross": [
+    "daily-2023-09-11 ~ daily-2026-09-13 (daily-2026-09)",
+    "daily-2023-09-11 ~ daily-2026-07-31 (daily-2026-07)",
+    "daily-2023-09-11 ~ daily-2025-02-20 (daily-2025-02)",
+    "daily-2023-09-11 ~ daily-2024-09-07 (daily-2024-09)",
+    "daily-2023-09-11 ~ daily-2024-06-29 (daily-2024-06)",
+    "daily-2023-09-11 ~ daily-2023-08-20 (daily-2023-08)",
+    "daily-2023-09-11 ~ daily-2023-07-07 (daily-2023-07)",
+    "daily-2023-09-11 ~ daily-2023-07-31 (daily-2023-07)",
+    "daily-2023-09-13 ~ evpack-fathers-day-2027-12 (evpack-fathers-day-2027)",
+    "daily-2023-09-17 ~ daily-2025-05-11 (daily-2025-05)",
+    "daily-2023-09-21 ~ daily-2023-02-05 (daily-2023-02)"
+   ]
+  },
+  "daily-2023-08": {
+   "name": "August 2023",
+   "category": "Daily",
+   "count": 31,
+   "issues": [
+    "daily-2023-08-02: too small 607x900",
+    "daily-2023-08-04: landscape 900x638",
+    "daily-2023-08-04: too small 900x638",
+    "daily-2023-08-06: landscape 1161x893",
+    "daily-2023-08-08: landscape 1263x766",
+    "daily-2023-08-10: too small 683x900",
+    "daily-2023-08-14: landscape 1263x873",
+    "daily-2023-08-16: landscape 750x718",
+    "daily-2023-08-16: keyword people:fisherman",
+    "daily-2023-08-20: too small 604x893",
+    "daily-2023-08-20: keyword text:page",
+    "daily-2023-08-22: keyword people:child,singer",
+    "daily-2023-08-24: landscape 900x694",
+    "daily-2023-08-24: too small 900x694",
+    "daily-2023-08-26: landscape 1092x893",
+    "daily-2023-08-26: keyword people:man",
+    "daily-2023-08-28: too small 684x900",
+    "daily-2023-08-30: landscape 900x718"
+   ],
+   "cross": [
+    "daily-2023-08-03 ~ evpack-new-years-eve-2026-02 (evpack-new-years-eve-2026)",
+    "daily-2023-08-09 ~ deep-space-nasa-pia02879 (deep-space)",
+    "daily-2023-08-09 ~ daily-2026-10-26 (daily-2026-10)",
+    "daily-2023-08-09 ~ daily-2025-06-05 (daily-2025-06)",
+    "daily-2023-08-09 ~ daily-2025-01-12 (daily-2025-01)",
+    "daily-2023-08-09 ~ daily-2024-09-04 (daily-2024-09)",
+    "daily-2023-08-09 ~ daily-2024-03-22 (daily-2024-03)",
+    "daily-2023-08-09 ~ daily-2023-05-27 (daily-2023-05)",
+    "daily-2023-08-09 ~ pack-planets-15 (pack-planets)",
+    "daily-2023-08-20 ~ daily-2026-09-13 (daily-2026-09)",
+    "daily-2023-08-20 ~ daily-2026-07-31 (daily-2026-07)",
+    "daily-2023-08-20 ~ daily-2025-02-20 (daily-2025-02)",
+    "daily-2023-08-20 ~ daily-2024-09-07 (daily-2024-09)",
+    "daily-2023-08-20 ~ daily-2024-09-09 (daily-2024-09)",
+    "daily-2023-08-20 ~ daily-2024-06-29 (daily-2024-06)",
+    "daily-2023-08-20 ~ daily-2023-09-11 (daily-2023-09)",
+    "daily-2023-08-20 ~ daily-2023-07-07 (daily-2023-07)",
+    "daily-2023-08-20 ~ daily-2023-07-31 (daily-2023-07)",
+    "daily-2023-08-26 ~ pack-old-maps-05 (pack-old-maps)",
+    "daily-2023-08-26 ~ pack-vintage-posters-12 (pack-vintage-posters)"
+   ]
+  },
+  "daily-2023-07": {
+   "name": "July 2023",
+   "category": "Daily",
+   "count": 31,
+   "issues": [
+    "daily-2023-07-01: too small 657x900",
+    "daily-2023-07-01: keyword people:lovers",
+    "daily-2023-07-03: too small 678x900",
+    "daily-2023-07-05: too small 660x900",
+    "daily-2023-07-07: too small 608x893",
+    "daily-2023-07-07: keyword text:page",
+    "daily-2023-07-09: landscape 900x845",
+    "daily-2023-07-13: landscape 900x620",
+    "daily-2023-07-13: too small 900x620",
+    "daily-2023-07-13: keyword text:document",
+    "daily-2023-07-15: landscape 900x715",
+    "daily-2023-07-17: landscape 1263x837",
+    "daily-2023-07-17: keyword people:christ",
+    "daily-2023-07-19: landscape 1263x865",
+    "daily-2023-07-20: landscape 1263x878",
+    "daily-2023-07-21: keyword people:portrait",
+    "daily-2023-07-23: landscape 900x805",
+    "daily-2023-07-25: landscape 900x609",
+    "daily-2023-07-25: too small 900x609",
+    "daily-2023-07-27: keyword people:musicians",
+    "daily-2023-07-29: landscape 900x671",
+    "daily-2023-07-29: too small 900x671",
+    "daily-2023-07-31: too small 625x893",
+    "daily-2023-07-31: keyword text:page",
+    "daily-2023-07-31 ~ daily-2023-07-07: same palette and layout (colour 7, phash 26)"
+   ],
+   "cross": [
+    "daily-2023-07-05 ~ pack-winter-scenes-18 (pack-winter-scenes)",
+    "daily-2023-07-07 ~ daily-2026-09-13 (daily-2026-09)",
+    "daily-2023-07-07 ~ daily-2024-06-29 (daily-2024-06)",
+    "daily-2023-07-07 ~ daily-2023-09-11 (daily-2023-09)",
+    "daily-2023-07-07 ~ daily-2023-08-20 (daily-2023-08)",
+    "daily-2023-07-08 ~ daily-2023-12-27 (daily-2023-12)",
+    "daily-2023-07-21 ~ daily-2026-03-27 (daily-2026-03)",
+    "daily-2023-07-21 ~ daily-2024-10-01 (daily-2024-10)",
+    "daily-2023-07-23 ~ daily-2026-10-25 (daily-2026-10)",
+    "daily-2023-07-23 ~ daily-2026-09-29 (daily-2026-09)",
+    "daily-2023-07-23 ~ daily-2026-05-04 (daily-2026-05)",
+    "daily-2023-07-23 ~ daily-2025-11-13 (daily-2025-11)",
+    "daily-2023-07-23 ~ daily-2025-06-19 (daily-2025-06)",
+    "daily-2023-07-23 ~ daily-2025-03-08 (daily-2025-03)",
+    "daily-2023-07-23 ~ daily-2025-01-09 (daily-2025-01)",
+    "daily-2023-07-23 ~ daily-2024-10-25 (daily-2024-10)",
+    "daily-2023-07-23 ~ daily-2024-05-06 (daily-2024-05)",
+    "daily-2023-07-23 ~ daily-2024-02-10 (daily-2024-02)",
+    "daily-2023-07-23 ~ daily-2023-12-24 (daily-2023-12)",
+    "daily-2023-07-23 ~ daily-2023-11-10 (daily-2023-11)",
+    "daily-2023-07-23 ~ daily-2023-05-20 (daily-2023-05)",
+    "daily-2023-07-23 ~ evpack-remembrance-2027-01 (evpack-remembrance-2027)",
+    "daily-2023-07-23 ~ pack-renaissance-03 (pack-renaissance)",
+    "daily-2023-07-23 ~ pack-renaissance-13 (pack-renaissance)",
+    "daily-2023-07-31 ~ daily-2026-09-13 (daily-2026-09)",
+    "daily-2023-07-31 ~ daily-2026-07-31 (daily-2026-07)",
+    "daily-2023-07-31 ~ daily-2024-09-07 (daily-2024-09)",
+    "daily-2023-07-31 ~ daily-2024-06-29 (daily-2024-06)",
+    "daily-2023-07-31 ~ daily-2023-09-11 (daily-2023-09)",
+    "daily-2023-07-31 ~ daily-2023-08-20 (daily-2023-08)"
+   ]
+  },
+  "daily-2023-06": {
+   "name": "June 2023",
+   "category": "Daily",
+   "count": 30,
+   "issues": [
+    "daily-2023-06-07: landscape 1263x893",
+    "daily-2023-06-09: landscape 1263x834",
+    "daily-2023-06-11: too small 600x900",
+    "daily-2023-06-15: landscape 973x893",
+    "daily-2023-06-17: too small 652x900",
+    "daily-2023-06-19: landscape 1263x879",
+    "daily-2023-06-21: landscape 900x631",
+    "daily-2023-06-21: too small 900x631",
+    "daily-2023-06-25: too small 641x900"
+   ],
+   "cross": [
+    "daily-2023-06-12 ~ pack-venice-14 (pack-venice)"
+   ]
+  },
+  "daily-2023-05": {
+   "name": "May 2023",
+   "category": "Daily",
+   "count": 31,
+   "issues": [
+    "daily-2023-05-02: too small 675x900",
+    "daily-2023-05-04: too small 687x893",
+    "daily-2023-05-06: landscape 900x618",
+    "daily-2023-05-06: too small 900x618",
+    "daily-2023-05-06: keyword text:manuscript",
+    "daily-2023-05-08: landscape 900x600",
+    "daily-2023-05-08: too small 900x600",
+    "daily-2023-05-08: keyword people:portrait",
+    "daily-2023-05-12: too small 607x900",
+    "daily-2023-05-12: keyword people:fishermen",
+    "daily-2023-05-14: too small 616x893",
+    "daily-2023-05-14: keyword people:man",
+    "daily-2023-05-16: landscape 976x893",
+    "daily-2023-05-18: landscape 900x633",
+    "daily-2023-05-18: too small 900x633",
+    "daily-2023-05-20: landscape 900x856",
+    "daily-2023-05-22: landscape 900x714",
+    "daily-2023-05-24: landscape 900x822",
+    "daily-2023-05-26: too small 641x893",
+    "daily-2023-05-26: keyword people:portrait",
+    "daily-2023-05-28: keyword people:portrait,woman",
+    "daily-2023-05-30: keyword people:man",
+    "daily-2023-05-31: landscape 1263x857"
+   ],
+   "cross": [
+    "daily-2023-05-04 ~ daily-2026-05-26 (daily-2026-05)",
+    "daily-2023-05-04 ~ daily-2024-11-26 (daily-2024-11)",
+    "daily-2023-05-04 ~ daily-2024-10-17 (daily-2024-10)",
+    "daily-2023-05-04 ~ daily-2024-07-04 (daily-2024-07)",
+    "daily-2023-05-04 ~ daily-2023-11-04 (daily-2023-11)",
+    "daily-2023-05-06 ~ daily-2025-12-31 (daily-2025-12)",
+    "daily-2023-05-12 ~ daily-2023-03-13 (daily-2023-03)",
+    "daily-2023-05-12 ~ daily-2023-01-08 (daily-2023-01)",
+    "daily-2023-05-12 ~ evpack-dance-2027-07 (evpack-dance-2027)",
+    "daily-2023-05-16 ~ daily-2025-07-02 (daily-2025-07)",
+    "daily-2023-05-20 ~ daily-2026-05-04 (daily-2026-05)",
+    "daily-2023-05-20 ~ daily-2024-10-25 (daily-2024-10)",
+    "daily-2023-05-20 ~ daily-2023-07-23 (daily-2023-07)",
+    "daily-2023-05-20 ~ evpack-remembrance-2027-01 (evpack-remembrance-2027)",
+    "daily-2023-05-27 ~ deep-space-nasa-pia02879 (deep-space)",
+    "daily-2023-05-27 ~ daily-2025-06-05 (daily-2025-06)",
+    "daily-2023-05-27 ~ daily-2024-03-22 (daily-2024-03)",
+    "daily-2023-05-27 ~ daily-2023-08-09 (daily-2023-08)",
+    "daily-2023-05-27 ~ pack-planets-15 (pack-planets)"
+   ]
+  },
+  "daily-2023-04": {
+   "name": "April 2023",
+   "category": "Daily",
+   "count": 30,
+   "issues": [
+    "daily-2023-04-02: landscape 1199x893",
+    "daily-2023-04-02: keyword text:calligraphy",
+    "daily-2023-04-04: landscape 1263x773",
+    "daily-2023-04-06: too small 686x893",
+    "daily-2023-04-08: landscape 1161x893",
+    "daily-2023-04-10: landscape 902x893",
+    "daily-2023-04-11: landscape 1263x864",
+    "daily-2023-04-12: too small 659x893",
+    "daily-2023-04-14: too small 662x900",
+    "daily-2023-04-14: keyword text:page",
+    "daily-2023-04-16: keyword people:portrait,woman",
+    "daily-2023-04-18: landscape 900x783",
+    "daily-2023-04-20: too small 605x893",
+    "daily-2023-04-20: keyword text:page",
+    "daily-2023-04-24: landscape 1222x893",
+    "daily-2023-04-26: landscape 900x641",
+    "daily-2023-04-26: too small 900x641",
+    "daily-2023-04-28: landscape 1221x893",
+    "daily-2023-04-28: keyword people:girl",
+    "daily-2023-04-30: landscape 1177x893"
+   ],
+   "cross": [
+    "daily-2023-04-11 ~ daily-2026-07-27 (daily-2026-07)",
+    "daily-2023-04-11 ~ daily-2024-03-19 (daily-2024-03)"
+   ]
+  },
+  "daily-2023-03": {
+   "name": "March 2023",
+   "category": "Daily",
+   "count": 31,
+   "issues": [
+    "daily-2023-03-03: landscape 900x751",
+    "daily-2023-03-05: landscape 1169x893",
+    "daily-2023-03-07: too small 629x893",
+    "daily-2023-03-09: landscape 1263x721",
+    "daily-2023-03-11: too small 624x900",
+    "daily-2023-03-13: landscape 900x784",
+    "daily-2023-03-15: keyword people:women",
+    "daily-2023-03-17: landscape 1263x888",
+    "daily-2023-03-21: landscape 900x742",
+    "daily-2023-03-23: too small 637x900",
+    "daily-2023-03-23: keyword people:portrait",
+    "daily-2023-03-25: too small 660x900",
+    "daily-2023-03-27: too small 644x900",
+    "daily-2023-03-29: landscape 900x747",
+    "daily-2023-03-31: landscape 1263x789"
+   ],
+   "cross": [
+    "daily-2023-03-13 ~ daily-2024-10-13 (daily-2024-10)",
+    "daily-2023-03-13 ~ daily-2023-05-12 (daily-2023-05)",
+    "daily-2023-03-13 ~ daily-2023-01-08 (daily-2023-01)",
+    "daily-2023-03-29 ~ daily-2026-05-02 (daily-2026-05)"
+   ]
+  },
+  "daily-2023-02": {
+   "name": "February 2023",
+   "category": "Daily",
+   "count": 28,
+   "issues": [
+    "daily-2023-02-01: landscape 900x632",
+    "daily-2023-02-01: too small 900x632",
+    "daily-2023-02-03: landscape 900x835",
+    "daily-2023-02-11: landscape 900x834",
+    "daily-2023-02-13: keyword people:boy",
+    "daily-2023-02-15: too small 647x900",
+    "daily-2023-02-15: keyword people:woman",
+    "daily-2023-02-17: too small 673x900",
+    "daily-2023-02-19: keyword people:portrait",
+    "daily-2023-02-20: too small 673x900",
+    "daily-2023-02-25: landscape 900x654",
+    "daily-2023-02-25: too small 900x654",
+    "daily-2023-02-27: landscape 1263x888"
+   ],
+   "cross": [
+    "daily-2023-02-05 ~ daily-2023-09-21 (daily-2023-09)",
+    "daily-2023-02-07 ~ daily-2026-09-25 (daily-2026-09)",
+    "daily-2023-02-07 ~ pack-bridges-17 (pack-bridges)",
+    "daily-2023-02-21 ~ evpack-star-wars-day-2027-01 (evpack-star-wars-day-2027)"
+   ]
+  },
+  "daily-2023-01": {
+   "name": "January 2023",
+   "category": "Daily",
+   "count": 31,
+   "issues": [
+    "daily-2023-01-01: too small 645x893",
+    "daily-2023-01-01: keyword people:portrait",
+    "daily-2023-01-02: landscape 1263x733",
+    "daily-2023-01-04: landscape 1263x762",
+    "daily-2023-01-06: too small 690x893",
+    "daily-2023-01-06: keyword text:letter",
+    "daily-2023-01-08: landscape 900x821",
+    "daily-2023-01-10: landscape 1263x802",
+    "daily-2023-01-12: too small 667x893",
+    "daily-2023-01-14: too small 654x893",
+    "daily-2023-01-14: keyword people:portrait",
+    "daily-2023-01-16: landscape 1263x860",
+    "daily-2023-01-20: keyword people:child",
+    "daily-2023-01-22: landscape 750x627",
+    "daily-2023-01-22: too small 750x627",
+    "daily-2023-01-26: landscape 1263x893",
+    "daily-2023-01-28: landscape 1195x893",
+    "daily-2023-01-30: landscape 900x685",
+    "daily-2023-01-30: too small 900x685"
+   ],
+   "cross": [
+    "daily-2023-01-08 ~ daily-2024-10-13 (daily-2024-10)",
+    "daily-2023-01-08 ~ daily-2023-05-12 (daily-2023-05)",
+    "daily-2023-01-08 ~ daily-2023-03-13 (daily-2023-03)",
+    "daily-2023-01-27 ~ daily-2025-07-01 (daily-2025-07)",
+    "daily-2023-01-28 ~ daily-2024-02-12 (daily-2024-02)"
+   ]
+  },
+  "evpack-animal-day-2026": {
+   "name": "World Animal Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-animal-day-2026-03: too small 681x1024",
+    "evpack-animal-day-2026-04: too small 678x1024",
+    "evpack-animal-day-2026-06: too small 683x1024",
+    "evpack-animal-day-2026-08 ~ evpack-animal-day-2026-07: same scene (phash 12, colour 8)"
+   ],
+   "cross": [
+    "evpack-animal-day-2026-08 ~ daily-2026-10-09 (daily-2026-10)",
+    "evpack-animal-day-2026-08 ~ evpack-smile-day-2027-10 (evpack-smile-day-2027)"
+   ]
+  },
+  "evpack-animal-day-2027": {
+   "name": "World Animal Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-animal-day-2027-02: too small 612x900",
+    "evpack-animal-day-2027-03: landscape 900x806",
+    "evpack-animal-day-2027-04: landscape 1184x893",
+    "evpack-animal-day-2027-05: landscape 1216x893",
+    "evpack-animal-day-2027-06: landscape 900x682",
+    "evpack-animal-day-2027-06: too small 900x682",
+    "evpack-animal-day-2027-07: too small 620x893",
+    "evpack-animal-day-2027-08: too small 607x893",
+    "evpack-animal-day-2027-10: landscape 900x807",
+    "evpack-animal-day-2027-11: too small 626x900",
+    "evpack-animal-day-2027-13: landscape 900x798",
+    "evpack-animal-day-2027-14: landscape 750x647",
+    "evpack-animal-day-2027-14: too small 750x647"
+   ],
+   "cross": [
+    "evpack-animal-day-2027-05 ~ pack-textiles-14 (pack-textiles)"
+   ]
+  },
+  "evpack-art-day-2027": {
+   "name": "World Art Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-art-day-2027-01: landscape 900x690",
+    "evpack-art-day-2027-01: too small 900x690",
+    "evpack-art-day-2027-02: landscape 1174x893",
+    "evpack-art-day-2027-03: landscape 1263x883",
+    "evpack-art-day-2027-04: too small 687x893",
+    "evpack-art-day-2027-05: too small 695x893",
+    "evpack-art-day-2027-06: too small 616x893",
+    "evpack-art-day-2027-08: landscape 900x715",
+    "evpack-art-day-2027-09: landscape 1161x893",
+    "evpack-art-day-2027-10: too small 606x893",
+    "evpack-art-day-2027-11: too small 601x900",
+    "evpack-art-day-2027-12: too small 641x893"
+   ]
+  },
+  "evpack-autumn-2027": {
+   "name": "Autumn Equinox",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ]
+  },
+  "evpack-beach-day-2027": {
+   "name": "National Beach Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ]
+  },
+  "evpack-bean-day-2027": {
+   "name": "National Bean Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ]
+  },
+  "evpack-bee-day-2027": {
+   "name": "World Bee Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ]
+  },
+  "evpack-bicycle-2027": {
+   "name": "World Bicycle Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ]
+  },
+  "evpack-biodiversity-2027": {
+   "name": "International Day for Biodiversity",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-biodiversity-2027-07: too small 683x1024",
+    "evpack-biodiversity-2027-10: too small 683x1024"
+   ]
+  },
+  "evpack-book-day-2027": {
+   "name": "World Book Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-book-day-2027-04: too small 688x1024"
+   ]
+  },
+  "evpack-cat-day-2027": {
+   "name": "International Cat Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-cat-day-2027-13 ~ evpack-cat-day-2027-11: near-duplicate (phash 10, dhash 5)"
+   ]
+  },
+  "evpack-cheeseburger-2027": {
+   "name": "National Cheeseburger Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-cheeseburger-2027-09 ~ evpack-cheeseburger-2027-08: near-duplicate (phash 4, dhash 4)",
+    "evpack-cheeseburger-2027-11 ~ evpack-cheeseburger-2027-07: near-duplicate (phash 8, dhash 5)",
+    "evpack-cheeseburger-2027-13 ~ evpack-cheeseburger-2027-08: near-duplicate (phash 8, dhash 5)",
+    "evpack-cheeseburger-2027-13 ~ evpack-cheeseburger-2027-09: same scene (phash 12, colour 5)",
+    "evpack-cheeseburger-2027-14 ~ evpack-cheeseburger-2027-08: same scene (phash 10, colour 14)",
+    "evpack-cheeseburger-2027-14 ~ evpack-cheeseburger-2027-09: same scene (phash 14, colour 16)",
+    "evpack-cheeseburger-2027-14 ~ evpack-cheeseburger-2027-13: near-duplicate (phash 4, dhash 7)"
+   ]
+  },
+  "evpack-childrens-book-2027": {
+   "name": "International Children's Book Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-childrens-book-2027-01: too small 624x893",
+    "evpack-childrens-book-2027-02: keyword people:children",
+    "evpack-childrens-book-2027-03: too small 690x1024",
+    "evpack-childrens-book-2027-03: keyword people:children",
+    "evpack-childrens-book-2027-04: keyword people:children",
+    "evpack-childrens-book-2027-05: keyword people:children",
+    "evpack-childrens-book-2027-06: too small 622x1024",
+    "evpack-childrens-book-2027-06: keyword people:children",
+    "evpack-childrens-book-2027-07: keyword people:children",
+    "evpack-childrens-book-2027-08: too small 686x1024",
+    "evpack-childrens-book-2027-08: keyword people:children",
+    "evpack-childrens-book-2027-09: keyword people:children",
+    "evpack-childrens-book-2027-10: too small 691x1024",
+    "evpack-childrens-book-2027-10: keyword people:children",
+    "evpack-childrens-book-2027-10 ~ evpack-childrens-book-2027-08: same scene (phash 14, colour 19)",
+    "evpack-childrens-book-2027-11: keyword people:children",
+    "evpack-childrens-book-2027-12: too small 665x1024",
+    "evpack-childrens-book-2027-12: keyword people:children",
+    "evpack-childrens-book-2027-13: too small 666x1024",
+    "evpack-childrens-book-2027-13: keyword people:children",
+    "evpack-childrens-book-2027-14: too small 699x1024",
+    "evpack-childrens-book-2027-14: keyword people:children"
+   ],
+   "cross": [
+    "evpack-childrens-book-2027-14 ~ daily-2024-06-05 (daily-2024-06)",
+    "evpack-childrens-book-2027-14 ~ daily-2023-11-30 (daily-2023-11)",
+    "evpack-childrens-book-2027-14 ~ evpack-dance-2027-02 (evpack-dance-2027)",
+    "evpack-childrens-book-2027-14 ~ evpack-mothers-day-2027-10 (evpack-mothers-day-2027)",
+    "evpack-childrens-book-2027-14 ~ evpack-heart-day-2027-07 (evpack-heart-day-2027)",
+    "evpack-childrens-book-2027-14 ~ pack-dutch-masters-08 (pack-dutch-masters)",
+    "evpack-childrens-book-2027-14 ~ pack-impressionists-06 (pack-impressionists)",
+    "evpack-childrens-book-2027-14 ~ pack-old-maps-19 (pack-old-maps)"
+   ]
+  },
+  "evpack-childrens-day-2027": {
+   "name": "International Children's Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-childrens-day-2027-01: keyword people:children",
+    "evpack-childrens-day-2027-02: keyword people:children",
+    "evpack-childrens-day-2027-03: keyword people:children",
+    "evpack-childrens-day-2027-04: keyword people:children",
+    "evpack-childrens-day-2027-05: keyword people:children",
+    "evpack-childrens-day-2027-06: keyword people:children",
+    "evpack-childrens-day-2027-07: keyword people:children",
+    "evpack-childrens-day-2027-08: keyword people:children",
+    "evpack-childrens-day-2027-09: too small 536x1024",
+    "evpack-childrens-day-2027-09: keyword people:children",
+    "evpack-childrens-day-2027-10: too small 699x1024",
+    "evpack-childrens-day-2027-10: keyword people:children",
+    "evpack-childrens-day-2027-11: keyword people:children",
+    "evpack-childrens-day-2027-12: keyword people:children",
+    "evpack-childrens-day-2027-13: keyword people:children",
+    "evpack-childrens-day-2027-14: too small 685x1024",
+    "evpack-childrens-day-2027-14: keyword people:children"
+   ]
+  },
+  "evpack-chocolate-2027": {
+   "name": "World Chocolate Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-chocolate-2027-10 ~ evpack-chocolate-2027-09: same palette and layout (colour 6, phash 30)"
+   ],
+   "cross": [
+    "evpack-chocolate-2027-09 ~ pack-nebulae-20 (pack-nebulae)"
+   ]
+  },
+  "evpack-christmas-2026": {
+   "name": "Christmas",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ]
+  },
+  "evpack-christmas-2027": {
+   "name": "Christmas",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-christmas-2027-13 ~ evpack-christmas-2027-11: near-duplicate (phash 6, dhash 10)"
+   ]
+  },
+  "evpack-coffee-2026": {
+   "name": "International Coffee Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ]
+  },
+  "evpack-coffee-2027": {
+   "name": "International Coffee Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ]
+  },
+  "evpack-croissant-2027": {
+   "name": "National Croissant Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ]
+  },
+  "evpack-dance-2027": {
+   "name": "International Dance Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-dance-2027-01: landscape 1263x802",
+    "evpack-dance-2027-01: keyword people:dancers",
+    "evpack-dance-2027-02: too small 693x893",
+    "evpack-dance-2027-02: keyword people:dancer",
+    "evpack-dance-2027-03: too small 671x900",
+    "evpack-dance-2027-03: keyword people:dancers",
+    "evpack-dance-2027-04: keyword people:dancers",
+    "evpack-dance-2027-05: too small 642x900",
+    "evpack-dance-2027-05: keyword people:dancers",
+    "evpack-dance-2027-06: too small 661x893",
+    "evpack-dance-2027-06: keyword people:dancer",
+    "evpack-dance-2027-07: keyword people:dancers,nude",
+    "evpack-dance-2027-08: keyword people:dancer",
+    "evpack-dance-2027-09: too small 608x893",
+    "evpack-dance-2027-11: too small 624x893",
+    "evpack-dance-2027-11: keyword people:dancer",
+    "evpack-dance-2027-12: too small 666x893",
+    "evpack-dance-2027-12: keyword people:dancer",
+    "evpack-dance-2027-13: landscape 750x630",
+    "evpack-dance-2027-13: too small 750x630",
+    "evpack-dance-2027-13: keyword people:dancer",
+    "evpack-dance-2027-14: too small 625x900"
+   ],
+   "cross": [
+    "evpack-dance-2027-02 ~ daily-2024-06-05 (daily-2024-06)",
+    "evpack-dance-2027-02 ~ daily-2023-11-30 (daily-2023-11)",
+    "evpack-dance-2027-02 ~ evpack-childrens-book-2027-14 (evpack-childrens-book-2027)",
+    "evpack-dance-2027-02 ~ evpack-mothers-day-2027-10 (evpack-mothers-day-2027)",
+    "evpack-dance-2027-02 ~ evpack-families-2027-13 (evpack-families-2027)",
+    "evpack-dance-2027-02 ~ evpack-heart-day-2027-07 (evpack-heart-day-2027)",
+    "evpack-dance-2027-07 ~ daily-2023-05-12 (daily-2023-05)",
+    "evpack-dance-2027-11 ~ daily-2024-12-26 (daily-2024-12)",
+    "evpack-dance-2027-11 ~ pack-botanical-12 (pack-botanical)"
+   ]
+  },
+  "evpack-diwali-2026": {
+   "name": "Diwali",
+   "category": "Event",
+   "count": 10,
+   "issues": [
+    "count 10 < 20",
+    "evpack-diwali-2026-03: too small 651x900",
+    "evpack-diwali-2026-03: keyword people:women"
+   ],
+   "cross": [
+    "evpack-diwali-2026-03 ~ daily-2026-08-26 (daily-2026-08)"
+   ]
+  },
+  "evpack-diwali-2027": {
+   "name": "Diwali",
+   "category": "Event",
+   "count": 10,
+   "issues": [
+    "count 10 < 20"
+   ]
+  },
+  "evpack-dog-day-2027": {
+   "name": "International Dog Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ]
+  },
+  "evpack-earth-day-2027": {
+   "name": "Earth Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-earth-day-2027-01: landscape 1280x1264",
+    "evpack-earth-day-2027-03: landscape 1280x720",
+    "evpack-earth-day-2027-05: landscape 1280x840",
+    "evpack-earth-day-2027-06: landscape 1280x844",
+    "evpack-earth-day-2027-07: landscape 1280x840",
+    "evpack-earth-day-2027-08: landscape 1279x851",
+    "evpack-earth-day-2027-09: landscape 1280x851",
+    "evpack-earth-day-2027-10: landscape 1280x851",
+    "evpack-earth-day-2027-12: landscape 1280x851",
+    "evpack-earth-day-2027-12 ~ evpack-earth-day-2027-09: same scene (phash 14, colour 9)",
+    "evpack-earth-day-2027-13: landscape 1280x849",
+    "evpack-earth-day-2027-14: landscape 1280x851"
+   ],
+   "cross": [
+    "evpack-earth-day-2027-14 ~ pack-galaxies-02 (pack-galaxies)",
+    "evpack-earth-day-2027-14 ~ pack-galaxies-19 (pack-galaxies)",
+    "evpack-earth-day-2027-14 ~ pack-harbours-07 (pack-harbours)"
+   ]
+  },
+  "evpack-easter-2027": {
+   "name": "Easter",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-easter-2027-08 ~ evpack-easter-2027-01: same scene (phash 12, colour 12)",
+    "evpack-easter-2027-08 ~ evpack-easter-2027-06: same scene (phash 14, colour 18)",
+    "evpack-easter-2027-09 ~ evpack-easter-2027-06: same scene (phash 12, colour 17)",
+    "evpack-easter-2027-09 ~ evpack-easter-2027-08: same scene (phash 14, colour 12)",
+    "evpack-easter-2027-14: keyword people:pilgrim"
+   ]
+  },
+  "evpack-education-2027": {
+   "name": "International Day of Education",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ]
+  },
+  "evpack-environment-2027": {
+   "name": "World Environment Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-environment-2027-07: too small 694x1024",
+    "evpack-environment-2027-10 ~ evpack-environment-2027-03: near-duplicate (phash 0, dhash 0)"
+   ]
+  },
+  "evpack-families-2027": {
+   "name": "International Day of Families",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-families-2027-01: landscape 900x759",
+    "evpack-families-2027-01: keyword people:family,portrait",
+    "evpack-families-2027-02: keyword people:portrait",
+    "evpack-families-2027-03: keyword people:portrait",
+    "evpack-families-2027-05: keyword people:self-portrait",
+    "evpack-families-2027-06: keyword people:portrait",
+    "evpack-families-2027-07: keyword people:portrait",
+    "evpack-families-2027-08: too small 687x893",
+    "evpack-families-2027-08: keyword people:family",
+    "evpack-families-2027-09: too small 670x893",
+    "evpack-families-2027-09: keyword people:man,portrait",
+    "evpack-families-2027-10: too small 624x893",
+    "evpack-families-2027-10: keyword people:portrait",
+    "evpack-families-2027-11: too small 670x893",
+    "evpack-families-2027-11: keyword people:portrait",
+    "evpack-families-2027-12: too small 690x893",
+    "evpack-families-2027-12: keyword people:family",
+    "evpack-families-2027-12 ~ evpack-families-2027-08: same scene (phash 12, colour 12)",
+    "evpack-families-2027-13: keyword people:portrait",
+    "evpack-families-2027-14: landscape 1263x841",
+    "evpack-families-2027-14: keyword people:portrait"
+   ],
+   "cross": [
+    "evpack-families-2027-13 ~ evpack-dance-2027-02 (evpack-dance-2027)",
+    "evpack-families-2027-13 ~ evpack-mothers-day-2027-10 (evpack-mothers-day-2027)"
+   ]
+  },
+  "evpack-fathers-day-2027": {
+   "name": "Father's Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-fathers-day-2027-01: landscape 1115x893",
+    "evpack-fathers-day-2027-02: landscape 1263x867",
+    "evpack-fathers-day-2027-02: keyword people:family",
+    "evpack-fathers-day-2027-03: too small 697x900",
+    "evpack-fathers-day-2027-04: landscape 900x697",
+    "evpack-fathers-day-2027-04: too small 900x697",
+    "evpack-fathers-day-2027-05: landscape 900x687",
+    "evpack-fathers-day-2027-05: too small 900x687",
+    "evpack-fathers-day-2027-05: keyword text:page",
+    "evpack-fathers-day-2027-06: landscape 1204x893",
+    "evpack-fathers-day-2027-07: landscape 1263x828",
+    "evpack-fathers-day-2027-08: too small 615x893",
+    "evpack-fathers-day-2027-08: keyword people:child,madonna",
+    "evpack-fathers-day-2027-09: too small 687x893",
+    "evpack-fathers-day-2027-09: keyword people:boy",
+    "evpack-fathers-day-2027-10: landscape 900x696",
+    "evpack-fathers-day-2027-10: too small 900x696",
+    "evpack-fathers-day-2027-10: keyword people:hands",
+    "evpack-fathers-day-2027-11: too small 648x900",
+    "evpack-fathers-day-2027-12: landscape 1210x893",
+    "evpack-fathers-day-2027-13: keyword people:family",
+    "evpack-fathers-day-2027-14: landscape 900x691",
+    "evpack-fathers-day-2027-14: too small 900x691",
+    "evpack-fathers-day-2027-14: keyword people:family"
+   ],
+   "cross": [
+    "evpack-fathers-day-2027-12 ~ daily-2023-09-13 (daily-2023-09)"
+   ]
+  },
+  "evpack-food-day-2026": {
+   "name": "World Food Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ]
+  },
+  "evpack-food-day-2027": {
+   "name": "World Food Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-food-day-2027-04: too small 678x1024"
+   ]
+  },
+  "evpack-forests-2027": {
+   "name": "International Day of Forests",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ]
+  },
+  "evpack-friendship-2027": {
+   "name": "International Day of Friendship",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-friendship-2027-11 ~ evpack-friendship-2027-09: near-duplicate (phash 0, dhash 3)",
+    "evpack-friendship-2027-12 ~ evpack-friendship-2027-10: near-duplicate (phash 0, dhash 5)",
+    "evpack-friendship-2027-13 ~ evpack-friendship-2027-09: near-duplicate (phash 0, dhash 2)",
+    "evpack-friendship-2027-13 ~ evpack-friendship-2027-11: near-duplicate (phash 0, dhash 3)",
+    "evpack-friendship-2027-14 ~ evpack-friendship-2027-09: near-duplicate (phash 0, dhash 4)",
+    "evpack-friendship-2027-14 ~ evpack-friendship-2027-11: near-duplicate (phash 0, dhash 3)",
+    "evpack-friendship-2027-14 ~ evpack-friendship-2027-13: near-duplicate (phash 0, dhash 2)"
+   ],
+   "cross": [
+    "evpack-friendship-2027-09 ~ pack-starry-nights-16 (pack-starry-nights)",
+    "evpack-friendship-2027-10 ~ pack-horses-13 (pack-horses)",
+    "evpack-friendship-2027-13 ~ pack-starry-nights-19 (pack-starry-nights)",
+    "evpack-friendship-2027-14 ~ pack-starry-nights-16 (pack-starry-nights)"
+   ]
+  },
+  "evpack-fries-2027": {
+   "name": "National French Fry Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-fries-2027-11: too small 683x1024",
+    "evpack-fries-2027-13: too small 685x1024"
+   ]
+  },
+  "evpack-grandparents-2027": {
+   "name": "Grandparents Day",
+   "category": "Event",
+   "count": 10,
+   "issues": [
+    "count 10 < 20"
+   ],
+   "cross": [
+    "evpack-grandparents-2027-02 ~ evpack-universal-childrens-2026-05 (evpack-universal-childrens-2026)"
+   ]
+  },
+  "evpack-halloween-2026": {
+   "name": "Halloween",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-halloween-2026-02 ~ evpack-halloween-2026-01: same scene (phash 12, colour 10)",
+    "evpack-halloween-2026-12: too small 683x1024"
+   ]
+  },
+  "evpack-halloween-2027": {
+   "name": "Halloween",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ]
+  },
+  "evpack-hamburger-2027": {
+   "name": "National Hamburger Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ]
+  },
+  "evpack-happiness-2027": {
+   "name": "International Day of Happiness",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-happiness-2027-04: too small 695x1024",
+    "evpack-happiness-2027-05: too small 678x1024",
+    "evpack-happiness-2027-05 ~ evpack-happiness-2027-04: near-duplicate (phash 6, dhash 4)",
+    "evpack-happiness-2027-14: too small 683x1024"
+   ]
+  },
+  "evpack-health-2027": {
+   "name": "World Health Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-health-2027-07: too small 683x1024"
+   ]
+  },
+  "evpack-heart-day-2027": {
+   "name": "World Heart Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-heart-day-2027-10: too small 683x1024",
+    "evpack-heart-day-2027-11: too small 683x1024",
+    "evpack-heart-day-2027-12: too small 683x1024"
+   ],
+   "cross": [
+    "evpack-heart-day-2027-07 ~ daily-2023-11-30 (daily-2023-11)",
+    "evpack-heart-day-2027-07 ~ evpack-childrens-book-2027-14 (evpack-childrens-book-2027)",
+    "evpack-heart-day-2027-07 ~ evpack-dance-2027-02 (evpack-dance-2027)",
+    "evpack-heart-day-2027-07 ~ pack-impressionists-06 (pack-impressionists)",
+    "evpack-heart-day-2027-07 ~ pack-old-maps-19 (pack-old-maps)"
+   ]
+  },
+  "evpack-hot-tea-2027": {
+   "name": "National Hot Tea Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-hot-tea-2027-09: too small 683x1024"
+   ],
+   "cross": [
+    "evpack-hot-tea-2027-10 ~ daily-2026-01-12 (daily-2026-01)"
+   ]
+  },
+  "evpack-independence-day-2027": {
+   "name": "Independence Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-independence-day-2027-07 ~ evpack-independence-day-2027-06: near-duplicate (phash 16, dhash 6)"
+   ]
+  },
+  "evpack-kindness-2026": {
+   "name": "World Kindness Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-kindness-2026-07: too small 683x1024",
+    "evpack-kindness-2026-08: too small 683x1024",
+    "evpack-kindness-2026-09: too small 683x1024",
+    "evpack-kindness-2026-11: too small 683x1024"
+   ]
+  },
+  "evpack-kindness-2027": {
+   "name": "World Kindness Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ]
+  },
+  "evpack-literacy-2027": {
+   "name": "International Literacy Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-literacy-2027-03: too small 607x1024",
+    "evpack-literacy-2027-07: too small 640x1024",
+    "evpack-literacy-2027-11: too small 661x1024"
+   ]
+  },
+  "evpack-love-your-pet-2027": {
+   "name": "Love Your Pet Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-love-your-pet-2027-03 ~ evpack-love-your-pet-2027-02: same scene (phash 14, colour 21)"
+   ]
+  },
+  "evpack-lunar-new-year-2027": {
+   "name": "Lunar New Year",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-lunar-new-year-2027-04 ~ evpack-lunar-new-year-2027-01: near-duplicate (phash 4, dhash 4)"
+   ]
+  },
+  "evpack-may-day-2027": {
+   "name": "May Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ]
+  },
+  "evpack-mental-health-2026": {
+   "name": "World Mental Health Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ]
+  },
+  "evpack-mental-health-2027": {
+   "name": "World Mental Health Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ]
+  },
+  "evpack-moon-day-2027": {
+   "name": "Moon Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-moon-day-2027-04: landscape 1280x853",
+    "evpack-moon-day-2027-05: landscape 1280x856"
+   ],
+   "cross": [
+    "evpack-moon-day-2027-08 ~ pack-galaxies-02 (pack-galaxies)"
+   ]
+  },
+  "evpack-mothers-day-2027": {
+   "name": "Mother's Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-mothers-day-2027-01: too small 648x893",
+    "evpack-mothers-day-2027-01: keyword people:child,christ,madonna",
+    "evpack-mothers-day-2027-02: too small 621x893",
+    "evpack-mothers-day-2027-02: keyword people:child",
+    "evpack-mothers-day-2027-03: keyword people:child",
+    "evpack-mothers-day-2027-04: too small 647x893",
+    "evpack-mothers-day-2027-04: keyword people:child",
+    "evpack-mothers-day-2027-05: keyword people:child",
+    "evpack-mothers-day-2027-06: keyword people:child",
+    "evpack-mothers-day-2027-07: too small 622x893",
+    "evpack-mothers-day-2027-07: keyword people:child",
+    "evpack-mothers-day-2027-08: too small 663x893",
+    "evpack-mothers-day-2027-09: keyword people:child",
+    "evpack-mothers-day-2027-10: landscape 900x715",
+    "evpack-mothers-day-2027-10: keyword people:child",
+    "evpack-mothers-day-2027-11: too small 648x900",
+    "evpack-mothers-day-2027-11: keyword people:children",
+    "evpack-mothers-day-2027-12: keyword people:child",
+    "evpack-mothers-day-2027-13: landscape 1263x804",
+    "evpack-mothers-day-2027-14: landscape 900x608",
+    "evpack-mothers-day-2027-14: too small 900x608"
+   ],
+   "cross": [
+    "evpack-mothers-day-2027-10 ~ daily-2024-08-10 (daily-2024-08)",
+    "evpack-mothers-day-2027-10 ~ evpack-childrens-book-2027-14 (evpack-childrens-book-2027)",
+    "evpack-mothers-day-2027-10 ~ evpack-dance-2027-02 (evpack-dance-2027)",
+    "evpack-mothers-day-2027-10 ~ evpack-families-2027-13 (evpack-families-2027)",
+    "evpack-mothers-day-2027-10 ~ pack-botanical-16 (pack-botanical)",
+    "evpack-mothers-day-2027-10 ~ pack-gardens-art-07 (pack-gardens-art)"
+   ]
+  },
+  "evpack-mountain-day-2026": {
+   "name": "International Mountain Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-mountain-day-2026-10: too small 683x1024",
+    "evpack-mountain-day-2026-13: too small 682x1024"
+   ],
+   "cross": [
+    "evpack-mountain-day-2026-07 ~ pack-horses-13 (pack-horses)",
+    "evpack-mountain-day-2026-07 ~ pack-textiles-07 (pack-textiles)"
+   ]
+  },
+  "evpack-mountain-day-2027": {
+   "name": "International Mountain Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-mountain-day-2027-11: landscape 1263x818",
+    "evpack-mountain-day-2027-12: landscape 900x712",
+    "evpack-mountain-day-2027-13: landscape 968x893",
+    "evpack-mountain-day-2027-14: landscape 1263x855"
+   ]
+  },
+  "evpack-new-year-2027": {
+   "name": "New Year's Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ]
+  },
+  "evpack-new-years-eve-2026": {
+   "name": "New Year's Eve",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-new-years-eve-2026-13: landscape 1263x836",
+    "evpack-new-years-eve-2026-14: landscape 900x635",
+    "evpack-new-years-eve-2026-14: too small 900x635"
+   ],
+   "cross": [
+    "evpack-new-years-eve-2026-02 ~ daily-2023-08-03 (daily-2023-08)"
+   ]
+  },
+  "evpack-new-years-eve-2027": {
+   "name": "New Year's Eve",
+   "category": "Event",
+   "count": 10,
+   "issues": [
+    "count 10 < 20"
+   ],
+   "cross": [
+    "evpack-new-years-eve-2027-10 ~ pack-starry-nights-09 (pack-starry-nights)"
+   ]
+  },
+  "evpack-oceans-2027": {
+   "name": "World Oceans Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-oceans-2027-03: too small 683x1024"
+   ]
+  },
+  "evpack-peace-2027": {
+   "name": "International Day of Peace",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ]
+  },
+  "evpack-pet-day-2027": {
+   "name": "National Pet Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-pet-day-2027-03: too small 683x1024",
+    "evpack-pet-day-2027-05: too small 683x1024",
+    "evpack-pet-day-2027-06: too small 683x1024"
+   ],
+   "cross": [
+    "evpack-pet-day-2027-05 ~ daily-2025-10-24 (daily-2025-10)",
+    "evpack-pet-day-2027-05 ~ daily-2024-11-28 (daily-2024-11)",
+    "evpack-pet-day-2027-05 ~ pack-manuscripts-08 (pack-manuscripts)",
+    "evpack-pet-day-2027-05 ~ pack-manuscripts-11 (pack-manuscripts)",
+    "evpack-pet-day-2027-05 ~ pack-starry-nights-14 (pack-starry-nights)",
+    "evpack-pet-day-2027-05 ~ pack-starry-nights-15 (pack-starry-nights)",
+    "evpack-pet-day-2027-05 ~ pack-starry-nights-19 (pack-starry-nights)"
+   ]
+  },
+  "evpack-photography-2027": {
+   "name": "World Photography Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-photography-2027-07: too small 683x1024"
+   ],
+   "cross": [
+    "evpack-photography-2027-11 ~ pack-nebulae-20 (pack-nebulae)",
+    "evpack-photography-2027-11 ~ pack-galaxies-04 (pack-galaxies)",
+    "evpack-photography-2027-11 ~ pack-galaxies-19 (pack-galaxies)"
+   ]
+  },
+  "evpack-pi-day-2027": {
+   "name": "Pi Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ]
+  },
+  "evpack-pizza-2027": {
+   "name": "National Pizza Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ]
+  },
+  "evpack-polar-bear-2027": {
+   "name": "International Polar Bear Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ]
+  },
+  "evpack-pride-2027": {
+   "name": "Pride Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ]
+  },
+  "evpack-remembrance-2026": {
+   "name": "Remembrance Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-remembrance-2026-08: keyword people:portrait"
+   ]
+  },
+  "evpack-remembrance-2027": {
+   "name": "Remembrance Day",
+   "category": "Event",
+   "count": 10,
+   "issues": [
+    "count 10 < 20",
+    "evpack-remembrance-2027-02: too small 605x900"
+   ],
+   "cross": [
+    "evpack-remembrance-2027-01 ~ daily-2026-10-25 (daily-2026-10)",
+    "evpack-remembrance-2027-01 ~ daily-2026-09-29 (daily-2026-09)",
+    "evpack-remembrance-2027-01 ~ daily-2026-05-04 (daily-2026-05)",
+    "evpack-remembrance-2027-01 ~ daily-2025-11-13 (daily-2025-11)",
+    "evpack-remembrance-2027-01 ~ daily-2025-01-09 (daily-2025-01)",
+    "evpack-remembrance-2027-01 ~ daily-2024-10-25 (daily-2024-10)",
+    "evpack-remembrance-2027-01 ~ daily-2024-05-06 (daily-2024-05)",
+    "evpack-remembrance-2027-01 ~ daily-2023-12-24 (daily-2023-12)",
+    "evpack-remembrance-2027-01 ~ daily-2023-11-10 (daily-2023-11)",
+    "evpack-remembrance-2027-01 ~ daily-2023-07-23 (daily-2023-07)",
+    "evpack-remembrance-2027-01 ~ daily-2023-05-20 (daily-2023-05)"
+   ]
+  },
+  "evpack-smile-day-2026": {
+   "name": "World Smile Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-smile-day-2026-01: keyword people:smile",
+    "evpack-smile-day-2026-02: keyword people:smile",
+    "evpack-smile-day-2026-03: keyword people:smile",
+    "evpack-smile-day-2026-04: keyword people:smile",
+    "evpack-smile-day-2026-05: keyword people:smile",
+    "evpack-smile-day-2026-06: keyword people:smile",
+    "evpack-smile-day-2026-07: keyword people:smile",
+    "evpack-smile-day-2026-08: keyword people:smile",
+    "evpack-smile-day-2026-09: keyword people:smile",
+    "evpack-smile-day-2026-10: keyword people:smile",
+    "evpack-smile-day-2026-11: keyword people:smile",
+    "evpack-smile-day-2026-12: keyword people:smile",
+    "evpack-smile-day-2026-13: keyword people:smile",
+    "evpack-smile-day-2026-14: keyword people:smile"
+   ]
+  },
+  "evpack-smile-day-2027": {
+   "name": "World Smile Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-smile-day-2027-02: landscape 1095x893",
+    "evpack-smile-day-2027-03: keyword unwanted:war",
+    "evpack-smile-day-2027-05: too small 696x900",
+    "evpack-smile-day-2027-05: keyword people:figure",
+    "evpack-smile-day-2027-06: keyword people:man,portrait",
+    "evpack-smile-day-2027-07: too small 696x893",
+    "evpack-smile-day-2027-08: landscape 1179x893",
+    "evpack-smile-day-2027-09: too small 646x893",
+    "evpack-smile-day-2027-10: landscape 1263x881",
+    "evpack-smile-day-2027-10: keyword people:boy",
+    "evpack-smile-day-2027-14: landscape 900x656",
+    "evpack-smile-day-2027-14: too small 900x656"
+   ],
+   "cross": [
+    "evpack-smile-day-2027-10 ~ daily-2025-07-26 (daily-2025-07)",
+    "evpack-smile-day-2027-10 ~ evpack-animal-day-2026-08 (evpack-animal-day-2026)"
+   ]
+  },
+  "evpack-squirrel-2027": {
+   "name": "Squirrel Appreciation Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ]
+  },
+  "evpack-st-patricks-2027": {
+   "name": "St Patrick's Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ]
+  },
+  "evpack-star-wars-day-2027": {
+   "name": "Star Wars Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-star-wars-day-2027-03: landscape 1280x1051",
+    "evpack-star-wars-day-2027-09: landscape 3463x1200",
+    "evpack-star-wars-day-2027-10: landscape 1280x926",
+    "evpack-star-wars-day-2027-11: too small 640x800",
+    "evpack-star-wars-day-2027-13: landscape 2000x1125",
+    "evpack-star-wars-day-2027-14: landscape 1280x720"
+   ],
+   "cross": [
+    "evpack-star-wars-day-2027-01 ~ daily-2023-02-21 (daily-2023-02)",
+    "evpack-star-wars-day-2027-08 ~ deep-space-nasa-pia03606 (deep-space)",
+    "evpack-star-wars-day-2027-11 ~ daily-2023-11-24 (daily-2023-11)",
+    "evpack-star-wars-day-2027-11 ~ pack-deer-06 (pack-deer)"
+   ]
+  },
+  "evpack-tea-day-2026": {
+   "name": "International Tea Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-tea-day-2026-04: too small 693x1024"
+   ]
+  },
+  "evpack-tea-day-2027": {
+   "name": "International Tea Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-tea-day-2027-11: keyword people:woman",
+    "evpack-tea-day-2027-12: landscape 900x887",
+    "evpack-tea-day-2027-14: too small 609x900"
+   ],
+   "cross": [
+    "evpack-tea-day-2027-12 ~ daily-2024-08-08 (daily-2024-08)",
+    "evpack-tea-day-2027-12 ~ daily-2024-07-09 (daily-2024-07)",
+    "evpack-tea-day-2027-12 ~ daily-2024-02-28 (daily-2024-02)",
+    "evpack-tea-day-2027-13 ~ daily-2024-03-19 (daily-2024-03)"
+   ]
+  },
+  "evpack-teachers-2026": {
+   "name": "World Teachers' Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-teachers-2026-01: keyword people:teachers",
+    "evpack-teachers-2026-02: keyword people:teachers",
+    "evpack-teachers-2026-03: keyword people:teachers",
+    "evpack-teachers-2026-04: keyword people:teachers",
+    "evpack-teachers-2026-05: keyword people:teachers",
+    "evpack-teachers-2026-06: keyword people:teachers",
+    "evpack-teachers-2026-07: keyword people:teachers",
+    "evpack-teachers-2026-08: keyword people:teachers",
+    "evpack-teachers-2026-09: keyword people:teachers",
+    "evpack-teachers-2026-10: keyword people:teachers",
+    "evpack-teachers-2026-11: keyword people:teachers",
+    "evpack-teachers-2026-12: keyword people:teachers",
+    "evpack-teachers-2026-13: keyword people:teachers",
+    "evpack-teachers-2026-14: keyword people:teachers"
+   ]
+  },
+  "evpack-teachers-2027": {
+   "name": "World Teachers' Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-teachers-2027-01: keyword people:teachers",
+    "evpack-teachers-2027-02: keyword people:teachers",
+    "evpack-teachers-2027-03: keyword people:teachers",
+    "evpack-teachers-2027-04: keyword people:teachers",
+    "evpack-teachers-2027-05: keyword people:teachers",
+    "evpack-teachers-2027-06: keyword people:teachers",
+    "evpack-teachers-2027-07: keyword people:teachers",
+    "evpack-teachers-2027-08: keyword people:teachers",
+    "evpack-teachers-2027-09: keyword people:teachers",
+    "evpack-teachers-2027-10: keyword people:teachers",
+    "evpack-teachers-2027-11: keyword people:teachers",
+    "evpack-teachers-2027-12: keyword people:teachers",
+    "evpack-teachers-2027-13: keyword people:teachers",
+    "evpack-teachers-2027-14: keyword people:teachers"
+   ]
+  },
+  "evpack-thanksgiving-2026": {
+   "name": "Thanksgiving",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-thanksgiving-2026-07: too small 683x1024"
+   ]
+  },
+  "evpack-thanksgiving-2027": {
+   "name": "Thanksgiving",
+   "category": "Event",
+   "count": 10,
+   "issues": [
+    "count 10 < 20",
+    "evpack-thanksgiving-2027-01: landscape 900x759"
+   ],
+   "cross": [
+    "evpack-thanksgiving-2027-06 ~ evpack-vegan-2026-08 (evpack-vegan-2026)"
+   ]
+  },
+  "evpack-un-day-2026": {
+   "name": "United Nations Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-un-day-2026-03 ~ evpack-un-day-2026-02: near-duplicate (phash 0, dhash 0)",
+    "evpack-un-day-2026-13: keyword people:veterans"
+   ]
+  },
+  "evpack-un-day-2027": {
+   "name": "United Nations Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ]
+  },
+  "evpack-universal-childrens-2026": {
+   "name": "Universal Children's Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-universal-childrens-2026-01: keyword people:children",
+    "evpack-universal-childrens-2026-02: keyword people:children",
+    "evpack-universal-childrens-2026-03: keyword people:children",
+    "evpack-universal-childrens-2026-04: keyword people:children",
+    "evpack-universal-childrens-2026-05: keyword people:children",
+    "evpack-universal-childrens-2026-06: keyword people:children",
+    "evpack-universal-childrens-2026-07: keyword people:children",
+    "evpack-universal-childrens-2026-08: keyword people:children",
+    "evpack-universal-childrens-2026-09: keyword people:children",
+    "evpack-universal-childrens-2026-10: keyword people:children",
+    "evpack-universal-childrens-2026-11: keyword people:children",
+    "evpack-universal-childrens-2026-12: keyword people:children",
+    "evpack-universal-childrens-2026-13: keyword people:children",
+    "evpack-universal-childrens-2026-13 ~ evpack-universal-childrens-2026-05: same scene (phash 14, colour 19)",
+    "evpack-universal-childrens-2026-14: keyword people:children"
+   ],
+   "cross": [
+    "evpack-universal-childrens-2026-05 ~ evpack-grandparents-2027-02 (evpack-grandparents-2027)"
+   ]
+  },
+  "evpack-universal-childrens-2027": {
+   "name": "Universal Children's Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-universal-childrens-2027-01: keyword people:children",
+    "evpack-universal-childrens-2027-02: too small 651x1024",
+    "evpack-universal-childrens-2027-02: keyword people:children",
+    "evpack-universal-childrens-2027-03: too small 646x1024",
+    "evpack-universal-childrens-2027-03: keyword people:children",
+    "evpack-universal-childrens-2027-04: keyword people:children",
+    "evpack-universal-childrens-2027-05: keyword people:children",
+    "evpack-universal-childrens-2027-06: keyword people:children",
+    "evpack-universal-childrens-2027-07: keyword people:children",
+    "evpack-universal-childrens-2027-08: keyword people:children",
+    "evpack-universal-childrens-2027-09: keyword people:children",
+    "evpack-universal-childrens-2027-10: keyword people:children",
+    "evpack-universal-childrens-2027-11: keyword people:children",
+    "evpack-universal-childrens-2027-12: keyword people:children",
+    "evpack-universal-childrens-2027-13: keyword people:children",
+    "evpack-universal-childrens-2027-14: keyword people:children"
+   ]
+  },
+  "evpack-valentines-2027": {
+   "name": "Valentine's Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ],
+   "cross": [
+    "evpack-valentines-2027-01 ~ pack-manuscripts-02 (pack-manuscripts)"
+   ]
+  },
+  "evpack-vegan-2026": {
+   "name": "World Vegan Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-vegan-2026-01: too small 683x1024",
+    "evpack-vegan-2026-02: too small 683x1024",
+    "evpack-vegan-2026-05: too small 683x1024",
+    "evpack-vegan-2026-06: too small 683x1024"
+   ],
+   "cross": [
+    "evpack-vegan-2026-08 ~ evpack-thanksgiving-2027-06 (evpack-thanksgiving-2027)"
+   ]
+  },
+  "evpack-vegan-2027": {
+   "name": "World Vegan Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ]
+  },
+  "evpack-volunteer-2026": {
+   "name": "International Volunteer Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-volunteer-2026-07 ~ evpack-volunteer-2026-04: near-duplicate (phash 0, dhash 0)",
+    "evpack-volunteer-2026-13 ~ evpack-volunteer-2026-08: near-duplicate (phash 0, dhash 0)"
+   ]
+  },
+  "evpack-volunteer-2027": {
+   "name": "International Volunteer Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ]
+  },
+  "evpack-water-day-2027": {
+   "name": "World Water Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ]
+  },
+  "evpack-wetlands-2027": {
+   "name": "World Wetlands Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ]
+  },
+  "evpack-wildlife-2027": {
+   "name": "World Wildlife Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ]
+  },
+  "evpack-winter-solstice-2026": {
+   "name": "Winter Solstice",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20"
+   ],
+   "cross": [
+    "evpack-winter-solstice-2026-07 ~ pack-starry-nights-08 (pack-starry-nights)"
+   ]
+  },
+  "evpack-winter-solstice-2027": {
+   "name": "Winter Solstice",
+   "category": "Event",
+   "count": 10,
+   "issues": [
+    "count 10 < 20"
+   ]
+  },
+  "evpack-womens-day-2027": {
+   "name": "International Women's Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-womens-day-2027-01: too small 663x893",
+    "evpack-womens-day-2027-01: keyword people:portrait,woman",
+    "evpack-womens-day-2027-02: keyword people:portrait,woman",
+    "evpack-womens-day-2027-03: keyword people:portrait,woman",
+    "evpack-womens-day-2027-04: too small 687x893",
+    "evpack-womens-day-2027-04: keyword people:portrait,woman",
+    "evpack-womens-day-2027-05: keyword people:portrait,woman",
+    "evpack-womens-day-2027-06: too small 623x893",
+    "evpack-womens-day-2027-07: too small 622x893",
+    "evpack-womens-day-2027-07: keyword people:portrait,woman",
+    "evpack-womens-day-2027-08: keyword people:portrait,woman",
+    "evpack-womens-day-2027-09: keyword people:portrait",
+    "evpack-womens-day-2027-10: too small 673x900",
+    "evpack-womens-day-2027-10: keyword people:portrait,woman",
+    "evpack-womens-day-2027-11: too small 670x893",
+    "evpack-womens-day-2027-11: keyword people:portrait,woman",
+    "evpack-womens-day-2027-12: landscape 900x609",
+    "evpack-womens-day-2027-12: too small 900x609",
+    "evpack-womens-day-2027-12: keyword people:man,portrait,woman",
+    "evpack-womens-day-2027-12 ~ evpack-womens-day-2027-09: same palette and layout (colour 8, phash 26)",
+    "evpack-womens-day-2027-13: keyword people:portrait,woman",
+    "evpack-womens-day-2027-14: too small 653x893",
+    "evpack-womens-day-2027-14: keyword people:man,portrait"
+   ],
+   "cross": [
+    "evpack-womens-day-2027-09 ~ pack-portraits-06 (pack-portraits)",
+    "evpack-womens-day-2027-09 ~ pack-portraits-07 (pack-portraits)",
+    "evpack-womens-day-2027-12 ~ pack-portraits-06 (pack-portraits)",
+    "evpack-womens-day-2027-12 ~ pack-portraits-07 (pack-portraits)",
+    "evpack-womens-day-2027-13 ~ pack-portraits-06 (pack-portraits)",
+    "evpack-womens-day-2027-13 ~ pack-portraits-07 (pack-portraits)"
+   ]
+  },
+  "evpack-yoga-2027": {
+   "name": "International Yoga Day",
+   "category": "Event",
+   "count": 10,
+   "issues": [
+    "count 10 < 20",
+    "evpack-yoga-2027-01: keyword people:yoga",
+    "evpack-yoga-2027-02: keyword people:yoga",
+    "evpack-yoga-2027-03: keyword people:yoga",
+    "evpack-yoga-2027-04: keyword people:yoga",
+    "evpack-yoga-2027-05: keyword people:yoga",
+    "evpack-yoga-2027-06: keyword people:yoga",
+    "evpack-yoga-2027-07: keyword people:yoga",
+    "evpack-yoga-2027-08: keyword people:yoga",
+    "evpack-yoga-2027-09: keyword people:yoga",
+    "evpack-yoga-2027-10: keyword people:yoga"
+   ]
+  },
+  "evpack-youth-2027": {
+   "name": "International Youth Day",
+   "category": "Event",
+   "count": 14,
+   "issues": [
+    "count 14 < 20",
+    "evpack-youth-2027-14 ~ evpack-youth-2027-13: same scene (phash 14, colour 9)"
+   ]
+  },
+  "pack-cherry-blossom": {
+   "name": "Cherry Blossom",
+   "category": "Flowers",
+   "count": 20,
+   "issues": []
+  },
+  "pack-tulip-fields": {
+   "name": "Tulip Fields",
+   "category": "Flowers",
+   "count": 20,
+   "issues": [
+    "pack-tulip-fields-08: too small 683x1024",
+    "pack-tulip-fields-11: too small 683x1024"
+   ]
+  },
+  "pack-wild-roses": {
+   "name": "Wild Roses",
+   "category": "Flowers",
+   "count": 20,
+   "issues": [
+    "pack-wild-roses-10 ~ pack-wild-roses-08: near-duplicate (phash 0, dhash 0)",
+    "pack-wild-roses-17 ~ pack-wild-roses-12: near-duplicate (phash 0, dhash 0)",
+    "pack-wild-roses-19 ~ pack-wild-roses-12: same scene (phash 14, colour 16)",
+    "pack-wild-roses-19 ~ pack-wild-roses-17: same scene (phash 14, colour 16)"
+   ]
+  },
+  "pack-sunflowers": {
+   "name": "Sunflowers",
+   "category": "Flowers",
+   "count": 20,
+   "issues": []
+  },
+  "pack-lavender": {
+   "name": "Lavender",
+   "category": "Flowers",
+   "count": 20,
+   "issues": [
+    "pack-lavender-08 ~ pack-lavender-05: near-duplicate (phash 0, dhash 0)",
+    "pack-lavender-09: too small 683x1024",
+    "pack-lavender-10: too small 683x1024",
+    "pack-lavender-11: too small 683x1024",
+    "pack-lavender-13: too small 683x1024"
+   ]
+  },
+  "pack-orchids": {
+   "name": "Orchids",
+   "category": "Flowers",
+   "count": 20,
+   "issues": []
+  },
+  "cozy-kitchen": {
+   "name": "Cozy Kitchen",
+   "category": "Food",
+   "count": 28,
+   "issues": [
+    "cozy-kitchen-p167: same URL also in ['autumn-harvest']",
+    "cozy-kitchen-p139: same URL also in ['autumn-harvest']"
+   ],
+   "cross": [
+    "cozy-kitchen-p167 ~ autumn-harvest-p167 (autumn-harvest)",
+    "cozy-kitchen-p139 ~ autumn-harvest-p139 (autumn-harvest)"
+   ]
+  },
+  "pack-street-food": {
+   "name": "Street Food",
+   "category": "Food",
+   "count": 20,
+   "issues": []
+  },
+  "pack-pastries": {
+   "name": "Pastries",
+   "category": "Food",
+   "count": 20,
+   "issues": []
+  },
+  "pack-sushi": {
+   "name": "Sushi",
+   "category": "Food",
+   "count": 17,
+   "issues": [
+    "count 17 < 20",
+    "pack-sushi-17: landscape 900x638",
+    "pack-sushi-17: too small 900x638"
+   ]
+  },
+  "pack-fruit-markets": {
+   "name": "Fruit Markets",
+   "category": "Food",
+   "count": 20,
+   "issues": [
+    "pack-fruit-markets-03: too small 683x1024"
+   ]
+  },
+  "pack-cocktails": {
+   "name": "Cocktails",
+   "category": "Food",
+   "count": 20,
+   "issues": [
+    "pack-cocktails-19: too small 683x1024",
+    "pack-cocktails-20: too small 681x1024"
+   ]
+  },
+  "pack-ice-cream": {
+   "name": "Ice Cream",
+   "category": "Food",
+   "count": 20,
+   "issues": [
+    "pack-ice-cream-05: keyword people:man"
+   ]
+  },
+  "pack-coffee-shops": {
+   "name": "Coffee Shops",
+   "category": "Food",
+   "count": 20,
+   "issues": []
+  },
+  "pack-snowy-peaks": {
+   "name": "Snowy Peaks",
+   "category": "Mountains",
+   "count": 20,
+   "issues": []
+  },
+  "wild-nature": {
+   "name": "Wild Nature",
+   "category": "Nature",
+   "count": 24,
+   "issues": []
+  },
+  "pack-alpine-lakes": {
+   "name": "Alpine Lakes",
+   "category": "Nature",
+   "count": 25,
+   "issues": []
+  },
+  "pack-waterfalls": {
+   "name": "Waterfalls",
+   "category": "Nature",
+   "count": 20,
+   "issues": [
+    "pack-waterfalls-02: too small 683x1024"
+   ]
+  },
+  "pack-desert-dunes": {
+   "name": "Desert Dunes",
+   "category": "Nature",
+   "count": 20,
+   "issues": [
+    "pack-desert-dunes-14: too small 694x1024",
+    "pack-desert-dunes-15: too small 692x1024",
+    "pack-desert-dunes-16: too small 687x1024"
+   ]
+  },
+  "pack-misty-forests": {
+   "name": "Misty Forests",
+   "category": "Nature",
+   "count": 20,
+   "issues": [
+    "pack-misty-forests-01: too small 683x1024",
+    "pack-misty-forests-02: too small 681x1024"
+   ],
+   "cross": [
+    "pack-misty-forests-03 ~ deep-space-nasa-gsfc-20171208-archiv (deep-space)",
+    "pack-misty-forests-03 ~ pack-rockets-11 (pack-rockets)"
+   ]
+  },
+  "pack-volcanoes": {
+   "name": "Volcanoes",
+   "category": "Nature",
+   "count": 20,
+   "issues": []
+  },
+  "pack-canyons": {
+   "name": "Canyons",
+   "category": "Nature",
+   "count": 20,
+   "issues": []
+  },
+  "pack-northern-lights": {
+   "name": "Northern Lights",
+   "category": "Nature",
+   "count": 20,
+   "issues": [
+    "pack-northern-lights-16 ~ pack-northern-lights-13: near-duplicate (phash 0, dhash 0)"
+   ],
+   "cross": [
+    "pack-northern-lights-08 ~ pack-harbours-07 (pack-harbours)",
+    "pack-northern-lights-18 ~ deep-space-nasa-gsfc-20171208-archiv (deep-space)",
+    "pack-northern-lights-18 ~ pack-rockets-11 (pack-rockets)"
+   ]
+  },
+  "pack-autumn-parks": {
+   "name": "Autumn Parks",
+   "category": "Nature",
+   "count": 20,
+   "issues": []
+  },
+  "pack-rolling-hills": {
+   "name": "Rolling Hills",
+   "category": "Nature",
+   "count": 12,
+   "issues": [
+    "count 12 < 20",
+    "pack-rolling-hills-10: too small 602x900",
+    "pack-rolling-hills-11: landscape 900x737"
+   ],
+   "cross": [
+    "pack-rolling-hills-01 ~ daily-2026-07-27 (daily-2026-07)",
+    "pack-rolling-hills-10 ~ daily-2026-07-25 (daily-2026-07)",
+    "pack-rolling-hills-12 ~ daily-2026-03-26 (daily-2026-03)",
+    "pack-rolling-hills-12 ~ pack-whales-04 (pack-whales)"
+   ]
+  },
+  "pack-jungle": {
+   "name": "Jungle",
+   "category": "Nature",
+   "count": 20,
+   "issues": [],
+   "cross": [
+    "pack-jungle-12 ~ pack-winter-scenes-17 (pack-winter-scenes)"
+   ]
+  },
+  "pack-caves": {
+   "name": "Caves",
+   "category": "Nature",
+   "count": 20,
+   "issues": []
+  },
+  "pack-starry-nights": {
+   "name": "Starry Nights",
+   "category": "Nature",
+   "count": 20,
+   "issues": [
+    "pack-starry-nights-03 ~ pack-starry-nights-01: near-duplicate (phash 0, dhash 1)",
+    "pack-starry-nights-15 ~ pack-starry-nights-04: same palette and layout (colour 8, phash 40)",
+    "pack-starry-nights-16 ~ pack-starry-nights-14: same palette and layout (colour 9, phash 36)",
+    "pack-starry-nights-19 ~ pack-starry-nights-15: same palette and layout (colour 8, phash 30)"
+   ],
+   "cross": [
+    "pack-starry-nights-08 ~ evpack-winter-solstice-2026-07 (evpack-winter-solstice-2026)",
+    "pack-starry-nights-09 ~ evpack-new-years-eve-2027-10 (evpack-new-years-eve-2027)",
+    "pack-starry-nights-14 ~ daily-2024-11-28 (daily-2024-11)",
+    "pack-starry-nights-14 ~ evpack-pet-day-2027-05 (evpack-pet-day-2027)",
+    "pack-starry-nights-15 ~ evpack-pet-day-2027-05 (evpack-pet-day-2027)",
+    "pack-starry-nights-15 ~ pack-manuscripts-08 (pack-manuscripts)",
+    "pack-starry-nights-16 ~ evpack-friendship-2027-09 (evpack-friendship-2027)",
+    "pack-starry-nights-16 ~ evpack-friendship-2027-14 (evpack-friendship-2027)",
+    "pack-starry-nights-16 ~ pack-scottish-highlands-12 (pack-scottish-highlands)",
+    "pack-starry-nights-19 ~ evpack-pet-day-2027-05 (evpack-pet-day-2027)",
+    "pack-starry-nights-19 ~ evpack-friendship-2027-13 (evpack-friendship-2027)",
+    "pack-starry-nights-19 ~ pack-manuscripts-08 (pack-manuscripts)"
+   ]
+  },
+  "pack-sunsets": {
+   "name": "Sunsets",
+   "category": "Nature",
+   "count": 20,
+   "issues": [],
+   "cross": [
+    "pack-sunsets-19 ~ deep-space-nasa-pia15658 (deep-space)"
+   ]
+  },
+  "pack-gardens": {
+   "name": "Gardens",
+   "category": "Nature",
+   "count": 20,
+   "issues": []
+  },
+  "pack-sea-life": {
+   "name": "Sea Life",
+   "category": "Oceans",
+   "count": 20,
+   "issues": [
+    "pack-sea-life-07: too small 694x1024",
+    "pack-sea-life-17 ~ pack-sea-life-16: same scene (phash 10, colour 8)"
+   ]
+  },
+  "pack-whales": {
+   "name": "Whales",
+   "category": "Oceans",
+   "count": 20,
+   "issues": [],
+   "cross": [
+    "pack-whales-04 ~ pack-rolling-hills-12 (pack-rolling-hills)"
+   ]
+  },
+  "pack-lighthouses": {
+   "name": "Lighthouses",
+   "category": "Oceans",
+   "count": 12,
+   "issues": [
+    "count 12 < 20",
+    "pack-lighthouses-10: landscape 1152x893",
+    "pack-lighthouses-11: landscape 1201x893",
+    "pack-lighthouses-12: landscape 900x762"
+   ],
+   "cross": [
+    "pack-lighthouses-02 ~ daily-2025-03-01 (daily-2025-03)",
+    "pack-lighthouses-10 ~ daily-2023-11-30 (daily-2023-11)"
+   ]
+  },
+  "pack-sailing": {
+   "name": "Sailing",
+   "category": "Oceans",
+   "count": 20,
+   "issues": []
+  },
+  "pack-tropical-beaches": {
+   "name": "Tropical Beaches",
+   "category": "Oceans",
+   "count": 20,
+   "issues": []
+  },
+  "pack-sea-cliffs": {
+   "name": "Sea Cliffs",
+   "category": "Oceans",
+   "count": 20,
+   "issues": []
+  },
+  "pack-textiles": {
+   "name": "Textiles",
+   "category": "Patterns",
+   "count": 20,
+   "issues": [
+    "pack-textiles-01: too small 688x900",
+    "pack-textiles-02: too small 644x900",
+    "pack-textiles-03: too small 606x900",
+    "pack-textiles-03 ~ pack-textiles-01: same scene (phash 14, colour 7)",
+    "pack-textiles-04: too small 633x900",
+    "pack-textiles-05: too small 670x900",
+    "pack-textiles-06: too small 638x900",
+    "pack-textiles-07: too small 624x893",
+    "pack-textiles-08: too small 606x900",
+    "pack-textiles-08 ~ pack-textiles-01: same scene (phash 14, colour 7)",
+    "pack-textiles-08 ~ pack-textiles-03: near-duplicate (phash 0, dhash 0)",
+    "pack-textiles-09: landscape 900x831",
+    "pack-textiles-11: too small 601x900",
+    "pack-textiles-12: landscape 900x832",
+    "pack-textiles-13: landscape 900x708",
+    "pack-textiles-14: landscape 900x818",
+    "pack-textiles-16: landscape 750x647",
+    "pack-textiles-16: too small 750x647",
+    "pack-textiles-17: landscape 900x858",
+    "pack-textiles-18: landscape 750x714",
+    "pack-textiles-18: keyword text:inscription",
+    "pack-textiles-19: landscape 1188x893",
+    "pack-textiles-20: landscape 900x813"
+   ],
+   "cross": [
+    "pack-textiles-07 ~ evpack-mountain-day-2026-07 (evpack-mountain-day-2026)",
+    "pack-textiles-12 ~ daily-2025-11-13 (daily-2025-11)",
+    "pack-textiles-14 ~ daily-2026-02-17 (daily-2026-02)",
+    "pack-textiles-14 ~ evpack-animal-day-2027-05 (evpack-animal-day-2027)",
+    "pack-textiles-19 ~ daily-2025-01-31 (daily-2025-01)"
+   ]
+  },
+  "pack-tiles": {
+   "name": "Tiles & Mosaics",
+   "category": "Patterns",
+   "count": 20,
+   "issues": [
+    "pack-tiles-01: landscape 750x686",
+    "pack-tiles-01: too small 750x686",
+    "pack-tiles-02: landscape 1213x893",
+    "pack-tiles-03: landscape 1263x821",
+    "pack-tiles-04: landscape 1206x893",
+    "pack-tiles-04 ~ pack-tiles-02: same palette and layout (colour 9, phash 28)",
+    "pack-tiles-05: landscape 1263x811",
+    "pack-tiles-07: landscape 1121x893",
+    "pack-tiles-09: landscape 1137x893",
+    "pack-tiles-09: keyword people:christ",
+    "pack-tiles-11: landscape 1263x892",
+    "pack-tiles-12: landscape 1100x893",
+    "pack-tiles-13: landscape 750x684",
+    "pack-tiles-13: too small 750x684"
+   ]
+  },
+  "land-of-fire-ice": {
+   "name": "Land of Fire & Ice",
+   "category": "Premium",
+   "count": 13,
+   "issues": [
+    "count 13 < 20"
+   ]
+  },
+  "autumn-harvest": {
+   "name": "Autumn Harvest",
+   "category": "Seasonal",
+   "count": 15,
+   "issues": [
+    "count 15 < 20",
+    "autumn-harvest-p167: same URL also in ['cozy-kitchen']",
+    "autumn-harvest-p139: same URL also in ['cozy-kitchen']"
+   ],
+   "cross": [
+    "autumn-harvest-p167 ~ cozy-kitchen-p167 (cozy-kitchen)",
+    "autumn-harvest-p139 ~ cozy-kitchen-p139 (cozy-kitchen)"
+   ]
+  },
+  "deep-space": {
+   "name": "Deep Space",
+   "category": "Space",
+   "count": 21,
+   "issues": [
+    "deep-space-nasa-carina-nebula: landscape 1280x741",
+    "deep-space-nasa-pia04630: landscape 1280x1012",
+    "deep-space-nasa-pia05062: landscape 1384x908",
+    "deep-space-nasa-pia14728: landscape 1280x1032",
+    "deep-space-nasa-pia06594: landscape 1018x872",
+    "deep-space-nasa-pia01369: landscape 916x901",
+    "deep-space-nasa-pia01369: same URL also in ['pack-planets']",
+    "deep-space-nasa-pia02879: landscape 999x959",
+    "deep-space-nasa-pia02879: same URL also in ['pack-planets']",
+    "deep-space-nasa-pia04215: landscape 853x620",
+    "deep-space-nasa-pia04215: too small 853x620",
+    "deep-space-nasa-pia04215: same URL also in ['pack-nebulae']",
+    "deep-space-nasa-pia07902: landscape 1280x983",
+    "deep-space-nasa-pia01370: same URL also in ['pack-planets']",
+    "deep-space-nasa-pia14415: landscape 1280x1024",
+    "deep-space-nasa-iss072e159172: landscape 1280x853",
+    "deep-space-nasa-s92-52043: landscape 1280x1023",
+    "deep-space-nasa-iss045e013851: landscape 1279x851"
+   ],
+   "cross": [
+    "deep-space-nasa-pia15658 ~ pack-nebulae-20 (pack-nebulae)",
+    "deep-space-nasa-pia15658 ~ pack-galaxies-01 (pack-galaxies)",
+    "deep-space-nasa-pia15658 ~ pack-galaxies-04 (pack-galaxies)",
+    "deep-space-nasa-pia15658 ~ pack-sunsets-19 (pack-sunsets)",
+    "deep-space-nasa-pia03606 ~ evpack-star-wars-day-2027-08 (evpack-star-wars-day-2027)",
+    "deep-space-nasa-pia01369 ~ pack-planets-08 (pack-planets)",
+    "deep-space-nasa-pia02879 ~ daily-2026-10-26 (daily-2026-10)",
+    "deep-space-nasa-pia02879 ~ daily-2025-06-05 (daily-2025-06)",
+    "deep-space-nasa-pia02879 ~ daily-2025-01-12 (daily-2025-01)",
+    "deep-space-nasa-pia02879 ~ daily-2024-09-04 (daily-2024-09)",
+    "deep-space-nasa-pia02879 ~ daily-2024-03-22 (daily-2024-03)",
+    "deep-space-nasa-pia02879 ~ daily-2023-08-09 (daily-2023-08)",
+    "deep-space-nasa-pia02879 ~ daily-2023-05-27 (daily-2023-05)",
+    "deep-space-nasa-pia02879 ~ pack-planets-15 (pack-planets)",
+    "deep-space-nasa-pia04215 ~ pack-nebulae-10 (pack-nebulae)",
+    "deep-space-nasa-gsfc-20171208-archiv ~ daily-2025-12-02 (daily-2025-12)",
+    "deep-space-nasa-gsfc-20171208-archiv ~ daily-2025-08-20 (daily-2025-08)",
+    "deep-space-nasa-gsfc-20171208-archiv ~ daily-2025-01-28 (daily-2025-01)",
+    "deep-space-nasa-gsfc-20171208-archiv ~ daily-2024-11-03 (daily-2024-11)",
+    "deep-space-nasa-gsfc-20171208-archiv ~ daily-2024-10-24 (daily-2024-10)",
+    "deep-space-nasa-gsfc-20171208-archiv ~ daily-2024-07-07 (daily-2024-07)",
+    "deep-space-nasa-gsfc-20171208-archiv ~ pack-misty-forests-03 (pack-misty-forests)",
+    "deep-space-nasa-gsfc-20171208-archiv ~ pack-northern-lights-18 (pack-northern-lights)",
+    "deep-space-nasa-gsfc-20171208-archiv ~ pack-rockets-11 (pack-rockets)",
+    "deep-space-nasa-pia07902 ~ daily-2024-11-03 (daily-2024-11)",
+    "deep-space-nasa-pia04628 ~ pack-galaxies-01 (pack-galaxies)",
+    "deep-space-nasa-pia04628 ~ pack-galaxies-05 (pack-galaxies)",
+    "deep-space-nasa-pia07903 ~ daily-2024-07-21 (daily-2024-07)",
+    "deep-space-nasa-pia01370 ~ pack-planets-04 (pack-planets)"
+   ]
+  },
+  "pack-nebulae": {
+   "name": "Nebulae",
+   "category": "Space",
+   "count": 20,
+   "issues": [
+    "pack-nebulae-01: landscape 1280x640",
+    "pack-nebulae-01: too small 1280x640",
+    "pack-nebulae-02: landscape 1072x708",
+    "pack-nebulae-06: landscape 1280x1070",
+    "pack-nebulae-07: landscape 1280x913",
+    "pack-nebulae-08: too small 674x674",
+    "pack-nebulae-09: landscape 1074x895",
+    "pack-nebulae-10: landscape 853x620",
+    "pack-nebulae-10: too small 853x620",
+    "pack-nebulae-10: same URL also in ['deep-space']",
+    "pack-nebulae-11: landscape 1280x1064",
+    "pack-nebulae-12: landscape 1280x1246",
+    "pack-nebulae-13: landscape 1280x1231",
+    "pack-nebulae-14: landscape 1262x750",
+    "pack-nebulae-15: landscape 1280x654",
+    "pack-nebulae-15: too small 1280x654",
+    "pack-nebulae-16: landscape 1280x1203",
+    "pack-nebulae-18: landscape 1280x669",
+    "pack-nebulae-18: too small 1280x669",
+    "pack-nebulae-19: landscape 1920x1080",
+    "pack-nebulae-20: landscape 1280x1050"
+   ],
+   "cross": [
+    "pack-nebulae-01 ~ pack-galaxies-10 (pack-galaxies)",
+    "pack-nebulae-09 ~ daily-2025-06-03 (daily-2025-06)",
+    "pack-nebulae-10 ~ deep-space-nasa-pia04215 (deep-space)",
+    "pack-nebulae-20 ~ deep-space-nasa-pia15658 (deep-space)",
+    "pack-nebulae-20 ~ evpack-chocolate-2027-09 (evpack-chocolate-2027)",
+    "pack-nebulae-20 ~ evpack-photography-2027-11 (evpack-photography-2027)"
+   ]
+  },
+  "pack-galaxies": {
+   "name": "Galaxies",
+   "category": "Space",
+   "count": 20,
+   "issues": [
+    "pack-galaxies-01: landscape 1034x965",
+    "pack-galaxies-04: landscape 1017x982",
+    "pack-galaxies-05 ~ pack-galaxies-01: same palette and layout (colour 5, phash 26)",
+    "pack-galaxies-06: landscape 1280x1024",
+    "pack-galaxies-06: keyword people:portrait",
+    "pack-galaxies-07: landscape 1008x992",
+    "pack-galaxies-08: landscape 2574x858",
+    "pack-galaxies-09: landscape 1280x1196",
+    "pack-galaxies-10: landscape 1755x790",
+    "pack-galaxies-11: landscape 1280x719",
+    "pack-galaxies-13: landscape 2004x1004",
+    "pack-galaxies-14: too small 656x656",
+    "pack-galaxies-14 ~ pack-galaxies-03: same palette and layout (colour 7, phash 16)",
+    "pack-galaxies-15: landscape 1280x710",
+    "pack-galaxies-15: keyword people:adult,baby",
+    "pack-galaxies-16 ~ pack-galaxies-10: same scene (phash 14, colour 17)",
+    "pack-galaxies-17 ~ pack-galaxies-05: same scene (phash 14, colour 20)",
+    "pack-galaxies-18: landscape 1280x914",
+    "pack-galaxies-18: keyword people:baby",
+    "pack-galaxies-20: landscape 1280x768"
+   ],
+   "cross": [
+    "pack-galaxies-01 ~ deep-space-nasa-pia15658 (deep-space)",
+    "pack-galaxies-01 ~ deep-space-nasa-pia04628 (deep-space)",
+    "pack-galaxies-02 ~ evpack-earth-day-2027-14 (evpack-earth-day-2027)",
+    "pack-galaxies-02 ~ evpack-moon-day-2027-08 (evpack-moon-day-2027)",
+    "pack-galaxies-04 ~ deep-space-nasa-pia15658 (deep-space)",
+    "pack-galaxies-04 ~ evpack-photography-2027-11 (evpack-photography-2027)",
+    "pack-galaxies-05 ~ deep-space-nasa-pia04628 (deep-space)",
+    "pack-galaxies-07 ~ pack-prague-10 (pack-prague)",
+    "pack-galaxies-10 ~ pack-nebulae-01 (pack-nebulae)",
+    "pack-galaxies-19 ~ evpack-earth-day-2027-14 (evpack-earth-day-2027)",
+    "pack-galaxies-19 ~ evpack-photography-2027-11 (evpack-photography-2027)",
+    "pack-galaxies-19 ~ pack-scottish-highlands-12 (pack-scottish-highlands)",
+    "pack-galaxies-19 ~ pack-harbours-07 (pack-harbours)"
+   ]
+  },
+  "pack-planets": {
+   "name": "Planets",
+   "category": "Space",
+   "count": 20,
+   "issues": [
+    "pack-planets-01: too small 581x915",
+    "pack-planets-02: too small 256x256",
+    "pack-planets-04: same URL also in ['deep-space']",
+    "pack-planets-06: landscape 1280x1017",
+    "pack-planets-08: landscape 916x901",
+    "pack-planets-08: same URL also in ['deep-space']",
+    "pack-planets-09: landscape 683x467",
+    "pack-planets-09: too small 683x467",
+    "pack-planets-10: landscape 880x620",
+    "pack-planets-10: too small 880x620",
+    "pack-planets-11: landscape 1362x1228",
+    "pack-planets-13: landscape 937x910",
+    "pack-planets-14: too small 600x992",
+    "pack-planets-15: landscape 999x959",
+    "pack-planets-15: same URL also in ['deep-space']",
+    "pack-planets-16: landscape 750x700",
+    "pack-planets-19: landscape 1157x633",
+    "pack-planets-19: too small 1157x633",
+    "pack-planets-20: landscape 1280x864"
+   ],
+   "cross": [
+    "pack-planets-04 ~ deep-space-nasa-pia01370 (deep-space)",
+    "pack-planets-08 ~ deep-space-nasa-pia01369 (deep-space)",
+    "pack-planets-15 ~ deep-space-nasa-pia02879 (deep-space)",
+    "pack-planets-15 ~ daily-2026-10-26 (daily-2026-10)",
+    "pack-planets-15 ~ daily-2025-06-05 (daily-2025-06)",
+    "pack-planets-15 ~ daily-2025-01-12 (daily-2025-01)",
+    "pack-planets-15 ~ daily-2024-09-04 (daily-2024-09)",
+    "pack-planets-15 ~ daily-2024-03-22 (daily-2024-03)",
+    "pack-planets-15 ~ daily-2023-08-09 (daily-2023-08)",
+    "pack-planets-15 ~ daily-2023-05-27 (daily-2023-05)"
+   ]
+  },
+  "pack-earth-orbit": {
+   "name": "Earth from Orbit",
+   "category": "Space",
+   "count": 20,
+   "issues": [
+    "pack-earth-orbit-01: landscape 1279x851",
+    "pack-earth-orbit-02: landscape 1279x851",
+    "pack-earth-orbit-03: landscape 700x462",
+    "pack-earth-orbit-03: too small 700x462",
+    "pack-earth-orbit-04: landscape 1279x851",
+    "pack-earth-orbit-06: landscape 1280x849",
+    "pack-earth-orbit-08: landscape 1280x871",
+    "pack-earth-orbit-09: landscape 1280x871",
+    "pack-earth-orbit-11: landscape 1280x849",
+    "pack-earth-orbit-12: landscape 1280x851",
+    "pack-earth-orbit-13: landscape 1280x851",
+    "pack-earth-orbit-14: landscape 1280x851",
+    "pack-earth-orbit-15: landscape 1279x851",
+    "pack-earth-orbit-16: landscape 1280x851",
+    "pack-earth-orbit-17: landscape 1280x851",
+    "pack-earth-orbit-18: landscape 1280x851",
+    "pack-earth-orbit-20: landscape 1280x851"
+   ]
+  },
+  "pack-rockets": {
+   "name": "Rockets",
+   "category": "Space",
+   "count": 20,
+   "issues": [
+    "pack-rockets-02: landscape 1280x650",
+    "pack-rockets-02: too small 1280x650",
+    "pack-rockets-05: landscape 1280x720",
+    "pack-rockets-08: landscape 1280x960",
+    "pack-rockets-14 ~ pack-rockets-11: near-duplicate (phash 26, dhash 6)",
+    "pack-rockets-17: landscape 1280x853",
+    "pack-rockets-18: landscape 1280x1023",
+    "pack-rockets-19: landscape 1280x853"
+   ],
+   "cross": [
+    "pack-rockets-11 ~ deep-space-nasa-gsfc-20171208-archiv (deep-space)",
+    "pack-rockets-11 ~ daily-2025-12-02 (daily-2025-12)",
+    "pack-rockets-11 ~ daily-2025-08-20 (daily-2025-08)",
+    "pack-rockets-11 ~ daily-2025-01-28 (daily-2025-01)",
+    "pack-rockets-11 ~ daily-2024-11-03 (daily-2024-11)",
+    "pack-rockets-11 ~ daily-2024-10-24 (daily-2024-10)",
+    "pack-rockets-11 ~ daily-2024-07-07 (daily-2024-07)",
+    "pack-rockets-11 ~ pack-misty-forests-03 (pack-misty-forests)",
+    "pack-rockets-11 ~ pack-northern-lights-18 (pack-northern-lights)"
+   ]
+  },
+  "city-lights": {
+   "name": "City Lights",
+   "category": "Travel",
+   "count": 44,
+   "issues": [
+    "city-lights-p441: keyword people:crowd"
+   ]
+  },
+  "pack-santorini": {
+   "name": "Santorini",
+   "category": "Travel",
+   "count": 20,
+   "issues": []
+  },
+  "pack-moroccan-souks": {
+   "name": "Moroccan Souks",
+   "category": "Travel",
+   "count": 20,
+   "issues": [
+    "pack-moroccan-souks-19 ~ pack-moroccan-souks-18: near-duplicate (phash 6, dhash 16)"
+   ]
+  },
+  "pack-iceland-roads": {
+   "name": "Iceland Roads",
+   "category": "Travel",
+   "count": 16,
+   "issues": [
+    "count 16 < 20",
+    "pack-iceland-roads-02: too small 683x1024"
+   ]
+  },
+  "pack-scottish-highlands": {
+   "name": "Scottish Highlands",
+   "category": "Travel",
+   "count": 20,
+   "issues": [],
+   "cross": [
+    "pack-scottish-highlands-12 ~ pack-galaxies-19 (pack-galaxies)",
+    "pack-scottish-highlands-12 ~ pack-starry-nights-16 (pack-starry-nights)"
+   ]
+  },
+  "pack-bali-temples": {
+   "name": "Bali Temples",
+   "category": "Travel",
+   "count": 16,
+   "issues": [
+    "count 16 < 20",
+    "pack-bali-temples-10 ~ pack-bali-temples-02: near-duplicate (phash 12, dhash 5)"
+   ]
+  },
+  "pack-swiss-villages": {
+   "name": "Swiss Villages",
+   "category": "Travel",
+   "count": 20,
+   "issues": []
+  },
+  "pack-patagonia": {
+   "name": "Patagonia",
+   "category": "Travel",
+   "count": 20,
+   "issues": [
+    "pack-patagonia-04 ~ pack-patagonia-02: same scene (phash 12, colour 6)",
+    "pack-patagonia-07 ~ pack-patagonia-06: near-duplicate (phash 8, dhash 11)",
+    "pack-patagonia-09 ~ pack-patagonia-06: near-duplicate (phash 2, dhash 0)",
+    "pack-patagonia-09 ~ pack-patagonia-07: near-duplicate (phash 6, dhash 11)",
+    "pack-patagonia-11 ~ pack-patagonia-08: near-duplicate (phash 6, dhash 11)",
+    "pack-patagonia-13 ~ pack-patagonia-08: near-duplicate (phash 6, dhash 5)",
+    "pack-patagonia-13 ~ pack-patagonia-11: same scene (phash 12, colour 13)",
+    "pack-patagonia-20 ~ pack-patagonia-19: near-duplicate (phash 0, dhash 0)"
+   ]
+  },
+  "pack-kyoto": {
+   "name": "Kyoto",
+   "category": "Travel",
+   "count": 20,
+   "issues": [
+    "pack-kyoto-09: too small 685x1024",
+    "pack-kyoto-14: landscape 900x844",
+    "pack-kyoto-15: landscape 900x859",
+    "pack-kyoto-17: too small 605x900",
+    "pack-kyoto-18: too small 685x900",
+    "pack-kyoto-19: landscape 900x894",
+    "pack-kyoto-20: too small 654x900"
+   ],
+   "cross": [
+    "pack-kyoto-19 ~ daily-2026-02-09 (daily-2026-02)"
+   ]
+  },
+  "pack-hot-air-balloons": {
+   "name": "Hot Air Balloons",
+   "category": "Travel",
+   "count": 20,
+   "issues": []
+  },
+  "pack-harbours": {
+   "name": "Harbours",
+   "category": "Travel",
+   "count": 20,
+   "issues": [
+    "pack-harbours-14 ~ pack-harbours-07: near-duplicate (phash 0, dhash 8)",
+    "pack-harbours-16: too small 683x1024"
+   ],
+   "cross": [
+    "pack-harbours-07 ~ evpack-earth-day-2027-14 (evpack-earth-day-2027)",
+    "pack-harbours-07 ~ pack-northern-lights-08 (pack-northern-lights)",
+    "pack-harbours-07 ~ pack-galaxies-19 (pack-galaxies)"
+   ]
+  },
+  "pack-night-markets": {
+   "name": "Night Markets",
+   "category": "Travel",
+   "count": 18,
+   "issues": [
+    "count 18 < 20",
+    "pack-night-markets-18: landscape 1153x893"
+   ]
+  },
+  "pack-rice-terraces": {
+   "name": "Rice Terraces",
+   "category": "Travel",
+   "count": 20,
+   "issues": [
+    "pack-rice-terraces-03: too small 683x1024",
+    "pack-rice-terraces-04: too small 683x1024",
+    "pack-rice-terraces-10: too small 673x1024",
+    "pack-rice-terraces-20: too small 683x1024"
+   ]
+  },
+  "pack-islands": {
+   "name": "Islands",
+   "category": "Travel",
+   "count": 20,
+   "issues": [
+    "pack-islands-19: too small 683x1024"
+   ]
+  },
+  "pack-vineyards": {
+   "name": "Vineyards",
+   "category": "Travel",
+   "count": 20,
+   "issues": []
+  },
+  "pack-ancient-ruins": {
+   "name": "Ancient Ruins",
+   "category": "Travel",
+   "count": 20,
+   "issues": [
+    "pack-ancient-ruins-03: too small 614x1024",
+    "pack-ancient-ruins-06: too small 649x1024"
+   ]
+  },
+  "pack-fairytale-villages": {
+   "name": "Fairytale Villages",
+   "category": "Travel",
+   "count": 20,
+   "issues": []
+  },
+  "pack-old-maps": {
+   "name": "Old Maps",
+   "category": "Vintage",
+   "count": 20,
+   "issues": [
+    "pack-old-maps-01: landscape 900x769",
+    "pack-old-maps-02: landscape 900x705",
+    "pack-old-maps-05: landscape 1250x893",
+    "pack-old-maps-05: keyword unwanted:battle",
+    "pack-old-maps-06: landscape 900x617",
+    "pack-old-maps-06: too small 900x617",
+    "pack-old-maps-07: landscape 1111x893",
+    "pack-old-maps-08: landscape 900x660",
+    "pack-old-maps-08: too small 900x660",
+    "pack-old-maps-09: too small 650x893",
+    "pack-old-maps-09 ~ pack-old-maps-05: same palette and layout (colour 7, phash 30)",
+    "pack-old-maps-11: landscape 1263x890",
+    "pack-old-maps-11: keyword people:soldiers",
+    "pack-old-maps-12: landscape 1263x880",
+    "pack-old-maps-14: too small 656x900",
+    "pack-old-maps-15: too small 664x900",
+    "pack-old-maps-16: landscape 1201x893",
+    "pack-old-maps-17: too small 654x900",
+    "pack-old-maps-18: landscape 900x732",
+    "pack-old-maps-20: too small 642x900"
+   ],
+   "cross": [
+    "pack-old-maps-05 ~ daily-2023-08-26 (daily-2023-08)",
+    "pack-old-maps-05 ~ pack-botanical-16 (pack-botanical)",
+    "pack-old-maps-05 ~ pack-vintage-posters-12 (pack-vintage-posters)",
+    "pack-old-maps-09 ~ pack-botanical-03 (pack-botanical)",
+    "pack-old-maps-09 ~ pack-botanical-16 (pack-botanical)",
+    "pack-old-maps-09 ~ pack-gardens-art-20 (pack-gardens-art)",
+    "pack-old-maps-09 ~ pack-vintage-posters-12 (pack-vintage-posters)",
+    "pack-old-maps-19 ~ daily-2023-11-30 (daily-2023-11)",
+    "pack-old-maps-19 ~ evpack-childrens-book-2027-14 (evpack-childrens-book-2027)",
+    "pack-old-maps-19 ~ evpack-heart-day-2027-07 (evpack-heart-day-2027)",
+    "pack-old-maps-19 ~ pack-dutch-masters-08 (pack-dutch-masters)",
+    "pack-old-maps-19 ~ pack-impressionists-06 (pack-impressionists)"
+   ]
+  },
+  "pack-vintage-posters": {
+   "name": "Vintage Posters",
+   "category": "Vintage",
+   "count": 20,
+   "issues": [
+    "pack-vintage-posters-01: too small 669x900",
+    "pack-vintage-posters-01: keyword text:poster",
+    "pack-vintage-posters-02: too small 634x900",
+    "pack-vintage-posters-03: too small 631x893",
+    "pack-vintage-posters-03: keyword text:poster",
+    "pack-vintage-posters-04: too small 665x893",
+    "pack-vintage-posters-04: keyword text:poster",
+    "pack-vintage-posters-05: too small 677x893",
+    "pack-vintage-posters-07: too small 610x900",
+    "pack-vintage-posters-08: too small 695x900",
+    "pack-vintage-posters-09: too small 695x893",
+    "pack-vintage-posters-10: landscape 900x683",
+    "pack-vintage-posters-10: too small 900x683",
+    "pack-vintage-posters-10: keyword people:man",
+    "pack-vintage-posters-11: landscape 1207x893",
+    "pack-vintage-posters-12: too small 666x900",
+    "pack-vintage-posters-13: keyword text:posters",
+    "pack-vintage-posters-14: keyword text:posters",
+    "pack-vintage-posters-15: keyword text:posters",
+    "pack-vintage-posters-16: keyword text:posters",
+    "pack-vintage-posters-17: keyword text:posters",
+    "pack-vintage-posters-18: keyword text:posters",
+    "pack-vintage-posters-19: keyword text:posters",
+    "pack-vintage-posters-20: keyword text:posters"
+   ],
+   "cross": [
+    "pack-vintage-posters-12 ~ daily-2023-08-26 (daily-2023-08)",
+    "pack-vintage-posters-12 ~ pack-botanical-12 (pack-botanical)",
+    "pack-vintage-posters-12 ~ pack-botanical-16 (pack-botanical)",
+    "pack-vintage-posters-12 ~ pack-gardens-art-20 (pack-gardens-art)",
+    "pack-vintage-posters-12 ~ pack-old-maps-05 (pack-old-maps)",
+    "pack-vintage-posters-12 ~ pack-old-maps-09 (pack-old-maps)"
+   ]
+  },
+  "pack-classic-cars": {
+   "name": "Classic Cars",
+   "category": "Vintage",
+   "count": 20,
+   "issues": []
+  },
+  "pack-steam-trains": {
+   "name": "Steam Trains",
+   "category": "Vintage",
+   "count": 20,
+   "issues": [
+    "pack-steam-trains-08: too small 681x1024",
+    "pack-steam-trains-09: too small 683x1024",
+    "pack-steam-trains-10: too small 683x1024",
+    "pack-steam-trains-11: too small 683x1024",
+    "pack-steam-trains-12: too small 683x1024",
+    "pack-steam-trains-13: too small 685x1024"
+   ]
+  },
+  "pack-cozy-interiors": {
+   "name": "Cozy Interiors",
+   "category": "Vintage",
+   "count": 12,
+   "issues": [
+    "count 12 < 20"
+   ]
+  }
+ }
+}
