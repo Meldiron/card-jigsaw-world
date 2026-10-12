@@ -8,13 +8,51 @@
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
- "sources": ["commons", "openverse"],
- "topics": [
-  "Harzer Schmalspurbahnen steam locomotive", "Brocken railway steam", "Flying Scotsman", "LNER Class A4 Mallard", "Jacobite steam train Glenfinnan",
-  "Ffestiniog Railway locomotive", "Welsh Highland Railway Garratt", "Darjeeling Himalayan Railway locomotive", "Durango and Silverton steam", "Cumbres and Toltec steam",
-  "Union Pacific Big Boy 4014", "DRG Class 01 locomotive", "DR Class 52 locomotive", "Molli Bad Doberan", "Rhaetian Railway steam",
-  "Brienz Rothorn Bahn steam", "Schafbergbahn steam", "Puffing Billy Railway", "steam locomotive firebox", "steam locomotive wheels driving rods",
-  "steam locomotive smokebox", "steam locomotive snow", "steam locomotive viaduct", "Bluebell Railway locomotive", "Severn Valley Railway steam"
+ "sources": [
+  "commons",
+  "openverse"
  ],
- "more_topics": ["Fichtelbergbahn", "Rügensche Bäderbahn Rasender Roland", "Zillertalbahn steam", "Mount Washington Cog Railway", "Strasburg Rail Road steam", "Tanfield Railway", "Talyllyn Railway", "Ohio Central steam", "Chemin de fer de la Baie de Somme", "Furka Cogwheel Steam Railway", "steam locomotive depot", "steam locomotive cab", "Sächsische Dampfeisenbahn", "Kingdom of Fife steam"]
+ "topics": [
+  "Harzer Schmalspurbahnen steam locomotive",
+  "Brocken railway steam",
+  "Flying Scotsman",
+  "LNER Class A4 Mallard",
+  "Jacobite steam train Glenfinnan",
+  "Ffestiniog Railway locomotive",
+  "Welsh Highland Railway Garratt",
+  "Darjeeling Himalayan Railway locomotive",
+  "Durango and Silverton steam",
+  "Cumbres and Toltec steam",
+  "Union Pacific Big Boy 4014",
+  "DRG Class 01 locomotive",
+  "DR Class 52 locomotive",
+  "Molli Bad Doberan",
+  "Rhaetian Railway steam",
+  "Brienz Rothorn Bahn steam",
+  "Schafbergbahn steam",
+  "Puffing Billy Railway",
+  "steam locomotive firebox",
+  "steam locomotive wheels driving rods",
+  "steam locomotive smokebox",
+  "steam locomotive snow",
+  "steam locomotive viaduct",
+  "Bluebell Railway locomotive",
+  "Severn Valley Railway steam"
+ ],
+ "more_topics": [
+  "Fichtelbergbahn",
+  "Rügensche Bäderbahn Rasender Roland",
+  "Zillertalbahn steam",
+  "Mount Washington Cog Railway",
+  "Strasburg Rail Road steam",
+  "Tanfield Railway",
+  "Talyllyn Railway",
+  "Ohio Central steam",
+  "Chemin de fer de la Baie de Somme",
+  "Furka Cogwheel Steam Railway",
+  "steam locomotive depot",
+  "steam locomotive cab",
+  "Sächsische Dampfeisenbahn",
+  "Kingdom of Fife steam"
+ ]
 }

@@ -9,7 +9,8 @@
  "fetch_per_topic": 4,
  "author_cap": 2,
  "sources": [
-  "commons"
+  "commons",
+  "openverse"
  ],
  "quality_deepcat": "Quality images of landscapes",
  "price": "coins",

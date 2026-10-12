@@ -2,7 +2,7 @@
  "id": "evpack-lunar-new-year-2027",
  "name": "Lunar New Year",
  "category": "Event",
- "description": "A limited pack for Lunar New Year (6 February 2027). Red lanterns, dragons, red envelopes, dumplings, plum blossom and temples for the Year of the Goat, playable for one week.",
+ "description": "A limited pack for Lunar New Year (6 February 2027). Red lanterns, red envelopes, jiaozi and xiaolongbao, bánh chưng, kumquat trees, plum blossom, temple dragons and a goat for the Year of the Goat, playable for one week.",
  "kind": "event",
  "target": 24,
  "per_topic": 1,
@@ -50,6 +50,23 @@
   "sheep",
   "moon cake",
   "dragon sculpture",
-  "chrysanthemum"
+  "chrysanthemum",
+  "Yu Garden",
+  "red door studs",
+  "Chinese tea set",
+  "spring rolls",
+  "lotus lantern",
+  "pomelo",
+  "Wong Tai Sin Temple",
+  "guardian lion",
+  "gold ingot",
+  "Phalaenopsis",
+  "pussy willow",
+  "xiaolongbao",
+  "eight treasure rice",
+  "chrysanthemum",
+  "Chinatown lanterns",
+  "candied fruit",
+  "sugarcane"
  ]
 }

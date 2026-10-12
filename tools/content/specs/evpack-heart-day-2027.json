@@ -2,14 +2,17 @@
  "id": "evpack-heart-day-2027",
  "name": "World Heart Day",
  "category": "Event",
- "description": "A limited pack for World Heart Day (29 September 2027). Heart-healthy foods like salmon, berries, walnuts and olive oil, heart-shaped leaves and flowers, and trails to walk and cycle, playable for one week.",
+ "description": "A limited pack for World Heart Day (29 September 2027). Heart-healthy foods like berries, cherries, almonds, avocados, olive oil and greens, heart-shaped flowers and leaves, and a bicycle for the ride home, playable for one week.",
  "kind": "event",
  "target": 24,
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
  "accent_from_cover": true,
- "sources": ["commons", "openverse"],
+ "sources": [
+  "commons",
+  "openverse"
+ ],
  "topics": [
   "Bleeding heart flower Lamprocapnos",
   "Anthurium flower",
@@ -49,5 +52,6 @@
   "Cherries",
   "Flaxseed",
   "Heart-shaped cookie"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Bleeding_heart_%28Lamprocapnos%29_flower_%40_Peony_Festival_%40_Garden_of_Toshogu_Shrine_%40_Ueno_Park_%2814042119454%29.jpg/1280px-Bleeding_heart_%28Lamprocapnos%29_flower_%40_Peony_Festival_%40_Garden_of_Toshogu_Shrine_%40_Ueno_Park_%2814042119454%29.jpg"
 }

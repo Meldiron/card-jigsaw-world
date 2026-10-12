@@ -7,7 +7,7 @@
  "target": 24,
  "per_topic": 1,
  "fetch_per_topic": 4,
- "author_cap": 2,
+ "author_cap": 4,
  "sources": [
   "commons",
   "openverse"

@@ -154,15 +154,16 @@
 "status": "verified"
 },
 "abstract-neon": {
-"added": 0,
-"at": "2026-10-12T22:40:25",
+"added": 28,
+"at": "2026-10-12T22:53:32",
 "category": "Abstract",
+"issues": 0,
 "kind": "new",
-"last_step": "reject 1 quality",
+"last_step": "verify",
 "name": "Neon Lines",
-"puzzles": 0,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 4,
+"status": "verified"
 },
 "abstract-paper-collage": {
 "added": 28,
@@ -554,15 +555,15 @@
 },
 "daily-2023-05": {
 "added": 28,
-"at": "2026-10-12T11:07:46",
+"at": "2026-10-12T22:47:59",
 "category": "Daily",
-"issues": 1,
+"issues": 0,
 "kind": "daily",
-"last_step": "verify failed",
+"last_step": "verify",
 "name": "May 2023",
 "puzzles": 31,
 "removed": 28,
-"status": "fixed"
+"status": "verified"
 },
 "daily-2023-06": {
 "added": 23,
@@ -1569,15 +1570,16 @@
 "status": "verified"
 },
 "evpack-heart-day-2027": {
-"added": 0,
-"at": "2026-10-12T22:41:05",
+"added": 24,
+"at": "2026-10-12T22:49:21",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "pool 71 usable",
+"last_step": "verify",
 "name": "World Heart Day",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 14,
+"status": "verified"
 },
 "evpack-hot-tea-2027": {
 "added": 22,
@@ -1628,15 +1630,16 @@
 "status": "verified"
 },
 "evpack-literacy-2027": {
-"added": 0,
-"at": "2026-10-12T16:47:16",
+"added": 24,
+"at": "2026-10-12T23:03:27",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "reject 1 quality",
+"last_step": "verify",
 "name": "International Literacy Day",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 23,
+"removed": 15,
+"status": "verified"
 },
 "evpack-love-your-pet-2027": {
 "added": 20,
@@ -1651,15 +1654,16 @@
 "status": "verified"
 },
 "evpack-lunar-new-year-2027": {
-"added": 0,
-"at": "2026-10-12T22:40:17",
+"added": 25,
+"at": "2026-10-12T22:52:47",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "reject 7 similar",
+"last_step": "verify",
 "name": "Lunar New Year",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 15,
+"status": "verified"
 },
 "evpack-may-day-2027": {
 "added": 24,
@@ -1795,10 +1799,10 @@
 },
 "evpack-peace-2027": {
 "added": 0,
-"at": "2026-10-12T16:47:29",
+"at": "2026-10-12T23:06:43",
 "category": "Event",
 "kind": "event",
-"last_step": "reject 4 weak",
+"last_step": "pool 26 usable",
 "name": "International Day of Peace",
 "puzzles": null,
 "removed": 0,
@@ -2315,15 +2319,16 @@
 "status": "verified"
 },
 "pack-big-cats": {
-"added": 23,
-"at": "2026-10-12T02:41:02",
+"added": 28,
+"at": "2026-10-12T22:47:57",
 "category": "Animals",
+"issues": 0,
 "kind": "library",
-"last_step": "pool 15 usable",
+"last_step": "verify",
 "name": "Big Cats",
-"puzzles": null,
-"removed": 20,
-"status": "fixed"
+"puzzles": 24,
+"removed": 24,
+"status": "verified"
 },
 "pack-birds-of-prey": {
 "added": 20,
@@ -2494,15 +2499,16 @@
 "status": "verified"
 },
 "pack-desert-dunes": {
-"added": 13,
-"at": "2026-10-12T02:41:08",
+"added": 16,
+"at": "2026-10-12T22:52:54",
 "category": "Nature",
+"issues": 0,
 "kind": "library",
-"last_step": "apply",
+"last_step": "verify",
 "name": "Desert Dunes",
-"puzzles": 20,
-"removed": 13,
-"status": "fixed"
+"puzzles": 21,
+"removed": 15,
+"status": "verified"
 },
 "pack-doors": {
 "added": 12,
@@ -3093,15 +3099,16 @@
 "status": "verified"
 },
 "pack-prague": {
-"added": 0,
-"at": "2026-10-12T22:40:10",
+"added": 21,
+"at": "2026-10-12T22:54:12",
 "category": "Cities",
+"issues": 0,
 "kind": "library",
-"last_step": "reject 1 weak",
+"last_step": "verify",
 "name": "Prague",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 22,
+"removed": 19,
+"status": "verified"
 },
 "pack-puppies": {
 "added": 24,
@@ -3117,10 +3124,10 @@
 },
 "pack-rainy-streets": {
 "added": 0,
-"at": "2026-10-12T10:21:27",
+"at": "2026-10-12T23:05:13",
 "category": "Cities",
 "kind": "library",
-"last_step": "reject 3 weak",
+"last_step": "reject 6 weak",
 "name": "Rainy Streets",
 "puzzles": null,
 "removed": 0,
@@ -3305,14 +3312,15 @@
 },
 "pack-steam-trains": {
 "added": 20,
-"at": "2026-10-12T22:41:03",
+"at": "2026-10-12T22:41:39",
 "category": "Vintage",
+"issues": 0,
 "kind": "library",
-"last_step": "apply",
+"last_step": "verify",
 "name": "Steam Trains",
 "puzzles": 24,
 "removed": 16,
-"status": "fixed"
+"status": "verified"
 },
 "pack-still-life": {
 "added": 26,
@@ -3328,10 +3336,10 @@
 },
 "pack-street-food": {
 "added": 0,
-"at": "2026-10-12T10:23:29",
+"at": "2026-10-12T23:08:01",
 "category": "Food",
 "kind": "library",
-"last_step": "reject 1 text",
+"last_step": "pool 46 usable",
 "name": "Street Food",
 "puzzles": null,
 "removed": 0,
@@ -3373,15 +3381,16 @@
 "status": "audited"
 },
 "pack-swiss-villages": {
-"added": 0,
-"at": "2026-10-12T10:42:51",
+"added": 24,
+"at": "2026-10-12T23:03:59",
 "category": "Travel",
+"issues": 0,
 "kind": "library",
-"last_step": "reject 14 quality",
+"last_step": "verify",
 "name": "Swiss Villages",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 22,
+"removed": 22,
+"status": "verified"
 },
 "pack-temples": {
 "added": 0,
@@ -3455,10 +3464,10 @@
 },
 "pack-venice": {
 "added": 0,
-"at": "2026-10-12T10:25:30",
+"at": "2026-10-12T23:07:17",
 "category": "Cities",
 "kind": "library",
-"last_step": "reject 1 weak",
+"last_step": "reject 6 off-theme",
 "name": "Venice",
 "puzzles": null,
 "removed": 0,
@@ -3466,10 +3475,10 @@
 },
 "pack-vineyards": {
 "added": 0,
-"at": "2026-10-12T10:43:15",
+"at": "2026-10-12T23:07:16",
 "category": "Travel",
 "kind": "library",
-"last_step": "reject 4 off-theme",
+"last_step": "pool 15 usable",
 "name": "Vineyards",
 "puzzles": null,
 "removed": 0,

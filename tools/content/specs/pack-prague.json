@@ -2,12 +2,12 @@
  "id": "pack-prague",
  "name": "Prague",
  "category": "Cities",
- "description": "Gothic spires of Týn, the castle above the Vltava, Baroque palace gardens, Art Nouveau halls and red-roofed Malá Strana.",
+ "description": "The Gothic spires of Týn, the astronomical clock, red-roofed Malá Strana, Golden Lane, Moorish synagogues and Baroque monasteries.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
  "fetch_per_topic": 4,
- "author_cap": 2,
+ "author_cap": 3,
  "sources": [
   "commons",
   "openverse"
@@ -63,5 +63,6 @@
   "Church of Saints Cyril and Methodius Prague",
   "Vinohrady Water Tower",
   "Ungelt Prague"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Prague_Rooftops_%2835147212526%29.jpg/1280px-Prague_Rooftops_%2835147212526%29.jpg"
 }
