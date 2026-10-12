@@ -147,7 +147,11 @@ leave these five TestFlight feedback items open (they are the content work's):
 AAX-tfwxcKgwk8WC7ZmPEIM, AFs4NDzzaDynNOI55qyTIkM, ANO-zfTaIYOjY-ueQhFp1QM, AEkB37H2zKX9inL57pfg2gE,
 AOZ2T5f4FZgO6tNrSO3BovQ (picture quality). Every other open item, including pack prices and the
 economy model, is app work.
-Pull before you push; their checkpoints commit only their own paths.
+Their checkpoints commit only their own paths. Content files change every few seconds while it runs,
+so integrate remote commits with `git fetch origin main && git merge --no-edit origin/main`; never
+`git pull --rebase`, `--autostash` or `git stash` (an autostash once hid the workers' changes), and
+never `git checkout`/`restore` files under `tools/content`. `tools/dev/testflight.sh` refuses a dirty
+tree, so dispatch the workflow directly as described in the testflight-feedback skill.
 
 ## Docs index
 
