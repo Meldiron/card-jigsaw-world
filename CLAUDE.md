@@ -32,6 +32,12 @@ skills under `.claude/skills/` hold the detailed workflows.
   `/preview?width=1080` for covers). Never write a third-party image URL to the database. The content
   tool hosts each pick on apply (`tools/content/cjw/host.py`); `tools/content/run.sh host` migrates
   anything left. The original address stays in `sourceUrl` (puzzles) / `coverSourceUrl` (packs, events).
+- **The app talks only to Appwrite and Apple** (owner rule, 2026-10-13): no analytics, crash or ad SDKs,
+  no CDNs. Pictures come from our Storage (above); the web build bundles CanvasKit
+  (`--no-web-resources-cdn` in `tools/dev/deploy-web.sh`) and serves its default font from
+  `web/fallback-fonts/` (`fontFallbackBaseUrl` in `web/flutter_bootstrap.js`). Apple traffic is
+  StoreKit, Sign in with Apple and the widget/App Store system services. Check new dependencies for
+  network use before adding them.
 - **Every build also redeploys the web site** (`tools/dev/deploy-web.sh`) from the same commit.
 - **Versioning**: one version string per App Store cycle; TestFlight builds only bump the build number.
   Details in the apple-release skill. Never bump the version for a TestFlight cut.
