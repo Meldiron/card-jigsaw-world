@@ -1,0 +1,9 @@
+{
+ "id": "evpack-winter-solstice-2027",
+ "name": "Winter Solstice",
+ "category": "Event",
+ "kind": "event",
+ "description": "A limited pack for Winter Solstice (21 December 2027). Stonehenge, Newgrange and the Callanish Stones, Yule goats, a Yule log, holly, mistletoe, frost, icicles and snowy forests, playable for one week.",
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Stonehenge%2C_Condado_de_Wiltshire%2C_Inglaterra%2C_2014-08-12%2C_DD_04.JPG/1280px-Stonehenge%2C_Condado_de_Wiltshire%2C_Inglaterra%2C_2014-08-12%2C_DD_04.JPG",
+ "note": "clone of evpack-winter-solstice-2026; content comes from `run.sh clone evpack-winter-solstice-2026 evpack-winter-solstice-2027`"
+}

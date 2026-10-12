@@ -2,7 +2,7 @@
  "id": "pack-pastries",
  "name": "Pastries",
  "category": "Food",
- "description": "Flaky croissants, glossy fruit tarts, éclairs, baklava, cannoli and pastries from bakery windows around the world.",
+ "description": "Croissants, glossy fruit tarts, Paris-Brest, baklava, cannoli, sfogliatelle and Portuguese egg tarts.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
@@ -50,6 +50,17 @@
   "Börek",
   "Fig tart",
   "Raspberry tartlet",
-  "Brioche"
- ]
+  "Brioche",
+  "Apfelstrudel",
+  "Lemon tart",
+  "Tarte Tatin",
+  "Macarons",
+  "Pain aux raisins",
+  "Galette des rois",
+  "Saint-Honoré cake",
+  "Cinnamon roll",
+  "Chouquettes",
+  "Pithivier"
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Tart_with_fruit_and_white_chocolate_%28KETO%2C_LCHF%2C_Low_Carb%2C_Gluten_free%2C_FIT%29_-_52774783549.jpg/1280px-Tart_with_fruit_and_white_chocolate_%28KETO%2C_LCHF%2C_Low_Carb%2C_Gluten_free%2C_FIT%29_-_52774783549.jpg"
 }

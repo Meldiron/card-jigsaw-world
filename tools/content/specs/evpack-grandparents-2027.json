@@ -2,14 +2,17 @@
  "id": "evpack-grandparents-2027",
  "name": "Grandparents Day",
  "category": "Event",
- "description": "A limited pack for Grandparents Day (12 September 2027). Knitting baskets, rocking chairs, porcelain tea sets, grandfather clocks, patchwork quilts, jam jars and cottage gardens, playable for one week.",
+ "description": "A limited pack for Grandparents Day (12 September 2027). Rocking chairs, porcelain tea sets, cuckoo and grandfather clocks, crochet blankets, apple pie, rose-covered cottages and apple orchards, playable for one week.",
  "kind": "event",
  "target": 24,
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
  "accent_from_cover": true,
- "sources": ["commons", "openverse"],
+ "sources": [
+  "commons",
+  "openverse"
+ ],
  "topics": [
   "Knitting needles and yarn",
   "Rocking chair on porch",
@@ -49,5 +52,6 @@
   "Rhubarb",
   "Plum cake",
   "Farmhouse kitchen"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Dessus_de_lit_ann%C3%A9es_70.jpg/1280px-Dessus_de_lit_ann%C3%A9es_70.jpg"
 }

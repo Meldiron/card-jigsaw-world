@@ -2,14 +2,16 @@
  "id": "evpack-dog-day-2027",
  "name": "International Dog Day",
  "category": "Event",
- "description": "A limited pack for International Dog Day (26 August 2027). Border Collies, Golden Retrievers, Huskies, Corgis, Dalmatians, Bernese Mountain Dogs and many more breeds, playable for one week.",
+ "description": "A limited pack for International Dog Day (26 August 2027). Bernese Mountain Dogs, Golden Retrievers, Huskies, Corgis, Shiba Inus, Basset Hounds, Vizslas and many more breeds, playable for one week.",
  "kind": "event",
  "target": 24,
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
  "accent_from_cover": true,
- "sources": ["commons"],
+ "sources": [
+  "commons"
+ ],
  "quality_deepcat": "Quality images of animals",
  "topics": [
   "Border Collie",
@@ -50,5 +52,6 @@
   "Yorkshire Terrier",
   "English Springer Spaniel",
   "Puppy portrait"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/1-BerneseMountainDogInGrass.jpg/1280px-1-BerneseMountainDogInGrass.jpg"
 }

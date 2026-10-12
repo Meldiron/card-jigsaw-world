@@ -2,7 +2,7 @@
  "id": "evpack-winter-solstice-2026",
  "name": "Winter Solstice",
  "category": "Event",
- "description": "A limited pack for Winter Solstice (21 December 2026). Stonehenge at sunrise, Yule logs, candles in snow, frost, icicles, holly and the low midwinter sun, playable for one week.",
+ "description": "A limited pack for Winter Solstice (21 December 2026). Stonehenge, Newgrange and the Callanish Stones, Yule goats, a Yule log, holly, mistletoe, frost, icicles and snowy forests, playable for one week.",
  "kind": "event",
  "target": 24,
  "per_topic": 1,
@@ -50,6 +50,18 @@
   "birch forest snow",
   "hot chocolate",
   "winter sunrise",
-  "snowy cabin"
- ]
+  "snowy cabin",
+  "Callanish Stones",
+  "candlelight",
+  "snowy cabin",
+  "hot chocolate",
+  "pomegranate seeds",
+  "straw goat ornament",
+  "snow lantern",
+  "Goseck circle",
+  "frozen berries",
+  "ice lantern",
+  "winter oak"
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Stonehenge%2C_Condado_de_Wiltshire%2C_Inglaterra%2C_2014-08-12%2C_DD_04.JPG/1280px-Stonehenge%2C_Condado_de_Wiltshire%2C_Inglaterra%2C_2014-08-12%2C_DD_04.JPG"
 }

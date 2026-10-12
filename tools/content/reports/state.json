@@ -106,15 +106,16 @@
 "status": "verified"
 },
 "abstract-glitch": {
-"added": 0,
-"at": "2026-10-12T22:07:42",
+"added": 25,
+"at": "2026-10-12T22:26:42",
 "category": "Abstract",
+"issues": 0,
 "kind": "new",
-"last_step": "pool 51 usable",
+"last_step": "verify",
 "name": "Glitch & Pixel",
-"puzzles": 0,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 1,
+"status": "verified"
 },
 "abstract-kaleidoscope": {
 "added": 23,
@@ -151,6 +152,17 @@
 "puzzles": 24,
 "removed": 0,
 "status": "verified"
+},
+"abstract-neon": {
+"added": 0,
+"at": "2026-10-12T22:37:31",
+"category": "Abstract",
+"kind": "new",
+"last_step": "pool 52 usable",
+"name": "Neon Lines",
+"puzzles": 0,
+"removed": 0,
+"status": "pending"
 },
 "abstract-paper-collage": {
 "added": 28,
@@ -1341,15 +1353,16 @@
 "status": "verified"
 },
 "evpack-dog-day-2027": {
-"added": 0,
-"at": "2026-10-12T22:09:36",
+"added": 23,
+"at": "2026-10-12T22:20:26",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "pool 3 usable",
+"last_step": "verify",
 "name": "International Dog Day",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 13,
+"status": "verified"
 },
 "evpack-earth-day-2027": {
 "added": 25,
@@ -1376,16 +1389,16 @@
 "status": "verified"
 },
 "evpack-education-2027": {
-"added": 24,
-"at": "2026-10-12T17:47:25",
+"added": 26,
+"at": "2026-10-12T22:23:29",
 "category": "Event",
 "issues": 0,
 "kind": "event",
-"last_step": "verify",
+"last_step": "reject 7 similar",
 "name": "International Day of Education",
 "puzzles": 24,
-"removed": 14,
-"status": "verified"
+"removed": 16,
+"status": "audited"
 },
 "evpack-environment-2027": {
 "added": 25,
@@ -1484,15 +1497,16 @@
 "status": "verified"
 },
 "evpack-grandparents-2027": {
-"added": 0,
-"at": "2026-10-12T16:46:52",
+"added": 24,
+"at": "2026-10-12T22:32:02",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "reject 4 weak",
+"last_step": "verify",
 "name": "Grandparents Day",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 10,
+"status": "verified"
 },
 "evpack-halloween-2026": {
 "added": 22,
@@ -1556,10 +1570,10 @@
 },
 "evpack-heart-day-2027": {
 "added": 0,
-"at": "2026-10-12T16:47:07",
+"at": "2026-10-12T22:36:46",
 "category": "Event",
 "kind": "event",
-"last_step": "reject 6 weak",
+"last_step": "pool 27 usable",
 "name": "World Heart Day",
 "puzzles": null,
 "removed": 0,
@@ -1625,26 +1639,27 @@
 "status": "audited"
 },
 "evpack-love-your-pet-2027": {
-"added": 19,
-"at": "2026-10-12T18:56:49",
+"added": 20,
+"at": "2026-10-12T22:25:58",
 "category": "Event",
 "issues": 0,
 "kind": "event",
 "last_step": "verify",
 "name": "Love Your Pet Day",
 "puzzles": 24,
-"removed": 9,
+"removed": 10,
 "status": "verified"
 },
 "evpack-lunar-new-year-2027": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T22:37:22",
 "category": "Event",
 "kind": "event",
+"last_step": "pool 75 usable",
 "name": "Lunar New Year",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "evpack-may-day-2027": {
 "added": 24,
@@ -1743,27 +1758,27 @@
 "status": "verified"
 },
 "evpack-new-years-eve-2026": {
-"added": 23,
-"at": "2026-10-12T15:27:07",
+"added": 25,
+"at": "2026-10-12T22:19:56",
 "category": "Event",
 "issues": 0,
 "kind": "event",
 "last_step": "verify",
 "name": "New Year's Eve",
 "puzzles": 24,
-"removed": 13,
+"removed": 15,
 "status": "verified"
 },
 "evpack-new-years-eve-2027": {
-"added": 24,
-"at": "2026-10-12T15:27:36",
+"added": 48,
+"at": "2026-10-12T22:21:20",
 "category": "Event",
 "issues": 0,
 "kind": "event",
 "last_step": "verify",
 "name": "New Year's Eve",
 "puzzles": 24,
-"removed": 10,
+"removed": 34,
 "status": "verified"
 },
 "evpack-oceans-2027": {
@@ -2147,25 +2162,28 @@
 "status": "pending"
 },
 "evpack-winter-solstice-2026": {
-"added": 0,
-"at": "2026-10-12T22:09:39",
+"added": 23,
+"at": "2026-10-12T22:13:40",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "pool 36 usable",
+"last_step": "verify",
 "name": "Winter Solstice",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 13,
+"status": "verified"
 },
 "evpack-winter-solstice-2027": {
-"added": 0,
-"at": "2026-10-12T02:04:57",
+"added": 24,
+"at": "2026-10-12T22:14:06",
 "category": "Event",
+"issues": 0,
 "kind": "event",
+"last_step": "verify",
 "name": "Winter Solstice",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 10,
+"status": "verified"
 },
 "evpack-womens-day-2027": {
 "added": 0,
@@ -3015,15 +3033,16 @@
 "status": "verified"
 },
 "pack-pastries": {
-"added": 0,
-"at": "2026-10-12T22:08:54",
+"added": 21,
+"at": "2026-10-12T22:22:52",
 "category": "Food",
+"issues": 0,
 "kind": "library",
-"last_step": "pool 66 usable",
+"last_step": "verify",
 "name": "Pastries",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 23,
+"removed": 18,
+"status": "verified"
 },
 "pack-patagonia": {
 "added": 23,
@@ -3075,10 +3094,10 @@
 },
 "pack-prague": {
 "added": 0,
-"at": "2026-10-12T10:20:58",
+"at": "2026-10-12T22:38:37",
 "category": "Cities",
 "kind": "library",
-"last_step": "reject 2 weak",
+"last_step": "pool 102 usable",
 "name": "Prague",
 "puzzles": null,
 "removed": 0,
@@ -3179,26 +3198,28 @@
 "status": "verified"
 },
 "pack-santorini": {
-"added": 20,
-"at": "2026-10-12T22:11:22",
+"added": 21,
+"at": "2026-10-12T22:12:10",
 "category": "Travel",
+"issues": 0,
 "kind": "library",
-"last_step": "apply",
+"last_step": "verify",
 "name": "Santorini",
 "puzzles": 23,
-"removed": 17,
-"status": "fixed"
+"removed": 18,
+"status": "verified"
 },
 "pack-scottish-highlands": {
-"added": 0,
-"at": "2026-10-12T10:41:42",
+"added": 22,
+"at": "2026-10-12T22:24:50",
 "category": "Travel",
+"issues": 0,
 "kind": "library",
-"last_step": "reject 4 weak",
+"last_step": "verify",
 "name": "Scottish Highlands",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 18,
+"status": "verified"
 },
 "pack-sea-cliffs": {
 "added": 22,
@@ -3284,10 +3305,10 @@
 },
 "pack-steam-trains": {
 "added": 0,
-"at": "2026-10-12T10:42:29",
+"at": "2026-10-12T22:38:16",
 "category": "Vintage",
 "kind": "library",
-"last_step": "reject 5 weak",
+"last_step": "pool 55 usable",
 "name": "Steam Trains",
 "puzzles": null,
 "removed": 0,
