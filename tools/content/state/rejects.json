@@ -44897,6 +44897,12 @@
 "pack": "pack-rockets",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Sunflower_%28PSF%29.png/1280px-Sunflower_%28PSF%29.png": {
+"at": "2026-10-12",
+"label": "c94",
+"pack": "evpack-autumn-2027",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Top_view_of_a_lab_technitian_putting_a_test_tube_with_ink_and_water_solution_on_a_rack.jpg/1280px-Top_view_of_a_lab_technitian_putting_a_test_tube_with_ink_and_water_solution_on_a_rack.jpg": {
 "at": "2026-10-12",
 "label": "c13",
@@ -69946,6 +69952,12 @@
 "label": "c68",
 "pack": "pack-tropical-beaches",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Begonia_bowerae_NBG.jpg/1280px-Begonia_bowerae_NBG.jpg": {
+"at": "2026-10-12",
+"label": "c15",
+"pack": "evpack-autumn-2027",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Bessen_van_een_Ophiopogon_planiscapus_%27Niger%27._28-02-2023._%28d.j.b%29.jpg/1280px-Bessen_van_een_Ophiopogon_planiscapus_%27Niger%27._28-02-2023._%28d.j.b%29.jpg": {
 "at": "2026-10-12",

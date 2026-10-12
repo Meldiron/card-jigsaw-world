@@ -9,7 +9,10 @@
  "fetch_per_topic": 4,
  "author_cap": 2,
  "accent_from_cover": true,
- "sources": ["commons", "openverse"],
+ "sources": [
+  "commons",
+  "openverse"
+ ],
  "quality_deepcat": "Quality images of plants",
  "topics": [
   "Red maple leaves",
@@ -40,15 +43,17 @@
   "Corn harvest"
  ],
  "more_topics": [
-  "Sugar maple autumn",
-  "Autumn leaves on ground",
-  "Virginia creeper autumn",
+  "Pumpkin patch",
+  "Butternut squash",
+  "Indian corn cobs",
+  "Chanterelle mushrooms",
   "Rose hips",
+  "Euonymus europaeus fruit",
+  "Persimmons on tree",
   "Quince fruit",
-  "Walnuts",
-  "Autumn vineyard",
-  "Red deer stag",
-  "Chanterelles",
-  "Persimmons"
+  "Liquidambar autumn leaves",
+  "Roasted chestnuts",
+  "Crab apples",
+  "Pumpkin pie"
  ]
 }
