@@ -1,0 +1,10 @@
+{
+ "id": "ai-oceans", "name": "AI Ocean Dreams", "category": "AI",
+ "description": "Whales, octopuses, coral reefs, crashing waves and sunken ships from text-to-image models. Every picture is AI-generated and in the public domain.",
+ "kind": "ai", "pool": "ai-all", "price": "coins", "priceCoins": 500, "sortOrder": 2012,
+ "target": 24, "per_topic": 1, "fetch_per_topic": 20, "author_cap": 16, "min_short": 900,
+ "sources": ["openverse"], "openverse_category": "photograph", "accent_from_cover": true,
+ "topics": ["AI-generated ocean", "AI-generated sea", "AI-generated beach", "AI-generated underwater", "AI-generated whale", "AI-generated octopus",
+            "AI-generated jellyfish", "AI-generated fish", "AI-generated coral", "AI-generated shark", "AI-generated turtle", "AI-generated dolphin",
+            "AI-generated waves", "AI-generated seashell", "AI-generated lighthouse", "AI-generated crab"]
+}

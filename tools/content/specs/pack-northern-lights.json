@@ -2,12 +2,12 @@
  "id": "pack-northern-lights",
  "name": "Northern Lights",
  "category": "Nature",
- "description": "Aurora borealis over Lapland, Iceland, Norway and Alaska in green, violet and red.",
+ "description": "Aurora borealis over Lapland, Norway, the Kola Peninsula and Canada in green, violet and red.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
  "fetch_per_topic": 4,
- "author_cap": 2,
+ "author_cap": 3,
  "sources": [
   "commons",
   "openverse"
@@ -48,20 +48,14 @@
   "aurora borealis Estonia"
  ],
  "more_topics": [
-  "aurora borealis Finland",
-  "aurora borealis Iceland",
-  "aurora borealis Canada",
-  "aurora borealis Sweden",
-  "northern lights Alaska",
-  "aurora borealis Norway winter",
-  "aurora Lapland reindeer",
-  "aurora borealis",
-  "northern lights",
-  "aurora australis",
-  "aurora Tromsø",
-  "aurora Kirkjufell",
-  "aurora Abisko",
-  "aurora Yellowknife",
-  "aurora Lofoten"
- ]
+  "aurora borealis Greenland",
+  "aurora borealis Scotland",
+  "aurora Finnish Lapland",
+  "aurora borealis Estonia",
+  "aurora borealis Denmark",
+  "aurora borealis Kola Peninsula",
+  "aurora borealis Faroe Islands",
+  "aurora borealis Yukon"
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Aurora_Above_Triangular_Peak1.jpg/1280px-Aurora_Above_Triangular_Peak1.jpg"
 }

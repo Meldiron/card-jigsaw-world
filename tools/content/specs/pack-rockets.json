@@ -2,7 +2,7 @@
  "id": "pack-rockets",
  "name": "Rockets",
  "category": "Space",
- "description": "Saturn V, Falcon, Ariane, Soyuz and Space Shuttle launches, rollouts and night liftoffs.",
+ "description": "Saturn V, Space Shuttle, Falcon, Ariane, Soyuz, SLS and Starship on the pad and climbing into the sky.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
@@ -66,5 +66,6 @@
   "Soyuz night launch",
   "Mercury Redstone launch",
   "Gemini Titan launch"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Falcon_Heavy_Demo_Mission_%2839337245145%29.jpg/1280px-Falcon_Heavy_Demo_Mission_%2839337245145%29.jpg"
 }

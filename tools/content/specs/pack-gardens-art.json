@@ -12,7 +12,7 @@
  "id": "pack-gardens-art",
  "name": "Gardens in Art",
  "category": "Art",
- "description": "Painted gardens by Monet, Klimt, Rusiñol, Sorolla, Liebermann and Le Sidaner, plus Hiroshige's wisteria and iris gardens.",
+ "description": "Painted gardens by Monet, Caillebotte, Klimt, Van Gogh, Sorolla, Rusiñol and Le Sidaner, plus Hiroshige's iris garden and Seurat's watering can.",
  "topics": [
   "Monet garden Giverny painting",
   "Monet Japanese bridge painting",
@@ -51,16 +51,19 @@
   "Beatrice Parsons garden"
  ],
  "more_topics": [
+  "Monet Nymphéas 1907",
+  "Caillebotte roses Petit Gennevilliers",
+  "Klimt Avenue Schloss Kammer Park",
+  "Watering Can Garden at Le Raincy",
+  "Peder Mønsted garden painting",
+  "Sargent Boboli Gardens watercolor",
+  "Henri-Edmond Cross garden painting",
+  "Gustave Loiseau garden painting",
   "formal garden painting 19th century",
-  "rose garden painting",
-  "cottage garden painting",
-  "lily pond painting",
-  "water garden painting",
-  "walled garden painting",
-  "garden watercolor Edwardian",
   "Frederick Carl Frieseke garden painting"
  ],
  "nga_classes": [
   "Painting"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Henri_Le_Sidaner_-_Jardin_a_Hampton-Court.jpg"
 }

@@ -2,7 +2,7 @@
  "id": "pack-planets",
  "name": "Planets",
  "category": "Space",
- "description": "Mercury to Neptune, the Moon and Pluto, from Voyager, Cassini, Juno and New Horizons.",
+ "description": "Mercury to Pluto and their moons, seen by Messenger, Viking, Juno, Cassini, Voyager and New Horizons.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
@@ -70,5 +70,6 @@
   "Makemake",
   "Eris",
   "Jupiter Voyager"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Saturn%27s_North_Polar_Hexagon_%2854445512558%29.png/1280px-Saturn%27s_North_Polar_Hexagon_%2854445512558%29.png"
 }

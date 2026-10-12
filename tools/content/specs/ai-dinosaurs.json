@@ -1,0 +1,9 @@
+{
+ "id": "ai-dinosaurs", "name": "AI Dinosaur Worlds", "category": "AI",
+ "description": "Tyrannosaurs, mammoths and erupting volcanoes from a prehistoric world that only text-to-image models have seen. Every picture is AI-generated and in the public domain.",
+ "kind": "ai", "pool": "ai-all", "price": "tickets", "priceTickets": 2, "sortOrder": 2014,
+ "target": 24, "per_topic": 1, "fetch_per_topic": 20, "author_cap": 16, "min_short": 900,
+ "sources": ["openverse"], "openverse_category": "photograph", "accent_from_cover": true,
+ "topics": ["AI-generated dinosaur", "AI-generated dinosaurs", "AI-generated t-rex", "AI-generated tyrannosaurus", "AI-generated mammoth",
+            "AI-generated prehistoric", "AI-generated jurassic", "AI-generated triceratops", "AI-generated pterodactyl", "AI-generated dragon lizard"]
+}

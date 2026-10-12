@@ -1,0 +1,39 @@
+{
+ "id": "ai-castles",
+ "name": "AI Dream Architecture",
+ "category": "AI",
+ "description": "Pagodas at sunset, floating temples, painted palaces, treehouses and cliffside villas designed by text-to-image models. Every picture is AI-generated and in the public domain.",
+ "kind": "ai",
+ "pool": "ai-all",
+ "price": "coins",
+ "priceCoins": 600,
+ "sortOrder": 2013,
+ "target": 24,
+ "per_topic": 1,
+ "fetch_per_topic": 20,
+ "author_cap": 14,
+ "min_short": 900,
+ "sources": [
+  "openverse"
+ ],
+ "openverse_category": "photograph",
+ "accent_from_cover": true,
+ "topics": [
+  "AI-generated castle",
+  "AI-generated house",
+  "AI-generated cottage",
+  "AI-generated village",
+  "AI-generated temple",
+  "AI-generated church",
+  "AI-generated tower",
+  "AI-generated bridge",
+  "AI-generated treehouse",
+  "AI-generated palace",
+  "AI-generated architecture",
+  "AI-generated building",
+  "AI-generated cabin",
+  "AI-generated mansion",
+  "AI-generated ruins",
+  "AI-generated street"
+ ]
+}

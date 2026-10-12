@@ -9,7 +9,8 @@
  "fetch_per_topic": 4,
  "author_cap": 2,
  "sources": [
-  "commons"
+  "commons",
+  "openverse"
  ],
  "quality_deepcat": "Quality images of landscapes",
  "price": "free",
@@ -55,6 +56,14 @@
   "Hills Normandy bocage",
   "Molise hills",
   "Hills Switzerland Emmental",
-  "Hills Eifel"
+  "Hills Eifel",
+  "Val d Orcia hills",
+  "Palouse hills Washington",
+  "South Moravia rolling fields",
+  "Crete Senesi",
+  "rolling hills Ireland",
+  "Cotswolds hills",
+  "Pienza countryside",
+  "rolling hills green spring"
  ]
 }
