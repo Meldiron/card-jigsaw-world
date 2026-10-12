@@ -1,7 +1,7 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-12T16:37:50",
+"at": "2026-10-12T16:40:34",
 "msg": "Content: checkpoint (189 verified, 3 fixed, 47 audited, 55 pending)",
 "ok": true,
 "pushed": true,
@@ -35,14 +35,14 @@
 },
 "abstract-crystal": {
 "added": 0,
-"at": "2026-10-12T16:29:35",
+"at": "2026-10-12T17:00:21",
 "category": "Abstract",
 "kind": "new",
-"last_step": "newpack",
+"last_step": "reject 10 weak",
 "name": "Crystal Macro",
 "puzzles": 0,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "abstract-fluid-ink": {
 "added": 23,
@@ -734,8 +734,8 @@
 },
 "daily-2025": {
 "added": 0,
-"at": "2026-10-12T16:17:29",
-"last_step": "pool 66 usable",
+"at": "2026-10-12T17:06:58",
+"last_step": "pool 109 usable",
 "puzzles": null,
 "removed": 0,
 "status": "pending"
@@ -910,10 +910,10 @@
 },
 "daily-2026-03": {
 "added": 0,
-"at": "2026-10-12T16:39:48",
+"at": "2026-10-12T17:07:28",
 "category": "Daily",
 "kind": "daily",
-"last_step": "reject 4 similar",
+"last_step": "reject 1 similar",
 "name": "March 2026",
 "puzzles": null,
 "removed": 0,
@@ -1046,23 +1046,25 @@
 },
 "evpack-autumn-2027": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T16:45:27",
 "category": "Event",
 "kind": "event",
+"last_step": "reject 1 similar",
 "name": "Autumn Equinox",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "evpack-beach-day-2027": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T16:45:49",
 "category": "Event",
 "kind": "event",
+"last_step": "reject 1 quality",
 "name": "National Beach Day",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "evpack-bean-day-2027": {
 "added": 25,
@@ -1120,23 +1122,25 @@
 },
 "evpack-cat-day-2027": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T16:46:12",
 "category": "Event",
 "kind": "event",
+"last_step": "reject 2 similar",
 "name": "International Cat Day",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "evpack-cheeseburger-2027": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T16:46:29",
 "category": "Event",
 "kind": "event",
+"last_step": "reject 1 weak",
 "name": "National Cheeseburger Day",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "evpack-childrens-book-2027": {
 "added": 23,
@@ -1221,14 +1225,16 @@
 "status": "verified"
 },
 "evpack-croissant-2027": {
-"added": 0,
-"at": "2026-10-12T02:04:57",
+"added": 22,
+"at": "2026-10-12T16:58:40",
 "category": "Event",
+"issues": 0,
 "kind": "event",
+"last_step": "verify",
 "name": "National Croissant Day",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 12,
+"status": "verified"
 },
 "evpack-dance-2027": {
 "added": 22,
@@ -1268,13 +1274,14 @@
 },
 "evpack-dog-day-2027": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T16:46:40",
 "category": "Event",
 "kind": "event",
+"last_step": "reject 1 weak",
 "name": "International Dog Day",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "evpack-earth-day-2027": {
 "added": 25,
@@ -1379,15 +1386,16 @@
 "status": "verified"
 },
 "evpack-friendship-2027": {
-"added": 0,
-"at": "2026-10-12T16:28:44",
+"added": 24,
+"at": "2026-10-12T17:06:08",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "reject 3 similar",
+"last_step": "verify",
 "name": "International Day of Friendship",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 14,
+"status": "verified"
 },
 "evpack-fries-2027": {
 "added": 21,
@@ -1403,13 +1411,14 @@
 },
 "evpack-grandparents-2027": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T16:46:52",
 "category": "Event",
 "kind": "event",
+"last_step": "reject 4 weak",
 "name": "Grandparents Day",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "evpack-halloween-2026": {
 "added": 22,
@@ -1469,13 +1478,14 @@
 },
 "evpack-heart-day-2027": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T16:47:07",
 "category": "Event",
 "kind": "event",
+"last_step": "reject 6 weak",
 "name": "World Heart Day",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "evpack-hot-tea-2027": {
 "added": 22,
@@ -1527,13 +1537,14 @@
 },
 "evpack-literacy-2027": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T16:47:16",
 "category": "Event",
 "kind": "event",
+"last_step": "reject 1 quality",
 "name": "International Literacy Day",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "evpack-love-your-pet-2027": {
 "added": 0,
@@ -1557,10 +1568,10 @@
 },
 "evpack-may-day-2027": {
 "added": 0,
-"at": "2026-10-12T16:20:08",
+"at": "2026-10-12T17:06:28",
 "category": "Event",
 "kind": "event",
-"last_step": "reject 14 quality",
+"last_step": "pool 92 usable",
 "name": "May Day",
 "puzzles": null,
 "removed": 0,
@@ -1686,13 +1697,14 @@
 },
 "evpack-peace-2027": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T16:47:29",
 "category": "Event",
 "kind": "event",
+"last_step": "reject 4 weak",
 "name": "International Day of Peace",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "evpack-pet-day-2027": {
 "added": 24,
@@ -1708,13 +1720,14 @@
 },
 "evpack-photography-2027": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T16:47:50",
 "category": "Event",
 "kind": "event",
+"last_step": "reject 4 weak",
 "name": "World Photography Day",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "evpack-pi-day-2027": {
 "added": 0,
@@ -1759,25 +1772,28 @@
 "status": "verified"
 },
 "evpack-remembrance-2026": {
-"added": 16,
-"at": "2026-10-12T16:34:52",
+"added": 22,
+"at": "2026-10-12T16:47:50",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "pool 16 usable",
+"last_step": "verify",
 "name": "Remembrance Day",
-"puzzles": 22,
-"removed": 8,
-"status": "audited"
+"puzzles": 24,
+"removed": 12,
+"status": "verified"
 },
 "evpack-remembrance-2027": {
-"added": 0,
-"at": "2026-10-12T02:04:57",
+"added": 24,
+"at": "2026-10-12T16:48:53",
 "category": "Event",
+"issues": 0,
 "kind": "event",
+"last_step": "verify",
 "name": "Remembrance Day",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 10,
+"status": "verified"
 },
 "evpack-smile-day-2026": {
 "added": 29,
@@ -1837,13 +1853,14 @@
 },
 "evpack-tea-day-2026": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T17:04:49",
 "category": "Event",
 "kind": "event",
+"last_step": "pool 41 usable",
 "name": "International Tea Day",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "evpack-tea-day-2027": {
 "added": 0,
@@ -2065,13 +2082,14 @@
 },
 "evpack-youth-2027": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T16:48:05",
 "category": "Event",
 "kind": "event",
+"last_step": "reject 2 weak",
 "name": "International Youth Day",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "land-of-fire-ice": {
 "added": 22,
@@ -2408,15 +2426,16 @@
 "status": "verified"
 },
 "pack-fairytale-villages": {
-"added": 0,
-"at": "2026-10-12T16:33:33",
+"added": 24,
+"at": "2026-10-12T16:43:10",
 "category": "Travel",
+"issues": 0,
 "kind": "library",
-"last_step": "reject 2 off-theme",
+"last_step": "verify",
 "name": "Fairytale Villages",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 20,
+"status": "verified"
 },
 "pack-farm-life": {
 "added": 22,
@@ -2456,10 +2475,10 @@
 },
 "pack-fruit-markets": {
 "added": 0,
-"at": "2026-10-12T16:28:56",
+"at": "2026-10-12T16:58:47",
 "category": "Food",
 "kind": "library",
-"last_step": "reject 1 text",
+"last_step": "reject 1 quality",
 "name": "Fruit Markets",
 "puzzles": null,
 "removed": 0,
@@ -2503,10 +2522,10 @@
 },
 "pack-harbours": {
 "added": 0,
-"at": "2026-10-12T10:36:45",
+"at": "2026-10-12T17:06:09",
 "category": "Travel",
 "kind": "library",
-"last_step": "reject 11 weak",
+"last_step": "pool 43 usable",
 "name": "Harbours",
 "puzzles": null,
 "removed": 0,

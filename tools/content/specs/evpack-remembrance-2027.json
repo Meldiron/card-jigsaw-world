@@ -1,0 +1,8 @@
+{
+ "id": "evpack-remembrance-2027",
+ "name": "Remembrance Day",
+ "category": "Event",
+ "kind": "event",
+ "description": "A limited pack for Remembrance Day (11 November 2027). Red poppies, cornflowers and forget-me-nots, poppy wreaths, war memorials and an eternal flame, playable for one week.",
+ "note": "clone of evpack-remembrance-2026; content comes from `run.sh clone evpack-remembrance-2026 evpack-remembrance-2027`"
+}
