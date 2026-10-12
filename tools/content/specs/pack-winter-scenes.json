@@ -11,7 +11,7 @@
  "id": "pack-winter-scenes",
  "name": "Winter Scenes",
  "category": "Art",
- "description": "Snow in paint and print: Savrasov's rooks, Friedrich's oaks, Fjaestad's hoarfrost, Hiroshige's snowy temples and Koson's winter birds.",
+ "description": "Snow in paint and print: Savrasov's rooks, Gallen-Kallela's Finnish nights, Fjaestad's frozen lakes, Hiroshige's eagle over the snow and Koson's winter birds.",
  "topics": [
   "Alexei Savrasov Rooks Have Returned",
   "Caspar David Friedrich oak in snow",
@@ -53,11 +53,19 @@
   "Vilhelms Purvītis winter painting"
  ],
  "more_topics": [
-  "winter landscape oil painting 19th century",
-  "snow forest painting",
-  "hoarfrost painting",
-  "winter night painting village",
-  "Igor Grabar winter painting",
-  "Lawren Harris"
- ]
+  "cat:Birds in snow in art",
+  "cat:Forests in winter in art",
+  "cat:Trees in art in winter",
+  "cat:Winter landscape paintings",
+  "Shishkin In the Wild North",
+  "Hiroshige Fukagawa Susaki Jumantsubo",
+  "Ito Jakuchu snow",
+  "Pekka Halonen winter",
+  "Joseph Farquharson sheep snow",
+  "cat:Bamboo and snow in art of Japan",
+  "cat:Snow-covered roofs in art",
+  "Gustaf Fjaestad"
+ ],
+ "category_depth": 1,
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/NDL-DC_1303313-Utagawa_Hiroshige-%E5%90%8D%E6%89%80%E6%B1%9F%E6%88%B8%E7%99%BE%E6%99%AF_%E6%B7%B1%E5%B7%9D%E6%B4%B2%E5%B4%8E%E5%8D%81%E4%B8%87%E5%9D%AA-%E5%AE%89%E6%94%BF4-crd.jpg/1280px-NDL-DC_1303313-Utagawa_Hiroshige-%E5%90%8D%E6%89%80%E6%B1%9F%E6%88%B8%E7%99%BE%E6%99%AF_%E6%B7%B1%E5%B7%9D%E6%B4%B2%E5%B4%8E%E5%8D%81%E4%B8%87%E5%9D%AA-%E5%AE%89%E6%94%BF4-crd.jpg"
 }

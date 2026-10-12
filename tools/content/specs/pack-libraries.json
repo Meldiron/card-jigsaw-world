@@ -60,7 +60,17 @@
   "Bibliothèque Mazarine",
   "Library of Parliament Ottawa",
   "Real Gabinete Português de Leitura bookshelves",
-  "Stiftsbibliothek Sankt Gallen"
+  "Stiftsbibliothek Sankt Gallen",
+  "Library of Birmingham",
+  "Kanazawa Umimirai Library",
+  "Biblioteca Vasconcelos",
+  "Salle Ovale Richelieu",
+  "British Museum Reading Room dome",
+  "Wren Library Cambridge",
+  "Stiftsbibliothek Admont",
+  "Bibliotheca Alexandrina reading room",
+  "Mitchell Library Sydney"
  ],
- "quality_deepcat": "Quality images of libraries"
+ "quality_deepcat": "Quality images of libraries",
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Main_reading_room_of_the_Library_of_Congress_-_4.jpg/1280px-Main_reading_room_of_the_Library_of_Congress_-_4.jpg"
 }
