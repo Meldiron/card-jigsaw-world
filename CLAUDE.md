@@ -36,7 +36,8 @@ skills under `.claude/skills/` hold the detailed workflows.
 - **Long multi-agent jobs**: watch the active account's 5-hour usage and pause everything when it
   passes the threshold the owner sets (default 50%): run `tools/dev/usage-watch.sh <LIMIT>` in the
   background; it exits when the limit is crossed, then stop the agents, push a checkpoint, tell the
-  owner. Keep worker counts modest (4 to 5): many parallel downloads saturated the owner's internet.
+  owner. If the owner asks to continue on the other account past a limit, `tools/dev/usage-relay.sh
+  FIRST TARGET` switches with `cswap switch TARGET` when FIRST is crossed. Keep worker counts modest (4 to 5): many parallel downloads saturated the owner's internet.
 - **Installing on the owner's iPhone**: `tools/dev/device.sh` works over Wi-Fi (the phone is paired;
   UDID 00008110-000024E63650401E). `--wipe` reinstalls fresh (onboarding), `--no-build` pushes the
   last build. Release builds keep sound; debug runs are muted.
