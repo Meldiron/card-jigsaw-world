@@ -1,0 +1,12 @@
+{
+ "id": "evpack-biodiversity-2027", "name": "International Day for Biodiversity", "category": "Event",
+ "description": "A limited pack for the International Day for Biological Diversity (22 May 2027). Poison frogs, jewel beetles, butterflies, orchids, fungi, reef fish, birds and mammals from every corner of the living world, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2, "accent_from_cover": true,
+ "sources": ["inat", "commons"],
+ "topics": ["Dendrobates tinctorius", "Agalychnis callidryas", "Morpho peleides", "Chrysochroa fulgidissima", "Ramphastos sulfuratus",
+  "Alcedo atthis", "Furcifer pardalis", "Ailurus fulgens", "Trametes versicolor", "Ophrys apifera",
+  "Nepenthes", "Chromodoris", "Amphiprion ocellaris", "Hippocampus", "Cladonia cristatella",
+  "Hymenopus coronatus", "Papilio machaon", "Pharomachrus mocinno", "Okapia johnstoni", "Drosera rotundifolia",
+  "Coccinella septempunctata", "Bradypus variegatus", "Ambystoma mexicanum", "Acropora"],
+ "more_topics": ["Heliconius", "Tarsius", "Clathrus ruber", "Pomacanthus imperator", "Coracias garrulus"]
+}

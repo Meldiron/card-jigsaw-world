@@ -3221,6 +3221,18 @@
 "pack": "pack-harbours",
 "reason": "weak"
 },
+"https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvZmwyNTg4MjMyMzc2My1pbWFnZS1reWNqbXl3ZS5qcGc.jpg": {
+"at": "2026-10-12",
+"label": "evpack-biodiversity-2027-07",
+"pack": "evpack-biodiversity-2027",
+"reason": "quality"
+},
+"https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvZmwzOTYyMTU1Mzc5NS1pbWFnZS1reWNqNW1kei5qcGc.jpg": {
+"at": "2026-10-12",
+"label": "evpack-biodiversity-2027-08",
+"pack": "evpack-biodiversity-2027",
+"reason": "quality"
+},
 "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvZnJ0ZWVfdGVhX2JhZ3NfcmVkLWltYWdlLWt5YmNtNmJnLmpwZw.jpg": {
 "at": "2026-10-12",
 "label": "evpack-hot-tea-2027-09",
@@ -3232,6 +3244,12 @@
 "label": "pack-steam-trains-10",
 "pack": "pack-steam-trains",
 "reason": "weak"
+},
+"https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvZnJ1bmRlcndhdGVyX2RpdmluZ19zY29ycGlvbnNmaXNjaF8xNjU2NDkyLWltYWdlLWt5Y2Y0MWJjLmpwZw.jpg": {
+"at": "2026-10-12",
+"label": "evpack-biodiversity-2027-09",
+"pack": "evpack-biodiversity-2027",
+"reason": "quality"
 },
 "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvZnJjb2NrdGFpbF90ZXF1aWxhX2Jhcl9wYXJ0eS1pbWFnZS1reWJkeGt2eC5qcGc.jpg": {
 "at": "2026-10-12",
@@ -3262,6 +3280,12 @@
 "label": "pack-istanbul-16",
 "pack": "pack-istanbul",
 "reason": "people"
+},
+"https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvZnJzZWFfbGlmZV9maXNoX2FxdWF0aWMtaW1hZ2Uta3ljZmw1a3guanBn.jpg": {
+"at": "2026-10-12",
+"label": "evpack-biodiversity-2027-10",
+"pack": "evpack-biodiversity-2027",
+"reason": "quality"
 },
 "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvZnJzd2VldF9waW5rX2RlbGljaW91c19zdWdhci1pbWFnZS1reWJja3d4NC5qcGc.jpg": {
 "at": "2026-10-12",
@@ -6323,6 +6347,18 @@
 "pack": "daily-2023-10",
 "reason": "quality"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/297692519/original.jpg": {
+"at": "2026-10-12",
+"label": "evpack-biodiversity-2027-14",
+"pack": "evpack-biodiversity-2027",
+"reason": "similar"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/297692609/original.jpg": {
+"at": "2026-10-12",
+"label": "evpack-biodiversity-2027-13",
+"pack": "evpack-biodiversity-2027",
+"reason": "similar"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/298235191/original.jpeg": {
 "at": "2026-10-12",
 "label": "c866",
@@ -7036,6 +7072,12 @@
 "label": "c2333",
 "pack": "daily-2024-08",
 "reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/339543278/original.jpg": {
+"at": "2026-10-12",
+"label": "evpack-biodiversity-2027-11",
+"pack": "evpack-biodiversity-2027",
+"reason": "similar"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/339629692/original.jpeg": {
 "at": "2026-10-12",
@@ -19697,6 +19739,12 @@
 "pack": "daily-2024-02",
 "reason": "similar"
 },
+"https://live.staticflickr.com/65535/52319075803_a00e8067e9_b.jpg": {
+"at": "2026-10-12",
+"label": "evpack-biodiversity-2027-06",
+"pack": "evpack-biodiversity-2027",
+"reason": "off-theme"
+},
 "https://live.staticflickr.com/65535/52319603481_07524f30c7_b.jpg": {
 "at": "2026-10-12",
 "label": "evpack-un-day-2026-06",
@@ -25043,6 +25091,12 @@
 "pack": "pack-prague",
 "reason": "quality"
 },
+"https://live.staticflickr.com/65535/54094746796_473ab3f4f6_b.jpg": {
+"at": "2026-10-12",
+"label": "c132",
+"pack": "evpack-thanksgiving-2026",
+"reason": "text"
+},
 "https://live.staticflickr.com/65535/54096675189_bc03592293_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-prague-19",
@@ -25178,6 +25232,12 @@
 "https://live.staticflickr.com/65535/54165246688_076b7cb488_b.jpg": {
 "at": "2026-10-12",
 "label": "evpack-thanksgiving-2026-02",
+"pack": "evpack-thanksgiving-2026",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/54165399407_3f4c5f0ca0_b.jpg": {
+"at": "2026-10-12",
+"label": "c107",
 "pack": "evpack-thanksgiving-2026",
 "reason": "people"
 },
@@ -26399,6 +26459,12 @@
 "pack": "pack-cherry-blossom",
 "reason": "people"
 },
+"https://live.staticflickr.com/7464/15957521337_56fdd65be6_b.jpg": {
+"at": "2026-10-12",
+"label": "evpack-biodiversity-2027-01",
+"pack": "evpack-biodiversity-2027",
+"reason": "quality"
+},
 "https://live.staticflickr.com/7468/16143721821_b6383bbeeb_b.jpg": {
 "at": "2026-10-12",
 "label": "evpack-wildlife-2027-03",
@@ -26410,6 +26476,18 @@
 "label": "pack-cocktails-06",
 "pack": "pack-cocktails",
 "reason": "off-theme"
+},
+"https://live.staticflickr.com/7508/15528991924_b77515b25c_b.jpg": {
+"at": "2026-10-12",
+"label": "evpack-biodiversity-2027-05",
+"pack": "evpack-biodiversity-2027",
+"reason": "quality"
+},
+"https://live.staticflickr.com/7514/15957414870_b659397ded_b.jpg": {
+"at": "2026-10-12",
+"label": "evpack-biodiversity-2027-04",
+"pack": "evpack-biodiversity-2027",
+"reason": "quality"
 },
 "https://live.staticflickr.com/7527/16149494725_fc21a456ec_b.jpg": {
 "at": "2026-10-12",
@@ -26428,6 +26506,12 @@
 "label": "pack-farm-life-05",
 "pack": "pack-farm-life",
 "reason": "text"
+},
+"https://live.staticflickr.com/7553/15962615858_d3277a1084_b.jpg": {
+"at": "2026-10-12",
+"label": "evpack-biodiversity-2027-02",
+"pack": "evpack-biodiversity-2027",
+"reason": "quality"
 },
 "https://live.staticflickr.com/7555/15963423579_3cf0c61453_b.jpg": {
 "at": "2026-10-12",
@@ -26697,6 +26781,12 @@
 "at": "2026-10-12",
 "label": "pack-islands-02",
 "pack": "pack-islands",
+"reason": "quality"
+},
+"https://live.staticflickr.com/8653/16150206782_2d1dd6c1bc_b.jpg": {
+"at": "2026-10-12",
+"label": "evpack-biodiversity-2027-03",
+"pack": "evpack-biodiversity-2027",
 "reason": "quality"
 },
 "https://live.staticflickr.com/8669/16143951435_6f18d1eb37_b.jpg": {
@@ -40133,6 +40223,12 @@
 "pack": "pack-caves",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/A_field_of_flint_corn%2C_photo_from_The_Encyclopedia_of_Food_by_Artemas_Ward.jpg/1280px-A_field_of_flint_corn%2C_photo_from_The_Encyclopedia_of_Food_by_Artemas_Ward.jpg": {
+"at": "2026-10-12",
+"label": "c101",
+"pack": "evpack-thanksgiving-2026",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Arches_National_Park_-_Delicate_Arch_%284561611399%29.jpg/1280px-Arches_National_Park_-_Delicate_Arch_%284561611399%29.jpg": {
 "at": "2026-10-12",
 "label": "c79",
@@ -47914,6 +48010,12 @@
 "label": "c28",
 "pack": "pack-sea-cliffs",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Edge_of_Hell_main_entrance_%282025%29.jpg/1280px-Edge_of_Hell_main_entrance_%282025%29.jpg": {
+"at": "2026-10-12",
+"label": "c130",
+"pack": "evpack-thanksgiving-2026",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Gargouille_sur_la_fa%C3%A7ade_est_du_Vieux_logis_%28Le_Mont-Saint-Michel%2C_Manche%2C_France%29.jpg/1280px-Gargouille_sur_la_fa%C3%A7ade_est_du_Vieux_logis_%28Le_Mont-Saint-Michel%2C_Manche%2C_France%29.jpg": {
 "at": "2026-10-12",
@@ -59026,6 +59128,12 @@
 "label": "c99",
 "pack": "evpack-bean-day-2027",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Multicolored_glass_gem_corn.jpg/1280px-Multicolored_glass_gem_corn.jpg": {
+"at": "2026-10-12",
+"label": "c124",
+"pack": "evpack-thanksgiving-2026",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Ordnance_Survey_One-Inch_Sheet_181_Chichester%2C_Published_1970.jpg/1280px-Ordnance_Survey_One-Inch_Sheet_181_Chichester%2C_Published_1970.jpg": {
 "at": "2026-10-12",
@@ -73823,6 +73931,12 @@
 "pack": "abstract-geometric-minimal",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Bacon_cornbread.jpg/1280px-Bacon_cornbread.jpg": {
+"at": "2026-10-12",
+"label": "c136",
+"pack": "evpack-thanksgiving-2026",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Bottle_of_the_Goryeo_period%2C_British_Museum_02.jpg/1280px-Bottle_of_the_Goryeo_period%2C_British_Museum_02.jpg": {
 "at": "2026-10-12",
 "label": "c41",
@@ -78586,6 +78700,12 @@
 "label": "p-416420b4f107",
 "pack": "pack-amsterdam",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Bajcsy-Zsilinszky_Stra%C3%9Fe_73%2C_Hallenspielplatz%2C_2023_Tolna.jpg/1280px-Bajcsy-Zsilinszky_Stra%C3%9Fe_73%2C_Hallenspielplatz%2C_2023_Tolna.jpg": {
+"at": "2026-10-12",
+"label": "c131",
+"pack": "evpack-thanksgiving-2026",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Cenote_Ik_Kil%2C_Yucatan%2C_Dec_2011_-_08.jpg/1280px-Cenote_Ik_Kil%2C_Yucatan%2C_Dec_2011_-_08.jpg": {
 "at": "2026-10-12",
