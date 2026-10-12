@@ -2,7 +2,7 @@
  "id": "pack-tropical-beaches",
  "name": "Tropical Beaches",
  "category": "Oceans",
- "description": "Palm-fringed sand and turquoise shallows in the Maldives, the Caribbean, Thailand and the Seychelles.",
+ "description": "Palm-fringed sand and turquoise shallows in the Seychelles, the Maldives, Thailand, the Philippines and Brazil.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
@@ -62,5 +62,6 @@
   "Cuba beach palms",
   "Sri Lanka beach palms",
   "Kerala beach palms"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/ANSE_SOURCE_D%27ARGENT%2C_APRIL_2013_-_panoramio_%2831%29.jpg/1280px-ANSE_SOURCE_D%27ARGENT%2C_APRIL_2013_-_panoramio_%2831%29.jpg"
 }

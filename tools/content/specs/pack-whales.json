@@ -1,15 +1,16 @@
 {
  "id": "pack-whales",
- "name": "Whales",
+ "name": "Whales & Dolphins",
  "category": "Oceans",
- "description": "Humpbacks, orcas, belugas and sperm whales breaching, spouting and diving.",
+ "description": "Humpbacks, orcas, belugas, gray whales and bottlenose and spinner dolphins in the open sea.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
  "fetch_per_topic": 4,
  "author_cap": 2,
  "sources": [
-  "commons"
+  "commons",
+  "inat"
  ],
  "quality_deepcat": "Quality images of animals",
  "price": "tickets",
@@ -49,14 +50,13 @@
   "sei whale"
  ],
  "more_topics": [
-  "humpback whale Iceland",
-  "whale Azores",
-  "orca Vancouver Island",
-  "humpback whale Australia",
-  "humpback whale Antarctica",
-  "humpback whale Mexico",
-  "beluga Churchill",
-  "whale Sri Lanka",
-  "whale Norway winter"
+  "Tursiops truncatus",
+  "Stenella longirostris",
+  "Delphinus delphis",
+  "bottlenose dolphin jumping",
+  "dolphin underwater",
+  "Stenella frontalis",
+  "Lagenorhynchus obliquidens",
+  "Sousa chinensis"
  ]
 }

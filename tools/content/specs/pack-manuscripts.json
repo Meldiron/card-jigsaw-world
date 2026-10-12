@@ -3,7 +3,7 @@
  "target": 24,
  "per_topic": 1,
  "fetch_per_topic": 5,
- "author_cap": 3,
+ "author_cap": 12,
  "sources": [
   "commons"
  ],
@@ -11,7 +11,7 @@
  "id": "pack-manuscripts",
  "name": "Ceramics & Porcelain",
  "category": "Art",
- "description": "Museum ceramics from Ming blue-and-white and Iznik dishes to Meissen, Sèvres, Satsuma and Art Nouveau vases.",
+ "description": "Museum ceramics from Qing famille rose and Iznik dishes to Meissen, Sèvres, Satsuma, Talavera, Royal Copenhagen and Zsolnay vases.",
  "topics": [
   "Ming dynasty blue and white porcelain vase",
   "Qing dynasty famille rose vase",

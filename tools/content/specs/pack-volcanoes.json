@@ -2,7 +2,7 @@
  "id": "pack-volcanoes",
  "name": "Volcanoes",
  "category": "Nature",
- "description": "Cones, craters and lava flows from Fuji and Etna to Kīlauea and Stromboli.",
+ "description": "Cones, craters, lava and ash plumes from Etna and Stromboli to Mayon, Cotopaxi and Villarrica.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
@@ -61,5 +61,6 @@
   "Tolbachik eruption",
   "Kronotsky volcano",
   "Ijen crater"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Rugido_Volc%C3%A1n_Villarrica.png/1280px-Rugido_Volc%C3%A1n_Villarrica.png"
 }
