@@ -2,7 +2,7 @@
  "id": "pack-iceland-roads",
  "name": "Scenic Roads",
  "category": "Travel",
- "description": "Hairpin passes, coastal highways and empty desert roads, from Trollstigen and the Stelvio to Big Sur and Monument Valley.",
+ "description": "Hairpin passes, canyon roads and coastal drives, from Trollstigen and the Transfăgărășan to the Moki Dugway and the Dades Gorge.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
@@ -66,6 +66,14 @@
   "Silvretta Hochalpenstraße",
   "Gamle Strynefjellsvegen",
   "Tizi n'Tichka",
-  "Passo Pordoi"
+  "Passo Pordoi",
+  "Albulapass",
+  "Lacets de Montvernier",
+  "Vršič Pass",
+  "Beartooth Highway",
+  "Pikes Peak Highway",
+  "Col de la Bonette",
+  "Trail Ridge Road",
+  "Skyline Drive Shenandoah"
  ]
 }

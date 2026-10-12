@@ -3401,6 +3401,12 @@
 "pack": "evpack-independence-day-2027",
 "reason": "quality"
 },
+"https://images.rawpixel.com/image_1300/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvZmw0ODc1NDM5OTQ5MS1pbWFnZS1rdmx0NHJlYS5qcGc.jpg": {
+"at": "2026-10-12",
+"label": "c134",
+"pack": "pack-iceland-roads",
+"reason": "quality"
+},
 "https://images.rawpixel.com/image_1300/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvZmwzMzE4NTE5OTQzNi1pbWFnZS1rdmx0NXQzaC5qcGc.jpg": {
 "at": "2026-10-12",
 "label": "pack-desert-dunes-13",
@@ -16325,6 +16331,12 @@
 "pack": "daily-2024-02",
 "reason": "weak"
 },
+"https://live.staticflickr.com/65535/51773690275_faa842452a_b.jpg": {
+"at": "2026-10-12",
+"label": "c136",
+"pack": "pack-iceland-roads",
+"reason": "quality"
+},
 "https://live.staticflickr.com/65535/51774336271_6777992f12_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-owls-03",
@@ -21640,6 +21652,12 @@
 "label": "pack-prague-16",
 "pack": "pack-prague",
 "reason": "similar"
+},
+"https://live.staticflickr.com/65535/52615202708_59860152cd_b.jpg": {
+"at": "2026-10-12",
+"label": "c130",
+"pack": "pack-iceland-roads",
+"reason": "off-theme"
 },
 "https://live.staticflickr.com/65535/52615512034_fcfec9a337_b.jpg": {
 "at": "2026-10-12",
@@ -38111,6 +38129,12 @@
 "pack": "evpack-water-day-2027",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/4/48/Gamle_Strynefjellsvegen_150608.jpg": {
+"at": "2026-10-12",
+"label": "c117",
+"pack": "pack-iceland-roads",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/4/48/Illustrations_de_Astronomiae_Instauratae_Mechanica_-_%28Non_identifi%C3%A9%29_%3B_Tycho_Brahe%2C_aut._de_texte_-_btv1b2600056p_%2801_of_28%29.jpg": {
 "at": "2026-10-12",
 "label": "c65",
@@ -38543,6 +38567,12 @@
 "pack": "pack-fairytale-villages",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/7/7d/Col_de_la_Bonette_05.jpg": {
+"at": "2026-10-12",
+"label": "c133",
+"pack": "pack-iceland-roads",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/7/7d/Surprised_rabbit.jpg": {
 "at": "2026-10-12",
 "label": "c21",
@@ -38973,6 +39003,12 @@
 "at": "2026-10-12",
 "label": "c355",
 "pack": "ai-robots",
+"reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/b/b0/Trail_Ridge_Road-Beaver_Meadow_Road_-_Formidable_View_from_the_Forest_Canyon_Overlook_-_NARA_-_7722549.jpg": {
+"at": "2026-10-12",
+"label": "c135",
+"pack": "pack-iceland-roads",
 "reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/b/b1/Bicycle_museum_in_tokyo.jpg": {
@@ -43583,6 +43619,12 @@
 "pack": "evpack-mountain-day-2026",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Skyline_Drive_%2813082361735%29.jpg/1280px-Skyline_Drive_%2813082361735%29.jpg": {
+"at": "2026-10-12",
+"label": "c140",
+"pack": "pack-iceland-roads",
+"reason": "similar"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Snowy_Owl_7171.jpg/1280px-Snowy_Owl_7171.jpg": {
 "at": "2026-10-12",
 "label": "c79",
@@ -44812,6 +44854,12 @@
 "label": "c114",
 "pack": "evpack-hot-tea-2027",
 "reason": "text"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Beartooth_Highway_-_Hairpin_Curve_on_the_West_Summit_of_Beartooth_Pass_-_NARA_-_7717204.jpg/1280px-Beartooth_Highway_-_Hairpin_Curve_on_the_West_Summit_of_Beartooth_Pass_-_NARA_-_7717204.jpg": {
+"at": "2026-10-12",
+"label": "c127",
+"pack": "pack-iceland-roads",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Bibury_2015_11.jpg/1280px-Bibury_2015_11.jpg": {
 "at": "2026-10-12",
@@ -48191,6 +48239,12 @@
 "pack": "pack-earth-orbit",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Pordoi_Pass_-_Canazei%2C_Trento%2C_Italy_02_-_August_12%2C_2013_02.jpg/1280px-Pordoi_Pass_-_Canazei%2C_Trento%2C_Italy_02_-_August_12%2C_2013_02.jpg": {
+"at": "2026-10-12",
+"label": "c111",
+"pack": "pack-iceland-roads",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Pork_liver_pate_with_mushrooms%2C_pickled_garlic%2C_and_capers%2C_on_whole_grain_bread_-_Massachusetts.jpg/1280px-Pork_liver_pate_with_mushrooms%2C_pickled_garlic%2C_and_capers%2C_on_whole_grain_bread_-_Massachusetts.jpg": {
 "at": "2026-10-12",
 "label": "c30",
@@ -49354,6 +49408,12 @@
 "label": "c93",
 "pack": "pack-ice-cream",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Grimselpass_Topographischer_Atlas_um_1910.jpg/1280px-Grimselpass_Topographischer_Atlas_um_1910.jpg": {
+"at": "2026-10-12",
+"label": "c103",
+"pack": "pack-iceland-roads",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/KITTEN_BEING_FED_BY_SPOON_-_SPOONFEEDING_A_KITTEN_-_HOW_TO_FEED_A_KITTEN_01.jpg/1280px-KITTEN_BEING_FED_BY_SPOON_-_SPOONFEEDING_A_KITTEN_-_HOW_TO_FEED_A_KITTEN_01.jpg": {
 "at": "2026-10-12",
@@ -51083,6 +51143,12 @@
 "pack": "evpack-forests-2027",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Beartooth_Pass_%28valley%29.jpg/1280px-Beartooth_Pass_%28valley%29.jpg": {
+"at": "2026-10-12",
+"label": "c129",
+"pack": "pack-iceland-roads",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Bonifacio_Corsica.jpg/1280px-Bonifacio_Corsica.jpg": {
 "at": "2026-10-12",
 "label": "c52",
@@ -51719,6 +51785,12 @@
 "pack": "abstract-geometric-minimal",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Lacets-montvernier-4.jpg/1280px-Lacets-montvernier-4.jpg": {
+"at": "2026-10-12",
+"label": "c121",
+"pack": "pack-iceland-roads",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Lavandula_multifida_kz03.jpg/1280px-Lavandula_multifida_kz03.jpg": {
 "at": "2026-10-12",
 "label": "p-a95784234e4e",
@@ -52306,6 +52378,12 @@
 "label": "c05",
 "pack": "evpack-squirrel-2027",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Silvretta_-_Vermuntbach_02.jpg/1280px-Silvretta_-_Vermuntbach_02.jpg": {
+"at": "2026-10-12",
+"label": "c105",
+"pack": "pack-iceland-roads",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Speckled_yellow_orchids_%2828776435745%29.jpg/1280px-Speckled_yellow_orchids_%2828776435745%29.jpg": {
 "at": "2026-10-12",
@@ -52996,6 +53074,12 @@
 "label": "c37",
 "pack": "evpack-pet-day-2027",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Cascade_des_lacets_de_Montvernier_%28%C3%A9t%C3%A9_2015%29.JPG/1280px-Cascade_des_lacets_de_Montvernier_%28%C3%A9t%C3%A9_2015%29.JPG": {
+"at": "2026-10-12",
+"label": "c122",
+"pack": "pack-iceland-roads",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Cave_near_Guilin_1.jpg/1280px-Cave_near_Guilin_1.jpg": {
 "at": "2026-10-12",
@@ -55601,6 +55685,12 @@
 "pack": "pack-jungle",
 "reason": "quality"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Water_fall_on_the_north_side_of_Tizi_n%27Tichka_Pass.JPG/1280px-Water_fall_on_the_north_side_of_Tizi_n%27Tichka_Pass.JPG": {
+"at": "2026-10-12",
+"label": "c112",
+"pack": "pack-iceland-roads",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/20200725_Wildpark_V%C3%B6lklingen_03.jpg/1280px-20200725_Wildpark_V%C3%B6lklingen_03.jpg": {
 "at": "2026-10-12",
 "label": "c05",
@@ -56980,6 +57070,12 @@
 "label": "c163",
 "pack": "abstract-kaleidoscope",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Tizi_Tichka-andreweland-02.jpg/1280px-Tizi_Tichka-andreweland-02.jpg": {
+"at": "2026-10-12",
+"label": "c113",
+"pack": "pack-iceland-roads",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Yachts_sailing_at_Cowes_Week_2012_15.jpg/1280px-Yachts_sailing_at_Cowes_Week_2012_15.jpg": {
 "at": "2026-10-12",
@@ -59679,6 +59775,12 @@
 "at": "2026-10-12",
 "label": "c61",
 "pack": "pack-sunsets",
+"reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Pordoi_Pass_-_Canazei%2C_Trento%2C_Italy_-_August_12%2C_2013_04.jpg/1280px-Pordoi_Pass_-_Canazei%2C_Trento%2C_Italy_-_August_12%2C_2013_04.jpg": {
+"at": "2026-10-12",
+"label": "c109",
+"pack": "pack-iceland-roads",
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Prague_Praha_2014_Holmstad_cafe_Louvre_interior_interi%C3%B8r_1.JPG/1280px-Prague_Praha_2014_Holmstad_cafe_Louvre_interior_interi%C3%B8r_1.JPG": {
@@ -62747,6 +62849,12 @@
 "pack": "pack-rockets",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Silvretta_-_Vermuntbach_01.jpg/1280px-Silvretta_-_Vermuntbach_01.jpg": {
+"at": "2026-10-12",
+"label": "c104",
+"pack": "pack-iceland-roads",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Sphynx_kittens._img_120.jpg/1280px-Sphynx_kittens._img_120.jpg": {
 "at": "2026-10-12",
 "label": "c29",
@@ -64613,6 +64721,12 @@
 "pack": "evpack-food-day-2026",
 "reason": "text"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Colorado_-_Pikes_Peak_-_NARA_-_23936147.jpg/1280px-Colorado_-_Pikes_Peak_-_NARA_-_23936147.jpg": {
+"at": "2026-10-12",
+"label": "c131",
+"pack": "pack-iceland-roads",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Cosmos_sulphureus_of_Kadavoor.jpg/1280px-Cosmos_sulphureus_of_Kadavoor.jpg": {
 "at": "2026-10-12",
 "label": "c28",
@@ -66083,6 +66197,12 @@
 "pack": "pack-caves",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Hastula_albula_01.jpg/1280px-Hastula_albula_01.jpg": {
+"at": "2026-10-12",
+"label": "c118",
+"pack": "pack-iceland-roads",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Healthy_meal_prep_with_fresh_salad%2C_fruits%2C_and_planning_tools_displayed_on_a_table.jpg/1280px-Healthy_meal_prep_with_fresh_salad%2C_fruits%2C_and_planning_tools_displayed_on_a_table.jpg": {
 "at": "2026-10-12",
 "label": "c01",
@@ -66400,6 +66520,12 @@
 "label": "c90",
 "pack": "evpack-health-2027",
 "reason": "text"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Early_Spring_on_Skyline_Drive_%2833741630473%29.jpg/1280px-Early_Spring_on_Skyline_Drive_%2833741630473%29.jpg": {
+"at": "2026-10-12",
+"label": "c137",
+"pack": "pack-iceland-roads",
+"reason": "similar"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Echinops_ritro_%28Azurite%29_%C3%A0_Navour-sur-Grosne_01.jpg/1280px-Echinops_ritro_%28Azurite%29_%C3%A0_Navour-sur-Grosne_01.jpg": {
 "at": "2026-10-12",
@@ -67318,6 +67444,12 @@
 "label": "c50",
 "pack": "pack-rolling-hills",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Periodo_ottomano%2C_tappeto_di_tipo_ushak_a_medaglione%2C_1590_ca._01.jpg/1280px-Periodo_ottomano%2C_tappeto_di_tipo_ushak_a_medaglione%2C_1590_ca._01.jpg": {
+"at": "2026-10-12",
+"label": "p-6e287ce23189",
+"pack": "pack-textiles",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Poplar_hawk-moth_%28Laothoe_populi_populi%29_3.jpg/1280px-Poplar_hawk-moth_%28Laothoe_populi_populi%29_3.jpg": {
 "at": "2026-10-12",
@@ -68542,6 +68674,12 @@
 "label": "c43",
 "pack": "evpack-coffee-2026",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Colorado_-_Pikes_Peak_-_NARA_-_23936149.jpg/1280px-Colorado_-_Pikes_Peak_-_NARA_-_23936149.jpg": {
+"at": "2026-10-12",
+"label": "c132",
+"pack": "pack-iceland-roads",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Drawing%2C_Designs_for_Teapot%2C_Hot_Water_Pitcher%2C_Milk_Pitcher_and_Sugar_Bowl%2C_ca._1825_%28CH_18550959-2%29.jpg/1280px-Drawing%2C_Designs_for_Teapot%2C_Hot_Water_Pitcher%2C_Milk_Pitcher_and_Sugar_Bowl%2C_ca._1825_%28CH_18550959-2%29.jpg": {
 "at": "2026-10-12",
@@ -69857,6 +69995,12 @@
 "pack": "pack-tulip-fields",
 "reason": "quality"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Pordoi_Pass%2C_Canazei%2C_Trento%2C_Italy_-_November_1%2C_2017.jpg/1280px-Pordoi_Pass%2C_Canazei%2C_Trento%2C_Italy_-_November_1%2C_2017.jpg": {
+"at": "2026-10-12",
+"label": "c108",
+"pack": "pack-iceland-roads",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Pura_Taman_Saraswati%2C_Ubud_%2815194218141%29.jpg/1280px-Pura_Taman_Saraswati%2C_Ubud_%2815194218141%29.jpg": {
 "at": "2026-10-12",
 "label": "p-a025b4a378f2",
@@ -70731,6 +70875,12 @@
 "at": "2026-10-12",
 "label": "c19",
 "pack": "pack-pandas",
+"reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Traditional_Moroccan_neckless_in_Tizi%27n_Tichka_pass.JPG/1280px-Traditional_Moroccan_neckless_in_Tizi%27n_Tichka_pass.JPG": {
+"at": "2026-10-12",
+"label": "c115",
+"pack": "pack-iceland-roads",
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Valles_Marineris_and_the_US_-1_%284081334414%29.jpg/1280px-Valles_Marineris_and_the_US_-1_%284081334414%29.jpg": {
@@ -72521,6 +72671,12 @@
 "pack": "pack-harbours",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Beartooth_Highway_-_Runoff_-_NARA_-_7717248.jpg/1280px-Beartooth_Highway_-_Runoff_-_NARA_-_7717248.jpg": {
+"at": "2026-10-12",
+"label": "c128",
+"pack": "pack-iceland-roads",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Bridal_Veil_Falls_%28full-length%29%2C_Havasu_Canyon%2C_Grand_Canyon%2C_ca.1900_%28CHS-4599%29.jpg/1280px-Bridal_Veil_Falls_%28full-length%29%2C_Havasu_Canyon%2C_Grand_Canyon%2C_ca.1900_%28CHS-4599%29.jpg": {
 "at": "2026-10-12",
 "label": "c56",
@@ -73463,6 +73619,12 @@
 "pack": "evpack-moon-day-2027",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Gaschurn-Partenen-view_to_Vermunt_and_Bielerhoehe_and_Silvrettastra%C3%9Fe_%28B_188%29-Vermuntstausee-01ASD.jpg/1280px-Gaschurn-Partenen-view_to_Vermunt_and_Bielerhoehe_and_Silvrettastra%C3%9Fe_%28B_188%29-Vermuntstausee-01ASD.jpg": {
+"at": "2026-10-12",
+"label": "c106",
+"pack": "pack-iceland-roads",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Hummingbird_Hovering_and_Red_Flowers.jpg/1280px-Hummingbird_Hovering_and_Red_Flowers.jpg": {
 "at": "2026-10-12",
 "label": "c1075",
@@ -74158,6 +74320,12 @@
 "label": "c11",
 "pack": "pack-alpine-lakes",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Izlet_na_Vr%C5%A1i%C4%8D_%283625144931%29.jpg/1280px-Izlet_na_Vr%C5%A1i%C4%8D_%283625144931%29.jpg": {
+"at": "2026-10-12",
+"label": "c125",
+"pack": "pack-iceland-roads",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/K%C3%B5pu_tuletorn%2C_K%C3%B5pu%2C_ostrov_Hiiumaa%2C_Estonsko_03.jpg/1280px-K%C3%B5pu_tuletorn%2C_K%C3%B5pu%2C_ostrov_Hiiumaa%2C_Estonsko_03.jpg": {
 "at": "2026-10-12",
@@ -76163,6 +76331,12 @@
 "pack": "daily-2026-05",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/ColduTichka.JPG/1280px-ColduTichka.JPG": {
+"at": "2026-10-12",
+"label": "c114",
+"pack": "pack-iceland-roads",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Green_Tea_Cup_with_Hollandia_milk.jpg/1280px-Green_Tea_Cup_with_Hollandia_milk.jpg": {
 "at": "2026-10-12",
 "label": "c36",
@@ -76378,6 +76552,12 @@
 "label": "c135",
 "pack": "evpack-tea-day-2026",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Gaschurn-Partenen-Vermunt-Bielerhoehe-Silvrettastra%C3%9Fe_%28B_188%29_toll_collect_in_Ganifer-01ASD.jpg/1280px-Gaschurn-Partenen-Vermunt-Bielerhoehe-Silvrettastra%C3%9Fe_%28B_188%29_toll_collect_in_Ganifer-01ASD.jpg": {
+"at": "2026-10-12",
+"label": "c107",
+"pack": "pack-iceland-roads",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Heron%2C_Varadero_beach%2C_Cuba%2C_2025_19_22_54_871000.jpeg/1280px-Heron%2C_Varadero_beach%2C_Cuba%2C_2025_19_22_54_871000.jpeg": {
 "at": "2026-10-12",
@@ -76690,6 +76870,12 @@
 "label": "c32",
 "pack": "pack-doors",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Albulapass-152-Berguen_bis_Passhoehe-Palpuognasee-2006-gje.jpg/1280px-Albulapass-152-Berguen_bis_Passhoehe-Palpuognasee-2006-gje.jpg": {
+"at": "2026-10-12",
+"label": "c119",
+"pack": "pack-iceland-roads",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/B%C3%BCste_Wilheim_Hauff_-_Schloss_Lichtenstein_%28W%C3%BCrttemberg%29.jpg/1280px-B%C3%BCste_Wilheim_Hauff_-_Schloss_Lichtenstein_%28W%C3%BCrttemberg%29.jpg": {
 "at": "2026-10-12",
@@ -78808,6 +78994,12 @@
 "label": "c35",
 "pack": "pack-gardens-art",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Russian_Road_-_Vr%C5%A1i%C4%8D-pas%2C_Slovenia_%288324828671%29.jpg/1280px-Russian_Road_-_Vr%C5%A1i%C4%8D-pas%2C_Slovenia_%288324828671%29.jpg": {
+"at": "2026-10-12",
+"label": "c126",
+"pack": "pack-iceland-roads",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Sail_Amsterdam_-_Veemkade_-_View_East_on_Tall_Ship_Mir_I.jpg/1280px-Sail_Amsterdam_-_Veemkade_-_View_East_on_Tall_Ship_Mir_I.jpg": {
 "at": "2026-10-12",
@@ -83086,6 +83278,12 @@
 "label": "c39",
 "pack": "evpack-mountain-day-2026",
 "reason": "text"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Pordoi_Pass_-_Canazei%2C_Trento%2C_Italy_-_August_12%2C_2013_01.jpg/1280px-Pordoi_Pass_-_Canazei%2C_Trento%2C_Italy_-_August_12%2C_2013_01.jpg": {
+"at": "2026-10-12",
+"label": "c110",
+"pack": "pack-iceland-roads",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Puffin_at_L%C3%A1trabjarg_8.jpg/1280px-Puffin_at_L%C3%A1trabjarg_8.jpg": {
 "at": "2026-10-12",

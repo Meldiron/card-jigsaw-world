@@ -1133,14 +1133,15 @@
 },
 "evpack-biodiversity-2027": {
 "added": 0,
-"at": "2026-10-12T20:07:38",
+"at": "2026-10-12T20:15:56",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "pool 50 usable",
+"last_step": "verify",
 "name": "International Day for Biodiversity",
-"puzzles": null,
+"puzzles": 24,
 "removed": 0,
-"status": "audited"
+"status": "verified"
 },
 "evpack-book-day-2027": {
 "added": 23,
@@ -1967,10 +1968,10 @@
 },
 "evpack-un-day-2026": {
 "added": 0,
-"at": "2026-10-12T20:07:55",
+"at": "2026-10-12T20:15:33",
 "category": "Event",
 "kind": "event",
-"last_step": "reject 2 weak",
+"last_step": "pool 44 usable",
 "name": "United Nations Day",
 "puzzles": null,
 "removed": 0,
@@ -2632,15 +2633,16 @@
 "status": "verified"
 },
 "pack-iceland-roads": {
-"added": 0,
-"at": "2026-10-12T20:08:16",
+"added": 22,
+"at": "2026-10-12T20:16:11",
 "category": "Travel",
+"issues": 0,
 "kind": "library",
-"last_step": "pool 26 usable",
+"last_step": "verify",
 "name": "Iceland Roads",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 22,
+"removed": 16,
+"status": "verified"
 },
 "pack-impressionists": {
 "added": 26,
@@ -3303,15 +3305,16 @@
 "status": "audited"
 },
 "pack-textiles": {
-"added": 22,
-"at": "2026-10-12T20:08:16",
+"added": 23,
+"at": "2026-10-12T20:09:15",
 "category": "Patterns",
+"issues": 0,
 "kind": "library",
-"last_step": "apply",
+"last_step": "verify",
 "name": "Textiles",
 "puzzles": 24,
-"removed": 18,
-"status": "fixed"
+"removed": 19,
+"status": "verified"
 },
 "pack-tiles": {
 "added": 0,
@@ -3451,9 +3454,10 @@
 },
 "pack-winter-scenes": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T20:16:09",
 "category": "Art",
 "kind": "library",
+"last_step": "pool 62 usable",
 "name": "Winter Scenes",
 "puzzles": null,
 "removed": 0,

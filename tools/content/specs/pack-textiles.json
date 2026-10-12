@@ -11,7 +11,7 @@
  "id": "pack-textiles",
  "name": "Textiles",
  "category": "Patterns",
- "description": "Carpets, kilims, ikats, brocades, kente, Kuba cloth, quilts and William Morris prints: woven and printed pattern from around the world.",
+ "description": "Persian and Turkish carpets, Caucasian kilims, Bukhara ikats, kente, kimonos, batik and William Morris prints: woven and printed pattern from around the world.",
  "topics": [
   "William Morris textile design",
   "William Morris Strawberry Thief",
@@ -76,5 +76,6 @@
   "Mamluk carpet",
   "Tibetan rug",
   "Koloman Moser textile"
- ]
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Detailed_section_of_the_Persian_Garden_Carpet%2C_Albert_Hall_Museum.jpg/1280px-Detailed_section_of_the_Persian_Garden_Carpet%2C_Albert_Hall_Museum.jpg"
 }

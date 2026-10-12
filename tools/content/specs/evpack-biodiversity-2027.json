@@ -1,7 +1,7 @@
 {
  "id": "evpack-biodiversity-2027", "name": "International Day for Biodiversity", "category": "Event",
  "description": "A limited pack for the International Day for Biological Diversity (22 May 2027). Poison frogs, jewel beetles, butterflies, orchids, fungi, reef fish, birds and mammals from every corner of the living world, playable for one week.",
- "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2, "accent_from_cover": true,
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2, "accent_from_cover": true, "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/056_Male_Resplendent_quetzal_in_Los_Quetzales_National_Park_Photo_by_Giles_Laurent.jpg/1280px-056_Male_Resplendent_quetzal_in_Los_Quetzales_National_Park_Photo_by_Giles_Laurent.jpg",
  "sources": ["inat", "commons"],
  "topics": ["Dendrobates tinctorius", "Agalychnis callidryas", "Morpho peleides", "Chrysochroa fulgidissima", "Ramphastos sulfuratus",
   "Alcedo atthis", "Furcifer pardalis", "Ailurus fulgens", "Trametes versicolor", "Ophrys apifera",
