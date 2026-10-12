@@ -1,8 +1,8 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-12T23:39:03",
-"msg": "Content: checkpoint (284 verified, 0 fixed, 6 audited, 9 pending)",
+"at": "2026-10-13T00:09:07",
+"msg": "Content: checkpoint (296 verified, 0 fixed, 2 audited, 2 pending)",
 "ok": true,
 "pushed": true,
 "stage": "committed"
@@ -153,6 +153,17 @@
 "removed": 0,
 "status": "verified"
 },
+"abstract-marbling": {
+"added": 23,
+"at": "2026-10-13T00:39:10",
+"category": "Abstract",
+"kind": "new",
+"last_step": "reject 1 similar",
+"name": "Marbling",
+"puzzles": 23,
+"removed": 0,
+"status": "audited"
+},
 "abstract-neon": {
 "added": 28,
 "at": "2026-10-12T22:53:32",
@@ -199,6 +210,18 @@
 "name": "Smoke & Vapour",
 "puzzles": 22,
 "removed": 0,
+"status": "verified"
+},
+"abstract-stained-glass": {
+"added": 25,
+"at": "2026-10-13T00:35:16",
+"category": "Abstract",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "Stained Glass",
+"puzzles": 24,
+"removed": 1,
 "status": "verified"
 },
 "abstract-topographic": {
@@ -1870,15 +1893,16 @@
 "status": "verified"
 },
 "evpack-pizza-2027": {
-"added": 0,
-"at": "2026-10-13T00:08:52",
+"added": 22,
+"at": "2026-10-13T00:24:59",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "pool 16 usable",
+"last_step": "verify",
 "name": "National Pizza Day",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 12,
+"status": "verified"
 },
 "evpack-polar-bear-2027": {
 "added": 23,
@@ -1965,15 +1989,16 @@
 "status": "verified"
 },
 "evpack-st-patricks-2027": {
-"added": 0,
-"at": "2026-10-13T00:08:36",
+"added": 24,
+"at": "2026-10-13T00:16:46",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "pool 29 usable",
+"last_step": "verify",
 "name": "St Patrick's Day",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 23,
+"removed": 15,
+"status": "verified"
 },
 "evpack-star-wars-day-2027": {
 "added": 17,
@@ -2108,14 +2133,16 @@
 "status": "verified"
 },
 "evpack-valentines-2027": {
-"added": 0,
-"at": "2026-10-12T02:04:57",
+"added": 23,
+"at": "2026-10-13T00:26:46",
 "category": "Event",
+"issues": 0,
 "kind": "event",
+"last_step": "verify",
 "name": "Valentine's Day",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 13,
+"status": "verified"
 },
 "evpack-vegan-2026": {
 "added": 17,
@@ -2178,16 +2205,16 @@
 "status": "verified"
 },
 "evpack-wetlands-2027": {
-"added": 0,
-"at": "2026-10-13T00:08:26",
+"added": 20,
+"at": "2026-10-13T00:17:17",
 "category": "Event",
-"issues": 10,
+"issues": 0,
 "kind": "event",
-"last_step": "pool 41 usable",
+"last_step": "verify",
 "name": "World Wetlands Day",
-"puzzles": 14,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 10,
+"status": "verified"
 },
 "evpack-wildlife-2027": {
 "added": 21,

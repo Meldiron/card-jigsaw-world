@@ -2,7 +2,7 @@
  "id": "evpack-pizza-2027",
  "name": "National Pizza Day",
  "category": "Event",
- "description": "A limited pack for National Pizza Day (9 February 2027). Margherita, pepperoni, deep dish, calzone, wood-fired ovens and pizza dough, playable for one week.",
+ "description": "A limited pack for National Pizza Day (9 February 2027). Neapolitan margherita, pepperoni, Detroit and Sicilian squares, calzone, pizza fritta, pinsa, lahmacun, mozzarella and oregano, playable for one week.",
  "kind": "event",
  "target": 24,
  "per_topic": 1,
@@ -51,6 +51,11 @@
   "fresh tomatoes",
   "olive",
   "rocket pizza",
-  "pizza slice"
- ]
+  "pizza slice",
+  "lahmacun",
+  "pinsa",
+  "Hawaiian pizza",
+  "burrata"
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Pizza_Napoletana_%2833247617972%29.jpg/1280px-Pizza_Napoletana_%2833247617972%29.jpg"
 }

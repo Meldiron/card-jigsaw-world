@@ -1,0 +1,23 @@
+[
+ {
+  "table": "puzzles",
+  "id": "daily-2026-08-10",
+  "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/D%C3%BCrnstein_Burgruine_20211024_02.jpg/1280px-D%C3%BCrnstein_Burgruine_20211024_02.jpg",
+  "kind": "puzzle",
+  "error": "HTTP Error 429: Your bot is making too many requests. Please reduce your request rate or contact bot-traffic@wikimedia.org (f263c81)"
+ },
+ {
+  "table": "puzzles",
+  "id": "daily-2026-08-12",
+  "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Iris_im_botanischen_Garten_M%C3%BCnchen-Nymphenburg_23.jpg/1280px-Iris_im_botanischen_Garten_M%C3%BCnchen-Nymphenburg_23.jpg",
+  "kind": "puzzle",
+  "error": "HTTP Error 429: Your bot is making too many requests. Please reduce your request rate or contact bot-traffic@wikimedia.org (f263c81)"
+ },
+ {
+  "table": "puzzles",
+  "id": "daily-2026-08-22",
+  "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Zantedeschia_aethiopica_-_Madeira_01.jpg/1280px-Zantedeschia_aethiopica_-_Madeira_01.jpg",
+  "kind": "puzzle",
+  "error": "HTTP Error 429: Your bot is making too many requests. Please reduce your request rate or contact bot-traffic@wikimedia.org (f263c81)"
+ }
+]

@@ -202,15 +202,21 @@ def migrate(snap, pack=None, workers=4, dry=False):
         api.update_row(table, rid, fields)
         return job
 
-    with ThreadPoolExecutor(max_workers=workers) as ex:
-        futs = {ex.submit(work, j): j for j in jobs}
+    # Wikimedia throttles this machine per client, so its pictures go one at a time on their own
+    # stream; everything else (Flickr, iNaturalist, Picsum, museum CDNs) runs in parallel.
+    wiki = [j for j in jobs if 'wikimedia.org' in j[2]]
+    rest = [j for j in jobs if 'wikimedia.org' not in j[2]]
+    print(f'  {len(rest)} from other hosts in parallel, {len(wiki)} from Wikimedia one at a time', flush=True)
+    with ThreadPoolExecutor(max_workers=workers) as ex, ThreadPoolExecutor(max_workers=1) as wx:
+        futs = {ex.submit(work, j): j for j in rest}
+        futs.update({wx.submit(work, j): j for j in wiki})
         for f in as_completed(futs):
             j = futs[f]
             try:
                 f.result(); done += 1
             except Exception as e:      # keep going; report at the end
                 failures.append((j, str(e)[:160]))
-            if (done + len(failures)) % 100 == 0:
+            if (done + len(failures)) % 50 == 0:
                 print(f'  {done + len(failures)}/{len(jobs)} ({len(failures)} failed)', flush=True)
     print(f'  hosted {done}, failed {len(failures)}')
     for (table, rid, src, kind), err in failures[:40]:

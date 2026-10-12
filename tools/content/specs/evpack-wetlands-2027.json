@@ -2,7 +2,7 @@
  "id": "evpack-wetlands-2027",
  "name": "World Wetlands Day",
  "category": "Event",
- "description": "A limited pack for World Wetlands Day (2 February 2027). Mangroves, reed beds, bogs, lily ponds and the herons, frogs, otters and dragonflies that live in them, playable for one week.",
+ "description": "A limited pack for World Wetlands Day (2 February 2027). Mangroves, swamp cypress, bogs, lily ponds and the herons, spoonbills, caimans and damselflies that live in them, playable for one week.",
  "kind": "event",
  "target": 24,
  "per_topic": 1,
@@ -37,12 +37,12 @@
   "pantanal caiman",
   "wetland boardwalk reeds",
   "bulrush typha",
-  "spoonbill wading",
+  "Eurasian spoonbill",
   "swamp cypress knees",
   "reed warbler",
-  "moorhen",
-  "newt pond",
-  "damselfly blue"
+  "common moorhen",
+  "great crested newt",
+  "azure damselfly"
  ],
  "more_topics": [
   "heron in reeds",

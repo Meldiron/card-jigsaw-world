@@ -2,7 +2,7 @@
  "id": "evpack-st-patricks-2027",
  "name": "St Patrick's Day",
  "category": "Event",
- "description": "A limited pack for St Patrick's Day (17 March 2027). Shamrocks, the Cliffs of Moher, green Irish hills, Celtic crosses and knotwork, round towers and thatched cottages, playable for one week.",
+ "description": "A limited pack for St Patrick's Day (17 March 2027). Shamrocks, the Cliffs of Moher, Celtic crosses and round towers, the Rock of Cashel, Kylemore Abbey, thatched cottages, Georgian doors and soda bread, playable for one week.",
  "kind": "event",
  "target": 24,
  "per_topic": 1,
@@ -48,5 +48,6 @@
   "book of kells library",
   "dingle peninsula"
  ],
- "accent_from_cover": true
+ "accent_from_cover": true,
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Four_Leaf_Clover_%287258825680%29.jpg/1280px-Four_Leaf_Clover_%287258825680%29.jpg"
 }

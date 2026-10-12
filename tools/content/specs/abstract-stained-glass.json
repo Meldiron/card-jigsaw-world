@@ -2,7 +2,7 @@
  "id": "abstract-stained-glass",
  "name": "Stained Glass",
  "category": "Abstract",
- "description": "Abstract and geometric stained glass: leaded colour fields, Prairie-style art glass and dalle de verre.",
+ "description": "Abstract church windows, Richter's colour squares in Cologne, Leeds' arcade canopy and glass domes and skylights: light through coloured glass.",
  "kind": "abstract",
  "price": "coins",
  "priceCoins": 700,
@@ -16,7 +16,7 @@
  "commons_quality": true,
  "per_topic": 2,
  "fetch_per_topic": 5,
- "author_cap": 3,
+ "author_cap": 5,
  "topics": [
   "cat:Dalle de verre",
   "cat:Stained glass in concrete in Germany",
@@ -45,5 +45,18 @@
  ],
  "category_depth": 1,
  "category_limit": 200,
- "openverse_category": "photograph"
+ "openverse_category": "photograph",
+ "more_topics": [
+  "cat:Abstract stained-glass windows",
+  "cat:Abstract stained-glass windows in France",
+  "cat:Abstract stained-glass windows in Germany",
+  "cat:Abstract stained glasses",
+  "cat:Richter window in the Cologne Cathedral",
+  "cat:Johannes Schreiter",
+  "cat:Georg Meistermann",
+  "cat:Quality images of stained glass",
+  "cat:Stained glass ceilings",
+  "cat:Stained glass domes"
+ ],
+ "cover": "https://fra.cloud.appwrite.io/v1/storage/buckets/puzzle-images/files/p9b4571118c7e43d4c2c6a684c421787ab9e/view?project=6acb4de5003e38d5ebd9"
 }
