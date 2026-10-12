@@ -2,11 +2,12 @@
  "id": "evpack-bee-day-2027", "name": "World Bee Day", "category": "Event",
  "description": "A limited pack for World Bee Day (20 May 2027). Honey bees, bumblebees and solitary bees, honeycomb, hives and skeps, and the flowers bees feed on, playable for one week.",
  "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2, "accent_from_cover": true,
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Apis_mellifera_carnica_drone_aborning.jpg/1280px-Apis_mellifera_carnica_drone_aborning.jpg",
  "sources": ["commons"],
  "topics": ["Apis mellifera carnica", "Bombus lapidarius", "Osmia bicornis", "Xylocopa violacea", "Anthidium manicatum",
   "Andrena fulva", "Amegilla cingulata", "Agapostemon",
   "Honeycomb", "Honey jar", "Honey dipper", "Beehive frame with bees", "Bee skep", "Insect hotel",
-  "Slovenian beehouse", "Colourful beehives apiary", "Beeswax candles", "Comb honey", "Bee swarm",
+  "Čebelnjak", "Beehives", "Beeswax candles", "Comb honey", "Bee swarm",
   "Phacelia tanacetifolia", "Trifolium pratense", "Tilia cordata flowers", "Borago officinalis", "Helianthus annuus"],
  "more_topics": ["Bombus terrestris", "Calluna vulgaris", "Buckwheat field", "Queen cell honeybee", "Wooden beehive", "Bee on dandelion"]
 }

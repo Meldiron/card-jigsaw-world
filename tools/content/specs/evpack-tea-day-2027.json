@@ -1,0 +1,8 @@
+{
+ "id": "evpack-tea-day-2027",
+ "name": "International Tea Day",
+ "category": "Event",
+ "kind": "event",
+ "description": "A limited pack for International Tea Day (15 December 2027). Moroccan mint tea, masala chai, Turkish tea, samovars, Yixing and Japanese teapots, tea gardens from Darjeeling to Sri Lanka, tea flowers and tea eggs, playable for one week.",
+ "note": "clone of evpack-tea-day-2026; content comes from `run.sh clone evpack-tea-day-2026 evpack-tea-day-2027`"
+}

@@ -2,7 +2,7 @@
  "id": "evpack-tea-day-2026",
  "name": "International Tea Day",
  "category": "Event",
- "description": "A limited pack for International Tea Day (15 December 2026). Matcha bowls, tea plantations, teapots from Japan, China, Morocco and Turkey, loose leaves and afternoon tea, playable for one week.",
+ "description": "A limited pack for International Tea Day (15 December 2026). Moroccan mint tea, masala chai, Turkish tea, samovars, Yixing and Japanese teapots, tea gardens from Darjeeling to Sri Lanka, tea flowers and tea eggs, playable for one week.",
  "kind": "event",
  "target": 24,
  "per_topic": 1,
@@ -61,6 +61,10 @@
   "podstakannik",
   "Huxinting Teahouse",
   "matcha powder",
-  "teapot collection"
+  "teapot collection",
+  "Chinese tea set",
+  "sencha",
+  "Japanese teapot",
+  "lemon tea"
  ]
 }

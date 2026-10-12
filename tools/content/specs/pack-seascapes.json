@@ -5,7 +5,8 @@
  "fetch_per_topic": 5,
  "author_cap": 3,
  "sources": [
-  "met"
+  "commons",
+  "nga"
  ],
  "commons_quality": false,
  "id": "pack-seascapes",
@@ -58,7 +59,19 @@
   "Whistler nocturne sea",
   "Thomas Moran sea painting",
   "Carl Locher sea painting",
-  "Laurits Tuxen sea painting"
+  "Laurits Tuxen sea painting",
+  "Anna Boberg Lofoten painting",
+  "Kirchner Fehmarn coast painting",
+  "Georges Lacombe Marine bleue effet de vagues",
+  "Edvard Munch Summer Night by the Beach",
+  "Hiroshige Sea off Kazusa print",
+  "Hiroshige Shichirigahama print",
+  "Hiroshige Izu sea print",
+  "Paul Signac Saint-Tropez painting",
+  "Monet Port-Domois",
+  "Monet Manneporte painting",
+  "Aivazovsky moonlit night painting",
+  "Hiroshige Bishu print sea"
  ],
  "nga_classes": [
   "Painting"

@@ -2,7 +2,7 @@
  "id": "pack-ice-cream",
  "name": "Ice Cream",
  "category": "Food",
- "description": "Gelato counters, sundaes, sorbets, popsicles and frozen treats from Italian kulfi to Korean bingsu.",
+ "description": "Sundaes, sorbets, granita, bingsu, baked Alaska, Spaghettieis and gelato cones, served up in glasses, cups and coupes.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
@@ -44,13 +44,18 @@
   "lemon sorbet"
  ],
  "more_topics": [
+  "granita",
+  "paletas",
+  "lemon sorbet",
   "strawberry ice cream",
   "vanilla ice cream",
-  "coupe Danemark",
-  "Spaghettieis",
-  "ice cream waffle cone",
   "stracciatella gelato",
   "mango sorbet",
-  "melon sorbet"
- ]
+  "affogato",
+  "semifreddo",
+  "coupe glacée",
+  "cassata siciliana",
+  "ice cream scoops bowl"
+ ],
+ "cover": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Amorino_Gelato_Flowers.jpg/1280px-Amorino_Gelato_Flowers.jpg"
 }

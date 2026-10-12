@@ -1,0 +1,12 @@
+{
+ "id": "evpack-bicycle-2027", "name": "World Bicycle Day", "category": "Event",
+ "description": "A limited pack for World Bicycle Day (3 June 2027). Vintage roadsters and penny-farthings, cargo and folding bikes, Dutch bike racks, bells, chains and spoked wheels, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2, "accent_from_cover": true,
+ "sources": ["commons", "openverse"], "openverse_category": "photograph",
+ "topics": ["Penny-farthing", "Vintage bicycle", "Dutch roadster bicycle", "Bicycle with flower basket", "Bicycles Amsterdam canal",
+  "Bicycle parking Amsterdam", "Copenhagen bicycles", "Road racing bicycle", "Fixed-gear bicycle", "Cargo bike bakfiets",
+  "Tandem bicycle", "Brompton folding bicycle", "Mountain bike", "BMX bike", "Draisine Laufmaschine",
+  "Bicycle bell", "Bicycle chain sprocket", "Bicycle wheel spokes", "Brooks leather saddle", "Velib bike sharing station",
+  "Bicycle museum", "Tricycle", "Old bicycle against wall", "Bicycle repair workshop"],
+ "more_topics": ["Bicycle Utrecht", "Kyoto bicycle", "Vintage bicycle headlamp", "Bicycle frame", "Bicycle rack", "Velodrome track"]
+}
