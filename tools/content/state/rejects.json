@@ -38987,6 +38987,12 @@
 "pack": "pack-rolling-hills",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/2/29/Old_mansion_in_Imerovigli.jpg": {
+"at": "2026-10-12",
+"label": "c62",
+"pack": "pack-santorini",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/2/29/Wooden_blocks_on_a_Concrete_shelf_the_Yale_School_of_Architecture%2C_2018.jpg": {
 "at": "2026-10-12",
 "label": "c246",
@@ -39455,6 +39461,12 @@
 "pack": "deep-space",
 "reason": "quality"
 },
+"https://upload.wikimedia.org/wikipedia/commons/5/53/Aerial_tram_Fira_Santorini_06_2017.jpg": {
+"at": "2026-10-12",
+"label": "c12",
+"pack": "pack-santorini",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/5/53/Mangrove_tree_crab%2C_Aratus_pisonii.jpg": {
 "at": "2026-10-12",
 "label": "c73",
@@ -39849,6 +39861,12 @@
 "at": "2026-10-12",
 "label": "c78",
 "pack": "pack-big-cats",
+"reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/7/7b/OiaChurch.jpg": {
+"at": "2026-10-12",
+"label": "c03",
+"pack": "pack-santorini",
 "reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/7/7c/10-10-27%2C_mount_mckinley_-_panoramio.jpg": {
@@ -44039,6 +44057,12 @@
 "pack": "pack-tulip-fields",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Traditional_houses_beneath_the_churches_in_Firostefani%2C_Santorini%2C_Greece_%2834473665406%29.jpg/1280px-Traditional_houses_beneath_the_churches_in_Firostefani%2C_Santorini%2C_Greece_%2834473665406%29.jpg": {
+"at": "2026-10-12",
+"label": "c13",
+"pack": "pack-santorini",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Zadar_-_bar_Cuba_Libre_na_pla%C5%BEi_Kolovare.3.jpg/1280px-Zadar_-_bar_Cuba_Libre_na_pla%C5%BEi_Kolovare.3.jpg": {
 "at": "2026-10-12",
 "label": "c101",
@@ -44314,6 +44338,12 @@
 "label": "c90",
 "pack": "evpack-fathers-day-2027",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Vy_%C3%B6ver_Santorini_SLSA_1150_8994.jpg/1280px-Vy_%C3%B6ver_Santorini_SLSA_1150_8994.jpg": {
+"at": "2026-10-12",
+"label": "c58",
+"pack": "pack-santorini",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/2016_Singapur%2C_Ogrody_botaniczne_%28269%29.jpg/1280px-2016_Singapur%2C_Ogrody_botaniczne_%28269%29.jpg": {
 "at": "2026-10-12",
@@ -45617,6 +45647,12 @@
 "pack": "pack-seascapes",
 "reason": "quality"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/View_of_Caldera_at_Sunset_from_Imerovigli%2C_Santorini.jpg/1280px-View_of_Caldera_at_Sunset_from_Imerovigli%2C_Santorini.jpg": {
+"at": "2026-10-12",
+"label": "c60",
+"pack": "pack-santorini",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/White_Peacock_dance_%287331345858%29.jpg/1280px-White_Peacock_dance_%287331345858%29.jpg": {
 "at": "2026-10-12",
 "label": "c34",
@@ -46012,6 +46048,12 @@
 "label": "c108",
 "pack": "evpack-may-day-2027",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Santorini_12.jpg/1280px-Santorini_12.jpg": {
+"at": "2026-10-12",
+"label": "c42",
+"pack": "pack-santorini",
+"reason": "similar"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Seceda_y_Resciesa.JPG/1280px-Seceda_y_Resciesa.JPG": {
 "at": "2026-10-12",
@@ -46468,6 +46510,12 @@
 "label": "c11",
 "pack": "evpack-book-day-2027",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Fira_Santorini_Greece-3_%2845487422652%29.jpg/1280px-Fira_Santorini_Greece-3_%2845487422652%29.jpg": {
+"at": "2026-10-12",
+"label": "c09",
+"pack": "pack-santorini",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Golden_Retriever_2020_2.jpg/1280px-Golden_Retriever_2020_2.jpg": {
 "at": "2026-10-12",
@@ -50267,6 +50315,12 @@
 "pack": "evpack-vegan-2026",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/07-17-2012_-_Emborio_-_Emporio_-_Santorini_-_Greece_-_19.jpg/1280px-07-17-2012_-_Emborio_-_Emporio_-_Santorini_-_Greece_-_19.jpg": {
+"at": "2026-10-12",
+"label": "c54",
+"pack": "pack-santorini",
+"reason": "similar"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/1790s_period_room_-_23806547952.jpg/1280px-1790s_period_room_-_23806547952.jpg": {
 "at": "2026-10-12",
 "label": "c43",
@@ -51358,6 +51412,12 @@
 "label": "c59",
 "pack": "pack-northern-lights",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Aerial_tram_Fira_Santorini_06_2017_3407.jpg/1280px-Aerial_tram_Fira_Santorini_06_2017_3407.jpg": {
+"at": "2026-10-12",
+"label": "c11",
+"pack": "pack-santorini",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Agricultural_tool_display_in_Chazik_Garden_at_Beit_Rishonim_7943.jpg/1280px-Agricultural_tool_display_in_Chazik_Garden_at_Beit_Rishonim_7943.jpg": {
 "at": "2026-10-12",
@@ -55793,6 +55853,12 @@
 "pack": "pack-deer",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/%CE%9C%CE%B5%CE%B3%CE%B1%CE%BB%CE%BF%CF%87%CF%8E%CF%81%CE%B9_9743.jpg/1280px-%CE%9C%CE%B5%CE%B3%CE%B1%CE%BB%CE%BF%CF%87%CF%8E%CF%81%CE%B9_9743.jpg": {
+"at": "2026-10-12",
+"label": "c27",
+"pack": "pack-santorini",
+"reason": "similar"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/20120102_052209_A.jpg/1280px-20120102_052209_A.jpg": {
 "at": "2026-10-12",
 "label": "c07",
@@ -57797,6 +57863,12 @@
 "pack": "evpack-fathers-day-2027",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Nymphaeum_Decorated_with_Garden_Scenes_-_Pompeii_e_Santorini-_L%27Eternita_e_un_Giorno.jpg/1280px-Nymphaeum_Decorated_with_Garden_Scenes_-_Pompeii_e_Santorini-_L%27Eternita_e_un_Giorno.jpg": {
+"at": "2026-10-12",
+"label": "c57",
+"pack": "pack-santorini",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Padova_juil_09_193_%288188950524%29.jpg/1280px-Padova_juil_09_193_%288188950524%29.jpg": {
 "at": "2026-10-12",
 "label": "c100",
@@ -57905,6 +57977,12 @@
 "pack": "pack-iceland-roads",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Donkeys_of_Santorini_Mule_Path%2C_Fira%2C_Santorini_island_%28Thira%29%2C_Greece.jpg/1280px-Donkeys_of_Santorini_Mule_Path%2C_Fira%2C_Santorini_island_%28Thira%29%2C_Greece.jpg": {
+"at": "2026-10-12",
+"label": "c59",
+"pack": "pack-santorini",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Eissprossenzehner%2C_Schloss_Rothestein%2C_Hessen%2C_Deutschland%2C_IMG_2430_31_32_33_34_35_36.jpg/1280px-Eissprossenzehner%2C_Schloss_Rothestein%2C_Hessen%2C_Deutschland%2C_IMG_2430_31_32_33_34_35_36.jpg": {
 "at": "2026-10-12",
 "label": "c1466",
@@ -58006,6 +58084,12 @@
 "label": "c32",
 "pack": "pack-barcelona",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Santorini%2C_Firostefani_03.jpg/1280px-Santorini%2C_Firostefani_03.jpg": {
+"at": "2026-10-12",
+"label": "c56",
+"pack": "pack-santorini",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Sliced_watermelon_at_ayegbaju_market%2C_osogbo.jpg/1280px-Sliced_watermelon_at_ayegbaju_market%2C_osogbo.jpg": {
 "at": "2026-10-12",
@@ -58931,6 +59015,12 @@
 "pack": "evpack-independence-day-2027",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Cape_Akrotiri_cliff_-_Santorini_-_Greece_-_01.jpg/1280px-Cape_Akrotiri_cliff_-_Santorini_-_Greece_-_01.jpg": {
+"at": "2026-10-12",
+"label": "c33",
+"pack": "pack-santorini",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Cape_Hatteras_Lighthouse_image_2.jpg/1280px-Cape_Hatteras_Lighthouse_image_2.jpg": {
 "at": "2026-10-12",
 "label": "c15",
@@ -59771,6 +59861,12 @@
 "pack": "evpack-art-day-2027",
 "reason": "quality"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/%CE%95%CE%BC%CF%80%CE%BF%CF%81%CE%B5%CE%B9%CF%8C_0740.jpg/1280px-%CE%95%CE%BC%CF%80%CE%BF%CF%81%CE%B5%CE%B9%CF%8C_0740.jpg": {
+"at": "2026-10-12",
+"label": "c46",
+"pack": "pack-santorini",
+"reason": "similar"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Aegolius_funereus_-_Finnish_Museum_of_Natural_History_-_DSC04617.JPG/1280px-Aegolius_funereus_-_Finnish_Museum_of_Natural_History_-_DSC04617.JPG": {
 "at": "2026-10-12",
 "label": "c38",
@@ -60509,6 +60605,12 @@
 "pack": "pack-hot-air-balloons",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Alleyway_and_traditional_blue_Greek_door_in_Pyrgos%2C_Santorini%2C_Greece_%2834129472430%29.jpg/1280px-Alleyway_and_traditional_blue_Greek_door_in_Pyrgos%2C_Santorini%2C_Greece_%2834129472430%29.jpg": {
+"at": "2026-10-12",
+"label": "c39",
+"pack": "pack-santorini",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Border_Collie_in_Sogne.jpg/1280px-Border_Collie_in_Sogne.jpg": {
 "at": "2026-10-12",
 "label": "c61",
@@ -60640,6 +60742,12 @@
 "label": "c36",
 "pack": "pack-misty-forests",
 "reason": "quality"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Oia_-_il_mulino_a_vento_-_panoramio.jpg/1280px-Oia_-_il_mulino_a_vento_-_panoramio.jpg": {
+"at": "2026-10-12",
+"label": "c08",
+"pack": "pack-santorini",
+"reason": "similar"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Orange_peel_fungus_%2815159767555%29.jpg/1280px-Orange_peel_fungus_%2815159767555%29.jpg": {
 "at": "2026-10-12",
@@ -62140,6 +62248,12 @@
 "label": "c85",
 "pack": "pack-ice-cream",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Emporio_%284494571879%29.jpg/1280px-Emporio_%284494571879%29.jpg": {
+"at": "2026-10-12",
+"label": "c45",
+"pack": "pack-santorini",
+"reason": "similar"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Frank_Lloyd_Wright_-_New_York%2C_NY_-_Solomon_R._Guggenheim_Museum_%28R%29.jpg/1280px-Frank_Lloyd_Wright_-_New_York%2C_NY_-_Solomon_R._Guggenheim_Museum_%28R%29.jpg": {
 "at": "2026-10-12",
@@ -65861,6 +65975,12 @@
 "pack": "pack-rice-terraces",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Santorini_100.jpg/1280px-Santorini_100.jpg": {
+"at": "2026-10-12",
+"label": "c37",
+"pack": "pack-santorini",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Smoke_from_Alaska_Fires_%2813469%29.jpg/1280px-Smoke_from_Alaska_Fires_%2813469%29.jpg": {
 "at": "2026-10-12",
 "label": "c46",
@@ -69041,6 +69161,12 @@
 "pack": "pack-nebulae",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/%22Emporio%22_village_-_Santorini%2C_Greece.jpg/1280px-%22Emporio%22_village_-_Santorini%2C_Greece.jpg": {
+"at": "2026-10-12",
+"label": "c44",
+"pack": "pack-santorini",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/%E5%B9%B4%E8%B6%8A%E3%81%97_%283191656000%29.jpg/1280px-%E5%B9%B4%E8%B6%8A%E3%81%97_%283191656000%29.jpg": {
 "at": "2026-10-12",
 "label": "c124",
@@ -69256,6 +69382,12 @@
 "label": "c142",
 "pack": "evpack-tea-day-2026",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/%CE%9A%CE%B1%CF%83%CF%84%CE%AD%CE%BB%CE%B9_%CE%A0%CF%8D%CF%81%CE%B3%CE%BF%CF%85_0873.jpg/1280px-%CE%9A%CE%B1%CF%83%CF%84%CE%AD%CE%BB%CE%B9_%CE%A0%CF%8D%CF%81%CE%B3%CE%BF%CF%85_0873.jpg": {
+"at": "2026-10-12",
+"label": "c26",
+"pack": "pack-santorini",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/018_Greater_flamingo_eating_in_the_Camargue_Photo_by_Giles_Laurent.jpg/1280px-018_Greater_flamingo_eating_in_the_Camargue_Photo_by_Giles_Laurent.jpg": {
 "at": "2026-10-12",
@@ -70510,6 +70642,12 @@
 "label": "c60",
 "pack": "evpack-art-day-2027",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Santorini_92.jpg/1280px-Santorini_92.jpg": {
+"at": "2026-10-12",
+"label": "c35",
+"pack": "pack-santorini",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Seedling_%2850171305152%29.jpg/1280px-Seedling_%2850171305152%29.jpg": {
 "at": "2026-10-12",
@@ -72892,6 +73030,12 @@
 "label": "c107",
 "pack": "pack-snowy-peaks",
 "reason": "quality"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Fira_and_crater_rim_seen_from_the_caldera_-_Santorini_-_Greece_-_04.jpg/1280px-Fira_and_crater_rim_seen_from_the_caldera_-_Santorini_-_Greece_-_04.jpg": {
+"at": "2026-10-12",
+"label": "c10",
+"pack": "pack-santorini",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Flickr_-_moses_namkung_-_Black_Eyed_Peas_5.jpg/1280px-Flickr_-_moses_namkung_-_Black_Eyed_Peas_5.jpg": {
 "at": "2026-10-12",
@@ -78131,6 +78275,12 @@
 "pack": "pack-patagonia",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/%CE%95%CE%BC%CF%80%CE%BF%CF%81%CE%B5%CE%B9%CF%8C_0768.jpg/1280px-%CE%95%CE%BC%CF%80%CE%BF%CF%81%CE%B5%CE%B9%CF%8C_0768.jpg": {
+"at": "2026-10-12",
+"label": "c47",
+"pack": "pack-santorini",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/%D0%92%D1%96%D0%B7%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%B8%D0%B9_%D0%BA%D0%BE%D0%BD%D1%82%D0%B0%D0%BA%D1%82.jpg/1280px-%D0%92%D1%96%D0%B7%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%B8%D0%B9_%D0%BA%D0%BE%D0%BD%D1%82%D0%B0%D0%BA%D1%82.jpg": {
 "at": "2026-10-12",
 "label": "c47",
@@ -78688,6 +78838,12 @@
 "label": "c254",
 "pack": "evpack-universal-childrens-2026",
 "reason": "text"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Timiou_Stafrou_bell_tower%2C_Perissa_1.jpg/1280px-Timiou_Stafrou_bell_tower%2C_Perissa_1.jpg": {
+"at": "2026-10-12",
+"label": "c16",
+"pack": "pack-santorini",
+"reason": "similar"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Truffle_sauce_%2B_chicken_with_colorful_peppers_%22pasta_from_the_wheel%22_-_Kaaskop_2024-12-03.jpg/1280px-Truffle_sauce_%2B_chicken_with_colorful_peppers_%22pasta_from_the_wheel%22_-_Kaaskop_2024-12-03.jpg": {
 "at": "2026-10-12",
@@ -81761,6 +81917,12 @@
 "pack": "evpack-un-day-2026",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Timiou_Stafrou_bell_tower%2C_Perissa_3.jpg/1280px-Timiou_Stafrou_bell_tower%2C_Perissa_3.jpg": {
+"at": "2026-10-12",
+"label": "c18",
+"pack": "pack-santorini",
+"reason": "similar"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Topographic_Map_of_Gale_Crater.jpg/1280px-Topographic_Map_of_Gale_Crater.jpg": {
 "at": "2026-10-12",
 "label": "c241",
@@ -81844,6 +82006,12 @@
 "label": "c43",
 "pack": "pack-portraits",
 "reason": "text"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Church_tower_-_Kamari_-_Santorini_-_Greece_-_04.jpg/1280px-Church_tower_-_Kamari_-_Santorini_-_Greece_-_04.jpg": {
+"at": "2026-10-12",
+"label": "c53",
+"pack": "pack-santorini",
+"reason": "similar"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Didyma_Apollo_Temple_Rotunda_at_front_in_2015_3304.jpg/1280px-Didyma_Apollo_Temple_Rotunda_at_front_in_2015_3304.jpg": {
 "at": "2026-10-12",
@@ -84439,8 +84607,8 @@
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Santorini_94.jpg/1280px-Santorini_94.jpg": {
 "at": "2026-10-12",
-"label": "c84",
-"pack": "pack-sea-cliffs",
+"label": "c36",
+"pack": "pack-santorini",
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Sleeping_longnose_parrotfish_closeup.JPG/1280px-Sleeping_longnose_parrotfish_closeup.JPG": {
@@ -84532,6 +84700,12 @@
 "label": "c14",
 "pack": "pack-sailing",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Bougainvillea_and_blue_%2834515107355%29.jpg/1280px-Bougainvillea_and_blue_%2834515107355%29.jpg": {
+"at": "2026-10-12",
+"label": "c43",
+"pack": "pack-santorini",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Builing_blocks_design-1.jpg/1280px-Builing_blocks_design-1.jpg": {
 "at": "2026-10-12",
@@ -86019,6 +86193,12 @@
 "at": "2026-10-12",
 "label": "c88",
 "pack": "pack-pandas",
+"reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Amoudi_Bay_at_Dusk.jpg/1280px-Amoudi_Bay_at_Dusk.jpg": {
+"at": "2026-10-12",
+"label": "c21",
+"pack": "pack-santorini",
 "reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Amsterdam_-_View_West_on_Blauwbrug_1884_B.de_Greef_%26_W.Springer_II.jpg/1280px-Amsterdam_-_View_West_on_Blauwbrug_1884_B.de_Greef_%26_W.Springer_II.jpg": {
@@ -87953,6 +88133,12 @@
 "pack": "pack-orchids",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Bell_tower_-_Ypapanti_cathedral_-_Fira_-_Santorini_-_Greece_-_01.jpg/1280px-Bell_tower_-_Ypapanti_cathedral_-_Fira_-_Santorini_-_Greece_-_01.jpg": {
+"at": "2026-10-12",
+"label": "c51",
+"pack": "pack-santorini",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Bemberg_Fondation_Toulouse_-_Femme_au_jardin_%28Villa_Arnulphi_%C3%A0_Nice%29_-_Berthe_Morisot_1882_Inv.2113_56x33.jpg/1280px-Bemberg_Fondation_Toulouse_-_Femme_au_jardin_%28Villa_Arnulphi_%C3%A0_Nice%29_-_Berthe_Morisot_1882_Inv.2113_56x33.jpg": {
 "at": "2026-10-12",
 "label": "c77",
@@ -88384,6 +88570,12 @@
 "label": "c25",
 "pack": "pack-autumn-parks",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Santorini_93.jpg/1280px-Santorini_93.jpg": {
+"at": "2026-10-12",
+"label": "c38",
+"pack": "pack-santorini",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Sheep_In_The_Snow_%2825767081757%29.jpg/1280px-Sheep_In_The_Snow_%2825767081757%29.jpg": {
 "at": "2026-10-12",
@@ -89797,8 +89989,8 @@
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Sunset_-_Cape_Akrotiri_-_Santorini_-_Greece_-_01.jpg/1280px-Sunset_-_Cape_Akrotiri_-_Santorini_-_Greece_-_01.jpg": {
 "at": "2026-10-12",
-"label": "c11",
-"pack": "pack-sunsets",
+"label": "c32",
+"pack": "pack-santorini",
 "reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Tea_leaves_3_2017-08-01.jpg/1280px-Tea_leaves_3_2017-08-01.jpg": {
@@ -91114,6 +91306,12 @@
 "label": "c134",
 "pack": "pack-bridges",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Cape_Akrotiri_cliff_-_Santorini_-_Greece_-_02.jpg/1280px-Cape_Akrotiri_cliff_-_Santorini_-_Greece_-_02.jpg": {
+"at": "2026-10-12",
+"label": "c34",
+"pack": "pack-santorini",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Claude_Monet_-_Poplars_%28Autumn%29_II.JPG/1280px-Claude_Monet_-_Poplars_%28Autumn%29_II.JPG": {
 "at": "2026-10-12",
@@ -92716,6 +92914,12 @@
 "label": "c72",
 "pack": "pack-gardens",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Megalochori_847_00%2C_Greece_-_panoramio_%2820%29.jpg/1280px-Megalochori_847_00%2C_Greece_-_panoramio_%2820%29.jpg": {
+"at": "2026-10-12",
+"label": "c30",
+"pack": "pack-santorini",
+"reason": "similar"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Package_of_cherry_vine_tomatoes_by_Waitrose_in_Glasgow.jpg/1280px-Package_of_cherry_vine_tomatoes_by_Waitrose_in_Glasgow.jpg": {
 "at": "2026-10-12",

@@ -1,8 +1,8 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-12T21:38:48",
-"msg": "Content: checkpoint (249 verified, 3 fixed, 29 audited, 16 pending)",
+"at": "2026-10-12T22:08:52",
+"msg": "Content: checkpoint (258 verified, 3 fixed, 26 audited, 10 pending)",
 "ok": true,
 "pushed": true,
 "stage": "committed"
@@ -1342,10 +1342,10 @@
 },
 "evpack-dog-day-2027": {
 "added": 0,
-"at": "2026-10-12T16:46:40",
+"at": "2026-10-12T22:09:36",
 "category": "Event",
 "kind": "event",
-"last_step": "reject 1 weak",
+"last_step": "pool 3 usable",
 "name": "International Dog Day",
 "puzzles": null,
 "removed": 0,
@@ -2148,10 +2148,10 @@
 },
 "evpack-winter-solstice-2026": {
 "added": 0,
-"at": "2026-10-12T22:08:12",
+"at": "2026-10-12T22:09:39",
 "category": "Event",
 "kind": "event",
-"last_step": "reject 5 similar",
+"last_step": "pool 36 usable",
 "name": "Winter Solstice",
 "puzzles": null,
 "removed": 0,
@@ -3016,10 +3016,10 @@
 },
 "pack-pastries": {
 "added": 0,
-"at": "2026-10-12T22:07:27",
+"at": "2026-10-12T22:08:54",
 "category": "Food",
 "kind": "library",
-"last_step": "pool 43 usable",
+"last_step": "pool 66 usable",
 "name": "Pastries",
 "puzzles": null,
 "removed": 0,
@@ -3179,15 +3179,15 @@
 "status": "verified"
 },
 "pack-santorini": {
-"added": 0,
-"at": "2026-10-12T22:08:19",
+"added": 20,
+"at": "2026-10-12T22:11:22",
 "category": "Travel",
 "kind": "library",
-"last_step": "pool 48 usable",
+"last_step": "apply",
 "name": "Santorini",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 23,
+"removed": 17,
+"status": "fixed"
 },
 "pack-scottish-highlands": {
 "added": 0,
