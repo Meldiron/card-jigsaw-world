@@ -1,0 +1,12 @@
+{
+ "id": "evpack-may-day-2027", "name": "May Day", "category": "Event",
+ "description": "A limited pack for May Day (1 May 2027). Bavarian maypoles, lily of the valley, hawthorn, lilac and apple blossom, bluebell woods, tulips and wisteria, and the birds and hares of spring, playable for one week.",
+ "kind": "event", "target": 24, "per_topic": 1, "fetch_per_topic": 4, "author_cap": 2, "accent_from_cover": true,
+ "sources": ["commons"], "quality_deepcat": "Quality images of plants",
+ "topics": ["Maibaum Bavaria", "Maypole", "Lily of the valley", "Hawthorn blossom", "Bluebell wood", "Cowslip Primula veris",
+  "Primula vulgaris", "Lilac blossom", "Apple blossom", "Cherry blossom", "Wisteria", "Laburnum arch",
+  "Keukenhof tulips", "Rhododendron", "Forget-me-not", "Dandelion seed head", "Buttercup meadow", "Cardamine pratensis",
+  "Magnolia blossom", "Rapeseed field", "Bird nest with eggs", "European hare", "Barn swallow", "Blackthorn blossom"],
+ "more_topics": ["Maibaum Oberbayern", "Tulip field", "Pear blossom", "Horse chestnut flowers", "Anemone nemorosa", "Fritillaria meleagris",
+  "Common cuckoo", "Song thrush", "Blue tit nest box", "Lamb in meadow"]
+}

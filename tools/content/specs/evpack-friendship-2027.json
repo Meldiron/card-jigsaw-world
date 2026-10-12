@@ -9,7 +9,10 @@
  "fetch_per_topic": 4,
  "author_cap": 2,
  "accent_from_cover": true,
- "sources": ["commons", "openverse"],
+ "sources": [
+  "commons",
+  "openverse"
+ ],
  "topics": [
   "Friendship bracelets",
   "Picnic basket",
@@ -39,15 +42,15 @@
   "Jigsaw puzzle pieces"
  ],
  "more_topics": [
-  "Two teddy bears",
+  "Meerkat family",
+  "Mute swan couple",
+  "Elephant family",
+  "Ducklings",
+  "Oxpecker on giraffe",
+  "Cattle egret on cattle",
+  "Cupcakes",
   "Lemonade jug",
   "Treehouse",
-  "Hammock",
-  "Bunting garden party",
-  "Two wine glasses",
-  "Cupcakes",
-  "Two birds on branch",
-  "Elephants together",
-  "Ducklings in a row"
+  "Teacups"
  ]
 }
