@@ -1,0 +1,8 @@
+{
+ "id": "evpack-food-day-2027",
+ "name": "World Food Day",
+ "category": "Event",
+ "kind": "event",
+ "description": "A limited pack for World Food Day (16 October 2027). Ramen, paella, thali, bibimbap, spice and fish markets, pumpkins and rice terraces from around the world, playable for one week.",
+ "note": "clone of evpack-food-day-2026; content comes from `run.sh clone evpack-food-day-2026 evpack-food-day-2027`"
+}

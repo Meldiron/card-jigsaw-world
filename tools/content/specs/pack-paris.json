@@ -1,0 +1,22 @@
+{
+ "id": "pack-paris",
+ "name": "Paris",
+ "category": "Cities",
+ "description": "The Eiffel Tower, Sainte-Chapelle's glass, Haussmann balconies, covered passages and the domes of Sacré-Cœur and the Invalides.",
+ "kind": "library",
+ "target": 24,
+ "per_topic": 1,
+ "fetch_per_topic": 4,
+ "author_cap": 2,
+ "sources": ["commons"],
+ "topics": [
+  "Eiffel Tower", "Notre-Dame de Paris", "Sacré-Cœur Basilica", "Sainte-Chapelle stained glass",
+  "Louvre Pyramid", "Palais Garnier", "Galeries Lafayette dome", "Musée d'Orsay clock",
+  "Montmartre street", "Panthéon Paris", "Les Invalides dome", "Place des Vosges",
+  "Jardin du Luxembourg", "Colonnes de Buren", "Paris Métro Art Nouveau entrance", "Haussmann building balcony",
+  "Tour Saint-Jacques", "Grand Palais glass roof", "Fondation Louis Vuitton", "Galerie Vivienne",
+  "Canal Saint-Martin", "Rue Crémieux", "Saint-Eustache Paris", "Hôtel de Ville Paris",
+  "Grande Arche La Défense", "Saint-Étienne-du-Mont"
+ ],
+ "more_topics": ["Arc de Triomphe", "Pont Alexandre III", "Passage des Panoramas", "Conciergerie", "Petit Palais", "Paris rooftops", "Le Marais street", "Square du Vert-Galant"]
+}

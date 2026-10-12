@@ -43,3 +43,7 @@ recovered with it before any apply. Later pools ran with the paced fetcher.
 - Pool 118 candidates (after recover); rejected: people 4, text 9, off-theme 25 (museum pots with scale rulers, moorland, mint plants, iced drinks), quality 1, weak 12, similar 3.
 - Added 21: jasmine pearls, samovars, yixing teapot, milk tea cups, hibiscus petals, porcelain cups, green/oolong/white tea leaves, gaiwan, darjeeling cups, tea bag cup, afternoon tea pour.
 - Final count 24, verified.
+
+### evpack-squirrel-2027 (Squirrel Appreciation Day)
+- Resumed at 14 with 12 rejects pending (sign 1, feeder 1, same-photographer red squirrels 10); removed 1 more of the same photographer (similar), keeping one. Candidate rejects: off-theme 9 (acorn woodpeckers, hawks, sea creatures from "flying squirrel", painting), weak 7 (museum mounts, skeleton, illustrations).
+- Added 23 by pick, one per species/scene: Eurasian red x3 (hazelnut, branch, standing), eastern grey x4, fox, black, Indian giant x2, Siberian chipmunk x2, eastern chipmunk, Abert's, Douglas, golden-mantled x2, California ground squirrels, red-bellied x2, American red x2. Final 24, verified.

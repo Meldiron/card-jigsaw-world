@@ -1,8 +1,8 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-12T09:39:37",
-"msg": "Content: batches.json, resume --batch, worker brief",
+"at": "2026-10-12T10:06:53",
+"msg": "Content: checkpoint (29 verified, 4 fixed, 18 audited, 214 pending)",
 "ok": true,
 "pushed": true,
 "stage": "committed"
@@ -77,15 +77,16 @@
 "status": "pending"
 },
 "cozy-kitchen": {
-"added": 0,
-"at": "2026-10-12T09:48:11",
+"added": 16,
+"at": "2026-10-12T10:09:40",
 "category": "Food",
+"issues": 1,
 "kind": "library",
-"last_step": "reject 5 weak",
+"last_step": "apply",
 "name": "Cozy Kitchen",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"puzzles": 24,
+"removed": 20,
+"status": "fixed"
 },
 "daily-2023-01": {
 "added": 28,
@@ -228,9 +229,10 @@
 },
 "daily-2024-01": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:08:41",
 "category": "Daily",
 "kind": "daily",
+"last_step": "pool 28 usable",
 "name": "January 2024",
 "puzzles": null,
 "removed": 0,
@@ -888,25 +890,28 @@
 "status": "pending"
 },
 "evpack-food-day-2026": {
-"added": 24,
-"at": "2026-10-12T10:06:40",
+"added": 35,
+"at": "2026-10-12T10:07:07",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "reject 2 text",
+"last_step": "verify",
 "name": "World Food Day",
-"puzzles": null,
-"removed": 14,
-"status": "audited"
+"puzzles": 24,
+"removed": 25,
+"status": "verified"
 },
 "evpack-food-day-2027": {
-"added": 0,
-"at": "2026-10-12T02:04:57",
+"added": 24,
+"at": "2026-10-12T10:07:29",
 "category": "Event",
+"issues": 0,
 "kind": "event",
+"last_step": "verify",
 "name": "World Food Day",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 14,
+"status": "verified"
 },
 "evpack-forests-2027": {
 "added": 0,
@@ -1307,15 +1312,16 @@
 "status": "verified"
 },
 "evpack-squirrel-2027": {
-"added": 0,
-"at": "2026-10-12T02:45:19",
+"added": 23,
+"at": "2026-10-12T10:08:13",
 "category": "Event",
+"issues": 0,
 "kind": "event",
-"last_step": "pool 81 usable",
+"last_step": "verify",
 "name": "Squirrel Appreciation Day",
-"puzzles": null,
-"removed": 0,
-"status": "pending"
+"puzzles": 24,
+"removed": 13,
+"status": "verified"
 },
 "evpack-st-patricks-2027": {
 "added": 0,
@@ -1890,14 +1896,14 @@
 },
 "pack-farm-life": {
 "added": 0,
-"at": "2026-10-12T03:48:35",
+"at": "2026-10-12T10:06:57",
 "category": "Animals",
 "kind": "library",
-"last_step": "pool 72 usable",
+"last_step": "reject 13 weak",
 "name": "Farm Life",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "pack-foxes": {
 "added": 0,
@@ -2200,13 +2206,14 @@
 },
 "pack-new-york": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:07:10",
 "category": "Cities",
 "kind": "library",
+"last_step": "reject 3 weak",
 "name": "New York",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "pack-night-markets": {
 "added": 0,
@@ -2285,13 +2292,14 @@
 },
 "pack-paris": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:07:38",
 "category": "Cities",
 "kind": "library",
+"last_step": "reject 15 off-theme",
 "name": "Paris",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "pack-parrots": {
 "added": 0,
@@ -2306,13 +2314,14 @@
 },
 "pack-pastries": {
 "added": 0,
-"at": "2026-10-12T02:04:57",
+"at": "2026-10-12T10:08:10",
 "category": "Food",
 "kind": "library",
+"last_step": "reject 3 weak",
 "name": "Pastries",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "pack-patagonia": {
 "added": 0,
