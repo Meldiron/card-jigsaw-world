@@ -15830,3 +15830,36 @@
 {"pack": "pack-clocks", "puzzle": "p-a7944345ec2d", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Le_Mus%C3%A9e_Paul_Dupuy_-_Pendule_de_chemin%C3%A9e_-_vers_1650_-_Isaac_Thuret_Inv.18062.jpg/1280px-Le_Mus%C3%A9e_Paul_Dupuy_-_Pendule_de_chemin%C3%A9e_-_vers_1650_-_Isaac_Thuret_Inv.18062.jpg", "topic": "pendule", "event": "create", "at": "2026-10-13T16:45:55"}
 {"pack": "pack-clocks", "puzzle": "p-7fb04fff7bd2", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Vienna_-_Vintage_Table_or_Mantel_Clock_-_0575.jpg/1280px-Vienna_-_Vintage_Table_or_Mantel_Clock_-_0575.jpg", "topic": "skeleton clock", "event": "create", "at": "2026-10-13T16:45:57"}
 {"pack": "pack-clocks", "puzzle": "p-419a65e692ee", "url": "https://images.metmuseum.org/CRDImages/es/original/DP-897-004.jpg", "topic": "Vienna regulator clock", "event": "create", "at": "2026-10-13T16:45:58"}
+{"pack": "pack-clocks", "puzzle": "p-2c4d1d86f134", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Nieznany_-_Zegar_%C5%9Bcienny_wisz%C4%85cy.jpg/1280px-Nieznany_-_Zegar_%C5%9Bcienny_wisz%C4%85cy.jpg", "topic": "Biedermeier clock", "event": "create", "at": "2026-10-13T16:46:00"}
+{"pack": "pack-clocks", "puzzle": "p-8471f1826def", "url": "https://images.metmuseum.org/CRDImages/es/original/DP-896-001.jpg", "topic": "clock movement gears", "event": "create", "at": "2026-10-13T16:46:02"}
+{"pack": "pack-clocks", "puzzle": "p-053f8795c83a", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Kuckucksuhr.JPG/1280px-Kuckucksuhr.JPG", "topic": "cuckoo clock", "event": "create", "at": "2026-10-13T16:46:04"}
+{"pack": "pack-clocks", "fields": ["blurhash", "coverSourceUrl", "coverUrl", "imageCount"], "event": "pack-update", "at": "2026-10-13T16:46:05"}
+{"puzzle": "p-b93863a8f90e", "title": "Black Forest cuckoo clock", "event": "retitle", "at": "2026-10-13T16:46:36"}
+{"puzzle": "p-f2c515cc2b53", "title": "Rococo table clock", "event": "retitle", "at": "2026-10-13T16:46:38"}
+{"puzzle": "p-4a520c298b8a", "title": "Comtoise pendulum", "event": "retitle", "at": "2026-10-13T16:46:38"}
+{"puzzle": "p-1b86be6c3cf7", "title": "Gilt carriage clock", "event": "retitle", "at": "2026-10-13T16:46:38"}
+{"puzzle": "p-156882bcdcec", "title": "Cuckoo clock, Sankt Goar", "event": "retitle", "at": "2026-10-13T16:46:38"}
+{"puzzle": "p-ca5c7fa9b1b4", "title": "Japanese wadokei", "event": "retitle", "at": "2026-10-13T16:46:39"}
+{"puzzle": "p-658149288a0f", "title": "Lyre clock, Salem", "event": "retitle", "at": "2026-10-13T16:46:39"}
+{"puzzle": "p-77282ad91f42", "title": "Musical bracket clock", "event": "retitle", "at": "2026-10-13T16:46:39"}
+{"puzzle": "p-b978accef733", "title": "Painted Black Forest wall clock", "event": "retitle", "at": "2026-10-13T16:46:40"}
+{"puzzle": "p-6d7f93d647f9", "title": "Crystal portico clock", "event": "retitle", "at": "2026-10-13T16:46:40"}
+{"puzzle": "p-7e6d4756612d", "title": "Biedermeier frame clock in blue", "event": "retitle", "at": "2026-10-13T16:46:40"}
+{"puzzle": "p-29b3b324c344", "title": "Painted longcase dial with a ship", "event": "retitle", "at": "2026-10-13T16:46:40"}
+{"puzzle": "p-fba27b20fc8e", "title": "Empire lyre clock", "event": "retitle", "at": "2026-10-13T16:46:41"}
+{"puzzle": "p-0059827acb74", "title": "Marquetry Jugendstil clock", "event": "retitle", "at": "2026-10-13T16:46:41"}
+{"puzzle": "p-8d672d3798fa", "title": "Carved Black Forest eagle clock", "event": "retitle", "at": "2026-10-13T16:46:41"}
+{"puzzle": "p-8deaf2efa5c6", "title": "Eagle automaton clock", "event": "retitle", "at": "2026-10-13T16:46:42"}
+{"puzzle": "p-48381ba8d7c8", "title": "Swedish cartel clock", "event": "retitle", "at": "2026-10-13T16:46:42"}
+{"puzzle": "p-e38fd61c4a9a", "title": "Bornholm clock dial", "event": "retitle", "at": "2026-10-13T16:46:42"}
+{"puzzle": "p-a7944345ec2d", "title": "Engraved table clock, c. 1650", "event": "retitle", "at": "2026-10-13T16:46:42"}
+{"puzzle": "p-7fb04fff7bd2", "title": "Skeleton clock, Vienna", "event": "retitle", "at": "2026-10-13T16:46:43"}
+{"puzzle": "p-419a65e692ee", "title": "Berthoud longcase regulator", "event": "retitle", "at": "2026-10-13T16:46:43"}
+{"puzzle": "p-2c4d1d86f134", "title": "Gilt frame clock", "event": "retitle", "at": "2026-10-13T16:46:43"}
+{"puzzle": "p-8471f1826def", "title": "Roentgen obelisk clock", "event": "retitle", "at": "2026-10-13T16:46:43"}
+{"puzzle": "p-053f8795c83a", "title": "Carved cuckoo clock", "event": "retitle", "at": "2026-10-13T16:46:44"}
+{"puzzle": "p-156882bcdcec", "author": "Unknown photographer", "event": "author-fix", "at": "2026-10-13T16:46:44"}
+{"puzzle": "p-8d672d3798fa", "author": "Mike Peel", "event": "author-fix", "at": "2026-10-13T16:46:44"}
+{"puzzle": "p-8deaf2efa5c6", "author": "Unknown maker", "event": "author-fix", "at": "2026-10-13T16:46:45"}
+{"puzzle": "p-2c4d1d86f134", "author": "Unknown photographer", "event": "author-fix", "at": "2026-10-13T16:46:45"}
+{"puzzle": "p-053f8795c83a", "author": "da didi", "event": "author-fix", "at": "2026-10-13T16:46:45"}

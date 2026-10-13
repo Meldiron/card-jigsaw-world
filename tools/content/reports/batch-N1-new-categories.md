@@ -21,3 +21,16 @@ Feel free ...") were shortened to the photographer's name, and topic titles were
 | pack-rocky-mountains (Rocky Mountains) | Mountains | 24 | Replaces the planned Rainbow Mountains as the fifth Mountains pack (see below). Two pool rounds (144 candidates); avoided peaks already in Snowy Peaks (Assiniboine, Robson), the Mountain Day event (Grand Teton, Mount Sam, Sunburst) and road shots covered by Scenic Roads; rejected NZ's Mount Hector (same name), a plaque, b&w archive photos, Mount Stephen House interiors, Chester (England) street views, a portrait; verified |
 | pack-rainbow-mountains (Rainbow Mountains) | Mountains | not built | Three pool rounds (126 candidates) gave only about 16 truly striped frames: Vinicunca and Hornocal shots are crowded or flat, the rest are muted tan badlands and canyons that overlap the Canyons pack. Spec and pool kept for a later attempt; no pack row was created. |
 | pack-mountain-autumn (Autumn in the Mountains) | Mountains | 24 | Three pool rounds (114 candidates): English "autumn" searches were thin, so round 2 added fall / Herbst / automne / jesień / 紅葉 topics; rejected hikers, a signpost, close-ups without mountains, park scenes, mineral photos returned for "Telluride"; author_cap kept at 2 (two NARA and two NPS Photo credits); verified |
+| pack-clocks (Antique Clocks) | Vintage | 24 | Chosen over Carousels (two rounds gave only ~17 people-free carousels; riders, operators, signs, watermarks). Domestic clocks only, so no overlap with the tower clocks, pocket watch and chronometer in Antique Globes & Instruments. Rejected 40 figural clocks (gilt figures, cupids, busts, Sèvres nudes, painted porcelain scenes count as people), Prague astronomical clock repeats, b&w record shots, museum rooms; verified |
+| pack-carousels (Carousels) | Vintage | not built | Spec and three pool rounds kept; not needed once Antique Clocks filled the Vintage slot. |
+
+Final audit (`reports/audit-2026-10-13-1647.md`, the 10 new packs): 0 violations, 0 duplicate pairs, 0 cross-pack repeats,
+0 landscape, 0 small; 4 title/author keyword hints, all false positives checked by eye ("Agner north face", the Commons user
+"family picture", "Grandmother's Flower Garden", "Robert Graves Co.").
+
+Process notes for the next worker:
+- A global reject reason (`people`, `text`, `quality`, `duplicate`, `landscape`) on a candidate whose URL is also a live puzzle in
+  another pack makes that pack's next `apply` delete the puzzle. Use `similar`/`off-theme` for "already used elsewhere". Found one
+  pre-existing case: `evpack-food-day-2027` p-fe0a61c6b8de still shows the spice-market photo rejected for people in the 2026 pack.
+- Cooper Hewitt (Smithsonian) scans reach Commons as "(CH 18xxxxxx)" files; they were already in Textiles, Marbling and Ceramics
+  before this batch and are 14 of the 24 Wallpapers. Owner decision needed on whether the Smithsonian exclusion covers them.
