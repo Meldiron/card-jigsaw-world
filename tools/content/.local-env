@@ -1,3 +1,5 @@
-# Session-local settings for run.sh (safe to commit: no secrets). Adjust if the venv moves.
-export CJW_CONTENT_CACHE=/private/tmp/claude-501/-Users-matejbaco-Desktop-card-jigsaw-world/84a5a9d1-99d6-42b6-b2f4-69b0d07f144b/scratchpad/content-cache
-export CJW_PY=/private/tmp/claude-501/-Users-matejbaco-Desktop-card-jigsaw-world/84a5a9d1-99d6-42b6-b2f4-69b0d07f144b/scratchpad/venv/bin/python
+# Machine-local settings for run.sh (safe to commit: no secrets). Persistent, outside the iCloud-synced
+# Desktop: the content cache (image cache, candidate pools, contact sheets, openverse budget) and the
+# Python venv live in ~/.local/share/card-jigsaw-world/. The repo-root .venv is a symlink to that venv.
+export CJW_CONTENT_CACHE="$HOME/.local/share/card-jigsaw-world/content-cache"
+export CJW_PY="$HOME/.local/share/card-jigsaw-world/venv/bin/python"

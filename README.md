@@ -9,10 +9,10 @@ Every puzzle is a photo cut into cards and shuffled on a board. Tap a card and t
 Cards that belong next to each other **snap together anywhere on the board** and move as one group; a card that lands in its true spot **locks** into the picture. Fewer moves earn more stars.
 
 <p align="center">
-  <img src="screenshots/02_home.png" width="200" alt="Home" />
-  <img src="screenshots/09b_game_group.png" width="200" alt="Cards snapped into a group" />
-  <img src="screenshots/11b_complete.png" width="200" alt="Picture complete" />
-  <img src="screenshots/25_game_dark.png" width="200" alt="Game, dark mode" />
+  <img src="docs/images/02_home.png" width="200" alt="Home" />
+  <img src="docs/images/09b_game_group.png" width="200" alt="Cards snapped into a group" />
+  <img src="docs/images/11b_complete.png" width="200" alt="Picture complete" />
+  <img src="docs/images/25_game_dark.png" width="200" alt="Game, dark mode" />
 </p>
 
 ## What is in the game
@@ -37,43 +37,43 @@ Cards that belong next to each other **snap together anywhere on the board** and
 
 | Onboarding | Home | Daily gift | Library |
 |---|---|---|---|
-| ![](screenshots/01b_onboarding_3.png) | ![](screenshots/02_home.png) | ![](screenshots/03_daily_gift.png) | ![](screenshots/04_library.png) |
+| ![](docs/images/01b_onboarding_3.png) | ![](docs/images/02_home.png) | ![](docs/images/03_daily_gift.png) | ![](docs/images/04_library.png) |
 
 | Daily months | This month's calendar | Past month (locked) | Pack |
 |---|---|---|---|
-| ![](screenshots/04b_library_daily.png) | ![](screenshots/04c_daily_month.png) | ![](screenshots/04d_daily_locked.png) | ![](screenshots/05_pack.png) |
+| ![](docs/images/04b_library_daily.png) | ![](docs/images/04c_daily_month.png) | ![](docs/images/04d_daily_locked.png) | ![](docs/images/05_pack.png) |
 
 | Difficulty | Store | Goals | Live events |
 |---|---|---|---|
-| ![](screenshots/06_difficulty.png) | ![](screenshots/12_store.png) | ![](screenshots/15_events.png) | ![](screenshots/15b_events_live.png) |
+| ![](docs/images/06_difficulty.png) | ![](docs/images/12_store.png) | ![](docs/images/15_events.png) | ![](docs/images/15b_events_live.png) |
 
 | Tutorial | Game | Cards snapped into groups | Picture complete |
 |---|---|---|---|
-| ![](screenshots/07_tutorial.png) | ![](screenshots/10_game_progress.png) | ![](screenshots/09b_game_group.png) | ![](screenshots/11b_complete.png) |
+| ![](docs/images/07_tutorial.png) | ![](docs/images/10_game_progress.png) | ![](docs/images/09b_game_group.png) | ![](docs/images/11b_complete.png) |
 
 | Mode picker | Squares | Triangles | Hexagons |
 |---|---|---|---|
-| ![](screenshots/26_difficulty_hexagons.png) | ![](screenshots/27_game_squares.png) | ![](screenshots/27_game_triangles.png) | ![](screenshots/27_game_hexagons.png) |
+| ![](docs/images/26_difficulty_hexagons.png) | ![](docs/images/27_game_squares.png) | ![](docs/images/27_game_triangles.png) | ![](docs/images/27_game_hexagons.png) |
 
 | Achievements | | | |
 |---|---|---|---|
-| ![](screenshots/28_achievements.png) | | | |
+| ![](docs/images/28_achievements.png) | | | |
 
 | Pause | Rewarded offer | Close early | Piggy bank |
 |---|---|---|---|
-| ![](screenshots/11_pause.png) | ![](screenshots/12b_rewarded_offer.png) | ![](screenshots/12c_rewarded_close_dialog.png) | ![](screenshots/14_piggy.png) |
+| ![](docs/images/11_pause.png) | ![](docs/images/12b_rewarded_offer.png) | ![](docs/images/12c_rewarded_close_dialog.png) | ![](docs/images/14_piggy.png) |
 
 | Store | Lucky Wheel | Piggy bank | Events |
 |---|---|---|---|
-| ![](screenshots/12_store.png) | ![](screenshots/13_wheel.png) | ![](screenshots/14_piggy.png) | ![](screenshots/15_events.png) |
+| ![](docs/images/12_store.png) | ![](docs/images/13_wheel.png) | ![](docs/images/14_piggy.png) | ![](docs/images/15_events.png) |
 
 | League | Friends | Profile | Settings |
 |---|---|---|---|
-| ![](screenshots/16_social_league.png) | ![](screenshots/17_social_friends.png) | ![](screenshots/18_profile.png) | ![](screenshots/19_settings.png) |
+| ![](docs/images/16_social_league.png) | ![](docs/images/17_social_friends.png) | ![](docs/images/18_profile.png) | ![](docs/images/19_settings.png) |
 
 | Home (dark) | Pack (dark) | Game (dark) | Account (dark) |
 |---|---|---|---|
-| ![](screenshots/23_home_dark.png) | ![](screenshots/24_pack_dark.png) | ![](screenshots/25_game_dark.png) | ![](screenshots/22_account_dark.png) |
+| ![](docs/images/23_home_dark.png) | ![](docs/images/24_pack_dark.png) | ![](docs/images/25_game_dark.png) | ![](docs/images/22_account_dark.png) |
 
 ## Architecture
 

@@ -74,5 +74,9 @@ store/raw/
 # TestFlight feedback ledger and screenshots (tester emails, keep private)
 store/feedback/
 
-# local Python tooling venv (tools/store, tools/content)
+# local Python tooling venv (tools/store, tools/content); .venv is a symlink to ~/.local/share/card-jigsaw-world/venv
 .venv/
+.venv
+
+# QA simulator captures (tools/dev/qa.sh shots, integration tests). README images live in docs/images/.
+screenshots/
