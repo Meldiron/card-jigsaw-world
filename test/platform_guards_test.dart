@@ -155,7 +155,7 @@ void main() {
       expect(find.textContaining('Free coins: daily quests'), findsOneWidget);
       await tester.drag(find.byType(ListView), const Offset(0, -1500));
       await tester.pumpAndSettle();
-      expect(find.text('Card Jigsaw VIP'), findsOneWidget);
+      expect(find.text('Card Jigsaw World VIP'), findsOneWidget);
       expect(find.text('Available on iPhone'), findsOneWidget);
       expect(find.text(StoreProducts.grant(ProductIds.coins1000).label), findsNothing);
       expect(find.text('Start 7-day free trial'), findsNothing);

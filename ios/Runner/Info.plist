@@ -69,7 +69,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Take a photo to turn it into a card puzzle.</string>
 	<key>CFBundleDisplayName</key>
-	<string>Card Jigsaw</string>
+	<string>Card Jigsaw World</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleURLTypes</key>

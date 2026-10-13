@@ -428,7 +428,7 @@ void main() {
     // Store, then scrolled to the VIP card (also the subscription review shot).
     await push(tester, '/store', ms: 2500);
     await shot(tester, '11_store');
-    await tester.dragUntilVisible(find.text('Card Jigsaw VIP'), find.byType(Scrollable).first, const Offset(0, -300));
+    await tester.dragUntilVisible(find.text('Card Jigsaw World VIP'), find.byType(Scrollable).first, const Offset(0, -300));
     await tester.drag(find.byType(Scrollable).first, const Offset(0, -600));
     await settle(tester, 1200);
     // Start the view at the Hints heading, not halfway through its subtitle.

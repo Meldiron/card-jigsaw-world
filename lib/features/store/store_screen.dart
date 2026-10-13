@@ -199,7 +199,7 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
       return;
     }
     final trial = 'after a ${StoreProducts.vipTrialDays}-day trial';
-    if (!await _sandboxConfirm('Card Jigsaw VIP', productId == ProductIds.vipYearly ? '${StoreProducts.price(ProductIds.vipYearly)} / year $trial' : '${StoreProducts.price(ProductIds.vipMonthly)} / month $trial')) return;
+    if (!await _sandboxConfirm('Card Jigsaw World VIP', productId == ProductIds.vipYearly ? '${StoreProducts.price(ProductIds.vipYearly)} / year $trial' : '${StoreProducts.price(ProductIds.vipMonthly)} / month $trial')) return;
     await ref.read(profileProvider.notifier).setVip(true);
     if (!mounted) return;
     Sfx.instance.win();
@@ -391,7 +391,7 @@ class _VipCard extends StatelessWidget {
                 child: const Icon(AppIcons.vip, color: Brand.coin, size: 24),
               ),
               const SizedBox(width: 12),
-              const Expanded(child: Text('Card Jigsaw VIP', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 19, letterSpacing: -0.3, color: fg))),
+              const Expanded(child: Text('Card Jigsaw World VIP', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 19, letterSpacing: -0.3, color: fg))),
               if (isVip) const Chip2(label: 'Active', icon: CupertinoIcons.checkmark_alt, color: Color(0x22FFFFFF), foreground: fg),
             ],
           ),

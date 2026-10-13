@@ -88,7 +88,7 @@ skills under `.claude/skills/` hold the detailed workflows.
   `integration_test/social_profile_test.dart`, `merge_sheet_test.dart`.
   Quirks: capture is in-app (host `simctl io screenshot` fires too late); uninstall the app before a
   second same-day run (`xcrun simctl uninstall <udid> com.matejbaco.cardjigsawworld`, the daily gift is
-  otherwise already claimed); a stuck "Open in Card Jigsaw?" prompt needs a simulator reboot; started
+  otherwise already claimed); a stuck "Open in Card Jigsaw World?" prompt needs a simulator reboot; started
   puzzles resume directly, so tests needing the difficulty screen open an untouched picture.
 - Board shape harness: `flutter test test/board_widget_test.dart` renders fused-group shapes for all
   modes to `build/board_shapes/`.
