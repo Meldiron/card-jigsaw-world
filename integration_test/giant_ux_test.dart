@@ -236,7 +236,7 @@ void main() {
     await leaveBoard(tester);
     container(tester).read(routerProvider).push('/play/${pictures[0].id}');
     await settle(tester, 6000);
-    await tester.tap(find.textContaining('Continue'), warnIfMissed: false);
+    await tester.tap(find.textContaining('Continue ·'), warnIfMissed: false);
     for (var i = 0; i < 40 && find.byType(BoardWidget).evaluate().isEmpty; i++) {
       await settle(tester, 500);
     }
@@ -309,8 +309,7 @@ void main() {
       frameSeen = true;
       await shot(tester, 'gx_15_frame_complete');
     }
-    await tester.tap(find.byKey(const ValueKey('giant-edges')), warnIfMissed: false);
-    await settle(tester, 400);
+    expect(board(tester).edges, isFalse, reason: 'Edges switches itself off once the frame is complete');
     for (var guard = 0; guard < 400 && !board(tester).state.board.isSolved; guard++) {
       final b = board(tester).state.board;
       final slot = List.generate(b.cells, (i) => i).firstWhere((i) => !b.isLocked(i));

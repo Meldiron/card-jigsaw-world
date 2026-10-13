@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 
@@ -285,6 +286,7 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
   void dispose() {
     widget.zoom?.removeListener(_onZoom);
     _autoPan.dispose();
+    _bandTimer?.cancel();
     super.dispose();
   }
 
@@ -355,8 +357,23 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
   }
 
   void _onZoom() {
-    if (mounted) setState(() {});
+    if (!mounted) return;
+    setState(() {});
+    // The outline step follows the zoom once it rests: changing it rebuilds
+    // every card, which a pinch or a zoom animation must not do on each frame.
+    final band = _bandFor(widget.zoom!.zoom);
+    _bandTimer?.cancel();
+    if (band != _band) {
+      _bandTimer = Timer(const Duration(milliseconds: 180), () {
+        if (mounted) setState(() => _band = _bandFor(widget.zoom!.zoom));
+      });
+    }
   }
+
+  /// Outline step of a zoomed giant board (1 to 4, see [build]).
+  double _band = 1;
+  Timer? _bandTimer;
+  static double _bandFor(double zoom) => zoom < 1.6 ? 1.0 : (zoom < 2.6 ? 2.0 : (zoom < 3.4 ? 3.0 : 4.0));
 
   void _cancelDrag() {
     if (_dragSlot == null) return;
@@ -436,13 +453,14 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
     // Giant boards are scaled up as a whole, so their gutters, frames and
     // outlines stay thin for the close view (at 4x a normal frame would take
     // a third of every card). Outlines also thin out in steps as the player
-    // zooms in, so they read about the same on screen at every zoom (steps,
-    // not every frame, so 300 cards are not rebuilt during a pinch).
+    // zooms in, so they read about the same on screen at every zoom; the step
+    // changes once the zoom rests ([_onZoom]), so 300 cards are not rebuilt
+    // during a pinch.
     if (fine) {
       zoom.viewport = boardSize;
       zoom.fitCell(cell);
     }
-    final band = fine ? (zoom.zoom < 1.6 ? 1.0 : (zoom.zoom < 2.6 ? 2.0 : (zoom.zoom < 3.4 ? 3.0 : 4.0))) : 1.0;
+    final band = fine ? _band : 1.0;
     final gap = widget.cardStyle == CardStyle.classic ? (fine ? math.max(0.8, cell * 0.05) : math.max(6.0, cell * 0.08)) : (fine ? math.max(0.6, cell * 0.035) : 2.0);
     final radius = widget.cardStyle == CardStyle.classic ? (fine ? cell * 0.12 : math.min(18.0, cell * 0.17)) : (fine ? cell * 0.1 : 8.0);
     final strokeScale = fine ? (cell / 56).clamp(0.3, 1.0) / math.pow(band, 0.6) : 1.0;

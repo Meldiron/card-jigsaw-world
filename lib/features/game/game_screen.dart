@@ -640,13 +640,21 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                                                   board: state.board,
                                                   boardSize: Size(w, h),
                                                   zoom: _zoom,
-                                                  width: math.min(116.0, w * 0.3),
+                                                  // Small enough to cover only a few cards in the corner.
+                                                  width: math.min(84.0, w * 0.22),
                                                   selected: state.selected,
                                                   painting: _painting,
                                                 ),
                                               ),
                                             ),
-                                          GiantMilestones(board: state.board, playing: state.status == GameStatus.playing),
+                                          GiantMilestones(
+                                            board: state.board,
+                                            playing: state.status == GameStatus.playing,
+                                            // Every edge card is in place: the filter would only dim the rest.
+                                            onFrame: () {
+                                              if (_edges) setState(() => _edges = false);
+                                            },
+                                          ),
                                         ],
                                       ),
                                     ),

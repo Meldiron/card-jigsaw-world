@@ -287,12 +287,13 @@ void main() {
       final spec = BoardSpec.giantTiers(GameMode.cards).first;
       var board = Board.shuffled(spec, seed: 9);
       late StateSetter set;
+      var frames = 0;
       await tester.pumpWidget(MaterialApp(
         theme: AppTheme.light(),
         home: Scaffold(
           body: StatefulBuilder(builder: (context, s) {
             set = s;
-            return GiantMilestones(board: board, playing: true);
+            return GiantMilestones(board: board, playing: true, onFrame: () => frames++);
           }),
         ),
       ));
@@ -314,6 +315,7 @@ void main() {
       set(() => board = sendHome(board, edge));
       await wait(400);
       expect(find.text('Frame complete'), findsOneWidget);
+      expect(frames, 1, reason: 'the game switches the Edges filter off');
       await wait(3500);
       expect(find.byType(SnackBar), findsNothing);
       set(() => board = sendHome(board, List.generate(board.cells ~/ 2 + 1, (i) => i)));

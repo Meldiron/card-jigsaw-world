@@ -53,7 +53,7 @@ class GiantBoardBar extends StatelessWidget {
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
-                  zoom.zoomed ? '${zoom.zoom.toStringAsFixed(1)}x · two fingers to move' : 'Pinch or double-tap to zoom',
+                  zoom.zoomed ? 'Zoom ${zoom.zoom.toStringAsFixed(1)}x' : 'Pinch or double-tap to zoom',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: c.textSecondary),
@@ -226,7 +226,7 @@ class _MiniBoardPainter extends CustomPainter {
     final grey = Paint()
       ..filterQuality = FilterQuality.low
       ..colorFilter = _grey;
-    final shade = Paint()..color = Colors.black.withValues(alpha: 0.42);
+    final shade = Paint()..color = Colors.black.withValues(alpha: 0.3);
     for (var slot = 0; slot < board.cells; slot++) {
       final locked = board.isLocked(slot);
       final bounds = tiling.cellBounds(slot, boardSize);
@@ -343,9 +343,12 @@ class OffscreenSelection extends StatelessWidget {
 /// Calm milestones on a long board: the frame done (every edge card in
 /// place) and halfway, each shown once per board as a toast.
 class GiantMilestones extends StatefulWidget {
-  const GiantMilestones({super.key, required this.board, required this.playing});
+  const GiantMilestones({super.key, required this.board, required this.playing, this.onFrame});
   final Board board;
   final bool playing;
+
+  /// The frame was just completed (the Edges filter has nothing left to show).
+  final VoidCallback? onFrame;
 
   @override
   State<GiantMilestones> createState() => _GiantMilestonesState();
@@ -388,7 +391,9 @@ class _GiantMilestonesState extends State<GiantMilestones> {
     if (widget.playing && !solved) {
       if (frame && !_frame) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (mounted) showToast(context, 'Frame complete', icon: AppIcons.edges);
+          if (!mounted) return;
+          showToast(context, 'Frame complete', icon: AppIcons.edges);
+          widget.onFrame?.call();
         });
       } else if (half && !_half) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
