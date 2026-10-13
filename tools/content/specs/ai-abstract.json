@@ -6,5 +6,6 @@
  "sources": ["openverse"], "openverse_category": "photograph", "accent_from_cover": true,
  "topics": ["AI-generated abstract", "AI-generated pattern", "AI-generated fractal", "AI-generated texture", "AI-generated colorful",
             "AI-generated geometric", "AI-generated psychedelic", "AI-generated swirl", "AI-generated kaleidoscope", "AI-generated mandala",
-            "AI-generated abstract art", "AI-generated colors"]
+            "AI-generated abstract art", "AI-generated colors"],
+ "more_topics": ["cat:AI-generated abstract art", "cat:AI-generated textures", "AI-generated abstract", "AI-generated fractal", "AI-generated pattern", "AI-generated swirl", "AI-generated kaleidoscope", "AI-generated psychedelic", "AI-generated geometric", "midjourney abstract", "stable diffusion abstract", "dall-e abstract", "ai art abstract", "midjourney fractal", "midjourney pattern", "midjourney colorful", "midjourney geometric"]
 }

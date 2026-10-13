@@ -6,5 +6,6 @@
  "sources": ["openverse"], "openverse_category": "photograph", "accent_from_cover": true,
  "topics": ["AI-generated nebula", "AI-generated cosmos", "AI-generated universe", "AI-generated stars", "AI-generated earth", "AI-generated black hole",
             "AI-generated solar system", "AI-generated comet", "AI-generated eclipse", "AI-generated saturn", "AI-generated outer space",
-            "AI-generated starship", "AI-generated exoplanet", "AI-generated milky way", "AI-generated planets", "AI-generated cosmic"]
+            "AI-generated starship", "AI-generated exoplanet", "AI-generated milky way", "AI-generated planets", "AI-generated cosmic"],
+ "more_topics": ["cat:AI-generated astronomy", "cat:AI-generated works set on the Moon", "cat:AI-generated aliens", "AI-generated galaxy", "AI-generated spaceship", "AI-generated alien planet", "AI-generated space station", "AI-generated rocket", "AI-generated ringed planet", "AI-generated supernova", "AI-generated starfield", "AI-generated asteroid", "AI-generated planet", "midjourney space", "midjourney planet", "midjourney galaxy", "midjourney nebula", "midjourney spaceship", "midjourney cosmos", "midjourney stars", "midjourney moon", "stable diffusion space", "stable diffusion planet", "dall-e space", "dall-e planet", "ai art space", "ai art galaxy", "midjourney sunset", "midjourney jellyfish", "midjourney alien", "midjourney astronaut planet"]
 }

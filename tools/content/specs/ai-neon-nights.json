@@ -5,5 +5,6 @@
  "target": 24, "per_topic": 1, "fetch_per_topic": 20, "author_cap": 14, "min_short": 900,
  "sources": ["openverse"], "openverse_category": "photograph", "accent_from_cover": true,
  "topics": ["AI-generated night", "AI-generated neon", "AI-generated rain", "AI-generated japan", "AI-generated tokyo", "AI-generated storm",
-            "AI-generated fire", "AI-generated light", "AI-generated lights", "AI-generated glow", "AI-generated midnight"]
+            "AI-generated fire", "AI-generated light", "AI-generated lights", "AI-generated glow", "AI-generated midnight"],
+ "more_topics": ["cat:AI-generated cyberpunk", "AI-generated cyberpunk city", "AI-generated neon lights", "AI-generated synthwave", "AI-generated night city", "AI-generated rainy night", "AI-generated lanterns", "AI-generated fireworks", "AI-generated aurora", "AI-generated lightning", "AI-generated vaporwave", "AI-generated bioluminescent", "AI-generated night sky", "midjourney night", "midjourney city", "midjourney lights", "midjourney fire", "midjourney storm", "midjourney rain", "midjourney street", "stable diffusion rain", "stable diffusion night", "dall-e night", "aiart neon", "dalle neon", "AI-generated blue light", "AI-generated lamp", "AI-generated electric", "midjourney glow", "midjourney lightning", "midjourney tokyo", "midjourney dark", "midjourney lighthouse", "AI Generated Image fire", "AI Generated Image rain", "ai art night"]
 }

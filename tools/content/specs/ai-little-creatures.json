@@ -5,5 +5,6 @@
  "target": 24, "per_topic": 1, "fetch_per_topic": 20, "author_cap": 11, "min_short": 900,
  "sources": ["openverse"], "openverse_category": "photograph", "accent_from_cover": true,
  "topics": ["AI-generated dog", "AI-generated puppy", "AI-generated frog", "AI-generated bunny", "AI-generated mouse", "AI-generated squirrel",
-            "AI-generated hamster", "AI-generated hedgehog", "AI-generated chick", "AI-generated lizard", "AI-generated chameleon", "AI-generated animal"]
+            "AI-generated hamster", "AI-generated hedgehog", "AI-generated chick", "AI-generated lizard", "AI-generated chameleon", "AI-generated animal"],
+ "more_topics": ["cat:AI-generated rodentia", "cat:AI-generated chickens", "AI-generated hedgehog", "AI-generated hamster", "AI-generated squirrel", "AI-generated guinea pig", "AI-generated mouse", "AI-generated bunny", "AI-generated snail", "AI-generated ladybug", "AI-generated duckling", "AI-generated otter", "midjourney rabbit", "midjourney frog", "midjourney mouse", "midjourney hedgehog", "midjourney squirrel", "midjourney hamster", "midjourney raccoon", "dall-e rabbit", "dall-e frog", "dall-e hedgehog"]
 }

@@ -20981,6 +20981,18 @@
 "pack": "pack-libraries",
 "reason": "people"
 },
+"https://live.staticflickr.com/65535/52292522266_19dc0a713e_b.jpg": {
+"at": "2026-10-13",
+"label": "c2070",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52294893162_27b4b95fca_b.jpg": {
+"at": "2026-10-13",
+"label": "c1199",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://live.staticflickr.com/65535/52297760404_11d1b23e06_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-skylines-10",
@@ -21017,6 +21029,90 @@
 "pack": "pack-vineyards",
 "reason": "text"
 },
+"https://live.staticflickr.com/65535/52304207457_702256aeda_b.jpg": {
+"at": "2026-10-13",
+"label": "p-0e0ebc7bb1b8",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52304207732_a6c3cfeafd_b.jpg": {
+"at": "2026-10-13",
+"label": "p-0532a57238c5",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52304207847_751cf6bed3_b.jpg": {
+"at": "2026-10-13",
+"label": "p-f56565af0a66",
+"pack": "ai-wild-animals",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52304207962_4af67f235c_b.jpg": {
+"at": "2026-10-13",
+"label": "c2021",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52304207987_dd626c43e6_b.jpg": {
+"at": "2026-10-13",
+"label": "c2020",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52304208262_8a806f9586_b.jpg": {
+"at": "2026-10-13",
+"label": "c2018",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52304208567_9f59334ece_b.jpg": {
+"at": "2026-10-13",
+"label": "c1285",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52304208627_e8b7716f5c_b.jpg": {
+"at": "2026-10-13",
+"label": "p-2ffe767714c7",
+"pack": "ai-dream-machines",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52304208782_1bbcbb7d9d_b.jpg": {
+"at": "2026-10-13",
+"label": "p-58189d594959",
+"pack": "ai-little-creatures",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52304208832_6c469f9e27_b.jpg": {
+"at": "2026-10-13",
+"label": "p-2ea11da22582",
+"pack": "ai-little-creatures",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52304208877_e7888edefd_b.jpg": {
+"at": "2026-10-13",
+"label": "p-3d178ae03e96",
+"pack": "ai-wild-animals",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52304208897_5263738e92_b.jpg": {
+"at": "2026-10-13",
+"label": "p-8e8b52e5e5f2",
+"pack": "ai-butterflies",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52304928086_247805d3a5_b.jpg": {
+"at": "2026-10-13",
+"label": "p-0278ce0e9bcc",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52304928126_77fe3c31aa_b.jpg": {
+"at": "2026-10-13",
+"label": "c1802",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://live.staticflickr.com/65535/52304928186_520600ce7c_b.jpg": {
 "at": "2026-10-12",
 "label": "c1795",
@@ -21029,11 +21125,71 @@
 "pack": "ai-neon-nights",
 "reason": "people"
 },
+"https://live.staticflickr.com/65535/52304928371_523f233b30_b.jpg": {
+"at": "2026-10-13",
+"label": "c1473",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52304928406_3f4ab217eb_b.jpg": {
+"at": "2026-10-13",
+"label": "c1465",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52304928586_fc9938102d_b.jpg": {
+"at": "2026-10-13",
+"label": "p-46f90e98fa24",
+"pack": "ai-little-creatures",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52304929106_06be54f20b_b.jpg": {
+"at": "2026-10-13",
+"label": "p-cc9eac787ed6",
+"pack": "ai-oceans",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52304929766_3121ddf80f_b.jpg": {
+"at": "2026-10-13",
+"label": "p-eb73810501f8",
+"pack": "ai-space",
+"reason": "text"
+},
 "https://live.staticflickr.com/65535/52305392923_137d056f7c_b.jpg": {
 "at": "2026-10-12",
 "label": "c1796",
 "pack": "ai-neon-nights",
 "reason": "people"
+},
+"https://live.staticflickr.com/65535/52305392998_08106030bc_b.jpg": {
+"at": "2026-10-13",
+"label": "p-f3fa468a5946",
+"pack": "ai-flowers",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52305393348_dd3c67a852_b.jpg": {
+"at": "2026-10-13",
+"label": "p-8307cce4ef43",
+"pack": "ai-little-creatures",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52305393563_5c5d829a03_b.jpg": {
+"at": "2026-10-13",
+"label": "c1156",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52305393588_f90aa8b8d7_b.jpg": {
+"at": "2026-10-13",
+"label": "p-1bc624380ed7",
+"pack": "ai-abstract",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52305393613_58e882e0cc_b.jpg": {
+"at": "2026-10-13",
+"label": "p-54e239ad8223",
+"pack": "ai-abstract",
+"reason": "text"
 },
 "https://live.staticflickr.com/65535/52305393708_b45cea9084_b.jpg": {
 "at": "2026-10-12",
@@ -21041,11 +21197,65 @@
 "pack": "abstract-water-ripples",
 "reason": "off-theme"
 },
+"https://live.staticflickr.com/65535/52305393768_8132a5f024_b.jpg": {
+"at": "2026-10-13",
+"label": "c978",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52305394028_b28ed4d94a_b.jpg": {
+"at": "2026-10-13",
+"label": "c936",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52305394043_0ea6e0b108_b.jpg": {
+"at": "2026-10-13",
+"label": "p-9e8a181769af",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52305394083_aeb7422b53_b.jpg": {
+"at": "2026-10-13",
+"label": "c1799",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://live.staticflickr.com/65535/52305394168_52eb7cdd6a_b.jpg": {
 "at": "2026-10-12",
 "label": "p-740b9886958f",
 "pack": "ai-dream-machines",
 "reason": "similar"
+},
+"https://live.staticflickr.com/65535/52305394468_04af4574f2_b.jpg": {
+"at": "2026-10-13",
+"label": "p-da4a5ffa4a09",
+"pack": "ai-space",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52305440174_8641f45420_b.jpg": {
+"at": "2026-10-13",
+"label": "p-1f669c3d83cf",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52305440499_46ffac497f_b.jpg": {
+"at": "2026-10-13",
+"label": "c1476",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52305440664_f8dced56bc_b.jpg": {
+"at": "2026-10-13",
+"label": "p-dd9d4befd74b",
+"pack": "ai-cats",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52305440974_599c690247_b.jpg": {
+"at": "2026-10-13",
+"label": "c1504",
+"pack": "ai-neon-nights",
+"reason": "text"
 },
 "https://live.staticflickr.com/65535/52305441124_4b19ef390d_b.jpg": {
 "at": "2026-10-12",
@@ -21059,11 +21269,71 @@
 "pack": "abstract-water-ripples",
 "reason": "off-theme"
 },
+"https://live.staticflickr.com/65535/52305441414_776dd76488_b.jpg": {
+"at": "2026-10-13",
+"label": "c1932",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52305441509_8c8e664779_b.jpg": {
+"at": "2026-10-13",
+"label": "p-9e442530b849",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52305441689_632737e4f6_b.jpg": {
+"at": "2026-10-13",
+"label": "c993",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52305441864_5a9a8fe8f1_b.jpg": {
+"at": "2026-10-13",
+"label": "p-9c5999d1e535",
+"pack": "ai-space",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52305441894_31f5400376_b.jpg": {
+"at": "2026-10-13",
+"label": "c1308",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://live.staticflickr.com/65535/52305453110_723332266f_b.jpg": {
 "at": "2026-10-12",
 "label": "p-4fe1942b660f",
 "pack": "ai-flowers",
 "reason": "similar"
+},
+"https://live.staticflickr.com/65535/52305453230_d9675abfb7_b.jpg": {
+"at": "2026-10-13",
+"label": "p-9f97a22282e6",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52305453275_5c59015e98_b.jpg": {
+"at": "2026-10-13",
+"label": "p-c6671464374c",
+"pack": "ai-dream-machines",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52305453335_52528cff02_b.jpg": {
+"at": "2026-10-13",
+"label": "c1017",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52305453920_7de91c96cf_b.jpg": {
+"at": "2026-10-13",
+"label": "p-f341c1a55dd8",
+"pack": "ai-dreamscapes",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52305453985_d0d97967a7_b.jpg": {
+"at": "2026-10-13",
+"label": "p-1b67cb5a50c6",
+"pack": "ai-future-worlds",
+"reason": "text"
 },
 "https://live.staticflickr.com/65535/52305454080_686a61ef81_b.jpg": {
 "at": "2026-10-12",
@@ -21071,11 +21341,59 @@
 "pack": "ai-dream-machines",
 "reason": "similar"
 },
+"https://live.staticflickr.com/65535/52305454185_10340dd686_b.jpg": {
+"at": "2026-10-13",
+"label": "c958",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52305454695_f3bcb83966_b.jpg": {
+"at": "2026-10-13",
+"label": "p-d16b42304bc6",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://live.staticflickr.com/65535/52305501893_683ecf5b12_b.jpg": {
 "at": "2026-10-13",
 "label": "p-87e39796baed",
 "pack": "ai-myths-monsters",
 "reason": "quality"
+},
+"https://live.staticflickr.com/65535/52305501923_2376504a3c_b.jpg": {
+"at": "2026-10-13",
+"label": "c1276",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52305501993_1d8a5ac570_b.jpg": {
+"at": "2026-10-13",
+"label": "p-a0c7caa9fa4f",
+"pack": "ai-myths-monsters",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52305533385_f124c3c6c1_b.jpg": {
+"at": "2026-10-13",
+"label": "p-f70980c523ee",
+"pack": "ai-dreamscapes",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52305562045_2db468a025_b.jpg": {
+"at": "2026-10-13",
+"label": "p-e4298c77d3d9",
+"pack": "ai-myths-monsters",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52305562075_06d8b55f6c_b.jpg": {
+"at": "2026-10-13",
+"label": "p-4ef840075466",
+"pack": "ai-myths-monsters",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52305562085_e5efc9b504_b.jpg": {
+"at": "2026-10-13",
+"label": "p-ed7c267cba82",
+"pack": "ai-robots",
+"reason": "text"
 },
 "https://live.staticflickr.com/65535/52306065816_c056a0a230_b.jpg": {
 "at": "2026-10-12",
@@ -21155,6 +21473,12 @@
 "pack": "ai-castles",
 "reason": "similar"
 },
+"https://live.staticflickr.com/65535/52312386452_a493d00298_b.jpg": {
+"at": "2026-10-13",
+"label": "p-58684e352a21",
+"pack": "ai-castles",
+"reason": "people"
+},
 "https://live.staticflickr.com/65535/52312389762_af61910f75_b.jpg": {
 "at": "2026-10-12",
 "label": "c1346",
@@ -21184,6 +21508,12 @@
 "label": "c1356",
 "pack": "ai-future-worlds",
 "reason": "people"
+},
+"https://live.staticflickr.com/65535/52313495828_d937751cc4_b.jpg": {
+"at": "2026-10-13",
+"label": "p-754c114b46f2",
+"pack": "ai-little-creatures",
+"reason": "text"
 },
 "https://live.staticflickr.com/65535/52313502363_b64c3c4eb6_b.jpg": {
 "at": "2026-10-12",
@@ -21233,6 +21563,12 @@
 "pack": "ai-neon-nights",
 "reason": "people"
 },
+"https://live.staticflickr.com/65535/52313614454_dde862e0d1_b.jpg": {
+"at": "2026-10-13",
+"label": "p-7b9a5d74ad9e",
+"pack": "ai-dream-machines",
+"reason": "text"
+},
 "https://live.staticflickr.com/65535/52313623600_56ecd6ae27_b.jpg": {
 "at": "2026-10-12",
 "label": "c1350",
@@ -21275,6 +21611,12 @@
 "pack": "ai-neon-nights",
 "reason": "people"
 },
+"https://live.staticflickr.com/65535/52313626335_57d580c7d3_b.jpg": {
+"at": "2026-10-13",
+"label": "p-c64d1a7fae19",
+"pack": "ai-dream-machines",
+"reason": "people"
+},
 "https://live.staticflickr.com/65535/52313627515_0aef6aa042_b.jpg": {
 "at": "2026-10-12",
 "label": "c1347",
@@ -21287,6 +21629,30 @@
 "pack": "ai-cats",
 "reason": "text"
 },
+"https://live.staticflickr.com/65535/52313632095_929bb8419e_b.jpg": {
+"at": "2026-10-13",
+"label": "p-998b8c5b819d",
+"pack": "ai-robots",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52315100872_09df6d9b4f_b.jpg": {
+"at": "2026-10-13",
+"label": "p-bb3356d90833",
+"pack": "ai-space",
+"reason": "off-theme"
+},
+"https://live.staticflickr.com/65535/52315897101_6077200f35_b.jpg": {
+"at": "2026-10-13",
+"label": "p-0d3b729c88d0",
+"pack": "ai-space",
+"reason": "off-theme"
+},
+"https://live.staticflickr.com/65535/52316215733_6240715900_b.jpg": {
+"at": "2026-10-13",
+"label": "p-06f47e7e6cf3",
+"pack": "ai-space",
+"reason": "off-theme"
+},
 "https://live.staticflickr.com/65535/52316931056_474ef068e9_b.jpg": {
 "at": "2026-10-12",
 "label": "c1518",
@@ -21298,6 +21664,12 @@
 "label": "evpack-biodiversity-2027-06",
 "pack": "evpack-biodiversity-2027",
 "reason": "off-theme"
+},
+"https://live.staticflickr.com/65535/52319078054_f8496662cd_b.jpg": {
+"at": "2026-10-13",
+"label": "p-ea5dab6516c7",
+"pack": "ai-wild-animals",
+"reason": "text"
 },
 "https://live.staticflickr.com/65535/52319603481_07524f30c7_b.jpg": {
 "at": "2026-10-12",
@@ -22240,6 +22612,12 @@
 "label": "evpack-easter-2027-09",
 "pack": "evpack-easter-2027",
 "reason": "people"
+},
+"https://live.staticflickr.com/65535/52458895686_77f993d417_b.jpg": {
+"at": "2026-10-13",
+"label": "c2007",
+"pack": "ai-neon-nights",
+"reason": "text"
 },
 "https://live.staticflickr.com/65535/52459337773_4d57b34c4f_b.jpg": {
 "at": "2026-10-12",
@@ -23549,6 +23927,12 @@
 "pack": "pack-rice-terraces",
 "reason": "people"
 },
+"https://live.staticflickr.com/65535/52635351212_67f98d945f_b.jpg": {
+"at": "2026-10-13",
+"label": "c970",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://live.staticflickr.com/65535/52635795468_f1b57f1b93_b.jpg": {
 "at": "2026-10-13",
 "label": "c145",
@@ -24251,11 +24635,71 @@
 "pack": "pack-steam-trains",
 "reason": "quality"
 },
+"https://live.staticflickr.com/65535/52948533960_39370f7501_b.jpg": {
+"at": "2026-10-13",
+"label": "c2187",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52948611900_5411caf594_b.jpg": {
+"at": "2026-10-13",
+"label": "c2185",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://live.staticflickr.com/65535/52949313650_9e68a21340_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-steam-trains-17",
 "pack": "pack-steam-trains",
 "reason": "quality"
+},
+"https://live.staticflickr.com/65535/52952422072_1af0a1a788_b.jpg": {
+"at": "2026-10-13",
+"label": "c2161",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52952574289_a78458f0d1_b.jpg": {
+"at": "2026-10-13",
+"label": "c1994",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52952818810_6e112fcfcc_b.jpg": {
+"at": "2026-10-13",
+"label": "c1993",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52953156499_0fbf6dfbbe_b.jpg": {
+"at": "2026-10-13",
+"label": "c2162",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52953400805_fba8b24427_b.jpg": {
+"at": "2026-10-13",
+"label": "c2164",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52953471823_5117193fde_b.jpg": {
+"at": "2026-10-13",
+"label": "c2163",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52955197427_5c847a76d3_b.jpg": {
+"at": "2026-10-13",
+"label": "c2199",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52955197452_da1c824d54_b.jpg": {
+"at": "2026-10-13",
+"label": "c2200",
+"pack": "ai-neon-nights",
+"reason": "text"
 },
 "https://live.staticflickr.com/65535/52960066515_603c31f8bf_b.jpg": {
 "at": "2026-10-12",
@@ -24263,11 +24707,71 @@
 "pack": "pack-rainy-streets",
 "reason": "people"
 },
+"https://live.staticflickr.com/65535/52963072368_bbe1b4cc13_b.jpg": {
+"at": "2026-10-13",
+"label": "c2237",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52970286289_c8e91ebd36_b.jpg": {
+"at": "2026-10-13",
+"label": "c1985",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52970520275_bec33edccc_b.jpg": {
+"at": "2026-10-13",
+"label": "c1984",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://live.staticflickr.com/65535/52971261957_7c4930be80_b.jpg": {
 "at": "2026-10-12",
 "label": "c02",
 "pack": "pack-classic-cars",
 "reason": "people"
+},
+"https://live.staticflickr.com/65535/52974311169_3ffb344ed3_b.jpg": {
+"at": "2026-10-13",
+"label": "c2165",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52976008957_20ea8b3201_b.jpg": {
+"at": "2026-10-13",
+"label": "c2188",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52976008972_a7d87a47f4_b.jpg": {
+"at": "2026-10-13",
+"label": "c2190",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52976018417_6eac022937_b.jpg": {
+"at": "2026-10-13",
+"label": "c2186",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52976764244_327835d748_b.jpg": {
+"at": "2026-10-13",
+"label": "c2189",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52977068183_060e21afc6_b.jpg": {
+"at": "2026-10-13",
+"label": "c2191",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/52977068188_6241bd6120_b.jpg": {
+"at": "2026-10-13",
+"label": "c2192",
+"pack": "ai-neon-nights",
+"reason": "text"
 },
 "https://live.staticflickr.com/65535/52979553847_bbf2fc3030_b.jpg": {
 "at": "2026-10-12",
@@ -24333,6 +24837,18 @@
 "at": "2026-10-12",
 "label": "c1531",
 "pack": "daily-2024-02",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/53022104634_8e511f9ebd_b.jpg": {
+"at": "2026-10-13",
+"label": "c2234",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/53027741698_9892acc30a_b.jpg": {
+"at": "2026-10-13",
+"label": "c2235",
+"pack": "ai-neon-nights",
 "reason": "text"
 },
 "https://live.staticflickr.com/65535/53029535715_d7d3cd9d8e_b.jpg": {
@@ -24497,6 +25013,48 @@
 "pack": "pack-parrots",
 "reason": "text"
 },
+"https://live.staticflickr.com/65535/53047449747_29fed1e60b_b.jpg": {
+"at": "2026-10-13",
+"label": "c2251",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/53048214939_8fda99a8dc_b.jpg": {
+"at": "2026-10-13",
+"label": "c2030",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/53048418435_ae926542c0_b.jpg": {
+"at": "2026-10-13",
+"label": "c2249",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/53048516903_4f4f0b3fde_b.jpg": {
+"at": "2026-10-13",
+"label": "c2247",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/53048516908_dfcbf2b5eb_b.jpg": {
+"at": "2026-10-13",
+"label": "c2246",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/53048519143_91854528c6_b.jpg": {
+"at": "2026-10-13",
+"label": "c2250",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/53048522328_862d4dc8c0_b.jpg": {
+"at": "2026-10-13",
+"label": "c2248",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://live.staticflickr.com/65535/53049791059_22a4ab81c6_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-volcanoes-14",
@@ -24509,11 +25067,83 @@
 "pack": "pack-volcanoes",
 "reason": "text"
 },
+"https://live.staticflickr.com/65535/53050160145_ff80738431_b.jpg": {
+"at": "2026-10-13",
+"label": "c2245",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/53050160155_53cd15c26d_b.jpg": {
+"at": "2026-10-13",
+"label": "c2244",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/53050160160_755fa7b660_b.jpg": {
+"at": "2026-10-13",
+"label": "c2242",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/53050160170_2d597e9f26_b.jpg": {
+"at": "2026-10-13",
+"label": "c2243",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/53052518772_3c563e3906_b.jpg": {
+"at": "2026-10-13",
+"label": "c2031",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://live.staticflickr.com/65535/53052761267_94cbfdb6a6_b.jpg": {
 "at": "2026-10-12",
 "label": "c90",
 "pack": "evpack-mothers-day-2027",
 "reason": "people"
+},
+"https://live.staticflickr.com/65535/53053104986_392b3f5371_b.jpg": {
+"at": "2026-10-13",
+"label": "c2034",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/53053290599_ca177905ae_b.jpg": {
+"at": "2026-10-13",
+"label": "c2032",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/53053582038_dfbaff6334_b.jpg": {
+"at": "2026-10-13",
+"label": "c2033",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/53055895599_040a654d6e_b.jpg": {
+"at": "2026-10-13",
+"label": "c2206",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/53056087945_22da7f25c4_b.jpg": {
+"at": "2026-10-13",
+"label": "c2205",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/53056087950_4fda5edb02_b.jpg": {
+"at": "2026-10-13",
+"label": "c2203",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/53056189963_6f09f0c486_b.jpg": {
+"at": "2026-10-13",
+"label": "c2204",
+"pack": "ai-neon-nights",
+"reason": "text"
 },
 "https://live.staticflickr.com/65535/53059637244_44ce31ed3e_b.jpg": {
 "at": "2026-10-12",
@@ -24539,11 +25169,47 @@
 "pack": "pack-yellowstone",
 "reason": "weak"
 },
+"https://live.staticflickr.com/65535/53061531962_2b237d5fa2_b.jpg": {
+"at": "2026-10-13",
+"label": "c2081",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/53062113741_200c29c7cd_b.jpg": {
+"at": "2026-10-13",
+"label": "c2082",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/53062290054_f867c2c589_b.jpg": {
+"at": "2026-10-13",
+"label": "c2207",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/53062497625_1be84ac6cb_b.jpg": {
+"at": "2026-10-13",
+"label": "c2238",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/53062499735_548338f88c_b.jpg": {
+"at": "2026-10-13",
+"label": "c2069",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://live.staticflickr.com/65535/53062594717_b08bc8b797_b.jpg": {
 "at": "2026-10-12",
 "label": "c102",
 "pack": "daily-2025-01",
 "reason": "people"
+},
+"https://live.staticflickr.com/65535/53064073413_369673aba3_b.jpg": {
+"at": "2026-10-13",
+"label": "c2226",
+"pack": "ai-neon-nights",
+"reason": "text"
 },
 "https://live.staticflickr.com/65535/53066825556_2eab4bcf7b_b.jpg": {
 "at": "2026-10-12",
@@ -24581,6 +25247,30 @@
 "pack": "daily-2025-01",
 "reason": "weak"
 },
+"https://live.staticflickr.com/65535/53085207469_cb75492c63_b.jpg": {
+"at": "2026-10-13",
+"label": "c2198",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/53085207479_87ed8300bf_b.jpg": {
+"at": "2026-10-13",
+"label": "c2195",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/53085425470_fd55c5e3b2_b.jpg": {
+"at": "2026-10-13",
+"label": "c2194",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/53085425475_ce356ecdd7_b.jpg": {
+"at": "2026-10-13",
+"label": "c2196",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://live.staticflickr.com/65535/53092245188_18ffe090d3_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-rice-terraces-09",
@@ -24592,6 +25282,30 @@
 "label": "pack-lavender-14",
 "pack": "pack-lavender",
 "reason": "off-theme"
+},
+"https://live.staticflickr.com/65535/53106858682_21fafa82bf_b.jpg": {
+"at": "2026-10-13",
+"label": "c2229",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/53106858697_d7ae736d85_b.jpg": {
+"at": "2026-10-13",
+"label": "c2231",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/53106858707_db5d1ea671_b.jpg": {
+"at": "2026-10-13",
+"label": "c2228",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/53107425791_905cc4b63c_b.jpg": {
+"at": "2026-10-13",
+"label": "c2230",
+"pack": "ai-neon-nights",
+"reason": "text"
 },
 "https://live.staticflickr.com/65535/53109394600_12f4fb3f78_b.jpg": {
 "at": "2026-10-12",
@@ -24635,6 +25349,12 @@
 "pack": "pack-harbours",
 "reason": "off-theme"
 },
+"https://live.staticflickr.com/65535/53132699900_a657dd8d6b_b.jpg": {
+"at": "2026-10-13",
+"label": "c2100",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://live.staticflickr.com/65535/53142707636_9c61dbc99c_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-classic-cars-02",
@@ -24670,6 +25390,12 @@
 "label": "c1020",
 "pack": "daily-2023-12",
 "reason": "weak"
+},
+"https://live.staticflickr.com/65535/53155529827_b8fd191062_b.jpg": {
+"at": "2026-10-13",
+"label": "c2105",
+"pack": "ai-neon-nights",
+"reason": "text"
 },
 "https://live.staticflickr.com/65535/53156187095_df30871d1f_b.jpg": {
 "at": "2026-10-12",
@@ -24737,6 +25463,24 @@
 "pack": "pack-cozy-interiors",
 "reason": "off-theme"
 },
+"https://live.staticflickr.com/65535/53205790081_0bac45034c_b.jpg": {
+"at": "2026-10-13",
+"label": "c2241",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/53206091153_5c058cf348_b.jpg": {
+"at": "2026-10-13",
+"label": "c2239",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://live.staticflickr.com/65535/53206169814_eccdd95f6b_b.jpg": {
+"at": "2026-10-13",
+"label": "c2240",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://live.staticflickr.com/65535/53208697218_12d12203c4_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-sailing-20",
@@ -24755,6 +25499,12 @@
 "pack": "daily-2023-12",
 "reason": "weak"
 },
+"https://live.staticflickr.com/65535/53378289066_b281f5d046_b.jpg": {
+"at": "2026-10-13",
+"label": "p-27de0c174e92",
+"pack": "ai-dream-machines",
+"reason": "text"
+},
 "https://live.staticflickr.com/65535/53379755577_7c3118b537_b.jpg": {
 "at": "2026-10-12",
 "label": "c1278",
@@ -24766,6 +25516,12 @@
 "label": "evpack-lunar-new-year-2027-13",
 "pack": "evpack-lunar-new-year-2027",
 "reason": "quality"
+},
+"https://live.staticflickr.com/65535/53382228760_d824e39f4b_b.jpg": {
+"at": "2026-10-13",
+"label": "p-4334bc195870",
+"pack": "ai-dream-machines",
+"reason": "text"
 },
 "https://live.staticflickr.com/65535/53384018163_ef6f032ce5_b.jpg": {
 "at": "2026-10-12",
@@ -24821,6 +25577,12 @@
 "pack": "pack-amsterdam",
 "reason": "weak"
 },
+"https://live.staticflickr.com/65535/53401787310_f949d02b36_b.jpg": {
+"at": "2026-10-13",
+"label": "p-88499b67a3b0",
+"pack": "ai-dream-machines",
+"reason": "text"
+},
 "https://live.staticflickr.com/65535/53412773802_1b9001617d_b.jpg": {
 "at": "2026-10-12",
 "label": "c1328",
@@ -24856,6 +25618,12 @@
 "label": "p-9d1b176eddbb",
 "pack": "ai-abstract",
 "reason": "similar"
+},
+"https://live.staticflickr.com/65535/53419015245_1d9dcabd59_b.jpg": {
+"at": "2026-10-13",
+"label": "p-1d53165aa484",
+"pack": "ai-dream-machines",
+"reason": "text"
 },
 "https://live.staticflickr.com/65535/53419418089_f884046ef6_b.jpg": {
 "at": "2026-10-12",
@@ -24965,6 +25733,12 @@
 "pack": "ai-flowers",
 "reason": "people"
 },
+"https://live.staticflickr.com/65535/53438136030_0e3d8eb356_b.jpg": {
+"at": "2026-10-13",
+"label": "p-666ffa79f8a5",
+"pack": "ai-flowers",
+"reason": "text"
+},
 "https://live.staticflickr.com/65535/53438137905_ff80d63444_b.jpg": {
 "at": "2026-10-12",
 "label": "p-9365e5c358c6",
@@ -25019,6 +25793,12 @@
 "pack": "evpack-pi-day-2027",
 "reason": "off-theme"
 },
+"https://live.staticflickr.com/65535/53474570703_4eb2dc07a5_b.jpg": {
+"at": "2026-10-13",
+"label": "c2009",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://live.staticflickr.com/65535/53476982703_252f75f852_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-caves-09",
@@ -25066,6 +25846,12 @@
 "label": "c49",
 "pack": "evpack-lunar-new-year-2027",
 "reason": "people"
+},
+"https://live.staticflickr.com/65535/53516699925_f726978b70_b.jpg": {
+"at": "2026-10-13",
+"label": "c2093",
+"pack": "ai-neon-nights",
+"reason": "text"
 },
 "https://live.staticflickr.com/65535/53517212697_0b4d0f78d1_b.jpg": {
 "at": "2026-10-12",
@@ -25481,6 +26267,12 @@
 "pack": "pack-skylines",
 "reason": "weak"
 },
+"https://live.staticflickr.com/65535/53594793712_3930cf310b_b.jpg": {
+"at": "2026-10-13",
+"label": "p-6cdb47f500bd",
+"pack": "ai-food",
+"reason": "text"
+},
 "https://live.staticflickr.com/65535/53595849848_e048675202_b.jpg": {
 "at": "2026-10-13",
 "label": "p-35b2c72bfb61",
@@ -25677,6 +26469,12 @@
 "at": "2026-10-12",
 "label": "c1515",
 "pack": "ai-food",
+"reason": "people"
+},
+"https://live.staticflickr.com/65535/53615620245_2e5129ceaa_b.jpg": {
+"at": "2026-10-13",
+"label": "p-ca2b47391c21",
+"pack": "ai-dinosaurs",
 "reason": "people"
 },
 "https://live.staticflickr.com/65535/53616429144_0e3216afc2_b.jpg": {
@@ -26212,6 +27010,12 @@
 "label": "c1740",
 "pack": "ai-oceans",
 "reason": "people"
+},
+"https://live.staticflickr.com/65535/53669954979_2c95c92df4_b.jpg": {
+"at": "2026-10-13",
+"label": "c2011",
+"pack": "ai-neon-nights",
+"reason": "text"
 },
 "https://live.staticflickr.com/65535/53674978305_cd34640667_b.jpg": {
 "at": "2026-10-12",
@@ -26795,6 +27599,12 @@
 "pack": "evpack-wetlands-2027",
 "reason": "similar"
 },
+"https://live.staticflickr.com/65535/53821892096_a39c40e497_b.jpg": {
+"at": "2026-10-13",
+"label": "c2008",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://live.staticflickr.com/65535/53827003793_6a23fc7c7d_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-bridges-18",
@@ -27076,6 +27886,12 @@
 "label": "pack-coffee-shops-20",
 "pack": "pack-coffee-shops",
 "reason": "text"
+},
+"https://live.staticflickr.com/65535/53984525433_09f71fc69e_b.jpg": {
+"at": "2026-10-13",
+"label": "p-c6a8fcc1cbaf",
+"pack": "ai-myths-monsters",
+"reason": "people"
 },
 "https://live.staticflickr.com/65535/53986798617_47c7a1a28d_b.jpg": {
 "at": "2026-10-12",
@@ -40175,6 +40991,18 @@
 "pack": "pack-vineyards",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/0/02/DALL%C2%B7E_2022-08-28_15.57.15_%E2%80%93_Ferrum_Ultima_Salus.png": {
+"at": "2026-10-13",
+"label": "c51",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://upload.wikimedia.org/wikipedia/commons/0/02/DALL-E_Generated_images_of_a_empty_street_in_Penang.jpg": {
+"at": "2026-10-13",
+"label": "c29",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/0/02/Super_Clusters_in_NGC_1569_%2818218661555%29.png": {
 "at": "2026-10-12",
 "label": "c141",
@@ -40349,6 +41177,12 @@
 "pack": "pack-autumn-parks",
 "reason": "quality"
 },
+"https://upload.wikimedia.org/wikipedia/commons/0/0d/DALL%C2%B7E_2022-07-29_09.42.17_-_photograph_of_a_polar_bear_in_the_desert.png": {
+"at": "2026-10-13",
+"label": "p-2106fe95fe7a",
+"pack": "ai-wild-animals",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/0/0d/John_Bull%E2%80%99s_Market%2C_Fig_2.jpg": {
 "at": "2026-10-12",
 "label": "c124",
@@ -40366,6 +41200,12 @@
 "label": "c29",
 "pack": "pack-wallpapers",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/0/0f/DALL%C2%B7E_2022-08-28_15.15.09_by_Studio_Atang.png": {
+"at": "2026-10-13",
+"label": "c45",
+"pack": "ai-neon-nights",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/0/0f/Everglades_uneven_limestone_floor_and_sawgrass_prairie.JPG": {
 "at": "2026-10-13",
@@ -40433,6 +41273,12 @@
 "pack": "daily-2027-04",
 "reason": "quality"
 },
+"https://upload.wikimedia.org/wikipedia/commons/1/12/Dystopia.png": {
+"at": "2026-10-13",
+"label": "p-8f27bca81f0b",
+"pack": "ai-future-worlds",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/1/12/Ujanko_%28euskal_mitologia%29_-_Midjourney_AI_bertsioa.png": {
 "at": "2026-10-12",
 "label": "c821",
@@ -40487,6 +41333,18 @@
 "pack": "pack-night-markets",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/1/17/DALL%C2%B7E_2022-07-29_09.35.46_-_ultra_realistic_picture_of_a_biplane_landed_on_the_beach_at_sunset.png": {
+"at": "2026-10-13",
+"label": "c40",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://upload.wikimedia.org/wikipedia/commons/1/17/DALL-E_2_generation_for_Oliver_Wendell_Holmes_editing_Wikipedia.jpg": {
+"at": "2026-10-13",
+"label": "c26",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/1/17/Hutters_Lectiones_Evangeliorum.jpg": {
 "at": "2026-10-13",
 "label": "c153",
@@ -40504,6 +41362,12 @@
 "label": "c09",
 "pack": "evpack-winter-solstice-2026",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/1/19/A_photo_of_a_confused_grizzly_bear_in_calculus_class.jpg": {
+"at": "2026-10-13",
+"label": "c73",
+"pack": "ai-neon-nights",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/1/19/Night_in_Kyoto_%285759026225%29.jpg": {
 "at": "2026-10-12",
@@ -40570,6 +41434,12 @@
 "label": "c53",
 "pack": "evpack-lunar-new-year-2027",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/1/1d/DALL%C2%B7E_Painting_of_a_wheel.png": {
+"at": "2026-10-13",
+"label": "c56",
+"pack": "ai-neon-nights",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/1/1d/FMIB_40156_Chesapeake_Bay_Bug-Eye.jpeg": {
 "at": "2026-10-12",
@@ -40679,6 +41549,12 @@
 "pack": "pack-swiss-villages",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/2/24/DALL%C2%B7E_2022-08-28_15.22.26_by_Studio_Atang.png": {
+"at": "2026-10-13",
+"label": "c50",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/2/24/Grand_Cascade%2C_Sheffield_Park_Garden-5120968338.jpg": {
 "at": "2026-10-12",
 "label": "c53",
@@ -40732,6 +41608,12 @@
 "label": "c59",
 "pack": "pack-rolling-hills",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/2/27/Surrealist_painting_of_birdwatchers_editing_Wikipedia_3.png": {
+"at": "2026-10-13",
+"label": "c902",
+"pack": "ai-neon-nights",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/2/29/Old_mansion_in_Imerovigli.jpg": {
 "at": "2026-10-12",
@@ -40817,6 +41699,12 @@
 "pack": "evpack-wildlife-2027",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/2/2d/DALL%C2%B7E_2022-08-20_16.21.26.png": {
+"at": "2026-10-13",
+"label": "c35",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/2/2d/Dammum_Dome_and_the_North_Jafura_desert%2C_Saudi_Arabia_001.jpg": {
 "at": "2026-10-12",
 "label": "c102",
@@ -40883,6 +41771,12 @@
 "pack": "pack-penguins",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/3/30/DALL.E2_-_Looking_at_a_Rudolph_deer_thru_the_peepholes_-_variant_2.jpg": {
+"at": "2026-10-13",
+"label": "c83",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/3/31/Aicp_homescreen.bitflip_glitch_art.rerender.png": {
 "at": "2026-10-12",
 "label": "c35",
@@ -40906,6 +41800,12 @@
 "label": "c114",
 "pack": "abstract-topographic",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/3/31/Lazy_Orca_Origami.jpg": {
+"at": "2026-10-13",
+"label": "p-4ecb9a0b98f8",
+"pack": "ai-oceans",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/3/32/Illustration_of_Stellar_EGGs_in_M16_%281995-44-354%29.jpg": {
 "at": "2026-10-12",
@@ -41021,6 +41921,12 @@
 "pack": "evpack-new-year-2027",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/3/3a/DALL%C2%B7E_2024-03-05_16.53.05_-_A_dynamic_and_colorful_depiction_of_the_digital_world%2C_featuring_a_globe_surrounded_by_digital_networks_and_data_streams%2C_various_digital_devices_like.webp": {
+"at": "2026-10-13",
+"label": "p-84f87d478bad",
+"pack": "ai-abstract",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/3/3a/Isaac_Asimovs_robot_by_Vishchun.png": {
 "at": "2026-10-12",
 "label": "p-6387d2a5d76c",
@@ -41123,6 +42029,12 @@
 "pack": "pack-skylines",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/3/3e/DALL%C2%B7E_2022-08-20_16.25.09_by_Studio_Atang.png": {
+"at": "2026-10-13",
+"label": "c49",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/3/3e/Levens_Hall_MMB_04.jpg": {
 "at": "2026-10-12",
 "label": "c136",
@@ -41152,6 +42064,12 @@
 "label": "c42",
 "pack": "pack-gardens",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/4/40/A_new_hybrid_species_%22Zebra-Giraffe%22_spotted_in_African_Safari_during_golden_hour.jpg": {
+"at": "2026-10-13",
+"label": "p-f968e227030a",
+"pack": "ai-wild-animals",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/4/40/Two_cupcakes_with_frosting.jpg": {
 "at": "2026-10-12",
@@ -41321,6 +42239,18 @@
 "pack": "masterpieces",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/4/4a/DALL%C2%B7E_2022-07-29_15.49.15_-_macro_photograph_of_a_water_drop_on_a_flower.png": {
+"at": "2026-10-13",
+"label": "c37",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://upload.wikimedia.org/wikipedia/commons/4/4a/DALL-E_oil_painting_of_a_cardinal.png": {
+"at": "2026-10-13",
+"label": "c75",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/4/4a/Golden_Bay_Forest.jpg": {
 "at": "2026-10-13",
 "label": "c135",
@@ -41345,6 +42275,12 @@
 "pack": "evpack-food-day-2026",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/4/4c/DALL%C2%B7E_2023-07-04_18.49.38_-_A_photograph_of_Paddington_Bear_giving_Batman_a_marmalade_sandwich.png": {
+"at": "2026-10-13",
+"label": "c59",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/4/4f/Cotton_candy_brazil.jpg": {
 "at": "2026-10-12",
 "label": "c63",
@@ -41362,6 +42298,12 @@
 "label": "c18",
 "pack": "pack-embroidery",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/5/50/AmorphousNecrophagousShadowsDanceBeneathAnAccursedWaningMoon.png": {
+"at": "2026-10-13",
+"label": "c18",
+"pack": "ai-neon-nights",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/5/50/Grand_Cascade%2C_Sheffield_Park_Garden-5120958936.jpg": {
 "at": "2026-10-12",
@@ -41398,6 +42340,12 @@
 "label": "c63",
 "pack": "pack-old-maps",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/5/52/DALL%C2%B7E_-_Press_photo_of_a_monkey_shouting_angrily_to_its_microphone_while_reading_from_their_scripts_during_press_conferences_in_World_Economic_Forum.png": {
+"at": "2026-10-13",
+"label": "c84",
+"pack": "ai-neon-nights",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/5/52/Desert_elephant_%28Loxodonta_africana%29_tail.jpg": {
 "at": "2026-10-12",
@@ -41482,6 +42430,12 @@
 "label": "c129",
 "pack": "pack-summer-fruit",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/5/57/Random_vivid_colors%2C_Picasso_style_forms.jpg": {
+"at": "2026-10-13",
+"label": "p-a991cafbeaed",
+"pack": "ai-abstract",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/5/57/Soleil_flame.jpg": {
 "at": "2026-10-12",
@@ -41589,6 +42543,12 @@
 "at": "2026-10-12",
 "label": "c109",
 "pack": "pack-lisbon",
+"reason": "text"
+},
+"https://upload.wikimedia.org/wikipedia/commons/5/5e/DALL.E2_-_Looking_at_a_Rudolph_deer_thru_the_peepholes_-_variant_1.jpg": {
+"at": "2026-10-13",
+"label": "p-2ef70abe1842",
+"pack": "ai-wild-animals",
 "reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/5/5e/July_12%2C_2013_-_DC_Algal_Bloom_%289321802631%29.jpg": {
@@ -41705,11 +42665,29 @@
 "pack": "evpack-smile-day-2026",
 "reason": "text"
 },
+"https://upload.wikimedia.org/wikipedia/commons/6/62/DALL%C2%B7E_2022-07-29_15.51.24_-_Photograph_of_A_metal_sphere_reflects_a_country_landscape.png": {
+"at": "2026-10-13",
+"label": "c36",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
+"https://upload.wikimedia.org/wikipedia/commons/6/62/DALL%C2%B7E_Romantic_painting_of_machine_with_many_gears.png": {
+"at": "2026-10-13",
+"label": "p-3ef33e746c5c",
+"pack": "ai-robots",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/6/62/Lobishome_-_IA_Midjourney_versi%C3%B3n_1.png": {
 "at": "2026-10-12",
 "label": "c827",
 "pack": "ai-myths-monsters",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/6/63/DALL%C2%B7E_2022-08-28_15.15.30_by_Studio_Atang.png": {
+"at": "2026-10-13",
+"label": "c48",
+"pack": "ai-neon-nights",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/6/63/Gustaf_Fjaestad_Winter_landscape_from_Norway.jpg": {
 "at": "2026-10-12",
@@ -41783,6 +42761,12 @@
 "pack": "pack-folk-art",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/6/68/An_illustrated_dungeon_background_DALLE2.png": {
+"at": "2026-10-13",
+"label": "c16",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/6/68/Binhai_library_bookshelves.jpg": {
 "at": "2026-10-12",
 "label": "c29",
@@ -41831,6 +42815,12 @@
 "pack": "pack-carousels",
 "reason": "text"
 },
+"https://upload.wikimedia.org/wikipedia/commons/6/6a/MORCEGO_ORIGIN%C3%81RIO.jpg": {
+"at": "2026-10-13",
+"label": "p-e021808c78e7",
+"pack": "ai-wild-animals",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/6/6a/Mittellegih%C3%BCtte.jpg": {
 "at": "2026-10-13",
 "label": "c82",
@@ -41848,6 +42838,12 @@
 "label": "c75",
 "pack": "pack-skylines",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/6/6b/1960%27s_art_of_cow_getting_abducted_by_UFO_in_midwest.jpg": {
+"at": "2026-10-13",
+"label": "p-e21ba03c7db0",
+"pack": "ai-space",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/6/6c/George_Stubbs_017.jpg": {
 "at": "2026-10-12",
@@ -41915,6 +42911,12 @@
 "pack": "abstract-kaleidoscope",
 "reason": "text"
 },
+"https://upload.wikimedia.org/wikipedia/commons/6/6f/DALL%C2%B7E_2022-08-20_16.25.20_by_Studio_Atang.png": {
+"at": "2026-10-13",
+"label": "c46",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/6/6f/Gold_Ingot_100g_Barren_%C3%96sterreich.jpg": {
 "at": "2026-10-12",
 "label": "c150",
@@ -41932,6 +42934,12 @@
 "label": "c70",
 "pack": "pack-hot-air-balloons",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/7/71/Plaza_Calderon_in_Binondo%2C_Manila%2C_Philippines_late_1800%27s_to_early_1900%27s.jpg": {
+"at": "2026-10-13",
+"label": "p-c1c881caa644",
+"pack": "ai-castles",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/7/71/Sk%C3%B6nberga_kyrka%2C_den_25_juli_2009%2C_bild_27.JPG": {
 "at": "2026-10-12",
@@ -41981,6 +42989,12 @@
 "pack": "evpack-remembrance-2026",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/7/74/Wolf_sees_cheese_in_moon_reflection.jpg": {
+"at": "2026-10-13",
+"label": "c126",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/7/75/BattenbergCake.jpg": {
 "at": "2026-10-13",
 "label": "c548",
@@ -42011,6 +43025,12 @@
 "pack": "pack-gardens",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/7/76/DALL%C2%B7E_2023-07-04_18.49.32_-_A_photograph_of_Paddington_Bear_giving_Batman_a_marmalade_sandwich.png": {
+"at": "2026-10-13",
+"label": "c58",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/7/76/Pintura_rupestre_de_Cerro_Colorado_02.jpg": {
 "at": "2026-10-13",
 "label": "c77",
@@ -42034,6 +43054,12 @@
 "label": "c903",
 "pack": "daily-2025-09",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/7/78/A_machine_that_reads_dreams_and_translates_them_into_images_-_by_Midjourney.png": {
+"at": "2026-10-13",
+"label": "p-b50edc0c4ec2",
+"pack": "ai-dream-machines",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/7/78/Dolly_Pentreath_House_in_Mousehole_%28Millicent_Jago%2C_1882%29.png": {
 "at": "2026-10-13",
@@ -42094,6 +43120,12 @@
 "label": "c133",
 "pack": "pack-iceland-roads",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/7/7d/DALL-E-2022-08-28-15-22-58-by-Studio-Atang.png": {
+"at": "2026-10-13",
+"label": "c34",
+"pack": "ai-neon-nights",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/7/7d/Surprised_rabbit.jpg": {
 "at": "2026-10-12",
@@ -42185,6 +43217,18 @@
 "pack": "land-of-fire-ice",
 "reason": "text"
 },
+"https://upload.wikimedia.org/wikipedia/commons/8/83/DALL%C2%B7E_2025-02-21_23.36.35_-_A_compact_50W_digital_laser_cutting_and_engraving_machine_with_a_sleek%2C_modern_design._The_machine_has_a_sturdy_metal_frame%2C_a_transparent_protective.webp": {
+"at": "2026-10-13",
+"label": "p-93bb3b861c08",
+"pack": "ai-robots",
+"reason": "text"
+},
+"https://upload.wikimedia.org/wikipedia/commons/8/84/DALL%C2%B7E_2022-09-21_21.48.04_-_medium_shot_of_an_eroded_cart_track_leading_up_to_a_fortified_monastery_occupying_the_top_of_a_steep-sided_mesa_with_a_desert_river_in_the_foreground%2C.png": {
+"at": "2026-10-13",
+"label": "c54",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/8/85/Patterns_in_the_sandstone_-_geograph.org.uk_-_3509360.jpg": {
 "at": "2026-10-13",
 "label": "p-96cf2fcee0c7",
@@ -42239,11 +43283,23 @@
 "pack": "pack-classic-cars",
 "reason": "quality"
 },
+"https://upload.wikimedia.org/wikipedia/commons/8/8b/DALL%C2%B7E_2022-08-20_16.23.22_by_Studio_Atang.png": {
+"at": "2026-10-13",
+"label": "c30",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/8/8b/Female_annas_hummingbird_hovering.jpg": {
 "at": "2026-10-12",
 "label": "c1079",
 "pack": "daily-2024-01",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/8/8c/DALL%C2%B7E_2022-08-20_16.24.57_by_Studio_Atang.png": {
+"at": "2026-10-13",
+"label": "c33",
+"pack": "ai-neon-nights",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/8/8c/Hokusai_SGK_T%C3%B4to.jpg": {
 "at": "2026-10-12",
@@ -42269,6 +43325,12 @@
 "pack": "pack-dutch-masters",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/8/8d/DALL%C2%B7E_2022-08-28_15.21.58_by_Studio_Atang.png": {
+"at": "2026-10-13",
+"label": "c47",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/8/8d/Freycinet_National_Park_-_Lyle_Closs%2C_Hazards_Main_Wall.jpg": {
 "at": "2026-10-13",
 "label": "c124",
@@ -42280,6 +43342,12 @@
 "label": "c32",
 "pack": "pack-vineyards",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/8/8d/Painting_of_a_chocolate_factory_disaster_where_wikipedia_editors_would_later_congregate_1.png": {
+"at": "2026-10-13",
+"label": "c905",
+"pack": "ai-neon-nights",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/8/8d/Schwabinger_Bach%2C_Altschwabing%2C_Englischer_Garten%2C_M%C3%BCnchen%2C_21.10.2024.jpg": {
 "at": "2026-10-12",
@@ -42383,6 +43451,12 @@
 "pack": "pack-japanese-prints",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/9/93/Vermeer_painting_of_birdwatchers_using_computers_to_upload_photos_to_Wikipedia.png": {
+"at": "2026-10-13",
+"label": "c901",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/9/94/Icarus_-_Ed_Dutkiewicz.jpg": {
 "at": "2026-10-12",
 "label": "c126",
@@ -42412,6 +43486,12 @@
 "label": "c56",
 "pack": "pack-misty-forests",
 "reason": "quality"
+},
+"https://upload.wikimedia.org/wikipedia/commons/9/98/AI_generated_image_of_a_cancer_cell.jpg": {
+"at": "2026-10-13",
+"label": "c14",
+"pack": "ai-neon-nights",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/9/98/Alluvial_fan_%28GeoDIL_number_-_1366%29.jpg": {
 "at": "2026-10-12",
@@ -42448,6 +43528,12 @@
 "label": "c321",
 "pack": "daily-2026-11",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/9/9a/Surrealist_painting_of_birdwatchers_editing_Wikipedia_1.png": {
+"at": "2026-10-13",
+"label": "c903",
+"pack": "ai-neon-nights",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/9/9b/Fireworks_%286652952209%29.jpg": {
 "at": "2026-10-12",
@@ -42526,6 +43612,12 @@
 "label": "c30",
 "pack": "pack-lighthouses",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/a/a0/Painting_of_a_chocolate_factory_disaster_where_wikipedia_editors_would_later_congregate_4.png": {
+"at": "2026-10-13",
+"label": "c906",
+"pack": "ai-neon-nights",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/a/a0/Persian_Gulf_sandstorm.jpg": {
 "at": "2026-10-12",
@@ -42610,6 +43702,12 @@
 "label": "c12",
 "pack": "evpack-remembrance-2026",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/a/a4/DALL%C2%B7E_2022-09-15_17.07.27_-_argmax_local_maximum%2C_photorealistic_4k.png": {
+"at": "2026-10-13",
+"label": "c53",
+"pack": "ai-neon-nights",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/a/a4/Monte_Carpasina_003.png": {
 "at": "2026-10-13",
@@ -42711,6 +43809,12 @@
 "at": "2026-10-12",
 "label": "c56",
 "pack": "evpack-youth-2027",
+"reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/a/aa/Esternosangaetano.png": {
+"at": "2026-10-13",
+"label": "p-698b9eec6047",
+"pack": "ai-castles",
 "reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/a/aa/Jan_Rohac_z_Dube_2.jpg": {
@@ -42983,6 +44087,12 @@
 "pack": "pack-new-zealand",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/b/b8/VoyageToArcturusTheSinkingSea.png": {
+"at": "2026-10-13",
+"label": "c898",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/b/b8/Zheng_Wuchang_-_Mountain_in_the_Clouds_Hanging_scroll%2C_ink_on_paper_198_x_63.jpg": {
 "at": "2026-10-12",
 "label": "c26",
@@ -43012,6 +44122,12 @@
 "label": "c158",
 "pack": "daily-2023-01",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/b/bc/DALL%C2%B7E_2022-08-20_16.23.36_by_Studio_Atang.png": {
+"at": "2026-10-13",
+"label": "c31",
+"pack": "ai-neon-nights",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/b/bc/Part_of_%22Dragonfly_pool%22_in_the_local_nature_reserve_-_geograph.org.uk_-_4113930.jpg": {
 "at": "2026-10-13",
@@ -43144,6 +44260,12 @@
 "label": "c102",
 "pack": "abstract-water-ripples",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/c/c3/DALL%C2%B7E_2023-07-04_18.49.20_-_A_photograph_of_Paddington_Bear_giving_Batman_a_marmalade_sandwich.png": {
+"at": "2026-10-13",
+"label": "c60",
+"pack": "ai-neon-nights",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/c/c3/Stereolizza-Black-Eyed-Peas.jpg": {
 "at": "2026-10-12",
@@ -43379,11 +44501,23 @@
 "pack": "pack-gardens-art",
 "reason": "duplicate"
 },
+"https://upload.wikimedia.org/wikipedia/commons/d/d2/Utopia.png": {
+"at": "2026-10-13",
+"label": "p-5c4229abeb9d",
+"pack": "ai-future-worlds",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/d/d3/Watzmann_k%C3%B6nigssee_st_bartholom%C3%A4.jpg": {
 "at": "2026-10-13",
 "label": "c43",
 "pack": "pack-mountain-huts",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/d/d4/DALL%C2%B7E_2022-11-07_19.47.06_-_A_robin_keeps_watch_over_encyclopedia.png": {
+"at": "2026-10-13",
+"label": "p-33d5c70ec6b0",
+"pack": "ai-birds",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/d/d4/Horse_grazing_in_a_paddock_off_Lincoln_Road%2C_Northborough_-_geograph.org.uk_-_8018488.jpg": {
 "at": "2026-10-12",
@@ -43505,6 +44639,12 @@
 "pack": "pack-earth-orbit",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/d/d9/DALL%C2%B7E_2022-08-20_16.23.29_by_Studio_Atang.png": {
+"at": "2026-10-13",
+"label": "c32",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/d/d9/Handmade_soap.jpg": {
 "at": "2026-10-12",
 "label": "c1667",
@@ -43553,6 +44693,12 @@
 "pack": "evpack-lunar-new-year-2027",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/d/db/ThereResoundedOnHathegKlaThatTerriblePealOfThunderWhichAwakedTheGoodCottersOfThePlains.png": {
+"at": "2026-10-13",
+"label": "p-5e90371d6301",
+"pack": "ai-dreamscapes",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/d/dc/Historic_Buses_Preston_20191019.jpg": {
 "at": "2026-10-12",
 "label": "c97",
@@ -43564,6 +44710,12 @@
 "label": "c1306",
 "pack": "daily-2026-03",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/d/dd/Blue_T-Rex_Computer.png": {
+"at": "2026-10-13",
+"label": "c85",
+"pack": "ai-neon-nights",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/d/dd/Lapponian_Herder_black_%26_tan_1.jpg": {
 "at": "2026-10-12",
@@ -43709,6 +44861,12 @@
 "pack": "pack-autumn-berries",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/e/e4/DALL%C2%B7E_2022-11-15_09.17.49_-_a_hyper-realistic_photograph_of_a_blue_porcelain_elephant_with_a_white_background.png": {
+"at": "2026-10-13",
+"label": "c80",
+"pack": "ai-neon-nights",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/e/e4/Kaleidoscope_colours_-_geograph.org.uk_-_6266433.jpg": {
 "at": "2026-10-12",
 "label": "c72",
@@ -43780,6 +44938,12 @@
 "label": "c40",
 "pack": "abstract-fluid-ink",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/e/e8/DALL%C2%B7E_-_Photos_of_rhinoceros_wearing_a_business_suit_%2C_holding_a_magnifying_glass_to_read_a_long_list_of_transaction_records.png": {
+"at": "2026-10-13",
+"label": "c547",
+"pack": "ai-neon-nights",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/e/e8/Doubtful_Sound_%283%29.jpg": {
 "at": "2026-10-13",
@@ -44170,6 +45334,12 @@
 "label": "c110",
 "pack": "pack-islands",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/f/ff/Encyclopedia_on_a_wooden_bookshelf.png": {
+"at": "2026-10-13",
+"label": "c44",
+"pack": "ai-neon-nights",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/f/ff/Packet%2C_food_product_%28AM_2015.4.17-3%29.jpg": {
 "at": "2026-10-12",
@@ -59987,6 +61157,12 @@
 "pack": "pack-snowy-villages",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/DOUBLE_SPIRAL.jpg/1280px-DOUBLE_SPIRAL.jpg": {
+"at": "2026-10-13",
+"label": "p-cd3d5079c21b",
+"pack": "abstract-fluid-ink",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Dactylorhiza_russowii_plant-_Niitv%C3%A4lja_bog.jpg/1280px-Dactylorhiza_russowii_plant-_Niitv%C3%A4lja_bog.jpg": {
 "at": "2026-10-12",
 "label": "c1487",
@@ -72203,6 +73379,12 @@
 "pack": "evpack-universal-childrens-2026",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/%27Not_exactly_what_I_meant_with_nuclear_mushroom%2C_but_I%27ll_take_it%27_%28Stable_Diffusion_misgeneration%29.png/1280px-%27Not_exactly_what_I_meant_with_nuclear_mushroom%2C_but_I%27ll_take_it%27_%28Stable_Diffusion_misgeneration%29.png": {
+"at": "2026-10-13",
+"label": "p-ecd94d0ce7e8",
+"pack": "ai-future-worlds",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/%E5%BB%A3%E5%B7%9E%E5%A1%94.jpg/1280px-%E5%BB%A3%E5%B7%9E%E5%A1%94.jpg": {
 "at": "2026-10-12",
 "label": "c68",
@@ -73498,6 +74680,12 @@
 "label": "c57",
 "pack": "abstract-fluid-ink",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/A_golden_skin_lady_wearing_ornamental_heads_and_golden_ornaments_on_her_body_standing_in_a_lake.jpg/1280px-A_golden_skin_lady_wearing_ornamental_heads_and_golden_ornaments_on_her_body_standing_in_a_lake.jpg": {
+"at": "2026-10-13",
+"label": "c05",
+"pack": "ai-neon-nights",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Allegorische_Skulpturen_in_der_Klosterbibliothek_Wiblingen._01.jpg/1280px-Allegorische_Skulpturen_in_der_Klosterbibliothek_Wiblingen._01.jpg": {
 "at": "2026-10-12",
@@ -75970,6 +77158,12 @@
 "label": "c137",
 "pack": "pack-street-food",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/DALL%C2%B7E_2022-12-10_16.29.10_-_Spit.jpg/1280px-DALL%C2%B7E_2022-12-10_16.29.10_-_Spit.jpg": {
+"at": "2026-10-13",
+"label": "c07",
+"pack": "ai-neon-nights",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Documentary_view_of_the_Magellan_spacecraft_during_checkout_at_Martin_Marietta_Denver_%28S88-50418%29.jpg/1280px-Documentary_view_of_the_Magellan_spacecraft_during_checkout_at_Martin_Marietta_Denver_%28S88-50418%29.jpg": {
 "at": "2026-10-12",
@@ -109541,6 +110735,12 @@
 "pack": "pack-street-food",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/2025%E2%80%9004%E2%80%9024_Thursday_12.40_%28UTC%E2%88%924%29_song_generated_by_artificial_intelligence.jpg/1280px-2025%E2%80%9004%E2%80%9024_Thursday_12.40_%28UTC%E2%88%924%29_song_generated_by_artificial_intelligence.jpg": {
+"at": "2026-10-13",
+"label": "p-84e91f785af3",
+"pack": "ai-abstract",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/20251115_Christmas_cactus_szlumbergera_grudnik.jpg/1280px-20251115_Christmas_cactus_szlumbergera_grudnik.jpg": {
 "at": "2026-10-13",
 "label": "c42",
@@ -120280,6 +121480,12 @@
 "label": "c19",
 "pack": "evpack-bicycle-2027",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Dosa_IMAGE.png/1280px-Dosa_IMAGE.png": {
+"at": "2026-10-13",
+"label": "p-a7a5b058c64d",
+"pack": "ai-food",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Edohikan_%28Prunus_pendula_Maxim_f._ascendens_Ohwi%29_in_Shinjuku_Gyoen%2C_Tokyo%2C_Japan_-_20110404-02.jpg/1280px-Edohikan_%28Prunus_pendula_Maxim_f._ascendens_Ohwi%29_in_Shinjuku_Gyoen%2C_Tokyo%2C_Japan_-_20110404-02.jpg": {
 "at": "2026-10-12",

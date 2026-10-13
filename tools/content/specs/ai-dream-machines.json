@@ -6,5 +6,6 @@
  "sources": ["openverse"], "openverse_category": "photograph", "accent_from_cover": true,
  "topics": ["AI-generated car", "AI-generated sports car", "AI-generated motorcycle", "AI-generated truck", "AI-generated vintage car",
             "AI-generated race car", "AI-generated supercar", "AI-generated train", "AI-generated airplane", "AI-generated ship",
-            "AI-generated boat", "AI-generated bicycle", "AI-generated hot rod", "AI-generated van", "AI-generated locomotive", "AI-generated submarine"]
+            "AI-generated boat", "AI-generated bicycle", "AI-generated hot rod", "AI-generated van", "AI-generated locomotive", "AI-generated submarine"],
+ "more_topics": ["cat:AI-generated automobiles", "cat:AI-generated vehicles", "cat:AI-generated ships", "cat:AI-generated trains", "cat:AI-generated aircraft images", "cat:AI-generated steampunk", "AI-generated sports car", "AI-generated vintage car", "AI-generated steam locomotive", "AI-generated airship", "AI-generated sailing ship", "AI-generated hot air balloon", "AI-generated motorbike", "AI-generated airplane", "midjourney car", "midjourney motorcycle", "midjourney train", "midjourney ship", "midjourney airship", "midjourney steampunk", "midjourney vehicle", "midjourney locomotive", "midjourney boat", "stable diffusion car", "dall-e car", "dall-e steampunk"]
 }

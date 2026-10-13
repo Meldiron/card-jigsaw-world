@@ -59,15 +59,15 @@
 },
 "abstract-fluid-ink": {
 "added": 23,
-"at": "2026-10-12T02:13:54",
+"at": "2026-10-13T16:10:08",
 "category": "Abstract",
 "issues": 0,
 "kind": "library",
-"last_step": "verify",
+"last_step": "reject 1 people",
 "name": "Ink & Dye",
 "puzzles": 21,
 "removed": 2,
-"status": "verified"
+"status": "audited"
 },
 "abstract-fractals": {
 "added": 25,
@@ -251,15 +251,15 @@
 },
 "ai-abstract": {
 "added": 23,
-"at": "2026-10-13T15:55:32",
+"at": "2026-10-13T16:09:53",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "pool 1283 usable",
+"last_step": "reject 2 people",
 "name": "AI Abstract",
 "puzzles": 20,
 "removed": 3,
-"status": "verified"
+"status": "audited"
 },
 "ai-all": {
 "added": 0,
@@ -271,111 +271,111 @@
 },
 "ai-birds": {
 "added": 25,
-"at": "2026-10-12T12:23:47",
+"at": "2026-10-13T16:09:53",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "verify",
+"last_step": "reject 1 text",
 "name": "AI Birds",
 "puzzles": 24,
 "removed": 1,
-"status": "verified"
+"status": "audited"
 },
 "ai-butterflies": {
 "added": 24,
-"at": "2026-10-12T12:56:31",
+"at": "2026-10-13T16:09:54",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "verify",
+"last_step": "reject 1 text",
 "name": "AI Butterflies and Bugs",
 "puzzles": 22,
 "removed": 2,
-"status": "verified"
+"status": "audited"
 },
 "ai-castles": {
 "added": 21,
-"at": "2026-10-12T13:06:21",
+"at": "2026-10-13T16:09:55",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "verify",
+"last_step": "reject 1 text",
 "name": "AI Dream Architecture",
 "puzzles": 20,
 "removed": 1,
-"status": "verified"
+"status": "audited"
 },
 "ai-cats": {
 "added": 23,
-"at": "2026-10-12T12:19:11",
+"at": "2026-10-13T16:09:56",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "verify",
+"last_step": "reject 1 text",
 "name": "AI Cats",
 "puzzles": 20,
 "removed": 3,
-"status": "verified"
+"status": "audited"
 },
 "ai-dinosaurs": {
 "added": 21,
-"at": "2026-10-12T13:09:50",
+"at": "2026-10-13T16:09:56",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "verify",
+"last_step": "reject 1 people",
 "name": "AI Dinosaur Worlds",
 "puzzles": 20,
 "removed": 1,
-"status": "verified"
+"status": "audited"
 },
 "ai-dream-machines": {
-"added": 24,
-"at": "2026-10-13T15:49:50",
+"added": 33,
+"at": "2026-10-13T16:14:41",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "pool 1194 usable",
+"last_step": "apply",
 "name": "AI Dream Machines",
 "puzzles": 22,
-"removed": 2,
-"status": "verified"
+"removed": 11,
+"status": "fixed"
 },
 "ai-dreamscapes": {
 "added": 25,
-"at": "2026-10-12T12:13:50",
+"at": "2026-10-13T16:09:58",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "verify",
+"last_step": "reject 3 text",
 "name": "AI Dreamscapes",
 "puzzles": 24,
 "removed": 1,
-"status": "verified"
+"status": "audited"
 },
 "ai-flowers": {
 "added": 22,
-"at": "2026-10-12T12:54:05",
+"at": "2026-10-13T16:09:59",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "verify",
+"last_step": "reject 2 text",
 "name": "AI Flowers",
 "puzzles": 20,
 "removed": 2,
-"status": "verified"
+"status": "audited"
 },
 "ai-food": {
 "added": 23,
-"at": "2026-10-12T12:46:00",
+"at": "2026-10-13T16:09:59",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "verify",
+"last_step": "reject 2 text",
 "name": "AI Food Fantasies",
 "puzzles": 21,
 "removed": 2,
-"status": "verified"
+"status": "audited"
 },
 "ai-forests": {
 "added": 22,
@@ -391,87 +391,87 @@
 },
 "ai-future-worlds": {
 "added": 25,
-"at": "2026-10-12T12:32:01",
+"at": "2026-10-13T16:10:02",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "verify",
+"last_step": "reject 1 quality",
 "name": "AI Future Worlds",
 "puzzles": 24,
 "removed": 1,
-"status": "verified"
+"status": "audited"
 },
 "ai-little-creatures": {
 "added": 20,
-"at": "2026-10-13T15:53:54",
+"at": "2026-10-13T16:10:03",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "pool 1244 usable",
+"last_step": "reject 5 text",
 "name": "AI Little Creatures",
 "puzzles": 20,
 "removed": 0,
-"status": "verified"
+"status": "audited"
 },
 "ai-myths-monsters": {
 "added": 26,
-"at": "2026-10-13T00:52:41",
+"at": "2026-10-13T16:10:04",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "verify",
+"last_step": "reject 1 people",
 "name": "AI Myths and Monsters",
 "puzzles": 24,
 "removed": 2,
-"status": "verified"
+"status": "audited"
 },
 "ai-neon-nights": {
-"added": 20,
-"at": "2026-10-13T15:58:41",
+"added": 28,
+"at": "2026-10-13T16:12:25",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "pool 1326 usable",
+"last_step": "apply",
 "name": "AI Neon Nights",
 "puzzles": 20,
-"removed": 0,
-"status": "verified"
+"removed": 8,
+"status": "fixed"
 },
 "ai-oceans": {
 "added": 23,
-"at": "2026-10-12T13:02:32",
+"at": "2026-10-13T16:10:05",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "verify",
+"last_step": "reject 2 text",
 "name": "AI Ocean Dreams",
 "puzzles": 21,
 "removed": 2,
-"status": "verified"
+"status": "audited"
 },
 "ai-robots": {
 "added": 21,
-"at": "2026-10-13T15:51:03",
+"at": "2026-10-13T16:10:06",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "pool 1204 usable",
+"last_step": "reject 4 text",
 "name": "AI Robots and Machines",
 "puzzles": 20,
 "removed": 1,
-"status": "verified"
+"status": "audited"
 },
 "ai-space": {
-"added": 21,
-"at": "2026-10-13T15:59:28",
+"added": 28,
+"at": "2026-10-13T16:13:29",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "pool 1342 usable",
+"last_step": "apply",
 "name": "AI Deep Space",
 "puzzles": 20,
-"removed": 1,
-"status": "verified"
+"removed": 8,
+"status": "fixed"
 },
 "ai-surreal": {
 "added": 20,
@@ -486,16 +486,16 @@
 "status": "verified"
 },
 "ai-wild-animals": {
-"added": 24,
-"at": "2026-10-13T15:53:08",
+"added": 31,
+"at": "2026-10-13T16:15:44",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "pool 1235 usable",
+"last_step": "apply",
 "name": "AI Wild Animals",
 "puzzles": 24,
-"removed": 0,
-"status": "verified"
+"removed": 7,
+"status": "fixed"
 },
 "ai-winter": {
 "added": 0,
@@ -3947,8 +3947,8 @@
 },
 "pack-wallpapers": {
 "added": 0,
-"at": "2026-10-13T15:23:32",
-"last_step": "reject 23 off-theme",
+"at": "2026-10-13T16:15:56",
+"last_step": "pool 98 usable",
 "puzzles": null,
 "removed": 0,
 "status": "audited"
