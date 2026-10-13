@@ -1,0 +1,6 @@
+New in this build:
+- All packs now show in the Library, including the AI and Abstract categories (the app used to stop at 200 of 302 packs).
+- Upcoming content stays hidden until it is close: a daily month appears on its first day, an event three days before it opens.
+- Pictures load straight from our own storage on every device.
+
+Please try: Library > AI and Library > Abstract, then Quests > Live events.

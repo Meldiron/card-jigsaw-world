@@ -17,7 +17,7 @@ iterates by build number only.**
 | Goal | Command | Effect |
 | --- | --- | --- |
 | Install on the phone (only when the owner asks) | `tools/dev/device.sh [--wipe] [--no-build]` | release build, installs on the paired iPhone |
-| Next TestFlight build of the current version | `tools/dev/testflight.sh` | runs the `Release to TestFlight` workflow; build = 100 + run number; waits for processing, adds to internal + public groups, submits beta review only if the version has none |
+| Next TestFlight build of the current version (only when the owner asks) | `tools/dev/testflight.sh` | runs the `Release to TestFlight` workflow; build = 100 + run number; waits for processing, adds to internal + public groups, submits beta review only if the version has none |
 | Start a new version cycle | `tools/dev/release.sh X.Y.Z` | bumps pubspec, commits, pushes, first build; only after the previous version shipped to the store or was abandoned |
 | Submit to App Review | Actions → `Submit to App Store` (version, optional build) | `asc_publish.py release` + `submit --yes`; always human-started |
 | Record a store release | `tools/dev/tag-store-release.sh X.Y.Z` | tag + GitHub release; never for TestFlight cuts |
@@ -29,6 +29,12 @@ or plain python3 with those packages installed. Credentials live in `secrets/`.
 
 ## Every build also updates the web site
 After `tools/dev/testflight.sh` always run `tools/dev/deploy-web.sh` so https://card-jigsaw-world.appwrite.network ships the same commit (owner rule, 2026-10-12). Both can run in parallel only if the Flutter builds do not overlap; run the web deploy after the device/TestFlight build finishes.
+
+## Per-build "What to Test"
+Before each build rewrite `store/metadata/en-US/testflight_build_notes.txt` with a TL;DR of what
+changed since the previous build (2-4 plain bullets, one "Please try:" line); the workflow sends it as
+that build's TestFlight "What to Test". `release_notes.txt` stays the App Store "What's New" for the
+whole version. `asc_publish.py --build N build-notes` rewrites one existing build's text.
 
 ## Before every upload
 1. `git status` clean, main pushed, analyzer and tests green, QA runs silent
@@ -42,6 +48,7 @@ After `tools/dev/testflight.sh` always run `tools/dev/deploy-web.sh` so https://
    the only approved one.
 
 ## When the user says
+- Never start a build, submission or web deploy on your own: only these explicit requests do.
 - "release", "push a build", "ship to testers" → `testflight.sh`, keep the version.
 - "new version", "bump", "App Store release" → `release.sh X.Y.Z`, then later the
   `Submit to App Store` workflow, then `tag-store-release.sh` after it is live.

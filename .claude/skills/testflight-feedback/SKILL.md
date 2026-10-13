@@ -47,16 +47,24 @@ Items that are questions or "help me decide" get an answer, not a code change.
 
 ## 4. Ship
 
-1. Update `store/metadata/en-US/release_notes.txt` and `testflight_what_to_test.txt` (short bullets,
-   no version bump; the first line keeps the current cycle's version, e.g. "Version 1.7.0").
+**Builds only when the owner asks** (owner rule, 2026-10-13). After fixing and QA, commit, push and
+report "ready for a build"; dispatch nothing on Apple and do not deploy the web until the owner says so.
+Items stay open on Apple until the build that carries their fix exists.
+
+1. Update `store/metadata/en-US/release_notes.txt` (the App Store "What's New" for the whole version,
+   short bullets, no version bump; first line keeps the cycle's version, e.g. "Version 1.7.0") and
+   REWRITE `testflight_build_notes.txt`: a TL;DR of what changed since the previous build only
+   (2-4 plain bullets plus one "Please try:" line). The workflow sends it as the build's "What to Test",
+   which testers see per build. Fix or backfill one build's text with
+   `asc_publish.py --build N build-notes` (only when the owner asks; it is visible to testers).
 2. Commit with explicit paths and push (see commit rule in `CLAUDE.md`).
-3. Build for TestFlight: `tools/dev/testflight.sh` dispatches the "Release to TestFlight" workflow
+3. Build for TestFlight (only on the owner's request): `tools/dev/testflight.sh` dispatches the "Release to TestFlight" workflow
    and watches it. The workflow signs, uploads, waits for processing, adds the build to the internal
    and public groups and submits Beta App Review when Apple asks for it. Build number = 100 + run
    number. The script refuses a dirty tree or unpushed main. If another agent's files keep the tree
    dirty, run `gh workflow run "Release to TestFlight" --ref main -f version=<current>` and
    `gh run watch` yourself.
-4. Web: `tools/dev/deploy-web.sh` (same commit). Run it after any local Flutter build finishes, not in
+4. Web: `tools/dev/deploy-web.sh` (same commit, together with the requested build). Run it after any local Flutter build finishes, not in
    parallel with one.
 5. Owner's iPhone: do NOT install unless the owner asks (owner rule); TestFlight delivers the build.
    When asked: `tools/dev/device.sh` (Wi-Fi works). Bump the local build number in `pubspec.yaml`

@@ -38,6 +38,9 @@ skills under `.claude/skills/` hold the detailed workflows.
   `web/fallback-fonts/` (`fontFallbackBaseUrl` in `web/flutter_bootstrap.js`). Apple traffic is
   StoreKit, Sign in with Apple and the widget/App Store system services. Check new dependencies for
   network use before adding them.
+- **Builds only when the owner asks** (owner rule, 2026-10-13): never dispatch a TestFlight/App Store build
+  (`gh workflow run`, `tools/dev/testflight.sh`, submissions) on your own initiative. Fix, QA, commit, push, then
+  report that it is ready for a build. Same for installs on the owner's iPhone.
 - **Every build also redeploys the web site** (`tools/dev/deploy-web.sh`) from the same commit.
 - **Versioning**: one version string per App Store cycle; TestFlight builds only bump the build number.
   Details in the apple-release skill. Never bump the version for a TestFlight cut.

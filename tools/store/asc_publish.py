@@ -1005,6 +1005,32 @@ def cmd_review_info(s: Store) -> None:
                refetch=lambda: s.c.get_one(f"/v1/appStoreVersions/{version['id']}/appStoreReviewDetail"))
 
 
+def set_build_notes(s: Store, bid: str, text: str) -> None:
+    """The build's own "What to Test" text that testers see in TestFlight (betaBuildLocalization)."""
+    blocs = s.c.get_list(f"/v1/builds/{bid}/betaBuildLocalizations")
+    bloc = next((l for l in blocs if attr(l, "locale") == LOCALE), None)
+    whats_new = {"whatsNew": text}
+    s.c.upsert("betaBuildLocalizations", bloc, whats_new if bloc else {**whats_new, "locale": LOCALE},
+               {"build": rel("builds", bid)}, label=f"betaBuildLocalization {LOCALE}",
+               refetch=lambda: next((l for l in s.c.get_list(f"/v1/builds/{bid}/betaBuildLocalizations") if attr(l, "locale") == LOCALE), None))
+
+
+def cmd_build_notes(s: Store) -> None:
+    """Set only the "What to Test" text of one build (--build N, default the latest), e.g. to fix or
+    backfill a build's summary. Text: --whats-new-file, default testflight_build_notes.txt."""
+    log("== build-notes")
+    wanted = s.opt("build")
+    build = s.build_by_number(str(wanted)) if wanted else s.latest_build()
+    if build is None:
+        sys.exit(f"build {wanted or '(latest)'} not found")
+    path = s.opt("whats_new_file") or str(EN / "testflight_build_notes.txt")
+    text = read_whats_new(path)
+    if text is None:
+        return
+    log(f"  build {attr(build, 'version')}: {len(text)} characters")
+    set_build_notes(s, build["id"], text)
+
+
 def cmd_testflight(s: Store) -> None:
     log("== testflight")
     contact = contact_attrs()
@@ -1067,12 +1093,7 @@ def cmd_testflight(s: Store) -> None:
         log("  build: usesNonExemptEncryption already false")
     whats_new_text = read_whats_new(s.opt("whats_new_file"))
     if whats_new_text is not None:
-        blocs = s.c.get_list(f"/v1/builds/{bid}/betaBuildLocalizations")
-        bloc = next((l for l in blocs if attr(l, "locale") == LOCALE), None)
-        whats_new = {"whatsNew": whats_new_text}
-        s.c.upsert("betaBuildLocalizations", bloc, whats_new if bloc else {**whats_new, "locale": LOCALE},
-                   {"build": rel("builds", bid)}, label=f"betaBuildLocalization {LOCALE}",
-                   refetch=lambda: next((l for l in s.c.get_list(f"/v1/builds/{bid}/betaBuildLocalizations") if attr(l, "locale") == LOCALE), None))
+        set_build_notes(s, bid, whats_new_text)
     in_group = {b["id"] for b in s.c.get_list(f"/v1/betaGroups/{group['id']}/builds")}
     if bid in in_group:
         log("  build already in the public group")
@@ -1576,6 +1597,7 @@ COMMANDS: dict[str, Callable[[Store], Any]] = {
     "subscriptions": cmd_subscriptions,
     "review-info": cmd_review_info,
     "testflight": cmd_testflight,
+    "build-notes": cmd_build_notes,
     "release": cmd_release,
     "submit": cmd_submit,
 }

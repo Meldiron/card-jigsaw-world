@@ -108,7 +108,7 @@ jobs:
 
       - name: Add to TestFlight group and submit for beta review
         # Waits for Apple to process the build, marks it export-compliant,
-        # writes store/metadata/en-US/release_notes.txt as "what to test", adds
+        # writes store/metadata/en-US/testflight_build_notes.txt (this build only) as "what to test", adds
         # the build to the internal and public groups and submits it to Beta
         # App Review when this version has no approved build yet.
         timeout-minutes: 45
@@ -119,7 +119,7 @@ jobs:
           python3 -m pip install -q --user --break-system-packages pyjwt cryptography requests
           ASC_KEY_PATH=~/private_keys/AuthKey_${ASC_KEY_ID}.p8 python3 tools/store/asc_publish.py testflight \
             --build ${{ steps.ver.outputs.build }} \
-            --whats-new-file store/metadata/en-US/release_notes.txt
+            --whats-new-file store/metadata/en-US/testflight_build_notes.txt
 
       - uses: actions/upload-artifact@v4
         with:
