@@ -77,76 +77,89 @@ class _MyPuzzlesScreenState extends ConsumerState<MyPuzzlesScreen> {
       body: mine.when(
         loading: () => const Loader(),
         error: (e, _) => EmptyState(icon: AppIcons.signal, title: 'Photos did not load', message: 'Check your connection and pull to refresh.'),
-        data: (list) => CustomScrollView(
-          physics: const BouncingScrollPhysics(),
-          slivers: [
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(20, MediaQuery.paddingOf(context).top + kToolbarHeight + 8, 20, 0),
-                child: BigButton(label: _uploading ? 'Uploading…' : 'Add photo', icon: CupertinoIcons.plus, loading: _uploading, onTap: _uploading ? null : _choose),
-              ),
-            ),
-            if (list.isEmpty)
-              const SliverFillRemaining(hasScrollBody: false, child: EmptyState(icon: AppIcons.camera, title: 'No photos yet', message: 'Turn pets, trips and family into card puzzles. Photos stay private to your account.'))
-            else
-              SliverPadding(
-                padding: EdgeInsets.fromLTRB(20, 16, 20, GlassTabBar.scrollEndPadding(context)),
-                sliver: SliverGrid(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 12, crossAxisSpacing: 12, childAspectRatio: 0.78),
-                  delegate: SliverChildBuilderDelegate(
-                    (_, i) {
-                      final m = list[i];
-                      final url = UploadRepository.imageUrl(m.fileId);
-                      final pr = progress[m.id];
-                      return Pressable(
-                        onTap: () => context.push('/play/${m.id}'),
-                        onLongPress: () async {
-                          final ok = await showAppAlert(
-                            context,
-                            title: 'Delete photo?',
-                            message: 'The photo and its puzzle are removed from your account.',
-                            cancelLabel: 'Keep',
-                            confirmLabel: 'Delete photo',
-                            destructive: true,
-                          );
-                          if (ok) {
-                            await ref.read(uploadRepositoryProvider).delete(m);
-                            ref.invalidate(myPuzzlesProvider);
-                          }
-                        },
-                        child: Container(
-                          clipBehavior: Clip.antiAlias,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(Radii.lg), border: Border.all(color: c.stroke)),
-                          child: Stack(
-                            fit: StackFit.expand,
-                            children: [
-                              NetImage(url: url),
-                              Positioned(
-                                left: 0,
-                                right: 0,
-                                bottom: 0,
-                                child: Container(
-                                  padding: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(gradient: Brand.scrim(strength: 0.7)),
-                                  child: Row(
-                                    children: [
-                                      Expanded(child: Text(m.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 12))),
-                                      if (pr?.completed == true) Stars(count: pr!.stars, size: 12),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                    childCount: list.length,
+        data: (paged) {
+          final list = paged.items;
+          return RefreshIndicator.adaptive(
+            edgeOffset: MediaQuery.paddingOf(context).top + kToolbarHeight,
+            onRefresh: () async => ref.invalidate(myPuzzlesProvider),
+            child: CustomScrollView(
+              physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+              slivers: [
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(20, MediaQuery.paddingOf(context).top + kToolbarHeight + 8, 20, 0),
+                    child: BigButton(label: _uploading ? 'Uploading…' : 'Add photo', icon: CupertinoIcons.plus, loading: _uploading, onTap: _uploading ? null : _choose),
                   ),
                 ),
-              ),
-          ],
-        ),
+                if (list.isEmpty)
+                  const SliverFillRemaining(hasScrollBody: false, child: EmptyState(icon: AppIcons.camera, title: 'No photos yet', message: 'Turn pets, trips and family into card puzzles. Photos stay private to your account.'))
+                else
+                  SliverPadding(
+                    padding: EdgeInsets.fromLTRB(20, 16, 20, GlassTabBar.scrollEndPadding(context)),
+                    sliver: SliverGrid(
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 12, crossAxisSpacing: 12, childAspectRatio: 0.78),
+                      delegate: SliverChildBuilderDelegate(
+                        (_, i) {
+                          // Next page when the grid nears its end (infinite scroll).
+                          if (paged.hasMore && i >= list.length - 6) {
+                            WidgetsBinding.instance.addPostFrameCallback((_) => ref.read(myPuzzlesProvider.notifier).loadMore());
+                          }
+                          final m = list[i];
+                          final url = UploadRepository.imageUrl(m.fileId);
+                          final pr = progress[m.id];
+                          return Pressable(
+                            onTap: () => context.push('/play/${m.id}'),
+                            onLongPress: () async {
+                              final ok = await showAppAlert(
+                                context,
+                                title: 'Delete photo?',
+                                message: 'The photo and its puzzle are removed from your account.',
+                                cancelLabel: 'Keep',
+                                confirmLabel: 'Delete photo',
+                                destructive: true,
+                              );
+                              if (ok) {
+                                await ref.read(uploadRepositoryProvider).delete(m);
+                                ref.invalidate(myPuzzlesProvider);
+                              }
+                            },
+                            child: Container(
+                              clipBehavior: Clip.antiAlias,
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(Radii.lg), border: Border.all(color: c.stroke)),
+                              child: Stack(
+                                fit: StackFit.expand,
+                                children: [
+                                  NetImage(url: url),
+                                  Positioned(
+                                    left: 0,
+                                    right: 0,
+                                    bottom: 0,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(10),
+                                      decoration: BoxDecoration(gradient: Brand.scrim(strength: 0.7)),
+                                      child: Row(
+                                        children: [
+                                          Expanded(child: Text(m.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 12))),
+                                          if (pr?.completed == true) Stars(count: pr!.stars, size: 12),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                        childCount: list.length,
+                      ),
+                    ),
+                  ),
+                if (paged.hasMore)
+                  const SliverToBoxAdapter(child: Padding(padding: EdgeInsets.only(bottom: 24), child: Center(child: CupertinoActivityIndicator()))),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

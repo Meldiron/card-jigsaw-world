@@ -41,6 +41,11 @@ skills under `.claude/skills/` hold the detailed workflows.
 - **Builds only when the owner asks** (owner rule, 2026-10-13): never dispatch a TestFlight/App Store build
   (`gh workflow run`, `tools/dev/testflight.sh`, submissions) on your own initiative. Fix, QA, commit, push, then
   report that it is ready for a build. Same for installs on the owner's iPhone.
+- **No single-page reads** (owner rule, 2026-10-13): never read a list with a fixed `Query.limit`.
+  Data the app needs whole goes through `listAllRows` (cursor pagination over every page), counts
+  through `countRows`, and lists people scroll (league, My Puzzles) through `listRowsPage` + a
+  `PagedNotifier` (`lib/state/paged.dart`) that loads the next page near the end. Filter and sort on
+  the server (`Query.equal`, `orderDesc`, `select`). `test/pagination_test.dart` fails on a fixed limit.
 - **Every build also redeploys the web site** (`tools/dev/deploy-web.sh`) from the same commit.
 - **Versioning**: one version string per App Store cycle; TestFlight builds only bump the build number.
   Details in the apple-release skill. Never bump the version for a TestFlight cut.
@@ -77,9 +82,11 @@ skills under `.claude/skills/` hold the detailed workflows.
   puzzles resume directly, so tests needing the difficulty screen open an untouched picture.
 - Board shape harness: `flutter test test/board_widget_test.dart` renders fused-group shapes for all
   modes to `build/board_shapes/`.
-- Python helpers (store tooling, content): `python3 -m venv .venv && .venv/bin/pip install -r
-  tools/content/requirements.txt` once (`.venv/` is git-ignored), then `.venv/bin/python
-  tools/store/asc_publish.py ...`.
+- Python helpers (store tooling, content): the venv and the content cache live in
+  `~/.local/share/card-jigsaw-world/` (persistent, outside the iCloud-synced Desktop); `.venv` in the
+  repo is a symlink to that venv, so `.venv/bin/python tools/store/asc_publish.py ...` works.
+  `tools/content/.local-env` points the content tool at both. Recreate with `python3 -m venv
+  ~/.local/share/card-jigsaw-world/venv && ... pip install -r tools/content/requirements.txt`.
 
 ## Code map
 

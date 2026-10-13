@@ -1,5 +1,7 @@
 import 'package:card_jigsaw_world/app.dart';
+import 'package:card_jigsaw_world/core/appwrite.dart';
 import 'package:card_jigsaw_world/core/sfx.dart';
+import 'package:card_jigsaw_world/data/repositories.dart';
 import 'package:card_jigsaw_world/data/local_store.dart';
 import 'package:card_jigsaw_world/state/catalog.dart';
 import 'package:card_jigsaw_world/state/settings.dart';
@@ -59,6 +61,17 @@ void main() {
     final puzzles = await container.read(allPuzzlesProvider.future);
     final hidden = {for (final p in rows) if (!p.isReleasedAt(now)) p.id};
     expect(puzzles.where((z) => hidden.contains(z.packId)), isEmpty);
+
+    // Cursor pagination against the live database: small pages add up to the same rows as one
+    // big read, for the league (sorted by XP) and for the whole pack table.
+    final profiles = container.read(profileRepositoryProvider);
+    final a = await profiles.leaderboardPage(limit: 3);
+    final b = await profiles.leaderboardPage(limit: 3, after: a.lastId);
+    final ab = await profiles.leaderboardPage(limit: 6);
+    expect([...a.items, ...b.items].map((p) => p.id).toList(), ab.items.map((p) => p.id).toList());
+    final tables = container.read(tablesProvider);
+    final paged = await listAllRows(tables, AppwriteConfig.packs, const [], pageSize: 40);
+    expect(paged.map((r) => r.$id).toSet().length, rows.length, reason: 'pages of 40 cover every pack exactly once');
 
     await tapText(tester, 'Library', ms: 4000);
     await binding.takeScreenshot('40_library_all');

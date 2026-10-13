@@ -127,7 +127,7 @@ void main() {
     await tapText(tester, 'Friends', ms: 1500);
     final container = ProviderScope.containerOf(tester.element(find.byType(SocialScreen)));
     final me = container.read(currentUserIdProvider);
-    final leaders = container.read(leaderboardProvider).value ?? const [];
+    final leaders = container.read(leaderboardProvider).value?.items ?? const [];
     final other = leaders.where((p) => p.userId != me).firstOrNull;
     await tapText(tester, 'Add friend by code', ms: 1200);
     await shot(tester, 's06_add_friend_alert');

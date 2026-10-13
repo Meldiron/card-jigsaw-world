@@ -11,6 +11,42 @@ import '../core/appwrite.dart';
 import '../models/models.dart';
 import 'web_redirect.dart' as web_redirect;
 
+/// Every row matching [queries], read page by page with cursor pagination, so no list is ever cut
+/// at one page. Ordering queries in [queries] apply across pages.
+Future<List<models.Row>> listAllRows(TablesDB tables, String tableId, List<String> queries, {int pageSize = 500}) async {
+  final out = <models.Row>[];
+  String? cursor;
+  while (true) {
+    final res = await tables.listRows(
+      databaseId: AppwriteConfig.databaseId,
+      tableId: tableId,
+      queries: [...queries, Query.limit(pageSize), if (cursor != null) Query.cursorAfter(cursor)],
+      total: false,
+    );
+    out.addAll(res.rows);
+    if (res.rows.length < pageSize) break;
+    cursor = res.rows.last.$id;
+  }
+  return out;
+}
+
+/// One page of rows after the row id [after] (cursor pagination), for lists that scroll.
+Future<List<models.Row>> listRowsPage(TablesDB tables, String tableId, List<String> queries, {required int limit, String? after}) async {
+  final res = await tables.listRows(
+    databaseId: AppwriteConfig.databaseId,
+    tableId: tableId,
+    queries: [...queries, Query.limit(limit), if (after != null) Query.cursorAfter(after)],
+    total: false,
+  );
+  return res.rows;
+}
+
+/// How many rows match [queries] (Appwrite counts them; no rows are transferred).
+Future<int> countRows(TablesDB tables, String tableId, List<String> queries) async {
+  final res = await tables.listRows(databaseId: AppwriteConfig.databaseId, tableId: tableId, queries: [...queries, Query.limit(1), Query.select(['\$id'])]);
+  return res.total;
+}
+
 const _db = AppwriteConfig.databaseId;
 
 String deterministicId(String a, String b) => md5.convert(utf8.encode('$a:$b')).toString();
@@ -167,23 +203,24 @@ class ProfileRepository {
 
   Future<Profile?> findByUserId(String userId) => fetch(userId);
 
-  Future<List<Profile>> leaderboard({int limit = 50}) async {
-    final res = await _tables.listRows(
-      databaseId: _db,
-      tableId: AppwriteConfig.profiles,
-      queries: [Query.greaterThan('puzzlesCompleted', 0), Query.orderDesc('xp'), Query.limit(limit)],
-    );
-    return res.rows.map((r) => Profile.fromRow(r.$id, r.data)).toList();
+  static final _ranked = [Query.greaterThan('puzzlesCompleted', 0)];
+
+  /// One page of the league (players with a solved puzzle, most XP first) after the row [after].
+  Future<({List<Profile> items, String? lastId})> leaderboardPage({required int limit, String? after}) async {
+    final rows = await listRowsPage(_tables, AppwriteConfig.profiles, [..._ranked, Query.orderDesc('xp')], limit: limit, after: after);
+    return (items: rows.map((r) => Profile.fromRow(r.$id, r.data)).toList(), lastId: rows.isEmpty ? null : rows.last.$id);
+  }
+
+  /// League size and the player's place in it, counted on the server (the list itself pages).
+  Future<({int rank, int total})> leaderboardRank(Profile me) async {
+    final total = await countRows(_tables, AppwriteConfig.profiles, _ranked);
+    final ahead = await countRows(_tables, AppwriteConfig.profiles, [..._ranked, Query.greaterThan('xp', me.xp)]);
+    return (rank: ahead + 1, total: total);
   }
 
   /// How many ledger entries the player has with [reason] (e.g. `peek`).
   Future<int> ledgerCount(String userId, String reason) async {
-    final res = await _tables.listRows(
-      databaseId: _db,
-      tableId: AppwriteConfig.ledger,
-      queries: [Query.equal('userId', userId), Query.equal('reason', reason), Query.limit(1), Query.select(['\$id'])],
-    );
-    return res.total;
+    return countRows(_tables, AppwriteConfig.ledger, [Query.equal('userId', userId), Query.equal('reason', reason)]);
   }
 
   Future<void> logLedger(String userId, {required int amount, required String currency, required String reason, int? balanceAfter}) async {
@@ -210,45 +247,19 @@ class CatalogRepository {
 
   /// Every pack row, in pages (the catalogue has well over one page of packs).
   Future<List<Pack>> packs() async {
-    final out = <Pack>[];
-    String? cursor;
-    while (true) {
-      final res = await _tables.listRows(
-        databaseId: _db,
-        tableId: AppwriteConfig.packs,
-        queries: [Query.orderAsc('\$id'), Query.limit(500), if (cursor != null) Query.cursorAfter(cursor)],
-      );
-      out.addAll(res.rows.map((r) => Pack.fromRow(r.$id, r.data)));
-      if (res.rows.length < 500) break;
-      cursor = res.rows.last.$id;
-    }
+    final out = [for (final r in await listAllRows(_tables, AppwriteConfig.packs, [Query.orderAsc('sortOrder')])) Pack.fromRow(r.$id, r.data)];
     out.sort((a, b) => a.sortOrder != b.sortOrder ? a.sortOrder.compareTo(b.sortOrder) : a.id.compareTo(b.id));
     return out;
   }
 
   Future<List<Puzzle>> puzzles(String packId) async {
-    final res = await _tables.listRows(
-      databaseId: _db,
-      tableId: AppwriteConfig.puzzles,
-      queries: [Query.equal('packId', packId), Query.orderAsc('sortOrder'), Query.limit(200)],
-    );
-    return res.rows.map((r) => Puzzle.fromRow(r.$id, r.data)).toList();
+    final rows = await listAllRows(_tables, AppwriteConfig.puzzles, [Query.equal('packId', packId), Query.orderAsc('sortOrder')]);
+    return rows.map((r) => Puzzle.fromRow(r.$id, r.data)).toList();
   }
 
   /// Loads the whole catalog (featured packs + every daily puzzle) in pages.
   Future<List<Puzzle>> allPuzzles() async {
-    final out = <Puzzle>[];
-    String? cursor;
-    while (true) {
-      final res = await _tables.listRows(
-        databaseId: _db,
-        tableId: AppwriteConfig.puzzles,
-        queries: [Query.orderAsc('\$id'), Query.limit(500), if (cursor != null) Query.cursorAfter(cursor)],
-      );
-      out.addAll(res.rows.map((r) => Puzzle.fromRow(r.$id, r.data)));
-      if (res.rows.length < 500) break;
-      cursor = res.rows.last.$id;
-    }
+    final out = [for (final r in await listAllRows(_tables, AppwriteConfig.puzzles, [Query.orderAsc('\$id')])) Puzzle.fromRow(r.$id, r.data)];
     out.sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
     return out;
   }
@@ -265,18 +276,7 @@ class CatalogRepository {
 
   /// Every event row, in pages (past events still count towards player statistics).
   Future<List<GameEvent>> events() async {
-    final out = <GameEvent>[];
-    String? cursor;
-    while (true) {
-      final res = await _tables.listRows(
-        databaseId: _db,
-        tableId: AppwriteConfig.events,
-        queries: [Query.orderAsc('\$id'), Query.limit(500), if (cursor != null) Query.cursorAfter(cursor)],
-      );
-      out.addAll(res.rows.map((r) => GameEvent.fromRow(r.$id, r.data)));
-      if (res.rows.length < 500) break;
-      cursor = res.rows.last.$id;
-    }
+    final out = [for (final r in await listAllRows(_tables, AppwriteConfig.events, [Query.orderAsc('endAt')])) GameEvent.fromRow(r.$id, r.data)];
     out.sort((a, b) => (a.endAt ?? DateTime(9999)).compareTo(b.endAt ?? DateTime(9999)));
     return out;
   }
@@ -290,29 +290,14 @@ class ProgressRepository {
   final TablesDB _tables;
 
   Future<List<PuzzleProgress>> forUser(String userId) async {
-    final res = await _tables.listRows(
-      databaseId: _db,
-      tableId: AppwriteConfig.progress,
-      queries: [Query.equal('userId', userId), Query.limit(500)],
-    );
-    return res.rows.map((r) => PuzzleProgress.fromRow(r.$id, r.data)).toList();
+    final rows = await listAllRows(_tables, AppwriteConfig.progress, [Query.equal('userId', userId)]);
+    return rows.map((r) => PuzzleProgress.fromRow(r.$id, r.data)).toList();
   }
 
   /// Every row with its last-written time (for the save merge).
   Future<List<({PuzzleProgress row, DateTime? updatedAt})>> forUserWithMeta(String userId) async {
-    final out = <({PuzzleProgress row, DateTime? updatedAt})>[];
-    String? cursor;
-    while (true) {
-      final res = await _tables.listRows(
-        databaseId: _db,
-        tableId: AppwriteConfig.progress,
-        queries: [Query.equal('userId', userId), Query.orderAsc('\$id'), Query.limit(500), if (cursor != null) Query.cursorAfter(cursor)],
-      );
-      out.addAll(res.rows.map((r) => (row: PuzzleProgress.fromRow(r.$id, r.data), updatedAt: DateTime.tryParse(r.$updatedAt))));
-      if (res.rows.length < 500) break;
-      cursor = res.rows.last.$id;
-    }
-    return out;
+    final rows = await listAllRows(_tables, AppwriteConfig.progress, [Query.equal('userId', userId)]);
+    return [for (final r in rows) (row: PuzzleProgress.fromRow(r.$id, r.data), updatedAt: DateTime.tryParse(r.$updatedAt))];
   }
 
   Future<PuzzleProgress> upsert(String userId, String puzzleId, Map<String, dynamic> data) async {
@@ -340,12 +325,8 @@ class SocialRepository {
   final TablesDB _tables;
 
   Future<List<Friend>> friends(String userId) async {
-    final res = await _tables.listRows(
-      databaseId: _db,
-      tableId: AppwriteConfig.friends,
-      queries: [Query.equal('userId', userId), Query.limit(200)],
-    );
-    return res.rows.map((r) => Friend.fromRow(r.$id, r.data)).toList();
+    final rows = await listAllRows(_tables, AppwriteConfig.friends, [Query.equal('userId', userId), Query.orderDesc('\$createdAt')]);
+    return rows.map((r) => Friend.fromRow(r.$id, r.data)).toList();
   }
 
   Future<Friend> addFriend(String userId, Profile friend) async {
@@ -369,23 +350,15 @@ class SocialRepository {
       _tables.deleteRow(databaseId: _db, tableId: AppwriteConfig.friends, rowId: rowId);
 
   Future<Map<String, EventProgress>> eventProgress(String userId) async {
-    final res = await _tables.listRows(
-      databaseId: _db,
-      tableId: AppwriteConfig.eventProgress,
-      queries: [Query.equal('userId', userId), Query.limit(100)],
-    );
-    return {for (final r in res.rows) r.data['eventId'].toString(): EventProgress.fromRow(r.$id, r.data)};
+    final rows = await listAllRows(_tables, AppwriteConfig.eventProgress, [Query.equal('userId', userId)]);
+    return {for (final r in rows) r.data['eventId'].toString(): EventProgress.fromRow(r.$id, r.data)};
   }
 
   /// Community progress is the sum of every player's progress on this event.
   Future<int> communityProgress(String eventId) async {
     try {
-      final res = await _tables.listRows(
-        databaseId: _db,
-        tableId: AppwriteConfig.eventProgress,
-        queries: [Query.equal('eventId', eventId), Query.limit(1000), Query.select(['progress'])],
-      );
-      return res.rows.fold<int>(0, (sum, r) => sum + ((r.data['progress'] as num?)?.toInt() ?? 0));
+      final rows = await listAllRows(_tables, AppwriteConfig.eventProgress, [Query.equal('eventId', eventId), Query.select(['\$id', 'progress'])], pageSize: 1000);
+      return rows.fold<int>(0, (sum, r) => sum + ((r.data['progress'] as num?)?.toInt() ?? 0));
     } catch (e) {
       debugPrint('communityProgress failed: $e');
       return 0;
@@ -412,13 +385,21 @@ class UploadRepository {
   final Storage _storage;
   final TablesDB _tables;
 
-  Future<List<MyPuzzle>> list(String userId) async {
-    final res = await _tables.listRows(
-      databaseId: _db,
-      tableId: AppwriteConfig.myPuzzles,
-      queries: [Query.equal('userId', userId), Query.orderDesc('\$createdAt'), Query.limit(100)],
-    );
-    return res.rows.map((r) => MyPuzzle.fromRow(r.$id, r.data)).toList();
+  /// One page of the player's photos, newest first, after the row [after].
+  Future<({List<MyPuzzle> items, String? lastId})> page(String userId, {required int limit, String? after}) async {
+    final rows = await listRowsPage(_tables, AppwriteConfig.myPuzzles, [Query.equal('userId', userId), Query.orderDesc('\$createdAt')], limit: limit, after: after);
+    return (items: rows.map((r) => MyPuzzle.fromRow(r.$id, r.data)).toList(), lastId: rows.isEmpty ? null : rows.last.$id);
+  }
+
+  /// One photo by id (a puzzle in progress may be older than the pages loaded so far).
+  Future<MyPuzzle?> byId(String id) async {
+    try {
+      final row = await _tables.getRow(databaseId: _db, tableId: AppwriteConfig.myPuzzles, rowId: id);
+      return MyPuzzle.fromRow(row.$id, row.data);
+    } on AppwriteException catch (e) {
+      if (e.code == 404) return null;
+      rethrow;
+    }
   }
 
   Future<MyPuzzle> upload(String userId, {required Uint8List bytes, required String filename, String? title}) async {

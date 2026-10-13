@@ -119,19 +119,30 @@ class _Leaderboard extends ConsumerWidget {
     final c = context.colors;
     final board = ref.watch(leaderboardProvider);
     final me = ref.watch(currentUserIdProvider);
+    final place = ref.watch(leaderboardRankProvider).value;
     return board.when(
       loading: () => const Loader(),
       error: (e, _) => const EmptyState(icon: AppIcons.signal, title: 'League could not load', message: 'Check your connection and pull to refresh.'),
-      data: (list) {
+      data: (paged) {
+        final list = paged.items;
         if (list.isEmpty) return const EmptyState(icon: AppIcons.trophy, title: 'The league is empty', message: 'Solve a puzzle to earn XP and take the first place.');
-        final myRank = list.indexWhere((p) => p.userId == me);
         return RefreshIndicator.adaptive(
-          onRefresh: () async => ref.invalidate(leaderboardProvider),
+          onRefresh: () async {
+            ref.invalidate(leaderboardProvider);
+            ref.invalidate(leaderboardRankProvider);
+          },
           child: ListView.builder(
             physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
             padding: EdgeInsets.fromLTRB(20, 0, 20, GlassTabBar.scrollEndPadding(context)),
-            itemCount: list.length + 1,
+            itemCount: list.length + 1 + (paged.hasMore ? 1 : 0),
             itemBuilder: (_, i) {
+              // Next page when the list nears its end (infinite scroll).
+              if (paged.hasMore && i >= list.length - 10) {
+                WidgetsBinding.instance.addPostFrameCallback((_) => ref.read(leaderboardProvider.notifier).loadMore());
+              }
+              if (i == list.length + 1) {
+                return const Padding(padding: EdgeInsets.symmetric(vertical: 16), child: Center(child: CupertinoActivityIndicator()));
+              }
               if (i == 0) {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 12),
@@ -148,7 +159,7 @@ class _Leaderboard extends ConsumerWidget {
                               Text('Crystal League', style: Theme.of(context).textTheme.titleLarge),
                               const SizedBox(height: 2),
                               Text(
-                                myRank >= 0 ? 'You are #${myRank + 1} of ${list.length} · Ranked by XP this season' : 'Ranked by XP this season',
+                                place != null ? 'You are #${place.rank} of ${place.total} · Ranked by XP this season' : 'Ranked by XP this season',
                                 style: TextStyle(color: c.textSecondary, fontSize: 12.5),
                               ),
                             ],

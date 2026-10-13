@@ -5,6 +5,7 @@ import '../data/repositories.dart';
 import '../models/models.dart';
 import 'auth.dart';
 import 'catalog.dart';
+import 'paged.dart';
 import 'profile.dart';
 
 final friendsProvider = FutureProvider<List<Friend>>((ref) async {
@@ -18,12 +19,26 @@ final friendsProvider = FutureProvider<List<Friend>>((ref) async {
   }
 });
 
-final leaderboardProvider = FutureProvider<List<Profile>>((ref) async {
+/// The league, most XP first, loaded a page at a time as the list scrolls.
+class LeaderboardNotifier extends PagedNotifier<Profile> {
+  @override
+  int get pageSize => 50;
+
+  @override
+  Future<PageResult<Profile>> fetchPage(String? after) => ref.read(profileRepositoryProvider).leaderboardPage(limit: pageSize, after: after);
+}
+
+final leaderboardProvider = AsyncNotifierProvider<LeaderboardNotifier, Paged<Profile>>(LeaderboardNotifier.new);
+
+/// The player's place in the league and its size (server-side counts, independent of paging).
+final leaderboardRankProvider = FutureProvider<({int rank, int total})?>((ref) async {
+  final me = ref.watch(profileProvider).value;
+  if (me == null || me.puzzlesCompleted <= 0) return null;
   try {
-    return await ref.watch(profileRepositoryProvider).leaderboard();
+    return await ref.watch(profileRepositoryProvider).leaderboardRank(me);
   } catch (e) {
-    debugPrint('leaderboard failed: $e');
-    return const [];
+    debugPrint('league rank failed: $e');
+    return null;
   }
 });
 
@@ -64,14 +79,29 @@ final communityProgressProvider = FutureProvider.family<int, String>((ref, event
   return ref.watch(socialRepositoryProvider).communityProgress(eventId);
 });
 
-final myPuzzlesProvider = FutureProvider<List<MyPuzzle>>((ref) async {
-  final userId = ref.watch(currentUserIdProvider);
-  if (userId == null) return const [];
+/// The player's photos, newest first, loaded a page at a time as the grid scrolls.
+class MyPuzzlesNotifier extends PagedNotifier<MyPuzzle> {
+  @override
+  int get pageSize => 30;
+
+  @override
+  Future<PageResult<MyPuzzle>> fetchPage(String? after) async {
+    final userId = ref.watch(currentUserIdProvider);
+    if (userId == null) return (items: const <MyPuzzle>[], lastId: null);
+    return ref.read(uploadRepositoryProvider).page(userId, limit: pageSize, after: after);
+  }
+}
+
+final myPuzzlesProvider = AsyncNotifierProvider<MyPuzzlesNotifier, Paged<MyPuzzle>>(MyPuzzlesNotifier.new);
+
+/// One photo by id, for puzzles older than the pages the grid has loaded.
+final myPuzzleByIdProvider = FutureProvider.family<MyPuzzle?, String>((ref, id) async {
+  if (ref.watch(currentUserIdProvider) == null) return null;
   try {
-    return await ref.watch(uploadRepositoryProvider).list(userId);
+    return await ref.watch(uploadRepositoryProvider).byId(id);
   } catch (e) {
-    debugPrint('my puzzles failed: $e');
-    return const [];
+    debugPrint('my puzzle $id failed: $e');
+    return null;
   }
 });
 
@@ -79,15 +109,14 @@ final myPuzzlesProvider = FutureProvider<List<MyPuzzle>>((ref) async {
 final resolvedPuzzleProvider = Provider.family<Puzzle?, String>((ref, id) {
   final fromCatalog = ref.watch(puzzleByIdProvider(id));
   if (fromCatalog != null) return fromCatalog;
-  final mine = ref.watch(myPuzzlesProvider).value;
-  if (mine != null) {
-    for (final m in mine) {
-      if (m.id == id) {
-        return Puzzle.custom(id: m.id, title: m.title, imageUrl: UploadRepository.imageUrl(m.fileId));
-      }
-    }
+  Puzzle custom(MyPuzzle m) => Puzzle.custom(id: m.id, title: m.title, imageUrl: UploadRepository.imageUrl(m.fileId));
+  for (final m in ref.watch(myPuzzlesProvider).value?.items ?? const <MyPuzzle>[]) {
+    if (m.id == id) return custom(m);
   }
-  return null;
+  // Only ask the server once the catalogue has loaded: until then every id would look unknown.
+  if (ref.watch(allPuzzlesProvider).value == null) return null;
+  final single = ref.watch(myPuzzleByIdProvider(id)).value;
+  return single == null ? null : custom(single);
 });
 
 /// Records progress on every active event when a puzzle is completed.
