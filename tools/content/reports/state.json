@@ -1,8 +1,8 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-13T13:52:55",
-"msg": "Content: daily-2027-12 (December 2027, 31 days)\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+"at": "2026-10-13T13:55:09",
+"msg": "Content: daily-2027-06..12 finished, audited and verified (daily-2027b)\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
 "ok": true,
 "pushed": true,
 "stage": "committed"
@@ -1654,16 +1654,16 @@
 "status": "verified"
 },
 "evpack-food-day-2026": {
-"added": 35,
-"at": "2026-10-12T10:07:07",
+"added": 36,
+"at": "2026-10-13T14:02:38",
 "category": "Event",
 "issues": 0,
 "kind": "event",
-"last_step": "verify",
+"last_step": "apply",
 "name": "World Food Day",
 "puzzles": 24,
-"removed": 25,
-"status": "verified"
+"removed": 26,
+"status": "fixed"
 },
 "evpack-food-day-2027": {
 "added": 24,

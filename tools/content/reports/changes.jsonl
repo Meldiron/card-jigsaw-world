@@ -14207,3 +14207,6 @@
 {"puzzle": "daily-2027-06-17", "title": "Brimstone on a thistle", "event": "retitle", "at": "2026-10-13T13:53:57"}
 {"puzzle": "daily-2027-06-27", "title": "Lantana with a butterfly", "event": "retitle", "at": "2026-10-13T13:53:58"}
 {"puzzle": "daily-2027-07-20", "title": "Sea thrift", "event": "retitle", "at": "2026-10-13T13:54:31"}
+{"pack": "evpack-food-day-2026", "puzzle": "p-bebcb565c67b", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Old_Dubai_Spice_Souq_01.jpg/1280px-Old_Dubai_Spice_Souq_01.jpg", "reason": "people", "event": "delete", "at": "2026-10-13T14:02:35"}
+{"pack": "evpack-food-day-2026", "puzzle": "p-0de14e6121b5", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Tomatoes_on_a_vine.jpg/1280px-Tomatoes_on_a_vine.jpg", "topic": "tomatoes vine", "event": "create", "at": "2026-10-13T14:02:37"}
+{"pack": "evpack-food-day-2026", "fields": ["blurhash", "coverSourceUrl", "coverUrl", "imageCount"], "event": "pack-update", "at": "2026-10-13T14:02:37"}
