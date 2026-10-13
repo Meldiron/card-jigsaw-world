@@ -1,0 +1,23 @@
+{
+ "summary": {
+  "packs": 1,
+  "violating": 0,
+  "count": 0,
+  "landscape": 0,
+  "dup_pairs": 0,
+  "people_kw": 0,
+  "text_kw": 0,
+  "small": 0,
+  "unscanned": 0,
+  "cross_dups": 0,
+  "rejected_pending": 0
+ },
+ "packs": {
+  "evpack-food-day-2027": {
+   "name": "World Food Day",
+   "category": "Event",
+   "count": 24,
+   "issues": []
+  }
+ }
+}

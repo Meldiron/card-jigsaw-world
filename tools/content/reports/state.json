@@ -1666,16 +1666,16 @@
 "status": "fixed"
 },
 "evpack-food-day-2027": {
-"added": 24,
-"at": "2026-10-12T10:07:29",
+"added": 48,
+"at": "2026-10-13T16:49:22",
 "category": "Event",
 "issues": 0,
 "kind": "event",
-"last_step": "verify",
+"last_step": "clone from evpack-food-day-2026",
 "name": "World Food Day",
 "puzzles": 24,
-"removed": 14,
-"status": "verified"
+"removed": 38,
+"status": "fixed"
 },
 "evpack-forests-2027": {
 "added": 23,
