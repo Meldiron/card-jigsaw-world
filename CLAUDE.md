@@ -11,6 +11,7 @@ skills under `.claude/skills/` hold the detailed workflows.
 | `.claude/skills/testflight-feedback/` | Pulling TestFlight feedback, fixing it, QA, shipping a build, resolving items on Apple |
 | `.claude/skills/apple-release/` | Any build, TestFlight push, version bump, App Store submission |
 | `.claude/skills/pack-making/` | Picture packs: adding, repairing, auditing, sources, licences |
+| `.claude/skills/giant-packs/` | Giant packs (category Giant, 100-300 card boards): sources, `giantcheck`, 4096 px hosting |
 
 ## Owner rules (non-negotiable, learned from feedback)
 
@@ -138,7 +139,15 @@ skills under `.claude/skills/` hold the detailed workflows.
   day for a week at the Settings time, none on a day the daily gift is claimed; replanned on start, resume
   and background), `lib/core/reminders.dart` (channel `cjw/reminders`), native side `DailyReminders` in
   `ios/Runner/AppDelegate.swift`. Integration runs ask for provisional permission (no prompt to tap);
-  `integration_test/quests_reminders_test.dart` checks a reminder really fires.
+  `integration_test/quests_reminders_test.dart` checks a reminder really fires. `planEventReminders`
+  (Settings > New events): the evening before an event opens, only for notes 5+ days out (lapsed players).
+- Painting and giant boards: `progress.painting`; `lib/state/giant.dart` (`isGiantPack`,
+  `isGiantPuzzleProvider`: packs of category `Giant` get the Large/Huge/Giant/Colossal ladder only, about
+  100-300 cards in Cards), `puzzleImageFullProvider` (full-resolution decode), `BoardZoom` in
+  `board_widget.dart` (pinch, two-finger pan).
+- `lib/state/account_deletion.dart`, `lib/state/review_prompt.dart` (`ReviewRules`: App Store rating after a
+  3-star solve or finished pack, 5+ solves, once per version and 120 days), `lib/core/app_review.dart`
+  (channel `cjw/review`).
 - Routes (`lib/router.dart`): /welcome /home /library /library/pack/:packId /events (Quests) /social
   /profile (+settings, account, my-puzzles) /play/:puzzleId (difficulty) /game/:puzzleId/:grid /store
   /wheel /auth/callback /player/:userId.
@@ -153,10 +162,16 @@ skills under `.claude/skills/` hold the detailed workflows.
   `ProfileNotifier.syncCompletion`, backfill `tools/dev/backfill_profile_stats.py`) are public.
   `isTest` marks QA players (excluded from the league). `profiles.appliedOps` / `event_progress.appliedOps` (ids
   of applied sync ops, exactly-once retries) and `progress.session` (play-through id) belong to the save sync.
+  `progress.painting` marks a Painting board (x1.25). `purchases.ownership` / `purchases.appTransactionId`
+  (index `idx_apptx`) track Family Sharing (VIP is family-shared since 2026-10-14, irreversible; at most 6
+  game accounts per subscription).
 - Functions: `verify-purchase` (StoreKit 2 JWS verification, grants, App Store Server Notifications at
   `https://cjw-verify-purchase.fra.appwrite.run/notifications`; secret vars can only be updated with
   `secret: true`); `catalog-snapshot` (daily 03:00 UTC: catalogue file in bucket `catalog`, pointer row
-  `meta/catalog`; see `docs/catalog-sync.md`). There is no image proxy: pictures load straight from Storage on every platform.
+  `meta/catalog`; see `docs/catalog-sync.md`; pack rows keep `$createdAt` for the New badge); `delete-account`
+  (Profile > Account > Delete account: deletes the caller's rows, uploads and user with a per-execution key;
+  secret variable `APPLE_SIGNIN_KEY` (contents of `AuthKey_2QJPJFW8JW.p8`, NOT set yet) revokes Sign in with
+  Apple tokens; without it the revoke is skipped and logged). There is no image proxy: pictures load straight from Storage on every platform.
 - Site `card-jigsaw-world` → https://card-jigsaw-world.appwrite.network (static, fallback index.html),
   deployed by `tools/dev/deploy-web.sh` (chunked upload). Web build hides purchases, gift codes,
   widgets. Apple sign-in on web (configured 2026-10-13): Services ID `com.matejbaco.cardjigsawworld.signin`,
@@ -182,9 +197,16 @@ skills under `.claude/skills/` hold the detailed workflows.
   eight consumables (see `lib/data/purchases.dart`). Gift offer codes exist ("VIP Monthly gift", "VIP Yearly
   gift"); single-use codes can only be minted after the app is live (`tools/store/offer_codes.py`).
 - `tools/store/asc_publish.py`: `audit`, `status`, `feedback [--resolve IDS --note TEXT]`,
-  `testflight`, `release`, `submit`, metadata/screenshots/iap/subscriptions commands. Docs:
+  `testflight`, `release`, `submit`, metadata/screenshots/iap/subscriptions commands, `events --window N`
+  (In-App Event drafts from `store/metadata/app_events.json`, made by `tools/store/make_app_events.py`;
+  never submits; Apple allows 15 approved / 10 published), `platforms` (Mac and Vision Pro: TestFlight on;
+  App Store availability is two manual ticks in Pricing and Availability). Win-back offers are recorded in
+  `store/metadata/subscriptions/vip_*.json`; `subscriptions` creates them once Apple approves the plans. Docs:
   `tools/store/README.md`, `docs/release-flow.md`, `docs/release-checklist.md`.
-- Not yet done (owner): App Privacy questionnaire, Paid Applications agreement, App Store submission.
+- Not yet done (owner): App Privacy questionnaire, Paid Applications agreement, App Store submission,
+  Mac / Vision Pro availability ticks, `APPLE_SIGNIN_KEY` on `delete-account`, restoring
+  `secrets/appwrite-storage-key.txt` (the content tool falls back to the users key), pushing the local
+  branch `workflow-dsym-check` (needs a GitHub token with the `workflow` scope: `gh auth refresh -s workflow`).
 - **Changing what a purchase gives** (coins, tickets, hints per product): three places must agree:
   `functions/verify-purchase/src/main.js` (server grant, then redeploy the function as in
   `docs/purchases.md`), `lib/data/purchases.dart` (what the store screen shows) and
