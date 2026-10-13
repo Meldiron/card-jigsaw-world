@@ -1108,7 +1108,8 @@ def cmd_testflight(s: Store) -> None:
         s.c.update("builds", bid, {"usesNonExemptEncryption": False})
     else:
         log("  build: usesNonExemptEncryption already false")
-    whats_new_text = read_whats_new(s.opt("whats_new_file"))
+    # A build's "What to Test" is the per-build TL;DR, never the version-wide release notes.
+    whats_new_text = read_whats_new(s.opt("whats_new_file") or str(EN / "testflight_build_notes.txt"))
     if whats_new_text is not None:
         set_build_notes(s, bid, whats_new_text)
     in_group = {b["id"] for b in s.c.get_list(f"/v1/betaGroups/{group['id']}/builds")}
@@ -1630,7 +1631,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--build", metavar="N", help="build number: `testflight` waits for it, `release` attaches it "
                         "(default: env ASC_BUILD_NUMBER, else the latest build)")
     parser.add_argument("--timeout", type=float, default=40, metavar="MIN", help="with `testflight --build`: minutes to wait for processing (default 40)")
-    parser.add_argument("--whats-new-file", metavar="PATH", help="text for what's new instead of release_notes.txt; an empty file leaves it untouched")
+    parser.add_argument("--whats-new-file", metavar="PATH", help="text for what's new (default: testflight_build_notes.txt for `testflight`, release_notes.txt for `release`); an empty file leaves it untouched")
     parser.add_argument("--version", metavar="X.Y.Z", help="with `release`: the App Store version (default: pubspec.yaml)")
     parser.add_argument("--auto-release", action="store_true", help="with `release`: go live automatically after approval (default: manual release)")
     parser.add_argument("--yes", action="store_true", help="with `submit`: really submit (without it only a preview is printed)")
