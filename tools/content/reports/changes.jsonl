@@ -15549,3 +15549,92 @@
 {"puzzle": "p-b1a48e2668d3", "title": "Many-headed dragon", "event": "retitle", "at": "2026-10-13T16:23:38"}
 {"puzzle": "p-415a5750f4ad", "title": "Tentacled giant over a city", "event": "retitle", "at": "2026-10-13T16:23:39"}
 {"puzzle": "p-64fb51b837f8", "title": "Golden origami dragon", "event": "retitle", "at": "2026-10-13T16:23:40"}
+{"pack": "ai-future-worlds", "puzzle": "p-5c4229abeb9d", "url": "https://upload.wikimedia.org/wikipedia/commons/d/d2/Utopia.png", "reason": "people", "event": "delete", "at": "2026-10-13T16:25:23"}
+{"pack": "ai-future-worlds", "puzzle": "p-8f27bca81f0b", "url": "https://upload.wikimedia.org/wikipedia/commons/1/12/Dystopia.png", "reason": "people", "event": "delete", "at": "2026-10-13T16:25:23"}
+{"pack": "ai-future-worlds", "puzzle": "p-ecd94d0ce7e8", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/%27Not_exactly_what_I_meant_with_nuclear_mushroom%2C_but_I%27ll_take_it%27_%28Stable_Diffusion_misgeneration%29.png/1280px-%27Not_exactly_what_I_meant_with_nuclear_mushroom%2C_but_I%27ll_take_it%27_%28Stable_Diffusion_misgeneration%29.png", "reason": "quality", "event": "delete", "at": "2026-10-13T16:25:24"}
+{"pack": "ai-future-worlds", "puzzle": "p-1b67cb5a50c6", "url": "https://live.staticflickr.com/65535/52305453985_d0d97967a7_b.jpg", "reason": "text", "event": "delete", "at": "2026-10-13T16:25:24"}
+{"pack": "ai-future-worlds", "puzzle": "p-0f0f62fce69d", "url": "https://live.staticflickr.com/65535/53958961334_a705820526_b.jpg", "topic": "midjourney spaceship", "event": "create", "at": "2026-10-13T16:25:26"}
+{"pack": "ai-future-worlds", "puzzle": "p-c1dec4130ae0", "url": "https://live.staticflickr.com/65535/52265006128_1e59df98ea_b.jpg", "topic": "AI-generated solarpunk", "event": "create", "at": "2026-10-13T16:25:28"}
+{"pack": "ai-future-worlds", "puzzle": "p-574548bccaf5", "url": "https://live.staticflickr.com/65535/52328106462_8e11ca4849_b.jpg", "topic": "midjourney steampunk", "event": "create", "at": "2026-10-13T16:25:29"}
+{"pack": "ai-future-worlds", "puzzle": "p-e6371e085203", "url": "https://live.staticflickr.com/65535/52313613194_51787f7401_b.jpg", "topic": "AI-generated alien", "event": "create", "at": "2026-10-13T16:25:31"}
+{"pack": "ai-future-worlds", "fields": ["accent", "imageCount"], "event": "pack-update", "at": "2026-10-13T16:25:32"}
+{"puzzle": "p-0f0f62fce69d", "title": "Starship in a canyon of towers", "event": "retitle", "at": "2026-10-13T16:25:33"}
+{"puzzle": "p-c1dec4130ae0", "title": "Greenhouse room of the future", "event": "retitle", "at": "2026-10-13T16:25:35"}
+{"puzzle": "p-574548bccaf5", "title": "Smokestack city under the moon", "event": "retitle", "at": "2026-10-13T16:25:36"}
+{"puzzle": "p-e6371e085203", "title": "Flooded factory hall", "event": "retitle", "at": "2026-10-13T16:25:37"}
+{"pack": "ai-castles", "puzzle": "p-58684e352a21", "url": "https://live.staticflickr.com/65535/52312386452_a493d00298_b.jpg", "reason": "people", "event": "delete", "at": "2026-10-13T16:26:19"}
+{"pack": "ai-castles", "puzzle": "p-698b9eec6047", "url": "https://upload.wikimedia.org/wikipedia/commons/a/aa/Esternosangaetano.png", "reason": "people", "event": "delete", "at": "2026-10-13T16:26:19"}
+{"pack": "ai-castles", "puzzle": "p-c1c881caa644", "url": "https://upload.wikimedia.org/wikipedia/commons/7/71/Plaza_Calderon_in_Binondo%2C_Manila%2C_Philippines_late_1800%27s_to_early_1900%27s.jpg", "reason": "text", "event": "delete", "at": "2026-10-13T16:26:19"}
+{"pack": "ai-castles", "puzzle": "p-e222f95820d9", "url": "https://live.staticflickr.com/65535/53085487705_3bb4af6b03_b.jpg", "topic": "AI-generated castle", "event": "create", "at": "2026-10-13T16:26:27"}
+{"pack": "ai-castles", "puzzle": "p-5ea3217cba3d", "url": "https://live.staticflickr.com/65535/54241157088_4fcf81f1ec_b.jpg", "topic": "AI-generated palace", "event": "create", "at": "2026-10-13T16:26:29"}
+{"pack": "ai-castles", "puzzle": "p-5b3a51070d00", "url": "https://live.staticflickr.com/65535/53153391850_ba024fe5fc_b.jpg", "topic": "midjourney colorful", "event": "create", "at": "2026-10-13T16:26:31"}
+{"pack": "ai-castles", "fields": ["accent", "imageCount"], "event": "pack-update", "at": "2026-10-13T16:26:31"}
+{"puzzle": "p-e222f95820d9", "title": "Flying steampunk castle", "event": "retitle", "at": "2026-10-13T16:26:34"}
+{"puzzle": "p-5ea3217cba3d", "title": "Tiled palace archway", "event": "retitle", "at": "2026-10-13T16:26:35"}
+{"puzzle": "p-5b3a51070d00", "title": "Pastel castle by a lake", "event": "retitle", "at": "2026-10-13T16:26:36"}
+{"pack": "ai-dreamscapes", "puzzle": "p-f341c1a55dd8", "url": "https://live.staticflickr.com/65535/52305453920_7de91c96cf_b.jpg", "reason": "text", "event": "delete", "at": "2026-10-13T16:28:12"}
+{"pack": "ai-dreamscapes", "puzzle": "p-f70980c523ee", "url": "https://live.staticflickr.com/65535/52305533385_f124c3c6c1_b.jpg", "reason": "text", "event": "delete", "at": "2026-10-13T16:28:12"}
+{"pack": "ai-dreamscapes", "puzzle": "p-5e90371d6301", "url": "https://upload.wikimedia.org/wikipedia/commons/d/db/ThereResoundedOnHathegKlaThatTerriblePealOfThunderWhichAwakedTheGoodCottersOfThePlains.png", "reason": "text", "event": "delete", "at": "2026-10-13T16:28:13"}
+{"pack": "ai-dreamscapes", "puzzle": "p-7bdbf2a172b5", "url": "https://live.staticflickr.com/65535/53976536315_26dede2c6a_b.jpg", "topic": "AI-generated sky", "event": "create", "at": "2026-10-13T16:28:14"}
+{"pack": "ai-dreamscapes", "puzzle": "p-6f5fbea13318", "url": "https://live.staticflickr.com/65535/53441551231_6f4ca8740b_b.jpg", "topic": "AI-generated landscape", "event": "create", "at": "2026-10-13T16:28:16"}
+{"pack": "ai-dreamscapes", "puzzle": "p-8bc94c22e4fd", "url": "https://live.staticflickr.com/65535/52323809913_96aceab767_b.jpg", "topic": "AI-generated nature", "event": "create", "at": "2026-10-13T16:28:19"}
+{"pack": "ai-dreamscapes", "fields": ["accent", "imageCount"], "event": "pack-update", "at": "2026-10-13T16:28:21"}
+{"puzzle": "p-7bdbf2a172b5", "title": "Floating island with waterfalls", "event": "retitle", "at": "2026-10-13T16:28:24"}
+{"puzzle": "p-6f5fbea13318", "title": "Red trees by a winding stream", "event": "retitle", "at": "2026-10-13T16:28:25"}
+{"puzzle": "p-8bc94c22e4fd", "title": "Room overgrown with ivy", "event": "retitle", "at": "2026-10-13T16:28:26"}
+{"pack": "pack-alpine-meadows", "category": "Mountains", "event": "pack-create", "at": "2026-10-13T16:29:03"}
+{"pack": "pack-alpine-meadows", "puzzle": "p-8535ddd86749", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Beargrass_Path_%2820725470908%29.jpg/1280px-Beargrass_Path_%2820725470908%29.jpg", "topic": "beargrass Glacier National Park", "event": "create", "at": "2026-10-13T16:29:18"}
+{"pack": "pack-alpine-meadows", "puzzle": "p-0c5f23966d97", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Wildflowers_With_Clements_Mountain_%2820360478540%29.jpg/1280px-Wildflowers_With_Clements_Mountain_%2820360478540%29.jpg", "topic": "Logan Pass wildflowers", "event": "create", "at": "2026-10-13T16:29:25"}
+{"pack": "pack-alpine-meadows", "puzzle": "p-2a7957803217", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Avalanche_lilies_and_Mount_Rainier_%281cbe5967-d3ba-e01c-dd11-db4afc4458bc%29.jpg/1280px-Avalanche_lilies_and_Mount_Rainier_%281cbe5967-d3ba-e01c-dd11-db4afc4458bc%29.jpg", "topic": "Mount Rainier wildflower meadow", "event": "create", "at": "2026-10-13T16:29:27"}
+{"pack": "pack-alpine-meadows", "puzzle": "p-756ba4b9201b", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Rhododendrons_near_Chaukhi_Massif.jpg/1280px-Rhododendrons_near_Chaukhi_Massif.jpg", "topic": "Kazbegi flowers", "event": "create", "at": "2026-10-13T16:29:29"}
+{"pack": "pack-alpine-meadows", "puzzle": "p-353e343db0c4", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/1956-07-01_01_Fr%C3%BChlingswiese_mit_Trollblumen_vorm_Reichenstein.jpg/1280px-1956-07-01_01_Fr%C3%BChlingswiese_mit_Trollblumen_vorm_Reichenstein.jpg", "topic": "Trollius europaeus Alpen", "event": "create", "at": "2026-10-13T16:29:31"}
+{"pack": "pack-alpine-meadows", "puzzle": "p-8fdf3b3b6ee0", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Rustlers_Gulch_2006-07-16_%28197744481%29.jpg/1280px-Rustlers_Gulch_2006-07-16_%28197744481%29.jpg", "topic": "Crested Butte wildflowers", "event": "create", "at": "2026-10-13T16:29:33"}
+{"pack": "pack-alpine-meadows", "puzzle": "p-8d9275a39235", "url": "https://upload.wikimedia.org/wikipedia/commons/5/55/Fireweed_Alpine_wildflowers_pink_scenic_mountains_summer_NPS_Photo_2001_%2817297578656%29.jpg", "topic": "Olympic Mountains wildflowers", "event": "create", "at": "2026-10-13T16:29:35"}
+{"pack": "pack-alpine-meadows", "puzzle": "p-161efa9d6b91", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Moss_campion_%28silene_acaulis%29_02.jpg/1280px-Moss_campion_%28silene_acaulis%29_02.jpg", "topic": "Silene acaulis", "event": "create", "at": "2026-10-13T16:29:40"}
+{"pack": "pack-alpine-meadows", "puzzle": "p-83ab0e7bc566", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Alpen-Bergh%C3%A4hnlein_und_Trollblume%2C_Zlackensattel.jpg/1280px-Alpen-Bergh%C3%A4hnlein_und_Trollblume%2C_Zlackensattel.jpg", "topic": "Trollius europaeus Alpen", "event": "create", "at": "2026-10-13T16:29:43"}
+{"pack": "pack-alpine-meadows", "puzzle": "p-f17eda6117b8", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/PmValleVaraita01.jpg/1280px-PmValleVaraita01.jpg", "topic": "Narzissenwiese", "event": "create", "at": "2026-10-13T16:29:45"}
+{"pack": "pack-alpine-meadows", "puzzle": "p-78dac39ca824", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Alpine_flower_meadow_on_Blackcomb_mountain_%287734246612%29.jpg/1280px-Alpine_flower_meadow_on_Blackcomb_mountain_%287734246612%29.jpg", "topic": "alpine meadow flowers mountains", "event": "create", "at": "2026-10-13T16:29:48"}
+{"pack": "pack-alpine-meadows", "puzzle": "p-53e7f1bd2bf6", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/20230728-FS-AB-Deer-Mountain-Meadow-0012_%2853321538053%29.jpg/1280px-20230728-FS-AB-Deer-Mountain-Meadow-0012_%2853321538053%29.jpg", "topic": "mountain meadow wildflowers", "event": "create", "at": "2026-10-13T16:29:49"}
+{"pack": "pack-alpine-meadows", "puzzle": "p-b0a8693d9175", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Pearly_everlasting_%28Anaphalis_margaritacea%29_is_one_wildflower_that_seems_to_last_well_into_fall._The_true_flower_is_the_yellow_%284363d1ac-eaad-401b-b40c-da9dbc47b09b%29.JPG/1280px-thumbnail.jpg", "topic": "Mount Rainier wildflower meadow", "event": "create", "at": "2026-10-13T16:29:52"}
+{"pack": "pack-alpine-meadows", "puzzle": "p-ffcefaf151ef", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Vunasti_osjak-Cirsium_eriophorum.jpg/1280px-Vunasti_osjak-Cirsium_eriophorum.jpg", "topic": "Eriophorum mountains", "event": "create", "at": "2026-10-13T16:29:53"}
+{"pack": "pack-alpine-meadows", "puzzle": "p-cd5915d93bff", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Rhododendron_ferrugineum_kz04.jpg/1280px-Rhododendron_ferrugineum_kz04.jpg", "topic": "Rhododendron ferrugineum", "event": "create", "at": "2026-10-13T16:29:55"}
+{"pack": "pack-alpine-meadows", "puzzle": "p-4e90db67e2d8", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Three_purple_pink_fleabane_flower_alpine_wildflowers_hurricane_ridge_c_bubar_june_27_2014_%2822554401027%29.jpg/1280px-Three_purple_pink_fleabane_flower_alpine_wildflowers_hurricane_ridge_c_bubar_june_27_2014_%2822554401027%29.jpg", "topic": "Hurricane Ridge wildflowers", "event": "create", "at": "2026-10-13T16:29:57"}
+{"pack": "pack-alpine-meadows", "puzzle": "p-900953d62647", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/AlmwieseRaggal.JPG/1280px-AlmwieseRaggal.JPG", "topic": "Almwiese", "event": "create", "at": "2026-10-13T16:29:58"}
+{"pack": "pack-alpine-meadows", "puzzle": "p-cb8c2b7041b3", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Alpine_glacier_poppy_%284545959551%29.jpg/1280px-Alpine_glacier_poppy_%284545959551%29.jpg", "topic": "Logan Pass wildflowers", "event": "create", "at": "2026-10-13T16:30:01"}
+{"pack": "pack-alpine-meadows", "puzzle": "p-386d225b4913", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Bieltal-Rotb%C3%BChl-Blumen-Alpenrosen-E01.jpg/1280px-Bieltal-Rotb%C3%BChl-Blumen-Alpenrosen-E01.jpg", "topic": "Alpenrosen", "event": "create", "at": "2026-10-13T16:30:04"}
+{"pack": "pack-alpine-meadows", "puzzle": "p-84b667ac65cd", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Allg%C3%A4uAlmWieseOrchidee.jpg/1280px-Allg%C3%A4uAlmWieseOrchidee.jpg", "topic": "Almwiese", "event": "create", "at": "2026-10-13T16:30:09"}
+{"pack": "pack-alpine-meadows", "puzzle": "p-6839762a8a83", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Lupine%2C_subalpine_daisy%2C_arrowleaf_groundsel_and_more_blooming_in_the_meadows_around_Tipsoo_Lake._%28ccd7af05-0ab5-4f0d-a5f7-b63aa4cd5696%29.JPG/1280px-Lupine%2C_subalpine_daisy%2C_arrowleaf_groundsel_and_more_blooming_in_the_meadows_around_Tipsoo_Lake._%28ccd7af05-0ab5-4f0d-a5f7-b63aa4cd5696%29.JPG", "topic": "subalpine meadow wildflowers", "event": "create", "at": "2026-10-13T16:30:11"}
+{"pack": "pack-alpine-meadows", "puzzle": "p-38ba52176eb5", "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/139704182/original.jpeg", "topic": "Rhododendron ferrugineum", "event": "create", "at": "2026-10-13T16:30:14"}
+{"pack": "pack-alpine-meadows", "puzzle": "p-8a162762fd47", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Jaidhaus_Narzissenwiese_20080526d.jpg/1280px-Jaidhaus_Narzissenwiese_20080526d.jpg", "topic": "Narzissenwiese", "event": "create", "at": "2026-10-13T16:30:20"}
+{"pack": "pack-alpine-meadows", "puzzle": "p-88008b8589cc", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/%22Flowers_Blossom_At_valley_of_flowers_Chamoli%2C_India%22_13.jpg/1280px-%22Flowers_Blossom_At_valley_of_flowers_Chamoli%2C_India%22_13.jpg", "topic": "Valley of Flowers Uttarakhand", "event": "create", "at": "2026-10-13T16:30:23"}
+{"pack": "pack-alpine-meadows", "fields": ["blurhash", "coverSourceUrl", "coverUrl", "imageCount"], "event": "pack-update", "at": "2026-10-13T16:30:24"}
+{"puzzle": "p-8535ddd86749", "title": "Beargrass, Glacier National Park", "event": "retitle", "at": "2026-10-13T16:30:39"}
+{"puzzle": "p-0c5f23966d97", "title": "Wildflowers below Clements Mountain", "event": "retitle", "at": "2026-10-13T16:30:40"}
+{"puzzle": "p-2a7957803217", "title": "Avalanche lilies and Mount Rainier", "event": "retitle", "at": "2026-10-13T16:30:40"}
+{"puzzle": "p-756ba4b9201b", "title": "Rhododendrons below Chaukhi", "event": "retitle", "at": "2026-10-13T16:30:40"}
+{"puzzle": "p-353e343db0c4", "title": "Globeflowers below the Reichenstein", "event": "retitle", "at": "2026-10-13T16:30:40"}
+{"puzzle": "p-8fdf3b3b6ee0", "title": "Lupins and paintbrush, Rustlers Gulch", "event": "retitle", "at": "2026-10-13T16:30:41"}
+{"puzzle": "p-8d9275a39235", "title": "Fireweed, Olympic Mountains", "event": "retitle", "at": "2026-10-13T16:30:41"}
+{"puzzle": "p-161efa9d6b91", "title": "Moss campion", "event": "retitle", "at": "2026-10-13T16:30:42"}
+{"puzzle": "p-83ab0e7bc566", "title": "Globeflowers and anemones, Zlackensattel", "event": "retitle", "at": "2026-10-13T16:30:42"}
+{"puzzle": "p-f17eda6117b8", "title": "White meadow, Valle Varaita", "event": "retitle", "at": "2026-10-13T16:30:42"}
+{"puzzle": "p-78dac39ca824", "title": "Flower meadow on Blackcomb", "event": "retitle", "at": "2026-10-13T16:30:43"}
+{"puzzle": "p-53e7f1bd2bf6", "title": "Lupins on Deer Mountain", "event": "retitle", "at": "2026-10-13T16:30:43"}
+{"puzzle": "p-b0a8693d9175", "title": "Pearly everlasting, Mount Rainier", "event": "retitle", "at": "2026-10-13T16:30:43"}
+{"puzzle": "p-ffcefaf151ef", "title": "Woolly thistle", "event": "retitle", "at": "2026-10-13T16:30:43"}
+{"puzzle": "p-cd5915d93bff", "title": "Alpine rose", "event": "retitle", "at": "2026-10-13T16:30:44"}
+{"puzzle": "p-4e90db67e2d8", "title": "Fleabane on Hurricane Ridge", "event": "retitle", "at": "2026-10-13T16:30:44"}
+{"puzzle": "p-900953d62647", "title": "Alpine meadow, Raggal", "event": "retitle", "at": "2026-10-13T16:30:44"}
+{"puzzle": "p-cb8c2b7041b3", "title": "Glacier poppy, Logan Pass", "event": "retitle", "at": "2026-10-13T16:30:44"}
+{"puzzle": "p-386d225b4913", "title": "Alpine roses, Bieltal", "event": "retitle", "at": "2026-10-13T16:30:45"}
+{"puzzle": "p-84b667ac65cd", "title": "Orchid in an Allg\u00e4u meadow", "event": "retitle", "at": "2026-10-13T16:30:45"}
+{"puzzle": "p-6839762a8a83", "title": "Subalpine meadow in bloom", "event": "retitle", "at": "2026-10-13T16:30:46"}
+{"puzzle": "p-38ba52176eb5", "title": "Alpine rose slope", "event": "retitle", "at": "2026-10-13T16:30:46"}
+{"puzzle": "p-8a162762fd47", "title": "Narcissus meadow, Jaidhaus", "event": "retitle", "at": "2026-10-13T16:30:46"}
+{"puzzle": "p-88008b8589cc", "title": "Valley of Flowers", "event": "retitle", "at": "2026-10-13T16:30:47"}
+{"puzzle": "p-78dac39ca824", "author": "Ruth Hartnup", "event": "author-fix", "at": "2026-10-13T16:30:47"}
+{"puzzle": "p-53e7f1bd2bf6", "author": "Forest Service Alaska Region", "event": "author-fix", "at": "2026-10-13T16:30:47"}
+{"puzzle": "p-b0a8693d9175", "author": "NPS Photo", "event": "author-fix", "at": "2026-10-13T16:30:48"}
+{"puzzle": "p-cd5915d93bff", "author": "Krzysztof Ziarnek", "event": "author-fix", "at": "2026-10-13T16:30:48"}
+{"pack": "ai-dinosaurs", "puzzle": "p-ca2b47391c21", "url": "https://live.staticflickr.com/65535/53615620245_2e5129ceaa_b.jpg", "reason": "people", "event": "delete", "at": "2026-10-13T16:31:07"}
+{"pack": "ai-dinosaurs", "puzzle": "p-270ddb24f60c", "url": "https://live.staticflickr.com/65535/53612942741_f257d87aa2_b.jpg", "topic": "AI-generated volcano", "event": "create", "at": "2026-10-13T16:31:11"}

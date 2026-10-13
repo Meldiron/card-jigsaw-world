@@ -294,16 +294,16 @@
 "status": "audited"
 },
 "ai-castles": {
-"added": 21,
-"at": "2026-10-13T16:09:55",
+"added": 24,
+"at": "2026-10-13T16:26:31",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "reject 1 text",
+"last_step": "apply",
 "name": "AI Dream Architecture",
 "puzzles": 20,
-"removed": 1,
-"status": "audited"
+"removed": 4,
+"status": "fixed"
 },
 "ai-cats": {
 "added": 23,
@@ -319,11 +319,11 @@
 },
 "ai-dinosaurs": {
 "added": 21,
-"at": "2026-10-13T16:09:56",
+"at": "2026-10-13T16:30:45",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "reject 1 people",
+"last_step": "reject 10 text",
 "name": "AI Dinosaur Worlds",
 "puzzles": 20,
 "removed": 1,
@@ -342,16 +342,16 @@
 "status": "fixed"
 },
 "ai-dreamscapes": {
-"added": 25,
-"at": "2026-10-13T16:09:58",
+"added": 28,
+"at": "2026-10-13T16:28:21",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "reject 3 text",
+"last_step": "apply",
 "name": "AI Dreamscapes",
 "puzzles": 24,
-"removed": 1,
-"status": "audited"
+"removed": 4,
+"status": "fixed"
 },
 "ai-flowers": {
 "added": 22,
@@ -390,16 +390,16 @@
 "status": "verified"
 },
 "ai-future-worlds": {
-"added": 25,
-"at": "2026-10-13T16:10:02",
+"added": 29,
+"at": "2026-10-13T16:25:32",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "reject 1 quality",
+"last_step": "apply",
 "name": "AI Future Worlds",
 "puzzles": 24,
-"removed": 1,
-"status": "audited"
+"removed": 5,
+"status": "fixed"
 },
 "ai-little-creatures": {
 "added": 25,
@@ -2494,12 +2494,16 @@
 "status": "verified"
 },
 "pack-alpine-meadows": {
-"added": 0,
-"at": "2026-10-13T15:43:53",
-"last_step": "reject 29 off-theme",
-"puzzles": null,
+"added": 24,
+"at": "2026-10-13T16:30:55",
+"category": "Mountains",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "Alpine Meadows",
+"puzzles": 24,
 "removed": 0,
-"status": "audited"
+"status": "verified"
 },
 "pack-amsterdam": {
 "added": 26,
@@ -2659,8 +2663,8 @@
 },
 "pack-carousels": {
 "added": 0,
-"at": "2026-10-13T16:22:57",
-"last_step": "pool 54 usable",
+"at": "2026-10-13T16:25:50",
+"last_step": "reject 8 weak",
 "puzzles": null,
 "removed": 0,
 "status": "audited"
@@ -3515,8 +3519,8 @@
 },
 "pack-rainbow-mountains": {
 "added": 0,
-"at": "2026-10-13T15:47:52",
-"last_step": "reject 1 similar",
+"at": "2026-10-13T16:30:53",
+"last_step": "pool 55 usable",
 "puzzles": null,
 "removed": 0,
 "status": "audited"
