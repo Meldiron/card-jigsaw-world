@@ -79,9 +79,39 @@ Store Connect open the approved version and press **Release this version**.
 
 - `tools/store/offer_codes.py codes monthly 10` / `codes yearly 10` mint the
   single-use VIP gift codes (Apple only allows this for live apps).
+- `asc_publish.py subscriptions` creates the VIP win-back offers from
+  `store/metadata/subscriptions/vip_*.json` (Apple only allows offers for
+  approved subscriptions).
+- Roll the In-App Event window forward every few weeks:
+  `make_app_events.py --media-next 10` and `asc_publish.py events`.
 - The purchase function verifies transactions against Production and falls back
   to Sandbox, so App Review's sandbox purchases and real purchases both work
   without changing `APPLE_ENVIRONMENT`.
+
+## Crash reports
+
+Apple collects crashes from TestFlight and App Store users with no SDK in the app. Every build uploads its
+debug symbols: `ios/ExportOptions.plist` has `uploadSymbols`, the Dart code is not obfuscated (so
+`App.framework.dSYM` covers it), and the "Release to TestFlight" workflow checks that the archive holds
+`Runner.app.dSYM`, `DailyWidget.appex.dSYM`, `App.framework.dSYM` and `Flutter.framework.dSYM` (a missing one
+is a warning in the run) and keeps them as the run artifact `dsyms-<version>-<build>` for 90 days.
+
+Where to read them:
+- Xcode > Window > Organizer > Crashes, select Card Jigsaw World and a version or build (signed in with the
+  team account). Reports arrive a day or so after the crash and are symbolicated with the uploaded dSYMs.
+- App Store Connect > TestFlight > Crashes (crashes testers sent with feedback) and App Analytics > Crashes.
+- For an old report that is not symbolicated, download the run's `dsyms-...` artifact and drag the report
+  into Xcode's Organizer, or run `symbolicatecrash` against those dSYMs.
+
+## In-App Events, Mac and Vision Pro
+
+- World-day events as App Store In-App Events: `tools/store/make_app_events.py`, then `asc_publish.py events`
+  (drafts only, see `tools/store/README.md`, "In-App Events"). The first ones go to review with the first App
+  Store version.
+- The iPhone app can run on Apple silicon Macs and Apple Vision Pro. TestFlight already offers builds on both
+  (`asc_publish.py platforms`); App Store availability is two ticks in Pricing and Availability (steps in
+  `tools/store/README.md`, "Done in App Store Connect by hand"). Test a build on a Mac through TestFlight before
+  ticking them: notifications, Sign in with Apple, StoreKit, the photo picker and the portrait-only layout.
 
 ## Metadata and assets
 

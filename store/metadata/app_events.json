@@ -1,0 +1,2629 @@
+{
+ "about": "In-App Events for the world-day events. Written by tools/store/make_app_events.py; set \"locked\": true on an entry to keep hand edits. asc_publish.py events creates drafts.",
+ "events": [
+  {
+   "eventId": "ev-coffee-2026",
+   "packId": "evpack-coffee-2026",
+   "referenceName": "ev-coffee-2026",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-coffee-2026",
+   "publishStart": "2026-09-21T00:00:00Z",
+   "eventStart": "2026-09-28T00:00:00Z",
+   "eventEnd": "2026-10-05T23:59:59Z",
+   "localization": {
+    "name": "International Coffee Day",
+    "shortDescription": "23 pictures for International Coffee Day",
+    "longDescription": "Espresso, latte art, roasted beans, coffee cherries, moka pots and cezves from the world of coffee. Open for one week."
+   },
+   "pictures": [
+    "evpack-coffee-2026-06",
+    "evpack-coffee-2026-07",
+    "evpack-coffee-2026-12"
+   ],
+   "media": {
+    "card": "ev-coffee-2026/ev-coffee-2026-card.jpg",
+    "details": "ev-coffee-2026/ev-coffee-2026-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-smile-day-2026",
+   "packId": "evpack-smile-day-2026",
+   "referenceName": "ev-smile-day-2026",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-smile-day-2026",
+   "publishStart": "2026-09-22T00:00:00Z",
+   "eventStart": "2026-09-29T00:00:00Z",
+   "eventEnd": "2026-10-06T23:59:59Z",
+   "localization": {
+    "name": "World Smile Day",
+    "shortDescription": "24 pictures for World Smile Day",
+    "longDescription": "Smiling animals, sunflowers, smiley-face treats, balloons and other cheerful colourful things. Open for one week."
+   },
+   "pictures": [
+    "p-62bdd042d6eb",
+    "p-34c3495b7db4",
+    "p-dc43341d634a"
+   ],
+   "media": {
+    "card": "ev-smile-day-2026/ev-smile-day-2026-card.jpg",
+    "details": "ev-smile-day-2026/ev-smile-day-2026-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-animal-day-2026",
+   "packId": "evpack-animal-day-2026",
+   "referenceName": "ev-animal-day-2026",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-animal-day-2026",
+   "publishStart": "2026-09-24T00:00:00Z",
+   "eventStart": "2026-10-01T00:00:00Z",
+   "eventEnd": "2026-10-08T23:59:59Z",
+   "localization": {
+    "name": "World Animal Day",
+    "shortDescription": "24 pictures for World Animal Day",
+    "longDescription": "Portraits of animals from every continent, from red pandas and toucans to elephants and polar bears. Open for one week."
+   },
+   "pictures": [
+    "evpack-animal-day-2026-13",
+    "p-082914330d8f",
+    "p-fc28e951c0b4"
+   ],
+   "media": {
+    "card": "ev-animal-day-2026/ev-animal-day-2026-card.jpg",
+    "details": "ev-animal-day-2026/ev-animal-day-2026-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-teachers-2026",
+   "packId": "evpack-teachers-2026",
+   "referenceName": "ev-teachers-2026",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-teachers-2026",
+   "publishStart": "2026-09-25T00:00:00Z",
+   "eventStart": "2026-10-02T00:00:00Z",
+   "eventEnd": "2026-10-09T23:59:59Z",
+   "localization": {
+    "name": "World Teachers' Day",
+    "shortDescription": "24 pictures for World Teachers' Day",
+    "longDescription": "Old books, globes, coloured pencils, abacuses, school bells, historic schoolhouses and grand libraries."
+   },
+   "pictures": [
+    "p-204de50bb19a",
+    "p-a28627ec020b",
+    "p-de3151f28061"
+   ],
+   "media": {
+    "card": "ev-teachers-2026/ev-teachers-2026-card.jpg",
+    "details": "ev-teachers-2026/ev-teachers-2026-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-mental-health-2026",
+   "packId": "evpack-mental-health-2026",
+   "referenceName": "ev-mental-health-2026",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-mental-health-2026",
+   "publishStart": "2026-09-30T00:00:00Z",
+   "eventStart": "2026-10-07T00:00:00Z",
+   "eventEnd": "2026-10-14T23:59:59Z",
+   "localization": {
+    "name": "World Mental Health Day",
+    "shortDescription": "24 pictures for World Mental Health Day",
+    "longDescription": "Lotus flowers, moss gardens, lavender fields, stone cairns, koi ponds and calming scenes."
+   },
+   "pictures": [
+    "p-fc052b563ed6",
+    "evpack-mental-health-2026-06",
+    "evpack-mental-health-2026-14"
+   ],
+   "media": {
+    "card": "ev-mental-health-2026/ev-mental-health-2026-card.jpg",
+    "details": "ev-mental-health-2026/ev-mental-health-2026-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-food-day-2026",
+   "packId": "evpack-food-day-2026",
+   "referenceName": "ev-food-day-2026",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-food-day-2026",
+   "publishStart": "2026-10-06T00:00:00Z",
+   "eventStart": "2026-10-13T00:00:00Z",
+   "eventEnd": "2026-10-20T23:59:59Z",
+   "localization": {
+    "name": "World Food Day",
+    "shortDescription": "24 pictures for World Food Day",
+    "longDescription": "Ramen, paella, thali, bibimbap, spice and fish markets, pumpkins and rice terraces from around the world."
+   },
+   "pictures": [
+    "p-9ed32d8961ff",
+    "p-250f6aaac6fc",
+    "p-4e2e8c43db42"
+   ],
+   "media": {
+    "card": "ev-food-day-2026/ev-food-day-2026-card.jpg",
+    "details": "ev-food-day-2026/ev-food-day-2026-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-un-day-2026",
+   "packId": "evpack-un-day-2026",
+   "referenceName": "ev-un-day-2026",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-un-day-2026",
+   "publishStart": "2026-10-14T00:00:00Z",
+   "eventStart": "2026-10-21T00:00:00Z",
+   "eventEnd": "2026-10-28T23:59:59Z",
+   "localization": {
+    "name": "United Nations Day",
+    "shortDescription": "24 pictures for United Nations Day",
+    "longDescription": "Flags of the member states, a white dove, an olive branch, the UN headquarters and landmarks from every continent."
+   },
+   "pictures": [
+    "p-61ea32ab68fa",
+    "p-0f4749024a80",
+    "p-61167dbed52d"
+   ],
+   "media": {
+    "card": "ev-un-day-2026/ev-un-day-2026-card.jpg",
+    "details": "ev-un-day-2026/ev-un-day-2026-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-halloween-2026",
+   "packId": "evpack-halloween-2026",
+   "referenceName": "ev-halloween-2026",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-halloween-2026",
+   "publishStart": "2026-10-21T00:00:00Z",
+   "eventStart": "2026-10-28T00:00:00Z",
+   "eventEnd": "2026-11-04T23:59:59Z",
+   "localization": {
+    "name": "Halloween",
+    "shortDescription": "24 pictures for Halloween",
+    "longDescription": "Carved jack-o'-lanterns, pumpkins and gourds, a fruit bat, a barn owl, a tarantula, cobwebs and fly agaric."
+   },
+   "pictures": [
+    "p-791afa5f42ef",
+    "evpack-halloween-2026-04",
+    "evpack-halloween-2026-05"
+   ],
+   "media": {
+    "card": "ev-halloween-2026/ev-halloween-2026-card.jpg",
+    "details": "ev-halloween-2026/ev-halloween-2026-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-vegan-2026",
+   "packId": "evpack-vegan-2026",
+   "referenceName": "ev-vegan-2026",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-vegan-2026",
+   "publishStart": "2026-10-22T00:00:00Z",
+   "eventStart": "2026-10-29T00:00:00Z",
+   "eventEnd": "2026-11-05T23:59:59Z",
+   "localization": {
+    "name": "World Vegan Day",
+    "shortDescription": "24 pictures for World Vegan Day",
+    "longDescription": "Tofu bowls, falafel, chana masala, koshari, guacamole, figs, dragon fruit, jackfruit and market vegetables."
+   },
+   "pictures": [
+    "evpack-vegan-2026-01",
+    "evpack-vegan-2026-02",
+    "evpack-vegan-2026-03"
+   ],
+   "media": {
+    "card": "ev-vegan-2026/ev-vegan-2026-card.jpg",
+    "details": "ev-vegan-2026/ev-vegan-2026-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-diwali-2026",
+   "packId": "evpack-diwali-2026",
+   "referenceName": "ev-diwali-2026",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-diwali-2026",
+   "publishStart": "2026-10-29T00:00:00Z",
+   "eventStart": "2026-11-05T00:00:00Z",
+   "eventEnd": "2026-11-12T23:59:59Z",
+   "localization": {
+    "name": "Diwali",
+    "shortDescription": "24 pictures for Diwali",
+    "longDescription": "Clay diyas and brass lamps, rangoli patterns, marigolds, sweets from jalebi to kaju katli and sparklers."
+   },
+   "pictures": [
+    "p-589d97a67f2d",
+    "p-18b6ef8cf4fd",
+    "p-8c501de85d5f"
+   ],
+   "media": {
+    "card": "ev-diwali-2026/ev-diwali-2026-card.jpg",
+    "details": "ev-diwali-2026/ev-diwali-2026-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-remembrance-2026",
+   "packId": "evpack-remembrance-2026",
+   "referenceName": "ev-remembrance-2026",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-remembrance-2026",
+   "publishStart": "2026-11-01T00:00:00Z",
+   "eventStart": "2026-11-08T00:00:00Z",
+   "eventEnd": "2026-11-15T23:59:59Z",
+   "localization": {
+    "name": "Remembrance Day",
+    "shortDescription": "24 pictures for Remembrance Day",
+    "longDescription": "Red poppies, cornflowers and forget-me-nots, poppy wreaths, war memorials and an eternal flame. Open for one week."
+   },
+   "pictures": [
+    "evpack-remembrance-2026-04",
+    "evpack-remembrance-2026-05",
+    "evpack-remembrance-2026-10"
+   ],
+   "media": {
+    "card": "ev-remembrance-2026/ev-remembrance-2026-card.jpg",
+    "details": "ev-remembrance-2026/ev-remembrance-2026-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-kindness-2026",
+   "packId": "evpack-kindness-2026",
+   "referenceName": "ev-kindness-2026",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-kindness-2026",
+   "publishStart": "2026-11-03T00:00:00Z",
+   "eventStart": "2026-11-10T00:00:00Z",
+   "eventEnd": "2026-11-17T23:59:59Z",
+   "localization": {
+    "name": "World Kindness Day",
+    "shortDescription": "24 pictures for World Kindness Day",
+    "longDescription": "Wrapped gifts, bouquets, heart-shaped treats, warm drinks, honey and jam."
+   },
+   "pictures": [
+    "p-93fa77e3f262",
+    "p-a0e04a992207",
+    "p-c2869168200f"
+   ],
+   "media": {
+    "card": "ev-kindness-2026/ev-kindness-2026-card.jpg",
+    "details": "ev-kindness-2026/ev-kindness-2026-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-universal-childrens-2026",
+   "packId": "evpack-universal-childrens-2026",
+   "referenceName": "ev-universal-childrens-2026",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-universal-childrens-2026",
+   "publishStart": "2026-11-10T00:00:00Z",
+   "eventStart": "2026-11-17T00:00:00Z",
+   "eventEnd": "2026-11-24T23:59:59Z",
+   "localization": {
+    "name": "Universal Children's Day",
+    "shortDescription": "23 pictures for Universal Children's Day",
+    "longDescription": "Balloons, building bricks, a carousel, tin robots, a pinwheel and a birthday cake."
+   },
+   "pictures": [
+    "p-ce6b1131db71",
+    "p-c3dde1d70d26",
+    "p-6e0998719415"
+   ],
+   "media": {
+    "card": "ev-universal-childrens-2026/ev-universal-childrens-2026-card.jpg",
+    "details": "ev-universal-childrens-2026/ev-universal-childrens-2026-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-thanksgiving-2026",
+   "packId": "evpack-thanksgiving-2026",
+   "referenceName": "ev-thanksgiving-2026",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-thanksgiving-2026",
+   "publishStart": "2026-11-16T00:00:00Z",
+   "eventStart": "2026-11-23T00:00:00Z",
+   "eventEnd": "2026-11-30T23:59:59Z",
+   "localization": {
+    "name": "Thanksgiving",
+    "shortDescription": "24 pictures for Thanksgiving",
+    "longDescription": "Wild turkeys, pumpkin, pecan and apple pies, stuffing, cranberries, corn, squash soups, sweet potatoes and acorns."
+   },
+   "pictures": [
+    "p-eb4e233522c1",
+    "evpack-thanksgiving-2026-04",
+    "evpack-thanksgiving-2026-14"
+   ],
+   "media": {
+    "card": "ev-thanksgiving-2026/ev-thanksgiving-2026-card.jpg",
+    "details": "ev-thanksgiving-2026/ev-thanksgiving-2026-details.jpg"
+   },
+   "locked": true,
+   "note": "Card picture changed by hand 2026-10-14: the pack picture of mini pumpkins on pallets carries a photographer watermark."
+  },
+  {
+   "eventId": "ev-volunteer-2026",
+   "packId": "evpack-volunteer-2026",
+   "referenceName": "ev-volunteer-2026",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-volunteer-2026",
+   "publishStart": "2026-11-25T00:00:00Z",
+   "eventStart": "2026-12-02T00:00:00Z",
+   "eventEnd": "2026-12-09T23:59:59Z",
+   "localization": {
+    "name": "International Volunteer Day",
+    "shortDescription": "24 pictures for International Volunteer Day",
+    "longDescription": "Community gardens, garden tools, seedlings, insect hotels, nest boxes and knitted mittens."
+   },
+   "pictures": [
+    "p-2fcfaa3dd0cb",
+    "evpack-volunteer-2026-09",
+    "evpack-volunteer-2026-12"
+   ],
+   "media": {
+    "card": "ev-volunteer-2026/ev-volunteer-2026-card.jpg",
+    "details": "ev-volunteer-2026/ev-volunteer-2026-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-mountain-day-2026",
+   "packId": "evpack-mountain-day-2026",
+   "referenceName": "ev-mountain-day-2026",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-mountain-day-2026",
+   "publishStart": "2026-12-01T00:00:00Z",
+   "eventStart": "2026-12-08T00:00:00Z",
+   "eventEnd": "2026-12-15T23:59:59Z",
+   "localization": {
+    "name": "International Mountain Day",
+    "shortDescription": "24 pictures for International Mountain Day",
+    "longDescription": "Famous peaks from the Matterhorn, K2 and Ama Dablam to Half Dome, Kirkjufell and the Lofoten."
+   },
+   "pictures": [
+    "p-80696341667a",
+    "evpack-mountain-day-2026-01",
+    "evpack-mountain-day-2026-10"
+   ],
+   "media": {
+    "card": "ev-mountain-day-2026/ev-mountain-day-2026-card.jpg",
+    "details": "ev-mountain-day-2026/ev-mountain-day-2026-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-tea-day-2026",
+   "packId": "evpack-tea-day-2026",
+   "referenceName": "ev-tea-day-2026",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-tea-day-2026",
+   "publishStart": "2026-12-05T00:00:00Z",
+   "eventStart": "2026-12-12T00:00:00Z",
+   "eventEnd": "2026-12-19T23:59:59Z",
+   "localization": {
+    "name": "International Tea Day",
+    "shortDescription": "24 pictures for International Tea Day",
+    "longDescription": "Moroccan mint tea, masala chai, Turkish tea, samovars, Yixing and Japanese teapots."
+   },
+   "pictures": [
+    "p-18679ec53799",
+    "p-ddcb7c5a4550",
+    "p-f9e6398762cb"
+   ],
+   "media": {
+    "card": "ev-tea-day-2026/ev-tea-day-2026-card.jpg",
+    "details": "ev-tea-day-2026/ev-tea-day-2026-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-winter-solstice-2026",
+   "packId": "evpack-winter-solstice-2026",
+   "referenceName": "ev-winter-solstice-2026",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-winter-solstice-2026",
+   "publishStart": "2026-12-11T00:00:00Z",
+   "eventStart": "2026-12-18T00:00:00Z",
+   "eventEnd": "2026-12-25T23:59:59Z",
+   "localization": {
+    "name": "Winter Solstice",
+    "shortDescription": "24 pictures for Winter Solstice",
+    "longDescription": "Stonehenge, Newgrange and the Callanish Stones, Yule goats, a Yule log, holly, mistletoe and frost."
+   },
+   "pictures": [
+    "p-fdafda74b9bd",
+    "evpack-winter-solstice-2026-14",
+    "p-1419ebfed768"
+   ],
+   "media": {
+    "card": "ev-winter-solstice-2026/ev-winter-solstice-2026-card.jpg",
+    "details": "ev-winter-solstice-2026/ev-winter-solstice-2026-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-christmas-2026",
+   "packId": "evpack-christmas-2026",
+   "referenceName": "ev-christmas-2026",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-christmas-2026",
+   "publishStart": "2026-12-15T00:00:00Z",
+   "eventStart": "2026-12-22T00:00:00Z",
+   "eventEnd": "2026-12-29T23:59:59Z",
+   "localization": {
+    "name": "Christmas",
+    "shortDescription": "24 pictures for Christmas",
+    "longDescription": "Decorated trees, baubles, gingerbread, poinsettias, holly and mistletoe."
+   },
+   "pictures": [
+    "evpack-christmas-2026-02",
+    "evpack-christmas-2026-08",
+    "evpack-christmas-2026-13"
+   ],
+   "media": {
+    "card": "ev-christmas-2026/ev-christmas-2026-card.jpg",
+    "details": "ev-christmas-2026/ev-christmas-2026-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-new-years-eve-2026",
+   "packId": "evpack-new-years-eve-2026",
+   "referenceName": "ev-new-years-eve-2026",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-new-years-eve-2026",
+   "publishStart": "2026-12-21T00:00:00Z",
+   "eventStart": "2026-12-28T00:00:00Z",
+   "eventEnd": "2027-01-04T23:59:59Z",
+   "localization": {
+    "name": "New Year's Eve",
+    "shortDescription": "24 pictures for New Year's Eve",
+    "longDescription": "Fireworks over Sydney, London, Prague and Singapore, champagne, sparklers, glitter and oliebollen."
+   },
+   "pictures": [
+    "evpack-new-years-eve-2026-01",
+    "evpack-new-years-eve-2026-09",
+    "p-b6d5485b89ae"
+   ],
+   "media": {
+    "card": "ev-new-years-eve-2026/ev-new-years-eve-2026-card.jpg",
+    "details": "ev-new-years-eve-2026/ev-new-years-eve-2026-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-new-year-2027",
+   "packId": "evpack-new-year-2027",
+   "referenceName": "ev-new-year-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-new-year-2027",
+   "publishStart": "2026-12-22T00:00:00Z",
+   "eventStart": "2026-12-29T00:00:00Z",
+   "eventEnd": "2027-01-05T23:59:59Z",
+   "localization": {
+    "name": "New Year's Day",
+    "shortDescription": "23 pictures for New Year's Day",
+    "longDescription": "Winter sunrises, Japanese kagami mochi, kadomatsu and daruma, a lucky ladybird, winter flowers and berries."
+   },
+   "pictures": [
+    "p-cb4caa74bb6f",
+    "evpack-new-year-2027-07",
+    "p-244dbdd674c5"
+   ],
+   "media": {
+    "card": "ev-new-year-2027/ev-new-year-2027-card.jpg",
+    "details": "ev-new-year-2027/ev-new-year-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-bean-day-2027",
+   "packId": "evpack-bean-day-2027",
+   "referenceName": "ev-bean-day-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-bean-day-2027",
+   "publishStart": "2026-12-27T00:00:00Z",
+   "eventStart": "2027-01-03T00:00:00Z",
+   "eventEnd": "2027-01-10T23:59:59Z",
+   "localization": {
+    "name": "National Bean Day",
+    "shortDescription": "24 pictures for National Bean Day",
+    "longDescription": "Kidney beans, chickpeas, lentils, edamame, bean pods and the dishes made from them. Open for one week."
+   },
+   "pictures": [
+    "p-500eab6c7468",
+    "p-87c100d6826e",
+    "p-8c64d70d0754"
+   ],
+   "media": {
+    "card": "ev-bean-day-2027/ev-bean-day-2027-card.jpg",
+    "details": "ev-bean-day-2027/ev-bean-day-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-hot-tea-2027",
+   "packId": "evpack-hot-tea-2027",
+   "referenceName": "ev-hot-tea-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-hot-tea-2027",
+   "publishStart": "2027-01-02T00:00:00Z",
+   "eventStart": "2027-01-09T00:00:00Z",
+   "eventEnd": "2027-01-16T23:59:59Z",
+   "localization": {
+    "name": "National Hot Tea Day",
+    "shortDescription": "24 pictures for National Hot Tea Day",
+    "longDescription": "Steaming cups, teapots, matcha, chai, loose leaves and tea gardens. Open for one week."
+   },
+   "pictures": [
+    "evpack-hot-tea-2027-08",
+    "evpack-hot-tea-2027-11",
+    "evpack-hot-tea-2027-14"
+   ],
+   "media": {
+    "card": "ev-hot-tea-2027/ev-hot-tea-2027-card.jpg",
+    "details": "ev-hot-tea-2027/ev-hot-tea-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-squirrel-2027",
+   "packId": "evpack-squirrel-2027",
+   "referenceName": "ev-squirrel-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-squirrel-2027",
+   "publishStart": "2027-01-11T00:00:00Z",
+   "eventStart": "2027-01-18T00:00:00Z",
+   "eventEnd": "2027-01-25T23:59:59Z",
+   "localization": {
+    "name": "Squirrel Appreciation Day",
+    "shortDescription": "24 pictures for Squirrel Appreciation Day",
+    "longDescription": "Red, grey, fox, giant and ground squirrels plus chipmunks and the nuts they hoard. Open for one week."
+   },
+   "pictures": [
+    "evpack-squirrel-2027-06",
+    "p-412ceb9a2fa4",
+    "p-308c6ff8988c"
+   ],
+   "media": {
+    "card": "ev-squirrel-2027/ev-squirrel-2027-card.jpg",
+    "details": "ev-squirrel-2027/ev-squirrel-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-education-2027",
+   "packId": "evpack-education-2027",
+   "referenceName": "ev-education-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-education-2027",
+   "publishStart": "2027-01-14T00:00:00Z",
+   "eventStart": "2027-01-21T00:00:00Z",
+   "eventEnd": "2027-01-28T23:59:59Z",
+   "localization": {
+    "name": "International Day of Education",
+    "shortDescription": "24 pictures for International Day of Education",
+    "longDescription": "Grand abbey and city libraries, old books, school buildings, an abacus, pencils and other tools of learning."
+   },
+   "pictures": [
+    "p-5b3cd5366002",
+    "p-3c34379c0528",
+    "p-40e47841b6e7"
+   ],
+   "media": {
+    "card": "ev-education-2027/ev-education-2027-card.jpg",
+    "details": "ev-education-2027/ev-education-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-croissant-2027",
+   "packId": "evpack-croissant-2027",
+   "referenceName": "ev-croissant-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-croissant-2027",
+   "publishStart": "2027-01-20T00:00:00Z",
+   "eventStart": "2027-01-27T00:00:00Z",
+   "eventEnd": "2027-02-03T23:59:59Z",
+   "localization": {
+    "name": "National Croissant Day",
+    "shortDescription": "24 pictures for National Croissant Day",
+    "longDescription": "Butter croissants, pain au chocolat, almond croissants, bakery trays and viennoiserie. Open for one week."
+   },
+   "pictures": [
+    "evpack-croissant-2027-05",
+    "evpack-croissant-2027-08",
+    "evpack-croissant-2027-12"
+   ],
+   "media": {
+    "card": "ev-croissant-2027/ev-croissant-2027-card.jpg",
+    "details": "ev-croissant-2027/ev-croissant-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-wetlands-2027",
+   "packId": "evpack-wetlands-2027",
+   "referenceName": "ev-wetlands-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-wetlands-2027",
+   "publishStart": "2027-01-23T00:00:00Z",
+   "eventStart": "2027-01-30T00:00:00Z",
+   "eventEnd": "2027-02-06T23:59:59Z",
+   "localization": {
+    "name": "World Wetlands Day",
+    "shortDescription": "24 pictures for World Wetlands Day",
+    "longDescription": "Mangroves, swamp cypress, bogs, lily ponds and the herons, spoonbills, caimans and damselflies that live in them."
+   },
+   "pictures": [
+    "evpack-wetlands-2027-03",
+    "evpack-wetlands-2027-06",
+    "evpack-wetlands-2027-09"
+   ],
+   "media": {
+    "card": "ev-wetlands-2027/ev-wetlands-2027-card.jpg",
+    "details": "ev-wetlands-2027/ev-wetlands-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-lunar-new-year-2027",
+   "packId": "evpack-lunar-new-year-2027",
+   "referenceName": "ev-lunar-new-year-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-lunar-new-year-2027",
+   "publishStart": "2027-01-27T00:00:00Z",
+   "eventStart": "2027-02-03T00:00:00Z",
+   "eventEnd": "2027-02-10T23:59:59Z",
+   "localization": {
+    "name": "Lunar New Year",
+    "shortDescription": "24 pictures for Lunar New Year",
+    "longDescription": "Red lanterns, red envelopes, jiaozi and xiaolongbao, bánh chưng, kumquat trees and plum blossom."
+   },
+   "pictures": [
+    "p-1415e57ca305",
+    "p-4c538e761b3f",
+    "p-22742cd81ae9"
+   ],
+   "media": {
+    "card": "ev-lunar-new-year-2027/ev-lunar-new-year-2027-card.jpg",
+    "details": "ev-lunar-new-year-2027/ev-lunar-new-year-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-pizza-2027",
+   "packId": "evpack-pizza-2027",
+   "referenceName": "ev-pizza-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-pizza-2027",
+   "publishStart": "2027-01-30T00:00:00Z",
+   "eventStart": "2027-02-06T00:00:00Z",
+   "eventEnd": "2027-02-13T23:59:59Z",
+   "localization": {
+    "name": "National Pizza Day",
+    "shortDescription": "24 pictures for National Pizza Day",
+    "longDescription": "Neapolitan margherita, pepperoni, Detroit and Sicilian squares, calzone, pizza fritta, pinsa and lahmacun."
+   },
+   "pictures": [
+    "p-03087986ffee",
+    "evpack-pizza-2027-10",
+    "evpack-pizza-2027-11"
+   ],
+   "media": {
+    "card": "ev-pizza-2027/ev-pizza-2027-card.jpg",
+    "details": "ev-pizza-2027/ev-pizza-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-valentines-2027",
+   "packId": "evpack-valentines-2027",
+   "referenceName": "ev-valentines-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-valentines-2027",
+   "publishStart": "2027-02-04T00:00:00Z",
+   "eventStart": "2027-02-11T00:00:00Z",
+   "eventEnd": "2027-02-18T23:59:59Z",
+   "localization": {
+    "name": "Valentine's Day",
+    "shortDescription": "24 pictures for Valentine's Day",
+    "longDescription": "Red and pink roses, chocolate-dipped strawberries, macarons, heart candies, love locks, tulips and gift boxes."
+   },
+   "pictures": [
+    "p-81f694792f95",
+    "evpack-valentines-2027-07",
+    "p-12b8dbc065cc"
+   ],
+   "media": {
+    "card": "ev-valentines-2027/ev-valentines-2027-card.jpg",
+    "details": "ev-valentines-2027/ev-valentines-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-love-your-pet-2027",
+   "packId": "evpack-love-your-pet-2027",
+   "referenceName": "ev-love-your-pet-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-love-your-pet-2027",
+   "publishStart": "2027-02-10T00:00:00Z",
+   "eventStart": "2027-02-17T00:00:00Z",
+   "eventEnd": "2027-02-24T23:59:59Z",
+   "localization": {
+    "name": "Love Your Pet Day",
+    "shortDescription": "24 pictures for Love Your Pet Day",
+    "longDescription": "Dogs, cats, rabbits, guinea pigs, budgies, a hamster, a chinchilla, a bearded dragon and a betta fish."
+   },
+   "pictures": [
+    "evpack-love-your-pet-2027-01",
+    "evpack-love-your-pet-2027-02",
+    "evpack-love-your-pet-2027-08"
+   ],
+   "media": {
+    "card": "ev-love-your-pet-2027/ev-love-your-pet-2027-card.jpg",
+    "details": "ev-love-your-pet-2027/ev-love-your-pet-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-polar-bear-2027",
+   "packId": "evpack-polar-bear-2027",
+   "referenceName": "ev-polar-bear-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-polar-bear-2027",
+   "publishStart": "2027-02-17T00:00:00Z",
+   "eventStart": "2027-02-24T00:00:00Z",
+   "eventEnd": "2027-03-03T23:59:59Z",
+   "localization": {
+    "name": "International Polar Bear Day",
+    "shortDescription": "22 pictures for International Polar Bear Day",
+    "longDescription": "Polar bears on snow and in the water, walruses, snowy owls, Arctic hares, musk oxen, belugas and reindeer."
+   },
+   "pictures": [
+    "p-6cc084a67cf2",
+    "p-1d52cb2de7de",
+    "p-d7bae4790489"
+   ],
+   "media": {
+    "card": "ev-polar-bear-2027/ev-polar-bear-2027-card.jpg",
+    "details": "ev-polar-bear-2027/ev-polar-bear-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-wildlife-2027",
+   "packId": "evpack-wildlife-2027",
+   "referenceName": "ev-wildlife-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-wildlife-2027",
+   "publishStart": "2027-02-21T00:00:00Z",
+   "eventStart": "2027-02-28T00:00:00Z",
+   "eventEnd": "2027-03-07T23:59:59Z",
+   "localization": {
+    "name": "World Wildlife Day",
+    "shortDescription": "24 pictures for World Wildlife Day",
+    "longDescription": "Elephants, tigers, wolves, rhinos, puffins, flamingos, tree frogs and other wild animals in their habitats."
+   },
+   "pictures": [
+    "evpack-wildlife-2027-01",
+    "evpack-wildlife-2027-04",
+    "evpack-wildlife-2027-06"
+   ],
+   "media": {
+    "card": "ev-wildlife-2027/ev-wildlife-2027-card.jpg",
+    "details": "ev-wildlife-2027/ev-wildlife-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-womens-day-2027",
+   "packId": "evpack-womens-day-2027",
+   "referenceName": "ev-womens-day-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-womens-day-2027",
+   "publishStart": "2027-02-26T00:00:00Z",
+   "eventStart": "2027-03-05T00:00:00Z",
+   "eventEnd": "2027-03-12T23:59:59Z",
+   "localization": {
+    "name": "International Women's Day",
+    "shortDescription": "24 pictures for International Women's Day",
+    "longDescription": "Mimosa, violets, irises, lilac, pansies and a pearl necklace."
+   },
+   "pictures": [
+    "p-c67ef6b311d9",
+    "p-c41188ef8f36",
+    "p-0f43af38f77c"
+   ],
+   "media": {
+    "card": "ev-womens-day-2027/ev-womens-day-2027-card.jpg",
+    "details": "ev-womens-day-2027/ev-womens-day-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-pi-day-2027",
+   "packId": "evpack-pi-day-2027",
+   "referenceName": "ev-pi-day-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-pi-day-2027",
+   "publishStart": "2027-03-04T00:00:00Z",
+   "eventStart": "2027-03-11T00:00:00Z",
+   "eventEnd": "2027-03-18T23:59:59Z",
+   "localization": {
+    "name": "Pi Day",
+    "shortDescription": "24 pictures for Pi Day",
+    "longDescription": "Lattice, pecan, pumpkin, blueberry and lemon meringue pies, fruit tarts and mince pies."
+   },
+   "pictures": [
+    "p-2f48ac6c0ef7",
+    "evpack-pi-day-2027-01",
+    "evpack-pi-day-2027-09"
+   ],
+   "media": {
+    "card": "ev-pi-day-2027/ev-pi-day-2027-card.jpg",
+    "details": "ev-pi-day-2027/ev-pi-day-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-st-patricks-2027",
+   "packId": "evpack-st-patricks-2027",
+   "referenceName": "ev-st-patricks-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-st-patricks-2027",
+   "publishStart": "2027-03-07T00:00:00Z",
+   "eventStart": "2027-03-14T00:00:00Z",
+   "eventEnd": "2027-03-21T23:59:59Z",
+   "localization": {
+    "name": "St Patrick's Day",
+    "shortDescription": "23 pictures for St Patrick's Day",
+    "longDescription": "Shamrocks, the Cliffs of Moher, Celtic crosses and round towers, the Rock of Cashel and Kylemore Abbey."
+   },
+   "pictures": [
+    "p-769ead42683f",
+    "evpack-st-patricks-2027-04",
+    "p-77ba8e9dd71e"
+   ],
+   "media": {
+    "card": "ev-st-patricks-2027/ev-st-patricks-2027-card.jpg",
+    "details": "ev-st-patricks-2027/ev-st-patricks-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-happiness-2027",
+   "packId": "evpack-happiness-2027",
+   "referenceName": "ev-happiness-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-happiness-2027",
+   "publishStart": "2027-03-10T00:00:00Z",
+   "eventStart": "2027-03-17T00:00:00Z",
+   "eventEnd": "2027-03-24T23:59:59Z",
+   "localization": {
+    "name": "International Day of Happiness",
+    "shortDescription": "24 pictures for International Day of Happiness",
+    "longDescription": "Sunflowers, tulip fields, puppies, ducklings, sprinkled doughnuts, colourful umbrellas and a hot air balloon."
+   },
+   "pictures": [
+    "evpack-happiness-2027-14",
+    "p-6f2e25fa87b2",
+    "p-d4c119e9b3be"
+   ],
+   "media": {
+    "card": "ev-happiness-2027/ev-happiness-2027-card.jpg",
+    "details": "ev-happiness-2027/ev-happiness-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-forests-2027",
+   "packId": "evpack-forests-2027",
+   "referenceName": "ev-forests-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-forests-2027",
+   "publishStart": "2027-03-11T00:00:00Z",
+   "eventStart": "2027-03-18T00:00:00Z",
+   "eventEnd": "2027-03-25T23:59:59Z",
+   "localization": {
+    "name": "International Day of Forests",
+    "shortDescription": "24 pictures for International Day of Forests",
+    "longDescription": "Redwoods, beech woods, bamboo groves, rainforests, mossy glens and the mushrooms and ferns of the forest floor."
+   },
+   "pictures": [
+    "p-272af2566d59",
+    "evpack-forests-2027-06",
+    "evpack-forests-2027-13"
+   ],
+   "media": {
+    "card": "ev-forests-2027/ev-forests-2027-card.jpg",
+    "details": "ev-forests-2027/ev-forests-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-water-day-2027",
+   "packId": "evpack-water-day-2027",
+   "referenceName": "ev-water-day-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-water-day-2027",
+   "publishStart": "2027-03-12T00:00:00Z",
+   "eventStart": "2027-03-19T00:00:00Z",
+   "eventEnd": "2027-03-26T23:59:59Z",
+   "localization": {
+    "name": "World Water Day",
+    "shortDescription": "24 pictures for World Water Day",
+    "longDescription": "Springs, waterfalls, wells, aqueducts, glaciers, raindrops and rice terraces: fresh water in all its forms."
+   },
+   "pictures": [
+    "p-7c766ec691b1",
+    "evpack-water-day-2027-11",
+    "evpack-water-day-2027-12"
+   ],
+   "media": {
+    "card": "ev-water-day-2027/ev-water-day-2027-card.jpg",
+    "details": "ev-water-day-2027/ev-water-day-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-easter-2027",
+   "packId": "evpack-easter-2027",
+   "referenceName": "ev-easter-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-easter-2027",
+   "publishStart": "2027-03-18T00:00:00Z",
+   "eventStart": "2027-03-25T00:00:00Z",
+   "eventEnd": "2027-04-01T23:59:59Z",
+   "localization": {
+    "name": "Easter",
+    "shortDescription": "24 pictures for Easter",
+    "longDescription": "Dyed eggs and pysanky, egg trees and Osterbrunnen fountains, hot cross buns, simnel cake and Święconka baskets."
+   },
+   "pictures": [
+    "p-077bb66cb95d",
+    "p-e3edfcb156ef",
+    "p-38b233e30a2b"
+   ],
+   "media": {
+    "card": "ev-easter-2027/ev-easter-2027-card.jpg",
+    "details": "ev-easter-2027/ev-easter-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-childrens-book-2027",
+   "packId": "evpack-childrens-book-2027",
+   "referenceName": "ev-childrens-book-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-childrens-book-2027",
+   "publishStart": "2027-03-23T00:00:00Z",
+   "eventStart": "2027-03-30T00:00:00Z",
+   "eventEnd": "2027-04-06T23:59:59Z",
+   "localization": {
+    "name": "Children's Book Day",
+    "shortDescription": "Pictures for Children's Book Day",
+    "longDescription": "Fairy-tale castles, storybook houses, teddy bears, toy trains and the animals of classic children's stories, and more."
+   },
+   "pictures": [
+    "p-161bd62b76e9",
+    "p-3094949104f4",
+    "p-d679ef7806c4"
+   ],
+   "media": {
+    "card": "ev-childrens-book-2027/ev-childrens-book-2027-card.jpg",
+    "details": "ev-childrens-book-2027/ev-childrens-book-2027-details.jpg"
+   },
+   "locked": true
+  },
+  {
+   "eventId": "ev-health-2027",
+   "packId": "evpack-health-2027",
+   "referenceName": "ev-health-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-health-2027",
+   "publishStart": "2027-03-28T00:00:00Z",
+   "eventStart": "2027-04-04T00:00:00Z",
+   "eventEnd": "2027-04-11T23:59:59Z",
+   "localization": {
+    "name": "World Health Day",
+    "shortDescription": "23 pictures for World Health Day",
+    "longDescription": "Baskets of fresh fruit and vegetables, berries, kale, wholegrain bread and nuts, rosemary and ginger."
+   },
+   "pictures": [
+    "p-74a91792cc76",
+    "p-b42996a61863",
+    "p-544f090d2ffd"
+   ],
+   "media": {
+    "card": "ev-health-2027/ev-health-2027-card.jpg",
+    "details": "ev-health-2027/ev-health-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-pet-day-2027",
+   "packId": "evpack-pet-day-2027",
+   "referenceName": "ev-pet-day-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-pet-day-2027",
+   "publishStart": "2027-04-01T00:00:00Z",
+   "eventStart": "2027-04-08T00:00:00Z",
+   "eventEnd": "2027-04-15T23:59:59Z",
+   "localization": {
+    "name": "National Pet Day",
+    "shortDescription": "24 pictures for National Pet Day",
+    "longDescription": "Shiba Inus, retrievers, collies, dachshunds and Dalmatians, Maine Coons and Siamese cats, rabbits and guinea pigs."
+   },
+   "pictures": [
+    "p-41ce42e6a720",
+    "p-8e39cb93edd6",
+    "p-6fc9f2775c7d"
+   ],
+   "media": {
+    "card": "ev-pet-day-2027/ev-pet-day-2027-card.jpg",
+    "details": "ev-pet-day-2027/ev-pet-day-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-art-day-2027",
+   "packId": "evpack-art-day-2027",
+   "referenceName": "ev-art-day-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-art-day-2027",
+   "publishStart": "2027-04-05T00:00:00Z",
+   "eventStart": "2027-04-12T00:00:00Z",
+   "eventEnd": "2027-04-19T23:59:59Z",
+   "localization": {
+    "name": "World Art Day",
+    "shortDescription": "24 pictures for World Art Day",
+    "longDescription": "Van Gogh's Sunflowers and Dutch flower still lifes, brushes, pencils, pastels and paints and Monet's garden at Giverny."
+   },
+   "pictures": [
+    "p-a3d16964a2a4",
+    "p-541e0a1cb5fc",
+    "p-b3fb14942799"
+   ],
+   "media": {
+    "card": "ev-art-day-2027/ev-art-day-2027-card.jpg",
+    "details": "ev-art-day-2027/ev-art-day-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-earth-day-2027",
+   "packId": "evpack-earth-day-2027",
+   "referenceName": "ev-earth-day-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-earth-day-2027",
+   "publishStart": "2027-04-12T00:00:00Z",
+   "eventStart": "2027-04-19T00:00:00Z",
+   "eventEnd": "2027-04-26T23:59:59Z",
+   "localization": {
+    "name": "Earth Day",
+    "shortDescription": "21 pictures for Earth Day",
+    "longDescription": "The planet from orbit and its natural wonders: slot canyons, lava fields, basalt columns, waterfalls and mountains."
+   },
+   "pictures": [
+    "p-36945fa93ada",
+    "p-46d6e2f1fcd9",
+    "p-31f1252223df"
+   ],
+   "media": {
+    "card": "ev-earth-day-2027/ev-earth-day-2027-card.jpg",
+    "details": "ev-earth-day-2027/ev-earth-day-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-book-day-2027",
+   "packId": "evpack-book-day-2027",
+   "referenceName": "ev-book-day-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-book-day-2027",
+   "publishStart": "2027-04-13T00:00:00Z",
+   "eventStart": "2027-04-20T00:00:00Z",
+   "eventEnd": "2027-04-27T23:59:59Z",
+   "localization": {
+    "name": "World Book Day",
+    "shortDescription": "20 pictures for World Book Day",
+    "longDescription": "Baroque abbey libraries, grand reading rooms and Livraria Lello, quills and pens and little free libraries."
+   },
+   "pictures": [
+    "p-a91eecc9fbf2",
+    "p-9a12e6511de0",
+    "p-c0ec493376d5"
+   ],
+   "media": {
+    "card": "ev-book-day-2027/ev-book-day-2027-card.jpg",
+    "details": "ev-book-day-2027/ev-book-day-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-dance-2027",
+   "packId": "evpack-dance-2027",
+   "referenceName": "ev-dance-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-dance-2027",
+   "publishStart": "2027-04-19T00:00:00Z",
+   "eventStart": "2027-04-26T00:00:00Z",
+   "eventEnd": "2027-05-03T23:59:59Z",
+   "localization": {
+    "name": "International Dance Day",
+    "shortDescription": "22 pictures for International Dance Day",
+    "longDescription": "Pointe shoes and flamenco dresses, castanets, maracas and accordions, gramophones and jukeboxes."
+   },
+   "pictures": [
+    "p-20a51741d7df",
+    "p-d75607c029c2",
+    "p-ccae3cb1551c"
+   ],
+   "media": {
+    "card": "ev-dance-2027/ev-dance-2027-card.jpg",
+    "details": "ev-dance-2027/ev-dance-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-may-day-2027",
+   "packId": "evpack-may-day-2027",
+   "referenceName": "ev-may-day-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-may-day-2027",
+   "publishStart": "2027-04-21T00:00:00Z",
+   "eventStart": "2027-04-28T00:00:00Z",
+   "eventEnd": "2027-05-05T23:59:59Z",
+   "localization": {
+    "name": "May Day",
+    "shortDescription": "24 pictures for May Day",
+    "longDescription": "Bavarian maypoles, lily of the valley, hawthorn, lilac and apple blossom, bluebell woods, tulips and wisteria."
+   },
+   "pictures": [
+    "p-65201b73e8d0",
+    "p-7e6dc1233617",
+    "p-88d0722285fb"
+   ],
+   "media": {
+    "card": "ev-may-day-2027/ev-may-day-2027-card.jpg",
+    "details": "ev-may-day-2027/ev-may-day-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-star-wars-day-2027",
+   "packId": "evpack-star-wars-day-2027",
+   "referenceName": "ev-star-wars-day-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-star-wars-day-2027",
+   "publishStart": "2027-04-24T00:00:00Z",
+   "eventStart": "2027-05-01T00:00:00Z",
+   "eventEnd": "2027-05-08T23:59:59Z",
+   "localization": {
+    "name": "Star Wars Day",
+    "shortDescription": "24 pictures for Star Wars Day",
+    "longDescription": "Nebulae, galaxies and ringed planets, plus the real deserts, islands, forests and palaces where the saga was filmed."
+   },
+   "pictures": [
+    "p-86df21b86e5a",
+    "evpack-star-wars-day-2027-01",
+    "evpack-star-wars-day-2027-02"
+   ],
+   "media": {
+    "card": "ev-star-wars-day-2027/ev-star-wars-day-2027-card.jpg",
+    "details": "ev-star-wars-day-2027/ev-star-wars-day-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-mothers-day-2027",
+   "packId": "evpack-mothers-day-2027",
+   "referenceName": "ev-mothers-day-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-mothers-day-2027",
+   "publishStart": "2027-04-29T00:00:00Z",
+   "eventStart": "2027-05-06T00:00:00Z",
+   "eventEnd": "2027-05-13T23:59:59Z",
+   "localization": {
+    "name": "Mother's Day",
+    "shortDescription": "24 pictures for Mother's Day",
+    "longDescription": "Carnations, peonies, roses and tulips, breakfast in bed, afternoon tea, strawberry cake and other small gifts."
+   },
+   "pictures": [
+    "p-7d2b2ebcfc13",
+    "p-cf1bde51c012",
+    "p-574f19fcda65"
+   ],
+   "media": {
+    "card": "ev-mothers-day-2027/ev-mothers-day-2027-card.jpg",
+    "details": "ev-mothers-day-2027/ev-mothers-day-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-families-2027",
+   "packId": "evpack-families-2027",
+   "referenceName": "ev-families-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-families-2027",
+   "publishStart": "2027-05-05T00:00:00Z",
+   "eventStart": "2027-05-12T00:00:00Z",
+   "eventEnd": "2027-05-19T23:59:59Z",
+   "localization": {
+    "name": "International Day of Families",
+    "shortDescription": "24 pictures for International Day of Families",
+    "longDescription": "Animal families from swans with cygnets to elephants with calves and nests full of chicks."
+   },
+   "pictures": [
+    "p-4470b29115ad",
+    "p-9c67aa3bfad3",
+    "p-b5c035c59400"
+   ],
+   "media": {
+    "card": "ev-families-2027/ev-families-2027-card.jpg",
+    "details": "ev-families-2027/ev-families-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-bee-day-2027",
+   "packId": "evpack-bee-day-2027",
+   "referenceName": "ev-bee-day-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-bee-day-2027",
+   "publishStart": "2027-05-10T00:00:00Z",
+   "eventStart": "2027-05-17T00:00:00Z",
+   "eventEnd": "2027-05-24T23:59:59Z",
+   "localization": {
+    "name": "World Bee Day",
+    "shortDescription": "24 pictures for World Bee Day",
+    "longDescription": "Honey bees, bumblebees and solitary bees, honeycomb, hives and skeps, and the flowers bees feed on. Open for one week."
+   },
+   "pictures": [
+    "p-e7dcdd7836b9",
+    "evpack-bee-day-2027-01",
+    "evpack-bee-day-2027-03"
+   ],
+   "media": {
+    "card": "ev-bee-day-2027/ev-bee-day-2027-card.jpg",
+    "details": "ev-bee-day-2027/ev-bee-day-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-biodiversity-2027",
+   "packId": "evpack-biodiversity-2027",
+   "referenceName": "ev-biodiversity-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-biodiversity-2027",
+   "publishStart": "2027-05-12T00:00:00Z",
+   "eventStart": "2027-05-19T00:00:00Z",
+   "eventEnd": "2027-05-26T23:59:59Z",
+   "localization": {
+    "name": "Biodiversity Day",
+    "shortDescription": "Pictures for Biodiversity Day",
+    "longDescription": "Poison frogs, jewel beetles, butterflies, orchids, fungi, reef fish, and more."
+   },
+   "pictures": [
+    "evpack-biodiversity-2027-12",
+    "p-b56aae19665c",
+    "p-6e3142fba6b5"
+   ],
+   "media": {
+    "card": "ev-biodiversity-2027/ev-biodiversity-2027-card.jpg",
+    "details": "ev-biodiversity-2027/ev-biodiversity-2027-details.jpg"
+   },
+   "locked": true
+  },
+  {
+   "eventId": "ev-hamburger-2027",
+   "packId": "evpack-hamburger-2027",
+   "referenceName": "ev-hamburger-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-hamburger-2027",
+   "publishStart": "2027-05-18T00:00:00Z",
+   "eventStart": "2027-05-25T00:00:00Z",
+   "eventEnd": "2027-06-01T23:59:59Z",
+   "localization": {
+    "name": "National Hamburger Day",
+    "shortDescription": "24 pictures for National Hamburger Day",
+    "longDescription": "Cheeseburgers, smash burgers, sliders and veggie burgers, fish and tuna burgers, loco moco and Hamburg steak."
+   },
+   "pictures": [
+    "p-6cc7f38db701",
+    "p-46f38bbde44b",
+    "p-ef4110dfe7b9"
+   ],
+   "media": {
+    "card": "ev-hamburger-2027/ev-hamburger-2027-card.jpg",
+    "details": "ev-hamburger-2027/ev-hamburger-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-childrens-day-2027",
+   "packId": "evpack-childrens-day-2027",
+   "referenceName": "ev-childrens-day-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-childrens-day-2027",
+   "publishStart": "2027-05-22T00:00:00Z",
+   "eventStart": "2027-05-29T00:00:00Z",
+   "eventEnd": "2027-06-05T23:59:59Z",
+   "localization": {
+    "name": "International Children's Day",
+    "shortDescription": "24 pictures for International Children's Day",
+    "longDescription": "Toys, sweets and places to play: carp streamers, nesting dolls, building bricks, crayons, tin robots and gummy bears."
+   },
+   "pictures": [
+    "p-f02259452ec9",
+    "p-9418e095c851",
+    "p-b1ebf0f4a447"
+   ],
+   "media": {
+    "card": "ev-childrens-day-2027/ev-childrens-day-2027-card.jpg",
+    "details": "ev-childrens-day-2027/ev-childrens-day-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-bicycle-2027",
+   "packId": "evpack-bicycle-2027",
+   "referenceName": "ev-bicycle-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-bicycle-2027",
+   "publishStart": "2027-05-24T00:00:00Z",
+   "eventStart": "2027-05-31T00:00:00Z",
+   "eventEnd": "2027-06-07T23:59:59Z",
+   "localization": {
+    "name": "World Bicycle Day",
+    "shortDescription": "24 pictures for World Bicycle Day",
+    "longDescription": "Vintage roadsters and penny-farthings, cargo and folding bikes, Dutch bike racks, bells, chains and spoked wheels."
+   },
+   "pictures": [
+    "p-f7d3241c0105",
+    "p-4b2494578499",
+    "p-9e5c9c4d5ab0"
+   ],
+   "media": {
+    "card": "ev-bicycle-2027/ev-bicycle-2027-card.jpg",
+    "details": "ev-bicycle-2027/ev-bicycle-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-environment-2027",
+   "packId": "evpack-environment-2027",
+   "referenceName": "ev-environment-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-environment-2027",
+   "publishStart": "2027-05-26T00:00:00Z",
+   "eventStart": "2027-06-02T00:00:00Z",
+   "eventEnd": "2027-06-09T23:59:59Z",
+   "localization": {
+    "name": "World Environment Day",
+    "shortDescription": "24 pictures for World Environment Day",
+    "longDescription": "Mangroves, bogs, rice terraces, meadows and lotus ponds, wind turbines, solar panels, green roofs and vertical forests."
+   },
+   "pictures": [
+    "p-d68b96066c3e",
+    "evpack-environment-2027-04",
+    "p-520ba8a8007c"
+   ],
+   "media": {
+    "card": "ev-environment-2027/ev-environment-2027-card.jpg",
+    "details": "ev-environment-2027/ev-environment-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-oceans-2027",
+   "packId": "evpack-oceans-2027",
+   "referenceName": "ev-oceans-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-oceans-2027",
+   "publishStart": "2027-05-29T00:00:00Z",
+   "eventStart": "2027-06-05T00:00:00Z",
+   "eventEnd": "2027-06-12T23:59:59Z",
+   "localization": {
+    "name": "World Oceans Day",
+    "shortDescription": "24 pictures for World Oceans Day",
+    "longDescription": "Coral reefs, sea turtles, reef fish, jellyfish, kelp forests, tide pools and the creatures of the open sea."
+   },
+   "pictures": [
+    "p-5f74204a8576",
+    "p-85c25ce316ef",
+    "p-4625d4743f73"
+   ],
+   "media": {
+    "card": "ev-oceans-2027/ev-oceans-2027-card.jpg",
+    "details": "ev-oceans-2027/ev-oceans-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-fathers-day-2027",
+   "packId": "evpack-fathers-day-2027",
+   "referenceName": "ev-fathers-day-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-fathers-day-2027",
+   "publishStart": "2027-06-10T00:00:00Z",
+   "eventStart": "2027-06-17T00:00:00Z",
+   "eventEnd": "2027-06-24T23:59:59Z",
+   "localization": {
+    "name": "Father's Day",
+    "shortDescription": "23 pictures for Father's Day",
+    "longDescription": "Pocket watches, fishing reels, pocket knives, brogues, fountain pens, campfires, barbecues and a toolbox."
+   },
+   "pictures": [
+    "p-bdb4ce59c798",
+    "p-7dc9318500a1",
+    "p-5b1a88192200"
+   ],
+   "media": {
+    "card": "ev-fathers-day-2027/ev-fathers-day-2027-card.jpg",
+    "details": "ev-fathers-day-2027/ev-fathers-day-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-yoga-2027",
+   "packId": "evpack-yoga-2027",
+   "referenceName": "ev-yoga-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-yoga-2027",
+   "publishStart": "2027-06-11T00:00:00Z",
+   "eventStart": "2027-06-18T00:00:00Z",
+   "eventEnd": "2027-06-25T23:59:59Z",
+   "localization": {
+    "name": "International Yoga Day",
+    "shortDescription": "24 pictures for International Yoga Day",
+    "longDescription": "Lotus flowers, a singing bowl, prayer flags, zen and moss gardens, bamboo groves, temple lamps and peacocks."
+   },
+   "pictures": [
+    "p-5ab41318c88f",
+    "p-f20cdb052d94",
+    "p-e50681b880d3"
+   ],
+   "media": {
+    "card": "ev-yoga-2027/ev-yoga-2027-card.jpg",
+    "details": "ev-yoga-2027/ev-yoga-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-pride-2027",
+   "packId": "evpack-pride-2027",
+   "referenceName": "ev-pride-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-pride-2027",
+   "publishStart": "2027-06-18T00:00:00Z",
+   "eventStart": "2027-06-25T00:00:00Z",
+   "eventEnd": "2027-07-02T23:59:59Z",
+   "localization": {
+    "name": "Pride Day",
+    "shortDescription": "24 pictures for Pride Day",
+    "longDescription": "Rainbow flags, rainbow birds, Burano's painted houses, colour pencils and rainbow cake."
+   },
+   "pictures": [
+    "evpack-pride-2027-09",
+    "evpack-pride-2027-03",
+    "evpack-pride-2027-04"
+   ],
+   "media": {
+    "card": "ev-pride-2027/ev-pride-2027-card.jpg",
+    "details": "ev-pride-2027/ev-pride-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-independence-day-2027",
+   "packId": "evpack-independence-day-2027",
+   "referenceName": "ev-independence-day-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-independence-day-2027",
+   "publishStart": "2027-06-24T00:00:00Z",
+   "eventStart": "2027-07-01T00:00:00Z",
+   "eventEnd": "2027-07-08T23:59:59Z",
+   "localization": {
+    "name": "Independence Day",
+    "shortDescription": "24 pictures for Independence Day",
+    "longDescription": "The Capitol under fireworks, the Liberty Bell, bald eagles, bison, apple and blueberry pies."
+   },
+   "pictures": [
+    "evpack-independence-day-2027-08",
+    "p-b81fc7d01e23",
+    "p-2cabd06450be"
+   ],
+   "media": {
+    "card": "ev-independence-day-2027/ev-independence-day-2027-card.jpg",
+    "details": "ev-independence-day-2027/ev-independence-day-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-chocolate-2027",
+   "packId": "evpack-chocolate-2027",
+   "referenceName": "ev-chocolate-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-chocolate-2027",
+   "publishStart": "2027-06-27T00:00:00Z",
+   "eventStart": "2027-07-04T00:00:00Z",
+   "eventEnd": "2027-07-11T23:59:59Z",
+   "localization": {
+    "name": "World Chocolate Day",
+    "shortDescription": "24 pictures for World Chocolate Day",
+    "longDescription": "Cacao pods and flowers, cocoa beans, truffles, Sachertorte, brownies and brigadeiros."
+   },
+   "pictures": [
+    "evpack-chocolate-2027-04",
+    "evpack-chocolate-2027-07",
+    "p-4cf8a4683cdb"
+   ],
+   "media": {
+    "card": "ev-chocolate-2027/ev-chocolate-2027-card.jpg",
+    "details": "ev-chocolate-2027/ev-chocolate-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-fries-2027",
+   "packId": "evpack-fries-2027",
+   "referenceName": "ev-fries-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-fries-2027",
+   "publishStart": "2027-07-03T00:00:00Z",
+   "eventStart": "2027-07-10T00:00:00Z",
+   "eventEnd": "2027-07-17T23:59:59Z",
+   "localization": {
+    "name": "National French Fry Day",
+    "shortDescription": "24 pictures for National French Fry Day",
+    "longDescription": "Classic, curly, sweet potato and chili cheese fries, fish and chips, steak frites and patatas bravas."
+   },
+   "pictures": [
+    "evpack-fries-2027-03",
+    "evpack-fries-2027-04",
+    "evpack-fries-2027-09"
+   ],
+   "media": {
+    "card": "ev-fries-2027/ev-fries-2027-card.jpg",
+    "details": "ev-fries-2027/ev-fries-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-moon-day-2027",
+   "packId": "evpack-moon-day-2027",
+   "referenceName": "ev-moon-day-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-moon-day-2027",
+   "publishStart": "2027-07-10T00:00:00Z",
+   "eventStart": "2027-07-17T00:00:00Z",
+   "eventEnd": "2027-07-24T23:59:59Z",
+   "localization": {
+    "name": "Moon Day",
+    "shortDescription": "24 pictures for Moon Day",
+    "longDescription": "The lunar module, Earthrise, Tycho crater, Moon rocks, Saturn V and Artemis rockets, luna moths and moonflowers."
+   },
+   "pictures": [
+    "p-5ab9f1ccfe0b",
+    "evpack-moon-day-2027-11",
+    "p-9ababe18c25d"
+   ],
+   "media": {
+    "card": "ev-moon-day-2027/ev-moon-day-2027-card.jpg",
+    "details": "ev-moon-day-2027/ev-moon-day-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-friendship-2027",
+   "packId": "evpack-friendship-2027",
+   "referenceName": "ev-friendship-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-friendship-2027",
+   "publishStart": "2027-07-20T00:00:00Z",
+   "eventStart": "2027-07-27T00:00:00Z",
+   "eventEnd": "2027-08-03T23:59:59Z",
+   "localization": {
+    "name": "Day of Friendship",
+    "shortDescription": "Pictures for Day of Friendship",
+    "longDescription": "Lovebirds, penguins, a zebra with her foal, picnic baskets, birthday cake, board games, and more."
+   },
+   "pictures": [
+    "p-c6eee1e233b7",
+    "p-ec0d0ae1063f",
+    "p-4def92f5470c"
+   ],
+   "media": {
+    "card": "ev-friendship-2027/ev-friendship-2027-card.jpg",
+    "details": "ev-friendship-2027/ev-friendship-2027-details.jpg"
+   },
+   "locked": true
+  },
+  {
+   "eventId": "ev-cat-day-2027",
+   "packId": "evpack-cat-day-2027",
+   "referenceName": "ev-cat-day-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-cat-day-2027",
+   "publishStart": "2027-07-29T00:00:00Z",
+   "eventStart": "2027-08-05T00:00:00Z",
+   "eventEnd": "2027-08-12T23:59:59Z",
+   "localization": {
+    "name": "International Cat Day",
+    "shortDescription": "24 pictures for International Cat Day",
+    "longDescription": "Maine Coons, Sphynx, Devon Rex, Scottish Folds, tabbies, calicos and tuxedos, plus a lioness and a tiger."
+   },
+   "pictures": [
+    "evpack-cat-day-2027-02",
+    "evpack-cat-day-2027-03",
+    "evpack-cat-day-2027-07"
+   ],
+   "media": {
+    "card": "ev-cat-day-2027/ev-cat-day-2027-card.jpg",
+    "details": "ev-cat-day-2027/ev-cat-day-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-youth-2027",
+   "packId": "evpack-youth-2027",
+   "referenceName": "ev-youth-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-youth-2027",
+   "publishStart": "2027-08-02T00:00:00Z",
+   "eventStart": "2027-08-09T00:00:00Z",
+   "eventEnd": "2027-08-16T23:59:59Z",
+   "localization": {
+    "name": "International Youth Day",
+    "shortDescription": "24 pictures for International Youth Day",
+    "longDescription": "Skateboards, sneakers, electric guitars, drum kits, arcade machines, bubble tea, backpacks and campus quads."
+   },
+   "pictures": [
+    "p-fc7cebf212fb",
+    "evpack-youth-2027-03",
+    "p-2430f1f7e1b6"
+   ],
+   "media": {
+    "card": "ev-youth-2027/ev-youth-2027-card.jpg",
+    "details": "ev-youth-2027/ev-youth-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-photography-2027",
+   "packId": "evpack-photography-2027",
+   "referenceName": "ev-photography-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-photography-2027",
+   "publishStart": "2027-08-09T00:00:00Z",
+   "eventStart": "2027-08-16T00:00:00Z",
+   "eventEnd": "2027-08-23T23:59:59Z",
+   "localization": {
+    "name": "World Photography Day",
+    "shortDescription": "24 pictures for World Photography Day",
+    "longDescription": "Leicas, Rolleiflexes, Brownies, Polaroids, bellows and view cameras, a darkroom enlarger and film canisters."
+   },
+   "pictures": [
+    "p-b07b04364c19",
+    "evpack-photography-2027-03",
+    "evpack-photography-2027-05"
+   ],
+   "media": {
+    "card": "ev-photography-2027/ev-photography-2027-card.jpg",
+    "details": "ev-photography-2027/ev-photography-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-dog-day-2027",
+   "packId": "evpack-dog-day-2027",
+   "referenceName": "ev-dog-day-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-dog-day-2027",
+   "publishStart": "2027-08-16T00:00:00Z",
+   "eventStart": "2027-08-23T00:00:00Z",
+   "eventEnd": "2027-08-30T23:59:59Z",
+   "localization": {
+    "name": "International Dog Day",
+    "shortDescription": "24 pictures for International Dog Day",
+    "longDescription": "Bernese Mountain Dogs, Golden Retrievers, Huskies, Corgis, Shiba Inus, Basset Hounds, Vizslas and many more breeds."
+   },
+   "pictures": [
+    "p-cf5059c15394",
+    "evpack-dog-day-2027-10",
+    "p-081026c94c01"
+   ],
+   "media": {
+    "card": "ev-dog-day-2027/ev-dog-day-2027-card.jpg",
+    "details": "ev-dog-day-2027/ev-dog-day-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-beach-day-2027",
+   "packId": "evpack-beach-day-2027",
+   "referenceName": "ev-beach-day-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-beach-day-2027",
+   "publishStart": "2027-08-20T00:00:00Z",
+   "eventStart": "2027-08-27T00:00:00Z",
+   "eventEnd": "2027-09-03T23:59:59Z",
+   "localization": {
+    "name": "National Beach Day",
+    "shortDescription": "24 pictures for National Beach Day",
+    "longDescription": "Striped deck chairs, seashells, sandcastles, beach huts, lifeguard towers, palm-fringed coves and tide pools."
+   },
+   "pictures": [
+    "p-a51b99d3d6c5",
+    "p-8afbc76d825e",
+    "p-547bdb521779"
+   ],
+   "media": {
+    "card": "ev-beach-day-2027/ev-beach-day-2027-card.jpg",
+    "details": "ev-beach-day-2027/ev-beach-day-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-literacy-2027",
+   "packId": "evpack-literacy-2027",
+   "referenceName": "ev-literacy-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-literacy-2027",
+   "publishStart": "2027-08-29T00:00:00Z",
+   "eventStart": "2027-09-05T00:00:00Z",
+   "eventEnd": "2027-09-12T23:59:59Z",
+   "localization": {
+    "name": "International Literacy Day",
+    "shortDescription": "23 pictures for International Literacy Day",
+    "longDescription": "Great library halls in Weimar, Paris and Ottawa, stacks of old books, printing presses, typewriters and library ladders."
+   },
+   "pictures": [
+    "p-11c515ac9084",
+    "p-e75ae4033c56",
+    "p-1578ad38fbf9"
+   ],
+   "media": {
+    "card": "ev-literacy-2027/ev-literacy-2027-card.jpg",
+    "details": "ev-literacy-2027/ev-literacy-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-grandparents-2027",
+   "packId": "evpack-grandparents-2027",
+   "referenceName": "ev-grandparents-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-grandparents-2027",
+   "publishStart": "2027-09-02T00:00:00Z",
+   "eventStart": "2027-09-09T00:00:00Z",
+   "eventEnd": "2027-09-16T23:59:59Z",
+   "localization": {
+    "name": "Grandparents Day",
+    "shortDescription": "24 pictures for Grandparents Day",
+    "longDescription": "Rocking chairs, porcelain tea sets, cuckoo and grandfather clocks, crochet blankets and apple pie."
+   },
+   "pictures": [
+    "p-c9bcabfe88cf",
+    "p-fbb71280c8ee",
+    "p-44f60a887e15"
+   ],
+   "media": {
+    "card": "ev-grandparents-2027/ev-grandparents-2027-card.jpg",
+    "details": "ev-grandparents-2027/ev-grandparents-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-cheeseburger-2027",
+   "packId": "evpack-cheeseburger-2027",
+   "referenceName": "ev-cheeseburger-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-cheeseburger-2027",
+   "publishStart": "2027-09-05T00:00:00Z",
+   "eventStart": "2027-09-12T00:00:00Z",
+   "eventEnd": "2027-09-19T23:59:59Z",
+   "localization": {
+    "name": "National Cheeseburger Day",
+    "shortDescription": "24 pictures for National Cheeseburger Day",
+    "longDescription": "Cheeseburgers stacked every way, the cheeses, patties, pickles, onions and tomatoes inside."
+   },
+   "pictures": [
+    "p-491e1b982ca3",
+    "p-f533bb0a3d35",
+    "p-4b6e6c7c7ae9"
+   ],
+   "media": {
+    "card": "ev-cheeseburger-2027/ev-cheeseburger-2027-card.jpg",
+    "details": "ev-cheeseburger-2027/ev-cheeseburger-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-peace-2027",
+   "packId": "evpack-peace-2027",
+   "referenceName": "ev-peace-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-peace-2027",
+   "publishStart": "2027-09-11T00:00:00Z",
+   "eventStart": "2027-09-18T00:00:00Z",
+   "eventEnd": "2027-09-25T23:59:59Z",
+   "localization": {
+    "name": "International Day of Peace",
+    "shortDescription": "24 pictures for International Day of Peace",
+    "longDescription": "Doves, olive trees, paper cranes, the Peace Palace and Hiroshima memorial, peace bells and torii gates."
+   },
+   "pictures": [
+    "p-f0b32c7ff406",
+    "p-b8e365d45229",
+    "p-edb4e1c87896"
+   ],
+   "media": {
+    "card": "ev-peace-2027/ev-peace-2027-card.jpg",
+    "details": "ev-peace-2027/ev-peace-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-autumn-2027",
+   "packId": "evpack-autumn-2027",
+   "referenceName": "ev-autumn-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-autumn-2027",
+   "publishStart": "2027-09-12T00:00:00Z",
+   "eventStart": "2027-09-19T00:00:00Z",
+   "eventEnd": "2027-09-26T23:59:59Z",
+   "localization": {
+    "name": "Autumn Equinox",
+    "shortDescription": "24 pictures for Autumn Equinox",
+    "longDescription": "Red maples, golden aspens, apples, squash, chestnuts, toadstools, a hedgehog and a red squirrel. Open for one week."
+   },
+   "pictures": [
+    "evpack-autumn-2027-01",
+    "evpack-autumn-2027-09",
+    "evpack-autumn-2027-12"
+   ],
+   "media": {
+    "card": "ev-autumn-2027/ev-autumn-2027-card.jpg",
+    "details": "ev-autumn-2027/ev-autumn-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-heart-day-2027",
+   "packId": "evpack-heart-day-2027",
+   "referenceName": "ev-heart-day-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-heart-day-2027",
+   "publishStart": "2027-09-19T00:00:00Z",
+   "eventStart": "2027-09-26T00:00:00Z",
+   "eventEnd": "2027-10-03T23:59:59Z",
+   "localization": {
+    "name": "World Heart Day",
+    "shortDescription": "24 pictures for World Heart Day",
+    "longDescription": "Heart-healthy foods like berries, cherries, almonds, avocados, olive oil and greens, heart-shaped flowers and leaves."
+   },
+   "pictures": [
+    "p-e66bb9c85311",
+    "p-a2049c1ed936",
+    "p-04993f8a41a7"
+   ],
+   "media": {
+    "card": "ev-heart-day-2027/ev-heart-day-2027-card.jpg",
+    "details": "ev-heart-day-2027/ev-heart-day-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-coffee-2027",
+   "packId": "evpack-coffee-2027",
+   "referenceName": "ev-coffee-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-coffee-2027",
+   "publishStart": "2027-09-21T00:00:00Z",
+   "eventStart": "2027-09-28T00:00:00Z",
+   "eventEnd": "2027-10-05T23:59:59Z",
+   "localization": {
+    "name": "International Coffee Day",
+    "shortDescription": "23 pictures for International Coffee Day",
+    "longDescription": "Espresso, latte art, roasted beans, coffee cherries, moka pots and cezves from the world of coffee. Open for one week."
+   },
+   "pictures": [
+    "p-ed8a01802e4f",
+    "p-894bb8abf5ac",
+    "p-d8e4c410b85c"
+   ],
+   "media": {
+    "card": "ev-coffee-2027/ev-coffee-2027-card.jpg",
+    "details": "ev-coffee-2027/ev-coffee-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-smile-day-2027",
+   "packId": "evpack-smile-day-2027",
+   "referenceName": "ev-smile-day-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-smile-day-2027",
+   "publishStart": "2027-09-21T00:00:00Z",
+   "eventStart": "2027-09-28T00:00:00Z",
+   "eventEnd": "2027-10-05T23:59:59Z",
+   "localization": {
+    "name": "World Smile Day",
+    "shortDescription": "24 pictures for World Smile Day",
+    "longDescription": "Smiling animals, sunflowers, smiley-face treats, balloons and other cheerful colourful things. Open for one week."
+   },
+   "pictures": [
+    "p-c050887ee51f",
+    "p-50823d22005d",
+    "p-81b7194186dd"
+   ],
+   "media": {
+    "card": "ev-smile-day-2027/ev-smile-day-2027-card.jpg",
+    "details": "ev-smile-day-2027/ev-smile-day-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-animal-day-2027",
+   "packId": "evpack-animal-day-2027",
+   "referenceName": "ev-animal-day-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-animal-day-2027",
+   "publishStart": "2027-09-24T00:00:00Z",
+   "eventStart": "2027-10-01T00:00:00Z",
+   "eventEnd": "2027-10-08T23:59:59Z",
+   "localization": {
+    "name": "World Animal Day",
+    "shortDescription": "24 pictures for World Animal Day",
+    "longDescription": "Portraits of animals from every continent, from red pandas and toucans to elephants and polar bears. Open for one week."
+   },
+   "pictures": [
+    "p-f967e2948003",
+    "p-3df5a7b0aaaa",
+    "p-0a069fec74ac"
+   ],
+   "media": {
+    "card": "ev-animal-day-2027/ev-animal-day-2027-card.jpg",
+    "details": "ev-animal-day-2027/ev-animal-day-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-teachers-2027",
+   "packId": "evpack-teachers-2027",
+   "referenceName": "ev-teachers-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-teachers-2027",
+   "publishStart": "2027-09-25T00:00:00Z",
+   "eventStart": "2027-10-02T00:00:00Z",
+   "eventEnd": "2027-10-09T23:59:59Z",
+   "localization": {
+    "name": "World Teachers' Day",
+    "shortDescription": "24 pictures for World Teachers' Day",
+    "longDescription": "Old books, globes, coloured pencils, abacuses, school bells, historic schoolhouses and grand libraries."
+   },
+   "pictures": [
+    "p-a47c5ec93bff",
+    "p-435ff19e7103",
+    "p-1507210199a7"
+   ],
+   "media": {
+    "card": "ev-teachers-2027/ev-teachers-2027-card.jpg",
+    "details": "ev-teachers-2027/ev-teachers-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-mental-health-2027",
+   "packId": "evpack-mental-health-2027",
+   "referenceName": "ev-mental-health-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-mental-health-2027",
+   "publishStart": "2027-09-30T00:00:00Z",
+   "eventStart": "2027-10-07T00:00:00Z",
+   "eventEnd": "2027-10-14T23:59:59Z",
+   "localization": {
+    "name": "World Mental Health Day",
+    "shortDescription": "24 pictures for World Mental Health Day",
+    "longDescription": "Lotus flowers, moss gardens, lavender fields, stone cairns, koi ponds and calming scenes."
+   },
+   "pictures": [
+    "p-def2759770fd",
+    "p-6e4f35a2493e",
+    "p-0251484d723a"
+   ],
+   "media": {
+    "card": "ev-mental-health-2027/ev-mental-health-2027-card.jpg",
+    "details": "ev-mental-health-2027/ev-mental-health-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-food-day-2027",
+   "packId": "evpack-food-day-2027",
+   "referenceName": "ev-food-day-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-food-day-2027",
+   "publishStart": "2027-10-06T00:00:00Z",
+   "eventStart": "2027-10-13T00:00:00Z",
+   "eventEnd": "2027-10-20T23:59:59Z",
+   "localization": {
+    "name": "World Food Day",
+    "shortDescription": "24 pictures for World Food Day",
+    "longDescription": "Ramen, paella, thali, bibimbap, spice and fish markets, pumpkins and rice terraces from around the world."
+   },
+   "pictures": [
+    "p-5d3d0d0d405c",
+    "p-3d24fcd367bc",
+    "p-18df3607c9d9"
+   ],
+   "media": {
+    "card": "ev-food-day-2027/ev-food-day-2027-card.jpg",
+    "details": "ev-food-day-2027/ev-food-day-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-un-day-2027",
+   "packId": "evpack-un-day-2027",
+   "referenceName": "ev-un-day-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-un-day-2027",
+   "publishStart": "2027-10-14T00:00:00Z",
+   "eventStart": "2027-10-21T00:00:00Z",
+   "eventEnd": "2027-10-28T23:59:59Z",
+   "localization": {
+    "name": "United Nations Day",
+    "shortDescription": "24 pictures for United Nations Day",
+    "longDescription": "Flags of the member states, a white dove, an olive branch, the UN headquarters and landmarks from every continent."
+   },
+   "pictures": [
+    "p-c79345e4de86",
+    "p-b54683359bf7",
+    "p-fecf55172986"
+   ],
+   "media": {
+    "card": "ev-un-day-2027/ev-un-day-2027-card.jpg",
+    "details": "ev-un-day-2027/ev-un-day-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-diwali-2027",
+   "packId": "evpack-diwali-2027",
+   "referenceName": "ev-diwali-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-diwali-2027",
+   "publishStart": "2027-10-19T00:00:00Z",
+   "eventStart": "2027-10-26T00:00:00Z",
+   "eventEnd": "2027-11-02T23:59:59Z",
+   "localization": {
+    "name": "Diwali",
+    "shortDescription": "24 pictures for Diwali",
+    "longDescription": "Clay diyas and brass lamps, rangoli patterns, marigolds, sweets from jalebi to kaju katli and sparklers."
+   },
+   "pictures": [
+    "p-ca5df1f64443",
+    "p-4eecf830292e",
+    "p-3256de67571a"
+   ],
+   "media": {
+    "card": "ev-diwali-2027/ev-diwali-2027-card.jpg",
+    "details": "ev-diwali-2027/ev-diwali-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-halloween-2027",
+   "packId": "evpack-halloween-2027",
+   "referenceName": "ev-halloween-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-halloween-2027",
+   "publishStart": "2027-10-21T00:00:00Z",
+   "eventStart": "2027-10-28T00:00:00Z",
+   "eventEnd": "2027-11-04T23:59:59Z",
+   "localization": {
+    "name": "Halloween",
+    "shortDescription": "24 pictures for Halloween",
+    "longDescription": "Carved jack-o'-lanterns, pumpkins and gourds, a fruit bat, a barn owl, a tarantula, cobwebs and fly agaric."
+   },
+   "pictures": [
+    "p-c2a589ab2f03",
+    "p-233179a77fa4",
+    "p-16791885e5a6"
+   ],
+   "media": {
+    "card": "ev-halloween-2027/ev-halloween-2027-card.jpg",
+    "details": "ev-halloween-2027/ev-halloween-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-vegan-2027",
+   "packId": "evpack-vegan-2027",
+   "referenceName": "ev-vegan-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-vegan-2027",
+   "publishStart": "2027-10-22T00:00:00Z",
+   "eventStart": "2027-10-29T00:00:00Z",
+   "eventEnd": "2027-11-05T23:59:59Z",
+   "localization": {
+    "name": "World Vegan Day",
+    "shortDescription": "24 pictures for World Vegan Day",
+    "longDescription": "Tofu bowls, falafel, chana masala, koshari, guacamole, figs, dragon fruit, jackfruit and market vegetables."
+   },
+   "pictures": [
+    "p-21a40bc8c862",
+    "p-7c40f707951f",
+    "p-590f7a962e15"
+   ],
+   "media": {
+    "card": "ev-vegan-2027/ev-vegan-2027-card.jpg",
+    "details": "ev-vegan-2027/ev-vegan-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-remembrance-2027",
+   "packId": "evpack-remembrance-2027",
+   "referenceName": "ev-remembrance-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-remembrance-2027",
+   "publishStart": "2027-11-01T00:00:00Z",
+   "eventStart": "2027-11-08T00:00:00Z",
+   "eventEnd": "2027-11-15T23:59:59Z",
+   "localization": {
+    "name": "Remembrance Day",
+    "shortDescription": "24 pictures for Remembrance Day",
+    "longDescription": "Red poppies, cornflowers and forget-me-nots, poppy wreaths, war memorials and an eternal flame. Open for one week."
+   },
+   "pictures": [
+    "p-ef179af96f1e",
+    "p-7825a7f62451",
+    "p-17c84b643ae2"
+   ],
+   "media": {
+    "card": "ev-remembrance-2027/ev-remembrance-2027-card.jpg",
+    "details": "ev-remembrance-2027/ev-remembrance-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-kindness-2027",
+   "packId": "evpack-kindness-2027",
+   "referenceName": "ev-kindness-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-kindness-2027",
+   "publishStart": "2027-11-03T00:00:00Z",
+   "eventStart": "2027-11-10T00:00:00Z",
+   "eventEnd": "2027-11-17T23:59:59Z",
+   "localization": {
+    "name": "World Kindness Day",
+    "shortDescription": "24 pictures for World Kindness Day",
+    "longDescription": "Wrapped gifts, bouquets, heart-shaped treats, warm drinks, honey and jam."
+   },
+   "pictures": [
+    "p-7a52fc138db2",
+    "p-2bf9516d8eeb",
+    "p-33b183e2cd1e"
+   ],
+   "media": {
+    "card": "ev-kindness-2027/ev-kindness-2027-card.jpg",
+    "details": "ev-kindness-2027/ev-kindness-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-universal-childrens-2027",
+   "packId": "evpack-universal-childrens-2027",
+   "referenceName": "ev-universal-childrens-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-universal-childrens-2027",
+   "publishStart": "2027-11-10T00:00:00Z",
+   "eventStart": "2027-11-17T00:00:00Z",
+   "eventEnd": "2027-11-24T23:59:59Z",
+   "localization": {
+    "name": "Universal Children's Day",
+    "shortDescription": "23 pictures for Universal Children's Day",
+    "longDescription": "Balloons, building bricks, a carousel, tin robots, a pinwheel and a birthday cake."
+   },
+   "pictures": [
+    "p-17cd5e4f2f7d",
+    "p-48acae0e58c5",
+    "p-3ae815bc0756"
+   ],
+   "media": {
+    "card": "ev-universal-childrens-2027/ev-universal-childrens-2027-card.jpg",
+    "details": "ev-universal-childrens-2027/ev-universal-childrens-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-thanksgiving-2027",
+   "packId": "evpack-thanksgiving-2027",
+   "referenceName": "ev-thanksgiving-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-thanksgiving-2027",
+   "publishStart": "2027-11-15T00:00:00Z",
+   "eventStart": "2027-11-22T00:00:00Z",
+   "eventEnd": "2027-11-29T23:59:59Z",
+   "localization": {
+    "name": "Thanksgiving",
+    "shortDescription": "24 pictures for Thanksgiving",
+    "longDescription": "Wild turkeys, pumpkin, pecan and apple pies, stuffing, cranberries, corn, squash soups, sweet potatoes and acorns."
+   },
+   "pictures": [
+    "p-d8adf9b12888",
+    "p-d1278428ab70",
+    "p-567c062846a4"
+   ],
+   "media": {
+    "card": "ev-thanksgiving-2027/ev-thanksgiving-2027-card.jpg",
+    "details": "ev-thanksgiving-2027/ev-thanksgiving-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-volunteer-2027",
+   "packId": "evpack-volunteer-2027",
+   "referenceName": "ev-volunteer-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-volunteer-2027",
+   "publishStart": "2027-11-25T00:00:00Z",
+   "eventStart": "2027-12-02T00:00:00Z",
+   "eventEnd": "2027-12-09T23:59:59Z",
+   "localization": {
+    "name": "International Volunteer Day",
+    "shortDescription": "24 pictures for International Volunteer Day",
+    "longDescription": "Community gardens, garden tools, seedlings, insect hotels, nest boxes and knitted mittens."
+   },
+   "pictures": [
+    "p-3e20d88b7bf6",
+    "p-5b4c8be87516",
+    "p-1f48f902bda1"
+   ],
+   "media": {
+    "card": "ev-volunteer-2027/ev-volunteer-2027-card.jpg",
+    "details": "ev-volunteer-2027/ev-volunteer-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-mountain-day-2027",
+   "packId": "evpack-mountain-day-2027",
+   "referenceName": "ev-mountain-day-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-mountain-day-2027",
+   "publishStart": "2027-12-01T00:00:00Z",
+   "eventStart": "2027-12-08T00:00:00Z",
+   "eventEnd": "2027-12-15T23:59:59Z",
+   "localization": {
+    "name": "International Mountain Day",
+    "shortDescription": "24 pictures for International Mountain Day",
+    "longDescription": "Famous peaks from the Matterhorn, K2 and Ama Dablam to Half Dome, Kirkjufell and the Lofoten."
+   },
+   "pictures": [
+    "p-7423697a8102",
+    "p-31d3d5e4e80c",
+    "p-e0d1adaee6bc"
+   ],
+   "media": {
+    "card": "ev-mountain-day-2027/ev-mountain-day-2027-card.jpg",
+    "details": "ev-mountain-day-2027/ev-mountain-day-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-tea-day-2027",
+   "packId": "evpack-tea-day-2027",
+   "referenceName": "ev-tea-day-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-tea-day-2027",
+   "publishStart": "2027-12-05T00:00:00Z",
+   "eventStart": "2027-12-12T00:00:00Z",
+   "eventEnd": "2027-12-19T23:59:59Z",
+   "localization": {
+    "name": "International Tea Day",
+    "shortDescription": "24 pictures for International Tea Day",
+    "longDescription": "Moroccan mint tea, masala chai, Turkish tea, samovars, Yixing and Japanese teapots."
+   },
+   "pictures": [
+    "p-1f4171632ff5",
+    "p-e677ce4e16f1",
+    "p-fc52870e0dfc"
+   ],
+   "media": {
+    "card": "ev-tea-day-2027/ev-tea-day-2027-card.jpg",
+    "details": "ev-tea-day-2027/ev-tea-day-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-winter-solstice-2027",
+   "packId": "evpack-winter-solstice-2027",
+   "referenceName": "ev-winter-solstice-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-winter-solstice-2027",
+   "publishStart": "2027-12-11T00:00:00Z",
+   "eventStart": "2027-12-18T00:00:00Z",
+   "eventEnd": "2027-12-25T23:59:59Z",
+   "localization": {
+    "name": "Winter Solstice",
+    "shortDescription": "24 pictures for Winter Solstice",
+    "longDescription": "Stonehenge, Newgrange and the Callanish Stones, Yule goats, a Yule log, holly, mistletoe and frost."
+   },
+   "pictures": [
+    "p-b57b276a7d71",
+    "p-c5d15f094472",
+    "p-d5e11eabd1e4"
+   ],
+   "media": {
+    "card": "ev-winter-solstice-2027/ev-winter-solstice-2027-card.jpg",
+    "details": "ev-winter-solstice-2027/ev-winter-solstice-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-christmas-2027",
+   "packId": "evpack-christmas-2027",
+   "referenceName": "ev-christmas-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-christmas-2027",
+   "publishStart": "2027-12-15T00:00:00Z",
+   "eventStart": "2027-12-22T00:00:00Z",
+   "eventEnd": "2027-12-29T23:59:59Z",
+   "localization": {
+    "name": "Christmas",
+    "shortDescription": "24 pictures for Christmas",
+    "longDescription": "Decorated trees, baubles, gingerbread, poinsettias, holly and mistletoe."
+   },
+   "pictures": [
+    "p-020224b18cce",
+    "p-5d7371bd847d",
+    "p-d18b5f4362d7"
+   ],
+   "media": {
+    "card": "ev-christmas-2027/ev-christmas-2027-card.jpg",
+    "details": "ev-christmas-2027/ev-christmas-2027-details.jpg"
+   }
+  },
+  {
+   "eventId": "ev-new-years-eve-2027",
+   "packId": "evpack-new-years-eve-2027",
+   "referenceName": "ev-new-years-eve-2027",
+   "badge": "SPECIAL_EVENT",
+   "purpose": "APPROPRIATE_FOR_ALL_USERS",
+   "priority": "NORMAL",
+   "purchaseRequirement": "NO_COST_ASSOCIATED",
+   "deepLink": "cardjigsaw://library/pack/evpack-new-years-eve-2027",
+   "publishStart": "2027-12-21T00:00:00Z",
+   "eventStart": "2027-12-28T00:00:00Z",
+   "eventEnd": "2028-01-04T23:59:59Z",
+   "localization": {
+    "name": "New Year's Eve",
+    "shortDescription": "24 pictures for New Year's Eve",
+    "longDescription": "Fireworks over Sydney, London, Prague and Singapore, champagne, sparklers, glitter and oliebollen."
+   },
+   "pictures": [
+    "p-2d63bf7ee826",
+    "p-c4767d2387d2",
+    "p-44e4c71e81b6"
+   ],
+   "media": {
+    "card": "ev-new-years-eve-2027/ev-new-years-eve-2027-card.jpg",
+    "details": "ev-new-years-eve-2027/ev-new-years-eve-2027-details.jpg"
+   }
+  }
+ ]
+}

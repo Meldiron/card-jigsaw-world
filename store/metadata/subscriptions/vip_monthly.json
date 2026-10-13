@@ -4,9 +4,17 @@
   "referenceName": "VIP Monthly",
   "subscriptionPeriod": "ONE_MONTH",
   "groupLevel": 1,
-  "familySharable": false,
-  "price": { "currency": "USD", "customerPrice": "2.99", "baseTerritory": "USA" },
-  "introductoryOffer": { "offerMode": "FREE_TRIAL", "duration": "ONE_WEEK", "numberOfPeriods": 1 },
+  "familySharable": true,
+  "price": {
+    "currency": "USD",
+    "customerPrice": "2.99",
+    "baseTerritory": "USA"
+  },
+  "introductoryOffer": {
+    "offerMode": "FREE_TRIAL",
+    "duration": "ONE_WEEK",
+    "numberOfPeriods": 1
+  },
   "localizations": {
     "en-US": {
       "name": "VIP Monthly",
@@ -15,5 +23,28 @@
   },
   "reviewNote": "Auto-renewable monthly subscription with a 7-day free trial. VIP unlocks every pack (including past monthly daily packs) and hides the game's own store promotions. The grant is applied server-side by our Appwrite Function after verifying the signed transaction; during review the function runs against the Sandbox environment. Test: Home > tap coin balance > Store > Go VIP > Monthly, confirm with a Sandbox Apple ID. A VIP badge appears on Home and in Profile within a few seconds.",
   "reviewScreenshot": "store/review/subscription-review.png",
-  "promotionalImage": "store/promo/vip-promotional-1024.png"
+  "promotionalImage": "store/promo/vip-promotional-1024.png",
+  "winBackOffers": [
+    {
+      "offerId": "vip_monthly_winback",
+      "referenceName": "VIP Monthly win-back",
+      "offerMode": "PAY_AS_YOU_GO",
+      "duration": "ONE_MONTH",
+      "periodCount": 1,
+      "price": {
+        "currency": "USD",
+        "customerPrice": "0.99",
+        "baseTerritory": "USA"
+      },
+      "customerEligibilityPaidSubscriptionDurationInMonths": 1,
+      "customerEligibilityTimeSinceLastSubscribedInMonths": {
+        "minimum": 1,
+        "maximum": 12
+      },
+      "customerEligibilityWaitBetweenOffersInMonths": 12,
+      "priority": "NORMAL",
+      "promotionIntent": "USE_AUTO_GENERATED_ASSETS",
+      "note": "Default chosen 2026-10-14 (owner can change): the first month back for $0.99 instead of $2.99, for people who paid for at least a month and lapsed 1 to 12 months ago; once a year at most."
+    }
+  ]
 }

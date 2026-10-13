@@ -46,8 +46,10 @@ Below, `asc` stands for `.venv/bin/python tools/store/asc_publish.py`.
 | `price-free` | `appPriceSchedules` with the free USA price point (Apple equalises the rest) and `appAvailabilities` (v2) for every territory |
 | `screenshots` | one `appScreenshotSets` of type `APP_IPHONE_67` and every PNG in `store/screenshots/iphone-6.9/` in file order (reserve, upload, commit with MD5). The folder is the source of truth: an unchanged file is skipped, a changed one (MD5 differs) is replaced, and an uploaded screenshot with no file of its name is deleted |
 | `iap` | the eight consumables from `subscriptions/consumables.json` (`/v2/inAppPurchases`), localizations, USD price equalised to all territories through `inAppPurchasePricePoints/{id}/equalizations`, availability, optional review screenshot |
-| `subscriptions` | group `VIP` and its localization, `vip_monthly` / `vip_yearly` attributes and localizations, one `subscriptionPrices` per territory from `subscriptionPricePoints/{id}/equalizations`, one `subscriptionIntroductoryOffers` (1 week free) per territory, review screenshot, promotional image, availability |
+| `subscriptions` | group `VIP` and its localization, `vip_monthly` / `vip_yearly` attributes (Family Sharing on) and localizations, one `subscriptionPrices` per territory from `subscriptionPricePoints/{id}/equalizations`, one `subscriptionIntroductoryOffers` (1 week free) per territory, the `winBackOffers` from each file (only once the subscription is APPROVED: Apple refuses offers before), review screenshot, promotional image, availability. A field Apple refuses to change while the subscription sits in the open review draft (Family Sharing did) is patched by lifting the subscription's item out of the draft and putting it back |
 | `review-info` | `appStoreReviewDetails`: contact from `review_contact.json` and `review_notes.txt` |
+| `events` | In-App Event drafts (`appEvents`, their `appEventLocalizations` and the two `appEventScreenshots`) for the next world-day events from `store/metadata/app_events.json`; `--window N` (default 10). Never submits. See "In-App Events" below |
+| `platforms` | TestFlight on Macs and Apple Vision Pro for every beta group (`iosBuildsAvailableForAppleSiliconMac`, `iosBuildsAvailableForAppleVision`), then prints the App Store availability steps (no API for those) |
 | `testflight` | `betaAppLocalizations` (feedback email, what to test, URLs), `betaAppReviewDetails`, `betaLicenseAgreements`, the build's `usesNonExemptEncryption=false` and what-to-test text, the build added to the external `betaGroups` "Public testers" (public link) and to every internal group that does not already get all builds, then a `betaAppReviewSubmissions` for the build. `--build N` waits for build N to appear and finish processing (30 s polls, `--timeout` minutes, default 40; fails on INVALID/FAILED); without it the latest build is used. `--whats-new-file PATH` replaces `release_notes.txt` as the what-to-test text (an empty file leaves it untouched). `ASC_BUILD_NUMBER` is the env fallback for `--build` |
 | `build-notes` | Only the "What to Test" text (`betaBuildLocalizations.whatsNew`) of one build: `--build N` (default the latest), text from `--whats-new-file` or `store/metadata/en-US/testflight_build_notes.txt`. The release workflow sends that file for every new build, so rewrite it before each build with a TL;DR of what changed since the previous one. Visible to testers. |
 | `release` | the `appStoreVersions` record for `--version X.Y.Z` (default: `pubspec.yaml`): found, renamed from the one editable version, or created when the newest version is already in review or live; `releaseType` MANUAL (approved versions wait for a click in App Store Connect; `--auto-release` for AFTER_APPROVAL); the build attached (`--build N`, else the newest processed build of that version); the primary-locale localization with what's new from `release_notes.txt` or `--whats-new-file` (a new localization gets description, keywords, URLs too; Apple's refusal of what's new on a first version is tolerated) |
@@ -168,6 +170,44 @@ the key was added.
 - **Sandbox tester** for verifying purchases on a device:
   Users and Access > Sandbox.
 
+- **Macs and Apple Vision Pro**: App Store Connect > Pricing and Availability >
+  "iPhone and iPad Apps on Apple Silicon Mac" and "iPhone and iPad Apps on Apple
+  Vision Pro": tick "Make this app available" in both, Save (no API; `platforms`
+  prints the same steps and keeps TestFlight on both platforms switched on).
+- **Submitting In-App Events**: the drafts `events` creates go to App Review
+  with the first App Store version (add them to that submission in App Store
+  Connect > In-App Events, or after the app is live submit them on their own).
+
+## In-App Events
+
+Every world-day event (table `events` with its free event pack) can be an
+In-App Event card on the App Store and in search, opening the pack
+(`cardjigsaw://library/pack/<packId>`).
+
+1. `.venv/bin/python tools/store/make_app_events.py` writes
+   `store/metadata/app_events.json` from the live catalogue (one billed read:
+   the snapshot pointer). Per event: reference name = event id, badge Special
+   Event, purpose "appropriate for all users", priority normal, no purchase
+   needed (event packs are free), the event window as the event dates, publish a
+   week before it opens, the event's name (30 characters), "24 pictures for
+   World Food Day" (50) and the pack's subjects (120). Hand edits survive a
+   re-run when the entry has `"locked": true` (three long names are shortened
+   that way, and the Thanksgiving card avoids a watermarked picture).
+2. `make_app_events.py --media-next 10` builds the images for the next 10
+   events: the event card (1920x1080, three of the pack's pictures with the
+   cover in the middle) and the details page (1080x1920, the cover), JPEG, no
+   text. They live in `~/.local/share/card-jigsaw-world/app-events/` (outside
+   git; `CJW_APP_EVENT_MEDIA` overrides), built from our hosted pictures.
+3. `asc_publish.py events` creates or updates the drafts for the next 10
+   events that start at least two days from now (Apple publishes at most 10
+   events at a time and keeps 15 approved). Accepted, published or past events
+   are left alone. Nothing is ever submitted: an unreleased app must send its
+   first events with its first version; afterwards events can go to review on
+   their own. Re-run both steps every few weeks to roll the window forward.
+
+Apple's rules (2026): event at most 31 days, shown up to 14 days before it
+starts, no prices or app name in the text, no text or borders on the art.
+
 ## Files the script reads
 
 ```
@@ -178,6 +218,7 @@ store/metadata/en-US/
   categories.json testflight_what_to_test.txt beta_license_agreement.txt
 store/metadata/subscriptions/
   group.json vip_monthly.json vip_yearly.json consumables.json
+store/metadata/app_events.json   (make_app_events.py; media in ~/.local/share/card-jigsaw-world/app-events/)
 store/screenshots/iphone-6.9/*.png
 store/review/subscription-review.png
 store/promo/vip-promotional-1024.png

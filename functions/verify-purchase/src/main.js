@@ -8,6 +8,16 @@
 // Every transaction is verified with Apple's App Store Server Library
 // (certificate chain back to Apple Root CA G3), checked against the bundle id,
 // and applied exactly once (purchases.transactionId is unique).
+//
+// Family Sharing (VIP, since 2026-10-14): a family member's device sends its own
+// transaction (inAppOwnershipType FAMILY_SHARED, its own transactionId) and gets
+// VIP like the purchaser. One subscription (originalTransactionId) unlocks VIP on
+// at most MAX_ACCOUNTS_PER_SUBSCRIPTION game accounts, the size of an Apple family,
+// so a purchase cannot be spread over unrelated accounts. Notifications for the
+// purchaser update every account linked to the subscription; family-only
+// notifications (REVOKE when sharing stops, DID_RECOVER, DID_FAIL_TO_RENEW) update
+// only that member's accounts. Win-back offers (offerType 4) and every other offer
+// are plain transactions of the same products and verify the same way.
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -38,6 +48,10 @@ const GRANTS = {
   vip_monthly: { vip: true },
   vip_yearly: { vip: true },
 };
+
+// An Apple family is the organiser plus up to five members.
+const MAX_ACCOUNTS_PER_SUBSCRIPTION = 6;
+const PAGE = 100;
 
 const rootCerts = [readFileSync(join(__dirname, '..', 'certs', 'AppleRootCA-G3.cer'))];
 
@@ -79,6 +93,30 @@ function tables(req) {
 }
 
 const iso = (ms) => (ms ? new Date(ms).toISOString() : null);
+
+/// Every row matching `queries`, a page at a time (never a single fixed-size read).
+async function listAll(db, tableId, queries) {
+  const out = [];
+  let cursor = null;
+  for (;;) {
+    const page = await db.listRows({
+      databaseId: DB,
+      tableId,
+      queries: [...queries, Query.limit(PAGE), ...(cursor ? [Query.cursorAfter(cursor)] : [])],
+    });
+    out.push(...page.rows);
+    if (page.rows.length < PAGE) return out;
+    cursor = page.rows[page.rows.length - 1].$id;
+  }
+}
+
+/// Game accounts that already hold VIP from this subscription (purchaser and family).
+async function accountsOfSubscription(db, originalTransactionId) {
+  const rows = await listAll(db, 'purchases', [Query.equal('originalTransactionId', originalTransactionId), Query.select(['userId'])]);
+  return new Set(rows.map((r) => r.userId));
+}
+
+const ownershipOf = (tx) => tx.inAppOwnershipType ?? 'PURCHASED';
 
 async function applyGrant(db, userId, tx, grant, log) {
   const profile = await db.getRow({ databaseId: DB, tableId: 'profiles', rowId: userId });
@@ -136,7 +174,18 @@ async function handleVerify(req, res, log, error) {
     return res.json({ ok: true, alreadyApplied: true, grant: JSON.parse(row.grant || '{}') });
   }
 
+  const originalId = tx.originalTransactionId ?? tx.transactionId;
+  const ownership = ownershipOf(tx);
+  if (grant.vip) {
+    const accounts = await accountsOfSubscription(db, originalId);
+    if (!accounts.has(userId) && accounts.size >= MAX_ACCOUNTS_PER_SUBSCRIPTION) {
+      log(`refused ${tx.productId} (${tx.transactionId}, ${ownership}) for ${userId}: subscription ${originalId} already on ${accounts.size} accounts`);
+      return res.json({ ok: false, error: 'This subscription is already in use on the most accounts it can unlock.' }, 403);
+    }
+  }
+
   const applied = await applyGrant(db, userId, tx, grant, log);
+  if (ownership !== 'PURCHASED' || tx.offerType) log(`  ownership ${ownership}, offerType ${tx.offerType ?? '-'} ${tx.offerIdentifier ?? ''}`);
   await db.createRow({
     databaseId: DB,
     tableId: 'purchases',
@@ -144,7 +193,9 @@ async function handleVerify(req, res, log, error) {
     data: {
       userId,
       transactionId: tx.transactionId,
-      originalTransactionId: tx.originalTransactionId ?? tx.transactionId,
+      originalTransactionId: originalId,
+      ownership,
+      appTransactionId: tx.appTransactionId ? String(tx.appTransactionId) : null,
       productId: tx.productId,
       type: grant.vip ? 'subscription' : 'consumable',
       environment: tx.environment ?? 'Sandbox',
@@ -156,7 +207,7 @@ async function handleVerify(req, res, log, error) {
   return res.json({ ok: true, grant: applied });
 }
 
-const RENEW_TYPES = new Set(['DID_RENEW', 'SUBSCRIBED', 'DID_CHANGE_RENEWAL_STATUS', 'OFFER_REDEEMED', 'RENEWAL_EXTENDED', 'RENEWAL_EXTENSION', 'REFUND_REVERSED']);
+const RENEW_TYPES = new Set(['DID_RENEW', 'DID_RECOVER', 'SUBSCRIBED', 'DID_CHANGE_RENEWAL_STATUS', 'OFFER_REDEEMED', 'RENEWAL_EXTENDED', 'RENEWAL_EXTENSION', 'REFUND_REVERSED']);
 const END_TYPES = new Set(['EXPIRED', 'REFUND', 'REVOKE', 'GRACE_PERIOD_EXPIRED']);
 
 async function handleNotification(req, res, log, error) {
@@ -183,13 +234,13 @@ async function handleNotification(req, res, log, error) {
     try { renewal = await v.verifyAndDecodeRenewalInfo(data.signedRenewalInfo); } catch (e) { error(`renewal info: ${e}`); }
   }
   const originalId = tx.originalTransactionId ?? tx.transactionId;
+  const ownership = ownershipOf(tx);
   const db = tables(req);
-  const profiles = await db.listRows({ databaseId: DB, tableId: 'profiles', queries: [Query.equal('appleOriginalTransactionId', originalId), Query.limit(1)] });
-  if (profiles.total === 0) {
-    log(`no profile for original transaction ${originalId}`);
+  const profileIds = await profilesFor(db, tx, originalId, ownership);
+  if (profileIds.length === 0) {
+    log(`no profile for ${ownership} transaction ${tx.transactionId} (original ${originalId})`);
     return res.json({ ok: true, unmatched: true });
   }
-  const profile = profiles.rows[0];
   const patch = {};
   if (RENEW_TYPES.has(type)) {
     patch.vipExpiresAt = iso(tx.expiresDate);
@@ -209,10 +260,28 @@ async function handleNotification(req, res, log, error) {
     patch.vipExpiresAt = iso(renewal.gracePeriodExpiresDate);
   }
   if (Object.keys(patch).length > 0) {
-    await db.updateRow({ databaseId: DB, tableId: 'profiles', rowId: profile.$id, data: patch });
-    log(`profile ${profile.$id}: ${JSON.stringify(patch)}`);
+    for (const id of profileIds) {
+      await db.updateRow({ databaseId: DB, tableId: 'profiles', rowId: id, data: patch });
+      log(`profile ${id}: ${JSON.stringify(patch)} (${ownership})`);
+    }
   }
-  return res.json({ ok: true });
+  return res.json({ ok: true, profiles: profileIds.length });
+}
+
+/// The profiles a notification applies to. A family member's notification
+/// (FAMILY_SHARED) reaches only the accounts that verified that member's
+/// transactions (by transactionId, else by the member's appTransactionId); the
+/// purchaser's reaches every account linked to the subscription.
+async function profilesFor(db, tx, originalId, ownership) {
+  if (ownership === 'FAMILY_SHARED') {
+    let rows = await listAll(db, 'purchases', [Query.equal('transactionId', tx.transactionId), Query.select(['userId'])]);
+    if (rows.length === 0 && tx.appTransactionId) {
+      rows = await listAll(db, 'purchases', [Query.equal('appTransactionId', String(tx.appTransactionId)), Query.select(['userId'])]);
+    }
+    return [...new Set(rows.map((r) => r.userId))];
+  }
+  const rows = await listAll(db, 'profiles', [Query.equal('appleOriginalTransactionId', originalId), Query.select(['userId'])]);
+  return rows.map((r) => r.$id);
 }
 
 export default async ({ req, res, log, error }) => {

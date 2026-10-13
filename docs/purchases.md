@@ -16,8 +16,8 @@ Apple product ids cannot be renamed, so the number in a consumable id is histori
 | `tickets_15` | consumable | 30 tickets | $4.99 |
 | `hints_5` | consumable | 16 hints | $0.99 |
 | `hints_15` | consumable | 48 hints | $2.49 |
-| `vip_monthly` | auto-renewable, group `VIP` | VIP until `expiresDate`; 7-day free introductory offer | $2.99 / month (Apple price-point equalised per country) |
-| `vip_yearly` | auto-renewable, group `VIP` | VIP until `expiresDate`; 7-day free introductory offer | $14.99 / year (Apple price-point equalised per country) |
+| `vip_monthly` | auto-renewable, group `VIP`, Family Sharing | VIP until `expiresDate`; 7-day free introductory offer; win-back offer | $2.99 / month (Apple price-point equalised per country) |
+| `vip_yearly` | auto-renewable, group `VIP`, Family Sharing | VIP until `expiresDate`; 7-day free introductory offer; win-back offer | $14.99 / year (Apple price-point equalised per country) |
 
 The store screen shows the localised App Store price once products load; the table prices are the fallbacks.
 
@@ -39,6 +39,42 @@ Three places hold the amounts and `test/economy_test.dart` fails unless they agr
 6. Subscription renewals, refunds and expirations arrive through App Store Server Notifications V2 at `POST /notifications` and update `vipExpiresAt` on the matching profile (`appleOriginalTransactionId`).
 
 `Profile.isVip` is true while `vipExpiresAt` is in the future (or while the debug `isVip` flag is set).
+
+## Family Sharing (VIP)
+
+Both VIP plans have Family Sharing on since 2026-10-14 (Apple: it can never be turned off again). A family
+member's device gets its own transaction for the plan (`inAppOwnershipType: FAMILY_SHARED`, its own
+`transactionId`) and sends it to `/verify` like any purchase, so the member's game account gets VIP too.
+
+- **At most 6 accounts per subscription.** One `originalTransactionId` unlocks VIP on at most
+  `MAX_ACCOUNTS_PER_SUBSCRIPTION` = 6 distinct game accounts (the organiser plus five members, the size of an
+  Apple family). A 7th account gets 403 "This subscription is already in use on the most accounts it can
+  unlock." This also caps one purchaser spreading renewals over many accounts.
+- **Rows.** `purchases` records `ownership` (`PURCHASED` / `FAMILY_SHARED`) and the transaction's
+  `appTransactionId` (one per Apple account and app, indexed) next to the transaction ids.
+- **Notifications.** A purchaser's notification (renewal, expiry, refund) updates every profile linked to
+  the subscription (`appleOriginalTransactionId`), so family members follow renewals. Family-only
+  notifications (`REVOKE` when sharing stops or a member leaves, `DID_RECOVER`, `DID_FAIL_TO_RENEW`) update
+  only that member's accounts, found by the notification's `transactionId`, else its `appTransactionId`.
+  `DID_RECOVER` now renews like `DID_RENEW`.
+
+## Win-back offers (VIP)
+
+StoreKit win-back offers for people whose VIP lapsed, recorded in `winBackOffers` of
+`store/metadata/subscriptions/vip_monthly.json` / `vip_yearly.json` and created by
+`asc_publish.py subscriptions`. Defaults (2026-10-14, change them in the files): VIP Monthly first month back
+for $0.99, VIP Yearly first year back for $7.99; for people who paid at least a month and lapsed 1 to 12
+months ago, at most once a year; promoted with Apple's generated assets. Apple only creates offers for
+approved subscriptions, so the command waits until the plans are approved (run it once after the first
+approval).
+
+The App Store shows the offers itself (subscription settings, the product page, and in the app as a StoreKit
+message). Redeemed offers are ordinary transactions of `vip_monthly` / `vip_yearly` (`offerType` 4), which
+`/verify` and the notifications handle like any other. The app's own store screen does not show the offer
+yet. The StoreKit plugin we already use (`in_app_purchase_storekit` 0.4.13) supports it without a new
+dependency: `InAppPurchaseStoreKitPlatform.isWinBackOfferEligible(productId, offerId)` tells whether the
+player may take it, and buying with `Sk2PurchaseParam(productDetails: ..., winBackOfferId: offerId)` applies
+it (offer ids `vip_monthly_winback`, `vip_yearly_winback`).
 
 ## VIP benefits
 

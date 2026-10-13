@@ -10,6 +10,7 @@ updates only what differs, so it is safe to run again after a partial failure.
     asc_publish.py testflight --build 103 # wait for build 103, add to the groups, beta review
     asc_publish.py release --version 1.7.0 --build 103   # prepare the App Store version
     asc_publish.py submit --yes           # create and submit the review submission
+    asc_publish.py events [--window 10]   # In-App Event drafts for the next world-day events (never submitted)
 
 Reads metadata from store/metadata (see tools/store/README.md). Credentials:
 the team API key secrets/AuthKey_9QC72A5QMN.p8 (override with ASC_KEY_ID and
@@ -65,6 +66,15 @@ ACTIVE_SUBMISSION_STATES = ("WAITING_FOR_REVIEW", "IN_REVIEW")
 BUILD_POLL_SECONDS = 30
 
 API = "https://api.appstoreconnect.apple.com"
+
+# In-App Events (cmd_events): metadata from tools/store/make_app_events.py, media outside git.
+APP_EVENTS = META / "app_events.json"
+EVENT_MEDIA = Path(os.environ.get("CJW_APP_EVENT_MEDIA", "~/.local/share/card-jigsaw-world/app-events")).expanduser()
+EVENT_WINDOW = 10        # Apple publishes at most 10 events at a time (15 approved)
+EVENT_LEAD_DAYS = 2      # events starting sooner are left alone (too late for review)
+EVENT_EDITABLE_STATES = ("DRAFT", "REJECTED")
+# Asset types whose upload commit takes only `uploaded` (Apple rejects sourceFileChecksum on them).
+NO_CHECKSUM_ASSETS = ("appEventScreenshots", "appEventVideoClips")
 
 ALL_ORDER = [
     "app-info",
@@ -567,11 +577,12 @@ class Store:
     # -- uploads ------------------------------------------------------------
 
     def upload_asset(self, type_: str, parent_rel: dict, path: Path, existing: list[dict] | None = None,
-                     patch_path: str | None = None) -> dict | None:
+                     patch_path: str | None = None, extra: dict | None = None) -> dict | None:
         """Reserve, upload, commit. Returns None when an asset with the same file
         name is already there (idempotent by file name)."""
         if not path.exists():
-            log(f"  {type_}: {path.relative_to(ROOT)} not found, skipping")
+            shown = path.relative_to(ROOT) if path.is_relative_to(ROOT) else path
+            log(f"  {type_}: {shown} not found, skipping")
             return None
         for res in existing or []:
             if attr(res, "fileName") == path.name:
@@ -584,9 +595,9 @@ class Store:
                 log(f"  {type_}: {path.name} already uploaded ({state})")
                 return res
         size = path.stat().st_size
-        log(f"  {type_}: uploading {path.relative_to(ROOT)} ({size} bytes)")
+        log(f"  {type_}: uploading {path.relative_to(ROOT) if path.is_relative_to(ROOT) else path.name} ({size} bytes)")
         try:
-            reserved = self.c.create(type_, {"fileName": path.name, "fileSize": size}, parent_rel)
+            reserved = self.c.create(type_, {"fileName": path.name, "fileSize": size, **(extra or {})}, parent_rel)
         except ApiError as e:
             if e.status == 409:
                 # Apple keeps one asset of this kind; it is already there (possibly still processing).
@@ -601,7 +612,10 @@ class Store:
             chunk = data[op["offset"]: op["offset"] + op["length"]]
             headers = {h["name"]: h["value"] for h in op.get("requestHeaders", [])}
             self.c.request(op.get("method", "PUT"), op["url"], raw=chunk, headers=headers)
-        return self.c.update(type_, reserved["id"], {"uploaded": True, "sourceFileChecksum": md5_of(path)}, path=patch_path)
+        commit = {"uploaded": True}
+        if type_ not in NO_CHECKSUM_ASSETS:
+            commit["sourceFileChecksum"] = md5_of(path)
+        return self.c.update(type_, reserved["id"], commit, path=patch_path)
 
     def describe_price_schedule(self, schedule: dict) -> str:
         resp = self.c.request("GET", f"/v1/appPriceSchedules/{schedule['id']}/manualPrices",
@@ -912,6 +926,93 @@ def cmd_iap(s: Store) -> None:
                            [shot] if shot else [])
 
 
+def patch_outside_review_draft(s: Store, sub: dict, attrs: dict, label: str) -> dict:
+    """PATCH a subscription that sits in the app's open review draft. Apple refuses some fields
+    (familySharable, 2026-10-14) while the subscription's version is an item of a review submission
+    that has not been sent: lift that item out, PATCH, put it back. The draft is never submitted.
+    Apple sometimes refuses the first try right after another subscription of the group changed;
+    it accepts a second one a few seconds later."""
+    current = sub.get("attributes") or {}
+    diff = {k: v for k, v in attrs.items() if current.get(k) != v}
+    versions = {v["id"] for v in s.c.get_list(f"/v1/subscriptions/{sub['id']}/versions")}
+    drafts = [x for x in s.c.get_list(f"/v1/apps/{APP_ID}/reviewSubmissions", {"filter[platform]": PLATFORM})
+              if attr(x, "state") in PENDING_SUBMISSION_STATES]
+    for attempt in range(2):
+        moved: list[tuple[str, str]] = []
+        try:
+            for draft in drafts:
+                resp = s.c.request("GET", f"/v1/reviewSubmissions/{draft['id']}/items",
+                                   params={"limit": 50, "include": "subscriptionVersion"}) or {}
+                for item in resp.get("data") or []:
+                    vid = related_id(item, "subscriptionVersion")
+                    if vid in versions:
+                        s.c.request("DELETE", f"/v1/reviewSubmissionItems/{item['id']}")
+                        moved.append((draft["id"], vid))
+            log(f"    {label}: lifted {len(moved)} item(s) out of the review draft, updating {', '.join(sorted(diff))}")
+            return s.c.update("subscriptions", sub["id"], diff)
+        except ApiError as err:
+            if attempt == 1 or err.status != 409:
+                raise
+            log(f"    {label}: Apple refused ({err.status}); retrying in 20 s")
+        finally:
+            for draft_id, vid in moved:
+                s.c.create("reviewSubmissionItems", relationships={
+                    "reviewSubmission": rel("reviewSubmissions", draft_id),
+                    "subscriptionVersion": rel("subscriptionVersions", vid)})
+            if moved:
+                log(f"    {label}: put {len(moved)} item(s) back into the review draft")
+        if not s.c.dry_run:
+            time.sleep(20)
+    return sub
+
+
+WINBACK_ATTRS = ("referenceName", "offerMode", "duration", "periodCount", "customerEligibilityPaidSubscriptionDurationInMonths",
+                 "customerEligibilityTimeSinceLastSubscribedInMonths", "customerEligibilityWaitBetweenOffersInMonths",
+                 "priority", "promotionIntent", "endDate")
+# Subscription states that accept offers (Apple: "Offers can only be created for approved subscriptions").
+WINBACK_STATES = ("APPROVED",)
+WINBACK_EDITABLE = ("customerEligibilityPaidSubscriptionDurationInMonths", "customerEligibilityTimeSinceLastSubscribedInMonths",
+                    "customerEligibilityWaitBetweenOffersInMonths", "priority", "promotionIntent", "endDate")
+
+
+def sync_winback_offers(s: Store, sid: str, pid: str, cfg: dict) -> None:
+    """Win-back offers (`winBackOffers` in the subscription's metadata): StoreKit offers for people whose
+    subscription lapsed. The App Store shows them itself (subscription settings, the product page, and in
+    the app through StoreKit messages). Created once per `offerId`, priced per territory from the USD price
+    point like the subscription; afterwards only the eligibility, priority, promotion and end date can change."""
+    offers = cfg.get("winBackOffers") or []
+    if not offers:
+        return
+    state = attr(s.c.get_one(f"/v1/subscriptions/{sid}"), "state")
+    if state not in WINBACK_STATES and not s.c.dry_run:
+        log(f"    win-back offers: waiting, the subscription is {state} (Apple creates offers only for approved"
+            f" subscriptions; run `subscriptions` again after approval)")
+        return
+    existing = {attr(o, "offerId"): o for o in s.c.get_list(f"/v1/subscriptions/{sid}/winBackOffers")}
+    for o in offers:
+        oid = o["offerId"]
+        attrs = {k: o[k] for k in WINBACK_ATTRS if k in o}
+        if oid in existing:
+            s.c.upsert("winBackOffers", existing[oid], {k: v for k, v in attrs.items() if k in WINBACK_EDITABLE},
+                       label=f"    win-back {oid}")
+            continue
+        # Apple wants a start date after today (its own clock); tomorrow is always accepted.
+        attrs.update({"offerId": oid, "startDate": o.get("startDate") or time.strftime("%Y-%m-%d", time.gmtime(time.time() + 36 * 3600))})
+        included, refs = [], []
+        if o["offerMode"] != "FREE_TRIAL":
+            point = s.price_point(f"/v1/subscriptions/{sid}/pricePoints", o["price"]["customerPrice"], f"{pid} win-back")
+            by_territory = s.equalized(f"/v1/subscriptionPricePoints/{point['id']}/equalizations", point, {"filter[subscription]": sid})
+            for i, (t, pp) in enumerate(sorted(by_territory.items())):
+                local = f"${{price-{i}}}"
+                refs.append({"type": "winBackOfferPrices", "id": local})
+                included.append({"type": "winBackOfferPrices", "id": local,
+                                 "relationships": {"territory": rel("territories", t),
+                                                   "subscriptionPricePoint": rel("subscriptionPricePoints", pp)}})
+        log(f"    win-back {oid}: creating ({o['offerMode']} {o['duration']} x{o['periodCount']}"
+            + (f", USD {o['price']['customerPrice']} in {len(refs)} territories" if refs else "") + ")")
+        s.c.create("winBackOffers", attrs, {"subscription": rel("subscriptions", sid), "prices": {"data": refs}}, included=included)
+
+
 def cmd_subscriptions(s: Store) -> None:
     log("== subscriptions")
     group_cfg = read_json(SUBS_DIR / "group.json")
@@ -945,7 +1046,12 @@ def cmd_subscriptions(s: Store) -> None:
             log(f"    {pid}: creating")
             sub = s.c.create("subscriptions", {**attrs, "productId": pid}, {"group": rel("subscriptionGroups", gid)})
         else:
-            sub = s.c.upsert("subscriptions", sub, attrs, label=f"  {pid} ({attr(sub, 'state')})")
+            try:
+                sub = s.c.upsert("subscriptions", sub, attrs, label=f"  {pid} ({attr(sub, 'state')})")
+            except ApiError as err:
+                if err.status != 409 or not err.mentions("UNMODIFIABLE", "can not be modified"):
+                    raise
+                sub = patch_outside_review_draft(s, sub, attrs, pid)
         sid = sub["id"]
 
         locs = s.c.get_list(f"/v1/subscriptions/{sid}/subscriptionLocalizations")
@@ -978,6 +1084,8 @@ def cmd_subscriptions(s: Store) -> None:
             s.c.create("subscriptionIntroductoryOffers",
                        {"offerMode": offer["offerMode"], "duration": offer["duration"], "numberOfPeriods": offer["numberOfPeriods"]},
                        {"subscription": rel("subscriptions", sid), "territory": rel("territories", t)})
+
+        sync_winback_offers(s, sid, pid, cfg)
 
         shot = s.c.get_one(f"/v1/subscriptions/{sid}/appStoreReviewScreenshot")
         s.upload_asset("subscriptionAppStoreReviewScreenshots", {"subscription": rel("subscriptions", sid)},
@@ -1605,7 +1713,114 @@ def cmd_submit(s: Store) -> int:
 # Entry point
 # ---------------------------------------------------------------------------
 
+def _utc(value: str) -> "dt.datetime":
+    import datetime as dt
+    return dt.datetime.fromisoformat(value.replace("Z", "+00:00"))
+
+
+def _iso(t: "dt.datetime") -> str:
+    return t.astimezone(__import__("datetime").timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def _same_schedule(a: list | None, b: list) -> bool:
+    if not a or len(a) != len(b):
+        return False
+    for x, y in zip(a, b):
+        if set(x.get("territories") or []) != set(y.get("territories") or []):
+            return False
+        if any(_utc(x[k]) != _utc(y[k]) for k in ("publishStart", "eventStart", "eventEnd") if x.get(k) and y.get(k)):
+            return False
+    return True
+
+
+def cmd_events(s: Store) -> int:
+    """In-App Events for the next world-day events, as drafts. Never submits: Apple reviews events with an
+    app version (the first one must go with the first App Store submission) or on their own later, and the
+    owner starts that. Events Apple has already accepted are left alone."""
+    import datetime as dt
+    log("== in-app events (drafts only, never submitted)")
+    if not APP_EVENTS.exists():
+        sys.exit(f"{APP_EVENTS.relative_to(ROOT)} is missing: run tools/store/make_app_events.py first")
+    events = read_json(APP_EVENTS)["events"]
+    window = int(s.opt("window") or EVENT_WINDOW)
+    now = dt.datetime.now(dt.timezone.utc)
+    todo = sorted((e for e in events if _utc(e["eventStart"]) >= now + dt.timedelta(days=EVENT_LEAD_DAYS)),
+                  key=lambda e: e["eventStart"])[:window]
+    existing = {attr(x, "referenceName"): x for x in s.c.get_list(f"/v1/apps/{APP_ID}/appEvents")}
+    territories = s.territories()
+    missing_media = []
+    for e in todo:
+        ref = e["referenceName"]
+        loc_cfg = e["localization"]
+        for field, limit in (("name", 30), ("shortDescription", 50), ("longDescription", 120)):
+            if len(loc_cfg[field]) > limit:
+                sys.exit(f"{ref}: {field} is {len(loc_cfg[field])} characters (Apple allows {limit})")
+        # Apple needs the publish date ahead of now: never earlier than the next full UTC day.
+        tomorrow = (now + dt.timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
+        publish = max(_utc(e["publishStart"]), tomorrow)
+        schedule = [{"territories": territories, "publishStart": _iso(publish),
+                     "eventStart": e["eventStart"], "eventEnd": e["eventEnd"]}]
+        attrs = {"referenceName": ref, "badge": e["badge"], "deepLink": e["deepLink"], "purpose": e["purpose"],
+                 "priority": e["priority"], "purchaseRequirement": e["purchaseRequirement"], "primaryLocale": LOCALE,
+                 "territorySchedules": schedule}
+        ev = existing.get(ref)
+        state = attr(ev, "eventState")
+        log(f"  -- {ref} ({e['eventStart'][:10]}, {state or 'new'})")
+        if ev and state not in EVENT_EDITABLE_STATES:
+            log(f"    {state}: left alone")
+            continue
+        if ev is None:
+            ev = s.c.create("appEvents", attrs, {"app": rel("apps", APP_ID)})
+        else:
+            if _same_schedule(attr(ev, "territorySchedules"), schedule):
+                attrs.pop("territorySchedules")
+            attrs.pop("primaryLocale")
+            ev = s.c.upsert("appEvents", ev, attrs, label="    event")
+        eid = ev["id"]
+        locs = s.c.get_list(f"/v1/appEvents/{eid}/localizations")
+        loc = next((l for l in locs if attr(l, "locale") == LOCALE), None)
+        loc = s.c.upsert("appEventLocalizations", loc, dict(loc_cfg) if loc else {**loc_cfg, "locale": LOCALE},
+                         {"appEvent": rel("appEvents", eid)}, label=f"    localization {LOCALE}",
+                         refetch=lambda: next((l for l in s.c.get_list(f"/v1/appEvents/{eid}/localizations") if attr(l, "locale") == LOCALE), None))
+        shots = s.c.get_list(f"/v1/appEventLocalizations/{loc['id']}/appEventScreenshots")
+        for kind, asset_type in (("card", "EVENT_CARD"), ("details", "EVENT_DETAILS_PAGE")):
+            path = EVENT_MEDIA / e["media"][kind]
+            if not path.exists():
+                missing_media.append(e["eventId"])
+                continue
+            s.upload_asset("appEventScreenshots", {"appEventLocalization": rel("appEventLocalizations", loc["id"])},
+                           path, [x for x in shots if attr(x, "appEventAssetType") == asset_type],
+                           extra={"appEventAssetType": asset_type})
+    if missing_media:
+        ids = " ".join(sorted(set(missing_media)))
+        log(f"  media missing for {len(set(missing_media))} event(s): tools/store/make_app_events.py --media {ids}")
+    log(f"  {len(todo)} event(s) in the window (next {window} starting {EVENT_LEAD_DAYS}+ days from now); nothing was submitted")
+    return 0
+
+
+PLATFORM_STEPS = """  App Store availability on Macs and Apple Vision Pro is not in the App Store Connect API. Once, by hand
+  (role Account Holder, Admin or App Manager): App Store Connect > Apps > Card Jigsaw World > Pricing and
+  Availability >
+    - "iPhone and iPad Apps on Apple Silicon Mac": tick "Make this app available", Save
+    - "iPhone and iPad Apps on Apple Vision Pro": tick "Make this app available", Save
+  Both apply to every version. The build already allows it (SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD and
+  SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD are Xcode's default YES; no UIRequiredDeviceCapabilities)."""
+
+
+def cmd_platforms(s: Store) -> int:
+    """Macs with Apple silicon ("Designed for iPhone") and Apple Vision Pro: the TestFlight side (every beta
+    group offers iOS builds on both) is set here; App Store availability has no API and is printed as steps."""
+    log("== Mac and Apple Vision Pro")
+    for g in s.c.get_list(f"/v1/apps/{APP_ID}/betaGroups"):
+        want = {"iosBuildsAvailableForAppleSiliconMac": True, "iosBuildsAvailableForAppleVision": True}
+        s.c.upsert("betaGroups", g, want, label=f"  TestFlight group {attr(g, 'name')}")
+    log(PLATFORM_STEPS)
+    return 0
+
+
 COMMANDS: dict[str, Callable[[Store], Any]] = {
+    "events": cmd_events,
+    "platforms": cmd_platforms,
     "app-info": cmd_app_info,
     "version": cmd_version,
     "age-rating": cmd_age_rating,
@@ -1638,6 +1853,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--resolve", metavar="ID[,ID]", help="with `feedback`: resolve these items (deletes them on Apple, records them locally)")
     parser.add_argument("--note", metavar="TEXT", help="with `feedback --resolve`: what was done about it")
     parser.add_argument("--without-iap", action="store_true", help="with `submit`: proceed even if ready products are not in the submission")
+    parser.add_argument("--window", type=int, metavar="N", help=f"with `events`: how many upcoming events to draft (default {EVENT_WINDOW})")
     args = parser.parse_args(argv)
 
     client = Client(dry_run=args.dry_run, verbose=args.verbose)
