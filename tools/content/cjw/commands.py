@@ -109,6 +109,11 @@ def cmd_newpack(a):
     writer.new_pack(spec, snap)
     print('pack row ready:', spec['id'])
 
+def cmd_newdaily(a):
+    snap = catalog.load()
+    for month in a.month:
+        writer.new_daily(specs.load(f'daily-{month}'), snap, month, picks=a.pick or (), dry=a.dry)
+
 def cmd_finalize(a):
     snap = catalog.load()
     spec = specs.load(a.pack) if specs.spec_path(a.pack).exists() else {'id': a.pack, 'pool': a.pack}
@@ -261,6 +266,7 @@ def main(argv):
     p = sub.add_parser('reject'); p.add_argument('pack'); p.add_argument('ids', nargs='+'); p.add_argument('--reason', required=True); p.set_defaults(f=cmd_reject)
     p = sub.add_parser('apply'); p.add_argument('pack'); p.add_argument('--target', type=int); p.add_argument('--pick', nargs='*'); p.add_argument('--no-auto', action='store_true'); p.add_argument('--dry', action='store_true'); p.set_defaults(f=cmd_apply)
     p = sub.add_parser('newpack'); p.add_argument('pack'); p.set_defaults(f=cmd_newpack)
+    p = sub.add_parser('newdaily'); p.add_argument('month', nargs='+', help='YYYY-MM'); p.add_argument('--pick', nargs='*'); p.add_argument('--dry', action='store_true'); p.set_defaults(f=cmd_newdaily)
     p = sub.add_parser('finalize'); p.add_argument('pack'); p.set_defaults(f=cmd_finalize)
     p = sub.add_parser('clone'); p.add_argument('src'); p.add_argument('dst'); p.set_defaults(f=cmd_clone)
     p = sub.add_parser('summary'); p.add_argument('-v', '--verbose', action='store_true'); p.set_defaults(f=cmd_summary)

@@ -192,6 +192,69 @@ def finalize_pack(spec, snap, accent=None):
         except RuntimeError as e:
             print('  event update failed', str(e)[:100])
 
+def new_daily(spec, snap, month, picks=(), dry=False):
+    """Create a daily month pack (daily-YYYY-MM): the pack row and one dated puzzle per day, filled from
+    the spec's pool. Idempotent: existing day rows are kept, only missing days are created. Review the
+    sheet afterwards and fix rejects with `apply` (daily packs replace in place)."""
+    import calendar, datetime
+    y, mo = (int(x) for x in month.split('-'))
+    pack_id = f'daily-{y:04d}-{mo:02d}'
+    label = datetime.date(y, mo, 1).strftime('%B %Y')
+    spec = dict(spec, id=pack_id)
+    packs = catalog.pack_index(snap)
+    if pack_id not in packs:
+        if dry:
+            print(f'{pack_id}: pack row would be created ({label})')
+        else:
+            # price follows tools/store/apply_pack_prices.py (re-run it after a content session)
+            data = dict(name=label, category='Daily', description=f"One fresh picture for every day of {label}. Solve today's for a bonus.",
+                        priceCoins=3100, priceTickets=0, isFree=False, isPremium=False, isSeasonal=False, sortOrder=100,
+                        accent='', emoji='', coverUrl='', imageCount=0)
+            api.create_row('packs', data, row_id=pack_id)
+            state.log('pack-create', pack=pack_id, category='Daily')
+            checkpoint.update(pack_id, status='pending', step='newdaily', kind='new', name=label, category='Daily', puzzles=0)
+    snap = catalog.refresh_pack(snap, pack_id) if not dry or pack_id in packs else snap
+    puzzles = catalog.by_pack(snap).get(pack_id, [])
+    have = {p['$id'] for p in puzzles}
+    days = [d for d in range(1, calendar.monthrange(y, mo)[1] + 1) if f'{pack_id}-{d:02d}' not in have]
+    kept_metas = [m for m in (imagecache.load_meta(p['imageUrl']) for p in puzzles) if m and m.get('ok')]
+    kept_authors = {}
+    for p in puzzles: kept_authors[p.get('author') or ''] = kept_authors.get(p.get('author') or '', 0) + 1
+    pool = load_pool(spec['pool'])
+    taken = {p['imageUrl'] for p in catalog.load(refresh=True)['puzzles'] if p['packId'] != pack_id}
+    chosen = select_candidates(pool, spec, kept_metas, kept_authors, len(days), picks, True, state.rejects(), taken)
+    print(f'{pack_id}: {len(puzzles)} days exist, {len(days)} missing, chosen {len(chosen)}')
+    if dry:
+        for d, c in zip(days, chosen): print(f'   {d:02d}', c['key'], c.get('topic'), c['author'])
+        return snap
+    titles = {p.get('title') for p in puzzles}
+    for d, c in zip(days, chosen):
+        m = _meta_ok(c['url'])
+        pid = f'{pack_id}-{d:02d}'
+        title = nice_title(c, c.get('topic', 'Daily picture'), titles); titles.add(title)
+        data = dict(packId=pack_id, title=title, **host.puzzle_urls(c['url']), author=c['author'][:96], source=c['source'][:128],
+                    sortOrder=d, accent=m['accent'], date=f'{y:04d}-{mo:02d}-{d:02d}T00:00:00.000+00:00', blurhash=m['blurhash'])
+        try:
+            api.create_row('puzzles', data, row_id=pid)
+        except RuntimeError as e:
+            if '409' in str(e): api.update_row('puzzles', pid, data)
+            else: raise
+        state.add_provenance(pid, dict(url=c['url'], author=c['author'], licence=c['licence'], source=c['source'], page=c.get('page', ''), provider=c['provider'], packId=pack_id, topic=c.get('topic', ''), at=time.strftime('%Y-%m-%d'), **_prov_extra(c)))
+        _on_used(c)
+        state.log('create', pack=pack_id, puzzle=pid, url=c['url'], topic=c.get('topic', ''))
+        c['status'] = 'used'
+    save_pool(pool)
+    missing = days[len(chosen):]
+    if missing:
+        print(f'  WARNING {len(missing)} days still empty ({", ".join(f"{d:02d}" for d in missing)}): grow the pool (pool {pack_id} --more) and run newdaily again')
+    snap = catalog.refresh_pack(snap, pack_id)
+    finalize_pack(spec, snap)
+    n = len(catalog.by_pack(snap).get(pack_id, []))
+    checkpoint.update(pack_id, status='fixed' if not missing else 'pending', step='newdaily', puzzles=n)
+    print(f'  done: {pack_id} has {n} days')
+    return snap
+
+
 def new_pack(spec, snap, sort_order=None):
     """Create (or update metadata of) a pack row from a spec. Idempotent."""
     packs = catalog.pack_index(snap)
