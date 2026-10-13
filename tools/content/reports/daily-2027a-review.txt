@@ -1,0 +1,221 @@
+# daily-2027a candidate review (pool cache/pools/daily-2027a.json). Reviewed c01-c399; bad ones rejected in state/rejects.json.
+# Format: key grade(A great, B fine, B- weak) month-fit note. c400-c495 still to review. No month created yet.
+c01 B nov sweetgum trunk+red
+c02 B nov sweetgum tree up
+c03 A nov sweetgum red leaves
+c04 B chanterelle dark
+c05 B chanterelle
+c06 B nov chanterelle portrait
+c08 A nov shaggy ink green
+c09 B nov shaggy ink pair
+c10 A nov bald cypress needles
+c11 B nov bald cypress tree (building)
+c12 B nov bald cypress tree
+c16 B crab apples grasshopper
+c17 A apr crab apple blossom pink
+c18 B apr crab apple blossom bush
+c19 B nov sea buckthorn branch
+c20 A nov sea buckthorn berries
+c21 B nov sea buckthorn berry mass
+c25 A nov saffron crocus purple
+c26 B nov saffron crocus (similar c25)
+c27 B nov pale crocus
+c28 B nov nerine on rock
+c31 A pheasant portrait (Sprinz)
+c33 A pheasant head close (Sprinz, same author as c31)
+c40 B- dec christmas cactus messy
+c44 A dec/jan clementines pile
+c45 B dec clementines close
+c47 B dec star anise on doily
+c49 B dec door with wreath
+c50 B- dec silver wreath grey wall
+c51 B dec wreath red green orange wall
+c56 A dec/jan long-tailed tit colourful bokeh
+c57 B long-tailed tit
+c58 B dec sasanqua camellia
+c60 B dec camellia bush
+c64 A jan camellia in snow
+c68 B jan winter jasmine bush
+c69 B- jan winter jasmine
+c71 A jan mahonia
+c72 B jan mahonia
+c73 B jan mahonia close
+c77 A jan tartan
+c78 B jan tartan w pin (same author c77)
+c83 B- jan frozen niagara grey
+c90 B feb red-crowned crane preening
+c95 B- feb whooper swan dark water
+c96 B feb snow bunting blue bg
+c102 B feb mountain goat head
+c103 B- feb mountain goats lying
+c105 B feb siberian jay branch
+c106 B- feb siberian jay wire
+c107 A feb siberian jay snow
+c110 B- feb black grouse back
+c114 A feb semla
+c116 B feb semla (same author)
+c117 B feb paczki green plate
+c119 B- feb paczki lace
+c128 A mar kawazu blossom close
+c129 A mar winter aconite
+c130 B mar winter aconite
+c131 B mar winter aconite
+c133 B- mar scilla small
+c135 A mar glory-of-the-snow
+c136 B mar glory-of-the-snow white
+c139 A mar witch hazel red
+c141 B mar pasque bud
+c142 B- mar pasque dirt
+c143 B mar pasque
+c144 A mar iris reticulata
+c147 B- mar daphne
+c148 B mar daphne bush pattern
+c150 A mar cherry plum blossom sky
+c152 B mar cherry plum white
+c153 B- mar pussy willow
+c154 B- mar pussy willow
+c155 B- mar pussy willow
+c156 B- mar celandine
+c157 B mar celandine
+c158 B mar celandine
+c163 B mar apricot blossom
+c164 B mar apricot white
+c165 B- mar star magnolia
+c170 B- mar mimosa sky
+c172 B mar hepatica
+c173 A mar hepatica blue
+c174 B mar spring snowflake
+c175 B mar spring snowflake
+c176 B mar spring snowflake (same author)
+c179 A apr crown imperial
+c180 B apr crown imperial
+c181 A apr dog's-tooth violet
+c182 B apr erythronium
+c184 B apr narcissus poeticus
+c185 B apr narcissus poeticus
+c188 B- apr kerria bush
+c189 B apr kerria double
+c190 A apr pieris red
+c191 B- apr pieris white
+c192 B apr pieris pink
+c193 A apr japanese quince
+c194 A apr japanese quince (same author)
+c195 B- apr flowering yellow (corylopsis?)
+c196 B apr dogwood tree white
+c197 B- apr dogwood
+c198 B apr purple weeping redbud
+c201 B apr cowslips/marsh marigold
+c202 B apr yellow flower close
+c204 B apr tulipa clusiana
+c205 B- apr tulipa clusiana
+c206 A apr yellow species tulips
+c207 B- apr drumstick primula
+c208 B- apr white primula stone
+c209 B apr purple drumstick primula
+c213 B may sissinghurst gate arch
+c216 B- may isola bella pot tree
+c217 B may isola bella orange tree pot
+c219 B may hosta
+c220 B may hosta
+c221 B may hosta (same author c220)
+c223 A may mainau flowers dahlias
+c224 B may mainau
+c225 B may hydrangea purple
+c227 B red elderberries (title Elderflower wrong -> retitle)
+c228 B red elderberries
+c229 B red elderberries
+c234 A may papel picado canopy
+c235 B may blue poppy
+c236 A may blue poppies
+c237 B may blue poppy
+c238 A may iceland poppies
+c239 A may yellow poppy close
+c240 B may pink poppy
+c243 B regaleira well
+c261 A yellow crane tower
+c262 B hanging temple
+c263 B- hanging temple ceiling
+c265 A wazir khan tile panels
+c266 A wazir khan fresco pattern
+c267 B wazir khan floral fresco
+c268 A patrika gate
+c270 B patrika gate (2nd)
+c271 B punakha dzong
+c272 B punakha dzong
+c273 B- punakha window
+c274 A nyatapola temple
+c278 B- wat xieng thong columns
+c279 A wat xieng thong tree of life mosaic
+c280 B changdeokgung gate
+c281 A changdeokgung dancheong pattern
+c282 A changdeokgung eaves
+c285 B lindau lighthouse grey
+c287 B lindau lighthouse blue
+c288 B giethoorn boats (check people)
+c292 B- rocamadour tower
+c293 B rocamadour house
+c295 B roussillon ochre
+c296 B roussillon
+c297 B- roussillon
+c301 B san gimignano towers
+c302 B san gimignano aerial
+c303 B- san gimignano hazy
+c304 B sirmione
+c305 A sirmione castle docks
+c306 B- sirmione
+c307 B ronda
+c308 B ronda bridge
+c309 A ronda with flowers
+c310 B cuenca
+c311 A cuenca hanging houses
+c312 B cuenca
+c314 B girona houses
+c315 A girona reflections
+c316 B- sant pau
+c318 B- sant pau steps
+c319 B costa nova black stripes
+c320 A costa nova yellow
+c327 B alesund harbour
+c328 B alesund facade
+c329 B- alesund
+c333 B+ stockholm metro blue
+c335 B egeskov castle
+c337 B egeskov castle
+c338 A zalipie painted cottage
+c339 B- zalipie
+c340 B bratislava blue church
+c343 A peles castle
+c346 B plovdiv
+c347 B plovdiv (check people)
+c348 B plovdiv house
+c349 B trinity lavra bell tower grey
+c351 A trinity lavra bell tower blue (check people)
+c353 B antigua arch street (check people)
+c354 A antigua arch volcano
+c355 B red tower san miguel
+c358 B guatape houses
+c360 B guatape zocalos colourful
+c361 B pelourinho facade
+c362 B pelourinho rooftops
+c363 B pelourinho
+c367 B quebec petit champlain night
+c368 B- quebec steps
+c369 B- quebec
+c370 B- mesa arch canyon wall
+c371 B- canyon flat sky
+c373 A sidi bou said red door
+c374 B sidi bou said blue door plaque
+c375 B sidi bou said courtyard
+c376 A yick cheong
+c377 B yick cheong
+c378 B yick cheong
+c379 A champagne pool
+c384 B- church good shepherd
+c385 A umbrella sky
+c387 B- umbrella street
+c388 A lobster buoys
+c390 B- buoy tree
+c391 A fresnel lens
+c392 B fresnel lens red
+c393 B fresnel lens
+c399 B european roller flying (border?)
