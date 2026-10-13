@@ -264,3 +264,120 @@ c487 B elephant hawk-moth
 c488 A elephant hawk-moth
 c489 B elephant hawk-moth
 c491 B glasswing butterfly
+c497 B cuckoo wasp green
+c498 A flame angelfish
+c499 B regal angelfish
+c500 B regal angelfish
+c501 A regal angelfish
+c502 A moorish idol
+c503 B moorish idol
+c504 B moorish idol
+c505 A harlequin shrimp
+c506 B harlequin shrimp
+c507 B harlequin shrimp (same author)
+c508 B- banggai cardinalfish blue
+c511 A shakshuka
+c514 B mezze platter
+c515 B masala dosa
+c521 B- onigiri dark
+c522 B onigiri slate
+c523 B- onigiri white
+c527 B laksa
+c528 B laksa
+c529 B laksa
+c530 B- borscht
+c535 B raclette cheese wheels
+c540 B- risotto
+c541 B- risotto
+c542 B- kunefe
+c544 B- kunefe
+c547 A battenberg cake
+c549 B- trifle
+c551 B- trifle
+c553 A petit fours pink green
+c554 B petit fours tray
+c558 A blood oranges
+c560 B blood orange
+c570 A marzipan fruits
+c574 B aloe polyphylla spiral
+c576 A aloe polyphylla spiral
+c580 B lithops flower
+c582 B- lithops
+c583 A coleus red
+c585 B coleus
+c586 B- caladium
+c587 B caladium
+c588 B caladium
+c595 B- petrified wood sky
+c596 B- petrified wood green
+c603 B- watermelon tourmaline slice
+c606 B- ammonite shop
+c614 B paperbark maple trunk
+c618 B- monkey puzzle tree
+c622 B- bristlecone pine sky
+c625 B quiver tree aloe
+c626 B- quiver tree
+c627 B quiver tree (same author c625)
+c628 B+ jade vine orange
+c629 B- jade vine greenhouse
+c630 B- jade vine
+c631 B torch ginger
+c633 A torch ginger
+c634 B gloriosa lily
+c636 B gloriosa lily
+c638 B- primula auricula yellow
+c639 B- primula auricula yellow
+c641 A gazania close
+c642 B+ gazania pink
+c643 B- tiger lily
+c644 B- tiger lilies dark
+c647 B alpenrose
+c649 B- globeflower
+c650 B- globeflower dark
+c651 B- globeflower
+c652 B sturt's desert pea
+c653 B sturt's desert pea
+c654 B- sturt's desert pea
+c658 A Morning Glory Pool yellowstone (retitle "Morning Glory Pool")
+c659 B morning glory pool (retitle)
+c660 B morning glory pool (same author, retitle)
+c661 B snapdragon pink
+c662 B snapdragon
+c663 B- snapdragon
+c665 B lisianthus
+c666 B lisianthus
+c667 A grevillea
+c670 B nov medlar pile
+c671 B nov medlar on tree
+c672 B nov medlar/hips blue sky
+c674 B+ nov hawthorn berries drop
+c675 A nov hawthorn berries
+c678 A nov staghorn sumac
+c679 B nov staghorn sumac (same author)
+c680 A nov staghorn sumac
+c682 B- nov burning bush berries
+c683 B nov burning bush berries
+c684 B nov persian ironwood tree building
+c685 B nov red oak leaves
+c688 B nov amethyst deceiver
+c689 A nov amethyst deceiver
+c691 B nov chicken of the woods
+c692 A nov chicken of the woods
+c693 B- nov chicken of the woods
+c694 B nov earthstar
+c697 B nov wood blewit
+c699 B- nov wood blewit
+c702 B nuthatch
+c703 A nuthatch (Sprinz)
+c704 A dec goldcrest (Sprinz)
+c706 B- goldcrest
+c708 B dec sufganiyot
+c709 B- dec sufganiyot
+c710 A dec lussekatter
+c717 B- gokayama sky
+c718 B+ jan gokayama house flowers
+c719 A jan frosted bramble leaves
+c720 B seville cathedral orange trees (retitle)
+c721 B giralda (retitle)
+c722 B- orange tree
+c726 B- feb snowshoe hare white

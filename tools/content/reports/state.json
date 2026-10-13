@@ -1,8 +1,8 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-13T10:59:46",
-"msg": "Content: daily-2027a pool paused at 191/399 topics (usage limit)",
+"at": "2026-10-13T13:02:30",
+"msg": "Content: daily-2027-06 (June 2027, 30 days)\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
 "ok": true,
 "pushed": true,
 "stage": "committed"
@@ -1115,22 +1115,26 @@
 },
 "daily-2026-11": {
 "added": 0,
-"at": "2026-10-13T12:56:56",
-"last_step": "reject 5 text",
-"puzzles": null,
+"at": "2026-10-13T13:15:31",
+"category": "Daily",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "November 2026",
+"puzzles": 30,
 "removed": 0,
-"status": "audited"
+"status": "verified"
 },
 "daily-2027-06": {
 "added": 2,
-"at": "2026-10-13T13:01:46",
+"at": "2026-10-13T13:09:00",
 "category": "Daily",
 "kind": "new",
-"last_step": "apply",
+"last_step": "reject 7 text",
 "name": "June 2027",
 "puzzles": 30,
 "removed": 2,
-"status": "fixed"
+"status": "audited"
 },
 "deep-space": {
 "added": 24,
