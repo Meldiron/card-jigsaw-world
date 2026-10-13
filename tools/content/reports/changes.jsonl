@@ -15219,3 +15219,55 @@
 {"pack": "pack-embroidery", "puzzle": "p-87b95967bd11", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Bedcover_MET_DP267963.jpg/1280px-Bedcover_MET_DP267963.jpg", "topic": "embroidered bedcover", "event": "create", "at": "2026-10-13T16:07:19"}
 {"pack": "pack-embroidery", "puzzle": "p-5fea8a103884", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Korean_embroidery-Joseon_Dynasty-Hyungbae-Rank_badge-01.jpg/1280px-Korean_embroidery-Joseon_Dynasty-Hyungbae-Rank_badge-01.jpg", "topic": "rank badge", "event": "create", "at": "2026-10-13T16:07:21"}
 {"pack": "pack-embroidery", "puzzle": "p-40f229a33c53", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Phulkari.jpg/1280px-Phulkari.jpg", "topic": "phulkari", "event": "create", "at": "2026-10-13T16:07:23"}
+{"pack": "pack-embroidery", "puzzle": "p-89a57dfa7921", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Ceremonial_hanging_IMA_50671.jpg/1280px-Ceremonial_hanging_IMA_50671.jpg", "topic": "Uzbek suzani", "event": "create", "at": "2026-10-13T16:07:25"}
+{"pack": "pack-embroidery", "puzzle": "p-758c2c24d2b2", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Side_skirt_panel_from_Lydda_dress_%28Palestinian_Thobe%29.jpg/1280px-Side_skirt_panel_from_Lydda_dress_%28Palestinian_Thobe%29.jpg", "topic": "Palestinian embroidery", "event": "create", "at": "2026-10-13T16:07:29"}
+{"pack": "pack-embroidery", "puzzle": "p-7827db471adb", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Antique_Nuestra_Se%C3%B1ora_de_los_Dolores_from_Catanauan%2C_Quezon_-_Pasig_2024_06.jpg/1280px-Antique_Nuestra_Se%C3%B1ora_de_los_Dolores_from_Catanauan%2C_Quezon_-_Pasig_2024_06.jpg", "topic": "goldwork embroidery", "event": "create", "at": "2026-10-13T16:07:31"}
+{"pack": "pack-embroidery", "puzzle": "p-8f3b53516c1c", "url": "https://images.metmuseum.org/CRDImages/is/original/wb-10.33.1.JPG", "topic": "Rasht embroidery", "event": "create", "at": "2026-10-13T16:07:33"}
+{"pack": "pack-embroidery", "puzzle": "p-a14407c99e71", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Cover%2C_bed_%28AM_6600-5%29.jpg/1280px-Cover%2C_bed_%28AM_6600-5%29.jpg", "topic": "Chinese embroidery birds flowers", "event": "create", "at": "2026-10-13T16:07:35"}
+{"pack": "pack-embroidery", "puzzle": "p-d1f7738c1c6c", "url": "https://images.metmuseum.org/CRDImages/as/original/LC_53_60_20-001.jpg", "topic": "rank badge", "event": "create", "at": "2026-10-13T16:07:37"}
+{"pack": "pack-embroidery", "puzzle": "p-b984ab5cb665", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Bordados_de_Tenangos._001.jpg/1280px-Bordados_de_Tenangos._001.jpg", "topic": "Tenango embroidery", "event": "create", "at": "2026-10-13T16:07:39"}
+{"pack": "pack-embroidery", "puzzle": "p-608092d81764", "url": "https://images.metmuseum.org/CRDImages/is/original/DP105386.jpg", "topic": "Ottoman embroidery", "event": "create", "at": "2026-10-13T16:07:41"}
+{"pack": "pack-embroidery", "puzzle": "p-117e94c992cc", "url": "https://upload.wikimedia.org/wikipedia/commons/7/7d/Turkmen_dress_embroidery.jpg", "topic": "Turkmen embroidery", "event": "create", "at": "2026-10-13T16:07:43"}
+{"pack": "pack-embroidery", "puzzle": "p-a0d2713e7625", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Suzani_%28bed_cover%29_from_Uzbekistan%2C_Honolulu_Museum_of_Art_933.JPG/1280px-Suzani_%28bed_cover%29_from_Uzbekistan%2C_Honolulu_Museum_of_Art_933.JPG", "topic": "Uzbek suzani", "event": "create", "at": "2026-10-13T16:07:44"}
+{"pack": "pack-embroidery", "puzzle": "p-010bbbe153ad", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Textile_exhibits_at_the_Indian_Museum%2C_Kolkata_05.jpg/1280px-Textile_exhibits_at_the_Indian_Museum%2C_Kolkata_05.jpg", "topic": "embroidered bedcover", "event": "create", "at": "2026-10-13T16:07:50"}
+{"pack": "pack-embroidery", "puzzle": "p-d2d7bb80cea6", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Embroidered_Binding_%28CBL_BB665%2C_Binding%2C_Front%29.jpg/1280px-Embroidered_Binding_%28CBL_BB665%2C_Binding%2C_Front%29.jpg", "topic": "embroidered silk cover", "event": "create", "at": "2026-10-13T16:07:54"}
+{"pack": "pack-embroidery", "fields": ["blurhash", "coverSourceUrl", "coverUrl", "imageCount"], "event": "pack-update", "at": "2026-10-13T16:07:55"}
+{"puzzle": "p-3ea1ff5cf61f", "title": "Tenango animals and flowers", "event": "retitle", "at": "2026-10-13T16:08:07"}
+{"puzzle": "p-7cf10007f17d", "title": "Nurata suzani", "event": "retitle", "at": "2026-10-13T16:08:08"}
+{"puzzle": "p-368901c49b90", "title": "Mandarin square with a pheasant", "event": "retitle", "at": "2026-10-13T16:08:08"}
+{"puzzle": "p-7845eb6ae3cf", "title": "Ahir embroidery, Kutch", "event": "retitle", "at": "2026-10-13T16:08:08"}
+{"puzzle": "p-33f583dbaaf6", "title": "Cypress panel, Jaffa", "event": "retitle", "at": "2026-10-13T16:08:09"}
+{"puzzle": "p-bb8731109792", "title": "Korean leopard rank badge", "event": "retitle", "at": "2026-10-13T16:08:09"}
+{"puzzle": "p-b40189464fdc", "title": "Stack of Bukhara suzanis", "event": "retitle", "at": "2026-10-13T16:08:09"}
+{"puzzle": "p-ab96666ba1bc", "title": "Rasht prayer hanging", "event": "retitle", "at": "2026-10-13T16:08:09"}
+{"puzzle": "p-b47f0ab2add5", "title": "Kuna mola", "event": "retitle", "at": "2026-10-13T16:08:10"}
+{"puzzle": "p-87b95967bd11", "title": "Indian bedcover with animals", "event": "retitle", "at": "2026-10-13T16:08:10"}
+{"puzzle": "p-5fea8a103884", "title": "Korean leopard badge in gold thread", "event": "retitle", "at": "2026-10-13T16:08:10"}
+{"puzzle": "p-40f229a33c53", "title": "Phulkari and bagh cloths", "event": "retitle", "at": "2026-10-13T16:08:10"}
+{"puzzle": "p-89a57dfa7921", "title": "Uzbek ceremonial suzani", "event": "retitle", "at": "2026-10-13T16:08:10"}
+{"puzzle": "p-758c2c24d2b2", "title": "Lydda dress panel", "event": "retitle", "at": "2026-10-13T16:08:11"}
+{"puzzle": "p-7827db471adb", "title": "Gold thread flower on velvet", "event": "retitle", "at": "2026-10-13T16:08:11"}
+{"puzzle": "p-8f3b53516c1c", "title": "Rasht hanging with a vase", "event": "retitle", "at": "2026-10-13T16:08:11"}
+{"puzzle": "p-a14407c99e71", "title": "Chinese silk bedcover with a crest", "event": "retitle", "at": "2026-10-13T16:08:12"}
+{"puzzle": "p-d1f7738c1c6c", "title": "Korean crane rank badge", "event": "retitle", "at": "2026-10-13T16:08:12"}
+{"puzzle": "p-b984ab5cb665", "title": "Tenango cloths", "event": "retitle", "at": "2026-10-13T16:08:12"}
+{"puzzle": "p-608092d81764", "title": "Ottoman floral panel", "event": "retitle", "at": "2026-10-13T16:08:12"}
+{"puzzle": "p-117e94c992cc", "title": "Turkmen dress yoke", "event": "retitle", "at": "2026-10-13T16:08:13"}
+{"puzzle": "p-a0d2713e7625", "title": "Uzbek pomegranate suzani", "event": "retitle", "at": "2026-10-13T16:08:13"}
+{"puzzle": "p-010bbbe153ad", "title": "Indian floral bedcover", "event": "retitle", "at": "2026-10-13T16:08:13"}
+{"puzzle": "p-d2d7bb80cea6", "title": "Embroidered book binding", "event": "retitle", "at": "2026-10-13T16:08:13"}
+{"puzzle": "p-368901c49b90", "author": "Zenwort", "event": "author-fix", "at": "2026-10-13T16:08:14"}
+{"puzzle": "p-bb8731109792", "author": "Unknown Korean maker", "event": "author-fix", "at": "2026-10-13T16:08:14"}
+{"puzzle": "p-d1f7738c1c6c", "author": "Unknown Korean maker", "event": "author-fix", "at": "2026-10-13T16:08:14"}
+{"puzzle": "p-87b95967bd11", "author": "Unknown maker", "event": "author-fix", "at": "2026-10-13T16:08:14"}
+{"puzzle": "p-5fea8a103884", "author": "Unknown Korean maker", "event": "author-fix", "at": "2026-10-13T16:08:15"}
+{"puzzle": "p-89a57dfa7921", "author": "Unknown Uzbek maker", "event": "author-fix", "at": "2026-10-13T16:08:15"}
+{"puzzle": "p-a14407c99e71", "author": "Unknown maker", "event": "author-fix", "at": "2026-10-13T16:08:15"}
+{"puzzle": "p-d2d7bb80cea6", "author": "Unknown maker", "event": "author-fix", "at": "2026-10-13T16:08:16"}
+{"puzzle": "p-7cf10007f17d", "author": "Unknown maker", "event": "author-fix", "at": "2026-10-13T16:08:16"}
+{"puzzle": "p-ab96666ba1bc", "author": "Unknown maker", "event": "author-fix", "at": "2026-10-13T16:08:16"}
+{"puzzle": "p-8f3b53516c1c", "author": "Unknown maker", "event": "author-fix", "at": "2026-10-13T16:08:16"}
+{"puzzle": "p-608092d81764", "author": "Unknown maker", "event": "author-fix", "at": "2026-10-13T16:08:17"}
+{"puzzle": "p-a14407c99e71", "title": "Silk bedcover with a coat of arms", "event": "retitle", "at": "2026-10-13T16:08:35"}
+{"puzzle": "p-a14407c99e71", "author": "Auckland Museum", "event": "author-fix", "at": "2026-10-13T16:08:35"}
+{"puzzle": "p-89a57dfa7921", "author": "Indianapolis Museum of Art", "event": "author-fix", "at": "2026-10-13T16:08:35"}
