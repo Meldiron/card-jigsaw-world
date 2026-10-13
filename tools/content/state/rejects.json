@@ -2675,6 +2675,12 @@
 "pack": "pack-wallpapers",
 "reason": "off-theme"
 },
+"https://images.metmuseum.org/CRDImages/ad/original/LC-2019_94-01.jpg": {
+"at": "2026-10-13",
+"label": "c92",
+"pack": "pack-clocks",
+"reason": "off-theme"
+},
 "https://images.metmuseum.org/CRDImages/ad/original/ap89.24%20verso.jpg": {
 "at": "2026-10-12",
 "label": "c981",
@@ -2831,6 +2837,12 @@
 "pack": "pack-folk-art",
 "reason": "off-theme"
 },
+"https://images.metmuseum.org/CRDImages/es/original/268172.jpg": {
+"at": "2026-10-13",
+"label": "c90",
+"pack": "pack-clocks",
+"reason": "quality"
+},
 "https://images.metmuseum.org/CRDImages/es/original/DP-13486-059.jpg": {
 "at": "2026-10-13",
 "label": "c26",
@@ -2890,6 +2902,18 @@
 "label": "c34",
 "pack": "pack-folk-art",
 "reason": "off-theme"
+},
+"https://images.metmuseum.org/CRDImages/es/original/DP336058.jpg": {
+"at": "2026-10-13",
+"label": "c74",
+"pack": "pack-clocks",
+"reason": "off-theme"
+},
+"https://images.metmuseum.org/CRDImages/es/original/DP344566.jpg": {
+"at": "2026-10-13",
+"label": "c75",
+"pack": "pack-clocks",
+"reason": "people"
 },
 "https://images.metmuseum.org/CRDImages/es/original/DP704407.jpg": {
 "at": "2026-10-13",
@@ -21539,6 +21563,12 @@
 "pack": "ai-future-worlds",
 "reason": "people"
 },
+"https://live.staticflickr.com/65535/52313184246_796a61f5cf_b.jpg": {
+"at": "2026-10-13",
+"label": "c1716",
+"pack": "ai-dream-machines",
+"reason": "text"
+},
 "https://live.staticflickr.com/65535/52313184566_6bbb3caab8_b.jpg": {
 "at": "2026-10-12",
 "label": "c1290",
@@ -25847,6 +25877,12 @@
 "pack": "ai-flowers",
 "reason": "people"
 },
+"https://live.staticflickr.com/65535/53436794127_1419701a4b_b.jpg": {
+"at": "2026-10-13",
+"label": "p-be7fb0e919a5",
+"pack": "ai-flowers",
+"reason": "similar"
+},
 "https://live.staticflickr.com/65535/53437720201_87973a264d_b.jpg": {
 "at": "2026-10-12",
 "label": "c1571",
@@ -25906,6 +25942,12 @@
 "label": "c1448",
 "pack": "ai-dream-machines",
 "reason": "people"
+},
+"https://live.staticflickr.com/65535/53458898778_b8e807cace_b.jpg": {
+"at": "2026-10-13",
+"label": "p-a3ec67995437",
+"pack": "ai-dream-machines",
+"reason": "text"
 },
 "https://live.staticflickr.com/65535/53469539167_cddaa999ee_b.jpg": {
 "at": "2026-10-12",
@@ -29602,6 +29644,12 @@
 "label": "c59",
 "pack": "pack-bridges",
 "reason": "weak"
+},
+"https://live.staticflickr.com/65535/54831599603_10a65885fa_b.jpg": {
+"at": "2026-10-13",
+"label": "c2092",
+"pack": "ai-dream-machines",
+"reason": "text"
 },
 "https://live.staticflickr.com/65535/54901207461_ea206bd2ba_b.jpg": {
 "at": "2026-10-12",
@@ -43589,6 +43637,12 @@
 "pack": "pack-deer",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/8/8f/Bornholm-clock.jpg": {
+"at": "2026-10-13",
+"label": "c104",
+"pack": "pack-clocks",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/8/8f/Kaleidoscope_to_Belvedere_-_geograph.org.uk_-_6266431.jpg": {
 "at": "2026-10-12",
 "label": "c71",
@@ -45731,6 +45785,12 @@
 "pack": "pack-jungle",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Myriad-Year_Clock%2C_made_by_Hisashige_Tanaka%2C_1851%2C_with_western_and_Japanese_dials%2C_weekly%2C_monthly%2C_and_zodiac_setting%2C_plus_sun_and_moon_-_National_Museum_of_Nature_and_Science%2C_Tokyo_-_DSC07407.JPG/1280px-thumbnail.jpg": {
+"at": "2026-10-13",
+"label": "c78",
+"pack": "pack-clocks",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Neuch%C3%A2tel_Herbarium_-_Eryngium_alpinum_-_NEU000006574.jpg/1280px-Neuch%C3%A2tel_Herbarium_-_Eryngium_alpinum_-_NEU000006574.jpg": {
 "at": "2026-10-13",
 "label": "c22",
@@ -47297,6 +47357,12 @@
 "pack": "pack-prague",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Pedestal_clock%2C_French%2C_c._1715-1720%2C_oak%2C_Boulle_marquetry%2C_gilt-bronze_mounts_-_Wallace_Collection_-_London%2C_UK_-_DSC06136.jpg/1280px-Pedestal_clock%2C_French%2C_c._1715-1720%2C_oak%2C_Boulle_marquetry%2C_gilt-bronze_mounts_-_Wallace_Collection_-_London%2C_UK_-_DSC06136.jpg": {
+"at": "2026-10-13",
+"label": "c55",
+"pack": "pack-clocks",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Peel_Monument_-_August_2022_%281%29.jpg/1280px-Peel_Monument_-_August_2022_%281%29.jpg": {
 "at": "2026-10-13",
 "label": "c60",
@@ -47813,6 +47879,12 @@
 "pack": "evpack-croissant-2027",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Casa_de_los_Condes_de_Creixell_2.jpg/1280px-Casa_de_los_Condes_de_Creixell_2.jpg": {
+"at": "2026-10-13",
+"label": "c100",
+"pack": "pack-clocks",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Competitive_design_for_Cathedral_of_St._John_the_Divine%2C_Robert_W._Gibson.jpg/1280px-Competitive_design_for_Cathedral_of_St._John_the_Divine%2C_Robert_W._Gibson.jpg": {
 "at": "2026-10-12",
 "label": "c77",
@@ -48220,6 +48292,12 @@
 "label": "c67",
 "pack": "evpack-love-your-pet-2027",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Longcase_clock_MET_DP346435.jpg/1280px-Longcase_clock_MET_DP346435.jpg": {
+"at": "2026-10-13",
+"label": "c28",
+"pack": "pack-clocks",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Loreta_Prague_1.jpg/1280px-Loreta_Prague_1.jpg": {
 "at": "2026-10-12",
@@ -49073,6 +49151,12 @@
 "pack": "evpack-chocolate-2027",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Clock%2C_1727-1730%2C_Meissen_Porcelain_Manufactory%2C_probably_modeled_by_George_Fritzsche%2C_porcelain%2C_enamels%2C_gilding_-_Art_Institute_of_Chicago_-_DSC00031.JPG/1280px-Clock%2C_1727-1730%2C_Meissen_Porcelain_Manufactory%2C_probably_modeled_by_George_Fritzsche%2C_porcelain%2C_enamels%2C_gilding_-_Art_Institute_of_Chicago_-_DSC00031.JPG": {
+"at": "2026-10-13",
+"label": "c61",
+"pack": "pack-clocks",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Close-up_view_of_fire_damage_to_Timberline_Lodge%2C_Mt._Hood_National_Forest.jpg/1280px-Close-up_view_of_fire_damage_to_Timberline_Lodge%2C_Mt._Hood_National_Forest.jpg": {
 "at": "2026-10-12",
 "label": "c191",
@@ -49684,6 +49768,12 @@
 "label": "c88",
 "pack": "pack-ice-cream",
 "reason": "text"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/La_salle_de_s%C3%A9jour_d%27une_vielle_dame.jpg/1280px-La_salle_de_s%C3%A9jour_d%27une_vielle_dame.jpg": {
+"at": "2026-10-13",
+"label": "c32",
+"pack": "pack-clocks",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Land_of_Israel_from_Space.jpeg/1280px-Land_of_Israel_from_Space.jpeg": {
 "at": "2026-10-12",
@@ -51995,6 +52085,12 @@
 "pack": "daily-2023-01",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Table_clock%2C_probably_Augsburg%2C_c._1590_-_Mathematisch-Physikalischer_Salon%2C_Dresden_-_DSC07888.JPG/1280px-Table_clock%2C_probably_Augsburg%2C_c._1590_-_Mathematisch-Physikalischer_Salon%2C_Dresden_-_DSC07888.JPG": {
+"at": "2026-10-13",
+"label": "c107",
+"pack": "pack-clocks",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Tea_set_%28AM_1981.194-8%29.jpg/1280px-Tea_set_%28AM_1981.194-8%29.jpg": {
 "at": "2026-10-12",
 "label": "c54",
@@ -52564,6 +52660,12 @@
 "label": "c145",
 "pack": "pack-alpine-meadows",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Table_clock%2C_dial_signed_by_Ephraim_Hedstrom%2C_Stockholm%2C_case_is_probably_French%2C_c._1810%2C_gilt_bronze_-_Nordiska_museet_-_Stockholm%2C_Sweden_-_DSC09841.JPG/1280px-Table_clock%2C_dial_signed_by_Ephraim_Hedstrom%2C_Stockholm%2C_case_is_probably_French%2C_c._1810%2C_gilt_bronze_-_Nordiska_museet_-_Stockholm%2C_Sweden_-_DSC09841.JPG": {
+"at": "2026-10-13",
+"label": "c08",
+"pack": "pack-clocks",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Templo_de_Nefertari%2C_Abu_Simbel%2C_Egipto%2C_2022-04-02%2C_DD_103.jpg/1280px-Templo_de_Nefertari%2C_Abu_Simbel%2C_Egipto%2C_2022-04-02%2C_DD_103.jpg": {
 "at": "2026-10-12",
@@ -53153,6 +53255,12 @@
 "pack": "evpack-kindness-2026",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Cartel_clock%2C_attributed_to_Andr%C3%A9-Charles_Boulle%2C_France%2C_1725-1750_-_Waddesdon_Manor_-_Buckinghamshire%2C_England_-_DSC07713.jpg/1280px-Cartel_clock%2C_attributed_to_Andr%C3%A9-Charles_Boulle%2C_France%2C_1725-1750_-_Waddesdon_Manor_-_Buckinghamshire%2C_England_-_DSC07713.jpg": {
+"at": "2026-10-13",
+"label": "c49",
+"pack": "pack-clocks",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Cassiopeia%2C_Interboot_2020%2C_Friedrichshafen_%28IB200150%29.jpg/1280px-Cassiopeia%2C_Interboot_2020%2C_Friedrichshafen_%28IB200150%29.jpg": {
 "at": "2026-10-12",
 "label": "c27",
@@ -53499,6 +53607,12 @@
 "at": "2026-10-12",
 "label": "c99",
 "pack": "pack-libraries",
+"reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Falize-Morrison_Carriage_clock.jpg/1280px-Falize-Morrison_Carriage_clock.jpg": {
+"at": "2026-10-13",
+"label": "c39",
+"pack": "pack-clocks",
 "reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Furka_Pass_Switzerland.JPG/1280px-Furka_Pass_Switzerland.JPG": {
@@ -55049,6 +55163,12 @@
 "pack": "evpack-tea-day-2026",
 "reason": "text"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/2025-02-03-Abgel%C3%B6ste-Silberfolie-FSG-Bild-Susann-B%C3%B6hm.jpg/1280px-2025-02-03-Abgel%C3%B6ste-Silberfolie-FSG-Bild-Susann-B%C3%B6hm.jpg": {
+"at": "2026-10-13",
+"label": "c87",
+"pack": "pack-clocks",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Aktiver_Brenner_Hei%C3%9Fluftballon_2011.JPG/1280px-Aktiver_Brenner_Hei%C3%9Fluftballon_2011.JPG": {
 "at": "2026-10-12",
 "label": "c68",
@@ -56157,6 +56277,12 @@
 "at": "2026-10-12",
 "label": "c59",
 "pack": "pack-rice-terraces",
+"reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Reloj_de_mesa-2007.JPG/1280px-Reloj_de_mesa-2007.JPG": {
+"at": "2026-10-13",
+"label": "c40",
+"pack": "pack-clocks",
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Rubjerg_Knude_Fyr_%28Matthias_Schalk%29.jpg/1280px-Rubjerg_Knude_Fyr_%28Matthias_Schalk%29.jpg": {
@@ -57335,6 +57461,12 @@
 "pack": "pack-sea-cliffs",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Clock_%28Germany%29%2C_1730%E2%80%9332_%28CH_18404081-2%29.jpg/1280px-Clock_%28Germany%29%2C_1730%E2%80%9332_%28CH_18404081-2%29.jpg": {
+"at": "2026-10-13",
+"label": "c64",
+"pack": "pack-clocks",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Closejay.jpg/1280px-Closejay.jpg": {
 "at": "2026-10-12",
 "label": "c60",
@@ -57827,6 +57959,12 @@
 "pack": "pack-norway-fjords",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Automaton_clock%2C_maker_unknown%2C_Germany%2C_c._1600-1615_-_Waddesdon_Manor_-_Buckinghamshire%2C_England_-_DSC07705.jpg/1280px-Automaton_clock%2C_maker_unknown%2C_Germany%2C_c._1600-1615_-_Waddesdon_Manor_-_Buckinghamshire%2C_England_-_DSC07705.jpg": {
+"at": "2026-10-13",
+"label": "c111",
+"pack": "pack-clocks",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Briochepolonaise_hk_jp.jpg/1280px-Briochepolonaise_hk_jp.jpg": {
 "at": "2026-10-12",
 "label": "c116",
@@ -58211,6 +58349,12 @@
 "pack": "evpack-pi-day-2027",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Clock%2C_copper_alloy_with_mercury_gilding%2C_Jacques-Francois_Baudin%2C_Paris%2C_c._1810_-_Nelson-Atkins_Museum_of_Art_-_DSC08952.JPG/1280px-Clock%2C_copper_alloy_with_mercury_gilding%2C_Jacques-Francois_Baudin%2C_Paris%2C_c._1810_-_Nelson-Atkins_Museum_of_Art_-_DSC08952.JPG": {
+"at": "2026-10-13",
+"label": "c11",
+"pack": "pack-clocks",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Close-up_of_a_specimen_of_the_blossom_of_a_Mountain_lilac_%28Ceanothus_Divaricatus%29%2C_ca.1920_%28CHS-1729%29.jpg/1280px-Close-up_of_a_specimen_of_the_blossom_of_a_Mountain_lilac_%28Ceanothus_Divaricatus%29%2C_ca.1920_%28CHS-1729%29.jpg": {
 "at": "2026-10-12",
 "label": "c62",
@@ -58426,6 +58570,12 @@
 "label": "c15",
 "pack": "pack-gardens",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Table_clock_with_Cupid%2C_Empire_style%2C_dial_signed_Bourdier%2C_Paris%2C_early_1700s%2C_gilt_and_dark-patinated_bronze_-_Nordiska_museet_-_Stockholm%2C_Sweden_-_DSC09974.JPG/1280px-thumbnail.jpg": {
+"at": "2026-10-13",
+"label": "c10",
+"pack": "pack-clocks",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/The_Gibson_-_cocktail_at_Hotel_Chelsea%2C_Manhattan.jpg/1280px-The_Gibson_-_cocktail_at_Hotel_Chelsea%2C_Manhattan.jpg": {
 "at": "2026-10-12",
@@ -60137,6 +60287,12 @@
 "pack": "pack-lisbon",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Pendule_lyre%2C_PPO2400%282%29.jpg/1280px-Pendule_lyre%2C_PPO2400%282%29.jpg": {
+"at": "2026-10-13",
+"label": "c46",
+"pack": "pack-clocks",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Pura_Taman_Saraswati%2C_Ubud%2C_Bali%2C_20220823_0847_0263.jpg/1280px-Pura_Taman_Saraswati%2C_Ubud%2C_Bali%2C_20220823_0847_0263.jpg": {
 "at": "2026-10-12",
 "label": "c37",
@@ -61505,6 +61661,12 @@
 "pack": "evpack-lunar-new-year-2027",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/2026-03-17-Restaurierung-Zwischenstand-Bild-Susann-B%C3%B6hm.jpg/1280px-2026-03-17-Restaurierung-Zwischenstand-Bild-Susann-B%C3%B6hm.jpg": {
+"at": "2026-10-13",
+"label": "c88",
+"pack": "pack-clocks",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/A_budding_lotus_flower.jpg/1280px-A_budding_lotus_flower.jpg": {
 "at": "2026-10-12",
 "label": "c12",
@@ -62074,6 +62236,12 @@
 "label": "c18",
 "pack": "pack-night-markets",
 "reason": "text"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Mantel_Clock%2C_Jacques_Nicolas_Pierre_Francois_Dubuc%2C_Paris%2C_1815-1819%2C_ormolu%2C_iron%2C_glass%2C_silvered_dial_-_National_Gallery_of_Art%2C_Washington_-_DSC08776.JPG/1280px-Mantel_Clock%2C_Jacques_Nicolas_Pierre_Francois_Dubuc%2C_Paris%2C_1815-1819%2C_ormolu%2C_iron%2C_glass%2C_silvered_dial_-_National_Gallery_of_Art%2C_Washington_-_DSC08776.JPG": {
+"at": "2026-10-13",
+"label": "c03",
+"pack": "pack-clocks",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Melanistic_Pekin_Duck_5.jpg/1280px-Melanistic_Pekin_Duck_5.jpg": {
 "at": "2026-10-12",
@@ -64061,6 +64229,12 @@
 "pack": "daily-2023-01",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/York_Art_Gallery%2C_Automaton_Clock_-_geograph.org.uk_-_7650196.jpg/1280px-York_Art_Gallery%2C_Automaton_Clock_-_geograph.org.uk_-_7650196.jpg": {
+"at": "2026-10-13",
+"label": "c113",
+"pack": "pack-clocks",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Young_Fallow_Deer_Bucks_grazing%2C_Dunham_Park_-_geograph.org.uk_-_6932960.jpg/1280px-Young_Fallow_Deer_Bucks_grazing%2C_Dunham_Park_-_geograph.org.uk_-_6932960.jpg": {
 "at": "2026-10-12",
 "label": "c08",
@@ -65237,6 +65411,12 @@
 "pack": "pack-hummingbirds",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Campanar_de_l%27esgl%C3%A9sia_colegiata_de_Santa_Maria_la_Mayor_de_Rubiols.jpg/1280px-Campanar_de_l%27esgl%C3%A9sia_colegiata_de_Santa_Maria_la_Mayor_de_Rubiols.jpg": {
+"at": "2026-10-13",
+"label": "c98",
+"pack": "pack-clocks",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Carlton_Street_Christmas_Lights_2016_-_geograph.org.uk_-_5234615.jpg/1280px-Carlton_Street_Christmas_Lights_2016_-_geograph.org.uk_-_5234615.jpg": {
 "at": "2026-10-12",
 "label": "c40",
@@ -65884,6 +66064,12 @@
 "label": "c57",
 "pack": "evpack-pride-2027",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Edam%2C_toren.jpg/1280px-Edam%2C_toren.jpg": {
+"at": "2026-10-13",
+"label": "c95",
+"pack": "pack-clocks",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Egyptian_grasshopper_%28Anacridium_aegyptium%29_on_crab_apple_%28Malus_sylvestris%29_Corfu.jpg/1280px-Egyptian_grasshopper_%28Anacridium_aegyptium%29_on_crab_apple_%28Malus_sylvestris%29_Corfu.jpg": {
 "at": "2026-10-13",
@@ -66563,6 +66749,12 @@
 "pack": "daily-2026-05",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Cuckoo_clock_mechanism_Austria_1880_Wien_Museum_Uhrenmuseum_Vienna_2024.jpeg/1280px-Cuckoo_clock_mechanism_Austria_1880_Wien_Museum_Uhrenmuseum_Vienna_2024.jpeg": {
+"at": "2026-10-13",
+"label": "c16",
+"pack": "pack-clocks",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/DSC00414_%2833655189635%29.jpg/1280px-DSC00414_%2833655189635%29.jpg": {
 "at": "2026-10-12",
 "label": "c104",
@@ -66971,6 +67163,12 @@
 "pack": "pack-paris",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Pendule_d%27officier.jpg/1280px-Pendule_d%27officier.jpg": {
+"at": "2026-10-13",
+"label": "c37",
+"pack": "pack-clocks",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Piranga_ludoviciana_%2849979175822%29.jpg/1280px-Piranga_ludoviciana_%2849979175822%29.jpg": {
 "at": "2026-10-13",
 "label": "c410",
@@ -67300,6 +67498,12 @@
 "label": "c08",
 "pack": "pack-gardens-art",
 "reason": "quality"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/The_pit_and_the_pendulum_LCCN2011647473.jpg/1280px-The_pit_and_the_pendulum_LCCN2011647473.jpg": {
+"at": "2026-10-13",
+"label": "c115",
+"pack": "pack-clocks",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Thorpe_Morieux%2C_St._Mary_the_Virgin_Church%2C_Pulpit_by_Wyatt_featuring_Irish_green_marble_-_geograph.org.uk_-_6521081.jpg/1280px-Thorpe_Morieux%2C_St._Mary_the_Virgin_Church%2C_Pulpit_by_Wyatt_featuring_Irish_green_marble_-_geograph.org.uk_-_6521081.jpg": {
 "at": "2026-10-13",
@@ -68253,6 +68457,12 @@
 "at": "2026-10-13",
 "label": "c69",
 "pack": "abstract-marbling",
+"reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Perpetual_motion_longcase_clock%2C_V%26A_London_01.jpg/1280px-Perpetual_motion_longcase_clock%2C_V%26A_London_01.jpg": {
+"at": "2026-10-13",
+"label": "c24",
+"pack": "pack-clocks",
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Pieces_of_Watermelon_%28Unsplash%29.jpg/1280px-Pieces_of_Watermelon_%28Unsplash%29.jpg": {
@@ -70721,6 +70931,12 @@
 "pack": "pack-lavender",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/French_mantel_clock_with_George_Washington_and_Cornwallis%2C_c.1820_%28New_Orleans_Mus_of_Art_82.215%29.jpg/1280px-French_mantel_clock_with_George_Washington_and_Cornwallis%2C_c.1820_%28New_Orleans_Mus_of_Art_82.215%29.jpg": {
+"at": "2026-10-13",
+"label": "c06",
+"pack": "pack-clocks",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Fresh_apple_chai_-_KEEK_lunchroom_2024-11-28.jpg/1280px-Fresh_apple_chai_-_KEEK_lunchroom_2024-11-28.jpg": {
 "at": "2026-10-12",
 "label": "c23",
@@ -72273,6 +72489,12 @@
 "at": "2026-10-12",
 "label": "c63",
 "pack": "pack-deer",
+"reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Den_Haag_-_Museum_Bredius_-_Thomas_Tompion_%281638-1713%29_-_Longcase_Clock.jpg/1280px-Den_Haag_-_Museum_Bredius_-_Thomas_Tompion_%281638-1713%29_-_Longcase_Clock.jpg": {
+"at": "2026-10-13",
+"label": "c21",
+"pack": "pack-clocks",
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Domon_Ken_-_Yakushi_Nyorai_%28Bhaisajyaguru%29_Shin-Yakushi-ji_2.jpg/1280px-Domon_Ken_-_Yakushi_Nyorai_%28Bhaisajyaguru%29_Shin-Yakushi-ji_2.jpg": {
@@ -76589,6 +76811,12 @@
 "pack": "daily-2026-11",
 "reason": "quality"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Mantel_clock_by_Julien_Le_Roy%2C_1790%2C_glass%2C_ormolu%2C_vitreous_enamel%2C_on_chimneypiece_by_John_Devall_the_younger%2C_1793%2C_marble_-_Blue_Drawing_Room_-_Shugborough_Hall_-_Staffordshire%2C_England_-_DSC00336.jpg/1280px-thumbnail.jpg": {
+"at": "2026-10-13",
+"label": "c02",
+"pack": "pack-clocks",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Medieval_seal_matrix_with_castle_device_%28FindID_263907%29.jpg/1280px-Medieval_seal_matrix_with_castle_device_%28FindID_263907%29.jpg": {
 "at": "2026-10-13",
 "label": "c131",
@@ -77555,6 +77783,12 @@
 "pack": "pack-hot-air-balloons",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/M%C3%B6dling_Bezirksmuseum_5930.JPG/1280px-M%C3%B6dling_Bezirksmuseum_5930.JPG": {
+"at": "2026-10-13",
+"label": "c69",
+"pack": "pack-clocks",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Mosi-oa-Tunya%2C_Livingstone_%2820260519-P1075700%29.jpg/1280px-Mosi-oa-Tunya%2C_Livingstone_%2820260519-P1075700%29.jpg": {
 "at": "2026-10-12",
 "label": "c64",
@@ -77884,6 +78118,12 @@
 "label": "c76",
 "pack": "evpack-literacy-2027",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Pendule_lyre%2C_PPO2400.jpg/1280px-Pendule_lyre%2C_PPO2400.jpg": {
+"at": "2026-10-13",
+"label": "c45",
+"pack": "pack-clocks",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Pink_hydrangea_in_Z%C3%BCrich.jpg/1280px-Pink_hydrangea_in_Z%C3%BCrich.jpg": {
 "at": "2026-10-12",
@@ -80183,6 +80423,12 @@
 "pack": "abstract-light-leaks",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Perpetual_motion_longcase_clock%2C_V%26A_London_02.jpg/1280px-Perpetual_motion_longcase_clock%2C_V%26A_London_02.jpg": {
+"at": "2026-10-13",
+"label": "c23",
+"pack": "pack-clocks",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Petite_Venise_depuis_le_pont_de_la_rue_de_Turenne_%28Colmar%29.jpg/1280px-Petite_Venise_depuis_le_pont_de_la_rue_de_Turenne_%28Colmar%29.jpg": {
 "at": "2026-10-12",
 "label": "c06",
@@ -80434,6 +80680,12 @@
 "label": "c06",
 "pack": "pack-canyons",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Mantle_clock_of_George_Washington%2C_by_Jacques_Nicolas_Pierre_Francois_Dubuc%2C_1815-1819%2C_brass%2C_iron%2C_glass%2C_ormolu_-_Winterthur_Museum_-_DSC01707.JPG/1280px-Mantle_clock_of_George_Washington%2C_by_Jacques_Nicolas_Pierre_Francois_Dubuc%2C_1815-1819%2C_brass%2C_iron%2C_glass%2C_ormolu_-_Winterthur_Museum_-_DSC01707.JPG": {
+"at": "2026-10-13",
+"label": "c01",
+"pack": "pack-clocks",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Medieval_Inkwell_%28FindID_879340%29.jpg/1280px-Medieval_Inkwell_%28FindID_879340%29.jpg": {
 "at": "2026-10-12",
@@ -81298,6 +81550,12 @@
 "label": "c34",
 "pack": "pack-foxes",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Interieur%2C_detail_van_Staand_Horloge_uit_ca._1775%2C_Jan_de_Vries%2C_Oost-Zaandam_-_Zaandam_-_20400454_-_RCE.jpg/1280px-Interieur%2C_detail_van_Staand_Horloge_uit_ca._1775%2C_Jan_de_Vries%2C_Oost-Zaandam_-_Zaandam_-_20400454_-_RCE.jpg": {
+"at": "2026-10-13",
+"label": "c96",
+"pack": "pack-clocks",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Interior_of_St._Jakob_%28Schrobenhausen%29_-_Eternal_flame.jpg/1280px-Interior_of_St._Jakob_%28Schrobenhausen%29_-_Eternal_flame.jpg": {
 "at": "2026-10-12",
@@ -83176,6 +83434,12 @@
 "label": "c03",
 "pack": "pack-canyons",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Milled_wooden_clock_teeth.jpg/1280px-Milled_wooden_clock_teeth.jpg": {
+"at": "2026-10-13",
+"label": "c89",
+"pack": "pack-clocks",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Mount_Rainier_-_Skyline_Trail_in_Paradise_meadow%2C_August_2014_-_01.jpg/1280px-Mount_Rainier_-_Skyline_Trail_in_Paradise_meadow%2C_August_2014_-_01.jpg": {
 "at": "2026-10-13",
@@ -85517,6 +85781,12 @@
 "pack": "pack-new-zealand",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Clock_%28Germany%29%2C_1730%E2%80%9332_%28CH_18404081%29.jpg/1280px-Clock_%28Germany%29%2C_1730%E2%80%9332_%28CH_18404081%29.jpg": {
+"at": "2026-10-13",
+"label": "c63",
+"pack": "pack-clocks",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Container_for_sorted_waste_in_Munich_03.jpg/1280px-Container_for_sorted_waste_in_Munich_03.jpg": {
 "at": "2026-10-12",
 "label": "c37",
@@ -85875,6 +86145,12 @@
 "at": "2026-10-12",
 "label": "c06",
 "pack": "pack-gardens-art",
+"reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Japanese_lantern_clock_wadokei_Wien_Museum_Uhrenmuseum_Vienna_2024.jpeg/1280px-Japanese_lantern_clock_wadokei_Wien_Museum_Uhrenmuseum_Vienna_2024.jpeg": {
+"at": "2026-10-13",
+"label": "c80",
+"pack": "pack-clocks",
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Kinderen_zoeken_naar_kastanjes%2C_Bestanddeelnr_919-6180.jpg/1280px-Kinderen_zoeken_naar_kastanjes%2C_Bestanddeelnr_919-6180.jpg": {
@@ -86488,6 +86764,12 @@
 "label": "c106",
 "pack": "pack-skylines",
 "reason": "quality"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Horloge_Comtoise_A.jpg/1280px-Horloge_Comtoise_A.jpg": {
+"at": "2026-10-13",
+"label": "c30",
+"pack": "pack-clocks",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Huka_Falls_%284840473440%29.jpg/1280px-Huka_Falls_%284840473440%29.jpg": {
 "at": "2026-10-13",
@@ -87353,6 +87635,12 @@
 "pack": "pack-vintage-posters",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Frari_%28Venice%29_-_Sacristy_-_Descent_from_the_Cross_by_Niccol%C3%B2_Frangipane.jpg/1280px-Frari_%28Venice%29_-_Sacristy_-_Descent_from_the_Cross_by_Niccol%C3%B2_Frangipane.jpg": {
+"at": "2026-10-13",
+"label": "c86",
+"pack": "pack-clocks",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/G%C3%B6teve_church_and_22%C2%B0_halo.jpg/1280px-G%C3%B6teve_church_and_22%C2%B0_halo.jpg": {
 "at": "2026-10-12",
 "label": "c63",
@@ -87448,6 +87736,12 @@
 "label": "c134",
 "pack": "pack-seascapes",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Perpetual_motion_longcase_clock%2C_V%26A_London_03.jpg/1280px-Perpetual_motion_longcase_clock%2C_V%26A_London_03.jpg": {
+"at": "2026-10-13",
+"label": "c22",
+"pack": "pack-clocks",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Prague_Charles_Bridge_2021_20.jpg/1280px-Prague_Charles_Bridge_2021_20.jpg": {
 "at": "2026-10-12",
@@ -91151,6 +91445,12 @@
 "pack": "pack-bridges",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Casa_de_los_Condes_de_Creixell_3.jpg/1280px-Casa_de_los_Condes_de_Creixell_3.jpg": {
+"at": "2026-10-13",
+"label": "c101",
+"pack": "pack-clocks",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Castillo_de_Coca%2C_Segovia%2C_Espa%C3%B1a%2C_2016_11.JPG/1280px-Castillo_de_Coca%2C_Segovia%2C_Espa%C3%B1a%2C_2016_11.JPG": {
 "at": "2026-10-12",
 "label": "c104",
@@ -93335,6 +93635,12 @@
 "pack": "pack-whales",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Zaanse_klok%2C_BK-KOG-1412-1.jpg/1280px-Zaanse_klok%2C_BK-KOG-1412-1.jpg": {
+"at": "2026-10-13",
+"label": "c94",
+"pack": "pack-clocks",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/ZalipieKirikuKabel.jpg/1280px-ZalipieKirikuKabel.jpg": {
 "at": "2026-10-13",
 "label": "c05",
@@ -94643,6 +94949,12 @@
 "pack": "pack-moroccan-souks",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Prague_Town_Hall_Clock_2021_06.jpg/1280px-Prague_Town_Hall_Clock_2021_06.jpg": {
+"at": "2026-10-13",
+"label": "c67",
+"pack": "pack-clocks",
+"reason": "duplicate"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Roaring_Lion_Khorsabad_Louvre_AO_20116_14012018_6.jpg/1280px-Roaring_Lion_Khorsabad_Louvre_AO_20116_14012018_6.jpg": {
 "at": "2026-10-12",
 "label": "c55",
@@ -95620,6 +95932,12 @@
 "label": "c132",
 "pack": "pack-rockets",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Skeleton_clock_and_key_MET_DP-13122-075.jpg/1280px-Skeleton_clock_and_key_MET_DP-13122-075.jpg": {
+"at": "2026-10-13",
+"label": "c44",
+"pack": "pack-clocks",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Southern_sea_otter_enhydra_lutris_nereis.jpg/1280px-Southern_sea_otter_enhydra_lutris_nereis.jpg": {
 "at": "2026-10-12",
@@ -96699,6 +97017,12 @@
 "at": "2026-10-12",
 "label": "c72",
 "pack": "evpack-childrens-day-2027",
+"reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Urn_clock_with_three_graces%2C_unidentified%2C_view_1_-_Museo_Nacional_de_Artes_Decorativas_-_Madrid%2C_Spain_-_DSC08339.JPG/1280px-Urn_clock_with_three_graces%2C_unidentified%2C_view_1_-_Museo_Nacional_de_Artes_Decorativas_-_Madrid%2C_Spain_-_DSC08339.JPG": {
+"at": "2026-10-13",
+"label": "c58",
+"pack": "pack-clocks",
 "reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Wiki-0003-mingus-mill.jpg/1280px-Wiki-0003-mingus-mill.jpg": {
@@ -97865,6 +98189,12 @@
 "pack": "pack-tokyo-nights",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Urn_clock_with_three_graces%2C_unidentified%2C_view_2_-_Museo_Nacional_de_Artes_Decorativas_-_Madrid%2C_Spain_-_DSC08342.JPG/1280px-Urn_clock_with_three_graces%2C_unidentified%2C_view_2_-_Museo_Nacional_de_Artes_Decorativas_-_Madrid%2C_Spain_-_DSC08342.JPG": {
+"at": "2026-10-13",
+"label": "c57",
+"pack": "pack-clocks",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Vikos_Gorge_14.JPG/1280px-Vikos_Gorge_14.JPG": {
 "at": "2026-10-12",
 "label": "c35",
@@ -98531,6 +98861,12 @@
 "pack": "pack-lisbon",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/At_Clock_museum%2C_Vienna_2025_161.jpg/1280px-At_Clock_museum%2C_Vienna_2025_161.jpg": {
+"at": "2026-10-13",
+"label": "c20",
+"pack": "pack-clocks",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/At_Royal_Botanic_Gardens%2C_Kew_2024_267.jpg/1280px-At_Royal_Botanic_Gardens%2C_Kew_2024_267.jpg": {
 "at": "2026-10-12",
 "label": "c30",
@@ -98764,6 +99100,12 @@
 "label": "c37",
 "pack": "abstract-crystal",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Reloj_Bracket_1770_Kieninger_14.jpg/1280px-Reloj_Bracket_1770_Kieninger_14.jpg": {
+"at": "2026-10-13",
+"label": "c35",
+"pack": "pack-clocks",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/STS-55_Rollout_-_GPN-2000-000747.jpg/1280px-STS-55_Rollout_-_GPN-2000-000747.jpg": {
 "at": "2026-10-12",
@@ -100055,6 +100397,12 @@
 "pack": "pack-nebulae",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Japanned_tall_clock%2C_dial_inscribed_%27Brown_Boston%27%2C_movement_by_Gawen_Brown%2C_japanning_possibly_by_Thomas_Johnston%2C_Boston%2C_1745-1755%2C_white_pine%2C_paint%2C_gesso%2C_gilt%2C_view_2_-_Winterthur_Museum_-_DSC01406.JPG/1280px-thumbnail.jpg": {
+"at": "2026-10-13",
+"label": "c25",
+"pack": "pack-clocks",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Kiyotaki_Kannon_Waterfall_at_Sakanoshita_MET_DP141255.jpg/1280px-Kiyotaki_Kannon_Waterfall_at_Sakanoshita_MET_DP141255.jpg": {
 "at": "2026-10-12",
 "label": "c51",
@@ -100306,6 +100654,12 @@
 "label": "c175",
 "pack": "evpack-oceans-2027",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Clock%2C_Sevres%2C_movement_by_Kinable%2C_about_1795-1797%2C_porcelain%2C_gilded_colpper%2C_glass-paste_diamonds%2C_enamels_on_copper_-_Victoria_and_Albert_Museum_-_London%2C_England_-_DSC05102.jpg/1280px-thumbnail.jpg": {
+"at": "2026-10-13",
+"label": "c59",
+"pack": "pack-clocks",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Compass_Image_of_Triangulum_Galaxy_%28M33%29_%282019-01-4308%29.png/1280px-Compass_Image_of_Triangulum_Galaxy_%28M33%29_%282019-01-4308%29.png": {
 "at": "2026-10-12",
@@ -100641,6 +100995,12 @@
 "at": "2026-10-12",
 "label": "c148",
 "pack": "pack-libraries",
+"reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Harlequin_with_bagpipes_and_a_pug-dog_mounted_on_a_clock%2C_c._1745-1752_harlequin%2C_c._1752_pug%2C_ormolu_mounts_c._1765%2C_Meissen%2C_modeller_Johann_Joachim_Kandler%2C_hard-paste_-_Gardiner_Museum%2C_Toronto_-_DSC00866.JPG/1280px-thumbnail.jpg": {
+"at": "2026-10-13",
+"label": "c62",
+"pack": "pack-clocks",
 "reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Healthy_eating_the_rainbow_on_a_plate_%2852249826052%29.jpg/1280px-Healthy_eating_the_rainbow_on_a_plate_%2852249826052%29.jpg": {
@@ -101675,6 +102035,12 @@
 "pack": "masterpieces",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Interieur%2C_Staand_Horloge_uit_ca._1775%2C_Jan_de_Vries%2C_Oost-Zaandam_-_Zaandam_-_20400453_-_RCE.jpg/1280px-Interieur%2C_Staand_Horloge_uit_ca._1775%2C_Jan_de_Vries%2C_Oost-Zaandam_-_Zaandam_-_20400453_-_RCE.jpg": {
+"at": "2026-10-13",
+"label": "c97",
+"pack": "pack-clocks",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Lava_flow_3818.JPG/1280px-Lava_flow_3818.JPG": {
 "at": "2026-10-12",
 "label": "c10",
@@ -102495,6 +102861,12 @@
 "at": "2026-10-12",
 "label": "c33",
 "pack": "pack-volcanoes",
+"reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Reloj_estilo_Luis_XV%2C_Museo_Bellver_%28Sevilla%29.jpg/1280px-Reloj_estilo_Luis_XV%2C_Museo_Bellver_%28Sevilla%29.jpg": {
+"at": "2026-10-13",
+"label": "c60",
+"pack": "pack-clocks",
 "reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Seljalandsfoss%2C_Iceland%2C_20230501_1329_3939.jpg/1280px-Seljalandsfoss%2C_Iceland%2C_20230501_1329_3939.jpg": {
@@ -104249,6 +104621,12 @@
 "pack": "evpack-lunar-new-year-2027",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Pendule_%C3%A9poque_Louis_XVI_01479.JPG/1280px-Pendule_%C3%A9poque_Louis_XVI_01479.JPG": {
+"at": "2026-10-13",
+"label": "c42",
+"pack": "pack-clocks",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Pigeon_Point_Lighthouse_and_wildflowers.jpg/1280px-Pigeon_Point_Lighthouse_and_wildflowers.jpg": {
 "at": "2026-10-12",
 "label": "c24",
@@ -104301,6 +104679,12 @@
 "at": "2026-10-12",
 "label": "c92",
 "pack": "abstract-kaleidoscope",
+"reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Wardrobe_by_Andre-Charles_Boulle%2C_clock_movement_by_Pierre_Gudron%2C_1715%2C_oak_veneered_with_ebony_and_Boulle_marquetry%2C_gilt-bronze_mounts_-_Wallace_Collection_-_London%2C_UK_-_DSC06119.jpg/1280px-thumbnail.jpg": {
+"at": "2026-10-13",
+"label": "c56",
+"pack": "pack-clocks",
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Wycinkanka_Puszcza_Bia%C5%82a_Aleksandra_Liwska_Muzeum_Kultury_Kurpiowskiej_w_Ostro%C5%82%C4%99ce.jpg/1280px-Wycinkanka_Puszcza_Bia%C5%82a_Aleksandra_Liwska_Muzeum_Kultury_Kurpiowskiej_w_Ostro%C5%82%C4%99ce.jpg": {
@@ -106391,6 +106775,12 @@
 "pack": "daily-2025-07",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Moscow_-_Polytech_museum_-_Skeleton_clock_-_p4.jpg/1280px-Moscow_-_Polytech_museum_-_Skeleton_clock_-_p4.jpg": {
+"at": "2026-10-13",
+"label": "c41",
+"pack": "pack-clocks",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Mount_Fuji_Japan%2C_Epcot.JPG/1280px-Mount_Fuji_Japan%2C_Epcot.JPG": {
 "at": "2026-10-12",
 "label": "c40",
@@ -106961,6 +107351,12 @@
 "pack": "pack-mountain-huts",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Musical_automaton_clock_with_rotating_glass_columns_and_eight_dolphins%2C_presented_by_Lord_Macartney_to_the_Qianlong_emperor%2C_made_in_London%2C_1780-1790_-_British_Museum_-_DSC01279.jpg/1280px-thumbnail.jpg": {
+"at": "2026-10-13",
+"label": "c112",
+"pack": "pack-clocks",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/NASA%27s_SLS_Rocket_and_Orion_Spacecraft_Rollout_to_Launch_Pad_39B_%28SLS_KSC_Artemis_II_Rollout_1172026_3%29.jpg/1280px-NASA%27s_SLS_Rocket_and_Orion_Spacecraft_Rollout_to_Launch_Pad_39B_%28SLS_KSC_Artemis_II_Rollout_1172026_3%29.jpg": {
 "at": "2026-10-12",
 "label": "c80",
@@ -107189,6 +107585,12 @@
 "pack": "pack-rainbow-mountains",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Comtoise-Wanduhr_1830er_img01_VLM.jpg/1280px-Comtoise-Wanduhr_1830er_img01_VLM.jpg": {
+"at": "2026-10-13",
+"label": "c31",
+"pack": "pack-clocks",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Craig_Strong_Wheelie_BMX_Bike.jpg/1280px-Craig_Strong_Wheelie_BMX_Bike.jpg": {
 "at": "2026-10-12",
 "label": "c38",
@@ -107248,6 +107650,12 @@
 "label": "c11",
 "pack": "pack-alpine-lakes",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Grand_Salon_-_Pal%C3%A1cio_de_Santos%2C_Embaixada_de_Fran%C3%A7a%2C_Lisboa_Portugal_7.jpg/1280px-Grand_Salon_-_Pal%C3%A1cio_de_Santos%2C_Embaixada_de_Fran%C3%A7a%2C_Lisboa_Portugal_7.jpg": {
+"at": "2026-10-13",
+"label": "c12",
+"pack": "pack-clocks",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Hochjochhospiz_Eingang_Winterraum.jpg/1280px-Hochjochhospiz_Eingang_Winterraum.jpg": {
 "at": "2026-10-13",
@@ -108155,6 +108563,12 @@
 "pack": "pack-jungle",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/At_Clock_museum%2C_Vienna_2025_137.jpg/1280px-At_Clock_museum%2C_Vienna_2025_137.jpg": {
+"at": "2026-10-13",
+"label": "c17",
+"pack": "pack-clocks",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Atea_a_Rangi_star_compass_through_waharoa.jpg/1280px-Atea_a_Rangi_star_compass_through_waharoa.jpg": {
 "at": "2026-10-12",
 "label": "c149",
@@ -108490,6 +108904,12 @@
 "label": "c05",
 "pack": "pack-coffee-shops",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Zentralbibliothek_Z%C3%BCrich_-_Oechsli%2C_Interieur_des_Hauses_-_991008549839705501.jpg/1280px-Zentralbibliothek_Z%C3%BCrich_-_Oechsli%2C_Interieur_des_Hauses_-_991008549839705501.jpg": {
+"at": "2026-10-13",
+"label": "c102",
+"pack": "pack-clocks",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Zentralbibliothek_Z%C3%BCrich_-_Schloss_Eltz_-_991160152339705501.jpg/1280px-Zentralbibliothek_Z%C3%BCrich_-_Schloss_Eltz_-_991160152339705501.jpg": {
 "at": "2026-10-12",
@@ -109421,6 +109841,12 @@
 "pack": "daily-2023-01",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Longcase_clock%2C_Albin_Muller_designer%2C_Georg_Schwab_maker%2C_1908%2C_oak_-_Museum_K%C3%BCnstlerkolonie_Darmstadt_-_Mathildenh%C3%B6he_-_Darmstadt%2C_Germany_-_DSC06000.jpg/1280px-Longcase_clock%2C_Albin_Muller_designer%2C_Georg_Schwab_maker%2C_1908%2C_oak_-_Museum_K%C3%BCnstlerkolonie_Darmstadt_-_Mathildenh%C3%B6he_-_Darmstadt%2C_Germany_-_DSC06000.jpg": {
+"at": "2026-10-13",
+"label": "c82",
+"pack": "pack-clocks",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Malayan_Tiger_with_reflection_in_the_water.jpg/1280px-Malayan_Tiger_with_reflection_in_the_water.jpg": {
 "at": "2026-10-12",
 "label": "c79",
@@ -109649,6 +110075,12 @@
 "pack": "evpack-happiness-2027",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Cartel_clock%2C_Paris%2C_movement_by_Michel_Stollewerck%2C_1745-1750%2C_gilded_copper%2C_enamel_-_Victoria_and_Albert_Museum_-_London%2C_England_-_DSC05079.jpg/1280px-Cartel_clock%2C_Paris%2C_movement_by_Michel_Stollewerck%2C_1745-1750%2C_gilded_copper%2C_enamel_-_Victoria_and_Albert_Museum_-_London%2C_England_-_DSC05079.jpg": {
+"at": "2026-10-13",
+"label": "c51",
+"pack": "pack-clocks",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Central_station_Frankfurt_-_Germany_-_Luminale_2014_-_April_3rd_2014_-_05.jpg/1280px-Central_station_Frankfurt_-_Germany_-_Luminale_2014_-_April_3rd_2014_-_05.jpg": {
 "at": "2026-10-12",
 "label": "c184",
@@ -109714,6 +110146,12 @@
 "label": "c374",
 "pack": "daily-2023-01",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Japanned_tall_clock%2C_dial_inscribed_%27Brown_Boston%27%2C_movement_by_Gawen_Brown%2C_japanning_possibly_by_Thomas_Johnston%2C_Boston%2C_1745-1755%2C_white_pine%2C_paint%2C_gesso%2C_gilt%2C_view_1_-_Winterthur_Museum_-_DSC01404.JPG/1280px-thumbnail.jpg": {
+"at": "2026-10-13",
+"label": "c27",
+"pack": "pack-clocks",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Jollof_rice%2C_plantain%2C_bean_porridge_and_turkey.jpg/1280px-Jollof_rice%2C_plantain%2C_bean_porridge_and_turkey.jpg": {
 "at": "2026-10-12",
@@ -110319,6 +110757,12 @@
 "at": "2026-10-12",
 "label": "c92",
 "pack": "evpack-art-day-2027",
+"reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/No%C3%ABl_Dauville_-_Horloge_de_table_02.jpg/1280px-No%C3%ABl_Dauville_-_Horloge_de_table_02.jpg": {
+"at": "2026-10-13",
+"label": "c109",
+"pack": "pack-clocks",
 "reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Nord-Pas-de-Calais-_2015-12-26_%2825506673256%29.jpg/1280px-Nord-Pas-de-Calais-_2015-12-26_%2825506673256%29.jpg": {
@@ -111262,6 +111706,12 @@
 "label": "c71",
 "pack": "pack-street-food",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Pendule_%28wall_clock%29_with_boulle_casing%2C_Balthazar%2C_Paris%2C_c._1720_-_Mathematisch-Physikalischer_Salon%2C_Dresden_-_DSC07952.jpg/1280px-Pendule_%28wall_clock%29_with_boulle_casing%2C_Balthazar%2C_Paris%2C_c._1720_-_Mathematisch-Physikalischer_Salon%2C_Dresden_-_DSC07952.jpg": {
+"at": "2026-10-13",
+"label": "c53",
+"pack": "pack-clocks",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Pierre_Bonnard%2C_1930-31_-_The_Breakfast_Room.jpg/1280px-Pierre_Bonnard%2C_1930-31_-_The_Breakfast_Room.jpg": {
 "at": "2026-10-12",
@@ -112319,6 +112769,12 @@
 "pack": "daily-2023-01",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Napoleon%27s_clock_-_Amsterdam_Royal_Palace_2822.jpg/1280px-Napoleon%27s_clock_-_Amsterdam_Royal_Palace_2822.jpg": {
+"at": "2026-10-13",
+"label": "c07",
+"pack": "pack-clocks",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Old_Atlas_Bicycle_3.jpg/1280px-Old_Atlas_Bicycle_3.jpg": {
 "at": "2026-10-12",
 "label": "c114",
@@ -112600,6 +113056,12 @@
 "label": "c71",
 "pack": "evpack-literacy-2027",
 "reason": "text"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Mantel_Clock_with_Orpheus%2C_dial_signed_Le_Roy_br._de_Madame_A_Paris_-_Stockholm%2C_Sweden_-_DSC00740.JPG/1280px-Mantel_Clock_with_Orpheus%2C_dial_signed_Le_Roy_br._de_Madame_A_Paris_-_Stockholm%2C_Sweden_-_DSC00740.JPG": {
+"at": "2026-10-13",
+"label": "c05",
+"pack": "pack-clocks",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Mesen_Island_of_Ireland_Peace_Parc_%2848%29_-_310836_-_onroerenderfgoed.jpg/1280px-Mesen_Island_of_Ireland_Peace_Parc_%2848%29_-_310836_-_onroerenderfgoed.jpg": {
 "at": "2026-10-12",
@@ -113920,6 +114382,12 @@
 "label": "c07",
 "pack": "evpack-diwali-2026",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Japanese_Lantern_Clock.jpg/1280px-Japanese_Lantern_Clock.jpg": {
+"at": "2026-10-13",
+"label": "c79",
+"pack": "pack-clocks",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/K%C3%B6nigsstuhl_R%C3%BCgen_Jasmund.jpg/1280px-K%C3%B6nigsstuhl_R%C3%BCgen_Jasmund.jpg": {
 "at": "2026-10-12",
@@ -115751,6 +116219,12 @@
 "pack": "evpack-mental-health-2026",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Mantel_Clock%2C_Jacques_Nicolas_Pierre_Francois_Dubuc%2C_Paris%2C_1815-1819%2C_ormolu%2C_iron%2C_glass%2C_enamel_-_National_Gallery_of_Art%2C_Washington_-_DSC09687.JPG/1280px-Mantel_Clock%2C_Jacques_Nicolas_Pierre_Francois_Dubuc%2C_Paris%2C_1815-1819%2C_ormolu%2C_iron%2C_glass%2C_enamel_-_National_Gallery_of_Art%2C_Washington_-_DSC09687.JPG": {
+"at": "2026-10-13",
+"label": "c04",
+"pack": "pack-clocks",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/National_Irrigation_Administration_Irrigation_Canal_along_service_road_02.jpg/1280px-National_Irrigation_Administration_Irrigation_Canal_along_service_road_02.jpg": {
 "at": "2026-10-12",
 "label": "c70",
@@ -116825,6 +117299,12 @@
 "pack": "pack-santorini",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Cartel_Clock%2C_Charles_Cressent%2C_1745-1750_-_Nelson-Atkins_Museum_of_Art_-_DSC08834.JPG/1280px-Cartel_Clock%2C_Charles_Cressent%2C_1745-1750_-_Nelson-Atkins_Museum_of_Art_-_DSC08834.JPG": {
+"at": "2026-10-13",
+"label": "c52",
+"pack": "pack-clocks",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Claude_Monet_-_Poplars_%28Autumn%29_II.JPG/1280px-Claude_Monet_-_Poplars_%28Autumn%29_II.JPG": {
 "at": "2026-10-12",
 "label": "c29",
@@ -117125,6 +117605,12 @@
 "pack": "evpack-universal-childrens-2026",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Clock%2C_Roanoke%2C_Virginia_%2849460686833%29.jpg/1280px-Clock%2C_Roanoke%2C_Virginia_%2849460686833%29.jpg": {
+"at": "2026-10-13",
+"label": "c33",
+"pack": "pack-clocks",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Corn_candy_sticker_on_metal_surface.jpg/1280px-Corn_candy_sticker_on_metal_surface.jpg": {
 "at": "2026-10-12",
 "label": "c09",
@@ -117297,6 +117783,12 @@
 "at": "2026-10-13",
 "label": "c71",
 "pack": "evpack-pizza-2027",
+"reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Pedestal_clock_by_Andr%C3%A9-Charles_Boulle%2C_movement_by_George_Graham%2C_1720-1725_-_Waddesdon_Manor_-_Buckinghamshire%2C_England_-_DSC07655.jpg/1280px-Pedestal_clock_by_Andr%C3%A9-Charles_Boulle%2C_movement_by_George_Graham%2C_1720-1725_-_Waddesdon_Manor_-_Buckinghamshire%2C_England_-_DSC07655.jpg": {
+"at": "2026-10-13",
+"label": "c54",
+"pack": "pack-clocks",
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Red_Poppies_and_Cornflowers_by_Vincent_van_Gogh.jpg/1280px-Red_Poppies_and_Cornflowers_by_Vincent_van_Gogh.jpg": {
@@ -118235,6 +118727,12 @@
 "pack": "pack-nebulae",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/MangaldanPangasinanjf9725_20.JPG/1280px-MangaldanPangasinanjf9725_20.JPG": {
+"at": "2026-10-13",
+"label": "c85",
+"pack": "pack-clocks",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Mariana_Alc%C3%A1ntara_en_la_Biblioteca_Vasconcelos_02.jpg/1280px-Mariana_Alc%C3%A1ntara_en_la_Biblioteca_Vasconcelos_02.jpg": {
 "at": "2026-10-12",
 "label": "c198",
@@ -118528,6 +119026,12 @@
 "label": "c21",
 "pack": "evpack-pride-2027",
 "reason": "text"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Manifattura_Francese_%2819th_C%29_-_Robinson_Crusoe_e_Venerdi.jpg/1280px-Manifattura_Francese_%2819th_C%29_-_Robinson_Crusoe_e_Venerdi.jpg": {
+"at": "2026-10-13",
+"label": "c09",
+"pack": "pack-clocks",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Marble_mosaic_tiles_arm_16k_%28Amal_Kumar_via_Poly_Haven%29.png/1280px-Marble_mosaic_tiles_arm_16k_%28Amal_Kumar_via_Poly_Haven%29.png": {
 "at": "2026-10-12",
@@ -119056,6 +119560,12 @@
 "label": "c54",
 "pack": "pack-waterfalls",
 "reason": "quality"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Campanar_de_l%27esgl%C3%A9sia_colegiata_de_Santa_Maria_la_Mayor_de_Rubiols_2.jpg/1280px-Campanar_de_l%27esgl%C3%A9sia_colegiata_de_Santa_Maria_la_Mayor_de_Rubiols_2.jpg": {
+"at": "2026-10-13",
+"label": "c99",
+"pack": "pack-clocks",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Esgl%C3%A9sia_Santa_Margalida_-_Santa_Margalida_-_Mallorca_-_stained-glass_windows.jpg/1280px-Esgl%C3%A9sia_Santa_Margalida_-_Santa_Margalida_-_Mallorca_-_stained-glass_windows.jpg": {
 "at": "2026-10-12",
@@ -120647,6 +121157,12 @@
 "pack": "evpack-universal-childrens-2026",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Clock_featuring_Napoleon%2C_Columbus%2C_and_Washington_-_Bayernhof_Museum_-_DSC06196.JPG/1280px-Clock_featuring_Napoleon%2C_Columbus%2C_and_Washington_-_Bayernhof_Museum_-_DSC06196.JPG": {
+"at": "2026-10-13",
+"label": "c110",
+"pack": "pack-clocks",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Desert_Flowers_4_-_Sam_Sand_Dunes_-_Jaisalmer.JPG_%28405401651%29.jpg/1280px-Desert_Flowers_4_-_Sam_Sand_Dunes_-_Jaisalmer.JPG_%28405401651%29.jpg": {
 "at": "2026-10-12",
 "label": "c96",
@@ -120940,6 +121456,12 @@
 "label": "c18",
 "pack": "pack-rainbow-mountains",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Bracket_clock%2C_rococo%2C_dial_signed_Nils_Berg%2C_Stockholm%2C_1760s%2C_wooden_case_painted_as_imitation_tortoiseshell%2C_gilt_bronze_mountings_-_Nordiska_museet_-_Stockholm%2C_Sweden_-_DSC09967.JPG/1280px-thumbnail.jpg": {
+"at": "2026-10-13",
+"label": "c65",
+"pack": "pack-clocks",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Castello_Sforzesco_%28Milan%29_-_main_entrance.jpg/1280px-Castello_Sforzesco_%28Milan%29_-_main_entrance.jpg": {
 "at": "2026-10-12",
@@ -121450,6 +121972,12 @@
 "label": "c50",
 "pack": "evpack-mothers-day-2027",
 "reason": "text"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Prague_Town_Hall_Clock_2021_11.jpg/1280px-Prague_Town_Hall_Clock_2021_11.jpg": {
+"at": "2026-10-13",
+"label": "c68",
+"pack": "pack-clocks",
+"reason": "duplicate"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Rice_terrace_of_Tegallalan_200507-4.jpg/1280px-Rice_terrace_of_Tegallalan_200507-4.jpg": {
 "at": "2026-10-12",
@@ -124553,6 +125081,12 @@
 "pack": "pack-penguins",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/At_Clock_museum%2C_Vienna_2025_160.jpg/1280px-At_Clock_museum%2C_Vienna_2025_160.jpg": {
+"at": "2026-10-13",
+"label": "c19",
+"pack": "pack-clocks",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Biblioteca_Joanina%2C_Coimbra._Portal.jpg/1280px-Biblioteca_Joanina%2C_Coimbra._Portal.jpg": {
 "at": "2026-10-12",
 "label": "c72",
@@ -125363,6 +125897,12 @@
 "pack": "pack-summer-fruit",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Reloj_Bracket_1770_Kieninger_27.jpg/1280px-Reloj_Bracket_1770_Kieninger_27.jpg": {
+"at": "2026-10-13",
+"label": "c36",
+"pack": "pack-clocks",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Rhubarbed_Strawberry_Daiquiri_Vegan_Tart_Undressed_%284922766328%29.jpg/1280px-Rhubarbed_Strawberry_Daiquiri_Vegan_Tart_Undressed_%284922766328%29.jpg": {
 "at": "2026-10-12",
 "label": "c89",
@@ -125729,6 +126269,12 @@
 "pack": "abstract-glitch",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Table_clock%2C_Paulus_Schuster%2C_Nuremberg%2C_1587_-_Mathematisch-Physikalischer_Salon%2C_Dresden_-_DSC07884.JPG/1280px-Table_clock%2C_Paulus_Schuster%2C_Nuremberg%2C_1587_-_Mathematisch-Physikalischer_Salon%2C_Dresden_-_DSC07884.JPG": {
+"at": "2026-10-13",
+"label": "c106",
+"pack": "pack-clocks",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Temple_Expiatori_del_Sagrat_Cor_%28Tibidabo%29_-_interior_06.jpg/1280px-Temple_Expiatori_del_Sagrat_Cor_%28Tibidabo%29_-_interior_06.jpg": {
 "at": "2026-10-12",
 "label": "c59",
@@ -125975,6 +126521,12 @@
 "pack": "pack-prague",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Prague_Town_Hall_Clock_2021_12.jpg/1280px-Prague_Town_Hall_Clock_2021_12.jpg": {
+"at": "2026-10-13",
+"label": "c84",
+"pack": "pack-clocks",
+"reason": "duplicate"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Pushkin_Catherine_Palace_NW_facade_08.jpg/1280px-Pushkin_Catherine_Palace_NW_facade_08.jpg": {
 "at": "2026-10-13",
 "label": "c254",
@@ -126016,6 +126568,12 @@
 "label": "c05",
 "pack": "pack-temples",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Table_clock%2C_designer_Joseph_Maria_Olbrich%2C_c._1902%2C_maple%2C_ivory%2C_nacre%2C_copper%2C_brass%2C_tin_-_Museum_K%C3%BCnstlerkolonie_Darmstadt_-_Mathildenh%C3%B6he_-_Darmstadt%2C_Germany_-_DSC06304.jpg/1280px-thumbnail.jpg": {
+"at": "2026-10-13",
+"label": "c83",
+"pack": "pack-clocks",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/The_Blue_Flame_pic2.JPG/1280px-The_Blue_Flame_pic2.JPG": {
 "at": "2026-10-12",

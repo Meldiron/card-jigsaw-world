@@ -1,0 +1,157 @@
+{
+ "summary": {
+  "packs": 21,
+  "violating": 0,
+  "count": 0,
+  "landscape": 0,
+  "dup_pairs": 0,
+  "people_kw": 2,
+  "text_kw": 0,
+  "small": 0,
+  "unscanned": 0,
+  "cross_dups": 0,
+  "rejected_pending": 0
+ },
+ "packs": {
+  "ai-wild-animals": {
+   "name": "AI Wild Animals",
+   "category": "AI",
+   "count": 24,
+   "issues": []
+  },
+  "ai-little-creatures": {
+   "name": "AI Little Creatures",
+   "category": "AI",
+   "count": 20,
+   "issues": []
+  },
+  "ai-dreamscapes": {
+   "name": "AI Dreamscapes",
+   "category": "AI",
+   "count": 24,
+   "issues": []
+  },
+  "ai-cats": {
+   "name": "AI Cats",
+   "category": "AI",
+   "count": 20,
+   "issues": []
+  },
+  "ai-birds": {
+   "name": "AI Birds",
+   "category": "AI",
+   "count": 24,
+   "issues": []
+  },
+  "ai-myths-monsters": {
+   "name": "AI Myths and Monsters",
+   "category": "AI",
+   "count": 24,
+   "issues": [],
+   "warnings": [
+    "p-35edf592003f: keyword people:man"
+   ]
+  },
+  "ai-future-worlds": {
+   "name": "AI Future Worlds",
+   "category": "AI",
+   "count": 24,
+   "issues": [],
+   "warnings": [
+    "p-0ad928f75b26: keyword unwanted:icons"
+   ]
+  },
+  "ai-space": {
+   "name": "AI Deep Space",
+   "category": "AI",
+   "count": 20,
+   "issues": []
+  },
+  "ai-dream-machines": {
+   "name": "AI Dream Machines",
+   "category": "AI",
+   "count": 22,
+   "issues": []
+  },
+  "ai-abstract": {
+   "name": "AI Abstract",
+   "category": "AI",
+   "count": 20,
+   "issues": []
+  },
+  "ai-food": {
+   "name": "AI Food Fantasies",
+   "category": "AI",
+   "count": 21,
+   "issues": [],
+   "warnings": [
+    "p-9f30868dc7c0: keyword people:man"
+   ]
+  },
+  "ai-flowers": {
+   "name": "AI Flowers",
+   "category": "AI",
+   "count": 20,
+   "issues": []
+  },
+  "ai-butterflies": {
+   "name": "AI Butterflies and Bugs",
+   "category": "AI",
+   "count": 22,
+   "issues": []
+  },
+  "ai-oceans": {
+   "name": "AI Ocean Dreams",
+   "category": "AI",
+   "count": 21,
+   "issues": []
+  },
+  "ai-castles": {
+   "name": "AI Dream Architecture",
+   "category": "AI",
+   "count": 20,
+   "issues": []
+  },
+  "ai-dinosaurs": {
+   "name": "AI Dinosaur Worlds",
+   "category": "AI",
+   "count": 20,
+   "issues": []
+  },
+  "ai-forests": {
+   "name": "AI Forests",
+   "category": "AI",
+   "count": 20,
+   "issues": []
+  },
+  "ai-robots": {
+   "name": "AI Robots and Machines",
+   "category": "AI",
+   "count": 20,
+   "issues": [],
+   "warnings": [
+    "p-736da005d0c8: keyword unwanted:battle",
+    "p-acae9518ec11: keyword unwanted:battle",
+    "p-0ef49c914e70: keyword unwanted:circuit"
+   ]
+  },
+  "ai-surreal": {
+   "name": "AI Jewelled Menagerie",
+   "category": "AI",
+   "count": 20,
+   "issues": []
+  },
+  "ai-neon-nights": {
+   "name": "AI Neon Nights",
+   "category": "AI",
+   "count": 20,
+   "issues": []
+  },
+  "abstract-fluid-ink": {
+   "name": "Ink & Dye",
+   "category": "Abstract",
+   "count": 21,
+   "issues": []
+  }
+ }
+}
