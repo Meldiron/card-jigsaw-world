@@ -177,16 +177,18 @@ class _DayTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.colors;
     final accent = context.accent;
-    final onColor = today ? Colors.white : c.textPrimary;
-    final labelColor = today ? Colors.white.withValues(alpha: 0.85) : c.textTertiary;
+    // Today is a tinted tile with a strong outline, not a solid accent fill: the coin, ticket and
+    // hint icons keep their own colours and need a dark (or, in light mode, pale) ground to read.
+    final onColor = c.textPrimary;
+    final labelColor = today ? accent : c.textTertiary;
     return Container(
       width: big ? 168 : 80,
       height: 96,
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: today ? accent : c.card,
+        color: today ? c.accentTint : c.card,
         borderRadius: BorderRadius.circular(Radii.md),
-        border: Border.all(color: today ? accent : (big ? accent.withValues(alpha: 0.6) : c.stroke)),
+        border: Border.all(color: today ? accent : (big ? accent.withValues(alpha: 0.6) : c.stroke), width: today ? 2 : 1),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -198,7 +200,7 @@ class _DayTile extends StatelessWidget {
             child: claimed && !today
                 ? Icon(CupertinoIcons.checkmark_circle_fill, size: 22, color: c.success)
                 : big
-                    ? Icon(AppIcons.crown, size: 24, color: today ? Colors.white : accent)
+                    ? Icon(AppIcons.crown, size: 24, color: accent)
                     : Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

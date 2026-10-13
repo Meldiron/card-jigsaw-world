@@ -7,3 +7,4 @@ Version 1.7.0
 - Offers in an ad break open their destination instead of the next puzzle.
 - Cleaner board preview corners on the difficulty screen.
 - VIP members get their 500 bonus coins automatically once a week.
+- Daily gift: today's day is outlined instead of filled, so the coin, ticket and hint icons stay easy to read.
