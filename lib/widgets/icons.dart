@@ -62,6 +62,13 @@ class AppIcons {
   static const bundle = Icons.card_giftcard_rounded;
   static const puzzle = Icons.extension_rounded;
   static const bigBoard = Icons.grid_on_rounded;
+
+  /// Painting: cards start in black and white and get their colour back as they lock.
+  static const painting = Icons.palette_rounded;
+
+  /// Zoomed-in giant board: back to the whole board.
+  static const wholeBoard = CupertinoIcons.arrow_down_right_arrow_up_left;
+  static const zoom = CupertinoIcons.zoom_in;
   static const level = Icons.military_tech_rounded;
   static const swaps = CupertinoIcons.arrow_right_arrow_left;
   static const time = CupertinoIcons.time;

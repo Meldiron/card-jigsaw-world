@@ -5,6 +5,7 @@ import '../core/appwrite.dart';
 import '../data/repositories.dart';
 import '../models/models.dart';
 import 'catalog_sync.dart';
+import 'giant.dart';
 import 'profile.dart';
 import 'progress.dart';
 import 'settings.dart';
@@ -89,13 +90,14 @@ final dailyPuzzleProvider = Provider<Puzzle?>((ref) {
 });
 
 /// Picks a random puzzle the player can start right now (unlocked pack,
-/// not already completed when possible). Used by goal "Play" buttons.
+/// not already completed when possible). Used by goal "Play" buttons; the
+/// Giant pack's 100-card boards are left out.
 Puzzle? pickRandomPlayable(WidgetRef ref) {
   final packs = ref.read(packsProvider).value ?? const <Pack>[];
   final all = ref.read(allPuzzlesProvider).value ?? const <Puzzle>[];
   final progress = ref.read(progressProvider).value ?? const {};
   final notifier = ref.read(profileProvider.notifier);
-  final open = {for (final p in packs) if (notifier.isUnlocked(p)) p.id};
+  final open = {for (final p in packs) if (notifier.isUnlocked(p) && !isGiantPack(p)) p.id};
   final pool = all.where((z) => open.contains(z.packId) && !z.isLockedByDate).toList();
   if (pool.isEmpty) return null;
   final fresh = pool.where((z) => progress[z.id]?.completed != true).toList();

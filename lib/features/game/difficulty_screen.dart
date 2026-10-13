@@ -12,6 +12,7 @@ import '../../core/theme/tokens.dart';
 import '../../game/board.dart';
 import '../../game/image_loader.dart';
 import '../../models/models.dart';
+import '../../state/giant.dart';
 import '../../state/profile.dart';
 import '../../state/progress.dart';
 import '../../state/rewards.dart';
@@ -33,8 +34,11 @@ import '../../widgets/ui.dart';
 /// Continue resumes it, Discard progress throws it away and reopens the
 /// choice.
 class DifficultyScreen extends ConsumerStatefulWidget {
-  const DifficultyScreen({super.key, required this.puzzleId, this.initialGrid, this.initialMode});
+  const DifficultyScreen({super.key, required this.puzzleId, this.initialGrid, this.initialMode, this.initialPainting = false});
   final String puzzleId;
+
+  /// Painting preselected (`?painting=1`).
+  final bool initialPainting;
 
   /// Optional tier code to preselect: legacy `5x5` or a full code such as
   /// `hexagons:5x6` / `hexagons-5x6` (used by goal shortcuts).
@@ -50,8 +54,12 @@ class DifficultyScreen extends ConsumerStatefulWidget {
 class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
   late GameMode _mode;
 
-  /// Selected tier (index into the ladder); its size follows the picture.
+  /// Selected tier (its index, `BoardSpec.firstGiantTier` and up for giant
+  /// sizes); its size follows the picture.
   late int _tier;
+
+  /// Painting chosen for a new board.
+  late bool _painting = widget.initialPainting;
 
   /// Decoded picture size (full resolution), once the image is in.
   Size? _imageSize;
@@ -132,6 +140,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
     setState(() {
       _mode = savedSpec.mode;
       _tier = savedSpec.tierIndex < 0 ? 2 : savedSpec.tierIndex;
+      _painting = saved.painting;
     });
     await ref.read(progressProvider.notifier).discard(widget.puzzleId);
     if (!mounted) return;
@@ -210,10 +219,12 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
     final profile = ref.watch(profileProvider).value;
     final profileN = ref.read(profileProvider.notifier);
     if (puzzle != null) _resolveImage(puzzle);
+    // Giant pack pictures offer only the giant sizes, all open with the pack.
+    final giant = ref.watch(isGiantPuzzleProvider(widget.puzzleId));
     // Boards are laid out for the picture's proportions, read from the same
     // decode the game uses so the preview and the deal always agree. Until
     // it is in, the full-size picture's dimensions (or 3:4) stand in.
-    final decoded = puzzle == null || puzzle.imageUrl.isEmpty ? null : ref.watch(puzzleImageProvider(puzzle.imageUrl)).value;
+    final decoded = puzzle == null || puzzle.imageUrl.isEmpty ? null : ref.watch(puzzleImageFor(puzzle.imageUrl, giant: giant)).value;
     final known = decoded != null;
     final imageAspect = decoded != null
         ? decoded.width / decoded.height
@@ -231,10 +242,14 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
     }
     final saved = savedSpec != null ? savedRow : null;
     final mode = saved != null ? savedSpec!.mode : _mode;
-    final tiers = BoardSpec.tiers(mode, imageAspect);
-    final spec = saved != null ? savedSpec! : tiers[_tier.clamp(0, tiers.length - 1)];
-    final coins = Economy.completionCoins(spec.cells, 3, mode: mode);
-    final xp = Economy.completionXp(spec.cells, 3, mode: mode);
+    final tiers = BoardSpec.ladder(mode, imageAspect, giant: giant);
+    // A size picked on the other ladder (a normal tier carried to a Giant
+    // pack picture, say) falls back to that ladder's first giant or Relaxed size.
+    final pick = giant ? (BoardSpec.isGiantTier(_tier) ? _tier - BoardSpec.firstGiantTier : 0) : (BoardSpec.isGiantTier(_tier) ? 2 : _tier);
+    final spec = saved != null ? savedSpec! : tiers[pick.clamp(0, tiers.length - 1)];
+    final painting = saved != null ? saved.painting : _painting;
+    final coins = Economy.completionCoins(spec.cells, 3, mode: mode, painting: painting);
+    final xp = Economy.completionXp(spec.cells, 3, mode: mode, painting: painting);
     final maxTier = LevelRewards.maxTierIndex(profile?.level ?? 1) + 1;
     final boardAspect = spec.tiling.boardAspect(imageAspect);
 
@@ -356,7 +371,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                             alignment: Alignment.centerLeft,
                             child: Text(
                               saved != null
-                                  ? 'A ${mode.label.toLowerCase()} ${spec.code} board is in progress. Continue it, or discard it to pick another mode or size.'
+                                  ? 'A ${mode.label.toLowerCase()} ${spec.code} board${painting ? ' in Painting' : ''} is in progress. Continue it, or discard it to pick another mode or size.'
                                   : 'Every mode cuts the picture differently. Trickier shapes pay more.',
                               style: TextStyle(color: c.textSecondary, fontSize: 13),
                             ),
@@ -380,7 +395,12 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                           const SizedBox(height: 4),
                           Align(
                             alignment: Alignment.centerLeft,
-                            child: Text('Bigger boards pay more. Higher levels unlock larger boards, or unlock them now with coins.', style: TextStyle(color: c.textSecondary, fontSize: 13)),
+                            child: Text(
+                              giant
+                                  ? 'Giant boards of 100 cards and more, all open with this pack. Pinch to zoom in while you play.'
+                                  : 'Bigger boards pay more. Higher levels unlock larger boards, or unlock them now with coins.',
+                              style: TextStyle(color: c.textSecondary, fontSize: 13),
+                            ),
                           ),
                           const SizedBox(height: 12),
                           SizedBox(
@@ -393,7 +413,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                               itemBuilder: (_, i) {
                                 final t = tiers[i];
                                 final selected = t == spec;
-                                final locked = i >= maxTier && !profileN.hasTier(mode, i);
+                                final locked = !giant && i >= maxTier && !profileN.hasTier(mode, i);
                                 final fg = selected ? Colors.white : (locked ? c.textTertiary : c.textPrimary);
                                 return Pressable(
                                   onTap: saved != null
@@ -402,7 +422,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                                       ? () => _offerUnlock(i, t)
                                       : () {
                                           Haptics.selection();
-                                          setState(() => _tier = i);
+                                          setState(() => _tier = t.tier);
                                         },
                                   child: Opacity(
                                     opacity: saved != null && !selected ? 0.45 : 1,
@@ -418,7 +438,8 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                                       child: Column(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          Icon(locked ? AppIcons.lock : AppIcons.tier(i), size: 22, color: selected ? Colors.white : (locked ? c.textTertiary : context.accent)),
+                                          // Giant sizes borrow the top four tier marks.
+                                          Icon(locked ? AppIcons.lock : AppIcons.tier(giant ? 4 + i : i), size: 22, color: selected ? Colors.white : (locked ? c.textTertiary : context.accent)),
                                           const SizedBox(height: 4),
                                           Text(
                                             t.code,
@@ -432,6 +453,15 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                                 );
                               },
                             ),
+                          ),
+                          const SizedBox(height: 16),
+                          _PaintingTile(
+                            on: painting,
+                            enabled: saved == null,
+                            onChanged: (v) {
+                              Haptics.selection();
+                              setState(() => _painting = v);
+                            },
                           ),
                           const SizedBox(height: 16),
                           // One row: caption with the mode multiplier, then
@@ -449,6 +479,10 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                                     ),
                                     const SizedBox(width: 8),
                                     Chip2(label: 'x${_fmtMult(mode.multiplier)}', color: c.accentTint, foreground: context.accent),
+                                    if (painting) ...[
+                                      const SizedBox(width: 6),
+                                      Chip2(key: const ValueKey('painting-bonus'), label: 'Painting x${_fmtMult(Economy.paintingMultiplier)}', color: c.accentTint, foreground: context.accent),
+                                    ],
                                     const SizedBox(width: 8),
                                     Expanded(
                                       child: Text('for 3 stars', maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.right, style: TextStyle(fontSize: 11.5, color: c.textTertiary)),
@@ -494,9 +528,14 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                               : '${spec.cells} ${mode == GameMode.cards ? 'cards' : mode.label.toLowerCase()} · Play',
                           icon: CupertinoIcons.play_fill,
                           onTap: () {
-                            final idx = spec.tierIndex < 0 ? 2 : spec.tierIndex;
-                            ref.read(settingsProvider.notifier).setDefaultGrid(GridSpec.tiers[idx].cells);
-                            context.pushReplacement('/game/${widget.puzzleId}/${BoardCode.toPath(spec.fullCode)}');
+                            // The default size follows normal boards only.
+                            if (!spec.isGiant) {
+                              final idx = spec.tierIndex < 0 ? 2 : spec.tierIndex;
+                              ref.read(settingsProvider.notifier).setDefaultGrid(GridSpec.tiers[idx].cells);
+                            }
+                            // A saved board resumes the way it was saved, so only a new one carries the choice.
+                            final flag = saved == null && painting ? '?painting=1' : '';
+                            context.pushReplacement('/game/${widget.puzzleId}/${BoardCode.toPath(spec.fullCode)}$flag');
                           },
                         ),
                         if (saved != null) ...[const SizedBox(height: 8), BigButton(label: 'Discard progress', kind: ButtonKind.ghost, icon: CupertinoIcons.trash, onTap: () => _discard(saved, spec))],
@@ -510,6 +549,55 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
   }
 
   static String _fmtMult(double m) => m == m.roundToDouble() ? '${m.toInt()}.0' : m.toStringAsFixed(2).replaceFirst(RegExp(r'0$'), '');
+}
+
+/// The Painting option: works with every shape and size and pays
+/// [Economy.paintingMultiplier] more. Frozen while a board is in progress.
+class _PaintingTile extends StatelessWidget {
+  const _PaintingTile({required this.on, required this.enabled, required this.onChanged});
+  final bool on;
+  final bool enabled;
+  final ValueChanged<bool> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return Pressable(
+      key: const ValueKey('painting-option'),
+      onTap: enabled ? () => onChanged(!on) : null,
+      scale: 0.99,
+      child: Opacity(
+        opacity: enabled || on ? 1 : 0.45,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
+          decoration: BoxDecoration(
+            color: on ? c.accentTint : c.card,
+            borderRadius: BorderRadius.circular(Radii.md),
+            border: Border.all(color: on ? context.accent : c.stroke),
+          ),
+          child: Row(
+            children: [
+              const IconTile(icon: AppIcons.painting, size: 36, radius: 10),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Painting · x${_DifficultyScreenState._fmtMult(Economy.paintingMultiplier)}', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                    const SizedBox(height: 2),
+                    Text('Cards start in black and white and get their colour back as they lock.', style: TextStyle(fontSize: 12.5, height: 1.3, color: c.textSecondary)),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 10),
+              CupertinoSwitch(value: on, activeTrackColor: Brand.success, onChanged: enabled ? onChanged : null),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class _ModeTile extends StatelessWidget {

@@ -31,6 +31,8 @@ class BoardWidget extends StatefulWidget {
     required this.cardStyle,
     required this.width,
     required this.height,
+    this.painting = false,
+    this.zoom,
   });
 
   final ui.Image image;
@@ -41,8 +43,89 @@ class BoardWidget extends StatefulWidget {
   final double width;
   final double height;
 
+  /// Painting: cards not in place are drawn in black and white and get their
+  /// colour back as they lock.
+  final bool painting;
+
+  /// Zoom and pan for giant boards (pinch to zoom, two fingers to move); null
+  /// on normal boards, which behave exactly as before.
+  final BoardZoom? zoom;
+
   @override
   State<BoardWidget> createState() => _BoardWidgetState();
+}
+
+/// Zoom and pan of a giant board. The game screen owns it (its zoom buttons
+/// call [zoomTo] and [reset]); [BoardWidget] draws the board through it and
+/// feeds it the player's pinch. [pan] is where the scaled board's top left
+/// corner sits in the viewport; the board always covers the viewport.
+class BoardZoom extends ChangeNotifier {
+  BoardZoom({required TickerProvider vsync}) : _anim = AnimationController(vsync: vsync, duration: const Duration(milliseconds: 260)) {
+    _anim.addListener(() {
+      final t = Curves.easeOutCubic.transform(_anim.value);
+      _apply(ui.lerpDouble(_from.$1, _to.$1, t)!, Offset.lerp(_from.$2, _to.$2, t)!);
+    });
+  }
+
+  static const maxZoom = 4.0;
+
+  /// Zoom the zoom-in button goes to from the whole board.
+  static const stepZoom = 2.5;
+
+  final AnimationController _anim;
+  double _zoom = 1;
+  Offset _pan = Offset.zero;
+  Size _viewport = Size.zero;
+  (double, Offset) _from = (1, Offset.zero), _to = (1, Offset.zero);
+
+  double get zoom => _zoom;
+  Offset get pan => _pan;
+  bool get zoomed => _zoom > 1.01;
+
+  /// The board's size on screen at zoom 1 (set by [BoardWidget]).
+  set viewport(Size size) {
+    if (size == _viewport) return;
+    _viewport = size;
+    _apply(_zoom, _pan, notify: false);
+  }
+
+  void _apply(double zoom, Offset pan, {bool notify = true}) {
+    final z = zoom.clamp(1.0, maxZoom);
+    final p = Offset(pan.dx.clamp(_viewport.width * (1 - z), 0.0), pan.dy.clamp(_viewport.height * (1 - z), 0.0));
+    if (z == _zoom && p == _pan) return;
+    _zoom = z;
+    _pan = p;
+    if (notify) notifyListeners();
+  }
+
+  /// The player's fingers: applied at once.
+  void set(double zoom, Offset pan) {
+    _anim.stop();
+    _apply(zoom, pan);
+  }
+
+  /// Animates to [zoom] around the viewport point [focal] (the middle by default).
+  void zoomTo(double zoom, {Offset? focal}) {
+    final f = focal ?? _viewport.center(Offset.zero);
+    final content = (f - _pan) / _zoom;
+    final z = zoom.clamp(1.0, maxZoom);
+    _animateTo(z, f - content * z);
+  }
+
+  /// Back to the whole board.
+  void reset() => _animateTo(1, Offset.zero);
+
+  void _animateTo(double zoom, Offset pan) {
+    _from = (_zoom, _pan);
+    _to = (zoom, pan);
+    _anim.forward(from: 0);
+  }
+
+  @override
+  void dispose() {
+    _anim.dispose();
+    super.dispose();
+  }
 }
 
 class _BoardWidgetState extends State<BoardWidget> {
@@ -50,8 +133,90 @@ class _BoardWidgetState extends State<BoardWidget> {
   Offset _dragDelta = Offset.zero; // how far the finger moved since pan start
   int? _hoverSlot; // slot under the dragged card's centre
 
+  // Pinch (zoomable boards): fingers on the board, the pinch's starting
+  // point, and whether this touch has had two fingers (its taps and drags
+  // are then ignored until every finger is up and a new touch starts).
+  final _pointers = <int, Offset>{};
+  ({double dist, double zoom, Offset focal, Offset pan})? _pinch;
+  bool _multiTouch = false;
+
+  // Built cards, reused while only the dragged card changes (a 300-card
+  // board rebuilds on every finger move otherwise).
+  Object? _cacheKey;
+  final _cache = <int, (int, Widget)>{};
+
   Tiling get tiling => widget.state.board.tiling;
   Size get boardSize => Size(widget.width, widget.height);
+
+  @override
+  void initState() {
+    super.initState();
+    widget.zoom?.addListener(_onZoom);
+  }
+
+  @override
+  void didUpdateWidget(BoardWidget old) {
+    super.didUpdateWidget(old);
+    if (old.zoom != widget.zoom) {
+      old.zoom?.removeListener(_onZoom);
+      widget.zoom?.addListener(_onZoom);
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.zoom?.removeListener(_onZoom);
+    super.dispose();
+  }
+
+  void _onZoom() {
+    if (mounted) setState(() {});
+  }
+
+  void _cancelDrag() {
+    if (_dragSlot == null) return;
+    setState(() {
+      _dragSlot = null;
+      _hoverSlot = null;
+      _dragDelta = Offset.zero;
+    });
+  }
+
+  void _pointerDown(PointerDownEvent e) {
+    if (_pointers.isEmpty) _multiTouch = false;
+    _pointers[e.pointer] = e.localPosition;
+    if (_pointers.length >= 2) {
+      _multiTouch = true;
+      _cancelDrag();
+      _startPinch();
+    }
+  }
+
+  void _startPinch() {
+    final zoom = widget.zoom;
+    if (zoom == null) return;
+    final ps = _pointers.values.take(2).toList();
+    _pinch = (dist: (ps[0] - ps[1]).distance, zoom: zoom.zoom, focal: (ps[0] + ps[1]) / 2, pan: zoom.pan);
+  }
+
+  void _pointerMove(PointerMoveEvent e) {
+    if (!_pointers.containsKey(e.pointer)) return;
+    _pointers[e.pointer] = e.localPosition;
+    final p = _pinch, zoom = widget.zoom;
+    if (p == null || zoom == null || _pointers.length < 2) return;
+    final ps = _pointers.values.take(2).toList();
+    final dist = (ps[0] - ps[1]).distance, focal = (ps[0] + ps[1]) / 2;
+    final z = (p.zoom * (p.dist <= 0 ? 1 : dist / p.dist)).clamp(1.0, BoardZoom.maxZoom);
+    // Keep the board point that was under the fingers under them.
+    final content = (p.focal - p.pan) / p.zoom;
+    zoom.set(z, focal - content * z);
+  }
+
+  void _pointerUp(PointerEvent e) {
+    _pointers.remove(e.pointer);
+    _pinch = null;
+    if (_pointers.length >= 2) _startPinch();
+  }
 
   /// The part of the picture the board shows: a centre crop with the board's
   /// aspect (the whole picture when the board could take its proportions;
@@ -78,8 +243,19 @@ class _BoardWidgetState extends State<BoardWidget> {
     final board = widget.state.board;
     final c = context.colors;
     final cell = tiling.cellSize(boardSize);
-    final gap = widget.cardStyle == CardStyle.classic ? math.max(6.0, cell * 0.08) : 2.0;
-    final radius = widget.cardStyle == CardStyle.classic ? math.min(18.0, cell * 0.17) : 8.0;
+    final zoom = widget.zoom;
+    // Giant boards have cells of 20 to 30 pt: gutters, corners and strokes
+    // follow the cell instead of the minimums tuned for normal boards (which
+    // keep exactly their old values).
+    final fine = zoom != null;
+    final gap = widget.cardStyle == CardStyle.classic ? (fine ? math.max(math.min(6.0, cell * 0.12), cell * 0.08) : math.max(6.0, cell * 0.08)) : 2.0;
+    final radius = widget.cardStyle == CardStyle.classic ? math.min(18.0, cell * 0.17) : (fine ? math.min(8.0, cell * 0.2) : 8.0);
+    final strokeScale = fine ? (cell / 56).clamp(0.35, 1.0) : 1.0;
+    final cacheKey = (widget.state, widget.cardStyle, boardSize, widget.image, widget.painting, gap, radius, strokeScale);
+    if (cacheKey != _cacheKey) {
+      _cacheKey = cacheKey;
+      _cache.clear();
+    }
     final dragGroup = _dragSlot == null ? const <int>{} : board.groupOf(_dragSlot!).toSet();
     final selectedGroup = widget.state.selectedGroup.toSet();
     final hintGroup = widget.state.hintSlot == null ? const <int>{} : {widget.state.hintSlot!};
@@ -97,10 +273,7 @@ class _BoardWidgetState extends State<BoardWidget> {
         return rank(a).compareTo(rank(b));
       });
 
-    return SizedBox(
-      width: widget.width,
-      height: widget.height,
-      child: Stack(
+    Widget content = Stack(
         clipBehavior: Clip.none,
         children: [
           Positioned.fill(
@@ -117,10 +290,11 @@ class _BoardWidgetState extends State<BoardWidget> {
               ),
             ),
           for (final slot in order)
-            _buildCard(
+            _cachedCard(
               slot,
               gap,
               radius,
+              strokeScale,
               dragging: dragGroup.contains(slot),
               selected: selectedGroup.contains(slot) || hintGroup.contains(slot),
               hovered: targets.contains(slot) && !dragGroup.contains(slot) ? (targetsValid ? _Hover.ok : _Hover.blocked) : _Hover.none,
@@ -140,8 +314,41 @@ class _BoardWidgetState extends State<BoardWidget> {
               ),
             ),
         ],
-      ),
-    );
+      );
+    if (zoom != null) {
+      zoom.viewport = boardSize;
+      // The board is laid out at its size on screen and scaled, so every
+      // card, gutter and stroke grows with the zoom and the picture is drawn
+      // from the full-size decode at the zoomed resolution.
+      content = Listener(
+        behavior: HitTestBehavior.opaque,
+        onPointerDown: _pointerDown,
+        onPointerMove: _pointerMove,
+        onPointerUp: _pointerUp,
+        onPointerCancel: _pointerUp,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(radius + 2),
+          child: Transform(
+            transform: Matrix4.diagonal3Values(zoom.zoom, zoom.zoom, 1)..setTranslationRaw(zoom.pan.dx, zoom.pan.dy, 0),
+            child: content,
+          ),
+        ),
+      );
+    }
+    return SizedBox(width: widget.width, height: widget.height, child: content);
+  }
+
+  /// [_buildCard], reused from the last build when nothing about the card
+  /// changed (same game state and the same drag, selection and hover flags).
+  Widget _cachedCard(int slot, double gap, double radius, double strokeScale, {required bool dragging, required bool selected, required _Hover hovered}) {
+    // A dragged card moves with the finger, so it is always built afresh.
+    if (dragging) return _buildCard(slot, gap, radius, strokeScale, dragging: true, selected: selected, hovered: hovered);
+    final flags = (selected ? 1 : 0) | (hovered.index << 1);
+    final hit = _cache[slot];
+    if (hit != null && hit.$1 == flags) return hit.$2;
+    final built = _buildCard(slot, gap, radius, strokeScale, dragging: false, selected: selected, hovered: hovered);
+    _cache[slot] = (flags, built);
+    return built;
   }
 
   static List<Offset> _local(List<Offset> poly, Rect bounds) => [for (final p in poly) p - bounds.topLeft];
@@ -208,7 +415,7 @@ class _BoardWidgetState extends State<BoardWidget> {
     return _Fan(_norm(start), span);
   }
 
-  Widget _buildCard(int slot, double gap, double radius, {required bool dragging, required bool selected, required _Hover hovered}) {
+  Widget _buildCard(int slot, double gap, double radius, double strokeScale, {required bool dragging, required bool selected, required _Hover hovered}) {
     final state = widget.state;
     final board = state.board;
     final card = board.slots[slot];
@@ -250,6 +457,8 @@ class _BoardWidgetState extends State<BoardWidget> {
       fans: fans,
       gutterHalf: gap / 2,
       grouped: grouped,
+      painting: widget.painting,
+      strokeScale: strokeScale,
     );
     if (justLocked || justJoined) {
       child = _LockPulse(key: ValueKey('pulse-$slot-${state.tick}'), strong: justLocked, child: child);
@@ -267,14 +476,20 @@ class _BoardWidgetState extends State<BoardWidget> {
         polygon: localPoly,
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
-          onTap: () => widget.onTap(slot),
+          // A touch that became a pinch neither taps nor drags.
+          onTap: () {
+            if (!_multiTouch) widget.onTap(slot);
+          },
           onPanStart: locked || state.status != GameStatus.playing
               ? null
-              : (_) => setState(() {
+              : (_) {
+                  if (_multiTouch) return;
+                  setState(() {
                     _dragSlot = slot;
                     _dragDelta = Offset.zero;
                     _hoverSlot = slot;
-                  }),
+                  });
+                },
           onPanUpdate: locked
               ? null
               : (d) {
@@ -420,12 +635,21 @@ class _CardFace extends StatelessWidget {
     required this.fans,
     required this.gutterHalf,
     required this.grouped,
+    this.painting = false,
+    this.strokeScale = 1,
   });
 
   final ui.Image image;
   final List<Offset> polygon;
   final Rect source;
   final bool locked;
+
+  /// Painting: black and white until the card locks, then its colour fades in
+  /// with the lock.
+  final bool painting;
+
+  /// Outline widths relative to a normal board (giant boards' small cells).
+  final double strokeScale;
   final double gap;
   final double radius;
   final bool selected;
@@ -494,18 +718,18 @@ class _CardFace extends StatelessWidget {
           var outerOnly = true;
           if (selected) {
             outline = ink;
-            stroke = _selectionStroke;
+            stroke = _selectionStroke * strokeScale;
           } else if (hovered == _Hover.ok) {
             outline = ink;
-            stroke = _selectionStroke;
+            stroke = _selectionStroke * strokeScale;
             outerOnly = false;
           } else if (hovered == _Hover.blocked) {
             outline = Brand.danger;
-            stroke = _selectionStroke;
+            stroke = _selectionStroke * strokeScale;
             outerOnly = false;
           } else if (grouped && !locked) {
             outline = context.accent;
-            stroke = _groupStroke;
+            stroke = _groupStroke * strokeScale;
           } else {
             outline = null;
             stroke = 0;
@@ -532,8 +756,9 @@ class _CardFace extends StatelessWidget {
                       ? Colors.black.withValues(alpha: 0.35)
                       : null,
               dim: dragging ? 0 : _dim * (1 - lockT),
+              saturation: painting ? lockT : 1.0,
               outline: outline,
-              outlineWidth: dragging ? _dragStroke : stroke,
+              outlineWidth: dragging ? _dragStroke * strokeScale : stroke,
               outlineOuterOnly: outerOnly,
               outlineOutside: dragging,
             ),
@@ -591,6 +816,7 @@ class _CardPainter extends CustomPainter {
     required this.shadowDy,
     required this.tint,
     required this.dim,
+    this.saturation = 1,
     required this.outline,
     required this.outlineWidth,
     required this.outlineOuterOnly,
@@ -624,6 +850,10 @@ class _CardPainter extends CustomPainter {
 
   /// Alpha of the flat black overlay (0 for a card in place).
   final double dim;
+
+  /// Colour of the picture: 0 is black and white (Painting, not in place),
+  /// 1 the full picture.
+  final double saturation;
   final Color? outline;
   final double outlineWidth;
 
@@ -948,7 +1178,8 @@ class _CardPainter extends CustomPainter {
     // as it locks. The dim is part of the image draw (not a layer on top)
     // so the overlap zone of two fused cells is never darkened twice.
     final imagePaint = Paint()..filterQuality = FilterQuality.medium;
-    if (dim > 0) imagePaint.colorFilter = ColorFilter.mode(Colors.black.withValues(alpha: dim), BlendMode.srcATop);
+    final filter = _imageFilter();
+    if (filter != null) imagePaint.colorFilter = filter;
     canvas.drawImageRect(image, src, dest, imagePaint);
     if (tint != null) canvas.drawRect(dest, Paint()..color = tint!);
     // Strokes are drawn at twice the width inside the clip, so exactly half
@@ -987,8 +1218,26 @@ class _CardPainter extends CustomPainter {
     }
   }
 
+  /// The dim and, for Painting, the black and white in one colour filter:
+  /// luminance (Rec. 709) blended with the colour by [saturation], darkened
+  /// by [dim] exactly like the plain dim (a black `srcATop` overlay scales
+  /// every channel by `1 - dim`).
+  ColorFilter? _imageFilter() {
+    if (saturation >= 0.999) return dim > 0 ? ColorFilter.mode(Colors.black.withValues(alpha: dim), BlendMode.srcATop) : null;
+    final s = saturation.clamp(0.0, 1.0), k = 1 - dim;
+    const lr = 0.2126, lg = 0.7152, lb = 0.0722;
+    final g = 1 - s;
+    return ColorFilter.matrix(<double>[
+      k * (lr * g + s), k * lg * g, k * lb * g, 0, 0,
+      k * lr * g, k * (lg * g + s), k * lb * g, 0, 0,
+      k * lr * g, k * lg * g, k * (lb * g + s), 0, 0,
+      0, 0, 0, 1, 0,
+    ]);
+  }
+
   @override
   bool shouldRepaint(_CardPainter o) =>
+      o.saturation != saturation ||
       o.image != image ||
       o.source != source ||
       o.radius != radius ||

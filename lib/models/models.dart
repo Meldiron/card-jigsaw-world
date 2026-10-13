@@ -560,6 +560,7 @@ class PuzzleProgress {
     this.totalSeconds = 0,
     this.totalHints = 0,
     this.session = '',
+    this.painting = false,
   });
 
   final String id;
@@ -586,6 +587,10 @@ class PuzzleProgress {
   /// The play-through the saved board belongs to (empty on rows from older versions and after a
   /// discard). Lifetime totals replace a session's earlier numbers and add up across sessions.
   final String session;
+
+  /// Painting: the board in progress (or the last one finished) shows cards in black and white
+  /// until they lock, and pays `Economy.paintingMultiplier` more. Rows from older versions: off.
+  final bool painting;
 
   factory PuzzleProgress.fromRow(String id, Map<String, dynamic> d) {
     List<int>? layout;
@@ -614,6 +619,7 @@ class PuzzleProgress {
       totalSeconds: max(_i(d['totalSeconds']), _i(d['elapsedSeconds'])),
       totalHints: max(_i(d['totalHints']), _i(d['hintsUsed'])),
       session: _s(d['session']),
+      painting: _b(d['painting']),
     );
   }
 
@@ -636,6 +642,7 @@ class PuzzleProgress {
         'totalSeconds': totalSeconds,
         'totalHints': totalHints,
         'session': session,
+        'painting': painting,
       };
 
   /// A board is saved (a first play or a replay of a solved picture).

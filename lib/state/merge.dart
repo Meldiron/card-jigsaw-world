@@ -132,7 +132,9 @@ Map<String, dynamic> mergeProgressRow(Map<String, dynamic> a, Map<String, dynami
   final base = aNewer ? a : b;
   final other = aNewer ? b : a;
   final out = <String, dynamic>{...other, ...base};
-  out['stars'] = max(SaveSnapshot._i(a['stars']), SaveSnapshot._i(b['stars']));
+  // Painting belongs to the board kept (the newer row's), also when that row predates it.
+  out['painting'] = base['painting'] == true;
+  out['stars'] =max(SaveSnapshot._i(a['stars']), SaveSnapshot._i(b['stars']));
   out['completed'] = a['completed'] == true || b['completed'] == true;
   for (final k in const ['bestMoves', 'bestSeconds']) {
     final va = a[k], vb = b[k];

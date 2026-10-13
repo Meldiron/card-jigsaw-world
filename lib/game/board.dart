@@ -38,6 +38,34 @@ class BoardSpec {
 
   static const labels = ['Cozy', 'Easy', 'Relaxed', 'Medium', 'Tricky', 'Hard', 'Expert', 'Master'];
 
+  /// Giant boards: the pictures of the Giant pack (`Pack.isGiant`) offer
+  /// only these four sizes, tiers [firstGiantTier] and up, from about 100 to
+  /// 300 cards. The pictures are large enough to stay sharp when zoomed in;
+  /// every other picture keeps the eight-step ladder.
+  static const giantLabels = ['Large', 'Huge', 'Giant', 'Colossal'];
+
+  /// Tier index of the first giant size; codes carry it (`cards:12x14t8`).
+  static const firstGiantTier = 8;
+
+  /// Whether [tier] is a giant size.
+  static bool isGiantTier(int tier) => tier >= firstGiantTier;
+
+  /// Name of [tier] on either ladder.
+  static String labelOf(int tier) =>
+      isGiantTier(tier) ? giantLabels[(tier - firstGiantTier).clamp(0, giantLabels.length - 1)] : labels[tier.clamp(0, labels.length - 1)];
+
+  /// Piece counts the giant sizes aim for. The other shapes scale like the
+  /// normal ladders (smaller pieces, more of them).
+  static const giantTargets = <GameMode, List<int>>{
+    GameMode.cards: [100, 150, 200, 300],
+    GameMode.squares: [160, 240, 320, 480],
+    GameMode.triangles: [220, 330, 440, 660],
+    GameMode.hexagons: [175, 260, 350, 525],
+  };
+
+  /// A giant size (see [giantLabels]).
+  bool get isGiant => isGiantTier(tierIndex);
+
   /// Picture proportions used when the picture is not known yet (3:4
   /// portrait, the catalogue's most common shape).
   static const referenceAspect = 3 / 4;
@@ -68,8 +96,21 @@ class BoardSpec {
     return [for (var i = 0; i < dims.length; i++) BoardSpec(mode, dims[i].$1, dims[i].$2, labels[i], tier: i)];
   }
 
-  /// Tier [tier] of [mode] laid out for a picture of [aspect].
-  static BoardSpec forPicture(GameMode mode, int tier, double aspect) => tiers(mode, aspect)[tier.clamp(0, labels.length - 1)];
+  /// The four giant sizes of [mode] for a picture of [aspect] (tiers
+  /// [firstGiantTier] to [firstGiantTier] + 3).
+  static List<BoardSpec> giantTiers(GameMode mode, [double aspect = referenceAspect]) {
+    final dims = BoardLayouts.forAspect(mode, aspect, giant: true);
+    return [for (var i = 0; i < dims.length; i++) BoardSpec(mode, dims[i].$1, dims[i].$2, giantLabels[i], tier: firstGiantTier + i)];
+  }
+
+  /// The ladder a picture offers: the giant sizes for the Giant pack, else the eight normal ones.
+  static List<BoardSpec> ladder(GameMode mode, double aspect, {required bool giant}) => giant ? giantTiers(mode, aspect) : tiers(mode, aspect);
+
+  /// Tier [tier] of [mode] laid out for a picture of [aspect] (a giant tier
+  /// on the giant ladder).
+  static BoardSpec forPicture(GameMode mode, int tier, double aspect) => isGiantTier(tier)
+      ? giantTiers(mode, aspect)[(tier - firstGiantTier).clamp(0, giantLabels.length - 1)]
+      : tiers(mode, aspect)[tier.clamp(0, labels.length - 1)];
 
   /// This board's tier laid out for a picture of [aspect].
   BoardSpec fitTo(double aspect) => forPicture(mode, tierIndex < 0 ? 2 : tierIndex, aspect);
@@ -81,8 +122,8 @@ class BoardSpec {
   /// `mode-CxR` / `mode-CxRtT`.
   static BoardSpec fromCode(String code) {
     final d = BoardCode.decode(BoardCode.fromPath(code));
-    final t = d.tier != null && d.tier! >= 0 && d.tier! < labels.length ? d.tier! : _tierOf(d.mode, d.cols, d.rows);
-    return BoardSpec(d.mode, d.cols, d.rows, t >= 0 ? labels[t] : 'Custom', tier: t);
+    final t = d.tier != null && d.tier! >= 0 && d.tier! < firstGiantTier + giantLabels.length ? d.tier! : _tierOf(d.mode, d.cols, d.rows);
+    return BoardSpec(d.mode, d.cols, d.rows, t >= 0 ? labelOf(t) : 'Custom', tier: t);
   }
 
   /// Ladder index of a board size given without a tier. Codes made by this
@@ -98,6 +139,19 @@ class BoardSpec {
       if (i >= 0) return i;
     }
     final cells = Tiling.cellCount(mode, cols, rows);
+    // Giant boards are never smaller than the biggest normal candidate.
+    if (cells >= BoardLayouts.giantFloor(mode)) {
+      for (final a in [referenceAspect, ...commonAspects]) {
+        final i = BoardLayouts.forAspect(mode, a, giant: true).indexWhere((d) => d.$1 == cols && d.$2 == rows);
+        if (i >= 0) return firstGiantTier + i;
+      }
+      final g = giantTargets[mode]!;
+      var nearest = 0;
+      for (var i = 1; i < g.length; i++) {
+        if ((log(cells / g[i])).abs() < (log(cells / g[nearest])).abs()) nearest = i;
+      }
+      return firstGiantTier + nearest;
+    }
     final t = targets[mode]!;
     var best = 0;
     for (var i = 1; i < t.length; i++) {
@@ -116,6 +170,12 @@ class BoardSpec {
   static BoardSpec? fromSaved(GameMode mode, int cells, double aspect) {
     for (final t in tiers(mode, aspect)) {
       if (t.cells == cells) return t;
+    }
+    // The two ladders' piece counts never overlap (see [BoardLayouts.giantFloor]).
+    if (cells >= BoardLayouts.giantFloor(mode)) {
+      for (final t in giantTiers(mode, aspect)) {
+        if (t.cells == cells) return t;
+      }
     }
     return null;
   }
@@ -169,16 +229,25 @@ class BoardLayouts {
   /// [imageAspect]. Landscape pictures are treated as square (the board
   /// stays portrait or square and the picture is cropped); very tall ones
   /// as 1:2.
-  static List<(int, int)> forAspect(GameMode mode, double imageAspect) {
+  static List<(int, int)> forAspect(GameMode mode, double imageAspect, {bool giant = false}) {
     final a = (!imageAspect.isFinite || imageAspect <= 0 ? BoardSpec.referenceAspect : imageAspect).clamp(0.5, 1.0);
-    final key = '${mode.code}:${a.toStringAsFixed(6)}';
-    return _cache.putIfAbsent(key, () => _solve(mode, a));
+    final key = '${giant ? 'giant:' : ''}${mode.code}:${a.toStringAsFixed(6)}';
+    return _cache.putIfAbsent(key, () => giant ? _solveGiant(mode, a) : _solve(mode, a));
   }
+
+  /// Most pieces a normal tier of [mode] may have.
+  static double _normalCeiling(GameMode mode) {
+    final clipped = mode == GameMode.triangles || mode == GameMode.hexagons;
+    return BoardSpec.targets[mode]!.last * (clipped ? 1.45 : 1.3);
+  }
+
+  /// Fewest pieces a giant size of [mode] may have: above every normal
+  /// candidate, so a saved piece count always names one ladder.
+  static int giantFloor(GameMode mode) => max(_normalCeiling(mode).floor() + 1, (BoardSpec.giantTargets[mode]!.first * 0.8).round());
 
   static List<(int, int)> candidates(GameMode mode) => _candidates.putIfAbsent(mode, () {
         final t = BoardSpec.targets[mode]!;
-        final clipped = mode == GameMode.triangles || mode == GameMode.hexagons;
-        final lo = t.first * 0.6, hi = t.last * (clipped ? 1.45 : 1.3);
+        final lo = t.first * 0.6, hi = _normalCeiling(mode);
         final out = <(int, int)>[];
         void add(int c, int r) {
           final cells = Tiling.cellCount(mode, c, r);
@@ -226,31 +295,83 @@ class BoardLayouts {
 
   static final _candidates = <GameMode, List<(int, int)>>{};
 
+  /// Sizes the giant ladder of [mode] chooses from: the same shape rules as
+  /// [candidates] with many more rows and columns.
+  static List<(int, int)> giantCandidates(GameMode mode) => _giantCandidates.putIfAbsent(mode, () {
+        final t = BoardSpec.giantTargets[mode]!;
+        final clipped = mode == GameMode.triangles || mode == GameMode.hexagons;
+        final lo = giantFloor(mode), hi = t.last * (clipped ? 1.45 : 1.3);
+        final out = <(int, int)>[];
+        void add(int c, int r) {
+          final cells = Tiling.cellCount(mode, c, r);
+          if (cells < lo || cells > hi) return;
+          final (a, b) = Tiling.of(mode, c, r).aspectRange;
+          if (a > 1.0 || b < 0.5) return;
+          out.add((c, r));
+        }
+
+        switch (mode) {
+          case GameMode.cards || GameMode.squares:
+            for (var r = 6; r <= 40; r++) {
+              for (var c = 6; c <= 36; c++) {
+                add(c, r);
+              }
+            }
+          case GameMode.triangles:
+            for (var r = 6; r <= 36; r++) {
+              for (var c = 8; c <= 64; c++) {
+                add(c, r);
+              }
+            }
+          case GameMode.hexagons:
+            for (var r = 9; r <= 51; r += 2) {
+              for (var c = 4; c <= 36; c++) {
+                add(c, r);
+              }
+            }
+        }
+        out.sort((x, y) {
+          final d = Tiling.cellCount(mode, x.$1, x.$2) - Tiling.cellCount(mode, y.$1, y.$2);
+          if (d != 0) return d;
+          return x.$1 != y.$1 ? x.$1 - y.$1 : x.$2 - y.$2;
+        });
+        return out;
+      });
+
+  static final _giantCandidates = <GameMode, List<(int, int)>>{};
+
   /// Score of [dims] as tier [tier] of [mode] for a picture of [aspect].
-  static double score(GameMode mode, (int, int) dims, int tier, double aspect) {
-    final tiling = Tiling.of(mode, dims.$1, dims.$2);
-    final f = tiling.fitFor(aspect);
+  static double score(GameMode mode, (int, int) dims, int tier, double aspect, {bool giant = false}) {
+    final f = Tiling.of(mode, dims.$1, dims.$2).fitFor(aspect);
     final clipped = mode == GameMode.triangles || mode == GameMode.hexagons;
     final cropWeight = clipped ? 4.0 : 1.0;
     final stretchWeight = mode == GameMode.cards ? 0.5 : 0.3;
     final countWeight = clipped ? 0.15 : 0.25;
-    final target = BoardSpec.targets[mode]![tier];
-    return cropWeight * (f.crop + 3 * max(0, f.crop - 0.05)) + stretchWeight * f.stretch + countWeight * (log(tiling.cells / target)).abs();
+    final target = (giant ? BoardSpec.giantTargets : BoardSpec.targets)[mode]![tier];
+    final cells = Tiling.cellCount(mode, dims.$1, dims.$2);
+    return cropWeight * (f.crop + 3 * max(0, f.crop - 0.05)) + stretchWeight * f.stretch + countWeight * (log(cells / target)).abs();
   }
 
-  static List<(int, int)> _solve(GameMode mode, double aspect) {
-    final cands = candidates(mode);
-    final n = cands.length, k = BoardSpec.labels.length;
+  static List<(int, int)> _solve(GameMode mode, double aspect) => _pick(mode, aspect, candidates(mode), BoardSpec.labels.length, minCells, giant: false);
+
+  static List<(int, int)> _solveGiant(GameMode mode, double aspect) =>
+      _pick(mode, aspect, giantCandidates(mode), BoardSpec.giantLabels.length, const [0, 0, 0, 0], giant: true);
+
+  /// One size per tier out of [cands] (sorted by piece count) at the lowest
+  /// total [score], each tier at least [minStep] bigger than the one before
+  /// and at least [floors] pieces.
+  static List<(int, int)> _pick(GameMode mode, double aspect, List<(int, int)> cands, int k, List<int> floors, {required bool giant}) {
+    final n = cands.length;
     final counts = [for (final d in cands) Tiling.cellCount(mode, d.$1, d.$2)];
     final best = List.generate(k, (_) => List<double>.filled(n, double.infinity));
     final prev = List.generate(k, (_) => List<int>.filled(n, -1));
     for (var i = 0; i < n; i++) {
-      best[0][i] = score(mode, cands[i], 0, aspect);
+      best[0][i] = score(mode, cands[i], 0, aspect, giant: giant);
     }
     for (var t = 1; t < k; t++) {
       for (var i = 0; i < n; i++) {
-        if (counts[i] < minCells[t]) continue;
-        final s = score(mode, cands[i], t, aspect);
+        if (counts[i] < floors[t]) continue;
+        final s = score(mode, cands[i], t, aspect, giant: giant);
         for (var j = 0; j < n; j++) {
           if (counts[i] < counts[j] * minStep || best[t - 1][j] == double.infinity) continue;
           final v = best[t - 1][j] + s;

@@ -174,6 +174,7 @@ class SyncOp {
     required int hints,
     required String session,
     required bool resumed,
+    bool painting = false,
   }) =>
       SyncOp(OpKind.board, {
         'puzzleId': puzzleId,
@@ -185,6 +186,7 @@ class SyncOp {
         'hints': hints,
         'session': session,
         'resumed': resumed,
+        'painting': painting,
       });
 
   /// A finished board: records only improve, a solved picture stays solved.
@@ -198,6 +200,7 @@ class SyncOp {
     required int stars,
     required String session,
     required bool resumed,
+    bool painting = false,
     DateTime? at,
   }) =>
       SyncOp(at: at, OpKind.win, {
@@ -210,6 +213,7 @@ class SyncOp {
         'stars': stars,
         'session': session,
         'resumed': resumed,
+        'painting': painting,
       });
 
   /// Drops the board in progress; records and lifetime totals stay.
@@ -374,6 +378,8 @@ class SyncOp {
         return OpPlan({
           'gridSize': Put(_a('gridSize')),
           'mode': Put(args['mode']),
+          // Ops queued by builds before Painting carry no flag: a plain board.
+          'painting': Put(args['painting'] == true),
           'layout': Put(args['layout']),
           'moves': Put(_a('moves')),
           'elapsedSeconds': Put(_a('seconds')),
@@ -391,6 +397,7 @@ class SyncOp {
         return OpPlan({
           'gridSize': Put(_a('gridSize')),
           'mode': Put(args['mode']),
+          'painting': Put(args['painting'] == true),
           'layout': const Put(''),
           'moves': Put(moves),
           'elapsedSeconds': Put(seconds),

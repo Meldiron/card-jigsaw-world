@@ -36,6 +36,7 @@ class ProgressNotifier extends AsyncNotifier<Map<String, PuzzleProgress>> {
     required int hints,
     required String session,
     required bool resumed,
+    bool painting = false,
   }) =>
       _do(SyncOp.board(
         puzzleId: puzzleId,
@@ -47,6 +48,7 @@ class ProgressNotifier extends AsyncNotifier<Map<String, PuzzleProgress>> {
         hints: hints,
         session: session,
         resumed: resumed,
+        painting: painting,
       ));
 
   /// Records a finished board: the picture is solved, stars and best moves and time keep the
@@ -61,6 +63,7 @@ class ProgressNotifier extends AsyncNotifier<Map<String, PuzzleProgress>> {
     required int stars,
     required String session,
     required bool resumed,
+    bool painting = false,
     DateTime? at,
   }) =>
       _do(SyncOp.win(
@@ -73,6 +76,7 @@ class ProgressNotifier extends AsyncNotifier<Map<String, PuzzleProgress>> {
         stars: stars,
         session: session,
         resumed: resumed,
+        painting: painting,
         at: at,
       ));
 
