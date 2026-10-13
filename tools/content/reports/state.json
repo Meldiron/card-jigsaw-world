@@ -1,8 +1,8 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-13T13:44:01",
-"msg": "Content: daily-2026-12 and daily-2027-01 (31 days each); all seven daily-2027a months verified, audit clean",
+"at": "2026-10-13T13:46:37",
+"msg": "Content: daily-2027-10 (October 2027, 31 days)\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
 "ok": true,
 "pushed": true,
 "stage": "committed"
@@ -1199,10 +1199,10 @@
 },
 "daily-2027-06": {
 "added": 2,
-"at": "2026-10-13T13:44:12",
+"at": "2026-10-13T13:46:45",
 "category": "Daily",
 "kind": "new",
-"last_step": "pool 944 usable",
+"last_step": "reject 3 quality",
 "name": "June 2027",
 "puzzles": 30,
 "removed": 2,
@@ -1250,6 +1250,17 @@
 "name": "October 2027",
 "puzzles": 31,
 "removed": 0,
+"status": "fixed"
+},
+"daily-2027-11": {
+"added": 1,
+"at": "2026-10-13T13:49:20",
+"category": "Daily",
+"kind": "new",
+"last_step": "apply",
+"name": "November 2027",
+"puzzles": 30,
+"removed": 1,
 "status": "fixed"
 },
 "deep-space": {

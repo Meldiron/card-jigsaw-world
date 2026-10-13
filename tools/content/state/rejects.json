@@ -44429,6 +44429,12 @@
 "pack": "deep-space",
 "reason": "text"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Krumkakejern_og_krumkakepinne_p%C3%A5_Majorstuen_Oslo_28NOV2023.jpg/1280px-Krumkakejern_og_krumkakepinne_p%C3%A5_Majorstuen_Oslo_28NOV2023.jpg": {
+"at": "2026-10-13",
+"label": "c1180",
+"pack": "daily-2027-06",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Kul_Sharif_Mosque_14.jpg/1280px-Kul_Sharif_Mosque_14.jpg": {
 "at": "2026-10-13",
 "label": "c1000",
@@ -49301,6 +49307,12 @@
 "pack": "evpack-universal-childrens-2026",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/2025-12-28_11_52_03_Asian_persimmon_coated_in_glaze_ice_along_Seven_Oaks_Lane_in_the_Mountainview_section_of_Ewing_Township%2C_Mercer_County%2C_New_Jersey.jpg/1280px-2025-12-28_11_52_03_Asian_persimmon_coated_in_glaze_ice_along_Seven_Oaks_Lane_in_the_Mountainview_section_of_Ewing_Township%2C_Mercer_County%2C_New_Jersey.jpg": {
+"at": "2026-10-13",
+"label": "c1190",
+"pack": "daily-2027-06",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/A_wooden_carved_bench_by_William_Morris_01.jpg/1280px-A_wooden_carved_bench_by_William_Morris_01.jpg": {
 "at": "2026-10-12",
 "label": "c05",
@@ -51605,6 +51617,12 @@
 "pack": "pack-harbours",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Persinomin_tree.JPG/1280px-Persinomin_tree.JPG": {
+"at": "2026-10-13",
+"label": "c1191",
+"pack": "daily-2027-06",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Purple_sweet_potato_mochi_%281%29.jpg/1280px-Purple_sweet_potato_mochi_%281%29.jpg": {
 "at": "2026-10-12",
 "label": "c59",
@@ -52500,10 +52518,10 @@
 "reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Trakai_Island_Castle_2024-7-15-1706.jpg/1280px-Trakai_Island_Castle_2024-7-15-1706.jpg": {
-"at": "2026-10-12",
-"label": "c88",
-"pack": "pack-castles",
-"reason": "similar"
+"at": "2026-10-13",
+"label": "daily-2027-11-07",
+"pack": "daily-2027-11",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Trick_or_Tea_%2834310783231%29.jpg/1280px-Trick_or_Tea_%2834310783231%29.jpg": {
 "at": "2026-10-12",
@@ -63258,10 +63276,10 @@
 "reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Hugh_C._Leighton_Co._-_Ormond%2C_Florida%2C_A_Kumquat_Tree_in_Full_Fruit_front.jpg/1280px-Hugh_C._Leighton_Co._-_Ormond%2C_Florida%2C_A_Kumquat_Tree_in_Full_Fruit_front.jpg": {
-"at": "2026-10-12",
-"label": "c42",
-"pack": "evpack-lunar-new-year-2027",
-"reason": "weak"
+"at": "2026-10-13",
+"label": "c1184",
+"pack": "daily-2027-06",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Huizen_in_Jordaan_Amsterdam%2C_Bestanddeelnr_925-0202.jpg/1280px-Huizen_in_Jordaan_Amsterdam%2C_Bestanddeelnr_925-0202.jpg": {
 "at": "2026-10-12",
@@ -64648,6 +64666,12 @@
 "label": "c74",
 "pack": "abstract-marbling",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/A_Giant_Kumquats_Trees_at_Sam_Shing_Estate.jpg/1280px-A_Giant_Kumquats_Trees_at_Sam_Shing_Estate.jpg": {
+"at": "2026-10-13",
+"label": "c1186",
+"pack": "daily-2027-06",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Aero_A-38_a_Walter_Jupiter_IV_%28L-BACB%29.jpg/1280px-Aero_A-38_a_Walter_Jupiter_IV_%28L-BACB%29.jpg": {
 "at": "2026-10-12",
