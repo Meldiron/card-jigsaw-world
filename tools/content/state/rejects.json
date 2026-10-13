@@ -2507,6 +2507,18 @@
 "pack": "pack-quilts",
 "reason": "off-theme"
 },
+"https://images.metmuseum.org/CRDImages/ad/original/137182.jpg": {
+"at": "2026-10-13",
+"label": "c160",
+"pack": "pack-embroidery",
+"reason": "quality"
+},
+"https://images.metmuseum.org/CRDImages/ad/original/16745.jpg": {
+"at": "2026-10-13",
+"label": "c132",
+"pack": "pack-embroidery",
+"reason": "text"
+},
 "https://images.metmuseum.org/CRDImages/ad/original/45605.jpg": {
 "at": "2026-10-13",
 "label": "c22",
@@ -2517,6 +2529,12 @@
 "at": "2026-10-13",
 "label": "c21",
 "pack": "pack-wallpapers",
+"reason": "quality"
+},
+"https://images.metmuseum.org/CRDImages/ad/original/52097.jpg": {
+"at": "2026-10-13",
+"label": "c159",
+"pack": "pack-embroidery",
 "reason": "quality"
 },
 "https://images.metmuseum.org/CRDImages/ad/original/85J_ACF3112R9.jpg": {
@@ -2560,6 +2578,12 @@
 "label": "c65",
 "pack": "pack-seascapes",
 "reason": "off-theme"
+},
+"https://images.metmuseum.org/CRDImages/ad/original/DP-22361-001.jpg": {
+"at": "2026-10-13",
+"label": "c36",
+"pack": "pack-embroidery",
+"reason": "quality"
 },
 "https://images.metmuseum.org/CRDImages/ad/original/DP-29450-001.jpg": {
 "at": "2026-10-13",
@@ -2758,6 +2782,12 @@
 "label": "c90",
 "pack": "pack-wallpapers",
 "reason": "off-theme"
+},
+"https://images.metmuseum.org/CRDImages/es/original/201880.jpg": {
+"at": "2026-10-13",
+"label": "c148",
+"pack": "pack-embroidery",
+"reason": "quality"
 },
 "https://images.metmuseum.org/CRDImages/es/original/26.233.9_F.jpg": {
 "at": "2026-10-13",
@@ -16883,6 +16913,12 @@
 "pack": "evpack-thanksgiving-2026",
 "reason": "weak"
 },
+"https://live.staticflickr.com/65535/51671673839_aa4ced3d75_b.jpg": {
+"at": "2026-10-13",
+"label": "c04",
+"pack": "pack-rocky-mountains",
+"reason": "off-theme"
+},
 "https://live.staticflickr.com/65535/51672572971_a8ba1191ed_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-alpine-lakes-12",
@@ -22985,6 +23021,12 @@
 "pack": "pack-tropical-beaches",
 "reason": "weak"
 },
+"https://live.staticflickr.com/65535/52569787109_bfa547a04b_b.jpg": {
+"at": "2026-10-13",
+"label": "c53",
+"pack": "pack-rocky-mountains",
+"reason": "off-theme"
+},
 "https://live.staticflickr.com/65535/52569955650_7e3250efe2_b.jpg": {
 "at": "2026-10-13",
 "label": "c41",
@@ -23339,11 +23381,17 @@
 "pack": "pack-prague",
 "reason": "similar"
 },
+"https://live.staticflickr.com/65535/52615143730_b2f39eef11_b.jpg": {
+"at": "2026-10-13",
+"label": "c76",
+"pack": "pack-rocky-mountains",
+"reason": "quality"
+},
 "https://live.staticflickr.com/65535/52615202708_59860152cd_b.jpg": {
-"at": "2026-10-12",
-"label": "c130",
-"pack": "pack-iceland-roads",
-"reason": "off-theme"
+"at": "2026-10-13",
+"label": "c75",
+"pack": "pack-rocky-mountains",
+"reason": "quality"
 },
 "https://live.staticflickr.com/65535/52615512034_fcfec9a337_b.jpg": {
 "at": "2026-10-12",
@@ -26867,6 +26915,12 @@
 "pack": "abstract-dunes",
 "reason": "off-theme"
 },
+"https://live.staticflickr.com/65535/53879020862_0a34c89379_b.jpg": {
+"at": "2026-10-13",
+"label": "c83",
+"pack": "pack-rocky-mountains",
+"reason": "off-theme"
+},
 "https://live.staticflickr.com/65535/53879625962_dc25a03281_b.jpg": {
 "at": "2026-10-12",
 "label": "c162",
@@ -27844,6 +27898,18 @@
 "label": "pack-rolling-hills-09",
 "pack": "pack-rolling-hills",
 "reason": "text"
+},
+"https://live.staticflickr.com/65535/54362309294_b3e5087ee5_b.jpg": {
+"at": "2026-10-13",
+"label": "c85",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
+},
+"https://live.staticflickr.com/65535/54362459803_3ef2c0e471_b.jpg": {
+"at": "2026-10-13",
+"label": "c84",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
 },
 "https://live.staticflickr.com/65535/54372634688_f2d1b4a0c2_b.jpg": {
 "at": "2026-10-12",
@@ -40127,6 +40193,12 @@
 "pack": "deep-space",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/0/04/Gmina_Ko%C5%9Bcielisko%2C_Poland_-_panoramio_%2815%29.jpg": {
+"at": "2026-10-13",
+"label": "c49",
+"pack": "pack-mountain-autumn",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/0/04/Hull_blasting_with_DOCKMASTER.jpg": {
 "at": "2026-10-13",
 "label": "c118",
@@ -40215,6 +40287,12 @@
 "at": "2026-10-12",
 "label": "c22",
 "pack": "evpack-smile-day-2026",
+"reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/0/08/Woodrow_Wilson_giving_a_speech_-_DPLA_-_398e22bb306decb3519f56f5f2bb3191.jpg": {
+"at": "2026-10-13",
+"label": "c51",
+"pack": "pack-rocky-mountains",
 "reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/0/09/Colomba_pasquale_al_Cioccolato_e_Pistacchio.jpg": {
@@ -40439,6 +40517,12 @@
 "pack": "daily-2023-01",
 "reason": "quality"
 },
+"https://upload.wikimedia.org/wikipedia/commons/1/19/Ptasia_grypa_w_Toruniu_2.jpg": {
+"at": "2026-10-13",
+"label": "c189",
+"pack": "pack-snowy-villages",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/1/1a/July_12_-_Webb%27s_4th_Science_Anniversary%21_%28NASA%27s_James_Webb_Space_Telescope%29.jpg": {
 "at": "2026-10-12",
 "label": "c593",
@@ -40523,6 +40607,12 @@
 "pack": "daily-2026-11",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/1/1f/Mount_Bethel_Church_in_Wolverhampton_-_geograph.org.uk_-_7139478.jpg": {
+"at": "2026-10-13",
+"label": "c18",
+"pack": "pack-rocky-mountains",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/2/20/NATO_Peace_Conference_in_Portmeirion_%281490459%29.jpg": {
 "at": "2026-10-13",
 "label": "c322",
@@ -40605,6 +40695,12 @@
 "at": "2026-10-12",
 "label": "c86",
 "pack": "pack-snowy-peaks",
+"reason": "quality"
+},
+"https://upload.wikimedia.org/wikipedia/commons/2/25/Spomenik_kralju_Aleksandru_na_Kongresnem_trgu%2C_Ljubljana%2C_1941.jpg": {
+"at": "2026-10-13",
+"label": "c170",
+"pack": "pack-snowy-villages",
 "reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/2/25/Tea_Estate_Munnar_Kerala_India.jpg": {
@@ -40792,6 +40888,12 @@
 "label": "c35",
 "pack": "abstract-glitch",
 "reason": "text"
+},
+"https://upload.wikimedia.org/wikipedia/commons/3/31/Drsali%C5%A1%C4%8De_na_prostem_v_Tivoliju%2C_Ljubljana%2C_1941.jpg": {
+"at": "2026-10-13",
+"label": "c171",
+"pack": "pack-snowy-villages",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/3/31/Gold_Balloons_%2820944603931%29.jpg": {
 "at": "2026-10-12",
@@ -41153,6 +41255,12 @@
 "pack": "pack-gardens-art",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/4/47/Planting_guide_%2816187807360%29.jpg": {
+"at": "2026-10-13",
+"label": "c232",
+"pack": "pack-summer-fruit",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/4/47/Soap_Bubbles.jpg": {
 "at": "2026-10-12",
 "label": "c20",
@@ -41176,6 +41284,12 @@
 "label": "c65",
 "pack": "pack-old-maps",
 "reason": "text"
+},
+"https://upload.wikimedia.org/wikipedia/commons/4/48/Islande_Landmannalaugar_Bl%C3%A1hnj%C3%BAkur_couleur.jpg": {
+"at": "2026-10-13",
+"label": "c59",
+"pack": "pack-rainbow-mountains",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/4/49/Cotton_candy_from_Kerala.jpg": {
 "at": "2026-10-12",
@@ -41242,6 +41356,12 @@
 "label": "c03",
 "pack": "pack-dolomites",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/4/4f/Embroidered_hanging%2C_Kutch_%28western_India.jpg": {
+"at": "2026-10-13",
+"label": "c18",
+"pack": "pack-embroidery",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/5/50/Grand_Cascade%2C_Sheffield_Park_Garden-5120958936.jpg": {
 "at": "2026-10-12",
@@ -41326,6 +41446,12 @@
 "label": "c15",
 "pack": "pack-steam-trains",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/5/54/Abajo_Mountains_with_Canyonlands_National_Park%2C_Utah_in_Background_%2898453253%29.jpg": {
+"at": "2026-10-13",
+"label": "c69",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/5/54/Hokusai_SGK_Settsu.jpg": {
 "at": "2026-10-12",
@@ -41633,6 +41759,12 @@
 "pack": "pack-wild-australia",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/6/67/Marina_Square_and_Marina_Mandarin_Singapore%2C_Jul_07.JPG": {
+"at": "2026-10-13",
+"label": "c99",
+"pack": "pack-embroidery",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/6/67/Mittellegi_ridge%2C_Eiger.jpg": {
 "at": "2026-10-13",
 "label": "c83",
@@ -41747,6 +41879,12 @@
 "pack": "evpack-dance-2027",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/6/6d/Pintura_rupestre_de_Cerro_Colorado_03.jpg": {
+"at": "2026-10-13",
+"label": "c76",
+"pack": "pack-rainbow-mountains",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/6/6e/Chan_Kusalo_cremation_43.jpg": {
 "at": "2026-10-12",
 "label": "c52",
@@ -41813,11 +41951,23 @@
 "pack": "pack-sushi",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/7/72/Debbie_Reynolds_Auction_-_Worrall_gear_head_and_%22Sputnik%22_camera_dolly-tripod_with_Mitchell_BNCR_35mm_motion_picture_camera_circa_1960.jpg": {
+"at": "2026-10-13",
+"label": "c59",
+"pack": "pack-rocky-mountains",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/7/72/Teide-Seilbahn_Kabine.jpg": {
 "at": "2026-10-12",
 "label": "c50",
 "pack": "pack-volcanoes",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/7/72/Yellow_Aspen%2C_Fall_Colors_at_Rocky_Mountain_National_Park%2C_Colorado.jpg": {
+"at": "2026-10-13",
+"label": "c67",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/7/74/Calzone_ingredients.png": {
 "at": "2026-10-13",
@@ -41860,6 +42010,12 @@
 "label": "c137",
 "pack": "pack-gardens",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/7/76/Pintura_rupestre_de_Cerro_Colorado_02.jpg": {
+"at": "2026-10-13",
+"label": "c77",
+"pack": "pack-rainbow-mountains",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/7/77/Long_March_7_Y11_Tianzhou_10_rollout_02.png": {
 "at": "2026-10-12",
@@ -41993,6 +42149,12 @@
 "pack": "abstract-dunes",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/8/80/Zakopane%2C_Poland_-_panoramio_%2829%29.jpg": {
+"at": "2026-10-13",
+"label": "c52",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/8/82/Lohrstra%C3%9Fe_40.JPG": {
 "at": "2026-10-12",
 "label": "c21",
@@ -42046,6 +42208,12 @@
 "label": "c52",
 "pack": "abstract-neon",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/8/89/Fall_Colors_at_Rocky_Mountain_National_Park%2C_Colorado_-_Single_Yellow_Aspen.jpg": {
+"at": "2026-10-13",
+"label": "c68",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/8/89/Peacock_butterfly_%28Inachis_io%29.jpg": {
 "at": "2026-10-12",
@@ -42165,6 +42333,12 @@
 "at": "2026-10-12",
 "label": "c113",
 "pack": "pack-ancient-ruins",
+"reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/9/91/Zakopane%2C_Poland_-_panoramio_%2828%29.jpg": {
+"at": "2026-10-13",
+"label": "c51",
+"pack": "pack-mountain-autumn",
 "reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/9/92/Hot_Air_Balloon_Inflation_%2820424825693%29.jpg": {
@@ -42329,6 +42503,12 @@
 "pack": "pack-desert-dunes",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/9/9f/Gmina_Ko%C5%9Bcielisko%2C_Poland_-_panoramio_%2829%29.jpg": {
+"at": "2026-10-13",
+"label": "c50",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/9/9f/Reynisdrangar_sea_stack.jpg": {
 "at": "2026-10-12",
 "label": "c115",
@@ -42388,6 +42568,12 @@
 "label": "c96",
 "pack": "pack-new-zealand",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/a/a2/Fall_Colors_9-2006_119-DVD_%283699820130%29.jpg": {
+"at": "2026-10-13",
+"label": "c60",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/a/a2/Haunted_house_in_Anglesey_%281477289%29.jpg": {
 "at": "2026-10-12",
@@ -42893,6 +43079,18 @@
 "pack": "pack-old-maps",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/b/bf/Fall_Colors_9-2006_038-DVD_%283699819602%29.jpg": {
+"at": "2026-10-13",
+"label": "c59",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/b/bf/Fall_Colors_9-2006_122-DVD_%283699009257%29.jpg": {
+"at": "2026-10-13",
+"label": "c58",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/b/bf/Polignano_a_Mare_-_Isola_di_San_Paolo_-_startrail.png": {
 "at": "2026-10-13",
 "label": "c100",
@@ -43139,6 +43337,12 @@
 "pack": "evpack-universal-childrens-2026",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/d/d0/Zakopane%2C_Poland_-_panoramio_%2867%29.jpg": {
+"at": "2026-10-13",
+"label": "c131",
+"pack": "pack-snowy-villages",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/d/d1/Ffestiniog_Railway_%281470147%29.jpg": {
 "at": "2026-10-12",
 "label": "c20",
@@ -43240,6 +43444,12 @@
 "label": "c14",
 "pack": "pack-northern-lights",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/d/d7/Mount_Bethel_Church_in_Wolverhampton_-_geograph.org.uk_-_7987877.jpg": {
+"at": "2026-10-13",
+"label": "c16",
+"pack": "pack-rocky-mountains",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/d/d7/Sin%28x%29_detail.png": {
 "at": "2026-10-12",
@@ -43517,6 +43727,12 @@
 "pack": "ai-food",
 "reason": "quality"
 },
+"https://upload.wikimedia.org/wikipedia/commons/e/e5/Steber_sv._Trojice_na_Kongresnem_trgu%2C_Ljubljana%2C_1941.jpg": {
+"at": "2026-10-13",
+"label": "c169",
+"pack": "pack-snowy-villages",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/e/e6/Flowers_on_the_water.jpg": {
 "at": "2026-10-13",
 "label": "c140",
@@ -43611,6 +43827,12 @@
 "at": "2026-10-13",
 "label": "c17",
 "pack": "pack-mountain-huts",
+"reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/e/ea/Tarragona_-_panoramio_-_Arwin_Meijer_%284%29.jpg": {
+"at": "2026-10-13",
+"label": "c74",
+"pack": "pack-rocky-mountains",
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/e/eb/Grupp_5_SIBERIAN_HUSKY%2C_Snowmist_A_Gamble_With_Destiny_%2823919308839%29.jpg": {
@@ -43929,6 +44151,12 @@
 "at": "2026-10-12",
 "label": "c20",
 "pack": "pack-paris",
+"reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/f/fe/Mount_St._Louis_Moonstone_Resort_%28358179685%29.jpg": {
+"at": "2026-10-13",
+"label": "c82",
+"pack": "pack-rocky-mountains",
 "reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/f/fe/Sevensisters.jpg": {
@@ -44279,6 +44507,12 @@
 "pack": "abstract-crystal",
 "reason": "text"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/C%C3%A9ret_-_Rue_du_Vieux_C%C3%A9ret_-_Automne_1.JPG/1280px-C%C3%A9ret_-_Rue_du_Vieux_C%C3%A9ret_-_Automne_1.JPG": {
+"at": "2026-10-13",
+"label": "c94",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Cadenet_-_Au_Tambour_d%27Arcole.JPG/1280px-Cadenet_-_Au_Tambour_d%27Arcole.JPG": {
 "at": "2026-10-12",
 "label": "c60",
@@ -44422,6 +44656,12 @@
 "label": "c07",
 "pack": "evpack-photography-2027",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Paullymac_IMG_5387_%2831966998412%29.jpg/1280px-Paullymac_IMG_5387_%2831966998412%29.jpg": {
+"at": "2026-10-13",
+"label": "c34",
+"pack": "pack-rocky-mountains",
+"reason": "similar"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Personalized_cutting_board_and_spatula_with_vegetable_and_meat_skewers_on_top_of_a_barbecue_grill_in_back_yard_by_grass_lawn_%2816720259677%29.jpg/1280px-Personalized_cutting_board_and_spatula_with_vegetable_and_meat_skewers_on_top_of_a_barbecue_grill_in_back_yard_by_grass_lawn_%2816720259677%29.jpg": {
 "at": "2026-10-12",
@@ -44614,6 +44854,12 @@
 "label": "c192",
 "pack": "abstract-neon",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Eisenhower_Tower%2C_Castle_Mountain.jpg/1280px-Eisenhower_Tower%2C_Castle_Mountain.jpg": {
+"at": "2026-10-13",
+"label": "c07",
+"pack": "pack-rocky-mountains",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Emilian_L%C4%83z%C4%83rescu_-_Street_on_a_Rainy_Day_-_MNAR_%28cropped_out_frame%29.jpg/1280px-Emilian_L%C4%83z%C4%83rescu_-_Street_on_a_Rainy_Day_-_MNAR_%28cropped_out_frame%29.jpg": {
 "at": "2026-10-12",
@@ -45215,6 +45461,12 @@
 "pack": "evpack-independence-day-2027",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Colorado_River_Headwaters_Byway_-_Fall_Recreation_Along_Colorado_River_Headwaters_-_NARA_-_7717724.jpg/1280px-Colorado_River_Headwaters_Byway_-_Fall_Recreation_Along_Colorado_River_Headwaters_-_NARA_-_7717724.jpg": {
+"at": "2026-10-13",
+"label": "c62",
+"pack": "pack-mountain-autumn",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Cowes_Royal_Yacht_Squadron_cannon_during_Cowes_Week_2012.jpg/1280px-Cowes_Royal_Yacht_Squadron_cannon_during_Cowes_Week_2012.jpg": {
 "at": "2026-10-12",
 "label": "c92",
@@ -45815,6 +46067,12 @@
 "pack": "pack-caves",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Carving_of_a_Tayberry%2C_on_the_banks_of_the_River_Tay_in_Perth.jpg/1280px-Carving_of_a_Tayberry%2C_on_the_banks_of_the_River_Tay_in_Perth.jpg": {
+"at": "2026-10-13",
+"label": "c207",
+"pack": "pack-summer-fruit",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Chania_lighthouse_in_Crete_001.jpg/1280px-Chania_lighthouse_in_Crete_001.jpg": {
 "at": "2026-10-12",
 "label": "c138",
@@ -46313,6 +46571,12 @@
 "pack": "abstract-stained-glass",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Tatransk%C3%BD_%C5%A1t%C3%ADt_Kriv%C3%A1%C5%88_21_Slovakia_5.jpg/1280px-Tatransk%C3%BD_%C5%A1t%C3%ADt_Kriv%C3%A1%C5%88_21_Slovakia_5.jpg": {
+"at": "2026-10-13",
+"label": "c54",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/The_Brown_Bear_%286784305943%29.jpg/1280px-The_Brown_Bear_%286784305943%29.jpg": {
 "at": "2026-10-12",
 "label": "c23",
@@ -46642,6 +46906,12 @@
 "label": "c96",
 "pack": "cozy-kitchen",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Wild_rhododendron_in_fall_%28ea3709d9-dc1f-4312-9660-1e4aa906c699%29.JPG/1280px-Wild_rhododendron_in_fall_%28ea3709d9-dc1f-4312-9660-1e4aa906c699%29.JPG": {
+"at": "2026-10-13",
+"label": "c88",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Xuantian_Shangdi_Statue_at_Lotus_Pond_in_Kaohsiung.jpg/1280px-Xuantian_Shangdi_Statue_at_Lotus_Pond_in_Kaohsiung.jpg": {
 "at": "2026-10-12",
@@ -46991,11 +47261,23 @@
 "pack": "pack-seascapes",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Detail_of_Traditional_Dress_-_Buhalov_Han_%28Owl%27s_Inn%29_-_Karlovo_-_Bulgaria_%2842583448704%29.jpg/1280px-Detail_of_Traditional_Dress_-_Buhalov_Han_%28Owl%27s_Inn%29_-_Karlovo_-_Bulgaria_%2842583448704%29.jpg": {
+"at": "2026-10-13",
+"label": "c150",
+"pack": "pack-embroidery",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Edith_Towner%2C_Crazy_Quilt_%28Detail%29%2C_c._1940%2C_NGA_12532.jpg/1280px-Edith_Towner%2C_Crazy_Quilt_%28Detail%29%2C_c._1940%2C_NGA_12532.jpg": {
 "at": "2026-10-13",
 "label": "c22",
 "pack": "pack-quilts",
 "reason": "quality"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/El_Hornocal_Cerro_de_Los_14_Colores.jpg/1280px-El_Hornocal_Cerro_de_Los_14_Colores.jpg": {
+"at": "2026-10-13",
+"label": "c69",
+"pack": "pack-rainbow-mountains",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/G%C3%B6remed.jpg/1280px-G%C3%B6remed.jpg": {
 "at": "2026-10-12",
@@ -47152,6 +47434,12 @@
 "label": "c67",
 "pack": "pack-sea-cliffs",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Sarah_Lohman_Eight_Flavors_Loganberry_Books.jpg/1280px-Sarah_Lohman_Eight_Flavors_Loganberry_Books.jpg": {
+"at": "2026-10-13",
+"label": "c208",
+"pack": "pack-summer-fruit",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/School_Desk_Design.png/1280px-School_Desk_Design.png": {
 "at": "2026-10-12",
@@ -47488,6 +47776,12 @@
 "label": "c127",
 "pack": "evpack-lunar-new-year-2027",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Tajik_black_and_red_suzani.jpg/1280px-Tajik_black_and_red_suzani.jpg": {
+"at": "2026-10-13",
+"label": "c142",
+"pack": "pack-embroidery",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/To_the_hoop_Mchemba.jpg/1280px-To_the_hoop_Mchemba.jpg": {
 "at": "2026-10-12",
@@ -47902,6 +48196,12 @@
 "label": "c36",
 "pack": "pack-mountain-huts",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Golden_Gate%2C_G%C5%82%C3%B3wne_Miasto%2C_Gda%C5%84sk%2C_Poland_-_20090102.jpg/1280px-Golden_Gate%2C_G%C5%82%C3%B3wne_Miasto%2C_Gda%C5%84sk%2C_Poland_-_20090102.jpg": {
+"at": "2026-10-13",
+"label": "c175",
+"pack": "pack-snowy-villages",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Grand_Canyon_Sunset_-_panoramio.jpg/1280px-Grand_Canyon_Sunset_-_panoramio.jpg": {
 "at": "2026-10-12",
@@ -49307,6 +49607,12 @@
 "pack": "pack-pastries",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Breitach_Klamm_%287182288460%29.jpg/1280px-Breitach_Klamm_%287182288460%29.jpg": {
+"at": "2026-10-13",
+"label": "c241",
+"pack": "pack-snowy-villages",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Clervaux_Loretto_Chapel_Albert_Eug%C3%A8ne_de_Lannoy_tomb.jpg/1280px-Clervaux_Loretto_Chapel_Albert_Eug%C3%A8ne_de_Lannoy_tomb.jpg": {
 "at": "2026-10-13",
 "label": "c09",
@@ -49469,6 +49775,12 @@
 "pack": "pack-doors",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Painted_Hills%2C_John_Day_Fossil_Beds_National_Monument_-_DPLA_-_daeb4ec6fbd940c358be9ef80764d13e.jpg/1280px-Painted_Hills%2C_John_Day_Fossil_Beds_National_Monument_-_DPLA_-_daeb4ec6fbd940c358be9ef80764d13e.jpg": {
+"at": "2026-10-13",
+"label": "c81",
+"pack": "pack-rainbow-mountains",
+"reason": "similar"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Palazzo_della_Civilt%C3%A0_Italiana.19.jpg/1280px-Palazzo_della_Civilt%C3%A0_Italiana.19.jpg": {
 "at": "2026-10-12",
 "label": "c49",
@@ -49491,6 +49803,12 @@
 "at": "2026-10-12",
 "label": "c78",
 "pack": "pack-orchids",
+"reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Pyramid_Mountain_and_Pyramid_Lake_--_Jasper_National_Park_Alberta_%28CA%29_September_2019_%2849112355743%29.jpg/1280px-Pyramid_Mountain_and_Pyramid_Lake_--_Jasper_National_Park_Alberta_%28CA%29_September_2019_%2849112355743%29.jpg": {
+"at": "2026-10-13",
+"label": "c35",
+"pack": "pack-rocky-mountains",
 "reason": "similar"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Pyramid_of_Cestius_in_2018.02.jpg/1280px-Pyramid_of_Cestius_in_2018.02.jpg": {
@@ -49596,10 +49914,10 @@
 "reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Yosemite_National_Park%2C_Nevada_Fall%2C_2024-07_CN-03.jpg/1280px-Yosemite_National_Park%2C_Nevada_Fall%2C_2024-07_CN-03.jpg": {
-"at": "2026-10-12",
-"label": "c49",
-"pack": "pack-waterfalls",
-"reason": "similar"
+"at": "2026-10-13",
+"label": "c70",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/%28Lisianthus%29%2C_da_Cole%C3%A7%C3%A3o_Brasiliana_Iconogr%C3%A1fica.jpg/1280px-%28Lisianthus%29%2C_da_Cole%C3%A7%C3%A3o_Brasiliana_Iconogr%C3%A1fica.jpg": {
 "at": "2026-10-13",
@@ -50411,6 +50729,12 @@
 "pack": "pack-harbours",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Night_view_near_Takayama_Station_20150122.jpg/1280px-Night_view_near_Takayama_Station_20150122.jpg": {
+"at": "2026-10-13",
+"label": "c62",
+"pack": "pack-snowy-villages",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Norwegen_1998_%28087%29_Steinsdalsfossen_%2834123683385%29.jpg/1280px-Norwegen_1998_%28087%29_Steinsdalsfossen_%2834123683385%29.jpg": {
 "at": "2026-10-12",
 "label": "c100",
@@ -50933,6 +51257,12 @@
 "pack": "abstract-rust",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Lviv_tram_2004_10.jpg/1280px-Lviv_tram_2004_10.jpg": {
+"at": "2026-10-13",
+"label": "c195",
+"pack": "pack-snowy-villages",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Marble-slab_table_MET_18_110_27ab_SlabTable_2.jpg/1280px-Marble-slab_table_MET_18_110_27ab_SlabTable_2.jpg": {
 "at": "2026-10-13",
 "label": "c73",
@@ -51233,6 +51563,12 @@
 "pack": "pack-cherry-blossom",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Pueblo_de_Purmamarca_-_Puerta.jpg/1280px-Pueblo_de_Purmamarca_-_Puerta.jpg": {
+"at": "2026-10-13",
+"label": "c65",
+"pack": "pack-rainbow-mountains",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Rosa_Pink_Pins_2020-07-30_1542.jpg/1280px-Rosa_Pink_Pins_2020-07-30_1542.jpg": {
 "at": "2026-10-12",
 "label": "c61",
@@ -51376,6 +51712,12 @@
 "label": "c44",
 "pack": "pack-volcanoes",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Frozen_Neris_river_and_Gediminas_tower.jpg/1280px-Frozen_Neris_river_and_Gediminas_tower.jpg": {
+"at": "2026-10-13",
+"label": "c124",
+"pack": "pack-snowy-villages",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Geopende_zaaddoos_van_een_wilde_hyacint_24-07-2022._%28d.j.b%29.jpg/1280px-Geopende_zaaddoos_van_een_wilde_hyacint_24-07-2022._%28d.j.b%29.jpg": {
 "at": "2026-10-12",
@@ -51544,6 +51886,12 @@
 "label": "c61",
 "pack": "pack-staircases",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Tajik_blue_ceramic_dish%2C_suzani_and_a_cat.jpg/1280px-Tajik_blue_ceramic_dish%2C_suzani_and_a_cat.jpg": {
+"at": "2026-10-13",
+"label": "c139",
+"pack": "pack-embroidery",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Teatro_Col%C3%B3n_2025_05.jpg/1280px-Teatro_Col%C3%B3n_2025_05.jpg": {
 "at": "2026-10-12",
@@ -51737,6 +52085,12 @@
 "pack": "abstract-topographic",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Ivan_Enchev-Vidyu_Bulgarian_Folk_Crosses_129.jpg/1280px-Ivan_Enchev-Vidyu_Bulgarian_Folk_Crosses_129.jpg": {
+"at": "2026-10-13",
+"label": "c155",
+"pack": "pack-embroidery",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Lavandula_lanata_kz03.jpg/1280px-Lavandula_lanata_kz03.jpg": {
 "at": "2026-10-12",
 "label": "c58",
@@ -51755,10 +52109,22 @@
 "pack": "evpack-youth-2027",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Lviv_tram_2004_08.jpg/1280px-Lviv_tram_2004_08.jpg": {
+"at": "2026-10-13",
+"label": "c193",
+"pack": "pack-snowy-villages",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/M%C3%BCnchen_%289762141825%29.jpg/1280px-M%C3%BCnchen_%289762141825%29.jpg": {
 "at": "2026-10-12",
 "label": "c07",
 "pack": "pack-renaissance",
+"reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/MEMBER_OF_VL.DIMITROV.jpg/1280px-MEMBER_OF_VL.DIMITROV.jpg": {
+"at": "2026-10-13",
+"label": "c151",
+"pack": "pack-embroidery",
 "reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Momoto_Ceja_Azul%2C_Turquoise_Browed_Motmot%2C_Eumomota_superciliosa_%2815588827554%29.jpg/1280px-Momoto_Ceja_Azul%2C_Turquoise_Browed_Motmot%2C_Eumomota_superciliosa_%2815588827554%29.jpg": {
@@ -52001,11 +52367,23 @@
 "pack": "pack-sea-cliffs",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Fall_colors_at_Peep_O_Day_Park%2C_The_east-facing_side_and_entrance_into_the_main_building.jpg/1280px-Fall_colors_at_Peep_O_Day_Park%2C_The_east-facing_side_and_entrance_into_the_main_building.jpg": {
+"at": "2026-10-13",
+"label": "c61",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Fondation_Louis_Vuitton_-_Paris_%2850577213051%29.jpg/1280px-Fondation_Louis_Vuitton_-_Paris_%2850577213051%29.jpg": {
 "at": "2026-10-12",
 "label": "c68",
 "pack": "pack-paris",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Frances_Densmore_recording_Mountain_Chief2.jpg/1280px-Frances_Densmore_recording_Mountain_Chief2.jpg": {
+"at": "2026-10-13",
+"label": "c56",
+"pack": "pack-rocky-mountains",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Ghost_House_at_Gyeongju_World.jpg/1280px-Ghost_House_at_Gyeongju_World.jpg": {
 "at": "2026-10-12",
@@ -52089,6 +52467,12 @@
 "at": "2026-10-12",
 "label": "c24",
 "pack": "pack-paris",
+"reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Otaru_Canal_Cruise_%2820240223%29.jpg/1280px-Otaru_Canal_Cruise_%2820240223%29.jpg": {
+"at": "2026-10-13",
+"label": "c201",
+"pack": "pack-snowy-villages",
 "reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Pani_Puri%2C_Indian.jpg/1280px-Pani_Puri%2C_Indian.jpg": {
@@ -52192,6 +52576,12 @@
 "label": "c89",
 "pack": "evpack-mothers-day-2027",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/%E4%BA%9C%E7%B4%B0%E4%BA%9C%E5%A4%A7%E8%A6%B3_10_024_%22%E9%9B%AA%E3%81%AE%E5%8D%83%E5%B1%B1%22.jpg/1280px-%E4%BA%9C%E7%B4%B0%E4%BA%9C%E5%A4%A7%E8%A6%B3_10_024_%22%E9%9B%AA%E3%81%AE%E5%8D%83%E5%B1%B1%22.jpg": {
+"at": "2026-10-13",
+"label": "c93",
+"pack": "pack-mountain-autumn",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/%E8%BB%9B%E7%93%A3%E8%98%AD%E5%B1%AC_Zygopetalum_Blackii_-%E9%A6%99%E6%B8%AF%E8%98%AD%E8%8A%B1%E7%AF%80_Hong_Kong_Orchid_Festival-_%2839710836390%29.jpg/1280px-%E8%BB%9B%E7%93%A3%E8%98%AD%E5%B1%AC_Zygopetalum_Blackii_-%E9%A6%99%E6%B8%AF%E8%98%AD%E8%8A%B1%E7%AF%80_Hong_Kong_Orchid_Festival-_%2839710836390%29.jpg": {
 "at": "2026-10-12",
@@ -54443,6 +54833,12 @@
 "pack": "pack-seascapes",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Flinsch_Peak_as_seen_from_the_east_-_panoramio.jpg/1280px-Flinsch_Peak_as_seen_from_the_east_-_panoramio.jpg": {
+"at": "2026-10-13",
+"label": "c50",
+"pack": "pack-rocky-mountains",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Francois_Church%2C_Hot_Spring_County%2C_Arkansas%2C_2024-10-01%2C_TJ_01.jpg/1280px-Francois_Church%2C_Hot_Spring_County%2C_Arkansas%2C_2024-10-01%2C_TJ_01.jpg": {
 "at": "2026-10-12",
 "label": "c71",
@@ -55967,6 +56363,12 @@
 "pack": "pack-new-zealand",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Hanging_MET_3864.jpg/1280px-Hanging_MET_3864.jpg": {
+"at": "2026-10-13",
+"label": "c112",
+"pack": "pack-embroidery",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Ice_On_Lake_Erie.jpg/1280px-Ice_On_Lake_Erie.jpg": {
 "at": "2026-10-13",
 "label": "c1063",
@@ -55990,6 +56392,12 @@
 "label": "c126",
 "pack": "abstract-marbling",
 "reason": "quality"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Kokubunji_Street_Shopping_Area_at_dusk_20150123.jpg/1280px-Kokubunji_Street_Shopping_Area_at_dusk_20150123.jpg": {
+"at": "2026-10-13",
+"label": "c64",
+"pack": "pack-snowy-villages",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Kollmitzberg_-_themenweg_augenblicke_-_01.jpg/1280px-Kollmitzberg_-_themenweg_augenblicke_-_01.jpg": {
 "at": "2026-10-12",
@@ -56218,6 +56626,12 @@
 "label": "c414",
 "pack": "daily-2023-01",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Bow_Valley_Parkway_and_Castle_Mountain_-_Improvement_District_No._9%2C_Alberta%2C_Canada_-_July_1990.jpg/1280px-Bow_Valley_Parkway_and_Castle_Mountain_-_Improvement_District_No._9%2C_Alberta%2C_Canada_-_July_1990.jpg": {
+"at": "2026-10-13",
+"label": "c05",
+"pack": "pack-rocky-mountains",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Brown_Hawk-Owl_in_Kuldiha_Wildlife_Sanctuary_March_2025_by_Tisha_Mukherjee_04.jpg/1280px-Brown_Hawk-Owl_in_Kuldiha_Wildlife_Sanctuary_March_2025_by_Tisha_Mukherjee_04.jpg": {
 "at": "2026-10-12",
@@ -58673,6 +59087,12 @@
 "pack": "pack-autumn-parks",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Grinnell_Glacier_from_Mount_Gould_in_1998_%2854209867485%29.jpg/1280px-Grinnell_Glacier_from_Mount_Gould_in_1998_%2854209867485%29.jpg": {
+"at": "2026-10-13",
+"label": "c63",
+"pack": "pack-rocky-mountains",
+"reason": "similar"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Gros_and_Petit_Pitons_-_55374969489.jpg/1280px-Gros_and_Petit_Pitons_-_55374969489.jpg": {
 "at": "2026-10-12",
 "label": "c50",
@@ -59561,6 +59981,12 @@
 "pack": "pack-jungle",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Copenhagen_2018-01-07_%2839019566314%29.jpg/1280px-Copenhagen_2018-01-07_%2839019566314%29.jpg": {
+"at": "2026-10-13",
+"label": "c235",
+"pack": "pack-snowy-villages",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Dactylorhiza_russowii_plant-_Niitv%C3%A4lja_bog.jpg/1280px-Dactylorhiza_russowii_plant-_Niitv%C3%A4lja_bog.jpg": {
 "at": "2026-10-12",
 "label": "c1487",
@@ -60239,6 +60665,12 @@
 "pack": "evpack-water-day-2027",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Grinnell_Glacier_from_Mount_Gould_in_1938_%2854209461861%29.jpg/1280px-Grinnell_Glacier_from_Mount_Gould_in_1938_%2854209461861%29.jpg": {
+"at": "2026-10-13",
+"label": "c64",
+"pack": "pack-rocky-mountains",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Hiroshige%2C_Bikuni_bridge_in_snow%2C_Meisho_Edo_Hyakkei_114.jpg/1280px-Hiroshige%2C_Bikuni_bridge_in_snow%2C_Meisho_Edo_Hyakkei_114.jpg": {
 "at": "2026-10-12",
 "label": "c20",
@@ -60658,6 +61090,12 @@
 "label": "c29",
 "pack": "abstract-rust",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Mount_Moran_05.JPG/1280px-Mount_Moran_05.JPG": {
+"at": "2026-10-13",
+"label": "c68",
+"pack": "pack-rocky-mountains",
+"reason": "similar"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Mural_Ceiling_Stupa_Phuktal_Jun24_A7CR_00453.jpg/1280px-Mural_Ceiling_Stupa_Phuktal_Jun24_A7CR_00453.jpg": {
 "at": "2026-10-12",
@@ -62141,6 +62579,12 @@
 "pack": "evpack-new-years-eve-2026",
 "reason": "quality"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Hanging_MET_1831.jpg/1280px-Hanging_MET_1831.jpg": {
+"at": "2026-10-13",
+"label": "c114",
+"pack": "pack-embroidery",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Hiroshige_II%2C_Ts%C5%ABten_Bridge%2C_T%C5%8Dfukuji_Temple_at_Ky%C5%8Dto%2C_1859.jpg/1280px-Hiroshige_II%2C_Ts%C5%ABten_Bridge%2C_T%C5%8Dfukuji_Temple_at_Ky%C5%8Dto%2C_1859.jpg": {
 "at": "2026-10-12",
 "label": "c38",
@@ -62279,6 +62723,12 @@
 "pack": "pack-summer-fruit",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Sir_Donald_Peak_in_the_Selkirk_Mountains%2C_Canadian_Pacific_by_Thomas_Hill.jpg/1280px-Sir_Donald_Peak_in_the_Selkirk_Mountains%2C_Canadian_Pacific_by_Thomas_Hill.jpg": {
+"at": "2026-10-13",
+"label": "c30",
+"pack": "pack-rocky-mountains",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Southern_Ring_Nebula%E2%80%99s_Spokes_%28NIRCam_and_MIRI_Composite_Compass_Image%29_%282022-059-01GJZJ435KWCYTA77QBGDPCR5B%29.png/1280px-Southern_Ring_Nebula%E2%80%99s_Spokes_%28NIRCam_and_MIRI_Composite_Compass_Image%29_%282022-059-01GJZJ435KWCYTA77QBGDPCR5B%29.png": {
 "at": "2026-10-12",
 "label": "c1867",
@@ -62296,6 +62746,12 @@
 "label": "c52",
 "pack": "pack-gardens-art",
 "reason": "text"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Tomato_packaging_worker_-_La_Gomera_01.jpg/1280px-Tomato_packaging_worker_-_La_Gomera_01.jpg": {
+"at": "2026-10-13",
+"label": "c218",
+"pack": "pack-summer-fruit",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Torres_del_Paine%2C_guanacos_11.jpg/1280px-Torres_del_Paine%2C_guanacos_11.jpg": {
 "at": "2026-10-12",
@@ -63101,6 +63557,12 @@
 "pack": "abstract-neon",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/A_corner_of_a_Tajik_house_decorated_with_Suzani.jpg/1280px-A_corner_of_a_Tajik_house_decorated_with_Suzani.jpg": {
+"at": "2026-10-13",
+"label": "c143",
+"pack": "pack-embroidery",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/At_Hampton_Court_Palace_2024_069.jpg/1280px-At_Hampton_Court_Palace_2024_069.jpg": {
 "at": "2026-10-12",
 "label": "c62",
@@ -63233,6 +63695,12 @@
 "pack": "evpack-new-years-eve-2026",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Mercado_de_Chorsu_15.jpg/1280px-Mercado_de_Chorsu_15.jpg": {
+"at": "2026-10-13",
+"label": "c93",
+"pack": "pack-embroidery",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Milano_-_Duomo_di_Milano_-_Guglie%2C_composizione_-_2026-09-08_20-59-21_001.jpg/1280px-Milano_-_Duomo_di_Milano_-_Guglie%2C_composizione_-_2026-09-08_20-59-21_001.jpg": {
 "at": "2026-10-12",
 "label": "c17",
@@ -63323,6 +63791,12 @@
 "pack": "deep-space",
 "reason": "quality"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/The_Maroon_Bells_mountains%2C_Colorado.jpg/1280px-The_Maroon_Bells_mountains%2C_Colorado.jpg": {
+"at": "2026-10-13",
+"label": "c39",
+"pack": "pack-rocky-mountains",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Tiefer_Stollen_%28Aalen%29.jpg/1280px-Tiefer_Stollen_%28Aalen%29.jpg": {
 "at": "2026-10-12",
 "label": "c52",
@@ -63370,6 +63844,12 @@
 "label": "c54",
 "pack": "evpack-may-day-2027",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/%D0%A7%D0%BE%D1%80%D0%BD%D0%B0_%D1%88%D0%BE%D0%B2%D0%BA%D0%BE%D0%B2%D0%B8%D1%86%D1%8F_%28Morus_nigra%29_20210803_02.jpg/1280px-%D0%A7%D0%BE%D1%80%D0%BD%D0%B0_%D1%88%D0%BE%D0%B2%D0%BA%D0%BE%D0%B2%D0%B8%D1%86%D1%8F_%28Morus_nigra%29_20210803_02.jpg": {
+"at": "2026-10-13",
+"label": "c168",
+"pack": "pack-summer-fruit",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/%E2%80%9CPlastic_History%E2%80%9D_%28Transfiguration%29%2C_8%E2%80%9Dx%210%E2%80%9D%2C_poured_acrylic_on_photo%2C_Tyler_Turkle%2C_1985.jpg/1280px-%E2%80%9CPlastic_History%E2%80%9D_%28Transfiguration%29%2C_8%E2%80%9Dx%210%E2%80%9D%2C_poured_acrylic_on_photo%2C_Tyler_Turkle%2C_1985.jpg": {
 "at": "2026-10-12",
@@ -63820,6 +64300,12 @@
 "label": "c25",
 "pack": "evpack-coffee-2026",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Glacier_National_Park%2C_Mountain._Chief_Mountain_from_north_fork_of_the_Kennedy_Creek_Mountain._Two_horses_in_foreground_and_mountain_in_background_LCCN90715347.jpg/1280px-thumbnail.jpg": {
+"at": "2026-10-13",
+"label": "c55",
+"pack": "pack-rocky-mountains",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Halpin_Covered_Bridge_-_Vermont_-_6433931019.jpg/1280px-Halpin_Covered_Bridge_-_Vermont_-_6433931019.jpg": {
 "at": "2026-10-12",
@@ -65441,6 +65927,12 @@
 "pack": "pack-tropical-beaches",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Rank_Badge_%28China%29%2C_1644%E2%80%931911_%28CH_18563207%29.jpg/1280px-Rank_Badge_%28China%29%2C_1644%E2%80%931911_%28CH_18563207%29.jpg": {
+"at": "2026-10-13",
+"label": "c96",
+"pack": "pack-embroidery",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Rhododendron_azalea_subsp_mollis_cv._%27glowing_embers%27%2C_Conservatoire_botanique_national_de_Brest_02.jpg/1280px-Rhododendron_azalea_subsp_mollis_cv._%27glowing_embers%27%2C_Conservatoire_botanique_national_de_Brest_02.jpg": {
 "at": "2026-10-12",
 "label": "c164",
@@ -65591,6 +66083,12 @@
 "pack": "pack-snowy-peaks",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Blue_Ridge_Parkway_-_Looking_Glass_Rock_in_Pisgah_National_Forest_-_NARA_-_7717403.jpg/1280px-Blue_Ridge_Parkway_-_Looking_Glass_Rock_in_Pisgah_National_Forest_-_NARA_-_7717403.jpg": {
+"at": "2026-10-13",
+"label": "c83",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Botanischer_Garten_Berlin-Dahlem_10-2014_photo05_footbridge.jpg/1280px-Botanischer_Garten_Berlin-Dahlem_10-2014_photo05_footbridge.jpg": {
 "at": "2026-10-12",
 "label": "c08",
@@ -65675,6 +66173,12 @@
 "pack": "evpack-dance-2027",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Fall_color._Sunset_light_on_Kautz_Glacier_and_Mt_Rainier._%289f33a4c3d32c48cb8687b73ac5365d97%29.JPG/1280px-Fall_color._Sunset_light_on_Kautz_Glacier_and_Mt_Rainier._%289f33a4c3d32c48cb8687b73ac5365d97%29.JPG": {
+"at": "2026-10-13",
+"label": "c81",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Fez_tannery_2018_2.jpg/1280px-Fez_tannery_2018_2.jpg": {
 "at": "2026-10-12",
 "label": "c13",
@@ -65698,6 +66202,12 @@
 "label": "c58",
 "pack": "pack-sailing",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Icefields_III.jpg/1280px-Icefields_III.jpg": {
+"at": "2026-10-13",
+"label": "c38",
+"pack": "pack-rocky-mountains",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Jar_MET_4471.jpg/1280px-Jar_MET_4471.jpg": {
 "at": "2026-10-12",
@@ -65811,6 +66321,12 @@
 "at": "2026-10-12",
 "label": "c105",
 "pack": "pack-iceland-roads",
+"reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Sir_Donald_Alexandre_Smith%2C_premier_baron_Strathcona_et_Mount_Royal.jpg/1280px-Sir_Donald_Alexandre_Smith%2C_premier_baron_Strathcona_et_Mount_Royal.jpg": {
+"at": "2026-10-13",
+"label": "c28",
+"pack": "pack-rocky-mountains",
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Speckled_yellow_orchids_%2828776435745%29.jpg/1280px-Speckled_yellow_orchids_%2828776435745%29.jpg": {
@@ -66341,6 +66857,12 @@
 "pack": "pack-sushi",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Kalocsa_embroidery_1.jpg/1280px-Kalocsa_embroidery_1.jpg": {
+"at": "2026-10-13",
+"label": "c42",
+"pack": "pack-embroidery",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Kelingking_Beach_%282022%29.jpg/1280px-Kelingking_Beach_%282022%29.jpg": {
 "at": "2026-10-12",
 "label": "c78",
@@ -66358,6 +66880,12 @@
 "label": "c185",
 "pack": "daily-2023-01",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Mount_Moran_02.JPG/1280px-Mount_Moran_02.JPG": {
+"at": "2026-10-13",
+"label": "c67",
+"pack": "pack-rocky-mountains",
+"reason": "similar"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Nouvelle_m%C3%A9thode_d%27ophicl%C3%A9%C3%AFde_basse_avec_le_doigt%C3%A9_du_Bass-horn_%28dit_sap-horn%29_B.sse_et_contrebasse_%C3%A0_3_et_4_pistons_%C3%A0_bo%C3%AEte_cylindrique%2C_en_2_parties_-_btv1b525022519_%28032_of_114%29.jpg/1280px-thumbnail.jpg": {
 "at": "2026-10-12",
@@ -67043,6 +67571,12 @@
 "pack": "pack-farm-life",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Jenny_Lake_Spring_Thaw_Teewinot_Mountain_%2852112889318%29.jpg/1280px-Jenny_Lake_Spring_Thaw_Teewinot_Mountain_%2852112889318%29.jpg": {
+"at": "2026-10-13",
+"label": "c70",
+"pack": "pack-rocky-mountains",
+"reason": "similar"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Jokhang_Temple_%2822649176027%29.jpg/1280px-Jokhang_Temple_%2822649176027%29.jpg": {
 "at": "2026-10-12",
 "label": "c145",
@@ -67156,6 +67690,12 @@
 "label": "c198",
 "pack": "pack-rockets",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Talampaya_National_Park_-_54491434171.jpg/1280px-Talampaya_National_Park_-_54491434171.jpg": {
+"at": "2026-10-13",
+"label": "c73",
+"pack": "pack-rainbow-mountains",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Torch_--_Statue_of_Liberty_on_Liberty_Island_New_York_Harbor_%28NY%29_April_2016_%2826714638785%29.jpg/1280px-Torch_--_Statue_of_Liberty_on_Liberty_Island_New_York_Harbor_%28NY%29_April_2016_%2826714638785%29.jpg": {
 "at": "2026-10-12",
@@ -69701,6 +70241,12 @@
 "pack": "evpack-literacy-2027",
 "reason": "quality"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Bridge_at_Castle_Mountain_viewpoint_%2852717906577%29.jpg/1280px-Bridge_at_Castle_Mountain_viewpoint_%2852717906577%29.jpg": {
+"at": "2026-10-13",
+"label": "c06",
+"pack": "pack-rocky-mountains",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Cenote_Ik_Kil%2C_Yucatan%2C_Dec_2011_-_05.jpg/1280px-Cenote_Ik_Kil%2C_Yucatan%2C_Dec_2011_-_05.jpg": {
 "at": "2026-10-12",
 "label": "c1001",
@@ -70073,6 +70619,12 @@
 "pack": "pack-canyons",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Gedimino_castle_%288178230132%29.jpg/1280px-Gedimino_castle_%288178230132%29.jpg": {
+"at": "2026-10-13",
+"label": "c120",
+"pack": "pack-snowy-villages",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Glass_Tower_Shadhinota_Stambha.jpg/1280px-Glass_Tower_Shadhinota_Stambha.jpg": {
 "at": "2026-10-12",
 "label": "c96",
@@ -70168,6 +70720,12 @@
 "label": "c79",
 "pack": "pack-rome",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Pair_of_Vases%2C_view_2%2C_Marc-Louis-Emmanuel_Solon%2C_Minton_factory%2C_England%2C_1880%2C_porcelain%2C_polychromy%2C_gilding%2C_bronze_bases_-_Mount_Holyoke_College_Art_Museum_-_DSC04600.JPG/1280px-thumbnail.jpg": {
+"at": "2026-10-13",
+"label": "c80",
+"pack": "pack-rocky-mountains",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Palazzo_Ducale_di_Urbino_-_46.jpg/1280px-Palazzo_Ducale_di_Urbino_-_46.jpg": {
 "at": "2026-10-12",
@@ -70355,6 +70913,12 @@
 "pack": "pack-dolomites",
 "reason": "text"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Crater_Lake%2C_Maroon_Bells%2C_Colorado.jpg/1280px-Crater_Lake%2C_Maroon_Bells%2C_Colorado.jpg": {
+"at": "2026-10-13",
+"label": "c42",
+"pack": "pack-rocky-mountains",
+"reason": "similar"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Dish_with_%27Kaleidoscope%27_Design_MET_DP166367.jpg/1280px-Dish_with_%27Kaleidoscope%27_Design_MET_DP166367.jpg": {
 "at": "2026-10-12",
 "label": "c108",
@@ -70480,6 +71044,12 @@
 "label": "c142",
 "pack": "pack-earth-orbit",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/USA_Region_West_relief_Sawtooth_Range_location_map.jpg/1280px-USA_Region_West_relief_Sawtooth_Range_location_map.jpg": {
+"at": "2026-10-13",
+"label": "c77",
+"pack": "pack-rocky-mountains",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Vergleich_druckraster.jpg/1280px-Vergleich_druckraster.jpg": {
 "at": "2026-10-12",
@@ -70642,6 +71212,12 @@
 "label": "c14",
 "pack": "pack-kittens",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Lava_beds%2C_Long%27s_Peak_LCCN93512876.jpg/1280px-Lava_beds%2C_Long%27s_Peak_LCCN93512876.jpg": {
+"at": "2026-10-13",
+"label": "c44",
+"pack": "pack-rocky-mountains",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Lisse%2C_Netherlands_-_panoramio_%2814%29.jpg/1280px-Lisse%2C_Netherlands_-_panoramio_%2814%29.jpg": {
 "at": "2026-10-12",
@@ -72341,6 +72917,12 @@
 "pack": "abstract-frost",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Coat_of_arms_of_Jeti-Oguz.png/1280px-Coat_of_arms_of_Jeti-Oguz.png": {
+"at": "2026-10-13",
+"label": "c91",
+"pack": "pack-rainbow-mountains",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Delta_and_Homochitto_national_forests%2C_Mississippi_LOC_96681278.jpg/1280px-Delta_and_Homochitto_national_forests%2C_Mississippi_LOC_96681278.jpg": {
 "at": "2026-10-12",
 "label": "c131",
@@ -72622,6 +73204,12 @@
 "label": "c97",
 "pack": "pack-caves",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/2021-07-11_Maroon_Bells_-_078.jpg/1280px-2021-07-11_Maroon_Bells_-_078.jpg": {
+"at": "2026-10-13",
+"label": "c40",
+"pack": "pack-rocky-mountains",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/A_red_deer_stag_rutting_on_a_hill_by_Balmoral_Castle._Colour_Wellcome_V0021540.jpg/1280px-A_red_deer_stag_rutting_on_a_hill_by_Balmoral_Castle._Colour_Wellcome_V0021540.jpg": {
 "at": "2026-10-12",
@@ -73595,6 +74183,12 @@
 "pack": "pack-norway-fjords",
 "reason": "quality"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Hanging_MET_4027.jpg/1280px-Hanging_MET_4027.jpg": {
+"at": "2026-10-13",
+"label": "c110",
+"pack": "pack-embroidery",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Huge_flapping_ears_%2828975972368%29.jpg/1280px-Huge_flapping_ears_%2828975972368%29.jpg": {
 "at": "2026-10-12",
 "label": "c31",
@@ -73803,6 +74397,12 @@
 "at": "2026-10-12",
 "label": "c39",
 "pack": "pack-farm-life",
+"reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Bieszczady68-73-Jesien.jpg/1280px-Bieszczady68-73-Jesien.jpg": {
+"at": "2026-10-13",
+"label": "c97",
+"pack": "pack-mountain-autumn",
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Blackpool_Tram_706_Princess_Alice.jpg/1280px-Blackpool_Tram_706_Princess_Alice.jpg": {
@@ -74291,6 +74891,12 @@
 "pack": "pack-rolling-hills",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Southern_Region%2C_Iceland_-_panoramio_%2841%29.jpg/1280px-Southern_Region%2C_Iceland_-_panoramio_%2841%29.jpg": {
+"at": "2026-10-13",
+"label": "c61",
+"pack": "pack-rainbow-mountains",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/St%C5%99e%C5%A1ovice_M%C3%BCllerova_vila_9.jpg/1280px-St%C5%99e%C5%A1ovice_M%C3%BCllerova_vila_9.jpg": {
 "at": "2026-10-12",
 "label": "c144",
@@ -74368,6 +74974,12 @@
 "label": "c99",
 "pack": "pack-japanese-prints",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/109._Completion_of_the_Basin%2C_Kiama._%281876%29_John_Sharkey_%289831820835%29.jpg/1280px-109._Completion_of_the_Basin%2C_Kiama._%281876%29_John_Sharkey_%289831820835%29.jpg": {
+"at": "2026-10-13",
+"label": "c84",
+"pack": "pack-rainbow-mountains",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/150207_Ryoan-ji_Kyoto_Japan12s3.jpg/1280px-150207_Ryoan-ji_Kyoto_Japan12s3.jpg": {
 "at": "2026-10-12",
@@ -75412,6 +76024,12 @@
 "label": "c38",
 "pack": "pack-iceland-roads",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Kirschwasser_Bavaria.JPG/1280px-Kirschwasser_Bavaria.JPG": {
+"at": "2026-10-13",
+"label": "c230",
+"pack": "pack-summer-fruit",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Kittens_Philippines3.jpg/1280px-Kittens_Philippines3.jpg": {
 "at": "2026-10-12",
@@ -76667,6 +77285,12 @@
 "pack": "daily-2025-09",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Dissolve_-_panoramio.jpg/1280px-Dissolve_-_panoramio.jpg": {
+"at": "2026-10-13",
+"label": "c02",
+"pack": "pack-snowy-villages",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Diyas_WM17_%286%29_%2835379586093%29.jpg/1280px-Diyas_WM17_%286%29_%2835379586093%29.jpg": {
 "at": "2026-10-12",
 "label": "c73",
@@ -77051,6 +77675,12 @@
 "pack": "evpack-fries-2027",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Glove_left_on_a_post_in_the_snow_in_Quebec_City.jpg/1280px-Glove_left_on_a_post_in_the_snow_in_Quebec_City.jpg": {
+"at": "2026-10-13",
+"label": "c96",
+"pack": "pack-snowy-villages",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Hedychium_thyrsiforme_in_Fata_Morgana_2012.jpg/1280px-Hedychium_thyrsiforme_in_Fata_Morgana_2012.jpg": {
 "at": "2026-10-12",
 "label": "c136",
@@ -77091,6 +77721,12 @@
 "at": "2026-10-12",
 "label": "c173",
 "pack": "evpack-universal-childrens-2026",
+"reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Ljubljana_ratusz_1.jpg/1280px-Ljubljana_ratusz_1.jpg": {
+"at": "2026-10-13",
+"label": "c165",
+"pack": "pack-snowy-villages",
 "reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Melopsittacus_undulatus_%28Budgerigar%29_%2848719367453%29.jpg/1280px-Melopsittacus_undulatus_%28Budgerigar%29_%2848719367453%29.jpg": {
@@ -77247,6 +77883,12 @@
 "at": "2026-10-12",
 "label": "c93",
 "pack": "pack-sailing",
+"reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Zima_2007_Krak%C3%B3w.jpg/1280px-Zima_2007_Krak%C3%B3w.jpg": {
+"at": "2026-10-13",
+"label": "c162",
+"pack": "pack-snowy-villages",
 "reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/039_Common_kingfisher_in_flight_at_Champ-Pittet_Photo_by_Giles_Laurent.jpg/1280px-039_Common_kingfisher_in_flight_at_Champ-Pittet_Photo_by_Giles_Laurent.jpg": {
@@ -78197,6 +78839,12 @@
 "pack": "evpack-grandparents-2027",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Letheringsett_Brewery_Watermill_cascade_in_1998_%28photo_Margaret_Bird%29.jpg/1280px-Letheringsett_Brewery_Watermill_cascade_in_1998_%28photo_Margaret_Bird%29.jpg": {
+"at": "2026-10-13",
+"label": "c75",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Light_blue_reflection_%286482429725%29.jpg/1280px-Light_blue_reflection_%286482429725%29.jpg": {
 "at": "2026-10-12",
 "label": "c26",
@@ -78369,6 +79017,12 @@
 "at": "2026-10-12",
 "label": "c119",
 "pack": "evpack-dog-day-2027",
+"reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Adrian_2017-04-04_%28Unsplash_yocwPcXJe9c%29.jpg/1280px-Adrian_2017-04-04_%28Unsplash_yocwPcXJe9c%29.jpg": {
+"at": "2026-10-13",
+"label": "c13",
+"pack": "pack-rocky-mountains",
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Amethyst_Jos_Plateau_01.jpg/1280px-Amethyst_Jos_Plateau_01.jpg": {
@@ -78701,6 +79355,12 @@
 "pack": "pack-winter-scenes",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Yellow_Mounds_Overlook%2C_Badlands_National_Park%2C_Wall%2C_SD_-_53751885489.jpg/1280px-Yellow_Mounds_Overlook%2C_Badlands_National_Park%2C_Wall%2C_SD_-_53751885489.jpg": {
+"at": "2026-10-13",
+"label": "c90",
+"pack": "pack-rainbow-mountains",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/%D0%91%D1%83%D1%85%D0%B0%D1%80%D0%B0%2C_%D0%BC%D1%83%D0%B7%D0%B5%D0%B9_%D0%A5%D0%BE%D0%B4%D0%B6%D0%B0%D0%B5%D0%B2%D0%B0%2C_%D0%B2%D0%B0%D0%B7%D0%B0_%2811%29.jpg/1280px-%D0%91%D1%83%D1%85%D0%B0%D1%80%D0%B0%2C_%D0%BC%D1%83%D0%B7%D0%B5%D0%B9_%D0%A5%D0%BE%D0%B4%D0%B6%D0%B0%D0%B5%D0%B2%D0%B0%2C_%D0%B2%D0%B0%D0%B7%D0%B0_%2811%29.jpg": {
 "at": "2026-10-12",
 "label": "c96",
@@ -78874,6 +79534,12 @@
 "label": "c51",
 "pack": "pack-lighthouses",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Larix_decidua_in_autumn_%2822434151784%29.jpg/1280px-Larix_decidua_in_autumn_%2822434151784%29.jpg": {
+"at": "2026-10-13",
+"label": "c03",
+"pack": "pack-mountain-autumn",
+"reason": "similar"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Laval_-_MANAS_06.jpg/1280px-Laval_-_MANAS_06.jpg": {
 "at": "2026-10-12",
@@ -79288,6 +79954,12 @@
 "label": "c104",
 "pack": "pack-pastries",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Winter_in_Krakow_%283282949724%29.jpg/1280px-Winter_in_Krakow_%283282949724%29.jpg": {
+"at": "2026-10-13",
+"label": "c158",
+"pack": "pack-snowy-villages",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/%CE%9A%CE%BF%CF%80%CE%AE_%CE%B2%CE%B1%CF%83%CE%B9%CE%BB%CF%8C%CF%80%CE%B9%CF%84%CE%B1%CF%82_%CE%A5%CF%80%CE%BF%CF%85%CF%81%CE%B3%CE%B5%CE%AF%CE%BF%CF%85_%CE%95%CE%BE%CF%89%CF%84%CE%B5%CF%81%CE%B9%CE%BA%CF%8E%CE%BD_%2807.01.2016%29_%2824120318952%29.jpg/1280px-%CE%9A%CE%BF%CF%80%CE%AE_%CE%B2%CE%B1%CF%83%CE%B9%CE%BB%CF%8C%CF%80%CE%B9%CF%84%CE%B1%CF%82_%CE%A5%CF%80%CE%BF%CF%85%CF%81%CE%B3%CE%B5%CE%AF%CE%BF%CF%85_%CE%95%CE%BE%CF%89%CF%84%CE%B5%CF%81%CE%B9%CE%BA%CF%8E%CE%BD_%2807.01.2016%29_%2824120318952%29.jpg": {
 "at": "2026-10-12",
@@ -80711,6 +81383,12 @@
 "pack": "evpack-halloween-2026",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Reynolds%2C_John_D_-_Age_%28Blank%29%2C_Year-_%28BLANK%29_-_Fourth_Mounted_Infantry%2C_Ph-Ri_-_DPLA_-_661f6c172bc5afbf579669904afc4c4f.jpg/1280px-Reynolds%2C_John_D_-_Age_%28Blank%29%2C_Year-_%28BLANK%29_-_Fourth_Mounted_Infantry%2C_Ph-Ri_-_DPLA_-_661f6c172bc5afbf579669904afc4c4f.jpg": {
+"at": "2026-10-13",
+"label": "c57",
+"pack": "pack-rocky-mountains",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Scala_dei_Turchi_02.jpg/1280px-Scala_dei_Turchi_02.jpg": {
 "at": "2026-10-12",
 "label": "c56",
@@ -81257,6 +81935,18 @@
 "pack": "daily-2023-01",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Maroon_Bells_Colorado_%2850845820216%29.jpg/1280px-Maroon_Bells_Colorado_%2850845820216%29.jpg": {
+"at": "2026-10-13",
+"label": "c57",
+"pack": "pack-mountain-autumn",
+"reason": "text"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/NMAx.0085367.jpg/1280px-NMAx.0085367.jpg": {
+"at": "2026-10-13",
+"label": "c30",
+"pack": "pack-snowy-villages",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Nerja%27s_cave_%2835187585075%29.jpg/1280px-Nerja%27s_cave_%2835187585075%29.jpg": {
 "at": "2026-10-12",
 "label": "c84",
@@ -81304,6 +81994,12 @@
 "label": "c22",
 "pack": "pack-wild-roses",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Saskatchewan_Crossing_looking_South_%285510194016%29.jpg/1280px-Saskatchewan_Crossing_looking_South_%285510194016%29.jpg": {
+"at": "2026-10-13",
+"label": "c19",
+"pack": "pack-rocky-mountains",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Savigny_%E2%80%93_%C3%89glise_Notre-Dame-et-Sainte-Barbe_%E2%80%93_La_chapelle_Sainte_Barbe_2023_08_14.jpg/1280px-Savigny_%E2%80%93_%C3%89glise_Notre-Dame-et-Sainte-Barbe_%E2%80%93_La_chapelle_Sainte_Barbe_2023_08_14.jpg": {
 "at": "2026-10-12",
@@ -81575,6 +82271,12 @@
 "pack": "evpack-heart-day-2027",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Panel_MET_74244.jpg/1280px-Panel_MET_74244.jpg": {
+"at": "2026-10-13",
+"label": "c165",
+"pack": "pack-embroidery",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Pompoko_-_Beef_Curry_with_Rice_and_Tofu_Shouga_Yaki_Don.jpg/1280px-Pompoko_-_Beef_Curry_with_Rice_and_Tofu_Shouga_Yaki_Don.jpg": {
 "at": "2026-10-12",
 "label": "c60",
@@ -81628,6 +82330,12 @@
 "label": "c79",
 "pack": "pack-waterfalls",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Yellow_Mounds_Overlook%2C_Badlands_National_Park%2C_Wall%2C_SD_-_53751972440.jpg/1280px-Yellow_Mounds_Overlook%2C_Badlands_National_Park%2C_Wall%2C_SD_-_53751972440.jpg": {
+"at": "2026-10-13",
+"label": "c89",
+"pack": "pack-rainbow-mountains",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/%22Das_Castel_wurde_von_1240_bis_um1250_errichtet%22_20.jpg/1280px-%22Das_Castel_wurde_von_1240_bis_um1250_errichtet%22_20.jpg": {
 "at": "2026-10-12",
@@ -81772,6 +82480,12 @@
 "label": "c123",
 "pack": "pack-planets",
 "reason": "quality"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Juicy_Kashmiri_Apricots.jpg/1280px-Juicy_Kashmiri_Apricots.jpg": {
+"at": "2026-10-13",
+"label": "c213",
+"pack": "pack-summer-fruit",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Laufenbach_-_Monschau_01.jpg/1280px-Laufenbach_-_Monschau_01.jpg": {
 "at": "2026-10-12",
@@ -82678,6 +83392,12 @@
 "label": "c31",
 "pack": "pack-gardens-art",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Fall_Creek%2C_North_Umpqua_River_-_DPLA_-_a91c1ddcddd3f1d861ee0ced29de53f3.jpg/1280px-Fall_Creek%2C_North_Umpqua_River_-_DPLA_-_a91c1ddcddd3f1d861ee0ced29de53f3.jpg": {
+"at": "2026-10-13",
+"label": "c77",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Franz_Josef_Glacier_13.jpg/1280px-Franz_Josef_Glacier_13.jpg": {
 "at": "2026-10-13",
@@ -84365,6 +85085,12 @@
 "pack": "daily-2027-06",
 "reason": "text"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/BASA-313K-1-2536-19-Vasil_Radoslavov_embroidery.jpeg/1280px-BASA-313K-1-2536-19-Vasil_Radoslavov_embroidery.jpeg": {
+"at": "2026-10-13",
+"label": "c152",
+"pack": "pack-embroidery",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Bixby_Bridge_%282%29.jpg/1280px-Bixby_Bridge_%282%29.jpg": {
 "at": "2026-10-12",
 "label": "c79",
@@ -84780,9 +85506,9 @@
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Mini_Adam%E2%80%99s_peak_%2818%29.jpg/1280px-Mini_Adam%E2%80%99s_peak_%2818%29.jpg": {
-"at": "2026-10-12",
-"label": "c12",
-"pack": "pack-rolling-hills",
+"at": "2026-10-13",
+"label": "c43",
+"pack": "pack-rocky-mountains",
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Oia_Santorini_Blue_Domes.jpg/1280px-Oia_Santorini_Blue_Domes.jpg": {
@@ -85558,6 +86284,12 @@
 "label": "c846",
 "pack": "daily-2025-09",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/2014-09-15_16_30_50_Aspens_showing_autumnal_foliage_coloration_amid_Engelmann_Spruces_along_the_Bristlecone_Trail%2C_the_Glacier_Trail_and_the_Alpine_Lakes_Trail_in_Great_Basin_National_Park%2C_Nevada.JPG/1280px-thumbnail.jpg": {
+"at": "2026-10-13",
+"label": "c73",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/20230711_Hosta_funkia_Silesian_Zoological_Garden_Poland_03.jpg/1280px-20230711_Hosta_funkia_Silesian_Zoological_Garden_Poland_03.jpg": {
 "at": "2026-10-13",
@@ -86447,6 +87179,12 @@
 "pack": "evpack-croissant-2027",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Vilnia%2C_Vilenskaja%2C_Benedyktynski._%D0%92%D1%96%D0%BB%D1%8C%D0%BD%D1%8F%2C_%D0%92%D1%96%D0%BB%D0%B5%D0%BD%D1%81%D0%BA%D0%B0%D1%8F%2C_%D0%91%D1%8D%D0%BD%D1%8D%D0%B4%D1%8B%D0%BA%D1%82%D1%8B%D0%BD%D1%81%D0%BA%D1%96_%28S._Fleury%2C_1900%29.jpg/1280px-Vilnia%2C_Vilenskaja%2C_Benedyktynski._%D0%92%D1%96%D0%BB%D1%8C%D0%BD%D1%8F%2C_%D0%92%D1%96%D0%BB%D0%B5%D0%BD%D1%81%D0%BA%D0%B0%D1%8F%2C_%D0%91%D1%8D%D0%BD%D1%8D%D0%B4%D1%8B%D0%BA%D1%82%D1%8B%D0%BD%D1%81%D0%BA%D1%96_%28S._Fleury%2C_1900%29.jpg": {
+"at": "2026-10-13",
+"label": "c126",
+"pack": "pack-snowy-villages",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/02_Small_red_tulip.jpg/1280px-02_Small_red_tulip.jpg": {
 "at": "2026-10-12",
 "label": "c1060",
@@ -86506,6 +87244,12 @@
 "label": "c100",
 "pack": "evpack-lunar-new-year-2027",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Flora_danica%2C_det_er_dansk_urtebog_2-2-113.jpg/1280px-Flora_danica%2C_det_er_dansk_urtebog_2-2-113.jpg": {
+"at": "2026-10-13",
+"label": "c180",
+"pack": "pack-summer-fruit",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Forest_in_Winter_by_Medny%C3%A1nszky.jpg/1280px-Forest_in_Winter_by_Medny%C3%A1nszky.jpg": {
 "at": "2026-10-12",
@@ -86644,6 +87388,12 @@
 "label": "c1284",
 "pack": "daily-2026-02",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/24.12.23_Cesky_Krumlov_27_%2853419755108%29.jpg/1280px-24.12.23_Cesky_Krumlov_27_%2853419755108%29.jpg": {
+"at": "2026-10-13",
+"label": "c71",
+"pack": "pack-snowy-villages",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/7920jfWorld_Peace_Bell_Quezon_Memorial_Circlefvf_07.JPG/1280px-7920jfWorld_Peace_Bell_Quezon_Memorial_Circlefvf_07.JPG": {
 "at": "2026-10-12",
@@ -87149,6 +87899,12 @@
 "pack": "pack-temples",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/A_limestone_crevice_on_Rainbow_Mountain%2C_Alabama.jpg/1280px-A_limestone_crevice_on_Rainbow_Mountain%2C_Alabama.jpg": {
+"at": "2026-10-13",
+"label": "c75",
+"pack": "pack-rainbow-mountains",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Across_St._Ives_Harbour_-_geograph.org.uk_-_4554998.jpg/1280px-Across_St._Ives_Harbour_-_geograph.org.uk_-_4554998.jpg": {
 "at": "2026-10-13",
 "label": "c175",
@@ -87353,6 +88109,12 @@
 "pack": "evpack-christmas-2026",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/South_Icelandic_Highland%2C_Aug._2015_16.jpg/1280px-South_Icelandic_Highland%2C_Aug._2015_16.jpg": {
+"at": "2026-10-13",
+"label": "c56",
+"pack": "pack-rainbow-mountains",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Spruces_covered_in_snow%2C_Finland%2C_Kangasala.jpg/1280px-Spruces_covered_in_snow%2C_Finland%2C_Kangasala.jpg": {
 "at": "2026-10-12",
 "label": "c111",
@@ -87472,6 +88234,12 @@
 "label": "c33",
 "pack": "evpack-hamburger-2027",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Circ_Rom%C3%A0%2C_Voltes_del_Circ%2C_Tarragona-10.JPG/1280px-Circ_Rom%C3%A0%2C_Voltes_del_Circ%2C_Tarragona-10.JPG": {
+"at": "2026-10-13",
+"label": "c73",
+"pack": "pack-rocky-mountains",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Cream_sfogliatella.jpg/1280px-Cream_sfogliatella.jpg": {
 "at": "2026-10-12",
@@ -87683,6 +88451,12 @@
 "pack": "pack-mountain-huts",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Vilnia%2C_Vialla._%D0%92%D1%96%D0%BB%D1%8C%D0%BD%D1%8F%2C_%D0%92%D1%8F%D0%BB%D1%8C%D0%BB%D1%8F_%28S._Fleury%2C_1900%29.jpg/1280px-Vilnia%2C_Vialla._%D0%92%D1%96%D0%BB%D1%8C%D0%BD%D1%8F%2C_%D0%92%D1%8F%D0%BB%D1%8C%D0%BB%D1%8F_%28S._Fleury%2C_1900%29.jpg": {
+"at": "2026-10-13",
+"label": "c125",
+"pack": "pack-snowy-villages",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/WLM_2017_K%C3%B6lner_Dom_Lichtspiel.jpg/1280px-WLM_2017_K%C3%B6lner_Dom_Lichtspiel.jpg": {
 "at": "2026-10-13",
 "label": "c95",
@@ -87839,6 +88613,12 @@
 "pack": "pack-street-food",
 "reason": "text"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Gda%C5%84sk_Main_Town_Hall_Danzig_Rathaus.jpg/1280px-Gda%C5%84sk_Main_Town_Hall_Danzig_Rathaus.jpg": {
+"at": "2026-10-13",
+"label": "c176",
+"pack": "pack-snowy-villages",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Geneva_09-05-2013_-_Bakfiets.nl_Electric_Cargobike_short.jpg/1280px-Geneva_09-05-2013_-_Bakfiets.nl_Electric_Cargobike_short.jpg": {
 "at": "2026-10-12",
 "label": "p-b2b00ce20d16",
@@ -87910,6 +88690,12 @@
 "label": "c1384",
 "pack": "daily-2026-03",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/NMAx.0085390.jpg/1280px-NMAx.0085390.jpg": {
+"at": "2026-10-13",
+"label": "c29",
+"pack": "pack-snowy-villages",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Nachet_collection%3B_Passemant_model_telescope_Wellcome_M0000208.jpg/1280px-Nachet_collection%3B_Passemant_model_telescope_Wellcome_M0000208.jpg": {
 "at": "2026-10-12",
@@ -88510,6 +89296,12 @@
 "label": "c72",
 "pack": "evpack-christmas-2026",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Jenny_Lake_Spring_Thaw_Teewinot_Mountain_%2852113098904%29.jpg/1280px-Jenny_Lake_Spring_Thaw_Teewinot_Mountain_%2852113098904%29.jpg": {
+"at": "2026-10-13",
+"label": "c72",
+"pack": "pack-rocky-mountains",
+"reason": "similar"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Jokhang_Temple_%2823078739391%29.jpg/1280px-Jokhang_Temple_%2823078739391%29.jpg": {
 "at": "2026-10-12",
@@ -89165,6 +89957,12 @@
 "pack": "daily-2026-05",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Geological_formation_-_Paseo_de_los_Colorados_-_Purmamarca_2.JPG/1280px-Geological_formation_-_Paseo_de_los_Colorados_-_Purmamarca_2.JPG": {
+"at": "2026-10-13",
+"label": "c66",
+"pack": "pack-rainbow-mountains",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Grande_Arche_%40_La_D%C3%A9fense_%40_Paris_%2834797972140%29.jpg/1280px-Grande_Arche_%40_La_D%C3%A9fense_%40_Paris_%2834797972140%29.jpg": {
 "at": "2026-10-12",
 "label": "c91",
@@ -89807,6 +90605,12 @@
 "pack": "pack-moroccan-souks",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/NMAx.0072963.jpg/1280px-NMAx.0072963.jpg": {
+"at": "2026-10-13",
+"label": "c219",
+"pack": "pack-snowy-villages",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Narodni_Divadlo%2C_Estates_Theater%2C_Prague_-_8652.jpg/1280px-Narodni_Divadlo%2C_Estates_Theater%2C_Prague_-_8652.jpg": {
 "at": "2026-10-12",
 "label": "c87",
@@ -89919,6 +90723,12 @@
 "at": "2026-10-13",
 "label": "c62",
 "pack": "daily-2026-11",
+"reason": "quality"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Talampaya_National_Park_-_54491620564.jpg/1280px-Talampaya_National_Park_-_54491620564.jpg": {
+"at": "2026-10-13",
+"label": "c71",
+"pack": "pack-rainbow-mountains",
 "reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Taranaki_Falls_18.jpg/1280px-Taranaki_Falls_18.jpg": {
@@ -91469,6 +92279,12 @@
 "pack": "pack-farm-life",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Helicia_cochinchinensis_%2834833819634%29.jpg/1280px-Helicia_cochinchinensis_%2834833819634%29.jpg": {
+"at": "2026-10-13",
+"label": "c91",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Hidcote_Manor_Garden_-_geograph.org.uk_-_4298971.jpg/1280px-Hidcote_Manor_Garden_-_geograph.org.uk_-_4298971.jpg": {
 "at": "2026-10-12",
 "label": "c37",
@@ -92188,6 +93004,12 @@
 "label": "c90",
 "pack": "pack-rice-terraces",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/The_Red_Room%2C_Purmamarca%2C_Argentina_%286971234272%29.jpg/1280px-The_Red_Room%2C_Purmamarca%2C_Argentina_%286971234272%29.jpg": {
+"at": "2026-10-13",
+"label": "c67",
+"pack": "pack-rainbow-mountains",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Tulipa_%27Angelique%27_2019-04-28_04.jpg/1280px-Tulipa_%27Angelique%27_2019-04-28_04.jpg": {
 "at": "2026-10-12",
@@ -93101,6 +93923,12 @@
 "pack": "pack-seascapes",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Painted_Hills_-_John_Day_Fossil_Beds_NM_OR_-_8.jpg/1280px-Painted_Hills_-_John_Day_Fossil_Beds_NM_OR_-_8.jpg": {
+"at": "2026-10-13",
+"label": "c80",
+"pack": "pack-rainbow-mountains",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Pizza_%2841982837880%29.jpg/1280px-Pizza_%2841982837880%29.jpg": {
 "at": "2026-10-13",
 "label": "c77",
@@ -93202,6 +94030,12 @@
 "label": "c62",
 "pack": "pack-skylines",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Tatransk%C3%BD_%C5%A1t%C3%ADt_Kriv%C3%A1%C5%88_21_Slovakia_3.jpg/1280px-Tatransk%C3%BD_%C5%A1t%C3%ADt_Kriv%C3%A1%C5%88_21_Slovakia_3.jpg": {
+"at": "2026-10-13",
+"label": "c53",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Thaipusam_Cleanse%2C_a_puja_ritual.jpg/1280px-Thaipusam_Cleanse%2C_a_puja_ritual.jpg": {
 "at": "2026-10-12",
@@ -93850,6 +94684,12 @@
 "label": "c61",
 "pack": "pack-jungle",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Thomas_Moran_-_Mount_Grohman_-_1985.217_-_Indianapolis_Museum_of_Art.jpg/1280px-Thomas_Moran_-_Mount_Grohman_-_1985.217_-_Indianapolis_Museum_of_Art.jpg": {
+"at": "2026-10-13",
+"label": "c65",
+"pack": "pack-rocky-mountains",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Toscana_-_Maremma_Regional_Park_-_aerial_photo_with_Torre_di_Collelungo.jpg/1280px-Toscana_-_Maremma_Regional_Park_-_aerial_photo_with_Torre_di_Collelungo.jpg": {
 "at": "2026-10-12",
@@ -94636,6 +95476,12 @@
 "label": "c19",
 "pack": "pack-moroccan-souks",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Ljubljana_zamek_2.jpg/1280px-Ljubljana_zamek_2.jpg": {
+"at": "2026-10-13",
+"label": "c166",
+"pack": "pack-snowy-villages",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Marokko2018-9_%2840949324220%29.jpg/1280px-Marokko2018-9_%2840949324220%29.jpg": {
 "at": "2026-10-12",
@@ -96383,6 +97229,12 @@
 "pack": "pack-summer-fruit",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/20250902_Canon_R5_Crowfoot_Mountain-6058.jpg/1280px-20250902_Canon_R5_Crowfoot_Mountain-6058.jpg": {
+"at": "2026-10-13",
+"label": "c25",
+"pack": "pack-rocky-mountains",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/A_plate_of_fries%2C_chicken%2C_salad_and_ketchup.jpg/1280px-A_plate_of_fries%2C_chicken%2C_salad_and_ketchup.jpg": {
 "at": "2026-10-12",
 "label": "c82",
@@ -96490,6 +97342,12 @@
 "label": "c99",
 "pack": "pack-cherry-blossom",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Gdansk_house_of_tortures_and_gaol_tower.jpg/1280px-Gdansk_house_of_tortures_and_gaol_tower.jpg": {
+"at": "2026-10-13",
+"label": "c173",
+"pack": "pack-snowy-villages",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/German_Shepherd_Dog_Alsatian_2.jpg/1280px-German_Shepherd_Dog_Alsatian_2.jpg": {
 "at": "2026-10-12",
@@ -96995,6 +97853,12 @@
 "pack": "pack-volcanoes",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Winter_%40Shirakawa-g%C5%8D_%2CSo_Beautiful%2C_Village_of_Shirakawa%2CGifu_Prefecture%2CJapan_-_panoramio.jpg/1280px-Winter_%40Shirakawa-g%C5%8D_%2CSo_Beautiful%2C_Village_of_Shirakawa%2CGifu_Prefecture%2CJapan_-_panoramio.jpg": {
+"at": "2026-10-13",
+"label": "c03",
+"pack": "pack-snowy-villages",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/%2851-365%29_Scheve_Jan_Kerk_%285288919462%29.jpg/1280px-%2851-365%29_Scheve_Jan_Kerk_%285288919462%29.jpg": {
 "at": "2026-10-12",
 "label": "c53",
@@ -97289,6 +98153,12 @@
 "pack": "pack-wallpapers",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Small_Waterfall_of_Mount_Edith_Cavell_Mountain_meadow_in_Alberta%27s_Jasper_National_Park.JPG/1280px-Small_Waterfall_of_Mount_Edith_Cavell_Mountain_meadow_in_Alberta%27s_Jasper_National_Park.JPG": {
+"at": "2026-10-13",
+"label": "c11",
+"pack": "pack-rocky-mountains",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Sonnenhut_%28Rudbeckia%29_Raureif-20241201-RM-103828.jpg/1280px-Sonnenhut_%28Rudbeckia%29_Raureif-20241201-RM-103828.jpg": {
 "at": "2026-10-12",
 "label": "c41",
@@ -97312,6 +98182,12 @@
 "label": "c825",
 "pack": "daily-2027-06",
 "reason": "text"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/The_Samaritans_of_Nablus_%28Shechhem%29._Interesting_scroll-cover_of_embroidered_silk._LOC_matpc.01824.jpg/1280px-The_Samaritans_of_Nablus_%28Shechhem%29._Interesting_scroll-cover_of_embroidered_silk._LOC_matpc.01824.jpg": {
+"at": "2026-10-13",
+"label": "c116",
+"pack": "pack-embroidery",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Toronto_Skyline_March_2023_12.jpg/1280px-Toronto_Skyline_March_2023_12.jpg": {
 "at": "2026-10-12",
@@ -98182,6 +99058,12 @@
 "label": "c51",
 "pack": "pack-snowy-peaks",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Pomological_Watercolor_POM00004618.jpg/1280px-Pomological_Watercolor_POM00004618.jpg": {
+"at": "2026-10-13",
+"label": "c231",
+"pack": "pack-summer-fruit",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Ponies_on_the_beach.jpg/1280px-Ponies_on_the_beach.jpg": {
 "at": "2026-10-12",
@@ -99125,6 +100007,12 @@
 "pack": "pack-snowy-peaks",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/NMAx.0016428.jpg/1280px-NMAx.0016428.jpg": {
+"at": "2026-10-13",
+"label": "c224",
+"pack": "pack-snowy-villages",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Parc_des_Buttes-Chaumont%2C_grotte_02_stereographical_fused.jpg/1280px-Parc_des_Buttes-Chaumont%2C_grotte_02_stereographical_fused.jpg": {
 "at": "2026-10-12",
 "label": "c117",
@@ -99214,6 +100102,12 @@
 "label": "c91",
 "pack": "evpack-health-2027",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Vernal_Falls_and_Nevada_Falls_from_Glacier_Point_in_Yosemite_National_Park%2C_California%2C_1901_%28CHS-1174%29.jpg/1280px-Vernal_Falls_and_Nevada_Falls_from_Glacier_Point_in_Yosemite_National_Park%2C_California%2C_1901_%28CHS-1174%29.jpg": {
+"at": "2026-10-13",
+"label": "c72",
+"pack": "pack-mountain-autumn",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Vernieuwingswerkzaamheden_aan_Magere_Brug_%2C_Amsterdam_nieuwe_Hamijpoort_geplaats%2C_Bestanddeelnr_922-3949.jpg/1280px-Vernieuwingswerkzaamheden_aan_Magere_Brug_%2C_Amsterdam_nieuwe_Hamijpoort_geplaats%2C_Bestanddeelnr_922-3949.jpg": {
 "at": "2026-10-12",
@@ -99887,6 +100781,12 @@
 "pack": "pack-new-york",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Tomato_packaging_worker_-_La_Gomera_02.jpg/1280px-Tomato_packaging_worker_-_La_Gomera_02.jpg": {
+"at": "2026-10-13",
+"label": "c217",
+"pack": "pack-summer-fruit",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Traditional_Kulfi%2C_Shilaidaha%2C_Kushtia_2.jpg/1280px-Traditional_Kulfi%2C_Shilaidaha%2C_Kushtia_2.jpg": {
 "at": "2026-10-12",
 "label": "c28",
@@ -100211,6 +101111,12 @@
 "pack": "pack-staircases",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Sn%C3%B8_i_Bergen_-_L0043_669Fo30141609050045.jpg/1280px-Sn%C3%B8_i_Bergen_-_L0043_669Fo30141609050045.jpg": {
+"at": "2026-10-13",
+"label": "c128",
+"pack": "pack-snowy-villages",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Steatoda_bipunctata_-_Rabbit_Hutch_Spider.jpg/1280px-Steatoda_bipunctata_-_Rabbit_Hutch_Spider.jpg": {
 "at": "2026-10-12",
 "label": "c58",
@@ -100359,6 +101265,12 @@
 "at": "2026-10-12",
 "label": "c107",
 "pack": "pack-gardens",
+"reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Fall_Creek%2C_North_Umpqua_River_-_DPLA_-_06f7b093197d3562987ab54f2258b763.jpg/1280px-Fall_Creek%2C_North_Umpqua_River_-_DPLA_-_06f7b093197d3562987ab54f2258b763.jpg": {
+"at": "2026-10-13",
+"label": "c76",
+"pack": "pack-mountain-autumn",
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Fontaine_de_Vaucluse_Chateau_03.jpg/1280px-Fontaine_de_Vaucluse_Chateau_03.jpg": {
@@ -101567,6 +102479,12 @@
 "pack": "evpack-universal-childrens-2026",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Southern_Region%2C_Iceland_-_panoramio_%2837%29.jpg/1280px-Southern_Region%2C_Iceland_-_panoramio_%2837%29.jpg": {
+"at": "2026-10-13",
+"label": "c57",
+"pack": "pack-rainbow-mountains",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Ta_Phrom%2C_Angkor%2C_Camboya%2C_2013-08-16%2C_DD_22.JPG/1280px-Ta_Phrom%2C_Angkor%2C_Camboya%2C_2013-08-16%2C_DD_22.JPG": {
 "at": "2026-10-12",
 "label": "c08",
@@ -102251,6 +103169,12 @@
 "pack": "pack-kittens",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Reynolds%2C_Thomas_E_-_64th_Mounted_Infantry%2C_Company_%28Blank%29_-_Enlistment_Rank-_1_Lieutenant-_Discharge_Rank-_1_Lieutenant_-_DPLA_-_87d08da0d7d38a10a5d31aeebf74b2d3.jpg/1280px-thumbnail.jpg": {
+"at": "2026-10-13",
+"label": "c58",
+"pack": "pack-rocky-mountains",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Rusty_metal_door_in_Plaka_on_12-3-2023.jpg/1280px-Rusty_metal_door_in_Plaka_on_12-3-2023.jpg": {
 "at": "2026-10-13",
 "label": "c103",
@@ -102334,6 +103258,12 @@
 "label": "c33",
 "pack": "pack-moroccan-souks",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/%E6%B8%85_%E5%88%BA%E7%B9%A1%E7%93%B6%E8%8A%B1%E6%B8%85%E7%8E%A9%E5%9C%96-Panel_with_Flowers_in_Vase_and_Scholar%27s_Objects_MET_DP156759.jpg/1280px-%E6%B8%85_%E5%88%BA%E7%B9%A1%E7%93%B6%E8%8A%B1%E6%B8%85%E7%8E%A9%E5%9C%96-Panel_with_Flowers_in_Vase_and_Scholar%27s_Objects_MET_DP156759.jpg": {
+"at": "2026-10-13",
+"label": "c21",
+"pack": "pack-embroidery",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/A_hen_with_his_chicks_under_her_warm_feathers.jpg/1280px-A_hen_with_his_chicks_under_her_warm_feathers.jpg": {
 "at": "2026-10-12",
@@ -102617,11 +103547,23 @@
 "pack": "pack-lighthouses",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Star%C3%BD_Smokovec_17_Slovakia3.jpg/1280px-Star%C3%BD_Smokovec_17_Slovakia3.jpg": {
+"at": "2026-10-13",
+"label": "c56",
+"pack": "pack-mountain-autumn",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Star_reflections_at_Myall_Lakes_National_Park.jpg/1280px-Star_reflections_at_Myall_Lakes_National_Park.jpg": {
 "at": "2026-10-12",
 "label": "c09",
 "pack": "pack-starry-nights",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Starr-130201-1636-Morus_alba-var_Cookes_Pakistan_with_fruit_in_mesh_bag_bird_prevention-Hawea_Pl_Olinda-Maui_%2824574593584%29.jpg/1280px-Starr-130201-1636-Morus_alba-var_Cookes_Pakistan_with_fruit_in_mesh_bag_bird_prevention-Hawea_Pl_Olinda-Maui_%2824574593584%29.jpg": {
+"at": "2026-10-13",
+"label": "c169",
+"pack": "pack-summer-fruit",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Stein_am_Rhein_Understadt_4-12.jpg/1280px-Stein_am_Rhein_Understadt_4-12.jpg": {
 "at": "2026-10-12",
@@ -102881,6 +103823,12 @@
 "pack": "pack-vineyards",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Powderhorn_Wilderness_location_in_Hinsdale_County.png/1280px-Powderhorn_Wilderness_location_in_Hinsdale_County.png": {
+"at": "2026-10-13",
+"label": "c47",
+"pack": "pack-rocky-mountains",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Profiterole_%28Cream_Puff%29.jpg/1280px-Profiterole_%28Cream_Puff%29.jpg": {
 "at": "2026-10-12",
 "label": "c46",
@@ -102933,6 +103881,12 @@
 "at": "2026-10-12",
 "label": "c09",
 "pack": "pack-cozy-interiors",
+"reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Thirteen-story_pagoda_of_Tanzan_Shrine_illuminated_with_autumn_leaves.jpg/1280px-Thirteen-story_pagoda_of_Tanzan_Shrine_illuminated_with_autumn_leaves.jpg": {
+"at": "2026-10-13",
+"label": "c92",
+"pack": "pack-mountain-autumn",
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Venezia_Ca%27_d%27Oro_Innen_Galleria_Franchetti_Incoronazione_della_Vergine.jpg/1280px-Venezia_Ca%27_d%27Oro_Innen_Galleria_Franchetti_Incoronazione_della_Vergine.jpg": {
@@ -103222,6 +104176,12 @@
 "label": "c85",
 "pack": "pack-cathedrals",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/C%C3%A9ret_-_Rue_du_Vieux_C%C3%A9ret_-_Automne_2.JPG/1280px-C%C3%A9ret_-_Rue_du_Vieux_C%C3%A9ret_-_Automne_2.JPG": {
+"at": "2026-10-13",
+"label": "c95",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Ceiling_of_Honour_Grand_Staircase_in_the_Palace_of_Caserta.jpg/1280px-Ceiling_of_Honour_Grand_Staircase_in_the_Palace_of_Caserta.jpg": {
 "at": "2026-10-12",
@@ -103582,6 +104542,12 @@
 "label": "c175",
 "pack": "pack-libraries",
 "reason": "text"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/La_Quebrada_de_las_Conchas_-_Argentina_01.jpg/1280px-La_Quebrada_de_las_Conchas_-_Argentina_01.jpg": {
+"at": "2026-10-13",
+"label": "c12",
+"pack": "pack-rainbow-mountains",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Lanzadera_espacial_Vega_-_Museo_de_las_Ciencias_Pr%C3%ADncipe_Felipe_-_001.jpg/1280px-Lanzadera_espacial_Vega_-_Museo_de_las_Ciencias_Pr%C3%ADncipe_Felipe_-_001.jpg": {
 "at": "2026-10-12",
@@ -104015,6 +104981,12 @@
 "pack": "evpack-fathers-day-2027",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/%22Order%22_%28late_1850s%29%2C_by_Antoine-Louis_Barye_%281796_-_1875%29%2C_with_Mount_Vernon_U.M.C.jpg/1280px-%22Order%22_%28late_1850s%29%2C_by_Antoine-Louis_Barye_%281796_-_1875%29%2C_with_Mount_Vernon_U.M.C.jpg": {
+"at": "2026-10-13",
+"label": "c81",
+"pack": "pack-rocky-mountains",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/%E8%BB%9B%E7%93%A3%E8%98%AD%E5%B1%AC_Zygopetalum_Redvale_Pretty_Ann_-%E9%A6%99%E6%B8%AF%E6%B2%99%E7%94%B0%E6%B4%8B%E8%98%AD%E5%B1%95_Shatin_Orchid_Show%2C_Hong_Kong-_%289255178780%29.jpg/1280px-%E8%BB%9B%E7%93%A3%E8%98%AD%E5%B1%AC_Zygopetalum_Redvale_Pretty_Ann_-%E9%A6%99%E6%B8%AF%E6%B2%99%E7%94%B0%E6%B4%8B%E8%98%AD%E5%B1%95_Shatin_Orchid_Show%2C_Hong_Kong-_%289255178780%29.jpg": {
 "at": "2026-10-12",
 "label": "c25",
@@ -104326,6 +105298,12 @@
 "label": "c783",
 "pack": "daily-2025-08",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Talampaya_National_Park_-_54491775900.jpg/1280px-Talampaya_National_Park_-_54491775900.jpg": {
+"at": "2026-10-13",
+"label": "c72",
+"pack": "pack-rainbow-mountains",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Thai_spring_rolls_2.jpg/1280px-Thai_spring_rolls_2.jpg": {
 "at": "2026-10-12",
@@ -105251,6 +106229,12 @@
 "pack": "abstract-fluid-ink",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/NMAx.0072957.jpg/1280px-NMAx.0072957.jpg": {
+"at": "2026-10-13",
+"label": "c218",
+"pack": "pack-snowy-villages",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Peder_M%C3%B8nsted_-_Vinterdag_i_Rosenborg_Have_med_to_kvinder_og_en_barnevogn_-_1920.png/1280px-Peder_M%C3%B8nsted_-_Vinterdag_i_Rosenborg_Have_med_to_kvinder_og_en_barnevogn_-_1920.png": {
 "at": "2026-10-12",
 "label": "c55",
@@ -105520,6 +106504,12 @@
 "label": "c92",
 "pack": "abstract-fluid-ink",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Josephine_Kirsch_von_Yeah_Handmade.jpg/1280px-Josephine_Kirsch_von_Yeah_Handmade.jpg": {
+"at": "2026-10-13",
+"label": "c229",
+"pack": "pack-summer-fruit",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/King_Penguin_grooming_%285848680649%29.jpg/1280px-King_Penguin_grooming_%285848680649%29.jpg": {
 "at": "2026-10-12",
@@ -106385,6 +107375,12 @@
 "pack": "abstract-macro-textures",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Shawl_%28India%29%2C_19th_century_%28CH_18604601%29.jpg/1280px-Shawl_%28India%29%2C_19th_century_%28CH_18604601%29.jpg": {
+"at": "2026-10-13",
+"label": "c124",
+"pack": "pack-embroidery",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Space_Shuttle_Discovery_on_Launch_Pad_39A_for_mission_STS-133.jpg/1280px-Space_Shuttle_Discovery_on_Launch_Pad_39A_for_mission_STS-133.jpg": {
 "at": "2026-10-12",
 "label": "c187",
@@ -106407,6 +107403,12 @@
 "at": "2026-10-12",
 "label": "c04",
 "pack": "abstract-geometric-minimal",
+"reason": "quality"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Talampaya_National_Park_-_54491700623.jpg/1280px-Talampaya_National_Park_-_54491700623.jpg": {
+"at": "2026-10-13",
+"label": "c74",
+"pack": "pack-rainbow-mountains",
 "reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Tall_Ship_races_Harlingen_2014_-_Alexander_von_Humboldt_II_and_Sorlandet_in_the_back_Stad_Amsterdam.jpg/1280px-Tall_Ship_races_Harlingen_2014_-_Alexander_von_Humboldt_II_and_Sorlandet_in_the_back_Stad_Amsterdam.jpg": {
@@ -106876,6 +107878,12 @@
 "label": "c61",
 "pack": "pack-japanese-prints",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Lviv_tram_2004_12.jpg/1280px-Lviv_tram_2004_12.jpg": {
+"at": "2026-10-13",
+"label": "c190",
+"pack": "pack-snowy-villages",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Okonomiyaki_Chibo_Sennichimae.jpg/1280px-Okonomiyaki_Chibo_Sennichimae.jpg": {
 "at": "2026-10-12",
@@ -108125,6 +109133,12 @@
 "pack": "daily-2025-06",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Takeisao-jinja_Kenkun_San_%28Kita-ku%2C_Kyoto%29_T%C5%8Dr%C5%8D_hdsr_S5_10.jpg/1280px-Takeisao-jinja_Kenkun_San_%28Kita-ku%2C_Kyoto%29_T%C5%8Dr%C5%8D_hdsr_S5_10.jpg": {
+"at": "2026-10-13",
+"label": "c48",
+"pack": "pack-snowy-villages",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Templo_Wat_Arun%2C_Bangkok%2C_Tailandia%2C_2013-08-22%2C_DD_11.jpg/1280px-Templo_Wat_Arun%2C_Bangkok%2C_Tailandia%2C_2013-08-22%2C_DD_11.jpg": {
 "at": "2026-10-12",
 "label": "c1374",
@@ -108244,6 +109258,12 @@
 "label": "c105",
 "pack": "pack-rice-terraces",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Blue_Basin_in_John_Day_Fossil_Beds_National_Monument_08.jpg/1280px-Blue_Basin_in_John_Day_Fossil_Beds_National_Monument_08.jpg": {
+"at": "2026-10-13",
+"label": "c85",
+"pack": "pack-rainbow-mountains",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Blue_poison_dart_frog_Aquarium_of_the_pacific.jpg/1280px-Blue_poison_dart_frog_Aquarium_of_the_pacific.jpg": {
 "at": "2026-10-12",
@@ -108617,6 +109637,18 @@
 "pack": "pack-butterflies",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Heinz_Tomato_Ketchup%2C_Canada_%28front%29%2C_2026-02-19.jpg/1280px-Heinz_Tomato_Ketchup%2C_Canada_%28front%29%2C_2026-02-19.jpg": {
+"at": "2026-10-13",
+"label": "c219",
+"pack": "pack-summer-fruit",
+"reason": "text"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Historic_house_in_Saint-Sacrement%2C_Quebec_City.jpg/1280px-Historic_house_in_Saint-Sacrement%2C_Quebec_City.jpg": {
+"at": "2026-10-13",
+"label": "c95",
+"pack": "pack-snowy-villages",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Hot_Chocolate_drinks.jpg/1280px-Hot_Chocolate_drinks.jpg": {
 "at": "2026-10-12",
 "label": "c130",
@@ -108772,6 +109804,12 @@
 "label": "c36",
 "pack": "pack-pastries",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Southern_Region%2C_Iceland_-_panoramio_%2873%29.jpg/1280px-Southern_Region%2C_Iceland_-_panoramio_%2873%29.jpg": {
+"at": "2026-10-13",
+"label": "c58",
+"pack": "pack-rainbow-mountains",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Speculaas_amandelcake%2C_Jumbo_Oude_Pekela_%282020%29_01.jpg/1280px-Speculaas_amandelcake%2C_Jumbo_Oude_Pekela_%282020%29_01.jpg": {
 "at": "2026-10-13",
@@ -110044,6 +111082,12 @@
 "label": "c74",
 "pack": "pack-lighthouses",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Icefields_Parkway_02.jpg/1280px-Icefields_Parkway_02.jpg": {
+"at": "2026-10-13",
+"label": "c20",
+"pack": "pack-rocky-mountains",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Imitation_Leather_%28Japan%29%2C_1875%E2%80%9399_%28CH_18798401-2%29.jpg/1280px-Imitation_Leather_%28Japan%29%2C_1875%E2%80%9399_%28CH_18798401-2%29.jpg": {
 "at": "2026-10-13",
@@ -111328,6 +112372,12 @@
 "label": "c11",
 "pack": "pack-frogs",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Toru%C5%84_Nicolaus_Copernicus_Monument_in_the_snow_1.jpg/1280px-Toru%C5%84_Nicolaus_Copernicus_Monument_in_the_snow_1.jpg": {
+"at": "2026-10-13",
+"label": "c183",
+"pack": "pack-snowy-villages",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Two_Space_Shuttle_SRBs_on_the_Crawler_transporter.jpg/1280px-Two_Space_Shuttle_SRBs_on_the_Crawler_transporter.jpg": {
 "at": "2026-10-12",
@@ -113153,6 +114203,12 @@
 "pack": "daily-2025-08",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Wild_Rhododendron_in_Fall_%284a60d70d-6e4c-4ac0-ba6b-f837c840dcfa%29.jpeg/1280px-Wild_Rhododendron_in_Fall_%284a60d70d-6e4c-4ac0-ba6b-f837c840dcfa%29.jpeg": {
+"at": "2026-10-13",
+"label": "c80",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/2016_Kuala_Lumpur%2C_Petronas_Towers_%2810%29.jpg/1280px-2016_Kuala_Lumpur%2C_Petronas_Towers_%2810%29.jpg": {
 "at": "2026-10-12",
 "label": "p-964f12b18812",
@@ -113525,6 +114581,12 @@
 "pack": "evpack-may-day-2027",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Fireweed_is_well-known_for_its_plume_of_hot-pink_flowers_during_the_summer%2C_but_in_fall_its_leaves_also_turn_deep_red._%287c57f6b5-862e-4783-b1c6-3ff13b1241d3%29.jpg/1280px-thumbnail.jpg": {
+"at": "2026-10-13",
+"label": "c89",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Flowers_%287103719607%29.jpg/1280px-Flowers_%287103719607%29.jpg": {
 "at": "2026-10-12",
 "label": "c70",
@@ -113596,6 +114658,12 @@
 "label": "c103",
 "pack": "pack-rockets",
 "reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Mount_Road_in_Penn%2C_Wolverhampton_-_geograph.org.uk_-_8216071.jpg/1280px-Mount_Road_in_Penn%2C_Wolverhampton_-_geograph.org.uk_-_8216071.jpg": {
+"at": "2026-10-13",
+"label": "c17",
+"pack": "pack-rocky-mountains",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Mustard_Mayonnaise_Ketchup_Brown_Sauce_Vinegar_02.JPG/1280px-Mustard_Mayonnaise_Ketchup_Brown_Sauce_Vinegar_02.JPG": {
 "at": "2026-10-12",
@@ -114263,6 +115331,12 @@
 "pack": "pack-volcanoes",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Scenery_at_Purmamarca_-_Argentina_01.jpg/1280px-Scenery_at_Purmamarca_-_Argentina_01.jpg": {
+"at": "2026-10-13",
+"label": "c68",
+"pack": "pack-rainbow-mountains",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Sk%C3%B3gafoss_Waterfall%2C_Iceland%2C_20240720_1319_2978.jpg/1280px-Sk%C3%B3gafoss_Waterfall%2C_Iceland%2C_20240720_1319_2978.jpg": {
 "at": "2026-10-12",
 "label": "c52",
@@ -114646,6 +115720,12 @@
 "label": "c81",
 "pack": "pack-sailing",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Table_Mountain%2C_Alberta%2C_Canada.jpg/1280px-Table_Mountain%2C_Alberta%2C_Canada.jpg": {
+"at": "2026-10-13",
+"label": "c08",
+"pack": "pack-rocky-mountains",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/The_Harmandir_Sahib_%28Golden_Temple%29_02.jpg/1280px-The_Harmandir_Sahib_%28Golden_Temple%29_02.jpg": {
 "at": "2026-10-12",
@@ -115829,6 +116909,12 @@
 "pack": "pack-waterfalls",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Sn%C3%B8_i_Bergen_-_L0043_669Fo30141609050031.jpg/1280px-Sn%C3%B8_i_Bergen_-_L0043_669Fo30141609050031.jpg": {
+"at": "2026-10-13",
+"label": "c127",
+"pack": "pack-snowy-villages",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Statue_of_Enriqueta_Rylands_in_the_Reading_Room_of_John_Rylands_Library%2C_Deansgate_%2801%29.jpg/1280px-Statue_of_Enriqueta_Rylands_in_the_Reading_Room_of_John_Rylands_Library%2C_Deansgate_%2801%29.jpg": {
 "at": "2026-10-12",
 "label": "c122",
@@ -115888,6 +116974,12 @@
 "label": "c165",
 "pack": "pack-mountain-huts",
 "reason": "text"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Winter_in_Krakow_%283282120137%29.jpg/1280px-Winter_in_Krakow_%283282120137%29.jpg": {
+"at": "2026-10-13",
+"label": "c157",
+"pack": "pack-snowy-villages",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/York_Minster_%2829th_August_2020%29_004.jpg/1280px-York_Minster_%2829th_August_2020%29_004.jpg": {
 "at": "2026-10-12",
@@ -115985,6 +117077,12 @@
 "pack": "daily-2025-01",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Dante_in_the_Icefields.jpg/1280px-Dante_in_the_Icefields.jpg": {
+"at": "2026-10-13",
+"label": "c22",
+"pack": "pack-rocky-mountains",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Dates_%28Dabino%29.jpg/1280px-Dates_%28Dabino%29.jpg": {
 "at": "2026-10-12",
 "label": "c25",
@@ -116002,6 +117100,12 @@
 "label": "c74",
 "pack": "pack-vintage-posters",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Gda%C5%84sk_Ja%C5%9Bkowa_Dolina_19.JPG/1280px-Gda%C5%84sk_Ja%C5%9Bkowa_Dolina_19.JPG": {
+"at": "2026-10-13",
+"label": "c181",
+"pack": "pack-snowy-villages",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Illustration_of_flies_from_Favorite_Flies_and_Their_Histories_by_Mary_Orvis_Marbury_from_rawpixel%E2%80%99s_own_original_first_edition_of_the_publication_11.jpg/1280px-Illustration_of_flies_from_Favorite_Flies_and_Their_Histories_by_Mary_Orvis_Marbury_from_rawpixel%E2%80%99s_own_original_first_edition_of_the_publication_11.jpg": {
 "at": "2026-10-13",
@@ -116043,6 +117147,12 @@
 "at": "2026-10-12",
 "label": "c10",
 "pack": "pack-street-food",
+"reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Mount_Rundle_Saltlik.jpg/1280px-Mount_Rundle_Saltlik.jpg": {
+"at": "2026-10-13",
+"label": "c01",
+"pack": "pack-rocky-mountains",
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Mus%C3%A9e_Vouland_-_vase_kangxi.jpg/1280px-Mus%C3%A9e_Vouland_-_vase_kangxi.jpg": {
@@ -116231,6 +117341,12 @@
 "pack": "abstract-geometric-minimal",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Cesta_kole%C4%8Dkov%C3%A1%2C_Vysok%C3%A9_Tatry_21_Slovakia_4.jpg/1280px-Cesta_kole%C4%8Dkov%C3%A1%2C_Vysok%C3%A9_Tatry_21_Slovakia_4.jpg": {
+"at": "2026-10-13",
+"label": "c55",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Chur_from_Weisshorn_%28Arosa%29.jpg/1280px-Chur_from_Weisshorn_%28Arosa%29.jpg": {
 "at": "2026-10-12",
 "label": "c70",
@@ -116373,6 +117489,12 @@
 "at": "2026-10-12",
 "label": "c40",
 "pack": "evpack-environment-2027",
+"reason": "text"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Przystanek_Zimowa.JPG/1280px-Przystanek_Zimowa.JPG": {
+"at": "2026-10-13",
+"label": "c187",
+"pack": "pack-snowy-villages",
 "reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Purbeck_%2C_Headfast_Point_and_Old_Harry_Rocks_-_geograph.org.uk_-_1711905.jpg/1280px-Purbeck_%2C_Headfast_Point_and_Old_Harry_Rocks_-_geograph.org.uk_-_1711905.jpg": {
@@ -116601,6 +117723,12 @@
 "at": "2026-10-12",
 "label": "c105",
 "pack": "pack-rolling-hills",
+"reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Fall_color_along_the_trail_%2853234911085%29.jpg/1280px-Fall_color_along_the_trail_%2853234911085%29.jpg": {
+"at": "2026-10-13",
+"label": "c79",
+"pack": "pack-mountain-autumn",
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Fenghuang_City.jpg/1280px-Fenghuang_City.jpg": {
@@ -117281,6 +118409,12 @@
 "pack": "abstract-paper-collage",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Helicia_cochinchinensis_-_Miyajima_Natural_Botanical_Garden_-_DSC02394.JPG/1280px-Helicia_cochinchinensis_-_Miyajima_Natural_Botanical_Garden_-_DSC02394.JPG": {
+"at": "2026-10-13",
+"label": "c90",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Jason_Brian_Fox_The_Ballad_of_Her_Spirit.jpg/1280px-Jason_Brian_Fox_The_Ballad_of_Her_Spirit.jpg": {
 "at": "2026-10-12",
 "label": "c33",
@@ -117328,6 +118462,12 @@
 "label": "c88",
 "pack": "evpack-mountain-day-2026",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/N%C3%A1mafjall_Mountain%2C_Iceland%2C_20240716_1135_1362.jpg/1280px-N%C3%A1mafjall_Mountain%2C_Iceland%2C_20240716_1135_1362.jpg": {
+"at": "2026-10-13",
+"label": "c63",
+"pack": "pack-rainbow-mountains",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Ophrys_holoserica_3_RF.jpg/1280px-Ophrys_holoserica_3_RF.jpg": {
 "at": "2026-10-12",
@@ -117935,6 +119075,12 @@
 "pack": "daily-2027-06",
 "reason": "quality"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Marina_Square_and_Marina_Mandarin_Singapore%2C_panorama%2C_Jul_07.jpg/1280px-Marina_Square_and_Marina_Mandarin_Singapore%2C_panorama%2C_Jul_07.jpg": {
+"at": "2026-10-13",
+"label": "c97",
+"pack": "pack-embroidery",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Mevlid-i_Halil_Mosque_14.jpg/1280px-Mevlid-i_Halil_Mosque_14.jpg": {
 "at": "2026-10-13",
 "label": "c101",
@@ -118114,6 +119260,12 @@
 "label": "c36",
 "pack": "evpack-food-day-2026",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Hanging_MET_3859.jpg/1280px-Hanging_MET_3859.jpg": {
+"at": "2026-10-13",
+"label": "c113",
+"pack": "pack-embroidery",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Hook_Head_Lighthouse_at_coast%27s_edge.jpg/1280px-Hook_Head_Lighthouse_at_coast%27s_edge.jpg": {
 "at": "2026-10-12",
@@ -118685,6 +119837,12 @@
 "pack": "evpack-friendship-2027",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/A_single_larch_starts_to_turn_golden_for_fall._%28f2e465d82fe7408d9ba69035b5377cf7%29.JPG/1280px-A_single_larch_starts_to_turn_golden_for_fall._%28f2e465d82fe7408d9ba69035b5377cf7%29.JPG": {
+"at": "2026-10-13",
+"label": "c74",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Adonis_amurensis_Knospe.JPG/1280px-Adonis_amurensis_Knospe.JPG": {
 "at": "2026-10-12",
 "label": "c96",
@@ -118817,6 +119975,12 @@
 "pack": "pack-cathedrals",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Frances_Densmore_recording_Mountain_Chief.jpg/1280px-Frances_Densmore_recording_Mountain_Chief.jpg": {
+"at": "2026-10-13",
+"label": "c54",
+"pack": "pack-rocky-mountains",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Grus_paradisea_MHNT.ZOO.2010.11.65.4.jpg/1280px-Grus_paradisea_MHNT.ZOO.2010.11.65.4.jpg": {
 "at": "2026-10-13",
 "label": "c478",
@@ -118912,6 +120076,12 @@
 "label": "c01",
 "pack": "evpack-remembrance-2026",
 "reason": "similar"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Rue_du_Petit_Champlain_en_hiver_-_panoramio.jpg/1280px-Rue_du_Petit_Champlain_en_hiver_-_panoramio.jpg": {
+"at": "2026-10-13",
+"label": "c12",
+"pack": "pack-snowy-villages",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Saint-Ursanne_Rue_de_23-Juin_46.jpg/1280px-Saint-Ursanne_Rue_de_23-Juin_46.jpg": {
 "at": "2026-10-12",
@@ -119339,6 +120509,12 @@
 "pack": "evpack-health-2027",
 "reason": "text"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/%D8%AA%D9%88%D8%AA_%D8%B3%D9%81%DB%8C%D8%AF.jpg/1280px-%D8%AA%D9%88%D8%AA_%D8%B3%D9%81%DB%8C%D8%AF.jpg": {
+"at": "2026-10-13",
+"label": "c170",
+"pack": "pack-summer-fruit",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/2011_Zombie_Walk_IMG_7182_%288108896819%29.jpg/1280px-2011_Zombie_Walk_IMG_7182_%288108896819%29.jpg": {
 "at": "2026-10-12",
 "label": "c106",
@@ -119559,6 +120735,12 @@
 "at": "2026-10-12",
 "label": "c626",
 "pack": "daily-2025-06",
+"reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/NMAx.0016397.jpg/1280px-NMAx.0016397.jpg": {
+"at": "2026-10-13",
+"label": "c220",
+"pack": "pack-snowy-villages",
 "reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Neuch%C3%A2tel_Herbarium_-_Paradisea_liliastrum_-_NEU000008722.jpg/1280px-Neuch%C3%A2tel_Herbarium_-_Paradisea_liliastrum_-_NEU000008722.jpg": {
@@ -121798,6 +122980,12 @@
 "label": "c41",
 "pack": "pack-rice-terraces",
 "reason": "text"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Sn%C3%B8_i_Bergen_-_L0043_669Fo30141609050047.jpg/1280px-Sn%C3%B8_i_Bergen_-_L0043_669Fo30141609050047.jpg": {
+"at": "2026-10-13",
+"label": "c129",
+"pack": "pack-snowy-villages",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Starr-080601-5250-Euphorbia_cyathophora-leaves_flowers_and_fruit-Old_Fuel_Farm_Sand_Island-Midway_Atoll_%2824283522614%29.jpg/1280px-Starr-080601-5250-Euphorbia_cyathophora-leaves_flowers_and_fruit-Old_Fuel_Farm_Sand_Island-Midway_Atoll_%2824283522614%29.jpg": {
 "at": "2026-10-12",

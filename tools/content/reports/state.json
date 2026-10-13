@@ -251,11 +251,11 @@
 },
 "ai-abstract": {
 "added": 23,
-"at": "2026-10-12T12:42:45",
+"at": "2026-10-13T15:55:32",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "verify",
+"last_step": "pool 1283 usable",
 "name": "AI Abstract",
 "puzzles": 20,
 "removed": 3,
@@ -331,11 +331,11 @@
 },
 "ai-dream-machines": {
 "added": 24,
-"at": "2026-10-12T12:38:53",
+"at": "2026-10-13T15:49:50",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "verify",
+"last_step": "pool 1194 usable",
 "name": "AI Dream Machines",
 "puzzles": 22,
 "removed": 2,
@@ -403,11 +403,11 @@
 },
 "ai-little-creatures": {
 "added": 20,
-"at": "2026-10-12T13:18:30",
+"at": "2026-10-13T15:53:54",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "verify",
+"last_step": "pool 1244 usable",
 "name": "AI Little Creatures",
 "puzzles": 20,
 "removed": 0,
@@ -427,11 +427,11 @@
 },
 "ai-neon-nights": {
 "added": 20,
-"at": "2026-10-13T15:44:15",
+"at": "2026-10-13T15:58:41",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "pool 1124 usable",
+"last_step": "pool 1326 usable",
 "name": "AI Neon Nights",
 "puzzles": 20,
 "removed": 0,
@@ -451,11 +451,11 @@
 },
 "ai-robots": {
 "added": 21,
-"at": "2026-10-12T13:14:59",
+"at": "2026-10-13T15:51:03",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "verify",
+"last_step": "pool 1204 usable",
 "name": "AI Robots and Machines",
 "puzzles": 20,
 "removed": 1,
@@ -463,11 +463,11 @@
 },
 "ai-space": {
 "added": 21,
-"at": "2026-10-12T12:35:57",
+"at": "2026-10-13T15:59:28",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "verify",
+"last_step": "pool 1342 usable",
 "name": "AI Deep Space",
 "puzzles": 20,
 "removed": 1,
@@ -487,11 +487,11 @@
 },
 "ai-wild-animals": {
 "added": 24,
-"at": "2026-10-12T12:13:45",
+"at": "2026-10-13T15:53:08",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "verify",
+"last_step": "pool 1235 usable",
 "name": "AI Wild Animals",
 "puzzles": 24,
 "removed": 0,
@@ -2527,7 +2527,7 @@
 },
 "pack-autumn-berries": {
 "added": 24,
-"at": "2026-10-13T15:45:29",
+"at": "2026-10-13T16:06:58",
 "category": "Seasonal",
 "issues": 0,
 "kind": "new",
@@ -2539,7 +2539,7 @@
 },
 "pack-autumn-mushrooms": {
 "added": 24,
-"at": "2026-10-13T15:26:19",
+"at": "2026-10-13T16:06:58",
 "category": "Seasonal",
 "issues": 0,
 "kind": "new",
@@ -2751,7 +2751,7 @@
 },
 "pack-colourful-birds": {
 "added": 24,
-"at": "2026-10-13T15:04:42",
+"at": "2026-10-13T16:06:58",
 "category": "Premium",
 "issues": 0,
 "kind": "new",
@@ -2859,11 +2859,14 @@
 },
 "pack-embroidery": {
 "added": 0,
-"at": "2026-10-13T15:23:49",
-"last_step": "reject 3 off-theme",
-"puzzles": null,
+"at": "2026-10-13T16:06:46",
+"category": "Patterns",
+"kind": "new",
+"last_step": "newpack",
+"name": "Embroidery",
+"puzzles": 0,
 "removed": 0,
-"status": "audited"
+"status": "pending"
 },
 "pack-fairytale-villages": {
 "added": 24,
@@ -2891,7 +2894,7 @@
 },
 "pack-first-flowers": {
 "added": 24,
-"at": "2026-10-13T15:19:52",
+"at": "2026-10-13T16:06:58",
 "category": "Seasonal",
 "issues": 0,
 "kind": "new",
@@ -3235,8 +3238,8 @@
 },
 "pack-mountain-autumn": {
 "added": 0,
-"at": "2026-10-13T14:57:28",
-"last_step": "reject 26 off-theme",
+"at": "2026-10-13T16:01:55",
+"last_step": "reject 32 off-theme",
 "puzzles": null,
 "removed": 0,
 "status": "audited"
@@ -3279,7 +3282,7 @@
 },
 "pack-new-zealand": {
 "added": 24,
-"at": "2026-10-13T14:51:19",
+"at": "2026-10-13T16:06:58",
 "category": "Premium",
 "issues": 0,
 "kind": "new",
@@ -3315,7 +3318,7 @@
 },
 "pack-norway-fjords": {
 "added": 24,
-"at": "2026-10-13T15:08:32",
+"at": "2026-10-13T16:06:58",
 "category": "Premium",
 "issues": 0,
 "kind": "new",
@@ -3507,8 +3510,8 @@
 },
 "pack-rainbow-mountains": {
 "added": 0,
-"at": "2026-10-13T14:53:45",
-"last_step": "reject 27 off-theme",
+"at": "2026-10-13T15:47:52",
+"last_step": "reject 1 similar",
 "puzzles": null,
 "removed": 0,
 "status": "audited"
@@ -3560,6 +3563,14 @@
 "puzzles": 24,
 "removed": 21,
 "status": "verified"
+},
+"pack-rocky-mountains": {
+"added": 0,
+"at": "2026-10-13T15:55:52",
+"last_step": "reject 8 similar",
+"puzzles": null,
+"removed": 0,
+"status": "audited"
 },
 "pack-rolling-hills": {
 "added": 24,
@@ -3682,12 +3693,16 @@
 "status": "verified"
 },
 "pack-snowy-villages": {
-"added": 0,
-"at": "2026-10-13T15:36:35",
-"last_step": "pool 29 usable",
-"puzzles": null,
+"added": 24,
+"at": "2026-10-13T16:06:58",
+"category": "Seasonal",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "Snowy Towns",
+"puzzles": 24,
 "removed": 0,
-"status": "pending"
+"status": "verified"
 },
 "pack-staircases": {
 "added": 14,
@@ -3750,12 +3765,16 @@
 "status": "verified"
 },
 "pack-summer-fruit": {
-"added": 0,
-"at": "2026-10-13T15:39:55",
-"last_step": "reject 10 weak",
-"puzzles": null,
+"added": 24,
+"at": "2026-10-13T16:06:58",
+"category": "Seasonal",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "Summer Fruit",
+"puzzles": 24,
 "removed": 0,
-"status": "audited"
+"status": "verified"
 },
 "pack-sunflowers": {
 "added": 20,
@@ -3959,7 +3978,7 @@
 },
 "pack-wild-australia": {
 "added": 24,
-"at": "2026-10-13T15:13:50",
+"at": "2026-10-13T16:06:58",
 "category": "Premium",
 "issues": 0,
 "kind": "new",
@@ -4007,7 +4026,7 @@
 },
 "pack-yellowstone": {
 "added": 24,
-"at": "2026-10-13T14:44:33",
+"at": "2026-10-13T16:06:58",
 "category": "Premium",
 "issues": 0,
 "kind": "new",

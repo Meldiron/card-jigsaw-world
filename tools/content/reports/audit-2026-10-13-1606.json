@@ -1,0 +1,83 @@
+{
+ "summary": {
+  "packs": 10,
+  "violating": 0,
+  "count": 0,
+  "landscape": 0,
+  "dup_pairs": 0,
+  "people_kw": 1,
+  "text_kw": 0,
+  "small": 0,
+  "unscanned": 0,
+  "cross_dups": 0,
+  "rejected_pending": 0
+ },
+ "packs": {
+  "pack-yellowstone": {
+   "name": "Yellowstone",
+   "category": "Premium",
+   "count": 24,
+   "issues": [],
+   "warnings": [
+    "p-4c5b6f3ae7d4: keyword unwanted:dead"
+   ]
+  },
+  "pack-new-zealand": {
+   "name": "New Zealand",
+   "category": "Premium",
+   "count": 24,
+   "issues": [],
+   "warnings": [
+    "p-a5ec089158fe: keyword people:warrior"
+   ]
+  },
+  "pack-norway-fjords": {
+   "name": "Fjords of Norway",
+   "category": "Premium",
+   "count": 24,
+   "issues": []
+  },
+  "pack-wild-australia": {
+   "name": "Wild Australia",
+   "category": "Premium",
+   "count": 24,
+   "issues": []
+  },
+  "pack-colourful-birds": {
+   "name": "Colourful Birds",
+   "category": "Premium",
+   "count": 24,
+   "issues": []
+  },
+  "pack-first-flowers": {
+   "name": "First Flowers",
+   "category": "Seasonal",
+   "count": 24,
+   "issues": []
+  },
+  "pack-autumn-mushrooms": {
+   "name": "Autumn Mushrooms",
+   "category": "Seasonal",
+   "count": 24,
+   "issues": []
+  },
+  "pack-summer-fruit": {
+   "name": "Summer Fruit",
+   "category": "Seasonal",
+   "count": 24,
+   "issues": []
+  },
+  "pack-autumn-berries": {
+   "name": "Autumn Berries",
+   "category": "Seasonal",
+   "count": 24,
+   "issues": []
+  },
+  "pack-snowy-villages": {
+   "name": "Snowy Towns",
+   "category": "Seasonal",
+   "count": 24,
+   "issues": []
+  }
+ }
+}
