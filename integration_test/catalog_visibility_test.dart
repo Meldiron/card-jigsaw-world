@@ -75,8 +75,8 @@ void main() {
 
     await tapText(tester, 'Library', ms: 4000);
     await binding.takeScreenshot('40_library_all');
-    await tapText(tester, 'Events', ms: 4000);
-    await binding.takeScreenshot('40b_library_events');
+    await tapText(tester, 'Finished', ms: 4000);
+    await binding.takeScreenshot('40b_library_finished');
     await tapText(tester, 'Daily', ms: 4000);
     await binding.takeScreenshot('40c_library_daily');
     final chips = find.byWidgetPredicate((w) => w is Scrollable && w.axisDirection == AxisDirection.right).first;

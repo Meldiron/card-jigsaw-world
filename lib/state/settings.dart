@@ -21,6 +21,7 @@ class Settings {
     required this.defaultGrid,
     required this.onboarded,
     required this.tutorialSeen,
+    this.hideFinished = false,
   });
 
   final ThemeMode themeMode;
@@ -34,6 +35,9 @@ class Settings {
   final bool onboarded;
   final bool tutorialSeen;
 
+  /// Library: leave finished packs out of every filter except Finished.
+  final bool hideFinished;
+
   Settings copyWith({
     ThemeMode? themeMode,
     bool? sound,
@@ -45,6 +49,7 @@ class Settings {
     int? defaultGrid,
     bool? onboarded,
     bool? tutorialSeen,
+    bool? hideFinished,
   }) =>
       Settings(
         themeMode: themeMode ?? this.themeMode,
@@ -57,6 +62,7 @@ class Settings {
         defaultGrid: defaultGrid ?? this.defaultGrid,
         onboarded: onboarded ?? this.onboarded,
         tutorialSeen: tutorialSeen ?? this.tutorialSeen,
+        hideFinished: hideFinished ?? this.hideFinished,
       );
 }
 
@@ -75,6 +81,7 @@ class SettingsNotifier extends Notifier<Settings> {
       defaultGrid: s.defaultGrid,
       onboarded: s.onboarded,
       tutorialSeen: s.tutorialSeen,
+      hideFinished: s.getJson(_libraryKey)?['hideFinished'] == true,
     );
     Haptics.enabled = settings.haptics;
     Sfx.instance.soundEnabled = settings.sound;
@@ -83,6 +90,9 @@ class SettingsNotifier extends Notifier<Settings> {
   }
 
   LocalStore get _s => ref.read(localStoreProvider);
+
+  /// Library view preferences, one JSON entry so new ones need no new store field.
+  static const _libraryKey = 'libraryPrefs';
 
   void setThemeMode(ThemeMode m) {
     _s.themeMode = m.name;
@@ -135,6 +145,11 @@ class SettingsNotifier extends Notifier<Settings> {
   void setTutorialSeen() {
     _s.tutorialSeen = true;
     state = state.copyWith(tutorialSeen: true);
+  }
+
+  void setHideFinished(bool v) {
+    _s.setJson(_libraryKey, {...?_s.getJson(_libraryKey), 'hideFinished': v});
+    state = state.copyWith(hideFinished: v);
   }
 }
 

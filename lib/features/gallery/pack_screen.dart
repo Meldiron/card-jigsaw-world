@@ -67,7 +67,7 @@ class PackScreen extends ConsumerWidget {
         showToast(
           context,
           needTickets ? 'Not enough Tickets. Finish weekly quests or level up to earn more.' : 'Not enough Coins. Play more puzzles or visit the store.',
-          leading: const CoinIcon(size: 20),
+          leading: needTickets ? const TicketIcon(size: 20) : const CoinIcon(size: 20),
         );
         context.push('/store');
       }
@@ -235,14 +235,14 @@ class PackScreen extends ConsumerWidget {
         title: 'Past month',
         reason: 'Past months are included with VIP or can be unlocked once.',
         primary: ('Go VIP', AppIcons.vip, null, () => wrap(onVip)),
-        secondary: ('Unlock for', null, Amount(currency: currency, value: price, size: 18, color: context.accent), () => wrap(onUnlock)),
+        secondary: ('Unlock for', null, (currency, price), () => wrap(onUnlock)),
       );
     }
     return _AccessCard(
       icon: AppIcons.lock,
       title: 'Locked pack',
       reason: 'Unlock once to play every picture.',
-      primary: ('Unlock for', AppIcons.unlock, Amount(currency: currency, value: price, size: 18, color: Colors.white), () => wrap(onUnlock)),
+      primary: ('Unlock for', null, (currency, price), () => wrap(onUnlock)),
       secondary: ('Go VIP', AppIcons.vip, null, () => wrap(onVip)),
     );
   }
@@ -310,15 +310,22 @@ class _CollapsedGlass extends StatelessWidget {
 
 /// The one access card used for every locked state: icon, title, reason,
 /// and up to two actions. Keeps locked packs, past months and event packs
-/// visually identical.
+/// visually identical. An action with a cost is a [BigButton.cost]
+/// ("Unlock for [ticket] 10"): no leading icon, the price says it all.
 class _AccessCard extends StatelessWidget {
   const _AccessCard({required this.icon, required this.title, required this.reason, this.primary, this.secondary, this.ghost});
   final IconData icon;
   final String title;
   final String reason;
-  final (String, IconData?, Widget?, VoidCallback)? primary;
-  final (String, IconData?, Widget?, VoidCallback)? secondary;
+  final (String, IconData?, (Currency, int)?, VoidCallback)? primary;
+  final (String, IconData?, (Currency, int)?, VoidCallback)? secondary;
   final (String, VoidCallback)? ghost;
+
+  static Widget _action((String, IconData?, (Currency, int)?, VoidCallback) a, ButtonKind kind) {
+    final (label, icon, cost, onTap) = a;
+    if (cost == null) return BigButton(label: label, icon: icon, kind: kind, onTap: onTap);
+    return BigButton.cost(label: label, currency: cost.$1, amount: cost.$2, kind: kind, onTap: onTap);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -346,11 +353,11 @@ class _AccessCard extends StatelessWidget {
           ),
           if (primary != null) ...[
             const SizedBox(height: 14),
-            BigButton(label: primary!.$1, icon: primary!.$2, trailing: primary!.$3, onTap: primary!.$4),
+            _action(primary!, ButtonKind.primary),
           ],
           if (secondary != null) ...[
             const SizedBox(height: 8),
-            BigButton(label: secondary!.$1, icon: secondary!.$2, trailing: secondary!.$3, kind: ButtonKind.secondary, onTap: secondary!.$4),
+            _action(secondary!, ButtonKind.secondary),
           ],
           if (ghost != null) ...[
             const SizedBox(height: 14),

@@ -74,6 +74,12 @@ class AppIcons {
   static const mail = CupertinoIcons.envelope_fill;
   static const receipt = CupertinoIcons.doc_plaintext;
 
+  // Library filters that are not pack categories (drawn before the label).
+  static const filterAll = CupertinoIcons.square_grid_2x2_fill;
+  static const filterFinished = CupertinoIcons.checkmark_circle_fill;
+  static const filterStarted = CupertinoIcons.play_circle_fill;
+  static const filterUnlocked = CupertinoIcons.lock_open_fill;
+
   // Boosters
   static const undo = Icons.undo_rounded;
   static const peek = Icons.visibility_rounded;
@@ -234,20 +240,45 @@ class _CoinPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter o) => false;
 }
 
-/// Teal admission ticket with notched sides.
-class TicketIcon extends StatelessWidget {
-  const TicketIcon({super.key, this.size = 18, this.mono = false});
-  final double size;
-  /// White silhouette for accent-coloured buttons.
-  final bool mono;
+/// Monochrome ink for currency marks drawn on a filled surface (a primary
+/// or tinted button). [BigButton] provides it with its label colour, so a
+/// ticket on a cobalt button turns into a white pass instead of a teal one
+/// that fights the blue. Coins and hints keep their colours: gold and amber
+/// read well on the accent.
+class CurrencyInk extends InheritedWidget {
+  const CurrencyInk({super.key, required this.color, required super.child});
+  final Color color;
+
+  static Color? of(BuildContext context) => context.dependOnInheritedWidgetOfExactType<CurrencyInk>()?.color;
+
   @override
-  Widget build(BuildContext context) => CustomPaint(size: Size(size * 0.8, size), painter: _TicketPainter(mono));
+  bool updateShouldNotify(CurrencyInk old) => old.color != color;
+}
+
+/// Teal admission ticket with notched sides.
+///
+/// On a filled surface it is drawn as a monochrome silhouette: either when
+/// [mono] is set (white, or [color]) or inside a [CurrencyInk]. The star and
+/// the tear line are cut out, so the fill underneath shows through them.
+class TicketIcon extends StatelessWidget {
+  const TicketIcon({super.key, this.size = 18, this.mono = false, this.color});
+  final double size;
+  /// Silhouette for accent-coloured buttons (white unless [color] is given).
+  final bool mono;
+  /// Ink of the silhouette; setting it implies [mono].
+  final Color? color;
+  @override
+  Widget build(BuildContext context) {
+    final ink = color ?? (mono ? Colors.white : CurrencyInk.of(context));
+    return CustomPaint(size: Size(size * 0.8, size), painter: _TicketPainter(ink));
+  }
 }
 
 /// Upright pass with notches top and bottom, a star and a short tear line.
 class _TicketPainter extends CustomPainter {
-  _TicketPainter(this.mono);
-  final bool mono;
+  _TicketPainter(this.ink);
+  /// Null: the teal ticket with a white star. Otherwise a silhouette in this colour.
+  final Color? ink;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -259,16 +290,34 @@ class _TicketPainter extends CustomPainter {
       ..addOval(Rect.fromCircle(center: Offset(r.center.dx, r.top), radius: n))
       ..addOval(Rect.fromCircle(center: Offset(r.center.dx, r.bottom), radius: n));
     final shape = Path.combine(PathOperation.difference, body, holes);
-    canvas.drawPath(shape, Paint()..color = mono ? Colors.white : Brand.ticket);
-    final ink = mono ? const Color(0xFF0F766E) : Colors.white;
-    canvas.drawPath(_star(Offset(w / 2, h * 0.44), w * 0.24), Paint()..color = ink);
-    final line = Paint()
-      ..color = ink.withValues(alpha: mono ? 0.55 : 0.85)
-      ..strokeWidth = math.max(1, h * 0.05)
-      ..strokeCap = StrokeCap.round;
-    for (var x = w * 0.26; x < w * 0.78; x += w * 0.16) {
-      canvas.drawLine(Offset(x, h * 0.72), Offset(x + w * 0.08, h * 0.72), line);
+    final star = _star(Offset(w / 2, h * 0.44), w * 0.24);
+    final stroke = math.max(1.0, h * 0.05);
+    void tearLine(Paint p) {
+      for (var x = w * 0.26; x < w * 0.78; x += w * 0.16) {
+        canvas.drawLine(Offset(x, h * 0.72), Offset(x + w * 0.08, h * 0.72), p);
+      }
     }
+
+    final mono = ink;
+    if (mono == null) {
+      canvas.drawPath(shape, Paint()..color = Brand.ticket);
+      canvas.drawPath(star, Paint()..color = Colors.white);
+      tearLine(Paint()
+        ..color = Colors.white.withValues(alpha: 0.85)
+        ..strokeWidth = stroke
+        ..strokeCap = StrokeCap.round);
+      return;
+    }
+    // Silhouette: the star and tear line are punched out of the body.
+    canvas.saveLayer(Offset.zero & size, Paint());
+    canvas.drawPath(shape, Paint()..color = mono);
+    canvas.drawPath(star, Paint()..blendMode = BlendMode.dstOut);
+    tearLine(Paint()
+      ..blendMode = BlendMode.dstOut
+      ..color = const Color(0xD9000000)
+      ..strokeWidth = stroke
+      ..strokeCap = StrokeCap.round);
+    canvas.restore();
   }
 
   Path _star(Offset c, double r) {
@@ -283,7 +332,7 @@ class _TicketPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant _TicketPainter o) => o.mono != mono;
+  bool shouldRepaint(covariant _TicketPainter o) => o.ink != ink;
 }
 
 /// Amber bulb mark for hints.
@@ -299,11 +348,12 @@ class HintIcon extends StatelessWidget {
       );
 }
 
-/// [mono] draws the ticket as a white silhouette for accent buttons; coins
-/// and hints keep their own colours, which already read well on the accent.
-Widget currencyIcon(Currency c, {double size = 18, bool mono = false}) => switch (c) {
+/// [mono] draws the ticket as a silhouette for accent buttons (white, or
+/// [monoColor]); coins and hints keep their own colours, which already read
+/// well on the accent. Inside a [CurrencyInk] the ticket is a silhouette anyway.
+Widget currencyIcon(Currency c, {double size = 18, bool mono = false, Color? monoColor}) => switch (c) {
       Currency.coins => CoinIcon(size: size),
-      Currency.tickets => TicketIcon(size: size, mono: mono),
+      Currency.tickets => TicketIcon(size: size, mono: mono, color: mono ? monoColor : null),
       Currency.hints => HintIcon(size: size),
     };
 

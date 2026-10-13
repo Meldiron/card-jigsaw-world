@@ -129,9 +129,10 @@ class _DailyRewardSheetState extends ConsumerState<DailyRewardSheet> {
                       ],
                     ),
                     const SizedBox(height: 12),
-                    BigButton(
+                    BigButton.cost(
                       label: 'Restore for',
-                      trailing: Amount(currency: Currency.tickets, value: Economy.streakRestoreTickets(profile.longestStreak), size: 18, color: Colors.white),
+                      currency: Currency.tickets,
+                      amount: Economy.streakRestoreTickets(profile.longestStreak),
                       loading: _restoring,
                       onTap: _restore,
                     ),

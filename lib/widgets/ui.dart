@@ -178,7 +178,10 @@ class BigButton extends StatelessWidget {
         fg = Colors.white;
         border = Border.all(color: Colors.white.withValues(alpha: 0.45));
     }
-    final content = Row(
+    // On a filled button a ticket mark (in a cost label or a trailing
+    // [Amount]) is drawn in the label colour, never teal on cobalt.
+    final filled = bg != Colors.transparent;
+    final Widget content = Row(
       mainAxisSize: expand ? MainAxisSize.max : MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -202,7 +205,7 @@ class BigButton extends StatelessWidget {
           height: height,
           padding: EdgeInsets.symmetric(horizontal: expand ? 16 : 20),
           decoration: BoxDecoration(color: bg, border: border, borderRadius: BorderRadius.circular(Radii.md)),
-          child: content,
+          child: filled ? CurrencyInk(color: fg, child: content) : content,
         ),
       ),
     );
@@ -232,7 +235,7 @@ class CostLabel extends StatelessWidget {
       children: [
         Flexible(child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.w600, letterSpacing: -0.2, color: fg))),
         SizedBox(width: fontSize * 0.5),
-        currencyIcon(currency, size: mark, mono: fg.computeLuminance() > 0.8),
+        currencyIcon(currency, size: mark, mono: fg.computeLuminance() > 0.8, monoColor: fg),
         SizedBox(width: fontSize * 0.3),
         Text('$prefix${AnimatedCounter._fmt(amount)}', style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.w800, letterSpacing: -0.2, color: fg)),
       ],
