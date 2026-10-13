@@ -82,6 +82,8 @@ final routerProvider = Provider<GoRouter>((ref) {
             initialGrid: s.uri.queryParameters['grid'],
             initialMode: s.uri.queryParameters['mode'],
             initialPainting: s.uri.queryParameters['painting'] == '1',
+            // Opened by Quick play (`?from=quick`): offers Another picture.
+            fromQuick: s.uri.queryParameters['from'] == 'quick',
           ),
           s,
         ),

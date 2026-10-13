@@ -22,13 +22,16 @@ import '../../state/catalog.dart';
 import '../../state/giant.dart';
 import '../../state/profile.dart';
 import '../../state/progress.dart';
+import '../../state/rewards.dart';
 import '../../state/settings.dart';
 import '../../state/social.dart';
 import '../../state/sync.dart';
+import '../../state/unlocks.dart';
 import '../../widgets/hash_image.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 import '../ads/house_ads.dart';
+import '../events/quest_rewards.dart';
 import '../sync/board_choice_sheet.dart';
 import 'board_widget.dart';
 import 'giant_board.dart';
@@ -74,6 +77,10 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   final _confetti = ConfettiController(duration: const Duration(seconds: 2));
   bool _completionHandled = false;
   ({int coins, int xp, bool levelUp, int level})? _reward;
+
+  /// Quests this win finished (ready to claim) and what the level-up opened, for the overlay.
+  List<Goal> _questsReady = const [];
+  List<Unlock> _unlocked = const [];
   bool _showTutorial = false;
   int _chainFlash = 0;
 
@@ -160,6 +167,9 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
       elapsed: ok ? existing.elapsedSeconds : 0,
       hintsUsed: ok ? existing.hintsUsed : 0,
       session: session,
+      par: ok ? existing.par : 0,
+      peeked: ok && existing.peeked,
+      bestLock: ok ? existing.bestLock : 0,
     );
   }
 
@@ -253,6 +263,9 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
         Haptics.success();
         setState(() => _chainFlash++);
         _scheduleSave();
+        // The "Lock 5 cards in one move" quests count it when the board is finished.
+        final locked = ref.read(gameControllerProvider(_args!)).justLocked.length;
+        if (locked >= Goals.lockRun) showToast(context, '$locked cards locked in one move', icon: AppIcons.lock);
       case GameEventKind.undo:
         Sfx.instance.whoosh();
         Haptics.light();
@@ -287,6 +300,9 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
       session: _playId,
       resumed: _resumed,
       painting: _painting,
+      par: s.basePar,
+      peeked: s.peeked,
+      bestLock: s.bestLock,
     );
   }
 
@@ -365,6 +381,28 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     final stars = s.stars;
     final puzzle = ref.read(resolvedPuzzleProvider(widget.puzzleId));
     final daily = ref.read(dailyPuzzleProvider);
+    // Quests this win finishes: the ones ready with the solve counted, minus those ready before.
+    final now = DateTime.now();
+    final profileBefore = ref.read(profileProvider).value;
+    final open = ref.read(openFeaturesProvider);
+    final rows = {...?ref.read(progressProvider).value};
+    final readyBefore = {for (final g in readyGoals(rows.values, profileBefore, open, now)) g.key};
+    rows[widget.puzzleId] = PuzzleProgress.fromRow(existing?.id ?? '', {
+      ...?existing?.toData(),
+      'puzzleId': widget.puzzleId,
+      'gridSize': _spec.cells,
+      'mode': _spec.mode.code,
+      'layout': '',
+      'moves': s.moves,
+      'completed': true,
+      'completedAt': now.toUtc().toIso8601String(),
+      'stars': math.max(existing?.stars ?? 0, stars),
+      'painting': _painting,
+      'par': s.basePar,
+      'peeked': s.peeked,
+      'bestLock': s.bestLock,
+    });
+    final questsReady = [for (final g in readyGoals(rows.values, profileBefore, open, now)) if (!readyBefore.contains(g.key)) g];
     ref.read(progressProvider.notifier).complete(
       widget.puzzleId,
       gridSize: _spec.cells,
@@ -376,6 +414,9 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
       session: _playId,
       resumed: _resumed,
       painting: _painting,
+      par: s.basePar,
+      peeked: s.peeked,
+      bestLock: s.bestLock,
     );
     final reward = await ref.read(profileProvider.notifier).recordCompletion(
           puzzleId: widget.puzzleId,
@@ -390,7 +431,16 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
         );
     unawaited(bumpEventProgress(ref, packId: puzzle?.packId));
     if (!mounted) return;
-    setState(() => _reward = (coins: reward.coins, xp: reward.xp, levelUp: reward.levelUp, level: reward.level));
+    final before = profileBefore?.level ?? reward.level;
+    setState(() {
+      _reward = (coins: reward.coins, xp: reward.xp, levelUp: reward.levelUp, level: reward.level);
+      _questsReady = questsReady;
+      _unlocked = [
+        for (var l = before + 1; l <= reward.level; l++)
+          for (final u in Unlocks.atLevel(l))
+            if (!open.has(u)) u,
+      ];
+    });
   }
 
   Future<void> _hint() async {
@@ -716,10 +766,17 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
               image: image.requireValue,
               state: state,
               reward: _reward,
+              questsReady: _questsReady,
+              unlocked: _unlocked,
               pack: _packProgress(puzzle, state),
+              onQuests: () => context.go('/events'),
               onReplay: () {
                 _completionHandled = false;
-                setState(() => _reward = null);
+                setState(() {
+                  _reward = null;
+                  _questsReady = const [];
+                  _unlocked = const [];
+                });
                 _newPlay();
                 _ctrl.restart();
               },
@@ -1004,11 +1061,21 @@ class _CompletionOverlay extends StatefulWidget {
     required this.onReplay,
     required this.onNext,
     required this.onHome,
+    this.questsReady = const [],
+    this.unlocked = const [],
+    this.onQuests,
   });
   final Puzzle puzzle;
   final ui.Image image;
   final GameState state;
   final ({int coins, int xp, bool levelUp, int level})? reward;
+
+  /// Quests this solve finished; a tap opens the Quests tab to claim them.
+  final List<Goal> questsReady;
+
+  /// What the level-up opened (Squares, Painting...).
+  final List<Unlock> unlocked;
+  final VoidCallback? onQuests;
   final _PackProgress pack;
   final VoidCallback onReplay;
   final void Function(Puzzle? next) onNext;
@@ -1132,10 +1199,46 @@ class _CompletionOverlayState extends State<_CompletionOverlay> {
                           children: [
                             Icon(AppIcons.crown, size: 20, color: context.accent),
                             const SizedBox(width: 8),
-                            Text('Level ${reward!.level} reached', style: TextStyle(fontWeight: FontWeight.w600, color: context.accent)),
+                            Flexible(
+                              child: Text(
+                                widget.unlocked.isEmpty
+                                    ? 'Level ${reward!.level} reached'
+                                    : 'Level ${reward!.level} · ${widget.unlocked.map((u) => u == Unlock.painting ? 'Painting is open' : '${u.label} are open').join(' · ')}',
+                                key: const ValueKey('level-up-line'),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontWeight: FontWeight.w600, color: context.accent),
+                              ),
+                            ),
                           ],
                         ),
                       ).animate().fadeIn(),
+                    ],
+                    if (widget.questsReady.isNotEmpty) ...[
+                      const SizedBox(height: 10),
+                      Pressable(
+                        key: const ValueKey('quest-ready-line'),
+                        onTap: widget.onQuests,
+                        scale: 0.99,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                          decoration: BoxDecoration(color: c.canvas, borderRadius: BorderRadius.circular(Radii.md), border: Border.all(color: c.stroke)),
+                          child: Row(
+                            children: [
+                              Icon(AppIcons.quests, size: 18, color: context.accent),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  widget.questsReady.length == 1 ? 'Quest ready: ${widget.questsReady.first.title}' : '${widget.questsReady.length} quests ready to claim',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13.5),
+                                ),
+                              ),
+                              Icon(CupertinoIcons.chevron_right, size: 15, color: c.textTertiary),
+                            ],
+                          ),
+                        ),
+                      ).animate().fadeIn(delay: 200.ms),
                     ],
                     const SizedBox(height: 10),
                     credit,

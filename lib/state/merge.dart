@@ -132,8 +132,12 @@ Map<String, dynamic> mergeProgressRow(Map<String, dynamic> a, Map<String, dynami
   final base = aNewer ? a : b;
   final other = aNewer ? b : a;
   final out = <String, dynamic>{...other, ...base};
-  // Painting belongs to the board kept (the newer row's), also when that row predates it.
+  // Painting, par, Peek and the longest lock belong to the play-through kept (the newer row's),
+  // also when that row predates them.
   out['painting'] = base['painting'] == true;
+  out['par'] = SaveSnapshot._i(base['par']);
+  out['peeked'] = base['peeked'] == true;
+  out['bestLock'] = SaveSnapshot._i(base['bestLock']);
   out['stars'] =max(SaveSnapshot._i(a['stars']), SaveSnapshot._i(b['stars']));
   out['completed'] = a['completed'] == true || b['completed'] == true;
   for (final k in const ['bestMoves', 'bestSeconds']) {

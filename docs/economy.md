@@ -527,3 +527,30 @@ play time (`tools/store/apply_pack_prices.py` keeps `TIER_PACK_COINS` and record
 
 Regular player: boards 27,300 -> 10,200 coins a week; all sources 41,400 -> 24,300 a week (about 5,900 ->
 3,500 coins per hour); a standard 2,400-coin pack goes from about 25 to about 40 minutes of play.
+
+## Quest pool and unlocks (2026-10-14)
+
+Rewards per slot are unchanged (daily 60 + 80 + 100 coins, VIP 120; weekly 1 + 1 + 2 + 2 + 2 tickets,
+VIP 1), so the totals above still hold. What changed is which quest fills a slot (`Goals.daily`,
+`Goals.weekly`):
+
+| Slot | Reward | Quest (rotates by day or week) |
+|---|---|---|
+| Daily 1 | 60 | Solve 3 puzzles |
+| Daily 2 | 80 | Earn 3 stars twice / Solve 2 pictures without Peek / Finish a board at par |
+| Daily 3 | 100 | Finish a <shape> board / Lock 5 cards in one move / Solve a Painting board |
+| Daily VIP | 120 | Finish a 5x5 (4x4 below level 3) or bigger board |
+| Weekly 1 | 1 | Solve 10 puzzles this week |
+| Weekly 2 | 1 | Collect 15 stars / Solve 5 pictures without Peek / Finish 3 boards at par |
+| Weekly 3 | 2 | Play on 4 different days |
+| Weekly 4 | 2 | Finish 3 boards of 5x5 or bigger / Lock 5 cards in one move on 3 pictures / Solve 3 Painting boards |
+| Weekly 5 | 2 | Play every mode once (only the modes the player has; "Earn 3 stars 5 times" with Cards only) |
+| Weekly VIP | 1 | Finish 2 boards of the trickiest open shape (hexagons once open; "Solve 15 puzzles" with Cards only) |
+
+Shapes and options open as levels rise (`Unlocks.levels` in `lib/state/rewards.dart`): Squares at
+level 2, Triangles 4, Hexagons 6, Painting 8, giant boards 10. A player who plays about 20 minutes a day
+earns roughly 1,000 XP a day, so the first comes after the second picture and the rest about a day apart.
+Anything a player already used (a board finished or in progress) stays open whatever the level. A
+quest never asks for something locked: the shape or Painting quest falls back to "Lock 5 cards in one
+move", and a slot keeps the quest already claimed in it, so a level-up that changes the pick never pays
+twice.

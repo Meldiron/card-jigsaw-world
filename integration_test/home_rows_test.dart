@@ -10,7 +10,7 @@
 // writes progress rows through the app's own ProgressNotifier (the same save
 // a finished game makes): one pack with three stars everywhere, one finished
 // short of stars, two started. The newest finished game is on Squares, Easy,
-// which Quick play then repeats.
+// which Quick play then preselects on the mode and board screen.
 import 'dart:async';
 
 import 'package:card_jigsaw_world/app.dart';
@@ -26,6 +26,8 @@ import 'package:card_jigsaw_world/state/catalog.dart';
 import 'package:card_jigsaw_world/state/profile.dart';
 import 'package:card_jigsaw_world/state/progress.dart';
 import 'package:card_jigsaw_world/state/settings.dart';
+import 'package:card_jigsaw_world/state/rewards.dart';
+import 'package:card_jigsaw_world/state/unlocks.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' show MaterialApp;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -80,7 +82,12 @@ void main() {
     Sfx.instance.soundEnabled = false;
     Sfx.instance.musicEnabled = false;
     await tester.pumpWidget(ProviderScope(
-      overrides: [localStoreProvider.overrideWithValue(store)],
+      overrides: [
+        localStoreProvider.overrideWithValue(store),
+        // Shapes and options open as levels rise (lib/state/unlocks.dart); these suites play every one, so all are open and no intro sheet interrupts them.
+        openFeaturesProvider.overrideWithValue(OpenFeatures.all),
+        pendingUnlockIntroProvider.overrideWithValue(null),
+      ],
       child: const CardJigsawApp(),
     ));
     await settle(tester, 1500);
@@ -160,7 +167,6 @@ void main() {
     await solve(of(started.first)[3], 3, mode: GameMode.squares, cells: easySquares.cells);
 
     await go(tester, '/home', ms: 3000);
-    expect(find.text('Squares · Easy board'), findsOneWidget);
     await shot(tester, 'home_03_quick_play_with_board');
 
     await scrollTo(tester, 'Packs in progress');
@@ -185,16 +191,22 @@ void main() {
     expect(c.read(libraryFilterProvider), LibraryFilter.finished);
     await shot(tester, 'home_08_library_finished');
 
-    // Quick play again: straight into a game on the remembered board.
+    // Quick play again: the mode and board screen, on the remembered board (owner request: Quick
+    // play never starts a game by itself), then Play deals it.
     await go(tester, '/home', ms: 2500);
     await tester.drag(find.byType(Scrollable).first, const Offset(0, 4000));
     await settle(tester, 1500);
-    await tapText(tester, 'Quick play', ms: 6000);
+    await tapText(tester, 'Quick play', ms: 4000);
+    expect(find.byType(DifficultyScreen), findsOneWidget, reason: 'Quick play opens the mode and board screen');
+    expect(find.textContaining('squares · Play'), findsOneWidget, reason: 'the last mode is preselected');
+    await shot(tester, 'home_09_quick_play_preselected');
+    await tester.tap(find.textContaining('· Play'), warnIfMissed: false);
+    await settle(tester, 6000);
     if (find.text('Got it').evaluate().isNotEmpty) await tapText(tester, 'Got it');
-    expect(find.byType(BoardWidget), findsOneWidget, reason: 'Quick play starts the game directly');
+    expect(find.byType(BoardWidget), findsOneWidget);
     final board = tester.widget<BoardWidget>(find.byType(BoardWidget)).state.board;
     expect(board.spec.mode, GameMode.squares);
     expect(board.spec.tierIndex, 1);
-    await shot(tester, 'home_09_quick_play_game');
+    await shot(tester, 'home_10_quick_play_game');
   }, timeout: const Timeout(Duration(minutes: 15)));
 }

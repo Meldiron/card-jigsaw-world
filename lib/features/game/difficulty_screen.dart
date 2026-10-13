@@ -15,13 +15,16 @@ import '../../models/models.dart';
 import '../../state/giant.dart';
 import '../../state/profile.dart';
 import '../../state/progress.dart';
+import '../../state/quick_play.dart';
 import '../../state/rewards.dart';
 import '../../state/settings.dart';
 import '../../state/social.dart';
+import '../../state/unlocks.dart';
 import '../../widgets/cached_url_image.dart';
 import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
+import 'unlock_intro.dart';
 
 /// Pre-game screen: preview with the cut overlay, mode picker, board picker
 /// with reward preview, play button. This is the only place the cut preview
@@ -34,8 +37,11 @@ import '../../widgets/ui.dart';
 /// Continue resumes it, Discard progress throws it away and reopens the
 /// choice.
 class DifficultyScreen extends ConsumerStatefulWidget {
-  const DifficultyScreen({super.key, required this.puzzleId, this.initialGrid, this.initialMode, this.initialPainting = false});
+  const DifficultyScreen({super.key, required this.puzzleId, this.initialGrid, this.initialMode, this.initialPainting = false, this.fromQuick = false});
   final String puzzleId;
+
+  /// Opened by Quick play: "Another picture" draws a new one from the same pool.
+  final bool fromQuick;
 
   /// Painting preselected (`?painting=1`).
   final bool initialPainting;
@@ -154,6 +160,24 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
     setState(() => _mode = m);
   }
 
+  /// Quick play's "Another picture": a new picture from the same pool, on the
+  /// same mode, size and Painting.
+  void _anotherPicture(BoardSpec spec, bool painting) {
+    final pool = ref.read(quickPlayPoolProvider);
+    if (pool == null) return;
+    final others = QuickPlayPool(pool.tier, [for (final z in pool.puzzles) if (z.id != widget.puzzleId) z]);
+    final next = pickQuickPlay(others, _random);
+    if (next == null) {
+      showToast(context, 'No other picture to pick right now', icon: CupertinoIcons.shuffle);
+      return;
+    }
+    Haptics.light();
+    final route = quickPlayRoute(next, saved: ref.read(puzzleProgressProvider(next.id)), board: spec.isGiant ? null : spec);
+    context.pushReplacement(painting ? '$route&painting=1' : route);
+  }
+
+  static final _random = math.Random();
+
   Future<void> _offerUnlock(int tierIndex, BoardSpec t) async {
     final cost = Economy.tierUnlockCoins(tierIndex);
     final level = LevelRewards.tierUnlockLevel[tierIndex];
@@ -218,6 +242,8 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
     final progress = ref.watch(puzzleProgressProvider(widget.puzzleId));
     final profile = ref.watch(profileProvider).value;
     final profileN = ref.read(profileProvider.notifier);
+    // Shapes, Painting and giant boards open as levels rise (or stay open once used).
+    final open = ref.watch(openFeaturesProvider);
     if (puzzle != null) _resolveImage(puzzle);
     // Giant pack pictures offer only the giant sizes, all open with the pack.
     final giant = ref.watch(isGiantPuzzleProvider(widget.puzzleId));
@@ -241,13 +267,16 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
       if (savedSpec != null && known && !Board.isValidLayout(savedSpec, savedRow.layout)) savedSpec = null;
     }
     final saved = savedSpec != null ? savedRow : null;
-    final mode = saved != null ? savedSpec!.mode : _mode;
+    // A shape not open yet (a preselection from a quest, say) falls back to Cards.
+    final mode = saved != null ? savedSpec!.mode : (open.mode(_mode) ? _mode : GameMode.cards);
+    // Giant pack pictures wait for giant boards to open (the pack itself can be bought before).
+    final giantLocked = giant && saved == null && !open.giant;
     final tiers = BoardSpec.ladder(mode, imageAspect, giant: giant);
     // A size picked on the other ladder (a normal tier carried to a Giant
     // pack picture, say) falls back to that ladder's first giant or Relaxed size.
     final pick = giant ? (BoardSpec.isGiantTier(_tier) ? _tier - BoardSpec.firstGiantTier : 0) : (BoardSpec.isGiantTier(_tier) ? 2 : _tier);
     final spec = saved != null ? savedSpec! : tiers[pick.clamp(0, tiers.length - 1)];
-    final painting = saved != null ? saved.painting : _painting;
+    final painting = saved != null ? saved.painting : (_painting && open.painting);
     final coins = Economy.completionCoins(spec.cells, 3, mode: mode, painting: painting);
     final xp = Economy.completionXp(spec.cells, 3, mode: mode, painting: painting);
     final maxTier = LevelRewards.maxTierIndex(profile?.level ?? 1) + 1;
@@ -381,7 +410,13 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                             children: [
                               for (final m in GameMode.values) ...[
                                 Expanded(
-                                  child: _ModeTile(mode: m, selected: m == mode, enabled: saved == null, onTap: () => _pickMode(m)),
+                                  child: _ModeTile(
+                                    mode: m,
+                                    selected: m == mode,
+                                    enabled: saved == null,
+                                    locked: saved == null && !open.mode(m),
+                                    onTap: () => saved == null && !open.mode(m) ? showLockedInfo(context, ref, Unlocks.ofMode(m)!) : _pickMode(m),
+                                  ),
                                 ),
                                 if (m != GameMode.values.last) const SizedBox(width: 8),
                               ],
@@ -396,7 +431,9 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              giant
+                              giantLocked
+                                  ? 'Giant boards of 100 cards and more open at level ${Unlock.giant.level}. This pack is ready for you then.'
+                                  : giant
                                   ? 'Giant boards of 100 cards and more, all open with this pack. Pinch to zoom in while you play.'
                                   : 'Bigger boards pay more. Higher levels unlock larger boards, or unlock them now with coins.',
                               style: TextStyle(color: c.textSecondary, fontSize: 13),
@@ -413,13 +450,13 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                               itemBuilder: (_, i) {
                                 final t = tiers[i];
                                 final selected = t == spec;
-                                final locked = !giant && i >= maxTier && !profileN.hasTier(mode, i);
+                                final locked = giant ? giantLocked : i >= maxTier && !profileN.hasTier(mode, i);
                                 final fg = selected ? Colors.white : (locked ? c.textTertiary : c.textPrimary);
                                 return Pressable(
                                   onTap: saved != null
                                       ? null
                                       : locked
-                                      ? () => _offerUnlock(i, t)
+                                      ? () => giant ? showLockedInfo(context, ref, Unlock.giant) : _offerUnlock(i, t)
                                       : () {
                                           Haptics.selection();
                                           setState(() => _tier = t.tier);
@@ -458,6 +495,8 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                           _PaintingTile(
                             on: painting,
                             enabled: saved == null,
+                            locked: saved == null && !open.painting,
+                            onLocked: () => showLockedInfo(context, ref, Unlock.painting),
                             onChanged: (v) {
                               Haptics.selection();
                               setState(() => _painting = v);
@@ -522,6 +561,23 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        // Shows the first-time intro of a shape or option that just opened.
+                        UnlockIntroHost(
+                          at: (path) => path == '/play/${widget.puzzleId}',
+                          onTryHere: (u) => setState(() {
+                            if (u.mode != null) _mode = u.mode!;
+                            if (u == Unlock.painting) _painting = true;
+                          }),
+                        ),
+                        if (giantLocked)
+                          BigButton(
+                            key: const ValueKey('giant-locked'),
+                            label: 'Giant boards open at level ${Unlock.giant.level}',
+                            kind: ButtonKind.secondary,
+                            icon: AppIcons.lock,
+                            onTap: () => showLockedInfo(context, ref, Unlock.giant),
+                          )
+                        else
                         BigButton(
                           label: saved != null
                               ? 'Continue · ${saved.moves} ${saved.moves == 1 ? 'move' : 'moves'} in'
@@ -539,6 +595,17 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                           },
                         ),
                         if (saved != null) ...[const SizedBox(height: 8), BigButton(label: 'Discard progress', kind: ButtonKind.ghost, icon: CupertinoIcons.trash, onTap: () => _discard(saved, spec))],
+                        if (widget.fromQuick) ...[
+                          const SizedBox(height: 4),
+                          BigButton(
+                            key: const ValueKey('another-picture'),
+                            label: 'Another picture',
+                            kind: ButtonKind.ghost,
+                            height: 40,
+                            icon: CupertinoIcons.shuffle,
+                            onTap: () => _anotherPicture(spec, painting),
+                          ),
+                        ],
                       ],
                     ),
                   ),
@@ -554,20 +621,24 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
 /// The Painting option: works with every shape and size and pays
 /// [Economy.paintingMultiplier] more. Frozen while a board is in progress.
 class _PaintingTile extends StatelessWidget {
-  const _PaintingTile({required this.on, required this.enabled, required this.onChanged});
+  const _PaintingTile({required this.on, required this.enabled, required this.onChanged, this.locked = false, this.onLocked});
   final bool on;
   final bool enabled;
   final ValueChanged<bool> onChanged;
+
+  /// Not open yet (level below [Unlock.painting]): a tap explains when it opens.
+  final bool locked;
+  final VoidCallback? onLocked;
 
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
     return Pressable(
       key: const ValueKey('painting-option'),
-      onTap: enabled ? () => onChanged(!on) : null,
+      onTap: locked ? onLocked : (enabled ? () => onChanged(!on) : null),
       scale: 0.99,
       child: Opacity(
-        opacity: enabled || on ? 1 : 0.45,
+        opacity: locked ? 0.6 : (enabled || on ? 1 : 0.45),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 180),
           padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
@@ -586,12 +657,18 @@ class _PaintingTile extends StatelessWidget {
                   children: [
                     Text('Painting · x${_DifficultyScreenState._fmtMult(Economy.paintingMultiplier)}', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
                     const SizedBox(height: 2),
-                    Text('Cards start in black and white and get their colour back as they lock.', style: TextStyle(fontSize: 12.5, height: 1.3, color: c.textSecondary)),
+                    Text(
+                      locked ? 'Opens at level ${Unlock.painting.level}. Cards start in black and white and get their colour back as they lock.' : 'Cards start in black and white and get their colour back as they lock.',
+                      style: TextStyle(fontSize: 12.5, height: 1.3, color: c.textSecondary),
+                    ),
                   ],
                 ),
               ),
               const SizedBox(width: 10),
-              CupertinoSwitch(value: on, activeTrackColor: Brand.success, onChanged: enabled ? onChanged : null),
+              if (locked)
+                Icon(AppIcons.lock, size: 18, color: c.textTertiary)
+              else
+                CupertinoSwitch(value: on, activeTrackColor: Brand.success, onChanged: enabled ? onChanged : null),
             ],
           ),
         ),
@@ -601,20 +678,24 @@ class _PaintingTile extends StatelessWidget {
 }
 
 class _ModeTile extends StatelessWidget {
-  const _ModeTile({required this.mode, required this.selected, required this.onTap, this.enabled = true});
+  const _ModeTile({required this.mode, required this.selected, required this.onTap, this.enabled = true, this.locked = false});
   final GameMode mode;
   final bool selected;
   final bool enabled;
+
+  /// Opens at a higher level: drawn quietly with the level; a tap explains.
+  final bool locked;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    final fg = selected ? Colors.white : c.textPrimary;
+    final fg = selected ? Colors.white : (locked ? c.textTertiary : c.textPrimary);
     return Pressable(
+      key: ValueKey('mode-${mode.code}'),
       onTap: enabled ? onTap : null,
       child: Opacity(
-        opacity: enabled || selected ? 1 : 0.45,
+        opacity: enabled || selected ? (locked ? 0.7 : 1) : 0.45,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 180),
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
@@ -628,9 +709,11 @@ class _ModeTile extends StatelessWidget {
               SizedBox(
                 width: 40,
                 height: 40,
-                child: CustomPaint(
-                  painter: _ModePreview(mode: mode, color: selected ? Colors.white : context.accent),
-                ),
+                child: locked
+                    ? Icon(AppIcons.lock, size: 22, color: c.textTertiary)
+                    : CustomPaint(
+                        painter: _ModePreview(mode: mode, color: selected ? Colors.white : context.accent),
+                      ),
               ),
               const SizedBox(height: 6),
               Text(
@@ -640,7 +723,10 @@ class _ModeTile extends StatelessWidget {
                 style: TextStyle(fontWeight: FontWeight.w700, fontSize: 12.5, color: fg),
               ),
               const SizedBox(height: 2),
-              Text('x${_DifficultyScreenState._fmtMult(mode.multiplier)}', style: TextStyle(fontSize: 11, color: selected ? Colors.white.withValues(alpha: 0.85) : c.textSecondary)),
+              Text(
+                locked ? 'Level ${Unlocks.ofMode(mode)!.level}' : 'x${_DifficultyScreenState._fmtMult(mode.multiplier)}',
+                style: TextStyle(fontSize: 11, color: selected ? Colors.white.withValues(alpha: 0.85) : (locked ? c.textTertiary : c.textSecondary)),
+              ),
             ],
           ),
         ),

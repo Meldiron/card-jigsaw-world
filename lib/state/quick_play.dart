@@ -85,10 +85,15 @@ BoardSpec? lastFinishedBoard(Map<String, PuzzleProgress> progress) {
 /// Where Quick play goes for [puzzle]: its difficulty screen, so the mode
 /// and board can be chosen (owner request: Quick play never starts a game by
 /// itself). [board], the player's last board, is preselected; a board in
-/// progress ([saved]) opens on its own mode and size with Continue.
+/// progress ([saved]) opens on its own mode and size with Continue. The
+/// screen knows it came from Quick play (`from=quick`) and offers Another
+/// picture.
 String quickPlayRoute(Puzzle puzzle, {PuzzleProgress? saved, BoardSpec? board}) {
-  if (board == null || (saved != null && saved.inProgress)) return '/play/${puzzle.id}';
-  return Uri(path: '/play/${puzzle.id}', queryParameters: {'grid': BoardCode.toPath(board.fullCode)}).toString();
+  final preselect = board != null && (saved == null || !saved.inProgress);
+  return Uri(path: '/play/${puzzle.id}', queryParameters: {
+    if (preselect) 'grid': BoardCode.toPath(board.fullCode),
+    'from': 'quick',
+  }).toString();
 }
 
 /// Quick play's pool for the signed-in player (Home shows what it will do).

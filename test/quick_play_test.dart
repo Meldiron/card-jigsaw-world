@@ -132,12 +132,16 @@ void main() {
 
     test('a board in progress opens on its own mode, not the last board', () {
       final saved = _row(z.id, completed: false, mode: 'triangles', cells: BoardSpec.tiers(GameMode.triangles)[2].cells, layout: '1,0,2');
-      expect(quickPlayRoute(z, saved: saved, board: squares), '/play/${z.id}');
+      expect(quickPlayRoute(z, saved: saved, board: squares), '/play/${z.id}?from=quick');
     });
 
     test('opens the plain difficulty screen without a last board', () {
-      expect(quickPlayRoute(z), '/play/${z.id}');
-      expect(quickPlayRoute(z, saved: _row(z.id, stars: 2)), '/play/${z.id}');
+      expect(quickPlayRoute(z), '/play/${z.id}?from=quick');
+      expect(quickPlayRoute(z, saved: _row(z.id, stars: 2)), '/play/${z.id}?from=quick');
+    });
+
+    test('tells the difficulty screen it came from Quick play (Another picture)', () {
+      expect(Uri.parse(quickPlayRoute(z, board: squares)).queryParameters['from'], 'quick');
     });
   });
 }

@@ -9,8 +9,10 @@ import 'package:card_jigsaw_world/game/board.dart';
 import 'package:card_jigsaw_world/models/models.dart';
 import 'package:card_jigsaw_world/state/auth.dart';
 import 'package:card_jigsaw_world/state/catalog.dart';
+import 'package:card_jigsaw_world/state/rewards.dart';
 import 'package:card_jigsaw_world/state/settings.dart';
 import 'package:card_jigsaw_world/state/social.dart';
+import 'package:card_jigsaw_world/state/unlocks.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -34,7 +36,7 @@ void main() {
     }
   }
 
-  Future<GlobalKey> pumpScreen(WidgetTester tester, {required double width, required double height, Map<String, PuzzleProgress> progress = const {}}) async {
+  Future<GlobalKey> pumpScreen(WidgetTester tester, {required double width, required double height, Map<String, PuzzleProgress> progress = const {}, OpenFeatures open = OpenFeatures.all}) async {
     tester.view.physicalSize = Size(width, height);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
@@ -49,6 +51,8 @@ void main() {
         // Offline: the catalogue is empty instead of a network call.
         packsProvider.overrideWith((ref) async => const <Pack>[]),
         allPuzzlesProvider.overrideWith((ref) async => const <Puzzle>[]),
+        // Every shape and option open unless a test says otherwise (they open as levels rise).
+        openFeaturesProvider.overrideWithValue(open),
       ],
       child: RepaintBoundary(
         key: key,
@@ -140,5 +144,34 @@ void main() {
     await settle(tester);
     expect(find.textContaining('hexagons · Play'), findsOneWidget);
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('a level 1 player sees the other shapes and Painting locked with their levels', (tester) async {
+    final key = await pumpScreen(tester, width: 402, height: 874, open: OpenFeatures.forPlayer(level: 1));
+    expect(find.text('Level ${Unlock.squares.level}'), findsOneWidget);
+    expect(find.text('Level ${Unlock.triangles.level}'), findsOneWidget);
+    expect(find.text('Level ${Unlock.hexagons.level}'), findsOneWidget);
+    expect(find.textContaining('Opens at level ${Unlock.painting.level}'), findsOneWidget);
+    await dump(tester, key, 'difficulty_level1_locked');
+    // A locked shape explains itself instead of being picked.
+    await tester.tap(find.byKey(const ValueKey('mode-squares')));
+    await settle(tester);
+    expect(find.text('Squares open at level ${Unlock.squares.level}'), findsOneWidget);
+    expect(find.textContaining('XP to go'), findsOneWidget);
+    await dump(tester, key, 'difficulty_locked_info');
+    await tester.tap(find.text('Got it'));
+    await settle(tester);
+    expect(find.textContaining('cards · Play'), findsOneWidget, reason: 'still on Cards');
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('a shape used before stays open below its level', (tester) async {
+    final used = PuzzleProgress.fromRow('r2', {'userId': 'local', 'puzzleId': 'old', 'gridSize': 20, 'mode': 'hexagons', 'completed': true, 'stars': 3, 'completedAt': '2026-10-01T10:00:00Z'});
+    await pumpScreen(tester, width: 402, height: 874, open: OpenFeatures.forPlayer(level: 1, progress: [used]));
+    expect(find.text('Level ${Unlock.hexagons.level}'), findsNothing);
+    expect(find.text('Level ${Unlock.squares.level}'), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('mode-hexagons')));
+    await settle(tester);
+    expect(find.textContaining('hexagons · Play'), findsOneWidget);
   });
 }

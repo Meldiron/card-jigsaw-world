@@ -25,6 +25,9 @@ class GameState {
     required this.peeking,
     required this.chain,
     required this.tick,
+    this.basePar = 0,
+    this.peeked = false,
+    this.bestLock = 0,
   });
 
   final Board board;
@@ -42,6 +45,19 @@ class GameState {
   final bool peeking;
   final int chain; // 2 when the last move locked 2+ cards in place
   final int tick; // increments on each lock/join, used to re-trigger animations
+
+  /// Par of the play-through as dealt (a resumed board keeps the one it was saved with; [par]
+  /// itself is recomputed on resume and stays what the stars use).
+  final int basePar;
+
+  /// Peek was used in this play-through.
+  final bool peeked;
+
+  /// Most cards a single move of the player's locked in this play-through (Magic does not count).
+  final int bestLock;
+
+  /// Finished in no more moves than the dealt par.
+  bool get atPar => basePar > 0 && moves <= basePar;
 
   int get stars => Board.starsFor(moves: moves, par: par);
   bool get canUndo => history.isNotEmpty && status == GameStatus.playing;
@@ -67,6 +83,9 @@ class GameState {
     bool? peeking,
     int? chain,
     int? tick,
+    int? basePar,
+    bool? peeked,
+    int? bestLock,
   }) =>
       GameState(
         board: board ?? this.board,
@@ -84,19 +103,38 @@ class GameState {
         peeking: peeking ?? this.peeking,
         chain: chain ?? this.chain,
         tick: tick ?? this.tick,
+        basePar: basePar ?? this.basePar,
+        peeked: peeked ?? this.peeked,
+        bestLock: bestLock ?? this.bestLock,
       );
 }
 
 /// Parameters for a game session: which puzzle, which grid, and optionally a
 /// saved layout to resume from.
 class GameArgs {
-  const GameArgs({required this.puzzleId, required this.spec, this.layout, this.moves = 0, this.elapsed = 0, this.hintsUsed = 0, this.session = 0});
+  const GameArgs({
+    required this.puzzleId,
+    required this.spec,
+    this.layout,
+    this.moves = 0,
+    this.elapsed = 0,
+    this.hintsUsed = 0,
+    this.session = 0,
+    this.par = 0,
+    this.peeked = false,
+    this.bestLock = 0,
+  });
   final String puzzleId;
   final BoardSpec spec;
   final List<int>? layout;
   final int moves;
   final int elapsed;
   final int hintsUsed;
+
+  /// The saved play-through's par, Peek and longest lock (0 / false on saves from older versions).
+  final int par;
+  final bool peeked;
+  final int bestLock;
 
   /// Distinguishes sessions on the same board (the game screen bumps it when
   /// it settles the board for the loaded picture), so each gets its own
@@ -136,11 +174,18 @@ class GameController extends Notifier<GameState> {
     final par = restore ? args.moves + board.par : board.par;
     _startTimer();
     return restore
-        ? _fresh(board, par: max(par, 1), moves: args.moves, elapsed: args.elapsed, hintsUsed: args.hintsUsed)
+        ? _fresh(board,
+            par: max(par, 1),
+            moves: args.moves,
+            elapsed: args.elapsed,
+            hintsUsed: args.hintsUsed,
+            basePar: args.par > 0 ? args.par : max(par, 1),
+            peeked: args.peeked,
+            bestLock: args.bestLock)
         : _fresh(board, par: max(par, 1));
   }
 
-  GameState _fresh(Board board, {required int par, int moves = 0, int elapsed = 0, int hintsUsed = 0}) => GameState(
+  GameState _fresh(Board board, {required int par, int moves = 0, int elapsed = 0, int hintsUsed = 0, int? basePar, bool peeked = false, int bestLock = 0}) => GameState(
         board: board,
         par: par,
         moves: moves,
@@ -156,6 +201,9 @@ class GameController extends Notifier<GameState> {
         peeking: false,
         chain: 0,
         tick: 0,
+        basePar: basePar ?? par,
+        peeked: peeked,
+        bestLock: bestLock,
       );
 
   void _startTimer() {
@@ -206,7 +254,7 @@ class GameController extends Notifier<GameState> {
     _apply(state.board.moveTo(from, to));
   }
 
-  void _apply(Board? after, {bool countMove = true}) {
+  void _apply(Board? after, {bool countMove = true, bool byPlayer = true}) {
     if (after == null) {
       state = state.copyWith(clearSelected: true);
       _events.add(GameEventKind.invalid);
@@ -231,6 +279,7 @@ class GameController extends Notifier<GameState> {
       justLocked: newlyLocked,
       justJoined: newlyJoined,
       chain: newlyLocked.length >= 2 ? 2 : 0,
+      bestLock: byPlayer ? max(state.bestLock, newlyLocked.length) : state.bestLock,
       tick: newlyLocked.isEmpty && newlyJoined.isEmpty ? state.tick : state.tick + 1,
       clearSelected: true,
       clearHint: true,
@@ -289,14 +338,14 @@ class GameController extends Notifier<GameState> {
     if (candidates.isEmpty) return false;
     final slot = state.hintSlot ?? (state.selected != null && !b.isLocked(state.selected!) ? state.selected! : candidates[Random().nextInt(candidates.length)]);
     state = state.copyWith(hintsUsed: state.hintsUsed + 1);
-    _apply(b.moveTo(slot, b.homeOf(slot)));
+    _apply(b.moveTo(slot, b.homeOf(slot)), byPlayer: false);
     return true;
   }
 
   void peek({Duration duration = const Duration(seconds: 2)}) {
     if (state.status != GameStatus.playing) return;
     _peekTimer?.cancel();
-    state = state.copyWith(peeking: true, clearSelected: true);
+    state = state.copyWith(peeking: true, peeked: true, clearSelected: true);
     _peekTimer = Timer(duration, () {
       if (!_events.isClosed) state = state.copyWith(peeking: false);
     });

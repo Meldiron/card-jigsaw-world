@@ -76,6 +76,15 @@ layout, so the flag always describes the saved board; ops queued by older builds
 and write `false`, and a sign-in merge takes it from the row whose board it keeps. Older builds
 ignore it (and resume such a board in colour).
 
+`progress.par` (integer 0-100000, default 0), `progress.peeked` (boolean, default false) and
+`progress.bestLock` (integer 0-100000, default 0), all optional, added 2026-10-14 (Appwrite CLI):
+the play-through's dealt par, whether Peek was used and the most cards one move of the player's
+locked (Magic does not count). The quests read them ("Finish a board at par", "Solve without
+Peek", "Lock 5 cards in one move"). Like `painting` they describe the board on the row: board and
+win ops `Put` them, a discard clears them, ops queued by older builds write 0 / false, and a
+sign-in merge takes them from the row whose board it keeps. A resumed board keeps its saved par
+for the quests; the stars still use the par recomputed on resume.
+
 ## Known limits
 
 - A guarded op is checked and then written: two devices claiming the same quest within one round
