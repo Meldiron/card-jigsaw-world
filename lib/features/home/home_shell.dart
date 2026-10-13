@@ -12,6 +12,7 @@ import '../../state/settings.dart';
 import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
+import '../events/quest_rewards.dart';
 
 /// Bottom tab shell: Home · Library · Quests · Social · Profile.
 ///
@@ -57,10 +58,12 @@ class _HomeShellState extends ConsumerState<HomeShell> {
     final dailyReady = profile?.dailyAvailable ?? false;
     // Profile dot: an achievement reward is waiting to be claimed.
     final rewardReady = ref.watch(achievementsProvider.select((list) => list.any((a) => a.done)));
+    // Quests dot: a quest or live event reward is waiting to be claimed.
+    final questReady = ref.watch(questRewardReadyProvider);
     final tabs = [
       GlassTabItem(icon: CupertinoIcons.house, activeIcon: CupertinoIcons.house_fill, label: 'Home', badge: dailyReady),
       const GlassTabItem(icon: CupertinoIcons.square_grid_2x2, activeIcon: CupertinoIcons.square_grid_2x2_fill, label: 'Library'),
-      const GlassTabItem(icon: AppIcons.questsOutline, activeIcon: AppIcons.quests, label: 'Quests'),
+      GlassTabItem(icon: AppIcons.questsOutline, activeIcon: AppIcons.quests, label: 'Quests', badge: questReady),
       const GlassTabItem(icon: CupertinoIcons.person_2, activeIcon: CupertinoIcons.person_2_fill, label: 'Social'),
       GlassTabItem(icon: CupertinoIcons.person_crop_circle, activeIcon: CupertinoIcons.person_crop_circle_fill, label: 'Profile', badge: rewardReady),
     ];

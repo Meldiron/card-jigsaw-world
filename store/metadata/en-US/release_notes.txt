@@ -11,9 +11,12 @@ Version 1.7.0
 - Every pack in the catalogue now shows in the Library, including the AI and Abstract categories.
 - Upcoming content stays hidden until it is close: daily months appear on their first day, events three days before they open.
 - My Puzzles photos are private to your account. Free players keep up to 5 photos; VIP has no limit.
-- The league and My Puzzles load more as you scroll; players with equal XP share a place.
-- Quick play on Home starts a random picture you have not played yet.
+- The leaderboard and My Puzzles load more as you scroll; players with equal XP share a place.
+- Quick play on Home picks a random picture you have not played yet and opens the mode and board picker, with your last board selected.
 - Home shows your packs in progress, packs missing stars and finished packs.
 - Library: a Finished filter, a Hide finished switch and search.
 - Profiles show Total Completion and quests completed.
 - Tickets on blue buttons are now white, so prices are easy to read.
+- Daily reminders: turn them on in Settings and choose the time. One a day with the daily puzzle, none on days you have already claimed your daily gift.
+- A dot on the Quests tab when a quest or event reward is ready to claim.
+- The Social tab shows one leaderboard, ranked by total XP.

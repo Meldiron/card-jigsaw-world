@@ -5,6 +5,7 @@ import 'package:quick_actions/quick_actions.dart';
 import 'core/appwrite.dart';
 import 'core/image_files.dart';
 import 'core/platform.dart';
+import 'core/reminders.dart';
 import 'core/sfx.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/tokens.dart';
@@ -13,6 +14,7 @@ import 'features/sync/sync_host.dart';
 import 'router.dart';
 import 'state/catalog.dart';
 import 'state/purchases.dart';
+import 'state/reminders.dart';
 import 'state/settings.dart';
 import 'state/sync.dart';
 import 'widgets/ui.dart';
@@ -31,6 +33,7 @@ class _CardJigsawAppState extends ConsumerState<CardJigsawApp> with WidgetsBindi
     WidgetsBinding.instance.addObserver(this);
     ImageFiles.attach(ref.read(storageProvider));
     if (supportsQuickActions) _setUpQuickActions();
+    if (supportsNotifications) _setUpReminders();
     // Coins and VIP from a purchase on this device arrive through the server; take them in
     // without the "Synced from another device" alert.
     if (supportsPurchases) {
@@ -59,6 +62,23 @@ class _CardJigsawAppState extends ConsumerState<CardJigsawApp> with WidgetsBindi
     // (UIApplicationShortcutItems) so it uses an SF Symbol and shows once.
   }
 
+  /// A tapped daily reminder opens its daily puzzle (or Home); the week of
+  /// reminders is planned again from the current state.
+  void _setUpReminders() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ReminderChannel.listen((route) {
+        if (!mounted) return;
+        final router = ref.read(routerProvider);
+        if (route.startsWith('/play/')) {
+          router.push(route);
+        } else {
+          router.go(route);
+        }
+      });
+      ref.read(remindersProvider).refresh();
+    });
+  }
+
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
@@ -71,9 +91,13 @@ class _CardJigsawAppState extends ConsumerState<CardJigsawApp> with WidgetsBindi
     if (state == AppLifecycleState.resumed) {
       if (ref.read(settingsProvider).music) Sfx.instance.startMusic();
       ref.read(syncProvider.notifier).onResume();
+      // Picks up a permission change made in iOS Settings.
+      if (supportsNotifications) ref.read(remindersProvider).refresh();
     } else if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive || state == AppLifecycleState.hidden) {
       Sfx.instance.stopMusic();
       ref.read(syncProvider.notifier).onPause();
+      // Leaving the game: plan reminders from today's state (gift, daily puzzle).
+      if (supportsNotifications && state == AppLifecycleState.paused) ref.read(remindersProvider).refresh();
     }
   }
 

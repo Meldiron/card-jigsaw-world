@@ -67,7 +67,7 @@ Puzzle? pickQuickPlay(QuickPlayPool? pool, Random random) {
 }
 
 /// The mode and board tier of the player's most recently finished game,
-/// the choice Quick play repeats. Null before the first finished game.
+/// the choice Quick play preselects. Null before the first finished game.
 ///
 /// The board's columns and rows are those of a reference picture; the game
 /// screen lays the same tier out for the picked picture's proportions.
@@ -81,16 +81,13 @@ BoardSpec? lastFinishedBoard(Map<String, PuzzleProgress> progress) {
   return BoardSpec.fromCells(GameMode.fromCode(last.mode), last.gridSize);
 }
 
-/// Where Quick play goes for [puzzle]: its saved board when one is in
-/// progress, a new game on [board] when the player has a last board, else the
-/// picture's difficulty screen so the mode and board can be chosen.
+/// Where Quick play goes for [puzzle]: its difficulty screen, so the mode
+/// and board can be chosen (owner request: Quick play never starts a game by
+/// itself). [board], the player's last board, is preselected; a board in
+/// progress ([saved]) opens on its own mode and size with Continue.
 String quickPlayRoute(Puzzle puzzle, {PuzzleProgress? saved, BoardSpec? board}) {
-  if (saved != null && saved.inProgress) {
-    final spec = BoardSpec.fromCells(GameMode.fromCode(saved.mode), saved.gridSize);
-    return '/game/${puzzle.id}/${BoardCode.toPath(spec.fullCode)}';
-  }
-  if (board != null) return '/game/${puzzle.id}/${BoardCode.toPath(board.fullCode)}';
-  return '/play/${puzzle.id}';
+  if (board == null || (saved != null && saved.inProgress)) return '/play/${puzzle.id}';
+  return Uri(path: '/play/${puzzle.id}', queryParameters: {'grid': BoardCode.toPath(board.fullCode)}).toString();
 }
 
 /// Quick play's pool for the signed-in player (Home shows what it will do).
@@ -110,7 +107,7 @@ final quickPlayPoolProvider = Provider<QuickPlayPool?>((ref) {
   );
 });
 
-/// The board Quick play starts on, when the player has finished a game.
+/// The board Quick play preselects, when the player has finished a game.
 final quickPlayBoardProvider = Provider<BoardSpec?>((ref) {
   return lastFinishedBoard(ref.watch(progressProvider).value ?? const {});
 });

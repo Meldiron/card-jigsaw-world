@@ -76,7 +76,6 @@ void main() {
       expect(isWeb, kIsWeb);
       expect(supportsPurchases, !kIsWeb);
       expect(supportsQuickActions, !kIsWeb);
-      expect(supportsNotifications, !kIsWeb);
       if (kIsWeb) {
         expect(supportsGiftCodes, isFalse);
         expect(supportsWidgets, isFalse);
@@ -84,13 +83,16 @@ void main() {
       }
     });
 
-    test('gift codes and widgets are Apple-only', () {
+    test('gift codes, widgets and reminders are Apple-only', () {
       debugDefaultTargetPlatformOverride = TargetPlatform.android;
       expect(supportsGiftCodes, isFalse);
       expect(supportsWidgets, isFalse);
+      // Reminders are native iOS code (AppDelegate.swift); Android has none.
+      expect(supportsNotifications, isFalse);
       debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
       expect(supportsGiftCodes, !kIsWeb);
       expect(supportsWidgets, !kIsWeb);
+      expect(supportsNotifications, !kIsWeb);
       debugDefaultTargetPlatformOverride = null;
     });
 

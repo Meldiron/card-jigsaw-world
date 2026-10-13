@@ -15,4 +15,4 @@ CONTENT
 Catalog photos come from Openverse (CC0, public domain, CC BY, CC BY-SA), the Cleveland Museum of Art Open Access API (CC0), the NASA Image and Video Library and Lorem Picsum (Unsplash License). Author and licence are shown on every finished puzzle. Players can also upload their own photos (My Puzzles); these are private to the uploader and not shared with other players.
 
 SOCIAL
-The league leaderboard shows display names and avatars only. Friends are added by friend code. There is no chat, no messaging and no user-generated text beyond the display name.
+The leaderboard shows display names and avatars only. Friends are added by friend code. There is no chat, no messaging and no user-generated text beyond the display name.

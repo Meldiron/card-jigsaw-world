@@ -801,11 +801,11 @@ class _ContinueCard extends StatelessWidget {
 
 final _quickPlayRandom = Random();
 
-/// Quick play: one tap starts a random picture the player can play now. It
-/// prefers pictures never played, then ones short of three stars, then any
-/// (see [quickPlayPool]); the picture is drawn at tap time. The game starts
-/// straight away on the mode and board of the player's last finished game,
-/// or opens the picture's difficulty screen before the first one.
+/// Quick play: one tap opens a random picture the player can play now on
+/// its difficulty screen. It prefers pictures never played, then ones short
+/// of three stars, then any (see [quickPlayPool]); the picture is drawn at
+/// tap time. The mode and board of the player's last finished game are
+/// preselected when that board is still open to them.
 class _QuickPlayCard extends ConsumerWidget {
   const _QuickPlayCard();
 
@@ -829,7 +829,6 @@ class _QuickPlayCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final c = context.colors;
     final pool = ref.watch(quickPlayPoolProvider);
-    final board = _open(ref, ref.watch(quickPlayBoardProvider), ref.watch(profileProvider).value);
     final status = switch (pool?.tier) {
       QuickPlayTier.fresh => 'A picture you have not played yet',
       QuickPlayTier.improve => 'A picture still short of 3 stars',
@@ -852,8 +851,6 @@ class _QuickPlayCard extends ConsumerWidget {
                 Text('Quick play', style: Theme.of(context).textTheme.titleLarge),
                 const SizedBox(height: 2),
                 Text(status, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12.5, color: c.textSecondary)),
-                if (board != null)
-                  Text('${board.mode.label} · ${board.label} board', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, color: c.textTertiary)),
               ],
             ),
           ),

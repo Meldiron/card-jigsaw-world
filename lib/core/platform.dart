@@ -27,8 +27,9 @@ bool get supportsQuickActions => !kIsWeb;
 /// Home Screen / Lock Screen widgets (WidgetKit bridge). iOS only.
 bool get supportsWidgets => !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
 
-/// Daily reminder notifications. Not wired on web.
-bool get supportsNotifications => !kIsWeb;
+/// Daily reminder notifications (local, scheduled on the device). iOS only:
+/// the native side lives in `ios/Runner/AppDelegate.swift`.
+bool get supportsNotifications => !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
 
 /// Native Sign in with Apple sheet. The web signs in through an OAuth redirect.
 bool get supportsNativeAppleSignIn => _isApple;

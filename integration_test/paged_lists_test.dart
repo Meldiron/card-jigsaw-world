@@ -44,7 +44,7 @@ void main() {
     await tapText(tester, 'Continue');
     await tapText(tester, 'Start playing', ms: 8000);
     await tapText(tester, 'Social', ms: 2500);
-    await tapText(tester, 'League', ms: 5000);
+    await tapText(tester, 'Leaderboard', ms: 5000);
     expect(find.textContaining('XP'), findsWidgets);
     await binding.takeScreenshot('41_league');
     final list = find.byWidgetPredicate((w) => w is Scrollable && w.axisDirection == AxisDirection.down).last;

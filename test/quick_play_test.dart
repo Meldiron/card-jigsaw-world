@@ -115,22 +115,27 @@ void main() {
     final z = pictures.first;
     final squares = BoardSpec.tiers(GameMode.squares)[3];
 
-    test('starts the game on the last board', () {
-      final route = quickPlayRoute(z, board: squares);
-      expect(route, '/game/${z.id}/${BoardCode.toPath(squares.fullCode)}');
-      final spec = BoardSpec.fromCode(route.split('/').last);
+    test('opens the difficulty screen with the last board preselected', () {
+      final uri = Uri.parse(quickPlayRoute(z, board: squares));
+      expect(uri.path, '/play/${z.id}');
+      final spec = BoardSpec.fromCode(uri.queryParameters['grid']!);
       expect(spec.mode, GameMode.squares);
       expect(spec.tierIndex, 3);
     });
 
-    test('resumes a saved board instead of replacing it', () {
+    test('never starts a game by itself', () {
       final saved = _row(z.id, completed: false, mode: 'triangles', cells: BoardSpec.tiers(GameMode.triangles)[2].cells, layout: '1,0,2');
-      final spec = BoardSpec.fromCode(quickPlayRoute(z, saved: saved, board: squares).split('/').last);
-      expect(spec.mode, GameMode.triangles);
-      expect(spec.tierIndex, 2);
+      for (final route in [quickPlayRoute(z), quickPlayRoute(z, board: squares), quickPlayRoute(z, saved: saved, board: squares)]) {
+        expect(route, startsWith('/play/${z.id}'));
+      }
     });
 
-    test('opens the difficulty screen without a last board', () {
+    test('a board in progress opens on its own mode, not the last board', () {
+      final saved = _row(z.id, completed: false, mode: 'triangles', cells: BoardSpec.tiers(GameMode.triangles)[2].cells, layout: '1,0,2');
+      expect(quickPlayRoute(z, saved: saved, board: squares), '/play/${z.id}');
+    });
+
+    test('opens the plain difficulty screen without a last board', () {
       expect(quickPlayRoute(z), '/play/${z.id}');
       expect(quickPlayRoute(z, saved: _row(z.id, stars: 2)), '/play/${z.id}');
     });

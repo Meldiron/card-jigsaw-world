@@ -4,10 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/platform.dart';
+import '../../core/reminders.dart';
 import '../../core/theme/tokens.dart';
 import '../../state/auth.dart';
 import '../../state/sync.dart';
 import '../../state/purchases.dart';
+import '../../state/reminders.dart';
 import '../../state/settings.dart';
 import '../../data/purchases.dart';
 import '../../widgets/glass.dart';
@@ -74,8 +76,24 @@ class SettingsScreen extends ConsumerWidget {
           ]),
           group('Gameplay', [
             _SwitchRow(icon: CupertinoIcons.time, label: 'Show timer', value: s.showTimer, onChanged: n.setShowTimer),
-            // Reminders are not wired on web, so the switch is hidden there.
-            if (caps.notifications) _SwitchRow(icon: CupertinoIcons.bell_fill, label: 'Daily reminders', value: s.notifications, onChanged: n.setNotifications),
+            // Reminders are local iOS notifications; the rows are hidden elsewhere.
+            if (caps.notifications) ...[
+              _SwitchRow(
+                key: const ValueKey('settings-reminders'),
+                icon: CupertinoIcons.bell_fill,
+                label: 'Daily reminders',
+                value: s.reminders,
+                onChanged: (v) => _toggleReminders(context, ref, v),
+              ),
+              if (s.reminders)
+                _ValueRow(
+                  key: const ValueKey('settings-reminder-time'),
+                  icon: CupertinoIcons.clock_fill,
+                  label: 'Reminder time',
+                  value: _minutesOfDay(s.reminderMinutes).format(context),
+                  onTap: () => _pickReminderTime(context, ref, s.reminderMinutes),
+                ),
+            ],
           ]),
           group('Account', [
             _NavRow(icon: CupertinoIcons.person_crop_circle, label: isGuest ? 'Sign in or create account' : 'Manage account', onTap: () => context.push('/account')),
@@ -121,6 +139,69 @@ class SettingsScreen extends ConsumerWidget {
     );
   }
 
+  static TimeOfDay _minutesOfDay(int minutes) => TimeOfDay(hour: minutes ~/ 60, minute: minutes % 60);
+
+  /// On: asks iOS for permission the first time. When iOS says no, the switch
+  /// stays off and the alert leads to the app's page in iOS Settings.
+  Future<void> _toggleReminders(BuildContext context, WidgetRef ref, bool on) async {
+    final reminders = ref.read(remindersProvider);
+    if (!on) {
+      await reminders.disable();
+      return;
+    }
+    final granted = await reminders.enable();
+    if (!context.mounted) return;
+    if (granted) {
+      final time = _minutesOfDay(ref.read(settingsProvider).reminderMinutes).format(context);
+      showToast(context, 'Daily reminder at $time', icon: CupertinoIcons.bell_fill);
+      return;
+    }
+    final open = await showAppAlert(
+      context,
+      title: 'Notifications are off',
+      message: 'Allow notifications for Card Jigsaw World in iOS Settings to get a daily reminder.',
+      confirmLabel: 'Open Settings',
+      cancelLabel: 'Not now',
+    );
+    if (open) await ReminderChannel.openSettings();
+  }
+
+  Future<void> _pickReminderTime(BuildContext context, WidgetRef ref, int current) async {
+    var picked = current;
+    final save = await showAppSheet<bool>(
+      context,
+      builder: (ctx) => Padding(
+        padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Reminder time', style: Theme.of(ctx).textTheme.headlineSmall),
+            const SizedBox(height: 2),
+            Text(
+              "One a day with the daily puzzle. None on days you have already claimed your daily gift.",
+              style: TextStyle(color: ctx.colors.textSecondary, fontSize: 13.5, height: 1.35),
+            ),
+            SizedBox(
+              height: 180,
+              child: CupertinoDatePicker(
+                mode: CupertinoDatePickerMode.time,
+                minuteInterval: 5,
+                use24hFormat: MediaQuery.alwaysUse24HourFormatOf(ctx),
+                initialDateTime: DateTime(2000, 1, 1, current ~/ 60, current % 60 - current % 5),
+                onDateTimeChanged: (t) => picked = t.hour * 60 + t.minute,
+              ),
+            ),
+            const SizedBox(height: 8),
+            BigButton(key: const ValueKey('reminder-time-save'), label: 'Set time', onTap: () => Navigator.pop(ctx, true)),
+          ],
+        ),
+      ),
+    );
+    if (save != true) return;
+    await ref.read(remindersProvider).setTime(picked);
+  }
+
   void _showCredits(BuildContext context) {
     showAppSheet(
       context,
@@ -147,7 +228,7 @@ class SettingsScreen extends ConsumerWidget {
 }
 
 class _SwitchRow extends StatelessWidget {
-  const _SwitchRow({required this.icon, required this.label, required this.value, required this.onChanged});
+  const _SwitchRow({super.key, required this.icon, required this.label, required this.value, required this.onChanged});
   final IconData icon;
   final String label;
   final bool value;
@@ -206,6 +287,33 @@ class _NavRow extends StatelessWidget {
               Icon(icon, size: 20, color: context.accent),
               const SizedBox(width: 12),
               Expanded(child: Text(label, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15))),
+              Icon(CupertinoIcons.chevron_right, size: 16, color: context.colors.textTertiary),
+            ],
+          ),
+        ),
+      );
+}
+
+/// A setting with its current value on the right; tapping changes it.
+class _ValueRow extends StatelessWidget {
+  const _ValueRow({super.key, required this.icon, required this.label, required this.value, required this.onTap});
+  final IconData icon;
+  final String label;
+  final String value;
+  final VoidCallback onTap;
+  @override
+  Widget build(BuildContext context) => Pressable(
+        onTap: onTap,
+        scale: 0.99,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Row(
+            children: [
+              Icon(icon, size: 20, color: context.accent),
+              const SizedBox(width: 12),
+              Expanded(child: Text(label, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15))),
+              Text(value, style: TextStyle(color: context.colors.textSecondary, fontSize: 15)),
+              const SizedBox(width: 6),
               Icon(CupertinoIcons.chevron_right, size: 16, color: context.colors.textTertiary),
             ],
           ),

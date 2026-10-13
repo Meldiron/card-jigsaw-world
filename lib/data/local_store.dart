@@ -20,8 +20,13 @@ class LocalStore {
   set haptics(bool v) => _prefs.setBool('haptics', v);
   bool get showTimer => _prefs.getBool('showTimer') ?? true;
   set showTimer(bool v) => _prefs.setBool('showTimer', v);
-  bool get notifications => _prefs.getBool('notifications') ?? true;
-  set notifications(bool v) => _prefs.setBool('notifications', v);
+  /// Daily reminders, off until the player turns them on (the old
+  /// `notifications` key defaulted to on but never scheduled anything).
+  bool get reminders => _prefs.getBool('reminders') ?? false;
+  set reminders(bool v) => _prefs.setBool('reminders', v);
+  /// Reminder time in minutes after local midnight (19:00 by default).
+  int get reminderMinutes => _prefs.getInt('reminderMinutes') ?? 19 * 60;
+  set reminderMinutes(int v) => _prefs.setInt('reminderMinutes', v);
   String get cardStyle => _prefs.getString('cardStyle') ?? 'classic';
   set cardStyle(String v) => _prefs.setString('cardStyle', v);
   int get defaultGrid => _prefs.getInt('defaultGrid') ?? 4;

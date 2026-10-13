@@ -15,7 +15,7 @@ import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 import '../home/header_bar.dart';
 
-/// Social: league leaderboard and friends (add by friend code).
+/// Social: the leaderboard (every player by total XP) and friends (add by friend code).
 class SocialScreen extends ConsumerStatefulWidget {
   const SocialScreen({super.key});
   @override
@@ -93,7 +93,7 @@ class _SocialScreenState extends ConsumerState<SocialScreen> {
                   children: const {
                     0: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Text('League', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+                      child: Text('Leaderboard', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
                     ),
                     1: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 10),
@@ -122,10 +122,10 @@ class _Leaderboard extends ConsumerWidget {
     final place = ref.watch(leaderboardRankProvider).value;
     return board.when(
       loading: () => const Loader(),
-      error: (e, _) => const EmptyState(icon: AppIcons.signal, title: 'League could not load', message: 'Check your connection and pull to refresh.'),
+      error: (e, _) => const EmptyState(icon: AppIcons.signal, title: 'Leaderboard could not load', message: 'Check your connection and pull to refresh.'),
       data: (paged) {
         final list = paged.items;
-        if (list.isEmpty) return const EmptyState(icon: AppIcons.trophy, title: 'The league is empty', message: 'Solve a puzzle to earn XP and take the first place.');
+        if (list.isEmpty) return const EmptyState(icon: AppIcons.trophy, title: 'The leaderboard is empty', message: 'Solve a puzzle to earn XP and take the first place.');
         return RefreshIndicator.adaptive(
           onRefresh: () async {
             ref.invalidate(leaderboardProvider);
@@ -156,10 +156,10 @@ class _Leaderboard extends ConsumerWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Crystal League', style: Theme.of(context).textTheme.titleLarge),
+                              Text('Leaderboard', style: Theme.of(context).textTheme.titleLarge),
                               const SizedBox(height: 2),
                               Text(
-                                place != null ? 'You are #${place.rank} of ${place.total} · Ranked by XP this season' : 'Ranked by XP this season',
+                                place != null ? 'You are #${place.rank} of ${place.total} · Ranked by total XP' : 'Ranked by total XP',
                                 style: TextStyle(color: c.textSecondary, fontSize: 12.5),
                               ),
                             ],

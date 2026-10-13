@@ -21,6 +21,7 @@ import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 import '../gallery/pack_progress.dart';
 import '../home/header_bar.dart';
+import 'quest_rewards.dart';
 
 /// Quests tab: daily quests, weekly quests, then live events.
 class EventsScreen extends ConsumerStatefulWidget {
@@ -163,7 +164,6 @@ class _GoalList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final c = context.colors;
     final profile = ref.watch(profileProvider).value;
-    final isVip = profile?.isVip ?? false;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: SoftCard(
@@ -173,8 +173,7 @@ class _GoalList extends ConsumerWidget {
             for (var i = 0; i < goals.length; i++) ...[
               () {
                 final claimed = profile?.claimedGoals.contains(goals[i].key) ?? false;
-                final locked = (goals[i].vipOnly || i >= freeCount) && !isVip && !claimed;
-                return locked ? _VipGoalRow(goal: goals[i]) : _GoalRow(goal: goals[i], claimed: claimed);
+                return goalLocked(goals[i], i, freeCount, profile) ? _VipGoalRow(goal: goals[i]) : _GoalRow(goal: goals[i], claimed: claimed);
               }(),
               if (i < goals.length - 1) Divider(height: 1, color: c.stroke, indent: 16),
             ],
@@ -316,8 +315,7 @@ class _EventCard extends ConsumerWidget {
     // (community goals).
     final pack = _packProgress(ref, event);
     final isPackQuest = pack != null;
-    final target = isPackQuest ? pack.total : event.goal;
-    final value = isPackQuest ? pack.solved : (progress?.progress ?? 0);
+    final (value, target) = eventProgressOf(pack, event, progress);
     final done = value >= target;
     final claimed = progress?.claimed ?? false;
     final description = isPackQuest ? 'Finish all $target pictures in the ${event.name} pack while the event is live.' : event.description;
@@ -487,9 +485,7 @@ class _UpcomingRow extends ConsumerWidget {
 PackProgress? _packProgress(WidgetRef ref, GameEvent event) {
   final packId = event.packId;
   if (packId == null || packId.isEmpty) return null;
-  final pictures = ref.watch(packPuzzlesProvider(packId)).value ?? const <Puzzle>[];
-  if (pictures.isEmpty) return null;
-  return ref.watch(packProgressProvider(packId));
+  return ref.watch(eventPackProgressProvider(packId));
 }
 
 /// The event cover is its pack cover, so reuse the pack's BlurHash.

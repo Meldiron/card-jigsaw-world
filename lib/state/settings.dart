@@ -16,7 +16,8 @@ class Settings {
     required this.music,
     required this.haptics,
     required this.showTimer,
-    required this.notifications,
+    required this.reminders,
+    this.reminderMinutes = 19 * 60,
     required this.cardStyle,
     required this.defaultGrid,
     required this.onboarded,
@@ -29,7 +30,11 @@ class Settings {
   final bool music;
   final bool haptics;
   final bool showTimer;
-  final bool notifications;
+  /// Daily reminders are on (the player turned them on and iOS allows them).
+  final bool reminders;
+
+  /// When the daily reminder fires, in minutes after local midnight.
+  final int reminderMinutes;
   final CardStyle cardStyle;
   final int defaultGrid;
   final bool onboarded;
@@ -44,7 +49,8 @@ class Settings {
     bool? music,
     bool? haptics,
     bool? showTimer,
-    bool? notifications,
+    bool? reminders,
+    int? reminderMinutes,
     CardStyle? cardStyle,
     int? defaultGrid,
     bool? onboarded,
@@ -57,7 +63,8 @@ class Settings {
         music: music ?? this.music,
         haptics: haptics ?? this.haptics,
         showTimer: showTimer ?? this.showTimer,
-        notifications: notifications ?? this.notifications,
+        reminders: reminders ?? this.reminders,
+        reminderMinutes: reminderMinutes ?? this.reminderMinutes,
         cardStyle: cardStyle ?? this.cardStyle,
         defaultGrid: defaultGrid ?? this.defaultGrid,
         onboarded: onboarded ?? this.onboarded,
@@ -76,7 +83,8 @@ class SettingsNotifier extends Notifier<Settings> {
       music: s.music,
       haptics: s.haptics,
       showTimer: s.showTimer,
-      notifications: s.notifications,
+      reminders: s.reminders,
+      reminderMinutes: s.reminderMinutes,
       cardStyle: s.cardStyle == 'minimal' ? CardStyle.minimal : CardStyle.classic,
       defaultGrid: s.defaultGrid,
       onboarded: s.onboarded,
@@ -122,9 +130,16 @@ class SettingsNotifier extends Notifier<Settings> {
     state = state.copyWith(showTimer: v);
   }
 
-  void setNotifications(bool v) {
-    _s.notifications = v;
-    state = state.copyWith(notifications: v);
+  /// Stores the switch only; `RemindersController` asks iOS for permission
+  /// and schedules the notifications.
+  void setReminders(bool v) {
+    _s.reminders = v;
+    state = state.copyWith(reminders: v);
+  }
+
+  void setReminderMinutes(int v) {
+    _s.reminderMinutes = v;
+    state = state.copyWith(reminderMinutes: v);
   }
 
   void setCardStyle(CardStyle v) {

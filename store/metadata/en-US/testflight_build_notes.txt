@@ -1,7 +1,7 @@
 New in this build:
-- One save on every device: coins, unlocks and solved pictures from the iPhone and the web site now add up instead of overwriting each other. Play made offline is kept and sent when the connection returns.
-- The save reloads when you open the app or return to it, and a short note lists what arrived from another device. If the same picture has two different boards in progress, you choose which one to keep.
-- Records only improve, and replaying a solved picture no longer pays the first-solve reward again.
-- The picture catalogue loads faster: after the first launch only new or changed packs are downloaded.
+- Daily reminders work: turn them on in Settings > Daily reminders and choose the time (19:00 by default). One a day with the daily puzzle, none on days you have already claimed your daily gift.
+- Quick play opens the mode and board picker instead of starting a game; your last board is selected.
+- The Quests tab shows a dot while a quest or event reward is waiting to be claimed.
+- Social shows a plain leaderboard ranked by total XP (no league or season).
 
-Please try: sign in with the same account on the iPhone and on card-jigsaw-world.appwrite.network, solve a picture on one, then open the other.
+Please try: turn on Daily reminders, set the time a few minutes ahead, leave the game, and tap the reminder when it arrives.

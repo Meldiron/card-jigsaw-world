@@ -134,6 +134,11 @@ skills under `.claude/skills/` hold the detailed workflows.
   vip_monthly/yearly), verified server-side by the `verify-purchase` function.
 - `lib/core/platform.dart`: web capability flags.
   `lib/core/sfx.dart`: `CJW_MUTE`. `lib/core/qa.dart`: `CJW_QA` / `CJW_QA_RUN` (test players).
+- Daily reminders: local iOS notifications, no server. `lib/state/reminders.dart` (`planReminders`: one a
+  day for a week at the Settings time, none on a day the daily gift is claimed; replanned on start, resume
+  and background), `lib/core/reminders.dart` (channel `cjw/reminders`), native side `DailyReminders` in
+  `ios/Runner/AppDelegate.swift`. Integration runs ask for provisional permission (no prompt to tap);
+  `integration_test/quests_reminders_test.dart` checks a reminder really fires.
 - Routes (`lib/router.dart`): /welcome /home /library /library/pack/:packId /events (Quests) /social
   /profile (+settings, account, my-puzzles) /play/:puzzleId (difficulty) /game/:puzzleId/:grid /store
   /wheel /auth/callback /player/:userId.
