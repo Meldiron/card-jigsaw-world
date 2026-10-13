@@ -1,8 +1,8 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-13T13:22:31",
-"msg": "Content: daily-2027-03 (31 days) from pool daily-2027a",
+"at": "2026-10-13T13:25:40",
+"msg": "Content: daily-2027-04 (30 days) from pool daily-2027a",
 "ok": true,
 "pushed": true,
 "stage": "committed"
@@ -1115,11 +1115,11 @@
 },
 "daily-2026-11": {
 "added": 0,
-"at": "2026-10-13T13:15:31",
+"at": "2026-10-13T13:26:45",
 "category": "Daily",
 "issues": 0,
 "kind": "new",
-"last_step": "verify",
+"last_step": "pool 986 usable",
 "name": "November 2026",
 "puzzles": 30,
 "removed": 0,
@@ -1182,14 +1182,14 @@
 },
 "daily-2027-07": {
 "added": 0,
-"at": "2026-10-13T13:25:08",
+"at": "2026-10-13T13:26:30",
 "category": "Daily",
 "kind": "new",
 "last_step": "newdaily",
 "name": "July 2027",
-"puzzles": 0,
+"puzzles": 31,
 "removed": 0,
-"status": "pending"
+"status": "fixed"
 },
 "deep-space": {
 "added": 24,
