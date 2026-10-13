@@ -53,7 +53,7 @@ Send us the pack and puzzle name. We check every report and remove pictures that
 
 ### How do I delete my account and data?
 
-Write to us from the email on your account (or with your friend code if you play as a guest). We delete the account, profile, progress, purchase records and uploaded photos within 30 days. See the [privacy policy](privacy-policy.md).
+In the app: Profile > Account > Delete account (guests too). It deletes the account, profile, progress, purchase records, friends and uploaded photos straight away, on every device, and the game starts over as a new guest. If you signed in with Apple you confirm with Apple once more. A VIP subscription is not cancelled by this: cancel it in your App Store subscriptions first. You can also write to us from the email on your account (or with your friend code if you play as a guest) and we delete everything within 30 days. See the [privacy policy](privacy-policy.md).
 
 ### The widget shows an old picture
 

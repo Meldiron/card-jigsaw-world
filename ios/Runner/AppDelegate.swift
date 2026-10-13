@@ -1,4 +1,5 @@
 import Flutter
+import StoreKit
 import UIKit
 import UserNotifications
 
@@ -19,6 +20,35 @@ import UserNotifications
     if let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "DailyReminders") {
       DailyReminders.shared.attach(messenger: registrar.messenger())
     }
+    if let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "AppReview") {
+      AppReview.attach(messenger: registrar.messenger())
+    }
+  }
+}
+
+/// App Store rating prompt (Dart side: lib/core/app_review.dart). StoreKit decides whether the
+/// prompt really appears (at most three times a year per person) and talks only to Apple.
+///
+/// Channel `cjw/review`: `request` asks StoreKit in the active window scene; answers whether a
+/// scene was there to ask in (not whether the prompt showed: StoreKit never says).
+enum AppReview {
+  private static var channel: FlutterMethodChannel?
+
+  static func attach(messenger: FlutterBinaryMessenger) {
+    let channel = FlutterMethodChannel(name: "cjw/review", binaryMessenger: messenger)
+    channel.setMethodCallHandler { call, result in
+      guard call.method == "request" else { return result(FlutterMethodNotImplemented) }
+      let scene = UIApplication.shared.connectedScenes
+        .first { $0.activationState == .foregroundActive } as? UIWindowScene
+      guard let scene else { return result(false) }
+      if #available(iOS 16.0, *) {
+        AppStore.requestReview(in: scene)
+      } else {
+        SKStoreReviewController.requestReview(in: scene)
+      }
+      result(true)
+    }
+    self.channel = channel
   }
 }
 

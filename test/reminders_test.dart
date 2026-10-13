@@ -83,4 +83,64 @@ void main() {
     final n = planReminders(now: _now, minutes: _seven, puzzles: month, profile: _profile(), progress: const {}).first;
     expect(n.toJson(), {'id': '2026-10-13', 'at': DateTime(2026, 10, 13, 19).millisecondsSinceEpoch, 'title': n.title, 'body': n.body, 'route': '/play/daily-13'});
   });
+
+  group('event reminders (players who stopped opening the game)', () {
+    UpcomingEvent event(String id, DateTime opens, {String? pack, int pictures = 22}) =>
+        UpcomingEvent(id: id, name: 'Event $id', opensAt: opens, packId: pack ?? 'evpack-$id', pictures: pictures);
+
+    test('a note the evening before an event opens, opening its pack', () {
+      final notes = planEventReminders(now: _now, minutes: _seven, events: [event('food', DateTime(2026, 10, 25, 0, 1))]);
+      expect(notes, hasLength(1));
+      final n = notes.single;
+      expect(n.id, 'event-food');
+      expect(n.at, DateTime(2026, 10, 24, 19));
+      expect(n.title, 'Event food opens tomorrow');
+      expect(n.body, 'A new pack of 22 pictures for the day, open for a week.');
+      expect(n.route, '/library/pack/evpack-food');
+    });
+
+    test('only notes at least five days away: a player who keeps playing never gets one', () {
+      final notes = planEventReminders(now: _now, minutes: _seven, events: [
+        event('soon', DateTime(2026, 10, 16)), // note on the 15th: two days away
+        event('later', DateTime(2026, 10, 20)), // note on the 19th: six days away
+      ]);
+      expect([for (final n in notes) n.id], ['event-later']);
+    });
+
+    test('at most one a week, a few weeks ahead', () {
+      final notes = planEventReminders(now: _now, minutes: _seven, events: [
+        for (var d = 0; d < 70; d += 2) event('e$d', DateTime(2026, 10, 20 + d)),
+      ]);
+      expect(notes.length, inInclusiveRange(4, eventReminderWeeks));
+      for (var i = 1; i < notes.length; i++) {
+        expect(notes[i].at.difference(notes[i - 1].at), greaterThanOrEqualTo(eventReminderGap));
+      }
+      expect(notes.last.at.isBefore(_now.add(const Duration(days: eventReminderWeeks * 7 + 1))), isTrue);
+    });
+
+    test('never on a day that already has a daily reminder', () {
+      final daily = planReminders(now: _now, minutes: _seven, puzzles: month, profile: _profile(), progress: const {});
+      final busy = {for (final n in daily) '${n.at.year}-${n.at.month.toString().padLeft(2, '0')}-${n.at.day.toString().padLeft(2, '0')}'};
+      // The 19th has a daily reminder (the week ahead runs to the 19th); the 20th note is free.
+      final notes = planEventReminders(now: _now, minutes: _seven, events: [event('a', DateTime(2026, 10, 20)), event('b', DateTime(2026, 10, 21))], busyDays: busy);
+      expect([for (final n in notes) n.id], ['event-b']);
+    });
+
+    test('an event without a pack opens Quests; an unknown picture count stays out of the text', () {
+      final n = planEventReminders(now: _now, minutes: _seven, events: [event('x', DateTime(2026, 10, 25), pack: '', pictures: 0)]).single;
+      expect(n.route, '/events');
+      expect(n.body, 'A new picture pack for the day, open for a week.');
+    });
+
+    test('upcomingEvents takes every event row with its pack size', () {
+      final events = [
+        GameEvent.fromRow('food', {'name': 'World Food Day', 'startAt': '2026-10-13T00:00:00.000Z', 'packId': 'evpack-food'}),
+        GameEvent.fromRow('nostart', {'name': 'No date'}),
+      ];
+      final packs = [Pack.fromRow('evpack-food', {'name': 'World Food Day', 'imageCount': 22})];
+      final up = upcomingEvents(events, packs);
+      expect(up, hasLength(1));
+      expect((up.single.name, up.single.pictures, up.single.packId), ('World Food Day', 22, 'evpack-food'));
+    });
+  });
 }

@@ -129,6 +129,17 @@ class AuthNotifier extends AsyncNotifier<models.User?> {
     state = AsyncData(_remember(await _repo.signInAnonymously()));
   }
 
+  /// The account was deleted on the server: drops its session and the copy of the player this
+  /// device remembers, and starts a fresh guest.
+  Future<models.User> startOverAfterDeletion() async {
+    await _repo.signOut();
+    await ref.read(localStoreProvider).remove(_userKey);
+    state = const AsyncLoading();
+    final user = _remember(await _repo.signInAnonymously());
+    state = AsyncData(user);
+    return user;
+  }
+
   Future<void> retry() async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {

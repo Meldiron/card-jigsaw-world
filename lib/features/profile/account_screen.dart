@@ -11,10 +11,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:go_router/go_router.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/haptics.dart';
 import '../../core/theme/tokens.dart';
 import '../../data/repositories.dart';
+import '../../state/account_deletion.dart';
 import '../../state/auth.dart';
 import '../../state/merge.dart';
 import '../../state/merge_flow.dart';
@@ -199,6 +201,114 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
   /// redirect on the web.
   bool get _appleAvailable => kIsWeb || Platform.isIOS || Platform.isMacOS;
 
+  bool _deleting = false;
+
+  /// Account > Delete account (App Store guideline 5.1.1(v)): guests and signed-in players alike.
+  /// VIP members are reminded first that Apple bills the subscription until they cancel it there.
+  /// Players who signed in with Apple confirm with Apple once more, so the server can revoke the
+  /// game's access to their Apple ID.
+  Future<void> _deleteAccount() async {
+    final isVip = ref.read(profileProvider).value?.isVip ?? false;
+    if (isVip && !kIsWeb) {
+      final manage = await showAppAlert(
+        context,
+        title: 'VIP is billed by Apple',
+        message: 'Deleting your account does not cancel your VIP subscription. Cancel it in your App Store subscriptions first, or Apple keeps billing it.',
+        confirmLabel: 'Manage subscription',
+        cancelLabel: 'Continue',
+      );
+      if (manage) {
+        await launchUrl(Uri.parse('https://apps.apple.com/account/subscriptions'), mode: LaunchMode.externalApplication);
+        return;
+      }
+      if (!mounted) return;
+    }
+    final withApple = !kIsWeb && (Platform.isIOS || Platform.isMacOS) && await ref.read(authRepositoryProvider).hasAppleIdentity();
+    if (!mounted) return;
+    final ok = await showAppAlert(
+      context,
+      title: 'Delete your account?',
+      message: 'Your profile, progress, coins and unlocks, purchase records, My Puzzles photos and friends are deleted on every device. This cannot be undone.'
+          '${withApple ? ' You will confirm with Apple once more.' : ''}',
+      confirmLabel: 'Delete account',
+      cancelLabel: 'Keep account',
+      destructive: true,
+    );
+    if (!ok || !mounted) return;
+    String? appleCode;
+    if (withApple) {
+      try {
+        appleCode = (await SignInWithApple.getAppleIDCredential(scopes: const [])).authorizationCode;
+      } on SignInWithAppleAuthorizationException catch (e) {
+        if (e.code == AuthorizationErrorCode.canceled) {
+          if (mounted) showToast(context, 'Your account was not deleted', icon: CupertinoIcons.xmark_circle);
+          return;
+        }
+        // Apple could not confirm: delete anyway; the server skips revoking the Apple tokens.
+        debugPrint('Apple confirmation failed: ${e.code}');
+      }
+    }
+    setState(() => _deleting = true);
+    final deletion = ref.read(accountDeletionProvider);
+    try {
+      await deletion.deleteOnServer(appleAuthorizationCode: appleCode);
+    } catch (e) {
+      debugPrint('account deletion failed: $e');
+      if (!mounted) return;
+      setState(() => _deleting = false);
+      await showAppAlert(
+        context,
+        title: 'Account not deleted',
+        message: 'The game server could not be reached. Check your connection and try again.',
+        confirmLabel: 'Close',
+        cancelLabel: null,
+      );
+      return;
+    }
+    Haptics.medium();
+    if (mounted) showToast(context, 'Your account was deleted', icon: CupertinoIcons.trash);
+    // The app starts over as a new guest on the welcome screens (the router follows onboarding).
+    await deletion.startOver();
+    if (mounted) setState(() => _deleting = false);
+  }
+
+  Widget _deleteButton(BuildContext context) {
+    final c = context.colors;
+    return Padding(
+      padding: const EdgeInsets.only(top: 28),
+      child: Column(
+        children: [
+          Divider(color: c.stroke),
+          const SizedBox(height: 10),
+          if (_deleting)
+            const Padding(padding: EdgeInsets.all(10), child: CupertinoActivityIndicator())
+          else
+            Pressable(
+              key: const ValueKey('account-delete'),
+              onTap: _busy ? null : _deleteAccount,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(CupertinoIcons.trash, size: 17, color: c.danger),
+                    const SizedBox(width: 8),
+                    Text('Delete account', style: TextStyle(color: c.danger, fontWeight: FontWeight.w600, fontSize: 15)),
+                  ],
+                ),
+              ),
+            ),
+          const SizedBox(height: 4),
+          Text(
+            'Deletes your profile, progress and photos for good.',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 11.5, color: c.textTertiary),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
@@ -323,6 +433,7 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
               child: Text('By continuing you agree to the Terms and Privacy Policy.', style: TextStyle(fontSize: 11.5, color: c.textTertiary)),
             ),
           ],
+          _deleteButton(context),
         ],
       ),
     );

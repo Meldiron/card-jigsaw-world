@@ -51,9 +51,9 @@ The game is suitable for all ages. It contains no violent, sexual or frightening
 ## Your choices
 
 - **Play as a guest.** No email, no name, no password.
-- **Delete your data.** Contact us (below) from the email on your account, or with your friend code if you play as a guest, and we will delete your account, profile, progress, purchase records and uploaded photos within 30 days. Purchases are refunded through Apple, not by us.
+- **Delete your data.** In the app: Profile > Account > Delete account, for guests and signed-in players. It deletes your account, profile, progress, purchase records, friends and uploaded photos at once, on every device; if you signed in with Apple, the game's access to your Apple ID is revoked too. You can also contact us (below) from the email on your account, or with your friend code if you play as a guest, and we will do the same within 30 days. Deleting your account does not cancel a VIP subscription: cancel it in your App Store subscriptions. Purchases are refunded through Apple, not by us.
 - **Export your data.** On request we will send you a copy of the data listed above.
-- **Reminders.** Daily reminders are an opt-in setting and can be turned off at any time.
+- **Reminders.** Daily reminders (and, with them, a note before a new event opens) are an opt-in setting, scheduled on your device only, and can be turned off at any time.
 
 ## Security
 
