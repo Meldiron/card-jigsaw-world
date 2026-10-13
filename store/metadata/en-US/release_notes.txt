@@ -1,11 +1,9 @@
 Version 1.7.0
 
-- Squares are always square and Cards are always card-shaped; board sizes follow each picture's shape.
-- Triangles and Hexagons show the whole picture, with half pieces along the edges.
-- Pieces in their right spot sit edge to edge without a frame; loose cards have a clearer frame.
-- Live event and daily month cards show progress and completion ticks.
-- Achievements: ready to claim on top, finished at the bottom.
-- Every screen leaves room above the tab bar.
-- New prices: packs from 2,000 coins, boosters cost more, and every store bundle gives much more.
-- VIP members claim 500 bonus coins every week from Quests.
-- Fixed pictures that sometimes failed to appear.
+- Every picture is now served from our own servers, so tiles and covers load reliably.
+- The picture catalogue is rebuilt: no people, no repeats, portrait or square only, at least 20 pictures per pack, and new AI and Abstract categories.
+- Finishing a puzzle pays fewer coins; packs stay at their prices.
+- Dragged pieces show every detail: square corners and no frame.
+- Offers in an ad break open their destination instead of the next puzzle.
+- Cleaner board preview corners on the difficulty screen.
+- VIP members get their 500 bonus coins automatically once a week.
