@@ -16,7 +16,7 @@ iterates by build number only.**
 ## Commands
 | Goal | Command | Effect |
 | --- | --- | --- |
-| Install on the phone (USB or Wi-Fi) | `tools/dev/device.sh [--wipe] [--no-build]` | release build, installs on the paired iPhone |
+| Install on the phone (only when the owner asks) | `tools/dev/device.sh [--wipe] [--no-build]` | release build, installs on the paired iPhone |
 | Next TestFlight build of the current version | `tools/dev/testflight.sh` | runs the `Release to TestFlight` workflow; build = 100 + run number; waits for processing, adds to internal + public groups, submits beta review only if the version has none |
 | Start a new version cycle | `tools/dev/release.sh X.Y.Z` | bumps pubspec, commits, pushes, first build; only after the previous version shipped to the store or was abandoned |
 | Submit to App Review | Actions → `Submit to App Store` (version, optional build) | `asc_publish.py release` + `submit --yes`; always human-started |

@@ -1,6 +1,6 @@
 ---
 name: testflight-feedback
-description: Handle a round of TestFlight tester feedback for Card Jigsaw World end to end - fetch feedback and screenshots from App Store Connect, triage, fix, QA the exact reported path on the simulator, ship a TestFlight build plus web deploy, install on the owner's iPhone, and resolve the items on Apple. Use when the owner says "check feedback", "address feedback", "new feedback on Apple", or sends iOS screenshots with requests.
+description: Handle a round of TestFlight tester feedback for Card Jigsaw World end to end - fetch feedback and screenshots from App Store Connect, triage, fix, QA the exact reported path on the simulator, ship a TestFlight build plus web deploy, and resolve the items on Apple. Use when the owner says "check feedback", "address feedback", "new feedback on Apple", or sends iOS screenshots with requests.
 ---
 
 # TestFlight feedback round
@@ -58,7 +58,8 @@ Items that are questions or "help me decide" get an answer, not a code change.
    `gh run watch` yourself.
 4. Web: `tools/dev/deploy-web.sh` (same commit). Run it after any local Flutter build finishes, not in
    parallel with one.
-5. Owner's iPhone: `tools/dev/device.sh` (Wi-Fi works). Bump the local build number in `pubspec.yaml`
+5. Owner's iPhone: do NOT install unless the owner asks (owner rule); TestFlight delivers the build.
+   When asked: `tools/dev/device.sh` (Wi-Fi works). Bump the local build number in `pubspec.yaml`
    if the owner needs to tell builds apart.
 
 ## 5. Resolve

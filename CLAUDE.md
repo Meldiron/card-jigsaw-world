@@ -49,7 +49,8 @@ skills under `.claude/skills/` hold the detailed workflows.
   background; it exits when the limit is crossed, then stop the agents, push a checkpoint, tell the
   owner. If the owner asks to continue on the other account past a limit, `tools/dev/usage-relay.sh
   FIRST TARGET` switches with `cswap switch TARGET` when FIRST is crossed. Keep worker counts modest (4 to 5): many parallel downloads saturated the owner's internet.
-- **Installing on the owner's iPhone**: `tools/dev/device.sh` works over Wi-Fi (the phone is paired;
+- **Installing on the owner's iPhone: only when the owner asks** (owner rule, 2026-10-13; releases and
+  feedback rounds do not install, TestFlight reaches the phone). When asked, `tools/dev/device.sh` works over Wi-Fi (the phone is paired;
   UDID 00008110-000024E63650401E). `--wipe` reinstalls fresh (onboarding), `--no-build` pushes the
   last build. Release builds keep sound; debug runs are muted.
 - **Commits**: `git -c user.name="Matej Bačo" -c user.email="matej@appwrite.io" commit ...`, push to
