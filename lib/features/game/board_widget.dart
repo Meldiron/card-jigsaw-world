@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/scheduler.dart';
 
 import '../../core/theme/tokens.dart';
 import '../../game/board.dart';
@@ -33,6 +34,7 @@ class BoardWidget extends StatefulWidget {
     required this.height,
     this.painting = false,
     this.zoom,
+    this.edges = false,
   });
 
   final ui.Image image;
@@ -51,9 +53,19 @@ class BoardWidget extends StatefulWidget {
   /// on normal boards, which behave exactly as before.
   final BoardZoom? zoom;
 
+  /// The Edges filter (giant boards): cards whose place is on the board's
+  /// edge stay bright and every other card fades back, the classic way to
+  /// start a big jigsaw with its frame.
+  final bool edges;
+
   @override
   State<BoardWidget> createState() => _BoardWidgetState();
 }
+
+/// Whether [card] belongs on the edge of the board (a cell with a side on the
+/// board's outline). Works for every tiling: an edge cell has a missing
+/// neighbour.
+bool isEdgeCard(Tiling tiling, int card) => tiling.edgeNeighbours(card).contains(null);
 
 /// Zoom and pan of a giant board. The game screen owns it (its zoom buttons
 /// call [zoomTo] and [reset]); [BoardWidget] draws the board through it and
@@ -67,30 +79,116 @@ class BoardZoom extends ChangeNotifier {
     });
   }
 
+  /// The most any board zooms in.
   static const maxZoom = 4.0;
 
   /// Zoom the zoom-in button goes to from the whole board.
   static const stepZoom = 2.5;
+
+  /// On-screen width a card reaches at the board's own zoom limit: enough to
+  /// see its detail, never so close that only two or three cards show (the
+  /// smaller giant boards stop earlier than the 300-card ones).
+  static const closeCard = 96.0;
 
   final AnimationController _anim;
   double _zoom = 1;
   Offset _pan = Offset.zero;
   Size _viewport = Size.zero;
   (double, Offset) _from = (1, Offset.zero), _to = (1, Offset.zero);
+  double _limit = maxZoom;
+  ({double zoom, Offset centre})? _pending;
 
   double get zoom => _zoom;
   Offset get pan => _pan;
   bool get zoomed => _zoom > 1.01;
 
+  /// This board's zoom limit (at most [maxZoom]).
+  double get limit => _limit;
+
+  /// Where the double tap and the zoom-in button go from the whole board.
+  double get step => math.min(stepZoom, _limit);
+
+  /// Sets the limit from the size of one cell on screen at zoom 1. Called
+  /// while the board builds: no notification, the build reads the result.
+  void fitCell(double cell) {
+    final l = cell <= 0 ? maxZoom : (closeCard / cell).clamp(2.0, maxZoom);
+    if (l == _limit) return;
+    _limit = l;
+    _apply(_zoom, _pan, notify: false);
+  }
+
   /// The board's size on screen at zoom 1 (set by [BoardWidget]).
+  Size get viewport => _viewport;
   set viewport(Size size) {
     if (size == _viewport) return;
     _viewport = size;
     _apply(_zoom, _pan, notify: false);
+    final p = _pending;
+    if (p != null && !size.isEmpty) {
+      _pending = null;
+      // Set while the board builds (it draws the restored view at once); the
+      // bar and the overview map hear about it after the frame.
+      _apply(p.zoom, _panFor(p.zoom, p.centre), notify: false);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!_disposed) notifyListeners();
+      });
+    }
+  }
+
+  /// The part of the board in view, in board coordinates (zoom 1).
+  Rect get visible => Rect.fromLTWH(-_pan.dx / _zoom, -_pan.dy / _zoom, _viewport.width / _zoom, _viewport.height / _zoom);
+
+  /// Where the board point [p] (zoom 1 coordinates) is in the viewport.
+  Offset toViewport(Offset p) => p * _zoom + _pan;
+
+  /// The view to save: the zoom and the board point in the middle of the
+  /// view as a share of the board's width and height, so a different screen
+  /// size still opens on the same part of the picture.
+  ({double zoom, Offset centre}) get snapshot {
+    if (_viewport.isEmpty) return (zoom: _zoom, centre: const Offset(0.5, 0.5));
+    final c = visible.center;
+    return (zoom: _zoom, centre: Offset(c.dx / _viewport.width, c.dy / _viewport.height));
+  }
+
+  /// Opens on a saved view (applied once the viewport is known).
+  void restore(double zoom, Offset centre) {
+    if (_viewport.isEmpty) {
+      _pending = (zoom: zoom, centre: centre);
+      return;
+    }
+    _apply(zoom, _panFor(zoom, centre));
+  }
+
+  Offset _panFor(double zoom, Offset centre) {
+    final z = zoom.clamp(1.0, _limit);
+    return _viewport.center(Offset.zero) - Offset(centre.dx * _viewport.width, centre.dy * _viewport.height) * z;
+  }
+
+  /// Animates so the board point [p] (zoom 1 coordinates) sits in the middle
+  /// of the view, at the current zoom (or [zoom]).
+  void centreOn(Offset p, {double? zoom}) {
+    final z = (zoom ?? _zoom).clamp(1.0, _limit);
+    _animateTo(z, _viewport.center(Offset.zero) - p * z);
+  }
+
+  /// Puts the board point [p] in the middle of the view at once (a finger
+  /// dragging over the overview map).
+  void lookAt(Offset p) {
+    _anim.stop();
+    _apply(_zoom, _viewport.center(Offset.zero) - p * _zoom);
+  }
+
+  /// Moves the view by [delta] viewport points at once (auto-pan while a card
+  /// is dragged to the edge); returns how far the board actually moved.
+  Offset panBy(Offset delta) {
+    _anim.stop();
+    final before = _pan;
+    _apply(_zoom, _pan + delta);
+    return _pan - before;
   }
 
   void _apply(double zoom, Offset pan, {bool notify = true}) {
-    final z = zoom.clamp(1.0, maxZoom);
+    final z = zoom.clamp(1.0, _limit);
     final p = Offset(pan.dx.clamp(_viewport.width * (1 - z), 0.0), pan.dy.clamp(_viewport.height * (1 - z), 0.0));
     if (z == _zoom && p == _pan) return;
     _zoom = z;
@@ -108,9 +206,13 @@ class BoardZoom extends ChangeNotifier {
   void zoomTo(double zoom, {Offset? focal}) {
     final f = focal ?? _viewport.center(Offset.zero);
     final content = (f - _pan) / _zoom;
-    final z = zoom.clamp(1.0, maxZoom);
+    final z = zoom.clamp(1.0, _limit);
     _animateTo(z, f - content * z);
   }
+
+  /// Double tap: in at [focal] from the whole board, back to the whole board
+  /// when zoomed in.
+  void toggleAt(Offset focal) => zoomed ? reset() : zoomTo(step, focal: focal);
 
   /// Back to the whole board.
   void reset() => _animateTo(1, Offset.zero);
@@ -121,17 +223,33 @@ class BoardZoom extends ChangeNotifier {
     _anim.forward(from: 0);
   }
 
+  bool _disposed = false;
+
   @override
   void dispose() {
+    _disposed = true;
     _anim.dispose();
     super.dispose();
   }
 }
 
-class _BoardWidgetState extends State<BoardWidget> {
+class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStateMixin {
   int? _dragSlot; // the card under the finger
   Offset _dragDelta = Offset.zero; // how far the finger moved since pan start
   int? _hoverSlot; // slot under the dragged card's centre
+
+  // Auto-pan (zoomed boards): while a dragged card is held near the edge of
+  // the view, the board slides the other way under it, so a card can travel
+  // across a zoomed board in one drag.
+  late final Ticker _autoPan = createTicker(_onAutoPan);
+  Offset _autoPanVelocity = Offset.zero; // viewport points per second
+  Duration _autoPanLast = Duration.zero;
+
+  // Double tap (zoomed boards): the first tap of a pair, so the second can
+  // undo it (select, then deselect) and zoom instead. Taps go through at
+  // once, so tap-tap moves never wait for a double tap that does not come.
+  ({int slot, int? selectedBefore, DateTime at})? _lastTap;
+  static const _doubleTapWindow = Duration(milliseconds: 280);
 
   // Pinch (zoomable boards): fingers on the board, the pinch's starting
   // point, and whether this touch has had two fingers (its taps and drags
@@ -166,7 +284,74 @@ class _BoardWidgetState extends State<BoardWidget> {
   @override
   void dispose() {
     widget.zoom?.removeListener(_onZoom);
+    _autoPan.dispose();
     super.dispose();
+  }
+
+  /// A tap on [slot] at [local] (the card's own coordinates). On a zoomable
+  /// board a second tap on the same card right after a select or deselect is
+  /// a double tap: it puts the selection back the way it was and zooms in at
+  /// that point, or back out to the whole board.
+  void _tapped(int slot, Offset local) {
+    if (_multiTouch) return;
+    final zoom = widget.zoom;
+    final now = DateTime.now();
+    final last = _lastTap;
+    if (zoom != null && last != null && last.slot == slot && now.difference(last.at) < _doubleTapWindow) {
+      _lastTap = null;
+      // The first tap selected or deselected this card (a move would have
+      // gone elsewhere): restore what was selected before it.
+      if (last.selectedBefore == null || last.selectedBefore == slot) {
+        if (widget.state.selected != last.selectedBefore) widget.onTap(slot);
+        zoom.toggleAt(zoom.toViewport(tiling.cellBounds(slot, boardSize).topLeft + local));
+        return;
+      }
+    }
+    _lastTap = (slot: slot, selectedBefore: widget.state.selected, at: now);
+    widget.onTap(slot);
+  }
+
+  /// Starts, steers or stops the auto-pan for a dragged card whose finger is
+  /// at [global] (screen coordinates).
+  void _steerAutoPan(Offset global) {
+    final zoom = widget.zoom;
+    final box = context.findRenderObject() as RenderBox?;
+    if (zoom == null || !zoom.zoomed || box == null || !box.hasSize) return _stopAutoPan();
+    final p = box.globalToLocal(global);
+    const margin = 44.0, maxSpeed = 520.0;
+    double axis(double v, double extent) {
+      if (v < margin) return maxSpeed * ((margin - v) / margin).clamp(0.0, 1.0);
+      if (v > extent - margin) return -maxSpeed * ((v - (extent - margin)) / margin).clamp(0.0, 1.0);
+      return 0;
+    }
+
+    _autoPanVelocity = Offset(axis(p.dx, box.size.width), axis(p.dy, box.size.height));
+    if (_autoPanVelocity == Offset.zero) return _stopAutoPan();
+    if (!_autoPan.isActive) {
+      _autoPanLast = Duration.zero;
+      _autoPan.start();
+    }
+  }
+
+  void _stopAutoPan() {
+    _autoPanVelocity = Offset.zero;
+    if (_autoPan.isActive) _autoPan.stop();
+  }
+
+  void _onAutoPan(Duration elapsed) {
+    final zoom = widget.zoom, slot = _dragSlot;
+    if (zoom == null || slot == null) return _stopAutoPan();
+    final dt = (elapsed - _autoPanLast).inMicroseconds / 1e6;
+    _autoPanLast = elapsed;
+    if (dt <= 0 || dt > 0.1) return;
+    final moved = zoom.panBy(_autoPanVelocity * dt);
+    if (moved == Offset.zero) return;
+    // The finger stays put while the board slides: the card it holds moves
+    // through the board by the same amount the other way.
+    setState(() {
+      _dragDelta -= moved / zoom.zoom;
+      _hoverSlot = tiling.slotAt(tiling.cellCenter(slot, boardSize) + _dragDelta, boardSize);
+    });
   }
 
   void _onZoom() {
@@ -206,7 +391,7 @@ class _BoardWidgetState extends State<BoardWidget> {
     if (p == null || zoom == null || _pointers.length < 2) return;
     final ps = _pointers.values.take(2).toList();
     final dist = (ps[0] - ps[1]).distance, focal = (ps[0] + ps[1]) / 2;
-    final z = (p.zoom * (p.dist <= 0 ? 1 : dist / p.dist)).clamp(1.0, BoardZoom.maxZoom);
+    final z = (p.zoom * (p.dist <= 0 ? 1 : dist / p.dist)).clamp(1.0, zoom.limit);
     // Keep the board point that was under the fingers under them.
     final content = (p.focal - p.pan) / p.zoom;
     zoom.set(z, focal - content * z);
@@ -248,10 +433,20 @@ class _BoardWidgetState extends State<BoardWidget> {
     // follow the cell instead of the minimums tuned for normal boards (which
     // keep exactly their old values).
     final fine = zoom != null;
-    final gap = widget.cardStyle == CardStyle.classic ? (fine ? math.max(math.min(6.0, cell * 0.12), cell * 0.08) : math.max(6.0, cell * 0.08)) : 2.0;
-    final radius = widget.cardStyle == CardStyle.classic ? math.min(18.0, cell * 0.17) : (fine ? math.min(8.0, cell * 0.2) : 8.0);
-    final strokeScale = fine ? (cell / 56).clamp(0.35, 1.0) : 1.0;
-    final cacheKey = (widget.state, widget.cardStyle, boardSize, widget.image, widget.painting, gap, radius, strokeScale);
+    // Giant boards are scaled up as a whole, so their gutters, frames and
+    // outlines stay thin for the close view (at 4x a normal frame would take
+    // a third of every card). Outlines also thin out in steps as the player
+    // zooms in, so they read about the same on screen at every zoom (steps,
+    // not every frame, so 300 cards are not rebuilt during a pinch).
+    if (fine) {
+      zoom.viewport = boardSize;
+      zoom.fitCell(cell);
+    }
+    final band = fine ? (zoom.zoom < 1.6 ? 1.0 : (zoom.zoom < 2.6 ? 2.0 : (zoom.zoom < 3.4 ? 3.0 : 4.0))) : 1.0;
+    final gap = widget.cardStyle == CardStyle.classic ? (fine ? math.max(0.8, cell * 0.05) : math.max(6.0, cell * 0.08)) : (fine ? math.max(0.6, cell * 0.035) : 2.0);
+    final radius = widget.cardStyle == CardStyle.classic ? (fine ? cell * 0.12 : math.min(18.0, cell * 0.17)) : (fine ? cell * 0.1 : 8.0);
+    final strokeScale = fine ? (cell / 56).clamp(0.3, 1.0) / math.pow(band, 0.6) : 1.0;
+    final cacheKey = (widget.state, widget.cardStyle, boardSize, widget.image, widget.painting, gap, radius, strokeScale, widget.edges);
     if (cacheKey != _cacheKey) {
       _cacheKey = cacheKey;
       _cache.clear();
@@ -316,7 +511,6 @@ class _BoardWidgetState extends State<BoardWidget> {
         ],
       );
     if (zoom != null) {
-      zoom.viewport = boardSize;
       // The board is laid out at its size on screen and scaled, so every
       // card, gutter and stroke grows with the zoom and the picture is drawn
       // from the full-size decode at the zoomed resolution.
@@ -459,6 +653,8 @@ class _BoardWidgetState extends State<BoardWidget> {
       grouped: grouped,
       painting: widget.painting,
       strokeScale: strokeScale,
+      thinFrame: widget.zoom != null,
+      fade: widget.edges && !dragging && !selected && !isEdgeCard(tiling, card),
     );
     if (justLocked || justJoined) {
       child = _LockPulse(key: ValueKey('pulse-$slot-${state.tick}'), strong: justLocked, child: child);
@@ -477,9 +673,7 @@ class _BoardWidgetState extends State<BoardWidget> {
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
           // A touch that became a pinch neither taps nor drags.
-          onTap: () {
-            if (!_multiTouch) widget.onTap(slot);
-          },
+          onTapUp: (d) => _tapped(slot, d.localPosition),
           onPanStart: locked || state.status != GameStatus.playing
               ? null
               : (_) {
@@ -498,10 +692,12 @@ class _BoardWidgetState extends State<BoardWidget> {
                     _dragDelta += d.delta;
                     _hoverSlot = tiling.slotAt(tiling.cellCenter(slot, boardSize) + _dragDelta, boardSize);
                   });
+                  _steerAutoPan(d.globalPosition);
                 },
           onPanEnd: locked
               ? null
               : (_) {
+                  _stopAutoPan();
                   if (_dragSlot != slot) return;
                   final target = tiling.slotAt(tiling.cellCenter(slot, boardSize) + _dragDelta, boardSize);
                   setState(() {
@@ -512,6 +708,7 @@ class _BoardWidgetState extends State<BoardWidget> {
                   if (target != null && target != slot) widget.onDrop(slot, target);
                 },
           onPanCancel: () {
+            _stopAutoPan();
             if (_dragSlot == slot) {
               setState(() {
                 _dragSlot = null;
@@ -637,12 +834,22 @@ class _CardFace extends StatelessWidget {
     required this.grouped,
     this.painting = false,
     this.strokeScale = 1,
+    this.thinFrame = false,
+    this.fade = false,
   });
 
   final ui.Image image;
   final List<Offset> polygon;
   final Rect source;
   final bool locked;
+
+  /// Giant boards: the frame follows the thin gutter instead of a 2 pt minimum.
+  final bool thinFrame;
+
+  /// The Edges filter is on and this card does not belong on the edge: it
+  /// fades back (darker and paler) so the edge cards stand out.
+  final bool fade;
+  static const _fadeDim = 0.58;
 
   /// Painting: black and white until the card locks, then its colour fades in
   /// with the lock.
@@ -697,73 +904,78 @@ class _CardFace extends StatelessWidget {
     final classic = cardStyle == CardStyle.classic;
     final frame = context.isDark ? const Color(0xFFA9AEB9) : Colors.white;
     final edge = Colors.black.withValues(alpha: context.isDark ? 0.55 : 0.22);
-    final frameWidth = math.max(2.0, gap * 0.38);
+    final frameWidth = thinFrame ? gap * 0.45 : math.max(2.0, gap * 0.38);
     return TweenAnimationBuilder<double>(
-      tween: Tween(end: locked ? 1 : 0),
-      duration: const Duration(milliseconds: 420),
+      tween: Tween(end: fade ? 1 : 0),
+      duration: const Duration(milliseconds: 220),
       curve: Curves.easeOutCubic,
-      builder: (_, lockT, _) => TweenAnimationBuilder<_EdgeInsets>(
-        // Each edge's gutter slides shut as the card snaps to its group, in
-        // step with the card's own move.
-        tween: _EdgeInsetsTween(end: _EdgeInsets([for (final fused in fusedEdges) fused ? -_overlap : (locked || dragging ? 0.0 : half)])),
-        duration: const Duration(milliseconds: 280),
+      builder: (_, fadeT, _) => TweenAnimationBuilder<double>(
+        tween: Tween(end: locked ? 1 : 0),
+        duration: const Duration(milliseconds: 420),
         curve: Curves.easeOutCubic,
-        builder: (_, insets, _) {
-          // Interaction language: a picked-up card lifts (shadow + scale) and
-          // gets an ink edge; the drop target brightens; a blocked target dims
-          // with a red edge; a floating group shares one accent edge. No colour
-          // casts over the picture.
-          final Color? outline;
-          final double stroke;
-          var outerOnly = true;
-          if (selected) {
-            outline = ink;
-            stroke = _selectionStroke * strokeScale;
-          } else if (hovered == _Hover.ok) {
-            outline = ink;
-            stroke = _selectionStroke * strokeScale;
-            outerOnly = false;
-          } else if (hovered == _Hover.blocked) {
-            outline = Brand.danger;
-            stroke = _selectionStroke * strokeScale;
-            outerOnly = false;
-          } else if (grouped && !locked) {
-            outline = context.accent;
-            stroke = _groupStroke * strokeScale;
-          } else {
-            outline = null;
-            stroke = 0;
-          }
-          return CustomPaint(
-            painter: _CardPainter(
-              image: image,
-              polygon: polygon,
-              source: source,
-              insets: insets.values,
-              radius: dragging ? 0 : radius * (1 - lockT),
-              fusedEdges: fusedEdges,
-              fans: fans,
-              gutterHalf: gutterHalf,
-              borderColor: classic ? frame : Colors.transparent,
-              borderWidth: classic && !dragging ? frameWidth * (1 - lockT) : 0,
-              edgeColor: classic && !dragging ? edge.withValues(alpha: edge.a * (1 - lockT)) : null,
-              shadow: lockT > 0.95 || lift == 0 ? null : Colors.black.withValues(alpha: (0.25 + 0.2 * lift) * (1 - lockT)),
-              shadowBlur: 10 + lift * 20,
-              shadowDy: 4 + lift * 10,
-              tint: hovered == _Hover.ok
-                  ? Colors.white.withValues(alpha: 0.28)
-                  : hovered == _Hover.blocked
-                      ? Colors.black.withValues(alpha: 0.35)
-                      : null,
-              dim: dragging ? 0 : _dim * (1 - lockT),
-              saturation: painting ? lockT : 1.0,
-              outline: outline,
-              outlineWidth: dragging ? _dragStroke * strokeScale : stroke,
-              outlineOuterOnly: outerOnly,
-              outlineOutside: dragging,
-            ),
-          );
-        },
+        builder: (_, lockT, _) => TweenAnimationBuilder<_EdgeInsets>(
+          // Each edge's gutter slides shut as the card snaps to its group, in
+          // step with the card's own move.
+          tween: _EdgeInsetsTween(end: _EdgeInsets([for (final fused in fusedEdges) fused ? -_overlap : (locked || dragging ? 0.0 : half)])),
+          duration: const Duration(milliseconds: 280),
+          curve: Curves.easeOutCubic,
+          builder: (_, insets, _) {
+            // Interaction language: a picked-up card lifts (shadow + scale) and
+            // gets an ink edge; the drop target brightens; a blocked target dims
+            // with a red edge; a floating group shares one accent edge. No colour
+            // casts over the picture.
+            final Color? outline;
+            final double stroke;
+            var outerOnly = true;
+            if (selected) {
+              outline = ink;
+              stroke = _selectionStroke * strokeScale;
+            } else if (hovered == _Hover.ok) {
+              outline = ink;
+              stroke = _selectionStroke * strokeScale;
+              outerOnly = false;
+            } else if (hovered == _Hover.blocked) {
+              outline = Brand.danger;
+              stroke = _selectionStroke * strokeScale;
+              outerOnly = false;
+            } else if (grouped && !locked) {
+              outline = context.accent;
+              stroke = _groupStroke * strokeScale;
+            } else {
+              outline = null;
+              stroke = 0;
+            }
+            return CustomPaint(
+              painter: _CardPainter(
+                image: image,
+                polygon: polygon,
+                source: source,
+                insets: insets.values,
+                radius: dragging ? 0 : radius * (1 - lockT),
+                fusedEdges: fusedEdges,
+                fans: fans,
+                gutterHalf: gutterHalf,
+                borderColor: classic ? frame : Colors.transparent,
+                borderWidth: classic && !dragging ? frameWidth * (1 - lockT) : 0,
+                edgeColor: classic && !dragging ? edge.withValues(alpha: edge.a * (1 - lockT)) : null,
+                shadow: lockT > 0.95 || lift == 0 ? null : Colors.black.withValues(alpha: (0.25 + 0.2 * lift) * (1 - lockT)),
+                shadowBlur: 10 + lift * 20,
+                shadowDy: 4 + lift * 10,
+                tint: hovered == _Hover.ok
+                    ? Colors.white.withValues(alpha: 0.28)
+                    : hovered == _Hover.blocked
+                        ? Colors.black.withValues(alpha: 0.35)
+                        : null,
+                dim: dragging ? 0 : _dim * (1 - lockT) + (_fadeDim - _dim * (1 - lockT)) * fadeT,
+                saturation: (painting ? lockT : 1.0) * (1 - 0.65 * fadeT),
+                outline: outline,
+                outlineWidth: dragging ? _dragStroke * strokeScale : stroke,
+                outlineOuterOnly: outerOnly,
+                outlineOutside: dragging,
+              ),
+            );
+          },
+        ),
       ),
     );
   }
