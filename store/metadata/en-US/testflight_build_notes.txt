@@ -1,7 +1,7 @@
 New in this build:
-- Home: Quick play starts a random picture you have not played yet, plus new rows for packs in progress, packs missing stars and your finished packs.
-- Library: a Finished filter, a Hide finished switch and search; Started now lists every pack you have begun.
-- Profiles show Total Completion (pictures and packs) and quests completed.
-- My Puzzles photos are private to you (free players keep up to 5), and the league and My Puzzles load more as you scroll.
+- One save on every device: coins, unlocks and solved pictures from the iPhone and the web site now add up instead of overwriting each other. Play made offline is kept and sent when the connection returns.
+- The save reloads when you open the app or return to it, and a short note lists what arrived from another device. If the same picture has two different boards in progress, you choose which one to keep.
+- Records only improve, and replaying a solved picture no longer pays the first-solve reward again.
+- The picture catalogue loads faster: after the first launch only new or changed packs are downloaded.
 
-Please try: Home > Quick play, then Library > search and Finished, then Profile > Statistics.
+Please try: sign in with the same account on the iPhone and on card-jigsaw-world.appwrite.network, solve a picture on one, then open the other.
