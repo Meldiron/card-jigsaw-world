@@ -442,3 +442,97 @@ c826 B- may buttercup
 c829 B- may red campion
 c830 B may red campion
 c831 B- may oriental poppy bud
+c836 B- may honeysuckle
+c840 A may common blue butterfly
+c841 B may common blue pair
+c842 B+ may common blue
+c845 B may cockchafer
+c846 B+ sankeien autumn maple
+c848 B- sankeien pagoda
+c850 B- hakone garden
+c851 B- hakone garden green
+c852 B may kew clivia greenhouse
+c854 A clivia orange (kew)
+c860 B monsanto rooftops
+c861 B obidos street (check people)
+c864 B sintra monserrate window
+c867 B- conques
+c868 B conques
+c869 B conques tower
+c870 B- dinan chapel
+c871 B- dinan church
+c876 B- ca d'oro portal
+c878 B ca d'oro venice
+c879 B- castelmezzano steps
+c880 B dec castelmezzano night lights
+c881 B castelmezzano
+c890 B frigiliana white wall red flowers
+c891 B+ teruel tower
+c892 A teruel mudejar tower
+c894 B clovelly lane
+c895 B clovelly
+c896 B clovelly
+c899 B st michael's mount
+c900 B visby wall
+c901 B- visby church
+c902 B visby towers
+c908 B meersburg (check people)
+c909 A heidelberg bridge gate
+c913 B freiburg
+c916 B+ sighisoara
+c917 B sighisoara clock tower
+c918 B- sibiu arch
+c919 B sibiu roof eyes
+c923 B- rostov kremlin
+c924 B suzdal
+c925 B suzdal
+c926 B- suzdal
+c932 B+ trinidad window green
+c935 B lunenburg church
+c940 B bok tower (check people)
+c941 B bok tower
+c943 B- space needle
+c945 B space needle fountain
+c946 B- fenghuang (check people)
+c949 B- wuzhen boats night
+c950 B wuzhen
+c951 B humble administrator's garden
+c961 B hue gate detail
+c962 B hue gate
+c963 A tran quoc pagoda
+c967 B wat chedi luang naga
+c968 B wat chedi luang naga
+c970 B- inle stilt house
+c971 B- paro dzong
+c972 B- paro dzong gate
+c977 B mehrangarh
+c979 B mehrangarh
+c981 B jaisalmer haveli (check)
+c986 B bou inania minaret
+c987 B bou inania courtyard
+c992 B+ sheki khan palace painted wall (check figures)
+c995 B+ golestan ceiling (check figures)
+c996 B golestan mirror hall
+c997 B golestan
+c998 B kul sharif mosque
+c1002 A ulugh beg tiles (calligraphy band)
+c1003 B+ ulugh beg tiles
+c1004 B kotor
+c1005 B- kotor church
+c1006 B- kotor tower
+c1008 B perast
+c1009 B- perast
+c1010 B monemvasia
+c1011 B monemvasia
+c1013 B- nafplio arcade
+c1014 B nafplio
+c1017 B- dec japanese lantern
+c1019 B- dec struffoli
+c1020 A dec kransekake
+c1022 B dec kransekake flags
+c1023 B jan rosca de reyes
+c1024 A jan rosca de reyes
+c1025 B jan rosca de reyes
+c1026 B king cake
+c1030 B- jan frozen leaves
+c1031 B jan frosted lichen
