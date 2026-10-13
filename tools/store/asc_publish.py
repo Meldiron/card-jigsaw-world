@@ -822,6 +822,23 @@ def cmd_screenshots(s: Store) -> None:
         sset = s.c.create("appScreenshotSets", {"screenshotDisplayType": SCREENSHOT_TYPE},
                           {"appStoreVersionLocalization": rel("appStoreVersionLocalizations", loc["id"])})
     existing = s.c.get_list(f"/v1/appScreenshotSets/{sset['id']}/appScreenshots")
+    # The folder is the source of truth: a screenshot whose file changed is replaced, and one
+    # with no file of its name (an older, longer set) is removed.
+    local = {p.name: p for p in files}
+    kept = []
+    for res in existing:
+        name = attr(res, "fileName")
+        png = local.get(name)
+        checksum = attr(res, "sourceFileChecksum")
+        if png is None:
+            log(f"  appScreenshots: {name} is not in {SCREENSHOT_DIR.relative_to(ROOT)}, deleting")
+            s.c.request("DELETE", f"/v1/appScreenshots/{res['id']}")
+        elif checksum and checksum != md5_of(png):
+            log(f"  appScreenshots: {name} changed, replacing")
+            s.c.request("DELETE", f"/v1/appScreenshots/{res['id']}")
+        else:
+            kept.append(res)
+    existing = kept
     uploaded: list[str] = []
     for png in files:
         res = s.upload_asset("appScreenshots", {"appScreenshotSet": rel("appScreenshotSets", sset["id"])}, png, existing)

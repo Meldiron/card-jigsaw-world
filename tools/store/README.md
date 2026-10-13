@@ -44,7 +44,7 @@ Below, `asc` stands for `.venv/bin/python tools/store/asc_publish.py`.
 | `version` | the editable `appStoreVersions` record renamed to 1.7.0 (or created), copyright, and the `appStoreVersionLocalizations`: description, keywords, promotional text, support and marketing URL, what's new |
 | `age-rating` | `ageRatingDeclarations` from `age_rating.json` |
 | `price-free` | `appPriceSchedules` with the free USA price point (Apple equalises the rest) and `appAvailabilities` (v2) for every territory |
-| `screenshots` | one `appScreenshotSets` of type `APP_IPHONE_67` and every PNG in `store/screenshots/iphone-6.9/` in file order (reserve, upload, commit with MD5; files already uploaded are skipped by name) |
+| `screenshots` | one `appScreenshotSets` of type `APP_IPHONE_67` and every PNG in `store/screenshots/iphone-6.9/` in file order (reserve, upload, commit with MD5). The folder is the source of truth: an unchanged file is skipped, a changed one (MD5 differs) is replaced, and an uploaded screenshot with no file of its name is deleted |
 | `iap` | the eight consumables from `subscriptions/consumables.json` (`/v2/inAppPurchases`), localizations, USD price equalised to all territories through `inAppPurchasePricePoints/{id}/equalizations`, availability, optional review screenshot |
 | `subscriptions` | group `VIP` and its localization, `vip_monthly` / `vip_yearly` attributes and localizations, one `subscriptionPrices` per territory from `subscriptionPricePoints/{id}/equalizations`, one `subscriptionIntroductoryOffers` (1 week free) per territory, review screenshot, promotional image, availability |
 | `review-info` | `appStoreReviewDetails`: contact from `review_contact.json` and `review_notes.txt` |
