@@ -1,6 +1,7 @@
 New in this build:
-- Your My Puzzles photos are now private: only you can see them. Free players keep up to 5 photos; VIP has no limit.
-- The league and My Puzzles keep loading as you scroll, and players with the same XP share a place.
-- Long-time players keep every star and solved picture (progress used to stop loading after 500 entries).
+- Home: Quick play starts a random picture you have not played yet, plus new rows for packs in progress, packs missing stars and your finished packs.
+- Library: a Finished filter, a Hide finished switch and search; Started now lists every pack you have begun.
+- Profiles show Total Completion (pictures and packs) and quests completed.
+- My Puzzles photos are private to you (free players keep up to 5), and the league and My Puzzles load more as you scroll.
 
-Please try: Profile > My Puzzles (add a photo and play it), then Social > League and scroll to the end.
+Please try: Home > Quick play, then Library > search and Finished, then Profile > Statistics.
