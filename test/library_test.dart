@@ -207,7 +207,7 @@ void main() {
 
       await tester.tap(chip('Nature'));
       await tester.pumpAndSettle();
-      expect(find.text('No packs found'), findsOneWidget);
+      expect(find.text('Nothing found'), findsOneWidget);
       await tester.tap(find.text('Search all packs'));
       await tester.pumpAndSettle();
       expect(container.read(libraryFilterProvider), LibraryFilter.all);
@@ -215,7 +215,7 @@ void main() {
 
       await tester.enterText(find.byType(CupertinoSearchTextField), 'zebra');
       await tester.pumpAndSettle();
-      expect(find.text('No packs found'), findsOneWidget);
+      expect(find.text('Nothing found'), findsOneWidget);
       expect(find.textContaining('"zebra"'), findsOneWidget);
     });
 

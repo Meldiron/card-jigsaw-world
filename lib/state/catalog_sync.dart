@@ -36,6 +36,9 @@ class CatalogSync {
   /// Columns the app never reads: Appwrite internals and the content tool's original picture addresses.
   static const _drop = {r'$permissions', r'$sequence', r'$tableId', r'$databaseId', r'$createdAt', 'sourceUrl', 'coverSourceUrl'};
 
+  /// Pack rows keep `$createdAt`: the Library marks packs added in the last week as New.
+  static const _keepCreatedAt = {AppwriteConfig.packs};
+
   /// The catalogue on the device, for when the server cannot be reached.
   CatalogTables? cached() => _CatalogState.fromJson(_store.getJson(cacheKey))?.tables;
 
@@ -53,7 +56,7 @@ class CatalogSync {
     final fresh = await Future.wait([
       for (final t in tables) _source.rowsSince(t, (current.watermarks[t] ?? DateTime.utc(1970)).subtract(overlap).toUtc().toIso8601String()),
     ]);
-    final incoming = {for (var i = 0; i < tables.length; i++) tables[i]: [for (final r in fresh[i]) _clean(r)]};
+    final incoming = {for (var i = 0; i < tables.length; i++) tables[i]: [for (final r in fresh[i]) _clean(r, tables[i])]};
 
     final packs = state.rows[AppwriteConfig.packs]!;
     final changedPacks = {
@@ -62,7 +65,7 @@ class CatalogSync {
     };
     if (changedPacks.isNotEmpty) {
       state.rows[AppwriteConfig.puzzles]!.removeWhere((_, r) => changedPacks.contains(r['packId']));
-      incoming[AppwriteConfig.puzzles]!.addAll([for (final r in await _source.puzzleRowsOfPacks(changedPacks.toList())) _clean(r)]);
+      incoming[AppwriteConfig.puzzles]!.addAll([for (final r in await _source.puzzleRowsOfPacks(changedPacks.toList())) _clean(r, AppwriteConfig.puzzles)]);
       dirty = true;
     }
 
@@ -107,20 +110,20 @@ class CatalogSync {
       return _CatalogState(
         baseAt: now,
         watermarks: {for (final t in tables) t: DateTime.tryParse('${snapTables[t]['watermark']}')},
-        rows: {for (final t in tables) t: _byId([for (final r in (snapTables[t]['rows'] as List).whereType<Map>()) _clean(Map<String, dynamic>.from(r))])},
+        rows: {for (final t in tables) t: _byId([for (final r in (snapTables[t]['rows'] as List).whereType<Map>()) _clean(Map<String, dynamic>.from(r), t)])},
       );
     }
     final full = await Future.wait([for (final t in tables) _source.rows(t)]);
     return _CatalogState(
       baseAt: now,
       watermarks: {for (var i = 0; i < tables.length; i++) tables[i]: _latest(full[i], null)},
-      rows: {for (var i = 0; i < tables.length; i++) tables[i]: _byId([for (final r in full[i]) _clean(r)])},
+      rows: {for (var i = 0; i < tables.length; i++) tables[i]: _byId([for (final r in full[i]) _clean(r, tables[i])])},
     );
   }
 
-  static Map<String, dynamic> _clean(Map<String, dynamic> row) => {
+  static Map<String, dynamic> _clean(Map<String, dynamic> row, String table) => {
         for (final e in row.entries)
-          if (!_drop.contains(e.key)) e.key: e.value,
+          if (!_drop.contains(e.key) || (e.key == r'$createdAt' && _keepCreatedAt.contains(table))) e.key: e.value,
       };
 
   static Map<String, Map<String, dynamic>> _byId(List<Map<String, dynamic>> rows) => {for (final r in rows) '${r[r'$id']}': r};

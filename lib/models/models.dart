@@ -351,6 +351,7 @@ class Pack {
     this.endAt,
     this.blurhash,
     this.updatedAt,
+    this.createdAt,
   });
   /// BlurHash of the cover, shown while the image loads.
   final String? blurhash;
@@ -358,6 +359,26 @@ class Pack {
   /// The row's `$updatedAt` (server time). The content tool updates the pack row whenever it adds,
   /// removes or replaces the pack's puzzles, so a change here means its puzzles changed too.
   final String? updatedAt;
+
+  /// When the row was created (`$createdAt`), for the Library's New badge.
+  final DateTime? createdAt;
+
+  /// The launch catalogue was built from 2026-10-11 to 2026-10-13 (its last pack is from 14:45 UTC
+  /// on the 13th); packs created before this are never New, or the whole Library would be New in
+  /// the first week.
+  static final newBaseline = DateTime.utc(2026, 10, 13, 18);
+
+  /// How long a pack counts as New after it was added.
+  static const newFor = Duration(days: 7);
+
+  /// A library pack (not a daily month or an event pack) added in the last [newFor].
+  bool isNewAt(DateTime now) {
+    final at = createdAt;
+    if (at == null || isDaily || hasWindow || at.isBefore(newBaseline)) return false;
+    return now.difference(at) < newFor;
+  }
+
+  bool get isNew => isNewAt(DateTime.now());
 
   final String id;
   final String name;
@@ -443,6 +464,7 @@ class Pack {
         endAt: _dt(d['endAt']),
         blurhash: d['blurhash']?.toString(),
         updatedAt: d[r'$updatedAt']?.toString(),
+        createdAt: _dt(d[r'$createdAt']),
       );
 }
 

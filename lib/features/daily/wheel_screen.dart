@@ -16,8 +16,10 @@ import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 
-class _Segment {
-  const _Segment(this.label, this.kind, this.color, {this.coins = 0, this.hints = 0, this.weight = 1, this.jackpot = false});
+/// One slice of the Lucky Wheel. [weight] is its share of the draw: the
+/// chance of a slice is its weight over the sum of all weights.
+class WheelSegment {
+  const WheelSegment(this.label, this.kind, this.color, {this.coins = 0, this.hints = 0, this.weight = 1, this.jackpot = false});
   final String label;
   final Currency kind;
   final Color color;
@@ -27,24 +29,114 @@ class _Segment {
   final bool jackpot;
 }
 
-/// Balance: a spin costs 1 Ticket, and a Ticket is worth roughly 150 Coins
-/// (it opens a piggy bank of up to 500 Coins, premium packs cost 3).
+/// Balance: a spin costs 1 Ticket.
 /// Expected value per spin:
 ///   coins  = (60·5 + 90·4 + 120·4 + 150·3 + 200·2 + 300·1.5 + 500·0.5) / 22 ≈ 122
-///   hints  = 2 hints (≈120 Coins at the 60-Coin hint price) × 2/22      ≈  11
-///   total  ≈ 133 Coin-equivalent, i.e. about a 90% return with a 2.3%
-///   chance (0.5/22) of the 500-Coin jackpot. Tickets are never a reward,
-///   so the wheel cannot pay for itself.
-const _segments = [
-  _Segment('60', Currency.coins, Color(0xFFD97706), coins: 60, weight: 5),
-  _Segment('90', Currency.coins, Color(0xFF64748B), coins: 90, weight: 4),
-  _Segment('120', Currency.coins, Color(0xFF0F9D8F), coins: 120, weight: 4),
-  _Segment('2', Currency.hints, Brand.accent, hints: 2, weight: 2),
-  _Segment('150', Currency.coins, Color(0xFFB45309), coins: 150, weight: 3),
-  _Segment('200', Currency.coins, Color(0xFF475569), coins: 200, weight: 2),
-  _Segment('300', Currency.coins, Color(0xFF0B7A70), coins: 300, weight: 1.5),
-  _Segment('500', Currency.coins, Color(0xFF3730A3), coins: 500, weight: 0.5, jackpot: true),
+///   hints  = 2 hints × 2/22 ≈ 0.18 hints
+/// with a 2.3% chance (0.5/22) of the 500-Coin jackpot. Tickets are never a
+/// reward, so the wheel cannot pay for itself. The odds sheet reads this same
+/// table ([wheelOdds]), so what players are shown is what the spin draws.
+const wheelSegments = [
+  WheelSegment('60', Currency.coins, Color(0xFFD97706), coins: 60, weight: 5),
+  WheelSegment('90', Currency.coins, Color(0xFF64748B), coins: 90, weight: 4),
+  WheelSegment('120', Currency.coins, Color(0xFF0F9D8F), coins: 120, weight: 4),
+  WheelSegment('2', Currency.hints, Brand.accent, hints: 2, weight: 2),
+  WheelSegment('150', Currency.coins, Color(0xFFB45309), coins: 150, weight: 3),
+  WheelSegment('200', Currency.coins, Color(0xFF475569), coins: 200, weight: 2),
+  WheelSegment('300', Currency.coins, Color(0xFF0B7A70), coins: 300, weight: 1.5),
+  WheelSegment('500', Currency.coins, Color(0xFF3730A3), coins: 500, weight: 0.5, jackpot: true),
 ];
+
+const _segments = wheelSegments;
+
+/// The slice a spin lands on for [r], a uniform random number in [0, 1).
+int wheelPick(double r, [List<WheelSegment> segments = wheelSegments]) {
+  final total = segments.fold<double>(0, (s, e) => s + e.weight);
+  var left = r * total;
+  for (var i = 0; i < segments.length; i++) {
+    left -= segments[i].weight;
+    if (left < 0) return i;
+  }
+  return segments.length - 1;
+}
+
+/// One prize on the odds sheet and its chance in percent (one decimal).
+typedef WheelOdd = ({WheelSegment segment, double percent});
+
+/// Every prize with its chance, smallest prize first. Percentages carry one
+/// decimal and are rounded by largest remainder, so they add up to exactly 100.
+List<WheelOdd> wheelOdds([List<WheelSegment> segments = wheelSegments]) {
+  final total = segments.fold<double>(0, (s, e) => s + e.weight);
+  final tenths = [for (final s in segments) s.weight / total * 1000];
+  final floors = [for (final t in tenths) t.floor()];
+  var missing = 1000 - floors.fold<int>(0, (a, b) => a + b);
+  final order = List.generate(segments.length, (i) => i)..sort((a, b) => (tenths[b] - floors[b]).compareTo(tenths[a] - floors[a]));
+  for (final i in order) {
+    if (missing <= 0) break;
+    floors[i]++;
+    missing--;
+  }
+  final odds = [for (var i = 0; i < segments.length; i++) (segment: segments[i], percent: floors[i] / 10)];
+  // Coins by amount, then hints.
+  odds.sort((a, b) => a.segment.kind != b.segment.kind ? a.segment.kind.index.compareTo(b.segment.kind.index) : (a.segment.coins + a.segment.hints).compareTo(b.segment.coins + b.segment.hints));
+  return odds;
+}
+
+/// "22.7%", "9.1%", "2.3%".
+String formatOdds(double percent) => '${percent.toStringAsFixed(1)}%';
+
+/// The odds sheet, opened from "See odds" on the wheel (App Review guideline
+/// 3.1.1: the odds of a paid random reward are shown before spending).
+Future<void> showWheelOdds(BuildContext context) => showAppSheet(
+      context,
+      builder: (ctx) {
+        final c = ctx.colors;
+        final odds = wheelOdds();
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Lucky Wheel odds', style: Theme.of(ctx).textTheme.headlineSmall),
+              const SizedBox(height: 2),
+              Text(
+                'Every spin costs ${Economy.wheelSpinTickets} ticket and pays one prize. Each spin is drawn on its own with these chances.',
+                style: TextStyle(color: c.textSecondary, fontSize: 13.5, height: 1.35),
+              ),
+              const SizedBox(height: 14),
+              SoftCard(
+                padding: EdgeInsets.zero,
+                child: Column(
+                  children: [
+                    for (var i = 0; i < odds.length; i++) ...[
+                      Padding(
+                        key: ValueKey('wheel-odd-$i'),
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
+                        child: Row(
+                          children: [
+                            Amount(
+                              currency: odds[i].segment.kind,
+                              value: odds[i].segment.kind == Currency.hints ? odds[i].segment.hints : odds[i].segment.coins,
+                              size: 18,
+                              fontSize: 15,
+                            ),
+                            if (odds[i].segment.jackpot) ...[const SizedBox(width: 8), Text('Jackpot', style: TextStyle(color: c.textSecondary, fontSize: 13))],
+                            const Spacer(),
+                            Text(formatOdds(odds[i].percent), style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15, fontFeatures: [FontFeature.tabularFigures()])),
+                          ],
+                        ),
+                      ),
+                      if (i < odds.length - 1) Divider(height: 1, color: c.stroke, indent: 16),
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
 
 /// Lucky Wheel: every spin costs one Ticket.
 class WheelScreen extends ConsumerStatefulWidget {
@@ -60,7 +152,7 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
   double _from = 0;
   double _to = 0;
   bool _spinning = false;
-  _Segment? _result;
+  WheelSegment? _result;
   int _lastTick = -1;
 
   @override
@@ -94,17 +186,8 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
       if (mounted) showToast(context, 'You need 1 Ticket to spin.', leading: const TicketIcon(size: 18));
       return;
     }
-    // Weighted pick.
-    final total = _segments.fold<double>(0, (s, e) => s + e.weight);
-    var r = math.Random().nextDouble() * total;
-    var idx = 0;
-    for (var i = 0; i < _segments.length; i++) {
-      r -= _segments[i].weight;
-      if (r <= 0) {
-        idx = i;
-        break;
-      }
-    }
+    // Weighted pick, from the same table the odds sheet shows.
+    final idx = wheelPick(math.Random().nextDouble());
     final seg = 2 * math.pi / _segments.length;
     // Pointer is at top (-pi/2). Segment i spans [i*seg, (i+1)*seg) starting at -pi/2 when rotation=0.
     final target = -(idx * seg + seg / 2) + (math.Random().nextDouble() - 0.5) * seg * 0.6;
@@ -257,6 +340,13 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
                     const SizedBox(height: 8),
                     Text('Jackpot: 500 coins', style: TextStyle(color: c.textTertiary, fontSize: 12, fontWeight: FontWeight.w600)),
                   ],
+                  CupertinoButton(
+                    key: const ValueKey('wheel-see-odds'),
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    minimumSize: const Size(44, 32),
+                    onPressed: () => showWheelOdds(context),
+                    child: Text('See odds', style: TextStyle(color: context.accent, fontSize: 14, fontWeight: FontWeight.w600)),
+                  ),
                 ],
               ),
             ),
@@ -268,7 +358,7 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
 }
 
 /// Segment glyph: the jackpot is coins too, so it carries the coin mark.
-IconData _glyph(_Segment s) => switch (s.kind) {
+IconData _glyph(WheelSegment s) => switch (s.kind) {
       Currency.coins => Icons.monetization_on_rounded,
       Currency.tickets => Icons.confirmation_number_rounded,
       Currency.hints => Icons.lightbulb_rounded,

@@ -81,3 +81,6 @@ store/feedback/
 # QA simulator captures (tools/dev/qa.sh shots, integration tests). README images live in docs/images/.
 # Root only: store/screenshots/ holds the App Store set and stays tracked.
 /screenshots/
+
+# Claude Code agent worktrees
+.claude/worktrees/

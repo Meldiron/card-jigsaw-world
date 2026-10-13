@@ -25,7 +25,11 @@ const MAX_QUERY_VALUES = 100;
 // Columns the app never reads: Appwrite internals and the content tool's original picture addresses.
 const DROP = ['$permissions', '$sequence', '$tableId', '$databaseId', '$createdAt', 'sourceUrl', 'coverSourceUrl'];
 
-const clean = (row) => Object.fromEntries(Object.entries(row).filter(([k]) => !DROP.includes(k)));
+// Pack rows keep $createdAt: the app marks packs added in the last week as New.
+const KEEP_CREATED_AT = ['packs'];
+
+const clean = (row, table) =>
+  Object.fromEntries(Object.entries(row).filter(([k]) => !DROP.includes(k) || (k === '$createdAt' && KEEP_CREATED_AT.includes(table))));
 
 const latest = (rows, start = null) => rows.reduce((max, r) => (!max || r.$updatedAt > max ? r.$updatedAt : max), start);
 
@@ -50,7 +54,7 @@ export default async ({ req, res, log, error }) => {
       });
       out.push(...page.rows);
       reads += page.rows.length;
-      if (page.rows.length < PAGE) return out.map(clean);
+      if (page.rows.length < PAGE) return out.map((row) => clean(row, tableId));
       cursor = page.rows[page.rows.length - 1].$id;
     }
   };

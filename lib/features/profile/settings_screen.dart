@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/platform.dart';
 import '../../core/reminders.dart';
@@ -15,6 +17,18 @@ import '../../data/purchases.dart';
 import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
+
+/// The App Store page where a player writes a review of the game.
+final appStoreReviewUrl = Uri.parse('https://apps.apple.com/app/id6821644423?action=write-review');
+
+/// "1.7.0 (115)": the version and build number of the running build (the web build has no
+/// build number, so it shows the version alone).
+String formatAppVersion(String version, String build) => build.isEmpty || build == version ? version : '$version ($build)';
+
+final appVersionProvider = FutureProvider<String>((ref) async {
+  final info = await PackageInfo.fromPlatform();
+  return formatAppVersion(info.version, info.buildNumber);
+});
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -132,7 +146,21 @@ class SettingsScreen extends ConsumerWidget {
           group('About', [
             _NavRow(icon: CupertinoIcons.doc_text, label: 'Image credits and licences', onTap: () => _showCredits(context)),
             _NavRow(icon: CupertinoIcons.question_circle, label: 'Support', onTap: () => showToast(context, 'support@almostapps.eu', icon: AppIcons.mail)),
-            const _InfoRow(label: 'Version', value: '1.6.0 (9)'),
+            // App Store features (gift codes, reviews) exist on Apple platforms only.
+            if (caps.giftCodes)
+              _NavRow(
+                key: const ValueKey('settings-rate'),
+                icon: CupertinoIcons.star,
+                label: 'Rate Card Jigsaw World',
+                onTap: () async {
+                  var opened = false;
+                  try {
+                    opened = await launchUrl(appStoreReviewUrl, mode: LaunchMode.externalApplication);
+                  } catch (_) {}
+                  if (!opened && context.mounted) showToast(context, 'The App Store could not open. Try again later.', icon: CupertinoIcons.star);
+                },
+              ),
+            _InfoRow(key: const ValueKey('settings-version'), label: 'Version', value: ref.watch(appVersionProvider).value ?? ''),
           ]),
         ],
       ),
@@ -272,7 +300,7 @@ class _SegRow<T extends Object> extends StatelessWidget {
 }
 
 class _NavRow extends StatelessWidget {
-  const _NavRow({required this.icon, required this.label, required this.onTap});
+  const _NavRow({super.key, required this.icon, required this.label, required this.onTap});
   final IconData icon;
   final String label;
   final VoidCallback onTap;
@@ -322,7 +350,7 @@ class _ValueRow extends StatelessWidget {
 }
 
 class _InfoRow extends StatelessWidget {
-  const _InfoRow({required this.label, required this.value});
+  const _InfoRow({super.key, required this.label, required this.value});
   final String label;
   final String value;
   @override

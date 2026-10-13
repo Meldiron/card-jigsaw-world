@@ -26,6 +26,7 @@ import '../gallery/pack_card.dart';
 import '../gallery/pack_progress.dart';
 import 'header_bar.dart';
 import 'home_pack_rows.dart';
+import 'tomorrow_preview.dart';
 
 /// Home: today's puzzle, Quick play, Wheel and piggy bank, streak, level,
 /// boards to continue, packs in progress, live events, daily months, packs
@@ -42,6 +43,8 @@ class HomeScreen extends ConsumerWidget {
     final progress = ref.watch(progressProvider).value ?? {};
     final daily = ref.watch(dailyPuzzleProvider);
     final isGuest = ref.watch(isGuestProvider);
+    final dailySolved = daily != null && daily.isToday && (progress[daily.id]?.completed ?? false);
+    final tomorrow = dailySolved ? tomorrowsDaily(puzzles.value ?? const <Puzzle>[], DateTime.now()) : null;
 
     final inProgress = puzzles.value == null
         ? const <Puzzle>[]
@@ -80,6 +83,14 @@ class HomeScreen extends ConsumerWidget {
                 child: _DailyHero(puzzle: daily, progress: daily == null ? null : progress[daily.id]),
               ),
             ),
+            // Today's daily puzzle is solved: a blurred look at tomorrow's.
+            if (tomorrow != null)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                  child: TomorrowPreview(puzzle: tomorrow),
+                ),
+              ),
             const SliverToBoxAdapter(
               child: Padding(
                 padding: EdgeInsets.fromLTRB(20, 12, 20, 0),

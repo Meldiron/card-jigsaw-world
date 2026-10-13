@@ -7,6 +7,7 @@ import '../../core/theme/tokens.dart';
 import '../../models/models.dart';
 import '../../state/catalog.dart';
 import '../../state/profile.dart';
+import '../../state/progress.dart';
 import '../../state/settings.dart';
 import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
@@ -23,10 +24,11 @@ class LibraryFilter extends Notifier<String> {
   static const finished = 'Finished';
   static const started = 'Started';
   static const unlocked = 'Unlocked';
+  static const fresh = 'New';
   static const daily = 'Daily';
 
   /// Chips that are not pack categories; they carry an icon before the label.
-  static const special = {all, finished, started, unlocked};
+  static const special = {all, fresh, finished, started, unlocked};
 
   @override
   String build() => all;
@@ -36,10 +38,12 @@ class LibraryFilter extends Notifier<String> {
 
 final libraryFilterProvider = NotifierProvider<LibraryFilter, String>(LibraryFilter.new);
 
-/// The chips in order: All, Finished, Started, Unlocked (only useful without
-/// VIP, which opens everything), Daily, then the library categories.
-List<String> libraryChips(List<Pack> packs, {required bool showUnlocked}) => [
+/// The chips in order: All, New (only while a library pack is new, see
+/// [Pack.isNewAt]), Finished, Started, Unlocked (only useful without VIP,
+/// which opens everything), Daily, then the library categories.
+List<String> libraryChips(List<Pack> packs, {required bool showUnlocked, DateTime? now}) => [
       LibraryFilter.all,
+      if (packs.any((p) => p.isNewAt(now ?? DateTime.now()))) LibraryFilter.fresh,
       LibraryFilter.finished,
       LibraryFilter.started,
       if (showUnlocked) LibraryFilter.unlocked,
@@ -50,6 +54,7 @@ List<String> libraryChips(List<Pack> packs, {required bool showUnlocked}) => [
 /// Icon for a chip that is not a pack category, null for categories.
 IconData? libraryChipIcon(String chip) => switch (chip) {
       LibraryFilter.all => AppIcons.filterAll,
+      LibraryFilter.fresh => AppIcons.sparkle,
       LibraryFilter.finished => AppIcons.filterFinished,
       LibraryFilter.started => AppIcons.filterStarted,
       LibraryFilter.unlocked => AppIcons.filterUnlocked,
@@ -86,8 +91,8 @@ const _fold = <String, String>{
 ///
 /// [filter] picks the chip's packs; [hideFinished] then drops packs whose
 /// every picture is solved (never in the Finished view, which would empty
-/// it); [query] keeps packs whose name, category or description contain every
-/// word of it, ignoring case and accents, with name matches first.
+/// it); [query] keeps packs where every word of it starts a word of the name,
+/// category or description, ignoring case and accents, with name matches first.
 List<Pack> libraryPacks(
   List<Pack> packs, {
   required String filter,
@@ -95,6 +100,7 @@ List<Pack> libraryPacks(
   required bool Function(Pack) isUnlocked,
   bool hideFinished = false,
   String query = '',
+  DateTime? now,
 }) {
   bool finished(Pack p) => progress[p.id]?.complete ?? false;
   final library = packs.where((p) => !p.isDaily && !p.hasWindow);
@@ -113,6 +119,7 @@ List<Pack> libraryPacks(
       }).toList(),
     // Same rule as the pack page: free, current month, bought, live event.
     LibraryFilter.unlocked => inAllOrder.where(isUnlocked).toList(),
+    LibraryFilter.fresh => library.where((p) => p.isNewAt(now ?? DateTime.now())).toList(),
     LibraryFilter.daily => daily.toList(),
     _ => packs.where((p) => p.category == filter).toList(),
   };
@@ -120,7 +127,10 @@ List<Pack> libraryPacks(
 
   final words = foldForSearch(query).split(RegExp(r'\s+')).where((w) => w.isNotEmpty).toList();
   if (words.isEmpty) return out;
-  bool all(String text) => words.every(text.contains);
+  bool all(String text) {
+    final textWords = text.split(_wordBreak);
+    return words.every((w) => textWords.any((t) => t.startsWith(w)));
+  }
   final byName = <Pack>[], byText = <Pack>[];
   for (final p in out) {
     if (all(foldForSearch(p.name))) {
@@ -131,6 +141,47 @@ List<Pack> libraryPacks(
   }
   return [...byName, ...byText];
 }
+
+/// Pictures a Library search finds: every picture of [packs] (the packs the
+/// current chip and "Hide finished" show) where every word of [query] starts a
+/// word of the title, ignoring case and accents ("owl" finds "Snowy owl" and
+/// "Owls", never "Berry Bowl"). Daily pictures whose day has not come
+/// stay out (their titles would spoil the day). Titles that start with the
+/// query come first, then the rest in catalogue order; [pictures] holds at
+/// most [limit] of the [total] matches.
+({List<Puzzle> pictures, int total}) libraryPictures(
+  Iterable<Puzzle> puzzles, {
+  required List<Pack> packs,
+  required String query,
+  required DateTime now,
+  int limit = 40,
+}) {
+  final words = foldForSearch(query).split(RegExp(r'\s+')).where((w) => w.isNotEmpty).toList();
+  if (words.isEmpty) return (pictures: const <Puzzle>[], total: 0);
+  final order = {for (var i = 0; i < packs.length; i++) packs[i].id: i};
+  final today = DateTime(now.year, now.month, now.day);
+  final starts = <Puzzle>[], contains = <Puzzle>[];
+  for (final z in puzzles) {
+    if (!order.containsKey(z.packId)) continue;
+    final d = z.date;
+    if (d != null && DateTime(d.year, d.month, d.day).isAfter(today)) continue;
+    final title = foldForSearch(z.title);
+    final titleWords = title.split(_wordBreak);
+    if (!words.every((w) => titleWords.any((t) => t.startsWith(w)))) continue;
+    (title.startsWith(words.first) ? starts : contains).add(z);
+  }
+  int byPack(Puzzle a, Puzzle b) {
+    final p = order[a.packId]!.compareTo(order[b.packId]!);
+    return p != 0 ? p : a.sortOrder.compareTo(b.sortOrder);
+  }
+
+  starts.sort(byPack);
+  contains.sort(byPack);
+  final all = [...starts, ...contains];
+  return (pictures: all.take(limit).toList(), total: all.length);
+}
+
+final _wordBreak = RegExp(r'[^a-z0-9]+');
 
 /// Library: every pack behind filter chips and a search field, plus the
 /// "My Puzzles" entry.
@@ -207,6 +258,10 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
     final filtered = view();
     final finishedCount = inFinished ? view(q: '').length : 0;
     final searching = _query.trim().isNotEmpty;
+    final found = searching
+        ? libraryPictures(ref.watch(allPuzzlesProvider).value ?? const <Puzzle>[], packs: view(q: ''), query: _query, now: DateTime.now())
+        : (pictures: const <Puzzle>[], total: 0);
+    final packById = {for (final p in list) p.id: p};
 
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
@@ -236,7 +291,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
               key: const ValueKey('library-search'),
               controller: _search,
               focusNode: _searchFocus,
-              placeholder: 'Search packs',
+              placeholder: 'Search packs and pictures',
               onSubmitted: (_) => _searchFocus.unfocus(),
               style: TextStyle(color: c.textPrimary, fontSize: 16, letterSpacing: -0.2),
               placeholderStyle: TextStyle(color: c.textTertiary, fontSize: 16, letterSpacing: -0.2),
@@ -281,9 +336,9 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
               ),
             ),
           ),
-        if (filtered.isEmpty)
+        if (filtered.isEmpty && found.total == 0)
           SliverToBoxAdapter(child: _empty(filter, hideFinished: hideFinished, view: view))
-        else
+        else if (filtered.isNotEmpty)
           SliverPadding(
             padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
             sliver: SliverGrid(
@@ -294,6 +349,31 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
               ),
             ),
           ),
+        if (found.total > 0) ...[
+          SliverToBoxAdapter(
+            child: SectionHeader(
+              key: const ValueKey('library-pictures'),
+              title: 'Pictures',
+              subtitle: found.total > found.pictures.length ? '${found.pictures.length} of ${found.total} · add a word to narrow it down' : '${found.total} ${found.total == 1 ? 'picture' : 'pictures'}',
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            sliver: SliverToBoxAdapter(
+              child: SoftCard(
+                padding: EdgeInsets.zero,
+                child: Column(
+                  children: [
+                    for (var i = 0; i < found.pictures.length; i++) ...[
+                      _PictureRow(puzzle: found.pictures[i], pack: packById[found.pictures[i].packId]),
+                      if (i < found.pictures.length - 1) Divider(height: 1, color: c.stroke, indent: 76),
+                    ],
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
         SliverToBoxAdapter(child: SizedBox(height: GlassTabBar.scrollEndPadding(context))),
       ],
     );
@@ -311,12 +391,12 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
       if (filter != LibraryFilter.all && view(f: LibraryFilter.all).isNotEmpty) {
         return EmptyState(
           icon: CupertinoIcons.search,
-          title: 'No packs found',
+          title: 'Nothing found',
           message: 'Nothing in $filter matches "$q". Other packs do.',
           action: BigButton(label: 'Search all packs', kind: ButtonKind.secondary, expand: false, onTap: () => ref.read(libraryFilterProvider.notifier).select(LibraryFilter.all)),
         );
       }
-      return EmptyState(icon: CupertinoIcons.search, title: 'No packs found', message: 'No pack name or description matches "$q". Try another word.');
+      return EmptyState(icon: CupertinoIcons.search, title: 'Nothing found', message: 'No pack or picture matches "$q". Try another word.');
     }
     if (hideFinished && view(hide: false).isNotEmpty) {
       return EmptyState(icon: AppIcons.filterFinished, title: 'Every pack here is finished', message: 'Finished packs are hidden. Show them again to replay a picture.', action: showFinished);
@@ -325,8 +405,59 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
       LibraryFilter.finished => const EmptyState(icon: AppIcons.filterFinished, title: 'No finished packs yet', message: 'A pack lands here once every picture in it is solved. Open a pack you have started to finish it.'),
       LibraryFilter.started => const EmptyState(icon: AppIcons.filterStarted, title: 'Nothing started yet', message: 'Packs you have begun and not finished show up here. Open a pack to start one.'),
       LibraryFilter.unlocked => const EmptyState(icon: AppIcons.filterUnlocked, title: 'Nothing unlocked yet', message: 'Packs you can play right now show up here.'),
+      LibraryFilter.fresh => const EmptyState(icon: AppIcons.sparkle, title: 'No new packs this week', message: 'Packs added in the last seven days show up here.'),
       _ => const EmptyState(icon: AppIcons.library, title: 'Nothing here yet', message: 'New packs arrive with events and every month.'),
     };
+  }
+}
+
+/// A picture found by the search: thumbnail, title, pack, and its state.
+/// It opens the picture when its pack is open and its day has come, else the
+/// pack page (which explains the price or the date).
+class _PictureRow extends ConsumerWidget {
+  const _PictureRow({required this.puzzle, required this.pack});
+  final Puzzle puzzle;
+  final Pack? pack;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final c = context.colors;
+    ref.watch(profileProvider);
+    final pack = this.pack;
+    final open = pack != null && ref.read(profileProvider.notifier).isUnlocked(pack) && !puzzle.isLockedByDate;
+    final saved = ref.watch(progressProvider.select((m) => m.value?[puzzle.id]));
+    final stars = saved != null && saved.completed ? saved.stars : 0;
+    return Pressable(
+      key: ValueKey('library-picture-${puzzle.id}'),
+      scale: 0.99,
+      onTap: () => open ? context.push('/play/${puzzle.id}') : context.go('/library/pack/${puzzle.packId}'),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        child: Row(
+          children: [
+            NetImage(url: puzzle.thumbUrl, blurhash: puzzle.blurhash, width: 52, height: 52, radius: 10),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(puzzle.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
+                  const SizedBox(height: 2),
+                  Text(pack?.name ?? '', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontSize: 13)),
+                ],
+              ),
+            ),
+            const SizedBox(width: 8),
+            if (!open)
+              Icon(AppIcons.lock, size: 16, color: c.textTertiary)
+            else if (stars > 0)
+              Row(mainAxisSize: MainAxisSize.min, children: [for (var i = 0; i < 3; i++) Icon(i < stars ? AppIcons.star : AppIcons.starOutline, size: 14, color: i < stars ? Brand.star : c.textTertiary)])
+            else
+              Icon(CupertinoIcons.chevron_right, size: 16, color: c.textTertiary),
+          ],
+        ),
+      ),
+    );
   }
 }
 

@@ -81,6 +81,20 @@ List<ReminderNote> planReminders({
   return notes;
 }
 
+/// Whether to ask, in the game and before the iOS prompt, if the player wants
+/// a daily reminder. Asked once, right after a daily gift on the player's
+/// second day with one at the earliest ([giftDays] counts claims on this
+/// device; a [streak] of 2 or more covers players who claimed before the
+/// count existed), and only while reminders are off and iOS has never asked.
+bool shouldOfferReminders({
+  required int giftDays,
+  required int streak,
+  required bool remindersOn,
+  required bool offerShown,
+  required ReminderPermission permission,
+}) =>
+    !offerShown && !remindersOn && permission == ReminderPermission.notDetermined && (giftDays >= 2 || streak >= 2);
+
 /// Keeps the pending reminders in line with the Settings switch, the iOS
 /// permission and the player's day. [refresh] runs when the app starts,
 /// comes back and goes to the background, so the week ahead is always

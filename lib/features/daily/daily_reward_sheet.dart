@@ -5,13 +5,56 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/haptics.dart';
+import '../../core/platform.dart';
+import '../../core/reminders.dart';
 import '../../core/sfx.dart';
 import '../../core/theme/tokens.dart';
 import '../../state/profile.dart';
+import '../../state/reminders.dart';
+import '../../state/settings.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 
-Future<void> showDailyRewardSheet(BuildContext context) => showAppSheet(context, builder: (_) => const DailyRewardSheet());
+/// The daily gift sheet. When the player claimed a gift in it, the sheet may
+/// be followed by the one-time reminder question ([offerRemindersAfterGift]).
+Future<void> showDailyRewardSheet(BuildContext context) async {
+  final container = ProviderScope.containerOf(context, listen: false);
+  final before = container.read(localStoreProvider).giftClaimDays;
+  await showAppSheet(context, builder: (_) => const DailyRewardSheet());
+  if (!context.mounted || container.read(localStoreProvider).giftClaimDays == before) return;
+  await offerRemindersAfterGift(context, container);
+}
+
+/// Asks once, in the game, whether the player wants a daily reminder, before
+/// iOS shows its own permission prompt (see [shouldOfferReminders]). "Turn on"
+/// goes on to the iOS prompt; either answer closes the question for good.
+Future<void> offerRemindersAfterGift(BuildContext context, ProviderContainer container) async {
+  if (!container.read(platformCapsProvider).notifications) return;
+  final store = container.read(localStoreProvider);
+  final settings = container.read(settingsProvider);
+  final profile = container.read(profileProvider).value;
+  final permission = await ReminderChannel.status();
+  final offer = shouldOfferReminders(
+    giftDays: store.giftClaimDays,
+    streak: profile?.streak ?? 0,
+    remindersOn: settings.reminders,
+    offerShown: store.reminderOfferShown,
+    permission: permission,
+  );
+  if (!offer || !context.mounted) return;
+  store.reminderOfferShown = true;
+  final time = TimeOfDay(hour: settings.reminderMinutes ~/ 60, minute: settings.reminderMinutes % 60).format(context);
+  final yes = await showAppAlert(
+    context,
+    title: 'Get a daily reminder?',
+    message: 'One notification a day with the daily puzzle, at $time. You can change the time or turn it off in Settings.',
+    confirmLabel: 'Turn on',
+    cancelLabel: 'Not now',
+  );
+  if (!yes) return;
+  final granted = await container.read(remindersProvider).enable();
+  if (granted && context.mounted) showToast(context, 'Daily reminder at $time', icon: CupertinoIcons.bell_fill);
+}
 
 /// 7-day streak calendar. Day 7 is the big one.
 class DailyRewardSheet extends ConsumerStatefulWidget {
@@ -51,6 +94,10 @@ class _DailyRewardSheetState extends ConsumerState<DailyRewardSheet> {
   Future<void> _claim() async {
     setState(() => _claiming = true);
     final r = await ref.read(profileProvider.notifier).claimDaily();
+    if (r != null) {
+      final store = ref.read(localStoreProvider);
+      store.giftClaimDays = store.giftClaimDays + 1;
+    }
     if (!mounted) return;
     if (r != null) {
       Sfx.instance.coin();

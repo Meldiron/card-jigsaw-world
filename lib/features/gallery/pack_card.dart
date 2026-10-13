@@ -72,6 +72,12 @@ class PackCard extends ConsumerWidget {
                         ),
                       ),
                     ),
+                  if (pack.isNew)
+                    const Positioned(
+                      left: 8,
+                      bottom: 8,
+                      child: Chip2(key: ValueKey('pack-new'), label: 'New', color: Brand.live, foreground: Colors.white),
+                    ),
                   if (pack.hasWindow && !pack.isExpired)
                     Positioned(
                       right: 8,

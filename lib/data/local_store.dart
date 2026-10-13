@@ -27,6 +27,12 @@ class LocalStore {
   /// Reminder time in minutes after local midnight (19:00 by default).
   int get reminderMinutes => _prefs.getInt('reminderMinutes') ?? 19 * 60;
   set reminderMinutes(int v) => _prefs.setInt('reminderMinutes', v);
+  /// Daily gifts claimed on this device (one a day), for the reminder offer.
+  int get giftClaimDays => _prefs.getInt('giftClaimDays') ?? 0;
+  set giftClaimDays(int v) => _prefs.setInt('giftClaimDays', v);
+  /// The in-app "Get a daily reminder?" question was shown (it is asked once).
+  bool get reminderOfferShown => _prefs.getBool('reminderOfferShown') ?? false;
+  set reminderOfferShown(bool v) => _prefs.setBool('reminderOfferShown', v);
   String get cardStyle => _prefs.getString('cardStyle') ?? 'classic';
   set cardStyle(String v) => _prefs.setString('cardStyle', v);
   int get defaultGrid => _prefs.getInt('defaultGrid') ?? 4;
