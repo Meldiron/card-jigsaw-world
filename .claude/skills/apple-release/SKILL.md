@@ -74,6 +74,16 @@ for each product, DELETE its `reviewSubmissionItems/{id}` (the item that points 
 `reviewSubmissionItems` with relationships `reviewSubmission` + `inAppPurchaseVersion`. The draft is
 never submitted by this. Done this way for the 2026-10-12 amount change (all 8 consumables).
 
+## "expected 2 profiles, installed 1" in the workflow
+Editing an App ID on the developer portal (its name, capabilities) turns its App Store profile
+INVALID, and `tools/store/install_profiles.py` only installs ACTIVE ones. Recreate it under the same
+name: `GET /v1/profiles?include=bundleId,certificates` to find the invalid one, its bundle id and the
+distribution certificate, `DELETE /v1/profiles/{id}` (Apple refuses a second profile with the same
+name), then `POST /v1/profiles` with `name` (`CJW AppStore cardjigsawworld` or `CJW AppStore
+DailyWidget`), `profileType: IOS_APP_STORE` and relationships `bundleId` + `certificates`. Then
+`gh run rerun <run id>`: nothing was uploaded, so the build number stays. Happened 2026-10-13 after the
+App ID description was renamed.
+
 ## Payment function deploys
 The repo's API keys cannot deploy functions. Package with
 `COPYFILE_DISABLE=1 tar --exclude node_modules -czf verify-purchase.tar.gz -C functions/verify-purchase .`
