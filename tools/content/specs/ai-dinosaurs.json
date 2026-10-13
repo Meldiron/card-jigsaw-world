@@ -5,5 +5,6 @@
  "target": 24, "per_topic": 1, "fetch_per_topic": 20, "author_cap": 21, "min_short": 900,
  "sources": ["openverse"], "openverse_category": "photograph", "accent_from_cover": true,
  "topics": ["AI-generated dinosaur", "AI-generated dinosaurs", "AI-generated t-rex", "AI-generated tyrannosaurus", "AI-generated mammoth",
-            "AI-generated prehistoric", "AI-generated jurassic", "AI-generated triceratops", "AI-generated pterodactyl", "AI-generated dragon lizard"]
+            "AI-generated prehistoric", "AI-generated jurassic", "AI-generated triceratops", "AI-generated pterodactyl", "AI-generated dragon lizard"],
+ "more_topics": ["midjourney dinosaur"]
 }
