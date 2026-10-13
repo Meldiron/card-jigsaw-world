@@ -3575,14 +3575,15 @@
 },
 "pack-rocky-mountains": {
 "added": 24,
-"at": "2026-10-13T16:36:57",
+"at": "2026-10-13T16:37:24",
 "category": "Mountains",
+"issues": 0,
 "kind": "new",
-"last_step": "apply",
+"last_step": "verify",
 "name": "Rocky Mountains",
 "puzzles": 24,
 "removed": 0,
-"status": "fixed"
+"status": "verified"
 },
 "pack-rolling-hills": {
 "added": 24,
