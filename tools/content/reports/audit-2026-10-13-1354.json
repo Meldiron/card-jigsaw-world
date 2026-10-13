@@ -1,0 +1,62 @@
+{
+ "summary": {
+  "packs": 7,
+  "violating": 0,
+  "count": 0,
+  "landscape": 0,
+  "dup_pairs": 0,
+  "people_kw": 1,
+  "text_kw": 0,
+  "small": 0,
+  "unscanned": 0,
+  "cross_dups": 0,
+  "rejected_pending": 0
+ },
+ "packs": {
+  "daily-2027-06": {
+   "name": "June 2027",
+   "category": "Daily",
+   "count": 30,
+   "issues": []
+  },
+  "daily-2027-07": {
+   "name": "July 2027",
+   "category": "Daily",
+   "count": 31,
+   "issues": [],
+   "warnings": [
+    "daily-2027-07-20: keyword people:visitor"
+   ]
+  },
+  "daily-2027-08": {
+   "name": "August 2027",
+   "category": "Daily",
+   "count": 31,
+   "issues": []
+  },
+  "daily-2027-09": {
+   "name": "September 2027",
+   "category": "Daily",
+   "count": 30,
+   "issues": []
+  },
+  "daily-2027-10": {
+   "name": "October 2027",
+   "category": "Daily",
+   "count": 31,
+   "issues": []
+  },
+  "daily-2027-11": {
+   "name": "November 2027",
+   "category": "Daily",
+   "count": 30,
+   "issues": []
+  },
+  "daily-2027-12": {
+   "name": "December 2027",
+   "category": "Daily",
+   "count": 31,
+   "issues": []
+  }
+ }
+}

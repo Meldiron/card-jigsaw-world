@@ -1,8 +1,8 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-13T13:49:47",
-"msg": "Content: daily-2027-11 (November 2027, 30 days)\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+"at": "2026-10-13T13:52:55",
+"msg": "Content: daily-2027-12 (December 2027, 31 days)\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
 "ok": true,
 "pushed": true,
 "stage": "committed"
@@ -1198,81 +1198,88 @@
 "status": "verified"
 },
 "daily-2027-06": {
-"added": 2,
-"at": "2026-10-13T13:46:45",
+"added": 6,
+"at": "2026-10-13T13:54:45",
 "category": "Daily",
+"issues": 0,
 "kind": "new",
-"last_step": "reject 3 quality",
+"last_step": "verify",
 "name": "June 2027",
 "puzzles": 30,
-"removed": 2,
-"status": "audited"
+"removed": 6,
+"status": "verified"
 },
 "daily-2027-07": {
 "added": 0,
-"at": "2026-10-13T13:26:30",
+"at": "2026-10-13T13:54:45",
 "category": "Daily",
+"issues": 0,
 "kind": "new",
-"last_step": "newdaily",
+"last_step": "verify",
 "name": "July 2027",
 "puzzles": 31,
 "removed": 0,
-"status": "fixed"
+"status": "verified"
 },
 "daily-2027-08": {
 "added": 1,
-"at": "2026-10-13T13:30:14",
+"at": "2026-10-13T13:54:45",
 "category": "Daily",
+"issues": 0,
 "kind": "new",
-"last_step": "apply",
+"last_step": "verify",
 "name": "August 2027",
 "puzzles": 31,
 "removed": 1,
-"status": "fixed"
+"status": "verified"
 },
 "daily-2027-09": {
 "added": 1,
-"at": "2026-10-13T13:38:30",
+"at": "2026-10-13T13:54:45",
 "category": "Daily",
+"issues": 0,
 "kind": "new",
-"last_step": "apply",
+"last_step": "verify",
 "name": "September 2027",
 "puzzles": 30,
 "removed": 1,
-"status": "fixed"
+"status": "verified"
 },
 "daily-2027-10": {
 "added": 0,
-"at": "2026-10-13T13:46:02",
+"at": "2026-10-13T13:54:45",
 "category": "Daily",
+"issues": 0,
 "kind": "new",
-"last_step": "newdaily",
+"last_step": "verify",
 "name": "October 2027",
 "puzzles": 31,
 "removed": 0,
-"status": "fixed"
+"status": "verified"
 },
 "daily-2027-11": {
 "added": 1,
-"at": "2026-10-13T13:49:20",
+"at": "2026-10-13T13:54:45",
 "category": "Daily",
+"issues": 0,
 "kind": "new",
-"last_step": "apply",
+"last_step": "verify",
 "name": "November 2027",
 "puzzles": 30,
 "removed": 1,
-"status": "fixed"
+"status": "verified"
 },
 "daily-2027-12": {
 "added": 3,
-"at": "2026-10-13T13:52:37",
+"at": "2026-10-13T13:54:45",
 "category": "Daily",
+"issues": 0,
 "kind": "new",
-"last_step": "apply",
+"last_step": "verify",
 "name": "December 2027",
 "puzzles": 31,
 "removed": 3,
-"status": "fixed"
+"status": "verified"
 },
 "deep-space": {
 "added": 24,

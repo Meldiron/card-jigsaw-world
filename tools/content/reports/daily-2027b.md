@@ -1,122 +1,26 @@
 # daily-2027b batch (daily-2027-06 to daily-2027-12)
 
-Spec: tools/content/specs/daily-2027b.json (pool daily-2027b). Status at pause (2026-10-13 10:58): no month pack created yet.
+Spec: `tools/content/specs/daily-2027b.json` (pool `daily-2027b`, Commons only, 312 topics plus a
+reserve in `more_topics`; subjects that daily-2027a covers were left out). Pool at the end: 1191
+candidates, every one reviewed on contact sheets; people, text and quality rejects are recorded in
+`state/rejects.json`. Every day is an explicit pick; titles were set by hand with `retitle` (common
+names, no scientific names).
 
-## Pool progress
+| Pack | Days | Seasonal feel | Replaced after the sheet review |
+| --- | --- | --- | --- |
+| daily-2027-06 June 2027 | 30 | summer flowers, orchids, lighthouses, coastal cliffs | 6: 4 people (calanque swimmers, lighthouse and Bonifacio visitors, Villa d'Este tourists), 2 weak (common spotted orchid, emperor dragonfly) |
+| daily-2027-07 July 2027 | 31 | seaside, harbours, summer fruit, lilies | 0 |
+| daily-2027-08 August 2027 | 31 | late-summer meadows, butterflies, alpine lakes | 1 weak (tanager on a flat white background) |
+| daily-2027-09 September 2027 | 30 | harvest, fungi, deer and squirrels, vineyards | 1 weak (rose hips against a plain sky) |
+| daily-2027-10 October 2027 | 31 | autumn trees and leaves, pumpkin soup, caramel apples | 0 |
+| daily-2027-11 November 2027 | 30 | forest fungi, castles, autumn gardens, cakes | 1 people (Trakai Island Castle: visitors on the bridge) |
+| daily-2027-12 December 2027 | 31 | snow, winter birds and animals, festive bakes, Christmas Tree Cluster | 3 weak (two-tone ice, two subjects on plain white) |
 
-- Pool has 549 candidates (last key c549). Pooled: the spec topics in file order through "Quercus rubra autumn", then "Acer rubrum autumn" to "Westonbirt Arboretum".
-- Still to pool (132 topics, in this order): Sheffield Park Garden | Stourhead | turban squash | Hokkaido pumpkin | caramel apples | Diospyros kaki | hoshigaki | roasted chestnuts | pumpkin pie | pumpkin soup | cranberries | pecan pie | Physalis alkekengi | Tamias sibiricus | Aleuria aurantia | Sarcoscypha austriaca | Tremella mesenterica | Pholiota squarrosa | Calocera viscosa | Hygrocybe coccinea | Clavulinopsis | Lycogala epidendrum | Flammulina velutipes | Hypholoma fasciculare | Cladonia lichen | Rakotzbrucke | Puzzlewood | Bialowieza Forest | Sonian Forest | Fontainebleau forest | Jasmund National Park beech | Trakai Island Castle | Corvin Castle | Predjama Castle | Kasteel de Haar | Chateau de Pierrefonds | Marksburg | Spis Castle | Trakoscan Castle | Troglodytes troglodytes | Turdus iliacus | Milvus milvus | Parus major | Sus scrofa | Exmoor pony | apple strudel | Sachertorte | Kaiserschmarrn | stroopwafel | Fair Isle knitting | firewood stack | Lagopus muta | Samoyed dog | Siberian Husky | Alaskan Malamute | frost flowers on window | Lake Baikal ice | Herrnhut star | straw star Christmas | Viscum album | Skimmia japonica | Stollen | Panettone | Lebkuchen | Buche de Noel | Speculaas | candy canes | mince pies | Christmas pudding | mulled wine | Zimtsterne | Vanillekipferl | Linzer cookies | Turron | Melomakarona | pomander orange cloves | dried orange slices | wrapped Christmas presents | Zermatt winter | Harbin Ice and Snow Festival | Spirobranchus giganteus | Christmas tree lights | snowy spruce forest | Notting Hill colourful houses | Rainbow Row Charleston | Balat Istanbul | Wroclaw Market Square | Gdansk Long Market | Shah-i-Zinda | Itchan Kala Khiva | Bahia Palace | Ben Youssef Madrasa | Landwasser Viaduct | Citroen 2CV | origami cranes | wagasa umbrellas | temari balls | Moroccan lanterns | Otomi embroidery | Matyo embroidery | millefiori glass | spools of thread | wagashi | cassata siciliana | prinsesstarta | Pallas's cat | sand cat | binturong | kinkajou | markhor | takin | Valais Blacknose sheep | Akhal-Teke | Harlequin duck | King eider | superb starling | carmine bee-eater | paradise tanager | Himalayan monal | Temminck's tragopan | Phelsuma madagascariensis | Indian star tortoise | Chrysina gloriosa | Graphium agamemnon | Urania ripheus | Odontodactylus scyllarus | Dendronephthya | Cat's Paw Nebula | Lobster Nebula | Elephant's Trunk Nebula | NGC 602 | Thor's Helmet Nebula
-- Resume pooling with `tools/content/run.sh pool daily-2027-06 --topic "<topic>" ...` passing the topics above (a plain `pool daily-2027-06` re-searches every spec topic and adds 3 more candidates to each).
+Audit (`run.sh audit --pack daily-2027-06 ... daily-2027-12`, 2026-10-13 13:54): 0 violations, 0
+cross-pack near-duplicates, all dates present; `verify` marked all seven packs verified. All pictures
+and covers are hosted in Storage. Prices untouched (packs were created at the tool default; the
+coordinator runs `tools/store/apply_pack_prices.py`).
 
-## Candidate review (contact sheets read up to c417; c418 onward not yet reviewed)
-
-Rejections already recorded with run.sh reject (quality/people/text, global). Keepers are planned explicit picks tagged by month; (alt) = second choice.
-
-- c05 JUN Rosa rugosa pink flower | Matti Blume | https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Beach_rose%2C_Born_a._Darss_%28_1100881%29.jpg/1280px-Beach_rose%2C_Born_a._Darss_%28_1100881%29.jpg
-- c04 JUN Rosa rugosa bud (alt) | Photo by and (c)2014 Derek Ram | https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Beach_Rose_Rosa_rugosa_Bud.jpg/1280px-Beach_Rose_Rosa_rugosa_Bud.jpg
-- c11 JUL Echinacea pink | Krzysztof Golik | https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Echinacea_purpurea_in_Aboul.jpg/1280px-Echinacea_purpurea_in_Aboul.jpg
-- c14 JUN Campanula purple cluster | Robert Flogaus-Faust | https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Campanula_glomerata_RF.jpg/1280px-Campanula_glomerata_RF.jpg
-- c15 JUN Campanula (alt) | Hans Hillewaert | https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Campanula_glomerata_%28flowers%29.jpg/1280px-Campanula_glomerata_%28flowers%29.jpg
-- c21 JUN Astrantia pink | Dominicus Johannes Bergsma | https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Zeeuws_knoopje_%28Astrantia_major%29.JPG/1280px-Zeeuws_knoopje_%28Astrantia_major%29.JPG
-- c24 AUG Eryngium alpinum close | Meneerke bloem | https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Eryngium_alpinum_2022_03.JPG/1280px-Eryngium_alpinum_2022_03.JPG
-- c28 JUN Philadelphus white | Bff | https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Philadelphus_coronarius20190615_15656.jpg/1280px-Philadelphus_coronarius20190615_15656.jpg
-- c31 JUN dark red rose (Rosa canina?) | Alvesgaspar | https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Rosa_Porto_Covo_July_2026-6.jpg/1280px-Rosa_Porto_Covo_July_2026-6.jpg
-- c33 JUN dog rose white | Suisant7 | https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Rosa_canina_05_2018.jpg/1280px-Rosa_canina_05_2018.jpg
-- c39 JUN Lilium martagon mountains | Uoaei1 | https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Lilium_martagon_Tauerntal_03.jpg/1280px-Lilium_martagon_Tauerntal_03.jpg
-- c42 JUN Dactylorhiza | Uoaei1 | https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Dactylorhiza_fuchsii_Mariazell_01.JPG/1280px-Dactylorhiza_fuchsii_Mariazell_01.JPG
-- c43 JUN Ophrys bee orchid | JackyM59 | https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Ophrys_abeille_-_Ophrys_apifera.jpg/1280px-Ophrys_abeille_-_Ophrys_apifera.jpg
-- c49 JUN Geranium pratense blue | Julie Anne Workman | https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Geranium_pratense_%28Meadow_Cranesbill%29.jpg/1280px-Geranium_pratense_%28Meadow_Cranesbill%29.jpg
-- c54 JUN oxeye daisy | böhringer friedrich | https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Margerite%2C_Leucanthemum_vulgare_10.JPG/1280px-Margerite%2C_Leucanthemum_vulgare_10.JPG
-- c55 JUN wild strawberry | Stephan van Helden | https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Walderdbeere_s%C3%BCdlich_vom_Speierlingsgraben_unterhalb_des_Brambergs.jpg/1280px-Walderdbeere_s%C3%BCdlich_vom_Speierlingsgraben_unterhalb_des_Brambergs.jpg
-- c59 JUL burnet moth on scabious | Reinhold Möller Ermell | https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Sechsfleck-Widderchen_%28Zygaena_filipendulae%29_-20250719-RM-165836.jpg/1280px-Sechsfleck-Widderchen_%28Zygaena_filipendulae%29_-20250719-RM-165836.jpg
-- c70 JUN Calopteryx virgo green | Charles J. Sharp | https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Beautiful_demoiselle_%28Calopteryx_virgo%29_male_close_up.jpg/1280px-Beautiful_demoiselle_%28Calopteryx_virgo%29_male_close_up.jpg
-- c72 JUL yellow beetle on passion flower | Richard Bartz, Munich Makro Fr | https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Euchroea-auripimenta-on-passiflora.jpg/1280px-Euchroea-auripimenta-on-passiflora.jpg
-- c74 JUN rose chafer on bark | Richard Bartz, Munich Richard  | https://upload.wikimedia.org/wikipedia/commons/9/9f/Torynorrhina_flammea_chicheryi_and_Formica_Rufa_Richard_Bartz.jpg
-- c75 JUL Rosalia alpina on thistle | Fvukajlovic | https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Rosalia_alpina_FV_Mucanj_2018.jpg/1280px-Rosalia_alpina_FV_Mucanj_2018.jpg
-- c80 JUN Graphosoma on umbel | Quartl | https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Graphosoma_italicum_qtl1.jpg/1280px-Graphosoma_italicum_qtl1.jpg
-- c94 JUL oystercatcher | Stephan Sprinz | https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Austernfischer_%28Haematopus_ostralegus%29_bei_der_Nahrungssuche_%28Baltrum%2C_Nationalpark_nieders%C3%A4chsisches_Wattenmeer%29_04.jpg/1280px-Austernfischer_%28Haematopus_ostralegus%29_bei_der_Nahrungssuche_%28Baltrum%2C_Nationalpark_nieders%C3%A4chsisches_Wattenmeer%29_04.jpg
-- c102 JUN Calanque d'En-Vau | kallerna | https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/En-Vau_calanque_6.jpg/1280px-En-Vau_calanque_6.jpg
-- c108 JUN Bonifacio cliffs | BartekPtaszyński | https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Bonifacio_Grain_de_sable_6.jpg/1280px-Bonifacio_Grain_de_sable_6.jpg
-- c109 JUN Bonifacio town on cliff | Michimaya | https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Bonifacio_Corsica.jpg/1280px-Bonifacio_Corsica.jpg
-- c68 ANY Anax dragonfly reflection (alt) | Alun Williams333 | https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Anax_imperator_Ymerawdwr.jpg/1280px-Anax_imperator_Ymerawdwr.jpg
-- c110 JUN Bonifacio (alt) | Michał Jasiński | https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Corsica_Bonifacio_Cliff.JPG/1280px-Corsica_Bonifacio_Cliff.JPG
-- c126 JUN Hook Head lighthouse | Ianfhunter | https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Hook_Head_Lighthouse_close-up.jpg/1280px-Hook_Head_Lighthouse_close-up.jpg
-- c120 JUN Portland Head Light | Photo by and (c)2014 Derek Ram | https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Portland_Head_Lighthouse_Ocean_Vertical.JPG/1280px-Portland_Head_Lighthouse_Ocean_Vertical.JPG
-- c124 JUN Phare du Petit Minou | Shadowgate | https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Petit_Minou_Lighthouse_%2850690881668%29.jpg/1280px-Petit_Minou_Lighthouse_%2850690881668%29.jpg
-- c129 JUN Bodnant pond water lilies | Ellie from UK | https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Bodnant_Gardens_%2828615493001%29.jpg/1280px-Bodnant_Gardens_%2828615493001%29.jpg
-- c131 JUN allium Bodnant | Ellie from UK | https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Bodnant_Gardens_%2828077311333%29.jpg/1280px-Bodnant_Gardens_%2828077311333%29.jpg
-- c138 JUL beadlet anemone red | Diego Delso | https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Tomate_de_mar_%28Actinia_equina%29%2C_Set%C3%BAbal%2C_Portugal%2C_2020-08-01%2C_DD_11.jpg/1280px-Tomate_de_mar_%28Actinia_equina%29%2C_Set%C3%BAbal%2C_Portugal%2C_2020-08-01%2C_DD_11.jpg
-- c149 JUL tiger cowrie | Diego Delso | https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Caracol_marino_%28Cypraea_tigris%29%2C_Ambalihabe%2C_Madagascar%2C_2025-09-16%2C_DD_69.jpg/1280px-Caracol_marino_%28Cypraea_tigris%29%2C_Ambalihabe%2C_Madagascar%2C_2025-09-16%2C_DD_69.jpg
-- c150 JUL tiger cowrie (alt) | Debra Baker | https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Cypraea_tigris_436048191.jpg/1280px-Cypraea_tigris_436048191.jpg
-- c152 JUL Cotylorhiza jellyfish texture | Holger Krisp | https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Spiegeleiqualle_Cotylorhiza_tuberculata_2.jpg/1280px-Spiegeleiqualle_Cotylorhiza_tuberculata_2.jpg
-- c153 JUL Cotylorhiza jellyfish blue (alt) | Holger Krisp | https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Spiegeleiqualle_Cotylorhiza_tuberculata_4.jpg/1280px-Spiegeleiqualle_Cotylorhiza_tuberculata_4.jpg
-- c162 JUL Camogli harbour | Cliomd1 | https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Camogli%2C_italy.jpg/1280px-Camogli%2C_italy.jpg
-- c166 JUL Atrani | Diego Delso | https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Atrani%2C_Italia%2C_2023-03-26%2C_DD_34.jpg/1280px-Atrani%2C_Italia%2C_2023-03-26%2C_DD_34.jpg
-- c114 JUN Cap de Formentor lighthouse (alt) | H. Zell | https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Far_de_Formentor_-_Majorca_-_02.jpg/1280px-Far_de_Formentor_-_Majorca_-_02.jpg
-- c135 JUN Villa d'Este fountains (alt) | Daderot | https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Fountains_-_Villa_d%27Este_-_Tivoli%2C_Italy_-_DSC03900.jpg/1280px-Fountains_-_Villa_d%27Este_-_Tivoli%2C_Italy_-_DSC03900.jpg
-- c172 JUL Collioure tower | Krzysztof Golik | https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Notre-Dame_des_Anges_church_of_Collioure_01.jpg/1280px-Notre-Dame_des_Anges_church_of_Collioure_01.jpg
-- c175 JUL St Ives boats | Peter Jeffery | https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Across_St._Ives_Harbour_-_geograph.org.uk_-_4554998.jpg/1280px-Across_St._Ives_Harbour_-_geograph.org.uk_-_4554998.jpg
-- c183 JUL Piran harbour boats | Jakub Hałun | https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Piran_harbour%2C_Slovenia%2C_20240504_1641_8654.jpg/1280px-Piran_harbour%2C_Slovenia%2C_20240504_1641_8654.jpg
-- c192 JUL nectarines pile | Fumikas Sagisavas | https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Nectarines_%281%29.jpg/1280px-Nectarines_%281%29.jpg
-- c199 JUL mulberries | Chiring chandan | https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Morus_alba_%28White_mulberry%29.jpg/1280px-Morus_alba_%28White_mulberry%29.jpg
-- c200 JUL mulberries (alt) | Stefan Oemisch (Germany) | https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/2024_Morus_at_Mottisfont_Abbey.jpg/1280px-2024_Morus_at_Mottisfont_Abbey.jpg
-- c214 JUL pineapple plant | Diego Delso | https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Pi%C3%B1a_%28Ananas_comosus%29%2C_Parque_Nacional_de_Lokobe%2C_Nosy_Be%2C_Madagascar%2C_2025-09-21%2C_DD_39.jpg/1280px-Pi%C3%B1a_%28Ananas_comosus%29%2C_Parque_Nacional_de_Lokobe%2C_Nosy_Be%2C_Madagascar%2C_2025-09-21%2C_DD_39.jpg
-- c215 ANY red pineapple | NorbertNagel | https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Pinapple_-_Ananas_macrodontes_-_Jardin_du_Roi.jpg/1280px-Pinapple_-_Ananas_macrodontes_-_Jardin_du_Roi.jpg
-- c170 JUL Cefalu alley (alt) | Berthold Werner | https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Cefal%C3%B9_BW_2025-05-01_10-52-52.jpg/1280px-Cefal%C3%B9_BW_2025-05-01_10-52-52.jpg
-- c221 JUL Caprese salad | Takeaway | https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Insalata_Caprese_The_Larder.jpg/1280px-Insalata_Caprese_The_Larder.jpg
-- c230 JUL cherry clafoutis | Orf3us | https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Clafoutis_i_Telemarken.jpg/1280px-Clafoutis_i_Telemarken.jpg
-- c233 JUL luzzu eye Malta | Kritzolina | https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Luzzu_in_Marsaxlokk_05.jpg/1280px-Luzzu_in_Marsaxlokk_05.jpg
-- c232 JUL luzzu (alt) | Kritzolina | https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/A_Luzzu_in_Marsaskala_Harbour.jpg/1280px-A_Luzzu_in_Marsaskala_Harbour.jpg
-- c248 AUG Crocosmia | Rudolphous | https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Crocosmia_%28Montbretia%29_-_Noordwijk%2C_South_Holland%2C_NL.jpg/1280px-Crocosmia_%28Montbretia%29_-_Noordwijk%2C_South_Holland%2C_NL.jpg
-- c250 AUG Echinops with bee | Mickaël Schauli | https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Azurite_-_Echinops_ritro_-_2_-_par_Mickael_Schauli.jpg/1280px-Azurite_-_Echinops_ritro_-_2_-_par_Mickael_Schauli.jpg
-- c254 JUL regal lilies | Burkhard Mücke | https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Wei%C3%9Fe_K%C3%B6nigs-Lilie_%28Lilium_regale%29.jpg/1280px-Wei%C3%9Fe_K%C3%B6nigs-Lilie_%28Lilium_regale%29.jpg
-- c256 JUL red daylily | George Chernilevsky | https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Hemerocallis_2021_G6.jpg/1280px-Hemerocallis_2021_G6.jpg
-- c258 JUL orange daylilies (alt) | George Chernilevsky | https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Hemerocallis_fulva_2009_G1.jpg/1280px-Hemerocallis_fulva_2009_G1.jpg
-- c259 JUL pink phlox | Екатерина Борисова | https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/%D0%9F%D0%B5%D1%82%D0%B5%D1%80%D0%B3%D0%BE%D1%84%2C_%D0%90%D0%BB%D0%B5%D0%BA%D1%81%D0%B0%D0%BD%D0%B4%D1%80%D0%B8%D1%8F%2C_%D0%9A%D0%BE%D1%82%D1%82%D0%B5%D0%B4%D0%B6%2C_%D1%84%D0%BB%D0%BE%D0%BA%D1%81%D1%8B_%D0%B2_%D0%A1%D0%BE%D0%B1%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%BC_%D1%81%D0%B0%D0%B4%D1%83.jpg/1280px-%D0%9F%D0%B5%D1%82%D0%B5%D1%80%D0%B3%D0%BE%D1%84%2C_%D0%90%D0%BB%D0%B5%D0%BA%D1%81%D0%B0%D0%BD%D0%B4%D1%80%D0%B8%D1%8F%2C_%D0%9A%D0%BE%D1%82%D1%82%D0%B5%D0%B4%D0%B6%2C_%D1%84%D0%BB%D0%BE%D0%BA%D1%81%D1%8B_%D0%B2_%D0%A1%D0%BE%D0%B1%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%BC_%D1%81%D0%B0%D0%B4%D1%83.jpg
-- c263 AUG buddleja with hoverfly | Reinhold Möller Ermell | https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Hornissenschwebfliege_%28Volucellaa_zonaria%29_auf_Buddleja-20250711-RM-125430.jpg/1280px-Hornissenschwebfliege_%28Volucellaa_zonaria%29_auf_Buddleja-20250711-RM-125430.jpg
-- c265 AUG canna red | Berthold Werner | https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Canna_indica_BW_1.JPG/1280px-Canna_indica_BW_1.JPG
-- c266 AUG canna with bird (alt) | Charles J. Sharp | https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Cinnamon-bellied_flowerpiercer_%28Diglossa_baritula%29_male_on_Indian_shot_%28Canna_indica%29_Finca_El_Pilar.jpg/1280px-Cinnamon-bellied_flowerpiercer_%28Diglossa_baritula%29_male_on_Indian_shot_%28Canna_indica%29_Finca_El_Pilar.jpg
-- c236 ANY felucca (alt) | Martin Falbisoner | https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Nilboot.JPG/1280px-Nilboot.JPG
-- c239 ANY moliceiro (alt) | CardosoSousa1988 | https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Moliceiro_na_Ria_de_Aveiro.jpg/1280px-Moliceiro_na_Ria_de_Aveiro.jpg
-- c276 AUG chicory flower | Alvesgaspar | https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Cichorium_May_2013-1.jpg/1280px-Cichorium_May_2013-1.jpg
-- c281 AUG marbled white on teasel | Reinhold Möller Ermell | https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Schachbrettfalter_auf_Karde-20250713-RM-170639.jpg/1280px-Schachbrettfalter_auf_Karde-20250713-RM-170639.jpg
-- c284 AUG rudbeckia mass | Acabashi | https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/%22Rudbeckia_hirta%22_Black-eyed_Susan_Gibberd_Garden_Essex_England_%28cropped%29.JPG/1280px-%22Rudbeckia_hirta%22_Black-eyed_Susan_Gibberd_Garden_Essex_England_%28cropped%29.JPG
-- c288 AUG helenium with bee | Reinhold Möller Ermell | https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Rotbeinige_Furchenbiene_%28Halictus_rubicundus%29_Sonnenbraut_%28Helenium%29-20250829-RM-161408.jpg/1280px-Rotbeinige_Furchenbiene_%28Halictus_rubicundus%29_Sonnenbraut_%28Helenium%29-20250829-RM-161408.jpg
-- c294 AUG gaillardia | MadinAl | https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Gaillardia_Santa_Elena.jpg/1280px-Gaillardia_Santa_Elena.jpg
-- c309 AUG wheat ears | böhringer friedrich | https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Triticum_polonicum_L_4.JPG/1280px-Triticum_polonicum_L_4.JPG
-- c317 AUG wasp spider on leaf | 26D | https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/%D0%9F%D0%B0%D1%83%D0%BA_%D0%90%D1%80%D0%B3%D0%B8%D0%BE%D0%BF%D0%B0_%D0%91%D1%80%D1%8E%D0%BD%D0%BD%D0%B8%D1%85%D0%B0.jpg/1280px-%D0%9F%D0%B0%D1%83%D0%BA_%D0%90%D1%80%D0%B3%D0%B8%D0%BE%D0%BF%D0%B0_%D0%91%D1%80%D1%8E%D0%BD%D0%BD%D0%B8%D1%85%D0%B0.jpg
-- c296 AUG verbena (alt) | Abraham | https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/20250805_Verbena_bonariensis_werbena_patago%C5%84ska_Panewniki_Poland_02.jpg/1280px-20250805_Verbena_bonariensis_werbena_patago%C5%84ska_Panewniki_Poland_02.jpg
-- c302 AUG corncockle (alt) | Agnieszka Kwiecień, Nova | https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Agrostemma_githago_K%C4%85kol_polny_2023-06-08_01.jpg/1280px-Agrostemma_githago_K%C4%85kol_polny_2023-06-08_01.jpg
-- c305 AUG barley (alt) | Yoko Nekonomania | https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Flower%2C_Barley_-_Flickr_-_nekonomania.jpg/1280px-Flower%2C_Barley_-_Flickr_-_nekonomania.jpg
-- c323 AUG red admiral on flowers | Rhododendrites | https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Red_admiral_%2805196%29.jpg/1280px-Red_admiral_%2805196%29.jpg
-- c327 AUG painted lady | Jörg Hempel | https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Vanessa_cardui_LC0307.jpg/1280px-Vanessa_cardui_LC0307.jpg
-- c325 AUG painted lady on buddleja (alt) | Thomas Bresson | https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Vanessa_cardui_%283%29.jpg/1280px-Vanessa_cardui_%283%29.jpg
-- c332 AUG brimstone on thistle | Robert Flogaus-Faust | https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Gonepteryx_rhamni_on_Cirsium_arvense_RF.jpg/1280px-Gonepteryx_rhamni_on_Cirsium_arvense_RF.jpg
-- c333 AUG brimstone on oregano (alt) | SimonWaldherr | https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Lepidoptera_%28Butterfly%29_02.jpg/1280px-Lepidoptera_%28Butterfly%29_02.jpg
-- c335 AUG scarce swallowtail | Diego Delso | https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Podalirio_ib%C3%A9rica_%28Iphiclides_feisthamelii%29%2C_A%C3%B1%C3%B3n%2C_Espa%C3%B1a%2C_2012-08-27%2C_DD_06.jpg/1280px-Podalirio_ib%C3%A9rica_%28Iphiclides_feisthamelii%29%2C_A%C3%B1%C3%B3n%2C_Espa%C3%B1a%2C_2012-08-27%2C_DD_06.jpg
-- c347 AUG Blausee | Hons084 | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/2014_Droga_w_kierunku_jeziora_Rica%2C_B%C5%82%C4%99kitne_Jezioro_%2804%29.jpg/1280px-2014_Droga_w_kierunku_jeziora_Rica%2C_B%C5%82%C4%99kitne_Jezioro_%2804%29.jpg
-- c350 AUG Caumasee | Caumasee | https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Caumasee_in_October_2017_07.jpg/1280px-Caumasee_in_October_2017_07.jpg
-- c354 AUG Seealpsee reflection | albinfo | https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Seealpsee_Juni2018_04.jpg/1280px-Seealpsee_Juni2018_04.jpg
-- c356 AUG Bachalpsee cotton grass | Freddy Amend | https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Bachalpsee_Sicht_auf_das_Schreckhorn.jpg/1280px-Bachalpsee_Sicht_auf_das_Schreckhorn.jpg
-- c358 JUN Phyteuma purple (Bachalpsee) | Murray Foubister | https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/A_day_in_the_Grindelwald_area_-_up_to_First_%26_Bachsee_-_more_spectacular_Alpine_Flowers_%2810955558323%29.jpg/1280px-A_day_in_the_Grindelwald_area_-_up_to_First_%26_Bachsee_-_more_spectacular_Alpine_Flowers_%2810955558323%29.jpg
-- c360 AUG Eibsee Zugspitze | GlockiGlocksen | https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Bayrische_Karibik.jpg/1280px-Bayrische_Karibik.jpg
-- c362 AUG Lago Federa reflection | Yreen | https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Il_Becco_di_Mezzod%C3%AC_riflesso_nel_lago_Federa.jpg/1280px-Il_Becco_di_Mezzod%C3%AC_riflesso_nel_lago_Federa.jpg
-- c364 AUG Soca gorge | Krzysztof Golik | https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Soca_river_in_Kobarid_%2817%29.jpg/1280px-Soca_river_in_Kobarid_%2817%29.jpg
-- c366 AUG Soca valley (alt) | Krzysztof Golik | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Soca_river_in_Kobarid_%2826%29.jpg/1280px-Soca_river_in_Kobarid_%2826%29.jpg
-- c367 AUG Verzasca | JoachimKohler-HB | https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Im_Verzascatal%2C_Tessin%2C_Schweiz.jpg/1280px-Im_Verzascatal%2C_Tessin%2C_Schweiz.jpg
-- c345 OCT Gosausee autumn trees | holger mohaupt | https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Buntes_am_Gosausee_2007_-_panoramio.jpg/1280px-Buntes_am_Gosausee_2007_-_panoramio.jpg
-- c372 SEP green wine grapes | Photograph by Mike Peel (www.m | https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/RHS_Garden_Bridgewater_2022_081.jpg/1280px-RHS_Garden_Bridgewater_2022_081.jpg
-- c374 SEP quince tree with fruit | Dietrich Krieger | https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Quitten-5483-2.jpg/1280px-Quitten-5483-2.jpg
-- c383 SEP chestnut burr open | Dominicus Johannes Bergsma | https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Afgevallen_kastanje_van_een_Tamme_kastanje_%28Castanea_sativa%29_17-10-2021_%28d.j.b.%29_01.jpg/1280px-Afgevallen_kastanje_van_een_Tamme_kastanje_%28Castanea_sativa%29_17-10-2021_%28d.j.b.%29_01.jpg
-- c387 SEP corn cobs pile | Tanvir Rahat | https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Maize%2C_Kurigram%2C_Bangladesh.jpg/1280px-Maize%2C_Kurigram%2C_Bangladesh.jpg
-- c389 SEP corn cob close (alt) | Luigi Chiesa | https://upload.wikimedia.org/wikipedia/commons/9/98/Pannocchia_sgranata.jpg
-- c401 SEP apple pie lattice | Shisma | https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Apple_pie_42.jpg/1280px-Apple_pie_42.jpg
-- c407 DEC frosted hawthorn berries | Famartin | https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/2014-12-17_09_51_38_Rime_from_freezing_fog_on_a_hawthorne_berry_in_Elko%2C_Nevada.JPG/1280px-2014-12-17_09_51_38_Rime_from_freezing_fog_on_a_hawthorne_berry_in_Elko%2C_Nevada.JPG
-- c414 SEP Colchicum | T. Kebert | https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Colchicum_autumnale_TK_2021-09-25_2.jpg/1280px-Colchicum_autumnale_TK_2021-09-25_2.jpg
-- c417 SEP Cyclamen hederifolium pink | Agnes Monkelbaan | https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Cyclamen_purpurascens_010.jpg/1280px-Cyclamen_purpurascens_010.jpg
-- c398 SEP plum cake (alt) | Takeaway | https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/2015_0804_Zwetschkenkuchen_Gaislachalm_S%C3%B6lden.jpg/1280px-2015_0804_Zwetschkenkuchen_Gaislachalm_S%C3%B6lden.jpg
-- c413 SEP rose hips (alt) | W.carter | https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Twig_with_rose_hips.jpg/1280px-Twig_with_rose_hips.jpg
-
-## Plan
-
-Per month: pick ~30 keepers (seasonal first, then any-season), `tools/content/run.sh newdaily 2027-MM --pick <keys in day order>`, then `sheet daily-2027-MM --puzzles-only`, reject bad days and `apply daily-2027-MM`. Finish with the audit over all seven packs. Subjects that daily-2027a covers (oriental poppy, honeysuckle, golden oriole, European roller, hawk-moths, chanterelle, goldcrest and similar) are not picked.
+Dedupe note: one planned November pick (velvet shank, Commons file shared with the daily-2027a pool) was
+refused by the "already used in another pack" check because daily-2026-12-22 had taken it first; a
+different picture was used.
