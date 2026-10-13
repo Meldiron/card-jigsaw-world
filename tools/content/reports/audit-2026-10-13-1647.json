@@ -1,0 +1,87 @@
+{
+ "summary": {
+  "packs": 10,
+  "violating": 0,
+  "count": 0,
+  "landscape": 0,
+  "dup_pairs": 0,
+  "people_kw": 3,
+  "text_kw": 0,
+  "small": 0,
+  "unscanned": 0,
+  "cross_dups": 0,
+  "rejected_pending": 0
+ },
+ "packs": {
+  "pack-dolomites": {
+   "name": "Dolomites",
+   "category": "Mountains",
+   "count": 24,
+   "issues": [],
+   "warnings": [
+    "p-7ce828d1493a: keyword people:face",
+    "p-a742a3894f73: keyword people:family"
+   ]
+  },
+  "pack-mountain-huts": {
+   "name": "Mountain Huts",
+   "category": "Mountains",
+   "count": 24,
+   "issues": []
+  },
+  "pack-alpine-meadows": {
+   "name": "Alpine Meadows",
+   "category": "Mountains",
+   "count": 24,
+   "issues": []
+  },
+  "pack-rocky-mountains": {
+   "name": "Rocky Mountains",
+   "category": "Mountains",
+   "count": 24,
+   "issues": []
+  },
+  "pack-mountain-autumn": {
+   "name": "Autumn in the Mountains",
+   "category": "Mountains",
+   "count": 24,
+   "issues": []
+  },
+  "pack-quilts": {
+   "name": "Quilts",
+   "category": "Patterns",
+   "count": 24,
+   "issues": [],
+   "warnings": [
+    "p-b9a293c515bf: keyword people:grandmother"
+   ]
+  },
+  "pack-embroidery": {
+   "name": "Embroidery",
+   "category": "Patterns",
+   "count": 24,
+   "issues": []
+  },
+  "pack-wallpapers": {
+   "name": "Wallpapers",
+   "category": "Patterns",
+   "count": 24,
+   "issues": [],
+   "warnings": [
+    "p-ea51bedb1122: keyword unwanted:graves"
+   ]
+  },
+  "pack-folk-art": {
+   "name": "Folk Art",
+   "category": "Patterns",
+   "count": 24,
+   "issues": []
+  },
+  "pack-clocks": {
+   "name": "Antique Clocks",
+   "category": "Vintage",
+   "count": 24,
+   "issues": []
+  }
+ }
+}
