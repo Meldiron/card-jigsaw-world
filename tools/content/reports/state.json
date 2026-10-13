@@ -2825,6 +2825,14 @@
 "removed": 15,
 "status": "verified"
 },
+"pack-embroidery": {
+"added": 0,
+"at": "2026-10-13T15:13:25",
+"last_step": "pool 75 usable",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
 "pack-fairytale-villages": {
 "added": 24,
 "at": "2026-10-12T16:43:10",
@@ -3870,12 +3878,16 @@
 "status": "verified"
 },
 "pack-wild-australia": {
-"added": 0,
-"at": "2026-10-13T14:58:27",
-"last_step": "reject 12 weak",
-"puzzles": null,
+"added": 24,
+"at": "2026-10-13T15:13:50",
+"category": "Premium",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "Wild Australia",
+"puzzles": 24,
 "removed": 0,
-"status": "audited"
+"status": "verified"
 },
 "pack-wild-roses": {
 "added": 25,

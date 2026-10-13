@@ -5543,6 +5543,12 @@
 "pack": "daily-2026-01",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/220086256/original.jpg": {
+"at": "2026-10-13",
+"label": "c149",
+"pack": "pack-wild-australia",
+"reason": "off-theme"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/221374287/original.jpeg": {
 "at": "2026-10-12",
 "label": "c159",
@@ -6527,6 +6533,12 @@
 "pack": "daily-2024-06",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/287517225/original.jpg": {
+"at": "2026-10-13",
+"label": "c145",
+"pack": "pack-wild-australia",
+"reason": "off-theme"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/288082845/original.jpg": {
 "at": "2026-10-12",
 "label": "c2608",
@@ -7390,6 +7402,12 @@
 "label": "c900",
 "pack": "daily-2023-10",
 "reason": "weak"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/335444601/original.jpg": {
+"at": "2026-10-13",
+"label": "c148",
+"pack": "pack-wild-australia",
+"reason": "off-theme"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/336062534/original.jpeg": {
 "at": "2026-10-12",
@@ -8447,6 +8465,12 @@
 "pack": "daily-2024-06",
 "reason": "weak"
 },
+"https://inaturalist-open-data.s3.amazonaws.com/photos/400974428/original.jpg": {
+"at": "2026-10-13",
+"label": "c146",
+"pack": "pack-wild-australia",
+"reason": "off-theme"
+},
 "https://inaturalist-open-data.s3.amazonaws.com/photos/401395343/original.jpg": {
 "at": "2026-10-12",
 "label": "c1740",
@@ -8596,6 +8620,12 @@
 "label": "c1802",
 "pack": "daily-2024-06",
 "reason": "quality"
+},
+"https://inaturalist-open-data.s3.amazonaws.com/photos/409536090/original.jpg": {
+"at": "2026-10-13",
+"label": "c147",
+"pack": "pack-wild-australia",
+"reason": "off-theme"
 },
 "https://inaturalist-open-data.s3.amazonaws.com/photos/409656337/original.jpeg": {
 "at": "2026-10-12",
@@ -41615,6 +41645,12 @@
 "pack": "pack-dutch-masters",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/8/8d/Freycinet_National_Park_-_Lyle_Closs%2C_Hazards_Main_Wall.jpg": {
+"at": "2026-10-13",
+"label": "c124",
+"pack": "pack-wild-australia",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/8/8d/Mayschoss_Ahrtal_30206.jpg": {
 "at": "2026-10-12",
 "label": "c32",
@@ -50639,6 +50675,12 @@
 "pack": "pack-lisbon",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/MK-07789_Dales_Gorge_%28Karijini_National_Park%29.jpg/1280px-MK-07789_Dales_Gorge_%28Karijini_National_Park%29.jpg": {
+"at": "2026-10-13",
+"label": "c97",
+"pack": "pack-wild-australia",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Magenta_paintbrush_and_Sitka_valerian_in_the_Paradise_Meadows._%28ad29ee7a-aa5c-42ab-a8f1-ccc0b14a0d73%29.JPG/1280px-Magenta_paintbrush_and_Sitka_valerian_in_the_Paradise_Meadows._%28ad29ee7a-aa5c-42ab-a8f1-ccc0b14a0d73%29.JPG": {
 "at": "2026-10-13",
 "label": "c36",
@@ -59267,6 +59309,12 @@
 "pack": "pack-canyons",
 "reason": "people"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Sandy_lamproite_tuff_%28Argyle_Lamproite%2C_Mesoproterozoic%2C_1.178_Ga%3B_Argyle_Mine%2C_Western_Australia%29_5.jpg/1280px-Sandy_lamproite_tuff_%28Argyle_Lamproite%2C_Mesoproterozoic%2C_1.178_Ga%3B_Argyle_Mine%2C_Western_Australia%29_5.jpg": {
+"at": "2026-10-13",
+"label": "c129",
+"pack": "pack-wild-australia",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Scots_Pine_pollen_cones%2C_cultivated%2C_Guelph%2C_Ontario_19.jpg/1280px-Scots_Pine_pollen_cones%2C_cultivated%2C_Guelph%2C_Ontario_19.jpg": {
 "at": "2026-10-12",
 "label": "c105",
@@ -64283,6 +64331,12 @@
 "pack": "pack-farm-life",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Durack_Homestead_Aboriginal.JPG/1280px-Durack_Homestead_Aboriginal.JPG": {
+"at": "2026-10-13",
+"label": "c130",
+"pack": "pack-wild-australia",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Eastern_Cattle-Egret_in_Bhagalpur_December_2025_by_Tisha_Mukherjee_02.jpg/1280px-Eastern_Cattle-Egret_in_Bhagalpur_December_2025_by_Tisha_Mukherjee_02.jpg": {
 "at": "2026-10-12",
 "label": "c93",
@@ -69064,6 +69118,12 @@
 "label": "c46",
 "pack": "pack-new-zealand",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Gathering_pineapples_from_a_farm_near_Glass_House_Mountains%2C_circa_1958.jpg/1280px-Gathering_pineapples_from_a_farm_near_Glass_House_Mountains%2C_circa_1958.jpg": {
+"at": "2026-10-13",
+"label": "c100",
+"pack": "pack-wild-australia",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Gazpacho_3.jpg/1280px-Gazpacho_3.jpg": {
 "at": "2026-10-13",
@@ -75059,6 +75119,12 @@
 "pack": "pack-impressionists",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Tessellated_Pavement_14.jpg/1280px-Tessellated_Pavement_14.jpg": {
+"at": "2026-10-13",
+"label": "c125",
+"pack": "pack-wild-australia",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/The_Doors_of_Dublin_%287580307812%29.jpg/1280px-The_Doors_of_Dublin_%287580307812%29.jpg": {
 "at": "2026-10-12",
 "label": "c02",
@@ -78767,6 +78833,12 @@
 "pack": "pack-rockets",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Ormiston_Gorge%2C_October_2025_03.jpg/1280px-Ormiston_Gorge%2C_October_2025_03.jpg": {
+"at": "2026-10-13",
+"label": "c106",
+"pack": "pack-wild-australia",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Parthenos_sylvia_-_Clipper_butterfly_at_Peravoor_%282%29.jpg/1280px-Parthenos_sylvia_-_Clipper_butterfly_at_Peravoor_%282%29.jpg": {
 "at": "2026-10-12",
 "label": "c60",
@@ -80555,6 +80627,12 @@
 "pack": "daily-2027-06",
 "reason": "text"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Standley_Chasm%2C_October_2025_11.jpg/1280px-Standley_Chasm%2C_October_2025_11.jpg": {
+"at": "2026-10-13",
+"label": "c111",
+"pack": "pack-wild-australia",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Strangler_Fig_%28Ficus_sp.%29_%2823240074100%29.jpg/1280px-Strangler_Fig_%28Ficus_sp.%29_%2823240074100%29.jpg": {
 "at": "2026-10-12",
 "label": "c62",
@@ -82259,6 +82337,12 @@
 "pack": "pack-tulip-fields",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Undara_National_Park1.jpg/1280px-Undara_National_Park1.jpg": {
+"at": "2026-10-13",
+"label": "c140",
+"pack": "pack-wild-australia",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Untitled_globe_gore_depicting_Southern_Russia%2C_Ukraine%2C_the_Caucasus_and_the_Levante.jpg/1280px-Untitled_globe_gore_depicting_Southern_Russia%2C_Ukraine%2C_the_Caucasus_and_the_Levante.jpg": {
 "at": "2026-10-12",
 "label": "c25",
@@ -82798,6 +82882,12 @@
 "label": "c84",
 "pack": "pack-portraits",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Standley_Chasm%2C_October_2025_07.jpg/1280px-Standley_Chasm%2C_October_2025_07.jpg": {
+"at": "2026-10-13",
+"label": "c110",
+"pack": "pack-wild-australia",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Twtitch_Streamer_ReconNathan.jpg/1280px-Twtitch_Streamer_ReconNathan.jpg": {
 "at": "2026-10-12",
@@ -89703,6 +89793,12 @@
 "at": "2026-10-12",
 "label": "c18",
 "pack": "evpack-lunar-new-year-2027",
+"reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Feral_pigeons_from_Salt_Lake%2C_Kolkata.jpg/1280px-Feral_pigeons_from_Salt_Lake%2C_Kolkata.jpg": {
+"at": "2026-10-13",
+"label": "c99",
+"pack": "pack-wild-australia",
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Ferdinand_von_Wright_-_Rough-Legged_Buzzard_-_A_I_616-14_-_Finnish_National_Gallery.jpg/1280px-Ferdinand_von_Wright_-_Rough-Legged_Buzzard_-_A_I_616-14_-_Finnish_National_Gallery.jpg": {
@@ -100817,6 +100913,12 @@
 "pack": "evpack-pet-day-2027",
 "reason": "off-theme"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Dowling_047.jpg/1280px-Dowling_047.jpg": {
+"at": "2026-10-13",
+"label": "c109",
+"pack": "pack-wild-australia",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Eibenwald_Paterzell_03.jpg/1280px-Eibenwald_Paterzell_03.jpg": {
 "at": "2026-10-12",
 "label": "c41",
@@ -103960,6 +104062,12 @@
 "label": "c71",
 "pack": "evpack-photography-2027",
 "reason": "quality"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Tessellated_Pavement_22.jpg/1280px-Tessellated_Pavement_22.jpg": {
+"at": "2026-10-13",
+"label": "c126",
+"pack": "pack-wild-australia",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Trough_Creek_State_Park_-_panoramio.jpg/1280px-Trough_Creek_State_Park_-_panoramio.jpg": {
 "at": "2026-10-13",
@@ -108783,6 +108891,12 @@
 "at": "2026-10-12",
 "label": "c55",
 "pack": "pack-rice-terraces",
+"reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Undara_Lava_Tubes_-_panoramio_%2823%29.jpg/1280px-Undara_Lava_Tubes_-_panoramio_%2823%29.jpg": {
+"at": "2026-10-13",
+"label": "c144",
+"pack": "pack-wild-australia",
 "reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Unnamed_Road%2C_Zakinthos_290_91%2C_Greece_-_panoramio_%2860%29.jpg/1280px-Unnamed_Road%2C_Zakinthos_290_91%2C_Greece_-_panoramio_%2860%29.jpg": {
@@ -117335,6 +117449,12 @@
 "pack": "evpack-bean-day-2027",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Ormiston_Gorge%2C_October_2025_19.jpg/1280px-Ormiston_Gorge%2C_October_2025_19.jpg": {
+"at": "2026-10-13",
+"label": "c108",
+"pack": "pack-wild-australia",
+"reason": "text"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Panikkoorkka_Coleus_aromaticus_tuvvur.JPG/1280px-Panikkoorkka_Coleus_aromaticus_tuvvur.JPG": {
 "at": "2026-10-13",
 "label": "c584",
@@ -117568,6 +117688,12 @@
 "label": "c106",
 "pack": "pack-japanese-prints",
 "reason": "quality"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Neudrossenfeld_Kirche-20201011-RM-154725.jpg/1280px-Neudrossenfeld_Kirche-20201011-RM-154725.jpg": {
+"at": "2026-10-13",
+"label": "c104",
+"pack": "pack-wild-australia",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Overzicht_-_Amsterdam_-_20011052_-_RCE.jpg/1280px-Overzicht_-_Amsterdam_-_20011052_-_RCE.jpg": {
 "at": "2026-10-12",

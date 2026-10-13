@@ -2,7 +2,7 @@
  "id": "pack-wild-australia",
  "name": "Wild Australia",
  "category": "Premium",
- "description": "Red rock, pink lakes and lichen-orange shores: Uluru, Kata Tjuta, the Bungle Bungles, Karijini's gorges, Cradle Mountain and the Bay of Fires.",
+ "description": "Red gorges, balancing boulders and tropical falls: Karijini, Kata Tjuta, the Bungle Bungles, Karlu Karlu, the Kimberley, the Blue Mountains and the fern forests of Tasmania.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
@@ -55,7 +55,6 @@
   "Lake Bumbunga pink",
   "Lake Hillier",
   "Glass House Mountains",
-  "Kings Canyon rim",
   "Ormiston Gorge",
   "Standley Chasm",
   "Cathedral Termite Mounds Litchfield",
@@ -68,6 +67,18 @@
   "Lake Argyle",
   "Eli Creek Fraser Island",
   "Ellery Creek Big Hole",
-  "Undara lava tubes"
+  "Undara lava tubes",
+  "Bay of Fires rocks",
+  "Painted Cliffs Tasmania",
+  "Handrail Pool Karijini",
+  "Kermits Pool Karijini",
+  "Fortescue Falls",
+  "Uluru rock face",
+  "Valley of the Winds Kata Tjuta",
+  "Cathedral Gorge Purnululu",
+  "Kalbarri gorge",
+  "Cradle Mountain",
+  "Dove Lake boatshed",
+  "Mount Field tree ferns"
  ]
 }

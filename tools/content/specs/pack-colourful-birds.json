@@ -2,12 +2,12 @@
  "id": "pack-colourful-birds",
  "name": "Colourful Birds",
  "category": "Premium",
- "description": "Kingfishers, bee-eaters, rollers, tanagers, sunbirds and golden pheasants: the brightest feathers in the bird world, photographed up close.",
+ "description": "Kingfishers, bee-eaters, rollers, tanagers, golden pheasants and a peacock in full display: the brightest feathers in the bird world, up close.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
  "fetch_per_topic": 5,
- "author_cap": 2,
+ "author_cap": 3,
  "accent_from_cover": true,
  "sortOrder": 1204,
  "sources": [
@@ -77,5 +77,6 @@
   "crimson sunbird",
   "orange-breasted sunbird",
   "red-headed bunting"
- ]
+ ],
+ "_note": "author_cap 3: Charles J. Sharp (Commons featured bird photographer) supplies three different species."
 }
