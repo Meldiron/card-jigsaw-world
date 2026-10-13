@@ -1,8 +1,8 @@
 {
  "id": "pack-snowy-villages",
- "name": "Snowy Villages",
+ "name": "Snowy Towns",
  "category": "Seasonal",
- "description": "Fresh snow on chalets, farmhouses and old towns, from Hallstatt and Ramsau to Shirakawa-go, Ouchi-juku, Røros and Québec.",
+ "description": "Fresh snow on old towns and villages: the farmhouses of Shirakawa-go, Kyoto temples, Český Krumlov, Tallinn, Riga, Québec and the Alps.",
  "kind": "library",
  "target": 24,
  "per_topic": 1,
@@ -43,7 +43,25 @@
   "Riquewihr winter",
   "Hamnøy winter",
   "Telluride winter",
-  "Bohinj winter church"
+  "Bohinj winter church",
+  "cat:Winter in Shirakawa-go",
+  "cat:Snowy streets in Shirakawa-go",
+  "cat:Snow in Kyoto",
+  "cat:Snow in Takayama, Gifu",
+  "cat:Winter in Český Krumlov",
+  "cat:Winter in Tallinn",
+  "cat:Winter in Riga",
+  "cat:Winter in Quebec City",
+  "cat:Winter in Bled",
+  "cat:Winter in Bruges",
+  "cat:Winter in Prague",
+  "cat:Winter in Vilnius",
+  "cat:Winter in Bergen",
+  "cat:Winter in Zakopane",
+  "cat:Winter in Ernen",
+  "cat:Winter in Arosa",
+  "cat:Winter in Kraków",
+  "cat:Winter in Ljubljana"
  ],
  "more_topics": [
   "Kitzbühel winter",
@@ -74,5 +92,26 @@
   "Dinkelsbühl snow",
   "Goslar winter",
   "Quedlinburg winter"
- ]
+ ],
+ "cat_topics": [
+  "cat:Winter in Shirakawa-go",
+  "cat:Snowy streets in Shirakawa-go",
+  "cat:Snow in Kyoto",
+  "cat:Snow in Takayama, Gifu",
+  "cat:Winter in Český Krumlov",
+  "cat:Winter in Tallinn",
+  "cat:Winter in Riga",
+  "cat:Winter in Quebec City",
+  "cat:Winter in Bled",
+  "cat:Winter in Bruges",
+  "cat:Winter in Prague",
+  "cat:Winter in Vilnius",
+  "cat:Winter in Bergen",
+  "cat:Winter in Zakopane",
+  "cat:Winter in Ernen",
+  "cat:Winter in Arosa",
+  "cat:Winter in Kraków",
+  "cat:Winter in Ljubljana"
+ ],
+ "category_depth": 1
 }

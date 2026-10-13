@@ -7,7 +7,7 @@
  "target": 24,
  "per_topic": 1,
  "fetch_per_topic": 5,
- "author_cap": 2,
+ "author_cap": 3,
  "accent_from_cover": true,
  "sortOrder": 1211,
  "price": "coins",
@@ -68,5 +68,6 @@
   "Phallus indusiatus",
   "Craterellus cornucopioides horn of plenty",
   "Kuehneromyces mutabilis"
- ]
+ ],
+ "_note": "author_cap 3: Agnes Monkelbaan and Björn S. are the main Commons fungus photographers; three different species each."
 }

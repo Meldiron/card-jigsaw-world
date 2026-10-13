@@ -427,11 +427,11 @@
 },
 "ai-neon-nights": {
 "added": 20,
-"at": "2026-10-13T15:34:59",
+"at": "2026-10-13T15:44:15",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "pool 1050 usable",
+"last_step": "pool 1124 usable",
 "name": "AI Neon Nights",
 "puzzles": 20,
 "removed": 0,
@@ -2495,8 +2495,8 @@
 },
 "pack-alpine-meadows": {
 "added": 0,
-"at": "2026-10-13T15:42:18",
-"last_step": "pool 52 usable",
+"at": "2026-10-13T15:43:53",
+"last_step": "reject 29 off-theme",
 "puzzles": null,
 "removed": 0,
 "status": "audited"
@@ -2526,12 +2526,16 @@
 "status": "verified"
 },
 "pack-autumn-berries": {
-"added": 0,
-"at": "2026-10-13T15:42:23",
-"last_step": "pool 81 usable",
-"puzzles": null,
+"added": 24,
+"at": "2026-10-13T15:45:29",
+"category": "Seasonal",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "Autumn Berries",
+"puzzles": 24,
 "removed": 0,
-"status": "audited"
+"status": "verified"
 },
 "pack-autumn-mushrooms": {
 "added": 24,
