@@ -69,6 +69,13 @@ class AppIcons {
   /// Zoomed-in giant board: back to the whole board.
   static const wholeBoard = CupertinoIcons.arrow_down_right_arrow_up_left;
   static const zoom = CupertinoIcons.zoom_in;
+
+  /// Giant boards: the Edges filter (frame cards first) and the overview map.
+  static const edges = Icons.border_outer_rounded;
+  static const minimap = CupertinoIcons.map;
+
+  /// Points at a selected card outside the zoomed view.
+  static const towards = CupertinoIcons.arrow_up;
   static const level = Icons.military_tech_rounded;
   static const swaps = CupertinoIcons.arrow_right_arrow_left;
   static const time = CupertinoIcons.time;

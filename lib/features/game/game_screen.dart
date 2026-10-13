@@ -31,6 +31,7 @@ import '../../widgets/ui.dart';
 import '../ads/house_ads.dart';
 import '../sync/board_choice_sheet.dart';
 import 'board_widget.dart';
+import 'giant_board.dart';
 
 /// The play screen: HUD, board, booster bar, pause and completion overlays.
 class GameScreen extends ConsumerStatefulWidget {
@@ -55,6 +56,16 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
 
   /// Zoom of giant boards (the zoom bar and the board share it).
   late final BoardZoom _zoom = BoardZoom(vsync: this);
+
+  /// Giant boards: the Edges filter (this visit only), the overview map
+  /// (remembered), and the saved view, restored once when a board resumes
+  /// and written shortly after the player stops zooming or panning.
+  bool _edges = false;
+  late bool _showMap = ref.read(giantViewsProvider).showMap;
+  bool _viewRestored = false;
+  bool _viewCleared = false;
+  String? _viewId;
+  Timer? _viewSave;
   GameArgs? _args;
   bool _fitted = false;
   GameArgs? _listening;
@@ -86,7 +97,51 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     _args = _argsFor(_spec, resume: true, session: _base);
     _showTutorial = !ref.read(settingsProvider).tutorialSeen;
     _boardSub = ref.read(syncProvider.notifier).boardUpdates.listen(_onBoardUpdate);
+    _zoom.addListener(_onZoomChanged);
     WidgetsBinding.instance.addPostFrameCallback((_) => _listen());
+  }
+
+  void _onZoomChanged() {
+    if (_viewId == null || _viewCleared) return;
+    _viewSave?.cancel();
+    _viewSave = Timer(const Duration(milliseconds: 600), _saveView);
+  }
+
+  void _saveView() {
+    final id = _viewId;
+    if (id == null || _viewCleared) return;
+    ref.read(giantViewsProvider).write(id, _zoom.snapshot);
+  }
+
+  /// Giant boards: opens a resumed board on the view it was left at, and
+  /// forgets the view once the board is finished.
+  void _syncView(GameState state) {
+    final id = GiantViews.id(widget.puzzleId, state.board.spec);
+    if (_viewId != id) {
+      _viewId = id;
+      _viewRestored = false;
+    }
+    if (state.status == GameStatus.won) {
+      if (!_viewCleared) {
+        _viewCleared = true;
+        _viewSave?.cancel();
+        ref.read(giantViewsProvider).clear(id);
+      }
+      return;
+    }
+    if (_viewRestored) return;
+    _viewRestored = true;
+    final saved = _resumed ? ref.read(giantViewsProvider).read(id) : null;
+    if (saved == null) return;
+    // Before the board's first layout the view waits for its size; later it
+    // must not change in the middle of this build.
+    if (_zoom.viewport.isEmpty) {
+      _zoom.restore(saved.zoom, saved.centre);
+    } else {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _zoom.restore(saved.zoom, saved.centre);
+      });
+    }
   }
 
   /// Session arguments for [spec], resuming the saved board when [resume]
@@ -154,6 +209,11 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     _boardSub?.cancel();
     _saveDebounce?.cancel();
     _confetti.dispose();
+    if (_viewSave?.isActive ?? false) {
+      _viewSave!.cancel();
+      _saveView();
+    }
+    _zoom.removeListener(_onZoomChanged);
     _zoom.dispose();
     super.dispose();
   }
@@ -162,6 +222,10 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
       _saveNow();
+      if (_viewSave?.isActive ?? false) {
+        _viewSave!.cancel();
+        _saveView();
+      }
     }
   }
 
@@ -453,6 +517,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     if (image.hasValue) _fitToPicture(image.requireValue, giant: giant);
     final state = ref.watch(gameControllerProvider(_args!));
     final zoomable = state.board.spec.isGiant;
+    if (zoomable && image.hasValue) _syncView(state);
 
     return Scaffold(
       backgroundColor: c.canvas,
@@ -476,8 +541,8 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                       // picture; rectangular grids follow the picture within
                       // sane limits (a 900×21 handscroll must not become a strip).
                       final imageAspect = image.value == null ? 3 / 4 : image.value!.width / image.value!.height;
-                      // Giant boards keep a strip above the board for the zoom bar.
-                      final bar = zoomable && image.hasValue ? _ZoomBar.height : 0.0;
+                      // Giant boards keep a strip above the board for their tools.
+                      final bar = zoomable && image.hasValue ? GiantBoardBar.height : 0.0;
                       final fitted = state.board.tiling.fit(Size(cons.maxWidth - 24, cons.maxHeight - 16 - bar), imageAspect);
                       final w = fitted.width, h = fitted.height;
                       return Center(
@@ -517,18 +582,82 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                               Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  if (zoomable) _ZoomBar(zoom: _zoom, width: w),
-                                  BoardWidget(
-                                    image: img,
-                                    state: state,
-                                    width: w,
-                                    height: h,
-                                    cardStyle: settings.cardStyle,
-                                    painting: _painting,
-                                    zoom: zoomable ? _zoom : null,
-                                    onTap: _ctrl.tap,
-                                    onDrop: _ctrl.drop,
-                                  ),
+                                  if (zoomable)
+                                    GiantBoardBar(
+                                      zoom: _zoom,
+                                      width: w,
+                                      edges: _edges,
+                                      onEdges: () => setState(() => _edges = !_edges),
+                                      showMap: _showMap,
+                                      onMap: () {
+                                        setState(() => _showMap = !_showMap);
+                                        ref.read(giantViewsProvider).showMap = _showMap;
+                                      },
+                                    ),
+                                  if (!zoomable)
+                                    BoardWidget(
+                                      image: img,
+                                      state: state,
+                                      width: w,
+                                      height: h,
+                                      cardStyle: settings.cardStyle,
+                                      painting: _painting,
+                                      onTap: _ctrl.tap,
+                                      onDrop: _ctrl.drop,
+                                    )
+                                  else
+                                    SizedBox(
+                                      width: w,
+                                      height: h,
+                                      child: Stack(
+                                        clipBehavior: Clip.none,
+                                        children: [
+                                          BoardWidget(
+                                            image: img,
+                                            state: state,
+                                            width: w,
+                                            height: h,
+                                            cardStyle: settings.cardStyle,
+                                            painting: _painting,
+                                            zoom: _zoom,
+                                            edges: _edges,
+                                            onTap: _ctrl.tap,
+                                            onDrop: _ctrl.drop,
+                                          ),
+                                          OffscreenSelection(zoom: _zoom, board: state.board, boardSize: Size(w, h), selected: state.selected),
+                                          if (_showMap)
+                                            Positioned(
+                                              top: 8,
+                                              right: 8,
+                                              child: ListenableBuilder(
+                                                listenable: _zoom,
+                                                builder: (context, child) => IgnorePointer(
+                                                  ignoring: !_zoom.zoomed,
+                                                  child: AnimatedOpacity(opacity: _zoom.zoomed ? 1 : 0, duration: const Duration(milliseconds: 180), child: child),
+                                                ),
+                                                child: GiantMinimap(
+                                                  image: img,
+                                                  board: state.board,
+                                                  boardSize: Size(w, h),
+                                                  zoom: _zoom,
+                                                  // Small enough to cover only a few cards in the corner.
+                                                  width: math.min(84.0, w * 0.22),
+                                                  selected: state.selected,
+                                                  painting: _painting,
+                                                ),
+                                              ),
+                                            ),
+                                          GiantMilestones(
+                                            board: state.board,
+                                            playing: state.status == GameStatus.playing,
+                                            // Every edge card is in place: the filter would only dim the rest.
+                                            onFrame: () {
+                                              if (_edges) setState(() => _edges = false);
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                 ],
                               ),
                               if (_chainFlash > 0)
@@ -613,57 +742,6 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
               },
             ),
         ],
-      ),
-    );
-  }
-}
-
-/// Above a giant board: how far it is zoomed and two buttons, zoom in and
-/// back to the whole board (pinching works anywhere on the board).
-class _ZoomBar extends StatelessWidget {
-  const _ZoomBar({required this.zoom, required this.width});
-  final BoardZoom zoom;
-  final double width;
-
-  static const height = 44.0;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.colors;
-    return SizedBox(
-      width: width,
-      height: height,
-      child: ListenableBuilder(
-        listenable: zoom,
-        builder: (context, _) => Row(
-          children: [
-            Icon(AppIcons.zoom, size: 15, color: c.textTertiary),
-            const SizedBox(width: 6),
-            Expanded(
-              child: Text(
-                zoom.zoomed ? 'Zoom ${zoom.zoom.toStringAsFixed(1)}x · two fingers to move' : 'Pinch to zoom in',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: c.textSecondary),
-              ),
-            ),
-            RoundIconButton(
-              key: const ValueKey('zoom-in'),
-              icon: AppIcons.zoom,
-              size: 34,
-              iconColor: zoom.zoom < BoardZoom.maxZoom - 0.01 ? context.accent : c.textTertiary,
-              onTap: zoom.zoom < BoardZoom.maxZoom - 0.01 ? () => zoom.zoomTo(zoom.zoomed ? math.min(BoardZoom.maxZoom, zoom.zoom * 1.6) : BoardZoom.stepZoom) : null,
-            ),
-            const SizedBox(width: 8),
-            RoundIconButton(
-              key: const ValueKey('zoom-whole-board'),
-              icon: AppIcons.wholeBoard,
-              size: 34,
-              iconColor: zoom.zoomed ? context.accent : c.textTertiary,
-              onTap: zoom.zoomed ? zoom.reset : null,
-            ),
-          ],
-        ),
       ),
     );
   }
