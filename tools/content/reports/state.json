@@ -1113,6 +1113,22 @@
 "removed": 28,
 "status": "verified"
 },
+"daily-2026-11": {
+"added": 0,
+"at": "2026-10-13T10:56:11",
+"last_step": "reject 4 text",
+"puzzles": null,
+"removed": 0,
+"status": "audited"
+},
+"daily-2027-06": {
+"added": 0,
+"at": "2026-10-13T10:57:39",
+"last_step": "reject 7 text",
+"puzzles": null,
+"removed": 0,
+"status": "audited"
+},
 "deep-space": {
 "added": 24,
 "at": "2026-10-13T00:52:41",
