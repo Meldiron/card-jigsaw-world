@@ -130,6 +130,17 @@ def _fetch(src):
     (Flickr, iNaturalist, Picsum, museum CDNs) are fetched directly with a few retries."""
     if 'wikimedia.org' in src:
         return imagecache._download(src)[0]
+    if 'images-assets.nasa.gov' in src and '~medium.' in src:
+        # NASA refuses some ~medium renditions (403); the large and original files work
+        for alt in (src, src.replace('~medium.', '~large.'), src.replace('~medium.', '~orig.')):
+            try: return _fetch_direct(alt)
+            except urllib.error.HTTPError as e:
+                if e.code not in (403, 404): raise
+        raise RuntimeError(f'no NASA rendition for {src}')
+    return _fetch_direct(src)
+
+
+def _fetch_direct(src):
     for attempt in range(4):
         req = urllib.request.Request(src, headers=imagecache.UA)
         try:

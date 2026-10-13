@@ -1,23 +1,79 @@
 [
  {
   "table": "puzzles",
-  "id": "daily-2026-08-10",
-  "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/D%C3%BCrnstein_Burgruine_20211024_02.jpg/1280px-D%C3%BCrnstein_Burgruine_20211024_02.jpg",
+  "id": "daily-2025-02-08",
+  "src": "https://inaturalist-open-data.s3.amazonaws.com/photos/461315910/original.jpg",
   "kind": "puzzle",
-  "error": "HTTP Error 429: Your bot is making too many requests. Please reduce your request rate or contact bot-traffic@wikimedia.org (f263c81)"
+  "error": "[Errno 54] Connection reset by peer"
  },
  {
   "table": "puzzles",
-  "id": "daily-2026-08-12",
-  "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Iris_im_botanischen_Garten_M%C3%BCnchen-Nymphenburg_23.jpg/1280px-Iris_im_botanischen_Garten_M%C3%BCnchen-Nymphenburg_23.jpg",
+  "id": "p-407f28108d8c",
+  "src": "https://images-assets.nasa.gov/image/PIA06854/PIA06854~medium.jpg",
   "kind": "puzzle",
-  "error": "HTTP Error 429: Your bot is making too many requests. Please reduce your request rate or contact bot-traffic@wikimedia.org (f263c81)"
+  "error": "HTTP Error 403: Forbidden"
  },
  {
   "table": "puzzles",
-  "id": "daily-2026-08-22",
-  "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Zantedeschia_aethiopica_-_Madeira_01.jpg/1280px-Zantedeschia_aethiopica_-_Madeira_01.jpg",
+  "id": "p-320d48b556c0",
+  "src": "https://images-assets.nasa.gov/image/GSFC_20171208_Archive_e000266/GSFC_20171208_Archive_e000266~medium.jpg",
   "kind": "puzzle",
-  "error": "HTTP Error 429: Your bot is making too many requests. Please reduce your request rate or contact bot-traffic@wikimedia.org (f263c81)"
+  "error": "HTTP Error 403: Forbidden"
+ },
+ {
+  "table": "puzzles",
+  "id": "p-639e6e4dbc0c",
+  "src": "https://images-assets.nasa.gov/image/PIA01744/PIA01744~medium.jpg",
+  "kind": "puzzle",
+  "error": "HTTP Error 403: Forbidden"
+ },
+ {
+  "table": "puzzles",
+  "id": "p-46c6cb23f62e",
+  "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Booted_Racket-tail_%2832885209377%29.jpg/1280px-Booted_Racket-tail_%2832885209377%29.jpg",
+  "kind": "puzzle",
+  "error": "PATCH /tablesdb/cjw/tables/puzzles/rows/p-46c6cb23f62e -> 404: {\"message\":\"Row with the requested ID 'p-46c6cb23f62e' could not be found.\",\"code\":404,\"type\":\"ro"
+ },
+ {
+  "table": "puzzles",
+  "id": "p-c641c87613c0",
+  "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Melopsittacus_undulatus_%28Budgerigar%29_%2848719367453%29.jpg/1280px-Melopsittacus_undulatus_%28Budgerigar%29_%2848719367453%29.jpg",
+  "kind": "puzzle",
+  "error": "PATCH /tablesdb/cjw/tables/puzzles/rows/p-c641c87613c0 -> 404: {\"message\":\"Row with the requested ID 'p-c641c87613c0' could not be found.\",\"code\":404,\"type\":\"ro"
+ },
+ {
+  "table": "puzzles",
+  "id": "p-70a4e586fdff",
+  "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Shaving-Set.jpg/1280px-Shaving-Set.jpg",
+  "kind": "puzzle",
+  "error": "PATCH /tablesdb/cjw/tables/puzzles/rows/p-70a4e586fdff -> 404: {\"message\":\"Row with the requested ID 'p-70a4e586fdff' could not be found.\",\"code\":404,\"type\":\"ro"
+ },
+ {
+  "table": "puzzles",
+  "id": "p-524733ada2ed",
+  "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Twee_dekselvazen_Balustervormige_dekselpot_met_fazanten_op_een_rots_bij_een_hek_en_bloeiende_planten%2C_AK-NM-6467-A.jpg/1280px-Twee_dekselvazen_Balustervormige_dekselpot_met_fazanten_op_een_rots_bij_een_hek_en_bloeiende_planten%2C_AK-NM-6467-A.jpg",
+  "kind": "puzzle",
+  "error": "PATCH /tablesdb/cjw/tables/puzzles/rows/p-524733ada2ed -> 404: {\"message\":\"Row with the requested ID 'p-524733ada2ed' could not be found.\",\"code\":404,\"type\":\"ro"
+ },
+ {
+  "table": "puzzles",
+  "id": "p-a4105f7e75cc",
+  "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Inoxcrom_ID._Nib._M_%28sepia_ink%29.jpg/1280px-Inoxcrom_ID._Nib._M_%28sepia_ink%29.jpg",
+  "kind": "puzzle",
+  "error": "PATCH /tablesdb/cjw/tables/puzzles/rows/p-a4105f7e75cc -> 404: {\"message\":\"Row with the requested ID 'p-a4105f7e75cc' could not be found.\",\"code\":404,\"type\":\"ro"
+ },
+ {
+  "table": "puzzles",
+  "id": "p-47a39280f374",
+  "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Chicago_in_2022_Parking_levels_in_Marina_City_%2852051545100%29.jpg/1280px-Chicago_in_2022_Parking_levels_in_Marina_City_%2852051545100%29.jpg",
+  "kind": "puzzle",
+  "error": "PATCH /tablesdb/cjw/tables/puzzles/rows/p-47a39280f374 -> 404: {\"message\":\"Row with the requested ID 'p-47a39280f374' could not be found.\",\"code\":404,\"type\":\"ro"
+ },
+ {
+  "table": "puzzles",
+  "id": "p-177efc78537d",
+  "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Classic_cameras_seneca_view_camera_2_%283368272189%29.jpg/1280px-Classic_cameras_seneca_view_camera_2_%283368272189%29.jpg",
+  "kind": "puzzle",
+  "error": "PATCH /tablesdb/cjw/tables/puzzles/rows/p-177efc78537d -> 404: {\"message\":\"Row with the requested ID 'p-177efc78537d' could not be found.\",\"code\":404,\"type\":\"ro"
  }
 ]
