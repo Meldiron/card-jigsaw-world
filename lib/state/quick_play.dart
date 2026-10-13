@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../game/board.dart';
 import '../models/models.dart';
 import 'catalog.dart';
+import 'giant.dart';
 import 'profile.dart';
 import 'progress.dart';
 
@@ -99,7 +100,8 @@ final quickPlayPoolProvider = Provider<QuickPlayPool?>((ref) {
   ref.watch(profileProvider);
   final profile = ref.read(profileProvider.notifier);
   return quickPlayPool(
-    packs: packs,
+    // Giant boards (100 cards and more) are never a quick game.
+    packs: [for (final p in packs) if (!isGiantPack(p)) p],
     puzzles: puzzles,
     progress: ref.watch(progressProvider).value ?? const {},
     isUnlocked: profile.isUnlocked,

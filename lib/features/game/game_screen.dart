@@ -19,6 +19,7 @@ import '../../game/image_loader.dart';
 import '../../models/models.dart';
 import '../../router.dart' show rootNavigatorKey;
 import '../../state/catalog.dart';
+import '../../state/giant.dart';
 import '../../state/profile.dart';
 import '../../state/progress.dart';
 import '../../state/settings.dart';
@@ -33,18 +34,27 @@ import 'board_widget.dart';
 
 /// The play screen: HUD, board, booster bar, pause and completion overlays.
 class GameScreen extends ConsumerStatefulWidget {
-  const GameScreen({super.key, required this.puzzleId, required this.gridCode});
+  const GameScreen({super.key, required this.puzzleId, required this.gridCode, this.painting = false});
   final String puzzleId;
   final String gridCode;
+
+  /// A new board starts in Painting (a saved board resumes the way it was saved).
+  final bool painting;
 
   @override
   ConsumerState<GameScreen> createState() => _GameScreenState();
 }
 
-class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObserver {
+class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObserver, TickerProviderStateMixin {
   /// The board being played. It starts from the route code and is settled
   /// for the picture once the picture is decoded (see [_fitToPicture]).
   late BoardSpec _spec = BoardSpec.fromCode(widget.gridCode);
+
+  /// Painting on this board: the saved board's choice when one resumes, else the route's.
+  late bool _painting = widget.painting;
+
+  /// Zoom of giant boards (the zoom bar and the board share it).
+  late final BoardZoom _zoom = BoardZoom(vsync: this);
   GameArgs? _args;
   bool _fitted = false;
   GameArgs? _listening;
@@ -85,6 +95,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     final existing = ref.read(puzzleProgressProvider(widget.puzzleId));
     final ok = resume && existing != null && existing.inProgress && existing.gridSize == spec.cells && existing.mode == spec.mode.code;
     _resumed = ok;
+    _painting = ok ? existing.painting : widget.painting;
     _playId = ok && existing.session.isNotEmpty ? existing.session : SyncOp.newId();
     return GameArgs(
       puzzleId: widget.puzzleId,
@@ -103,12 +114,15 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   /// a board resumed from Home gets the size its tier has for this picture.
   /// A save resumes only when this picture still deals its board; older
   /// saves (a layout that changed) start fresh.
-  void _fitToPicture(ui.Image image) {
+  void _fitToPicture(ui.Image image, {required bool giant}) {
     if (_fitted) return;
     _fitted = true;
     final aspect = image.width / image.height;
     final current = _args!;
     var next = _spec.fitTo(aspect);
+    // A Giant pack picture deals only giant sizes and other pictures only
+    // normal ones, whatever size the route named (a pack's next picture).
+    if (next.isGiant != giant) next = BoardSpec.forPicture(next.mode, giant ? BoardSpec.firstGiantTier : 2, aspect);
     var resume = false;
     if (current.layout != null) {
       final saved = BoardSpec.fromSaved(_spec.mode, _spec.cells, aspect);
@@ -140,6 +154,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     _boardSub?.cancel();
     _saveDebounce?.cancel();
     _confetti.dispose();
+    _zoom.dispose();
     super.dispose();
   }
 
@@ -207,6 +222,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
       hints: s.hintsUsed,
       session: _playId,
       resumed: _resumed,
+      painting: _painting,
     );
   }
 
@@ -295,6 +311,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
       stars: stars,
       session: _playId,
       resumed: _resumed,
+      painting: _painting,
     );
     final reward = await ref.read(profileProvider.notifier).recordCompletion(
           puzzleId: widget.puzzleId,
@@ -302,6 +319,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
           stars: stars,
           firstTime: firstTime,
           mode: _spec.mode,
+          painting: _painting,
           moves: s.moves,
           seconds: s.elapsed,
           dailyBonus: daily != null && daily.id == widget.puzzleId ? 50 : 0,
@@ -427,9 +445,14 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     if (puzzle == null) {
       return Scaffold(appBar: AppBar(leading: const BackButton()), body: const Loader());
     }
-    final image = ref.watch(puzzleImageProvider(puzzle.imageUrl));
-    if (image.hasValue) _fitToPicture(image.requireValue);
+    // Giant pack pictures (or a giant board named by the route, before the
+    // catalogue says so) are decoded at full size for zooming in.
+    final giant = ref.watch(isGiantPuzzleProvider(widget.puzzleId)) || _spec.isGiant;
+    final imageProvider = puzzleImageFor(puzzle.imageUrl, giant: giant);
+    final image = ref.watch(imageProvider);
+    if (image.hasValue) _fitToPicture(image.requireValue, giant: giant);
     final state = ref.watch(gameControllerProvider(_args!));
+    final zoomable = state.board.spec.isGiant;
 
     return Scaffold(
       backgroundColor: c.canvas,
@@ -443,6 +466,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                   showTimer: settings.showTimer,
                   onPause: _openPause,
                   title: puzzle.title,
+                  painting: _painting,
                 ),
                 Expanded(
                   child: LayoutBuilder(
@@ -452,7 +476,9 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                       // picture; rectangular grids follow the picture within
                       // sane limits (a 900×21 handscroll must not become a strip).
                       final imageAspect = image.value == null ? 3 / 4 : image.value!.width / image.value!.height;
-                      final fitted = state.board.tiling.fit(Size(cons.maxWidth - 24, cons.maxHeight - 16), imageAspect);
+                      // Giant boards keep a strip above the board for the zoom bar.
+                      final bar = zoomable && image.hasValue ? _ZoomBar.height : 0.0;
+                      final fitted = state.board.tiling.fit(Size(cons.maxWidth - 24, cons.maxHeight - 16 - bar), imageAspect);
                       final w = fitted.width, h = fitted.height;
                       return Center(
                         child: image.when(
@@ -482,20 +508,28 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                             icon: AppIcons.image,
                             title: 'Picture did not load',
                             message: 'Check your connection and try again.',
-                            action: BigButton(label: 'Try again', expand: false, onTap: () => ref.invalidate(puzzleImageProvider(puzzle.imageUrl))),
+                            action: BigButton(label: 'Try again', expand: false, onTap: () => ref.invalidate(imageProvider)),
                           ),
                           data: (img) => Stack(
                             clipBehavior: Clip.none,
                             alignment: Alignment.center,
                             children: [
-                              BoardWidget(
-                                image: img,
-                                state: state,
-                                width: w,
-                                height: h,
-                                cardStyle: settings.cardStyle,
-                                onTap: _ctrl.tap,
-                                onDrop: _ctrl.drop,
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  if (zoomable) _ZoomBar(zoom: _zoom, width: w),
+                                  BoardWidget(
+                                    image: img,
+                                    state: state,
+                                    width: w,
+                                    height: h,
+                                    cardStyle: settings.cardStyle,
+                                    painting: _painting,
+                                    zoom: zoomable ? _zoom : null,
+                                    onTap: _ctrl.tap,
+                                    onDrop: _ctrl.drop,
+                                  ),
+                                ],
                               ),
                               if (_chainFlash > 0)
                                 IgnorePointer(
@@ -565,8 +599,8 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                 if (!context.mounted) return;
                 if (offer != null && leaveGameForCreative(context, ref, offer)) return;
                 if (next != null) {
-                  // Same mode and tier; the next picture settles its own size.
-                  context.pushReplacement('/game/${next.id}/${BoardCode.toPath(_spec.fullCode)}');
+                  // Same mode, tier and Painting; the next picture settles its own size.
+                  context.pushReplacement('/game/${next.id}/${BoardCode.toPath(_spec.fullCode)}${_painting ? '?painting=1' : ''}');
                 } else {
                   context.pop();
                 }
@@ -584,12 +618,64 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   }
 }
 
+/// Above a giant board: how far it is zoomed and two buttons, zoom in and
+/// back to the whole board (pinching works anywhere on the board).
+class _ZoomBar extends StatelessWidget {
+  const _ZoomBar({required this.zoom, required this.width});
+  final BoardZoom zoom;
+  final double width;
+
+  static const height = 44.0;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return SizedBox(
+      width: width,
+      height: height,
+      child: ListenableBuilder(
+        listenable: zoom,
+        builder: (context, _) => Row(
+          children: [
+            Icon(AppIcons.zoom, size: 15, color: c.textTertiary),
+            const SizedBox(width: 6),
+            Expanded(
+              child: Text(
+                zoom.zoomed ? 'Zoom ${zoom.zoom.toStringAsFixed(1)}x · two fingers to move' : 'Pinch to zoom in',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: c.textSecondary),
+              ),
+            ),
+            RoundIconButton(
+              key: const ValueKey('zoom-in'),
+              icon: AppIcons.zoom,
+              size: 34,
+              iconColor: zoom.zoom < BoardZoom.maxZoom - 0.01 ? context.accent : c.textTertiary,
+              onTap: zoom.zoom < BoardZoom.maxZoom - 0.01 ? () => zoom.zoomTo(zoom.zoomed ? math.min(BoardZoom.maxZoom, zoom.zoom * 1.6) : BoardZoom.stepZoom) : null,
+            ),
+            const SizedBox(width: 8),
+            RoundIconButton(
+              key: const ValueKey('zoom-whole-board'),
+              icon: AppIcons.wholeBoard,
+              size: 34,
+              iconColor: zoom.zoomed ? context.accent : c.textTertiary,
+              onTap: zoom.zoomed ? zoom.reset : null,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _Hud extends StatelessWidget {
-  const _Hud({required this.state, required this.showTimer, required this.onPause, required this.title});
+  const _Hud({required this.state, required this.showTimer, required this.onPause, required this.title, this.painting = false});
   final GameState state;
   final bool showTimer;
   final VoidCallback onPause;
   final String title;
+  final bool painting;
 
   @override
   Widget build(BuildContext context) {
@@ -608,7 +694,7 @@ class _Hud extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-                    Text('${b.spec.mode.label} · ${b.spec.code} · ${b.spec.label}', style: TextStyle(color: c.textSecondary, fontSize: 12)),
+                    Text('${b.spec.mode.label} · ${b.spec.code} · ${b.spec.label}${painting ? ' · Painting' : ''}', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontSize: 12)),
                   ],
                 ),
               ),

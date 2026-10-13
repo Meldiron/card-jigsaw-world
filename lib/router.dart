@@ -74,12 +74,22 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/play/:puzzleId',
         parentNavigatorKey: rootNavigatorKey,
-        pageBuilder: (c, s) => _cupertino(DifficultyScreen(puzzleId: s.pathParameters['puzzleId']!, initialGrid: s.uri.queryParameters['grid'], initialMode: s.uri.queryParameters['mode']), s),
+        pageBuilder: (c, s) => _cupertino(
+          DifficultyScreen(
+            puzzleId: s.pathParameters['puzzleId']!,
+            initialGrid: s.uri.queryParameters['grid'],
+            initialMode: s.uri.queryParameters['mode'],
+            initialPainting: s.uri.queryParameters['painting'] == '1',
+          ),
+          s,
+        ),
       ),
       GoRoute(
-        path: '/game/:puzzleId/:grid', // :grid is a BoardCode path form, e.g. hexagons-5x6 or 4x4 (cards)
+        // :grid is a BoardCode path form, e.g. hexagons-5x6 or 4x4 (cards); `?painting=1` starts a
+        // new board in Painting (a saved board resumes as it was saved).
+        path: '/game/:puzzleId/:grid',
         parentNavigatorKey: rootNavigatorKey,
-        pageBuilder: (c, s) => _fade(GameScreen(puzzleId: s.pathParameters['puzzleId']!, gridCode: s.pathParameters['grid']!), s),
+        pageBuilder: (c, s) => _fade(GameScreen(puzzleId: s.pathParameters['puzzleId']!, gridCode: s.pathParameters['grid']!, painting: s.uri.queryParameters['painting'] == '1'), s),
       ),
       GoRoute(path: '/store', parentNavigatorKey: rootNavigatorKey, pageBuilder: (c, s) => _sheet(StoreScreen(showVip: s.uri.queryParameters['vip'] == '1'), s)),
       GoRoute(path: '/wheel', parentNavigatorKey: rootNavigatorKey, pageBuilder: (c, s) => _sheet(const WheelScreen(), s)),

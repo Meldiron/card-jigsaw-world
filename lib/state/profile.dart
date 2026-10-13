@@ -54,15 +54,19 @@ class Economy {
   /// Share of the coins paid again when a solved picture is replayed (0.4 until 2026-10-13).
   static const replayCoinShare = 0.25;
 
+  /// Painting (cards in black and white until they lock) pays this much more coins and XP, on top
+  /// of the mode's multiplier.
+  static const paintingMultiplier = 1.25;
+
   /// Coins awarded for finishing a board of [cells] cards with [stars].
-  /// Harder tilings multiply the payout.
-  static int completionCoins(int cells, int stars, {GameMode mode = GameMode.cards}) {
+  /// Harder tilings multiply the payout, and so does [painting].
+  static int completionCoins(int cells, int stars, {GameMode mode = GameMode.cards, bool painting = false}) {
     final base = (cells * coinsPerCard).round();
-    return ((base + (stars - 1) * (base ~/ 3)) * mode.multiplier).round();
+    return ((base + (stars - 1) * (base ~/ 3)) * mode.multiplier * (painting ? paintingMultiplier : 1)).round();
   }
 
-  static int completionXp(int cells, int stars, {GameMode mode = GameMode.cards}) =>
-      (((cells * 2.5).round() + stars * 10) * mode.multiplier).round();
+  static int completionXp(int cells, int stars, {GameMode mode = GameMode.cards, bool painting = false}) =>
+      (((cells * 2.5).round() + stars * 10) * mode.multiplier * (painting ? paintingMultiplier : 1)).round();
 }
 
 /// The player's profile. Every change is queued as a [SyncOp] ([SyncController]): the screen shows
@@ -251,14 +255,15 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
     required int stars,
     required bool firstTime,
     GameMode mode = GameMode.cards,
+    bool painting = false,
     int moves = 0,
     int seconds = 0,
     int dailyBonus = 0,
   }) async {
     final p = _p;
-    final full = Economy.completionCoins(cells, stars, mode: mode);
+    final full = Economy.completionCoins(cells, stars, mode: mode, painting: painting);
     final replay = (full * Economy.replayCoinShare).round();
-    final xpGain = Economy.completionXp(cells, stars, mode: mode);
+    final xpGain = Economy.completionXp(cells, stars, mode: mode, painting: painting);
     final level = LevelRewards.levelForXp(p.xp + xpGain);
     var levelBonus = 0;
     for (var l = p.level + 1; l <= level; l++) {

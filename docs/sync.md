@@ -70,6 +70,12 @@ Checked against the live backend (Appwrite Cloud 2.4.0) on 2026-10-13 with a QA 
 `profiles.appliedOps` and `event_progress.appliedOps` (string arrays, 32) and `progress.session`
 (string 32), all optional, added 2026-10-13 (Appwrite CLI). Builds before the sync ignore them.
 
+`progress.painting` (boolean, default false, optional), added 2026-10-14 (Appwrite CLI): the board
+in progress (or the last one finished) is played in Painting. Board and win ops `Put` it with the
+layout, so the flag always describes the saved board; ops queued by older builds carry no flag
+and write `false`, and a sign-in merge takes it from the row whose board it keeps. Older builds
+ignore it (and resume such a board in colour).
+
 ## Known limits
 
 - A guarded op is checked and then written: two devices claiming the same quest within one round
