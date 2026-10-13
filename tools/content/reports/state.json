@@ -402,15 +402,15 @@
 "status": "fixed"
 },
 "ai-little-creatures": {
-"added": 25,
-"at": "2026-10-13T16:18:34",
+"added": 26,
+"at": "2026-10-13T16:39:13",
 "category": "AI",
 "issues": 0,
 "kind": "new",
 "last_step": "apply",
 "name": "AI Little Creatures",
 "puzzles": 20,
-"removed": 5,
+"removed": 6,
 "status": "fixed"
 },
 "ai-myths-monsters": {
@@ -3246,12 +3246,16 @@
 "status": "verified"
 },
 "pack-mountain-autumn": {
-"added": 0,
-"at": "2026-10-13T16:01:55",
-"last_step": "reject 32 off-theme",
-"puzzles": null,
+"added": 24,
+"at": "2026-10-13T16:40:00",
+"category": "Mountains",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "Autumn in the Mountains",
+"puzzles": 24,
 "removed": 0,
-"status": "audited"
+"status": "verified"
 },
 "pack-mountain-huts": {
 "added": 25,

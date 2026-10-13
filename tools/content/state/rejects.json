@@ -28217,6 +28217,12 @@
 "pack": "pack-volcanoes",
 "reason": "off-theme"
 },
+"https://live.staticflickr.com/65535/54078499015_08a6ac1f35_b.jpg": {
+"at": "2026-10-13",
+"label": "p-b4f2fcab572f",
+"pack": "ai-little-creatures",
+"reason": "text"
+},
 "https://live.staticflickr.com/65535/54080438489_594889f52e_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-iceland-roads-13",
@@ -29236,6 +29242,18 @@
 "label": "pack-foxes-20",
 "pack": "pack-foxes",
 "reason": "people"
+},
+"https://live.staticflickr.com/65535/54503524361_89629fa90c_b.jpg": {
+"at": "2026-10-13",
+"label": "c110",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
+},
+"https://live.staticflickr.com/65535/54503883370_5439c99b58_b.jpg": {
+"at": "2026-10-13",
+"label": "c109",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
 },
 "https://live.staticflickr.com/65535/54504737255_833ee8de1c_b.jpg": {
 "at": "2026-10-12",
@@ -42472,6 +42490,12 @@
 "label": "c03",
 "pack": "pack-dolomites",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/4/4f/Edge_of_the_Wilderness_-_Spectacular_Fall_Colors_on_Prairie_Lake_-_NARA_-_7718187.jpg": {
+"at": "2026-10-13",
+"label": "c106",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/4/4f/Embroidered_hanging%2C_Kutch_%28western_India.jpg": {
 "at": "2026-10-13",
@@ -68602,6 +68626,12 @@
 "label": "c58",
 "pack": "evpack-mothers-day-2027",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Snow_across_the_western_United_States_%28MODIS_2018-03-12%29.jpg/1280px-Snow_across_the_western_United_States_%28MODIS_2018-03-12%29.jpg": {
+"at": "2026-10-13",
+"label": "c107",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Squirrel_Zinnia_Janif.jpg/1280px-Squirrel_Zinnia_Janif.jpg": {
 "at": "2026-10-12",
@@ -95273,6 +95303,12 @@
 "pack": "evpack-childrens-day-2027",
 "reason": "text"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Wildes_Isar_Flussbett_-_Hochformat.jpg/1280px-Wildes_Isar_Flussbett_-_Hochformat.jpg": {
+"at": "2026-10-13",
+"label": "c101",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/-0748-_Ptocheuusa_paupella_%2849576094157%29.jpg/1280px--0748-_Ptocheuusa_paupella_%2849576094157%29.jpg": {
 "at": "2026-10-12",
 "label": "c535",
@@ -104735,6 +104771,12 @@
 "pack": "pack-yellowstone",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Gro%C3%9Fer_Ahornboden_von_oben_-_panoramio.jpg/960px-Gro%C3%9Fer_Ahornboden_von_oben_-_panoramio.jpg": {
+"at": "2026-10-13",
+"label": "c100",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Ham_Rong%2C_Ta_Phin%2C_QL.4D.Sa_Pa%2C_rice_fields_%2850539%29.jpg/1280px-Ham_Rong%2C_Ta_Phin%2C_QL.4D.Sa_Pa%2C_rice_fields_%2850539%29.jpg": {
 "at": "2026-10-12",
 "label": "c75",
@@ -108844,6 +108886,12 @@
 "label": "c18",
 "pack": "abstract-geometric-minimal",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Autumn_Roadtrip_in_Eastern_Sierra_-_53304886033.jpg/1280px-Autumn_Roadtrip_in_Eastern_Sierra_-_53304886033.jpg": {
+"at": "2026-10-13",
+"label": "c104",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Bacon_cornbread.jpg/1280px-Bacon_cornbread.jpg": {
 "at": "2026-10-12",
@@ -115571,6 +115619,12 @@
 "pack": "daily-2023-01",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Aspen%2C_Bishop_Creek_%2848117198907%29.jpg/1280px-Aspen%2C_Bishop_Creek_%2848117198907%29.jpg": {
+"at": "2026-10-13",
+"label": "c103",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Cahors_-_Pont_Valentr%C3%A9_-_09.jpg/1280px-Cahors_-_Pont_Valentr%C3%A9_-_09.jpg": {
 "at": "2026-10-12",
 "label": "c131",
@@ -117268,6 +117322,12 @@
 "label": "c601",
 "pack": "daily-2025-07",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Subalpine_meadow_in_fall_%281e195a06-2a3b-41e9-b9c4-464e8c8fe80e%29.JPG/1280px-Subalpine_meadow_in_fall_%281e195a06-2a3b-41e9-b9c4-464e8c8fe80e%29.JPG": {
+"at": "2026-10-13",
+"label": "c78",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Tulipa_sylvestris_subsp._australis_-_52508095835.png/1280px-Tulipa_sylvestris_subsp._australis_-_52508095835.png": {
 "at": "2026-10-13",
@@ -124277,6 +124337,12 @@
 "pack": "pack-skylines",
 "reason": "similar"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Manzanita_Lake_fall_colors_%289169949212%29.jpg/1280px-Manzanita_Lake_fall_colors_%289169949212%29.jpg": {
+"at": "2026-10-13",
+"label": "c105",
+"pack": "pack-mountain-autumn",
+"reason": "off-theme"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Memorial_Cross_Kilian_Walz_in_Oberwittstadt.jpg/1280px-Memorial_Cross_Kilian_Walz_in_Oberwittstadt.jpg": {
 "at": "2026-10-12",
 "label": "c17",
@@ -124881,6 +124947,12 @@
 "at": "2026-10-12",
 "label": "c39",
 "pack": "pack-gardens",
+"reason": "off-theme"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/NP_Karwendel_Gro%C3%9Fer_Ahornboden_4.jpg/1280px-NP_Karwendel_Gro%C3%9Fer_Ahornboden_4.jpg": {
+"at": "2026-10-13",
+"label": "c99",
+"pack": "pack-mountain-autumn",
 "reason": "off-theme"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Oxalis_tetraphylla%2C_Velo_de_Novia%2C_M%C3%A9xico_State_1.jpg/1280px-Oxalis_tetraphylla%2C_Velo_de_Novia%2C_M%C3%A9xico_State_1.jpg": {
