@@ -2493,6 +2493,14 @@
 "removed": 14,
 "status": "verified"
 },
+"pack-alpine-meadows": {
+"added": 0,
+"at": "2026-10-13T14:44:27",
+"last_step": "reject 52 off-theme",
+"puzzles": null,
+"removed": 0,
+"status": "audited"
+},
 "pack-amsterdam": {
 "added": 26,
 "at": "2026-10-12T11:06:02",
@@ -3155,8 +3163,8 @@
 },
 "pack-mountain-huts": {
 "added": 0,
-"at": "2026-10-13T14:38:57",
-"last_step": "reject 1 similar",
+"at": "2026-10-13T14:49:22",
+"last_step": "reject 34 off-theme",
 "puzzles": null,
 "removed": 0,
 "status": "audited"
@@ -3186,12 +3194,16 @@
 "status": "verified"
 },
 "pack-new-zealand": {
-"added": 0,
-"at": "2026-10-13T14:38:31",
-"last_step": "reject 15 weak",
-"puzzles": null,
+"added": 24,
+"at": "2026-10-13T14:51:19",
+"category": "Premium",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "New Zealand",
+"puzzles": 24,
 "removed": 0,
-"status": "audited"
+"status": "verified"
 },
 "pack-night-markets": {
 "added": 21,
@@ -3216,6 +3228,14 @@
 "puzzles": 20,
 "removed": 19,
 "status": "verified"
+},
+"pack-norway-fjords": {
+"added": 0,
+"at": "2026-10-13T14:52:29",
+"last_step": "reject 14 weak",
+"puzzles": null,
+"removed": 0,
+"status": "audited"
 },
 "pack-oil-landscapes": {
 "added": 26,
@@ -3384,6 +3404,14 @@
 "puzzles": 24,
 "removed": 20,
 "status": "verified"
+},
+"pack-rainbow-mountains": {
+"added": 0,
+"at": "2026-10-13T14:53:45",
+"last_step": "reject 27 off-theme",
+"puzzles": null,
+"removed": 0,
+"status": "audited"
 },
 "pack-rainy-streets": {
 "added": 22,
@@ -3842,12 +3870,16 @@
 "status": "verified"
 },
 "pack-yellowstone": {
-"added": 0,
-"at": "2026-10-13T14:33:08",
-"last_step": "reject 21 weak",
-"puzzles": null,
+"added": 24,
+"at": "2026-10-13T14:44:33",
+"category": "Premium",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "Yellowstone",
+"puzzles": 24,
 "removed": 0,
-"status": "audited"
+"status": "verified"
 },
 "wild-nature": {
 "added": 5,
