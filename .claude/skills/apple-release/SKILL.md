@@ -37,8 +37,9 @@ that build's TestFlight "What to Test". `release_notes.txt` stays the App Store 
 whole version. `asc_publish.py --build N build-notes` rewrites one existing build's text.
 
 ## Before every upload
-1. `git status` clean, main pushed, analyzer and tests green, QA runs silent
-   (`--dart-define=CJW_MUTE=true`).
+1. `git status` clean, main pushed, analyzer and tests green, QA runs silent and flagged
+   (`tools/dev/qa-run.sh`: `CJW_MUTE=true`, `CJW_QA=true`, test players purged), and no test players
+   left: `python3 tools/dev/purge_test_players.py purge` lists none (`--apply` removes them).
 2. Check builds: if a build of the **current** version is already in or past beta
    review, keep it (its approval covers the new build). Do not upload an older
    version string than the one in review.

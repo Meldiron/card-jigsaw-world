@@ -38,7 +38,9 @@ Items that are questions or "help me decide" get an answer, not a code change.
 - Keep to the owner rules in `CLAUDE.md` (design, copy, glass alerts, cost buttons, Quests naming).
 - Gates: `flutter analyze --fatal-infos --fatal-warnings`, `flutter test`.
 - QA silently on the simulator and look at the screenshots yourself:
-  `tools/dev/qa.sh shots` (or the store suite on the Pro Max). Extend
+  `tools/dev/qa.sh shots` (or the store suite on the Pro Max). Every run goes through
+  `tools/dev/qa-run.sh` (`CJW_MUTE`, `CJW_QA`, purge of the run's test players afterwards), so QA
+  guests never land in the public league; never a bare `flutter drive`/`flutter run`. Extend
   `integration_test/screenshots_test.dart` so the exact path from the feedback is captured, e.g. a
   new `11d_...png`. Uninstall the app before a second same-day run.
 - If a fix lives on a screen, confirm the user can reach that screen from where they reported it.

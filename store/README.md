@@ -79,7 +79,7 @@ simulator, and a Python 3 with Pillow (`pip install pillow`).
    export PATH="$HOME/flutter/bin:$PATH"
    xcrun simctl boot D03644FB-6169-4E87-8E0F-CCFC884FBE78   # iPhone 17 Pro Max
    xcrun simctl uninstall D03644FB-6169-4E87-8E0F-CCFC884FBE78 com.matejbaco.cardjigsawworld
-   flutter drive --dart-define=CJW_MUTE=true --driver=test_driver/store_screenshots.dart \
+   tools/dev/qa-run.sh drive --driver=test_driver/store_screenshots.dart \
      --target=integration_test/store_screenshots_test.dart \
      -d D03644FB-6169-4E87-8E0F-CCFC884FBE78
    ```

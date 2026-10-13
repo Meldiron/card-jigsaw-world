@@ -60,6 +60,12 @@ class Profile {
     this.totalMoves = 0,
     this.totalSeconds = 0,
     this.solvedByMode = const {},
+    this.questsCompleted = 0,
+    this.picturesSolved = 0,
+    this.picturesPerfect = 0,
+    this.packsCompleted = 0,
+    this.packsPerfect = 0,
+    this.isTest = false,
   }) : vipFlag = isVip;
 
   final String id;
@@ -104,6 +110,22 @@ class Profile {
   final int totalMoves;
   final int totalSeconds;
   final Map<String, int> solvedByMode;
+
+  /// Quests claimed over the player's lifetime (daily and weekly, VIP ones included).
+  final int questsCompleted;
+
+  /// Public completion numbers for "Total Completion" on other players' profiles (progress rows
+  /// are owner-only). Kept in step with the player's own progress and the catalogue by the app
+  /// (see `CompletionTotals`): catalogue pictures solved and solved with three stars, packs with
+  /// every picture solved and with three stars on every picture. My Puzzles photos never count.
+  final int picturesSolved;
+  final int picturesPerfect;
+  final int packsCompleted;
+  final int packsPerfect;
+
+  /// A guest played by a QA run (`--dart-define=CJW_QA=true`): left out of the league and its
+  /// counts, and deleted by `tools/dev/purge_test_players.py`.
+  final bool isTest;
 
   /// Derived from [xp] with [LevelRewards.levelForXp]; the stored `level`
   /// column is only a mirror for queries and older clients.
@@ -150,6 +172,12 @@ class Profile {
         totalMoves: _i(d['totalMoves']),
         totalSeconds: _i(d['totalSeconds']),
         solvedByMode: _modeCounts(d['solvedByMode']),
+        questsCompleted: _i(d['questsCompleted']),
+        picturesSolved: _i(d['picturesSolved']),
+        picturesPerfect: _i(d['picturesPerfect']),
+        packsCompleted: _i(d['packsCompleted']),
+        packsPerfect: _i(d['packsPerfect']),
+        isTest: _b(d['isTest']),
       );
 
   /// `{"cards":3,"hexagons":1}` stored as a short JSON string.
@@ -213,6 +241,12 @@ class Profile {
         'totalMoves': totalMoves,
         'totalSeconds': totalSeconds,
         'solvedByMode': solvedByMode.isEmpty ? null : jsonEncode(solvedByMode),
+        'questsCompleted': questsCompleted,
+        'picturesSolved': picturesSolved,
+        'picturesPerfect': picturesPerfect,
+        'packsCompleted': packsCompleted,
+        'packsPerfect': packsPerfect,
+        'isTest': isTest,
       };
 
   Profile copyWith({
@@ -231,6 +265,7 @@ class Profile {
     int? totalStars,
     String? id,
     String? userId,
+    bool? isTest,
   }) =>
       Profile(
         id: id ?? this.id,
@@ -263,6 +298,12 @@ class Profile {
         totalMoves: totalMoves,
         totalSeconds: totalSeconds,
         solvedByMode: solvedByMode,
+        questsCompleted: questsCompleted,
+        picturesSolved: picturesSolved,
+        picturesPerfect: picturesPerfect,
+        packsCompleted: packsCompleted,
+        packsPerfect: packsPerfect,
+        isTest: isTest ?? this.isTest,
       );
 
   /// XP needed to go from [level] to the next one; grows gently.

@@ -89,7 +89,7 @@ Copy lives in `store/metadata`, screenshots in `store/screenshots`; the
 `asc_publish.py` subcommands (`app-info`, `version`, `screenshots`, `iap`,
 `subscriptions`, `review-info`, `testflight`, `release`, `submit`, `audit`) push
 them to App Store Connect and are idempotent. Regenerate screenshots with
-`flutter drive` on the iPhone 17 Pro Max simulator and
+`tools/dev/qa-run.sh drive` on the iPhone 17 Pro Max simulator and
 `tools/store/compose_screenshots.py` (see `store/README.md`).
 
 ## Secrets

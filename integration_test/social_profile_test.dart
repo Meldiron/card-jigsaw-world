@@ -1,6 +1,6 @@
 // Extra captures for the social / profile / gallery feedback round
 // (live Appwrite backend, fresh guest). Runs on the iPhone 17 Pro Max simulator:
-//   flutter drive --dart-define=CJW_MUTE=true --driver=test_driver/store_screenshots.dart \
+//   tools/dev/qa-run.sh drive --driver=test_driver/store_screenshots.dart \
 //     --target=integration_test/social_profile_test.dart \
 //     -d D03644FB-6169-4E87-8E0F-CCFC884FBE78
 // Output lands in store/raw/s*.png.

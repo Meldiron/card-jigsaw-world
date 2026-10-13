@@ -1,6 +1,6 @@
 // Renders the save-merge sheet with sample stats in both themes so a human
 // can check it. Captures land in store/raw/ via test_driver/store_screenshots.dart:
-//   flutter drive --dart-define=CJW_MUTE=true --driver=test_driver/store_screenshots.dart \
+//   tools/dev/qa-run.sh drive --driver=test_driver/store_screenshots.dart \
 //     --target=integration_test/merge_sheet_test.dart -d CDD7317C-19D6-486D-B258-8AB8A607297D
 import 'package:card_jigsaw_world/core/theme/app_theme.dart';
 import 'package:card_jigsaw_world/core/theme/tokens.dart';

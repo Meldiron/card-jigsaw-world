@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/appwrite.dart';
+import '../core/qa.dart';
 import '../models/models.dart';
 import 'web_redirect.dart' as web_redirect;
 
@@ -69,7 +70,23 @@ class AuthRepository {
 
   Future<models.User> signInAnonymously() async {
     await _account.createAnonymousSession();
-    return _account.get();
+    return markQaGuest(await _account.get());
+  }
+
+  /// QA builds (`CJW_QA`) write the test-player prefs on the guest they play, so the purge tool
+  /// finds it even when its profile row never got written (see [QaRun]). Accounts with an email or
+  /// phone are never marked, and release builds do nothing here.
+  Future<models.User> markQaGuest(models.User user) async {
+    if (!QaRun.enabled || user.email.isNotEmpty || user.phone.isNotEmpty) return user;
+    final prefs = Map<String, dynamic>.from(user.prefs.data);
+    if (!QaRun.needsPrefs(prefs)) return user;
+    try {
+      await _account.updatePrefs(prefs: QaRun.markedPrefs(prefs));
+      return await _account.get();
+    } catch (e) {
+      debugPrint('QA mark failed: $e');
+      return user;
+    }
   }
 
   Future<models.User> signUp({required String email, required String password, required String name}) async {
@@ -166,8 +183,9 @@ class ProfileRepository {
     }
   }
 
-  Future<Profile> create(String userId, {String? name}) async {
-    final p = Profile.guest(userId).copyWith(displayName: name?.trim().isNotEmpty == true ? name!.trim() : 'Player');
+  /// Creates the player's profile row. [isTest] marks a QA run's guest (kept out of the league).
+  Future<Profile> create(String userId, {String? name, bool isTest = false}) async {
+    final p = Profile.guest(userId).copyWith(displayName: name?.trim().isNotEmpty == true ? name!.trim() : 'Player', isTest: isTest);
     final row = await _tables.createRow(
       databaseId: _db,
       tableId: AppwriteConfig.profiles,
@@ -182,8 +200,8 @@ class ProfileRepository {
     return Profile.fromRow(row.$id, row.data);
   }
 
-  Future<Profile> fetchOrCreate(String userId, {String? name}) async =>
-      (await fetch(userId)) ?? await create(userId, name: name);
+  Future<Profile> fetchOrCreate(String userId, {String? name, bool isTest = false}) async =>
+      (await fetch(userId)) ?? await create(userId, name: name, isTest: isTest);
 
   /// The profile with its last-written time (for the save merge).
   Future<({Profile profile, DateTime? updatedAt})?> fetchWithMeta(String userId) async {
@@ -203,19 +221,37 @@ class ProfileRepository {
 
   Future<Profile?> findByUserId(String userId) => fetch(userId);
 
-  static final _ranked = [Query.greaterThan('puzzlesCompleted', 0)];
+  /// Who is in the league: players with a solved puzzle, never QA test players ([Profile.isTest]),
+  /// filtered on the server for the list and both counts. A test player looking at the league
+  /// (a QA run) still finds its own row, so its screenshots read like a real player's; nobody
+  /// else ever sees it.
+  static List<String> leagueQueries({Profile? viewer}) => [
+        Query.greaterThan('puzzlesCompleted', 0),
+        if (viewer != null && viewer.isTest)
+          Query.or([Query.equal('isTest', false), Query.equal('\$id', viewer.id)])
+        else
+          Query.equal('isTest', false),
+      ];
 
-  /// One page of the league (players with a solved puzzle, most XP first) after the row [after].
-  Future<({List<Profile> items, String? lastId})> leaderboardPage({required int limit, String? after}) async {
-    final rows = await listRowsPage(_tables, AppwriteConfig.profiles, [..._ranked, Query.orderDesc('xp')], limit: limit, after: after);
+  /// One page of the league (most XP first) after the row [after], as [viewer] sees it.
+  Future<({List<Profile> items, String? lastId})> leaderboardPage({required int limit, String? after, Profile? viewer}) async {
+    final rows = await listRowsPage(_tables, AppwriteConfig.profiles, [...leagueQueries(viewer: viewer), Query.orderDesc('xp')], limit: limit, after: after);
     return (items: rows.map((r) => Profile.fromRow(r.$id, r.data)).toList(), lastId: rows.isEmpty ? null : rows.last.$id);
   }
 
   /// League size and the player's place in it, counted on the server (the list itself pages).
   Future<({int rank, int total})> leaderboardRank(Profile me) async {
-    final total = await countRows(_tables, AppwriteConfig.profiles, _ranked);
-    final ahead = await countRows(_tables, AppwriteConfig.profiles, [..._ranked, Query.greaterThan('xp', me.xp)]);
+    final league = leagueQueries(viewer: me);
+    final total = await countRows(_tables, AppwriteConfig.profiles, league);
+    final ahead = await countRows(_tables, AppwriteConfig.profiles, [...league, Query.greaterThan('xp', me.xp)]);
     return (rank: ahead + 1, total: total);
+  }
+
+  /// Quests the player has claimed, from the ledger (one `goal:<key>` entry per reward currency),
+  /// counted once per quest key.
+  Future<int> questClaims(String userId) async {
+    final rows = await listAllRows(_tables, AppwriteConfig.ledger, [Query.equal('userId', userId), Query.startsWith('reason', 'goal:'), Query.select(['\$id', 'reason'])]);
+    return {for (final r in rows) r.data['reason']}.length;
   }
 
   /// How many ledger entries the player has with [reason] (e.g. `peek`).

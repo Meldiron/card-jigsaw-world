@@ -1,7 +1,7 @@
 // Captures the raw App Store marketing screens (live Appwrite backend).
 // Meant for the iPhone 17 Pro Max simulator (6.9", 1320x2868):
 //   xcrun simctl uninstall D03644FB-6169-4E87-8E0F-CCFC884FBE78 com.matejbaco.cardjigsawworld
-//   flutter drive --dart-define=CJW_MUTE=true --driver=test_driver/store_screenshots.dart \
+//   tools/dev/qa-run.sh drive --driver=test_driver/store_screenshots.dart \
 //     --target=integration_test/store_screenshots_test.dart \
 //     -d D03644FB-6169-4E87-8E0F-CCFC884FBE78
 // Output lands in store/raw/. Then run tools/store/compose_screenshots.py.

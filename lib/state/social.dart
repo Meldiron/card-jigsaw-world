@@ -25,7 +25,14 @@ class LeaderboardNotifier extends PagedNotifier<Profile> {
   int get pageSize => 50;
 
   @override
-  Future<PageResult<Profile>> fetchPage(String? after) => ref.read(profileRepositoryProvider).leaderboardPage(limit: pageSize, after: after);
+  Future<PageResult<Profile>> fetchPage(String? after) async {
+    // The viewer decides one detail of the filter: a QA test player sees its own row.
+    Profile? me;
+    try {
+      me = await ref.read(profileProvider.future);
+    } catch (_) {}
+    return ref.read(profileRepositoryProvider).leaderboardPage(limit: pageSize, after: after, viewer: me);
+  }
 }
 
 final leaderboardProvider = AsyncNotifierProvider<LeaderboardNotifier, Paged<Profile>>(LeaderboardNotifier.new);

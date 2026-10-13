@@ -5,10 +5,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/guest_names.dart';
+import '../core/qa.dart';
 import '../data/repositories.dart';
 import '../game/modes.dart';
 import '../models/models.dart';
 import 'auth.dart';
+import 'completion.dart';
+import 'progress.dart';
 import 'rewards.dart';
 import 'settings.dart';
 
@@ -67,6 +70,8 @@ class Economy {
 class ProfileNotifier extends AsyncNotifier<Profile> {
   @override
   Future<Profile> build() async {
+    // The public completion numbers follow the player's own progress (see [syncCompletion]).
+    ref.listen(completionTotalsProvider, (_, t) => syncCompletion(t));
     final auth = await ref.watch(authProvider.future);
     final store = ref.read(localStoreProvider);
     if (auth == null) {
@@ -76,8 +81,13 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
     }
     final repo = ref.read(profileRepositoryProvider);
     try {
-      final p = await repo.fetchOrCreate(auth.$id, name: auth.name.isNotEmpty ? auth.name : GuestNames.next());
+      // A QA run's guest is a test player: out of the league, purged after the run (see [QaRun]).
+      final qaGuest = QaRun.enabled && auth.email.isEmpty && auth.phone.isEmpty;
+      var p = await repo.fetchOrCreate(auth.$id, name: auth.name.isNotEmpty ? auth.name : GuestNames.next(), isTest: qaGuest);
+      if (qaGuest && !p.isTest) p = await repo.update(p.id, {'isTest': true});
       _cache(p);
+      // Once the state is set: bring older rows up to date (completion numbers, quest count).
+      Future(_selfHeal);
       return p;
     } catch (e) {
       debugPrint('profile load failed: $e');
@@ -199,7 +209,8 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
     return true;
   }
 
-  /// Claims a finished goal once; rewards are credited immediately.
+  /// Claims a finished goal once; rewards are credited immediately and the quest counts towards
+  /// the public "Quests completed" number.
   Future<bool> claimGoal(Goal goal) async {
     final p = _p;
     if (!goal.done || p.claimedGoals.contains(goal.key)) return false;
@@ -207,7 +218,12 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
     final claimed = [...p.claimedGoals, goal.key];
     // Keep the list short: drop keys older than ~3 weeks by trimming length.
     final trimmed = claimed.length > 60 ? claimed.sublist(claimed.length - 60) : claimed;
-    await _apply({'claimedGoals': trimmed, if (goal.coins > 0) 'coins': p.coins + goal.coins, if (goal.tickets > 0) 'tickets': p.tickets + goal.tickets});
+    await _apply({
+      'claimedGoals': trimmed,
+      'questsCompleted': p.questsCompleted + 1,
+      if (goal.coins > 0) 'coins': p.coins + goal.coins,
+      if (goal.tickets > 0) 'tickets': p.tickets + goal.tickets,
+    });
     if (goal.coins > 0) _ledger(goal.coins, 'coins', 'goal:${goal.key}', p.coins + goal.coins);
     if (goal.tickets > 0) _ledger(goal.tickets, 'tickets', 'goal:${goal.key}', p.tickets + goal.tickets);
     return true;
@@ -365,6 +381,35 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
     });
     _ledger(coins + levelBonus, 'coins', 'complete', total);
     return (coins: coins + levelBonus, xp: xpGain, levelUp: levelUp, level: level);
+  }
+
+  /// Writes the public "Total Completion" numbers ([Profile.picturesSolved] and the rest) when
+  /// the player's own progress says something else: after a solve or a better score, when the
+  /// catalogue changes, and on start for rows written by older versions. Skipped while progress
+  /// (re)loads or belongs to another player (a sign-in in flight).
+  Future<void> syncCompletion(CompletionTotals? t) async {
+    if (t == null || !ref.mounted) return;
+    final p = state.value;
+    if (p == null || p.id == 'local' || state.isLoading || ref.read(progressProvider).isLoading) return;
+    if (t.ownerId != null && t.ownerId != p.id) return;
+    final current = p.toData();
+    final patch = {for (final e in t.publicFields.entries) if (current[e.key] != e.value) e.key: e.value};
+    if (patch.isNotEmpty) await _apply(patch);
+  }
+
+  /// Start-up repairs for rows from older versions: the completion numbers, and the quest count
+  /// from the ledger (quests claimed before the count existed, or a write that failed).
+  Future<void> _selfHeal() async {
+    if (!ref.mounted) return;
+    await syncCompletion(ref.read(completionTotalsProvider));
+    final p = state.value;
+    if (p == null || p.id == 'local' || !ref.mounted) return;
+    try {
+      final claims = await ref.read(profileRepositoryProvider).questClaims(p.id);
+      if (ref.mounted && claims > _p.questsCompleted && _p.id == p.id) await _apply({'questsCompleted': claims});
+    } catch (e) {
+      debugPrint('quest count failed: $e');
+    }
   }
 
   Future<void> refresh() async {

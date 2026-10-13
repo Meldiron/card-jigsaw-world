@@ -106,7 +106,8 @@ asc audit                        # everything should be OK or N/A
 
 ## Release flow
 
-1. **Local device**: develop and test with `flutter run`; bump `version:` in
+1. **Local device**: develop and test with `tools/dev/qa-run.sh run -d <simulator>` (QA runs) or
+   `tools/dev/device.sh` (the owner's iPhone); bump `version:` in
    `pubspec.yaml` (the `+N` build number only matters for hand uploads).
 2. **GitHub release**: publish a release with tag `vX.Y.Z` (the release body
    becomes the TestFlight "what to test" text).

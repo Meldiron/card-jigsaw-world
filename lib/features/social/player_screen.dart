@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/theme/tokens.dart';
 import '../../state/achievements.dart';
 import '../../state/auth.dart';
+import '../../state/completion.dart';
 import '../../state/social.dart';
 import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
@@ -118,7 +119,7 @@ class PlayerScreen extends ConsumerWidget {
                 title: 'Statistics',
                 subtitle: isMe ? 'Everything you have played so far' : 'Everything ${p.displayName} has played so far',
               ),
-              StatisticsSection(stats: isMe ? ref.watch(playerStatsProvider) : PlayerStats.fromProfile(p)),
+              StatisticsSection(stats: isMe ? ref.watch(playerStatsProvider) : PlayerStats.fromProfile(p, catalogue: ref.watch(catalogueSizeProvider))),
               SectionHeader(padding: const EdgeInsets.fromLTRB(0, 28, 0, 12), title: 'Achievements', subtitle: badges.isEmpty ? 'Nothing claimed yet' : '${badges.length} of ${achievementFamilies.length} families claimed'),
               if (badges.isEmpty)
                 const EmptyState(icon: AppIcons.level, title: 'No badges yet', message: 'Claimed achievement tiers show up here.')

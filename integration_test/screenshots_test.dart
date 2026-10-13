@@ -1,5 +1,5 @@
 // Drives the real app (live Appwrite backend) and captures screenshots.
-// Run: flutter drive --dart-define=CJW_MUTE=true --driver=test_driver/integration_test.dart \
+// Run: tools/dev/qa-run.sh drive --driver=test_driver/integration_test.dart \
 //        --target=integration_test/screenshots_test.dart -d <simulator>
 import 'package:card_jigsaw_world/app.dart';
 import 'package:card_jigsaw_world/core/sfx.dart';

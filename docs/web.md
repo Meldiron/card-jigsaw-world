@@ -90,10 +90,11 @@ with Pillow. Regenerate them if the icon changes.
 ## Run locally
 
 ```sh
-flutter run -d chrome --dart-define=CJW_MUTE=true   # silent, for QA
+tools/dev/qa-run.sh run -d chrome   # silent QA run, test player purged afterwards
 ```
 
-`CJW_MUTE=true` silences music and effects. To test the release bundle with
+`CJW_MUTE=true` silences music and effects; `CJW_QA=true` keeps the guest out of the league
+(both passed by `tools/dev/qa-run.sh`). To test the release bundle with
 path routing, serve `build/web` with any static server that falls back to
 `index.html`.
 

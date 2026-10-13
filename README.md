@@ -120,16 +120,19 @@ See `docs/research-card-jigsaw-and-image-apis.md` for the full evaluation of 11 
 
 ```bash
 flutter pub get
-flutter run -d "iPhone 17 Pro"          # iOS simulator
-flutter run -d android
-flutter run -d chrome                   # web (register the hostname as a Web platform in Appwrite)
+tools/dev/qa-run.sh run -d "iPhone 17 Pro"   # iOS simulator
+tools/dev/qa-run.sh run -d chrome            # web (register the hostname as a Web platform in Appwrite)
 ```
+
+Every run while developing goes through `tools/dev/qa-run.sh`: silent (`CJW_MUTE`), a flagged test
+player (`CJW_QA`, kept out of the league) and purged when the run ends
+(`tools/dev/purge_test_players.py`).
 
 Tests:
 
 ```bash
 flutter test                                                 # board engine unit tests
-flutter drive --dart-define=CJW_MUTE=true --driver=test_driver/integration_test.dart \
+tools/dev/qa-run.sh drive --driver=test_driver/integration_test.dart \
   --target=integration_test/screenshots_test.dart -d <simulator-id>   # walks the app and writes screenshots/
 ```
 

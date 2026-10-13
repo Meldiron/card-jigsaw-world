@@ -2,6 +2,7 @@ import 'package:appwrite/models.dart' as models;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../core/qa.dart';
 import '../data/repositories.dart';
 
 /// Holds the current Appwrite user. A guest (anonymous) session is created
@@ -10,9 +11,12 @@ class AuthNotifier extends AsyncNotifier<models.User?> {
   @override
   Future<models.User?> build() async {
     final repo = ref.watch(authRepositoryProvider);
+    // Integration tests must be QA runs, or their guest would join the public league.
+    QaRun.requireForIntegrationRuns();
     try {
       final user = await repo.currentUser();
-      if (user != null) return user;
+      // A QA build reusing a guest from an earlier run marks it too (no-op in release builds).
+      if (user != null) return await repo.markQaGuest(user);
       // The web OAuth callback is about to create the real session; a
       // throwaway guest here would only get in its way.
       if (isOAuthCallback) return null;

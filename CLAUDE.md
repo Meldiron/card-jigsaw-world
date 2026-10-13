@@ -24,6 +24,15 @@ skills under `.claude/skills/` hold the detailed workflows.
   called **Quests**: daily quests, weekly quests and the world-day "Live events" section.
 - **QA is silent**: never start the app without `--dart-define=CJW_MUTE=true` (or `tools/dev/qa.sh`).
   The owner does not want to hear the game's music while you work.
+- **QA players stay out of the league** (owner rule, 2026-10-13): every QA run plays a guest on the LIVE
+  backend, so every run (flutter drive, flutter run on a simulator or Chrome, store screenshots) goes
+  through `tools/dev/qa-run.sh <run|drive|test> ...` (or `tools/dev/qa.sh`), which passes `CJW_MUTE=true`,
+  `CJW_QA=true` and a run id, then purges that run's test players. `CJW_QA` flags the guest
+  (`profiles.isTest`, user prefs `qa`/`qaRun`); the league and its counts filter `isTest` on the server
+  (a QA player sees only its own row). Integration tests refuse to start without the flag
+  (`QaRun.requireForIntegrationRuns`, `test/qa_test_players_test.dart`). Leftovers:
+  `python3 tools/dev/purge_test_players.py purge --apply` (dry run without `--apply`; `audit` explains
+  every player; backups in `secrets/purged/`). Never purge by hand outside the tool.
 - **QA the exact user path**: when fixing a reported problem, reproduce and verify the path the user
   described (e.g. Home > Continue > puzzle > pause menu), with a simulator screenshot you have looked
   at. Describing a fix on a screen the user never reaches is not a fix.
@@ -71,9 +80,10 @@ skills under `.claude/skills/` hold the detailed workflows.
 - Gates before any build: `flutter analyze --fatal-infos --fatal-warnings` and `flutter test`.
 - Simulators: iPhone 17 Pro `CDD7317C-19D6-486D-B258-8AB8A607297D` (QA), iPhone 17 Pro Max
   `D03644FB-6169-4E87-8E0F-CCFC884FBE78` (App Store 6.9" screenshots).
-- Screenshot QA: `tools/dev/qa.sh shots` = `flutter drive --dart-define=CJW_MUTE=true
+- Screenshot QA: `tools/dev/qa.sh shots` = `tools/dev/qa-run.sh drive
   --driver=test_driver/integration_test.dart --target=integration_test/screenshots_test.dart -d <pro>`
-  → `screenshots/*.png`. Store captures: `test_driver/store_screenshots.dart` +
+  → `screenshots/*.png`. Any other suite: `tools/dev/qa-run.sh drive --driver=... --target=... -d <udid>`
+  (never a bare `flutter drive`/`flutter run`; `QA_KEEP=1` keeps the run's players for inspection). Store captures: `test_driver/store_screenshots.dart` +
   `integration_test/store_screenshots_test.dart` → `store/raw/`. Extra suites:
   `integration_test/social_profile_test.dart`, `merge_sheet_test.dart`.
   Quirks: capture is in-app (host `simctl io screenshot` fires too late); uninstall the app before a
@@ -111,7 +121,7 @@ skills under `.claude/skills/` hold the detailed workflows.
 - `lib/data/purchases.dart`: StoreKit products (coins_1000/3000/5500/12000, tickets_5/15, hints_5/15,
   vip_monthly/yearly), verified server-side by the `verify-purchase` function.
 - `lib/core/platform.dart`: web capability flags.
-  `lib/core/sfx.dart`: `CJW_MUTE`.
+  `lib/core/sfx.dart`: `CJW_MUTE`. `lib/core/qa.dart`: `CJW_QA` / `CJW_QA_RUN` (test players).
 - Routes (`lib/router.dart`): /welcome /home /library /library/pack/:packId /events (Quests) /social
   /profile (+settings, account, my-puzzles) /play/:puzzleId (difficulty) /game/:puzzleId/:grid /store
   /wheel /auth/callback /player/:userId.
@@ -121,7 +131,10 @@ skills under `.claude/skills/` hold the detailed workflows.
 - Endpoint `https://fra.cloud.appwrite.io/v1`, project `6acb4de5003e38d5ebd9`, database `cjw`
   (tables profiles, packs, puzzles, progress, events, event_progress, friends, ledger, my_puzzles,
   purchases). Profiles are readable by anyone; `level` mirrors XP; aggregates `totalMoves`,
-  `totalSeconds`, `solvedByMode` are public.
+  `totalSeconds`, `solvedByMode`, `questsCompleted` and the "Total Completion" numbers
+  (`picturesSolved`, `picturesPerfect`, `packsCompleted`, `packsPerfect`, kept in step by
+  `ProfileNotifier.syncCompletion`, backfill `tools/dev/backfill_profile_stats.py`) are public.
+  `isTest` marks QA players (excluded from the league).
 - Functions: `verify-purchase` (StoreKit 2 JWS verification, grants, App Store Server Notifications at
   `https://cjw-verify-purchase.fra.appwrite.run/notifications`; secret vars can only be updated with
   `secret: true`). There is no image proxy: pictures load straight from Storage on every platform.
@@ -169,7 +182,8 @@ skills under `.claude/skills/` hold the detailed workflows.
 `AuthKey_9QC72A5QMN.p8`, Sign in with Apple key `AuthKey_2QJPJFW8JW.p8` (web browser sign-in, stored in
 Appwrite's Apple provider), distribution `Certificates.p12` + password, Appwrite keys
 (`appwrite-api-key.txt` rows/tables scopes, `appwrite-storage-key.txt` files/rows scopes for picture
-hosting, `appwrite-sites-key.txt`), `content-keys.env` (Openverse client). Never print or commit their
+hosting, `appwrite-sites-key.txt`, `appwrite-users-key.txt` users/rows/files scopes for the QA player
+purge and stats backfills), `content-keys.env` (Openverse client). Never print or commit their
 values. GitHub Actions has the signing secrets.
 
 ## Work that may be running in parallel

@@ -181,6 +181,8 @@ Map<String, dynamic> mergeProfile({
   final stars = rows.where((r) => r['completed'] == true).fold<int>(0, (s, r) => s + SaveSnapshot._i(r['stars']));
   patch['puzzlesCompleted'] = [solved, SaveSnapshot._i(guest.profile['puzzlesCompleted']), SaveSnapshot._i(account.profile['puzzlesCompleted'])].reduce(max);
   patch['totalStars'] = [stars, SaveSnapshot._i(guest.profile['totalStars']), SaveSnapshot._i(account.profile['totalStars'])].reduce(max);
+  // Quests claimed: the larger count (claimedGoals is a union, so a quest claimed on both saves is one).
+  patch['questsCompleted'] = max(SaveSnapshot._i(guest.profile['questsCompleted']), SaveSnapshot._i(account.profile['questsCompleted']));
   final chosen = choice == MergeChoice.guest ? guest : account;
   for (final k in scalarKeys) {
     patch[k] = chosen.profile[k];
