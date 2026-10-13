@@ -13,8 +13,13 @@ attribution, duplicate checks and rejects, which all key on the source URL.
 
 File ids are derived from the source URL, so hosting is idempotent and a picture used by two
 packs is stored once. `state/hosted.json` maps source URL -> file id (git-tracked).
+
+Giant packs (category Giant, 100-300 card boards) keep far more pixels: a spec with
+`"host_max_px": 4096` stores its pictures at up to that many px on the long side (JPEG quality
+GIANT_QUALITY) instead of MAX_W. Such a copy gets its own file id and map key (`<source>|4096px`),
+so a picture hosted at 1200 px for another pack is never reused at the wrong size.
 """
-import hashlib, io, json, time, urllib.request, urllib.error, uuid
+import hashlib, io, json, re, time, urllib.request, urllib.error, uuid
 from PIL import Image, ImageOps
 from .paths import ROOT, STATE
 from .lock import locked
@@ -23,16 +28,29 @@ from . import api, imagecache
 BUCKET = 'puzzle-images'
 BASE = f'{api.ENDPOINT}/storage/buckets/{BUCKET}/files'
 MAX_W, MAX_H, QUALITY = 1200, 2134, 86
+GIANT_QUALITY = 90
 THUMB_W, COVER_W = 600, 1080
 HOSTED = STATE / 'hosted.json'
 STORAGE_KEY = ROOT / 'secrets' / 'appwrite-storage-key.txt'
+# The QA purge key (users, rows, files scopes) can host too when the storage key is not on this machine.
+FALLBACK_KEY = ROOT / 'secrets' / 'appwrite-users-key.txt'
 _key = None
+
+
+def _read_key():
+    if STORAGE_KEY.exists():
+        return STORAGE_KEY.read_text().strip()
+    if FALLBACK_KEY.exists():
+        print('  host: secrets/appwrite-storage-key.txt is missing; using secrets/appwrite-users-key.txt '
+              '(files.read/files.write). Restore the storage key to stop this fallback.', flush=True)
+        return FALLBACK_KEY.read_text().strip()
+    raise SystemExit('missing secrets/appwrite-storage-key.txt (an API key with files.read, files.write)')
 
 
 def _headers(extra=None):
     global _key
     if _key is None:
-        _key = STORAGE_KEY.read_text().strip()
+        _key = _read_key()
     h = {'X-Appwrite-Project': api.PROJECT, 'X-Appwrite-Key': _key}
     if extra: h.update(extra)
     return h
@@ -42,8 +60,17 @@ def is_hosted(url):
     return bool(url) and url.startswith(BASE + '/')
 
 
-def file_id_for(src):
-    return 'p' + hashlib.sha1(src.encode()).hexdigest()[:35]
+def map_key(src, max_px=None):
+    """hosted.json key: the source URL, plus the size for a giant copy."""
+    return f'{src}|{int(max_px)}px' if max_px else src
+
+
+def _source_of_key(key):
+    return re.sub(r'\|\d+px$', '', key)
+
+
+def file_id_for(src, max_px=None):
+    return 'p' + hashlib.sha1(map_key(src, max_px).encode()).hexdigest()[:35]
 
 
 def view_url(fid): return f'{BASE}/{fid}/view?project={api.PROJECT}'
@@ -77,19 +104,20 @@ def source_of(url):
     fid = file_id_of(url)
     if not fid: return url
     for src, f in _load_map().items():
-        if f == fid: return src
+        if f == fid: return _source_of_key(src)
     return url
 
 
-def _normalise(data):
+def _normalise(data, max_px=None):
+    """JPEG of at most MAX_W x MAX_H, or (giant packs) at most max_px on the long side."""
     img = Image.open(io.BytesIO(data))
     img = ImageOps.exif_transpose(img).convert('RGB')
     w, h = img.size
-    scale = min(1.0, MAX_W / w, MAX_H / h)
+    scale = min(1.0, max_px / max(w, h)) if max_px else min(1.0, MAX_W / w, MAX_H / h)
     if scale < 1.0:
         img = img.resize((max(1, round(w * scale)), max(1, round(h * scale))), Image.LANCZOS)
     out = io.BytesIO()
-    img.save(out, 'JPEG', quality=QUALITY, optimize=True, progressive=True)
+    img.save(out, 'JPEG', quality=GIANT_QUALITY if max_px else QUALITY, optimize=True, progressive=True)
     return out.getvalue(), img.size
 
 
@@ -155,28 +183,32 @@ def _fetch_direct(src):
             raise
 
 
-def ensure(src):
-    """Host `src` (a third-party URL) and return its file id. Idempotent and safe across processes."""
+def ensure(src, max_px=None):
+    """Host `src` (a third-party URL) and return its file id. Idempotent and safe across processes.
+    max_px (giant packs) stores a larger copy under its own id."""
     if is_hosted(src):
         return file_id_of(src)
+    key = map_key(src, max_px)
     m = _load_map()
-    if src in m:
-        return m[src]
-    fid = file_id_for(src)
+    if key in m:
+        return m[key]
+    fid = file_id_for(src, max_px)
     if not _exists(fid):
         data = _fetch(src)
-        jpeg, _size = _normalise(data)
+        jpeg, size = _normalise(data, max_px)
         _upload(fid, jpeg)
+        if max_px:
+            print(f'  hosted {fid} at {size[0]}x{size[1]} ({len(jpeg) / 1e6:.1f} MB)', flush=True)
     with locked('hosted'):
         m = dict(_load_map())
-        m[src] = fid
+        m[key] = fid
         HOSTED.write_text(json.dumps(m, indent=0, sort_keys=True))
     return fid
 
 
-def puzzle_urls(src):
-    """Row fields for a puzzle picture whose source is `src`."""
-    fid = ensure(src)
+def puzzle_urls(src, max_px=None):
+    """Row fields for a puzzle picture whose source is `src` (max_px: giant packs, see the module doc)."""
+    fid = ensure(src, max_px)
     return {'imageUrl': view_url(fid), 'thumbUrl': thumb_url(fid), 'sourceUrl': src}
 
 
@@ -186,6 +218,20 @@ def cover_fields(src):
         return {'coverUrl': '', 'coverSourceUrl': ''}
     src = source_of(src)
     return {'coverUrl': cover_url(ensure(src)), 'coverSourceUrl': src}
+
+
+def _pack_sizes(snap):
+    """pack id -> host_max_px of its spec (giant packs only)."""
+    from . import specs
+    out = {}
+    for p in snap['packs']:
+        try:
+            if specs.spec_path(p['$id']).exists():
+                px = specs.load(p['$id']).get('host_max_px')
+                if px: out[p['$id']] = int(px)
+        except SystemExit:
+            pass
+    return out
 
 
 def migrate(snap, pack=None, workers=4, dry=False):
@@ -207,9 +253,15 @@ def migrate(snap, pack=None, workers=4, dry=False):
     if dry: return 0, []
     done, failures = 0, []
 
+    sizes = _pack_sizes(snap)
+    pack_of = {p['$id']: p['packId'] for p in snap['puzzles']}
+
     def work(job):
         table, rid, src, kind = job
-        fields = puzzle_urls(src) if kind == 'puzzle' else cover_fields(src)
+        if kind == 'puzzle':
+            fields = puzzle_urls(src, sizes.get(pack_of.get(rid)))
+        else:
+            fields = cover_fields(src)
         api.update_row(table, rid, fields)
         return job
 

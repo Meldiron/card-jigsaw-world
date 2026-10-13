@@ -577,8 +577,10 @@ def _word_res(query):
         res.append(re.compile(r'\b' + re.escape(stem) + r'(s|es)?\b'))
     return res
 
-def nga_search(query, limit=40, classes=None, portrait_only=True):
-    """All query words must appear in title, classification, medium or the image description; title hits rank first."""
+def nga_search(query, limit=40, classes=None, portrait_only=True, box=None):
+    """All query words must appear in title, classification, medium or the image description; title hits rank first.
+    box (giant packs, spec source_box) asks the IIIF server for that many px on the long side instead of NGA_BOX;
+    sizes are then left unknown (0) so the prefilter does not judge them, and the download measures them."""
     res = _word_res(query)
     if not res: return []
     try:
@@ -588,8 +590,9 @@ def nga_search(query, limit=40, classes=None, portrait_only=True):
     want = [c.lower() for c in (classes or [])]
     scored = []
     for r in rows:
-        oid, title, attr, date, medium, cls, iiif, w, h, alt, box = r
+        oid, title, attr, date, medium, cls, iiif, w, h, alt, _box = r
         if portrait_only and w > h: continue
+        if box and r[10] < NGA_BOX: continue          # the museum caps this image (maxpixels): never giant
         if want and not any(c in cls.lower() for c in want): continue
         t = title.lower(); hay = ' '.join([t, cls.lower(), medium.lower(), alt.lower()])
         if not all(rx.search(hay) for rx in res): continue
@@ -597,11 +600,12 @@ def nga_search(query, limit=40, classes=None, portrait_only=True):
     scored.sort(key=lambda x: (x[0], x[1]))
     out = []
     for _, _, r in scored[:limit]:
-        oid, title, attr, date, medium, cls, iiif, w, h, alt, box = r
-        out.append(_cand(url=f'{iiif}/full/!{box},{box}/0/default.jpg', thumb=f'{iiif}/full/!960,960/0/default.jpg',
+        oid, title, attr, date, medium, cls, iiif, w, h, alt, _box = r
+        b = box or r[10]
+        out.append(_cand(url=f'{iiif}/full/!{b},{b}/0/default.jpg', thumb=f'{iiif}/full/!960,960/0/default.jpg',
                          author=attr or 'Unknown artist', source='National Gallery of Art, Washington, CC0', licence='CC0',
                          page=f'https://www.nga.gov/collection/art-object-page.{oid}.html', title=title,
-                         text=' '.join([title, cls, medium, alt]), w=w, h=h, provider='nga', object_id=oid))
+                         text=' '.join([title, cls, medium, alt]), w=0 if box else w, h=0 if box else h, provider='nga', object_id=oid))
     return out
 
 # ---------------- iNaturalist (research-grade observation photos, CC0 / CC BY per photo, keyless) ----------------
@@ -712,7 +716,9 @@ def _rijks_resolve(oid):
                     text=' '.join([' '.join(allnames), kind, ' '.join(texts)])[:4000])
     return _disk_json('rijks', oid, fetch)
 
-def rijks_search(query, limit=20, fields=('title', 'description')):
+def rijks_search(query, limit=20, fields=('title', 'description'), box=None):
+    """box (giant packs, spec source_box): IIIF rendition of that many px on the long side instead of 2000
+    (Micrio serves up to about 17.5 MP)."""
     ids = []
     for field in fields:                      # title matches first, then description matches
         if len(ids) >= limit * 3: break
@@ -730,7 +736,8 @@ def rijks_search(query, limit=20, fields=('title', 'description')):
         except Exception as e:
             _err('rijks', e); continue
         if r.get('skip'): continue
-        out.append(_cand(url=f"{r['iiif']}/full/!2000,2000/0/default.jpg", thumb=f"{r['iiif']}/full/!960,960/0/default.jpg",
+        b = box or 2000
+        out.append(_cand(url=f"{r['iiif']}/full/!{b},{b}/0/default.jpg", thumb=f"{r['iiif']}/full/!960,960/0/default.jpg",
                          author=r['author'], source=f"Rijksmuseum, {r['licence']}", licence=r['licence'], page=r['page'],
                          title=r['title'], text=r['text'], provider='rijks', object_id=oid))
     return out
@@ -882,8 +889,11 @@ def search_opt_in(name, topic, spec):
     if not provider_active(name):
         return []
     limit = int(spec.get('source_limit') or default_limit)
+    box = spec.get('source_box')          # giant packs: bigger museum renditions
     if name == 'nga':
-        return fn(topic, limit=limit, classes=spec.get('nga_classes'))
+        return fn(topic, limit=limit, classes=spec.get('nga_classes'), **({'box': int(box)} if box else {}))
+    if name == 'rijks' and box:
+        return fn(topic, limit=limit, box=int(box))
     return fn(topic, limit=limit)
 
 PROVIDERS.update({k: v[0] for k, v in OPT_IN.items()})

@@ -2457,6 +2457,46 @@
 "removed": 14,
 "status": "verified"
 },
+"giant-test-autumn": {
+"added": 0,
+"at": "2026-10-14T00:41:02",
+"last_step": "pool 16 usable",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"giant-test-flowers": {
+"added": 0,
+"at": "2026-10-14T00:38:30",
+"last_step": "pool 25 usable",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"giant-test-gardens": {
+"added": 0,
+"at": "2026-10-14T00:41:53",
+"last_step": "pool 14 usable",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"giant-test-reefs": {
+"added": 0,
+"at": "2026-10-14T00:39:56",
+"last_step": "pool 12 usable",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
+"giant-test-towns": {
+"added": 0,
+"at": "2026-10-14T00:43:04",
+"last_step": "pool 14 usable",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
 "land-of-fire-ice": {
 "added": 22,
 "at": "2026-10-12T12:57:44",
@@ -2773,6 +2813,18 @@
 "kind": "new",
 "last_step": "verify",
 "name": "Colourful Birds",
+"puzzles": 24,
+"removed": 0,
+"status": "verified"
+},
+"pack-colourful-houses": {
+"added": 24,
+"at": "2026-10-14T01:19:11",
+"category": "Giant",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "Colourful Houses",
 "puzzles": 24,
 "removed": 0,
 "status": "verified"

@@ -118,7 +118,7 @@ def apply(spec, snap, target=None, picks=(), auto=True, dry=False, daily=False):
         # replace in place: keep ids, dates and sort order
         for p, c in zip(removed, chosen):
             m = _meta_ok(c['url'])
-            data = dict(title=nice_title(c, c.get('topic', 'Daily picture')), **host.puzzle_urls(c['url']),
+            data = dict(title=nice_title(c, c.get('topic', 'Daily picture')), **host.puzzle_urls(c['url'], spec.get('host_max_px')),
                         author=c['author'][:96], source=c['source'][:128], accent=m['accent'], blurhash=m['blurhash'])
             api.update_row('puzzles', p['$id'], data)
             state.add_provenance(p['$id'], dict(url=c['url'], author=c['author'], licence=c['licence'], source=c['source'], page=c.get('page', ''), provider=c['provider'], packId=pack_id, replaced=p['imageUrl'], at=time.strftime('%Y-%m-%d'), **_prov_extra(c)))
@@ -138,7 +138,7 @@ def apply(spec, snap, target=None, picks=(), auto=True, dry=False, daily=False):
             m = _meta_ok(c['url'])
             pid = puzzle_id_for(c['url'], pack_id)
             title = nice_title(c, pack['name'] if str(c.get('topic', '')).startswith('cat:') else c.get('topic', pack['name']), taken); taken.add(title)
-            data = dict(packId=pack_id, title=title, **host.puzzle_urls(c['url']),
+            data = dict(packId=pack_id, title=title, **host.puzzle_urls(c['url'], spec.get('host_max_px')),
                         author=c['author'][:96], source=c['source'][:128], sortOrder=order, accent=accent, blurhash=m['blurhash'])
             try:
                 api.create_row('puzzles', data, row_id=pid)
@@ -237,7 +237,7 @@ def new_daily(spec, snap, month, picks=(), dry=False):
         m = _meta_ok(c['url'])
         pid = f'{pack_id}-{d:02d}'
         title = nice_title(c, c.get('topic', 'Daily picture'), titles); titles.add(title)
-        data = dict(packId=pack_id, title=title, **host.puzzle_urls(c['url']), author=c['author'][:96], source=c['source'][:128],
+        data = dict(packId=pack_id, title=title, **host.puzzle_urls(c['url'], spec.get('host_max_px')), author=c['author'][:96], source=c['source'][:128],
                     sortOrder=d, accent=m['accent'], date=f'{y:04d}-{mo:02d}-{d:02d}T00:00:00.000+00:00', blurhash=m['blurhash'])
         try:
             api.create_row('puzzles', data, row_id=pid)
@@ -290,10 +290,12 @@ def clone(src_id, dst_id, snap):
     for p in old:
         api.delete_row('puzzles', p['$id']); state.log('delete', pack=dst_id, puzzle=p['$id'], url=p['imageUrl'], reason=f'replaced by clone of {src_id}')
     prov = state.provenance()
+    from . import specs as _specs
+    src_px = _specs.load(src_id).get('host_max_px') if _specs.spec_path(src_id).exists() else None   # a giant source stays giant
     for i, p in enumerate(src):
         pid = puzzle_id_for(p['imageUrl'], dst_id)
         data = {k: p.get(k) for k in ('title', 'author', 'source', 'accent', 'blurhash')}
-        data.update(host.puzzle_urls(p['imageUrl']), packId=dst_id, sortOrder=i)
+        data.update(host.puzzle_urls(p['imageUrl'], src_px), packId=dst_id, sortOrder=i)
         try:
             api.create_row('puzzles', data, row_id=pid)
         except RuntimeError as e:

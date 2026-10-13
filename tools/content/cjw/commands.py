@@ -245,6 +245,59 @@ def cmd_host(a):
         print('  failures written to reports/host-failures.json')
 
 
+def cmd_giantcheck(a):
+    """Giant packs: source size, sharpness at 100%, flat / dark / look-alike cards at a 300-card cut, and a
+    100% crop sheet per item (cjw/giant.py)."""
+    from . import giant
+    from concurrent.futures import ThreadPoolExecutor
+    snap = catalog.load()
+    spec = specs.load(a.pack)
+    px = int(spec.get('host_max_px') or 4096)
+    items = []
+    if not a.candidates_only:
+        snap = catalog.refresh_pack(snap, a.pack)
+        for i, p in enumerate(catalog.by_pack(snap).get(a.pack, [])):
+            items.append((f'p{i + 1:02d}', p['imageUrl'], p.get('title') or ''))
+    if not a.puzzles_only:
+        rejected = state.rejects()
+        for c in pool_mod.load_pool(spec['pool'])['candidates']:
+            if c.get('status') != 'ok' or state.is_rejected(c['url'], a.pack, rejected): continue
+            if a.keys and c['key'] not in a.keys: continue
+            items.append((c['key'], c['url'], c.get('title') or c.get('topic') or ''))
+    out_dir = CACHE / 'sheets' / 'giant' / a.pack
+    if a.thumbs:          # quick prescreen on cached thumbnails, nothing downloaded
+        rows = []
+        for key, url, title in items:
+            tp = imagecache.thumb_path(url)
+            if tp.exists():
+                st = giant.prescreen(tp)
+                rows.append((st['flat'] + st['dark'] + st['alike'], key, title, st))
+        for _, key, title, st in sorted(rows):
+            print(f"{key:5} flat {st['flat']:4.0%} dark {st['dark']:4.0%} alike {st['alike']:4.0%}  {title[:50]}")
+        print(f'{len(rows)} prescreened on thumbnails (rough: run without --thumbs on the shortlist)')
+        return
+    if a.review:          # larger sheets for the people / text check
+        for p in giant.review_sheets(items, out_dir): print(p)
+        return
+
+    def one(it):
+        key, url, title = it
+        return key, title, giant.check(url, px, force=a.force, crop_path=out_dir / f'{key}.png')
+
+    with ThreadPoolExecutor(max_workers=2) as ex:      # big files: keep the owner's line free
+        rows = list(ex.map(one, items))
+    passed = 0
+    for key, title, st in rows:
+        why = giant.verdict(st)
+        passed += not why
+        if st.get('ok'):
+            print(f"{key:5} {'FAIL' if why else 'ok  '} {st['src_w']}x{st['src_h']} sharp {st['sharp']:5.2f} flat {st['flat']:4.0%} "
+                  f"dark {st['dark']:4.0%} alike {st['alike']:4.0%}  {title[:42]}{'  -- ' + why if why else ''}")
+        else:
+            print(f'{key:5} FAIL {why}')
+    print(f'{passed} of {len(rows)} pass the measurable giant rules; 100% crop sheets in {out_dir}')
+
+
 def cmd_retitle(a):
     """Rename one puzzle (titles come from search topics and are sometimes inexact)."""
     title = ' '.join(a.title).strip()
@@ -272,6 +325,7 @@ def main(argv):
     p = sub.add_parser('summary'); p.add_argument('-v', '--verbose', action='store_true'); p.set_defaults(f=cmd_summary)
     p = sub.add_parser('plan'); p.set_defaults(f=cmd_plan)
     p = sub.add_parser('verify'); p.add_argument('pack', nargs='+'); p.set_defaults(f=cmd_verify)
+    p = sub.add_parser('giantcheck'); p.add_argument('pack'); p.add_argument('--keys', nargs='*'); p.add_argument('--candidates-only', action='store_true'); p.add_argument('--puzzles-only', action='store_true'); p.add_argument('--force', action='store_true'); p.add_argument('--thumbs', action='store_true'); p.add_argument('--review', action='store_true'); p.set_defaults(f=cmd_giantcheck)
     p = sub.add_parser('retitle'); p.add_argument('puzzle'); p.add_argument('title', nargs='+'); p.set_defaults(f=cmd_retitle)
     p = sub.add_parser('resume'); p.add_argument('--prefix'); p.add_argument('--batch'); p.add_argument('--next', type=int, default=10); p.add_argument('--auto', action='store_true'); p.set_defaults(f=cmd_resume)
     p = sub.add_parser('checkpoint'); p.add_argument('-m', '--message'); p.set_defaults(f=cmd_checkpoint)

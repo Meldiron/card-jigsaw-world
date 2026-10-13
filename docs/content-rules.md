@@ -83,3 +83,13 @@ under an id derived from its source URL. Rows point at our endpoints: `imageUrl`
 address stays in `sourceUrl` / `coverSourceUrl` for attribution, rejects and duplicate checks.
 `tools/content/cli.py apply` hosts its picks itself; `cli.py host [--pack ID]` migrates anything left
 (idempotent; `reports/host-failures.json` lists sources that could not be fetched).
+
+## Giant packs
+
+Packs in category `Giant` are played on boards of about 100 to 300 cards, so on top of every rule above
+their pictures must be huge (about 4000 px on the long side), sharp at 100%, and carry detail and colour
+in every card: at a 300-card cut at most 22% near-uniform cards, 15% nearly black cards and 30% cards that
+look like 8 or more others. Large skies, plain walls, dark painted backgrounds, mirror reflections and
+repeating or symmetric patterns fail. They are hosted at up to 4096 px (`host_max_px`). The procedure,
+sources and checks (`tools/content/run.sh giantcheck`) are in the `giant-packs` skill
+(`.claude/skills/giant-packs/SKILL.md`).

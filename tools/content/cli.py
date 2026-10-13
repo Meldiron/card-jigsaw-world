@@ -18,6 +18,7 @@
   cli.py recover [POOL...]            re-fetch candidates lost to HTTP 429 throttling
   cli.py summary [-v]                 totals from reports/changes.jsonl
   cli.py sources [NAME...] [--refresh] [--offline]   picture providers: active?, licence policy, live health (cached 10 min)
+  cli.py giantcheck PACK [--keys K...] [--candidates-only|--puzzles-only] [--thumbs|--review]   giant packs: size, 100% sharpness, card checks, crop sheets
 """
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))

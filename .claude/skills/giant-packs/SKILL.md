@@ -1,0 +1,133 @@
+---
+name: giant-packs
+description: Build, extend, repair and audit Giant packs for Card Jigsaw World (category Giant, boards of about 100 to 300 cards). Use for any request to add a giant pack, add or replace pictures in one, source very large and highly detailed pictures, or check that a picture is good enough for a 300-card board.
+---
+
+# Giant packs for Card Jigsaw World
+
+A Giant pack is a library pack in category **`Giant`** (exactly that string: the app offers its giant
+board ladder, about 100 to 300 cards, only for this category). Each picture is cut into up to ~300 cards
+of about 200 px of a 4096 px hosted copy, so it has to be huge, sharp at 100% and full of detail and
+colour that tell the cards apart. Everything in the `pack-making` skill and `docs/content-rules.md`
+still applies (no people, no repeats, portrait or square only, no walls of text, at least 20 pictures,
+one theme, free licences with author and source). This skill adds the giant rules, the tooling and
+the lessons from the first giant pack, `pack-colourful-houses` (Colourful Houses, 24 pictures,
+2026-10-14).
+
+## Giant rules (on top of the content rules)
+
+1. **Huge source**: at least ~4000 px on the long side (`GIANT_MIN_LONG` 3800, because Commons' largest
+   standard rendition is 3840 px wide). Portrait or square, as always.
+2. **Sharp at 100%**: `sharp` >= 1.8 (a sharp museum scan scores ~2.8, the same scan upscaled 3x 0.98,
+   good photos 3 to 11). Always read the 100% crop sheet as well: soft focus, motion blur, heavy noise
+   reduction, JPEG blocks and HDR halos show there and nowhere else.
+3. **Every card must be tellable**: measured at a 300-card cut,
+   - `flat` <= 22%: cards that are almost uniform (sky, plain painted wall, water, studio backdrop);
+   - `dark` <= 15%: nearly black cards (shadows, night, dark varnish);
+   - `alike` <= 30%: cards whose colour and texture match 8 or more others (repeating patterns,
+     symmetric designs, foliage, backgrounds).
+   These limits are in `tools/content/cjw/giant.py`; they were calibrated on Colourful Houses. Do not
+   loosen them for one picture; loosen them only with a reason that holds for the whole category, and
+   note it in the module.
+4. **No large plain or repeating areas**: no big skies, plain walls, dark or olive painted backgrounds,
+   mirror-like water reflections (they double the look-alike cards), tiled or symmetric patterns
+   (rose windows, mosaics, carpets), rows of identical windows.
+5. **People, looked for at full size**: 4096 px shows what a 480 px thumbnail hides. Reject passers-by
+   at the bottom of a street, people reflected in a door or window, people behind café umbrellas,
+   statues, busts, cherubs and carved faces (mascarons), religious images framed on a wall, murals and
+   sgraffito with figures, mannequins. Use the review sheets (below) for every pick.
+
+## What works, what does not (first pack, measured)
+
+| Theme | Result | Why |
+| --- | --- | --- |
+| Dutch and Flemish flower still lifes (museum scans 5000-16000 px) | fails | Dark or olive backgrounds: 45-80% look-alike cards at 300 cards; only 1 of 25 passed |
+| Autumn forests | weak | Foliage looks alike everywhere (30-60% alike) |
+| Flower gardens and borders | mixed | Good close shots, but sky and lawns creep in |
+| Coral reefs | weak | Few portrait originals, chaotic, blue water backgrounds |
+| Colourful houses (facade fills the frame) | works | Every house its own colour, windows, shutters and balconies make cards distinct |
+
+Good topic shapes are named streets, squares, shophouses, balconies and single houses ("Calle Santiago
+Hondarribia", "Joo Chiat shophouses", "Largo Santa Luzia Alfama"), not "colourful town" panoramas,
+which bring sky, cars and crowds. Expect about 1 usable giant picture per 6 to 8 candidates.
+
+## Sources with huge originals
+
+| Provider | How to get full size | Notes |
+| --- | --- | --- |
+| `commons` | `commons_width: 3840`, `commons_extra: "fileh:>3800"` | Main source. Quality images rank first. 3840 is the largest standard rendition (Commons rejects other widths). |
+| `nga` | `source_box: 4096` (IIIF `!4096,4096`) | Serves up to 4096 px; images capped by `maxpixels` are skipped automatically. |
+| `rijks` | `source_box: 4096` | Micrio caps at about 17.5 MP (2915 x 4096 fits). |
+| `met` | nothing: the candidate URL is the original | Originals 3000-6000 px. The v1.1 search returned HTTP 404 on 2026-10-14: check `run.sh sources met` first. |
+| `nasa` | originals | Space has black backgrounds (fails `dark`/`flat`); Earth from orbit can work. |
+| `inat`, `cma` | too small | 2048 px and ~900 px. |
+
+The pool fetches the candidates with the largest known originals first. Museum results have no size
+until downloaded, so in a mixed spec Commons fills every `fetch_per_topic` slot: pool museum sources in
+a spec of their own (or raise `fetch_per_topic`).
+
+## Spec (tools/content/specs/<packId>.json)
+
+```json
+{
+ "id": "pack-colourful-houses", "name": "Colourful Houses", "category": "Giant",
+ "description": "Painted façades, shutters and flower boxes from Burano to Valparaíso, sharp enough for boards of 300 cards.",
+ "price": "tickets", "priceTickets": 4, "premium": true,     // 4 = the old scale's top tier -> 12 tickets
+ "sortOrder": 1250, "accent_from_cover": true, "cover": "<source URL of the cover pick>",
+ "sources": ["commons"], "commons_quality": true, "commons_width": 3840, "commons_extra": "fileh:>3800",
+ "source_box": 4096,                                          // nga / rijks renditions
+ "host_max_px": 4096,                                         // hosting keeps 4096 px (long side)
+ "min_short": 2800, "target": 24, "per_topic": 1, "fetch_per_topic": 3, "author_cap": 2,
+ "topics": ["Burano houses", "Calle Santiago Hondarribia", "..."], "more_topics": ["..."]
+}
+```
+
+## Pipeline
+
+```
+tools/content/run.sh pool PACK                       # 3-4 min per 30 topics; several hundred MB
+tools/content/run.sh sheet PACK --candidates-only    # read it; reject people/text/quality/weak
+tools/content/run.sh reject PACK c04 c10 --reason quality
+tools/content/run.sh giantcheck PACK --candidates-only --thumbs     # rough prescreen, no downloads
+tools/content/run.sh giantcheck PACK --candidates-only --keys c01 c02 ...   # full check + 100% crops
+tools/content/run.sh giantcheck PACK --candidates-only --review --keys ...  # 2x2 sheets for the people check
+tools/content/run.sh pool PACK --more                # new more_topics when the shortlist is short
+tools/content/run.sh newpack PACK
+tools/content/run.sh apply PACK --no-auto --pick c211 c01 ...       # explicit picks only, cover first
+tools/content/run.sh retitle PUZZLE_ID Exact place, Town          # every picture (see Titles)
+tools/content/run.sh finalize PACK                   # bumps puzzlesUpdatedAt after the retitles
+.venv/bin/python tools/store/apply_pack_prices.py --only PACK       # dry run, then --apply
+tools/content/run.sh verify PACK
+tools/content/run.sh giantcheck PACK --puzzles-only  # every puzzle passes
+tools/content/run.sh sheet PACK --puzzles-only       # final read: clean, >= 20
+```
+
+Crop and review sheets land in `<cache>/sheets/giant/<pack>/`. Keep the pool's two download workers:
+giant renditions are 3-8 MB each and the owner's line saturates.
+
+## Hosting
+
+`"host_max_px": 4096` makes `apply` (and `host --pack`, `clone`) store each picture as a JPEG of at most
+4096 px on the long side, quality 90 (about 1.7 to 3.8 MB), instead of the normal 1200 px. The giant copy
+has its own file id and `state/hosted.json` key (`<source URL>|4096px`), so a picture hosted at 1200 px
+for another pack is never reused at the wrong size. Thumbs (`/preview?width=600`) and covers
+(`/preview?width=1080`) are unchanged. If `secrets/appwrite-storage-key.txt` is missing, `host.py` falls
+back to `secrets/appwrite-users-key.txt` (files scopes too) and says so in the log.
+
+## Titles
+
+Commons pictures are titled from their search topic, and a giant topic is usually a place that the
+search only approximately hit (the "Lisbon tiled facade" topic returned a square in Salvador). Retitle
+every picture with its exact place, in the catalogue's plain style ("Calle Tibaldon, Burano", "Wharf
+houses on the Nidelva, Trondheim"); check the file's Commons categories when the file name is vague.
+
+## Review checklist (before `apply`, and again on the final sheet)
+
+- [ ] category is exactly `Giant`, `host_max_px` 4096, at least 20 pictures (aim 24)
+- [ ] every pick passes `giantcheck` (long side, sharp, flat, dark, alike) and its crop sheet looks sharp
+- [ ] review sheets read for people, reflections, statues, faces, framed images, murals
+- [ ] no wall of text; small shop signs and house numbers are fine
+- [ ] author cap 2, and no photographer twice on the same subject; one place at most 3 times
+- [ ] colour and composition vary across the pack (not 24 times the same street angle)
+- [ ] titles name the exact place; cover is the strongest picture
+- [ ] price applied (12 tickets for the top ticket tier), `puzzlesUpdatedAt` set, `verify` clean
