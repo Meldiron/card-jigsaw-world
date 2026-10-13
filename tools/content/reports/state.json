@@ -2717,6 +2717,18 @@
 "removed": 19,
 "status": "verified"
 },
+"pack-colourful-birds": {
+"added": 24,
+"at": "2026-10-13T15:04:42",
+"category": "Premium",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "Colourful Birds",
+"puzzles": 24,
+"removed": 0,
+"status": "verified"
+},
 "pack-cozy-interiors": {
 "added": 23,
 "at": "2026-10-12T16:03:42",
@@ -3161,6 +3173,14 @@
 "removed": 19,
 "status": "verified"
 },
+"pack-mountain-autumn": {
+"added": 0,
+"at": "2026-10-13T14:57:28",
+"last_step": "reject 26 off-theme",
+"puzzles": null,
+"removed": 0,
+"status": "audited"
+},
 "pack-mountain-huts": {
 "added": 0,
 "at": "2026-10-13T14:49:22",
@@ -3230,12 +3250,16 @@
 "status": "verified"
 },
 "pack-norway-fjords": {
-"added": 0,
-"at": "2026-10-13T14:52:29",
-"last_step": "reject 14 weak",
-"puzzles": null,
+"added": 24,
+"at": "2026-10-13T15:08:32",
+"category": "Premium",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "Fjords of Norway",
+"puzzles": 24,
 "removed": 0,
-"status": "audited"
+"status": "verified"
 },
 "pack-oil-landscapes": {
 "added": 26,
@@ -3403,6 +3427,18 @@
 "name": "Puppies",
 "puzzles": 24,
 "removed": 20,
+"status": "verified"
+},
+"pack-quilts": {
+"added": 24,
+"at": "2026-10-13T15:09:17",
+"category": "Patterns",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "Quilts",
+"puzzles": 24,
+"removed": 0,
 "status": "verified"
 },
 "pack-rainbow-mountains": {
@@ -3832,6 +3868,14 @@
 "puzzles": 22,
 "removed": 20,
 "status": "verified"
+},
+"pack-wild-australia": {
+"added": 0,
+"at": "2026-10-13T14:58:27",
+"last_step": "reject 12 weak",
+"puzzles": null,
+"removed": 0,
+"status": "audited"
 },
 "pack-wild-roses": {
 "added": 25,

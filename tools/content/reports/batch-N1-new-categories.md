@@ -12,3 +12,4 @@ Feel free ...") were shortened to the photographer's name, and topic titles were
 | Pack | Category | Puzzles | Notes |
 | --- | --- | --- | --- |
 | pack-dolomites (Dolomites) | Mountains | 24 | 103 candidates, 52 rejected (19 people, 9 black-and-white/old prints, 2 text, 8 same scene, 14 weak); verified |
+| pack-quilts (Quilts) | Patterns | 24 | Met CC0 objects and Commons museum photos (MFA Boston via Daderot, Met donations); 40 rejected: Index of American Design watercolour renderings (paper margins, signatures), Smithsonian SAAM / Cooper Hewitt files (Smithsonian Open Access is excluded by the owner), a signature quilt (text), modern quilts (copyright), b&w record shots; author_cap 6 because "American" is the Met's credit for anonymous makers; verified |
