@@ -7,7 +7,7 @@
  "target": 24,
  "per_topic": 1,
  "fetch_per_topic": 4,
- "author_cap": 2,
+ "author_cap": 4,
  "price": "coins",
  "priceCoins": 400,
  "sortOrder": 1127,
@@ -16,7 +16,7 @@
   "met",
   "commons"
  ],
- "source_limit": 10,
+ "source_limit": 12,
  "topics": [
   "sidewall wallpaper",
   "wallpaper sample",

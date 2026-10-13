@@ -427,11 +427,11 @@
 },
 "ai-neon-nights": {
 "added": 20,
-"at": "2026-10-12T13:28:22",
+"at": "2026-10-13T15:34:59",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "verify",
+"last_step": "pool 1050 usable",
 "name": "AI Neon Nights",
 "puzzles": 20,
 "removed": 0,
@@ -2495,8 +2495,8 @@
 },
 "pack-alpine-meadows": {
 "added": 0,
-"at": "2026-10-13T14:44:27",
-"last_step": "reject 52 off-theme",
+"at": "2026-10-13T15:42:18",
+"last_step": "pool 52 usable",
 "puzzles": null,
 "removed": 0,
 "status": "audited"
@@ -2523,6 +2523,26 @@
 "name": "Ancient Ruins",
 "puzzles": 24,
 "removed": 20,
+"status": "verified"
+},
+"pack-autumn-berries": {
+"added": 0,
+"at": "2026-10-13T15:42:23",
+"last_step": "pool 81 usable",
+"puzzles": null,
+"removed": 0,
+"status": "audited"
+},
+"pack-autumn-mushrooms": {
+"added": 24,
+"at": "2026-10-13T15:26:19",
+"category": "Seasonal",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "Autumn Mushrooms",
+"puzzles": 24,
+"removed": 0,
 "status": "verified"
 },
 "pack-autumn-parks": {
@@ -2632,6 +2652,14 @@
 "puzzles": 24,
 "removed": 18,
 "status": "verified"
+},
+"pack-carousels": {
+"added": 0,
+"at": "2026-10-13T15:33:58",
+"last_step": "reject 11 off-theme",
+"puzzles": null,
+"removed": 0,
+"status": "audited"
 },
 "pack-castles": {
 "added": 25,
@@ -2827,11 +2855,11 @@
 },
 "pack-embroidery": {
 "added": 0,
-"at": "2026-10-13T15:13:25",
-"last_step": "pool 75 usable",
+"at": "2026-10-13T15:23:49",
+"last_step": "reject 3 off-theme",
 "puzzles": null,
 "removed": 0,
-"status": "pending"
+"status": "audited"
 },
 "pack-fairytale-villages": {
 "added": 24,
@@ -2856,6 +2884,26 @@
 "puzzles": 24,
 "removed": 18,
 "status": "verified"
+},
+"pack-first-flowers": {
+"added": 24,
+"at": "2026-10-13T15:19:52",
+"category": "Seasonal",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "First Flowers",
+"puzzles": 24,
+"removed": 0,
+"status": "verified"
+},
+"pack-folk-art": {
+"added": 0,
+"at": "2026-10-13T15:27:54",
+"last_step": "reject 33 off-theme",
+"puzzles": null,
+"removed": 0,
+"status": "audited"
 },
 "pack-foxes": {
 "added": 23,
@@ -3190,12 +3238,16 @@
 "status": "audited"
 },
 "pack-mountain-huts": {
-"added": 0,
-"at": "2026-10-13T14:49:22",
-"last_step": "reject 34 off-theme",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"added": 25,
+"at": "2026-10-13T15:42:38",
+"category": "Mountains",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "Mountain Huts",
+"puzzles": 24,
+"removed": 1,
+"status": "verified"
 },
 "pack-nebulae": {
 "added": 24,
@@ -3625,6 +3677,14 @@
 "removed": 20,
 "status": "verified"
 },
+"pack-snowy-villages": {
+"added": 0,
+"at": "2026-10-13T15:36:35",
+"last_step": "pool 29 usable",
+"puzzles": null,
+"removed": 0,
+"status": "pending"
+},
 "pack-staircases": {
 "added": 14,
 "at": "2026-10-13T00:08:58",
@@ -3684,6 +3744,14 @@
 "puzzles": 24,
 "removed": 19,
 "status": "verified"
+},
+"pack-summer-fruit": {
+"added": 0,
+"at": "2026-10-13T15:39:55",
+"last_step": "reject 10 weak",
+"puzzles": null,
+"removed": 0,
+"status": "audited"
 },
 "pack-sunflowers": {
 "added": 20,
@@ -3852,6 +3920,14 @@
 "puzzles": 23,
 "removed": 21,
 "status": "verified"
+},
+"pack-wallpapers": {
+"added": 0,
+"at": "2026-10-13T15:23:32",
+"last_step": "reject 23 off-theme",
+"puzzles": null,
+"removed": 0,
+"status": "audited"
 },
 "pack-waterfalls": {
 "added": 13,
