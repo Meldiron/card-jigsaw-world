@@ -381,3 +381,64 @@ c720 B seville cathedral orange trees (retitle)
 c721 B giralda (retitle)
 c722 B- orange tree
 c726 B- feb snowshoe hare white
+c731 B- feb bighorn small
+c732 B feb bighorn on rock
+c733 B- feb bighorn
+c734 B feb japanese serow
+c735 B- feb japanese serow
+c741 B feb crested tit
+c742 A feb crested tit
+c743 A feb hawfinch
+c745 B- feb hawfinch
+c746 B- feb brambling
+c747 A feb brambling
+c750 B feb common redpoll
+c752 B feb pine grosbeak berries
+c753 A feb pine grosbeak
+c755 B feb chickadee
+c756 B feb chickadee
+c757 A feb chickadee
+c759 B- feb junco
+c762 B- feb gyrfalcon perch
+c770 B feb spectacled eider
+c771 B feb spectacled eider face
+c772 A mar flowering currant
+c774 B mar flowering currant bush
+c775 B- mar lungwort leaves
+c776 B mar lungwort
+c777 A mar lungwort
+c778 B mar skunk cabbage
+c779 B mar skunk cabbage spadix
+c780 A mar skunk cabbage
+c781 B- mar spring lamb
+c784 A mar brown hare
+c785 B mar brown hare path
+c786 B mar brown hare (same author)
+c789 A mar yellowhammer
+c790 A apr virginia bluebells
+c791 B apr virginia bluebells
+c792 A apr virginia bluebells (same author c791)
+c794 B apr green hairstreak
+c795 B- apr green hairstreak
+c796 A apr snake's head fritillary
+c797 B apr snake's head fritillary (same author)
+c798 B- apr fritillary
+c799 B apr pear blossom
+c800 A apr pear blossom
+c801 B- apr pear blossom
+c805 B- apr anemone blanda
+c806 B apr anemone blanda
+c807 B+ apr anemone blanda
+c812 B- may villa taranto path
+c813 B may villa taranto azaleas
+c814 B may powis castle
+c815 B- may powis garden
+c817 B- may peas
+c819 B- may ceanothus grey bg
+c822 B may horse chestnut flowers
+c823 A may horse chestnut flowers
+c824 B+ may red horse chestnut
+c826 B- may buttercup
+c829 B- may red campion
+c830 B may red campion
+c831 B- may oriental poppy bud
