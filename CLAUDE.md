@@ -115,6 +115,11 @@ skills under `.claude/skills/` hold the detailed workflows.
 - `lib/state/`: `profile.dart` (`Economy` constants, VIP, piggy 5/picture up to 500), `rewards.dart`
   (level curve `LevelRewards.levelForXp`, daily 3 + 1 VIP / weekly 5 + 1 VIP quests), `achievements.dart`,
   `progress.dart`, `merge.dart` + `merge_flow.dart` (guest→account save merge), `auth.dart`, `social.dart`.
+- **Save sync** (`docs/sync.md`): `lib/state/sync.dart` (`SyncController`: queued ops, fetch on start/resume/
+  focus/sign-in, conflicts) + `lib/data/sync/` (`ops.dart` intents → atomic operators, `notice.dart`,
+  `backend.dart`). Profile and progress changes go through `enqueue(SyncOp...)`; never write totals
+  computed on the device. "Synced from another device" alert and "Two boards in progress" sheet live in
+  `lib/features/sync/`.
 - `lib/features/ads/house_ads.dart`: house ads only (no ad network). Break offer every 3rd completion
   or when the last break is 3+ minutes old, closable after 5 s, rewarded 15 s; the offer CTA never
   skips the rewarded countdown.
@@ -134,7 +139,8 @@ skills under `.claude/skills/` hold the detailed workflows.
   `totalSeconds`, `solvedByMode`, `questsCompleted` and the "Total Completion" numbers
   (`picturesSolved`, `picturesPerfect`, `packsCompleted`, `packsPerfect`, kept in step by
   `ProfileNotifier.syncCompletion`, backfill `tools/dev/backfill_profile_stats.py`) are public.
-  `isTest` marks QA players (excluded from the league).
+  `isTest` marks QA players (excluded from the league). `profiles.appliedOps` / `event_progress.appliedOps` (ids
+  of applied sync ops, exactly-once retries) and `progress.session` (play-through id) belong to the save sync.
 - Functions: `verify-purchase` (StoreKit 2 JWS verification, grants, App Store Server Notifications at
   `https://cjw-verify-purchase.fra.appwrite.run/notifications`; secret vars can only be updated with
   `secret: true`). There is no image proxy: pictures load straight from Storage on every platform.
@@ -203,7 +209,7 @@ tree, so dispatch the workflow directly as described in the testflight-feedback 
 
 ## Docs index
 
-`docs/native-ui.md` (glass components), `docs/copy-guide.md`, `docs/house-ads.md`,
+`docs/native-ui.md` (glass components), `docs/copy-guide.md`, `docs/sync.md` (save sync), `docs/house-ads.md`,
 `docs/purchases.md`, `docs/web.md`, `docs/release-flow.md`, `docs/release-checklist.md`,
 `docs/content-rules.md`, `docs/content-sources.md`, `store/README.md` (store assets),
 `tools/store/README.md`, `README.md`.

@@ -1,3 +1,4 @@
+import 'package:appwrite/appwrite.dart' show Operator;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -7,6 +8,7 @@ import 'merge.dart';
 import 'profile.dart';
 import 'progress.dart';
 import 'settings.dart';
+import 'sync.dart';
 
 /// What happened to the guest save after a sign-in, for the toast.
 enum MergeOutcome {
@@ -33,6 +35,8 @@ class SaveMerge {
   /// The save of [userId]: fresh rows from the backend, or the providers'
   /// cached copy when the backend cannot be reached.
   Future<SaveSnapshot?> snapshot(String userId) async {
+    // Send what this device still has queued, so the snapshot has it.
+    await _ref.read(syncProvider.notifier).flush();
     try {
       final meta = await _ref.read(profileRepositoryProvider).fetchWithMeta(userId);
       final rows = await _ref.read(progressRepositoryProvider).forUserWithMeta(userId);
@@ -109,7 +113,20 @@ class SaveMerge {
         debugPrint('merge: progress ${e.key} failed: $err');
       }
     }
-    await profiles.update(accountId, mergeProfile(guest: guest, account: account, choice: choice, mergedProgress: merged.all));
+    // Only what changes is written: unlocks the account lacks are appended (atomically, so the
+    // account's other devices keep theirs) and scalars only when they differ.
+    final patch = mergeProfile(guest: guest, account: account, choice: choice, mergedProgress: merged.all);
+    final data = <String, dynamic>{};
+    for (final e in patch.entries) {
+      if (unionKeys.contains(e.key)) {
+        final have = {for (final v in (account.profile[e.key] as List? ?? const [])) v.toString()};
+        final missing = [for (final v in e.value as List<String>) if (!have.contains(v)) v];
+        if (missing.isNotEmpty) data[e.key] = Operator.arrayAppend(missing);
+      } else if (account.profile[e.key] != e.value) {
+        data[e.key] = e.value;
+      }
+    }
+    if (data.isNotEmpty) await profiles.update(accountId, data);
     return choice == MergeChoice.guest ? MergeOutcome.keptGuest : MergeOutcome.keptAccount;
   }
 }

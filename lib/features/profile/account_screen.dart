@@ -22,6 +22,7 @@ import '../../state/profile.dart';
 import '../../state/progress.dart';
 import '../../state/settings.dart';
 import '../../state/social.dart';
+import '../../state/sync.dart';
 import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
@@ -67,6 +68,8 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
   }
 
   void _afterAuth() {
+    // The merge wrote to the account after it loaded: take those rows in without the alert.
+    ref.read(syncProvider.notifier).sync(silent: true);
     ref.invalidate(profileProvider);
     ref.invalidate(progressProvider);
     ref.invalidate(friendsProvider);
@@ -380,6 +383,7 @@ class _AuthCallbackScreenState extends ConsumerState<AuthCallbackScreen> {
   }
 
   void _invalidate() {
+    ref.read(syncProvider.notifier).sync(silent: true);
     ref.invalidate(profileProvider);
     ref.invalidate(progressProvider);
     ref.invalidate(friendsProvider);

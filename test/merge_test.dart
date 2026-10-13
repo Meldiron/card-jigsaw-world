@@ -21,6 +21,7 @@ SaveSnapshot save(
   int solved = 0,
   int xp = 0,
   int coins = 500,
+  int tickets = 1,
   int streak = 0,
   int longestStreak = 0,
   DateTime? at,
@@ -30,7 +31,7 @@ SaveSnapshot save(
 }) =>
     SaveSnapshot(
       userId: user,
-      profile: {'xp': xp, 'level': 1 + xp ~/ 100, 'coins': coins, 'tickets': 1, 'hints': 2, 'piggyCoins': 40, 'streak': streak, 'longestStreak': longestStreak, 'displayName': name, 'avatar': 'fox', 'unlockedPacks': packs, 'claimedAchievements': achievements, 'puzzlesCompleted': solved, 'totalStars': solved * 3},
+      profile: {'xp': xp, 'level': 1 + xp ~/ 100, 'coins': coins, 'tickets': tickets, 'hints': 2, 'piggyCoins': 40, 'streak': streak, 'longestStreak': longestStreak, 'displayName': name, 'avatar': 'fox', 'unlockedPacks': packs, 'claimedAchievements': achievements, 'puzzlesCompleted': solved, 'totalStars': solved * 3},
       progress: [for (var i = 0; i < solved; i++) row('${user}_p$i', at: at)],
       updatedAt: at,
     );
@@ -50,6 +51,21 @@ void main() {
       final account = save('a', solved: 4, xp: 300, at: t1);
       expect(dominates(guest, account), isTrue);
       expect(decide(guest: guest, account: account), MergeDecision.keepGuest);
+    });
+
+    test('the save that would be dropped holds more Coins: ask instead of dropping them', () {
+      final guest = save('g', solved: 5, xp: 400, coins: 3000, at: t1);
+      final account = save('a', solved: 10, xp: 900, coins: 200, at: t2);
+      expect(dominates(account, guest), isTrue);
+      expect(decide(guest: guest, account: account), MergeDecision.ask);
+      final more = save('a', solved: 10, xp: 900, tickets: 9, at: t2);
+      expect(decide(guest: more, account: save('g', solved: 12, xp: 1200, at: t2.add(const Duration(days: 1)))), MergeDecision.ask, reason: 'Tickets too');
+    });
+
+    test('a guest with bought Coins and no pictures is not a save to drop silently', () {
+      final guest = save('g', coins: 2500, at: t2);
+      expect(guest.isTrivial, isFalse);
+      expect(decide(guest: guest, account: save('a', solved: 10, xp: 900, coins: 300, at: t1)), MergeDecision.ask);
     });
 
     test('more progress but older is not clear: ask', () {

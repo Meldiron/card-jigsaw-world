@@ -2,11 +2,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/repositories.dart';
+import '../data/sync/ops.dart';
 import '../models/models.dart';
 import 'auth.dart';
 import 'catalog.dart';
 import 'paged.dart';
 import 'profile.dart';
+import 'sync.dart';
 
 final friendsProvider = FutureProvider<List<Friend>>((ref) async {
   final userId = ref.watch(currentUserIdProvider);
@@ -144,22 +146,22 @@ final resolvedPuzzleProvider = Provider.family<Puzzle?, String>((ref, id) {
   return single == null ? null : custom(single);
 });
 
-/// Records progress on every active event when a puzzle is completed.
+/// Records progress on every active event when a puzzle is completed. Each step is a queued
+/// [SyncOp] (an atomic +1 on the server), so steps from several devices add up and steps made
+/// offline count once the server answers.
 Future<void> bumpEventProgress(WidgetRef ref, {String? packId}) async {
-  final userId = ref.read(currentUserIdProvider);
-  if (userId == null) return;
+  if (ref.read(currentUserIdProvider) == null) return;
   final events = ref.read(eventsProvider).value ?? const [];
   final progress = ref.read(eventProgressProvider).value ?? const {};
-  final repo = ref.read(socialRepositoryProvider);
+  final sync = ref.read(syncProvider.notifier);
+  var bumped = false;
   for (final e in events.where((e) => e.isActive)) {
     if (e.packId != null && e.packId!.isNotEmpty && e.packId != packId) continue;
-    final current = progress[e.id];
-    if (current?.claimed == true) continue;
-    try {
-      await repo.upsertEventProgress(userId, e.id, progress: (current?.progress ?? 0) + 1);
-    } catch (err) {
-      debugPrint('event bump failed: $err');
-    }
+    if (progress[e.id]?.claimed == true) continue;
+    sync.enqueue(SyncOp.event(e.id));
+    bumped = true;
   }
+  if (!bumped) return;
+  await sync.flush();
   ref.invalidate(eventProgressProvider);
 }

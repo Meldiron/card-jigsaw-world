@@ -14,6 +14,7 @@ import '../../core/theme/tokens.dart';
 import '../../data/purchases.dart';
 import '../../models/models.dart';
 import '../../state/profile.dart';
+import '../../state/sync.dart';
 import '../../state/purchases.dart';
 import '../../state/settings.dart';
 import '../../widgets/glass.dart';
@@ -71,7 +72,7 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
     switch (e) {
       case PurchaseVerified():
         setState(() => _buying = false);
-        ref.read(profileProvider.notifier).refresh();
+        ref.read(syncProvider.notifier).sync(silent: true);
         final g = e.grant;
         if (e.alreadyApplied && !e.restored) {
           showToast(context, 'Purchase already applied', icon: AppIcons.check);

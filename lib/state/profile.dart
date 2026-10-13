@@ -1,19 +1,17 @@
-import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../core/guest_names.dart';
-import '../core/qa.dart';
 import '../data/repositories.dart';
+import '../data/sync/ops.dart';
 import '../game/modes.dart';
 import '../models/models.dart';
 import 'auth.dart';
 import 'completion.dart';
 import 'progress.dart';
 import 'rewards.dart';
-import 'settings.dart';
+import 'sync.dart';
 
 /// Economy rules in one place so UI and backend stay consistent.
 class Economy {
@@ -67,124 +65,67 @@ class Economy {
       (((cells * 2.5).round() + stars * 10) * mode.multiplier).round();
 }
 
+/// The player's profile. Every change is queued as a [SyncOp] ([SyncController]): the screen shows
+/// it at once and the server applies it on top of whatever the player's other devices did.
 class ProfileNotifier extends AsyncNotifier<Profile> {
   @override
   Future<Profile> build() async {
     // The public completion numbers follow the player's own progress (see [syncCompletion]).
     ref.listen(completionTotalsProvider, (_, t) => syncCompletion(t));
     final auth = await ref.watch(authProvider.future);
-    final store = ref.read(localStoreProvider);
-    if (auth == null) {
-      // Offline guest: restore cached profile.
-      final cached = store.getJson('profile');
-      return cached != null ? Profile.fromRow(cached['id'] ?? 'local', cached) : Profile.guest('local');
-    }
-    final repo = ref.read(profileRepositoryProvider);
-    try {
-      // A QA run's guest is a test player: out of the league, purged after the run (see [QaRun]).
-      final qaGuest = QaRun.enabled && auth.email.isEmpty && auth.phone.isEmpty;
-      var p = await repo.fetchOrCreate(auth.$id, name: auth.name.isNotEmpty ? auth.name : GuestNames.next(), isTest: qaGuest);
-      if (qaGuest && !p.isTest) p = await repo.update(p.id, {'isTest': true});
-      _cache(p);
-      // Once the state is set: bring older rows up to date (completion numbers, quest count).
-      Future(_selfHeal);
-      return p;
-    } catch (e) {
-      debugPrint('profile load failed: $e');
-      final cached = store.getJson('profile');
-      return cached != null ? Profile.fromRow(cached['id'] ?? auth.$id, cached) : Profile.guest(auth.$id);
-    }
+    final sync = ref.read(syncProvider.notifier);
+    await sync.attach(auth);
+    final id = auth?.$id ?? SyncController.local;
+    ref.listen(syncProvider.select((s) => s.profile), (_, p) {
+      if (p != null && p.id == id) state = AsyncData(p);
+    });
+    // Once the state is set: bring older rows up to date (completion numbers, quest count).
+    Future(_selfHeal);
+    final p = ref.read(syncProvider).profile;
+    return p != null && p.id == id ? p : Profile.guest(id);
   }
 
-  void _cache(Profile p) {
-    ref.read(localStoreProvider).setJson('profile', {...p.toData(), 'id': p.id});
-  }
+  SyncController get _sync => ref.read(syncProvider.notifier);
 
-  Profile get _p => state.value ?? Profile.guest('local');
+  Profile get _p => state.value ?? Profile.guest(SyncController.local);
 
-  /// Applies an optimistic patch locally and persists it in the background.
-  /// Any change to `xp` also rewrites the mirrored `level` column, derived
-  /// with [LevelRewards.levelForXp], so other players read the same level.
-  Future<void> _apply(Map<String, dynamic> patch) async {
-    if (patch.containsKey('xp')) patch = {...patch, 'level': LevelRewards.levelForXp((patch['xp'] as num?)?.toInt() ?? 0)};
-    final current = _p;
-    final merged = {...current.toData(), ...patch};
-    final next = Profile.fromRow(current.id, merged);
-    state = AsyncData(next);
-    _cache(next);
-    if (current.id == 'local') return;
-    try {
-      await ref.read(profileRepositoryProvider).update(current.id, patch);
-    } catch (e) {
-      debugPrint('profile patch failed: $e');
-    }
-  }
+  void _do(SyncOp op) => _sync.enqueue(op);
 
-  void _ledger(int amount, String currency, String reason, int balanceAfter) {
-    final p = _p;
-    if (p.id == 'local') return;
-    ref.read(profileRepositoryProvider).logLedger(p.id, amount: amount, currency: currency, reason: reason, balanceAfter: balanceAfter);
-  }
-
-  Future<void> addCoins(int amount, {required String reason}) async {
-    final next = _p.coins + amount;
-    await _apply({'coins': next});
-    _ledger(amount, 'coins', reason, next);
-  }
+  Future<void> addCoins(int amount, {required String reason}) async => _do(SyncOp.earn('coins', amount, reason));
 
   Future<bool> spendCoins(int amount, {required String reason}) async {
     if (_p.coins < amount) return false;
-    final next = _p.coins - amount;
-    await _apply({'coins': next});
-    _ledger(-amount, 'coins', reason, next);
+    _do(SyncOp.spend('coins', amount, reason));
     return true;
   }
 
-  Future<void> addTickets(int amount, {required String reason}) async {
-    final next = _p.tickets + amount;
-    await _apply({'tickets': next});
-    _ledger(amount, 'tickets', reason, next);
-  }
+  Future<void> addTickets(int amount, {required String reason}) async => _do(SyncOp.earn('tickets', amount, reason));
 
   Future<bool> spendTickets(int amount, {required String reason}) async {
     if (_p.tickets < amount) return false;
-    final next = _p.tickets - amount;
-    await _apply({'tickets': next});
-    _ledger(-amount, 'tickets', reason, next);
+    _do(SyncOp.spend('tickets', amount, reason));
     return true;
   }
 
-  Future<void> addHints(int amount, {required String reason}) async {
-    final next = _p.hints + amount;
-    await _apply({'hints': next});
-    _ledger(amount, 'hints', reason, next);
-  }
+  Future<void> addHints(int amount, {required String reason}) async => _do(SyncOp.earn('hints', amount, reason));
 
   /// Uses a hint from inventory, or buys one with coins. Returns false if neither is possible.
   Future<bool> useHint() async {
     if (_p.hints > 0) {
-      await _apply({'hints': _p.hints - 1});
+      _do(SyncOp.spend('hints', 1, 'hint', log: false));
       return true;
     }
     return spendCoins(Economy.hintCostCoins, reason: 'hint');
   }
 
-  Future<void> setIdentity({String? name, String? avatar}) =>
-      _apply({'displayName': ?name, 'avatar': ?avatar});
+  Future<void> setIdentity({String? name, String? avatar}) async => _do(SyncOp.put({'displayName': ?name, 'avatar': ?avatar}));
 
   Future<bool> unlockPack(Pack pack) async {
     if (_p.unlockedPacks.contains(pack.id)) return true;
-    if (pack.priceTickets > 0) {
-      if (_p.tickets < pack.priceTickets) return false;
-      final next = _p.tickets - pack.priceTickets;
-      await _apply({'tickets': next, 'unlockedPacks': [..._p.unlockedPacks, pack.id]});
-      _ledger(-pack.priceTickets, 'tickets', 'unlock:${pack.id}', next);
-      return true;
-    }
-    if (_p.coins < pack.priceCoins) return false;
-    final next = _p.coins - pack.priceCoins;
-    await _apply({'coins': next, 'unlockedPacks': [..._p.unlockedPacks, pack.id]});
-    _ledger(-pack.priceCoins, 'coins', 'unlock:${pack.id}', next);
+    final tickets = pack.priceTickets > 0;
+    final price = tickets ? pack.priceTickets : pack.priceCoins;
+    if ((tickets ? _p.tickets : _p.coins) < price) return false;
+    _do(SyncOp.unlock(list: 'unlockedPacks', key: pack.id, currency: tickets ? 'tickets' : 'coins', price: price, reason: 'unlock:${pack.id}'));
     return true;
   }
 
@@ -197,35 +138,22 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
 
   /// Debug-only sandbox toggle. Real VIP comes from verified App Store
   /// subscriptions (`vipExpiresAt`), applied by the verify-purchase function.
-  Future<void> setVip(bool vip) => _apply({'isVip': vip});
+  Future<void> setVip(bool vip) async => _do(SyncOp.put({'isVip': vip}));
 
   /// Records a rewarded video. Returns false when today's allowance is used up.
   Future<bool> consumeAd() async {
-    final p = _p;
-    if (p.adsLeftToday <= 0) return false;
-    final now = DateTime.now();
-    final sameDay = p.adsDate != null && p.adsDate!.year == now.year && p.adsDate!.month == now.month && p.adsDate!.day == now.day;
-    await _apply({'adsToday': (sameDay ? p.adsToday : 0) + 1, 'adsDate': now.toUtc().toIso8601String()});
+    if (_p.adsLeftToday <= 0) return false;
+    _do(SyncOp.ad());
     return true;
   }
 
   /// Claims a finished goal once; rewards are credited immediately and the quest counts towards
-  /// the public "Quests completed" number.
+  /// the public "Quests completed" number. A quest claimed on another device first pays nothing.
   Future<bool> claimGoal(Goal goal) async {
     final p = _p;
     if (!goal.done || p.claimedGoals.contains(goal.key)) return false;
     if (goal.vipOnly && !p.isVip) return false;
-    final claimed = [...p.claimedGoals, goal.key];
-    // Keep the list short: drop keys older than ~3 weeks by trimming length.
-    final trimmed = claimed.length > 60 ? claimed.sublist(claimed.length - 60) : claimed;
-    await _apply({
-      'claimedGoals': trimmed,
-      'questsCompleted': p.questsCompleted + 1,
-      if (goal.coins > 0) 'coins': p.coins + goal.coins,
-      if (goal.tickets > 0) 'tickets': p.tickets + goal.tickets,
-    });
-    if (goal.coins > 0) _ledger(goal.coins, 'coins', 'goal:${goal.key}', p.coins + goal.coins);
-    if (goal.tickets > 0) _ledger(goal.tickets, 'tickets', 'goal:${goal.key}', p.tickets + goal.tickets);
+    _do(SyncOp.quest(goal.key, coins: goal.coins, tickets: goal.tickets));
     return true;
   }
 
@@ -233,14 +161,11 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
   /// the player is not VIP or already got this week's bonus).
   Future<int> claimVipWeeklyBonus() async {
     final p = _p;
-    if (!p.isVip || p.id == 'local') return 0;
+    if (!p.isVip || p.id == SyncController.local) return 0;
     final key = Goals.vipBonusKey(DateTime.now());
     if (p.claimedGoals.contains(key)) return 0;
-    final claimed = [...p.claimedGoals, key];
-    final trimmed = claimed.length > 60 ? claimed.sublist(claimed.length - 60) : claimed;
     const bonus = Goals.vipWeeklyBonus;
-    await _apply({'claimedGoals': trimmed, 'coins': p.coins + bonus});
-    _ledger(bonus, 'coins', 'vip-weekly', p.coins + bonus);
+    _do(SyncOp.vipBonus(key, bonus));
     return bonus;
   }
 
@@ -254,15 +179,7 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
     final streak = consecutive ? p.streak + 1 : 1;
     final day = (streak - 1) % 7;
     final r = Economy.dailyRewards[day];
-    await _apply({
-      'coins': p.coins + r.coins,
-      'tickets': p.tickets + r.tickets,
-      'hints': p.hints + r.hints,
-      'streak': streak,
-      'longestStreak': max(p.longestStreak, streak),
-      'lastDailyClaim': now.toUtc().toIso8601String(),
-    });
-    _ledger(r.coins, 'coins', 'daily:day${day + 1}', p.coins + r.coins);
+    _do(SyncOp.daily(day: day, coins: r.coins, tickets: r.tickets, hints: r.hints));
     return (coins: r.coins, tickets: r.tickets, hints: r.hints, day: day);
   }
 
@@ -279,8 +196,7 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
     if (!canRestoreStreak) return false;
     final cost = Economy.streakRestoreTickets(p.longestStreak);
     if (p.tickets < cost) return false;
-    await _apply({'tickets': p.tickets - cost, 'streak': p.longestStreak, 'lastStreakRestore': DateTime.now().toUtc().toIso8601String()});
-    _ledger(-cost, 'tickets', 'streak-restore', p.tickets - cost);
+    _do(SyncOp.restoreStreak(cost: cost, target: p.longestStreak));
     return true;
   }
 
@@ -288,99 +204,79 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
   bool hasTier(GameMode mode, int tierIndex) => _p.unlockedTiers.contains('${mode.code}:$tierIndex');
 
   Future<bool> unlockTier(GameMode mode, int tierIndex) async {
-    final p = _p;
     final key = '${mode.code}:$tierIndex';
-    if (p.unlockedTiers.contains(key)) return true;
+    if (_p.unlockedTiers.contains(key)) return true;
     final cost = Economy.tierUnlockCoins(tierIndex);
-    if (p.coins < cost) return false;
-    await _apply({'coins': p.coins - cost, 'unlockedTiers': [...p.unlockedTiers, key]});
-    _ledger(-cost, 'coins', 'tier:$key', p.coins - cost);
+    if (_p.coins < cost) return false;
+    _do(SyncOp.unlock(list: 'unlockedTiers', key: key, price: cost, reason: 'tier:$key'));
     return true;
   }
 
   Future<bool> unlockAvatar(String key, {int cost = Economy.avatarCoins}) async {
-    final p = _p;
-    if (p.unlockedAvatars.contains(key)) return true;
-    if (p.coins < cost) return false;
-    await _apply({'coins': p.coins - cost, 'unlockedAvatars': [...p.unlockedAvatars, key]});
-    _ledger(-cost, 'coins', 'avatar:$key', p.coins - cost);
+    if (_p.unlockedAvatars.contains(key)) return true;
+    if (_p.coins < cost) return false;
+    _do(SyncOp.unlock(list: 'unlockedAvatars', key: key, price: cost, reason: 'avatar:$key'));
     return true;
   }
 
   /// Grants an avatar for free (achievement reward).
   Future<void> grantAvatar(String key) async {
-    final p = _p;
-    if (p.unlockedAvatars.contains(key)) return;
-    await _apply({'unlockedAvatars': [...p.unlockedAvatars, key]});
+    if (_p.unlockedAvatars.contains(key)) return;
+    _do(SyncOp.unlock(list: 'unlockedAvatars', key: key));
   }
 
   Future<bool> claimAchievement(String stepKey, {int coins = 0, int tickets = 0, String? avatar}) async {
-    final p = _p;
-    if (p.claimedAchievements.contains(stepKey)) return false;
-    final avatars = avatar != null && !p.unlockedAvatars.contains(avatar) ? [...p.unlockedAvatars, avatar] : p.unlockedAvatars;
-    await _apply({
-      'claimedAchievements': [...p.claimedAchievements, stepKey],
-      if (coins > 0) 'coins': p.coins + coins,
-      if (tickets > 0) 'tickets': p.tickets + tickets,
-      'unlockedAvatars': avatars,
-    });
-    if (coins > 0) _ledger(coins, 'coins', 'achievement:$stepKey', p.coins + coins);
-    if (tickets > 0) _ledger(tickets, 'tickets', 'achievement:$stepKey', p.tickets + tickets);
+    if (_p.claimedAchievements.contains(stepKey)) return false;
+    _do(SyncOp.achievement(stepKey, coins: coins, tickets: tickets, avatar: avatar));
     return true;
   }
 
-  Future<void> markWheelSpun() => _apply({'lastWheelSpin': DateTime.now().toUtc().toIso8601String()});
+  Future<void> markWheelSpun() async => _do(SyncOp.put({'lastWheelSpin': DateTime.now().toUtc().toIso8601String()}));
 
   Future<bool> openPiggy() async {
     final p = _p;
     if (p.tickets < Economy.piggyOpenTickets || p.piggyCoins <= 0) return false;
-    final coins = p.coins + p.piggyCoins;
-    await _apply({'coins': coins, 'tickets': p.tickets - Economy.piggyOpenTickets, 'piggyCoins': 0});
-    _ledger(p.piggyCoins, 'coins', 'piggy', coins);
+    _do(SyncOp.piggy(amount: p.piggyCoins, tickets: Economy.piggyOpenTickets));
     return true;
   }
 
   /// Called when a puzzle is completed; returns the rewards granted. [moves]
   /// and [seconds] are the finishing session's numbers, added to the public
-  /// aggregates on the profile row.
+  /// aggregates on the profile row. [dailyBonus] is paid on top for a first
+  /// solve of the daily puzzle. Level rewards follow the server's XP, so a
+  /// level reached on two devices pays once.
   Future<({int coins, int xp, bool levelUp, int level})> recordCompletion({
+    required String puzzleId,
     required int cells,
     required int stars,
     required bool firstTime,
     GameMode mode = GameMode.cards,
     int moves = 0,
     int seconds = 0,
+    int dailyBonus = 0,
   }) async {
     final p = _p;
-    var coins = Economy.completionCoins(cells, stars, mode: mode);
+    final full = Economy.completionCoins(cells, stars, mode: mode);
+    final replay = (full * Economy.replayCoinShare).round();
     final xpGain = Economy.completionXp(cells, stars, mode: mode);
-    if (!firstTime) coins = (coins * Economy.replayCoinShare).round();
-    final xp = p.xp + xpGain;
-    final level = LevelRewards.levelForXp(xp);
-    final levelUp = level > p.level;
-    var levelBonus = 0, levelTickets = 0, levelHints = 0;
+    final level = LevelRewards.levelForXp(p.xp + xpGain);
+    var levelBonus = 0;
     for (var l = p.level + 1; l <= level; l++) {
-      final r = LevelRewards.forLevel(l);
-      levelBonus += r.coins;
-      levelTickets += r.tickets;
-      levelHints += r.hints;
+      levelBonus += LevelRewards.forLevel(l).coins;
     }
-    final total = p.coins + coins + levelBonus;
-    await _apply({
-      'coins': total,
-      'xp': xp,
-      'level': level,
-      'piggyCoins': min(Profile.piggyCapacity, p.piggyCoins + Economy.piggyPerPuzzle),
-      'puzzlesCompleted': p.puzzlesCompleted + (firstTime ? 1 : 0),
-      'totalStars': p.totalStars + (firstTime ? stars : 0),
-      'totalMoves': p.totalMoves + max(0, moves),
-      'totalSeconds': p.totalSeconds + max(0, seconds),
-      'solvedByMode': jsonEncode({...p.solvedByMode, mode.code: (p.solvedByMode[mode.code] ?? 0) + 1}),
-      if (levelTickets > 0) 'tickets': p.tickets + levelTickets,
-      if (levelHints > 0) 'hints': p.hints + levelHints,
-    });
-    _ledger(coins + levelBonus, 'coins', 'complete', total);
-    return (coins: coins + levelBonus, xp: xpGain, levelUp: levelUp, level: level);
+    _do(SyncOp.solve(
+      puzzleId: puzzleId,
+      first: firstTime,
+      coins: full + dailyBonus,
+      replayCoins: replay,
+      xp: xpGain,
+      stars: stars,
+      mode: mode.code,
+      moves: max(0, moves),
+      seconds: max(0, seconds),
+      piggy: Economy.piggyPerPuzzle,
+    ));
+    return (coins: (firstTime ? full + dailyBonus : replay) + levelBonus, xp: xpGain, levelUp: level > p.level, level: level);
   }
 
   /// Writes the public "Total Completion" numbers ([Profile.picturesSolved] and the rest) when
@@ -390,11 +286,11 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
   Future<void> syncCompletion(CompletionTotals? t) async {
     if (t == null || !ref.mounted) return;
     final p = state.value;
-    if (p == null || p.id == 'local' || state.isLoading || ref.read(progressProvider).isLoading) return;
+    if (p == null || p.id == SyncController.local || state.isLoading || ref.read(progressProvider).isLoading) return;
     if (t.ownerId != null && t.ownerId != p.id) return;
     final current = p.toData();
     final patch = {for (final e in t.publicFields.entries) if (current[e.key] != e.value) e.key: e.value};
-    if (patch.isNotEmpty) await _apply(patch);
+    if (patch.isNotEmpty) _do(SyncOp.put(patch));
   }
 
   /// Start-up repairs for rows from older versions: the completion numbers, and the quest count
@@ -403,26 +299,17 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
     if (!ref.mounted) return;
     await syncCompletion(ref.read(completionTotalsProvider));
     final p = state.value;
-    if (p == null || p.id == 'local' || !ref.mounted) return;
+    if (p == null || p.id == SyncController.local || !ref.mounted) return;
     try {
       final claims = await ref.read(profileRepositoryProvider).questClaims(p.id);
-      if (ref.mounted && claims > _p.questsCompleted && _p.id == p.id) await _apply({'questsCompleted': claims});
+      if (ref.mounted && claims > _p.questsCompleted && _p.id == p.id) _do(SyncOp.questCount(claims));
     } catch (e) {
       debugPrint('quest count failed: $e');
     }
   }
 
-  Future<void> refresh() async {
-    final p = _p;
-    if (p.id == 'local') return;
-    try {
-      final fresh = await ref.read(profileRepositoryProvider).fetch(p.id);
-      if (fresh != null) {
-        state = AsyncData(fresh);
-        _cache(fresh);
-      }
-    } catch (_) {}
-  }
+  /// Reads the save from the server again (pull to refresh).
+  Future<void> refresh() => _sync.sync();
 }
 
 final profileProvider = AsyncNotifierProvider<ProfileNotifier, Profile>(ProfileNotifier.new);

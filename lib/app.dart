@@ -8,9 +8,13 @@ import 'core/platform.dart';
 import 'core/sfx.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/tokens.dart';
+import 'data/purchases.dart';
+import 'features/sync/sync_host.dart';
 import 'router.dart';
 import 'state/catalog.dart';
+import 'state/purchases.dart';
 import 'state/settings.dart';
+import 'state/sync.dart';
 import 'widgets/ui.dart';
 
 class CardJigsawApp extends ConsumerStatefulWidget {
@@ -27,6 +31,13 @@ class _CardJigsawAppState extends ConsumerState<CardJigsawApp> with WidgetsBindi
     WidgetsBinding.instance.addObserver(this);
     ImageFiles.attach(ref.read(storageProvider));
     if (supportsQuickActions) _setUpQuickActions();
+    // Coins and VIP from a purchase on this device arrive through the server; take them in
+    // without the "Synced from another device" alert.
+    if (supportsPurchases) {
+      ref.read(purchaseServiceProvider).events.listen((e) {
+        if (e is PurchaseVerified) ref.read(syncProvider.notifier).sync(silent: true);
+      });
+    }
   }
 
   /// Home Screen long-press menu: "One last game?" opens a playable puzzle.
@@ -56,10 +67,13 @@ class _CardJigsawAppState extends ConsumerState<CardJigsawApp> with WidgetsBindi
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    // On the web, resumed and inactive also follow the tab's focus.
     if (state == AppLifecycleState.resumed) {
       if (ref.read(settingsProvider).music) Sfx.instance.startMusic();
-    } else if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
+      ref.read(syncProvider.notifier).onResume();
+    } else if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive || state == AppLifecycleState.hidden) {
       Sfx.instance.stopMusic();
+      ref.read(syncProvider.notifier).onPause();
     }
   }
 
@@ -85,7 +99,7 @@ class _CardJigsawAppState extends ConsumerState<CardJigsawApp> with WidgetsBindi
         final host = Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.transparent,
-          body: ScaffoldMessenger(child: child!),
+          body: ScaffoldMessenger(child: SyncHost(child: child!)),
         );
         final data = mq.copyWith(textScaler: mq.textScaler.clamp(minScaleFactor: 0.9, maxScaleFactor: 1.2));
         if (!ref.watch(platformCapsProvider).isWeb) return MediaQuery(data: data, child: host);

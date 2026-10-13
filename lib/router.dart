@@ -20,12 +20,13 @@ import 'features/social/social_screen.dart';
 import 'features/store/store_screen.dart';
 import 'state/settings.dart';
 
-final _rootKey = GlobalKey<NavigatorState>();
+/// The app's root navigator (alerts and sheets raised outside a screen, e.g. by the save sync).
+final rootNavigatorKey = GlobalKey<NavigatorState>();
 
 final routerProvider = Provider<GoRouter>((ref) {
   final onboarded = ref.watch(settingsProvider.select((s) => s.onboarded));
   return GoRouter(
-    navigatorKey: _rootKey,
+    navigatorKey: rootNavigatorKey,
     initialLocation: onboarded ? '/home' : '/welcome',
     // Unknown paths (typed URLs on web, stale links) land on Home instead of
     // the framework's error page. `/auth/callback` is reserved for the
@@ -72,19 +73,19 @@ final routerProvider = Provider<GoRouter>((ref) {
       // Full-screen routes above the tab shell.
       GoRoute(
         path: '/play/:puzzleId',
-        parentNavigatorKey: _rootKey,
+        parentNavigatorKey: rootNavigatorKey,
         pageBuilder: (c, s) => _cupertino(DifficultyScreen(puzzleId: s.pathParameters['puzzleId']!, initialGrid: s.uri.queryParameters['grid'], initialMode: s.uri.queryParameters['mode']), s),
       ),
       GoRoute(
         path: '/game/:puzzleId/:grid', // :grid is a BoardCode path form, e.g. hexagons-5x6 or 4x4 (cards)
-        parentNavigatorKey: _rootKey,
+        parentNavigatorKey: rootNavigatorKey,
         pageBuilder: (c, s) => _fade(GameScreen(puzzleId: s.pathParameters['puzzleId']!, gridCode: s.pathParameters['grid']!), s),
       ),
-      GoRoute(path: '/store', parentNavigatorKey: _rootKey, pageBuilder: (c, s) => _sheet(StoreScreen(showVip: s.uri.queryParameters['vip'] == '1'), s)),
-      GoRoute(path: '/wheel', parentNavigatorKey: _rootKey, pageBuilder: (c, s) => _sheet(const WheelScreen(), s)),
-      GoRoute(path: '/account', parentNavigatorKey: _rootKey, pageBuilder: (c, s) => _sheet(const AccountScreen(), s)),
-      GoRoute(path: '/auth/callback', parentNavigatorKey: _rootKey, pageBuilder: (c, s) => _fade(AuthCallbackScreen(query: s.uri.queryParameters), s)),
-      GoRoute(path: '/player/:userId', parentNavigatorKey: _rootKey, pageBuilder: (c, s) => _cupertino(PlayerScreen(userId: s.pathParameters['userId']!), s)),
+      GoRoute(path: '/store', parentNavigatorKey: rootNavigatorKey, pageBuilder: (c, s) => _sheet(StoreScreen(showVip: s.uri.queryParameters['vip'] == '1'), s)),
+      GoRoute(path: '/wheel', parentNavigatorKey: rootNavigatorKey, pageBuilder: (c, s) => _sheet(const WheelScreen(), s)),
+      GoRoute(path: '/account', parentNavigatorKey: rootNavigatorKey, pageBuilder: (c, s) => _sheet(const AccountScreen(), s)),
+      GoRoute(path: '/auth/callback', parentNavigatorKey: rootNavigatorKey, pageBuilder: (c, s) => _fade(AuthCallbackScreen(query: s.uri.queryParameters), s)),
+      GoRoute(path: '/player/:userId', parentNavigatorKey: rootNavigatorKey, pageBuilder: (c, s) => _cupertino(PlayerScreen(userId: s.pathParameters['userId']!), s)),
     ],
   );
 });

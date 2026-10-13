@@ -132,19 +132,18 @@ void main() {
     final progress = c.read(progressProvider.notifier);
     final easySquares = BoardSpec.tiers(GameMode.squares)[1];
     var minute = 0;
-    Future<void> solve(Puzzle z, int stars, {GameMode mode = GameMode.cards, int? cells}) => progress.save(z.id, {
-          'gridSize': cells ?? 16,
-          'mode': mode.code,
-          'layout': '',
-          'moves': 30,
-          'elapsedSeconds': 90,
-          'hintsUsed': 0,
-          'completed': true,
-          'stars': stars,
-          'bestMoves': 30,
-          'bestSeconds': 90,
-          'completedAt': DateTime.now().subtract(Duration(minutes: 300 - minute++)).toUtc().toIso8601String(),
-        });
+    Future<void> solve(Puzzle z, int stars, {GameMode mode = GameMode.cards, int? cells}) async => progress.complete(
+          z.id,
+          gridSize: cells ?? 16,
+          mode: mode.code,
+          moves: 30,
+          seconds: 90,
+          hints: 0,
+          stars: stars,
+          session: 'qa-${z.id}',
+          resumed: false,
+          at: DateTime.now().subtract(Duration(minutes: 300 - minute++)),
+        );
     for (final z in of(perfect)) {
       await solve(z, 3);
     }

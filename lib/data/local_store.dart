@@ -49,6 +49,10 @@ class LocalStore {
   String? get lastCreativeId => _prefs.getString('lastCreativeId');
   set lastCreativeId(String? v) => v == null ? _prefs.remove('lastCreativeId') : _prefs.setString('lastCreativeId', v);
 
+  // ---- small values ----
+  String? getText(String key) => _prefs.getString(key);
+  Future<void> setText(String key, String value) => _prefs.setString(key, value);
+
   // ---- caches ----
   Map<String, dynamic>? getJson(String key) {
     final raw = _prefs.getString(key);

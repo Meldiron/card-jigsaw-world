@@ -146,19 +146,7 @@ void main() {
     final finished = library.first, begun = library.last;
     debugPrint('library QA: finished ${finished.id} "${finished.name}" (${of(finished).length}), begun ${begun.id} "${begun.name}"');
     final progress = c.read(progressProvider.notifier);
-    Future<void> solve(Puzzle z) => progress.save(z.id, {
-          'gridSize': 9,
-          'mode': 'cards',
-          'layout': '',
-          'moves': 12,
-          'elapsedSeconds': 60,
-          'hintsUsed': 0,
-          'completed': true,
-          'stars': 3,
-          'bestMoves': 12,
-          'bestSeconds': 60,
-          'completedAt': DateTime.now().toUtc().toIso8601String(),
-        });
+    Future<void> solve(Puzzle z) async => progress.complete(z.id, gridSize: 9, mode: 'cards', moves: 12, seconds: 60, hints: 0, stars: 3, session: 'qa-${z.id}', resumed: false);
     for (final z in of(finished)) {
       await solve(z);
     }

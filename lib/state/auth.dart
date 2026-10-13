@@ -1,9 +1,10 @@
 import 'package:appwrite/models.dart' as models;
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show debugPrint, kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/qa.dart';
 import '../data/repositories.dart';
+import 'settings.dart';
 
 /// Holds the current Appwrite user. A guest (anonymous) session is created
 /// automatically so players can start immediately and link an email later.
@@ -16,18 +17,63 @@ class AuthNotifier extends AsyncNotifier<models.User?> {
     try {
       final user = await repo.currentUser();
       // A QA build reusing a guest from an earlier run marks it too (no-op in release builds).
-      if (user != null) return await repo.markQaGuest(user);
+      if (user != null) return _remember(await repo.markQaGuest(user));
       // The web OAuth callback is about to create the real session; a
       // throwaway guest here would only get in its way.
       if (isOAuthCallback) return null;
-      return await repo.signInAnonymously();
+      return _remember(await repo.signInAnonymously());
     } catch (e) {
-      // Offline or backend unreachable: continue as a local guest.
-      return null;
+      // Offline or backend unreachable: keep playing as the player this device last saw (the
+      // session itself is stored by the SDK, so requests work again once the server answers).
+      // A device that never reached the server plays without an account until it does.
+      _offline = true;
+      return _remembered();
     }
   }
 
   AuthRepository get _repo => ref.read(authRepositoryProvider);
+
+  static const _userKey = 'authUser';
+
+  /// The user came from the device's copy because the server did not answer.
+  bool _offline = false;
+
+  models.User _remember(models.User user) {
+    _offline = false;
+    ref.read(localStoreProvider).setJson(_userKey, user.toMap());
+    return user;
+  }
+
+  models.User? _remembered() {
+    final j = ref.read(localStoreProvider).getJson(_userKey);
+    if (j == null) return null;
+    try {
+      return models.User.fromMap(j);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Called when the connection may be back (or, with [force], when the server refused the
+  /// session): confirms the remembered player, or makes the guest a device that started without a
+  /// connection never got. The state changes only when the player does, so screens do not reload
+  /// for nothing. A session that is gone is left for the next start (as before).
+  Future<void> reconnect({bool force = false}) async {
+    final current = state.value;
+    if (current != null && !_offline && !force) return;
+    try {
+      final user = await _repo.currentUser();
+      if (user != null) {
+        _remember(user);
+        if (user.$id != current?.$id) state = AsyncData(user);
+        return;
+      }
+      if (isOAuthCallback || current != null) return;
+      state = AsyncData(_remember(await _repo.signInAnonymously()));
+    } catch (e) {
+      debugPrint('reconnect failed: $e');
+    }
+  }
 
   /// True while the web app is loading on `/auth/callback` (path or hash routing).
   static bool get isOAuthCallback => kIsWeb && (Uri.base.path.contains('/auth/callback') || Uri.base.fragment.contains('/auth/callback'));
@@ -38,14 +84,14 @@ class AuthNotifier extends AsyncNotifier<models.User?> {
     final user = isAnon
         ? await _repo.linkAnonymous(email: email, password: password, name: name)
         : await _repo.signUp(email: email, password: password, name: name);
-    state = AsyncData(user);
+    state = AsyncData(_remember(user));
   }
 
   Future<void> signIn({required String email, required String password}) async {
     // If we are a guest, end that session first.
     await _repo.signOut();
     final user = await _repo.signIn(email: email, password: password);
-    state = AsyncData(user);
+    state = AsyncData(_remember(user));
   }
 
   /// Native Sign in with Apple: the credential comes from the system sheet,
@@ -55,7 +101,7 @@ class AuthNotifier extends AsyncNotifier<models.User?> {
   /// (the guest progress on this device is left behind in that case).
   Future<bool> signInWithApple({required String idToken, required String nonce, String? name}) async {
     final result = await _repo.signInWithAppleIdToken(idToken: idToken, nonce: nonce, name: name);
-    state = AsyncData(result.user);
+    state = AsyncData(_remember(result.user));
     return result.switched;
   }
 
@@ -66,7 +112,7 @@ class AuthNotifier extends AsyncNotifier<models.User?> {
     // whatever session is here (the guest, or a stale one) is being replaced.
     await _repo.signOut();
     final user = await _repo.createSessionFromToken(userId: userId, secret: secret);
-    state = AsyncData(user);
+    state = AsyncData(_remember(user));
     return user;
   }
 
@@ -80,21 +126,21 @@ class AuthNotifier extends AsyncNotifier<models.User?> {
   Future<void> signOut() async {
     await _repo.signOut();
     state = const AsyncLoading();
-    state = AsyncData(await _repo.signInAnonymously());
+    state = AsyncData(_remember(await _repo.signInAnonymously()));
   }
 
   Future<void> retry() async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       final user = await _repo.currentUser();
-      return user ?? await _repo.signInAnonymously();
+      return _remember(user ?? await _repo.signInAnonymously());
     });
   }
 
   Future<void> updateName(String name) async {
     await _repo.updateName(name);
     final user = await _repo.currentUser();
-    if (user != null) state = AsyncData(user);
+    if (user != null) state = AsyncData(_remember(user));
   }
 }
 

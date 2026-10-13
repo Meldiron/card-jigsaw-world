@@ -96,11 +96,8 @@ void main() {
     final free = packs.where((p) => p.isFree && !p.hasWindow && !p.isDaily && of(p).length >= 2).toList()..sort((a, b) => of(a).length.compareTo(of(b).length));
     final full = free.first, partial = free[1];
     Future<void> solve(Puzzle z, int stars) async {
-      await c.read(progressProvider.notifier).save(z.id, {
-        'gridSize': 16, 'mode': 'cards', 'layout': '', 'moves': 20, 'elapsedSeconds': 40, 'hintsUsed': 0,
-        'completed': true, 'stars': stars, 'bestMoves': 20, 'bestSeconds': 40, 'completedAt': DateTime.now().toUtc().toIso8601String(),
-      });
-      await c.read(profileProvider.notifier).recordCompletion(cells: 16, stars: stars, firstTime: true, moves: 20, seconds: 40);
+      c.read(progressProvider.notifier).complete(z.id, gridSize: 16, mode: 'cards', moves: 20, seconds: 40, hints: 0, stars: stars, session: 'qa-${z.id}', resumed: false);
+      await c.read(profileProvider.notifier).recordCompletion(puzzleId: z.id, cells: 16, stars: stars, firstTime: true, moves: 20, seconds: 40);
     }
 
     for (final z in of(full)) {

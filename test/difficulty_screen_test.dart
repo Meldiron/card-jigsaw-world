@@ -8,8 +8,7 @@ import 'package:card_jigsaw_world/features/game/difficulty_screen.dart';
 import 'package:card_jigsaw_world/game/board.dart';
 import 'package:card_jigsaw_world/models/models.dart';
 import 'package:card_jigsaw_world/state/auth.dart';
-import 'package:card_jigsaw_world/state/profile.dart';
-import 'package:card_jigsaw_world/state/progress.dart';
+import 'package:card_jigsaw_world/state/catalog.dart';
 import 'package:card_jigsaw_world/state/settings.dart';
 import 'package:card_jigsaw_world/state/social.dart';
 import 'package:flutter/material.dart';
@@ -18,21 +17,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'support/seed_save.dart';
+
 class _NoAuth extends AuthNotifier {
   @override
   Future<models.User?> build() async => null;
-}
-
-class _GuestProfile extends ProfileNotifier {
-  @override
-  Future<Profile> build() async => Profile.guest('local');
-}
-
-class _SavedProgress extends ProgressNotifier {
-  _SavedProgress(this.rows);
-  final Map<String, PuzzleProgress> rows;
-  @override
-  Future<Map<String, PuzzleProgress>> build() async => rows;
 }
 
 /// The pre-game screen offline: the rewards row lays out at 320 pt without
@@ -49,16 +38,17 @@ void main() {
     tester.view.physicalSize = Size(width, height);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
-    SharedPreferences.setMockInitialValues({});
+    SharedPreferences.setMockInitialValues(seededSave(progress: {for (final e in progress.entries) e.key: e.value.toData()}));
     final store = await LocalStore.open();
     final key = GlobalKey();
     await tester.pumpWidget(ProviderScope(
       overrides: [
         localStoreProvider.overrideWithValue(store),
         authProvider.overrideWith(_NoAuth.new),
-        profileProvider.overrideWith(_GuestProfile.new),
-        progressProvider.overrideWith(() => _SavedProgress(progress)),
         resolvedPuzzleProvider.overrideWith((ref, id) => Puzzle.custom(id: id, title: 'Test picture', imageUrl: '')),
+        // Offline: the catalogue is empty instead of a network call.
+        packsProvider.overrideWith((ref) async => const <Pack>[]),
+        allPuzzlesProvider.overrideWith((ref) async => const <Puzzle>[]),
       ],
       child: RepaintBoundary(
         key: key,

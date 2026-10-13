@@ -8,6 +8,8 @@ import '../state/rewards.dart';
 int _i(dynamic v, [int d = 0]) => v is num ? v.toInt() : (v is String ? int.tryParse(v) ?? d : d);
 String _s(dynamic v, [String d = '']) => v?.toString() ?? d;
 bool _b(dynamic v, [bool d = false]) => v is bool ? v : d;
+/// A list column without duplicates (two devices can append the same key before it is tidied).
+List<String> _strings(dynamic v) => v is List ? {for (final e in v) e.toString()}.toList() : <String>[];
 /// Parses a date-only value without shifting the day through time zones.
 DateTime? _dateOnly(dynamic v) {
   if (v == null || v.toString().isEmpty) return null;
@@ -154,21 +156,21 @@ class Profile {
         streak: _i(d['streak']),
         lastDailyClaim: _dt(d['lastDailyClaim']),
         lastWheelSpin: _dt(d['lastWheelSpin']),
-        unlockedPacks: List<String>.from(d['unlockedPacks'] ?? const []),
+        unlockedPacks: _strings(d['unlockedPacks']),
         puzzlesCompleted: _i(d['puzzlesCompleted']),
         totalStars: _i(d['totalStars']),
         country: d['country']?.toString(),
         isVip: _b(d['isVip']),
         vipExpiresAt: _dt(d['vipExpiresAt']),
         appleOriginalTransactionId: d['appleOriginalTransactionId']?.toString(),
-        claimedGoals: List<String>.from(d['claimedGoals'] ?? const []),
+        claimedGoals: _strings(d['claimedGoals']),
         adsToday: _i(d['adsToday']),
         adsDate: _dt(d['adsDate']),
-        unlockedTiers: List<String>.from(d['unlockedTiers'] ?? const []),
-        unlockedAvatars: List<String>.from(d['unlockedAvatars'] ?? const []),
+        unlockedTiers: _strings(d['unlockedTiers']),
+        unlockedAvatars: _strings(d['unlockedAvatars']),
         longestStreak: _i(d['longestStreak']),
         lastStreakRestore: _dt(d['lastStreakRestore']),
-        claimedAchievements: List<String>.from(d['claimedAchievements'] ?? const []),
+        claimedAchievements: _strings(d['claimedAchievements']),
         totalMoves: _i(d['totalMoves']),
         totalSeconds: _i(d['totalSeconds']),
         solvedByMode: _modeCounts(d['solvedByMode']),
@@ -529,6 +531,7 @@ class PuzzleProgress {
     this.totalMoves = 0,
     this.totalSeconds = 0,
     this.totalHints = 0,
+    this.session = '',
   });
 
   final String id;
@@ -552,6 +555,10 @@ class PuzzleProgress {
   final int totalSeconds;
   final int totalHints;
 
+  /// The play-through the saved board belongs to (empty on rows from older versions and after a
+  /// discard). Lifetime totals replace a session's earlier numbers and add up across sessions.
+  final String session;
+
   factory PuzzleProgress.fromRow(String id, Map<String, dynamic> d) {
     List<int>? layout;
     final raw = d['layout']?.toString();
@@ -567,7 +574,9 @@ class PuzzleProgress {
       moves: _i(d['moves']),
       elapsedSeconds: _i(d['elapsedSeconds']),
       hintsUsed: _i(d['hintsUsed']),
-      completed: _b(d['completed']),
+      // Solved stays solved: older versions wrote `completed: false` while a solved picture was
+      // replayed, and only a finish ever sets the finish time.
+      completed: _b(d['completed']) || _dt(d['completedAt']) != null,
       stars: _i(d['stars']),
       bestMoves: d['bestMoves'] == null ? null : _i(d['bestMoves']),
       bestSeconds: d['bestSeconds'] == null ? null : _i(d['bestSeconds']),
@@ -576,6 +585,7 @@ class PuzzleProgress {
       totalMoves: max(_i(d['totalMoves']), _i(d['moves'])),
       totalSeconds: max(_i(d['totalSeconds']), _i(d['elapsedSeconds'])),
       totalHints: max(_i(d['totalHints']), _i(d['hintsUsed'])),
+      session: _s(d['session']),
     );
   }
 
@@ -597,9 +607,11 @@ class PuzzleProgress {
         'totalMoves': totalMoves,
         'totalSeconds': totalSeconds,
         'totalHints': totalHints,
+        'session': session,
       };
 
-  bool get inProgress => !completed && layout != null && layout!.isNotEmpty;
+  /// A board is saved (a first play or a replay of a solved picture).
+  bool get inProgress => layout != null && layout!.isNotEmpty;
 }
 
 enum EventType { seasonal, social, weekly, daily }

@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/platform.dart';
 import '../../core/theme/tokens.dart';
 import '../../state/auth.dart';
-import '../../state/profile.dart';
+import '../../state/sync.dart';
 import '../../state/purchases.dart';
 import '../../state/settings.dart';
 import '../../data/purchases.dart';
@@ -99,7 +99,7 @@ class SettingsScreen extends ConsumerWidget {
                 final sub = service.events.listen((e) {
                   if (!context.mounted) return;
                   if (e is RestoreFinished) {
-                    ref.read(profileProvider.notifier).refresh();
+                    ref.read(syncProvider.notifier).sync(silent: true);
                     showToast(context, e.count > 0 ? 'Purchases restored' : 'No purchases to restore', icon: AppIcons.receipt);
                   } else if (e is PurchaseFailed) {
                     showToast(context, e.message, icon: AppIcons.receipt);

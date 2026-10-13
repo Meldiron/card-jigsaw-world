@@ -7,13 +7,13 @@ import 'package:card_jigsaw_world/models/models.dart';
 import 'package:card_jigsaw_world/state/achievements.dart';
 import 'package:card_jigsaw_world/state/auth.dart';
 import 'package:card_jigsaw_world/state/catalog.dart';
-import 'package:card_jigsaw_world/state/profile.dart';
-import 'package:card_jigsaw_world/state/progress.dart';
 import 'package:card_jigsaw_world/state/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'support/seed_save.dart';
 
 AchievementFamily _family(String id, List<int> thresholds) => AchievementFamily(
       id: id,
@@ -30,20 +30,6 @@ AchievementStatus _status(String id, {required List<int> thresholds, required in
 class _NoAuth extends AuthNotifier {
   @override
   Future<models.User?> build() async => null;
-}
-
-class _Player extends ProfileNotifier {
-  _Player(this.profile);
-  final Profile profile;
-  @override
-  Future<Profile> build() async => profile;
-}
-
-class _Rows extends ProgressNotifier {
-  _Rows(this.rows);
-  final Map<String, PuzzleProgress> rows;
-  @override
-  Future<Map<String, PuzzleProgress>> build() async => rows;
 }
 
 void main() {
@@ -110,33 +96,20 @@ void main() {
     tester.view.physicalSize = const Size(520, 7000);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
-    SharedPreferences.setMockInitialValues({});
-    final store = await LocalStore.open();
-
     // 6000 coins: Well Off (hold 5000) is ready. VIP and Piggy Breaker are
     // fully claimed. Twelve three-star solves make several tiers ready.
-    final profile = Profile.fromRow('local', {
-      'userId': 'local',
-      'coins': 6000,
-      'claimedAchievements': ['vip:1', 'piggy:1'],
-    });
-    final rows = {
-      for (var i = 1; i <= 12; i++)
-        'pack${i % 3}-$i': PuzzleProgress.fromRow('r$i', {
-          'userId': 'local',
-          'puzzleId': 'pack${i % 3}-$i',
-          'gridSize': 16,
-          'completed': true,
-          'stars': 3,
-        }),
-    };
+    SharedPreferences.setMockInitialValues(seededSave(
+      profile: {'coins': 6000, 'claimedAchievements': ['vip:1', 'piggy:1']},
+      progress: {
+        for (var i = 1; i <= 12; i++) 'pack${i % 3}-$i': {'gridSize': 16, 'completed': true, 'stars': 3},
+      },
+    ));
+    final store = await LocalStore.open();
     final visible = ValueNotifier(true);
     await tester.pumpWidget(ProviderScope(
       overrides: [
         localStoreProvider.overrideWithValue(store),
         authProvider.overrideWith(_NoAuth.new),
-        profileProvider.overrideWith(() => _Player(profile)),
-        progressProvider.overrideWith(() => _Rows(rows)),
         // Offline: the catalogue is empty instead of a network call.
         packsProvider.overrideWith((ref) async => const <Pack>[]),
         allPuzzlesProvider.overrideWith((ref) async => const <Puzzle>[]),

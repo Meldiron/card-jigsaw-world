@@ -60,8 +60,9 @@ class SaveSnapshot {
     return best;
   }
 
-  /// A save with almost nothing in it is not worth asking about.
-  bool get isTrivial => solved < 3 && xp < 200;
+  /// A save with almost nothing in it is not worth asking about: few pictures, little XP and no
+  /// more Coins, Tickets or Hints than a new player gets in the first days (bought ones count).
+  bool get isTrivial => solved < 3 && xp < 200 && coins <= 650 && tickets <= 5 && hints <= 5;
 
   Map<String, dynamic> toJson() => {
         'userId': userId,
@@ -89,13 +90,22 @@ bool dominates(SaveSnapshot x, SaveSnapshot y) {
 }
 
 /// Decides the scalar parts. The account wins ties, so a player who signs in
-/// on a fresh install never sees a question.
+/// on a fresh install never sees a question. Coins, Tickets and Hints come
+/// from one save only, so when the save that would be dropped holds more of
+/// any of them (bought ones, say), the player chooses.
 MergeDecision decide({required SaveSnapshot guest, required SaveSnapshot account}) {
   if (guest.isTrivial) return MergeDecision.keepAccount;
   if (account.isTrivial) return MergeDecision.keepGuest;
-  if (dominates(account, guest)) return MergeDecision.keepAccount;
-  if (dominates(guest, account)) return MergeDecision.keepGuest;
-  return MergeDecision.ask;
+  final auto = dominates(account, guest)
+      ? MergeDecision.keepAccount
+      : dominates(guest, account)
+          ? MergeDecision.keepGuest
+          : MergeDecision.ask;
+  if (auto == MergeDecision.ask) return auto;
+  final kept = auto == MergeDecision.keepAccount ? account : guest;
+  final dropped = auto == MergeDecision.keepAccount ? guest : account;
+  if (dropped.coins > kept.coins || dropped.tickets > kept.tickets || dropped.hints > kept.hints) return MergeDecision.ask;
+  return auto;
 }
 
 /// Keys of the profile that are copied as a block from the chosen save.

@@ -12,19 +12,23 @@ import 'package:go_router/go_router.dart';
 import '../../core/haptics.dart';
 import '../../core/sfx.dart';
 import '../../core/theme/tokens.dart';
+import '../../data/sync/ops.dart';
 import '../../game/board.dart';
 import '../../game/game_controller.dart';
 import '../../game/image_loader.dart';
 import '../../models/models.dart';
+import '../../router.dart' show rootNavigatorKey;
 import '../../state/catalog.dart';
 import '../../state/profile.dart';
 import '../../state/progress.dart';
 import '../../state/settings.dart';
 import '../../state/social.dart';
+import '../../state/sync.dart';
 import '../../widgets/hash_image.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 import '../ads/house_ads.dart';
+import '../sync/board_choice_sheet.dart';
 import 'board_widget.dart';
 
 /// The play screen: HUD, board, booster bar, pause and completion overlays.
@@ -52,12 +56,26 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   bool _showTutorial = false;
   int _chainFlash = 0;
 
+  /// The play-through being saved (lifetime totals add up per play-through), and whether it
+  /// continues the board that was saved for the picture.
+  String _playId = SyncOp.newId();
+  bool _resumed = false;
+  StreamSubscription<BoardUpdate>? _boardSub;
+  bool _askingBoard = false;
+
+  /// Each screen counts its sessions from its own base: a screen that replaces another one for the
+  /// same picture and board (another device's board reopened) must not get the old screen's
+  /// controller, which is still alive while the two swap.
+  static int _screens = 0;
+  final int _base = 1000 * ++_screens;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _args = _argsFor(_spec, resume: true);
+    _args = _argsFor(_spec, resume: true, session: _base);
     _showTutorial = !ref.read(settingsProvider).tutorialSeen;
+    _boardSub = ref.read(syncProvider.notifier).boardUpdates.listen(_onBoardUpdate);
     WidgetsBinding.instance.addPostFrameCallback((_) => _listen());
   }
 
@@ -66,6 +84,8 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   GameArgs _argsFor(BoardSpec spec, {required bool resume, int session = 0}) {
     final existing = ref.read(puzzleProgressProvider(widget.puzzleId));
     final ok = resume && existing != null && existing.inProgress && existing.gridSize == spec.cells && existing.mode == spec.mode.code;
+    _resumed = ok;
+    _playId = ok && existing.session.isNotEmpty ? existing.session : SyncOp.newId();
     return GameArgs(
       puzzleId: widget.puzzleId,
       spec: spec,
@@ -117,6 +137,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _sub?.cancel();
+    _boardSub?.cancel();
     _saveDebounce?.cancel();
     _confetti.dispose();
     super.dispose();
@@ -176,15 +197,79 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     if (_args == null || !mounted || !_fitted) return;
     final s = ref.read(gameControllerProvider(_args!));
     if (s.status == GameStatus.won) return;
-    ref.read(progressProvider.notifier).save(widget.puzzleId, {
+    ref.read(progressProvider.notifier).saveBoard(
+      widget.puzzleId,
+      gridSize: _spec.cells,
+      mode: _spec.mode.code,
+      layout: s.board.slots,
+      moves: s.moves,
+      seconds: s.elapsed,
+      hints: s.hintsUsed,
+      session: _playId,
+      resumed: _resumed,
+    );
+  }
+
+  /// Another device changed this picture's board while it is open here.
+  Future<void> _onBoardUpdate(BoardUpdate u) async {
+    if (u.puzzleId != widget.puzzleId || !mounted || !_fitted || _args == null || _askingBoard) return;
+    final s = ref.read(gameControllerProvider(_args!));
+    if (s.status == GameStatus.won) return;
+    // Already the board on screen (this device's own save coming back).
+    if (u.after.layout?.join(',') == s.board.slots.join(',')) return;
+    if (u.chosen) {
+      _openSaved(u.after);
+      return;
+    }
+    if (u.continued) {
+      // The player went on with this same board elsewhere: its newer state replaces this one.
+      _openSaved(u.after);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final ctx = rootNavigatorKey.currentContext;
+        if (ctx == null || !ctx.mounted) return;
+        showAppAlert(
+          ctx,
+          title: 'Board updated',
+          message: 'You played this picture on another device. Its newer board is loaded here.',
+          confirmLabel: 'Continue',
+          cancelLabel: null,
+        );
+      });
+      return;
+    }
+    _askingBoard = true;
+    _ctrl.pause();
+    final here = PuzzleProgress.fromRow('', {
+      'puzzleId': widget.puzzleId,
       'gridSize': _spec.cells,
       'mode': _spec.mode.code,
       'layout': s.board.slots.join(','),
       'moves': s.moves,
       'elapsedSeconds': s.elapsed,
-      'hintsUsed': s.hintsUsed,
-      'completed': false,
     });
+    final title = ref.read(resolvedPuzzleProvider(widget.puzzleId))?.title;
+    final choice = await showBoardChoiceSheet(context, title: title, device: here, other: u.after);
+    _askingBoard = false;
+    if (!mounted) return;
+    if (choice == BoardChoice.other) {
+      _openSaved(u.after);
+    } else {
+      _ctrl.resume();
+      _saveNow();
+    }
+  }
+
+  /// A new play-through (restart, replay): its moves and time add to the picture's totals.
+  void _newPlay() {
+    _playId = SyncOp.newId();
+    _resumed = false;
+  }
+
+  /// Reopens the picture on the board saved for it (another device's).
+  void _openSaved(PuzzleProgress p) {
+    _saveDebounce?.cancel();
+    final spec = BoardSpec.fromCells(GameMode.fromCode(p.mode), p.gridSize);
+    context.pushReplacement('/game/${widget.puzzleId}/${BoardCode.toPath(spec.fullCode)}');
   }
 
   Future<void> _onWin() async {
@@ -198,32 +283,32 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     final existing = ref.read(puzzleProgressProvider(widget.puzzleId));
     final firstTime = existing?.completed != true;
     final stars = s.stars;
-    final bestMoves = existing?.bestMoves == null ? s.moves : math.min(existing!.bestMoves!, s.moves);
-    final bestSeconds = existing?.bestSeconds == null ? s.elapsed : math.min(existing!.bestSeconds!, s.elapsed);
     final puzzle = ref.read(resolvedPuzzleProvider(widget.puzzleId));
     final daily = ref.read(dailyPuzzleProvider);
-    await ref.read(progressProvider.notifier).save(widget.puzzleId, {
-      'gridSize': _spec.cells,
-      'mode': _spec.mode.code,
-      'layout': '',
-      'moves': s.moves,
-      'elapsedSeconds': s.elapsed,
-      'hintsUsed': s.hintsUsed,
-      'completed': true,
-      'stars': math.max(stars, existing?.stars ?? 0),
-      'bestMoves': bestMoves,
-      'bestSeconds': bestSeconds,
-      'completedAt': DateTime.now().toUtc().toIso8601String(),
-    });
-    final reward = await ref.read(profileProvider.notifier).recordCompletion(cells: _spec.cells, stars: stars, firstTime: firstTime, mode: _spec.mode, moves: s.moves, seconds: s.elapsed);
-    var coins = reward.coins;
-    if (daily != null && daily.id == widget.puzzleId && firstTime) {
-      await ref.read(profileProvider.notifier).addCoins(50, reason: 'daily-puzzle');
-      coins += 50;
-    }
+    ref.read(progressProvider.notifier).complete(
+      widget.puzzleId,
+      gridSize: _spec.cells,
+      mode: _spec.mode.code,
+      moves: s.moves,
+      seconds: s.elapsed,
+      hints: s.hintsUsed,
+      stars: stars,
+      session: _playId,
+      resumed: _resumed,
+    );
+    final reward = await ref.read(profileProvider.notifier).recordCompletion(
+          puzzleId: widget.puzzleId,
+          cells: _spec.cells,
+          stars: stars,
+          firstTime: firstTime,
+          mode: _spec.mode,
+          moves: s.moves,
+          seconds: s.elapsed,
+          dailyBonus: daily != null && daily.id == widget.puzzleId ? 50 : 0,
+        );
     unawaited(bumpEventProgress(ref, packId: puzzle?.packId));
     if (!mounted) return;
-    setState(() => _reward = (coins: coins, xp: reward.xp, levelUp: reward.levelUp, level: reward.level));
+    setState(() => _reward = (coins: reward.coins, xp: reward.xp, levelUp: reward.levelUp, level: reward.level));
   }
 
   Future<void> _hint() async {
@@ -278,6 +363,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
         onRestart: () {
           Navigator.pop(ctx);
           _completionHandled = false;
+          _newPlay();
           _ctrl.restart();
         },
         onQuit: () {
@@ -471,6 +557,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
               onReplay: () {
                 _completionHandled = false;
                 setState(() => _reward = null);
+                _newPlay();
                 _ctrl.restart();
               },
               onNext: (next) async {
