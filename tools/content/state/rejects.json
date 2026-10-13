@@ -40637,6 +40637,12 @@
 "pack": "pack-jungle",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/5/58/Russia%2C_Irkutsk%2C_Lake_Baikal_2023_-_SS.jpg": {
+"at": "2026-10-13",
+"label": "daily-2027-12-05",
+"pack": "daily-2027-12",
+"reason": "weak"
+},
 "https://upload.wikimedia.org/wikipedia/commons/5/59/El_Machu_Lan%C3%BA.png": {
 "at": "2026-10-12",
 "label": "c834",
@@ -41566,6 +41572,12 @@
 "label": "p-7b69144c6b38",
 "pack": "ai-forests",
 "reason": "quality"
+},
+"https://upload.wikimedia.org/wikipedia/commons/a/a5/Moscow%2C_ice_rowan_05.jpg": {
+"at": "2026-10-13",
+"label": "daily-2027-12-14",
+"pack": "daily-2027-12",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/a/a6/Alfred_Sisley_052.jpg": {
 "at": "2026-10-12",
@@ -54121,9 +54133,9 @@
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Ovibos_moschatus_fd.jpg/1280px-Ovibos_moschatus_fd.jpg": {
 "at": "2026-10-13",
-"label": "c46",
-"pack": "evpack-polar-bear-2027",
-"reason": "off-theme"
+"label": "daily-2027-12-19",
+"pack": "daily-2027-12",
+"reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Prunus_cerasoides_var._rubea_-_Kunming_Botanical_Garden_-_DSC02977.JPG/1280px-Prunus_cerasoides_var._rubea_-_Kunming_Botanical_Garden_-_DSC02977.JPG": {
 "at": "2026-10-12",
