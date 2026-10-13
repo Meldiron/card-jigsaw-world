@@ -8,6 +8,7 @@ import '../../core/sfx.dart';
 import '../../data/purchases.dart';
 import '../../state/achievements.dart';
 import '../../state/profile.dart';
+import '../../state/review_prompt.dart';
 import '../../state/settings.dart';
 import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
@@ -60,6 +61,8 @@ class _HomeShellState extends ConsumerState<HomeShell> {
     final rewardReady = ref.watch(achievementsProvider.select((list) => list.any((a) => a.done)));
     // Quests dot: a quest or live event reward is waiting to be claimed.
     final questReady = ref.watch(questRewardReadyProvider);
+    // Asks for an App Store rating after a happy moment (rules in ReviewRules).
+    ref.watch(reviewPromptProvider);
     final tabs = [
       GlassTabItem(icon: CupertinoIcons.house, activeIcon: CupertinoIcons.house_fill, label: 'Home', badge: dailyReady),
       const GlassTabItem(icon: CupertinoIcons.square_grid_2x2, activeIcon: CupertinoIcons.square_grid_2x2_fill, label: 'Library'),

@@ -107,6 +107,18 @@ class SettingsScreen extends ConsumerWidget {
                   value: _minutesOfDay(s.reminderMinutes).format(context),
                   onTap: () => _pickReminderTime(context, ref, s.reminderMinutes),
                 ),
+              // A note before a world-day event opens, for players who have not played for a while.
+              if (s.reminders)
+                _SwitchRow(
+                  key: const ValueKey('settings-event-reminders'),
+                  icon: CupertinoIcons.flag_fill,
+                  label: 'New events',
+                  value: ref.watch(eventRemindersProvider),
+                  onChanged: (v) {
+                    ref.read(eventRemindersProvider.notifier).set(v);
+                    ref.read(remindersProvider).refresh();
+                  },
+                ),
             ],
           ]),
           group('Account', [

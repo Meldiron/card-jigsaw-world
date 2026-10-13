@@ -20,13 +20,14 @@ const reminderDays = 7;
 class ReminderNote {
   const ReminderNote({required this.id, required this.at, required this.title, required this.body, required this.route});
 
-  /// The day (`2026-10-14`); iOS keeps one reminder per id.
+  /// The day (`2026-10-14`) for a daily reminder, `event-<id>` for an event note; iOS keeps one
+  /// reminder per id.
   final String id;
   final DateTime at;
   final String title;
   final String body;
 
-  /// Where a tap goes: the day's daily puzzle, or Home.
+  /// Where a tap goes: the day's daily puzzle, Home, or an event's pack.
   final String route;
 
   Map<String, Object?> toJson() => {'id': id, 'at': at.millisecondsSinceEpoch, 'title': title, 'body': body, 'route': route};
@@ -81,6 +82,92 @@ List<ReminderNote> planReminders({
   return notes;
 }
 
+/// An upcoming world-day event the reminders can announce.
+@immutable
+class UpcomingEvent {
+  const UpcomingEvent({required this.id, required this.name, required this.opensAt, this.packId, this.pictures = 0});
+  final String id;
+  final String name;
+  final DateTime opensAt;
+  final String? packId;
+
+  /// Pictures in its pack (0 when unknown).
+  final int pictures;
+}
+
+/// Event notes go only to players who stopped opening the game: a note is at least this far
+/// ahead when it is planned, and every open plans again (so a player who keeps playing never gets
+/// one; the daily reminders cover them).
+const eventReminderLead = Duration(days: 5);
+
+/// How far ahead event notes are planned, and the shortest gap between two of them.
+const eventReminderWeeks = 6;
+const eventReminderGap = Duration(days: 7);
+
+/// The event notes to schedule at [now]: "World Food Day opens tomorrow" at [minutes] after
+/// local midnight on the day before an event opens, for events opening within
+/// [eventReminderWeeks], only when the note is at least [eventReminderLead] away, at most one per
+/// [eventReminderGap], and never on a day in [busyDays] (day keys that already have a daily
+/// reminder). A tap opens the event's pack.
+List<ReminderNote> planEventReminders({
+  required DateTime now,
+  required int minutes,
+  required Iterable<UpcomingEvent> events,
+  Set<String> busyDays = const {},
+  int weeks = eventReminderWeeks,
+}) {
+  final until = now.add(Duration(days: weeks * 7));
+  final candidates = <(DateTime, UpcomingEvent)>[];
+  for (final e in events) {
+    final opens = e.opensAt.toLocal();
+    final at = DateTime(opens.year, opens.month, opens.day - 1, minutes ~/ 60, minutes % 60);
+    if (at.isBefore(now.add(eventReminderLead)) || at.isAfter(until)) continue;
+    if (busyDays.contains(Goals.dayKey(at))) continue;
+    candidates.add((at, e));
+  }
+  candidates.sort((a, b) => a.$1.compareTo(b.$1));
+  final notes = <ReminderNote>[];
+  DateTime? last;
+  for (final (at, e) in candidates) {
+    if (last != null && at.difference(last) < eventReminderGap) continue;
+    last = at;
+    notes.add(ReminderNote(
+      id: 'event-${e.id}',
+      at: at,
+      title: '${e.name} opens tomorrow',
+      body: e.pictures > 0 ? 'A new pack of ${e.pictures} pictures for the day, open for a week.' : 'A new picture pack for the day, open for a week.',
+      route: e.packId != null && e.packId!.isNotEmpty ? '/library/pack/${e.packId}' : '/events',
+    ));
+  }
+  return notes;
+}
+
+/// Settings > New events: event notes on top of the daily reminders (on by default; stored on the
+/// device).
+class EventRemindersNotifier extends Notifier<bool> {
+  static const _key = 'eventReminders';
+
+  @override
+  bool build() => ref.watch(localStoreProvider).getText(_key) != 'off';
+
+  void set(bool on) {
+    ref.read(localStoreProvider).setText(_key, on ? 'on' : 'off');
+    state = on;
+  }
+}
+
+final eventRemindersProvider = NotifierProvider<EventRemindersNotifier, bool>(EventRemindersNotifier.new);
+
+/// The catalogue's world-day events as [UpcomingEvent]s: every event row (created up to a year
+/// ahead, released or not) with its pack's picture count.
+List<UpcomingEvent> upcomingEvents(Iterable<GameEvent> events, Iterable<Pack> packRows) {
+  final pictures = {for (final p in packRows) p.id: p.imageCount};
+  return [
+    for (final e in events)
+      if (e.startAt != null) UpcomingEvent(id: e.id, name: e.name, opensAt: e.startAt!, packId: e.packId, pictures: pictures[e.packId] ?? 0),
+  ];
+}
+
 /// Whether to ask, in the game and before the iOS prompt, if the player wants
 /// a daily reminder. Asked once, right after a daily gift on the player's
 /// second day with one at the earliest ([giftDays] counts claims on this
@@ -122,13 +209,29 @@ class RemindersController {
     } catch (e) {
       debugPrint('reminders: catalogue not ready ($e)');
     }
+    final now = DateTime.now();
+    final minutes = _ref.read(settingsProvider).reminderMinutes;
     final notes = planReminders(
-      now: DateTime.now(),
-      minutes: _ref.read(settingsProvider).reminderMinutes,
+      now: now,
+      minutes: minutes,
       puzzles: puzzles,
       profile: _ref.read(profileProvider).value,
       progress: _ref.read(progressProvider).value ?? const {},
     );
+    if (_ref.read(eventRemindersProvider)) {
+      try {
+        final events = await _ref.read(eventsProvider.future).timeout(const Duration(seconds: 15));
+        final packs = await _ref.read(packRowsProvider.future).timeout(const Duration(seconds: 15));
+        notes.addAll(planEventReminders(
+          now: now,
+          minutes: minutes,
+          events: upcomingEvents(events, packs),
+          busyDays: {for (final n in notes) Goals.dayKey(n.at)},
+        ));
+      } catch (e) {
+        debugPrint('reminders: events not ready ($e)');
+      }
+    }
     await ReminderChannel.schedule([for (final n in notes) n.toJson()]);
   }
 

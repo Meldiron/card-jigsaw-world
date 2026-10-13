@@ -160,12 +160,60 @@ class AuthRepository {
     try {
       await _account.deleteSession(sessionId: 'current');
     } on AppwriteException catch (e) {
-      if (e.code != 401) rethrow;
+      // 401: no session; 404: the user (and so the session) was deleted.
+      if (e.code != 401 && e.code != 404) rethrow;
+    }
+  }
+
+  /// Whether the signed-in player signed in with Apple (their tokens are revoked on deletion).
+  Future<bool> hasAppleIdentity() async {
+    try {
+      final list = await _account.listIdentities();
+      return list.identities.any((i) => i.provider == 'apple');
+    } on AppwriteException catch (e) {
+      debugPrint('identities failed: ${e.message}');
+      return false;
     }
   }
 
   Future<void> updateName(String name) => _account.updateName(name: name);
   Future<void> updatePrefs(Map<String, dynamic> prefs) => _account.updatePrefs(prefs: prefs);
+}
+
+/// What the `delete-account` function removed.
+class AccountDeletionResult {
+  const AccountDeletionResult({required this.files, required this.rows, required this.apple});
+  final int files;
+  final Map<String, int> rows;
+
+  /// `revoked`, `not-apple`, or why the Apple tokens were not revoked (`skipped:no-key`, ...).
+  final String apple;
+}
+
+/// Deletes the signed-in player's account on the server: the `delete-account` Appwrite Function
+/// (functions/delete-account) removes their photos, their rows in every player table, the profile
+/// and the user, and revokes their Sign in with Apple tokens when [appleAuthorizationCode] is
+/// given. Only the caller's own account can go: the function reads the user from the session.
+class AccountDeletionRepository {
+  AccountDeletionRepository(this._functions);
+  final Functions _functions;
+
+  static const functionId = 'delete-account';
+
+  Future<AccountDeletionResult> delete({String? appleAuthorizationCode}) async {
+    final exec = await _functions.createExecution(
+      functionId: functionId,
+      body: jsonEncode({'appleAuthorizationCode': ?appleAuthorizationCode}),
+      method: enums.ExecutionMethod.pOST,
+      path: '/delete',
+    );
+    final body = exec.responseBody.isEmpty ? <String, dynamic>{} : jsonDecode(exec.responseBody) as Map<String, dynamic>;
+    if (body['ok'] != true) {
+      throw AppwriteException(body['error']?.toString() ?? 'Account deletion failed (${exec.responseStatusCode})', exec.responseStatusCode);
+    }
+    final rows = <String, int>{for (final e in ((body['rows'] as Map?) ?? const {}).entries) '${e.key}': (e.value as num?)?.toInt() ?? 0};
+    return AccountDeletionResult(files: (body['files'] as num?)?.toInt() ?? 0, rows: rows, apple: '${body['apple'] ?? ''}');
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -492,3 +540,4 @@ final catalogRepositoryProvider = Provider((ref) => CatalogRepository(ref.watch(
 final progressRepositoryProvider = Provider((ref) => ProgressRepository(ref.watch(tablesProvider)));
 final socialRepositoryProvider = Provider((ref) => SocialRepository(ref.watch(tablesProvider)));
 final uploadRepositoryProvider = Provider((ref) => UploadRepository(ref.watch(storageProvider), ref.watch(tablesProvider)));
+final accountDeletionRepositoryProvider = Provider((ref) => AccountDeletionRepository(Functions(ref.watch(appwriteClientProvider))));
