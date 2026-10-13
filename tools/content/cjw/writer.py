@@ -206,9 +206,9 @@ def new_daily(spec, snap, month, picks=(), dry=False):
         if dry:
             print(f'{pack_id}: pack row would be created ({label})')
         else:
-            # price follows tools/store/apply_pack_prices.py (re-run it after a content session)
+            # standard tier of tools/store/apply_pack_prices.py: 100 coins per day (2,800 to 3,100)
             data = dict(name=label, category='Daily', description=f"One fresh picture for every day of {label}. Solve today's for a bonus.",
-                        priceCoins=3100, priceTickets=0, isFree=False, isPremium=False, isSeasonal=False, sortOrder=100,
+                        priceCoins=100 * calendar.monthrange(y, mo)[1], priceTickets=0, isFree=False, isPremium=False, isSeasonal=False, sortOrder=100,
                         accent='', emoji='', coverUrl='', imageCount=0)
             api.create_row('packs', data, row_id=pack_id)
             state.log('pack-create', pack=pack_id, category='Daily')

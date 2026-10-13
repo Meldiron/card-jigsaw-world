@@ -391,6 +391,9 @@ class UploadRepository {
     return (items: rows.map((r) => MyPuzzle.fromRow(r.$id, r.data)).toList(), lastId: rows.isEmpty ? null : rows.last.$id);
   }
 
+  /// How many photos the player keeps (counted on the server).
+  Future<int> count(String userId) => countRows(_tables, AppwriteConfig.myPuzzles, [Query.equal('userId', userId)]);
+
   /// One photo by id (a puzzle in progress may be older than the pages loaded so far).
   Future<MyPuzzle?> byId(String id) async {
     try {
@@ -407,7 +410,8 @@ class UploadRepository {
       bucketId: AppwriteConfig.userUploadsBucket,
       fileId: ID.unique(),
       file: InputFile.fromBytes(bytes: bytes, filename: filename),
-      permissions: [Permission.read(Role.any()), Permission.delete(Role.user(userId))],
+      // Private to the uploader: other players cannot read or list it (see ImageFiles).
+      permissions: [Permission.read(Role.user(userId)), Permission.delete(Role.user(userId))],
     );
     final row = await _tables.createRow(
       databaseId: _db,

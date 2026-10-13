@@ -22,7 +22,8 @@ class AppwriteConfig {
   static const puzzleImagesBucket = 'puzzle-images';
   static const userUploadsBucket = 'user-uploads';
 
-  /// Public view URL for a file in a bucket with `read("any")` permission.
+  /// View URL of a file. Public files load from it directly; private player photos are fetched
+  /// through the signed-in client under this URL (`ImageFiles`).
   static String fileViewUrl(String bucketId, String fileId) =>
       '$endpoint/storage/buckets/$bucketId/files/$fileId/view?project=$projectId';
 

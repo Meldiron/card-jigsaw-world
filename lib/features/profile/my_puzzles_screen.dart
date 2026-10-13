@@ -5,9 +5,11 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../core/haptics.dart';
+import '../../core/platform.dart';
 import '../../core/theme/tokens.dart';
 import '../../data/repositories.dart';
 import '../../state/auth.dart';
+import '../../state/profile.dart';
 import '../../state/progress.dart';
 import '../../state/social.dart';
 import '../../widgets/glass.dart';
@@ -38,6 +40,7 @@ class _MyPuzzlesScreenState extends ConsumerState<MyPuzzlesScreen> {
       final bytes = await file.readAsBytes();
       await ref.read(uploadRepositoryProvider).upload(userId, bytes: bytes, filename: file.name.isEmpty ? 'photo.jpg' : file.name, title: 'My photo ${DateTime.now().day}/${DateTime.now().month}');
       ref.invalidate(myPuzzlesProvider);
+      ref.invalidate(myPuzzleCountProvider);
       if (mounted) {
         Haptics.success();
         showToast(context, 'Photo added. Tap it to play.', icon: AppIcons.photo);
@@ -49,7 +52,32 @@ class _MyPuzzlesScreenState extends ConsumerState<MyPuzzlesScreen> {
     }
   }
 
-  void _choose() {
+  Future<void> _choose() async {
+    if (!(ref.read(profileProvider).value?.isVip ?? false)) {
+      final int used;
+      try {
+        used = await ref.read(myPuzzleCountProvider.future);
+      } catch (_) {
+        if (mounted) showToast(context, 'No connection. Try again when you are back online.', icon: AppIcons.signal);
+        return;
+      }
+      if (!mounted) return;
+      if (used >= Economy.freeMyPuzzles) {
+        const limit = Economy.freeMyPuzzles;
+        final vip = await showAppAlert(
+          context,
+          title: 'Photo limit reached',
+          message: supportsPurchases
+              ? 'You can keep $limit photos. Delete one to add another, or get VIP for unlimited photos.'
+              : 'You can keep $limit photos. Delete one to add another. VIP members have no limit.',
+          confirmLabel: supportsPurchases ? 'See VIP' : 'OK',
+          cancelLabel: supportsPurchases ? 'Not now' : null,
+        );
+        if (vip && supportsPurchases && mounted) context.push('/store?vip=1');
+        return;
+      }
+    }
+    if (!mounted) return;
     showCupertinoModalPopup(
       context: context,
       builder: (ctx) => CupertinoActionSheet(
@@ -68,6 +96,8 @@ class _MyPuzzlesScreenState extends ConsumerState<MyPuzzlesScreen> {
     final c = context.colors;
     final mine = ref.watch(myPuzzlesProvider);
     final progress = ref.watch(progressProvider).value ?? {};
+    final isVip = ref.watch(profileProvider).value?.isVip ?? false;
+    final used = ref.watch(myPuzzleCountProvider).value;
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: GlassAppBar(
@@ -81,7 +111,10 @@ class _MyPuzzlesScreenState extends ConsumerState<MyPuzzlesScreen> {
           final list = paged.items;
           return RefreshIndicator.adaptive(
             edgeOffset: MediaQuery.paddingOf(context).top + kToolbarHeight,
-            onRefresh: () async => ref.invalidate(myPuzzlesProvider),
+            onRefresh: () async {
+              ref.invalidate(myPuzzlesProvider);
+              ref.invalidate(myPuzzleCountProvider);
+            },
             child: CustomScrollView(
               physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
               slivers: [
@@ -91,8 +124,19 @@ class _MyPuzzlesScreenState extends ConsumerState<MyPuzzlesScreen> {
                     child: BigButton(label: _uploading ? 'Uploading…' : 'Add photo', icon: CupertinoIcons.plus, loading: _uploading, onTap: _uploading ? null : _choose),
                   ),
                 ),
+                if (!isVip && used != null)
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                      child: Text(
+                        '${used.clamp(0, Economy.freeMyPuzzles)} of ${Economy.freeMyPuzzles} photos · VIP: unlimited',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 12.5, color: c.textSecondary),
+                      ),
+                    ),
+                  ),
                 if (list.isEmpty)
-                  const SliverFillRemaining(hasScrollBody: false, child: EmptyState(icon: AppIcons.camera, title: 'No photos yet', message: 'Turn pets, trips and family into card puzzles. Photos stay private to your account.'))
+                  const SliverFillRemaining(hasScrollBody: false, child: EmptyState(icon: AppIcons.camera, title: 'No photos yet', message: 'Turn pets, trips and family into card puzzles. Only you can see your photos.'))
                 else
                   SliverPadding(
                     padding: EdgeInsets.fromLTRB(20, 16, 20, GlassTabBar.scrollEndPadding(context)),
@@ -121,6 +165,7 @@ class _MyPuzzlesScreenState extends ConsumerState<MyPuzzlesScreen> {
                               if (ok) {
                                 await ref.read(uploadRepositoryProvider).delete(m);
                                 ref.invalidate(myPuzzlesProvider);
+                                ref.invalidate(myPuzzleCountProvider);
                               }
                             },
                             child: Container(

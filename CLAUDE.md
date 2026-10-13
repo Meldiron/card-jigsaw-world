@@ -132,6 +132,9 @@ skills under `.claude/skills/` hold the detailed workflows.
   rule): full-page redirect to `/account/tokens/oauth2/apple` (the `createOAuth2Token` endpoint), then
   `account.createSession(userId, secret)` on `/auth/callback`, which stores the third-party-cookie
   fallback. Never `createOAuth2Session` (guarded by `test/web_oauth_flow_test.dart`).
+- Player photos (My Puzzles, bucket `user-uploads`) are private: each file is `read(user:<owner>)` only, and
+  the app fetches them through the signed-in client (`lib/core/image_files.dart`), never as a public URL.
+  `test/private_uploads_test.dart` fails if an upload grants `Role.any()`.
 - Auth: anonymous guests, email, native Sign in with Apple (`createIdTokenSession`, nonce flow; falls
   back to the existing account on 409). Google/Facebook intentionally removed.
 - Appwrite MCP: pass `project_id` as the top-level call parameter, not inside `arguments`.

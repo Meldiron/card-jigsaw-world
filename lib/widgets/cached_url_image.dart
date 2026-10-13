@@ -2,10 +2,11 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import '../core/image_files.dart';
 
-/// A network image cached on disk by [DefaultCacheManager] (the same cache the
-/// game uses for puzzle pictures) and decoded by Flutter's own
+/// A network image cached on disk through [ImageFiles] (the same cache the
+/// game uses for puzzle pictures; player photos go through the signed-in
+/// Appwrite client) and decoded by Flutter's own
 /// [MultiFrameImageStreamCompleter].
 ///
 /// It replaces `CachedNetworkImageProvider`, whose stream completer re-decodes
@@ -37,8 +38,7 @@ class CachedUrlImage extends ImageProvider<CachedUrlImage> {
 
   static Future<ui.Codec> _load(CachedUrlImage key, ImageDecoderCallback decode) async {
     try {
-      final file = await DefaultCacheManager().getSingleFile(key.url);
-      final bytes = await file.readAsBytes();
+      final bytes = await ImageFiles.bytes(key.url);
       if (bytes.isEmpty) throw StateError('Empty image file for ${key.url}');
       final buffer = await ui.ImmutableBuffer.fromUint8List(bytes);
       return await decode(buffer);

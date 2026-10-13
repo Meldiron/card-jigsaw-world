@@ -31,6 +31,17 @@ class LeaderboardNotifier extends PagedNotifier<Profile> {
 final leaderboardProvider = AsyncNotifierProvider<LeaderboardNotifier, Paged<Profile>>(LeaderboardNotifier.new);
 
 /// The player's place in the league and its size (server-side counts, independent of paging).
+/// League place of the row at [index]: players with equal XP share a place (1, 2, 2, 4), the same
+/// rule as the "You are #N" header (players with more XP, plus one). Rows are a loaded prefix of the
+/// XP-ordered league, so equal XP rows are next to each other.
+int leaguePlace(List<Profile> rows, int index) {
+  var j = index;
+  while (j > 0 && rows[j - 1].xp == rows[index].xp) {
+    j--;
+  }
+  return j + 1;
+}
+
 final leaderboardRankProvider = FutureProvider<({int rank, int total})?>((ref) async {
   final me = ref.watch(profileProvider).value;
   if (me == null || me.puzzlesCompleted <= 0) return null;
@@ -93,6 +104,13 @@ class MyPuzzlesNotifier extends PagedNotifier<MyPuzzle> {
 }
 
 final myPuzzlesProvider = AsyncNotifierProvider<MyPuzzlesNotifier, Paged<MyPuzzle>>(MyPuzzlesNotifier.new);
+
+/// How many photos the player keeps, for the free limit ([Economy.freeMyPuzzles]).
+final myPuzzleCountProvider = FutureProvider<int>((ref) async {
+  final userId = ref.watch(currentUserIdProvider);
+  if (userId == null) return 0;
+  return ref.watch(uploadRepositoryProvider).count(userId);
+});
 
 /// One photo by id, for puzzles older than the pages the grid has loaded.
 final myPuzzleByIdProvider = FutureProvider.family<MyPuzzle?, String>((ref, id) async {

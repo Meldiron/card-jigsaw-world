@@ -122,12 +122,18 @@ bool leaveGameForCreative(BuildContext context, WidgetRef ref, Creative creative
   return true;
 }
 
+/// Monthly daily packs released so far: one per month since January 2023 (46 in October 2026).
+int _dailyMonthsSoFar([DateTime? now]) {
+  final t = now ?? DateTime.now();
+  return (t.year - 2023) * 12 + t.month;
+}
+
 /// Every amount and price in the copy comes from the store catalogue
 /// ([StoreProducts]), the pack price policy and [Economy], so a change to a
 /// bundle or a price cannot leave an ad promising the old numbers.
 final houseCreatives = <Creative>[
   Creative(id: 'vip-all', kind: CreativeKind.vip, headline: 'Every pack. No breaks.', body: 'VIP opens every pack and every past month, and removes these cards.', cta: 'Start free trial', route: '/store', price: StoreProducts.vipTrialLine()),
-  Creative(id: 'vip-months', kind: CreativeKind.vip, headline: 'Three years of daily puzzles', body: 'All 46 monthly albums are included with VIP.', cta: 'Go VIP', route: '/store', price: '${StoreProducts.vipTrialDays} days free'),
+  Creative(id: 'vip-months', kind: CreativeKind.vip, headline: 'Three years of daily puzzles', body: 'All ${_dailyMonthsSoFar()} monthly albums are included with VIP.', cta: 'Go VIP', route: '/store', price: '${StoreProducts.vipTrialDays} days free'),
   _coinsCreative('coins-3000', ProductIds.coins3000, headline: 'Running low on coins?', body: (n) {
     final packs = n ~/ PackPricePolicy.standardPackCoins;
     return '${groupThousands(n)} coins unlock up to ${_count(packs)} packs or ${n ~/ Economy.magicLockCostCoins} Magic Locks.';

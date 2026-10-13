@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quick_actions/quick_actions.dart';
 
+import 'core/appwrite.dart';
+import 'core/image_files.dart';
 import 'core/platform.dart';
 import 'core/sfx.dart';
 import 'core/theme/app_theme.dart';
@@ -23,6 +25,7 @@ class _CardJigsawAppState extends ConsumerState<CardJigsawApp> with WidgetsBindi
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    ImageFiles.attach(ref.read(storageProvider));
     if (supportsQuickActions) _setUpQuickActions();
   }
 

@@ -171,7 +171,7 @@ class _Leaderboard extends ConsumerWidget {
                 );
               }
               final p = list[i - 1];
-              final rank = i;
+              final rank = leaguePlace(list, i - 1);
               final isMe = p.userId == me;
               return Padding(
                 padding: const EdgeInsets.only(bottom: 8),

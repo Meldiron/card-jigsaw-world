@@ -1,6 +1,6 @@
 New in this build:
-- All packs now show in the Library, including the AI and Abstract categories (the app used to stop at 200 of 302 packs).
-- Upcoming content stays hidden until it is close: a daily month appears on its first day, an event three days before it opens.
-- Pictures load straight from our own storage on every device.
+- Your My Puzzles photos are now private: only you can see them. Free players keep up to 5 photos; VIP has no limit.
+- The league and My Puzzles keep loading as you scroll, and players with the same XP share a place.
+- Long-time players keep every star and solved picture (progress used to stop loading after 500 entries).
 
-Please try: Library > AI and Library > Abstract, then Quests > Live events.
+Please try: Profile > My Puzzles (add a photo and play it), then Social > League and scroll to the end.

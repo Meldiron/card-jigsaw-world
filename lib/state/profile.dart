@@ -28,6 +28,10 @@ class Economy {
 
   static const avatarCoins = 900;
 
+  /// Photos a free player can keep in My Puzzles at once (deleting one frees a place); VIP has no
+  /// limit ("Unlimited My Puzzles uploads").
+  static const freeMyPuzzles = 5;
+
   /// Piggy bank: +5 coins per solved picture, holds up to [piggyCapacity].
   static const piggyPerPuzzle = 5;
   static const piggyCapacity = Profile.piggyCapacity;

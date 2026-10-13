@@ -10,3 +10,5 @@ Version 1.7.0
 - Daily gift: today's day is outlined instead of filled, so the coin, ticket and hint icons stay easy to read.
 - Every pack in the catalogue now shows in the Library, including the AI and Abstract categories.
 - Upcoming content stays hidden until it is close: daily months appear on their first day, events three days before they open.
+- My Puzzles photos are private to your account. Free players keep up to 5 photos; VIP has no limit.
+- The league and My Puzzles load more as you scroll; players with equal XP share a place.

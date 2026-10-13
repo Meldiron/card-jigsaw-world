@@ -47,7 +47,7 @@ What `isVip` unlocks in the app (keep this list, the `_VipCard` bullets in `lib/
 - Every pack unlocked, including past monthly daily packs (`ProfileNotifier.isUnlocked`).
 - A fourth daily quest and a sixth weekly quest (`Goals.daily` / `Goals.weekly` mark the last entry `vipOnly`; non-VIP players see it as a locked card that opens the Store VIP card, and `claimGoal` refuses it). The free counts are `Goals.dailyFree = 3` and `Goals.weeklyFree = 5`.
 - No bonus videos (house promotions) anywhere.
-- Unlimited My Puzzles uploads.
+- Unlimited My Puzzles uploads (free players keep up to `Economy.freeMyPuzzles` = 5 photos; the My Puzzles screen shows the count and a VIP alert at the limit).
 - +500 coins every week: paid automatically once per week when a VIP member opens the app (`ProfileNotifier.claimVipWeeklyBonus`, called from `HomeShell`; marker `Goals.vipBonusKey` in `claimedGoals`). It is not a quest: VIP has exactly one extra weekly quest.
 
 ## Function configuration (Appwrite console → Functions → verify-purchase)
