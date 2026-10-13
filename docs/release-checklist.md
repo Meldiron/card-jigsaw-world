@@ -72,5 +72,8 @@ the developer portal (no API), so three manual steps:
    "Browser sign-in" enabled with `asc_publish.py`'s sibling command or the
    Appwrite console (Auth > Social providers > Apple).
 
-Until then the web build shows the Apple button but the redirect fails with
-`project_provider_disabled`; email sign-in works.
+Done 2026-10-13: Services ID `com.matejbaco.cardjigsawworld.signin`, Key ID
+`2QJPJFW8JW` (`secrets/AuthKey_2QJPJFW8JW.p8`), browser sign-in enabled on the
+Appwrite Apple provider (native sign-in settings unchanged). The redirect from
+the web app reaches Apple's page "Use your Apple Account to sign in to
+'Card Jigsaw World Web'".

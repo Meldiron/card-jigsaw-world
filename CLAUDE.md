@@ -120,8 +120,11 @@ skills under `.claude/skills/` hold the detailed workflows.
   `secret: true`). There is no image proxy: pictures load straight from Storage on every platform.
 - Site `card-jigsaw-world` → https://card-jigsaw-world.appwrite.network (static, fallback index.html),
   deployed by `tools/dev/deploy-web.sh` (chunked upload). Web build hides purchases, gift codes,
-  widgets; Apple sign-in on web uses the OAuth redirect `/auth/callback` (browser sign-in still needs a
-  Services ID + key from the owner, see `docs/release-checklist.md`).
+  widgets. Apple sign-in on web (configured 2026-10-13): Services ID `com.matejbaco.cardjigsawworld.signin`,
+  key `secrets/AuthKey_2QJPJFW8JW.p8`, team `C24QP73SQM`. **Web OAuth must use the token flow** (owner
+  rule): full-page redirect to `/account/tokens/oauth2/apple` (the `createOAuth2Token` endpoint), then
+  `account.createSession(userId, secret)` on `/auth/callback`, which stores the third-party-cookie
+  fallback. Never `createOAuth2Session` (guarded by `test/web_oauth_flow_test.dart`).
 - Auth: anonymous guests, email, native Sign in with Apple (`createIdTokenSession`, nonce flow; falls
   back to the existing account on 409). Google/Facebook intentionally removed.
 - Appwrite MCP: pass `project_id` as the top-level call parameter, not inside `arguments`.
@@ -153,10 +156,11 @@ skills under `.claude/skills/` hold the detailed workflows.
 ## Secrets
 
 `secrets/` is git-ignored (only `app-store-connect-issuer-id.txt` is tracked): App Store Connect key
-`AuthKey_9QC72A5QMN.p8`, distribution `Certificates.p12` + password, Appwrite keys
+`AuthKey_9QC72A5QMN.p8`, Sign in with Apple key `AuthKey_2QJPJFW8JW.p8` (web browser sign-in, stored in
+Appwrite's Apple provider), distribution `Certificates.p12` + password, Appwrite keys
 (`appwrite-api-key.txt` rows/tables scopes, `appwrite-storage-key.txt` files/rows scopes for picture
-hosting, `appwrite-sites-key.txt`), `content-keys.env` (Openverse
-client). Never print or commit their values. GitHub Actions has the signing secrets.
+hosting, `appwrite-sites-key.txt`), `content-keys.env` (Openverse client). Never print or commit their
+values. GitHub Actions has the signing secrets.
 
 ## Work that may be running in parallel
 

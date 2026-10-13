@@ -14,7 +14,7 @@ without native plugins; everything else is the iPhone app.
 | House ads | Shown. The rewarded "Watch" card still pays coins; CTAs that lead to a purchase show "Purchases are available in the iPhone app." instead of opening the store. | The ads are in-app promotions, not an ad network. |
 | Daily reminders switch | Hidden. | No notification plugin is wired on web. |
 | Home Screen widgets, quick actions | Not present. | WidgetKit and `quick_actions` are native. |
-| Sign in with Apple | OAuth redirect through Appwrite, returning to `/auth/callback`. | The native `sign_in_with_apple` sheet needs an app. Handled in `account_screen.dart` / `state/auth.dart`. |
+| Sign in with Apple | OAuth token flow through Appwrite: full-page redirect to `/account/tokens/oauth2/apple` (`createOAuth2Token`), back to `/auth/callback`, then `account.createSession` (stores the third-party-cookie fallback). Never `createOAuth2Session`. | The native `sign_in_with_apple` sheet needs an app. Handled in `account_screen.dart` / `state/auth.dart`. |
 | Sound, music, haptics | Sound and music work (`audioplayers` web). Haptics are a no-op. | Browsers block autoplay until the first tap; the music starts on the first interaction. |
 | My Puzzles uploads | Work (`image_picker` web uses a file chooser). | |
 
