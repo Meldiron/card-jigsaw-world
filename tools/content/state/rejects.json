@@ -40721,6 +40721,12 @@
 "pack": "pack-caves",
 "reason": "quality"
 },
+"https://upload.wikimedia.org/wikipedia/commons/5/5e/Nederlandsche_vogelen_%28KB%29_-_Mergellus_albellus_%28ivb%29.jpg": {
+"at": "2026-10-13",
+"label": "c1123",
+"pack": "daily-2027-06",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/5/5e/Phot-13a-99-hires.jpg": {
 "at": "2026-10-12",
 "label": "c175",
@@ -44104,6 +44110,12 @@
 "label": "c29",
 "pack": "evpack-art-day-2027",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Dobos_Cake_ingredients.png/1280px-Dobos_Cake_ingredients.png": {
+"at": "2026-10-13",
+"label": "c1140",
+"pack": "daily-2027-06",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Dunluce_Castle_%2848307640992%29.jpg/1280px-Dunluce_Castle_%2848307640992%29.jpg": {
 "at": "2026-10-13",
@@ -48892,6 +48904,12 @@
 "label": "c148",
 "pack": "pack-temples",
 "reason": "people"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Juvenile_yellow_boxfish_-_Ostracion_cubicus_-_%2815492355908%29.jpg/1280px-Juvenile_yellow_boxfish_-_Ostracion_cubicus_-_%2815492355908%29.jpg": {
+"at": "2026-10-13",
+"label": "c1150",
+"pack": "daily-2027-06",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Landappbw_1225633_1819_Maria-Sibylla-Merian-Grundschule_K%C3%B6nigschaffhausen.jpg/1280px-Landappbw_1225633_1819_Maria-Sibylla-Merian-Grundschule_K%C3%B6nigschaffhausen.jpg": {
 "at": "2026-10-12",
@@ -54029,6 +54047,12 @@
 "pack": "daily-2026-12",
 "reason": "quality"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Indian_Luna_Moth_Thodupuzha.jpg/1280px-Indian_Luna_Moth_Thodupuzha.jpg": {
+"at": "2026-10-13",
+"label": "c1156",
+"pack": "daily-2027-06",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Ink%26dye38_-_Jordan_Mudrack_-_Flickr_photo_close-up_of_inks%2C_dyes%2C_paints%2C_wet_mediums_forming_and_making_abstract_shapes%2C_patterns_and_images.jpg/1280px-Ink%26dye38_-_Jordan_Mudrack_-_Flickr_photo_close-up_of_inks%2C_dyes%2C_paints%2C_wet_mediums_forming_and_making_abstract_shapes%2C_patterns_and_images.jpg": {
 "at": "2026-10-12",
 "label": "c95",
@@ -54371,6 +54395,12 @@
 "pack": "daily-2025-01",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Norsk_Kulturarv_Rosemaling_-_Ungdomsleder_formidling_%28Celina_Xu_Nilssen%29.jpg/1280px-Norsk_Kulturarv_Rosemaling_-_Ungdomsleder_formidling_%28Celina_Xu_Nilssen%29.jpg": {
+"at": "2026-10-13",
+"label": "c1133",
+"pack": "daily-2027-06",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Overhead_View_of_Chicago_at_Sunset.jpg/1280px-Overhead_View_of_Chicago_at_Sunset.jpg": {
 "at": "2026-10-12",
 "label": "c18",
@@ -54708,9 +54738,9 @@
 "reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Raclette-Negative0-03-1A%281%29.jpg/1280px-Raclette-Negative0-03-1A%281%29.jpg": {
-"at": "2026-10-12",
-"label": "c467",
-"pack": "daily-2023-01",
+"at": "2026-10-13",
+"label": "daily-2026-12-16",
+"pack": "daily-2026-12",
 "reason": "weak"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Red_lentils_%281%29.jpg/1280px-Red_lentils_%281%29.jpg": {
@@ -57173,6 +57203,12 @@
 "pack": "daily-2026-11",
 "reason": "quality"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Norsk_Kulturarv_Rosemaling_-_Ungdomsleder_formidling_%28Celina_Xu_Nilssen%29_Nyskapning.jpg/1280px-Norsk_Kulturarv_Rosemaling_-_Ungdomsleder_formidling_%28Celina_Xu_Nilssen%29_Nyskapning.jpg": {
+"at": "2026-10-13",
+"label": "c1134",
+"pack": "daily-2027-06",
+"reason": "people"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/On_a_boat_in_the_Eastern_Mangroves.jpg/1280px-On_a_boat_in_the_Eastern_Mangroves.jpg": {
 "at": "2026-10-12",
 "label": "c90",
@@ -57262,6 +57298,12 @@
 "label": "c09",
 "pack": "city-lights",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Universit%C3%A9_de_Rennes_1%2C_collection_Charles_Oberth%C3%BCr%2C_papillons%2C_r%C3%A9gion_australienne.jpg/1280px-Universit%C3%A9_de_Rennes_1%2C_collection_Charles_Oberth%C3%BCr%2C_papillons%2C_r%C3%A9gion_australienne.jpg": {
+"at": "2026-10-13",
+"label": "c1159",
+"pack": "daily-2027-06",
+"reason": "text"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Vault_of_St_Vitus_Cathedral_01%28js%29.jpg/1280px-Vault_of_St_Vitus_Cathedral_01%28js%29.jpg": {
 "at": "2026-10-12",
@@ -82001,6 +82043,12 @@
 "pack": "pack-galaxies",
 "reason": "weak"
 },
+"https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Neofelis_nebulosa_%28Clouded_leopard%29_fur_skin.jpg/1280px-Neofelis_nebulosa_%28Clouded_leopard%29_fur_skin.jpg": {
+"at": "2026-10-13",
+"label": "c1164",
+"pack": "daily-2027-06",
+"reason": "quality"
+},
 "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Orbital_ATK_Minotaur-C_Launch_%283919738%29.jpg/1280px-Orbital_ATK_Minotaur-C_Launch_%283919738%29.jpg": {
 "at": "2026-10-12",
 "label": "c143",
@@ -91384,6 +91432,12 @@
 "label": "c142",
 "pack": "evpack-new-years-eve-2026",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Norwegian_Cultural_Heritage_%E2%80%93_Rosemaling_Workshop_Happiness.jpg/1280px-Norwegian_Cultural_Heritage_%E2%80%93_Rosemaling_Workshop_Happiness.jpg": {
+"at": "2026-10-13",
+"label": "c1135",
+"pack": "daily-2027-06",
+"reason": "people"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Peppermint_candy_cane_01.jpg/1280px-Peppermint_candy_cane_01.jpg": {
 "at": "2026-10-12",
