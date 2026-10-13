@@ -2745,6 +2745,18 @@
 "removed": 15,
 "status": "verified"
 },
+"pack-dolomites": {
+"added": 24,
+"at": "2026-10-13T14:36:24",
+"category": "Mountains",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "Dolomites",
+"puzzles": 24,
+"removed": 0,
+"status": "verified"
+},
 "pack-doors": {
 "added": 12,
 "at": "2026-10-13T00:52:41",
@@ -3141,6 +3153,14 @@
 "removed": 19,
 "status": "verified"
 },
+"pack-mountain-huts": {
+"added": 0,
+"at": "2026-10-13T14:38:57",
+"last_step": "reject 1 similar",
+"puzzles": null,
+"removed": 0,
+"status": "audited"
+},
 "pack-nebulae": {
 "added": 24,
 "at": "2026-10-12T12:38:52",
@@ -3164,6 +3184,14 @@
 "puzzles": 22,
 "removed": 16,
 "status": "verified"
+},
+"pack-new-zealand": {
+"added": 0,
+"at": "2026-10-13T14:38:31",
+"last_step": "reject 15 weak",
+"puzzles": null,
+"removed": 0,
+"status": "audited"
 },
 "pack-night-markets": {
 "added": 21,
@@ -3812,6 +3840,14 @@
 "puzzles": 24,
 "removed": 22,
 "status": "verified"
+},
+"pack-yellowstone": {
+"added": 0,
+"at": "2026-10-13T14:33:08",
+"last_step": "reject 21 weak",
+"puzzles": null,
+"removed": 0,
+"status": "audited"
 },
 "wild-nature": {
 "added": 5,
