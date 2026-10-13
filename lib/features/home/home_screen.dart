@@ -14,6 +14,7 @@ import '../../state/catalog.dart';
 import '../../state/profile.dart';
 import '../../state/progress.dart';
 import '../../state/quick_play.dart';
+import '../game/unlock_intro.dart';
 import '../../state/rewards.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
@@ -77,6 +78,8 @@ class HomeScreen extends ConsumerWidget {
           physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
           slivers: [
             const HeaderBar(title: 'Card Jigsaw World'),
+            // The first-time intro of a shape or option the player's level just opened.
+            SliverToBoxAdapter(child: UnlockIntroHost(at: (path) => path == '/home')),
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
@@ -606,6 +609,7 @@ class _LevelCard extends StatelessWidget {
               if (next.tickets > 0) _RewardChip(child: Amount(currency: Currency.tickets, value: next.tickets, size: 14, fontSize: 12.5)),
               if (next.hints > 0) _RewardChip(child: Amount(currency: Currency.hints, value: next.hints, size: 14, fontSize: 12.5)),
               if (next.tier != null) Chip2(label: '${next.tier!.code} ${next.tier!.label} boards', icon: AppIcons.bigBoard),
+              for (final u in next.unlocks) Chip2(key: ValueKey('next-unlock-${u.name}'), label: u.label, icon: _unlockIcon(u), color: c.accentTint, foreground: context.accent),
             ],
           ),
           const SizedBox(height: 12),
@@ -634,6 +638,12 @@ class _LevelCard extends StatelessWidget {
     );
   }
 }
+
+IconData _unlockIcon(Unlock u) => switch (u) {
+      Unlock.painting => AppIcons.painting,
+      Unlock.giant => AppIcons.bigBoard,
+      _ => AppIcons.unlock,
+    };
 
 class _RewardChip extends StatelessWidget {
   const _RewardChip({required this.child});

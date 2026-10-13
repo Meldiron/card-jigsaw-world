@@ -175,6 +175,9 @@ class SyncOp {
     required String session,
     required bool resumed,
     bool painting = false,
+    int par = 0,
+    bool peeked = false,
+    int bestLock = 0,
   }) =>
       SyncOp(OpKind.board, {
         'puzzleId': puzzleId,
@@ -187,6 +190,9 @@ class SyncOp {
         'session': session,
         'resumed': resumed,
         'painting': painting,
+        'par': par,
+        'peeked': peeked,
+        'bestLock': bestLock,
       });
 
   /// A finished board: records only improve, a solved picture stays solved.
@@ -201,6 +207,9 @@ class SyncOp {
     required String session,
     required bool resumed,
     bool painting = false,
+    int par = 0,
+    bool peeked = false,
+    int bestLock = 0,
     DateTime? at,
   }) =>
       SyncOp(at: at, OpKind.win, {
@@ -214,6 +223,9 @@ class SyncOp {
         'session': session,
         'resumed': resumed,
         'painting': painting,
+        'par': par,
+        'peeked': peeked,
+        'bestLock': bestLock,
       });
 
   /// Drops the board in progress; records and lifetime totals stay.
@@ -373,13 +385,24 @@ class SyncOp {
   OpPlan _progress(Map<String, dynamic> row) {
     switch (kind) {
       case OpKind.discard:
-        return const OpPlan({'layout': Put(''), 'moves': Put(0), 'elapsedSeconds': Put(0), 'hintsUsed': Put(0), 'session': Put('')});
+        return const OpPlan({
+          'layout': Put(''),
+          'moves': Put(0),
+          'elapsedSeconds': Put(0),
+          'hintsUsed': Put(0),
+          'session': Put(''),
+          'par': Put(0),
+          'peeked': Put(false),
+          'bestLock': Put(0),
+        });
       case OpKind.board:
         return OpPlan({
           'gridSize': Put(_a('gridSize')),
           'mode': Put(args['mode']),
           // Ops queued by builds before Painting carry no flag: a plain board.
           'painting': Put(args['painting'] == true),
+          // The play-through's par, Peek and longest lock (quests); older ops carry none.
+          ..._run(),
           'layout': Put(args['layout']),
           'moves': Put(_a('moves')),
           'elapsedSeconds': Put(_a('seconds')),
@@ -398,6 +421,7 @@ class SyncOp {
           'gridSize': Put(_a('gridSize')),
           'mode': Put(args['mode']),
           'painting': Put(args['painting'] == true),
+          ..._run(),
           'layout': const Put(''),
           'moves': Put(moves),
           'elapsedSeconds': Put(seconds),
@@ -413,6 +437,14 @@ class SyncOp {
     }
     return const OpPlan({});
   }
+
+  /// The play-through's numbers the quests read: par, whether Peek was used, the most cards one
+  /// move locked. They describe the board on the row (in progress, or the last one finished).
+  Map<String, FieldChange> _run() => {
+        'par': Put(_a('par')),
+        'peeked': Put(args['peeked'] == true),
+        'bestLock': Put(_a('bestLock')),
+      };
 
   /// Lifetime totals on the picture: the session's numbers replace its earlier save, or add on
   /// top when this is a new session. Sending the same op twice gives the same result.

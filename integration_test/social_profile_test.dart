@@ -10,6 +10,8 @@ import 'package:card_jigsaw_world/data/local_store.dart';
 import 'package:card_jigsaw_world/features/social/social_screen.dart';
 import 'package:card_jigsaw_world/state/auth.dart';
 import 'package:card_jigsaw_world/state/settings.dart';
+import 'package:card_jigsaw_world/state/rewards.dart';
+import 'package:card_jigsaw_world/state/unlocks.dart';
 import 'package:card_jigsaw_world/state/social.dart';
 import 'package:card_jigsaw_world/widgets/icons.dart';
 import 'package:flutter/cupertino.dart';
@@ -58,7 +60,12 @@ void main() {
     Sfx.instance.soundEnabled = false;
     Sfx.instance.musicEnabled = false;
     await tester.pumpWidget(ProviderScope(
-      overrides: [localStoreProvider.overrideWithValue(store)],
+      overrides: [
+        localStoreProvider.overrideWithValue(store),
+        // Shapes and options open as levels rise (lib/state/unlocks.dart); these suites play every one, so all are open and no intro sheet interrupts them.
+        openFeaturesProvider.overrideWithValue(OpenFeatures.all),
+        pendingUnlockIntroProvider.overrideWithValue(null),
+      ],
       child: const CardJigsawApp(),
     ));
     await settle(tester, 1500);

@@ -561,6 +561,9 @@ class PuzzleProgress {
     this.totalHints = 0,
     this.session = '',
     this.painting = false,
+    this.par = 0,
+    this.peeked = false,
+    this.bestLock = 0,
   });
 
   final String id;
@@ -592,6 +595,16 @@ class PuzzleProgress {
   /// until they lock, and pays `Economy.paintingMultiplier` more. Rows from older versions: off.
   final bool painting;
 
+  /// Par of the play-through on the row (the board in progress, or the last one finished):
+  /// fewest moves its shuffle needed. 0 on rows from older versions (unknown).
+  final int par;
+
+  /// Peek was used in that play-through.
+  final bool peeked;
+
+  /// Most cards one move locked in that play-through (moves by Magic do not count).
+  final int bestLock;
+
   factory PuzzleProgress.fromRow(String id, Map<String, dynamic> d) {
     List<int>? layout;
     final raw = d['layout']?.toString();
@@ -620,6 +633,9 @@ class PuzzleProgress {
       totalHints: max(_i(d['totalHints']), _i(d['hintsUsed'])),
       session: _s(d['session']),
       painting: _b(d['painting']),
+      par: _i(d['par']),
+      peeked: _b(d['peeked']),
+      bestLock: _i(d['bestLock']),
     );
   }
 
@@ -643,6 +659,9 @@ class PuzzleProgress {
         'totalHints': totalHints,
         'session': session,
         'painting': painting,
+        'par': par,
+        'peeked': peeked,
+        'bestLock': bestLock,
       };
 
   /// A board is saved (a first play or a replay of a solved picture).

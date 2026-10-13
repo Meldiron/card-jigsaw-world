@@ -25,7 +25,8 @@ class ProgressNotifier extends AsyncNotifier<Map<String, PuzzleProgress>> {
   void _do(SyncOp op) => ref.read(syncProvider.notifier).enqueue(op);
 
   /// Saves the board in progress. [session] is the play-through; [resumed] says it continues the
-  /// board that was saved for the picture.
+  /// board that was saved for the picture. [par], [peeked] and [bestLock] describe the
+  /// play-through for the quests (its par, whether Peek was used, the most cards one move locked).
   void saveBoard(
     String puzzleId, {
     required int gridSize,
@@ -37,6 +38,9 @@ class ProgressNotifier extends AsyncNotifier<Map<String, PuzzleProgress>> {
     required String session,
     required bool resumed,
     bool painting = false,
+    int par = 0,
+    bool peeked = false,
+    int bestLock = 0,
   }) =>
       _do(SyncOp.board(
         puzzleId: puzzleId,
@@ -49,6 +53,9 @@ class ProgressNotifier extends AsyncNotifier<Map<String, PuzzleProgress>> {
         session: session,
         resumed: resumed,
         painting: painting,
+        par: par,
+        peeked: peeked,
+        bestLock: bestLock,
       ));
 
   /// Records a finished board: the picture is solved, stars and best moves and time keep the
@@ -64,6 +71,9 @@ class ProgressNotifier extends AsyncNotifier<Map<String, PuzzleProgress>> {
     required String session,
     required bool resumed,
     bool painting = false,
+    int par = 0,
+    bool peeked = false,
+    int bestLock = 0,
     DateTime? at,
   }) =>
       _do(SyncOp.win(
@@ -77,6 +87,9 @@ class ProgressNotifier extends AsyncNotifier<Map<String, PuzzleProgress>> {
         session: session,
         resumed: resumed,
         painting: painting,
+        par: par,
+        peeked: peeked,
+        bestLock: bestLock,
         at: at,
       ));
 

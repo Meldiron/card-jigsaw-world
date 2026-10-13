@@ -8,14 +8,14 @@ import 'package:go_router/go_router.dart';
 import '../../core/haptics.dart';
 import '../../core/sfx.dart';
 import '../../core/theme/tokens.dart';
-import '../../data/repositories.dart';
 import '../../models/models.dart';
-import '../../state/auth.dart';
 import '../../state/catalog.dart';
 import '../../state/profile.dart';
 import '../../state/progress.dart';
 import '../../state/rewards.dart';
 import '../../state/social.dart';
+import '../../state/unlocks.dart';
+import '../../game/board.dart';
 import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
@@ -55,8 +55,12 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
     final eventProgress = ref.watch(eventProgressProvider).value ?? {};
     final progress = ref.watch(progressProvider).value ?? {};
     final now = DateTime.now();
-    final daily = Goals.daily(progress.values, now);
-    final weekly = Goals.weekly(progress.values, now);
+    final profile = ref.watch(profileProvider).value;
+    final open = ref.watch(openFeaturesProvider);
+    final quests = questsFor(progress.values, profile, open, now);
+    final daily = quests.daily, weekly = quests.weekly;
+    final readyQuests = readyGoals(progress.values, profile, open, now);
+    final readyEvents = ref.watch(readyEventsProvider);
 
     return Scaffold(
       body: RefreshIndicator.adaptive(
@@ -75,6 +79,9 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
                 child: Text('Quests', style: Theme.of(context).textTheme.headlineLarge),
               ),
             ),
+            // Two or more rewards waiting: one tap claims them all.
+            if (readyQuests.length + readyEvents.length >= 2)
+              SliverToBoxAdapter(child: _ClaimAllCard(goals: readyQuests, events: readyEvents)),
             SliverToBoxAdapter(
               child: SectionHeader(
                 title: 'Daily quests',
@@ -251,7 +258,8 @@ class _GoalRow extends ConsumerWidget {
     void play() {
       final p = pickRandomPlayable(ref);
       if (p != null) {
-        context.push('/play/${p.id}?${goal.minCells >= 25 ? 'grid=5x5' : 'grid='}${goal.mode != null ? '&mode=${goal.mode!.code}' : ''}');
+        final grid = goal.minCells > 0 ? GridSpec.fromCells(goal.minCells).code : '';
+        context.push('/play/${p.id}?grid=$grid${goal.mode != null ? '&mode=${goal.mode!.code}' : ''}${goal.painting ? '&painting=1' : ''}');
       } else {
         showToast(context, 'Unlock a pack to start playing', icon: AppIcons.lock);
       }
@@ -324,14 +332,7 @@ class _EventCard extends ConsumerWidget {
     final community = event.type == EventType.social ? ref.watch(communityProgressProvider(event.id)).value : null;
 
     Future<void> claim() async {
-      final userId = ref.read(currentUserIdProvider);
-      if (userId == null) return;
-      final n = ref.read(profileProvider.notifier);
-      await n.addCoins(event.rewardCoins, reason: 'event:${event.id}');
-      if (event.rewardTickets > 0) await n.addTickets(event.rewardTickets, reason: 'event:${event.id}');
-      await ref.read(socialRepositoryProvider).upsertEventProgress(userId, event.id, progress: value, claimed: true);
-      ref.invalidate(eventProgressProvider);
-      if (!context.mounted) return;
+      if (!await claimEventReward(ref, event, value) || !context.mounted) return;
       Sfx.instance.win();
       Haptics.success();
       showToast(context, 'Claimed ${event.rewardCoins} coins${event.rewardTickets > 0 ? ' and ${event.rewardTickets} ticket${event.rewardTickets == 1 ? '' : 's'}' : ''}', icon: AppIcons.check);
@@ -495,4 +496,82 @@ String? _coverHash(WidgetRef ref, GameEvent event) {
     if (p.id == event.packId) return p.blurhash;
   }
   return null;
+}
+
+/// Shown at the top of the Quests tab when two or more rewards are ready:
+/// claims every finished quest and live event in one go, one toast with the
+/// total.
+class _ClaimAllCard extends ConsumerStatefulWidget {
+  const _ClaimAllCard({required this.goals, required this.events});
+  final List<Goal> goals;
+  final List<({GameEvent event, int value})> events;
+
+  @override
+  ConsumerState<_ClaimAllCard> createState() => _ClaimAllCardState();
+}
+
+class _ClaimAllCardState extends ConsumerState<_ClaimAllCard> {
+  bool _busy = false;
+
+  Future<void> _claimAll() async {
+    if (_busy) return;
+    setState(() => _busy = true);
+    var coins = 0, tickets = 0;
+    final profile = ref.read(profileProvider.notifier);
+    for (final g in widget.goals) {
+      if (await profile.claimGoal(g)) {
+        coins += g.coins;
+        tickets += g.tickets;
+      }
+    }
+    for (final e in widget.events) {
+      if (await claimEventReward(ref, e.event, e.value)) {
+        coins += e.event.rewardCoins;
+        tickets += e.event.rewardTickets;
+      }
+    }
+    if (!mounted) return;
+    setState(() => _busy = false);
+    Sfx.instance.win();
+    Haptics.success();
+    showToast(context, claimedLine(coins, tickets), icon: AppIcons.check);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final count = widget.goals.length + widget.events.length;
+    final coins = widget.goals.fold<int>(0, (s, g) => s + g.coins) + widget.events.fold<int>(0, (s, e) => s + e.event.rewardCoins);
+    final tickets = widget.goals.fold<int>(0, (s, g) => s + g.tickets) + widget.events.fold<int>(0, (s, e) => s + e.event.rewardTickets);
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+      child: SoftCard(
+        key: const ValueKey('claim-all'),
+        padding: const EdgeInsets.fromLTRB(16, 12, 12, 12),
+        child: Row(
+          children: [
+            const IconTile(icon: AppIcons.quests, size: 36, radius: 10),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('$count rewards ready', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                  const SizedBox(height: 4),
+                  Wrap(
+                    spacing: 10,
+                    children: [
+                      if (coins > 0) Amount(currency: Currency.coins, value: coins, prefix: '+', size: 14, fontSize: 12.5),
+                      if (tickets > 0) Amount(currency: Currency.tickets, value: tickets, prefix: '+', size: 14, fontSize: 12.5),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 10),
+            BigButton(label: 'Claim all', height: 36, expand: false, loading: _busy, onTap: _claimAll),
+          ],
+        ),
+      ),
+    );
+  }
 }
