@@ -219,3 +219,48 @@ c391 A fresnel lens
 c392 B fresnel lens red
 c393 B fresnel lens
 c399 B european roller flying (border?)
+c405 B- superb fairywren female
+c406 B- scarlet tanager female
+c407 B scarlet tanager heliconia
+c408 A scarlet tanager red
+c409 B western tanager
+c411 B western tanager berries
+c414 B- indigo bunting grass
+c415 B- eastern bluebird
+c416 B eastern bluebird
+c417 B- eastern bluebird
+c418 A cedar waxwing orange bg
+c419 B cedar waxwing
+c420 B- cedar waxwing
+c421 A golden oriole blue sky
+c424 A crimson rosella
+c427 B- wallcreeper rock
+c433 B- bearded reedling
+c434 B bearded reedling
+c437 A turquoise-browed motmot
+c438 B motmot rope
+c440 B- red-billed blue magpie
+c442 B- kea fence
+c447 B pelican head
+c448 B golden snub-nosed monkey
+c451 B- slow loris
+c456 B- hazel dormouse
+c457 B alpine marmot
+c458 B alpine marmot (same author)
+c463 B- bactrian camel zoo
+c464 B bactrian camel
+c468 B echidna
+c469 A echidna
+c470 B- leaf-tailed gecko
+c475 B- marine iguana sand
+c476 B- marine iguana underwater
+c478 B rainbow agama wall
+c480 A rainbow agama
+c481 B rosy maple moth
+c482 B rosy maple moth
+c483 A rosy maple moth
+c486 A hummingbird hawk-moth
+c487 B elephant hawk-moth
+c488 A elephant hawk-moth
+c489 B elephant hawk-moth
+c491 B glasswing butterfly
