@@ -11,13 +11,22 @@
 // with a `_light` suffix. Navigation goes through the router so a changed
 // pack order or a moved button does not derail the run; every board is set
 // up by tapping real moves on the live board.
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:card_jigsaw_world/app.dart';
+import 'package:card_jigsaw_world/core/appwrite.dart';
 import 'package:card_jigsaw_world/core/sfx.dart';
 import 'package:card_jigsaw_world/data/local_store.dart';
+import 'package:card_jigsaw_world/data/repositories.dart';
 import 'package:card_jigsaw_world/features/game/board_widget.dart';
 import 'package:card_jigsaw_world/game/board.dart';
 import 'package:card_jigsaw_world/router.dart';
+import 'package:card_jigsaw_world/state/auth.dart';
 import 'package:card_jigsaw_world/state/settings.dart';
+import 'package:card_jigsaw_world/state/social.dart';
+import 'package:flutter/foundation.dart' show consolidateHttpClientResponseBytes;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' show MaterialApp;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,7 +41,21 @@ const modesPuzzle = 'p-00df45e91273'; // Tropical Beaches: Bora Bora lagoon
 const hexPuzzle = 'p-06ae2d7ad942'; // Sunsets: Key West sunset
 const galleryPack = 'pack-butterflies';
 
+/// Past days of the current daily month solved before the calendar capture
+/// (stars on their tiles). Ids are `daily-YYYY-MM-DD`.
+const dailyDaysToSolve = [1, 3, 6, 8, 10];
+
+/// Photos uploaded through My Puzzles, oldest first (the grid shows newest
+/// first). Catalogue pictures with a CC0 or public-domain licence and no
+/// people: Macarons, Chania lighthouse, Tuxedo kitten II, Corgi puppy. The
+/// last one is played as a puzzle.
+const myPhotos = ['pack-pastries-09', 'p-3b694ec057be', 'p-de0b799403de', 'p-62ce633fc70a'];
+
 const theme = String.fromEnvironment('CJW_STORE_THEME', defaultValue: 'dark');
+
+/// `--dart-define=CJW_STORE_SKIP_UPLOAD=true` skips the My Puzzles uploads
+/// (and their two captures) on a rerun, so live Storage gets no duplicates.
+const skipUpload = bool.fromEnvironment('CJW_STORE_SKIP_UPLOAD');
 const suffix = theme == 'light' ? '_light' : '';
 
 Future<void> settle(WidgetTester tester, [int ms = 1500]) async {
@@ -126,6 +149,75 @@ void main() {
       await move(tester, from, home);
       if (board(tester).isLocked(home)) locked++;
     }
+  }
+
+  /// Sends every card home except those whose home is in [open]; the open
+  /// cards stay shuffled among the open slots.
+  Future<void> lockAllBut(WidgetTester tester, Set<int> open) async {
+    for (var pass = 0; pass < 3; pass++) {
+      for (var home = 0; home < board(tester).cells; home++) {
+        if (open.contains(home)) continue;
+        final b = board(tester);
+        if (b.isLocked(home)) continue;
+        final from = b.slotOfCard(home);
+        if (!single(b, from) || !single(b, home)) continue;
+        await move(tester, from, home);
+      }
+    }
+  }
+
+  /// Every card home except the two top corners, which end up swapped (the
+  /// hero state: one obvious swap left). A move that would put a corner
+  /// card home as a side effect sends it to the other corner instead, so
+  /// the board never completes here. Best effort: a group that forms by
+  /// chance is left as it is (it shows the cobalt group outline).
+  Future<void> swapCornersOnly(WidgetTester tester) async {
+    final a = 0, c = board(tester).cols - 1;
+    for (var pass = 0; pass < 4; pass++) {
+      for (var home = 0; home < board(tester).cells; home++) {
+        if (home == a || home == c) continue;
+        var b = board(tester);
+        if (b.isLocked(home)) continue;
+        final from = b.slotOfCard(home);
+        final there = b.slots[home];
+        if ((from == a && there == a) || (from == c && there == c)) {
+          // The corner card sits at [home] and [home]'s card at its corner:
+          // park the corner card in the other corner first.
+          final other = from == a ? c : a;
+          if (!single(b, home) || !single(b, other)) continue;
+          await move(tester, home, other);
+          b = board(tester);
+          if (b.isLocked(home)) continue;
+        }
+        final f = b.slotOfCard(home);
+        if (!single(b, f) || !single(b, home)) continue;
+        await move(tester, f, home);
+      }
+    }
+  }
+
+  /// Places every piece except a scattered set and one neighbouring pair, so
+  /// the board shows its piece shapes all over a recognisable picture. With
+  /// [interiorOnly] (triangles, hexagons) the open pieces are whole interior
+  /// ones; edge pieces there are halves. Returns the pair (for [buildGroup]).
+  Future<List<int>> lockAllButScattered(WidgetTester tester, {bool interiorOnly = true}) async {
+    final b0 = board(tester);
+    final t = b0.tiling;
+    final maxN = List.generate(b0.cells, (i) => t.neighbours(i).length).reduce((a, c) => a > c ? a : c);
+    final interior = List.generate(b0.cells, (i) => i).where((i) => !interiorOnly || t.neighbours(i).length == maxN).toList();
+    final open = interior.where((i) => (t.row(i) + 2 * t.col(i)) % 3 == 0).toSet();
+    // One neighbouring pair of interior pieces stays open for a fused group.
+    var pair = <int>[];
+    for (final h in interior.where((i) => !open.contains(i))) {
+      final n = t.neighbours(h).where((x) => interior.contains(x) && !open.contains(x) && x != h).toList();
+      if (n.isNotEmpty) {
+        pair = [h, n.first];
+        break;
+      }
+    }
+    open.addAll(pair);
+    await lockAllBut(tester, open);
+    return pair;
   }
 
   /// Assembles a fused (unlocked) group of the cards that belong at [homes]
@@ -237,6 +329,22 @@ void main() {
     }
   }
 
+  /// A catalogue picture as the photo picker would hand it over (JPEG, at
+  /// most 1600 px), fetched from our own Storage.
+  Future<Uint8List> pictureBytes(String puzzleId) async {
+    final client = HttpClient();
+    try {
+      final rowReq = await client.getUrl(Uri.parse('${AppwriteConfig.endpoint}/tablesdb/${AppwriteConfig.databaseId}/tables/${AppwriteConfig.puzzles}/rows/$puzzleId'));
+      rowReq.headers.set('X-Appwrite-Project', AppwriteConfig.projectId);
+      final row = jsonDecode(await (await rowReq.close()).transform(utf8.decoder).join()) as Map<String, dynamic>;
+      final view = row['imageUrl'] as String;
+      final req = await client.getUrl(Uri.parse('${view.replaceFirst('/view?', '/preview?')}&width=1600&quality=88'));
+      return await consolidateHttpClientResponseBytes(await req.close());
+    } finally {
+      client.close();
+    }
+  }
+
   testWidgets('capture store screens', (tester) async {
     SharedPreferences.setMockInitialValues({
       'themeMode': theme,
@@ -270,9 +378,10 @@ void main() {
     // Hero: the Monarch on a 12-card board, mostly placed, one fused group,
     // one card lifted. Then finish it (pack progress, quest progress).
     await startGame(tester, heroPuzzle, 'Cards', 'Easy', difficultyShot: '02_difficulty');
-    await lockMiddle(tester, 7);
-    await buildAnyGroup(tester);
-    await selectOne(tester);
+    // Everything placed but the two top corners (swapped), the left one lifted.
+    await swapCornersOnly(tester);
+    await tester.tapAt(center(tester, 0));
+    await settle(tester, 500);
     await shot(tester, '03_game_cards');
     await tester.tapAt(center(tester, 0)); // drop the selection
     await settle(tester, 300);
@@ -301,8 +410,8 @@ void main() {
     ]) {
       try {
         await startGame(tester, modesPuzzle, mode, tier);
-        await lockMiddle(tester, (board(tester).cells * 0.55).round());
-        await buildAnyGroup(tester);
+        final pair = await lockAllButScattered(tester, interiorOnly: mode == 'Triangles' || mode == 'Hexagons');
+        if (pair.isEmpty || !await buildGroup(tester, pair)) await buildAnyGroup(tester);
         await shot(tester, name);
         if (mode == 'Hexagons') {
           await selectOne(tester);
@@ -322,52 +431,107 @@ void main() {
     await tester.dragUntilVisible(find.text('Card Jigsaw VIP'), find.byType(Scrollable).first, const Offset(0, -300));
     await tester.drag(find.byType(Scrollable).first, const Offset(0, -600));
     await settle(tester, 1200);
+    // Start the view at the Hints heading, not halfway through its subtitle.
+    final hints = find.text('Hints');
+    if (hints.evaluate().isNotEmpty) {
+      await tester.drag(find.byType(Scrollable).first, Offset(0, 152 - tester.getTopLeft(hints.first).dy));
+      await settle(tester, 1200);
+    }
     await shot(tester, '12_store_vip');
     await tester.tap(find.byIcon(CupertinoIcons.xmark).first, warnIfMissed: false);
     await settle(tester, 1200);
 
-    // Library, the daily calendar, a pack.
+    // Quests (before the daily solves, so a few quests are still in
+    // progress), then the live events further down.
+    await go(tester, '/events', ms: 3500);
+    await shot(tester, '13_quests');
+    try {
+      await tester.dragUntilVisible(find.text('Live events'), find.byType(CustomScrollView).last, const Offset(0, -300));
+      await tester.drag(find.byType(CustomScrollView).last, const Offset(0, -500));
+      await settle(tester, 2500);
+      await shot(tester, '14_quests_live');
+    } catch (_) {
+      await binding.takeScreenshot('zz_diag_live_events');
+    }
+
+    // A few past days of this month's daily pack, so the calendar shows stars.
+    final now = DateTime.now();
+    String two(int v) => v.toString().padLeft(2, '0');
+    for (final day in dailyDaysToSolve.where((d) => d < now.day)) {
+      try {
+        await go(tester, '/home', ms: 1500);
+        await startGame(tester, 'daily-${now.year}-${two(now.month)}-${two(day)}', 'Cards', 'Cozy');
+        await solve(tester);
+        await settle(tester, 2500);
+      } catch (e) {
+        await binding.takeScreenshot('zz_diag_daily_$day');
+      }
+    }
+
+    // Library, the daily calendar (top, then scrolled to the day grid), a pack.
     await go(tester, '/library', ms: 3500);
-    await shot(tester, '13_library');
+    await shot(tester, '15_library');
     if (await tapIfShown(tester, 'Daily', ms: 2000)) {
-      await shot(tester, '14_library_daily');
-      final month = find.textContaining(' 2026');
+      await shot(tester, '16_library_daily');
+      final month = find.textContaining(' ${now.year}');
       if (month.evaluate().isNotEmpty) {
         await tester.tap(month.first, warnIfMissed: false);
         await settle(tester, 4500);
-        await shot(tester, '15_daily_month');
+        await shot(tester, '17_daily_month');
+        await tester.drag(find.byType(Scrollable).first, const Offset(0, -330));
+        await settle(tester, 2500);
+        await shot(tester, '18_daily_month_grid');
       }
     }
     await go(tester, '/library/pack/$galleryPack', ms: 4500);
-    await shot(tester, '16_pack');
+    await shot(tester, '19_pack');
 
-    // Quests: daily and weekly quests, then the live events.
-    await go(tester, '/events', ms: 3500);
-    await shot(tester, '17_quests');
-    if (find.text('Live events').evaluate().isNotEmpty || find.byType(CustomScrollView).evaluate().isNotEmpty) {
-      try {
-        await tester.dragUntilVisible(find.text('Live events'), find.byType(CustomScrollView).last, const Offset(0, -300));
-        await tester.drag(find.byType(CustomScrollView).last, const Offset(0, -500));
-        await settle(tester, 2500);
-        await shot(tester, '18_quests_live');
-      } catch (_) {
-        await binding.takeScreenshot('zz_diag_live_events');
+    // My Puzzles: four photos uploaded to live Storage with the app's own
+    // upload (the native photo picker cannot be driven from a test), titled
+    // the way the screen titles them; then the newest one played as a puzzle.
+    {
+      final container = ProviderScope.containerOf(tester.element(find.byType(MaterialApp)));
+      final userId = skipUpload ? null : container.read(currentUserIdProvider);
+      String? lastId;
+      if (userId != null) {
+        for (final id in myPhotos) {
+          final bytes = await pictureBytes(id);
+          final made = await container.read(uploadRepositoryProvider).upload(userId, bytes: bytes, filename: 'photo.jpg', title: 'My photo ${now.day}/${now.month}');
+          lastId = made.id;
+        }
+        container.invalidate(myPuzzlesProvider);
+      }
+      if (!skipUpload) {
+        await go(tester, '/profile/my-puzzles', ms: 6000);
+        await shot(tester, '20_my_puzzles');
+      }
+      if (lastId != null) {
+        try {
+          await startGame(tester, lastId, 'Squares', 'Easy');
+          await lockMiddle(tester, (board(tester).cells * 0.6).round());
+          await buildAnyGroup(tester);
+          await selectOne(tester);
+          await shot(tester, '21_my_puzzle_game');
+          await saveAndQuit(tester);
+        } catch (e) {
+          await binding.takeScreenshot('zz_diag_my_puzzle');
+        }
       }
     }
 
     // League.
     await go(tester, '/social', ms: 4000);
-    await shot(tester, '19_social_league');
+    await shot(tester, '22_social_league');
 
     // Lucky Wheel sheet and the profile.
     await go(tester, '/home', ms: 2000);
     await push(tester, '/wheel', ms: 2500);
-    await shot(tester, '20_wheel');
+    await shot(tester, '23_wheel');
     if (find.byIcon(CupertinoIcons.xmark).evaluate().isNotEmpty) {
       await tester.tap(find.byIcon(CupertinoIcons.xmark).first, warnIfMissed: false);
       await settle(tester, 1200);
     }
     await go(tester, '/profile', ms: 3000);
-    await shot(tester, '21_profile');
-  }, timeout: const Timeout(Duration(minutes: 16)));
+    await shot(tester, '24_profile');
+  }, timeout: const Timeout(Duration(minutes: 20)));
 }

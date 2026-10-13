@@ -51,6 +51,7 @@ INK = (245, 245, 247)
 MUTED = (168, 168, 176)
 ACCENT_DARK = (0x7C, 0x9A, 0xFF)  # Brand.accent, dark theme
 NEUTRAL_CANVAS = (21, 21, 23)
+CALLOUT_EDGE = (78, 78, 84)  # hairline around a callout lifted over a dark screen
 
 SF = "/System/Library/Fonts/SFNS.ttf"
 HELVETICA = "/System/Library/Fonts/HelveticaNeue.ttc"
@@ -74,11 +75,12 @@ class Callout:
     """A zoomed piece of a real capture, floated over the phone."""
 
     raw: str  # capture to cut from
-    box: tuple[int, int, int, int]  # crop in raw pixels (left, top, right, bottom)
+    box: tuple[int, int, int, int] | None  # crop in raw px (l, t, r, b); None = the board (boards.json)
     width: int  # on-slide width of the zoomed card
     center: tuple[int, int]  # on-slide centre
     radius: int = 44  # corner radius of the card (slide px)
-    ring: bool = False  # cobalt ring around the card
+    ring: bool = False  # cobalt ring around the card (default: a hairline grey edge)
+    frac: tuple[float, float, float, float] = (0, 0, 1, 1)  # part of the box to keep (l, t, r, b as fractions)
 
 
 @dataclass
@@ -94,7 +96,7 @@ class Slide:
     callouts: list[Callout] = field(default_factory=list)
     # Where the canvas hue comes from: None = the slide's photo (board, or
     # the whole capture), "neutral" = graphite, or (raw, box) = that crop.
-    tone: str | tuple[str, tuple[int, int, int, int]] | None = None
+    tone: str | tuple[str, tuple[int, int, int, int] | None] | None = None
 
 
 SLIDES: list[Slide] = [
@@ -109,16 +111,14 @@ SLIDES: list[Slide] = [
         "collage",
         "Thousands\nof pictures",
         "Nature, animals, cities, art and space, in 150+ packs.",
-        raw="13_library",
+        raw="15_library",
         phone_w=960,
     ),
     Slide(
         "phone",
         "A new picture\nevery day",
         "Solve today's puzzle for a bonus.",
-        raw="15_daily_month",
-        # Home's "Today" card, zoomed over the month calendar.
-        callouts=[Callout("01_home", (60, 362, 1260, 1021), width=1060, center=(660, 2330), radius=56)],
+        raw="18_daily_month_grid",
     ),
     Slide(
         "grid4",
@@ -129,6 +129,15 @@ SLIDES: list[Slide] = [
     ),
     Slide(
         "phone",
+        "Puzzle your\nown photos",
+        "Add a photo from your library or camera and play it.",
+        raw="20_my_puzzles",
+        tone=("21_my_puzzle_game", None),
+        # The newest photo, mid-game, over the lower half of the grid.
+        callouts=[Callout("21_my_puzzle_game", None, width=600, center=(905, 2235), radius=34)],
+    ),
+    Slide(
+        "phone",
         "Fewer moves,\nmore stars",
         "Coins and XP for every picture you finish.",
         raw="04_complete",
@@ -136,17 +145,17 @@ SLIDES: list[Slide] = [
     Slide(
         "phone",
         "Quests and\nlive events",
-        "Daily and weekly quests, and a pack for each world day.",
-        raw="17_quests",
-        tone=("18_quests_live", (60, 1647, 1260, 2506)),
+        "Daily and weekly quests, plus world-day events.",
+        raw="13_quests",
+        tone=("14_quests_live", (60, 690, 1260, 1566)),
         # A world-day event card from further down the Quests tab.
-        callouts=[Callout("18_quests_live", (60, 1647, 1260, 2506), width=1020, center=(660, 2330), radius=50)],
+        callouts=[Callout("14_quests_live", (60, 690, 1260, 1566), width=1020, center=(660, 2330), radius=50)],
     ),
     Slide(
         "phone",
         "Climb\nthe league",
         "Ranked by XP each season. Add your friends.",
-        raw="19_social_league",
+        raw="22_social_league",
         tone="neutral",
     ),
     Slide(
@@ -397,7 +406,8 @@ def tone_for(slide: Slide, neutral: bool) -> tuple[int, int, int]:
     if neutral or slide.tone == "neutral":
         return NEUTRAL_CANVAS
     if isinstance(slide.tone, tuple):
-        return canvas_tone(load_raw(slide.tone[0]).crop(slide.tone[1]))
+        raw, box = slide.tone
+        return canvas_tone(load_raw(raw).crop(box or board_box(raw)))
     if slide.kind == "grid4":
         sample = load_raw(slide.raws[0]).crop(board_box(slide.raws[0]))
     elif slide.kind == "collage":
@@ -507,9 +517,11 @@ def compose_collage(slide: Slide, bg: tuple[int, int, int]) -> Image.Image:
 
 def add_callouts(canvas: Image.Image, slide: Slide, bg: tuple[int, int, int]) -> None:
     for c in slide.callouts:
-        crop = load_raw(c.raw).crop(c.box)
-        ring = ACCENT_DARK if c.ring else None
-        tile = card(crop, c.width, c.radius, ring=ring, ring_w=6 if ring else 0)
+        l, t, r, b = c.box or board_box(c.raw)
+        fl, ft, fr, fb = c.frac
+        crop = load_raw(c.raw).crop((round(l + (r - l) * fl), round(t + (b - t) * ft), round(l + (r - l) * fr), round(t + (b - t) * fb)))
+        ring = ACCENT_DARK if c.ring else CALLOUT_EDGE
+        tile = card(crop, c.width, c.radius, ring=ring, ring_w=6 if c.ring else 3)
         x, y = c.center[0] - tile.width // 2, c.center[1] - tile.height // 2
         paste_shadowed(canvas, tile, (x, y), c.radius, blur=36, alpha=190, dy=26)
 

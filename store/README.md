@@ -17,7 +17,7 @@ ratings or awards. The research and reasoning are in
 | `raw/*.png` | Untouched in-app captures from the iPhone 17 Pro Max simulator (6.9"), dark theme. Numbered in capture order; see the list below. | 1320x2868 |
 | `raw/boards.json` | Board rectangle (physical px: left, top, width, height) of every game capture, written by the capture driver; the composer crops boards with it. | |
 | `collage/*.jpg` | Pack covers for the slide-2 wall, downloaded from our Storage bucket (`--refresh-collage`; pack ids in `COLLAGE_PACKS`). | 600 px wide |
-| `screenshots/iphone-6.9/01.png` ... `08.png` | Marketing screenshots for the App Store "iPhone 6.9-inch Display" slot. Upload in numeric order. | 1320x2868, RGB |
+| `screenshots/iphone-6.9/01.png` ... `09.png` | Marketing screenshots for the App Store "iPhone 6.9-inch Display" slot. Upload in numeric order. | 1320x2868, RGB |
 | `review/subscription-review.png` | Store screen scrolled to the "Card Jigsaw VIP" card, for the App Store Connect subscription "Review screenshot" field (min 640x920). Same pixels as `raw/12_store_vip.png`. | 1320x2868 |
 | `promo/app-icon-1024.png` | The app icon flattened to RGB (App Store rejects alpha). | 1024x1024 |
 | `promo/vip-promotional-1024.png` | Promotional image for the VIP subscription (icon, "VIP" word mark, one-line benefit). | 1024x1024 |
@@ -28,14 +28,15 @@ daily hook.
 
 | Slide | Headline | Shows |
 | --- | --- | --- |
-| `01.png` | Swap pieces. Reveal the picture. | `raw/03_game_cards.png`: Monarch, 9 of 12 cards placed, one lifted |
-| `02.png` | Thousands of pictures | `raw/13_library.png` in front of a wall of real pack covers (`collage/`) |
-| `03.png` | A new picture every day | `raw/15_daily_month.png` with Home's "Today" card as a callout (work in progress: the callout hides the day grid) |
+| `01.png` | Swap pieces. Reveal the picture. | `raw/03_game_cards.png`: Monarch butterfly, most cards placed, one lifted |
+| `02.png` | Thousands of pictures | `raw/15_library.png` in front of a wall of real pack covers (`collage/`) |
+| `03.png` | A new picture every day | `raw/18_daily_month_grid.png`: this month's calendar, solved days with stars, today outlined |
 | `04.png` | Four ways to play | Board crops of `raw/06`-`09`: Bora Bora lagoon as cards, squares, triangles, hexagons |
-| `05.png` | Fewer moves, more stars | `raw/04_complete.png`: Key West sunset, three stars, coins and XP |
-| `06.png` | Quests and live events | `raw/17_quests.png` with a World Food Day card (`raw/18_quests_live.png`) as a callout |
-| `07.png` | Climb the league | `raw/19_social_league.png` |
-| `08.png` | Every pack with VIP | `raw/12_store_vip.png` |
+| `05.png` | Puzzle your own photos | `raw/20_my_puzzles.png` (four uploaded photos) with the Corgi board of `raw/21_my_puzzle_game.png` as a callout |
+| `06.png` | Fewer moves, more stars | `raw/04_complete.png`: Key West sunset, three stars, coins and XP |
+| `07.png` | Quests and live events | `raw/13_quests.png` with a live world-day event card (`raw/14_quests_live.png`) as a callout |
+| `08.png` | Climb the league | `raw/22_social_league.png` (real player names, approved by the owner) |
+| `09.png` | Every pack with VIP | `raw/12_store_vip.png` |
 
 Raw captures (dark theme; a `--dart-define=CJW_STORE_THEME=light` run writes
 the same names with a `_light` suffix):
@@ -44,22 +45,26 @@ the same names with a `_light` suffix):
 | --- | --- |
 | `01_home.png` | Home: today's daily picture, Lucky Wheel, piggy bank, 1-day streak, level |
 | `02_difficulty.png` | Difficulty screen of "Monarch butterfly": preview, mode and board pickers |
-| `03_game_cards.png` | Cards, "Monarch butterfly" (Butterflies), 12 cards, middle placed, one group, one card lifted |
+| `03_game_cards.png` | Cards, "Monarch butterfly" (Butterflies), 12 cards, middle placed, one card lifted |
 | `04_complete.png` | Win screen of "Key West sunset" (Sunsets) in hexagons: three stars, coins, XP, pack progress |
 | `05_complete_view.png` | "View picture" on the win screen: the finished photo |
-| `06_mode_cards.png` ... `09_mode_hexagons.png` | "Bora Bora lagoon" (Tropical Beaches) mid-game in cards, squares, triangles and hexagons |
+| `06_mode_cards.png` ... `09_mode_hexagons.png` | "Bora Bora lagoon" (Tropical Beaches) in cards, squares, triangles and hexagons: edges placed, scattered whole pieces open, one fused group |
 | `10_game_hexagons.png` | The hexagons board of 09 with one piece lifted |
 | `11_store.png` | Store, top |
 | `12_store_vip.png` | Store, scrolled to the VIP card |
-| `13_library.png` | Library, all packs |
-| `14_library_daily.png` | Library, Daily filter (monthly daily packs) |
-| `15_daily_month.png` | Daily calendar of the current month |
-| `16_pack.png` | "Butterflies" pack page (the Monarch solved) |
-| `17_quests.png` | Quests tab: daily and weekly quests with progress |
-| `18_quests_live.png` | Quests tab scrolled to the live (world-day) events |
-| `19_social_league.png` | Social, league leaderboard |
-| `20_wheel.png` | Lucky Wheel sheet |
-| `21_profile.png` | Profile |
+| `13_quests.png` | Quests tab: daily and weekly quests with progress and two Claim buttons |
+| `14_quests_live.png` | Quests tab scrolled to the live (world-day) events |
+| `15_library.png` | Library, all packs |
+| `16_library_daily.png` | Library, Daily filter (monthly daily packs) |
+| `17_daily_month.png` | Daily calendar of the current month, top |
+| `18_daily_month_grid.png` | The same calendar scrolled to the day grid (five past days solved, today outlined) |
+| `19_pack.png` | "Butterflies" pack page |
+| `20_my_puzzles.png` | My Puzzles with four photos uploaded to live Storage (CC0 / public-domain catalogue pictures: Corgi puppy, Tuxedo kitten II, Chania lighthouse, Macarons) |
+| `21_my_puzzle_game.png` | The Corgi photo as a squares board, mid-game |
+| `22_social_league.png` | Social, league leaderboard |
+| `23_wheel.png` | Lucky Wheel sheet |
+| `24_profile.png` | Profile |
+| `boards.json` | Board rectangles of the game captures |
 
 ## Regenerating
 
@@ -84,7 +89,15 @@ simulator, and a Python 3 with Pillow (`pip install pillow`).
    `store/raw/` plus the board rectangles to `store/raw/boards.json`. The
    pictures are fixed by id at the top of the test (`heroPuzzle`,
    `modesPuzzle`, `hexPuzzle`, `galleryPack`); if one leaves the catalogue,
-   pick another people-free, vivid picture from a free pack. If the
+   pick another people-free, vivid picture from a free pack. Each run
+   uploads four photos to My Puzzles for its new guest (real uploads to the
+   `user-uploads` bucket through the app's `UploadRepository`; the native
+   photo picker cannot be driven from a test). On a rerun that only needs
+   the other screens, add `--dart-define=CJW_STORE_SKIP_UPLOAD=true`: the
+   upload and captures 20-21 are skipped and the earlier files kept. Every
+   run also leaves its guest in the live league (about 430 XP); guests with
+   equal XP make the league header's "#N" disagree with the row, so check
+   slide 8 after a rerun. If the
    simulator shows a stuck "Open in Card Jigsaw?" prompt, `xcrun simctl
    shutdown` it and boot again. Any `raw/zz_diag_*.png` files are
    diagnostics the test writes when a step failed; delete them, they are not

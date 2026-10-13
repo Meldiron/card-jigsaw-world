@@ -56,10 +56,17 @@ A dark gallery wall where the photographs are the only colour.
   bottom edge, so the content is big in thumbnails.
 - **Story in the first three**: 1) the core loop on a nearly finished photo;
   2) the size of the catalogue as a wall of real pack covers behind the
-  Library; 3) the daily picture.
+  Library; 3) the daily picture (the month calendar with solved days).
+- **Order (9 slides)**: Swap pieces. Reveal the picture. / Thousands of
+  pictures / A new picture every day / Four ways to play / Puzzle your own
+  photos / Fewer moves, more stars / Quests and live events / Climb the
+  league / Every pack with VIP.
 - **One signature slide**: the same photo cut four ways (cards, squares,
   triangles, hexagons), as four real board crops. No competitor can show
   this.
+- **Your own photos**: right after the modes, My Puzzles with four real
+  uploads (CC0 / public-domain pictures from our catalogue, no people) and
+  the newest one, a corgi, lifted out as a board mid-game.
 - **Accent**: cobalt only where the app uses it (selection and group
   outlines on the boards, the selected tab). No accent-coloured words.
 - **Honesty**: every number and claim is checked against the code or the
