@@ -596,11 +596,12 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                         ),
                         if (saved != null) ...[const SizedBox(height: 8), BigButton(label: 'Discard progress', kind: ButtonKind.ghost, icon: CupertinoIcons.trash, onTap: () => _discard(saved, spec))],
                         if (widget.fromQuick) ...[
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 4),
                           BigButton(
                             key: const ValueKey('another-picture'),
                             label: 'Another picture',
                             kind: ButtonKind.ghost,
+                            height: 40,
                             icon: CupertinoIcons.shuffle,
                             onTap: () => _anotherPicture(spec, painting),
                           ),

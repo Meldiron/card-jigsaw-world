@@ -23,7 +23,16 @@ String unlockTitle(Unlock u) => switch (u) {
       _ => '${u.label} are open',
     };
 
-/// One or two calm sentences on what the unlock is.
+/// What the unlock is, for a player who does not have it yet.
+String unlockWhat(Unlock u) => switch (u) {
+      Unlock.squares => 'Pictures cut into even squares instead of cards. Squares pay x${GameMode.squares.multiplier}.',
+      Unlock.triangles => 'Up and down triangles that fit together in rows. They pay x${GameMode.triangles.multiplier}.',
+      Unlock.hexagons => 'A honeycomb of six-sided cells, the trickiest shape. Hexagons pay x${GameMode.hexagons.multiplier}.',
+      Unlock.painting => 'Cards start in black and white and get their colour back as they lock. It works with every shape and pays x${Economy.paintingMultiplier}.',
+      Unlock.giant => 'Boards of 100 to 300 cards for the pictures of the Giant pack, with pinch to zoom.',
+    };
+
+/// One or two calm sentences on what just opened.
 String unlockBody(Unlock u) => switch (u) {
       Unlock.squares => 'Pictures can now be cut into even squares. Trickier shapes pay more: squares pay x${GameMode.squares.multiplier}.',
       Unlock.triangles => 'Up and down triangles that fit together in rows. They pay x${GameMode.triangles.multiplier}.',
@@ -94,7 +103,7 @@ Future<void> showLockedInfo(BuildContext context, WidgetRef ref, Unlock u) async
   await showAppAlert(
     context,
     title: '$what at level ${u.level}',
-    message: '${unlockBody(u)}\n\n$left XP to go. Every solved picture brings you closer.',
+    message: '${unlockWhat(u)}\n\n$left XP to go. Every solved picture brings you closer.',
     confirmLabel: 'Got it',
     cancelLabel: null,
   );
@@ -237,7 +246,9 @@ class _UnlockIntroHostState extends ConsumerState<UnlockIntroHost> {
     if (_showing || !mounted) return;
     final u = ref.read(pendingUnlockIntroProvider);
     if (u == null) return;
-    final path = _router?.routerDelegate.currentConfiguration.uri.path;
+    // The top-most route, pushes included (the configuration's own uri stays on the tab below).
+    final router = _router;
+    final path = router == null || router.routerDelegate.currentConfiguration.isEmpty ? null : router.state.uri.path;
     if (path == null || !widget.at(path)) return;
     _showing = true;
     final onTryHere = widget.onTryHere;

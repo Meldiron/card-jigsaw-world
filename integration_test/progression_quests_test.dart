@@ -53,7 +53,7 @@ void main() {
   }
 
   ProviderContainer container(WidgetTester tester) => ProviderScope.containerOf(tester.element(find.byType(CardJigsawApp)));
-  String location(WidgetTester tester) => container(tester).read(routerProvider).routerDelegate.currentConfiguration.uri.toString();
+  String location(WidgetTester tester) => container(tester).read(routerProvider).state.uri.toString();
 
   /// Sends every misplaced card home, one tap-tap move at a time.
   Future<void> solveBoard(WidgetTester tester) async {
