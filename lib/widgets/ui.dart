@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 
 import '../core/haptics.dart';
 import '../core/sfx.dart';
-import '../core/platform.dart';
 import '../core/theme/tokens.dart';
 import 'cached_url_image.dart';
 import 'glass.dart';
@@ -455,7 +454,7 @@ class NetImage extends StatelessWidget {
     Widget img = url.isEmpty
         ? Container(color: c.boardBackground)
         : Image(
-            image: CachedUrlImage(proxiedImageUrl(url)),
+            image: CachedUrlImage(url),
             fit: fit,
             width: width,
             height: height,

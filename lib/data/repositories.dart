@@ -208,13 +208,22 @@ class CatalogRepository {
   CatalogRepository(this._tables);
   final TablesDB _tables;
 
+  /// Every pack row, in pages (the catalogue has well over one page of packs).
   Future<List<Pack>> packs() async {
-    final res = await _tables.listRows(
-      databaseId: _db,
-      tableId: AppwriteConfig.packs,
-      queries: [Query.orderAsc('sortOrder'), Query.limit(200)],
-    );
-    return res.rows.map((r) => Pack.fromRow(r.$id, r.data)).toList();
+    final out = <Pack>[];
+    String? cursor;
+    while (true) {
+      final res = await _tables.listRows(
+        databaseId: _db,
+        tableId: AppwriteConfig.packs,
+        queries: [Query.orderAsc('\$id'), Query.limit(500), if (cursor != null) Query.cursorAfter(cursor)],
+      );
+      out.addAll(res.rows.map((r) => Pack.fromRow(r.$id, r.data)));
+      if (res.rows.length < 500) break;
+      cursor = res.rows.last.$id;
+    }
+    out.sort((a, b) => a.sortOrder != b.sortOrder ? a.sortOrder.compareTo(b.sortOrder) : a.id.compareTo(b.id));
+    return out;
   }
 
   Future<List<Puzzle>> puzzles(String packId) async {
@@ -254,13 +263,22 @@ class CatalogRepository {
     }
   }
 
+  /// Every event row, in pages (past events still count towards player statistics).
   Future<List<GameEvent>> events() async {
-    final res = await _tables.listRows(
-      databaseId: _db,
-      tableId: AppwriteConfig.events,
-      queries: [Query.orderAsc('endAt'), Query.limit(50)],
-    );
-    return res.rows.map((r) => GameEvent.fromRow(r.$id, r.data)).toList();
+    final out = <GameEvent>[];
+    String? cursor;
+    while (true) {
+      final res = await _tables.listRows(
+        databaseId: _db,
+        tableId: AppwriteConfig.events,
+        queries: [Query.orderAsc('\$id'), Query.limit(500), if (cursor != null) Query.cursorAfter(cursor)],
+      );
+      out.addAll(res.rows.map((r) => GameEvent.fromRow(r.$id, r.data)));
+      if (res.rows.length < 500) break;
+      cursor = res.rows.last.$id;
+    }
+    out.sort((a, b) => (a.endAt ?? DateTime(9999)).compareTo(b.endAt ?? DateTime(9999)));
+    return out;
   }
 }
 

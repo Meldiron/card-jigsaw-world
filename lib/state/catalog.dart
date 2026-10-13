@@ -7,7 +7,9 @@ import 'profile.dart';
 import 'progress.dart';
 import 'settings.dart';
 
-final packsProvider = FutureProvider<List<Pack>>((ref) async {
+/// Every pack row, including ones that are not released yet (future daily months, event packs
+/// more than [Pack.soonWindow] away). Screens read [packsProvider]; refresh by invalidating this.
+final packRowsProvider = FutureProvider<List<Pack>>((ref) async {
   final store = ref.read(localStoreProvider);
   try {
     final packs = await ref.watch(catalogRepositoryProvider).packs();
@@ -20,6 +22,23 @@ final packsProvider = FutureProvider<List<Pack>>((ref) async {
     rethrow;
   }
 });
+
+/// The packs the player can see now (see [Pack.isReleasedAt]).
+final packsProvider = FutureProvider<List<Pack>>((ref) async {
+  final rows = await ref.watch(packRowsProvider.future);
+  final now = DateTime.now();
+  return rows.where((p) => p.isReleasedAt(now)).toList();
+});
+
+/// Ids of packs that exist but are not released yet; their puzzles stay out of the app too.
+Future<Set<String>> _hiddenPackIds(Ref ref) async {
+  try {
+    final now = DateTime.now();
+    return {for (final p in await ref.watch(packRowsProvider.future)) if (!p.isReleasedAt(now)) p.id};
+  } catch (_) {
+    return const {};
+  }
+}
 
 Map<String, dynamic> _packToJson(Pack p) => {
       'name': p.name,
@@ -55,14 +74,16 @@ Map<String, dynamic> _puzzleToJson(Puzzle p) => {
 
 final allPuzzlesProvider = FutureProvider<List<Puzzle>>((ref) async {
   final store = ref.read(localStoreProvider);
+  final hiddenPacks = _hiddenPackIds(ref);
+  List<Puzzle> visible(List<Puzzle> all, Set<String> hidden) => hidden.isEmpty ? all : all.where((p) => !hidden.contains(p.packId)).toList();
   try {
     final puzzles = await ref.watch(catalogRepositoryProvider).allPuzzles();
     store.setJsonList('puzzles', puzzles.map((p) => {'id': p.id, ..._puzzleToJson(p)}).toList());
-    return puzzles;
+    return visible(puzzles, await hiddenPacks);
   } catch (e) {
     debugPrint('puzzles failed: $e');
     final cached = store.getJsonList('puzzles');
-    if (cached != null) return cached.map((j) => Puzzle.fromRow(j['id'], Map<String, dynamic>.from(j))).toList();
+    if (cached != null) return visible(cached.map((j) => Puzzle.fromRow(j['id'], Map<String, dynamic>.from(j))).toList(), await hiddenPacks);
     rethrow;
   }
 });

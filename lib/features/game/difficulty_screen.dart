@@ -7,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/haptics.dart';
-import '../../core/platform.dart';
 import '../../core/sfx.dart';
 import '../../core/theme/tokens.dart';
 import '../../game/board.dart';
@@ -98,7 +97,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
     _resolvedUrl = url;
     _stopListening();
     _imageSize = null;
-    final stream = CachedUrlImage(proxiedImageUrl(url)).resolve(ImageConfiguration.empty);
+    final stream = CachedUrlImage(url).resolve(ImageConfiguration.empty);
     final listener = ImageStreamListener((info, _) {
       final size = Size(info.image.width.toDouble(), info.image.height.toDouble());
       info.dispose();

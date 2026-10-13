@@ -77,16 +77,3 @@ class PlatformCaps {
 }
 
 final platformCapsProvider = Provider<PlatformCaps>((ref) => PlatformCaps.current());
-
-/// Hosts that send no CORS headers; browsers refuse to decode their images,
-/// so on the web they go through the `image-proxy` Appwrite Function.
-const corsBlockedHosts = {'openaccess-cdn.clevelandart.org', 'images-assets.nasa.gov', 'cdn.stocksnap.io'};
-const imageProxyBase = 'https://cjw-img.fra.appwrite.run/?u=';
-
-/// Returns the URL the current platform can actually load.
-String proxiedImageUrl(String url) {
-  if (!isWeb) return url;
-  final uri = Uri.tryParse(url);
-  if (uri == null || !corsBlockedHosts.contains(uri.host)) return url;
-  return '$imageProxyBase${Uri.encodeComponent(url)}';
-}

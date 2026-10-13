@@ -109,6 +109,13 @@ tools/content/run.sh status PACK ...           # counts, pool size, openverse bu
 tools/content/run.sh sources                   # providers: active?, licence policy, live health
 ```
 
+Daily months ahead of time: `tools/content/run.sh newdaily 2027-03 [2027-04 ...] [--pick ...]` creates
+the `daily-YYYY-MM` pack row and one dated puzzle per day from the pool of the daily spec whose
+`"months"` list holds that month (`specs/daily-2027a.json`, `daily-2027b.json`); otherwise
+`specs/daily-YYYY.json`. The app hides a daily month until its first day and an event pack until 3
+days before it opens, so creating content a year ahead is safe. Re-run `tools/store/apply_pack_prices.py`
+afterwards.
+
 Reject reasons: `people`, `text`, `landscape`, `duplicate`, `quality` (global: the image is never
 used again anywhere) and `off-theme`, `weak`, `similar` (scoped to this pack only).
 

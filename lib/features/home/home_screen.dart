@@ -56,7 +56,7 @@ class HomeScreen extends ConsumerWidget {
       body: RefreshIndicator.adaptive(
         edgeOffset: MediaQuery.paddingOf(context).top + HeaderBar.height,
         onRefresh: () async {
-          ref.invalidate(packsProvider);
+          ref.invalidate(packRowsProvider);
           ref.invalidate(allPuzzlesProvider);
           await ref.read(profileProvider.notifier).refresh();
         },

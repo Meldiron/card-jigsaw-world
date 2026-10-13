@@ -343,14 +343,37 @@ class Pack {
   bool get isUpcoming => startAt != null && DateTime.now().isBefore(startAt!);
   bool get isExpired => endAt != null && DateTime.now().isAfter(endAt!);
 
+  /// How long before it opens an event (and its pack) shows up as "coming soon".
+  static const soonWindow = Duration(days: 3);
+
+  /// First day of a daily pack's month (local time), from its id `daily-YYYY-MM`.
+  DateTime? get dailyMonth {
+    if (!isDaily) return null;
+    final m = RegExp(r'daily-(\d{4})-(\d{2})').firstMatch(id);
+    if (m == null) return null;
+    return DateTime(int.parse(m.group(1)!), int.parse(m.group(2)!));
+  }
+
   /// Daily packs are identified by id `daily-YYYY-MM`; the current month is free.
   bool get isCurrentMonth {
-    if (!isDaily) return false;
-    final m = RegExp(r'daily-(\d{4})-(\d{2})').firstMatch(id);
-    if (m == null) return false;
+    final month = dailyMonth;
+    if (month == null) return false;
     final now = DateTime.now();
-    return int.parse(m.group(1)!) == now.year && int.parse(m.group(2)!) == now.month;
+    return month.year == now.year && month.month == now.month;
   }
+
+  /// Whether the app shows this pack at all at [now]. The catalogue holds daily months and event
+  /// packs well ahead of time: a daily month appears on its first day, an event pack
+  /// [soonWindow] before it opens. Ended event packs stay (players keep their progress).
+  bool isReleasedAt(DateTime now) {
+    final month = dailyMonth;
+    if (month != null) return !now.isBefore(month);
+    final start = startAt;
+    if (start != null && now.isBefore(start)) return start.difference(now) <= soonWindow;
+    return true;
+  }
+
+  bool get isReleased => isReleasedAt(DateTime.now());
 
   factory Pack.fromRow(String id, Map<String, dynamic> d) => Pack(
         id: id,
@@ -597,8 +620,8 @@ class GameEvent {
   Duration get timeLeft => endAt == null ? Duration.zero : endAt!.difference(DateTime.now());
   Duration get startsIn => startAt == null ? Duration.zero : startAt!.difference(DateTime.now());
 
-  /// Shown in the events list up to three days before it opens.
-  bool get isUpcoming => startAt != null && DateTime.now().isBefore(startAt!) && startsIn.inDays < 3;
+  /// Shown in the events list up to [Pack.soonWindow] before it opens.
+  bool get isUpcoming => startAt != null && DateTime.now().isBefore(startAt!) && startsIn <= Pack.soonWindow;
   bool get isOver => endAt != null && DateTime.now().isAfter(endAt!);
 }
 

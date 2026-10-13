@@ -46,12 +46,10 @@ catalog hosts:
 | cdn.stocksnap.io | 403 to the probe, unverified | 304 |
 | inaturalist-open-data.s3.amazonaws.com, pd.w.org | yes | 106 |
 
-Cleveland Museum of Art and NASA pictures therefore fail to load on web
-(console: "blocked by CORS policy"); the covers stay on their BlurHash and
-the board cannot start. The fix is server-side: either copy those files into
-the `puzzle-images` bucket (Appwrite Storage sends CORS headers for
-registered web platforms) or add an image proxy function and rewrite
-`imageUrl` for those packs. The iPhone app is unaffected.
+This is resolved: since 1.7.0 every picture and cover is served from our
+Appwrite Storage bucket `puzzle-images`, which sends CORS headers for the
+registered web platforms, so the web build loads all pictures directly. The
+former `image-proxy` function was removed (2026-10-13).
 
 ## Layout
 

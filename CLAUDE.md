@@ -89,6 +89,9 @@ skills under `.claude/skills/` hold the detailed workflows.
   `game_screen.dart` (HUD, toolbar Undo/Peek/Magic/Hint, pause sheet with "Change mode or board",
   completion overlay with pack progress and "View picture"), `difficulty_screen.dart` (real-aspect
   preview, rewards chips, Discard progress).
+- `lib/state/catalog.dart`: `packRowsProvider` loads every pack row (paged; refresh by invalidating it),
+  `packsProvider` is what screens see: `Pack.isReleasedAt` hides daily months until their first day and
+  event packs until 3 days before they open (content is created up to a year ahead).
 - `lib/state/`: `profile.dart` (`Economy` constants, VIP, piggy 5/picture up to 500), `rewards.dart`
   (level curve `LevelRewards.levelForXp`, daily 3 + 1 VIP / weekly 5 + 1 VIP quests), `achievements.dart`,
   `progress.dart`, `merge.dart` + `merge_flow.dart` (guest→account save merge), `auth.dart`, `social.dart`.
@@ -97,7 +100,7 @@ skills under `.claude/skills/` hold the detailed workflows.
   skips the rewarded countdown.
 - `lib/data/purchases.dart`: StoreKit products (coins_1000/3000/5500/12000, tickets_5/15, hints_5/15,
   vip_monthly/yearly), verified server-side by the `verify-purchase` function.
-- `lib/core/platform.dart`: web capability flags, `proxiedImageUrl` for CORS-blocked hosts.
+- `lib/core/platform.dart`: web capability flags.
   `lib/core/sfx.dart`: `CJW_MUTE`.
 - Routes (`lib/router.dart`): /welcome /home /library /library/pack/:packId /events (Quests) /social
   /profile (+settings, account, my-puzzles) /play/:puzzleId (difficulty) /game/:puzzleId/:grid /store
@@ -111,7 +114,7 @@ skills under `.claude/skills/` hold the detailed workflows.
   `totalSeconds`, `solvedByMode` are public.
 - Functions: `verify-purchase` (StoreKit 2 JWS verification, grants, App Store Server Notifications at
   `https://cjw-verify-purchase.fra.appwrite.run/notifications`; secret vars can only be updated with
-  `secret: true`), `image-proxy` (`https://cjw-img.fra.appwrite.run/?u=<encoded>`, allow-listed hosts).
+  `secret: true`). There is no image proxy: pictures load straight from Storage on every platform.
 - Site `card-jigsaw-world` → https://card-jigsaw-world.appwrite.network (static, fallback index.html),
   deployed by `tools/dev/deploy-web.sh` (chunked upload). Web build hides purchases, gift codes,
   widgets; Apple sign-in on web uses the OAuth redirect `/auth/callback` (browser sign-in still needs a

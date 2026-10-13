@@ -45,7 +45,7 @@ class LibraryScreen extends ConsumerWidget {
           icon: AppIcons.signal,
           title: 'Packs did not load',
           message: 'Check your connection and try again.',
-          action: BigButton(label: 'Try again', expand: false, onTap: () => ref.invalidate(packsProvider)),
+          action: BigButton(label: 'Try again', expand: false, onTap: () => ref.invalidate(packRowsProvider)),
         ),
         data: (list) {
           final hasEvents = list.any((p) => p.hasWindow && !p.isExpired);
