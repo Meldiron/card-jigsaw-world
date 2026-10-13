@@ -15940,3 +15940,11 @@
 {"puzzle": "p-02393a004ea6", "title": "Christianshavn, Copenhagen", "event": "retitle", "at": "2026-10-14T01:18:50"}
 {"puzzle": "p-d8e2ac7e3500", "title": "Shopfront in central Porto", "event": "retitle", "at": "2026-10-14T01:18:51"}
 {"pack": "pack-colourful-houses", "fields": ["accent", "imageCount", "puzzlesUpdatedAt"], "event": "pack-update", "at": "2026-10-14T01:19:01"}
+{"pack": "evpack-thanksgiving-2026", "puzzle": "evpack-thanksgiving-2026-09", "url": "https://live.staticflickr.com/65535/51555871928_46580e1c32_b.jpg", "reason": "quality", "event": "delete", "at": "2026-10-14T01:47:59"}
+{"pack": "evpack-thanksgiving-2026", "puzzle": "p-043d484e4fcc", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Concord_Viala_et_Vermorel.jpg/1280px-Concord_Viala_et_Vermorel.jpg", "topic": "Concord grapes", "event": "create", "at": "2026-10-14T01:48:02"}
+{"pack": "evpack-thanksgiving-2026", "fields": ["imageCount", "puzzlesUpdatedAt"], "event": "pack-update", "at": "2026-10-14T01:48:03"}
+{"pack": "evpack-thanksgiving-2026", "puzzle": "p-043d484e4fcc", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Concord_Viala_et_Vermorel.jpg/1280px-Concord_Viala_et_Vermorel.jpg", "reason": "quality", "event": "delete", "at": "2026-10-14T01:48:27"}
+{"pack": "evpack-thanksgiving-2026", "puzzle": "p-dd7e228e9aa6", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Raw_sweet_potato.jpg/1280px-Raw_sweet_potato.jpg", "topic": "sweet potatoes", "event": "create", "at": "2026-10-14T01:48:29"}
+{"pack": "evpack-thanksgiving-2026", "fields": ["imageCount", "puzzlesUpdatedAt"], "event": "pack-update", "at": "2026-10-14T01:48:30"}
+{"pack": "evpack-thanksgiving-2027", "puzzle": "p-567c062846a4", "url": "https://live.staticflickr.com/65535/51555871928_46580e1c32_b.jpg", "reason": "quality", "event": "delete", "at": "2026-10-14T01:48:32"}
+{"pack": "evpack-thanksgiving-2027", "fields": ["imageCount", "puzzlesUpdatedAt"], "event": "pack-update", "at": "2026-10-14T01:48:33"}

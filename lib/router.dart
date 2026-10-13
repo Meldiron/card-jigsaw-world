@@ -34,8 +34,10 @@ final routerProvider = Provider<GoRouter>((ref) {
     // falls back here.
     onException: (context, state, router) => router.go(onboarded ? '/home' : '/welcome'),
     redirect: (context, state) {
-      // Widget deep links arrive as /play/<id>; let them through even for new installs.
-      if (!onboarded && state.uri.path.startsWith('/play/')) {
+      // Deep links (the widget's /play/<id>, App Store In-App Events' /library/pack/<id>) go
+      // straight to their screen, even for new installs, and count as onboarding.
+      final path = state.uri.path;
+      if (!onboarded && (path.startsWith('/play/') || path.startsWith('/library/pack/'))) {
         ref.read(settingsProvider.notifier).setOnboarded();
       }
       return null;

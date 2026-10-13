@@ -2230,27 +2230,27 @@
 "status": "verified"
 },
 "evpack-thanksgiving-2026": {
-"added": 22,
-"at": "2026-10-12T18:47:06",
+"added": 24,
+"at": "2026-10-14T01:49:06",
 "category": "Event",
 "issues": 0,
 "kind": "event",
 "last_step": "verify",
 "name": "Thanksgiving",
 "puzzles": 24,
-"removed": 12,
+"removed": 14,
 "status": "verified"
 },
 "evpack-thanksgiving-2027": {
 "added": 24,
-"at": "2026-10-12T18:47:27",
+"at": "2026-10-14T01:49:10",
 "category": "Event",
 "issues": 0,
 "kind": "event",
 "last_step": "verify",
 "name": "Thanksgiving",
-"puzzles": 24,
-"removed": 10,
+"puzzles": 23,
+"removed": 11,
 "status": "verified"
 },
 "evpack-un-day-2026": {

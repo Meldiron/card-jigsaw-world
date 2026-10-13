@@ -16265,6 +16265,12 @@
 "pack": "evpack-un-day-2026",
 "reason": "people"
 },
+"https://live.staticflickr.com/65535/51555871928_46580e1c32_b.jpg": {
+"at": "2026-10-14",
+"label": "evpack-thanksgiving-2026-09",
+"pack": "evpack-thanksgiving-2026",
+"reason": "quality"
+},
 "https://live.staticflickr.com/65535/51556013164_26e0b695f3_b.jpg": {
 "at": "2026-10-12",
 "label": "pack-hummingbirds-07",
@@ -79030,6 +79036,12 @@
 "label": "c40",
 "pack": "pack-autumn-berries",
 "reason": "weak"
+},
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Concord_Viala_et_Vermorel.jpg/1280px-Concord_Viala_et_Vermorel.jpg": {
+"at": "2026-10-14",
+"label": "p-043d484e4fcc",
+"pack": "evpack-thanksgiving-2026",
+"reason": "quality"
 },
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Cr%C3%AApe_au_mielleux_de_cidre.jpg/1280px-Cr%C3%AApe_au_mielleux_de_cidre.jpg": {
 "at": "2026-10-12",
