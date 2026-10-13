@@ -536,3 +536,28 @@ c1025 B jan rosca de reyes
 c1026 B king cake
 c1030 B- jan frozen leaves
 c1031 B jan frosted lichen
+c1040 B dec fieldfare snow
+c1041 A dec redwing berries
+c1047 A jan chamois snow
+c1048 B jan frosted tree
+c1049 B- jan blue tit feeder
+c1050 B- jan blue tit feeder
+c1051 A jan hoarfrost beech leaf
+c1054 B- jan ice twig
+c1056 A dec wooden church snow
+c1060 A dec snow on berries
+c1061 B dec berries blue bg
+c1062 A dec snow on rowan berries
+c1066 B dec wooden christmas tree ornament
+c1071 B dec spritz cookies
+c1072 B dec macaroons
+c1073 B- dec florentine
+c1079 A dec candle lantern
+c1080 A dec glass icicle ornament
+c1083 A jan scarlet elf cup
+c1087 B jan velvet shank
+c1089 B jan jelly ear
+c1090 B jan jelly ear
+c1094 B jan witch's butter
+c1095 B may holly blue
+c1096 B apr holly blue
