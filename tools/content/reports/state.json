@@ -250,16 +250,16 @@
 "status": "verified"
 },
 "ai-abstract": {
-"added": 23,
-"at": "2026-10-13T16:09:53",
+"added": 28,
+"at": "2026-10-13T16:19:30",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "reject 2 people",
+"last_step": "apply",
 "name": "AI Abstract",
 "puzzles": 20,
-"removed": 3,
-"status": "audited"
+"removed": 8,
+"status": "fixed"
 },
 "ai-all": {
 "added": 0,
@@ -402,28 +402,28 @@
 "status": "audited"
 },
 "ai-little-creatures": {
-"added": 20,
-"at": "2026-10-13T16:10:03",
+"added": 25,
+"at": "2026-10-13T16:18:34",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "reject 5 text",
+"last_step": "apply",
 "name": "AI Little Creatures",
 "puzzles": 20,
-"removed": 0,
-"status": "audited"
+"removed": 5,
+"status": "fixed"
 },
 "ai-myths-monsters": {
-"added": 26,
-"at": "2026-10-13T16:10:04",
+"added": 30,
+"at": "2026-10-13T16:23:29",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "reject 1 people",
+"last_step": "apply",
 "name": "AI Myths and Monsters",
 "puzzles": 24,
-"removed": 2,
-"status": "audited"
+"removed": 6,
+"status": "fixed"
 },
 "ai-neon-nights": {
 "added": 28,
@@ -450,16 +450,16 @@
 "status": "audited"
 },
 "ai-robots": {
-"added": 21,
-"at": "2026-10-13T16:10:06",
+"added": 25,
+"at": "2026-10-13T16:22:11",
 "category": "AI",
 "issues": 0,
 "kind": "new",
-"last_step": "reject 4 text",
+"last_step": "apply",
 "name": "AI Robots and Machines",
 "puzzles": 20,
-"removed": 1,
-"status": "audited"
+"removed": 5,
+"status": "fixed"
 },
 "ai-space": {
 "added": 28,
@@ -2659,8 +2659,8 @@
 },
 "pack-carousels": {
 "added": 0,
-"at": "2026-10-13T15:33:58",
-"last_step": "reject 11 off-theme",
+"at": "2026-10-13T16:22:57",
+"last_step": "pool 54 usable",
 "puzzles": null,
 "removed": 0,
 "status": "audited"
@@ -2906,12 +2906,16 @@
 "status": "verified"
 },
 "pack-folk-art": {
-"added": 0,
-"at": "2026-10-13T15:27:54",
-"last_step": "reject 33 off-theme",
-"puzzles": null,
+"added": 24,
+"at": "2026-10-13T16:23:36",
+"category": "Patterns",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "Folk Art",
+"puzzles": 24,
 "removed": 0,
-"status": "audited"
+"status": "verified"
 },
 "pack-foxes": {
 "added": 23,
@@ -3946,12 +3950,16 @@
 "status": "verified"
 },
 "pack-wallpapers": {
-"added": 0,
-"at": "2026-10-13T16:15:56",
-"last_step": "pool 98 usable",
-"puzzles": null,
-"removed": 0,
-"status": "audited"
+"added": 25,
+"at": "2026-10-13T16:20:31",
+"category": "Patterns",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "Wallpapers",
+"puzzles": 24,
+"removed": 1,
+"status": "verified"
 },
 "pack-waterfalls": {
 "added": 13,

@@ -15368,3 +15368,184 @@
 {"puzzle": "p-6f8c99057bb7", "title": "Leopard on a tree at sunset", "event": "retitle", "at": "2026-10-13T16:15:58"}
 {"puzzle": "p-88b15e266924", "title": "Tiger and cubs at a temple", "event": "retitle", "at": "2026-10-13T16:16:00"}
 {"puzzle": "p-be2b196bdfd7", "title": "Stag in a misty forest", "event": "retitle", "at": "2026-10-13T16:16:01"}
+{"pack": "ai-little-creatures", "puzzle": "p-58189d594959", "url": "https://live.staticflickr.com/65535/52304208782_1bbcbb7d9d_b.jpg", "reason": "text", "event": "delete", "at": "2026-10-13T16:18:22"}
+{"pack": "ai-little-creatures", "puzzle": "p-46f90e98fa24", "url": "https://live.staticflickr.com/65535/52304928586_fc9938102d_b.jpg", "reason": "text", "event": "delete", "at": "2026-10-13T16:18:23"}
+{"pack": "ai-little-creatures", "puzzle": "p-754c114b46f2", "url": "https://live.staticflickr.com/65535/52313495828_d937751cc4_b.jpg", "reason": "text", "event": "delete", "at": "2026-10-13T16:18:23"}
+{"pack": "ai-little-creatures", "puzzle": "p-2ea11da22582", "url": "https://live.staticflickr.com/65535/52304208832_6c469f9e27_b.jpg", "reason": "text", "event": "delete", "at": "2026-10-13T16:18:23"}
+{"pack": "ai-little-creatures", "puzzle": "p-8307cce4ef43", "url": "https://live.staticflickr.com/65535/52305393348_dd3c67a852_b.jpg", "reason": "text", "event": "delete", "at": "2026-10-13T16:18:24"}
+{"pack": "ai-little-creatures", "puzzle": "p-ecd50d700847", "url": "https://live.staticflickr.com/65535/52731335647_db9f093134_b.jpg", "topic": "AI-generated chameleon", "event": "create", "at": "2026-10-13T16:18:26"}
+{"pack": "pack-wallpapers", "category": "Patterns", "event": "pack-create", "at": "2026-10-13T16:18:26"}
+{"pack": "ai-little-creatures", "puzzle": "p-b4f2fcab572f", "url": "https://live.staticflickr.com/65535/54078499015_08a6ac1f35_b.jpg", "topic": "AI-generated pig", "event": "create", "at": "2026-10-13T16:18:27"}
+{"pack": "ai-little-creatures", "puzzle": "p-ea56b7e5c11b", "url": "https://live.staticflickr.com/65535/53468907810_8677214e51_b.jpg", "topic": "AI-generated raccoon", "event": "create", "at": "2026-10-13T16:18:29"}
+{"pack": "ai-little-creatures", "puzzle": "p-6f8ada5d322e", "url": "https://live.staticflickr.com/65535/52305368220_22cedd94d4_b.jpg", "topic": "stable diffusion rain", "event": "create", "at": "2026-10-13T16:18:30"}
+{"pack": "ai-little-creatures", "puzzle": "p-e9f720977f67", "url": "https://live.staticflickr.com/65535/53900204333_6eed3a465e_b.jpg", "topic": "AI-generated mouse", "event": "create", "at": "2026-10-13T16:18:33"}
+{"pack": "ai-little-creatures", "fields": ["accent", "blurhash", "coverSourceUrl", "coverUrl", "imageCount"], "event": "pack-update", "at": "2026-10-13T16:18:34"}
+{"puzzle": "p-ecd50d700847", "title": "Chameleon on a jungle branch", "event": "retitle", "at": "2026-10-13T16:18:40"}
+{"pack": "pack-wallpapers", "puzzle": "p-a536dd04c35b", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Zuber_%26_Cie_-_Floral_Brocade_-_Google_Art_Project.jpg/1280px-Zuber_%26_Cie_-_Floral_Brocade_-_Google_Art_Project.jpg", "topic": "Zuber wallpaper", "event": "create", "at": "2026-10-13T16:18:40"}
+{"puzzle": "p-b4f2fcab572f", "title": "Pig with red lipstick", "event": "retitle", "at": "2026-10-13T16:18:41"}
+{"puzzle": "p-ea56b7e5c11b", "title": "Raccoon in flying goggles", "event": "retitle", "at": "2026-10-13T16:18:42"}
+{"puzzle": "p-6f8ada5d322e", "title": "Turtle wading through a pond", "event": "retitle", "at": "2026-10-13T16:18:42"}
+{"pack": "pack-wallpapers", "puzzle": "p-53707f609643", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Salzburg_-_Schloss_Hellbrunn_-_Chinese_Room_Wallpaper_-_2018-08-21.jpg/1280px-Salzburg_-_Schloss_Hellbrunn_-_Chinese_Room_Wallpaper_-_2018-08-21.jpg", "topic": "Chinese wallpaper", "event": "create", "at": "2026-10-13T16:18:43"}
+{"puzzle": "p-e9f720977f67", "title": "Mice playing music", "event": "retitle", "at": "2026-10-13T16:18:43"}
+{"pack": "pack-wallpapers", "puzzle": "p-5832e2650a41", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Sidewall_%28France%29%2C_ca._1900_%28CH_18658321%29.jpg/1280px-Sidewall_%28France%29%2C_ca._1900_%28CH_18658321%29.jpg", "topic": "sidewall birds", "event": "create", "at": "2026-10-13T16:18:45"}
+{"pack": "pack-wallpapers", "puzzle": "p-1c602f9e6efb", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Trellis_MET_DP306738.jpg/1280px-Trellis_MET_DP306738.jpg", "topic": "block printed wallpaper", "event": "create", "at": "2026-10-13T16:18:46"}
+{"pack": "pack-wallpapers", "puzzle": "p-a24b636f1708", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Sidewall_%28France%29%2C_1920_%28CH_18574879-2%29.jpg/1280px-Sidewall_%28France%29%2C_1920_%28CH_18574879-2%29.jpg", "topic": "sidewall stripes", "event": "create", "at": "2026-10-13T16:18:48"}
+{"pack": "pack-wallpapers", "puzzle": "p-8dd5de3e5d66", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Bordure_-_papier_peint_-_btv1b6901417t.jpg/1280px-Bordure_-_papier_peint_-_btv1b6901417t.jpg", "topic": "papier peint", "event": "create", "at": "2026-10-13T16:18:50"}
+{"pack": "pack-wallpapers", "puzzle": "p-a065fec3d10d", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Sidewall%2C_Scenic_Chinese_export%2C_ca._1850_%28CH_18397291%29.jpg/1280px-Sidewall%2C_Scenic_Chinese_export%2C_ca._1850_%28CH_18397291%29.jpg", "topic": "sidewall chinoiserie", "event": "create", "at": "2026-10-13T16:18:52"}
+{"pack": "pack-wallpapers", "puzzle": "p-0d7da20f3428", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Sidewall_%28USA%29%2C_1900_%28CH_18445987%29.jpg/1280px-Sidewall_%28USA%29%2C_1900_%28CH_18445987%29.jpg", "topic": "sidewall damask", "event": "create", "at": "2026-10-13T16:18:54"}
+{"pack": "pack-wallpapers", "puzzle": "p-e8c21a428e08", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Design_for_Wallpaper_or_Panel_Met_DP889279.jpg/1280px-Design_for_Wallpaper_or_Panel_Met_DP889279.jpg", "topic": "wallpaper panel", "event": "create", "at": "2026-10-13T16:18:56"}
+{"pack": "pack-wallpapers", "puzzle": "p-ea6d0b081958", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Sidewall_%28Japan%29%2C_1875%E2%80%931900_%28CH_18800183%29.jpg/1280px-Sidewall_%28Japan%29%2C_1875%E2%80%931900_%28CH_18800183%29.jpg", "topic": "sidewall Japanese", "event": "create", "at": "2026-10-13T16:18:58"}
+{"pack": "pack-wallpapers", "puzzle": "p-51a9400b945a", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Sidewall_%28USA%29%2C_1895_%28CH_18482321%29.jpg/1280px-Sidewall_%28USA%29%2C_1895_%28CH_18482321%29.jpg", "topic": "sidewall Art Nouveau", "event": "create", "at": "2026-10-13T16:18:59"}
+{"pack": "pack-wallpapers", "puzzle": "p-4530ed107ba1", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Wallpaper%2C_China_-_Marquis_and_Marchioness_of_Normanby_Bedrooms_-_Chatsworth_House_-_Derbyshire%2C_England_-_DSC03344.jpg/1280px-Wallpaper%2C_China_-_Marquis_and_Marchioness_of_Normanby_Bedrooms_-_Chatsworth_House_-_Derbyshire%2C_England_-_DSC03344.jpg", "topic": "Chinese wallpaper", "event": "create", "at": "2026-10-13T16:19:01"}
+{"pack": "pack-wallpapers", "puzzle": "p-ae61629e6805", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Sidewall%2C_ca._1880_%28CH_85010173%29.jpg/1280px-Sidewall%2C_ca._1880_%28CH_85010173%29.jpg", "topic": "sidewall geometric", "event": "create", "at": "2026-10-13T16:19:03"}
+{"pack": "pack-wallpapers", "puzzle": "p-dfc9f5151dde", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Sidewall%2C_Fruit_or_Pomegranate_or_Four_Fruits%2C_1862_%28CH_18340049%29.jpg/1280px-Sidewall%2C_Fruit_or_Pomegranate_or_Four_Fruits%2C_1862_%28CH_18340049%29.jpg", "topic": "sidewall fruit", "event": "create", "at": "2026-10-13T16:19:05"}
+{"pack": "pack-wallpapers", "puzzle": "p-1f8f37ca3994", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Sidewall_%28USA%29%2C_1900%E2%80%9312_%28CH_18476879%29.jpg/1280px-Sidewall_%28USA%29%2C_1900%E2%80%9312_%28CH_18476879%29.jpg", "topic": "sidewall rococo", "event": "create", "at": "2026-10-13T16:19:07"}
+{"pack": "pack-wallpapers", "puzzle": "p-01b609307f4c", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/M-Badenburg-TapeteA03.JPG/1280px-M-Badenburg-TapeteA03.JPG", "topic": "Chinese export wallpaper", "event": "create", "at": "2026-10-13T16:19:08"}
+{"pack": "pack-wallpapers", "puzzle": "p-2576a4a5dc1e", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Sidewall%2C_1900%E2%80%931920_%28CH_18615659%29.jpg/1280px-Sidewall%2C_1900%E2%80%931920_%28CH_18615659%29.jpg", "topic": "sidewall geometric", "event": "create", "at": "2026-10-13T16:19:10"}
+{"pack": "pack-wallpapers", "puzzle": "p-02c534b6880e", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Sidewall%2C_The_Hawes_Design%2C_1919_%28CH_18639351%29.jpg/1280px-Sidewall%2C_The_Hawes_Design%2C_1919_%28CH_18639351%29.jpg", "topic": "sidewall chinoiserie", "event": "create", "at": "2026-10-13T16:19:13"}
+{"pack": "pack-wallpapers", "puzzle": "p-9991de4f9e0f", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Bordure_-_papier_peint_-_btv1b6901441g.jpg/1280px-Bordure_-_papier_peint_-_btv1b6901441g.jpg", "topic": "papier peint", "event": "create", "at": "2026-10-13T16:19:17"}
+{"pack": "pack-wallpapers", "puzzle": "p-c7ab5eb0da51", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Sidewall_%28France%29%2C_1755%E2%80%9365_%28CH_18615679%29.jpg/1280px-Sidewall_%28France%29%2C_1755%E2%80%9365_%28CH_18615679%29.jpg", "topic": "sidewall birds", "event": "create", "at": "2026-10-13T16:19:19"}
+{"pack": "pack-wallpapers", "puzzle": "p-b55f5997306b", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Sidewall%2C_Vine%2C_1873_%28CH_18471671%29.jpg/1280px-Sidewall%2C_Vine%2C_1873_%28CH_18471671%29.jpg", "topic": "sidewall English", "event": "create", "at": "2026-10-13T16:19:21"}
+{"pack": "ai-abstract", "puzzle": "p-a991cafbeaed", "url": "https://upload.wikimedia.org/wikipedia/commons/5/57/Random_vivid_colors%2C_Picasso_style_forms.jpg", "reason": "people", "event": "delete", "at": "2026-10-13T16:19:21"}
+{"pack": "ai-abstract", "puzzle": "p-84f87d478bad", "url": "https://upload.wikimedia.org/wikipedia/commons/3/3a/DALL%C2%B7E_2024-03-05_16.53.05_-_A_dynamic_and_colorful_depiction_of_the_digital_world%2C_featuring_a_globe_surrounded_by_digital_networks_and_data_streams%2C_various_digital_devices_like.webp", "reason": "people", "event": "delete", "at": "2026-10-13T16:19:22"}
+{"pack": "ai-abstract", "puzzle": "p-84e91f785af3", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/2025%E2%80%9004%E2%80%9024_Thursday_12.40_%28UTC%E2%88%924%29_song_generated_by_artificial_intelligence.jpg/1280px-2025%E2%80%9004%E2%80%9024_Thursday_12.40_%28UTC%E2%88%924%29_song_generated_by_artificial_intelligence.jpg", "reason": "text", "event": "delete", "at": "2026-10-13T16:19:22"}
+{"pack": "ai-abstract", "puzzle": "p-54e239ad8223", "url": "https://live.staticflickr.com/65535/52305393613_58e882e0cc_b.jpg", "reason": "text", "event": "delete", "at": "2026-10-13T16:19:22"}
+{"pack": "ai-abstract", "puzzle": "p-1bc624380ed7", "url": "https://live.staticflickr.com/65535/52305393588_f90aa8b8d7_b.jpg", "reason": "text", "event": "delete", "at": "2026-10-13T16:19:22"}
+{"pack": "pack-wallpapers", "puzzle": "p-6207604b0aea", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Design_for_a_Panel_or_Wallpaper_Met_DP889277.jpg/1280px-Design_for_a_Panel_or_Wallpaper_Met_DP889277.jpg", "topic": "wallpaper panel", "event": "create", "at": "2026-10-13T16:19:23"}
+{"pack": "ai-abstract", "puzzle": "p-bd97599fed06", "url": "https://live.staticflickr.com/65535/53167844600_cd320674b6_b.jpg", "topic": "AI-generated glass", "event": "create", "at": "2026-10-13T16:19:24"}
+{"pack": "pack-wallpapers", "puzzle": "p-994abd9a04de", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Zuber_%26_Cie_-_Sidewall_-_Google_Art_Project_%286852168%29.jpg/1280px-Zuber_%26_Cie_-_Sidewall_-_Google_Art_Project_%286852168%29.jpg", "topic": "Zuber wallpaper", "event": "create", "at": "2026-10-13T16:19:25"}
+{"pack": "ai-abstract", "puzzle": "p-41cfa077814b", "url": "https://live.staticflickr.com/65535/53579117771_1c8e0b01aa_b.jpg", "topic": "midjourney abstract", "event": "create", "at": "2026-10-13T16:19:26"}
+{"pack": "ai-abstract", "puzzle": "p-96c9524ac585", "url": "https://live.staticflickr.com/65535/53497831979_c2188fb2a8_b.jpg", "topic": "AI-generated volcano", "event": "create", "at": "2026-10-13T16:19:27"}
+{"pack": "pack-wallpapers", "puzzle": "p-6b7486982900", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Sidewall_%28France%29%2C_1785_%28CH_18316411%29.jpg/1280px-Sidewall_%28France%29%2C_1785_%28CH_18316411%29.jpg", "topic": "sidewall French", "event": "create", "at": "2026-10-13T16:19:27"}
+{"pack": "pack-wallpapers", "fields": ["blurhash", "coverSourceUrl", "coverUrl", "imageCount"], "event": "pack-update", "at": "2026-10-13T16:19:28"}
+{"pack": "ai-abstract", "puzzle": "p-4454ea1f0b19", "url": "https://live.staticflickr.com/65535/52850643364_39b193c0ee_b.jpg", "topic": "midjourney pattern", "event": "create", "at": "2026-10-13T16:19:28"}
+{"pack": "ai-abstract", "puzzle": "p-cc561050e77c", "url": "https://live.staticflickr.com/65535/54089448395_ce1623e42f_b.jpg", "topic": "AI-generated glass", "event": "create", "at": "2026-10-13T16:19:30"}
+{"pack": "ai-abstract", "fields": ["accent", "blurhash", "coverSourceUrl", "coverUrl", "imageCount"], "event": "pack-update", "at": "2026-10-13T16:19:30"}
+{"puzzle": "p-bd97599fed06", "title": "Celtic knot in stained glass", "event": "retitle", "at": "2026-10-13T16:19:32"}
+{"puzzle": "p-41cfa077814b", "title": "Black rings on a violet sky", "event": "retitle", "at": "2026-10-13T16:19:32"}
+{"puzzle": "p-96c9524ac585", "title": "Rainbow glass volcano", "event": "retitle", "at": "2026-10-13T16:19:33"}
+{"puzzle": "p-4454ea1f0b19", "title": "Gold sunburst on red", "event": "retitle", "at": "2026-10-13T16:19:33"}
+{"puzzle": "p-cc561050e77c", "title": "Glass dahlia", "event": "retitle", "at": "2026-10-13T16:19:34"}
+{"pack": "pack-wallpapers", "puzzle": "p-2576a4a5dc1e", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Sidewall%2C_1900%E2%80%931920_%28CH_18615659%29.jpg/1280px-Sidewall%2C_1900%E2%80%931920_%28CH_18615659%29.jpg", "reason": "off-theme", "event": "delete", "at": "2026-10-13T16:19:48"}
+{"pack": "pack-wallpapers", "puzzle": "p-ea51bedb1122", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Sidewall_%28USA%29%2C_1900_%28CH_18480499%29.jpg/1280px-Sidewall_%28USA%29%2C_1900_%28CH_18480499%29.jpg", "topic": "sidewall flowers vase", "event": "create", "at": "2026-10-13T16:19:50"}
+{"pack": "pack-wallpapers", "fields": ["imageCount"], "event": "pack-update", "at": "2026-10-13T16:19:50"}
+{"puzzle": "p-a536dd04c35b", "title": "Zuber floral brocade", "event": "retitle", "at": "2026-10-13T16:20:01"}
+{"puzzle": "p-53707f609643", "title": "Chinese Room, Hellbrunn", "event": "retitle", "at": "2026-10-13T16:20:02"}
+{"puzzle": "p-5832e2650a41", "title": "Pheasants in red", "event": "retitle", "at": "2026-10-13T16:20:02"}
+{"puzzle": "p-1c602f9e6efb", "title": "Trellis", "event": "retitle", "at": "2026-10-13T16:20:02"}
+{"puzzle": "p-a24b636f1708", "title": "Pink flowers on black", "event": "retitle", "at": "2026-10-13T16:20:03"}
+{"puzzle": "p-8dd5de3e5d66", "title": "Triangle border", "event": "retitle", "at": "2026-10-13T16:20:03"}
+{"puzzle": "p-a065fec3d10d", "title": "Chinese garden with rocks", "event": "retitle", "at": "2026-10-13T16:20:03"}
+{"puzzle": "p-0d7da20f3428", "title": "Blue damask", "event": "retitle", "at": "2026-10-13T16:20:04"}
+{"puzzle": "p-e8c21a428e08", "title": "Birds in a flowered arch", "event": "retitle", "at": "2026-10-13T16:20:04"}
+{"puzzle": "p-ea6d0b081958", "title": "Japanese leather paper", "event": "retitle", "at": "2026-10-13T16:20:05"}
+{"puzzle": "p-51a9400b945a", "title": "Art Nouveau tulips", "event": "retitle", "at": "2026-10-13T16:20:05"}
+{"puzzle": "p-4530ed107ba1", "title": "Chinese wallpaper, Chatsworth", "event": "retitle", "at": "2026-10-13T16:20:05"}
+{"puzzle": "p-ae61629e6805", "title": "Aesthetic owls and fans", "event": "retitle", "at": "2026-10-13T16:20:06"}
+{"puzzle": "p-dfc9f5151dde", "title": "Fruit", "event": "retitle", "at": "2026-10-13T16:20:06"}
+{"puzzle": "p-1f8f37ca3994", "title": "Roses and scrolls", "event": "retitle", "at": "2026-10-13T16:20:07"}
+{"puzzle": "p-01b609307f4c", "title": "Birdcage on pink, Badenburg", "event": "retitle", "at": "2026-10-13T16:20:07"}
+{"puzzle": "p-02c534b6880e", "title": "Red and black chinoiserie", "event": "retitle", "at": "2026-10-13T16:20:08"}
+{"puzzle": "p-9991de4f9e0f", "title": "Palmette border", "event": "retitle", "at": "2026-10-13T16:20:08"}
+{"puzzle": "p-c7ab5eb0da51", "title": "Parrots and tits", "event": "retitle", "at": "2026-10-13T16:20:09"}
+{"puzzle": "p-b55f5997306b", "title": "Vine", "event": "retitle", "at": "2026-10-13T16:20:09"}
+{"puzzle": "p-6207604b0aea", "title": "Flower vase on red", "event": "retitle", "at": "2026-10-13T16:20:09"}
+{"puzzle": "p-994abd9a04de", "title": "Zuber damask", "event": "retitle", "at": "2026-10-13T16:20:10"}
+{"puzzle": "p-6b7486982900", "title": "French flowers, 1785", "event": "retitle", "at": "2026-10-13T16:20:10"}
+{"puzzle": "p-ea51bedb1122", "title": "Red damask", "event": "retitle", "at": "2026-10-13T16:20:10"}
+{"puzzle": "p-a536dd04c35b", "author": "Zuber & Cie", "event": "author-fix", "at": "2026-10-13T16:20:11"}
+{"puzzle": "p-5832e2650a41", "author": "Unknown maker", "event": "author-fix", "at": "2026-10-13T16:20:11"}
+{"puzzle": "p-a065fec3d10d", "author": "Unknown maker", "event": "author-fix", "at": "2026-10-13T16:20:11"}
+{"puzzle": "p-e8c21a428e08", "author": "Unknown designer", "event": "author-fix", "at": "2026-10-13T16:20:11"}
+{"puzzle": "p-ea6d0b081958", "author": "Unknown maker", "event": "author-fix", "at": "2026-10-13T16:20:12"}
+{"puzzle": "p-51a9400b945a", "author": "Unknown maker", "event": "author-fix", "at": "2026-10-13T16:20:12"}
+{"puzzle": "p-ae61629e6805", "author": "Unknown maker", "event": "author-fix", "at": "2026-10-13T16:20:12"}
+{"puzzle": "p-1f8f37ca3994", "author": "Unknown maker", "event": "author-fix", "at": "2026-10-13T16:20:13"}
+{"puzzle": "p-02c534b6880e", "author": "Unknown maker", "event": "author-fix", "at": "2026-10-13T16:20:13"}
+{"puzzle": "p-c7ab5eb0da51", "author": "Unknown maker", "event": "author-fix", "at": "2026-10-13T16:20:13"}
+{"puzzle": "p-6207604b0aea", "author": "Unknown designer", "event": "author-fix", "at": "2026-10-13T16:20:13"}
+{"puzzle": "p-6b7486982900", "author": "Unknown maker", "event": "author-fix", "at": "2026-10-13T16:20:14"}
+{"puzzle": "p-1c602f9e6efb", "author": "William Morris", "event": "author-fix", "at": "2026-10-13T16:20:14"}
+{"puzzle": "p-a24b636f1708", "author": "Ch. H. Geffroy", "event": "author-fix", "at": "2026-10-13T16:20:14"}
+{"puzzle": "p-dfc9f5151dde", "author": "William Morris / Jeffrey & Co.", "event": "author-fix", "at": "2026-10-13T16:20:15"}
+{"puzzle": "p-b55f5997306b", "author": "Arthur Sanderson & Sons", "event": "author-fix", "at": "2026-10-13T16:20:15"}
+{"puzzle": "p-ea51bedb1122", "author": "Robert Graves Co.", "event": "author-fix", "at": "2026-10-13T16:20:26"}
+{"pack": "pack-folk-art", "category": "Patterns", "event": "pack-create", "at": "2026-10-13T16:21:52"}
+{"pack": "ai-robots", "puzzle": "p-ed7c267cba82", "url": "https://live.staticflickr.com/65535/52305562085_e5efc9b504_b.jpg", "reason": "text", "event": "delete", "at": "2026-10-13T16:22:00"}
+{"pack": "ai-robots", "puzzle": "p-3ef33e746c5c", "url": "https://upload.wikimedia.org/wikipedia/commons/6/62/DALL%C2%B7E_Romantic_painting_of_machine_with_many_gears.png", "reason": "text", "event": "delete", "at": "2026-10-13T16:22:00"}
+{"pack": "ai-robots", "puzzle": "p-93bb3b861c08", "url": "https://upload.wikimedia.org/wikipedia/commons/8/83/DALL%C2%B7E_2025-02-21_23.36.35_-_A_compact_50W_digital_laser_cutting_and_engraving_machine_with_a_sleek%2C_modern_design._The_machine_has_a_sturdy_metal_frame%2C_a_transparent_protective.webp", "reason": "text", "event": "delete", "at": "2026-10-13T16:22:01"}
+{"pack": "ai-robots", "puzzle": "p-998b8c5b819d", "url": "https://live.staticflickr.com/65535/52313632095_929bb8419e_b.jpg", "reason": "text", "event": "delete", "at": "2026-10-13T16:22:01"}
+{"pack": "ai-robots", "puzzle": "p-1ff4dfb58ca7", "url": "https://live.staticflickr.com/65535/53510192488_357de016db_b.jpg", "topic": "AI-generated retro", "event": "create", "at": "2026-10-13T16:22:03"}
+{"pack": "pack-folk-art", "puzzle": "p-1f0831981dcb", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/20170815_Zalipie_5521.jpg/1280px-20170815_Zalipie_5521.jpg", "topic": "Zalipie", "event": "create", "at": "2026-10-13T16:22:04"}
+{"pack": "ai-robots", "puzzle": "p-9ba967130a08", "url": "https://live.staticflickr.com/65535/53212901235_12db1ba581_b.jpg", "topic": "midjourney robot", "event": "create", "at": "2026-10-13T16:22:04"}
+{"pack": "pack-folk-art", "puzzle": "p-8f839d463488", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Rambergstugo_I_Uppstugo.JPG/1280px-Rambergstugo_I_Uppstugo.JPG", "topic": "rosemaling", "event": "create", "at": "2026-10-13T16:22:06"}
+{"pack": "ai-robots", "puzzle": "p-0ef49c914e70", "url": "https://live.staticflickr.com/65535/52575058800_2588d94fcc_b.jpg", "topic": "ai art robot", "event": "create", "at": "2026-10-13T16:22:06"}
+{"pack": "pack-folk-art", "puzzle": "p-82e62329f3ad", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/%D0%A5%D0%BE%D1%85%D0%BB%D0%BE%D0%BC%D1%81%D0%BA%D0%B0%D1%8F_%D1%80%D0%BE%D1%81%D0%BF%D0%B8%D1%81%D1%8C_%D0%BD%D0%B0_%D0%B4%D0%BE%D1%81%D0%BA%D0%B5.jpg/1280px-%D0%A5%D0%BE%D1%85%D0%BB%D0%BE%D0%BC%D1%81%D0%BA%D0%B0%D1%8F_%D1%80%D0%BE%D1%81%D0%BF%D0%B8%D1%81%D1%8C_%D0%BD%D0%B0_%D0%B4%D0%BE%D1%81%D0%BA%D0%B5.jpg", "topic": "Khokhloma", "event": "create", "at": "2026-10-13T16:22:10"}
+{"pack": "ai-robots", "puzzle": "p-012aebce42d0", "url": "https://live.staticflickr.com/65535/53568552974_dc80a14168_b.jpg", "topic": "AI-generated beetle", "event": "create", "at": "2026-10-13T16:22:10"}
+{"pack": "ai-robots", "fields": ["accent", "imageCount"], "event": "pack-update", "at": "2026-10-13T16:22:11"}
+{"pack": "pack-folk-art", "puzzle": "p-0cd8ae04f862", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Petrikivsky_painting.jpg/1280px-Petrikivsky_painting.jpg", "topic": "Petrykivka painting", "event": "create", "at": "2026-10-13T16:22:12"}
+{"puzzle": "p-1ff4dfb58ca7", "title": "Giant mech in a dust storm", "event": "retitle", "at": "2026-10-13T16:22:13"}
+{"puzzle": "p-9ba967130a08", "title": "Chrome dragon robot", "event": "retitle", "at": "2026-10-13T16:22:14"}
+{"puzzle": "p-0ef49c914e70", "title": "Winged circuit robot", "event": "retitle", "at": "2026-10-13T16:22:15"}
+{"pack": "pack-folk-art", "puzzle": "p-b121e89b1d19", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Stadtmuseum_Neumarkt_030.jpg/1280px-Stadtmuseum_Neumarkt_030.jpg", "topic": "Bauernschrank", "event": "create", "at": "2026-10-13T16:22:15"}
+{"puzzle": "p-012aebce42d0", "title": "Mechanical beetle", "event": "retitle", "at": "2026-10-13T16:22:15"}
+{"pack": "pack-folk-art", "puzzle": "p-01fe3e0d3129", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/%D0%A0%D0%BE%D0%B7%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D1%96_%D0%BA%D0%BE%D1%82%D0%B8%D0%BA%D0%B8.jpg/1280px-%D0%A0%D0%BE%D0%B7%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D1%96_%D0%BA%D0%BE%D1%82%D0%B8%D0%BA%D0%B8.jpg", "topic": "Petrykivka painting", "event": "create", "at": "2026-10-13T16:22:18"}
+{"pack": "pack-folk-art", "puzzle": "p-f06b2920bdcf", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Schostovo_podnos_2.JPG/1280px-Schostovo_podnos_2.JPG", "topic": "Zhostovo", "event": "create", "at": "2026-10-13T16:22:21"}
+{"pack": "pack-folk-art", "puzzle": "p-1e8b7b685ae0", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Koshak_Tile_Deer_1911.jpg/1280px-Koshak_Tile_Deer_1911.jpg", "topic": "Hutsul painted", "event": "create", "at": "2026-10-13T16:22:23"}
+{"pack": "pack-folk-art", "puzzle": "p-f65bf44a6b8f", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/20170815_Zalipie_5504_DxO.jpg/1280px-20170815_Zalipie_5504_DxO.jpg", "topic": "Zalipie painted house", "event": "create", "at": "2026-10-13T16:22:25"}
+{"pack": "pack-folk-art", "puzzle": "p-74a67fa412d7", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Petrykivsky_rospys_vaza.jpg/1280px-Petrykivsky_rospys_vaza.jpg", "topic": "Petrykivka painting", "event": "create", "at": "2026-10-13T16:22:26"}
+{"pack": "pack-folk-art", "puzzle": "p-6cd1e2ca93df", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/%D0%93%D0%BE%D1%80%D0%BE%D0%B4%D0%B5%D1%86%D0%BA%D0%B0%D1%8F_%D1%80%D0%BE%D1%81%D0%BF%D0%B8%D1%81%D1%8C.jpg/1280px-%D0%93%D0%BE%D1%80%D0%BE%D0%B4%D0%B5%D1%86%D0%BA%D0%B0%D1%8F_%D1%80%D0%BE%D1%81%D0%BF%D0%B8%D1%81%D1%8C.jpg", "topic": "Gorodets painting", "event": "create", "at": "2026-10-13T16:22:28"}
+{"pack": "pack-folk-art", "puzzle": "p-27823db48b4b", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/%D0%9A%D0%B5%D1%80%D0%B0%D0%BC%D1%96%D1%87%D0%BD%D0%B8%D0%B9_%D0%BF%D0%BE%D1%81%D1%83%D0%B4_%D0%B7_%D0%BE%D0%BF%D1%96%D1%88%D0%BD%D1%8F%D0%BD%D1%81%D1%8C%D0%BA%D0%B8%D0%BC_%D1%80%D0%BE%D0%B7%D0%BF%D0%B8%D1%81%D0%BE%D0%BC.jpg/1280px-%D0%9A%D0%B5%D1%80%D0%B0%D0%BC%D1%96%D1%87%D0%BD%D0%B8%D0%B9_%D0%BF%D0%BE%D1%81%D1%83%D0%B4_%D0%B7_%D0%BE%D0%BF%D1%96%D1%88%D0%BD%D1%8F%D0%BD%D1%81%D1%8C%D0%BA%D0%B8%D0%BC_%D1%80%D0%BE%D0%B7%D0%BF%D0%B8%D1%81%D0%BE%D0%BC.jpg", "topic": "Opishnia ceramics", "event": "create", "at": "2026-10-13T16:22:31"}
+{"pack": "pack-folk-art", "puzzle": "p-8887e3be8051", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Zalipie_Dom_Malarek_sufit.jpg/1280px-Zalipie_Dom_Malarek_sufit.jpg", "topic": "Zalipie painted house", "event": "create", "at": "2026-10-13T16:22:33"}
+{"pack": "pack-folk-art", "puzzle": "p-46b7dbb95415", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/BMH_-_Schrank_2a.jpg/1280px-BMH_-_Schrank_2a.jpg", "topic": "Bauernmalerei", "event": "create", "at": "2026-10-13T16:22:35"}
+{"pack": "pack-folk-art", "puzzle": "p-dce295baca1a", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/%D0%98%D0%BA%D0%BE%D1%80%D0%BD%D0%B8%D1%86%D0%B0_%D1%81_%D1%85%D0%BE%D1%85%D0%BB%D0%BE%D0%BC%D1%81%D0%BA%D0%BE%D0%B9_%D1%80%D0%BE%D1%81%D0%BF%D0%B8%D1%81%D1%8C%D1%8E%2C_%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D0%BD%D0%B0_%D0%B2_%D0%A1%D0%B5%D0%BC%D1%91%D0%BD%D0%BE%D0%B2%D0%B5%2C_%D0%9D%D0%B8%D0%B6%D0%B5%D0%B3%D0%BE%D1%80%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D1%8F_%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C%2C_%D0%A0%D0%BE%D1%81%D1%81%D0%B8%D1%8F.jpg/1280px-%D0%98%D0%BA%D0%BE%D1%80%D0%BD%D0%B8%D1%86%D0%B0_%D1%81_%D1%85%D0%BE%D1%85%D0%BB%D0%BE%D0%BC%D1%81%D0%BA%D0%BE%D0%B9_%D1%80%D0%BE%D1%81%D0%BF%D0%B8%D1%81%D1%8C%D1%8E%2C_%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D0%BD%D0%B0_%D0%B2_%D0%A1%D0%B5%D0%BC%D1%91%D0%BD%D0%BE%D0%B2%D0%B5%2C_%D0%9D%D0%B8%D0%B6%D0%B5%D0%B3%D0%BE%D1%80%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D1%8F_%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C%2C_%D0%A0%D0%BE%D1%81%D1%81%D0%B8%D1%8F.jpg", "topic": "\u0425\u043e\u0445\u043b\u043e\u043c\u0430", "event": "create", "at": "2026-10-13T16:22:37"}
+{"pack": "pack-folk-art", "puzzle": "p-48ae204ab3d8", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Alebrije20171109p1.jpg/1280px-Alebrije20171109p1.jpg", "topic": "alebrije", "event": "create", "at": "2026-10-13T16:22:39"}
+{"pack": "pack-folk-art", "puzzle": "p-3a49f86e388b", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Folklore_of_Zalipie%2C_Lesser_Poland_Voivodeship%2C_2019%2C_14.jpg/1280px-Folklore_of_Zalipie%2C_Lesser_Poland_Voivodeship%2C_2019%2C_14.jpg", "topic": "Zalipie", "event": "create", "at": "2026-10-13T16:22:41"}
+{"pack": "pack-folk-art", "puzzle": "p-f5b5935db8fc", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/%D0%93%D0%BB%D0%B8%D0%BD%D1%8F%D0%BD%D0%B8%D0%B9_%D0%BA%D1%83%D0%BC%D0%B0%D0%BD%D0%B5%D1%86%D1%8C.jpg/1280px-%D0%93%D0%BB%D0%B8%D0%BD%D1%8F%D0%BD%D0%B8%D0%B9_%D0%BA%D1%83%D0%BC%D0%B0%D0%BD%D0%B5%D1%86%D1%8C.jpg", "topic": "Hutsul painted", "event": "create", "at": "2026-10-13T16:22:43"}
+{"pack": "pack-folk-art", "puzzle": "p-247890c56a15", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/%D0%90%D0%BB%D0%BC%D0%B0%D1%82%D1%8B%2C_%D0%94%D0%BE%D0%BC%D0%B8%D0%BA_%D1%81_%D0%B1%D0%BB%D0%B8%D0%BD%D0%B0%D0%BC%D0%B8%2C_%D0%B4%D0%BE%D1%81%D0%BA%D0%B8.jpg/1280px-%D0%90%D0%BB%D0%BC%D0%B0%D1%82%D1%8B%2C_%D0%94%D0%BE%D0%BC%D0%B8%D0%BA_%D1%81_%D0%B1%D0%BB%D0%B8%D0%BD%D0%B0%D0%BC%D0%B8%2C_%D0%B4%D0%BE%D1%81%D0%BA%D0%B8.jpg", "topic": "Zhostovo tray", "event": "create", "at": "2026-10-13T16:22:45"}
+{"pack": "pack-folk-art", "puzzle": "p-5d1a2728744e", "url": "https://upload.wikimedia.org/wikipedia/commons/1/1a/%D0%9F%D0%B5%D1%82%D1%80%D0%B8%D0%BA%D1%96%D0%B2%D0%BA%D0%B0.jpg", "topic": "\u041f\u0435\u0442\u0440\u0438\u043a\u0456\u0432\u0441\u044c\u043a\u0438\u0439 \u0440\u043e\u0437\u043f\u0438\u0441", "event": "create", "at": "2026-10-13T16:22:47"}
+{"pack": "pack-folk-art", "puzzle": "p-f627ebadcb5b", "url": "https://upload.wikimedia.org/wikipedia/commons/b/b6/Mezenskaya_rospis.jpg", "topic": "Mezen painting", "event": "create", "at": "2026-10-13T16:22:50"}
+{"pack": "pack-folk-art", "puzzle": "p-46b9b2501e3f", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Poland-Zalipie-6VM5%2BPR_Zalipie-2020-07-04_170308_02249.jpg/1280px-Poland-Zalipie-6VM5%2BPR_Zalipie-2020-07-04_170308_02249.jpg", "topic": "Polish folk art painted", "event": "create", "at": "2026-10-13T16:22:53"}
+{"pack": "pack-folk-art", "puzzle": "p-914976541ec1", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/%D0%A5%D0%BE%D1%85%D0%BB%D0%BE%D0%BC%D0%B0_%D1%85%D0%BE%D1%85%D0%BB%D0%BE%D0%BC%D1%81%D0%BA%D0%B0%D1%8F_%D1%80%D0%BE%D1%81%D0%BF%D0%B8%D1%81%D1%8C-Khokhloma_-_%D0%96%D0%B0%D1%80-%D0%BF%D1%82%D0%B8%CC%81%D1%86%D0%B0.jpg/1280px-%D0%A5%D0%BE%D1%85%D0%BB%D0%BE%D0%BC%D0%B0_%D1%85%D0%BE%D1%85%D0%BB%D0%BE%D0%BC%D1%81%D0%BA%D0%B0%D1%8F_%D1%80%D0%BE%D1%81%D0%BF%D0%B8%D1%81%D1%8C-Khokhloma_-_%D0%96%D0%B0%D1%80-%D0%BF%D1%82%D0%B8%CC%81%D1%86%D0%B0.jpg", "topic": "Khokhloma", "event": "create", "at": "2026-10-13T16:22:58"}
+{"pack": "pack-folk-art", "puzzle": "p-57e94f075b8a", "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Poland-Zalipie-6VM5%2BPR_Zalipie-2020-07-04_171857_02297.jpg/1280px-Poland-Zalipie-6VM5%2BPR_Zalipie-2020-07-04_171857_02297.jpg", "topic": "Polish folk art painted", "event": "create", "at": "2026-10-13T16:23:00"}
+{"pack": "pack-folk-art", "fields": ["blurhash", "coverSourceUrl", "coverUrl", "imageCount"], "event": "pack-update", "at": "2026-10-13T16:23:01"}
+{"puzzle": "p-1f0831981dcb", "title": "Painted flowers on a Zalipie cottage", "event": "retitle", "at": "2026-10-13T16:23:15"}
+{"puzzle": "p-8f839d463488", "title": "Rosemaling at Rambergstugo", "event": "retitle", "at": "2026-10-13T16:23:15"}
+{"puzzle": "p-82e62329f3ad", "title": "Khokhloma cutting board", "event": "retitle", "at": "2026-10-13T16:23:16"}
+{"puzzle": "p-0cd8ae04f862", "title": "Petrykivka flowers", "event": "retitle", "at": "2026-10-13T16:23:16"}
+{"puzzle": "p-b121e89b1d19", "title": "Painted cupboard, Neumarkt", "event": "retitle", "at": "2026-10-13T16:23:16"}
+{"puzzle": "p-01fe3e0d3129", "title": "Petrykivka cats", "event": "retitle", "at": "2026-10-13T16:23:16"}
+{"puzzle": "p-f06b2920bdcf", "title": "Zhostovo tray", "event": "retitle", "at": "2026-10-13T16:23:17"}
+{"puzzle": "p-1e8b7b685ae0", "title": "Hutsul tile with deer", "event": "retitle", "at": "2026-10-13T16:23:17"}
+{"puzzle": "p-f65bf44a6b8f", "title": "Painted tree and cottage, Zalipie", "event": "retitle", "at": "2026-10-13T16:23:17"}
+{"puzzle": "p-74a67fa412d7", "title": "Petrykivka vase", "event": "retitle", "at": "2026-10-13T16:23:18"}
+{"pack": "ai-myths-monsters", "puzzle": "p-a0c7caa9fa4f", "url": "https://live.staticflickr.com/65535/52305501993_1d8a5ac570_b.jpg", "reason": "text", "event": "delete", "at": "2026-10-13T16:23:18"}
+{"puzzle": "p-6cd1e2ca93df", "title": "Gorodets cutting board", "event": "retitle", "at": "2026-10-13T16:23:18"}
+{"pack": "ai-myths-monsters", "puzzle": "p-4ef840075466", "url": "https://live.staticflickr.com/65535/52305562075_06d8b55f6c_b.jpg", "reason": "text", "event": "delete", "at": "2026-10-13T16:23:18"}
+{"puzzle": "p-27823db48b4b", "title": "Opishnia pottery", "event": "retitle", "at": "2026-10-13T16:23:18"}
+{"pack": "ai-myths-monsters", "puzzle": "p-e4298c77d3d9", "url": "https://live.staticflickr.com/65535/52305562045_2db468a025_b.jpg", "reason": "text", "event": "delete", "at": "2026-10-13T16:23:18"}
+{"puzzle": "p-8887e3be8051", "title": "Painted ceiling, Zalipie", "event": "retitle", "at": "2026-10-13T16:23:18"}
+{"pack": "ai-myths-monsters", "puzzle": "p-c6a8fcc1cbaf", "url": "https://live.staticflickr.com/65535/53984525433_09f71fc69e_b.jpg", "reason": "people", "event": "delete", "at": "2026-10-13T16:23:18"}
+{"puzzle": "p-46b7dbb95415", "title": "Painted cupboard door", "event": "retitle", "at": "2026-10-13T16:23:19"}
+{"puzzle": "p-dce295baca1a", "title": "Khokhloma caviar dish", "event": "retitle", "at": "2026-10-13T16:23:19"}
+{"puzzle": "p-48ae204ab3d8", "title": "Alebrije", "event": "retitle", "at": "2026-10-13T16:23:19"}
+{"puzzle": "p-3a49f86e388b", "title": "Blue flowers, Zalipie", "event": "retitle", "at": "2026-10-13T16:23:20"}
+{"puzzle": "p-f5b5935db8fc", "title": "Hutsul ceramic flask", "event": "retitle", "at": "2026-10-13T16:23:20"}
+{"pack": "ai-myths-monsters", "puzzle": "p-60eb682fbfcc", "url": "https://live.staticflickr.com/65535/53640432957_b1be62995f_b.jpg", "topic": "AI Generated Image fire", "event": "create", "at": "2026-10-13T16:23:20"}
+{"puzzle": "p-247890c56a15", "title": "Zhostovo trays", "event": "retitle", "at": "2026-10-13T16:23:20"}
+{"puzzle": "p-5d1a2728744e", "title": "Petrykivka rowan berries", "event": "retitle", "at": "2026-10-13T16:23:20"}
+{"puzzle": "p-f627ebadcb5b", "title": "Mezen birch-bark box", "event": "retitle", "at": "2026-10-13T16:23:21"}
+{"puzzle": "p-46b9b2501e3f", "title": "Painted wall and blue door, Zalipie", "event": "retitle", "at": "2026-10-13T16:23:21"}
+{"puzzle": "p-914976541ec1", "title": "Khokhloma firebird", "event": "retitle", "at": "2026-10-13T16:23:21"}
+{"pack": "ai-myths-monsters", "puzzle": "p-b1a48e2668d3", "url": "https://live.staticflickr.com/65535/53212902525_ffe999556a_b.jpg", "topic": "midjourney colorful", "event": "create", "at": "2026-10-13T16:23:21"}
+{"puzzle": "p-57e94f075b8a", "title": "Painted pot, Zalipie", "event": "retitle", "at": "2026-10-13T16:23:21"}
+{"puzzle": "p-1e8b7b685ae0", "author": "Piotr Koshak", "event": "author-fix", "at": "2026-10-13T16:23:22"}
+{"pack": "ai-myths-monsters", "puzzle": "p-415a5750f4ad", "url": "https://live.staticflickr.com/65535/52531564299_3454981423_b.jpg", "topic": "midjourney tokyo", "event": "create", "at": "2026-10-13T16:23:23"}
+{"pack": "ai-myths-monsters", "puzzle": "p-64fb51b837f8", "url": "https://live.staticflickr.com/65535/53521226735_fe920753a5_b.jpg", "topic": "midjourney moon", "event": "create", "at": "2026-10-13T16:23:28"}
+{"pack": "ai-myths-monsters", "fields": ["accent", "imageCount"], "event": "pack-update", "at": "2026-10-13T16:23:29"}
+{"puzzle": "p-8887e3be8051", "author": "Andrzej Otr\u0119bski", "event": "author-fix", "at": "2026-10-13T16:23:30"}
+{"puzzle": "p-f627ebadcb5b", "title": "Mezen painted box", "event": "retitle", "at": "2026-10-13T16:23:30"}
+{"puzzle": "p-60eb682fbfcc", "title": "Dragon setting a castle alight", "event": "retitle", "at": "2026-10-13T16:23:37"}
+{"puzzle": "p-b1a48e2668d3", "title": "Many-headed dragon", "event": "retitle", "at": "2026-10-13T16:23:38"}
+{"puzzle": "p-415a5750f4ad", "title": "Tentacled giant over a city", "event": "retitle", "at": "2026-10-13T16:23:39"}
+{"puzzle": "p-64fb51b837f8", "title": "Golden origami dragon", "event": "retitle", "at": "2026-10-13T16:23:40"}
