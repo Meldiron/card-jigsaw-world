@@ -1,8 +1,8 @@
 {
 "meta": {
 "last_checkpoint": {
-"at": "2026-10-13T13:19:58",
-"msg": "Content: daily-2027-02 (28 days) from pool daily-2027a",
+"at": "2026-10-13T13:22:31",
+"msg": "Content: daily-2027-03 (31 days) from pool daily-2027a",
 "ok": true,
 "pushed": true,
 "stage": "committed"
@@ -1157,9 +1157,21 @@
 "removed": 0,
 "status": "verified"
 },
+"daily-2027-04": {
+"added": 0,
+"at": "2026-10-13T13:25:36",
+"category": "Daily",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "April 2027",
+"puzzles": 30,
+"removed": 0,
+"status": "verified"
+},
 "daily-2027-06": {
 "added": 2,
-"at": "2026-10-13T13:18:24",
+"at": "2026-10-13T13:24:44",
 "category": "Daily",
 "kind": "new",
 "last_step": "reject 1 people",
@@ -1167,6 +1179,17 @@
 "puzzles": 30,
 "removed": 2,
 "status": "audited"
+},
+"daily-2027-07": {
+"added": 0,
+"at": "2026-10-13T13:25:08",
+"category": "Daily",
+"kind": "new",
+"last_step": "newdaily",
+"name": "July 2027",
+"puzzles": 0,
+"removed": 0,
+"status": "pending"
 },
 "deep-space": {
 "added": 24,
