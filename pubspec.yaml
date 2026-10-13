@@ -55,6 +55,8 @@ dependencies:
   in_app_purchase: ^3.3.1
   sign_in_with_apple: ^8.2.0
   in_app_purchase_storekit: ^0.4.13+1
+  # Gunzips the catalogue snapshot (pure Dart, no network).
+  archive: ^4.0.7
 
 dev_dependencies:
   flutter_test:

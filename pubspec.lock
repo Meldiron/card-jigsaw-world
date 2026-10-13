@@ -10,7 +10,7 @@ packages:
     source: hosted
     version: "27.0.0"
   archive:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: archive
       sha256: "58c8d17d8d589c4259f773522815115de873c397b977a29993588487d3f9acb4"

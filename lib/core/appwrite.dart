@@ -17,10 +17,15 @@ class AppwriteConfig {
   static const friends = 'friends';
   static const ledger = 'ledger';
   static const myPuzzles = 'my_puzzles';
+  static const meta = 'meta';
+
+  /// Row in [meta] naming the newest catalogue snapshot file in [catalogBucket].
+  static const catalogPointer = 'catalog';
 
   // Buckets
   static const puzzleImagesBucket = 'puzzle-images';
   static const userUploadsBucket = 'user-uploads';
+  static const catalogBucket = 'catalog';
 
   /// View URL of a file. Public files load from it directly; private player photos are fetched
   /// through the signed-in client under this URL (`ImageFiles`).

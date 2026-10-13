@@ -109,14 +109,16 @@ skills under `.claude/skills/` hold the detailed workflows.
   `game_screen.dart` (HUD, toolbar Undo/Peek/Magic/Hint, pause sheet with "Change mode or board",
   completion overlay with pack progress and "View picture"), `difficulty_screen.dart` (real-aspect
   preview, rewards chips, Discard progress).
-- `lib/state/catalog.dart`: `packRowsProvider` loads every pack row (paged; refresh by invalidating it),
+- `lib/state/catalog.dart`: `catalogProvider` is the catalogue (packs, puzzles, events; refresh by
+  invalidating it); `packRowsProvider`, `allPuzzlesProvider` and `eventsProvider` read it.
   `packsProvider` is what screens see: `Pack.isReleasedAt` hides daily months until their first day and
   event packs until 3 days before they open (content is created up to a year ahead).
-- `lib/state/puzzle_sync.dart`: `PuzzleCatalogSync` keeps the puzzle catalogue on the device. A launch
-  reads only rows changed since the last sync plus the puzzles of packs whose row `$updatedAt` moved;
-  the whole table (8k+ rows, each one a billed read) only on first launch and weekly. This relies on
-  the content tool updating the pack row whenever it removes or replaces puzzles (`finalize_pack`).
-  The content tool itself checks duplicates with `catalog.sync()`, not a full dump.
+- **Catalogue sync** (`docs/catalog-sync.md`): `lib/state/catalog_sync.dart` (`CatalogSync`, snapshot +
+  delta sync). A launch reads only rows changed since the newest one on the device (about 30 reads); the
+  base comes from the daily snapshot file (function `catalog-snapshot`) on first launch and weekly. Never
+  read a whole catalogue table on launch (8k+ rows, each one a billed read). The content tool sets
+  `packs.puzzlesUpdatedAt` whenever it changes a pack's puzzles (`finalize_pack`): that is how devices
+  and the snapshot see removed puzzles. Its duplicate check uses `catalog.sync()`, not a full dump.
 - `lib/state/`: `profile.dart` (`Economy` constants, VIP, piggy 5/picture up to 500), `rewards.dart`
   (level curve `LevelRewards.levelForXp`, daily 3 + 1 VIP / weekly 5 + 1 VIP quests), `achievements.dart`,
   `progress.dart`, `merge.dart` + `merge_flow.dart` (guest→account save merge), `auth.dart`, `social.dart`.
@@ -140,7 +142,7 @@ skills under `.claude/skills/` hold the detailed workflows.
 
 - Endpoint `https://fra.cloud.appwrite.io/v1`, project `6acb4de5003e38d5ebd9`, database `cjw`
   (tables profiles, packs, puzzles, progress, events, event_progress, friends, ledger, my_puzzles,
-  purchases). Profiles are readable by anyone; `level` mirrors XP; aggregates `totalMoves`,
+  purchases, meta). Profiles are readable by anyone; `level` mirrors XP; aggregates `totalMoves`,
   `totalSeconds`, `solvedByMode`, `questsCompleted` and the "Total Completion" numbers
   (`picturesSolved`, `picturesPerfect`, `packsCompleted`, `packsPerfect`, kept in step by
   `ProfileNotifier.syncCompletion`, backfill `tools/dev/backfill_profile_stats.py`) are public.
@@ -148,7 +150,8 @@ skills under `.claude/skills/` hold the detailed workflows.
   of applied sync ops, exactly-once retries) and `progress.session` (play-through id) belong to the save sync.
 - Functions: `verify-purchase` (StoreKit 2 JWS verification, grants, App Store Server Notifications at
   `https://cjw-verify-purchase.fra.appwrite.run/notifications`; secret vars can only be updated with
-  `secret: true`). There is no image proxy: pictures load straight from Storage on every platform.
+  `secret: true`); `catalog-snapshot` (daily 03:00 UTC: catalogue file in bucket `catalog`, pointer row
+  `meta/catalog`; see `docs/catalog-sync.md`). There is no image proxy: pictures load straight from Storage on every platform.
 - Site `card-jigsaw-world` → https://card-jigsaw-world.appwrite.network (static, fallback index.html),
   deployed by `tools/dev/deploy-web.sh` (chunked upload). Web build hides purchases, gift codes,
   widgets. Apple sign-in on web (configured 2026-10-13): Services ID `com.matejbaco.cardjigsawworld.signin`,
@@ -214,7 +217,7 @@ tree, so dispatch the workflow directly as described in the testflight-feedback 
 
 ## Docs index
 
-`docs/native-ui.md` (glass components), `docs/copy-guide.md`, `docs/sync.md` (save sync), `docs/house-ads.md`,
+`docs/native-ui.md` (glass components), `docs/copy-guide.md`, `docs/sync.md` (save sync), `docs/catalog-sync.md`, `docs/house-ads.md`,
 `docs/purchases.md`, `docs/web.md`, `docs/release-flow.md`, `docs/release-checklist.md`,
 `docs/content-rules.md`, `docs/content-sources.md`, `store/README.md` (store assets),
 `tools/store/README.md`, `README.md`.

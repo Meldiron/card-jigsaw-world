@@ -1,27 +1,35 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../core/appwrite.dart';
 import '../data/repositories.dart';
 import '../models/models.dart';
+import 'catalog_sync.dart';
 import 'profile.dart';
 import 'progress.dart';
-import 'puzzle_sync.dart';
 import 'settings.dart';
 
-/// Every pack row, including ones that are not released yet (future daily months, event packs
-/// more than [Pack.soonWindow] away). Screens read [packsProvider]; refresh by invalidating this.
-final packRowsProvider = FutureProvider<List<Pack>>((ref) async {
-  final store = ref.read(localStoreProvider);
+final catalogSyncProvider = Provider((ref) => CatalogSync(ref.read(localStoreProvider), ref.watch(catalogRepositoryProvider)));
+
+/// The catalogue brought up to date with the server (see [CatalogSync]), or the copy on the device
+/// when the server cannot be reached. Refresh by invalidating this.
+final catalogProvider = FutureProvider<CatalogTables>((ref) async {
+  final sync = ref.watch(catalogSyncProvider);
   try {
-    final packs = await ref.watch(catalogRepositoryProvider).packs();
-    store.setJsonList('packs', packs.map((p) => {'id': p.id, ..._packToJson(p)}).toList());
-    return packs;
+    return await sync.sync();
   } catch (e) {
-    debugPrint('packs failed: $e');
-    final cached = store.getJsonList('packs');
-    if (cached != null) return cached.map((j) => Pack.fromRow(j['id'], Map<String, dynamic>.from(j))).toList();
+    debugPrint('catalogue sync failed: $e');
+    final cached = sync.cached();
+    if (cached != null) return cached;
     rethrow;
   }
+});
+
+/// Every pack row, including ones that are not released yet (future daily months, event packs
+/// more than [Pack.soonWindow] away). Screens read [packsProvider].
+final packRowsProvider = FutureProvider<List<Pack>>((ref) async {
+  final rows = (await ref.watch(catalogProvider.future))[AppwriteConfig.packs]!;
+  return [for (final r in rows) Pack.fromRow('${r[r'$id']}', r)]..sort((a, b) => a.sortOrder != b.sortOrder ? a.sortOrder.compareTo(b.sortOrder) : a.id.compareTo(b.id));
 });
 
 /// The packs the player can see now (see [Pack.isReleasedAt]).
@@ -31,47 +39,15 @@ final packsProvider = FutureProvider<List<Pack>>((ref) async {
   return rows.where((p) => p.isReleasedAt(now)).toList();
 });
 
-Map<String, dynamic> _packToJson(Pack p) => {
-      'name': p.name,
-      'category': p.category,
-      'description': p.description,
-      'coverUrl': p.coverUrl,
-      'priceCoins': p.priceCoins,
-      'priceTickets': p.priceTickets,
-      'isFree': p.isFree,
-      'isPremium': p.isPremium,
-      'isSeasonal': p.isSeasonal,
-      'eventId': p.eventId,
-      'sortOrder': p.sortOrder,
-      'imageCount': p.imageCount,
-      'accent': '#${p.accent.toARGB32().toRadixString(16).substring(2)}',
-      'emoji': p.emoji,
-      'startAt': p.startAt?.toIso8601String(),
-      'endAt': p.endAt?.toIso8601String(),
-      'blurhash': p.blurhash,
-      r'$updatedAt': p.updatedAt,
-    };
-
-final puzzleCatalogSyncProvider = Provider((ref) => PuzzleCatalogSync(ref.read(localStoreProvider), ref.watch(catalogRepositoryProvider)));
-
 /// Every puzzle of the released packs (puzzles of packs that are not released yet stay out of the app).
 final allPuzzlesProvider = FutureProvider<List<Puzzle>>((ref) async {
-  final sync = ref.watch(puzzleCatalogSyncProvider);
-  List<Pack>? packs;
-  try {
-    packs = await ref.watch(packRowsProvider.future);
-  } catch (_) {}
+  final rows = (await ref.watch(catalogProvider.future))[AppwriteConfig.puzzles]!;
   final now = DateTime.now();
-  final hidden = {for (final p in packs ?? const <Pack>[]) if (!p.isReleasedAt(now)) p.id};
-  List<Puzzle> visible(List<Puzzle> all) => hidden.isEmpty ? all : all.where((p) => !hidden.contains(p.packId)).toList();
-  try {
-    return visible(await sync.sync(packs));
-  } catch (e) {
-    debugPrint('puzzles failed: $e');
-    final cached = sync.cached();
-    if (cached != null) return visible(cached);
-    rethrow;
-  }
+  final hidden = {for (final p in await ref.watch(packRowsProvider.future)) if (!p.isReleasedAt(now)) p.id};
+  return [
+    for (final r in rows)
+      if (!hidden.contains(r['packId'])) Puzzle.fromRow('${r[r'$id']}', r),
+  ]..sort((a, b) => a.sortOrder != b.sortOrder ? a.sortOrder.compareTo(b.sortOrder) : a.id.compareTo(b.id));
 });
 
 final packPuzzlesProvider = Provider.family<AsyncValue<List<Puzzle>>, String>((ref, packId) {
@@ -87,9 +63,11 @@ final puzzleByIdProvider = Provider.family<Puzzle?, String>((ref, id) {
   return null;
 });
 
+/// Every event row (past events still count towards player statistics), by end date.
 final eventsProvider = FutureProvider<List<GameEvent>>((ref) async {
   try {
-    return await ref.watch(catalogRepositoryProvider).events();
+    final rows = (await ref.watch(catalogProvider.future))[AppwriteConfig.events]!;
+    return [for (final r in rows) GameEvent.fromRow('${r[r'$id']}', r)]..sort((a, b) => (a.endAt ?? DateTime(9999)).compareTo(b.endAt ?? DateTime(9999)));
   } catch (e) {
     debugPrint('events failed: $e');
     return const [];

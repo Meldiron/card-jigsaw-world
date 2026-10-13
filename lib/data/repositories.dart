@@ -4,6 +4,7 @@ import 'dart:math' show min;
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/enums.dart' as enums;
 import 'package:appwrite/models.dart' as models;
+import 'package:archive/archive.dart' show GZipDecoder;
 import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -278,67 +279,56 @@ class ProfileRepository {
 // ---------------------------------------------------------------------------
 // Catalog (packs, puzzles, events)
 // ---------------------------------------------------------------------------
-class CatalogRepository implements PuzzleRowSource {
-  CatalogRepository(this._tables);
+class CatalogRepository implements CatalogSource {
+  CatalogRepository(this._tables, this._storage);
   final TablesDB _tables;
-
-  /// Every pack row, in pages (the catalogue has well over one page of packs).
-  Future<List<Pack>> packs() async {
-    final out = [for (final r in await listAllRows(_tables, AppwriteConfig.packs, [Query.orderAsc('sortOrder')])) Pack.fromRow(r.$id, r.data)];
-    out.sort((a, b) => a.sortOrder != b.sortOrder ? a.sortOrder.compareTo(b.sortOrder) : a.id.compareTo(b.id));
-    return out;
-  }
-
-  Future<List<Puzzle>> puzzles(String packId) async {
-    final rows = await listAllRows(_tables, AppwriteConfig.puzzles, [Query.equal('packId', packId), Query.orderAsc('sortOrder')]);
-    return rows.map((r) => Puzzle.fromRow(r.$id, r.data)).toList();
-  }
-
-  Future<List<Map<String, dynamic>>> _puzzleRows(List<String> queries) async =>
-      [for (final r in await listAllRows(_tables, AppwriteConfig.puzzles, [...queries, Query.orderAsc('\$id')])) r.data];
-
-  @override
-  Future<List<Map<String, dynamic>>> allPuzzleRows() => _puzzleRows(const []);
-
-  @override
-  Future<List<Map<String, dynamic>>> puzzleRowsSince(String updatedAt) => _puzzleRows([Query.greaterThanEqual('\$updatedAt', updatedAt)]);
+  final Storage _storage;
 
   /// Appwrite takes at most 100 values in one `equal` query.
   static const _maxQueryValues = 100;
 
-  @override
-  Future<List<Map<String, dynamic>>> puzzleRowsOfPacks(List<String> packIds) async => [
-        for (var i = 0; i < packIds.length; i += _maxQueryValues)
-          ...await _puzzleRows([Query.equal('packId', packIds.sublist(i, min(i + _maxQueryValues, packIds.length)))]),
-      ];
+  Future<List<Map<String, dynamic>>> _rows(String tableId, List<String> queries) async =>
+      [for (final r in await listAllRows(_tables, tableId, [...queries, Query.orderAsc('\$id')])) r.data];
 
-  Future<Puzzle?> puzzle(String id) async {
+  @override
+  Future<Map<String, dynamic>?> snapshot() async {
+    final models.Row pointer;
     try {
-      final row = await _tables.getRow(databaseId: _db, tableId: AppwriteConfig.puzzles, rowId: id);
-      return Puzzle.fromRow(row.$id, row.data);
+      pointer = await _tables.getRow(databaseId: _db, tableId: AppwriteConfig.meta, rowId: AppwriteConfig.catalogPointer);
     } on AppwriteException catch (e) {
       if (e.code == 404) return null;
       rethrow;
     }
+    final bytes = await _storage.getFileDownload(bucketId: AppwriteConfig.catalogBucket, fileId: '${pointer.data['fileId']}');
+    return jsonDecode(utf8.decode(const GZipDecoder().decodeBytes(bytes))) as Map<String, dynamic>;
   }
 
-  /// Every event row, in pages (past events still count towards player statistics).
-  Future<List<GameEvent>> events() async {
-    final out = [for (final r in await listAllRows(_tables, AppwriteConfig.events, [Query.orderAsc('endAt')])) GameEvent.fromRow(r.$id, r.data)];
-    out.sort((a, b) => (a.endAt ?? DateTime(9999)).compareTo(b.endAt ?? DateTime(9999)));
-    return out;
-  }
+  @override
+  Future<List<Map<String, dynamic>>> rows(String tableId) => _rows(tableId, const []);
+
+  @override
+  Future<List<Map<String, dynamic>>> rowsSince(String tableId, String updatedAt) => _rows(tableId, [Query.greaterThanEqual('\$updatedAt', updatedAt)]);
+
+  @override
+  Future<List<Map<String, dynamic>>> puzzleRowsOfPacks(List<String> packIds) async => [
+        for (var i = 0; i < packIds.length; i += _maxQueryValues)
+          ...await _rows(AppwriteConfig.puzzles, [Query.equal('packId', packIds.sublist(i, min(i + _maxQueryValues, packIds.length)))]),
+      ];
 }
 
-/// Puzzle rows as raw maps (with `$id` and `$updatedAt`) for [PuzzleCatalogSync].
-abstract interface class PuzzleRowSource {
-  /// Every puzzle row (featured packs + every daily puzzle), in pages.
-  Future<List<Map<String, dynamic>>> allPuzzleRows();
+/// Where [CatalogSync] gets the catalogue: the daily snapshot file and the tables (rows as maps with
+/// `$id` and `$updatedAt`).
+abstract interface class CatalogSource {
+  /// The newest snapshot (`functions/catalog-snapshot`), decoded; null when there is none yet.
+  Future<Map<String, dynamic>?> snapshot();
 
-  /// Rows created or updated at or after [updatedAt] (server time, ISO 8601).
-  Future<List<Map<String, dynamic>>> puzzleRowsSince(String updatedAt);
+  /// Every row of [tableId], in pages.
+  Future<List<Map<String, dynamic>>> rows(String tableId);
 
-  /// Every row of the packs [packIds].
+  /// Rows of [tableId] created or updated at or after [updatedAt] (server time, ISO 8601).
+  Future<List<Map<String, dynamic>>> rowsSince(String tableId, String updatedAt);
+
+  /// Every puzzle row of the packs [packIds].
   Future<List<Map<String, dynamic>>> puzzleRowsOfPacks(List<String> packIds);
 }
 
@@ -498,7 +488,7 @@ class UploadRepository {
 // ---------------------------------------------------------------------------
 final authRepositoryProvider = Provider((ref) => AuthRepository(ref.watch(accountProvider)));
 final profileRepositoryProvider = Provider((ref) => ProfileRepository(ref.watch(tablesProvider)));
-final catalogRepositoryProvider = Provider((ref) => CatalogRepository(ref.watch(tablesProvider)));
+final catalogRepositoryProvider = Provider((ref) => CatalogRepository(ref.watch(tablesProvider), ref.watch(storageProvider)));
 final progressRepositoryProvider = Provider((ref) => ProgressRepository(ref.watch(tablesProvider)));
 final socialRepositoryProvider = Provider((ref) => SocialRepository(ref.watch(tablesProvider)));
 final uploadRepositoryProvider = Provider((ref) => UploadRepository(ref.watch(storageProvider), ref.watch(tablesProvider)));

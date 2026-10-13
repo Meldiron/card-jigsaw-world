@@ -61,7 +61,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
       body: RefreshIndicator.adaptive(
         edgeOffset: MediaQuery.paddingOf(context).top + HeaderBar.height,
         onRefresh: () async {
-          ref.invalidate(eventsProvider);
+          ref.invalidate(catalogProvider);
           ref.invalidate(eventProgressProvider);
         },
         child: CustomScrollView(

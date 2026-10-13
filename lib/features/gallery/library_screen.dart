@@ -176,7 +176,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
           icon: AppIcons.signal,
           title: 'Packs did not load',
           message: 'Check your connection and try again.',
-          action: BigButton(label: 'Try again', expand: false, onTap: () => ref.invalidate(packRowsProvider)),
+          action: BigButton(label: 'Try again', expand: false, onTap: () => ref.invalidate(catalogProvider)),
         ),
         data: _library,
       ),

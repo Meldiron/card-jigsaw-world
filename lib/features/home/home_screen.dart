@@ -67,8 +67,7 @@ class HomeScreen extends ConsumerWidget {
       body: RefreshIndicator.adaptive(
         edgeOffset: MediaQuery.paddingOf(context).top + HeaderBar.height,
         onRefresh: () async {
-          ref.invalidate(packRowsProvider);
-          ref.invalidate(allPuzzlesProvider);
+          ref.invalidate(catalogProvider);
           await ref.read(profileProvider.notifier).refresh();
         },
         child: CustomScrollView(

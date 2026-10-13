@@ -1,5 +1,6 @@
 """Create / replace puzzles and keep pack rows consistent (imageCount, cover, blurhash, accent)."""
 import hashlib, time
+from datetime import datetime, timezone
 from . import host, api, catalog, imagecache, state, filters, checkpoint
 from .pool import load_pool, save_pool, nice_title, HashIndex
 
@@ -161,7 +162,11 @@ def apply(spec, snap, target=None, picks=(), auto=True, dry=False, daily=False):
     return snap
 
 def finalize_pack(spec, snap, accent=None):
-    """Sync imageCount, cover, blurhash and accent on the pack (and its event row)."""
+    """Sync imageCount, cover, blurhash and accent on the pack (and its event row).
+
+    Always sets puzzlesUpdatedAt: the app and the catalogue snapshot read a pack's puzzles again when
+    its row changes, which is how they see puzzles removed or replaced. Appwrite leaves $updatedAt
+    alone on an update that changes nothing, so imageCount alone is not enough."""
     pack_id = spec['id']
     pack = catalog.pack_index(snap)[pack_id]
     puzzles = catalog.by_pack(snap).get(pack_id, [])
@@ -169,7 +174,7 @@ def finalize_pack(spec, snap, accent=None):
     cover = spec.get('cover') if spec.get('cover') in urls else None
     if not cover:
         cover = pack.get('coverUrl') if pack.get('coverUrl') in urls else (urls[0] if urls else '')
-    data = {'imageCount': len(puzzles)}
+    data = {'imageCount': len(puzzles), 'puzzlesUpdatedAt': datetime.now(timezone.utc).isoformat()}
     # covers are always served from our storage; re-host a cover that still points elsewhere
     if cover and (cover != pack.get('coverUrl') or not host.is_hosted(pack.get('hostedCoverUrl') or '')):
         data.update(host.cover_fields(cover))
