@@ -1,8 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/haptics.dart';
 import '../../core/theme/tokens.dart';
 import '../../game/board.dart';
 import '../../models/models.dart';
@@ -10,6 +13,7 @@ import '../../state/auth.dart';
 import '../../state/catalog.dart';
 import '../../state/profile.dart';
 import '../../state/progress.dart';
+import '../../state/quick_play.dart';
 import '../../state/rewards.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
@@ -21,8 +25,11 @@ import '../gallery/library_screen.dart';
 import '../gallery/pack_card.dart';
 import '../gallery/pack_progress.dart';
 import 'header_bar.dart';
+import 'home_pack_rows.dart';
 
-/// Home: today's puzzle, quick actions, streak, level, continue, months, packs.
+/// Home: today's puzzle, Quick play, Wheel and piggy bank, streak, level,
+/// boards to continue, packs in progress, live events, daily months, packs
+/// missing stars, featured packs and finished packs.
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
@@ -51,6 +58,10 @@ class HomeScreen extends ConsumerWidget {
 
     final piggyFull = profile?.piggyFull ?? false;
     final livePacks = ref.watch(eventPacksProvider).where((p) => p.isLive).toList();
+    final packRows = ref.watch(homePackRowsProvider);
+    final packProgress = ref.watch(allPackProgressProvider);
+    PackProgress progressOf(Pack p) => packProgress[p.id] ?? const PackProgress(solved: 0, total: 0, stars: 0);
+    final missingStars = packRows.missingStars.fold<int>(0, (sum, p) => sum + progressOf(p).maxStars - progressOf(p).stars);
 
     return Scaffold(
       body: RefreshIndicator.adaptive(
@@ -68,6 +79,12 @@ class HomeScreen extends ConsumerWidget {
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
                 child: _DailyHero(puzzle: daily, progress: daily == null ? null : progress[daily.id]),
+              ),
+            ),
+            const SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(20, 12, 20, 0),
+                child: _QuickPlayCard(),
               ),
             ),
             SliverToBoxAdapter(
@@ -156,6 +173,21 @@ class HomeScreen extends ConsumerWidget {
                 ),
               ),
             ],
+            if (packRows.inProgress.isNotEmpty) ...[
+              SliverToBoxAdapter(
+                child: SectionHeader(
+                  title: 'Packs in progress',
+                  subtitle: '${packRows.inProgress.length} ${packRows.inProgress.length == 1 ? 'pack' : 'packs'} to finish',
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: _PackCoverRow(
+                  key: const ValueKey('home-packs-in-progress'),
+                  packs: packRows.inProgress,
+                  progressOf: progressOf,
+                ),
+              ),
+            ],
             if (livePacks.isNotEmpty) ...[
               SliverToBoxAdapter(
                 child: SectionHeader(
@@ -212,6 +244,22 @@ class HomeScreen extends ConsumerWidget {
                 ),
               ),
             ],
+            if (packRows.missingStars.isNotEmpty) ...[
+              SliverToBoxAdapter(
+                child: SectionHeader(
+                  title: 'Missing stars',
+                  subtitle: '$missingStars ${missingStars == 1 ? 'star' : 'stars'} to earn in ${packRows.missingStars.length} '
+                      '${packRows.missingStars.length == 1 ? 'pack' : 'packs'}',
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: _PackCoverRow(
+                  key: const ValueKey('home-missing-stars'),
+                  packs: packRows.missingStars,
+                  progressOf: progressOf,
+                ),
+              ),
+            ],
             const SliverToBoxAdapter(child: HouseBanner()),
             SliverToBoxAdapter(
               child: SectionHeader(
@@ -229,7 +277,9 @@ class HomeScreen extends ConsumerWidget {
                 child: EmptyState(icon: AppIcons.signal, title: 'Could not load packs', message: 'Check your connection and pull to refresh.'),
               ),
               data: (all) {
-                final list = all.where((p) => !p.isDaily).toList();
+                // Library packs only (no daily months, no event packs), in catalogue order.
+                final list = all.where((p) => !p.isDaily && !p.hasWindow).toList()
+                  ..sort((a, b) => a.sortOrder != b.sortOrder ? a.sortOrder.compareTo(b.sortOrder) : a.id.compareTo(b.id));
                 return SliverPadding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   sliver: SliverGrid(
@@ -241,18 +291,39 @@ class HomeScreen extends ConsumerWidget {
                     ),
                     delegate: SliverChildBuilderDelegate(
                       (_, i) => PackCard(pack: list[i], onTap: () => context.push('/library/pack/${list[i].id}')),
-                      childCount: list.length.clamp(0, 6),
+                      childCount: list.length.clamp(0, featuredCount),
                     ),
                   ),
                 );
               },
             ),
+            if (packRows.finished.isNotEmpty) ...[
+              SliverToBoxAdapter(
+                child: SectionHeader(
+                  title: 'Finished packs',
+                  action: 'See all',
+                  onAction: () {
+                    ref.read(libraryFilterProvider.notifier).select(LibraryFilter.finished);
+                    context.go('/library');
+                  },
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: _FinishedPacksCard(rows: packRows, progressOf: progressOf),
+                ),
+              ),
+            ],
             SliverToBoxAdapter(child: SizedBox(height: GlassTabBar.scrollEndPadding(context))),
           ],
         ),
       ),
     );
   }
+
+  /// Library packs in the Featured grid.
+  static const featuredCount = 6;
 
   /// Route path for resuming a saved board (mode + ladder entry by cell count).
   static String _gridCode(PuzzleProgress pr) {
@@ -594,26 +665,27 @@ class _EventPackCard extends ConsumerWidget {
   final Pack pack;
   final VoidCallback onTap;
 
-  String get _endsIn {
-    final end = pack.endAt;
-    if (end == null) return 'Live';
-    final d = end.difference(DateTime.now());
-    if (d.inDays >= 1) return 'Ends in ${d.inDays}d';
-    if (d.inHours >= 1) return 'Ends in ${d.inHours}h';
-    return 'Ends soon';
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final progress = ref.watch(packProgressProvider(pack.id));
     return _CoverTile(
       pack: pack,
       progress: progress,
-      chip: Chip2(label: _endsIn, color: Brand.live, foreground: Colors.white),
+      chip: Chip2(label: _endsIn(pack), color: Brand.live, foreground: Colors.white),
       nameLines: 2,
       onTap: onTap,
     );
   }
+}
+
+/// "Ends in 3d" for an event pack's chip.
+String _endsIn(Pack pack) {
+  final end = pack.endAt;
+  if (end == null) return 'Live';
+  final d = end.difference(DateTime.now());
+  if (d.inDays >= 1) return 'Ends in ${d.inDays}d';
+  if (d.inHours >= 1) return 'Ends in ${d.inHours}h';
+  return 'Ends soon';
 }
 
 /// Square cover tile shared by the Home event and month rows: picture with
@@ -721,6 +793,224 @@ class _ContinueCard extends StatelessWidget {
                 ],
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+final _quickPlayRandom = Random();
+
+/// Quick play: one tap starts a random picture the player can play now. It
+/// prefers pictures never played, then ones short of three stars, then any
+/// (see [quickPlayPool]); the picture is drawn at tap time. The game starts
+/// straight away on the mode and board of the player's last finished game,
+/// or opens the picture's difficulty screen before the first one.
+class _QuickPlayCard extends ConsumerWidget {
+  const _QuickPlayCard();
+
+  /// [board] when the player may still play its tier (level or bought).
+  static BoardSpec? _open(WidgetRef ref, BoardSpec? board, Profile? profile) {
+    if (board == null) return null;
+    final tier = board.tierIndex;
+    final open = tier <= LevelRewards.maxTierIndex(profile?.level ?? 1) || ref.read(profileProvider.notifier).hasTier(board.mode, tier);
+    return open ? board : null;
+  }
+
+  void _start(BuildContext context, WidgetRef ref) {
+    final puzzle = pickQuickPlay(ref.read(quickPlayPoolProvider), _quickPlayRandom);
+    if (puzzle == null) return;
+    Haptics.light();
+    final board = _open(ref, ref.read(quickPlayBoardProvider), ref.read(profileProvider).value);
+    context.push(quickPlayRoute(puzzle, saved: ref.read(progressProvider).value?[puzzle.id], board: board));
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final c = context.colors;
+    final pool = ref.watch(quickPlayPoolProvider);
+    final board = _open(ref, ref.watch(quickPlayBoardProvider), ref.watch(profileProvider).value);
+    final status = switch (pool?.tier) {
+      QuickPlayTier.fresh => 'A picture you have not played yet',
+      QuickPlayTier.improve => 'A picture still short of 3 stars',
+      QuickPlayTier.any => 'A random picture to replay',
+      null => 'Loading pictures…',
+    };
+    return SoftCard(
+      key: const ValueKey('home-quick-play'),
+      onTap: pool == null ? null : () => _start(context, ref),
+      padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
+      child: Row(
+        children: [
+          const IconTile(icon: CupertinoIcons.shuffle, size: 36, radius: 10),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('Quick play', style: Theme.of(context).textTheme.titleLarge),
+                const SizedBox(height: 2),
+                Text(status, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12.5, color: c.textSecondary)),
+                if (board != null)
+                  Text('${board.mode.label} · ${board.label} board', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, color: c.textTertiary)),
+              ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(color: context.accent, shape: BoxShape.circle),
+            child: const Icon(CupertinoIcons.play_fill, color: Colors.white, size: 18),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Horizontal row of pack covers with each pack's progress line (Packs in
+/// progress, Missing stars). Event packs keep their "Ends in" chip.
+class _PackCoverRow extends StatelessWidget {
+  const _PackCoverRow({super.key, required this.packs, required this.progressOf});
+  final List<Pack> packs;
+  final PackProgress Function(Pack pack) progressOf;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: _CoverTile.size,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        physics: const BouncingScrollPhysics(),
+        itemCount: packs.length,
+        separatorBuilder: (_, _) => const SizedBox(width: 12),
+        itemBuilder: (_, i) {
+          final pack = packs[i];
+          return _CoverTile(
+            pack: pack,
+            progress: progressOf(pack),
+            chip: pack.hasWindow && pack.isLive ? Chip2(label: _endsIn(pack), color: Brand.live, foreground: Colors.white) : null,
+            nameLines: 2,
+            onTap: () => context.push('/library/pack/${pack.id}'),
+          );
+        },
+      ),
+    );
+  }
+}
+
+/// Finished packs: the totals, then the most recently finished packs as
+/// compact rows. "See all" in the section header opens the Library on
+/// Finished.
+class _FinishedPacksCard extends StatelessWidget {
+  const _FinishedPacksCard({required this.rows, required this.progressOf});
+  final HomePackRows rows;
+  final PackProgress Function(Pack pack) progressOf;
+
+  /// Rows shown on Home; the rest are in the Library.
+  static const shown = 3;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final s = rows.stats;
+    final list = rows.finished.take(shown).toList();
+    return SoftCard(
+      key: const ValueKey('home-finished-packs'),
+      padding: EdgeInsets.zero,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 14, 16, 12),
+            child: Row(
+              children: [
+                Expanded(child: _StatCell(value: s.packs, label: s.packs == 1 ? 'Pack finished' : 'Packs finished')),
+                Expanded(child: _StatCell(value: s.perfect, label: 'With every star', star: true)),
+                Expanded(child: _StatCell(value: s.pictures, label: 'Pictures solved')),
+              ],
+            ),
+          ),
+          for (final pack in list) ...[
+            Divider(height: 1, color: c.stroke, indent: pack == list.first ? 0 : 76),
+            _FinishedRow(pack: pack, progress: progressOf(pack)),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _StatCell extends StatelessWidget {
+  const _StatCell({required this.value, required this.label, this.star = false});
+  final int value;
+  final String label;
+  final bool star;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text('$value', style: Theme.of(context).textTheme.titleLarge),
+            if (star) ...[const SizedBox(width: 4), const Icon(AppIcons.star, size: 14, color: Brand.star)],
+          ],
+        ),
+        const SizedBox(height: 2),
+        Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w500, color: c.textSecondary)),
+      ],
+    );
+  }
+}
+
+/// One finished pack: cover with the done badges, name, star progress line.
+class _FinishedRow extends StatelessWidget {
+  const _FinishedRow({required this.pack, required this.progress});
+  final Pack pack;
+  final PackProgress progress;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return Pressable(
+      onTap: () => context.push('/library/pack/${pack.id}'),
+      scale: 0.99,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 10, 14, 10),
+        child: Row(
+          children: [
+            SizedBox(
+              width: 52,
+              height: 52,
+              child: NetImage(url: pack.coverUrl, radius: 10, blurhash: pack.blurhash),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Text(pack.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
+                      ),
+                      const SizedBox(width: 6),
+                      PackDoneBadges(progress: progress, size: 16),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  PackProgressLine(progress: progress, height: 4),
+                ],
+              ),
+            ),
+            const SizedBox(width: 10),
+            Icon(CupertinoIcons.chevron_right, size: 16, color: c.textTertiary),
           ],
         ),
       ),
