@@ -16,7 +16,7 @@ import '../../widgets/ui.dart';
 /// agree with each other and with the pack page.
 @immutable
 class PackProgress {
-  const PackProgress({required this.solved, required this.total, required this.stars});
+  const PackProgress({required this.solved, required this.total, required this.stars, this.playing = 0});
 
   /// Counts from the pack's pictures and the player's progress rows.
   /// [fallbackTotal] stands in for the picture count while the catalogue
@@ -24,18 +24,26 @@ class PackProgress {
   factory PackProgress.of(List<Puzzle> puzzles, Map<String, PuzzleProgress> rows, {int fallbackTotal = 0}) {
     var solved = 0;
     var stars = 0;
+    var playing = 0;
     for (final p in puzzles) {
       final row = rows[p.id];
       if (row == null) continue;
       if (row.completed) solved++;
+      if (row.inProgress) playing++;
       stars += row.stars;
     }
-    return PackProgress(solved: solved, total: puzzles.isEmpty ? fallbackTotal : puzzles.length, stars: stars);
+    return PackProgress(solved: solved, total: puzzles.isEmpty ? fallbackTotal : puzzles.length, stars: stars, playing: playing);
   }
 
   final int solved;
   final int total;
   final int stars;
+
+  /// Boards left unfinished in this pack (saved, not yet solved).
+  final int playing;
+
+  /// At least one picture solved or a board in progress.
+  bool get started => solved > 0 || playing > 0;
 
   int get maxStars => total * 3;
 
@@ -49,13 +57,13 @@ class PackProgress {
   double get starRatio => maxStars == 0 ? 0 : (stars / maxStars).clamp(0.0, 1.0);
 
   @override
-  bool operator ==(Object other) => other is PackProgress && other.solved == solved && other.total == total && other.stars == stars;
+  bool operator ==(Object other) => other is PackProgress && other.solved == solved && other.total == total && other.stars == stars && other.playing == playing;
 
   @override
-  int get hashCode => Object.hash(solved, total, stars);
+  int get hashCode => Object.hash(solved, total, stars, playing);
 
   @override
-  String toString() => 'PackProgress($solved/$total, $stars/$maxStars stars)';
+  String toString() => 'PackProgress($solved/$total, $stars/$maxStars stars, $playing playing)';
 }
 
 /// Progress of a pack by id: its pictures from the catalogue and the
@@ -73,6 +81,19 @@ final packProgressProvider = Provider.family<PackProgress, String>((ref, packId)
     }
   }
   return PackProgress.of(puzzles, rows, fallbackTotal: fallback);
+});
+
+/// Progress of every visible pack in one pass, for lists that filter or sort packs by it (Home's
+/// unfinished and finished rows, the Library's Finished and Started filters).
+final allPackProgressProvider = Provider<Map<String, PackProgress>>((ref) {
+  final packs = ref.watch(packsProvider).value ?? const <Pack>[];
+  final puzzles = ref.watch(allPuzzlesProvider).value ?? const <Puzzle>[];
+  final rows = ref.watch(progressProvider).value ?? const <String, PuzzleProgress>{};
+  final byPack = <String, List<Puzzle>>{};
+  for (final p in puzzles) {
+    (byPack[p.packId] ??= []).add(p);
+  }
+  return {for (final p in packs) p.id: PackProgress.of(byPack[p.id] ?? const [], rows, fallbackTotal: p.imageCount)};
 });
 
 /// Cover badges for a finished pack: a green check once every picture is

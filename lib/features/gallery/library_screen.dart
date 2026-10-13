@@ -17,6 +17,9 @@ import 'pack_card.dart';
 /// to the Library, e.g. Home's "All months" opens it on Daily.
 class LibraryFilter extends Notifier<String> {
   static const all = 'All';
+  static const finished = 'Finished';
+  static const started = 'Started';
+  static const unlocked = 'Unlocked';
   static const daily = 'Daily';
 
   @override
