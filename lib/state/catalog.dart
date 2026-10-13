@@ -5,6 +5,7 @@ import '../data/repositories.dart';
 import '../models/models.dart';
 import 'profile.dart';
 import 'progress.dart';
+import 'puzzle_sync.dart';
 import 'settings.dart';
 
 /// Every pack row, including ones that are not released yet (future daily months, event packs
@@ -30,16 +31,6 @@ final packsProvider = FutureProvider<List<Pack>>((ref) async {
   return rows.where((p) => p.isReleasedAt(now)).toList();
 });
 
-/// Ids of packs that exist but are not released yet; their puzzles stay out of the app too.
-Future<Set<String>> _hiddenPackIds(Ref ref) async {
-  try {
-    final now = DateTime.now();
-    return {for (final p in await ref.watch(packRowsProvider.future)) if (!p.isReleasedAt(now)) p.id};
-  } catch (_) {
-    return const {};
-  }
-}
-
 Map<String, dynamic> _packToJson(Pack p) => {
       'name': p.name,
       'category': p.category,
@@ -58,32 +49,27 @@ Map<String, dynamic> _packToJson(Pack p) => {
       'startAt': p.startAt?.toIso8601String(),
       'endAt': p.endAt?.toIso8601String(),
       'blurhash': p.blurhash,
+      r'$updatedAt': p.updatedAt,
     };
 
-Map<String, dynamic> _puzzleToJson(Puzzle p) => {
-      'packId': p.packId,
-      'title': p.title,
-      'imageUrl': p.imageUrl,
-      'thumbUrl': p.thumbUrl,
-      'author': p.author,
-      'source': p.source,
-      'sortOrder': p.sortOrder,
-      'date': p.date?.toIso8601String(),
-      'blurhash': p.blurhash,
-    };
+final puzzleCatalogSyncProvider = Provider((ref) => PuzzleCatalogSync(ref.read(localStoreProvider), ref.watch(catalogRepositoryProvider)));
 
+/// Every puzzle of the released packs (puzzles of packs that are not released yet stay out of the app).
 final allPuzzlesProvider = FutureProvider<List<Puzzle>>((ref) async {
-  final store = ref.read(localStoreProvider);
-  final hiddenPacks = _hiddenPackIds(ref);
-  List<Puzzle> visible(List<Puzzle> all, Set<String> hidden) => hidden.isEmpty ? all : all.where((p) => !hidden.contains(p.packId)).toList();
+  final sync = ref.watch(puzzleCatalogSyncProvider);
+  List<Pack>? packs;
   try {
-    final puzzles = await ref.watch(catalogRepositoryProvider).allPuzzles();
-    store.setJsonList('puzzles', puzzles.map((p) => {'id': p.id, ..._puzzleToJson(p)}).toList());
-    return visible(puzzles, await hiddenPacks);
+    packs = await ref.watch(packRowsProvider.future);
+  } catch (_) {}
+  final now = DateTime.now();
+  final hidden = {for (final p in packs ?? const <Pack>[]) if (!p.isReleasedAt(now)) p.id};
+  List<Puzzle> visible(List<Puzzle> all) => hidden.isEmpty ? all : all.where((p) => !hidden.contains(p.packId)).toList();
+  try {
+    return visible(await sync.sync(packs));
   } catch (e) {
     debugPrint('puzzles failed: $e');
-    final cached = store.getJsonList('puzzles');
-    if (cached != null) return visible(cached.map((j) => Puzzle.fromRow(j['id'], Map<String, dynamic>.from(j))).toList(), await hiddenPacks);
+    final cached = sync.cached();
+    if (cached != null) return visible(cached);
     rethrow;
   }
 });

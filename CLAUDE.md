@@ -112,6 +112,11 @@ skills under `.claude/skills/` hold the detailed workflows.
 - `lib/state/catalog.dart`: `packRowsProvider` loads every pack row (paged; refresh by invalidating it),
   `packsProvider` is what screens see: `Pack.isReleasedAt` hides daily months until their first day and
   event packs until 3 days before they open (content is created up to a year ahead).
+- `lib/state/puzzle_sync.dart`: `PuzzleCatalogSync` keeps the puzzle catalogue on the device. A launch
+  reads only rows changed since the last sync plus the puzzles of packs whose row `$updatedAt` moved;
+  the whole table (8k+ rows, each one a billed read) only on first launch and weekly. This relies on
+  the content tool updating the pack row whenever it removes or replaces puzzles (`finalize_pack`).
+  The content tool itself checks duplicates with `catalog.sync()`, not a full dump.
 - `lib/state/`: `profile.dart` (`Economy` constants, VIP, piggy 5/picture up to 500), `rewards.dart`
   (level curve `LevelRewards.levelForXp`, daily 3 + 1 VIP / weekly 5 + 1 VIP quests), `achievements.dart`,
   `progress.dart`, `merge.dart` + `merge_flow.dart` (guest→account save merge), `auth.dart`, `social.dart`.

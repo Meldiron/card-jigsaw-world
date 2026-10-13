@@ -350,9 +350,14 @@ class Pack {
     this.startAt,
     this.endAt,
     this.blurhash,
+    this.updatedAt,
   });
   /// BlurHash of the cover, shown while the image loads.
   final String? blurhash;
+
+  /// The row's `$updatedAt` (server time). The content tool updates the pack row whenever it adds,
+  /// removes or replaces the pack's puzzles, so a change here means its puzzles changed too.
+  final String? updatedAt;
 
   final String id;
   final String name;
@@ -437,6 +442,7 @@ class Pack {
         startAt: _dt(d['startAt']),
         endAt: _dt(d['endAt']),
         blurhash: d['blurhash']?.toString(),
+        updatedAt: d[r'$updatedAt']?.toString(),
       );
 }
 

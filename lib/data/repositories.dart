@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math' show min;
 
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/enums.dart' as enums;
@@ -277,7 +278,7 @@ class ProfileRepository {
 // ---------------------------------------------------------------------------
 // Catalog (packs, puzzles, events)
 // ---------------------------------------------------------------------------
-class CatalogRepository {
+class CatalogRepository implements PuzzleRowSource {
   CatalogRepository(this._tables);
   final TablesDB _tables;
 
@@ -293,12 +294,23 @@ class CatalogRepository {
     return rows.map((r) => Puzzle.fromRow(r.$id, r.data)).toList();
   }
 
-  /// Loads the whole catalog (featured packs + every daily puzzle) in pages.
-  Future<List<Puzzle>> allPuzzles() async {
-    final out = [for (final r in await listAllRows(_tables, AppwriteConfig.puzzles, [Query.orderAsc('\$id')])) Puzzle.fromRow(r.$id, r.data)];
-    out.sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
-    return out;
-  }
+  Future<List<Map<String, dynamic>>> _puzzleRows(List<String> queries) async =>
+      [for (final r in await listAllRows(_tables, AppwriteConfig.puzzles, [...queries, Query.orderAsc('\$id')])) r.data];
+
+  @override
+  Future<List<Map<String, dynamic>>> allPuzzleRows() => _puzzleRows(const []);
+
+  @override
+  Future<List<Map<String, dynamic>>> puzzleRowsSince(String updatedAt) => _puzzleRows([Query.greaterThanEqual('\$updatedAt', updatedAt)]);
+
+  /// Appwrite takes at most 100 values in one `equal` query.
+  static const _maxQueryValues = 100;
+
+  @override
+  Future<List<Map<String, dynamic>>> puzzleRowsOfPacks(List<String> packIds) async => [
+        for (var i = 0; i < packIds.length; i += _maxQueryValues)
+          ...await _puzzleRows([Query.equal('packId', packIds.sublist(i, min(i + _maxQueryValues, packIds.length)))]),
+      ];
 
   Future<Puzzle?> puzzle(String id) async {
     try {
@@ -316,6 +328,18 @@ class CatalogRepository {
     out.sort((a, b) => (a.endAt ?? DateTime(9999)).compareTo(b.endAt ?? DateTime(9999)));
     return out;
   }
+}
+
+/// Puzzle rows as raw maps (with `$id` and `$updatedAt`) for [PuzzleCatalogSync].
+abstract interface class PuzzleRowSource {
+  /// Every puzzle row (featured packs + every daily puzzle), in pages.
+  Future<List<Map<String, dynamic>>> allPuzzleRows();
+
+  /// Rows created or updated at or after [updatedAt] (server time, ISO 8601).
+  Future<List<Map<String, dynamic>>> puzzleRowsSince(String updatedAt);
+
+  /// Every row of the packs [packIds].
+  Future<List<Map<String, dynamic>>> puzzleRowsOfPacks(List<String> packIds);
 }
 
 // ---------------------------------------------------------------------------

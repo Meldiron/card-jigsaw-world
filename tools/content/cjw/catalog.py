@@ -1,10 +1,16 @@
 """Local snapshot of the live catalogue (packs, puzzles, events) in the cache dir."""
 import json, time
+from datetime import datetime, timedelta, timezone
 from .paths import CACHE
 from . import api
 from .lock import locked
 
 SNAP = CACHE / 'catalog.json'
+KINDS = ('packs', 'puzzles', 'events')
+SYNC_OVERLAP = timedelta(minutes=1)   # re-read writes that landed just before the last sync
+
+def _now():
+    return datetime.now(timezone.utc)
 
 def normalise(rows, kind):
     """Rows point at our Appwrite Storage copies; the tool keys everything (image cache, rejects,
@@ -19,10 +25,9 @@ def normalise(rows, kind):
     return rows
 
 def dump():
-    packs = normalise(api.list_rows('packs'), 'packs')
-    puzzles = normalise(api.list_rows('puzzles'), 'puzzles')
-    events = normalise(api.list_rows('events'), 'events')
-    snap = {'at': time.strftime('%Y-%m-%dT%H:%M:%S'), 'packs': packs, 'puzzles': puzzles, 'events': events}
+    started = _now()
+    snap = {kind: normalise(api.list_rows(kind), kind) for kind in KINDS}
+    snap.update(at=time.strftime('%Y-%m-%dT%H:%M:%S'), syncedAt=started.isoformat())
     with locked('catalog'):
         SNAP.write_text(json.dumps(snap))
     return snap
@@ -31,6 +36,25 @@ def load(refresh=False):
     if refresh or not SNAP.exists():
         return dump()
     return json.loads(SNAP.read_text())
+
+def sync():
+    """The snapshot plus every row created or updated since the last dump/sync. Costs a few reads
+    instead of the whole catalogue (every row returned is a billed read). Rows deleted on the server stay
+    until their pack is refreshed; every writer that deletes calls refresh_pack on that pack."""
+    snap = json.loads(SNAP.read_text()) if SNAP.exists() else {}
+    if not snap.get('syncedAt'):
+        return dump()
+    started = _now()
+    since = (datetime.fromisoformat(snap['syncedAt']) - SYNC_OVERLAP).isoformat()
+    fresh = {kind: normalise(api.list_rows(kind, [api.q('greaterThanEqual', since, attribute='$updatedAt')]), kind) for kind in KINDS}
+    with locked('catalog'):
+        snap = json.loads(SNAP.read_text())
+        for kind, rows in fresh.items():
+            ids = {r['$id'] for r in rows}
+            snap[kind] = [r for r in snap[kind] if r['$id'] not in ids] + rows
+        snap['syncedAt'] = started.isoformat()
+        SNAP.write_text(json.dumps(snap))
+    return snap
 
 def by_pack(snap):
     out = {}

@@ -104,7 +104,7 @@ def apply(spec, snap, target=None, picks=(), auto=True, dry=False, daily=False):
     else:
         need = max(0, target - len(kept))
     # pictures used anywhere else in the catalogue (twin event years share theirs on purpose via clone)
-    taken = {p['imageUrl'] for p in catalog.load(refresh=True)['puzzles'] if p['packId'] != pack_id}
+    taken = {p['imageUrl'] for p in catalog.sync()['puzzles'] if p['packId'] != pack_id}
     chosen = select_candidates(pool, spec, kept_metas, kept_authors, need, picks, auto, rejected, taken)
     print(f'{pack_id}: {len(puzzles)} puzzles, remove {len(removed)}, keep {len(kept)}, need {need}, chosen {len(chosen)}')
     if dry:
@@ -221,7 +221,7 @@ def new_daily(spec, snap, month, picks=(), dry=False):
     kept_authors = {}
     for p in puzzles: kept_authors[p.get('author') or ''] = kept_authors.get(p.get('author') or '', 0) + 1
     pool = load_pool(spec['pool'])
-    taken = {p['imageUrl'] for p in catalog.load(refresh=True)['puzzles'] if p['packId'] != pack_id}
+    taken = {p['imageUrl'] for p in catalog.sync()['puzzles'] if p['packId'] != pack_id}
     chosen = select_candidates(pool, spec, kept_metas, kept_authors, len(days), picks, True, state.rejects(), taken)
     print(f'{pack_id}: {len(puzzles)} days exist, {len(days)} missing, chosen {len(chosen)}')
     if dry:
