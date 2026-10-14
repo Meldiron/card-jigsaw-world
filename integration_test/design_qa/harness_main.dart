@@ -218,7 +218,19 @@ Future<ProviderContainer> buildContainer(Map<String, dynamic> scene) async {
   }
 
   final server = FakeServer();
-  final row = {...playerPreset(scene['player'] as String? ?? 'casual', userId), ...?(scene['profile'] as Map<String, dynamic>?)};
+  // Relative times in overrides: "NOW", "TODAY" (this morning), "DAYS:-2.5".
+  dynamic when(dynamic v) {
+    if (v is! String) return v;
+    if (v == 'NOW') return iso(now);
+    if (v == 'TODAY') return iso(DateTime(now.year, now.month, now.day, 0, 5));
+    if (v.startsWith('DAYS:')) return iso(now.add(Duration(minutes: (double.parse(v.substring(5)) * 24 * 60).round())));
+    return v;
+  }
+
+  final row = {
+    ...playerPreset(scene['player'] as String? ?? 'casual', userId),
+    for (final e in ((scene['profile'] as Map?) ?? const {}).entries) e.key as String: when(e.value),
+  };
   server.profiles[userId] = server.write(null, row, userId);
   final progress = progressPreset(scene['progress'] as String? ?? 'some', packs, puzzles);
   for (final e in ((scene['progressRows'] as Map?) ?? const {}).entries) {
