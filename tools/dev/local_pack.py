@@ -9,7 +9,13 @@ MANIFEST.json:
   {"pack": {"id": "pack-...", "name": "...", "category": "Food", "description": "...", "sortOrder": 1300,
             "price": "coins" | "tickets" | "free", "premium": false},
    "pictures": [{"file": "/abs/path.png", "title": "...", "author": "...", "licence": "CC0",
-                 "source": "Tiny Speck (Glitch), CC0", "page": "https://...", "changes": "composed from 214 items"}]}
+                 "source": "Tiny Speck (Glitch), CC0", "page": "https://...", "original": "https://...jpg",
+                 "changes": "composed from 214 items"}]}
+
+`page` is the web page that credits the picture (kept in provenance). `original`, when there is one, is the
+direct URL of the source image file; it becomes the puzzle's `sourceUrl`. The content tool reads
+`sourceUrl` as the picture's address (catalogue duplicate checks, `scan`, `verify`), so it must be an image:
+without `original` the puzzle's own hosted copy is used, never the web page.
 
 Category `Giant` hosts each picture at up to 4096 px on the long side (quality 90); every other category
 at most 1200 x 2134 (quality 86), like `host.py`. Pictures must be portrait or square, at least 900 px on
@@ -105,7 +111,7 @@ def publish(args):
         api.create_row('puzzles', {
             'packId': pid_pack, 'title': p['title'][:128], 'imageUrl': host.view_url(fid), 'thumbUrl': host.thumb_url(fid),
             'author': p['author'][:128], 'source': p['source'][:128], 'sortOrder': i, 'accent': accent, 'blurhash': hashed,
-            'sourceUrl': p.get('page') or src}, row_id=pid)
+            'sourceUrl': p.get('original') or host.view_url(fid)}, row_id=pid)
         state.add_provenance(pid, dict(url=host.view_url(fid), author=p['author'], licence=p['licence'], source=p['source'],
                                        page=p.get('page', ''), provider='local', packId=pid_pack, changes=p.get('changes', ''),
                                        file=os.path.basename(p['file']), at=time.strftime('%Y-%m-%d')))
@@ -118,7 +124,7 @@ def publish(args):
         'coverUrl': host.cover_url(fid), 'priceCoins': 400 if price == 'coins' else 0, 'priceTickets': 3 if price == 'tickets' else 0,
         'isFree': price == 'free', 'isPremium': bool(pack.get('premium', False)), 'isSeasonal': False,
         'sortOrder': int(pack.get('sortOrder', 500)), 'imageCount': len(pics), 'accent': accent, 'emoji': '', 'blurhash': hashed,
-        'coverSourceUrl': p0.get('page') or '', 'puzzlesUpdatedAt': datetime.datetime.now(datetime.timezone.utc).isoformat()},
+        'coverSourceUrl': p0.get('original') or host.view_url(fid), 'puzzlesUpdatedAt': datetime.datetime.now(datetime.timezone.utc).isoformat()},
         row_id=pid_pack)
     state.log('local-pack', pack=pid_pack, category=pack['category'], pictures=len(pics))
     print(f"published {pid_pack}; next: .venv/bin/python tools/store/apply_pack_prices.py --only {pid_pack} (dry run, then --apply)")

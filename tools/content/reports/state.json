@@ -2970,6 +2970,15 @@
 "removed": 20,
 "status": "verified"
 },
+"pack-fantasy-worlds": {
+"added": 0,
+"at": "2026-10-14T15:31:36",
+"issues": 0,
+"last_step": "verify",
+"puzzles": 20,
+"removed": 0,
+"status": "verified"
+},
 "pack-farm-life": {
 "added": 22,
 "at": "2026-10-12T10:17:23",

@@ -1,0 +1,193 @@
+{
+ "pack": {
+  "id": "pack-fantasy-worlds",
+  "name": "Fantasy Worlds",
+  "category": "Illustration",
+  "description": "Painted maps, floating islands and storybook villages, with the creatures that live in them.",
+  "sortOrder": 1380,
+  "price": "coins",
+  "premium": false
+ },
+ "pictures": [
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-fantasy-worlds/contributopia-3.png",
+   "title": "Floating island harbour",
+   "author": "David Revoy",
+   "licence": "CC BY 4.0",
+   "source": "David Revoy for Framasoft via Wikimedia Commons, CC BY 4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:Contributopia_Travel_Journal,_third_map_tile.jpg",
+   "changes": "whole picture, unchanged"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-fantasy-worlds/jat-jester-town.png",
+   "title": "Jester town and watchtower",
+   "author": "J&T Story (Bankrot Studio)",
+   "licence": "CC0",
+   "source": "J&T Story (Bankrot Studio) via OpenGameArt.org, CC0",
+   "page": "https://opengameart.org/content/villagekingdom-complete-all-buildings",
+   "changes": "cropped to portrait from 1MainMap.png (x 0-1200, y 230-2030 of 3000 x 2350); joker card with a face, noose tree and grave plot removed and refilled from the artist's own background layers; eyes of a clown-face finial painted out"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-fantasy-worlds/contributopia-1.png",
+   "title": "World tree and waterfall",
+   "author": "David Revoy",
+   "licence": "CC BY 4.0",
+   "source": "David Revoy for Framasoft via Wikimedia Commons, CC BY 4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:Contributopia_Travel_Journal,_first_map_tile.jpg",
+   "changes": "whole picture, unchanged"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-fantasy-worlds/dorlotons-camp.png",
+   "title": "Riverside camp",
+   "author": "David Revoy",
+   "licence": "CC BY 4.0",
+   "source": "David Revoy for Framasoft via Wikimedia Commons, CC BY 4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:2023-05-20_Dorlotons-Degooglisons_by-David-Revoy.jpg",
+   "changes": "cropped to portrait (x 0-4621, y 0-6162 of 8872 x 6162)"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-fantasy-worlds/tree-house.png",
+   "title": "Tree house by the water",
+   "author": "David Revoy",
+   "licence": "CC BY 4.0",
+   "source": "David Revoy via Wikimedia Commons, CC BY 4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:2012-08-24_Tree-house_by-David-Revoy.jpg",
+   "changes": "cropped to portrait (x 1150-2416, y 0-1688 of 3000 x 1688)"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-fantasy-worlds/jat-troll-fort.png",
+   "title": "Troll fort by the river",
+   "author": "J&T Story (Bankrot Studio)",
+   "licence": "CC0",
+   "source": "J&T Story (Bankrot Studio) via OpenGameArt.org, CC0",
+   "page": "https://opengameart.org/content/villagekingdom-complete-all-buildings",
+   "changes": "cropped to portrait from 1MainMap.png (x 1570-3000, y 100-2245 of 3000 x 2350); joker card with a face, noose tree and grave plot removed and refilled from the artist's own background layers; eyes of a clown-face finial painted out"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-fantasy-worlds/contributopia-2.png",
+   "title": "Sky ship over the spiral isles",
+   "author": "David Revoy",
+   "licence": "CC BY 4.0",
+   "source": "David Revoy for Framasoft via Wikimedia Commons, CC BY 4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:Contributopia_Travel_Journal,_second_map_tile.jpg",
+   "changes": "whole picture, unchanged"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-fantasy-worlds/fishing-port.png",
+   "title": "Cliffside fishing port",
+   "author": "Stephane Wootha Richard",
+   "licence": "CC BY-SA 4.0",
+   "source": "Stephane Wootha Richard via Wikimedia Commons, CC BY-SA 4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:Fishing_Port.jpg",
+   "changes": "whole picture, unchanged"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-fantasy-worlds/cat-island.png",
+   "title": "Island of cats",
+   "author": "David Revoy",
+   "licence": "CC BY 4.0",
+   "source": "David Revoy for Framasoft via Wikimedia Commons, CC BY 4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:2017-10-09_framasoft-campaign_2_Essaimage_by-David-Revoy.jpg",
+   "changes": "cropped to portrait (x 0-2100, y 0-3150 of 6400 x 3600)"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-fantasy-worlds/tidal-castle.png",
+   "title": "Castle on a tidal island",
+   "author": "David Revoy",
+   "licence": "CC BY 4.0",
+   "source": "David Revoy via Wikimedia Commons, CC BY 4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:2021-02-15_An-islands-you-can-visit-at-low-tide_by-David-Revoy.jpg",
+   "changes": "cropped to portrait (x 1720-3218, y 0-1998 of 4098 x 1998)"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-fantasy-worlds/box-mountain.png",
+   "title": "Mountain of boxes and books",
+   "author": "David Revoy",
+   "licence": "CC BY 4.0",
+   "source": "David Revoy for Framasoft via Wikimedia Commons, CC BY 4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:2022-02-01_Poster-Framasoft-2022_by-David-Revoy.jpg",
+   "changes": "cropped to portrait (x 400-4525, y 1700-7200 of 5098 x 7200)"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-fantasy-worlds/jat-old-village.png",
+   "title": "Walled old village",
+   "author": "J&T Story (Bankrot Studio)",
+   "licence": "CC0",
+   "source": "J&T Story (Bankrot Studio) via OpenGameArt.org, CC0",
+   "page": "https://opengameart.org/content/old-villagebuildings",
+   "changes": "cropped to portrait from Village.jpg (x 800-2000 of 2000 x 1567)"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-fantasy-worlds/contributopia-4.png",
+   "title": "Telescope isle and star lanterns",
+   "author": "David Revoy",
+   "licence": "CC BY 4.0",
+   "source": "David Revoy for Framasoft via Wikimedia Commons, CC BY 4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:Contributopia_Travel_Journal,_fourth_map_tile.jpg",
+   "changes": "whole picture, unchanged"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-fantasy-worlds/pod-houses.png",
+   "title": "Seed-pod houses on the lagoon",
+   "author": "David Revoy",
+   "licence": "CC BY 4.0",
+   "source": "David Revoy via Wikimedia Commons, CC BY 4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:2007-01-30_Fantasy-Landscape_by-David-Revoy.jpg",
+   "changes": "cropped to portrait (x 0-1333, y 0-2000 of 3948 x 2000)"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-fantasy-worlds/notice-board.png",
+   "title": "Notice board on the forest path",
+   "author": "David Revoy",
+   "licence": "CC BY 4.0",
+   "source": "David Revoy for Framasoft via Wikimedia Commons, CC BY 4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:2023-05-20_Framagroupes_by-David-Revoy.jpg",
+   "changes": "cropped to portrait (x 3401-6000, y 0-3465 of 6160 x 3465)"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-fantasy-worlds/lake-tower.png",
+   "title": "Lake tower in the pines",
+   "author": "David Revoy",
+   "licence": "CC BY 4.0",
+   "source": "David Revoy via Wikimedia Commons, CC BY 4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:2022-06-27_Landscape-study_by-David-Revoy.jpg",
+   "changes": "cropped to portrait (x 1100-2828, y 0-2304 of 4096 x 2304)"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-fantasy-worlds/balloon-tree.png",
+   "title": "Balloon tree over a floating island",
+   "author": "David Revoy",
+   "licence": "CC BY 4.0",
+   "source": "David Revoy via Wikimedia Commons, CC BY 4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:2024-11-19_07_Envole_by-David-Revoy.jpg",
+   "changes": "cropped to portrait (x 1700-4300, y 0-3465 of 6160 x 3465)"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-fantasy-worlds/dorlotons-crates.png",
+   "title": "Storehouse of crates and books",
+   "author": "David Revoy",
+   "licence": "CC BY 4.0",
+   "source": "David Revoy for Framasoft via Wikimedia Commons, CC BY 4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:2023-05-20_Dorlotons-Degooglisons_by-David-Revoy.jpg",
+   "changes": "cropped to portrait (x 4764-8872, y 0-6162 of 8872 x 6162)"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-fantasy-worlds/mesa-village.png",
+   "title": "Village on a desert mesa",
+   "author": "David Revoy",
+   "licence": "CC BY 4.0",
+   "source": "David Revoy via Wikimedia Commons, CC BY 4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:2022-02-18_Landscape-study-D-01h51_by-David-Revoy.jpg",
+   "changes": "cropped to portrait (x 1650-3300, y 0-2200 of 3840 x 2200)"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-fantasy-worlds/octopus-reef.png",
+   "title": "Octopus reef",
+   "author": "David Revoy",
+   "licence": "CC BY 4.0",
+   "source": "David Revoy via Wikimedia Commons, CC BY 4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:2024-11-19_06_Peertube_7_by-David-Revoy.jpg",
+   "changes": "cropped to portrait (x 0-1950, y 865-3465 of 6160 x 3465)"
+  }
+ ]
+}

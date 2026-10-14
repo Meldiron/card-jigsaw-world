@@ -16093,3 +16093,5 @@
 {"puzzle": "p-c4486aae2c94", "title": "Carpet shop, Fes", "event": "retitle", "at": "2026-10-14T15:19:25"}
 {"puzzle": "p-c9d0241e6abb", "title": "Bronze finds stall, Izmailovo, Moscow", "event": "retitle", "at": "2026-10-14T15:19:25"}
 {"pack": "pack-curiosity-shops", "fields": ["accent", "imageCount", "puzzlesUpdatedAt"], "event": "pack-update", "at": "2026-10-14T15:19:26"}
+{"pack": "pack-fantasy-worlds", "category": "Illustration", "pictures": 20, "event": "local-pack", "at": "2026-10-14T15:28:35"}
+{"pack": "pack-fantasy-worlds", "puzzles": 20, "note": "sourceUrl pointed at web pages; now the hosted copy", "event": "source-fix", "at": "2026-10-14T15:30:53"}
