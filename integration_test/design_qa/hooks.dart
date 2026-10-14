@@ -15,6 +15,7 @@ import 'package:card_jigsaw_world/features/social/social_screen.dart';
 import 'package:card_jigsaw_world/features/sync/board_choice_sheet.dart';
 import 'package:card_jigsaw_world/models/models.dart';
 import 'package:card_jigsaw_world/state/merge.dart';
+import 'package:card_jigsaw_world/state/catalog.dart';
 import 'package:card_jigsaw_world/state/rewards.dart';
 import 'package:card_jigsaw_world/widgets/ui.dart';
 import 'package:flutter/material.dart';
@@ -24,14 +25,17 @@ typedef Hook = Future<void> Function(BuildContext context, ProviderContainer c, 
 
 /// Runs [fn] with a [WidgetRef] (some sheets need one): a hidden overlay entry lends its ref.
 Future<void> withRef(BuildContext context, Future<void> Function(BuildContext context, WidgetRef ref) fn) async {
-  final overlay = Overlay.of(context, rootOverlay: true);
+  // The hook context is the root Navigator's own element, which sits above its Overlay.
+  final overlay = context is StatefulElement && context.state is NavigatorState
+      ? (context.state as NavigatorState).overlay!
+      : Overlay.of(context, rootOverlay: true);
   late OverlayEntry entry;
   var started = false;
   entry = OverlayEntry(
     builder: (_) => Consumer(builder: (ctx, ref, _) {
       if (!started) {
         started = true;
-        WidgetsBinding.instance.addPostFrameCallback((_) => unawaited(fn(context, ref)));
+        WidgetsBinding.instance.addPostFrameCallback((_) => unawaited(fn(ctx, ref)));
       }
       return const SizedBox.shrink();
     }),
@@ -72,6 +76,23 @@ final hooks = <String, Hook>{
   'unlockIntro': (ctx, c, a) => withRef(ctx, (ctx, ref) => showUnlockIntro(ctx, ref, Unlock.values.byName(a['unlock'] as String? ?? 'squares'))),
   'lockedInfo': (ctx, c, a) => withRef(ctx, (ctx, ref) => showLockedInfo(ctx, ref, Unlock.values.byName(a['unlock'] as String? ?? 'hexagons'))),
   'rewardedAd': (ctx, c, a) => withRef(ctx, (ctx, ref) => showRewardedHouseAd(ctx, ref, rewardCoins: 40)),
+  // A fixed house ad (deterministic creative and cover): {"creative": "vip-months", "pack": "pack-islands", "rewarded": true}.
+  'houseAd': (ctx, c, a) async {
+    final creative = houseCreatives.firstWhere((x) => x.id == (a['creative'] as String? ?? 'vip-months'));
+    final packs = c.read(packsProvider).value ?? const <Pack>[];
+    final pack = packs.where((p) => p.id == (a['pack'] as String? ?? 'pack-islands')).firstOrNull;
+    final rewarded = a['rewarded'] as bool? ?? true;
+    await Navigator.of(ctx, rootNavigator: true).push<Object?>(PageRouteBuilder(
+      opaque: true,
+      fullscreenDialog: true,
+      pageBuilder: (_, _, _) => HouseAdScreen(
+        creative: creative,
+        coverUrl: pack == null ? null : (url: pack.coverUrl, hash: pack.blurhash),
+        rewarded: rewarded,
+        rewardCoins: rewarded ? 40 : 0,
+      ),
+    ));
+  },
   'boardChoice': (ctx, c, a) => showBoardChoiceSheet(
         ctx,
         title: a['title'] as String?,
