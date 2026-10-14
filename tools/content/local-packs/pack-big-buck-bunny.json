@@ -1,0 +1,220 @@
+{
+ "pack": {
+  "id": "pack-big-buck-bunny",
+  "name": "Big Buck Bunny",
+  "category": "Illustration",
+  "description": "Frames from the Blender Foundation's open film: a big rabbit, three rodent pranksters, butterflies and a sunny forest.",
+  "sortOrder": 1350,
+  "price": "coins",
+  "premium": false
+ },
+ "pictures": [
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-big-buck-bunny/bbb-13_04_0098.png",
+   "title": "Butterfly on the bunny's face",
+   "author": "Blender Foundation (Big Buck Bunny)",
+   "licence": "CC BY 3.0",
+   "source": "(CC) Blender Foundation | peach.blender.org, CC BY 3.0; 4K rework: Janus B. Kristensen",
+   "page": "https://media.xiph.org/BBB/bbb3d/video/png/13_04/0098.png",
+   "changes": "cropped from 4K frame 13_04/0098 (left eye of the 2013 stereoscopic 4K rework by Janus B. Kristensen, bbb3d.renderfarming.net, CC BY 3.0)"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-big-buck-bunny/bbb-01_01_0421.png",
+   "title": "Pines at the meadow's edge",
+   "author": "Blender Foundation (Big Buck Bunny)",
+   "licence": "CC BY 3.0",
+   "source": "(CC) Blender Foundation | peach.blender.org, CC BY 3.0; 4K rework: Janus B. Kristensen",
+   "page": "https://media.xiph.org/BBB/bbb3d/video/png/01_01/0421.png",
+   "changes": "cropped from 4K frame 01_01/0421 (left eye of the 2013 stereoscopic 4K rework by Janus B. Kristensen, bbb3d.renderfarming.net, CC BY 3.0)"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-big-buck-bunny/bbb-01_02_0068.png",
+   "title": "Stream through the meadow",
+   "author": "Blender Foundation (Big Buck Bunny)",
+   "licence": "CC BY 3.0",
+   "source": "(CC) Blender Foundation | peach.blender.org, CC BY 3.0; 4K rework: Janus B. Kristensen",
+   "page": "https://media.xiph.org/BBB/bbb3d/video/png/01_02/0068.png",
+   "changes": "cropped from 4K frame 01_02/0068 (left eye of the 2013 stereoscopic 4K rework by Janus B. Kristensen, bbb3d.renderfarming.net, CC BY 3.0)"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-big-buck-bunny/bbb-01_03_0136.png",
+   "title": "Bird singing on a branch",
+   "author": "Blender Foundation (Big Buck Bunny)",
+   "licence": "CC BY 3.0",
+   "source": "(CC) Blender Foundation | peach.blender.org, CC BY 3.0; 4K rework: Janus B. Kristensen",
+   "page": "https://media.xiph.org/BBB/bbb3d/video/png/01_03/0136.png",
+   "changes": "cropped from 4K frame 01_03/0136 (left eye of the 2013 stereoscopic 4K rework by Janus B. Kristensen, bbb3d.renderfarming.net, CC BY 3.0)"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-big-buck-bunny/bbb-01_04_0118.png",
+   "title": "Burrow under the old tree",
+   "author": "Blender Foundation (Big Buck Bunny)",
+   "licence": "CC BY 3.0",
+   "source": "(CC) Blender Foundation | peach.blender.org, CC BY 3.0; 4K rework: Janus B. Kristensen",
+   "page": "https://media.xiph.org/BBB/bbb3d/video/png/01_04/0118.png",
+   "changes": "cropped from 4K frame 01_04/0118 (left eye of the 2013 stereoscopic 4K rework by Janus B. Kristensen, bbb3d.renderfarming.net, CC BY 3.0)"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-big-buck-bunny/bbb-02_02_0318.png",
+   "title": "Morning stretch by the burrow",
+   "author": "Blender Foundation (Big Buck Bunny)",
+   "licence": "CC BY 3.0",
+   "source": "(CC) Blender Foundation | peach.blender.org, CC BY 3.0; 4K rework: Janus B. Kristensen",
+   "page": "https://media.xiph.org/BBB/bbb3d/video/png/02_02/0318.png",
+   "changes": "cropped from 4K frame 02_02/0318 (left eye of the 2013 stereoscopic 4K rework by Janus B. Kristensen, bbb3d.renderfarming.net, CC BY 3.0)"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-big-buck-bunny/bbb-03_01_0193.png",
+   "title": "Butterfly over the bunny",
+   "author": "Blender Foundation (Big Buck Bunny)",
+   "licence": "CC BY 3.0",
+   "source": "(CC) Blender Foundation | peach.blender.org, CC BY 3.0; 4K rework: Janus B. Kristensen",
+   "page": "https://media.xiph.org/BBB/bbb3d/video/png/03_01/0193.png",
+   "changes": "cropped from 4K frame 03_01/0193 (left eye of the 2013 stereoscopic 4K rework by Janus B. Kristensen, bbb3d.renderfarming.net, CC BY 3.0)"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-big-buck-bunny/bbb-03_08_0011.png",
+   "title": "Squirrel and chinchilla with a nut",
+   "author": "Blender Foundation (Big Buck Bunny)",
+   "licence": "CC BY 3.0",
+   "source": "(CC) Blender Foundation | peach.blender.org, CC BY 3.0; 4K rework: Janus B. Kristensen",
+   "page": "https://media.xiph.org/BBB/bbb3d/video/png/03_08/0011.png",
+   "changes": "cropped from 4K frame 03_08/0011 (left eye of the 2013 stereoscopic 4K rework by Janus B. Kristensen, bbb3d.renderfarming.net, CC BY 3.0)"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-big-buck-bunny/bbb-04_03_0938.png",
+   "title": "Flying squirrel above the bunny",
+   "author": "Blender Foundation (Big Buck Bunny)",
+   "licence": "CC BY 3.0",
+   "source": "(CC) Blender Foundation | peach.blender.org, CC BY 3.0; 4K rework: Janus B. Kristensen",
+   "page": "https://media.xiph.org/BBB/bbb3d/video/png/04_03/0938.png",
+   "changes": "cropped from 4K frame 04_03/0938 (left eye of the 2013 stereoscopic 4K rework by Janus B. Kristensen, bbb3d.renderfarming.net, CC BY 3.0)"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-big-buck-bunny/bbb-07_01_0061.png",
+   "title": "Trees on the meadow",
+   "author": "Blender Foundation (Big Buck Bunny)",
+   "licence": "CC BY 3.0",
+   "source": "(CC) Blender Foundation | peach.blender.org, CC BY 3.0; 4K rework: Janus B. Kristensen",
+   "page": "https://media.xiph.org/BBB/bbb3d/video/png/07_01/0061.png",
+   "changes": "cropped from 4K frame 07_01/0061 (left eye of the 2013 stereoscopic 4K rework by Janus B. Kristensen, bbb3d.renderfarming.net, CC BY 3.0)"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-big-buck-bunny/bbb-08_03_0020.png",
+   "title": "Bunny testing a vine",
+   "author": "Blender Foundation (Big Buck Bunny)",
+   "licence": "CC BY 3.0",
+   "source": "(CC) Blender Foundation | peach.blender.org, CC BY 3.0; 4K rework: Janus B. Kristensen",
+   "page": "https://media.xiph.org/BBB/bbb3d/video/png/08_03/0020.png",
+   "changes": "cropped from 4K frame 08_03/0020 (left eye of the 2013 stereoscopic 4K rework by Janus B. Kristensen, bbb3d.renderfarming.net, CC BY 3.0)"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-big-buck-bunny/bbb-09_01_0170.png",
+   "title": "Hiding in the tall grass",
+   "author": "Blender Foundation (Big Buck Bunny)",
+   "licence": "CC BY 3.0",
+   "source": "(CC) Blender Foundation | peach.blender.org, CC BY 3.0; 4K rework: Janus B. Kristensen",
+   "page": "https://media.xiph.org/BBB/bbb3d/video/png/09_01/0170.png",
+   "changes": "cropped from 4K frame 09_01/0170 (left eye of the 2013 stereoscopic 4K rework by Janus B. Kristensen, bbb3d.renderfarming.net, CC BY 3.0)"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-big-buck-bunny/bbb-09_10_0100.png",
+   "title": "Red squirrel up close",
+   "author": "Blender Foundation (Big Buck Bunny)",
+   "licence": "CC BY 3.0",
+   "source": "(CC) Blender Foundation | peach.blender.org, CC BY 3.0; 4K rework: Janus B. Kristensen",
+   "page": "https://media.xiph.org/BBB/bbb3d/video/png/09_10/0100.png",
+   "changes": "cropped from 4K frame 09_10/0100 (left eye of the 2013 stereoscopic 4K rework by Janus B. Kristensen, bbb3d.renderfarming.net, CC BY 3.0)"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-big-buck-bunny/bbb-10_02_1035.png",
+   "title": "Chinchilla by the hollow log",
+   "author": "Blender Foundation (Big Buck Bunny)",
+   "licence": "CC BY 3.0",
+   "source": "(CC) Blender Foundation | peach.blender.org, CC BY 3.0; 4K rework: Janus B. Kristensen",
+   "page": "https://media.xiph.org/BBB/bbb3d/video/png/10_02/1035.png",
+   "changes": "cropped from 4K frame 10_02/1035 (left eye of the 2013 stereoscopic 4K rework by Janus B. Kristensen, bbb3d.renderfarming.net, CC BY 3.0)"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-big-buck-bunny/bbb-11_01_0100.png",
+   "title": "Flying squirrel at the tree roots",
+   "author": "Blender Foundation (Big Buck Bunny)",
+   "licence": "CC BY 3.0",
+   "source": "(CC) Blender Foundation | peach.blender.org, CC BY 3.0; 4K rework: Janus B. Kristensen",
+   "page": "https://media.xiph.org/BBB/bbb3d/video/png/11_01/0100.png",
+   "changes": "cropped from 4K frame 11_01/0100 (left eye of the 2013 stereoscopic 4K rework by Janus B. Kristensen, bbb3d.renderfarming.net, CC BY 3.0)"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-big-buck-bunny/bbb-11_02_0350.png",
+   "title": "Bird beside the trunk",
+   "author": "Blender Foundation (Big Buck Bunny)",
+   "licence": "CC BY 3.0",
+   "source": "(CC) Blender Foundation | peach.blender.org, CC BY 3.0; 4K rework: Janus B. Kristensen",
+   "page": "https://media.xiph.org/BBB/bbb3d/video/png/11_02/0350.png",
+   "changes": "cropped from 4K frame 11_02/0350 (left eye of the 2013 stereoscopic 4K rework by Janus B. Kristensen, bbb3d.renderfarming.net, CC BY 3.0)"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-big-buck-bunny/bbb-11_03_0073.png",
+   "title": "Flying squirrel on a branch",
+   "author": "Blender Foundation (Big Buck Bunny)",
+   "licence": "CC BY 3.0",
+   "source": "(CC) Blender Foundation | peach.blender.org, CC BY 3.0; 4K rework: Janus B. Kristensen",
+   "page": "https://media.xiph.org/BBB/bbb3d/video/png/11_03/0073.png",
+   "changes": "cropped from 4K frame 11_03/0073 (left eye of the 2013 stereoscopic 4K rework by Janus B. Kristensen, bbb3d.renderfarming.net, CC BY 3.0)"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-big-buck-bunny/bbb-11_04_0030.png",
+   "title": "Forest path from above",
+   "author": "Blender Foundation (Big Buck Bunny)",
+   "licence": "CC BY 3.0",
+   "source": "(CC) Blender Foundation | peach.blender.org, CC BY 3.0; 4K rework: Janus B. Kristensen",
+   "page": "https://media.xiph.org/BBB/bbb3d/video/png/11_04/0030.png",
+   "changes": "cropped from 4K frame 11_04/0030 (left eye of the 2013 stereoscopic 4K rework by Janus B. Kristensen, bbb3d.renderfarming.net, CC BY 3.0)"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-big-buck-bunny/bbb-12_04_0100.png",
+   "title": "Fruit on the forest floor",
+   "author": "Blender Foundation (Big Buck Bunny)",
+   "licence": "CC BY 3.0",
+   "source": "(CC) Blender Foundation | peach.blender.org, CC BY 3.0; 4K rework: Janus B. Kristensen",
+   "page": "https://media.xiph.org/BBB/bbb3d/video/png/12_04/0100.png",
+   "changes": "cropped from 4K frame 12_04/0100 (left eye of the 2013 stereoscopic 4K rework by Janus B. Kristensen, bbb3d.renderfarming.net, CC BY 3.0)"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-big-buck-bunny/bbb-12_07_0118.png",
+   "title": "Stakes in the clearing",
+   "author": "Blender Foundation (Big Buck Bunny)",
+   "licence": "CC BY 3.0",
+   "source": "(CC) Blender Foundation | peach.blender.org, CC BY 3.0; 4K rework: Janus B. Kristensen",
+   "page": "https://media.xiph.org/BBB/bbb3d/video/png/12_07/0118.png",
+   "changes": "cropped from 4K frame 12_07/0118 (left eye of the 2013 stereoscopic 4K rework by Janus B. Kristensen, bbb3d.renderfarming.net, CC BY 3.0)"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-big-buck-bunny/bbb-12_10_0166.png",
+   "title": "Bunny in the tall grass",
+   "author": "Blender Foundation (Big Buck Bunny)",
+   "licence": "CC BY 3.0",
+   "source": "(CC) Blender Foundation | peach.blender.org, CC BY 3.0; 4K rework: Janus B. Kristensen",
+   "page": "https://media.xiph.org/BBB/bbb3d/video/png/12_10/0166.png",
+   "changes": "cropped from 4K frame 12_10/0166 (left eye of the 2013 stereoscopic 4K rework by Janus B. Kristensen, bbb3d.renderfarming.net, CC BY 3.0)"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-big-buck-bunny/bbb-12_12_0324.png",
+   "title": "Gliding over the forest",
+   "author": "Blender Foundation (Big Buck Bunny)",
+   "licence": "CC BY 3.0",
+   "source": "(CC) Blender Foundation | peach.blender.org, CC BY 3.0; 4K rework: Janus B. Kristensen",
+   "page": "https://media.xiph.org/BBB/bbb3d/video/png/12_12/0324.png",
+   "changes": "cropped from 4K frame 12_12/0324 (left eye of the 2013 stereoscopic 4K rework by Janus B. Kristensen, bbb3d.renderfarming.net, CC BY 3.0)"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-big-buck-bunny/bbb-12_20_0228.png",
+   "title": "Caught above the stakes",
+   "author": "Blender Foundation (Big Buck Bunny)",
+   "licence": "CC BY 3.0",
+   "source": "(CC) Blender Foundation | peach.blender.org, CC BY 3.0; 4K rework: Janus B. Kristensen",
+   "page": "https://media.xiph.org/BBB/bbb3d/video/png/12_20/0228.png",
+   "changes": "cropped from 4K frame 12_20/0228 (left eye of the 2013 stereoscopic 4K rework by Janus B. Kristensen, bbb3d.renderfarming.net, CC BY 3.0)"
+  }
+ ]
+}

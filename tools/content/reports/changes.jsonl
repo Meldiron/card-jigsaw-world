@@ -15948,3 +15948,5 @@
 {"pack": "evpack-thanksgiving-2026", "fields": ["imageCount", "puzzlesUpdatedAt"], "event": "pack-update", "at": "2026-10-14T01:48:30"}
 {"pack": "evpack-thanksgiving-2027", "puzzle": "p-567c062846a4", "url": "https://live.staticflickr.com/65535/51555871928_46580e1c32_b.jpg", "reason": "quality", "event": "delete", "at": "2026-10-14T01:48:32"}
 {"pack": "evpack-thanksgiving-2027", "fields": ["imageCount", "puzzlesUpdatedAt"], "event": "pack-update", "at": "2026-10-14T01:48:33"}
+{"pack": "pack-big-buck-bunny", "category": "Illustration", "pictures": 24, "event": "local-pack", "at": "2026-10-14T14:06:25"}
+{"pack": "pack-big-buck-bunny", "puzzle": "p-2611ebb87f50", "reason": "same scene as p-b42cbac87112", "event": "local-pack-remove", "at": "2026-10-14T14:07:40"}

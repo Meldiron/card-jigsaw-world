@@ -2629,6 +2629,15 @@
 "removed": 15,
 "status": "verified"
 },
+"pack-big-buck-bunny": {
+"added": 0,
+"at": "2026-10-14T14:07:44",
+"issues": 0,
+"last_step": "verify",
+"puzzles": 23,
+"removed": 0,
+"status": "verified"
+},
 "pack-big-cats": {
 "added": 28,
 "at": "2026-10-12T22:47:57",
@@ -2840,6 +2849,14 @@
 "puzzles": 22,
 "removed": 13,
 "status": "verified"
+},
+"pack-curiosity-shops": {
+"added": 0,
+"at": "2026-10-14T13:25:18",
+"last_step": "reject 5 off-theme",
+"puzzles": null,
+"removed": 0,
+"status": "audited"
 },
 "pack-deer": {
 "added": 23,
@@ -3285,6 +3302,14 @@
 "removed": 13,
 "status": "verified"
 },
+"pack-market-stalls": {
+"added": 0,
+"at": "2026-10-14T13:02:16",
+"last_step": "reject 1 weak",
+"puzzles": null,
+"removed": 0,
+"status": "audited"
+},
 "pack-misty-forests": {
 "added": 16,
 "at": "2026-10-12T12:37:39",
@@ -3452,6 +3477,14 @@
 "puzzles": 24,
 "removed": 18,
 "status": "verified"
+},
+"pack-painted-paradises": {
+"added": 0,
+"at": "2026-10-14T11:57:42",
+"last_step": "reject 1 people",
+"puzzles": null,
+"removed": 0,
+"status": "audited"
 },
 "pack-pandas": {
 "added": 23,

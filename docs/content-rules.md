@@ -80,8 +80,10 @@ people.
 ## Categories
 
 Library categories: Nature, Animals, Flowers, Oceans, Cities, Travel, Architecture, Food, Space,
-Art, Patterns, Vintage, Mountains, plus **AI** (AI-generated art, 20 themed packs) and
-**Abstract** (20 distinct abstract themes). Event packs use category `Event`, monthly daily packs
+Art, Patterns, Vintage, Mountains, plus **AI** (AI-generated art, 20 themed packs),
+**Abstract** (20 distinct abstract themes) and **Illustration** (digital art made on a computer:
+composed collages of Glitch art, Blender film frames, painted game maps; see the pack-making skill's
+illustration sources). Event packs use category `Event`, monthly daily packs
 use `Daily`.
 
 ## Prices

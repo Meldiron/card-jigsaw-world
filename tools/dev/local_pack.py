@@ -22,6 +22,7 @@ import argparse, datetime, hashlib, io, json, os, sys, time
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 CONTENT = os.path.join(ROOT, 'tools', 'content')
+CALLER_DIR = os.getcwd()          # manifest paths are relative to where the command was run
 sys.path.insert(0, CONTENT)
 os.chdir(CONTENT)
 from PIL import Image, ImageOps  # noqa: E402
@@ -34,7 +35,7 @@ GIANT_MAX, GIANT_MIN_LONG = 4096, 3800
 
 
 def load(path):
-    m = json.load(open(path))
+    m = json.load(open(os.path.join(CALLER_DIR, path)))
     pack, pics = m['pack'], m['pictures']
     for key in ('id', 'name', 'category', 'description'):
         if not pack.get(key):
