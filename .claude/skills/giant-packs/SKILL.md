@@ -95,7 +95,9 @@ when portrait and without large labels (most are landscape and labelled).
 | Painted Paradises: crowded old masters, tapestries, bird parks (Savery, Hondecoeter, verdures, millefleurs, palampores) | fails | 59-96% look-alike, dark varnish; Jakuchū scans top out at 2695 px (2026-10-14) |
 | Painted Paradises: colour painting 1880-1920 (Caillebotte, Sorolla, Marc, Klee, Séraphine, Van Gogh gardens) | works | Brushwork everywhere and strong colour: 17 of 20 picks at flat <= 8%, alike <= 15%; find them with targeted `intitle:` Commons topics after a 500 px prescreen |
 | Curiosity shops, flea markets, cabinets (photos) | weak | Figurines everywhere (strict rule) and dim interiors behind glass; 4 of about 340 passed before the giant people rule was relaxed and the Commons size fix landed |
-| Quilts (museum scans) | weak | Grey backdrops, colour strips, borders; one very low-alike Cleveland quilt |
+| Quilts (museum scans) | weak | Grey backdrops, colour strips, borders; one very low-alike Cleveland quilt. Whole quilts on Smithsonian, Yale and Mia fail on white backgrounds or repeats (alike 25-65%) |
+| Museum flower still lifes (Getty, Paris Musées, Europeana, Yale botanicals) | fails | Dark or plain backgrounds and massed foliage: alike 49-71% (2026-10-14 source study) |
+| Bright plein-air and frame-filling flower painting (Finnish National Gallery, SMK) | works | Halonen's Tomatoes (flat 0.3%, alike 2.3%) and Løvmand's bouquet at the foot of a tree (flat 6.9%, alike 27.6%) passed; look for sunlit gardens, harvests and flowers that fill the whole canvas |
 
 Good topic shapes are named streets, squares, shophouses, balconies and single houses ("Calle Santiago
 Hondarribia", "Joo Chiat shophouses", "Largo Santa Luzia Alfama"), not "colourful town" panoramas,
@@ -110,6 +112,9 @@ which bring sky, cars and crowds. Expect about 1 usable giant picture per 6 to 8
 | `rijks` | `source_box: 4096` | Micrio caps at about 17.5 MP (2915 x 4096 fits). |
 | `met` | nothing: the candidate URL is the original | Originals 3000-6000 px. The v1.1 search returned HTTP 404 on 2026-10-14: check `run.sh sources met` first. |
 | `nasa` | originals | No space pictures (owner). Earth from orbit can work. |
+| SMK (not a provider yet) | `image_native` or IIIF `!4096,4096` | Keyless search with sizes in the results; originals 4,000-11,000 px. |
+| Finnish National Gallery (not a provider yet) | `media-assets/1/jpg/4000/<id>.jpg` | The 4000 rendition is 4000 px wide and UPSCALED from narrower originals: check the dump's width, and judge `sharp` on the real size. |
+| Getty, Yale (not providers yet) | IIIF `!4096,4096` | Originals 4,000-15,000 px; Getty's are mostly dark old masters. |
 | USGS Earth as Art (not a provider yet) | S3 "Original" per media page | About 7200 px square Landsat art, public domain; the best giant source sampled (flat 0, alike 0) but every file is a poster: crop the inner square (no logos). See the pack-making skill's approved sources. |
 | Negative Space, NPS NPGallery (not providers yet) | originals | Top-down flat-lays (Negative Space) and geology textures (NPS staff photos) can pass; mostly normal-pack material. |
 | `inat`, `cma` | too small | 2048 px and ~900 px. |
