@@ -36,3 +36,18 @@ reads an hour per open iPhone app; the web look is a static file, not a database
 When a workflow is dispatched by hand (`gh workflow run ...`), announce the build afterwards:
 `.venv/bin/python tools/dev/publish_release.py testflight --build <100 + run number>` (it waits up to
 an hour for Apple, then writes the row). `publish_release.py show` prints both rows.
+
+## Update required (not built yet)
+
+Today every prompt is "Update available" and Later always works. An old build that can no longer
+work with the backend (a removed column, a changed function contract, a security fix) needs a
+blocking prompt instead: the server's definition of the oldest supported build, compared with the
+running one, exactly like "Update available" compares with the newest. The plan:
+
+- A `minBuild` integer on each `releases` row (and `minBuild` in the web's `app-version.json`),
+  written by `publish_release.py ... --min-build N` only when a change really breaks older builds.
+- Running build below `minBuild`: an "Update required" alert with Update only, shown at once (not
+  waiting for a calm moment, but after the save sync has flushed), and again on every launch.
+- Until it exists, keep backend changes compatible with every build in testers' hands (apple-release
+  skill, "Old builds stay in use").
+

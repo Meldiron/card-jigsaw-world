@@ -7,11 +7,41 @@ description: Ship Card Jigsaw World to TestFlight and the App Store without trig
 
 ## The one rule
 Apple reviews TestFlight builds for **external testers once per version string**
-(CFBundleShortVersionString). Later builds of the same version reach public testers
-with no review. A new version string always starts a new Beta App Review (1 to 7
-days). The App Store version record must match the version string of the build you
-attach to it. Therefore: **one version string per App Store release cycle; TestFlight
-iterates by build number only.**
+(CFBundleShortVersionString). A new version string always starts a full Beta App Review (1 to 7
+days). The App Store version record must match the version string of the build you attach to it.
+Therefore: **one version string per App Store release cycle; TestFlight iterates by build number
+only** (the version is what customers see, the build number is a sub-version that must only go up:
+1.7.0 (117), 1.7.0 (118), ...; the App Store can take any of them without a new version).
+
+Later builds of an approved version still get a beta review submission (the workflow files it), and
+Apple usually approves those within minutes. But Apple may hold **any** external build for a real
+review, most often when it adds a permission prompt (a new `NS...UsageDescription`, a new
+entitlement or capability) or a large change. Ship such changes early in a cycle, name them in the
+build's "What to Test", and do not promise testers a time.
+
+## What may change without a build
+Server-side changes (catalogue, prices, events, pack rows, the `releases` table, function code) are
+fine as content and configuration. A switch may turn on or off only what the reviewed binary already
+contains; a feature that reviewers never saw must ship in a build and be described in the review
+notes (guideline 2.3.1 hidden features; no downloaded code, 2.5.2). Pack codes and hidden packs are
+such a feature: say so in `store/metadata/en-US/review_notes.txt`.
+
+## Old builds stay in use
+Assume the client is outdated, the network unreliable and releases slow (Apple processing, beta
+review, testers who do not update; a TestFlight build lives 90 days). Every backend change must keep
+every build still in testers' hands working:
+- Add columns with defaults; never rename or remove a column, enum value or row id that a live build
+  reads or writes (the ledger enum stayed `coins, tickets, hints` for this reason).
+- Deploy the server first (functions, tables), then the build that needs it.
+- A change that cannot stay compatible needs a minimum build ("Update required", see
+  `docs/app-updates.md`; only "Update available" exists today). Example: the 2026-10-14 starter
+  packs locked formerly free packs for testers on build 115 until they updated.
+
+## Tooling
+No fastlane: `tools/store/asc_publish.py` (metadata, screenshots, products, TestFlight, review),
+`tools/store/install_profiles.py` + `ci_manual_signing.py` (signing in CI) and the workflows cover what
+fastlane's deliver/match/pilot would. Keep it that way unless the owner asks; the scripts are
+readable and do exactly what the docs say.
 
 ## Commands
 | Goal | Command | Effect |
@@ -36,6 +66,19 @@ Before each build rewrite `store/metadata/en-US/testflight_build_notes.txt` with
 changed since the previous build (2-4 plain bullets, one "Please try:" line); the workflow sends it as
 that build's TestFlight "What to Test". `release_notes.txt` stays the App Store "What's New" for the
 whole version. `asc_publish.py --build N build-notes` rewrites one existing build's text.
+
+## Before an App Store submission
+On top of the TestFlight checks below (the guideline review of 2026-10-15 found these gaps):
+1. Retake the store screenshots from the build you submit (`test_driver/store_screenshots.dart` +
+   `integration_test/store_screenshots_test.dart`, then `asc_publish.py screenshots`). They must show
+   the current app; the 2026-10-13 set still showed a seasonal league that no longer exists.
+2. Rewrite `store/metadata/en-US/review_notes.txt` so every feature is described specifically
+   (purchases and how to test them, pack codes, the Lucky Wheel odds, sources of the pictures).
+3. Check `docs/privacy-policy.md`, the App Privacy answers in App Store Connect and the age rating
+   (`store/metadata/en-US/age_rating.json`) against what the build does.
+4. Attach the final build (`asc_publish.py release --build N`) and submit the products and the VIP
+   plans together with the version.
+5. Do not ship a newer TestFlight build while the version is in review.
 
 ## Before every upload
 1. `git status` clean, main pushed, analyzer and tests green, QA runs silent and flagged

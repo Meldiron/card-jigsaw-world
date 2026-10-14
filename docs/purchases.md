@@ -29,6 +29,13 @@ Three places hold the amounts and `test/economy_test.dart` fails unless they agr
 2. `GRANTS` in `functions/verify-purchase/src/main.js`: what the server credits. Redeploy the function (below) before the build that shows new amounts ships.
 3. `store/metadata/subscriptions/consumables.json`: App Store display names (30 characters), descriptions (45) and review notes, pushed with `.venv/bin/python tools/store/asc_publish.py iap` (try `--dry-run` first).
 
+## Sources of truth
+
+Two, and the app is neither: **Apple** for payments and subscription status (signed transactions,
+App Store Server Notifications), **our backend** for what a player owns (`profiles`, `purchases`,
+`ledger`, written only by `verify-purchase`). The app shows what the backend says; it never grants
+anything itself in a release build.
+
 ## Flow
 
 1. The app enables StoreKit 2, queries the products and starts a purchase (`buyConsumable` / `buyNonConsumable`).

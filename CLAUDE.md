@@ -64,6 +64,12 @@ skills under `.claude/skills/` hold the detailed workflows.
   Apple has the build out; after a hand-dispatched workflow run it yourself).
 - **Versioning**: one version string per App Store cycle; TestFlight builds only bump the build number.
   Details in the apple-release skill. Never bump the version for a TestFlight cut.
+- **Old builds stay in use** (lessons the owner collected, 2026-10-15): assume the client is outdated,
+  the network unreliable and releases slow. Backend changes stay compatible with every build testers
+  still have (add with defaults, never rename or remove what a live build reads; server before build).
+  Server switches may only turn on or off what a reviewed build already contains; new features ship
+  in a build and are described in the review notes. Details: "Old builds stay in use" and "What may
+  change without a build" in the apple-release skill.
 - **Resolve feedback** on Apple after fixing it (`asc_publish.py feedback --resolve`), so items are not
   fixed twice.
 - **Subagents run on Opus** (`model: "opus"` on every Agent call).
@@ -225,8 +231,9 @@ skills under `.claude/skills/` hold the detailed workflows.
 - Bundle `com.matejbaco.cardjigsawworld` (widget `.DailyWidget`), team `C24QP73SQM`, app id
   `6821644423`, primary locale en-GB, iPhone only. Current cycle: version **1.7.0**; build 103 passed the
   full Beta App Review. Apple still wants a beta review submission for every later 1.7.0 build (the workflow
-  files it; the log says WAITING_FOR_REVIEW), but those are approved automatically within minutes (108-115
-  all were), so public testers get each build shortly after it processes.
+  files it; the log says WAITING_FOR_REVIEW), but those are approved automatically within minutes (108-118
+  all were), so public testers get each build shortly after it processes. Apple may still hold any build
+  for a real review, most often one that adds a permission prompt or entitlement.
 - Groups: "Internal testers" (all builds instantly), "Public testers"
   (https://testflight.apple.com/join/7nPCfg6A).
 - Subscriptions: vip_monthly 6821645754 ($2.99), vip_yearly 6821646642 ($14.99), both 1-week trial;

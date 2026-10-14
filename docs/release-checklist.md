@@ -6,9 +6,19 @@ What the repository automates, and what only you can do.
 
 `.github/workflows/ci.yml` runs on every push and pull request: `flutter analyze`, `flutter test`, a syntax check of the Appwrite function, and unsigned iOS, Android and web builds.
 
-## TestFlight release (automatic after one-time setup)
+## TestFlight release (started by hand)
 
-`.github/workflows/release-testflight.yml` runs when you **publish a GitHub release** (tag `vX.Y.Z`) or trigger it manually. It archives the app with Xcode, lets Xcode create the App Store provisioning profiles through the App Store Connect API, exports an IPA and uploads it to TestFlight. The version is the tag, the build number is the workflow run number.
+`.github/workflows/release-testflight.yml` runs only when started (`tools/dev/testflight.sh` or
+`gh workflow run "Release to TestFlight" --ref main -f version=X.Y.Z`; never on a push or a tag). It
+installs the App Store profiles named in `ios/ExportOptions.plist` with the App Store Connect API
+(`tools/store/install_profiles.py`), switches the Release configuration to manual signing, archives,
+exports and uploads the IPA (symbols included), waits for processing, sets "What to Test" from
+`store/metadata/en-US/testflight_build_notes.txt`, adds the build to the internal and public groups
+and files the beta review. Version = `pubspec.yaml` (or the input), build number = 100 + run number.
+The workflow runs no tests: run the gates first (`flutter analyze --fatal-infos --fatal-warnings`,
+`flutter test`) or check that CI passed on the commit. Afterwards announce the build to the update
+prompt (`publish_release.py testflight --build N`; `testflight.sh` does it) and deploy the web site
+from the same commit (`tools/dev/deploy-web.sh`).
 
 ### One-time setup (manual)
 
@@ -26,8 +36,10 @@ What the repository automates, and what only you can do.
 
 ### Each release
 
-1. Bump `version:` in `pubspec.yaml` (for example `1.6.0+9`) and the version row in `lib/features/profile/settings_screen.dart`; merge to `main`.
-2. On GitHub create a release with tag `v1.6.0`. The workflow uploads the build; processing in TestFlight takes 10 to 30 minutes, then testers get it.
+A TestFlight build keeps the version and gets the next build number (apple-release skill). A new
+App Store cycle starts with `tools/dev/release.sh X.Y.Z`. Before submitting a version for review,
+follow "Before an App Store submission" in the apple-release skill (fresh store screenshots, specific
+review notes, privacy policy and App Privacy answers that match the build).
 
 ## In-app purchases (manual, once)
 
