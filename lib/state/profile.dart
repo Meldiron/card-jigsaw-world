@@ -11,6 +11,7 @@ import 'auth.dart';
 import 'completion.dart';
 import 'progress.dart';
 import 'rewards.dart';
+import 'starter_packs.dart';
 import 'sync.dart';
 
 /// Economy rules in one place so UI and backend stay consistent.
@@ -156,10 +157,16 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
   }
 
   /// Playable right now: event packs must be live; otherwise VIP, the current
-  /// daily month, free packs and purchased packs are open.
+  /// daily month, free packs, purchased packs, and the packs that were free until
+  /// 2026-10-14 for a player who had played them ([keptFreePack]) are open.
   bool isUnlocked(Pack pack) {
     if (pack.hasWindow && !pack.isLive) return false;
-    return _p.isVip || pack.isCurrentMonth || pack.isFree || (pack.priceCoins == 0 && pack.priceTickets == 0) || _p.unlockedPacks.contains(pack.id);
+    return _p.isVip ||
+        pack.isCurrentMonth ||
+        pack.isFree ||
+        (pack.priceCoins == 0 && pack.priceTickets == 0) ||
+        _p.unlockedPacks.contains(pack.id) ||
+        keptFreePack(pack.id, () => ref.read(playedPacksProvider));
   }
 
   /// Debug-only sandbox toggle. Real VIP comes from verified App Store

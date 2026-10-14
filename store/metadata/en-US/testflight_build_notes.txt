@@ -1,6 +1,6 @@
 New in this build:
-- Painting (black-and-white cards that colour in as they lock, pays 25% more) and giant boards of 100 to 300 cards in four Giant packs. Zoom in, tap a card to see its place on the map (Locate switches off in the bar), Gather the cards for the view, Peek for 10 coins.
-- Lucky Wheel: some coin prizes are now 5 or 10 Peeks and 1 or 3 Magic, kept in stock and used before coins in a game.
-- Shapes, Painting and giant boards open as you level up (2, 4, 6, 8, 10); new quests, Claim all, daily and New events reminders, account deletion in the app, new Illustration packs (Big Buck Bunny, Fantasy Worlds).
+- Six free starter packs, one per category (Wild Nature, Butterflies, Paris, Fruit Markets, Impressionists, Tropical Beaches). The other library packs now cost coins; any pack you have already played stays open.
+- New packs: Pantry Shelves, Tinker's Workshop, Garden Plots and House and Home (Illustration), and Treasure Trove (Giant).
+- The giant board bar no longer cuts off the zoom level.
 
-Please try: a Colossal board in a Giant pack (zoom in, tap a card, try Gather and Peek), a few Lucky Wheel spins, and Daily reminders in Settings.
+Please try: the Library on a fresh install, a pack you played before, and a Colossal board in Treasure Trove.

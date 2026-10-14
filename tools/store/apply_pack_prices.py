@@ -12,8 +12,12 @@ and what would change. Nothing is written without --apply.
 
 The policy (docs/economy.md, "Pack prices"):
 
-* Free packs (isFree), event packs (category Event or a start/end window) and
-  rows without any price stay as they are.
+* Six starter packs from six categories are free (STARTER_PACKS; owner,
+  2026-10-14: "6 packs from different categories is more than enough at the
+  start"). Every other free library pack is priced as a standard coin pack and
+  loses isFree; players who had played one before keep it open (the app's
+  `formerlyFreePacks`). Event packs (category Event or a start/end window),
+  hidden packs (pack codes) and rows without any price stay as they are.
 * Coin packs are priced by how long a regular player (1 hour a day) plays to
   earn them: price = pictures x coins per picture of the pack's tier, rounded
   to 100, never below 1,000 and never above 5,000. The tier comes from the
@@ -77,6 +81,18 @@ TIER_HOURS = {t: round(c / REGULAR_COINS_PER_HOUR, 2) for t, c in TIER_PACK_COIN
 MIN_COINS = 1000  # owner: no coin pack below 1,000
 MAX_COINS = 5000  # owner: nice packs up to 5,000
 ROUND_COINS = 100
+
+# The only free library packs (owner, 2026-10-14), one per category. Until then
+# 52 library packs were free; lib/state/starter_packs.dart lists the others so a
+# player who had started one keeps it.
+STARTER_PACKS = {
+    "wild-nature",  # Nature
+    "pack-butterflies",  # Animals
+    "pack-paris",  # Cities
+    "pack-fruit-markets",  # Food
+    "pack-impressionists",  # Art
+    "pack-tropical-beaches",  # Oceans
+}
 
 # Share of a regular player's weekly free tickets a ticket pack costs.
 TICKET_TIER_WEEKS = {"standard": 0.5, "plus": 0.625, "special": 0.75}  # 8, 10, 12 tickets
@@ -146,11 +162,19 @@ def plan(pack: dict, rederive: bool) -> dict:
     tickets = int(pack.get("priceTickets") or 0)
     pictures = pictures_of(pack)
     category = pack.get("category") or ""
-    base = {"kind": "", "tier": "", "field": None, "old": None, "new": None, "note": ""}
+    base = {"kind": "", "tier": "", "field": None, "old": None, "new": None, "note": "", "extra": {}}
     if category == "Event" or pack.get("startAt") or pack.get("endAt") or pack.get("eventId"):
         return {**base, "kind": "event", "note": "event pack: free while live, unchanged"}
+    if pack.get("hidden"):
+        return {**base, "kind": "hidden", "note": "hidden pack (pack codes), unchanged"}
+    if pack["$id"] in STARTER_PACKS:
+        if pack.get("isFree"):
+            return {**base, "kind": "free", "note": "starter pack, free"}
+        return {**base, "kind": "free", "field": "isFree", "old": False, "new": True, "note": "starter pack: made free"}
     if pack.get("isFree"):
-        return {**base, "kind": "free", "note": "free pack, unchanged"}
+        return {**base, "kind": "coins", "tier": "standard", "field": "priceCoins", "old": coins,
+                "new": coin_price("standard", pictures), "extra": {"isFree": False},
+                "note": "free until 2026-10-14, not a starter pack: standard tier"}
     if tickets > 0:
         if tickets < LEGACY_TICKET_LIMIT:
             tier, note = legacy_ticket_tier(tickets), f"old scale ({tickets} tickets)"
@@ -256,11 +280,11 @@ def main(argv: list[str] | None = None) -> int:
     packs.sort(key=lambda p: (p.get("category") or "", p.get("sortOrder") or 0, p["$id"]))
 
     plans = [(p, plan(p, args.all)) for p in packs]
-    changes = [(p, x) for p, x in plans if x["field"] and x["new"] != x["old"]]
+    changes = [(p, x) for p, x in plans if x["field"] and (x["new"] != x["old"] or x["extra"])]
 
     print(f"{'pack':34} {'category':12} {'pics':>4}  {'currency':8} {'tier':9} {'old':>6} {'new':>6}  note")
     for p, x in plans:
-        changed = x["field"] and x["new"] != x["old"]
+        changed = x["field"] and (x["new"] != x["old"] or x["extra"])
         if not (changed or args.verbose):
             continue
         cur = {"priceCoins": "coins", "priceTickets": "tickets"}.get(x["field"], "")
@@ -299,8 +323,8 @@ def main(argv: list[str] | None = None) -> int:
     failed = 0
     for p, x in changes:
         try:
-            api.update(p["$id"], {x["field"]: x["new"]})
-            print(f"  {p['$id']}: {x['field']} {x['old']} -> {x['new']}")
+            api.update(p["$id"], {x["field"]: x["new"], **x["extra"]})
+            print(f"  {p['$id']}: {x['field']} {x['old']} -> {x['new']}{''.join(f', {k} -> {v}' for k, v in x['extra'].items())}")
         except RuntimeError as e:
             failed += 1
             print(f"  {p['$id']}: FAILED {e}", file=sys.stderr)

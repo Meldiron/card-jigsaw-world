@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/tokens.dart';
 import '../../models/models.dart';
 import '../../state/profile.dart';
+import '../../state/starter_packs.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 import 'pack_progress.dart';
@@ -19,6 +20,7 @@ class PackCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final c = context.colors;
     final profile = ref.watch(profileProvider).value;
+    if (formerlyFreePacks.contains(pack.id)) ref.watch(playedPacksProvider); // stays open once played
     final unlocked = profile != null && ref.read(profileProvider.notifier).isUnlocked(pack);
     final vip = profile?.isVip ?? false;
     final showLock = !unlocked && !vip && !pack.hasWindow;

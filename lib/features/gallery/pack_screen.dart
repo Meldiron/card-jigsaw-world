@@ -12,6 +12,7 @@ import '../../models/models.dart';
 import '../../state/catalog.dart';
 import '../../state/profile.dart';
 import '../../state/progress.dart';
+import '../../state/starter_packs.dart';
 import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
@@ -35,6 +36,7 @@ class PackScreen extends ConsumerWidget {
     final progress = ref.watch(progressProvider).value ?? {};
     final profileN = ref.read(profileProvider.notifier);
     final profile = ref.watch(profileProvider).value;
+    if (formerlyFreePacks.contains(pack.id)) ref.watch(playedPacksProvider); // stays open once played
     final unlocked = profile != null && profileN.isUnlocked(pack);
     final list = puzzles.value ?? const <Puzzle>[];
     final packProgress = ref.watch(packProgressProvider(packId));

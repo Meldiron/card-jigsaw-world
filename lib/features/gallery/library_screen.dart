@@ -9,6 +9,7 @@ import '../../state/catalog.dart';
 import '../../state/profile.dart';
 import '../../state/progress.dart';
 import '../../state/settings.dart';
+import '../../state/starter_packs.dart';
 import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
@@ -424,6 +425,7 @@ class _PictureRow extends ConsumerWidget {
     final c = context.colors;
     ref.watch(profileProvider);
     final pack = this.pack;
+    if (pack != null && formerlyFreePacks.contains(pack.id)) ref.watch(playedPacksProvider); // stays open once played
     final open = pack != null && ref.read(profileProvider.notifier).isUnlocked(pack) && !puzzle.isLockedByDate;
     final saved = ref.watch(progressProvider.select((m) => m.value?[puzzle.id]));
     final stars = saved != null && saved.completed ? saved.stars : 0;

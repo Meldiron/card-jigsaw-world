@@ -234,7 +234,10 @@ skills under `.claude/skills/` hold the detailed workflows.
 - **Pack prices** live in the `packs` rows (`priceCoins`, `priceTickets`, `isFree`). The policy and the
   earnings model behind it are in `docs/economy.md`; `tools/store/apply_pack_prices.py` applies it
   (dry run by default, `--apply` writes). The content tool creates new packs at 400 coins or 3 tickets
-  and never touches existing prices, so re-run the script after every content session.
+  and never touches existing prices, so re-run the script after every content session. Only six starter
+  library packs are free (`STARTER_PACKS` in that script; owner, 2026-10-14); the script prices any other
+  free library pack, and `lib/state/starter_packs.dart` keeps the 45 packs that were free until then open
+  for players who had played them.
 
 ## Secrets
 

@@ -31,4 +31,4 @@ Pictures and sync
 - One save on every device: progress from the iPhone and the web site adds up, play made offline is kept, and records only improve.
 - The Social tab shows one leaderboard, ranked by total XP; it and My Puzzles load more as you scroll.
 - My Puzzles photos are private to your account. Free players keep up to 5 photos; VIP has no limit.
-- Finishing a puzzle pays fewer coins; packs stay at their prices.
+- Finishing a puzzle pays fewer coins. Six starter packs, one per category, are free; the other library packs cost coins, and any pack you have already played stays open.

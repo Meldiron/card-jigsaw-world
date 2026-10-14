@@ -59,8 +59,10 @@ typical player rather than the developer.
 | Heavy | 3 h a day | 6x6 (36) once level 7 | 0.9 (faster) | 85 / 15 / 0% | 5 a day | all 8 tickets | every one (1.46) |
 
 Everyone claims the daily gift, finishes the three daily quests and today's puzzle, opens the piggy bank
-when it is full, and plays new pictures (there are 1,106 free library pictures, 30 daily pictures a
-month and about 32 event pictures a week, so nobody runs out of first-time boards in the first weeks).
+when it is full, and plays new pictures (1,106 free library pictures when this model was made; since
+2026-10-14 only the six starter packs are free, about 140 pictures, plus 30 daily pictures a month and
+about 32 event pictures a week; a regular player earns a standard 2,400-coin pack in about 40 minutes of play
+once the starters are done).
 Board size grows with the unlock levels (`LevelRewards.tierUnlockLevel`). Achievements are claimed as
 their thresholds are reached. Not counted: the Lucky Wheel (it converts tickets into coins, it does not
 create value), Night Owl / Early Bird, friends, VIP.
@@ -158,8 +160,12 @@ cheap farming trick to worry about; replays pay 40% and are not worth farming.
 | Restoring a lost streak | `3 + longest ~/ 7` tickets, 3 to 10 | `Economy.streakRestoreTickets` |
 | VIP (real money) | $2.99 a month or $14.99 a year: every pack and every past month | App Store |
 
-Free and unchanged: 48 free library packs (1,106 pictures, about 35 hours for a regular player), every
-world-day event pack while it is live, the current month's daily album, undo.
+Free: six starter packs, one per category (Wild Nature, Butterflies, Paris, Fruit Markets,
+Impressionists, Tropical Beaches; owner, 2026-10-14: "6 packs from different categories is more than
+enough at the start"; until then 51 library packs were free), every world-day event pack while it is
+live, the current month's daily album, undo. The other 45 formerly free packs are standard coin packs
+(2,000 to 2,500 coins); a player who had played one keeps it open (`formerlyFreePacks`,
+`lib/state/starter_packs.dart`).
 
 ## 6. Pack prices
 
@@ -205,8 +211,9 @@ weeks; two fewer for packs under 18 pictures. Since every player type earns 14 t
 that is about one premium pack a week for anyone who saves their tickets, a clear step up from the old
 2 to 4 (one every two days).
 
-**Unchanged by the model**: free packs stay free (they are the starter catalogue), event packs stay
-free while live and keep their 300 coins + 1 ticket reward, VIP keeps unlocking everything.
+**Unchanged by the model**: the six starter packs stay free (`STARTER_PACKS` in
+`tools/store/apply_pack_prices.py`; every other free library pack is priced at the standard tier), event
+packs stay free while live and keep their 300 coins + 1 ticket reward, VIP keeps unlocking everything.
 
 ### Re-applying (new packs)
 
