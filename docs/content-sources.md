@@ -45,14 +45,14 @@ Licences outside the free set (Pexels License, Pixabay Content License, Unsplash
 "no known copyright restrictions") are dropped by the pool unless the spec lists them in `allow_licences`,
 which a spec may only do after the owner has approved that licence (`docs/content-rules.md`).
 
-Deliberately not used: Europeana (excluded by the owner) and space sources (ESA/Hubble, ESA/Webb, ESO;
-the owner does not want space pictures, 2026-10-14); the Art Institute of Chicago and Library of Congress
-image servers block automated clients (Cloudflare challenges). Smithsonian Open Access, excluded earlier,
-is now approved for pattern packs.
+Deliberately not used: space sources (ESA/Hubble, ESA/Webb, ESO; the owner does not want space pictures,
+2026-10-14); the Art Institute of Chicago and Library of Congress image servers block automated clients
+(Cloudflare challenges). Smithsonian Open Access (patterns) and Europeana (paintings), excluded earlier,
+are now approved.
 
 Owner-approved new sources (2026-10-14), not providers in the content tool yet: USGS Earth as Art
 (drawings and patterns), SMK National Gallery of Denmark, the J. Paul Getty Museum and Paris Musées
-(drawings), Smithsonian Open Access (patterns), ISO Republic, Negative Space, NPS NPGallery and the Yale
+(drawings), Europeana and the Finnish National Gallery (paintings), Smithsonian Open Access (patterns), ISO Republic, Negative Space, NPS NPGallery and the Yale
 Center for British Art and Yale University Art Gallery (pictures). Licences, credits, access and caveats
 are in the pack-making skill (`.claude/skills/pack-making/SKILL.md`, "Owner-approved new sources").
 
