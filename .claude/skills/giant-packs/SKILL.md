@@ -32,10 +32,16 @@ the lessons from the first giant pack, `pack-colourful-houses` (Colourful Houses
 4. **No large plain or repeating areas**: no big skies, plain walls, dark or olive painted backgrounds,
    mirror-like water reflections (they double the look-alike cards), tiled or symmetric patterns
    (rose windows, mosaics, carpets), rows of identical windows.
-5. **People, looked for at full size**: 4096 px shows what a 480 px thumbnail hides. Reject passers-by
-   at the bottom of a street, people reflected in a door or window, people behind café umbrellas,
-   statues, busts, cherubs and carved faces (mascarons), religious images framed on a wall, murals and
-   sgraffito with figures, mannequins. Use the review sheets (below) for every pick.
+5. **People, looked for at full size**: 4096 px shows what a 480 px thumbnail hides. Giant packs may
+   keep small incidental figures (owner, 2026-10-14): a distant passer-by, a figurine or finial on a
+   shelf, a relief on a vase, a cherub on a teapot lid, a tiny statue on a roof, as long as each covers
+   about 2% of the frame at most (some 6 cards of 300), is never the subject, never in the foreground and
+   never the focus. Reject a person you notice first: someone sitting or standing as the focus (the
+   owner's example: "a guy sitting on a bench"), a vendor at the stall, a recognisable face, a large
+   statue, bust or mural figure, a mannequin in a window, several figures together. Use the review sheets
+   (below) for every pick.
+6. **No space** (owner, 2026-10-14): no nebulae, galaxies, planets or star fields, however detailed
+   (ESA/Hubble, ESA/Webb and ESO were sampled and excluded). Earth seen from orbit or the air is fine.
 
 ## The target: hidden-object art (owner's reference, 2026-10-14)
 
@@ -86,6 +92,10 @@ when portrait and without large labels (most are landscape and labelled).
 | Flower gardens and borders | mixed | Good close shots, but sky and lawns creep in |
 | Coral reefs | weak | Few portrait originals, chaotic, blue water backgrounds |
 | Colourful houses (facade fills the frame) | works | Every house its own colour, windows, shutters and balconies make cards distinct |
+| Painted Paradises: crowded old masters, tapestries, bird parks (Savery, Hondecoeter, verdures, millefleurs, palampores) | fails | 59-96% look-alike, dark varnish; Jakuchū scans top out at 2695 px (2026-10-14) |
+| Painted Paradises: colour painting 1880-1920 (Caillebotte, Sorolla, Marc, Klee, Séraphine, Van Gogh gardens) | works | Brushwork everywhere and strong colour: 17 of 20 picks at flat <= 8%, alike <= 15%; find them with targeted `intitle:` Commons topics after a 500 px prescreen |
+| Curiosity shops, flea markets, cabinets (photos) | weak | Figurines everywhere (strict rule) and dim interiors behind glass; 4 of about 340 passed before the giant people rule was relaxed and the Commons size fix landed |
+| Quilts (museum scans) | weak | Grey backdrops, colour strips, borders; one very low-alike Cleveland quilt |
 
 Good topic shapes are named streets, squares, shophouses, balconies and single houses ("Calle Santiago
 Hondarribia", "Joo Chiat shophouses", "Largo Santa Luzia Alfama"), not "colourful town" panoramas,
@@ -99,7 +109,9 @@ which bring sky, cars and crowds. Expect about 1 usable giant picture per 6 to 8
 | `nga` | `source_box: 4096` (IIIF `!4096,4096`) | Serves up to 4096 px; images capped by `maxpixels` are skipped automatically. |
 | `rijks` | `source_box: 4096` | Micrio caps at about 17.5 MP (2915 x 4096 fits). |
 | `met` | nothing: the candidate URL is the original | Originals 3000-6000 px. The v1.1 search returned HTTP 404 on 2026-10-14: check `run.sh sources met` first. |
-| `nasa` | originals | Space has black backgrounds (fails `dark`/`flat`); Earth from orbit can work. |
+| `nasa` | originals | No space pictures (owner). Earth from orbit can work. |
+| USGS Earth as Art (not a provider yet) | S3 "Original" per media page | About 7200 px square Landsat art, public domain; the best giant source sampled (flat 0, alike 0) but every file is a poster: crop the inner square (no logos). See the pack-making skill's approved sources. |
+| Negative Space, NPS NPGallery (not providers yet) | originals | Top-down flat-lays (Negative Space) and geology textures (NPS staff photos) can pass; mostly normal-pack material. |
 | `inat`, `cma` | too small | 2048 px and ~900 px. |
 
 The pool fetches the candidates with the largest known originals first. Museum results have no size

@@ -16,7 +16,7 @@ The rules every image must satisfy are in `docs/content-rules.md`; the workflow 
 | Abstract category | Wikimedia Commons (macro, texture, aerial and render photos), NASA Earth Observatory for topographic packs | as above / NASA public domain | |
 | Original featured packs (Wild Nature, Animal Friends, Cozy Kitchen, City Lights) | Lorem Picsum (Unsplash photos) | Unsplash License | `picsum.photos/id/{id}/900/1200`; violating pictures replaced from Commons |
 | Legacy art packs | Cleveland Museum of Art Open Access API | CC0 | `web` renditions are at most 900 px on the long side; landscape ones were removed, new art comes from Commons PD-Art museum uploads |
-| Space packs | NASA Image and Video Library, Hubble/Webb/ESO uploads on Commons | Public domain, credit NASA / CC BY (ESO, ESA) | `~medium.jpg` renditions, `~orig.jpg` where medium is unavailable |
+| Space packs (existing only) | NASA Image and Video Library, Hubble/Webb/ESO uploads on Commons | Public domain, credit NASA / CC BY (ESO, ESA) | `~medium.jpg` renditions, `~orig.jpg` where medium is unavailable. No new space pictures: the owner does not want them (2026-10-14). |
 | Legacy library and event packs (October 2026 drop) | Openverse search (Flickr, rawpixel, StockSnap, iNaturalist hosts) | CC0, PDM, CC BY, CC BY-SA only | Now a registered, verified client (10,000 requests/day); anonymous fallback 190/day when the client keys are missing |
 
 ## Picture providers in the content tool
@@ -45,8 +45,16 @@ Licences outside the free set (Pexels License, Pixabay Content License, Unsplash
 "no known copyright restrictions") are dropped by the pool unless the spec lists them in `allow_licences`,
 which a spec may only do after the owner has approved that licence (`docs/content-rules.md`).
 
-Deliberately not used: Europeana and Smithsonian Open Access (excluded by the owner); the Art Institute
-of Chicago and Library of Congress image servers block automated clients (Cloudflare challenges).
+Deliberately not used: Europeana (excluded by the owner) and space sources (ESA/Hubble, ESA/Webb, ESO;
+the owner does not want space pictures, 2026-10-14); the Art Institute of Chicago and Library of Congress
+image servers block automated clients (Cloudflare challenges). Smithsonian Open Access, excluded earlier,
+is now approved for pattern packs.
+
+Owner-approved new sources (2026-10-14), not providers in the content tool yet: USGS Earth as Art
+(drawings and patterns), SMK National Gallery of Denmark, the J. Paul Getty Museum and Paris Musées
+(drawings), Smithsonian Open Access (patterns), ISO Republic, Negative Space, NPS NPGallery and the Yale
+Center for British Art and Yale University Art Gallery (pictures). Licences, credits, access and caveats
+are in the pack-making skill (`.claude/skills/pack-making/SKILL.md`, "Owner-approved new sources").
 
 Attribution: every puzzle row keeps `author` and a `source` string that names the provider and the
 licence (`Rijksmuseum, Public domain`, `iNaturalist, CC BY`); `state/provenance.json` adds the object or

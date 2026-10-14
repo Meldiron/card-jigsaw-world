@@ -9,6 +9,12 @@ reports the ones that do not. The pack-making workflow that enforces them is the
 
 1. **No people.** No faces, bodies, crowds, silhouettes, hands, or figures in paintings. Statues
    and dolls are tolerated only when they are clearly objects; when in doubt, reject.
+   **Giant packs** (category `Giant`, owner 2026-10-14) may keep small incidental figures: a distant
+   person, a figurine on a shelf, a finial, a relief on a vase, as long as each covers only a small part
+   of the picture (about 2% of the frame at most, some 6 cards of a 300-card board), is never the subject,
+   never in the foreground and never the focus (the owner's example of what must go: "a guy sitting on a
+   bench"). A recognisable face, a vendor at the stall, a person you notice first: reject. Normal packs
+   keep the strict rule.
 2. **No repeats.** Within a pack no two images may be the same picture, a near-duplicate, the same
    scene from a slightly different angle, or the same photographer shooting the same subject the same
    way. The tools flag perceptual-hash matches; the reviewer rejects the rest by eye.
@@ -34,6 +40,11 @@ reports the ones that do not. The pack-making workflow that enforces them is the
    `allow_licences`. No pack may use these sources or set `allow_licences` until the owner has
    reviewed and approved that licence (and, for Pixabay, a re-hosting plan: Pixabay forbids
    permanent hotlinking).
+
+8. **No space.** No new packs or pictures of nebulae, galaxies, planets, star fields or telescope
+   images (owner, 2026-10-14: "I don't like space ones"). The existing Space packs stay as they are; no
+   source is used for space pictures (ESA/Hubble, ESA/Webb and ESO were evaluated and excluded). Earth
+   seen from orbit or from the air (USGS Earth as Art, NASA Earth Observatory) is not space and is fine.
 
 ## Quality rules (what makes a picture a good puzzle)
 

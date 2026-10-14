@@ -11,7 +11,9 @@ The rules are in `docs/content-rules.md`; this skill is the procedure.
 
 ## The rules you enforce (owner's words, non-negotiable)
 
-1. Never people: no faces, bodies, crowds, hands, silhouettes, painted figures.
+1. Never people: no faces, bodies, crowds, hands, silhouettes, painted figures. Giant packs only: small
+   incidental figures may stay (about 2% of the frame at most, never the subject, the foreground or the
+   focus; "a guy sitting on a bench" must go), see `docs/content-rules.md`.
 2. Never repeats inside a pack: same picture, near-duplicate, same scene re-shot, same
    photographer doing the same subject. Reject all but the best one.
 3. Never landscape: every image is portrait or square (height >= width).
@@ -21,6 +23,8 @@ The rules are in `docs/content-rules.md`; this skill is the procedure.
 7. Only free licences (CC0 / PDM / public domain / CC BY / CC BY-SA / NASA); keep author,
    source and licence on every puzzle; never claim AI art is human-made.
 8. Events: choose concrete image topics for the day first, then one best image per topic.
+9. Never space: no nebulae, galaxies, planets, star fields or telescope pictures (owner, 2026-10-14).
+   Earth seen from orbit or the air is fine.
 
 Plus the puzzle-quality rules: one clear subject, several distinct colours, detail in every
 region (no big flat sky/water/wall), sharp, no borders or watermarks, >= 900 px short side.
@@ -43,7 +47,7 @@ of a verified client registered to matejbaco2000@gmail.com. Never print or commi
 | `rijks` | Dutch Golden Age paintings, flower and botanical drawings, Delftware, prints | Public domain / CC0 as stated per image | none | 0.5 s spacing; 1 search + 3 resolution requests per object (cached 60 days), so ~30-45 s per topic |
 | `inat` | Animals, birds, insects, butterflies, flowers, fungi, plants: species names (`Danaus plexippus`, `snowy owl`) | CC0 or CC BY per photo, research grade only | none | 1 request/s across all workers (iNaturalist guidance); `original` photos up to 2048 px |
 | `cma` | Fallback for art; small renditions (~700-900 px) | CC0 | none | 0.6 s spacing |
-| `nasa` | Space, Earth from orbit, planets, nebulae | Public domain (NASA) | none | 0.6 s spacing; many landscape images, fetch more |
+| `nasa` | Earth from orbit only (no space pictures, owner 2026-10-14) | Public domain (NASA) | none | 0.6 s spacing; many landscape images, fetch more |
 | `pexels` | Stock photos (inactive) | Pexels License: needs owner review + spec `allow_licences` | `PEXELS_API_KEY` (empty) | 1 s spacing |
 | `pixabay` | Stock photos (inactive) | Pixabay Content License: owner review + `allow_licences`; no permanent hotlinking, so `apply` refuses these until re-hosted | `PIXABAY_API_KEY` (empty) | 1 s spacing |
 | `unsplash` | Stock photos (inactive) | Unsplash License: owner review + `allow_licences`; photographer and `download_location` recorded, `apply` pings it | `UNSPLASH_ACCESS_KEY` (empty) | 1 s spacing; demo apps 50 requests/hour |
@@ -56,15 +60,32 @@ Which sources to put in a spec:
 | --- | --- | --- |
 | Animals, birds, insects, butterflies, flowers, fungi | `["inat", "commons"]` | Topics as species (scientific or common names). iNaturalist photos often show a hand or a finger holding the animal: reject `people` on the sheet. |
 | Paintings, still lifes, art, botanical art | `["met", "nga", "rijks", "cma", "commons"]` (pick 2-3) | Topics as subjects ("still life flowers", "tulip", "seascape"); museum titles become puzzle titles. Reject figures, portraits, text, and dark varnished canvases. |
-| Space | `["nasa", "commons"]` | |
+| Space | none | The owner does not want space pictures (2026-10-14). Earth from orbit: `["nasa", "commons"]`. |
 | Landscapes, mountains, lakes, cities, architecture, travel | `["commons", "openverse"]` | Commons quality images first; Openverse adds variety. |
 | Food, objects, patterns, events, daily packs | `["commons"]`, optionally `"openverse"` | |
 | AI and Abstract categories | `["commons"]` with `cat:` topics | |
 | Stock photo packs | none | `pexels`, `pixabay`, `unsplash`, `flickr`, `flickr-commons` stay inactive (no keys) and need the owner's licence review before any pack uses them (`docs/content-rules.md`). |
 
-Excluded on purpose: Europeana and Smithsonian Open Access (the owner decided against them). Blocked:
-the Art Institute of Chicago and Library of Congress image servers sit behind Cloudflare challenges and
-refuse automated downloads, so they cannot be used.
+Excluded on purpose: Europeana (the owner decided against it), and ESA/Hubble, ESA/Webb and ESO (space,
+2026-10-14). Smithsonian Open Access was excluded earlier and is now approved by the owner for pattern
+packs (2026-10-14, see below). Blocked: the Art Institute of Chicago and Library of Congress image servers
+sit behind Cloudflare challenges and refuse automated downloads, so they cannot be used.
+
+## Owner-approved new sources (2026-10-14), not providers in the tool yet
+
+The owner reviewed samples of new sources (`~/Downloads/new-picture-sources/`, one folder per source with
+`SOURCE.txt`) and approved these, each for a kind of pack. None is a `run.sh` provider yet: adding one
+means a provider in `tools/content/cjw/sources.py` (search, licence check, author and source strings,
+full-size URL), registered in `run.sh sources`. Until then, pick by hand into a spec only with the owner's
+go-ahead. Every licence below allows commercial use, changes and re-hosting.
+
+| Source | Owner's use | Licence (verified 2026-10-14) | Credit | Access | Largest | Notes |
+| --- | --- | --- | --- | --- | --- | --- |
+| USGS Earth as Art (EROS Center, Landsat) | drawings and patterns (abstract Earth from above) | US public domain ("USGS-authored or produced data and information are considered to be in the U.S. Public Domain"; each media page says "Public Domain."), https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits | requested, not required: "U.S. Geological Survey"; app credit "USGS EROS Center, Earth as Art (Landsat), public domain" | no API; media pages `https://www.usgs.gov/media/images/<slug>` link the S3 "Original"; collections at `/centers/eros/earth-art-1` ... `-6` | about 7200 x 7200 (collections 1-4), 3600 (5-6) | Every file is a poster: black frame, USGS and NASA logos on top, caption below. The square picture inside must be cut out with a fixed per-collection crop before hosting (logos are trademarks and must not show). Square only. About 150-200 images, most giant-board material (sample: sharp 7.9, flat 0, dark 0, alike 0). Slow S3 host (20-60 MB files). |
+| ISO Republic | pictures | CC0 1.0 ("All photo and video downloads on ISORepublic.com are free for both personal and commercial use and come with a CC0 license"), https://isorepublic.com/license/ | not required; "ISO Republic, CC0" | keyless WordPress API `https://isorepublic.com/wp-json/wp/v2/media?search=<term>&per_page=50&media_type=image` (source_url = full file, media_details = sizes) | originals up to 4000 x 6000 | Curated site; respect trademarks and do not imply endorsement. Lifestyle-heavy (people, brands): normal packs only, flowers, autumn, food. Shares files with Negative Space: one pool for duplicate checks. |
+| Negative Space | pictures | CC0 1.0 ("all the photographs (and their raw image files) are made available under the Creative Commons CC0 license"), https://negativespace.co/license/ | not required; "Negative Space, CC0" | keyless WordPress API: search posts (`/wp-json/wp/v2/posts?search=`), then `/wp-json/wp/v2/media?include=<ids>` | about 4000 x 6000 | Food, autumn, flowers, top-down flat-lays (sample spices 3748 x 4317 passed giant: flat 1.3%, alike 8.6%). No photographer names. |
+| NPS NPGallery | pictures | per asset, `ConstraintsInformation` in the search JSON; staff photos are US public domain (https://www.nps.gov/aboutus/disclaimer.htm) | appreciated: "NPS / <photographer>, public domain". Paid packs must carry "No claim to original U.S. Government works" (17 U.S.C. 403) in the app's credits. | `https://npgallery.nps.gov/SearchResults?keyword=<term>&PageSize=48` (results JSON in the page), files `https://npgallery.nps.gov/GetAsset/<AssetID>/original.jpg` | camera originals 4000-8700 px | "Public domain" tags are unreliable for contest, volunteer and outside photographers: keep only assets whose PhotoCredit names an NPS employee. Mostly landscape orientation; no Arrowhead logo, signs or uniforms; many visitors in frame. Geology textures can pass giant (Canary Spring: flat 1%, alike 15.6%). Slow site. |
+
 
 Optional spec fields for sources: `source_limit` (results per topic per provider), `nga_classes`,
 `commons_width` (1920 or 3840 renditions instead of 1280), `allow_licences` (owner-approved licences only).
