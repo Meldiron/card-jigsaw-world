@@ -65,7 +65,9 @@ Items stay open on Apple until the build that carries their fix exists.
    and public groups and submits Beta App Review when Apple asks for it. Build number = 100 + run
    number. The script refuses a dirty tree or unpushed main. If another agent's files keep the tree
    dirty, run `gh workflow run "Release to TestFlight" --ref main -f version=<current>` and
-   `gh run watch` yourself.
+   `gh run watch` yourself, then announce the build to the in-app update prompt:
+   `.venv/bin/python tools/dev/publish_release.py testflight --build <100 + run number>` (waits until
+   Apple has it out to public testers; `testflight.sh` does this itself). See `docs/app-updates.md`.
 4. Web: `tools/dev/deploy-web.sh` (same commit, together with the requested build). Run it after any local Flutter build finishes, not in
    parallel with one.
 5. Owner's iPhone: do NOT install unless the owner asks (owner rule); TestFlight delivers the build.

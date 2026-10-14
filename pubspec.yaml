@@ -59,6 +59,8 @@ dependencies:
   archive: ^4.0.7
   package_info_plus: ^10.2.2
   url_launcher: ^6.3.3
+  # Web build only: fetches app-version.json from our own site and reloads the page (update prompt).
+  web: ^1.1.1
 
 dev_dependencies:
   flutter_test:

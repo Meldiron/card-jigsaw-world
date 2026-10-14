@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
@@ -409,6 +410,28 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
     if (_pointers.length >= 2) _startPinch();
   }
 
+  /// Trackpad and mouse wheel (web): a pinch on the trackpad arrives as scale
+  /// signals (the browser's ctrl+wheel; Safari's gesture events are turned
+  /// into the same in `web/index.html`) and zooms around the pointer; a
+  /// two-finger scroll or the wheel moves the zoomed board.
+  void _pointerSignal(PointerSignalEvent e) {
+    final zoom = widget.zoom;
+    if (zoom == null || _dragSlot != null) return;
+    if (e is PointerScaleEvent) {
+      GestureBinding.instance.pointerSignalResolver.register(e, (event) {
+        final s = event as PointerScaleEvent;
+        final z = (zoom.zoom * s.scale).clamp(1.0, zoom.limit);
+        // Keep the board point under the pointer under it.
+        final content = (s.localPosition - zoom.pan) / zoom.zoom;
+        zoom.set(z, s.localPosition - content * z);
+      });
+    } else if (e is PointerScrollEvent && zoom.zoomed) {
+      GestureBinding.instance.pointerSignalResolver.register(e, (event) {
+        zoom.panBy(-(event as PointerScrollEvent).scrollDelta);
+      });
+    }
+  }
+
   /// The part of the picture the board shows: a centre crop with the board's
   /// aspect (the whole picture when the board could take its proportions;
   /// the peek overlay uses the same `BoxFit.cover`).
@@ -517,6 +540,7 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
         onPointerMove: _pointerMove,
         onPointerUp: _pointerUp,
         onPointerCancel: _pointerUp,
+        onPointerSignal: _pointerSignal,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(radius + 2),
           child: Transform(

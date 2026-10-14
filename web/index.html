@@ -136,6 +136,39 @@
       setTimeout(hide, 20000);
     })();
   </script>
+  <script>
+    // Trackpad pinch in Safari on a Mac. Chrome and Firefox send a pinch as
+    // ctrl+wheel, which Flutter turns into a zoom (giant boards); Safari sends
+    // gesture events instead and would zoom the whole page. Each gesture step
+    // becomes the ctrl+wheel Flutter expects (scale = exp(-deltaY * dpr / 200)
+    // on macOS) at the pointer. Touch screens are left alone: their pinch
+    // reaches Flutter as two fingers.
+    (function () {
+      if (typeof window.GestureEvent === 'undefined' || navigator.maxTouchPoints > 0) return;
+      var last = 1, x = 0, y = 0, native = false;
+      window.addEventListener('wheel', function (e) { if (e.isTrusted && e.ctrlKey) native = true; }, { capture: true, passive: true });
+      window.addEventListener('mousemove', function (e) { x = e.clientX; y = e.clientY; }, { passive: true });
+      document.addEventListener('gesturestart', function (e) { e.preventDefault(); last = 1; }, { passive: false });
+      document.addEventListener('gestureend', function (e) { e.preventDefault(); }, { passive: false });
+      document.addEventListener('gesturechange', function (e) {
+        e.preventDefault();
+        // A Safari that sends ctrl+wheel itself needs no help.
+        if (native) return;
+        var ratio = e.scale / last;
+        last = e.scale;
+        if (!(ratio > 0) || ratio === 1 || !isFinite(ratio)) return;
+        var cx = typeof e.clientX === 'number' && e.clientX ? e.clientX : x;
+        var cy = typeof e.clientY === 'number' && e.clientY ? e.clientY : y;
+        var target = document.elementFromPoint(cx, cy);
+        if (!target) return;
+        target.dispatchEvent(new WheelEvent('wheel', {
+          deltaY: -200 * Math.log(ratio) / (window.devicePixelRatio || 1),
+          deltaMode: 0, ctrlKey: true, clientX: cx, clientY: cy,
+          bubbles: true, cancelable: true, composed: true,
+        }));
+      }, { passive: false });
+    })();
+  </script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

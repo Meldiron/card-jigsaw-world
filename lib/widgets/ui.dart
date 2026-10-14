@@ -65,6 +65,7 @@ class SoftCard extends StatelessWidget {
     this.gradient,
     this.onTap,
     this.border = true,
+    this.borderColor,
     this.margin,
     this.clip = Clip.antiAlias,
   });
@@ -76,6 +77,9 @@ class SoftCard extends StatelessWidget {
   final Gradient? gradient;
   final VoidCallback? onTap;
   final bool border;
+
+  /// Outline colour (the theme's stroke by default).
+  final Color? borderColor;
   final EdgeInsetsGeometry? margin;
   final Clip clip;
 
@@ -89,7 +93,7 @@ class SoftCard extends StatelessWidget {
         color: gradient == null ? (color ?? c.card) : null,
         gradient: gradient,
         borderRadius: BorderRadius.circular(radius),
-        border: border && gradient == null ? Border.all(color: c.stroke) : null,
+        border: border && gradient == null ? Border.all(color: borderColor ?? c.stroke) : null,
       ),
       child: Padding(padding: padding, child: child),
     );
@@ -698,15 +702,20 @@ class Loader extends StatelessWidget {
 
 /// Settings-style list row: leading icon tile, title, subtitle, chevron.
 class ListRow extends StatelessWidget {
-  const ListRow({super.key, required this.icon, required this.title, this.subtitle, this.onTap, this.trailing});
+  const ListRow({super.key, required this.icon, required this.title, this.subtitle, this.onTap, this.trailing, this.tone});
   final IconData icon;
   final String title;
   final String? subtitle;
   final VoidCallback? onTap;
   final Widget? trailing;
+
+  /// Colours the icon tile, the title and the chevron (e.g. the theme's
+  /// warning colour); the accent and neutral text by default.
+  final Color? tone;
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
+    final tone = this.tone;
     return Pressable(
       onTap: onTap,
       scale: 0.99,
@@ -714,18 +723,18 @@ class ListRow extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
         child: Row(
           children: [
-            IconTile(icon: icon, size: 34, radius: 10),
+            tone == null ? IconTile(icon: icon, size: 34, radius: 10) : IconTile(icon: icon, size: 34, radius: 10, color: tone.withValues(alpha: 0.16), iconColor: tone),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
+                  Text(title, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15, color: tone)),
                   if (subtitle != null) Text(subtitle!, style: TextStyle(fontSize: 12.5, color: c.textSecondary)),
                 ],
               ),
             ),
-            trailing ?? Icon(CupertinoIcons.chevron_right, size: 16, color: c.textTertiary),
+            trailing ?? Icon(CupertinoIcons.chevron_right, size: 16, color: tone ?? c.textTertiary),
           ],
         ),
       ),

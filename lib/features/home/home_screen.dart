@@ -146,12 +146,17 @@ class HomeScreen extends ConsumerWidget {
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                  // A caution, not an offer: a guest's coins and puzzles are
+                  // lost with this device until they create an account.
                   child: SoftCard(
                     padding: EdgeInsets.zero,
+                    color: context.colors.warningTint,
+                    borderColor: context.colors.warning.withValues(alpha: 0.45),
                     child: ListRow(
                       icon: AppIcons.save,
+                      tone: context.colors.warning,
                       title: 'Save progress',
-                      subtitle: 'Create a free account to keep coins and puzzles on every device',
+                      subtitle: 'Your progress is tied to this device. Create a free account to keep coins and puzzles on every device.',
                       onTap: () => context.push('/account'),
                     ),
                   ),

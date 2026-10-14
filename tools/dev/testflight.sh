@@ -4,8 +4,9 @@
 # version for external testers and lets later builds of the same version
 # through on their own, so iterating within a version is the fast path.
 #
-#   tools/dev/testflight.sh            run the workflow and watch it
-#   tools/dev/testflight.sh --no-wait  just start it
+#   tools/dev/testflight.sh            run the workflow, watch it, then announce the build to the
+#                                      in-app update prompt once Apple has it out to testers
+#   tools/dev/testflight.sh --no-wait  just start it (announce later with tools/dev/publish_release.py)
 set -euo pipefail
 cd "$(dirname "$0")/../.."
 [ -z "$(git status --porcelain)" ] || { echo "working tree is not clean; commit first" >&2; exit 1; }
@@ -19,3 +20,7 @@ sleep 20
 ID=$(gh run list --workflow "Release to TestFlight" --limit 1 --json databaseId -q '.[0].databaseId')
 echo "run $ID"
 gh run watch "$ID" --exit-status
+# Build number = 100 + run number (release-testflight.yml).
+B=$((100 + $(gh run view "$ID" --json number -q .number)))
+PY=python3; [ -x .venv/bin/python ] && PY=.venv/bin/python
+"$PY" tools/dev/publish_release.py testflight --build "$B" --version "$V"

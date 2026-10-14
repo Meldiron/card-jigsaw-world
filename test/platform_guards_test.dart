@@ -149,19 +149,43 @@ void main() {
   });
 
   group('Store on web', () {
-    testWidgets('shows the notice, hides prices, keeps free sources and VIP info', (tester) async {
+    testWidgets('lists every bundle and VIP as available on iPhone, with no price anywhere', (tester) async {
       await tester.pumpWidget(await _app(const StoreScreen(), caps: PlatformCaps.web));
       await tester.pumpAndSettle();
       expect(find.text(StoreWebNotice.message), findsOneWidget);
       expect(find.text('Free coins'), findsOneWidget);
       expect(find.textContaining('Free coins: daily quests'), findsOneWidget);
-      await tester.drag(find.byType(ListView), const Offset(0, -1500));
+      final seen = <String>{};
+      // Scroll the whole store, collecting every line drawn on the way.
+      for (var i = 0; i < 12; i++) {
+        for (final t in tester.widgetList<Text>(find.byType(Text))) {
+          seen.add(t.data ?? t.textSpan?.toPlainText() ?? '');
+        }
+        await tester.drag(find.byType(ListView), const Offset(0, -300));
+        await tester.pumpAndSettle();
+      }
+      for (final id in ProductIds.consumables) {
+        expect(seen, contains(StoreProducts.grant(id).label), reason: id);
+      }
+      expect(seen, contains('Card Jigsaw World VIP'));
+      expect(seen, contains('Available on iPhone'));
+      expect(seen.where((t) => t.contains(r'$')), isEmpty, reason: 'no price on web');
+      expect(seen, isNot(contains('Start 7-day free trial')));
+      expect(seen, isNot(contains('Have a gift code? Redeem it')));
+    });
+
+    testWidgets('a bundle tile on web says where to buy it', (tester) async {
+      await tester.pumpWidget(await _app(const StoreScreen(), caps: PlatformCaps.web));
       await tester.pumpAndSettle();
-      expect(find.text('Card Jigsaw World VIP'), findsOneWidget);
-      expect(find.text('Available on iPhone'), findsOneWidget);
-      expect(find.text(StoreProducts.grant(ProductIds.coins1000).label), findsNothing);
-      expect(find.text('Start 7-day free trial'), findsNothing);
-      expect(find.text('Have a gift code? Redeem it'), findsNothing);
+      final tile = find.text(StoreProducts.grant(ProductIds.coins1000).label);
+      // Mid-screen, clear of the glass app bar.
+      await Scrollable.ensureVisible(tester.element(tile), alignment: 0.5);
+      await tester.pumpAndSettle();
+      await tester.tap(tile);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(find.text(purchasesOnIphoneMessage), findsOneWidget);
+      await tester.pumpAndSettle(const Duration(seconds: 5));
     });
 
     testWidgets('on iOS the grids and buy buttons are back', (tester) async {

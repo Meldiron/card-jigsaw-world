@@ -389,7 +389,8 @@ class _HouseAdScreenState extends ConsumerState<HouseAdScreen> {
                       Text(c.headline, style: Theme.of(context).textTheme.displaySmall?.copyWith(color: Colors.white)).animate().fadeIn(delay: 150.ms).slideY(begin: 0.1),
                       const SizedBox(height: 8),
                       Text(c.body, style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 16, height: 1.4)).animate().fadeIn(delay: 250.ms),
-                      if (c.price != null) ...[
+                      // No prices on web, where nothing can be bought.
+                      if (c.price != null && ref.watch(platformCapsProvider).purchases) ...[
                         const SizedBox(height: 8),
                         Text(c.price!, style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 13, fontWeight: FontWeight.w600)),
                       ],
@@ -553,7 +554,7 @@ class _HouseBannerState extends ConsumerState<HouseBanner> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(c.headline, style: TextStyle(color: context.isDark ? colors.textPrimary : Colors.white, fontWeight: FontWeight.w700, fontSize: 14)),
-                  Text(c.price ?? c.body, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: (context.isDark ? colors.textPrimary : Colors.white).withValues(alpha: 0.7), fontSize: 12)),
+                  Text((ref.watch(platformCapsProvider).purchases ? c.price : null) ?? c.body, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: (context.isDark ? colors.textPrimary : Colors.white).withValues(alpha: 0.7), fontSize: 12)),
                 ],
               ),
             ),

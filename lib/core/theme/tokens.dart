@@ -17,6 +17,7 @@ class Brand {
   static const hint = Color(0xFFF59E0B);
   static const success = Color(0xFF16A34A);
   static const danger = Color(0xFFDC2626);
+  static const warning = Color(0xFFB45309); // unsaved guest progress and similar cautions
   static const live = Color(0xFFE11D48); // "today", "new", "ready" markers
   static const star = Color(0xFFF5B301);
 
@@ -80,6 +81,8 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.shadow,
     required this.success,
     required this.danger,
+    required this.warning,
+    required this.warningTint,
     required this.accentTint,
   });
 
@@ -95,6 +98,12 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color shadow;
   final Color success;
   final Color danger;
+
+  /// A caution the player should act on (guest progress not saved to an
+  /// account): [warning] for the icon, outline and title, [warningTint] as
+  /// the card's quiet fill.
+  final Color warning;
+  final Color warningTint;
   final Color accentTint;
 
   static const light = AppColors(
@@ -110,6 +119,8 @@ class AppColors extends ThemeExtension<AppColors> {
     shadow: Color(0x0F101020),
     success: Brand.success,
     danger: Brand.danger,
+    warning: Brand.warning,
+    warningTint: Color(0xFFFFF6E5),
     accentTint: Color(0xFFE9EEFB),
   );
 
@@ -126,6 +137,8 @@ class AppColors extends ThemeExtension<AppColors> {
     shadow: Color(0x55000000),
     success: Color(0xFF4ADE80),
     danger: Color(0xFFF87171),
+    warning: Color(0xFFF2B045),
+    warningTint: Color(0xFF261E10),
     accentTint: Color(0xFF1C2440),
   );
 
@@ -148,6 +161,8 @@ class AppColors extends ThemeExtension<AppColors> {
       shadow: Color.lerp(shadow, other.shadow, t)!,
       success: Color.lerp(success, other.success, t)!,
       danger: Color.lerp(danger, other.danger, t)!,
+      warning: Color.lerp(warning, other.warning, t)!,
+      warningTint: Color.lerp(warningTint, other.warningTint, t)!,
       accentTint: Color.lerp(accentTint, other.accentTint, t)!,
     );
   }

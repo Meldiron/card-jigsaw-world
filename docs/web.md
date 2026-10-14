@@ -113,9 +113,15 @@ Frankfurt). The site must have the single-page fallback file set to
 the Appwrite project (the OAuth redirect and session cookies depend on it).
 
 ```sh
-flutter build web --release --base-href /
-appwrite sites create-deployment --site-id <site-id> --code ./build/web --activate true
+tools/dev/deploy-web.sh            # build + deploy + wait until live
 ```
+
+Every build gets a deploy id compiled in (`CJW_WEB_BUILD`) and published as `app-version.json`;
+open tabs look at it every 5 minutes and offer "Update available" (`docs/app-updates.md`). Deploy
+with the script, not by hand, or open tabs never hear about the new build.
+
+The web store lists every bundle and VIP with "Available on iPhone" and shows no price anywhere
+(store tiles, VIP card, house ads).
 
 Nothing in `build/web` is secret: the Appwrite endpoint and project id are
 public, and all writes are protected by Appwrite permissions and the

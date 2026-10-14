@@ -1,6 +1,6 @@
-New in this build (giant boards):
-- Locate is always on: tap a card and the overview map shows where it belongs (when the map is on). The Locate switch and the zoom hint are gone.
-- Gather is in the bar at every zoom. When every card for the view is already here or nearby, Gather shuffles the loose cards instead; cards in place and joined groups stay where they are.
-- No more double tap to zoom: use pinch or the zoom buttons. Magic now puts the selected card in its place.
+New in this build:
+- Update prompt: when a newer TestFlight build is out, the app says so and Update opens TestFlight. Later hides it for an hour; it comes back on every launch until you update.
+- Home: the Save progress card for guests now stands out as a caution.
+- Web: pinch on a trackpad zooms giant boards, and the store lists every bundle without prices.
 
-Please try: a Colossal board, Gather on the whole board, and Magic with a card selected.
+Please try: Later on the update prompt once the next build arrives, then reopen the app.

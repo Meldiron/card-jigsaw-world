@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:ui' as ui;
 
 import 'package:card_jigsaw_world/core/theme/app_theme.dart';
@@ -8,6 +9,7 @@ import 'package:card_jigsaw_world/game/board.dart';
 import 'package:card_jigsaw_world/game/game_controller.dart';
 import 'package:card_jigsaw_world/state/giant.dart';
 import 'package:card_jigsaw_world/state/settings.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -215,6 +217,35 @@ void main() {
       await tester.pumpAndSettle();
       expect(zoom.zoomed, isTrue);
       expect(taps, [slot, slot, inView, inView]);
+    });
+
+    testWidgets('a trackpad pinch (web: ctrl+wheel scale signals) zooms around the pointer; two-finger scroll pans', (tester) async {
+      final spec = BoardSpec.giantTiers(GameMode.cards).first;
+      final board = Board.shuffled(spec, seed: 4);
+      final (zoom, taps) = await pumpBoard(tester, board);
+      final rect = tester.getRect(find.byType(BoardWidget));
+      final at = rect.topLeft + Offset(rect.width * 0.3, rect.height * 0.6);
+      final under = (at - rect.topLeft - zoom.pan) / zoom.zoom;
+      // Pinch out: the board point under the pointer stays under it.
+      for (var i = 0; i < 4; i++) {
+        await tester.sendEventToBinding(PointerScaleEvent(position: at, scale: 1.25, kind: PointerDeviceKind.trackpad));
+        await tester.pump();
+      }
+      expect(zoom.zoom, closeTo(math.min(math.pow(1.25, 4).toDouble(), zoom.limit), 0.001));
+      expect(zoom.toViewport(under).dx, closeTo(at.dx - rect.left, 0.5));
+      expect(zoom.toViewport(under).dy, closeTo(at.dy - rect.top, 0.5));
+      // Two fingers scrolling move the zoomed board.
+      final pan = zoom.pan;
+      await tester.sendEventToBinding(PointerScrollEvent(position: at, scrollDelta: const Offset(30, 40), kind: PointerDeviceKind.trackpad));
+      await tester.pump();
+      expect(zoom.pan, pan - const Offset(30, 40));
+      // Pinch in back to the whole board.
+      for (var i = 0; i < 10; i++) {
+        await tester.sendEventToBinding(PointerScaleEvent(position: at, scale: 0.7, kind: PointerDeviceKind.trackpad));
+        await tester.pump();
+      }
+      expect(zoom.zoomed, isFalse);
+      expect(taps, isEmpty, reason: 'zooming never taps a card');
     });
 
     testWidgets('two taps on different cards are a move, never a double tap', (tester) async {

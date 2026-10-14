@@ -57,6 +57,11 @@ skills under `.claude/skills/` hold the detailed workflows.
   `PagedNotifier` (`lib/state/paged.dart`) that loads the next page near the end. Filter and sort on
   the server (`Query.equal`, `orderDesc`, `select`). `test/pagination_test.dart` fails on a fixed limit.
 - **Every build also redeploys the web site** (`tools/dev/deploy-web.sh`) from the same commit.
+- **Update prompt** (`docs/app-updates.md`): web and iPhone ask "Update available" when a newer build
+  is out (looks every 5 min, Later = 1 hour, again after every reload/launch). Web compares its
+  `CJW_WEB_BUILD` with the site's `app-version.json` (written by `deploy-web.sh`); iPhone compares its
+  build number with table `releases` (`tools/dev/publish_release.py`, run by `testflight.sh` once
+  Apple has the build out; after a hand-dispatched workflow run it yourself).
 - **Versioning**: one version string per App Store cycle; TestFlight builds only bump the build number.
   Details in the apple-release skill. Never bump the version for a TestFlight cut.
 - **Resolve feedback** on Apple after fixing it (`asc_publish.py feedback --resolve`), so items are not
@@ -158,6 +163,9 @@ skills under `.claude/skills/` hold the detailed workflows.
   Quests: `Goals.daily` / `weekly` rotate by day and week and take `open`, `level` and `claimed`;
   `lib/features/events/quest_rewards.dart` (`questsFor`, `readyGoals`, `readyEventsProvider`, Claim all).
   Integration suites that play every shape override `openFeaturesProvider` and `pendingUnlockIntroProvider`.
+- `lib/state/app_update.dart` + `lib/features/update/update_host.dart`: update prompt (above).
+  Web-only page helpers (fetch past the cache, reload) in `lib/core/web_page.dart`; Safari trackpad
+  pinch (gesture events) is turned into Flutter's ctrl+wheel zoom by a script in `web/index.html`.
 - `lib/state/account_deletion.dart`, `lib/state/review_prompt.dart` (`ReviewRules`: App Store rating after a
   3-star solve or finished pack, 5+ solves, once per version and 120 days), `lib/core/app_review.dart`
   (channel `cjw/review`).
@@ -169,7 +177,7 @@ skills under `.claude/skills/` hold the detailed workflows.
 
 - Endpoint `https://fra.cloud.appwrite.io/v1`, project `6acb4de5003e38d5ebd9`, database `cjw`
   (tables profiles, packs, puzzles, progress, events, event_progress, friends, ledger, my_puzzles,
-  purchases, meta). Profiles are readable by anyone; `level` mirrors XP; aggregates `totalMoves`,
+  purchases, meta, releases). Profiles are readable by anyone; `level` mirrors XP; aggregates `totalMoves`,
   `totalSeconds`, `solvedByMode`, `questsCompleted` and the "Total Completion" numbers
   (`picturesSolved`, `picturesPerfect`, `packsCompleted`, `packsPerfect`, kept in step by
   `ProfileNotifier.syncCompletion`, backfill `tools/dev/backfill_profile_stats.py`) are public.
@@ -269,6 +277,6 @@ tree, so dispatch the workflow directly as described in the testflight-feedback 
 ## Docs index
 
 `docs/native-ui.md` (glass components), `docs/copy-guide.md`, `docs/sync.md` (save sync), `docs/catalog-sync.md`, `docs/house-ads.md`,
-`docs/purchases.md`, `docs/web.md`, `docs/release-flow.md`, `docs/release-checklist.md`,
+`docs/purchases.md`, `docs/web.md`, `docs/app-updates.md`, `docs/release-flow.md`, `docs/release-checklist.md`,
 `docs/content-rules.md`, `docs/content-sources.md`, `store/README.md` (store assets),
 `tools/store/README.md`, `README.md`.

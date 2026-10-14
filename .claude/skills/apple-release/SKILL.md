@@ -17,10 +17,11 @@ iterates by build number only.**
 | Goal | Command | Effect |
 | --- | --- | --- |
 | Install on the phone (only when the owner asks) | `tools/dev/device.sh [--wipe] [--no-build]` | release build, installs on the paired iPhone |
-| Next TestFlight build of the current version (only when the owner asks) | `tools/dev/testflight.sh` | runs the `Release to TestFlight` workflow; build = 100 + run number; waits for processing, adds to internal + public groups, submits beta review only if the version has none |
+| Next TestFlight build of the current version (only when the owner asks) | `tools/dev/testflight.sh` | runs the `Release to TestFlight` workflow; build = 100 + run number; waits for processing, adds to internal + public groups, submits beta review only if the version has none; then announces the build to the in-app update prompt (`publish_release.py testflight`) |
+| Announce a build to the update prompt by hand | `.venv/bin/python tools/dev/publish_release.py testflight --build N` / `appstore --version X.Y.Z` / `show` | writes `releases/ios-testflight` or `ios-appstore` (`docs/app-updates.md`) |
 | Start a new version cycle | `tools/dev/release.sh X.Y.Z` | bumps pubspec, commits, pushes, first build; only after the previous version shipped to the store or was abandoned |
 | Submit to App Review | Actions → `Submit to App Store` (version, optional build) | `asc_publish.py release` + `submit --yes`; always human-started |
-| Record a store release | `tools/dev/tag-store-release.sh X.Y.Z` | tag + GitHub release; never for TestFlight cuts |
+| Record a store release | `tools/dev/tag-store-release.sh X.Y.Z` | tag + GitHub release + `releases/ios-appstore` for the update prompt; never for TestFlight cuts |
 | State of everything on Apple | `tools/store/asc_publish.py audit` / `status` | builds, review states, metadata gaps |
 | Tester feedback | `asc_publish.py feedback` / `--resolve ID,ID --note ...` | list, then delete on Apple + local ledger after fixing |
 

@@ -11,6 +11,7 @@ import 'core/theme/app_theme.dart';
 import 'core/theme/tokens.dart';
 import 'data/purchases.dart';
 import 'features/sync/sync_host.dart';
+import 'features/update/update_host.dart';
 import 'router.dart';
 import 'state/catalog.dart';
 import 'state/purchases.dart';
@@ -123,7 +124,7 @@ class _CardJigsawAppState extends ConsumerState<CardJigsawApp> with WidgetsBindi
         final host = Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.transparent,
-          body: ScaffoldMessenger(child: SyncHost(child: child!)),
+          body: ScaffoldMessenger(child: UpdateHost(child: SyncHost(child: child!))),
         );
         final data = mq.copyWith(textScaler: mq.textScaler.clamp(minScaleFactor: 0.9, maxScaleFactor: 1.2));
         if (!ref.watch(platformCapsProvider).isWeb) return MediaQuery(data: data, child: host);

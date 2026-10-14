@@ -28,9 +28,10 @@ import '../ads/house_ads.dart';
 /// builds without a store (plain simulator) a clearly labelled sandbox
 /// dialog stands in so the flow can still be exercised.
 ///
-/// On web there is no store: a notice card replaces the price grids and the
-/// VIP buy buttons, while the free sources (bonus video, quests, piggy bank)
-/// stay. Earned currency is saved to the account like on iPhone.
+/// On web there is no store and no price is shown anywhere: every bundle and
+/// VIP stay listed with "Available on iPhone" in place of the price and the
+/// buy buttons, next to the free sources (bonus video, quests, piggy bank).
+/// Earned currency is saved to the account like on iPhone.
 class StoreScreen extends ConsumerStatefulWidget {
   const StoreScreen({super.key, this.showVip = false});
   /// Opens scrolled to the VIP card (`/store?vip=1`).
@@ -276,13 +277,13 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
           ),
           const SectionHeader(title: 'Coins', subtitle: 'Unlock packs and boosters', padding: EdgeInsets.fromLTRB(0, 24, 0, 12)),
           _FreeNote(text: 'Free coins: daily quests, the daily gift, level-ups, the piggy bank (${Economy.piggyPerPuzzle} per picture, up to ${Profile.piggyCapacity}) and the Lucky Wheel.', route: '/events'),
-          if (caps.purchases) _ProductGrid(products: _coinProducts, onBuy: _buy, priceOf: (p) => _price(p, products), busy: _buying),
+          _ProductGrid(products: _coinProducts, onBuy: _buy, priceOf: (p) => _price(p, products), busy: _buying, purchasable: caps.purchases),
           const SectionHeader(title: 'Tickets', subtitle: 'Premium packs and the piggy bank', padding: EdgeInsets.fromLTRB(0, 24, 0, 12)),
           _FreeNote(text: 'Free tickets: the daily gift, weekly quests, world-day events and every third level.', route: '/events'),
-          if (caps.purchases) _ProductGrid(products: _ticketProducts, onBuy: _buy, priceOf: (p) => _price(p, products), busy: _buying),
+          _ProductGrid(products: _ticketProducts, onBuy: _buy, priceOf: (p) => _price(p, products), busy: _buying, purchasable: caps.purchases),
           const SectionHeader(title: 'Hints', subtitle: 'Show a card its place', padding: EdgeInsets.fromLTRB(0, 24, 0, 12)),
           _FreeNote(text: 'Free hints: the daily gift on even days, every second level and the Lucky Wheel.', route: '/home'),
-          if (caps.purchases) _ProductGrid(products: _boosterProducts, onBuy: _buy, priceOf: (p) => _price(p, products), busy: _buying),
+          _ProductGrid(products: _boosterProducts, onBuy: _buy, priceOf: (p) => _price(p, products), busy: _buying, purchasable: caps.purchases),
           const SizedBox(height: 24),
           _VipCard(
             key: _vipKey,
@@ -365,8 +366,9 @@ class _VipCard extends StatelessWidget {
   final String monthlyPrice;
   final String yearlyPrice;
   final bool busy;
-  /// False on web: the benefits stay as information, the buy buttons and the
-  /// gift-code link are replaced by an "Available on iPhone" label.
+  /// False on web: the benefits stay as information, the buy buttons, the
+  /// prices and the gift-code link are replaced by an "Available on iPhone"
+  /// label.
   final bool purchasable;
   final VoidCallback onBuyMonthly;
   final VoidCallback onBuyYearly;
@@ -425,7 +427,8 @@ class _VipCard extends StatelessWidget {
               children: [
                 const Chip2(label: 'Available on iPhone', icon: CupertinoIcons.device_phone_portrait, color: Color(0x22FFFFFF), foreground: fg),
                 const SizedBox(width: 10),
-                Expanded(child: Text('From $monthlyPrice/month after a ${StoreProducts.vipTrialDays}-day trial.', style: TextStyle(color: fg.withValues(alpha: 0.7), fontSize: 12))),
+                // No price on web: the App Store shows it on iPhone.
+                Expanded(child: Text('Starts with a ${StoreProducts.vipTrialDays}-day free trial.', style: TextStyle(color: fg.withValues(alpha: 0.7), fontSize: 12))),
               ],
             )
           else ...[
@@ -551,11 +554,15 @@ class _FreeNote extends StatelessWidget {
 }
 
 class _ProductGrid extends StatelessWidget {
-  const _ProductGrid({required this.products, required this.onBuy, required this.priceOf, this.busy = false});
+  const _ProductGrid({required this.products, required this.onBuy, required this.priceOf, this.busy = false, this.purchasable = true});
   final List<_Product> products;
   final void Function(_Product) onBuy;
   final String Function(_Product) priceOf;
   final bool busy;
+
+  /// False on web: each tile shows "Available on iPhone" instead of its
+  /// price, and a tap says where to buy it.
+  final bool purchasable;
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
@@ -571,7 +578,9 @@ class _ProductGrid extends StatelessWidget {
       itemBuilder: (_, i) {
         final p = products[i];
         return Pressable(
-          onTap: busy ? null : () => onBuy(p),
+          onTap: !purchasable
+              ? () => showToast(context, purchasesOnIphoneMessage, icon: CupertinoIcons.device_phone_portrait)
+              : (busy ? null : () => onBuy(p)),
           child: Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(color: c.card, borderRadius: BorderRadius.circular(Radii.lg), border: Border.all(color: c.stroke)),
@@ -584,11 +593,14 @@ class _ProductGrid extends StatelessWidget {
                     const Spacer(),
                     Text(p.title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
                     const SizedBox(height: 6),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                      decoration: BoxDecoration(color: c.accentTint, borderRadius: BorderRadius.circular(999)),
-                      child: Text(priceOf(p), style: TextStyle(color: context.accent, fontWeight: FontWeight.w700, fontSize: 13)),
-                    ),
+                    if (purchasable)
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(color: c.accentTint, borderRadius: BorderRadius.circular(999)),
+                        child: Text(priceOf(p), style: TextStyle(color: context.accent, fontWeight: FontWeight.w700, fontSize: 13)),
+                      )
+                    else
+                      Chip2(label: 'Available on iPhone', icon: CupertinoIcons.device_phone_portrait, color: c.accentTint, foreground: context.accent),
                   ],
                 ),
                 if (p.badge != null)
