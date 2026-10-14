@@ -37,6 +37,46 @@ the lessons from the first giant pack, `pack-colourful-houses` (Colourful Houses
    statues, busts, cherubs and carved faces (mascarons), religious images framed on a wall, murals and
    sgraffito with figures, mannequins. Use the review sheets (below) for every pick.
 
+## The target: hidden-object art (owner's reference, 2026-10-14)
+
+The owner's model of a perfect giant picture is hidden-object game art, for example "Hidden Object
+Adventure" by Cú Xanh (Behance, **© All Rights Reserved: a reference only, never in the catalogue**; the
+owner's local copies stay out of the repo). Its seven 3840 x 5973 px scenes measure, with `giantcheck` at
+4096 px and 300 cards: **sharp 8.6-12.7, flat 0-0.7%, dark 0%, alike 0-7%**. The real photos that passed
+for Colourful Houses measure sharp 4.0 (median), flat 7% (p90 17%), dark 1%, alike 15% (p90 29%). The
+limits above are the floor, not the goal: rank a shortlist towards the reference, prefer **flat <= 8% and
+alike <= 15%**, and take a picture near a limit only when nothing better is left.
+
+What makes that art work, and how to find the same in real pictures:
+
+1. **No horizon, no sky.** A bird's-eye or three-quarter view from above: the whole frame is ground
+   covered with things. In photos: looking down onto a stall, a table, a shelf wall, a square seen from a
+   tower. More than a strip of sky costs the picture.
+2. **An object in every card.** Something you can name every 200-300 px of the 4K picture (a card at the
+   300-card cut is about 200 px), big landmarks and small props mixed. In photos: goods fill the frame edge
+   to edge, at a distance where each object spans a few cards (too close: one object over 40 cards; too
+   far: mush).
+3. **Every object once.** Nothing repeats, which keeps `alike` near zero. Rows of identical jars, bricks,
+   windows, tiles or leaves are the enemy; mixed assortments (a junk shop, a spice stall with twenty
+   spices, a mixed fruit stall) are the friend.
+4. **Even the "empty" ground carries marks.** Paths have tiles, sand has spots, grass has tufts, everything
+   has an outline. In photos: textured surfaces (cobbles, wood grain, baskets, worn paint) instead of
+   smooth walls, plain cloth, sky or still water.
+5. **Each area its own palette.** A farm, a pond, an orchard and a market side by side, so a card says
+   where it belongs (and each zone of a giant board gets a look of its own). Prefer scenes with several
+   distinct colour areas over one colour everywhere (an all-red façade, all-green foliage).
+6. **Bright, even light.** No deep shadows and no black (`dark` 0%); its night scenes are saturated blues
+   and purples, not black. In photos: daylight or well-lit interiors; dim shops and backlit windows fail.
+7. **Tall portrait.** The reference is 2:3 (0.64), which suits the phone board.
+
+Real-world themes with these traits, still to try: market stalls and shop displays seen slightly from
+above; antique, junk and toy shops; flea-market tables from above; model villages and miniature parks
+(Madurodam, Miniatur Wunderland, Mini-Europe) from above, but their tiny figurines are figures, so any
+visible figure rejects the picture; top-down drone views of harbours full of small boats, rows of beach
+huts, flower markets (no visible people); crazy quilts and patchwork (Met and Smithsonian open access,
+CC0: every patch a different fabric; reject figurative embroidery); illustrated bird's-eye panoramas only
+when portrait and without large labels (most are landscape and labelled).
+
 ## What works, what does not (first pack, measured)
 
 | Theme | Result | Why |
