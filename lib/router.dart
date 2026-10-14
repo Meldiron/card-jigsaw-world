@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart' show Material, Colors;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -14,6 +15,7 @@ import 'features/onboarding/onboarding_screen.dart';
 import 'features/profile/account_screen.dart';
 import 'features/profile/my_puzzles_screen.dart';
 import 'features/profile/profile_screen.dart';
+import 'features/profile/redeem_code_sheet.dart';
 import 'features/profile/settings_screen.dart';
 import 'features/social/player_screen.dart';
 import 'features/social/social_screen.dart';
@@ -97,6 +99,15 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(path: '/store', parentNavigatorKey: rootNavigatorKey, pageBuilder: (c, s) => _sheet(StoreScreen(showVip: s.uri.queryParameters['vip'] == '1'), s)),
       GoRoute(path: '/wheel', parentNavigatorKey: rootNavigatorKey, pageBuilder: (c, s) => _sheet(const WheelScreen(), s)),
+      // Pack codes shared as a link (`/redeem?code=ABCD-EFGH-JKLM-NPQR`, e.g. on the web site).
+      GoRoute(
+        path: '/redeem',
+        parentNavigatorKey: rootNavigatorKey,
+        pageBuilder: (c, s) => _sheet(
+          Material(color: Colors.transparent, child: SafeArea(child: RedeemCodePanel(initialCode: s.uri.queryParameters['code']))),
+          s,
+        ),
+      ),
       GoRoute(path: '/account', parentNavigatorKey: rootNavigatorKey, pageBuilder: (c, s) => _sheet(const AccountScreen(), s)),
       GoRoute(path: '/auth/callback', parentNavigatorKey: rootNavigatorKey, pageBuilder: (c, s) => _fade(AuthCallbackScreen(query: s.uri.queryParameters), s)),
       GoRoute(path: '/player/:userId', parentNavigatorKey: rootNavigatorKey, pageBuilder: (c, s) => _cupertino(PlayerScreen(userId: s.pathParameters['userId']!), s)),

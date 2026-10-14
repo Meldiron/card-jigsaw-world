@@ -352,7 +352,15 @@ class Pack {
     this.blurhash,
     this.updatedAt,
     this.createdAt,
+    this.hidden = false,
   });
+
+  /// A hidden pack (`packs.hidden`) is opened with a pack code: the app shows it only to players
+  /// who have it in their unlocked packs (see [visibleTo]). Hidden pack rows also carry a start
+  /// date far in the future, so app versions from before hidden packs treat them as unreleased and
+  /// never list them; this version ignores the dates of a hidden pack.
+  final bool hidden;
+
   /// BlurHash of the cover, shown while the image loads.
   final String? blurhash;
 
@@ -444,6 +452,10 @@ class Pack {
 
   bool get isReleased => isReleasedAt(DateTime.now());
 
+  /// Whether a player who owns the packs in [owned] sees this pack at [now]: released, and not
+  /// hidden unless a pack code put it in [owned].
+  bool visibleTo(Set<String> owned, DateTime now) => hidden ? owned.contains(id) : isReleasedAt(now);
+
   factory Pack.fromRow(String id, Map<String, dynamic> d) => Pack(
         id: id,
         name: _s(d['name']),
@@ -460,11 +472,12 @@ class Pack {
         imageCount: _i(d['imageCount']),
         accent: colorFromHex(d['accent']?.toString()),
         emoji: _s(d['emoji'], ''),
-        startAt: _dt(d['startAt']),
-        endAt: _dt(d['endAt']),
+        startAt: _b(d['hidden']) ? null : _dt(d['startAt']),
+        endAt: _b(d['hidden']) ? null : _dt(d['endAt']),
         blurhash: d['blurhash']?.toString(),
         updatedAt: d[r'$updatedAt']?.toString(),
         createdAt: _dt(d[r'$createdAt']),
+        hidden: _b(d['hidden']),
       );
 }
 

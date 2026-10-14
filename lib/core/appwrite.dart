@@ -27,6 +27,11 @@ class AppwriteConfig {
   static const userUploadsBucket = 'user-uploads';
   static const catalogBucket = 'catalog';
 
+  /// Pictures of private packs (hidden packs opened with a pack code): each file is readable only by
+  /// the players who claimed one of its pack's codes (function `redeem-code`), fetched like player
+  /// photos through the signed-in client (`ImageFiles`).
+  static const privatePacksBucket = 'private-packs';
+
   /// View URL of a file. Public files load from it directly; private player photos are fetched
   /// through the signed-in client under this URL (`ImageFiles`).
   static String fileViewUrl(String bucketId, String fileId) =>

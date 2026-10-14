@@ -17,6 +17,7 @@ import '../../data/purchases.dart';
 import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
+import 'redeem_code_sheet.dart';
 
 /// The App Store page where a player writes a review of the game.
 final appStoreReviewUrl = Uri.parse('https://apps.apple.com/app/id6821644423?action=write-review');
@@ -123,6 +124,13 @@ class SettingsScreen extends ConsumerWidget {
           ]),
           group('Account', [
             _NavRow(icon: CupertinoIcons.person_crop_circle, label: isGuest ? 'Sign in or create account' : 'Manage account', onTap: () => context.push('/account')),
+            // Pack codes (giveaways, special posts) work everywhere, the web included.
+            _NavRow(
+              key: const ValueKey('settings-redeem-pack-code'),
+              icon: AppIcons.packCode,
+              label: 'Redeem a pack code',
+              onTap: () => showRedeemCodeSheet(context),
+            ),
             // Gift codes and restores go through StoreKit; both rows are
             // hidden where there is no store (web).
             if (caps.purchases) _NavRow(

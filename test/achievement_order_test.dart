@@ -113,6 +113,8 @@ void main() {
         // Offline: the catalogue is empty instead of a network call.
         packsProvider.overrideWith((ref) async => const <Pack>[]),
         allPuzzlesProvider.overrideWith((ref) async => const <Puzzle>[]),
+        publicPacksProvider.overrideWith((ref) async => const <Pack>[]),
+        publicPuzzlesProvider.overrideWith((ref) async => const <Puzzle>[]),
         eventsProvider.overrideWith((ref) async => const <GameEvent>[]),
       ],
       child: MaterialApp(

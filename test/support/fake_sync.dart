@@ -225,6 +225,8 @@ class Device {
       profileRepositoryProvider.overrideWithValue(this.repo),
       packsProvider.overrideWith((ref) async => packs),
       allPuzzlesProvider.overrideWith((ref) async => puzzles),
+      publicPacksProvider.overrideWith((ref) async => packs),
+      publicPuzzlesProvider.overrideWith((ref) async => puzzles),
       eventsProvider.overrideWith((ref) async => const <GameEvent>[]),
     ]);
   }

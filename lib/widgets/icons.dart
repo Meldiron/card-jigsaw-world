@@ -80,6 +80,9 @@ class AppIcons {
   /// A zone of a giant board finished.
   static const zone = Icons.grid_view_rounded;
 
+  /// Settings > Redeem a pack code.
+  static const packCode = CupertinoIcons.ticket;
+
   /// Points at a selected card outside the zoomed view.
   static const towards = CupertinoIcons.arrow_up;
   static const level = Icons.military_tech_rounded;

@@ -51,6 +51,8 @@ void main() {
         // Offline: the catalogue is empty instead of a network call.
         packsProvider.overrideWith((ref) async => const <Pack>[]),
         allPuzzlesProvider.overrideWith((ref) async => const <Puzzle>[]),
+        publicPacksProvider.overrideWith((ref) async => const <Pack>[]),
+        publicPuzzlesProvider.overrideWith((ref) async => const <Puzzle>[]),
         // Every shape and option open unless a test says otherwise (they open as levels rise).
         openFeaturesProvider.overrideWithValue(open),
       ],

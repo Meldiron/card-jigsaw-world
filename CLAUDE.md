@@ -177,6 +177,11 @@ skills under `.claude/skills/` hold the detailed workflows.
   `progress.painting` marks a Painting board (x1.25); `progress.par` / `peeked` / `bestLock` feed the quests. `purchases.ownership` / `purchases.appTransactionId`
   (index `idx_apptx`) track Family Sharing (VIP is family-shared since 2026-10-14, irreversible; at most 6
   game accounts per subscription).
+- Pack codes (`docs/pack-codes.md`): `packs.hidden` packs are listed only for players who own them;
+  codes in the server-only `pack_codes` table (SHA-256 hashes) and `code_claims`; function `redeem-code`
+  (Settings > Redeem a pack code, `/redeem?code=`); private pack pictures in bucket `private-packs`, readable
+  per claimant. Tools: `tools/dev/private_pack.py`, `tools/dev/pack_codes.py`. The Hidden Object Adventure
+  test pack (`pack-hidden-object-test`) is unlicensed art for an internal test only: never make it public.
 - Functions: `verify-purchase` (StoreKit 2 JWS verification, grants, App Store Server Notifications at
   `https://cjw-verify-purchase.fra.appwrite.run/notifications`; secret vars can only be updated with
   `secret: true`); `catalog-snapshot` (daily 03:00 UTC: catalogue file in bucket `catalog`, pointer row

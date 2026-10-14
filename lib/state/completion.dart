@@ -118,8 +118,8 @@ class CompletionTotals {
 
 /// The catalogue's size here, or null while it loads.
 final catalogueSizeProvider = Provider<CatalogueSize?>((ref) {
-  final packs = ref.watch(packsProvider).value;
-  final puzzles = ref.watch(allPuzzlesProvider).value;
+  final packs = ref.watch(publicPacksProvider).value;
+  final puzzles = ref.watch(publicPuzzlesProvider).value;
   if (packs == null || puzzles == null || puzzles.isEmpty) return null;
   final t = CompletionTotals.of(packs: packs, puzzles: puzzles, rows: const {});
   return (pictures: t.pictures, packs: t.packs);
@@ -127,8 +127,10 @@ final catalogueSizeProvider = Provider<CatalogueSize?>((ref) {
 
 /// The signed-in player's "Total Completion", or null while the catalogue or progress loads.
 final completionTotalsProvider = Provider<CompletionTotals?>((ref) {
-  final packs = ref.watch(packsProvider).value;
-  final puzzles = ref.watch(allPuzzlesProvider).value;
+  // The shared catalogue (no hidden packs): the profile keeps these totals and must not depend on
+  // its own unlocked packs, and the public numbers stay comparable between players.
+  final packs = ref.watch(publicPacksProvider).value;
+  final puzzles = ref.watch(publicPuzzlesProvider).value;
   final rows = ref.watch(progressProvider).value;
   if (packs == null || puzzles == null || puzzles.isEmpty || rows == null) return null;
   return CompletionTotals.of(packs: packs, puzzles: puzzles, rows: rows);

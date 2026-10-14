@@ -18,7 +18,7 @@ UPLOADS_BUCKET = 'user-uploads'
 KEY_FILE = os.path.join(ROOT, 'secrets', 'appwrite-users-key.txt')
 
 # Every table keyed by a player's user id (profiles use the user id as the row id as well).
-PLAYER_TABLES = ['profiles', 'progress', 'ledger', 'event_progress', 'friends', 'my_puzzles', 'purchases']
+PLAYER_TABLES = ['profiles', 'progress', 'ledger', 'event_progress', 'friends', 'my_puzzles', 'purchases', 'code_claims']
 
 
 class AppwriteError(Exception):
