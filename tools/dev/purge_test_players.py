@@ -199,6 +199,12 @@ def player_rows(w, uid):
             rows[t] = [w.profiles[uid]] if uid in w.profiles else []
         elif t == 'friends':
             rows[t] = [f for f in w.friends if f.get('userId') == uid or f.get('friendId') == uid]
+        elif t in aw.PAIR_TABLES:
+            found = {}
+            for col in aw.PAIR_TABLES[t]:
+                for r in w.c.rows(t, [aw.q('equal', col, [uid])]):
+                    found[r['$id']] = r
+            rows[t] = list(found.values())
         else:
             rows[t] = w.c.rows(t, [aw.q('equal', 'userId', [uid])])
     return rows

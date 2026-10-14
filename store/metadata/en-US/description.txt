@@ -13,7 +13,7 @@ Peek, Hint and Magic Lock for stubborn boards. Undo is always free. Leave any bo
 
 PROGRESS AND REWARDS
 - Coins, tickets and hints are earned by playing: level rewards, daily quests, weekly quests, a daily gift streak and a piggy bank that fills with every completed puzzle.
-- Spin the Lucky Wheel for coins or hints.
+- Spin the Lucky Wheel for coins, hints, Peeks and Magic.
 - 24 achievement families and 55 avatars to collect.
 - A leaderboard and friend codes to compare progress with people you know.
 

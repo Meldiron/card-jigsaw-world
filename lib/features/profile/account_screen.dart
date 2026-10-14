@@ -9,11 +9,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/gestures.dart' show TapGestureRecognizer;
 import 'package:go_router/go_router.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/haptics.dart';
+import '../../core/links.dart';
 import '../../core/theme/tokens.dart';
 import '../../data/repositories.dart';
 import '../../state/account_deletion.dart';
@@ -60,12 +62,16 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
   final _email = TextEditingController();
   final _password = TextEditingController();
   String? _error;
+  late final _termsTap = TapGestureRecognizer()..onTap = () => openLink(AppLinks.termsOfUse);
+  late final _privacyTap = TapGestureRecognizer()..onTap = () => openLink(AppLinks.privacyPolicy);
 
   @override
   void dispose() {
     _name.dispose();
     _email.dispose();
     _password.dispose();
+    _termsTap.dispose();
+    _privacyTap.dispose();
     super.dispose();
   }
 
@@ -430,7 +436,20 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
             BigButton(label: _signUp ? 'Create account' : 'Sign in', loading: _busy, onTap: _submit),
             const SizedBox(height: 12),
             Center(
-              child: Text('By continuing you agree to the Terms and Privacy Policy.', style: TextStyle(fontSize: 11.5, color: c.textTertiary)),
+              child: Text.rich(
+                TextSpan(
+                  style: TextStyle(fontSize: 11.5, color: c.textTertiary),
+                  children: [
+                    const TextSpan(text: 'By continuing you agree to the '),
+                    TextSpan(text: 'Terms of use', recognizer: _termsTap, style: TextStyle(color: context.accent, fontWeight: FontWeight.w600)),
+                    const TextSpan(text: ' and the '),
+                    TextSpan(text: 'Privacy policy', recognizer: _privacyTap, style: TextStyle(color: context.accent, fontWeight: FontWeight.w600)),
+                    const TextSpan(text: '.'),
+                  ],
+                ),
+                key: const ValueKey('account-legal'),
+                textAlign: TextAlign.center,
+              ),
             ),
           ],
           _deleteButton(context),

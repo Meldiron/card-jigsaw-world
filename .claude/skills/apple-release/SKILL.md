@@ -106,7 +106,8 @@ On top of the TestFlight checks below (the guideline review of 2026-10-15 found 
   builds of a version that passed Beta App Review.
 
 ## Related docs
-`docs/release-flow.md`, `docs/release-checklist.md`, `tools/store/README.md`.
+`docs/release-flow.md`, `docs/release-checklist.md` (its last section lists possible pipeline
+improvements: notes only, not started without the owner's go), `tools/store/README.md`.
 
 ## Renaming in-app purchases while they sit in a review draft
 If products were added to the app's open review submission ("Submit for Review" on the products in App

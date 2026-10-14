@@ -21,7 +21,20 @@ final friendsProvider = FutureProvider<List<Friend>>((ref) async {
   }
 });
 
-/// The league, most XP first, loaded a page at a time as the list scrolls.
+/// Players the signed-in player blocked (Player > Block), newest first.
+final blockedPlayersProvider = FutureProvider<List<BlockedPlayer>>((ref) async {
+  final userId = ref.watch(currentUserIdProvider);
+  if (userId == null) return const [];
+  try {
+    return await ref.watch(socialRepositoryProvider).blocks(userId);
+  } catch (e) {
+    debugPrint('blocks failed: $e');
+    return const [];
+  }
+});
+
+/// The league, most XP first, loaded a page at a time as the list scrolls, without the players the
+/// viewer blocked.
 class LeaderboardNotifier extends PagedNotifier<Profile> {
   @override
   int get pageSize => 50;
@@ -33,9 +46,53 @@ class LeaderboardNotifier extends PagedNotifier<Profile> {
     try {
       me = await ref.read(profileProvider.future);
     } catch (_) {}
-    return ref.read(profileRepositoryProvider).leaderboardPage(limit: pageSize, after: after, viewer: me);
+    final blocked = {for (final b in await ref.read(blockedPlayersProvider.future)) b.playerId};
+    return ref.read(profileRepositoryProvider).leaderboardPage(limit: pageSize, after: after, viewer: me, excluding: blocked);
   }
 }
+
+/// Report and block (guideline 1.2: players can report a name and block a player).
+class PlayerSafety {
+  PlayerSafety(this._ref);
+  final Ref _ref;
+
+  Future<void> report(Profile player, ReportReason reason) async {
+    final me = _ref.read(currentUserIdProvider);
+    if (me == null) throw StateError('not signed in');
+    await _ref.read(socialRepositoryProvider).report(reporterId: me, player: player, reason: reason);
+  }
+
+  /// Blocks [player]: gone from the leaderboard, and from the friends list if they were a friend.
+  Future<void> block(Profile player) async {
+    final me = _ref.read(currentUserIdProvider);
+    if (me == null) throw StateError('not signed in');
+    final social = _ref.read(socialRepositoryProvider);
+    await social.block(me, player);
+    try {
+      await social.removeFriend(social.friendRowId(me, player.userId));
+    } catch (_) {
+      // Not a friend.
+    }
+    _refresh();
+  }
+
+  Future<void> unblock(String playerId) async {
+    final me = _ref.read(currentUserIdProvider);
+    if (me == null) return;
+    final social = _ref.read(socialRepositoryProvider);
+    await social.unblock(deterministicId(me, playerId));
+    _refresh();
+  }
+
+  void _refresh() {
+    _ref
+      ..invalidate(blockedPlayersProvider)
+      ..invalidate(leaderboardProvider)
+      ..invalidate(friendsProvider);
+  }
+}
+
+final playerSafetyProvider = Provider<PlayerSafety>(PlayerSafety.new);
 
 final leaderboardProvider = AsyncNotifierProvider<LeaderboardNotifier, Paged<Profile>>(LeaderboardNotifier.new);
 

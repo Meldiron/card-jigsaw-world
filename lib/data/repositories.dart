@@ -283,10 +283,28 @@ class ProfileRepository {
           Query.equal('isTest', false),
       ];
 
-  /// One page of the league (most XP first) after the row [after], as [viewer] sees it.
-  Future<({List<Profile> items, String? lastId})> leaderboardPage({required int limit, String? after, Profile? viewer}) async {
-    final rows = await listRowsPage(_tables, AppwriteConfig.profiles, [...leagueQueries(viewer: viewer), Query.orderDesc('xp')], limit: limit, after: after);
-    return (items: rows.map((r) => Profile.fromRow(r.$id, r.data)).toList(), lastId: rows.isEmpty ? null : rows.last.$id);
+  /// Blocked players left out on the server, one `notEqual` each (Appwrite takes at most 100 queries
+  /// a request); any beyond are left out of the page on the device.
+  static const maxServerExclusions = 90;
+
+  /// One page of the league (most XP first) after the row [after], as [viewer] sees it, without the
+  /// players in [excluding] (the viewer's blocked players).
+  Future<({List<Profile> items, String? lastId})> leaderboardPage({required int limit, String? after, Profile? viewer, Set<String> excluding = const {}}) async {
+    final rows = await listRowsPage(
+      _tables,
+      AppwriteConfig.profiles,
+      [
+        ...leagueQueries(viewer: viewer),
+        for (final id in excluding.take(maxServerExclusions)) Query.notEqual('\$id', id),
+        Query.orderDesc('xp'),
+      ],
+      limit: limit,
+      after: after,
+    );
+    return (
+      items: [for (final r in rows) if (!excluding.contains(r.$id)) Profile.fromRow(r.$id, r.data)],
+      lastId: rows.isEmpty ? null : rows.last.$id,
+    );
   }
 
   /// League size and the player's place in it, counted on the server (the list itself pages).
@@ -446,6 +464,37 @@ class SocialRepository {
 
   Future<void> removeFriend(String rowId) =>
       _tables.deleteRow(databaseId: _db, tableId: AppwriteConfig.friends, rowId: rowId);
+
+  /// The friend row [userId] keeps for [friendId], if any (rows have a deterministic id).
+  String friendRowId(String userId, String friendId) => deterministicId(userId, friendId);
+
+  /// Reports [player] for [reason]. The row carries no permissions: only the server reads it.
+  Future<void> report({required String reporterId, required Profile player, required ReportReason reason}) async {
+    await _tables.createRow(
+      databaseId: _db,
+      tableId: AppwriteConfig.reports,
+      rowId: ID.unique(),
+      data: {'reporterId': reporterId, 'reportedId': player.userId, 'reportedName': player.displayName, 'reason': reason.code},
+      permissions: const [],
+    );
+  }
+
+  Future<List<BlockedPlayer>> blocks(String userId) async {
+    final rows = await listAllRows(_tables, AppwriteConfig.blocks, [Query.equal('blockerId', userId), Query.orderDesc('\$createdAt')]);
+    return rows.map((r) => BlockedPlayer.fromRow(r.$id, r.data)).toList();
+  }
+
+  Future<void> block(String userId, Profile player) async {
+    await _tables.upsertRow(
+      databaseId: _db,
+      tableId: AppwriteConfig.blocks,
+      rowId: deterministicId(userId, player.userId),
+      data: {'blockerId': userId, 'blockedId': player.userId, 'blockedName': player.displayName, 'blockedAvatar': player.avatar},
+      permissions: [Permission.read(Role.user(userId)), Permission.update(Role.user(userId)), Permission.delete(Role.user(userId))],
+    );
+  }
+
+  Future<void> unblock(String rowId) => _tables.deleteRow(databaseId: _db, tableId: AppwriteConfig.blocks, rowId: rowId);
 
   Future<Map<String, EventProgress>> eventProgress(String userId) async {
     final rows = await listAllRows(_tables, AppwriteConfig.eventProgress, [Query.equal('userId', userId)]);

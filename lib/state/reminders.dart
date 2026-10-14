@@ -142,13 +142,14 @@ List<ReminderNote> planEventReminders({
   return notes;
 }
 
-/// Settings > New events: event notes on top of the daily reminders (on by default; stored on the
-/// device).
+/// Settings > New events: event notes on top of the daily reminders, stored on the device. They
+/// promote events, so they are off until the player turns them on: the switch, or Turn on in the
+/// reminder question, whose copy names them (guideline 4.5.4, explicit opt-in; owner, 2026-10-15).
 class EventRemindersNotifier extends Notifier<bool> {
   static const _key = 'eventReminders';
 
   @override
-  bool build() => ref.watch(localStoreProvider).getText(_key) != 'off';
+  bool build() => ref.watch(localStoreProvider).getText(_key) == 'on';
 
   void set(bool on) {
     ref.read(localStoreProvider).setText(_key, on ? 'on' : 'off');

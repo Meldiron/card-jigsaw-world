@@ -57,6 +57,8 @@ class AppIcons {
   static const community = Icons.public_rounded;
   static const friends = CupertinoIcons.person_2_fill;
   static const addFriend = CupertinoIcons.person_add_solid;
+  static const report = CupertinoIcons.exclamationmark_bubble;
+  static const block = CupertinoIcons.hand_raised;
   static const copy = CupertinoIcons.doc_on_doc;
   static const video = Icons.play_circle_fill_rounded;
   static const bundle = Icons.card_giftcard_rounded;

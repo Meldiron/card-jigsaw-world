@@ -209,6 +209,7 @@ void main() {
       expect(find.text('Redeem a gift code'), findsNothing);
       expect(find.text('Daily reminders'), findsNothing);
       expect(find.text('Sign in or create account'), findsOneWidget);
+      expect(find.byKey(const ValueKey('settings-redeem-pack-code')), findsOneWidget, reason: 'pack codes keep their row on the web');
     });
 
     testWidgets('keeps them on iOS', (tester) async {
@@ -217,6 +218,17 @@ void main() {
       expect(find.text('Daily reminders'), findsOneWidget);
       expect(find.text('Restore purchases'), findsOneWidget);
       expect(find.text('Redeem a gift code'), findsOneWidget);
+    });
+
+    testWidgets('on iOS a pack code opens only through its link; privacy, terms and blocked players are listed', (tester) async {
+      await tester.pumpWidget(await _app(const SettingsScreen(), caps: PlatformCaps.ios));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const ValueKey('settings-redeem-pack-code')), findsNothing);
+      expect(find.text('Redeem a pack code'), findsNothing);
+      for (final key in ['settings-privacy', 'settings-terms', 'settings-support', 'settings-blocked']) {
+        await tester.dragUntilVisible(find.byKey(ValueKey(key)), find.byType(Scrollable).first, const Offset(0, -200));
+        expect(find.byKey(ValueKey(key)), findsOneWidget, reason: key);
+      }
     });
   });
 

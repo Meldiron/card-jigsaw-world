@@ -47,11 +47,13 @@ Future<void> offerRemindersAfterGift(BuildContext context, ProviderContainer con
   final yes = await showAppAlert(
     context,
     title: 'Get a daily reminder?',
-    message: 'One notification a day with the daily puzzle, at $time. You can change the time or turn it off in Settings.',
+    message: 'One notification a day with the daily puzzle at $time, and one the evening before a new event opens. You can change or turn off either in Settings.',
     confirmLabel: 'Turn on',
     cancelLabel: 'Not now',
   );
   if (!yes) return;
+  // The question named event notes too, so Turn on is the explicit yes to them.
+  container.read(eventRemindersProvider.notifier).set(true);
   final granted = await container.read(remindersProvider).enable();
   if (granted && context.mounted) showToast(context, 'Daily reminder at $time', icon: CupertinoIcons.bell_fill);
 }

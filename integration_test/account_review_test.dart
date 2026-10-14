@@ -115,7 +115,8 @@ void main() {
     expect(store.getText('reviewAskedAt'), askedAt);
     ReviewPrompter.allowInIntegrationRuns = false;
 
-    // Settings > Daily reminders, then New events: notes for events at least five days away.
+    // Settings > Daily reminders: event notes stay off (explicit opt-in), then New events turns
+    // them on: notes for events at least five days away.
     await tapText(tester, 'Profile', ms: 2500);
     await tester.tap(find.byIcon(CupertinoIcons.gear_alt_fill).first, warnIfMissed: false);
     await settle(tester, 1500);
@@ -123,6 +124,11 @@ void main() {
     await settle(tester, 4000);
     expect(c.read(settingsProvider).reminders, isTrue);
     expect(find.byKey(const ValueKey('settings-event-reminders')), findsOneWidget);
+    expect(c.read(eventRemindersProvider), isFalse, reason: 'promotional notes need their own yes');
+    await c.read(remindersProvider).refresh();
+    expect((await ReminderChannel.pending()).where((n) => '${n['id']}'.startsWith('event-')), isEmpty);
+    await tester.tap(find.descendant(of: find.byKey(const ValueKey('settings-event-reminders')), matching: find.byType(CupertinoSwitch)), warnIfMissed: false);
+    await settle(tester, 2500);
     expect(c.read(eventRemindersProvider), isTrue);
     await shot(tester, 'ar_02_settings_new_events');
     await c.read(remindersProvider).refresh();

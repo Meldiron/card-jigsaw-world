@@ -89,3 +89,29 @@ Done 2026-10-13: Services ID `com.matejbaco.cardjigsawworld.signin`, Key ID
 Appwrite Apple provider (native sign-in settings unchanged). The redirect from
 the web app reaches Apple's page "Use your Apple Account to sign in to
 'Card Jigsaw World Web'".
+
+## Possible future improvements (not started)
+
+From an iOS expert's advice (Jake, 2026-10-15), compared with our pipeline. The owner asked to keep
+these as notes for now: do not start any of them without the owner's go. Workflow changes also need a
+GitHub token with the `workflow` scope (`gh auth refresh -s workflow`).
+
+1. **Tests in the release workflow.** `release-testflight.yml` builds whatever commit it is given; run
+   `flutter analyze --fatal-infos --fatal-warnings` and `flutter test` (or require a green CI run on the
+   commit) before the archive.
+2. **Announce the build from the workflow.** `publish_release.py testflight --build N` (the in-app
+   update prompt) runs only from `tools/dev/testflight.sh`; a hand-dispatched run depends on someone
+   remembering it. Needs an Appwrite key with rows write on `releases` as a GitHub secret.
+3. **Deploy the web site from the workflow**, from the same commit (`tools/dev/deploy-web.sh`); needs the
+   Sites key as a GitHub secret.
+4. **Refresh the store screenshots in the App Store submission flow** (the store screenshot suite, then
+   `asc_publish.py screenshots`), so they never fall behind the app again.
+5. **Keep each build's "What to Test"** (an archive per build number, or the GitHub release body);
+   today the file is overwritten every build.
+6. **Translate the store listing** into more locales (optional growth; English only today).
+7. **One release run at a time** (a `concurrency` group on the release workflow).
+8. **"Update required"**: a minimum build on the server that blocks builds which can no longer work
+   with the backend (`docs/app-updates.md`).
+
+Considered and not adopted: fastlane. Our own scripts (`tools/store/`) already do its portal, signing,
+upload and metadata work, and are easier to follow (apple-release skill, "Tooling").

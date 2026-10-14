@@ -9,6 +9,7 @@ import 'package:go_router/go_router.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
 import '../../core/haptics.dart';
+import '../../core/links.dart';
 import '../../core/platform.dart';
 import '../../core/sfx.dart';
 import '../../core/theme/tokens.dart';
@@ -327,16 +328,42 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
               !caps.purchases
                   ? 'VIP and bundles are sold in the iPhone app. A VIP subscription bought there is active here too.'
                   : storeUp
-                      ? 'Payment is handled by the App Store. Subscriptions renew automatically and can be cancelled in your Apple ID settings.'
+                      ? 'Payment is charged to your Apple ID when you confirm, or when the free trial ends. VIP renews automatically unless cancelled at least 24 hours before the period ends; manage it in your App Store account settings.'
                       : (kDebugMode ? 'Store unavailable on this device. Debug sandbox purchases grant items locally.' : 'The App Store is not available right now.'),
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 11.5, color: c.textTertiary),
             ),
           ),
+          // Apple asks for both links where a subscription is sold (guideline 3.1.2).
+          const SizedBox(height: 6),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _FooterLink(key: const ValueKey('store-terms'), label: 'Terms of use', url: AppLinks.termsOfUse),
+              Text('·', style: TextStyle(fontSize: 11.5, color: c.textTertiary)),
+              _FooterLink(key: const ValueKey('store-privacy'), label: 'Privacy policy', url: AppLinks.privacyPolicy),
+            ],
+          ),
         ],
       ),
     );
   }
+}
+
+class _FooterLink extends StatelessWidget {
+  const _FooterLink({super.key, required this.label, required this.url});
+  final String label;
+  final Uri url;
+
+  @override
+  Widget build(BuildContext context) => CupertinoButton(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        minimumSize: Size.zero,
+        onPressed: () async {
+          if (!await openLink(url) && context.mounted) showToast(context, 'The page could not open. Check your connection and try again.', icon: AppIcons.signal);
+        },
+        child: Text(label, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: context.accent)),
+      );
 }
 
 /// Web notice at the top of the store: no purchases here, but everything

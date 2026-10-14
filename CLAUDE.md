@@ -152,6 +152,8 @@ skills under `.claude/skills/` hold the detailed workflows.
   `ios/Runner/AppDelegate.swift`. Integration runs ask for provisional permission (no prompt to tap);
   `integration_test/quests_reminders_test.dart` checks a reminder really fires. `planEventReminders`
   (Settings > New events): the evening before an event opens, only for notes 5+ days out (lapsed players).
+  They are promotional, so they are off until the player says yes (the switch, or Turn on in the reminder
+  question, whose copy names them; guideline 4.5.4).
 - Painting and giant boards: `progress.painting`; `lib/state/giant.dart` (`isGiantPack`,
   `isGiantPuzzleProvider`: packs of category `Giant` get the Large/Huge/Giant/Colossal ladder only, about
   100-300 cards in Cards), `puzzleImageFullProvider` (full-resolution decode), `BoardZoom` in
@@ -191,7 +193,7 @@ skills under `.claude/skills/` hold the detailed workflows.
 
 - Endpoint `https://fra.cloud.appwrite.io/v1`, project `6acb4de5003e38d5ebd9`, database `cjw`
   (tables profiles, packs, puzzles, progress, events, event_progress, friends, ledger, my_puzzles,
-  purchases, meta, releases). Profiles are readable by anyone; `level` mirrors XP; aggregates `totalMoves`,
+  purchases, meta, releases, reports, blocks). Profiles are readable by anyone; `level` mirrors XP; aggregates `totalMoves`,
   `totalSeconds`, `solvedByMode`, `questsCompleted` and the "Total Completion" numbers
   (`picturesSolved`, `picturesPerfect`, `packsCompleted`, `packsPerfect`, kept in step by
   `ProfileNotifier.syncCompletion`, backfill `tools/dev/backfill_profile_stats.py`) are public.
@@ -200,9 +202,20 @@ skills under `.claude/skills/` hold the detailed workflows.
   `progress.painting` marks a Painting board (x1.25); `progress.par` / `peeked` / `bestLock` feed the quests. `purchases.ownership` / `purchases.appTransactionId`
   (index `idx_apptx`) track Family Sharing (VIP is family-shared since 2026-10-14, irreversible; at most 6
   game accounts per subscription).
+- Report and block (guideline 1.2, owner 2026-10-15): Player > Report writes a `reports` row (reporterId,
+  reportedId, reportedName, reason as text) with no permissions, so only the server reads it; read and close
+  them with `tools/dev/reports.py` (look regularly: Apple wants timely responses). Player > Block writes a
+  `blocks` row readable only by the blocker; blocked players are left out of their leaderboard (one
+  `Query.notEqual('$id')` each) and their friendship ends; Settings > Blocked players unblocks. Both tables are
+  deleted in both directions with an account (`delete-account`, `PAIR_TABLES` in `tools/dev/cjw_admin.py`).
+  `lib/state/social.dart` (`PlayerSafety`, `blockedPlayersProvider`), `lib/features/social/player_safety.dart`.
+- Legal links: `AppLinks` in `lib/core/links.dart` (privacy policy = `docs/privacy-policy.md` on GitHub, the
+  same URL as the listing; terms of use = Apple's standard EULA) in Settings > About, under the VIP plans in
+  the store and on the sign-in screen. Keep `docs/privacy-policy.md` true to what the app does.
 - Pack codes (`docs/pack-codes.md`): `packs.hidden` packs are listed only for players who own them;
   codes in the server-only `pack_codes` table (SHA-256 hashes) and `code_claims`; function `redeem-code`
-  (Settings > Redeem a pack code, `/redeem?code=`); private pack pictures in bucket `private-packs`, readable
+  (`/redeem?code=` links everywhere; the Settings row exists on the web only, never in the iPhone app
+  (owner, 2026-10-15; guideline 3.1.1)); private pack pictures in bucket `private-packs`, readable
   per claimant. Tools: `tools/dev/private_pack.py`, `tools/dev/pack_codes.py`. The Hidden Object Adventure
   test pack (`pack-hidden-object-test`) is unlicensed art for an internal test only: never make it public.
 - Functions: `verify-purchase` (StoreKit 2 JWS verification, grants, App Store Server Notifications at
@@ -210,8 +223,9 @@ skills under `.claude/skills/` hold the detailed workflows.
   `secret: true`); `catalog-snapshot` (daily 03:00 UTC: catalogue file in bucket `catalog`, pointer row
   `meta/catalog`; see `docs/catalog-sync.md`; pack rows keep `$createdAt` for the New badge); `delete-account`
   (Profile > Account > Delete account: deletes the caller's rows, uploads and user with a per-execution key;
-  secret variable `APPLE_SIGNIN_KEY` (contents of `AuthKey_2QJPJFW8JW.p8`, NOT set yet) revokes Sign in with
-  Apple tokens; without it the revoke is skipped and logged). There is no image proxy: pictures load straight from Storage on every platform.
+  secret variable `APPLE_SIGNIN_KEY` (contents of `AuthKey_2QJPJFW8JW.p8`, set 2026-10-15) revokes Sign in
+  with Apple tokens; without it the revoke is skipped and logged; it also deletes the player's reports and
+  blocks). Deploy functions with the Appwrite CLI (`appwrite functions create-deployment --code functions/<name>`). There is no image proxy: pictures load straight from Storage on every platform.
 - Site `card-jigsaw-world` → https://card-jigsaw-world.appwrite.network (static, fallback index.html),
   deployed by `tools/dev/deploy-web.sh` (chunked upload). Web build hides purchases, gift codes,
   widgets. Apple sign-in on web (configured 2026-10-13): Services ID `com.matejbaco.cardjigsawworld.signin`,
@@ -246,8 +260,8 @@ skills under `.claude/skills/` hold the detailed workflows.
   App Store availability is two manual ticks in Pricing and Availability). Win-back offers are recorded in
   `store/metadata/subscriptions/vip_*.json`; `subscriptions` creates them once Apple approves the plans. Docs:
   `tools/store/README.md`, `docs/release-flow.md`, `docs/release-checklist.md`.
-- Not yet done (owner): App Privacy questionnaire, Paid Applications agreement, App Store submission,
-  Mac / Vision Pro availability ticks, `APPLE_SIGNIN_KEY` on `delete-account`, restoring
+- Not yet done (owner): App Privacy questionnaire, App Store submission (Paid Apps agreement, banking and tax active since 2026-10-14),
+  Mac / Vision Pro availability ticks, restoring
   `secrets/appwrite-storage-key.txt` (the content tool falls back to the users key), pushing the local
   branch `workflow-dsym-check` (needs a GitHub token with the `workflow` scope: `gh auth refresh -s workflow`).
 - **Changing what a purchase gives** (coins, tickets, hints per product): three places must agree:

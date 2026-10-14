@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../core/links.dart';
 import '../../core/platform.dart';
 import '../../core/reminders.dart';
 import '../../core/theme/tokens.dart';
@@ -17,6 +18,7 @@ import '../../data/purchases.dart';
 import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
+import '../social/player_safety.dart';
 import 'redeem_code_sheet.dart';
 
 /// The App Store page where a player writes a review of the game.
@@ -124,13 +126,16 @@ class SettingsScreen extends ConsumerWidget {
           ]),
           group('Account', [
             _NavRow(icon: CupertinoIcons.person_crop_circle, label: isGuest ? 'Sign in or create account' : 'Manage account', onTap: () => context.push('/account')),
-            // Pack codes (giveaways, special posts) work everywhere, the web included.
-            _NavRow(
-              key: const ValueKey('settings-redeem-pack-code'),
-              icon: AppIcons.packCode,
-              label: 'Redeem a pack code',
-              onTap: () => showRedeemCodeSheet(context),
-            ),
+            _NavRow(key: const ValueKey('settings-blocked'), icon: AppIcons.block, label: 'Blocked players', onTap: () => showBlockedPlayersSheet(context)),
+            // Pack codes (giveaways, special posts): a row on the web only. On iPhone a code opens
+            // through its link (`/redeem?code=`, docs/deep-links.md), never from a menu (owner, 2026-10-15).
+            if (caps.isWeb)
+              _NavRow(
+                key: const ValueKey('settings-redeem-pack-code'),
+                icon: AppIcons.packCode,
+                label: 'Redeem a pack code',
+                onTap: () => showRedeemCodeSheet(context),
+              ),
             // Gift codes and restores go through StoreKit; both rows are
             // hidden where there is no store (web).
             if (caps.purchases) _NavRow(
@@ -165,7 +170,16 @@ class SettingsScreen extends ConsumerWidget {
           ]),
           group('About', [
             _NavRow(icon: CupertinoIcons.doc_text, label: 'Image credits and licences', onTap: () => _showCredits(context)),
-            _NavRow(icon: CupertinoIcons.question_circle, label: 'Support', onTap: () => showToast(context, 'support@almostapps.eu', icon: AppIcons.mail)),
+            _NavRow(
+              key: const ValueKey('settings-support'),
+              icon: CupertinoIcons.question_circle,
+              label: 'Support',
+              onTap: () async {
+                if (!await openLink(AppLinks.support) && context.mounted) showToast(context, AppLinks.supportEmail, icon: AppIcons.mail);
+              },
+            ),
+            _NavRow(key: const ValueKey('settings-privacy'), icon: CupertinoIcons.lock_shield, label: 'Privacy policy', onTap: () => _open(context, AppLinks.privacyPolicy)),
+            _NavRow(key: const ValueKey('settings-terms'), icon: CupertinoIcons.doc_plaintext, label: 'Terms of use', onTap: () => _open(context, AppLinks.termsOfUse)),
             // App Store features (gift codes, reviews) exist on Apple platforms only.
             if (caps.giftCodes)
               _NavRow(
@@ -188,6 +202,10 @@ class SettingsScreen extends ConsumerWidget {
   }
 
   static TimeOfDay _minutesOfDay(int minutes) => TimeOfDay(hour: minutes ~/ 60, minute: minutes % 60);
+
+  static Future<void> _open(BuildContext context, Uri url) async {
+    if (!await openLink(url) && context.mounted) showToast(context, 'The page could not open. Check your connection and try again.', icon: AppIcons.signal);
+  }
 
   /// On: asks iOS for permission the first time. When iOS says no, the switch
   /// stays off and the alert leads to the app's page in iOS Settings.

@@ -786,6 +786,33 @@ class Friend {
       );
 }
 
+/// A player the signed-in player blocked (table `blocks`), with the name and avatar they had then.
+class BlockedPlayer {
+  BlockedPlayer({required this.id, required this.playerId, required this.name, required this.avatar});
+  final String id;
+  final String playerId;
+  final String name;
+  final String avatar;
+  factory BlockedPlayer.fromRow(String id, Map<String, dynamic> d) => BlockedPlayer(
+        id: id,
+        playerId: _s(d['blockedId']),
+        name: _s(d['blockedName'], 'Player'),
+        avatar: _s(d['blockedAvatar'], 'fox'),
+      );
+}
+
+/// Why a player is reported (column `reports.reason`, free text on the server so a new reason never
+/// breaks an older build).
+enum ReportReason {
+  name('name', 'Offensive name'),
+  cheating('cheating', 'Cheating or unfair play'),
+  other('other', 'Something else');
+
+  const ReportReason(this.code, this.label);
+  final String code;
+  final String label;
+}
+
 class MyPuzzle {
   MyPuzzle({required this.id, required this.fileId, required this.title});
   final String id;

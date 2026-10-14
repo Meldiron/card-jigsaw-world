@@ -15,6 +15,12 @@ class AppwriteConfig {
   static const events = 'events';
   static const eventProgress = 'event_progress';
   static const friends = 'friends';
+
+  /// Player reports (Player > Report): rows only the server reads (`tools/dev/reports.py`).
+  static const reports = 'reports';
+
+  /// Players a player blocked (Player > Block): left out of their leaderboard; rows only they read.
+  static const blocks = 'blocks';
   static const ledger = 'ledger';
   static const myPuzzles = 'my_puzzles';
   static const meta = 'meta';

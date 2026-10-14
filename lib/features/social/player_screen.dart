@@ -12,6 +12,7 @@ import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 import '../profile/stats.dart';
+import 'player_safety.dart';
 
 /// Read-only profile of another player: identity, headline numbers, the
 /// public statistics and the achievement tiers they have claimed. Profiles
@@ -135,6 +136,44 @@ class PlayerScreen extends ConsumerWidget {
                     return _BadgeTile(family: b.family, tier: b.tier);
                   },
                 ),
+              // Report and block (guideline 1.2), for another player's profile.
+              if (!isMe && ref.watch(currentUserIdProvider) != null) ...[
+                const SizedBox(height: 28),
+                Row(
+                  children: [
+                    Expanded(
+                      child: BigButton(
+                        key: const ValueKey('player-report'),
+                        label: 'Report',
+                        icon: AppIcons.report,
+                        kind: ButtonKind.secondary,
+                        height: 46,
+                        onTap: () => showReportSheet(context, p),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ref.watch(blockedPlayersProvider).value?.any((b) => b.playerId == p.userId) ?? false
+                          ? BigButton(
+                              key: const ValueKey('player-unblock'),
+                              label: 'Unblock',
+                              icon: AppIcons.block,
+                              kind: ButtonKind.secondary,
+                              height: 46,
+                              onTap: () => unblockPlayer(context, p.userId, p.displayName),
+                            )
+                          : BigButton(
+                              key: const ValueKey('player-block'),
+                              label: 'Block',
+                              icon: AppIcons.block,
+                              kind: ButtonKind.secondary,
+                              height: 46,
+                              onTap: () => confirmBlock(context, p),
+                            ),
+                    ),
+                  ],
+                ),
+              ],
             ],
           );
         },

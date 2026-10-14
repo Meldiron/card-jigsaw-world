@@ -1,6 +1,7 @@
-import 'dart:io' show Directory;
+import 'dart:io' show Directory, File;
 
 import 'package:appwrite/appwrite.dart';
+import 'package:card_jigsaw_world/core/links.dart';
 import 'package:card_jigsaw_world/core/platform.dart';
 import 'package:card_jigsaw_world/core/theme/app_theme.dart';
 import 'package:card_jigsaw_world/data/local_store.dart';
@@ -103,6 +104,16 @@ void main() {
     }
     expect(find.text(StoreProducts.price(ProductIds.coins3000)), findsOneWidget);
     expect(find.text('+${StoreProducts.coinBonusPercent(ProductIds.coins5500)}%'), findsOneWidget);
+  });
+
+  testWidgets('terms of use and privacy policy are linked where VIP is sold', (tester) async {
+    await _pumpStore(tester);
+    await tester.drag(find.byType(ListView), const Offset(0, -6000));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('store-terms')), findsOneWidget);
+    expect(find.byKey(const ValueKey('store-privacy')), findsOneWidget);
+    // The same address as the App Store listing's privacy policy URL.
+    expect(AppLinks.privacyPolicy.toString(), File('store/metadata/en-US/privacy_url.txt').readAsStringSync().trim());
   });
 
   testWidgets('the last row scrolls clear of the home indicator', (tester) async {
