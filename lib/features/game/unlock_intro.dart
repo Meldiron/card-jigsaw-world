@@ -38,7 +38,7 @@ String unlockBody(Unlock u) => switch (u) {
       Unlock.triangles => 'Up and down triangles that fit together in rows. They pay x${GameMode.triangles.multiplier}.',
       Unlock.hexagons => 'A honeycomb of six-sided cells, the trickiest shape. Hexagons pay x${GameMode.hexagons.multiplier}.',
       Unlock.painting => 'Cards start in black and white and get their colour back as they lock. It works with every shape and pays x${Economy.paintingMultiplier}.',
-      Unlock.giant => 'Boards of 100 to 300 cards for the pictures of the Giant pack. Pinch to zoom in while you play.',
+      Unlock.giant => 'Boards of 100 to 300 cards for the pictures of the Giant pack, dealt in zones you finish one at a time. Pinch to zoom in while you play.',
     };
 
 /// The one-screen intro shown the first time a shape, Painting or giant

@@ -74,6 +74,11 @@ class GiantViews {
   bool get showMap => _store.getJson(_prefsKey)?['map'] != false;
   set showMap(bool v) => _store.setJson(_prefsKey, {...?_store.getJson(_prefsKey), 'map': v});
 
+  /// The one-time tip about holding a card to see its place, shown the first time a giant board
+  /// is zoomed in.
+  bool get locateTipShown => _store.getJson(_prefsKey)?['locateTip'] == true;
+  set locateTipShown(bool v) => _store.setJson(_prefsKey, {...?_store.getJson(_prefsKey), 'locateTip': v});
+
   static double _round(double v) => (v * 1000).roundToDouble() / 1000;
 }
 

@@ -2,7 +2,8 @@ Version 1.7.0
 
 New ways to play
 - Painting: cards start in black and white and get their colour back as they lock. Pays 25% more.
-- Giant boards of 100 to 300 cards, with pinch and double-tap zoom, an overview map, an Edges filter for the frame, and a board that opens where you left it.
+- Giant boards of 100 to 300 cards, dealt in zones you finish one at a time, with pinch and double-tap zoom, an overview map, an Edges filter for the frame, Gather, and a board that opens where you left it. Hold a card to see its place on the map.
+- Peek costs 10 coins and is free on giant boards: every card flies to its place for a moment, then back.
 - A new Giant pack, Colourful Houses: 24 detailed pictures made for the biggest boards.
 - Shapes and options open as you level up: Squares, Triangles, Hexagons, Painting, then giant boards, each with a short intro.
 

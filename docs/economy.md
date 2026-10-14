@@ -150,7 +150,7 @@ cheap farming trick to worry about; replays pay 40% and are not worth farming.
 | Ticket packs (15) | **8, 10 or 12** tickets (was 2 to 4) | `packs.priceTickets` |
 | Hint when none are left | 150 coins (was 60) | `Economy.hintCostCoins` |
 | Magic Lock | 300 coins (was 120) | `Economy.magicLockCostCoins` |
-| Peek | 75 coins (was 30) | `Economy.peekCostCoins` |
+| Peek | 10 coins (was 75; owner, 2026-10-14), free on giant boards | `Economy.peekCostCoins` |
 | Early board tier (before its level) | `600 + 300 x tier`: 1,500 / 1,800 / 2,100 / 2,400 / 2,700 for tiers 3 to 7 (levels 2, 3, 5, 7, 10) | `Economy.tierUnlockCoins` |
 | Avatars (28 for coins) | 900 coins each, 25,200 for all | `Economy.avatarCoins` |
 | Lucky Wheel spin | 1 ticket | `Economy.wheelSpinTickets` |
@@ -316,7 +316,8 @@ the new server only gets more than it shows, which is harmless.
 - **Level-ups pay about a fifth of all coins forever** (100 + 25 x level, while the XP per level grows by
   60). That is the main reason earnings feel generous; the owner asked for price changes only, so it is
   untouched.
-- **Boosters were raised x2.5** (owner approved, 2026-10-12): hint 150, Magic Lock 300, Peek 75. Avatars
+- **Boosters were raised x2.5** (owner approved, 2026-10-12): hint 150, Magic Lock 300, Peek 75. Peek was
+  then cut to 10 coins and made free on giant boards (owner, 2026-10-14), once it became the animated look. Avatars
   (9 minutes of play) and early board tiers (24 minutes for an early 6x6 tier) are still cheap next to
   packs; raising them is a separate decision.
 - **Event rewards (300 coins + 1 ticket) are small**: three minutes of play for finishing about 22

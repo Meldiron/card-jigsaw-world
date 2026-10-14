@@ -1,6 +1,6 @@
 New in this build:
-- Painting (black-and-white cards that colour in as they lock, pays 25% more) and giant boards of 100 to 300 cards in the new Giant pack Colourful Houses, with zoom, an overview map and an Edges filter.
+- Painting (black-and-white cards that colour in as they lock, pays 25% more) and giant boards of 100 to 300 cards in the new Giant pack Colourful Houses. Giant boards are dealt in zones you finish one at a time, with zoom, an overview map (hold a card to see its place), Edges and Gather.
 - Shapes, Painting and giant boards open as you level up (2, 4, 6, 8, 10), each with an intro; new quests (no Peek, at par, 5 locks in one move, Painting), Claim all, Another picture in Quick play.
-- Daily reminders and New events reminders, account deletion in the app, App Store rating request, wheel odds, tomorrow's daily preview, picture search, New packs, dark and tinted icons.
+- Peek costs 10 coins (free on giant boards) and flies every card to its place and back. Also: daily and New events reminders, account deletion in the app, App Store rating request, wheel odds, tomorrow's daily preview, picture search, New packs, dark and tinted icons.
 
-Please try: a giant board in the Colourful Houses pack (zoom in, use the map and Edges), and turn on Daily reminders in Settings.
+Please try: a Colossal board in Colourful Houses (zoom in, hold a card, try Gather and Peek, finish one zone), and turn on Daily reminders in Settings.

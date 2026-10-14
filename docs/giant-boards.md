@@ -27,7 +27,47 @@ a preview too small to read; and finding the last unplaced pieces once the board
 ## What a giant board does here
 
 The swap board has no free table and no tray (every card is always on the board), so the tools
-are the ones that make sense for it:
+are the ones that make sense for it.
+
+### Dealt by zone (owner feedback 2026-10-14: "feels impossible, cards are all over the place")
+
+A giant board shuffled across all of its cards cannot be read on a phone: zoomed in, the cards in
+view could belong anywhere among 300 places. Giant boards are therefore **dealt by zone**
+(`lib/game/zones.dart`, `BoardZones`): the board is cut into zones of about a normal board each
+(cards 30, squares 48, triangles 66, hexagons 52; zones as close to square as the board allows), and
+every card is shuffled only inside its own zone. The smallest size (Large, 100 cards) has 4 zones,
+Huge and Giant 6, Colossal 12. Zoomed in, what is in view belongs within a few cards of where it
+lies, and one huge puzzle becomes a handful of normal ones that build one picture (what jigsaw
+players do by sorting pieces into areas first).
+
+- Faint lines (a thin light line over a soft dark one) run between the zones; the line between two
+  finished zones goes, so finished areas merge into the picture. A finished zone's outline glows once
+  and a toast says "Zone complete · 3 of 12". The overview map outlines the zones still to finish.
+- The deal keeps the usual rules inside each zone: no card in place, no pair joined. Edge half
+  pieces of triangle and hexagon boards that are too few in a zone to shuffle (fewer than 5) share a
+  pool with the nearest zone, so those few may start one zone over.
+- Zones depend only on the board (shape and size), so a saved board finds them again. A giant board
+  saved before zones (shuffled across the whole board) plays on without zone lines
+  (`BoardZones.dealtIn`); Restart deals it by zone. `GameState.zoned` carries the choice.
+
+### Finding a card's place
+
+- **Locate**: hold a card still for a moment (or pick it up to drag it) on a zoomed board and the
+  overview map shows where it belongs: a ring there and a line from the card. It stays while the card
+  is held, dragged or selected, and the map shows for it even when it is hidden. The first zoom on a
+  giant board says so once ("Hold a card to see its place on the map"). Dragging towards the ring
+  uses auto-pan, so one drag crosses the board.
+- **Gather** (in the bar while zoomed in): every card that belongs in the view comes into it. Each
+  card in view that belongs elsewhere trades places with one that belongs here, chosen so the card
+  leaving lands as close to its own place as it can. Cards in place, joined groups and trades that
+  would put a card straight into its place are left alone: Gather sorts, it never solves. It is not a
+  move; Undo takes it back. (`gatherInto` in `zones.dart`.)
+- **Peek is free on giant boards** (10 coins elsewhere): every card not in place flies to its place,
+  the picture shows (3.2 s on a giant board, 2.4 s elsewhere) and the cards fly back, each a little
+  later than the last, so the picture builds itself in a ripple. Using it still counts for the
+  "without Peek" quests.
+
+### The other tools
 
 - **Pinch to zoom, two fingers to move; one finger plays as usual.** Tap-tap and drag work at
   every zoom, and a selected card stays selected while zooming and panning. The zoom changes only
@@ -54,8 +94,12 @@ are the ones that make sense for it:
 - **Thin frames on giant boards**: the board is scaled as a whole, so gutters, frames and outlines
   are kept thin for the close view and outlines thin out in steps as the zoom grows (at 4x a
   normal frame took a third of every card).
-- **Milestones**: a calm toast when the frame is complete and at halfway, once each per board.
+- **Milestones**: a calm toast for each zone finished, when the frame is complete and at halfway,
+  once each per board (one toast per move: a zone, else the frame, else halfway).
 
-Code: `BoardZoom` and the board's gestures in `lib/features/game/board_widget.dart`, the bar, the
-map, the pointer and the milestones in `lib/features/game/giant_board.dart`, the saved views in
-`lib/state/giant.dart`. QA: `integration_test/giant_ux_test.dart` plays the real Giant pack.
+Code: zones, the zoned deal and Gather in `lib/game/zones.dart`; `BoardZoom`, the board's gestures,
+the zone lines, Locate and Peek's flight in `lib/features/game/board_widget.dart`; the bar, the map,
+the pointer and the milestones in `lib/features/game/giant_board.dart`; the saved views and the
+Locate tip in `lib/state/giant.dart`. Tests: `test/zones_test.dart`. QA:
+`integration_test/giant_ux_test.dart` and `integration_test/giant_zones_test.dart` play the real
+Giant pack.

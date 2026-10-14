@@ -17,7 +17,7 @@ import 'sync.dart';
 class Economy {
   static const hintCostCoins = 150;
   static const magicLockCostCoins = 300;
-  static const peekCostCoins = 75;
+  static const peekCostCoins = 10;
   static const piggyOpenTickets = 1;
   static const wheelSpinTickets = 1;
 

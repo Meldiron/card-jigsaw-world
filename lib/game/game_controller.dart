@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:math';
+import 'dart:ui' show Rect, Size;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'board.dart';
+import 'zones.dart';
 
 enum GameStatus { playing, paused, won }
 
@@ -28,6 +30,7 @@ class GameState {
     this.basePar = 0,
     this.peeked = false,
     this.bestLock = 0,
+    this.zoned = false,
   });
 
   final Board board;
@@ -55,6 +58,10 @@ class GameState {
 
   /// Most cards a single move of the player's locked in this play-through (Magic does not count).
   final int bestLock;
+
+  /// The board was dealt by zone (giant sizes, see `BoardZones`): the game shows the zone lines
+  /// and counts finished zones. A giant board saved before zones plays on without them.
+  final bool zoned;
 
   /// Finished in no more moves than the dealt par.
   bool get atPar => basePar > 0 && moves <= basePar;
@@ -86,6 +93,7 @@ class GameState {
     int? basePar,
     bool? peeked,
     int? bestLock,
+    bool? zoned,
   }) =>
       GameState(
         board: board ?? this.board,
@@ -106,6 +114,7 @@ class GameState {
         basePar: basePar ?? this.basePar,
         peeked: peeked ?? this.peeked,
         bestLock: bestLock ?? this.bestLock,
+        zoned: zoned ?? this.zoned,
       );
 }
 
@@ -170,8 +179,9 @@ class GameController extends Notifier<GameState> {
     // length, a permutation, every card in a slot of its own shape. Saves
     // from before a layout changed start fresh instead.
     final restore = Board.isValidLayout(args.spec, args.layout);
-    final board = restore ? Board(args.spec, args.layout!) : Board.shuffled(args.spec);
+    final board = restore ? Board(args.spec, args.layout!) : dealBoard(args.spec);
     final par = restore ? args.moves + board.par : board.par;
+    final zoned = BoardZones.appliesTo(args.spec) && (!restore || BoardZones.of(args.spec).dealtIn(board));
     _startTimer();
     return restore
         ? _fresh(board,
@@ -181,11 +191,12 @@ class GameController extends Notifier<GameState> {
             hintsUsed: args.hintsUsed,
             basePar: args.par > 0 ? args.par : max(par, 1),
             peeked: args.peeked,
-            bestLock: args.bestLock)
-        : _fresh(board, par: max(par, 1));
+            bestLock: args.bestLock,
+            zoned: zoned)
+        : _fresh(board, par: max(par, 1), zoned: zoned);
   }
 
-  GameState _fresh(Board board, {required int par, int moves = 0, int elapsed = 0, int hintsUsed = 0, int? basePar, bool peeked = false, int bestLock = 0}) => GameState(
+  GameState _fresh(Board board, {required int par, int moves = 0, int elapsed = 0, int hintsUsed = 0, int? basePar, bool peeked = false, int bestLock = 0, bool zoned = false}) => GameState(
         board: board,
         par: par,
         moves: moves,
@@ -204,6 +215,7 @@ class GameController extends Notifier<GameState> {
         basePar: basePar ?? par,
         peeked: peeked,
         bestLock: bestLock,
+        zoned: zoned,
       );
 
   void _startTimer() {
@@ -342,8 +354,11 @@ class GameController extends Notifier<GameState> {
     return true;
   }
 
-  void peek({Duration duration = const Duration(seconds: 2)}) {
-    if (state.status != GameStatus.playing) return;
+  /// Peek: every card not in place flies to its place, the picture shows for a moment and the
+  /// cards fly back (the board draws the flight while [GameState.peeking] is on). [duration] is
+  /// the time the cards spend away, the flight there included. The caller handles payment.
+  void peek({Duration duration = peekTime}) {
+    if (state.status != GameStatus.playing || state.peeking) return;
     _peekTimer?.cancel();
     state = state.copyWith(peeking: true, peeked: true, clearSelected: true);
     _peekTimer = Timer(duration, () {
@@ -351,10 +366,30 @@ class GameController extends Notifier<GameState> {
     });
   }
 
+  /// How long a Peek keeps the cards in their places, and the longer look on a giant board.
+  static const peekTime = Duration(milliseconds: 2400);
+  static const giantPeekTime = Duration(milliseconds: 3200);
+
+  /// Gather (giant boards): brings the cards that belong in [view] (board coordinates at the
+  /// board's [size]) into it, trading places with cards that belong elsewhere (see
+  /// [gatherInto]). Not a move; Undo takes it back. Returns how many cards came in.
+  int gather(Rect view, Size size) {
+    if (state.status != GameStatus.playing || state.peeking) return 0;
+    final before = state.board;
+    final after = gatherInto(before, view, size);
+    if (after == null) return 0;
+    var moved = 0;
+    for (var s = 0; s < after.cells; s++) {
+      if (after.slots[s] != before.slots[s]) moved++;
+    }
+    _apply(after, countMove: false, byPlayer: false);
+    return moved ~/ 2;
+  }
+
   void restart() {
     _peekTimer?.cancel();
-    final board = Board.shuffled(args.spec);
-    state = _fresh(board, par: max(board.par, 1));
+    final board = dealBoard(args.spec);
+    state = _fresh(board, par: max(board.par, 1), zoned: BoardZones.appliesTo(args.spec));
     _startTimer();
   }
 

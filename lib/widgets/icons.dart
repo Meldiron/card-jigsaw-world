@@ -74,6 +74,12 @@ class AppIcons {
   static const edges = Icons.border_outer_rounded;
   static const minimap = CupertinoIcons.map;
 
+  /// Gather (giant boards): bring the cards that belong in view into it.
+  static const gather = Icons.zoom_in_map_rounded;
+
+  /// A zone of a giant board finished.
+  static const zone = Icons.grid_view_rounded;
+
   /// Points at a selected card outside the zoomed view.
   static const towards = CupertinoIcons.arrow_up;
   static const level = Icons.military_tech_rounded;

@@ -622,13 +622,23 @@ class Board {
   /// Random permutations are tried first; if none is clean, a derangement is
   /// repaired by targeted swaps until every join is broken. Only as a last
   /// resort does the board keep a join. It never keeps a fixed point.
-  factory Board.shuffled(BoardSpec spec, {int? seed}) {
+  ///
+  /// [pools] narrows where each card may be dealt: every pool is a set of
+  /// slots of one placement class, and a card stays inside the pool of its
+  /// home (giant boards deal by zone, see `BoardZones`). Without it each
+  /// placement class is one pool.
+  factory Board.shuffled(BoardSpec spec, {int? seed, List<List<int>>? pools}) {
     final rng = Random(seed);
     final tiling = spec.tiling;
     final n = spec.cells;
-    final classes = List.generate(tiling.classCount, (_) => <int>[]);
-    for (var s = 0; s < n; s++) {
-      classes[tiling.classOf(s)].add(s);
+    final List<List<int>> classes;
+    if (pools != null) {
+      classes = pools;
+    } else {
+      classes = List.generate(tiling.classCount, (_) => <int>[]);
+      for (var s = 0; s < n; s++) {
+        classes[tiling.classOf(s)].add(s);
+      }
     }
     List<int> random() {
       final perm = List<int>.filled(n, 0);
