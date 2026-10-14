@@ -126,7 +126,9 @@ def commons_search(query, limit=40, offset=0, quality=True, min_h=1000, extra=''
     if quality and quality_cat:
         q = f'({query}) deepcategory:"{quality_cat}"'
     elif quality:
-        q = f'({query}) (incategory:"Quality images" OR incategory:"Featured pictures on Wikimedia Commons" OR incategory:"Valued images")'
+        # CirrusSearch takes several categories as one incategory:"A|B|C"; a grouped
+        # (incategory:A OR incategory:B) matches nothing (found 2026-10-14: quality-first pools were empty).
+        q = f'({query}) incategory:"Quality images|Featured pictures on Wikimedia Commons|Valued images"'
     q += f' filetype:bitmap fileh:>{min_h} {extra}'
     params = dict(action='query', generator='search', gsrsearch=q, gsrnamespace=6, gsrlimit=limit, gsroffset=offset,
                   prop='imageinfo', iiprop='url|size|extmetadata|mime', iiurlwidth=wm_step(width) if width else COMMONS_REQUEST, iiextmetadatafilter='LicenseShortName|Artist|ImageDescription|Categories|Restrictions|ObjectName|Credit',
