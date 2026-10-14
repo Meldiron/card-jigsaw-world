@@ -2,7 +2,7 @@ Version 1.7.0
 
 New ways to play
 - Painting: cards start in black and white and get their colour back as they lock. Pays 25% more.
-- Giant boards of 100 to 300 cards, with pinch and double-tap zoom, an overview map, Locate (tap a card to see its place on the map), Gather, and a board that opens where you left it.
+- Giant boards of 100 to 300 cards, with pinch to zoom, an overview map that shows where a tapped card belongs, Gather (which shuffles the loose cards when they are all in view), and a board that opens where you left it. Magic puts the selected card in its place.
 - Peek costs 10 coins: every card flies to its place for a moment, then back.
 - Five Giant packs of detailed pictures made for the biggest boards: Colourful Houses, Painted Paradises, Market Stalls, Curiosity Shops and Treasure Trove.
 - Shapes and options open as you level up: Squares, Triangles, Hexagons, Painting, then giant boards, each with a short intro.

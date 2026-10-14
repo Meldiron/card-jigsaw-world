@@ -1,6 +1,6 @@
-New in this build:
-- Six free starter packs, one per category (Wild Nature, Butterflies, Paris, Fruit Markets, Impressionists, Tropical Beaches). The other library packs now cost coins; any pack you have already played stays open.
-- New packs: Pantry Shelves, Tinker's Workshop, Garden Plots and House and Home (Illustration), and Treasure Trove (Giant).
-- The giant board bar no longer cuts off the zoom level.
+New in this build (giant boards):
+- Locate is always on: tap a card and the overview map shows where it belongs (when the map is on). The Locate switch and the zoom hint are gone.
+- Gather is in the bar at every zoom. When every card for the view is already here or nearby, Gather shuffles the loose cards instead; cards in place and joined groups stay where they are.
+- No more double tap to zoom: use pinch or the zoom buttons. Magic now puts the selected card in its place.
 
-Please try: the Library on a fresh install, a pack you played before, and a Colossal board in Treasure Trove.
+Please try: a Colossal board, Gather on the whole board, and Magic with a card selected.

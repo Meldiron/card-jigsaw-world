@@ -338,7 +338,10 @@ class GameController extends Notifier<GameState> {
     final b = state.board;
     final candidates = <int>[for (var i = 0; i < b.cells; i++) if (!b.isLocked(i)) i];
     if (candidates.isEmpty) return false;
-    final slot = state.hintSlot ?? (state.selected != null && !b.isLocked(state.selected!) ? state.selected! : candidates[Random().nextInt(candidates.length)]);
+    // The selected card first (owner, 2026-10-14: Magic puts that exact card in place), then the
+    // card a Hint is showing, else any card not in place.
+    final sel = state.selected;
+    final slot = sel != null && !b.isLocked(sel) ? sel : state.hintSlot ?? candidates[Random().nextInt(candidates.length)];
     state = state.copyWith(hintsUsed: state.hintsUsed + 1);
     _apply(b.moveTo(slot, b.homeOf(slot)), byPlayer: false);
     return true;
@@ -362,18 +365,23 @@ class GameController extends Notifier<GameState> {
 
   /// Gather (giant boards): brings the cards that belong in [view] (board coordinates at the
   /// board's [size]) into it, trading places with cards that belong elsewhere (see
-  /// [gatherInto]). Not a move; Undo takes it back. Returns how many cards came in.
-  int gather(Rect view, Size size) {
-    if (state.status != GameStatus.playing || state.peeking) return 0;
+  /// [gatherInto]); `gathered` is how many came in. When none has to come in (the view holds its
+  /// cards already, or they are just outside it), the loose cards in view are shuffled instead
+  /// ([shuffleInView]); `shuffled` is how many moved. Neither is a move; Undo takes either back.
+  ({int gathered, int shuffled}) gather(Rect view, Size size, {Random? random}) {
+    const nothing = (gathered: 0, shuffled: 0);
+    if (state.status != GameStatus.playing || state.peeking) return nothing;
     final before = state.board;
+    int changed(Board after) => [for (var s = 0; s < after.cells; s++) if (after.slots[s] != before.slots[s]) s].length;
     final after = gatherInto(before, view, size);
-    if (after == null) return 0;
-    var moved = 0;
-    for (var s = 0; s < after.cells; s++) {
-      if (after.slots[s] != before.slots[s]) moved++;
+    if (after != null) {
+      _apply(after, countMove: false, byPlayer: false);
+      return (gathered: changed(after) ~/ 2, shuffled: 0);
     }
-    _apply(after, countMove: false, byPlayer: false);
-    return moved ~/ 2;
+    final mixed = shuffleInView(before, view, size, random: random);
+    if (mixed == null) return nothing;
+    _apply(mixed, countMove: false, byPlayer: false);
+    return (gathered: 0, shuffled: changed(mixed));
   }
 
   void restart() {

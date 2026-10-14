@@ -100,7 +100,7 @@ class BoardZoom extends ChangeNotifier {
   /// This board's zoom limit (at most [maxZoom]).
   double get limit => _limit;
 
-  /// Where the double tap and the zoom-in button go from the whole board.
+  /// Where the zoom-in button goes from the whole board.
   double get step => math.min(stepZoom, _limit);
 
   /// Sets the limit from the size of one cell on screen at zoom 1. Called
@@ -205,10 +205,6 @@ class BoardZoom extends ChangeNotifier {
     _animateTo(z, f - content * z);
   }
 
-  /// Double tap: in at [focal] from the whole board, back to the whole board
-  /// when zoomed in.
-  void toggleAt(Offset focal) => zoomed ? reset() : zoomTo(step, focal: focal);
-
   /// Back to the whole board.
   void reset() => _animateTo(1, Offset.zero);
 
@@ -239,12 +235,6 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
   late final Ticker _autoPan = createTicker(_onAutoPan);
   Offset _autoPanVelocity = Offset.zero; // viewport points per second
   Duration _autoPanLast = Duration.zero;
-
-  // Double tap (zoomed boards): the first tap of a pair, so the second can
-  // undo it (select, then deselect) and zoom instead. Taps go through at
-  // once, so tap-tap moves never wait for a double tap that does not come.
-  ({int slot, int? selectedBefore, DateTime at})? _lastTap;
-  static const _doubleTapWindow = Duration(milliseconds: 280);
 
   // Pinch (zoomable boards): fingers on the board, the pinch's starting
   // point, and whether this touch has had two fingers (its taps and drags
@@ -304,26 +294,11 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
   static const _peekSpread = Duration(milliseconds: 320);
   static Duration _flightOf(int card) => _peekFlight + Duration(milliseconds: (card * 97 + 31) % 11 * _peekSpread.inMilliseconds ~/ 10);
 
-  /// A tap on [slot] at [local] (the card's own coordinates). On a zoomable
-  /// board a second tap on the same card right after a select or deselect is
-  /// a double tap: it puts the selection back the way it was and zooms in at
-  /// that point, or back out to the whole board.
-  void _tapped(int slot, Offset local) {
+  /// A tap on [slot]: select, deselect or move (the controller decides). No
+  /// double tap on giant boards (owner, 2026-10-14): two quick taps on a card
+  /// select and deselect it like on any board; pinch and the zoom buttons zoom.
+  void _tapped(int slot) {
     if (_multiTouch) return;
-    final zoom = widget.zoom;
-    final now = DateTime.now();
-    final last = _lastTap;
-    if (zoom != null && last != null && last.slot == slot && now.difference(last.at) < _doubleTapWindow) {
-      _lastTap = null;
-      // The first tap selected or deselected this card (a move would have
-      // gone elsewhere): restore what was selected before it.
-      if (last.selectedBefore == null || last.selectedBefore == slot) {
-        if (widget.state.selected != last.selectedBefore) widget.onTap(slot);
-        zoom.toggleAt(zoom.toViewport(tiling.cellBounds(slot, boardSize).topLeft + local));
-        return;
-      }
-    }
-    _lastTap = (slot: slot, selectedBefore: widget.state.selected, at: now);
     widget.onTap(slot);
   }
 
@@ -703,7 +678,7 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
           behavior: HitTestBehavior.opaque,
           // A touch that became a pinch neither taps nor drags. A card held
           // still for a moment shows where it belongs (Locate).
-          onTapUp: (d) => _tapped(slot, d.localPosition),
+          onTapUp: (_) => _tapped(slot),
           onPanStart: locked || state.status != GameStatus.playing
               ? null
               : (_) {

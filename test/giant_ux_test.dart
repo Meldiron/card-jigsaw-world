@@ -13,7 +13,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// The giant board tools: the zoom's limits and moves, the edge rule for every tiling, the saved
-/// views, the double tap, the overview map and the milestones.
+/// views, taps (no double tap), the overview map and the milestones.
 void main() {
   ui.Image picture(int w, int h) {
     final rec = ui.PictureRecorder();
@@ -148,12 +148,6 @@ void main() {
       expect(views.showMap, isFalse);
     });
 
-    test('Locate is on until switched off, apart from the map', () {
-      expect(views.locate, isTrue);
-      views.locate = false;
-      expect(views.locate, isFalse);
-      expect(views.showMap, isTrue);
-    });
   });
 
   group('giant board widget', () {
@@ -196,7 +190,7 @@ void main() {
       return rect.topLeft + zoom.toViewport(board.tiling.cellCenter(slot, Size(w.width, w.height)));
     }
 
-    testWidgets('double tap zooms in at the card, leaves the selection as it was, and zooms back out', (tester) async {
+    testWidgets('no double tap on a giant board: two quick taps on a card select and deselect it, and never zoom', (tester) async {
       final spec = BoardSpec.giantTiers(GameMode.cards).first;
       final board = Board.shuffled(spec, seed: 3);
       final (zoom, taps) = await pumpBoard(tester, board);
@@ -206,20 +200,21 @@ void main() {
       await tester.pump(const Duration(milliseconds: 60));
       await tester.tapAt(at);
       await tester.pumpAndSettle();
-      expect(zoom.zoomed, isTrue);
-      expect(zoom.zoom, closeTo(zoom.step, 1e-6));
-      // Selected by the first tap, deselected again for the double tap.
+      expect(zoom.zoomed, isFalse, reason: 'pinch and the zoom buttons zoom, taps never do');
       expect(taps, [slot, slot]);
       expect(tester.widget<BoardWidget>(find.byType(BoardWidget)).state.selected, isNull);
-      // The card that was double-tapped stays under the finger.
-      expect((slotOnScreen(tester, board, zoom, slot) - at).distance, lessThan(2));
-
-      final again = slotOnScreen(tester, board, zoom, slot);
+      // Zoomed in by the button: the same, no double tap back out.
+      zoom.zoomTo(zoom.step);
+      await tester.pumpAndSettle();
+      final rect = tester.getRect(find.byType(BoardWidget)).deflate(20);
+      final inView = List.generate(board.cells, (i) => i).firstWhere((i) => !board.isLocked(i) && rect.contains(slotOnScreen(tester, board, zoom, i)));
+      final again = slotOnScreen(tester, board, zoom, inView);
       await tester.tapAt(again);
       await tester.pump(const Duration(milliseconds: 60));
       await tester.tapAt(again);
       await tester.pumpAndSettle();
-      expect(zoom.zoomed, isFalse);
+      expect(zoom.zoomed, isTrue);
+      expect(taps, [slot, slot, inView, inView]);
     });
 
     testWidgets('two taps on different cards are a move, never a double tap', (tester) async {

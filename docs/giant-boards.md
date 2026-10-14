@@ -38,16 +38,23 @@ any other (`Board.shuffled`: no card in place, no pair joined).
 
 ### Finding a card's place
 
-- **Locate** (owner, 2026-10-14): tap a card on a zoomed board and the overview map shows where it
-  belongs: a ring there and a line from the card, for as long as the card is selected. It only uses
-  the map when the map is on (it never opens a hidden map), and the Locate switch in the bar turns it
-  off (remembered, `GiantViews.locate`, on by default). The first zoom with the map and Locate on says
-  so once ("Tap a card to see its place on the map").
-- **Gather** (in the bar while zoomed in): every card that belongs in the view comes into it. Each
-  card in view that belongs elsewhere trades places with one that belongs here, chosen so the card
-  leaving lands as close to its own place as it can. Cards in place, joined groups and trades that
-  would put a card straight into its place are left alone: Gather sorts, it never solves. It is not a
-  move; Undo takes it back. (`gatherInto` in `lib/game/gather.dart`.)
+- **Locate** (owner, 2026-10-14; always on since build 117, no switch): tap a card on a zoomed board
+  and the overview map shows where it belongs: a ring there and a line from the card, for as long as
+  the card is selected. It only uses the map when the map is on (it never opens a hidden map). The
+  first zoom with the map on says so once ("Tap a card to see its place on the map").
+- **Gather** (in the bar at every zoom, the whole board included): every card that belongs in the
+  view comes into it. Each card in view that belongs elsewhere trades places with one that belongs
+  here, chosen so the card leaving lands as close to its own place as it can. Cards in place, joined
+  groups and trades that would put a card straight into its place are left alone: Gather sorts, it
+  never solves, so the last card or two may stay just outside the view ("Every card for this view is
+  here or nearby"). (`gatherInto` in `lib/game/gather.dart`.)
+- **Shuffle** (owner, build 117): a Gather with nothing to bring in shuffles the loose cards in view
+  instead, so the view can be read afresh; on the whole board that is every loose card. Cards in place
+  and joined groups (also ones not yet in place) stay exactly where they are; every loose card moves,
+  none lands in its place and, where another order allows, no pair is joined. (`shuffleInView`.)
+  Neither Gather nor the shuffle is a move; Undo takes either back.
+- **Magic** puts the selected card in its place (owner, build 117); with nothing selected, the card a
+  Hint shows, else any card not in place.
 - **Peek** (10 coins on every board; owner, 2026-10-14: no free Peek on giant boards): every card not in place flies to its place,
   the picture shows (3.2 s on a giant board, 2.4 s elsewhere) and the cards fly back, each a little
   later than the last, so the picture builds itself in a ripple. Using it still counts for the
@@ -58,9 +65,9 @@ any other (`Board.shuffled`: no card in place, no pair joined).
 - **Pinch to zoom, two fingers to move; one finger plays as usual.** Tap-tap and drag work at
   every zoom, and a selected card stays selected while zooming and panning. The zoom changes only
   when the player asks (no automatic zoom: a top complaint elsewhere).
-- **Double tap to zoom** in at that card, double tap again for the whole board (PuzzleTouch). Taps
-  go through at once: the second tap of a double tap undoes the first one's select or deselect, so
-  tap-tap moves never wait.
+- **No double tap** (owner, build 117; it was there before, after PuzzleTouch): two quick taps on a
+  card select and deselect it like on any board. The zoom-in button goes in a step, the whole-board
+  button back out.
 - **A zoom limit per board** (`BoardZoom.fitCell`): a card reaches about 96 pt on screen at most,
   so the 100-card board stops near 2.5x and the 300-card board at 4x. Never so close that only two
   cards show.
@@ -82,8 +89,8 @@ any other (`Board.shuffled`: no card in place, no pair joined).
   owner on 2026-10-14.
 
 Code: Gather in `lib/game/gather.dart`; `BoardZoom`, the board's gestures and Peek's flight in
-`lib/features/game/board_widget.dart`; the bar (Locate, Gather, map, zoom), the map, the pointer and
-the milestones in `lib/features/game/giant_board.dart`; the saved views, the map and Locate switches
-and the Locate tip in `lib/state/giant.dart`. Tests: `test/gather_test.dart`, `test/giant_ux_test.dart`.
+`lib/features/game/board_widget.dart`; the bar (Gather, map, zoom), the map with Locate, the pointer
+and the milestones in `lib/features/game/giant_board.dart`; the saved views, the map switch and the
+Locate tip in `lib/state/giant.dart`. Tests: `test/gather_test.dart`, `test/giant_ux_test.dart`.
 QA: `integration_test/giant_ux_test.dart` and `integration_test/giant_tools_test.dart` play the real
 Giant pack.

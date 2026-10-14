@@ -74,10 +74,6 @@ class GiantViews {
   bool get showMap => _store.getJson(_prefsKey)?['map'] != false;
   set showMap(bool v) => _store.setJson(_prefsKey, {...?_store.getJson(_prefsKey), 'map': v});
 
-  /// Locate: a tapped card shows its place on the overview map (on by default; the map itself must be on).
-  bool get locate => _store.getJson(_prefsKey)?['locate'] != false;
-  set locate(bool v) => _store.setJson(_prefsKey, {...?_store.getJson(_prefsKey), 'locate': v});
-
   /// The one-time tip about tapping a card to see its place, shown the first time a giant board
   /// is zoomed in.
   bool get locateTipShown => _store.getJson(_prefsKey)?['locateTip'] == true;

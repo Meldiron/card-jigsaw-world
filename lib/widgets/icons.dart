@@ -72,7 +72,6 @@ class AppIcons {
 
   /// Giant boards: the overview map, and Locate (a tapped card's place on the map).
   static const minimap = CupertinoIcons.map;
-  static const locate = CupertinoIcons.location;
 
   /// Gather (giant boards): bring the cards that belong in view into it.
   static const gather = Icons.zoom_in_map_rounded;

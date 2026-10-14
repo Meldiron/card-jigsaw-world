@@ -1,3 +1,4 @@
+import 'dart:math' show Random;
 import 'dart:ui' show Rect, Size;
 
 import 'board.dart';
@@ -60,6 +61,71 @@ Board? gatherInto(Board board, Rect view, Size size) {
     next[f] = next[pick];
     next[pick] = t;
     moved++;
+  }
+  return moved == 0 ? null : Board(board.spec, next);
+}
+
+/// Shuffle (a Gather that has nothing to bring in): the loose cards in [view] trade places among
+/// themselves at random, so the view can be read afresh. Cards in place and joined groups (even
+/// ones not yet in place) stay exactly where they are; every loose card moves, none lands in its
+/// own place and, where another order allows it, no pair ends up joined. Each shape class shuffles
+/// within itself (up and down triangles, the half cells on hexagon edges). Null when fewer than two
+/// loose cards are in view.
+Board? shuffleInView(Board board, Rect view, Size size, {Random? random}) {
+  final rng = random ?? Random();
+  final tiling = board.tiling;
+  bool loose(int slot) => !board.isLocked(slot) && board.groupOf(slot).length == 1;
+  final byClass = <int, List<int>>{};
+  for (var s = 0; s < board.cells; s++) {
+    if (loose(s) && view.contains(tiling.cellCenter(s, size))) (byClass[tiling.classOf(s)] ??= []).add(s);
+  }
+  final next = List<int>.from(board.slots);
+  // The card may go to [slot]: it moves, and not into its own place.
+  bool fits(int slot, int card) => card != board.slots[slot] && card != slot;
+  int joinsAt(int slot) {
+    var n = 0;
+    for (final nb in tiling.neighbours(slot)) {
+      if (tiling.direction(next[slot], next[nb]) == tiling.direction(slot, nb)) n++;
+    }
+    return n;
+  }
+
+  void swap(int a, int b) {
+    final t = next[a];
+    next[a] = next[b];
+    next[b] = t;
+  }
+
+  var moved = 0;
+  for (final slots in byClass.values) {
+    if (slots.length < 2) continue;
+    // A random order in which every card moves and none goes home (about one in seven is).
+    List<int>? order;
+    for (var attempt = 0; attempt < 80 && order == null; attempt++) {
+      final o = [for (final s in slots) board.slots[s]]..shuffle(rng);
+      var ok = true;
+      for (var i = 0; i < slots.length && ok; i++) {
+        ok = fits(slots[i], o[i]);
+      }
+      if (ok) order = o;
+    }
+    // No such order (two cards that belong in each other's places, say): leave this class alone.
+    if (order == null) continue;
+    for (var i = 0; i < slots.length; i++) {
+      next[slots[i]] = order[i];
+    }
+    // A random order joins a pair or two on a big board: a joined card trades places with another
+    // loose card whenever that leaves fewer joins around the two.
+    for (var round = 0; round < slots.length * 8; round++) {
+      final joined = [for (final s in slots) if (joinsAt(s) > 0) s];
+      if (joined.isEmpty) break;
+      final a = joined[rng.nextInt(joined.length)], b = slots[rng.nextInt(slots.length)];
+      if (a == b || !fits(a, next[b]) || !fits(b, next[a])) continue;
+      final before = joinsAt(a) + joinsAt(b);
+      swap(a, b);
+      if (joinsAt(a) + joinsAt(b) >= before) swap(a, b);
+    }
+    moved += slots.length;
   }
   return moved == 0 ? null : Board(board.spec, next);
 }

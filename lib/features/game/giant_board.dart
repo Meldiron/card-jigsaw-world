@@ -11,21 +11,18 @@ import 'board_widget.dart';
 
 /// The tools around a giant board (100 to 300 cards and more), chosen from
 /// how big-board jigsaw apps help on a phone (see docs/giant-boards.md):
-/// a bar with the Locate switch, Gather and the zoom buttons, an overview map
-/// of the whole board while zoomed in (showing where a tapped card belongs),
+/// a bar with Gather and the zoom buttons, an overview map of the whole board
+/// while zoomed in (showing where the selected card belongs),
 /// a pointer to a selected card that is out of view, and calm milestones on
 /// the way (the frame, halfway).
 
-/// Above a giant board: the Locate switch, Gather (while zoomed in), a short
-/// hint, the overview map switch (while zoomed in), zoom in, and back to the
-/// whole board.
+/// Above a giant board: Gather (at any zoom), the zoom level and the overview
+/// map switch (while zoomed in), zoom in, and back to the whole board.
 class GiantBoardBar extends StatelessWidget {
   const GiantBoardBar({
     super.key,
     required this.zoom,
     required this.width,
-    required this.locate,
-    required this.onLocate,
     required this.showMap,
     required this.onMap,
     this.onGather,
@@ -33,13 +30,10 @@ class GiantBoardBar extends StatelessWidget {
 
   final BoardZoom zoom;
   final double width;
-  /// Locate: a tapped card shows where it belongs on the overview map (when the map is on).
-  final bool locate;
-  final VoidCallback onLocate;
   final bool showMap;
   final VoidCallback onMap;
 
-  /// Gather: brings the cards that belong in view into it (shown while zoomed in).
+  /// Gather: brings the cards that belong in view into it, or shuffles the loose ones (at any zoom).
   final VoidCallback? onGather;
 
   static const height = 44.0;
@@ -58,19 +52,15 @@ class GiantBoardBar extends StatelessWidget {
           final canZoomIn = zoom.zoom < zoom.limit - 0.01;
           return Row(
             children: [
-              _BarChip(key: const ValueKey('giant-locate'), icon: AppIcons.locate, label: 'Locate', on: locate, compact: compact, onTap: onLocate),
-              if (zoom.zoomed && onGather != null) ...[
-                SizedBox(width: compact ? 6 : 8),
-                _BarChip(key: const ValueKey('giant-gather'), icon: AppIcons.gather, label: 'Gather', compact: compact, onTap: onGather!),
-              ],
+              if (onGather != null) _BarChip(key: const ValueKey('giant-gather'), icon: AppIcons.gather, label: 'Gather', compact: compact, onTap: onGather!),
               const SizedBox(width: 10),
               Expanded(
                 child: LayoutBuilder(
-                  // The zoom level only when it fits whole.
-                  builder: (context, cons) => cons.maxWidth < (zoom.zoomed ? 72 : 150)
+                  // The zoom level, while zoomed in and only when it fits whole.
+                  builder: (context, cons) => !zoom.zoomed || cons.maxWidth < 72
                       ? const SizedBox.shrink()
                       : Text(
-                          zoom.zoomed ? 'Zoom ${zoom.zoom.toStringAsFixed(1)}x' : 'Pinch or double-tap to zoom',
+                          'Zoom ${zoom.zoom.toStringAsFixed(1)}x',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: c.textSecondary),
@@ -111,30 +101,27 @@ class GiantBoardBar extends StatelessWidget {
   }
 }
 
-/// A small capsule button: icon and label, cobalt while on (a switch such as
-/// Locate; an action such as Gather is never on).
+/// A small capsule button: icon and label (Gather).
 class _BarChip extends StatelessWidget {
-  const _BarChip({super.key, required this.icon, required this.label, this.on = false, this.compact = false, required this.onTap});
+  const _BarChip({super.key, required this.icon, required this.label, this.compact = false, required this.onTap});
   final IconData icon;
   final String label;
-  final bool on;
   final bool compact;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    final fg = on ? context.accent : c.textSecondary;
+    final fg = c.textSecondary;
     return Pressable(
       onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 160),
+      child: Container(
         height: 34,
         padding: EdgeInsets.symmetric(horizontal: compact ? 9 : 12),
         decoration: BoxDecoration(
-          color: on ? c.accentTint : c.card,
+          color: c.card,
           borderRadius: BorderRadius.circular(17),
-          border: Border.all(color: on ? context.accent.withValues(alpha: 0.5) : c.stroke),
+          border: Border.all(color: c.stroke),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -151,9 +138,9 @@ class _BarChip extends StatelessWidget {
 
 /// The whole board in miniature while zoomed in: the cards as they lie now
 /// (cards in place bright, the rest darker, so the unfinished areas are easy
-/// to spot), the part in view outlined, and the selected card marked. With
-/// Locate on, the tapped card shows where it belongs: a ring there and a
-/// line to it. Tap or drag on the map to move the view there.
+/// to spot), the part in view outlined, and the selected card marked with
+/// where it belongs (Locate): a ring there and a line to it. Tap or drag on
+/// the map to move the view there.
 class GiantMinimap extends StatelessWidget {
   const GiantMinimap({
     super.key,
@@ -177,7 +164,7 @@ class GiantMinimap extends StatelessWidget {
   final int? selected;
   final bool painting;
 
-  /// The located card's slot: the selected card while Locate is on.
+  /// The located card's slot: the selected card (not in place).
   final int? locate;
 
   @override

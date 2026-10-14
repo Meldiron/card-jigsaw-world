@@ -1,6 +1,6 @@
 // Giant boards with the real Giant pack ("Colourful Houses", 4096 px pictures) on the live
-// backend: the size picker, the whole 306-card board, the Edges filter, double tap and pinch to
-// zoom, the overview map, the pointer to a selected card out of view, auto-pan while dragging,
+// backend: the size picker, the whole 306-card board, the zoom-in button and pinch to zoom (no
+// double tap), the overview map, the pointer to a selected card out of view, auto-pan while dragging,
 // resuming on the same view, every shape at its largest giant size (with frame timings), and a
 // full solve of the smallest giant board with the frame and halfway milestones.
 //
@@ -170,7 +170,7 @@ void main() {
     container(tester).read(routerProvider).pop();
     await settle(tester, 800);
 
-    // ---- Cards, Colossal (306): the whole board, Edges, double tap, pinch, the close view.
+    // ---- Cards, Colossal (306): the whole board, the zoom-in button, pinch, the close view.
     await openBoard(tester, pictures[0], 'Cards', 'Colossal');
     await shot(tester, 'gx_02_cards_colossal_whole');
     final z = zoomOf(tester);
@@ -178,18 +178,13 @@ void main() {
     debugPrint('QA_GIANT ${pictures[0].title}: ${board(tester).state.board.cells} cards, limit ${z.limit.toStringAsFixed(2)}x');
 
 
-    // Double tap a card near the top left: zoom in there, nothing selected.
-    final b0 = board(tester).state.board;
-    final corner = List.generate(b0.cells, (i) => i).firstWhere((i) => !b0.isLocked(i) && i > b0.cols + 1);
-    final at = onScreen(tester, corner);
-    await tester.tapAt(at);
-    await tester.pump(const Duration(milliseconds: 80));
-    await tester.tapAt(at);
+    // The zoom-in button: in by one step, nothing selected, the overview map in the corner.
+    await tester.tap(find.byKey(const ValueKey('zoom-in')), warnIfMissed: false);
     await settle(tester, 900);
     expect(z.zoomed, isTrue);
-    expect(board(tester).state.selected, isNull, reason: 'a double tap leaves the selection as it was');
+    expect(board(tester).state.selected, isNull);
     expect(find.byKey(const ValueKey('giant-minimap')), findsOneWidget);
-    await shot(tester, 'gx_04_double_tap_zoom');
+    await shot(tester, 'gx_04_zoom_button');
 
     // Pinch further in, to the board's limit: is the real picture sharp up close?
     results.add(await timings(tester, 'cards 306 pinch', () => pinch(tester, boardRect(tester).center, 80, 260)));

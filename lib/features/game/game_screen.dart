@@ -60,13 +60,11 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   /// Zoom of giant boards (the zoom bar and the board share it).
   late final BoardZoom _zoom = BoardZoom(vsync: this);
 
-  /// Giant boards: the overview map and Locate (both remembered), and the
-  /// saved view, restored once when a board resumes and written shortly
-  /// after the player stops zooming or panning.
+  /// Giant boards: the overview map (remembered; the selected card's place
+  /// shows on it), and the saved view, restored once when a board resumes
+  /// and written shortly after the player stops zooming or panning.
   late bool _showMap = ref.read(giantViewsProvider).showMap;
 
-  /// Locate: while the map is on, the selected card's place shows on it.
-  late bool _locateOn = ref.read(giantViewsProvider).locate;
   bool _viewRestored = false;
   bool _viewCleared = false;
   String? _viewId;
@@ -120,7 +118,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   /// The first time a giant board is zoomed in with the map and Locate on:
   /// how to find a card's place.
   void _maybeLocateTip() {
-    if (!_zoom.zoomed || _zoom.zoom < 1.5 || !_showMap || !_locateOn) return;
+    if (!_zoom.zoomed || _zoom.zoom < 1.5 || !_showMap) return;
     final views = ref.read(giantViewsProvider);
     if (views.locateTipShown) return;
     views.locateTipShown = true;
@@ -505,14 +503,19 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   }
 
   /// Gather (zoomed giant board): the cards that belong in view come into it.
+  /// Gather (giant boards, at any zoom): the cards that belong in view come into it; when they
+  /// are all here or nearby already, the loose ones in view are shuffled instead.
   void _gather(Size boardSize) {
-    final n = _ctrl.gather(_zoom.visible, boardSize);
-    if (n == 0) {
-      showToast(context, 'Every card for this view is here', icon: AppIcons.gather);
-      return;
+    final r = _ctrl.gather(_zoom.visible, boardSize);
+    if (r.gathered > 0) {
+      Haptics.medium();
+      showToast(context, '${r.gathered} card${r.gathered == 1 ? '' : 's'} gathered', icon: AppIcons.gather);
+    } else if (r.shuffled > 0) {
+      Haptics.medium();
+      showToast(context, 'Every card for this view is here or nearby. The loose ones were shuffled.', icon: AppIcons.gather);
+    } else {
+      showToast(context, 'Every card for this view is here or nearby', icon: AppIcons.gather);
     }
-    Haptics.medium();
-    showToast(context, '$n card${n == 1 ? '' : 's'} gathered', icon: AppIcons.gather);
   }
 
   void _offerStore(String message) {
@@ -603,7 +606,8 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     final zoomable = state.board.spec.isGiant;
     if (zoomable && image.hasValue) _syncView(state);
     final sel = state.selected;
-    final locate = _locateOn && sel != null && sel < state.board.cells && !state.board.isLocked(sel) ? sel : null;
+    // Locate: while the map is on, the selected card's place shows on it.
+    final locate = sel != null && sel < state.board.cells && !state.board.isLocked(sel) ? sel : null;
 
     return Scaffold(
       backgroundColor: c.canvas,
@@ -672,11 +676,6 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                                     GiantBoardBar(
                                       zoom: _zoom,
                                       width: w,
-                                      locate: _locateOn,
-                                      onLocate: () {
-                                        setState(() => _locateOn = !_locateOn);
-                                        ref.read(giantViewsProvider).locate = _locateOn;
-                                      },
                                       showMap: _showMap,
                                       onMap: () {
                                         setState(() => _showMap = !_showMap);
