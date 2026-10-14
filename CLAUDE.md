@@ -206,8 +206,10 @@ skills under `.claude/skills/` hold the detailed workflows.
 ## App Store / TestFlight
 
 - Bundle `com.matejbaco.cardjigsawworld` (widget `.DailyWidget`), team `C24QP73SQM`, app id
-  `6821644423`, primary locale en-GB, iPhone only. Current cycle: version **1.7.0**; builds 103 and 108
-  passed Beta App Review, so later 1.7.0 builds reach public testers without review.
+  `6821644423`, primary locale en-GB, iPhone only. Current cycle: version **1.7.0**; build 103 passed the
+  full Beta App Review. Apple still wants a beta review submission for every later 1.7.0 build (the workflow
+  files it; the log says WAITING_FOR_REVIEW), but those are approved automatically within minutes (108-115
+  all were), so public testers get each build shortly after it processes.
 - Groups: "Internal testers" (all builds instantly), "Public testers"
   (https://testflight.apple.com/join/7nPCfg6A).
 - Subscriptions: vip_monthly 6821645754 ($2.99), vip_yearly 6821646642 ($14.99), both 1-week trial;
