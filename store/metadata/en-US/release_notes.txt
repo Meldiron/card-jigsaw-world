@@ -24,6 +24,7 @@ Reminders and account
 - New events: a reminder the evening before a world-day event opens, if you have not played for a while.
 - Delete your account in the app: Profile > Account > Delete account.
 - Settings: Rate Card Jigsaw World, the real app version, and Redeem a pack code for special packs. Dark and tinted Home Screen icons on iOS 18.
+- Links to packs, pictures, player profiles, the store and pack codes open the matching screen, in the app and on the web site.
 
 Pictures and sync
 - New Illustration packs: Big Buck Bunny, Fantasy Worlds, Pantry Shelves, Tinker's Workshop, Garden Plots and House and Home.

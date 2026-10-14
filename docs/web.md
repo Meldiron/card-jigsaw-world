@@ -60,12 +60,16 @@ that column so the phone layout is not stretched. Narrow windows are untouched.
 ## Routing
 
 `main.dart` calls `usePathUrlStrategy()` on web, so links are plain paths:
-`/play/<puzzleId>`, `/library/pack/<packId>`, `/store`, `/auth/callback`.
-Unknown paths fall back to Home (`onException` in `lib/router.dart`) instead
-of the framework's error page.
+`/play/<puzzleId>`, `/library/pack/<packId>`, `/store`, `/redeem?code=...`,
+`/auth/callback`. Every link the app knows, and how a visit that starts on one
+is shown (Home beneath a picture or the store, sheets for codes), is in
+[deep-links.md](deep-links.md). Unknown paths fall back to Home (`onException`
+in `lib/router.dart`) instead of the framework's error page.
 
 The host must serve `index.html` for every path (single-page fallback), or
-deep links and the OAuth callback return a 404.
+deep links and the OAuth callback return a 404. The site also serves
+`/.well-known/apple-app-site-association` (from `web/`), which lets the same
+addresses open the iPhone app where it is installed.
 
 ## Build
 

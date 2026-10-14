@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart' show Material, Colors;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'core/app_links.dart';
+import 'core/platform.dart';
 import 'features/daily/wheel_screen.dart';
 import 'features/events/events_screen.dart';
 import 'features/gallery/library_screen.dart';
@@ -11,11 +12,11 @@ import 'features/game/game_screen.dart';
 import 'features/game/difficulty_screen.dart';
 import 'features/home/home_screen.dart';
 import 'features/home/home_shell.dart';
+import 'features/links/deep_links.dart';
 import 'features/onboarding/onboarding_screen.dart';
 import 'features/profile/account_screen.dart';
 import 'features/profile/my_puzzles_screen.dart';
 import 'features/profile/profile_screen.dart';
-import 'features/profile/redeem_code_sheet.dart';
 import 'features/profile/settings_screen.dart';
 import 'features/social/player_screen.dart';
 import 'features/social/social_screen.dart';
@@ -26,20 +27,29 @@ import 'state/settings.dart';
 final rootNavigatorKey = GlobalKey<NavigatorState>();
 
 final routerProvider = Provider<GoRouter>((ref) {
-  final onboarded = ref.watch(settingsProvider.select((s) => s.onboarded));
-  return GoRouter(
+  bool onboarded() => ref.read(settingsProvider).onboarded;
+  final webLink = isWeb ? _webStartLink() : null;
+  final router = GoRouter(
     navigatorKey: rootNavigatorKey,
-    initialLocation: onboarded ? '/home' : '/welcome',
-    // Unknown paths (typed URLs on web, stale links) land on Home instead of
-    // the framework's error page. `/auth/callback` is reserved for the
-    // Appwrite OAuth redirect; until its handler is registered it also
-    // falls back here.
-    onException: (context, state, router) => router.go(onboarded ? '/home' : '/welcome'),
+    // A web visit that starts on a link which needs Home beneath it (a picture, the store, a pack
+    // code) starts on Home and hands the link to DeepLinks after the first frame.
+    initialLocation: webLink != null || onboarded() ? '/home' : '/welcome',
+    overridePlatformDefaultLocation: webLink != null,
+    // Unknown paths (typed URLs on web, stale links) land on Home instead of the framework's
+    // error page; a link the router has no page for (/quests, /redeem, /daily, see AppLink) goes
+    // to DeepLinks. `/auth/callback` is reserved for the Appwrite OAuth redirect.
+    onException: (context, state, router) {
+      final link = AppLink.parse(state.uri);
+      if (link != null && !(link.kind == LinkKind.page && link.path == '/home')) {
+        ref.read(deepLinksProvider).show(link);
+      } else {
+        router.go(onboarded() ? '/home' : '/welcome');
+      }
+    },
     redirect: (context, state) {
-      // Deep links (the widget's /play/<id>, App Store In-App Events' /library/pack/<id>) go
-      // straight to their screen, even for new installs, and count as onboarding.
-      final path = state.uri.path;
-      if (!onboarded && (path.startsWith('/play/') || path.startsWith('/library/pack/'))) {
+      // A link into the game (the widget's /play/<id>, a pack from an In-App Event, a web
+      // address) goes straight to its screen, even for a new install, and counts as onboarding.
+      if (!onboarded() && state.uri.path != '/home' && AppLink.parse(state.uri) != null) {
         ref.read(settingsProvider.notifier).setOnboarded();
       }
       return null;
@@ -99,21 +109,34 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(path: '/store', parentNavigatorKey: rootNavigatorKey, pageBuilder: (c, s) => _sheet(StoreScreen(showVip: s.uri.queryParameters['vip'] == '1'), s)),
       GoRoute(path: '/wheel', parentNavigatorKey: rootNavigatorKey, pageBuilder: (c, s) => _sheet(const WheelScreen(), s)),
-      // Pack codes shared as a link (`/redeem?code=ABCD-EFGH-JKLM-NPQR`, e.g. on the web site).
-      GoRoute(
-        path: '/redeem',
-        parentNavigatorKey: rootNavigatorKey,
-        pageBuilder: (c, s) => _sheet(
-          Material(color: Colors.transparent, child: SafeArea(child: RedeemCodePanel(initialCode: s.uri.queryParameters['code']))),
-          s,
-        ),
-      ),
       GoRoute(path: '/account', parentNavigatorKey: rootNavigatorKey, pageBuilder: (c, s) => _sheet(const AccountScreen(), s)),
       GoRoute(path: '/auth/callback', parentNavigatorKey: rootNavigatorKey, pageBuilder: (c, s) => _fade(AuthCallbackScreen(query: s.uri.queryParameters), s)),
       GoRoute(path: '/player/:userId', parentNavigatorKey: rootNavigatorKey, pageBuilder: (c, s) => _cupertino(PlayerScreen(userId: s.pathParameters['userId']!), s)),
     ],
   );
+  // One router for the app's life, so a link that finishes onboarding keeps its screen. After an
+  // account deletion (onboarded goes back to false) the welcome screens show again.
+  ref.listen(settingsProvider.select((s) => s.onboarded), (was, now) {
+    if (was == true && !now) router.go('/welcome');
+  });
+  if (webLink != null) {
+    WidgetsBinding.instance.addPostFrameCallback((_) => ref.read(deepLinksProvider).show(webLink));
+  }
+  ref.onDispose(router.dispose);
+  return router;
 });
+
+/// The link a web visit starts on, when it needs more than the router's own page: an alias
+/// (`/quests`, `/pack/<id>`), a query the screen reads (`/library?filter=Giant`), an overlay that
+/// needs Home beneath it, or an action. Null for the site root and for plain pages.
+AppLink? _webStartLink() {
+  final start = Uri.parse(WidgetsBinding.instance.platformDispatcher.defaultRouteName);
+  if (start.path.isEmpty || start.path == '/') return null;
+  final link = AppLink.parse(start);
+  if (link == null) return null;
+  if (link.kind == LinkKind.page && !link.location.hasQuery && link.path == start.path) return null;
+  return link;
+}
 
 Page<T> _cupertino<T>(Widget child, GoRouterState s) => CupertinoPage<T>(key: s.pageKey, child: child);
 Page<T> _noAnim<T>(Widget child, GoRouterState s) => NoTransitionPage<T>(key: s.pageKey, child: child);

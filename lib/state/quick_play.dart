@@ -9,6 +9,7 @@ import 'catalog.dart';
 import 'giant.dart';
 import 'profile.dart';
 import 'progress.dart';
+import 'rewards.dart';
 
 /// Which pictures Quick play draws from, in order of preference.
 enum QuickPlayTier {
@@ -94,6 +95,14 @@ String quickPlayRoute(Puzzle puzzle, {PuzzleProgress? saved, BoardSpec? board}) 
     if (preselect) 'grid': BoardCode.toPath(board.fullCode),
     'from': 'quick',
   }).toString();
+}
+
+/// [board] when the player may still play its tier (by level, or bought with [hasTier]); null
+/// otherwise, and Quick play preselects nothing.
+BoardSpec? openQuickPlayBoard(BoardSpec? board, {required int level, required bool Function(GameMode mode, int tier) hasTier}) {
+  if (board == null) return null;
+  final tier = board.tierIndex;
+  return tier <= LevelRewards.maxTierIndex(level) || hasTier(board.mode, tier) ? board : null;
 }
 
 /// Quick play's pool for the signed-in player (Home shows what it will do).

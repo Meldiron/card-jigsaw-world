@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quick_actions/quick_actions.dart';
 
+import 'core/app_links.dart';
 import 'core/appwrite.dart';
 import 'core/image_files.dart';
 import 'core/platform.dart';
@@ -10,6 +11,7 @@ import 'core/sfx.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/tokens.dart';
 import 'data/purchases.dart';
+import 'features/links/deep_links.dart';
 import 'features/sync/sync_host.dart';
 import 'features/update/update_host.dart';
 import 'router.dart';
@@ -78,6 +80,20 @@ class _CardJigsawAppState extends ConsumerState<CardJigsawApp> with WidgetsBindi
       });
       ref.read(remindersProvider).refresh();
     });
+  }
+
+  /// Links opened from outside the app on iPhone (the `cardjigsaw://` scheme, universal links to
+  /// the web site, the widget) reach this observer before the router's: [DeepLinks] shows them,
+  /// with Home beneath a sheet or a page that opens above the tabs. Other schemes (the Appwrite
+  /// sign-in redirect) go on to the router. On the web the link is the address the visit starts
+  /// on (`routerProvider`), and browser back and forward stay with the router.
+  @override
+  Future<bool> didPushRouteInformation(RouteInformation routeInformation) async {
+    if (isWeb) return false;
+    final link = AppLink.parse(routeInformation.uri);
+    if (link == null) return false;
+    ref.read(deepLinksProvider).show(link);
+    return true;
   }
 
   @override

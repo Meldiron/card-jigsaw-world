@@ -12,6 +12,7 @@ import '../../core/theme/tokens.dart';
 import '../../game/board.dart';
 import '../../game/image_loader.dart';
 import '../../models/models.dart';
+import '../../state/catalog.dart';
 import '../../state/giant.dart';
 import '../../state/profile.dart';
 import '../../state/progress.dart';
@@ -287,12 +288,21 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
       appBar: GlassAppBar(
         leading: Padding(
           padding: const EdgeInsets.only(left: 12),
-          child: RoundIconButton(icon: CupertinoIcons.back, size: 38, onTap: () => context.pop()),
+          child: RoundIconButton(icon: CupertinoIcons.back, size: 38, onTap: () => context.canPop() ? context.pop() : context.go('/home')),
         ),
         title: Text(puzzle?.title ?? 'Puzzle'),
       ),
       body: puzzle == null
-          ? const Loader()
+          // A link to a picture that is gone (or someone else's photo) says so once the
+          // catalogue and the player's own photos have answered.
+          ? (ref.watch(allPuzzlesProvider).hasValue && ref.watch(myPuzzleByIdProvider(widget.puzzleId)).hasValue
+              ? const EmptyState(
+                  key: ValueKey('picture-not-available'),
+                  icon: AppIcons.image,
+                  title: 'Picture not available',
+                  message: 'The link may be out of date, or the picture belongs to another player.',
+                )
+              : const Loader())
           : SafeArea(
               top: false,
               child: Column(

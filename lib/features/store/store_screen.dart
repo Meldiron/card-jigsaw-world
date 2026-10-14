@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show ScrollCacheExtent;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
@@ -241,6 +242,9 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
       ),
       body: ListView(
         physics: const BouncingScrollPhysics(),
+        // Opened at VIP (`/store?vip=1`): the VIP card, far down the list, is built at once so it
+        // can be scrolled to.
+        scrollCacheExtent: widget.showVip ? const ScrollCacheExtent.pixels(6000) : null,
         // The store is a sheet: the end padding clears the home indicator.
         padding: EdgeInsets.fromLTRB(20, MediaQuery.paddingOf(context).top + kToolbarHeight + 8, 20, GlassTabBar.scrollEndPadding(context)),
         children: [

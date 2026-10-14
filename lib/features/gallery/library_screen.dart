@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show ScrollCacheExtent;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -197,10 +198,20 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
   final _search = TextEditingController();
   final _searchFocus = FocusNode();
 
+  /// Chip keys, so a chip picked from elsewhere (a link: `/library?filter=Giant`) scrolls into view.
+  final _chipKeys = <String, GlobalKey>{};
+
   @override
   void initState() {
     super.initState();
     _search.addListener(_onQuery);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _revealChip(ref.read(libraryFilterProvider)));
+  }
+
+  void _revealChip(String chip) {
+    final ctx = _chipKeys[chip]?.currentContext;
+    if (ctx == null || !ctx.mounted || chip == LibraryFilter.all) return;
+    Scrollable.ensureVisible(ctx, alignment: 0.5, duration: const Duration(milliseconds: 300), curve: Curves.easeOutCubic);
   }
 
   String _query = '';
@@ -246,6 +257,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
     // A chip that is no longer offered (e.g. Unlocked after going VIP) falls back to All.
     final selected = ref.watch(libraryFilterProvider);
     final filter = chips.contains(selected) ? selected : LibraryFilter.all;
+    ref.listen(libraryFilterProvider, (_, next) => WidgetsBinding.instance.addPostFrameCallback((_) => _revealChip(next)));
     final inFinished = filter == LibraryFilter.finished;
 
     List<Pack> view({String? f, bool? hide, String? q}) => libraryPacks(
@@ -310,14 +322,19 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.fromLTRB(20, 12, 20, 6),
               physics: const BouncingScrollPhysics(),
+              // Every chip is built, so any of them can be scrolled to.
+              scrollCacheExtent: const ScrollCacheExtent.pixels(4000),
               itemCount: chips.length,
               separatorBuilder: (_, _) => const SizedBox(width: 8),
-              itemBuilder: (_, i) => _FilterChip(
-                key: ValueKey('library-chip-${chips[i]}'),
-                label: chips[i],
-                icon: libraryChipIcon(chips[i]),
-                selected: chips[i] == filter,
-                onTap: () => ref.read(libraryFilterProvider.notifier).select(chips[i]),
+              itemBuilder: (_, i) => KeyedSubtree(
+                key: _chipKeys.putIfAbsent(chips[i], GlobalKey.new),
+                child: _FilterChip(
+                  key: ValueKey('library-chip-${chips[i]}'),
+                  label: chips[i],
+                  icon: libraryChipIcon(chips[i]),
+                  selected: chips[i] == filter,
+                  onTap: () => ref.read(libraryFilterProvider.notifier).select(chips[i]),
+                ),
               ),
             ),
           ),

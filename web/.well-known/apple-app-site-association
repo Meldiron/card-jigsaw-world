@@ -1,0 +1,156 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": [
+          "C24QP73SQM.com.matejbaco.cardjigsawworld"
+        ],
+        "components": [
+          {
+            "/": "/auth/*",
+            "exclude": true,
+            "comment": "web sign-in callback stays in the browser"
+          },
+          {
+            "/": "/"
+          },
+          {
+            "/": "/home"
+          },
+          {
+            "/": "/library"
+          },
+          {
+            "/": "/library/pack/*"
+          },
+          {
+            "/": "/pack/*"
+          },
+          {
+            "/": "/packs/*"
+          },
+          {
+            "/": "/play/*"
+          },
+          {
+            "/": "/picture/*"
+          },
+          {
+            "/": "/puzzle/*"
+          },
+          {
+            "/": "/game/*/*"
+          },
+          {
+            "/": "/events"
+          },
+          {
+            "/": "/quests"
+          },
+          {
+            "/": "/social"
+          },
+          {
+            "/": "/leaderboard"
+          },
+          {
+            "/": "/league"
+          },
+          {
+            "/": "/friends"
+          },
+          {
+            "/": "/add-friend"
+          },
+          {
+            "/": "/friend"
+          },
+          {
+            "/": "/friend/*"
+          },
+          {
+            "/": "/profile"
+          },
+          {
+            "/": "/profile/settings"
+          },
+          {
+            "/": "/profile/account"
+          },
+          {
+            "/": "/profile/my-puzzles"
+          },
+          {
+            "/": "/settings"
+          },
+          {
+            "/": "/my-puzzles"
+          },
+          {
+            "/": "/account"
+          },
+          {
+            "/": "/sign-in"
+          },
+          {
+            "/": "/player/*"
+          },
+          {
+            "/": "/user/*"
+          },
+          {
+            "/": "/store"
+          },
+          {
+            "/": "/shop"
+          },
+          {
+            "/": "/vip"
+          },
+          {
+            "/": "/wheel"
+          },
+          {
+            "/": "/lucky-wheel"
+          },
+          {
+            "/": "/redeem"
+          },
+          {
+            "/": "/redeem/*"
+          },
+          {
+            "/": "/code"
+          },
+          {
+            "/": "/code/*"
+          },
+          {
+            "/": "/daily"
+          },
+          {
+            "/": "/today"
+          },
+          {
+            "/": "/quick"
+          },
+          {
+            "/": "/quick-play"
+          },
+          {
+            "/": "/gift"
+          },
+          {
+            "/": "/daily-gift"
+          },
+          {
+            "/": "/piggy"
+          },
+          {
+            "/": "/piggy-bank"
+          }
+        ]
+      }
+    ]
+  }
+}

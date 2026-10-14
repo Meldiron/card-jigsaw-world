@@ -835,19 +835,11 @@ final _quickPlayRandom = Random();
 class _QuickPlayCard extends ConsumerWidget {
   const _QuickPlayCard();
 
-  /// [board] when the player may still play its tier (level or bought).
-  static BoardSpec? _open(WidgetRef ref, BoardSpec? board, Profile? profile) {
-    if (board == null) return null;
-    final tier = board.tierIndex;
-    final open = tier <= LevelRewards.maxTierIndex(profile?.level ?? 1) || ref.read(profileProvider.notifier).hasTier(board.mode, tier);
-    return open ? board : null;
-  }
-
   void _start(BuildContext context, WidgetRef ref) {
     final puzzle = pickQuickPlay(ref.read(quickPlayPoolProvider), _quickPlayRandom);
     if (puzzle == null) return;
     Haptics.light();
-    final board = _open(ref, ref.read(quickPlayBoardProvider), ref.read(profileProvider).value);
+    final board = openQuickPlayBoard(ref.read(quickPlayBoardProvider), level: ref.read(profileProvider).value?.level ?? 1, hasTier: ref.read(profileProvider.notifier).hasTier);
     context.push(quickPlayRoute(puzzle, saved: ref.read(progressProvider).value?[puzzle.id], board: board));
   }
 

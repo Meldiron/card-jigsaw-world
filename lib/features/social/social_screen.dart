@@ -15,68 +15,81 @@ import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 import '../home/header_bar.dart';
 
-/// Social: the leaderboard (every player by total XP) and friends (add by friend code).
-class SocialScreen extends ConsumerStatefulWidget {
-  const SocialScreen({super.key});
+/// Social's tab: 0 the leaderboard, 1 friends. A provider, so a link (`/social?tab=friends`,
+/// `/add-friend?code=...`) can pick it.
+class SocialTab extends Notifier<int> {
+  static const leaderboard = 0;
+  static const friends = 1;
+
   @override
-  ConsumerState<SocialScreen> createState() => _SocialScreenState();
+  int build() => leaderboard;
+
+  void select(int tab) => state = tab;
 }
 
-class _SocialScreenState extends ConsumerState<SocialScreen> {
-  int _tab = 0;
+final socialTabProvider = NotifierProvider<SocialTab, int>(SocialTab.new);
 
-  Future<void> _addFriend() async {
-    final controller = TextEditingController();
-    final c = context.colors;
-    final ok = await showAppAlert(
-      context,
-      title: 'Add friend by code',
-      message: 'Paste the code your friend shared. Yours is on the Friends tab.',
-      confirmLabel: 'Add friend',
-      cancelLabel: 'Not now',
-      canConfirm: () => controller.text.trim().isNotEmpty,
-      child: CupertinoTextField(
-        controller: controller,
-        placeholder: 'Friend code',
-        autofocus: true,
-        autocorrect: false,
-        style: TextStyle(fontFamily: 'Menlo', fontSize: 13.5, color: c.textPrimary),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        decoration: BoxDecoration(
-          color: c.boardBackground,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: c.stroke),
-        ),
+/// "Add friend by code": Social > Friends, and the link `/add-friend?code=<friend code>`, which
+/// fills the code in.
+Future<void> showAddFriendAlert(BuildContext context, {String? code}) async {
+  final container = ProviderScope.containerOf(context, listen: false);
+  final controller = TextEditingController(text: code?.trim() ?? '');
+  final c = context.colors;
+  final ok = await showAppAlert(
+    context,
+    title: 'Add friend by code',
+    message: 'Paste the code your friend shared. Yours is on the Friends tab.',
+    confirmLabel: 'Add friend',
+    cancelLabel: 'Not now',
+    canConfirm: () => controller.text.trim().isNotEmpty,
+    child: CupertinoTextField(
+      key: const ValueKey('add-friend-field'),
+      controller: controller,
+      placeholder: 'Friend code',
+      autofocus: code == null || code.trim().isEmpty,
+      autocorrect: false,
+      style: TextStyle(fontFamily: 'Menlo', fontSize: 13.5, color: c.textPrimary),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: c.boardBackground,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: c.stroke),
       ),
-    );
-    final code = ok ? controller.text.trim() : null;
-    if (code == null || code.isEmpty || !mounted) return;
-    final me = ref.read(currentUserIdProvider);
-    if (me == null) return;
-    if (code == me) {
-      showToast(context, 'That is your own code. Share it with a friend instead.', icon: AppIcons.profile);
+    ),
+  );
+  final entered = ok ? controller.text.trim() : null;
+  if (entered == null || entered.isEmpty || !context.mounted) return;
+  final me = container.read(currentUserIdProvider);
+  if (me == null) return;
+  if (entered == me) {
+    showToast(context, 'That is your own code. Share it with a friend instead.', icon: AppIcons.profile);
+    return;
+  }
+  try {
+    final friend = await container.read(profileRepositoryProvider).findByUserId(entered);
+    if (friend == null) {
+      if (context.mounted) showToast(context, 'No player with that code. Check it and try again.', icon: CupertinoIcons.search);
       return;
     }
-    try {
-      final friend = await ref.read(profileRepositoryProvider).findByUserId(code);
-      if (friend == null) {
-        if (mounted) showToast(context, 'No player with that code. Check it and try again.', icon: CupertinoIcons.search);
-        return;
-      }
-      await ref.read(socialRepositoryProvider).addFriend(me, friend);
-      ref.invalidate(friendsProvider);
-      if (mounted) {
-        Haptics.success();
-        showToast(context, 'Added ${friend.displayName}', icon: AppIcons.addFriend);
-      }
-    } catch (e) {
-      if (mounted) showToast(context, 'Could not add friend. Check your connection and try again.', icon: AppIcons.signal);
+    await container.read(socialRepositoryProvider).addFriend(me, friend);
+    container.invalidate(friendsProvider);
+    if (context.mounted) {
+      Haptics.success();
+      showToast(context, 'Added ${friend.displayName}', icon: AppIcons.addFriend);
     }
+  } catch (e) {
+    if (context.mounted) showToast(context, 'Could not add friend. Check your connection and try again.', icon: AppIcons.signal);
   }
+}
+
+/// Social: the leaderboard (every player by total XP) and friends (add by friend code).
+class SocialScreen extends ConsumerWidget {
+  const SocialScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final c = context.colors;
+    final tab = ref.watch(socialTabProvider);
     return Scaffold(
       body: Column(
         children: [
@@ -87,7 +100,7 @@ class _SocialScreenState extends ConsumerState<SocialScreen> {
               children: [
                 Expanded(child: Text('Social', style: Theme.of(context).textTheme.headlineLarge)),
                 CupertinoSlidingSegmentedControl<int>(
-                  groupValue: _tab,
+                  groupValue: tab,
                   backgroundColor: c.boardBackground,
                   thumbColor: c.card,
                   children: const {
@@ -100,12 +113,12 @@ class _SocialScreenState extends ConsumerState<SocialScreen> {
                       child: Text('Friends', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
                     ),
                   },
-                  onValueChanged: (v) => setState(() => _tab = v ?? 0),
+                  onValueChanged: (v) => ref.read(socialTabProvider.notifier).select(v ?? SocialTab.leaderboard),
                 ),
               ],
             ),
           ),
-          Expanded(child: _tab == 0 ? const _Leaderboard() : _Friends(onAdd: _addFriend)),
+          Expanded(child: tab == SocialTab.leaderboard ? const _Leaderboard() : _Friends(onAdd: () => showAddFriendAlert(context))),
         ],
       ),
     );

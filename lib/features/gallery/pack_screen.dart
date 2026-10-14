@@ -27,10 +27,29 @@ class PackScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final c = context.colors;
-    final packs = ref.watch(packsProvider).value ?? const [];
+    final packsAsync = ref.watch(packsProvider);
+    final packs = packsAsync.value ?? const [];
     final pack = packs.where((p) => p.id == packId).firstOrNull;
     if (pack == null) {
-      return Scaffold(appBar: AppBar(), body: const Loader());
+      // A link to a pack the catalogue does not list (removed, an event not announced yet, or a
+      // pack that opens with a pack code) says so instead of loading forever.
+      final missing = packsAsync.hasValue && !packsAsync.isLoading;
+      return Scaffold(
+        appBar: AppBar(
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 12),
+            child: RoundIconButton(icon: CupertinoIcons.back, size: 38, onTap: () => context.canPop() ? context.pop() : context.go('/library')),
+          ),
+        ),
+        body: missing
+            ? const EmptyState(
+                key: ValueKey('pack-not-available'),
+                icon: AppIcons.library,
+                title: 'Pack not available',
+                message: 'The link may be out of date. A pack from a pack code shows here once the code is redeemed.',
+              )
+            : const Loader(),
+      );
     }
     final puzzles = ref.watch(packPuzzlesProvider(packId));
     final progress = ref.watch(progressProvider).value ?? {};

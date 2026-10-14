@@ -163,6 +163,13 @@ skills under `.claude/skills/` hold the detailed workflows.
   Quests: `Goals.daily` / `weekly` rotate by day and week and take `open`, `level` and `claimed`;
   `lib/features/events/quest_rewards.dart` (`questsFor`, `readyGoals`, `readyEventsProvider`, Claim all).
   Integration suites that play every shape override `openFeaturesProvider` and `pendingUnlockIntroProvider`.
+- Deep links (`docs/deep-links.md`): `lib/core/app_links.dart` (`AppLink.parse`: one path set for the web
+  address, `cardjigsaw://` and universal links; kinds page/overlay/action) and
+  `lib/features/links/deep_links.dart` (`DeepLinks.show`: Home beneath overlays, sheets for `/redeem?code=`,
+  `/add-friend?code=`, `/gift`, `/piggy`; a picture in a pack the player has not opened shows the pack). iPhone
+  links arrive in `CardJigsawApp.didPushRouteInformation`, a web visit's start address in `routerProvider`.
+  Universal links: `applinks:` in `Runner.entitlements` + `web/.well-known/apple-app-site-association`. A new
+  link goes into `AppLink.parse`, the association file, the doc and `test/deep_links_test.dart`.
 - `lib/state/app_update.dart` + `lib/features/update/update_host.dart`: update prompt (above).
   Web-only page helpers (fetch past the cache, reload) in `lib/core/web_page.dart`; Safari trackpad
   pinch (gesture events) is turned into Flutter's ctrl+wheel zoom by a script in `web/index.html`.
@@ -171,7 +178,8 @@ skills under `.claude/skills/` hold the detailed workflows.
   (channel `cjw/review`).
 - Routes (`lib/router.dart`): /welcome /home /library /library/pack/:packId /events (Quests) /social
   /profile (+settings, account, my-puzzles) /play/:puzzleId (difficulty) /game/:puzzleId/:grid /store
-  /wheel /auth/callback /player/:userId.
+  /wheel /account /auth/callback /player/:userId. One `GoRouter` for the app's life (it listens to
+  `onboarded` instead of being rebuilt, so a link that finishes onboarding keeps its screen).
 
 ## Backend (Appwrite Cloud)
 
@@ -276,7 +284,7 @@ tree, so dispatch the workflow directly as described in the testflight-feedback 
 
 ## Docs index
 
-`docs/native-ui.md` (glass components), `docs/copy-guide.md`, `docs/sync.md` (save sync), `docs/catalog-sync.md`, `docs/house-ads.md`,
+`docs/native-ui.md` (glass components), `docs/copy-guide.md`, `docs/sync.md` (save sync), `docs/catalog-sync.md`, `docs/deep-links.md`, `docs/house-ads.md`,
 `docs/purchases.md`, `docs/web.md`, `docs/app-updates.md`, `docs/release-flow.md`, `docs/release-checklist.md`,
 `docs/content-rules.md`, `docs/content-sources.md`, `store/README.md` (store assets),
 `tools/store/README.md`, `README.md`.
