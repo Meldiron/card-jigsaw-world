@@ -44,6 +44,19 @@ void main() {
     await settle(tester, ms);
   }
 
+  /// Library filter chips sit in a horizontal row ('library-chips'); a chip past the edge is not built until
+  /// scrolled to. Back to the start of the row, then forward until the chip is there.
+  Future<void> tapChip(WidgetTester tester, String label, {int ms = 1200}) async {
+    final row = find.descendant(of: find.byKey(const ValueKey('library-chips')), matching: find.byType(Scrollable));
+    if (find.text(label).evaluate().isEmpty && row.evaluate().isNotEmpty) {
+      await tester.fling(row.first, const Offset(3000, 0), 3000);
+      await settle(tester, 600);
+      if (find.text(label).evaluate().isEmpty) await tester.scrollUntilVisible(find.text(label), 120, scrollable: row.first);
+      await settle(tester, 400);
+    }
+    await tapText(tester, label, ms: ms);
+  }
+
   Future<void> back(WidgetTester tester) async {
     final f = find.byIcon(CupertinoIcons.back);
     if (f.evaluate().isEmpty) {
@@ -110,7 +123,7 @@ void main() {
     }
 
     // Daily month: today's tile outline.
-    await tapText(tester, 'Daily', ms: 1500);
+    await tapChip(tester, 'Daily', ms: 1500);
     final month = find.textContaining(' 2026');
     if (month.evaluate().isNotEmpty) {
       await tester.tap(month.first, warnIfMissed: false);
@@ -118,7 +131,7 @@ void main() {
       await shot(tester, 's04_daily_month');
       await back(tester);
     }
-    await tapText(tester, 'All', ms: 1200);
+    await tapChip(tester, 'All', ms: 1200);
 
     // League row opens the player's profile.
     await tapText(tester, 'Social', ms: 3500);

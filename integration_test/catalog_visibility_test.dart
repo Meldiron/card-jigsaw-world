@@ -77,9 +77,11 @@ void main() {
     await binding.takeScreenshot('40_library_all');
     await tapText(tester, 'Finished', ms: 4000);
     await binding.takeScreenshot('40b_library_finished');
+    // The filter row ('library-chips') scrolls; Daily can sit past its edge (a New chip shows while a pack is new).
+    final chips = find.descendant(of: find.byKey(const ValueKey('library-chips')), matching: find.byType(Scrollable)).first;
+    if (find.text('Daily').evaluate().isEmpty) await tester.scrollUntilVisible(find.text('Daily'), 120, scrollable: chips);
     await tapText(tester, 'Daily', ms: 4000);
     await binding.takeScreenshot('40c_library_daily');
-    final chips = find.byWidgetPredicate((w) => w is Scrollable && w.axisDirection == AxisDirection.right).first;
     await tester.dragUntilVisible(find.text('AI'), chips, const Offset(-200, 0));
     await settle(tester, 800);
     await tapText(tester, 'AI', ms: 5000);

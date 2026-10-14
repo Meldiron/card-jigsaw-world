@@ -42,6 +42,19 @@ void main() {
     await settle(tester, ms);
   }
 
+  /// Library filter chips sit in a horizontal row ('library-chips'); a chip past the edge is not built until
+  /// scrolled to. Back to the start of the row, then forward until the chip is there.
+  Future<void> tapChip(WidgetTester tester, String label, {int ms = 1200}) async {
+    final row = find.descendant(of: find.byKey(const ValueKey('library-chips')), matching: find.byType(Scrollable));
+    if (find.text(label).evaluate().isEmpty && row.evaluate().isNotEmpty) {
+      await tester.fling(row.first, const Offset(3000, 0), 3000);
+      await settle(tester, 600);
+      if (find.text(label).evaluate().isEmpty) await tester.scrollUntilVisible(find.text(label), 120, scrollable: row.first);
+      await settle(tester, 400);
+    }
+    await tapText(tester, label, ms: ms);
+  }
+
   /// Assembles a fused group on the live board: the cards that belong at
   /// [homes] (home slots, a pattern around the first one) are brought into
   /// that formation somewhere else on the board, by tap-tap moves. Best
@@ -138,7 +151,7 @@ void main() {
     // Library + this month's daily pack (calendar view).
     await tapText(tester, 'Library', ms: 3000);
     await shot(tester, '04_library');
-    await tapText(tester, 'Daily', ms: 1500);
+    await tapChip(tester, 'Daily', ms: 1500);
     await shot(tester, '04b_library_daily');
     await tapText(tester, 'October 2026', ms: 4000);
     await shot(tester, '04c_daily_month');
@@ -153,7 +166,7 @@ void main() {
     await shot(tester, '04d_daily_locked');
     await tester.tap(find.byIcon(CupertinoIcons.back).first, warnIfMissed: false);
     await settle(tester, 1200);
-    await tapText(tester, 'All', ms: 1200);
+    await tapChip(tester, 'All', ms: 1200);
     await tapText(tester, 'Wild Nature', ms: 4000);
     await shot(tester, '05_pack');
     // Open first puzzle tile via its title.
