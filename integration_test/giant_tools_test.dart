@@ -32,7 +32,8 @@ Future<void> settle(WidgetTester tester, [int ms = 1500]) async {
   }
 }
 
-const _packId = 'pack-colourful-houses';
+/// The Giant pack played (QA_GIANT_PACK=pack-treasure-trove to try another).
+const _packId = String.fromEnvironment('QA_GIANT_PACK', defaultValue: 'pack-colourful-houses');
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();

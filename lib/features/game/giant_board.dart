@@ -67,7 +67,7 @@ class GiantBoardBar extends StatelessWidget {
               Expanded(
                 child: LayoutBuilder(
                   // The zoom level only when it fits whole.
-                  builder: (context, cons) => cons.maxWidth < (zoom.zoomed ? 58 : 150)
+                  builder: (context, cons) => cons.maxWidth < (zoom.zoomed ? 72 : 150)
                       ? const SizedBox.shrink()
                       : Text(
                           zoom.zoomed ? 'Zoom ${zoom.zoom.toStringAsFixed(1)}x' : 'Pinch or double-tap to zoom',
