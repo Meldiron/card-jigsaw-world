@@ -71,13 +71,35 @@ def _canon(u):
 def _small(u):
     return re.sub(r'/1280px-', '/960px-', u) if '/1280px-' in u else u
 
-def _wide(c):
+def commons_original(url):
+    """The original file of an upload.wikimedia.org thumbnail URL (the URL itself when it is one)."""
+    u = _canon(url)
+    m = re.match(r'^(https://upload\.wikimedia\.org/wikipedia/commons)/thumb/([0-9a-f]/[0-9a-f]{2})/([^/]+)/\d+px-[^/]+$', u)
+    return f'{m.group(1)}/{m.group(2)}/{m.group(3)}' if m else u
+
+def _wide(c, width=None):
     """Opt-in wider rendition (spec commons_width): 960 px thumb, and remember the default 1280 px URL so
-    rejections and catalogue matches recorded under that URL still apply."""
-    if '/thumb/' in c['url']:
-        c['thumb'] = commons_rendition(c['url'], COMMONS_THUMB)
-        if (c.get('orig_w') or 0) > COMMONS_WIDTH:
-            c['alt_urls'] = [commons_rendition(c['url'], COMMONS_WIDTH)]
+    rejections and catalogue matches recorded under that URL still apply.
+
+    An original narrower than the requested step comes as the original file: for such files the API
+    reports the requested width (3840) but serves either the original or a smaller step (often 1920 px),
+    which made 3000 x 4000 originals look like 1920 px pictures (2026-10-14). The URL the API gave is kept
+    in alt_urls, so rejections recorded under it still apply."""
+    orig_w = c.get('orig_w') or 0
+    switched = False
+    if width and orig_w and orig_w < wm_step(width) and re.search(r'\.(jpe?g|png)$', c['url'], re.I):
+        original = commons_original(c['url'])
+        if original != c['url']:
+            c.setdefault('alt_urls', []).append(c['url'])
+            c['url'] = original
+        c['w'], c['h'] = orig_w, c.get('orig_h') or 0
+        switched = True
+    if '/thumb/' in c['url'] or switched:
+        if orig_w > COMMONS_THUMB:
+            c['thumb'] = commons_rendition(c['url'], COMMONS_THUMB)
+        if orig_w > COMMONS_WIDTH:
+            alt = commons_rendition(c['url'], COMMONS_WIDTH)
+            if alt not in c.get('alt_urls', []): c.setdefault('alt_urls', []).append(alt)
     return c
 
 def _author(a):
@@ -135,7 +157,7 @@ def commons_search(query, limit=40, offset=0, quality=True, min_h=1000, extra=''
                          source=f'Wikimedia Commons, {lic}', licence=lic, page=ii.get('descriptionurl', ''),
                          title=title, text=' '.join([title, desc, g('Categories'), g('ObjectName')]),
                          w=tw, h=th, orig_w=w, orig_h=h, provider='commons', commons_title=p['title']))
-        if width: _wide(out[-1])
+        if width: _wide(out[-1], width)
         _ai_tag(out[-1], g('Categories'))
     return out
 
@@ -199,7 +221,7 @@ def commons_category(cat, limit=200, cont=None, width=None):
                              title=title, text=' '.join([title, g('ImageDescription'), g('Categories'), g('ObjectName')]),
                              w=ii.get('thumbwidth', ii.get('width', 0)), h=ii.get('thumbheight', ii.get('height', 0)),
                              orig_w=ii.get('width', 0), orig_h=ii.get('height', 0), provider='commons', commons_title=p['title']))
-            if width: _wide(out[-1])
+            if width: _wide(out[-1], width)
             _ai_tag(out[-1], g('Categories'))
         seen_cont = d.get('continue', {}).get('gcmcontinue')
         if not seen_cont: break
@@ -475,7 +497,7 @@ def commons_imageinfo(titles, width=None):
                       text=' '.join([title, g('ImageDescription'), g('Categories'), g('ObjectName')]),
                       w=ii.get('thumbwidth', ii.get('width', 0)), h=ii.get('thumbheight', ii.get('height', 0)),
                       orig_w=ii.get('width', 0), orig_h=ii.get('height', 0), provider='commons', commons_title=p['title'])
-            if width: _wide(c)
+            if width: _wide(c, width)
             out[p['title']] = _ai_tag(c, g('Categories'))
     return out
 
