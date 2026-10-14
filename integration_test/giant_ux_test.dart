@@ -18,6 +18,8 @@ import 'package:card_jigsaw_world/state/catalog.dart';
 import 'package:card_jigsaw_world/state/giant.dart';
 import 'package:card_jigsaw_world/state/profile.dart';
 import 'package:card_jigsaw_world/state/settings.dart';
+import 'package:card_jigsaw_world/state/rewards.dart';
+import 'package:card_jigsaw_world/state/unlocks.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -82,7 +84,8 @@ void main() {
     final build = [for (final f in frames) f.buildDuration.inMicroseconds / 1000]..sort();
     final raster = [for (final f in frames) f.rasterDuration.inMicroseconds / 1000]..sort();
     double p(List<double> v, double q) => v[((v.length - 1) * q).round()];
-    final line = '$label: ${frames.length} frames, build median ${p(build, 0.5).toStringAsFixed(1)} ms p90 ${p(build, 0.9).toStringAsFixed(1)} max ${build.last.toStringAsFixed(1)}, '
+    final line =
+        '$label: ${frames.length} frames, build median ${p(build, 0.5).toStringAsFixed(1)} ms p90 ${p(build, 0.9).toStringAsFixed(1)} max ${build.last.toStringAsFixed(1)}, '
         'raster median ${p(raster, 0.5).toStringAsFixed(1)} ms p90 ${p(raster, 0.9).toStringAsFixed(1)} max ${raster.last.toStringAsFixed(1)}';
     debugPrint('QA_TIMING $line');
     return line;
@@ -132,7 +135,17 @@ void main() {
     final store = await LocalStore.open();
     Sfx.instance.soundEnabled = false;
     Sfx.instance.musicEnabled = false;
-    await tester.pumpWidget(ProviderScope(overrides: [localStoreProvider.overrideWithValue(store)], child: const CardJigsawApp()));
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          localStoreProvider.overrideWithValue(store),
+          // Giant boards open at level 10 and the other shapes on the way there; this suite plays them all.
+          openFeaturesProvider.overrideWithValue(OpenFeatures.all),
+          pendingUnlockIntroProvider.overrideWithValue(null),
+        ],
+        child: const CardJigsawApp(),
+      ),
+    );
     await settle(tester, 1500);
     await tapText(tester, 'Continue');
     await tapText(tester, 'Continue');
@@ -259,13 +272,15 @@ void main() {
       await settle(tester, 500);
       await shot(tester, 'gx_12_${slug}_edges');
       await tester.tap(find.byKey(const ValueKey('giant-edges')), warnIfMissed: false);
-      results.add(await timings(tester, '$slug ${board(tester).state.board.cells} zoom', () async {
-        zoomOf(tester).zoomTo(zoomOf(tester).step);
-        await settle(tester, 500);
-        await pinch(tester, boardRect(tester).center, 90, 200);
-        zoomOf(tester).lookAt(boardSize(tester).center(Offset.zero) * 0.6);
-        await settle(tester, 300);
-      }));
+      results.add(
+        await timings(tester, '$slug ${board(tester).state.board.cells} zoom', () async {
+          zoomOf(tester).zoomTo(zoomOf(tester).step);
+          await settle(tester, 500);
+          await pinch(tester, boardRect(tester).center, 90, 200);
+          zoomOf(tester).lookAt(boardSize(tester).center(Offset.zero) * 0.6);
+          await settle(tester, 300);
+        }),
+      );
       // A move while zoomed in.
       final b = board(tester).state.board;
       final s = List.generate(b.cells, (i) => i).firstWhere((i) => !b.isLocked(i) && inView(tester, i));
@@ -300,7 +315,10 @@ void main() {
     }
 
     final first = board(tester).state.board;
-    final edgeSlots = [for (var s = 0; s < first.cells; s++) if (isEdgeCard(first.tiling, s)) s];
+    final edgeSlots = [
+      for (var s = 0; s < first.cells; s++)
+        if (isEdgeCard(first.tiling, s)) s,
+    ];
     for (final s in edgeSlots) {
       await sendHome(s);
     }
