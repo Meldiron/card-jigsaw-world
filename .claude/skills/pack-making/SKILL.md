@@ -104,6 +104,28 @@ go-ahead. Every licence below allows commercial use, changes and re-hosting.
 Optional spec fields for sources: `source_limit` (results per topic per provider), `nga_classes`,
 `commons_width` (1920 or 3840 renditions instead of 1280), `allow_licences` (owner-approved licences only).
 
+## Owner-approved illustration sources (2026-10-14)
+
+Digital illustration (made on a computer, not paint on canvas). The owner reviewed samples
+(`~/Downloads/illustration-sources/`, a `SOURCE.txt` per source) and approved these four. None is a `run.sh`
+provider: pictures are made or picked locally and published with `tools/dev/local_pack.py` (see below).
+
+| Source | Licence (verified 2026-10-14) | Credit | What it gives | How to use it |
+| --- | --- | --- | --- | --- |
+| Glitch (Tiny Speck), https://github.com/tinyspeck/glitch-items (+ glitch-locations; 2x PNG exports in ThirdPartyNinjas/GlitchAssets; SVG conversions on OpenGameArt) | CC0: "All files are provided by Tiny Speck under the Creative Commons CC0 1.0 Universal License ... you may do what you please". Not covered: "the Glitch logo and trademark" | not required; "Art: Tiny Speck (Glitch), CC0, glitchthegame.com" | About 2,600 hand-drawn items (food, drink, herbs, tools, alchemy, keys, about 780 furniture pieces), about 2,200 location parts (trees, rocks, houses, plants), 880 player-house parts. No finished pictures | Compose pictures ourselves (dense flat-lay collages on a textured ground: the sampled "junk shop" collage scored flat 0, alike 0 at 4096 px). Exclude the folders with characters or logos: avatars, inhabitants, giants, shrines, trophies, rare_items, misc. Never call a pack "Glitch" or use its logo (trademark). The author of a composed picture is "Tiny Speck (Glitch), composed by Card Jigsaw World". |
+| Blender Studio open films, https://studio.blender.org | CC BY 4.0: "all digital content (webpages, video, artwork, 3D data) is available under the Creative Commons Attribution 4.0" (Sprite Fright: CC BY 1.0; Big Buck Bunny and Sintel frame dumps: CC BY 3.0); logos and trademarks excluded | required: "<artist or film> / (CC) Blender Foundation \| studio.blender.org", and say it was cropped | Film frames (Big Buck Bunny and Sintel 4K PNG frame dumps at https://media.xiph.org/BBB/ and https://media.xiph.org/sintel/), free concept art (a few dozen, mostly landscape; most production files need a membership) | Hand-picked portrait crops of 4K frames (about 1620 x 2160), reviewed one by one: a deliberate crop of a film frame, never an automatic crop of a landscape picture. Animal-led films only for people-free pictures: Big Buck Bunny, Caminandes, Wing It!, Overgrown; Sintel, Spring, Coffee Run, Sprite Fright, Charge and Agent 327 have human characters (only frames without them). |
+| OpenGameArt.org, https://opengameart.org | per item: CC0, CC BY, CC BY-SA, OGA-BY (CC BY without the DRM clause); never GPL-only items | per the page's "Attribution Instructions"; CC0: "<author>, CC0, via OpenGameArt.org" | Mostly game parts and wide backgrounds; a few finished paintings, best of all J&T Story's bird's-eye village and shop maps (3000 x 2350, CC0, every building also as a separate PNG) | Portrait crops or re-compositions of the finished paintings; record the OGA page as provenance (uploads are not verified). Space backgrounds are plentiful there: never use them. |
+| Wikimedia Commons digital art (Category:Digital art and its subcategories, "Created with Krita") | per file: CC0, PD, CC BY, CC BY-SA | per file; "indicate if changes were made" | Little digital illustration; the best is David Revoy's "Contributopia" (CC BY 4.0): four portrait map tiles of 2480 x 4185 (giant-grade: flat 2.3%, alike 0.7%) and the 2017 set at 6400 x 3600 | The content tool's `commons` provider works as usual. Revoy adds "AI derivation prohibited": never feed his files to an AI tool. Exclude Category:Artificial intelligence art, and watch for studio concept art re-uploaded as free (a Pixar "Coco" upload was found). |
+
+### Publishing locally made pictures
+
+`tools/dev/local_pack.py publish MANIFEST.json` hosts local picture files in `puzzle-images` (JPEG, 1200 px for
+normal packs, up to 4096 px for Giant) and writes the pack row, the puzzle rows, `puzzlesUpdatedAt` and
+`state/provenance.json`, the same records `apply` writes. The manifest names the pack and, per picture, the
+file, title, author, licence, `source` string, source page and a note of changes ("cropped", "composed from
+...");  `local_pack.py delete --pack-id` undoes it. Run `tools/store/apply_pack_prices.py --only PACK` afterwards,
+as for every new pack, and review the published pack with `tools/content/run.sh sheet PACK --puzzles-only`.
+
 Evaluated on 2026-10-14 and not chosen (do not research again without a new reason): Library of Congress, NYPL, NOAA and USFWS (bot walls or captioned plates), Nationalmuseum Sweden (no
 search, mixed licences; its release is on Commons), Philadelphia Museum of Art (educational use only), StockSnap
 (Cloudflare; reaches us through Openverse), Life of Pix, Skitterphoto and Magdeleine (unclear or mixed licences),
