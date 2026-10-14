@@ -33,8 +33,11 @@ reports the ones that do not. The pack-making workflow that enforces them is the
    presented as human-made.
 
    **Stock-site licences need the owner's review first.** The Pexels License, Pixabay Content
-   License, Unsplash License (new API sources, not the legacy Picsum packs) and Flickr Commons' "no
-   known copyright restrictions" are not CC licences, and the free Flickr API key is non-commercial.
+   License and Flickr Commons' "no known copyright restrictions" are not CC licences, and the free
+   Flickr API key is non-commercial. The Unsplash License was approved by the owner on 2026-10-14 (no
+   selling "without significant modification", no "replicating a similar or competing service"), but
+   the Unsplash API terms require hotlinking, which the self-hosting rule forbids: no Unsplash pack
+   until the owner settles how pictures are obtained (see the pack-making skill).
    The tool keeps `pexels`, `pixabay`, `unsplash`, `flickr` and `flickr-commons` inactive until their
    key is in `secrets/content-keys.env`, and drops their licences unless a spec lists them in
    `allow_licences`. No pack may use these sources or set `allow_licences` until the owner has

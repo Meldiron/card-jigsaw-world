@@ -52,7 +52,9 @@ are now approved.
 
 Owner-approved new sources (2026-10-14), not providers in the content tool yet: USGS Earth as Art
 (drawings and patterns), SMK National Gallery of Denmark, the J. Paul Getty Museum and Paris Musées
-(drawings), Europeana and the Finnish National Gallery (paintings), Smithsonian Open Access (patterns), ISO Republic, Negative Space, NPS NPGallery and the Yale
+(drawings), Europeana, the Finnish National Gallery and LACMA (paintings), Smithsonian Open Access
+(patterns), Unsplash (pictures; licence approved, how to obtain pictures still open: its API requires
+hotlinking), ISO Republic, Negative Space, NPS NPGallery and the Yale
 Center for British Art and Yale University Art Gallery (pictures). Licences, credits, access and caveats
 are in the pack-making skill (`.claude/skills/pack-making/SKILL.md`, "Owner-approved new sources").
 
