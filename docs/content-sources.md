@@ -46,13 +46,13 @@ Licences outside the free set (Pexels License, Pixabay Content License, Unsplash
 which a spec may only do after the owner has approved that licence (`docs/content-rules.md`).
 
 Deliberately not used: space sources (ESA/Hubble, ESA/Webb, ESO; the owner does not want space pictures,
-2026-10-14); the Art Institute of Chicago and Library of Congress image servers block automated clients
-(Cloudflare challenges). Smithsonian Open Access (patterns) and Europeana (paintings), excluded earlier,
+2026-10-14); the Library of Congress image servers block automated clients (Cloudflare challenges). The
+Art Institute of Chicago passes slow, honest clients (1686 px) and is approved. Smithsonian Open Access (patterns) and Europeana (paintings), excluded earlier,
 are now approved.
 
 Owner-approved new sources (2026-10-14), not providers in the content tool yet: USGS Earth as Art
-(drawings and patterns), SMK National Gallery of Denmark, the J. Paul Getty Museum and Paris Musées
-(drawings), Europeana, the Finnish National Gallery and LACMA (paintings), Smithsonian Open Access
+(drawings and patterns), SMK National Gallery of Denmark, the J. Paul Getty Museum, Paris Musées, the
+Minneapolis Institute of Art and the Art Institute of Chicago (drawings), Europeana, the Finnish National Gallery and LACMA (paintings), Smithsonian Open Access
 (patterns), Pexels and Pixabay (pictures; licences approved, the tool providers need their API keys),
 Unsplash (pictures; licence approved, how to obtain pictures still open: its API requires hotlinking), ISO Republic, Negative Space, NPS NPGallery and the Yale
 Center for British Art and Yale University Art Gallery (pictures). Licences, credits, access and caveats
