@@ -2851,12 +2851,16 @@
 "status": "verified"
 },
 "pack-curiosity-shops": {
-"added": 0,
-"at": "2026-10-14T13:25:18",
-"last_step": "reject 5 off-theme",
-"puzzles": null,
+"added": 21,
+"at": "2026-10-14T15:19:29",
+"category": "Giant",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "Curiosity Shops",
+"puzzles": 21,
 "removed": 0,
-"status": "audited"
+"status": "verified"
 },
 "pack-deer": {
 "added": 23,
@@ -3303,12 +3307,16 @@
 "status": "verified"
 },
 "pack-market-stalls": {
-"added": 0,
-"at": "2026-10-14T13:02:16",
-"last_step": "reject 1 weak",
-"puzzles": null,
+"added": 5,
+"at": "2026-10-14T15:17:13",
+"category": "Giant",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "Market Stalls",
+"puzzles": 24,
 "removed": 0,
-"status": "audited"
+"status": "verified"
 },
 "pack-misty-forests": {
 "added": 16,
@@ -3479,12 +3487,16 @@
 "status": "verified"
 },
 "pack-painted-paradises": {
-"added": 0,
-"at": "2026-10-14T11:57:42",
-"last_step": "reject 1 people",
-"puzzles": null,
+"added": 20,
+"at": "2026-10-14T15:00:10",
+"category": "Giant",
+"issues": 0,
+"kind": "new",
+"last_step": "verify",
+"name": "Painted Paradises",
+"puzzles": 20,
 "removed": 0,
-"status": "audited"
+"status": "verified"
 },
 "pack-pandas": {
 "added": 23,

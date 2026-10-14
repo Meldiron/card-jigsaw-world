@@ -22,7 +22,8 @@ Run (with that venv's python):
   PY=~/.local/share/card-jigsaw-world/glitch/venv/bin/python
   $PY tools/content/compose/glitch_collage.py library                  # scan, clean guide lines, test SVGs (~10 min)
   $PY tools/content/compose/glitch_collage.py sheet TAG [--out FILE]   # review sheet of the items behind a tag
-  $PY tools/content/compose/glitch_collage.py render PACK [--only SLUG ...] [--jobs 4]
+  $PY tools/content/compose/glitch_collage.py render PACK [--only SLUG|N ...]  # in order, item use capped per pack
+  $PY tools/content/compose/glitch_collage.py similar PACK           # near-repeat check (phash, colour) between pictures
   $PY tools/content/compose/glitch_collage.py contact PACK            # contact sheet + 100% crops of the pack
   $PY tools/content/compose/glitch_collage.py measure PACK            # giant.measure numbers (flat, dark, alike)
   $PY tools/content/compose/glitch_collage.py manifest PACK           # tools/content/local-packs/PACK.json
@@ -33,7 +34,6 @@ SVG conversion renders faithfully (the `library` step compares every SVG with it
 that lost Flash blend modes, which show as black or white stripes); other items stay at most at PNG size.
 """
 import argparse, io, json, math, os, random, re, sys, time
-from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 import numpy as np
@@ -256,6 +256,48 @@ class Library:
                 r['svg_ok'] = True
                 if fp.exists():
                     r['svg'] = str(fp.relative_to(GLITCH))
+        self.colors = self._color_stats()
+
+    def _color_stats(self):
+        """Per item: alpha-weighted mean colour in Lab and in RGB (cached in cache/colors.json)."""
+        cp = GLITCH / 'cache' / 'colors.json'
+        cache = json.loads(cp.read_text()) if cp.exists() else {}
+        dirty = False
+        for iid in self.items:
+            if iid in cache:
+                continue
+            a = np.asarray(Image.open(CLEAN_DIR / f'{safe(iid)}.png').convert('RGBA'), np.float32)
+            m = a[..., 3] > 128
+            rgb = a[..., :3][m].mean(0) if m.any() else np.array([128, 128, 128], np.float32)
+            cache[iid] = dict(rgb=[round(float(v), 1) for v in rgb], lab=[round(float(v), 2) for v in to_lab(rgb[None])[0]])
+            dirty = True
+        if dirty:
+            cp.parent.mkdir(parents=True, exist_ok=True)
+            cp.write_text(json.dumps(cache))
+        return cache
+
+    def palette_dist(self, iid, palette):
+        """Smallest Lab distance from the item's mean colour to any palette colour (chroma weighted up)."""
+        lab = np.array(self.colors[iid]['lab'], np.float32)
+        best = 1e9
+        for c in palette:
+            p = to_lab(hexrgb(c)[None])[0]
+            d = math.sqrt(0.5 * (lab[0] - p[0]) ** 2 + (lab[1] - p[1]) ** 2 + (lab[2] - p[2]) ** 2)
+            best = min(best, d)
+        return best
+
+    def aspect(self, iid):
+        r = self.items[iid]
+        return r['w'] / r['h']
+
+    def max_h(self, iid):
+        r = self.items[iid]
+        return self.max_long(iid) * r['h'] / max(r['w'], r['h'])
+
+    def image_h(self, iid, h_px):
+        """Item drawn about h_px tall (capped like image())."""
+        r = self.items[iid]
+        return self.image(iid, h_px * max(r['w'], r['h']) / r['h'])
 
     def excluded(self, iid):
         rec = self.items[iid]
@@ -344,6 +386,16 @@ class Library:
 def hexrgb(c):
     c = c.lstrip('#')
     return np.array([int(c[i:i + 2], 16) for i in (0, 2, 4)], np.float32)
+
+
+def to_lab(rgb):
+    """N x 3 sRGB (0-255) -> N x 3 CIE Lab (D65)."""
+    c = np.asarray(rgb, np.float64) / 255.0
+    c = np.where(c > 0.04045, ((c + 0.055) / 1.055) ** 2.4, c / 12.92)
+    M = np.array([[0.4124, 0.3576, 0.1805], [0.2126, 0.7152, 0.0722], [0.0193, 0.1192, 0.9505]])
+    xyz = c @ M.T / np.array([0.95047, 1.0, 1.08883])
+    f = np.where(xyz > 0.008856, np.cbrt(xyz), 7.787 * xyz + 16 / 116)
+    return np.stack([116 * f[:, 1] - 16, 500 * (f[:, 0] - f[:, 1]), 200 * (f[:, 1] - f[:, 2])], 1)
 
 
 def vnoise(h, w, cell, rng):
@@ -583,6 +635,31 @@ def g_linen(h, w, rng, colors, **_):
     return shade(np.broadcast_to(c, (h, w, 3)).copy(), (weave + n).astype(np.float32))
 
 
+def g_marble(h, w, rng, colors=('#f2f0ec',), vein='#9a948c', **_):
+    base = hexrgb(colors[0])
+    n = fbm(h, w, rng, cells=(220, 90, 30, 10))
+    n2 = fbm(h, w, rng, cells=(160, 50, 14), weights=(.5, .3, .2))
+    v = np.abs(np.sin((n * 9 + n2 * 5) * math.pi))
+    veins = np.clip(1 - v * 6, 0, 1) ** 2
+    out = shade(np.broadcast_to(base, (h, w, 3)).copy(), (n2 - 0.5) * 0.12)
+    vc = hexrgb(vein)
+    return out * (1 - veins[..., None] * 0.6) + vc * veins[..., None] * 0.6
+
+
+def g_paint(h, w, rng, colors, strokes=1.0, **_):
+    """Painted plaster: one colour with brush strokes and a few lighter and darker patches."""
+    base = hexrgb(colors[0])
+    out = shade(np.broadcast_to(base, (h, w, 3)).copy(), (fbm(h, w, rng, cells=(200, 70, 20)) - 0.5) * 0.22)
+    im = Image.fromarray(out.clip(0, 255).astype(np.uint8)); d = ImageDraw.Draw(im)
+    for _ in range(int(h * w / 2500 * strokes)):
+        x, y = rng.integers(0, w), rng.integers(0, h)
+        L = rng.uniform(20, 70); a = rng.uniform(-0.4, 0.4)
+        f = rng.uniform(0.9, 1.1)
+        c = tuple(int(v) for v in (base * f).clip(0, 255))
+        d.line([x, y, x + L * math.cos(a), y + L * math.sin(a)], fill=c, width=int(rng.integers(2, 5)))
+    return np.asarray(im, np.float32)
+
+
 def g_wallpaper(h, w, rng, name, scale=2.0, **_):
     p = GLITCH / 'png' / 'Player Houses' / 'wallpaper' / f'{name}.png'
     t = Image.open(p).convert('RGB')
@@ -595,7 +672,8 @@ def g_wallpaper(h, w, rng, name, scale=2.0, **_):
 
 
 GROUNDS = dict(planks=g_planks, check=g_check, plaid=g_plaid, stripes=g_stripes, dots=g_dots, tiles=g_tiles, grass=g_grass,
-               scatter=g_scatter, cobble=g_cobble, quilt=g_quilt, linen=g_linen, wallpaper=g_wallpaper)
+               scatter=g_scatter, cobble=g_cobble, quilt=g_quilt, linen=g_linen, wallpaper=g_wallpaper, marble=g_marble,
+               paint=g_paint)
 
 
 def make_ground(spec, h, w, rng):
@@ -648,6 +726,286 @@ def layout_labels(lay, hh, ww, rng):
     raise ValueError(t)
 
 
+# ------------------------------------------------------------------------------------------------ structures
+#
+# A structure turns a picture's "layout" into zones and a painted ground. Each zone has a spec (cycled from
+# the picture's "zones" list), a mode ("pack": items packed in 2D inside a mask; "row": items standing on a
+# shelf or floor line) and its region. Kinds:
+#   single | hbands | vbands | grid | voronoi | ring | diag   soft-edged regions (pack)
+#   cubbies   shelves or pigeonholes in a wooden frame (row): cols, rows, frame, frame_w, board_h, floor_h
+#   crates    crates seen from above in a grid (pack): cols, rows, gutter, rim, rim_colors, base (ground)
+#   trays     treemap of rounded trays with painted rims (pack): n, gutter, rim, rims, base
+#   table     round / oval table seen from above on a floor (pack): shape, margin, plates, edge, base
+#   cloth     picnic cloth with a striped border on a ground (pack): margin, border{colors,width}, base
+
+def _rect_mask(hh, ww, x0, y0, x1, y1):
+    m = np.zeros((hh, ww), bool)
+    m[max(0, int(y0 / S)):int(math.ceil(y1 / S)), max(0, int(x0 / S)):int(math.ceil(x1 / S))] = True
+    return m
+
+
+def _paint(ground, spec, mask_full, seed, H, W, box=None):
+    """Paint a ground spec into ground where mask_full is True (box limits the work to a rectangle)."""
+    if box is None:
+        g = make_ground(spec, H, W, np.random.default_rng(seed))
+        ground[mask_full] = g[mask_full]
+        return
+    x0, y0, x1, y1 = [int(round(v)) for v in box]
+    x0, y0 = max(0, x0), max(0, y0)
+    x1, y1 = min(W, x1), min(H, y1)
+    if x1 <= x0 or y1 <= y0:
+        return
+    g = make_ground(spec, y1 - y0, x1 - x0, np.random.default_rng(seed))
+    sub = mask_full[y0:y1, x0:x1]
+    ground[y0:y1, x0:x1][sub] = g[sub]
+
+
+def _wood(h, w, rng, colors, vertical=False):
+    return g_planks(h, w, rng, colors, width=max(12, (w if vertical else h) + 2), vertical=vertical, seam=0.7, grain=0.22)
+
+
+def _board(ground, x0, y0, x1, y1, colors, rng, vertical=False, light_top=True):
+    x0, y0, x1, y1 = [int(round(v)) for v in (x0, y0, x1, y1)]
+    H, W = ground.shape[:2]
+    x0, y0, x1, y1 = max(0, x0), max(0, y0), min(W, x1), min(H, y1)
+    if x1 <= x0 or y1 <= y0:
+        return
+    b = _wood(y1 - y0, x1 - x0, rng, colors, vertical)
+    t = max(2, (y1 - y0) // 5) if not vertical else max(2, (x1 - x0) // 5)
+    if light_top:
+        if vertical:
+            b[:, :t] = np.minimum(255, b[:, :t] * 1.18)
+            b[:, -t:] *= 0.7
+        else:
+            b[:t] = np.minimum(255, b[:t] * 1.2)
+            b[-t:] *= 0.68
+    ground[y0:y1, x0:x1] = b
+
+
+def _shadow_band(ground, x0, y0, x1, y1, strength=0.35, down=True):
+    """Soft shadow gradient inside a rectangle (under a shelf board, along a rim)."""
+    x0, y0, x1, y1 = [int(round(v)) for v in (x0, y0, x1, y1)]
+    H, W = ground.shape[:2]
+    x0, y0, x1, y1 = max(0, x0), max(0, y0), min(W, x1), min(H, y1)
+    if x1 <= x0 or y1 <= y0:
+        return
+    n = y1 - y0
+    g = np.linspace(1 - strength, 1, n)[:, None, None] if down else np.linspace(1, 1 - strength, n)[:, None, None]
+    ground[y0:y1, x0:x1] *= g
+
+
+def _round_rect(w, h, r):
+    im = Image.new('L', (w, h), 0)
+    ImageDraw.Draw(im).rounded_rectangle([0, 0, w - 1, h - 1], radius=r, fill=255)
+    return np.asarray(im) > 127
+
+
+def _treemap(rect, n, rng, min_ratio=0.45):
+    rects = [rect]
+    while len(rects) < n:
+        rects.sort(key=lambda r: -(r[2] - r[0]) * (r[3] - r[1]))
+        x0, y0, x1, y1 = rects.pop(0)
+        w, h = x1 - x0, y1 - y0
+        f = rng.uniform(0.35, 0.65)
+        if w > h * 1.1 or (w > h * 0.8 and rng.random() < 0.5):
+            xm = x0 + w * f
+            rects += [(x0, y0, xm, y1), (xm, y0, x1, y1)]
+        else:
+            ym = y0 + h * f
+            rects += [(x0, y0, x1, ym), (x0, ym, x1, y1)]
+    return rects
+
+
+def build_structure(lay, zone_list, W, H, rng, seed):
+    """-> dict(ground HxWx3 float, labels hh x ww int (-1 = no items), zones [dict(spec, mode, mask, rows)])."""
+    hh, ww = H // S, W // S
+    t = lay.get('type', 'single')
+    ground = np.zeros((H, W, 3), np.float32)
+    zones = []
+    labels = -np.ones((hh, ww), np.int32)
+    base_spec = lay.get('base')
+
+    def spec_for(k):
+        return zone_list[k % len(zone_list)]
+
+    if t in ('single', 'hbands', 'vbands', 'grid', 'voronoi', 'ring', 'diag', 'cloth'):
+        lab = layout_labels(dict(lay, type='ring', square=True) if t == 'cloth' else lay, hh, ww, rng)
+        nz = int(lab.max()) + 1
+        lab_full = np.asarray(Image.fromarray(lab.astype(np.uint8)).resize((W, H), Image.NEAREST))
+        for z in range(nz):
+            _paint(ground, spec_for(z)['ground'], lab_full == z, seed * 31 + z, H, W)
+            zones.append(dict(spec=spec_for(z), mode='pack', mask=(lab == z)))
+        labels = lab
+        if t == 'cloth':
+            b = lay.get('border', {'colors': ['#ffffff', '#d33f3f'], 'width': 0.035})
+            inner = lab_full == 0
+            dist = ndimage.distance_transform_edt(inner)
+            bw = b.get('width', 0.035) * W
+            cols = [hexrgb(c) for c in b['colors']]
+            band = (dist > 0) & (dist < bw)
+            k = (dist[band] / bw * len(cols) * 2).astype(int) % len(cols)
+            ground[band] = np.stack(cols)[k] * 0.97
+            ext = (~inner) & (ndimage.distance_transform_edt(~inner) < W * 0.012)
+            ground[ext] *= 0.6
+            zones[0]['mask'] = zones[0]['mask'] & (ndimage.distance_transform_edt(lab == 0) > bw * 0.5 / S)
+        elif nz > 1:
+            e = np.zeros((H, W), bool)
+            e[:-1] |= lab_full[:-1] != lab_full[1:]
+            e[:, :-1] |= lab_full[:, :-1] != lab_full[:, 1:]
+            e = ndimage.binary_dilation(e, iterations=4)
+            ground[e] *= 0.55
+        return dict(ground=ground, labels=labels, zones=zones)
+
+    if base_spec:
+        _paint(ground, base_spec, np.ones((H, W), bool), seed * 7, H, W)
+
+    if t == 'cubbies':
+        cols, rows = lay.get('cols', 1), lay.get('rows', 4)
+        fw = lay.get('frame_w', 0.022) * W
+        bh = lay.get('board_h', 0.018) * H
+        wood = lay.get('frame', ['#a8774a', '#9a6b40', '#b4835a'])
+        colw = np.array(lay.get('col_sizes', [1] * cols), np.float32); colw = colw / colw.sum() * (W - fw * (cols + 1))
+        rowh = np.array(lay.get('row_sizes', [1] * rows), np.float32); rowh = rowh / rowh.sum() * (H - bh * (rows + 1))
+        assign = lay.get('assign', 'cell')
+        y = bh
+        k = 0
+        for r in range(rows):
+            x = fw
+            for c in range(cols):
+                x0, y0, x1, y1 = x, y, x + colw[c], y + rowh[r]
+                zi = {'cell': k, 'row': r, 'col': c}[assign]
+                spec = spec_for(zi)
+                m_full = np.zeros((H, W), bool)
+                m_full[int(y0):int(y1) + 1, int(x0):int(x1) + 1] = True
+                _paint(ground, spec['ground'], m_full, seed * 31 + k, H, W, box=(x0, y0, x1 + 1, y1 + 1))
+                fh = spec.get('floor_h', lay.get('floor_h', 0)) * (y1 - y0)
+                if fh > 0 and spec.get('floor'):
+                    fm = np.zeros((H, W), bool)
+                    fm[int(y1 - fh):int(y1) + 1, int(x0):int(x1) + 1] = True
+                    _paint(ground, spec['floor'], fm, seed * 37 + k, H, W, box=(x0, y1 - fh, x1 + 1, y1 + 1))
+                    _shadow_band(ground, x0, y1 - fh, x1, y1 - fh + 6, 0.35, down=True)
+                _shadow_band(ground, x0, y0, x1, y0 + (y1 - y0) * 0.22, 0.32, down=True)
+                base = y1 - fh * 0.4
+                zm = _rect_mask(hh, ww, x0, y0, x1, y1)
+                labels[zm] = len(zones)
+                zones.append(dict(spec=spec, mode='row', mask=zm, rows=[(x0, x1, base, base - y0)], box=(x0, y0, x1, y1)))
+                k += 1
+                x = x1 + fw
+            y += rowh[r] + bh
+        # frame: boards and posts
+        y = 0
+        for r in range(rows + 1):
+            _board(ground, 0, y, W, y + bh, wood, np.random.default_rng(seed + r))
+            if r < rows:
+                _shadow_band(ground, 0, y + bh, W, y + bh + bh * 0.8, 0.3)
+                y += bh + rowh[r]
+        x = 0
+        for c in range(cols + 1):
+            _board(ground, x, 0, x + fw, H, wood, np.random.default_rng(seed + 50 + c), vertical=True)
+            if c < cols:
+                x += fw + colw[c]
+        return dict(ground=ground, labels=labels, zones=zones)
+
+    if t in ('crates', 'trays'):
+        if t == 'crates':
+            cols, rows = lay.get('cols', 2), lay.get('rows', 3)
+            g = lay.get('gutter', 0.025) * W
+            cw, ch = (W - g * (cols + 1)) / cols, (H - g * (rows + 1)) / rows
+            rects = [(g + c * (cw + g), g + r * (ch + g), g + c * (cw + g) + cw, g + r * (ch + g) + ch) for r in range(rows) for c in range(cols)]
+        else:
+            g = lay.get('gutter', 0.02) * W
+            rects = _treemap((g / 2, g / 2, W - g / 2, H - g / 2), lay.get('n', 6), rng)
+            rects = [(x0 + g / 2, y0 + g / 2, x1 - g / 2, y1 - g / 2) for x0, y0, x1, y1 in rects]
+        rim = lay.get('rim', 0.04 if t == 'crates' else 0.022) * W
+        rim_colors = lay.get('rim_colors', ['#b98a55', '#a97b48', '#c89a64'])
+        rims = lay.get('rims')
+        for k, (x0, y0, x1, y1) in enumerate(rects):
+            spec = spec_for(k)
+            X0, Y0, X1, Y1 = [int(round(v)) for v in (x0, y0, x1, y1)]
+            w, h = X1 - X0, Y1 - Y0
+            # drop shadow on the base
+            sh = np.zeros((H, W), np.float32)
+            sh[min(H - 1, Y0 + 10):min(H, Y1 + 14), min(W - 1, X0 + 8):min(W, X1 + 12)] = 1
+            sh = ndimage.gaussian_filter(sh, 9)
+            ground *= (1 - 0.35 * sh)[..., None]
+            if t == 'crates':
+                outer = np.zeros((H, W), bool); outer[Y0:Y1, X0:X1] = True
+                r_rng = np.random.default_rng(seed + 100 + k)
+                # four boards
+                _board(ground, X0, Y0, X1, Y0 + rim, rim_colors, r_rng)
+                _board(ground, X0, Y1 - rim, X1, Y1, rim_colors, r_rng)
+                _board(ground, X0, Y0, X0 + rim, Y1, rim_colors, r_rng, vertical=True)
+                _board(ground, X1 - rim, Y0, X1, Y1, rim_colors, r_rng, vertical=True)
+                inner = (X0 + rim, Y0 + rim, X1 - rim, Y1 - rim)
+                im = np.zeros((H, W), bool); im[int(inner[1]):int(inner[3]), int(inner[0]):int(inner[2])] = True
+                _paint(ground, spec['ground'], im, seed * 31 + k, H, W, box=inner)
+                _shadow_band(ground, inner[0], inner[1], inner[2], inner[1] + rim * 0.9, 0.4)
+                zm = _rect_mask(hh, ww, *inner)
+            else:
+                rr = int(min(w, h) * 0.08)
+                m = _round_rect(w, h, rr)
+                outer = np.zeros((H, W), bool); outer[Y0:Y1, X0:X1] = m[:H - Y0, :W - X0][:Y1 - Y0, :X1 - X0]
+                col = hexrgb(rims[k % len(rims)]) if rims else hexrgb(rim_colors[k % len(rim_colors)])
+                rim_img = np.broadcast_to(col, (H, W, 3)).copy()
+                ground[outer] = rim_img[outer]
+                inner_m = ndimage.binary_erosion(outer, iterations=int(rim))
+                _paint(ground, spec['ground'], inner_m, seed * 31 + k, H, W, box=(X0, Y0, X1, Y1))
+                edge = outer & ~ndimage.binary_erosion(outer, iterations=3)
+                ground[edge] *= 0.7
+                lip = inner_m & ~ndimage.binary_erosion(inner_m, iterations=int(rim * 0.5))
+                ground[lip] *= 0.78
+                zm = np.asarray(Image.fromarray(inner_m.astype(np.uint8) * 255).resize((ww, hh), Image.NEAREST)) > 127
+            labels[zm] = len(zones)
+            zones.append(dict(spec=spec, mode='pack', mask=zm))
+        return dict(ground=ground, labels=labels, zones=zones)
+
+    if t == 'table':
+        m = lay.get('margin', 0.08)
+        shape = lay.get('shape', 'round')
+        cx, cy = W / 2, H / 2
+        rx = W * (0.5 - m)
+        ry = rx if shape == 'round' else H * (0.5 - m * W / H)
+        yy, xx = np.mgrid[0:H, 0:W]
+        d = ((xx - cx) / rx) ** 2 + ((yy - cy) / ry) ** 2
+        top = d < 1
+        # shadow on the floor
+        sh = ndimage.gaussian_filter((((xx - cx - 14) / rx) ** 2 + ((yy - cy - 22) / ry) ** 2 < 1).astype(np.float32), 18)
+        ground *= (1 - 0.45 * sh)[..., None]
+        _paint(ground, spec_for(0)['ground'], top, seed * 31, H, W)
+        edge_w = lay.get('edge', 0.02) * W
+        dist = ndimage.distance_transform_edt(top)
+        e = top & (dist < edge_w)
+        ground[e] = ground[e] * 0.72 + np.array([40, 22, 8], np.float32) * 0.0
+        ground[top & (dist < 3)] *= 0.6
+        prng = np.random.default_rng(seed + 9)
+        im = Image.fromarray(ground.clip(0, 255).astype(np.uint8))
+        dr = ImageDraw.Draw(im)
+        np_ = lay.get('plates', 0)
+        for k in range(np_):
+            a = 2 * math.pi * k / max(1, np_) + prng.uniform(-0.1, 0.1)
+            pr = min(rx, ry) * prng.uniform(0.13, 0.17)
+            px = cx + math.cos(a) * (rx - pr * 1.7)
+            py = cy + math.sin(a) * (ry - pr * 1.7)
+            pc = tuple(int(v) for v in hexrgb(lay.get('plate', '#f4f1ea')))
+            dr.ellipse([px - pr + 6, py - pr + 8, px + pr + 6, py + pr + 8], fill=(0, 0, 0))
+            dr.ellipse([px - pr, py - pr, px + pr, py + pr], fill=tuple(int(v * 0.86) for v in pc))
+            dr.ellipse([px - pr * 0.72, py - pr * 0.72, px + pr * 0.72, py + pr * 0.72], fill=pc)
+        g2 = np.asarray(im, np.float32)
+        ground[top] = g2[top]
+        top_m = np.asarray(Image.fromarray(top.astype(np.uint8) * 255).resize((ww, hh), Image.NEAREST)) > 127
+        top_m &= ndimage.distance_transform_edt(top_m) > edge_w / S
+        labels[top_m] = 0
+        zones.append(dict(spec=spec_for(0), mode='pack', mask=top_m))
+        if len(zone_list) > 1:
+            fl = np.asarray(Image.fromarray((~top).astype(np.uint8) * 255).resize((ww, hh), Image.NEAREST)) > 127
+            fl &= ndimage.distance_transform_edt(fl) > 3
+            labels[fl] = 1
+            zones.append(dict(spec=spec_for(1), mode='pack', mask=fl))
+        return dict(ground=ground, labels=labels, zones=zones)
+
+    raise ValueError(f'unknown layout type {t}')
+
+
 # ---------------------------------------------------------------------------------------------- placement
 
 S = 4  # mask resolution: 1 mask pixel = S x S picture pixels
@@ -655,15 +1013,17 @@ S = 4  # mask resolution: 1 mask pixel = S x S picture pixels
 
 class Composer:
     """Greedy packer on a coarse occupancy grid (1 cell = S x S px). Each item goes where it overlaps least,
-    prefers spots that touch other items or the frame (tight packing), and keeps to its zone."""
+    prefers spots that touch other items (tight packing), and keeps to its zone."""
     contact_w = 0.12
 
-    def __init__(self, lib, W, H, rng):
+    def __init__(self, lib, W, H, rng, banned=frozenset(), budget=10 ** 9):
         self.lib, self.W, self.H, self.rng = lib, W, H, rng
+        self.budget = budget
         self.hh, self.ww = H // S, W // S
         self.cov = np.zeros((self.hh, self.ww), np.float32)
         self.placed = []          # (iid, img, x, y)
-        self.used = set()
+        self.used = set(banned)
+        self.banned = set(banned)
 
     def item_mask(self, img):
         a = img.getchannel('A')
@@ -673,6 +1033,22 @@ class Composer:
         pad = np.pad(m, 2)
         ring = ndimage.binary_dilation(pad, iterations=2).astype(np.float32) - pad
         return m, ring
+
+    def full(self):
+        return len(self.placed) >= self.budget
+
+    def mark(self, iid, img, x, y):
+        if self.full():
+            return False
+        m, _ = self.item_mask(img)
+        y0, x0 = int(round(y / S)), int(round(x / S))
+        h, w = m.shape
+        ya, xa, yb, xb = max(0, y0), max(0, x0), min(self.hh, y0 + h), min(self.ww, x0 + w)
+        if yb > ya and xb > xa:
+            self.cov[ya:yb, xa:xb] = np.maximum(self.cov[ya:yb, xa:xb], m[ya - y0:yb - y0, xa - x0:xb - x0])
+        self.placed.append((iid, img, int(x), int(y)))
+        self.used.add(iid)
+        return True
 
     def score(self, m, ring, cy, cx, zone_mask):
         h, w = m.shape
@@ -687,19 +1063,18 @@ class Composer:
         ov = float((sub * self.cov[ya:yb, xa:xb]).sum() / tot)
         zf = float((sub * zone_mask[ya:yb, xa:xb]).sum() / tot) if zone_mask is not None else 1.0
         out = 1 - inside
-        # contact: share of the ring around the item that is occupied or outside the frame
         ry0, rx0 = y0 - 2, x0 - 2
         rh, rw = ring.shape
         rya, rxa, ryb, rxb = max(0, ry0), max(0, rx0), min(self.hh, ry0 + rh), min(self.ww, rx0 + rw)
         rtot = ring.sum() + 1e-6
         rin = ring[rya - ry0:ryb - ry0, rxa - rx0:rxb - rx0]
         contact = float((rin * (self.cov[rya:ryb, rxa:rxb] > 0.5)).sum() / rtot)
-        s = ov + 0.8 * max(0.0, out - 0.15) + 0.6 * max(0.0, 0.75 - zf) - self.contact_w * contact
-        return s, ov, out, (y0, x0)
+        s = ov + 0.8 * max(0.0, out - 0.15) + 0.9 * max(0.0, 0.8 - zf) - self.contact_w * contact
+        return s, ov, max(out, 1 - zf), (y0, x0)
 
     def candidates(self, zone_mask, k=30):
         free = self.cov < 0.5
-        zone = free if zone_mask is None else (free & (zone_mask > 0.5))
+        zone = free if zone_mask is None else (free & zone_mask)
         if not zone.any():
             return []
         edt = ndimage.distance_transform_edt(free) * zone
@@ -711,14 +1086,15 @@ class Composer:
         idx += list(self.rng.choice(flat.size, size=min(k, n), replace=False, p=p))
         fz = np.flatnonzero(zone)
         idx += list(self.rng.choice(fz, size=min(k // 2, fz.size), replace=False))
-        # free cells next to occupied ones: snug spots
         edge = np.flatnonzero(zone & ndimage.binary_dilation(~free, iterations=1))
         if edge.size:
             idx += list(self.rng.choice(edge, size=min(k // 2, edge.size), replace=False))
         idx = np.unique(np.asarray(idx))
         return [(i // self.ww, i % self.ww) for i in idx]
 
-    def try_place(self, iid, long_px, zone_mask, max_ov, min_px, tries=3, at=None):
+    def try_place(self, iid, long_px, zone_mask, max_ov, min_px, tries=3, at=None, max_out=0.3):
+        if iid in self.used or self.full():
+            return False
         for t in range(tries + 1):
             img = self.lib.image(iid, long_px)
             m, ring = self.item_mask(img)
@@ -734,7 +1110,7 @@ class Composer:
                     if best is None or sc[0] < best[0]:
                         best = sc
             s, ov, out, (y0, x0) = best
-            if ov <= max_ov and out <= 0.35:
+            if ov <= max_ov and out <= max_out:
                 h, w = m.shape
                 ya, xa, yb, xb = max(0, y0), max(0, x0), min(self.hh, y0 + h), min(self.ww, x0 + w)
                 self.cov[ya:yb, xa:xb] = np.maximum(self.cov[ya:yb, xa:xb], m[ya - y0:yb - y0, xa - x0:xb - x0])
@@ -747,20 +1123,17 @@ class Composer:
                 return False
         return False
 
-    def largest_hole(self, zone_mask):
+    def largest_hole(self, mask):
         free = self.cov < 0.5
-        edt = ndimage.distance_transform_edt(free)
-        if zone_mask is not None:
-            edt = edt * (zone_mask > 0.5)
+        edt = ndimage.distance_transform_edt(free) * mask
         i = int(edt.argmax())
         return float(edt.ravel()[i]), (i // self.ww, i % self.ww)
 
-    def coverage(self, zone_mask=None):
+    def coverage(self, mask=None):
         c = self.cov > 0.5
-        if zone_mask is None:
+        if mask is None:
             return float(c.mean())
-        z = zone_mask > 0.5
-        return float(c[z].mean()) if z.any() else 1.0
+        return float(c[mask].mean()) if mask.any() else 1.0
 
 
 def size_for(lib, iid, sz, W, rng):
@@ -775,93 +1148,174 @@ def size_for(lib, iid, sz, W, rng):
     return max(L, 8)
 
 
-def compose(lib, pack, pic, W, H, seed):
+def palette_order(lib, ids, palette, rng, max_dist=None, jitter=8.0, counts=None, use_w=10.0):
+    """ids sorted by closeness to the palette (with a little noise) and by how often the pack used them
+    already (use_w per earlier picture); max_dist drops colours far from the palette."""
+    counts = counts or {}
+    if not palette:
+        return [i for _, i in sorted((counts.get(i, 0) * use_w + rng.uniform(0, jitter), i) for i in ids)]
+    scored = [(lib.palette_dist(i, palette), i) for i in ids]
+    if max_dist is not None:
+        scored = [t for t in scored if t[0] <= max_dist]
+    return [i for _, i in sorted((d + rng.uniform(0, jitter) + counts.get(i, 0) * use_w, i) for d, i in scored)]
+
+
+def pack_row(comp, lib, cands, x0, x1, base, height, rng, rs, scale=1.0, lift=0.0, heroes=()):
+    """Items standing on a line (shelf, floor), left to right. rs: dict(min, max, gap, min_frac)."""
+    span = x1 - x0
+    x = x0 + rng.uniform(0.0, 0.03) * span
+    lo, hi = rs.get('min', 0.55), rs.get('max', 0.95)
+    gmin, gmax = rs.get('gap', (-0.1, 0.06))
+    min_frac = rs.get('min_frac', 0.32)
+    queue = list(heroes) + [c for c in cands if c not in heroes]
+    tries = 0
+    while x < x1 - 0.03 * span and tries < 400:
+        tries += 1
+        queue = [c for c in queue if c not in comp.used]
+        if not queue:
+            break
+        target = height * scale * rng.uniform(lo, hi)
+        room = x1 - x
+        pick = None
+        for c in queue[:60]:
+            hc = min(target, lib.max_h(c))
+            wc = hc * lib.aspect(c)
+            if hc >= target * 0.75 and wc <= room * 1.05 and hc >= height * scale * min_frac:
+                pick = c
+                break
+        if pick is None:
+            for c in queue[:120]:
+                hc = min(target, lib.max_h(c))
+                wc = hc * lib.aspect(c)
+                if hc >= height * scale * min_frac and wc <= room * 1.05:
+                    pick = c
+                    break
+        if pick is None:
+            if room < 0.12 * span or comp.full():
+                break
+            target *= 0.8
+            if target < height * scale * min_frac:
+                break
+            continue
+        h = min(target, lib.max_h(pick))
+        img = lib.image_h(pick, h)
+        y = base - lift - img.size[1] + rng.uniform(0, 0.02) * height
+        if not comp.mark(pick, img, x, y):
+            break
+        x += img.size[0] * (1 + rng.uniform(gmin, gmax))
+
+
+def core_items(lib, pic):
+    """Items a picture names in its zones (items and heroes): reserved for it against other pictures' filler."""
+    out = set()
+    for zs in pic['zones']:
+        out.update(lib.select(zs['items'] + zs.get('hero', [])))
+    return out
+
+
+def compose(lib, pack, pic, W, H, seed, counts=None, reserved=None):
+    counts = counts or {}
+    reserved = reserved or {}
     rng = np.random.default_rng(seed)
-    comp = Composer(lib, W, H, rng)
+    cap = pack.get('max_uses', max(2, math.ceil(len(pack['pictures']) / 3)))
+    banned = frozenset(k for k, v in counts.items() if v >= cap)
+    budget = pic.get('max_items', pack.get('max_items', 10 ** 9))
+    comp = Composer(lib, W, H, rng, banned, budget)
     lay = pic.get('layout', {'type': 'single'})
-    zones = pic['zones']
-    labels = layout_labels(lay, comp.hh, comp.ww, rng)
-    nz = int(labels.max()) + 1
-    zone_specs = [zones[i % len(zones)] for i in range(nz)]
+    st = build_structure(lay, pic['zones'], W, H, rng, seed)
+    zones = st['zones']
     defaults = pack.get('defaults', {})
-    # ground
-    ground = np.zeros((H, W, 3), np.float32)
-    lab_full = np.asarray(Image.fromarray(labels.astype(np.uint8)).resize((W, H), Image.NEAREST))
-    for z in range(nz):
-        g = make_ground(zone_specs[z]['ground'], H, W, np.random.default_rng(seed * 31 + z))
-        m = lab_full == z
-        ground[m] = g[m]
-    if nz > 1:   # seams between zones: a dark line with a light edge, like the rim of a board or cloth
-        e = np.zeros((H, W), bool)
-        e[:-1] |= lab_full[:-1] != lab_full[1:]
-        e[:, :-1] |= lab_full[:, :-1] != lab_full[:, 1:]
-        e = ndimage.binary_dilation(e, iterations=4)
-        ground[e] *= 0.55
-    # items per zone
-    pools = []
-    for z in range(nz):
-        zs = zone_specs[z]
-        ids = [i for i in lib.select(zs['items'])]
-        rng.shuffle(ids)
-        pools.append(ids)
-    fill_ids = lib.select(pic.get('fill', [])) if pic.get('fill') else []
-    rng.shuffle(fill_ids)
-    zone_masks = [(labels == z).astype(np.float32) for z in range(nz)] if nz > 1 else [None]
-    # hero items first (zone 'hero' selectors drawn big)
-    for z in range(nz):
-        zs = zone_specs[z]
+    palette = pic.get('palette')
+    pal_max = pic.get('palette_max', defaults.get('palette_max', 42))
+
+    def pool(sel, zpal=None, strict=False, filler=False):
+        ids = [i for i in lib.select(sel) if i not in comp.used]
+        if filler:      # keep items that later pictures still need for their own zones
+            ids = [i for i in ids if counts.get(i, 0) + reserved.get(i, 0) < cap]
+        p = zpal or palette
+        if p and strict:
+            return palette_order(lib, ids, p, rng, pal_max, counts=counts)
+        return palette_order(lib, ids, None, rng, counts=counts, jitter=30.0)
+
+    fill_ids = pool(pic.get('fill', []), strict=True, filler=True) if pic.get('fill') else []
+    fill_all = pool(pack.get('fill_all', []), strict=True, filler=True) if pack.get('fill_all') else []
+    # 1. heroes and core items, zone by zone (row zones: back row first, then front row)
+    for zi, z in enumerate(zones):
+        zs = z['spec']
+        zpal = zs.get('palette')
+        heroes = [h for h in lib.select(zs.get('hero', [])) if h not in comp.used]
+        core = pool(zs['items'], zpal, strict=bool(zs.get('palette_core')))
+        if z['mode'] == 'row':
+            rs = {**defaults.get('row', {}), **pic.get('row', {}), **zs.get('row', {})}
+            extra = pool(zs.get('fill', []), zpal, strict=True, filler=True) + fill_ids + (fill_all if rs.get('fill_all') else [])
+            for x0, x1, base, height in z['rows']:
+                if rs.get('back', True):
+                    pack_row(comp, lib, core + extra, x0, x1, base, height, rng, rs, scale=rs.get('back_scale', 0.8),
+                             lift=height * rs.get('back_lift', 0.1))
+                pack_row(comp, lib, core + extra, x0, x1, base, height, rng, rs, heroes=heroes)
+            continue
         sz = {**defaults.get('size', {}), **zs.get('size', {})}
         min_px = sz.get('min_px', W * 0.03)
-        target = zs.get('cover', defaults.get('cover', 0.8))
-        heroes = lib.select(zs.get('hero', [])) if zs.get('hero') else []
-        hsz = {**sz, **zs.get('hero_size', {'min': sz.get('max', 0.2) * 0.9, 'max': sz.get('max', 0.2) * 1.4, 'power': 1.0})}
-        plan = [(i, size_for(lib, i, hsz, W, rng)) for i in heroes if i not in comp.used]
-        plan += [(i, size_for(lib, i, sz, W, rng)) for i in pools[z] if i not in comp.used and i not in heroes]
+        target = zs.get('cover', pic.get('cover', defaults.get('cover', 0.8)))
+        hsz = {**sz, **zs.get('hero_size', defaults.get('hero_size', {'min': sz.get('max', 0.2) * 1.1, 'max': sz.get('max', 0.2) * 1.5, 'power': 1.0}))}
+        plan = [(i, size_for(lib, i, hsz, W, rng)) for i in heroes]
         plan.sort(key=lambda t: -t[1])
-        for iid, L in plan:
-            if comp.coverage(zone_masks[z]) >= target:
+        rest = [(i, size_for(lib, i, sz, W, rng)) for i in core if i not in heroes]
+        rest.sort(key=lambda t: -t[1])
+        for iid, L in plan + rest:
+            if comp.coverage(z['mask']) >= target:
                 break
-            if iid in comp.used:
-                continue
-            comp.try_place(iid, L, zone_masks[z], zs.get('max_ov', defaults.get('max_ov', 0.16)), min_px)
-    # fill: always the largest hole of the whole picture; an unused item of that zone (its pool, its fill, the
-    # picture's fill, then the pack's fill_all) that can be drawn at the hole's size (fill_size caps it), so big
-    # holes get SVG items and small ones the small PNG items
-    fill_cover = pic.get('fill_cover', defaults.get('fill_cover', 0.97))
-    fill_all = lib.select(pack.get('fill_all', [])) if pack.get('fill_all') else []
-    rng.shuffle(fill_all)
+            comp.try_place(iid, L, z['mask'], zs.get('max_ov', defaults.get('max_ov', 0.16)), min_px)
+    # 2. fill: always the largest hole among pack zones; an unused item of that zone (its items, its fill, the
+    # picture's fill, then the pack's fill_all, palette-filtered) drawn at the hole's size (fill_size caps it)
+    pack_mask = np.zeros_like(comp.cov, bool)
+    for z in zones:
+        if z['mode'] == 'pack':
+            pack_mask |= z['mask']
     zone_cands = []
-    for z in range(nz):
-        zs = zone_specs[z]
-        extra = lib.select(zs['fill']) if zs.get('fill') else []
-        rng.shuffle(extra)
-        zone_cands.append(list(dict.fromkeys(pools[z] + extra + fill_ids + fill_all)))
+    for z in zones:
+        zs = z['spec']
+        if z['mode'] != 'pack':
+            zone_cands.append([])
+            continue
+        zpal = zs.get('palette')
+        zone_cands.append(list(dict.fromkeys(pool(zs['items'], zpal) + pool(zs.get('fill', []), zpal, strict=True, filler=True) + fill_ids + fill_all)))
     misses = 0
-    while misses < 60 and comp.coverage() < fill_cover:
-        r, at = comp.largest_hole(None)
-        z = int(labels[at]) if nz > 1 else 0
-        zs = zone_specs[z]
+    lab = st['labels']
+    all_pack = pack_mask.copy()
+    while pack_mask.any() and misses < 60 and not comp.full():
+        r, at = comp.largest_hole(pack_mask)
+        zi = int(lab[at])
+        if zi < 0 or zones[zi]['mode'] != 'pack':
+            break
+        zs = zones[zi]['spec']
+        fc = zs.get('fill_cover', pic.get('fill_cover', defaults.get('fill_cover', 0.95)))
+        if comp.coverage(zones[zi]['mask']) >= fc:
+            pack_mask &= ~zones[zi]['mask']
+            continue
         sz = {**defaults.get('size', {}), **zs.get('size', {})}
         fsz = {**sz, **defaults.get('fill_size', {}), **pic.get('fill_size', {}), **zs.get('fill_size', {})}
         min_fill = fsz.get('min_px', W * 0.035)
         if r * S * 2 < min_fill * 0.6:
-            break
-        cand = [i for i in zone_cands[z] if i not in comp.used]
-        zone_cands[z] = cand
+            pack_mask &= ~zones[zi]['mask']
+            continue
+        cand = [i for i in zone_cands[zi] if i not in comp.used]
+        zone_cands[zi] = cand
         if not cand:
-            break
+            pack_mask &= ~zones[zi]['mask']
+            continue
         want = min(max(r * S * 2.3, fsz.get('min', 0.05) * W), fsz.get('max', 0.14) * W)
         able = [i for i in cand[:120] if lib.max_long(i) >= want * 0.85]
         pick = able[0] if able else max(cand[:120], key=lib.max_long)
         L = min(want * rng.uniform(0.9, 1.1), lib.max_long(pick))
-        ok = comp.try_place(pick, L, zone_masks[z] if nz > 1 else None, zs.get('fill_ov', defaults.get('fill_ov', 0.3)), min_fill * 0.6, tries=3, at=at)
+        ok = comp.try_place(pick, L, zones[zi]['mask'], zs.get('fill_ov', defaults.get('fill_ov', 0.3)), min_fill * 0.6, tries=3, at=at)
         if not ok:
             misses += 1
             cand.remove(pick)
             if L > min_fill:
                 cand.append(pick)
-    # render
-    canvas = Image.fromarray(ground.clip(0, 255).astype(np.uint8)).convert('RGBA')
+    # 3. render: ground, then every item with a soft drop shadow, in placement order
+    canvas = Image.fromarray(st['ground'].clip(0, 255).astype(np.uint8)).convert('RGBA')
     sh_op = pic.get('shadow', defaults.get('shadow', 0.34))
     for iid, img, x, y in comp.placed:
         L = max(img.size)
@@ -875,7 +1329,8 @@ def compose(lib, pack, pic, W, H, seed):
         dark = Image.new('RGBA', shadow.size, (30, 22, 14, 0)); dark.putalpha(shadow)
         _paste(canvas, dark, x - pad + off, y - pad + int(off * 1.3))
         _paste(canvas, img, x, y)
-    return canvas.convert('RGB'), [p[0] for p in comp.placed], comp.coverage()
+    ids = [p[0] for p in comp.placed]
+    return canvas.convert('RGB'), ids, comp.coverage(all_pack if all_pack.any() else None)
 
 
 def _paste(canvas, img, x, y):
@@ -907,32 +1362,82 @@ def pic_path(pack, i, pic):
     return out_dir(pack) / f'{i + 1:02d}-{pic["slug"]}.png'
 
 
-def _render_one(args):
-    pack_file, i = args
-    pack, _ = load_pack(pack_file)
-    lib = Library()
-    pic = pack['pictures'][i]
-    W, H = pic.get('canvas', pack['canvas'])
-    t0 = time.time()
-    img, ids, cov = compose(lib, pack, pic, W, H, pic.get('seed', 1000 + i))
-    p = pic_path(pack, i, pic)
-    img.save(p, optimize=False, compress_level=6)
-    meta = dict(slug=pic['slug'], title=pic['title'], items=ids, count=len(ids), coverage=round(cov, 3), size=[W, H])
-    p.with_suffix('.json').write_text(json.dumps(meta, indent=0))
-    return f'{p.name}: {len(ids)} items, coverage {cov:.2f}, {time.time() - t0:.0f}s'
-
-
 def cmd_render(args):
+    """Pictures are composed in order; an item may appear in at most max_uses pictures of the pack
+    (default: a third of them), so later pictures get the items earlier ones did not use."""
     pack, pf = load_pack(args.pack)
-    idx = [i for i, p in enumerate(pack['pictures']) if not args.only or p['slug'] in args.only or str(i + 1) in args.only]
-    jobs = [(str(pf), i) for i in idx]
-    if args.jobs > 1 and len(jobs) > 1:
-        with ProcessPoolExecutor(args.jobs) as ex:
-            for line in ex.map(_render_one, jobs):
-                print(' ', line, flush=True)
-    else:
-        for j in jobs:
-            print(' ', _render_one(j), flush=True)
+    lib = Library()
+    pics = pack['pictures']
+    cap = pack.get('max_uses', max(2, math.ceil(len(pics) / 3)))
+    todo = [i for i, p in enumerate(pics) if not args.only or p['slug'] in args.only or str(i + 1) in args.only]
+    counts = {}
+    cores = {i: core_items(lib, p) for i, p in enumerate(pics)}
+    pending = {}
+    for i in todo:
+        for iid in cores[i]:
+            pending[iid] = pending.get(iid, 0) + 1
+    for i, p in enumerate(pics):        # pictures not rendered now keep their items
+        mp = pic_path(pack, i, p).with_suffix('.json')
+        if i not in todo and mp.exists():
+            for iid in json.loads(mp.read_text())['items']:
+                counts[iid] = counts.get(iid, 0) + 1
+    for name in [p.name for p in out_dir(pack).glob('*.png')]:
+        if not any(name == pic_path(pack, i, p).name for i, p in enumerate(pics)) and re.match(r'\d\d-', name):
+            (out_dir(pack) / name).unlink()          # a picture dropped from the pack definition
+            (out_dir(pack) / name).with_suffix('.json').unlink(missing_ok=True)
+    for i in sorted(todo, key=lambda k: -pics[k].get('priority', 0)):     # priority: rendered first, same file order
+        pic = pics[i]
+        W, H = pic.get('canvas', pack['canvas'])
+        t0 = time.time()
+        for iid in cores[i]:
+            pending[iid] -= 1
+        img, ids, cov = compose(lib, pack, pic, W, H, pic.get('seed', 1000 + i), counts, pending)
+        for iid in ids:
+            counts[iid] = counts.get(iid, 0) + 1
+        p = pic_path(pack, i, pic)
+        img.save(p, optimize=False, compress_level=6)
+        meta = dict(slug=pic['slug'], title=pic['title'], items=ids, count=len(ids), coverage=round(cov, 3), size=[W, H])
+        p.with_suffix('.json').write_text(json.dumps(meta, indent=0))
+        print(f'  {p.name}: {len(ids)} items, coverage {cov:.2f}, {time.time() - t0:.0f}s', flush=True)
+    top = sorted(counts.items(), key=lambda kv: -kv[1])[:5]
+    print(f'  max uses {cap}; most used: ' + ', '.join(f'{k} {v}' for k, v in top))
+
+
+def pic_stats(path):
+    sys.path.insert(0, str(REPO / 'tools' / 'content'))
+    from cjw import imagecache as ic
+    im = Image.open(path).convert('RGB')
+    gray = im.convert('L')
+    a = np.asarray(im.resize((128, 128), Image.BOX), np.int32) // 32
+    hist = np.bincount((a[..., 0] * 64 + a[..., 1] * 8 + a[..., 2]).ravel(), minlength=512).astype(np.float64)
+    hist /= hist.sum()
+    return dict(phash='%016x' % ic.phash(gray), dhash='%016x' % ic.dhash(gray), mini=ic.mini(im), ok=True, hist=hist)
+
+
+def cmd_similar(args):
+    """Near-repeat check between all pictures of a pack: the content tool's similar() (phash, dhash, 4x4
+    colour sketch) plus colour-histogram intersection (flagged >= --hist)."""
+    sys.path.insert(0, str(REPO / 'tools' / 'content'))
+    from cjw import imagecache as ic
+    pack, _ = load_pack(args.pack)
+    files = [(i, p, pic_path(pack, i, p)) for i, p in enumerate(pack['pictures'])]
+    stats = {i: pic_stats(f) for i, p, f in files if f.exists()}
+    rows, flagged = [], 0
+    for a in stats:
+        for b in stats:
+            if b <= a:
+                continue
+            sim, why = ic.similar(stats[a], stats[b])
+            hi = float(np.minimum(stats[a]['hist'], stats[b]['hist']).sum())
+            md = ic.mini_dist(stats[a]['mini'], stats[b]['mini'])
+            ph = ic.hamming(int(stats[a]['phash'], 16), int(stats[b]['phash'], 16))
+            bad = sim or hi >= args.hist
+            flagged += bad
+            rows.append((hi, a, b, md, ph, why if sim else ('colour histogram' if bad else '')))
+    rows.sort(reverse=True)
+    for hi, a, b, md, ph, why in rows[:args.top]:
+        print(f'  {a + 1:2d} {pack["pictures"][a]["slug"]:24s} {b + 1:2d} {pack["pictures"][b]["slug"]:24s} hist {hi:.2f} mini {md:5.1f} phash {ph:2d}  {why}')
+    print(f'{flagged} flagged pairs of {len(rows)}')
 
 
 def cmd_contact(args):
@@ -1022,12 +1527,13 @@ def main():
     sub = ap.add_subparsers(dest='cmd', required=True)
     sub.add_parser('library')
     s = sub.add_parser('sheet'); s.add_argument('selectors', nargs='+'); s.add_argument('--out')
-    s = sub.add_parser('render'); s.add_argument('pack'); s.add_argument('--only', nargs='*'); s.add_argument('--jobs', type=int, default=4)
+    s = sub.add_parser('render'); s.add_argument('pack'); s.add_argument('--only', nargs='*')
+    s = sub.add_parser('similar'); s.add_argument('pack'); s.add_argument('--hist', type=float, default=0.80); s.add_argument('--top', type=int, default=12)
     s = sub.add_parser('contact'); s.add_argument('pack'); s.add_argument('--crops', action='store_true')
     s = sub.add_parser('measure'); s.add_argument('pack')
     s = sub.add_parser('manifest'); s.add_argument('pack')
     a = ap.parse_args()
-    dict(library=cmd_library, sheet=cmd_sheet, render=cmd_render, contact=cmd_contact, measure=cmd_measure, manifest=cmd_manifest)[a.cmd](a)
+    dict(library=cmd_library, sheet=cmd_sheet, render=cmd_render, similar=cmd_similar, contact=cmd_contact, measure=cmd_measure, manifest=cmd_manifest)[a.cmd](a)
 
 
 if __name__ == '__main__':

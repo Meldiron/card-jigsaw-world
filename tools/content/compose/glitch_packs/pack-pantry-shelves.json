@@ -3,7 +3,7 @@
   "id": "pack-pantry-shelves",
   "name": "Pantry Shelves",
   "category": "Illustration",
-  "description": "Fruit stalls, spice markets and bakery shelves piled with hand-drawn food, every item once.",
+  "description": "Bakery shelves, spice racks, market crates and laid tables, every hand-drawn item once.",
   "sortOrder": 1300,
   "price": "coins"
  },
@@ -11,23 +11,38 @@
   1800,
   2400
  ],
+ "max_uses": 7,
+ "max_items": 62,
  "defaults": {
   "size": {
-   "min": 0.13,
-   "max": 0.3,
-   "power": 1.2
+   "min": 0.16,
+   "max": 0.32,
+   "power": 1.0
   },
   "fill_size": {
-   "min": 0.06,
-   "max": 0.13,
-   "min_px": 100
+   "min": 0.1,
+   "max": 0.22,
+   "min_px": 110
   },
   "cover": 0.8,
   "max_ov": 0.15,
-  "fill_ov": 0.3,
-  "fill_cover": 0.95
+  "fill_ov": 0.28,
+  "fill_cover": 0.9,
+  "palette_max": 45,
+  "row": {
+   "min": 0.55,
+   "max": 0.95,
+   "gap": [
+    -0.12,
+    0.05
+   ]
+  }
  },
  "fill_all": [
+  "tag:seeds",
+  "tag:rubs",
+  "tag:vegbags",
+  "tag:kitchentools",
   "tag:fruit",
   "tag:veg",
   "tag:breakfast",
@@ -42,109 +57,214 @@
   "tag:spices",
   "tag:juices",
   "tag:hotdrinks",
-  "tag:herbs"
+  "tag:herbs",
+  "tag:sweets",
+  "tag:cocktails"
  ],
  "pictures": [
   {
-   "slug": "fruit-stall",
-   "title": "Fruit stall",
-   "seed": 101,
+   "slug": "breakfast-table",
+   "title": "Breakfast table",
+   "seed": 201,
+   "palette": [
+    "#3f7fbf",
+    "#f6f8fc",
+    "#f2c94c"
+   ],
    "layout": {
-    "type": "vbands",
-    "n": 2,
-    "sizes": [
-     3,
-     2
-    ],
-    "wobble": 0.04
+    "type": "table",
+    "shape": "round",
+    "margin": 0.04,
+    "plates": 7,
+    "base": {
+     "type": "tiles",
+     "colors": [
+      "#2f6db3",
+      "#f3f6fb"
+     ],
+     "size": 90,
+     "pattern": "checker",
+     "grout": "#dfe7f2"
+    }
    },
    "zones": [
     {
      "items": [
-      "tag:fruit"
+      "tag:breakfast",
+      "tag:hotdrinks",
+      "orange_juice",
+      "milk_butterfly",
+      "honey",
+      "butterfly_butter"
      ],
      "ground": {
-      "type": "planks",
+      "type": "check",
       "colors": [
-       "#7fb069",
-       "#6fa05a",
-       "#8dbf76"
+       "#4a86c8",
+       "#fbfcfe"
       ],
-      "width": 140
+      "size": 46
      },
+     "hero": [
+      "waffles",
+      "gammas_pancakes",
+      "fried_eggs",
+      "hearty_omelet"
+     ],
      "size": {
       "min": 0.16,
-      "max": 0.36,
-      "power": 1.1
+      "max": 0.32,
+      "power": 1.0
      },
-     "fill": [
-      "tag:sweets",
-      "tag:juices"
-     ]
+     "cover": 0.82,
+     "fill_cover": 0.9
     },
     {
      "items": [
       "tag:juices",
-      "tag:cocktails"
+      "tag:bakery"
      ],
      "ground": {
-      "type": "stripes",
+      "type": "tiles",
       "colors": [
-       "#ffd166",
-       "#fff4d6",
-       "#f7a541"
+       "#2f6db3",
+       "#f3f6fb"
       ],
-      "size": 44
+      "size": 90,
+      "pattern": "checker",
+      "grout": "#dfe7f2"
      },
      "size": {
-      "min": 0.1,
-      "max": 0.22,
-      "power": 1.2
+      "min": 0.12,
+      "max": 0.24,
+      "power": 1.0
      },
-     "fill": [
-      "tag:fruit",
-      "tag:sweets"
+     "cover": 0.5,
+     "fill_cover": 0.62
+    }
+   ]
+  },
+  {
+   "slug": "bakery-shelves",
+   "title": "Bakery shelves",
+   "seed": 202,
+   "palette": [
+    "#f2efe9",
+    "#d9a55b",
+    "#8a5a3a"
+   ],
+   "priority": 1,
+   "layout": {
+    "type": "cubbies",
+    "cols": 1,
+    "rows": 5,
+    "frame": [
+     "#ecd9b4",
+     "#e2cda4",
+     "#f2e2c2"
+    ],
+    "frame_w": 0.03,
+    "board_h": 0.02
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:bakery"
+     ],
+     "ground": {
+      "type": "marble",
+      "colors": [
+       "#f3f1ed"
+      ],
+      "vein": "#b9b2a8"
+     },
+     "hero": [
+      "swank_zucchini_loaf",
+      "pumpkin_pie",
+      "greasy_frybread",
+      "bun"
      ]
     }
+   ],
+   "row": {
+    "min": 0.55,
+    "max": 0.95
+   },
+   "fill": [
+    "tag:bakery",
+    "tag:sweets",
+    "tag:breakfast"
    ]
   },
   {
    "slug": "vegetable-crates",
    "title": "Vegetable crates",
-   "seed": 102,
+   "seed": 203,
+   "palette": [
+    "#4caf50",
+    "#8bc34a",
+    "#795548"
+   ],
    "layout": {
-    "type": "grid",
+    "type": "crates",
     "cols": 2,
-    "rows": 2,
-    "wobble": 0.03
+    "rows": 3,
+    "gutter": 0.03,
+    "rim": 0.04,
+    "rim_colors": [
+     "#c9a06a",
+     "#b98f5c",
+     "#d8b07a"
+    ],
+    "base": {
+     "type": "grass",
+     "colors": [
+      "#4f8f36",
+      "#68a843",
+      "#3f7a2c",
+      "#7bb84c"
+     ]
+    }
    },
    "zones": [
     {
      "items": [
-      "tag:veg"
+      "broccoli",
+      "cabbage",
+      "spinach",
+      "green_leaf",
+      "cucumber",
+      "zucchini",
+      "pickle"
      ],
      "ground": {
       "type": "scatter",
       "colors": [
+       "#6d4c41",
        "#8d6e63",
-       "#a1887f",
-       "#6d4c41"
+       "#5d4037"
       ],
-      "bg": "#6f4e37"
+      "bg": "#5a3f2e"
      },
      "size": {
-      "min": 0.16,
-      "max": 0.36,
-      "power": 1.1
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
      },
-     "fill": [
-      "tag:salad"
+     "palette": [
+      "#4caf50"
      ]
     },
     {
      "items": [
-      "tag:vegbags",
-      "tag:seeds"
+      "carrot",
+      "radish",
+      "turnip",
+      "parsnip",
+      "potato",
+      "onion",
+      "garlic",
+      "ginger"
      ],
      "ground": {
       "type": "linen",
@@ -153,625 +273,454 @@
       ]
      },
      "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:veg",
-      "tag:herbs"
-     ]
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
+     }
     },
     {
      "items": [
-      "tag:salad"
+      "tomato",
+      "pumpkin",
+      "corn",
+      "mushroom",
+      "hot_pepper"
      ],
      "ground": {
-      "type": "check",
+      "type": "scatter",
       "colors": [
-       "#4caf50",
-       "#f4f9ec"
+       "#d9c27a",
+       "#c9b06a",
+       "#e6d38f"
       ],
-      "size": 46
+      "bg": "#cdb36e",
+      "kind": "chip",
+      "rmin": 2,
+      "rmax": 6
      },
      "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:vegbags",
+      "tag:seeds"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#e8dcc0"
+      ]
      },
-     "fill": [
-      "tag:veg"
+     "size": {
+      "min": 0.16,
+      "max": 0.32,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:salad",
+      "big_salad",
+      "common_crudites"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#6d4c41",
+       "#8d6e63"
+      ],
+      "bg": "#5a3f2e"
+     },
+     "size": {
+      "min": 0.16,
+      "max": 0.32,
+      "power": 1.0
+     },
+     "palette": [
+      "#4caf50",
+      "#ffffff"
      ]
     },
     {
      "items": [
       "tag:herbs",
-      "tag:spices"
-     ],
-     "ground": {
-      "type": "planks",
-      "colors": [
-       "#e2bf86",
-       "#d6b077",
-       "#ecca92"
-      ],
-      "width": 130
-     },
-     "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:veg",
-      "tag:seeds"
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "breakfast-table",
-   "title": "Breakfast table",
-   "seed": 103,
-   "layout": {
-    "type": "single"
-   },
-   "zones": [
-    {
-     "items": [
-      "tag:breakfast",
-      "tag:hotdrinks",
-      "honey",
-      "birch_syrup",
-      "cloudberry_jam",
-      "whortleberry_jelly",
-      "butterfly_butter",
-      "orange_juice",
-      "milk_butterfly"
-     ],
-     "ground": {
-      "type": "check",
-      "colors": [
-       "#3f7fbf",
-       "#f6f8fc"
-      ],
-      "size": 52
-     },
-     "size": {
-      "min": 0.16,
-      "max": 0.36,
-      "power": 1.1
-     },
-     "fill": [
-      "tag:bakery",
-      "tag:fruit",
-      "tag:juices"
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "bakery-shelves",
-   "title": "Bakery shelves",
-   "seed": 104,
-   "layout": {
-    "type": "hbands",
-    "n": 3,
-    "wobble": 0.015
-   },
-   "zones": [
-    {
-     "items": [
-      "tag:bakery"
-     ],
-     "ground": {
-      "type": "planks",
-      "colors": [
-       "#c48a52",
-       "#b47a45",
-       "#d29a60"
-      ],
-      "width": 150
-     },
-     "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:sweets"
-     ]
-    },
-    {
-     "items": [
-      "tag:sweets",
-      "pumpkin_pie",
-      "carobish_treats"
-     ],
-     "ground": {
-      "type": "planks",
-      "colors": [
-       "#8a5a3a",
-       "#7b4f33",
-       "#99673f"
-      ],
-      "width": 160
-     },
-     "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:bakery"
-     ]
-    },
-    {
-     "items": [
-      "tag:jars",
-      "flour",
-      "grain",
-      "oats"
-     ],
-     "ground": {
-      "type": "planks",
-      "colors": [
-       "#e2bf86",
-       "#d6b077",
-       "#ecca92"
-      ],
-      "width": 130
-     },
-     "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:bakery",
-      "tag:fruit"
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "spice-market",
-   "title": "Spice market",
-   "seed": 105,
-   "layout": {
-    "type": "voronoi",
-    "n": 4,
-    "wobble": 0.05
-   },
-   "zones": [
-    {
-     "items": [
-      "tag:spices"
-     ],
-     "ground": {
-      "type": "tiles",
-      "colors": [
-       "#c8643b",
-       "#d9774a",
-       "#b85a33"
-      ],
-      "size": 120,
-      "grout": "#f1dfc4"
-     },
-     "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:rubs",
-      "tag:seeds"
-     ]
-    },
-    {
-     "items": [
-      "tag:rubs",
-      "tag:seeds"
+      "tag:veg"
      ],
      "ground": {
       "type": "linen",
       "colors": [
-       "#e6d3a8"
+       "#cfe0b8"
       ]
      },
      "size": {
-      "min": 0.1,
-      "max": 0.22,
-      "power": 1.2
+      "min": 0.16,
+      "max": 0.32,
+      "power": 1.0
      },
-     "fill": [
-      "tag:spices",
-      "tag:herbs"
-     ]
-    },
-    {
-     "items": [
-      "tag:herbs",
-      "garlic",
-      "ginger",
-      "hot_pepper"
-     ],
-     "ground": {
-      "type": "plaid",
-      "colors": [
-       "#2b3f8f",
-       "#e0b13a",
-       "#a63a2f",
-       "#e9e2d0"
-      ],
-      "size": 70
-     },
-     "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:spices"
-     ]
-    },
-    {
-     "items": [
-      "tag:spices",
-      "mortar_and_pestle",
-      "spice_mill"
-     ],
-     "ground": {
-      "type": "stripes",
-      "colors": [
-       "#f2b134",
-       "#e07a2e",
-       "#fbe3a6"
-      ],
-      "size": 40,
-      "angle": 45
-     },
-     "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:herbs",
-      "tag:rubs"
+     "palette": [
+      "#4caf50"
      ]
     }
+   ],
+   "fill": [
+    "tag:veg",
+    "tag:salad",
+    "tag:herbs"
+   ],
+   "fill_cover": 0.9
+  },
+  {
+   "slug": "fruit-trays",
+   "title": "Fruit trays",
+   "seed": 204,
+   "palette": [
+    "#e53935",
+    "#fb8c00",
+    "#fdd835",
+    "#8e24aa"
+   ],
+   "layout": {
+    "type": "trays",
+    "n": 7,
+    "gutter": 0.03,
+    "rim": 0.022,
+    "rims": [
+     "#d84343",
+     "#2f7fd0",
+     "#3f9e4f",
+     "#e8a02a",
+     "#7b4fb3",
+     "#e0607e",
+     "#2aa3a3"
+    ],
+    "base": {
+     "type": "planks",
+     "colors": [
+      "#e8d2a8",
+      "#dfc89c",
+      "#f0dcb6"
+     ],
+     "width": 110
+    }
+   },
+   "zones": [
+    {
+     "items": [
+      "apple",
+      "cherry",
+      "strawberry",
+      "tomato",
+      "plum"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#fbf6ec"
+      ]
+     },
+     "size": {
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
+     },
+     "palette": [
+      "#e53935",
+      "#8e24aa"
+     ]
+    },
+    {
+     "items": [
+      "orange",
+      "lemon",
+      "banana",
+      "pineapple",
+      "mangosteen"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#fbf6ec"
+      ]
+     },
+     "size": {
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "bunch_of_grapes",
+      "whortleberry",
+      "thimble_berry",
+      "tuna_berry",
+      "cloudberry"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#fbf6ec"
+      ]
+     },
+     "size": {
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "guava_spotted",
+      "guava_striped",
+      "fruit_salad",
+      "exotic_fruit_salad",
+      "berry_bowl"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#fbf6ec"
+      ]
+     },
+     "size": {
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:juices"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#fbf6ec"
+      ]
+     },
+     "size": {
+      "min": 0.16,
+      "max": 0.32,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:fruit",
+      "tag:sweets"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#fbf6ec"
+      ]
+     },
+     "size": {
+      "min": 0.16,
+      "max": 0.32,
+      "power": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:fruit",
+    "tag:juices",
+    "tag:sweets"
+   ],
+   "fill_cover": 0.88
+  },
+  {
+   "slug": "spice-rack",
+   "title": "Spice rack",
+   "seed": 205,
+   "palette": [
+    "#b5562f",
+    "#d98b3a",
+    "#5d3c26"
+   ],
+   "priority": 1,
+   "layout": {
+    "type": "cubbies",
+    "cols": 3,
+    "rows": 5,
+    "frame": [
+     "#6b452c",
+     "#5d3c26",
+     "#7a5034"
+    ],
+    "frame_w": 0.026,
+    "board_h": 0.02
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:spices",
+      "tag:rubs"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#c8643b"
+      ]
+     }
+    },
+    {
+     "items": [
+      "tag:spices",
+      "tag:herbs"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#d98b4a"
+      ]
+     }
+    },
+    {
+     "items": [
+      "tag:seeds",
+      "tag:spices"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#b85a33"
+      ]
+     }
+    }
+   ],
+   "row": {
+    "min": 0.5,
+    "max": 0.92
+   },
+   "fill": [
+    "tag:spices",
+    "tag:rubs",
+    "tag:herbs",
+    "tag:seeds",
+    "mortar_and_pestle",
+    "spice_mill"
    ]
   },
   {
    "slug": "cheese-board",
    "title": "Cheese board",
-   "seed": 106,
+   "seed": 206,
+   "palette": [
+    "#f2c94c",
+    "#9e9e9e",
+    "#7b1f2b"
+   ],
    "layout": {
-    "type": "ring",
-    "margin": 0.2,
-    "wobble": 0.03
+    "type": "table",
+    "shape": "round",
+    "margin": 0.06,
+    "edge": 0.025,
+    "base": {
+     "type": "cobble",
+     "colors": [
+      "#8e8e8e",
+      "#a3a3a3",
+      "#7c7c7c",
+      "#b0aca4"
+     ],
+     "size": 120,
+     "mortar": "#5a5a5a"
+    }
    },
    "zones": [
     {
      "items": [
       "tag:cheese",
       "bunch_of_grapes",
-      "apple",
       "plum",
-      "cherry",
       "jamon_bellota",
+      "pickle",
       "olive_oil",
-      "pickle",
-      "bun"
-     ],
-     "ground": {
-      "type": "planks",
-      "colors": [
-       "#8a5a3a",
-       "#7b4f33",
-       "#99673f"
-      ],
-      "width": 160
-     },
-     "size": {
-      "min": 0.16,
-      "max": 0.36,
-      "power": 1.1
-     },
-     "fill": [
-      "tag:fruit",
-      "tag:bakery"
-     ]
-    },
-    {
-     "items": [
-      "tag:bakery",
-      "tag:jars",
-      "tag:fruit"
-     ],
-     "ground": {
-      "type": "check",
-      "colors": [
-       "#c0392b",
-       "#fbf1e3"
-      ],
-      "size": 56
-     },
-     "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:sweets",
-      "tag:veg"
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "sandwich-counter",
-   "title": "Sandwich counter",
-   "seed": 107,
-   "layout": {
-    "type": "hbands",
-    "n": 2,
-    "sizes": [
-     3,
-     2
-    ],
-    "wobble": 0.03
-   },
-   "zones": [
-    {
-     "items": [
-      "tag:sandwich"
-     ],
-     "ground": {
-      "type": "tiles",
-      "colors": [
-       "#d64541",
-       "#f7f1e8"
-      ],
-      "size": 100,
-      "pattern": "checker",
-      "grout": "#e9e3da"
-     },
-     "size": {
-      "min": 0.16,
-      "max": 0.36,
-      "power": 1.1
-     },
-     "fill": [
-      "tag:salad",
-      "tag:jars"
-     ]
-    },
-    {
-     "items": [
-      "tag:salad",
-      "pickle",
-      "onion_rings",
-      "creamy_catsup",
-      "hot_n_fizzy_sauce"
-     ],
-     "ground": {
-      "type": "tiles",
-      "colors": [
-       "#6bb36b",
-       "#e8f4dd"
-      ],
-      "size": 90,
-      "pattern": "checker",
-      "grout": "#dfe9d6"
-     },
-     "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:veg",
-      "tag:juices"
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "noodle-bar",
-   "title": "Noodle bar",
-   "seed": 108,
-   "layout": {
-    "type": "diag",
-    "n": 2,
-    "wobble": 0.03
-   },
-   "zones": [
-    {
-     "items": [
-      "tag:noodles",
-      "tag:bowls"
-     ],
-     "ground": {
-      "type": "planks",
-      "colors": [
-       "#e8c98f",
-       "#dcbb7f",
-       "#f0d39c"
-      ],
-      "width": 70,
-      "vertical": true
-     },
-     "size": {
-      "min": 0.16,
-      "max": 0.36,
-      "power": 1.1
-     },
-     "fill": [
-      "tag:salad"
-     ]
-    },
-    {
-     "items": [
-      "tag:bowls",
-      "sesame_oil",
-      "sweet_n_sour_sauce",
-      "hot_n_fizzy_sauce",
-      "rice",
-      "urfu"
-     ],
-     "ground": {
-      "type": "dots",
-      "colors": [
-       "#b3202a",
-       "#f2c14e",
-       "#f7e6c4"
-      ],
-      "size": 64
-     },
-     "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:noodles",
-      "tag:veg"
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "soup-kitchen",
-   "title": "Soup kitchen",
-   "seed": 109,
-   "layout": {
-    "type": "single"
-   },
-   "zones": [
-    {
-     "items": [
-      "tag:bowls",
-      "awesome_pot",
-      "saucepan",
       "bun",
-      "greasy_frybread"
-     ],
-     "ground": {
-      "type": "tiles",
-      "colors": [
-       "#2f6db3",
-       "#f3f6fb",
-       "#7fa8d6"
-      ],
-      "size": 84,
-      "grout": "#ffffff"
-     },
-     "size": {
-      "min": 0.16,
-      "max": 0.36,
-      "power": 1.1
-     },
-     "fill": [
-      "tag:veg",
-      "tag:bakery"
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "salad-bar",
-   "title": "Salad bar",
-   "seed": 110,
-   "layout": {
-    "type": "vbands",
-    "n": 3,
-    "wobble": 0.03
-   },
-   "zones": [
-    {
-     "items": [
-      "tag:salad"
-     ],
-     "ground": {
-      "type": "tiles",
-      "colors": [
-       "#f6f6f2",
-       "#e3efe0"
-      ],
-      "size": 110,
-      "grout": "#b9d3b2",
-      "pattern": "checker"
-     },
-     "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:veg"
-     ]
-    },
-    {
-     "items": [
-      "tag:veg",
-      "olive_oil",
-      "sesame_oil",
-      "oily_dressing"
+      "fancy_cheese"
      ],
      "ground": {
       "type": "planks",
       "colors": [
-       "#a6c48a",
-       "#98b77c",
-       "#b4d098"
+       "#6b452c",
+       "#5d3c26",
+       "#7a5034"
       ],
       "width": 120
      },
+     "hero": [
+      "cheese",
+      "fancy_cheese",
+      "cheese_plate",
+      "cheese_very_very_stinky"
+     ],
      "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
      },
-     "fill": [
-      "tag:salad"
-     ]
+     "cover": 0.85,
+     "fill_cover": 0.92
     },
     {
      "items": [
-      "tag:salad",
-      "tag:herbs"
+      "tag:jars",
+      "tag:hotdrinks"
      ],
      "ground": {
-      "type": "check",
+      "type": "cobble",
       "colors": [
-       "#f29e4c",
-       "#fff6e5"
+       "#8e8e8e",
+       "#a3a3a3",
+       "#7c7c7c",
+       "#b0aca4"
       ],
-      "size": 40
+      "size": 120,
+      "mortar": "#5a5a5a"
      },
      "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
+      "min": 0.12,
+      "max": 0.24,
+      "power": 1.0
      },
-     "fill": [
-      "tag:veg",
-      "tag:fruit"
-     ]
+     "cover": 0.4,
+     "fill_cover": 0.55
     }
+   ],
+   "fill": [
+    "tag:cheese",
+    "tag:fruit",
+    "tag:bakery"
    ]
   },
   {
-   "slug": "barbecue",
-   "title": "Barbecue",
-   "seed": 111,
+   "slug": "barbecue-grill",
+   "title": "Barbecue grill",
+   "seed": 207,
+   "palette": [
+    "#5d4037",
+    "#c62828",
+    "#3e2723"
+   ],
    "layout": {
-    "type": "ring",
-    "margin": 0.18,
-    "square": true,
-    "wobble": 0.02
+    "type": "table",
+    "shape": "oval",
+    "margin": 0.07,
+    "edge": 0.03,
+    "base": {
+     "type": "planks",
+     "colors": [
+      "#4e342e",
+      "#5d4037",
+      "#3e2723"
+     ],
+     "width": 120
+    }
    },
    "zones": [
     {
@@ -780,64 +729,88 @@
       "corn",
       "corn_off_the_cob",
       "super_veggie_kebabs",
-      "hot_potatoes"
+      "hot_potatoes",
+      "onion_rings"
      ],
      "ground": {
-      "type": "cobble",
+      "type": "stripes",
       "colors": [
-       "#c9a27a",
-       "#b98f66",
-       "#d8b48c"
+       "#3a3a3a",
+       "#202020",
+       "#555555"
       ],
-      "size": 110,
-      "mortar": "#7a6450"
+      "size": 22,
+      "angle": 90
      },
+     "hero": [
+      "meat",
+      "simple_bbq",
+      "abbasid_ribs",
+      "jamon_bellota"
+     ],
      "size": {
-      "min": 0.16,
-      "max": 0.36,
-      "power": 1.1
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
      },
-     "fill": [
-      "tag:sandwich"
-     ]
+     "cover": 0.85,
+     "fill_cover": 0.92
     },
     {
      "items": [
-      "tag:jars",
       "tag:rubs",
+      "creamy_catsup",
+      "hot_n_fizzy_sauce",
+      "wicked_bolognese_sauce",
       "hot_pepper",
-      "onion",
-      "tomato"
+      "tomato",
+      "onion"
      ],
      "ground": {
       "type": "planks",
       "colors": [
-       "#d26a3c",
-       "#c25e35",
-       "#e07a48"
+       "#4e342e",
+       "#5d4037",
+       "#3e2723"
       ],
       "width": 120
      },
      "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
+      "min": 0.12,
+      "max": 0.24,
+      "power": 1.0
      },
-     "fill": [
-      "tag:veg",
-      "tag:juices"
-     ]
+     "cover": 0.45,
+     "fill_cover": 0.6
     }
+   ],
+   "fill": [
+    "tag:grill",
+    "tag:sandwich",
+    "tag:veg"
    ]
   },
   {
-   "slug": "sweet-shop",
-   "title": "Sweet shop",
-   "seed": 112,
+   "slug": "sweet-shop-counter",
+   "title": "Sweet shop counter",
+   "seed": 208,
+   "palette": [
+    "#f48fb1",
+    "#80deea",
+    "#ce93d8"
+   ],
+   "priority": 1,
    "layout": {
-    "type": "voronoi",
-    "n": 3,
-    "wobble": 0.04
+    "type": "cubbies",
+    "cols": 2,
+    "rows": 4,
+    "frame": [
+     "#f1efe9",
+     "#e7e4dc",
+     "#f8f6f1"
+    ],
+    "frame_w": 0.028,
+    "board_h": 0.022
    },
    "zones": [
     {
@@ -847,21 +820,12 @@
      "ground": {
       "type": "stripes",
       "colors": [
-       "#f7a8c4",
-       "#fff0f5",
-       "#8fd3e8"
+       "#f7b6cc",
+       "#fde4ec"
       ],
-      "size": 48,
+      "size": 34,
       "angle": 90
-     },
-     "size": {
-      "min": 0.16,
-      "max": 0.36,
-      "power": 1.1
-     },
-     "fill": [
-      "tag:bakery"
-     ]
+     }
     },
     {
      "items": [
@@ -869,445 +833,58 @@
       "tag:cocktails"
      ],
      "ground": {
-      "type": "dots",
-      "colors": [
-       "#7ec8c8",
-       "#ffffff",
-       "#ffd3e0"
-      ],
-      "size": 60
-     },
-     "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:fruit"
-     ]
-    },
-    {
-     "items": [
-      "tag:bakery",
-      "honey",
-      "cloudberry_jam"
-     ],
-     "ground": {
-      "type": "check",
-      "colors": [
-       "#c9a0dc",
-       "#fbf5ff"
-      ],
-      "size": 50
-     },
-     "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:sweets"
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "cocktail-bar",
-   "title": "Cocktail bar",
-   "seed": 113,
-   "layout": {
-    "type": "hbands",
-    "n": 2,
-    "sizes": [
-     1,
-     1
-    ],
-    "wobble": 0.04
-   },
-   "zones": [
-    {
-     "items": [
-      "tag:cocktails",
-      "lemon",
-      "orange",
-      "cherry",
-      "pineapple",
-      "cocktail_shaker"
-     ],
-     "ground": {
-      "type": "tiles",
-      "colors": [
-       "#1f9e89",
-       "#2bb3a0",
-       "#167f70",
-       "#f2e9d8"
-      ],
-      "size": 70,
-      "grout": "#eae2cf"
-     },
-     "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:fruit",
-      "tag:juices"
-     ]
-    },
-    {
-     "items": [
-      "tag:juices",
-      "tag:fruit"
-     ],
-     "ground": {
       "type": "stripes",
       "colors": [
-       "#ffb347",
-       "#ffe4b5",
-       "#ff7f50"
+       "#a5e3ea",
+       "#e6f8fa"
       ],
-      "size": 40,
-      "angle": 135
-     },
-     "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:cocktails",
-      "tag:sweets"
-     ]
+      "size": 34,
+      "angle": 90
+     }
     }
-   ]
-  },
-  {
-   "slug": "preserves-pantry",
-   "title": "Preserves pantry",
-   "seed": 114,
-   "layout": {
-    "type": "hbands",
-    "n": 4,
-    "wobble": 0.01
+   ],
+   "row": {
+    "min": 0.55,
+    "max": 0.95,
+    "min_frac": 0.35
    },
-   "zones": [
-    {
-     "items": [
-      "tag:jars",
-      "honey"
-     ],
-     "ground": {
-      "type": "planks",
-      "colors": [
-       "#c48a52",
-       "#b47a45",
-       "#d29a60"
-      ],
-      "width": 150
-     },
-     "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:fruit"
-     ]
-    },
-    {
-     "items": [
-      "tag:fruit",
-      "berry_bowl"
-     ],
-     "ground": {
-      "type": "plaid",
-      "colors": [
-       "#8c2d2d",
-       "#d9b44a",
-       "#2e5a3a",
-       "#efe6d2"
-      ],
-      "size": 64
-     },
-     "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:jars"
-     ]
-    },
-    {
-     "items": [
-      "tag:jars",
-      "tag:spices"
-     ],
-     "ground": {
-      "type": "planks",
-      "colors": [
-       "#8a5a3a",
-       "#7b4f33",
-       "#99673f"
-      ],
-      "width": 160
-     },
-     "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:fruit"
-     ]
-    },
-    {
-     "items": [
-      "tag:fruit",
-      "tag:veg"
-     ],
-     "ground": {
-      "type": "check",
-      "colors": [
-       "#e3a72f",
-       "#fff8e8"
-      ],
-      "size": 44
-     },
-     "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:jars"
-     ]
-    }
-   ]
+   "fill": [
+    "tag:sweets",
+    "tag:cocktails",
+    "tag:juices",
+    "tag:bakery",
+    "tag:fruit"
+   ],
+   "palette_max": 70
   },
   {
-   "slug": "seed-store",
-   "title": "Seed store",
-   "seed": 115,
+   "slug": "picnic-cloth",
+   "title": "Picnic cloth",
+   "seed": 209,
+   "palette": [
+    "#d33f3f",
+    "#ffffff",
+    "#4f8f36"
+   ],
    "layout": {
-    "type": "grid",
-    "cols": 2,
-    "rows": 3,
-    "wobble": 0.02
-   },
-   "zones": [
-    {
-     "items": [
-      "tag:seeds"
+    "type": "cloth",
+    "margin": 0.13,
+    "border": {
+     "colors": [
+      "#ffffff",
+      "#d33f3f"
      ],
-     "ground": {
-      "type": "linen",
-      "colors": [
-       "#cdb68a"
-      ]
-     },
-     "size": {
-      "min": 0.1,
-      "max": 0.22,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:veg"
-     ]
-    },
-    {
-     "items": [
-      "tag:veg"
-     ],
-     "ground": {
-      "type": "scatter",
-      "colors": [
-       "#8d6e63",
-       "#6d4c41",
-       "#a1887f"
-      ],
-      "bg": "#7a5a42"
-     },
-     "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:seeds"
-     ]
-    },
-    {
-     "items": [
-      "tag:herbs",
-      "tag:seeds"
-     ],
-     "ground": {
-      "type": "planks",
-      "colors": [
-       "#6f9e55",
-       "#7caa60",
-       "#629048"
-      ],
-      "width": 110
-     },
-     "size": {
-      "min": 0.1,
-      "max": 0.22,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:veg"
-     ]
-    },
-    {
-     "items": [
-      "tag:vegbags",
-      "grain",
-      "flour",
-      "oats",
-      "pepitas"
-     ],
-     "ground": {
-      "type": "planks",
-      "colors": [
-       "#e2bf86",
-       "#d6b077",
-       "#ecca92"
-      ],
-      "width": 130
-     },
-     "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:seeds",
-      "tag:veg"
-     ]
-    },
-    {
-     "items": [
-      "tag:veg",
-      "tag:herbs"
-     ],
-     "ground": {
-      "type": "stripes",
-      "colors": [
-       "#e6c84f",
-       "#f6edc8"
-      ],
-      "size": 38
-     },
-     "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:seeds"
-     ]
-    },
-    {
-     "items": [
-      "tag:seeds",
-      "tag:spices"
-     ],
-     "ground": {
-      "type": "check",
-      "colors": [
-       "#8b5e3c",
-       "#f0e2c8"
-      ],
-      "size": 40
-     },
-     "size": {
-      "min": 0.1,
-      "max": 0.22,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:veg"
-     ]
+     "width": 0.03
     }
-   ]
-  },
-  {
-   "slug": "herb-drying-rack",
-   "title": "Herb drying rack",
-   "seed": 116,
-   "layout": {
-    "type": "vbands",
-    "n": 2,
-    "wobble": 0.02
-   },
-   "zones": [
-    {
-     "items": [
-      "tag:herbs",
-      "re:^essence_of_",
-      "tag:powders"
-     ],
-     "ground": {
-      "type": "linen",
-      "colors": [
-       "#e8dcc0"
-      ]
-     },
-     "size": {
-      "min": 0.16,
-      "max": 0.36,
-      "power": 1.1
-     },
-     "fill": [
-      "tag:spices"
-     ]
-    },
-    {
-     "items": [
-      "tag:spices",
-      "mortar_and_pestle",
-      "tag:seeds"
-     ],
-     "ground": {
-      "type": "planks",
-      "colors": [
-       "#9c7a54",
-       "#8d6c48",
-       "#ab8760"
-      ],
-      "width": 100,
-      "vertical": true
-     },
-     "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:herbs"
-     ]
-    }
-   ]
-  },
-  {
-   "slug": "picnic-blanket",
-   "title": "Picnic blanket",
-   "seed": 117,
-   "layout": {
-    "type": "ring",
-    "margin": 0.17,
-    "square": true,
-    "wobble": 0.02
    },
    "zones": [
     {
      "items": [
       "tag:sandwich",
       "tag:fruit",
-      "tag:juices"
+      "lemon_juice",
+      "orange_juice",
+      "fruity_juice"
      ],
      "ground": {
       "type": "check",
@@ -1315,85 +892,371 @@
        "#d33f3f",
        "#fff7f0"
       ],
-      "size": 60
+      "size": 58
      },
+     "hero": [
+      "deluxe_sammich",
+      "hungry_nachos",
+      "fruit_salad",
+      "maburger_royale"
+     ],
      "size": {
       "min": 0.16,
-      "max": 0.36,
-      "power": 1.1
+      "max": 0.32,
+      "power": 1.0
      },
-     "fill": [
-      "tag:sweets",
-      "tag:salad"
-     ]
+     "fill_cover": 0.9
     },
     {
      "items": [
-      "tag:sweets",
-      "tag:fruit"
+      "bling_flamingo_1",
+      "re:^groddle/(flower_bush|flower_group)",
+      "re:^groddle/bush_[123]$"
      ],
      "ground": {
-      "type": "grass"
+      "type": "grass",
+      "colors": [
+       "#4f8f36",
+       "#68a843",
+       "#3f7a2c",
+       "#7bb84c"
+      ]
      },
      "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
+      "min": 0.12,
+      "max": 0.24,
+      "power": 1.0
      },
-     "fill": [
-      "tag:veg",
-      "tag:bakery"
-     ]
+     "cover": 0.35,
+     "fill_cover": 0.4
     }
+   ],
+   "fill": [
+    "tag:sandwich",
+    "tag:fruit",
+    "tag:juices",
+    "tag:salad"
    ]
   },
   {
-   "slug": "harvest-supper",
-   "title": "Harvest supper",
-   "seed": 118,
+   "slug": "preserves-pantry",
+   "title": "Preserves pantry",
+   "seed": 210,
+   "palette": [
+    "#2e5a3a",
+    "#d9a03a",
+    "#8c2d2d"
+   ],
+   "priority": 1,
    "layout": {
-    "type": "single"
+    "type": "cubbies",
+    "cols": 1,
+    "rows": 4,
+    "frame": [
+     "#c48a52",
+     "#b47a45",
+     "#d29a60"
+    ],
+    "frame_w": 0.03,
+    "board_h": 0.022
    },
    "zones": [
     {
      "items": [
-      "tag:bowls",
-      "tag:grill",
-      "pumpkin_pie",
-      "pumpkin",
-      "swank_zucchini_loaf",
-      "pumpkin_ale"
+      "tag:jars",
+      "honey",
+      "birch_syrup",
+      "olive_oil",
+      "sesame_oil"
      ],
      "ground": {
-      "type": "linen",
+      "type": "paint",
       "colors": [
-       "#f3ead6"
+       "#3d6b4a"
+      ]
+     }
+    }
+   ],
+   "row": {
+    "min": 0.55,
+    "max": 0.95
+   },
+   "fill": [
+    "tag:jars",
+    "tag:fruit",
+    "tag:veg",
+    "tag:spices"
+   ]
+  },
+  {
+   "slug": "coffee-bar",
+   "title": "Coffee bar",
+   "seed": 211,
+   "palette": [
+    "#2b2b2b",
+    "#f5f0e6",
+    "#8d5b3a"
+   ],
+   "layout": {
+    "type": "diag",
+    "n": 2,
+    "wobble": 0.03
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:hotdrinks",
+      "milk_butterfly",
+      "bubble_tea",
+      "carobish_treats",
+      "divine_crepes",
+      "waffles",
+      "oaty_cake"
+     ],
+     "ground": {
+      "type": "tiles",
+      "colors": [
+       "#2b2b2b",
+       "#f5f0e6"
+      ],
+      "size": 80,
+      "pattern": "checker",
+      "grout": "#cfc6b6"
+     },
+     "hero": [
+      "mabbish_coffee",
+      "coffee",
+      "swank_zucchini_loaf"
+     ],
+     "size": {
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
+     },
+     "fill_cover": 0.88
+    },
+    {
+     "items": [
+      "tag:bakery",
+      "tag:sweets"
+     ],
+     "ground": {
+      "type": "planks",
+      "colors": [
+       "#8d5b3a",
+       "#7d5032",
+       "#9c6842"
+      ],
+      "width": 100
+     },
+     "size": {
+      "min": 0.16,
+      "max": 0.32,
+      "power": 1.0
+     },
+     "fill_cover": 0.88
+    }
+   ],
+   "fill": [
+    "tag:bakery",
+    "tag:hotdrinks",
+    "tag:sweets"
+   ]
+  },
+  {
+   "slug": "noodle-bar",
+   "title": "Noodle bar",
+   "seed": 212,
+   "palette": [
+    "#b3202a",
+    "#1f1f1f",
+    "#f2c14e"
+   ],
+   "layout": {
+    "type": "trays",
+    "n": 6,
+    "gutter": 0.028,
+    "rim": 0.03,
+    "rims": [
+     "#b3202a",
+     "#1f1f1f",
+     "#b3202a",
+     "#2b2b2b",
+     "#c0392b",
+     "#1f1f1f"
+    ],
+    "base": {
+     "type": "planks",
+     "colors": [
+      "#e8c98f",
+      "#dcbb7f",
+      "#f0d39c"
+     ],
+     "width": 60,
+     "vertical": true
+    }
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:noodles",
+      "tag:bowls",
+      "rice",
+      "proper_rice",
+      "urfu",
+      "salmon_jaella"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#2a1d1a"
+      ]
+     },
+     "size": {
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:bowls",
+      "sesame_oil",
+      "sweet_n_sour_sauce",
+      "hot_n_fizzy_sauce",
+      "bubble_tea"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#f6eadb"
       ]
      },
      "size": {
       "min": 0.16,
-      "max": 0.36,
-      "power": 1.1
-     },
-     "fill": [
-      "tag:bakery",
-      "tag:veg"
-     ]
+      "max": 0.32,
+      "power": 1.0
+     }
     }
-   ]
+   ],
+   "fill": [
+    "tag:noodles",
+    "tag:bowls",
+    "tag:veg",
+    "tag:jars"
+   ],
+   "fill_cover": 0.88
+  },
+  {
+   "slug": "salad-bar",
+   "title": "Salad bar",
+   "seed": 213,
+   "palette": [
+    "#4caf50",
+    "#f6f6f2",
+    "#a5d6a7"
+   ],
+   "layout": {
+    "type": "trays",
+    "n": 8,
+    "gutter": 0.025,
+    "rim": 0.02,
+    "rims": [
+     "#3f9e4f",
+     "#6abf69",
+     "#2e7d32",
+     "#9ccc65"
+    ],
+    "base": {
+     "type": "tiles",
+     "colors": [
+      "#f6f6f2",
+      "#e8f1e4"
+     ],
+     "size": 90,
+     "grout": "#c6dcc0",
+     "pattern": "checker"
+    }
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:salad",
+      "big_salad",
+      "spinach_salad"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#f7f7f3"
+      ]
+     },
+     "size": {
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
+     },
+     "palette": [
+      "#4caf50",
+      "#ffffff"
+     ]
+    },
+    {
+     "items": [
+      "broccoli",
+      "cabbage",
+      "cucumber",
+      "green_leaf",
+      "spinach",
+      "zucchini",
+      "pickle",
+      "oily_dressing",
+      "onion_sauce"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#f7f7f3"
+      ]
+     },
+     "size": {
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:salad",
+    "tag:veg",
+    "tag:herbs"
+   ],
+   "fill_cover": 0.86
   },
   {
    "slug": "seafood-platter",
    "title": "Seafood platter",
-   "seed": 119,
+   "seed": 214,
+   "palette": [
+    "#4f8cc4",
+    "#f4f7fb",
+    "#f08a5d"
+   ],
    "layout": {
-    "type": "vbands",
-    "n": 2,
-    "sizes": [
-     3,
-     2
-    ],
-    "wobble": 0.03
+    "type": "table",
+    "shape": "oval",
+    "margin": 0.06,
+    "plates": 0,
+    "edge": 0.02,
+    "base": {
+     "type": "planks",
+     "colors": [
+      "#4f8cc4",
+      "#5b9bd5",
+      "#437db2"
+     ],
+     "width": 130
+    }
    },
    "zones": [
     {
@@ -1408,186 +1271,317 @@
       "lemon",
       "pad_tii",
       "rice",
-      "proper_rice"
+      "lemon_juice",
+      "slow_gin_fizz"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#ffffff",
+       "#e3f0fa",
+       "#cfe4f2"
+      ],
+      "bg": "#eef6fc",
+      "kind": "chip",
+      "rmin": 4,
+      "rmax": 12
+     },
+     "hero": [
+      "cedar_plank_salmon",
+      "salmon_jaella",
+      "oysters_ocean"
+     ],
+     "size": {
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
+     },
+     "fill_cover": 0.9
+    },
+    {
+     "items": [
+      "tag:salad",
+      "tag:jars"
      ],
      "ground": {
       "type": "planks",
       "colors": [
-       "#5b9bd5",
        "#4f8cc4",
-       "#6aa8df"
+       "#5b9bd5",
+       "#437db2"
       ],
       "width": 130
      },
      "size": {
-      "min": 0.16,
-      "max": 0.36,
-      "power": 1.1
+      "min": 0.12,
+      "max": 0.24,
+      "power": 1.0
      },
-     "fill": [
-      "tag:salad",
-      "tag:noodles"
-     ]
-    },
-    {
-     "items": [
-      "tag:jars",
-      "lemon_juice",
-      "slow_gin_fizz",
-      "tag:salad"
-     ],
-     "ground": {
-      "type": "tiles",
-      "colors": [
-       "#e6f2fa",
-       "#cfe4f2"
-      ],
-      "size": 80,
-      "grout": "#9fc3dc",
-      "pattern": "checker"
-     },
-     "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:veg"
-     ]
+     "cover": 0.35,
+     "fill_cover": 0.5
     }
-   ]
+   ],
+   "fill": [
+    "tag:salad",
+    "tag:noodles",
+    "tag:veg"
+   ],
+   "palette_max": 48
   },
   {
-   "slug": "kitchen-counter",
-   "title": "Kitchen counter",
-   "seed": 120,
+   "slug": "herb-cupboard",
+   "title": "Herb cupboard",
+   "seed": 216,
+   "palette": [
+    "#9575cd",
+    "#7cb342",
+    "#ede7f6"
+   ],
+   "priority": 1,
    "layout": {
-    "type": "hbands",
-    "n": 2,
-    "wobble": 0.03
+    "type": "cubbies",
+    "cols": 2,
+    "rows": 4,
+    "frame": [
+     "#7e6a9a",
+     "#6f5c8a",
+     "#8c78a8"
+    ],
+    "frame_w": 0.026,
+    "board_h": 0.02
    },
    "zones": [
     {
      "items": [
-      "tag:kitchentools",
-      "tag:veg"
+      "tag:herbs",
+      "rookswort",
+      "purple_flower"
      ],
      "ground": {
-      "type": "tiles",
+      "type": "paint",
       "colors": [
-       "#f2c94c",
-       "#f7dc85",
-       "#e9b93a"
-      ],
-      "size": 100,
-      "grout": "#fff8e0"
-     },
-     "size": {
-      "min": 0.16,
-      "max": 0.36,
-      "power": 1.1
-     },
-     "fill": [
-      "tag:spices"
-     ]
+       "#e6dcf2"
+      ]
+     }
     },
     {
      "items": [
+      "tag:herbs",
       "tag:spices",
+      "tag:seeds"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#dbe8c8"
+      ]
+     }
+    }
+   ],
+   "row": {
+    "min": 0.5,
+    "max": 0.95
+   },
+   "fill": [
+    "tag:herbs",
+    "tag:spices",
+    "tag:seeds",
+    "tag:veg",
+    "tag:salad"
+   ],
+   "palette_max": 70
+  },
+  {
+   "slug": "harvest-supper",
+   "title": "Harvest supper",
+   "seed": 218,
+   "palette": [
+    "#e07a2e",
+    "#8d5524",
+    "#f2c14e"
+   ],
+   "layout": {
+    "type": "table",
+    "shape": "oval",
+    "margin": 0.05,
+    "plates": 8,
+    "plate": "#f3e9d6",
+    "base": {
+     "type": "planks",
+     "colors": [
+      "#c86b2c",
+      "#b85f26",
+      "#d77a36"
+     ],
+     "width": 110
+    }
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:bowls",
+      "pumpkin_pie",
+      "pumpkin",
+      "swank_zucchini_loaf",
+      "pumpkin_ale",
+      "corny_fritter",
+      "applejack",
+      "potians_feast",
+      "pottine"
+     ],
+     "ground": {
+      "type": "linen",
+      "colors": [
+       "#f0e2c4"
+      ]
+     },
+     "hero": [
+      "pumpkin",
+      "pumpkin_pie",
+      "potians_feast"
+     ],
+     "size": {
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
+     },
+     "cover": 0.82,
+     "fill_cover": 0.9
+    },
+    {
+     "items": [
       "tag:veg",
-      "flour",
-      "swing_batter"
+      "grain",
+      "flour"
      ],
      "ground": {
       "type": "planks",
       "colors": [
-       "#c9a27a",
-       "#bb956e",
-       "#d6b08a"
+       "#c86b2c",
+       "#b85f26",
+       "#d77a36"
       ],
       "width": 110
      },
      "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
+      "min": 0.12,
+      "max": 0.24,
+      "power": 1.0
      },
-     "fill": [
-      "tag:herbs",
-      "tag:salad"
-     ]
+     "cover": 0.35,
+     "fill_cover": 0.5
     }
+   ],
+   "fill": [
+    "tag:bowls",
+    "tag:bakery",
+    "tag:veg",
+    "tag:grill"
    ]
   },
   {
-   "slug": "cafe-corner",
-   "title": "Café corner",
-   "seed": 121,
+   "slug": "deli-counter",
+   "title": "Deli counter",
+   "seed": 219,
+   "palette": [
+    "#d64541",
+    "#f7f1e8",
+    "#f2c94c"
+   ],
    "layout": {
-    "type": "diag",
-    "n": 2,
-    "wobble": 0.04
+    "type": "trays",
+    "n": 6,
+    "gutter": 0.03,
+    "rim": 0.025,
+    "rims": [
+     "#c9c9c9",
+     "#b5b5b5",
+     "#d6d6d6"
+    ],
+    "base": {
+     "type": "tiles",
+     "colors": [
+      "#d64541",
+      "#f7f1e8"
+     ],
+     "size": 100,
+     "pattern": "checker",
+     "grout": "#e9e3da"
+    }
    },
    "zones": [
     {
      "items": [
-      "tag:hotdrinks",
-      "tag:bakery",
-      "milk_butterfly",
-      "bubble_tea"
+      "tag:sandwich"
      ],
      "ground": {
-      "type": "tiles",
+      "type": "paint",
       "colors": [
-       "#2e2e2e",
-       "#f5f0e6"
-      ],
-      "size": 90,
-      "pattern": "checker",
-      "grout": "#d8d0c0"
+       "#faf6ef"
+      ]
      },
      "size": {
-      "min": 0.16,
-      "max": 0.36,
-      "power": 1.1
-     },
-     "fill": [
-      "tag:sweets"
-     ]
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
+     }
     },
     {
      "items": [
-      "tag:sweets",
-      "tag:juices"
+      "tag:grill",
+      "tag:cheese"
      ],
      "ground": {
-      "type": "stripes",
+      "type": "paint",
       "colors": [
-       "#79b4a9",
-       "#f3efe0"
-      ],
-      "size": 46
+       "#faf6ef"
+      ]
      },
      "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:bakery"
-     ]
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
+     }
     }
-   ]
+   ],
+   "fill": [
+    "tag:sandwich",
+    "tag:grill",
+    "tag:salad"
+   ],
+   "fill_cover": 0.88
   },
   {
-   "slug": "market-day",
-   "title": "Market day",
-   "seed": 122,
+   "slug": "market-crates",
+   "title": "Market crates",
+   "seed": 220,
+   "palette": [
+    "#e07a5f",
+    "#3d6db5",
+    "#81b29a",
+    "#f2cc8f"
+   ],
    "layout": {
-    "type": "grid",
-    "cols": 2,
-    "rows": 3,
-    "wobble": 0.025
+    "type": "crates",
+    "cols": 3,
+    "rows": 4,
+    "gutter": 0.022,
+    "rim": 0.03,
+    "rim_colors": [
+     "#a77b4f",
+     "#97704a",
+     "#b8895c"
+    ],
+    "base": {
+     "type": "cobble",
+     "colors": [
+      "#a89f91",
+      "#bcb3a4",
+      "#958c7e"
+     ],
+     "size": 80,
+     "mortar": "#6b6358"
+    }
    },
    "zones": [
     {
@@ -1595,22 +1589,16 @@
       "tag:fruit"
      ],
      "ground": {
-      "type": "planks",
+      "type": "linen",
       "colors": [
-       "#e07a5f",
-       "#d36c52",
-       "#ea8a70"
-      ],
-      "width": 90
+       "#e07a5f"
+      ]
      },
      "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:juices"
-     ]
+      "min": 0.16,
+      "max": 0.32,
+      "power": 1.0
+     }
     },
     {
      "items": [
@@ -1623,13 +1611,10 @@
       ]
      },
      "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:seeds"
-     ]
+      "min": 0.16,
+      "max": 0.32,
+      "power": 1.0
+     }
     },
     {
      "items": [
@@ -1641,16 +1626,13 @@
        "#3d6db5",
        "#f4f6fb"
       ],
-      "size": 40
+      "size": 36
      },
      "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:sweets"
-     ]
+      "min": 0.16,
+      "max": 0.32,
+      "power": 1.0
+     }
     },
     {
      "items": [
@@ -1658,22 +1640,16 @@
       "tag:grill"
      ],
      "ground": {
-      "type": "planks",
+      "type": "linen",
       "colors": [
-       "#86b37a",
-       "#78a56c",
-       "#94c088"
-      ],
-      "width": 90
+       "#81b29a"
+      ]
      },
      "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:sandwich"
-     ]
+      "min": 0.16,
+      "max": 0.32,
+      "power": 1.0
+     }
     },
     {
      "items": [
@@ -1686,41 +1662,202 @@
        "#f2cc8f",
        "#fff3dc"
       ],
-      "size": 36
+      "size": 30
      },
      "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:herbs"
-     ]
+      "min": 0.16,
+      "max": 0.32,
+      "power": 1.0
+     }
     },
     {
      "items": [
-      "tag:sweets",
-      "tag:juices"
+      "tag:sweets"
      ],
      "ground": {
       "type": "dots",
       "colors": [
        "#9b72cf",
-       "#ffffff",
-       "#ffd166"
+       "#ffffff"
       ],
-      "size": 54
+      "size": 44
      },
      "size": {
-      "min": 0.13,
-      "max": 0.3,
-      "power": 1.2
-     },
-     "fill": [
-      "tag:fruit"
-     ]
+      "min": 0.16,
+      "max": 0.32,
+      "power": 1.0
+     }
     }
+   ],
+   "fill": [
+    "tag:seeds",
+    "tag:rubs",
+    "tag:vegbags",
+    "tag:kitchentools",
+    "tag:fruit",
+    "tag:veg",
+    "tag:breakfast",
+    "tag:bakery",
+    "tag:sandwich",
+    "tag:cheese",
+    "tag:bowls",
+    "tag:noodles",
+    "tag:salad",
+    "tag:grill",
+    "tag:jars",
+    "tag:spices",
+    "tag:juices",
+    "tag:hotdrinks",
+    "tag:herbs",
+    "tag:sweets",
+    "tag:cocktails"
+   ],
+   "fill_cover": 0.9
+  },
+  {
+   "slug": "kitchen-counter",
+   "title": "Kitchen counter",
+   "seed": 221,
+   "palette": [
+    "#f2c94c",
+    "#c9a27a",
+    "#3a7d44"
+   ],
+   "layout": {
+    "type": "hbands",
+    "n": 2,
+    "sizes": [
+     2,
+     3
+    ],
+    "wobble": 0.0
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:kitchentools",
+      "awesome_pot",
+      "saucepan",
+      "frying_pan"
+     ],
+     "ground": {
+      "type": "tiles",
+      "colors": [
+       "#f2c94c",
+       "#f7dc85",
+       "#e9b93a"
+      ],
+      "size": 100,
+      "grout": "#fff8e0"
+     },
+     "size": {
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
+     },
+     "hero": [
+      "frying_pan",
+      "saucepan",
+      "awesome_pot"
+     ],
+     "fill_cover": 0.85
+    },
+    {
+     "items": [
+      "tag:veg",
+      "flour",
+      "swing_batter",
+      "knife_and_board"
+     ],
+     "ground": {
+      "type": "planks",
+      "colors": [
+       "#c9a27a",
+       "#bb956e",
+       "#d6b08a"
+      ],
+      "width": 110
+     },
+     "size": {
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
+     },
+     "fill_cover": 0.9
+    }
+   ],
+   "fill": [
+    "tag:veg",
+    "tag:spices",
+    "tag:herbs"
    ]
+  },
+  {
+   "slug": "soup-stove",
+   "title": "Soup stove",
+   "seed": 222,
+   "palette": [
+    "#2a9d8f",
+    "#e9f5f3",
+    "#c0392b"
+   ],
+   "layout": {
+    "type": "grid",
+    "cols": 2,
+    "rows": 2,
+    "wobble": 0.0
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:bowls"
+     ],
+     "ground": {
+      "type": "tiles",
+      "colors": [
+       "#2a9d8f",
+       "#e9f5f3"
+      ],
+      "size": 70,
+      "pattern": "checker",
+      "grout": "#d4ece8"
+     },
+     "size": {
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:bowls",
+      "awesome_pot",
+      "saucepan"
+     ],
+     "ground": {
+      "type": "tiles",
+      "colors": [
+       "#e9f5f3",
+       "#bfe3dd"
+      ],
+      "size": 70,
+      "pattern": "checker",
+      "grout": "#d4ece8"
+     },
+     "size": {
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:bowls",
+    "tag:bakery",
+    "tag:veg",
+    "tag:noodles"
+   ],
+   "fill_cover": 0.88
   }
  ]
 }
