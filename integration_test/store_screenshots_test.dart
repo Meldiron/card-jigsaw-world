@@ -20,6 +20,7 @@ import 'package:card_jigsaw_world/core/appwrite.dart';
 import 'package:card_jigsaw_world/core/sfx.dart';
 import 'package:card_jigsaw_world/data/local_store.dart';
 import 'package:card_jigsaw_world/data/repositories.dart';
+import 'package:card_jigsaw_world/features/gallery/library_screen.dart';
 import 'package:card_jigsaw_world/features/game/board_widget.dart';
 import 'package:card_jigsaw_world/game/board.dart';
 import 'package:card_jigsaw_world/router.dart';
@@ -478,7 +479,11 @@ void main() {
     // Library, the daily calendar (top, then scrolled to the day grid), a pack.
     await go(tester, '/library', ms: 3500);
     await shot(tester, '15_library');
-    if (await tapIfShown(tester, 'Daily', ms: 2000)) {
+    // The Daily chip sits past the screen's edge among the other chips; pick it the way a link does
+    // (the row then scrolls it into view).
+    ProviderScope.containerOf(tester.element(find.byType(MaterialApp))).read(libraryFilterProvider.notifier).select(LibraryFilter.daily);
+    await settle(tester, 2500);
+    {
       await shot(tester, '16_library_daily');
       final month = find.textContaining(' ${now.year}');
       if (month.evaluate().isNotEmpty) {

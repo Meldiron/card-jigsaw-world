@@ -35,7 +35,7 @@ daily hook.
 | `05.png` | Puzzle your own photos | `raw/20_my_puzzles.png` (four uploaded photos) with the Corgi board of `raw/21_my_puzzle_game.png` as a callout |
 | `06.png` | Fewer moves, more stars | `raw/04_complete.png`: Key West sunset, three stars, coins and XP |
 | `07.png` | Quests and live events | `raw/13_quests.png` with a live world-day event card (`raw/14_quests_live.png`) as a callout |
-| `08.png` | Climb the league | `raw/22_social_league.png` (real player names, approved by the owner) |
+| `08.png` | Climb the leaderboard | `raw/22_social_league.png` (real player names, approved by the owner) |
 | `09.png` | Every pack with VIP | `raw/12_store_vip.png` |
 
 Raw captures (dark theme; a `--dart-define=CJW_STORE_THEME=light` run writes
@@ -122,7 +122,11 @@ simulator, and a Python 3 with Pillow (`pip install pillow`).
    python3 tools/store/make_promo.py
    ```
 
-4. Uploading: `asc_publish.py screenshots` skips files whose name is already
-   in the App Store set and never deletes extras, so delete the old
-   screenshots in App Store Connect (or the set) before uploading a new set
-   with the same file names.
+4. Uploading: `asc_publish.py screenshots` replaces a slide whose file changed
+   (by checksum), removes slides that are no longer in the folder and keeps the
+   file order. The review screenshots go up with `asc_publish.py iap`
+   (`review/iap-review.png`, the top of the store: copy `raw/11_store.png`) and
+   `subscriptions` (`review/subscription-review.png`), which also replace a
+   changed file; while the products sit in the app's review draft Apple refuses
+   that until they are taken out of it (apple-release skill, "Renaming in-app
+   purchases while they sit in a review draft").

@@ -576,6 +576,18 @@ class Store:
 
     # -- uploads ------------------------------------------------------------
 
+    def drop_if_changed(self, type_: str, asset: dict | None, path: Path) -> dict | None:
+        """A one-per-parent asset (a review screenshot) whose file changed since it was uploaded is
+        deleted, so `upload_asset` puts the new file up; returns the asset to keep, or None."""
+        if asset is None or not path.exists():
+            return asset
+        checksum = attr(asset, "sourceFileChecksum")
+        if checksum and checksum != md5_of(path):
+            log(f"  {type_}: {path.name} changed, replacing")
+            self.c.request("DELETE", f"/v1/{type_}/{asset['id']}")
+            return None
+        return asset
+
     def upload_asset(self, type_: str, parent_rel: dict, path: Path, existing: list[dict] | None = None,
                      patch_path: str | None = None, extra: dict | None = None) -> dict | None:
         """Reserve, upload, commit. Returns None when an asset with the same file
@@ -922,6 +934,7 @@ def cmd_iap(s: Store) -> None:
 
         if review_png:
             shot = s.c.get_one(f"/v2/inAppPurchases/{iid}/appStoreReviewScreenshot")
+            shot = s.drop_if_changed("inAppPurchaseAppStoreReviewScreenshots", shot, review_png)
             s.upload_asset("inAppPurchaseAppStoreReviewScreenshots", {"inAppPurchaseV2": rel("inAppPurchases", iid)}, review_png,
                            [shot] if shot else [])
 
@@ -1088,6 +1101,7 @@ def cmd_subscriptions(s: Store) -> None:
         sync_winback_offers(s, sid, pid, cfg)
 
         shot = s.c.get_one(f"/v1/subscriptions/{sid}/appStoreReviewScreenshot")
+        shot = s.drop_if_changed("subscriptionAppStoreReviewScreenshots", shot, ROOT / cfg["reviewScreenshot"])
         s.upload_asset("subscriptionAppStoreReviewScreenshots", {"subscription": rel("subscriptions", sid)},
                        ROOT / cfg["reviewScreenshot"], [shot] if shot else [])
         images = s.c.get_list(f"/v1/subscriptions/{sid}/images")

@@ -153,8 +153,8 @@ SLIDES: list[Slide] = [
     ),
     Slide(
         "phone",
-        "Climb\nthe league",
-        "Ranked by XP each season. Add your friends.",
+        "Climb the\nleaderboard",
+        "Ranked by total XP. Add your friends.",
         raw="22_social_league",
         tone="neutral",
     ),

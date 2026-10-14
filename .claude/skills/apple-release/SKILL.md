@@ -118,6 +118,11 @@ for each product, DELETE its `reviewSubmissionItems/{id}` (the item that points 
 `inAppPurchaseVersion`), PATCH the `inAppPurchaseLocalizations/{id}`, then POST a new
 `reviewSubmissionItems` with relationships `reviewSubmission` + `inAppPurchaseVersion`. The draft is
 never submitted by this. Done this way for the 2026-10-12 amount change (all 8 consumables).
+The review screenshots of products and VIP plans are locked the same way (DELETE answers 409
+MEDIA_ASSET_DELETE_NOT_ALLOWED). On 2026-10-15 the items were taken out (item ids are base64 of
+`submission|type|resource`: 17 = inAppPurchaseVersion, 18 = subscriptionVersion, 19 =
+subscriptionGroupVersion; save them first), `asc_publish.py iap` and `subscriptions` replaced the
+changed screenshots (they swap a file whose checksum changed), and the 10 items went back in.
 
 ## "expected 2 profiles, installed 1" in the workflow
 Editing an App ID on the developer portal (its name, capabilities) turns its App Store profile

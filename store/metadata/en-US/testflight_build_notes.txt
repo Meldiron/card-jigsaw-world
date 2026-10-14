@@ -1,8 +1,7 @@
 New in this build:
-- Update prompt: when a newer TestFlight build is out, the app says so and Update opens TestFlight. Later hides it for an hour; it comes back on every launch until you update.
-- Home: the Save progress card for guests now stands out as a caution.
-- Web: pinch on a trackpad zooms giant boards, and the store lists every bundle without prices.
-- Store: when the App Store had no products at launch, opening the store or tapping a bundle asks again, instead of "not available" until the app is closed.
-- Links: cardjigsaw:// links open the matching screen in the app, and the same paths work on the web site (a pack, a picture, a profile, the store, a pack code filled in).
+- Report and block: a player's page has Report (offensive name, cheating, something else) and Block. Blocked players leave your leaderboard; unblock them in Settings > Blocked players.
+- Links: cardjigsaw:// links open the matching screen (a pack, a picture, a profile, the store, a pack code filled in), and the same paths work on the web site. Redeem a pack code is no longer in Settings on iPhone; codes open through their link.
+- Store: when the App Store had no products at launch, opening the store or tapping a bundle asks again. Terms of use and Privacy policy are linked under VIP and in Settings.
+- Notes before new events are now off until you turn them on in Settings.
 
-Please try: Later on the update prompt once the next build arrives, then reopen the app; and cardjigsaw://daily typed into Safari's address bar.
+Please try: report and block a player from the leaderboard, then unblock them in Settings; and cardjigsaw://daily typed into Safari's address bar.
