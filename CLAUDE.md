@@ -241,7 +241,8 @@ skills under `.claude/skills/` hold the detailed workflows.
 Appwrite's Apple provider), distribution `Certificates.p12` + password, Appwrite keys
 (`appwrite-api-key.txt` rows/tables scopes, `appwrite-storage-key.txt` files/rows scopes for picture
 hosting, `appwrite-sites-key.txt`, `appwrite-users-key.txt` users/rows/files scopes for the QA player
-purge and stats backfills), `content-keys.env` (Openverse client). Never print or commit their
+purge and stats backfills), `content-keys.env` (`PIXABAY_API_KEY`; the Openverse client id and secret
+belong there too but are missing on this Mac, so Openverse runs anonymously at 190 requests a day). Never print or commit their
 values. GitHub Actions has the signing secrets.
 
 ## Work that may be running in parallel
