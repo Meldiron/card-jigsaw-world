@@ -2,7 +2,7 @@
 import hashlib, io, json, math, time, urllib.request, urllib.error, colorsys
 from concurrent.futures import ThreadPoolExecutor
 import numpy as np
-from PIL import Image, ImageFile
+from PIL import Image, ImageFile, ImageOps
 from .paths import CACHE
 from . import blurhash
 
@@ -153,6 +153,9 @@ def fetch(url, force=False):
             raise ValueError('nasa non-image')
         img = Image.open(io.BytesIO(data))
         img.load()
+        # Phone photos store their rotation in EXIF: measure them the way they are shown (hosting and
+        # giantcheck transpose too). Commons thumbnails come rotated already; originals do not.
+        img = ImageOps.exif_transpose(img)
         w, h = img.size
         rgb = img.convert('RGB')
         gray = rgb.convert('L')
