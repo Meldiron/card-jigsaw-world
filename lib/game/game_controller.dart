@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'board.dart';
-import 'zones.dart';
+import 'gather.dart';
 
 enum GameStatus { playing, paused, won }
 
@@ -30,7 +30,6 @@ class GameState {
     this.basePar = 0,
     this.peeked = false,
     this.bestLock = 0,
-    this.zoned = false,
   });
 
   final Board board;
@@ -58,10 +57,6 @@ class GameState {
 
   /// Most cards a single move of the player's locked in this play-through (Magic does not count).
   final int bestLock;
-
-  /// The board was dealt by zone (giant sizes, see `BoardZones`): the game shows the zone lines
-  /// and counts finished zones. A giant board saved before zones plays on without them.
-  final bool zoned;
 
   /// Finished in no more moves than the dealt par.
   bool get atPar => basePar > 0 && moves <= basePar;
@@ -93,7 +88,6 @@ class GameState {
     int? basePar,
     bool? peeked,
     int? bestLock,
-    bool? zoned,
   }) =>
       GameState(
         board: board ?? this.board,
@@ -114,7 +108,6 @@ class GameState {
         basePar: basePar ?? this.basePar,
         peeked: peeked ?? this.peeked,
         bestLock: bestLock ?? this.bestLock,
-        zoned: zoned ?? this.zoned,
       );
 }
 
@@ -179,9 +172,8 @@ class GameController extends Notifier<GameState> {
     // length, a permutation, every card in a slot of its own shape. Saves
     // from before a layout changed start fresh instead.
     final restore = Board.isValidLayout(args.spec, args.layout);
-    final board = restore ? Board(args.spec, args.layout!) : dealBoard(args.spec);
+    final board = restore ? Board(args.spec, args.layout!) : Board.shuffled(args.spec);
     final par = restore ? args.moves + board.par : board.par;
-    final zoned = BoardZones.appliesTo(args.spec) && (!restore || BoardZones.of(args.spec).dealtIn(board));
     _startTimer();
     return restore
         ? _fresh(board,
@@ -191,12 +183,11 @@ class GameController extends Notifier<GameState> {
             hintsUsed: args.hintsUsed,
             basePar: args.par > 0 ? args.par : max(par, 1),
             peeked: args.peeked,
-            bestLock: args.bestLock,
-            zoned: zoned)
-        : _fresh(board, par: max(par, 1), zoned: zoned);
+            bestLock: args.bestLock)
+        : _fresh(board, par: max(par, 1));
   }
 
-  GameState _fresh(Board board, {required int par, int moves = 0, int elapsed = 0, int hintsUsed = 0, int? basePar, bool peeked = false, int bestLock = 0, bool zoned = false}) => GameState(
+  GameState _fresh(Board board, {required int par, int moves = 0, int elapsed = 0, int hintsUsed = 0, int? basePar, bool peeked = false, int bestLock = 0}) => GameState(
         board: board,
         par: par,
         moves: moves,
@@ -215,7 +206,6 @@ class GameController extends Notifier<GameState> {
         basePar: basePar ?? par,
         peeked: peeked,
         bestLock: bestLock,
-        zoned: zoned,
       );
 
   void _startTimer() {
@@ -388,8 +378,8 @@ class GameController extends Notifier<GameState> {
 
   void restart() {
     _peekTimer?.cancel();
-    final board = dealBoard(args.spec);
-    state = _fresh(board, par: max(board.par, 1), zoned: BoardZones.appliesTo(args.spec));
+    final board = Board.shuffled(args.spec);
+    state = _fresh(board, par: max(board.par, 1));
     _startTimer();
   }
 

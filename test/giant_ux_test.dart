@@ -147,10 +147,17 @@ void main() {
       views.showMap = false;
       expect(views.showMap, isFalse);
     });
+
+    test('Locate is on until switched off, apart from the map', () {
+      expect(views.locate, isTrue);
+      views.locate = false;
+      expect(views.locate, isFalse);
+      expect(views.showMap, isTrue);
+    });
   });
 
   group('giant board widget', () {
-    Future<(BoardZoom, List<int>)> pumpBoard(WidgetTester tester, Board board, {int? selected, bool edges = false}) async {
+    Future<(BoardZoom, List<int>)> pumpBoard(WidgetTester tester, Board board, {int? selected}) async {
       final zoom = BoardZoom(vsync: const TestVSync());
       addTearDown(zoom.dispose);
       final taps = <int>[];
@@ -168,7 +175,6 @@ void main() {
                 height: size.height,
                 cardStyle: CardStyle.classic,
                 zoom: zoom,
-                edges: edges,
                 onDrop: (_, _) {},
                 onTap: (slot) {
                   taps.add(slot);
@@ -287,13 +293,12 @@ void main() {
       final spec = BoardSpec.giantTiers(GameMode.cards).first;
       var board = Board.shuffled(spec, seed: 9);
       late StateSetter set;
-      var frames = 0;
       await tester.pumpWidget(MaterialApp(
         theme: AppTheme.light(),
         home: Scaffold(
           body: StatefulBuilder(builder: (context, s) {
             set = s;
-            return GiantMilestones(board: board, playing: true, onFrame: () => frames++);
+            return GiantMilestones(board: board, playing: true);
           }),
         ),
       ));
@@ -315,7 +320,6 @@ void main() {
       set(() => board = sendHome(board, edge));
       await wait(400);
       expect(find.text('Frame complete'), findsOneWidget);
-      expect(frames, 1, reason: 'the game switches the Edges filter off');
       await wait(3500);
       expect(find.byType(SnackBar), findsNothing);
       set(() => board = sendHome(board, List.generate(board.cells ~/ 2 + 1, (i) => i)));

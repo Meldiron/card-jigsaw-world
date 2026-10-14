@@ -112,6 +112,14 @@ void main() {
   }
 
   testWidgets('capture screens', (tester) async {
+    // Print layout errors the moment they happen: the test framework describes them at the end, when
+    // a widget that was on its way out (a route or sheet transition) can no longer be named.
+    final reportError = FlutterError.onError;
+    FlutterError.onError = (details) {
+      debugPrint('QA_FLUTTER_ERROR ${details.exceptionAsString()}\n${details.context ?? ''}\n${details.informationCollector?.call().join('\n') ?? ''}');
+      reportError?.call(details);
+    };
+
     SharedPreferences.setMockInitialValues({});
     final store = await LocalStore.open();
     Sfx.instance.soundEnabled = false;

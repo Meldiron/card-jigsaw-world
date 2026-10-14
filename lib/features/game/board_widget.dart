@@ -9,7 +9,6 @@ import 'package:flutter/scheduler.dart';
 import '../../core/theme/tokens.dart';
 import '../../game/board.dart';
 import '../../game/game_controller.dart';
-import '../../game/zones.dart';
 import '../../state/settings.dart';
 
 /// Interactive board for every tiling (cards, squares, triangles, hexagons).
@@ -36,9 +35,6 @@ class BoardWidget extends StatefulWidget {
     required this.height,
     this.painting = false,
     this.zoom,
-    this.edges = false,
-    this.zones,
-    this.onLocate,
   });
 
   final ui.Image image;
@@ -57,26 +53,9 @@ class BoardWidget extends StatefulWidget {
   /// on normal boards, which behave exactly as before.
   final BoardZoom? zoom;
 
-  /// The Edges filter (giant boards): cards whose place is on the board's
-  /// edge stay bright and every other card fades back, the classic way to
-  /// start a big jigsaw with its frame.
-  final bool edges;
-
-  /// The zones of a giant board dealt by zone: faint lines between them
-  /// (gone between two finished zones) and a short glow when one is done.
-  final BoardZones? zones;
-
-  /// Locate (giant boards): a card held still for a moment, or picked up to
-  /// drag, reports its slot so the overview map can show where it belongs.
-  /// It stays located while held, dragged or selected; null once it is not.
-  final void Function(int? slot)? onLocate;
-
   @override
   State<BoardWidget> createState() => _BoardWidgetState();
 }
-
-/// How long a card is held still before Locate shows its place.
-const locateHold = Duration(milliseconds: 380);
 
 /// Whether [card] belongs on the edge of the board (a cell with a side on the
 /// board's outline). Works for every tiling: an edge cell has a missing
@@ -284,23 +263,6 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
   bool _peekReturn = false;
   Timer? _peekReturnTimer;
 
-  // Locate: a card held still for [locateHold] or picked up to drag. It
-  // stays located while held, dragged or selected.
-  Timer? _holdTimer;
-  int? _locating;
-  bool _holding = false;
-
-  void _setLocate(int? slot) {
-    if (slot == _locating) return;
-    _locating = slot;
-    widget.onLocate?.call(slot);
-  }
-
-  // Zones finished since the board opened glow once.
-  Set<int> _doneZones = const {};
-  int? _glowZone;
-  int _glowTick = 0;
-
   Tiling get tiling => widget.state.board.tiling;
   Size get boardSize => Size(widget.width, widget.height);
 
@@ -308,7 +270,6 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
   void initState() {
     super.initState();
     widget.zoom?.addListener(_onZoom);
-    _doneZones = widget.zones?.completeZones(widget.state.board) ?? const {};
   }
 
   @override
@@ -325,28 +286,6 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
         if (mounted) setState(() => _peekReturn = false);
       });
     }
-    final l = _locating;
-    if (l != null && !_holding && _dragSlot != l && widget.state.selected != l) {
-      // Report after this frame: the screen listening may be building.
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted && _locating == l && !_holding && _dragSlot != l && widget.state.selected != l) _setLocate(null);
-      });
-    }
-    final zones = widget.zones;
-    if (zones == null) {
-      _doneZones = const {};
-    } else if (old.zones != zones) {
-      // A board that opens with zones done (resumed, or zones just switched on) does not glow.
-      _doneZones = zones.completeZones(widget.state.board);
-    } else if (old.state.board != widget.state.board) {
-      final done = zones.completeZones(widget.state.board);
-      final fresh = done.difference(_doneZones);
-      if (fresh.isNotEmpty && !widget.state.board.isSolved) {
-        _glowZone = fresh.first;
-        _glowTick++;
-      }
-      _doneZones = done;
-    }
   }
 
   @override
@@ -355,7 +294,6 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
     _autoPan.dispose();
     _bandTimer?.cancel();
     _peekReturnTimer?.cancel();
-    _holdTimer?.cancel();
     super.dispose();
   }
 
@@ -366,27 +304,11 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
   static const _peekSpread = Duration(milliseconds: 320);
   static Duration _flightOf(int card) => _peekFlight + Duration(milliseconds: (card * 97 + 31) % 11 * _peekSpread.inMilliseconds ~/ 10);
 
-  void _startHold(int slot) {
-    _holdTimer?.cancel();
-    if (widget.onLocate == null || widget.state.board.isLocked(slot)) return;
-    _holdTimer = Timer(locateHold, () {
-      if (!mounted || _multiTouch || _dragSlot != null) return;
-      _holding = true;
-      _setLocate(slot);
-    });
-  }
-
-  void _endHold() {
-    _holdTimer?.cancel();
-    _holding = false;
-  }
-
   /// A tap on [slot] at [local] (the card's own coordinates). On a zoomable
   /// board a second tap on the same card right after a select or deselect is
   /// a double tap: it puts the selection back the way it was and zooms in at
   /// that point, or back out to the whole board.
   void _tapped(int slot, Offset local) {
-    _endHold();
     if (_multiTouch) return;
     final zoom = widget.zoom;
     final now = DateTime.now();
@@ -469,7 +391,6 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
 
   void _cancelDrag() {
     if (_dragSlot == null) return;
-    _setLocate(null);
     setState(() {
       _dragSlot = null;
       _hoverSlot = null;
@@ -482,7 +403,6 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
     _pointers[e.pointer] = e.localPosition;
     if (_pointers.length >= 2) {
       _multiTouch = true;
-      _endHold();
       _cancelDrag();
       _startPinch();
     }
@@ -558,7 +478,7 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
     final gap = widget.cardStyle == CardStyle.classic ? (fine ? math.max(0.8, cell * 0.05) : math.max(6.0, cell * 0.08)) : (fine ? math.max(0.6, cell * 0.035) : 2.0);
     final radius = widget.cardStyle == CardStyle.classic ? (fine ? cell * 0.12 : math.min(18.0, cell * 0.17)) : (fine ? cell * 0.1 : 8.0);
     final strokeScale = fine ? (cell / 56).clamp(0.3, 1.0) / math.pow(band, 0.6) : 1.0;
-    final cacheKey = (widget.state, widget.cardStyle, boardSize, widget.image, widget.painting, gap, radius, strokeScale, widget.edges, _peekReturn);
+    final cacheKey = (widget.state, widget.cardStyle, boardSize, widget.image, widget.painting, gap, radius, strokeScale, _peekReturn);
     if (cacheKey != _cacheKey) {
       _cacheKey = cacheKey;
       _cache.clear();
@@ -577,7 +497,6 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
     }
 
     final order = List<int>.generate(board.cells, (i) => i)..sort((a, b) => rank(a).compareTo(rank(b)));
-    final zones = widget.state.peeking ? null : widget.zones;
     Widget card(int slot) => _cachedCard(
           slot,
           gap,
@@ -606,24 +525,6 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
             ),
           for (final slot in order)
             if (rank(slot) <= 1) card(slot),
-          if (zones != null)
-            Positioned.fill(
-              key: const ValueKey('zone-lines'),
-              child: IgnorePointer(
-                child: CustomPaint(
-                  painter: _ZoneLinesPainter(
-                    segments: _zoneSegments(zones),
-                    zoom: widget.zoom,
-                    dark: context.isDark,
-                  ),
-                ),
-              ),
-            ),
-          if (zones != null && _glowZone != null)
-            Positioned.fill(
-              key: ValueKey('zone-glow-$_glowTick'),
-              child: IgnorePointer(child: _ZoneGlow(segments: _zoneOutline(zones, _glowZone!), zoom: widget.zoom)),
-            ),
           for (final slot in order)
             if (rank(slot) >= 2) card(slot),
         ],
@@ -651,36 +552,6 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
       );
     }
     return SizedBox(width: widget.width, height: widget.height, child: content);
-  }
-
-  // Zone lines, rebuilt only when a zone is finished or the board resizes.
-  Object? _zoneKey;
-  List<(Offset, Offset)> _zoneLines = const [];
-
-  List<(Offset, Offset)> _zoneSegments(BoardZones zones) {
-    final key = (zones, boardSize, _doneZones);
-    if (key != _zoneKey) {
-      _zoneKey = key;
-      _zoneLines = zones.borders(tiling, boardSize, skip: _doneZones);
-    }
-    return _zoneLines;
-  }
-
-  /// The whole outline of zone [z]: its borders with other zones and the
-  /// board's edge.
-  List<(Offset, Offset)> _zoneOutline(BoardZones zones, int z) {
-    final out = <(Offset, Offset)>[];
-    for (final s in zones.members[z]) {
-      final edges = tiling.edgeNeighbours(s);
-      List<Offset>? poly;
-      for (var k = 0; k < edges.length; k++) {
-        final nb = edges[k];
-        if (nb != null && zones.zoneOf[nb] == z) continue;
-        poly ??= tiling.polygon(s, boardSize);
-        out.add((poly[k], poly[(k + 1) % poly.length]));
-      }
-    }
-    return out;
   }
 
   /// [_buildCard], reused from the last build when nothing about the card
@@ -813,7 +684,6 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
       painting: widget.painting,
       strokeScale: strokeScale,
       thinFrame: widget.zoom != null,
-      fade: !peek && widget.edges && !dragging && !selected && !isEdgeCard(tiling, card),
     );
     if (justLocked || justJoined) {
       child = _LockPulse(key: ValueKey('pulse-$slot-${state.tick}'), strong: justLocked, child: child);
@@ -833,15 +703,11 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
           behavior: HitTestBehavior.opaque,
           // A touch that became a pinch neither taps nor drags. A card held
           // still for a moment shows where it belongs (Locate).
-          onTapDown: (_) => _startHold(slot),
-          onTapCancel: _endHold,
           onTapUp: (d) => _tapped(slot, d.localPosition),
           onPanStart: locked || state.status != GameStatus.playing
               ? null
               : (_) {
-                  _endHold();
                   if (_multiTouch) return;
-                  _setLocate(slot);
                   setState(() {
                     _dragSlot = slot;
                     _dragDelta = Offset.zero;
@@ -863,7 +729,6 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
               : (_) {
                   _stopAutoPan();
                   if (_dragSlot != slot) return;
-                  _setLocate(null);
                   final target = tiling.slotAt(tiling.cellCenter(slot, boardSize) + _dragDelta, boardSize);
                   setState(() {
                     _dragSlot = null;
@@ -875,7 +740,6 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
           onPanCancel: () {
             _stopAutoPan();
             if (_dragSlot == slot) {
-              _setLocate(null);
               setState(() {
                 _dragSlot = null;
                 _hoverSlot = null;
@@ -1001,7 +865,6 @@ class _CardFace extends StatelessWidget {
     this.painting = false,
     this.strokeScale = 1,
     this.thinFrame = false,
-    this.fade = false,
   });
 
   final ui.Image image;
@@ -1011,11 +874,6 @@ class _CardFace extends StatelessWidget {
 
   /// Giant boards: the frame follows the thin gutter instead of a 2 pt minimum.
   final bool thinFrame;
-
-  /// The Edges filter is on and this card does not belong on the edge: it
-  /// fades back (darker and paler) so the edge cards stand out.
-  final bool fade;
-  static const _fadeDim = 0.58;
 
   /// Painting: black and white until the card locks, then its colour fades in
   /// with the lock.
@@ -1072,76 +930,71 @@ class _CardFace extends StatelessWidget {
     final edge = Colors.black.withValues(alpha: context.isDark ? 0.55 : 0.22);
     final frameWidth = thinFrame ? gap * 0.45 : math.max(2.0, gap * 0.38);
     return TweenAnimationBuilder<double>(
-      tween: Tween(end: fade ? 1 : 0),
-      duration: const Duration(milliseconds: 220),
+      tween: Tween(end: locked ? 1 : 0),
+      duration: const Duration(milliseconds: 420),
       curve: Curves.easeOutCubic,
-      builder: (_, fadeT, _) => TweenAnimationBuilder<double>(
-        tween: Tween(end: locked ? 1 : 0),
-        duration: const Duration(milliseconds: 420),
+      builder: (_, lockT, _) => TweenAnimationBuilder<_EdgeInsets>(
+        // Each edge's gutter slides shut as the card snaps to its group, in
+        // step with the card's own move.
+        tween: _EdgeInsetsTween(end: _EdgeInsets([for (final fused in fusedEdges) fused ? -_overlap : (locked || dragging ? 0.0 : half)])),
+        duration: const Duration(milliseconds: 280),
         curve: Curves.easeOutCubic,
-        builder: (_, lockT, _) => TweenAnimationBuilder<_EdgeInsets>(
-          // Each edge's gutter slides shut as the card snaps to its group, in
-          // step with the card's own move.
-          tween: _EdgeInsetsTween(end: _EdgeInsets([for (final fused in fusedEdges) fused ? -_overlap : (locked || dragging ? 0.0 : half)])),
-          duration: const Duration(milliseconds: 280),
-          curve: Curves.easeOutCubic,
-          builder: (_, insets, _) {
-            // Interaction language: a picked-up card lifts (shadow + scale) and
-            // gets an ink edge; the drop target brightens; a blocked target dims
-            // with a red edge; a floating group shares one accent edge. No colour
-            // casts over the picture.
-            final Color? outline;
-            final double stroke;
-            var outerOnly = true;
-            if (selected) {
-              outline = ink;
-              stroke = _selectionStroke * strokeScale;
-            } else if (hovered == _Hover.ok) {
-              outline = ink;
-              stroke = _selectionStroke * strokeScale;
-              outerOnly = false;
-            } else if (hovered == _Hover.blocked) {
-              outline = Brand.danger;
-              stroke = _selectionStroke * strokeScale;
-              outerOnly = false;
-            } else if (grouped && !locked) {
-              outline = context.accent;
-              stroke = _groupStroke * strokeScale;
-            } else {
-              outline = null;
-              stroke = 0;
-            }
-            return CustomPaint(
-              painter: _CardPainter(
-                image: image,
-                polygon: polygon,
-                source: source,
-                insets: insets.values,
-                radius: dragging ? 0 : radius * (1 - lockT),
-                fusedEdges: fusedEdges,
-                fans: fans,
-                gutterHalf: gutterHalf,
-                borderColor: classic ? frame : Colors.transparent,
-                borderWidth: classic && !dragging ? frameWidth * (1 - lockT) : 0,
-                edgeColor: classic && !dragging ? edge.withValues(alpha: edge.a * (1 - lockT)) : null,
-                shadow: lockT > 0.95 || lift == 0 ? null : Colors.black.withValues(alpha: (0.25 + 0.2 * lift) * (1 - lockT)),
-                shadowBlur: 10 + lift * 20,
-                shadowDy: 4 + lift * 10,
-                tint: hovered == _Hover.ok
-                    ? Colors.white.withValues(alpha: 0.28)
-                    : hovered == _Hover.blocked
-                        ? Colors.black.withValues(alpha: 0.35)
-                        : null,
-                dim: dragging ? 0 : _dim * (1 - lockT) + (_fadeDim - _dim * (1 - lockT)) * fadeT,
-                saturation: (painting ? lockT : 1.0) * (1 - 0.65 * fadeT),
-                outline: outline,
-                outlineWidth: dragging ? _dragStroke * strokeScale : stroke,
-                outlineOuterOnly: outerOnly,
-                outlineOutside: dragging,
-              ),
-            );
-          },
-        ),
+        builder: (_, insets, _) {
+          // Interaction language: a picked-up card lifts (shadow + scale) and
+          // gets an ink edge; the drop target brightens; a blocked target dims
+          // with a red edge; a floating group shares one accent edge. No colour
+          // casts over the picture.
+          final Color? outline;
+          final double stroke;
+          var outerOnly = true;
+          if (selected) {
+            outline = ink;
+            stroke = _selectionStroke * strokeScale;
+          } else if (hovered == _Hover.ok) {
+            outline = ink;
+            stroke = _selectionStroke * strokeScale;
+            outerOnly = false;
+          } else if (hovered == _Hover.blocked) {
+            outline = Brand.danger;
+            stroke = _selectionStroke * strokeScale;
+            outerOnly = false;
+          } else if (grouped && !locked) {
+            outline = context.accent;
+            stroke = _groupStroke * strokeScale;
+          } else {
+            outline = null;
+            stroke = 0;
+          }
+          return CustomPaint(
+            painter: _CardPainter(
+              image: image,
+              polygon: polygon,
+              source: source,
+              insets: insets.values,
+              radius: dragging ? 0 : radius * (1 - lockT),
+              fusedEdges: fusedEdges,
+              fans: fans,
+              gutterHalf: gutterHalf,
+              borderColor: classic ? frame : Colors.transparent,
+              borderWidth: classic && !dragging ? frameWidth * (1 - lockT) : 0,
+              edgeColor: classic && !dragging ? edge.withValues(alpha: edge.a * (1 - lockT)) : null,
+              shadow: lockT > 0.95 || lift == 0 ? null : Colors.black.withValues(alpha: (0.25 + 0.2 * lift) * (1 - lockT)),
+              shadowBlur: 10 + lift * 20,
+              shadowDy: 4 + lift * 10,
+              tint: hovered == _Hover.ok
+                  ? Colors.white.withValues(alpha: 0.28)
+                  : hovered == _Hover.blocked
+                      ? Colors.black.withValues(alpha: 0.35)
+                      : null,
+              dim: dragging ? 0 : _dim * (1 - lockT),
+              saturation: painting ? lockT : 1.0,
+              outline: outline,
+              outlineWidth: dragging ? _dragStroke * strokeScale : stroke,
+              outlineOuterOnly: outerOnly,
+              outlineOutside: dragging,
+            ),
+          );
+        },
       ),
     );
   }
@@ -1641,103 +1494,6 @@ class _CardPainter extends CustomPainter {
     }
     return true;
   }
-}
-
-/// Lines between the zones of a giant board: a thin ink line inside a light
-/// halo (the other way round on the dark theme), so it reads on the card
-/// frames, the gutters and every picture, about the same width on screen at
-/// every zoom.
-class _ZoneLinesPainter extends CustomPainter {
-  _ZoneLinesPainter({required this.segments, required this.zoom, required this.dark}) : super(repaint: zoom);
-  final List<(Offset, Offset)> segments;
-  final BoardZoom? zoom;
-  final bool dark;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    if (segments.isEmpty) return;
-    final z = zoom?.zoom ?? 1;
-    final path = Path();
-    for (final (a, b) in segments) {
-      path
-        ..moveTo(a.dx, a.dy)
-        ..lineTo(b.dx, b.dy);
-    }
-    final halo = dark ? Colors.black.withValues(alpha: 0.7) : Colors.white.withValues(alpha: 0.92);
-    final ink = dark ? Colors.white.withValues(alpha: 0.85) : const Color(0xFF111118).withValues(alpha: 0.7);
-    canvas.drawPath(path, Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round
-      ..strokeWidth = 4.2 / z
-      ..color = halo);
-    canvas.drawPath(path, Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round
-      ..strokeWidth = 1.6 / z
-      ..color = ink);
-  }
-
-  @override
-  bool shouldRepaint(_ZoneLinesPainter old) => old.segments != segments || old.zoom != zoom || old.dark != dark;
-}
-
-/// A finished zone's outline glows once and fades.
-class _ZoneGlow extends StatefulWidget {
-  const _ZoneGlow({required this.segments, required this.zoom});
-  final List<(Offset, Offset)> segments;
-  final BoardZoom? zoom;
-
-  @override
-  State<_ZoneGlow> createState() => _ZoneGlowState();
-}
-
-class _ZoneGlowState extends State<_ZoneGlow> with SingleTickerProviderStateMixin {
-  late final _c = AnimationController(vsync: this, duration: const Duration(milliseconds: 1600))..forward();
-
-  @override
-  void dispose() {
-    _c.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) => AnimatedBuilder(
-        animation: _c,
-        builder: (_, _) => _c.isCompleted ? const SizedBox.shrink() : CustomPaint(painter: _ZoneGlowPainter(segments: widget.segments, zoom: widget.zoom?.zoom ?? 1, t: _c.value)),
-      );
-}
-
-class _ZoneGlowPainter extends CustomPainter {
-  _ZoneGlowPainter({required this.segments, required this.zoom, required this.t});
-  final List<(Offset, Offset)> segments;
-  final double zoom;
-  final double t;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final path = Path();
-    for (final (a, b) in segments) {
-      path
-        ..moveTo(a.dx, a.dy)
-        ..lineTo(b.dx, b.dy);
-    }
-    // Up quickly, then a slow fade.
-    final a = t < 0.15 ? t / 0.15 : 1 - Curves.easeOut.transform((t - 0.15) / 0.85);
-    canvas.drawPath(path, Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round
-      ..strokeWidth = 8 / zoom
-      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 6 / zoom)
-      ..color = Brand.star.withValues(alpha: 0.7 * a));
-    canvas.drawPath(path, Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round
-      ..strokeWidth = 2.2 / zoom
-      ..color = Colors.white.withValues(alpha: 0.95 * a));
-  }
-
-  @override
-  bool shouldRepaint(_ZoneGlowPainter old) => old.t != t || old.zoom != zoom || old.segments != segments;
 }
 
 /// Flash + scale pop played when a card locks in place (strong) or snaps to a

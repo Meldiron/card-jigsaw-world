@@ -179,7 +179,16 @@
   "re:tree_int_wall_sroom_2",
   "re:vine_radio",
   "re:/charm_",
-  "re:jethimadh"
+  "re:jethimadh",
+  "re:8bit",
+  "re:warp_pipe",
+  "re:store_register",
+  "re:store_exitSign",
+  "re:fruit_changing_machine",
+  "re:pod_egg",
+  "re:hanging_eggs",
+  "re:^bag_furniture_sdb",
+  "re:^bag_cabinet_"
  ],
  "_doc_svg_force": "SVG conversions accepted by eye although the automatic PNG comparison failed (shading differs a little, no stripes). The screen-fixed SVG is used when one exists.",
  "svg_force": [
@@ -303,6 +312,179 @@
   "rock_beryl_3",
   "rock_dullite_2"
  ],
+ "_doc_kinds": "Kinds: recoloured variants of one drawing. The usage cap (a third of a pack) applies to the kind as a whole: a picture that shows any of them counts once.",
+ "kinds": {
+  "sno_cone": [
+   "re:^sno_cone_"
+  ],
+  "seed_packet": [
+   "re:^seed_"
+  ],
+  "egghunt_egg": [
+   "re:^egghunt_egg_"
+  ],
+  "stinky_cheese": [
+   "cheese",
+   "cheese_stinky",
+   "cheese_very_stinky",
+   "cheese_very_very_stinky"
+  ],
+  "oysters": [
+   "re:^oysters_"
+  ],
+  "guava": [
+   "re:^guava_"
+  ],
+  "bean": [
+   "re:^bean_(bean|bubble|egg|fruit|gas|spice|wood)$"
+  ],
+  "spice_bag": [
+   "re:_rub$",
+   "kings_of_condiments"
+  ],
+  "veg_bag": [
+   "death_to_veg",
+   "glitchepoix",
+   "green",
+   "vegmageddon"
+  ],
+  "sammich": [
+   "cheezy_sammich",
+   "deluxe_sammich",
+   "hearty_groddle_sammich",
+   "sammich"
+  ],
+  "grilled_cheese": [
+   "grilled_cheese",
+   "expensive_grilled_cheese"
+  ],
+  "fried_egg": [
+   "fried_egg",
+   "fried_eggs"
+  ],
+  "crudites": [
+   "choice_crudites",
+   "common_crudites"
+  ],
+  "door_key": [
+   "re:^door_key_"
+  ],
+  "essence": [
+   "re:^essence_of_"
+  ],
+  "powder_jar": [
+   "tag:powders"
+  ],
+  "necklace": [
+   "re:^artifact_necklace_"
+  ],
+  "peat": [
+   "re:^peat_"
+  ],
+  "patch": [
+   "patch",
+   "patch_dark",
+   "patch_seedling"
+  ],
+  "stactus": [
+   "re:stactus_ball",
+   "re:stactuc_pot"
+  ],
+  "branch_flowers": [
+   "re:bling_branch(flower|rose)brush"
+  ],
+  "wildflowers": [
+   "re:wildflowers_"
+  ],
+  "flower_button": [
+   "re:flower_button_"
+  ],
+  "acacia": [
+   "re:tree_acacia"
+  ],
+  "conifer": [
+   "re:tree_coniferous"
+  ],
+  "rock_rubble": [
+   "re:rock_rubble_01",
+   "re:rubble_01"
+  ],
+  "snow_rock": [
+   "re:rock_snowy"
+  ],
+  "mushroom_tree": [
+   "re:bling_mushroom_tree"
+  ],
+  "oyster_mushroom": [
+   "re:bling_mushroom_oyster"
+  ],
+  "beryl": [
+   "re:rock_beryl_(fore|mid|bg)"
+  ],
+  "dull_rock": [
+   "re:rock_dull_"
+  ],
+  "sparkly_rock": [
+   "re:rock_sparkly_(fore|mid|bg)"
+  ],
+  "cave_crystal": [
+   "re:cave_crystal_"
+  ],
+  "cactus_ix": [
+   "re:cl2_cactus",
+   "re:rev0718_cl2_cactus"
+  ],
+  "decor_plants": [
+   "re:decor_plants"
+  ],
+  "cattail": [
+   "re:cattail_"
+  ],
+  "test_tube": [
+   "test_tube",
+   "beaker"
+  ],
+  "ore_beryl": [
+   "re:^rock_beryl_[123]$"
+  ],
+  "ore_dullite": [
+   "re:^rock_dullite_[123]$"
+  ],
+  "ore_metal": [
+   "re:^rock_metal_[123]$"
+  ],
+  "ore_sparkly": [
+   "re:^rock_sparkly_[123]$"
+  ],
+  "trant_bean": [
+   "trant_bean",
+   "trant_bean_dead"
+  ],
+  "trant_bubble": [
+   "trant_bubble",
+   "trant_bubble_dead"
+  ],
+  "trant_egg": [
+   "trant_egg",
+   "trant_egg_dead"
+  ],
+  "trant_fruit": [
+   "trant_fruit",
+   "trant_fruit_dead"
+  ],
+  "trant_gas": [
+   "trant_gas",
+   "trant_gas_dead"
+  ],
+  "trant_spice": [
+   "trant_spice",
+   "trant_spice_dead"
+  ],
+  "wood_tree": [
+   "wood_tree",
+   "wood_tree_enchanted"
+  ]
+ },
  "tags": {
   "fruit": [
    "apple",
@@ -910,6 +1092,21 @@
    "re:red_mushroom",
    "re:mushroom__privacy",
    "re:roomdeco_uralia_tree"
+  ],
+  "props": [
+   "re:^furniture_roomdeco_(barrel|glass_wooden_podium|wooden_podium|white_podium|fire_egg|firebog_jars|firebog_stand_of_wood|firebog_vase_of_wood|turtle_shell_sprout)",
+   "re:^bag_furniture_smallcabinet_(antique_trunk|treasure_chest|vintage_trunk|dark_wood_small_cabinet)",
+   "re:^firebog/(corked_eggs|log_pile[12]|lantern_stacked|jar)",
+   "re:^ix/(store_crate_01|telescope_01|vine_bucket)$",
+   "re:^furniture_tabledeco_(firefly_jar|glass_candles_centerpiece|jar_of_jellisac|bamboo_tabletop_fountain|black_simple_cash_register|blue_grey_simple_cash_register)",
+   "re:^furniture_smalltabledeco_(black_vase|glass_vase|lava_lamp)",
+   "re:^furniture_tablelamp_(firefly_jar_table_lamp|log_cabin_table_lamp|danish_modern_lamp)"
+  ],
+  "crystals": [
+   "re:^ilmenskie/(cave_crystal_[4-8]|rock_beryl_(fore|mid)[0-9]|rock_sparkly_(fore|mid)[0-9])",
+   "re:^rock_(beryl|sparkly)_[123]$",
+   "ice_knob",
+   "element_shiny"
   ]
  }
 }

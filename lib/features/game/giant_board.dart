@@ -5,19 +5,18 @@ import 'package:flutter/material.dart';
 
 import '../../core/theme/tokens.dart';
 import '../../game/board.dart';
-import '../../game/zones.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 import 'board_widget.dart';
 
 /// The tools around a giant board (100 to 300 cards and more), chosen from
 /// how big-board jigsaw apps help on a phone (see docs/giant-boards.md):
-/// a bar with the Edges filter, Gather and the zoom buttons, an overview map
-/// of the whole board while zoomed in (with its zones and where a held card
-/// belongs), a pointer to a selected card that is out of view, and calm
-/// milestones on the way (a zone, the frame, halfway).
+/// a bar with the Locate switch, Gather and the zoom buttons, an overview map
+/// of the whole board while zoomed in (showing where a tapped card belongs),
+/// a pointer to a selected card that is out of view, and calm milestones on
+/// the way (the frame, halfway).
 
-/// Above a giant board: the Edges filter, Gather (while zoomed in), a short
+/// Above a giant board: the Locate switch, Gather (while zoomed in), a short
 /// hint, the overview map switch (while zoomed in), zoom in, and back to the
 /// whole board.
 class GiantBoardBar extends StatelessWidget {
@@ -25,8 +24,8 @@ class GiantBoardBar extends StatelessWidget {
     super.key,
     required this.zoom,
     required this.width,
-    required this.edges,
-    required this.onEdges,
+    required this.locate,
+    required this.onLocate,
     required this.showMap,
     required this.onMap,
     this.onGather,
@@ -34,8 +33,9 @@ class GiantBoardBar extends StatelessWidget {
 
   final BoardZoom zoom;
   final double width;
-  final bool edges;
-  final VoidCallback onEdges;
+  /// Locate: a tapped card shows where it belongs on the overview map (when the map is on).
+  final bool locate;
+  final VoidCallback onLocate;
   final bool showMap;
   final VoidCallback onMap;
 
@@ -58,7 +58,7 @@ class GiantBoardBar extends StatelessWidget {
           final canZoomIn = zoom.zoom < zoom.limit - 0.01;
           return Row(
             children: [
-              _BarChip(key: const ValueKey('giant-edges'), icon: AppIcons.edges, label: 'Edges', on: edges, compact: compact, onTap: onEdges),
+              _BarChip(key: const ValueKey('giant-locate'), icon: AppIcons.locate, label: 'Locate', on: locate, compact: compact, onTap: onLocate),
               if (zoom.zoomed && onGather != null) ...[
                 SizedBox(width: compact ? 6 : 8),
                 _BarChip(key: const ValueKey('giant-gather'), icon: AppIcons.gather, label: 'Gather', compact: compact, onTap: onGather!),
@@ -112,7 +112,7 @@ class GiantBoardBar extends StatelessWidget {
 }
 
 /// A small capsule button: icon and label, cobalt while on (a switch such as
-/// Edges; an action such as Gather is never on).
+/// Locate; an action such as Gather is never on).
 class _BarChip extends StatelessWidget {
   const _BarChip({super.key, required this.icon, required this.label, this.on = false, this.compact = false, required this.onTap});
   final IconData icon;
@@ -151,10 +151,9 @@ class _BarChip extends StatelessWidget {
 
 /// The whole board in miniature while zoomed in: the cards as they lie now
 /// (cards in place bright, the rest darker, so the unfinished areas are easy
-/// to spot), the zones still to finish outlined, the part in view outlined,
-/// and the selected card marked. A located card (held or dragged) shows
-/// where it belongs: a ring there and a line to it. Tap or drag on the map
-/// to move the view there.
+/// to spot), the part in view outlined, and the selected card marked. With
+/// Locate on, the tapped card shows where it belongs: a ring there and a
+/// line to it. Tap or drag on the map to move the view there.
 class GiantMinimap extends StatelessWidget {
   const GiantMinimap({
     super.key,
@@ -165,7 +164,6 @@ class GiantMinimap extends StatelessWidget {
     required this.width,
     this.selected,
     this.painting = false,
-    this.zones,
     this.locate,
   });
 
@@ -178,9 +176,8 @@ class GiantMinimap extends StatelessWidget {
   final double width;
   final int? selected;
   final bool painting;
-  final BoardZones? zones;
 
-  /// The located card's slot (see `BoardWidget.onLocate`).
+  /// The located card's slot: the selected card while Locate is on.
   final int? locate;
 
   @override
@@ -210,7 +207,7 @@ class GiantMinimap extends StatelessWidget {
           borderRadius: BorderRadius.circular(7),
           child: Stack(
             children: [
-              RepaintBoundary(child: CustomPaint(size: size, painter: _MiniBoardPainter(image: image, board: board, boardSize: boardSize, painting: painting, zones: zones))),
+              RepaintBoundary(child: CustomPaint(size: size, painter: _MiniBoardPainter(image: image, board: board, boardSize: boardSize, painting: painting))),
               ListenableBuilder(
                 listenable: zoom,
                 builder: (context, _) => CustomPaint(
@@ -233,12 +230,11 @@ class GiantMinimap extends StatelessWidget {
 }
 
 class _MiniBoardPainter extends CustomPainter {
-  _MiniBoardPainter({required this.image, required this.board, required this.boardSize, required this.painting, this.zones});
+  _MiniBoardPainter({required this.image, required this.board, required this.boardSize, required this.painting});
   final ui.Image image;
   final Board board;
   final Size boardSize;
   final bool painting;
-  final BoardZones? zones;
 
   static const _grey = ColorFilter.matrix(<double>[
     0.2126, 0.7152, 0.0722, 0, 0,
@@ -273,26 +269,12 @@ class _MiniBoardPainter extends CustomPainter {
       if (!locked) canvas.drawRect(bounds, shade);
       canvas.restore();
     }
-    final z = zones;
-    if (z != null) {
-      // The zones still to finish, outlined; finished ones merge into the picture.
-      final path = Path();
-      for (final (a, b) in z.borders(tiling, boardSize, skip: z.completeZones(board))) {
-        path
-          ..moveTo(a.dx, a.dy)
-          ..lineTo(b.dx, b.dy);
-      }
-      canvas.drawPath(path, Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 1.0 * boardSize.width / size.width
-        ..color = Colors.white.withValues(alpha: 0.85));
-    }
     canvas.restore();
   }
 
   @override
   bool shouldRepaint(_MiniBoardPainter old) =>
-      old.board != board || old.image != image || old.painting != painting || old.boardSize != boardSize || old.zones != zones;
+      old.board != board || old.image != image || old.painting != painting || old.boardSize != boardSize;
 }
 
 class _ViewPainter extends CustomPainter {
@@ -413,17 +395,12 @@ class OffscreenSelection extends StatelessWidget {
   }
 }
 
-/// Calm milestones on a long board: each zone finished ("Zone complete · 3
-/// of 12"), the frame done (every edge card in place) and halfway, each
-/// shown once per board as a toast.
+/// Calm milestones on a long board: the frame done (every edge card in place)
+/// and halfway, each shown once per board as a toast.
 class GiantMilestones extends StatefulWidget {
-  const GiantMilestones({super.key, required this.board, required this.playing, this.onFrame, this.zones});
+  const GiantMilestones({super.key, required this.board, required this.playing});
   final Board board;
   final bool playing;
-  final BoardZones? zones;
-
-  /// The frame was just completed (the Edges filter has nothing left to show).
-  final VoidCallback? onFrame;
 
   @override
   State<GiantMilestones> createState() => _GiantMilestonesState();
@@ -434,14 +411,12 @@ class _GiantMilestonesState extends State<GiantMilestones> {
   // halfway says nothing).
   late bool _frame;
   late bool _half;
-  late Set<int> _zones;
 
   @override
   void initState() {
     super.initState();
     _frame = _frameDone(widget.board);
     _half = _halfDone(widget.board);
-    _zones = widget.zones?.completeZones(widget.board) ?? const {};
   }
 
   static bool _frameDone(Board b) {
@@ -464,42 +439,23 @@ class _GiantMilestonesState extends State<GiantMilestones> {
     super.didUpdateWidget(old);
     if (old.board == widget.board) return;
     final frame = _frameDone(widget.board), half = _halfDone(widget.board);
-    if (old.board.spec != widget.board.spec || old.zones != widget.zones) {
-      // Another board (or zones switched on): start over without toasts.
+    if (old.board.spec != widget.board.spec) {
+      // Another board: start over without toasts.
       _frame = frame;
       _half = half;
-      _zones = widget.zones?.completeZones(widget.board) ?? const {};
       return;
     }
-    final zones = widget.zones?.completeZones(widget.board) ?? const <int>{};
-    final solved = widget.board.isSolved;
-    if (widget.playing && !solved) {
-      final z = widget.zones;
-      final frameNow = frame && !_frame;
-      // One toast per move: a zone, else the frame, else halfway. The frame
-      // turns the Edges filter off whichever toast shows.
-      final String? text;
-      final IconData icon;
-      if (z != null && zones.difference(_zones).isNotEmpty) {
-        (text, icon) = ('Zone complete · ${zones.length} of ${z.count}', AppIcons.zone);
-      } else if (frameNow) {
-        (text, icon) = ('Frame complete', AppIcons.edges);
-      } else if (half && !_half) {
-        (text, icon) = ('Halfway there', AppIcons.puzzle);
-      } else {
-        (text, icon) = (null, AppIcons.puzzle);
-      }
-      if (text != null || frameNow) {
+    if (widget.playing && !widget.board.isSolved) {
+      // One toast per move: the frame, else halfway.
+      final String? text = frame && !_frame ? 'Frame complete' : (half && !_half ? 'Halfway there' : null);
+      if (text != null) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (!mounted) return;
-          if (text != null) showToast(context, text, icon: icon);
-          if (frameNow) widget.onFrame?.call();
+          if (mounted) showToast(context, text, icon: AppIcons.puzzle);
         });
       }
     }
     _frame = frame;
     _half = half;
-    _zones = zones;
   }
 
   @override

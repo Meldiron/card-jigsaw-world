@@ -1,0 +1,1490 @@
+{
+ "pack": {
+  "id": "pack-house-and-home",
+  "name": "House and Home",
+  "category": "Illustration",
+  "description": "Parlours, cabins, salons and lamp shops, furnished room by room in hand-drawn pieces.",
+  "sortOrder": 1330,
+  "price": "coins"
+ },
+ "canvas": [
+  1800,
+  2400
+ ],
+ "max_uses": 7,
+ "max_items": 70,
+ "defaults": {
+  "size": {
+   "min": 0.16,
+   "max": 0.32
+  },
+  "fill_size": {
+   "min": 0.1,
+   "max": 0.22,
+   "min_px": 110
+  },
+  "cover": 0.8,
+  "max_ov": 0.15,
+  "fill_ov": 0.28,
+  "fill_cover": 0.88,
+  "palette_max": 50,
+  "row": {
+   "min": 0.5,
+   "max": 0.98,
+   "min_frac": 0.28,
+   "gap": [
+    -0.14,
+    0.03
+   ],
+   "fill_all": true
+  }
+ },
+ "fill_all": [
+  "tag:f_armchair",
+  "tag:f_chair",
+  "tag:f_sofa",
+  "tag:f_table",
+  "tag:f_counter",
+  "tag:f_cabinet",
+  "tag:f_lamp",
+  "tag:f_deco",
+  "tag:f_plant",
+  "tag:f_bed"
+ ],
+ "pictures": [
+  {
+   "slug": "powder-blue-parlour",
+   "title": "Powder blue parlour",
+   "seed": 601,
+   "palette": [
+    "#9ecae1",
+    "#ffffff",
+    "#c9a227"
+   ],
+   "layout": {
+    "type": "cubbies",
+    "cols": 2,
+    "rows": 5,
+    "frame": [
+     "#ece9e2",
+     "#e2dfd8",
+     "#f4f2ec"
+    ],
+    "frame_w": 0.022,
+    "board_h": 0.022,
+    "floor_h": 0.13
+   },
+   "zones": [
+    {
+     "items": [
+      "re:^(furniture|bag_furniture)_.*(?:powdered_blue)",
+      "re:^(furniture|bag_furniture)_.*(?:simply_white)",
+      "re:^(furniture|bag_furniture)_.*(?:white_highback)"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "babyblue_molding_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#e2bf86",
+       "#d6b077",
+       "#ecca92"
+      ],
+      "width": 90
+     },
+     "hero": [
+      "furniture_armchair_powdered_blue_armchair"
+     ]
+    },
+    {
+     "items": [
+      "re:^(furniture|bag_furniture)_.*(?:powdered_blue)",
+      "re:^(furniture|bag_furniture)_.*(?:white)"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "lightblue_stucco_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#c48a52",
+       "#b47a45",
+       "#d29a60"
+      ],
+      "width": 90
+     }
+    }
+   ]
+  },
+  {
+   "slug": "violet-lounge",
+   "title": "Violet lounge",
+   "seed": 602,
+   "palette": [
+    "#7e57c2",
+    "#b39ddb",
+    "#4a2c6b"
+   ],
+   "layout": {
+    "type": "cubbies",
+    "cols": 1,
+    "rows": 6,
+    "frame": [
+     "#6b452c",
+     "#5d3c26",
+     "#7a5034"
+    ],
+    "frame_w": 0.022,
+    "board_h": 0.022,
+    "floor_h": 0.13
+   },
+   "zones": [
+    {
+     "items": [
+      "re:^(furniture|bag_furniture)_.*(?:violet_voyage)",
+      "re:^(furniture|bag_furniture)_.*(?:slimy_in_purple)",
+      "re:^(furniture|bag_furniture)_.*(?:purple_journey)",
+      "re:^(furniture|bag_furniture)_.*(?:spotted_deep_purple)"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "purple_stripes_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#6b452c",
+       "#5d3c26",
+       "#7a5034"
+      ],
+      "width": 90
+     },
+     "hero": [
+      "furniture_bench_violet_voyage_bench"
+     ]
+    },
+    {
+     "items": [
+      "re:^(furniture|bag_furniture)_.*(?:violet_voyage)",
+      "re:^(furniture|bag_furniture)_.*(?:purple)"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "sweetpuple_stucco_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#c48a52",
+       "#b47a45",
+       "#d29a60"
+      ],
+      "width": 90
+     }
+    }
+   ]
+  },
+  {
+   "slug": "gentlemens-club",
+   "title": "Gentlemen's club",
+   "seed": 603,
+   "palette": [
+    "#8b1a1a",
+    "#1f1f1f",
+    "#c9a227"
+   ],
+   "layout": {
+    "type": "cubbies",
+    "cols": 2,
+    "rows": 5,
+    "frame": [
+     "#8b2f2f",
+     "#7a2828",
+     "#9a3a3a"
+    ],
+    "frame_w": 0.022,
+    "board_h": 0.022,
+    "floor_h": 0.13
+   },
+   "zones": [
+    {
+     "items": [
+      "re:^(furniture|bag_furniture)_.*(?:gentlemen_red)",
+      "re:^(furniture|bag_furniture)_.*(?:club_loveseat)",
+      "re:^(furniture|bag_furniture)_.*(?:black_leather|blackleather)"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "red_molding_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#6b452c",
+       "#5d3c26",
+       "#7a5034"
+      ],
+      "width": 90
+     },
+     "hero": [
+      "furniture_sofa_gentlemen_red_quilted_sofa"
+     ]
+    },
+    {
+     "items": [
+      "re:^(furniture|bag_furniture)_.*(?:gentlemen_red)",
+      "re:^(furniture|bag_furniture)_.*(?:wine_highback)",
+      "re:^(furniture|bag_furniture)_.*(?:mahogany)"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "spanishred_stucco_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#6b452c",
+       "#5d3c26",
+       "#7a5034"
+      ],
+      "width": 90
+     }
+    }
+   ]
+  },
+  {
+   "slug": "pearly-white-suite",
+   "title": "Pearly white suite",
+   "seed": 604,
+   "palette": [
+    "#f5f5f5",
+    "#bdbdbd",
+    "#212121"
+   ],
+   "layout": {
+    "type": "cubbies",
+    "cols": 1,
+    "rows": 6,
+    "frame": [
+     "#ece9e2",
+     "#e2dfd8",
+     "#f4f2ec"
+    ],
+    "frame_w": 0.022,
+    "board_h": 0.022,
+    "floor_h": 0.13
+   },
+   "zones": [
+    {
+     "items": [
+      "re:^(furniture|bag_furniture)_.*(?:pearl)",
+      "re:^(furniture|bag_furniture)_.*(?:simply_white)",
+      "re:^(furniture|bag_furniture)_.*(?:white_(polished|swedish))",
+      "re:^(furniture|bag_furniture)_.*(?:basic_white)"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "whitepillar_molding_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#9e9e9e",
+       "#8d8d8d",
+       "#b0b0b0"
+      ],
+      "width": 90
+     },
+     "hero": [
+      "furniture_sofa_pearly_white_quilted_sofa"
+     ]
+    },
+    {
+     "items": [
+      "re:^(furniture|bag_furniture)_.*(?:pearl)",
+      "re:^(furniture|bag_furniture)_.*(?:white)"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "white_stucco_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#cfcfcf",
+       "#c2c2c2",
+       "#dcdcdc"
+      ],
+      "width": 90
+     }
+    }
+   ]
+  },
+  {
+   "slug": "baroque-salon",
+   "title": "Baroque salon",
+   "seed": 605,
+   "palette": [
+    "#f48fb1",
+    "#1f1f1f",
+    "#f5e6c8"
+   ],
+   "layout": {
+    "type": "cubbies",
+    "cols": 2,
+    "rows": 5,
+    "frame": [
+     "#f2e6d0",
+     "#e8dcc4",
+     "#fbf1df"
+    ],
+    "frame_w": 0.022,
+    "board_h": 0.022,
+    "floor_h": 0.13
+   },
+   "zones": [
+    {
+     "items": [
+      "re:^(furniture|bag_furniture)_.*(?:baroque)",
+      "re:^(furniture|bag_furniture)_.*(?:royal_pink)",
+      "re:^(furniture|bag_furniture)_.*(?:pink_highback)"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "coralpillar_molding_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#c48a52",
+       "#b47a45",
+       "#d29a60"
+      ],
+      "width": 90
+     },
+     "hero": [
+      "furniture_sofa_baroque_pink_sofa"
+     ]
+    },
+    {
+     "items": [
+      "re:^(furniture|bag_furniture)_.*(?:baroque)",
+      "re:^(furniture|bag_furniture)_.*(?:black)"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "creamybaseboard_molding_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#6b452c",
+       "#5d3c26",
+       "#7a5034"
+      ],
+      "width": 90
+     }
+    }
+   ]
+  },
+  {
+   "slug": "log-cabin",
+   "title": "Log cabin",
+   "seed": 606,
+   "palette": [
+    "#8d5524",
+    "#e07a2e",
+    "#556b2f"
+   ],
+   "layout": {
+    "type": "cubbies",
+    "cols": 2,
+    "rows": 5,
+    "frame": [
+     "#6b452c",
+     "#5d3c26",
+     "#7a5034"
+    ],
+    "frame_w": 0.022,
+    "board_h": 0.022,
+    "floor_h": 0.13
+   },
+   "zones": [
+    {
+     "items": [
+      "re:^(furniture|bag_furniture)_.*(?:log_cabin)",
+      "re:^(furniture|bag_furniture)_.*(?:log_stool|log_stump)",
+      "re:^(furniture|bag_furniture)_.*(?:rustic_oven|wood_stove|camp_fire|foresty)",
+      "re:^(furniture|bag_furniture)_.*(?:root_coffee|rhubarb)"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "brown_boghouse_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#c48a52",
+       "#b47a45",
+       "#d29a60"
+      ],
+      "width": 90
+     },
+     "hero": [
+      "furniture_bed_log_cabin_bed",
+      "furniture_fireplace_wood_stove"
+     ]
+    },
+    {
+     "items": [
+      "re:^(furniture|bag_furniture)_.*(?:log_cabin)",
+      "re:^(furniture|bag_furniture)_.*(?:wood)"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "lightbrown_stucco_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#6b452c",
+       "#5d3c26",
+       "#7a5034"
+      ],
+      "width": 90
+     }
+    }
+   ]
+  },
+  {
+   "slug": "bog-hut",
+   "title": "Bog hut",
+   "seed": 607,
+   "palette": [
+    "#7d8a3a",
+    "#e6c84f",
+    "#5d4037"
+   ],
+   "layout": {
+    "type": "cubbies",
+    "cols": 2,
+    "rows": 5,
+    "frame": [
+     "#7d6a3a",
+     "#6d5a30",
+     "#8d7a48"
+    ],
+    "frame_w": 0.022,
+    "board_h": 0.022,
+    "floor_h": 0.13
+   },
+   "zones": [
+    {
+     "items": [
+      "re:^(furniture|bag_furniture)_.*(?:firebog)"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "yellow_boghouse_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#8d7a48",
+       "#7d6a3a",
+       "#9d8a58"
+      ],
+      "width": 90
+     },
+     "hero": [
+      "furniture_sofa_firebog_sofa",
+      "furniture_fireplace_firebog_fireplace"
+     ]
+    },
+    {
+     "items": [
+      "re:^(furniture|bag_furniture)_.*(?:firebog)",
+      "re:^(furniture|bag_furniture)_.*(?:green)"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "olive_stucco_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#c48a52",
+       "#b47a45",
+       "#d29a60"
+      ],
+      "width": 90
+     }
+    }
+   ]
+  },
+  {
+   "slug": "japanese-house",
+   "title": "Japanese house",
+   "seed": 608,
+   "palette": [
+    "#1f1f1f",
+    "#f2e6d0",
+    "#b3202a"
+   ],
+   "layout": {
+    "type": "cubbies",
+    "cols": 1,
+    "rows": 6,
+    "frame": [
+     "#6b452c",
+     "#5d3c26",
+     "#7a5034"
+    ],
+    "frame_w": 0.022,
+    "board_h": 0.022,
+    "floor_h": 0.13
+   },
+   "zones": [
+    {
+     "items": [
+      "re:^(furniture|bag_furniture)_.*(?:japanese)",
+      "re:^(furniture|bag_furniture)_.*(?:bamboo)",
+      "re:^(furniture|bag_furniture)_.*(?:lotus)",
+      "re:^(furniture|bag_furniture)_.*(?:flower_screen)",
+      "re:^(furniture|bag_furniture)_.*(?:minimalist)",
+      "re:^(furniture|bag_furniture)_.*(?:alakol_willow)"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "creamy_stucco_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#d9c49a",
+       "#cdb68a",
+       "#e3d0a8"
+      ],
+      "width": 90
+     },
+     "hero": [
+      "furniture_largefrontfloordeco_flower_screen_",
+      "furniture_mediumcabinet_black_japanese_medium_cabinet"
+     ]
+    }
+   ],
+   "row": {
+    "min": 0.5,
+    "max": 0.98,
+    "min_frac": 0.28,
+    "fill_all": true
+   }
+  },
+  {
+   "slug": "modern-loft",
+   "title": "Modern loft",
+   "seed": 609,
+   "palette": [
+    "#eceff1",
+    "#d7a86e",
+    "#37474f"
+   ],
+   "layout": {
+    "type": "cubbies",
+    "cols": 2,
+    "rows": 5,
+    "frame": [
+     "#9e9e9e",
+     "#8d8d8d",
+     "#b0b0b0"
+    ],
+    "frame_w": 0.022,
+    "board_h": 0.022,
+    "floor_h": 0.13
+   },
+   "zones": [
+    {
+     "items": [
+      "re:^(furniture|bag_furniture)_.*(?:danish)",
+      "re:^(furniture|bag_furniture)_.*(?:swedish)",
+      "re:^(furniture|bag_furniture)_.*(?:glass)",
+      "re:^(furniture|bag_furniture)_.*(?:modern_box|whitemodernbox|creammodern)"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "grey_stucco_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#e2bf86",
+       "#d6b077",
+       "#ecca92"
+      ],
+      "width": 90
+     },
+     "hero": [
+      "furniture_sofa_danish_modern_sofa"
+     ]
+    },
+    {
+     "items": [
+      "re:^(furniture|bag_furniture)_.*(?:danish)",
+      "re:^(furniture|bag_furniture)_.*(?:swedish)",
+      "re:^(furniture|bag_furniture)_.*(?:steel|stainless|metal)"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "white_stucco_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#90a4ae",
+       "#78909c",
+       "#a7b6bd"
+      ],
+      "width": 90
+     }
+    }
+   ]
+  },
+  {
+   "slug": "rook-nest-rooms",
+   "title": "Rook nest rooms",
+   "seed": 610,
+   "palette": [
+    "#4e342e",
+    "#33691e",
+    "#bcaaa4"
+   ],
+   "layout": {
+    "type": "cubbies",
+    "cols": 2,
+    "rows": 5,
+    "frame": [
+     "#6b452c",
+     "#5d3c26",
+     "#7a5034"
+    ],
+    "frame_w": 0.022,
+    "board_h": 0.022,
+    "floor_h": 0.13
+   },
+   "zones": [
+    {
+     "items": [
+      "re:^(furniture|bag_furniture)_.*(?:rook)"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "forest_papercut_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#6b452c",
+       "#5d3c26",
+       "#7a5034"
+      ],
+      "width": 90
+     },
+     "hero": [
+      "furniture_bed_rook_nest_bed"
+     ]
+    },
+    {
+     "items": [
+      "re:^(furniture|bag_furniture)_.*(?:rook)",
+      "re:^(furniture|bag_furniture)_.*(?:root|branches|vines)"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "olive_stucco_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#c48a52",
+       "#b47a45",
+       "#d29a60"
+      ],
+      "width": 90
+     }
+    }
+   ]
+  },
+  {
+   "slug": "toadstool-cottage",
+   "title": "Toadstool cottage",
+   "seed": 611,
+   "palette": [
+    "#8bc34a",
+    "#e53935",
+    "#fff59d"
+   ],
+   "layout": {
+    "type": "cubbies",
+    "cols": 2,
+    "rows": 5,
+    "frame": [
+     "#9ccc65",
+     "#8bc34a",
+     "#aed581"
+    ],
+    "frame_w": 0.022,
+    "board_h": 0.022,
+    "floor_h": 0.13
+   },
+   "zones": [
+    {
+     "items": [
+      "re:^(furniture|bag_furniture)_.*(?:mushroom)",
+      "re:^(furniture|bag_furniture)_.*(?:slimy)",
+      "re:^(furniture|bag_furniture)_.*(?:lime|green)"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "lime_stucco_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#c48a52",
+       "#b47a45",
+       "#d29a60"
+      ],
+      "width": 90
+     },
+     "hero": [
+      "furniture_stool_mushroom_stool",
+      "furniture_floorlamp_mushroom__lamp"
+     ]
+    },
+    {
+     "items": [
+      "re:^(furniture|bag_furniture)_.*(?:mushroom)",
+      "re:^(furniture|bag_furniture)_.*(?:slimy)"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "yellowgreen_molding_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#e2bf86",
+       "#d6b077",
+       "#ecca92"
+      ],
+      "width": 90
+     }
+    }
+   ]
+  },
+  {
+   "slug": "seaside-cabin",
+   "title": "Seaside cabin",
+   "seed": 612,
+   "palette": [
+    "#4db6ac",
+    "#ff8a65",
+    "#fff3e0"
+   ],
+   "layout": {
+    "type": "cubbies",
+    "cols": 2,
+    "rows": 5,
+    "frame": [
+     "#e0f2f1",
+     "#d4ebe9",
+     "#eef8f7"
+    ],
+    "frame_w": 0.022,
+    "board_h": 0.022,
+    "floor_h": 0.13
+   },
+   "zones": [
+    {
+     "items": [
+      "re:^(furniture|bag_furniture)_.*(?:coral|shell|fish_tank|starfish|seashell|oyster|clamshell)",
+      "re:^(furniture|bag_furniture)_.*(?:wicker|cane)"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "tealgreen_molding_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#e2bf86",
+       "#d6b077",
+       "#ecca92"
+      ],
+      "width": 90
+     },
+     "hero": [
+      "furniture_bed_clamshell_bed",
+      "furniture_roomdeco_fish_tank"
+     ]
+    },
+    {
+     "items": [
+      "re:^(furniture|bag_furniture)_.*(?:coral|shell|wicker|cane)",
+      "re:^(furniture|bag_furniture)_.*(?:blue)"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "blue_tiles_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#cfe8e6",
+       "#bfe0dd",
+       "#ddf0ee"
+      ],
+      "width": 90
+     }
+    }
+   ]
+  },
+  {
+   "slug": "starship-quarters",
+   "title": "Starship quarters",
+   "seed": 613,
+   "palette": [
+    "#b0bec5",
+    "#26c6da",
+    "#37474f"
+   ],
+   "layout": {
+    "type": "cubbies",
+    "cols": 1,
+    "rows": 6,
+    "frame": [
+     "#9e9e9e",
+     "#8d8d8d",
+     "#b0b0b0"
+    ],
+    "frame_w": 0.022,
+    "board_h": 0.022,
+    "floor_h": 0.13
+   },
+   "zones": [
+    {
+     "items": [
+      "re:^(furniture|bag_furniture)_.*(?:spaceship)",
+      "re:^(furniture|bag_furniture)_.*(?:steel|stainless|metal|aluminum|chrome)",
+      "re:^(furniture|bag_furniture)_.*(?:glass)"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "spaceship_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#9e9e9e",
+       "#8d8d8d",
+       "#b0b0b0"
+      ],
+      "width": 90
+     },
+     "hero": [
+      "furniture_desk_spaceship_desk",
+      "furniture_table_spaceship_table"
+     ]
+    }
+   ],
+   "row": {
+    "min": 0.5,
+    "max": 0.98,
+    "min_frac": 0.28,
+    "fill_all": true
+   }
+  },
+  {
+   "slug": "mahogany-study",
+   "title": "Mahogany study",
+   "seed": 614,
+   "palette": [
+    "#1f2a4a",
+    "#7b3a2a",
+    "#c9a227"
+   ],
+   "layout": {
+    "type": "cubbies",
+    "cols": 2,
+    "rows": 5,
+    "frame": [
+     "#8b2f2f",
+     "#7a2828",
+     "#9a3a3a"
+    ],
+    "frame_w": 0.022,
+    "board_h": 0.022,
+    "floor_h": 0.13
+   },
+   "zones": [
+    {
+     "items": [
+      "re:^(furniture|bag_furniture)_.*(?:mahogany)",
+      "re:^(furniture|bag_furniture)_.*(?:rolltop|student_glass|bookcase|officechair|office)",
+      "re:^(furniture|bag_furniture)_.*(?:tablelamp)"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "navy_molding_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#6b452c",
+       "#5d3c26",
+       "#7a5034"
+      ],
+      "width": 90
+     },
+     "hero": [
+      "furniture_desk_rolltop_desk",
+      "furniture_bookcase_bookcase_warpedwood"
+     ]
+    },
+    {
+     "items": [
+      "re:^(furniture|bag_furniture)_.*(?:mahogany)",
+      "re:^(furniture|bag_furniture)_.*(?:darkred|darkwood|dark_wood)"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "navy_stucco_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#c48a52",
+       "#b47a45",
+       "#d29a60"
+      ],
+      "width": 90
+     }
+    }
+   ]
+  },
+  {
+   "slug": "food-furniture",
+   "title": "Food furniture",
+   "seed": 615,
+   "palette": [
+    "#ffd54f",
+    "#e53935",
+    "#8bc34a"
+   ],
+   "layout": {
+    "type": "cubbies",
+    "cols": 2,
+    "rows": 5,
+    "frame": [
+     "#ffe082",
+     "#ffd54f",
+     "#ffecb3"
+    ],
+    "frame_w": 0.022,
+    "board_h": 0.022,
+    "floor_h": 0.13
+   },
+   "zones": [
+    {
+     "items": [
+      "re:^(furniture|bag_furniture)_.*(?:banana|coconut|hot_dog|pea_bench|durian|hambuger|watermelon|carrot|onion|tomato|pepper|corn_lamp|pineapple|sandwich|steak|pancakes|donut|lime_stool|orange_stool|ribs)"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "goldyellow_stucco_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#c48a52",
+       "#b47a45",
+       "#d29a60"
+      ],
+      "width": 90
+     },
+     "hero": [
+      "furniture_armchair_banana_armchair",
+      "furniture_table_watermelon_table"
+     ]
+    },
+    {
+     "items": [
+      "re:^(furniture|bag_furniture)_.*(?:banana|coconut|hot_dog|pea_bench|durian|hambuger|watermelon|carrot|onion|tomato|pepper|pineapple|sandwich|steak|pancakes|donut|lime_stool|orange_stool|ribs)"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "orange_tiles_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#e2bf86",
+       "#d6b077",
+       "#ecca92"
+      ],
+      "width": 90
+     }
+    }
+   ],
+   "priority": 1
+  },
+  {
+   "slug": "uralia-grove-house",
+   "title": "Grove house",
+   "seed": 616,
+   "palette": [
+    "#4db6ac",
+    "#7e57c2",
+    "#c5e1a5"
+   ],
+   "layout": {
+    "type": "cubbies",
+    "cols": 2,
+    "rows": 5,
+    "frame": [
+     "#5d7a6a",
+     "#4e6a5a",
+     "#6c8a7a"
+    ],
+    "frame_w": 0.022,
+    "board_h": 0.022,
+    "floor_h": 0.13
+   },
+   "zones": [
+    {
+     "items": [
+      "re:^(furniture|bag_furniture)_.*(?:uralia)",
+      "re:^(furniture|bag_furniture)_.*(?:forest_vines|ashen|swirly)"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "uralia_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#6c8a7a",
+       "#5d7a6a",
+       "#7c9a8a"
+      ],
+      "width": 90
+     },
+     "hero": [
+      "furniture_table_uralia_table",
+      "furniture_fireplace_uralia_fireplace"
+     ]
+    },
+    {
+     "items": [
+      "re:^(furniture|bag_furniture)_.*(?:uralia)",
+      "re:^(furniture|bag_furniture)_.*(?:teal|aqua)"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "violetvoyagesky_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#c48a52",
+       "#b47a45",
+       "#d29a60"
+      ],
+      "width": 90
+     }
+    }
+   ]
+  },
+  {
+   "slug": "lamp-shop",
+   "title": "Lamp shop",
+   "seed": 617,
+   "palette": [
+    "#1f2f5c",
+    "#ffd54f",
+    "#ff8a65"
+   ],
+   "layout": {
+    "type": "cubbies",
+    "cols": 3,
+    "rows": 3,
+    "frame": [
+     "#6b452c",
+     "#5d3c26",
+     "#7a5034"
+    ],
+    "frame_w": 0.022,
+    "board_h": 0.022,
+    "floor_h": 0.13
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:f_lamp"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "navy_stucco_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#6b452c",
+       "#5d3c26",
+       "#7a5034"
+      ],
+      "width": 90
+     },
+     "hero": [
+      "furniture_floorlamp_red_fringe_floor_lamp"
+     ]
+    },
+    {
+     "items": [
+      "tag:f_lamp",
+      "re:^(furniture|bag_furniture)_.*(?:vase|candle)"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "darkgrey_stucco_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#6b452c",
+       "#5d3c26",
+       "#7a5034"
+      ],
+      "width": 90
+     }
+    }
+   ],
+   "row": {
+    "min": 0.55,
+    "max": 0.98,
+    "min_frac": 0.28,
+    "fill_all": false
+   },
+   "fill": [
+    "tag:f_lamp",
+    "tag:f_deco",
+    "tag:f_plant"
+   ],
+   "priority": 1
+  },
+  {
+   "slug": "door-gallery",
+   "title": "Door gallery",
+   "seed": 618,
+   "palette": [
+    "#b5562f",
+    "#f2e6d0",
+    "#2e7d32"
+   ],
+   "layout": {
+    "type": "cubbies",
+    "cols": 1,
+    "rows": 4,
+    "frame": [
+     "#8b5a3c",
+     "#7b4f34",
+     "#9a6a4a"
+    ],
+    "frame_w": 0.022,
+    "board_h": 0.022,
+    "floor_h": 0.1
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:f_door"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "red_brick_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#9e9e9e",
+       "#8d8d8d",
+       "#b0b0b0"
+      ],
+      "width": 90
+     },
+     "hero": [
+      "furniture_door_mexican_door",
+      "furniture_door_garden_flower_door"
+     ]
+    },
+    {
+     "items": [
+      "tag:f_door"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "color_brick_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#bcaaa4",
+       "#a1887f",
+       "#d7ccc8"
+      ],
+      "width": 90
+     }
+    }
+   ],
+   "row": {
+    "min": 0.6,
+    "max": 0.98,
+    "min_frac": 0.3,
+    "fill_all": false,
+    "gap": [
+     -0.08,
+     0.02
+    ]
+   },
+   "fill": [
+    "tag:f_door",
+    "tag:f_plant"
+   ],
+   "priority": 1
+  },
+  {
+   "slug": "rug-shop",
+   "title": "Rug shop",
+   "seed": 619,
+   "palette": [
+    "#b71c1c",
+    "#f5e6c8",
+    "#1a237e",
+    "#ffb300"
+   ],
+   "layout": {
+    "type": "single"
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:f_rug",
+      "re:^(furniture|bag_furniture)_.*(?:beanbag)",
+      "re:^(furniture|bag_furniture)_.*(?:stool)"
+     ],
+     "ground": {
+      "type": "planks",
+      "colors": [
+       "#e2bf86",
+       "#d6b077",
+       "#ecca92"
+      ],
+      "width": 110
+     },
+     "hero": [
+      "furniture_rug_blue_fireworks_rug",
+      "furniture_rug_retro_squares_rug",
+      "furniture_rug_faux_zebra_skin_rug"
+     ],
+     "size": {
+      "min": 0.22,
+      "max": 0.45,
+      "power": 1.0
+     },
+     "fill_cover": 0.85
+    }
+   ],
+   "fill": [
+    "tag:f_rug",
+    "tag:f_chair",
+    "tag:f_plant"
+   ],
+   "fill_all": false
+  },
+  {
+   "slug": "bedroom-corridor",
+   "title": "Bedroom corridor",
+   "seed": 620,
+   "palette": [
+    "#f8bbd0",
+    "#fff8e1",
+    "#8d6e63"
+   ],
+   "layout": {
+    "type": "cubbies",
+    "cols": 1,
+    "rows": 5,
+    "frame": [
+     "#ece9e2",
+     "#e2dfd8",
+     "#f4f2ec"
+    ],
+    "frame_w": 0.022,
+    "board_h": 0.022,
+    "floor_h": 0.13
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:f_bed",
+      "re:^(furniture|bag_furniture)_.*(?:sidetable|tablelamp)"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "creamy_stripes_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#c48a52",
+       "#b47a45",
+       "#d29a60"
+      ],
+      "width": 90
+     },
+     "hero": [
+      "furniture_bed_bed_canopywithtransparentcurtains"
+     ]
+    },
+    {
+     "items": [
+      "tag:f_bed",
+      "re:^(furniture|bag_furniture)_.*(?:smallcabinet|sidetable)"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "pink_stucco_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#e2bf86",
+       "#d6b077",
+       "#ecca92"
+      ],
+      "width": 90
+     }
+    }
+   ],
+   "priority": 1
+  },
+  {
+   "slug": "fireplace-hall",
+   "title": "Fireplace hall",
+   "seed": 621,
+   "palette": [
+    "#757575",
+    "#ff7043",
+    "#5d4037"
+   ],
+   "layout": {
+    "type": "cubbies",
+    "cols": 2,
+    "rows": 5,
+    "frame": [
+     "#8d8d8d",
+     "#7d7d7d",
+     "#9d9d9d"
+    ],
+    "frame_w": 0.022,
+    "board_h": 0.022,
+    "floor_h": 0.13
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:f_fireplace",
+      "tag:f_armchair"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "grey_brick_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#6b452c",
+       "#5d3c26",
+       "#7a5034"
+      ],
+      "width": 90
+     },
+     "hero": [
+      "furniture_fireplace_rocky_fireplace",
+      "furniture_fireplace_fireplace"
+     ]
+    },
+    {
+     "items": [
+      "tag:f_fireplace",
+      "re:^(furniture|bag_furniture)_.*(?:lazychair|armchair)"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "grey_stripes_wall",
+      "scale": 2.0
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#c48a52",
+       "#b47a45",
+       "#d29a60"
+      ],
+      "width": 90
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -71,58 +71,115 @@ def safe(item_id):
 
 # ----------------------------------------------------------------------------------------------- library
 
+def _fill_from_ring(out, region, inner_iter=1, outer_iter=4):
+    """Replace region pixels by what surrounds them: transparent when the surroundings are mostly empty,
+    else the median colour of the opaque, not-dark surrounding pixels."""
+    near = ndimage.binary_dilation(region, iterations=inner_iter)
+    ring = ndimage.binary_dilation(near, iterations=outer_iter) & ~near
+    al = out[..., 3]
+    if not ring.any() or (al[ring] > 60).mean() < 0.5:
+        out[near] = 0
+        return
+    lum = out[..., :3].mean(2)
+    ok = ring & (al > 60) & (lum > 60)
+    src = out[ok] if ok.any() else out[ring & (al > 60)]
+    out[near] = np.median(src, axis=0).astype(out.dtype)
+
+
+def _trim_overhang(out, gap=3, min_len=6):
+    """Guide lines run past the drawing: clear 1-2 px thin rows that stick out beyond the drawing's extent
+    in the rows `gap` above and below (works on a view, so a transposed array trims columns)."""
+    m = out[..., 3] > 16
+    h, w = m.shape
+    any_ = m.any(1)
+    left = np.where(any_, m.argmax(1), w)
+    right = np.where(any_, w - 1 - m[:, ::-1].argmax(1), -1)
+    for y in range(h):
+        if not any_[y]:
+            continue
+        nb = [k for k in (y - gap, y - gap - 1, y + gap, y + gap + 1) if 0 <= k < h]
+        lo = min([left[k] for k in nb] + [w]); hi = max([right[k] for k in nb] + [-1])
+        if hi < 0:
+            lo, hi = w, -1
+        if left[y] < lo - min_len:
+            out[y, :lo][m[y, :lo]] = 0
+        if right[y] > hi + min_len:
+            out[y, hi + 1:][m[y, hi + 1:]] = 0
+
+
 def clean_png(img, furniture):
-    """Furniture only: erase Flash export guide lines (thin pure red / green lines) and tiny loose specks
-    (registration dots), and flag Flash placeholder boxes. Returns (RGBA image trimmed to content, placeholder)."""
+    """Furniture only: erase Flash export marks (thin single-colour red / green guide lines, white
+    registration dots with a black ring at the base or the top-left origin) and loose specks, and flag
+    Flash placeholder boxes. Returns (RGBA image trimmed to content, placeholder)."""
     if not furniture:
         im = img.convert('RGBA')
         bb = im.getchannel('A').point(lambda v: 255 if v > 16 else 0).getbbox()
         return (im.crop(bb) if bb else None), False
     a = np.asarray(img.convert('RGBA')).astype(np.int16)
-    r, g, b, al = a[..., 0], a[..., 1], a[..., 2], a[..., 3]
-    guide = (((r > 200) & (g < 70) & (b < 70)) | ((r < 70) & (g > 150) & (g < 240) & (b < 110) & (g - b > 90))) & (al > 60)
-    placeholder = False
     out = a.copy()
+    r, g, b, al = a[..., 0], a[..., 1], a[..., 2], a[..., 3]
+    placeholder = False
+    pure = (((r > 225) & (g < 45) & (b < 45)) | ((g > 190) & (r < 95) & (b < 115))) & (al > 0)
+    guideish = (((g > 110) & (g - r > 45) & (g - b > 35)) | ((r > 150) & (r - g > 90) & (r - b > 80))) & (al > 0)
+    guide = guideish & ndimage.binary_dilation(pure, iterations=2)
     if guide.any():
         lab, n = ndimage.label(guide, structure=np.ones((3, 3)))
         for i, sl in enumerate(ndimage.find_objects(lab), 1):
             ys, xs = sl
             h, w = ys.stop - ys.start, xs.stop - xs.start
             comp = lab[sl] == i
-            if min(h, w) <= 3 and max(h, w) >= 8:
-                if w >= h:      # horizontal: average the rows just above and below
-                    y0, y1 = ys.start - 1, ys.stop
+            cols = a[sl][comp][:, :3]
+            uniform = (cols.max(0) - cols.min(0)).max() < 40
+            if min(h, w) <= 3 and max(h, w) >= 5 and pure[sl][comp].mean() >= 0.25:
+                reg = np.zeros(guide.shape, bool); reg[sl] = comp
+                if w >= h:      # horizontal line: average the rows just above and below
                     for x in range(xs.start, xs.stop):
                         col = comp[:, x - xs.start]
                         if not col.any():
                             continue
+                        y0, y1 = ys.start - 1, ys.stop
                         above = a[y0, x] if y0 >= 0 else None
                         below = a[y1, x] if y1 < a.shape[0] else None
                         rep = (above + below) // 2 if above is not None and below is not None else (above if above is not None else below)
-                        for yy in np.nonzero(col)[0]:
-                            out[ys.start + yy, x] = rep
+                        out[ys.start:ys.stop, x][col] = rep
                 else:
-                    x0, x1 = xs.start - 1, xs.stop
                     for y in range(ys.start, ys.stop):
                         row = comp[y - ys.start, :]
                         if not row.any():
                             continue
+                        x0, x1 = xs.start - 1, xs.stop
                         left = a[y, x0] if x0 >= 0 else None
                         right = a[y, x1] if x1 < a.shape[1] else None
                         rep = (left + right) // 2 if left is not None and right is not None else (left if left is not None else right)
-                        for xx in np.nonzero(row)[0]:
-                            out[y, xs.start + xx] = rep
-            elif comp.sum() > 60 and min(h, w) >= 6:
+                        out[y, xs.start:xs.stop][row] = rep
+            elif comp.sum() > 60 and min(h, w) >= 6 and uniform:
                 placeholder = True
-    if furniture:
-        m = out[..., 3] > 40
-        lab, n = ndimage.label(m, structure=np.ones((3, 3)))
-        if n > 1:
-            sizes = ndimage.sum(m, lab, range(1, n + 1))
-            total = sizes.sum()
-            for i, s in enumerate(sizes, 1):
-                if s < 0.006 * total and s < 500:
-                    out[lab == i] = 0
+    # registration dots: small white discs ringed in black, at the base or at the top-left origin
+    bb = Image.fromarray(np.clip(al, 0, 255).astype(np.uint8)).getbbox()
+    if bb:
+        lum = a[..., :3].mean(2)
+        white = (a[..., :3].min(2) > 230) & (al > 100)
+        lab, n = ndimage.label(white)
+        for i, sl in enumerate(ndimage.find_objects(lab) if n else [], 1):
+            ys, xs = sl
+            comp = lab[sl] == i
+            c = int(comp.sum()); h, w = ys.stop - ys.start, xs.stop - xs.start
+            if not (8 <= c <= 160 and 0.6 < h / w < 1.7 and c / (h * w) > 0.5):
+                continue
+            reg = np.zeros(white.shape, bool); reg[sl] = comp
+            ring = ndimage.binary_dilation(reg, iterations=1) & ~reg
+            if ((lum < 90) | (al < 30))[ring].mean() > 0.6:
+                _fill_from_ring(out, ndimage.binary_dilation(reg, iterations=2), inner_iter=1, outer_iter=4)
+    _trim_overhang(out)
+    _trim_overhang(out.transpose(1, 0, 2))
+    m = out[..., 3] > 40
+    lab, n = ndimage.label(m, structure=np.ones((3, 3)))
+    if n > 1:
+        sizes = ndimage.sum(m, lab, range(1, n + 1))
+        total = sizes.sum()
+        for i, sz in enumerate(sizes, 1):
+            if sz < 0.006 * total and sz < 500:
+                out[lab == i] = 0
     im = Image.fromarray(out.clip(0, 255).astype(np.uint8), 'RGBA')
     bb = im.getchannel('A').point(lambda v: 255 if v > 16 else 0).getbbox()
     return (im.crop(bb) if bb else None), placeholder
@@ -257,6 +314,10 @@ class Library:
                 if fp.exists():
                     r['svg'] = str(fp.relative_to(GLITCH))
         self.colors = self._color_stats()
+        self.kind = {}
+        for k, sel in t.get('kinds', {}).items():
+            for iid in self.select(sel):
+                self.kind.setdefault(iid, k)
 
     def _color_stats(self):
         """Per item: alpha-weighted mean colour in Lab and in RGB (cached in cache/colors.json)."""
@@ -264,12 +325,13 @@ class Library:
         cache = json.loads(cp.read_text()) if cp.exists() else {}
         dirty = False
         for iid in self.items:
-            if iid in cache:
+            if iid in cache and 'lstd' in cache[iid]:
                 continue
             a = np.asarray(Image.open(CLEAN_DIR / f'{safe(iid)}.png').convert('RGBA'), np.float32)
             m = a[..., 3] > 128
             rgb = a[..., :3][m].mean(0) if m.any() else np.array([128, 128, 128], np.float32)
-            cache[iid] = dict(rgb=[round(float(v), 1) for v in rgb], lab=[round(float(v), 2) for v in to_lab(rgb[None])[0]])
+            lstd = float(a[..., :3].mean(2)[m].std()) if m.any() else 0.0
+            cache[iid] = dict(rgb=[round(float(v), 1) for v in rgb], lab=[round(float(v), 2) for v in to_lab(rgb[None])[0]], lstd=round(lstd, 1))
             dirty = True
         if dirty:
             cp.parent.mkdir(parents=True, exist_ok=True)
@@ -301,8 +363,8 @@ class Library:
 
     def excluded(self, iid):
         rec = self.items[iid]
-        if rec.get('placeholder'):
-            return True
+        if rec.get('placeholder') or self.colors.get(iid, {}).get('lstd', 99) < 4:
+            return True       # Flash placeholders and plain masks (one flat colour)
         if iid in self.excl_names:
             return True
         return any(r.search(iid) for r in self.excl_re)
@@ -660,6 +722,19 @@ def g_paint(h, w, rng, colors, strokes=1.0, **_):
     return np.asarray(im, np.float32)
 
 
+def g_pegboard(h, w, rng, colors=('#c8a27a',), hole='#5a4632', pitch=46, **_):
+    """Workshop pegboard: a fibre board with a regular grid of holes."""
+    out = g_paint(h, w, rng, colors, strokes=0.3)
+    im = Image.fromarray(out.clip(0, 255).astype(np.uint8)); d = ImageDraw.Draw(im)
+    hc = tuple(int(v) for v in hexrgb(hole))
+    r = max(3, pitch // 9)
+    for y in range(pitch // 2, h, pitch):
+        for x in range(pitch // 2, w, pitch):
+            d.ellipse([x - r, y - r, x + r, y + r], fill=hc)
+            d.arc([x - r - 1, y - r - 1, x + r + 1, y + r + 1], 200, 380, fill=tuple(min(255, int(v * 1.25)) for v in hexrgb(colors[0])))
+    return np.asarray(im, np.float32)
+
+
 def g_wallpaper(h, w, rng, name, scale=2.0, **_):
     p = GLITCH / 'png' / 'Player Houses' / 'wallpaper' / f'{name}.png'
     t = Image.open(p).convert('RGB')
@@ -673,7 +748,7 @@ def g_wallpaper(h, w, rng, name, scale=2.0, **_):
 
 GROUNDS = dict(planks=g_planks, check=g_check, plaid=g_plaid, stripes=g_stripes, dots=g_dots, tiles=g_tiles, grass=g_grass,
                scatter=g_scatter, cobble=g_cobble, quilt=g_quilt, linen=g_linen, wallpaper=g_wallpaper, marble=g_marble,
-               paint=g_paint)
+               paint=g_paint, pegboard=g_pegboard)
 
 
 def make_ground(spec, h, w, rng):
@@ -1093,8 +1168,8 @@ class Composer:
         return [(i // self.ww, i % self.ww) for i in idx]
 
     def try_place(self, iid, long_px, zone_mask, max_ov, min_px, tries=3, at=None, max_out=0.3):
-        if iid in self.used or self.full():
-            return False
+        if iid in self.used or self.full() or self.lib.max_long(iid) < min_px:
+            return False      # a PNG-only item cannot be drawn larger than its export
         for t in range(tries + 1):
             img = self.lib.image(iid, long_px)
             m, ring = self.item_mask(img)
@@ -1118,7 +1193,7 @@ class Composer:
                 self.placed.append((iid, img, px, py))
                 self.used.add(iid)
                 return True
-            long_px = long_px * 0.82
+            long_px = min(long_px, self.lib.max_long(iid)) * 0.82
             if long_px < min_px:
                 return False
         return False
@@ -1228,8 +1303,18 @@ def compose(lib, pack, pic, W, H, seed, counts=None, reserved=None):
     palette = pic.get('palette')
     pal_max = pic.get('palette_max', defaults.get('palette_max', 42))
 
+    core = core_items(lib, pic)
+    core_kinds = {lib.kind[i] for i in core if i in lib.kind}
+
+    def kind_ok(i, filler):
+        k = lib.kind.get(i)
+        if k is None:
+            return True
+        n = counts.get('kind:' + k, 0) + (reserved.get('kind:' + k, 0) if filler and k not in core_kinds else 0)
+        return n < cap or (k in core_kinds and counts.get('kind:' + k, 0) < cap)
+
     def pool(sel, zpal=None, strict=False, filler=False):
-        ids = [i for i in lib.select(sel) if i not in comp.used]
+        ids = [i for i in lib.select(sel) if i not in comp.used and kind_ok(i, filler)]
         if filler:      # keep items that later pictures still need for their own zones
             ids = [i for i in ids if counts.get(i, 0) + reserved.get(i, 0) < cap]
         p = zpal or palette
@@ -1238,7 +1323,7 @@ def compose(lib, pack, pic, W, H, seed, counts=None, reserved=None):
         return palette_order(lib, ids, None, rng, counts=counts, jitter=30.0)
 
     fill_ids = pool(pic.get('fill', []), strict=True, filler=True) if pic.get('fill') else []
-    fill_all = pool(pack.get('fill_all', []), strict=True, filler=True) if pack.get('fill_all') else []
+    fill_all = pool(pack.get('fill_all', []), strict=True, filler=True) if pack.get('fill_all') and pic.get('fill_all', True) else []
     # 1. heroes and core items, zone by zone (row zones: back row first, then front row)
     for zi, z in enumerate(zones):
         zs = z['spec']
@@ -1373,13 +1458,15 @@ def cmd_render(args):
     counts = {}
     cores = {i: core_items(lib, p) for i, p in enumerate(pics)}
     pending = {}
+    def keys(ids):      # an item and, once per picture, its kind
+        return list(ids) + sorted({'kind:' + lib.kind[i] for i in ids if i in lib.kind})
     for i in todo:
-        for iid in cores[i]:
+        for iid in keys(cores[i]):
             pending[iid] = pending.get(iid, 0) + 1
     for i, p in enumerate(pics):        # pictures not rendered now keep their items
         mp = pic_path(pack, i, p).with_suffix('.json')
         if i not in todo and mp.exists():
-            for iid in json.loads(mp.read_text())['items']:
+            for iid in keys(json.loads(mp.read_text())['items']):
                 counts[iid] = counts.get(iid, 0) + 1
     for name in [p.name for p in out_dir(pack).glob('*.png')]:
         if not any(name == pic_path(pack, i, p).name for i, p in enumerate(pics)) and re.match(r'\d\d-', name):
@@ -1389,10 +1476,10 @@ def cmd_render(args):
         pic = pics[i]
         W, H = pic.get('canvas', pack['canvas'])
         t0 = time.time()
-        for iid in cores[i]:
+        for iid in keys(cores[i]):
             pending[iid] -= 1
         img, ids, cov = compose(lib, pack, pic, W, H, pic.get('seed', 1000 + i), counts, pending)
-        for iid in ids:
+        for iid in keys(ids):
             counts[iid] = counts.get(iid, 0) + 1
         p = pic_path(pack, i, pic)
         img.save(p, optimize=False, compress_level=6)

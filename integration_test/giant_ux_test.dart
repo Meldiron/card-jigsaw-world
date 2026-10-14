@@ -177,12 +177,6 @@ void main() {
     expect(z.zoomed, isFalse);
     debugPrint('QA_GIANT ${pictures[0].title}: ${board(tester).state.board.cells} cards, limit ${z.limit.toStringAsFixed(2)}x');
 
-    await tester.tap(find.byKey(const ValueKey('giant-edges')), warnIfMissed: false);
-    await settle(tester, 600);
-    expect(board(tester).edges, isTrue);
-    await shot(tester, 'gx_03_edges_on');
-    await tester.tap(find.byKey(const ValueKey('giant-edges')), warnIfMissed: false);
-    await settle(tester, 400);
 
     // Double tap a card near the top left: zoom in there, nothing selected.
     final b0 = board(tester).state.board;
@@ -268,10 +262,6 @@ void main() {
       final slug = mode.toLowerCase();
       debugPrint('QA_GIANT ${pictures[n].title} $mode: ${board(tester).state.board.cells} cards, limit ${zoomOf(tester).limit.toStringAsFixed(2)}x');
       await shot(tester, 'gx_11_${slug}_whole');
-      await tester.tap(find.byKey(const ValueKey('giant-edges')), warnIfMissed: false);
-      await settle(tester, 500);
-      await shot(tester, 'gx_12_${slug}_edges');
-      await tester.tap(find.byKey(const ValueKey('giant-edges')), warnIfMissed: false);
       results.add(
         await timings(tester, '$slug ${board(tester).state.board.cells} zoom', () async {
           zoomOf(tester).zoomTo(zoomOf(tester).step);
@@ -295,8 +285,6 @@ void main() {
     // ---- Full solve of the smallest giant size (Cards, Large) with the Edges filter first.
     await openBoard(tester, pictures[4], 'Cards', 'Large');
     await shot(tester, 'gx_14_large_whole');
-    await tester.tap(find.byKey(const ValueKey('giant-edges')), warnIfMissed: false);
-    await settle(tester, 400);
     var frameSeen = false, halfSeen = false;
     Future<void> sendHome(int slot) async {
       final b = board(tester).state.board;
@@ -327,7 +315,6 @@ void main() {
       frameSeen = true;
       await shot(tester, 'gx_15_frame_complete');
     }
-    expect(board(tester).edges, isFalse, reason: 'Edges switches itself off once the frame is complete');
     for (var guard = 0; guard < 400 && !board(tester).state.board.isSolved; guard++) {
       final b = board(tester).state.board;
       final slot = List.generate(b.cells, (i) => i).firstWhere((i) => !b.isLocked(i));

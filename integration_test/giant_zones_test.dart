@@ -10,7 +10,6 @@ import 'package:card_jigsaw_world/core/sfx.dart';
 import 'package:card_jigsaw_world/data/local_store.dart';
 import 'package:card_jigsaw_world/features/game/board_widget.dart';
 import 'package:card_jigsaw_world/features/game/giant_board.dart';
-import 'package:card_jigsaw_world/game/zones.dart';
 import 'package:card_jigsaw_world/models/models.dart';
 import 'package:card_jigsaw_world/router.dart';
 import 'package:card_jigsaw_world/state/catalog.dart';
@@ -158,11 +157,7 @@ void main() {
     // ---- Cards, Colossal: dealt by zone, faint lines between the zones.
     await openBoard(tester, pictures[2], 'Cards', 'Colossal');
     final spec = board(tester).state.board.spec;
-    final zones = BoardZones.of(spec);
-    expect(board(tester).state.zoned, isTrue);
-    expect(board(tester).zones, isNotNull);
-    expect(zones.dealtIn(board(tester).state.board), isTrue);
-    debugPrint('QA_ZONES ${spec.code}: ${spec.cells} cards in ${zones.count} zones (${zones.cols}x${zones.rows})');
+    debugPrint('QA_ZONES ${spec.code}: ${spec.cells} cards');
     await shot(tester, 'gz_01_colossal_zones');
 
     // ---- Peek on a giant board: free, the cards fly home and back.
@@ -213,10 +208,8 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('giant-map')), warnIfMissed: false);
     await settle(tester, 500);
 
-    // ---- Gather: on a board dealt by zone the view mostly holds its cards already, so look
-    // across a zone line, where Gather has something to do.
-    final corner = zones.bounds(spec.tiling, boardSize(tester), 0).bottomRight;
-    z.lookAt(corner);
+    // ---- Gather: the cards that belong in view come into it.
+    z.lookAt(boardSize(tester).center(Offset.zero));
     await settle(tester, 700);
     await shot(tester, 'gz_07_before_gather');
     final movesBefore = board(tester).state.moves;
@@ -227,40 +220,6 @@ void main() {
     await shot(tester, 'gz_08_gathered', wait: 500);
     expect(board(tester).state.moves, movesBefore, reason: 'Gather is not a move');
 
-    // ---- Finish the top left zone card by card: "Zone complete" and the glow.
-    z.lookAt(zones.bounds(spec.tiling, boardSize(tester), 0).center);
-    await settle(tester, 600);
-    var zoneSeen = false;
-    // A card whose move a group blocks is tried again only after the board changed.
-    final blocked = <int>{};
-    for (var guard = 0; guard < 160 && !zoneSeen; guard++) {
-      final now = board(tester).state.board;
-      final todo = zones.members[0].where((s) => !now.isLocked(s)).toList();
-      if (todo.isEmpty) break;
-      final home = todo.firstWhere((s) => !blocked.contains(s), orElse: () => todo.first);
-      if (blocked.length >= todo.length) blocked.clear();
-      await tapSlot(tester, now.slotOfCard(home), ms: 200);
-      await tapSlot(tester, home, ms: 260);
-      if (board(tester).state.board.slots == now.slots || board(tester).state.board == now) {
-        blocked.add(home);
-      } else {
-        blocked.clear();
-      }
-      if (board(tester).state.selected != null) await tapSlot(tester, board(tester).state.selected!, ms: 150);
-      if (find.textContaining('Zone complete').evaluate().isNotEmpty) {
-        zoneSeen = true;
-        await shot(tester, 'gz_09_zone_complete', wait: 120);
-      }
-    }
-    await settle(tester, 400);
-    if (!zoneSeen && find.textContaining('Zone complete').evaluate().isNotEmpty) {
-      zoneSeen = true;
-      await shot(tester, 'gz_09_zone_complete', wait: 0);
-    }
-    expect(zones.complete(board(tester).state.board, 0), isTrue);
-    expect(zoneSeen, isTrue, reason: 'the zone milestone showed');
-    await settle(tester, 1800);
-    await shot(tester, 'gz_10_zone_done_lines_gone');
     z.reset();
     await settle(tester, 700);
     await shot(tester, 'gz_11_whole_one_zone_done');
@@ -270,7 +229,6 @@ void main() {
     var n = 3;
     for (final mode in ['Squares', 'Triangles', 'Hexagons']) {
       await openBoard(tester, pictures[n++], mode, 'Colossal');
-      expect(board(tester).state.zoned, isTrue);
       await shot(tester, 'gz_12_${mode.toLowerCase()}_zones');
       await leaveBoard(tester);
     }
@@ -286,7 +244,6 @@ void main() {
     await settle(tester, 1500);
     if (find.text('Got it').evaluate().isNotEmpty) await tapText(tester, 'Got it');
     expect(board(tester).zoom, isNull);
-    expect(board(tester).zones, isNull, reason: 'normal boards have no zones');
     await shot(tester, 'gz_13_normal_board');
     final wallet = coins(tester);
     await peek(tester, 'gz_14', away: const Duration(milliseconds: 2400));

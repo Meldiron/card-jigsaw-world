@@ -1,0 +1,1585 @@
+{
+ "pack": {
+  "id": "pack-garden-plots",
+  "name": "Garden Plots",
+  "category": "Illustration",
+  "description": "Flower borders, raised beds, mushroom woods and cactus gardens, every hand-drawn plant once.",
+  "sortOrder": 1320,
+  "price": "coins"
+ },
+ "canvas": [
+  1800,
+  2400
+ ],
+ "max_uses": 7,
+ "max_items": 62,
+ "defaults": {
+  "size": {
+   "min": 0.15,
+   "max": 0.32,
+   "power": 1.0
+  },
+  "fill_size": {
+   "min": 0.1,
+   "max": 0.22,
+   "min_px": 110
+  },
+  "cover": 0.8,
+  "max_ov": 0.16,
+  "fill_ov": 0.3,
+  "fill_cover": 0.88,
+  "palette_max": 48,
+  "row": {
+   "min": 0.6,
+   "max": 0.98,
+   "gap": [
+    -0.14,
+    0.04
+   ]
+  }
+ },
+ "fill_all": [
+  "tag:flowers",
+  "tag:bushes",
+  "tag:trees",
+  "tag:mushrooms",
+  "tag:ferns",
+  "tag:rocks",
+  "tag:cactus",
+  "tag:bogplants",
+  "tag:yardthings",
+  "tag:harvest",
+  "tag:gardentools",
+  "tag:veg",
+  "tag:herbs",
+  "tag:f_plant"
+ ],
+ "pictures": [
+  {
+   "slug": "flower-border",
+   "title": "Flower border",
+   "seed": 501,
+   "priority": 1,
+   "palette": [
+    "#e91e63",
+    "#ffeb3b",
+    "#2e7d32"
+   ],
+   "layout": {
+    "type": "cubbies",
+    "cols": 1,
+    "rows": 3,
+    "frame": [
+     "#f4f1ea",
+     "#ebe7de",
+     "#fbf9f4"
+    ],
+    "frame_w": 0.02,
+    "board_h": 0.018,
+    "floor_h": 0.18
+   },
+   "zones": [
+    {
+     "items": [
+      "re:^groddle/(flower_bush_|flower_group_|groddle_flower_|flower_button_)",
+      "re:^groddle/bling_branch_flower",
+      "re:bling_branch(flower|rose)brush"
+     ],
+     "ground": {
+      "type": "planks",
+      "colors": [
+       "#f4f1ea",
+       "#ebe7de",
+       "#fbf9f4"
+      ],
+      "width": 70,
+      "vertical": true
+     },
+     "floor": {
+      "type": "scatter",
+      "colors": [
+       "#6d4c41",
+       "#5d4037",
+       "#8d6e63"
+      ],
+      "bg": "#4e3529"
+     },
+     "hero": [
+      "groddle/flower_bush_4",
+      "groddle/flower_bush_1"
+     ]
+    }
+   ],
+   "row": {
+    "min": 0.6,
+    "max": 1.0,
+    "min_frac": 0.35,
+    "gap": [
+     -0.18,
+     0.0
+    ]
+   },
+   "fill": [
+    "tag:flowers",
+    "tag:herbs"
+   ],
+   "fill_all": false
+  },
+  {
+   "slug": "raised-beds",
+   "title": "Raised beds",
+   "seed": 502,
+   "palette": [
+    "#795548",
+    "#7cb342",
+    "#ff7043"
+   ],
+   "layout": {
+    "type": "crates",
+    "cols": 2,
+    "rows": 3,
+    "gutter": 0.035,
+    "rim": 0.035,
+    "rim_colors": [
+     "#a1887f",
+     "#8d6e63",
+     "#bcaaa4"
+    ],
+    "base": {
+     "type": "scatter",
+     "colors": [
+      "#bdbdbd",
+      "#9e9e9e",
+      "#e0e0e0",
+      "#8d8d8d"
+     ],
+     "bg": "#a8a8a8",
+     "rmin": 3,
+     "rmax": 9
+    }
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:veg",
+      "tag:patches"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#6d4c41",
+       "#5d4037",
+       "#8d6e63"
+      ],
+      "bg": "#4e3529"
+     },
+     "hero": [
+      "cabbage",
+      "pumpkin"
+     ],
+     "size": {
+      "min": 0.2,
+      "max": 0.42,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:herbs",
+      "tag:seeds",
+      "re:^groddle/(groddle_plant|groddle_fern)"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#6d4c41",
+       "#5d4037",
+       "#8d6e63"
+      ],
+      "bg": "#4e3529"
+     },
+     "size": {
+      "min": 0.15,
+      "max": 0.32,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:flowers"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#6d4c41",
+       "#5d4037",
+       "#8d6e63"
+      ],
+      "bg": "#4e3529"
+     },
+     "size": {
+      "min": 0.15,
+      "max": 0.32,
+      "power": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:veg",
+    "tag:flowers",
+    "tag:herbs",
+    "tag:gardentools"
+   ],
+   "fill_cover": 0.86
+  },
+  {
+   "slug": "mushroom-wood",
+   "title": "Mushroom wood",
+   "seed": 503,
+   "palette": [
+    "#c62828",
+    "#6d4c41",
+    "#558b2f"
+   ],
+   "layout": {
+    "type": "voronoi",
+    "n": 4,
+    "wobble": 0.06
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:mushrooms"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#8d6e63",
+       "#a1887f",
+       "#d7a86e",
+       "#6d4c41"
+      ],
+      "bg": "#5d4037",
+      "kind": "chip"
+     },
+     "hero": [
+      "groddle/mushroom_amanita_1",
+      "groddle/bling_mushroom_tree_1"
+     ],
+     "size": {
+      "min": 0.2,
+      "max": 0.42,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:ferns",
+      "re:^groddle/(tree_dead_|tree_stack_base_4|bling_tree_base_moss)",
+      "re:^firebog/log_pile"
+     ],
+     "ground": {
+      "type": "grass",
+      "colors": [
+       "#4e6b2a",
+       "#5c7d33",
+       "#3f5a22",
+       "#6b8e3a"
+      ],
+      "flowers": [
+       "#c62828",
+       "#ffffff"
+      ]
+     },
+     "size": {
+      "min": 0.15,
+      "max": 0.32,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:mushrooms",
+      "re:^groddle/(bush_|groddle_bush)"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#a1887f",
+       "#8d6e63"
+      ],
+      "bg": "#6d4c41"
+     },
+     "size": {
+      "min": 0.15,
+      "max": 0.32,
+      "power": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:mushrooms",
+    "tag:ferns",
+    "tag:bushes"
+   ],
+   "fill_cover": 0.88
+  },
+  {
+   "slug": "cactus-garden",
+   "title": "Cactus garden",
+   "seed": 504,
+   "palette": [
+    "#e8d2a0",
+    "#7c8a3a",
+    "#d84315"
+   ],
+   "layout": {
+    "type": "single"
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:cactus",
+      "re:stactus_ball",
+      "re:stactuc_pot",
+      "re:^groddle(_arid)?/(pampas_|tree_acacia_|stalagmite_)",
+      "re:^ix/(boulder_|cl2_gearTree_0)"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#e8d2a0",
+       "#d9bf86",
+       "#f2e2bc"
+      ],
+      "bg": "#dcc28c",
+      "kind": "chip",
+      "rmin": 2,
+      "rmax": 6
+     },
+     "hero": [
+      "ix/potted_cactus",
+      "ix/cl2_cactus_01"
+     ],
+     "size": {
+      "min": 0.2,
+      "max": 0.42,
+      "power": 1.0
+     },
+     "fill_cover": 0.82
+    }
+   ],
+   "fill": [
+    "tag:rocks",
+    "tag:cactus"
+   ],
+   "fill_all": true,
+   "palette_max": 40
+  },
+  {
+   "slug": "rock-garden",
+   "title": "Rock garden",
+   "seed": 505,
+   "palette": [
+    "#9e9e9e",
+    "#e0e0e0",
+    "#5d8a3a"
+   ],
+   "layout": {
+    "type": "diag",
+    "n": 3,
+    "wobble": 0.05
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:rocks",
+      "re:^alpine_landscape/mountain_bonsai"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#bdbdbd",
+       "#9e9e9e",
+       "#e0e0e0",
+       "#8d8d8d"
+      ],
+      "bg": "#a8a8a8",
+      "rmin": 3,
+      "rmax": 9
+     },
+     "hero": [
+      "alpine_landscape/mountain_bonsai_01a_al1",
+      "ix/boulder_01"
+     ],
+     "size": {
+      "min": 0.2,
+      "max": 0.42,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "re:^groddle/(bush_|groddle_bush|heights_bush|pampas_)",
+      "re:^alpine_landscape/(mountain_flora|draping_plant)"
+     ],
+     "ground": {
+      "type": "grass",
+      "colors": [
+       "#5d8a3a",
+       "#6f9e45",
+       "#4f7a30"
+      ]
+     },
+     "size": {
+      "min": 0.15,
+      "max": 0.32,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:rocks"
+     ],
+     "ground": {
+      "type": "cobble",
+      "colors": [
+       "#c8c2b8",
+       "#b5afa4",
+       "#d8d2c8"
+      ],
+      "size": 100,
+      "mortar": "#8a847a"
+     },
+     "size": {
+      "min": 0.15,
+      "max": 0.32,
+      "power": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:rocks",
+    "tag:bushes"
+   ],
+   "fill_cover": 0.86
+  },
+  {
+   "slug": "snowy-garden",
+   "title": "Snowy garden",
+   "seed": 506,
+   "palette": [
+    "#f5f9fc",
+    "#90caf9",
+    "#2e5e3a"
+   ],
+   "layout": {
+    "type": "single"
+   },
+   "zones": [
+    {
+     "items": [
+      "re:^alpine_landscape/(snow_bush|snow_pinecluster|rock_snowy|snow_drift|snow_rubble|snowcap)",
+      "re:^groddle/(whitesnow_|snow_patch|tree_coniferous)",
+      "re:^alpine_landscape/(mountain_bonsai|treemoss)"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#ffffff",
+       "#e3f2fd",
+       "#cfe8f7"
+      ],
+      "bg": "#eef6fb",
+      "kind": "chip",
+      "rmin": 2,
+      "rmax": 7
+     },
+     "hero": [
+      "alpine_landscape/snow_bush_01a_al1",
+      "alpine_landscape/snow_pinecluster_01a_al1"
+     ],
+     "size": {
+      "min": 0.2,
+      "max": 0.42,
+      "power": 1.0
+     },
+     "fill_cover": 0.82
+    }
+   ],
+   "fill": [
+    "tag:trees",
+    "tag:rocks"
+   ],
+   "palette_max": 45
+  },
+  {
+   "slug": "woodland-walk",
+   "title": "Woodland walk",
+   "seed": 507,
+   "palette": [
+    "#9ccc65",
+    "#d7ccc8",
+    "#ff8a65"
+   ],
+   "layout": {
+    "type": "diag",
+    "n": 3,
+    "wobble": 0.05
+   },
+   "zones": [
+    {
+     "items": [
+      "re:^groddle/(tree_deciduous|tree_canopy|tree_plane_|bush_|groddle_bush|groddle_fern|groddle_plant)"
+     ],
+     "ground": {
+      "type": "grass",
+      "colors": [
+       "#9ccc65",
+       "#aed581",
+       "#8bc34a",
+       "#c5e1a5"
+      ],
+      "flowers": [
+       "#ffffff",
+       "#ffeb3b"
+      ]
+     },
+     "hero": [
+      "groddle/tree_deciduous2",
+      "groddle/tree_canopy_single_1"
+     ],
+     "size": {
+      "min": 0.18,
+      "max": 0.36,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "re:^groddle/(bling_stonemonument_[23]|rubble_|stalagmite_base)",
+      "re:^groddle/(bling_wildmushrooms|mushroom_)",
+      "re:^firebog/log_pile"
+     ],
+     "ground": {
+      "type": "cobble",
+      "colors": [
+       "#e0d6cc",
+       "#d7ccc8",
+       "#efe8e2"
+      ],
+      "size": 90,
+      "mortar": "#a1887f"
+     },
+     "size": {
+      "min": 0.14,
+      "max": 0.28,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "re:^groddle/(flower_bush_|flower_group_|groddle_flower_|bling_branch_flower)",
+      "re:^groddle/(wildflowers_bunch|pampas_)"
+     ],
+     "ground": {
+      "type": "grass",
+      "colors": [
+       "#c5e1a5",
+       "#dcedc8",
+       "#aed581"
+      ],
+      "flowers": [
+       "#ff8a65",
+       "#ffffff",
+       "#f48fb1"
+      ],
+      "density": 1.3
+     },
+     "size": {
+      "min": 0.14,
+      "max": 0.28,
+      "power": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:bushes",
+    "tag:flowers",
+    "tag:trees",
+    "tag:mushrooms"
+   ],
+   "fill_cover": 0.86
+  },
+  {
+   "slug": "orchard-rows",
+   "title": "Orchard rows",
+   "seed": 508,
+   "priority": 1,
+   "palette": [
+    "#43a047",
+    "#a1887f",
+    "#e53935"
+   ],
+   "layout": {
+    "type": "cubbies",
+    "cols": 1,
+    "rows": 3,
+    "frame": [
+     "#7cb342",
+     "#6aa036",
+     "#8bc34a"
+    ],
+    "frame_w": 0.0,
+    "board_h": 0.012,
+    "floor_h": 0.12
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:trees",
+      "tag:trants"
+     ],
+     "ground": {
+      "type": "grass",
+      "colors": [
+       "#9ccc65",
+       "#aed581",
+       "#8bc34a"
+      ],
+      "flowers": [
+       "#ffffff",
+       "#ffeb3b"
+      ]
+     },
+     "floor": {
+      "type": "scatter",
+      "colors": [
+       "#6d4c41",
+       "#5d4037",
+       "#8d6e63"
+      ],
+      "bg": "#4e3529"
+     },
+     "hero": [
+      "groddle/tree_deciduous1",
+      "trant_fruit"
+     ]
+    }
+   ],
+   "row": {
+    "min": 0.6,
+    "max": 1.0,
+    "min_frac": 0.35,
+    "gap": [
+     -0.2,
+     0.0
+    ]
+   },
+   "fill": [
+    "tag:trees",
+    "tag:trants",
+    "tag:bushes"
+   ],
+   "fill_all": false
+  },
+  {
+   "slug": "vegetable-patch",
+   "title": "Vegetable patch",
+   "seed": 509,
+   "palette": [
+    "#5d4037",
+    "#8bc34a",
+    "#ff9800"
+   ],
+   "layout": {
+    "type": "hbands",
+    "n": 3,
+    "wobble": 0.01
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:veg"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#6d4c41",
+       "#5d4037",
+       "#8d6e63"
+      ],
+      "bg": "#4e3529"
+     },
+     "hero": [
+      "pumpkin",
+      "cabbage"
+     ],
+     "size": {
+      "min": 0.15,
+      "max": 0.32,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:patches",
+      "tag:seeds"
+     ],
+     "ground": {
+      "type": "stripes",
+      "colors": [
+       "#6d4c41",
+       "#5d4037"
+      ],
+      "size": 30
+     },
+     "size": {
+      "min": 0.15,
+      "max": 0.32,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:gardentools",
+      "tag:veg",
+      "tag:flowers",
+      "tag:herbs"
+     ],
+     "ground": {
+      "type": "grass"
+     },
+     "size": {
+      "min": 0.15,
+      "max": 0.32,
+      "power": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:veg",
+    "tag:seeds",
+    "tag:patches",
+    "tag:gardentools",
+    "tag:flowers",
+    "tag:herbs"
+   ],
+   "fill_cover": 0.86
+  },
+  {
+   "slug": "potting-bench",
+   "title": "Potting bench",
+   "seed": 510,
+   "priority": 1,
+   "palette": [
+    "#d0703c",
+    "#4caf50",
+    "#fff3e0"
+   ],
+   "layout": {
+    "type": "cubbies",
+    "cols": 2,
+    "rows": 3,
+    "frame": [
+     "#c48a52",
+     "#b47a45",
+     "#d29a60"
+    ],
+    "frame_w": 0.03,
+    "board_h": 0.022
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:f_plant",
+      "re:stactus_ball",
+      "re:stactuc_pot",
+      "ix/potted_cactus",
+      "ix/store_plant_01"
+     ],
+     "ground": {
+      "type": "tiles",
+      "colors": [
+       "#e7b48f",
+       "#f0c7a6"
+      ],
+      "size": 70,
+      "grout": "#f8e2d0"
+     },
+     "hero": [
+      "furniture_roomdeco_vase_of_buttercup__roses"
+     ]
+    }
+   ],
+   "row": {
+    "min": 0.6,
+    "max": 0.98,
+    "min_frac": 0.3
+   },
+   "fill": [
+    "tag:f_plant",
+    "tag:gardentools",
+    "tag:flowers"
+   ],
+   "fill_all": false
+  },
+  {
+   "slug": "flower-market",
+   "title": "Flower market",
+   "seed": 511,
+   "palette": [
+    "#e91e63",
+    "#ffffff",
+    "#ffc107",
+    "#7e57c2"
+   ],
+   "layout": {
+    "type": "trays",
+    "n": 7,
+    "gutter": 0.03,
+    "rim": 0.025,
+    "rims": [
+     "#2f7fd0",
+     "#e8a02a",
+     "#3f9e4f",
+     "#d84343",
+     "#7b4fb3"
+    ],
+    "base": {
+     "type": "cobble",
+     "colors": [
+      "#bcaaa4",
+      "#a1887f",
+      "#d7ccc8"
+     ],
+     "size": 90,
+     "mortar": "#795548"
+    }
+   },
+   "zones": [
+    {
+     "items": [
+      "re:^groddle/(flower_bush_|flower_group_|groddle_flower_|flower_button_)"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#f7f3ea"
+      ]
+     },
+     "hero": [
+      "groddle/flower_group_1",
+      "groddle/flower_bush_7"
+     ],
+     "size": {
+      "min": 0.2,
+      "max": 0.42,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "re:bling_branch(flower|rose)brush",
+      "re:^groddle/bling_branch_flower"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#f7f3ea"
+      ]
+     },
+     "size": {
+      "min": 0.15,
+      "max": 0.32,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:flowers",
+      "re:vase_of_buttercup",
+      "re:flower_vase",
+      "re:flower_paper_bag"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#f7f3ea"
+      ]
+     },
+     "size": {
+      "min": 0.15,
+      "max": 0.32,
+      "power": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:flowers",
+    "tag:f_plant",
+    "tag:herbs"
+   ],
+   "fill_cover": 0.85,
+   "palette_max": 60
+  },
+  {
+   "slug": "mushroom-ring",
+   "title": "Mushroom ring",
+   "seed": 512,
+   "palette": [
+    "#7cb342",
+    "#d32f2f",
+    "#fff176"
+   ],
+   "layout": {
+    "type": "ring",
+    "margin": 0.2,
+    "wobble": 0.03
+   },
+   "zones": [
+    {
+     "items": [
+      "re:^groddle/(wildflowers_|flower_button_|groddle_flower_)",
+      "re:^groddle/(bush_patch|bush_seethrough)",
+      "tag:herbs"
+     ],
+     "ground": {
+      "type": "grass",
+      "colors": [
+       "#8bc34a",
+       "#9ccc65",
+       "#7cb342"
+      ],
+      "flowers": [
+       "#fff176",
+       "#ffffff",
+       "#f48fb1"
+      ],
+      "density": 1.4
+     },
+     "size": {
+      "min": 0.15,
+      "max": 0.32,
+      "power": 1.0
+     },
+     "fill_cover": 0.7
+    },
+    {
+     "items": [
+      "tag:mushrooms"
+     ],
+     "ground": {
+      "type": "grass",
+      "colors": [
+       "#4e7a2a",
+       "#5c8a33",
+       "#3f6a22"
+      ],
+      "flowers": [
+       "#ffffff"
+      ]
+     },
+     "hero": [
+      "groddle/mushroom_amanita_1"
+     ],
+     "size": {
+      "min": 0.15,
+      "max": 0.32,
+      "power": 1.0
+     },
+     "fill_cover": 0.88
+    }
+   ],
+   "fill": [
+    "tag:mushrooms",
+    "tag:flowers",
+    "tag:ferns"
+   ]
+  },
+  {
+   "slug": "glowing-glade",
+   "title": "Glowing glade",
+   "seed": 513,
+   "palette": [
+    "#7e57c2",
+    "#26c6da",
+    "#c2185b"
+   ],
+   "layout": {
+    "type": "diag",
+    "n": 2,
+    "wobble": 0.05
+   },
+   "zones": [
+    {
+     "items": [
+      "re:^ilmenskie/(tree_(1[0-5]|[4-8])$|plant_fern|plant_giant_fern|purple_mushroom|zutto_plant|zutto_tree|liana_)"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#7e57c2",
+       "#9575cd",
+       "#5e35b1"
+      ],
+      "bg": "#4527a0",
+      "kind": "chip"
+     },
+     "hero": [
+      "ilmenskie/tree_15",
+      "ilmenskie/tree_12"
+     ],
+     "size": {
+      "min": 0.2,
+      "max": 0.42,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "re:^ilmenskie/(tree_(1[0-5]|[4-8])$|plant_|purple_mushroom|liana_)",
+      "tag:mushrooms",
+      "re:^ilmenskie/(cave_crystal_|rock_beryl_)"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#c2185b",
+       "#d81b60",
+       "#ad1457"
+      ],
+      "bg": "#880e4f",
+      "kind": "chip"
+     },
+     "size": {
+      "min": 0.15,
+      "max": 0.32,
+      "power": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:ferns",
+    "tag:crystals",
+    "tag:mushrooms"
+   ],
+   "fill_cover": 0.86,
+   "palette_max": 60
+  },
+  {
+   "slug": "tree-grove",
+   "title": "Tree grove",
+   "seed": 514,
+   "palette": [
+    "#8bc34a",
+    "#795548",
+    "#ffd54f"
+   ],
+   "layout": {
+    "type": "crates",
+    "cols": 2,
+    "rows": 2,
+    "gutter": 0.03,
+    "rim": 0.03,
+    "rim_colors": [
+     "#8d6e63",
+     "#795548",
+     "#a1887f"
+    ],
+    "base": {
+     "type": "grass"
+    }
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:trants",
+      "tag:patches"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#6d4c41",
+       "#5d4037",
+       "#8d6e63"
+      ],
+      "bg": "#4e3529"
+     },
+     "hero": [
+      "trant_bean",
+      "trant_egg"
+     ],
+     "size": {
+      "min": 0.2,
+      "max": 0.42,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "re:^groddle/(tree_canopy|tree_deciduous|bling_cookietree|bling_jellytree)",
+      "tag:patches"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#6d4c41",
+       "#5d4037",
+       "#8d6e63"
+      ],
+      "bg": "#4e3529"
+     },
+     "size": {
+      "min": 0.2,
+      "max": 0.42,
+      "power": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:harvest",
+    "tag:trees",
+    "tag:gardentools"
+   ],
+   "fill_cover": 0.85
+  },
+  {
+   "slug": "seed-and-tool-shed",
+   "title": "Seed and tool shed",
+   "seed": 515,
+   "priority": 1,
+   "palette": [
+    "#a1887f",
+    "#c5e1a5",
+    "#ffb74d"
+   ],
+   "layout": {
+    "type": "cubbies",
+    "cols": 2,
+    "rows": 3,
+    "frame": [
+     "#8d6e63",
+     "#7b5e52",
+     "#9c7d70"
+    ],
+    "frame_w": 0.028,
+    "board_h": 0.02
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:gardentools",
+      "tag:seeds"
+     ],
+     "ground": {
+      "type": "planks",
+      "colors": [
+       "#d7ccc8",
+       "#cfc3be",
+       "#e0d6d2"
+      ],
+      "width": 80,
+      "vertical": true
+     },
+     "hero": [
+      "watering_can",
+      "high_class_hoe"
+     ]
+    },
+    {
+     "items": [
+      "tag:seeds",
+      "tag:vegbags",
+      "tag:patches"
+     ],
+     "ground": {
+      "type": "planks",
+      "colors": [
+       "#c5e1a5",
+       "#b9d796",
+       "#d0e8b4"
+      ],
+      "width": 80,
+      "vertical": true
+     }
+    }
+   ],
+   "row": {
+    "min": 0.6,
+    "max": 0.98,
+    "min_frac": 0.3
+   },
+   "fill": [
+    "tag:gardentools",
+    "tag:seeds",
+    "tag:harvest"
+   ],
+   "fill_all": false
+  },
+  {
+   "slug": "savanna-garden",
+   "title": "Savanna garden",
+   "seed": 516,
+   "palette": [
+    "#d4a72c",
+    "#8d6e63",
+    "#6b8e23"
+   ],
+   "layout": {
+    "type": "hbands",
+    "n": 2,
+    "sizes": [
+     3,
+     2
+    ],
+    "wobble": 0.05
+   },
+   "zones": [
+    {
+     "items": [
+      "re:tree_acacia",
+      "re:^groddle(_arid)?/(pampas_|lens_grass|roots_ug)",
+      "re:^ix/(boulder_|cl2_gearTree)"
+     ],
+     "ground": {
+      "type": "grass",
+      "colors": [
+       "#c9a227",
+       "#d4b13a",
+       "#b8941f",
+       "#e0c050"
+      ],
+      "flowers": [
+       "#8d6e63"
+      ]
+     },
+     "hero": [
+      "groddle/tree_acacia_1",
+      "groddle/tree_acacia_3"
+     ],
+     "size": {
+      "min": 0.2,
+      "max": 0.42,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:rocks",
+      "re:^groddle(_arid)?/stalagmite"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#e8d2a0",
+       "#d9bf86",
+       "#f2e2bc"
+      ],
+      "bg": "#dcc28c",
+      "kind": "chip",
+      "rmin": 2,
+      "rmax": 6
+     },
+     "size": {
+      "min": 0.15,
+      "max": 0.32,
+      "power": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:rocks",
+    "tag:bushes",
+    "tag:cactus"
+   ],
+   "fill_cover": 0.86,
+   "palette_max": 45
+  },
+  {
+   "slug": "hedge-walk",
+   "title": "Hedge walk",
+   "seed": 517,
+   "palette": [
+    "#7cb342",
+    "#eeeeee",
+    "#e91e63"
+   ],
+   "layout": {
+    "type": "grid",
+    "cols": 2,
+    "rows": 3
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:bushes",
+      "re:^groddle/(flower_bush_|flower_group_|groddle_flower_|flower_button_)"
+     ],
+     "ground": {
+      "type": "grass",
+      "colors": [
+       "#8bc34a",
+       "#9ccc65",
+       "#7cb342",
+       "#aed581"
+      ],
+      "flowers": [
+       "#ffffff",
+       "#fff176"
+      ]
+     },
+     "hero": [
+      "groddle/groddle_bush1",
+      "groddle/heights_bush_1"
+     ],
+     "size": {
+      "min": 0.2,
+      "max": 0.42,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "re:^groddle/(bling_birdbath|bling_birdhouse_1)",
+      "ix/well_01",
+      "tag:bushes"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#eeeeee",
+       "#e0e0e0",
+       "#f5f5f5",
+       "#d6d6d6"
+      ],
+      "bg": "#e6e2da",
+      "rmin": 3,
+      "rmax": 8
+     },
+     "size": {
+      "min": 0.15,
+      "max": 0.32,
+      "power": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:bushes",
+    "tag:flowers",
+    "tag:yardthings"
+   ],
+   "fill_cover": 0.86
+  },
+  {
+   "slug": "autumn-garden",
+   "title": "Autumn garden",
+   "seed": 518,
+   "palette": [
+    "#e65100",
+    "#ffb74d",
+    "#6d4c41"
+   ],
+   "layout": {
+    "type": "single"
+   },
+   "zones": [
+    {
+     "items": [
+      "re:^ix/(tree_front_|tree_mid_|tree_background_|shrub_orange|cl2_pipeTree)",
+      "re:^groddle/(fallen_leaves|tree_bare|tree_dead|bling_branch_acorn|bling_branch_pinecone)",
+      "pumpkin"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#e65100",
+       "#ef6c00",
+       "#ffa726",
+       "#8d6e63",
+       "#bf360c"
+      ],
+      "bg": "#a1662f",
+      "kind": "chip",
+      "rmin": 4,
+      "rmax": 12
+     },
+     "hero": [
+      "ix/tree_front_02",
+      "ix/tree_mid_03"
+     ],
+     "size": {
+      "min": 0.2,
+      "max": 0.42,
+      "power": 1.0
+     },
+     "fill_cover": 0.85
+    }
+   ],
+   "fill": [
+    "tag:trees",
+    "tag:mushrooms",
+    "tag:harvest"
+   ],
+   "palette_max": 45
+  },
+  {
+   "slug": "garden-ornaments",
+   "title": "Garden ornaments",
+   "seed": 519,
+   "palette": [
+    "#4caf50",
+    "#f48fb1",
+    "#90a4ae"
+   ],
+   "layout": {
+    "type": "cloth",
+    "margin": 0.12,
+    "border": {
+     "colors": [
+      "#f48fb1",
+      "#ffffff"
+     ],
+     "width": 0.03
+    }
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:yardthings"
+     ],
+     "ground": {
+      "type": "grass"
+     },
+     "hero": [
+      "groddle/bling_flamingo_1",
+      "ix/windmill_01",
+      "ix/well_01"
+     ],
+     "size": {
+      "min": 0.2,
+      "max": 0.42,
+      "power": 1.0
+     },
+     "fill_cover": 0.85
+    },
+    {
+     "items": [
+      "tag:flowers",
+      "tag:bushes"
+     ],
+     "ground": {
+      "type": "cobble",
+      "colors": [
+       "#cfd8dc",
+       "#b0bec5",
+       "#eceff1"
+      ],
+      "size": 80,
+      "mortar": "#90a4ae"
+     },
+     "size": {
+      "min": 0.15,
+      "max": 0.32,
+      "power": 1.0
+     },
+     "fill_cover": 0.8
+    }
+   ],
+   "fill": [
+    "tag:yardthings",
+    "tag:flowers",
+    "tag:gardentools"
+   ]
+  },
+  {
+   "slug": "pine-forest-floor",
+   "title": "Pine forest floor",
+   "seed": 520,
+   "palette": [
+    "#1b5e20",
+    "#795548",
+    "#bcaaa4"
+   ],
+   "layout": {
+    "type": "voronoi",
+    "n": 3,
+    "wobble": 0.05
+   },
+   "zones": [
+    {
+     "items": [
+      "re:tree_coniferous",
+      "re:pinecluster",
+      "re:^groddle/(tree_stack_|tree_base_root)"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#d7b98e",
+       "#c9a77a",
+       "#e3c9a0",
+       "#b8956a"
+      ],
+      "bg": "#c4a074",
+      "kind": "chip"
+     },
+     "hero": [
+      "groddle/tree_coniferous_1",
+      "groddle/tree_coniferous_3"
+     ],
+     "size": {
+      "min": 0.2,
+      "max": 0.42,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "re:^groddle/(groddle_fern|pampas_|bush_)",
+      "re:^alpine_landscape/(mountain_flora|treemoss)"
+     ],
+     "ground": {
+      "type": "grass",
+      "colors": [
+       "#7cb342",
+       "#8bc34a",
+       "#689f38"
+      ]
+     },
+     "size": {
+      "min": 0.15,
+      "max": 0.32,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:rocks",
+      "tag:mushrooms"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#cfd8dc",
+       "#b0bec5",
+       "#eceff1"
+      ],
+      "bg": "#b0bec5"
+     },
+     "size": {
+      "min": 0.15,
+      "max": 0.32,
+      "power": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:trees",
+    "tag:ferns",
+    "tag:rocks"
+   ],
+   "fill_cover": 0.86
+  }
+ ]
+}

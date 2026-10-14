@@ -70,15 +70,12 @@ class AppIcons {
   static const wholeBoard = CupertinoIcons.arrow_down_right_arrow_up_left;
   static const zoom = CupertinoIcons.zoom_in;
 
-  /// Giant boards: the Edges filter (frame cards first) and the overview map.
-  static const edges = Icons.border_outer_rounded;
+  /// Giant boards: the overview map, and Locate (a tapped card's place on the map).
   static const minimap = CupertinoIcons.map;
+  static const locate = CupertinoIcons.location;
 
   /// Gather (giant boards): bring the cards that belong in view into it.
   static const gather = Icons.zoom_in_map_rounded;
-
-  /// A zone of a giant board finished.
-  static const zone = Icons.grid_view_rounded;
 
   /// Settings > Redeem a pack code.
   static const packCode = CupertinoIcons.ticket;

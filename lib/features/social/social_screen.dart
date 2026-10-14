@@ -405,10 +405,12 @@ class _SubStats extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.colors;
     final style = TextStyle(fontSize: 11.5, color: c.textSecondary);
+    // Big numbers (a long-time player) can be wider than a leaderboard row: the text gives way with
+    // an ellipsis and the star always shows.
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text('Level $level · $solved solved · $stars', style: style),
+        Flexible(child: Text('Level $level · $solved solved · $stars', style: style, maxLines: 1, overflow: TextOverflow.ellipsis)),
         const SizedBox(width: 3),
         const Icon(AppIcons.star, size: 11, color: Brand.star),
       ],

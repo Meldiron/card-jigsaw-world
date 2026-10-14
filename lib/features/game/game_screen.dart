@@ -16,7 +16,6 @@ import '../../data/sync/ops.dart';
 import '../../game/board.dart';
 import '../../game/game_controller.dart';
 import '../../game/image_loader.dart';
-import '../../game/zones.dart';
 import '../../models/models.dart';
 import '../../router.dart' show rootNavigatorKey;
 import '../../state/catalog.dart';
@@ -61,15 +60,13 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   /// Zoom of giant boards (the zoom bar and the board share it).
   late final BoardZoom _zoom = BoardZoom(vsync: this);
 
-  /// Giant boards: the Edges filter (this visit only), the overview map
-  /// (remembered), and the saved view, restored once when a board resumes
-  /// and written shortly after the player stops zooming or panning.
-  bool _edges = false;
+  /// Giant boards: the overview map and Locate (both remembered), and the
+  /// saved view, restored once when a board resumes and written shortly
+  /// after the player stops zooming or panning.
   late bool _showMap = ref.read(giantViewsProvider).showMap;
 
-  /// Locate: the card held or dragged on a zoomed giant board; the overview
-  /// map shows where it belongs (see `BoardWidget.onLocate`).
-  int? _locate;
+  /// Locate: while the map is on, the selected card's place shows on it.
+  late bool _locateOn = ref.read(giantViewsProvider).locate;
   bool _viewRestored = false;
   bool _viewCleared = false;
   String? _viewId;
@@ -120,14 +117,15 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     _viewSave = Timer(const Duration(milliseconds: 600), _saveView);
   }
 
-  /// The first time a giant board is zoomed in: how to find a card's place.
+  /// The first time a giant board is zoomed in with the map and Locate on:
+  /// how to find a card's place.
   void _maybeLocateTip() {
-    if (!_zoom.zoomed || _zoom.zoom < 1.5) return;
+    if (!_zoom.zoomed || _zoom.zoom < 1.5 || !_showMap || !_locateOn) return;
     final views = ref.read(giantViewsProvider);
     if (views.locateTipShown) return;
     views.locateTipShown = true;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) showToast(context, 'Hold a card to see its place on the map', icon: AppIcons.minimap);
+      if (mounted) showToast(context, 'Tap a card to see its place on the map', icon: AppIcons.minimap);
     });
   }
 
@@ -486,20 +484,18 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     _ctrl.magicLock();
   }
 
-  /// Peek: the cards fly to their places for a moment and back. Free on giant boards, where a
-  /// look at the part in view is how a big board is read.
+  /// Peek: the cards fly to their places for a moment and back (a little
+  /// longer on giant boards, where there is more to read).
   Future<void> _peek() async {
     final state = ref.read(gameControllerProvider(_args!));
     if (state.peeking) return;
     final giant = state.board.spec.isGiant;
-    if (!giant) {
-      final ok = await ref.read(profileProvider.notifier).spendCoins(Economy.peekCostCoins, reason: 'peek');
-      if (!mounted) return;
-      if (!ok) {
-        Sfx.instance.error();
-        _offerStore('Not enough Coins. Peek costs ${Economy.peekCostCoins} Coins.');
-        return;
-      }
+    final ok = await ref.read(profileProvider.notifier).spendCoins(Economy.peekCostCoins, reason: 'peek');
+    if (!mounted) return;
+    if (!ok) {
+      Sfx.instance.error();
+      _offerStore('Not enough Coins. Peek costs ${Economy.peekCostCoins} Coins.');
+      return;
     }
     Sfx.instance.whoosh();
     Haptics.light();
@@ -604,8 +600,8 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     final state = ref.watch(gameControllerProvider(_args!));
     final zoomable = state.board.spec.isGiant;
     if (zoomable && image.hasValue) _syncView(state);
-    final zones = state.zoned ? BoardZones.of(state.board.spec) : null;
-    final locate = _locate != null && _locate! < state.board.cells && !state.board.isLocked(_locate!) ? _locate : null;
+    final sel = state.selected;
+    final locate = _locateOn && sel != null && sel < state.board.cells && !state.board.isLocked(sel) ? sel : null;
 
     return Scaffold(
       backgroundColor: c.canvas,
@@ -674,8 +670,11 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                                     GiantBoardBar(
                                       zoom: _zoom,
                                       width: w,
-                                      edges: _edges,
-                                      onEdges: () => setState(() => _edges = !_edges),
+                                      locate: _locateOn,
+                                      onLocate: () {
+                                        setState(() => _locateOn = !_locateOn);
+                                        ref.read(giantViewsProvider).locate = _locateOn;
+                                      },
                                       showMap: _showMap,
                                       onMap: () {
                                         setState(() => _showMap = !_showMap);
@@ -709,17 +708,11 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                                             cardStyle: settings.cardStyle,
                                             painting: _painting,
                                             zoom: _zoom,
-                                            edges: _edges,
-                                            zones: zones,
-                                            onLocate: (slot) {
-                                              if (mounted && slot != _locate) setState(() => _locate = slot);
-                                            },
                                             onTap: _ctrl.tap,
                                             onDrop: _ctrl.drop,
                                           ),
                                           OffscreenSelection(zoom: _zoom, board: state.board, boardSize: Size(w, h), selected: state.selected),
-                                          // A located card shows the map even when it is hidden.
-                                          if (_showMap || locate != null)
+                                          if (_showMap)
                                             Positioned(
                                               top: 8,
                                               right: 8,
@@ -738,7 +731,6 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                                                   width: math.min(84.0, w * 0.22),
                                                   selected: state.selected,
                                                   painting: _painting,
-                                                  zones: zones,
                                                   locate: locate,
                                                 ),
                                               ),
@@ -746,11 +738,6 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                                           GiantMilestones(
                                             board: state.board,
                                             playing: state.status == GameStatus.playing,
-                                            zones: zones,
-                                            // Every edge card is in place: the filter would only dim the rest.
-                                            onFrame: () {
-                                              if (_edges) setState(() => _edges = false);
-                                            },
                                           ),
                                         ],
                                       ),
@@ -779,7 +766,6 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                     hints: profile?.hints ?? 0,
                     canUndo: state.canUndo,
                     playing: state.status == GameStatus.playing && !state.peeking,
-                    freePeek: zoomable,
                     onHint: _hint,
                     onMagic: _magic,
                     onPeek: _peek,
@@ -941,13 +927,11 @@ class _HudStat extends StatelessWidget {
 }
 
 class _BoosterBar extends StatelessWidget {
-  const _BoosterBar({required this.hints, required this.canUndo, required this.playing, this.freePeek = false, required this.onHint, required this.onMagic, required this.onPeek, required this.onUndo});
+  const _BoosterBar({required this.hints, required this.canUndo, required this.playing, required this.onHint, required this.onMagic, required this.onPeek, required this.onUndo});
   final int hints;
   final bool canUndo;
   final bool playing;
 
-  /// Giant boards: Peek costs nothing.
-  final bool freePeek;
   final VoidCallback onHint;
   final VoidCallback onMagic;
   final VoidCallback onPeek;
@@ -972,7 +956,7 @@ class _BoosterBar extends StatelessWidget {
             key: const ValueKey('booster-peek'),
             icon: AppIcons.peek,
             label: 'Peek',
-            cost: freePeek ? const Text('free') : Amount(currency: Currency.coins, value: Economy.peekCostCoins, size: 11, fontSize: 10, weight: FontWeight.w700),
+            cost: Amount(currency: Currency.coins, value: Economy.peekCostCoins, size: 11, fontSize: 10, weight: FontWeight.w700),
             enabled: playing,
             onTap: onPeek,
           ),

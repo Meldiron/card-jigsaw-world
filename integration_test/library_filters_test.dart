@@ -192,7 +192,7 @@ void main() {
     expect(inLibrary(find.text(finished.name)), findsOneWidget);
     await shot(tester, 'lib_10_search_results');
     await search(tester, 'zzqx');
-    expect(find.text('No packs found'), findsOneWidget);
+    expect(find.text('Nothing found'), findsOneWidget);
     await shot(tester, 'lib_11_search_none');
     await tapChip(tester, LibraryFilter.started);
     await search(tester, word);

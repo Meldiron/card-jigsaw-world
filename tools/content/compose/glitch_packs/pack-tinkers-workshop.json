@@ -1,0 +1,1584 @@
+{
+ "pack": {
+  "id": "pack-tinkers-workshop",
+  "name": "Tinker's Workshop",
+  "category": "Illustration",
+  "description": "Potion shelves, tool walls, jeweller's trays and humming machines, every hand-drawn gadget once.",
+  "sortOrder": 1310,
+  "price": "coins"
+ },
+ "canvas": [
+  1800,
+  2400
+ ],
+ "max_uses": 7,
+ "max_items": 58,
+ "defaults": {
+  "size": {
+   "min": 0.16,
+   "max": 0.32,
+   "power": 1.0
+  },
+  "fill_size": {
+   "min": 0.1,
+   "max": 0.22,
+   "min_px": 110
+  },
+  "cover": 0.8,
+  "max_ov": 0.15,
+  "fill_ov": 0.28,
+  "fill_cover": 0.88,
+  "palette_max": 48,
+  "row": {
+   "min": 0.6,
+   "max": 0.98,
+   "gap": [
+    -0.12,
+    0.05
+   ]
+  }
+ },
+ "fill_all": [
+  "tag:handtools",
+  "tag:machines",
+  "tag:lab",
+  "tag:compounds",
+  "tag:potions",
+  "tag:powders",
+  "tag:ores",
+  "tag:jewels",
+  "tag:curios",
+  "tag:harvest",
+  "tag:kitchentools",
+  "tag:props",
+  "tag:crystals"
+ ],
+ "pictures": [
+  {
+   "slug": "potion-shelves",
+   "title": "Potion shelves",
+   "seed": 401,
+   "priority": 1,
+   "palette": [
+    "#4a2c6b",
+    "#7e57c2",
+    "#26a69a",
+    "#ef5350"
+   ],
+   "layout": {
+    "type": "cubbies",
+    "cols": 1,
+    "rows": 3,
+    "frame": [
+     "#6b452c",
+     "#5d3c26",
+     "#7a5034"
+    ],
+    "frame_w": 0.03,
+    "board_h": 0.022
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:potions"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#3f2b5c"
+      ]
+     },
+     "hero": [
+      "potion_rainbow_juice",
+      "potion_draught_of_giant_amicability",
+      "potion_rook_balm"
+     ]
+    }
+   ],
+   "row": {
+    "min": 0.6,
+    "max": 0.98,
+    "fill_all": true
+   },
+   "fill": [
+    "tag:potions",
+    "tag:powders",
+    "re:^essence_of_",
+    "tag:lab"
+   ],
+   "fill_all": true,
+   "palette_max": 55
+  },
+  {
+   "slug": "alchemy-bench",
+   "title": "Alchemy bench",
+   "seed": 402,
+   "palette": [
+    "#2e7d32",
+    "#9e9e9e",
+    "#c0ca33"
+   ],
+   "layout": {
+    "type": "table",
+    "shape": "oval",
+    "margin": 0.05,
+    "edge": 0.025,
+    "base": {
+     "type": "cobble",
+     "colors": [
+      "#7d8a7a",
+      "#8f9c8b",
+      "#6c786a"
+     ],
+     "size": 110,
+     "mortar": "#4b544a"
+    }
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:lab",
+      "cauldron",
+      "alchemical_tongs",
+      "crystallizer",
+      "tag:powders",
+      "re:^essence_of_",
+      "tincturing_kit",
+      "focusing_orb"
+     ],
+     "ground": {
+      "type": "planks",
+      "colors": [
+       "#6b452c",
+       "#5d3c26",
+       "#7a5034"
+      ],
+      "width": 110
+     },
+     "hero": [
+      "cauldron",
+      "crystallizer",
+      "tincturing_kit"
+     ],
+     "size": {
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
+     },
+     "fill_cover": 0.9
+    },
+    {
+     "items": [
+      "tag:ores",
+      "tag:crystals"
+     ],
+     "ground": {
+      "type": "cobble",
+      "colors": [
+       "#7d8a7a",
+       "#8f9c8b",
+       "#6c786a"
+      ],
+      "size": 110,
+      "mortar": "#4b544a"
+     },
+     "size": {
+      "min": 0.12,
+      "max": 0.24,
+      "power": 1.0
+     },
+     "cover": 0.4,
+     "fill_cover": 0.55
+    }
+   ],
+   "fill": [
+    "tag:lab",
+    "tag:powders",
+    "tag:potions",
+    "tag:compounds"
+   ]
+  },
+  {
+   "slug": "tool-wall",
+   "title": "Tool wall",
+   "seed": 403,
+   "palette": [
+    "#c8a27a",
+    "#e07a2e",
+    "#607d8b"
+   ],
+   "layout": {
+    "type": "single"
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:handtools",
+      "tag:kitchentools",
+      "watering_can",
+      "butterfly_net"
+     ],
+     "ground": {
+      "type": "pegboard",
+      "colors": [
+       "#c8a27a"
+      ],
+      "hole": "#5a4632",
+      "pitch": 48
+     },
+     "hero": [
+      "fancy_pick",
+      "high_class_hoe",
+      "class_axe",
+      "super_scraper"
+     ],
+     "size": {
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
+     },
+     "cover": 0.75,
+     "fill_cover": 0.85
+    }
+   ],
+   "fill": [
+    "tag:handtools",
+    "tag:kitchentools",
+    "tag:props"
+   ],
+   "fill_all": false
+  },
+  {
+   "slug": "machine-floor",
+   "title": "Machine floor",
+   "seed": 404,
+   "palette": [
+    "#78909c",
+    "#455a64",
+    "#ffb300"
+   ],
+   "layout": {
+    "type": "crates",
+    "cols": 2,
+    "rows": 3,
+    "gutter": 0.03,
+    "rim": 0.03,
+    "rim_colors": [
+     "#f2b134",
+     "#2b2b2b",
+     "#f2b134"
+    ],
+    "base": {
+     "type": "tiles",
+     "colors": [
+      "#8f9aa6",
+      "#7d8894",
+      "#a3adb8"
+     ],
+     "size": 140,
+     "grout": "#5f6872"
+    }
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:machines"
+     ],
+     "ground": {
+      "type": "tiles",
+      "colors": [
+       "#b0bac4",
+       "#a2acb6"
+      ],
+      "size": 60,
+      "grout": "#8a949e"
+     },
+     "hero": [
+      "blockmaker",
+      "fuelmaker",
+      "metalmaker",
+      "woodworker",
+      "smelter",
+      "gassifier"
+     ],
+     "size": {
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:machines",
+    "tag:handtools"
+   ],
+   "fill_all": false,
+   "fill_cover": 0.85
+  },
+  {
+   "slug": "jewellers-trays",
+   "title": "Jeweller's trays",
+   "seed": 405,
+   "palette": [
+    "#1a237e",
+    "#b71c1c",
+    "#ffd54f"
+   ],
+   "layout": {
+    "type": "trays",
+    "n": 7,
+    "gutter": 0.03,
+    "rim": 0.028,
+    "rims": [
+     "#c9a227",
+     "#b8941f",
+     "#d8b437"
+    ],
+    "base": {
+     "type": "planks",
+     "colors": [
+      "#7b3a2a",
+      "#6c3224",
+      "#8a4533"
+     ],
+     "width": 120
+    }
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:jewels",
+      "re:^artifact_necklace_"
+     ],
+     "ground": {
+      "type": "linen",
+      "colors": [
+       "#1f2a6b"
+      ]
+     },
+     "hero": [
+      "artifact_magical_pendant",
+      "artifact_mirror_with_scribbles"
+     ],
+     "size": {
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:crystals",
+      "tag:ores"
+     ],
+     "ground": {
+      "type": "linen",
+      "colors": [
+       "#7b1c25"
+      ]
+     },
+     "size": {
+      "min": 0.16,
+      "max": 0.32,
+      "power": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:jewels",
+    "tag:crystals",
+    "tag:ores",
+    "tag:curios"
+   ],
+   "fill_cover": 0.85,
+   "palette_max": 60
+  },
+  {
+   "slug": "mine-carts",
+   "title": "Mine carts",
+   "seed": 406,
+   "palette": [
+    "#607d8b",
+    "#26a69a",
+    "#8d6e63"
+   ],
+   "layout": {
+    "type": "crates",
+    "cols": 2,
+    "rows": 3,
+    "gutter": 0.035,
+    "rim": 0.035,
+    "rim_colors": [
+     "#5d4a3a",
+     "#4e3d30",
+     "#6b5646"
+    ],
+    "base": {
+     "type": "scatter",
+     "colors": [
+      "#8d8d8d",
+      "#a3a3a3",
+      "#6f6f6f"
+     ],
+     "bg": "#6b5c4e",
+     "count": 1.2
+    }
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:ores",
+      "re:^ilmenskie/rock_(dull|beryl)_(fore|mid)",
+      "rock"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#5d4037",
+       "#4e342e"
+      ],
+      "bg": "#3e2f27"
+     },
+     "hero": [
+      "rock_metal_1",
+      "rock_beryl_1"
+     ],
+     "size": {
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "pick",
+      "fancy_pick",
+      "shovel",
+      "ace_of_spades",
+      "ore_grinder",
+      "dirt_pile",
+      "re:^peat_"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#795548",
+       "#6d4c41"
+      ],
+      "bg": "#5a4334"
+     },
+     "size": {
+      "min": 0.16,
+      "max": 0.32,
+      "power": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:ores",
+    "tag:rocks",
+    "tag:handtools"
+   ],
+   "fill_cover": 0.85
+  },
+  {
+   "slug": "molecule-lab",
+   "title": "Molecule lab",
+   "seed": 407,
+   "palette": [
+    "#e3f2fd",
+    "#1e88e5",
+    "#e53935",
+    "#43a047"
+   ],
+   "layout": {
+    "type": "trays",
+    "n": 6,
+    "gutter": 0.03,
+    "rim": 0.02,
+    "rims": [
+     "#cfd8dc",
+     "#b0bec5"
+    ],
+    "base": {
+     "type": "tiles",
+     "colors": [
+      "#f5f8fb",
+      "#e6eef5"
+     ],
+     "size": 90,
+     "grout": "#c9d6e2",
+     "pattern": "checker"
+    }
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:compounds"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#fbfdff"
+      ]
+     },
+     "hero": [
+      "element_red",
+      "element_blue",
+      "element_green"
+     ],
+     "size": {
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:lab",
+      "beaker",
+      "test_tube",
+      "tag:potions"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#fbfdff"
+      ]
+     },
+     "size": {
+      "min": 0.16,
+      "max": 0.32,
+      "power": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:compounds",
+    "tag:lab",
+    "tag:potions"
+   ],
+   "fill_all": true,
+   "fill_cover": 0.85,
+   "palette_max": 40
+  },
+  {
+   "slug": "woodshop",
+   "title": "Woodshop",
+   "seed": 408,
+   "palette": [
+    "#d7a86e",
+    "#8d5524",
+    "#4e7d3a"
+   ],
+   "layout": {
+    "type": "hbands",
+    "n": 2,
+    "sizes": [
+     3,
+     2
+    ]
+   },
+   "zones": [
+    {
+     "items": [
+      "woodworker",
+      "woodworker_chassis",
+      "woodworker_fuser",
+      "hatchet",
+      "class_axe",
+      "wood_tree",
+      "wood_tree_enchanted",
+      "paper_tree",
+      "re:^firebog/log_pile",
+      "re:^groddle/tree_dead_",
+      "re:^groddle/tree_stack_base_4"
+     ],
+     "ground": {
+      "type": "planks",
+      "colors": [
+       "#e2bf86",
+       "#d6b077",
+       "#ecca92"
+      ],
+      "width": 130
+     },
+     "hero": [
+      "woodworker",
+      "wood_tree"
+     ],
+     "size": {
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
+     },
+     "fill_cover": 0.88
+    },
+    {
+     "items": [
+      "tag:handtools",
+      "tag:props"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#e8c98f",
+       "#d9b77a",
+       "#f2d9a8"
+      ],
+      "bg": "#c9a26a",
+      "kind": "chip",
+      "rmin": 3,
+      "rmax": 9
+     },
+     "size": {
+      "min": 0.16,
+      "max": 0.32,
+      "power": 1.0
+     },
+     "fill_cover": 0.85
+    }
+   ],
+   "fill": [
+    "tag:handtools",
+    "tag:trants",
+    "tag:props"
+   ]
+  },
+  {
+   "slug": "curiosity-cabinet",
+   "title": "Curiosity cabinet",
+   "seed": 409,
+   "priority": 1,
+   "palette": [
+    "#7b3a2a",
+    "#c9a227",
+    "#26a69a"
+   ],
+   "layout": {
+    "type": "cubbies",
+    "cols": 3,
+    "rows": 4,
+    "frame": [
+     "#7b3a2a",
+     "#6c3224",
+     "#8a4533"
+    ],
+    "frame_w": 0.026,
+    "board_h": 0.02
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:curios",
+      "tag:jewels",
+      "focusing_orb",
+      "rook_egg"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#e9dcc0"
+      ]
+     },
+     "hero": [
+      "conch_decoy",
+      "rook_hall_focusing_orb"
+     ]
+    },
+    {
+     "items": [
+      "tag:crystals",
+      "tag:props"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#cfe3dd"
+      ]
+     }
+    }
+   ],
+   "row": {
+    "min": 0.6,
+    "max": 0.98
+   },
+   "fill": [
+    "tag:curios",
+    "tag:jewels",
+    "tag:crystals",
+    "tag:props",
+    "tag:potions"
+   ],
+   "fill_all": false
+  },
+  {
+   "slug": "powder-pantry",
+   "title": "Powder pantry",
+   "seed": 410,
+   "priority": 1,
+   "palette": [
+    "#a5d6a7",
+    "#f8bbd0",
+    "#b3e5fc"
+   ],
+   "layout": {
+    "type": "cubbies",
+    "cols": 2,
+    "rows": 3,
+    "frame": [
+     "#e8e0d0",
+     "#ddd4c2",
+     "#f2ebde"
+    ],
+    "frame_w": 0.03,
+    "board_h": 0.024
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:powders",
+      "re:^essence_of_",
+      "krazy_salts"
+     ],
+     "ground": {
+      "type": "stripes",
+      "colors": [
+       "#d7eedd",
+       "#f2faf4"
+      ],
+      "size": 36,
+      "angle": 90
+     },
+     "hero": [
+      "sparkle_powder",
+      "no_no_powder"
+     ]
+    },
+    {
+     "items": [
+      "tag:powders",
+      "tag:potions"
+     ],
+     "ground": {
+      "type": "stripes",
+      "colors": [
+       "#f6dce6",
+       "#fdf3f7"
+      ],
+      "size": 36,
+      "angle": 90
+     }
+    }
+   ],
+   "row": {
+    "min": 0.62,
+    "max": 0.98
+   },
+   "fill": [
+    "tag:powders",
+    "tag:potions",
+    "tag:lab"
+   ],
+   "fill_all": false
+  },
+  {
+   "slug": "crystal-cave-bench",
+   "title": "Crystal cave bench",
+   "seed": 411,
+   "palette": [
+    "#4dd0e1",
+    "#7e57c2",
+    "#1a3d6b"
+   ],
+   "layout": {
+    "type": "voronoi",
+    "n": 4,
+    "wobble": 0.05
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:crystals",
+      "re:^ilmenskie/cave_large_rock"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#5c6bc0",
+       "#3949ab",
+       "#7986cb"
+      ],
+      "bg": "#283593",
+      "kind": "chip"
+     },
+     "hero": [
+      "ilmenskie/cave_crystal_7",
+      "ilmenskie/cave_crystal_5"
+     ],
+     "size": {
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "re:^ilmenskie/rock_beryl",
+      "tag:ores"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#4db6ac",
+       "#26a69a",
+       "#80cbc4"
+      ],
+      "bg": "#00695c"
+     },
+     "size": {
+      "min": 0.16,
+      "max": 0.32,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "re:^ilmenskie/(purple_mushroom|plant_fern|plant_giant_fern|tree_1[0-5])",
+      "tag:crystals"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#9575cd",
+       "#7e57c2",
+       "#b39ddb"
+      ],
+      "bg": "#4527a0"
+     },
+     "size": {
+      "min": 0.16,
+      "max": 0.32,
+      "power": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:crystals",
+    "tag:ores",
+    "tag:rocks"
+   ],
+   "fill_cover": 0.85,
+   "palette_max": 60
+  },
+  {
+   "slug": "smithy",
+   "title": "Smithy",
+   "seed": 412,
+   "palette": [
+    "#d84315",
+    "#424242",
+    "#ffb300"
+   ],
+   "layout": {
+    "type": "table",
+    "shape": "round",
+    "margin": 0.06,
+    "edge": 0.03,
+    "base": {
+     "type": "cobble",
+     "colors": [
+      "#6d4c41",
+      "#5d4037",
+      "#795548"
+     ],
+     "size": 100,
+     "mortar": "#3e2723"
+    }
+   },
+   "zones": [
+    {
+     "items": [
+      "metalmaker",
+      "metalmaker_mechanism",
+      "metalmaker_tooler",
+      "smelter",
+      "ore_grinder",
+      "re:^rock_metal_",
+      "tinkertool",
+      "construction_tool",
+      "spigot",
+      "frying_pan"
+     ],
+     "ground": {
+      "type": "tiles",
+      "colors": [
+       "#5f5f5f",
+       "#6e6e6e",
+       "#525252"
+      ],
+      "size": 120,
+      "grout": "#3a3a3a"
+     },
+     "hero": [
+      "smelter",
+      "metalmaker"
+     ],
+     "size": {
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
+     },
+     "fill_cover": 0.88
+    },
+    {
+     "items": [
+      "re:^firebog/(hearth_fire|fire_egg|lantern_stacked|log_pile)",
+      "re:^furniture_fireplace_(camp_fire_pit|rustic_oven|wood_stove)",
+      "tag:props"
+     ],
+     "ground": {
+      "type": "cobble",
+      "colors": [
+       "#6d4c41",
+       "#5d4037",
+       "#795548"
+      ],
+      "size": 100,
+      "mortar": "#3e2723"
+     },
+     "size": {
+      "min": 0.16,
+      "max": 0.32,
+      "power": 1.0
+     },
+     "cover": 0.45,
+     "fill_cover": 0.6
+    }
+   ],
+   "fill": [
+    "tag:machines",
+    "tag:handtools",
+    "tag:ores"
+   ]
+  },
+  {
+   "slug": "gadget-table",
+   "title": "Gadget table",
+   "seed": 413,
+   "palette": [
+    "#29b6f6",
+    "#ffffff",
+    "#ff7043"
+   ],
+   "layout": {
+    "type": "table",
+    "shape": "round",
+    "margin": 0.04,
+    "plates": 0,
+    "edge": 0.02,
+    "base": {
+     "type": "check",
+     "colors": [
+      "#29b6f6",
+      "#ffffff"
+     ],
+     "size": 70
+    }
+   },
+   "zones": [
+    {
+     "items": [
+      "blockmaker_engine",
+      "blockmaker_plates",
+      "blockmaker_chassis",
+      "fuelmaker_case",
+      "fuelmaker_core",
+      "bubble_tuner",
+      "machine_stand",
+      "tinkertool",
+      "spindle",
+      "splendid_spindle",
+      "random_kindness",
+      "irrigator_9000",
+      "loomer",
+      "grand_ol_grinder"
+     ],
+     "ground": {
+      "type": "planks",
+      "colors": [
+       "#ff8a65",
+       "#ff7043",
+       "#ffab91"
+      ],
+      "width": 100
+     },
+     "hero": [
+      "bubble_tuner",
+      "fuelmaker_core",
+      "splendid_spindle"
+     ],
+     "size": {
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
+     },
+     "fill_cover": 0.9
+    },
+    {
+     "items": [
+      "tag:compounds",
+      "tag:curios"
+     ],
+     "ground": {
+      "type": "check",
+      "colors": [
+       "#29b6f6",
+       "#ffffff"
+      ],
+      "size": 70
+     },
+     "size": {
+      "min": 0.12,
+      "max": 0.24,
+      "power": 1.0
+     },
+     "cover": 0.4,
+     "fill_cover": 0.55
+    }
+   ],
+   "fill": [
+    "tag:machines",
+    "tag:handtools",
+    "tag:compounds"
+   ]
+  },
+  {
+   "slug": "explorers-desk",
+   "title": "Explorer's desk",
+   "seed": 414,
+   "palette": [
+    "#8d6e63",
+    "#4caf50",
+    "#ffd54f"
+   ],
+   "layout": {
+    "type": "cloth",
+    "margin": 0.1,
+    "border": {
+     "colors": [
+      "#2e7d32",
+      "#f1e5c8"
+     ],
+     "width": 0.028
+    }
+   },
+   "zones": [
+    {
+     "items": [
+      "butterfly_net",
+      "quill",
+      "firefly_whistle",
+      "conch_decoy",
+      "rook_egg",
+      "focusing_orb",
+      "butterfly_lotion",
+      "fox_brush",
+      "dusty_stick",
+      "re:^ix/(telescope_01|vine_bucket)$",
+      "re:^firebog/lantern_stacked"
+     ],
+     "ground": {
+      "type": "linen",
+      "colors": [
+       "#e9dcc0"
+      ]
+     },
+     "hero": [
+      "butterfly_net",
+      "ix/telescope_01"
+     ],
+     "size": {
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
+     },
+     "fill_cover": 0.88
+    },
+    {
+     "items": [
+      "tag:props",
+      "tag:harvest"
+     ],
+     "ground": {
+      "type": "planks",
+      "colors": [
+       "#6b452c",
+       "#5d3c26",
+       "#7a5034"
+      ],
+      "width": 110
+     },
+     "size": {
+      "min": 0.16,
+      "max": 0.32,
+      "power": 1.0
+     },
+     "cover": 0.45,
+     "fill_cover": 0.6
+    }
+   ],
+   "fill": [
+    "tag:curios",
+    "tag:props",
+    "tag:handtools",
+    "tag:jewels"
+   ]
+  },
+  {
+   "slug": "trant-nursery",
+   "title": "Tree nursery",
+   "seed": 415,
+   "palette": [
+    "#7cb342",
+    "#8d6e63",
+    "#ffca28"
+   ],
+   "layout": {
+    "type": "crates",
+    "cols": 2,
+    "rows": 3,
+    "gutter": 0.03,
+    "rim": 0.03,
+    "rim_colors": [
+     "#9e7b55",
+     "#8e6e4a",
+     "#ae8b63"
+    ],
+    "base": {
+     "type": "grass",
+     "colors": [
+      "#6a9a3a",
+      "#7fb34a",
+      "#5a8a30",
+      "#8cc152"
+     ]
+    }
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:trants",
+      "tag:patches"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#6d4c41",
+       "#5d4037"
+      ],
+      "bg": "#4e3529"
+     },
+     "hero": [
+      "trant_fruit",
+      "trant_bean",
+      "trant_egg"
+     ],
+     "size": {
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "re:^trant_.*_dead$",
+      "tag:patches",
+      "watering_can",
+      "hoe",
+      "shovel"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#8d6e63",
+       "#795548"
+      ],
+      "bg": "#6d4c41"
+     },
+     "size": {
+      "min": 0.16,
+      "max": 0.32,
+      "power": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:harvest",
+    "tag:handtools"
+   ],
+   "fill_cover": 0.85
+  },
+  {
+   "slug": "storeroom",
+   "title": "Storeroom",
+   "seed": 416,
+   "priority": 1,
+   "palette": [
+    "#8d4a3a",
+    "#5d4037",
+    "#c9a227"
+   ],
+   "layout": {
+    "type": "cubbies",
+    "cols": 1,
+    "rows": 3,
+    "frame": [
+     "#6b452c",
+     "#5d3c26",
+     "#7a5034"
+    ],
+    "frame_w": 0.03,
+    "board_h": 0.026
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:f_cabinet",
+      "re:^bag_furniture_smallcabinet_",
+      "furniture_roomdeco_barrel",
+      "tag:props"
+     ],
+     "ground": {
+      "type": "wallpaper",
+      "name": "longred_brick_wall",
+      "scale": 2.0
+     },
+     "hero": [
+      "bag_furniture_smallcabinet_treasure_chest",
+      "furniture_roomdeco_barrel"
+     ]
+    }
+   ],
+   "row": {
+    "min": 0.55,
+    "max": 0.98,
+    "min_frac": 0.3
+   },
+   "fill": [
+    "tag:f_cabinet",
+    "tag:props",
+    "tag:machines"
+   ],
+   "fill_all": false
+  },
+  {
+   "slug": "bubble-and-gas-works",
+   "title": "Gas works",
+   "seed": 417,
+   "palette": [
+    "#80deea",
+    "#b39ddb",
+    "#546e7a"
+   ],
+   "layout": {
+    "type": "vbands",
+    "n": 2,
+    "wobble": 0.02
+   },
+   "zones": [
+    {
+     "items": [
+      "gassifier",
+      "trant_gas",
+      "trant_bubble",
+      "bubble_tuner",
+      "re:^ilmenskie/(steam|floating_steam)",
+      "spigot",
+      "irrigator_9000",
+      "jellisac",
+      "jellisac_mound",
+      "barnacle_pod",
+      "mortar_barnacle"
+     ],
+     "ground": {
+      "type": "tiles",
+      "colors": [
+       "#b2ebf2",
+       "#80deea",
+       "#e0f7fa"
+      ],
+      "size": 80,
+      "grout": "#4dd0e1"
+     },
+     "hero": [
+      "gassifier",
+      "trant_gas"
+     ],
+     "size": {
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
+     },
+     "fill_cover": 0.85
+    },
+    {
+     "items": [
+      "tag:compounds",
+      "tag:powders",
+      "tag:lab"
+     ],
+     "ground": {
+      "type": "tiles",
+      "colors": [
+       "#d1c4e9",
+       "#b39ddb",
+       "#ede7f6"
+      ],
+      "size": 80,
+      "grout": "#9575cd"
+     },
+     "size": {
+      "min": 0.16,
+      "max": 0.32,
+      "power": 1.0
+     },
+     "fill_cover": 0.85
+    }
+   ],
+   "fill": [
+    "tag:machines",
+    "tag:compounds",
+    "tag:harvest"
+   ]
+  },
+  {
+   "slug": "kitchen-workbench",
+   "title": "Kitchen workbench",
+   "seed": 418,
+   "palette": [
+    "#e53935",
+    "#fafafa",
+    "#9e9e9e"
+   ],
+   "layout": {
+    "type": "hbands",
+    "n": 2,
+    "sizes": [
+     1,
+     1
+    ]
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:kitchentools",
+      "blender",
+      "mortar_and_pestle",
+      "spice_mill",
+      "knife_and_board",
+      "awesome_pot",
+      "egg_seasoner",
+      "bean_seasoner",
+      "cocktail_shaker"
+     ],
+     "ground": {
+      "type": "tiles",
+      "colors": [
+       "#e53935",
+       "#fafafa"
+      ],
+      "size": 90,
+      "pattern": "checker",
+      "grout": "#e0e0e0"
+     },
+     "hero": [
+      "blender",
+      "awesome_pot"
+     ],
+     "size": {
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
+     },
+     "fill_cover": 0.85
+    },
+    {
+     "items": [
+      "tag:handtools",
+      "tag:machines"
+     ],
+     "ground": {
+      "type": "tiles",
+      "colors": [
+       "#cfd8dc",
+       "#b0bec5"
+      ],
+      "size": 120,
+      "grout": "#90a4ae"
+     },
+     "size": {
+      "min": 0.16,
+      "max": 0.32,
+      "power": 1.0
+     },
+     "fill_cover": 0.85
+    }
+   ],
+   "fill": [
+    "tag:kitchentools",
+    "tag:handtools",
+    "tag:props"
+   ]
+  },
+  {
+   "slug": "treasure-chest-room",
+   "title": "Strongroom",
+   "seed": 419,
+   "palette": [
+    "#ffd54f",
+    "#6d4c41",
+    "#c62828"
+   ],
+   "layout": {
+    "type": "ring",
+    "margin": 0.2,
+    "wobble": 0.02
+   },
+   "zones": [
+    {
+     "items": [
+      "re:^bag_furniture_smallcabinet_(antique_trunk|treasure_chest|vintage_trunk)",
+      "tag:jewels",
+      "element_shiny",
+      "re:^rock_sparkly_",
+      "re:^bag_furniture_wallcabinet_wall_safe"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#ffd54f",
+       "#ffca28",
+       "#ffe082",
+       "#f9a825"
+      ],
+      "bg": "#c9a227",
+      "kind": "chip",
+      "rmin": 4,
+      "rmax": 10
+     },
+     "hero": [
+      "bag_furniture_smallcabinet_treasure_chest",
+      "bag_furniture_smallcabinet_antique_trunk"
+     ],
+     "size": {
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
+     },
+     "fill_cover": 0.9
+    },
+    {
+     "items": [
+      "tag:props",
+      "tag:curios",
+      "tag:crystals"
+     ],
+     "ground": {
+      "type": "planks",
+      "colors": [
+       "#8b2f2f",
+       "#7a2828",
+       "#9a3a3a"
+      ],
+      "width": 120
+     },
+     "size": {
+      "min": 0.16,
+      "max": 0.32,
+      "power": 1.0
+     },
+     "fill_cover": 0.85
+    }
+   ],
+   "fill": [
+    "tag:jewels",
+    "tag:crystals",
+    "tag:curios",
+    "tag:props"
+   ]
+  },
+  {
+   "slug": "harvest-shed",
+   "title": "Harvest shed",
+   "seed": 420,
+   "palette": [
+    "#ffd54f",
+    "#8d6e63",
+    "#689f38"
+   ],
+   "layout": {
+    "type": "grid",
+    "cols": 2,
+    "rows": 2
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:patches",
+      "re:^peat_",
+      "dirt_pile"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#e6c84f",
+       "#d9b84a",
+       "#f2da7a"
+      ],
+      "bg": "#d6b44a",
+      "kind": "chip",
+      "rmin": 2,
+      "rmax": 7
+     },
+     "hero": [
+      "garden",
+      "garden_new"
+     ],
+     "size": {
+      "min": 0.2,
+      "max": 0.4,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:handtools",
+      "watering_can",
+      "irrigator_9000"
+     ],
+     "ground": {
+      "type": "planks",
+      "colors": [
+       "#a1887f",
+       "#8d6e63",
+       "#bcaaa4"
+      ],
+      "width": 100
+     },
+     "size": {
+      "min": 0.16,
+      "max": 0.32,
+      "power": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:harvest",
+    "tag:handtools",
+    "tag:props"
+   ],
+   "fill_cover": 0.85
+  }
+ ]
+}
