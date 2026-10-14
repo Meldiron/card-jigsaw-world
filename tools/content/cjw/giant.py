@@ -92,14 +92,19 @@ def check(url, max_px=4096, force=False, crop_path=None):
     """Stats for one source URL (cached by URL and size); writes the crop sheet when crop_path is given."""
     sp = STATS / f'{imagecache.key_for(url)}-{max_px}.json'
     if sp.exists() and not force and (crop_path is None or crop_path.exists()):
-        return json.loads(sp.read_text())
+        st = json.loads(sp.read_text())
+        # Stats from before the EXIF fix stored the raw size: a rotated phone photo read as landscape.
+        # Only those (landscape, no 'exif' mark) are measured again; everything else stays cached.
+        if not (st.get('ok') and not st.get('exif') and st.get('src_w', 0) > st.get('src_h', 0)):
+            return st
     try:
         data = host._fetch(url)
         img = Image.open(io.BytesIO(data)); img.load()
+        img = ImageOps.exif_transpose(img)     # the size as shown (EXIF rotation), like measure() and hosting
     except Exception as e:
         st = {'ok': False, 'err': str(e)[:120]}
         sp.write_text(json.dumps(st)); return st
-    st = dict(ok=True, src_w=img.size[0], src_h=img.size[1], bytes=len(data), **measure(img, max_px))
+    st = dict(ok=True, exif=True, src_w=img.size[0], src_h=img.size[1], bytes=len(data), **measure(img, max_px))
     st['long'] = max(st['src_w'], st['src_h'])
     if crop_path is not None:
         crop_path.parent.mkdir(parents=True, exist_ok=True)
