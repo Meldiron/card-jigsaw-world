@@ -32,17 +32,20 @@ reports the ones that do not. The pack-making workflow that enforces them is the
    puzzle. AI-generated images are stored with their generator and prompter and are never
    presented as human-made.
 
-   **Stock-site licences need the owner's review first.** The Pexels License, Pixabay Content
-   License and Flickr Commons' "no known copyright restrictions" are not CC licences, and the free
-   Flickr API key is non-commercial. The Unsplash License was approved by the owner on 2026-10-14 (no
+   **Stock-site licences need the owner's review first.** Flickr Commons' "no known copyright
+   restrictions" is not a CC licence, and the free Flickr API key is non-commercial. The Pexels
+   License and the Pixabay Content License were approved by the owner on 2026-10-14 (a spec opts in
+   with `allow_licences`; no unaltered resale, no wallpaper or stock redistribution, Pixabay: no
+   systematic mass downloads, so small human-paced pools). The Unsplash License was approved by the owner on 2026-10-14 (no
    selling "without significant modification", no "replicating a similar or competing service"), but
    the Unsplash API terms require hotlinking, which the self-hosting rule forbids: no Unsplash pack
    until the owner settles how pictures are obtained (see the pack-making skill).
    The tool keeps `pexels`, `pixabay`, `unsplash`, `flickr` and `flickr-commons` inactive until their
    key is in `secrets/content-keys.env`, and drops their licences unless a spec lists them in
-   `allow_licences`. No pack may use these sources or set `allow_licences` until the owner has
-   reviewed and approved that licence (and, for Pixabay, a re-hosting plan: Pixabay forbids
-   permanent hotlinking).
+   `allow_licences`. A pack may set `allow_licences` only for a licence the owner has approved
+   (Pexels License, Pixabay Content License; Unsplash once its hotlinking question is settled).
+   Pixabay forbids permanent hotlinking, which self-hosting already satisfies: `apply` re-hosts
+   every pick.
 
 8. **No space.** No new packs or pictures of nebulae, galaxies, planets, star fields or telescope
    images (owner, 2026-10-14: "I don't like space ones"). The existing Space packs stay as they are; no
