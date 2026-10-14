@@ -2,6 +2,7 @@ New in this build:
 - Update prompt: when a newer TestFlight build is out, the app says so and Update opens TestFlight. Later hides it for an hour; it comes back on every launch until you update.
 - Home: the Save progress card for guests now stands out as a caution.
 - Web: pinch on a trackpad zooms giant boards, and the store lists every bundle without prices.
+- Store: when the App Store had no products at launch, opening the store or tapping a bundle asks again, instead of "not available" until the app is closed.
 - Links: cardjigsaw:// links open the matching screen in the app, and the same paths work on the web site (a pack, a picture, a profile, the store, a pack code filled in).
 
 Please try: Later on the update prompt once the next build arrives, then reopen the app; and cardjigsaw://daily typed into Safari's address bar.

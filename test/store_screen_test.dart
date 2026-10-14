@@ -34,6 +34,33 @@ class _NoStore extends PurchaseService {
   Future<Map<String, ProductDetails>> queryProducts() async => const {};
 }
 
+/// An App Store that answers without products for its first [emptyAnswers] queries (no network,
+/// or Apple not serving them yet after the Paid Apps agreement), then with Coins 2,500.
+class _LateStore extends PurchaseService {
+  _LateStore({required this.emptyAnswers}) : super(Client());
+  final int emptyAnswers;
+  int queries = 0;
+  ProductDetails? bought;
+  @override
+  Future<void> start() async {}
+  @override
+  Future<bool> isAvailable() async => true;
+  @override
+  Future<Map<String, ProductDetails>> queryProducts() async {
+    queries++;
+    if (queries <= emptyAnswers) return const {};
+    return {
+      ProductIds.coins1000: ProductDetails(id: ProductIds.coins1000, title: 'Coins', description: '', price: '1,09 €', rawPrice: 1.09, currencyCode: 'EUR'),
+    };
+  }
+
+  @override
+  Future<bool> buy(ProductDetails product) async {
+    bought = product;
+    return true;
+  }
+}
+
 /// iPhone 17 Pro portrait: 402 x 874 pt, 62 pt status bar, 34 pt home indicator.
 const _homeIndicator = 34.0;
 
@@ -87,5 +114,49 @@ void main() {
     expect(footer, findsOneWidget);
     final bottom = tester.getBottomLeft(footer).dy;
     expect(bottom, lessThanOrEqualTo(874 - _homeIndicator - 8), reason: 'footer ends at $bottom');
+  });
+
+  group('products asked for again', () {
+    Future<ProviderContainer> pumpLate(WidgetTester tester, _LateStore service) async {
+      SharedPreferences.setMockInitialValues({'onboarded': true});
+      final store = await LocalStore.open();
+      tester.view.physicalSize = const Size(402 * 3, 874 * 3);
+      tester.view.devicePixelRatio = 3;
+      addTearDown(tester.view.reset);
+      final container = ProviderContainer(overrides: [
+        localStoreProvider.overrideWithValue(store),
+        platformCapsProvider.overrideWithValue(PlatformCaps.ios),
+        profileProvider.overrideWith(_GuestProfile.new),
+        isGuestProvider.overrideWithValue(true),
+        purchaseServiceProvider.overrideWith((ref) => service),
+      ]);
+      addTearDown(container.dispose);
+      // Earlier in the launch (Home, say) the App Store answered without products.
+      expect(await container.read(productsProvider.future), isEmpty);
+      await tester.pumpWidget(UncontrolledProviderScope(
+        container: container,
+        child: MaterialApp(theme: AppTheme.light(), home: const StoreScreen()),
+      ));
+      await tester.pumpAndSettle();
+      return container;
+    }
+
+    testWidgets('opening the store asks again, so the App Store prices show', (tester) async {
+      final service = _LateStore(emptyAnswers: 1);
+      await pumpLate(tester, service);
+      expect(service.queries, 2);
+      expect(find.text('1,09 €'), findsOneWidget);
+    });
+
+    testWidgets('a tap asks again before saying the App Store is not available', (tester) async {
+      final service = _LateStore(emptyAnswers: 2);
+      await pumpLate(tester, service);
+      expect(find.text('1,09 €'), findsNothing, reason: 'still no products when the store opened');
+      await tester.tap(find.text(StoreProducts.grant(ProductIds.coins1000).label));
+      await tester.pumpAndSettle();
+      expect(service.queries, 3);
+      expect(service.bought?.id, ProductIds.coins1000);
+      expect(find.textContaining('not available right now'), findsNothing);
+    });
   });
 }

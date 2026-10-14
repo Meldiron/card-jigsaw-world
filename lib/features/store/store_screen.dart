@@ -54,6 +54,12 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
       final service = ref.read(purchaseServiceProvider);
       service.start();
       _events = service.events.listen(_onPurchaseEvent);
+      // Opened after an answer without products: ask the App Store again, so the prices load.
+      if ((ref.read(productsProvider).value ?? const {}).isEmpty) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) ref.invalidate(storeAvailableProvider);
+        });
+      }
     }
     if (widget.showVip) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -150,11 +156,25 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
 
   bool get _storeAvailable => ref.read(storeAvailableProvider).value ?? false;
 
+  /// The App Store's product [id]. The products are asked for once per launch, so an answer
+  /// without them (no network, or Apple not serving them yet, as for a while after the Paid Apps
+  /// agreement turns active) is asked again before the store says it is not available.
+  Future<ProductDetails?> _product(String id) async {
+    final details = ref.read(productsProvider).value?[id];
+    if (details != null && _storeAvailable) return details;
+    if (!ref.read(platformCapsProvider).purchases) return null;
+    setState(() => _buying = true);
+    ref.invalidate(storeAvailableProvider);
+    final products = await ref.read(productsProvider.future);
+    if (mounted) setState(() => _buying = false);
+    return _storeAvailable ? products[id] : null;
+  }
+
   Future<void> _buy(_Product p) async {
     if (_buying) return;
-    final products = ref.read(productsProvider).value ?? const {};
-    final details = products[p.id];
-    if (_storeAvailable && details != null) {
+    final details = await _product(p.id);
+    if (!mounted) return;
+    if (details != null) {
       setState(() => _buying = true);
       final started = await ref.read(purchaseServiceProvider).buy(details);
       if (!started && mounted) setState(() => _buying = false);
@@ -189,9 +209,9 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
 
   Future<void> _buyVip(String productId) async {
     if (_buying) return;
-    final products = ref.read(productsProvider).value ?? const {};
-    final details = products[productId];
-    if (_storeAvailable && details != null) {
+    final details = await _product(productId);
+    if (!mounted) return;
+    if (details != null) {
       setState(() => _buying = true);
       final started = await ref.read(purchaseServiceProvider).buy(details);
       if (!started && mounted) setState(() => _buying = false);
