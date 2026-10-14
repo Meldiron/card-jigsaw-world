@@ -1,0 +1,2536 @@
+{
+ "pack": {
+  "id": "pack-treasure-trove",
+  "name": "Treasure Trove",
+  "category": "Giant",
+  "description": "Bazaars, banquets, vaults and storerooms packed with hand-drawn things, every one different, for boards of 300 cards.",
+  "sortOrder": 1340,
+  "price": "coins"
+ },
+ "canvas": [
+  3072,
+  4096
+ ],
+ "grid": 6,
+ "max_uses": 7,
+ "max_items": 330,
+ "defaults": {
+  "size": {
+   "min": 0.07,
+   "max": 0.13,
+   "power": 1.0
+  },
+  "hero_size": {
+   "min": 0.14,
+   "max": 0.2,
+   "power": 1.0
+  },
+  "fill_size": {
+   "min": 0.055,
+   "max": 0.11,
+   "min_px": 120
+  },
+  "cover": 0.82,
+  "max_ov": 0.15,
+  "fill_ov": 0.3,
+  "fill_cover": 0.94,
+  "palette_max": 50,
+  "row": {
+   "min": 0.55,
+   "max": 0.98,
+   "gap": [
+    -0.12,
+    0.04
+   ]
+  }
+ },
+ "fill_all": [],
+ "pictures": [
+  {
+   "slug": "grand-bazaar",
+   "title": "Grand bazaar",
+   "seed": 901,
+   "palette": [
+    "#c0392b",
+    "#f39c12",
+    "#16a085",
+    "#8e44ad"
+   ],
+   "layout": {
+    "type": "trays",
+    "n": 12,
+    "gutter": 0.02,
+    "rim": 0.014,
+    "rims": [
+     "#c0392b",
+     "#16a085",
+     "#f39c12",
+     "#8e44ad",
+     "#2980b9",
+     "#d35400"
+    ],
+    "base": {
+     "type": "cobble",
+     "colors": [
+      "#c8b89a",
+      "#b9a98a",
+      "#d6c6a8"
+     ],
+     "size": 120,
+     "mortar": "#8a7a5e"
+    }
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:fruit"
+     ],
+     "ground": {
+      "type": "linen",
+      "colors": [
+       "#f7efe0"
+      ]
+     },
+     "hero": [
+      "pineapple",
+      "bunch_of_grapes"
+     ],
+     "size": {
+      "min": 0.09,
+      "max": 0.17,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:spices",
+      "tag:rubs"
+     ],
+     "ground": {
+      "type": "linen",
+      "colors": [
+       "#f3e3c3"
+      ]
+     },
+     "size": {
+      "min": 0.07,
+      "max": 0.13,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:potions"
+     ],
+     "ground": {
+      "type": "linen",
+      "colors": [
+       "#e8e0f3"
+      ]
+     },
+     "size": {
+      "min": 0.07,
+      "max": 0.13,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:jewels",
+      "tag:crystals"
+     ],
+     "ground": {
+      "type": "linen",
+      "colors": [
+       "#1f2a6b"
+      ]
+     },
+     "size": {
+      "min": 0.07,
+      "max": 0.13,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:sweets"
+     ],
+     "ground": {
+      "type": "linen",
+      "colors": [
+       "#fde4ec"
+      ]
+     },
+     "size": {
+      "min": 0.07,
+      "max": 0.13,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:f_rug",
+      "tag:f_deco"
+     ],
+     "ground": {
+      "type": "linen",
+      "colors": [
+       "#efe6d2"
+      ]
+     },
+     "size": {
+      "mode": "native",
+      "min": 0.8,
+      "max": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:fruit",
+    "tag:veg",
+    "tag:breakfast",
+    "tag:bakery",
+    "tag:sandwich",
+    "tag:cheese",
+    "tag:bowls",
+    "tag:noodles",
+    "tag:salad",
+    "tag:grill",
+    "tag:jars",
+    "tag:spices",
+    "tag:sweets",
+    "tag:juices",
+    "tag:cocktails",
+    "tag:hotdrinks",
+    "tag:herbs",
+    "tag:seeds",
+    "tag:vegbags",
+    "tag:rubs",
+    "tag:handtools",
+    "tag:machines",
+    "tag:lab",
+    "tag:compounds",
+    "tag:potions",
+    "tag:powders",
+    "tag:ores",
+    "tag:jewels",
+    "tag:curios",
+    "tag:harvest",
+    "tag:kitchentools",
+    "tag:props",
+    "tag:crystals"
+   ]
+  },
+  {
+   "slug": "castle-storeroom",
+   "title": "Castle storeroom",
+   "seed": 902,
+   "priority": 1,
+   "palette": [
+    "#7f8c8d",
+    "#c0392b",
+    "#d4a017"
+   ],
+   "layout": {
+    "type": "cubbies",
+    "row_cols": [
+     3,
+     4,
+     3,
+     4,
+     3,
+     4,
+     3,
+     4,
+     3
+    ],
+    "frame": [
+     "#6b452c",
+     "#5d3c26",
+     "#7a5034"
+    ],
+    "frame_w": 0.016,
+    "board_h": 0.012
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:jars",
+      "tag:props",
+      "tag:f_cabinet",
+      "tag:f_counter"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#8a8f96"
+      ]
+     },
+     "hero": [
+      "furniture_roomdeco_barrel"
+     ]
+    },
+    {
+     "items": [
+      "tag:bakery",
+      "tag:cheese",
+      "tag:vegbags"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#8b4a3a"
+      ]
+     }
+    },
+    {
+     "items": [
+      "tag:handtools",
+      "tag:kitchentools",
+      "tag:f_lamp",
+      "tag:f_cabinet"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#4a6741"
+      ]
+     }
+    }
+   ],
+   "row": {
+    "min": 0.55,
+    "max": 0.98,
+    "min_frac": 0.12,
+    "fill_all": true
+   },
+   "fill": [
+    "tag:fruit",
+    "tag:veg",
+    "tag:breakfast",
+    "tag:bakery",
+    "tag:sandwich",
+    "tag:cheese",
+    "tag:bowls",
+    "tag:noodles",
+    "tag:salad",
+    "tag:grill",
+    "tag:jars",
+    "tag:spices",
+    "tag:sweets",
+    "tag:juices",
+    "tag:cocktails",
+    "tag:hotdrinks",
+    "tag:herbs",
+    "tag:seeds",
+    "tag:vegbags",
+    "tag:rubs",
+    "tag:handtools",
+    "tag:machines",
+    "tag:lab",
+    "tag:compounds",
+    "tag:potions",
+    "tag:powders",
+    "tag:ores",
+    "tag:jewels",
+    "tag:curios",
+    "tag:harvest",
+    "tag:kitchentools",
+    "tag:props",
+    "tag:crystals",
+    "tag:f_armchair",
+    "tag:f_chair",
+    "tag:f_sofa",
+    "tag:f_table",
+    "tag:f_cabinet",
+    "tag:f_lamp",
+    "tag:f_deco",
+    "tag:f_plant",
+    "tag:f_bed",
+    "tag:f_rug",
+    "tag:f_door",
+    "tag:f_fireplace",
+    "tag:f_counter"
+   ]
+  },
+  {
+   "slug": "wizards-tower",
+   "title": "Wizard's tower",
+   "seed": 903,
+   "priority": 2,
+   "palette": [
+    "#6c3483",
+    "#17a589",
+    "#5d6d7e",
+    "#e91e63"
+   ],
+   "layout": {
+    "type": "voronoi",
+    "n": 6,
+    "wobble": 0.05
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:potions",
+      "re:^essence_of_"
+     ],
+     "ground": {
+      "type": "tiles",
+      "colors": [
+       "#5b2c6f",
+       "#6c3483",
+       "#7d3c98"
+      ],
+      "size": 110,
+      "grout": "#3b1c4a"
+     },
+     "hero": [
+      "potion_rainbow_juice",
+      "cauldron"
+     ],
+     "size": {
+      "min": 0.09,
+      "max": 0.17,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:crystals",
+      "tag:ores"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#48c9b0",
+       "#1abc9c",
+       "#76d7c4"
+      ],
+      "bg": "#117a65",
+      "kind": "chip"
+     },
+     "size": {
+      "min": 0.09,
+      "max": 0.17,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:lab",
+      "tag:compounds"
+     ],
+     "ground": {
+      "type": "cobble",
+      "colors": [
+       "#aab7b8",
+       "#99a3a4",
+       "#bfc9ca"
+      ],
+      "size": 120,
+      "mortar": "#717d7e"
+     },
+     "size": {
+      "min": 0.07,
+      "max": 0.13,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:powders",
+      "tag:jewels"
+     ],
+     "ground": {
+      "type": "check",
+      "colors": [
+       "#f8bbd0",
+       "#fce4ec"
+      ],
+      "size": 60
+     },
+     "size": {
+      "min": 0.07,
+      "max": 0.13,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:curios",
+      "tag:mushrooms"
+     ],
+     "ground": {
+      "type": "planks",
+      "colors": [
+       "#b9770e",
+       "#a66a0c",
+       "#ca8a1e"
+      ],
+      "width": 120,
+      "vertical": false
+     },
+     "size": {
+      "min": 0.07,
+      "max": 0.13,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:f_lamp",
+      "tag:f_deco",
+      "tag:ferns"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#1f3a5f"
+      ]
+     },
+     "size": {
+      "mode": "native",
+      "min": 0.8,
+      "max": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:handtools",
+    "tag:machines",
+    "tag:lab",
+    "tag:compounds",
+    "tag:potions",
+    "tag:powders",
+    "tag:ores",
+    "tag:jewels",
+    "tag:curios",
+    "tag:harvest",
+    "tag:kitchentools",
+    "tag:props",
+    "tag:crystals",
+    "tag:flowers",
+    "tag:bushes",
+    "tag:trees",
+    "tag:mushrooms",
+    "tag:ferns",
+    "tag:rocks",
+    "tag:cactus",
+    "tag:bogplants",
+    "tag:yardthings",
+    "tag:gardentools"
+   ]
+  },
+  {
+   "slug": "harvest-fair",
+   "title": "Harvest fair",
+   "seed": 904,
+   "palette": [
+    "#e67e22",
+    "#27ae60",
+    "#f1c40f",
+    "#c0392b"
+   ],
+   "layout": {
+    "type": "crates",
+    "cols": 3,
+    "rows": 4,
+    "gutter": 0.02,
+    "rim": 0.022,
+    "rim_colors": [
+     "#c9a06a",
+     "#b98f5c",
+     "#d8b07a"
+    ],
+    "base": {
+     "type": "grass",
+     "density": 1.2
+    }
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:veg"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#6d4c41",
+       "#5d4037",
+       "#8d6e63"
+      ],
+      "bg": "#4e3529"
+     },
+     "hero": [
+      "pumpkin",
+      "cabbage"
+     ],
+     "size": {
+      "min": 0.09,
+      "max": 0.17,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:fruit"
+     ],
+     "ground": {
+      "type": "linen",
+      "colors": [
+       "#e8d6b0"
+      ]
+     },
+     "size": {
+      "min": 0.09,
+      "max": 0.17,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:flowers"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#6d4c41",
+       "#5d4037",
+       "#8d6e63"
+      ],
+      "bg": "#4e3529"
+     },
+     "size": {
+      "min": 0.07,
+      "max": 0.13,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:seeds",
+      "tag:vegbags",
+      "tag:patches"
+     ],
+     "ground": {
+      "type": "linen",
+      "colors": [
+       "#d9c49a"
+      ]
+     },
+     "size": {
+      "min": 0.07,
+      "max": 0.13,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:trants",
+      "tag:harvest"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#6d4c41",
+       "#5d4037",
+       "#8d6e63"
+      ],
+      "bg": "#4e3529"
+     },
+     "size": {
+      "min": 0.07,
+      "max": 0.13,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:bakery",
+      "tag:jars"
+     ],
+     "ground": {
+      "type": "check",
+      "colors": [
+       "#c0392b",
+       "#fbf1e3"
+      ],
+      "size": 46
+     },
+     "size": {
+      "min": 0.07,
+      "max": 0.13,
+      "power": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:fruit",
+    "tag:veg",
+    "tag:breakfast",
+    "tag:bakery",
+    "tag:sandwich",
+    "tag:cheese",
+    "tag:bowls",
+    "tag:noodles",
+    "tag:salad",
+    "tag:grill",
+    "tag:jars",
+    "tag:spices",
+    "tag:sweets",
+    "tag:juices",
+    "tag:cocktails",
+    "tag:hotdrinks",
+    "tag:herbs",
+    "tag:seeds",
+    "tag:vegbags",
+    "tag:rubs",
+    "tag:flowers",
+    "tag:bushes",
+    "tag:trees",
+    "tag:mushrooms",
+    "tag:ferns",
+    "tag:rocks",
+    "tag:cactus",
+    "tag:bogplants",
+    "tag:yardthings",
+    "tag:gardentools"
+   ]
+  },
+  {
+   "slug": "royal-banquet",
+   "title": "Royal banquet",
+   "seed": 905,
+   "palette": [
+    "#922b21",
+    "#d4ac0d",
+    "#f5eef8"
+   ],
+   "layout": {
+    "type": "table",
+    "shape": "oval",
+    "margin": 0.07,
+    "plates": 14,
+    "plate": "#fbf7f0",
+    "edge": 0.015,
+    "base": {
+     "type": "plaid",
+     "colors": [
+      "#922b21",
+      "#7b241c",
+      "#d4ac0d",
+      "#1b2631"
+     ],
+     "size": 120
+    }
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:grill",
+      "tag:bowls",
+      "tag:bakery",
+      "tag:cheese",
+      "tag:fruit",
+      "tag:cocktails",
+      "tag:juices",
+      "tag:sweets",
+      "tag:salad"
+     ],
+     "ground": {
+      "type": "linen",
+      "colors": [
+       "#f5eef8"
+      ]
+     },
+     "hero": [
+      "potians_feast",
+      "simple_bbq",
+      "pumpkin_pie",
+      "fruit_salad"
+     ],
+     "size": {
+      "min": 0.09,
+      "max": 0.17,
+      "power": 1.0
+     },
+     "fill_cover": 0.95
+    },
+    {
+     "items": [
+      "tag:f_chair",
+      "tag:f_armchair",
+      "tag:f_lamp",
+      "tag:f_deco"
+     ],
+     "ground": {
+      "type": "plaid",
+      "colors": [
+       "#922b21",
+       "#7b241c",
+       "#d4ac0d",
+       "#1b2631"
+      ],
+      "size": 120
+     },
+     "size": {
+      "mode": "native",
+      "min": 0.8,
+      "max": 1.0
+     },
+     "fill_cover": 0.85
+    }
+   ],
+   "fill": [
+    "tag:fruit",
+    "tag:veg",
+    "tag:breakfast",
+    "tag:bakery",
+    "tag:sandwich",
+    "tag:cheese",
+    "tag:bowls",
+    "tag:noodles",
+    "tag:salad",
+    "tag:grill",
+    "tag:jars",
+    "tag:spices",
+    "tag:sweets",
+    "tag:juices",
+    "tag:cocktails",
+    "tag:hotdrinks",
+    "tag:herbs",
+    "tag:seeds",
+    "tag:vegbags",
+    "tag:rubs"
+   ]
+  },
+  {
+   "slug": "garden-party",
+   "title": "Garden party",
+   "seed": 906,
+   "palette": [
+    "#58d68d",
+    "#f5b7b1",
+    "#f9e79f"
+   ],
+   "layout": {
+    "type": "cloth",
+    "margin": 0.12,
+    "border": {
+     "colors": [
+      "#f5b7b1",
+      "#ffffff"
+     ],
+     "width": 0.02
+    }
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:sweets",
+      "tag:juices",
+      "tag:cocktails",
+      "tag:bakery",
+      "tag:fruit",
+      "tag:sandwich"
+     ],
+     "ground": {
+      "type": "check",
+      "colors": [
+       "#f5b7b1",
+       "#fffafa"
+      ],
+      "size": 70
+     },
+     "hero": [
+      "birch_candy",
+      "berry_bowl",
+      "deluxe_sammich"
+     ],
+     "size": {
+      "min": 0.09,
+      "max": 0.17,
+      "power": 1.0
+     },
+     "fill_cover": 0.95
+    },
+    {
+     "items": [
+      "tag:flowers",
+      "tag:bushes",
+      "tag:yardthings",
+      "tag:f_plant"
+     ],
+     "ground": {
+      "type": "grass",
+      "density": 1.2
+     },
+     "size": {
+      "mode": "native",
+      "min": 0.8,
+      "max": 1.0
+     },
+     "fill_cover": 0.9
+    }
+   ],
+   "fill": [
+    "tag:fruit",
+    "tag:veg",
+    "tag:breakfast",
+    "tag:bakery",
+    "tag:sandwich",
+    "tag:cheese",
+    "tag:bowls",
+    "tag:noodles",
+    "tag:salad",
+    "tag:grill",
+    "tag:jars",
+    "tag:spices",
+    "tag:sweets",
+    "tag:juices",
+    "tag:cocktails",
+    "tag:hotdrinks",
+    "tag:herbs",
+    "tag:seeds",
+    "tag:vegbags",
+    "tag:rubs",
+    "tag:flowers",
+    "tag:bushes",
+    "tag:trees",
+    "tag:mushrooms",
+    "tag:ferns",
+    "tag:rocks",
+    "tag:cactus",
+    "tag:bogplants",
+    "tag:yardthings",
+    "tag:gardentools"
+   ]
+  },
+  {
+   "slug": "forest-fair",
+   "title": "Forest fair",
+   "seed": 907,
+   "priority": 2,
+   "palette": [
+    "#1e8449",
+    "#a04000",
+    "#d4ac0d",
+    "#7d6608"
+   ],
+   "layout": {
+    "type": "diag",
+    "n": 3,
+    "wobble": 0.05
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:mushrooms",
+      "tag:ferns"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#8d6e63",
+       "#a1887f",
+       "#d7a86e"
+      ],
+      "bg": "#5d4037",
+      "kind": "chip"
+     },
+     "hero": [
+      "groddle/mushroom_amanita_1"
+     ],
+     "size": {
+      "min": 0.09,
+      "max": 0.17,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:trees",
+      "tag:bushes",
+      "tag:flowers"
+     ],
+     "ground": {
+      "type": "grass",
+      "colors": [
+       "#8bc34a",
+       "#9ccc65",
+       "#7cb342",
+       "#c5e1a5"
+      ],
+      "flowers": [
+       "#ffffff",
+       "#ffeb3b",
+       "#f48fb1"
+      ]
+     },
+     "size": {
+      "mode": "native",
+      "min": 0.8,
+      "max": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:rocks",
+      "tag:yardthings",
+      "tag:gardentools"
+     ],
+     "ground": {
+      "type": "cobble",
+      "colors": [
+       "#bdbdbd",
+       "#a8a8a8",
+       "#d0d0d0"
+      ],
+      "size": 120,
+      "mortar": "#7d7d7d"
+     },
+     "size": {
+      "min": 0.07,
+      "max": 0.13,
+      "power": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:flowers",
+    "tag:bushes",
+    "tag:trees",
+    "tag:mushrooms",
+    "tag:ferns",
+    "tag:rocks",
+    "tag:cactus",
+    "tag:bogplants",
+    "tag:yardthings",
+    "tag:gardentools",
+    "tag:harvest",
+    "tag:trants"
+   ]
+  },
+  {
+   "slug": "mine-and-forge",
+   "title": "Mine and forge",
+   "seed": 908,
+   "priority": 3,
+   "palette": [
+    "#566573",
+    "#e67e22",
+    "#48c9b0"
+   ],
+   "layout": {
+    "type": "grid",
+    "cols": 2,
+    "rows": 3
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:ores",
+      "tag:crystals"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#5d4037",
+       "#4e342e",
+       "#6d4c41"
+      ],
+      "bg": "#3e2f27"
+     },
+     "hero": [
+      "rock_metal_1",
+      "rock_beryl_1"
+     ],
+     "size": {
+      "min": 0.09,
+      "max": 0.17,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:machines"
+     ],
+     "ground": {
+      "type": "tiles",
+      "colors": [
+       "#85929e",
+       "#7f8c8d",
+       "#95a5a6"
+      ],
+      "size": 130,
+      "grout": "#566573"
+     },
+     "hero": [
+      "smelter",
+      "metalmaker"
+     ],
+     "size": {
+      "min": 0.09,
+      "max": 0.17,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:handtools",
+      "tag:kitchentools"
+     ],
+     "ground": {
+      "type": "planks",
+      "colors": [
+       "#e67e22",
+       "#d35400",
+       "#eb984e"
+      ],
+      "width": 120,
+      "vertical": false
+     },
+     "size": {
+      "min": 0.07,
+      "max": 0.13,
+      "power": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:handtools",
+    "tag:machines",
+    "tag:lab",
+    "tag:compounds",
+    "tag:potions",
+    "tag:powders",
+    "tag:ores",
+    "tag:jewels",
+    "tag:curios",
+    "tag:harvest",
+    "tag:kitchentools",
+    "tag:props",
+    "tag:crystals"
+   ]
+  },
+  {
+   "slug": "greenhouse",
+   "title": "Greenhouse",
+   "seed": 909,
+   "priority": 2,
+   "palette": [
+    "#e91e63",
+    "#ffffff",
+    "#9c27b0",
+    "#ffeb3b"
+   ],
+   "layout": {
+    "type": "trays",
+    "n": 10,
+    "gutter": 0.02,
+    "rim": 0.016,
+    "rims": [
+     "#ffffff",
+     "#f8bbd0",
+     "#e1bee7",
+     "#fff9c4"
+    ],
+    "base": {
+     "type": "tiles",
+     "colors": [
+      "#fce4ec",
+      "#f8bbd0"
+     ],
+     "size": 110,
+     "pattern": "checker",
+     "grout": "#ffffff"
+    }
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:flowers"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#ffffff"
+      ]
+     },
+     "hero": [
+      "groddle/flower_bush_4",
+      "groddle/flower_group_1"
+     ],
+     "size": {
+      "min": 0.09,
+      "max": 0.17,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:f_plant",
+      "tag:herbs",
+      "tag:bushes"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#f3e5f5"
+      ]
+     },
+     "size": {
+      "min": 0.07,
+      "max": 0.13,
+      "power": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:flowers",
+    "tag:bushes",
+    "tag:trees",
+    "tag:mushrooms",
+    "tag:ferns",
+    "tag:rocks",
+    "tag:cactus",
+    "tag:bogplants",
+    "tag:yardthings",
+    "tag:gardentools",
+    "tag:herbs",
+    "tag:f_plant"
+   ]
+  },
+  {
+   "slug": "snow-lodge",
+   "title": "Snow lodge",
+   "seed": 910,
+   "palette": [
+    "#eaf2f8",
+    "#a04000",
+    "#2e86c1"
+   ],
+   "layout": {
+    "type": "hbands",
+    "n": 3,
+    "sizes": [
+     2,
+     3,
+     2
+    ],
+    "wobble": 0.03
+   },
+   "zones": [
+    {
+     "items": [
+      "re:^alpine_landscape/(snow_bush|snow_pinecluster|rock_snowy|mountain_bonsai)",
+      "re:^groddle/(tree_coniferous|whitesnow_|snow_patch)",
+      "tag:rocks"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#ffffff",
+       "#e3f2fd",
+       "#cfe8f7"
+      ],
+      "bg": "#eef6fb",
+      "kind": "chip"
+     },
+     "size": {
+      "mode": "native",
+      "min": 0.8,
+      "max": 1.0
+     }
+    },
+    {
+     "items": [
+      "re:log_cabin",
+      "tag:f_fireplace",
+      "tag:f_armchair",
+      "tag:f_rug"
+     ],
+     "ground": {
+      "type": "planks",
+      "colors": [
+       "#a04000",
+       "#8e3a00",
+       "#b5530f"
+      ],
+      "width": 140,
+      "vertical": false
+     },
+     "hero": [
+      "furniture_fireplace_rocky_fireplace",
+      "furniture_bed_log_cabin_bed"
+     ],
+     "size": {
+      "mode": "native",
+      "min": 0.8,
+      "max": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:hotdrinks",
+      "tag:bowls",
+      "tag:bakery",
+      "tag:breakfast"
+     ],
+     "ground": {
+      "type": "check",
+      "colors": [
+       "#2e86c1",
+       "#eaf2f8"
+      ],
+      "size": 60
+     },
+     "size": {
+      "min": 0.07,
+      "max": 0.13,
+      "power": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:hotdrinks",
+    "tag:bowls",
+    "tag:bakery",
+    "tag:breakfast",
+    "tag:trees",
+    "tag:rocks",
+    "tag:f_fireplace",
+    "tag:f_armchair"
+   ]
+  },
+  {
+   "slug": "desert-caravan",
+   "title": "Desert caravan",
+   "seed": 911,
+   "palette": [
+    "#dcc28c",
+    "#a04000",
+    "#1abc9c"
+   ],
+   "layout": {
+    "type": "vbands",
+    "n": 2,
+    "sizes": [
+     1,
+     1
+    ],
+    "wobble": 0.04
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:cactus",
+      "re:tree_acacia",
+      "re:^groddle(_arid)?/(pampas_|stalagmite_)",
+      "tag:rocks"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#e8d2a0",
+       "#d9bf86",
+       "#f2e2bc"
+      ],
+      "bg": "#dcc28c",
+      "kind": "chip",
+      "rmin": 3,
+      "rmax": 9
+     },
+     "hero": [
+      "groddle/tree_acacia_1"
+     ],
+     "size": {
+      "mode": "native",
+      "min": 0.8,
+      "max": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:spices",
+      "tag:jars",
+      "tag:f_rug",
+      "tag:jewels",
+      "tag:rubs"
+     ],
+     "ground": {
+      "type": "plaid",
+      "colors": [
+       "#a04000",
+       "#1abc9c",
+       "#f4d03f",
+       "#6e2c00"
+      ],
+      "size": 100
+     },
+     "size": {
+      "min": 0.07,
+      "max": 0.13,
+      "power": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:fruit",
+    "tag:veg",
+    "tag:breakfast",
+    "tag:bakery",
+    "tag:sandwich",
+    "tag:cheese",
+    "tag:bowls",
+    "tag:noodles",
+    "tag:salad",
+    "tag:grill",
+    "tag:jars",
+    "tag:spices",
+    "tag:sweets",
+    "tag:juices",
+    "tag:cocktails",
+    "tag:hotdrinks",
+    "tag:herbs",
+    "tag:seeds",
+    "tag:vegbags",
+    "tag:rubs",
+    "tag:handtools",
+    "tag:machines",
+    "tag:lab",
+    "tag:compounds",
+    "tag:potions",
+    "tag:powders",
+    "tag:ores",
+    "tag:jewels",
+    "tag:curios",
+    "tag:harvest",
+    "tag:kitchentools",
+    "tag:props",
+    "tag:crystals",
+    "tag:flowers",
+    "tag:bushes",
+    "tag:trees",
+    "tag:mushrooms",
+    "tag:ferns",
+    "tag:rocks",
+    "tag:cactus",
+    "tag:bogplants",
+    "tag:yardthings",
+    "tag:gardentools"
+   ]
+  },
+  {
+   "slug": "treat-fair",
+   "title": "Treat fair",
+   "seed": 912,
+   "priority": 2,
+   "palette": [
+    "#ff6f91",
+    "#00c9a7",
+    "#ffc75f",
+    "#845ec2"
+   ],
+   "layout": {
+    "type": "grid",
+    "cols": 3,
+    "rows": 3
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:sweets"
+     ],
+     "ground": {
+      "type": "stripes",
+      "colors": [
+       "#ff9671",
+       "#ffe0d6"
+      ],
+      "size": 50,
+      "angle": 45
+     },
+     "hero": [
+      "corn_syrup_squares"
+     ],
+     "size": {
+      "min": 0.09,
+      "max": 0.17,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:compounds"
+     ],
+     "ground": {
+      "type": "dots",
+      "colors": [
+       "#00c9a7",
+       "#e6fff8"
+      ],
+      "size": 70
+     },
+     "size": {
+      "min": 0.07,
+      "max": 0.13,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:juices",
+      "tag:cocktails"
+     ],
+     "ground": {
+      "type": "check",
+      "colors": [
+       "#ffc75f",
+       "#fff6e0"
+      ],
+      "size": 56
+     },
+     "size": {
+      "min": 0.07,
+      "max": 0.13,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:potions",
+      "tag:powders"
+     ],
+     "ground": {
+      "type": "stripes",
+      "colors": [
+       "#845ec2",
+       "#ece3f8"
+      ],
+      "size": 50,
+      "angle": 135
+     },
+     "size": {
+      "min": 0.07,
+      "max": 0.13,
+      "power": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:fruit",
+    "tag:veg",
+    "tag:breakfast",
+    "tag:bakery",
+    "tag:sandwich",
+    "tag:cheese",
+    "tag:bowls",
+    "tag:noodles",
+    "tag:salad",
+    "tag:grill",
+    "tag:jars",
+    "tag:spices",
+    "tag:sweets",
+    "tag:juices",
+    "tag:cocktails",
+    "tag:hotdrinks",
+    "tag:herbs",
+    "tag:seeds",
+    "tag:vegbags",
+    "tag:rubs",
+    "tag:handtools",
+    "tag:machines",
+    "tag:lab",
+    "tag:compounds",
+    "tag:potions",
+    "tag:powders",
+    "tag:ores",
+    "tag:jewels",
+    "tag:curios",
+    "tag:harvest",
+    "tag:kitchentools",
+    "tag:props",
+    "tag:crystals"
+   ]
+  },
+  {
+   "slug": "jewel-vault",
+   "title": "Jewel vault",
+   "seed": 913,
+   "priority": 4,
+   "palette": [
+    "#d4ac0d",
+    "#922b21",
+    "#1f618d"
+   ],
+   "layout": {
+    "type": "ring",
+    "margin": 0.18,
+    "wobble": 0.02
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:jewels",
+      "tag:crystals",
+      "re:^bag_furniture_smallcabinet_",
+      "re:^rock_sparkly_",
+      "re:(baroque|mahogany|golden|marble)",
+      "tag:curios"
+     ],
+     "ground": {
+      "type": "plaid",
+      "colors": [
+       "#7b1f2b",
+       "#5e1621",
+       "#d4ac0d",
+       "#1b2631"
+      ],
+      "size": 110
+     },
+     "hero": [
+      "bag_furniture_smallcabinet_treasure_chest"
+     ],
+     "size": {
+      "mode": "native",
+      "min": 0.8,
+      "max": 1.0
+     },
+     "fill_cover": 0.92
+    },
+    {
+     "items": [
+      "tag:f_lamp",
+      "tag:f_cabinet",
+      "tag:f_deco",
+      "tag:f_armchair"
+     ],
+     "ground": {
+      "type": "planks",
+      "colors": [
+       "#8b2f2f",
+       "#7a2828",
+       "#9a3a3a"
+      ],
+      "width": 140,
+      "vertical": false
+     },
+     "size": {
+      "mode": "native",
+      "min": 0.8,
+      "max": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:handtools",
+    "tag:machines",
+    "tag:lab",
+    "tag:compounds",
+    "tag:potions",
+    "tag:powders",
+    "tag:ores",
+    "tag:jewels",
+    "tag:curios",
+    "tag:harvest",
+    "tag:kitchentools",
+    "tag:props",
+    "tag:crystals",
+    "tag:f_armchair",
+    "tag:f_chair",
+    "tag:f_sofa",
+    "tag:f_table",
+    "tag:f_cabinet",
+    "tag:f_lamp",
+    "tag:f_deco",
+    "tag:f_plant",
+    "tag:f_bed",
+    "tag:f_rug",
+    "tag:f_door",
+    "tag:f_fireplace",
+    "tag:f_counter"
+   ]
+  },
+  {
+   "slug": "furniture-hall",
+   "title": "Furniture hall",
+   "seed": 914,
+   "priority": 1,
+   "palette": [
+    "#a9cce3",
+    "#f5cba7",
+    "#a3e4d7",
+    "#d7bde2"
+   ],
+   "layout": {
+    "type": "cubbies",
+    "row_cols": [
+     3,
+     4,
+     3,
+     4,
+     3,
+     4,
+     3
+    ],
+    "frame": [
+     "#ecd9b4",
+     "#e2cda4",
+     "#f2e2c2"
+    ],
+    "frame_w": 0.014,
+    "board_h": 0.011,
+    "floor_h": 0.12
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:f_sofa",
+      "tag:f_armchair",
+      "tag:f_lamp"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#a9cce3"
+      ]
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#c48a52",
+       "#b47a45",
+       "#d29a60"
+      ],
+      "width": 60,
+      "vertical": false
+     }
+    },
+    {
+     "items": [
+      "tag:f_bed",
+      "tag:f_cabinet"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#f5cba7"
+      ]
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#6b452c",
+       "#5d3c26",
+       "#7a5034"
+      ],
+      "width": 60,
+      "vertical": false
+     }
+    },
+    {
+     "items": [
+      "tag:f_table",
+      "tag:f_chair",
+      "tag:f_plant"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#a3e4d7"
+      ]
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#ecd9b4",
+       "#e2cda4",
+       "#f2e2c2"
+      ],
+      "width": 60,
+      "vertical": false
+     }
+    },
+    {
+     "items": [
+      "tag:f_fireplace",
+      "tag:f_deco",
+      "tag:f_counter"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#d7bde2"
+      ]
+     },
+     "floor": {
+      "type": "planks",
+      "colors": [
+       "#c48a52",
+       "#b47a45",
+       "#d29a60"
+      ],
+      "width": 60,
+      "vertical": false
+     }
+    }
+   ],
+   "row": {
+    "min": 0.5,
+    "max": 0.98,
+    "min_frac": 0.15,
+    "fill_all": true
+   },
+   "fill": [
+    "tag:f_armchair",
+    "tag:f_chair",
+    "tag:f_sofa",
+    "tag:f_table",
+    "tag:f_cabinet",
+    "tag:f_lamp",
+    "tag:f_deco",
+    "tag:f_plant",
+    "tag:f_bed",
+    "tag:f_rug",
+    "tag:f_door",
+    "tag:f_fireplace",
+    "tag:f_counter"
+   ]
+  },
+  {
+   "slug": "bog-market",
+   "title": "Bog market",
+   "seed": 915,
+   "palette": [
+    "#7d8a3a",
+    "#e9c46a",
+    "#2a9d8f"
+   ],
+   "layout": {
+    "type": "trays",
+    "n": 8,
+    "gutter": 0.022,
+    "rim": 0.018,
+    "rims": [
+     "#5b6b2a",
+     "#2a9d8f",
+     "#e9c46a",
+     "#7d6a3a"
+    ],
+    "base": {
+     "type": "scatter",
+     "colors": [
+      "#6b7a30",
+      "#7d8a3a",
+      "#5a6a28"
+     ],
+     "bg": "#4a5a20",
+     "kind": "chip"
+    }
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:bogplants",
+      "re:^(furniture|bag_furniture)_.*firebog"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#d9d2a6"
+      ]
+     },
+     "hero": [
+      "furniture_sofa_firebog_sofa"
+     ],
+     "size": {
+      "min": 0.07,
+      "max": 0.13,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:mushrooms",
+      "tag:jars",
+      "tag:herbs"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#cfe3dd"
+      ]
+     },
+     "size": {
+      "min": 0.07,
+      "max": 0.13,
+      "power": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:flowers",
+    "tag:bushes",
+    "tag:trees",
+    "tag:mushrooms",
+    "tag:ferns",
+    "tag:rocks",
+    "tag:cactus",
+    "tag:bogplants",
+    "tag:yardthings",
+    "tag:gardentools",
+    "tag:fruit",
+    "tag:veg",
+    "tag:breakfast",
+    "tag:bakery",
+    "tag:sandwich",
+    "tag:cheese",
+    "tag:bowls",
+    "tag:noodles",
+    "tag:salad",
+    "tag:grill",
+    "tag:jars",
+    "tag:spices",
+    "tag:sweets",
+    "tag:juices",
+    "tag:cocktails",
+    "tag:hotdrinks",
+    "tag:herbs",
+    "tag:seeds",
+    "tag:vegbags",
+    "tag:rubs",
+    "tag:handtools",
+    "tag:machines",
+    "tag:lab",
+    "tag:compounds",
+    "tag:potions",
+    "tag:powders",
+    "tag:ores",
+    "tag:jewels",
+    "tag:curios",
+    "tag:harvest",
+    "tag:kitchentools",
+    "tag:props",
+    "tag:crystals"
+   ]
+  },
+  {
+   "slug": "kitchen-garden",
+   "title": "Kitchen garden",
+   "seed": 916,
+   "priority": 2,
+   "palette": [
+    "#5d4037",
+    "#7cb342",
+    "#ff7043"
+   ],
+   "layout": {
+    "type": "hbands",
+    "n": 5,
+    "wobble": 0.01
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:veg",
+      "tag:patches"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#6d4c41",
+       "#5d4037",
+       "#8d6e63"
+      ],
+      "bg": "#4e3529"
+     },
+     "hero": [
+      "pumpkin"
+     ],
+     "size": {
+      "min": 0.09,
+      "max": 0.17,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:herbs",
+      "tag:flowers"
+     ],
+     "ground": {
+      "type": "grass"
+     },
+     "size": {
+      "min": 0.07,
+      "max": 0.13,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:gardentools",
+      "tag:seeds",
+      "tag:yardthings"
+     ],
+     "ground": {
+      "type": "cobble",
+      "colors": [
+       "#cfd8dc",
+       "#b0bec5",
+       "#eceff1"
+      ],
+      "size": 120,
+      "mortar": "#90a4ae"
+     },
+     "size": {
+      "min": 0.07,
+      "max": 0.13,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:trants",
+      "tag:fruit"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#6d4c41",
+       "#5d4037",
+       "#8d6e63"
+      ],
+      "bg": "#4e3529"
+     },
+     "size": {
+      "min": 0.07,
+      "max": 0.13,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:salad",
+      "tag:bushes"
+     ],
+     "ground": {
+      "type": "grass",
+      "colors": [
+       "#9ccc65",
+       "#aed581",
+       "#8bc34a"
+      ]
+     },
+     "size": {
+      "min": 0.07,
+      "max": 0.13,
+      "power": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:flowers",
+    "tag:bushes",
+    "tag:trees",
+    "tag:mushrooms",
+    "tag:ferns",
+    "tag:rocks",
+    "tag:cactus",
+    "tag:bogplants",
+    "tag:yardthings",
+    "tag:gardentools",
+    "tag:fruit",
+    "tag:veg",
+    "tag:breakfast",
+    "tag:bakery",
+    "tag:sandwich",
+    "tag:cheese",
+    "tag:bowls",
+    "tag:noodles",
+    "tag:salad",
+    "tag:grill",
+    "tag:jars",
+    "tag:spices",
+    "tag:sweets",
+    "tag:juices",
+    "tag:cocktails",
+    "tag:hotdrinks",
+    "tag:herbs",
+    "tag:seeds",
+    "tag:vegbags",
+    "tag:rubs"
+   ]
+  },
+  {
+   "slug": "furniture-warehouse",
+   "title": "Furniture warehouse",
+   "seed": 917,
+   "palette": [
+    "#90a4ae",
+    "#ffb74d",
+    "#5d4037"
+   ],
+   "layout": {
+    "type": "crates",
+    "cols": 3,
+    "rows": 4,
+    "gutter": 0.02,
+    "rim": 0.02,
+    "rim_colors": [
+     "#d7b98e",
+     "#c9a77a",
+     "#e3c9a0"
+    ],
+    "base": {
+     "type": "tiles",
+     "colors": [
+      "#90a4ae",
+      "#a2b2ba",
+      "#7f939d"
+     ],
+     "size": 160,
+     "grout": "#607d8b"
+    }
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:f_table",
+      "tag:f_chair"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#f2e2bc",
+       "#e8d2a0",
+       "#fff3d6"
+      ],
+      "bg": "#e0c890",
+      "kind": "chip"
+     },
+     "hero": [
+      "furniture_table_mosaic_cafe_table"
+     ],
+     "size": {
+      "mode": "native",
+      "min": 0.8,
+      "max": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:f_sofa",
+      "tag:f_armchair"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#f2e2bc",
+       "#e8d2a0",
+       "#fff3d6"
+      ],
+      "bg": "#e0c890",
+      "kind": "chip"
+     },
+     "size": {
+      "mode": "native",
+      "min": 0.8,
+      "max": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:f_cabinet",
+      "tag:f_counter"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#f2e2bc",
+       "#e8d2a0",
+       "#fff3d6"
+      ],
+      "bg": "#e0c890",
+      "kind": "chip"
+     },
+     "size": {
+      "mode": "native",
+      "min": 0.8,
+      "max": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:f_door",
+      "tag:f_bed"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#f2e2bc",
+       "#e8d2a0",
+       "#fff3d6"
+      ],
+      "bg": "#e0c890",
+      "kind": "chip"
+     },
+     "size": {
+      "mode": "native",
+      "min": 0.8,
+      "max": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:f_table",
+    "tag:f_chair",
+    "tag:f_sofa",
+    "tag:f_armchair",
+    "tag:f_cabinet",
+    "tag:f_counter",
+    "tag:f_door",
+    "tag:f_bed"
+   ]
+  },
+  {
+   "slug": "tinkers-hall",
+   "title": "Tinker's hall",
+   "seed": 918,
+   "priority": 3,
+   "palette": [
+    "#e67e22",
+    "#2c3e50",
+    "#f1c40f"
+   ],
+   "layout": {
+    "type": "trays",
+    "n": 9,
+    "gutter": 0.022,
+    "rim": 0.016,
+    "rims": [
+     "#2c3e50",
+     "#e67e22",
+     "#f1c40f",
+     "#16a085"
+    ],
+    "base": {
+     "type": "pegboard",
+     "colors": [
+      "#e8b77a"
+     ],
+     "hole": "#6e4b2a",
+     "pitch": 60
+    }
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:machines"
+     ],
+     "ground": {
+      "type": "tiles",
+      "colors": [
+       "#d5dbdb",
+       "#cacfd2"
+      ],
+      "size": 80,
+      "grout": "#aab7b8"
+     },
+     "hero": [
+      "blockmaker",
+      "fuelmaker"
+     ],
+     "size": {
+      "min": 0.09,
+      "max": 0.17,
+      "power": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:handtools",
+      "tag:compounds",
+      "tag:curios"
+     ],
+     "ground": {
+      "type": "linen",
+      "colors": [
+       "#fdebd0"
+      ]
+     },
+     "size": {
+      "min": 0.07,
+      "max": 0.13,
+      "power": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:handtools",
+    "tag:machines",
+    "tag:lab",
+    "tag:compounds",
+    "tag:potions",
+    "tag:powders",
+    "tag:ores",
+    "tag:jewels",
+    "tag:curios",
+    "tag:harvest",
+    "tag:kitchentools",
+    "tag:props",
+    "tag:crystals"
+   ]
+  },
+  {
+   "slug": "antique-market",
+   "title": "Antique market",
+   "seed": 919,
+   "palette": [
+    "#7b3a2a",
+    "#c9a227",
+    "#2e7d32",
+    "#1f3a5f"
+   ],
+   "layout": {
+    "type": "trays",
+    "n": 10,
+    "gutter": 0.02,
+    "rim": 0.014,
+    "rims": [
+     "#7b3a2a",
+     "#c9a227",
+     "#2e7d32",
+     "#1f3a5f",
+     "#8e44ad"
+    ],
+    "base": {
+     "type": "cobble",
+     "colors": [
+      "#bcaaa4",
+      "#a1887f",
+      "#d7ccc8"
+     ],
+     "size": 120,
+     "mortar": "#795548"
+    }
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:f_armchair",
+      "tag:f_sofa",
+      "tag:f_lamp"
+     ],
+     "ground": {
+      "type": "plaid",
+      "colors": [
+       "#7b3a2a",
+       "#a0522d",
+       "#d2b48c",
+       "#3e2723"
+      ],
+      "size": 90
+     },
+     "hero": [
+      "furniture_sofa_baroque_pink_sofa"
+     ],
+     "size": {
+      "mode": "native",
+      "min": 0.8,
+      "max": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:f_cabinet",
+      "tag:f_door"
+     ],
+     "ground": {
+      "type": "stripes",
+      "colors": [
+       "#c9a227",
+       "#f3e5ab"
+      ],
+      "size": 46,
+      "angle": 90
+     },
+     "size": {
+      "mode": "native",
+      "min": 0.8,
+      "max": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:f_table",
+      "tag:f_chair",
+      "tag:f_rug"
+     ],
+     "ground": {
+      "type": "check",
+      "colors": [
+       "#2e7d32",
+       "#e8f5e9"
+      ],
+      "size": 56
+     },
+     "size": {
+      "mode": "native",
+      "min": 0.8,
+      "max": 1.0
+     }
+    },
+    {
+     "items": [
+      "tag:f_bed",
+      "tag:f_counter",
+      "tag:f_fireplace"
+     ],
+     "ground": {
+      "type": "dots",
+      "colors": [
+       "#1f3a5f",
+       "#e3eaf5"
+      ],
+      "size": 64
+     },
+     "size": {
+      "mode": "native",
+      "min": 0.8,
+      "max": 1.0
+     }
+    }
+   ],
+   "fill": [
+    "tag:f_armchair",
+    "tag:f_chair",
+    "tag:f_sofa",
+    "tag:f_table",
+    "tag:f_cabinet",
+    "tag:f_lamp",
+    "tag:f_deco",
+    "tag:f_plant",
+    "tag:f_bed",
+    "tag:f_rug",
+    "tag:f_door",
+    "tag:f_fireplace",
+    "tag:f_counter"
+   ]
+  },
+  {
+   "slug": "grand-pantry",
+   "title": "Grand pantry",
+   "seed": 920,
+   "priority": 1,
+   "palette": [
+    "#7b241c",
+    "#f4d03f",
+    "#1e8449"
+   ],
+   "layout": {
+    "type": "cubbies",
+    "row_cols": [
+     4,
+     3,
+     4,
+     3,
+     4,
+     3,
+     4,
+     3,
+     4
+    ],
+    "frame": [
+     "#c48a52",
+     "#b47a45",
+     "#d29a60"
+    ],
+    "frame_w": 0.014,
+    "board_h": 0.011
+   },
+   "zones": [
+    {
+     "items": [
+      "tag:jars",
+      "tag:spices"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#1e8449"
+      ]
+     }
+    },
+    {
+     "items": [
+      "tag:bakery",
+      "tag:cheese",
+      "tag:breakfast"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#7b241c"
+      ]
+     }
+    },
+    {
+     "items": [
+      "tag:fruit",
+      "tag:veg"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#1f618d"
+      ]
+     }
+    },
+    {
+     "items": [
+      "tag:bowls",
+      "tag:noodles",
+      "tag:grill"
+     ],
+     "ground": {
+      "type": "paint",
+      "colors": [
+       "#b9770e"
+      ]
+     }
+    }
+   ],
+   "row": {
+    "min": 0.5,
+    "max": 0.98,
+    "min_frac": 0.12,
+    "fill_all": true
+   },
+   "fill": [
+    "tag:fruit",
+    "tag:veg",
+    "tag:breakfast",
+    "tag:bakery",
+    "tag:sandwich",
+    "tag:cheese",
+    "tag:bowls",
+    "tag:noodles",
+    "tag:salad",
+    "tag:grill",
+    "tag:jars",
+    "tag:spices",
+    "tag:sweets",
+    "tag:juices",
+    "tag:cocktails",
+    "tag:hotdrinks",
+    "tag:herbs",
+    "tag:seeds",
+    "tag:vegbags",
+    "tag:rubs"
+   ]
+  }
+ ]
+}

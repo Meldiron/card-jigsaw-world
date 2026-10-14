@@ -4,7 +4,7 @@ New ways to play
 - Painting: cards start in black and white and get their colour back as they lock. Pays 25% more.
 - Giant boards of 100 to 300 cards, with pinch and double-tap zoom, an overview map, Locate (tap a card to see its place on the map), Gather, and a board that opens where you left it.
 - Peek costs 10 coins: every card flies to its place for a moment, then back.
-- Four Giant packs of detailed pictures made for the biggest boards: Colourful Houses, Painted Paradises, Market Stalls and Curiosity Shops.
+- Five Giant packs of detailed pictures made for the biggest boards: Colourful Houses, Painted Paradises, Market Stalls, Curiosity Shops and Treasure Trove.
 - Shapes and options open as you level up: Squares, Triangles, Hexagons, Painting, then giant boards, each with a short intro.
 
 Quests and rewards
@@ -26,7 +26,7 @@ Reminders and account
 - Settings: Rate Card Jigsaw World, the real app version, and Redeem a pack code for special packs. Dark and tinted Home Screen icons on iOS 18.
 
 Pictures and sync
-- New Illustration packs: Big Buck Bunny and Fantasy Worlds.
+- New Illustration packs: Big Buck Bunny, Fantasy Worlds, Pantry Shelves, Tinker's Workshop, Garden Plots and House and Home.
 - Every picture is served from our own servers, and the catalogue is rebuilt: no people, no repeats, portrait or square only, at least 20 pictures per pack, new AI and Abstract categories.
 - One save on every device: progress from the iPhone and the web site adds up, play made offline is kept, and records only improve.
 - The Social tab shows one leaderboard, ranked by total XP; it and My Puzzles load more as you scroll.

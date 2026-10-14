@@ -768,26 +768,22 @@
    "fill_cover": 0.86
   },
   {
-   "slug": "potting-bench",
-   "title": "Potting bench",
+   "slug": "potting-shed",
+   "title": "Potting shed",
    "seed": 510,
-   "priority": 1,
    "palette": [
     "#d0703c",
     "#4caf50",
     "#fff3e0"
    ],
    "layout": {
-    "type": "cubbies",
-    "cols": 2,
-    "rows": 3,
-    "frame": [
-     "#c48a52",
-     "#b47a45",
-     "#d29a60"
+    "type": "vbands",
+    "n": 2,
+    "sizes": [
+     3,
+     2
     ],
-    "frame_w": 0.03,
-    "board_h": 0.022
+    "wobble": 0.03
    },
    "zones": [
     {
@@ -796,33 +792,64 @@
       "re:stactus_ball",
       "re:stactuc_pot",
       "ix/potted_cactus",
-      "ix/store_plant_01"
+      "ix/store_plant_01",
+      "tag:flowers"
      ],
      "ground": {
       "type": "tiles",
       "colors": [
        "#e7b48f",
-       "#f0c7a6"
+       "#f0c7a6",
+       "#d9a27a"
       ],
-      "size": 70,
+      "size": 90,
       "grout": "#f8e2d0"
      },
      "hero": [
       "furniture_roomdeco_vase_of_buttercup__roses"
-     ]
+     ],
+     "size": {
+      "min": 0.14,
+      "max": 0.3,
+      "power": 1.0
+     },
+     "fill_cover": 0.88
+    },
+    {
+     "items": [
+      "tag:gardentools",
+      "tag:seeds",
+      "tag:patches",
+      "tag:vegbags"
+     ],
+     "ground": {
+      "type": "scatter",
+      "colors": [
+       "#6d4c41",
+       "#5d4037",
+       "#8d6e63"
+      ],
+      "bg": "#4e3529"
+     },
+     "hero": [
+      "watering_can"
+     ],
+     "size": {
+      "min": 0.12,
+      "max": 0.26,
+      "power": 1.0
+     },
+     "fill_cover": 0.85
     }
    ],
-   "row": {
-    "min": 0.6,
-    "max": 0.98,
-    "min_frac": 0.3
-   },
    "fill": [
     "tag:f_plant",
     "tag:gardentools",
-    "tag:flowers"
+    "tag:flowers",
+    "tag:herbs",
+    "tag:seeds"
    ],
-   "fill_all": false
+   "max_items": 110
   },
   {
    "slug": "flower-market",

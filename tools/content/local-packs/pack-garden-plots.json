@@ -1,0 +1,192 @@
+{
+ "pack": {
+  "id": "pack-garden-plots",
+  "name": "Garden Plots",
+  "category": "Illustration",
+  "description": "Flower borders, raised beds, mushroom woods and cactus gardens, every hand-drawn plant once.",
+  "sortOrder": 1320,
+  "price": "coins"
+ },
+ "pictures": [
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-garden-plots/01-flower-border.png",
+   "title": "Flower border",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 18 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-garden-plots/02-raised-beds.png",
+   "title": "Raised beds",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 62 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-garden-plots/03-mushroom-wood.png",
+   "title": "Mushroom wood",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 62 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-garden-plots/04-cactus-garden.png",
+   "title": "Cactus garden",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 62 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-garden-plots/05-rock-garden.png",
+   "title": "Rock garden",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 62 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-garden-plots/06-snowy-garden.png",
+   "title": "Snowy garden",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 62 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-garden-plots/07-woodland-walk.png",
+   "title": "Woodland walk",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 62 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-garden-plots/08-orchard-rows.png",
+   "title": "Orchard rows",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 24 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-garden-plots/09-vegetable-patch.png",
+   "title": "Vegetable patch",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 62 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-garden-plots/10-potting-shed.png",
+   "title": "Potting shed",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 110 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-garden-plots/11-flower-market.png",
+   "title": "Flower market",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 62 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-garden-plots/12-mushroom-ring.png",
+   "title": "Mushroom ring",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 62 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-garden-plots/13-glowing-glade.png",
+   "title": "Glowing glade",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 62 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-garden-plots/14-tree-grove.png",
+   "title": "Tree grove",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 62 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-garden-plots/15-seed-and-tool-shed.png",
+   "title": "Seed and tool shed",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 25 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-garden-plots/16-savanna-garden.png",
+   "title": "Savanna garden",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 62 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-garden-plots/17-hedge-walk.png",
+   "title": "Hedge walk",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 62 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-garden-plots/18-autumn-garden.png",
+   "title": "Autumn garden",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 62 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-garden-plots/19-garden-ornaments.png",
+   "title": "Garden ornaments",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 62 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-garden-plots/20-pine-forest-floor.png",
+   "title": "Pine forest floor",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 62 items"
+  }
+ ]
+}

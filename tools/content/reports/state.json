@@ -3063,6 +3063,15 @@
 "removed": 21,
 "status": "verified"
 },
+"pack-garden-plots": {
+"added": 0,
+"at": "2026-10-14T18:00:36",
+"issues": 0,
+"last_step": "verify",
+"puzzles": 20,
+"removed": 0,
+"status": "verified"
+},
 "pack-gardens": {
 "added": 25,
 "at": "2026-10-12T12:17:43",
@@ -3121,6 +3130,15 @@
 "name": "Hot Air Balloons",
 "puzzles": 20,
 "removed": 15,
+"status": "verified"
+},
+"pack-house-and-home": {
+"added": 0,
+"at": "2026-10-14T18:00:53",
+"issues": 0,
+"last_step": "verify",
+"puzzles": 20,
+"removed": 0,
 "status": "verified"
 },
 "pack-hummingbirds": {
@@ -3517,6 +3535,15 @@
 "name": "Pandas",
 "puzzles": 22,
 "removed": 21,
+"status": "verified"
+},
+"pack-pantry-shelves": {
+"added": 0,
+"at": "2026-10-14T18:00:03",
+"issues": 0,
+"last_step": "verify",
+"puzzles": 20,
+"removed": 0,
 "status": "verified"
 },
 "pack-paris": {
@@ -3995,6 +4022,15 @@
 "removed": 19,
 "status": "verified"
 },
+"pack-tinkers-workshop": {
+"added": 0,
+"at": "2026-10-14T18:00:20",
+"issues": 0,
+"last_step": "verify",
+"puzzles": 20,
+"removed": 0,
+"status": "verified"
+},
 "pack-tokyo-nights": {
 "added": 21,
 "at": "2026-10-12T23:33:03",
@@ -4005,6 +4041,15 @@
 "name": "Tokyo Nights",
 "puzzles": 23,
 "removed": 15,
+"status": "verified"
+},
+"pack-treasure-trove": {
+"added": 0,
+"at": "2026-10-14T18:01:10",
+"issues": 0,
+"last_step": "verify",
+"puzzles": 20,
+"removed": 0,
 "status": "verified"
 },
 "pack-tropical-beaches": {

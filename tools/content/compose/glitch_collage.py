@@ -29,9 +29,20 @@ Run (with that venv's python):
   $PY tools/content/compose/glitch_collage.py manifest PACK           # tools/content/local-packs/PACK.json
 Then: .venv/bin/python tools/dev/local_pack.py check tools/content/local-packs/PACK.json
 
-Rendering is deterministic for a given seed. Items are never scaled above their 2x PNG export unless the
-SVG conversion renders faithfully (the `library` step compares every SVG with its PNG and rejects the ones
-that lost Flash blend modes, which show as black or white stripes); other items stay at most at PNG size.
+Pack definition (glitch_packs/<pack-id>.json; pack-treasure-trove.json is written by _make_treasure_trove.py):
+  pack        the manifest's pack block (id, name, category, description, sortOrder, price)
+  canvas      [W, H]; grid (mask cell px, 6 for 3072 x 4096); max_uses (default a third of the pictures);
+              max_items (per picture); defaults (size, fill_size, cover, fill_cover, palette_max, row); fill_all
+  pictures    slug, title, seed, priority (rendered first), palette (filler colours), layout, zones, fill
+  layout      single | hbands | vbands | grid | voronoi | ring | diag | cloth | cubbies (row_cols) | crates | trays | table
+  zones       items (tag:x, re:..., ids), ground (planks, tiles, check, plaid, stripes, dots, grass, scatter,
+              cobble, quilt, linen, marble, paint, pegboard, wallpaper), hero, size, fill, floor (cubbies)
+Rendering is deterministic for a given seed and order. Pictures render in priority order; an item, and a
+"kind" of recoloured variants (glitch_tags.json), appears in at most max_uses pictures of a pack, and filler
+never takes an item that a later picture names in its own zones. Items are never scaled above their 2x PNG
+export unless the SVG conversion renders faithfully (the `library` step compares every SVG with its PNG and
+rejects the ones that lost Flash blend modes, which show as black or white stripes). `library` also erases
+Flash export marks from furniture (red and green guide lines, white registration dots).
 """
 import argparse, io, json, math, os, random, re, sys, time
 from pathlib import Path
@@ -107,11 +118,11 @@ def _trim_overhang(out, gap=3, min_len=6):
             out[y, hi + 1:][m[y, hi + 1:]] = 0
 
 
-def clean_png(img, furniture):
+def clean_png(img, furniture, dots=False):
     """Furniture only: erase Flash export marks (thin single-colour red / green guide lines, white
     registration dots with a black ring at the base or the top-left origin) and loose specks, and flag
     Flash placeholder boxes. Returns (RGBA image trimmed to content, placeholder)."""
-    if not furniture:
+    if not furniture and not dots:
         im = img.convert('RGBA')
         bb = im.getchannel('A').point(lambda v: 255 if v > 16 else 0).getbbox()
         return (im.crop(bb) if bb else None), False
@@ -119,9 +130,11 @@ def clean_png(img, furniture):
     out = a.copy()
     r, g, b, al = a[..., 0], a[..., 1], a[..., 2], a[..., 3]
     placeholder = False
-    pure = (((r > 225) & (g < 45) & (b < 45)) | ((g > 190) & (r < 95) & (b < 115))) & (al > 0)
+    pure = (((r > 170) & (g < 35) & (b < 35)) | ((g > 140) & (r < 30) & (b < g * 0.45)) | ((g > 190) & (r < 95) & (b < 115))) & (al > 0)
     guideish = (((g > 110) & (g - r > 45) & (g - b > 35)) | ((r > 150) & (r - g > 90) & (r - b > 80))) & (al > 0)
     guide = guideish & ndimage.binary_dilation(pure, iterations=2)
+    if not furniture:           # location parts: registration dots only (their grass and leaves are pure greens)
+        guide[:] = False
     if guide.any():
         lab, n = ndimage.label(guide, structure=np.ones((3, 3)))
         for i, sl in enumerate(ndimage.find_objects(lab), 1):
@@ -168,13 +181,19 @@ def clean_png(img, furniture):
                 continue
             reg = np.zeros(white.shape, bool); reg[sl] = comp
             ring = ndimage.binary_dilation(reg, iterations=1) & ~reg
-            if ((lum < 90) | (al < 30))[ring].mean() > 0.6:
+            dark = ((lum < 90) | (al < 30))[ring].mean()
+            inked = ((lum < 90) & (al > 60))[ring].mean()          # a drawn black outline, not just the edge
+            opaque = (al > 100)[ring].mean()
+            small_disc = 5 <= h <= 9 and 5 <= w <= 9 and c / (h * w) > 0.7
+            ring_lum = float(lum[ring][al[ring] > 100].mean()) if opaque > 0 else 255.0
+            if (dark > 0.6 and inked > 0.4) or (small_disc and opaque > 0.6 and (inked > 0.35 or ring_lum < 140)):
                 _fill_from_ring(out, ndimage.binary_dilation(reg, iterations=2), inner_iter=1, outer_iter=4)
-    _trim_overhang(out)
-    _trim_overhang(out.transpose(1, 0, 2))
+    if furniture:
+        _trim_overhang(out)
+        _trim_overhang(out.transpose(1, 0, 2))
     m = out[..., 3] > 40
     lab, n = ndimage.label(m, structure=np.ones((3, 3)))
-    if n > 1:
+    if n > 1 and furniture:
         sizes = ndimage.sum(m, lab, range(1, n + 1))
         total = sizes.sum()
         for i, sz in enumerate(sizes, 1):
@@ -270,7 +289,7 @@ def cmd_library(args):
         if iid in lib:
             continue
         img = Image.open(p).convert('RGBA')
-        im, placeholder = clean_png(img, furniture=(group == 'furniture'))
+        im, placeholder = clean_png(img, furniture=(group == 'furniture'), dots=group.startswith('loc_'))
         if im is None or max(im.size) < 20:
             continue
         im.save(CLEAN_DIR / f'{safe(iid)}.png')
@@ -363,8 +382,9 @@ class Library:
 
     def excluded(self, iid):
         rec = self.items[iid]
-        if rec.get('placeholder') or self.colors.get(iid, {}).get('lstd', 99) < 4:
-            return True       # Flash placeholders and plain masks (one flat colour)
+        lstd = self.colors.get(iid, {}).get('lstd', 99)
+        if rec.get('placeholder') or lstd < 4 or (lstd < 13 and max(rec['w'], rec['h']) > 300):
+            return True       # Flash placeholders, plain masks and big plain boards (flat cards)
         if iid in self.excl_names:
             return True
         return any(r.search(iid) for r in self.excl_re)
@@ -935,16 +955,21 @@ def build_structure(lay, zone_list, W, H, rng, seed):
         _paint(ground, base_spec, np.ones((H, W), bool), seed * 7, H, W)
 
     if t == 'cubbies':
-        cols, rows = lay.get('cols', 1), lay.get('rows', 4)
+        # row_cols (optional): rooms per floor, e.g. [1, 2, 3] for a dolls' house; else cols x rows
+        rows = len(lay['row_cols']) if lay.get('row_cols') else lay.get('rows', 4)
+        row_cols = lay.get('row_cols') or [lay.get('cols', 1)] * rows
         fw = lay.get('frame_w', 0.022) * W
         bh = lay.get('board_h', 0.018) * H
         wood = lay.get('frame', ['#a8774a', '#9a6b40', '#b4835a'])
-        colw = np.array(lay.get('col_sizes', [1] * cols), np.float32); colw = colw / colw.sum() * (W - fw * (cols + 1))
         rowh = np.array(lay.get('row_sizes', [1] * rows), np.float32); rowh = rowh / rowh.sum() * (H - bh * (rows + 1))
         assign = lay.get('assign', 'cell')
         y = bh
         k = 0
+        posts = []
         for r in range(rows):
+            cols = row_cols[r]
+            cs = lay.get('col_sizes') if not lay.get('row_cols') else None
+            colw = np.array(cs or [1] * cols, np.float32); colw = colw / colw.sum() * (W - fw * (cols + 1))
             x = fw
             for c in range(cols):
                 x0, y0, x1, y1 = x, y, x + colw[c], y + rowh[r]
@@ -965,20 +990,19 @@ def build_structure(lay, zone_list, W, H, rng, seed):
                 labels[zm] = len(zones)
                 zones.append(dict(spec=spec, mode='row', mask=zm, rows=[(x0, x1, base, base - y0)], box=(x0, y0, x1, y1)))
                 k += 1
+                posts.append((x0 - fw, y0 - bh, x0, y1 + bh))
                 x = x1 + fw
+            posts.append((x - fw, y - bh, x, y + rowh[r] + bh))
             y += rowh[r] + bh
-        # frame: boards and posts
+        # frame: boards and posts (posts per floor, so floors can hold different numbers of rooms)
         y = 0
         for r in range(rows + 1):
             _board(ground, 0, y, W, y + bh, wood, np.random.default_rng(seed + r))
             if r < rows:
                 _shadow_band(ground, 0, y + bh, W, y + bh + bh * 0.8, 0.3)
                 y += bh + rowh[r]
-        x = 0
-        for c in range(cols + 1):
-            _board(ground, x, 0, x + fw, H, wood, np.random.default_rng(seed + 50 + c), vertical=True)
-            if c < cols:
-                x += fw + colw[c]
+        for j, (x0, y0, x1, y1) in enumerate(posts):
+            _board(ground, x0, max(0, y0 + bh), x1, y1 - bh, wood, np.random.default_rng(seed + 50 + j), vertical=True)
         return dict(ground=ground, labels=labels, zones=zones)
 
     if t in ('crates', 'trays'):
@@ -1289,6 +1313,8 @@ def core_items(lib, pic):
 
 
 def compose(lib, pack, pic, W, H, seed, counts=None, reserved=None):
+    global S
+    S = int(pic.get('grid', pack.get('grid', 4)))     # occupancy-mask cell in px (6 for giant canvases)
     counts = counts or {}
     reserved = reserved or {}
     rng = np.random.default_rng(seed)
@@ -1368,7 +1394,8 @@ def compose(lib, pack, pic, W, H, seed, counts=None, reserved=None):
     misses = 0
     lab = st['labels']
     all_pack = pack_mask.copy()
-    while pack_mask.any() and misses < 60 and not comp.full():
+    hole_fail = {}
+    while pack_mask.any() and misses < 400 and not comp.full():
         r, at = comp.largest_hole(pack_mask)
         zi = int(lab[at])
         if zi < 0 or zones[zi]['mode'] != 'pack':
@@ -1399,6 +1426,11 @@ def compose(lib, pack, pic, W, H, seed, counts=None, reserved=None):
             cand.remove(pick)
             if L > min_fill:
                 cand.append(pick)
+            # a hole that keeps refusing items is left as ground: close it so the next hole gets its turn
+            hole_fail[at] = hole_fail.get(at, 0) + 1
+            if hole_fail[at] >= 4:
+                yy, xx = np.ogrid[:comp.hh, :comp.ww]
+                pack_mask &= ~(((yy - at[0]) ** 2 + (xx - at[1]) ** 2) <= max(2.0, r) ** 2)
     # 3. render: ground, then every item with a soft drop shadow, in placement order
     canvas = Image.fromarray(st['ground'].clip(0, 255).astype(np.uint8)).convert('RGBA')
     sh_op = pic.get('shadow', defaults.get('shadow', 0.34))

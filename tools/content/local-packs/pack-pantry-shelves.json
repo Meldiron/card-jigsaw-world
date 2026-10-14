@@ -1,0 +1,192 @@
+{
+ "pack": {
+  "id": "pack-pantry-shelves",
+  "name": "Pantry Shelves",
+  "category": "Illustration",
+  "description": "Bakery shelves, spice racks, market crates and laid tables, every hand-drawn item once.",
+  "sortOrder": 1300,
+  "price": "coins"
+ },
+ "pictures": [
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-pantry-shelves/01-breakfast-table.png",
+   "title": "Breakfast table",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 62 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-pantry-shelves/02-bakery-shelves.png",
+   "title": "Bakery shelves",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 27 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-pantry-shelves/03-vegetable-crates.png",
+   "title": "Vegetable crates",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 62 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-pantry-shelves/04-fruit-trays.png",
+   "title": "Fruit trays",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 62 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-pantry-shelves/05-spice-and-sauce-market.png",
+   "title": "Spice and sauce market",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 62 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-pantry-shelves/06-cheese-board.png",
+   "title": "Cheese board",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 61 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-pantry-shelves/07-barbecue-grill.png",
+   "title": "Barbecue grill",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 62 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-pantry-shelves/08-sweet-shop-counter.png",
+   "title": "Sweet shop counter",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 36 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-pantry-shelves/09-picnic-cloth.png",
+   "title": "Picnic cloth",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 50 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-pantry-shelves/10-preserves-pantry.png",
+   "title": "Preserves pantry",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 35 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-pantry-shelves/11-coffee-bar.png",
+   "title": "Coffee bar",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 62 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-pantry-shelves/12-noodle-bar.png",
+   "title": "Noodle bar",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 51 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-pantry-shelves/13-salad-bar.png",
+   "title": "Salad bar",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 62 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-pantry-shelves/14-seafood-platter.png",
+   "title": "Seafood platter",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 62 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-pantry-shelves/15-dessert-table.png",
+   "title": "Dessert table",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 62 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-pantry-shelves/16-harvest-supper.png",
+   "title": "Harvest supper",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 62 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-pantry-shelves/17-deli-counter.png",
+   "title": "Deli counter",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 39 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-pantry-shelves/18-market-crates.png",
+   "title": "Market crates",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 57 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-pantry-shelves/19-kitchen-counter.png",
+   "title": "Kitchen counter",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 62 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-pantry-shelves/20-soup-stove.png",
+   "title": "Soup stove",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 62 items"
+  }
+ ]
+}

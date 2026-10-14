@@ -1,0 +1,162 @@
+"""Writes glitch_packs/pack-treasure-trove.json (the giant pack). Run: python3 _make_treasure_trove.py"""
+import json, os
+
+
+def z(items, ground, **kw):
+    d = {"items": items, "ground": ground}
+    d.update(kw)
+    return d
+
+
+BIG = {"min": 0.09, "max": 0.17, "power": 1.0}
+MID = {"min": 0.07, "max": 0.13, "power": 1.0}
+NAT = {"mode": "native", "min": 0.8, "max": 1.0}
+pl = lambda c, w=150, v=False: {"type": "planks", "colors": c, "width": w, "vertical": v}
+oak = ["#c48a52", "#b47a45", "#d29a60"]; walnut = ["#6b452c", "#5d3c26", "#7a5034"]; birch = ["#ecd9b4", "#e2cda4", "#f2e2c2"]
+red = ["#8b2f2f", "#7a2828", "#9a3a3a"]; navy = ["#2b3a6b", "#24315c", "#33447a"]
+cob = lambda c, m="#6b6358", size=120: {"type": "cobble", "colors": c, "size": size, "mortar": m}
+grass = {"type": "grass", "density": 1.2}
+soil = {"type": "scatter", "colors": ["#6d4c41", "#5d4037", "#8d6e63"], "bg": "#4e3529"}
+sand = {"type": "scatter", "colors": ["#e8d2a0", "#d9bf86", "#f2e2bc"], "bg": "#dcc28c", "kind": "chip", "rmin": 3, "rmax": 9}
+FOOD = ["tag:fruit", "tag:veg", "tag:breakfast", "tag:bakery", "tag:sandwich", "tag:cheese", "tag:bowls", "tag:noodles", "tag:salad", "tag:grill",
+        "tag:jars", "tag:spices", "tag:sweets", "tag:juices", "tag:cocktails", "tag:hotdrinks", "tag:herbs", "tag:seeds", "tag:vegbags", "tag:rubs"]
+WORK = ["tag:handtools", "tag:machines", "tag:lab", "tag:compounds", "tag:potions", "tag:powders", "tag:ores", "tag:jewels", "tag:curios",
+        "tag:harvest", "tag:kitchentools", "tag:props", "tag:crystals"]
+GARD = ["tag:flowers", "tag:bushes", "tag:trees", "tag:mushrooms", "tag:ferns", "tag:rocks", "tag:cactus", "tag:bogplants", "tag:yardthings", "tag:gardentools"]
+FURN = ["tag:f_armchair", "tag:f_chair", "tag:f_sofa", "tag:f_table", "tag:f_cabinet", "tag:f_lamp", "tag:f_deco", "tag:f_plant", "tag:f_bed",
+        "tag:f_rug", "tag:f_door", "tag:f_fireplace", "tag:f_counter"]
+
+pics = [
+ dict(slug="grand-bazaar", title="Grand bazaar", seed=901, palette=["#c0392b", "#f39c12", "#16a085", "#8e44ad"],
+      layout={"type": "trays", "n": 12, "gutter": 0.02, "rim": 0.014, "rims": ["#c0392b", "#16a085", "#f39c12", "#8e44ad", "#2980b9", "#d35400"], "base": cob(["#c8b89a", "#b9a98a", "#d6c6a8"], "#8a7a5e")},
+      zones=[z(["tag:fruit"], {"type": "linen", "colors": ["#f7efe0"]}, hero=["pineapple", "bunch_of_grapes"], size=BIG), z(["tag:spices", "tag:rubs"], {"type": "linen", "colors": ["#f3e3c3"]}, size=MID),
+             z(["tag:potions"], {"type": "linen", "colors": ["#e8e0f3"]}, size=MID), z(["tag:jewels", "tag:crystals"], {"type": "linen", "colors": ["#1f2a6b"]}, size=MID),
+             z(["tag:sweets"], {"type": "linen", "colors": ["#fde4ec"]}, size=MID), z(["tag:f_rug", "tag:f_deco"], {"type": "linen", "colors": ["#efe6d2"]}, size=NAT)],
+      fill=FOOD + WORK),
+ dict(slug="castle-storeroom", title="Castle storeroom", seed=902, priority=1, palette=["#7f8c8d", "#c0392b", "#d4a017"],
+      layout={"type": "cubbies", "row_cols": [3, 4, 3, 4, 3, 4, 3, 4, 3], "frame": walnut, "frame_w": 0.016, "board_h": 0.012},
+      zones=[z(["tag:jars", "tag:props", "tag:f_cabinet", "tag:f_counter"], {"type": "paint", "colors": ["#8a8f96"]}, hero=["furniture_roomdeco_barrel"]),
+             z(["tag:bakery", "tag:cheese", "tag:vegbags"], {"type": "paint", "colors": ["#8b4a3a"]}),
+             z(["tag:handtools", "tag:kitchentools", "tag:f_lamp", "tag:f_cabinet"], {"type": "paint", "colors": ["#4a6741"]})],
+      row={"min": 0.55, "max": 0.98, "min_frac": 0.12, "fill_all": True}, fill=FOOD + WORK + FURN),
+ dict(slug="wizards-tower", title="Wizard's tower", seed=903, priority=2, palette=["#6c3483", "#17a589", "#5d6d7e", "#e91e63"],
+      layout={"type": "voronoi", "n": 6, "wobble": 0.05},
+      zones=[z(["tag:potions", "re:^essence_of_"], {"type": "tiles", "colors": ["#5b2c6f", "#6c3483", "#7d3c98"], "size": 110, "grout": "#3b1c4a"}, hero=["potion_rainbow_juice", "cauldron"], size=BIG),
+             z(["tag:crystals", "tag:ores"], {"type": "scatter", "colors": ["#48c9b0", "#1abc9c", "#76d7c4"], "bg": "#117a65", "kind": "chip"}, size=BIG),
+             z(["tag:lab", "tag:compounds"], cob(["#aab7b8", "#99a3a4", "#bfc9ca"], "#717d7e"), size=MID),
+             z(["tag:powders", "tag:jewels"], {"type": "check", "colors": ["#f8bbd0", "#fce4ec"], "size": 60}, size=MID),
+             z(["tag:curios", "tag:mushrooms"], pl(["#b9770e", "#a66a0c", "#ca8a1e"], 120), size=MID),
+             z(["tag:f_lamp", "tag:f_deco", "tag:ferns"], {"type": "paint", "colors": ["#1f3a5f"]}, size=NAT)],
+      fill=WORK + GARD),
+ dict(slug="harvest-fair", title="Harvest fair", seed=904, palette=["#e67e22", "#27ae60", "#f1c40f", "#c0392b"],
+      layout={"type": "crates", "cols": 3, "rows": 4, "gutter": 0.02, "rim": 0.022, "rim_colors": ["#c9a06a", "#b98f5c", "#d8b07a"], "base": grass},
+      zones=[z(["tag:veg"], soil, hero=["pumpkin", "cabbage"], size=BIG), z(["tag:fruit"], {"type": "linen", "colors": ["#e8d6b0"]}, size=BIG),
+             z(["tag:flowers"], soil, size=MID), z(["tag:seeds", "tag:vegbags", "tag:patches"], {"type": "linen", "colors": ["#d9c49a"]}, size=MID),
+             z(["tag:trants", "tag:harvest"], soil, size=MID), z(["tag:bakery", "tag:jars"], {"type": "check", "colors": ["#c0392b", "#fbf1e3"], "size": 46}, size=MID)],
+      fill=FOOD + GARD),
+ dict(slug="royal-banquet", title="Royal banquet", seed=905, palette=["#922b21", "#d4ac0d", "#f5eef8"],
+      layout={"type": "table", "shape": "oval", "margin": 0.07, "plates": 14, "plate": "#fbf7f0", "edge": 0.015, "base": {"type": "plaid", "colors": ["#922b21", "#7b241c", "#d4ac0d", "#1b2631"], "size": 120}},
+      zones=[z(["tag:grill", "tag:bowls", "tag:bakery", "tag:cheese", "tag:fruit", "tag:cocktails", "tag:juices", "tag:sweets", "tag:salad"], {"type": "linen", "colors": ["#f5eef8"]},
+               hero=["potians_feast", "simple_bbq", "pumpkin_pie", "fruit_salad"], size=BIG, fill_cover=0.95),
+             z(["tag:f_chair", "tag:f_armchair", "tag:f_lamp", "tag:f_deco"], {"type": "plaid", "colors": ["#922b21", "#7b241c", "#d4ac0d", "#1b2631"], "size": 120}, size=NAT, fill_cover=0.85)],
+      fill=FOOD),
+ dict(slug="garden-party", title="Garden party", seed=906, palette=["#58d68d", "#f5b7b1", "#f9e79f"],
+      layout={"type": "cloth", "margin": 0.12, "border": {"colors": ["#f5b7b1", "#ffffff"], "width": 0.02}},
+      zones=[z(["tag:sweets", "tag:juices", "tag:cocktails", "tag:bakery", "tag:fruit", "tag:sandwich"], {"type": "check", "colors": ["#f5b7b1", "#fffafa"], "size": 70}, hero=["birch_candy", "berry_bowl", "deluxe_sammich"], size=BIG, fill_cover=0.95),
+             z(["tag:flowers", "tag:bushes", "tag:yardthings", "tag:f_plant"], grass, size=NAT, fill_cover=0.9)],
+      fill=FOOD + GARD),
+ dict(slug="forest-fair", title="Forest fair", seed=907, priority=2, palette=["#1e8449", "#a04000", "#d4ac0d", "#7d6608"],
+      layout={"type": "diag", "n": 3, "wobble": 0.05},
+      zones=[z(["tag:mushrooms", "tag:ferns"], {"type": "scatter", "colors": ["#8d6e63", "#a1887f", "#d7a86e"], "bg": "#5d4037", "kind": "chip"}, hero=["groddle/mushroom_amanita_1"], size=BIG),
+             z(["tag:trees", "tag:bushes", "tag:flowers"], {"type": "grass", "colors": ["#8bc34a", "#9ccc65", "#7cb342", "#c5e1a5"], "flowers": ["#ffffff", "#ffeb3b", "#f48fb1"]}, size=NAT),
+             z(["tag:rocks", "tag:yardthings", "tag:gardentools"], cob(["#bdbdbd", "#a8a8a8", "#d0d0d0"], "#7d7d7d"), size=MID)],
+      fill=GARD + ["tag:harvest", "tag:trants"]),
+ dict(slug="mine-and-forge", title="Mine and forge", seed=908, priority=3, palette=["#566573", "#e67e22", "#48c9b0"],
+      layout={"type": "grid", "cols": 2, "rows": 3},
+      zones=[z(["tag:ores", "tag:crystals"], {"type": "scatter", "colors": ["#5d4037", "#4e342e", "#6d4c41"], "bg": "#3e2f27"}, hero=["rock_metal_1", "rock_beryl_1"], size=BIG),
+             z(["tag:machines"], {"type": "tiles", "colors": ["#85929e", "#7f8c8d", "#95a5a6"], "size": 130, "grout": "#566573"}, hero=["smelter", "metalmaker"], size=BIG),
+             z(["tag:handtools", "tag:kitchentools"], pl(["#e67e22", "#d35400", "#eb984e"], 120), size=MID)],
+      fill=WORK),
+ dict(slug="greenhouse", title="Greenhouse", seed=909, priority=2, palette=["#e91e63", "#ffffff", "#9c27b0", "#ffeb3b"],
+      layout={"type": "trays", "n": 10, "gutter": 0.02, "rim": 0.016, "rims": ["#ffffff", "#f8bbd0", "#e1bee7", "#fff9c4"], "base": {"type": "tiles", "colors": ["#fce4ec", "#f8bbd0"], "size": 110, "pattern": "checker", "grout": "#ffffff"}},
+      zones=[z(["tag:flowers"], {"type": "paint", "colors": ["#ffffff"]}, hero=["groddle/flower_bush_4", "groddle/flower_group_1"], size=BIG),
+             z(["tag:f_plant", "tag:herbs", "tag:bushes"], {"type": "paint", "colors": ["#f3e5f5"]}, size=MID)],
+      fill=GARD + ["tag:herbs", "tag:f_plant"]),
+ dict(slug="snow-lodge", title="Snow lodge", seed=910, palette=["#eaf2f8", "#a04000", "#2e86c1"],
+      layout={"type": "hbands", "n": 3, "sizes": [2, 3, 2], "wobble": 0.03},
+      zones=[z(["re:^alpine_landscape/(snow_bush|snow_pinecluster|rock_snowy|mountain_bonsai)", "re:^groddle/(tree_coniferous|whitesnow_|snow_patch)", "tag:rocks"], {"type": "scatter", "colors": ["#ffffff", "#e3f2fd", "#cfe8f7"], "bg": "#eef6fb", "kind": "chip"}, size=NAT),
+             z(["re:log_cabin", "tag:f_fireplace", "tag:f_armchair", "tag:f_rug"], pl(["#a04000", "#8e3a00", "#b5530f"], 140), hero=["furniture_fireplace_rocky_fireplace", "furniture_bed_log_cabin_bed"], size=NAT),
+             z(["tag:hotdrinks", "tag:bowls", "tag:bakery", "tag:breakfast"], {"type": "check", "colors": ["#2e86c1", "#eaf2f8"], "size": 60}, size=MID)],
+      fill=["tag:hotdrinks", "tag:bowls", "tag:bakery", "tag:breakfast", "tag:trees", "tag:rocks", "tag:f_fireplace", "tag:f_armchair"]),
+ dict(slug="desert-caravan", title="Desert caravan", seed=911, palette=["#dcc28c", "#a04000", "#1abc9c"],
+      layout={"type": "vbands", "n": 2, "sizes": [1, 1], "wobble": 0.04},
+      zones=[z(["tag:cactus", "re:tree_acacia", "re:^groddle(_arid)?/(pampas_|stalagmite_)", "tag:rocks"], sand, hero=["groddle/tree_acacia_1"], size=NAT),
+             z(["tag:spices", "tag:jars", "tag:f_rug", "tag:jewels", "tag:rubs"], {"type": "plaid", "colors": ["#a04000", "#1abc9c", "#f4d03f", "#6e2c00"], "size": 100}, size=MID)],
+      fill=FOOD + WORK + GARD),
+ dict(slug="treat-fair", title="Treat fair", seed=912, priority=2, palette=["#ff6f91", "#00c9a7", "#ffc75f", "#845ec2"],
+      layout={"type": "grid", "cols": 3, "rows": 3},
+      zones=[z(["tag:sweets"], {"type": "stripes", "colors": ["#ff9671", "#ffe0d6"], "size": 50, "angle": 45}, hero=["corn_syrup_squares"], size=BIG),
+             z(["tag:compounds"], {"type": "dots", "colors": ["#00c9a7", "#e6fff8"], "size": 70}, size=MID),
+             z(["tag:juices", "tag:cocktails"], {"type": "check", "colors": ["#ffc75f", "#fff6e0"], "size": 56}, size=MID),
+             z(["tag:potions", "tag:powders"], {"type": "stripes", "colors": ["#845ec2", "#ece3f8"], "size": 50, "angle": 135}, size=MID)],
+      fill=FOOD + WORK),
+ dict(slug="jewel-vault", title="Jewel vault", seed=913, priority=4, palette=["#d4ac0d", "#922b21", "#1f618d"],
+      layout={"type": "ring", "margin": 0.18, "wobble": 0.02},
+      zones=[z(["tag:jewels", "tag:crystals", "re:^bag_furniture_smallcabinet_", "re:^rock_sparkly_", "re:(baroque|mahogany|golden|marble)", "tag:curios"],
+               {"type": "plaid", "colors": ["#7b1f2b", "#5e1621", "#d4ac0d", "#1b2631"], "size": 110}, hero=["bag_furniture_smallcabinet_treasure_chest"], size=NAT, fill_cover=0.92),
+             z(["tag:f_lamp", "tag:f_cabinet", "tag:f_deco", "tag:f_armchair"], pl(red, 140), size=NAT)],
+      fill=WORK + FURN),
+ dict(slug="furniture-hall", title="Furniture hall", seed=914, priority=1, palette=["#a9cce3", "#f5cba7", "#a3e4d7", "#d7bde2"],
+      layout={"type": "cubbies", "row_cols": [3, 4, 3, 4, 3, 4, 3], "frame": birch, "frame_w": 0.014, "board_h": 0.011, "floor_h": 0.12},
+      zones=[z(["tag:f_sofa", "tag:f_armchair", "tag:f_lamp"], {"type": "paint", "colors": ["#a9cce3"]}, floor=pl(oak, 60)),
+             z(["tag:f_bed", "tag:f_cabinet"], {"type": "paint", "colors": ["#f5cba7"]}, floor=pl(walnut, 60)),
+             z(["tag:f_table", "tag:f_chair", "tag:f_plant"], {"type": "paint", "colors": ["#a3e4d7"]}, floor=pl(birch, 60)),
+             z(["tag:f_fireplace", "tag:f_deco", "tag:f_counter"], {"type": "paint", "colors": ["#d7bde2"]}, floor=pl(oak, 60))],
+      row={"min": 0.5, "max": 0.98, "min_frac": 0.15, "fill_all": True}, fill=FURN),
+ dict(slug="bog-market", title="Bog market", seed=915, palette=["#7d8a3a", "#e9c46a", "#2a9d8f"],
+      layout={"type": "trays", "n": 8, "gutter": 0.022, "rim": 0.018, "rims": ["#5b6b2a", "#2a9d8f", "#e9c46a", "#7d6a3a"], "base": {"type": "scatter", "colors": ["#6b7a30", "#7d8a3a", "#5a6a28"], "bg": "#4a5a20", "kind": "chip"}},
+      zones=[z(["tag:bogplants", "re:^(furniture|bag_furniture)_.*firebog"], {"type": "paint", "colors": ["#d9d2a6"]}, hero=["furniture_sofa_firebog_sofa"], size=MID),
+             z(["tag:mushrooms", "tag:jars", "tag:herbs"], {"type": "paint", "colors": ["#cfe3dd"]}, size=MID)],
+      fill=GARD + FOOD + WORK),
+ dict(slug="kitchen-garden", title="Kitchen garden", seed=916, priority=2, palette=["#5d4037", "#7cb342", "#ff7043"],
+      layout={"type": "hbands", "n": 5, "wobble": 0.01},
+      zones=[z(["tag:veg", "tag:patches"], soil, hero=["pumpkin"], size=BIG), z(["tag:herbs", "tag:flowers"], {"type": "grass"}, size=MID),
+             z(["tag:gardentools", "tag:seeds", "tag:yardthings"], cob(["#cfd8dc", "#b0bec5", "#eceff1"], "#90a4ae"), size=MID),
+             z(["tag:trants", "tag:fruit"], soil, size=MID), z(["tag:salad", "tag:bushes"], {"type": "grass", "colors": ["#9ccc65", "#aed581", "#8bc34a"]}, size=MID)],
+      fill=GARD + FOOD),
+ dict(slug="furniture-warehouse", title="Furniture warehouse", seed=917, palette=["#90a4ae", "#ffb74d", "#5d4037"],
+      layout={"type": "crates", "cols": 3, "rows": 4, "gutter": 0.02, "rim": 0.02, "rim_colors": ["#d7b98e", "#c9a77a", "#e3c9a0"], "base": {"type": "tiles", "colors": ["#90a4ae", "#a2b2ba", "#7f939d"], "size": 160, "grout": "#607d8b"}},
+      zones=[z(["tag:f_table", "tag:f_chair"], {"type": "scatter", "colors": ["#f2e2bc", "#e8d2a0", "#fff3d6"], "bg": "#e0c890", "kind": "chip"}, hero=["furniture_table_mosaic_cafe_table"], size=NAT),
+             z(["tag:f_sofa", "tag:f_armchair"], {"type": "scatter", "colors": ["#f2e2bc", "#e8d2a0", "#fff3d6"], "bg": "#e0c890", "kind": "chip"}, size=NAT),
+             z(["tag:f_cabinet", "tag:f_counter"], {"type": "scatter", "colors": ["#f2e2bc", "#e8d2a0", "#fff3d6"], "bg": "#e0c890", "kind": "chip"}, size=NAT),
+             z(["tag:f_door", "tag:f_bed"], {"type": "scatter", "colors": ["#f2e2bc", "#e8d2a0", "#fff3d6"], "bg": "#e0c890", "kind": "chip"}, size=NAT)],
+      fill=["tag:f_table", "tag:f_chair", "tag:f_sofa", "tag:f_armchair", "tag:f_cabinet", "tag:f_counter", "tag:f_door", "tag:f_bed"]),
+ dict(slug="tinkers-hall", title="Tinker's hall", seed=918, priority=3, palette=["#e67e22", "#2c3e50", "#f1c40f"],
+      layout={"type": "trays", "n": 9, "gutter": 0.022, "rim": 0.016, "rims": ["#2c3e50", "#e67e22", "#f1c40f", "#16a085"], "base": {"type": "pegboard", "colors": ["#e8b77a"], "hole": "#6e4b2a", "pitch": 60}},
+      zones=[z(["tag:machines"], {"type": "tiles", "colors": ["#d5dbdb", "#cacfd2"], "size": 80, "grout": "#aab7b8"}, hero=["blockmaker", "fuelmaker"], size=BIG),
+             z(["tag:handtools", "tag:compounds", "tag:curios"], {"type": "linen", "colors": ["#fdebd0"]}, size=MID)],
+      fill=WORK),
+ dict(slug="antique-market", title="Antique market", seed=919, palette=["#7b3a2a", "#c9a227", "#2e7d32", "#1f3a5f"],
+      layout={"type": "trays", "n": 10, "gutter": 0.02, "rim": 0.014, "rims": ["#7b3a2a", "#c9a227", "#2e7d32", "#1f3a5f", "#8e44ad"], "base": cob(["#bcaaa4", "#a1887f", "#d7ccc8"], "#795548")},
+      zones=[z(["tag:f_armchair", "tag:f_sofa", "tag:f_lamp"], {"type": "plaid", "colors": ["#7b3a2a", "#a0522d", "#d2b48c", "#3e2723"], "size": 90}, hero=["furniture_sofa_baroque_pink_sofa"], size=NAT),
+             z(["tag:f_cabinet", "tag:f_door"], {"type": "stripes", "colors": ["#c9a227", "#f3e5ab"], "size": 46, "angle": 90}, size=NAT),
+             z(["tag:f_table", "tag:f_chair", "tag:f_rug"], {"type": "check", "colors": ["#2e7d32", "#e8f5e9"], "size": 56}, size=NAT),
+             z(["tag:f_bed", "tag:f_counter", "tag:f_fireplace"], {"type": "dots", "colors": ["#1f3a5f", "#e3eaf5"], "size": 64}, size=NAT)],
+      fill=FURN),
+ dict(slug="grand-pantry", title="Grand pantry", seed=920, priority=1, palette=["#7b241c", "#f4d03f", "#1e8449"],
+      layout={"type": "cubbies", "row_cols": [4, 3, 4, 3, 4, 3, 4, 3, 4], "frame": oak, "frame_w": 0.014, "board_h": 0.011},
+      zones=[z(["tag:jars", "tag:spices"], {"type": "paint", "colors": ["#1e8449"]}), z(["tag:bakery", "tag:cheese", "tag:breakfast"], {"type": "paint", "colors": ["#7b241c"]}),
+             z(["tag:fruit", "tag:veg"], {"type": "paint", "colors": ["#1f618d"]}), z(["tag:bowls", "tag:noodles", "tag:grill"], {"type": "paint", "colors": ["#b9770e"]})],
+      row={"min": 0.5, "max": 0.98, "min_frac": 0.12, "fill_all": True}, fill=FOOD),
+]
+pack = {"pack": {"id": "pack-treasure-trove", "name": "Treasure Trove", "category": "Giant",
+                 "description": "Bazaars, banquets, vaults and storerooms packed with hand-drawn things, every one different, for boards of 300 cards.",
+                 "sortOrder": 1340, "price": "coins"},
+        "canvas": [3072, 4096], "grid": 6, "max_uses": 7, "max_items": 330,
+        "defaults": {"size": MID, "hero_size": {"min": 0.14, "max": 0.2, "power": 1.0}, "fill_size": {"min": 0.055, "max": 0.11, "min_px": 120},
+                     "cover": 0.82, "max_ov": 0.15, "fill_ov": 0.3, "fill_cover": 0.94, "palette_max": 50,
+                     "row": {"min": 0.55, "max": 0.98, "gap": [-0.12, 0.04]}},
+        "fill_all": [], "pictures": pics}
+out = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'pack-treasure-trove.json')
+json.dump(pack, open(out, 'w'), indent=1, ensure_ascii=False)
+print(len(pics), out)

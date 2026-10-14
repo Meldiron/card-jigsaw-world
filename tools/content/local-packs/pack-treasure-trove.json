@@ -1,0 +1,192 @@
+{
+  "pack": {
+    "id": "pack-treasure-trove",
+    "name": "Treasure Trove",
+    "category": "Giant",
+    "description": "Bazaars, banquets, vaults and storerooms packed with hand-drawn things, every one different, for boards of 300 cards.",
+    "sortOrder": 1340,
+    "price": "tickets"
+  },
+  "pictures": [
+    {
+      "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-treasure-trove/01-grand-bazaar.png",
+      "title": "Grand bazaar",
+      "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+      "licence": "CC0",
+      "source": "Tiny Speck (Glitch), CC0",
+      "page": "https://github.com/tinyspeck/glitch-items",
+      "changes": "composed from 330 items"
+    },
+    {
+      "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-treasure-trove/02-castle-storeroom.png",
+      "title": "Castle storeroom",
+      "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+      "licence": "CC0",
+      "source": "Tiny Speck (Glitch), CC0",
+      "page": "https://github.com/tinyspeck/glitch-items",
+      "changes": "composed from 213 items"
+    },
+    {
+      "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-treasure-trove/03-wizards-tower.png",
+      "title": "Wizard's tower",
+      "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+      "licence": "CC0",
+      "source": "Tiny Speck (Glitch), CC0",
+      "page": "https://github.com/tinyspeck/glitch-items",
+      "changes": "composed from 330 items"
+    },
+    {
+      "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-treasure-trove/04-harvest-fair.png",
+      "title": "Harvest fair",
+      "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+      "licence": "CC0",
+      "source": "Tiny Speck (Glitch), CC0",
+      "page": "https://github.com/tinyspeck/glitch-items",
+      "changes": "composed from 330 items"
+    },
+    {
+      "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-treasure-trove/05-royal-banquet.png",
+      "title": "Royal banquet",
+      "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+      "licence": "CC0",
+      "source": "Tiny Speck (Glitch), CC0",
+      "page": "https://github.com/tinyspeck/glitch-items",
+      "changes": "composed from 330 items"
+    },
+    {
+      "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-treasure-trove/06-garden-party.png",
+      "title": "Garden party",
+      "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+      "licence": "CC0",
+      "source": "Tiny Speck (Glitch), CC0",
+      "page": "https://github.com/tinyspeck/glitch-items",
+      "changes": "composed from 330 items"
+    },
+    {
+      "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-treasure-trove/07-forest-fair.png",
+      "title": "Forest fair",
+      "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+      "licence": "CC0",
+      "source": "Tiny Speck (Glitch), CC0",
+      "page": "https://github.com/tinyspeck/glitch-items",
+      "changes": "composed from 290 items"
+    },
+    {
+      "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-treasure-trove/08-mine-and-forge.png",
+      "title": "Mine and forge",
+      "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+      "licence": "CC0",
+      "source": "Tiny Speck (Glitch), CC0",
+      "page": "https://github.com/tinyspeck/glitch-items",
+      "changes": "composed from 206 items"
+    },
+    {
+      "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-treasure-trove/09-greenhouse.png",
+      "title": "Greenhouse",
+      "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+      "licence": "CC0",
+      "source": "Tiny Speck (Glitch), CC0",
+      "page": "https://github.com/tinyspeck/glitch-items",
+      "changes": "composed from 224 items"
+    },
+    {
+      "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-treasure-trove/10-snow-lodge.png",
+      "title": "Snow lodge",
+      "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+      "licence": "CC0",
+      "source": "Tiny Speck (Glitch), CC0",
+      "page": "https://github.com/tinyspeck/glitch-items",
+      "changes": "composed from 202 items"
+    },
+    {
+      "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-treasure-trove/11-desert-caravan.png",
+      "title": "Desert caravan",
+      "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+      "licence": "CC0",
+      "source": "Tiny Speck (Glitch), CC0",
+      "page": "https://github.com/tinyspeck/glitch-items",
+      "changes": "composed from 330 items"
+    },
+    {
+      "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-treasure-trove/12-treat-fair.png",
+      "title": "Treat fair",
+      "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+      "licence": "CC0",
+      "source": "Tiny Speck (Glitch), CC0",
+      "page": "https://github.com/tinyspeck/glitch-items",
+      "changes": "composed from 330 items"
+    },
+    {
+      "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-treasure-trove/13-jewel-vault.png",
+      "title": "Jewel vault",
+      "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+      "licence": "CC0",
+      "source": "Tiny Speck (Glitch), CC0",
+      "page": "https://github.com/tinyspeck/glitch-items",
+      "changes": "composed from 330 items"
+    },
+    {
+      "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-treasure-trove/14-furniture-hall.png",
+      "title": "Furniture hall",
+      "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+      "licence": "CC0",
+      "source": "Tiny Speck (Glitch), CC0",
+      "page": "https://github.com/tinyspeck/glitch-items",
+      "changes": "composed from 176 items"
+    },
+    {
+      "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-treasure-trove/15-bog-market.png",
+      "title": "Bog market",
+      "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+      "licence": "CC0",
+      "source": "Tiny Speck (Glitch), CC0",
+      "page": "https://github.com/tinyspeck/glitch-items",
+      "changes": "composed from 330 items"
+    },
+    {
+      "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-treasure-trove/16-kitchen-garden.png",
+      "title": "Kitchen garden",
+      "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+      "licence": "CC0",
+      "source": "Tiny Speck (Glitch), CC0",
+      "page": "https://github.com/tinyspeck/glitch-items",
+      "changes": "composed from 330 items"
+    },
+    {
+      "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-treasure-trove/17-furniture-warehouse.png",
+      "title": "Furniture warehouse",
+      "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+      "licence": "CC0",
+      "source": "Tiny Speck (Glitch), CC0",
+      "page": "https://github.com/tinyspeck/glitch-items",
+      "changes": "composed from 272 items"
+    },
+    {
+      "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-treasure-trove/18-tinkers-hall.png",
+      "title": "Tinker's hall",
+      "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+      "licence": "CC0",
+      "source": "Tiny Speck (Glitch), CC0",
+      "page": "https://github.com/tinyspeck/glitch-items",
+      "changes": "composed from 169 items"
+    },
+    {
+      "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-treasure-trove/19-antique-market.png",
+      "title": "Antique market",
+      "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+      "licence": "CC0",
+      "source": "Tiny Speck (Glitch), CC0",
+      "page": "https://github.com/tinyspeck/glitch-items",
+      "changes": "composed from 330 items"
+    },
+    {
+      "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-treasure-trove/20-grand-pantry.png",
+      "title": "Grand pantry",
+      "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+      "licence": "CC0",
+      "source": "Tiny Speck (Glitch), CC0",
+      "page": "https://github.com/tinyspeck/glitch-items",
+      "changes": "composed from 182 items"
+    }
+  ]
+}

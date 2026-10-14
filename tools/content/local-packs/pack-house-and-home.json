@@ -1,0 +1,192 @@
+{
+ "pack": {
+  "id": "pack-house-and-home",
+  "name": "House and Home",
+  "category": "Illustration",
+  "description": "Parlours, cabins, salons and lamp shops, furnished room by room in hand-drawn pieces.",
+  "sortOrder": 1330,
+  "price": "coins"
+ },
+ "pictures": [
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-house-and-home/01-powder-blue-parlour.png",
+   "title": "Powder blue parlour",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 82 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-house-and-home/02-violet-lounge.png",
+   "title": "Violet lounge",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 82 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-house-and-home/03-attic.png",
+   "title": "Attic",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 151 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-house-and-home/04-garden-terrace.png",
+   "title": "Garden terrace",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 141 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-house-and-home/05-baroque-salon.png",
+   "title": "Baroque salon",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 83 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-house-and-home/06-log-cabin.png",
+   "title": "Log cabin",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 94 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-house-and-home/07-bog-hut.png",
+   "title": "Bog hut",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 82 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-house-and-home/08-japanese-house.png",
+   "title": "Japanese house",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 80 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-house-and-home/09-modern-loft.png",
+   "title": "Modern loft",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 91 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-house-and-home/10-rook-nest-rooms.png",
+   "title": "Rook nest rooms",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 70 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-house-and-home/11-toadstool-cottage.png",
+   "title": "Toadstool cottage",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 90 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-house-and-home/12-yard-sale.png",
+   "title": "Yard sale",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 125 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-house-and-home/13-starship-quarters.png",
+   "title": "Starship quarters",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 85 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-house-and-home/14-furniture-showroom.png",
+   "title": "Furniture showroom",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 146 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-house-and-home/15-uralia-grove-house.png",
+   "title": "Grove house",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 83 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-house-and-home/16-lamp-and-flower-shop.png",
+   "title": "Lamp and flower shop",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 91 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-house-and-home/17-door-gallery.png",
+   "title": "Door gallery",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 41 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-house-and-home/18-rug-shop.png",
+   "title": "Rug shop",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 92 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-house-and-home/19-moving-day.png",
+   "title": "Moving day",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 135 items"
+  },
+  {
+   "file": "/Users/matejbaco/.local/share/card-jigsaw-world/local-packs/pack-house-and-home/20-fireplace-hall.png",
+   "title": "Fireplace hall",
+   "author": "Tiny Speck (Glitch), composed by Card Jigsaw World",
+   "licence": "CC0",
+   "source": "Tiny Speck (Glitch), CC0",
+   "page": "https://github.com/tinyspeck/glitch-items",
+   "changes": "composed from 82 items"
+  }
+ ]
+}
