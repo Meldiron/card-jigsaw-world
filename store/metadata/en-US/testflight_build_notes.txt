@@ -1,7 +1,6 @@
 New in this build:
-- Daily reminders work: turn them on in Settings > Daily reminders and choose the time (19:00 by default). One a day with the daily puzzle, none on days you have already claimed your daily gift.
-- Quick play opens the mode and board picker instead of starting a game; your last board is selected.
-- The Quests tab shows a dot while a quest or event reward is waiting to be claimed.
-- Social shows a plain leaderboard ranked by total XP (no league or season).
+- Painting (black-and-white cards that colour in as they lock, pays 25% more) and giant boards of 100 to 300 cards in the new Giant pack Colourful Houses, with zoom, an overview map and an Edges filter.
+- Shapes, Painting and giant boards open as you level up (2, 4, 6, 8, 10), each with an intro; new quests (no Peek, at par, 5 locks in one move, Painting), Claim all, Another picture in Quick play.
+- Daily reminders and New events reminders, account deletion in the app, App Store rating request, wheel odds, tomorrow's daily preview, picture search, New packs, dark and tinted icons.
 
-Please try: turn on Daily reminders, set the time a few minutes ahead, leave the game, and tap the reminder when it arrives.
+Please try: a giant board in the Colourful Houses pack (zoom in, use the map and Edges), and turn on Daily reminders in Settings.

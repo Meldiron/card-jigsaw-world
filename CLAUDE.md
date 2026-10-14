@@ -144,7 +144,16 @@ skills under `.claude/skills/` hold the detailed workflows.
 - Painting and giant boards: `progress.painting`; `lib/state/giant.dart` (`isGiantPack`,
   `isGiantPuzzleProvider`: packs of category `Giant` get the Large/Huge/Giant/Colossal ladder only, about
   100-300 cards in Cards), `puzzleImageFullProvider` (full-resolution decode), `BoardZoom` in
-  `board_widget.dart` (pinch, two-finger pan).
+  `board_widget.dart` (pinch, two-finger pan, `fitCell` zoom limit, double-tap, auto-pan, Edges fade); the bar,
+  overview map, off-screen pointer and milestones in `lib/features/game/giant_board.dart`; saved views in
+  `GiantViews` (`lib/state/giant.dart`). Design and research: `docs/giant-boards.md`. QA:
+  `integration_test/giant_ux_test.dart` (real Giant pack, about 4 minutes).
+- Progression: `lib/state/unlocks.dart` (`openFeaturesProvider`, intro bookkeeping) and `Unlocks` /
+  `OpenFeatures` in `lib/state/rewards.dart`: Squares, Triangles, Hexagons, Painting and giant boards open at
+  levels 2/4/6/8/10 or once used; `lib/features/game/unlock_intro.dart` (intro sheet, `UnlockIntroHost`).
+  Quests: `Goals.daily` / `weekly` rotate by day and week and take `open`, `level` and `claimed`;
+  `lib/features/events/quest_rewards.dart` (`questsFor`, `readyGoals`, `readyEventsProvider`, Claim all).
+  Integration suites that play every shape override `openFeaturesProvider` and `pendingUnlockIntroProvider`.
 - `lib/state/account_deletion.dart`, `lib/state/review_prompt.dart` (`ReviewRules`: App Store rating after a
   3-star solve or finished pack, 5+ solves, once per version and 120 days), `lib/core/app_review.dart`
   (channel `cjw/review`).
@@ -162,7 +171,7 @@ skills under `.claude/skills/` hold the detailed workflows.
   `ProfileNotifier.syncCompletion`, backfill `tools/dev/backfill_profile_stats.py`) are public.
   `isTest` marks QA players (excluded from the league). `profiles.appliedOps` / `event_progress.appliedOps` (ids
   of applied sync ops, exactly-once retries) and `progress.session` (play-through id) belong to the save sync.
-  `progress.painting` marks a Painting board (x1.25). `purchases.ownership` / `purchases.appTransactionId`
+  `progress.painting` marks a Painting board (x1.25); `progress.par` / `peeked` / `bestLock` feed the quests. `purchases.ownership` / `purchases.appTransactionId`
   (index `idx_apptx`) track Family Sharing (VIP is family-shared since 2026-10-14, irreversible; at most 6
   game accounts per subscription).
 - Functions: `verify-purchase` (StoreKit 2 JWS verification, grants, App Store Server Notifications at

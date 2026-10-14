@@ -1,22 +1,32 @@
 Version 1.7.0
 
-- Every picture is now served from our own servers, so tiles and covers load reliably.
-- The picture catalogue is rebuilt: no people, no repeats, portrait or square only, at least 20 pictures per pack, and new AI and Abstract categories.
-- Finishing a puzzle pays fewer coins; packs stay at their prices.
-- Dragged pieces show every detail: square corners and no frame.
-- Offers in an ad break open their destination instead of the next puzzle.
-- Cleaner board preview corners on the difficulty screen.
-- VIP members get their 500 bonus coins automatically once a week.
-- Daily gift: today's day is outlined instead of filled, so the coin, ticket and hint icons stay easy to read.
-- Every pack in the catalogue now shows in the Library, including the AI and Abstract categories.
-- Upcoming content stays hidden until it is close: daily months appear on their first day, events three days before they open.
-- My Puzzles photos are private to your account. Free players keep up to 5 photos; VIP has no limit.
-- The leaderboard and My Puzzles load more as you scroll; players with equal XP share a place.
-- Quick play on Home picks a random picture you have not played yet and opens the mode and board picker, with your last board selected.
+New ways to play
+- Painting: cards start in black and white and get their colour back as they lock. Pays 25% more.
+- Giant boards of 100 to 300 cards, with pinch and double-tap zoom, an overview map, an Edges filter for the frame, and a board that opens where you left it.
+- A new Giant pack, Colourful Houses: 24 detailed pictures made for the biggest boards.
+- Shapes and options open as you level up: Squares, Triangles, Hexagons, Painting, then giant boards, each with a short intro.
+
+Quests and rewards
+- New quests: solve without Peek, finish at par, lock 5 cards in one move, solve a Painting board.
+- Claim all on the Quests tab, a dot on the tab when a reward is ready, and the completion screen tells you when a quest is done.
+- Lucky Wheel: See odds lists every prize and its chance.
+- VIP members get their 500 bonus coins automatically once a week, and VIP can be shared with your family through Family Sharing.
+
+Home and Library
+- Quick play opens the mode and board picker with your last board selected, and Another picture draws a new one.
+- Once today's daily puzzle is solved, Home shows tomorrow's as a blurred preview.
+- Library search finds pictures by title, new packs carry a New badge, and there are Finished, New and Hide finished filters.
 - Home shows your packs in progress, packs missing stars and finished packs.
-- Library: a Finished filter, a Hide finished switch and search.
-- Profiles show Total Completion and quests completed.
-- Tickets on blue buttons are now white, so prices are easy to read.
-- Daily reminders: turn them on in Settings and choose the time. One a day with the daily puzzle, none on days you have already claimed your daily gift.
-- A dot on the Quests tab when a quest or event reward is ready to claim.
-- The Social tab shows one leaderboard, ranked by total XP.
+
+Reminders and account
+- Daily reminders: turn them on in Settings and choose the time. None on days you have already claimed your daily gift.
+- New events: a reminder the evening before a world-day event opens, if you have not played for a while.
+- Delete your account in the app: Profile > Account > Delete account.
+- Settings: Rate Card Jigsaw World and the real app version. Dark and tinted Home Screen icons on iOS 18.
+
+Pictures and sync
+- Every picture is served from our own servers, and the catalogue is rebuilt: no people, no repeats, portrait or square only, at least 20 pictures per pack, new AI and Abstract categories.
+- One save on every device: progress from the iPhone and the web site adds up, play made offline is kept, and records only improve.
+- The Social tab shows one leaderboard, ranked by total XP; it and My Puzzles load more as you scroll.
+- My Puzzles photos are private to your account. Free players keep up to 5 photos; VIP has no limit.
+- Finishing a puzzle pays fewer coins; packs stay at their prices.
