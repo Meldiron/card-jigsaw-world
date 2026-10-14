@@ -16,35 +16,57 @@ import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 
-/// One slice of the Lucky Wheel. [weight] is its share of the draw: the
-/// chance of a slice is its weight over the sum of all weights.
+/// One slice of the Lucky Wheel: [amount] of [kind]. [weight] is its share
+/// of the draw: the chance of a slice is its weight over the sum of all weights.
 class WheelSegment {
-  const WheelSegment(this.label, this.kind, this.color, {this.coins = 0, this.hints = 0, this.weight = 1, this.jackpot = false});
-  final String label;
+  const WheelSegment(this.kind, this.amount, this.color, {this.weight = 1, this.jackpot = false});
   final Currency kind;
+  final int amount;
   final Color color;
-  final int coins;
-  final int hints;
   final double weight;
   final bool jackpot;
+
+  String get label => '$amount';
+
+  /// What the prize is, after its icon and number ("2 Hints", "5 Peeks",
+  /// "1 Magic"). Coins carry the coin mark only.
+  String? get name => switch (kind) {
+        Currency.coins => null,
+        Currency.tickets => amount == 1 ? 'Ticket' : 'Tickets',
+        Currency.hints => amount == 1 ? 'Hint' : 'Hints',
+        Currency.peeks => amount == 1 ? 'Peek' : 'Peeks',
+        Currency.magics => 'Magic',
+      };
+
+  /// The prize in coins, at what the same boosters cost in a game.
+  int get coinValue => switch (kind) {
+        Currency.coins => amount,
+        Currency.tickets => 0,
+        Currency.hints => amount * Economy.hintCostCoins,
+        Currency.peeks => amount * Economy.peekCostCoins,
+        Currency.magics => amount * Economy.magicLockCostCoins,
+      };
 }
 
-/// Balance: a spin costs 1 Ticket.
-/// Expected value per spin:
-///   coins  = (60·5 + 90·4 + 120·4 + 150·3 + 200·2 + 300·1.5 + 500·0.5) / 22 ≈ 122
-///   hints  = 2 hints × 2/22 ≈ 0.18 hints
+/// Balance: a spin costs 1 Ticket. Since 2026-10-14 (owner) four coin slices
+/// are boosters for the stock: 5 and 10 Peeks, 1 and 3 Magic, used in a game
+/// before coins. Expected value per spin, boosters at their price in coins
+/// (Peek 10, Hint 150, Magic 300):
+///   coins    = (60·5 + 120·5 + 500·0.5) / 22 ≈ 52 coins
+///   boosters = (5·10·4 + 2·150·2 + 10·10·3 + 300·2 + 900·0.5) / 22 ≈ 98 coins
+///   together ≈ 150 coins (149 before, when the wheel paid mostly coins)
 /// with a 2.3% chance (0.5/22) of the 500-Coin jackpot. Tickets are never a
 /// reward, so the wheel cannot pay for itself. The odds sheet reads this same
 /// table ([wheelOdds]), so what players are shown is what the spin draws.
 const wheelSegments = [
-  WheelSegment('60', Currency.coins, Color(0xFFD97706), coins: 60, weight: 5),
-  WheelSegment('90', Currency.coins, Color(0xFF64748B), coins: 90, weight: 4),
-  WheelSegment('120', Currency.coins, Color(0xFF0F9D8F), coins: 120, weight: 4),
-  WheelSegment('2', Currency.hints, Brand.accent, hints: 2, weight: 2),
-  WheelSegment('150', Currency.coins, Color(0xFFB45309), coins: 150, weight: 3),
-  WheelSegment('200', Currency.coins, Color(0xFF475569), coins: 200, weight: 2),
-  WheelSegment('300', Currency.coins, Color(0xFF0B7A70), coins: 300, weight: 1.5),
-  WheelSegment('500', Currency.coins, Color(0xFF3730A3), coins: 500, weight: 0.5, jackpot: true),
+  WheelSegment(Currency.coins, 60, Color(0xFFD97706), weight: 5),
+  WheelSegment(Currency.peeks, 5, Color(0xFF64748B), weight: 4),
+  WheelSegment(Currency.coins, 120, Color(0xFF0F9D8F), weight: 5),
+  WheelSegment(Currency.hints, 2, Brand.accent, weight: 2),
+  WheelSegment(Currency.peeks, 10, Color(0xFF475569), weight: 3),
+  WheelSegment(Currency.magics, 1, Color(0xFFB45309), weight: 2),
+  WheelSegment(Currency.coins, 500, Color(0xFF3730A3), weight: 0.5, jackpot: true),
+  WheelSegment(Currency.magics, 3, Color(0xFF0B7A70), weight: 0.5),
 ];
 
 const _segments = wheelSegments;
@@ -77,8 +99,8 @@ List<WheelOdd> wheelOdds([List<WheelSegment> segments = wheelSegments]) {
     missing--;
   }
   final odds = [for (var i = 0; i < segments.length; i++) (segment: segments[i], percent: floors[i] / 10)];
-  // Coins by amount, then hints.
-  odds.sort((a, b) => a.segment.kind != b.segment.kind ? a.segment.kind.index.compareTo(b.segment.kind.index) : (a.segment.coins + a.segment.hints).compareTo(b.segment.coins + b.segment.hints));
+  // Coins by amount, then hints, Peeks and Magic.
+  odds.sort((a, b) => a.segment.kind != b.segment.kind ? a.segment.kind.index.compareTo(b.segment.kind.index) : a.segment.amount.compareTo(b.segment.amount));
   return odds;
 }
 
@@ -115,12 +137,8 @@ Future<void> showWheelOdds(BuildContext context) => showAppSheet(
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
                         child: Row(
                           children: [
-                            Amount(
-                              currency: odds[i].segment.kind,
-                              value: odds[i].segment.kind == Currency.hints ? odds[i].segment.hints : odds[i].segment.coins,
-                              size: 18,
-                              fontSize: 15,
-                            ),
+                            Amount(currency: odds[i].segment.kind, value: odds[i].segment.amount, size: 18, fontSize: 15),
+                            if (odds[i].segment.name != null) ...[const SizedBox(width: 5), Text(odds[i].segment.name!, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600))],
                             if (odds[i].segment.jackpot) ...[const SizedBox(width: 8), Text('Jackpot', style: TextStyle(color: c.textSecondary, fontSize: 13))],
                             const Spacer(),
                             Text(formatOdds(odds[i].percent), style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15, fontFeatures: [FontFeature.tabularFigures()])),
@@ -199,8 +217,18 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
     });
     _c.forward(from: 0).whenComplete(() async {
       final won = _segments[idx];
-      if (won.coins > 0) await n.addCoins(won.coins, reason: 'wheel');
-      if (won.hints > 0) await n.addHints(won.hints, reason: 'wheel');
+      switch (won.kind) {
+        case Currency.coins:
+          await n.addCoins(won.amount, reason: 'wheel');
+        case Currency.tickets:
+          await n.addTickets(won.amount, reason: 'wheel');
+        case Currency.hints:
+          await n.addHints(won.amount, reason: 'wheel');
+        case Currency.peeks:
+          await n.addPeeks(won.amount, reason: 'wheel');
+        case Currency.magics:
+          await n.addMagics(won.amount, reason: 'wheel');
+      }
       if (!mounted) return;
       Sfx.instance.win();
       if (won.jackpot) {
@@ -314,8 +342,8 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
                     children: [
                       const Text('You won', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
                       const SizedBox(width: 10),
-                      if (_result!.coins > 0) Amount(currency: Currency.coins, value: _result!.coins, size: 20),
-                      if (_result!.hints > 0) Amount(currency: Currency.hints, value: _result!.hints, size: 20),
+                      Amount(currency: _result!.kind, value: _result!.amount, size: 20),
+                      if (_result!.name != null) ...[const SizedBox(width: 6), Text(_result!.name!, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16))],
                       if (jackpot) ...[const SizedBox(width: 8), const Chip2(label: 'Jackpot', color: Brand.coin, foreground: Color(0xFF2A1F00))],
                     ],
                   ),
@@ -361,7 +389,9 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
 IconData _glyph(WheelSegment s) => switch (s.kind) {
       Currency.coins => Icons.monetization_on_rounded,
       Currency.tickets => Icons.confirmation_number_rounded,
-      Currency.hints => Icons.lightbulb_rounded,
+      Currency.hints => AppIcons.hint,
+      Currency.peeks => AppIcons.peek,
+      Currency.magics => AppIcons.magic,
     };
 
 class _WheelPainter extends CustomPainter {

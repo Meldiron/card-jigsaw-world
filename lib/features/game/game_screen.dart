@@ -472,8 +472,9 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     _ctrl.showHint();
   }
 
+  /// Magic: from stock (Lucky Wheel prizes) first, then for coins.
   Future<void> _magic() async {
-    final ok = await ref.read(profileProvider.notifier).spendCoins(Economy.magicLockCostCoins, reason: 'magic-lock');
+    final ok = await ref.read(profileProvider.notifier).useMagic();
     if (!mounted) return;
     if (!ok) {
       Sfx.instance.error();
@@ -485,12 +486,13 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   }
 
   /// Peek: the cards fly to their places for a moment and back (a little
-  /// longer on giant boards, where there is more to read).
+  /// longer on giant boards, where there is more to read). From stock first,
+  /// then for coins.
   Future<void> _peek() async {
     final state = ref.read(gameControllerProvider(_args!));
     if (state.peeking) return;
     final giant = state.board.spec.isGiant;
-    final ok = await ref.read(profileProvider.notifier).spendCoins(Economy.peekCostCoins, reason: 'peek');
+    final ok = await ref.read(profileProvider.notifier).usePeek();
     if (!mounted) return;
     if (!ok) {
       Sfx.instance.error();
@@ -764,6 +766,8 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                 if (state.status != GameStatus.won)
                   _BoosterBar(
                     hints: profile?.hints ?? 0,
+                    peeks: profile?.peeks ?? 0,
+                    magics: profile?.magics ?? 0,
                     canUndo: state.canUndo,
                     playing: state.status == GameStatus.playing && !state.peeking,
                     onHint: _hint,
@@ -927,8 +931,12 @@ class _HudStat extends StatelessWidget {
 }
 
 class _BoosterBar extends StatelessWidget {
-  const _BoosterBar({required this.hints, required this.canUndo, required this.playing, required this.onHint, required this.onMagic, required this.onPeek, required this.onUndo});
+  const _BoosterBar({required this.hints, this.peeks = 0, this.magics = 0, required this.canUndo, required this.playing, required this.onHint, required this.onMagic, required this.onPeek, required this.onUndo});
   final int hints;
+
+  /// Peeks and Magic in stock: used before coins, shown as "N left".
+  final int peeks;
+  final int magics;
   final bool canUndo;
   final bool playing;
 
@@ -956,11 +964,20 @@ class _BoosterBar extends StatelessWidget {
             key: const ValueKey('booster-peek'),
             icon: AppIcons.peek,
             label: 'Peek',
-            cost: Amount(currency: Currency.coins, value: Economy.peekCostCoins, size: 11, fontSize: 10, weight: FontWeight.w700),
+            cost: peeks > 0 ? Text('$peeks left') : Amount(currency: Currency.coins, value: Economy.peekCostCoins, size: 11, fontSize: 10, weight: FontWeight.w700),
             enabled: playing,
             onTap: onPeek,
+            accent: peeks > 0,
           ),
-          _Booster(icon: AppIcons.magic, label: 'Magic', cost: Amount(currency: Currency.coins, value: Economy.magicLockCostCoins, size: 11, fontSize: 10, weight: FontWeight.w700), enabled: playing, onTap: onMagic),
+          _Booster(
+            key: const ValueKey('booster-magic'),
+            icon: AppIcons.magic,
+            label: 'Magic',
+            cost: magics > 0 ? Text('$magics left') : Amount(currency: Currency.coins, value: Economy.magicLockCostCoins, size: 11, fontSize: 10, weight: FontWeight.w700),
+            enabled: playing,
+            onTap: onMagic,
+            accent: magics > 0,
+          ),
           _Booster(icon: AppIcons.hint, label: 'Hint', cost: hints > 0 ? Text('$hints left') : Amount(currency: Currency.coins, value: Economy.hintCostCoins, size: 11, fontSize: 10, weight: FontWeight.w700), enabled: playing, onTap: onHint, accent: hints > 0),
         ],
       ),

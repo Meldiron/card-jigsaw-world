@@ -29,7 +29,7 @@ Color colorFromHex(String? hex, [Color fallback = const Color(0xFF6C5CE7)]) {
   return v == null ? fallback : Color(v);
 }
 
-/// Player profile – the economy lives here (coins, tickets, hints, piggy bank).
+/// Player profile – the economy lives here (coins, tickets, hints, Peeks and Magic in stock, piggy bank).
 class Profile {
   Profile({
     required this.id,
@@ -58,6 +58,8 @@ class Profile {
     this.unlockedAvatars = const [],
     this.longestStreak = 0,
     this.lastStreakRestore,
+    this.peeks = 0,
+    this.magics = 0,
     this.claimedAchievements = const [],
     this.totalMoves = 0,
     this.totalSeconds = 0,
@@ -77,6 +79,11 @@ class Profile {
   final int coins;
   final int tickets;
   final int hints;
+
+  /// Peeks and Magic in stock (Lucky Wheel prizes), used before coins. Columns `peeks` and
+  /// `magics` default to 0 on the server, so [toData] leaves them out.
+  final int peeks;
+  final int magics;
   final int xp;
   final int piggyCoins;
   final int streak;
@@ -169,6 +176,8 @@ class Profile {
         unlockedTiers: _strings(d['unlockedTiers']),
         unlockedAvatars: _strings(d['unlockedAvatars']),
         longestStreak: _i(d['longestStreak']),
+        peeks: _i(d['peeks']),
+        magics: _i(d['magics']),
         lastStreakRestore: _dt(d['lastStreakRestore']),
         claimedAchievements: _strings(d['claimedAchievements']),
         totalMoves: _i(d['totalMoves']),
@@ -257,6 +266,8 @@ class Profile {
     int? coins,
     int? tickets,
     int? hints,
+    int? peeks,
+    int? magics,
     int? xp,
     int? piggyCoins,
     int? streak,
@@ -295,6 +306,8 @@ class Profile {
         unlockedTiers: unlockedTiers,
         unlockedAvatars: unlockedAvatars,
         longestStreak: longestStreak,
+        peeks: peeks ?? this.peeks,
+        magics: magics ?? this.magics,
         lastStreakRestore: lastStreakRestore,
         claimedAchievements: claimedAchievements,
         totalMoves: totalMoves,

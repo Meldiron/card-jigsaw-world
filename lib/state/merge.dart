@@ -203,6 +203,10 @@ Map<String, dynamic> mergeProfile({
   for (final k in scalarKeys) {
     patch[k] = chosen.profile[k];
   }
+  // Peeks and Magic in stock follow the chosen save too (a row read before the columns existed has none).
+  for (final k in const ['peeks', 'magics']) {
+    if (chosen.profile[k] != null) patch[k] = chosen.profile[k];
+  }
   // The chosen streak must stay at or below the combined longest.
   patch['longestStreak'] = max(patch['longestStreak'] as int, SaveSnapshot._i(patch['streak']));
   return patch;

@@ -142,7 +142,9 @@ void main() {
     await shot(tester, 'si_04_wheel');
     await tapText(tester, 'See odds', ms: 1500);
     expect(find.text('Lucky Wheel odds'), findsOneWidget);
-    expect(find.text('2.3%'), findsOneWidget);
+    // The 500-coin jackpot and 3 Magic.
+    expect(find.text('2.3%'), findsNWidgets(2));
+    expect(find.text('Peeks'), findsNWidgets(2));
     await shot(tester, 'si_05_wheel_odds');
     await tester.tapAt(const Offset(200, 60));
     await settle(tester, 900);

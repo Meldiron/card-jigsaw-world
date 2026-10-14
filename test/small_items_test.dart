@@ -11,6 +11,7 @@ import 'package:card_jigsaw_world/features/profile/settings_screen.dart';
 import 'package:card_jigsaw_world/models/models.dart';
 import 'package:card_jigsaw_world/state/catalog_sync.dart';
 import 'package:card_jigsaw_world/state/reminders.dart';
+import 'package:card_jigsaw_world/widgets/icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -119,6 +120,20 @@ void main() {
       expect(odds.fold<double>(0, (s, o) => s + o.percent), closeTo(100, 1e-9));
       expect(odds.firstWhere((o) => o.segment.jackpot).percent, 2.3);
       expect(formatOdds(22.7), '22.7%');
+    });
+
+    test('Peeks (5, 10) and Magic (1, 3) took four coin slices; a spin is worth about as much as before', () {
+      List<int> amounts(Currency kind) => [for (final s in wheelSegments) if (s.kind == kind) s.amount];
+      expect(amounts(Currency.peeks), [5, 10]);
+      expect(amounts(Currency.magics), [1, 3]);
+      expect(amounts(Currency.hints), [2]);
+      expect(amounts(Currency.coins), [60, 120, 500]);
+      expect(amounts(Currency.tickets), isEmpty, reason: 'the wheel never pays for itself');
+      final total = wheelSegments.fold<double>(0, (s, e) => s + e.weight);
+      final value = wheelSegments.fold<double>(0, (s, e) => s + e.weight * e.coinValue) / total;
+      expect(value, inInclusiveRange(140, 160), reason: 'about 150 coins a spin, boosters at their price');
+      expect(wheelSegments.where((s) => s.jackpot).single.amount, 500);
+      expect([for (final s in wheelSegments) s.name], [null, 'Peeks', null, 'Hints', 'Peeks', 'Magic', null, 'Magic']);
     });
 
     test('the spin draws each slice in proportion to its weight', () {

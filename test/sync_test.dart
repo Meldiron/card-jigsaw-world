@@ -44,6 +44,38 @@ void main() {
     expect(laptop.me.coins, 725);
   });
 
+  test('Peeks and Magic won on one device are in stock on the other and used before coins', () async {
+    final (server, phone, laptop) = await _twoDevices();
+    await phone.profile.addPeeks(5, reason: 'wheel');
+    await phone.profile.addMagics(1, reason: 'wheel');
+    await phone.settle();
+    expect(server.profiles['player1']!['peeks'], 5);
+    expect(server.profiles['player1']!['magics'], 1);
+    // The laptop has not seen them yet: its Peek is paid in coins.
+    expect(await laptop.profile.usePeek(), isTrue);
+    await laptop.settle();
+    expect(server.profiles['player1']!['coins'], 500 - Economy.peekCostCoins);
+    await laptop.resume();
+    expect(laptop.me.peeks, 5);
+    expect(laptop.me.magics, 1);
+    // Now the stock goes first and the coins stay.
+    expect(await laptop.profile.usePeek(), isTrue);
+    expect(await laptop.profile.useMagic(), isTrue);
+    expect(laptop.me.peeks, 4);
+    expect(laptop.me.magics, 0);
+    await laptop.settle();
+    final row = server.profiles['player1']!;
+    expect(row['peeks'], 4);
+    expect(row['magics'], 0);
+    expect(row['coins'], 500 - Economy.peekCostCoins);
+    // Out of Magic: the next one costs coins again.
+    expect(await laptop.profile.useMagic(), isTrue);
+    await laptop.settle();
+    expect(server.profiles['player1']!['coins'], 500 - Economy.peekCostCoins - Economy.magicLockCostCoins);
+    await phone.resume();
+    expect(phone.me.peeks, 4);
+  });
+
   test('a pack unlocked on one device is not lost when the other unlocks a different one', () async {
     final (server, phone, laptop) = await _twoDevices();
     final mountains = Pack.fromRow('mountains', {'name': 'Mountains', 'priceCoins': 200});
@@ -371,11 +403,13 @@ void main() {
   });
 
   test('notice lines read calmly and name what changed', () {
-    const n = SyncNotice(coins: 1200, tickets: -1, hints: 1, level: 7, solved: 3, betterStars: 1, boards: ['a', 'b'], packs: ['m'], quests: 2, skipped: [SkipReason.unlocked]);
+    const n = SyncNotice(coins: 1200, tickets: -1, hints: 1, peeks: 5, magics: -1, level: 7, solved: 3, betterStars: 1, boards: ['a', 'b'], packs: ['m'], quests: 2, skipped: [SkipReason.unlocked]);
     expect(syncNoticeLines(n, packNames: {'m': 'Mountains'}).map((l) => l.text), [
       '+1,200 Coins',
       '−1 Ticket',
       '+1 Hint',
+      '+5 Peeks',
+      '−1 Magic',
       'Level 7',
       '3 pictures solved',
       'More stars on 1 picture',

@@ -1,10 +1,10 @@
-// Giant boards dealt by zone, with the real Giant pack ("Colourful Houses") on the live backend:
-// zone lines on the whole board and zoomed in, Peek's flight (free on a giant board), the
-// one-time Locate tip, holding a card to see its place on the overview map, Gather, a zone
-// finished card by card ("Zone complete"), and Peek for 10 coins on a normal board.
+// The giant board tools with the real Giant pack ("Colourful Houses") on the live backend: Peek's
+// flight (10 coins, as on every board), the one-time Locate tip, a tapped card's place on the
+// overview map, the Locate switch, no map while the map is off, Gather, the other shapes at their
+// largest size, and Peek on a normal board.
 //
 // Run: tools/dev/qa-run.sh drive --driver=test_driver/integration_test.dart \
-//        --target=integration_test/giant_zones_test.dart -d <simulator>
+//        --target=integration_test/giant_tools_test.dart -d <simulator>
 import 'package:card_jigsaw_world/app.dart';
 import 'package:card_jigsaw_world/core/sfx.dart';
 import 'package:card_jigsaw_world/data/local_store.dart';
@@ -13,6 +13,7 @@ import 'package:card_jigsaw_world/features/game/giant_board.dart';
 import 'package:card_jigsaw_world/models/models.dart';
 import 'package:card_jigsaw_world/router.dart';
 import 'package:card_jigsaw_world/state/catalog.dart';
+import 'package:card_jigsaw_world/state/giant.dart';
 import 'package:card_jigsaw_world/state/settings.dart';
 import 'package:card_jigsaw_world/state/profile.dart';
 import 'package:card_jigsaw_world/state/rewards.dart';
@@ -124,7 +125,7 @@ void main() {
     await shot(tester, '${prefix}d_back', wait: 0);
   }
 
-  testWidgets('giant boards dealt by zone, Locate, Gather, Peek', (tester) async {
+  testWidgets('giant boards: Peek, Locate, Gather', (tester) async {
     SharedPreferences.setMockInitialValues({});
     final store = await LocalStore.open();
     Sfx.instance.soundEnabled = false;
@@ -154,82 +155,96 @@ void main() {
     final all = await container(tester).read(allPuzzlesProvider.future);
     final pictures = all.where((p) => p.packId == _packId).toList();
 
-    // ---- Cards, Colossal: dealt by zone, faint lines between the zones.
+    // ---- Cards, Colossal: the whole board.
     await openBoard(tester, pictures[2], 'Cards', 'Colossal');
     final spec = board(tester).state.board.spec;
-    debugPrint('QA_ZONES ${spec.code}: ${spec.cells} cards');
-    await shot(tester, 'gz_01_colossal_zones');
+    debugPrint('QA_GIANT ${spec.code}: ${spec.cells} cards');
+    await shot(tester, 'gt_01_colossal_whole');
 
-    // ---- Peek on a giant board: free, the cards fly home and back.
+    // ---- Peek on a giant board: 10 coins, the cards fly home and back.
     final before = coins(tester);
-    await peek(tester, 'gz_02', away: const Duration(milliseconds: 3200));
-    expect(coins(tester), before, reason: 'Peek is free on a giant board');
+    expect(before, greaterThanOrEqualTo(Economy.peekCostCoins));
+    await peek(tester, 'gt_02', away: const Duration(milliseconds: 3200));
+    expect(before - coins(tester), Economy.peekCostCoins, reason: 'Peek costs the same on a giant board');
     expect(board(tester).state.peeked, isTrue);
 
-    // ---- Zoom in: the zone lines stay thin; the first zoom explains Locate.
+    // ---- Zoom in: the first zoom explains Locate (the map and Locate are on by default).
     final z = zoomOf(tester);
     z.zoomTo(z.step, focal: boardRect(tester).size.center(Offset.zero) * 0.6);
     await settle(tester, 900);
-    expect(find.text('Hold a card to see its place on the map'), findsOneWidget);
-    await shot(tester, 'gz_03_zoomed_tip', wait: 0);
+    expect(find.byType(GiantMinimap), findsOneWidget);
+    expect(find.text('Tap a card to see its place on the map'), findsOneWidget);
+    await shot(tester, 'gt_03_zoomed_tip', wait: 0);
     await settle(tester, 3500);
 
-    // ---- Hold a card: the overview map shows a ring where it belongs and a line to it.
-    final b = board(tester).state.board;
-    final held = List.generate(b.cells, (i) => i).firstWhere((i) => !b.isLocked(i) && inView(tester, i) && b.groupOf(i).length == 1);
-    final g = await tester.startGesture(onScreen(tester, held));
-    await settle(tester, 900);
-    final map = tester.widget<GiantMinimap>(find.byType(GiantMinimap));
-    expect(map.locate, held, reason: 'the held card is located on the map');
-    await shot(tester, 'gz_04_hold_locate', wait: 0);
-    await g.up();
-    await settle(tester, 600);
-    expect(board(tester).state.selected, held, reason: 'releasing selects the card');
-    expect(tester.widget<GiantMinimap>(find.byType(GiantMinimap)).locate, held, reason: 'still located while selected');
-    await shot(tester, 'gz_05_selected_located');
-    // Moving it clears the marker.
-    await tapSlot(tester, board(tester).state.board.homeOf(held), ms: 900);
-    expect(tester.widget<GiantMinimap>(find.byType(GiantMinimap)).locate, isNull);
+    int loneCardInView() {
+      final b = board(tester).state.board;
+      return List.generate(b.cells, (i) => i).firstWhere((i) => !b.isLocked(i) && inView(tester, i) && b.groupOf(i).length == 1);
+    }
 
-    // ---- The map hidden: holding a card still shows it.
-    await tester.tap(find.byKey(const ValueKey('giant-map')), warnIfMissed: false);
-    await settle(tester, 500);
-    expect(find.byType(GiantMinimap), findsNothing);
-    final b2 = board(tester).state.board;
-    final held2 = List.generate(b2.cells, (i) => i).firstWhere((i) => !b2.isLocked(i) && inView(tester, i) && b2.groupOf(i).length == 1);
-    final g2 = await tester.startGesture(onScreen(tester, held2));
-    await settle(tester, 900);
-    expect(find.byType(GiantMinimap), findsOneWidget, reason: 'a held card brings the map back for a moment');
-    await shot(tester, 'gz_06_hold_map_hidden', wait: 0);
-    await g2.up();
+    GiantMinimap minimap() => tester.widget<GiantMinimap>(find.byType(GiantMinimap));
+
+    // ---- Tap a card: the map shows a ring where it belongs and a line to it.
+    final picked = loneCardInView();
+    await tapSlot(tester, picked, ms: 700);
+    expect(board(tester).state.selected, picked);
+    expect(minimap().locate, picked, reason: 'the tapped card is located on the map');
+    await shot(tester, 'gt_04_tap_locate', wait: 0);
+    // Moving it clears the marker.
+    await tapSlot(tester, board(tester).state.board.homeOf(picked), ms: 900);
+    expect(board(tester).state.selected, isNull);
+    expect(minimap().locate, isNull);
+
+    // ---- Locate off: a tapped card is only selected; on again, it is located.
+    await tester.tap(find.byKey(const ValueKey('giant-locate')), warnIfMissed: false);
     await settle(tester, 400);
-    await tapSlot(tester, held2, ms: 600); // deselect
-    expect(find.byType(GiantMinimap), findsNothing);
+    expect(container(tester).read(giantViewsProvider).locate, isFalse, reason: 'the switch is remembered');
+    final second = loneCardInView();
+    await tapSlot(tester, second, ms: 600);
+    expect(board(tester).state.selected, second);
+    expect(minimap().locate, isNull, reason: 'Locate is off');
+    await shot(tester, 'gt_05_locate_off', wait: 0);
+    await tester.tap(find.byKey(const ValueKey('giant-locate')), warnIfMissed: false);
+    await settle(tester, 400);
+    expect(minimap().locate, second, reason: 'Locate on again: the selected card shows');
+    await tapSlot(tester, second, ms: 500); // deselect
+
+    // ---- The map off: tapping a card never brings it back.
     await tester.tap(find.byKey(const ValueKey('giant-map')), warnIfMissed: false);
     await settle(tester, 500);
+    expect(find.byType(GiantMinimap), findsNothing);
+    final third = loneCardInView();
+    await tapSlot(tester, third, ms: 700);
+    expect(board(tester).state.selected, third);
+    expect(find.byType(GiantMinimap), findsNothing, reason: 'the map stays off');
+    await shot(tester, 'gt_06_map_off_selected', wait: 0);
+    await tapSlot(tester, third, ms: 500); // deselect
+    await tester.tap(find.byKey(const ValueKey('giant-map')), warnIfMissed: false);
+    await settle(tester, 500);
+    expect(find.byType(GiantMinimap), findsOneWidget);
 
     // ---- Gather: the cards that belong in view come into it.
     z.lookAt(boardSize(tester).center(Offset.zero));
     await settle(tester, 700);
-    await shot(tester, 'gz_07_before_gather');
+    await shot(tester, 'gt_07_before_gather');
     final movesBefore = board(tester).state.moves;
     await tester.tap(find.byKey(const ValueKey('giant-gather')), warnIfMissed: false);
     await settle(tester, 300);
     final gatheredToast = find.textContaining('gathered').evaluate().isNotEmpty || find.text('Every card for this view is here').evaluate().isNotEmpty;
     expect(gatheredToast, isTrue);
-    await shot(tester, 'gz_08_gathered', wait: 500);
+    await shot(tester, 'gt_08_gathered', wait: 500);
     expect(board(tester).state.moves, movesBefore, reason: 'Gather is not a move');
 
     z.reset();
     await settle(tester, 700);
-    await shot(tester, 'gz_11_whole_one_zone_done');
+    await shot(tester, 'gt_09_whole_after_gather');
     await leaveBoard(tester);
 
-    // ---- Squares and Hexagons at their largest sizes: zone lines follow every shape.
+    // ---- The other shapes at their largest giant size.
     var n = 3;
     for (final mode in ['Squares', 'Triangles', 'Hexagons']) {
       await openBoard(tester, pictures[n++], mode, 'Colossal');
-      await shot(tester, 'gz_12_${mode.toLowerCase()}_zones');
+      await shot(tester, 'gt_10_${mode.toLowerCase()}_whole');
       await leaveBoard(tester);
     }
 
@@ -244,9 +259,9 @@ void main() {
     await settle(tester, 1500);
     if (find.text('Got it').evaluate().isNotEmpty) await tapText(tester, 'Got it');
     expect(board(tester).zoom, isNull);
-    await shot(tester, 'gz_13_normal_board');
+    await shot(tester, 'gt_11_normal_board');
     final wallet = coins(tester);
-    await peek(tester, 'gz_14', away: const Duration(milliseconds: 2400));
+    await peek(tester, 'gt_12', away: const Duration(milliseconds: 2400));
     expect(wallet - coins(tester), Economy.peekCostCoins);
     expect(Economy.peekCostCoins, 10);
     await leaveBoard(tester);

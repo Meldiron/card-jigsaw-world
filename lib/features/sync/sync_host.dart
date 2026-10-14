@@ -92,7 +92,7 @@ class _SyncHostState extends ConsumerState<SyncHost> {
 /// One line of the alert: what changed, with its icon.
 typedef SyncNoticeLine = ({SyncLineIcon icon, String text});
 
-enum SyncLineIcon { coins, tickets, hints, level, puzzle, star, board, unlock, avatar, quest, achievement, dailyGift, vip, profile, check }
+enum SyncLineIcon { coins, tickets, hints, peeks, magics, level, puzzle, star, board, unlock, avatar, quest, achievement, dailyGift, vip, profile, check }
 
 String _count(int n, String one, String many) => '${groupThousands(n)} ${n == 1 ? one : many}';
 
@@ -106,6 +106,8 @@ List<SyncNoticeLine> syncNoticeLines(SyncNotice n, {Map<String, String> packName
     if (n.coins != 0) (icon: SyncLineIcon.coins, text: _signed(n.coins, 'Coin', 'Coins')),
     if (n.tickets != 0) (icon: SyncLineIcon.tickets, text: _signed(n.tickets, 'Ticket', 'Tickets')),
     if (n.hints != 0) (icon: SyncLineIcon.hints, text: _signed(n.hints, 'Hint', 'Hints')),
+    if (n.peeks != 0) (icon: SyncLineIcon.peeks, text: _signed(n.peeks, 'Peek', 'Peeks')),
+    if (n.magics != 0) (icon: SyncLineIcon.magics, text: _signed(n.magics, 'Magic', 'Magic')),
     if (n.level != null) (icon: SyncLineIcon.level, text: 'Level ${n.level}'),
     if (n.solved > 0) (icon: SyncLineIcon.puzzle, text: '${_count(n.solved, 'picture', 'pictures')} solved'),
     if (n.betterStars > 0) (icon: SyncLineIcon.star, text: 'More stars on ${_count(n.betterStars, 'picture', 'pictures')}'),
@@ -151,6 +153,8 @@ class SyncNoticeList extends StatelessWidget {
           SyncLineIcon.coins => const CoinIcon(size: 18),
           SyncLineIcon.tickets => const TicketIcon(size: 18),
           SyncLineIcon.hints => const HintIcon(size: 18),
+          SyncLineIcon.peeks => const BoosterIcon(AppIcons.peek, size: 18),
+          SyncLineIcon.magics => const BoosterIcon(AppIcons.magic, size: 18),
           SyncLineIcon.star => const Icon(AppIcons.star, size: 17, color: Brand.star),
           _ => Icon(
               switch (i) {

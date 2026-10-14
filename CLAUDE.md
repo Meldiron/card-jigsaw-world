@@ -144,13 +144,13 @@ skills under `.claude/skills/` hold the detailed workflows.
 - Painting and giant boards: `progress.painting`; `lib/state/giant.dart` (`isGiantPack`,
   `isGiantPuzzleProvider`: packs of category `Giant` get the Large/Huge/Giant/Colossal ladder only, about
   100-300 cards in Cards), `puzzleImageFullProvider` (full-resolution decode), `BoardZoom` in
-  `board_widget.dart` (pinch, two-finger pan, `fitCell` zoom limit, double-tap, auto-pan, Edges fade); the bar,
-  overview map, off-screen pointer and milestones in `lib/features/game/giant_board.dart`; saved views in
-  `GiantViews` (`lib/state/giant.dart`). Giant boards are dealt by zone (`lib/game/zones.dart`: `BoardZones`,
-  `dealBoard`, `gatherInto`; `GameState.zoned`; boards saved before zones play on without them): zone lines,
-  "Zone complete", Locate (hold a card, the map shows its place) and Gather. Peek (10 coins, free on giant
-  boards) flies the cards to their places and back. Design and research: `docs/giant-boards.md`. QA:
-  `integration_test/giant_ux_test.dart` (real Giant pack, about 4 minutes) and `giant_zones_test.dart`.
+  `board_widget.dart` (pinch, two-finger pan, `fitCell` zoom limit, double-tap, auto-pan); the bar,
+  overview map, off-screen pointer and milestones in `lib/features/game/giant_board.dart`; saved views and
+  the map / Locate switches in `GiantViews` (`lib/state/giant.dart`). No zones and no Edges (owner removed
+  both 2026-10-14): Locate (tap a card, the map shows its place, only while the map is on; switch in the
+  bar), Gather (`lib/game/gather.dart`) and Peek (10 coins on every board) flies the cards to their places
+  and back. Design and research: `docs/giant-boards.md`. QA:
+  `integration_test/giant_ux_test.dart` (real Giant pack, about 4 minutes) and `giant_tools_test.dart`.
 - Progression: `lib/state/unlocks.dart` (`openFeaturesProvider`, intro bookkeeping) and `Unlocks` /
   `OpenFeatures` in `lib/state/rewards.dart`: Squares, Triangles, Hexagons, Painting and giant boards open at
   levels 2/4/6/8/10 or once used; `lib/features/game/unlock_intro.dart` (intro sheet, `UnlockIntroHost`).

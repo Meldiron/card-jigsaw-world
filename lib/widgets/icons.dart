@@ -218,7 +218,9 @@ class AppIcons {
   }
 }
 
-enum Currency { coins, tickets, hints }
+/// What a price or a reward is counted in. Peeks and Magic are boosters in stock (Lucky Wheel
+/// prizes), never a price.
+enum Currency { coins, tickets, hints, peeks, magics }
 
 /// Round gold coin with an embossed star – the app's coin mark.
 class CoinIcon extends StatelessWidget {
@@ -368,6 +370,20 @@ class HintIcon extends StatelessWidget {
       );
 }
 
+/// A Peek or a Magic in stock: the booster's glyph on a cobalt disc, the same size as [HintIcon].
+class BoosterIcon extends StatelessWidget {
+  const BoosterIcon(this.icon, {super.key, this.size = 18});
+  final IconData icon;
+  final double size;
+  @override
+  Widget build(BuildContext context) => Container(
+        width: size,
+        height: size,
+        decoration: const BoxDecoration(shape: BoxShape.circle, color: Brand.accent),
+        child: Icon(icon, size: size * 0.62, color: Colors.white),
+      );
+}
+
 /// [mono] draws the ticket as a silhouette for accent buttons (white, or
 /// [monoColor]); coins and hints keep their own colours, which already read
 /// well on the accent. Inside a [CurrencyInk] the ticket is a silhouette anyway.
@@ -375,6 +391,8 @@ Widget currencyIcon(Currency c, {double size = 18, bool mono = false, Color? mon
       Currency.coins => CoinIcon(size: size),
       Currency.tickets => TicketIcon(size: size, mono: mono, color: mono ? monoColor : null),
       Currency.hints => HintIcon(size: size),
+      Currency.peeks => BoosterIcon(AppIcons.peek, size: size),
+      Currency.magics => BoosterIcon(AppIcons.magic, size: size),
     };
 
 /// Inline "icon + number" used for prices, rewards and balances.

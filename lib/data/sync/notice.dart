@@ -14,6 +14,8 @@ class SyncNotice {
     this.coins = 0,
     this.tickets = 0,
     this.hints = 0,
+    this.peeks = 0,
+    this.magics = 0,
     this.level,
     this.solved = 0,
     this.betterStars = 0,
@@ -33,8 +35,8 @@ class SyncNotice {
 
   static const empty = SyncNotice();
 
-  /// Balance changes made elsewhere.
-  final int coins, tickets, hints;
+  /// Balance changes made elsewhere (Peeks and Magic: the boosters in stock).
+  final int coins, tickets, hints, peeks, magics;
 
   /// The new level, when it went up.
   final int? level;
@@ -64,6 +66,8 @@ class SyncNotice {
       coins == 0 &&
       tickets == 0 &&
       hints == 0 &&
+      peeks == 0 &&
+      magics == 0 &&
       level == null &&
       solved == 0 &&
       betterStars == 0 &&
@@ -84,6 +88,8 @@ class SyncNotice {
         coins: coins + o.coins,
         tickets: tickets + o.tickets,
         hints: hints + o.hints,
+        peeks: peeks + o.peeks,
+        magics: magics + o.magics,
         level: o.level ?? level,
         solved: solved + o.solved,
         betterStars: betterStars + o.betterStars,
@@ -116,6 +122,8 @@ class SyncNotice {
       coins: asInt(after['coins']) - asInt(before['coins']),
       tickets: asInt(after['tickets']) - asInt(before['tickets']),
       hints: asInt(after['hints']) - asInt(before['hints']),
+      peeks: asInt(after['peeks']) - asInt(before['peeks']),
+      magics: asInt(after['magics']) - asInt(before['magics']),
       level: l1 > l0 ? l1 : null,
       packs: added('unlockedPacks'),
       avatars: added('unlockedAvatars').length,
@@ -155,6 +163,6 @@ class SyncNotice {
   }
 
   @override
-  String toString() => 'SyncNotice(coins $coins, tickets $tickets, hints $hints, level $level, solved $solved, better $betterStars, '
+  String toString() => 'SyncNotice(coins $coins, tickets $tickets, hints $hints, peeks $peeks, magics $magics, level $level, solved $solved, better $betterStars, '
       'boards $boards, packs $packs, quests $quests, achievements $achievements, daily $dailyStreak, skipped $skipped)';
 }

@@ -122,6 +122,28 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
     return spendCoins(Economy.hintCostCoins, reason: 'hint');
   }
 
+  Future<void> addPeeks(int amount, {required String reason}) async => _do(SyncOp.earn('peeks', amount, reason));
+
+  Future<void> addMagics(int amount, {required String reason}) async => _do(SyncOp.earn('magics', amount, reason));
+
+  /// Uses a Peek from stock, or pays [Economy.peekCostCoins]. False if neither is possible.
+  Future<bool> usePeek() async {
+    if (_p.peeks > 0) {
+      _do(SyncOp.spend('peeks', 1, 'peek', log: false));
+      return true;
+    }
+    return spendCoins(Economy.peekCostCoins, reason: 'peek');
+  }
+
+  /// Uses a Magic from stock, or pays [Economy.magicLockCostCoins]. False if neither is possible.
+  Future<bool> useMagic() async {
+    if (_p.magics > 0) {
+      _do(SyncOp.spend('magics', 1, 'magic-lock', log: false));
+      return true;
+    }
+    return spendCoins(Economy.magicLockCostCoins, reason: 'magic-lock');
+  }
+
   Future<void> setIdentity({String? name, String? avatar}) async => _do(SyncOp.put({'displayName': ?name, 'avatar': ?avatar}));
 
   Future<bool> unlockPack(Pack pack) async {
