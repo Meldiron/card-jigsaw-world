@@ -51,6 +51,7 @@ void main() {
     await phone.settle();
     expect(server.profiles['player1']!['peeks'], 5);
     expect(server.profiles['player1']!['magics'], 1);
+    expect(server.ledger.values.where((l) => l['currency'] == 'peeks' || l['currency'] == 'magics'), isEmpty, reason: 'the ledger records money only');
     // The laptop has not seen them yet: its Peek is paid in coins.
     expect(await laptop.profile.usePeek(), isTrue);
     await laptop.settle();

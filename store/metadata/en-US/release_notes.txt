@@ -2,15 +2,15 @@ Version 1.7.0
 
 New ways to play
 - Painting: cards start in black and white and get their colour back as they lock. Pays 25% more.
-- Giant boards of 100 to 300 cards, dealt in zones you finish one at a time, with pinch and double-tap zoom, an overview map, an Edges filter for the frame, Gather, and a board that opens where you left it. Hold a card to see its place on the map.
-- Peek costs 10 coins and is free on giant boards: every card flies to its place for a moment, then back.
-- A new Giant pack, Colourful Houses: 24 detailed pictures made for the biggest boards.
+- Giant boards of 100 to 300 cards, with pinch and double-tap zoom, an overview map, Locate (tap a card to see its place on the map), Gather, and a board that opens where you left it.
+- Peek costs 10 coins: every card flies to its place for a moment, then back.
+- Four Giant packs of detailed pictures made for the biggest boards: Colourful Houses, Painted Paradises, Market Stalls and Curiosity Shops.
 - Shapes and options open as you level up: Squares, Triangles, Hexagons, Painting, then giant boards, each with a short intro.
 
 Quests and rewards
 - New quests: solve without Peek, finish at par, lock 5 cards in one move, solve a Painting board.
 - Claim all on the Quests tab, a dot on the tab when a reward is ready, and the completion screen tells you when a quest is done.
-- Lucky Wheel: See odds lists every prize and its chance.
+- Lucky Wheel: some coin prizes are now Peeks and Magic, kept for your next games and used before coins. See odds lists every prize and its chance.
 - VIP members get their 500 bonus coins automatically once a week, and VIP can be shared with your family through Family Sharing.
 
 Home and Library
@@ -23,9 +23,10 @@ Reminders and account
 - Daily reminders: turn them on in Settings and choose the time. None on days you have already claimed your daily gift.
 - New events: a reminder the evening before a world-day event opens, if you have not played for a while.
 - Delete your account in the app: Profile > Account > Delete account.
-- Settings: Rate Card Jigsaw World and the real app version. Dark and tinted Home Screen icons on iOS 18.
+- Settings: Rate Card Jigsaw World, the real app version, and Redeem a pack code for special packs. Dark and tinted Home Screen icons on iOS 18.
 
 Pictures and sync
+- New Illustration packs: Big Buck Bunny and Fantasy Worlds.
 - Every picture is served from our own servers, and the catalogue is rebuilt: no people, no repeats, portrait or square only, at least 20 pictures per pack, new AI and Abstract categories.
 - One save on every device: progress from the iPhone and the web site adds up, play made offline is kept, and records only improve.
 - The Social tab shows one leaderboard, ranked by total XP; it and My Puzzles load more as you scroll.

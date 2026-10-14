@@ -21,6 +21,10 @@ enum OpTarget { profile, progress, event, ledger }
 enum SkipReason { questClaimed, vipBonusPaid, dailyClaimed, streakRestored, unlocked, achievementClaimed, piggyEmpty, notEnough }
 
 /// A ledger entry written once its op is confirmed (`balanceAfter` comes from the server's row).
+/// The currencies the ledger records (its `currency` column is an enum of these). Peeks and Magic
+/// in stock are boosters, not money: they change the profile and leave no ledger line.
+const ledgerCurrencies = {'coins', 'tickets', 'hints'};
+
 class LedgerLine {
   const LedgerLine(this.amount, this.currency, this.reason);
   final int amount;
@@ -251,13 +255,13 @@ class SyncOp {
     switch (kind) {
       case OpKind.earn:
         final n = _a('amount'), cur = args['currency'] as String;
-        return n == 0 ? const OpPlan({}) : OpPlan({cur: Inc(n)}, ledger: [LedgerLine(n, cur, args['reason'] as String)]);
+        return n == 0 ? const OpPlan({}) : OpPlan({cur: Inc(n)}, ledger: [if (ledgerCurrencies.contains(cur)) LedgerLine(n, cur, args['reason'] as String)]);
       case OpKind.spend:
         // Spent on another device meanwhile: the balance never goes below zero, so this charges
         // what is left (the hint or peek was already used here).
         final n = min(_a('amount'), asInt(row[args['currency']])), cur = args['currency'] as String;
         if (n <= 0) return const OpPlan({});
-        return OpPlan({cur: Dec(n)}, ledger: [if (args['log'] != false) LedgerLine(-n, cur, args['reason'] as String)]);
+        return OpPlan({cur: Dec(n)}, ledger: [if (args['log'] != false && ledgerCurrencies.contains(cur)) LedgerLine(-n, cur, args['reason'] as String)]);
       case OpKind.put:
         return OpPlan({for (final e in (args['fields'] as Map).entries) e.key.toString(): Put(e.value)});
       case OpKind.ad:

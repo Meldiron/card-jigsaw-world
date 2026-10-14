@@ -37,7 +37,7 @@ All numbers are read from the code. Formulas use the Dart rounding (`round()` = 
 | Bonus video (rewarded house ad) | 40 each, 5 a day, 10 min apart | - | - | `Economy.adRewardCoins`, `HouseAdPolicy` |
 | Piggy bank | +5 per finished board (replays too), holds 500; opening costs 1 ticket | -1 to open | - | `Economy.piggyPerPuzzle`, `openPiggy` |
 | Achievements (24 families, one-time) | 60 to 1,000 per step; 13,170 coins in total | 29 in total | - | `lib/state/achievements.dart` |
-| Lucky Wheel (costs 1 ticket, no daily free spin) | expected 122 per spin, jackpot 500 (2.3%) | never pays tickets | 2 hints with 9% chance (0.18 per spin) | `wheel_screen.dart` |
+| Lucky Wheel (costs 1 ticket, no daily free spin) | expected 52 per spin (60, 120, jackpot 500 at 2.3%) | never pays tickets | 2 hints (9%), 5 or 10 Peeks, 1 or 3 Magic (since 2026-10-14): about 150 coins of value a spin | `wheel_screen.dart` |
 | New profile | 500 | 3 | 3 | `Profile.guest` |
 | VIP | "+500 coins every week" is promised on the store and the App Store page, **but no code grants it** (see section 9) | | | |
 
@@ -132,7 +132,7 @@ cheap farming trick to worry about; replays pay 40% and are not worth farming.
   grows by 60, so they settle at about 0.42 coins per XP).
 - **Tickets: about 500 coins each.** Tickets are a login currency: 14 to 18 a week for everyone, no
   matter how long they play. What a ticket buys: a full piggy bank (500 coins, at most one per 100
-  boards), a Lucky Wheel spin (122 coins + 0.18 hints, about 133 coins of value) or a share of a ticket
+  boards), a Lucky Wheel spin (about 150 coins of value: 52 coins plus Hints, Peeks and Magic at their price) or a share of a ticket
   pack. 500 coins is the anchor: a 10-ticket pack is then worth 5,000 coins, just above the best coin
   packs, which is where premium packs belong. The wheel returns about a quarter of a ticket's value: it
   is a fun way to spend spare tickets, never an investment (it never pays tickets).
@@ -322,8 +322,9 @@ the new server only gets more than it shows, which is harmless.
   packs; raising them is a separate decision.
 - **Event rewards (300 coins + 1 ticket) are small**: three minutes of play for finishing about 22
   pictures in a week. Left as is (earnings).
-- **The Lucky Wheel returns about a quarter of a ticket's value** (122 coins + 0.18 hints for a ticket
-  worth 500). Fine for a sink; the comment in `wheel_screen.dart` still assumes a ticket is worth 150.
+- **The Lucky Wheel returns under a third of a ticket's value** (about 150 coins of coins and boosters for
+  a ticket worth 500). Fine for a sink. Since 2026-10-14 (owner) four coin slices are boosters for the
+  stock (5 and 10 Peeks, 1 and 3 Magic), so a spin pays about 52 coins instead of 122.
 - Copy that names old amounts outside the files changed here: `store/metadata/en-US/review_notes.txt`
   ("choose 1,000 coins", now "2,500 coins"), `ios/Runner/Products.storekit` (local StoreKit test
   names), `docs/house-ads.md` ("or when the offer is tapped": the reward needs the full countdown),
@@ -355,7 +356,8 @@ EVENTS_PER_WEEK = 76 / 52                  # 76 world-day events in 2027 (events
 PIGGY_PER, PIGGY_CAP = 5, 500
 TIER_LEVEL = [1, 1, 1, 2, 3, 5, 7, 10]
 CARD_CELLS = [9, 12, 16, 20, 25, 30, 36, 48]
-WHEEL = [(60,0,5),(90,0,4),(120,0,4),(0,2,2),(150,0,3),(200,0,2),(300,0,1.5),(500,0,0.5)]
+# (coins, hints, weight); Peeks and Magic count at their price in coins (10 and 300) since 2026-10-14
+WHEEL = [(60,0,5),(5*10,0,4),(120,0,5),(0,2,2),(10*10,0,3),(300,0,2),(500,0,0.5),(3*300,0,0.5)]
 
 def r(x):  # Dart round(): half away from zero
     return int(math.floor(x + 0.5))
