@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/numbers.dart';
 import '../../data/repositories.dart';
 import '../../models/models.dart';
 import '../../state/auth.dart';
@@ -97,8 +98,8 @@ Future<bool> claimEventReward(WidgetRef ref, GameEvent event, int value) async {
 /// "Claimed 140 coins and 2 tickets".
 String claimedLine(int coins, int tickets) {
   final parts = [
-    if (coins > 0) '$coins coins',
-    if (tickets > 0) '$tickets ticket${tickets == 1 ? '' : 's'}',
+    if (coins > 0) countOf(coins, 'coin'),
+    if (tickets > 0) countOf(tickets, 'ticket'),
   ];
   return parts.isEmpty ? 'Claimed' : 'Claimed ${parts.join(' and ')}';
 }

@@ -63,7 +63,7 @@ class GiantBoardBar extends StatelessWidget {
                           'Zoom ${zoom.zoom.toStringAsFixed(1)}x',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: c.textSecondary),
+                          style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w500, color: c.textSecondary),
                         ),
                 ),
               ),
@@ -128,7 +128,7 @@ class _BarChip extends StatelessWidget {
           children: [
             Icon(icon, size: 16, color: fg),
             SizedBox(width: compact ? 4 : 6),
-            Text(label, style: TextStyle(fontSize: compact ? 12 : 13, fontWeight: FontWeight.w600, color: fg)),
+            Text(label, style: TextStyle(fontSize: compact ? TypeSize.caption : TypeSize.footnote, fontWeight: FontWeight.w600, color: fg)),
           ],
         ),
       ),

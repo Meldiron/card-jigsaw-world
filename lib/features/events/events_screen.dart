@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -76,7 +75,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                child: Text('Quests', style: Theme.of(context).textTheme.headlineLarge),
+                child: const PageTitle('Quests'),
               ),
             ),
             // Two or more rewards waiting: one tap claims them all.
@@ -118,8 +117,8 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: SoftCard(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                          child: Text('Nothing live right now. The next event opens soon.', style: TextStyle(color: context.colors.textSecondary, fontSize: 13.5)),
+                          padding: Insets.cardCompact,
+                          child: Text('Nothing live right now. The next event opens soon.', style: TextStyle(color: context.colors.textSecondary, fontSize: TypeSize.footnote)),
                         ),
                       ),
                     if (upcoming.isNotEmpty) ...[
@@ -202,8 +201,8 @@ class _VipGoalRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.colors;
     final reward = goal.coins > 0
-        ? Amount(currency: Currency.coins, value: goal.coins, prefix: '+', size: 13, fontSize: 12, weight: FontWeight.w800)
-        : Amount(currency: Currency.tickets, value: goal.tickets, prefix: '+', size: 13, fontSize: 12, weight: FontWeight.w800);
+        ? Amount(currency: Currency.coins, value: goal.coins, prefix: '+', size: 13, fontSize: TypeSize.caption, weight: FontWeight.w700)
+        : Amount(currency: Currency.tickets, value: goal.tickets, prefix: '+', size: 13, fontSize: TypeSize.caption, weight: FontWeight.w700);
     return Pressable(
       onTap: () => context.push('/store?vip=1'),
       scale: 0.99,
@@ -222,22 +221,22 @@ class _VipGoalRow extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(goal.title, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14.5, color: c.textSecondary)),
+                  Text(goal.title, style: TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body, color: c.textSecondary)),
                   const SizedBox(height: 3),
                   Row(
                     children: [
                       Opacity(opacity: 0.6, child: reward),
-                      Text('  ·  ', style: TextStyle(fontSize: 12, color: c.textSecondary)),
+                      Text('  ·  ', style: TextStyle(fontSize: TypeSize.caption, color: c.textSecondary)),
                       Icon(AppIcons.vip, size: 13, color: context.accent),
                       const SizedBox(width: 3),
-                      Text('VIP members', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: context.accent)),
+                      Text('VIP members', style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600, color: context.accent)),
                     ],
                   ),
                 ],
               ),
             ),
             const SizedBox(width: 10),
-            Icon(CupertinoIcons.chevron_right, size: 15, color: c.textTertiary),
+            Icon(AppIcons.chevronRight, size: 15, color: c.textTertiary),
           ],
         ),
       ),
@@ -258,7 +257,7 @@ class _GoalRow extends ConsumerWidget {
       if (!context.mounted || !ok) return;
       Sfx.instance.coin();
       Haptics.success();
-      final what = goal.coins > 0 ? '${goal.coins} coins' : '${goal.tickets} ticket${goal.tickets == 1 ? '' : 's'}';
+      final what = goal.coins > 0 ? countOf(goal.coins, 'coin') : countOf(goal.tickets, 'ticket');
       showToast(context, 'Claimed $what', icon: AppIcons.check);
     }
 
@@ -286,18 +285,18 @@ class _GoalRow extends ConsumerWidget {
         padding: const EdgeInsets.fromLTRB(14, 11, 14, 11),
         child: Row(
           children: [
-            _QuestRing(value: claimed ? 1 : goal.progress / goal.target, done: claimed || goal.done, icon: claimed ? CupertinoIcons.checkmark_alt : _questIcon(goal.icon)),
+            _QuestRing(value: claimed ? 1 : goal.progress / goal.target, done: claimed || goal.done, icon: claimed ? AppIcons.checkmarkAlt : _questIcon(goal.icon)),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(goal.title, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14.5, color: claimed ? c.textSecondary : c.textPrimary)),
+                  Text(goal.title, style: TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body, color: claimed ? c.textSecondary : c.textPrimary)),
                   const SizedBox(height: 3),
                   Row(
                     children: [
-                      Opacity(opacity: claimed ? 0.5 : 1, child: Amount(currency: currency, value: amount, prefix: '+', size: 13, fontSize: 12, weight: FontWeight.w800)),
-                      Text('  ·  $status', style: TextStyle(fontSize: 12, color: ready ? c.success : c.textSecondary, fontWeight: ready ? FontWeight.w600 : FontWeight.w500)),
+                      Opacity(opacity: claimed ? 0.5 : 1, child: Amount(currency: currency, value: amount, prefix: '+', size: 13, fontSize: TypeSize.caption, weight: FontWeight.w700)),
+                      Text('  ·  $status', style: TextStyle(fontSize: TypeSize.caption, color: ready ? c.success : c.textSecondary, fontWeight: ready ? FontWeight.w600 : FontWeight.w500)),
                     ],
                   ),
                 ],
@@ -307,7 +306,7 @@ class _GoalRow extends ConsumerWidget {
             if (ready)
               BigButton(label: 'Claim', height: 34, expand: false, onTap: claim)
             else if (!claimed)
-              Icon(CupertinoIcons.chevron_right, size: 15, color: c.textTertiary),
+              Icon(AppIcons.chevronRight, size: 15, color: c.textTertiary),
           ],
         ),
       ),
@@ -375,14 +374,14 @@ class _EventCard extends ConsumerWidget {
     final description = isPackQuest ? 'Finish all $target pictures in the ${event.name} pack while the event is live.' : event.description;
     // Same wording as the event tiles on Home and the event pack page.
     final left = event.timeLeft;
-    final leftLabel = LiveChip.endsIn(left);
+    final leftLabel = endsIn(left);
     final community = event.type == EventType.social ? ref.watch(communityProgressProvider(event.id)).value : null;
 
     Future<void> claim() async {
       if (!await claimEventReward(ref, event, value) || !context.mounted) return;
       Sfx.instance.win();
       Haptics.success();
-      showToast(context, 'Claimed ${event.rewardCoins} coins${event.rewardTickets > 0 ? ' and ${event.rewardTickets} ticket${event.rewardTickets == 1 ? '' : 's'}' : ''}', icon: AppIcons.check);
+      showToast(context, 'Claimed ${countOf(event.rewardCoins, 'coin')}${event.rewardTickets > 0 ? ' and ${countOf(event.rewardTickets, 'ticket')}' : ''}', icon: AppIcons.check);
     }
 
     return Container(
@@ -401,7 +400,7 @@ class _EventCard extends ConsumerWidget {
                 Positioned(
                   left: 14,
                   top: 12,
-                  child: LiveChip(leftLabel),
+                  child: Chip2(label: leftLabel, onImage: true, dot: Brand.live),
                 ),
                 if (isPackQuest && pack.complete) Positioned(right: 14, top: 12, child: PackDoneBadges(progress: pack)),
                 Positioned(
@@ -418,16 +417,16 @@ class _EventCard extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(description, style: TextStyle(color: c.textSecondary, fontSize: 13.5, height: 1.4)),
+                Text(description, style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote, height: 1.4)),
                 const SizedBox(height: 12),
                 if (isPackQuest)
-                  PackProgressLine(progress: pack, height: 8, fontSize: 13)
+                  PackProgressLine(progress: pack, height: 8, fontSize: TypeSize.footnote)
                 else
                   Row(
                     children: [
                       Expanded(child: ProgressBar(value: target == 0 ? 0 : value / target, height: 8, color: done ? c.success : null)),
                       const SizedBox(width: 10),
-                      Text('$value / $target', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+                      Text('$value / $target', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.footnote)),
                     ],
                   ),
                 if (community != null) ...[
@@ -436,21 +435,21 @@ class _EventCard extends ConsumerWidget {
                     children: [
                       Icon(AppIcons.community, size: 14, color: c.textSecondary),
                       const SizedBox(width: 6),
-                      Text('$community puzzles solved by everyone', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: c.textSecondary)),
+                      Text('$community puzzles solved by everyone', style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w500, color: c.textSecondary)),
                     ],
                   ),
                 ],
                 const SizedBox(height: 14),
                 Row(
                   children: [
-                    Amount(currency: Currency.coins, value: event.rewardCoins, size: 16, fontSize: 13),
+                    Amount(currency: Currency.coins, value: event.rewardCoins, size: 16, fontSize: TypeSize.footnote),
                     if (event.rewardTickets > 0) ...[
                       const SizedBox(width: 12),
-                      Amount(currency: Currency.tickets, value: event.rewardTickets, size: 16, fontSize: 13),
+                      Amount(currency: Currency.tickets, value: event.rewardTickets, size: 16, fontSize: TypeSize.footnote),
                     ],
                     const Spacer(),
                     if (claimed)
-                      Row(children: [Icon(CupertinoIcons.checkmark_circle_fill, color: c.success, size: 18), const SizedBox(width: 4), const Text('Claimed', style: TextStyle(fontWeight: FontWeight.w600))])
+                      Row(children: [Icon(AppIcons.filterFinished, color: c.success, size: 18), const SizedBox(width: 4), const Text('Claimed', style: TextStyle(fontWeight: FontWeight.w600))])
                     else if (done)
                       BigButton(label: 'Claim', expand: false, height: 38, onTap: claim)
                     else
@@ -506,13 +505,13 @@ class _UpcomingRow extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(event.name, maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
+                  Text(event.name, maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body)),
                   const SizedBox(height: 3),
                   Row(
                     children: [
                       Icon(AppIcons.time, size: 12, color: c.textSecondary),
                       const SizedBox(width: 4),
-                      Text(opens, style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: c.textSecondary)),
+                      Text(opens, style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w500, color: c.textSecondary)),
                     ],
                   ),
                   if (showPack) ...[
@@ -522,7 +521,7 @@ class _UpcomingRow extends ConsumerWidget {
                 ],
               ),
             ),
-            if (event.packId != null) ...[const SizedBox(width: 8), Icon(CupertinoIcons.chevron_right, size: 14, color: c.textTertiary)],
+            if (event.packId != null) ...[const SizedBox(width: 8), Icon(AppIcons.chevronRight, size: 14, color: c.textTertiary)],
           ],
         ),
       ),
@@ -596,22 +595,22 @@ class _ClaimAllCardState extends ConsumerState<_ClaimAllCard> {
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
       child: SoftCard(
         key: const ValueKey('claim-all'),
-        padding: const EdgeInsets.fromLTRB(16, 12, 12, 12),
+        padding: Insets.cardCompact,
         child: Row(
           children: [
-            const IconTile(icon: AppIcons.quests, size: 36, radius: 10),
+            const IconTile(icon: AppIcons.quests, size: IconTile.medium),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('$count rewards ready', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                  Text('$count rewards ready', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body)),
                   const SizedBox(height: 4),
                   Wrap(
                     spacing: 10,
                     children: [
-                      if (coins > 0) Amount(currency: Currency.coins, value: coins, prefix: '+', size: 14, fontSize: 12.5),
-                      if (tickets > 0) Amount(currency: Currency.tickets, value: tickets, prefix: '+', size: 14, fontSize: 12.5),
+                      if (coins > 0) Amount(currency: Currency.coins, value: coins, prefix: '+', size: 14, fontSize: TypeSize.footnote),
+                      if (tickets > 0) Amount(currency: Currency.tickets, value: tickets, prefix: '+', size: 14, fontSize: TypeSize.footnote),
                     ],
                   ),
                 ],

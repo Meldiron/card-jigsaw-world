@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../core/dates.dart';
 import '../state/rewards.dart';
 
 int _i(dynamic v, [int d = 0]) => v is num ? v.toInt() : (v is String ? int.tryParse(v) ?? d : d);
@@ -844,10 +845,8 @@ class MyPuzzle {
       MyPuzzle(id: id, fileId: _s(d['fileId']), title: myPhotoTitle(_s(d['title'], 'My photo')));
 }
 
-const _monthsShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-/// Title of a new My Puzzles photo: "Photo, 12 Oct".
-String newMyPhotoTitle(DateTime at) => 'Photo, ${at.day} ${_monthsShort[at.month - 1]}';
+/// Title of a new My Puzzles photo: "Photo, 12 Oct" (the short date of lib/core/dates.dart).
+String newMyPhotoTitle(DateTime at) => 'Photo, ${formatDate(at, year: false, short: true)}';
 
 /// Older uploads were titled "My photo 12/10" (day/month, read as a date only by half the world):
 /// shown as "Photo, 12 Oct". Any other title is the player's own and stays.
@@ -856,5 +855,5 @@ String myPhotoTitle(String stored) {
   if (m == null) return stored;
   final day = int.parse(m.group(1)!), month = int.parse(m.group(2)!);
   if (day < 1 || day > 31 || month < 1 || month > 12) return stored;
-  return 'Photo, $day ${_monthsShort[month - 1]}';
+  return 'Photo, ${formatDate(DateTime(2000, month, day), year: false, short: true)}';
 }

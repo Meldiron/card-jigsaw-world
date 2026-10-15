@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:math' as math;
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,6 +14,7 @@ import '../../game/image_loader.dart';
 import '../../models/models.dart';
 import '../../state/catalog.dart';
 import '../../state/settings.dart';
+import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 import '../game/board_widget.dart';
 
@@ -41,7 +41,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     ),
     (
       title: 'A new picture daily',
-      body: 'Play the daily puzzle to keep your streak. Earn Coins and Tickets to open more packs and events.',
+      body: 'Play the daily puzzle to keep your streak. Earn coins and tickets to open more packs and events.',
     ),
   ];
 
@@ -121,7 +121,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                             Text(
                                   s.body,
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: TypeSize.callout,
                                     height: 1.45,
                                     color: c.textSecondary,
                                   ),
@@ -165,7 +165,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   const SizedBox(height: 20),
                   BigButton(
                     label: last ? 'Start playing' : 'Continue',
-                    icon: last ? CupertinoIcons.play_fill : null,
+                    icon: last ? AppIcons.playFill : null,
                     onTap: () {
                       if (last) {
                         _finish();

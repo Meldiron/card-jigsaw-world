@@ -3,7 +3,6 @@ import 'dart:math' as math;
 import 'dart:ui' as ui;
 
 import 'package:confetti/confetti.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle;
 import 'package:flutter_animate/flutter_animate.dart';
@@ -470,7 +469,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     if (!mounted) return;
     if (!ok) {
       Sfx.instance.error();
-      _offerStore('No Hints left. Buy one for ${Economy.hintCostCoins} Coins.');
+      _offerStore('No hints left. Buy one for ${countOf(Economy.hintCostCoins, 'coin')}.');
       return;
     }
     Sfx.instance.coin();
@@ -483,7 +482,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     if (!mounted) return;
     if (!ok) {
       Sfx.instance.error();
-      _offerStore('Not enough Coins. Magic costs ${Economy.magicLockCostCoins} Coins.');
+      _offerStore('Not enough coins. Magic costs ${countOf(Economy.magicLockCostCoins, 'coin')}.');
       return;
     }
     Sfx.instance.coin();
@@ -501,7 +500,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     if (!mounted) return;
     if (!ok) {
       Sfx.instance.error();
-      _offerStore('Not enough Coins. Peek costs ${Economy.peekCostCoins} Coins.');
+      _offerStore('Not enough coins. Peek costs ${countOf(Economy.peekCostCoins, 'coin')}.');
       return;
     }
     Sfx.instance.whoosh();
@@ -775,7 +774,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                               ),
                               if (_chainFlash > 0)
                                 IgnorePointer(
-                                  child: Text('×2 DOUBLE LOCK', key: ValueKey(_chainFlash), style: TextStyle(fontWeight: FontWeight.w700, fontSize: 24, letterSpacing: -0.3, color: Brand.star, shadows: [Shadow(color: Colors.black.withValues(alpha: 0.4), blurRadius: 12)]))
+                                  child: Text('×2 DOUBLE LOCK', key: ValueKey(_chainFlash), style: TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.title2, letterSpacing: -0.3, color: Brand.star, shadows: [Shadow(color: Colors.black.withValues(alpha: 0.4), blurRadius: 12)]))
                                       .animate()
                                       .fadeIn(duration: 150.ms)
                                       .scale(begin: const Offset(0.6, 0.6), end: const Offset(1.1, 1.1), curve: Curves.easeOutBack)
@@ -874,7 +873,10 @@ class _Hud extends StatelessWidget {
   final bool painting;
 
   @override
-  Widget build(BuildContext context) {
+  // Chrome keeps its size above the text-size cap of the bars (see ChromeText).
+  Widget build(BuildContext context) => ChromeText(child: Builder(builder: _build));
+
+  Widget _build(BuildContext context) {
     final c = context.colors;
     final b = state.board;
     return Padding(
@@ -883,20 +885,20 @@ class _Hud extends StatelessWidget {
         children: [
           Row(
             children: [
-              RoundIconButton(icon: CupertinoIcons.pause_fill, size: 40, onTap: onPause),
+              RoundIconButton(icon: AppIcons.pauseFill, size: 40, onTap: onPause),
               const SizedBox(width: 10),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-                    Text('${b.spec.mode.label} · ${b.spec.code} · ${b.spec.label}${painting ? ' · Painting' : ''}', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontSize: 12)),
+                    Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body)),
+                    Text('${b.spec.mode.label} · ${b.spec.code} · ${b.spec.label}${painting ? ' · Painting' : ''}', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontSize: TypeSize.caption)),
                   ],
                 ),
               ),
               const SizedBox(width: 10),
               // Moves against par ("14 / 18": three stars while within it), then time.
-              _HudStat(label: 'Moves', value: '${state.moves}', sub: '/${state.par}'),
+              _HudStat(label: 'Moves', value: formatCount(state.moves), sub: '/${state.par}'),
               if (showTimer) ...[
                 const SizedBox(width: 16),
                 _HudStat(label: 'Time', value: formatDuration(state.elapsed)),
@@ -909,7 +911,7 @@ class _Hud extends StatelessWidget {
             children: [
               Expanded(child: ProgressBar(value: b.lockedCount / b.cells, height: 6)),
               const SizedBox(width: 10),
-              Text('${b.lockedCount}/${b.cells} locked${b.floatingGroups > 0 ? ' · ${b.floatingGroups} group${b.floatingGroups == 1 ? '' : 's'}' : ''}', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: c.textSecondary)),
+              Text('${b.lockedCount}/${b.cells} locked${b.floatingGroups > 0 ? ' · ${b.floatingGroups} group${b.floatingGroups == 1 ? '' : 's'}' : ''}', style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w500, color: c.textSecondary)),
               const SizedBox(width: 10),
               Stars(count: state.stars, size: 14),
             ],
@@ -933,13 +935,13 @@ class _HudStat extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Text(label, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: c.textTertiary)),
+        Text(label, style: TextStyle(fontSize: TypeSize.micro, fontWeight: FontWeight.w600, color: c.textTertiary)),
         Row(
           crossAxisAlignment: CrossAxisAlignment.baseline,
           textBaseline: TextBaseline.alphabetic,
           children: [
-            Text(value, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 18, letterSpacing: -0.3, fontFeatures: [FontFeature.tabularFigures()])),
-            if (sub != null) Text(sub!, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: c.textTertiary, fontFeatures: const [FontFeature.tabularFigures()])),
+            Text(value, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.headline, letterSpacing: -0.3, fontFeatures: tabularFigures)),
+            if (sub != null) Text(sub!, style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: c.textTertiary, fontFeatures: tabularFigures)),
           ],
         ),
       ],
@@ -963,7 +965,10 @@ class _BoosterBar extends StatelessWidget {
   final VoidCallback onUndo;
 
   @override
-  Widget build(BuildContext context) {
+  // Chrome keeps its size above the text-size cap of the bars (see ChromeText).
+  Widget build(BuildContext context) => ChromeText(child: Builder(builder: _build));
+
+  Widget _build(BuildContext context) {
     final c = context.colors;
     final row = Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -1042,16 +1047,16 @@ class _Booster extends StatelessWidget {
                           borderRadius: BorderRadius.circular(Radii.pill),
                           border: Border.all(color: c.card, width: 1.5),
                         ),
-                        child: Text('$count', style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w700, color: c.card, height: 1.1)),
+                        child: Text('$count', style: TextStyle(fontSize: TypeSize.micro, fontWeight: FontWeight.w700, color: c.card, height: 1.1)),
                       ),
                     ),
                 ],
               ),
               const SizedBox(height: 2),
-              Text(label, style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w600)),
+              Text(label, style: const TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600)),
               SizedBox(
                 height: 14,
-                child: buying ? Amount(currency: Currency.coins, value: price!, size: 12, fontSize: 11, weight: FontWeight.w600, color: c.textSecondary) : null,
+                child: buying ? Amount(currency: Currency.coins, value: price!, size: 12, fontSize: TypeSize.micro, weight: FontWeight.w600, color: c.textSecondary) : null,
               ),
             ],
           ),
@@ -1081,25 +1086,25 @@ class _PauseSheet extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _PauseToggle(icon: CupertinoIcons.music_note_2, label: 'Music', on: settings.music, onChanged: n.setMusic),
-              _PauseToggle(icon: CupertinoIcons.speaker_2_fill, label: 'Sound', on: settings.sound, onChanged: n.setSound),
-              _PauseToggle(icon: CupertinoIcons.waveform, label: 'Haptics', on: settings.haptics, onChanged: n.setHaptics),
-              _PauseToggle(icon: CupertinoIcons.time, label: 'Timer', on: settings.showTimer, onChanged: n.setShowTimer),
+              _PauseToggle(icon: AppIcons.musicNote2, label: 'Music', on: settings.music, onChanged: n.setMusic),
+              _PauseToggle(icon: AppIcons.speaker2Fill, label: 'Sound', on: settings.sound, onChanged: n.setSound),
+              _PauseToggle(icon: AppIcons.waveform, label: 'Haptics', on: settings.haptics, onChanged: n.setHaptics),
+              _PauseToggle(icon: AppIcons.time, label: 'Timer', on: settings.showTimer, onChanged: n.setShowTimer),
             ],
           ),
           const SizedBox(height: 20),
-          BigButton(label: 'Resume', icon: CupertinoIcons.play_fill, onTap: onResume),
+          BigButton(label: 'Resume', icon: AppIcons.playFill, onTap: onResume),
           const SizedBox(height: 12),
           // The other ways out, as one grouped list: one primary action above it.
           SoftCard(
             padding: EdgeInsets.zero,
             child: Column(
               children: [
-                _PauseAction(icon: CupertinoIcons.shuffle, label: 'Shuffle and restart', onTap: onRestart),
+                _PauseAction(icon: AppIcons.shuffle, label: 'Shuffle and restart', onTap: onRestart),
                 _PauseDivider(),
-                _PauseAction(icon: CupertinoIcons.slider_horizontal_3, label: 'Change mode or board', onTap: onChangeDifficulty),
+                _PauseAction(icon: AppIcons.sliderHorizontal3, label: 'Change mode or board', onTap: onChangeDifficulty),
                 _PauseDivider(),
-                _PauseAction(icon: CupertinoIcons.square_arrow_left, label: 'Save & quit', onTap: onQuit),
+                _PauseAction(icon: AppIcons.squareArrowLeft, label: 'Save & quit', onTap: onQuit),
               ],
             ),
           ),
@@ -1141,8 +1146,8 @@ class _PauseToggle extends StatelessWidget {
                 child: Icon(icon, size: 23, color: on ? Colors.white : c.textSecondary),
               ),
               const SizedBox(height: 5),
-              Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
-              Text(on ? 'On' : 'Off', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: c.textTertiary)),
+              Text(label, style: const TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600)),
+              Text(on ? 'On' : 'Off', style: TextStyle(fontSize: TypeSize.micro, fontWeight: FontWeight.w500, color: c.textTertiary)),
             ],
           ),
         ),
@@ -1169,7 +1174,7 @@ class _PauseAction extends StatelessWidget {
               const SizedBox(width: 16),
               Icon(icon, size: 20, color: context.accent),
               const SizedBox(width: 14),
-              Expanded(child: Text(label, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500))),
+              Expanded(child: Text(label, style: const TextStyle(fontSize: TypeSize.callout, fontWeight: FontWeight.w500))),
             ],
           ),
         ),
@@ -1212,12 +1217,12 @@ class _CoachLine extends StatelessWidget {
             children: [
               Icon(icon, size: 18, color: context.accent),
               const SizedBox(width: 10),
-              Expanded(child: Text(text, style: TextStyle(fontSize: 13.5, height: 1.3, fontWeight: FontWeight.w500, color: c.textPrimary))),
+              Expanded(child: Text(text, style: TextStyle(fontSize: TypeSize.footnote, height: 1.3, fontWeight: FontWeight.w500, color: c.textPrimary))),
               Pressable(
                 onTap: onDone,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                  child: Text('Got it', style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w700, color: context.accent)),
+                  child: Text('Got it', style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w700, color: context.accent)),
                 ),
               ),
             ],
@@ -1310,7 +1315,7 @@ class _CompletionOverlayState extends State<_CompletionOverlay> {
             '${puzzle.author} · ${puzzle.source}',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontSize: 11.5, color: _viewing ? Colors.white.withValues(alpha: 0.7) : c.textTertiary),
+            style: TextStyle(fontSize: TypeSize.caption, color: _viewing ? Colors.white.withValues(alpha: 0.7) : c.textTertiary),
           ),
         ),
       ],
@@ -1321,9 +1326,9 @@ class _CompletionOverlayState extends State<_CompletionOverlay> {
     final stats = Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        _RewardStat(icon: const CoinIcon(size: 17), label: 'Coins', value: reward == null ? '…' : '+${reward.coins}'),
-        _RewardStat(icon: Icon(AppIcons.xp, size: 17, color: context.accent), label: 'XP', value: reward == null ? '…' : '+${reward.xp}'),
-        _RewardStat(label: 'Moves', value: '${state.moves}'),
+        _RewardStat(icon: const CoinIcon(size: 17), label: 'Coins', value: reward == null ? '…' : '+${formatCount(reward.coins)}'),
+        _RewardStat(icon: Icon(AppIcons.xp, size: 17, color: context.accent), label: 'XP', value: reward == null ? '…' : '+${formatCount(reward.xp)}'),
+        _RewardStat(label: 'Moves', value: formatCount(state.moves)),
         _RewardStat(label: 'Time', value: formatDuration(state.elapsed)),
       ],
     );
@@ -1353,7 +1358,7 @@ class _CompletionOverlayState extends State<_CompletionOverlay> {
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 3),
                               child: Icon(
-                                i < state.stars ? CupertinoIcons.star_fill : CupertinoIcons.star,
+                                i < state.stars ? AppIcons.star : AppIcons.starOutline,
                                 size: i == 1 ? 34 : 28,
                                 color: i < state.stars ? Brand.star : c.stroke,
                               ).animate().scale(delay: (300 + i * 150).ms, begin: const Offset(0, 0), curve: Curves.easeOutBack, duration: 450.ms),
@@ -1363,7 +1368,7 @@ class _CompletionOverlayState extends State<_CompletionOverlay> {
                       const SizedBox(height: 8),
                       Text('Picture complete', style: Theme.of(context).textTheme.headlineSmall),
                       const SizedBox(height: 2),
-                      Text(puzzle.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontWeight: FontWeight.w600, fontSize: 14)),
+                      Text(puzzle.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontWeight: FontWeight.w600, fontSize: TypeSize.body)),
                       const SizedBox(height: 16),
                       stats,
                       if (pack.total > 0) ...[
@@ -1372,16 +1377,16 @@ class _CompletionOverlayState extends State<_CompletionOverlay> {
                           children: [
                             Expanded(
                               child: Text(
-                                '${pack.solved} of ${pack.total} solved${pack.name != null ? ' · ${pack.name}' : ''}',
+                                '${formatCount(pack.solved)} of ${formatCount(pack.total)} solved${pack.name != null ? ' · ${pack.name}' : ''}',
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: c.textSecondary),
+                                style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: c.textSecondary),
                               ),
                             ),
                             const SizedBox(width: 10),
                             Icon(AppIcons.star, size: 13, color: Brand.star),
                             const SizedBox(width: 4),
-                            Text('${pack.stars}/${pack.total * 3}', style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: c.textPrimary)),
+                            Text('${formatCount(pack.stars)}/${formatCount(pack.total * 3)}', style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w700, color: c.textPrimary)),
                           ],
                         ),
                         const SizedBox(height: 8),
@@ -1417,12 +1422,12 @@ class _CompletionOverlayState extends State<_CompletionOverlay> {
               Row(
                 children: [
                   // Equal widths so neither label truncates on a 393 pt phone.
-                  Expanded(child: BigButton(label: 'Replay', kind: ButtonKind.secondary, icon: CupertinoIcons.arrow_counterclockwise, onTap: widget.onReplay)),
+                  Expanded(child: BigButton(label: 'Replay', kind: ButtonKind.secondary, icon: AppIcons.arrowCounterclockwise, onTap: widget.onReplay)),
                   const SizedBox(width: 10),
                   Expanded(
                     child: backIsPrimary
-                        ? BigButton(label: 'Back to pack', icon: CupertinoIcons.square_grid_2x2, onTap: widget.onHome)
-                        : BigButton(label: 'Next puzzle', icon: CupertinoIcons.arrow_right, onTap: () => widget.onNext(pack.next)),
+                        ? BigButton(label: 'Back to pack', icon: AppIcons.squareGrid2x2, onTap: widget.onHome)
+                        : BigButton(label: 'Next puzzle', icon: AppIcons.arrowRight, onTap: () => widget.onNext(pack.next)),
                   ),
                 ],
               ),
@@ -1460,7 +1465,7 @@ class _CompletionOverlayState extends State<_CompletionOverlay> {
                         Positioned(
                           right: 10,
                           bottom: 10,
-                          child: _OverlayPill(icon: CupertinoIcons.arrow_up_left_arrow_down_right, label: 'View picture', onTap: _view, small: true),
+                          child: _OverlayPill(icon: AppIcons.arrowUpLeftArrowDownRight, label: 'View picture', onTap: _view, small: true),
                         ),
                       ],
                     ),
@@ -1493,13 +1498,13 @@ class _CompletionOverlayState extends State<_CompletionOverlay> {
                 padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
                 child: Column(
                   children: [
-                    _OverlayPill(icon: CupertinoIcons.list_bullet, label: 'Back to results', onTap: _results),
+                    _OverlayPill(icon: AppIcons.listBullet, label: 'Back to results', onTap: _results),
                     const Spacer(),
                     credit,
                     const SizedBox(height: 10),
                     backIsPrimary
-                        ? _OverlayPill(icon: CupertinoIcons.square_grid_2x2, label: 'Back to pack', primary: true, onTap: widget.onHome)
-                        : _OverlayPill(icon: CupertinoIcons.arrow_right, label: 'Next puzzle', primary: true, onTap: () => widget.onNext(pack.next)),
+                        ? _OverlayPill(icon: AppIcons.squareGrid2x2, label: 'Back to pack', primary: true, onTap: widget.onHome)
+                        : _OverlayPill(icon: AppIcons.arrowRight, label: 'Next puzzle', primary: true, onTap: () => widget.onNext(pack.next)),
                   ],
                 ),
               ),
@@ -1556,7 +1561,7 @@ class _OverlayPill extends StatelessWidget {
       children: [
         Icon(icon, size: small ? 13 : 17, color: Colors.white),
         SizedBox(width: small ? 5 : 7),
-        Text(label, style: TextStyle(color: Colors.white, fontWeight: small ? FontWeight.w600 : FontWeight.w700, fontSize: small ? 12 : 14)),
+        Text(label, style: TextStyle(color: Colors.white, fontWeight: small ? FontWeight.w600 : FontWeight.w700, fontSize: small ? TypeSize.caption : TypeSize.body)),
       ],
     );
     final padding = small ? const EdgeInsets.symmetric(horizontal: 10, vertical: 6) : const EdgeInsets.symmetric(horizontal: 16, vertical: 10);
@@ -1589,11 +1594,11 @@ class _RewardStat extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             if (icon != null) ...[icon!, const SizedBox(width: 4)],
-            Text(value, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 18)),
+            Text(value, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.headline)),
           ],
         ),
         const SizedBox(height: 2),
-        Text(label, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: c.textTertiary)),
+        Text(label, style: TextStyle(fontSize: TypeSize.micro, fontWeight: FontWeight.w600, color: c.textTertiary)),
       ],
     );
   }
@@ -1624,9 +1629,9 @@ class _ResultLine extends StatelessWidget {
           Icon(icon, size: 18, color: context.accent),
           const SizedBox(width: 10),
           Expanded(
-            child: Text(text, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13.5, color: tinted ? context.accent : c.textPrimary)),
+            child: Text(text, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.footnote, color: tinted ? context.accent : c.textPrimary)),
           ),
-          if (onTap != null) Icon(CupertinoIcons.chevron_right, size: 15, color: c.textTertiary),
+          if (onTap != null) Icon(AppIcons.chevronRight, size: 15, color: c.textTertiary),
         ],
       ),
     );

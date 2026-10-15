@@ -59,7 +59,7 @@ class _AvatarPickerState extends ConsumerState<AvatarPicker> {
         context,
         title: 'Buy ${def.name}?',
         message: 'Yours to keep.',
-        child: const Amount(currency: Currency.coins, value: Economy.avatarCoins, size: 20, fontSize: 17, weight: FontWeight.w700),
+        child: const Amount(currency: Currency.coins, value: Economy.avatarCoins, size: 20, fontSize: TypeSize.headline, weight: FontWeight.w700),
         cancelLabel: 'Not now',
         confirmLabel: 'Buy avatar',
       );
@@ -104,7 +104,7 @@ class _AvatarPickerState extends ConsumerState<AvatarPicker> {
             padding: const EdgeInsets.fromLTRB(4, 18, 4, 10),
             child: Row(
               children: [
-                Expanded(child: Text(title.toUpperCase(), style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 0.6, color: c.textTertiary))),
+                Expanded(child: Text(title.toUpperCase(), style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600, letterSpacing: 0.6, color: c.textTertiary))),
                 ?trailing,
               ],
             ),
@@ -143,8 +143,8 @@ class _AvatarPickerState extends ConsumerState<AvatarPicker> {
                       section(yours),
                       if (shop.isNotEmpty) ...[
                         header('Shop', trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-                          Text('each ', style: TextStyle(fontSize: 12, color: c.textTertiary, fontWeight: FontWeight.w600)),
-                          const Amount(currency: Currency.coins, value: Economy.avatarCoins, size: 13, fontSize: 12, weight: FontWeight.w700),
+                          Text('each ', style: TextStyle(fontSize: TypeSize.caption, color: c.textTertiary, fontWeight: FontWeight.w600)),
+                          const Amount(currency: Currency.coins, value: Economy.avatarCoins, size: 13, fontSize: TypeSize.caption, weight: FontWeight.w700),
                         ])),
                         section(shop),
                       ],
@@ -210,7 +210,7 @@ class _AvatarTile extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 5),
-          Text(name, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 11.5, color: owned ? c.textPrimary : c.textSecondary, fontWeight: selected ? FontWeight.w700 : FontWeight.w500)),
+          Text(name, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: TypeSize.caption, color: owned ? c.textPrimary : c.textSecondary, fontWeight: selected ? FontWeight.w700 : FontWeight.w500)),
         ],
       ),
     );

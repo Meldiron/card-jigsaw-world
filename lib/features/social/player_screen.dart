@@ -1,10 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/theme/tokens.dart';
-import '../../data/purchases.dart' show groupThousands;
 import '../../state/achievements.dart';
 import '../../state/auth.dart';
 import '../../state/completion.dart';
@@ -39,7 +37,7 @@ class PlayerScreen extends ConsumerWidget {
             child: Text(profile.value?.displayName ?? 'Player', maxLines: 1, overflow: TextOverflow.ellipsis),
           ),
         ),
-        leading: Padding(padding: const EdgeInsets.only(left: 12), child: RoundIconButton(icon: CupertinoIcons.back, size: 38, onTap: () => context.pop())),
+        leading: Padding(padding: const EdgeInsets.only(left: 12), child: RoundIconButton(icon: AppIcons.back, size: 38, onTap: () => context.pop())),
       ),
       body: profile.when(
         loading: () => const Loader(),
@@ -62,7 +60,7 @@ class PlayerScreen extends ConsumerWidget {
             padding: EdgeInsets.fromLTRB(20, top + 12, 20, GlassTabBar.scrollEndPadding(context)),
             children: [
               SoftCard(
-                padding: const EdgeInsets.all(16),
+                padding: Insets.card,
                 child: Column(
                   children: [
                     Row(
@@ -77,7 +75,7 @@ class PlayerScreen extends ConsumerWidget {
                               const SizedBox(height: 4),
                               Row(
                                 children: [
-                                  Flexible(child: Text('Level ${p.level} · ${groupThousands(p.xp)} XP', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontSize: 13, fontWeight: FontWeight.w500))),
+                                  Flexible(child: Text('Level ${p.level} · ${formatCount(p.xp)} XP', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote, fontWeight: FontWeight.w500))),
                                   if (p.isVip) ...[
                                     const SizedBox(width: 8),
                                     Chip2(label: 'VIP', icon: AppIcons.vip, color: c.accentTint, foreground: context.accent),
@@ -97,11 +95,11 @@ class PlayerScreen extends ConsumerWidget {
                     IntrinsicHeight(
                       child: Row(
                         children: [
-                          _SummaryStat(icon: AppIcons.puzzle, value: groupThousands(p.puzzlesCompleted), label: 'Solved'),
+                          _SummaryStat(icon: AppIcons.puzzle, value: formatCount(p.puzzlesCompleted), label: 'Solved'),
                           VerticalDivider(width: 1, thickness: 1, color: c.stroke),
-                          _SummaryStat(icon: AppIcons.star, iconColor: Brand.star, value: groupThousands(p.totalStars), label: 'Stars'),
+                          _SummaryStat(icon: AppIcons.star, iconColor: Brand.star, value: formatCount(p.totalStars), label: 'Stars'),
                           VerticalDivider(width: 1, thickness: 1, color: c.stroke),
-                          _SummaryStat(icon: AppIcons.streak, value: groupThousands(p.streak), label: 'Day streak'),
+                          _SummaryStat(icon: AppIcons.streak, value: formatCount(p.streak), label: 'Day streak'),
                         ],
                       ),
                     ),
@@ -192,11 +190,11 @@ class _SummaryStat extends StatelessWidget {
             children: [
               Icon(icon, size: 16, color: iconColor ?? context.accent),
               const SizedBox(width: 5),
-              Text(value, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 17, letterSpacing: -0.3)),
+              Text(value, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.headline, letterSpacing: -0.3)),
             ],
           ),
           const SizedBox(height: 2),
-          Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 11.5, color: c.textSecondary)),
+          Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: TypeSize.caption, color: c.textSecondary)),
         ],
       ),
     );
@@ -223,7 +221,7 @@ class _SafetyRow extends StatelessWidget {
           children: [
             Icon(icon, size: 20, color: danger ? c.danger : c.textSecondary),
             const SizedBox(width: 14),
-            Expanded(child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: tone))),
+            Expanded(child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w500, color: tone))),
           ],
         ),
       ),
@@ -254,9 +252,9 @@ class _BadgeTile extends StatelessWidget {
               child: Icon(family.icon, size: 20, color: context.accent),
             ),
           const SizedBox(height: 8),
-          Text(family.title, maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 12.5)),
+          Text(family.title, maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.footnote)),
           const SizedBox(height: 2),
-          Text(family.steps.length > 1 ? 'Tier $tier of ${family.steps.length}' : family.describe(step.threshold), maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 10.5, color: c.textSecondary)),
+          Text(family.steps.length > 1 ? 'Tier $tier of ${family.steps.length}' : family.describe(step.threshold), maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: TypeSize.micro, color: c.textSecondary)),
         ],
       ),
     );

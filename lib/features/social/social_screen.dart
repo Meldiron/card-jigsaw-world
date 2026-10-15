@@ -7,7 +7,6 @@ import 'package:go_router/go_router.dart';
 import '../../core/app_links.dart';
 import '../../core/haptics.dart';
 import '../../core/theme/tokens.dart';
-import '../../data/purchases.dart' show groupThousands;
 import '../../data/repositories.dart';
 import '../../models/models.dart';
 import '../../state/auth.dart';
@@ -53,8 +52,8 @@ Future<void> showAddFriendAlert(BuildContext context, {String? code}) async {
       autocorrect: false,
       textAlign: TextAlign.center,
       cursorColor: context.accent,
-      style: TextStyle(fontSize: 16, color: c.textPrimary, letterSpacing: -0.2),
-      placeholderStyle: TextStyle(fontSize: 16, color: c.textTertiary, letterSpacing: -0.2),
+      style: TextStyle(fontSize: TypeSize.callout, color: c.textPrimary, letterSpacing: -0.2),
+      placeholderStyle: TextStyle(fontSize: TypeSize.callout, color: c.textTertiary, letterSpacing: -0.2),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       // The look of AlertTextField (the other alert fields), keyed for the deep-link tests.
       decoration: BoxDecoration(color: context.isDark ? Colors.white.withValues(alpha: 0.08) : Colors.black.withValues(alpha: 0.05), borderRadius: BorderRadius.circular(12)),
@@ -71,7 +70,7 @@ Future<void> showAddFriendAlert(BuildContext context, {String? code}) async {
   try {
     final friend = await container.read(profileRepositoryProvider).findByUserId(entered);
     if (friend == null) {
-      if (context.mounted) showToast(context, 'No player with that code. Check it and try again.', icon: CupertinoIcons.search);
+      if (context.mounted) showToast(context, 'No player with that code. Check it and try again.', icon: AppIcons.search);
       return;
     }
     await container.read(socialRepositoryProvider).addFriend(me, friend);
@@ -99,9 +98,13 @@ class SocialScreen extends ConsumerWidget {
           const HeaderBar(title: 'Social', sliver: false),
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 10, 20, 12),
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Expanded(child: Text('Social', style: Theme.of(context).textTheme.headlineLarge)),
+                // The large title alone on its line and the switch under it, full width (the iOS
+                // pattern): neither squeezes the other at any text size.
+                const PageTitle('Social'),
+                const SizedBox(height: 10),
                 CupertinoSlidingSegmentedControl<int>(
                   groupValue: tab,
                   backgroundColor: c.boardBackground,
@@ -109,11 +112,11 @@ class SocialScreen extends ConsumerWidget {
                   children: const {
                     0: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Text('Leaderboard', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+                      child: Text('Leaderboard', style: TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.footnote)),
                     ),
                     1: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Text('Friends', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+                      child: Text('Friends', style: TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.footnote)),
                     ),
                   },
                   onValueChanged: (v) => ref.read(socialTabProvider.notifier).select(v ?? SocialTab.leaderboard),
@@ -238,8 +241,8 @@ class _LeaderboardState extends ConsumerState<_Leaderboard> {
                 return Padding(
                   padding: const EdgeInsets.fromLTRB(4, 0, 4, 10),
                   child: Text(
-                    place != null ? '${groupThousands(place.total)} players · ranked by total XP' : 'Ranked by total XP. Solve a puzzle to join.',
-                    style: TextStyle(color: c.textSecondary, fontSize: 13),
+                    place != null ? '${formatCount(place.total)} players · ranked by total XP' : 'Ranked by total XP. Solve a puzzle to join.',
+                    style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote),
                   ),
                 );
               }
@@ -367,13 +370,13 @@ class _FriendsState extends ConsumerState<_Friends> {
         // Invite: the link opens the game with this player's code filled in (Social > Friends >
         // Add friend by code), in the app where it is installed and on the web elsewhere.
         SoftCard(
-          padding: const EdgeInsets.all(16),
+          padding: Insets.card,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('Invite friends', style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 4),
-              Text('Friends who open your link can add you in one tap.', style: TextStyle(fontSize: 13, color: c.textSecondary)),
+              Text('Friends who open your link can add you in one tap.', style: TextStyle(fontSize: TypeSize.footnote, color: c.textSecondary)),
               const SizedBox(height: 14),
               Row(
                 children: [
@@ -406,11 +409,11 @@ class _FriendsState extends ConsumerState<_Friends> {
                 child: Text.rich(
                   TextSpan(children: [
                     const TextSpan(text: 'Your code  '),
-                    TextSpan(text: me ?? '—', style: TextStyle(fontFamily: 'Menlo', fontSize: 12, fontWeight: FontWeight.w600, color: c.textPrimary)),
+                    TextSpan(text: me ?? '—', style: TextStyle(fontFamily: 'Menlo', fontSize: TypeSize.caption, fontWeight: FontWeight.w600, color: c.textPrimary)),
                   ]),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 12.5, color: c.textSecondary),
+                  style: TextStyle(fontSize: TypeSize.footnote, color: c.textSecondary),
                 ),
               ),
             ],
@@ -440,7 +443,7 @@ class _FriendsState extends ConsumerState<_Friends> {
                               alignment: Alignment.centerRight,
                               padding: const EdgeInsets.only(right: 20),
                               color: c.danger,
-                              child: const Icon(CupertinoIcons.trash, color: Colors.white),
+                              child: const Icon(AppIcons.trash, color: Colors.white),
                             ),
                             confirmDismiss: (_) => showAppAlert(
                               context,
@@ -488,7 +491,7 @@ class _FriendRow extends ConsumerWidget {
                     children: [
                       _PlayerName(name: p?.displayName ?? friend.name),
                       const SizedBox(height: 1),
-                      if (p == null) Text('Loading…', style: TextStyle(fontSize: 12, color: c.textSecondary)) else _SubStats(solved: p.puzzlesCompleted, stars: p.totalStars),
+                      if (p == null) Text('Loading…', style: TextStyle(fontSize: TypeSize.caption, color: c.textSecondary)) else _SubStats(solved: p.puzzlesCompleted, stars: p.totalStars),
                     ],
                   ),
                 ),
@@ -548,12 +551,12 @@ class _SubStats extends StatelessWidget {
     final c = context.colors;
     return Text.rich(
       TextSpan(children: [
-        TextSpan(text: '${groupThousands(solved)} solved · ${groupThousands(stars)} '),
+        TextSpan(text: '${formatCount(solved)} solved · ${formatCount(stars)} '),
         const WidgetSpan(alignment: PlaceholderAlignment.middle, child: Icon(AppIcons.star, size: 11, color: Brand.star)),
       ]),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
-      style: TextStyle(fontSize: 12, color: c.textSecondary),
+      style: TextStyle(fontSize: TypeSize.caption, color: c.textSecondary),
     );
   }
 }
@@ -569,9 +572,9 @@ class _XpColumn extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Text('${groupThousands(xp)} XP', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14.5, fontFeatures: [FontFeature.tabularFigures()])),
+        Text('${formatCount(xp)} XP', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body, fontFeatures: tabularFigures)),
         const SizedBox(height: 1),
-        Text('Level $level', style: TextStyle(fontSize: 12, color: c.textSecondary)),
+        Text('Level $level', style: TextStyle(fontSize: TypeSize.caption, color: c.textSecondary)),
       ],
     );
   }
@@ -592,7 +595,7 @@ class _PlayerName extends StatelessWidget {
             name,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body),
           ),
         ),
         if (me) ...[
@@ -605,7 +608,7 @@ class _PlayerName extends StatelessWidget {
             ),
             child: Text(
               'You',
-              style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: context.accent),
+              style: TextStyle(fontSize: TypeSize.micro, fontWeight: FontWeight.w700, color: context.accent),
             ),
           ),
         ],
@@ -643,7 +646,7 @@ class _RankBadge extends StatelessWidget {
       ),
       child: Text(
         '$rank',
-        style: TextStyle(fontWeight: medal != null ? FontWeight.w800 : FontWeight.w600, fontSize: 13, color: medal?.$2 ?? c.textSecondary, fontFeatures: const [FontFeature.tabularFigures()]),
+        style: TextStyle(fontWeight: medal != null ? FontWeight.w700 : FontWeight.w600, fontSize: TypeSize.footnote, color: medal?.$2 ?? c.textSecondary, fontFeatures: tabularFigures),
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:card_jigsaw_world/core/theme/app_theme.dart';
+import 'package:card_jigsaw_world/core/numbers.dart';
 import 'package:card_jigsaw_world/data/purchases.dart';
 import 'package:card_jigsaw_world/features/ads/house_ads.dart';
 import 'package:card_jigsaw_world/state/profile.dart';
@@ -62,7 +63,7 @@ void main() {
         final grant = StoreProducts.grant(product);
         expect(c.cta, 'Get ${grant.label}', reason: id);
         expect(c.price, StoreProducts.price(product), reason: id);
-        expect(c.body, contains(groupThousands(grant.coins + grant.tickets + grant.hints)), reason: id);
+        expect(c.body, contains(formatCount(grant.coins + grant.tickets + grant.hints)), reason: id);
       }
     });
 

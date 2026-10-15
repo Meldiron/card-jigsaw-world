@@ -139,7 +139,7 @@ class _MyPuzzlesScreenState extends ConsumerState<MyPuzzlesScreen> {
       extendBodyBehindAppBar: true,
       appBar: GlassAppBar(
         title: const Text('My Puzzles'),
-        leading: Padding(padding: const EdgeInsets.only(left: 12), child: RoundIconButton(icon: CupertinoIcons.back, size: 38, onTap: () => context.pop())),
+        leading: Padding(padding: const EdgeInsets.only(left: 12), child: RoundIconButton(icon: AppIcons.back, size: 38, onTap: () => context.pop())),
       ),
       body: mine.when(
         loading: () => const Loader(),
@@ -167,10 +167,10 @@ class _MyPuzzlesScreenState extends ConsumerState<MyPuzzlesScreen> {
                         message: 'Turn pets, trips and family into card puzzles. Only you can see your photos.',
                         action: Column(
                           children: [
-                            BigButton(label: _uploading ? 'Uploading…' : 'Add photo', icon: CupertinoIcons.plus, expand: false, loading: _uploading, onTap: _uploading ? null : _choose),
+                            BigButton(label: _uploading ? 'Uploading…' : 'Add photo', icon: AppIcons.plus, expand: false, loading: _uploading, onTap: _uploading ? null : _choose),
                             if (!isVip) ...[
                               const SizedBox(height: 12),
-                              Text('${Economy.freeMyPuzzles} photos free · no limit with VIP', style: TextStyle(fontSize: 12.5, color: c.textSecondary)),
+                              Text('${Economy.freeMyPuzzles} photos free · no limit with VIP', style: TextStyle(fontSize: TypeSize.footnote, color: c.textSecondary)),
                             ],
                           ],
                         ),
@@ -183,7 +183,7 @@ class _MyPuzzlesScreenState extends ConsumerState<MyPuzzlesScreen> {
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: EdgeInsets.fromLTRB(20, MediaQuery.paddingOf(context).top + kToolbarHeight + 4, 20, 0),
-                    child: Text('Only you can see your photos. Tap to play, hold for more.', style: TextStyle(fontSize: 13.5, height: 1.4, color: c.textSecondary)),
+                    child: Text('Only you can see your photos. Tap to play, hold for more.', style: TextStyle(fontSize: TypeSize.footnote, height: 1.4, color: c.textSecondary)),
                   ),
                 ),
                 SliverPadding(
@@ -209,16 +209,16 @@ class _MyPuzzlesScreenState extends ConsumerState<MyPuzzlesScreen> {
                                       width: 48,
                                       height: 48,
                                       decoration: BoxDecoration(color: context.accent, shape: BoxShape.circle),
-                                      child: const Icon(CupertinoIcons.plus, color: Colors.white, size: 24),
+                                      child: const Icon(AppIcons.plus, color: Colors.white, size: 24),
                                     ),
                                   const SizedBox(height: 12),
-                                  Text(_uploading ? 'Uploading…' : 'Add photo', style: TextStyle(color: context.accent, fontWeight: FontWeight.w700, fontSize: 16)),
+                                  Text(_uploading ? 'Uploading…' : 'Add photo', style: TextStyle(color: context.accent, fontWeight: FontWeight.w700, fontSize: TypeSize.callout)),
                                   if (!isVip && used != null) ...[
                                     const SizedBox(height: 4),
                                     Text(
                                       full ? 'All ${Economy.freeMyPuzzles} free photos used' : '${Economy.freeMyPuzzles - used.clamp(0, Economy.freeMyPuzzles)} of ${Economy.freeMyPuzzles} free left',
                                       textAlign: TextAlign.center,
-                                      style: TextStyle(fontSize: 12.5, color: c.textSecondary),
+                                      style: TextStyle(fontSize: TypeSize.footnote, color: c.textSecondary),
                                     ),
                                   ],
                                 ],
@@ -254,7 +254,7 @@ class _MyPuzzlesScreenState extends ConsumerState<MyPuzzlesScreen> {
                                     onTap: () => _photoActions(m),
                                     child: const Padding(
                                       padding: EdgeInsets.all(6),
-                                      child: Glass(dark: true, radius: 15, opacity: 0.4, padding: EdgeInsets.all(6), child: Icon(CupertinoIcons.ellipsis, color: Colors.white, size: 18)),
+                                      child: Glass(dark: true, radius: 15, opacity: 0.4, padding: EdgeInsets.all(6), child: Icon(AppIcons.ellipsis, color: Colors.white, size: 18)),
                                     ),
                                   ),
                                 ),
@@ -268,7 +268,7 @@ class _MyPuzzlesScreenState extends ConsumerState<MyPuzzlesScreen> {
                                   decoration: BoxDecoration(gradient: Brand.scrim(strength: 0.7)),
                                   child: Row(
                                     children: [
-                                      Expanded(child: Text(m.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 12))),
+                                      Expanded(child: Text(m.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: TypeSize.caption))),
                                       if (pr?.completed == true) Stars(count: pr!.stars, size: 12),
                                     ],
                                   ),
@@ -283,7 +283,7 @@ class _MyPuzzlesScreenState extends ConsumerState<MyPuzzlesScreen> {
                           enableHapticFeedback: true,
                           actions: [
                             CupertinoContextMenuAction(
-                              trailingIcon: CupertinoIcons.play,
+                              trailingIcon: AppIcons.play,
                               onPressed: () {
                                 Navigator.of(context, rootNavigator: true).pop();
                                 context.push('/play/${m.id}');
@@ -292,7 +292,7 @@ class _MyPuzzlesScreenState extends ConsumerState<MyPuzzlesScreen> {
                             ),
                             CupertinoContextMenuAction(
                               isDestructiveAction: true,
-                              trailingIcon: CupertinoIcons.delete,
+                              trailingIcon: AppIcons.delete,
                               onPressed: () {
                                 Navigator.of(context, rootNavigator: true).pop();
                                 _delete(m);

@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/theme/tokens.dart';
-import '../../data/purchases.dart' show groupThousands;
 import '../../models/models.dart';
 import '../../state/catalog.dart';
 import '../../state/profile.dart';
@@ -235,7 +234,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
 
     return Scaffold(
       body: packs.when(
-        loading: () => const Loader(),
+        loading: () => const _LibrarySkeleton(),
         error: (e, _) => EmptyState(
           icon: AppIcons.signal,
           title: 'Packs did not load',
@@ -285,14 +284,14 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
         const HeaderBar(title: 'Library'),
         SliverToBoxAdapter(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+            padding: const EdgeInsets.fromLTRB(20, 5, 20, 0),
             child: Row(
               crossAxisAlignment: inFinished ? CrossAxisAlignment.end : CrossAxisAlignment.center,
               children: [
-                Expanded(child: Text('Library', style: Theme.of(context).textTheme.headlineLarge)),
+                const Expanded(child: PageTitle('Library')),
                 // In Finished, hiding finished packs would empty the view; the count says more.
                 if (inFinished)
-                  Text('$finishedCount finished', key: const ValueKey('library-finished-count'), style: TextStyle(color: c.textSecondary, fontSize: 13))
+                  Text('$finishedCount finished', key: const ValueKey('library-finished-count'), style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote))
                 else
                   _HideFinishedToggle(value: hideFinished, onChanged: ref.read(settingsProvider.notifier).setHideFinished),
               ],
@@ -308,8 +307,8 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
               focusNode: _searchFocus,
               placeholder: 'Search packs and pictures',
               onSubmitted: (_) => _searchFocus.unfocus(),
-              style: TextStyle(color: c.textPrimary, fontSize: 16, letterSpacing: -0.2),
-              placeholderStyle: TextStyle(color: c.textTertiary, fontSize: 16, letterSpacing: -0.2),
+              style: TextStyle(color: c.textPrimary, fontSize: TypeSize.callout, letterSpacing: -0.2),
+              placeholderStyle: TextStyle(color: c.textTertiary, fontSize: TypeSize.callout, letterSpacing: -0.2),
               itemColor: c.textTertiary,
               decoration: BoxDecoration(color: c.card, borderRadius: BorderRadius.circular(10), border: Border.all(color: c.stroke)),
               padding: const EdgeInsetsDirectional.fromSTEB(6, 9, 6, 9),
@@ -322,7 +321,8 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
             child: ListView.separated(
               key: const ValueKey('library-chips'),
               scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 6),
+              // Chips are 36 pt with a 44 pt touch box (TapTarget); the row keeps its 54 pt.
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 2),
               physics: const BouncingScrollPhysics(),
               // Every chip is built, so any of them can be scrolled to.
               scrollCacheExtent: const ScrollCacheExtent.pixels(4000),
@@ -427,13 +427,13 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
       }
       if (filter != LibraryFilter.all && view(f: LibraryFilter.all).isNotEmpty) {
         return EmptyState(
-          icon: CupertinoIcons.search,
+          icon: AppIcons.search,
           title: 'Nothing found',
           message: 'Nothing in $filter matches "$q". Other packs do.',
           action: BigButton(label: 'Search all packs', kind: ButtonKind.secondary, expand: false, onTap: () => ref.read(libraryFilterProvider.notifier).select(LibraryFilter.all)),
         );
       }
-      return EmptyState(icon: CupertinoIcons.search, title: 'Nothing found', message: 'No pack or picture matches "$q". Try another word.');
+      return EmptyState(icon: AppIcons.search, title: 'Nothing found', message: 'No pack or picture matches "$q". Try another word.');
     }
     if (hideFinished && view(hide: false).isNotEmpty) {
       return EmptyState(icon: AppIcons.filterFinished, title: 'Every pack here is finished', message: 'Finished packs are hidden. Show them again to replay a picture.', action: showFinished);
@@ -476,9 +476,9 @@ class _PackRow extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(pack.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
+                  Text(pack.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body)),
                   const SizedBox(height: 2),
-                  Text('${pack.category} · ${progress.total} pictures', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontSize: 13)),
+                  Text('${pack.category} · ${progress.total} pictures', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote)),
                 ],
               ),
             ),
@@ -491,13 +491,13 @@ class _PackRow extends ConsumerWidget {
                   const SizedBox(width: 6),
                   currencyIcon(tickets ? Currency.tickets : Currency.coins, size: 14),
                   const SizedBox(width: 4),
-                  Text(groupThousands(tickets ? pack.priceTickets : pack.priceCoins), style: TextStyle(color: c.textSecondary, fontSize: 13, fontWeight: FontWeight.w600)),
+                  Text(formatCount(tickets ? pack.priceTickets : pack.priceCoins), style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote, fontWeight: FontWeight.w600)),
                 ],
               )
             else if (progress.started)
-              Text('${progress.solved}/${progress.total}', style: TextStyle(color: c.textSecondary, fontSize: 13, fontWeight: FontWeight.w600))
+              Text('${progress.solved}/${progress.total}', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote, fontWeight: FontWeight.w600))
             else
-              Icon(CupertinoIcons.chevron_right, size: 16, color: c.textTertiary),
+              Icon(AppIcons.chevronRight, size: 16, color: c.textTertiary),
           ],
         ),
       ),
@@ -536,9 +536,9 @@ class _PictureRow extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(puzzle.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
+                  Text(puzzle.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body)),
                   const SizedBox(height: 2),
-                  Text(pack?.name ?? '', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontSize: 13)),
+                  Text(pack?.name ?? '', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote)),
                 ],
               ),
             ),
@@ -548,7 +548,7 @@ class _PictureRow extends ConsumerWidget {
             else if (stars > 0)
               Row(mainAxisSize: MainAxisSize.min, children: [for (var i = 0; i < 3; i++) Icon(i < stars ? AppIcons.star : AppIcons.starOutline, size: 14, color: i < stars ? Brand.star : c.textTertiary)])
             else
-              Icon(CupertinoIcons.chevron_right, size: 16, color: c.textTertiary),
+              Icon(AppIcons.chevronRight, size: 16, color: c.textTertiary),
           ],
         ),
       ),
@@ -587,9 +587,9 @@ class _MyPuzzlesTile extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('My Puzzles', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15, letterSpacing: -0.2)),
+                  const Text('My Puzzles', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body, letterSpacing: -0.2)),
                   const SizedBox(height: 4),
-                  Text('Your own photos', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontSize: 12.5)),
+                  Text('Your own photos', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote)),
                 ],
               ),
             ),
@@ -615,8 +615,10 @@ class _FilterChip extends StatelessWidget {
     final fg = selected ? Colors.white : c.textSecondary;
     return Pressable(
       onTap: onTap,
-      child: AnimatedContainer(
+      child: TapTarget(
+        child: AnimatedContainer(
         duration: const Duration(milliseconds: 180),
+        height: 36,
         padding: EdgeInsets.only(left: icon == null ? 14 : 11, right: 14),
         alignment: Alignment.center,
         decoration: BoxDecoration(
@@ -628,9 +630,10 @@ class _FilterChip extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             if (icon != null) ...[Icon(icon, size: 15, color: fg), const SizedBox(width: 5)],
-            Text(label, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13.5, color: fg)),
+            Text(label, style: TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.footnote, color: fg)),
           ],
         ),
+      ),
       ),
     );
   }
@@ -653,8 +656,9 @@ class _HideFinishedToggle extends StatelessWidget {
             behavior: HitTestBehavior.opaque,
             onTap: () => onChanged(!value),
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 6),
-              child: Text('Hide finished', style: TextStyle(color: c.textSecondary, fontSize: 13, fontWeight: FontWeight.w500)),
+              // 44 pt touch height for the label.
+              padding: const EdgeInsets.symmetric(vertical: 13),
+              child: Text('Hide finished', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote, fontWeight: FontWeight.w500)),
             ),
           ),
           const SizedBox(width: 8),
@@ -670,4 +674,36 @@ class _HideFinishedToggle extends StatelessWidget {
       ),
     );
   }
+}
+
+/// The Library while the catalogue loads: its bar, title and search in place, and pack cards to come.
+class _LibrarySkeleton extends StatelessWidget {
+  const _LibrarySkeleton();
+  @override
+  Widget build(BuildContext context) => CustomScrollView(
+        physics: const NeverScrollableScrollPhysics(),
+        slivers: [
+          const HeaderBar(title: 'Library'),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 10, 20, 12),
+              child: Text('Library', style: Theme.of(context).textTheme.headlineLarge),
+            ),
+          ),
+          const SliverToBoxAdapter(child: Padding(padding: EdgeInsets.fromLTRB(20, 0, 20, 0), child: Skeleton(height: 40, radius: Radii.md))),
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(20, 18, 20, 6),
+              child: Row(children: [Skeleton(width: 64, height: 32, radius: 16), SizedBox(width: 8), Skeleton(width: 72, height: 32, radius: 16), SizedBox(width: 8), Skeleton(width: 92, height: 32, radius: 16)]),
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+            sliver: SliverGrid(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 12, crossAxisSpacing: 12, childAspectRatio: 0.78),
+              delegate: SliverChildBuilderDelegate((_, _) => const SkeletonPackCard(), childCount: 6),
+            ),
+          ),
+        ],
+      );
 }

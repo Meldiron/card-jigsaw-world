@@ -157,7 +157,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
     await ref.read(progressProvider.notifier).discard(widget.puzzleId);
     if (!mounted) return;
     Haptics.medium();
-    showToast(context, 'Progress discarded. Pick any mode or board.', icon: CupertinoIcons.trash);
+    showToast(context, 'Progress discarded. Pick any mode or board.', icon: AppIcons.trash);
   }
 
   void _pickMode(GameMode m) {
@@ -174,7 +174,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
     final others = QuickPlayPool(pool.tier, [for (final z in pool.puzzles) if (z.id != widget.puzzleId) z]);
     final next = pickQuickPlay(others, _random);
     if (next == null) {
-      showToast(context, 'No other picture to pick right now', icon: CupertinoIcons.shuffle);
+      showToast(context, 'No other picture to pick right now', icon: AppIcons.shuffle);
       return;
     }
     Haptics.light();
@@ -197,7 +197,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
           children: [
             Row(
               children: [
-                const IconTile(icon: AppIcons.lock, size: 44),
+                const IconTile(icon: AppIcons.lock, size: IconTile.large),
                 const SizedBox(width: 12),
                 Expanded(
                   child: SheetHeader(
@@ -312,7 +312,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
           label: saved != null
               ? 'Continue · ${saved.moves} ${saved.moves == 1 ? 'move' : 'moves'} in'
               : '${spec.cells} ${mode == GameMode.cards ? 'cards' : mode.label.toLowerCase()} · Play',
-          icon: CupertinoIcons.play_fill,
+          icon: AppIcons.playFill,
           onTap: () {
             // The default size follows normal boards only.
             if (!spec.isGiant) {
@@ -324,7 +324,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
             context.pushReplacement('/game/${widget.puzzleId}/${BoardCode.toPath(spec.fullCode)}$flag');
           },
         ),
-        if (saved != null) ...[const SizedBox(height: 8), BigButton(label: 'Discard progress', kind: ButtonKind.ghost, icon: CupertinoIcons.trash, onTap: () => _discard(saved, spec))],
+        if (saved != null) ...[const SizedBox(height: 8), BigButton(label: 'Discard progress', kind: ButtonKind.ghost, icon: AppIcons.trash, onTap: () => _discard(saved, spec))],
         if (widget.fromQuick) ...[
           const SizedBox(height: 4),
           BigButton(
@@ -332,7 +332,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
             label: 'Another picture',
             kind: ButtonKind.ghost,
             height: 40,
-            icon: CupertinoIcons.shuffle,
+            icon: AppIcons.shuffle,
             onTap: () => _anotherPicture(spec, painting),
           ),
         ],
@@ -347,7 +347,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
       appBar: GlassAppBar(
         leading: Padding(
           padding: const EdgeInsets.only(left: 12),
-          child: RoundIconButton(icon: CupertinoIcons.back, size: 38, onTap: () => context.canPop() ? context.pop() : context.go('/home')),
+          child: RoundIconButton(icon: AppIcons.back, size: 38, onTap: () => context.canPop() ? context.pop() : context.go('/home')),
         ),
         title: Text(puzzle?.title ?? 'Puzzle'),
       ),
@@ -425,8 +425,8 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                                 Stars(count: progress!.stars, size: 13),
                                 const SizedBox(width: 6),
                                 Text(
-                                  'Best ${progress.bestMoves ?? progress.moves} moves',
-                                  style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: c.textSecondary),
+                                  'Best ${countOf(progress.bestMoves ?? progress.moves, 'move')}',
+                                  style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: c.textSecondary),
                                 ),
                               ],
                             ),
@@ -443,7 +443,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                                   '${puzzle.author} · ${puzzle.source}',
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(fontSize: 11.5, color: c.textTertiary),
+                                  style: TextStyle(fontSize: TypeSize.caption, color: c.textTertiary),
                                 ),
                               ),
                             ],
@@ -458,7 +458,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                               alignment: Alignment.centerLeft,
                               child: Text(
                                 'Continue where you left off, or discard it to pick another mode or size.',
-                                style: TextStyle(color: c.textSecondary, fontSize: 13),
+                                style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote),
                               ),
                             ),
                           ] else ...[
@@ -480,14 +480,15 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                                 giantLocked
                                     ? 'Giant boards of 100 cards and more open at level ${Unlock.giant.level}. This pack is ready for you then.'
                                     : 'Giant boards of 100 cards and more, all open with this pack. Pinch to zoom in while you play.',
-                                style: TextStyle(color: c.textSecondary, fontSize: 13),
+                                style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote),
                               ),
                             ),
                           ],
                           const SizedBox(height: 8),
                           // Runs to the screen edges, so the next size peeks in as a hint to scroll.
                           SizedBox(
-                            height: 56,
+                            // 167: the chips' two lines grow with Larger Text; so does the row.
+                            height: MediaQuery.textScalerOf(context).scale(56),
                             child: OverflowBox(
                               maxWidth: MediaQuery.sizeOf(context).width,
                               child: ListView.separated(
@@ -573,20 +574,20 @@ class _PaintingTile extends StatelessWidget {
           ),
           child: Row(
             children: [
-              const IconTile(icon: AppIcons.painting, size: 32, radius: 9),
+              const IconTile(icon: AppIcons.painting, size: IconTile.small),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Keyed while on: the bonus is part of the rewards in the footer.
-                    Text('Painting · x${_DifficultyScreenState._fmtMult(Economy.paintingMultiplier)}', key: on ? const ValueKey('painting-bonus') : null, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                    Text('Painting · x${_DifficultyScreenState._fmtMult(Economy.paintingMultiplier)}', key: on ? const ValueKey('painting-bonus') : null, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body)),
                     const SizedBox(height: 2),
                     Text(
                       locked ? 'Opens at level ${Unlock.painting.level}' : 'Colour returns as cards lock',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 12.5, height: 1.3, color: c.textSecondary),
+                      style: TextStyle(fontSize: TypeSize.footnote, height: 1.3, color: c.textSecondary),
                     ),
                   ],
                 ),
@@ -734,7 +735,7 @@ class _SectionLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Align(
         alignment: Alignment.centerLeft,
-        child: Text(title, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700, letterSpacing: -0.3)),
+        child: Text(title, style: const TextStyle(fontSize: TypeSize.headline, fontWeight: FontWeight.w700, letterSpacing: -0.3)),
       );
 }
 
@@ -788,11 +789,11 @@ class _ModeSegments extends StatelessWidget {
                           m.label,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 12.5, fontWeight: m == selected ? FontWeight.w700 : FontWeight.w600, color: isOpen(m) ? c.textPrimary : c.textTertiary),
+                          style: TextStyle(fontSize: TypeSize.footnote, fontWeight: m == selected ? FontWeight.w700 : FontWeight.w600, color: isOpen(m) ? c.textPrimary : c.textTertiary),
                         ),
                         Text(
                           isOpen(m) ? 'x${_DifficultyScreenState._fmtMult(m.multiplier)}' : 'Level ${Unlocks.ofMode(m)!.level}',
-                          style: TextStyle(fontSize: 11, color: m == selected ? context.accent : c.textTertiary, fontWeight: FontWeight.w500),
+                          style: TextStyle(fontSize: TypeSize.micro, color: m == selected ? context.accent : c.textTertiary, fontWeight: FontWeight.w500),
                         ),
                       ],
                     ),
@@ -840,10 +841,10 @@ class _BoardChip extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   if (locked) ...[Icon(AppIcons.lock, size: 11, color: fg), const SizedBox(width: 3)],
-                  Text(spec.code, style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15, letterSpacing: -0.2, color: fg)),
+                  Text(spec.code, style: TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body, letterSpacing: -0.2, color: fg)),
                 ],
               ),
-              Text(spec.label, style: TextStyle(fontSize: 11, color: selected ? context.accent : c.textTertiary)),
+              Text(spec.label, style: TextStyle(fontSize: TypeSize.micro, color: selected ? context.accent : c.textTertiary)),
             ],
           ),
         ),
@@ -862,7 +863,7 @@ class _RewardsLine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    final style = TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: c.textSecondary);
+    final style = TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: c.textSecondary);
     Widget dot() => Padding(padding: const EdgeInsets.symmetric(horizontal: 8), child: Text('·', style: style));
     // Scales down rather than overflowing with big numbers or Larger Text.
     return FittedBox(
@@ -872,9 +873,9 @@ class _RewardsLine extends StatelessWidget {
       children: [
         Text('3 stars pay up to', style: style.copyWith(fontWeight: FontWeight.w500)),
         const SizedBox(width: 6),
-        Amount(currency: Currency.coins, value: coins, size: 15, fontSize: 13, weight: FontWeight.w700),
+        Amount(currency: Currency.coins, value: coins, size: 15, fontSize: TypeSize.footnote, weight: FontWeight.w700),
         dot(),
-        Text('$xp XP', style: style.copyWith(color: c.textPrimary, fontWeight: FontWeight.w700)),
+        Text('${formatCount(xp)} XP', style: style.copyWith(color: c.textPrimary, fontWeight: FontWeight.w700)),
         dot(),
         Icon(AppIcons.piggy, size: 14, color: c.textSecondary),
         const SizedBox(width: 3),
@@ -901,7 +902,7 @@ class _InProgressCard extends StatelessWidget {
     final cells = spec.cells;
     return SoftCard(
       key: const ValueKey('board-in-progress'),
-      padding: const EdgeInsets.fromLTRB(14, 14, 16, 14),
+      padding: Insets.card,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -919,13 +920,13 @@ class _InProgressCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Board in progress', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
+                    const Text('Board in progress', style: TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.callout)),
                     const SizedBox(height: 2),
                     Text(
                       '${spec.mode.label} · ${spec.code} ${spec.label}${painting ? ' · Painting' : ''}',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 13, color: c.textSecondary),
+                      style: TextStyle(fontSize: TypeSize.footnote, color: c.textSecondary),
                     ),
                   ],
                 ),
@@ -937,7 +938,7 @@ class _InProgressCard extends StatelessWidget {
           const SizedBox(height: 8),
           Row(
             children: [
-              Flexible(child: Text('$placed of $cells in place', maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600))),
+              Flexible(child: Text('$placed of $cells in place', maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600))),
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
@@ -945,7 +946,7 @@ class _InProgressCard extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.right,
-                  style: TextStyle(fontSize: 13, color: c.textSecondary),
+                  style: TextStyle(fontSize: TypeSize.footnote, color: c.textSecondary),
                 ),
               ),
             ],

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../data/purchases.dart' show groupThousands;
+import '../core/numbers.dart';
 import '../game/board.dart';
 import '../models/models.dart';
 import '../widgets/icons.dart';
@@ -96,26 +96,26 @@ final achievementFamilies = <AchievementFamily>[
   AchievementFamily(id: 'perfect', title: 'Perfectionist', icon: AppIcons.star, describe: (t) => 'Earn 3 stars on $t puzzles', steps: _tiered([5, 25, 100], 'perfect', coins: 120), progress: (f) => f.perfect),
   AchievementFamily(id: 'streak', title: 'On a roll', icon: AppIcons.streak, describe: (t) => 'Reach a $t-day streak', steps: _tiered([7, 30, 100], 'flame', coins: 150, tickets: 1), progress: (f) => f.profile.longestStreak),
   AchievementFamily(id: 'level', title: 'Veteran', icon: AppIcons.level, describe: (t) => 'Reach level $t', steps: _tiered([5, 10, 20, 35, 50], 'medal', coins: 200, tickets: 1), progress: (f) => f.profile.level),
-  AchievementFamily(id: 'cards', title: 'Card Sharp', icon: Icons.style_rounded, describe: (t) => 'Finish $t Cards boards', steps: _tiered([10, 50], 'cards', coins: 100), progress: (f) => f.mode(GameMode.cards)),
-  AchievementFamily(id: 'squares', title: 'Square Deal', icon: Icons.grid_view_rounded, describe: (t) => 'Finish $t Squares boards', steps: _tiered([10, 50], 'square', coins: 110), progress: (f) => f.mode(GameMode.squares)),
-  AchievementFamily(id: 'triangles', title: 'Triangulate', icon: Icons.change_history_rounded, describe: (t) => 'Finish $t Triangles boards', steps: _tiered([10, 50], 'triangle', coins: 130), progress: (f) => f.mode(GameMode.triangles)),
-  AchievementFamily(id: 'hexagons', title: 'Honeycomb', icon: Icons.hexagon_rounded, describe: (t) => 'Finish $t Hexagons boards', steps: _tiered([10, 50], 'hex', coins: 150), progress: (f) => f.mode(GameMode.hexagons)),
+  AchievementFamily(id: 'cards', title: 'Card Sharp', icon: AppIcons.modeCards, describe: (t) => 'Finish $t Cards boards', steps: _tiered([10, 50], 'cards', coins: 100), progress: (f) => f.mode(GameMode.cards)),
+  AchievementFamily(id: 'squares', title: 'Square Deal', icon: AppIcons.modeSquares, describe: (t) => 'Finish $t Squares boards', steps: _tiered([10, 50], 'square', coins: 110), progress: (f) => f.mode(GameMode.squares)),
+  AchievementFamily(id: 'triangles', title: 'Triangulate', icon: AppIcons.modeTriangles, describe: (t) => 'Finish $t Triangles boards', steps: _tiered([10, 50], 'triangle', coins: 130), progress: (f) => f.mode(GameMode.triangles)),
+  AchievementFamily(id: 'hexagons', title: 'Honeycomb', icon: AppIcons.modeHexagons, describe: (t) => 'Finish $t Hexagons boards', steps: _tiered([10, 50], 'hex', coins: 150), progress: (f) => f.mode(GameMode.hexagons)),
   AchievementFamily(id: 'big', title: 'Big Boards', icon: AppIcons.bigBoard, describe: (t) => 'Finish $t boards of 6x6 or bigger', steps: _tiered([5, 25], 'grid', coins: 150), progress: (f) => f.big),
   AchievementFamily(id: 'master', title: 'Master', icon: AppIcons.crown, describe: (t) => 'Finish $t Master board${t == 1 ? '' : 's'}', steps: _tiered([1, 10], 'crown', coins: 250, tickets: 1), progress: (f) => f.master),
-  AchievementFamily(id: 'nohints', title: 'Unassisted', icon: Icons.psychology_rounded, describe: (t) => 'Finish $t puzzles without hints', steps: _tiered([10, 50], 'mind', coins: 120), progress: (f) => f.noHints),
-  AchievementFamily(id: 'collector', title: 'Collector', icon: Icons.collections_bookmark_rounded, describe: (t) => 'Solve a puzzle in $t different packs', steps: _tiered([3, 10, 30], 'album', coins: 100), progress: (f) => f.packs),
+  AchievementFamily(id: 'nohints', title: 'Unassisted', icon: AppIcons.noHints, describe: (t) => 'Finish $t puzzles without hints', steps: _tiered([10, 50], 'mind', coins: 120), progress: (f) => f.noHints),
+  AchievementFamily(id: 'collector', title: 'Collector', icon: AppIcons.collector, describe: (t) => 'Solve a puzzle in $t different packs', steps: _tiered([3, 10, 30], 'album', coins: 100), progress: (f) => f.packs),
   AchievementFamily(id: 'daily', title: 'Daily Devotee', icon: AppIcons.dailyPuzzle, describe: (t) => 'Solve $t daily puzzles', steps: _tiered([7, 30, 100], 'calendar', coins: 100, tickets: 1), progress: (f) => f.daily),
   AchievementFamily(id: 'events', title: 'Event Goer', icon: AppIcons.events, describe: (t) => 'Solve $t event puzzles', steps: _tiered([5, 25], 'ticket', coins: 120, tickets: 1), progress: (f) => f.events),
-  AchievementFamily(id: 'nightowl', title: 'Night Owl', icon: Icons.dark_mode_rounded, describe: (t) => 'Solve $t puzzles between 22:00 and 05:00', steps: const [AchievementStep(10, coins: 150, avatarKey: 'owl')], progress: (f) => f.nightOwl),
-  AchievementFamily(id: 'earlybird', title: 'Early Bird', icon: Icons.wb_twilight_rounded, describe: (t) => 'Solve $t puzzles between 05:00 and 08:00', steps: const [AchievementStep(10, coins: 150, avatarKey: 'bird')], progress: (f) => f.earlyBird),
-  AchievementFamily(id: 'speed', title: 'Quick Hands', icon: Icons.speed_rounded, describe: (t) => 'Finish $t puzzles in under 4 seconds per card', steps: _tiered([10, 50], 'speed', coins: 120), progress: (f) => f.speed),
-  AchievementFamily(id: 'marathon', title: 'Marathon', icon: Icons.directions_run_rounded, describe: (t) => 'Solve $t puzzles in one day', steps: _tiered([10, 25], 'marathon', coins: 200), progress: (f) => f.marathon),
-  AchievementFamily(id: 'allmodes', title: 'All Shapes', icon: Icons.category_rounded, describe: (t) => 'Finish a board in every mode', steps: [AchievementStep(GameMode.values.length, coins: 200, tickets: 1, avatarKey: 'shapes')], progress: (f) => f.modes),
-  AchievementFamily(id: 'starhoarder', title: 'Star Hoarder', icon: Icons.stars_rounded, describe: (t) => 'Collect $t stars', steps: _tiered([50, 250, 1000], 'stars', coins: 150), progress: (f) => f.profile.totalStars),
-  AchievementFamily(id: 'rich', title: 'Well Off', icon: AppIcons.piggy, describe: (t) => 'Hold ${groupThousands(t)} coins at once', steps: const [AchievementStep(5000, tickets: 2, avatarKey: 'vault')], progress: (f) => f.profile.coins),
+  AchievementFamily(id: 'nightowl', title: 'Night Owl', icon: AppIcons.nightOwl, describe: (t) => 'Solve $t puzzles between 22:00 and 05:00', steps: const [AchievementStep(10, coins: 150, avatarKey: 'owl')], progress: (f) => f.nightOwl),
+  AchievementFamily(id: 'earlybird', title: 'Early Bird', icon: AppIcons.earlyBird, describe: (t) => 'Solve $t puzzles between 05:00 and 08:00', steps: const [AchievementStep(10, coins: 150, avatarKey: 'bird')], progress: (f) => f.earlyBird),
+  AchievementFamily(id: 'speed', title: 'Quick Hands', icon: AppIcons.speed, describe: (t) => 'Finish $t puzzles in under 4 seconds per card', steps: _tiered([10, 50], 'speed', coins: 120), progress: (f) => f.speed),
+  AchievementFamily(id: 'marathon', title: 'Marathon', icon: AppIcons.marathon, describe: (t) => 'Solve $t puzzles in one day', steps: _tiered([10, 25], 'marathon', coins: 200), progress: (f) => f.marathon),
+  AchievementFamily(id: 'allmodes', title: 'All Shapes', icon: AppIcons.allModes, describe: (t) => 'Finish a board in every mode', steps: [AchievementStep(GameMode.values.length, coins: 200, tickets: 1, avatarKey: 'shapes')], progress: (f) => f.modes),
+  AchievementFamily(id: 'starhoarder', title: 'Star Hoarder', icon: AppIcons.starHoarder, describe: (t) => 'Collect $t stars', steps: _tiered([50, 250, 1000], 'stars', coins: 150), progress: (f) => f.profile.totalStars),
+  AchievementFamily(id: 'rich', title: 'Well Off', icon: AppIcons.piggy, describe: (t) => 'Hold ${formatCount(t)} coins at once', steps: const [AchievementStep(5000, tickets: 2, avatarKey: 'vault')], progress: (f) => f.profile.coins),
   AchievementFamily(id: 'vip', title: 'VIP member', icon: AppIcons.vip, describe: (t) => 'Join VIP', steps: const [AchievementStep(1, coins: 300, avatarKey: 'vip')], progress: (f) => f.profile.isVip ? 1 : 0),
   AchievementFamily(id: 'social', title: 'Good Company', icon: AppIcons.friends, describe: (t) => 'Add $t friend${t == 1 ? '' : 's'}', steps: _tiered([1, 5], 'friends', coins: 100), progress: (f) => f.friends),
-  AchievementFamily(id: 'piggy', title: 'Piggy Breaker', icon: AppIcons.piggy, describe: (t) => 'Fill the piggy bank to ${groupThousands(t)} coins', steps: const [AchievementStep(Profile.piggyCapacity, coins: 100)], progress: (f) => f.profile.piggyCoins),
+  AchievementFamily(id: 'piggy', title: 'Piggy Breaker', icon: AppIcons.piggy, describe: (t) => 'Fill the piggy bank to ${formatCount(t)} coins', steps: const [AchievementStep(Profile.piggyCapacity, coins: 100)], progress: (f) => f.profile.piggyCoins),
 ];
 
 /// Live status of every family, from the profile and progress rows.

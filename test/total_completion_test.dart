@@ -1,4 +1,5 @@
 // "Total Completion" on the profile and on other players' profiles.
+import 'package:card_jigsaw_world/core/numbers.dart';
 import 'package:card_jigsaw_world/core/theme/app_theme.dart';
 import 'package:card_jigsaw_world/features/profile/stats.dart';
 import 'package:card_jigsaw_world/models/models.dart';

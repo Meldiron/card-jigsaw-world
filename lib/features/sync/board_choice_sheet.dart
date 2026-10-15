@@ -136,21 +136,21 @@ class _BoardCard extends ConsumerWidget {
       decoration: BoxDecoration(color: c.card, borderRadius: BorderRadius.circular(Radii.lg), border: Border.all(color: c.stroke)),
       child: Column(
         children: [
-          Text(label, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: c.textPrimary)),
-          Text('${mode.label} ${spec.code}', style: TextStyle(fontSize: 12, color: c.textSecondary)),
+          Text(label, style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: c.textPrimary)),
+          Text('${mode.label} ${spec.code}', style: TextStyle(fontSize: TypeSize.caption, color: c.textSecondary)),
           const SizedBox(height: 8),
           SizedBox(height: previewHeight, child: Center(child: preview())),
           const SizedBox(height: 10),
           Text(
             inPlace == null ? '${board.gridSize} cards' : '$inPlace of ${board.gridSize} in place',
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: c.textPrimary),
+            style: TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w700, color: c.textPrimary),
           ),
           const SizedBox(height: 2),
           Text(
-            '${board.moves} moves · ${formatDuration(board.elapsedSeconds)}',
+            '${countOf(board.moves, 'move')} · ${formatDuration(board.elapsedSeconds)}',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontSize: 12, color: c.textSecondary),
+            style: TextStyle(fontSize: TypeSize.caption, color: c.textSecondary),
           ),
           if (onKeep != null) ...[
             const SizedBox(height: 12),

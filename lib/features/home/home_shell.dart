@@ -1,11 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/haptics.dart';
 import '../../core/sfx.dart';
-import '../../data/purchases.dart';
 import '../../state/achievements.dart';
 import '../../state/profile.dart';
 import '../../state/review_prompt.dart';
@@ -45,7 +43,7 @@ class _HomeShellState extends ConsumerState<HomeShell> {
     final paid = await ref.read(profileProvider.notifier).claimVipWeeklyBonus();
     if (paid > 0 && mounted) {
       Sfx.instance.coin();
-      showToast(context, 'VIP weekly bonus: ${groupThousands(paid)} coins', leading: const CoinIcon(size: 20));
+      showToast(context, 'VIP weekly bonus: ${formatCount(paid)} coins', leading: const CoinIcon(size: 20));
     }
   }
 
@@ -64,11 +62,11 @@ class _HomeShellState extends ConsumerState<HomeShell> {
     // Asks for an App Store rating after a happy moment (rules in ReviewRules).
     ref.watch(reviewPromptProvider);
     final tabs = [
-      GlassTabItem(icon: CupertinoIcons.house, activeIcon: CupertinoIcons.house_fill, label: 'Home', badge: dailyReady),
-      const GlassTabItem(icon: CupertinoIcons.square_grid_2x2, activeIcon: CupertinoIcons.square_grid_2x2_fill, label: 'Library'),
+      GlassTabItem(icon: AppIcons.house, activeIcon: AppIcons.home, label: 'Home', badge: dailyReady),
+      const GlassTabItem(icon: AppIcons.squareGrid2x2, activeIcon: AppIcons.library, label: 'Library'),
       GlassTabItem(icon: AppIcons.questsOutline, activeIcon: AppIcons.quests, label: 'Quests', badge: questReady),
-      const GlassTabItem(icon: CupertinoIcons.person_2, activeIcon: CupertinoIcons.person_2_fill, label: 'Social'),
-      GlassTabItem(icon: CupertinoIcons.person_crop_circle, activeIcon: CupertinoIcons.person_crop_circle_fill, label: 'Profile', badge: rewardReady),
+      const GlassTabItem(icon: AppIcons.person2, activeIcon: AppIcons.social, label: 'Social'),
+      GlassTabItem(icon: AppIcons.personCropCircle, activeIcon: AppIcons.profile, label: 'Profile', badge: rewardReady),
     ];
     return Scaffold(
       extendBody: true,

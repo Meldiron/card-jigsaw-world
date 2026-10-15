@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -108,7 +107,7 @@ class Creative {
 /// route was opened.
 bool openCreative(BuildContext context, WidgetRef ref, Creative creative) {
   if (creative.sellsPurchase && !ref.read(platformCapsProvider).purchases) {
-    showToast(context, purchasesOnIphoneMessage, icon: CupertinoIcons.device_phone_portrait);
+    showToast(context, purchasesOnIphoneMessage, icon: AppIcons.devicePhonePortrait);
     return false;
   }
   context.push(creative.route);
@@ -123,7 +122,7 @@ const _tabRoots = {'/home', '/library', '/events', '/social', '/profile'};
 /// web), so the caller carries on as if no button had been tapped.
 bool leaveGameForCreative(BuildContext context, WidgetRef ref, Creative creative) {
   if (creative.sellsPurchase && !ref.read(platformCapsProvider).purchases) {
-    showToast(context, purchasesOnIphoneMessage, icon: CupertinoIcons.device_phone_portrait);
+    showToast(context, purchasesOnIphoneMessage, icon: AppIcons.devicePhonePortrait);
     return false;
   }
   final router = GoRouter.of(context);
@@ -152,9 +151,9 @@ final houseCreatives = <Creative>[
   Creative(id: 'vip-months', kind: CreativeKind.vip, headline: 'Three years of daily puzzles', body: 'All ${_dailyMonthsSoFar()} monthly albums are included with VIP.', cta: 'Go VIP', route: '/store', price: '${StoreProducts.vipTrialDays} days free'),
   _coinsCreative('coins-3000', ProductIds.coins3000, headline: 'Running low on coins?', body: (n) {
     final packs = n ~/ PackPricePolicy.standardPackCoins;
-    return '${groupThousands(n)} coins unlock up to ${_count(packs)} packs or ${n ~/ Economy.magicLockCostCoins} Magic Locks.';
+    return '${formatCount(n)} coins unlock up to ${_count(packs)} packs or ${n ~/ Economy.magicLockCostCoins} Magic Locks.';
   }),
-  _coinsCreative('coins-1000', ProductIds.coins1000, headline: 'One more pack', body: (n) => '${groupThousands(n)} coins unlock a standard 24-picture pack.'),
+  _coinsCreative('coins-1000', ProductIds.coins1000, headline: 'One more pack', body: (n) => '${formatCount(n)} coins unlock a standard 24-picture pack.'),
   Creative(
     id: 'tickets-5',
     kind: CreativeKind.tickets,
@@ -165,8 +164,8 @@ final houseCreatives = <Creative>[
     price: StoreProducts.price(ProductIds.tickets5),
     productId: ProductIds.tickets5,
   ),
-  Creative(id: 'hints-15', kind: CreativeKind.hints, headline: 'Stuck on a card?', body: '${groupThousands(_hints.hints)} hints show exactly where a card belongs.', cta: 'Get ${_hints.label}', route: '/store', price: StoreProducts.price(ProductIds.hints15), productId: ProductIds.hints15),
-  Creative(id: 'piggy', kind: CreativeKind.piggy, headline: 'Your piggy bank is filling up', body: 'Every finished puzzle adds ${Economy.piggyPerPuzzle} coins, up to ${Profile.piggyCapacity}. Open it with one ticket.', cta: 'See piggy bank', route: '/home'),
+  Creative(id: 'hints-15', kind: CreativeKind.hints, headline: 'Stuck on a card?', body: '${formatCount(_hints.hints)} hints show exactly where a card belongs.', cta: 'Get ${_hints.label}', route: '/store', price: StoreProducts.price(ProductIds.hints15), productId: ProductIds.hints15),
+  Creative(id: 'piggy', kind: CreativeKind.piggy, headline: 'Your piggy bank is filling up', body: 'Every finished puzzle adds ${countOf(Economy.piggyPerPuzzle, 'coin')}, up to ${formatCount(Profile.piggyCapacity)}. Open it with one ticket.', cta: 'See piggy bank', route: '/home'),
   Creative(id: 'monthly', kind: CreativeKind.monthly, headline: 'One new picture every day', body: 'This month’s album is free. Past months come with VIP.', cta: 'Open this month', route: '/library'),
   Creative(id: 'events', kind: CreativeKind.event, headline: 'A new world-day event every week', body: 'Themed packs that open for seven days. Finish every picture for a ticket.', cta: 'See events', route: '/events'),
 ];
@@ -180,7 +179,7 @@ Creative _coinsCreative(String id, String productId, {required String headline, 
 }
 
 /// Small counts in words ("three packs"), larger ones as digits.
-String _count(int n) => const ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'].elementAtOrNull(n) ?? groupThousands(n);
+String _count(int n) => const ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'].elementAtOrNull(n) ?? formatCount(n);
 
 /// Picks a creative for the player's state; never repeats the last one.
 Creative pickCreative(WidgetRef ref) {
@@ -325,7 +324,7 @@ class _HouseAdScreenState extends ConsumerState<HouseAdScreen> {
       final leave = await showAppAlert(
         context,
         title: 'Close and lose the reward?',
-        message: '${_left}s left to earn ${widget.rewardCoins} coins.',
+        message: '${_left}s left to earn ${countOf(widget.rewardCoins, 'coin')}.',
         cancelLabel: 'Keep watching',
         confirmLabel: 'Close',
         destructive: true,
@@ -418,11 +417,11 @@ class _HouseAdScreenState extends ConsumerState<HouseAdScreen> {
                         const SizedBox(height: 14),
                         Text(c.headline, style: Theme.of(context).textTheme.displaySmall?.copyWith(color: Colors.white, shadows: _textShadow)).animate().fadeIn(delay: 150.ms).slideY(begin: 0.1),
                         const SizedBox(height: 8),
-                        Text(c.body, style: TextStyle(color: Colors.white.withValues(alpha: 0.9), fontSize: 16, height: 1.4, shadows: _textShadow)).animate().fadeIn(delay: 250.ms),
+                        Text(c.body, style: TextStyle(color: Colors.white.withValues(alpha: 0.9), fontSize: TypeSize.callout, height: 1.4, shadows: _textShadow)).animate().fadeIn(delay: 250.ms),
                         // No prices on web, where nothing can be bought, and only the App Store's own.
                         if (priceLine != null) ...[
                           const SizedBox(height: 8),
-                          Text(priceLine, style: TextStyle(color: Colors.white.withValues(alpha: 0.75), fontSize: 13, fontWeight: FontWeight.w600)),
+                          Text(priceLine, style: TextStyle(color: Colors.white.withValues(alpha: 0.75), fontSize: TypeSize.footnote, fontWeight: FontWeight.w600)),
                         ],
                         const SizedBox(height: 20),
                         _OfferButton(label: c.cta, onTap: _cta),
@@ -503,8 +502,8 @@ class _CollectButton extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      if (done) ...[const Icon(Icons.check_rounded, color: Colors.white, size: 19), const SizedBox(width: 8)],
-                      Text(done ? 'Collect $coins coins' : 'Collect $coins coins in ${left}s', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600, letterSpacing: -0.2)),
+                      if (done) ...[const Icon(AppIcons.checkmark, color: Colors.white, size: 19), const SizedBox(width: 8)],
+                      Text(done ? 'Collect ${countOf(coins, 'coin')}' : 'Collect ${countOf(coins, 'coin')} in ${left}s', style: const TextStyle(color: Colors.white, fontSize: TypeSize.callout, fontWeight: FontWeight.w600, letterSpacing: -0.2)),
                     ],
                   ),
                 ),
@@ -535,7 +534,7 @@ class _OfferButton extends StatelessWidget {
         height: 52,
         alignment: Alignment.center,
         decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(Radii.md)),
-        child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(color: _ink, fontSize: 16, fontWeight: FontWeight.w700)),
+        child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(color: _ink, fontSize: TypeSize.callout, fontWeight: FontWeight.w700)),
       ),
     );
   }
@@ -560,7 +559,7 @@ class _CountdownChip extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(label, style: const TextStyle(color: Colors.white, fontSize: 12.5, fontWeight: FontWeight.w600)),
+            Text(label, style: const TextStyle(color: Colors.white, fontSize: TypeSize.footnote, fontWeight: FontWeight.w600)),
             const SizedBox(width: 8),
             SizedBox(
               width: 20,
@@ -575,7 +574,7 @@ class _CountdownChip extends StatelessWidget {
                       builder: (_, v, _) => CircularProgressIndicator(value: v, strokeWidth: 2.5, color: Colors.white, backgroundColor: Colors.white24),
                     ),
                   // The label already says the seconds; the ring only shows the time running.
-                  Icon(done ? Icons.close_rounded : null, size: 16, color: Colors.white),
+                  Icon(done ? AppIcons.xmark : null, size: 16, color: Colors.white),
                 ],
               ),
             ),
@@ -601,12 +600,11 @@ class _KindBadge extends StatelessWidget {
       CreativeKind.monthly => (const Icon(AppIcons.dailyPuzzle, size: 13, color: Colors.white), 'Daily puzzles'),
       CreativeKind.event => (const Icon(AppIcons.events, size: 13, color: Colors.white), 'Events'),
     };
-    return Container(
-      padding: const EdgeInsets.fromLTRB(8, 5, 10, 5),
-      decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.45), borderRadius: BorderRadius.circular(999)),
+    // 163: the one chip for text over a photo.
+    return PhotoChip(
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        children: [mark, const SizedBox(width: 5), Text(label, style: const TextStyle(color: Colors.white, fontSize: 11.5, fontWeight: FontWeight.w600))],
+        children: [mark, const SizedBox(width: 5), Text(label, style: PhotoChip.textStyle)],
       ),
     );
   }
@@ -636,22 +634,22 @@ class _HouseBannerState extends ConsumerState<HouseBanner> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
       child: SoftCard(
-        padding: const EdgeInsets.fromLTRB(14, 14, 14, 12),
+        padding: Insets.card,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
                 // Same crown tile as the Store's VIP card (102 D), smaller.
-                IconTile(icon: AppIcons.vip, size: 36, radius: 10, color: Brand.coin.withValues(alpha: context.isDark ? 0.18 : 0.14), iconColor: context.isDark ? Brand.coin : Brand.coinDeep),
+                IconTile(icon: AppIcons.vip, size: IconTile.small, color: Brand.coin.withValues(alpha: context.isDark ? 0.18 : 0.14), iconColor: context.isDark ? Brand.coin : Brand.coinDeep),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(c.headline, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
+                      Text(c.headline, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body)),
                       const SizedBox(height: 2),
-                      Text(price, style: TextStyle(color: colors.textSecondary, fontSize: 12.5, height: 1.3)),
+                      Text(price, style: TextStyle(color: colors.textSecondary, fontSize: TypeSize.footnote, height: 1.3)),
                     ],
                   ),
                 ),

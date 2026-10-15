@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 
+import '../core/numbers.dart';
 import '../core/platform.dart';
 
 /// Product identifiers as configured in App Store Connect / Products.storekit.
@@ -40,9 +41,9 @@ class ProductGrant {
 
   /// "2,500 coins", "10 tickets", "16 hints".
   String get label => [
-        if (coins > 0) '${groupThousands(coins)} coins',
-        if (tickets > 0) '${groupThousands(tickets)} ticket${tickets == 1 ? '' : 's'}',
-        if (hints > 0) '${groupThousands(hints)} hint${hints == 1 ? '' : 's'}',
+        if (coins > 0) '${formatCount(coins)} coins',
+        if (tickets > 0) '${formatCount(tickets)} ticket${tickets == 1 ? '' : 's'}',
+        if (hints > 0) '${formatCount(hints)} hint${hints == 1 ? '' : 's'}',
       ].join(', ');
 }
 
@@ -133,17 +134,6 @@ class PackPricePolicy {
 
   /// Ticket packs cost 8, 10 or 12 tickets (two fewer for small packs).
   static const ticketPackTickets = [8, 10, 12];
-}
-
-/// 12000 -> "12,000".
-String groupThousands(int v) {
-  final s = v.abs().toString();
-  final b = StringBuffer(v < 0 ? '-' : '');
-  for (var i = 0; i < s.length; i++) {
-    if (i > 0 && (s.length - i) % 3 == 0) b.write(',');
-    b.write(s[i]);
-  }
-  return b.toString();
 }
 
 /// What the server granted for a verified purchase.

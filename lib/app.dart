@@ -142,7 +142,8 @@ class _CardJigsawAppState extends ConsumerState<CardJigsawApp> with WidgetsBindi
           backgroundColor: Colors.transparent,
           body: ScaffoldMessenger(child: UpdateHost(child: SyncHost(child: child!))),
         );
-        final data = mq.copyWith(textScaler: mq.textScaler.clamp(minScaleFactor: 0.9, maxScaleFactor: 1.2));
+        // Text follows the system size up to iOS "xxxLarge" (1.35); bars cap themselves at 1.2 (ChromeText).
+        final data = mq.copyWith(textScaler: mq.textScaler.clamp(minScaleFactor: 0.9, maxScaleFactor: 1.35));
         if (!ref.watch(platformCapsProvider).isWeb) return MediaQuery(data: data, child: host);
         return PhoneFrame(mediaQuery: data, child: host);
       },

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -55,7 +54,7 @@ Future<void> offerRemindersAfterGift(BuildContext context, ProviderContainer con
   // The question named event notes too, so Turn on is the explicit yes to them.
   container.read(eventRemindersProvider.notifier).set(true);
   final granted = await container.read(remindersProvider).enable();
-  if (granted && context.mounted) showToast(context, 'Daily reminder at $time', icon: CupertinoIcons.bell_fill);
+  if (granted && context.mounted) showToast(context, 'Daily reminder at $time', icon: AppIcons.bellFill);
 }
 
 /// 7-day streak calendar. Day 7 is the big one.
@@ -153,7 +152,7 @@ class _DailyRewardSheetState extends ConsumerState<DailyRewardSheet> {
           const SizedBox(height: 18),
           // Today's gift in full; after the claim the same card says what arrived.
           SoftCard(
-            padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+            padding: Insets.card,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -163,7 +162,7 @@ class _DailyRewardSheetState extends ConsumerState<DailyRewardSheet> {
                     children: [
                       Text(
                         received != null ? 'You received' : (available ? 'Day ${todayIdx + 1} gift' : 'Today, day ${todayIdx + 1}'),
-                        style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: c.textSecondary),
+                        style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: c.textSecondary),
                       ),
                       const SizedBox(height: 6),
                       _Rewards(reward: today, size: 22, prefix: received != null ? '+' : ''),
@@ -173,7 +172,7 @@ class _DailyRewardSheetState extends ConsumerState<DailyRewardSheet> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text(todayIdx == 5 ? 'Tomorrow, the big one' : 'Tomorrow', style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w600, color: c.textTertiary)),
+                    Text(todayIdx == 5 ? 'Tomorrow, the big one' : 'Tomorrow', style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600, color: c.textTertiary)),
                     const SizedBox(height: 6),
                     _Rewards(reward: next, size: 14),
                   ],
@@ -262,12 +261,12 @@ class _StreakTrack extends StatelessWidget {
                           _Stop(day: i + 1, done: done(i), today: i == todayIdx, big: i == 6, size: _dot),
                           const SizedBox(height: 6),
                           Text(
-                            '${Economy.dailyRewards[i].coins}',
+                            formatCount(Economy.dailyRewards[i].coins),
                             style: TextStyle(
-                              fontSize: 11.5,
+                              fontSize: TypeSize.caption,
                               fontWeight: FontWeight.w600,
                               color: i == todayIdx ? accent : (done(i) ? c.textTertiary : c.textSecondary),
-                              fontFeatures: const [FontFeature.tabularFigures()],
+                              fontFeatures: tabularFigures,
                             ),
                           ),
                         ],
@@ -297,10 +296,10 @@ class _Stop extends StatelessWidget {
     final accent = context.accent;
     final fill = done ? accent : (today ? c.accentTint : c.card);
     final Widget mark = done
-        ? const Icon(CupertinoIcons.checkmark_alt, size: 18, color: Colors.white)
+        ? const Icon(AppIcons.checkmarkAlt, size: 18, color: Colors.white)
         : big
             ? Icon(AppIcons.crown, size: 18, color: today ? accent : accent.withValues(alpha: 0.8))
-            : Text('$day', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: today ? accent : c.textSecondary));
+            : Text('$day', style: TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w700, color: today ? accent : c.textSecondary));
     return Container(
       width: size,
       height: size,
@@ -332,17 +331,17 @@ class _RestoreRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.colors;
     return SoftCard(
-      padding: const EdgeInsets.fromLTRB(12, 10, 10, 10),
+      padding: Insets.cardCompact,
       child: Row(
         children: [
-          const IconTile(icon: AppIcons.streak, size: 34, radius: 10),
+          const IconTile(icon: AppIcons.streak, size: IconTile.small),
           const SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('$streak-day streak', maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
-                Text('Restore and claim day $day', maxLines: 2, style: TextStyle(fontSize: 12.5, color: c.textSecondary)),
+                Text('$streak-day streak', maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w600)),
+                Text('Restore and claim day $day', maxLines: 2, style: TextStyle(fontSize: TypeSize.footnote, color: c.textSecondary)),
               ],
             ),
           ),

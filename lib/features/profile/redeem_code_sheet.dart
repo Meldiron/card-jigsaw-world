@@ -93,7 +93,7 @@ class _RedeemCodePanelState extends ConsumerState<RedeemCodePanel> {
             textCapitalization: TextCapitalization.characters,
             textAlign: TextAlign.center,
             onSubmitted: (_) => _redeem(),
-            style: TextStyle(fontFamily: 'Menlo', fontSize: 17, letterSpacing: 1.2, color: c.textPrimary),
+            style: TextStyle(fontFamily: 'Menlo', fontSize: TypeSize.headline, letterSpacing: 1.2, color: c.textPrimary),
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
             decoration: BoxDecoration(
               color: c.boardBackground,
@@ -103,7 +103,7 @@ class _RedeemCodePanelState extends ConsumerState<RedeemCodePanel> {
           ),
           if (_error != null) ...[
             const SizedBox(height: 8),
-            Text(_error!, key: const ValueKey('redeem-code-error'), style: const TextStyle(fontSize: 13, color: Brand.danger, fontWeight: FontWeight.w500)),
+            Text(_error!, key: const ValueKey('redeem-code-error'), style: const TextStyle(fontSize: TypeSize.footnote, color: Brand.danger, fontWeight: FontWeight.w500)),
           ],
           const SizedBox(height: 16),
           BigButton(

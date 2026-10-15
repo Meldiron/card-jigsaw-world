@@ -146,15 +146,6 @@ final playerStatsProvider = Provider<PlayerStats>((ref) {
   );
 });
 
-/// Compact duration for stat tiles: `42s`, `12m`, `3h 05m`, `2d 4h`.
-String formatPlayTime(int seconds) {
-  if (seconds < 60) return '${seconds}s';
-  final d = seconds ~/ 86400, h = (seconds % 86400) ~/ 3600, m = (seconds % 3600) ~/ 60;
-  if (d > 0) return '${d}d ${h}h';
-  if (h > 0) return '${h}h ${m.toString().padLeft(2, '0')}m';
-  return '${m}m';
-}
-
 /// Statistics as inset grouped lists (the iOS Settings and Health idiom): label on the left,
 /// value on the right, in small titled groups, plus a per-mode table in the same style. Shared by
 /// the own profile and other players' profiles; rows whose number is not available are left
@@ -178,23 +169,23 @@ class StatisticsSection extends StatelessWidget {
     final s = stats;
     final groups = <(String, List<(IconData, Color?, String, String)>)>[
       ('Puzzles', [
-        if (!omit.contains('solved')) (AppIcons.puzzle, null, 'Puzzles solved', _n(s.solved)),
-        if (s.perfect != null) (AppIcons.star, Brand.star, '3-star solves', _n(s.perfect!)),
-        if (!omit.contains('stars')) (AppIcons.star, Brand.star, 'Stars collected', _n(s.stars)),
-        (AppIcons.swaps, null, 'Moves made', _n(s.moves)),
+        if (!omit.contains('solved')) (AppIcons.puzzle, null, 'Puzzles solved', formatCount(s.solved)),
+        if (s.perfect != null) (AppIcons.star, Brand.star, '3-star solves', formatCount(s.perfect!)),
+        if (!omit.contains('stars')) (AppIcons.star, Brand.star, 'Stars collected', formatCount(s.stars)),
+        (AppIcons.swaps, null, 'Moves made', formatCount(s.moves)),
         (AppIcons.time, null, 'Time played', formatPlayTime(s.seconds)),
       ]),
       ('Streaks and quests', [
         if (!omit.contains('streak')) (AppIcons.streak, null, 'Current streak', _days(s.streak)),
         if (!omit.contains('longestStreak')) (AppIcons.trophy, null, 'Longest streak', _days(s.longestStreak)),
-        (AppIcons.quests, null, 'Quests completed', _n(s.quests)),
-        if (s.eventsCompleted != null) (AppIcons.events, null, 'Events completed', _n(s.eventsCompleted!)),
+        (AppIcons.quests, null, 'Quests completed', formatCount(s.quests)),
+        if (s.eventsCompleted != null) (AppIcons.events, null, 'Events completed', formatCount(s.eventsCompleted!)),
       ]),
       if (s.hints != null || s.peeks != null || s.magic != null)
         ('Boosters used', [
-          if (s.hints != null) (AppIcons.hint, Brand.hint, 'Hints', _n(s.hints!)),
-          if (s.peeks != null) (AppIcons.peek, null, 'Peeks', _n(s.peeks!)),
-          if (s.magic != null) (AppIcons.magic, null, 'Magic', _n(s.magic!)),
+          if (s.hints != null) (AppIcons.hint, Brand.hint, 'Hints', formatCount(s.hints!)),
+          if (s.peeks != null) (AppIcons.peek, null, 'Peeks', formatCount(s.peeks!)),
+          if (s.magic != null) (AppIcons.magic, null, 'Magic', formatCount(s.magic!)),
         ]),
     ];
     if (compact) {
@@ -208,7 +199,7 @@ class StatisticsSection extends StatelessWidget {
     const figures = [FontFeature.tabularFigures()];
     Widget label(String text) => Padding(
           padding: const EdgeInsets.fromLTRB(4, 18, 4, 8),
-          child: Text(text.toUpperCase(), style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 0.6, color: c.textTertiary)),
+          child: Text(text.toUpperCase(), style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600, letterSpacing: 0.6, color: c.textTertiary)),
         );
     Widget card(List<Widget> rows) => SoftCard(
           padding: EdgeInsets.zero,
@@ -227,14 +218,14 @@ class StatisticsSection extends StatelessWidget {
             children: [
               SizedBox(width: 20, child: Icon(icon, size: 18, color: tint ?? context.accent)),
               const SizedBox(width: 12),
-              Expanded(child: Text(name, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500))),
+              Expanded(child: Text(name, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w500))),
               ...values,
             ],
           ),
         );
     Widget value(String text, {double? width, Color? color}) => SizedBox(
           width: width,
-          child: Text(text, textAlign: TextAlign.right, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: color, fontFeatures: figures)),
+          child: Text(text, textAlign: TextAlign.right, style: TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w600, color: color, fontFeatures: figures)),
         );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -249,16 +240,16 @@ class StatisticsSection extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(4, 18, 14, 8),
           child: Row(
             children: [
-              Expanded(child: Text('BY MODE', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 0.6, color: c.textTertiary))),
-              SizedBox(width: 64, child: Text('SOLVED', textAlign: TextAlign.right, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 0.6, color: c.textTertiary))),
-              if (best != null) SizedBox(width: 72, child: Text('BEST', textAlign: TextAlign.right, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 0.6, color: c.textTertiary))),
+              Expanded(child: Text('BY MODE', style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600, letterSpacing: 0.6, color: c.textTertiary))),
+              SizedBox(width: 64, child: Text('SOLVED', textAlign: TextAlign.right, style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600, letterSpacing: 0.6, color: c.textTertiary))),
+              if (best != null) SizedBox(width: 72, child: Text('BEST', textAlign: TextAlign.right, style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600, letterSpacing: 0.6, color: c.textTertiary))),
             ],
           ),
         ),
         card([
           for (final m in GameMode.values)
             row(_modeIcon(m), c.textSecondary, m.label, [
-              value(_n(s.solvedByMode[m] ?? 0), width: 64),
+              value(formatCount(s.solvedByMode[m] ?? 0), width: 64),
               if (best != null) value(best[m] == null ? '—' : formatDuration(best[m]!), width: 72, color: c.textSecondary),
             ]),
         ]),
@@ -268,25 +259,11 @@ class StatisticsSection extends StatelessWidget {
   }
 
   static IconData _modeIcon(GameMode m) => switch (m) {
-        GameMode.cards => Icons.style_rounded,
-        GameMode.squares => Icons.grid_view_rounded,
-        GameMode.triangles => Icons.change_history_rounded,
-        GameMode.hexagons => Icons.hexagon_rounded,
+        GameMode.cards => AppIcons.modeCards,
+        GameMode.squares => AppIcons.modeSquares,
+        GameMode.triangles => AppIcons.modeTriangles,
+        GameMode.hexagons => AppIcons.modeHexagons,
       };
-
-  /// Thousands separator for big counters.
-  static String _n(int v) => formatCount(v);
-}
-
-/// `7268` as `7,268`.
-String formatCount(int v) {
-  final s = v.toString();
-  final b = StringBuffer();
-  for (var i = 0; i < s.length; i++) {
-    if (i > 0 && (s.length - i) % 3 == 0) b.write(',');
-    b.write(s[i]);
-  }
-  return b.toString();
 }
 
 /// Share of [total] that [part] is, as a whole percentage for a label: never above 100, "<1%"
@@ -311,11 +288,11 @@ class TotalCompletion extends StatelessWidget {
     final t = totals;
     return SoftCard(
       key: const ValueKey('total-completion'),
-      padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
+      padding: Insets.cardCompact,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Total Completion', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+          const Text('Total Completion', style: TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body)),
           const SizedBox(height: 12),
           _CompletionLine(label: 'Pictures', done: t.picturesSolved, perfect: t.picturesPerfect, total: t.pictures, doneWord: 'solved'),
           const SizedBox(height: 14),
@@ -344,8 +321,8 @@ class _CompletionLine extends StatelessWidget {
       children: [
         Row(
           children: [
-            Expanded(child: Text(label, style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w500))),
-            Text(completionPercent(shownDone, total), style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w700, fontFeatures: [FontFeature.tabularFigures()])),
+            Expanded(child: Text(label, style: const TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w500))),
+            Text(completionPercent(shownDone, total), style: const TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w700, fontFeatures: tabularFigures)),
           ],
         ),
         const SizedBox(height: 6),
@@ -376,7 +353,7 @@ class _Legend extends StatelessWidget {
       children: [
         Container(width: 8, height: 8, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
         const SizedBox(width: 5),
-        Text(text, style: TextStyle(fontSize: 11.5, color: context.colors.textSecondary)),
+        Text(text, style: TextStyle(fontSize: TypeSize.caption, color: context.colors.textSecondary)),
       ],
     );
   }

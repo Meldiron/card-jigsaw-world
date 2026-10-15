@@ -7,7 +7,6 @@ import 'package:flutter/rendering.dart' show RenderAbstractViewport, ScrollCache
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:intl/intl.dart';
 
 import '../../core/haptics.dart';
 import '../../core/links.dart';
@@ -103,14 +102,14 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
         } else if (g.vipExpiresAt != null) {
           Sfx.instance.win();
           Haptics.success();
-          showToast(context, 'VIP active until ${_date(g.vipExpiresAt!)}', icon: AppIcons.vip);
+          showToast(context, 'VIP active until ${formatDate(g.vipExpiresAt!)}', icon: AppIcons.vip);
         } else {
           Sfx.instance.coin();
           Haptics.success();
           final parts = [
-            if (g.coins > 0) '${groupThousands(g.coins)} coins',
-            if (g.tickets > 0) '${groupThousands(g.tickets)} ticket${g.tickets == 1 ? '' : 's'}',
-            if (g.hints > 0) '${groupThousands(g.hints)} hint${g.hints == 1 ? '' : 's'}',
+            if (g.coins > 0) '${formatCount(g.coins)} coins',
+            if (g.tickets > 0) '${formatCount(g.tickets)} ticket${g.tickets == 1 ? '' : 's'}',
+            if (g.hints > 0) '${formatCount(g.hints)} hint${g.hints == 1 ? '' : 's'}',
           ];
           showToast(context, 'Added ${parts.join(', ')}', icon: AppIcons.check);
         }
@@ -126,16 +125,13 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
     }
   }
 
-  /// "23 May 2027": a written month cannot be read as 5 March.
-  static String _date(DateTime d) => DateFormat('d MMMM y').format(d);
-
   Future<void> _watchAd() async {
     if (_adBusy) return;
     // The allowance is persisted on the profile, so blocking the ad network
     // does not reset it.
     final wait = HouseAdPolicy.rewardedWaitLeft(ref.read(localStoreProvider).lastRewardedAt);
     if (wait > Duration.zero) {
-      showToast(context, 'Next offer in ${wait.inMinutes + 1} min.', icon: AppIcons.time);
+      showToast(context, 'Next offer in ${formatTimeLeft(wait)}.', icon: AppIcons.time);
       return;
     }
     final ok = await ref.read(profileProvider.notifier).consumeAd();
@@ -154,7 +150,7 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
     }
     await ref.read(profileProvider.notifier).addCoins(Economy.adRewardCoins, reason: 'bonus-video');
     if (!mounted) return;
-    showToast(context, 'Added ${Economy.adRewardCoins} coins', leading: const CoinIcon(size: 20));
+    showToast(context, 'Added ${countOf(Economy.adRewardCoins, 'coin')}', leading: const CoinIcon(size: 20));
   }
 
   /// Debug-only stand-in used when no store is reachable (plain simulator).
@@ -215,12 +211,12 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
 
   Future<void> _redeemCode() async {
     if (!ref.read(platformCapsProvider).giftCodes) {
-      showToast(context, 'Gift codes can be redeemed on iPhone and iPad through the App Store.', icon: CupertinoIcons.gift);
+      showToast(context, 'Gift codes can be redeemed on iPhone and iPad through the App Store.', icon: AppIcons.gift);
       return;
     }
     final opened = await ref.read(purchaseServiceProvider).presentCodeRedemptionSheet();
     if (!opened && mounted) {
-      showToast(context, 'Gift codes can be redeemed on iPhone and iPad through the App Store.', icon: CupertinoIcons.gift);
+      showToast(context, 'Gift codes can be redeemed on iPhone and iPad through the App Store.', icon: AppIcons.gift);
     }
   }
 
@@ -280,7 +276,7 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
       extendBodyBehindAppBar: true,
       appBar: GlassAppBar(
         title: const Text('Store'),
-        leading: Padding(padding: const EdgeInsets.only(left: 12), child: RoundIconButton(icon: CupertinoIcons.xmark, size: 38, onTap: () => context.pop())),
+        leading: Padding(padding: const EdgeInsets.only(left: 12), child: RoundIconButton(icon: AppIcons.xmark, size: 38, onTap: () => context.pop())),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
@@ -354,7 +350,7 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
                       ? 'Payment is charged to your Apple ID when you confirm, or when the free trial ends. VIP renews automatically unless cancelled at least 24 hours before the period ends; manage it in your App Store account settings.'
                       : (kDebugMode ? 'Store unavailable on this device. Debug sandbox purchases grant items locally.' : 'The App Store is not available right now.'),
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 11.5, color: c.textTertiary),
+              style: TextStyle(fontSize: TypeSize.caption, color: c.textTertiary),
             ),
           ),
           // Apple asks for both links where a subscription is sold (guideline 3.1.2).
@@ -363,7 +359,7 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _FooterLink(key: const ValueKey('store-terms'), label: 'Terms of use', url: AppLinks.termsOfUse),
-              Text('·', style: TextStyle(fontSize: 11.5, color: c.textTertiary)),
+              Text('·', style: TextStyle(fontSize: TypeSize.caption, color: c.textTertiary)),
               _FooterLink(key: const ValueKey('store-privacy'), label: 'Privacy policy', url: AppLinks.privacyPolicy),
             ],
           ),
@@ -403,17 +399,17 @@ class _FreeCoinsRowState extends ConsumerState<_FreeCoinsRow> {
     if (wait > Duration.zero && widget.adsLeft > 0) _tick = Timer(const Duration(seconds: 20), () => mounted ? setState(() {}) : null);
     final Widget trailing;
     if (widget.adsLeft == 0) {
-      trailing = Text('Back tomorrow', style: TextStyle(color: c.textSecondary, fontSize: 14, fontWeight: FontWeight.w600));
+      trailing = Text('Back tomorrow', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.body, fontWeight: FontWeight.w600));
     } else if (wait > Duration.zero) {
-      trailing = Text('Next in ${wait.inMinutes + 1} min', style: TextStyle(color: c.textSecondary, fontSize: 14, fontWeight: FontWeight.w600));
+      trailing = Text('Next in ${formatTimeLeft(wait)}', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.body, fontWeight: FontWeight.w600));
     } else {
       trailing = BigButton.cost(label: 'Watch', currency: Currency.coins, amount: Economy.adRewardCoins, amountPrefix: '+', height: 40, expand: false, onTap: widget.busy ? null : widget.onWatch);
     }
     return SoftCard(
-      padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
+      padding: Insets.cardCompact,
       child: Row(
         children: [
-          const IconTile(icon: AppIcons.video, size: 40, radius: 12),
+          const IconTile(icon: AppIcons.video, size: IconTile.medium),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -426,7 +422,7 @@ class _FreeCoinsRowState extends ConsumerState<_FreeCoinsRow> {
                   widget.adsLeft > 0 ? '${widget.adsLeft} left today' : 'All ${Profile.adsPerDay} used today',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(color: c.textSecondary, fontSize: 13),
+                  style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote),
                 ),
               ],
             ),
@@ -451,7 +447,7 @@ class _FooterLink extends StatelessWidget {
         onPressed: () async {
           if (!await openLink(url) && context.mounted) showToast(context, 'The page could not open. Check your connection and try again.', icon: AppIcons.signal);
         },
-        child: Text(label, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: context.accent)),
+        child: Text(label, style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600, color: context.accent)),
       );
 }
 
@@ -466,11 +462,11 @@ class StoreWebNotice extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.colors;
     return SoftCard(
-      padding: const EdgeInsets.fromLTRB(14, 14, 16, 14),
+      padding: Insets.card,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const IconTile(icon: CupertinoIcons.device_phone_portrait, size: 34, radius: 10),
+          const IconTile(icon: AppIcons.devicePhonePortrait, size: IconTile.small),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -478,7 +474,7 @@ class StoreWebNotice extends StatelessWidget {
               children: [
                 Text('Web version', style: Theme.of(context).textTheme.titleMedium),
                 const SizedBox(height: 3),
-                Text(message, style: TextStyle(fontSize: 13.5, height: 1.4, color: c.textSecondary)),
+                Text(message, style: TextStyle(fontSize: TypeSize.footnote, height: 1.4, color: c.textSecondary)),
               ],
             ),
           ),
@@ -498,11 +494,11 @@ class _StoreDownNotice extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.colors;
     return SoftCard(
-      padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
+      padding: Insets.card,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const IconTile(icon: AppIcons.signal, size: 34, radius: 10),
+          const IconTile(icon: AppIcons.signal, size: IconTile.small),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -510,7 +506,7 @@ class _StoreDownNotice extends StatelessWidget {
               children: [
                 Text('The App Store is not responding', style: Theme.of(context).textTheme.titleMedium),
                 const SizedBox(height: 3),
-                Text('Prices and purchases come back when it answers. Free coins and everything you own work as usual.', style: TextStyle(fontSize: 13, height: 1.35, color: c.textSecondary)),
+                Text('Prices and purchases come back when it answers. Free coins and everything you own work as usual.', style: TextStyle(fontSize: TypeSize.footnote, height: 1.35, color: c.textSecondary)),
                 const SizedBox(height: 10),
                 BigButton(label: 'Try again', kind: ButtonKind.secondary, height: 36, expand: false, onTap: onRetry),
               ],
@@ -534,10 +530,10 @@ class _VipMemberCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.colors;
     return SoftCard(
-      padding: const EdgeInsets.fromLTRB(14, 14, 10, 14),
+      padding: Insets.card,
       child: Row(
         children: [
-          IconTile(icon: AppIcons.vip, size: 44, radius: 12, color: Brand.coin.withValues(alpha: context.isDark ? 0.18 : 0.14), iconColor: context.isDark ? Brand.coin : Brand.coinDeep),
+          IconTile(icon: AppIcons.vip, size: IconTile.medium, color: Brand.coin.withValues(alpha: context.isDark ? 0.18 : 0.14), iconColor: context.isDark ? Brand.coin : Brand.coinDeep),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -546,8 +542,8 @@ class _VipMemberCard extends StatelessWidget {
                 Text('VIP', style: Theme.of(context).textTheme.titleLarge),
                 const SizedBox(height: 2),
                 Text(
-                  until != null ? 'Active until ${DateFormat('d MMMM y').format(until!)}' : 'Active',
-                  style: TextStyle(fontSize: 13, color: c.textSecondary),
+                  until != null ? 'Active until ${formatDate(until!)}' : 'Active',
+                  style: TextStyle(fontSize: TypeSize.footnote, color: c.textSecondary),
                 ),
               ],
             ),
@@ -561,7 +557,7 @@ class _VipMemberCard extends StatelessWidget {
                   showToast(context, 'The page could not open. Check your connection and try again.', icon: AppIcons.signal);
                 }
               },
-              child: Text('Manage', style: TextStyle(color: context.accent, fontSize: 15, fontWeight: FontWeight.w600)),
+              child: Text('Manage', style: TextStyle(color: context.accent, fontSize: TypeSize.body, fontWeight: FontWeight.w600)),
             ),
         ],
       ),
@@ -625,10 +621,10 @@ class _VipCardState extends State<_VipCard> {
         children: [
           Row(
             children: [
-              IconTile(icon: AppIcons.vip, size: 44, radius: 12, color: Brand.coin.withValues(alpha: context.isDark ? 0.18 : 0.14), iconColor: context.isDark ? Brand.coin : Brand.coinDeep),
+              IconTile(icon: AppIcons.vip, size: IconTile.medium, color: Brand.coin.withValues(alpha: context.isDark ? 0.18 : 0.14), iconColor: context.isDark ? Brand.coin : Brand.coinDeep),
               const SizedBox(width: 12),
-              Expanded(child: Text('Card Jigsaw World VIP', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 19, letterSpacing: -0.3, color: fg))),
-              if (isVip) const Chip2(label: 'Active', icon: CupertinoIcons.checkmark_alt),
+              Expanded(child: Text('Card Jigsaw World VIP', style: TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.title3, letterSpacing: -0.3, color: fg))),
+              if (isVip) const Chip2(label: 'Active', icon: AppIcons.checkmarkAlt),
             ],
           ),
           const SizedBox(height: 14),
@@ -643,33 +639,33 @@ class _VipCardState extends State<_VipCard> {
               padding: const EdgeInsets.only(bottom: 8),
               child: Row(
                 children: [
-                  Icon(CupertinoIcons.checkmark_circle_fill, color: context.accent, size: 16),
+                  Icon(AppIcons.checkmarkCircleFill, color: context.accent, size: 16),
                   const SizedBox(width: 8),
-                  Expanded(child: Text(line, style: TextStyle(color: fg, fontSize: 13.5))),
+                  Expanded(child: Text(line, style: TextStyle(color: fg, fontSize: TypeSize.footnote))),
                 ],
               ),
             ),
           const SizedBox(height: 10),
           if (isVip)
             Text(
-              vipUntil != null ? 'VIP is active until ${vipUntil.day}.${vipUntil.month}.${vipUntil.year}. Thank you for supporting the game.' : 'VIP is active. Thank you for supporting the game.',
-              style: TextStyle(color: c.textSecondary, fontSize: 13),
+              vipUntil != null ? 'VIP is active until ${formatDate(vipUntil)}. Thank you for supporting the game.' : 'VIP is active. Thank you for supporting the game.',
+              style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote),
             )
           else if (purchasable && w.unavailable)
             Row(
               children: [
                 Icon(AppIcons.signal, size: 16, color: c.textSecondary),
                 const SizedBox(width: 8),
-                Expanded(child: Text('Plans and prices show here once the App Store answers.', style: TextStyle(color: c.textSecondary, fontSize: 13))),
+                Expanded(child: Text('Plans and prices show here once the App Store answers.', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote))),
               ],
             )
           else if (!purchasable)
             Row(
               children: [
-                Chip2(label: 'Available on iPhone', icon: CupertinoIcons.device_phone_portrait, color: c.accentTint, foreground: context.accent),
+                Chip2(label: 'Available on iPhone', icon: AppIcons.devicePhonePortrait, color: c.accentTint, foreground: context.accent),
                 const SizedBox(width: 10),
                 // No price on web: the App Store shows it on iPhone.
-                Expanded(child: Text('Starts with a ${StoreProducts.vipTrialDays}-day free trial.', style: TextStyle(color: c.textSecondary, fontSize: 12))),
+                Expanded(child: Text('Starts with a ${StoreProducts.vipTrialDays}-day free trial.', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.caption))),
               ],
             )
           else ...[
@@ -700,7 +696,7 @@ class _VipCardState extends State<_VipCard> {
               child: Text(
                 '${StoreProducts.vipTrialDays} days free, then ${_yearly ? '${w.yearlyPrice} a year' : '${w.monthlyPrice} a month'}. Cancel anytime.',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: c.textSecondary, fontSize: 12.5),
+                style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote),
               ),
             ),
           ],
@@ -714,9 +710,9 @@ class _VipCardState extends State<_VipCard> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(CupertinoIcons.gift, size: 16, color: context.accent),
+                      Icon(AppIcons.gift, size: 16, color: context.accent),
                       const SizedBox(width: 6),
-                      Flexible(child: Text('Have a gift code? Redeem it', style: TextStyle(color: context.accent, fontSize: 13, fontWeight: FontWeight.w600))),
+                      Flexible(child: Text('Have a gift code? Redeem it', style: TextStyle(color: context.accent, fontSize: TypeSize.footnote, fontWeight: FontWeight.w600))),
                     ],
                   ),
                 ),
@@ -762,22 +758,22 @@ class _PlanRow extends StatelessWidget {
           ),
           child: Row(
             children: [
-              Icon(selected ? CupertinoIcons.checkmark_circle_fill : CupertinoIcons.circle, size: 22, color: selected ? accent : c.textTertiary),
+              Icon(selected ? AppIcons.checkmarkCircleFill : AppIcons.circle, size: 22, color: selected ? accent : c.textTertiary),
               const SizedBox(width: 10),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(title, style: TextStyle(color: fg, fontSize: 15, fontWeight: FontWeight.w600)),
-                    if (badge != null) Text(badge!, style: TextStyle(color: accent, fontSize: 12, fontWeight: FontWeight.w700)),
+                    Text(title, style: TextStyle(color: fg, fontSize: TypeSize.body, fontWeight: FontWeight.w600)),
+                    if (badge != null) Text(badge!, style: TextStyle(color: accent, fontSize: TypeSize.caption, fontWeight: FontWeight.w700)),
                   ],
                 ),
               ),
               const SizedBox(width: 8),
               Text.rich(
                 TextSpan(children: [
-                  TextSpan(text: price, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700, letterSpacing: -0.3)),
-                  TextSpan(text: ' $period', style: TextStyle(fontSize: 12.5, color: c.textSecondary)),
+                  TextSpan(text: price, style: const TextStyle(fontSize: TypeSize.headline, fontWeight: FontWeight.w700, letterSpacing: -0.3)),
+                  TextSpan(text: ' $period', style: TextStyle(fontSize: TypeSize.footnote, color: c.textSecondary)),
                 ]),
                 style: TextStyle(color: fg),
               ),
@@ -881,7 +877,7 @@ class _FreeNote extends StatelessWidget {
         children: [
           Padding(padding: const EdgeInsets.only(top: 1), child: Icon(AppIcons.dailyGift, size: 15, color: c.textTertiary)),
           const SizedBox(width: 6),
-          Expanded(child: Text(text, style: TextStyle(fontSize: 13, height: 1.35, color: c.textSecondary))),
+          Expanded(child: Text(text, style: TextStyle(fontSize: TypeSize.footnote, height: 1.35, color: c.textSecondary))),
         ],
       ),
     );
@@ -932,7 +928,7 @@ class _ProductGrid extends StatelessWidget {
                 purchasable: purchasable,
                 unavailable: unavailable,
                 onTap: !purchasable
-                    ? () => showToast(context, purchasesOnIphoneMessage, icon: CupertinoIcons.device_phone_portrait)
+                    ? () => showToast(context, purchasesOnIphoneMessage, icon: AppIcons.devicePhonePortrait)
                     : (busy ? null : () => onBuy(products[i])),
               ),
             ],
@@ -970,18 +966,18 @@ class _ProductRow extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(p.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16, letterSpacing: -0.2)),
+                  Text(p.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.callout, letterSpacing: -0.2)),
                   if (bonus >= 3) ...[
                     const SizedBox(height: 2),
                     Row(
                       children: [
-                        Text('+$bonus%', style: TextStyle(color: context.accent, fontWeight: FontWeight.w600, fontSize: 12.5)),
+                        Text('+$bonus%', style: TextStyle(color: context.accent, fontWeight: FontWeight.w600, fontSize: TypeSize.footnote)),
                         Flexible(
                           child: Text(
                             ' more ${p.grant.coins > 0 ? 'coins' : p.grant.tickets > 0 ? 'tickets' : 'hints'}',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(color: context.accent, fontWeight: FontWeight.w600, fontSize: 12.5),
+                            style: TextStyle(color: context.accent, fontWeight: FontWeight.w600, fontSize: TypeSize.footnote),
                           ),
                         ),
                       ],
@@ -995,7 +991,7 @@ class _ProductRow extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(color: c.canvas, borderRadius: BorderRadius.circular(999), border: Border.all(color: c.stroke)),
-                child: Text('Unavailable', maxLines: 1, style: TextStyle(color: c.textTertiary, fontWeight: FontWeight.w600, fontSize: 13)),
+                child: Text('Unavailable', maxLines: 1, style: TextStyle(color: c.textTertiary, fontWeight: FontWeight.w600, fontSize: TypeSize.footnote)),
               )
             else if (purchasable)
               Container(
@@ -1004,10 +1000,10 @@ class _ProductRow extends StatelessWidget {
                 alignment: Alignment.center,
                 // The best deal of the section is the one filled price: the value speaks, no label needed.
                 decoration: BoxDecoration(color: best ? context.accent : c.accentTint, borderRadius: BorderRadius.circular(999)),
-                child: Text(price, style: TextStyle(color: best ? Colors.white : context.accent, fontWeight: FontWeight.w700, fontSize: 14.5)),
+                child: Text(price, style: TextStyle(color: best ? Colors.white : context.accent, fontWeight: FontWeight.w700, fontSize: TypeSize.body)),
               )
             else
-              Icon(CupertinoIcons.device_phone_portrait, size: 18, color: c.textTertiary),
+              Icon(AppIcons.devicePhonePortrait, size: 18, color: c.textTertiary),
           ],
         ),
       ),

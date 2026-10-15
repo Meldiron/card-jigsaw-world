@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math' as math;
 
+import 'package:card_jigsaw_world/core/numbers.dart';
 import 'package:card_jigsaw_world/data/purchases.dart';
 import 'package:card_jigsaw_world/models/models.dart';
 import 'package:card_jigsaw_world/state/profile.dart';
@@ -42,7 +43,7 @@ void main() {
         expect((p['name'] as String).length, lessThanOrEqualTo(30), reason: '$id name length');
         expect((p['description'] as String).length, lessThanOrEqualTo(45), reason: '$id description length');
         final amount = grant.coins + grant.tickets + grant.hints;
-        expect(p['reviewNote'], contains(groupThousands(amount)), reason: '$id review note names the amount');
+        expect(p['reviewNote'], contains(formatCount(amount)), reason: '$id review note names the amount');
       }
       for (final id in ProductIds.subscriptions) {
         final sub = jsonDecode(File('store/metadata/subscriptions/$id.json').readAsStringSync()) as Map<String, dynamic>;

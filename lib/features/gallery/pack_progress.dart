@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -137,7 +136,7 @@ class _DoneBadge extends StatelessWidget {
           shape: BoxShape.circle,
           border: Border.all(color: perfect ? Brand.star : Colors.white.withValues(alpha: 0.9), width: perfect ? 2 : 1.5),
         ),
-        child: Icon(perfect ? CupertinoIcons.star_fill : CupertinoIcons.checkmark, size: size * (perfect ? 0.56 : 0.54), color: perfect ? Brand.star : Colors.white),
+        child: Icon(perfect ? AppIcons.star : AppIcons.checkmark, size: size * (perfect ? 0.56 : 0.54), color: perfect ? Brand.star : Colors.white),
       ),
     );
   }
@@ -153,7 +152,7 @@ class _DoneBadge extends StatelessWidget {
 ///
 /// [onImage] draws it in white for use over a picture with a scrim.
 class PackProgressLine extends StatelessWidget {
-  const PackProgressLine({super.key, required this.progress, this.onImage = false, this.height = 5, this.fontSize = 11});
+  const PackProgressLine({super.key, required this.progress, this.onImage = false, this.height = 5, this.fontSize = TypeSize.micro});
   final PackProgress progress;
   final bool onImage;
   final double height;

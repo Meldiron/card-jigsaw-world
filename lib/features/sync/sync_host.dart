@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/theme/tokens.dart';
-import '../../data/purchases.dart' show groupThousands;
 import '../../data/sync/notice.dart';
 import '../../data/sync/ops.dart';
 import '../../models/models.dart';
@@ -96,7 +95,7 @@ typedef SyncNoticeLine = ({SyncLineIcon icon, String text});
 
 enum SyncLineIcon { coins, tickets, hints, peeks, magics, level, puzzle, star, board, unlock, avatar, quest, achievement, dailyGift, vip, profile, check, undone }
 
-String _count(int n, String one, String many) => '${groupThousands(n)} ${n == 1 ? one : many}';
+String _count(int n, String one, String many) => '${formatCount(n)} ${n == 1 ? one : many}';
 
 String _signed(int n, String one, String many) => '${n > 0 ? '+' : '−'}${_count(n.abs(), one, many)}';
 
@@ -139,7 +138,7 @@ String skipText(SkipReason r) => switch (r) {
       SkipReason.questClaimed => 'A quest claimed on both devices, paid once',
       SkipReason.vipBonusPaid => "This week's VIP bonus, paid once",
       SkipReason.dailyClaimed => "Today's daily gift, paid once",
-      SkipReason.streakRestored => 'Streak already restored, no Tickets spent',
+      SkipReason.streakRestored => 'Streak already restored, no tickets spent',
       SkipReason.unlocked => 'Already unlocked there, nothing charged',
       SkipReason.achievementClaimed => 'An achievement reward claimed on both devices, paid once',
       SkipReason.piggyEmpty => 'Piggy bank already opened on the other device',
@@ -226,7 +225,7 @@ class _SyncNoticeListState extends State<SyncNoticeList> {
             children: [
               SizedBox(width: 22, child: Center(child: icon(l.icon))),
               const SizedBox(width: 10),
-              Expanded(child: Text(l.text, style: TextStyle(fontSize: 14, height: 1.3, color: c.textPrimary))),
+              Expanded(child: Text(l.text, style: TextStyle(fontSize: TypeSize.body, height: 1.3, color: c.textPrimary))),
             ],
           ),
         );
@@ -272,7 +271,7 @@ class _SyncNoticeListState extends State<SyncNoticeList> {
                         excludeSemantics: true,
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
-                          children: [icon(l.icon), const SizedBox(width: 5), Text(l.text.split(' ').first, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: c.textPrimary))],
+                          children: [icon(l.icon), const SizedBox(width: 5), Text(l.text.split(' ').first, style: TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w700, color: c.textPrimary))],
                         ),
                       ),
                   ],
@@ -284,7 +283,7 @@ class _SyncNoticeListState extends State<SyncNoticeList> {
                 padding: const EdgeInsets.only(top: 10, bottom: 2),
                 child: Align(
                   alignment: Alignment.centerLeft,
-                  child: Text('Counted once', style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: c.textSecondary)),
+                  child: Text('Counted once', style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: c.textSecondary)),
                 ),
               ),
               for (final l in once) row(l),

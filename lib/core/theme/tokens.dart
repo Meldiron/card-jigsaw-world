@@ -56,6 +56,37 @@ class Radii {
   static const pill = 999.0;
 }
 
+/// The type ramp: every text in the app uses one of these sizes (iOS text
+/// styles at the default Dynamic Type size). Weights: 400 for reading, 600
+/// for labels and row titles, 700 for headings and numbers; nothing heavier.
+///
+/// | size | name | for |
+/// | --- | --- | --- |
+/// | 40 | display | one big number (piggy bank) |
+/// | 34 | largeTitle | page titles (Quests, Social, Profile) |
+/// | 28 | title1 | hero titles |
+/// | 22 | title2 | sheet and alert-sized titles |
+/// | 20 | title3 | section headers |
+/// | 17 | headline | card titles, bar titles, stat values |
+/// | 16 | callout | buttons |
+/// | 15 | body | row titles, body copy |
+/// | 13 | footnote | subtitles, secondary lines, links |
+/// | 12 | caption | chips, meta lines, captions |
+/// | 11 | micro | tab labels, badges, axis labels (the smallest size iOS allows) |
+class TypeSize {
+  static const display = 40.0;
+  static const largeTitle = 34.0;
+  static const title1 = 28.0;
+  static const title2 = 22.0;
+  static const title3 = 20.0;
+  static const headline = 17.0;
+  static const callout = 16.0;
+  static const body = 15.0;
+  static const footnote = 13.0;
+  static const caption = 12.0;
+  static const micro = 11.0;
+}
+
 class Spacing {
   static const xs = 4.0;
   static const sm = 8.0;
@@ -63,6 +94,16 @@ class Spacing {
   static const lg = 16.0;
   static const xl = 24.0;
   static const xxl = 32.0;
+}
+
+/// Card insets: every card (`SoftCard`) uses one of two, so the content of stacked cards starts on
+/// the same line (page margin 20 + 16 = 36 pt from the screen edge).
+class Insets {
+  /// Cards with a title and body (the default).
+  static const card = EdgeInsets.all(Spacing.lg);
+
+  /// One-line rows and compact cards (a title and a subtitle beside a button).
+  static const cardCompact = EdgeInsets.symmetric(horizontal: Spacing.lg, vertical: Spacing.md);
 }
 
 /// Theme-aware semantic colours that are not part of ColorScheme.

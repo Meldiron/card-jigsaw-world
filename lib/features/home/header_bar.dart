@@ -21,16 +21,20 @@ class HeaderBar extends ConsumerWidget {
   static const double height = 50;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) => ChromeText(child: Builder(builder: (context) => _build(context, ref)));
+
+  Widget _build(BuildContext context, WidgetRef ref) {
     final c = context.colors;
     final profile = ref.watch(profileProvider).value;
     final row = Padding(
-      padding: const EdgeInsets.fromLTRB(20, 8, 20, 4),
+      // The row is 44 pt high (the pills' touch boxes); the bar keeps its 50 pt height.
+      padding: const EdgeInsets.fromLTRB(20, 4, 20, 2),
       child: Row(
         children: [
           Pressable(
             onTap: () => context.go('/profile'),
-            child: Row(
+            child: TapTarget(
+              child: Row(
               children: [
                 AvatarCircle(avatarKey: profile?.avatar, size: 38),
                 const SizedBox(width: 10),
@@ -38,12 +42,13 @@ class HeaderBar extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text('LV ${profile?.level ?? 1}', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13, letterSpacing: -0.2, color: c.textPrimary)),
+                    Text('LV ${profile?.level ?? 1}', style: TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.footnote, letterSpacing: -0.2, color: c.textPrimary)),
                     const SizedBox(height: 4),
                     SizedBox(width: 56, child: ProgressBar(value: profile?.levelProgress ?? 0, height: 4)),
                   ],
                 ),
               ],
+            ),
             ),
           ),
           const SizedBox(width: 12),
@@ -74,14 +79,16 @@ class _BalancePill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    final number = TextStyle(fontWeight: FontWeight.w700, fontSize: 15, color: c.textPrimary, letterSpacing: -0.2);
+    final number = TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body, color: c.textPrimary, letterSpacing: -0.2);
     return Pressable(
       onTap: onTap,
       scale: 0.95,
       child: Semantics(
         button: true,
-        label: '$tickets tickets, $coins coins, open the Store',
-        child: Container(
+        label: '${countOf(tickets, 'ticket')}, ${countOf(coins, 'coin')}, open the Store',
+        // 168: a 44 pt touch box around the 34 pt capsule; the bar keeps its 50 pt height.
+        child: TapTarget(
+          child: Container(
           height: 34,
           padding: const EdgeInsets.only(left: 10, right: 5),
           decoration: BoxDecoration(color: c.card, borderRadius: BorderRadius.circular(Radii.pill), border: Border.all(color: c.stroke)),
@@ -100,10 +107,11 @@ class _BalancePill extends StatelessWidget {
                 width: 24,
                 height: 24,
                 decoration: BoxDecoration(color: c.accentTint, shape: BoxShape.circle),
-                child: Icon(CupertinoIcons.plus, size: 14, color: context.accent),
+                child: Icon(AppIcons.plus, size: 14, color: context.accent),
               ),
             ],
           ),
+        ),
         ),
       ),
     );

@@ -212,6 +212,18 @@ class _GlassHeaderDelegate extends SliverPersistentHeaderDelegate {
   bool shouldRebuild(_GlassHeaderDelegate old) => old.extent != extent || old.top != top || old.child != child;
 }
 
+/// Bars and controls that must keep their size (tab bar, header bar with
+/// the balance pills, game HUD and booster bar) follow Larger Text only up
+/// to [max]; reading text elsewhere follows it up to the app's cap (1.35,
+/// iOS "xxxLarge", in app.dart).
+class ChromeText extends StatelessWidget {
+  const ChromeText({super.key, required this.child});
+  static const max = 1.2;
+  final Widget child;
+  @override
+  Widget build(BuildContext context) => MediaQuery.withClampedTextScaling(maxScaleFactor: max, child: child);
+}
+
 /// Floating glass tab bar in the iOS 26 shape: a capsule inset from the
 /// screen edges, hovering above the home indicator, content scrolling under
 /// it. The selected tab gets a soft tinted pill.
@@ -250,7 +262,10 @@ class GlassTabBar extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  // Chrome keeps its size above the text-size cap of the bars (see ChromeText).
+  Widget build(BuildContext context) => ChromeText(child: Builder(builder: _build));
+
+  Widget _build(BuildContext context) {
     final c = context.colors;
     final safe = MediaQuery.paddingOf(context).bottom;
     final bottom = bottomGap(safe);
@@ -369,7 +384,7 @@ class _TabCell extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 3),
-        Text(item.label, style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w600, color: color, letterSpacing: -0.1)),
+        Text(item.label, style: TextStyle(fontSize: TypeSize.micro, fontWeight: FontWeight.w600, color: color, letterSpacing: -0.1)),
       ],
     );
   }

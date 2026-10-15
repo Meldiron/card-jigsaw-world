@@ -65,8 +65,8 @@ class _ReportPanelState extends State<_ReportPanel> {
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Row(
                           children: [
-                            Expanded(child: Text(r.label, style: const TextStyle(fontSize: 15.5, fontWeight: FontWeight.w500))),
-                            if (_reason == r) Icon(CupertinoIcons.checkmark_alt, size: 20, color: context.accent),
+                            Expanded(child: Text(r.label, style: const TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w500))),
+                            if (_reason == r) Icon(AppIcons.checkmarkAlt, size: 20, color: context.accent),
                           ],
                         ),
                       ),
@@ -83,7 +83,7 @@ class _ReportPanelState extends State<_ReportPanel> {
             decoration: BoxDecoration(color: c.card.withValues(alpha: 0.7), borderRadius: BorderRadius.circular(Radii.md)),
             child: Row(
               children: [
-                Expanded(child: Text('Also block $name', maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 15.5, fontWeight: FontWeight.w500))),
+                Expanded(child: Text('Also block $name', maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w500))),
                 CupertinoSwitch(key: const ValueKey('report-block'), value: _block, activeTrackColor: context.accent, onChanged: (v) => setState(() => _block = v)),
               ],
             ),
@@ -170,7 +170,7 @@ class BlockedPlayersPanel extends ConsumerWidget {
                             children: [
                               AvatarCircle(avatarKey: b.avatar, size: 36),
                               const SizedBox(width: 12),
-                              Expanded(child: Text(b.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600))),
+                              Expanded(child: Text(b.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w600))),
                               BigButton(
                                 key: ValueKey('unblock-${b.playerId}'),
                                 label: 'Unblock',

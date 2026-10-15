@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -8,7 +7,6 @@ import 'package:go_router/go_router.dart';
 import '../../core/haptics.dart';
 import '../../core/sfx.dart';
 import '../../core/theme/tokens.dart';
-import '../../data/purchases.dart' show groupThousands;
 import '../../game/board.dart';
 import '../../models/models.dart';
 import '../../state/catalog.dart';
@@ -46,7 +44,7 @@ class PackScreen extends ConsumerWidget {
         appBar: AppBar(
           leading: Padding(
             padding: const EdgeInsets.only(left: 12),
-            child: RoundIconButton(icon: CupertinoIcons.back, size: 38, onTap: () => context.canPop() ? context.pop() : context.go('/library')),
+            child: RoundIconButton(icon: AppIcons.back, size: 38, onTap: () => context.canPop() ? context.pop() : context.go('/library')),
           ),
         ),
         body: failed
@@ -63,7 +61,7 @@ class PackScreen extends ConsumerWidget {
                     title: 'Pack not available',
                     message: 'The link may be out of date. A pack from a pack code shows here once the code is redeemed.',
                   )
-                : const Loader(),
+                : const _PackSkeleton(),
       );
     }
     final puzzles = ref.watch(packPuzzlesProvider(packId));
@@ -83,13 +81,13 @@ class PackScreen extends ConsumerWidget {
     final giantClosed = isGiantPack(pack) && !ref.watch(openFeaturesProvider).giant;
 
     Future<void> unlock() async {
-      final unit = priceCurrency == Currency.tickets ? 'Ticket' : 'Coin';
-      final amount = '${groupThousands(priceValue)} $unit${priceValue == 1 ? '' : 's'}';
+      // 166: units in sentence case ("This costs 3,300 coins").
+      final amount = countOf(priceValue, priceCurrency == Currency.tickets ? 'ticket' : 'coin');
       if (balance >= priceValue) {
         final sure = await showAppAlert(
           context,
           title: 'Unlock ${pack.name}?',
-          message: 'This costs $amount. You have ${groupThousands(balance)}.',
+          message: 'This costs $amount. You have ${formatCount(balance)}.',
           confirmLabel: 'Pay $amount',
         );
         if (!sure || !context.mounted) return;
@@ -105,7 +103,7 @@ class PackScreen extends ConsumerWidget {
         final needTickets = pack.priceTickets > 0;
         showToast(
           context,
-          needTickets ? 'Not enough Tickets. Finish weekly quests or level up to earn more.' : 'Not enough Coins. Play more puzzles or visit the store.',
+          needTickets ? 'Not enough tickets. Finish weekly quests or level up to earn more.' : 'Not enough coins. Play more puzzles or visit the store.',
           leading: needTickets ? const TicketIcon(size: 20) : const CoinIcon(size: 20),
         );
         context.push('/store');
@@ -172,9 +170,12 @@ class PackScreen extends ConsumerWidget {
                             Chip2(label: pack.category, icon: AppIcons.category(pack.category), onImage: true),
                             if (pack.hasWindow && !pack.isExpired) ...[
                               const SizedBox(width: 6),
-                              pack.isUpcoming
-                                  ? Chip2(label: 'Opens in ${_countdown(pack.startAt!)}', icon: AppIcons.time, onImage: true)
-                                  : LiveChip(LiveChip.endsIn(pack.endAt!.difference(DateTime.now()))),
+                              Chip2(
+                                label: pack.isUpcoming ? 'Opens in ${formatTimeLeft(pack.startAt!.difference(DateTime.now()))}' : endsIn(pack.endAt!.difference(DateTime.now())),
+                                icon: pack.isUpcoming ? AppIcons.time : null,
+                                onImage: true,
+                                dot: pack.isUpcoming ? null : Brand.live,
+                              ),
                             ],
                           ],
                         ),
@@ -202,7 +203,7 @@ class PackScreen extends ConsumerWidget {
                     _accessCard(context, pack, priceCurrency, priceValue, balance, goVip, unlock, getMore).animate().fadeIn().slideY(begin: 0.1),
                     const SizedBox(height: 16),
                   ],
-                  Text(pack.description, style: TextStyle(color: c.textSecondary, fontSize: 14.5, height: 1.4)),
+                  Text(pack.description, style: TextStyle(color: c.textSecondary, fontSize: TypeSize.body, height: 1.4)),
                   const SizedBox(height: 14),
                   // One progress line instead of three boxed numbers: solved and stars,
                   // one bar. It reads like the progress line on the pack cards.
@@ -210,13 +211,13 @@ class PackScreen extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.baseline,
                     textBaseline: TextBaseline.alphabetic,
                     children: [
-                      Text('${packProgress.solved}', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 17, letterSpacing: -0.3)),
-                      Text(' of ${packProgress.total} solved', style: TextStyle(color: c.textSecondary, fontSize: 14.5, fontWeight: FontWeight.w500)),
+                      Text('${packProgress.solved}', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.headline, letterSpacing: -0.3)),
+                      Text(' of ${packProgress.total} solved', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.body, fontWeight: FontWeight.w500)),
                       const Spacer(),
                       const Icon(AppIcons.star, size: 14, color: Brand.star),
                       const SizedBox(width: 4),
-                      Text('${packProgress.stars}', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-                      Text(' of ${packProgress.maxStars}', style: TextStyle(color: c.textSecondary, fontSize: 14.5, fontWeight: FontWeight.w500)),
+                      Text('${packProgress.stars}', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body)),
+                      Text(' of ${packProgress.maxStars}', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.body, fontWeight: FontWeight.w500)),
                     ],
                   ),
                   const SizedBox(height: 8),
@@ -268,7 +269,14 @@ class PackScreen extends ConsumerWidget {
             ),
           ),
           puzzles.when(
-            loading: () => const SliverToBoxAdapter(child: Padding(padding: EdgeInsets.all(40), child: Loader())),
+            // 169: the grid's shape while the pictures load (023's tiles: photo plus caption).
+            loading: () => SliverPadding(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+              sliver: SliverGrid(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: pack.isDaily ? 4 : 3, mainAxisSpacing: 10, crossAxisSpacing: 10, childAspectRatio: pack.isDaily ? 0.66 : 0.62),
+                delegate: SliverChildBuilderDelegate((_, _) => const Skeleton(radius: Radii.md), childCount: pack.isDaily ? 8 : 9),
+              ),
+            ),
             error: (e, _) => SliverToBoxAdapter(
               child: EmptyState(
                 icon: AppIcons.signal,
@@ -299,7 +307,7 @@ class PackScreen extends ConsumerWidget {
                     onTap: () {
                       if (p.isLockedByDate) {
                         Haptics.medium();
-                        showToast(context, 'Opens on ${p.date!.day} ${_monthName(p.date!.month)}. Today\'s puzzle is ready now.', icon: AppIcons.lock);
+                        showToast(context, 'Opens on ${formatDate(p.date!, year: false)}. Today\'s puzzle is ready now.', icon: AppIcons.lock);
                         return;
                       }
                       if (giantClosed) {
@@ -339,7 +347,7 @@ class PackScreen extends ConsumerWidget {
       return _AccessCard(
         icon: AppIcons.time,
         title: 'Opens soon',
-        reason: 'Opens in ${_countdown(pack.startAt!)}.',
+        reason: 'Opens in ${formatTimeLeft(pack.startAt!.difference(DateTime.now()))}.',
         ghost: ('Back to events', () => wrap(() => context.go('/events'))),
       );
     }
@@ -368,7 +376,7 @@ class PackScreen extends ConsumerWidget {
       return _AccessCard(
         icon: AppIcons.lock,
         title: 'Locked pack',
-        reason: '${groupThousands(missing)} more ${tickets ? 'Tickets' : 'Coins'} needed, or play every pack with VIP.',
+        reason: '${formatCount(missing)} more ${tickets ? 'tickets' : 'coins'} needed, or play every pack with VIP.',
         meter: (currency, balance, price),
         primary: (tickets ? 'Get tickets' : 'Get coins', null, null, () => wrap(onGetMore)),
         secondary: ('Go VIP', AppIcons.vip, null, () => wrap(onVip)),
@@ -401,16 +409,6 @@ class PackScreen extends ConsumerWidget {
     );
   }
 
-  static String _countdown(DateTime at) {
-    final d = at.difference(DateTime.now());
-    if (d.isNegative) return '0h';
-    if (d.inDays > 0) return '${d.inDays}d ${d.inHours % 24}h';
-    if (d.inHours > 0) return '${d.inHours}h';
-    return '${d.inMinutes}m';
-  }
-
-  static String _monthName(int m) => const ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][m - 1];
-
   /// Route path for resuming a saved board (mode + ladder entry by cell count).
   static String _gridCodeFor(PuzzleProgress pr) {
     final mode = GameMode.fromCode(pr.mode);
@@ -438,8 +436,8 @@ class _CollapsedTitle extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(text, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700, letterSpacing: -0.2)),
-          if (subtitle != null) Text(subtitle!, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: context.colors.textSecondary)),
+          Text(text, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w700, letterSpacing: -0.2)),
+          if (subtitle != null) Text(subtitle!, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w500, color: context.colors.textSecondary)),
         ],
       ),
     );
@@ -506,7 +504,7 @@ class _HeroBackButton extends StatelessWidget {
                 shape: BoxShape.circle,
                 border: Border.all(color: onPhoto ? Colors.white.withValues(alpha: 0.18) : c.stroke),
               ),
-              child: Icon(CupertinoIcons.back, size: size * 0.48, color: onPhoto ? Colors.white : c.textPrimary),
+              child: Icon(AppIcons.back, size: size * 0.48, color: onPhoto ? Colors.white : c.textPrimary),
             ),
           ),
         ),
@@ -547,15 +545,15 @@ class _AccessCard extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              IconTile(icon: icon, size: 40, radius: 12),
+              IconTile(icon: icon, size: IconTile.medium),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15, letterSpacing: -0.2)),
+                    Text(title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body, letterSpacing: -0.2)),
                     const SizedBox(height: 2),
-                    Text(reason, style: TextStyle(color: c.textSecondary, fontSize: 13, height: 1.35)),
+                    Text(reason, style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote, height: 1.35)),
                   ],
                 ),
               ),
@@ -565,9 +563,9 @@ class _AccessCard extends StatelessWidget {
             const SizedBox(height: 14),
             Row(
               children: [
-                CostLabel(label: 'Unlock for', currency: meter!.$1, amount: meter!.$3, fontSize: 14),
+                CostLabel(label: 'Unlock for', currency: meter!.$1, amount: meter!.$3, fontSize: TypeSize.body),
                 const Spacer(),
-                Text('You have ${groupThousands(meter!.$2)}', style: TextStyle(color: c.textSecondary, fontSize: 13.5, fontWeight: FontWeight.w500)),
+                Text('You have ${formatCount(meter!.$2)}', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote, fontWeight: FontWeight.w500)),
               ],
             ),
             const SizedBox(height: 8),
@@ -612,15 +610,15 @@ class _GiantGateCard extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const IconTile(icon: AppIcons.bigBoard, size: 40, radius: 12),
+              const IconTile(icon: AppIcons.bigBoard, size: IconTile.medium),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Opens at level ${Unlock.giant.level}', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15, letterSpacing: -0.2)),
+                    Text('Opens at level ${Unlock.giant.level}', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body, letterSpacing: -0.2)),
                     const SizedBox(height: 2),
-                    Text(owned ? 'A Giant pack: every picture is a board of 100 to 300 cards. It is yours; its boards open at level ${Unlock.giant.level}.' : 'A Giant pack: every picture is a board of 100 to 300 cards. You can unlock it once giant boards open.', style: TextStyle(color: c.textSecondary, fontSize: 13, height: 1.35)),
+                    Text(owned ? 'A Giant pack: every picture is a board of 100 to 300 cards. It is yours; its boards open at level ${Unlock.giant.level}.' : 'A Giant pack: every picture is a board of 100 to 300 cards. You can unlock it once giant boards open.', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote, height: 1.35)),
                   ],
                 ),
               ),
@@ -629,10 +627,10 @@ class _GiantGateCard extends StatelessWidget {
           const SizedBox(height: 14),
           Row(
             children: [
-              Text('Level $level', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
-              Text(' of ${Unlock.giant.level}', style: TextStyle(color: c.textSecondary, fontSize: 14)),
+              Text('Level $level', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body)),
+              Text(' of ${Unlock.giant.level}', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.body)),
               const Spacer(),
-              Text('${groupThousands((need - xp).clamp(0, need))} XP to go', style: TextStyle(color: c.textSecondary, fontSize: 13)),
+              Text('${formatCount((need - xp).clamp(0, need))} XP to go', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote)),
             ],
           ),
           const SizedBox(height: 8),
@@ -658,7 +656,7 @@ class _TodayCard extends StatelessWidget {
     final d = puzzle.date!;
     return SoftCard(
       onTap: onTap,
-      padding: const EdgeInsets.all(10),
+      padding: Insets.cardCompact,
       child: Row(
         children: [
           NetImage(url: puzzle.thumbUrl, blurhash: puzzle.blurhash, width: 56, height: 56, radius: Radii.sm + 2),
@@ -667,9 +665,9 @@ class _TodayCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Today · ${d.day} ${PackScreen._monthName(d.month)}', style: TextStyle(color: context.accent, fontSize: 12.5, fontWeight: FontWeight.w600)),
+                Text('Today · ${formatDate(d, year: false)}', style: TextStyle(color: context.accent, fontSize: TypeSize.footnote, fontWeight: FontWeight.w600)),
                 const SizedBox(height: 2),
-                Text(puzzle.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, letterSpacing: -0.2)),
+                Text(puzzle.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: TypeSize.callout, fontWeight: FontWeight.w600, letterSpacing: -0.2)),
               ],
             ),
           ),
@@ -713,7 +711,7 @@ class _PuzzleTile extends StatelessWidget {
               Container(
                 color: c.boardBackground,
                 alignment: Alignment.center,
-                child: Text('${puzzle.date!.day}', style: TextStyle(color: c.textTertiary, fontSize: 18, fontWeight: FontWeight.w600, letterSpacing: -0.3)),
+                child: Text('${puzzle.date!.day}', style: TextStyle(color: c.textTertiary, fontSize: TypeSize.headline, fontWeight: FontWeight.w600, letterSpacing: -0.3)),
               )
             else
               NetImage(url: puzzle.thumbUrl, blurhash: puzzle.blurhash),
@@ -733,7 +731,7 @@ class _PuzzleTile extends StatelessWidget {
                     shape: BoxShape.circle,
                     border: dateLocked ? Border.all(color: c.stroke) : null,
                   ),
-                  child: Text('${puzzle.date!.day}', style: TextStyle(color: dateLocked ? c.textTertiary : Colors.white, fontSize: 11, fontWeight: FontWeight.w600)),
+                  child: Text('${puzzle.date!.day}', style: TextStyle(color: dateLocked ? c.textTertiary : Colors.white, fontSize: TypeSize.micro, fontWeight: FontWeight.w600)),
                 ),
               ),
             if (started)
@@ -786,11 +784,41 @@ class _PuzzleTile extends StatelessWidget {
                     puzzle.title,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(color: c.textPrimary, fontSize: 12, fontWeight: FontWeight.w600, height: 1.2, letterSpacing: -0.1),
+                    style: TextStyle(color: c.textPrimary, fontSize: TypeSize.caption, fontWeight: FontWeight.w600, height: 1.2, letterSpacing: -0.1),
                   ),
           ),
         ],
       ),
     );
   }
+}
+
+/// A pack page while the catalogue loads (a link opened on a slow connection): cover, name and
+/// pictures to come, under the back button.
+class _PackSkeleton extends StatelessWidget {
+  const _PackSkeleton();
+  @override
+  Widget build(BuildContext context) => ListView(
+        padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
+        physics: const NeverScrollableScrollPhysics(),
+        children: [
+          const Skeleton(height: 180, radius: Radii.lg),
+          const SizedBox(height: 20),
+          const Skeleton(width: 180, height: 28, radius: Radii.sm),
+          const SizedBox(height: 12),
+          const Skeleton(height: 14),
+          const SizedBox(height: 8),
+          const Skeleton(width: 240, height: 14),
+          const SizedBox(height: 24),
+          GridView.count(
+            crossAxisCount: 3,
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
+            childAspectRatio: 0.62,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            children: [for (var i = 0; i < 9; i++) const Skeleton(radius: Radii.md)],
+          ),
+        ],
+      );
 }

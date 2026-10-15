@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 
+import '../core/dates.dart';
+import '../core/numbers.dart';
 import '../game/board.dart';
 import '../models/models.dart';
 
@@ -19,9 +21,9 @@ class LevelReward {
 
   List<String> get lines => [
         for (final u in unlocks) u.label,
-        '$coins coins',
-        if (tickets > 0) '$tickets ticket${tickets == 1 ? '' : 's'}',
-        if (hints > 0) '$hints hint${hints == 1 ? '' : 's'}',
+        countOf(coins, 'coin'),
+        if (tickets > 0) countOf(tickets, 'ticket'),
+        if (hints > 0) countOf(hints, 'hint'),
         if (tier != null) '${tier!.code} ${tier!.label} boards',
       ];
 }
@@ -384,13 +386,6 @@ class Goals {
   /// Next Monday 00:00 local: when weekly quests reset.
   static DateTime nextWeeklyReset(DateTime now) => DateTime(now.year, now.month, now.day + (8 - now.weekday));
 
-  /// "5h 12m" / "3d 4h" style remaining time, never negative.
-  static String formatLeft(Duration d) {
-    if (d.isNegative) d = Duration.zero;
-    // Two units at most and never a zero one: "6d", "6d 4h", "5h", "5h 12m", "12m", "<1m".
-    final hours = d.inHours % 24, minutes = d.inMinutes % 60;
-    if (d.inDays > 0) return hours > 0 ? '${d.inDays}d ${hours}h' : '${d.inDays}d';
-    if (d.inHours > 0) return minutes > 0 ? '${d.inHours}h ${minutes}m' : '${d.inHours}h';
-    return d.inMinutes > 0 ? '${d.inMinutes}m' : '<1m';
-  }
+  /// Time left until a reset, in the app's one style (`formatTimeLeft`, lib/core/dates.dart).
+  static String formatLeft(Duration d) => formatTimeLeft(d);
 }

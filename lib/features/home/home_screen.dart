@@ -1,13 +1,11 @@
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/haptics.dart';
-import '../../data/purchases.dart' show groupThousands;
 import '../../core/theme/tokens.dart';
 import '../../game/board.dart';
 import '../../models/models.dart';
@@ -191,12 +189,12 @@ class HomeScreen extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.baseline,
                           textBaseline: TextBaseline.alphabetic,
                           children: [
-                            Text('Up to', style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: context.colors.textSecondary)),
+                            Text('Up to', style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w500, color: context.colors.textSecondary)),
                             const SizedBox(width: 6),
-                            Amount(currency: Currency.coins, value: _wheelJackpot, size: 18, fontSize: 19, weight: FontWeight.w700),
+                            Amount(currency: Currency.coins, value: _wheelJackpot, size: 18, fontSize: TypeSize.title3, weight: FontWeight.w700),
                           ],
                         ),
-                        footer: CostLabel(label: 'Spin for', currency: Currency.tickets, amount: Economy.wheelSpinTickets, fontSize: 12.5, color: context.colors.textSecondary),
+                        footer: CostLabel(label: 'Spin for', currency: Currency.tickets, amount: Economy.wheelSpinTickets, fontSize: TypeSize.footnote, color: context.colors.textSecondary),
                         onTap: () => context.push('/wheel'),
                       ),
                     ),
@@ -210,12 +208,12 @@ class HomeScreen extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.baseline,
                           textBaseline: TextBaseline.alphabetic,
                           children: [
-                            Text(groupThousands(profile?.piggyCoins ?? 0), style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w700, letterSpacing: -0.3)),
-                            Text(' / ${groupThousands(Profile.piggyCapacity)}', style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: context.colors.textSecondary)),
+                            Text(formatCount(profile?.piggyCoins ?? 0), style: const TextStyle(fontSize: TypeSize.title3, fontWeight: FontWeight.w700, letterSpacing: -0.3)),
+                            Text(' / ${formatCount(Profile.piggyCapacity)}', style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w500, color: context.colors.textSecondary)),
                           ],
                         ),
                         footer: piggyFull
-                            ? CostLabel(label: 'Full · open for', currency: Currency.tickets, amount: Economy.piggyOpenTickets, fontSize: 12.5, color: context.accent)
+                            ? CostLabel(label: 'Full · open for', currency: Currency.tickets, amount: Economy.piggyOpenTickets, fontSize: TypeSize.footnote, color: context.accent)
                             : ProgressBar(value: (profile?.piggyCoins ?? 0) / Profile.piggyCapacity, height: 5),
                         onTap: () => showPiggySheet(context),
                       ),
@@ -245,7 +243,7 @@ class HomeScreen extends ConsumerWidget {
                     padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
                     child: Row(
                       children: [
-                        IconTile(icon: AppIcons.save, size: 36, radius: 10, color: context.colors.warning.withValues(alpha: 0.16), iconColor: context.colors.warning),
+                        IconTile(icon: AppIcons.save, size: IconTile.small, color: context.colors.warning.withValues(alpha: 0.16), iconColor: context.colors.warning),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Column(
@@ -254,12 +252,12 @@ class HomeScreen extends ConsumerWidget {
                               Text('Save progress', maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.titleMedium?.copyWith(color: context.colors.warning)),
                               const SizedBox(height: 2),
                               Text('Stored on this device only',
-                                  style: TextStyle(fontSize: 12.5, color: context.colors.textSecondary)),
+                                  style: TextStyle(fontSize: TypeSize.footnote, color: context.colors.textSecondary)),
                             ],
                           ),
                         ),
                         const SizedBox(width: 10),
-                        Icon(CupertinoIcons.chevron_right, size: 16, color: context.colors.warning),
+                        Icon(AppIcons.chevronRight, size: 16, color: context.colors.warning),
                       ],
                     ),
                   ),
@@ -438,7 +436,7 @@ class _Greeting extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(DateFormat('EEEE d MMMM').format(now), style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: c.textSecondary)),
+          Text(DateFormat('EEEE d MMMM').format(now), style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: c.textSecondary)),
           const SizedBox(height: 2),
           Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.headlineLarge),
         ],
@@ -506,16 +504,16 @@ class _DailyHero extends StatelessWidget {
                                     color: i < stars ? Brand.star : Colors.white.withValues(alpha: 0.6)),
                               const SizedBox(width: 8),
                               Text(stars >= 3 ? 'Solved' : 'Solved · replay for 3 stars',
-                                  style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 13, fontWeight: FontWeight.w500)),
+                                  style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: TypeSize.footnote, fontWeight: FontWeight.w500)),
                             ],
                           )
                         else
                           Row(
                             children: [
-                              Amount(currency: Currency.coins, value: 50, prefix: '+', size: 14, fontSize: 13, color: Colors.white, weight: FontWeight.w600),
+                              Amount(currency: Currency.coins, value: 50, prefix: '+', size: 14, fontSize: TypeSize.footnote, color: Colors.white, weight: FontWeight.w600),
                               const SizedBox(width: 6),
                               Text('bonus today',
-                                  style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 13, fontWeight: FontWeight.w500)),
+                                  style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: TypeSize.footnote, fontWeight: FontWeight.w500)),
                             ],
                           ),
                       ],
@@ -526,7 +524,7 @@ class _DailyHero extends StatelessWidget {
                     width: 46,
                     height: 46,
                     decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-                    child: Icon(done ? CupertinoIcons.arrow_counterclockwise : CupertinoIcons.play_fill, color: Colors.black, size: 20),
+                    child: Icon(done ? AppIcons.arrowCounterclockwise : AppIcons.playFill, color: Colors.black, size: 20),
                   ),
                 ],
               ),
@@ -567,7 +565,7 @@ class _HeroPlaceholder extends StatelessWidget {
                   const SizedBox(height: 10),
                   Text("Today's puzzle could not load", textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleMedium),
                   const SizedBox(height: 4),
-                  Text('Check your connection and try again.', textAlign: TextAlign.center, style: TextStyle(fontSize: 13, color: c.textSecondary)),
+                  Text('Check your connection and try again.', textAlign: TextAlign.center, style: TextStyle(fontSize: TypeSize.footnote, color: c.textSecondary)),
                   const SizedBox(height: 14),
                   BigButton(label: 'Try again', kind: ButtonKind.secondary, expand: false, height: 40, onTap: onRetry),
                 ],
@@ -595,7 +593,7 @@ class _QuickTile extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: 112,
-        padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
+        padding: Insets.cardCompact,
         decoration: BoxDecoration(
           color: c.card,
           borderRadius: BorderRadius.circular(Radii.lg),
@@ -606,11 +604,11 @@ class _QuickTile extends StatelessWidget {
           children: [
             Row(
               children: [
-                IconTile(icon: icon, size: 28, radius: 8),
+                IconTile(icon: icon, size: IconTile.small),
                 const SizedBox(width: 8),
                 Flexible(
                   child: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, letterSpacing: -0.2)),
+                      style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body, letterSpacing: -0.2)),
                 ),
                 if (ready) ...[
                   const SizedBox(width: 6),
@@ -659,13 +657,13 @@ class _StreakCard extends ConsumerWidget {
             : (streak > 0 ? 'Claim today to keep it going' : 'Claim a gift every day');
     return SoftCard(
       onTap: onTap,
-      padding: const EdgeInsets.all(14),
+      padding: Insets.card,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              const IconTile(icon: AppIcons.streak, size: 36, radius: 10),
+              const IconTile(icon: AppIcons.streak, size: IconTile.medium),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
@@ -673,12 +671,12 @@ class _StreakCard extends ConsumerWidget {
                   children: [
                     Text(title, style: Theme.of(context).textTheme.titleLarge),
                     const SizedBox(height: 2),
-                    Text(status, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12.5, color: c.textSecondary)),
+                    Text(status, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: TypeSize.footnote, color: c.textSecondary)),
                   ],
                 ),
               ),
               const SizedBox(width: 8),
-              Icon(CupertinoIcons.chevron_right, size: 16, color: c.textTertiary),
+              Icon(AppIcons.chevronRight, size: 16, color: c.textTertiary),
             ],
           ),
           const SizedBox(height: 14),
@@ -694,10 +692,10 @@ class _StreakCard extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('Keep your streak',
-                            maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600)),
+                            maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600)),
                         const SizedBox(height: 1),
                         Text('Today becomes day ${profile.streak % 7 + 1}',
-                            maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, color: c.textSecondary)),
+                            maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: TypeSize.caption, color: c.textSecondary)),
                       ],
                     ),
                   ),
@@ -729,10 +727,10 @@ class _StreakCard extends ConsumerWidget {
                             color: i < filled ? context.accent : Colors.transparent,
                             border: Border.all(color: i < filled ? context.accent : (i == nextIdx ? context.accent : c.stroke), width: i == nextIdx && i >= filled ? 1.5 : 1),
                           ),
-                          child: i < filled ? const Icon(CupertinoIcons.checkmark, size: 12, color: Colors.white) : null,
+                          child: i < filled ? const Icon(AppIcons.checkmark, size: 12, color: Colors.white) : null,
                         ),
                         const SizedBox(height: 4),
-                        Text('${i + 1}', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: c.textTertiary)),
+                        Text('${i + 1}', style: TextStyle(fontSize: TypeSize.micro, fontWeight: FontWeight.w600, color: c.textTertiary)),
                       ],
                     ),
                   ),
@@ -744,18 +742,28 @@ class _StreakCard extends ConsumerWidget {
           const SizedBox(height: 10),
           Row(
             children: [
-              if (available) ...[
-                Container(width: 6, height: 6, decoration: const BoxDecoration(color: Brand.live, shape: BoxShape.circle)),
-                const SizedBox(width: 6),
-              ],
-              Text(available ? "Today's gift" : "Tomorrow's gift",
-                  style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: available ? c.textPrimary : c.textSecondary)),
-              const SizedBox(width: 10),
-              Amount(currency: Currency.coins, value: next.coins, size: 15, fontSize: 13),
-              if (next.tickets > 0) ...[const SizedBox(width: 8), Amount(currency: Currency.tickets, value: next.tickets, size: 15, fontSize: 13)],
-              if (next.hints > 0) ...[const SizedBox(width: 8), Amount(currency: Currency.hints, value: next.hints, size: 15, fontSize: 13)],
-              const Spacer(),
-              if (available) BigButton(label: 'Claim', height: 36, expand: false, onTap: onTap),
+              // 167: the label gives way (ellipsis) before the amounts and Claim do, at any text size.
+              Expanded(
+                child: Row(
+                  children: [
+                    if (available) ...[
+                      Container(width: 6, height: 6, decoration: const BoxDecoration(color: Brand.live, shape: BoxShape.circle)),
+                      const SizedBox(width: 6),
+                    ],
+                    Flexible(
+                      child: Text(available ? "Today's gift" : "Tomorrow's gift",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w500, color: available ? c.textPrimary : c.textSecondary)),
+                    ),
+                    const SizedBox(width: 10),
+                    Amount(currency: Currency.coins, value: next.coins, size: 15, fontSize: TypeSize.footnote),
+                    if (next.tickets > 0) ...[const SizedBox(width: 8), Amount(currency: Currency.tickets, value: next.tickets, size: 15, fontSize: TypeSize.footnote)],
+                    if (next.hints > 0) ...[const SizedBox(width: 8), Amount(currency: Currency.hints, value: next.hints, size: 15, fontSize: TypeSize.footnote)],
+                  ],
+                ),
+              ),
+              if (available) ...[const SizedBox(width: 8), BigButton(label: 'Claim', height: 36, expand: false, onTap: onTap)],
             ],
           ),
         ],
@@ -777,13 +785,13 @@ class _LevelCard extends StatelessWidget {
     final toGo = Profile.xpForLevel(level) - profile.xpIntoLevel;
     final steps = [for (var i = 1; i <= 3; i++) LevelRewards.forLevel(level + i)];
     return SoftCard(
-      padding: const EdgeInsets.all(14),
+      padding: Insets.card,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              const IconTile(icon: AppIcons.level, size: 36, radius: 10),
+              const IconTile(icon: AppIcons.level, size: IconTile.medium),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
@@ -791,7 +799,7 @@ class _LevelCard extends StatelessWidget {
                   children: [
                     Text('Level $level', style: Theme.of(context).textTheme.titleLarge),
                     const SizedBox(height: 2),
-                    Text('${groupThousands(toGo)} XP to level ${level + 1}', style: TextStyle(fontSize: 12.5, color: c.textSecondary)),
+                    Text('${formatCount(toGo)} XP to level ${level + 1}', style: TextStyle(fontSize: TypeSize.footnote, color: c.textSecondary)),
                   ],
                 ),
               ),
@@ -838,7 +846,7 @@ class _LevelStep extends StatelessWidget {
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
                   alignment: Alignment.centerLeft,
-                  child: Text(text, maxLines: 1, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: color ?? c.textPrimary)),
+                  child: Text(text, maxLines: 1, style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600, color: color ?? c.textPrimary)),
                 ),
               ),
             ],
@@ -854,16 +862,16 @@ class _LevelStep extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Level ${r.level}', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: next ? context.accent : c.textSecondary)),
+          Text('Level ${r.level}', style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w700, color: next ? context.accent : c.textSecondary)),
           for (final u in r.unlocks)
             KeyedSubtree(
               key: next ? ValueKey('next-unlock-${u.name}') : null,
               child: line(Icon(_unlockIcon(u), size: 14, color: context.accent), u == Unlock.giant ? 'Giant' : u.label, color: context.accent),
             ),
           if (r.tier != null) line(Icon(AppIcons.bigBoard, size: 14, color: context.accent), r.tier!.code, color: context.accent),
-          line(const CoinIcon(size: 14), groupThousands(r.coins)),
-          if (r.tickets > 0) line(const TicketIcon(size: 14), '${r.tickets}'),
-          if (r.hints > 0) line(const HintIcon(size: 14), '${r.hints}'),
+          line(const CoinIcon(size: 14), formatCount(r.coins)),
+          if (r.tickets > 0) line(const TicketIcon(size: 14), formatCount(r.tickets)),
+          if (r.hints > 0) line(const HintIcon(size: 14), formatCount(r.hints)),
         ],
       ),
     );
@@ -890,7 +898,7 @@ class _MonthCard extends ConsumerWidget {
     return _CoverTile(
       pack: pack,
       progress: progress,
-      chip: current ? const LiveChip('This month') : null,
+      chip: current ? const Chip2(label: 'This month', onImage: true, dot: Brand.live) : null,
       onTap: onTap,
     );
   }
@@ -908,7 +916,7 @@ class _EventPackCard extends ConsumerWidget {
     return _CoverTile(
       pack: pack,
       progress: progress,
-      chip: LiveChip(_endsIn(pack)),
+      chip: Chip2(label: _endsIn(pack), onImage: true, dot: Brand.live),
       nameLines: 2,
       onTap: onTap,
     );
@@ -918,7 +926,7 @@ class _EventPackCard extends ConsumerWidget {
 /// "Ends in 3d" for an event pack's chip.
 String _endsIn(Pack pack) {
   final end = pack.endAt;
-  return end == null ? 'Live' : LiveChip.endsIn(end.difference(DateTime.now()));
+  return end == null ? 'Live' : endsIn(end.difference(DateTime.now()));
 }
 
 /// Square cover tile shared by the Home event and month rows: picture with
@@ -977,9 +985,9 @@ class _CoverTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(pack.name, maxLines: nameLines, overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 14, letterSpacing: -0.2, height: 1.15)),
+                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: TypeSize.body, letterSpacing: -0.2, height: 1.15)),
                   const SizedBox(height: 6),
-                  PackProgressLine(progress: progress, onImage: true, height: 4, fontSize: 10.5),
+                  PackProgressLine(progress: progress, onImage: true, height: 4, fontSize: TypeSize.micro),
                 ],
               ),
             ),
@@ -1035,13 +1043,13 @@ class _ContinueCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(puzzle.title, maxLines: 2, overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 14, letterSpacing: -0.2, height: 1.15)),
+                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: TypeSize.body, letterSpacing: -0.2, height: 1.15)),
                   const SizedBox(height: 6),
                   Row(
                     children: [
                       Expanded(child: ProgressBar(value: total == 0 ? 0 : locked / total, height: 4, color: Colors.white, background: Colors.white.withValues(alpha: 0.3))),
                       const SizedBox(width: 6),
-                      Text('$locked/$total', style: const TextStyle(color: Colors.white, fontSize: 10.5, fontWeight: FontWeight.w600)),
+                      Text('$locked/$total', style: const TextStyle(color: Colors.white, fontSize: TypeSize.micro, fontWeight: FontWeight.w600)),
                     ],
                   ),
                 ],
@@ -1096,7 +1104,7 @@ class _ResumeCard extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(others > 0 ? 'Continue · ${others + 1} boards' : 'Continue',
-                    style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w600, color: context.accent, letterSpacing: -0.1)),
+                    style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600, color: context.accent, letterSpacing: -0.1)),
                 const SizedBox(height: 1),
                 Text(puzzle.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.titleMedium),
                 const SizedBox(height: 6),
@@ -1104,7 +1112,7 @@ class _ResumeCard extends StatelessWidget {
                   children: [
                     Expanded(child: ProgressBar(value: share, height: 5)),
                     const SizedBox(width: 8),
-                    Text('${(share * 100).round()}%', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: c.textSecondary)),
+                    Text('${(share * 100).round()}%', style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600, color: c.textSecondary)),
                   ],
                 ),
               ],
@@ -1115,7 +1123,7 @@ class _ResumeCard extends StatelessWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(color: context.accent, shape: BoxShape.circle),
-            child: const Icon(CupertinoIcons.play_fill, color: Colors.white, size: 18),
+            child: const Icon(AppIcons.playFill, color: Colors.white, size: 18),
           ),
         ],
       ),
@@ -1157,7 +1165,7 @@ class _QuickPlayCard extends ConsumerWidget {
       padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
       child: Row(
         children: [
-          const IconTile(icon: CupertinoIcons.shuffle, size: 36, radius: 10),
+          const IconTile(icon: AppIcons.shuffle, size: IconTile.medium),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -1166,7 +1174,7 @@ class _QuickPlayCard extends ConsumerWidget {
               children: [
                 Text('Quick play', style: Theme.of(context).textTheme.titleLarge),
                 const SizedBox(height: 2),
-                Text(status, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12.5, color: c.textSecondary)),
+                Text(status, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: TypeSize.footnote, color: c.textSecondary)),
               ],
             ),
           ),
@@ -1176,7 +1184,7 @@ class _QuickPlayCard extends ConsumerWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(color: pool == null ? c.stroke : context.accent, shape: BoxShape.circle),
-            child: Icon(CupertinoIcons.play_fill, color: pool == null ? c.textTertiary : Colors.white, size: 18),
+            child: Icon(AppIcons.playFill, color: pool == null ? c.textTertiary : Colors.white, size: 18),
           ),
         ],
       ),
@@ -1206,7 +1214,7 @@ class _PackCoverRow extends StatelessWidget {
           return _CoverTile(
             pack: pack,
             progress: progressOf(pack),
-            chip: pack.hasWindow && pack.isLive ? LiveChip(_endsIn(pack)) : null,
+            chip: pack.hasWindow && pack.isLive ? Chip2(label: _endsIn(pack), onImage: true, dot: Brand.live) : null,
             nameLines: 2,
             onTap: () => context.push('/library/pack/${pack.id}'),
           );
@@ -1277,12 +1285,12 @@ class _StatCell extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(groupThousands(value), style: Theme.of(context).textTheme.titleLarge),
+              Text(formatCount(value), style: Theme.of(context).textTheme.titleLarge),
               if (star) ...[const SizedBox(width: 4), const Icon(AppIcons.star, size: 14, color: Brand.star)],
             ],
           ),
           const SizedBox(height: 2),
-          Text(label, maxLines: 2, textAlign: TextAlign.center, style: TextStyle(fontSize: 11.5, height: 1.2, fontWeight: FontWeight.w500, color: c.textSecondary)),
+          Text(label, maxLines: 2, textAlign: TextAlign.center, style: TextStyle(fontSize: TypeSize.caption, height: 1.2, fontWeight: FontWeight.w500, color: c.textSecondary)),
         ],
       ),
     );
@@ -1318,7 +1326,7 @@ class _FinishedRow extends StatelessWidget {
                   Row(
                     children: [
                       Flexible(
-                        child: Text(pack.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
+                        child: Text(pack.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body)),
                       ),
                       const SizedBox(width: 6),
                       PackDoneBadges(progress: progress, size: 16),
@@ -1330,7 +1338,7 @@ class _FinishedRow extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 10),
-            Icon(CupertinoIcons.chevron_right, size: 16, color: c.textTertiary),
+            Icon(AppIcons.chevronRight, size: 16, color: c.textTertiary),
           ],
         ),
       ),

@@ -233,7 +233,7 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
               onTap: () => launchUrl(Uri.parse('https://apps.apple.com/account/subscriptions'), mode: LaunchMode.externalApplication),
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 2),
-                child: Text('Manage subscription', style: TextStyle(color: context.accent, fontWeight: FontWeight.w600, fontSize: 15)),
+                child: Text('Manage subscription', style: TextStyle(color: context.accent, fontWeight: FontWeight.w600, fontSize: TypeSize.body)),
               ),
             )
           : null,
@@ -248,7 +248,7 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
         appleCode = (await SignInWithApple.getAppleIDCredential(scopes: const [])).authorizationCode;
       } on SignInWithAppleAuthorizationException catch (e) {
         if (e.code == AuthorizationErrorCode.canceled) {
-          if (mounted) showToast(context, 'Your account was not deleted', icon: CupertinoIcons.xmark_circle);
+          if (mounted) showToast(context, 'Your account was not deleted', icon: AppIcons.xmarkCircle);
           return;
         }
         // Apple could not confirm: delete anyway; the server skips revoking the Apple tokens.
@@ -273,7 +273,7 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
       return;
     }
     Haptics.medium();
-    if (mounted) showToast(context, 'Your account was deleted', icon: CupertinoIcons.trash);
+    if (mounted) showToast(context, 'Your account was deleted', icon: AppIcons.trash);
     // The app starts over as a new guest on the welcome screens (the router follows onboarding).
     await deletion.startOver();
     if (mounted) setState(() => _deleting = false);
@@ -298,9 +298,9 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(CupertinoIcons.trash, size: 17, color: c.danger),
+                    Icon(AppIcons.trash, size: 17, color: c.danger),
                     const SizedBox(width: 8),
-                    Text('Delete account', style: TextStyle(color: c.danger, fontWeight: FontWeight.w600, fontSize: 15)),
+                    Text('Delete account', style: TextStyle(color: c.danger, fontWeight: FontWeight.w600, fontSize: TypeSize.body)),
                   ],
                 ),
               ),
@@ -309,7 +309,7 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
           Text(
             'Deletes your profile, progress and photos for good.',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 11.5, color: c.textTertiary),
+            style: TextStyle(fontSize: TypeSize.caption, color: c.textTertiary),
           ),
         ],
       ),
@@ -330,7 +330,7 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
         // in the Profile tab.
         leading: Padding(
           padding: const EdgeInsets.only(left: 12),
-          child: RoundIconButton(icon: ModalRoute.of(context) is CupertinoSheetRoute ? CupertinoIcons.xmark : CupertinoIcons.back, size: 38, onTap: () => context.pop()),
+          child: RoundIconButton(icon: ModalRoute.of(context) is CupertinoSheetRoute ? AppIcons.xmark : AppIcons.back, size: 38, onTap: () => context.pop()),
         ),
       ),
       body: ListView(
@@ -344,7 +344,7 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
             const SizedBox(height: 10),
             Text(user?.name.isNotEmpty == true ? user!.name : 'Player', textAlign: TextAlign.center, maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.headlineSmall),
             const SizedBox(height: 2),
-            Text(user?.email ?? '', textAlign: TextAlign.center, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontSize: 14)),
+            Text(user?.email ?? '', textAlign: TextAlign.center, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontSize: TypeSize.body)),
             const SizedBox(height: 20),
             SoftCard(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -352,7 +352,7 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
                 children: [
                   FutureBuilder<bool>(
                     future: _withApple,
-                    builder: (context, snap) => _AccountLine(label: 'Signed in with', value: snap.data == true ? 'Apple' : 'Email', icon: snap.data == true ? Icons.apple : AppIcons.mail),
+                    builder: (context, snap) => _AccountLine(label: 'Signed in with', value: snap.data == true ? 'Apple' : 'Email', icon: snap.data == true ? AppIcons.appleLogo : AppIcons.mail),
                   ),
                   Divider(height: 1, color: c.stroke),
                   if (profile?.isVip == true) ...[
@@ -393,17 +393,17 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
                 child: SizedBox(
                   height: 50,
                   width: double.infinity,
-                  child: Center(child: Text('Sign out', style: TextStyle(color: context.accent, fontWeight: FontWeight.w600, fontSize: 16))),
+                  child: Center(child: Text('Sign out', style: TextStyle(color: context.accent, fontWeight: FontWeight.w600, fontSize: TypeSize.callout))),
                 ),
               ),
             ),
           ] else ...[
             SoftCard(
-              padding: const EdgeInsets.all(16),
+              padding: Insets.card,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const IconTile(icon: AppIcons.save, size: 44, radius: 12),
+                  const IconTile(icon: AppIcons.save, size: IconTile.medium),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(
@@ -411,7 +411,7 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
                       children: [
                         Text('Save your progress', style: Theme.of(context).textTheme.titleLarge),
                         const SizedBox(height: 4),
-                        Text('Create a free account to keep your coins, stars and puzzles on every device.', style: TextStyle(color: c.textSecondary, height: 1.4, fontSize: 13.5)),
+                        Text('Create a free account to keep your coins, stars and puzzles on every device.', style: TextStyle(color: c.textSecondary, height: 1.4, fontSize: TypeSize.footnote)),
                       ],
                     ),
                   ),
@@ -442,8 +442,8 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
               backgroundColor: c.boardBackground,
               thumbColor: c.card,
               children: const {
-                true: Padding(padding: EdgeInsets.symmetric(vertical: 6), child: Text('Create account', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13))),
-                false: Padding(padding: EdgeInsets.symmetric(vertical: 6), child: Text('Sign in', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13))),
+                true: Padding(padding: EdgeInsets.symmetric(vertical: 6), child: Text('Create account', style: TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.footnote))),
+                false: Padding(padding: EdgeInsets.symmetric(vertical: 6), child: Text('Sign in', style: TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.footnote))),
               },
               onValueChanged: (v) => setState(() => _signUp = v ?? true),
             ),
@@ -457,7 +457,7 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
             TextField(controller: _password, decoration: const InputDecoration(hintText: 'Password (8+ characters)'), obscureText: true),
             if (_error != null) ...[
               const SizedBox(height: 10),
-              Text(_error!, style: TextStyle(color: c.danger, fontWeight: FontWeight.w500, fontSize: 13)),
+              Text(_error!, style: TextStyle(color: c.danger, fontWeight: FontWeight.w500, fontSize: TypeSize.footnote)),
             ],
             const SizedBox(height: 16),
             BigButton(label: _signUp ? 'Create account' : 'Sign in', loading: _busy, onTap: _submit),
@@ -466,7 +466,7 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
             Center(
               child: Text.rich(
                 TextSpan(
-                  style: TextStyle(fontSize: 12, height: 1.45, color: c.textTertiary),
+                  style: TextStyle(fontSize: TypeSize.caption, height: 1.45, color: c.textTertiary),
                   children: [
                     // Two balanced lines instead of a lone "policy." on the second.
                     const TextSpan(text: 'By continuing you agree to the\n'),
@@ -506,9 +506,9 @@ class _AccountLine extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 12),
         child: Row(
           children: [
-            Text(label, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
+            Text(label, style: const TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w500)),
             const SizedBox(width: 12),
-            Expanded(child: Text(value, textAlign: TextAlign.right, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 15, color: c.textSecondary))),
+            Expanded(child: Text(value, textAlign: TextAlign.right, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: TypeSize.body, color: c.textSecondary))),
             const SizedBox(width: 8),
             Icon(icon, size: 17, color: onTap == null ? c.textTertiary : context.accent),
           ],
@@ -539,9 +539,9 @@ class _AppleButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Apple's proportions: the title is about 40% of the button height, the logo matches it.
-              Icon(Icons.apple, color: fg, size: 22),
+              Icon(AppIcons.appleLogo, color: fg, size: 22),
               const SizedBox(width: 6),
-              Text('Continue with Apple', style: TextStyle(color: fg, fontWeight: FontWeight.w500, fontSize: 19, letterSpacing: -0.3)),
+              Text('Continue with Apple', style: TextStyle(color: fg, fontWeight: FontWeight.w500, fontSize: TypeSize.title3, letterSpacing: -0.3)),
             ],
           ),
         ),

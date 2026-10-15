@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../../core/theme/tokens.dart';
 import '../../state/merge.dart';
@@ -27,23 +26,22 @@ class MergeSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    final n = NumberFormat.decimalPattern();
-    String days(int v) => v == 1 ? '1 day' : '${n.format(v)} days';
+    String days(int v) => countOf(v, 'day');
     // What the choice decides, side by side; the larger number of a row is in full ink.
     final rows = <(Widget, String, int, int, String Function(int))>[
-      (Icon(AppIcons.level, size: 15, color: c.textTertiary), 'Level', device.level, account.level, (v) => '$v'),
-      (currencyIcon(Currency.coins, size: 15), 'Coins', device.coins, account.coins, n.format),
-      (currencyIcon(Currency.tickets, size: 15), 'Tickets', device.tickets, account.tickets, n.format),
-      (currencyIcon(Currency.hints, size: 15), 'Hints', device.hints, account.hints, n.format),
+      (Icon(AppIcons.level, size: 15, color: c.textTertiary), 'Level', device.level, account.level, (v) => formatCount(v)),
+      (currencyIcon(Currency.coins, size: 15), 'Coins', device.coins, account.coins, formatCount),
+      (currencyIcon(Currency.tickets, size: 15), 'Tickets', device.tickets, account.tickets, formatCount),
+      (currencyIcon(Currency.hints, size: 15), 'Hints', device.hints, account.hints, formatCount),
       (Icon(AppIcons.streak, size: 15, color: c.textTertiary), 'Streak', device.streak, account.streak, days),
     ];
-    const figures = [FontFeature.tabularFigures()];
+    const figures = tabularFigures;
     Widget value(String text, bool more) => Expanded(
           flex: 3,
           child: Text(
             text,
             textAlign: TextAlign.right,
-            style: TextStyle(fontSize: 14, fontWeight: more ? FontWeight.w700 : FontWeight.w500, color: more ? c.textPrimary : c.textSecondary, fontFeatures: figures),
+            style: TextStyle(fontSize: TypeSize.body, fontWeight: more ? FontWeight.w700 : FontWeight.w500, color: more ? c.textPrimary : c.textSecondary, fontFeatures: figures),
           ),
         );
     Widget head(SaveSnapshot s, String label) => Expanded(
@@ -53,8 +51,8 @@ class MergeSheet extends StatelessWidget {
             children: [
               AvatarCircle(avatarKey: s.avatar, size: 30),
               const SizedBox(height: 6),
-              Text(label, maxLines: 1, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
-              Text(relativeTime(s.lastPlayed), style: TextStyle(fontSize: 11.5, color: c.textSecondary), maxLines: 1, overflow: TextOverflow.ellipsis),
+              Text(label, maxLines: 1, style: const TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w700)),
+              Text(relativeTime(s.lastPlayed), style: TextStyle(fontSize: TypeSize.caption, color: c.textSecondary), maxLines: 1, overflow: TextOverflow.ellipsis),
             ],
           ),
         );
@@ -72,7 +70,7 @@ class MergeSheet extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             SoftCard(
-              padding: const EdgeInsets.fromLTRB(14, 12, 14, 8),
+              padding: Insets.cardCompact.copyWith(bottom: 8),
               child: Column(
                 children: [
                   Row(
@@ -97,7 +95,7 @@ class MergeSheet extends StatelessWidget {
                               children: [
                                 SizedBox(width: 18, child: Center(child: r.$1)),
                                 const SizedBox(width: 8),
-                                Flexible(child: Text(r.$2, style: TextStyle(fontSize: 14, color: c.textSecondary), maxLines: 1, overflow: TextOverflow.ellipsis)),
+                                Flexible(child: Text(r.$2, style: TextStyle(fontSize: TypeSize.body, color: c.textSecondary), maxLines: 1, overflow: TextOverflow.ellipsis)),
                               ],
                             ),
                           ),

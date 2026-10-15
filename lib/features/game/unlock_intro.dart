@@ -1,13 +1,11 @@
 import 'dart:math' as math;
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/haptics.dart';
 import '../../core/theme/tokens.dart';
-import '../../data/purchases.dart' show groupThousands;
 import '../../game/modes.dart';
 import '../../game/tiling.dart';
 import '../../models/models.dart';
@@ -90,13 +88,13 @@ Future<void> showUnlockIntro(BuildContext context, WidgetRef ref, Unlock u, {Voi
                   const SizedBox(width: 4),
                   Icon(AppIcons.xp, size: 16, color: ctx.accent),
                   const SizedBox(width: 8),
-                  Text(bonus[0].toUpperCase() + bonus.substring(1), style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600, color: ctx.accent)),
+                  Text(bonus[0].toUpperCase() + bonus.substring(1), style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: ctx.accent)),
                 ],
               ),
             ),
           ],
           const SizedBox(height: 20),
-          BigButton(key: const ValueKey('unlock-try'), label: 'Try it', icon: CupertinoIcons.play_fill, onTap: () => Navigator.pop(ctx, true)),
+          BigButton(key: const ValueKey('unlock-try'), label: 'Try it', icon: AppIcons.playFill, onTap: () => Navigator.pop(ctx, true)),
           const SizedBox(height: 4),
           // The way out is a plain text button, as on iOS sheets; an outlined
           // box on glass read as an empty field.
@@ -105,7 +103,7 @@ Future<void> showUnlockIntro(BuildContext context, WidgetRef ref, Unlock u, {Voi
             child: SizedBox(
               height: 44,
               width: double.infinity,
-              child: Center(child: Text('Later', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: ctx.colors.textSecondary))),
+              child: Center(child: Text('Later', style: TextStyle(fontSize: TypeSize.callout, fontWeight: FontWeight.w600, color: ctx.colors.textSecondary))),
             ),
           ),
         ],
@@ -195,7 +193,7 @@ class _LevelDistance extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    final small = TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: c.textSecondary);
+    final small = TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: c.textSecondary);
     return Column(
       children: [
         ProgressBar(value: progress, height: 6),
@@ -204,7 +202,7 @@ class _LevelDistance extends StatelessWidget {
           children: [
             Text('Level $level', style: small),
             const Spacer(),
-            Text('${groupThousands(left)} XP to go', style: small),
+            Text('${formatCount(left)} XP to go', style: small),
           ],
         ),
       ],

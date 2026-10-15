@@ -5,12 +5,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../core/haptics.dart';
+import '../core/numbers.dart';
 import '../core/sfx.dart';
 import '../core/theme/tokens.dart';
 import 'cached_url_image.dart';
 import 'glass.dart';
 import 'hash_image.dart';
 import 'icons.dart';
+
+export '../core/dates.dart';
+export '../core/numbers.dart';
 
 /// A tappable surface that scales down slightly while pressed (iOS-style).
 class Pressable extends StatefulWidget {
@@ -55,12 +59,26 @@ class _PressableState extends State<Pressable> {
   }
 }
 
+/// Pads a compact control to Apple's 44 pt minimum touch area without changing how it looks:
+/// the control keeps its size and sits centred in the larger box, which takes the touches. Put it
+/// inside the [Pressable] so the whole box is tappable.
+class TapTarget extends StatelessWidget {
+  const TapTarget({super.key, required this.child, this.minSize = 44});
+  final Widget child;
+  final double minSize;
+  @override
+  Widget build(BuildContext context) => ConstrainedBox(
+        constraints: BoxConstraints(minWidth: minSize, minHeight: minSize),
+        child: Center(widthFactor: 1, heightFactor: 1, child: child),
+      );
+}
+
 /// Flat surface card: 1px hairline, no shadow. The main container.
 class SoftCard extends StatelessWidget {
   const SoftCard({
     super.key,
     required this.child,
-    this.padding = const EdgeInsets.all(Spacing.lg),
+    this.padding = Insets.card,
     this.radius = Radii.lg,
     this.color,
     this.gradient,
@@ -191,20 +209,25 @@ class BigButton extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         if (loading)
-          SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2.2, color: fg))
+          // The iOS activity indicator, as everywhere else in the app (was Material's ring).
+          CupertinoActivityIndicator(color: fg, radius: 9)
         else ...[
           if (icon != null) ...[Icon(icon, color: fg, size: 19), const SizedBox(width: 8)],
+          // A call to action is never cut: with Larger Text on a small phone the label shrinks to fit.
           if (currency != null)
-            Flexible(child: CostLabel(label: label, currency: currency!, amount: amount!, prefix: amountPrefix, color: fg, fontSize: 16))
+            Flexible(child: FittedBox(fit: BoxFit.scaleDown, child: CostLabel(label: label, currency: currency!, amount: amount!, prefix: amountPrefix, color: fg, fontSize: TypeSize.callout)))
           else
-            Flexible(child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, letterSpacing: -0.2, color: fg))),
+            Flexible(child: FittedBox(fit: BoxFit.scaleDown, child: Text(label, maxLines: 1, softWrap: false, style: TextStyle(fontSize: TypeSize.callout, fontWeight: FontWeight.w600, letterSpacing: -0.2, color: fg)))),
           if (trailing != null) ...[const SizedBox(width: 8), trailing!],
         ],
       ],
     );
     return Pressable(
       onTap: loading ? null : onTap,
-      child: Opacity(
+      // Compact buttons (Claim, Play: 34-36 pt) keep their look and get a 44 pt touch box.
+      child: TapTarget(
+        minSize: height < 44 ? 44 : 0,
+        child: Opacity(
         opacity: disabled ? 0.45 : 1,
         child: Container(
           height: height,
@@ -212,6 +235,7 @@ class BigButton extends StatelessWidget {
           decoration: BoxDecoration(color: bg, border: border, borderRadius: BorderRadius.circular(Radii.md)),
           child: filled ? CurrencyInk(color: fg, child: content) : content,
         ),
+      ),
       ),
     );
   }
@@ -221,7 +245,7 @@ class BigButton extends StatelessWidget {
 /// tickets or hints. Used inside [BigButton.cost]; also usable on its own in
 /// rows and sheets so prices read the same everywhere.
 class CostLabel extends StatelessWidget {
-  const CostLabel({super.key, required this.label, required this.currency, required this.amount, this.prefix = '', this.color, this.fontSize = 15, this.iconSize});
+  const CostLabel({super.key, required this.label, required this.currency, required this.amount, this.prefix = '', this.color, this.fontSize = TypeSize.body, this.iconSize});
   final String label;
   final Currency currency;
   final int amount;
@@ -242,7 +266,7 @@ class CostLabel extends StatelessWidget {
         SizedBox(width: fontSize * 0.5),
         currencyIcon(currency, size: mark, mono: fg.computeLuminance() > 0.8, monoColor: fg),
         SizedBox(width: fontSize * 0.3),
-        Text('$prefix${AnimatedCounter._fmt(amount)}', style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.w800, letterSpacing: -0.2, color: fg)),
+        Text('$prefix${formatCount(amount)}', style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.w700, letterSpacing: -0.2, color: fg, fontFeatures: tabularFigures)),
       ],
     );
   }
@@ -280,7 +304,7 @@ class RoundIconButton extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                   decoration: BoxDecoration(color: Brand.live, borderRadius: BorderRadius.circular(999)),
-                  child: Text(badge!, style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w700)),
+                  child: Text(badge!, style: const TextStyle(color: Colors.white, fontSize: TypeSize.micro, fontWeight: FontWeight.w700)),
                 ),
               ),
             ],
@@ -291,11 +315,11 @@ class RoundIconButton extends StatelessWidget {
         children: [
           child,
           const SizedBox(height: 4),
-          Text(label!, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: c.textSecondary)),
+          Text(label!, style: TextStyle(fontSize: TypeSize.micro, fontWeight: FontWeight.w600, color: c.textSecondary)),
         ],
       );
     }
-    return Pressable(onTap: onTap, scale: 0.9, child: child);
+    return Pressable(onTap: onTap, scale: 0.9, child: TapTarget(child: child));
   }
 }
 
@@ -314,7 +338,8 @@ class CurrencyPill extends StatelessWidget {
     return Pressable(
       onTap: onAdd,
       scale: 0.95,
-      child: Container(
+      child: TapTarget(
+        child: Container(
         height: 34,
         padding: EdgeInsets.only(left: 9, right: onAdd != null ? 5 : 12),
         decoration: BoxDecoration(color: c.card, borderRadius: BorderRadius.circular(999), border: Border.all(color: c.stroke)),
@@ -323,18 +348,19 @@ class CurrencyPill extends StatelessWidget {
           children: [
             currencyIcon(currency, size: 16),
             const SizedBox(width: 6),
-            AnimatedCounter(value: value, style: TextStyle(fontWeight: FontWeight.w700, fontSize: compact ? 14 : 15, color: c.textPrimary, letterSpacing: -0.2)),
+            AnimatedCounter(value: value, style: TextStyle(fontWeight: FontWeight.w700, fontSize: compact ? TypeSize.footnote : TypeSize.body, color: c.textPrimary, letterSpacing: -0.2)),
             if (onAdd != null) ...[
               const SizedBox(width: 6),
               Container(
                 width: 22,
                 height: 22,
                 decoration: BoxDecoration(color: c.accentTint, shape: BoxShape.circle),
-                child: Icon(CupertinoIcons.plus, size: 13, color: context.accent),
+                child: Icon(AppIcons.plus, size: 13, color: context.accent),
               ),
             ],
           ],
         ),
+      ),
       ),
     );
   }
@@ -351,19 +377,23 @@ class AnimatedCounter extends StatelessWidget {
       tween: Tween(end: value.toDouble()),
       duration: const Duration(milliseconds: 600),
       curve: Curves.easeOutCubic,
-      builder: (_, v, _) => Text(_fmt(v.round()), style: style),
+      builder: (_, v, _) => Text(formatCount(v.round()), style: (style ?? const TextStyle()).copyWith(fontFeatures: tabularFigures)),
     );
   }
+}
 
-  static String _fmt(int v) {
-    final s = v.toString();
-    final buf = StringBuffer();
-    for (var i = 0; i < s.length; i++) {
-      if (i > 0 && (s.length - i) % 3 == 0) buf.write(',');
-      buf.write(s[i]);
-    }
-    return buf.toString();
-  }
+/// A tab's large title (Library, Quests, Social, Profile). One line at
+/// every text size: when Larger Text leaves too little room it scales down
+/// instead of wrapping ("So" / "cial").
+class PageTitle extends StatelessWidget {
+  const PageTitle(this.title, {super.key});
+  final String title;
+  @override
+  Widget build(BuildContext context) => FittedBox(
+        fit: BoxFit.scaleDown,
+        alignment: Alignment.centerLeft,
+        child: Text(title, maxLines: 1, softWrap: false, style: Theme.of(context).textTheme.headlineLarge),
+      );
 }
 
 /// Section title with optional trailing action.
@@ -393,8 +423,12 @@ class SectionHeader extends StatelessWidget {
               const SizedBox(width: 12),
               Pressable(
                 onTap: onAction,
-                // No padding: it would move the title's baseline. The text plus the 12 pt gap is the target.
-                child: Text(action!, style: TextStyle(color: context.accent, fontWeight: FontWeight.w600, fontSize: 15)),
+                // 168: at least 44 pt wide. A 44 pt tall box would move the title's baseline (011) and
+                // push the subtitle down, so the height stays the title's line.
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(minWidth: 44),
+                  child: Text(action!, textAlign: TextAlign.right, style: TextStyle(color: context.accent, fontWeight: FontWeight.w600, fontSize: TypeSize.body)),
+                ),
               ),
             ],
           );
@@ -410,7 +444,7 @@ class SectionHeader extends StatelessWidget {
                 titleRow,
                 if (subtitle != null) ...[
                   const SizedBox(height: 2),
-                  Text(subtitle!, style: TextStyle(color: c.textSecondary, fontSize: 13)),
+                  Text(subtitle!, style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote)),
                 ],
               ],
             ),
@@ -494,7 +528,7 @@ class NetImage extends StatelessWidget {
               height: height,
               child: hasHash
                   ? HashImage(hash: blurhash!, color: c.boardBackground)
-                  : Container(color: c.boardBackground, child: Icon(CupertinoIcons.photo, color: c.textTertiary)),
+                  : Container(color: c.boardBackground, child: Icon(AppIcons.image, color: c.textTertiary)),
             ),
           );
     if (radius > 0) img = ClipRRect(borderRadius: BorderRadius.circular(radius), child: img);
@@ -534,6 +568,47 @@ class _ShimmerState extends State<_Shimmer> with SingleTickerProviderStateMixin 
   }
 }
 
+/// A block of content that is still loading: the image shimmer in a rounded box. Screens show
+/// skeletons shaped like what is coming (their title and bars stay), never a lone spinner on an
+/// empty page; spinners are for actions (buttons) and for "more" at the end of a list.
+class Skeleton extends StatelessWidget {
+  const Skeleton({super.key, this.width, this.height, this.radius = Radii.sm});
+  final double? width;
+  final double? height;
+  final double radius;
+  @override
+  Widget build(BuildContext context) => ClipRRect(
+        borderRadius: BorderRadius.circular(radius),
+        child: SizedBox(width: width ?? double.infinity, height: height ?? double.infinity, child: const _Shimmer()),
+      );
+}
+
+/// A loading pack card: the shape of a `PackCard` (cover, name, progress line).
+class SkeletonPackCard extends StatelessWidget {
+  const SkeletonPackCard({super.key});
+  @override
+  Widget build(BuildContext context) => SoftCard(
+        padding: EdgeInsets.zero,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Expanded(child: Skeleton(radius: 0)),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Skeleton(width: 96, height: 14),
+                  SizedBox(height: 10),
+                  Skeleton(height: 6, radius: 3),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+}
+
 /// Star row for ratings (0-3).
 class Stars extends StatelessWidget {
   const Stars({super.key, required this.count, this.size = 16, this.max = 3, this.animate = false});
@@ -547,7 +622,7 @@ class Stars extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         for (var i = 0; i < max; i++)
-          Icon(i < count ? CupertinoIcons.star_fill : CupertinoIcons.star, size: size, color: i < count ? Brand.star : context.colors.textTertiary.withValues(alpha: 0.5)),
+          Icon(i < count ? AppIcons.star : AppIcons.starOutline, size: size, color: i < count ? Brand.star : context.colors.textTertiary.withValues(alpha: 0.5)),
       ],
     );
   }
@@ -588,61 +663,81 @@ class ProgressBar extends StatelessWidget {
   }
 }
 
-/// Small label chip (category, status).
+/// Small label chip (category, status). On a photo ([onImage]) it is a
+/// [PhotoChip]: the one style for anything drawn over a picture.
 class Chip2 extends StatelessWidget {
-  const Chip2({super.key, required this.label, this.icon, this.onImage = false, this.color, this.foreground});
+  const Chip2({super.key, required this.label, this.icon, this.onImage = false, this.color, this.foreground, this.dot});
   final String label;
   final IconData? icon;
   final bool onImage;
   final Color? color;
   final Color? foreground;
+
+  /// A status dot before the label (`Brand.live` for live, today, new).
+  final Color? dot;
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    final bg = color ?? (onImage ? Colors.black.withValues(alpha: 0.45) : c.canvas);
-    final fg = foreground ?? (onImage ? Colors.white : c.textSecondary);
+    if (onImage && color == null) {
+      return PhotoChip(
+        dot: dot,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (icon != null) ...[Icon(icon, size: 12, color: Colors.white), const SizedBox(width: 4)],
+            Text(label, style: PhotoChip.textStyle),
+          ],
+        ),
+      );
+    }
+    final bg = color ?? c.canvas;
+    final fg = foreground ?? c.textSecondary;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
-      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(999), border: onImage || color != null ? null : Border.all(color: c.stroke)),
+      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(999), border: color != null ? null : Border.all(color: c.stroke)),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
+          if (dot != null) ...[Container(width: 6, height: 6, decoration: BoxDecoration(color: dot, shape: BoxShape.circle)), const SizedBox(width: 5)],
           if (icon != null) ...[Icon(icon, size: 12, color: fg), const SizedBox(width: 4)],
-          Text(label, style: TextStyle(color: fg, fontSize: 11.5, fontWeight: FontWeight.w600)),
+          Text(label, style: TextStyle(color: fg, fontSize: TypeSize.caption, fontWeight: FontWeight.w600)),
         ],
       ),
     );
   }
 }
 
-/// Status on a cover photo ("Ends in 5d", "This month"): the dark chip used for
-/// labels on pictures, with a small red dot as the "live" marker. The photo keeps
-/// the colour; the red is a marker, not a fill. Home, the event pack page and the
-/// Quests event cards share it.
-class LiveChip extends StatelessWidget {
-  const LiveChip(this.label, {super.key});
-  final String label;
+/// The one chip for text over a photo (covers, pack cards, picture tiles,
+/// the pack hero, event cards, house ads): a dark translucent pill with a
+/// hairline, white 11.5 pt semibold text, and an optional status dot.
+/// Status is the dot, never a solid red or gold fill over the picture, so
+/// the photo keeps its colour and every chip reads on light and dark photos.
+class PhotoChip extends StatelessWidget {
+  const PhotoChip({super.key, required this.child, this.dot});
+  final Widget child;
+  final Color? dot;
 
-  /// "Ends in 3d", "Ends in 5h", "Ends soon" for the time an event has left.
-  static String endsIn(Duration left) {
-    if (left.inDays >= 1) return 'Ends in ${left.inDays}d';
-    if (left.inHours >= 1) return 'Ends in ${left.inHours}h';
-    return 'Ends soon';
-  }
+  static const textStyle = TextStyle(color: Colors.white, fontSize: TypeSize.caption, fontWeight: FontWeight.w600, letterSpacing: -0.1);
 
   @override
-  Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.fromLTRB(8, 5, 9, 5),
-        decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.5), borderRadius: BorderRadius.circular(Radii.pill)),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(width: 6, height: 6, decoration: const BoxDecoration(color: Brand.live, shape: BoxShape.circle)),
-            const SizedBox(width: 5),
-            Text(label, style: const TextStyle(color: Colors.white, fontSize: 11.5, fontWeight: FontWeight.w600)),
-          ],
-        ),
-      );
+  Widget build(BuildContext context) {
+    return Container(
+      height: 24,
+      padding: EdgeInsets.only(left: dot != null ? 8 : 9, right: 9),
+      decoration: BoxDecoration(
+        color: Colors.black.withValues(alpha: 0.5),
+        borderRadius: BorderRadius.circular(Radii.pill),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.18), width: 0.5),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (dot != null) ...[Container(width: 6, height: 6, decoration: BoxDecoration(color: dot, shape: BoxShape.circle)), const SizedBox(width: 6)],
+          child,
+        ],
+      ),
+    );
+  }
 }
 
 /// The title block every sheet starts with: one title style (20 pt bold) and
@@ -663,10 +758,10 @@ class SheetHeader extends StatelessWidget {
       crossAxisAlignment: center ? CrossAxisAlignment.center : CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(title, textAlign: align, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, letterSpacing: -0.3, height: 1.2, color: c.textPrimary)),
+        Text(title, textAlign: align, style: TextStyle(fontSize: TypeSize.title3, fontWeight: FontWeight.w700, letterSpacing: -0.3, height: 1.2, color: c.textPrimary)),
         if (subtitle != null) ...[
           const SizedBox(height: 4),
-          Text(subtitle!, textAlign: align, style: TextStyle(fontSize: 14, height: 1.35, color: c.textSecondary)),
+          Text(subtitle!, textAlign: align, style: TextStyle(fontSize: TypeSize.body, height: 1.35, color: c.textSecondary)),
         ],
       ],
     );
@@ -820,7 +915,7 @@ class _ToastState extends State<_Toast> with SingleTickerProviderStateMixin {
                             children: [
                               if (widget.leading != null) ...[widget.leading!, const SizedBox(width: 10)] else if (widget.icon != null) ...[Icon(widget.icon, size: 18, color: c.textSecondary), const SizedBox(width: 10)],
                               Flexible(
-                                child: Text(widget.message, maxLines: 3, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 14.5, height: 1.3, fontWeight: FontWeight.w600, color: c.textPrimary, letterSpacing: -0.1)),
+                                child: Text(widget.message, maxLines: 3, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: TypeSize.body, height: 1.3, fontWeight: FontWeight.w600, color: c.textPrimary, letterSpacing: -0.1)),
                               ),
                             ],
                           ),
@@ -905,18 +1000,18 @@ class ListRow extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
         child: Row(
           children: [
-            tone == null ? IconTile(icon: icon, size: 34, radius: 10) : IconTile(icon: icon, size: 34, radius: 10, color: tone.withValues(alpha: 0.16), iconColor: tone),
+            tone == null ? IconTile(icon: icon, size: IconTile.small) : IconTile(icon: icon, size: IconTile.small, color: tone.withValues(alpha: 0.16), iconColor: tone),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15, color: tone)),
-                  if (subtitle != null) Text(subtitle!, style: TextStyle(fontSize: 12.5, color: c.textSecondary)),
+                  Text(title, style: TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body, color: tone)),
+                  if (subtitle != null) Text(subtitle!, style: TextStyle(fontSize: TypeSize.footnote, color: c.textSecondary)),
                 ],
               ),
             ),
-            trailing ?? Icon(CupertinoIcons.chevron_right, size: 16, color: tone ?? c.textTertiary),
+            trailing ?? Icon(AppIcons.chevronRight, size: 16, color: tone ?? c.textTertiary),
           ],
         ),
       ),
@@ -1010,8 +1105,8 @@ class AlertTextField extends StatelessWidget {
       textAlign: TextAlign.center,
       cursorColor: context.accent,
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      style: TextStyle(fontSize: 16, color: c.textPrimary, letterSpacing: -0.2),
-      placeholderStyle: TextStyle(fontSize: 16, color: c.textTertiary, letterSpacing: -0.2),
+      style: TextStyle(fontSize: TypeSize.callout, color: c.textPrimary, letterSpacing: -0.2),
+      placeholderStyle: TextStyle(fontSize: TypeSize.callout, color: c.textTertiary, letterSpacing: -0.2),
       decoration: BoxDecoration(color: fill, borderRadius: BorderRadius.circular(12)),
     );
   }
@@ -1060,10 +1155,10 @@ class _AppAlert extends StatelessWidget {
                         padding: const EdgeInsets.fromLTRB(22, 24, 22, 20),
                         child: Column(
                           children: [
-                            Text(title, textAlign: TextAlign.center, style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700, color: c.textPrimary, letterSpacing: -0.3, height: 1.25)),
+                            Text(title, textAlign: TextAlign.center, style: TextStyle(fontSize: TypeSize.headline, fontWeight: FontWeight.w700, color: c.textPrimary, letterSpacing: -0.3, height: 1.25)),
                             if (message != null) ...[
                               const SizedBox(height: 6),
-                              Text(message!, textAlign: TextAlign.center, style: TextStyle(fontSize: 13.5, height: 1.4, color: c.textSecondary)),
+                              Text(message!, textAlign: TextAlign.center, style: TextStyle(fontSize: TypeSize.footnote, height: 1.4, color: c.textSecondary)),
                             ],
                             if (child != null) ...[const SizedBox(height: 16), child!],
                           ],
@@ -1128,7 +1223,7 @@ class _AlertAction extends StatelessWidget {
   /// Space kept on each side of a label.
   static const padding = 14.0;
 
-  static TextStyle _style({required bool bold, Color? color}) => TextStyle(fontSize: 16.5, fontWeight: bold ? FontWeight.w600 : FontWeight.w500, color: color, letterSpacing: -0.2);
+  static TextStyle _style({required bool bold, Color? color}) => TextStyle(fontSize: TypeSize.headline, fontWeight: bold ? FontWeight.w600 : FontWeight.w500, color: color, letterSpacing: -0.2);
 
   /// Width of [label] as drawn, at the current text size.
   static double widthOf(BuildContext context, String label, {required bool bold}) {

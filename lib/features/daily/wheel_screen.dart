@@ -143,12 +143,12 @@ Future<void> showWheelOdds(BuildContext context) => showAppSheet(
                             // Mark, then the prize in words at one weight: "60 coins", "2 Hints".
                             currencyIcon(odds[i].segment.kind, size: 20),
                             const SizedBox(width: 10),
-                            Text('${odds[i].segment.amount}', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, fontFeatures: [FontFeature.tabularFigures()])),
+                            Text('${odds[i].segment.amount}', style: const TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w600, fontFeatures: tabularFigures)),
                             const SizedBox(width: 4),
-                            Text(odds[i].segment.name ?? 'coins', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+                            Text(odds[i].segment.name ?? 'coins', style: const TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w600)),
                             if (odds[i].segment.jackpot) ...[const SizedBox(width: 8), Chip2(label: 'Jackpot', color: Brand.coin.withValues(alpha: 0.16), foreground: ctx.isDark ? Brand.coin : Brand.coinDeep)],
                             const Spacer(),
-                            Text(formatOdds(odds[i].percent), style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15, fontFeatures: [FontFeature.tabularFigures()])),
+                            Text(formatOdds(odds[i].percent), style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body, fontFeatures: tabularFigures)),
                           ],
                         ),
                       ),
@@ -209,7 +209,7 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
     final n = ref.read(profileProvider.notifier);
     final ok = await n.spendTickets(Economy.wheelSpinTickets, reason: 'wheel');
     if (!ok) {
-      if (mounted) showToast(context, 'You need 1 Ticket to spin.', leading: const TicketIcon(size: 18));
+      if (mounted) showToast(context, 'You need 1 ticket to spin.', leading: const TicketIcon(size: 18));
       return;
     }
     // Weighted pick, from the same table the odds sheet shows.
@@ -264,7 +264,7 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
       // The ticket balance sits in the bar, as in the Store, so the wheel gets the height.
       appBar: GlassAppBar(
         title: const Text('Lucky Wheel'),
-        leading: Padding(padding: const EdgeInsets.only(left: 12), child: RoundIconButton(icon: CupertinoIcons.xmark, size: 38, onTap: () => context.pop())),
+        leading: Padding(padding: const EdgeInsets.only(left: 12), child: RoundIconButton(icon: AppIcons.xmark, size: 38, onTap: () => context.pop())),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
@@ -358,9 +358,9 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
                           key: const ValueKey('jackpot'),
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text('Jackpot', style: TextStyle(color: c.textSecondary, fontSize: 13.5, fontWeight: FontWeight.w600)),
+                            Text('Jackpot', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote, fontWeight: FontWeight.w600)),
                             const SizedBox(width: 8),
-                            Amount(currency: Currency.coins, value: _segments.firstWhere((s) => s.jackpot).amount, size: 16, fontSize: 14.5, weight: FontWeight.w700),
+                            Amount(currency: Currency.coins, value: _segments.firstWhere((s) => s.jackpot).amount, size: 16, fontSize: TypeSize.body, weight: FontWeight.w700),
                           ],
                         )
                       : SoftCard(
@@ -370,10 +370,10 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Text('You won', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
+                              const Text('You won', style: TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body)),
                               const SizedBox(width: 10),
-                              Amount(currency: _result!.kind, value: _result!.amount, size: 18, fontSize: 16, weight: FontWeight.w800),
-                              if (_result!.name != null) ...[const SizedBox(width: 5), Text(_result!.name!, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15))],
+                              Amount(currency: _result!.kind, value: _result!.amount, size: 18, fontSize: TypeSize.callout, weight: FontWeight.w700),
+                              if (_result!.name != null) ...[const SizedBox(width: 5), Text(_result!.name!, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body))],
                               if (jackpot) ...[const SizedBox(width: 8), const Chip2(label: 'Jackpot', color: Brand.coin, foreground: Color(0xFF2A1F00))],
                             ],
                           ),
@@ -389,7 +389,7 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
                   if (tickets < Economy.wheelSpinTickets && !_spinning) ...[
                     BigButton(label: 'Get tickets', onTap: () => context.push('/store')),
                     const SizedBox(height: 8),
-                    Text('A spin costs 1 ticket. Earn them from weekly quests, level-ups and events.', textAlign: TextAlign.center, style: TextStyle(color: c.textSecondary, fontSize: 12.5, height: 1.35)),
+                    Text('A spin costs 1 ticket. Earn them from weekly quests, level-ups and events.', textAlign: TextAlign.center, style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote, height: 1.35)),
                   ] else
                     BigButton.cost(
                       label: 'Spin for',
@@ -402,7 +402,7 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
                     padding: const EdgeInsets.symmetric(vertical: 6),
                     minimumSize: const Size(44, 32),
                     onPressed: () => showWheelOdds(context),
-                    child: Text('See odds', style: TextStyle(color: context.accent, fontSize: 14, fontWeight: FontWeight.w600)),
+                    child: Text('See odds', style: TextStyle(color: context.accent, fontSize: TypeSize.body, fontWeight: FontWeight.w600)),
                   ),
                 ],
               ),
@@ -485,7 +485,7 @@ class _PrizeMark extends StatelessWidget {
       children: [
         mark,
         const SizedBox(height: 3),
-        Text(segment.label, style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15, height: 1.1, color: ink, letterSpacing: -0.2, fontFeatures: const [FontFeature.tabularFigures()], shadows: const [Shadow(color: Color(0x99000000), blurRadius: 6)])),
+        Text(segment.label, style: TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body, height: 1.1, color: ink, letterSpacing: -0.2, fontFeatures: tabularFigures, shadows: const [Shadow(color: Color(0x99000000), blurRadius: 6)])),
       ],
     );
   }

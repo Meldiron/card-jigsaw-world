@@ -30,7 +30,7 @@ class PiggySheet extends ConsumerWidget {
         children: [
           SheetHeader(
             title: 'Piggy bank',
-            subtitle: 'Every solved picture adds ${Economy.piggyPerPuzzle} coins, up to ${Profile.piggyCapacity}. Open it with ${Economy.piggyOpenTickets} ticket whenever you like.',
+            subtitle: 'Every solved picture adds ${countOf(Economy.piggyPerPuzzle, 'coin')}, up to ${formatCount(Profile.piggyCapacity)}. Open it with ${countOf(Economy.piggyOpenTickets, 'ticket')} whenever you like.',
             center: true,
           ),
           const SizedBox(height: 20),
@@ -52,17 +52,17 @@ class PiggySheet extends ConsumerWidget {
                     children: [
                       const CoinIcon(size: 20),
                       const SizedBox(width: 5),
-                      AnimatedCounter(value: coins, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 32, letterSpacing: -0.8)),
+                      AnimatedCounter(value: coins, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.largeTitle, letterSpacing: -0.8)),
                     ],
                   ),
-                  Text('of ${Profile.piggyCapacity}', style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: c.textSecondary)),
+                  Text('of ${formatCount(Profile.piggyCapacity)}', style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w500, color: c.textSecondary)),
                 ],
               ),
             ),
           ),
           const SizedBox(height: 4),
           const SizedBox(height: 8),
-          Text(full ? 'Full. Open it to keep collecting.' : (coins == 0 ? 'Solve a picture to drop in the first ${Economy.piggyPerPuzzle} coins.' : 'Keep solving to fill it'), style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: full ? context.accent : c.textTertiary)),
+          Text(full ? 'Full. Open it to keep collecting.' : (coins == 0 ? 'Solve a picture to drop in the first ${countOf(Economy.piggyPerPuzzle, 'coin')}.' : 'Keep solving to fill it'), style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w500, color: full ? context.accent : c.textTertiary)),
           const SizedBox(height: 20),
           // One clear state each: nothing inside (no button, it says how it fills), not enough
           // tickets (the way to get one), or ready to open.
@@ -75,9 +75,9 @@ class PiggySheet extends ConsumerWidget {
             }),
             const SizedBox(height: 10),
             Text(
-              'Opening costs ${Economy.piggyOpenTickets} ticket. You have $tickets. Weekly quests, level-ups and events give tickets too.',
+              'Opening costs ${countOf(Economy.piggyOpenTickets, 'ticket')}. You have ${formatCount(tickets)}. Weekly quests, level-ups and events give tickets too.',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: c.textSecondary),
+              style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w500, color: c.textSecondary),
             ),
           ] else ...[
             BigButton.cost(
@@ -93,12 +93,12 @@ class PiggySheet extends ConsumerWidget {
                         Sfx.instance.coin();
                         Haptics.success();
                         Navigator.pop(context);
-                        showToast(context, '+$coins coins from your piggy bank', icon: AppIcons.piggy);
+                        showToast(context, '+${countOf(coins, 'coin')} from your piggy bank', icon: AppIcons.piggy);
                       }
                     },
             ),
             const SizedBox(height: 10),
-            Text('You have $tickets ticket${tickets == 1 ? '' : 's'}', textAlign: TextAlign.center, style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: c.textSecondary)),
+            Text('You have ${countOf(tickets, 'ticket')}', textAlign: TextAlign.center, style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w500, color: c.textSecondary)),
           ],
         ],
       ),

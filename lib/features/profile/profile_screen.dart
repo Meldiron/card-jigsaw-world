@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import '../../core/haptics.dart';
 import '../../core/sfx.dart';
 import '../../core/theme/tokens.dart';
-import '../../data/purchases.dart' show groupThousands;
 import '../../models/models.dart';
 import '../../state/achievements.dart';
 import '../../state/auth.dart';
@@ -65,7 +64,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         autofocus: true,
         maxLength: 20,
         textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: c.textPrimary),
+        style: TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w600, color: c.textPrimary),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(color: c.boardBackground, borderRadius: BorderRadius.circular(10), border: Border.all(color: c.stroke)),
       ),
@@ -118,11 +117,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           GlassSliverHeader(
             height: 52,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 8, 20, 4),
+              padding: const EdgeInsets.fromLTRB(20, 4, 20, 4),
               child: Row(
                 children: [
-                  Expanded(child: Text('Profile', style: Theme.of(context).textTheme.headlineLarge)),
-                  RoundIconButton(icon: CupertinoIcons.gear_alt_fill, onTap: () => context.go('/profile/settings')),
+                  const Expanded(child: PageTitle('Profile')),
+                  RoundIconButton(icon: AppIcons.gearAltFill, onTap: () => context.go('/profile/settings')),
                 ],
               ),
             ),
@@ -131,7 +130,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
               child: SoftCard(
-                padding: const EdgeInsets.all(16),
+                padding: Insets.card,
                 child: Column(
                   children: [
                     Row(
@@ -151,14 +150,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                   children: [
                                     Flexible(child: Text(profile.displayName, maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.headlineSmall)),
                                     const SizedBox(width: 6),
-                                    Icon(CupertinoIcons.pencil, color: c.textTertiary, size: 16),
+                                    Icon(AppIcons.pencil, color: c.textTertiary, size: 16),
                                   ],
                                 ),
                               ),
                               const SizedBox(height: 2),
                               Row(
                                 children: [
-                                  Flexible(child: Text(isGuest ? 'Guest account' : (user?.email ?? ''), maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontSize: 12.5))),
+                                  Flexible(child: Text(isGuest ? 'Guest account' : (user?.email ?? ''), maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote))),
                                   if (profile.isVip) ...[
                                     const SizedBox(width: 8),
                                     Chip2(label: 'VIP', icon: AppIcons.vip, color: c.accentTint, foreground: context.accent),
@@ -168,11 +167,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                               const SizedBox(height: 10),
                               Row(
                                 children: [
-                                  Text('LV ${profile.level}', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
+                                  Text('Level ${profile.level}', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.footnote)),
                                   const SizedBox(width: 8),
                                   Expanded(child: ProgressBar(value: profile.levelProgress, height: 6)),
                                   const SizedBox(width: 8),
-                                  Text('${groupThousands(profile.xpIntoLevel)}/${groupThousands(Profile.xpForLevel(profile.level))}', style: TextStyle(color: c.textSecondary, fontSize: 11, fontWeight: FontWeight.w600)),
+                                  Text('${formatCount(profile.xpIntoLevel)}/${formatCount(Profile.xpForLevel(profile.level))}', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.micro, fontWeight: FontWeight.w600)),
                                 ],
                               ),
                             ],
@@ -188,11 +187,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     IntrinsicHeight(
                       child: Row(
                         children: [
-                          _Stat(value: groupThousands(profile.coins), label: 'Coins', icon: const CoinIcon(size: 14)),
+                          _Stat(value: formatCount(profile.coins), label: 'Coins', icon: const CoinIcon(size: 14)),
                           VerticalDivider(width: 1, thickness: 1, color: c.stroke),
-                          _Stat(value: groupThousands(profile.tickets), label: 'Tickets', icon: const TicketIcon(size: 13)),
+                          _Stat(value: formatCount(profile.tickets), label: 'Tickets', icon: const TicketIcon(size: 13)),
                           VerticalDivider(width: 1, thickness: 1, color: c.stroke),
-                          _Stat(value: groupThousands(profile.hints), label: 'Hints', icon: const HintIcon(size: 14)),
+                          _Stat(value: formatCount(profile.hints), label: 'Hints', icon: const HintIcon(size: 14)),
                         ],
                       ),
                     ),
@@ -243,9 +242,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     Divider(height: 1, color: c.stroke, indent: 62),
                     ListRow(icon: AppIcons.profile, title: 'Account', subtitle: isGuest ? 'Guest · sign in to save progress' : 'Signed in', onTap: () => context.push('/account')),
                     Divider(height: 1, color: c.stroke, indent: 62),
-                    ListRow(icon: CupertinoIcons.bag_fill, title: 'Store', subtitle: 'Coins, Tickets, Hints and VIP', onTap: () => context.push('/store')),
+                    ListRow(icon: AppIcons.bagFill, title: 'Store', subtitle: 'Coins, tickets, hints and VIP', onTap: () => context.push('/store')),
                     Divider(height: 1, color: c.stroke, indent: 62),
-                    ListRow(icon: CupertinoIcons.gear_alt_fill, title: 'Settings', subtitle: 'Theme, sound, haptics', onTap: () => context.go('/profile/settings')),
+                    ListRow(icon: AppIcons.gearAltFill, title: 'Settings', subtitle: 'Theme, sound, haptics', onTap: () => context.go('/profile/settings')),
                   ],
                 ),
               ),
@@ -269,14 +268,14 @@ class _Stat extends StatelessWidget {
     return Expanded(
       child: Column(
         children: [
-          FittedBox(fit: BoxFit.scaleDown, child: Text(value, maxLines: 1, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 18, letterSpacing: -0.3))),
+          FittedBox(fit: BoxFit.scaleDown, child: Text(value, maxLines: 1, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.headline, letterSpacing: -0.3))),
           const SizedBox(height: 2),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               icon,
               const SizedBox(width: 4),
-              Text(label, style: TextStyle(color: c.textSecondary, fontSize: 11, fontWeight: FontWeight.w500)),
+              Text(label, style: TextStyle(color: c.textSecondary, fontSize: TypeSize.micro, fontWeight: FontWeight.w500)),
             ],
           ),
         ],
@@ -319,8 +318,8 @@ class _ClaimAllCardState extends ConsumerState<_ClaimAllCard> {
     Sfx.instance.coin();
     Haptics.success();
     final parts = [
-      if (coins > 0) '${groupThousands(coins)} coins',
-      if (tickets > 0) '$tickets ticket${tickets == 1 ? '' : 's'}',
+      if (coins > 0) '${formatCount(coins)} coins',
+      if (tickets > 0) countOf(tickets, 'ticket'),
       if (avatars > 0) '$avatars avatar${avatars == 1 ? '' : 's'}',
     ];
     showToast(context, '$count rewards claimed: ${parts.join(', ')}', icon: AppIcons.check);
@@ -345,16 +344,16 @@ class _ClaimAllCardState extends ConsumerState<_ClaimAllCard> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('${widget.ready.length} rewards ready', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                Text('${widget.ready.length} rewards ready', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body)),
                 const SizedBox(height: 4),
                 Wrap(
                   spacing: 10,
                   runSpacing: 4,
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
-                    if (coins > 0) Amount(currency: Currency.coins, value: groupThousands(coins), size: 14, fontSize: 13, weight: FontWeight.w600),
-                    if (tickets > 0) Amount(currency: Currency.tickets, value: tickets, size: 14, fontSize: 13, weight: FontWeight.w600),
-                    if (avatars > 0) Text('$avatars avatar${avatars == 1 ? '' : 's'}', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: c.textSecondary)),
+                    if (coins > 0) Amount(currency: Currency.coins, value: formatCount(coins), size: 14, fontSize: TypeSize.footnote, weight: FontWeight.w600),
+                    if (tickets > 0) Amount(currency: Currency.tickets, value: tickets, size: 14, fontSize: TypeSize.footnote, weight: FontWeight.w600),
+                    if (avatars > 0) Text('$avatars avatar${avatars == 1 ? '' : 's'}', style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: c.textSecondary)),
                   ],
                 ),
               ],
@@ -391,7 +390,7 @@ class _AchievementCard extends ConsumerWidget {
     final done = status.done;
     final ratio = all ? 1.0 : (status.progress / status.target).clamp(0.0, 1.0);
     return SoftCard(
-      padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+      padding: Insets.cardCompact,
       child: Row(
         children: [
           Container(
@@ -408,12 +407,12 @@ class _AchievementCard extends ConsumerWidget {
                 // The title, then one dot per tier (filled once claimed) instead of a second fraction.
                 Row(
                   children: [
-                    Flexible(child: Text(f.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15))),
+                    Flexible(child: Text(f.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body))),
                     if (f.steps.length > 1) ...[const SizedBox(width: 8), _TierDots(claimed: status.claimedSteps, total: f.steps.length)],
                   ],
                 ),
                 const SizedBox(height: 2),
-                Text(all ? 'Every tier claimed' : status.description, style: TextStyle(fontSize: 12.5, color: c.textSecondary)),
+                Text(all ? 'Every tier claimed' : status.description, style: TextStyle(fontSize: TypeSize.footnote, color: c.textSecondary)),
                 // A ready tier needs no full bar next to its Claim button.
                 if (!done) ...[
                 const SizedBox(height: 8),
@@ -422,8 +421,8 @@ class _AchievementCard extends ConsumerWidget {
                     Expanded(child: ProgressBar(value: ratio, height: 6, color: all ? Brand.success : null)),
                     const SizedBox(width: 8),
                     Text(
-                      all ? 'Done' : '${groupThousands(status.progress.clamp(0, status.target))} / ${groupThousands(status.target)}',
-                      style: TextStyle(fontSize: 11.5, color: c.textSecondary, fontWeight: FontWeight.w600, fontFeatures: const [FontFeature.tabularFigures()]),
+                      all ? 'Done' : '${formatCount(status.progress.clamp(0, status.target))} / ${formatCount(status.target)}',
+                      style: TextStyle(fontSize: TypeSize.caption, color: c.textSecondary, fontWeight: FontWeight.w600, fontFeatures: tabularFigures),
                     ),
                   ],
                 ),
@@ -436,16 +435,16 @@ class _AchievementCard extends ConsumerWidget {
                     runSpacing: 4,
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
-                      Text('Reward', style: TextStyle(fontSize: 11.5, color: c.textTertiary, fontWeight: FontWeight.w500)),
-                      if (step!.coins > 0) Amount(currency: Currency.coins, value: groupThousands(step.coins), size: 13, fontSize: 12, weight: FontWeight.w600),
-                      if (step.tickets > 0) Amount(currency: Currency.tickets, value: step.tickets, size: 13, fontSize: 12, weight: FontWeight.w600),
+                      Text('Reward', style: TextStyle(fontSize: TypeSize.caption, color: c.textTertiary, fontWeight: FontWeight.w500)),
+                      if (step!.coins > 0) Amount(currency: Currency.coins, value: formatCount(step.coins), size: 13, fontSize: TypeSize.caption, weight: FontWeight.w600),
+                      if (step.tickets > 0) Amount(currency: Currency.tickets, value: step.tickets, size: 13, fontSize: TypeSize.caption, weight: FontWeight.w600),
                       if (step.avatarKey != null)
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             AvatarCircle(avatarKey: step.avatarKey, size: 16),
                             const SizedBox(width: 4),
-                            Text('Avatar', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: c.textPrimary)),
+                            Text('Avatar', style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600, color: c.textPrimary)),
                           ],
                         ),
                     ],
@@ -456,7 +455,7 @@ class _AchievementCard extends ConsumerWidget {
           ),
           if (all) ...[
             const SizedBox(width: 12),
-            const Icon(CupertinoIcons.checkmark_circle_fill, color: Brand.success, size: 22),
+            const Icon(AppIcons.checkmarkCircleFill, color: Brand.success, size: 22),
           ] else if (done) ...[
             const SizedBox(width: 12),
             BigButton(label: 'Claim', height: 34, expand: false, onTap: () => _claim(context, ref)),

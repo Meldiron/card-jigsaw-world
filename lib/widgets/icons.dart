@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../core/numbers.dart';
 import '../core/theme/tokens.dart';
 import '../models/models.dart';
 
@@ -22,14 +23,16 @@ class AvatarDef {
 
 /// Semantic icon system. Every pictogram in the app comes from here so the
 /// visual language stays consistent: drawn currency marks (coin, ticket,
-/// hint) and Material Symbols for everything else.
+/// hint), SF-style Cupertino symbols wherever iOS has one, and Material
+/// Symbols only where it has none (wheel, piggy bank, puzzle piece, VIP,
+/// categories, board tiers).
 class AppIcons {
   AppIcons._();
 
   // Navigation / sections
   static const home = CupertinoIcons.house_fill;
   static const library = CupertinoIcons.square_grid_2x2_fill;
-  static const events = Icons.redeem_rounded;
+  static const events = CupertinoIcons.gift_fill;
   /// Quests tab (daily and weekly quests plus live events).
   static const quests = CupertinoIcons.flag_fill;
   static const questsOutline = CupertinoIcons.flag;
@@ -37,15 +40,15 @@ class AppIcons {
   static const profile = CupertinoIcons.person_crop_circle_fill;
 
   // Meta features
-  static const dailyGift = Icons.redeem_rounded;
+  static const dailyGift = CupertinoIcons.gift_fill;
   static const wheel = Icons.donut_large_rounded;
   static const piggy = Icons.savings_rounded;
-  static const dailyPuzzle = Icons.today_rounded;
-  static const streak = Icons.local_fire_department_rounded;
-  static const xp = Icons.auto_awesome_rounded;
+  static const dailyPuzzle = CupertinoIcons.calendar_today;
+  static const streak = CupertinoIcons.flame_fill;
+  static const xp = CupertinoIcons.sparkles;
   static const star = CupertinoIcons.star_fill;
   static const starOutline = CupertinoIcons.star;
-  static const trophy = Icons.emoji_events_rounded;
+  static const trophy = CupertinoIcons.chart_bar_alt_fill;
   static const crown = Icons.workspace_premium_rounded;
   static const vip = Icons.workspace_premium_rounded;
   static const lock = CupertinoIcons.lock_fill;
@@ -54,19 +57,19 @@ class AppIcons {
   static const photo = CupertinoIcons.photo_on_rectangle;
   static const camera = CupertinoIcons.camera_fill;
   static const credit = CupertinoIcons.camera;
-  static const community = Icons.public_rounded;
+  static const community = CupertinoIcons.globe;
   static const friends = CupertinoIcons.person_2_fill;
   static const addFriend = CupertinoIcons.person_add_solid;
   static const report = CupertinoIcons.exclamationmark_bubble;
   static const block = CupertinoIcons.hand_raised;
   static const copy = CupertinoIcons.doc_on_doc;
-  static const video = Icons.play_circle_fill_rounded;
-  static const bundle = Icons.card_giftcard_rounded;
+  static const video = CupertinoIcons.play_circle_fill;
+  static const bundle = CupertinoIcons.cube_box_fill;
   static const puzzle = Icons.extension_rounded;
-  static const bigBoard = Icons.grid_on_rounded;
+  static const bigBoard = CupertinoIcons.square_grid_4x3_fill;
 
   /// Painting: cards start in black and white and get their colour back as they lock.
-  static const painting = Icons.palette_rounded;
+  static const painting = CupertinoIcons.paintbrush_fill;
 
   /// Zoomed-in giant board: back to the whole board.
   static const wholeBoard = CupertinoIcons.arrow_down_right_arrow_up_left;
@@ -83,14 +86,14 @@ class AppIcons {
 
   /// Points at a selected card outside the zoomed view.
   static const towards = CupertinoIcons.arrow_up;
-  static const level = Icons.military_tech_rounded;
+  static const level = CupertinoIcons.rosette;
   static const swaps = CupertinoIcons.arrow_right_arrow_left;
   static const time = CupertinoIcons.time;
   static const save = CupertinoIcons.cloud_upload_fill;
   static const signal = CupertinoIcons.antenna_radiowaves_left_right;
-  static const wave = Icons.waving_hand_rounded;
+  static const wave = CupertinoIcons.hand_raised_fill;
   static const sparkle = CupertinoIcons.sparkles;
-  static const balloon = Icons.celebration_rounded;
+  static const balloon = CupertinoIcons.sparkles;
   static const image = CupertinoIcons.photo;
   static const mail = CupertinoIcons.envelope_fill;
   static const receipt = CupertinoIcons.doc_plaintext;
@@ -106,10 +109,84 @@ class AppIcons {
   static const group = CupertinoIcons.square_on_square;
 
   // Boosters
-  static const undo = Icons.undo_rounded;
-  static const peek = Icons.visibility_rounded;
-  static const hint = Icons.lightbulb_rounded;
-  static const magic = Icons.auto_fix_high_rounded;
+  static const undo = CupertinoIcons.arrow_uturn_left;
+  static const peek = CupertinoIcons.eye_fill;
+  static const hint = CupertinoIcons.lightbulb_fill;
+  static const magic = CupertinoIcons.wand_stars;
+
+  // Interface glyphs used across screens (every icon in the app is named here).
+  static const allModes = CupertinoIcons.square_grid_2x2;
+  static const appleLogo = Icons.apple;
+  static const arrowCounterclockwise = CupertinoIcons.arrow_counterclockwise;
+  static const arrowRight = CupertinoIcons.arrow_right;
+  static const back = CupertinoIcons.back;
+  static const bag = CupertinoIcons.bag;
+  static const bagFill = CupertinoIcons.bag_fill;
+  static const bellFill = CupertinoIcons.bell_fill;
+  static const checkmark = CupertinoIcons.checkmark;
+  static const checkmarkAlt = CupertinoIcons.checkmark_alt;
+  static const chevronRight = CupertinoIcons.chevron_right;
+  static const clockFill = CupertinoIcons.clock_fill;
+  static const coinGlyph = Icons.monetization_on_rounded;
+  static const collector = CupertinoIcons.rectangle_on_rectangle_angled;
+  static const devicePhonePortrait = CupertinoIcons.device_phone_portrait;
+  static const docText = CupertinoIcons.doc_text;
+  static const earlyBird = CupertinoIcons.sunrise_fill;
+  static const eye = CupertinoIcons.eye;
+  static const gearAltFill = CupertinoIcons.gear_alt_fill;
+  static const gift = CupertinoIcons.gift;
+  static const house = CupertinoIcons.house;
+  static const listBullet = CupertinoIcons.list_bullet;
+  static const lockShield = CupertinoIcons.lock_shield;
+  static const marathon = CupertinoIcons.hourglass;
+  static const modeCards = CupertinoIcons.rectangle_stack_fill;
+  static const modeHexagons = CupertinoIcons.hexagon_fill;
+  static const modeSquares = CupertinoIcons.square_fill;
+  static const modeTriangles = CupertinoIcons.triangle_fill;
+  static const musicNote2 = CupertinoIcons.music_note_2;
+  static const nightOwl = CupertinoIcons.moon_fill;
+  static const noHints = CupertinoIcons.lightbulb_slash_fill;
+  static const pauseFill = CupertinoIcons.pause_fill;
+  static const pencil = CupertinoIcons.pencil;
+  static const person2 = CupertinoIcons.person_2;
+  static const personCropCircle = CupertinoIcons.person_crop_circle;
+  static const playFill = CupertinoIcons.play_fill;
+  static const plus = CupertinoIcons.plus;
+  static const questionCircle = CupertinoIcons.question_circle;
+  static const search = CupertinoIcons.search;
+  static const shuffle = CupertinoIcons.shuffle;
+  static const sliderHorizontal3 = CupertinoIcons.slider_horizontal_3;
+  static const speaker2Fill = CupertinoIcons.speaker_2_fill;
+  static const speakerSlash = CupertinoIcons.speaker_slash;
+  static const speakerSlashFill = CupertinoIcons.speaker_slash_fill;
+  static const speed = CupertinoIcons.timer;
+  static const squareArrowRight = CupertinoIcons.square_arrow_right;
+  static const squareGrid2x2 = CupertinoIcons.square_grid_2x2;
+  static const starHoarder = CupertinoIcons.star_circle_fill;
+  static const tapToPlace = CupertinoIcons.hand_draw_fill;
+  static const ticketGlyph = Icons.confirmation_number_rounded;
+  static const trash = CupertinoIcons.trash;
+  static const waveform = CupertinoIcons.waveform;
+  static const xmark = CupertinoIcons.xmark;
+  static const xmarkCircle = CupertinoIcons.xmark_circle;
+  // Added for glyphs the screen batches introduced.
+  static const arrowUpLeftArrowDownRight = CupertinoIcons.arrow_up_left_arrow_down_right;
+  static const arrowUpRight = CupertinoIcons.arrow_up_right;
+  static const bell = CupertinoIcons.bell;
+  static const checkmarkCircleFill = CupertinoIcons.checkmark_circle_fill;
+  static const circle = CupertinoIcons.circle;
+  static const circleLefthalfFill = CupertinoIcons.circle_lefthalf_fill;
+  static const clock = CupertinoIcons.clock;
+  static const delete = CupertinoIcons.delete;
+  static const docPlaintext = CupertinoIcons.doc_plaintext;
+  static const ellipsis = CupertinoIcons.ellipsis;
+  static const flag = CupertinoIcons.flag;
+  static const infoCircle = CupertinoIcons.info_circle;
+  static const musicNote = CupertinoIcons.music_note;
+  static const play = CupertinoIcons.play;
+  static const speaker2 = CupertinoIcons.speaker_2;
+  static const squareArrowLeft = CupertinoIcons.square_arrow_left;
+  static const timer = CupertinoIcons.timer;
 
   /// Icon for a pack category chip, or none: themed categories (Nature,
   /// Cities, Abstract...) are plain words, like the Library's category chips;
@@ -408,7 +485,7 @@ class Amount extends StatelessWidget {
     this.color,
     this.prefix = '',
     this.suffix = '',
-    this.weight = FontWeight.w900,
+    this.weight = FontWeight.w700,
   });
   final Currency currency;
   final Object value;
@@ -426,15 +503,23 @@ class Amount extends StatelessWidget {
       children: [
         currencyIcon(currency, size: size),
         SizedBox(width: size * 0.3),
-        Text('$prefix$value$suffix', style: TextStyle(fontWeight: weight, fontSize: fontSize ?? size * 0.95, color: color ?? context.colors.textPrimary)),
+        Text('$prefix${value is int ? formatCount(value as int) : value}$suffix', style: TextStyle(fontWeight: weight, fontSize: fontSize ?? size * 0.95, color: color ?? context.colors.textPrimary, fontFeatures: tabularFigures)),
       ],
     );
   }
 }
 
 /// Rounded-square icon tile used by quick actions, boosters and list rows.
+/// Four sizes only, with a radius that follows the size (30%, the iOS
+/// continuous-corner proportion): [small] leads a list row, [medium] leads a
+/// card, [tool] is a toolbar button, [large] heads a sheet.
 class IconTile extends StatelessWidget {
-  const IconTile({super.key, required this.icon, this.size = 40, this.gradient, this.color, this.iconColor = Colors.white, this.radius = 12, this.child});
+  const IconTile({super.key, required this.icon, this.size = medium, this.gradient, this.color, this.iconColor = Colors.white, double? radius, this.child}) : radius = radius ?? size * 0.3;
+  static const small = 32.0;
+  static const medium = 40.0;
+  static const tool = 48.0;
+  static const large = 64.0;
+
   final IconData icon;
   final double size;
   final Gradient? gradient;

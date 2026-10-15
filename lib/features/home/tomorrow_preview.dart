@@ -58,7 +58,7 @@ class _TomorrowPreviewState extends State<TomorrowPreview> {
     final hash = widget.puzzle.blurhash;
     return SoftCard(
       key: const ValueKey('home-tomorrow'),
-      padding: const EdgeInsets.fromLTRB(12, 12, 16, 12),
+      padding: Insets.cardCompact,
       child: Row(
         children: [
           ClipRRect(
@@ -75,9 +75,9 @@ class _TomorrowPreviewState extends State<TomorrowPreview> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text("Tomorrow's daily puzzle", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
+                const Text("Tomorrow's daily puzzle", style: TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body)),
                 const SizedBox(height: 2),
-                Text('Opens in ${Goals.formatLeft(left)}', style: TextStyle(color: c.textSecondary, fontSize: 13)),
+                Text('Opens in ${Goals.formatLeft(left)}', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote)),
               ],
             ),
           ),

@@ -13,7 +13,6 @@ import '../../state/auth.dart';
 import '../../state/sync.dart';
 import '../../state/catalog.dart';
 import '../../models/models.dart';
-import 'stats.dart' show formatCount;
 import '../../state/purchases.dart';
 import '../../state/reminders.dart';
 import '../../state/settings.dart';
@@ -54,7 +53,7 @@ class SettingsScreen extends ConsumerWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.only(left: 4, bottom: 8),
-                child: Text(title.toUpperCase(), style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 0.6, color: c.textTertiary)),
+                child: Text(title.toUpperCase(), style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600, letterSpacing: 0.6, color: c.textTertiary)),
               ),
               SoftCard(
                 padding: EdgeInsets.zero,
@@ -75,7 +74,7 @@ class SettingsScreen extends ConsumerWidget {
       extendBodyBehindAppBar: true,
       appBar: GlassAppBar(
         title: const Text('Settings'),
-        leading: Padding(padding: const EdgeInsets.only(left: 12), child: RoundIconButton(icon: CupertinoIcons.back, size: 38, onTap: () => context.pop())),
+        leading: Padding(padding: const EdgeInsets.only(left: 12), child: RoundIconButton(icon: AppIcons.back, size: 38, onTap: () => context.pop())),
       ),
       body: ListView(
         physics: const BouncingScrollPhysics(),
@@ -83,7 +82,7 @@ class SettingsScreen extends ConsumerWidget {
         children: [
           group('Appearance', [
             _SegRow(
-              icon: CupertinoIcons.circle_lefthalf_fill,
+              icon: AppIcons.circleLefthalfFill,
               label: 'Theme',
               value: s.themeMode,
               options: const {ThemeMode.system: 'Auto', ThemeMode.light: 'Light', ThemeMode.dark: 'Dark'},
@@ -91,17 +90,17 @@ class SettingsScreen extends ConsumerWidget {
             ),
           ]),
           group('Sound', [
-            _SwitchRow(icon: CupertinoIcons.music_note, label: 'Music', value: s.music, onChanged: n.setMusic),
-            _SwitchRow(icon: CupertinoIcons.speaker_2, label: 'Sound effects', value: s.sound, onChanged: n.setSound),
-            _SwitchRow(icon: CupertinoIcons.waveform, label: 'Haptics', value: s.haptics, onChanged: n.setHaptics),
+            _SwitchRow(icon: AppIcons.musicNote, label: 'Music', value: s.music, onChanged: n.setMusic),
+            _SwitchRow(icon: AppIcons.speaker2, label: 'Sound effects', value: s.sound, onChanged: n.setSound),
+            _SwitchRow(icon: AppIcons.waveform, label: 'Haptics', value: s.haptics, onChanged: n.setHaptics),
           ]),
           group('Gameplay', [
-            _SwitchRow(icon: CupertinoIcons.timer, label: 'Show timer', value: s.showTimer, onChanged: n.setShowTimer),
+            _SwitchRow(icon: AppIcons.timer, label: 'Show timer', value: s.showTimer, onChanged: n.setShowTimer),
             // Reminders are local iOS notifications; the rows are hidden elsewhere.
             if (caps.notifications) ...[
               _SwitchRow(
                 key: const ValueKey('settings-reminders'),
-                icon: CupertinoIcons.bell,
+                icon: AppIcons.bell,
                 label: 'Daily reminders',
                 subtitle: 'One a day with the daily puzzle',
                 value: s.reminders,
@@ -110,7 +109,7 @@ class SettingsScreen extends ConsumerWidget {
               if (s.reminders)
                 _ValueRow(
                   key: const ValueKey('settings-reminder-time'),
-                  icon: CupertinoIcons.clock,
+                  icon: AppIcons.clock,
                   label: 'Reminder time',
                   value: _minutesOfDay(s.reminderMinutes).format(context),
                   onTap: () => _pickReminderTime(context, ref, s.reminderMinutes),
@@ -119,7 +118,7 @@ class SettingsScreen extends ConsumerWidget {
               if (s.reminders)
                 _SwitchRow(
                   key: const ValueKey('settings-event-reminders'),
-                  icon: CupertinoIcons.flag,
+                  icon: AppIcons.flag,
                   label: 'New events',
                   subtitle: 'The evening before an event opens',
                   value: ref.watch(eventRemindersProvider),
@@ -131,7 +130,7 @@ class SettingsScreen extends ConsumerWidget {
             ],
           ]),
           group('Account', [
-            _NavRow(icon: CupertinoIcons.person_crop_circle, label: isGuest ? 'Sign in or create account' : 'Manage account', onTap: () => context.push('/account')),
+            _NavRow(icon: AppIcons.personCropCircle, label: isGuest ? 'Sign in or create account' : 'Manage account', onTap: () => context.push('/account')),
             _NavRow(key: const ValueKey('settings-blocked'), icon: AppIcons.block, label: 'Blocked players', onTap: () => showBlockedPlayersSheet(context)),
             // Pack codes (giveaways, special posts): a row on the web only. On iPhone a code opens
             // through its link (`/redeem?code=`, docs/deep-links.md), never from a menu (owner, 2026-10-15).
@@ -145,15 +144,15 @@ class SettingsScreen extends ConsumerWidget {
             // Gift codes and restores go through StoreKit; both rows are
             // hidden where there is no store (web).
             if (caps.purchases) _NavRow(
-              icon: CupertinoIcons.gift,
+              icon: AppIcons.gift,
               label: 'Redeem a gift code',
               onTap: () async {
                 final opened = await ref.read(purchaseServiceProvider).presentCodeRedemptionSheet();
-                if (!opened && context.mounted) showToast(context, 'Gift codes can be redeemed on iPhone and iPad through the App Store.', icon: CupertinoIcons.gift);
+                if (!opened && context.mounted) showToast(context, 'Gift codes can be redeemed on iPhone and iPad through the App Store.', icon: AppIcons.gift);
               },
             ),
             if (caps.purchases) _NavRow(
-              icon: CupertinoIcons.bag,
+              icon: AppIcons.bag,
               label: 'Restore purchases',
               onTap: () async {
                 showToast(context, 'Restoring purchases…', icon: AppIcons.receipt);
@@ -175,32 +174,32 @@ class SettingsScreen extends ConsumerWidget {
             ),
           ]),
           group('About', [
-            _NavRow(icon: CupertinoIcons.doc_text, label: 'Image credits and licences', onTap: () => _showCredits(context)),
+            _NavRow(icon: AppIcons.docText, label: 'Image credits and licences', onTap: () => _showCredits(context)),
             _NavRow(
               key: const ValueKey('settings-support'), external: true,
-              icon: CupertinoIcons.question_circle,
+              icon: AppIcons.questionCircle,
               label: 'Support',
               onTap: () async {
                 if (!await openLink(AppLinks.support) && context.mounted) showToast(context, AppLinks.supportEmail, icon: AppIcons.mail);
               },
             ),
-            _NavRow(key: const ValueKey('settings-privacy'), external: true, icon: CupertinoIcons.lock_shield, label: 'Privacy policy', onTap: () => _open(context, AppLinks.privacyPolicy)),
-            _NavRow(key: const ValueKey('settings-terms'), external: true, icon: CupertinoIcons.doc_plaintext, label: 'Terms of use', onTap: () => _open(context, AppLinks.termsOfUse)),
+            _NavRow(key: const ValueKey('settings-privacy'), external: true, icon: AppIcons.lockShield, label: 'Privacy policy', onTap: () => _open(context, AppLinks.privacyPolicy)),
+            _NavRow(key: const ValueKey('settings-terms'), external: true, icon: AppIcons.docPlaintext, label: 'Terms of use', onTap: () => _open(context, AppLinks.termsOfUse)),
             // App Store features (gift codes, reviews) exist on Apple platforms only.
             if (caps.giftCodes)
               _NavRow(
                 key: const ValueKey('settings-rate'), external: true,
-                icon: CupertinoIcons.star,
+                icon: AppIcons.starOutline,
                 label: 'Rate Card Jigsaw World',
                 onTap: () async {
                   var opened = false;
                   try {
                     opened = await launchUrl(appStoreReviewUrl, mode: LaunchMode.externalApplication);
                   } catch (_) {}
-                  if (!opened && context.mounted) showToast(context, 'The App Store could not open. Try again later.', icon: CupertinoIcons.star);
+                  if (!opened && context.mounted) showToast(context, 'The App Store could not open. Try again later.', icon: AppIcons.starOutline);
                 },
               ),
-            _InfoRow(key: const ValueKey('settings-version'), icon: CupertinoIcons.info_circle, label: 'Version', value: ref.watch(appVersionProvider).value ?? ''),
+            _InfoRow(key: const ValueKey('settings-version'), icon: AppIcons.infoCircle, label: 'Version', value: ref.watch(appVersionProvider).value ?? ''),
           ]),
         ],
       ),
@@ -225,7 +224,7 @@ class SettingsScreen extends ConsumerWidget {
     if (!context.mounted) return;
     if (granted) {
       final time = _minutesOfDay(ref.read(settingsProvider).reminderMinutes).format(context);
-      showToast(context, 'Daily reminder at $time', icon: CupertinoIcons.bell_fill);
+      showToast(context, 'Daily reminder at $time', icon: AppIcons.bellFill);
       return;
     }
     final open = await showAppAlert(
@@ -354,16 +353,16 @@ class _CreditsSheet extends ConsumerWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(sources[i].name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14.5)),
+                                Text(sources[i].name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body)),
                                 if (sources[i].licences.isNotEmpty)
-                                  Text(sources[i].licences.join(', '), style: TextStyle(fontSize: 12.5, color: c.textSecondary)),
+                                  Text(sources[i].licences.join(', '), style: TextStyle(fontSize: TypeSize.footnote, color: c.textSecondary)),
                               ],
                             ),
                           ),
                           const SizedBox(width: 12),
                           Text(
                             formatCount(sources[i].count),
-                            style: TextStyle(fontSize: 13, color: c.textTertiary, fontWeight: FontWeight.w600, fontFeatures: const [FontFeature.tabularFigures()]),
+                            style: TextStyle(fontSize: TypeSize.footnote, color: c.textTertiary, fontWeight: FontWeight.w600, fontFeatures: tabularFigures),
                           ),
                         ],
                       ),
@@ -375,7 +374,7 @@ class _CreditsSheet extends ConsumerWidget {
           const SizedBox(height: 12),
           Text(
             'Every picture names its author and licence on the difficulty and completion screens.',
-            style: TextStyle(color: c.textSecondary, fontSize: 13, height: 1.4),
+            style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote, height: 1.4),
           ),
         ],
       ),
@@ -413,8 +412,8 @@ class _Row extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(label, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
-                  if (subtitle != null) Text(subtitle!, style: TextStyle(fontSize: 12.5, color: context.colors.textSecondary)),
+                  Text(label, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body)),
+                  if (subtitle != null) Text(subtitle!, style: TextStyle(fontSize: TypeSize.footnote, color: context.colors.textSecondary)),
                 ],
               ),
             ),
@@ -453,7 +452,7 @@ class _SegRow<T extends Object> extends StatelessWidget {
           groupValue: value,
           backgroundColor: context.colors.boardBackground,
           thumbColor: context.colors.card,
-          children: {for (final e in options.entries) e.key: Padding(padding: const EdgeInsets.symmetric(horizontal: 8), child: Text(e.value, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)))},
+          children: {for (final e in options.entries) e.key: Padding(padding: const EdgeInsets.symmetric(horizontal: 8), child: Text(e.value, style: const TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600)))},
           onValueChanged: (v) => v == null ? null : onChanged(v),
         ),
       );
@@ -472,7 +471,7 @@ class _NavRow extends StatelessWidget {
         icon: icon,
         label: label,
         onTap: onTap,
-        trailing: Icon(external ? CupertinoIcons.arrow_up_right : CupertinoIcons.chevron_right, size: external ? 14 : 16, color: context.colors.textTertiary),
+        trailing: Icon(external ? AppIcons.arrowUpRight : AppIcons.chevronRight, size: external ? 14 : 16, color: context.colors.textTertiary),
       );
 }
 
@@ -491,9 +490,9 @@ class _ValueRow extends StatelessWidget {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(value, style: TextStyle(color: context.colors.textSecondary, fontSize: 15)),
+            Text(value, style: TextStyle(color: context.colors.textSecondary, fontSize: TypeSize.body)),
             const SizedBox(width: 6),
-            Icon(CupertinoIcons.chevron_right, size: 16, color: context.colors.textTertiary),
+            Icon(AppIcons.chevronRight, size: 16, color: context.colors.textTertiary),
           ],
         ),
       );
@@ -505,5 +504,5 @@ class _InfoRow extends StatelessWidget {
   final String label;
   final String value;
   @override
-  Widget build(BuildContext context) => _Row(icon: icon, label: label, trailing: Text(value, style: TextStyle(color: context.colors.textSecondary, fontSize: 15)));
+  Widget build(BuildContext context) => _Row(icon: icon, label: label, trailing: Text(value, style: TextStyle(color: context.colors.textSecondary, fontSize: TypeSize.body)));
 }
