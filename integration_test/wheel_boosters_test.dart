@@ -126,8 +126,9 @@ void main() {
     }
     await settle(tester, 1500);
     if (find.text('Got it').evaluate().isNotEmpty) await tapText(tester, 'Got it');
-    if (wonPeeks > 0) expect(find.text('$wonPeeks left'), findsWidgets);
-    if (wonMagics > 0) expect(find.text('$wonMagics left'), findsWidgets);
+    // Stock shows as a count on the tool's corner.
+    if (wonPeeks > 0) expect(find.descendant(of: find.byKey(const ValueKey('booster-peek')), matching: find.text('$wonPeeks')), findsOneWidget);
+    if (wonMagics > 0) expect(find.descendant(of: find.byKey(const ValueKey('booster-magic')), matching: find.text('$wonMagics')), findsOneWidget);
     await shot(tester, 'wb_04_booster_bar_stock');
 
     final coins = container(tester).read(profileProvider).value!.coins;

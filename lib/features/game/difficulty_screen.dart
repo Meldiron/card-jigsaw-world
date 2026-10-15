@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart' show setEquals;
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,6 +11,7 @@ import '../../core/haptics.dart';
 import '../../core/sfx.dart';
 import '../../core/theme/tokens.dart';
 import '../../game/board.dart';
+import '../../game/game_controller.dart' show formatDuration;
 import '../../game/image_loader.dart';
 import '../../models/models.dart';
 import '../../state/catalog.dart';
@@ -70,6 +72,16 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
 
   /// Decoded picture size (full resolution), once the image is in.
   Size? _imageSize;
+
+  /// The choices continue under the footer: it turns to glass with a
+  /// hairline, like an iOS toolbar over a list that scrolls beneath it.
+  bool _moreBelow = false;
+
+  void _onMetrics(ScrollMetrics m) {
+    if (m.axis != Axis.vertical) return;
+    final more = m.extentAfter > 0.5;
+    if (more != _moreBelow) setState(() => _moreBelow = more);
+  }
   String? _resolvedUrl;
   ImageStream? _stream;
   ImageStreamListener? _listener;
@@ -125,13 +137,6 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
     _stream = stream;
     _listener = listener;
     stream.addListener(listener);
-  }
-
-  /// `1600 × 1067 · landscape`
-  static String describeSize(Size s) {
-    final w = s.width.round(), h = s.height.round();
-    final orientation = w > h * 1.05 ? 'landscape' : (h > w * 1.05 ? 'portrait' : 'square');
-    return '$w × $h · $orientation';
   }
 
   Future<void> _discard(PuzzleProgress saved, BoardSpec savedSpec) async {
@@ -282,9 +287,70 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
     final xp = Economy.completionXp(spec.cells, 3, mode: mode, painting: painting);
     final maxTier = LevelRewards.maxTierIndex(profile?.level ?? 1) + 1;
     final boardAspect = spec.tiling.boardAspect(imageAspect);
+    // Short phones (SE, mini): a smaller preview, so every choice sits above Play.
+    final compact = MediaQuery.sizeOf(context).height < 740;
+
+    final footer = Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // What a 3-star solve pays, next to the button that starts it.
+        if (!giantLocked) ...[
+          _RewardsLine(coins: coins, xp: xp, piggy: Economy.piggyPerPuzzle),
+          const SizedBox(height: 10),
+        ],
+        // Shows the first-time intro of a shape or option that just opened.
+        UnlockIntroHost(
+          at: (path) => path == '/play/${widget.puzzleId}',
+          onTryHere: (u) => setState(() {
+            if (u.mode != null) _mode = u.mode!;
+            if (u == Unlock.painting) _painting = true;
+          }),
+        ),
+        if (giantLocked)
+          BigButton(
+            key: const ValueKey('giant-locked'),
+            label: 'Giant boards open at level ${Unlock.giant.level}',
+            kind: ButtonKind.secondary,
+            icon: AppIcons.lock,
+            onTap: () => showLockedInfo(context, ref, Unlock.giant),
+          )
+        else
+        BigButton(
+          label: saved != null
+              ? 'Continue · ${saved.moves} ${saved.moves == 1 ? 'move' : 'moves'} in'
+              : '${spec.cells} ${mode == GameMode.cards ? 'cards' : mode.label.toLowerCase()} · Play',
+          icon: CupertinoIcons.play_fill,
+          onTap: () {
+            // The default size follows normal boards only.
+            if (!spec.isGiant) {
+              final idx = spec.tierIndex < 0 ? 2 : spec.tierIndex;
+              ref.read(settingsProvider.notifier).setDefaultGrid(GridSpec.tiers[idx].cells);
+            }
+            // A saved board resumes the way it was saved, so only a new one carries the choice.
+            final flag = saved == null && painting ? '?painting=1' : '';
+            context.pushReplacement('/game/${widget.puzzleId}/${BoardCode.toPath(spec.fullCode)}$flag');
+          },
+        ),
+        if (saved != null) ...[const SizedBox(height: 8), BigButton(label: 'Discard progress', kind: ButtonKind.ghost, icon: CupertinoIcons.trash, onTap: () => _discard(saved, spec))],
+        if (widget.fromQuick) ...[
+          const SizedBox(height: 4),
+          BigButton(
+            key: const ValueKey('another-picture'),
+            label: 'Another picture',
+            kind: ButtonKind.ghost,
+            height: 40,
+            icon: CupertinoIcons.shuffle,
+            onTap: () => _anotherPicture(spec, painting),
+          ),
+        ],
+      ],
+    );
 
     return Scaffold(
       extendBodyBehindAppBar: true,
+      // The footer floats over the page and the choices scroll under it.
+      extendBody: true,
+      bottomNavigationBar: puzzle == null ? null : _GlassFooter(glass: _moreBelow, child: footer),
       appBar: GlassAppBar(
         leading: Padding(
           padding: const EdgeInsets.only(left: 12),
@@ -303,14 +369,21 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                   message: 'The link may be out of date, or the picture belongs to another player.',
                 )
               : const Loader())
-          : SafeArea(
-              top: false,
-              child: Column(
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(
+          : NotificationListener<ScrollMetricsNotification>(
+              onNotification: (n) {
+                if (n.depth == 0) _onMetrics(n.metrics);
+                return false;
+              },
+              child: NotificationListener<ScrollUpdateNotification>(
+                onNotification: (n) {
+                  if (n.depth == 0) _onMetrics(n.metrics);
+                  return false;
+                },
+                // The body's bottom padding is the footer's height.
+                child: Builder(
+                  builder: (context) => SingleChildScrollView(
                       physics: const BouncingScrollPhysics(),
-                      padding: EdgeInsets.fromLTRB(20, MediaQuery.paddingOf(context).top + kToolbarHeight + 4, 20, 12),
+                      padding: EdgeInsets.fromLTRB(20, MediaQuery.paddingOf(context).top + 4, 20, MediaQuery.paddingOf(context).bottom + 16),
                       child: Column(
                         children: [
                           // Preview in the real board's proportions with the
@@ -321,7 +394,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                             curve: Curves.easeOutCubic,
                             alignment: Alignment.topCenter,
                             child: ConstrainedBox(
-                              constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.32),
+                              constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * (compact ? 0.24 : 0.32)),
                               child: AspectRatio(
                                 aspectRatio: boardAspect,
                                 child: Container(
@@ -335,63 +408,13 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                                     children: [
                                       NetImage(url: puzzle.imageUrl, blurhash: puzzle.blurhash),
                                       CustomPaint(
-                                        painter: _CutOverlay(spec: spec, imageAspect: imageAspect, color: Colors.white.withValues(alpha: 0.7)),
-                                      ),
-                                      if (progress?.completed == true)
-                                        Positioned(
-                                          left: 12,
-                                          top: 12,
-                                          child: Glass(
-                                            dark: true,
-                                            radius: 999,
-                                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Stars(count: progress!.stars, size: 13),
-                                                const SizedBox(width: 6),
-                                                Text(
-                                                  'Best: ${progress.bestMoves ?? progress.moves} moves',
-                                                  style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      Positioned(
-                                        left: 12,
-                                        right: 12,
-                                        bottom: 12,
-                                        child: Glass(
-                                          dark: true,
-                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                          child: Row(
-                                            children: [
-                                              const Icon(AppIcons.credit, size: 13, color: Colors.white),
-                                              const SizedBox(width: 6),
-                                              Expanded(
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  children: [
-                                                    Text(
-                                                      '${puzzle.author} · ${puzzle.source}',
-                                                      maxLines: 1,
-                                                      overflow: TextOverflow.ellipsis,
-                                                      style: const TextStyle(color: Colors.white, fontSize: 11.5, fontWeight: FontWeight.w500),
-                                                    ),
-                                                    if (_imageSize != null)
-                                                      Text(
-                                                        describeSize(_imageSize!),
-                                                        maxLines: 1,
-                                                        overflow: TextOverflow.ellipsis,
-                                                        style: TextStyle(color: Colors.white.withValues(alpha: 0.72), fontSize: 10.5, fontWeight: FontWeight.w500),
-                                                      ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
+                                        // A board in progress: the cards not in place yet are dimmed, so the
+                                        // preview shows how far along it is.
+                                        painter: _CutOverlay(
+                                          spec: spec,
+                                          imageAspect: imageAspect,
+                                          color: Colors.white.withValues(alpha: 0.7),
+                                          placed: saved?.layout == null ? null : {for (var i = 0; i < saved!.layout!.length; i++) if (saved.layout![i] == i) i},
                                         ),
                                       ),
                                     ],
@@ -400,108 +423,108 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                               ),
                             ),
                           ).animate().fadeIn(duration: 120.ms),
-                          const SizedBox(height: 20),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text('Choose a mode', style: Theme.of(context).textTheme.headlineSmall),
-                          ),
-                          const SizedBox(height: 4),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              saved != null
-                                  ? 'A ${mode.label.toLowerCase()} ${spec.code} board${painting ? ' in Painting' : ''} is in progress. Continue it, or discard it to pick another mode or size.'
-                                  : 'Every mode cuts the picture differently. Trickier shapes pay more.',
-                              style: TextStyle(color: c.textSecondary, fontSize: 13),
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          Row(
-                            children: [
-                              for (final m in GameMode.values) ...[
-                                Expanded(
-                                  child: _ModeTile(
-                                    mode: m,
-                                    selected: m == mode,
-                                    enabled: saved == null,
-                                    locked: saved == null && !open.mode(m),
-                                    onTap: () => saved == null && !open.mode(m) ? showLockedInfo(context, ref, Unlocks.ofMode(m)!) : _pickMode(m),
-                                  ),
+                          const SizedBox(height: 6),
+                          // A solved picture: its best result, above the credit.
+                          if (progress?.completed == true) ...[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Stars(count: progress!.stars, size: 13),
+                                const SizedBox(width: 6),
+                                Text(
+                                  'Best ${progress.bestMoves ?? progress.moves} moves',
+                                  style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: c.textSecondary),
                                 ),
-                                if (m != GameMode.values.last) const SizedBox(width: 8),
                               ],
+                            ),
+                            const SizedBox(height: 2),
+                          ],
+                          // The credit the licence asks for, quietly under the picture.
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(AppIcons.credit, size: 12, color: c.textTertiary),
+                              const SizedBox(width: 5),
+                              Flexible(
+                                child: Text(
+                                  '${puzzle.author} · ${puzzle.source}',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(fontSize: 11.5, color: c.textTertiary),
+                                ),
+                              ),
                             ],
                           ),
-                          const SizedBox(height: 20),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text('Choose a board', style: Theme.of(context).textTheme.headlineSmall),
-                          ),
-                          const SizedBox(height: 4),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              giantLocked
-                                  ? 'Giant boards of 100 cards and more open at level ${Unlock.giant.level}. This pack is ready for you then.'
-                                  : giant
-                                  ? 'Giant boards of 100 cards and more, all open with this pack. Pinch to zoom in while you play.'
-                                  : 'Bigger boards pay more. Higher levels unlock larger boards, or unlock them now with coins.',
-                              style: TextStyle(color: c.textSecondary, fontSize: 13),
+                          SizedBox(height: compact ? 14 : 20),
+                          // A board in progress: what it is and how far along, instead of
+                          // pickers that cannot be used until it is discarded.
+                          if (saved != null) ...[
+                            _InProgressCard(spec: spec, saved: saved, painting: painting),
+                            const SizedBox(height: 10),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'Continue where you left off, or discard it to pick another mode or size.',
+                                style: TextStyle(color: c.textSecondary, fontSize: 13),
+                              ),
                             ),
+                          ] else ...[
+                          const _SectionLabel('Mode'),
+                          const SizedBox(height: 8),
+                          _ModeSegments(
+                            selected: mode,
+                            frozen: saved != null,
+                            isOpen: (m) => saved != null || open.mode(m),
+                            onTap: (m) => saved == null && !open.mode(m) ? showLockedInfo(context, ref, Unlocks.ofMode(m)!) : _pickMode(m),
                           ),
-                          const SizedBox(height: 12),
+                          SizedBox(height: compact ? 14 : 20),
+                          const _SectionLabel('Board'),
+                          if (giant) ...[
+                            const SizedBox(height: 2),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                giantLocked
+                                    ? 'Giant boards of 100 cards and more open at level ${Unlock.giant.level}. This pack is ready for you then.'
+                                    : 'Giant boards of 100 cards and more, all open with this pack. Pinch to zoom in while you play.',
+                                style: TextStyle(color: c.textSecondary, fontSize: 13),
+                              ),
+                            ),
+                          ],
+                          const SizedBox(height: 8),
+                          // Runs to the screen edges, so the next size peeks in as a hint to scroll.
                           SizedBox(
-                            height: 92,
-                            child: ListView.separated(
-                              scrollDirection: Axis.horizontal,
-                              physics: const BouncingScrollPhysics(),
-                              itemCount: tiers.length,
-                              separatorBuilder: (_, _) => const SizedBox(width: 8),
-                              itemBuilder: (_, i) {
-                                final t = tiers[i];
-                                final selected = t == spec;
-                                final locked = giant ? giantLocked : i >= maxTier && !profileN.hasTier(mode, i);
-                                final fg = selected ? Colors.white : (locked ? c.textTertiary : c.textPrimary);
-                                return Pressable(
-                                  onTap: saved != null
-                                      ? null
-                                      : locked
-                                      ? () => giant ? showLockedInfo(context, ref, Unlock.giant) : _offerUnlock(i, t)
-                                      : () {
-                                          Haptics.selection();
-                                          setState(() => _tier = t.tier);
-                                        },
-                                  child: Opacity(
-                                    opacity: saved != null && !selected ? 0.45 : 1,
-                                    child: AnimatedContainer(
-                                      duration: const Duration(milliseconds: 180),
-                                      width: 84,
-                                      padding: const EdgeInsets.symmetric(vertical: 10),
-                                      decoration: BoxDecoration(
-                                        color: selected ? context.accent : c.card,
-                                        borderRadius: BorderRadius.circular(Radii.md),
-                                        border: Border.all(color: selected ? context.accent : c.stroke),
-                                      ),
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          // Giant sizes borrow the top four tier marks.
-                                          Icon(locked ? AppIcons.lock : AppIcons.tier(giant ? 4 + i : i), size: 22, color: selected ? Colors.white : (locked ? c.textTertiary : context.accent)),
-                                          const SizedBox(height: 4),
-                                          Text(
-                                            t.code,
-                                            style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15, color: fg),
-                                          ),
-                                          Text(t.label, style: TextStyle(fontSize: 11, color: selected ? Colors.white.withValues(alpha: 0.85) : (locked ? c.textTertiary : c.textSecondary))),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
+                            height: 56,
+                            child: OverflowBox(
+                              maxWidth: MediaQuery.sizeOf(context).width,
+                              child: ListView.separated(
+                                scrollDirection: Axis.horizontal,
+                                physics: const BouncingScrollPhysics(),
+                                padding: const EdgeInsets.symmetric(horizontal: 20),
+                                itemCount: tiers.length,
+                                separatorBuilder: (_, _) => const SizedBox(width: 8),
+                                itemBuilder: (_, i) {
+                                  final t = tiers[i];
+                                  final locked = giant ? giantLocked : i >= maxTier && !profileN.hasTier(mode, i);
+                                  return _BoardChip(
+                                    spec: t,
+                                    selected: t == spec,
+                                    locked: locked,
+                                    frozen: saved != null,
+                                    onTap: saved != null
+                                        ? null
+                                        : locked
+                                        ? () => giant ? showLockedInfo(context, ref, Unlock.giant) : _offerUnlock(i, t)
+                                        : () {
+                                            Haptics.selection();
+                                            setState(() => _tier = t.tier);
+                                          },
+                                  );
+                                },
+                              ),
                             ),
                           ),
-                          const SizedBox(height: 16),
+                          SizedBox(height: compact ? 12 : 16),
                           _PaintingTile(
                             on: painting,
                             enabled: saved == null,
@@ -512,114 +535,11 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                               setState(() => _painting = v);
                             },
                           ),
-                          const SizedBox(height: 16),
-                          // One row: caption with the mode multiplier, then
-                          // three equal chips that wrap on narrow screens.
-                          SoftCard(
-                            padding: const EdgeInsets.fromLTRB(16, 12, 16, 14),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      'Rewards',
-                                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12, letterSpacing: 0.2, color: c.textSecondary),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Chip2(label: 'x${_fmtMult(mode.multiplier)}', color: c.accentTint, foreground: context.accent),
-                                    if (painting) ...[
-                                      const SizedBox(width: 6),
-                                      Chip2(key: const ValueKey('painting-bonus'), label: 'Painting x${_fmtMult(Economy.paintingMultiplier)}', color: c.accentTint, foreground: context.accent),
-                                    ],
-                                    const SizedBox(width: 8),
-                                    Expanded(
-                                      child: Text('for 3 stars', maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.right, style: TextStyle(fontSize: 11.5, color: c.textTertiary)),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 10),
-                                LayoutBuilder(
-                                  builder: (context, cons) {
-                                    const gap = 12.0;
-                                    // Three across when they fit; on a 320 pt screen the third
-                                    // chip wraps to a second row.
-                                    final width = math.max(92.0, (cons.maxWidth - 2 * gap) / 3).floorToDouble();
-                                    return Wrap(
-                                      spacing: gap,
-                                      runSpacing: gap,
-                                      children: [
-                                        _RewardChip(
-                                          width: width,
-                                          child: Amount(currency: Currency.coins, value: coins, prefix: 'up to ', size: 16, fontSize: 13, weight: FontWeight.w600),
-                                        ),
-                                        _RewardChip(width: width, icon: AppIcons.xp, label: '+$xp XP'),
-                                        _RewardChip(width: width, icon: AppIcons.piggy, label: '+${Economy.piggyPerPuzzle}'),
-                                      ],
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
+                          ],
                         ],
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        // Shows the first-time intro of a shape or option that just opened.
-                        UnlockIntroHost(
-                          at: (path) => path == '/play/${widget.puzzleId}',
-                          onTryHere: (u) => setState(() {
-                            if (u.mode != null) _mode = u.mode!;
-                            if (u == Unlock.painting) _painting = true;
-                          }),
-                        ),
-                        if (giantLocked)
-                          BigButton(
-                            key: const ValueKey('giant-locked'),
-                            label: 'Giant boards open at level ${Unlock.giant.level}',
-                            kind: ButtonKind.secondary,
-                            icon: AppIcons.lock,
-                            onTap: () => showLockedInfo(context, ref, Unlock.giant),
-                          )
-                        else
-                        BigButton(
-                          label: saved != null
-                              ? 'Continue · ${saved.moves} ${saved.moves == 1 ? 'move' : 'moves'} in'
-                              : '${spec.cells} ${mode == GameMode.cards ? 'cards' : mode.label.toLowerCase()} · Play',
-                          icon: CupertinoIcons.play_fill,
-                          onTap: () {
-                            // The default size follows normal boards only.
-                            if (!spec.isGiant) {
-                              final idx = spec.tierIndex < 0 ? 2 : spec.tierIndex;
-                              ref.read(settingsProvider.notifier).setDefaultGrid(GridSpec.tiers[idx].cells);
-                            }
-                            // A saved board resumes the way it was saved, so only a new one carries the choice.
-                            final flag = saved == null && painting ? '?painting=1' : '';
-                            context.pushReplacement('/game/${widget.puzzleId}/${BoardCode.toPath(spec.fullCode)}$flag');
-                          },
-                        ),
-                        if (saved != null) ...[const SizedBox(height: 8), BigButton(label: 'Discard progress', kind: ButtonKind.ghost, icon: CupertinoIcons.trash, onTap: () => _discard(saved, spec))],
-                        if (widget.fromQuick) ...[
-                          const SizedBox(height: 4),
-                          BigButton(
-                            key: const ValueKey('another-picture'),
-                            label: 'Another picture',
-                            kind: ButtonKind.ghost,
-                            height: 40,
-                            icon: CupertinoIcons.shuffle,
-                            onTap: () => _anotherPicture(spec, painting),
-                          ),
-                        ],
-                      ],
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
     );
@@ -648,10 +568,11 @@ class _PaintingTile extends StatelessWidget {
       onTap: locked ? onLocked : (enabled ? () => onChanged(!on) : null),
       scale: 0.99,
       child: Opacity(
-        opacity: locked ? 0.6 : (enabled || on ? 1 : 0.45),
+        // Locked is said by the lock and the level, not by fading the text.
+        opacity: locked ? 1 : (enabled || on ? 1 : 0.45),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 180),
-          padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
+          padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
           decoration: BoxDecoration(
             color: on ? c.accentTint : c.card,
             borderRadius: BorderRadius.circular(Radii.md),
@@ -659,16 +580,19 @@ class _PaintingTile extends StatelessWidget {
           ),
           child: Row(
             children: [
-              const IconTile(icon: AppIcons.painting, size: 36, radius: 10),
+              const IconTile(icon: AppIcons.painting, size: 32, radius: 9),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Painting · x${_DifficultyScreenState._fmtMult(Economy.paintingMultiplier)}', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                    // Keyed while on: the bonus is part of the rewards in the footer.
+                    Text('Painting · x${_DifficultyScreenState._fmtMult(Economy.paintingMultiplier)}', key: on ? const ValueKey('painting-bonus') : null, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
                     const SizedBox(height: 2),
                     Text(
-                      locked ? 'Opens at level ${Unlock.painting.level}. Cards start in black and white and get their colour back as they lock.' : 'Cards start in black and white and get their colour back as they lock.',
+                      locked ? 'Opens at level ${Unlock.painting.level}' : 'Colour returns as cards lock',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(fontSize: 12.5, height: 1.3, color: c.textSecondary),
                     ),
                   ],
@@ -679,64 +603,6 @@ class _PaintingTile extends StatelessWidget {
                 Icon(AppIcons.lock, size: 18, color: c.textTertiary)
               else
                 CupertinoSwitch(value: on, activeTrackColor: Brand.success, onChanged: enabled ? onChanged : null),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _ModeTile extends StatelessWidget {
-  const _ModeTile({required this.mode, required this.selected, required this.onTap, this.enabled = true, this.locked = false});
-  final GameMode mode;
-  final bool selected;
-  final bool enabled;
-
-  /// Opens at a higher level: drawn quietly with the level; a tap explains.
-  final bool locked;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.colors;
-    final fg = selected ? Colors.white : (locked ? c.textTertiary : c.textPrimary);
-    return Pressable(
-      key: ValueKey('mode-${mode.code}'),
-      onTap: enabled ? onTap : null,
-      child: Opacity(
-        opacity: enabled || selected ? (locked ? 0.7 : 1) : 0.45,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 180),
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
-          decoration: BoxDecoration(
-            color: selected ? context.accent : c.card,
-            borderRadius: BorderRadius.circular(Radii.md),
-            border: Border.all(color: selected ? context.accent : c.stroke),
-          ),
-          child: Column(
-            children: [
-              SizedBox(
-                width: 40,
-                height: 40,
-                child: locked
-                    ? Icon(AppIcons.lock, size: 22, color: c.textTertiary)
-                    : CustomPaint(
-                        painter: _ModePreview(mode: mode, color: selected ? Colors.white : context.accent),
-                      ),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                mode.label,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 12.5, color: fg),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                locked ? 'Level ${Unlocks.ofMode(mode)!.level}' : 'x${_DifficultyScreenState._fmtMult(mode.multiplier)}',
-                style: TextStyle(fontSize: 11, color: selected ? Colors.white.withValues(alpha: 0.85) : (locked ? c.textTertiary : c.textSecondary)),
-              ),
             ],
           ),
         ),
@@ -784,53 +650,17 @@ class _ModePreview extends CustomPainter {
   bool shouldRepaint(_ModePreview old) => old.mode != mode || old.color != color;
 }
 
-/// One reward in the rewards row: a fixed-width, centred pill with either
-/// an icon and a label or a ready-made [Amount].
-class _RewardChip extends StatelessWidget {
-  const _RewardChip({required this.width, this.icon, this.label, this.child}) : assert(child != null || (icon != null && label != null));
-  final double width;
-  final IconData? icon;
-  final String? label;
-  final Widget? child;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.colors;
-    return Container(
-      width: width,
-      height: 36,
-      alignment: Alignment.center,
-      padding: const EdgeInsets.symmetric(horizontal: 6),
-      decoration: BoxDecoration(
-        color: c.canvas,
-        borderRadius: BorderRadius.circular(Radii.sm),
-        border: Border.all(color: c.stroke),
-      ),
-      // Scales down rather than overflowing when the chip is at its minimum.
-      child: FittedBox(
-        fit: BoxFit.scaleDown,
-        child: child ??
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(icon, size: 16, color: c.textSecondary),
-                const SizedBox(width: 4),
-                Text(label!, maxLines: 1, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
-              ],
-            ),
-      ),
-    );
-  }
-}
-
 /// Draws the selected tiling's cell outlines over the preview, laid out the
 /// way the board will be for a picture of [imageAspect] (same fit and
 /// centre crop as the game, see [Tiling.fit] and [Tiling.crop]).
 class _CutOverlay extends CustomPainter {
-  _CutOverlay({required this.spec, required this.imageAspect, required this.color});
+  _CutOverlay({required this.spec, required this.imageAspect, required this.color, this.placed});
   final BoardSpec spec;
   final double imageAspect;
   final Color color;
+
+  /// Slots whose card is in place on a saved board; every other cell is dimmed.
+  final Set<int>? placed;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -852,6 +682,19 @@ class _CutOverlay extends CustomPainter {
         ((a.dx - fitted.width).abs() < eps && (b.dx - fitted.width).abs() < eps) ||
         (a.dy.abs() < eps && b.dy.abs() < eps) ||
         ((a.dy - fitted.height).abs() < eps && (b.dy - fitted.height).abs() < eps);
+    final placed = this.placed;
+    if (placed != null) {
+      final dim = Paint()..color = Colors.black.withValues(alpha: 0.55);
+      for (var s = 0; s < tiling.cells; s++) {
+        if (placed.contains(s)) continue;
+        final poly = tiling.polygon(s, fitted);
+        final cell = Path()..moveTo(poly.first.dx + origin.dx, poly.first.dy + origin.dy);
+        for (final v in poly.skip(1)) {
+          cell.lineTo(v.dx + origin.dx, v.dy + origin.dy);
+        }
+        canvas.drawPath(cell..close(), dim);
+      }
+    }
     final path = Path();
     for (var s = 0; s < tiling.cells; s++) {
       final poly = tiling.polygon(s, fitted);
@@ -867,5 +710,255 @@ class _CutOverlay extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_CutOverlay old) => old.spec != spec || old.imageAspect != imageAspect || old.color != color;
+  bool shouldRepaint(_CutOverlay old) => old.spec != spec || old.imageAspect != imageAspect || old.color != color || !setEquals(old.placed, placed);
+}
+
+/// The Play footer: transparent over the canvas while the choices end above
+/// it, glass with a hairline once they continue underneath.
+class _GlassFooter extends StatelessWidget {
+  const _GlassFooter({required this.glass, required this.child});
+  final bool glass;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return GlassSurface(
+      visible: glass,
+      hairline: Border(top: BorderSide(color: context.colors.stroke, width: 0.5)),
+      child: SafeArea(
+        top: false,
+        child: Padding(padding: const EdgeInsets.fromLTRB(20, 12, 20, 12), child: child),
+      ),
+    );
+  }
+}
+
+/// Small section title, lighter than a page heading: the choices are the content.
+class _SectionLabel extends StatelessWidget {
+  const _SectionLabel(this.title);
+  final String title;
+
+  @override
+  Widget build(BuildContext context) => Align(
+        alignment: Alignment.centerLeft,
+        child: Text(title, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700, letterSpacing: -0.3)),
+      );
+}
+
+/// The four modes as one segmented control: a track with a raised segment
+/// for the choice, each with its cut drawn small and its multiplier.
+class _ModeSegments extends StatelessWidget {
+  const _ModeSegments({required this.selected, required this.frozen, required this.isOpen, required this.onTap});
+  final GameMode selected;
+
+  /// A board is in progress: only its mode shows as chosen, the rest rest.
+  final bool frozen;
+  final bool Function(GameMode) isOpen;
+  final ValueChanged<GameMode> onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return Container(
+      padding: const EdgeInsets.all(3),
+      decoration: BoxDecoration(color: context.isDark ? c.card : const Color(0xFFE9E9EE), borderRadius: BorderRadius.circular(Radii.md)),
+      child: Row(
+        children: [
+          for (final m in GameMode.values)
+            Expanded(
+              child: Pressable(
+                key: ValueKey('mode-${m.code}'),
+                onTap: frozen ? null : () => onTap(m),
+                scale: 0.96,
+                child: Opacity(
+                  opacity: frozen && m != selected ? 0.4 : 1,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 180),
+                    padding: const EdgeInsets.symmetric(vertical: 7),
+                    decoration: BoxDecoration(
+                      // The raised segment is lighter than the track in both themes.
+                      color: m == selected ? (context.isDark ? Color.lerp(c.cardElevated, Colors.white, 0.08) : c.card) : Colors.transparent,
+                      borderRadius: BorderRadius.circular(Radii.md - 3),
+                      boxShadow: m == selected ? [BoxShadow(color: Colors.black.withValues(alpha: context.isDark ? 0.3 : 0.08), blurRadius: 6, offset: const Offset(0, 1))] : null,
+                    ),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          width: 26,
+                          height: 22,
+                          child: isOpen(m)
+                              ? CustomPaint(painter: _ModePreview(mode: m, color: m == selected ? context.accent : c.textSecondary))
+                              : Icon(AppIcons.lock, size: 15, color: c.textTertiary),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          m.label,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontSize: 12.5, fontWeight: m == selected ? FontWeight.w700 : FontWeight.w600, color: isOpen(m) ? c.textPrimary : c.textTertiary),
+                        ),
+                        Text(
+                          isOpen(m) ? 'x${_DifficultyScreenState._fmtMult(m.multiplier)}' : 'Level ${Unlocks.ofMode(m)!.level}',
+                          style: TextStyle(fontSize: 11, color: m == selected ? context.accent : c.textTertiary, fontWeight: FontWeight.w500),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+/// One board size: its cut ("5x4") over its name ("Relaxed"). Locked sizes
+/// carry a small lock; a tap offers the unlock.
+class _BoardChip extends StatelessWidget {
+  const _BoardChip({required this.spec, required this.selected, required this.locked, required this.frozen, this.onTap});
+  final BoardSpec spec;
+  final bool selected;
+  final bool locked;
+  final bool frozen;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final fg = selected ? context.accent : (locked ? c.textTertiary : c.textPrimary);
+    return Pressable(
+      onTap: onTap,
+      child: Opacity(
+        opacity: frozen && !selected ? 0.4 : 1,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          constraints: const BoxConstraints(minWidth: 74),
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          decoration: BoxDecoration(
+            color: selected ? c.accentTint : c.card,
+            borderRadius: BorderRadius.circular(Radii.md),
+            border: Border.all(color: selected ? context.accent : c.stroke, width: selected ? 1.5 : 1),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (locked) ...[Icon(AppIcons.lock, size: 11, color: fg), const SizedBox(width: 3)],
+                  Text(spec.code, style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15, letterSpacing: -0.2, color: fg)),
+                ],
+              ),
+              Text(spec.label, style: TextStyle(fontSize: 11, color: selected ? context.accent : c.textTertiary)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// "Up to [coin] 40 · 80 XP · [piggy] +5": what a 3-star solve pays.
+class _RewardsLine extends StatelessWidget {
+  const _RewardsLine({required this.coins, required this.xp, required this.piggy});
+  final int coins;
+  final int xp;
+  final int piggy;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final style = TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: c.textSecondary);
+    Widget dot() => Padding(padding: const EdgeInsets.symmetric(horizontal: 8), child: Text('·', style: style));
+    // Scales down rather than overflowing with big numbers or Larger Text.
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text('3 stars pay up to', style: style.copyWith(fontWeight: FontWeight.w500)),
+        const SizedBox(width: 6),
+        Amount(currency: Currency.coins, value: coins, size: 15, fontSize: 13, weight: FontWeight.w700),
+        dot(),
+        Text('$xp XP', style: style.copyWith(color: c.textPrimary, fontWeight: FontWeight.w700)),
+        dot(),
+        Icon(AppIcons.piggy, size: 14, color: c.textSecondary),
+        const SizedBox(width: 3),
+        Text('+$piggy', style: style.copyWith(color: c.textPrimary, fontWeight: FontWeight.w700)),
+      ],
+      ),
+    );
+  }
+}
+
+/// The board in progress for this picture: mode and size, how many cards
+/// are in place, moves and time.
+class _InProgressCard extends StatelessWidget {
+  const _InProgressCard({required this.spec, required this.saved, required this.painting});
+  final BoardSpec spec;
+  final PuzzleProgress saved;
+  final bool painting;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final layout = saved.layout ?? const <int>[];
+    final placed = [for (var i = 0; i < layout.length; i++) if (layout[i] == i) i].length;
+    final cells = spec.cells;
+    return SoftCard(
+      key: const ValueKey('board-in-progress'),
+      padding: const EdgeInsets.fromLTRB(14, 14, 16, 14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 44,
+                height: 44,
+                padding: const EdgeInsets.all(9),
+                decoration: BoxDecoration(color: c.accentTint, borderRadius: BorderRadius.circular(Radii.md)),
+                child: CustomPaint(painter: _ModePreview(mode: spec.mode, color: context.accent)),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Board in progress', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
+                    const SizedBox(height: 2),
+                    Text(
+                      '${spec.mode.label} · ${spec.code} ${spec.label}${painting ? ' · Painting' : ''}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 13, color: c.textSecondary),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          ProgressBar(value: cells == 0 ? 0 : placed / cells, height: 6),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Flexible(child: Text('$placed of $cells in place', maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600))),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  '${saved.moves} ${saved.moves == 1 ? 'move' : 'moves'} · ${formatDuration(saved.elapsedSeconds)}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.right,
+                  style: TextStyle(fontSize: 13, color: c.textSecondary),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 }

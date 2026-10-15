@@ -79,7 +79,7 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('home-quick-play')), warnIfMissed: false);
     await settle(tester, 4000);
     expect(find.byType(DifficultyScreen), findsOneWidget, reason: 'Quick play opens the mode and board picker');
-    expect(find.text('Choose a mode'), findsOneWidget);
+    expect(find.text('Mode'), findsOneWidget);
     if (pickCozy) {
       await tester.dragUntilVisible(find.text('Cozy'), find.byType(Scrollable).first, const Offset(0, -200));
       await settle(tester, 600);

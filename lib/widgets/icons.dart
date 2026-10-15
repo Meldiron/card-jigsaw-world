@@ -101,6 +101,10 @@ class AppIcons {
   static const filterStarted = CupertinoIcons.play_circle_fill;
   static const filterUnlocked = CupertinoIcons.lock_open_fill;
 
+  // How to play (the first-game tutorial)
+  static const tapCard = Icons.touch_app_rounded;
+  static const group = CupertinoIcons.square_on_square;
+
   // Boosters
   static const undo = Icons.undo_rounded;
   static const peek = Icons.visibility_rounded;

@@ -79,12 +79,9 @@ void main() {
   for (final (w, h) in [(320.0, 700.0), (402.0, 874.0)]) {
     testWidgets('rewards row fits at ${w.toInt()} pt', (tester) async {
       final key = await pumpScreen(tester, width: w, height: h);
-      expect(find.text('Choose a mode'), findsOneWidget);
-      // Scroll the rewards card into view.
-      await tester.drag(find.byType(SingleChildScrollView), const Offset(0, -900));
-      await settle(tester);
-      expect(find.text('Rewards'), findsOneWidget);
-      expect(find.textContaining('up to '), findsOneWidget);
+      expect(find.text('Mode'), findsOneWidget);
+      // The rewards sit in the footer, next to Play, without scrolling.
+      expect(find.textContaining('up to'), findsOneWidget);
       expect(find.textContaining(' XP'), findsOneWidget);
       expect(find.text('+5'), findsOneWidget);
       expect(find.textContaining('· Play'), findsOneWidget);
@@ -125,12 +122,11 @@ void main() {
     final key = await pumpScreen(tester, width: 402, height: 874, progress: {'p1': saved});
     expect(find.textContaining('Continue · 7 moves in'), findsOneWidget);
     expect(find.text('Discard progress'), findsOneWidget);
-    expect(find.textContaining('board is in progress'), findsOneWidget);
+    expect(find.byKey(const ValueKey('board-in-progress')), findsOneWidget);
+    expect(find.textContaining('Squares · 4x5'), findsOneWidget);
     await dump(tester, key, 'difficulty_in_progress');
-    // Mode tiles do not react while the save exists.
-    await tester.tap(find.text('Hexagons'));
-    await settle(tester);
-    expect(find.textContaining('A squares 4x5 board is in progress'), findsOneWidget);
+    // The pickers wait until the save is discarded.
+    expect(find.text('Hexagons'), findsNothing);
 
     await tester.tap(find.text('Discard progress'));
     await settle(tester);
@@ -140,7 +136,7 @@ void main() {
     await settle(tester, 15);
     expect(find.text('Discard progress'), findsNothing);
     expect(find.textContaining('· Play'), findsOneWidget);
-    expect(find.text('Every mode cuts the picture differently. Trickier shapes pay more.'), findsOneWidget);
+    expect(find.textContaining('board is in progress'), findsNothing);
     // The choice is open again: another mode can be picked.
     await tester.tap(find.text('Hexagons'));
     await settle(tester);

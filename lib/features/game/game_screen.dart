@@ -5,6 +5,7 @@ import 'dart:ui' as ui;
 import 'package:confetti/confetti.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show SystemUiOverlayStyle;
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -27,6 +28,7 @@ import '../../state/settings.dart';
 import '../../state/social.dart';
 import '../../state/sync.dart';
 import '../../state/unlocks.dart';
+import '../../widgets/glass.dart';
 import '../../widgets/hash_image.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
@@ -384,6 +386,11 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   Future<void> _onWin() async {
     if (_completionHandled) return;
     _completionHandled = true;
+    // The first board is done: the coach line has done its job.
+    if (_showTutorial) {
+      ref.read(settingsProvider.notifier).setTutorialSeen();
+      _showTutorial = false;
+    }
     _saveDebounce?.cancel();
     Sfx.instance.win();
     Haptics.success();
@@ -529,7 +536,19 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
       context,
       builder: (ctx) => _PauseSheet(
         onResume: () => Navigator.pop(ctx),
-        onRestart: () {
+        onRestart: () async {
+          // A started board is thrown away: ask first, like Change mode or board does.
+          final moves = ref.read(gameControllerProvider(_args!)).moves;
+          if (moves > 0) {
+            final ok = await showAppAlert(
+              context,
+              title: 'Shuffle and restart?',
+              message: 'This board and its $moves ${moves == 1 ? 'move' : 'moves'} are thrown away and the cards are dealt again. Stars and records stay.',
+              confirmLabel: 'Shuffle',
+              destructive: true,
+            );
+            if (!ok || !mounted || !ctx.mounted) return;
+          }
           Navigator.pop(ctx);
           _completionHandled = false;
           _newPlay();
@@ -623,6 +642,15 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                   title: puzzle.title,
                   painting: _painting,
                 ),
+                // First game: one line that teaches the next thing to do, while playing.
+                if (_showTutorial && image.hasValue && state.status != GameStatus.won)
+                  _CoachLine(
+                    state: state,
+                    onDone: () {
+                      ref.read(settingsProvider.notifier).setTutorialSeen();
+                      setState(() => _showTutorial = false);
+                    },
+                  ),
                 Expanded(
                   child: LayoutBuilder(
                     builder: (context, cons) {
@@ -779,24 +807,6 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
               ],
             ),
           ),
-          Align(
-            alignment: Alignment.topCenter,
-            child: ConfettiWidget(
-              confettiController: _confetti,
-              blastDirectionality: BlastDirectionality.explosive,
-              numberOfParticles: 24,
-              maxBlastForce: 24,
-              minBlastForce: 8,
-              gravity: 0.25,
-              emissionFrequency: 0.04,
-              colors: const [Brand.accent, Brand.star, Brand.ticket, Color(0xFF94A3B8), Colors.white],
-            ),
-          ),
-          if (_showTutorial && image.hasValue)
-            _TutorialOverlay(onDone: () {
-              ref.read(settingsProvider.notifier).setTutorialSeen();
-              setState(() => _showTutorial = false);
-            }),
           if (state.status == GameStatus.won && image.hasValue)
             _CompletionOverlay(
               puzzle: puzzle,
@@ -835,6 +845,20 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                 context.pop();
               },
             ),
+          // Over the results: the panel is opaque.
+          Align(
+            alignment: Alignment.topCenter,
+            child: ConfettiWidget(
+              confettiController: _confetti,
+              blastDirectionality: BlastDirectionality.explosive,
+              numberOfParticles: 24,
+              maxBlastForce: 24,
+              minBlastForce: 8,
+              gravity: 0.25,
+              emissionFrequency: 0.04,
+              colors: const [Brand.accent, Brand.star, Brand.ticket, Color(0xFF94A3B8), Colors.white],
+            ),
+          ),
         ],
       ),
     );
@@ -870,11 +894,14 @@ class _Hud extends StatelessWidget {
                   ],
                 ),
               ),
-              _HudStat(icon: CupertinoIcons.arrow_right_arrow_left, label: 'Moves', value: '${state.moves}', sub: 'par ${state.par}'),
+              const SizedBox(width: 10),
+              // Moves against par ("14 / 18": three stars while within it), then time.
+              _HudStat(label: 'Moves', value: '${state.moves}', sub: '/${state.par}'),
               if (showTimer) ...[
-                const SizedBox(width: 8),
-                _HudStat(icon: CupertinoIcons.time, label: 'Time', value: formatDuration(state.elapsed)),
+                const SizedBox(width: 16),
+                _HudStat(label: 'Time', value: formatDuration(state.elapsed)),
               ],
+              const SizedBox(width: 4),
             ],
           ),
           const SizedBox(height: 10),
@@ -893,38 +920,29 @@ class _Hud extends StatelessWidget {
   }
 }
 
+/// A HUD figure without a box: the name small above, the number below
+/// (tabular figures, so the timer does not jitter), an optional quiet suffix.
 class _HudStat extends StatelessWidget {
-  const _HudStat({required this.icon, required this.label, required this.value, this.sub});
-  final IconData icon;
+  const _HudStat({required this.label, required this.value, this.sub});
   final String label;
   final String value;
   final String? sub;
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      decoration: BoxDecoration(color: c.card, borderRadius: BorderRadius.circular(12), border: Border.all(color: c.stroke)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(icon, size: 12, color: c.textTertiary),
-              const SizedBox(width: 4),
-              Text(label, style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: c.textTertiary)),
-            ],
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.baseline,
-            textBaseline: TextBaseline.alphabetic,
-            children: [
-              Text(value, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16, letterSpacing: -0.3)),
-              if (sub != null) ...[const SizedBox(width: 4), Text(sub!, style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w500, color: c.textTertiary))],
-            ],
-          ),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Text(label, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: c.textTertiary)),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.baseline,
+          textBaseline: TextBaseline.alphabetic,
+          children: [
+            Text(value, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 18, letterSpacing: -0.3, fontFeatures: [FontFeature.tabularFigures()])),
+            if (sub != null) Text(sub!, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: c.textTertiary, fontFeatures: const [FontFeature.tabularFigures()])),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -933,7 +951,7 @@ class _BoosterBar extends StatelessWidget {
   const _BoosterBar({required this.hints, this.peeks = 0, this.magics = 0, required this.canUndo, required this.playing, required this.onHint, required this.onMagic, required this.onPeek, required this.onUndo});
   final int hints;
 
-  /// Peeks and Magic in stock: used before coins, shown as "N left".
+  /// Peeks and Magic in stock: used before coins, shown as a count on the tool.
   final int peeks;
   final int magics;
   final bool canUndo;
@@ -947,67 +965,96 @@ class _BoosterBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    return Container(
-      margin: const EdgeInsets.fromLTRB(12, 4, 12, 8),
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-      decoration: BoxDecoration(
-        color: c.card,
-        borderRadius: BorderRadius.circular(Radii.lg),
-        border: Border.all(color: c.stroke),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _Booster(icon: AppIcons.undo, label: 'Undo', cost: const Text('free'), enabled: canUndo, onTap: onUndo),
-          _Booster(
-            key: const ValueKey('booster-peek'),
-            icon: AppIcons.peek,
-            label: 'Peek',
-            cost: peeks > 0 ? Text('$peeks left') : Amount(currency: Currency.coins, value: Economy.peekCostCoins, size: 11, fontSize: 10, weight: FontWeight.w700),
-            enabled: playing,
-            onTap: onPeek,
-            accent: peeks > 0,
-          ),
-          _Booster(
-            key: const ValueKey('booster-magic'),
-            icon: AppIcons.magic,
-            label: 'Magic',
-            cost: magics > 0 ? Text('$magics left') : Amount(currency: Currency.coins, value: Economy.magicLockCostCoins, size: 11, fontSize: 10, weight: FontWeight.w700),
-            enabled: playing,
-            onTap: onMagic,
-            accent: magics > 0,
-          ),
-          _Booster(icon: AppIcons.hint, label: 'Hint', cost: hints > 0 ? Text('$hints left') : Amount(currency: Currency.coins, value: Economy.hintCostCoins, size: 11, fontSize: 10, weight: FontWeight.w700), enabled: playing, onTap: onHint, accent: hints > 0),
-        ],
+    final row = Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        _Booster(icon: AppIcons.undo, label: 'Undo', enabled: canUndo, onTap: onUndo),
+        _Booster(key: const ValueKey('booster-peek'), icon: AppIcons.peek, label: 'Peek', stock: peeks, price: Economy.peekCostCoins, enabled: playing, onTap: onPeek),
+        _Booster(key: const ValueKey('booster-magic'), icon: AppIcons.magic, label: 'Magic', stock: magics, price: Economy.magicLockCostCoins, enabled: playing, onTap: onMagic),
+        _Booster(icon: AppIcons.hint, label: 'Hint', stock: hints, price: Economy.hintCostCoins, enabled: playing, onTap: onHint),
+      ],
+    );
+    // A floating glass toolbar, the same material and shape as the tab bar.
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(Radii.pill),
+          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: context.isDark ? 0.35 : 0.08), blurRadius: 18, offset: const Offset(0, 4))],
+        ),
+        child: GlassSurface(
+          borderRadius: BorderRadius.circular(Radii.pill),
+          opacity: context.isDark ? 0.7 : 0.82,
+          hairline: Border.all(color: c.stroke, width: 0.5),
+          child: Padding(padding: const EdgeInsets.fromLTRB(10, 8, 10, 7), child: row),
+        ),
       ),
     );
   }
 }
 
+/// One tool. What it costs reads the same on every tool: a count on its
+/// corner while there are some in stock, else its price in coins under the
+/// label. Undo is free and shows neither.
 class _Booster extends StatelessWidget {
-  const _Booster({super.key, required this.icon, required this.label, required this.cost, required this.enabled, required this.onTap, this.accent = false});
+  const _Booster({super.key, required this.icon, required this.label, required this.enabled, required this.onTap, this.stock, this.price});
   final IconData icon;
   final String label;
-  final Widget cost;
   final bool enabled;
   final VoidCallback onTap;
-  final bool accent;
+
+  /// In stock (used before coins); null for free tools.
+  final int? stock;
+
+  /// Coins per use once the stock is out.
+  final int? price;
+
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
+    final count = stock ?? 0;
+    final buying = stock != null && count == 0 && price != null;
     return Pressable(
       onTap: enabled ? onTap : null,
       scale: 0.9,
       child: Opacity(
         opacity: enabled ? 1 : 0.4,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconTile(icon: icon, size: 48, radius: 14, color: c.accentTint, iconColor: accent ? Brand.hint : context.accent),
-            const SizedBox(height: 4),
-            Text(label, style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w600)),
-            DefaultTextStyle(style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: c.textTertiary), child: cost),
-          ],
+        child: SizedBox(
+          width: 64,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  SizedBox(width: 40, height: 30, child: Icon(icon, size: 26, color: context.accent)),
+                  if (count > 0)
+                    Positioned(
+                      right: -11,
+                      top: -6,
+                      child: Container(
+                        constraints: const BoxConstraints(minWidth: 18),
+                        height: 18,
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: c.textPrimary,
+                          borderRadius: BorderRadius.circular(Radii.pill),
+                          border: Border.all(color: c.card, width: 1.5),
+                        ),
+                        child: Text('$count', style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w700, color: c.card, height: 1.1)),
+                      ),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 2),
+              Text(label, style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w600)),
+              SizedBox(
+                height: 14,
+                child: buying ? Amount(currency: Currency.coins, value: price!, size: 12, fontSize: 11, weight: FontWeight.w600, color: c.textSecondary) : null,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -1034,58 +1081,147 @@ class _PauseSheet extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              RoundIconButton(icon: settings.music ? CupertinoIcons.music_note_2 : CupertinoIcons.speaker_slash, label: 'Music', size: 52, onTap: () => n.setMusic(!settings.music), iconColor: settings.music ? context.accent : null),
-              RoundIconButton(icon: settings.sound ? CupertinoIcons.speaker_2_fill : CupertinoIcons.speaker_slash_fill, label: 'Sound', size: 52, onTap: () => n.setSound(!settings.sound), iconColor: settings.sound ? context.accent : null),
-              RoundIconButton(icon: CupertinoIcons.waveform, label: 'Haptics', size: 52, onTap: () => n.setHaptics(!settings.haptics), iconColor: settings.haptics ? context.accent : null),
-              RoundIconButton(icon: CupertinoIcons.time, label: 'Timer', size: 52, onTap: () => n.setShowTimer(!settings.showTimer), iconColor: settings.showTimer ? context.accent : null),
+              _PauseToggle(icon: CupertinoIcons.music_note_2, label: 'Music', on: settings.music, onChanged: n.setMusic),
+              _PauseToggle(icon: CupertinoIcons.speaker_2_fill, label: 'Sound', on: settings.sound, onChanged: n.setSound),
+              _PauseToggle(icon: CupertinoIcons.waveform, label: 'Haptics', on: settings.haptics, onChanged: n.setHaptics),
+              _PauseToggle(icon: CupertinoIcons.time, label: 'Timer', on: settings.showTimer, onChanged: n.setShowTimer),
             ],
           ),
-          const SizedBox(height: 22),
+          const SizedBox(height: 20),
           BigButton(label: 'Resume', icon: CupertinoIcons.play_fill, onTap: onResume),
-          const SizedBox(height: 10),
-          BigButton(label: 'Shuffle and restart', kind: ButtonKind.secondary, icon: CupertinoIcons.shuffle, onTap: onRestart),
-          const SizedBox(height: 10),
-          BigButton(label: 'Change mode or board', kind: ButtonKind.secondary, icon: CupertinoIcons.slider_horizontal_3, onTap: onChangeDifficulty),
-          const SizedBox(height: 10),
-          BigButton(label: 'Save & quit', kind: ButtonKind.ghost, onTap: onQuit),
+          const SizedBox(height: 12),
+          // The other ways out, as one grouped list: one primary action above it.
+          SoftCard(
+            padding: EdgeInsets.zero,
+            child: Column(
+              children: [
+                _PauseAction(icon: CupertinoIcons.shuffle, label: 'Shuffle and restart', onTap: onRestart),
+                _PauseDivider(),
+                _PauseAction(icon: CupertinoIcons.slider_horizontal_3, label: 'Change mode or board', onTap: onChangeDifficulty),
+                _PauseDivider(),
+                _PauseAction(icon: CupertinoIcons.square_arrow_left, label: 'Save & quit', onTap: onQuit),
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
 }
 
-/// First-time, finger-guided hint overlay.
-class _TutorialOverlay extends StatelessWidget {
-  const _TutorialOverlay({required this.onDone});
-  final VoidCallback onDone;
+/// An on/off switch as a round button, the way Control Center draws them:
+/// filled cobalt with a white mark when on, grey when off, and the state
+/// spelled out under the name.
+class _PauseToggle extends StatelessWidget {
+  const _PauseToggle({required this.icon, required this.label, required this.on, required this.onChanged});
+  final IconData icon;
+  final String label;
+  final bool on;
+  final ValueChanged<bool> onChanged;
+
   @override
   Widget build(BuildContext context) {
-    return Positioned.fill(
-      child: GestureDetector(
-        onTap: onDone,
+    final c = context.colors;
+    return Semantics(
+      toggled: on,
+      label: label,
+      child: Pressable(
+        onTap: () => onChanged(!on),
+        scale: 0.92,
+        child: SizedBox(
+          width: 64,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 160),
+                width: 52,
+                height: 52,
+                decoration: BoxDecoration(color: on ? context.accent : (context.isDark ? c.cardElevated : const Color(0xFFE6E6EB)), shape: BoxShape.circle),
+                child: Icon(icon, size: 23, color: on ? Colors.white : c.textSecondary),
+              ),
+              const SizedBox(height: 5),
+              Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+              Text(on ? 'On' : 'Off', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: c.textTertiary)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// A row in the pause sheet's grouped list.
+class _PauseAction extends StatelessWidget {
+  const _PauseAction({required this.icon, required this.label, required this.onTap});
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) => Pressable(
+        onTap: onTap,
+        scale: 0.99,
+        child: SizedBox(
+          height: 50,
+          child: Row(
+            children: [
+              const SizedBox(width: 16),
+              Icon(icon, size: 20, color: context.accent),
+              const SizedBox(width: 14),
+              Expanded(child: Text(label, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500))),
+            ],
+          ),
+        ),
+      );
+}
+
+class _PauseDivider extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) => Divider(height: 0.5, thickness: 0.5, indent: 50, color: context.colors.stroke);
+}
+
+/// First game: a coach line between the HUD and the board that follows the
+/// player: pick a card, place it, then how groups and locks work. It never
+/// covers the board; "Got it" (or the first locked card's step) ends it.
+class _CoachLine extends StatelessWidget {
+  const _CoachLine({required this.state, required this.onDone});
+  final GameState state;
+  final VoidCallback onDone;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final b = state.board;
+    final (IconData icon, String text) = b.lockedCount > 0
+        ? (AppIcons.lock, 'A card in its true spot locks in place. Fewer moves earn more stars.')
+        : state.moves > 0
+        ? (AppIcons.group, 'Neighbours in the picture snap into a group and move together.')
+        : state.selected != null
+        ? (AppIcons.tapCard, 'Now tap the place where it belongs. Or drag it there.')
+        : (AppIcons.tapCard, 'Tap a card to pick it up.');
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 0, 12, 4),
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 220),
         child: Container(
-          color: Colors.black.withValues(alpha: 0.55),
-          alignment: Alignment.center,
-          padding: const EdgeInsets.all(28),
-          child: SoftCard(
-            padding: const EdgeInsets.all(22),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const IconTile(icon: Icons.touch_app_rounded, size: 56, radius: 16),
-                const SizedBox(height: 14),
-                Text('How to play', style: Theme.of(context).textTheme.headlineSmall),
-                const SizedBox(height: 8),
-                Text(
-                  'Tap a card, then tap where it belongs. Or drag it there.\n\nCards that sit next to each other in the picture snap into a group anywhere on the board and move together. A card in its true spot locks in place. Fewer moves earn more stars. There is no timer pressure.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: context.colors.textSecondary, height: 1.45),
+          key: ValueKey(text),
+          padding: const EdgeInsets.fromLTRB(12, 8, 6, 8),
+          decoration: BoxDecoration(color: c.accentTint, borderRadius: BorderRadius.circular(Radii.md)),
+          child: Row(
+            children: [
+              Icon(icon, size: 18, color: context.accent),
+              const SizedBox(width: 10),
+              Expanded(child: Text(text, style: TextStyle(fontSize: 13.5, height: 1.3, fontWeight: FontWeight.w500, color: c.textPrimary))),
+              Pressable(
+                onTap: onDone,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                  child: Text('Got it', style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w700, color: context.accent)),
                 ),
-                const SizedBox(height: 18),
-                BigButton(label: 'Got it', onTap: onDone),
-              ],
-            ),
-          ).animate().scale(begin: const Offset(0.9, 0.9), curve: Curves.easeOutBack).fadeIn(),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -1180,129 +1316,103 @@ class _CompletionOverlayState extends State<_CompletionOverlay> {
       ],
     );
 
-    final results = Container(
-      color: Colors.black.withValues(alpha: 0.5),
+    // The finished picture is the reward: it stays in full colour above a
+    // results panel (no scrim over it). A tap on it shows it on its own.
+    final stats = Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        _RewardStat(icon: const CoinIcon(size: 17), label: 'Coins', value: reward == null ? '…' : '+${reward.coins}'),
+        _RewardStat(icon: Icon(AppIcons.xp, size: 17, color: context.accent), label: 'XP', value: reward == null ? '…' : '+${reward.xp}'),
+        _RewardStat(label: 'Moves', value: '${state.moves}'),
+        _RewardStat(label: 'Time', value: formatDuration(state.elapsed)),
+      ],
+    );
+    final panel = Container(
+      decoration: BoxDecoration(
+        color: c.card,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: context.isDark ? 0.4 : 0.1), blurRadius: 24, offset: const Offset(0, -4))],
+      ),
       child: SafeArea(
+        top: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
+          padding: const EdgeInsets.fromLTRB(20, 18, 20, 8),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              // Sits under the HUD rather than over its title.
-              const SizedBox(height: 92),
-              _OverlayPill(icon: CupertinoIcons.eye, label: 'View picture', onTap: _view).animate().fadeIn(delay: 700.ms),
-              const Spacer(),
-              Text('Picture complete', style: Theme.of(context).textTheme.displaySmall?.copyWith(color: Colors.white))
-                  .animate()
-                  .fadeIn(delay: 300.ms)
-                  .slideY(begin: 0.3, curve: Curves.easeOutBack),
-              const SizedBox(height: 6),
-              Text(puzzle.title, style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontWeight: FontWeight.w700, fontSize: 15)).animate().fadeIn(delay: 400.ms),
-              const SizedBox(height: 18),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  for (var i = 0; i < 3; i++)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 6),
-                      child: Icon(
-                        i < state.stars ? CupertinoIcons.star_fill : CupertinoIcons.star,
-                        size: i == 1 ? 54 : 42,
-                        color: i < state.stars ? Brand.star : Colors.white.withValues(alpha: 0.4),
-                      ).animate().scale(delay: (500 + i * 180).ms, begin: const Offset(0, 0), curve: Curves.elasticOut, duration: 700.ms),
-                    ),
-                ],
-              ),
-              const SizedBox(height: 22),
-              SoftCard(
-                padding: const EdgeInsets.all(18),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        _RewardStat(icon: const CoinIcon(size: 22), label: 'Coins', value: reward == null ? '…' : '+${reward.coins}'),
-                        _RewardStat(icon: Icon(AppIcons.xp, size: 22, color: context.accent), label: 'XP', value: reward == null ? '…' : '+${reward.xp}'),
-                        _RewardStat(icon: Icon(AppIcons.swaps, size: 22, color: c.textSecondary), label: 'Moves', value: '${state.moves}', sub: 'par ${state.par}'),
-                        _RewardStat(icon: Icon(AppIcons.time, size: 22, color: c.textSecondary), label: 'Time', value: formatDuration(state.elapsed)),
-                      ],
-                    ),
-                    if (pack.total > 0) ...[
-                      const SizedBox(height: 16),
+              // Scrolls when a quest and a level-up make it taller than a small phone.
+              Flexible(
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    children: [
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Expanded(
-                            child: Text(
-                              '${pack.solved} of ${pack.total} solved${pack.name != null ? ' · ${pack.name}' : ''}',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: c.textSecondary),
+                          for (var i = 0; i < 3; i++)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 3),
+                              child: Icon(
+                                i < state.stars ? CupertinoIcons.star_fill : CupertinoIcons.star,
+                                size: i == 1 ? 34 : 28,
+                                color: i < state.stars ? Brand.star : c.stroke,
+                              ).animate().scale(delay: (300 + i * 150).ms, begin: const Offset(0, 0), curve: Curves.easeOutBack, duration: 450.ms),
                             ),
-                          ),
-                          const SizedBox(width: 10),
-                          Icon(AppIcons.star, size: 13, color: Brand.star),
-                          const SizedBox(width: 4),
-                          Text('${pack.stars}/${pack.total * 3}', style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: c.textPrimary)),
                         ],
                       ),
                       const SizedBox(height: 8),
-                      ProgressBar(value: pack.solved / pack.total, height: 4),
-                    ],
-                    if (reward?.levelUp == true) ...[
-                      const SizedBox(height: 14),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                        decoration: BoxDecoration(color: c.accentTint, borderRadius: BorderRadius.circular(Radii.md)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                      Text('Picture complete', style: Theme.of(context).textTheme.headlineSmall),
+                      const SizedBox(height: 2),
+                      Text(puzzle.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontWeight: FontWeight.w600, fontSize: 14)),
+                      const SizedBox(height: 16),
+                      stats,
+                      if (pack.total > 0) ...[
+                        const SizedBox(height: 16),
+                        Row(
                           children: [
-                            Icon(AppIcons.crown, size: 20, color: context.accent),
-                            const SizedBox(width: 8),
-                            Flexible(
+                            Expanded(
                               child: Text(
-                                widget.unlocked.isEmpty
-                                    ? 'Level ${reward!.level} reached'
-                                    : 'Level ${reward!.level} · ${widget.unlocked.map((u) => u == Unlock.painting ? 'Painting is open' : '${u.label} are open').join(' · ')}',
-                                key: const ValueKey('level-up-line'),
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontWeight: FontWeight.w600, color: context.accent),
+                                '${pack.solved} of ${pack.total} solved${pack.name != null ? ' · ${pack.name}' : ''}',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: c.textSecondary),
                               ),
                             ),
+                            const SizedBox(width: 10),
+                            Icon(AppIcons.star, size: 13, color: Brand.star),
+                            const SizedBox(width: 4),
+                            Text('${pack.stars}/${pack.total * 3}', style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: c.textPrimary)),
                           ],
                         ),
-                      ).animate().fadeIn(),
+                        const SizedBox(height: 8),
+                        ProgressBar(value: pack.solved / pack.total, height: 4),
+                      ],
+                      if (reward?.levelUp == true) ...[
+                        const SizedBox(height: 12),
+                        _ResultLine(
+                          key: const ValueKey('level-up-line'),
+                          icon: AppIcons.crown,
+                          text: widget.unlocked.isEmpty
+                              ? 'Level ${reward!.level} reached'
+                              : 'Level ${reward!.level} · ${widget.unlocked.map((u) => u == Unlock.painting ? 'Painting is open' : '${u.label} are open').join(' · ')}',
+                          tinted: true,
+                        ).animate().fadeIn(),
+                      ],
+                      if (widget.questsReady.isNotEmpty) ...[
+                        const SizedBox(height: 8),
+                        _ResultLine(
+                          key: const ValueKey('quest-ready-line'),
+                          icon: AppIcons.quests,
+                          text: widget.questsReady.length == 1 ? 'Quest ready: ${widget.questsReady.first.title}' : '${widget.questsReady.length} quests ready to claim',
+                          onTap: widget.onQuests,
+                        ).animate().fadeIn(delay: 200.ms),
+                      ],
+                      const SizedBox(height: 12),
+                      credit,
                     ],
-                    if (widget.questsReady.isNotEmpty) ...[
-                      const SizedBox(height: 10),
-                      Pressable(
-                        key: const ValueKey('quest-ready-line'),
-                        onTap: widget.onQuests,
-                        scale: 0.99,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                          decoration: BoxDecoration(color: c.canvas, borderRadius: BorderRadius.circular(Radii.md), border: Border.all(color: c.stroke)),
-                          child: Row(
-                            children: [
-                              Icon(AppIcons.quests, size: 18, color: context.accent),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  widget.questsReady.length == 1 ? 'Quest ready: ${widget.questsReady.first.title}' : '${widget.questsReady.length} quests ready to claim',
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13.5),
-                                ),
-                              ),
-                              Icon(CupertinoIcons.chevron_right, size: 15, color: c.textTertiary),
-                            ],
-                          ),
-                        ),
-                      ).animate().fadeIn(delay: 200.ms),
-                    ],
-                    const SizedBox(height: 10),
-                    credit,
-                  ],
+                  ),
                 ),
-              ).animate().fadeIn(delay: 900.ms).slideY(begin: 0.2, curve: Curves.easeOut),
+              ),
               const SizedBox(height: 14),
               Row(
                 children: [
@@ -1315,24 +1425,61 @@ class _CompletionOverlayState extends State<_CompletionOverlay> {
                         : BigButton(label: 'Next puzzle', icon: CupertinoIcons.arrow_right, onTap: () => widget.onNext(pack.next)),
                   ),
                 ],
-              ).animate().fadeIn(delay: 1100.ms),
-              const SizedBox(height: 8),
+              ),
               if (backIsPrimary)
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Text(pack.complete ? 'Every picture in this pack is solved' : 'Nothing else to play here yet', style: TextStyle(color: Colors.white.withValues(alpha: 0.75), fontWeight: FontWeight.w600)),
+                  child: Text(pack.complete ? 'Every picture in this pack is solved' : 'Nothing else to play here yet', style: TextStyle(color: c.textSecondary, fontWeight: FontWeight.w600)),
                 )
               else
-                Pressable(onTap: widget.onHome, child: const Padding(padding: EdgeInsets.all(10), child: Text('Back to pack', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700)))),
+                Pressable(onTap: widget.onHome, child: Padding(padding: const EdgeInsets.all(10), child: Text('Back to pack', style: TextStyle(color: context.accent, fontWeight: FontWeight.w600)))),
             ],
           ),
         ),
+      ),
+    ).animate().slideY(begin: 0.25, duration: 350.ms, curve: Curves.easeOutCubic).fadeIn(duration: 200.ms);
+
+    final results = Container(
+      color: c.canvas,
+      child: Column(
+        children: [
+          Expanded(
+            child: SafeArea(
+              bottom: false,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
+                child: Center(
+                  child: GestureDetector(
+                    onTap: _view,
+                    child: Stack(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(Radii.lg),
+                          child: RawImage(image: widget.image, fit: BoxFit.contain, filterQuality: FilterQuality.medium),
+                        ),
+                        Positioned(
+                          right: 10,
+                          bottom: 10,
+                          child: _OverlayPill(icon: CupertinoIcons.arrow_up_left_arrow_down_right, label: 'View picture', onTap: _view, small: true),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          panel,
+        ],
       ),
     );
 
     // The photo on its own: no scrim, gutters or borders. A tap anywhere
     // brings the results back; the primary action stays within reach.
-    final picture = GestureDetector(
+    // On black the status bar turns light (time and battery stay readable).
+    final picture = AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light,
+      child: GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: _results,
       child: Container(
@@ -1359,6 +1506,7 @@ class _CompletionOverlayState extends State<_CompletionOverlay> {
             ),
           ],
         ),
+      ),
       ),
     );
 
@@ -1392,23 +1540,26 @@ class _CompletionOverlayState extends State<_CompletionOverlay> {
 /// Compact pill over the finished picture: frosted glass, or solid accent
 /// for the one primary action.
 class _OverlayPill extends StatelessWidget {
-  const _OverlayPill({required this.icon, required this.label, required this.onTap, this.primary = false});
+  const _OverlayPill({required this.icon, required this.label, required this.onTap, this.primary = false, this.small = false});
   final IconData icon;
   final String label;
   final VoidCallback onTap;
   final bool primary;
+
+  /// Over the picture's corner: a smaller pill.
+  final bool small;
 
   @override
   Widget build(BuildContext context) {
     final row = Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, size: 17, color: Colors.white),
-        const SizedBox(width: 7),
-        Text(label, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 14)),
+        Icon(icon, size: small ? 13 : 17, color: Colors.white),
+        SizedBox(width: small ? 5 : 7),
+        Text(label, style: TextStyle(color: Colors.white, fontWeight: small ? FontWeight.w600 : FontWeight.w700, fontSize: small ? 12 : 14)),
       ],
     );
-    const padding = EdgeInsets.symmetric(horizontal: 16, vertical: 10);
+    final padding = small ? const EdgeInsets.symmetric(horizontal: 10, vertical: 6) : const EdgeInsets.symmetric(horizontal: 16, vertical: 10);
     return Pressable(
       onTap: onTap,
       child: primary
@@ -1423,21 +1574,62 @@ class _OverlayPill extends StatelessWidget {
 }
 
 class _RewardStat extends StatelessWidget {
-  const _RewardStat({required this.icon, required this.label, required this.value, this.sub});
-  final Widget icon;
+  const _RewardStat({this.icon, required this.label, required this.value});
+
+  /// Drawn before the value (the coin, the XP mark); counts go without one.
+  final Widget? icon;
   final String label;
   final String value;
-  final String? sub;
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
     return Column(
       children: [
-        SizedBox(height: 24, child: Center(child: icon)),
-        const SizedBox(height: 4),
-        Text(value, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 18)),
-        Text(sub ?? label, style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w700, color: c.textTertiary)),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (icon != null) ...[icon!, const SizedBox(width: 4)],
+            Text(value, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 18)),
+          ],
+        ),
+        const SizedBox(height: 2),
+        Text(label, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: c.textTertiary)),
       ],
     );
+  }
+}
+
+/// One extra result under the numbers (a level reached, a quest ready): an
+/// icon and a line; tinted for news, outlined with a chevron when it opens something.
+class _ResultLine extends StatelessWidget {
+  const _ResultLine({super.key, required this.icon, required this.text, this.onTap, this.tinted = false});
+  final IconData icon;
+  final String text;
+  final VoidCallback? onTap;
+  final bool tinted;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final row = Container(
+      height: 44,
+      padding: const EdgeInsets.symmetric(horizontal: 14),
+      decoration: BoxDecoration(
+        color: tinted ? c.accentTint : c.canvas,
+        borderRadius: BorderRadius.circular(Radii.md),
+        border: tinted ? null : Border.all(color: c.stroke),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, size: 18, color: context.accent),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(text, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13.5, color: tinted ? context.accent : c.textPrimary)),
+          ),
+          if (onTap != null) Icon(CupertinoIcons.chevron_right, size: 15, color: c.textTertiary),
+        ],
+      ),
+    );
+    return onTap == null ? row : Pressable(onTap: onTap, scale: 0.99, child: row);
   }
 }
