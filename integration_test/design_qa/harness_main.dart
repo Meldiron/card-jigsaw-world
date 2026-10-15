@@ -256,6 +256,7 @@ Future<ProviderContainer> buildContainer(Map<String, dynamic> scene) async {
     if (v == 'NOW') return iso(now);
     if (v == 'TODAY') return iso(DateTime(now.year, now.month, now.day, 0, 5));
     if (v.startsWith('DAYS:')) return iso(now.add(Duration(minutes: (double.parse(v.substring(5)) * 24 * 60).round())));
+    if (v.startsWith('HOURS:')) return iso(now.add(Duration(minutes: (double.parse(v.substring(6)) * 60).round())));
     return v;
   }
 
@@ -290,6 +291,10 @@ Future<ProviderContainer> buildContainer(Map<String, dynamic> scene) async {
     profileRepositoryProvider.overrideWithValue(FakeProfileRepo(league: league, claims: (row['questsCompleted'] as int?) ?? 0)),
     socialRepositoryProvider.overrideWithValue(FakeSocialRepo(
       friendList: friends,
+      blocked: [
+        for (final p in league.reversed.take((scene['blocked'] as int?) ?? 0))
+          if (p.id != userId) BlockedPlayer(id: 'b-${p.id}', playerId: p.userId, name: p.displayName, avatar: p.avatar),
+      ],
       events: {
         for (final e in ((scene['eventProgress'] as Map?) ?? const {}).entries)
           e.key as String: EventProgress.fromRow('ep-${e.key}', {'eventId': e.key, ...Map<String, dynamic>.from(e.value as Map)}),
@@ -299,7 +304,10 @@ Future<ProviderContainer> buildContainer(Map<String, dynamic> scene) async {
       // Titles as the app writes them on upload ('My photo <day>/<month>').
       for (var i = 0; i < ((scene['myPuzzles'] as int?) ?? 0); i++) MyPuzzle.fromRow('my-$i', {'fileId': 'file-$i', 'title': 'My photo ${12 - i % 9}/10'}),
     ])),
-    catalogRepositoryProvider.overrideWithValue(FakeCatalogRepo(SnapshotCatalogSource(catalogPath))),
+    catalogRepositoryProvider.overrideWithValue(FakeCatalogRepo(SnapshotCatalogSource(catalogPath, eventPatches: {
+      for (final e in ((scene['eventRows'] as Map?) ?? const {}).entries)
+        e.key as String: {for (final f in (e.value as Map).entries) f.key as String: when(f.value)},
+    }))),
     storeAvailableProvider.overrideWith((ref) async => store != 'down'),
     productsProvider.overrideWith((ref) async => store == 'down' ? const <String, ProductDetails>{} : fakeProducts),
     if (scene['allOpen'] == true) openFeaturesProvider.overrideWithValue(OpenFeatures.all),

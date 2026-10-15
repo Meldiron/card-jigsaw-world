@@ -19,12 +19,24 @@ final _storage = Storage(NoClient());
 
 /// The catalogue from the snapshot file on the Mac (downloaded once), never the network.
 class SnapshotCatalogSource implements CatalogSource {
-  SnapshotCatalogSource(this.path);
+  SnapshotCatalogSource(this.path, {this.eventPatches = const {}});
   final String path;
+  /// Column overrides per event id (scene key `eventRows`), e.g. an `endAt` 40 minutes from now.
+  final Map<String, Map<String, dynamic>> eventPatches;
   Map<String, dynamic>? _cache;
 
   @override
-  Future<Map<String, dynamic>?> snapshot() async => _cache ??= jsonDecode(await File(path).readAsString()) as Map<String, dynamic>;
+  Future<Map<String, dynamic>?> snapshot() async {
+    if (_cache != null) return _cache;
+    final s = jsonDecode(await File(path).readAsString()) as Map<String, dynamic>;
+    if (eventPatches.isNotEmpty) {
+      for (final r in (s['tables']['events']['rows'] as List)) {
+        final patch = eventPatches[(r as Map)[r'$id']];
+        if (patch != null) r.addAll(patch);
+      }
+    }
+    return _cache = s;
+  }
 
   @override
   Future<List<Map<String, dynamic>>> rows(String tableId) async {
