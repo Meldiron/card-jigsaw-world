@@ -34,7 +34,7 @@ All numbers are read from the code. Formulas use the Dart rounding (`round()` = 
 | Weekly quests (5 free) | - | 1 + 1 + 2 + 2 + 2 = **8 / week** (VIP 6th: +1) | - | `Goals.weekly` |
 | Today's daily puzzle | +50 the first time | - | - | `game_screen.dart` |
 | World-day event (finish all ~22 pictures of the pack in its 8-day window) | 300 | 1 | - | `events` rows (all 97: 300 + 1); 76 events in 2027 = **1.46 / week** |
-| Bonus video (rewarded house ad) | 40 each, 5 a day, 10 min apart | - | - | `Economy.adRewardCoins`, `HouseAdPolicy` |
+| Bonus video (rewarded house ad) | 40 each, 3 a day (5 until 2026-10-15), 10 min apart | - | - | `Economy.adRewardCoins`, `Profile.adsPerDay`, `HouseAdPolicy` |
 | Piggy bank | +5 per finished board (replays too), holds 500; opening costs 1 ticket | -1 to open | - | `Economy.piggyPerPuzzle`, `openPiggy` |
 | Achievements (24 families, one-time) | 60 to 1,000 per step; 13,170 coins in total | 29 in total | - | `lib/state/achievements.dart` |
 | Lucky Wheel (costs 1 ticket, no daily free spin) | expected 52 per spin (60, 120, jackpot 500 at 2.3%) | never pays tickets | 2 hints (9%), 5 or 10 Peeks, 1 or 3 Magic (since 2026-10-14): about 150 coins of value a spin | `wheel_screen.dart` |
@@ -538,6 +538,13 @@ play time (`tools/store/apply_pack_prices.py` keeps `TIER_PACK_COINS` and record
 
 Regular player: boards 27,300 -> 10,200 coins a week; all sources 41,400 -> 24,300 a week (about 5,900 ->
 3,500 coins per hour); a standard 2,400-coin pack goes from about 25 to about 40 minutes of play.
+
+## Fewer bonus videos (owner request, 2026-10-15)
+
+`Profile.adsPerDay` 5 -> 3: the Store's "Free coins" card offers three 15-second videos a day (40 coins
+each, 10 minutes apart). The regular player above already watched 3 a day, so their numbers stand. The
+heavy player watched 5: they now earn 840 instead of 1,400 coins a week from videos, 560 less, about 0.5% of
+their weekly coins in the model above.
 
 ## Quest pool and unlocks (2026-10-14)
 

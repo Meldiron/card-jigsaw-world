@@ -7,7 +7,10 @@
 //
 // Every transaction is verified with Apple's App Store Server Library
 // (certificate chain back to Apple Root CA G3), checked against the bundle id,
-// and applied exactly once (purchases.transactionId is unique).
+// and applied exactly once: the purchases row (unique transactionId) is claimed
+// before the grant, so two calls for one transaction cannot both grant it.
+// Currencies are added with atomic operators, like the app's own changes, so a
+// grant never overwrites a coin or ticket the player spends at the same moment.
 //
 // Family Sharing (VIP, since 2026-10-14): a family member's device sends its own
 // transaction (inAppOwnershipType FAMILY_SHARED, its own transactionId) and gets
@@ -21,7 +24,7 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { Client, TablesDB, ID, Query, Permission, Role } from 'node-appwrite';
+import { Client, TablesDB, ID, Query, Permission, Role, Operator } from 'node-appwrite';
 import { SignedDataVerifier, Environment } from '@apple/app-store-server-library';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -118,32 +121,52 @@ async function accountsOfSubscription(db, originalTransactionId) {
 
 const ownershipOf = (tx) => tx.inAppOwnershipType ?? 'PURCHASED';
 
-async function applyGrant(db, userId, tx, grant, log) {
-  const profile = await db.getRow({ databaseId: DB, tableId: 'profiles', rowId: userId });
+const CURRENCIES = ['coins', 'tickets', 'hints'];
+
+/// What a verified transaction gives the player: amounts of coins, tickets and hints, or the VIP
+/// expiry. Stored on the purchases row and returned to the app.
+function grantFor(tx, grant) {
+  const out = {};
+  for (const c of CURRENCIES) if (grant[c]) out[c] = grant[c];
+  if (grant.vip) out.vipExpiresAt = iso(tx.expiresDate);
+  return out;
+}
+
+/// The player's coins, tickets and hints as the profile row has them.
+const balancesOf = (row) => Object.fromEntries(CURRENCIES.map((c) => [c, row[c] ?? 0]));
+
+/// Adds [applied] to the profile (atomic increments) and returns the row as it is now.
+async function applyGrant(db, userId, tx, applied) {
   const patch = {};
-  const applied = {};
-  if (grant.coins) { patch.coins = (profile.coins ?? 0) + grant.coins; applied.coins = grant.coins; }
-  if (grant.tickets) { patch.tickets = (profile.tickets ?? 0) + grant.tickets; applied.tickets = grant.tickets; }
-  if (grant.hints) { patch.hints = (profile.hints ?? 0) + grant.hints; applied.hints = grant.hints; }
-  if (grant.vip) {
-    const expires = iso(tx.expiresDate);
-    patch.vipExpiresAt = expires;
+  for (const c of CURRENCIES) if (applied[c]) patch[c] = Operator.increment(applied[c]);
+  if ('vipExpiresAt' in applied) {
+    patch.vipExpiresAt = applied.vipExpiresAt;
     patch.appleOriginalTransactionId = tx.originalTransactionId ?? tx.transactionId;
-    applied.vipExpiresAt = expires;
   }
-  await db.updateRow({ databaseId: DB, tableId: 'profiles', rowId: userId, data: patch });
-  for (const [currency, amount] of [['coins', applied.coins], ['tickets', applied.tickets], ['hints', applied.hints]]) {
-    if (!amount) continue;
-    await db.createRow({
-      databaseId: DB,
-      tableId: 'ledger',
-      rowId: ID.unique(),
-      data: { userId, amount, currency, reason: `iap:${tx.productId}`, balanceAfter: patch[currency] },
-      permissions: [Permission.read(Role.user(userId))],
-    });
+  return db.updateRow({ databaseId: DB, tableId: 'profiles', rowId: userId, data: patch });
+}
+
+/// One ledger row per currency granted. Bookkeeping only: the grant stands if a row fails.
+async function writeLedger(db, userId, tx, applied, profile, error) {
+  for (const c of CURRENCIES) {
+    if (!applied[c]) continue;
+    try {
+      await db.createRow({
+        databaseId: DB,
+        tableId: 'ledger',
+        rowId: ID.unique(),
+        data: { userId, amount: applied[c], currency: c, reason: `iap:${tx.productId}`, balanceAfter: profile[c] ?? 0 },
+        permissions: [Permission.read(Role.user(userId))],
+      });
+    } catch (e) {
+      error(`ledger row for ${tx.transactionId} (${c}) failed: ${e}`);
+    }
   }
-  log(`granted ${JSON.stringify(applied)} to ${userId} for ${tx.productId} (${tx.transactionId})`);
-  return applied;
+}
+
+async function findPurchase(db, transactionId) {
+  const page = await db.listRows({ databaseId: DB, tableId: 'purchases', queries: [Query.equal('transactionId', transactionId), Query.limit(1)] });
+  return page.rows[0] ?? null;
 }
 
 async function handleVerify(req, res, log, error) {
@@ -168,11 +191,8 @@ async function handleVerify(req, res, log, error) {
   if (!grant) return res.json({ ok: false, error: `Unknown product ${tx.productId}` }, 400);
 
   const db = tables(req);
-  const existing = await db.listRows({ databaseId: DB, tableId: 'purchases', queries: [Query.equal('transactionId', tx.transactionId), Query.limit(1)] });
-  if (existing.total > 0) {
-    const row = existing.rows[0];
-    return res.json({ ok: true, alreadyApplied: true, grant: JSON.parse(row.grant || '{}') });
-  }
+  const existing = await findPurchase(db, tx.transactionId);
+  if (existing) return res.json({ ok: true, alreadyApplied: true, grant: JSON.parse(existing.grant || '{}') });
 
   const originalId = tx.originalTransactionId ?? tx.transactionId;
   const ownership = ownershipOf(tx);
@@ -184,27 +204,51 @@ async function handleVerify(req, res, log, error) {
     }
   }
 
-  const applied = await applyGrant(db, userId, tx, grant, log);
+  // Claim the transaction first (unique transactionId): of two calls at once, only one grants.
+  const applied = grantFor(tx, grant);
+  let claim;
+  try {
+    claim = await db.createRow({
+      databaseId: DB,
+      tableId: 'purchases',
+      rowId: ID.unique(),
+      data: {
+        userId,
+        transactionId: tx.transactionId,
+        originalTransactionId: originalId,
+        ownership,
+        appTransactionId: tx.appTransactionId ? String(tx.appTransactionId) : null,
+        productId: tx.productId,
+        type: grant.vip ? 'subscription' : 'consumable',
+        environment: tx.environment ?? 'Sandbox',
+        purchasedAt: iso(tx.purchaseDate),
+        expiresAt: iso(tx.expiresDate),
+        grant: JSON.stringify(applied),
+      },
+    });
+  } catch (e) {
+    if (e?.code !== 409) throw e;
+    log(`${tx.transactionId} was claimed by another call a moment ago`);
+    const row = await findPurchase(db, tx.transactionId);
+    return res.json({ ok: true, alreadyApplied: true, grant: row ? JSON.parse(row.grant || '{}') : applied });
+  }
+
+  let profile;
+  try {
+    profile = await applyGrant(db, userId, tx, applied);
+  } catch (e) {
+    // Nothing was granted: free the transaction so the app's next try applies it.
+    try {
+      await db.deleteRow({ databaseId: DB, tableId: 'purchases', rowId: claim.$id });
+    } catch (d) {
+      error(`could not free ${tx.transactionId} after a failed grant: ${d}`);
+    }
+    throw e;
+  }
+  log(`granted ${JSON.stringify(applied)} to ${userId} for ${tx.productId} (${tx.transactionId})`);
   if (ownership !== 'PURCHASED' || tx.offerType) log(`  ownership ${ownership}, offerType ${tx.offerType ?? '-'} ${tx.offerIdentifier ?? ''}`);
-  await db.createRow({
-    databaseId: DB,
-    tableId: 'purchases',
-    rowId: ID.unique(),
-    data: {
-      userId,
-      transactionId: tx.transactionId,
-      originalTransactionId: originalId,
-      ownership,
-      appTransactionId: tx.appTransactionId ? String(tx.appTransactionId) : null,
-      productId: tx.productId,
-      type: grant.vip ? 'subscription' : 'consumable',
-      environment: tx.environment ?? 'Sandbox',
-      purchasedAt: iso(tx.purchaseDate),
-      expiresAt: iso(tx.expiresDate),
-      grant: JSON.stringify(applied),
-    },
-  });
-  return res.json({ ok: true, grant: applied });
+  await writeLedger(db, userId, tx, applied, profile, error);
+  return res.json({ ok: true, grant: applied, balances: balancesOf(profile) });
 }
 
 const RENEW_TYPES = new Set(['DID_RENEW', 'DID_RECOVER', 'SUBSCRIBED', 'DID_CHANGE_RENEWAL_STATUS', 'OFFER_REDEEMED', 'RENEWAL_EXTENDED', 'RENEWAL_EXTENSION', 'REFUND_REVERSED']);

@@ -6,7 +6,7 @@ The game runs no ad network. Every "ad" slot promotes something sold in the app 
 
 | Format | Where | Timing | Reward |
 |---|---|---|---|
-| Rewarded offer | Store, "Free coins" card | 15 s countdown, close button always visible; closing early asks "Close and lose the reward?" | 40 coins only after the full 15 s countdown (tapping the offer never skips it); 5 per day (stored on the profile), 10 min cooldown |
+| Rewarded offer | Store, "Free coins" card | 15 s countdown, close button always visible; closing early asks "Close and lose the reward?" | 40 coins only after the full 15 s countdown (tapping the offer never skips it); 3 per day (`Profile.adsPerDay`, stored on the profile), 10 min cooldown |
 | Interstitial | After a completed puzzle, on Next puzzle / Back to pack | Skip in 5 s, then X and "No thanks" | none |
 | Banner | Home, above Featured packs | dismissible per session | none |
 

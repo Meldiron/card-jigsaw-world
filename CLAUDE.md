@@ -143,7 +143,10 @@ skills under `.claude/skills/` hold the detailed workflows.
   or when the last break is 3+ minutes old, closable after 5 s, rewarded 15 s; the offer CTA never
   skips the rewarded countdown.
 - `lib/data/purchases.dart`: StoreKit products (coins_1000/3000/5500/12000, tickets_5/15, hints_5/15,
-  vip_monthly/yearly), verified server-side by the `verify-purchase` function.
+  vip_monthly/yearly), verified server-side by the `verify-purchase` function. `PurchaseService` listens from
+  launch, checks open transactions on resume and retries checks without an answer; `PurchaseFlow`
+  (`lib/state/purchases.dart`) and `PurchaseHost` (`lib/features/store/purchase_host.dart`) show the tile
+  spinner, the purchase sheet ("Adding 10 tickets" > "10 tickets added") and toasts. Flow: `docs/purchases.md`.
 - `lib/core/platform.dart`: web capability flags.
   `lib/core/sfx.dart`: `CJW_MUTE`. `lib/core/qa.dart`: `CJW_QA` / `CJW_QA_RUN` (test players).
 - Daily reminders: local iOS notifications, no server. `lib/state/reminders.dart` (`planReminders`: one a

@@ -1,10 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
+
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/enums.dart' as enums;
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart' show PlatformException;
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
+import 'package:in_app_purchase_storekit/store_kit_2_wrappers.dart' show SK2Transaction;
 
 import '../core/platform.dart';
 
@@ -151,25 +155,55 @@ class PurchaseGrant {
         hints: (j['hints'] as num?)?.toInt() ?? 0,
         vipExpiresAt: j['vipExpiresAt'] == null ? null : DateTime.tryParse(j['vipExpiresAt'].toString())?.toLocal(),
       );
+
+  /// "10 tickets", "2,500 coins".
+  String get label => ProductGrant(coins: coins, tickets: tickets, hints: hints).label;
 }
+
+/// Coins, tickets and hints as the server has them after a grant.
+typedef PurchaseBalances = ({int coins, int tickets, int hints});
 
 /// Events surfaced to the UI.
 sealed class PurchaseEvent {
   const PurchaseEvent();
 }
 
+/// The App Store took the payment; the server is checking the purchase and adding what it gives.
+class PurchaseVerifying extends PurchaseEvent {
+  const PurchaseVerifying(this.productId, {this.restored = false});
+  final String productId;
+  final bool restored;
+}
+
 class PurchaseVerified extends PurchaseEvent {
-  const PurchaseVerified(this.productId, this.grant, {this.alreadyApplied = false, this.restored = false});
+  const PurchaseVerified(this.productId, this.grant, {this.alreadyApplied = false, this.restored = false, this.balances});
   final String productId;
   final PurchaseGrant grant;
   final bool alreadyApplied;
   final bool restored;
+
+  /// The player's coins, tickets and hints right after the grant (null when the purchase had been
+  /// added before).
+  final PurchaseBalances? balances;
+}
+
+/// The check did not get through (no connection, the server starting up or busy). It runs again
+/// after [wait]; the App Store keeps the purchase open until it is added.
+class PurchaseRetrying extends PurchaseEvent {
+  const PurchaseRetrying(this.productId, {required this.attempt, required this.wait});
+  final String productId;
+  final int attempt;
+  final Duration wait;
 }
 
 class PurchaseFailed extends PurchaseEvent {
-  const PurchaseFailed(this.message, {this.productId});
+  const PurchaseFailed(this.message, {this.productId, this.paid = false});
   final String message;
   final String? productId;
+
+  /// The payment went through but the server did not accept the purchase. The App Store keeps it
+  /// open, so it is checked again on the next launch.
+  final bool paid;
 }
 
 class PurchaseCanceled extends PurchaseEvent {
@@ -190,6 +224,12 @@ class RestoreFinished extends PurchaseEvent {
 /// completed transaction with the `verify-purchase` Appwrite Function, which
 /// applies the grant server-side.
 ///
+/// [start] runs at launch (Apple: listen for transactions as soon as the app starts), so a
+/// purchase paid while the app was closed, restarted or on another screen is added at once. A
+/// check that does not get through is tried again by itself ([retryDelays], then every minute)
+/// and when the app comes back ([checkOpenPurchases]); the transaction is finished only once the
+/// server has added it, so the App Store keeps it until then.
+///
 /// On web (no plugin implementation) every method is a safe no-op:
 /// [start] does nothing, [isAvailable] is false, [queryProducts] is empty,
 /// [presentCodeRedemptionSheet] returns false. `InAppPurchase.instance` is
@@ -205,16 +245,40 @@ class PurchaseService {
   bool _started = false;
   bool _restoring = false;
   int _restoredCount = 0;
+  DateTime? _warmedAt;
+
+  /// Seconds between tries of a check that did not get through; the last one repeats.
+  static const retryDelays = [2, 4, 8, 15, 30, 60];
+
+  /// Shown when StoreKit itself fails (before any payment).
+  static const storeErrorMessage = 'The App Store could not complete the purchase. Try again in a moment.';
+
+  /// Product id of each transaction being checked right now, by transaction id. StoreKit can hand
+  /// over one transaction twice (the purchase call and the updates stream, or a launch sweep).
+  final _checking = <String, String>{};
+
+  /// Checks that did not get through, waiting for their next try.
+  final _waiting = <String, ({PurchaseDetails details, bool restored})>{};
+  final _attempts = <String, int>{};
+  final _timers = <String, Timer>{};
+
+  /// Added this session (finished, or about to be).
+  final _added = <String>{};
+
+  /// Refused by the server this session; checked again on the next launch.
+  final _rejected = <String>{};
 
   Stream<PurchaseEvent> get events => _events.stream;
 
-  /// Idempotent: enables StoreKit 2 and starts listening to the purchase stream.
+  /// Idempotent: listens to the purchase stream (StoreKit 2 `Transaction.updates`) and checks the
+  /// purchases the App Store still has open.
   Future<void> start() async {
     if (_started || !supportsPurchases) return;
     _started = true;
     // StoreKit 2 is the default transport in in_app_purchase_storekit 0.4+,
     // so verificationData.serverVerificationData is the signed JWS transaction.
     _sub = _iap.purchaseStream.listen(_onPurchases, onError: (e) => _events.add(PurchaseFailed('$e')));
+    unawaited(checkOpenPurchases());
   }
 
   Future<bool> isAvailable() async {
@@ -233,21 +297,42 @@ class PurchaseService {
     return {for (final p in res.productDetails) p.id: p};
   }
 
+  /// Starts a purchase. Completes when the App Store sheet closes; the outcome arrives as events.
   Future<bool> buy(ProductDetails product) async {
     if (!supportsPurchases) {
       _events.add(PurchaseFailed(purchasesOnIphoneMessage, productId: product.id));
       return false;
     }
+    warmUp();
     final param = PurchaseParam(productDetails: product);
     try {
       if (ProductIds.isSubscription(product.id)) {
         return await _iap.buyNonConsumable(purchaseParam: param);
       }
       return await _iap.buyConsumable(purchaseParam: param);
+    } on PlatformException catch (e) {
+      // A purchase of this product is paid but not added yet: StoreKit refuses another one.
+      if (e.code == 'storekit_duplicate_product_object') return _resumeOpen(product.id);
+      debugPrint('buy ${product.id}: $e');
+      _events.add(PurchaseFailed(storeErrorMessage, productId: product.id));
+      return false;
     } catch (e) {
-      _events.add(PurchaseFailed('$e', productId: product.id));
+      debugPrint('buy ${product.id}: $e');
+      _events.add(PurchaseFailed(storeErrorMessage, productId: product.id));
       return false;
     }
+  }
+
+  /// Wakes the verify-purchase function while the player is still in the App Store sheet, so the
+  /// check after the payment does not wait for a cold start (about 5 s). At most every 2 minutes.
+  void warmUp() {
+    if (!supportsPurchases) return;
+    final now = DateTime.now();
+    if (_warmedAt != null && now.difference(_warmedAt!) < const Duration(minutes: 2)) return;
+    _warmedAt = now;
+    Functions(_client)
+        .createExecution(functionId: 'verify-purchase', path: '/health', method: enums.ExecutionMethod.gET, xasync: true)
+        .then((_) {}, onError: (Object e) => debugPrint('verify-purchase warm-up: $e'));
   }
 
   /// Opens the App Store sheet where a player types a VIP gift code (an
@@ -284,6 +369,55 @@ class PurchaseService {
     _events.add(RestoreFinished(_restoredCount));
   }
 
+  /// Checks at once every purchase that is paid but not added: the ones waiting for another try
+  /// and the ones the App Store still has open (paid while the app was closed, an approved Ask to
+  /// Buy). Runs at launch and when the app comes back. Returns their product ids.
+  Future<Set<String>> checkOpenPurchases() async {
+    final products = <String>{};
+    for (final id in [..._waiting.keys]) {
+      _timers.remove(id)?.cancel();
+      final w = _waiting.remove(id)!;
+      products.add(w.details.productID);
+      unawaited(_verify(w.details, restored: w.restored));
+    }
+    for (final t in _started ? await _unfinished() : const <SK2Transaction>[]) {
+      if (_rejected.contains(t.id)) continue;
+      products.add(t.productId);
+      unawaited(_verify(_details(t), restored: false));
+    }
+    return products;
+  }
+
+  Future<List<SK2Transaction>> _unfinished() async {
+    if (defaultTargetPlatform != TargetPlatform.iOS && defaultTargetPlatform != TargetPlatform.macOS) return const [];
+    try {
+      return await SK2Transaction.unfinishedTransactions();
+    } catch (e) {
+      debugPrint('unfinished transactions: $e');
+      return const [];
+    }
+  }
+
+  static PurchaseDetails _details(SK2Transaction t) => SK2PurchaseDetails(
+        productID: t.productId,
+        purchaseID: t.id,
+        verificationData: PurchaseVerificationData(localVerificationData: t.jsonRepresentation ?? '', serverVerificationData: t.receiptData ?? '', source: kIAPSource),
+        transactionDate: t.purchaseDate,
+        status: PurchaseStatus.purchased,
+      );
+
+  /// StoreKit refused a new purchase of [productId] because an earlier one is still open: check
+  /// that one now instead.
+  Future<bool> _resumeOpen(String productId) async {
+    final open = await checkOpenPurchases();
+    if (open.contains(productId) || _checking.containsValue(productId)) {
+      _events.add(PurchaseVerifying(productId));
+      return true;
+    }
+    _events.add(PurchaseFailed('Your last purchase of this item is still being completed. Try again in a minute.', productId: productId));
+    return false;
+  }
+
   Future<void> _onPurchases(List<PurchaseDetails> purchases) async {
     for (final p in purchases) {
       switch (p.status) {
@@ -293,7 +427,8 @@ class PurchaseService {
           _events.add(const PurchaseCanceled());
           await _complete(p);
         case PurchaseStatus.error:
-          _events.add(PurchaseFailed(p.error?.message ?? 'Purchase failed', productId: p.productID));
+          debugPrint('purchase ${p.productID}: ${p.error}');
+          _events.add(PurchaseFailed(storeErrorMessage, productId: p.productID));
           await _complete(p);
         case PurchaseStatus.purchased:
         case PurchaseStatus.restored:
@@ -303,28 +438,85 @@ class PurchaseService {
   }
 
   Future<void> _verify(PurchaseDetails p, {required bool restored}) async {
+    final id = p.purchaseID ?? p.verificationData.serverVerificationData;
+    if (_added.contains(id)) {
+      await _complete(p);
+      return;
+    }
+    if (_checking.containsKey(id)) return;
+    _checking[id] = p.productID;
+    _events.add(PurchaseVerifying(p.productID, restored: restored));
     try {
-      final functions = Functions(_client);
-      final exec = await functions.createExecution(
-        functionId: 'verify-purchase',
-        body: jsonEncode({'jws': p.verificationData.serverVerificationData, 'productId': p.productID}),
-        method: enums.ExecutionMethod.pOST,
-        path: '/verify',
-      );
-      final body = exec.responseBody.isEmpty ? <String, dynamic>{} : jsonDecode(exec.responseBody) as Map<String, dynamic>;
+      final (status, text) = await sendForVerification(p.verificationData.serverVerificationData, p.productID);
+      Map<String, dynamic> body;
+      try {
+        body = text.isEmpty ? <String, dynamic>{} : jsonDecode(text) as Map<String, dynamic>;
+      } catch (_) {
+        body = <String, dynamic>{};
+      }
       if (body['ok'] == true) {
+        _forget(id);
+        _added.add(id);
         final grant = PurchaseGrant.fromJson((body['grant'] as Map?)?.cast<String, dynamic>() ?? const {});
+        final b = body['balances'];
+        final balances = b is Map ? (coins: _int(b['coins']), tickets: _int(b['tickets']), hints: _int(b['hints'])) : null;
         if (restored || _restoring) _restoredCount++;
-        _events.add(PurchaseVerified(p.productID, grant, alreadyApplied: body['alreadyApplied'] == true, restored: restored));
+        _events.add(PurchaseVerified(p.productID, grant, alreadyApplied: body['alreadyApplied'] == true, restored: restored, balances: balances));
         await _complete(p);
+      } else if (status >= 400 && status < 500 && status != 401 && status != 408 && status != 429) {
+        // Refused (not verifiable, refunded, the family limit): another try now would answer the
+        // same. The transaction stays open, so the next launch asks again.
+        _forget(id);
+        _rejected.add(id);
+        _events.add(PurchaseFailed(body['error']?.toString() ?? 'The purchase could not be confirmed ($status).', productId: p.productID, paid: true));
       } else {
-        // Leave the transaction unfinished so StoreKit re-delivers it later.
-        _events.add(PurchaseFailed(body['error']?.toString() ?? 'Verification failed (${exec.responseStatusCode})', productId: p.productID));
+        debugPrint('verify ${p.productID}: $status $text');
+        _retryLater(id, p, restored);
       }
     } catch (e) {
-      _events.add(PurchaseFailed('Could not verify purchase: $e', productId: p.productID));
+      debugPrint('verify ${p.productID}: $e');
+      _retryLater(id, p, restored);
+    } finally {
+      _checking.remove(id);
     }
   }
+
+  /// `POST /verify` on the verify-purchase function: the answer's status and body.
+  @protected
+  Future<(int, String)> sendForVerification(String jws, String productId) async {
+    final exec = await Functions(_client).createExecution(
+      functionId: 'verify-purchase',
+      body: jsonEncode({'jws': jws, 'productId': productId}),
+      method: enums.ExecutionMethod.pOST,
+      path: '/verify',
+    );
+    return (exec.responseStatusCode, exec.responseBody);
+  }
+
+  /// Hands [purchases] over as the purchase stream would.
+  @visibleForTesting
+  Future<void> debugDeliver(List<PurchaseDetails> purchases) => _onPurchases(purchases);
+
+  void _retryLater(String id, PurchaseDetails p, bool restored) {
+    final attempt = _attempts[id] = (_attempts[id] ?? 0) + 1;
+    final wait = Duration(seconds: retryDelays[min(attempt, retryDelays.length) - 1]);
+    _waiting[id] = (details: p, restored: restored);
+    _timers.remove(id)?.cancel();
+    _timers[id] = Timer(wait, () {
+      _timers.remove(id);
+      final w = _waiting.remove(id);
+      if (w != null) unawaited(_verify(w.details, restored: w.restored));
+    });
+    _events.add(PurchaseRetrying(p.productID, attempt: attempt, wait: wait));
+  }
+
+  void _forget(String id) {
+    _waiting.remove(id);
+    _attempts.remove(id);
+    _timers.remove(id)?.cancel();
+  }
+
+  static int _int(Object? v) => v is num ? v.toInt() : 0;
 
   Future<void> _complete(PurchaseDetails p) async {
     if (p.pendingCompletePurchase) {
@@ -337,6 +529,9 @@ class PurchaseService {
   }
 
   void dispose() {
+    for (final t in _timers.values) {
+      t.cancel();
+    }
     _sub?.cancel();
     _events.close();
   }

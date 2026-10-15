@@ -191,6 +191,15 @@ class SyncController extends Notifier<SyncState> {
   /// server's rows without telling the player (a purchase made on this device, a merge).
   Future<void> sync({bool full = false, bool silent = false}) => _kick(fetch: true, full: full, silent: silent);
 
+  /// The server is about to change the save itself (a purchase being added): reads during the
+  /// next [quiet] take its changes in without the "Synced from another device" alert.
+  void expectServerChange([Duration quiet = const Duration(seconds: 30)]) {
+    final until = DateTime.now().add(quiet);
+    if (_quietUntil == null || until.isAfter(_quietUntil!)) _quietUntil = until;
+  }
+
+  DateTime? _quietUntil;
+
   /// The app came back to the foreground (or the browser tab got the focus again).
   void onResume() {
     _foreground = true;
@@ -286,7 +295,8 @@ class SyncController extends Notifier<SyncState> {
     final since = !full && a.cursor != null ? _before(a.cursor!) : null;
     final rows = await _backend.progressRows(a.userId, since: since);
     _lastFetch = DateTime.now();
-    final known = a.synced, tell = a.synced && !silent;
+    final quiet = _quietUntil != null && DateTime.now().isBefore(_quietUntil!);
+    final known = a.synced, tell = a.synced && !silent && !quiet;
     var notice = SyncNotice.empty;
 
     // Profile ops the server already has: sent before, but the answer never came.

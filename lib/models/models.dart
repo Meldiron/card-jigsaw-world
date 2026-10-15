@@ -141,7 +141,7 @@ class Profile {
   int get level => LevelRewards.levelForXp(xp);
 
   static const piggyCapacity = 500;
-  static const adsPerDay = 5;
+  static const adsPerDay = 3;
 
   /// Rewarded videos still available today.
   int get adsLeftToday {

@@ -9,6 +9,6 @@
   },
   "dependencies": {
     "@apple/app-store-server-library": "^3.1.0",
-    "node-appwrite": "^20.0.0"
+    "node-appwrite": "^20.3.0"
   }
 }

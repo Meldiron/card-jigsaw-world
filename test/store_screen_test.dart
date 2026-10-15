@@ -12,6 +12,7 @@ import 'package:card_jigsaw_world/state/auth.dart';
 import 'package:card_jigsaw_world/state/profile.dart';
 import 'package:card_jigsaw_world/state/purchases.dart';
 import 'package:card_jigsaw_world/state/settings.dart';
+import 'package:flutter/cupertino.dart' show CupertinoActivityIndicator;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -164,10 +165,21 @@ void main() {
       await pumpLate(tester, service);
       expect(find.text('1,09 €'), findsNothing, reason: 'still no products when the store opened');
       await tester.tap(find.text(StoreProducts.grant(ProductIds.coins1000).label));
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
       expect(service.queries, 3);
       expect(service.bought?.id, ProductIds.coins1000);
       expect(find.textContaining('not available right now'), findsNothing);
+      // The tapped tile waits for the App Store with a spinner in place of its price.
+      expect(find.byType(CupertinoActivityIndicator), findsOneWidget);
+      expect(find.text('1,09 €'), findsNothing);
+      // The App Store sheet closes without a purchase: the price is back.
+      await service.debugDeliver([
+        PurchaseDetails(productID: ProductIds.coins1000, verificationData: PurchaseVerificationData(localVerificationData: '', serverVerificationData: '', source: 'app_store'), transactionDate: null, status: PurchaseStatus.canceled),
+      ]);
+      await tester.pumpAndSettle();
+      expect(find.byType(CupertinoActivityIndicator), findsNothing);
+      expect(find.text('1,09 €'), findsOneWidget);
     });
   });
 }

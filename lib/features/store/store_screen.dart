@@ -16,7 +16,6 @@ import '../../core/theme/tokens.dart';
 import '../../data/purchases.dart';
 import '../../models/models.dart';
 import '../../state/profile.dart';
-import '../../state/sync.dart';
 import '../../state/purchases.dart';
 import '../../state/settings.dart';
 import '../../widgets/glass.dart';
@@ -26,7 +25,9 @@ import '../ads/house_ads.dart';
 
 /// Store: free bonus video (capped per day), coin bundles, ticket bundles,
 /// hint packs, VIP. Purchases go through StoreKit and are verified by the
-/// `verify-purchase` Appwrite Function before anything is granted. In debug
+/// `verify-purchase` Appwrite Function before anything is granted; the tapped
+/// tile waits while the App Store sheet is open, then [PurchaseHost] shows the
+/// purchase sheet ([purchaseFlowProvider]). In debug
 /// builds without a store (plain simulator) a clearly labelled sandbox
 /// dialog stands in so the flow can still be exercised.
 ///
@@ -44,17 +45,16 @@ class StoreScreen extends ConsumerStatefulWidget {
 
 class _StoreScreenState extends ConsumerState<StoreScreen> {
   bool _adBusy = false;
-  bool _buying = false;
-  StreamSubscription<PurchaseEvent>? _events;
+
+  /// The product whose App Store details are being asked for again.
+  String? _querying;
   final _vipKey = GlobalKey();
 
   @override
   void initState() {
     super.initState();
     if (ref.read(platformCapsProvider).purchases) {
-      final service = ref.read(purchaseServiceProvider);
-      service.start();
-      _events = service.events.listen(_onPurchaseEvent);
+      ref.read(purchaseServiceProvider).start();
       // Opened after an answer without products: ask the App Store again, so the prices load.
       if ((ref.read(productsProvider).value ?? const {}).isEmpty) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -69,49 +69,6 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
       });
     }
   }
-
-  @override
-  void dispose() {
-    _events?.cancel();
-    super.dispose();
-  }
-
-  void _onPurchaseEvent(PurchaseEvent e) {
-    if (!mounted) return;
-    switch (e) {
-      case PurchaseVerified():
-        setState(() => _buying = false);
-        ref.read(syncProvider.notifier).sync(silent: true);
-        final g = e.grant;
-        if (e.alreadyApplied && !e.restored) {
-          showToast(context, 'Purchase already applied', icon: AppIcons.check);
-        } else if (g.vipExpiresAt != null) {
-          Sfx.instance.win();
-          Haptics.success();
-          showToast(context, 'VIP active until ${_date(g.vipExpiresAt!)}', icon: AppIcons.vip);
-        } else {
-          Sfx.instance.coin();
-          Haptics.success();
-          final parts = [
-            if (g.coins > 0) '${groupThousands(g.coins)} coins',
-            if (g.tickets > 0) '${groupThousands(g.tickets)} ticket${g.tickets == 1 ? '' : 's'}',
-            if (g.hints > 0) '${groupThousands(g.hints)} hint${g.hints == 1 ? '' : 's'}',
-          ];
-          showToast(context, 'Added ${parts.join(', ')}', icon: AppIcons.check);
-        }
-      case PurchaseFailed():
-        setState(() => _buying = false);
-        showToast(context, e.message, icon: AppIcons.time);
-      case PurchaseCanceled():
-        setState(() => _buying = false);
-      case PurchasePending():
-        showToast(context, 'Waiting for approval', icon: AppIcons.time);
-      case RestoreFinished():
-        setState(() => _buying = false);
-    }
-  }
-
-  static String _date(DateTime d) => '${d.day}.${d.month}.${d.year}';
 
   Future<void> _watchAd() async {
     if (_adBusy) return;
@@ -164,21 +121,21 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
     final details = ref.read(productsProvider).value?[id];
     if (details != null && _storeAvailable) return details;
     if (!ref.read(platformCapsProvider).purchases) return null;
-    setState(() => _buying = true);
+    setState(() => _querying = id);
     ref.invalidate(storeAvailableProvider);
     final products = await ref.read(productsProvider.future);
-    if (mounted) setState(() => _buying = false);
+    if (mounted) setState(() => _querying = null);
     return _storeAvailable ? products[id] : null;
   }
 
+  bool get _busy => _querying != null || ref.read(purchaseFlowProvider).busy;
+
   Future<void> _buy(_Product p) async {
-    if (_buying) return;
+    if (_busy) return;
     final details = await _product(p.id);
     if (!mounted) return;
     if (details != null) {
-      setState(() => _buying = true);
-      final started = await ref.read(purchaseServiceProvider).buy(details);
-      if (!started && mounted) setState(() => _buying = false);
+      await ref.read(purchaseFlowProvider.notifier).buy(details);
       return;
     }
     if (!kDebugMode) {
@@ -209,13 +166,11 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
   }
 
   Future<void> _buyVip(String productId) async {
-    if (_buying) return;
+    if (_busy) return;
     final details = await _product(productId);
     if (!mounted) return;
     if (details != null) {
-      setState(() => _buying = true);
-      final started = await ref.read(purchaseServiceProvider).buy(details);
-      if (!started && mounted) setState(() => _buying = false);
+      await ref.read(purchaseFlowProvider.notifier).buy(details);
       return;
     }
     if (!kDebugMode) {
@@ -243,6 +198,10 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
     final storeUp = caps.purchases && (ref.watch(storeAvailableProvider).value ?? false);
     final adsLeft = profile?.adsLeftToday ?? Profile.adsPerDay;
     final isVip = profile?.isVip ?? false;
+    final flow = ref.watch(purchaseFlowProvider);
+    final busy = _querying != null || flow.busy;
+    // The tile that waits: its products asked for again, or its App Store sheet open.
+    final activeId = _querying ?? (flow.stage == PurchaseStage.paying ? flow.productId : null);
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: GlassAppBar(
@@ -302,13 +261,13 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
           ),
           const SectionHeader(title: 'Coins', subtitle: 'Unlock packs and boosters', padding: EdgeInsets.fromLTRB(0, 24, 0, 12)),
           _FreeNote(text: 'Free coins: daily quests, the daily gift, level-ups, the piggy bank (${Economy.piggyPerPuzzle} per picture, up to ${Profile.piggyCapacity}) and the Lucky Wheel.', route: '/events'),
-          _ProductGrid(products: _coinProducts, onBuy: _buy, priceOf: (p) => _price(p, products), busy: _buying, purchasable: caps.purchases),
+          _ProductGrid(products: _coinProducts, onBuy: _buy, priceOf: (p) => _price(p, products), busy: busy, activeId: activeId, purchasable: caps.purchases),
           const SectionHeader(title: 'Tickets', subtitle: 'Premium packs and the piggy bank', padding: EdgeInsets.fromLTRB(0, 24, 0, 12)),
           _FreeNote(text: 'Free tickets: the daily gift, weekly quests, world-day events and every third level.', route: '/events'),
-          _ProductGrid(products: _ticketProducts, onBuy: _buy, priceOf: (p) => _price(p, products), busy: _buying, purchasable: caps.purchases),
+          _ProductGrid(products: _ticketProducts, onBuy: _buy, priceOf: (p) => _price(p, products), busy: busy, activeId: activeId, purchasable: caps.purchases),
           const SectionHeader(title: 'Hints', subtitle: 'Show a card its place', padding: EdgeInsets.fromLTRB(0, 24, 0, 12)),
           _FreeNote(text: 'Free hints: the daily gift on even days, every second level and the Lucky Wheel.', route: '/home'),
-          _ProductGrid(products: _boosterProducts, onBuy: _buy, priceOf: (p) => _price(p, products), busy: _buying, purchasable: caps.purchases),
+          _ProductGrid(products: _boosterProducts, onBuy: _buy, priceOf: (p) => _price(p, products), busy: busy, activeId: activeId, purchasable: caps.purchases),
           const SizedBox(height: 24),
           _VipCard(
             key: _vipKey,
@@ -316,7 +275,8 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
             vipUntil: profile?.vipExpiresAt,
             monthlyPrice: products[ProductIds.vipMonthly]?.price ?? StoreProducts.price(ProductIds.vipMonthly),
             yearlyPrice: products[ProductIds.vipYearly]?.price ?? StoreProducts.price(ProductIds.vipYearly),
-            busy: _buying,
+            busy: busy,
+            activeId: activeId,
             purchasable: caps.purchases,
             onBuyMonthly: () => _buyVip(ProductIds.vipMonthly),
             onBuyYearly: () => _buyVip(ProductIds.vipYearly),
@@ -407,6 +367,7 @@ class _VipCard extends StatelessWidget {
     required this.monthlyPrice,
     required this.yearlyPrice,
     required this.busy,
+    this.activeId,
     this.purchasable = true,
     required this.onBuyMonthly,
     required this.onBuyYearly,
@@ -417,6 +378,7 @@ class _VipCard extends StatelessWidget {
   final String monthlyPrice;
   final String yearlyPrice;
   final bool busy;
+  final String? activeId;
   /// False on web: the benefits stay as information, the buy buttons, the
   /// prices and the gift-code link are replaced by an "Available on iPhone"
   /// label.
@@ -483,11 +445,11 @@ class _VipCard extends StatelessWidget {
               ],
             )
           else ...[
-            BigButton(label: 'Start ${StoreProducts.vipTrialDays}-day free trial', kind: ButtonKind.gold, loading: busy, onTap: onBuyMonthly),
+            BigButton(label: 'Start ${StoreProducts.vipTrialDays}-day free trial', kind: ButtonKind.gold, loading: activeId == ProductIds.vipMonthly, onTap: busy ? null : onBuyMonthly),
             const SizedBox(height: 6),
             Text(StoreProducts.vipTrialLine(monthlyPrice), style: TextStyle(color: fg.withValues(alpha: 0.7), fontSize: 12)),
             const SizedBox(height: 10),
-            BigButton(label: 'Yearly · $yearlyPrice · ${StoreProducts.vipTrialDays} days free', kind: ButtonKind.ghostLight, loading: busy, onTap: onBuyYearly),
+            BigButton(label: 'Yearly · $yearlyPrice · ${StoreProducts.vipTrialDays} days free', kind: ButtonKind.ghostLight, loading: activeId == ProductIds.vipYearly, onTap: busy ? null : onBuyYearly),
           ],
           if (purchasable) ...[
             const SizedBox(height: 14),
@@ -605,11 +567,16 @@ class _FreeNote extends StatelessWidget {
 }
 
 class _ProductGrid extends StatelessWidget {
-  const _ProductGrid({required this.products, required this.onBuy, required this.priceOf, this.busy = false, this.purchasable = true});
+  const _ProductGrid({required this.products, required this.onBuy, required this.priceOf, this.busy = false, this.activeId, this.purchasable = true});
   final List<_Product> products;
   final void Function(_Product) onBuy;
   final String Function(_Product) priceOf;
+
+  /// A purchase is under way: no tile takes a tap, and the others dim.
   final bool busy;
+
+  /// The tile whose purchase is under way: a spinner in place of its price.
+  final String? activeId;
 
   /// False on web: each tile shows "Available on iPhone" instead of its
   /// price, and a tap says where to buy it.
@@ -628,35 +595,42 @@ class _ProductGrid extends StatelessWidget {
       itemCount: products.length,
       itemBuilder: (_, i) {
         final p = products[i];
+        final active = p.id == activeId;
         return Pressable(
           onTap: !purchasable
               ? () => showToast(context, purchasesOnIphoneMessage, icon: CupertinoIcons.device_phone_portrait)
               : (busy ? null : () => onBuy(p)),
-          child: Container(
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(color: c.card, borderRadius: BorderRadius.circular(Radii.lg), border: Border.all(color: c.stroke)),
-            child: Stack(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _ProductArt(art: p.art),
-                    const Spacer(),
-                    Text(p.title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
-                    const SizedBox(height: 6),
-                    if (purchasable)
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(color: c.accentTint, borderRadius: BorderRadius.circular(999)),
-                        child: Text(priceOf(p), style: TextStyle(color: context.accent, fontWeight: FontWeight.w700, fontSize: 13)),
-                      )
-                    else
-                      Chip2(label: 'Available on iPhone', icon: CupertinoIcons.device_phone_portrait, color: c.accentTint, foreground: context.accent),
-                  ],
-                ),
-                if (p.badge != null)
-                  Positioned(right: 0, top: 0, child: Chip2(label: p.badge!, color: c.accentTint, foreground: context.accent)),
-              ],
+          child: AnimatedOpacity(
+            opacity: busy && !active ? 0.5 : 1,
+            duration: const Duration(milliseconds: 200),
+            child: Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(color: c.card, borderRadius: BorderRadius.circular(Radii.lg), border: Border.all(color: c.stroke)),
+              child: Stack(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _ProductArt(art: p.art),
+                      const Spacer(),
+                      Text(p.title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
+                      const SizedBox(height: 6),
+                      if (purchasable)
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(color: c.accentTint, borderRadius: BorderRadius.circular(999)),
+                          child: active
+                              ? const SizedBox(height: 16, width: 36, child: CupertinoActivityIndicator(radius: 7))
+                              : Text(priceOf(p), style: TextStyle(color: context.accent, fontWeight: FontWeight.w700, fontSize: 13)),
+                        )
+                      else
+                        Chip2(label: 'Available on iPhone', icon: CupertinoIcons.device_phone_portrait, color: c.accentTint, foreground: context.accent),
+                    ],
+                  ),
+                  if (p.badge != null)
+                    Positioned(right: 0, top: 0, child: Chip2(label: p.badge!, color: c.accentTint, foreground: context.accent)),
+                ],
+              ),
             ),
           ),
         );
