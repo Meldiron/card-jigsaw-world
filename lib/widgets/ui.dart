@@ -873,6 +873,9 @@ class _AppSegmentedControlState<T extends Object> extends State<AppSegmentedCont
                                     button: true,
                                     selected: i == _index,
                                     inMutuallyExclusiveGroup: true,
+                                    // VoiceOver activates a segment here; touches go through the
+                                    // control's own gesture detector.
+                                    onTap: () => _select(i),
                                     child: Padding(
                                       padding: widget.segmentPadding,
                                       child: Center(
