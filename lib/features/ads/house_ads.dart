@@ -19,6 +19,7 @@ import '../../state/purchases.dart';
 import '../../state/settings.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
+import '../../widgets/vip.dart';
 
 /// House ads: we run no ad network, so every "ad" slot promotes something the
 /// player can buy in the app (VIP, coins, tickets, hints) or a free feature
@@ -627,40 +628,37 @@ class _HouseBannerState extends ConsumerState<HouseBanner> {
     if (_dismissedThisSession || profile == null || profile.isVip) return const SizedBox.shrink();
     _creative ??= houseCreatives.firstWhere((c) => c.kind == CreativeKind.vip);
     final c = _creative!;
-    final colors = context.colors;
     final price = ((ref.watch(platformCapsProvider).purchases ? c.priceLine(_appStorePrices(ref)) : null) ?? c.body).replaceAll('/', '\u2060/\u2060');
-    // A quiet card like the others on Home: gold only on the crown, the action in cobalt, the price
-    // in full (word joiners keep "$2.99/month" together), and "Not now" instead of a small cross.
+    // The VIP card (lib/widgets/vip.dart), stacked: the crown, the headline and the full price on
+    // top (word joiners keep "$2.99/month" together), then the action and "Not now" as real buttons.
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-      child: SoftCard(
-        padding: Insets.card,
+      child: VipSurface(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                // Same crown tile as the Store's VIP card (102 D), smaller.
-                IconTile(icon: AppIcons.vip, size: IconTile.small, color: Brand.coin.withValues(alpha: context.isDark ? 0.18 : 0.14), iconColor: context.isDark ? Brand.coin : Brand.coinDeep),
+                const VipCrown(size: IconTile.medium),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(c.headline, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body)),
+                      Text(c.headline, style: const TextStyle(color: Vip.fg, fontWeight: FontWeight.w600, fontSize: TypeSize.body)),
                       const SizedBox(height: 2),
-                      Text(price, style: TextStyle(color: colors.textSecondary, fontSize: TypeSize.footnote, height: 1.3)),
+                      Text(price, style: TextStyle(color: Vip.fgSecondary, fontSize: TypeSize.footnote, height: 1.3)),
                     ],
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 14),
             Row(
               children: [
-                Expanded(child: BigButton(label: 'Go VIP', kind: ButtonKind.secondary, height: 40, onTap: () => openCreative(context, ref, c))),
+                Expanded(child: BigButton(label: 'Go VIP', kind: ButtonKind.gold, height: 40, onTap: () => openCreative(context, ref, c))),
                 const SizedBox(width: 8),
-                BigButton(label: 'Not now', kind: ButtonKind.ghost, height: 40, expand: false, onTap: () => setState(() => _dismissedThisSession = true)),
+                BigButton(label: 'Not now', kind: ButtonKind.ghostLight, height: 40, expand: false, onTap: () => setState(() => _dismissedThisSession = true)),
               ],
             ),
           ],
