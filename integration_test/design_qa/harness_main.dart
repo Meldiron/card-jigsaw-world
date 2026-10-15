@@ -437,7 +437,17 @@ List<Map<String, dynamic>> tapTargets() {
       if (ro is RenderBox && ro.attached && ro.hasSize) {
         final rect = MatrixUtils.transformRect(ro.getTransformTo(null), Offset.zero & ro.size);
         if (rect.width > 0 && _hits(ro, rect.center)) {
-          out.add({'label': label(e), 'rect': [rect.left.round(), rect.top.round(), rect.width.round(), rect.height.round()]});
+          // Effective touch area: how far from the centre a touch still reaches this target.
+          double reach(Offset dir) {
+            var d = 0.0;
+            while (d < 60 && _hits(ro, rect.center + dir * (d + 1))) {
+              d += 1;
+            }
+            return d;
+          }
+          final hitW = reach(const Offset(-1, 0)) + reach(const Offset(1, 0)) + 1;
+          final hitH = reach(const Offset(0, -1)) + reach(const Offset(0, 1)) + 1;
+          out.add({'label': label(e), 'rect': [rect.left.round(), rect.top.round(), rect.width.round(), rect.height.round()], 'hit': [hitW.round(), hitH.round()]});
         }
       }
     }
