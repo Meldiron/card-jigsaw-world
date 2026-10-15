@@ -448,7 +448,9 @@ Future<void> act(Map<String, dynamic> a, ProviderContainer c) async {
     if (ctx == null) throw StateError('hook: no navigator');
     final fn = hooks[a['hook']];
     if (fn == null) throw StateError('hook: unknown ${a['hook']}');
-    unawaited(fn(ctx, c, Map<String, dynamic>.from((a['args'] as Map?) ?? const {})));
+    unawaited(fn(ctx, c, Map<String, dynamic>.from((a['args'] as Map?) ?? const {})).catchError((Object e) {
+      _errors.add('hook ${a['hook']}: $e');
+    }));
     return pause(900);
   }
   if (a.containsKey('profile')) {
