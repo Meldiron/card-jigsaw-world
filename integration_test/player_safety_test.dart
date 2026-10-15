@@ -1,7 +1,7 @@
 // Report and block on the real app (live Appwrite backend, guideline 1.2), the links Apple asks
 // for (privacy policy, terms of use), and account deletion taking the reports and blocks along.
 // A new player reports the league's top player (the row is private: the player cannot read it
-// back), blocks them (gone from the leaderboard, Unblock on their page), unblocks them in Settings >
+// back), blocks them (gone from the leaderboard, Unblock in their page's menu), unblocks them in Settings >
 // Blocked players, blocks again and deletes the account. The run prints QA_SAFETY_USER <id>; the
 // host then checks that no report or block of that id is left (see the end of this file).
 //
@@ -93,9 +93,8 @@ void main() {
     // ---- Report: a reason, then a private row the player cannot read back.
     router.push('/player/${target.id}');
     await settle(tester, 3500);
-    final page = find.byWidgetPredicate((w) => w is Scrollable && w.axisDirection == AxisDirection.down).first;
-    await tester.dragUntilVisible(find.byKey(const ValueKey('player-report')), page, const Offset(0, -300));
-    await settle(tester, 800);
+    // Report and block live in the bar's "..." menu (an action sheet: Report, Block, Cancel).
+    await tapKey(tester, 'player-more', ms: 800);
     await shot(tester, 'ps_01_player_actions');
     await tapKey(tester, 'player-report');
     expect(find.text('Report ${target.displayName}'), findsOneWidget);
@@ -111,13 +110,17 @@ void main() {
     }
     expect(readable, 0, reason: 'a report is read by the developer only');
 
-    // ---- Block: confirmed, gone from the leaderboard, Unblock on their page.
+    // ---- Block: confirmed, gone from the leaderboard, Unblock in their page's menu.
+    await tapKey(tester, 'player-more', ms: 800);
     await tapKey(tester, 'player-block');
     expect(find.text('Block ${target.displayName}?'), findsOneWidget);
     await shot(tester, 'ps_03_block_alert');
     await tapText(tester, 'Block', last: true, ms: 3000);
+    expect(find.byKey(const ValueKey('player-blocked')), findsOneWidget);
+    await tapKey(tester, 'player-more', ms: 800);
     expect(find.byKey(const ValueKey('player-unblock')), findsOneWidget);
     await shot(tester, 'ps_04_blocked');
+    await tapText(tester, 'Cancel', last: true, ms: 800);
     expect(await leaderboardIds(tester), isNot(contains(target.id)));
     router.go('/social');
     await settle(tester, 3500);
@@ -170,6 +173,8 @@ void main() {
     await settle(tester, 1000);
     await tester.tap(find.byKey(const ValueKey('account-delete')), warnIfMissed: false);
     await settle(tester, 2500);
+    await tester.tap(find.byKey(const ValueKey('account-delete-continue')), warnIfMissed: false);
+    await settle(tester, 1500);
     await tapText(tester, 'Delete account', last: true, ms: 500);
     for (var i = 0; i < 40 && find.byType(OnboardingScreen).evaluate().isEmpty; i++) {
       await settle(tester, 500);

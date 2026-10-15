@@ -183,15 +183,16 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     Divider(height: 1, color: c.stroke),
                     const SizedBox(height: 12),
                     // The wallet: three columns split by hairlines. The streak lives in Statistics
-                    // (and on Home), so each balance gets a third of the card at full size.
+                    // (and on Home), so each balance gets a third of the card at full size; from
+                    // 100,000 a balance is written short ("235K", "1.2M") and keeps that size.
                     IntrinsicHeight(
                       child: Row(
                         children: [
-                          _Stat(value: formatCount(profile.coins), label: 'Coins', icon: const CoinIcon(size: 14)),
+                          _Stat(value: compactCount(profile.coins), label: 'Coins', icon: const CoinIcon(size: 14)),
                           VerticalDivider(width: 1, thickness: 1, color: c.stroke),
-                          _Stat(value: formatCount(profile.tickets), label: 'Tickets', icon: const TicketIcon(size: 13)),
+                          _Stat(value: compactCount(profile.tickets), label: 'Tickets', icon: const TicketIcon(size: 13)),
                           VerticalDivider(width: 1, thickness: 1, color: c.stroke),
-                          _Stat(value: formatCount(profile.hints), label: 'Hints', icon: const HintIcon(size: 14)),
+                          _Stat(value: compactCount(profile.hints), label: 'Hints', icon: const HintIcon(size: 14)),
                         ],
                       ),
                     ),
@@ -226,7 +227,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             sliver: SliverList.separated(
               itemCount: achievements.length,
-              separatorBuilder: (_, _) => const SizedBox(height: 10),
+              separatorBuilder: (_, _) => const SizedBox(height: 8),
               itemBuilder: (_, i) => _AchievementCard(key: ValueKey(achievements[i].family.id), status: achievements[i]),
             ),
           ),
@@ -327,7 +328,6 @@ class _ClaimAllCardState extends ConsumerState<_ClaimAllCard> {
 
   @override
   Widget build(BuildContext context) {
-    final c = context.colors;
     var coins = 0, tickets = 0, avatars = 0;
     for (final a in widget.ready) {
       coins += a.step?.coins ?? 0;
@@ -335,8 +335,6 @@ class _ClaimAllCardState extends ConsumerState<_ClaimAllCard> {
       if (a.step?.avatarKey != null) avatars++;
     }
     return SoftCard(
-      color: c.accentTint,
-      border: false,
       padding: const EdgeInsets.fromLTRB(16, 12, 12, 12),
       child: Row(
         children: [
@@ -345,22 +343,22 @@ class _ClaimAllCardState extends ConsumerState<_ClaimAllCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('${widget.ready.length} rewards ready', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body)),
-                const SizedBox(height: 4),
+                const SizedBox(height: 6),
+                // Together, in the level card's reward marks.
                 Wrap(
-                  spacing: 10,
-                  runSpacing: 4,
-                  crossAxisAlignment: WrapCrossAlignment.center,
+                  spacing: 6,
+                  runSpacing: 6,
                   children: [
-                    if (coins > 0) Amount(currency: Currency.coins, value: formatCount(coins), size: 14, fontSize: TypeSize.footnote, weight: FontWeight.w600),
-                    if (tickets > 0) Amount(currency: Currency.tickets, value: tickets, size: 14, fontSize: TypeSize.footnote, weight: FontWeight.w600),
-                    if (avatars > 0) Text('$avatars avatar${avatars == 1 ? '' : 's'}', style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: c.textSecondary)),
+                    if (coins > 0) RewardChip.amount(currency: Currency.coins, value: coins),
+                    if (tickets > 0) RewardChip.amount(currency: Currency.tickets, value: tickets),
+                    if (avatars > 0) RewardChip.unlock(leading: Icon(AppIcons.personCropCircle, size: 14, color: context.accent), label: countOf(avatars, 'avatar')),
                   ],
                 ),
               ],
             ),
           ),
           const SizedBox(width: 12),
-          BigButton(label: 'Claim all', height: 40, expand: false, loading: _busy, onTap: _claimAll),
+          BigButton(label: 'Claim all', height: 36, expand: false, loading: _busy, onTap: _claimAll),
         ],
       ),
     );
@@ -389,15 +387,26 @@ class _AchievementCard extends ConsumerWidget {
     final all = status.allClaimed;
     final done = status.done;
     final ratio = all ? 1.0 : (status.progress / status.target).clamp(0.0, 1.0);
+    // Compact, in the quests' checklist language: the icon in a progress ring (the bar), the title
+    // with its tier dots and the one fraction, the description, then the next tier's reward as
+    // chips. Claim sits alone on the right once the tier is reached; a finished family keeps two
+    // lines.
+    // Cobalt while it runs and once ready (the colour of its Claim button); green when every tier is in.
+    final tone = all ? c.success : context.accent;
     return SoftCard(
-      padding: Insets.cardCompact,
+      padding: const EdgeInsets.fromLTRB(12, 12, 14, 12),
       child: Row(
         children: [
-          Container(
-            width: 44,
-            height: 44,
-            decoration: BoxDecoration(shape: BoxShape.circle, color: (all || done) ? c.accentTint : c.boardBackground),
-            child: Icon(f.icon, size: 22, color: (all || done) ? context.accent : c.textTertiary),
+          SizedBox(
+            width: 42,
+            height: 42,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                SizedBox.expand(child: CircularProgressIndicator(value: ratio, strokeWidth: 3, strokeCap: StrokeCap.round, backgroundColor: c.stroke, color: tone)),
+                Icon(all ? AppIcons.checkmarkAlt : f.icon, size: 18, color: (all || done) ? tone : c.textSecondary),
+              ],
+            ),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -407,56 +416,43 @@ class _AchievementCard extends ConsumerWidget {
                 // The title, then one dot per tier (filled once claimed) instead of a second fraction.
                 Row(
                   children: [
-                    Flexible(child: Text(f.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body))),
-                    if (f.steps.length > 1) ...[const SizedBox(width: 8), _TierDots(claimed: status.claimedSteps, total: f.steps.length)],
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Flexible(child: Text(f.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body))),
+                          if (f.steps.length > 1) ...[const SizedBox(width: 8), _TierDots(claimed: status.claimedSteps, total: f.steps.length)],
+                        ],
+                      ),
+                    ),
+                    // The one fraction, at the end of the title line, while the tier runs.
+                    if (!done && !all) ...[
+                      const SizedBox(width: 8),
+                      Text(
+                        '${formatCount(status.progress.clamp(0, status.target))} / ${formatCount(status.target)}',
+                        style: TextStyle(fontSize: TypeSize.footnote, color: c.textSecondary, fontWeight: FontWeight.w600, fontFeatures: tabularFigures),
+                      ),
+                    ],
                   ],
                 ),
                 const SizedBox(height: 2),
                 Text(all ? 'Every tier claimed' : status.description, style: TextStyle(fontSize: TypeSize.footnote, color: c.textSecondary)),
-                // A ready tier needs no full bar next to its Claim button.
-                if (!done) ...[
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Expanded(child: ProgressBar(value: ratio, height: 6, color: all ? Brand.success : null)),
-                    const SizedBox(width: 8),
-                    Text(
-                      all ? 'Done' : '${formatCount(status.progress.clamp(0, status.target))} / ${formatCount(status.target)}',
-                      style: TextStyle(fontSize: TypeSize.caption, color: c.textSecondary, fontWeight: FontWeight.w600, fontFeatures: tabularFigures),
-                    ),
-                  ],
-                ),
-                ],
                 if (!all) ...[
                   const SizedBox(height: 8),
-                  // What the next tier pays, as one quiet line (wraps when space is short).
+                  // What the next tier pays, in the level card's reward chips.
                   Wrap(
-                    spacing: 8,
-                    runSpacing: 4,
-                    crossAxisAlignment: WrapCrossAlignment.center,
+                    spacing: 6,
+                    runSpacing: 6,
                     children: [
-                      Text('Reward', style: TextStyle(fontSize: TypeSize.caption, color: c.textTertiary, fontWeight: FontWeight.w500)),
-                      if (step!.coins > 0) Amount(currency: Currency.coins, value: formatCount(step.coins), size: 13, fontSize: TypeSize.caption, weight: FontWeight.w600),
-                      if (step.tickets > 0) Amount(currency: Currency.tickets, value: step.tickets, size: 13, fontSize: TypeSize.caption, weight: FontWeight.w600),
-                      if (step.avatarKey != null)
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            AvatarCircle(avatarKey: step.avatarKey, size: 16),
-                            const SizedBox(width: 4),
-                            Text('Avatar', style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600, color: c.textPrimary)),
-                          ],
-                        ),
+                      if (step!.coins > 0) RewardChip.amount(currency: Currency.coins, value: step.coins),
+                      if (step.tickets > 0) RewardChip.amount(currency: Currency.tickets, value: step.tickets),
+                      if (step.avatarKey != null) RewardChip.unlock(leading: AvatarCircle(avatarKey: step.avatarKey, size: 16), label: 'Avatar'),
                     ],
                   ),
                 ],
               ],
             ),
           ),
-          if (all) ...[
-            const SizedBox(width: 12),
-            const Icon(AppIcons.checkmarkCircleFill, color: Brand.success, size: 22),
-          ] else if (done) ...[
+          if (done) ...[
             const SizedBox(width: 12),
             BigButton(label: 'Claim', height: 34, expand: false, onTap: () => _claim(context, ref)),
           ],

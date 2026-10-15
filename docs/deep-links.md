@@ -27,9 +27,8 @@ either form from a link.
 | `/add-friend?code=<friend code>` (also `/friend/<code>`) | Social > Friends with "Add friend by code" filled in | The player still taps Add friend |
 | `/profile` | My profile | |
 | `/profile/settings` (also `/settings`) | Settings | |
-| `/profile/account` | Account | |
 | `/profile/my-puzzles` (also `/my-puzzles`) | My Puzzles | |
-| `/account` (also `/sign-in`) | Sign in or create account (sheet) | |
+| `/account` (also `/sign-in`, `/profile/account`) | Account: sign in or create account, or the signed-in account (a sheet) | Account is a sheet wherever it opens |
 | `/player/<userId>` (also `/user/<userId>`) | A player's profile | The user id is the friend code |
 | `/store` (also `/shop`) | Store | `?vip=1` (or `/vip`) opens at VIP |
 | `/wheel` | Lucky Wheel | |

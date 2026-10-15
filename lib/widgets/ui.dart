@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/physics.dart' show SpringDescription, SpringSimulation;
 
 import '../core/haptics.dart';
 import '../core/numbers.dart';
@@ -120,7 +122,10 @@ class SoftCard extends StatelessWidget {
   }
 }
 
-enum ButtonKind { primary, secondary, ghost, ghostLight, coral, gold, teal, dark }
+/// [destructive]: the one action that throws something away for good (Delete account), a red
+/// fill with a white label; never the default of a screen. [plain]: a label without a surface, for
+/// the quiet way out under a primary action (Cancel under Delete account).
+enum ButtonKind { primary, secondary, ghost, ghostLight, coral, gold, teal, dark, destructive, plain }
 
 /// The CTA button. Solid fills, no gradients.
 class BigButton extends StatelessWidget {
@@ -201,6 +206,14 @@ class BigButton extends StatelessWidget {
         bg = Colors.transparent;
         fg = Colors.white;
         border = Border.all(color: Colors.white.withValues(alpha: 0.45));
+      case ButtonKind.destructive:
+        // The light theme's red in both themes: white on it is 4.8:1 (the dark theme's softer red
+        // is tuned for text and would leave a white label at 2.8:1).
+        bg = Brand.danger;
+        fg = Colors.white;
+      case ButtonKind.plain:
+        bg = Colors.transparent;
+        fg = context.accent;
     }
     // Disabled (and not busy): every kind turns into the same neutral slab
     // with a tertiary label, the iOS disabled button. Fading the kind's own
@@ -693,38 +706,294 @@ class ProgressBar extends StatelessWidget {
   }
 }
 
-/// The app's segmented control (Settings > Theme, Social tabs, the account
-/// form). One look in both themes: a quiet track and a thumb that stands
-/// clearly off it, the selected label in the primary text colour and the
-/// others in secondary. In dark mode the track is a white wash, so it sits on
-/// cards, sheets and the canvas alike, and the thumb is a lighter grey.
-class AppSegmentedControl<T extends Object> extends StatelessWidget {
-  const AppSegmentedControl({super.key, required this.value, required this.segments, required this.onChanged, this.segmentPadding = const EdgeInsets.symmetric(horizontal: 8, vertical: 2)});
+/// The app's segmented control in the iOS 26 shape (Social's Leaderboard / Friends, the Account
+/// form's Create account / Sign in, Settings > Theme): a capsule track and a glass thumb that
+/// springs to the chosen segment, stretches a little while it travels and lifts under the finger,
+/// which can drag it to another segment. The thumb carries a light rim on its upper edge, the
+/// specular edge of iOS glass; the selected label is in the primary text colour and a step
+/// heavier, the others in secondary. Right in light and dark, on cards, sheets and the canvas.
+class AppSegmentedControl<T extends Object> extends StatefulWidget {
+  const AppSegmentedControl({super.key, required this.value, required this.segments, required this.onChanged, this.height = 36, this.segmentPadding = const EdgeInsets.symmetric(horizontal: 10)});
   final T value;
   final Map<T, String> segments;
   final ValueChanged<T> onChanged;
+
+  /// Capsule height at the default text size (it grows with Larger Text).
+  final double height;
   final EdgeInsetsGeometry segmentPadding;
 
-  static Color trackColor(BuildContext context) => context.isDark ? Colors.white.withValues(alpha: 0.08) : context.colors.boardBackground;
-  static Color thumbColor(BuildContext context) => context.isDark ? const Color(0xFF55555F) : Colors.white;
+  /// The track: iOS's tertiary fill, a grey wash that reads on white cards, the canvas and sheets.
+  static Color trackColor(BuildContext context) => context.isDark ? const Color(0x3D767680) : const Color(0x1F767680);
+
+  /// The thumb's fill: white in light mode; a white glass layer over the track in dark mode.
+  static Color thumbColor(BuildContext context) => context.isDark ? const Color(0xFF4A4A52) : Colors.white;
+
+  @override
+  State<AppSegmentedControl<T>> createState() => _AppSegmentedControlState<T>();
+}
+
+class _AppSegmentedControlState<T extends Object> extends State<AppSegmentedControl<T>> with SingleTickerProviderStateMixin {
+  static const _inset = 3.0;
+  static const _spring = SpringDescription(mass: 1, stiffness: 420, damping: 34);
+
+  /// The thumb's position in segments (0 = first). Unbounded so the spring may overshoot.
+  late final AnimationController _pos = AnimationController.unbounded(vsync: this, value: _index.toDouble());
+  bool _lifted = false;
+  bool _dragging = false;
+
+  List<T> get _keys => widget.segments.keys.toList();
+  int get _index => _keys.indexOf(widget.value).clamp(0, widget.segments.length - 1);
+
+  @override
+  void didUpdateWidget(AppSegmentedControl<T> old) {
+    super.didUpdateWidget(old);
+    if (old.value != widget.value && !_dragging) _springTo(_index);
+  }
+
+  @override
+  void dispose() {
+    _pos.dispose();
+    super.dispose();
+  }
+
+  void _springTo(int i) => _pos.animateWith(SpringSimulation(_spring, _pos.value, i.toDouble(), _pos.velocity));
+
+  int _segmentAt(double x, double width) {
+    final n = widget.segments.length;
+    final seg = (width - _inset * 2) / n;
+    return ((x - _inset) / seg).floor().clamp(0, n - 1);
+  }
+
+  void _select(int i) {
+    if (i == _index) {
+      _springTo(i);
+      return;
+    }
+    Haptics.selection();
+    _springTo(i);
+    widget.onChanged(_keys[i]);
+  }
 
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    return CupertinoSlidingSegmentedControl<T>(
-      groupValue: value,
-      backgroundColor: trackColor(context),
-      thumbColor: thumbColor(context),
-      children: {
-        for (final e in segments.entries)
-          e.key: Padding(
-            padding: segmentPadding,
-            child: Text(e.value, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: e.key == value ? c.textPrimary : c.textSecondary)),
+    final dark = context.isDark;
+    final n = widget.segments.length;
+    final scaler = MediaQuery.textScalerOf(context).clamp(maxScaleFactor: 1.35);
+    final height = math.max(widget.height, scaler.scale(TypeSize.footnote) + 20);
+    final radius = BorderRadius.circular(height / 2);
+    final labelStyle = const TextStyle(fontSize: TypeSize.footnote, letterSpacing: -0.1, fontWeight: FontWeight.w600);
+    return LayoutBuilder(
+      builder: (context, cons) {
+        // Full width where the parent gives one (Social, the Account form); in a row's trailing
+        // slot (Settings > Theme) every segment is as wide as the longest label.
+        var width = cons.maxWidth;
+        if (!cons.hasBoundedWidth) {
+          var widest = 0.0;
+          for (final label in widget.segments.values) {
+            final tp = TextPainter(text: TextSpan(text: label, style: labelStyle), textDirection: TextDirection.ltr, textScaler: scaler, maxLines: 1)..layout();
+            widest = math.max(widest, tp.width);
+            tp.dispose();
+          }
+          width = n * (widest + widget.segmentPadding.horizontal) + _inset * 2;
+        }
+        final seg = (width - _inset * 2) / n;
+        return GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTapUp: (d) {
+            setState(() => _lifted = false);
+            _select(_segmentAt(d.localPosition.dx, width));
+          },
+          onTapDown: (d) {
+            if (_segmentAt(d.localPosition.dx, width) == _index) setState(() => _lifted = true);
+          },
+          onTapCancel: () => setState(() => _lifted = false),
+          onHorizontalDragStart: (d) {
+            // Like iOS: only the thumb can be dragged; a drag elsewhere does nothing.
+            if (_segmentAt(d.localPosition.dx, width) != _index) return;
+            _pos.stop();
+            setState(() {
+              _dragging = true;
+              _lifted = true;
+            });
+          },
+          onHorizontalDragUpdate: (d) {
+            if (!_dragging) return;
+            _pos.value = ((d.localPosition.dx - _inset - seg / 2) / seg).clamp(-0.08, n - 1 + 0.08);
+          },
+          onHorizontalDragEnd: (_) {
+            if (!_dragging) return;
+            setState(() {
+              _dragging = false;
+              _lifted = false;
+            });
+            _select(_pos.value.round().clamp(0, n - 1));
+          },
+          onHorizontalDragCancel: () {
+            if (!_dragging) return;
+            setState(() {
+              _dragging = false;
+              _lifted = false;
+            });
+            _springTo(_index);
+          },
+          child: Listener(
+            onPointerUp: (_) {
+              if (_lifted && !_dragging) setState(() => _lifted = false);
+            },
+            child: SizedBox(
+              height: height,
+              width: width,
+              child: DecoratedBox(
+                decoration: BoxDecoration(color: AppSegmentedControl.trackColor(context), borderRadius: radius),
+                child: AnimatedBuilder(
+                  animation: _pos,
+                  builder: (context, _) {
+                    final at = _pos.value;
+                    // The thumb stretches with its speed, the way the iOS 26 thumb does in motion.
+                    final stretch = 1 + (_pos.velocity.abs() * 0.012).clamp(0.0, 0.12);
+                    return Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        Positioned(
+                          left: _inset + seg * at,
+                          top: _inset,
+                          bottom: _inset,
+                          width: seg,
+                          child: Transform.scale(
+                            scaleX: stretch,
+                            child: AnimatedScale(
+                              scale: _lifted ? 1.06 : 1,
+                              duration: const Duration(milliseconds: 160),
+                              curve: Curves.easeOutCubic,
+                              child: _SegmentThumb(dark: dark, lifted: _lifted, radius: radius),
+                            ),
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            const SizedBox(width: _inset),
+                            for (var i = 0; i < n; i++)
+                              Expanded(
+                                child: () {
+                                  // 1 on the thumb, 0 a segment or more away: the label's colour and
+                                  // weight follow the thumb as it slides.
+                                  final on = (1 - (at - i).abs()).clamp(0.0, 1.0);
+                                  final label = widget.segments[_keys[i]]!;
+                                  return Semantics(
+                                    button: true,
+                                    selected: i == _index,
+                                    inMutuallyExclusiveGroup: true,
+                                    // VoiceOver activates a segment here; touches go through the
+                                    // control's own gesture detector.
+                                    onTap: () => _select(i),
+                                    child: Padding(
+                                      padding: widget.segmentPadding,
+                                      child: Center(
+                                        child: FittedBox(
+                                          fit: BoxFit.scaleDown,
+                                          child: Text(
+                                            label,
+                                            maxLines: 1,
+                                            softWrap: false,
+                                            style: labelStyle.copyWith(
+                                              fontWeight: FontWeight.lerp(FontWeight.w500, FontWeight.w600, on),
+                                              color: Color.lerp(c.textSecondary, c.textPrimary, on),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }(),
+                              ),
+                            const SizedBox(width: _inset),
+                          ],
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ),
           ),
+        );
       },
-      onValueChanged: (v) {
-        if (v != null) onChanged(v);
-      },
+    );
+  }
+}
+
+/// The glass thumb of [AppSegmentedControl]: a capsule with a soft shadow and a rim that is
+/// brighter along its upper edge. Lifted (under the finger) it turns clearer and its shadow grows.
+class _SegmentThumb extends StatelessWidget {
+  const _SegmentThumb({required this.dark, required this.lifted, required this.radius});
+  final bool dark;
+  final bool lifted;
+  final BorderRadius radius;
+
+  @override
+  Widget build(BuildContext context) {
+    final fill = AppSegmentedControl.thumbColor(context).withValues(alpha: lifted ? (dark ? 0.78 : 0.82) : 1);
+    final rim = dark
+        ? [Colors.white.withValues(alpha: 0.34), Colors.white.withValues(alpha: 0.06)]
+        : [Colors.white, Colors.black.withValues(alpha: 0.07)];
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 160),
+      curve: Curves.easeOutCubic,
+      padding: const EdgeInsets.all(0.75),
+      decoration: BoxDecoration(
+        borderRadius: radius,
+        gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: rim),
+        boxShadow: [
+          BoxShadow(color: Colors.black.withValues(alpha: dark ? 0.35 : (lifted ? 0.16 : 0.10)), blurRadius: lifted ? 14 : 6, offset: Offset(0, lifted ? 4 : 2)),
+          BoxShadow(color: Colors.black.withValues(alpha: dark ? 0.2 : 0.04), blurRadius: 1, offset: const Offset(0, 0.5)),
+        ],
+      ),
+      child: DecoratedBox(decoration: BoxDecoration(color: fill, borderRadius: radius)),
+    );
+  }
+}
+
+/// A reward as a chip, the Home level card's style (design QA 006 C): a currency amount in a
+/// neutral pill ([RewardChip.amount]); something that opens or is given (an avatar, a shape, a
+/// board size) in a cobalt-tinted pill ([RewardChip.unlock]). Achievements, the level card and
+/// Claim all use the same marks, so a reward reads the same wherever it is promised.
+///
+/// Two sizes: the default is compact (24 pt, 12 pt figures) for lists of rewards (achievements,
+/// Claim all); [large] is the one reward a card is about (the Home level card's next level): the
+/// pill sizes to its content with 13 pt figures.
+class RewardChip extends StatelessWidget {
+  const RewardChip.amount({super.key, required Currency this.currency, required int this.value, this.large = false})
+      : leading = null,
+        label = null;
+  const RewardChip.unlock({super.key, required Widget this.leading, required String this.label, this.large = false})
+      : currency = null,
+        value = null;
+
+  final Currency? currency;
+  final int? value;
+  final Widget? leading;
+  final String? label;
+  final bool large;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final unlock = currency == null;
+    return Container(
+      height: large ? null : 24,
+      padding: large ? const EdgeInsets.symmetric(horizontal: 9, vertical: 5) : const EdgeInsets.symmetric(horizontal: 8),
+      decoration: BoxDecoration(
+        color: unlock ? c.accentTint : c.canvas,
+        borderRadius: BorderRadius.circular(Radii.pill),
+        border: unlock ? null : Border.all(color: c.stroke),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: unlock
+            ? [leading!, const SizedBox(width: 4), Text(label!, style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600, color: context.accent))]
+            : [Amount(currency: currency!, value: value!, size: 14, fontSize: large ? TypeSize.footnote : TypeSize.caption, weight: FontWeight.w700)],
+      ),
     );
   }
 }

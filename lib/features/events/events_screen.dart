@@ -94,7 +94,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
             SliverToBoxAdapter(
               child: SectionHeader(title: 'Weekly quests', subtitle: 'Tickets · new every week', trailing: _ResetsIn(at: Goals.nextWeeklyReset(now), now: now)),
             ),
-            SliverToBoxAdapter(child: _GoalList(goals: weekly, freeCount: Goals.weeklyFree)),
+            SliverToBoxAdapter(child: _GoalList(goals: weekly, freeCount: Goals.weeklyFree, weekly: true)),
             const SliverToBoxAdapter(child: SectionHeader(title: 'Live events', subtitle: 'World-day events, one week each')),
             events.when(
               loading: () => const SliverToBoxAdapter(child: Padding(padding: EdgeInsets.all(40), child: Loader())),
@@ -162,8 +162,9 @@ class _ResetsIn extends StatelessWidget {
 }
 
 class _GoalList extends ConsumerWidget {
-  const _GoalList({required this.goals, required this.freeCount});
+  const _GoalList({required this.goals, required this.freeCount, this.weekly = false});
   final List<Goal> goals;
+  final bool weekly;
   /// Quests past this index are VIP-only: locked cards for everyone else.
   final int freeCount;
 
@@ -180,7 +181,7 @@ class _GoalList extends ConsumerWidget {
             for (var i = 0; i < goals.length; i++) ...[
               () {
                 final claimed = profile?.claimedGoals.contains(goals[i].key) ?? false;
-                return goalLocked(goals[i], i, freeCount, profile) ? _VipGoalRow(goal: goals[i]) : _GoalRow(goal: goals[i], claimed: claimed);
+                return goalLocked(goals[i], i, freeCount, profile) ? _VipGoalRow(weekly: weekly) : _GoalRow(goal: goals[i], claimed: claimed);
               }(),
               if (i < goals.length - 1) Divider(height: 1, color: c.stroke, indent: 16),
             ],
@@ -191,20 +192,19 @@ class _GoalList extends ConsumerWidget {
   }
 }
 
-/// The extra quest non-VIP players see, in the checklist style of the other quests (066 C with
-/// 065 B): an empty ring with the VIP mark, the quest, its reward and "VIP members", and a chevron
-/// to the Store's VIP card.
+/// What non-VIP players see in place of the extra quest: an invitation, not the quest. One
+/// checklist row in the style of the others (a ring with the VIP mark), "One more quest every day"
+/// (or week) and "With VIP", leading to the Store's VIP card. The quest itself, its goal and its
+/// reward stay out of sight until the player is a member.
 class _VipGoalRow extends StatelessWidget {
-  const _VipGoalRow({required this.goal});
-  final Goal goal;
+  const _VipGoalRow({required this.weekly});
+  final bool weekly;
 
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    final reward = goal.coins > 0
-        ? Amount(currency: Currency.coins, value: goal.coins, prefix: '+', size: 13, fontSize: TypeSize.caption, weight: FontWeight.w700)
-        : Amount(currency: Currency.tickets, value: goal.tickets, prefix: '+', size: 13, fontSize: TypeSize.caption, weight: FontWeight.w700);
     return Pressable(
+      key: ValueKey(weekly ? 'quest-vip-weekly' : 'quest-vip-daily'),
       onTap: () => context.push('/store?vip=1'),
       scale: 0.99,
       child: Padding(
@@ -214,25 +214,17 @@ class _VipGoalRow extends StatelessWidget {
             Container(
               width: 38,
               height: 38,
-              decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: c.stroke, width: 3)),
-              child: Icon(AppIcons.vip, size: 17, color: c.textTertiary),
+              decoration: BoxDecoration(shape: BoxShape.circle, color: c.accentTint),
+              child: Icon(AppIcons.vip, size: 18, color: context.accent),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(goal.title, style: TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body, color: c.textSecondary)),
+                  Text(weekly ? 'One more quest every week' : 'One more quest every day', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body)),
                   const SizedBox(height: 3),
-                  Row(
-                    children: [
-                      Opacity(opacity: 0.6, child: reward),
-                      Text('  ·  ', style: TextStyle(fontSize: TypeSize.caption, color: c.textSecondary)),
-                      Icon(AppIcons.vip, size: 13, color: context.accent),
-                      const SizedBox(width: 3),
-                      Text('VIP members', style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600, color: context.accent)),
-                    ],
-                  ),
+                  Text('Included with VIP', style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600, color: context.accent)),
                 ],
               ),
             ),

@@ -27,9 +27,10 @@ String formatCount(int v) {
 /// [many] defaults to [one] + "s".
 String countOf(int n, String one, [String? many]) => '${formatCount(n)} ${n == 1 ? one : (many ?? '${one}s')}';
 
-/// A count short enough for a tight spot (the header pills): exact and grouped up to 99,999, then
-/// three figures at most: `123K`, `1.23M`, `12.3M`, `123M`, `1.23B`. Always rounded down, so it
-/// never shows more than there is (235,999 -> `235K`, 1,239,999 -> `1.23M`).
+/// A count short enough for a tight spot or a slot of fixed width (the header pills, Profile's
+/// wallet, the player card's three numbers): exact and grouped up to 99,999, then three figures at
+/// most: `123K`, `1.23M`, `12.3M`, `123M`, `1.23B`. Always rounded down, so it never shows more than
+/// there is (235,999 -> `235K`, 1,239,999 -> `1.23M`). Everywhere else counts stay exact ([formatCount]).
 String compactCount(int v) {
   final a = v.abs();
   final sign = v < 0 ? '-' : '';

@@ -37,14 +37,18 @@ Future<void> showAddFriendAlert(BuildContext context, {String? code}) async {
   final container = ProviderScope.containerOf(context, listen: false);
   final controller = TextEditingController(text: code?.trim() ?? '');
   final c = context.colors;
+  final mine = container.read(currentUserIdProvider);
   final ok = await showAppAlert(
     context,
     title: 'Add friend by code',
-    message: 'Paste the code your friend shared. Yours is on the Friends tab.',
+    message: 'Paste the code your friend shared.',
     confirmLabel: 'Add friend',
     cancelLabel: 'Not now',
     canConfirm: () => controller.text.trim().isNotEmpty,
-    child: CupertinoTextField(
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        CupertinoTextField(
       key: const ValueKey('add-friend-field'),
       controller: controller,
       placeholder: 'Friend code',
@@ -57,6 +61,10 @@ Future<void> showAddFriendAlert(BuildContext context, {String? code}) async {
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       // The look of AlertTextField (the other alert fields), keyed for the deep-link tests.
       decoration: BoxDecoration(color: context.isDark ? Colors.white.withValues(alpha: 0.08) : Colors.black.withValues(alpha: 0.05), borderRadius: BorderRadius.circular(12)),
+        ),
+        // The player's own code, for a friend who adds by code instead of the link.
+        if (mine != null) ...[const SizedBox(height: 2), _YourCode(code: mine)],
+      ],
     ),
   );
   final entered = ok ? controller.text.trim() : null;
@@ -81,6 +89,53 @@ Future<void> showAddFriendAlert(BuildContext context, {String? code}) async {
     }
   } catch (e) {
     if (context.mounted) showToast(context, 'Could not add friend. Check your connection and try again.', icon: AppIcons.signal);
+  }
+}
+
+/// "Your code 6acb...  [copy]" under the Add friend field: tap to copy. The alert sits above the
+/// toasts, so the line itself confirms the copy.
+class _YourCode extends StatefulWidget {
+  const _YourCode({required this.code});
+  final String code;
+  @override
+  State<_YourCode> createState() => _YourCodeState();
+}
+
+class _YourCodeState extends State<_YourCode> {
+  bool _copied = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return Pressable(
+      key: const ValueKey('add-friend-your-code'),
+      onTap: () async {
+        await Clipboard.setData(ClipboardData(text: widget.code));
+        if (!mounted) return;
+        setState(() => _copied = true);
+        await Future<void>.delayed(const Duration(seconds: 2));
+        if (mounted) setState(() => _copied = false);
+      },
+      child: TapTarget(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('Your code', style: TextStyle(fontSize: TypeSize.caption, color: c.textSecondary)),
+            const SizedBox(width: 6),
+            Flexible(
+              child: Text(
+                _copied ? 'Copied' : widget.code,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600, color: c.textPrimary, fontFeatures: tabularFigures),
+              ),
+            ),
+            const SizedBox(width: 5),
+            Icon(_copied ? AppIcons.checkmarkAlt : AppIcons.copy, size: 13, color: context.accent),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -151,6 +206,10 @@ class _LeaderboardState extends ConsumerState<_Leaderboard> {
     if (on != _meOnScreen && mounted) setState(() => _meOnScreen = on);
   }
 
+  /// How many players stand on the podium card (the first three), 0 when the league is too small
+  /// for one; the list continues after them.
+  static int _podiumCount(List<Profile> list) => list.length >= 3 ? 3 : 0;
+
   /// Scrolls to the player's row when it is loaded; otherwise opens their own profile.
   Future<void> _showMe(List<Profile> list, String? me) async {
     final index = list.indexWhere((p) => p.userId == me);
@@ -159,8 +218,11 @@ class _LeaderboardState extends ConsumerState<_Leaderboard> {
       return;
     }
     if (_meKey.currentContext == null) {
-      // Rows are about 57 pt; land near it, then let ensureVisible place it exactly.
-      await _scroll.animateTo((30.0 + index * 57).clamp(0, _scroll.position.maxScrollExtent), duration: const Duration(milliseconds: 350), curve: Curves.easeOutCubic);
+      // The podium is about 200 pt and rows about 57 pt; land near the row, then let
+      // ensureVisible place it exactly.
+      final start = _podiumCount(list);
+      final offset = index < start ? 30.0 : 30.0 + (start > 0 ? 200 : 0) + (index - start) * 57;
+      await _scroll.animateTo(offset.clamp(0, _scroll.position.maxScrollExtent), duration: const Duration(milliseconds: 350), curve: Curves.easeOutCubic);
     }
     final ctx = _meKey.currentContext;
     if (ctx != null && ctx.mounted) await Scrollable.ensureVisible(ctx, alignment: 0.4, duration: const Duration(milliseconds: 250), curve: Curves.easeOut);
@@ -196,6 +258,9 @@ class _LeaderboardState extends ConsumerState<_Leaderboard> {
       ),
       data: (paged) {
         final list = paged.items;
+        final start = _podiumCount(list);
+        final podium = start > 0;
+        final rowCount = list.length - start;
         if (list.isEmpty) return const EmptyState(icon: AppIcons.trophy, title: 'The leaderboard is empty', message: 'Solve a puzzle to earn XP and take the first place.');
         final listView = RefreshIndicator.adaptive(
           onRefresh: () async {
@@ -215,13 +280,13 @@ class _LeaderboardState extends ConsumerState<_Leaderboard> {
             physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
             // Room for the pinned bar, so the last rows can scroll above it.
             padding: EdgeInsets.fromLTRB(20, 0, 20, GlassTabBar.scrollEndPadding(context) + (place != null ? 72 : 0)),
-            itemCount: list.length + 1 + (paged.hasMore ? 1 : 0),
+            itemCount: rowCount + 1 + (podium ? 1 : 0) + (paged.hasMore ? 1 : 0),
             itemBuilder: (_, i) {
               // Next page when the list nears its end (infinite scroll).
-              if (paged.hasMore && i >= list.length - 10) {
+              if (paged.hasMore && i >= rowCount - 10) {
                 WidgetsBinding.instance.addPostFrameCallback((_) => ref.read(leaderboardProvider.notifier).loadMore());
               }
-              if (i == list.length + 1) {
+              if (i == rowCount + 1 + (podium ? 1 : 0)) {
                 return const Padding(padding: EdgeInsets.symmetric(vertical: 16), child: Center(child: CupertinoActivityIndicator()));
               }
               if (i == 0) {
@@ -235,11 +300,19 @@ class _LeaderboardState extends ConsumerState<_Leaderboard> {
                   ),
                 );
               }
-              final p = list[i - 1];
-              final rank = leaguePlace(list, i - 1);
+              // The first three stand on a podium card; the list continues from fourth.
+              if (podium && i == 1) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: _Podium(top: list.take(3).toList(), places: [for (var k = 0; k < 3; k++) leaguePlace(list, k)], me: me, meKey: _meKey),
+                );
+              }
+              final index = start + i - 1 - (podium ? 1 : 0);
+              final p = list[index];
+              final rank = leaguePlace(list, index);
               final isMe = p.userId == me;
-              // One grouped list (iOS inset style): rounded ends, hairlines between rows.
-              final first = i == 1, last = i == list.length;
+              // One grouped list (iOS inset style): rounded ends, full-width hairlines between rows.
+              final first = index == start, last = index == list.length - 1;
               return Pressable(
                 key: isMe ? _meKey : null,
                 scale: 0.99,
@@ -252,7 +325,7 @@ class _LeaderboardState extends ConsumerState<_Leaderboard> {
                   child: Column(
                     children: [
                       _PlayerRow(rank: rank, profile: p, me: isMe),
-                      if (!last) Divider(height: 1, thickness: 1, indent: 96, color: c.stroke),
+                      if (!last) Divider(height: 1, thickness: 1, indent: _dividerIndent, color: c.stroke),
                     ],
                   ),
                 ),
@@ -365,7 +438,7 @@ class _FriendsState extends ConsumerState<_Friends> {
             children: [
               Text('Invite friends', style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 4),
-              Text('Friends who open your link can add you in one tap.', style: TextStyle(fontSize: TypeSize.footnote, color: c.textSecondary)),
+              Text('Your link lets friends add you in one tap.', style: TextStyle(fontSize: TypeSize.footnote, color: c.textSecondary)),
               const SizedBox(height: 14),
               Row(
                 children: [
@@ -387,24 +460,6 @@ class _FriendsState extends ConsumerState<_Friends> {
                   Expanded(child: BigButton(key: const ValueKey('add-friend-open'), label: 'Add friend', kind: ButtonKind.secondary, height: 44, onTap: onAdd)),
                 ],
               ),
-              const SizedBox(height: 12),
-              Pressable(
-                onTap: me == null
-                    ? null
-                    : () {
-                        Clipboard.setData(ClipboardData(text: me));
-                        showToast(context, 'Copied your friend code', icon: AppIcons.copy);
-                      },
-                child: Text.rich(
-                  TextSpan(children: [
-                    const TextSpan(text: 'Your code  '),
-                    TextSpan(text: me ?? '—', style: TextStyle(fontFamily: 'Menlo', fontSize: TypeSize.caption, fontWeight: FontWeight.w600, color: c.textPrimary)),
-                  ]),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: TypeSize.footnote, color: c.textSecondary),
-                ),
-              ),
             ],
           ),
         ),
@@ -418,13 +473,13 @@ class _FriendsState extends ConsumerState<_Friends> {
             action: BigButton(label: 'Try again', kind: ButtonKind.secondary, height: 44, expand: false, onTap: () => ref.invalidate(friendsProvider)),
           ),
           data: (list) => list.isEmpty
-              ? const EmptyState(icon: AppIcons.wave, title: 'No friends yet', message: 'Share your code, or add a friend by theirs, to compare stars.')
+              ? const EmptyState(icon: AppIcons.wave, title: 'No friends yet', message: 'Send your invite link, or add a friend by their code, to compare stars.')
               : SoftCard(
                   padding: EdgeInsets.zero,
                   child: Column(
                     children: [
                       for (final (i, f) in list.where((f) => !_removed.contains(f.id)).indexed) ...[
-                        if (i > 0) Divider(height: 1, thickness: 1, indent: 58, color: c.stroke),
+                        if (i > 0) Divider(height: 1, thickness: 1, indent: _dividerIndent, color: c.stroke),
                         Dismissible(
                             key: ValueKey(f.id),
                             direction: DismissDirection.endToStart,
@@ -504,11 +559,11 @@ class _PlayerRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = profile;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 9, 16, 9),
+      padding: const EdgeInsets.fromLTRB(8, 9, 16, 9),
       child: Row(
         children: [
-          _RankBadge(rank: rank),
-          const SizedBox(width: 10),
+          _RankNumber(rank: rank),
+          const SizedBox(width: 8),
           AvatarCircle(avatarKey: p.avatar, size: 36),
           const SizedBox(width: 10),
           Expanded(
@@ -606,37 +661,112 @@ class _PlayerName extends StatelessWidget {
   }
 }
 
-/// League place in a disc. The top three are tinted with their medal colour and keep a dark number
-/// (white on gold and silver was about 2:1); the disc grows into a capsule for three- and four-digit
-/// places.
-class _RankBadge extends StatelessWidget {
-  const _RankBadge({required this.rank});
+/// Hairlines between league and friend rows run the full width of the list: with the place column
+/// in front of the avatar the rows read as one table, and an inset line looked cut in half.
+const double _dividerIndent = 0;
+
+/// A league place as plain figures in a fixed column, so the avatar is the only circle in a row
+/// (the medals live on the podium card). Places past 999 widen the column.
+class _RankNumber extends StatelessWidget {
+  const _RankNumber({required this.rank});
   final int rank;
+  @override
+  Widget build(BuildContext context) => ConstrainedBox(
+        constraints: const BoxConstraints(minWidth: 30),
+        child: Text(
+          formatCount(rank),
+          textAlign: TextAlign.center,
+          maxLines: 1,
+          style: TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.footnote, color: context.colors.textSecondary, fontFeatures: tabularFigures),
+        ),
+      );
+}
+
+/// First, second and third place side by side (second, first, third), first raised and larger:
+/// the avatar carries its place in a medal disc, then the name ("You" for the player) and XP.
+/// Each opens the player's profile.
+class _Podium extends StatelessWidget {
+  const _Podium({required this.top, required this.places, required this.me, required this.meKey});
+  final List<Profile> top;
+  final List<int> places;
+  final String? me;
+  final Key meKey;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    Widget spot(int index) {
+      final p = top[index];
+      final first = index == 0;
+      final isMe = p.userId == me;
+      final size = first ? 68.0 : 56.0;
+      return Expanded(
+        child: Pressable(
+          key: isMe ? meKey : null,
+          scale: 0.97,
+          onTap: () => context.push('/player/${p.userId}'),
+          child: Padding(
+            padding: EdgeInsets.only(top: first ? 0 : 16, left: 4, right: 4),
+            child: Column(
+              children: [
+                SizedBox(
+                  width: size + 8,
+                  height: size + 12,
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    alignment: Alignment.topCenter,
+                    children: [
+                      AvatarCircle(avatarKey: p.avatar, size: size, border: true),
+                      Positioned(bottom: 0, child: _MedalBadge(place: places[index])),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  isMe ? 'You' : p.displayName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: first ? TypeSize.body : TypeSize.footnote, color: isMe ? context.accent : c.textPrimary),
+                ),
+                const SizedBox(height: 1),
+                Text('${formatCount(p.xp)} XP', maxLines: 1, style: TextStyle(fontSize: TypeSize.caption, color: c.textSecondary, fontFeatures: tabularFigures)),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    return SoftCard(
+      padding: const EdgeInsets.fromLTRB(8, 18, 8, 16),
+      child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [spot(1), spot(0), spot(2)]),
+    );
+  }
+}
+
+/// A podium place on its avatar: the medal's soft tint with a deep-tone number (white on gold and
+/// silver read at about 2:1), ringed in the card colour so it sits cleanly on the avatar's edge.
+class _MedalBadge extends StatelessWidget {
+  const _MedalBadge({required this.place});
+  final int place;
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
     final dark = context.isDark;
-    // (fill, number) per medal; light and dark themes.
-    final medal = switch (rank) {
-      1 => dark ? (const Color(0x4DE0A200), const Color(0xFFF5C84A)) : (const Color(0x33E0A200), const Color(0xFF7A5600)),
-      2 => dark ? (const Color(0x40A3A8B5), const Color(0xFFD5D8E0)) : (const Color(0x40A3A8B5), const Color(0xFF4B505C)),
-      3 => dark ? (const Color(0x4DC27C4A), const Color(0xFFE5A577)) : (const Color(0x33C27C4A), const Color(0xFF7D4520)),
-      _ => null,
+    // (fill, number) per medal, opaque so the disc covers the avatar; light and dark themes.
+    final medal = switch (place) {
+      1 => dark ? (const Color(0xFF4A3B12), const Color(0xFFF5C84A)) : (const Color(0xFFF8E7B3), const Color(0xFF7A5600)),
+      2 => dark ? (const Color(0xFF3A3C43), const Color(0xFFD5D8E0)) : (const Color(0xFFE6E8EE), const Color(0xFF4B505C)),
+      _ => dark ? (const Color(0xFF45301F), const Color(0xFFE5A577)) : (const Color(0xFFF3DED0), const Color(0xFF7D4520)),
     };
     return Container(
       constraints: const BoxConstraints(minWidth: 28),
       height: 28,
       padding: const EdgeInsets.symmetric(horizontal: 6),
       alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: medal?.$1 ?? c.boardBackground,
-        borderRadius: BorderRadius.circular(Radii.pill),
-        border: medal == null ? null : Border.all(color: medal.$2.withValues(alpha: 0.35), width: 1.5),
-      ),
-      child: Text(
-        '$rank',
-        style: TextStyle(fontWeight: medal != null ? FontWeight.w700 : FontWeight.w600, fontSize: TypeSize.footnote, color: medal?.$2 ?? c.textSecondary, fontFeatures: tabularFigures),
-      ),
+      decoration: BoxDecoration(color: medal.$1, borderRadius: BorderRadius.circular(Radii.pill), border: Border.all(color: c.card, width: 2.5)),
+      child: Text('$place', style: TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.footnote, color: medal.$2, fontFeatures: tabularFigures)),
     );
   }
 }

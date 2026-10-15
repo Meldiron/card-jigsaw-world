@@ -14,6 +14,22 @@ void main() {
     expect(formatCount(-1500), '-1,500');
   });
 
+  test('counts in a tight spot are written short from 100,000 (header pills 002, Profile wallet 080)', () {
+    expect(compactCount(950), '950');
+    expect(compactCount(99999), '99,999');
+    expect(compactCount(100000), '100K');
+    expect(compactCount(235999), '235K');
+    expect(compactCount(999999), '999K');
+    expect(compactCount(1000000), '1M');
+    expect(compactCount(1200000), '1.2M', reason: 'no trailing zero');
+    expect(compactCount(1235067), '1.23M');
+    expect(compactCount(1239999), '1.23M', reason: 'rounded down: never more than the player has');
+    expect(compactCount(12500000), '12.5M');
+    expect(compactCount(123456789), '123M');
+    expect(compactCount(1239999999), '1.23B');
+    expect(compactCount(-150000), '-150K');
+  });
+
   test('a count with its noun', () {
     expect(countOf(1, 'ticket'), '1 ticket');
     expect(countOf(3, 'ticket'), '3 tickets');

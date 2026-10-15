@@ -20,7 +20,7 @@ Sign in with the same account (Apple or email) and open Profile > Settings > Acc
 
 Progress belongs to the account that was signed in when you played.
 
-- If you played as a guest and reinstalled the app or changed phones, the guest account on the old installation cannot be recovered automatically. Write to us with your old friend code (shown in Social > Friends) and your new one, and we will move the profile across.
+- If you played as a guest and reinstalled the app or changed phones, the guest account on the old installation cannot be recovered automatically. Write to us with your old friend code (Social > Friends > Add friend, under "Your code") and your new one, and we will move the profile across.
 - If you had an email account or Sign in with Apple, just sign in again from Profile > Settings > Account.
 
 To avoid this in the future, create an account from Profile > Settings > Account. It keeps your guest progress.

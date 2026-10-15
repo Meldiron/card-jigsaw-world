@@ -9,6 +9,8 @@ import '../../widgets/ui.dart';
 /// an existing account and neither save clearly wins. Pictures, badges and
 /// unlocks from both are combined before this is shown. Cannot be dismissed
 /// without choosing; if the OS closes it anyway, the account's save is kept.
+/// The account's save is called the "cloud save" here: what the player is
+/// choosing between is where a save lives, not two accounts.
 Future<MergeChoice> showMergeSheet(BuildContext context, {required SaveSnapshot device, required SaveSnapshot account}) async {
   final choice = await showAppSheet<MergeChoice>(
     context,
@@ -79,7 +81,7 @@ class MergeSheet extends StatelessWidget {
                       const Expanded(flex: 4, child: SizedBox()),
                       head(device, 'This device'),
                       const SizedBox(width: 12),
-                      head(account, 'Account'),
+                      head(account, 'Cloud save'),
                     ],
                   ),
                   const SizedBox(height: 10),
@@ -110,7 +112,7 @@ class MergeSheet extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            BigButton(label: "Keep my account's save", onTap: () => Navigator.of(context).pop(MergeChoice.account)),
+            BigButton(label: 'Keep cloud save', onTap: () => Navigator.of(context).pop(MergeChoice.account)),
             const SizedBox(height: 10),
             BigButton(label: "Keep this device's save", kind: ButtonKind.secondary, onTap: () => Navigator.of(context).pop(MergeChoice.guest)),
           ],

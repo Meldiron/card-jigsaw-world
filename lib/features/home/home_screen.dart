@@ -880,9 +880,10 @@ class _LevelCard extends StatelessWidget {
   }
 }
 
-/// A reward as chips: what it opens first (cobalt), then coins, tickets and hints in neutral
-/// chips with their currency marks. The Level card's next level; achievements use the same
-/// look for what a step gives. [keyed] keys each unlock `next-unlock-<name>` (tests scroll to it).
+/// A reward as chips ([RewardChip], large): what it opens first (cobalt), then coins, tickets and
+/// hints in neutral chips with their currency marks. The Level card's next level; achievements use
+/// the same chips, compact, for what a step gives. [keyed] keys each unlock `next-unlock-<name>`
+/// (tests scroll to it).
 class _LevelRewardChips extends StatelessWidget {
   const _LevelRewardChips({required this.reward, this.keyed = false});
   final LevelReward reward;
@@ -890,7 +891,6 @@ class _LevelRewardChips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final c = context.colors;
     final r = reward;
     // A chip wider than the card (Larger Text on a small phone) scales down instead of overflowing.
     Widget fit(Widget chip) => FittedBox(fit: BoxFit.scaleDown, alignment: Alignment.centerLeft, child: chip);
@@ -899,19 +899,13 @@ class _LevelRewardChips extends StatelessWidget {
       runSpacing: 8,
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
-        for (final u in r.unlocks) fit(Chip2(key: keyed ? ValueKey('next-unlock-${u.name}') : null, label: u.label, icon: _unlockIcon(u), color: c.accentTint, foreground: context.accent)),
-        if (r.tier != null) fit(Chip2(label: '${r.tier!.code} ${r.tier!.label} boards', icon: AppIcons.bigBoard, color: c.accentTint, foreground: context.accent)),
-        _RewardChip(
-          child: Amount(currency: Currency.coins, value: r.coins, size: 14, fontSize: TypeSize.footnote),
-        ),
-        if (r.tickets > 0)
-          _RewardChip(
-            child: Amount(currency: Currency.tickets, value: r.tickets, size: 14, fontSize: TypeSize.footnote),
-          ),
-        if (r.hints > 0)
-          _RewardChip(
-            child: Amount(currency: Currency.hints, value: r.hints, size: 14, fontSize: TypeSize.footnote),
-          ),
+        for (final u in r.unlocks)
+          fit(RewardChip.unlock(key: keyed ? ValueKey('next-unlock-${u.name}') : null, large: true, leading: Icon(_unlockIcon(u), size: 12, color: context.accent), label: u.label)),
+        if (r.tier != null)
+          fit(RewardChip.unlock(large: true, leading: Icon(AppIcons.bigBoard, size: 12, color: context.accent), label: '${r.tier!.code} ${r.tier!.label} boards')),
+        RewardChip.amount(currency: Currency.coins, value: r.coins, large: true),
+        if (r.tickets > 0) RewardChip.amount(currency: Currency.tickets, value: r.tickets, large: true),
+        if (r.hints > 0) RewardChip.amount(currency: Currency.hints, value: r.hints, large: true),
       ],
     );
   }
@@ -964,25 +958,6 @@ class _UnlockMark extends StatelessWidget {
       ],
     ),
   );
-}
-
-/// A neutral chip around a currency amount (reward lists).
-class _RewardChip extends StatelessWidget {
-  const _RewardChip({required this.child});
-  final Widget child;
-  @override
-  Widget build(BuildContext context) {
-    final c = context.colors;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
-      decoration: BoxDecoration(
-        color: c.canvas,
-        borderRadius: BorderRadius.circular(Radii.pill),
-        border: Border.all(color: c.stroke),
-      ),
-      child: child,
-    );
-  }
 }
 
 IconData _unlockIcon(Unlock u) => switch (u) {

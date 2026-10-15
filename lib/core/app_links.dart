@@ -112,7 +112,10 @@ class AppLink {
         return action('/add-friend', c == null ? null : {'code': c});
       case 'profile' when rest.isEmpty:
         return page('/profile');
-      case 'profile' when rest.length == 1 && const {'settings', 'account', 'my-puzzles'}.contains(rest.first.toLowerCase()):
+      // Account is a sheet wherever it opens (design QA 084), so its old page address opens it too.
+      case 'profile' when rest.length == 1 && rest.first.toLowerCase() == 'account':
+        return overlay('/account');
+      case 'profile' when rest.length == 1 && const {'settings', 'my-puzzles'}.contains(rest.first.toLowerCase()):
         return page('/profile/${rest.first.toLowerCase()}');
       case 'settings' when rest.isEmpty:
         return page('/profile/settings');
