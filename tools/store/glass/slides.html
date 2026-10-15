@@ -1,0 +1,83 @@
+<!doctype html>
+<!-- Carden App Store slides in the glass style. tools/store/compose_glass.py fills in __DATA__ and
+     __FONT__ and renders one slide per #<number> at 1320 x 2868. The look lives here (panes, halo,
+     headline, phones, break-out cards); the copy and the slide list live in compose_glass.py. -->
+<html><head><meta charset="utf-8"><style>
+@font-face { font-family: "Head"; src: url("__FONT__"); font-weight: 100 1000; }
+* { box-sizing: border-box; }
+html, body { margin: 0; background: transparent; }
+.slide { position: relative; width: 1320px; height: 2868px; overflow: hidden; background: #F3F3F7;
+  --ink: #111118; --halo: rgba(246,246,250,.62); --paneA: .74; --shade: rgba(30,30,60,.20); }
+.slide.dark { background: #0A0A10; --ink: #F5F5F8; --halo: rgba(10,10,16,.45); --paneA: .82; --shade: rgba(0,0,0,.6); }
+
+/* Glass panes: one panorama across all slides, shifted per slide so a pane cut by an edge goes on. */
+.world { position: absolute; top: 0; height: 2868px; }
+.pane { position: absolute; border-radius: 150px; opacity: var(--paneA);
+  box-shadow: 0 80px 160px -40px var(--shade), inset 0 4px 0 rgba(255,255,255,.6), inset 0 -60px 120px rgba(0,0,0,.08); }
+.pane::before { content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 6px;
+  background: linear-gradient(150deg, rgba(255,255,255,.95), rgba(255,255,255,.2) 25%, rgba(255,255,255,0) 55%, rgba(255,255,255,.5));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
+.pane::after { content: ""; position: absolute; inset: 0; border-radius: inherit;
+  background: linear-gradient(115deg, rgba(255,255,255,0) 30%, rgba(255,255,255,.28) 42%, rgba(255,255,255,0) 54%),
+              radial-gradient(80% 40% at 25% 0%, rgba(255,255,255,.5), rgba(255,255,255,0) 60%); }
+.dark .pane { filter: brightness(.36) saturate(1.35); }
+.dark .pane::after { opacity: .5; }
+
+/* Headline on a soft frosted halo (no box). */
+.halo { position: absolute; left: -100px; right: -100px; border-radius: 50%; background: var(--halo);
+  -webkit-backdrop-filter: blur(40px) saturate(1.3); backdrop-filter: blur(40px) saturate(1.3);
+  -webkit-mask-image: radial-gradient(closest-side, #000 55%, transparent 100%); mask-image: radial-gradient(closest-side, #000 55%, transparent 100%); }
+h1 { position: absolute; left: 70px; right: 70px; margin: 0; text-align: center; white-space: nowrap;
+  font-family: "Head"; font-weight: var(--weight); line-height: 1.06; letter-spacing: var(--track); color: var(--ink); }
+.brand { position: absolute; left: 0; right: 0; display: flex; justify-content: center; align-items: center; gap: 24px; }
+.brand img { width: 108px; height: 108px; border-radius: 22.37%; box-shadow: 0 8px 24px rgba(0,0,0,.14); }
+.brand span { font-family: "Head"; font-weight: var(--weight); font-size: 76px; letter-spacing: var(--track); color: var(--ink); }
+
+.phone { position: absolute; filter: drop-shadow(0 60px 80px var(--shade)); transform-origin: 50% 40%; }
+.out { position: absolute; overflow: hidden; box-shadow: 0 50px 90px -24px rgba(20,20,50,.45), 0 0 0 6px rgba(255,255,255,.92); }
+.dark .out { box-shadow: 0 50px 90px -24px rgba(0,0,0,.7), 0 0 0 5px rgba(255,255,255,.3); }
+.out img { display: block; width: 100%; }
+.out b { position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%); padding: 12px 26px; border-radius: 999px;
+  background: rgba(255,255,255,.88); font: 600 40px/1 "Head"; color: #111118; white-space: nowrap; }
+.cover { position: absolute; width: 300px; border-radius: 34px; object-fit: cover;
+  box-shadow: 0 40px 70px -20px rgba(20,20,50,.4), 0 0 0 6px rgba(255,255,255,.9); }
+</style></head><body><div id="root"></div><script>
+const S = __DATA__;
+const n = +(decodeURIComponent(location.hash.slice(1)) || 1), sl = S.slides[n - 1], W = S.W, H = S.H;
+const grad = c => `linear-gradient(165deg, ${S.glass[c][0]} 0%, ${S.glass[c][1]} 100%)`;
+const file = f => S.parts + "/" + f;
+document.documentElement.style.setProperty("--weight", S.font.weight);
+document.documentElement.style.setProperty("--track", S.font.track + "em");
+
+function render(size) {
+  let h = `<div class="world" style="left:${-(n - 1) * W}px;width:${W * S.slides.length}px">` + S.panes.map(p =>
+    `<div class="pane" style="left:${p.x}px;top:${p.y}px;width:${p.w}px;height:${p.h}px;transform:rotate(${p.r}deg);background:${grad(p.c)}"></div>`).join("") + `</div>`;
+  const lines = sl.head.split("\n").length, lh = size * 1.06, L = S.layout;
+  let headTop, phoneTop;
+  if (sl.layout === "B") { phoneTop = L.b_phone_top; headTop = phoneTop + S.phone_h + L.b_gap; }
+  else { headTop = sl.brand ? L.a_head_top_brand : L.a_head_top; phoneTop = headTop + lines * lh + L.a_gap; }
+  (sl.covers || []).forEach(c => { h += `<img class="cover" src="${c.src}" style="left:${c.x}px;top:${c.y}px;height:${c.h}px;transform:rotate(${c.r}deg)">`; });
+  const haloTop = headTop - (sl.brand ? 230 : 110), haloH = lines * lh + (sl.brand ? 340 : 220);
+  h += `<div class="halo" style="top:${haloTop}px;height:${haloH}px"></div>`;
+  if (sl.brand) h += `<div class="brand" style="top:${headTop - 190}px"><img src="${S.icon}"><span>Carden</span></div>`;
+  h += `<h1 style="top:${headTop}px;font-size:${size}px">${sl.head.replace(/\n/g, "<br>")}</h1>`;
+  const left = (W - S.phone_w) / 2, tilt = sl.tilt || 0;
+  if (sl.second) {  // two phones, same size: the second one behind, leaning the other way
+    h += `<img class="phone" src="${file(sl.second)}" style="width:${S.phone_w}px;left:${left + 250}px;top:${phoneTop + 140}px;transform:rotate(${tilt + 3}deg)">`;
+    h += `<img class="phone" src="${file(sl.phone)}" style="width:${S.phone_w}px;left:${left - 230}px;top:${phoneTop}px;transform:rotate(${-tilt + 2}deg)">`;
+  } else {
+    const dx = tilt ? (tilt < 0 ? -40 : 40) : 0;
+    h += `<img class="phone" src="${file(sl.phone)}" style="width:${S.phone_w}px;left:${left + dx}px;top:${phoneTop}px;transform:rotate(${tilt}deg)">`;
+  }
+  (sl.out || []).forEach(o => {  // break-out cards, placed from the phone's top edge
+    h += `<div class="out" style="left:${o.x}px;top:${phoneTop + o.y}px;width:${o.w}px;border-radius:${o.radius}px;transform:rotate(${o.rot}deg)"><img src="${file(o.img)}">${o.label ? `<b>${o.label}</b>` : ""}</div>`;
+  });
+  document.getElementById("root").innerHTML = `<div class="slide${sl.dark ? " dark" : ""}">${h}</div>`;
+}
+// One headline size for the set; a slide shrinks only when a line would not fit the measure.
+document.fonts.load(`${S.font.weight} ${S.head_size}px Head`).then(() => {
+  const c = document.createElement("canvas").getContext("2d"); c.font = `${S.font.weight} ${S.head_size}px Head`;
+  const widest = Math.max(...sl.head.split("\n").map(l => c.measureText(l).width * (1 + S.font.track)));
+  render(Math.min(S.head_size, Math.floor(S.head_size * S.measure / widest)));
+});
+</script></body></html>

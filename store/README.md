@@ -3,21 +3,22 @@
 Everything in this folder is generated. Edit the sources under `tools/store/`
 and the capture test, then rerun; do not hand-edit the PNGs.
 
-Design rules: a flat, very dark canvas per slide whose hue comes from that
-slide's photo (or one graphite with `--canvas neutral`), white SF Pro
-captions of 2-5 words sized for search-result thumbnails, real captures in a
-slim iPhone frame, colour only from the photos, no gradients, no emoji, no
-ratings or awards. The research and reasoning are in
-`docs/store-screenshots.md`.
+Design rules (glass set, `tools/store/compose_glass.py`): large panes of
+coloured glass in the lotus colours running across the whole set, light app
+captures on a light canvas for slides 1-9 and a dark finale (slide 10), one
+phone size, three layouts, two-line headlines in SF Pro Rounded sized for
+search-result thumbnails, no subtext, no emoji, no ratings or awards. The
+older dark gallery style is still `tools/store/compose_screenshots.py`. The
+research and reasoning are in `docs/store-screenshots.md`.
 
 ## Layout
 
 | Path | What it is | Size |
 | --- | --- | --- |
-| `raw/*.png` | Untouched in-app captures from the iPhone 17 Pro Max simulator (6.9"), dark theme. Numbered in capture order; see the list below. | 1320x2868 |
+| `raw/*.png` | Untouched in-app captures from the iPhone 17 Pro Max simulator (6.9"), dark theme; `raw/*_light.png` the same screens in the light theme. Numbered in capture order; see the list below. | 1320x2868 |
 | `raw/boards.json` | Board rectangle (physical px: left, top, width, height) of every game capture, written by the capture driver; the composer crops boards with it. | |
 | `collage/*.jpg` | Pack covers for the slide-2 wall, downloaded from our Storage bucket (`--refresh-collage`; pack ids in `COLLAGE_PACKS`). | 600 px wide |
-| `screenshots/iphone-6.9/01.png` ... `09.png` | Marketing screenshots for the App Store "iPhone 6.9-inch Display" slot. Upload in numeric order. | 1320x2868, RGB |
+| `screenshots/iphone-6.9/01.png` ... `10.png` | Marketing screenshots for the App Store "iPhone 6.9-inch Display" slot. Upload in numeric order. | 1320x2868, RGB |
 | `review/subscription-review.png` | Store screen scrolled to the "Carden VIP" card, for the App Store Connect subscription "Review screenshot" field (min 640x920). Same pixels as `raw/12_store_vip.png`. | 1320x2868 |
 | `promo/app-icon-1024.png` | The app icon flattened to RGB (App Store rejects alpha). | 1024x1024 |
 | `promo/vip-promotional-1024.png` | Promotional image for the VIP subscription (icon, "VIP" word mark, one-line benefit). | 1024x1024 |
@@ -26,17 +27,18 @@ Marketing slides (`screenshots/iphone-6.9/`), in upload order. Slides 1-3
 appear in search results, so they carry the core loop, the catalogue and the
 daily hook.
 
-| Slide | Headline | Shows |
-| --- | --- | --- |
-| `01.png` | Swap pieces. Reveal the picture. | `raw/03_game_cards.png`: Monarch butterfly, most cards placed, one lifted |
-| `02.png` | Thousands of pictures | `raw/15_library.png` in front of a wall of real pack covers (`collage/`) |
-| `03.png` | A new picture every day | `raw/18_daily_month_grid.png`: this month's calendar, solved days with stars, today outlined |
-| `04.png` | Four ways to play | Board crops of `raw/06`-`09`: Bora Bora lagoon as cards, squares, triangles, hexagons |
-| `05.png` | Puzzle your own photos | `raw/20_my_puzzles.png` (four uploaded photos) with the Corgi board of `raw/21_my_puzzle_game.png` as a callout |
-| `06.png` | Fewer moves, more stars | `raw/04_complete.png`: Key West sunset, three stars, coins and XP |
-| `07.png` | Quests and live events | `raw/13_quests.png` with a live world-day event card (`raw/14_quests_live.png`) as a callout |
-| `08.png` | Climb the leaderboard | `raw/22_social_league.png` (real player names, approved by the owner) |
-| `09.png` | Every pack with VIP | `raw/12_store_vip.png` |
+| Slide | Headline | Layout | Shows (light captures unless noted) |
+| --- | --- | --- | --- |
+| `01.png` | Swap cards. Reveal the picture. | A + icon | `raw/03_game_cards`: Monarch butterfly, most cards placed |
+| `02.png` | Thousands of pictures | B | `raw/15_library` with real pack covers (`collage/`) floating beside it |
+| `03.png` | A new picture every day | A | `raw/18_daily_month_grid`, today's card lifted out |
+| `04.png` | Four ways to play | C, -7 deg | `raw/09_mode_hexagons`, with the cards, squares and triangles boards (`raw/06`-`08`) lifted out |
+| `05.png` | Puzzle your own photos | A | `raw/20_my_puzzles`, the Corgi board of `raw/21_my_puzzle_game` lifted out |
+| `06.png` | Fewer moves, more stars | B | `raw/04_complete`, the Picture complete card lifted out |
+| `07.png` | Quests and live events | C, two phones | `raw/13_quests` in front of `raw/14_quests_live` |
+| `08.png` | Climb the leaderboard | B | `raw/22_social_league` (real player names, approved by the owner), the podium lifted out |
+| `09.png` | Every pack with VIP | C, -7 deg | `raw/12_store_vip` |
+| `10.png` | Just as calm in the dark | A, dark | `raw/03_game_cards` in the dark theme |
 
 Raw captures (dark theme; a `--dart-define=CJW_STORE_THEME=light` run writes
 the same names with a `_light` suffix):
@@ -82,6 +84,10 @@ simulator, and a Python 3 with Pillow (`pip install pillow`).
    tools/dev/qa-run.sh drive --driver=test_driver/store_screenshots.dart \
      --target=integration_test/store_screenshots_test.dart \
      -d D03644FB-6169-4E87-8E0F-CCFC884FBE78
+   # the light theme, written as raw/<name>_light.png (slides 1-9 of the glass set):
+   tools/dev/qa-run.sh drive --driver=test_driver/store_screenshots.dart \
+     --target=integration_test/store_screenshots_test.dart \
+     -d D03644FB-6169-4E87-8E0F-CCFC884FBE78 --dart-define=CJW_STORE_THEME=light
    ```
 
    Captures are taken in-app (`binding.takeScreenshot`), so they have no
@@ -103,8 +109,18 @@ simulator, and a Python 3 with Pillow (`pip install pillow`).
    diagnostics the test writes when a step failed; delete them, they are not
    assets.
 
-2. Compose the slides (copy, order, layouts and callouts live in `SLIDES` at
-   the top of the script; pass slide numbers to rebuild only some):
+2. Compose the slides. The glass set: copy, order, layouts, phones and
+   break-out cards live in `SLIDES` at the top of the script, the look in
+   `tools/store/glass/slides.html`; pass slide numbers to rebuild only some.
+
+   ```sh
+   .venv/bin/python tools/store/compose_glass.py                  # all, SF Pro Rounded
+   .venv/bin/python tools/store/compose_glass.py 1 4              # just 01 and 04
+   .venv/bin/python tools/store/compose_glass.py --font newyork   # or display
+   .venv/bin/python tools/store/compose_glass.py --out /tmp/try --sheet /tmp/sheet.png
+   ```
+
+   The dark gallery set of 2026-10-13 (same captures, dark theme):
 
    ```sh
    python3 tools/store/compose_screenshots.py                 # all
