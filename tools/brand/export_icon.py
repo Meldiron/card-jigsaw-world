@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Render the Carden app icon (tools/brand/icon-glass.js, id FINAL) into every icon file the app ships.
 
-  python3 tools/brand/export_icon.py          # writes iOS, web, Android, README and store icons
+  python3 tools/brand/export_icon.py          # writes iOS, web, Android, assets/icon, README and store icons
 
 Needs node, Pillow and a Chromium (CHROME=/path/to/chrome, else Playwright's or Google Chrome).
 Each look is drawn at 2048 px and scaled down, so small sizes stay crisp:
@@ -33,10 +33,12 @@ def render(svg_text: str, out: Path, px: int = 2048) -> Image.Image:
     with tempfile.TemporaryDirectory() as d:
         page = Path(d) / "icon.html"
         page.write_text(f'<!doctype html><html><head><style>html,body{{margin:0;background:transparent}}svg{{display:block;width:1024px;height:1024px}}</style></head><body>{svg_text}</body></html>')
+        # --headless=new paints about 87 px less than the window height, so the window is taller than
+        # the icon and the screenshot is cropped back to the square.
         subprocess.run([chrome(), "--headless=new", "--disable-gpu", "--hide-scrollbars", "--default-background-color=00000000",
-                        f"--window-size=1024,1024", f"--force-device-scale-factor={px / 1024}", "--virtual-time-budget=4000",
+                        f"--window-size=1024,1224", f"--force-device-scale-factor={px / 1024}", "--virtual-time-budget=4000",
                         f"--screenshot={out}", f"file://{page}"], check=True, capture_output=True)
-    return Image.open(out).convert("RGBA")
+    return Image.open(out).convert("RGBA").crop((0, 0, px, px))
 
 def fit(im: Image.Image, size: int, opaque: bool) -> Image.Image:
     out = im.resize((size, size), Image.LANCZOS)
@@ -78,6 +80,13 @@ def main() -> None:
     for folder, size in [("mdpi", 48), ("hdpi", 72), ("xhdpi", 96), ("xxhdpi", 144), ("xxxhdpi", 192)]:
         fit(light, size, True).save(ROOT / f"android/app/src/main/res/mipmap-{folder}/ic_launcher.png", "PNG", optimize=True)
     print("android: 5 launcher sizes")
+
+    # The sources pubspec.yaml's flutter_launcher_icons reads, so a regeneration keeps this icon.
+    fit(light, 1024, True).save(ROOT / "assets/icon/icon.png", "PNG", optimize=True)
+    fit(dark, 1024, False).save(ROOT / "assets/icon/icon_dark.png", "PNG", optimize=True)
+    fit(tinted, 1024, False).save(ROOT / "assets/icon/icon_tinted.png", "PNG", optimize=True)
+    fit(light, 256, True).save(ROOT / "assets/icon/icon_preview.png", "PNG", optimize=True)
+    print("assets/icon: flutter_launcher_icons sources")
 
     fit(light, 256, True).save(ROOT / "docs/images/app-icon.png", "PNG", optimize=True)
     (BRAND / "out").mkdir(exist_ok=True)

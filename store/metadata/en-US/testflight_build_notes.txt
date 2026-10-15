@@ -1,10 +1,6 @@
 New in this build:
-- New name: Card Jigsaw World is now Carden, your calm picture puzzle. Your progress, coins and packs stay as they are. Links now start with carden:// and the web site is carden.appwrite.network; old links still open.
-- A design pass over every screen: a calmer Home header with your level as a ring around the avatar, a new level card, a redesigned Store, daily gift, Lucky Wheel and piggy bank, a podium for the top three in the league, and a glass toolbar and score capsule in the game.
-- Board picker: the mode picker and board sizes are redesigned, Painting is one row with what it does, and the picture credit sits behind a camera button.
-- Library: pack grids show only the photos, with the day, stars and boards in progress; searching shows matching packs as a shelf.
-- Welcome screens open instantly with their pictures built into the app.
-- Giant packs can be opened before level 10 for 1 ticket per level to go.
-- Account is one sheet everywhere, and every alert and menu has the same calm style in light and dark mode.
+- New app icon: the Carden lotus in coloured glass, with matching dark and tinted versions for the Home Screen. The web site and its tab icon use it too.
+- A board you finished on another device stays finished: if an older copy is still open somewhere (a browser tab, a second phone), it closes with "Solved on another device" instead of coming back as Continue.
+- Sync notices and the update prompt no longer appear in the middle of a game.
 
-Please try: the Home Screen name and icon label (Carden), a link such as carden://daily typed into Safari's address bar, and the Store, daily gift and wheel.
+Please try: the new icon on your Home Screen in light, dark and tinted mode, and finishing a board on one device while it is still open on another.

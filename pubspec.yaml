@@ -91,8 +91,9 @@ flutter_launcher_icons:
   ios: true
   remove_alpha_ios: true
   image_path: "assets/icon/icon.png"
-  # iOS 18 dark and tinted Home Screen icons (made from icon.png: the cards on a transparent
-  # background, and the same in greyscale). Keep these keys, or a regeneration drops both.
+  # iOS 18 dark and tinted Home Screen icons (the lotus on a transparent background, and the same in
+  # grey). All four files come from tools/brand/export_icon.py, which also writes every app icon
+  # directly; prefer it. Keep these keys, or a regeneration drops both.
   # After `dart run flutter_launcher_icons`, revert its edit of ios/Runner.xcodeproj/project.pbxproj:
   # it renames the widget's ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME to AppIcon.
   image_path_ios_dark_transparent: "assets/icon/icon_dark.png"

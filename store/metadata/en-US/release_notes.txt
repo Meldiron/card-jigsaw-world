@@ -1,6 +1,6 @@
 Version 1.7.0
 
-Card Jigsaw World is now Carden, your calm picture puzzle. Your progress, coins and packs stay as they are.
+Card Jigsaw World is now Carden, your calm picture puzzle, with a new icon: a lotus in coloured glass. Your progress, coins and packs stay as they are.
 
 New ways to play
 - Painting: cards start in black and white and get their colour back as they lock. Pays 25% more.
