@@ -27,6 +27,7 @@ import '../../widgets/cached_url_image.dart';
 import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
+import '../gallery/giant_gate.dart' show showGiantGateFor;
 import 'unlock_intro.dart';
 
 /// Pre-game screen: preview with the cut overlay, mode picker, board picker
@@ -359,7 +360,8 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
             label: 'Giant boards open at level ${Unlock.giant.level}',
             kind: ButtonKind.secondary,
             icon: AppIcons.lock,
-            onTap: () => showLockedInfo(context, ref, Unlock.giant),
+            // 027: the Giant pack's gate (level 10, or open now for tickets).
+            onTap: () => showGiantGateFor(context, ref, puzzle?.packId),
           )
         else
         BigButton(

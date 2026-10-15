@@ -7,10 +7,12 @@ import 'package:go_router/go_router.dart';
 import '../../core/theme/tokens.dart';
 import '../../models/models.dart';
 import '../../state/catalog.dart';
+import '../../state/giant.dart';
 import '../../state/profile.dart';
 import '../../state/progress.dart';
 import '../../state/settings.dart';
 import '../../state/starter_packs.dart';
+import '../../state/unlocks.dart';
 import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
@@ -28,9 +30,15 @@ class LibraryFilter extends Notifier<String> {
   static const unlocked = 'Unlocked';
   static const fresh = 'New';
   static const daily = 'Daily';
+  static const giant = 'Giant';
+  static const ai = 'AI';
 
   /// Chips that are not pack categories; they carry an icon before the label.
   static const special = {all, fresh, finished, started, unlocked};
+
+  /// Categories that are a different kind of pack (a calendar, giant boards, generated pictures):
+  /// they carry their mark ([AppIcons.category]) and lead the categories, in this order.
+  static const kinds = [daily, giant, ai];
 
   @override
   String build() => all;
@@ -42,25 +50,31 @@ final libraryFilterProvider = NotifierProvider<LibraryFilter, String>(LibraryFil
 
 /// The chips in order: All, New (only while a library pack is new, see
 /// [Pack.isNewAt]), Finished, Started, Unlocked (only useful without VIP,
-/// which opens everything), Daily, then the library categories.
-List<String> libraryChips(List<Pack> packs, {required bool showUnlocked, DateTime? now}) => [
-      LibraryFilter.all,
-      if (packs.any((p) => p.isNewAt(now ?? DateTime.now()))) LibraryFilter.fresh,
-      LibraryFilter.finished,
-      LibraryFilter.started,
-      if (showUnlocked) LibraryFilter.unlocked,
-      LibraryFilter.daily,
-      ...{for (final p in packs) if (!p.isDaily && !p.hasWindow) p.category},
-    ];
+/// which opens everything), then the kinds of pack with their marks (Daily,
+/// Giant, AI; Giant and AI only while such packs exist), then the themed
+/// categories. Events have no chip: they live on Home and in Quests.
+List<String> libraryChips(List<Pack> packs, {required bool showUnlocked, DateTime? now}) {
+  final categories = {for (final p in packs) if (!p.isDaily && !p.hasWindow && p.category != 'Event') p.category};
+  return [
+    LibraryFilter.all,
+    if (packs.any((p) => p.isNewAt(now ?? DateTime.now()))) LibraryFilter.fresh,
+    LibraryFilter.finished,
+    LibraryFilter.started,
+    if (showUnlocked) LibraryFilter.unlocked,
+    for (final k in LibraryFilter.kinds) if (k == LibraryFilter.daily || categories.contains(k)) k,
+    ...categories.where((c) => !LibraryFilter.kinds.contains(c)),
+  ];
+}
 
-/// Icon for a chip that is not a pack category, null for categories.
+/// Icon for a chip: the special views and the kinds of pack (Daily, Giant,
+/// AI) carry one, themed categories are words.
 IconData? libraryChipIcon(String chip) => switch (chip) {
       LibraryFilter.all => AppIcons.filterAll,
-      LibraryFilter.fresh => AppIcons.sparkle,
+      LibraryFilter.fresh => AppIcons.filterNew,
       LibraryFilter.finished => AppIcons.filterFinished,
       LibraryFilter.started => AppIcons.filterStarted,
       LibraryFilter.unlocked => AppIcons.filterUnlocked,
-      _ => null,
+      _ => LibraryFilter.kinds.contains(chip) ? AppIcons.category(chip) : null,
     };
 
 /// Lower case without accents, apostrophes or hyphens, so "Kraków",
@@ -195,6 +209,9 @@ class LibraryScreen extends ConsumerStatefulWidget {
 }
 
 class _LibraryScreenState extends ConsumerState<LibraryScreen> {
+  /// Width of a pack on the search shelf: two and a bit fit an SE, so the next one peeks.
+  static const _shelfCardWidth = 150.0;
+
   final _search = TextEditingController();
   final _searchFocus = FocusNode();
 
@@ -344,9 +361,9 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
         if (filtered.isEmpty && found.total == 0)
           SliverToBoxAdapter(child: _empty(filter, hideFinished: hideFinished, view: view))
         else if (searching && filtered.isNotEmpty) ...[
-          // While searching, packs and pictures are results of one list: packs as compact
-          // rows, so the matching pictures start on the first screen instead of under a
-          // page of large covers.
+          // While searching, the matching packs are a shelf that scrolls sideways: the covers
+          // look as they do everywhere else, and the matching pictures start on the first
+          // screen instead of under a page of large covers.
           SliverToBoxAdapter(
             child: SectionHeader(
               key: const ValueKey('library-packs'),
@@ -355,18 +372,20 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
               padding: const EdgeInsets.fromLTRB(20, 14, 20, 10),
             ),
           ),
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            sliver: SliverToBoxAdapter(
-              child: SoftCard(
-                padding: EdgeInsets.zero,
-                child: Column(
-                  children: [
-                    for (var i = 0; i < filtered.length; i++) ...[
-                      _PackRow(pack: filtered[i]),
-                      if (i < filtered.length - 1) Divider(height: 1, color: c.stroke, indent: 76),
-                    ],
-                  ],
+          SliverToBoxAdapter(
+            child: SizedBox(
+              // A grid card's shape (0.78) at shelf width.
+              height: _shelfCardWidth / 0.78,
+              child: ListView.separated(
+                key: const ValueKey('library-pack-shelf'),
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                physics: const BouncingScrollPhysics(),
+                itemCount: filtered.length,
+                separatorBuilder: (_, _) => const SizedBox(width: 12),
+                itemBuilder: (_, i) => SizedBox(
+                  width: _shelfCardWidth,
+                  child: PackCard(key: ValueKey('library-pack-${filtered[i].id}'), pack: filtered[i], onTap: () => context.go('/library/pack/${filtered[i].id}')),
                 ),
               ),
             ),
@@ -442,66 +461,9 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
       LibraryFilter.finished => const EmptyState(icon: AppIcons.filterFinished, title: 'No finished packs yet', message: 'A pack lands here once every picture in it is solved. Open a pack you have started to finish it.'),
       LibraryFilter.started => const EmptyState(icon: AppIcons.filterStarted, title: 'Nothing started yet', message: 'Packs you have begun and not finished show up here. Open a pack to start one.'),
       LibraryFilter.unlocked => const EmptyState(icon: AppIcons.filterUnlocked, title: 'Nothing unlocked yet', message: 'Packs you can play right now show up here.'),
-      LibraryFilter.fresh => const EmptyState(icon: AppIcons.sparkle, title: 'No new packs this week', message: 'Packs added in the last seven days show up here.'),
+      LibraryFilter.fresh => const EmptyState(icon: AppIcons.filterNew, title: 'No new packs this week', message: 'Packs added in the last seven days show up here.'),
       _ => const EmptyState(icon: AppIcons.library, title: 'Nothing here yet', message: 'New packs arrive with events and every month.'),
     };
-  }
-}
-
-/// A pack found by the search: cover, name, category and size, and its
-/// state (price, progress or finished) on the right.
-class _PackRow extends ConsumerWidget {
-  const _PackRow({required this.pack});
-  final Pack pack;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final c = context.colors;
-    final profile = ref.watch(profileProvider).value;
-    if (formerlyFreePacks.contains(pack.id)) ref.watch(playedPacksProvider); // stays open once played
-    final open = profile != null && ref.read(profileProvider.notifier).isUnlocked(pack);
-    final progress = ref.watch(packProgressProvider(pack.id));
-    final tickets = pack.priceTickets > 0;
-    return Pressable(
-      key: ValueKey('library-pack-${pack.id}'),
-      scale: 0.99,
-      onTap: () => context.go('/library/pack/${pack.id}'),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        child: Row(
-          children: [
-            NetImage(url: pack.coverUrl, blurhash: pack.blurhash, width: 52, height: 52, radius: 10),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(pack.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body)),
-                  const SizedBox(height: 2),
-                  Text('${pack.category} · ${progress.total} pictures', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote)),
-                ],
-              ),
-            ),
-            const SizedBox(width: 8),
-            if (!open && !pack.hasWindow)
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(AppIcons.lock, size: 12, color: c.textTertiary),
-                  const SizedBox(width: 6),
-                  currencyIcon(tickets ? Currency.tickets : Currency.coins, size: 14),
-                  const SizedBox(width: 4),
-                  Text(formatCount(tickets ? pack.priceTickets : pack.priceCoins), style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote, fontWeight: FontWeight.w600)),
-                ],
-              )
-            else if (progress.started)
-              Text('${progress.solved}/${progress.total}', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote, fontWeight: FontWeight.w600))
-            else
-              Icon(AppIcons.chevronRight, size: 16, color: c.textTertiary),
-          ],
-        ),
-      ),
-    );
   }
 }
 
@@ -519,7 +481,10 @@ class _PictureRow extends ConsumerWidget {
     ref.watch(profileProvider);
     final pack = this.pack;
     if (pack != null && formerlyFreePacks.contains(pack.id)) ref.watch(playedPacksProvider); // stays open once played
-    final open = pack != null && ref.read(profileProvider.notifier).isUnlocked(pack) && !puzzle.isLockedByDate;
+    // A Giant pack's picture before giant boards open shows its pack, where the gate explains
+    // level 10 and the early opening.
+    final giantClosed = pack != null && isGiantPack(pack) && !ref.watch(openFeaturesProvider).giant;
+    final open = pack != null && ref.read(profileProvider.notifier).isUnlocked(pack) && !puzzle.isLockedByDate && !giantClosed;
     final saved = ref.watch(progressProvider.select((m) => m.value?[puzzle.id]));
     final stars = saved != null && saved.completed ? saved.stars : 0;
     return Pressable(

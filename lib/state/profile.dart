@@ -25,6 +25,14 @@ class Economy {
   /// Early unlock of a board tier that is still above the player's level.
   static int tierUnlockCoins(int tierIndex) => 600 + 300 * tierIndex;
 
+  /// Opening giant boards before their level ([Unlock.giant], level 10) costs one ticket for every
+  /// level still to go, on top of the Giant pack's own price (owner, 2026-10-15): a level 7 player
+  /// opens a 12-ticket Giant pack now for 12 + 3. Paid once; giant boards then stay open.
+  static const giantEarlyTicketsPerLevel = 1;
+
+  /// Tickets that open giant boards now for a player at [level] (0 from level 10).
+  static int giantEarlyFee(int level) => max(0, Unlock.giant.level - level) * giantEarlyTicketsPerLevel;
+
   /// Restoring a lost streak of [lost] days with the next daily gift.
   static int streakRestoreTickets(int lost) => (3 + lost ~/ 7).clamp(3, 10);
 
@@ -156,6 +164,33 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
     final price = tickets ? pack.priceTickets : pack.priceCoins;
     if ((tickets ? _p.tickets : _p.coins) < price) return false;
     _do(SyncOp.unlock(list: 'unlockedPacks', key: pack.id, currency: tickets ? 'tickets' : 'coins', price: price, reason: 'unlock:${pack.id}'));
+    return true;
+  }
+
+  /// Tickets [openGiantEarly] takes for [pack] now: [Economy.giantEarlyFee], plus the pack's ticket
+  /// price unless the player already has the pack (bought, VIP, free). A pack priced in coins
+  /// keeps its coin price for later (its access card): only the fee is paid here.
+  int giantEarlyPrice(Pack pack) => _giantFeeNow() + (isUnlocked(pack) ? 0 : pack.priceTickets);
+
+  /// The early fee still to pay: none once giant boards were opened early.
+  int _giantFeeNow() => _p.unlockedTiers.contains(Unlocks.earlyKey(Unlock.giant)) ? 0 : Economy.giantEarlyFee(_p.level);
+
+  /// Opens giant boards before their level and, unless the player has it, buys the Giant [pack],
+  /// in one payment of [giantEarlyPrice] tickets. Two ops, each applied exactly once: the pack
+  /// first (`unlockedPacks`), then the early opening ([Unlocks.earlyKey] in `unlockedTiers`, which
+  /// [openFeaturesProvider] reads). Spent elsewhere meanwhile, the server skips what no longer
+  /// fits and the pack page offers the rest. False when the tickets are short.
+  Future<bool> openGiantEarly(Pack pack) async {
+    final fee = _giantFeeNow();
+    final packTickets = isUnlocked(pack) ? 0 : pack.priceTickets;
+    if (_p.tickets < fee + packTickets) return false;
+    if (packTickets > 0) {
+      _do(SyncOp.unlock(list: 'unlockedPacks', key: pack.id, currency: 'tickets', price: packTickets, reason: 'unlock:${pack.id}'));
+    }
+    if (fee > 0) {
+      final key = Unlocks.earlyKey(Unlock.giant);
+      _do(SyncOp.unlock(list: 'unlockedTiers', key: key, currency: 'tickets', price: fee, reason: key));
+    }
     return true;
   }
 

@@ -146,6 +146,11 @@ class Unlocks {
 
   /// What opens at [level].
   static List<Unlock> atLevel(int level) => [for (final u in Unlock.values) if (u.level == level) u];
+
+  /// The key an unlock opened before its level with tickets is kept under, in the profile's
+  /// `unlockedTiers` list (next to early board tiers `<mode>:<index>`, so no new column: older
+  /// builds read the list and ignore a key they do not know). Only giant boards are sold early.
+  static String earlyKey(Unlock u) => 'early:${u.name}';
 }
 
 /// What a player can pick on the mode and board screen: everything their
@@ -162,7 +167,9 @@ class OpenFeatures {
 
   static const all = OpenFeatures({Unlock.squares, Unlock.triangles, Unlock.hexagons, Unlock.painting, Unlock.giant});
 
-  factory OpenFeatures.forPlayer({required int level, Iterable<PuzzleProgress> progress = const [], Map<String, int> solvedByMode = const {}}) {
+  /// [unlockedTiers] is the profile's list of early unlocks: an unlock whose [Unlocks.earlyKey] is
+  /// in it was opened before its level (giant boards for tickets, see `Economy.giantEarlyFee`).
+  factory OpenFeatures.forPlayer({required int level, Iterable<PuzzleProgress> progress = const [], Map<String, int> solvedByMode = const {}, Iterable<String> unlockedTiers = const []}) {
     final used = <Unlock>{};
     for (final e in solvedByMode.entries) {
       final u = e.value > 0 ? Unlocks.ofMode(GameMode.fromCode(e.key)) : null;
@@ -176,7 +183,8 @@ class OpenFeatures {
       if (p.painting) used.add(Unlock.painting);
       if (p.gridSize >= BoardLayouts.giantFloor(mode)) used.add(Unlock.giant);
     }
-    return OpenFeatures({for (final u in Unlock.values) if (level >= u.level || used.contains(u)) u}, used: used);
+    final early = {for (final u in Unlock.values) if (unlockedTiers.contains(Unlocks.earlyKey(u))) u};
+    return OpenFeatures({for (final u in Unlock.values) if (level >= u.level || used.contains(u) || early.contains(u)) u}, used: used);
   }
 
   bool has(Unlock u) => open.contains(u);

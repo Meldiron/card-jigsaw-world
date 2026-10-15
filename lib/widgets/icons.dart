@@ -102,6 +102,8 @@ class AppIcons {
 
   // Library filters that are not pack categories (drawn before the label).
   static const filterAll = CupertinoIcons.square_grid_2x2_fill;
+  /// New packs: a burst, so it never reads as the AI mark (sparkles) in the same row.
+  static const filterNew = CupertinoIcons.burst_fill;
   static const filterFinished = CupertinoIcons.checkmark_circle_fill;
   static const filterStarted = CupertinoIcons.play_circle_fill;
   static const filterUnlocked = CupertinoIcons.lock_open_fill;
@@ -192,13 +194,13 @@ class AppIcons {
   static const timer = CupertinoIcons.timer;
 
   /// Icon for a pack category chip, or none: themed categories (Nature,
-  /// Cities, Abstract...) are plain words, like the Library's category chips;
-  /// only the kinds of pack that play or are made differently carry a mark.
+  /// Cities, Abstract...) and Event are plain words; only the three kinds of
+  /// pack that play or are made differently carry a mark, on pack covers and
+  /// on the Library's chips alike (owner, 2026-10-15: Daily, Giant, AI).
   static IconData? category(String category) => switch (category.toLowerCase()) {
-        'ai' => Icons.auto_awesome_rounded, // generated pictures
         'daily' => Icons.calendar_month_rounded,
-        'event' => Icons.celebration_rounded,
         'giant' => Icons.grid_on_rounded, // 100-300 card boards
+        'ai' => Icons.auto_awesome_rounded, // generated pictures
         _ => null,
       };
 

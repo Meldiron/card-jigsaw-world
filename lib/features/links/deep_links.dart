@@ -9,10 +9,12 @@ import '../../core/app_links.dart';
 import '../../models/models.dart';
 import '../../router.dart';
 import '../../state/catalog.dart';
+import '../../state/giant.dart';
 import '../../state/profile.dart';
 import '../../state/progress.dart';
 import '../../state/quick_play.dart';
 import '../../state/settings.dart';
+import '../../state/unlocks.dart';
 import '../daily/daily_reward_sheet.dart';
 import '../daily/piggy_sheet.dart';
 import '../gallery/library_screen.dart';
@@ -150,11 +152,14 @@ class DeepLinks {
     final pack = (_ref.read(packsProvider).value ?? const <Pack>[]).where((p) => p.id == puzzle.packId).firstOrNull;
     if (pack == null || puzzle.isLockedByDate) return puzzle.packId;
     if (_ref.read(profileProvider).value == null) return puzzle.packId;
+    // A Giant pack's picture before giant boards open: the pack page explains the gate (027).
+    if (isGiantPack(pack) && !_ref.read(openFeaturesProvider).giant) return pack.id;
     return _ref.read(profileProvider.notifier).isUnlocked(pack) ? null : pack.id;
   }
 
   /// `/library?filter=`: a chip by its label (All, New, Finished, Started, Unlocked, Daily) or a
-  /// pack category (Animals, Giant), in any case.
+  /// category the Library has a chip for (Animals, Giant), in any case. Event has no chip (events
+  /// live on Home and in Quests): such a link, like any filter without a chip, opens it on All.
   Future<void> _libraryFilter(String filter) async {
     final want = filter.trim().toLowerCase();
     const chips = [LibraryFilter.all, LibraryFilter.fresh, LibraryFilter.finished, LibraryFilter.started, LibraryFilter.unlocked, LibraryFilter.daily];
@@ -162,9 +167,9 @@ class DeepLinks {
     if (chip == null) {
       await _ready();
       final packs = _ref.read(packsProvider).value ?? const <Pack>[];
-      chip = packs.map((p) => p.category).where((c) => c.toLowerCase() == want).firstOrNull;
+      chip = libraryChips(packs, showUnlocked: true).where((c) => c.toLowerCase() == want).firstOrNull;
     }
-    if (chip != null) _ref.read(libraryFilterProvider.notifier).select(chip);
+    _ref.read(libraryFilterProvider.notifier).select(chip ?? LibraryFilter.all);
   }
 
   /// Where Quick play on Home would go now, or null when there is nothing to play.
