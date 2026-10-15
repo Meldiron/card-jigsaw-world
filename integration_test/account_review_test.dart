@@ -159,8 +159,13 @@ void main() {
     await shot(tester, 'ar_03_account_delete_button');
     await tester.tap(find.byKey(const ValueKey('account-delete')), warnIfMissed: false);
     await settle(tester, 2500);
+    // The deletion sheet lists what goes; its red button asks a last time in an alert.
     expect(find.text('Delete your account?'), findsOneWidget);
-    await shot(tester, 'ar_04_delete_alert');
+    await shot(tester, 'ar_04_delete_sheet');
+    await tester.tap(find.byKey(const ValueKey('account-delete-continue')), warnIfMissed: false);
+    await settle(tester, 1500);
+    expect(find.text('Delete account for good?'), findsOneWidget);
+    await shot(tester, 'ar_04b_delete_alert');
     await tapText(tester, 'Delete account', last: true, ms: 500);
     debugPrint('QA_DELETED_USER $userId');
     // The function deletes everything, then the app starts over on the welcome screens.

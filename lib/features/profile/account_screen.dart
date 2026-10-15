@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/enums.dart' as enums;
+import 'package:appwrite/models.dart' as models;
 import 'package:crypto/crypto.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ import '../../core/haptics.dart';
 import '../../core/links.dart';
 import '../../core/theme/tokens.dart';
 import '../../data/repositories.dart';
+import '../../models/models.dart';
 import '../../state/account_deletion.dart';
 import '../../state/auth.dart';
 import '../../state/merge.dart';
@@ -213,32 +215,22 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
   bool _deleting = false;
 
   /// Account > Delete account (App Store guideline 5.1.1(v)): guests and signed-in players alike.
-  /// VIP members are reminded first that Apple bills the subscription until they cancel it there.
-  /// Players who signed in with Apple confirm with Apple once more, so the server can revoke the
-  /// game's access to their Apple ID.
+  /// A sheet lists what goes (and, for VIP members, that Apple keeps billing until they cancel,
+  /// with Manage subscription); its one red button asks a last time in an alert. Players who
+  /// signed in with Apple then confirm with Apple once more, so the server can revoke the game's
+  /// access to their Apple ID.
   Future<void> _deleteAccount() async {
     final isVip = (ref.read(profileProvider).value?.isVip ?? false) && !kIsWeb;
     final withApple = !kIsWeb && (Platform.isIOS || Platform.isMacOS) && await ref.read(authRepositoryProvider).hasAppleIdentity();
     if (!mounted) return;
-    // One confirmation that says everything: what goes, that it is final, and for VIP members
-    // that Apple keeps billing until they cancel there (with a link to do it now).
+    final proceed = await showAppSheet<bool>(context, builder: (_) => _DeleteAccountPanel(vip: isVip, withApple: withApple));
+    if (proceed != true || !mounted) return;
     final ok = await showAppAlert(
       context,
-      title: 'Delete your account?',
-      message: 'Your progress, coins, purchases, unlocks, photos and friends are removed from every device. This cannot be undone.'
-          '${withApple ? ' Apple asks you to confirm once more.' : ''}'
-          '${isVip ? '\n\nVIP is billed by Apple and is not cancelled by this. Cancel it in your App Store subscriptions.' : ''}',
-      child: isVip
-          ? Pressable(
-              onTap: () => launchUrl(Uri.parse('https://apps.apple.com/account/subscriptions'), mode: LaunchMode.externalApplication),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 2),
-                child: Text('Manage subscription', style: TextStyle(color: context.accent, fontWeight: FontWeight.w600, fontSize: TypeSize.body)),
-              ),
-            )
-          : null,
+      title: 'Delete account for good?',
+      message: 'This cannot be undone.',
       confirmLabel: 'Delete account',
-      cancelLabel: 'Keep account',
+      cancelLabel: 'Cancel',
       destructive: true,
     );
     if (!ok || !mounted) return;
@@ -279,205 +271,453 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
     if (mounted) setState(() => _deleting = false);
   }
 
-  Widget _deleteButton(BuildContext context) {
+  /// Delete account: a quiet red link at the foot of the guest sheet; a red row in its own group
+  /// for a signed-in player, under Sign out.
+  Widget _deleteButton(BuildContext context, {required bool guest}) {
     final c = context.colors;
-    return Padding(
-      padding: const EdgeInsets.only(top: 28),
-      child: Column(
-        children: [
-          Divider(color: c.stroke),
-          const SizedBox(height: 10),
-          if (_deleting)
-            const Padding(padding: EdgeInsets.all(10), child: CupertinoActivityIndicator())
-          else
-            Pressable(
-              key: const ValueKey('account-delete'),
-              onTap: _busy ? null : _deleteAccount,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(AppIcons.trash, size: 17, color: c.danger),
-                    const SizedBox(width: 8),
-                    Text('Delete account', style: TextStyle(color: c.danger, fontWeight: FontWeight.w600, fontSize: TypeSize.body)),
-                  ],
-                ),
-              ),
-            ),
-          const SizedBox(height: 4),
-          Text(
-            'Deletes your profile, progress and photos for good.',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: TypeSize.caption, color: c.textTertiary),
-          ),
-        ],
+    if (_deleting) return const Padding(padding: EdgeInsets.all(14), child: CupertinoActivityIndicator());
+    final label = Text('Delete account', style: TextStyle(color: c.danger, fontWeight: FontWeight.w600, fontSize: guest ? TypeSize.footnote : TypeSize.callout));
+    if (guest) {
+      return Center(
+        child: Pressable(
+          key: const ValueKey('account-delete'),
+          onTap: _busy ? null : _deleteAccount,
+          child: TapTarget(child: Padding(padding: const EdgeInsets.symmetric(horizontal: 12), child: label)),
+        ),
+      );
+    }
+    return SoftCard(
+      padding: EdgeInsets.zero,
+      child: Pressable(
+        key: const ValueKey('account-delete'),
+        scale: 0.99,
+        onTap: _busy ? null : _deleteAccount,
+        child: SizedBox(height: 50, width: double.infinity, child: Center(child: label)),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final c = context.colors;
     final user = ref.watch(authProvider).value;
     final profile = ref.watch(profileProvider).value;
     final isGuest = ref.watch(isGuestProvider);
+    final top = MediaQuery.paddingOf(context).top + kToolbarHeight;
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: GlassAppBar(
-        title: const Text('Account'),
-        // Close (X) when presented as a sheet (Home, Settings, links), Back when pushed as a page
-        // in the Profile tab.
+        // A guest's sheet has its own large title ("Save your progress").
+        title: Text(isGuest ? '' : 'Account'),
+        // Close (X): Account is always a sheet (Home, Profile, Settings, links). Back if a page
+        // ever pushes it.
         leading: Padding(
           padding: const EdgeInsets.only(left: 12),
           child: RoundIconButton(icon: ModalRoute.of(context) is CupertinoSheetRoute ? AppIcons.xmark : AppIcons.back, size: 38, onTap: () => context.pop()),
         ),
       ),
-      body: ListView(
+      body: isGuest ? _guest(context, top) : _signedIn(context, top, user, profile),
+    );
+  }
+
+  /// The guest sheet: what an account gives at the top, the two ways in at the bottom (Apple
+  /// first, email on request), the legal line under them and a quiet Delete account at the foot.
+  /// On a tall phone the actions sit low, near the thumb; on a short one the page scrolls.
+  Widget _guest(BuildContext context, double top) {
+    final c = context.colors;
+    final bottom = GlassTabBar.scrollEndPadding(context, margin: 8);
+    final form = _emailOpen || !_appleAvailable;
+    return LayoutBuilder(
+      builder: (context, box) => SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
-        padding: EdgeInsets.fromLTRB(20, MediaQuery.paddingOf(context).top + kToolbarHeight + 8, 20, GlassTabBar.scrollEndPadding(context)),
-        children: [
-          if (!isGuest) ...[
-            // The Apple ID page idiom: who you are, centred, then grouped rows; actions are rows too.
-            const SizedBox(height: 8),
-            Center(child: AvatarCircle(avatarKey: profile?.avatar, size: 76, border: true)),
-            const SizedBox(height: 10),
-            Text(user?.name.isNotEmpty == true ? user!.name : 'Player', textAlign: TextAlign.center, maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.headlineSmall),
-            const SizedBox(height: 2),
-            Text(user?.email ?? '', textAlign: TextAlign.center, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontSize: TypeSize.body)),
-            const SizedBox(height: 20),
-            SoftCard(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
+        padding: EdgeInsets.fromLTRB(24, top + 4, 24, bottom),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: max(0, box.maxHeight - top - 4 - bottom)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // ---- What an account is for.
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  FutureBuilder<bool>(
-                    future: _withApple,
-                    builder: (context, snap) => _AccountLine(label: 'Signed in with', value: snap.data == true ? 'Apple' : 'Email', icon: snap.data == true ? AppIcons.appleLogo : AppIcons.mail),
+                  const Center(child: IconTile(icon: AppIcons.save, size: IconTile.large, radius: 18)),
+                  const SizedBox(height: 16),
+                  Text('Save your progress', textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontSize: TypeSize.title1, fontWeight: FontWeight.w700, letterSpacing: -0.5)),
+                  const SizedBox(height: 8),
+                  Text(
+                    'A free account keeps your coins, stars and puzzles on every device.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: TypeSize.body, height: 1.4, color: c.textSecondary),
                   ),
-                  Divider(height: 1, color: c.stroke),
-                  if (profile?.isVip == true) ...[
-                    _AccountLine(label: 'VIP', value: 'Active', icon: AppIcons.vip),
-                    Divider(height: 1, color: c.stroke),
-                  ],
-                  _AccountLine(
-                    label: 'Game ID',
-                    value: user?.$id ?? '',
-                    icon: AppIcons.copy,
-                    onTap: () async {
-                      await Clipboard.setData(ClipboardData(text: user?.$id ?? ''));
-                      if (context.mounted) showToast(context, 'Game ID copied', icon: AppIcons.copy);
-                    },
+                  AnimatedSize(
+                    duration: const Duration(milliseconds: 260),
+                    curve: Curves.easeOutCubic,
+                    alignment: Alignment.topCenter,
+                    child: form
+                        ? const SizedBox(width: double.infinity)
+                        : const Padding(padding: EdgeInsets.only(top: 20), child: _Benefits()),
                   ),
                 ],
               ),
-            ),
-            const SizedBox(height: 16),
-            SoftCard(
-              padding: EdgeInsets.zero,
-              child: Pressable(
-                scale: 0.99,
-                onTap: () async {
-                  final ok = await showAppAlert(
-                    context,
-                    title: 'Sign out?',
-                    message: 'You will continue as a guest. Progress saved to this account stays safe.',
-                    cancelLabel: 'Stay signed in',
-                    confirmLabel: 'Sign out',
-                    destructive: true,
-                  );
-                  if (!ok) return;
-                  await ref.read(authProvider.notifier).signOut();
-                  _afterAuth();
-                  if (context.mounted) context.pop();
-                },
-                child: SizedBox(
-                  height: 50,
-                  width: double.infinity,
-                  child: Center(child: Text('Sign out', style: TextStyle(color: context.accent, fontWeight: FontWeight.w600, fontSize: TypeSize.callout))),
-                ),
-              ),
-            ),
-          ] else ...[
-            SoftCard(
-              padding: Insets.card,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              // ---- The ways in.
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const IconTile(icon: AppIcons.save, size: IconTile.medium),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
+                  const SizedBox(height: 24),
+                  if (_appleAvailable) _AppleButton(onTap: _busy ? null : _apple),
+                  if (_appleAvailable && !_emailOpen) ...[
+                    const SizedBox(height: 12),
+                    // Email is the second way in: one quiet button until the player picks it, so
+                    // the sheet opens on two clear choices instead of a form.
+                    _EmailButton(onTap: () => setState(() => _emailOpen = true)),
+                  ],
+                  if (form) ...[
+                    SizedBox(height: _appleAvailable ? 24 : 0),
+                    AppSegmentedControl<bool>(
+                      key: const ValueKey('account-mode'),
+                      value: _signUp,
+                      segments: const {true: 'Create account', false: 'Sign in'},
+                      onChanged: (v) => setState(() {
+                        _signUp = v;
+                        _error = null;
+                      }),
+                    ),
+                    const SizedBox(height: 12),
+                    _FieldGroup(
+                      children: [
+                        if (_signUp) _Field(controller: _name, hint: 'Display name', capitalization: TextCapitalization.words, action: TextInputAction.next),
+                        _Field(controller: _email, hint: 'Email', keyboard: TextInputType.emailAddress, action: TextInputAction.next),
+                        _Field(controller: _password, hint: _signUp ? 'Password (8+ characters)' : 'Password', obscure: true, action: TextInputAction.done, onSubmitted: _busy ? null : (_) => _submit()),
+                      ],
+                    ),
+                    if (_error != null) ...[
+                      const SizedBox(height: 10),
+                      Text(_error!, style: TextStyle(color: c.danger, fontWeight: FontWeight.w500, fontSize: TypeSize.footnote)),
+                    ],
+                    const SizedBox(height: 16),
+                    BigButton(key: const ValueKey('account-submit'), label: _signUp ? 'Create account' : 'Sign in', loading: _busy, onTap: _submit),
+                  ],
+                  const SizedBox(height: 14),
+                  _legal(context),
+                  const SizedBox(height: 12),
+                  _deleteButton(context, guest: true),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _legal(BuildContext context) {
+    final c = context.colors;
+    return Text.rich(
+      TextSpan(
+        style: TextStyle(fontSize: TypeSize.caption, height: 1.45, color: c.textTertiary),
+        children: [
+          // Two balanced lines instead of a lone "policy." on the second.
+          const TextSpan(text: 'By continuing you agree to the\n'),
+          TextSpan(text: 'Terms of use', recognizer: _termsTap, style: TextStyle(color: context.accent, fontWeight: FontWeight.w600)),
+          const TextSpan(text: ' and the '),
+          TextSpan(text: 'Privacy policy', recognizer: _privacyTap, style: TextStyle(color: context.accent, fontWeight: FontWeight.w600)),
+          const TextSpan(text: '.'),
+        ],
+      ),
+      key: const ValueKey('account-legal'),
+      textAlign: TextAlign.center,
+    );
+  }
+
+  /// A signed-in player: the Apple ID page idiom. Who you are, centred, then grouped rows; Sign out
+  /// and Delete account are rows too, each in its own group.
+  Widget _signedIn(BuildContext context, double top, models.User? user, Profile? profile) {
+    final c = context.colors;
+    return ListView(
+      physics: const BouncingScrollPhysics(),
+      padding: EdgeInsets.fromLTRB(20, top + 8, 20, GlassTabBar.scrollEndPadding(context)),
+      children: [
+        const SizedBox(height: 8),
+        Center(child: AvatarCircle(avatarKey: profile?.avatar, size: 76, border: true)),
+        const SizedBox(height: 10),
+        Text(user?.name.isNotEmpty == true ? user!.name : 'Player', textAlign: TextAlign.center, maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.headlineSmall),
+        const SizedBox(height: 2),
+        Text(user?.email ?? '', textAlign: TextAlign.center, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontSize: TypeSize.body)),
+        const SizedBox(height: 20),
+        SoftCard(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            children: [
+              FutureBuilder<bool>(
+                future: _withApple,
+                builder: (context, snap) => _AccountLine(label: 'Signed in with', value: snap.data == true ? 'Apple' : 'Email', icon: snap.data == true ? AppIcons.appleLogo : AppIcons.mail),
+              ),
+              Divider(height: 1, color: c.stroke),
+              if (profile?.isVip == true) ...[
+                _AccountLine(label: 'VIP', value: 'Active', icon: AppIcons.vip),
+                Divider(height: 1, color: c.stroke),
+              ],
+              _AccountLine(
+                label: 'Game ID',
+                value: user?.$id ?? '',
+                icon: AppIcons.copy,
+                onTap: () async {
+                  await Clipboard.setData(ClipboardData(text: user?.$id ?? ''));
+                  if (context.mounted) showToast(context, 'Game ID copied', icon: AppIcons.copy);
+                },
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+        SoftCard(
+          padding: EdgeInsets.zero,
+          child: Pressable(
+            scale: 0.99,
+            onTap: () async {
+              final ok = await showAppAlert(
+                context,
+                title: 'Sign out?',
+                message: 'You will continue as a guest. Progress saved to this account stays safe.',
+                cancelLabel: 'Stay signed in',
+                confirmLabel: 'Sign out',
+                destructive: true,
+              );
+              if (!ok) return;
+              await ref.read(authProvider.notifier).signOut();
+              _afterAuth();
+              if (context.mounted) context.pop();
+            },
+            child: SizedBox(
+              height: 50,
+              width: double.infinity,
+              child: Center(child: Text('Sign out', style: TextStyle(color: context.accent, fontWeight: FontWeight.w600, fontSize: TypeSize.callout))),
+            ),
+          ),
+        ),
+        const SizedBox(height: 28),
+        _deleteButton(context, guest: false),
+        const SizedBox(height: 8),
+        Text('Removes your profile, progress and photos for good.', textAlign: TextAlign.center, style: TextStyle(fontSize: TypeSize.caption, color: c.textTertiary)),
+      ],
+    );
+  }
+}
+
+/// What an account gives, three one-line promises with their marks: the guest sheet's middle.
+class _Benefits extends StatelessWidget {
+  const _Benefits();
+  @override
+  Widget build(BuildContext context) {
+    Widget line(IconData icon, String text) => Padding(
+          padding: const EdgeInsets.symmetric(vertical: 6),
+          child: Row(
+            children: [
+              SizedBox(width: 26, child: Icon(icon, size: 20, color: context.accent)),
+              const SizedBox(width: 12),
+              Expanded(child: Text(text, style: const TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w500))),
+            ],
+          ),
+        );
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 320),
+        child: Column(
+          children: [
+            line(AppIcons.lockShield, 'Coins, stars and packs kept safe'),
+            line(AppIcons.devicePhonePortrait, 'Carry on from any device'),
+            line(AppIcons.friends, 'Keep your friends and league place'),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// "Continue with email": the second way in, a quiet filled button the same size as Apple's.
+class _EmailButton extends StatelessWidget {
+  const _EmailButton({required this.onTap});
+  final VoidCallback onTap;
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return Pressable(
+      key: const ValueKey('account-email-open'),
+      onTap: onTap,
+      child: Container(
+        height: 50,
+        decoration: BoxDecoration(color: context.isDark ? Colors.white.withValues(alpha: 0.1) : Colors.black.withValues(alpha: 0.05), borderRadius: BorderRadius.circular(Radii.md)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(AppIcons.mail, color: c.textPrimary, size: 19),
+            const SizedBox(width: 8),
+            Text('Continue with email', style: TextStyle(color: c.textPrimary, fontWeight: FontWeight.w600, fontSize: TypeSize.title3 - 3, letterSpacing: -0.3)),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// The email form's fields in one inset group, hairlines between them (the iOS sign-in idiom).
+class _FieldGroup extends StatelessWidget {
+  const _FieldGroup({required this.children});
+  final List<Widget> children;
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return SoftCard(
+      padding: EdgeInsets.zero,
+      child: Column(
+        children: [
+          for (var i = 0; i < children.length; i++) ...[
+            if (i > 0) Divider(height: 1, thickness: 1, indent: 16, color: c.stroke),
+            children[i],
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _Field extends StatelessWidget {
+  const _Field({required this.controller, required this.hint, this.keyboard, this.obscure = false, this.capitalization = TextCapitalization.none, this.action, this.onSubmitted});
+  final TextEditingController controller;
+  final String hint;
+  final TextInputType? keyboard;
+  final bool obscure;
+  final TextCapitalization capitalization;
+  final TextInputAction? action;
+  final ValueChanged<String>? onSubmitted;
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return TextField(
+      controller: controller,
+      keyboardType: keyboard,
+      obscureText: obscure,
+      autocorrect: false,
+      textCapitalization: capitalization,
+      textInputAction: action,
+      onSubmitted: onSubmitted,
+      cursorColor: context.accent,
+      style: TextStyle(fontSize: TypeSize.body + 1, color: c.textPrimary),
+      decoration: InputDecoration(
+        hintText: hint,
+        filled: false,
+        isDense: true,
+        border: InputBorder.none,
+        enabledBorder: InputBorder.none,
+        focusedBorder: InputBorder.none,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+        hintStyle: TextStyle(fontSize: TypeSize.body + 1, color: c.textTertiary),
+      ),
+    );
+  }
+}
+
+/// Account > Delete account: what goes, in calm rows; for VIP members that Apple keeps billing,
+/// with Manage subscription; then one red button and a plain Cancel. The red button pops `true`;
+/// the alert after it asks a last time.
+class _DeleteAccountPanel extends StatelessWidget {
+  const _DeleteAccountPanel({required this.vip, required this.withApple});
+  final bool vip;
+  final bool withApple;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    Widget loss(IconData icon, String text) => Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Row(
+            children: [
+              SizedBox(width: 22, child: Icon(icon, size: 19, color: c.textSecondary)),
+              const SizedBox(width: 14),
+              Expanded(child: Text(text, style: const TextStyle(fontSize: TypeSize.body))),
+            ],
+          ),
+        );
+    final losses = [
+      loss(AppIcons.puzzle, 'Your progress, stars and level'),
+      loss(AppIcons.coinGlyph, 'Coins, Tickets and Hints'),
+      loss(AppIcons.bag, 'Purchases, packs and avatars'),
+      loss(AppIcons.photo, 'My Puzzles photos'),
+      loss(AppIcons.friends, 'Friends and your place in the league'),
+    ];
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const SheetHeader(title: 'Delete your account?', subtitle: 'This removes from every device, for good:'),
+          const SizedBox(height: 14),
+          SoftCard(
+            padding: EdgeInsets.zero,
+            child: Column(
+              children: [
+                for (var i = 0; i < losses.length; i++) ...[
+                  if (i > 0) Divider(height: 1, thickness: 1, indent: 52, color: c.stroke),
+                  losses[i],
+                ],
+              ],
+            ),
+          ),
+          if (vip) ...[
+            const SizedBox(height: 12),
+            SoftCard(
+              key: const ValueKey('delete-vip-note'),
+              padding: EdgeInsets.zero,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+                    child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Save your progress', style: Theme.of(context).textTheme.titleLarge),
-                        const SizedBox(height: 4),
-                        Text('Create a free account to keep your coins, stars and puzzles on every device.', style: TextStyle(color: c.textSecondary, height: 1.4, fontSize: TypeSize.footnote)),
+                        SizedBox(width: 22, child: Padding(padding: const EdgeInsets.only(top: 1), child: Icon(AppIcons.vip, size: 19, color: context.accent))),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text('VIP is billed by Apple', style: TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w600)),
+                              const SizedBox(height: 2),
+                              Text('Deleting your account does not cancel it. Cancel VIP in the App Store first.', style: TextStyle(fontSize: TypeSize.footnote, height: 1.35, color: c.textSecondary)),
+                            ],
+                          ),
+                        ),
                       ],
+                    ),
+                  ),
+                  Divider(height: 1, thickness: 1, indent: 52, color: c.stroke),
+                  Pressable(
+                    key: const ValueKey('delete-manage-subscription'),
+                    scale: 0.99,
+                    onTap: () => launchUrl(Uri.parse('https://apps.apple.com/account/subscriptions'), mode: LaunchMode.externalApplication),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(52, 13, 16, 13),
+                      child: Row(
+                        children: [
+                          Expanded(child: Text('Manage subscription', style: TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w600, color: context.accent))),
+                          Icon(AppIcons.arrowUpRight, size: 14, color: context.accent),
+                        ],
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
-            if (_appleAvailable) ...[
-              const SizedBox(height: 16),
-              _AppleButton(onTap: _busy ? null : _apple),
-              const SizedBox(height: 10),
-              // Email is the second way in: one quiet button until the player picks it, so the
-              // sheet opens on two clear choices instead of a form.
-              if (!_emailOpen)
-                BigButton(
-                  key: const ValueKey('account-email-open'),
-                  label: 'Continue with email',
-                  icon: AppIcons.mail,
-                  kind: ButtonKind.ghost,
-                  height: 50,
-                  onTap: () => setState(() => _emailOpen = true),
-                ),
-            ] else
-              const SizedBox(height: 16),
-            if (_emailOpen || !_appleAvailable) ...[
-            const SizedBox(height: 14),
-            AppSegmentedControl<bool>(
-              value: _signUp,
-              segments: const {true: 'Create account', false: 'Sign in'},
-              segmentPadding: const EdgeInsets.symmetric(vertical: 6),
-              onChanged: (v) => setState(() => _signUp = v),
-            ),
-            const SizedBox(height: 14),
-            if (_signUp) ...[
-              TextField(controller: _name, decoration: const InputDecoration(hintText: 'Display name'), textCapitalization: TextCapitalization.words),
-              const SizedBox(height: 10),
-            ],
-            TextField(controller: _email, decoration: const InputDecoration(hintText: 'Email'), keyboardType: TextInputType.emailAddress, autocorrect: false),
-            const SizedBox(height: 10),
-            TextField(controller: _password, decoration: const InputDecoration(hintText: 'Password (8+ characters)'), obscureText: true),
-            if (_error != null) ...[
-              const SizedBox(height: 10),
-              Text(_error!, style: TextStyle(color: c.danger, fontWeight: FontWeight.w500, fontSize: TypeSize.footnote)),
-            ],
-            const SizedBox(height: 16),
-            BigButton(label: _signUp ? 'Create account' : 'Sign in', loading: _busy, onTap: _submit),
-            ],
-            const SizedBox(height: 12),
-            Center(
-              child: Text.rich(
-                TextSpan(
-                  style: TextStyle(fontSize: TypeSize.caption, height: 1.45, color: c.textTertiary),
-                  children: [
-                    // Two balanced lines instead of a lone "policy." on the second.
-                    const TextSpan(text: 'By continuing you agree to the\n'),
-                    TextSpan(text: 'Terms of use', recognizer: _termsTap, style: TextStyle(color: context.accent, fontWeight: FontWeight.w600)),
-                    const TextSpan(text: ' and the '),
-                    TextSpan(text: 'Privacy policy', recognizer: _privacyTap, style: TextStyle(color: context.accent, fontWeight: FontWeight.w600)),
-                    const TextSpan(text: '.'),
-                  ],
-                ),
-                key: const ValueKey('account-legal'),
-                textAlign: TextAlign.center,
-              ),
-            ),
           ],
-          _deleteButton(context),
+          if (withApple) ...[
+            const SizedBox(height: 10),
+            Text('Apple asks you to confirm with your Apple ID once more.', style: TextStyle(fontSize: TypeSize.footnote, color: c.textSecondary)),
+          ],
+          const SizedBox(height: 20),
+          BigButton(key: const ValueKey('account-delete-continue'), label: 'Delete account', kind: ButtonKind.destructive, onTap: () => Navigator.of(context).pop(true)),
+          const SizedBox(height: 6),
+          BigButton(key: const ValueKey('account-delete-cancel'), label: 'Cancel', kind: ButtonKind.plain, height: 46, onTap: () => Navigator.of(context).pop(false)),
         ],
       ),
     );

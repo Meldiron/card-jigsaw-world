@@ -173,6 +173,8 @@ void main() {
     await settle(tester, 1000);
     await tester.tap(find.byKey(const ValueKey('account-delete')), warnIfMissed: false);
     await settle(tester, 2500);
+    await tester.tap(find.byKey(const ValueKey('account-delete-continue')), warnIfMissed: false);
+    await settle(tester, 1500);
     await tapText(tester, 'Delete account', last: true, ms: 500);
     for (var i = 0; i < 40 && find.byType(OnboardingScreen).evaluate().isEmpty; i++) {
       await settle(tester, 500);

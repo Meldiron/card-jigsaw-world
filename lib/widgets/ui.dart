@@ -122,7 +122,10 @@ class SoftCard extends StatelessWidget {
   }
 }
 
-enum ButtonKind { primary, secondary, ghost, ghostLight, coral, gold, teal, dark }
+/// [destructive]: the one action that throws something away for good (Delete account), a red
+/// fill with a white label; never the default of a screen. [plain]: a label without a surface, for
+/// the quiet way out under a primary action (Cancel under Delete account).
+enum ButtonKind { primary, secondary, ghost, ghostLight, coral, gold, teal, dark, destructive, plain }
 
 /// The CTA button. Solid fills, no gradients.
 class BigButton extends StatelessWidget {
@@ -203,6 +206,14 @@ class BigButton extends StatelessWidget {
         bg = Colors.transparent;
         fg = Colors.white;
         border = Border.all(color: Colors.white.withValues(alpha: 0.45));
+      case ButtonKind.destructive:
+        // The light theme's red in both themes: white on it is 4.8:1 (the dark theme's softer red
+        // is tuned for text and would leave a white label at 2.8:1).
+        bg = Brand.danger;
+        fg = Colors.white;
+      case ButtonKind.plain:
+        bg = Colors.transparent;
+        fg = context.accent;
     }
     // Disabled (and not busy): every kind turns into the same neutral slab
     // with a tertiary label, the iOS disabled button. Fading the kind's own
