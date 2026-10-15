@@ -16,6 +16,7 @@ import '../../state/progress.dart';
 import '../../state/quick_play.dart';
 import '../game/unlock_intro.dart';
 import '../../state/rewards.dart';
+import '../../state/unlocks.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 import '../ads/house_ads.dart';
@@ -803,16 +804,20 @@ class _GuestSaveCard extends StatelessWidget {
 
 /// Level: progress, the next level's rewards as chips (what opens first, in cobalt, then the
 /// currencies), and the two after it as rows in the same marks, smaller.
-class _LevelCard extends StatelessWidget {
+class _LevelCard extends ConsumerWidget {
   const _LevelCard({required this.profile});
   final Profile profile;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final c = context.colors;
     final level = profile.level;
-    final next = LevelRewards.forLevel(level + 1);
-    final later = LevelRewards.upcoming(level + 1, count: 2);
+    // What the player already opened before its level (a shape used, giant boards bought early)
+    // is not promised again. Only the player's own opens count: a test that opens everything
+    // (`OpenFeatures.all`) keeps the card as a new player sees it.
+    final opened = {...ref.watch(openFeaturesProvider).used, ...Unlocks.openedEarly(profile.unlockedTiers)};
+    final next = LevelRewards.forLevel(level + 1).without(opened);
+    final later = [for (final r in LevelRewards.upcoming(level + 1, count: 2)) r.without(opened)];
     return SoftCard(
       padding: Insets.card,
       child: Column(

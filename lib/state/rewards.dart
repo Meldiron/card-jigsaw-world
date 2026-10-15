@@ -21,6 +21,13 @@ class LevelReward {
   /// Shapes and options that open at this level ([Unlocks.levels]).
   final List<Unlock> unlocks;
 
+  /// This reward without the unlocks in [opened]: a shape the player already used, or giant boards
+  /// opened early with tickets, is not promised again (the Home level card's next level and
+  /// "Coming up").
+  LevelReward without(Set<Unlock> opened) => unlocks.any(opened.contains)
+      ? LevelReward(level: level, coins: coins, tickets: tickets, hints: hints, tier: tier, unlocks: [for (final u in unlocks) if (!opened.contains(u)) u])
+      : this;
+
   List<String> get lines => [
         for (final u in unlocks) u.label,
         countOf(coins, 'coin'),
@@ -151,6 +158,9 @@ class Unlocks {
   /// `unlockedTiers` list (next to early board tiers `<mode>:<index>`, so no new column: older
   /// builds read the list and ignore a key they do not know). Only giant boards are sold early.
   static String earlyKey(Unlock u) => 'early:${u.name}';
+
+  /// The unlocks opened early with tickets, from the profile's `unlockedTiers`.
+  static Set<Unlock> openedEarly(Iterable<String> unlockedTiers) => {for (final u in Unlock.values) if (unlockedTiers.contains(earlyKey(u))) u};
 }
 
 /// What a player can pick on the mode and board screen: everything their
@@ -183,7 +193,7 @@ class OpenFeatures {
       if (p.painting) used.add(Unlock.painting);
       if (p.gridSize >= BoardLayouts.giantFloor(mode)) used.add(Unlock.giant);
     }
-    final early = {for (final u in Unlock.values) if (unlockedTiers.contains(Unlocks.earlyKey(u))) u};
+    final early = Unlocks.openedEarly(unlockedTiers);
     return OpenFeatures({for (final u in Unlock.values) if (level >= u.level || used.contains(u) || early.contains(u)) u}, used: used);
   }
 

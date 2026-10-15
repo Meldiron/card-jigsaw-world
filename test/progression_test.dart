@@ -98,6 +98,19 @@ void main() {
       expect(LevelRewards.levelForXp(LevelRewards.xpToReach(Unlock.giant.level)), Unlock.giant.level);
       expect(LevelRewards.levelForXp(LevelRewards.xpToReach(Unlock.giant.level) - 1), Unlock.giant.level - 1);
     });
+
+    test('a level reward does not promise what the player already opened (Home level card)', () {
+      final opened = Unlocks.openedEarly([Unlocks.earlyKey(Unlock.giant), 'cards:4']);
+      expect(opened, {Unlock.giant}, reason: 'only early:<unlock> keys; board tiers are not unlocks');
+      final atTen = LevelRewards.forLevel(Unlock.giant.level);
+      final shown = atTen.without(opened);
+      expect(shown.unlocks, isEmpty, reason: 'giant boards bought early are not listed at level 10 again');
+      expect(shown.lines, isNot(contains('Giant boards')));
+      expect((shown.level, shown.coins, shown.tickets, shown.hints, shown.tier), (atTen.level, atTen.coins, atTen.tickets, atTen.hints, atTen.tier), reason: 'the rest of the reward stays');
+      final squares = LevelRewards.forLevel(Unlock.squares.level);
+      expect(squares.without({Unlock.squares}).unlocks, isEmpty, reason: 'a shape used before its level is left out the same way');
+      expect(identical(squares.without(opened), squares), isTrue, reason: 'nothing to leave out');
+    });
   });
 
   group('Quest pools', () {
