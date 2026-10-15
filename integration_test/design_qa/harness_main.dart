@@ -27,6 +27,7 @@ import 'package:card_jigsaw_world/state/catalog_sync.dart' show CatalogTables;
 import 'package:card_jigsaw_world/state/profile.dart';
 import 'package:card_jigsaw_world/state/progress.dart';
 import 'package:card_jigsaw_world/state/purchases.dart';
+import 'package:card_jigsaw_world/state/reminders.dart';
 import 'package:card_jigsaw_world/state/rewards.dart';
 import 'package:card_jigsaw_world/state/settings.dart';
 import 'package:card_jigsaw_world/state/unlocks.dart';
@@ -34,6 +35,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
@@ -74,6 +76,14 @@ class _DqaRootState extends State<DqaRoot> {
   ProviderContainer? _container;
   Key _appKey = UniqueKey();
   int _run = 0;
+
+  /// `"emulate": "se"` in a scene lays the app out in an iPhone SE frame (375x667, 20 pt status
+  /// bar, no home indicator) at the top left of the screen, for a rough small-screen check on a
+  /// bigger simulator. Crop the screenshot to 375x667 pt.
+  String? _emulate;
+
+  /// `"textScale": 1.2` in a scene: the system text size (the app clamps it to 0.9-1.2).
+  double? _textScale;
 
   @override
   void initState() {
@@ -118,6 +128,8 @@ class _DqaRootState extends State<DqaRoot> {
     setState(() {
       _container = container;
       _appKey = UniqueKey();
+      _emulate = scene['emulate'] as String?;
+      _textScale = (scene['textScale'] as num?)?.toDouble();
     });
     await WidgetsBinding.instance.endOfFrame;
     final out = <String, dynamic>{'nonce': scene['nonce'], 'scene': scene['id']};
@@ -132,6 +144,7 @@ class _DqaRootState extends State<DqaRoot> {
       for (final t in visibleTexts())
         {'text': t.text, 'rect': [t.rect.left.round(), t.rect.top.round(), t.rect.width.round(), t.rect.height.round()]},
     ];
+    if (scene['targets'] == true) out['targets'] = tapTargets();
     _writeReady(out);
   }
 
@@ -153,7 +166,26 @@ class _DqaRootState extends State<DqaRoot> {
   Widget build(BuildContext context) {
     final c = _container;
     if (c == null) return const ColoredBox(color: Colors.black);
-    return UncontrolledProviderScope(container: c, child: CardJigsawApp(key: _appKey));
+    final mq = MediaQuery.of(context);
+    final scale = _textScale;
+    Widget app = UncontrolledProviderScope(container: c, child: CardJigsawApp(key: _appKey));
+    if (scale != null) app = MediaQuery(data: mq.copyWith(textScaler: TextScaler.linear(scale)), child: app);
+    if (_emulate != 'se') return app;
+    const size = Size(375, 667);
+    const pad = EdgeInsets.only(top: 20);
+    return ColoredBox(
+      color: Colors.black,
+      child: Align(
+        alignment: Alignment.topLeft,
+        child: SizedBox.fromSize(
+          size: size,
+          child: MediaQuery(
+            data: mq.copyWith(size: size, padding: pad, viewPadding: pad, textScaler: scale == null ? mq.textScaler : TextScaler.linear(scale)),
+            child: app,
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -278,7 +310,8 @@ Future<ProviderContainer> buildContainer(Map<String, dynamic> scene) async {
       },
     )),
     uploadRepositoryProvider.overrideWithValue(FakeUploadRepo([
-      for (var i = 0; i < ((scene['myPuzzles'] as int?) ?? 0); i++) MyPuzzle(id: 'my-$i', fileId: 'file-$i', title: i.isEven ? 'Holiday $i' : 'Garden'),
+      // Titles as the app writes them on upload ('My photo <day>/<month>').
+      for (var i = 0; i < ((scene['myPuzzles'] as int?) ?? 0); i++) MyPuzzle.fromRow('my-$i', {'fileId': 'file-$i', 'title': 'My photo ${12 - i % 9}/10'}),
     ])),
     catalogRepositoryProvider.overrideWithValue(FakeCatalogRepo(SnapshotCatalogSource(catalogPath, eventPatches: {
       for (final e in ((scene['eventRows'] as Map?) ?? const {}).entries)
@@ -287,11 +320,40 @@ Future<ProviderContainer> buildContainer(Map<String, dynamic> scene) async {
     storeAvailableProvider.overrideWith((ref) async => store != 'down'),
     productsProvider.overrideWith((ref) async => store == 'down' ? const <String, ProductDetails>{} : fakeProducts),
     if (scene['allOpen'] == true) openFeaturesProvider.overrideWithValue(OpenFeatures.all),
+    // "prefs": {"reminders": true}: keep the switch on (the simulator has not granted notifications,
+    // which would turn it off on start), so Settings shows the reminder rows.
+    if ((scene['prefs'] as Map?)?['reminders'] == true) remindersProvider.overrideWith((ref) => _QuietReminders(ref)),
     // "catalog": "down": the catalogue cannot be read (first launch offline); "loading": never arrives.
     if (scene['catalog'] == 'down') catalogProvider.overrideWith((ref) async => throw AppwriteException('design QA: offline', 0)),
     if (scene['catalog'] == 'loading') catalogProvider.overrideWith((ref) => Completer<CatalogTables>().future),
   ]);
   return c;
+}
+
+class _QuietReminders extends RemindersController {
+  _QuietReminders(super.ref);
+  @override
+  Future<void> refresh() async {}
+}
+
+/// My Puzzles photos are private files the harness cannot read: cache catalogue pictures under
+/// their private URLs (grid and game), so the screen shows real photos instead of grey boxes.
+Future<void> _seedMyPhotos(Map<String, dynamic> scene, ProviderContainer c) async {
+  final n = (scene['myPuzzles'] as int?) ?? 0;
+  if (n == 0) return;
+  try {
+    final puzzles = (await c.read(allPuzzlesProvider.future)).where((p) => p.thumbUrl.isNotEmpty).toList();
+    if (puzzles.isEmpty) return;
+    final cache = DefaultCacheManager();
+    for (var i = 0; i < n; i++) {
+      final url = UploadRepository.imageUrl('file-$i');
+      if (await cache.getFileFromCache(url) != null) continue;
+      final src = await cache.getSingleFile(puzzles[(i * 37 + 11) % puzzles.length].thumbUrl);
+      await cache.putFile(url, await src.readAsBytes(), fileExtension: 'jpg');
+    }
+  } catch (e) {
+    debugPrint('design QA: my photos not seeded: $e');
+  }
 }
 
 /// Goes to the scene's place and plays its actions.
@@ -301,6 +363,7 @@ Future<void> play(Map<String, dynamic> scene, ProviderContainer c, bool Function
     await c.read(progressProvider.future).timeout(const Duration(seconds: 8));
     await c.read(packsProvider.future).timeout(const Duration(seconds: 15));
   } catch (_) {}
+  await _seedMyPhotos(scene, c);
   await Future<void>.delayed(const Duration(milliseconds: 300));
   final router = c.read(routerProvider);
   final route = scene['route'] as String?;
@@ -359,6 +422,50 @@ List<VisibleText> visibleTexts() {
   return out;
 }
 
+/// `"targets": true` in a scene: every visible tap target (GestureDetector with onTap) with its
+/// size and a label (its first text, or the icon code point), for touch-target checks.
+List<Map<String, dynamic>> tapTargets() {
+  final out = <Map<String, dynamic>>[];
+  String label(Element e) {
+    String? found;
+    void v(Element c) {
+      if (found != null) return;
+      final w = c.widget;
+      if (w is RichText) found = w.text.toPlainText();
+      c.visitChildren(v);
+    }
+    v(e);
+    return (found ?? '?').replaceAll('\n', ' ');
+  }
+
+  void visit(Element e) {
+    final w = e.widget;
+    if (w is GestureDetector && (w.onTap != null || w.onTapDown != null)) {
+      final ro = e.renderObject;
+      if (ro is RenderBox && ro.attached && ro.hasSize) {
+        final rect = MatrixUtils.transformRect(ro.getTransformTo(null), Offset.zero & ro.size);
+        if (rect.width > 0 && _hits(ro, rect.center)) {
+          // Effective touch area: how far from the centre a touch still reaches this target.
+          double reach(Offset dir) {
+            var d = 0.0;
+            while (d < 60 && _hits(ro, rect.center + dir * (d + 1))) {
+              d += 1;
+            }
+            return d;
+          }
+          final hitW = reach(const Offset(-1, 0)) + reach(const Offset(1, 0)) + 1;
+          final hitH = reach(const Offset(0, -1)) + reach(const Offset(0, 1)) + 1;
+          out.add({'label': label(e), 'rect': [rect.left.round(), rect.top.round(), rect.width.round(), rect.height.round()], 'hit': [hitW.round(), hitH.round()]});
+        }
+      }
+    }
+    e.visitChildren(visit);
+  }
+
+  WidgetsBinding.instance.rootElement?.visitChildren(visit);
+  return out;
+}
+
 VisibleText? findText(String text, {bool contains = false, int index = 0}) {
   final hits = [for (final t in visibleTexts()) if (contains ? t.text.contains(text) : t.text.trim() == text) t];
   return hits.length > index ? hits[index] : null;
@@ -366,12 +473,12 @@ VisibleText? findText(String text, {bool contains = false, int index = 0}) {
 
 int _pointer = 1000;
 
-Future<void> tapAt(Offset p) async {
+Future<void> tapAt(Offset p, {int holdMs = 60}) async {
   final id = _pointer++;
   final b = GestureBinding.instance;
   b.handlePointerEvent(PointerAddedEvent(pointer: id, position: p, viewId: _viewId()));
   b.handlePointerEvent(PointerDownEvent(pointer: id, position: p, viewId: _viewId()));
-  await Future<void>.delayed(const Duration(milliseconds: 60));
+  await Future<void>.delayed(Duration(milliseconds: holdMs));
   b.handlePointerEvent(PointerUpEvent(pointer: id, position: p, viewId: _viewId()));
 }
 
@@ -426,6 +533,12 @@ Future<void> act(Map<String, dynamic> a, ProviderContainer c) async {
     await tapAt(Offset((p[0] as num).toDouble(), (p[1] as num).toDouble()));
     return pause();
   }
+  // {"holdAt": [x, y], "ms": 900}: a long press (context menus, long-press actions).
+  if (a.containsKey('holdAt')) {
+    final p = a['holdAt'] as List;
+    await tapAt(Offset((p[0] as num).toDouble(), (p[1] as num).toDouble()), holdMs: (a['ms'] as int?) ?? 900);
+    return pause();
+  }
   if (a.containsKey('drag')) {
     final p = a['drag'] as List;
     await dragFrom(Offset((p[0] as num).toDouble(), (p[1] as num).toDouble()), Offset((p[2] as num).toDouble(), (p[3] as num).toDouble()));
@@ -468,7 +581,9 @@ Future<void> act(Map<String, dynamic> a, ProviderContainer c) async {
     if (ctx == null) throw StateError('hook: no navigator');
     final fn = hooks[a['hook']];
     if (fn == null) throw StateError('hook: unknown ${a['hook']}');
-    unawaited(fn(ctx, c, Map<String, dynamic>.from((a['args'] as Map?) ?? const {})));
+    unawaited(fn(ctx, c, Map<String, dynamic>.from((a['args'] as Map?) ?? const {})).catchError((Object e) {
+      _errors.add('hook ${a['hook']}: $e');
+    }));
     return pause(900);
   }
   if (a.containsKey('profile')) {

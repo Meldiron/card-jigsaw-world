@@ -21,6 +21,7 @@ import 'package:card_jigsaw_world/state/sync.dart';
 import 'package:appwrite/appwrite.dart' show TablesDB;
 import 'package:appwrite/models.dart' as models;
 import 'package:card_jigsaw_world/models/models.dart';
+import 'package:card_jigsaw_world/router.dart';
 import 'package:card_jigsaw_world/state/merge.dart';
 import 'package:card_jigsaw_world/state/catalog.dart';
 import 'package:card_jigsaw_world/state/rewards.dart';
@@ -36,10 +37,8 @@ typedef Hook = Future<void> Function(BuildContext context, ProviderContainer c, 
 
 /// Runs [fn] with a [WidgetRef] (some sheets need one): a hidden overlay entry lends its ref.
 Future<void> withRef(BuildContext context, Future<void> Function(BuildContext context, WidgetRef ref) fn) async {
-  // The hook context is the root Navigator's own element, which sits above its Overlay.
-  final overlay = context is StatefulElement && context.state is NavigatorState
-      ? (context.state as NavigatorState).overlay!
-      : Overlay.of(context, rootOverlay: true);
+  // The root navigator's own overlay (the navigator's context has no Overlay above it).
+  final overlay = rootNavigatorKey.currentState!.overlay!;
   late OverlayEntry entry;
   var started = false;
   entry = OverlayEntry(
@@ -247,9 +246,55 @@ final hooks = <String, Hook>{
   },
   // The one-time daily reminder question (real code; needs notification permission "not determined").
   'reminderOffer': (ctx, c, a) => offerRemindersAfterGift(ctx, c),
-  'merge': (ctx, c, a) => showMergeSheet(
-        ctx,
-        device: SaveSnapshot(userId: 'dqa-player', profile: {'coins': 1240, 'tickets': 4, 'hints': 2, 'xp': 2200, 'puzzlesCompleted': 17, 'streak': 3}, progress: const []),
-        account: SaveSnapshot(userId: 'acc', profile: {'coins': 5400, 'tickets': 11, 'hints': 6, 'xp': 9100, 'puzzlesCompleted': 88, 'streak': 12}, progress: const [], updatedAt: DateTime.now().subtract(const Duration(days: 2))),
+  // Realistic saves: the same player on both sides (a guest who signs in to their own older account).
+  'merge': (ctx, c, a) {
+    List<Map<String, dynamic>> solved(int n, int days) => [
+          for (var i = 0; i < n; i++)
+            {'puzzleId': 'z$i', 'completed': true, 'stars': 1 + i % 3, '\$updatedAt': DateTime.now().subtract(Duration(days: days, hours: i)).toIso8601String()},
+        ];
+    return showMergeSheet(
+      ctx,
+      device: SaveSnapshot(
+        userId: 'dqa-player',
+        profile: {'displayName': a['device'] ?? 'Mia', 'avatar': 'leaf', 'level': 5, 'coins': 1240, 'tickets': 4, 'hints': 2, 'xp': 880, 'streak': 3},
+        progress: solved(17, 0),
       ),
+      account: SaveSnapshot(
+        userId: 'acc',
+        profile: {'displayName': a['account'] ?? 'Mia', 'avatar': 'fox', 'level': 9, 'coins': 5400, 'tickets': 11, 'hints': 6, 'xp': 2310, 'streak': 12},
+        progress: solved(41, 2),
+        updatedAt: DateTime.now().subtract(const Duration(days: 2)),
+      ),
+    );
+  },
+  // Types into the focused text field (else the first one on screen): {"hook": "type", "args": {"text": "owl"}}.
+  'type': (ctx, c, a) async {
+    final fields = <EditableTextState>[];
+    void visit(Element e) {
+      if (e is StatefulElement && e.state is EditableTextState) fields.add(e.state as EditableTextState);
+      e.visitChildren(visit);
+    }
+
+    WidgetsBinding.instance.rootElement?.visitChildren(visit);
+    if (fields.isEmpty) throw StateError('type: no text field');
+    final field = fields.firstWhere((f) => f.widget.focusNode.hasFocus, orElse: () => fields.first);
+    field.widget.controller.text = a['text'] as String? ?? '';
+  },
+  // Every pack category of the catalogue as the on-photo chip (pack cover, pack card), on a photo-dark panel.
+  'categoryChips': (ctx, c, a) async {
+    final packs = await c.read(packsProvider.future);
+    final cats = <String>{for (final p in packs) p.category}.toList()..sort();
+    if (!ctx.mounted) return;
+    await showAppSheet<void>(
+      ctx,
+      builder: (_) => Padding(
+        padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
+        child: Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(color: const Color(0xFF3A4A3A), borderRadius: BorderRadius.circular(16)),
+          child: Wrap(spacing: 8, runSpacing: 10, children: [for (final cat in cats) Chip2(label: cat, icon: AppIcons.category(cat), onImage: true)]),
+        ),
+      ),
+    );
+  },
 };
