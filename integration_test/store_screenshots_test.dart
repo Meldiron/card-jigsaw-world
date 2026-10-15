@@ -25,6 +25,8 @@ import 'package:carden/features/game/board_widget.dart';
 import 'package:carden/game/board.dart';
 import 'package:carden/router.dart';
 import 'package:carden/state/auth.dart';
+import 'package:carden/state/catalog.dart';
+import 'package:carden/state/profile.dart';
 import 'package:carden/state/settings.dart';
 import 'package:carden/state/rewards.dart';
 import 'package:carden/state/unlocks.dart';
@@ -44,6 +46,13 @@ const modesPuzzle = 'p-00df45e91273'; // Tropical Beaches: Bora Bora lagoon
 const hexPuzzle = 'p-06ae2d7ad942'; // Sunsets: Key West sunset
 const galleryPack = 'pack-butterflies';
 
+/// The glass set (tools/store/compose_glass.py): a bright hero for slide 1, a Painting board for
+/// slide 5 (an Impressionist painting, so the colour coming back is the point), and a giant board
+/// of the real Giant pack for slide 6 (the guest gets the pack's tickets and unlocks it).
+const brightHeroPuzzle = 'p-e667552c4e66'; // Butterflies: Painted lady butterfly
+const paintingPuzzle = 'p-2f9f0b647f9f'; // Impressionists: Monet chrysanthemums
+const giantPack = 'pack-colourful-houses';
+
 /// Past days of the current daily month solved before the calendar capture
 /// (stars on their tiles). Ids are `daily-YYYY-MM-DD`.
 const dailyDaysToSolve = [1, 3, 6, 8, 10];
@@ -60,6 +69,11 @@ const theme = String.fromEnvironment('CJW_STORE_THEME', defaultValue: 'dark');
 /// (and their two captures) on a rerun, so live Storage gets no duplicates.
 const skipUpload = bool.fromEnvironment('CJW_STORE_SKIP_UPLOAD');
 const suffix = theme == 'light' ? '_light' : '';
+
+/// `--dart-define=CJW_STORE_ONLY=25_hero,27_giant` re-takes only those glass-set captures (25-28)
+/// after onboarding and leaves every other file as it is: a quick rerun for one slide.
+const only = String.fromEnvironment('CJW_STORE_ONLY');
+bool want(String name) => only.isEmpty || only.split(',').contains(name);
 
 Future<void> settle(WidgetTester tester, [int ms = 1500]) async {
   // The app has infinite animations (shimmer, pulses), so pump for a fixed time.
@@ -304,8 +318,8 @@ void main() {
 
   /// Opens a picture's difficulty screen, clears an earlier board of it,
   /// picks [mode] and [tier] and starts the game.
-  Future<void> startGame(WidgetTester tester, String puzzleId, String mode, String tier, {String? difficultyShot}) async {
-    await push(tester, '/play/$puzzleId', ms: 3500);
+  Future<void> startGame(WidgetTester tester, String puzzleId, String mode, String tier, {String? difficultyShot, bool painting = false}) async {
+    await push(tester, '/play/$puzzleId${painting ? '?painting=1' : ''}', ms: 3500);
     if (await tapIfShown(tester, 'Discard progress', ms: 900)) {
       await tapText(tester, 'Discard', ms: 1500);
     }
@@ -318,6 +332,10 @@ void main() {
     if (difficultyShot != null) await shot(tester, difficultyShot);
     await tester.tap(find.textContaining('Play'), warnIfMissed: false);
     await settle(tester, 6000);
+    // Giant pictures are 4096 px: the full-size download and decode take a moment longer.
+    for (var i = 0; i < 30 && boardFinder().evaluate().isEmpty; i++) {
+      await settle(tester, 500);
+    }
     await tapIfShown(tester, 'Got it');
     expect(boardFinder(), findsOneWidget, reason: 'board for $puzzleId $mode $tier');
   }
@@ -381,7 +399,77 @@ void main() {
       await tester.tapAt(const Offset(220, 80));
       await settle(tester, 1200);
     }
-    await shot(tester, '01_home');
+    if (only.isEmpty) await shot(tester, '01_home');
+
+    // Glass set, slide 1: a bright picture nearly whole on a 16-card board (few stray groups form
+    // while the rest goes home): one card loose and selected, one fused pair.
+    if (want('25_hero')) {
+      try {
+        await startGame(tester, brightHeroPuzzle, 'Cards', 'Relaxed');
+        final t = board(tester).tiling;
+        int at(int row, int col) => row * t.cols + col;
+        final pair = [at(t.rows - 2, t.cols - 2), at(t.rows - 2, t.cols - 1)];
+        final open = {at(1, 0), ...pair};
+        for (var round = 0; round < 3; round++) {
+          await lockAllBut(tester, open);
+        }
+        await buildGroup(tester, pair);
+        await selectOne(tester);
+        await shot(tester, '25_hero');
+        await saveAndQuit(tester);
+      } catch (e) {
+        await binding.takeScreenshot('zz_diag_hero');
+        await go(tester, '/home', ms: 2000);
+      }
+    }
+
+    // Glass set, slide 5: Painting on Monet's chrysanthemums, the middle in colour, the rest grey.
+    if (want('26_painting')) {
+      try {
+        await startGame(tester, paintingPuzzle, 'Cards', 'Medium', painting: true);
+        await lockMiddle(tester, (board(tester).cells * 0.6).round());
+        await shot(tester, '26_painting');
+        await saveAndQuit(tester);
+      } catch (e) {
+        await binding.takeScreenshot('zz_diag_painting');
+        await go(tester, '/home', ms: 2000);
+      }
+    }
+
+    // Glass set, slide 6: a giant board of the real Giant pack, its middle assembled, zoomed in one
+    // step so the overview map shows in the corner.
+    if (want('27_giant')) {
+      try {
+        final container = ProviderScope.containerOf(tester.element(find.byType(MaterialApp)));
+        final pack = (await container.read(packsProvider.future)).firstWhere((p) => p.id == giantPack);
+        final profile = container.read(profileProvider.notifier);
+        await profile.addTickets(pack.priceTickets, reason: 'qa:store-giant');
+        await settle(tester, 800);
+        await profile.unlockPack(pack);
+        final pictures = (await container.read(allPuzzlesProvider.future)).where((p) => p.packId == giantPack).toList();
+        await startGame(tester, pictures.first.id, 'Cards', 'Large');
+        await lockMiddle(tester, (board(tester).cells * 0.45).round());
+        await buildAnyGroup(tester);
+        await tester.tap(find.byKey(const ValueKey('zoom-in')), warnIfMissed: false);
+        await settle(tester, 1500);
+        await shot(tester, '27_giant');
+        await saveAndQuit(tester);
+      } catch (e) {
+        await binding.takeScreenshot('zz_diag_giant');
+        await go(tester, '/home', ms: 2000);
+      }
+    }
+    await go(tester, '/home', ms: 2000);
+    if (only.isNotEmpty) {
+      if (want('28_library_more')) {
+        await go(tester, '/library', ms: 3500);
+        await tester.drag(find.byType(Scrollable).first, const Offset(0, -900));
+        await settle(tester, 3000);
+        await shot(tester, '28_library_more');
+      }
+      return;
+    }
+
 
     // Hero: the Monarch on a 12-card board, mostly placed, one fused group,
     // one card lifted. Then finish it (pack progress, quest progress).
@@ -479,6 +567,12 @@ void main() {
     // Library, the daily calendar (top, then scrolled to the day grid), a pack.
     await go(tester, '/library', ms: 3500);
     await shot(tester, '15_library');
+    // Glass set, slide 9: further down the Library, the packs VIP opens (lock and price on each).
+    await tester.drag(find.byType(Scrollable).first, const Offset(0, -900));
+    await settle(tester, 3000);
+    await shot(tester, '28_library_more');
+    await tester.drag(find.byType(Scrollable).first, const Offset(0, 900));
+    await settle(tester, 1200);
     // The Daily chip sits past the screen's edge among the other chips; pick it the way a link does
     // (the row then scrolls it into view).
     ProviderScope.containerOf(tester.element(find.byType(MaterialApp))).read(libraryFilterProvider.notifier).select(LibraryFilter.daily);

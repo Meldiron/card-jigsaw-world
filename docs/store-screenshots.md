@@ -25,19 +25,30 @@ in `tools/store/glass/slides.html`, then rerun the script.
   slide stands alone: only the background crosses a seam. The dark finale draws
   the same panes as deep jewel tones.
 - **One phone size** everywhere: 1,000 px wide on the 1,320 px canvas.
-- **Three layouts:** A headline on top with a flat phone (1, 3, 5, 8, 10); B phone
+- **The story:** the hook (1-3: how it plays, how much there is, why you come
+  back; the three that search results show), the depth (4-8: four ways to cut a
+  picture, Painting, giant boards, your own photos, quests and world-day events),
+  the close (9: what VIP opens, 10: the dark finale). Read in order the headlines
+  are one text: "Swap cards. Reveal the picture. Thousands of pictures. A new
+  picture every day. One picture, four ways to cut it. Bring the colour back,
+  card by card. Giant boards of up to 300 cards. Puzzle your own photos. Quests
+  and world-day events. Open every pack with VIP. Just as calm in the dark." The
+  leaderboard and "Fewer moves, more stars" slides were dropped: competition is
+  off-message for a calm game, and a scoring rule is not a reason to download.
+- **Three layouts:** A headline on top with a flat phone (1, 3, 5, 7, 10); B phone
   from the top edge, the headline below and a neat row of pictures under it (2:
-  pack covers, 6: solved pictures with their stars); C a phone tilted 7 degrees,
-  alternating direction (4, 7, 9). Slides 1-3 stay flat, since search results
+  pack covers, 9: the locked packs VIP opens); C a phone tilted 7 degrees,
+  alternating direction (4, 6, 8). Slides 1-3 stay flat, since search results
   show them as thumbnails.
 - **Break-out cards** lift one real part of the app out of the phone (today's
-  puzzle, the other three shapes, your own photo, Picture complete, the live
-  event, the podium, the VIP trial). A card that enlarges part of the same screen
+  puzzle, the other three shapes, a loose and a locked Painting card, the giant
+  board's map, your own photo, the live event, the VIP trial). A card that enlarges part of the same screen
   sits centred over that part, and every card shares its phone's frame, so it
   tilts with a tilted phone.
 - **Headlines only:** 2 lines of about five words, 136 px (a slide shrinks only
-  if a line would pass 1,180 px), on a soft frosted halo. No subtext: it is
-  unreadable at thumbnail size.
+  if a line would pass 1,180 px), straight on the glass (no halo or glow behind
+  them; the owner found its blurred shape ugly). No subtext: it is unreadable at
+  thumbnail size.
 - **Headline face:** SF Pro Rounded by default (`--font display` and
   `--font newyork` render the alternatives).
 

@@ -1,7 +1,7 @@
 <!doctype html>
 <!-- Carden App Store slides in the glass style. tools/store/compose_glass.py fills in __DATA__ and
      __FONT__ and renders one slide per #<number> at 1320 x 2868. The look lives here (glass panes,
-     halo, headline, phones, break-out cards, picture rows); the copy and slide list live in the script.
+     headline, phones, break-out cards, picture rows); the copy and slide list live in the script.
      The panes use the app icon's glass recipe (tools/brand/icon-glass.js): a see-through tinted body,
      a top sheen, a light edge zone, a rim of light, a crisp edge and a tinted shadow; on the white
      canvas the bodies multiply, so overlapping panes mix like stained glass. -->
@@ -10,16 +10,13 @@
 * { box-sizing: border-box; }
 html, body { margin: 0; background: transparent; }
 .slide { position: relative; width: 1320px; height: 2868px; overflow: hidden; background: #FFFFFF;
-  --ink: #111118; --halo: rgba(255,255,255,.66); --shade: rgba(28,30,60,.22); }
-.slide.dark { background: #0A0A10; --ink: #F5F5F8; --halo: rgba(10,10,16,.5); --shade: rgba(0,0,0,.6); }
+  --ink: #111118; --shade: rgba(28,30,60,.22); }
+.slide.dark { background: #0A0A10; --ink: #F5F5F8; --shade: rgba(0,0,0,.6); }
 .world { position: absolute; top: 0; }
 .body { mix-blend-mode: multiply; }
 .dark .body { mix-blend-mode: normal; filter: brightness(.42) saturate(1.45); }
 .dark .top { opacity: .42; }
 
-.halo { position: absolute; left: -120px; right: -120px; border-radius: 50%; background: var(--halo);
-  -webkit-backdrop-filter: blur(36px) saturate(1.2); backdrop-filter: blur(36px) saturate(1.2);
-  -webkit-mask-image: radial-gradient(closest-side, #000 55%, transparent 100%); mask-image: radial-gradient(closest-side, #000 55%, transparent 100%); }
 h1 { position: absolute; left: 70px; right: 70px; margin: 0; text-align: center; white-space: nowrap;
   font-family: "Head"; font-weight: var(--weight); line-height: 1.06; letter-spacing: var(--track); color: var(--ink); }
 .brand { position: absolute; left: 0; right: 0; display: flex; justify-content: center; align-items: center; gap: 24px; }
@@ -73,9 +70,7 @@ function render(size) {
   if (sl.layout === "B") { phoneTop = L.b_phone_top; headTop = phoneTop + S.phone_h + L.b_gap; }
   else { headTop = sl.brand ? L.a_head_top_brand : L.a_head_top; phoneTop = headTop + lines * lh + L.a_gap; }
   const pics = (sl.pics || []).map(c => `<img class="pic" src="${c.src}" style="left:${c.x}px;top:${c.y}px;width:${c.w}px;height:${c.h}px;border-radius:${c.radius}px;transform:rotate(${c.r}deg)">`).join("");
-  h += pics;  // floating covers and picture rows sit behind the halo and the phone
-  const haloTop = headTop - (sl.brand ? 230 : 110), haloH = lines * lh + (sl.brand ? 340 : 220);
-  h += `<div class="halo" style="top:${haloTop}px;height:${haloH}px"></div>`;
+  h += pics;  // floating covers and picture rows sit behind the headline and the phone
   if (sl.brand) h += `<div class="brand" style="top:${headTop - 190}px"><img src="${S.icon}"><span>Carden</span></div>`;
   h += `<h1 style="top:${headTop}px;font-size:${size}px">${sl.head.replace(/\n/g, "<br>")}</h1>`;
   const tilt = sl.tilt || 0, left = (W - S.phone_w) / 2 + (tilt ? (tilt < 0 ? -40 : 40) : 0);

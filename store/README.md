@@ -29,15 +29,15 @@ daily hook.
 
 | Slide | Headline | Layout | Shows (light captures unless noted) |
 | --- | --- | --- | --- |
-| `01.png` | Swap cards. Reveal the picture. | A + icon | `raw/03_game_cards`: Monarch butterfly, most cards placed |
+| `01.png` | Swap cards. Reveal the picture. | A + icon | `raw/25_hero`: Painted lady butterfly, 20 of 24 cards locked, two left to swap |
 | `02.png` | Thousands of pictures | B | `raw/15_library`, pack covers (`collage/`) beside it and in a row below |
 | `03.png` | A new picture every day | A | `raw/18_daily_month_grid`, today's card lifted out |
-| `04.png` | Four ways to play | C, -7 deg | `raw/09_mode_hexagons`, with the cards, squares and triangles boards (`raw/06`-`08`) lifted out |
-| `05.png` | Puzzle your own photos | A | `raw/20_my_puzzles`, the Corgi board of `raw/21_my_puzzle_game` lifted out |
-| `06.png` | Fewer moves, more stars | B | `raw/04_complete`, Picture complete lifted out; a row of solved daily pictures with stars below |
-| `07.png` | Quests and live events | C, +7 deg | `raw/13_quests`, the World Food Day event of `raw/14_quests_live` lifted out |
-| `08.png` | Climb the leaderboard | A | `raw/22_social_league` (real player names, approved by the owner), the podium lifted out |
-| `09.png` | Every pack with VIP | C, -7 deg | `raw/12_store_vip`, the 7-day trial lifted out |
+| `04.png` | One picture, four ways to cut it | C, -7 deg | `raw/09_mode_hexagons`, with the cards, squares and triangles boards (`raw/06`-`08`) lifted out |
+| `05.png` | Bring the colour back, card by card | A | `raw/26_painting`: Monet's chrysanthemums in Painting, a loose grey card and a locked one lifted out |
+| `06.png` | Giant boards of up to 300 cards | C, +7 deg | `raw/27_giant`: Colourful Houses zoomed in, the overview map lifted out |
+| `07.png` | Puzzle your own photos | A | `raw/20_my_puzzles`, the Corgi board of `raw/21_my_puzzle_game` lifted out |
+| `08.png` | Quests and world-day events | C, -7 deg | `raw/13_quests`, the World Food Day event of `raw/14_quests_live` lifted out |
+| `09.png` | Open every pack with VIP | B | `raw/12_store_vip`, the 7-day trial lifted out, four locked packs of `raw/28_library_more` below |
 | `10.png` | Just as calm in the dark | A, dark | `raw/03_game_cards` in the dark theme |
 
 Raw captures (dark theme; a `--dart-define=CJW_STORE_THEME=light` run writes
@@ -84,6 +84,8 @@ simulator, and a Python 3 with Pillow (`pip install pillow`).
    tools/dev/qa-run.sh drive --driver=test_driver/store_screenshots.dart \
      --target=integration_test/store_screenshots_test.dart \
      -d D03644FB-6169-4E87-8E0F-CCFC884FBE78
+   # only some glass-set captures (25_hero, 26_painting, 27_giant, 28_library_more), others kept:
+   #   add --dart-define=CJW_STORE_ONLY=25_hero,27_giant (about 4 minutes instead of 13)
    # the light theme, written as raw/<name>_light.png (slides 1-9 of the glass set):
    tools/dev/qa-run.sh drive --driver=test_driver/store_screenshots.dart \
      --target=integration_test/store_screenshots_test.dart \

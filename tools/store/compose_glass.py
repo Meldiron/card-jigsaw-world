@@ -44,30 +44,48 @@ W, H = cs.W, cs.H
 # Headlines: 2 lines, about five words; "\n" breaks the line. No subtext (illegible in search).
 
 DAILY = "18_daily_month_grid"
-STARRED = [(62, 840, 340, 1176), (674, 840, 952, 1176), (368, 1208, 646, 1546), (980, 1208, 1258, 1546), (368, 1576, 646, 1914)]
+# Crop boxes (capture px) of the newer captures; check them after a recapture.
+# 26_painting: a 5x5 board; a grey loose card (top-left cell) and a locked one in colour (centre cell).
+PAINTING_OUT = [{"crop": ("26_painting", (36, 582, 286, 837)), "x": -40, "y": 1500, "w": 300, "rot": -7, "radius": 26, "label": "Loose"},
+                {"crop": ("26_painting", (536, 1092, 785, 1347)), "x": 740, "y": 1440, "w": 300, "rot": 6, "radius": 26, "label": "Locked"}]
+# 27_giant: the overview map in the board's corner, enlarged over itself.
+GIANT_OUT = [{"crop": ("27_giant", (1000, 666, 1256, 1050)), "w": 440, "radius": 36}]
+# 28_library_more: four locked pack tiles (cover, name, lock and price).
+LOCKED_PACKS = [(62, 540, 640, 1290), (680, 540, 1258, 1290), (62, 1320, 640, 2070), (680, 1320, 1258, 2070)]
 
+# The story (2026-10-16): the hook (1-3: how it plays, how much there is, why you come back; the
+# three that search results show), the depth (4-8: ways to play that grow with you, ending on the
+# personal one), the close (9 VIP, 10 the dark finale). Read in order, the headlines are one text.
 SLIDES = [
-    {"layout": "A", "head": "Swap cards.\nReveal the picture.", "phone": "03_game_cards", "brand": True},
+    # 1. The mechanic and the payoff in one look: a bright picture nearly whole, a group joined.
+    {"layout": "A", "head": "Swap cards.\nReveal the picture.", "phone": "25_hero", "brand": True},
+    # 2. How much there is: the Library, covers from every category beside it and in a row below.
     {"layout": "B", "head": "Thousands\nof pictures", "phone": "15_library",
-     "pics": [{"covers": [0, 3, 6, 9], "spots": [(-50, 300, 330, -8), (1040, 230, 380, 7), (-70, 1120, 330, 6), (1060, 1060, 380, -6)]},
-              {"covers": [12, 15, 18, 1, 4], "fan": {"w": 228, "h": 296, "top": 2480, "step": 244, "spread": 9, "drop": 50}}]},
+     "pics": [{"covers": [0, 2, 5, 10], "spots": [(-50, 300, 330, -8), (1040, 230, 380, 7), (-70, 1120, 330, 6), (1060, 1060, 380, -6)]},
+              {"covers": [12, 3, 1, 19, 15], "fan": {"w": 228, "h": 296, "top": 2480, "step": 244, "spread": 9, "drop": 50}}]},
+    # 3. Why you come back: this month's calendar, today's picture lifted out.
     {"layout": "A", "head": "A new picture\nevery day", "phone": DAILY,
      "out": [{"crop": (DAILY, (60, 530, 1260, 775)), "w": 1180, "radius": 44}]},
-    {"layout": "C", "head": "Four ways\nto play", "phone": "09_mode_hexagons", "tilt": -7,
+    # 4. The signature: one lagoon cut four ways.
+    {"layout": "C", "head": "One picture,\nfour ways to cut it", "phone": "09_mode_hexagons", "tilt": -7,
      "out": [{"crop": ("06_mode_cards", "board"), "x": -60, "y": 880, "w": 430, "rot": -9, "label": "Cards"},
              {"crop": ("07_mode_squares", "board"), "x": 690, "y": 560, "w": 400, "rot": 8, "label": "Squares"},
              {"crop": ("08_mode_triangles", "board"), "x": 680, "y": 1440, "w": 400, "rot": 5, "label": "Triangles"}]},
+    # 5. Painting: Monet's chrysanthemums, locked cards in colour, loose ones grey.
+    {"layout": "A", "head": "Bring the colour\nback, card by card", "phone": "26_painting", "out": PAINTING_OUT},
+    # 6. Giant boards: the middle assembled, zoomed in, the overview map lifted out.
+    {"layout": "C", "head": "Giant boards of\nup to 300 cards", "phone": "27_giant", "tilt": 7, "out": GIANT_OUT},
+    # 7. The personal one: your own photos, one played as a puzzle.
     {"layout": "A", "head": "Puzzle your\nown photos", "phone": "20_my_puzzles",
      "out": [{"crop": ("21_my_puzzle_game", "board"), "x": 540, "y": 1060, "w": 560, "rot": 4, "radius": 40}]},
-    {"layout": "B", "head": "Fewer moves,\nmore stars", "phone": "04_complete",
-     "out": [{"crop": ("04_complete", (40, 1400, 1280, 1890)), "w": 1200, "radius": 48}],
-     "pics": [{"crops": [(DAILY, b) for b in STARRED], "fan": {"w": 228, "h": 276, "top": 2480, "step": 250, "spread": 8, "drop": 44}, "radius": 22}]},
-    {"layout": "C", "head": "Quests and\nlive events", "phone": "13_quests", "tilt": 7,
+    # 8. Quests, with a world-day event lifted out.
+    {"layout": "C", "head": "Quests and\nworld-day events", "phone": "13_quests", "tilt": -7,
      "out": [{"crop": ("14_quests_live", (60, 1440, 1260, 2480)), "x": 50, "y": 1180, "w": 900, "radius": 44}]},
-    {"layout": "A", "head": "Climb the\nleaderboard", "phone": "22_social_league",
-     "out": [{"crop": ("22_social_league", (60, 720, 1260, 1200)), "w": 1180, "radius": 48}]},
-    {"layout": "C", "head": "Every pack\nwith VIP", "phone": "12_store_vip", "tilt": -7,
-     "out": [{"crop": ("12_store_vip", (60, 670, 1260, 990)), "w": 1080, "radius": 40}]},
+    # 9. VIP as a benefit: the trial lifted out, the packs it opens in a row below.
+    {"layout": "B", "head": "Open every pack\nwith VIP", "phone": "12_store_vip",
+     "out": [{"crop": ("12_store_vip", (60, 670, 1260, 990)), "w": 1080, "radius": 40}],
+     "pics": [{"crops": [("28_library_more", b) for b in LOCKED_PACKS], "fan": {"w": 236, "h": 306, "top": 2440, "step": 272, "spread": 7, "drop": 40}, "radius": 26}]},
+    # 10. The finale: the same calm in dark mode (the Monarch, which slide 1 no longer uses).
     {"layout": "A", "head": "Just as calm\nin the dark", "phone": "03_game_cards", "dark": True},
 ]
 
