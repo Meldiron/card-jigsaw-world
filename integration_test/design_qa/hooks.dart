@@ -53,11 +53,12 @@ Future<void> withRef(BuildContext context, Future<void> Function(BuildContext co
   overlay.insert(entry);
 }
 
-PuzzleProgress _row(String puzzleId, {required List<int> layout, int moves = 20, int seconds = 180, String mode = 'cards'}) => PuzzleProgress.fromRow('p', {
+PuzzleProgress _row(String puzzleId, {required List<int> layout, int moves = 20, int seconds = 180, String mode = 'cards', bool painting = false}) => PuzzleProgress.fromRow('p', {
       'userId': 'dqa-player',
       'puzzleId': puzzleId,
       'gridSize': layout.length,
       'mode': mode,
+      'painting': painting,
       'layout': layout.join(','),
       'moves': moves,
       'elapsedSeconds': seconds,
@@ -243,11 +244,17 @@ final hooks = <String, Hook>{
       ),
     ));
   },
+  // Two real 4x4 boards: this device's has 10 cards in place and a group of two; the other's a
+  // locked corner of four, a 2x2 group and a pair. {"layout": "old"} keeps the earlier synthetic
+  // layouts (9 and 4 in place, no groups); {"painting": true} makes the other board a Painting one.
   'boardChoice': (ctx, c, a) => showBoardChoiceSheet(
         ctx,
         title: a['title'] as String?,
-        device: _row(a['puzzle'] as String? ?? 'x', layout: [for (var i = 0; i < 16; i++) i < 9 ? i : 24 - i], moves: 31, seconds: 260),
-        other: _row(a['puzzle'] as String? ?? 'x', layout: [for (var i = 0; i < 16; i++) i < 4 ? i : 19 - i], moves: 12, seconds: 95, mode: a['otherMode'] as String? ?? 'cards'),
+        device: _row(a['puzzle'] as String? ?? 'x',
+            layout: a['layout'] == 'old' ? [for (var i = 0; i < 16; i++) i < 9 ? i : 24 - i] : const [0, 1, 2, 3, 4, 5, 6, 13, 8, 9, 7, 14, 12, 15, 10, 11], moves: 31, seconds: 260),
+        other: _row(a['puzzle'] as String? ?? 'x',
+            layout: a['layout'] == 'old' ? [for (var i = 0; i < 16; i++) i < 4 ? i : 19 - i] : const [0, 1, 10, 11, 4, 5, 14, 15, 2, 8, 3, 6, 7, 12, 9, 13],
+            moves: 12, seconds: 95, mode: a['otherMode'] as String? ?? 'cards', painting: a['painting'] == true),
       ),
   // The "Synced from another device" alert through the real SyncHost: {"size": "small" | "big" | "skips"}.
   'syncNotice': (ctx, c, a) async {
