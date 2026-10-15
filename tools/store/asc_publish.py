@@ -1040,9 +1040,17 @@ def cmd_subscriptions(s: Store) -> None:
     glocs = s.c.get_list(f"/v1/subscriptionGroups/{gid}/subscriptionGroupLocalizations")
     gloc = next((l for l in glocs if attr(l, "locale") == LOCALE), None)
     g_attrs = dict(localized(group_cfg))
-    s.c.upsert("subscriptionGroupLocalizations", gloc, g_attrs if gloc else {**g_attrs, "locale": LOCALE},
-               {"subscriptionGroup": rel("subscriptionGroups", gid)}, label=f"group localization {LOCALE}",
-               refetch=lambda: next((l for l in s.c.get_list(f"/v1/subscriptionGroups/{gid}/subscriptionGroupLocalizations") if attr(l, "locale") == LOCALE), None))
+    try:
+        s.c.upsert("subscriptionGroupLocalizations", gloc, g_attrs if gloc else {**g_attrs, "locale": LOCALE},
+                   {"subscriptionGroup": rel("subscriptionGroups", gid)}, label=f"group localization {LOCALE}",
+                   refetch=lambda: next((l for l in s.c.get_list(f"/v1/subscriptionGroups/{gid}/subscriptionGroupLocalizations") if attr(l, "locale") == LOCALE), None))
+    except ApiError as e:
+        # Apple locks the group's name and custom app name before the first App Store release (409
+        # UNMODIFIABLE even outside the review draft, 2026-10-15); change them in App Store Connect and
+        # go on with the plans.
+        if e.status != 409 or gloc is None:
+            raise
+        log(f"  group localization {LOCALE}: locked by Apple, left as is ({e})")
 
     in_group = {attr(x, "productId"): x for x in s.c.get_list(f"/v1/subscriptionGroups/{gid}/subscriptions")}
     territories = s.territories()
