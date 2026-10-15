@@ -233,34 +233,7 @@ class HomeScreen extends ConsumerWidget {
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-                  // A caution, not an offer: a guest's coins and puzzles are
-                  // lost with this device until they create an account.
-                  child: SoftCard(
-                    onTap: () => context.push('/account'),
-                    // Still a caution (warning tint and outline), in one compact row.
-                    color: context.colors.warningTint,
-                    borderColor: context.colors.warning.withValues(alpha: 0.45),
-                    padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
-                    child: Row(
-                      children: [
-                        IconTile(icon: AppIcons.save, size: IconTile.small, color: context.colors.warning.withValues(alpha: 0.16), iconColor: context.colors.warning),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Save progress', maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.titleMedium?.copyWith(color: context.colors.warning)),
-                              const SizedBox(height: 2),
-                              Text('Stored on this device only',
-                                  style: TextStyle(fontSize: TypeSize.footnote, color: context.colors.textSecondary)),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Icon(AppIcons.chevronRight, size: 16, color: context.colors.warning),
-                      ],
-                    ),
-                  ),
+                  child: _GuestSaveCard(onSave: () => context.push('/account')),
                 ),
               ),
             if (livePacks.isNotEmpty) ...[
@@ -776,6 +749,50 @@ class _StreakCard extends ConsumerWidget {
               if (available) ...[const SizedBox(width: 8), BigButton(label: 'Claim', height: 36, expand: false, onTap: onTap)],
             ],
           ),
+        ],
+      ),
+    );
+  }
+}
+
+/// A guest's caution: their coins and puzzles live on this device only until they create an
+/// account. A calm card like the rest of Home (no orange fill), made a caution by the warning
+/// outline and mark and a line that says what is at stake, with one clear action.
+class _GuestSaveCard extends StatelessWidget {
+  const _GuestSaveCard({required this.onSave});
+  final VoidCallback onSave;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return SoftCard(
+      onTap: onSave,
+      padding: Insets.cardCompact,
+      borderColor: c.warning.withValues(alpha: 0.45),
+      child: Row(
+        children: [
+          IconTile(
+            icon: AppIcons.caution,
+            size: IconTile.medium,
+            color: c.warning.withValues(alpha: context.isDark ? 0.2 : 0.14),
+            iconColor: c.warning,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Not backed up', maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.titleMedium),
+                const SizedBox(height: 2),
+                Text(
+                  'Lost if this app is deleted',
+                  style: TextStyle(fontSize: TypeSize.footnote, height: 1.3, color: c.textSecondary),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 12),
+          BigButton(label: 'Save', kind: ButtonKind.secondary, height: 36, expand: false, onTap: onSave),
         ],
       ),
     );
