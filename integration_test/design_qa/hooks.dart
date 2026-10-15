@@ -17,6 +17,8 @@ import 'package:card_jigsaw_world/models/models.dart';
 import 'package:card_jigsaw_world/router.dart';
 import 'package:card_jigsaw_world/state/merge.dart';
 import 'package:card_jigsaw_world/state/rewards.dart';
+import 'package:card_jigsaw_world/state/catalog.dart';
+import 'package:card_jigsaw_world/widgets/icons.dart';
 import 'package:card_jigsaw_world/widgets/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -97,5 +99,22 @@ final hooks = <String, Hook>{
     if (fields.isEmpty) throw StateError('type: no text field');
     final field = fields.firstWhere((f) => f.widget.focusNode.hasFocus, orElse: () => fields.first);
     field.widget.controller.text = a['text'] as String? ?? '';
+  },
+  // Every pack category of the catalogue as the on-photo chip (pack cover, pack card), on a photo-dark panel.
+  'categoryChips': (ctx, c, a) async {
+    final packs = await c.read(packsProvider.future);
+    final cats = <String>{for (final p in packs) p.category}.toList()..sort();
+    if (!ctx.mounted) return;
+    await showAppSheet<void>(
+      ctx,
+      builder: (_) => Padding(
+        padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
+        child: Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(color: const Color(0xFF3A4A3A), borderRadius: BorderRadius.circular(16)),
+          child: Wrap(spacing: 8, runSpacing: 10, children: [for (final cat in cats) Chip2(label: cat, icon: AppIcons.category(cat), onImage: true)]),
+        ),
+      ),
+    );
   },
 };
