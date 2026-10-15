@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -57,7 +56,9 @@ Future<void> offerRemindersAfterGift(BuildContext context, ProviderContainer con
   if (granted && context.mounted) showToast(context, 'Daily reminder at $time', icon: AppIcons.bellFill);
 }
 
-/// 7-day streak calendar. Day 7 is the big one.
+/// The daily gift sheet (107 B): the week as a list, every day with its full
+/// gift, today's row larger than the rest. After missed days a lost streak can
+/// be restored together with today's claim (001 B).
 class DailyRewardSheet extends ConsumerStatefulWidget {
   const DailyRewardSheet({super.key});
   @override
@@ -67,7 +68,6 @@ class DailyRewardSheet extends ConsumerStatefulWidget {
 class _DailyRewardSheetState extends ConsumerState<DailyRewardSheet> {
   bool _claiming = false;
   bool _restoring = false;
-  ({int coins, int tickets, int hints, int day})? _claimed;
 
   /// Restores the lost streak and claims today's gift with it.
   Future<void> _restore() async {
@@ -86,10 +86,7 @@ class _DailyRewardSheetState extends ConsumerState<DailyRewardSheet> {
       store.giftClaimDays = store.giftClaimDays + 1;
     }
     if (!mounted) return;
-    setState(() {
-      _restoring = false;
-      _claimed = r;
-    });
+    setState(() => _restoring = false);
     if (r != null) {
       Sfx.instance.coin();
       Haptics.success();
@@ -111,15 +108,11 @@ class _DailyRewardSheetState extends ConsumerState<DailyRewardSheet> {
       Sfx.instance.coin();
       Haptics.success();
     }
-    setState(() {
-      _claiming = false;
-      _claimed = r;
-    });
+    setState(() => _claiming = false);
   }
 
   @override
   Widget build(BuildContext context) {
-    final c = context.colors;
     final profile = ref.watch(profileProvider).value;
     final available = profile?.dailyAvailable ?? false;
     final streak = profile?.streak ?? 0;
@@ -127,10 +120,6 @@ class _DailyRewardSheetState extends ConsumerState<DailyRewardSheet> {
     final todayIdx = profile == null ? 0 : (available ? profile.nextGiftDay : profile.giftsClaimedThisRound - 1);
     final missed = profile != null && !profile.streakAlive && profile.streak > 0;
     final canRestore = profile != null && ref.read(profileProvider.notifier).canRestoreStreak;
-
-    final today = Economy.dailyRewards[todayIdx];
-    final next = Economy.dailyRewards[(todayIdx + 1) % 7];
-    final received = _claimed;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
@@ -143,55 +132,18 @@ class _DailyRewardSheetState extends ConsumerState<DailyRewardSheet> {
             subtitle: !available
                 ? 'Streak: $streak day${streak == 1 ? '' : 's'}. Back tomorrow.'
                 : missed
-                    ? (canRestore ? 'You missed a day. Restore your streak or start again.' : 'You missed a day, so the streak starts again.')
-                    : 'Come back every day to grow your streak.',
+                ? (canRestore ? 'You missed a day. Restore your streak or start again.' : 'You missed a day, so the streak starts again.')
+                : 'Come back every day to grow your streak.',
             center: true,
           ),
-          const SizedBox(height: 18),
-          _StreakTrack(todayIdx: todayIdx, claimedToday: !available),
-          const SizedBox(height: 18),
-          // Today's gift in full; after the claim the same card says what arrived.
-          SoftCard(
-            padding: Insets.card,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        received != null ? 'You received' : (available ? 'Day ${todayIdx + 1} gift' : 'Today, day ${todayIdx + 1}'),
-                        style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: c.textSecondary),
-                      ),
-                      const SizedBox(height: 6),
-                      _Rewards(reward: today, size: 22, prefix: received != null ? '+' : ''),
-                    ],
-                  ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(todayIdx == 5 ? 'Tomorrow, the big one' : 'Tomorrow', style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600, color: c.textTertiary)),
-                    const SizedBox(height: 6),
-                    _Rewards(reward: next, size: 14),
-                  ],
-                ),
-              ],
-            ),
-          ).animate(key: ValueKey(received != null)).fadeIn(duration: 200.ms),
+          const SizedBox(height: 16),
+          _WeekList(todayIdx: todayIdx, claimedToday: !available),
           if (profile != null && canRestore) ...[
             const SizedBox(height: 10),
             // 001 B: restoring the streak just lost also claims today's gift as the next day of it.
-            _RestoreRow(
-              streak: profile.streak,
-              day: profile.streak % 7 + 1,
-              cost: Economy.streakRestoreTickets(profile.streak),
-              loading: _restoring,
-              onTap: _restore,
-            ),
+            _RestoreRow(streak: profile.streak, day: profile.streak % 7 + 1, cost: Economy.streakRestoreTickets(profile.streak), loading: _restoring, onTap: _restore),
           ],
-          const SizedBox(height: 18),
+          const SizedBox(height: 16),
           BigButton(
             label: available ? 'Claim day ${todayIdx + 1} gift' : 'Done',
             icon: available ? AppIcons.dailyGift : null,
@@ -205,111 +157,235 @@ class _DailyRewardSheetState extends ConsumerState<DailyRewardSheet> {
   }
 }
 
-/// Coins, tickets and hints of one day's gift, each as its mark and number.
-class _Rewards extends StatelessWidget {
-  const _Rewards({required this.reward, required this.size, this.prefix = ''});
-  final ({int coins, int tickets, int hints}) reward;
-  final double size;
-  final String prefix;
+/// Where a day stands in this round of seven.
+enum _DayState { claimed, today, claimedToday, later }
 
-  @override
-  Widget build(BuildContext context) => Wrap(
-        spacing: size * 0.6,
-        runSpacing: 4,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        children: [
-          Amount(currency: Currency.coins, value: reward.coins, size: size, prefix: prefix, weight: FontWeight.w700),
-          if (reward.tickets > 0) Amount(currency: Currency.tickets, value: reward.tickets, size: size, prefix: prefix, weight: FontWeight.w700),
-          if (reward.hints > 0) Amount(currency: Currency.hints, value: reward.hints, size: size, prefix: prefix, weight: FontWeight.w700),
-        ],
-      );
-}
-
-/// Seven stops on one line: done days filled, today ringed, day 7 marked.
-/// Under each stop the day's coins, so the climb to day 7 reads at a glance.
-class _StreakTrack extends StatelessWidget {
-  const _StreakTrack({required this.todayIdx, required this.claimedToday});
+/// The week as a list: a status mark, the day, then its coins, tickets and
+/// hints in aligned columns. Nothing is abbreviated: every gift reads in full.
+class _WeekList extends StatelessWidget {
+  const _WeekList({required this.todayIdx, required this.claimedToday});
   final int todayIdx;
   final bool claimedToday;
 
-  static const _dot = 34.0;
+  _DayState _state(int i) {
+    if (i < todayIdx) return _DayState.claimed;
+    if (i > todayIdx) return _DayState.later;
+    return claimedToday ? _DayState.claimedToday : _DayState.today;
+  }
 
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    final accent = context.accent;
-    bool done(int i) => i < todayIdx || (claimedToday && i == todayIdx);
-    return LayoutBuilder(
-      builder: (context, cons) {
-        final cell = cons.maxWidth / 7;
-        final reached = todayIdx.clamp(0, 6);
-        // Sized by the stops and their labels (no fixed height: the labels grow with the text size).
-        return Stack(
-          children: [
-            // The track behind the stops, filled up to today.
-            Positioned(left: cell / 2, right: cell / 2, top: _dot / 2 - 1.5, child: Container(height: 3, decoration: BoxDecoration(color: c.stroke, borderRadius: BorderRadius.circular(2)))),
-            if (reached > 0)
-              Positioned(left: cell / 2, width: cell * reached, top: _dot / 2 - 1.5, child: Container(height: 3, decoration: BoxDecoration(color: accent, borderRadius: BorderRadius.circular(2)))),
-            Row(
-              children: [
-                for (var i = 0; i < 7; i++)
-                  SizedBox(
-                    width: cell,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        _Stop(day: i + 1, done: done(i), today: i == todayIdx, big: i == 6, size: _dot),
-                        const SizedBox(height: 6),
-                        Text(
-                          formatCount(Economy.dailyRewards[i].coins),
-                          style: TextStyle(
-                            fontSize: TypeSize.caption,
-                            fontWeight: FontWeight.w600,
-                            color: i == todayIdx ? accent : (done(i) ? c.textTertiary : c.textSecondary),
-                            fontFeatures: tabularFigures,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-              ],
-            ),
-          ],
-        );
-      },
+    final rows = <Widget>[];
+    for (var i = 0; i < 7; i++) {
+      final isToday = i == todayIdx;
+      // No hairline next to today's row: its own raised card separates it.
+      if (i > 0 && !isToday && i - 1 != todayIdx) rows.add(Divider(height: 1, thickness: 0.5, color: c.stroke, indent: 52));
+      rows.add(
+        _DayRow(
+          day: i + 1,
+          reward: Economy.dailyRewards[i],
+          state: _state(i),
+          tag: switch (_state(i)) {
+            _DayState.today => 'Today',
+            _DayState.claimedToday => 'Claimed',
+            _ when claimedToday && i == todayIdx + 1 => 'Tomorrow',
+            _ => null,
+          },
+        ),
+      );
+    }
+    return SoftCard(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      clip: Clip.none,
+      child: Column(mainAxisSize: MainAxisSize.min, children: rows),
     );
   }
 }
 
-class _Stop extends StatelessWidget {
-  const _Stop({required this.day, required this.done, required this.today, required this.big, required this.size});
+/// One day of the week. Today's row is larger than the rest (owner, 107): a raised
+/// card a little wider than the list, the day on two lines, bigger marks and amounts.
+/// Compared on screen with a tinted row and with rows that grow towards today
+/// (round2/107/variants); the raised card reads clearest and keeps the list even.
+class _DayRow extends StatelessWidget {
+  const _DayRow({required this.day, required this.reward, required this.state, this.tag});
   final int day;
-  final bool done;
-  final bool today;
-  final bool big;
-  final double size;
+  final ({int coins, int tickets, int hints}) reward;
+  final _DayState state;
+
+  /// "Today", "Claimed" (today's, once claimed) or "Tomorrow".
+  final String? tag;
+
+  // Column widths, the same in every row so the amounts line up (they grow with Larger Text).
+  static const _coinsColumn = 62.0;
+  static const _extraColumn = 44.0;
+  static const _overhang = 6.0;
 
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
     final accent = context.accent;
-    final fill = done ? context.accentFill : (today ? c.accentTint : c.card);
-    final Widget mark = done
-        ? Icon(AppIcons.checkmarkAlt, size: 18, color: context.onAccent)
-        : big
-            ? Icon(AppIcons.crown, size: 18, color: today ? accent : accent.withValues(alpha: 0.8))
-            : Text('$day', style: TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w700, color: today ? accent : c.textSecondary));
-    return Container(
-      width: size,
-      height: size,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: fill,
-        shape: BoxShape.circle,
-        border: done ? null : Border.all(color: today ? accent : (big ? accent.withValues(alpha: 0.5) : c.stroke), width: today ? 2 : 1),
+    final today = state == _DayState.today || state == _DayState.claimedToday;
+    final done = state == _DayState.claimed;
+    final markSize = today ? 30.0 : 24.0;
+    final iconSize = today ? 20.0 : 16.0;
+    final amountFont = today ? TypeSize.headline : TypeSize.body;
+    final labelFont = today ? TypeSize.headline : TypeSize.body;
+    final scaler = MediaQuery.textScalerOf(context);
+    final height = scaler.scale(today ? 60.0 : 40.0);
+
+    final Widget mark = switch (state) {
+      _DayState.claimed || _DayState.claimedToday => Container(
+        width: markSize,
+        height: markSize,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(shape: BoxShape.circle, color: today ? context.accentFill : c.accentTint),
+        child: Icon(AppIcons.checkmarkAlt, size: markSize * 0.6, color: today ? context.onAccent : accent),
       ),
-      child: mark,
+      _DayState.today => Container(
+        width: markSize,
+        height: markSize,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(shape: BoxShape.circle, color: context.accentFill),
+        child: Text(
+          '$day',
+          style: TextStyle(fontSize: markSize * 0.47, fontWeight: FontWeight.w700, color: context.onAccent),
+        ),
+      ),
+      _DayState.later => Container(
+        width: markSize,
+        height: markSize,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(color: c.stroke, width: 1.5),
+        ),
+        child: Text(
+          '$day',
+          style: TextStyle(fontSize: markSize * 0.47, fontWeight: FontWeight.w600, color: c.textSecondary),
+        ),
+      ),
+    };
+
+    final dim = done ? 0.45 : 1.0;
+    // Right-aligned in its column; a figure wider than the column shrinks a little instead of running over.
+    Widget amount(Currency currency, int value) => FittedBox(
+      fit: BoxFit.scaleDown,
+      alignment: Alignment.centerRight,
+      child: Opacity(
+        opacity: dim,
+        child: Amount(currency: currency, value: value, size: iconSize, fontSize: amountFont, weight: today ? FontWeight.w700 : FontWeight.w600),
+      ),
     );
+
+    final label = Text(
+      'Day $day',
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: TextStyle(
+        fontSize: labelFont,
+        fontWeight: today ? FontWeight.w700 : FontWeight.w500,
+        color: done ? c.textTertiary : c.textPrimary,
+        letterSpacing: today ? -0.2 : 0,
+      ),
+    );
+    // Today's label on two lines (with the largest text sizes on a small phone it scales down rather
+    // than cut); the others on one, with "Tomorrow" after the day once today is claimed, which moves
+    // under the day when the line is too short.
+    final Widget title = today
+        ? FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                label,
+                Text(tag!, maxLines: 1, style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: accent)),
+              ],
+            ),
+          )
+        : Wrap(
+            spacing: 8,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              label,
+              if (tag != null)
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(tag!, maxLines: 1, style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: c.textSecondary)),
+                ),
+            ],
+          );
+
+    final pad = 14.0 + (today ? _overhang : 0);
+    final row = SizedBox(
+      height: height,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: pad),
+        child: Row(
+          children: [
+            SizedBox(
+              width: 30,
+              child: Center(
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 260),
+                  switchInCurve: Curves.easeOutBack,
+                  transitionBuilder: (child, a) => ScaleTransition(scale: a, child: child),
+                  child: KeyedSubtree(key: ValueKey(state), child: mark),
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Align(alignment: Alignment.centerLeft, child: title),
+            ),
+            SizedBox(
+              width: scaler.scale(_coinsColumn),
+              child: Align(alignment: Alignment.centerRight, child: amount(Currency.coins, reward.coins)),
+            ),
+            SizedBox(
+              width: scaler.scale(_extraColumn),
+              child: reward.tickets > 0 ? Align(alignment: Alignment.centerRight, child: amount(Currency.tickets, reward.tickets)) : null,
+            ),
+            SizedBox(
+              width: scaler.scale(_extraColumn),
+              child: reward.hints > 0 ? Align(alignment: Alignment.centerRight, child: amount(Currency.hints, reward.hints)) : null,
+            ),
+          ],
+        ),
+      ),
+    );
+
+    if (today) {
+      // A raised card over the list, reaching a little past its edges.
+      return LayoutBuilder(
+        builder: (context, cons) => SizedBox(
+          height: height,
+          width: cons.maxWidth,
+          child: OverflowBox(
+            minWidth: cons.maxWidth + _overhang * 2,
+            maxWidth: cons.maxWidth + _overhang * 2,
+            child: Container(
+              decoration: BoxDecoration(
+                color: c.cardElevated,
+                borderRadius: BorderRadius.circular(Radii.md),
+                border: Border.all(color: accent.withValues(alpha: 0.55), width: 1.5),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: context.isDark ? 0.4 : 0.10),
+                    blurRadius: 16,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: row,
+            ),
+          ),
+        ),
+      );
+    }
+    return row;
   }
 }
 
