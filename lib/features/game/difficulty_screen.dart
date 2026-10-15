@@ -604,6 +604,9 @@ class _PaintingTile extends StatelessWidget {
   final bool locked;
   final VoidCallback? onLocked;
 
+  /// What Painting is, in one line under its name (locked or open).
+  static const explainer = 'Black and white until cards lock';
+
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
@@ -612,11 +615,11 @@ class _PaintingTile extends StatelessWidget {
       onTap: locked ? onLocked : (enabled ? () => onChanged(!on) : null),
       scale: 0.99,
       child: Opacity(
-        // Locked is said by the lock and the level, not by fading the text.
+        // Locked is said by the level chip, not by fading the text.
         opacity: locked ? 1 : (enabled || on ? 1 : 0.45),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 180),
-          padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+          padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
           decoration: BoxDecoration(
             color: on ? c.accentTint : c.card,
             borderRadius: BorderRadius.circular(Radii.md),
@@ -624,17 +627,24 @@ class _PaintingTile extends StatelessWidget {
           ),
           child: Row(
             children: [
-              const IconTile(icon: AppIcons.painting, size: IconTile.small),
+              // Sized to the two lines beside it.
+              const IconTile(icon: AppIcons.painting, size: IconTile.medium),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Keyed while on: the bonus is part of the rewards in the footer.
-                    Text('Painting · x${_DifficultyScreenState._fmtMult(Economy.paintingMultiplier)}', key: on ? const ValueKey('painting-bonus') : null, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body)),
-                    const SizedBox(height: 2),
+                    Row(
+                      children: [
+                        // Keyed while on: the bonus is part of the rewards in the footer.
+                        Expanded(child: Text('Painting · x${_DifficultyScreenState._fmtMult(Economy.paintingMultiplier)}', key: on ? const ValueKey('painting-bonus') : null, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body))),
+                        // Locked: the level chip beside the name, so the line under it runs the full width.
+                        if (locked) ...[const SizedBox(width: 8), _LevelChip(level: Unlock.painting.level)],
+                      ],
+                    ),
+                    const SizedBox(height: 1),
                     Text(
-                      locked ? 'Opens at level ${Unlock.painting.level}' : 'Colour returns as cards lock',
+                      explainer,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(fontSize: TypeSize.footnote, height: 1.3, color: c.textSecondary),
@@ -642,14 +652,41 @@ class _PaintingTile extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(width: 10),
-              if (locked)
-                Icon(AppIcons.lock, size: 18, color: c.textTertiary)
-              else
+              if (!locked) ...[
+                const SizedBox(width: 8),
                 CupertinoSwitch(value: on, activeTrackColor: Brand.success, onChanged: enabled ? onChanged : null),
+              ],
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// "[lock] Level 8" beside Painting's name until it opens: a quiet grey chip,
+/// readable at full strength instead of a faded row.
+class _LevelChip extends StatelessWidget {
+  const _LevelChip({required this.level});
+  final int level;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return Container(
+      height: 24,
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      decoration: BoxDecoration(
+        color: context.isDark ? Colors.white.withValues(alpha: 0.08) : Colors.black.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(Radii.pill),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(AppIcons.lock, size: 11, color: c.textSecondary),
+          const SizedBox(width: 4),
+          Text('Level $level', style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600, color: c.textSecondary)),
+        ],
       ),
     );
   }
