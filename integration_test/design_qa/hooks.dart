@@ -24,6 +24,7 @@ import 'package:card_jigsaw_world/models/models.dart';
 import 'package:card_jigsaw_world/state/merge.dart';
 import 'package:card_jigsaw_world/state/catalog.dart';
 import 'package:card_jigsaw_world/state/rewards.dart';
+import 'package:card_jigsaw_world/core/theme/tokens.dart';
 import 'package:card_jigsaw_world/widgets/glass.dart';
 import 'package:card_jigsaw_world/widgets/icons.dart';
 import 'package:card_jigsaw_world/widgets/ui.dart';
@@ -92,6 +93,77 @@ class _ReleaseTables implements TablesDB {
 }
 
 final hooks = <String, Hook>{
+  // B08: every BigButton kind, enabled and disabled, on a sheet (dark-mode specimen).
+  'buttons': (ctx, c, a) => showAppSheet(
+        ctx,
+        builder: (sctx) => Padding(
+          padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Buttons', style: Theme.of(sctx).textTheme.headlineSmall),
+              const SizedBox(height: 12),
+              Row(children: [
+                Expanded(child: BigButton(label: 'Primary', height: 44, onTap: () {})),
+                const SizedBox(width: 10),
+                const Expanded(child: BigButton(label: 'Primary', height: 44)),
+              ]),
+              const SizedBox(height: 10),
+              Row(children: [
+                Expanded(child: BigButton.cost(label: 'Open for', currency: Currency.tickets, amount: 1, height: 44, onTap: () {})),
+                const SizedBox(width: 10),
+                const Expanded(child: BigButton.cost(label: 'Open for', currency: Currency.tickets, amount: 1, height: 44)),
+              ]),
+              const SizedBox(height: 10),
+              Row(children: [
+                Expanded(child: BigButton(label: 'Secondary', kind: ButtonKind.secondary, height: 44, onTap: () {})),
+                const SizedBox(width: 10),
+                const Expanded(child: BigButton(label: 'Secondary', kind: ButtonKind.secondary, height: 44)),
+              ]),
+              const SizedBox(height: 10),
+              Row(children: [
+                Expanded(child: BigButton(label: 'Ghost', kind: ButtonKind.ghost, height: 44, onTap: () {})),
+                const SizedBox(width: 10),
+                const Expanded(child: BigButton(label: 'Ghost', kind: ButtonKind.ghost, height: 44)),
+              ]),
+              const SizedBox(height: 10),
+              Row(children: [
+                Expanded(child: BigButton(label: 'Gold', kind: ButtonKind.gold, height: 44, onTap: () {})),
+                const SizedBox(width: 10),
+                const Expanded(child: BigButton(label: 'Gold', kind: ButtonKind.gold, height: 44)),
+              ]),
+              const SizedBox(height: 8),
+              Text('Left: enabled · right: disabled', style: TextStyle(fontSize: 12, color: sctx.colors.textSecondary)),
+            ],
+          ),
+        ),
+      ),
+  // B08: surfaces inside a sheet (card, round buttons, chip, tile, secondary button, field) to judge elevation.
+  'surfaces': (ctx, c, a) => showAppSheet(
+        ctx,
+        builder: (sctx) => Padding(
+          padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text('Surfaces in a sheet', textAlign: TextAlign.center, style: Theme.of(sctx).textTheme.headlineSmall),
+              const SizedBox(height: 12),
+              const SoftCard(child: Row(children: [IconTile(icon: AppIcons.piggy, size: 34), SizedBox(width: 12), Expanded(child: Text('SoftCard with an IconTile'))])),
+              const SizedBox(height: 12),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                RoundIconButton(icon: AppIcons.wheel, label: 'Round', size: 52, onTap: () {}),
+                const Chip2(label: 'Chip2', icon: AppIcons.star),
+                CurrencyPill(currency: Currency.coins, value: 1240, onAdd: () {}),
+              ]),
+              const SizedBox(height: 12),
+              BigButton(label: 'Secondary', kind: ButtonKind.secondary, height: 44, onTap: () {}),
+              const SizedBox(height: 10),
+              BigButton(label: 'Ghost', kind: ButtonKind.ghost, height: 44, onTap: () {}),
+            ],
+          ),
+        ),
+      ),
   // Shows the status bar again (a variant that hides it leaves it hidden across hot restarts).
   'statusBar': (ctx, c, a) async => SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge),
   'alert': (ctx, c, a) => showAppAlert(
