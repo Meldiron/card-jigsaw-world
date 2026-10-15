@@ -87,7 +87,7 @@ void main() {
     await tester.tapAt(const Offset(200, 60));
     await settle(tester, 1200);
 
-    // ---- Spin until a Peek or a Magic is won (43% a spin).
+    // ---- Spin until a Peek or a Magic is won (44% a spin).
     int peeks() => container(tester).read(profileProvider).value?.peeks ?? 0;
     int magics() => container(tester).read(profileProvider).value?.magics ?? 0;
     var spins = 0;
