@@ -163,6 +163,38 @@ final hooks = <String, Hook>{
           ),
         ),
       ),
+  // Every avatar disc at 36 pt, on the sheet and on a card inside it (144: dark discs).
+  // {"only": ["vip", "crown", "owl"]} limits the set; {"size": 44}.
+  'avatars': (ctx, c, a) => showAppSheet(
+        ctx,
+        builder: (sctx) {
+          final only = (a['only'] as List?)?.cast<String>();
+          final size = (a['size'] as num?)?.toDouble() ?? 36;
+          final defs = [for (final d in AppIcons.avatars) if (only == null || only.contains(d.key)) d];
+          Widget grid() => Wrap(
+                spacing: 6,
+                runSpacing: 8,
+                children: [
+                  for (final d in defs)
+                    SizedBox(
+                      width: 40,
+                      child: Column(children: [
+                        AvatarCircle(avatarKey: d.key, size: size),
+                        const SizedBox(height: 2),
+                        Text(d.key, maxLines: 1, overflow: TextOverflow.clip, style: const TextStyle(fontSize: 8)),
+                      ]),
+                    ),
+                ],
+              );
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [grid(), const SizedBox(height: 10), SoftCard(padding: const EdgeInsets.all(8), child: grid())],
+            ),
+          );
+        },
+      ),
   // Shows the status bar again (a variant that hides it leaves it hidden across hot restarts).
   'statusBar': (ctx, c, a) async => SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge),
   'alert': (ctx, c, a) => showAppAlert(
