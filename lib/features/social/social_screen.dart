@@ -37,14 +37,18 @@ Future<void> showAddFriendAlert(BuildContext context, {String? code}) async {
   final container = ProviderScope.containerOf(context, listen: false);
   final controller = TextEditingController(text: code?.trim() ?? '');
   final c = context.colors;
+  final mine = container.read(currentUserIdProvider);
   final ok = await showAppAlert(
     context,
     title: 'Add friend by code',
-    message: 'Paste the code your friend shared. Yours is on the Friends tab.',
+    message: 'Paste the code your friend shared.',
     confirmLabel: 'Add friend',
     cancelLabel: 'Not now',
     canConfirm: () => controller.text.trim().isNotEmpty,
-    child: CupertinoTextField(
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        CupertinoTextField(
       key: const ValueKey('add-friend-field'),
       controller: controller,
       placeholder: 'Friend code',
@@ -57,6 +61,10 @@ Future<void> showAddFriendAlert(BuildContext context, {String? code}) async {
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       // The look of AlertTextField (the other alert fields), keyed for the deep-link tests.
       decoration: BoxDecoration(color: context.isDark ? Colors.white.withValues(alpha: 0.08) : Colors.black.withValues(alpha: 0.05), borderRadius: BorderRadius.circular(12)),
+        ),
+        // The player's own code, for a friend who adds by code instead of the link.
+        if (mine != null) ...[const SizedBox(height: 2), _YourCode(code: mine)],
+      ],
     ),
   );
   final entered = ok ? controller.text.trim() : null;
@@ -81,6 +89,53 @@ Future<void> showAddFriendAlert(BuildContext context, {String? code}) async {
     }
   } catch (e) {
     if (context.mounted) showToast(context, 'Could not add friend. Check your connection and try again.', icon: AppIcons.signal);
+  }
+}
+
+/// "Your code 6acb...  [copy]" under the Add friend field: tap to copy. The alert sits above the
+/// toasts, so the line itself confirms the copy.
+class _YourCode extends StatefulWidget {
+  const _YourCode({required this.code});
+  final String code;
+  @override
+  State<_YourCode> createState() => _YourCodeState();
+}
+
+class _YourCodeState extends State<_YourCode> {
+  bool _copied = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return Pressable(
+      key: const ValueKey('add-friend-your-code'),
+      onTap: () async {
+        await Clipboard.setData(ClipboardData(text: widget.code));
+        if (!mounted) return;
+        setState(() => _copied = true);
+        await Future<void>.delayed(const Duration(seconds: 2));
+        if (mounted) setState(() => _copied = false);
+      },
+      child: TapTarget(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('Your code', style: TextStyle(fontSize: TypeSize.caption, color: c.textSecondary)),
+            const SizedBox(width: 6),
+            Flexible(
+              child: Text(
+                _copied ? 'Copied' : widget.code,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600, color: c.textPrimary, fontFeatures: tabularFigures),
+              ),
+            ),
+            const SizedBox(width: 5),
+            Icon(_copied ? AppIcons.checkmarkAlt : AppIcons.copy, size: 13, color: context.accent),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -387,24 +442,6 @@ class _FriendsState extends ConsumerState<_Friends> {
                   Expanded(child: BigButton(key: const ValueKey('add-friend-open'), label: 'Add friend', kind: ButtonKind.secondary, height: 44, onTap: onAdd)),
                 ],
               ),
-              const SizedBox(height: 12),
-              Pressable(
-                onTap: me == null
-                    ? null
-                    : () {
-                        Clipboard.setData(ClipboardData(text: me));
-                        showToast(context, 'Copied your friend code', icon: AppIcons.copy);
-                      },
-                child: Text.rich(
-                  TextSpan(children: [
-                    const TextSpan(text: 'Your code  '),
-                    TextSpan(text: me ?? '—', style: TextStyle(fontFamily: 'Menlo', fontSize: TypeSize.caption, fontWeight: FontWeight.w600, color: c.textPrimary)),
-                  ]),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: TypeSize.footnote, color: c.textSecondary),
-                ),
-              ),
             ],
           ),
         ),
@@ -418,7 +455,7 @@ class _FriendsState extends ConsumerState<_Friends> {
             action: BigButton(label: 'Try again', kind: ButtonKind.secondary, height: 44, expand: false, onTap: () => ref.invalidate(friendsProvider)),
           ),
           data: (list) => list.isEmpty
-              ? const EmptyState(icon: AppIcons.wave, title: 'No friends yet', message: 'Share your code, or add a friend by theirs, to compare stars.')
+              ? const EmptyState(icon: AppIcons.wave, title: 'No friends yet', message: 'Send your invite link, or add a friend by their code, to compare stars.')
               : SoftCard(
                   padding: EdgeInsets.zero,
                   child: Column(
