@@ -183,15 +183,16 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     Divider(height: 1, color: c.stroke),
                     const SizedBox(height: 12),
                     // The wallet: three columns split by hairlines. The streak lives in Statistics
-                    // (and on Home), so each balance gets a third of the card at full size.
+                    // (and on Home), so each balance gets a third of the card at full size; from
+                    // 100,000 a balance is written short ("235K", "1.2M") and keeps that size.
                     IntrinsicHeight(
                       child: Row(
                         children: [
-                          _Stat(value: formatCount(profile.coins), label: 'Coins', icon: const CoinIcon(size: 14)),
+                          _Stat(value: compactCount(profile.coins), label: 'Coins', icon: const CoinIcon(size: 14)),
                           VerticalDivider(width: 1, thickness: 1, color: c.stroke),
-                          _Stat(value: formatCount(profile.tickets), label: 'Tickets', icon: const TicketIcon(size: 13)),
+                          _Stat(value: compactCount(profile.tickets), label: 'Tickets', icon: const TicketIcon(size: 13)),
                           VerticalDivider(width: 1, thickness: 1, color: c.stroke),
-                          _Stat(value: formatCount(profile.hints), label: 'Hints', icon: const HintIcon(size: 14)),
+                          _Stat(value: compactCount(profile.hints), label: 'Hints', icon: const HintIcon(size: 14)),
                         ],
                       ),
                     ),

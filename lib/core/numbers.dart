@@ -26,3 +26,16 @@ String formatCount(int v) {
 /// A count with its noun: `1 ticket`, `3 tickets`, `12,000 coins`.
 /// [many] defaults to [one] + "s".
 String countOf(int n, String one, [String? many]) => '${formatCount(n)} ${n == 1 ? one : (many ?? '${one}s')}';
+
+/// A count in a slot of fixed width (Profile's wallet, the player card's three numbers): exact and
+/// grouped up to 99,999, then short and rounded down, so it never shows more than there is:
+/// `99,999`, `235K`, `1.2M`, `12M`. The exact figure stays in the Home pills and the Store.
+String compactCount(int v) {
+  final a = v.abs();
+  final sign = v < 0 ? '-' : '';
+  if (a < 100000) return formatCount(v);
+  if (a < 1000000) return '$sign${a ~/ 1000}K';
+  final tenths = a ~/ 100000; // millions with one decimal, rounded down
+  final whole = tenths ~/ 10, decimal = tenths % 10;
+  return '$sign${formatCount(whole)}${decimal == 0 || whole >= 10 ? '' : '.$decimal'}M';
+}
