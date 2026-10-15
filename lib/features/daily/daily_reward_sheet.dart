@@ -243,39 +243,38 @@ class _StreakTrack extends StatelessWidget {
       builder: (context, cons) {
         final cell = cons.maxWidth / 7;
         final reached = todayIdx.clamp(0, 6);
-        return SizedBox(
-          height: _dot + 22,
-          child: Stack(
-            children: [
-              // The track behind the stops, filled up to today.
-              Positioned(left: cell / 2, right: cell / 2, top: _dot / 2 - 1.5, child: Container(height: 3, decoration: BoxDecoration(color: c.stroke, borderRadius: BorderRadius.circular(2)))),
-              if (reached > 0)
-                Positioned(left: cell / 2, width: cell * reached, top: _dot / 2 - 1.5, child: Container(height: 3, decoration: BoxDecoration(color: accent, borderRadius: BorderRadius.circular(2)))),
-              Row(
-                children: [
-                  for (var i = 0; i < 7; i++)
-                    SizedBox(
-                      width: cell,
-                      child: Column(
-                        children: [
-                          _Stop(day: i + 1, done: done(i), today: i == todayIdx, big: i == 6, size: _dot),
-                          const SizedBox(height: 6),
-                          Text(
-                            formatCount(Economy.dailyRewards[i].coins),
-                            style: TextStyle(
-                              fontSize: TypeSize.caption,
-                              fontWeight: FontWeight.w600,
-                              color: i == todayIdx ? accent : (done(i) ? c.textTertiary : c.textSecondary),
-                              fontFeatures: tabularFigures,
-                            ),
+        // Sized by the stops and their labels (no fixed height: the labels grow with the text size).
+        return Stack(
+          children: [
+            // The track behind the stops, filled up to today.
+            Positioned(left: cell / 2, right: cell / 2, top: _dot / 2 - 1.5, child: Container(height: 3, decoration: BoxDecoration(color: c.stroke, borderRadius: BorderRadius.circular(2)))),
+            if (reached > 0)
+              Positioned(left: cell / 2, width: cell * reached, top: _dot / 2 - 1.5, child: Container(height: 3, decoration: BoxDecoration(color: accent, borderRadius: BorderRadius.circular(2)))),
+            Row(
+              children: [
+                for (var i = 0; i < 7; i++)
+                  SizedBox(
+                    width: cell,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _Stop(day: i + 1, done: done(i), today: i == todayIdx, big: i == 6, size: _dot),
+                        const SizedBox(height: 6),
+                        Text(
+                          formatCount(Economy.dailyRewards[i].coins),
+                          style: TextStyle(
+                            fontSize: TypeSize.caption,
+                            fontWeight: FontWeight.w600,
+                            color: i == todayIdx ? accent : (done(i) ? c.textTertiary : c.textSecondary),
+                            fontFeatures: tabularFigures,
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                ],
-              ),
-            ],
-          ),
+                  ),
+              ],
+            ),
+          ],
         );
       },
     );
