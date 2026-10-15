@@ -269,11 +269,11 @@ class PackScreen extends ConsumerWidget {
             ),
           ),
           puzzles.when(
-            // 169: the grid's shape while the pictures load (023's tiles: photo plus caption).
+            // 169: the grid's shape while the pictures load (023's photo tiles).
             loading: () => SliverPadding(
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
               sliver: SliverGrid(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: pack.isDaily ? 4 : 3, mainAxisSpacing: 10, crossAxisSpacing: 10, childAspectRatio: pack.isDaily ? 0.66 : 0.62),
+                gridDelegate: _gridShape(pack),
                 delegate: SliverChildBuilderDelegate((_, _) => const Skeleton(radius: Radii.md), childCount: pack.isDaily ? 8 : 9),
               ),
             ),
@@ -288,13 +288,7 @@ class PackScreen extends ConsumerWidget {
             data: (list) => SliverPadding(
               padding: EdgeInsets.fromLTRB(20, 20, 20, GlassTabBar.scrollEndPadding(context)),
               sliver: SliverGrid(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: pack.isDaily ? 4 : 3,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
-                  // Photo plus a two-line caption under it.
-                  childAspectRatio: pack.isDaily ? 0.66 : 0.62,
-                ),
+                gridDelegate: _gridShape(pack),
                 delegate: SliverChildBuilderDelegate((_, i) {
                   final p = list[i];
                   final pr = progress[p.id];
@@ -408,6 +402,15 @@ class PackScreen extends ConsumerWidget {
       ),
     );
   }
+
+  /// The picture grid: a month is a four-column calendar of nearly square days, other packs three
+  /// columns of 3:4 photos. Tiles carry no caption (023), so the photos get the whole cell.
+  static SliverGridDelegate _gridShape(Pack pack) => SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: pack.isDaily ? 4 : 3,
+        mainAxisSpacing: pack.isDaily ? 8 : 10,
+        crossAxisSpacing: pack.isDaily ? 8 : 10,
+        childAspectRatio: pack.isDaily ? 0.82 : 0.75,
+      );
 
   /// Route path for resuming a saved board (mode + ladder entry by cell count).
   static String _gridCodeFor(PuzzleProgress pr) {
@@ -682,6 +685,12 @@ class _TodayCard extends StatelessWidget {
   }
 }
 
+/// A picture of a pack grid: the photo and its state, no words (owner, 023 C: "no need for author
+/// or photo name in this view"). A month reads as a calendar of photos with the day as the label;
+/// every grid shows the same states: the lock, the day to come, a board in progress (its share
+/// of locked cards as a bar along the bottom edge, as on a video thumbnail), and the stars of a
+/// solved picture. The title is read out by VoiceOver and shown where the picture is played,
+/// with its credit (difficulty screen).
 class _PuzzleTile extends StatelessWidget {
   const _PuzzleTile({required this.puzzle, required this.progress, required this.locked, required this.onTap, this.dateLocked = false, this.daily = false});
   final Puzzle puzzle;
@@ -691,103 +700,121 @@ class _PuzzleTile extends StatelessWidget {
   final bool daily;
   final VoidCallback onTap;
 
+  /// Share of the cards in place on a board in progress (0 before the first card locks).
+  static double placedShare(List<int> layout) {
+    if (layout.isEmpty) return 0;
+    var placed = 0;
+    for (var i = 0; i < layout.length; i++) {
+      if (layout[i] == i) placed++;
+    }
+    return placed / layout.length;
+  }
+
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
     final completed = progress?.completed == true;
     final started = progress?.inProgress == true;
-    final photo = Container(
-        clipBehavior: Clip.antiAlias,
-        decoration: BoxDecoration(
-          color: c.card,
-          borderRadius: BorderRadius.circular(Radii.md),
-          border: Border.all(color: c.stroke),
-        ),
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            // A day still to come is a plain calendar cell: its date, nothing to tap into.
-            if (dateLocked)
-              Container(
-                color: c.boardBackground,
-                alignment: Alignment.center,
-                child: Text('${puzzle.date!.day}', style: TextStyle(color: c.textTertiary, fontSize: TypeSize.headline, fontWeight: FontWeight.w600, letterSpacing: -0.3)),
-              )
-            else
-              NetImage(url: puzzle.thumbUrl, blurhash: puzzle.blurhash),
-            if (locked && !dateLocked)
-              Container(color: Colors.black.withValues(alpha: 0.4), child: const Icon(AppIcons.lock, color: Colors.white, size: 18)),
-            if (daily && puzzle.date != null && !dateLocked)
-              Positioned(
-                right: 6,
-                top: 6,
-                child: Container(
-                  width: 24,
-                  height: 24,
+    final state = [
+      if (dateLocked) 'opens on ${formatDate(puzzle.date!, year: false)}' else if (locked) 'locked',
+      if (started) 'in progress',
+      if (completed) 'solved, ${countOf(progress!.stars, 'star')}',
+    ].join(', ');
+    return Semantics(
+      button: true,
+      // A day to come keeps its title secret, as on screen.
+      label: [if (daily && puzzle.date != null) formatDate(puzzle.date!, year: false), if (!dateLocked) puzzle.title, if (state.isNotEmpty) state].join(', '),
+      excludeSemantics: true,
+      child: Pressable(
+        onTap: onTap,
+        child: Container(
+          clipBehavior: Clip.antiAlias,
+          decoration: BoxDecoration(
+            color: c.card,
+            borderRadius: BorderRadius.circular(Radii.md),
+            border: Border.all(color: c.stroke),
+          ),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              // A day still to come is a plain calendar cell: its date, nothing to tap into.
+              if (dateLocked)
+                Container(
+                  color: c.boardBackground,
                   alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    // Today is marked in the accent only (badge and outline agree).
-                    color: puzzle.isToday ? context.accentFill : (dateLocked ? c.card : Colors.black.withValues(alpha: 0.5)),
-                    shape: BoxShape.circle,
-                    border: dateLocked ? Border.all(color: c.stroke) : null,
+                  child: Text('${puzzle.date!.day}', style: TextStyle(color: c.textTertiary, fontSize: TypeSize.headline, fontWeight: FontWeight.w600, letterSpacing: -0.3)),
+                )
+              else
+                NetImage(url: puzzle.thumbUrl, blurhash: puzzle.blurhash),
+              if (locked && !dateLocked)
+                Container(color: Colors.black.withValues(alpha: 0.4), child: const Icon(AppIcons.lock, color: Colors.white, size: 18)),
+              if (daily && puzzle.date != null && !dateLocked)
+                Positioned(
+                  right: 6,
+                  top: 6,
+                  child: Container(
+                    width: 24,
+                    height: 24,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      // Today is marked in the accent only (badge and outline agree).
+                      color: puzzle.isToday ? context.accentFill : Colors.black.withValues(alpha: 0.5),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text('${puzzle.date!.day}', style: const TextStyle(color: Colors.white, fontSize: TypeSize.micro, fontWeight: FontWeight.w600)),
                   ),
-                  child: Text('${puzzle.date!.day}', style: TextStyle(color: dateLocked ? c.textTertiary : Colors.white, fontSize: TypeSize.micro, fontWeight: FontWeight.w600)),
                 ),
-              ),
-            if (started)
-              const Positioned(left: 6, top: 6, child: Chip2(label: 'Continue', onImage: true)),
-            // Today's outline sits just inside the clip so its corners follow
-            // the tile's radius exactly instead of being shaved by the clip.
-            if (puzzle.isToday)
-              Positioned.fill(
-                child: IgnorePointer(
-                  child: Padding(
-                    padding: const EdgeInsets.all(1),
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(Radii.md - 1),
-                        border: Border.all(color: context.accent, width: 2),
+              // A board in progress: how far it got, along the bottom edge.
+              if (started && !locked)
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  child: Container(
+                    height: 4,
+                    color: Colors.black.withValues(alpha: 0.45),
+                    alignment: Alignment.centerLeft,
+                    child: FractionallySizedBox(
+                      widthFactor: placedShare(progress!.layout!).clamp(0.06, 1.0),
+                      child: Container(color: context.accentFill),
+                    ),
+                  ),
+                ),
+              if (started && !locked)
+                Positioned(
+                  left: 6,
+                  bottom: 10,
+                  child: PhotoChip(child: Icon(AppIcons.playFill, size: 11, color: Colors.white)),
+                )
+              else if (completed)
+                Positioned(
+                  left: 6,
+                  bottom: 6,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+                    decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.45), borderRadius: BorderRadius.circular(Radii.pill)),
+                    child: Stars(count: progress!.stars, size: 10),
+                  ),
+                ),
+              // Today's outline sits just inside the clip so its corners follow
+              // the tile's radius exactly instead of being shaved by the clip.
+              if (puzzle.isToday)
+                Positioned.fill(
+                  child: IgnorePointer(
+                    child: Padding(
+                      padding: const EdgeInsets.all(1),
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(Radii.md - 1),
+                          border: Border.all(color: context.accent, width: 2),
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            if (completed)
-              Positioned(
-                left: 6,
-                bottom: 6,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 3),
-                  decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.45), borderRadius: BorderRadius.circular(Radii.pill)),
-                  child: Stars(count: progress!.stars, size: 10),
-                ),
-              ),
-          ],
-        ),
-      );
-    // The caption sits under the photo, like an album in Photos: two lines of
-    // real text instead of a clipped line on the picture. The photographer is
-    // credited where the picture is played (difficulty and game screens).
-    return Pressable(
-      onTap: onTap,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(child: photo),
-          const SizedBox(height: 6),
-          SizedBox(
-            height: 30,
-            // A day still to come keeps its title secret (the day badge says when).
-            child: dateLocked
-                ? null
-                : Text(
-                    puzzle.title,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(color: c.textPrimary, fontSize: TypeSize.caption, fontWeight: FontWeight.w600, height: 1.2, letterSpacing: -0.1),
-                  ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -814,7 +841,7 @@ class _PackSkeleton extends StatelessWidget {
             crossAxisCount: 3,
             mainAxisSpacing: 10,
             crossAxisSpacing: 10,
-            childAspectRatio: 0.62,
+            childAspectRatio: 0.75,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             children: [for (var i = 0; i < 9; i++) const Skeleton(radius: Radii.md)],
