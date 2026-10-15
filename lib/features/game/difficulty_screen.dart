@@ -378,7 +378,8 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
             context.pushReplacement('/game/${widget.puzzleId}/${BoardCode.toPath(spec.fullCode)}$flag');
           },
         ),
-        if (saved != null) ...[const SizedBox(height: 8), BigButton(label: 'Discard progress', kind: ButtonKind.ghost, icon: AppIcons.trash, onTap: () => _discard(saved, spec))],
+        // The way to throw the board away: small, red, and it always asks first.
+        if (saved != null) ...[const SizedBox(height: 4), _DiscardButton(onTap: () => _discard(saved, spec))],
         if (widget.fromQuick) ...[
           const SizedBox(height: 4),
           BigButton(
@@ -979,6 +980,34 @@ class _RewardsLine extends StatelessWidget {
         const SizedBox(width: 3),
         Text('+$piggy', style: style.copyWith(color: c.textPrimary, fontWeight: FontWeight.w700)),
       ],
+      ),
+    );
+  }
+}
+
+/// "Discard progress" under Continue: a quiet destructive text button (red,
+/// 44 pt to tap) instead of a second full-size button next to the primary.
+class _DiscardButton extends StatelessWidget {
+  const _DiscardButton({required this.onTap});
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final red = context.colors.danger;
+    return Pressable(
+      key: const ValueKey('discard-progress'),
+      onTap: onTap,
+      child: SizedBox(
+        height: 44,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(AppIcons.trash, size: 16, color: red),
+            const SizedBox(width: 6),
+            Text('Discard progress', style: TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w600, color: red)),
+          ],
+        ),
       ),
     );
   }
