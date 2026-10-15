@@ -224,7 +224,10 @@ Future<ProviderContainer> buildContainer(Map<String, dynamic> scene) async {
   final server = FakeServer();
   // Relative times in overrides: "NOW", "TODAY" (this morning), "DAYS:-2.5".
   dynamic when(dynamic v) {
+    if (v is List) return [for (final x in v) when(x)];
     if (v is! String) return v;
+    // Quest keys of the scene's day and week: "d:{day}:solve3", "{week}:solve10".
+    if (v.contains('{day}') || v.contains('{week}')) return v.replaceAll('{day}', Goals.dayKey(now)).replaceAll('{week}', Goals.weekKey(now));
     if (v == 'NOW') return iso(now);
     if (v == 'TODAY') return iso(DateTime(now.year, now.month, now.day, 0, 5));
     if (v.startsWith('DAYS:')) return iso(now.add(Duration(minutes: (double.parse(v.substring(5)) * 24 * 60).round())));
