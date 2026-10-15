@@ -293,7 +293,7 @@ class _LeaderboardState extends ConsumerState<_Leaderboard> {
               final p = list[i - 1];
               final rank = leaguePlace(list, i - 1);
               final isMe = p.userId == me;
-              // One grouped list (iOS inset style): rounded ends, hairlines between rows.
+              // One grouped list (iOS inset style): rounded ends, full-width hairlines between rows.
               final first = i == 1, last = i == list.length;
               return Pressable(
                 key: isMe ? _meKey : null,
@@ -307,7 +307,7 @@ class _LeaderboardState extends ConsumerState<_Leaderboard> {
                   child: Column(
                     children: [
                       _PlayerRow(rank: rank, profile: p, me: isMe),
-                      if (!last) Divider(height: 1, thickness: 1, indent: 96, color: c.stroke),
+                      if (!last) Divider(height: 1, thickness: 1, indent: _dividerIndent, color: c.stroke),
                     ],
                   ),
                 ),
@@ -461,7 +461,7 @@ class _FriendsState extends ConsumerState<_Friends> {
                   child: Column(
                     children: [
                       for (final (i, f) in list.where((f) => !_removed.contains(f.id)).indexed) ...[
-                        if (i > 0) Divider(height: 1, thickness: 1, indent: 58, color: c.stroke),
+                        if (i > 0) Divider(height: 1, thickness: 1, indent: _dividerIndent, color: c.stroke),
                         Dismissible(
                             key: ValueKey(f.id),
                             direction: DismissDirection.endToStart,
@@ -541,11 +541,11 @@ class _PlayerRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = profile;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 9, 16, 9),
+      padding: const EdgeInsets.fromLTRB(8, 9, 16, 9),
       child: Row(
         children: [
-          _RankBadge(rank: rank),
-          const SizedBox(width: 10),
+          _RankNumber(rank: rank),
+          const SizedBox(width: 8),
           AvatarCircle(avatarKey: p.avatar, size: 36),
           const SizedBox(width: 10),
           Expanded(
@@ -643,37 +643,23 @@ class _PlayerName extends StatelessWidget {
   }
 }
 
-/// League place in a disc. The top three are tinted with their medal colour and keep a dark number
-/// (white on gold and silver was about 2:1); the disc grows into a capsule for three- and four-digit
-/// places.
-class _RankBadge extends StatelessWidget {
-  const _RankBadge({required this.rank});
+/// Hairlines between league and friend rows run the full width of the list: with the place column
+/// in front of the avatar the rows read as one table, and an inset line looked cut in half.
+const double _dividerIndent = 0;
+
+/// A league place as plain figures in a fixed column, so the avatar is the only circle in a row
+/// (the medals live on the podium card). Places past 999 widen the column.
+class _RankNumber extends StatelessWidget {
+  const _RankNumber({required this.rank});
   final int rank;
   @override
-  Widget build(BuildContext context) {
-    final c = context.colors;
-    final dark = context.isDark;
-    // (fill, number) per medal; light and dark themes.
-    final medal = switch (rank) {
-      1 => dark ? (const Color(0x4DE0A200), const Color(0xFFF5C84A)) : (const Color(0x33E0A200), const Color(0xFF7A5600)),
-      2 => dark ? (const Color(0x40A3A8B5), const Color(0xFFD5D8E0)) : (const Color(0x40A3A8B5), const Color(0xFF4B505C)),
-      3 => dark ? (const Color(0x4DC27C4A), const Color(0xFFE5A577)) : (const Color(0x33C27C4A), const Color(0xFF7D4520)),
-      _ => null,
-    };
-    return Container(
-      constraints: const BoxConstraints(minWidth: 28),
-      height: 28,
-      padding: const EdgeInsets.symmetric(horizontal: 6),
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: medal?.$1 ?? c.boardBackground,
-        borderRadius: BorderRadius.circular(Radii.pill),
-        border: medal == null ? null : Border.all(color: medal.$2.withValues(alpha: 0.35), width: 1.5),
-      ),
-      child: Text(
-        '$rank',
-        style: TextStyle(fontWeight: medal != null ? FontWeight.w700 : FontWeight.w600, fontSize: TypeSize.footnote, color: medal?.$2 ?? c.textSecondary, fontFeatures: tabularFigures),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => ConstrainedBox(
+        constraints: const BoxConstraints(minWidth: 30),
+        child: Text(
+          formatCount(rank),
+          textAlign: TextAlign.center,
+          maxLines: 1,
+          style: TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.footnote, color: context.colors.textSecondary, fontFeatures: tabularFigures),
+        ),
+      );
 }
