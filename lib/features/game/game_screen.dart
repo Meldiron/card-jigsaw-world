@@ -1473,38 +1473,57 @@ class _CompletionOverlayState extends State<_CompletionOverlay> {
       ),
     ).animate().slideY(begin: 0.25, duration: 350.ms, curve: Curves.easeOutCubic).fadeIn(duration: 200.ms);
 
-    final results = Container(
-      color: c.canvas,
-      child: Column(
+    // The finished picture runs full-bleed from the very top of the screen
+    // (under a light status bar and a glass back button, like a pack's cover)
+    // down behind the results panel's rounded corners.
+    final top = MediaQuery.paddingOf(context).top;
+    final photo = GestureDetector(
+      onTap: _view,
+      child: Stack(
+        fit: StackFit.expand,
         children: [
-          Expanded(
-            child: SafeArea(
-              bottom: false,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
-                child: Center(
-                  child: GestureDetector(
-                    onTap: _view,
-                    child: Stack(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(Radii.lg),
-                          child: RawImage(image: widget.image, fit: BoxFit.contain, filterQuality: FilterQuality.medium),
-                        ),
-                        Positioned(
-                          right: 10,
-                          bottom: 10,
-                          child: _OverlayPill(icon: AppIcons.arrowUpLeftArrowDownRight, label: 'View picture', onTap: _view, small: true),
-                        ),
-                      ],
-                    ),
-                  ),
+          RawImage(image: widget.image, fit: BoxFit.cover, filterQuality: FilterQuality.medium),
+          // A soft shade under the status bar and the back button, so both read on bright pictures.
+          Positioned(
+            left: 0,
+            right: 0,
+            top: 0,
+            height: top + 72,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Colors.black.withValues(alpha: 0.36), Colors.transparent],
                 ),
               ),
             ),
           ),
-          panel,
+          Positioned(
+            left: 10,
+            top: top + 4,
+            child: PhotoButton(key: const ValueKey('completion-back'), icon: AppIcons.back, size: 38, semanticLabel: 'Back to pack', onTap: widget.onHome),
+          ),
+          Positioned(
+            right: 14,
+            // Clear of the panel's rounded corners, which the photo runs behind.
+            bottom: _CompletionLayout.overlap + 12,
+            child: _OverlayPill(icon: AppIcons.arrowUpLeftArrowDownRight, label: 'View picture', onTap: _view, small: true),
+          ),
         ],
+      ),
+    );
+    final results = AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light.copyWith(statusBarColor: Colors.transparent),
+      child: ColoredBox(
+        color: c.card,
+        child: CustomMultiChildLayout(
+          delegate: _CompletionLayout(minPhoto: top + 120),
+          children: [
+            LayoutId(id: _CompletionLayout.photo, child: photo),
+            LayoutId(id: _CompletionLayout.panel, child: panel),
+          ],
+        ),
       ),
     );
 
@@ -1569,6 +1588,32 @@ class _CompletionOverlayState extends State<_CompletionOverlay> {
       ),
     );
   }
+}
+
+/// The completion page: the results panel at the bottom at its own height
+/// (it scrolls inside when taller than the screen allows), the picture
+/// filling everything above it and running [overlap] pt behind the panel's
+/// rounded top corners.
+class _CompletionLayout extends MultiChildLayoutDelegate {
+  _CompletionLayout({required this.minPhoto});
+
+  /// The picture never gets shorter than this (status bar and a strip of photo).
+  final double minPhoto;
+
+  static const photo = 'photo';
+  static const panel = 'panel';
+  static const overlap = 28.0;
+
+  @override
+  void performLayout(Size size) {
+    final p = layoutChild(panel, BoxConstraints(minWidth: size.width, maxWidth: size.width, maxHeight: math.max(0, size.height - minPhoto)));
+    positionChild(panel, Offset(0, size.height - p.height));
+    layoutChild(photo, BoxConstraints.tight(Size(size.width, math.max(0, size.height - p.height + overlap))));
+    positionChild(photo, Offset.zero);
+  }
+
+  @override
+  bool shouldRelayout(_CompletionLayout old) => old.minPhoto != minPhoto;
 }
 
 /// Compact pill over the finished picture: frosted glass, or solid accent
