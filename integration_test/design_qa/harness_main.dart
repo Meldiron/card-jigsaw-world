@@ -14,6 +14,7 @@ import 'dart:io';
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
 import 'package:card_jigsaw_world/app.dart';
+import 'package:card_jigsaw_world/core/platform.dart';
 import 'package:card_jigsaw_world/core/sfx.dart';
 import 'package:card_jigsaw_world/data/local_store.dart';
 import 'package:card_jigsaw_world/data/purchases.dart';
@@ -323,6 +324,8 @@ Future<ProviderContainer> buildContainer(Map<String, dynamic> scene) async {
     purchaseServiceProvider.overrideWithValue(FakePurchaseService(up: store != 'down', products: fakeProducts)),
     feedbackRepositoryProvider.overrideWithValue(FakeFeedbackRepo()),
     if (scene['allOpen'] == true) openFeaturesProvider.overrideWithValue(OpenFeatures.all),
+    // "caps": "web": the web build's capabilities (no purchases, gift codes or widgets).
+    if (scene['caps'] == 'web') platformCapsProvider.overrideWithValue(PlatformCaps.web),
     // "prefs": {"reminders": true}: keep the switch on (the simulator has not granted notifications,
     // which would turn it off on start), so Settings shows the reminder rows.
     if ((scene['prefs'] as Map?)?['reminders'] == true) remindersProvider.overrideWith((ref) => _QuietReminders(ref)),
