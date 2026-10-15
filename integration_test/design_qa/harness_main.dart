@@ -27,6 +27,7 @@ import 'package:card_jigsaw_world/state/catalog_sync.dart' show CatalogTables;
 import 'package:card_jigsaw_world/state/profile.dart';
 import 'package:card_jigsaw_world/state/progress.dart';
 import 'package:card_jigsaw_world/state/purchases.dart';
+import 'package:card_jigsaw_world/state/reminders.dart';
 import 'package:card_jigsaw_world/state/rewards.dart';
 import 'package:card_jigsaw_world/state/settings.dart';
 import 'package:card_jigsaw_world/state/unlocks.dart';
@@ -34,6 +35,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
@@ -294,17 +296,47 @@ Future<ProviderContainer> buildContainer(Map<String, dynamic> scene) async {
       },
     )),
     uploadRepositoryProvider.overrideWithValue(FakeUploadRepo([
-      for (var i = 0; i < ((scene['myPuzzles'] as int?) ?? 0); i++) MyPuzzle(id: 'my-$i', fileId: 'file-$i', title: i.isEven ? 'Holiday $i' : 'Garden'),
+      // Titles as the app writes them on upload ('My photo <day>/<month>').
+      for (var i = 0; i < ((scene['myPuzzles'] as int?) ?? 0); i++) MyPuzzle(id: 'my-$i', fileId: 'file-$i', title: 'My photo ${12 - i % 9}/10'),
     ])),
     catalogRepositoryProvider.overrideWithValue(FakeCatalogRepo(SnapshotCatalogSource(catalogPath))),
     storeAvailableProvider.overrideWith((ref) async => store != 'down'),
     productsProvider.overrideWith((ref) async => store == 'down' ? const <String, ProductDetails>{} : fakeProducts),
     if (scene['allOpen'] == true) openFeaturesProvider.overrideWithValue(OpenFeatures.all),
+    // "prefs": {"reminders": true}: keep the switch on (the simulator has not granted notifications,
+    // which would turn it off on start), so Settings shows the reminder rows.
+    if ((scene['prefs'] as Map?)?['reminders'] == true) remindersProvider.overrideWith((ref) => _QuietReminders(ref)),
     // "catalog": "down": the catalogue cannot be read (first launch offline); "loading": never arrives.
     if (scene['catalog'] == 'down') catalogProvider.overrideWith((ref) async => throw AppwriteException('design QA: offline', 0)),
     if (scene['catalog'] == 'loading') catalogProvider.overrideWith((ref) => Completer<CatalogTables>().future),
   ]);
   return c;
+}
+
+class _QuietReminders extends RemindersController {
+  _QuietReminders(super.ref);
+  @override
+  Future<void> refresh() async {}
+}
+
+/// My Puzzles photos are private files the harness cannot read: cache catalogue pictures under
+/// their private URLs (grid and game), so the screen shows real photos instead of grey boxes.
+Future<void> _seedMyPhotos(Map<String, dynamic> scene, ProviderContainer c) async {
+  final n = (scene['myPuzzles'] as int?) ?? 0;
+  if (n == 0) return;
+  try {
+    final puzzles = (await c.read(allPuzzlesProvider.future)).where((p) => p.thumbUrl.isNotEmpty).toList();
+    if (puzzles.isEmpty) return;
+    final cache = DefaultCacheManager();
+    for (var i = 0; i < n; i++) {
+      final url = UploadRepository.imageUrl('file-$i');
+      if (await cache.getFileFromCache(url) != null) continue;
+      final src = await cache.getSingleFile(puzzles[(i * 37 + 11) % puzzles.length].thumbUrl);
+      await cache.putFile(url, await src.readAsBytes(), fileExtension: 'jpg');
+    }
+  } catch (e) {
+    debugPrint('design QA: my photos not seeded: $e');
+  }
 }
 
 /// Goes to the scene's place and plays its actions.
@@ -314,6 +346,7 @@ Future<void> play(Map<String, dynamic> scene, ProviderContainer c, bool Function
     await c.read(progressProvider.future).timeout(const Duration(seconds: 8));
     await c.read(packsProvider.future).timeout(const Duration(seconds: 15));
   } catch (_) {}
+  await _seedMyPhotos(scene, c);
   await Future<void>.delayed(const Duration(milliseconds: 300));
   final router = c.read(routerProvider);
   final route = scene['route'] as String?;
