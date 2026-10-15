@@ -82,11 +82,27 @@ final hooks = <String, Hook>{
         device: _row(a['puzzle'] as String? ?? 'x', layout: [for (var i = 0; i < 16; i++) i < 9 ? i : 24 - i], moves: 31, seconds: 260),
         other: _row(a['puzzle'] as String? ?? 'x', layout: [for (var i = 0; i < 16; i++) i < 4 ? i : 19 - i], moves: 12, seconds: 95),
       ),
-  'merge': (ctx, c, a) => showMergeSheet(
-        ctx,
-        device: SaveSnapshot(userId: 'dqa-player', profile: {'coins': 1240, 'tickets': 4, 'hints': 2, 'xp': 2200, 'puzzlesCompleted': 17, 'streak': 3}, progress: const []),
-        account: SaveSnapshot(userId: 'acc', profile: {'coins': 5400, 'tickets': 11, 'hints': 6, 'xp': 9100, 'puzzlesCompleted': 88, 'streak': 12}, progress: const [], updatedAt: DateTime.now().subtract(const Duration(days: 2))),
+  // Realistic saves: the same player on both sides (a guest who signs in to their own older account).
+  'merge': (ctx, c, a) {
+    List<Map<String, dynamic>> solved(int n, int days) => [
+          for (var i = 0; i < n; i++)
+            {'puzzleId': 'z$i', 'completed': true, 'stars': 1 + i % 3, '\$updatedAt': DateTime.now().subtract(Duration(days: days, hours: i)).toIso8601String()},
+        ];
+    return showMergeSheet(
+      ctx,
+      device: SaveSnapshot(
+        userId: 'dqa-player',
+        profile: {'displayName': a['device'] ?? 'Mia', 'avatar': 'leaf', 'level': 5, 'coins': 1240, 'tickets': 4, 'hints': 2, 'xp': 880, 'streak': 3},
+        progress: solved(17, 0),
       ),
+      account: SaveSnapshot(
+        userId: 'acc',
+        profile: {'displayName': a['account'] ?? 'Mia', 'avatar': 'fox', 'level': 9, 'coins': 5400, 'tickets': 11, 'hints': 6, 'xp': 2310, 'streak': 12},
+        progress: solved(41, 2),
+        updatedAt: DateTime.now().subtract(const Duration(days: 2)),
+      ),
+    );
+  },
   // Types into the focused text field (else the first one on screen): {"hook": "type", "args": {"text": "owl"}}.
   'type': (ctx, c, a) async {
     final fields = <EditableTextState>[];
