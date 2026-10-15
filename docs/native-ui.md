@@ -20,6 +20,7 @@ What is used where:
 | Tab headers (Home, Library, Events, Profile) | `GlassSliverHeader` / `HeaderBar`: pinned, transparent while the list is at the top, glass with a hairline once content scrolls under. Same rule as `CupertinoNavigationBar.automaticBackgroundVisibility`. |
 | App bars on pushed pages (Settings, Store, Account, My Puzzles, Difficulty, Wheel) | `GlassAppBar` with `extendBodyBehindAppBar: true`. Transparent at rest, glass when scrolled under. |
 | Pack cover | `SliverAppBar` whose collapsed state turns into glass over the blurred top of the cover. |
+| Segmented switches (Social tabs, Account form, Settings > Theme) | `AppSegmentedControl` in `lib/widgets/ui.dart`: the iOS 26 shape drawn in Flutter. Capsule track in the system tertiary fill, glass thumb (white in light, light grey in dark, brighter rim on its upper edge) that springs to the segment, stretches while it travels, lifts under the finger and can be dragged. Use it for every new switch. |
 | Toasts | Material floating `SnackBar`, shown through the root `ScaffoldMessenger` so it sits on the outermost Scaffold: above the floating tab bar and above sheet barriers. |
 
 ## Why not a package
