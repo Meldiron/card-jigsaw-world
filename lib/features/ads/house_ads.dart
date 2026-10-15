@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -15,6 +16,7 @@ import '../../data/purchases.dart';
 import '../../models/models.dart';
 import '../../state/catalog.dart';
 import '../../state/profile.dart';
+import '../../state/purchases.dart';
 import '../../state/settings.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
@@ -73,6 +75,7 @@ class Creative {
     required this.cta,
     required this.route,
     this.price,
+    this.productId,
   });
   final String id;
   final CreativeKind kind;
@@ -81,6 +84,19 @@ class Creative {
   final String cta;
   final String route;
   final String? price;
+
+  /// The App Store product the [price] line is about, when it names money.
+  final String? productId;
+
+  /// The price line to show: the App Store's own price for [productId] (in the
+  /// player's currency), never the US placeholder; null while the App Store has
+  /// not given it. Creatives without a product keep their free text ("7 days free").
+  String? priceLine(Map<String, String> appStorePrices) {
+    if (productId == null) return price;
+    final local = appStorePrices[productId];
+    if (local == null) return null;
+    return kind == CreativeKind.vip ? StoreProducts.vipTrialLine(local) : local;
+  }
 
   /// The CTA opens the store to buy something. On web, where nothing can be
   /// bought, these CTAs show the "available on iPhone" toast instead.
@@ -132,7 +148,7 @@ int _dailyMonthsSoFar([DateTime? now]) {
 /// ([StoreProducts]), the pack price policy and [Economy], so a change to a
 /// bundle or a price cannot leave an ad promising the old numbers.
 final houseCreatives = <Creative>[
-  Creative(id: 'vip-all', kind: CreativeKind.vip, headline: 'Every pack. No breaks.', body: 'VIP opens every pack and every past month, and removes these cards.', cta: 'Start free trial', route: '/store', price: StoreProducts.vipTrialLine()),
+  Creative(id: 'vip-all', kind: CreativeKind.vip, headline: 'Every pack. No breaks.', body: 'VIP opens every pack and every past month, and removes these cards.', cta: 'Start free trial', route: '/store', price: StoreProducts.vipTrialLine(), productId: ProductIds.vipMonthly),
   Creative(id: 'vip-months', kind: CreativeKind.vip, headline: 'Three years of daily puzzles', body: 'All ${_dailyMonthsSoFar()} monthly albums are included with VIP.', cta: 'Go VIP', route: '/store', price: '${StoreProducts.vipTrialDays} days free'),
   _coinsCreative('coins-3000', ProductIds.coins3000, headline: 'Running low on coins?', body: (n) {
     final packs = n ~/ PackPricePolicy.standardPackCoins;
@@ -147,8 +163,9 @@ final houseCreatives = <Creative>[
     cta: 'Get ${_tickets.label}',
     route: '/store',
     price: StoreProducts.price(ProductIds.tickets5),
+    productId: ProductIds.tickets5,
   ),
-  Creative(id: 'hints-15', kind: CreativeKind.hints, headline: 'Stuck on a card?', body: '${groupThousands(_hints.hints)} hints show exactly where a card belongs.', cta: 'Get ${_hints.label}', route: '/store', price: StoreProducts.price(ProductIds.hints15)),
+  Creative(id: 'hints-15', kind: CreativeKind.hints, headline: 'Stuck on a card?', body: '${groupThousands(_hints.hints)} hints show exactly where a card belongs.', cta: 'Get ${_hints.label}', route: '/store', price: StoreProducts.price(ProductIds.hints15), productId: ProductIds.hints15),
   Creative(id: 'piggy', kind: CreativeKind.piggy, headline: 'Your piggy bank is filling up', body: 'Every finished puzzle adds ${Economy.piggyPerPuzzle} coins, up to ${Profile.piggyCapacity}. Open it with one ticket.', cta: 'See piggy bank', route: '/home'),
   Creative(id: 'monthly', kind: CreativeKind.monthly, headline: 'One new picture every day', body: 'This month’s album is free. Past months come with VIP.', cta: 'Open this month', route: '/library'),
   Creative(id: 'events', kind: CreativeKind.event, headline: 'A new world-day event every week', body: 'Themed packs that open for seven days. Finish every picture for a ticket.', cta: 'See events', route: '/events'),
@@ -159,7 +176,7 @@ ProductGrant get _hints => StoreProducts.grant(ProductIds.hints15);
 
 Creative _coinsCreative(String id, String productId, {required String headline, required String Function(int coins) body}) {
   final grant = StoreProducts.grant(productId);
-  return Creative(id: id, kind: CreativeKind.coins, headline: headline, body: body(grant.coins), cta: 'Get ${grant.label}', route: '/store', price: StoreProducts.price(productId));
+  return Creative(id: id, kind: CreativeKind.coins, headline: headline, body: body(grant.coins), cta: 'Get ${grant.label}', route: '/store', price: StoreProducts.price(productId), productId: productId);
 }
 
 /// Small counts in words ("three packs"), larger ones as digits.
@@ -342,91 +359,159 @@ class _HouseAdScreenState extends ConsumerState<HouseAdScreen> {
   Widget build(BuildContext context) {
     final c = widget.creative;
     final progress = 1 - _left / _total;
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          if (widget.coverUrl != null) NetImage(url: widget.coverUrl!.url, blurhash: widget.coverUrl!.hash) else Container(color: const Color(0xFF17171C)),
-          DecoratedBox(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                stops: const [0, 0.45, 1],
-                colors: [Colors.black.withValues(alpha: 0.35), Colors.black.withValues(alpha: 0.15), Colors.black.withValues(alpha: 0.92)],
+    final priceLine = ref.watch(platformCapsProvider).purchases ? c.priceLine(_appStorePrices(ref)) : null;
+    // Light status bar: the card is dark (scrim or ground) whatever the app theme.
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light,
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        body: Stack(
+          fit: StackFit.expand,
+          children: [
+            if (widget.coverUrl != null) NetImage(url: widget.coverUrl!.url, blurhash: widget.coverUrl!.hash) else Container(color: const Color(0xFF17171C)),
+            // A scrim that is light at the top (the chips) and nearly solid under the
+            // copy, whatever the picture: a white church or a beach must not wash it out.
+            DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  stops: const [0, 0.2, 0.38, 0.55, 0.7, 1],
+                  colors: [
+                    Colors.black.withValues(alpha: 0.4),
+                    Colors.black.withValues(alpha: 0.05),
+                    Colors.black.withValues(alpha: 0.12),
+                    Colors.black.withValues(alpha: 0.62),
+                    Colors.black.withValues(alpha: 0.82),
+                    Colors.black.withValues(alpha: 0.94),
+                  ],
+                ),
               ),
             ),
-          ),
-          SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-                  child: Row(
-                    children: [
-                      const Chip2(label: 'Offer', onImage: true),
-                      const Spacer(),
-                      _CountdownChip(
-                        left: _left,
-                        progress: progress,
-                        done: _done,
-                        label: widget.rewarded ? (_done ? 'Reward ready' : 'Reward in ${_left}s') : (_done ? 'Close' : 'Skip in ${_left}s'),
-                        onClose: _close,
-                      ),
-                    ],
-                  ),
-                ),
-                const Spacer(),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _KindBadge(kind: c.kind),
-                      const SizedBox(height: 14),
-                      Text(c.headline, style: Theme.of(context).textTheme.displaySmall?.copyWith(color: Colors.white)).animate().fadeIn(delay: 150.ms).slideY(begin: 0.1),
-                      const SizedBox(height: 8),
-                      Text(c.body, style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 16, height: 1.4)).animate().fadeIn(delay: 250.ms),
-                      // No prices on web, where nothing can be bought.
-                      if (c.price != null && ref.watch(platformCapsProvider).purchases) ...[
-                        const SizedBox(height: 8),
-                        Text(c.price!, style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 13, fontWeight: FontWeight.w600)),
-                      ],
-                      const SizedBox(height: 20),
-                      _OfferButton(label: c.cta, onTap: _cta),
-                      if (widget.rewarded) ...[
-                        const SizedBox(height: 10),
-                        AnimatedOpacity(
-                          opacity: _done ? 1 : 0.55,
-                          duration: const Duration(milliseconds: 250),
-                          child: BigButton(
-                            label: _done ? 'Collect ${widget.rewardCoins} coins' : 'Collect ${widget.rewardCoins} coins in ${_left}s',
-                            kind: ButtonKind.primary,
-                            icon: _done ? Icons.check_rounded : null,
-                            onTap: _done ? () => Navigator.of(context).pop(true) : null,
-                          ),
+            SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                    child: Row(
+                      children: [
+                        const Chip2(label: 'Offer', onImage: true),
+                        const Spacer(),
+                        _CountdownChip(
+                          left: _left,
+                          progress: progress,
+                          done: _done,
+                          label: widget.rewarded ? (_done ? 'Reward ready' : 'Reward in ${_left}s') : (_done ? 'Close' : 'Skip in ${_left}s'),
+                          onClose: _close,
                         ),
-                      ] else ...[
-                        const SizedBox(height: 10),
-                        Center(
-                          child: Pressable(
-                            onTap: _done ? _close : null,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: Text(_done ? 'No thanks' : 'Continue in ${_left}s', style: TextStyle(color: Colors.white.withValues(alpha: _done ? 0.9 : 0.5), fontWeight: FontWeight.w600)),
+                      ],
+                    ),
+                  ),
+                  const Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _KindBadge(kind: c.kind),
+                        const SizedBox(height: 14),
+                        Text(c.headline, style: Theme.of(context).textTheme.displaySmall?.copyWith(color: Colors.white, shadows: _textShadow)).animate().fadeIn(delay: 150.ms).slideY(begin: 0.1),
+                        const SizedBox(height: 8),
+                        Text(c.body, style: TextStyle(color: Colors.white.withValues(alpha: 0.9), fontSize: 16, height: 1.4, shadows: _textShadow)).animate().fadeIn(delay: 250.ms),
+                        // No prices on web, where nothing can be bought, and only the App Store's own.
+                        if (priceLine != null) ...[
+                          const SizedBox(height: 8),
+                          Text(priceLine, style: TextStyle(color: Colors.white.withValues(alpha: 0.75), fontSize: 13, fontWeight: FontWeight.w600)),
+                        ],
+                        const SizedBox(height: 20),
+                        _OfferButton(label: c.cta, onTap: _cta),
+                        if (widget.rewarded) ...[
+                          const SizedBox(height: 10),
+                          _CollectButton(coins: widget.rewardCoins, left: _left, progress: progress, done: _done, onTap: () => Navigator.of(context).pop(true)),
+                        ] else ...[
+                          const SizedBox(height: 10),
+                          // The countdown lives in the chip at the top; this link appears when it ends.
+                          Center(
+                            child: AnimatedOpacity(
+                              opacity: _done ? 1 : 0,
+                              duration: const Duration(milliseconds: 250),
+                              child: Pressable(
+                                onTap: _done ? _close : null,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Text('No thanks', style: TextStyle(color: Colors.white.withValues(alpha: 0.9), fontWeight: FontWeight.w600)),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                        ],
                       ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// A soft shadow that keeps white copy apart from a busy picture.
+const _textShadow = [Shadow(color: Color(0x66000000), blurRadius: 12)];
+
+/// App Store prices by product id (empty until they load, or when the App Store is away).
+Map<String, String> _appStorePrices(WidgetRef ref) => {
+      for (final e in (ref.watch(productsProvider).value ?? const {}).entries) e.key: e.value.price,
+    };
+
+/// The reward button of the rewarded card. While the countdown runs it fills from
+/// left to right with the time, and says how long is left in legible white; at the
+/// end it is a plain primary button.
+class _CollectButton extends StatelessWidget {
+  const _CollectButton({required this.coins, required this.left, required this.progress, required this.done, required this.onTap});
+  final int coins;
+  final int left;
+  final double progress;
+  final bool done;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    const radius = BorderRadius.all(Radius.circular(Radii.md));
+    return Semantics(
+      button: true,
+      enabled: done,
+      child: Pressable(
+        onTap: done ? onTap : null,
+        child: ClipRRect(
+          borderRadius: radius,
+          child: SizedBox(
+            height: 52,
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                ColoredBox(color: Colors.white.withValues(alpha: 0.14)),
+                TweenAnimationBuilder<double>(
+                  tween: Tween(end: done ? 1 : progress),
+                  duration: const Duration(milliseconds: 950),
+                  builder: (_, v, _) => FractionallySizedBox(alignment: Alignment.centerLeft, widthFactor: v, child: const ColoredBox(color: Brand.accent)),
+                ),
+                Center(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (done) ...[const Icon(Icons.check_rounded, color: Colors.white, size: 19), const SizedBox(width: 8)],
+                      Text(done ? 'Collect $coins coins' : 'Collect $coins coins in ${left}s', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600, letterSpacing: -0.2)),
                     ],
                   ),
                 ),
               ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
@@ -478,8 +563,8 @@ class _CountdownChip extends StatelessWidget {
             Text(label, style: const TextStyle(color: Colors.white, fontSize: 12.5, fontWeight: FontWeight.w600)),
             const SizedBox(width: 8),
             SizedBox(
-              width: 26,
-              height: 26,
+              width: 20,
+              height: 20,
               child: Stack(
                 alignment: Alignment.center,
                 children: [
@@ -489,8 +574,8 @@ class _CountdownChip extends StatelessWidget {
                       duration: const Duration(milliseconds: 900),
                       builder: (_, v, _) => CircularProgressIndicator(value: v, strokeWidth: 2.5, color: Colors.white, backgroundColor: Colors.white24),
                     ),
+                  // The label already says the seconds; the ring only shows the time running.
                   Icon(done ? Icons.close_rounded : null, size: 16, color: Colors.white),
-                  if (!done) Text('$left', style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w700)),
                 ],
               ),
             ),
@@ -506,16 +591,24 @@ class _KindBadge extends StatelessWidget {
   final CreativeKind kind;
   @override
   Widget build(BuildContext context) {
-    final (IconData icon, String label) = switch (kind) {
-      CreativeKind.vip => (AppIcons.vip, 'VIP'),
-      CreativeKind.coins => (Icons.monetization_on_rounded, 'Coins'),
-      CreativeKind.tickets => (Icons.confirmation_number_rounded, 'Tickets'),
-      CreativeKind.hints => (AppIcons.hint, 'Hints'),
-      CreativeKind.piggy => (AppIcons.piggy, 'Piggy bank'),
-      CreativeKind.monthly => (AppIcons.dailyPuzzle, 'Daily puzzles'),
-      CreativeKind.event => (AppIcons.events, 'Events'),
+    // Coins, tickets and hints carry the game's own marks, as everywhere else.
+    final (Widget mark, String label) = switch (kind) {
+      CreativeKind.vip => (const Icon(AppIcons.vip, size: 13, color: Brand.coin), 'VIP'),
+      CreativeKind.coins => (const CoinIcon(size: 14), 'Coins'),
+      CreativeKind.tickets => (const TicketIcon(size: 14), 'Tickets'),
+      CreativeKind.hints => (const HintIcon(size: 14), 'Hints'),
+      CreativeKind.piggy => (const Icon(AppIcons.piggy, size: 13, color: Colors.white), 'Piggy bank'),
+      CreativeKind.monthly => (const Icon(AppIcons.dailyPuzzle, size: 13, color: Colors.white), 'Daily puzzles'),
+      CreativeKind.event => (const Icon(AppIcons.events, size: 13, color: Colors.white), 'Events'),
     };
-    return Chip2(label: label, icon: icon, onImage: true);
+    return Container(
+      padding: const EdgeInsets.fromLTRB(8, 5, 10, 5),
+      decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.45), borderRadius: BorderRadius.circular(999)),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [mark, const SizedBox(width: 5), Text(label, style: const TextStyle(color: Colors.white, fontSize: 11.5, fontWeight: FontWeight.w600))],
+      ),
+    );
   }
 }
 
@@ -537,7 +630,7 @@ class _HouseBannerState extends ConsumerState<HouseBanner> {
     _creative ??= houseCreatives.firstWhere((c) => c.kind == CreativeKind.vip);
     final c = _creative!;
     final colors = context.colors;
-    final price = ((ref.watch(platformCapsProvider).purchases ? c.price : null) ?? c.body).replaceAll('/', '\u2060/\u2060');
+    final price = ((ref.watch(platformCapsProvider).purchases ? c.priceLine(_appStorePrices(ref)) : null) ?? c.body).replaceAll('/', '\u2060/\u2060');
     // A quiet card like the others on Home: gold only on the crown, the action in cobalt, the price
     // in full (word joiners keep "$2.99/month" together), and "Not now" instead of a small cross.
     return Padding(
@@ -549,7 +642,8 @@ class _HouseBannerState extends ConsumerState<HouseBanner> {
           children: [
             Row(
               children: [
-                IconTile(icon: AppIcons.vip, size: 36, radius: 10, color: Brand.coin.withValues(alpha: 0.16), iconColor: Brand.coinDeep),
+                // Same crown tile as the Store's VIP card (102 D), smaller.
+                IconTile(icon: AppIcons.vip, size: 36, radius: 10, color: Brand.coin.withValues(alpha: context.isDark ? 0.18 : 0.14), iconColor: context.isDark ? Brand.coin : Brand.coinDeep),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(

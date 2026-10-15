@@ -44,7 +44,7 @@ class _NoStore extends PurchaseService {
   Future<Map<String, ProductDetails>> queryProducts() async => const {};
 }
 
-Future<Widget> _app(Widget home, {required PlatformCaps caps}) async {
+Future<Widget> _app(Widget home, {required PlatformCaps caps, Map<String, ProductDetails> products = const {}}) async {
   SharedPreferences.setMockInitialValues({'onboarded': true});
   final store = await LocalStore.open();
   return ProviderScope(
@@ -54,8 +54,8 @@ Future<Widget> _app(Widget home, {required PlatformCaps caps}) async {
       profileProvider.overrideWith(_GuestProfile.new),
       isGuestProvider.overrideWithValue(true),
       purchaseServiceProvider.overrideWith((ref) => _NoStore()),
-      storeAvailableProvider.overrideWith((ref) => false),
-      productsProvider.overrideWith((ref) => const <String, ProductDetails>{}),
+      storeAvailableProvider.overrideWith((ref) => products.isNotEmpty),
+      productsProvider.overrideWith((ref) => products),
     ],
     child: MaterialApp(theme: AppTheme.light(), home: home),
   );
@@ -189,7 +189,12 @@ void main() {
     });
 
     testWidgets('on iOS the grids and buy buttons are back', (tester) async {
-      await tester.pumpWidget(await _app(const StoreScreen(), caps: PlatformCaps.ios));
+      // Prices from the App Store: without them the Store says it is not responding (store_screen_test).
+      final products = {
+        for (final id in [...ProductIds.consumables, ProductIds.vipMonthly, ProductIds.vipYearly])
+          id: ProductDetails(id: id, title: id, description: '', price: StoreProducts.price(id), rawPrice: double.parse(StoreProducts.usdPrices[id]!), currencyCode: 'USD'),
+      };
+      await tester.pumpWidget(await _app(const StoreScreen(), caps: PlatformCaps.ios, products: products));
       await tester.pumpAndSettle();
       expect(find.text(StoreWebNotice.message), findsNothing);
       expect(find.text(StoreProducts.grant(ProductIds.coins1000).label), findsOneWidget);

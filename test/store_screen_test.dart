@@ -97,12 +97,14 @@ void main() {
     );
   }
 
-  testWidgets('tiles show the catalogue amounts and fallback prices', (tester) async {
+  testWidgets('without App Store prices the tiles show the amounts, no placeholder price, and the Store says why', (tester) async {
     await _pumpStore(tester);
     for (final id in [ProductIds.coins1000, ProductIds.coins3000]) {
       expect(find.text(StoreProducts.grant(id).label), findsOneWidget, reason: id);
     }
-    expect(find.text(StoreProducts.price(ProductIds.coins3000)), findsOneWidget);
+    expect(find.text(StoreProducts.price(ProductIds.coins3000)), findsNothing);
+    expect(find.text('Unavailable'), findsWidgets);
+    expect(find.text('The App Store is not responding'), findsOneWidget);
     expect(find.text('+${StoreProducts.coinBonusPercent(ProductIds.coins5500)}%'), findsOneWidget);
   });
 

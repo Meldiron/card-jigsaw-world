@@ -635,7 +635,8 @@ Future<T?> showAppSheet<T>(BuildContext context, {required WidgetBuilder builder
     barrierColor: Colors.black.withValues(alpha: 0.32),
     builder: (ctx) => GlassSheet(
       grabber: dismissible,
-      child: Padding(padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(ctx).bottom), child: builder(ctx)),
+      bottomInset: MediaQuery.viewInsetsOf(ctx).bottom,
+      child: builder(ctx),
     ),
   );
 }

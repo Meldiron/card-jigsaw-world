@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../core/haptics.dart';
 import '../../core/sfx.dart';
@@ -27,8 +28,6 @@ class PiggySheet extends ConsumerWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const IconTile(icon: AppIcons.piggy, size: 64, radius: 20),
-          const SizedBox(height: 12),
           Text('Piggy bank', style: Theme.of(context).textTheme.headlineMedium),
           const SizedBox(height: 4),
           Text(
@@ -37,23 +36,52 @@ class PiggySheet extends ConsumerWidget {
             style: TextStyle(color: c.textSecondary),
           ),
           const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Padding(padding: EdgeInsets.only(right: 8), child: CoinIcon(size: 26)),
-              AnimatedCounter(value: coins, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 40, letterSpacing: -1)),
-              Text(' / ${Profile.piggyCapacity}', style: TextStyle(fontWeight: FontWeight.w500, color: c.textSecondary)),
-            ],
+          // The bank itself: a ring that fills with the coins inside, the amount in its middle.
+          SizedBox.square(
+            dimension: 148,
+            child: TweenAnimationBuilder<double>(
+              tween: Tween(end: (coins / Profile.piggyCapacity).clamp(0.0, 1.0)),
+              duration: const Duration(milliseconds: 700),
+              curve: Curves.easeOutCubic,
+              builder: (context, v, child) => CustomPaint(painter: _RingPainter(value: v, track: c.stroke, fill: context.accent), child: child),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(AppIcons.piggy, size: 22, color: context.accent),
+                  const SizedBox(height: 2),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const CoinIcon(size: 20),
+                      const SizedBox(width: 5),
+                      AnimatedCounter(value: coins, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 32, letterSpacing: -0.8)),
+                    ],
+                  ),
+                  Text('of ${Profile.piggyCapacity}', style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: c.textSecondary)),
+                ],
+              ),
+            ),
           ),
-          const SizedBox(height: 10),
-          ProgressBar(value: coins / Profile.piggyCapacity, height: 10),
+          const SizedBox(height: 4),
           const SizedBox(height: 8),
-          Text(full ? 'Full. Open it to keep collecting.' : 'Keep solving to fill it', style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: full ? context.accent : c.textTertiary)),
+          Text(full ? 'Full. Open it to keep collecting.' : (coins == 0 ? 'Solve a picture to drop in the first ${Economy.piggyPerPuzzle} coins.' : 'Keep solving to fill it'), style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: full ? context.accent : c.textTertiary)),
           const SizedBox(height: 20),
+          // One clear state each: nothing inside (no button, it says how it fills), not enough
+          // tickets (the way to get one), or ready to open.
           if (coins == 0)
-            const BigButton(label: 'Nothing inside yet')
-          else
+            const SizedBox.shrink()
+          else if (tickets < Economy.piggyOpenTickets) ...[
+            BigButton(label: 'Get tickets', onTap: () {
+              Navigator.pop(context);
+              context.push('/store');
+            }),
+            const SizedBox(height: 10),
+            Text(
+              'Opening costs ${Economy.piggyOpenTickets} ticket. You have $tickets. Weekly quests, level-ups and events give tickets too.',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: c.textSecondary),
+            ),
+          ] else ...[
             BigButton.cost(
               label: 'Open for',
               currency: Currency.tickets,
@@ -71,16 +99,38 @@ class PiggySheet extends ConsumerWidget {
                       }
                     },
             ),
-          const SizedBox(height: 10),
-          Text(
-            tickets >= Economy.piggyOpenTickets
-                ? 'You have $tickets ticket${tickets == 1 ? '' : 's'}'
-                : 'You have $tickets tickets. Earn tickets from weekly quests, level-ups and events.',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: c.textSecondary),
-          ),
+            const SizedBox(height: 10),
+            Text('You have $tickets ticket${tickets == 1 ? '' : 's'}', textAlign: TextAlign.center, style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: c.textSecondary)),
+          ],
         ],
       ),
     );
   }
+}
+
+class _RingPainter extends CustomPainter {
+  _RingPainter({required this.value, required this.track, required this.fill});
+  final double value;
+  final Color track;
+  final Color fill;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    const stroke = 10.0;
+    final rect = Rect.fromCircle(center: size.center(Offset.zero), radius: size.width / 2 - stroke / 2);
+    canvas.drawArc(rect, 0, 6.283185307179586, false, Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = stroke
+      ..color = track);
+    if (value > 0) {
+      canvas.drawArc(rect, -1.5707963267948966, 6.283185307179586 * value, false, Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = stroke
+        ..strokeCap = StrokeCap.round
+        ..color = fill);
+    }
+  }
+
+  @override
+  bool shouldRepaint(_RingPainter old) => old.value != value || old.track != track || old.fill != fill;
 }

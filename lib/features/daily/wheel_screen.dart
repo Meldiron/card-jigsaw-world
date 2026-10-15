@@ -11,6 +11,8 @@ import 'package:go_router/go_router.dart';
 import '../../core/haptics.dart';
 import '../../core/sfx.dart';
 import '../../core/theme/tokens.dart';
+import '../../models/models.dart';
+import '../../state/catalog.dart';
 import '../../state/profile.dart';
 import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
@@ -118,12 +120,13 @@ Future<void> showWheelOdds(BuildContext context) => showAppSheet(
           padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Lucky Wheel odds', style: Theme.of(ctx).textTheme.headlineSmall),
-              const SizedBox(height: 2),
+              // Centred like the other sheets (daily gift, piggy bank).
+              Text('Lucky Wheel odds', textAlign: TextAlign.center, style: Theme.of(ctx).textTheme.headlineSmall),
+              const SizedBox(height: 4),
               Text(
                 'Every spin costs ${Economy.wheelSpinTickets} ticket and pays one prize. Each spin is drawn on its own with these chances.',
+                textAlign: TextAlign.center,
                 style: TextStyle(color: c.textSecondary, fontSize: 13.5, height: 1.35),
               ),
               const SizedBox(height: 14),
@@ -137,9 +140,13 @@ Future<void> showWheelOdds(BuildContext context) => showAppSheet(
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
                         child: Row(
                           children: [
-                            Amount(currency: odds[i].segment.kind, value: odds[i].segment.amount, size: 18, fontSize: 15),
-                            if (odds[i].segment.name != null) ...[const SizedBox(width: 5), Text(odds[i].segment.name!, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600))],
-                            if (odds[i].segment.jackpot) ...[const SizedBox(width: 8), Text('Jackpot', style: TextStyle(color: c.textSecondary, fontSize: 13))],
+                            // Mark, then the prize in words at one weight: "60 coins", "2 Hints".
+                            currencyIcon(odds[i].segment.kind, size: 20),
+                            const SizedBox(width: 10),
+                            Text('${odds[i].segment.amount}', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, fontFeatures: [FontFeature.tabularFigures()])),
+                            const SizedBox(width: 4),
+                            Text(odds[i].segment.name ?? 'coins', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+                            if (odds[i].segment.jackpot) ...[const SizedBox(width: 8), Chip2(label: 'Jackpot', color: Brand.coin.withValues(alpha: 0.16), foreground: ctx.isDark ? Brand.coin : Brand.coinDeep)],
                             const Spacer(),
                             Text(formatOdds(odds[i].percent), style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15, fontFeatures: [FontFeature.tabularFigures()])),
                           ],
@@ -172,6 +179,7 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
   bool _spinning = false;
   WheelSegment? _result;
   int _lastTick = -1;
+  int _spins = 0;
 
   @override
   void initState() {
@@ -240,6 +248,7 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
       setState(() {
         _spinning = false;
         _result = won;
+        _spins++;
       });
     });
   }
@@ -252,27 +261,28 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
     final canSpin = tickets >= Economy.wheelSpinTickets && !_spinning;
     final jackpot = _result?.jackpot ?? false;
     return Scaffold(
+      // The ticket balance sits in the bar, as in the Store, so the wheel gets the height.
       appBar: GlassAppBar(
         title: const Text('Lucky Wheel'),
         leading: Padding(padding: const EdgeInsets.only(left: 12), child: RoundIconButton(icon: CupertinoIcons.xmark, size: 38, onTap: () => context.pop())),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: CurrencyPill(currency: Currency.tickets, value: tickets, compact: true, onAdd: () => context.push('/store')),
+          ),
+        ],
       ),
       body: SafeArea(
         child: Column(
           children: [
             const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Your Tickets', style: TextStyle(color: c.textSecondary)),
-                const SizedBox(width: 8),
-                Amount(currency: Currency.tickets, value: tickets, size: 16),
-              ],
-            ),
             Expanded(
               child: Center(
                 child: LayoutBuilder(
                   builder: (_, cons) {
-                    final size = math.min(cons.maxWidth - 48, 340.0);
+                    // The wheel fits the space left in both directions: on an SE the result
+                    // card and "Get tickets" take height the width-only size did not leave.
+                    final size = math.max(160.0, math.min(math.min(cons.maxWidth - 48, cons.maxHeight - 32), 340.0));
                     return Stack(
                       alignment: Alignment.center,
                       children: [
@@ -283,17 +293,19 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
                         ),
                         AnimatedBuilder(
                           animation: _c,
-                          builder: (_, _) => Transform.rotate(
-                            angle: _angle,
-                            child: CustomPaint(size: Size.square(size), painter: _WheelPainter(dark: context.isDark, ring: c.card, tick: c.stroke)),
-                          ),
+                          builder: (_, _) => _WheelFace(angle: _angle, size: size, photo: ref.watch(dailyPuzzleProvider)),
                         ),
+                        // A plain cap on the axle: the old wheel glyph there read as a loading spinner.
                         Container(
-                          width: 64,
-                          height: 64,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(color: c.card, shape: BoxShape.circle, border: Border.all(color: c.stroke)),
-                          child: Icon(AppIcons.wheel, size: 30, color: context.accent),
+                          width: 44,
+                          height: 44,
+                          decoration: BoxDecoration(
+                            color: c.cardElevated,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: c.stroke),
+                            boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: context.isDark ? 0.4 : 0.12), blurRadius: 8, offset: const Offset(0, 2))],
+                          ),
+                          child: Center(child: Container(width: 10, height: 10, decoration: BoxDecoration(color: context.accent, shape: BoxShape.circle))),
                         ),
                         if (jackpot)
                           // Glow pulse on the whole wheel when the jackpot lands.
@@ -323,7 +335,7 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
                           top: -4,
                           child: Transform.rotate(
                             angle: math.pi,
-                            child: CustomPaint(size: const Size(30, 36), painter: _PointerPainter()),
+                            child: CustomPaint(size: const Size(28, 34), painter: _PointerPainter(color: context.accent, edge: c.card)),
                           ),
                         ),
                       ],
@@ -332,42 +344,59 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
                 ),
               ),
             ),
-            if (_result != null)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: SoftCard(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Text('You won', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
-                      const SizedBox(width: 10),
-                      Amount(currency: _result!.kind, value: _result!.amount, size: 20),
-                      if (_result!.name != null) ...[const SizedBox(width: 6), Text(_result!.name!, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16))],
-                      if (jackpot) ...[const SizedBox(width: 8), const Chip2(label: 'Jackpot', color: Brand.coin, foreground: Color(0xFF2A1F00))],
-                    ],
-                  ),
-                ).animate().fadeIn().then().scale(begin: const Offset(1, 1), end: jackpot ? const Offset(1.08, 1.08) : const Offset(1, 1), duration: 220.ms, curve: Curves.easeOut).then().scale(begin: const Offset(1, 1), end: jackpot ? const Offset(1 / 1.08, 1 / 1.08) : const Offset(1, 1), duration: 260.ms, curve: Curves.easeOutBack),
+            // One fixed slot under the wheel: the jackpot before a spin, the prize after it.
+            // Its height never changes, so the wheel does not jump when a prize lands.
+            SizedBox(
+              height: 56,
+              child: Center(
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 250),
+                  switchInCurve: Curves.easeOutBack,
+                  transitionBuilder: (child, a) => FadeTransition(opacity: a, child: ScaleTransition(scale: Tween(begin: 0.9, end: 1.0).animate(a), child: child)),
+                  child: _result == null
+                      ? Row(
+                          key: const ValueKey('jackpot'),
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text('Jackpot', style: TextStyle(color: c.textSecondary, fontSize: 13.5, fontWeight: FontWeight.w600)),
+                            const SizedBox(width: 8),
+                            Amount(currency: Currency.coins, value: _segments.firstWhere((s) => s.jackpot).amount, size: 16, fontSize: 14.5, weight: FontWeight.w700),
+                          ],
+                        )
+                      : SoftCard(
+                          key: ValueKey('won-${_result!.kind}-${_result!.amount}-$_spins'),
+                          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                          radius: Radii.pill,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Text('You won', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
+                              const SizedBox(width: 10),
+                              Amount(currency: _result!.kind, value: _result!.amount, size: 18, fontSize: 16, weight: FontWeight.w800),
+                              if (_result!.name != null) ...[const SizedBox(width: 5), Text(_result!.name!, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15))],
+                              if (jackpot) ...[const SizedBox(width: 8), const Chip2(label: 'Jackpot', color: Brand.coin, foreground: Color(0xFF2A1F00))],
+                            ],
+                          ),
+                        ),
+                ),
               ),
+            ),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
               child: Column(
                 children: [
-                  BigButton.cost(
-                    label: 'Spin for',
-                    currency: Currency.tickets,
-                    amount: Economy.wheelSpinTickets,
-                    onTap: canSpin ? _spin : null,
-                  ),
-                  if (tickets < Economy.wheelSpinTickets) ...[
+                  // Out of tickets: one clear way on instead of a disabled Spin above a second button.
+                  if (tickets < Economy.wheelSpinTickets && !_spinning) ...[
+                    BigButton(label: 'Get tickets', onTap: () => context.push('/store')),
                     const SizedBox(height: 8),
-                    BigButton(label: 'Get tickets', kind: ButtonKind.secondary, onTap: () => context.push('/store')),
-                    const SizedBox(height: 8),
-                    Text('Earn tickets from weekly quests, level-ups and events.', textAlign: TextAlign.center, style: TextStyle(color: c.textSecondary, fontSize: 12.5)),
-                  ] else ...[
-                    const SizedBox(height: 8),
-                    Text('Jackpot: 500 coins', style: TextStyle(color: c.textTertiary, fontSize: 12, fontWeight: FontWeight.w600)),
-                  ],
+                    Text('A spin costs 1 ticket. Earn them from weekly quests, level-ups and events.', textAlign: TextAlign.center, style: TextStyle(color: c.textSecondary, fontSize: 12.5, height: 1.35)),
+                  ] else
+                    BigButton.cost(
+                      label: 'Spin for',
+                      currency: Currency.tickets,
+                      amount: Economy.wheelSpinTickets,
+                      onTap: canSpin ? _spin : null,
+                    ),
                   CupertinoButton(
                     key: const ValueKey('wheel-see-odds'),
                     padding: const EdgeInsets.symmetric(vertical: 6),
@@ -385,60 +414,132 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
   }
 }
 
-/// Segment glyph: the jackpot is coins too, so it carries the coin mark.
-IconData _glyph(WheelSegment s) => switch (s.kind) {
-      Currency.coins => Icons.monetization_on_rounded,
-      Currency.tickets => Icons.confirmation_number_rounded,
-      Currency.hints => AppIcons.hint,
-      Currency.peeks => AppIcons.peek,
-      Currency.magics => AppIcons.magic,
-    };
+/// The wheel: slices painted by [_SlicePainter], prizes as the game's own marks
+/// (coin, hint, Peek, Magic) laid on top. The slices turn with [angle]; each prize
+/// moves with its slice but stays upright, so no amount is ever upside down.
+class _WheelFace extends StatelessWidget {
+  const _WheelFace({required this.angle, required this.size, this.photo});
+  final double angle;
+  final double size;
+  final Puzzle? photo;
 
-class _WheelPainter extends CustomPainter {
-  _WheelPainter({required this.dark, required this.ring, required this.tick});
-  final bool dark;
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final r = size / 2;
+    final seg = 2 * math.pi / _segments.length;
+    final palette = _WheelPalette.of(context);
+    return SizedBox.square(
+      dimension: size,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Transform.rotate(
+            angle: angle,
+            child: Stack(
+              children: [
+                // Colour from the photos: the slices are pieces of today's picture.
+                ClipOval(
+                  child: SizedBox.square(
+                    dimension: size,
+                    child: photo == null ? ColoredBox(color: c.boardBackground) : NetImage(url: photo!.thumbUrl, blurhash: photo!.blurhash),
+                  ),
+                ),
+                CustomPaint(size: Size.square(size), painter: _SlicePainter(palette: palette, ring: c.card)),
+              ],
+            ),
+          ),
+          for (var i = 0; i < _segments.length; i++)
+            Builder(builder: (context) {
+              final a = -math.pi / 2 + i * seg + seg / 2 + angle;
+              const box = 56.0;
+              return Positioned(
+                left: r + math.cos(a) * r * 0.64 - box / 2,
+                top: r + math.sin(a) * r * 0.64 - box / 2,
+                width: box,
+                height: box,
+                child: _PrizeMark(segment: _segments[i], ink: palette.ink(i), ring: palette.markRing),
+              );
+            }),
+        ],
+      ),
+    );
+  }
+}
+
+/// A prize on the wheel: its currency mark over its amount.
+class _PrizeMark extends StatelessWidget {
+  const _PrizeMark({required this.segment, required this.ink, this.ring});
+  final WheelSegment segment;
+  final Color ink;
+  final Color? ring;
+
+  @override
+  Widget build(BuildContext context) {
+    Widget mark = currencyIcon(segment.kind, size: 24);
+    if (ring != null) {
+      mark = DecoratedBox(decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: ring!, width: 1.5)), child: mark);
+    }
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        mark,
+        const SizedBox(height: 3),
+        Text(segment.label, style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15, height: 1.1, color: ink, letterSpacing: -0.2, fontFeatures: const [FontFeature.tabularFigures()], shadows: const [Shadow(color: Color(0x99000000), blurRadius: 6)])),
+      ],
+    );
+  }
+}
+
+/// Today's picture under the slices: alternate slices darkened a little more than
+/// the others, the jackpot washed in coin gold. White amounts with a soft shadow; the
+/// marks get a white ring so they read on any picture.
+class _WheelPalette {
+  const _WheelPalette();
+
+  static _WheelPalette of(BuildContext context) => const _WheelPalette();
+
+  Color get spoke => Colors.white.withValues(alpha: 0.7);
+  Color? get markRing => Colors.white;
+  Color fill(int i) => _segments[i].jackpot ? Brand.coin.withValues(alpha: 0.62) : Colors.black.withValues(alpha: i.isEven ? 0.30 : 0.48);
+  Color ink(int i) => Colors.white;
+}
+
+class _SlicePainter extends CustomPainter {
+  _SlicePainter({required this.palette, required this.ring});
+  final _WheelPalette palette;
   final Color ring;
-  final Color tick;
   @override
   void paint(Canvas canvas, Size size) {
     final center = size.center(Offset.zero);
     final r = size.width / 2;
     final seg = 2 * math.pi / _segments.length;
+    final rect = Rect.fromCircle(center: center, radius: r);
     for (var i = 0; i < _segments.length; i++) {
       final start = -math.pi / 2 + i * seg;
-      final paint = Paint()..color = _segments[i].color;
-      canvas.drawArc(Rect.fromCircle(center: center, radius: r), start, seg, true, paint);
-      canvas.drawArc(Rect.fromCircle(center: center, radius: r), start, seg, true, Paint()..style = PaintingStyle.stroke..strokeWidth = 2..color = ring);
-      // Label
-      final angle = start + seg / 2;
-      final tp = TextPainter(
-        text: TextSpan(
-          children: [
-            TextSpan(text: String.fromCharCode(_glyph(_segments[i]).codePoint), style: TextStyle(fontFamily: _glyph(_segments[i]).fontFamily, package: _glyph(_segments[i]).fontPackage, fontSize: 22, color: Colors.white)),
-            TextSpan(text: '\n${_segments[i].label}', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15, color: Colors.white, height: 1.25)),
-          ],
-        ),
-        textAlign: TextAlign.center,
-        textDirection: TextDirection.ltr,
-      )..layout();
-      canvas.save();
-      canvas.translate(center.dx + math.cos(angle) * r * 0.66, center.dy + math.sin(angle) * r * 0.66);
-      canvas.rotate(angle + math.pi / 2);
-      tp.paint(canvas, Offset(-tp.width / 2, -tp.height / 2));
-      canvas.restore();
+      canvas.drawArc(rect, start, seg, true, Paint()..color = palette.fill(i));
     }
-    canvas.drawCircle(center, r, Paint()..style = PaintingStyle.stroke..strokeWidth = 6..color = ring);
+    // Hairline spokes between the slices.
+    final spoke = Paint()
+      ..color = palette.spoke
+      ..strokeWidth = 1.5;
     for (var i = 0; i < _segments.length; i++) {
       final a = -math.pi / 2 + i * seg;
-      canvas.drawCircle(Offset(center.dx + math.cos(a) * r, center.dy + math.sin(a) * r), 4, Paint()..color = tick);
+      canvas.drawLine(center, Offset(center.dx + math.cos(a) * r, center.dy + math.sin(a) * r), spoke);
     }
+    canvas.drawCircle(center, r, Paint()..style = PaintingStyle.stroke..strokeWidth = 6..color = ring);
+    // A hairline just inside the rim, so light slices do not melt into it.
+    canvas.drawCircle(center, r - 3, Paint()..style = PaintingStyle.stroke..strokeWidth = 1..color = palette.spoke);
   }
 
   @override
-  bool shouldRepaint(_WheelPainter old) => old.dark != dark || old.ring != ring || old.tick != tick;
+  bool shouldRepaint(_SlicePainter old) => old.ring != ring;
 }
 
 class _PointerPainter extends CustomPainter {
+  _PointerPainter({required this.color, required this.edge});
+  final Color color;
+  final Color edge;
   @override
   void paint(Canvas canvas, Size size) {
     final path = Path()
@@ -446,10 +547,11 @@ class _PointerPainter extends CustomPainter {
       ..lineTo(size.width, size.height * 0.75)
       ..quadraticBezierTo(size.width / 2, size.height, 0, size.height * 0.75)
       ..close();
-    canvas.drawPath(path, Paint()..color = Brand.live);
-    canvas.drawPath(path, Paint()..style = PaintingStyle.stroke..strokeWidth = 2..color = Colors.white);
+    canvas.drawShadow(path, Colors.black, 3, false);
+    canvas.drawPath(path, Paint()..color = color);
+    canvas.drawPath(path, Paint()..style = PaintingStyle.stroke..strokeWidth = 2..color = edge);
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(_PointerPainter old) => old.color != color || old.edge != edge;
 }

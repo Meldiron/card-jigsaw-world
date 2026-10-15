@@ -129,98 +129,75 @@ class _DailyRewardSheetState extends ConsumerState<DailyRewardSheet> {
     final missed = profile != null && !profile.streakAlive && profile.streak > 0;
     final canRestore = profile != null && ref.read(profileProvider.notifier).canRestoreStreak;
 
+    final today = Economy.dailyRewards[todayIdx];
+    final next = Economy.dailyRewards[(todayIdx + 1) % 7];
+    final received = _claimed;
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const IconTile(icon: AppIcons.dailyGift, size: 64, radius: 20),
-          const SizedBox(height: 12),
-          Text('Daily gift', style: Theme.of(context).textTheme.headlineMedium),
+          Text('Daily gift', textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineSmall),
           const SizedBox(height: 4),
           Text(
             !available
-                ? 'Claimed · Streak: $streak day${streak == 1 ? '' : 's'}. Back tomorrow.'
+                ? 'Streak: $streak day${streak == 1 ? '' : 's'}. Back tomorrow.'
                 : missed
                     ? (canRestore ? 'You missed a day. Restore your streak or start again.' : 'You missed a day, so the streak starts again.')
                     : 'Come back every day to grow your streak.',
             textAlign: TextAlign.center,
-            style: TextStyle(color: c.textSecondary),
+            style: TextStyle(color: c.textSecondary, fontSize: 14),
           ),
           const SizedBox(height: 18),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            alignment: WrapAlignment.center,
-            children: [
-              for (var i = 0; i < 7; i++)
-                _DayTile(
-                  day: i + 1,
-                  reward: Economy.dailyRewards[i],
-                  claimed: available ? i < todayIdx : i <= todayIdx,
-                  today: i == todayIdx,
-                  big: i == 6,
-                ).animate().fadeIn(delay: (40 * i).ms).scale(begin: const Offset(0.9, 0.9)),
-            ],
-          ),
-          const SizedBox(height: 20),
-          if (profile != null && canRestore)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: SoftCard(
-                padding: const EdgeInsets.all(14),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          _StreakTrack(todayIdx: todayIdx, claimedToday: !available),
+          const SizedBox(height: 18),
+          // Today's gift in full; after the claim the same card says what arrived.
+          SoftCard(
+            padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        received != null ? 'You received' : (available ? 'Day ${todayIdx + 1} gift' : 'Today, day ${todayIdx + 1}'),
+                        style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: c.textSecondary),
+                      ),
+                      const SizedBox(height: 6),
+                      _Rewards(reward: today, size: 22, prefix: received != null ? '+' : ''),
+                    ],
+                  ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Row(
-                      children: [
-                        const IconTile(icon: AppIcons.streak, size: 34, radius: 10),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Keep your ${profile.streak}-day streak', style: Theme.of(context).textTheme.titleMedium),
-                              const SizedBox(height: 2),
-                              Text(
-                                'Restore it and today\'s gift is day ${profile.streak % 7 + 1}.',
-                                style: TextStyle(fontSize: 12.5, color: c.textSecondary),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    BigButton.cost(
-                      label: 'Restore and claim for',
-                      kind: ButtonKind.secondary,
-                      currency: Currency.tickets,
-                      amount: Economy.streakRestoreTickets(profile.streak),
-                      loading: _restoring,
-                      onTap: _restore,
-                    ),
+                    Text(todayIdx == 5 ? 'Tomorrow, the big one' : 'Tomorrow', style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w600, color: c.textTertiary)),
+                    const SizedBox(height: 6),
+                    _Rewards(reward: next, size: 14),
                   ],
                 ),
-              ),
+              ],
             ),
-          if (_claimed != null)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: Wrap(
-                spacing: 14,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: [
-                  const Text('You received', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
-                  Amount(currency: Currency.coins, value: _claimed!.coins, size: 18, prefix: '+'),
-                  if (_claimed!.tickets > 0) Amount(currency: Currency.tickets, value: _claimed!.tickets, size: 18, prefix: '+'),
-                  if (_claimed!.hints > 0) Amount(currency: Currency.hints, value: _claimed!.hints, size: 18, prefix: '+'),
-                ],
-              ).animate().scale(curve: Curves.easeOutBack),
+          ).animate(key: ValueKey(received != null)).fadeIn(duration: 200.ms),
+          if (profile != null && canRestore) ...[
+            const SizedBox(height: 10),
+            // 001 B: restoring the streak just lost also claims today's gift as the next day of it.
+            _RestoreRow(
+              streak: profile.streak,
+              day: profile.streak % 7 + 1,
+              cost: Economy.streakRestoreTickets(profile.streak),
+              loading: _restoring,
+              onTap: _restore,
             ),
+          ],
+          const SizedBox(height: 18),
           BigButton(
-            label: available ? 'Claim day ${todayIdx + 1} gift' : 'Claimed today',
-            icon: available ? AppIcons.dailyGift : CupertinoIcons.checkmark_alt,
+            label: available ? 'Claim day ${todayIdx + 1} gift' : 'Done',
+            icon: available ? AppIcons.dailyGift : null,
             kind: available ? ButtonKind.primary : ButtonKind.secondary,
             loading: _claiming,
             onTap: available ? _claim : () => Navigator.pop(context),
@@ -231,57 +208,148 @@ class _DailyRewardSheetState extends ConsumerState<DailyRewardSheet> {
   }
 }
 
-class _DayTile extends StatelessWidget {
-  const _DayTile({required this.day, required this.reward, required this.claimed, required this.today, required this.big});
-  final int day;
+/// Coins, tickets and hints of one day's gift, each as its mark and number.
+class _Rewards extends StatelessWidget {
+  const _Rewards({required this.reward, required this.size, this.prefix = ''});
   final ({int coins, int tickets, int hints}) reward;
-  final bool claimed;
-  final bool today;
-  final bool big;
+  final double size;
+  final String prefix;
+
+  @override
+  Widget build(BuildContext context) => Wrap(
+        spacing: size * 0.6,
+        runSpacing: 4,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: [
+          Amount(currency: Currency.coins, value: reward.coins, size: size, prefix: prefix, weight: FontWeight.w700),
+          if (reward.tickets > 0) Amount(currency: Currency.tickets, value: reward.tickets, size: size, prefix: prefix, weight: FontWeight.w700),
+          if (reward.hints > 0) Amount(currency: Currency.hints, value: reward.hints, size: size, prefix: prefix, weight: FontWeight.w700),
+        ],
+      );
+}
+
+/// Seven stops on one line: done days filled, today ringed, day 7 marked.
+/// Under each stop the day's coins, so the climb to day 7 reads at a glance.
+class _StreakTrack extends StatelessWidget {
+  const _StreakTrack({required this.todayIdx, required this.claimedToday});
+  final int todayIdx;
+  final bool claimedToday;
+
+  static const _dot = 34.0;
+
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
     final accent = context.accent;
-    // Today is a tinted tile with a strong outline, not a solid accent fill: the coin, ticket and
-    // hint icons keep their own colours and need a dark (or, in light mode, pale) ground to read.
-    final onColor = c.textPrimary;
-    final labelColor = today ? accent : c.textTertiary;
-    return Container(
-      width: big ? 168 : 80,
-      height: 96,
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: today ? c.accentTint : c.card,
-        borderRadius: BorderRadius.circular(Radii.md),
-        border: Border.all(color: today ? accent : (big ? accent.withValues(alpha: 0.6) : c.stroke), width: today ? 2 : 1),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('Day $day', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: labelColor)),
-          const SizedBox(height: 6),
-          SizedBox(
-            height: 24,
-            child: claimed && !today
-                ? Icon(CupertinoIcons.checkmark_circle_fill, size: 22, color: c.success)
-                : big
-                    ? Icon(AppIcons.crown, size: 24, color: accent)
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+    bool done(int i) => i < todayIdx || (claimedToday && i == todayIdx);
+    return LayoutBuilder(
+      builder: (context, cons) {
+        final cell = cons.maxWidth / 7;
+        final reached = todayIdx.clamp(0, 6);
+        return SizedBox(
+          height: _dot + 22,
+          child: Stack(
+            children: [
+              // The track behind the stops, filled up to today.
+              Positioned(left: cell / 2, right: cell / 2, top: _dot / 2 - 1.5, child: Container(height: 3, decoration: BoxDecoration(color: c.stroke, borderRadius: BorderRadius.circular(2)))),
+              if (reached > 0)
+                Positioned(left: cell / 2, width: cell * reached, top: _dot / 2 - 1.5, child: Container(height: 3, decoration: BoxDecoration(color: accent, borderRadius: BorderRadius.circular(2)))),
+              Row(
+                children: [
+                  for (var i = 0; i < 7; i++)
+                    SizedBox(
+                      width: cell,
+                      child: Column(
                         children: [
-                          const CoinIcon(size: 18),
-                          if (reward.tickets > 0) ...[const SizedBox(width: 3), const TicketIcon(size: 13)],
-                          if (reward.hints > 0) ...[const SizedBox(width: 3), const HintIcon(size: 16)],
+                          _Stop(day: i + 1, done: done(i), today: i == todayIdx, big: i == 6, size: _dot),
+                          const SizedBox(height: 6),
+                          Text(
+                            '${Economy.dailyRewards[i].coins}',
+                            style: TextStyle(
+                              fontSize: 11.5,
+                              fontWeight: FontWeight.w600,
+                              color: i == todayIdx ? accent : (done(i) ? c.textTertiary : c.textSecondary),
+                              fontFeatures: const [FontFeature.tabularFigures()],
+                            ),
+                          ),
                         ],
                       ),
+                    ),
+                ],
+              ),
+            ],
           ),
-          const SizedBox(height: 4),
-          Text(
-            big ? '${reward.coins} · ${reward.tickets} tickets · ${reward.hints} hints' : '${reward.coins}${reward.tickets > 0 ? ' +${reward.tickets}' : ''}${reward.hints > 0 ? ' +${reward.hints}' : ''}',
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 11.5, color: onColor),
+        );
+      },
+    );
+  }
+}
+
+class _Stop extends StatelessWidget {
+  const _Stop({required this.day, required this.done, required this.today, required this.big, required this.size});
+  final int day;
+  final bool done;
+  final bool today;
+  final bool big;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final accent = context.accent;
+    final fill = done ? accent : (today ? c.accentTint : c.card);
+    final Widget mark = done
+        ? const Icon(CupertinoIcons.checkmark_alt, size: 18, color: Colors.white)
+        : big
+            ? Icon(AppIcons.crown, size: 18, color: today ? accent : accent.withValues(alpha: 0.8))
+            : Text('$day', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: today ? accent : c.textSecondary));
+    return Container(
+      width: size,
+      height: size,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: fill,
+        shape: BoxShape.circle,
+        border: done ? null : Border.all(color: today ? accent : (big ? accent.withValues(alpha: 0.5) : c.stroke), width: today ? 2 : 1),
+      ),
+      child: mark,
+    );
+  }
+}
+
+/// The streak restore offer as one row: what happened, what it brings back,
+/// and a small tinted button with the price. It sits above the claim and
+/// never outweighs it.
+class _RestoreRow extends StatelessWidget {
+  const _RestoreRow({required this.streak, required this.day, required this.cost, required this.loading, required this.onTap});
+
+  /// The streak lost to the missed days, and the gift day a restore claims with it.
+  final int streak;
+  final int day;
+  final int cost;
+  final bool loading;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return SoftCard(
+      padding: const EdgeInsets.fromLTRB(12, 10, 10, 10),
+      child: Row(
+        children: [
+          const IconTile(icon: AppIcons.streak, size: 34, radius: 10),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('$streak-day streak', maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+                Text('Restore and claim day $day', maxLines: 2, style: TextStyle(fontSize: 12.5, color: c.textSecondary)),
+              ],
+            ),
           ),
+          const SizedBox(width: 8),
+          BigButton.cost(label: 'Restore', currency: Currency.tickets, amount: cost, kind: ButtonKind.secondary, height: 36, expand: false, loading: loading, onTap: onTap),
         ],
       ),
     );

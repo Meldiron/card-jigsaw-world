@@ -7,6 +7,9 @@ import 'package:url_launcher/url_launcher.dart';
 abstract final class AppLinks {
   static final privacyPolicy = Uri.parse('https://github.com/Meldiron/card-jigsaw-world/blob/main/docs/privacy-policy.md');
   static final termsOfUse = Uri.parse('https://www.apple.com/legal/internet-services/itunes/dev/stdeula/');
+
+  /// The App Store's subscription management (opens the system sheet on iPhone).
+  static final manageSubscriptions = Uri.parse('https://apps.apple.com/account/subscriptions');
   static const supportEmail = 'support@almostapps.eu';
   static final support = Uri(scheme: 'mailto', path: supportEmail);
 }

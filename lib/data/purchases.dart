@@ -108,6 +108,15 @@ class StoreProducts {
 
   /// "7 days free, then $2.99/month".
   static String vipTrialLine([String? monthlyPrice]) => '$vipTrialDays days free, then ${monthlyPrice ?? price(ProductIds.vipMonthly)}/month';
+
+  /// How much less the yearly plan costs than twelve months, in whole percent
+  /// rounded down (58 for $14.99 against $2.99). Both prices must come from the
+  /// same source (the App Store, or both fallbacks); null when there is no saving.
+  static int? yearlySavingPercent(double monthly, double yearly) {
+    if (monthly <= 0 || yearly <= 0) return null;
+    final percent = ((1 - yearly / (monthly * 12)) * 100).floor();
+    return percent >= 5 ? percent : null;
+  }
 }
 
 /// Pack prices as set by `tools/store/apply_pack_prices.py` (docs/economy.md,

@@ -377,10 +377,18 @@ class _TabCell extends StatelessWidget {
 
 /// Surface for content-sized modal sheets: rounded top, glass, grabber and
 /// home-indicator inset, matching iOS 26 partial-height sheets.
+///
+/// The sheet hugs its content. When the content is taller than the screen
+/// allows (small phones, large text, an extra block such as the streak
+/// restore), it scrolls under the grabber instead of overflowing, so the
+/// last button can always be reached.
 class GlassSheet extends StatelessWidget {
-  const GlassSheet({super.key, required this.child, this.grabber = true});
+  const GlassSheet({super.key, required this.child, this.grabber = true, this.bottomInset = 0});
   final Widget child;
   final bool grabber;
+
+  /// Extra space at the bottom outside the scrolling area (the keyboard).
+  final double bottomInset;
 
   @override
   Widget build(BuildContext context) {
@@ -393,7 +401,7 @@ class GlassSheet extends StatelessWidget {
       opacity: isDark ? 0.80 : 0.84,
       hairline: Border.all(color: isDark ? Colors.white.withValues(alpha: 0.12) : Colors.white.withValues(alpha: 0.7), width: 0.5),
       child: Padding(
-        padding: EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom),
+        padding: EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom + bottomInset),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -404,8 +412,92 @@ class GlassSheet extends StatelessWidget {
               )
             else
               const SizedBox(height: 14),
-            child,
+            // Scrolls only when the content does not fit; otherwise a drag
+            // still moves the whole sheet (drag to dismiss).
+            Flexible(child: _SheetScroll(child: child)),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// The scrolling body of a [GlassSheet]. Content that fits does not scroll;
+/// content that does not fades out at the edge where more is waiting, so a
+/// cut-off button never looks like the end of the sheet.
+class _SheetScroll extends StatefulWidget {
+  const _SheetScroll({required this.child});
+  final Widget child;
+
+  @override
+  State<_SheetScroll> createState() => _SheetScrollState();
+}
+
+class _SheetScrollState extends State<_SheetScroll> {
+  final _controller = ScrollController();
+  bool _moreAbove = false;
+  bool _moreBelow = false;
+
+  static const _fade = 28.0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _update());
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _update() {
+    if (!mounted || !_controller.hasClients) return;
+    final p = _controller.position;
+    if (!p.hasContentDimensions) return;
+    final above = p.extentBefore > 0.5;
+    final below = p.extentAfter > 0.5;
+    if (above != _moreAbove || below != _moreBelow) {
+      setState(() {
+        _moreAbove = above;
+        _moreBelow = below;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final scroll = SingleChildScrollView(controller: _controller, physics: const ClampingScrollPhysics(), child: widget.child);
+    return NotificationListener<ScrollMetricsNotification>(
+      onNotification: (_) {
+        _update();
+        return false;
+      },
+      child: NotificationListener<ScrollUpdateNotification>(
+        onNotification: (_) {
+          _update();
+          return false;
+        },
+        // Always masked (opaque when nothing is hidden), so the scroll view
+        // keeps its place in the tree and its offset when the fade changes.
+        child: ShaderMask(
+          blendMode: BlendMode.dstIn,
+          shaderCallback: (rect) {
+            final f = (_fade / math.max(rect.height, 1)).clamp(0.0, 0.5);
+            return LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                _moreAbove ? Colors.transparent : Colors.black,
+                Colors.black,
+                Colors.black,
+                _moreBelow ? Colors.transparent : Colors.black,
+              ],
+              stops: [0, f, 1 - f, 1],
+            ).createShader(rect);
+          },
+          child: scroll,
         ),
       ),
     );
