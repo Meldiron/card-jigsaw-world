@@ -74,6 +74,11 @@ class _DqaRootState extends State<DqaRoot> {
   Key _appKey = UniqueKey();
   int _run = 0;
 
+  /// `"emulate": "se"` in a scene lays the app out in an iPhone SE frame (375x667, 20 pt status
+  /// bar, no home indicator) at the top left of the screen, for a rough small-screen check on a
+  /// bigger simulator. Crop the screenshot to 375x667 pt.
+  String? _emulate;
+
   @override
   void initState() {
     super.initState();
@@ -117,6 +122,7 @@ class _DqaRootState extends State<DqaRoot> {
     setState(() {
       _container = container;
       _appKey = UniqueKey();
+      _emulate = scene['emulate'] as String?;
     });
     await WidgetsBinding.instance.endOfFrame;
     final out = <String, dynamic>{'nonce': scene['nonce'], 'scene': scene['id']};
@@ -152,7 +158,21 @@ class _DqaRootState extends State<DqaRoot> {
   Widget build(BuildContext context) {
     final c = _container;
     if (c == null) return const ColoredBox(color: Colors.black);
-    return UncontrolledProviderScope(container: c, child: CardJigsawApp(key: _appKey));
+    final app = UncontrolledProviderScope(container: c, child: CardJigsawApp(key: _appKey));
+    if (_emulate != 'se') return app;
+    final mq = MediaQuery.of(context);
+    const size = Size(375, 667);
+    const pad = EdgeInsets.only(top: 20);
+    return ColoredBox(
+      color: Colors.black,
+      child: Align(
+        alignment: Alignment.topLeft,
+        child: SizedBox.fromSize(
+          size: size,
+          child: MediaQuery(data: mq.copyWith(size: size, padding: pad, viewPadding: pad), child: app),
+        ),
+      ),
+    );
   }
 }
 
