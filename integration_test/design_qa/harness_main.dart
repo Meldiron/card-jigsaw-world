@@ -263,8 +263,9 @@ Future<ProviderContainer> buildContainer(Map<String, dynamic> scene) async {
     syncBackendProvider.overrideWithValue(FakeBackend(server)),
     authProvider.overrideWith(() => FakeAuth(user)),
     authRepositoryProvider.overrideWithValue(_FakeAuthRepo(user, apple: scene['apple'] == true)),
-    profileRepositoryProvider.overrideWithValue(FakeProfileRepo(league: league, claims: (row['questsCompleted'] as int?) ?? 0)),
+    profileRepositoryProvider.overrideWithValue(FakeProfileRepo(league: league, claims: (row['questsCompleted'] as int?) ?? 0, down: scene['socialDown'] == true)),
     socialRepositoryProvider.overrideWithValue(FakeSocialRepo(
+      down: scene['socialDown'] == true,
       friendList: friends,
       blocked: [
         for (final p in league.reversed.take((scene['blocked'] as int?) ?? 0))

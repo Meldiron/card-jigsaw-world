@@ -66,8 +66,10 @@ class FakeCatalogRepo extends CatalogRepository implements CatalogSource {
 
 /// League, other players and ledger counts from a list of profiles.
 class FakeProfileRepo extends ProfileRepository {
-  FakeProfileRepo({required this.league, this.claims = 0, this.ledger = const {}}) : super(_tables);
+  FakeProfileRepo({required this.league, this.claims = 0, this.ledger = const {}, this.down = false}) : super(_tables);
   final List<Profile> league;
+  /// Scene `socialDown`: the league cannot be read (offline).
+  final bool down;
   final int claims;
   final Map<String, int> ledger;
 
@@ -81,6 +83,7 @@ class FakeProfileRepo extends ProfileRepository {
 
   @override
   Future<({List<Profile> items, String? lastId})> leaderboardPage({required int limit, String? after, Profile? viewer, Set<String> excluding = const {}}) async {
+    if (down) throw AppwriteException('design QA harness: offline', 0);
     final sorted = [...league.where((p) => !excluding.contains(p.id))]..sort((a, b) => b.xp.compareTo(a.xp));
     var start = 0;
     if (after != null) start = sorted.indexWhere((p) => p.id == after) + 1;
@@ -90,6 +93,7 @@ class FakeProfileRepo extends ProfileRepository {
 
   @override
   Future<({int rank, int total})> leaderboardRank(Profile me) async {
+    if (down) throw AppwriteException('design QA harness: offline', 0);
     final ahead = league.where((p) => p.xp > me.xp && p.id != me.id).length;
     return (rank: ahead + 1, total: league.length);
   }
@@ -105,14 +109,16 @@ class FakeProfileRepo extends ProfileRepository {
 }
 
 class FakeSocialRepo extends SocialRepository {
-  FakeSocialRepo({this.friendList = const [], this.blocked = const [], this.events = const {}, this.community = const {}}) : super(_tables);
+  FakeSocialRepo({this.friendList = const [], this.blocked = const [], this.events = const {}, this.community = const {}, this.down = false}) : super(_tables);
+  /// Scene `socialDown`: friends and blocks cannot be read (offline).
+  final bool down;
   List<Friend> friendList;
   List<BlockedPlayer> blocked;
   final Map<String, EventProgress> events;
   final Map<String, int> community;
 
   @override
-  Future<List<Friend>> friends(String userId) async => friendList;
+  Future<List<Friend>> friends(String userId) async => down ? throw AppwriteException('design QA harness: offline', 0) : friendList;
 
   @override
   Future<Friend> addFriend(String userId, Profile friend) async {
@@ -128,7 +134,7 @@ class FakeSocialRepo extends SocialRepository {
   Future<void> report({required String reporterId, required Profile player, required ReportReason reason}) async {}
 
   @override
-  Future<List<BlockedPlayer>> blocks(String userId) async => blocked;
+  Future<List<BlockedPlayer>> blocks(String userId) async => down ? throw AppwriteException('design QA harness: offline', 0) : blocked;
 
   @override
   Future<void> block(String userId, Profile player) async {
