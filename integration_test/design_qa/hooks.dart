@@ -13,10 +13,18 @@ import 'package:card_jigsaw_world/features/profile/redeem_code_sheet.dart';
 import 'package:card_jigsaw_world/features/social/player_safety.dart';
 import 'package:card_jigsaw_world/features/social/social_screen.dart';
 import 'package:card_jigsaw_world/features/sync/board_choice_sheet.dart';
+import 'package:card_jigsaw_world/features/update/update_host.dart';
+import 'package:card_jigsaw_world/data/sync/notice.dart';
+import 'package:card_jigsaw_world/data/sync/ops.dart' show SkipReason;
+import 'package:card_jigsaw_world/state/app_update.dart';
+import 'package:card_jigsaw_world/state/sync.dart';
+import 'package:appwrite/appwrite.dart' show TablesDB;
+import 'package:appwrite/models.dart' as models;
 import 'package:card_jigsaw_world/models/models.dart';
 import 'package:card_jigsaw_world/state/merge.dart';
 import 'package:card_jigsaw_world/state/catalog.dart';
 import 'package:card_jigsaw_world/state/rewards.dart';
+import 'package:card_jigsaw_world/widgets/icons.dart';
 import 'package:card_jigsaw_world/widgets/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -44,15 +52,27 @@ Future<void> withRef(BuildContext context, Future<void> Function(BuildContext co
   overlay.insert(entry);
 }
 
-PuzzleProgress _row(String puzzleId, {required List<int> layout, int moves = 20, int seconds = 180}) => PuzzleProgress.fromRow('p', {
+PuzzleProgress _row(String puzzleId, {required List<int> layout, int moves = 20, int seconds = 180, String mode = 'cards'}) => PuzzleProgress.fromRow('p', {
       'userId': 'dqa-player',
       'puzzleId': puzzleId,
-      'gridSize': 4,
-      'mode': 'cards',
+      'gridSize': layout.length,
+      'mode': mode,
       'layout': layout.join(','),
       'moves': moves,
       'elapsedSeconds': seconds,
     });
+
+/// A `releases` row for [IosUpdateSource] (the update prompt's real copy).
+class _ReleaseTables implements TablesDB {
+  _ReleaseTables(this.build, this.version);
+  final int build;
+  final String version;
+  @override
+  Future<models.Row> getRow({required String databaseId, required String tableId, required String rowId, List<String>? queries, String? transactionId}) async =>
+      models.Row($id: rowId, $sequence: '1', $tableId: tableId, $databaseId: databaseId, $createdAt: '', $updatedAt: '', $permissions: const [], data: {'build': build, 'version': version});
+  @override
+  dynamic noSuchMethod(Invocation invocation) => throw UnimplementedError();
+}
 
 final hooks = <String, Hook>{
   // Shows the status bar again (a variant that hides it leaves it hidden across hot restarts).
@@ -62,9 +82,14 @@ final hooks = <String, Hook>{
         title: a['title'] as String? ?? 'Discard progress?',
         message: a['message'] as String? ?? 'Your board for this picture will be cleared. This cannot be undone.',
         confirmLabel: a['confirm'] as String? ?? 'Discard',
+        cancelLabel: a.containsKey('cancel') ? a['cancel'] as String? : 'Cancel',
         destructive: a['destructive'] as bool? ?? true,
       ),
-  'toast': (ctx, c, a) async => showToast(ctx, a['text'] as String? ?? 'Saved'),
+  // {"text": "...", "delay": 1500}: the toast lasts 2 s, so it is shown late enough to be on screen at the shot.
+  'toast': (ctx, c, a) async {
+    await Future<void>.delayed(Duration(milliseconds: a['delay'] as int? ?? 1300));
+    if (ctx.mounted) showToast(ctx, a['text'] as String? ?? 'Saved', icon: a['icon'] == 'signal' ? AppIcons.signal : null);
+  },
   'dailyGift': (ctx, c, a) => showDailyRewardSheet(ctx),
   'piggy': (ctx, c, a) => showPiggySheet(ctx),
   'avatarPicker': (ctx, c, a) => showAvatarPicker(ctx),
@@ -100,8 +125,37 @@ final hooks = <String, Hook>{
         ctx,
         title: a['title'] as String?,
         device: _row(a['puzzle'] as String? ?? 'x', layout: [for (var i = 0; i < 16; i++) i < 9 ? i : 24 - i], moves: 31, seconds: 260),
-        other: _row(a['puzzle'] as String? ?? 'x', layout: [for (var i = 0; i < 16; i++) i < 4 ? i : 19 - i], moves: 12, seconds: 95),
+        other: _row(a['puzzle'] as String? ?? 'x', layout: [for (var i = 0; i < 16; i++) i < 4 ? i : 19 - i], moves: 12, seconds: 95, mode: a['otherMode'] as String? ?? 'cards'),
       ),
+  // The "Synced from another device" alert through the real SyncHost: {"size": "small" | "big" | "skips"}.
+  'syncNotice': (ctx, c, a) async {
+    final n = switch (a['size'] as String? ?? 'small') {
+      'big' => const SyncNotice(
+          coins: 1460, tickets: 3, hints: -1, level: 12, solved: 14, betterStars: 3, boards: ['a', 'b'],
+          packs: ['wild-nature', 'ai-wild-animals'], quests: 4, achievements: 2, dailyStreak: 9, avatarChanged: true,
+          skipped: [SkipReason.questClaimed, SkipReason.dailyClaimed]),
+      'skips' => const SyncNotice(skipped: [SkipReason.notEnough, SkipReason.unlocked]),
+      _ => const SyncNotice(coins: 240, solved: 3, boards: ['a']),
+    };
+    c.read(syncNoticeProvider.notifier).add(n);
+  },
+  // The update prompt through the real UpdateHost: {"channel": "testflight" | "appStore" | "web", "build": 119, "current": 118}.
+  'updatePrompt': (ctx, c, a) async {
+    UpdateHost.lastAsked = null;
+    final channel = a['channel'] as String? ?? 'testflight';
+    final AvailableUpdate? u;
+    if (channel == 'web') {
+      u = await WebUpdateSource(current: 'old', fetch: (_) async => '{"build": "new"}', reload: () {}).check();
+    } else {
+      u = await IosUpdateSource(_ReleaseTables(a['build'] as int? ?? 119, a['version'] as String? ?? '1.7.0'),
+              channel: channel == 'appStore' ? IosChannel.appStore : IosChannel.testflight, currentBuild: a['current'] as int? ?? 118, open: (_) async => true)
+          .check();
+    }
+    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+    c.read(appUpdateProvider.notifier).state = u;
+  },
+  // The one-time daily reminder question (real code; needs notification permission "not determined").
+  'reminderOffer': (ctx, c, a) => offerRemindersAfterGift(ctx, c),
   'merge': (ctx, c, a) => showMergeSheet(
         ctx,
         device: SaveSnapshot(userId: 'dqa-player', profile: {'coins': 1240, 'tickets': 4, 'hints': 2, 'xp': 2200, 'puzzlesCompleted': 17, 'streak': 3}, progress: const []),
