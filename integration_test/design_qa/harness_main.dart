@@ -242,7 +242,7 @@ Future<ProviderContainer> buildContainer(Map<String, dynamic> scene) async {
   server.profiles[userId] = server.write(null, row, userId);
   final progress = progressPreset(scene['progress'] as String? ?? 'some', packs, puzzles);
   for (final e in ((scene['progressRows'] as Map?) ?? const {}).entries) {
-    progress[e.key as String] = {'puzzleId': e.key, ...Map<String, dynamic>.from(e.value as Map)};
+    progress[e.key as String] = {'puzzleId': e.key, for (final f in (e.value as Map).entries) f.key as String: when(f.value)};
   }
   for (final e in progress.entries) {
     final id = deterministicId(userId, e.key);
