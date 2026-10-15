@@ -246,13 +246,20 @@ Future<ProviderContainer> buildContainer(Map<String, dynamic> scene) async {
   });
   if (scene['introsSeen'] ?? true) prefs.values['unlockIntros'] = jsonEncode({'seen': [for (final u in Unlock.values) u.name]});
   for (final e in ((scene['prefs'] as Map?) ?? const {}).entries) {
-    prefs.values[e.key as String] = e.value as Object;
+    // Relative times work here too ("NOW", "DAYS:-0.003"), written as local ISO strings like LocalStore does.
+    final v = e.value;
+    prefs.values[e.key as String] = v is String && (v == 'NOW' || v.startsWith('DAYS:'))
+        ? (v == 'NOW' ? DateTime.now() : DateTime.now().add(Duration(seconds: (double.parse(v.substring(5)) * 86400).round()))).toIso8601String()
+        : v as Object;
   }
 
   final server = FakeServer();
   // Relative times in overrides: "NOW", "TODAY" (this morning), "DAYS:-2.5".
   dynamic when(dynamic v) {
+    if (v is List) return [for (final x in v) when(x)];
     if (v is! String) return v;
+    // Quest keys of the scene's day and week: "d:{day}:solve3", "{week}:solve10".
+    if (v.contains('{day}') || v.contains('{week}')) return v.replaceAll('{day}', Goals.dayKey(now)).replaceAll('{week}', Goals.weekKey(now));
     if (v == 'NOW') return iso(now);
     if (v == 'TODAY') return iso(DateTime(now.year, now.month, now.day, 0, 5));
     if (v.startsWith('DAYS:')) return iso(now.add(Duration(minutes: (double.parse(v.substring(5)) * 24 * 60).round())));
@@ -267,7 +274,7 @@ Future<ProviderContainer> buildContainer(Map<String, dynamic> scene) async {
   server.profiles[userId] = server.write(null, row, userId);
   final progress = progressPreset(scene['progress'] as String? ?? 'some', packs, puzzles);
   for (final e in ((scene['progressRows'] as Map?) ?? const {}).entries) {
-    progress[e.key as String] = {'puzzleId': e.key, ...Map<String, dynamic>.from(e.value as Map)};
+    progress[e.key as String] = {'puzzleId': e.key, for (final f in (e.value as Map).entries) f.key as String: when(f.value)};
   }
   for (final e in progress.entries) {
     final id = deterministicId(userId, e.key);
@@ -288,8 +295,9 @@ Future<ProviderContainer> buildContainer(Map<String, dynamic> scene) async {
     syncBackendProvider.overrideWithValue(FakeBackend(server)),
     authProvider.overrideWith(() => FakeAuth(user)),
     authRepositoryProvider.overrideWithValue(_FakeAuthRepo(user, apple: scene['apple'] == true)),
-    profileRepositoryProvider.overrideWithValue(FakeProfileRepo(league: league, claims: (row['questsCompleted'] as int?) ?? 0)),
+    profileRepositoryProvider.overrideWithValue(FakeProfileRepo(league: league, claims: (row['questsCompleted'] as int?) ?? 0, down: scene['socialDown'] == true)),
     socialRepositoryProvider.overrideWithValue(FakeSocialRepo(
+      down: scene['socialDown'] == true,
       friendList: friends,
       blocked: [
         for (final p in league.reversed.take((scene['blocked'] as int?) ?? 0))
