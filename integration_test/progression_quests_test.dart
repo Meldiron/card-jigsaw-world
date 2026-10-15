@@ -190,7 +190,8 @@ void main() {
     await tester.tap(find.byIcon(CupertinoIcons.back).first, warnIfMissed: false);
     await settle(tester, 1500);
 
-    // A third board finishes "Solve 3 puzzles": two or more rewards, Claim all.
+    // A third board finishes "Solve 3 puzzles", and nothing else: every other quest asks for
+    // something these Cozy boards are not.
     await quickPlay(tester);
     await playCozy(tester);
     questLine |= find.byKey(const ValueKey('quest-ready-line')).evaluate().isNotEmpty;
@@ -200,10 +201,13 @@ void main() {
     await tapText(tester, 'Quests', ms: 3000);
     final ready = readyGoals(container(tester).read(progressProvider).value!.values, container(tester).read(profileProvider).value, container(tester).read(openFeaturesProvider), DateTime.now());
     debugPrint('QA_READY ${ready.map((g) => g.key).toList()}');
-    expect(ready.length, greaterThanOrEqualTo(2));
-    expect(find.byKey(const ValueKey('claim-all')), findsOneWidget);
-    await shot(tester, 'pq_11_claim_all');
-    await tapText(tester, 'Claim all', ms: 3000);
+    expect([for (final g in ready) if (g.key.startsWith('d:')) g.title], ['Solve 3 puzzles']);
+    await shot(tester, 'pq_11_ready');
+    if (find.byKey(const ValueKey('claim-all')).evaluate().isNotEmpty) {
+      await tapText(tester, 'Claim all', ms: 3000);
+    } else {
+      await tapText(tester, 'Claim', ms: 3000);
+    }
     await shot(tester, 'pq_12_claimed');
     expect(readyGoals(container(tester).read(progressProvider).value!.values, container(tester).read(profileProvider).value, container(tester).read(openFeaturesProvider), DateTime.now()), isEmpty);
     expect(find.byKey(const ValueKey('claim-all')), findsNothing);

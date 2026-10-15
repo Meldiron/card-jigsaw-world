@@ -6,8 +6,10 @@ import 'dart:typed_data';
 
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
+import 'package:card_jigsaw_world/data/purchases.dart';
 import 'package:card_jigsaw_world/data/repositories.dart';
 import 'package:card_jigsaw_world/models/models.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 
 class NoClient implements Client {
   @override
@@ -183,6 +185,41 @@ class FakeUploadRepo extends UploadRepository {
 
   @override
   Future<void> delete(MyPuzzle p) async {}
+}
+
+/// The App Store without StoreKit or the network. The app listens for purchases from launch and
+/// wakes the verify-purchase function on Buy; here nothing does either. A Buy leaves the tapped row
+/// waiting, as while the App Store sheet is open, until the flow gives up (10 s).
+class FakePurchaseService extends PurchaseService {
+  FakePurchaseService({required this.up, required this.products}) : super(NoClient());
+  final bool up;
+  final Map<String, ProductDetails> products;
+
+  @override
+  Future<void> start() async {}
+  @override
+  Future<bool> isAvailable() async => up;
+  @override
+  Future<Map<String, ProductDetails>> queryProducts() async => up ? products : const {};
+  @override
+  Future<bool> buy(ProductDetails product) async => true;
+  @override
+  void warmUp() {}
+  @override
+  Future<bool> presentCodeRedemptionSheet() async => false;
+  @override
+  Future<void> restorePurchases() async {}
+  @override
+  Future<Set<String>> checkOpenPurchases() async => const {};
+}
+
+/// Settings > Send feedback: kept in memory, never written to the live table.
+class FakeFeedbackRepo extends FeedbackRepository {
+  FakeFeedbackRepo() : super(_tables);
+  final sent = <String>[];
+
+  @override
+  Future<void> send({required String userId, required String message, String? appVersion, String? platform}) async => sent.add(message);
 }
 
 models.User fakeUser(String id, {String name = 'Player', String email = ''}) => models.User.fromMap({

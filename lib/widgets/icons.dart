@@ -179,6 +179,7 @@ class AppIcons {
   static const clock = CupertinoIcons.clock;
   static const delete = CupertinoIcons.delete;
   static const docPlaintext = CupertinoIcons.doc_plaintext;
+  static const chatBubbleText = CupertinoIcons.chat_bubble_text;
   static const ellipsis = CupertinoIcons.ellipsis;
   static const flag = CupertinoIcons.flag;
   static const infoCircle = CupertinoIcons.info_circle;

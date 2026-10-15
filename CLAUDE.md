@@ -143,7 +143,10 @@ skills under `.claude/skills/` hold the detailed workflows.
   or when the last break is 3+ minutes old, closable after 5 s, rewarded 15 s; the offer CTA never
   skips the rewarded countdown.
 - `lib/data/purchases.dart`: StoreKit products (coins_1000/3000/5500/12000, tickets_5/15, hints_5/15,
-  vip_monthly/yearly), verified server-side by the `verify-purchase` function.
+  vip_monthly/yearly), verified server-side by the `verify-purchase` function. `PurchaseService` listens from
+  launch, checks open transactions on resume and retries checks without an answer; `PurchaseFlow`
+  (`lib/state/purchases.dart`) and `PurchaseHost` (`lib/features/store/purchase_host.dart`) show the tile
+  spinner, the purchase sheet ("Adding 10 tickets" > "10 tickets added") and toasts. Flow: `docs/purchases.md`.
 - `lib/core/platform.dart`: web capability flags.
   `lib/core/sfx.dart`: `CJW_MUTE`. `lib/core/qa.dart`: `CJW_QA` / `CJW_QA_RUN` (test players).
 - Daily reminders: local iOS notifications, no server. `lib/state/reminders.dart` (`planReminders`: one a
@@ -168,7 +171,10 @@ skills under `.claude/skills/` hold the detailed workflows.
 - Progression: `lib/state/unlocks.dart` (`openFeaturesProvider`, intro bookkeeping) and `Unlocks` /
   `OpenFeatures` in `lib/state/rewards.dart`: Squares, Triangles, Hexagons, Painting and giant boards open at
   levels 2/4/6/8/10 or once used; `lib/features/game/unlock_intro.dart` (intro sheet, `UnlockIntroHost`).
-  Quests: `Goals.daily` / `weekly` rotate by day and week and take `open`, `level` and `claimed`;
+  Quests: `Goals.daily` / `weekly` rotate by day and week and take `open`, `level`, `claimed` (and the
+  daily puzzle); each quest comes from a different lane, chosen against the player's `PlayHabits`, so
+  ordinary play finishes only "Solve 3 puzzles" and one board never finishes two (docs/economy.md, "Quests
+  that do not overlap");
   `lib/features/events/quest_rewards.dart` (`questsFor`, `readyGoals`, `readyEventsProvider`, Claim all).
   Integration suites that play every shape override `openFeaturesProvider` and `pendingUnlockIntroProvider`.
 - Deep links (`docs/deep-links.md`): `lib/core/app_links.dart` (`AppLink.parse`: one path set for the web
@@ -193,7 +199,7 @@ skills under `.claude/skills/` hold the detailed workflows.
 
 - Endpoint `https://fra.cloud.appwrite.io/v1`, project `6acb4de5003e38d5ebd9`, database `cjw`
   (tables profiles, packs, puzzles, progress, events, event_progress, friends, ledger, my_puzzles,
-  purchases, meta, releases, reports, blocks). Profiles are readable by anyone; `level` mirrors XP; aggregates `totalMoves`,
+  purchases, meta, releases, reports, blocks, feedback). Profiles are readable by anyone; `level` mirrors XP; aggregates `totalMoves`,
   `totalSeconds`, `solvedByMode`, `questsCompleted` and the "Total Completion" numbers
   (`picturesSolved`, `picturesPerfect`, `packsCompleted`, `packsPerfect`, kept in step by
   `ProfileNotifier.syncCompletion`, backfill `tools/dev/backfill_profile_stats.py`) are public.
@@ -209,6 +215,11 @@ skills under `.claude/skills/` hold the detailed workflows.
   `Query.notEqual('$id')` each) and their friendship ends; Settings > Blocked players unblocks. Both tables are
   deleted in both directions with an account (`delete-account`, `PAIR_TABLES` in `tools/dev/cjw_admin.py`).
   `lib/state/social.dart` (`PlayerSafety`, `blockedPlayersProvider`), `lib/features/social/player_safety.dart`.
+- Help (owner, 2026-10-15): Settings > Help > Contact support opens an email to support@almostapps.eu with
+  the version and player id below the message (copies the address when there is no mail app); Send
+  feedback writes a `feedback` row (userId, message, appVersion, platform) with no permissions, so only the
+  server reads it: `tools/dev/feedback.py` lists and closes them. Deleted with the account (`delete-account`)
+  and with QA players. `lib/features/profile/help.dart`.
 - Legal links: `AppLinks` in `lib/core/links.dart` (privacy policy = `docs/privacy-policy.md` on GitHub, the
   same URL as the listing; terms of use = Apple's standard EULA) in Settings > About, under the VIP plans in
   the store and on the sign-in screen. Keep `docs/privacy-policy.md` true to what the app does.

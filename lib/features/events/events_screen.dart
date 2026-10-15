@@ -56,9 +56,10 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
     final now = DateTime.now();
     final profile = ref.watch(profileProvider).value;
     final open = ref.watch(openFeaturesProvider);
-    final quests = questsFor(progress.values, profile, open, now);
+    final dailyPuzzle = ref.watch(dailyPuzzleProvider)?.id;
+    final quests = questsFor(progress.values, profile, open, now, dailyPuzzle: dailyPuzzle);
     final daily = quests.daily, weekly = quests.weekly;
-    final readyQuests = readyGoals(progress.values, profile, open, now);
+    final readyQuests = readyGoals(progress.values, profile, open, now, dailyPuzzle: dailyPuzzle);
     final readyEvents = ref.watch(readyEventsProvider);
 
     return Scaffold(
@@ -262,6 +263,10 @@ class _GoalRow extends ConsumerWidget {
     }
 
     void play() {
+      if (goal.puzzleId != null) {
+        context.push('/play/${goal.puzzleId}');
+        return;
+      }
       final p = pickRandomPlayable(ref);
       if (p != null) {
         final grid = goal.minCells > 0 ? GridSpec.fromCells(goal.minCells).code : '';
@@ -324,6 +329,9 @@ IconData _questIcon(String name) => switch (name) {
       'streak' => AppIcons.streak,
       'bigBoard' => AppIcons.bigBoard,
       'painting' => AppIcons.painting,
+      // "Solve a 4x4 board in under 1:30": the time to beat.
+      'time' => AppIcons.timer,
+      'dailyPuzzle' => AppIcons.dailyPuzzle,
       _ => AppIcons.puzzle,
     };
 

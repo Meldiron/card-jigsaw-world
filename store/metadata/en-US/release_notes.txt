@@ -8,7 +8,7 @@ New ways to play
 - Shapes and options open as you level up: Squares, Triangles, Hexagons, Painting, then giant boards, each with a short intro.
 
 Quests and rewards
-- New quests: solve without Peek, finish at par, lock 5 cards in one move, solve a Painting board.
+- Quests that do not overlap: besides Solve 3 puzzles, each one asks for something different, like a shape you rarely play, a bigger board, Painting, a board at par, a time to beat or cards locked in one move.
 - Claim all on the Quests tab, a dot on the tab when a reward is ready, and the completion screen tells you when a quest is done.
 - Lucky Wheel: some coin prizes are now Peeks and Magic, kept for your next games and used before coins. See odds lists every prize and its chance.
 - VIP members get their 500 bonus coins automatically once a week, and VIP can be shared with your family through Family Sharing.

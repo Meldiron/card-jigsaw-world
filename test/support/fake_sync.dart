@@ -15,6 +15,7 @@ import 'package:card_jigsaw_world/state/progress.dart';
 import 'package:card_jigsaw_world/state/settings.dart';
 import 'package:card_jigsaw_world/state/sync.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:shared_preferences/shared_preferences.dart';
 
 models.User testUser(String id, {String email = ''}) => models.User.fromMap({
@@ -214,7 +215,7 @@ class FakeProfileRepo extends ProfileRepository {
 
 /// One device of a player: its own storage and connection, the shared server.
 class Device {
-  Device(this.server, this.user, {FakePrefs? prefs, List<Pack> packs = const [], List<Puzzle> puzzles = const [], FakeProfileRepo? repo})
+  Device(this.server, this.user, {FakePrefs? prefs, List<Pack> packs = const [], List<Puzzle> puzzles = const [], FakeProfileRepo? repo, List<Override> overrides = const []})
       : prefs = prefs ?? FakePrefs(),
         repo = repo ?? FakeProfileRepo() {
     backend = FakeBackend(server);
@@ -228,6 +229,7 @@ class Device {
       publicPacksProvider.overrideWith((ref) async => packs),
       publicPuzzlesProvider.overrideWith((ref) async => puzzles),
       eventsProvider.overrideWith((ref) async => const <GameEvent>[]),
+      ...overrides,
     ]);
   }
 

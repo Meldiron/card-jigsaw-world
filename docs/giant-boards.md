@@ -57,8 +57,8 @@ any other (`Board.shuffled`: no card in place, no pair joined).
   Hint shows, else any card not in place.
 - **Peek** (10 coins on every board; owner, 2026-10-14: no free Peek on giant boards): every card not in place flies to its place,
   the picture shows (3.2 s on a giant board, 2.4 s elsewhere) and the cards fly back, each a little
-  later than the last, so the picture builds itself in a ripple. Using it still counts for the
-  "without Peek" quests.
+  later than the last, so the picture builds itself in a ripple. Using it still counts against the
+  "without Peek" quest (a fallback for level 1 players).
 
 ### The other tools
 

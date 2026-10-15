@@ -21,6 +21,9 @@ class AppwriteConfig {
 
   /// Players a player blocked (Player > Block): left out of their leaderboard; rows only they read.
   static const blocks = 'blocks';
+
+  /// Settings > Send feedback: rows only the server reads (`tools/dev/feedback.py`).
+  static const feedback = 'feedback';
   static const ledger = 'ledger';
   static const myPuzzles = 'my_puzzles';
   static const meta = 'meta';

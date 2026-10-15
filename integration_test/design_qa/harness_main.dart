@@ -319,6 +319,9 @@ Future<ProviderContainer> buildContainer(Map<String, dynamic> scene) async {
     }))),
     storeAvailableProvider.overrideWith((ref) async => store != 'down'),
     productsProvider.overrideWith((ref) async => store == 'down' ? const <String, ProductDetails>{} : fakeProducts),
+    // The purchase flow listens from launch (app.dart): a service without StoreKit or the network.
+    purchaseServiceProvider.overrideWithValue(FakePurchaseService(up: store != 'down', products: fakeProducts)),
+    feedbackRepositoryProvider.overrideWithValue(FakeFeedbackRepo()),
     if (scene['allOpen'] == true) openFeaturesProvider.overrideWithValue(OpenFeatures.all),
     // "prefs": {"reminders": true}: keep the switch on (the simulator has not granted notifications,
     // which would turn it off on start), so Settings shows the reminder rows.

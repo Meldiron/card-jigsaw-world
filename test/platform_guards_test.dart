@@ -215,6 +215,10 @@ void main() {
       expect(find.text('Daily reminders'), findsNothing);
       expect(find.text('Sign in or create account'), findsOneWidget);
       expect(find.byKey(const ValueKey('settings-redeem-pack-code')), findsOneWidget, reason: 'pack codes keep their row on the web');
+      for (final key in ['settings-support', 'settings-feedback']) {
+        await tester.dragUntilVisible(find.byKey(ValueKey(key)), find.byType(Scrollable).first, const Offset(0, -200));
+        expect(find.byKey(ValueKey(key)), findsOneWidget, reason: '$key on the web too');
+      }
     });
 
     testWidgets('keeps them on iOS', (tester) async {
@@ -230,7 +234,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byKey(const ValueKey('settings-redeem-pack-code')), findsNothing);
       expect(find.text('Redeem a pack code'), findsNothing);
-      for (final key in ['settings-privacy', 'settings-terms', 'settings-support', 'settings-blocked']) {
+      for (final key in ['settings-privacy', 'settings-terms', 'settings-support', 'settings-feedback', 'settings-blocked']) {
         await tester.dragUntilVisible(find.byKey(ValueKey(key)), find.byType(Scrollable).first, const Offset(0, -200));
         expect(find.byKey(ValueKey(key)), findsOneWidget, reason: key);
       }

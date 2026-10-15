@@ -33,18 +33,19 @@ bool anyGoalReady(List<Goal> goals, int freeCount, Profile? profile) {
 
 /// Today's daily and this week's weekly quests for [profile]: only what
 /// [open] allows, and a slot keeps the quest already claimed in it.
-({List<Goal> daily, List<Goal> weekly}) questsFor(Iterable<PuzzleProgress> rows, Profile? profile, OpenFeatures open, DateTime now) {
+/// [dailyPuzzle] is today's daily puzzle (`dailyPuzzleProvider`).
+({List<Goal> daily, List<Goal> weekly}) questsFor(Iterable<PuzzleProgress> rows, Profile? profile, OpenFeatures open, DateTime now, {String? dailyPuzzle}) {
   final claimed = profile?.claimedGoals.toSet() ?? const <String>{};
   final level = profile?.level ?? 1;
   return (
-    daily: Goals.daily(rows, now, open: open, level: level, claimed: claimed),
+    daily: Goals.daily(rows, now, open: open, level: level, claimed: claimed, dailyPuzzle: dailyPuzzle),
     weekly: Goals.weekly(rows, now, open: open, level: level, claimed: claimed),
   );
 }
 
 /// The quests ready to claim now, daily ones first.
-List<Goal> readyGoals(Iterable<PuzzleProgress> rows, Profile? profile, OpenFeatures open, DateTime now) {
-  final q = questsFor(rows, profile, open, now);
+List<Goal> readyGoals(Iterable<PuzzleProgress> rows, Profile? profile, OpenFeatures open, DateTime now, {String? dailyPuzzle}) {
+  final q = questsFor(rows, profile, open, now, dailyPuzzle: dailyPuzzle);
   return [
     for (var i = 0; i < q.daily.length; i++)
       if (goalReady(q.daily[i], i, Goals.dailyFree, profile)) q.daily[i],
@@ -110,6 +111,6 @@ final questRewardReadyProvider = Provider<bool>((ref) {
   final profile = ref.watch(profileProvider).value;
   if (profile == null) return false;
   final progress = (ref.watch(progressProvider).value ?? const <String, PuzzleProgress>{}).values;
-  if (readyGoals(progress, profile, ref.watch(openFeaturesProvider), DateTime.now()).isNotEmpty) return true;
+  if (readyGoals(progress, profile, ref.watch(openFeaturesProvider), DateTime.now(), dailyPuzzle: ref.watch(dailyPuzzleProvider)?.id).isNotEmpty) return true;
   return ref.watch(readyEventsProvider).isNotEmpty;
 });

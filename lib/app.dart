@@ -10,11 +10,12 @@ import 'core/reminders.dart';
 import 'core/sfx.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/tokens.dart';
-import 'data/purchases.dart';
 import 'features/links/deep_links.dart';
+import 'features/store/purchase_host.dart';
 import 'features/sync/sync_host.dart';
 import 'features/update/update_host.dart';
 import 'router.dart';
+import 'state/auth.dart';
 import 'state/catalog.dart';
 import 'state/purchases.dart';
 import 'state/reminders.dart';
@@ -37,13 +38,17 @@ class _CardJigsawAppState extends ConsumerState<CardJigsawApp> with WidgetsBindi
     ImageFiles.attach(ref.read(storageProvider));
     if (supportsQuickActions) _setUpQuickActions();
     if (supportsNotifications) _setUpReminders();
-    // Coins and VIP from a purchase on this device arrive through the server; take them in
-    // without the "Synced from another device" alert.
-    if (supportsPurchases) {
-      ref.read(purchaseServiceProvider).events.listen((e) {
-        if (e is PurchaseVerified) ref.read(syncProvider.notifier).sync(silent: true);
-      });
-    }
+    // Apple: listen for transactions as soon as the app starts, so a purchase paid while the app
+    // was closed, restarted or on another screen is added now. After the sign-in: the check needs
+    // the session.
+    if (supportsPurchases) _startPurchases();
+  }
+
+  Future<void> _startPurchases() async {
+    try {
+      await ref.read(authProvider.future);
+    } catch (_) {}
+    if (mounted) await ref.read(purchaseFlowProvider.notifier).start();
   }
 
   /// Home Screen long-press menu: "One last game?" opens a playable puzzle.
@@ -108,6 +113,7 @@ class _CardJigsawAppState extends ConsumerState<CardJigsawApp> with WidgetsBindi
     if (state == AppLifecycleState.resumed) {
       if (ref.read(settingsProvider).music) Sfx.instance.startMusic();
       ref.read(syncProvider.notifier).onResume();
+      if (supportsPurchases) ref.read(purchaseFlowProvider.notifier).onResume();
       // Picks up a permission change made in iOS Settings.
       if (supportsNotifications) ref.read(remindersProvider).refresh();
     } else if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive || state == AppLifecycleState.hidden) {
@@ -140,7 +146,7 @@ class _CardJigsawAppState extends ConsumerState<CardJigsawApp> with WidgetsBindi
         final host = Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.transparent,
-          body: ScaffoldMessenger(child: UpdateHost(child: SyncHost(child: child!))),
+          body: ScaffoldMessenger(child: UpdateHost(child: SyncHost(child: PurchaseHost(child: child!)))),
         );
         // Text follows the system size up to iOS "xxxLarge" (1.35); bars cap themselves at 1.2 (ChromeText).
         final data = mq.copyWith(textScaler: mq.textScaler.clamp(minScaleFactor: 0.9, maxScaleFactor: 1.35));

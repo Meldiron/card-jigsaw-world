@@ -7,7 +7,7 @@
 // Only the user whose session made the call is deleted (x-appwrite-user-id, set by Appwrite); the
 // body never names a user. In order: Sign in with Apple tokens are revoked (when the player has an
 // Apple identity, the app sent a fresh authorization code and APPLE_SIGNIN_KEY is set), then their
-// My Puzzles photos, their rows in every player table (friend links, reports and blocks in both
+// My Puzzles photos, their rows in every player table (feedback, friend links, reports and blocks in both
 // directions), the profile row and finally the Appwrite user. Every step ignores what is already gone, so a retry
 // after a failure finishes the job. The same tables as PLAYER_TABLES in tools/dev/cjw_admin.py.
 import { createPrivateKey, createSign } from 'node:crypto';
@@ -16,7 +16,7 @@ import { Client, TablesDB, Storage, Users, Query } from 'node-appwrite';
 const DB = process.env.APPWRITE_DATABASE_ID || 'cjw';
 const UPLOADS = 'user-uploads';
 // Every table keyed by a player's user id; profiles also use the user id as the row id.
-const PLAYER_TABLES = ['progress', 'ledger', 'event_progress', 'friends', 'my_puzzles', 'purchases', 'code_claims'];
+const PLAYER_TABLES = ['progress', 'ledger', 'event_progress', 'friends', 'my_puzzles', 'purchases', 'code_claims', 'feedback'];
 // Tables keyed by two player columns (reports made and received, blocks made and received).
 const PAIR_TABLES = { reports: ['reporterId', 'reportedId'], blocks: ['blockerId', 'blockedId'] };
 const PAGE = 100;
