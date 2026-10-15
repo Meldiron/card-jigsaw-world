@@ -968,38 +968,46 @@ class _BoosterBar extends StatelessWidget {
   Widget build(BuildContext context) => ChromeText(child: Builder(builder: _build));
 
   Widget _build(BuildContext context) {
-    final c = context.colors;
-    final row = Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+    final undo = _Booster(icon: AppIcons.undo, label: 'Undo', enabled: canUndo, onTap: onUndo);
+    final paid = [
+      _Booster(key: const ValueKey('booster-peek'), icon: AppIcons.peek, label: 'Peek', stock: peeks, price: Economy.peekCostCoins, enabled: playing, onTap: onPeek),
+      _Booster(key: const ValueKey('booster-magic'), icon: AppIcons.magic, label: 'Magic', stock: magics, price: Economy.magicLockCostCoins, enabled: playing, onTap: onMagic),
+      _Booster(icon: AppIcons.hint, label: 'Hint', stock: hints, price: Economy.hintCostCoins, enabled: playing, onTap: onHint),
+    ];
+    // A floating glass capsule, the same material, shape and shadow as the tab bar.
+    Widget capsule(Widget child, {EdgeInsets padding = const EdgeInsets.symmetric(horizontal: 6)}) => DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(Radii.pill),
+            boxShadow: [
+              BoxShadow(color: Colors.black.withValues(alpha: context.isDark ? 0.4 : 0.09), blurRadius: 20, offset: const Offset(0, 6)),
+              BoxShadow(color: Colors.black.withValues(alpha: context.isDark ? 0.2 : 0.04), blurRadius: 2, offset: const Offset(0, 1)),
+            ],
+          ),
+          child: GlassSurface(
+            borderRadius: BorderRadius.circular(Radii.pill),
+            opacity: context.isDark ? 0.7 : 0.82,
+            hairline: Border.all(color: context.isDark ? Colors.white.withValues(alpha: 0.10) : Colors.black.withValues(alpha: 0.06), width: 0.5),
+            child: SizedBox(height: _Booster.barHeight, child: Padding(padding: padding, child: child)),
+          ),
+        );
+    // Undo, free and about the moves, in its own round glass button; the three
+    // helpers, which come from stock or cost coins, together in a capsule.
+    final bar = Row(
       children: [
-        _Booster(icon: AppIcons.undo, label: 'Undo', enabled: canUndo, onTap: onUndo),
-        _Booster(key: const ValueKey('booster-peek'), icon: AppIcons.peek, label: 'Peek', stock: peeks, price: Economy.peekCostCoins, enabled: playing, onTap: onPeek),
-        _Booster(key: const ValueKey('booster-magic'), icon: AppIcons.magic, label: 'Magic', stock: magics, price: Economy.magicLockCostCoins, enabled: playing, onTap: onMagic),
-        _Booster(icon: AppIcons.hint, label: 'Hint', stock: hints, price: Economy.hintCostCoins, enabled: playing, onTap: onHint),
+        capsule(SizedBox(width: _Booster.barHeight - 4, child: undo), padding: const EdgeInsets.symmetric(horizontal: 2)),
+        const SizedBox(width: 10),
+        Expanded(child: capsule(Row(children: [for (final b in paid) Expanded(child: b)]))),
       ],
     );
-    // A floating glass toolbar, the same material and shape as the tab bar.
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(Radii.pill),
-          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: context.isDark ? 0.35 : 0.08), blurRadius: 18, offset: const Offset(0, 4))],
-        ),
-        child: GlassSurface(
-          borderRadius: BorderRadius.circular(Radii.pill),
-          opacity: context.isDark ? 0.7 : 0.82,
-          hairline: Border.all(color: c.stroke, width: 0.5),
-          child: Padding(padding: const EdgeInsets.fromLTRB(10, 8, 10, 7), child: row),
-        ),
-      ),
-    );
+    return Padding(padding: const EdgeInsets.fromLTRB(16, 4, 16, 8), child: bar);
   }
 }
 
-/// One tool. What it costs reads the same on every tool: a count on its
-/// corner while there are some in stock, else its price in coins under the
-/// label. Undo is free and shows neither.
+/// One tool: its mark over its name, and one badge on the mark's corner that
+/// says what using it takes: how many are in stock (ink count, "999+" above
+/// that, as iOS badges do), or once the stock is out, its price (a coin and
+/// the amount). Undo is free and has no badge. Every tool has the same two
+/// lines, so marks and names align.
 class _Booster extends StatelessWidget {
   const _Booster({super.key, required this.icon, required this.label, required this.enabled, required this.onTap, this.stock, this.price});
   final IconData icon;
@@ -1013,51 +1021,75 @@ class _Booster extends StatelessWidget {
   /// Coins per use once the stock is out.
   final int? price;
 
+  /// Height of the toolbar capsule.
+  static const barHeight = 58.0;
+
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
     final count = stock ?? 0;
     final buying = stock != null && count == 0 && price != null;
-    return Pressable(
-      onTap: enabled ? onTap : null,
-      scale: 0.9,
-      child: Opacity(
-        opacity: enabled ? 1 : 0.4,
-        child: SizedBox(
-          width: 64,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  SizedBox(width: 40, height: 30, child: Icon(icon, size: 26, color: context.accent)),
-                  if (count > 0)
-                    Positioned(
-                      right: -11,
-                      top: -6,
-                      child: Container(
-                        constraints: const BoxConstraints(minWidth: 18),
-                        height: 18,
-                        padding: const EdgeInsets.symmetric(horizontal: 5),
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: c.textPrimary,
-                          borderRadius: BorderRadius.circular(Radii.pill),
-                          border: Border.all(color: c.card, width: 1.5),
-                        ),
-                        child: Text('$count', style: TextStyle(fontSize: TypeSize.micro, fontWeight: FontWeight.w700, color: c.card, height: 1.1)),
-                      ),
-                    ),
-                ],
-              ),
-              const SizedBox(height: 2),
-              Text(label, style: const TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600)),
-              SizedBox(
-                height: 14,
-                child: buying ? Amount(currency: Currency.coins, value: price!, size: 12, fontSize: TypeSize.micro, weight: FontWeight.w600, color: c.textSecondary) : null,
-              ),
-            ],
+    // The badge cuts out of the glass with a ring of the surface colour.
+    final ring = GlassSurface.tintColor(context);
+    Widget? badge;
+    if (count > 0) {
+      badge = Container(
+        constraints: const BoxConstraints(minWidth: 18),
+        height: 18,
+        padding: const EdgeInsets.symmetric(horizontal: 5),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(color: c.textPrimary, borderRadius: BorderRadius.circular(Radii.pill), border: Border.all(color: ring, width: 1.5)),
+        child: Text(count > 999 ? '999+' : '$count', style: TextStyle(fontSize: TypeSize.micro, fontWeight: FontWeight.w700, color: ring, height: 1.1, fontFeatures: tabularFigures)),
+      );
+    } else if (buying) {
+      badge = Container(
+        height: 18,
+        padding: const EdgeInsets.fromLTRB(3, 0, 6, 0),
+        decoration: BoxDecoration(
+          color: context.isDark ? c.cardElevated : Colors.white,
+          borderRadius: BorderRadius.circular(Radii.pill),
+          border: Border.all(color: c.stroke, width: 0.5),
+          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: context.isDark ? 0.3 : 0.08), blurRadius: 3, offset: const Offset(0, 1))],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const CoinIcon(size: 12),
+            const SizedBox(width: 2),
+            Text(formatCount(price!), style: TextStyle(fontSize: TypeSize.micro, fontWeight: FontWeight.w700, color: c.textPrimary, height: 1.1, fontFeatures: tabularFigures)),
+          ],
+        ),
+      );
+    }
+    return Semantics(
+      button: true,
+      enabled: enabled,
+      label: count > 0 ? '$label, $count left' : (buying ? '$label, ${countOf(price!, 'coin')}' : label),
+      child: Pressable(
+        onTap: enabled ? onTap : null,
+        scale: 0.9,
+        child: Opacity(
+          opacity: enabled ? 1 : 0.35,
+          child: SizedBox(
+            height: barHeight,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 26,
+                  height: 26,
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Icon(icon, size: 24, color: context.accent),
+                      if (badge != null) Positioned(left: 14, top: -4, child: badge),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 3),
+                Text(label, maxLines: 1, style: const TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600, letterSpacing: -0.1)),
+              ],
+            ),
           ),
         ),
       ),
