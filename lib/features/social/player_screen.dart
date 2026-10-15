@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/theme/tokens.dart';
+import '../../models/models.dart';
 import '../../state/achievements.dart';
 import '../../state/auth.dart';
 import '../../state/completion.dart';
@@ -27,6 +29,7 @@ class PlayerScreen extends ConsumerWidget {
     final c = context.colors;
     final profile = ref.watch(playerProfileProvider(userId));
     final isMe = ref.watch(currentUserIdProvider) == userId;
+    final blocked = ref.watch(blockedPlayersProvider).value?.any((b) => b.playerId == userId) ?? false;
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: GlassAppBar(
@@ -38,6 +41,20 @@ class PlayerScreen extends ConsumerWidget {
           ),
         ),
         leading: Padding(padding: const EdgeInsets.only(left: 12), child: RoundIconButton(icon: AppIcons.back, size: 38, onTap: () => context.pop())),
+        actions: [
+          // Report and block (guideline 1.2) for another player: one menu in the bar, reachable at
+          // any scroll position, as in Messages and Mail. App Review: Player > ... > Report / Block.
+          if (!isMe && ref.watch(currentUserIdProvider) != null && profile.value != null)
+            Padding(
+              padding: const EdgeInsets.only(right: 12),
+              child: RoundIconButton(
+                key: const ValueKey('player-more'),
+                icon: AppIcons.ellipsis,
+                size: 38,
+                onTap: () => _showPlayerMenu(context, profile.value!, blocked: blocked),
+              ),
+            ),
+        ],
       ),
       body: profile.when(
         loading: () => const Loader(),
@@ -79,6 +96,11 @@ class PlayerScreen extends ConsumerWidget {
                                   if (p.isVip) ...[
                                     const SizedBox(width: 8),
                                     Chip2(label: 'VIP', icon: AppIcons.vip, color: c.accentTint, foreground: context.accent),
+                                  ],
+                                  // The menu's Unblock is the way back; the card says why they are missing from the league.
+                                  if (blocked && !isMe) ...[
+                                    const SizedBox(width: 8),
+                                    const Chip2(key: ValueKey('player-blocked'), label: 'Blocked', icon: AppIcons.block),
                                   ],
                                 ],
                               ),
@@ -131,39 +153,6 @@ class PlayerScreen extends ConsumerWidget {
                     return _BadgeTile(family: b.family, tier: b.tier);
                   },
                 ),
-              // Report and block (guideline 1.2), for another player's profile: quiet rows at the
-              // end of the page, as iOS does for "Block this Caller".
-              if (!isMe && ref.watch(currentUserIdProvider) != null) ...[
-                const SizedBox(height: 28),
-                SoftCard(
-                  padding: EdgeInsets.zero,
-                  child: Column(
-                    children: [
-                      _SafetyRow(
-                        key: const ValueKey('player-report'),
-                        icon: AppIcons.report,
-                        label: 'Report ${p.displayName}',
-                        onTap: () => showReportSheet(context, p),
-                      ),
-                      Divider(height: 1, thickness: 1, indent: 50, color: c.stroke),
-                      ref.watch(blockedPlayersProvider).value?.any((b) => b.playerId == p.userId) ?? false
-                          ? _SafetyRow(
-                              key: const ValueKey('player-unblock'),
-                              icon: AppIcons.block,
-                              label: 'Unblock ${p.displayName}',
-                              onTap: () => unblockPlayer(context, p.userId, p.displayName),
-                            )
-                          : _SafetyRow(
-                              key: const ValueKey('player-block'),
-                              icon: AppIcons.block,
-                              label: 'Block ${p.displayName}',
-                              danger: true,
-                              onTap: () => confirmBlock(context, p),
-                            ),
-                    ],
-                  ),
-                ),
-              ],
             ],
           );
         },
@@ -201,32 +190,45 @@ class _SummaryStat extends StatelessWidget {
   }
 }
 
-/// A plain row for Report / Block: icon and label in the text colour (Block in the danger colour).
-class _SafetyRow extends StatelessWidget {
-  const _SafetyRow({super.key, required this.icon, required this.label, required this.onTap, this.danger = false});
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-  final bool danger;
-  @override
-  Widget build(BuildContext context) {
-    final c = context.colors;
-    final tone = danger ? c.danger : c.textPrimary;
-    return Pressable(
-      onTap: onTap,
-      scale: 0.99,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        child: Row(
-          children: [
-            Icon(icon, size: 20, color: danger ? c.danger : c.textSecondary),
-            const SizedBox(width: 14),
-            Expanded(child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w500, color: tone))),
-          ],
+/// The player menu: Report, Block in red (Unblock once blocked), Cancel. The system action sheet,
+/// as for "Add a photo" in My Puzzles.
+void _showPlayerMenu(BuildContext context, Profile p, {required bool blocked}) {
+  showCupertinoModalPopup<void>(
+    context: context,
+    builder: (ctx) => CupertinoActionSheet(
+      title: Text(p.displayName),
+      actions: [
+        CupertinoActionSheetAction(
+          key: const ValueKey('player-report'),
+          onPressed: () {
+            Navigator.pop(ctx);
+            showReportSheet(context, p);
+          },
+          child: Text('Report ${p.displayName}', maxLines: 1, overflow: TextOverflow.ellipsis),
         ),
-      ),
-    );
-  }
+        if (blocked)
+          CupertinoActionSheetAction(
+            key: const ValueKey('player-unblock'),
+            onPressed: () {
+              Navigator.pop(ctx);
+              unblockPlayer(context, p.userId, p.displayName);
+            },
+            child: Text('Unblock ${p.displayName}', maxLines: 1, overflow: TextOverflow.ellipsis),
+          )
+        else
+          CupertinoActionSheetAction(
+            key: const ValueKey('player-block'),
+            isDestructiveAction: true,
+            onPressed: () {
+              Navigator.pop(ctx);
+              confirmBlock(context, p);
+            },
+            child: Text('Block ${p.displayName}', maxLines: 1, overflow: TextOverflow.ellipsis),
+          ),
+      ],
+      cancelButton: CupertinoActionSheetAction(isDefaultAction: true, onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
+    ),
+  );
 }
 
 class _BadgeTile extends StatelessWidget {
