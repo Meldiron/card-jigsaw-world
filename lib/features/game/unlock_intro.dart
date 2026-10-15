@@ -176,7 +176,7 @@ Future<void> showLockedInfo(BuildContext context, WidgetRef ref, Unlock u) async
           const SizedBox(height: 18),
           _LevelDistance(level: LevelRewards.levelForXp(xp), progress: goal == 0 ? 1 : xp / goal, left: left),
           const SizedBox(height: 20),
-          BigButton(label: 'Got it', kind: ButtonKind.secondary, onTap: () => Navigator.pop(ctx)),
+          BigButton(label: 'Got it', onTap: () => Navigator.pop(ctx)),
         ],
       ),
     ),

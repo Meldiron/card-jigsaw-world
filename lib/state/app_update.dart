@@ -38,22 +38,19 @@ class UpdatePolicy {
 /// A newer build than the one running.
 @immutable
 class AvailableUpdate {
-  const AvailableUpdate({required this.latest, required this.message, this.action = 'Update'});
+  const AvailableUpdate({required this.latest, required this.message});
 
   /// The newest build's id (web deploy id, or iOS build number).
   final String latest;
 
-  /// The alert's text.
+  /// The alert's text: what is new and where the update comes from (its button says Update).
   final String message;
 
-  /// The alert's button: where it takes the player ("Open App Store", "Reload").
-  final String action;
+  @override
+  bool operator ==(Object other) => other is AvailableUpdate && other.latest == latest && other.message == message;
 
   @override
-  bool operator ==(Object other) => other is AvailableUpdate && other.latest == latest && other.message == message && other.action == action;
-
-  @override
-  int get hashCode => Object.hash(latest, message, action);
+  int get hashCode => Object.hash(latest, message);
 }
 
 /// Where this install learns about newer builds and how it gets one.
@@ -89,7 +86,7 @@ class WebUpdateSource implements UpdateSource {
     if (body == null) return null;
     final latest = '${(jsonDecode(body) as Map<String, dynamic>)['build'] ?? ''}';
     if (latest.isEmpty || latest == current) return null;
-    return AvailableUpdate(latest: latest, message: 'A new version of Card Jigsaw World is out. Reloading the page keeps your progress.', action: 'Reload');
+    return AvailableUpdate(latest: latest, message: 'A new version of Card Jigsaw World is out. Updating reloads the page and keeps your progress.');
   }
 
   @override
@@ -148,7 +145,7 @@ class IosUpdateSource implements UpdateSource {
     final message = channel == IosChannel.appStore
         ? '${hasVersion ? 'Version $version' : 'A new version'} is ready in the App Store. Your progress is kept.'
         : '${hasVersion ? 'Version $version ($build)' : 'Build $build'} is ready in TestFlight. You have build $currentBuild.';
-    return AvailableUpdate(latest: '$build', message: message, action: 'Open ${channel == IosChannel.appStore ? 'App Store' : 'TestFlight'}');
+    return AvailableUpdate(latest: '$build', message: message);
   }
 
   @override

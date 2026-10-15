@@ -171,21 +171,28 @@ class _DqaRootState extends State<DqaRoot> {
     final scale = _textScale;
     Widget app = UncontrolledProviderScope(container: c, child: CardJigsawApp(key: _appKey));
     if (scale != null) app = MediaQuery(data: mq.copyWith(textScaler: TextScaler.linear(scale)), child: app);
-    if (_emulate != 'se') return app;
-    const size = Size(375, 667);
-    const pad = EdgeInsets.only(top: 20);
+    // "se" lays the app out in an SE frame at the top left; "pro" and "max" lay it out at those
+    // phones' size and scale it down to fit the screen (a layout check on a smaller simulator).
+    const frames = {
+      'se': (Size(375, 667), EdgeInsets.only(top: 20)),
+      'pro': (Size(402, 874), EdgeInsets.only(top: 62, bottom: 34)),
+      'max': (Size(440, 956), EdgeInsets.only(top: 62, bottom: 34)),
+    };
+    final frame = frames[_emulate];
+    if (frame == null) return app;
+    final (size, pad) = frame;
+    final framed = SizedBox.fromSize(
+      size: size,
+      child: MediaQuery(
+        data: mq.copyWith(size: size, padding: pad, viewPadding: pad, textScaler: scale == null ? mq.textScaler : TextScaler.linear(scale)),
+        child: app,
+      ),
+    );
     return ColoredBox(
       color: Colors.black,
-      child: Align(
-        alignment: Alignment.topLeft,
-        child: SizedBox.fromSize(
-          size: size,
-          child: MediaQuery(
-            data: mq.copyWith(size: size, padding: pad, viewPadding: pad, textScaler: scale == null ? mq.textScaler : TextScaler.linear(scale)),
-            child: app,
-          ),
-        ),
-      ),
+      child: _emulate == 'se'
+          ? Align(alignment: Alignment.topLeft, child: framed)
+          : FittedBox(fit: BoxFit.contain, alignment: Alignment.topLeft, child: framed),
     );
   }
 }

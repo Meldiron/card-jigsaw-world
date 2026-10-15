@@ -11,11 +11,14 @@ enum AvatarSource { free, coins, achievement }
 
 /// One avatar in the catalogue.
 class AvatarDef {
-  const AvatarDef(this.key, this.name, this.icon, this.color, this.source, {this.achievementId});
+  const AvatarDef(this.key, this.name, this.icon, this.color, this.source, {this.achievementId, this.glyph = Colors.white});
   final String key;
   final String name;
   final IconData icon;
   final Color color;
+
+  /// The symbol's colour on the disc (white, except VIP's gold).
+  final Color glyph;
   final AvatarSource source;
   /// Achievement family that grants this avatar (tier n = step n).
   final String? achievementId;
@@ -237,7 +240,7 @@ class AppIcons {
     AvatarDef('flower', 'Flower', Icons.local_florist_rounded, Color(0xFFA21CAF), AvatarSource.coins),
     AvatarDef('sun', 'Sun', Icons.wb_sunny_rounded, Color(0xFFC2410C), AvatarSource.coins),
     AvatarDef('moon', 'Moon', Icons.nightlight_round, Color(0xFF3730A3), AvatarSource.coins),
-    AvatarDef('rocket', 'Rocket', Icons.rocket_launch_rounded, Color(0xFF334155), AvatarSource.coins),
+    AvatarDef('rocket', 'Rocket', Icons.rocket_launch_rounded, Color(0xFF475569), AvatarSource.coins),
     AvatarDef('music', 'Note', Icons.music_note_rounded, Color(0xFF0F766E), AvatarSource.coins),
     AvatarDef('game', 'Controller', Icons.sports_esports_rounded, Color(0xFF6D28D9), AvatarSource.coins),
     AvatarDef('camera', 'Camera', Icons.photo_camera_rounded, Color(0xFF0369A1), AvatarSource.coins),
@@ -249,11 +252,11 @@ class AppIcons {
     AvatarDef('mountain', 'Mountain', Icons.landscape_rounded, Color(0xFF365314), AvatarSource.coins),
     AvatarDef('wave', 'Wave', Icons.waves_rounded, Color(0xFF155E75), AvatarSource.coins),
     AvatarDef('coffee', 'Coffee', Icons.coffee_rounded, Color(0xFF713F12), AvatarSource.coins),
-    AvatarDef('book', 'Book', Icons.menu_book_rounded, Color(0xFF3F3F46), AvatarSource.coins),
+    AvatarDef('book', 'Book', Icons.menu_book_rounded, Color(0xFF5B5B66), AvatarSource.coins),
     AvatarDef('bike', 'Bicycle', Icons.pedal_bike_rounded, Color(0xFF115E59), AvatarSource.coins),
     AvatarDef('plane', 'Plane', Icons.flight_rounded, Color(0xFF1E40AF), AvatarSource.coins),
     AvatarDef('umbrella', 'Umbrella', Icons.beach_access_rounded, Color(0xFF9D174D), AvatarSource.coins),
-    AvatarDef('snow', 'Snowflake', Icons.ac_unit_rounded, Color(0xFF0C4A6E), AvatarSource.coins),
+    AvatarDef('snow', 'Snowflake', Icons.ac_unit_rounded, Color(0xFF1F5F8B), AvatarSource.coins),
     AvatarDef('pizza', 'Pizza', Icons.local_pizza_rounded, Color(0xFFB91C1C), AvatarSource.coins),
     AvatarDef('cake', 'Cake', Icons.cake_rounded, Color(0xFFBE185D), AvatarSource.coins),
     AvatarDef('globe', 'Globe', Icons.public_rounded, Color(0xFF166534), AvatarSource.coins),
@@ -269,20 +272,20 @@ class AppIcons {
     AvatarDef('square', 'Square Deal', Icons.grid_view_rounded, Color(0xFF1D4ED8), AvatarSource.achievement, achievementId: 'squares'),
     AvatarDef('triangle', 'Triangulate', Icons.change_history_rounded, Color(0xFF9F1239), AvatarSource.achievement, achievementId: 'triangles'),
     AvatarDef('hex', 'Honeycomb', Icons.hexagon_rounded, Color(0xFF92400E), AvatarSource.achievement, achievementId: 'hexagons'),
-    AvatarDef('grid', 'Big Boards', Icons.grid_on_rounded, Color(0xFF334155), AvatarSource.achievement, achievementId: 'big'),
+    AvatarDef('grid', 'Big Boards', Icons.grid_on_rounded, Color(0xFF475569), AvatarSource.achievement, achievementId: 'big'),
     AvatarDef('crown', 'Master', Icons.workspace_premium_rounded, Color(0xFF854D0E), AvatarSource.achievement, achievementId: 'master'),
     AvatarDef('mind', 'No Hints', Icons.psychology_rounded, Color(0xFF3730A3), AvatarSource.achievement, achievementId: 'nohints'),
     AvatarDef('album', 'Collector', Icons.collections_bookmark_rounded, Color(0xFF0369A1), AvatarSource.achievement, achievementId: 'collector'),
     AvatarDef('calendar', 'Daily Devotee', Icons.today_rounded, Color(0xFF15803D), AvatarSource.achievement, achievementId: 'daily'),
     AvatarDef('ticket', 'Event Goer', Icons.confirmation_number_rounded, Color(0xFFBE123C), AvatarSource.achievement, achievementId: 'events'),
-    AvatarDef('owl', 'Night Owl', Icons.dark_mode_rounded, Color(0xFF1E293B), AvatarSource.achievement, achievementId: 'nightowl'),
+    AvatarDef('owl', 'Night Owl', Icons.dark_mode_rounded, Color(0xFF4A5578), AvatarSource.achievement, achievementId: 'nightowl'),
     AvatarDef('bird', 'Early Bird', Icons.wb_twilight_rounded, Color(0xFFC2410C), AvatarSource.achievement, achievementId: 'earlybird'),
     AvatarDef('speed', 'Quick Hands', Icons.speed_rounded, Color(0xFF0E7490), AvatarSource.achievement, achievementId: 'speed'),
     AvatarDef('marathon', 'Marathon', Icons.directions_run_rounded, Color(0xFF065F46), AvatarSource.achievement, achievementId: 'marathon'),
     AvatarDef('shapes', 'All Modes', Icons.category_rounded, Color(0xFF7E22CE), AvatarSource.achievement, achievementId: 'allmodes'),
     AvatarDef('stars', 'Star Hoarder', Icons.stars_rounded, Color(0xFFA16207), AvatarSource.achievement, achievementId: 'starhoarder'),
     AvatarDef('vault', 'Rich', Icons.savings_rounded, Color(0xFF166534), AvatarSource.achievement, achievementId: 'rich'),
-    AvatarDef('vip', 'VIP', Icons.workspace_premium_rounded, Color(0xFF111827), AvatarSource.achievement, achievementId: 'vip'),
+    AvatarDef('vip', 'VIP', Icons.workspace_premium_rounded, Color(0xFF26262E), AvatarSource.achievement, achievementId: 'vip', glyph: Brand.coin),
     AvatarDef('friends', 'Social', Icons.people_alt_rounded, Color(0xFF155E75), AvatarSource.achievement, achievementId: 'social'),
   ];
 
@@ -508,7 +511,7 @@ class Amount extends StatelessWidget {
       children: [
         currencyIcon(currency, size: size),
         SizedBox(width: size * 0.3),
-        Text('$prefix${value is int ? formatCount(value as int) : value}$suffix', style: TextStyle(fontWeight: weight, fontSize: fontSize ?? size * 0.95, color: color ?? context.colors.textPrimary, fontFeatures: tabularFigures)),
+        Text('$prefix${value is int ? formatCount(value as int) : value}$suffix', style: TextStyle(fontWeight: weight, fontSize: fontSize ?? size * 0.95, color: color ?? context.colors.textPrimary)),
       ],
     );
   }
@@ -576,7 +579,7 @@ class AvatarCircle extends StatelessWidget {
         height: size * 0.78,
         alignment: Alignment.center,
         decoration: BoxDecoration(shape: BoxShape.circle, color: t >= 2 ? Color.lerp(color, Colors.black, 0.22) : color),
-        child: Icon(a.icon, size: size * 0.5, color: Colors.white),
+        child: Icon(a.icon, size: size * 0.5, color: a.glyph),
       ),
     );
     if (t <= 1) return disc;

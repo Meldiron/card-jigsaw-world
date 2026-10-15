@@ -7,9 +7,9 @@ library;
 
 import 'dart:ui' show FontFeature;
 
-/// Figures of equal width, for numbers that tick (balances, timers, move counts) or stand in a
-/// column (league XP, statistics): `1,111` and `8,888` take the same room, so a counting pill does
-/// not wobble and the digits of a list line up.
+/// Figures of equal width, only for numbers that change while you look at them: the game's timer
+/// and move count, and a balance counting up (`AnimatedCounter`). `1:11` and `8:08` take the same
+/// room, so they do not jitter. Everywhere else numbers keep the font's own (proportional) figures.
 const tabularFigures = [FontFeature.tabularFigures()];
 
 /// `12000` -> `12,000`; `-1500` -> `-1,500`; `950` -> `950`.

@@ -616,7 +616,7 @@ class _XpColumn extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Text('${formatCount(xp)} XP', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body, fontFeatures: tabularFigures)),
+        Text('${formatCount(xp)} XP', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body)),
         const SizedBox(height: 1),
         Text('Level $level', style: TextStyle(fontSize: TypeSize.caption, color: c.textSecondary)),
       ],

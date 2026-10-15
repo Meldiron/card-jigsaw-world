@@ -71,7 +71,7 @@ class _MyPuzzlesScreenState extends ConsumerState<MyPuzzlesScreen> {
           message: supportsPurchases
               ? 'You can keep $limit photos. Delete one to add another, or get VIP for unlimited photos.'
               : 'You can keep $limit photos. Delete one to add another. VIP members have no limit.',
-          confirmLabel: supportsPurchases ? 'See VIP' : 'OK',
+          confirmLabel: supportsPurchases ? 'See VIP' : 'Got it',
           cancelLabel: supportsPurchases ? 'Not now' : null,
         );
         if (vip && supportsPurchases && mounted) context.push('/store?vip=1');
@@ -79,17 +79,13 @@ class _MyPuzzlesScreenState extends ConsumerState<MyPuzzlesScreen> {
       }
     }
     if (!mounted) return;
-    showCupertinoModalPopup(
-      context: context,
-      builder: (ctx) => CupertinoActionSheet(
-        title: const Text('Add a photo'),
-        actions: [
-          CupertinoActionSheetAction(onPressed: () { Navigator.pop(ctx); _pick(ImageSource.gallery); }, child: const Text('Choose from library')),
-          CupertinoActionSheetAction(onPressed: () { Navigator.pop(ctx); _pick(ImageSource.camera); }, child: const Text('Take a photo')),
-        ],
-        cancelButton: CupertinoActionSheetAction(isDefaultAction: true, onPressed: () => Navigator.pop(ctx), child: const Text('Not now')),
-      ),
+    final source = await showAppActionSheet<ImageSource>(
+      context,
+      title: 'Add a photo',
+      actions: const [AppAction('Choose from library', ImageSource.gallery), AppAction('Take a photo', ImageSource.camera)],
+      cancelLabel: 'Not now',
     );
+    if (source != null && mounted) _pick(source);
   }
 
   Future<void> _delete(MyPuzzle m) async {
@@ -109,16 +105,10 @@ class _MyPuzzlesScreenState extends ConsumerState<MyPuzzlesScreen> {
 
   /// The tile's ... button: the same Play and Delete as holding the photo.
   Future<void> _photoActions(MyPuzzle m) async {
-    final action = await showCupertinoModalPopup<String>(
-      context: context,
-      builder: (ctx) => CupertinoActionSheet(
-        title: Text(m.title),
-        actions: [
-          CupertinoActionSheetAction(onPressed: () => Navigator.pop(ctx, 'play'), child: const Text('Play')),
-          CupertinoActionSheetAction(isDestructiveAction: true, onPressed: () => Navigator.pop(ctx, 'delete'), child: const Text('Delete photo')),
-        ],
-        cancelButton: CupertinoActionSheetAction(isDefaultAction: true, onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
-      ),
+    final action = await showAppActionSheet<String>(
+      context,
+      title: m.title,
+      actions: const [AppAction('Play', 'play'), AppAction('Delete photo', 'delete', destructive: true)],
     );
     if (!mounted || action == null) return;
     if (action == 'play') {

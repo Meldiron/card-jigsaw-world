@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -53,21 +52,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   Future<void> _editName(BuildContext context, WidgetRef ref, Profile p) async {
     final controller = TextEditingController(text: p.displayName);
-    final c = context.colors;
+    // The alert's own field (filled, no outline), as in every alert that asks for text.
     final ok = await showAppAlert(
       context,
       title: 'Your name',
       confirmLabel: 'Save',
       canConfirm: () => controller.text.trim().isNotEmpty,
-      child: CupertinoTextField(
-        controller: controller,
-        autofocus: true,
-        maxLength: 20,
-        textAlign: TextAlign.center,
-        style: TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w600, color: c.textPrimary),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        decoration: BoxDecoration(color: c.boardBackground, borderRadius: BorderRadius.circular(10), border: Border.all(color: c.stroke)),
-      ),
+      child: AlertTextField(controller: controller, placeholder: 'Name', maxLength: 20, textCapitalization: TextCapitalization.words),
     );
     final name = ok ? controller.text.trim() : null;
     if (name == null || name.isEmpty) return;

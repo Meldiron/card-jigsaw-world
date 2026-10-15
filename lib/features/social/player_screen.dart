@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -190,45 +189,29 @@ class _SummaryStat extends StatelessWidget {
   }
 }
 
-/// The player menu: Report, Block in red (Unblock once blocked), Cancel. The system action sheet,
-/// as for "Add a photo" in My Puzzles.
-void _showPlayerMenu(BuildContext context, Profile p, {required bool blocked}) {
-  showCupertinoModalPopup<void>(
-    context: context,
-    builder: (ctx) => CupertinoActionSheet(
-      title: Text(p.displayName),
-      actions: [
-        CupertinoActionSheetAction(
-          key: const ValueKey('player-report'),
-          onPressed: () {
-            Navigator.pop(ctx);
-            showReportSheet(context, p);
-          },
-          child: Text('Report ${p.displayName}', maxLines: 1, overflow: TextOverflow.ellipsis),
-        ),
-        if (blocked)
-          CupertinoActionSheetAction(
-            key: const ValueKey('player-unblock'),
-            onPressed: () {
-              Navigator.pop(ctx);
-              unblockPlayer(context, p.userId, p.displayName);
-            },
-            child: Text('Unblock ${p.displayName}', maxLines: 1, overflow: TextOverflow.ellipsis),
-          )
-        else
-          CupertinoActionSheetAction(
-            key: const ValueKey('player-block'),
-            isDestructiveAction: true,
-            onPressed: () {
-              Navigator.pop(ctx);
-              confirmBlock(context, p);
-            },
-            child: Text('Block ${p.displayName}', maxLines: 1, overflow: TextOverflow.ellipsis),
-          ),
-      ],
-      cancelButton: CupertinoActionSheetAction(isDefaultAction: true, onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
-    ),
+/// The player menu: Report, Block in red (Unblock once blocked), Cancel, as an action sheet in
+/// the alerts' family (as for "Add a photo" in My Puzzles).
+Future<void> _showPlayerMenu(BuildContext context, Profile p, {required bool blocked}) async {
+  final choice = await showAppActionSheet<String>(
+    context,
+    title: p.displayName,
+    actions: [
+      AppAction('Report ${p.displayName}', 'report', key: const ValueKey('player-report')),
+      if (blocked)
+        AppAction('Unblock ${p.displayName}', 'unblock', key: const ValueKey('player-unblock'))
+      else
+        AppAction('Block ${p.displayName}', 'block', destructive: true, key: const ValueKey('player-block')),
+    ],
   );
+  if (!context.mounted) return;
+  switch (choice) {
+    case 'report':
+      showReportSheet(context, p);
+    case 'unblock':
+      unblockPlayer(context, p.userId, p.displayName);
+    case 'block':
+      confirmBlock(context, p);
+  }
 }
 
 class _BadgeTile extends StatelessWidget {

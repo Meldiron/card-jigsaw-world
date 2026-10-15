@@ -298,7 +298,7 @@ class CostLabel extends StatelessWidget {
         SizedBox(width: fontSize * 0.5),
         currencyIcon(currency, size: mark, mono: fg.computeLuminance() > 0.8, monoColor: fg),
         SizedBox(width: fontSize * 0.3),
-        Text('$prefix${formatCount(amount)}', style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.w700, letterSpacing: -0.2, color: fg, fontFeatures: tabularFigures)),
+        Text('$prefix${formatCount(amount)}', style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.w700, letterSpacing: -0.2, color: fg)),
       ],
     );
   }
@@ -1596,10 +1596,121 @@ class _AppAlert extends StatelessWidget {
   }
 }
 
+/// One choice of [showAppActionSheet].
+class AppAction<T> {
+  const AppAction(this.label, this.value, {this.destructive = false, this.key});
+  final String label;
+  final T value;
+
+  /// Red: the choice throws something away or acts against someone (Delete, Block).
+  final bool destructive;
+  final Key? key;
+}
+
+/// iOS 26 action sheet in the alert's family: a glass card at the bottom of the screen with an
+/// optional title, the choices as capsules (cobalt, or red when destructive) and Cancel last,
+/// neutral. Returns the chosen value, or null for Cancel or a tap outside. Use it for every menu of
+/// actions (a "..." button, "Add a photo").
+Future<T?> showAppActionSheet<T>(BuildContext context, {String? title, String? message, required List<AppAction<T>> actions, String cancelLabel = 'Cancel'}) {
+  return showGeneralDialog<T>(
+    context: context,
+    useRootNavigator: true,
+    barrierDismissible: true,
+    barrierLabel: 'Dismiss',
+    barrierColor: Colors.black.withValues(alpha: context.isDark ? 0.5 : 0.28),
+    transitionDuration: const Duration(milliseconds: 280),
+    transitionBuilder: (ctx, anim, _, widget) {
+      final curved = CurvedAnimation(parent: anim, curve: Curves.easeOutCubic, reverseCurve: Curves.easeInCubic);
+      return FadeTransition(
+        opacity: curved,
+        child: SlideTransition(position: Tween(begin: const Offset(0, 0.25), end: Offset.zero).animate(curved), child: widget),
+      );
+    },
+    pageBuilder: (ctx, _, _) => _AppActionSheet<T>(title: title, message: message, actions: actions, cancelLabel: cancelLabel),
+  );
+}
+
+class _AppActionSheet<T> extends StatelessWidget {
+  const _AppActionSheet({this.title, this.message, required this.actions, required this.cancelLabel});
+  final String? title;
+  final String? message;
+  final List<AppAction<T>> actions;
+  final String cancelLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final isDark = context.isDark;
+    const radius = 28.0;
+    return SafeArea(
+      minimum: const EdgeInsets.only(bottom: 8),
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 440),
+            child: Material(
+              type: MaterialType.transparency,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(radius),
+                  boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: isDark ? 0.5 : 0.16), blurRadius: 40, offset: const Offset(0, 16))],
+                ),
+                child: GlassSurface(
+                  sigma: 36,
+                  tint: isDark ? AppColors.darkElevated.cardElevated : null,
+                  opacity: isDark ? 0.9 : 0.86,
+                  borderRadius: BorderRadius.circular(radius),
+                  hairline: Border.all(color: isDark ? Colors.white.withValues(alpha: 0.14) : Colors.white.withValues(alpha: 0.8), width: 0.5),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        if (title != null || message != null)
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(8, 2, 8, 14),
+                            child: Column(
+                              children: [
+                                if (title != null)
+                                  Text(title!, textAlign: TextAlign.center, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: c.textSecondary)),
+                                if (message != null) ...[
+                                  const SizedBox(height: 2),
+                                  Text(message!, textAlign: TextAlign.center, style: TextStyle(fontSize: TypeSize.footnote, height: 1.4, color: c.textSecondary)),
+                                ],
+                              ],
+                            ),
+                          ),
+                        for (final a in actions) ...[
+                          _AlertAction(
+                            key: a.key,
+                            label: a.label,
+                            bold: true,
+                            color: a.destructive ? (isDark ? c.danger : const Color(0xFFB91C1C)) : context.accent,
+                            onTap: () => Navigator.of(context).pop(a.value),
+                          ),
+                          const SizedBox(height: 10),
+                        ],
+                        _AlertAction(label: cancelLabel, onTap: () => Navigator.of(context).pop()),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 /// One alert action: a 48 pt capsule. Cancel is neutral; the action is tinted
 /// with its colour (cobalt, or red when destructive), text in that colour.
 class _AlertAction extends StatelessWidget {
-  const _AlertAction({required this.label, required this.onTap, this.bold = false, this.color});
+  const _AlertAction({super.key, required this.label, required this.onTap, this.bold = false, this.color});
   final String label;
   final VoidCallback onTap;
   final bool bold;
