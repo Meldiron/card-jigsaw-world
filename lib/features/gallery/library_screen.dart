@@ -28,9 +28,15 @@ class LibraryFilter extends Notifier<String> {
   static const unlocked = 'Unlocked';
   static const fresh = 'New';
   static const daily = 'Daily';
+  static const giant = 'Giant';
+  static const ai = 'AI';
 
   /// Chips that are not pack categories; they carry an icon before the label.
   static const special = {all, fresh, finished, started, unlocked};
+
+  /// Categories that are a different kind of pack (a calendar, giant boards, generated pictures):
+  /// they carry their mark ([AppIcons.category]) and lead the categories, in this order.
+  static const kinds = [daily, giant, ai];
 
   @override
   String build() => all;
@@ -42,25 +48,31 @@ final libraryFilterProvider = NotifierProvider<LibraryFilter, String>(LibraryFil
 
 /// The chips in order: All, New (only while a library pack is new, see
 /// [Pack.isNewAt]), Finished, Started, Unlocked (only useful without VIP,
-/// which opens everything), Daily, then the library categories.
-List<String> libraryChips(List<Pack> packs, {required bool showUnlocked, DateTime? now}) => [
-      LibraryFilter.all,
-      if (packs.any((p) => p.isNewAt(now ?? DateTime.now()))) LibraryFilter.fresh,
-      LibraryFilter.finished,
-      LibraryFilter.started,
-      if (showUnlocked) LibraryFilter.unlocked,
-      LibraryFilter.daily,
-      ...{for (final p in packs) if (!p.isDaily && !p.hasWindow) p.category},
-    ];
+/// which opens everything), then the kinds of pack with their marks (Daily,
+/// Giant, AI; Giant and AI only while such packs exist), then the themed
+/// categories. Events have no chip: they live on Home and in Quests.
+List<String> libraryChips(List<Pack> packs, {required bool showUnlocked, DateTime? now}) {
+  final categories = {for (final p in packs) if (!p.isDaily && !p.hasWindow && p.category != 'Event') p.category};
+  return [
+    LibraryFilter.all,
+    if (packs.any((p) => p.isNewAt(now ?? DateTime.now()))) LibraryFilter.fresh,
+    LibraryFilter.finished,
+    LibraryFilter.started,
+    if (showUnlocked) LibraryFilter.unlocked,
+    for (final k in LibraryFilter.kinds) if (k == LibraryFilter.daily || categories.contains(k)) k,
+    ...categories.where((c) => !LibraryFilter.kinds.contains(c)),
+  ];
+}
 
-/// Icon for a chip that is not a pack category, null for categories.
+/// Icon for a chip: the special views and the kinds of pack (Daily, Giant,
+/// AI) carry one, themed categories are words.
 IconData? libraryChipIcon(String chip) => switch (chip) {
       LibraryFilter.all => AppIcons.filterAll,
-      LibraryFilter.fresh => AppIcons.sparkle,
+      LibraryFilter.fresh => AppIcons.filterNew,
       LibraryFilter.finished => AppIcons.filterFinished,
       LibraryFilter.started => AppIcons.filterStarted,
       LibraryFilter.unlocked => AppIcons.filterUnlocked,
-      _ => null,
+      _ => LibraryFilter.kinds.contains(chip) ? AppIcons.category(chip) : null,
     };
 
 /// Lower case without accents, apostrophes or hyphens, so "Kraków",
@@ -442,7 +454,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
       LibraryFilter.finished => const EmptyState(icon: AppIcons.filterFinished, title: 'No finished packs yet', message: 'A pack lands here once every picture in it is solved. Open a pack you have started to finish it.'),
       LibraryFilter.started => const EmptyState(icon: AppIcons.filterStarted, title: 'Nothing started yet', message: 'Packs you have begun and not finished show up here. Open a pack to start one.'),
       LibraryFilter.unlocked => const EmptyState(icon: AppIcons.filterUnlocked, title: 'Nothing unlocked yet', message: 'Packs you can play right now show up here.'),
-      LibraryFilter.fresh => const EmptyState(icon: AppIcons.sparkle, title: 'No new packs this week', message: 'Packs added in the last seven days show up here.'),
+      LibraryFilter.fresh => const EmptyState(icon: AppIcons.filterNew, title: 'No new packs this week', message: 'Packs added in the last seven days show up here.'),
       _ => const EmptyState(icon: AppIcons.library, title: 'Nothing here yet', message: 'New packs arrive with events and every month.'),
     };
   }

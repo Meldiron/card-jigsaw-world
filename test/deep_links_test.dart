@@ -283,6 +283,8 @@ void main() {
       expect(container.read(libraryFilterProvider), 'Animals');
       await open(tester, container, '/library?filter=finished');
       expect(container.read(libraryFilterProvider), LibraryFilter.finished);
+      await open(tester, container, '/library?filter=event');
+      expect(container.read(libraryFilterProvider), LibraryFilter.all, reason: 'events have no Library chip');
       await open(tester, container, '/friends');
       expect(top(router), '/social');
       expect(container.read(socialTabProvider), SocialTab.friends);

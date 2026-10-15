@@ -85,12 +85,25 @@ void main() {
       expect(libraryChips(packs, showUnlocked: false), ['All', 'Finished', 'Started', 'Daily', 'Nature', 'Travel']);
     });
 
-    test('All, Finished, Started and Unlocked carry an icon; categories do not', () {
-      for (final chip in LibraryFilter.special) {
+    test('the kinds of pack lead the categories: Daily, Giant, AI; never Event', () {
+      final more = [
+        ...packs,
+        _pack('abstract', 'Stained Glass', category: 'Abstract'),
+        _pack('ai-cats', 'AI Cats', category: 'AI'),
+        _pack('houses', 'Colourful Houses', category: 'Giant'),
+        _pack('ev-food', 'World Bread Day', category: 'Event', startAt: now.subtract(const Duration(days: 1)), endAt: now.add(const Duration(days: 5))),
+        _pack('stray', 'Stray event row', category: 'Event'),
+      ];
+      expect(libraryChips(more, showUnlocked: false), ['All', 'Finished', 'Started', 'Daily', 'Giant', 'AI', 'Nature', 'Travel', 'Abstract']);
+    });
+
+    test('views and the kinds of pack carry an icon; themed categories do not', () {
+      for (final chip in [...LibraryFilter.special, ...LibraryFilter.kinds]) {
         expect(libraryChipIcon(chip), isNotNull, reason: chip);
       }
-      expect(libraryChipIcon('Daily'), isNull);
       expect(libraryChipIcon('Travel'), isNull);
+      expect(libraryChipIcon('Event'), isNull);
+      expect(libraryChipIcon(LibraryFilter.fresh), isNot(AppIcons.category(LibraryFilter.ai)), reason: 'New and AI must not share a mark');
     });
   });
 
