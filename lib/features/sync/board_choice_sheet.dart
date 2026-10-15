@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/theme/tokens.dart';
-import '../../game/game_controller.dart' show formatDuration;
-import '../../game/modes.dart';
+import '../../game/board.dart';
+import '../../game/game_controller.dart' show GameState, GameStatus, formatDuration;
+import '../../game/image_loader.dart';
 import '../../models/models.dart';
+import '../../state/settings.dart';
+import '../../state/social.dart' show resolvedPuzzleProvider;
 import '../../state/sync.dart';
-import '../../widgets/icons.dart';
+import '../../widgets/hash_image.dart';
 import '../../widgets/ui.dart';
+import '../game/board_widget.dart';
 
 /// Asks which board to keep when the same picture has a board in progress on this device and a
 /// different one from another device. Stars and records are never lost either way. Cannot be
@@ -28,7 +33,6 @@ class BoardChoiceSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final c = context.colors;
     final name = title == null || title!.isEmpty ? 'this picture' : title!;
     return PopScope(
       canPop: false,
@@ -38,27 +42,20 @@ class BoardChoiceSheet extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Two boards in progress', style: Theme.of(context).textTheme.titleLarge),
-            const SizedBox(height: 6),
-            Text(
-              'You played $name on another device too. Choose which board to keep; stars and records from both stay.',
-              style: TextStyle(color: c.textSecondary, fontSize: 13.5, height: 1.4),
+            SheetHeader(
+              title: 'Two boards in progress',
+              subtitle: 'You played $name on another device too. Keep one board; stars and records from both stay.',
+              center: false,
             ),
             const SizedBox(height: 16),
+            // The choice is made on the board itself: each card keeps its own.
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(child: _BoardCard(label: 'This device', board: device)),
+                Expanded(child: _BoardCard(label: 'This device', board: device, primary: true, onKeep: () => Navigator.of(context).pop(BoardChoice.device))),
                 const SizedBox(width: 12),
-                Expanded(child: _BoardCard(label: 'Other device', board: other)),
+                Expanded(child: _BoardCard(label: 'Other device', board: other, onKeep: () => Navigator.of(context).pop(BoardChoice.other))),
               ],
-            ),
-            const SizedBox(height: 16),
-            SizedBox(width: double.infinity, child: BigButton(label: "Keep this device's board", onTap: () => Navigator.of(context).pop(BoardChoice.device))),
-            const SizedBox(height: 10),
-            SizedBox(
-              width: double.infinity,
-              child: BigButton(label: "Keep the other device's board", kind: ButtonKind.secondary, onTap: () => Navigator.of(context).pop(BoardChoice.other)),
             ),
           ],
         ),
@@ -67,44 +64,101 @@ class BoardChoiceSheet extends StatelessWidget {
   }
 }
 
-class _BoardCard extends StatelessWidget {
-  const _BoardCard({required this.label, required this.board});
+/// One of the two boards as it stands: the real board in miniature (cards in
+/// place fill their cell, loose cards keep their frame), how many cards are
+/// in place, and the moves and time so far.
+class _BoardCard extends ConsumerWidget {
+  const _BoardCard({required this.label, required this.board, this.onKeep, this.primary = false});
   final String label;
   final PuzzleProgress board;
 
+  /// Keeps this board (the card is the choice); null when buttons below choose.
+  final VoidCallback? onKeep;
+  final bool primary;
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final c = context.colors;
     final mode = GameMode.fromCode(board.mode);
-    Widget stat(IconData icon, String name, String value) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4),
-          child: Row(
-            children: [
-              SizedBox(width: 18, child: Center(child: Icon(icon, size: 15, color: c.textTertiary))),
-              const SizedBox(width: 6),
-              Expanded(child: Text(name, style: TextStyle(fontSize: 12.5, color: c.textSecondary), maxLines: 1, overflow: TextOverflow.ellipsis)),
-              const SizedBox(width: 6),
-              Text(value, style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: c.textPrimary)),
-            ],
+    final spec = BoardSpec.fromCells(mode, board.gridSize);
+    final layout = board.layout;
+    final inPlace = layout == null ? null : [for (var i = 0; i < layout.length; i++) if (layout[i] == i) i].length;
+    final puzzle = ref.watch(resolvedPuzzleProvider(board.puzzleId));
+    final image = puzzle == null ? null : ref.watch(puzzleImageProvider(puzzle.imageUrl));
+    final style = ref.watch(settingsProvider).cardStyle;
+    const previewHeight = 118.0;
+    Widget preview() {
+      final img = image?.value;
+      if (img == null || layout == null || layout.length != spec.cells) {
+        // Until the picture is decoded: its colours, in the board's shape.
+        return SizedBox(
+          height: previewHeight,
+          width: previewHeight * 0.75,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(Radii.sm),
+            child: puzzle?.blurhash == null ? ColoredBox(color: c.boardBackground) : HashImage(hash: puzzle!.blurhash!, color: c.boardBackground),
           ),
         );
-    return Container(
-      padding: const EdgeInsets.fromLTRB(12, 12, 12, 10),
+      }
+      final b = Board(spec, layout);
+      final size = b.tiling.fit(const Size(double.infinity, previewHeight), img.width / img.height);
+      return IgnorePointer(
+        child: BoardWidget(
+          image: img,
+          state: GameState(
+            board: b,
+            par: b.par,
+            moves: board.moves,
+            elapsed: board.elapsedSeconds,
+            status: GameStatus.paused,
+            selected: null,
+            hintsUsed: 0,
+            history: const [],
+            justLocked: const {},
+            justJoined: const {},
+            hintSlot: null,
+            hintTarget: null,
+            peeking: false,
+            chain: 0,
+            tick: 0,
+          ),
+          width: size.width,
+          height: size.height,
+          cardStyle: style,
+          onTap: (_) {},
+          onDrop: (_, _) {},
+        ),
+      );
+    }
+
+    final card = Container(
+      padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
       decoration: BoxDecoration(color: c.card, borderRadius: BorderRadius.circular(Radii.lg), border: Border.all(color: c.stroke)),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label.toUpperCase(), style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w700, letterSpacing: 0.6, color: c.textTertiary)),
+          Text(label, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: c.textPrimary)),
+          Text('${mode.label} ${spec.code}', style: TextStyle(fontSize: 12, color: c.textSecondary)),
           const SizedBox(height: 8),
-          Text(mode.label, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
-          const SizedBox(height: 8),
-          Divider(height: 1, color: c.stroke),
-          const SizedBox(height: 6),
-          stat(AppIcons.puzzle, 'Pieces', '${board.gridSize}'),
-          stat(AppIcons.swaps, 'Moves', '${board.moves}'),
-          stat(AppIcons.time, 'Time', formatDuration(board.elapsedSeconds)),
+          SizedBox(height: previewHeight, child: Center(child: preview())),
+          const SizedBox(height: 10),
+          Text(
+            inPlace == null ? '${board.gridSize} cards' : '$inPlace of ${board.gridSize} in place',
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: c.textPrimary),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            '${board.moves} moves · ${formatDuration(board.elapsedSeconds)}',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(fontSize: 12, color: c.textSecondary),
+          ),
+          if (onKeep != null) ...[
+            const SizedBox(height: 12),
+            BigButton(key: ValueKey(primary ? 'keep-this-board' : 'keep-other-board'), label: 'Keep', height: 40, kind: primary ? ButtonKind.primary : ButtonKind.secondary, onTap: onKeep),
+          ],
         ],
       ),
     );
+    return onKeep == null ? card : Pressable(onTap: onKeep, scale: 0.98, child: card);
   }
 }

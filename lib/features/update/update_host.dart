@@ -55,7 +55,7 @@ class _UpdateHostState extends ConsumerState<UpdateHost> {
     final ctx = rootNavigatorKey.currentContext;
     if (ctx == null || !ctx.mounted) return;
     _showing = true;
-    final go = await showAppAlert(ctx, title: 'Update available', message: update.message, confirmLabel: 'Update', cancelLabel: 'Later');
+    final go = await showAppAlert(ctx, title: 'Update available', message: update.message, confirmLabel: update.action, cancelLabel: 'Later');
     UpdateHost.lastAsked = DateTime.now();
     _showing = false;
     if (!go || !mounted) return;

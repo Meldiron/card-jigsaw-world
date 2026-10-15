@@ -81,9 +81,7 @@ class _RedeemCodePanelState extends ConsumerState<RedeemCodePanel> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Redeem a pack code', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, letterSpacing: -0.3)),
-          const SizedBox(height: 6),
-          Text('Enter the code you received. It opens a special pack in your Library.', style: TextStyle(fontSize: 14, color: c.textSecondary)),
+          SizedBox(width: double.infinity, child: SheetHeader(title: 'Redeem a pack code', subtitle: 'Enter the code you received. It opens a special pack in your Library.', center: false)),
           const SizedBox(height: 16),
           CupertinoTextField(
             key: const ValueKey('redeem-code-field'),

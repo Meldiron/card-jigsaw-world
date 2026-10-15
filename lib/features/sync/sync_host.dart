@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -92,7 +94,7 @@ class _SyncHostState extends ConsumerState<SyncHost> {
 /// One line of the alert: what changed, with its icon.
 typedef SyncNoticeLine = ({SyncLineIcon icon, String text});
 
-enum SyncLineIcon { coins, tickets, hints, peeks, magics, level, puzzle, star, board, unlock, avatar, quest, achievement, dailyGift, vip, profile, check }
+enum SyncLineIcon { coins, tickets, hints, peeks, magics, level, puzzle, star, board, unlock, avatar, quest, achievement, dailyGift, vip, profile, check, undone }
 
 String _count(int n, String one, String many) => '${groupThousands(n)} ${n == 1 ? one : many}';
 
@@ -126,29 +128,68 @@ List<SyncNoticeLine> syncNoticeLines(SyncNotice n, {Map<String, String> packName
     if (n.vipEnded) (icon: SyncLineIcon.vip, text: 'VIP ended'),
     if (n.name != null) (icon: SyncLineIcon.profile, text: 'Name: ${n.name}'),
     if (n.avatarChanged) (icon: SyncLineIcon.avatar, text: 'New avatar'),
-    for (final r in {...n.skipped}) (icon: SyncLineIcon.check, text: skipText(r)),
+    // Something undone here is not "fine": its own mark, not a tick.
+    for (final r in [if (n.skipped.contains(SkipReason.notEnough)) SkipReason.notEnough, ...{...n.skipped}.where((r) => r != SkipReason.notEnough)])
+      (icon: r == SkipReason.notEnough ? SyncLineIcon.undone : SyncLineIcon.check, text: skipText(r)),
   ];
 }
 
 /// Something done on this device that another device had already done; it counted once.
 String skipText(SkipReason r) => switch (r) {
-      SkipReason.questClaimed => 'Quest already claimed on another device; paid once',
-      SkipReason.vipBonusPaid => "This week's VIP bonus was already paid",
-      SkipReason.dailyClaimed => "Today's daily gift was already claimed; paid once",
-      SkipReason.streakRestored => 'Streak already restored; no Tickets spent',
-      SkipReason.unlocked => 'Already unlocked on another device; nothing charged',
-      SkipReason.achievementClaimed => 'Achievement reward already claimed; paid once',
-      SkipReason.piggyEmpty => 'Piggy bank already opened on another device',
-      SkipReason.notEnough => 'Not enough left after spending on another device; one purchase here was undone',
+      SkipReason.questClaimed => 'A quest claimed on both devices, paid once',
+      SkipReason.vipBonusPaid => "This week's VIP bonus, paid once",
+      SkipReason.dailyClaimed => "Today's daily gift, paid once",
+      SkipReason.streakRestored => 'Streak already restored, no Tickets spent',
+      SkipReason.unlocked => 'Already unlocked there, nothing charged',
+      SkipReason.achievementClaimed => 'An achievement reward claimed on both devices, paid once',
+      SkipReason.piggyEmpty => 'Piggy bank already opened on the other device',
+      SkipReason.notEnough => 'One purchase here was undone: not enough was left after spending on the other device',
     };
 
-class SyncNoticeList extends StatelessWidget {
+class SyncNoticeList extends StatefulWidget {
   const SyncNoticeList({super.key, required this.lines});
   final List<SyncNoticeLine> lines;
 
   @override
+  State<SyncNoticeList> createState() => _SyncNoticeListState();
+}
+
+class _SyncNoticeListState extends State<SyncNoticeList> {
+  final _scroll = ScrollController();
+  bool _above = false, _below = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _update());
+  }
+
+  @override
+  void dispose() {
+    _scroll.dispose();
+    super.dispose();
+  }
+
+  void _update() {
+    if (!mounted || !_scroll.hasClients || !_scroll.position.hasContentDimensions) return;
+    final above = _scroll.position.extentBefore > 0.5, below = _scroll.position.extentAfter > 0.5;
+    if (above != _above || below != _below) {
+      setState(() {
+        _above = above;
+        _below = below;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final c = context.colors;
+    final lines = widget.lines;
+    const money = {SyncLineIcon.coins, SyncLineIcon.tickets, SyncLineIcon.hints, SyncLineIcon.peeks, SyncLineIcon.magics};
+    const skips = {SyncLineIcon.check, SyncLineIcon.undone};
+    final balances = [for (final l in lines) if (money.contains(l.icon)) l];
+    final once = [for (final l in lines) if (skips.contains(l.icon)) l];
+    final rest = [for (final l in lines) if (!money.contains(l.icon) && !skips.contains(l.icon)) l];
     Widget icon(SyncLineIcon i) => switch (i) {
           SyncLineIcon.coins => const CoinIcon(size: 18),
           SyncLineIcon.tickets => const TicketIcon(size: 18),
@@ -168,31 +209,90 @@ class SyncNoticeList extends StatelessWidget {
                 SyncLineIcon.dailyGift => AppIcons.dailyGift,
                 SyncLineIcon.vip => AppIcons.vip,
                 SyncLineIcon.profile => AppIcons.profile,
+                SyncLineIcon.undone => AppIcons.undo,
                 _ => AppIcons.check,
               },
               size: 17,
               color: c.textSecondary,
             ),
         };
+    // As tall as the screen allows (a long notice used to stop at 320 pt and
+    // hide its last lines, often the ones about what was not done twice);
+    // when it still scrolls, the edge with more fades out.
+    Widget row(SyncNoticeLine l) => Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(width: 22, child: Center(child: icon(l.icon))),
+              const SizedBox(width: 10),
+              Expanded(child: Text(l.text, style: TextStyle(fontSize: 14, height: 1.3, color: c.textPrimary))),
+            ],
+          ),
+        );
     return ConstrainedBox(
-      constraints: const BoxConstraints(maxHeight: 320),
-      child: SingleChildScrollView(
+      constraints: BoxConstraints(maxHeight: math.max(200, MediaQuery.sizeOf(context).height - 300)),
+      child: NotificationListener<ScrollMetricsNotification>(
+        onNotification: (_) {
+          _update();
+          return false;
+        },
+        child: NotificationListener<ScrollUpdateNotification>(
+          onNotification: (_) {
+            _update();
+            return false;
+          },
+          child: ShaderMask(
+            blendMode: BlendMode.dstIn,
+            shaderCallback: (rect) {
+              final f = (24 / math.max(rect.height, 1)).clamp(0.0, 0.5);
+              return LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [_above ? Colors.transparent : Colors.black, Colors.black, Colors.black, _below ? Colors.transparent : Colors.black],
+                stops: [0, f, 1 - f, 1],
+              ).createShader(rect);
+            },
+            child: SingleChildScrollView(
+        controller: _scroll,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            for (final l in lines)
+            if (balances.isNotEmpty)
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                padding: const EdgeInsets.only(bottom: 6),
+                child: Wrap(
+                  spacing: 14,
+                  runSpacing: 6,
+                  alignment: WrapAlignment.center,
                   children: [
-                    SizedBox(width: 22, child: Center(child: icon(l.icon))),
-                    const SizedBox(width: 10),
-                    Expanded(child: Text(l.text, style: TextStyle(fontSize: 14, height: 1.3, color: c.textPrimary))),
+                    for (final l in balances)
+                      Semantics(
+                        label: l.text,
+                        excludeSemantics: true,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [icon(l.icon), const SizedBox(width: 5), Text(l.text.split(' ').first, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: c.textPrimary))],
+                        ),
+                      ),
                   ],
                 ),
               ),
+            for (final l in rest) row(l),
+            if (once.isNotEmpty) ...[
+              Padding(
+                padding: const EdgeInsets.only(top: 10, bottom: 2),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text('Counted once', style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: c.textSecondary)),
+                ),
+              ),
+              for (final l in once) row(l),
+            ],
           ],
+        ),
+      ),
+          ),
         ),
       ),
     );

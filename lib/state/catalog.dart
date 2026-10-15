@@ -24,14 +24,23 @@ final catalogProvider = FutureProvider<CatalogTables>((ref) async {
     if (cached != null) return cached;
     rethrow;
   }
-});
+}, retry: _catalogRetry);
+
+/// The catalogue is read once more after 2 s, then its error reaches the screens, which offer Try
+/// again (`ref.invalidate(catalogProvider)`). Riverpod's default (ten tries over about 40 s, in
+/// every provider built on it as well) kept the catalogue screens on a spinner and never showed
+/// their error states.
+Duration? _catalogRetry(int count, Object error) => count < 1 ? const Duration(seconds: 2) : null;
+
+/// What is built from the catalogue does not try again on its own: it follows [catalogProvider].
+Duration? _followCatalog(int count, Object error) => null;
 
 /// Every pack row, including ones that are not released yet (future daily months, event packs
 /// more than [Pack.soonWindow] away). Screens read [packsProvider].
 final packRowsProvider = FutureProvider<List<Pack>>((ref) async {
   final rows = (await ref.watch(catalogProvider.future))[AppwriteConfig.packs]!;
   return [for (final r in rows) Pack.fromRow('${r[r'$id']}', r)]..sort((a, b) => a.sortOrder != b.sortOrder ? a.sortOrder.compareTo(b.sortOrder) : a.id.compareTo(b.id));
-});
+}, retry: _followCatalog);
 
 /// The packs the player owns, for hidden packs (opened with a pack code). Selected as one string so
 /// a coin or XP change in the profile does not rebuild the catalogue.
@@ -47,7 +56,7 @@ final packsProvider = FutureProvider<List<Pack>>((ref) async {
   final owned = ref.watch(_ownedPacksProvider);
   final now = DateTime.now();
   return rows.where((p) => p.visibleTo(owned, now)).toList();
-});
+}, retry: _followCatalog);
 
 /// The catalogue every player shares: released packs, hidden ones left out. Total Completion and
 /// the catalogue size count these, so a pack opened with a code does not change the public numbers
@@ -56,7 +65,7 @@ final publicPacksProvider = FutureProvider<List<Pack>>((ref) async {
   final rows = await ref.watch(packRowsProvider.future);
   final now = DateTime.now();
   return rows.where((p) => !p.hidden && p.isReleasedAt(now)).toList();
-});
+}, retry: _followCatalog);
 
 /// The puzzles of [publicPacksProvider].
 final publicPuzzlesProvider = FutureProvider<List<Puzzle>>((ref) async {
@@ -66,7 +75,7 @@ final publicPuzzlesProvider = FutureProvider<List<Puzzle>>((ref) async {
     for (final r in rows)
       if (packs.contains(r['packId'])) Puzzle.fromRow('${r[r'$id']}', r),
   ]..sort((a, b) => a.sortOrder != b.sortOrder ? a.sortOrder.compareTo(b.sortOrder) : a.id.compareTo(b.id));
-});
+}, retry: _followCatalog);
 
 /// Every puzzle of the packs the player can see (puzzles of packs that are not released yet, and of
 /// hidden packs the player has not opened, stay out of the app).
@@ -79,7 +88,7 @@ final allPuzzlesProvider = FutureProvider<List<Puzzle>>((ref) async {
     for (final r in rows)
       if (!hidden.contains(r['packId'])) Puzzle.fromRow('${r[r'$id']}', r),
   ]..sort((a, b) => a.sortOrder != b.sortOrder ? a.sortOrder.compareTo(b.sortOrder) : a.id.compareTo(b.id));
-});
+}, retry: _followCatalog);
 
 final packPuzzlesProvider = Provider.family<AsyncValue<List<Puzzle>>, String>((ref, packId) {
   return ref.watch(allPuzzlesProvider).whenData((all) => all.where((p) => p.packId == packId).toList());

@@ -38,7 +38,7 @@ class UpdatePolicy {
 /// A newer build than the one running.
 @immutable
 class AvailableUpdate {
-  const AvailableUpdate({required this.latest, required this.message});
+  const AvailableUpdate({required this.latest, required this.message, this.action = 'Update'});
 
   /// The newest build's id (web deploy id, or iOS build number).
   final String latest;
@@ -46,11 +46,14 @@ class AvailableUpdate {
   /// The alert's text.
   final String message;
 
-  @override
-  bool operator ==(Object other) => other is AvailableUpdate && other.latest == latest && other.message == message;
+  /// The alert's button: where it takes the player ("Open App Store", "Reload").
+  final String action;
 
   @override
-  int get hashCode => Object.hash(latest, message);
+  bool operator ==(Object other) => other is AvailableUpdate && other.latest == latest && other.message == message && other.action == action;
+
+  @override
+  int get hashCode => Object.hash(latest, message, action);
 }
 
 /// Where this install learns about newer builds and how it gets one.
@@ -86,7 +89,7 @@ class WebUpdateSource implements UpdateSource {
     if (body == null) return null;
     final latest = '${(jsonDecode(body) as Map<String, dynamic>)['build'] ?? ''}';
     if (latest.isEmpty || latest == current) return null;
-    return AvailableUpdate(latest: latest, message: 'A new version of Card Jigsaw World is out. Updating reloads the page; your progress is kept.');
+    return AvailableUpdate(latest: latest, message: 'A new version of Card Jigsaw World is out. Reloading the page keeps your progress.', action: 'Reload');
   }
 
   @override
@@ -140,8 +143,12 @@ class IosUpdateSource implements UpdateSource {
     final build = (row['build'] as num?)?.toInt() ?? 0;
     if (build <= currentBuild) return null;
     final version = row['version'] as String?;
-    final name = version == null || version.isEmpty ? 'Build $build' : 'Version $version ($build)';
-    return AvailableUpdate(latest: '$build', message: '$name is ready in ${channel.storeName}. You have build $currentBuild.');
+    final hasVersion = version != null && version.isNotEmpty;
+    // Testers compare builds; App Store players know versions, not build numbers.
+    final message = channel == IosChannel.appStore
+        ? '${hasVersion ? 'Version $version' : 'A new version'} is ready in the App Store. Your progress is kept.'
+        : '${hasVersion ? 'Version $version ($build)' : 'Build $build'} is ready in TestFlight. You have build $currentBuild.';
+    return AvailableUpdate(latest: '$build', message: message, action: 'Open ${channel == IosChannel.appStore ? 'App Store' : 'TestFlight'}');
   }
 
   @override

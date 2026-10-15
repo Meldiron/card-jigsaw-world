@@ -417,7 +417,7 @@ void main() {
       'Boards in progress on 2 pictures',
       'Unlocked: Mountains',
       '2 quests claimed',
-      'Already unlocked on another device; nothing charged',
+      'Already unlocked there, nothing charged',
     ]);
   });
 }

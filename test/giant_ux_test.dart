@@ -336,7 +336,7 @@ void main() {
       }
 
       final edge = [for (var s = 0; s < board.cells; s++) if (isEdgeCard(board.tiling, s)) s];
-      // A toast stays two seconds after it has slid in; step the clock frame by frame.
+      // A toast stays 2.2 s (short text) after it has slid in; step the clock frame by frame.
       Future<void> wait(int ms) async {
         for (var t = 0; t < ms; t += 100) {
           await tester.pump(const Duration(milliseconds: 100));
@@ -347,7 +347,7 @@ void main() {
       await wait(400);
       expect(find.text('Frame complete'), findsOneWidget);
       await wait(3500);
-      expect(find.byType(SnackBar), findsNothing);
+      expect(find.byKey(const ValueKey('toast')), findsNothing);
       set(() => board = sendHome(board, List.generate(board.cells ~/ 2 + 1, (i) => i)));
       await wait(400);
       expect(find.text('Halfway there'), findsOneWidget);
@@ -355,7 +355,7 @@ void main() {
       await wait(3500);
       set(() => board = sendHome(board, List.generate(board.cells - 2, (i) => i)));
       await wait(400);
-      expect(find.byType(SnackBar), findsNothing);
+      expect(find.byKey(const ValueKey('toast')), findsNothing);
     });
   });
 }

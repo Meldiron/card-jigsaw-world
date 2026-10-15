@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/haptics.dart';
 import '../../core/theme/tokens.dart';
+import '../../data/purchases.dart' show groupThousands;
 import '../../game/modes.dart';
 import '../../game/tiling.dart';
 import '../../models/models.dart';
@@ -15,6 +16,7 @@ import '../../state/giant.dart';
 import '../../state/profile.dart';
 import '../../state/rewards.dart';
 import '../../state/unlocks.dart';
+import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 
 /// Title of an unlock's intro ("Squares are open").
@@ -23,22 +25,35 @@ String unlockTitle(Unlock u) => switch (u) {
       _ => '${u.label} are open',
     };
 
+/// "15% more coins and XP" for a reward multiplier of 1.15.
+String _more(double multiplier) => '${((multiplier - 1) * 100).round()}% more coins and XP';
+
 /// What the unlock is, for a player who does not have it yet.
 String unlockWhat(Unlock u) => switch (u) {
-      Unlock.squares => 'Pictures cut into even squares instead of cards. Squares pay x${GameMode.squares.multiplier}.',
-      Unlock.triangles => 'Up and down triangles that fit together in rows. They pay x${GameMode.triangles.multiplier}.',
-      Unlock.hexagons => 'A honeycomb of six-sided cells, the trickiest shape. Hexagons pay x${GameMode.hexagons.multiplier}.',
-      Unlock.painting => 'Cards start in black and white and get their colour back as they lock. It works with every shape and pays x${Economy.paintingMultiplier}.',
+      Unlock.squares => 'Pictures cut into even squares instead of cards. Squares pay ${_more(GameMode.squares.multiplier)}.',
+      Unlock.triangles => 'Up and down triangles that fit together in rows. They pay ${_more(GameMode.triangles.multiplier)}.',
+      Unlock.hexagons => 'A honeycomb of six-sided cells, the trickiest shape. Hexagons pay ${_more(GameMode.hexagons.multiplier)}.',
+      Unlock.painting => 'Cards start in black and white and get their colour back as they lock. Works with every shape and pays ${_more(Economy.paintingMultiplier)}.',
       Unlock.giant => 'Boards of 100 to 300 cards for the pictures of the Giant pack, with pinch to zoom.',
     };
 
-/// One or two calm sentences on what just opened.
+/// One calm sentence on what just opened; the reward is shown apart
+/// ([unlockBonus]).
 String unlockBody(Unlock u) => switch (u) {
-      Unlock.squares => 'Pictures can now be cut into even squares. Trickier shapes pay more: squares pay x${GameMode.squares.multiplier}.',
-      Unlock.triangles => 'Up and down triangles that fit together in rows. They pay x${GameMode.triangles.multiplier}.',
-      Unlock.hexagons => 'A honeycomb of six-sided cells, the trickiest shape. Hexagons pay x${GameMode.hexagons.multiplier}.',
-      Unlock.painting => 'Cards start in black and white and get their colour back as they lock. It works with every shape and pays x${Economy.paintingMultiplier}.',
+      Unlock.squares => 'Pictures can now be cut into even squares.',
+      Unlock.triangles => 'Up and down triangles that fit together in rows.',
+      Unlock.hexagons => 'A honeycomb of six-sided cells, the trickiest shape.',
+      Unlock.painting => 'Cards start in black and white and get their colour back as they lock. Works with every shape.',
       Unlock.giant => 'Boards of 100 to 300 cards for the pictures of the Giant pack. Pinch to zoom in while you play.',
+    };
+
+/// The extra reward an unlock pays, or null (giant boards pay by size).
+String? unlockBonus(Unlock u) => switch (u) {
+      Unlock.squares => _more(GameMode.squares.multiplier),
+      Unlock.triangles => _more(GameMode.triangles.multiplier),
+      Unlock.hexagons => _more(GameMode.hexagons.multiplier),
+      Unlock.painting => _more(Economy.paintingMultiplier),
+      Unlock.giant => null,
     };
 
 /// The one-screen intro shown the first time a shape, Painting or giant
@@ -53,7 +68,7 @@ Future<void> showUnlockIntro(BuildContext context, WidgetRef ref, Unlock u, {Voi
     context,
     builder: (ctx) => Padding(
       key: ValueKey('unlock-intro-${u.name}'),
-      padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
+      padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -62,13 +77,37 @@ Future<void> showUnlockIntro(BuildContext context, WidgetRef ref, Unlock u, {Voi
             child: SizedBox(height: 168, width: 168 * 0.78, child: UnlockArt(unlock: u, picture: art)),
           ),
           const SizedBox(height: 16),
-          Text(unlockTitle(u), textAlign: TextAlign.center, style: Theme.of(ctx).textTheme.headlineMedium),
-          const SizedBox(height: 6),
-          Text(unlockBody(u), textAlign: TextAlign.center, style: TextStyle(color: ctx.colors.textSecondary, height: 1.4)),
+          SizedBox(width: double.infinity, child: SheetHeader(title: unlockTitle(u), subtitle: unlockBody(u), center: true)),
+          if (unlockBonus(u) case final bonus?) ...[
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(color: ctx.colors.accentTint, borderRadius: BorderRadius.circular(Radii.pill)),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const CoinIcon(size: 16),
+                  const SizedBox(width: 4),
+                  Icon(AppIcons.xp, size: 16, color: ctx.accent),
+                  const SizedBox(width: 8),
+                  Text(bonus[0].toUpperCase() + bonus.substring(1), style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600, color: ctx.accent)),
+                ],
+              ),
+            ),
+          ],
           const SizedBox(height: 20),
           BigButton(key: const ValueKey('unlock-try'), label: 'Try it', icon: CupertinoIcons.play_fill, onTap: () => Navigator.pop(ctx, true)),
-          const SizedBox(height: 8),
-          BigButton(label: 'Later', kind: ButtonKind.ghost, onTap: () => Navigator.pop(ctx, false)),
+          const SizedBox(height: 4),
+          // The way out is a plain text button, as on iOS sheets; an outlined
+          // box on glass read as an empty field.
+          Pressable(
+            onTap: () => Navigator.pop(ctx, false),
+            child: SizedBox(
+              height: 44,
+              width: double.infinity,
+              child: Center(child: Text('Later', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: ctx.colors.textSecondary))),
+            ),
+          ),
         ],
       ),
     ),
@@ -98,15 +137,79 @@ Future<void> showUnlockIntro(BuildContext context, WidgetRef ref, Unlock u, {Voi
 /// and how far away that is.
 Future<void> showLockedInfo(BuildContext context, WidgetRef ref, Unlock u) async {
   final xp = ref.read(profileProvider).value?.xp ?? 0;
-  final left = math.max(0, LevelRewards.xpToReach(u.level) - xp);
+  final goal = LevelRewards.xpToReach(u.level);
+  final left = math.max(0, goal - xp);
   final what = u == Unlock.painting ? 'Painting opens' : '${u.label} open';
-  await showAppAlert(
+  final art = _artPicture(ref);
+  // The same sheet as the intro that greets it once it opens, in black and
+  // white with a lock, so the player recognises it later.
+  await showAppSheet<void>(
     context,
-    title: '$what at level ${u.level}',
-    message: '${unlockWhat(u)}\n\n$left XP to go. Every solved picture brings you closer.',
-    confirmLabel: 'Got it',
-    cancelLabel: null,
+    builder: (ctx) => Padding(
+      key: ValueKey('locked-info-${u.name}'),
+      padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(Radii.lg),
+            child: SizedBox(
+              height: 140,
+              width: 140 * 0.78,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  ColorFiltered(colorFilter: const ColorFilter.matrix(UnlockArt._greyscale), child: UnlockArt(unlock: u, picture: art)),
+                  ColoredBox(color: Colors.black.withValues(alpha: 0.18)),
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.92), shape: BoxShape.circle),
+                      child: const Icon(AppIcons.lock, size: 20, color: Color(0xFF111118)),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          SizedBox(width: double.infinity, child: SheetHeader(title: '$what at level ${u.level}', subtitle: unlockWhat(u), center: true)),
+          const SizedBox(height: 18),
+          _LevelDistance(level: LevelRewards.levelForXp(xp), progress: goal == 0 ? 1 : xp / goal, left: left),
+          const SizedBox(height: 20),
+          BigButton(label: 'Got it', kind: ButtonKind.secondary, onTap: () => Navigator.pop(ctx)),
+        ],
+      ),
+    ),
   );
+}
+
+/// "Level 5 ... 220 XP to go" over a bar: the way to the level a feature opens at.
+class _LevelDistance extends StatelessWidget {
+  const _LevelDistance({required this.level, required this.progress, required this.left});
+  final int level;
+  final double progress;
+  final int left;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final small = TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: c.textSecondary);
+    return Column(
+      children: [
+        ProgressBar(value: progress, height: 6),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            Text('Level $level', style: small),
+            const Spacer(),
+            Text('${groupThousands(left)} XP to go', style: small),
+          ],
+        ),
+      ],
+    );
+  }
 }
 
 /// A picture for the intro art: today's daily picture, else any.

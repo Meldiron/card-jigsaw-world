@@ -226,7 +226,8 @@ void main() {
     await foreground(tester, ms: 4000);
     expect(find.text('Two boards in progress'), findsOneWidget);
     await shot(tester, 'sync_02_two_boards');
-    await tapText(tester, "Keep the other device's board", ms: 4000);
+    await tester.tap(find.byKey(const ValueKey('keep-other-board')), warnIfMissed: false);
+    await settle(tester, 4000);
     expect(find.text('Synced from another device'), findsOneWidget);
     await shot(tester, 'sync_03_after_offline');
     await tapText(tester, 'Continue');

@@ -40,6 +40,8 @@ class PackScreen extends ConsumerWidget {
       // A link to a pack the catalogue does not list (removed, an event not announced yet, or a
       // pack that opens with a pack code) says so instead of loading forever.
       final missing = packsAsync.hasValue && !packsAsync.isLoading;
+      // The catalogue could not be read (offline on a first launch, or a link opened offline).
+      final failed = packsAsync.hasError && !packsAsync.hasValue && !packsAsync.isLoading;
       return Scaffold(
         appBar: AppBar(
           leading: Padding(
@@ -47,14 +49,21 @@ class PackScreen extends ConsumerWidget {
             child: RoundIconButton(icon: CupertinoIcons.back, size: 38, onTap: () => context.canPop() ? context.pop() : context.go('/library')),
           ),
         ),
-        body: missing
-            ? const EmptyState(
-                key: ValueKey('pack-not-available'),
-                icon: AppIcons.library,
-                title: 'Pack not available',
-                message: 'The link may be out of date. A pack from a pack code shows here once the code is redeemed.',
+        body: failed
+            ? EmptyState(
+                icon: AppIcons.signal,
+                title: 'Packs did not load',
+                message: 'Check your connection and try again.',
+                action: BigButton(label: 'Try again', expand: false, onTap: () => ref.invalidate(catalogProvider)),
               )
-            : const Loader(),
+            : missing
+                ? const EmptyState(
+                    key: ValueKey('pack-not-available'),
+                    icon: AppIcons.library,
+                    title: 'Pack not available',
+                    message: 'The link may be out of date. A pack from a pack code shows here once the code is redeemed.',
+                  )
+                : const Loader(),
       );
     }
     final puzzles = ref.watch(packPuzzlesProvider(packId));
@@ -260,7 +269,14 @@ class PackScreen extends ConsumerWidget {
           ),
           puzzles.when(
             loading: () => const SliverToBoxAdapter(child: Padding(padding: EdgeInsets.all(40), child: Loader())),
-            error: (e, _) => const SliverToBoxAdapter(child: EmptyState(icon: AppIcons.signal, title: 'Pictures did not load', message: 'Check your connection and pull to try again.')),
+            error: (e, _) => SliverToBoxAdapter(
+              child: EmptyState(
+                icon: AppIcons.signal,
+                title: 'Pictures did not load',
+                message: 'Check your connection and try again.',
+                action: BigButton(label: 'Try again', expand: false, onTap: () => ref.invalidate(catalogProvider)),
+              ),
+            ),
             data: (list) => SliverPadding(
               padding: EdgeInsets.fromLTRB(20, 20, 20, GlassTabBar.scrollEndPadding(context)),
               sliver: SliverGrid(

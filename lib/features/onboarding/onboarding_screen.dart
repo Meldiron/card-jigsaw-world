@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/cupertino.dart';
@@ -6,11 +7,16 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/appwrite.dart';
 import '../../core/theme/tokens.dart';
+import '../../game/board.dart';
+import '../../game/game_controller.dart';
+import '../../game/image_loader.dart';
 import '../../models/models.dart';
 import '../../state/catalog.dart';
 import '../../state/settings.dart';
 import '../../widgets/ui.dart';
+import '../game/board_widget.dart';
 
 /// Three-slide welcome. The top half shows real pack pictures so the game
 /// sells itself; players start as guests and can link an account later.
@@ -34,8 +40,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       body: 'Cards that belong together snap into a group anywhere on the board. A card in its true spot locks into the picture.',
     ),
     (
-      title: 'A new picture every day',
-      body: 'Keep a daily streak, earn coins and tickets, and open packs, monthly albums and limited-time events.',
+      title: 'A new picture daily',
+      body: 'Play the daily puzzle to keep your streak. Earn Coins and Tickets to open more packs and events.',
     ),
   ];
 
@@ -54,10 +60,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   Widget build(BuildContext context) {
     final c = context.colors;
     final last = _index == _slides.length - 1;
-    final packs = ref.watch(packsProvider).value ?? const <Pack>[];
-    final covers = packs.where((p) => !p.isDaily && p.coverUrl.isNotEmpty).map((p) => _Cover(p.coverUrl, p.blurhash)).toList();
-    final months = packs.where((p) => p.isDaily && p.coverUrl.isNotEmpty).map((p) => _Cover(p.coverUrl, p.blurhash)).toList();
-    final artHeight = MediaQuery.sizeOf(context).height * 0.52;
+    final safeTop = MediaQuery.paddingOf(context).top;
+    // Room under the art for the longest title and text, so every page puts
+    // its title on the same line.
+    final textBlock = MediaQuery.textScalerOf(context).scale(196);
 
     return Scaffold(
       backgroundColor: c.canvas,
@@ -71,34 +77,36 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               itemBuilder: (_, i) {
                 final s = _slides[i];
                 final Widget art = switch (i) {
-                  0 => _CardFan(urls: covers.take(7).toList()),
-                  1 => _SnapBoard(
-                    url: covers.isEmpty
-                        ? null
-                        : covers[math.min(1, covers.length - 1)],
-                  ),
-                  _ => _CardFan(
-                    urls: [...months.take(4), ...covers.skip(7).take(3)],
-                  ),
+                  0 => const _CardFan(urls: _Cover.firstFan),
+                  1 => _DemoBoard(puzzle: ref.watch(dailyPuzzleProvider), fallback: _Cover.firstFan[1]),
+                  _ => const _CardFan(urls: _Cover.dailyFan),
                 };
-                return Column(
+                return LayoutBuilder(
+                  builder: (context, box) => Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: artHeight,
+                    // The art starts below the status bar and takes what the
+                    // text leaves: more on tall phones, never under the clock.
+                    Padding(
+                      padding: EdgeInsets.only(top: safeTop + 8),
+                      child: SizedBox(
+                      height: math.max(160, box.maxHeight - textBlock - safeTop - 8),
                       width: double.infinity,
-                      child: _FadeToCanvas(
-                        child: art
-                            .animate(key: ValueKey('a$i'))
-                            .fadeIn(duration: 400.ms),
-                      ),
+                      // The fans fade into the page; the board is shown whole.
+                      child: i == 1
+                          ? art.animate(key: ValueKey('a$i')).fadeIn(duration: 400.ms)
+                          : _FadeToCanvas(
+                              child: art
+                                  .animate(key: ValueKey('a$i'))
+                                  .fadeIn(duration: 400.ms),
+                            ),
+                    ),
                     ),
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(28, 16, 28, 0),
+                        padding: const EdgeInsets.fromLTRB(28, 20, 28, 0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
                                   s.title,
@@ -126,6 +134,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                       ),
                     ),
                   ],
+                ),
                 );
               },
             ),
@@ -147,7 +156,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                           width: i == _index ? 20 : 6,
                           height: 6,
                           decoration: BoxDecoration(
-                            color: i == _index ? context.accent : c.stroke,
+                            color: i == _index ? context.accent : c.textTertiary.withValues(alpha: 0.45),
                             borderRadius: BorderRadius.circular(6),
                           ),
                         ),
@@ -169,7 +178,14 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     },
                   ),
                   const SizedBox(height: 8),
-                  Pressable(
+                  // "Start playing" already finishes on the last page; the
+                  // space stays so the button does not move.
+                  Visibility(
+                    visible: !last,
+                    maintainSize: true,
+                    maintainAnimation: true,
+                    maintainState: true,
+                    child: Pressable(
                     onTap: _finish,
                     child: Padding(
                       padding: const EdgeInsets.all(10),
@@ -181,6 +197,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                         ),
                       ),
                     ),
+                  ),
                   ),
                 ],
               ),
@@ -209,7 +226,7 @@ class _FadeToCanvas extends StatelessWidget {
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                stops: const [0, 0.55, 1],
+                stops: const [0, 0.72, 1],
                 colors: [
                   canvas.withValues(alpha: 0),
                   canvas.withValues(alpha: 0),
@@ -270,6 +287,120 @@ class _CardFan extends StatelessWidget {
                 ),
               ),
           ],
+        );
+      },
+    );
+  }
+}
+
+/// Today's picture on a real 3x3 board that plays itself, drawn by the
+/// game's own board renderer: a card is picked and locks into its corner,
+/// two cards that belong together snap into a group away from their place,
+/// the group moves as one and locks, and the picture completes. Then it
+/// starts again. With Reduce Motion it holds one still frame (a locked
+/// corner, a group and loose cards). Empty frames while the picture loads.
+class _DemoBoard extends ConsumerStatefulWidget {
+  const _DemoBoard({required this.puzzle, required this.fallback});
+  final Puzzle? puzzle;
+
+  /// The picture when today's is not known yet (the catalogue has not arrived).
+  final _Cover fallback;
+
+  @override
+  ConsumerState<_DemoBoard> createState() => _DemoBoardState();
+}
+
+/// One step of the demo: the layout, the picked slot, the slots that just
+/// locked or joined (they pulse, as in the game) and how long it stays.
+typedef _DemoFrame = ({List<int> slots, int? selected, Set<int> locked, Set<int> joined, int ms});
+
+class _DemoBoardState extends ConsumerState<_DemoBoard> {
+  static const _spec = BoardSpec(GameMode.cards, 3, 3, 'Cozy');
+
+  static const List<_DemoFrame> _frames = [
+    (slots: [1, 3, 0, 5, 7, 2, 4, 8, 6], selected: null, locked: {}, joined: {}, ms: 1400),
+    (slots: [1, 3, 0, 5, 7, 2, 4, 8, 6], selected: 2, locked: {}, joined: {}, ms: 700),
+    (slots: [0, 3, 1, 5, 7, 2, 4, 8, 6], selected: null, locked: {0}, joined: {}, ms: 1300),
+    (slots: [0, 3, 1, 5, 7, 2, 4, 8, 6], selected: 3, locked: {}, joined: {}, ms: 700),
+    (slots: [0, 3, 1, 8, 7, 2, 4, 5, 6], selected: null, locked: {}, joined: {6, 7}, ms: 1400),
+    (slots: [0, 3, 1, 8, 7, 2, 4, 5, 6], selected: 6, locked: {}, joined: {}, ms: 700),
+    (slots: [0, 3, 1, 8, 4, 5, 7, 2, 6], selected: null, locked: {4, 5}, joined: {}, ms: 1400),
+    (slots: [0, 1, 2, 3, 4, 5, 6, 7, 8], selected: null, locked: {1, 2, 3, 6, 7, 8}, joined: {}, ms: 2200),
+  ];
+
+  /// The still frame for Reduce Motion: a locked corner, a group, loose cards.
+  static const _still = [0, 1, 7, 8, 3, 6, 4, 5, 2];
+
+  Timer? _timer;
+  int _i = 0;
+  int _tick = 0;
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  void _schedule() {
+    _timer?.cancel();
+    _timer = Timer(Duration(milliseconds: _frames[_i].ms), () {
+      if (!mounted) return;
+      setState(() {
+        _i = (_i + 1) % _frames.length;
+        _tick++;
+      });
+      _schedule();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final image = ref.watch(puzzleImageProvider(widget.puzzle?.imageUrl ?? widget.fallback.url));
+    final style = ref.watch(settingsProvider).cardStyle;
+    final still = MediaQuery.disableAnimationsOf(context);
+    return image.when(
+      loading: () => const _SnapBoard(url: null),
+      error: (_, _) => const _SnapBoard(url: null),
+      data: (img) {
+        if (!still && _timer == null) _schedule();
+        final f = _frames[_i];
+        final board = Board(_spec, still ? _still : f.slots);
+        return LayoutBuilder(
+          builder: (_, box) {
+            // The art box already starts below the status bar.
+            final size = board.tiling.fit(Size(box.maxWidth - 64, box.maxHeight - 16), img.width / img.height);
+            return SizedBox.expand(
+              child: Center(
+                child: IgnorePointer(
+                  child: BoardWidget(
+                    image: img,
+                    state: GameState(
+                      board: board,
+                      par: board.par,
+                      moves: 0,
+                      elapsed: 0,
+                      status: GameStatus.playing,
+                      selected: still ? null : f.selected,
+                      hintsUsed: 0,
+                      history: const [],
+                      justLocked: still ? const {} : f.locked,
+                      justJoined: still ? const {} : f.joined,
+                      hintSlot: null,
+                      hintTarget: null,
+                      peeking: false,
+                      chain: 0,
+                      tick: _tick,
+                    ),
+                    width: size.width,
+                    height: size.height,
+                    cardStyle: style,
+                    onTap: (_) {},
+                    onDrop: (_, _) {},
+                  ),
+                ),
+              ),
+            );
+          },
         );
       },
     );
@@ -377,9 +508,34 @@ class _SnapBoard extends StatelessWidget {
   }
 }
 
-/// A pack cover with its BlurHash.
+/// A picture for the welcome art, with its BlurHash.
 class _Cover {
   const _Cover(this.url, this.hash);
   final String url;
   final String? hash;
+
+  /// The fans show fixed catalogue pictures (public domain or CC0) by their
+  /// Storage address, so they start loading with the first frame instead of
+  /// after the whole catalogue; their BlurHash is in the code, so before they
+  /// arrive (or offline) each card shows the picture's own blurred colours.
+  static const _welcome = '${AppwriteConfig.endpoint}/storage/buckets/${AppwriteConfig.puzzleImagesBucket}/files/';
+  static const _preview = '/preview?project=${AppwriteConfig.projectId}&width=600&quality=80';
+  static const firstFan = [
+    _Cover('${_welcome}p54a4497d62d08bc01e8a352e433a708d807$_preview', r'LrAxQ7s.s.ozt:WEWBbItnWBflay'), // Island Lake, Wind River Range
+    _Cover('${_welcome}pa104c6e3ba15d91d5d3fc5caa6ee4648275$_preview', r'LDBzUCRiEK-p_LXgO8tRy9kBM|WB'), // Red panda sleeping
+    _Cover('${_welcome}pf0c1b7e37f239d5146a21057a16f9b300a5$_preview', r'LPIhpwtRWUxCp3aLs.WZ16n$RPJ8'), // Tulip Fields 11
+    _Cover('${_welcome}pf92be72d8070bec472ee35c02385ba7b98f$_preview', r'LYCZCbofM{j]_4ofV@oftmj[kCof'), // Amsterdam canal at night II
+    _Cover('${_welcome}p0f7c012505dbc3ae77d2f3e8dd309e925a8$_preview', r'LbF?9O0M$dxuXpxaSPjEA1-oNLbc'), // Gozo Azure Window
+    _Cover('${_welcome}pcc1f6f614dfb408abbc73f091ba705083c7$_preview', r'LDK8w~;3.n~AH[NaTKxtVu-U5n9a'), // Lower Antelope Canyon II
+    _Cover('${_welcome}p06fa00b7deb557c600ef49a8206fbb64db4$_preview', r'LGGIr-9G01W9RNIAWFIWxuM{_MIV'), // Emperor penguin
+  ];
+  static const dailyFan = [
+    _Cover('${_welcome}p52bce655e7fccbdb787e7132db54f71c494$_preview', r'LDFEZj+b0y$*tR^Q$kM|ELfi$*R*'), // Cherry blossom
+    _Cover('${_welcome}p804cf353e052e92de7b62ba814bb617231c$_preview', r'LKHLVd4mF4tR?dxuogWBE1xwi^jY'), // Meerkat standing
+    _Cover('${_welcome}p70c5579a18b51c0d1ba235bd66167a17881$_preview', r'LSI56^_2E4Io0kbckDjZI^ITWCjY'), // Parthenon Athens
+    _Cover('${_welcome}pa408454dd415d8fdbfd7ebee076b83d4e7f$_preview', r'L8Ef$I.41GyV^#M}Rj+~DSO8Romv'), // World Mental Health Day 14
+    _Cover('${_welcome}p4a23582e9623db6bd22a04d8eb94a840451$_preview', r'LbDSkL%3NKWBg8j]j]j@0KRixZof'), // Tropical Beaches 3
+    _Cover('${_welcome}pdcd02f809619f29b7f4f34e391f1e3f5468$_preview', r'LGKJ*trEE8W=~Vs:IooM=|oIIobH'), // California rolls
+    _Cover('${_welcome}p97439f5883f26b393d6c309aea1eb7f99ea$_preview', r'LNEfE3,,8^gO%iMcaItl?cn3aJx]'), // Upper Ammonoosuc Falls
+  ];
 }

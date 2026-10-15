@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
@@ -614,6 +615,34 @@ class Chip2 extends StatelessWidget {
   }
 }
 
+/// The title block every sheet starts with: one title style (20 pt bold) and
+/// one subtitle style (14 pt, secondary), so sheets read as one family.
+/// Sheets that are a list or a choice align it left; sheets that lead with
+/// a picture or an icon centre it ([center]).
+class SheetHeader extends StatelessWidget {
+  const SheetHeader({super.key, required this.title, this.subtitle, this.center = false});
+  final String title;
+  final String? subtitle;
+  final bool center;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final align = center ? TextAlign.center : TextAlign.start;
+    return Column(
+      crossAxisAlignment: center ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(title, textAlign: align, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, letterSpacing: -0.3, height: 1.2, color: c.textPrimary)),
+        if (subtitle != null) ...[
+          const SizedBox(height: 4),
+          Text(subtitle!, textAlign: align, style: TextStyle(fontSize: 14, height: 1.35, color: c.textSecondary)),
+        ],
+      ],
+    );
+  }
+}
+
 /// Content-sized modal sheet in the iOS 26 style: glass surface, grabber,
 /// light dim behind it, drag or tap outside to dismiss. For full-height
 /// modals (Store, Wheel, Account) the router uses a CupertinoSheetRoute.
@@ -642,28 +671,141 @@ Future<T?> showAppSheet<T>(BuildContext context, {required WidgetBuilder builder
 }
 
 /// Root messenger; `CardJigsawApp` hosts a Scaffold above the Navigator for
-/// it, so toasts float over every route, sheet barrier and the tab bar.
+/// it. Toasts no longer use it (see [showToast]); kept for the host.
 final appMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
+/// How long a toast stays: long enough to read (about 45 ms a character),
+/// 2.2 s at least and 5 s at most.
+Duration toastDuration(String message) => Duration(milliseconds: (1500 + message.length * 45).clamp(2200, 5000));
+
+OverlayEntry? _toastEntry;
+
+/// A short notice in an iOS 26 glass capsule that drops in under the status
+/// bar (the Dynamic Island on newer phones), above every screen, sheet and
+/// alert, and never over the tab bar, a game's tools or a sheet's buttons.
+/// One at a time: a new toast replaces the one on screen. Tap or swipe up to
+/// close it early; VoiceOver reads it out.
 void showToast(BuildContext context, String message, {IconData? icon, Widget? leading}) {
-  final messenger = appMessengerKey.currentState ?? ScaffoldMessenger.maybeOf(context);
-  if (messenger == null) return;
-  messenger.hideCurrentSnackBar();
-  final fg = context.isDark ? context.colors.textPrimary : Colors.white;
-  // Lift the toast 12pt above the floating tab bar (the host Scaffold is
-  // above the tab shell, so the bar's slot is not in its insets).
-  final safe = MediaQuery.viewPaddingOf(context).bottom;
-  final lift = GlassTabBar.bottomGap(safe) + GlassTabBar.barHeight + 12 - safe;
-  messenger.showSnackBar(SnackBar(
-    margin: EdgeInsets.fromLTRB(16, 0, 16, lift),
-    content: Row(
-      children: [
-        if (leading != null) ...[leading, const SizedBox(width: 10)] else if (icon != null) ...[Icon(icon, size: 20, color: fg), const SizedBox(width: 10)],
-        Expanded(child: Text(message)),
-      ],
+  // The root navigator's own context sits above its overlay.
+  final overlay = context is StatefulElement && context.state is NavigatorState ? (context.state as NavigatorState).overlay : Overlay.maybeOf(context, rootOverlay: true);
+  if (overlay == null) return;
+  _toastEntry?.remove();
+  late final OverlayEntry entry;
+  entry = OverlayEntry(
+    builder: (_) => _Toast(
+      key: const ValueKey('toast'),
+      message: message,
+      icon: icon,
+      leading: leading,
+      duration: toastDuration(message),
+      onDone: () {
+        if (_toastEntry == entry) _toastEntry = null;
+        if (entry.mounted) entry.remove();
+      },
     ),
-    duration: const Duration(seconds: 2),
-  ));
+  );
+  _toastEntry = entry;
+  overlay.insert(entry);
+}
+
+class _Toast extends StatefulWidget {
+  const _Toast({super.key, required this.message, this.icon, this.leading, required this.duration, required this.onDone});
+  final String message;
+  final IconData? icon;
+  final Widget? leading;
+  final Duration duration;
+  final VoidCallback onDone;
+
+  @override
+  State<_Toast> createState() => _ToastState();
+}
+
+class _ToastState extends State<_Toast> with SingleTickerProviderStateMixin {
+  late final _c = AnimationController(vsync: this, duration: const Duration(milliseconds: 280), reverseDuration: const Duration(milliseconds: 200))..forward();
+  late final _curve = CurvedAnimation(parent: _c, curve: Curves.easeOutCubic, reverseCurve: Curves.easeIn);
+  Timer? _timer;
+  bool _closing = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer(widget.duration + const Duration(milliseconds: 280), _close);
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _curve.dispose();
+    _c.dispose();
+    super.dispose();
+  }
+
+  void _close() {
+    if (_closing || !mounted) return;
+    _closing = true;
+    _timer?.cancel();
+    _c.reverse().whenComplete(widget.onDone);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final isDark = context.isDark;
+    final top = MediaQuery.viewPaddingOf(context).top;
+    return Positioned(
+      top: top + 6,
+      left: 16,
+      right: 16,
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: FadeTransition(
+          opacity: _curve,
+          child: SlideTransition(
+            position: Tween(begin: const Offset(0, -0.5), end: Offset.zero).animate(_curve),
+            child: GestureDetector(
+              onTap: _close,
+              onVerticalDragUpdate: (d) {
+                if (d.delta.dy < -2) _close();
+              },
+              child: Semantics(
+                liveRegion: true,
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 420, minHeight: 44),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(22),
+                        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: isDark ? 0.45 : 0.14), blurRadius: 24, offset: const Offset(0, 8))],
+                      ),
+                      child: GlassSurface(
+                        sigma: 30,
+                        opacity: isDark ? 0.82 : 0.88,
+                        borderRadius: BorderRadius.circular(22),
+                        hairline: Border.all(color: isDark ? Colors.white.withValues(alpha: 0.14) : Colors.black.withValues(alpha: 0.06), width: 0.5),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 11, 18, 11),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (widget.leading != null) ...[widget.leading!, const SizedBox(width: 10)] else if (widget.icon != null) ...[Icon(widget.icon, size: 18, color: c.textSecondary), const SizedBox(width: 10)],
+                              Flexible(
+                                child: Text(widget.message, maxLines: 3, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 14.5, height: 1.3, fontWeight: FontWeight.w600, color: c.textPrimary, letterSpacing: -0.1)),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 /// Empty-state placeholder.
@@ -762,7 +904,8 @@ Future<bool> showAppAlert(
   required String title,
   String? message,
   Widget? child,
-  String confirmLabel = 'OK',
+  // Always named for the action (copy guide: never "OK").
+  required String confirmLabel,
   String? cancelLabel = 'Cancel',
   bool destructive = false,
   bool Function()? canConfirm,
@@ -859,7 +1002,6 @@ class _AppAlert extends StatelessWidget {
     final c = context.colors;
     final isDark = context.isDark;
     final inset = MediaQuery.viewInsetsOf(context).bottom;
-    final hairline = isDark ? Colors.white.withValues(alpha: 0.16) : Colors.black.withValues(alpha: 0.14);
     const radius = 28.0;
     return AnimatedPadding(
       duration: const Duration(milliseconds: 200),
@@ -885,7 +1027,7 @@ class _AppAlert extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(22, 26, 22, 22),
+                        padding: const EdgeInsets.fromLTRB(22, 24, 22, 20),
                         child: Column(
                           children: [
                             Text(title, textAlign: TextAlign.center, style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700, color: c.textPrimary, letterSpacing: -0.3, height: 1.25)),
@@ -897,28 +1039,38 @@ class _AppAlert extends StatelessWidget {
                           ],
                         ),
                       ),
-                      SizedBox(height: 0.5, child: ColoredBox(color: hairline)),
-                      SizedBox(
-                        height: 50,
-                        child: Row(
-                          children: [
-                            if (cancelLabel != null) ...[
-                              Expanded(child: _AlertAction(label: cancelLabel!, onTap: () => Navigator.of(context).pop(false))),
-                              SizedBox(width: 0.5, child: ColoredBox(color: hairline)),
-                            ],
-                            Expanded(
-                              child: _AlertAction(
-                                label: confirmLabel,
-                                bold: true,
-                                color: destructive ? c.danger : null,
-                                onTap: () {
-                                  if (canConfirm != null && !canConfirm!()) return;
-                                  Navigator.of(context).pop(true);
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
+                      // iOS 26 alert actions: capsules, side by side when both
+                      // labels fit, otherwise stacked with Cancel last.
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                        child: LayoutBuilder(builder: (context, box) {
+                          final cancel = cancelLabel == null ? null : _AlertAction(label: cancelLabel!, onTap: () => Navigator.of(context).pop(false));
+                          final confirm = _AlertAction(
+                            label: confirmLabel,
+                            bold: true,
+                            // A deeper red on light glass keeps the label above 4.5:1.
+                            color: destructive ? (isDark ? c.danger : const Color(0xFFB91C1C)) : context.accent,
+                            onTap: () {
+                              if (canConfirm != null && !canConfirm!()) return;
+                              Navigator.of(context).pop(true);
+                            },
+                          );
+                          const gap = 10.0;
+                          final half = (box.maxWidth - gap) / 2 - 2 * _AlertAction.padding;
+                          final sideBySide = cancel == null || (_AlertAction.widthOf(context, cancelLabel!, bold: false) <= half && _AlertAction.widthOf(context, confirmLabel, bold: true) <= half);
+                          if (sideBySide) {
+                            return Row(
+                              children: [
+                                if (cancel != null) ...[Expanded(child: cancel), const SizedBox(width: gap)],
+                                Expanded(child: confirm),
+                              ],
+                            );
+                          }
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [confirm, const SizedBox(height: gap), cancel],
+                          );
+                        }),
                       ),
                     ],
                   ),
@@ -932,22 +1084,48 @@ class _AppAlert extends StatelessWidget {
   }
 }
 
+/// One alert action: a 48 pt capsule. Cancel is neutral; the action is tinted
+/// with its colour (cobalt, or red when destructive), text in that colour.
 class _AlertAction extends StatelessWidget {
   const _AlertAction({required this.label, required this.onTap, this.bold = false, this.color});
   final String label;
   final VoidCallback onTap;
   final bool bold;
+
+  /// The action's colour; null for Cancel.
   final Color? color;
+
+  /// Space kept on each side of a label.
+  static const padding = 14.0;
+
+  static TextStyle _style({required bool bold, Color? color}) => TextStyle(fontSize: 16.5, fontWeight: bold ? FontWeight.w600 : FontWeight.w500, color: color, letterSpacing: -0.2);
+
+  /// Width of [label] as drawn, at the current text size.
+  static double widthOf(BuildContext context, String label, {required bool bold}) {
+    final tp = TextPainter(text: TextSpan(text: label, style: _style(bold: bold)), textDirection: TextDirection.ltr, textScaler: MediaQuery.textScalerOf(context), maxLines: 1)..layout();
+    final w = tp.width;
+    tp.dispose();
+    return w;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final c = context.colors;
+    final tone = color;
+    final fill = tone == null
+        ? (context.isDark ? Colors.white.withValues(alpha: 0.10) : Colors.black.withValues(alpha: 0.06))
+        : tone.withValues(alpha: context.isDark ? 0.12 : 0.10);
     return Pressable(
       onTap: onTap,
-      scale: 0.98,
+      scale: 0.97,
       sound: false,
-      child: SizedBox.expand(
-        child: Center(
-          child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 16.5, fontWeight: bold ? FontWeight.w700 : FontWeight.w500, color: color ?? context.accent, letterSpacing: -0.2)),
-        ),
+      child: Container(
+        height: 48,
+        width: double.infinity,
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: padding),
+        decoration: BoxDecoration(color: fill, borderRadius: BorderRadius.circular(Radii.pill)),
+        child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: _style(bold: bold, color: tone ?? c.textPrimary)),
       ),
     );
   }
