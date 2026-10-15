@@ -23,6 +23,7 @@ import 'package:card_jigsaw_world/models/models.dart';
 import 'package:card_jigsaw_world/router.dart';
 import 'package:card_jigsaw_world/state/auth.dart';
 import 'package:card_jigsaw_world/state/catalog.dart';
+import 'package:card_jigsaw_world/state/catalog_sync.dart' show CatalogTables;
 import 'package:card_jigsaw_world/state/profile.dart';
 import 'package:card_jigsaw_world/state/progress.dart';
 import 'package:card_jigsaw_world/state/purchases.dart';
@@ -290,6 +291,9 @@ Future<ProviderContainer> buildContainer(Map<String, dynamic> scene) async {
     storeAvailableProvider.overrideWith((ref) async => store != 'down'),
     productsProvider.overrideWith((ref) async => store == 'down' ? const <String, ProductDetails>{} : fakeProducts),
     if (scene['allOpen'] == true) openFeaturesProvider.overrideWithValue(OpenFeatures.all),
+    // "catalog": "down": the catalogue cannot be read (first launch offline); "loading": never arrives.
+    if (scene['catalog'] == 'down') catalogProvider.overrideWith((ref) async => throw AppwriteException('design QA: offline', 0)),
+    if (scene['catalog'] == 'loading') catalogProvider.overrideWith((ref) => Completer<CatalogTables>().future),
   ]);
   return c;
 }
