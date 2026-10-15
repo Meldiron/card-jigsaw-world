@@ -1,4 +1,4 @@
-import 'package:card_jigsaw_world/game/board.dart';
+import 'package:carden/game/board.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

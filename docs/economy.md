@@ -353,7 +353,7 @@ constants the price script uses. The full day-by-day model behind the tables abo
 <summary>model.py (Python 3, no dependencies): `python3 model.py`</summary>
 
 ```python
-"""Card Jigsaw World economy model. Mirrors the Dart constants (lib/state/profile.dart,
+"""Carden economy model. Mirrors the Dart constants (lib/state/profile.dart,
 rewards.dart, achievements.dart, wheel_screen.dart, models.dart). Day-by-day simulation."""
 import math, json, sys, collections
 

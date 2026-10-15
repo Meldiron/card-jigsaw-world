@@ -7,20 +7,20 @@
 //
 // The later unlocks (levels 4 to 10) come from XP granted through the same
 // completion call a solve makes, so the run does not have to play 60 boards.
-import 'package:card_jigsaw_world/app.dart';
-import 'package:card_jigsaw_world/core/sfx.dart';
-import 'package:card_jigsaw_world/data/local_store.dart';
-import 'package:card_jigsaw_world/features/events/events_screen.dart';
-import 'package:card_jigsaw_world/features/events/quest_rewards.dart';
-import 'package:card_jigsaw_world/features/game/board_widget.dart';
-import 'package:card_jigsaw_world/features/game/difficulty_screen.dart';
-import 'package:card_jigsaw_world/game/board.dart';
-import 'package:card_jigsaw_world/router.dart';
-import 'package:card_jigsaw_world/state/profile.dart';
-import 'package:card_jigsaw_world/state/progress.dart';
-import 'package:card_jigsaw_world/state/rewards.dart';
-import 'package:card_jigsaw_world/state/settings.dart';
-import 'package:card_jigsaw_world/state/unlocks.dart';
+import 'package:carden/app.dart';
+import 'package:carden/core/sfx.dart';
+import 'package:carden/data/local_store.dart';
+import 'package:carden/features/events/events_screen.dart';
+import 'package:carden/features/events/quest_rewards.dart';
+import 'package:carden/features/game/board_widget.dart';
+import 'package:carden/features/game/difficulty_screen.dart';
+import 'package:carden/game/board.dart';
+import 'package:carden/router.dart';
+import 'package:carden/state/profile.dart';
+import 'package:carden/state/progress.dart';
+import 'package:carden/state/rewards.dart';
+import 'package:carden/state/settings.dart';
+import 'package:carden/state/unlocks.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -52,7 +52,7 @@ void main() {
     await settle(tester, ms);
   }
 
-  ProviderContainer container(WidgetTester tester) => ProviderScope.containerOf(tester.element(find.byType(CardJigsawApp)));
+  ProviderContainer container(WidgetTester tester) => ProviderScope.containerOf(tester.element(find.byType(CardenApp)));
   String location(WidgetTester tester) => container(tester).read(routerProvider).state.uri.toString();
 
   /// Sends every misplaced card home, one tap-tap move at a time.
@@ -119,7 +119,7 @@ void main() {
     Sfx.instance.musicEnabled = false;
     await tester.pumpWidget(ProviderScope(
       overrides: [localStoreProvider.overrideWithValue(store)],
-      child: const CardJigsawApp(),
+      child: const CardenApp(),
     ));
     await settle(tester, 1500);
     await tapText(tester, 'Continue');

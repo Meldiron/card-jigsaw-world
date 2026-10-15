@@ -3,14 +3,14 @@
 import 'dart:convert';
 
 import 'package:appwrite/models.dart' as models;
-import 'package:card_jigsaw_world/data/sync/notice.dart';
-import 'package:card_jigsaw_world/data/sync/ops.dart';
-import 'package:card_jigsaw_world/features/sync/sync_host.dart';
-import 'package:card_jigsaw_world/models/models.dart';
-import 'package:card_jigsaw_world/state/profile.dart';
-import 'package:card_jigsaw_world/state/rewards.dart';
-import 'package:card_jigsaw_world/state/sync.dart';
-import 'package:card_jigsaw_world/state/unlocks.dart';
+import 'package:carden/data/sync/notice.dart';
+import 'package:carden/data/sync/ops.dart';
+import 'package:carden/features/sync/sync_host.dart';
+import 'package:carden/models/models.dart';
+import 'package:carden/state/profile.dart';
+import 'package:carden/state/rewards.dart';
+import 'package:carden/state/sync.dart';
+import 'package:carden/state/unlocks.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'support/fake_sync.dart';

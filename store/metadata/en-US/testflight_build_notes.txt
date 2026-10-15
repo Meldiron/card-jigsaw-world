@@ -1,7 +1,10 @@
 New in this build:
-- Report and block: a player's page has Report (offensive name, cheating, something else) and Block. Blocked players leave your leaderboard; unblock them in Settings > Blocked players.
-- Links: cardjigsaw:// links open the matching screen (a pack, a picture, a profile, the store, a pack code filled in), and the same paths work on the web site. Redeem a pack code is no longer in Settings on iPhone; codes open through their link.
-- Store: when the App Store had no products at launch, opening the store or tapping a bundle asks again. Terms of use and Privacy policy are linked under VIP and in Settings.
-- Notes before new events are now off until you turn them on in Settings.
+- New name: Card Jigsaw World is now Carden, your calm picture puzzle. Your progress, coins and packs stay as they are. Links now start with carden:// and the web site is carden.appwrite.network; old links still open.
+- A design pass over every screen: a calmer Home header with your level as a ring around the avatar, a new level card, a redesigned Store, daily gift, Lucky Wheel and piggy bank, a podium for the top three in the league, and a glass toolbar and score capsule in the game.
+- Board picker: the mode picker and board sizes are redesigned, Painting is one row with what it does, and the picture credit sits behind a camera button.
+- Library: pack grids show only the photos, with the day, stars and boards in progress; searching shows matching packs as a shelf.
+- Welcome screens open instantly with their pictures built into the app.
+- Giant packs can be opened before level 10 for 1 ticket per level to go.
+- Account is one sheet everywhere, and every alert and menu has the same calm style in light and dark mode.
 
-Please try: report and block a player from the leaderboard, then unblock them in Settings; and cardjigsaw://daily typed into Safari's address bar.
+Please try: the Home Screen name and icon label (Carden), a link such as carden://daily typed into Safari's address bar, and the Store, daily gift and wheel.

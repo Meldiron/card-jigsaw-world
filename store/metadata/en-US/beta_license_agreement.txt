@@ -1,3 +1,3 @@
-Card Jigsaw World beta test agreement
+Carden beta test agreement
 
 This is a pre-release build provided for testing only. It may contain bugs, may change without notice and may stop working when the test period ends. Progress, purchases and balances made in a beta build may be reset before the public release; sandbox purchases are not charged. Do not distribute the build or share the TestFlight link publicly outside the channels where you received it. Feedback you send through TestFlight (including screenshots and device information) is used to improve the app. By installing the build you accept these terms and Apple's TestFlight terms of service.

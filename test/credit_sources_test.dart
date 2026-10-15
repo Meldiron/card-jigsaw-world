@@ -1,5 +1,5 @@
-import 'package:card_jigsaw_world/features/profile/settings_screen.dart';
-import 'package:card_jigsaw_world/models/models.dart';
+import 'package:carden/features/profile/settings_screen.dart';
+import 'package:carden/models/models.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Puzzle _p(int i, String source) => Puzzle.fromRow('p$i', {'packId': 'x', 'title': 't', 'imageUrl': 'u', 'source': source});

@@ -86,7 +86,7 @@ class WebUpdateSource implements UpdateSource {
     if (body == null) return null;
     final latest = '${(jsonDecode(body) as Map<String, dynamic>)['build'] ?? ''}';
     if (latest.isEmpty || latest == current) return null;
-    return AvailableUpdate(latest: latest, message: 'A new version of Card Jigsaw World is out. Updating reloads the page and keeps your progress.');
+    return AvailableUpdate(latest: latest, message: 'A new version of Carden is out. Updating reloads the page and keeps your progress.');
   }
 
   @override

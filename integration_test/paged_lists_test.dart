@@ -1,12 +1,12 @@
-import 'package:card_jigsaw_world/app.dart';
-import 'package:card_jigsaw_world/core/image_files.dart';
-import 'package:card_jigsaw_world/core/sfx.dart';
-import 'package:card_jigsaw_world/data/repositories.dart';
-import 'package:card_jigsaw_world/data/local_store.dart';
-import 'package:card_jigsaw_world/state/auth.dart';
-import 'package:card_jigsaw_world/state/catalog.dart';
-import 'package:card_jigsaw_world/state/settings.dart';
-import 'package:card_jigsaw_world/state/social.dart';
+import 'package:carden/app.dart';
+import 'package:carden/core/image_files.dart';
+import 'package:carden/core/sfx.dart';
+import 'package:carden/data/repositories.dart';
+import 'package:carden/data/local_store.dart';
+import 'package:carden/state/auth.dart';
+import 'package:carden/state/catalog.dart';
+import 'package:carden/state/settings.dart';
+import 'package:carden/state/social.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -38,7 +38,7 @@ void main() {
     final store = await LocalStore.open();
     Sfx.instance.soundEnabled = false;
     Sfx.instance.musicEnabled = false;
-    await tester.pumpWidget(ProviderScope(overrides: [localStoreProvider.overrideWithValue(store)], child: const CardJigsawApp()));
+    await tester.pumpWidget(ProviderScope(overrides: [localStoreProvider.overrideWithValue(store)], child: const CardenApp()));
     await settle(tester, 1500);
     await tapText(tester, 'Continue');
     await tapText(tester, 'Continue');
@@ -59,7 +59,7 @@ void main() {
 
     // Private photos: five uploads (the free limit) must still show for their owner, who loads
     // them through the signed-in client; a sixth is refused with the VIP alert. Cleaned up after.
-    final container = ProviderScope.containerOf(tester.element(find.byType(CardJigsawApp)));
+    final container = ProviderScope.containerOf(tester.element(find.byType(CardenApp)));
     final userId = container.read(currentUserIdProvider)!;
     final repo = container.read(uploadRepositoryProvider);
     final pictures = (await container.read(allPuzzlesProvider.future)).take(5).toList();

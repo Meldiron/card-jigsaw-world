@@ -2,12 +2,12 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
-import 'package:card_jigsaw_world/core/theme/app_theme.dart';
-import 'package:card_jigsaw_world/core/theme/tokens.dart';
-import 'package:card_jigsaw_world/features/game/board_widget.dart';
-import 'package:card_jigsaw_world/game/board.dart';
-import 'package:card_jigsaw_world/game/game_controller.dart';
-import 'package:card_jigsaw_world/state/settings.dart';
+import 'package:carden/core/theme/app_theme.dart';
+import 'package:carden/core/theme/tokens.dart';
+import 'package:carden/features/game/board_widget.dart';
+import 'package:carden/game/board.dart';
+import 'package:carden/game/game_controller.dart';
+import 'package:carden/state/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';

@@ -2,7 +2,7 @@ import 'dart:io' show Directory;
 
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
-import 'package:card_jigsaw_world/state/app_update.dart';
+import 'package:carden/state/app_update.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -94,7 +94,7 @@ void main() {
     });
 
     test('the version file is read from the site root past every cache', () {
-      final url = Uri.parse(WebUpdateSource.versionUrl(Uri.parse('https://card-jigsaw-world.appwrite.network/library/pack/x?y=1#z'), now));
+      final url = Uri.parse(WebUpdateSource.versionUrl(Uri.parse('https://carden.appwrite.network/library/pack/x?y=1#z'), now));
       expect(url.path, '/app-version.json');
       expect(url.queryParameters['t'], '${now.millisecondsSinceEpoch}');
       expect(url.fragment, isEmpty);

@@ -1,4 +1,4 @@
-"""Small Appwrite REST client for the Card Jigsaw World admin scripts (standard library only, so
+"""Small Appwrite REST client for the Carden admin scripts (standard library only, so
 it runs with the system python3 or the repo .venv).
 
 The key comes from secrets/appwrite-users-key.txt (scopes: users.read, users.write, rows.read,

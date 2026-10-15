@@ -1,15 +1,15 @@
 // Drives the real app (live Appwrite backend) and captures screenshots.
 // Run: tools/dev/qa-run.sh drive --driver=test_driver/integration_test.dart \
 //        --target=integration_test/screenshots_test.dart -d <simulator>
-import 'package:card_jigsaw_world/app.dart';
-import 'package:card_jigsaw_world/core/sfx.dart';
-import 'package:card_jigsaw_world/data/local_store.dart';
-import 'package:card_jigsaw_world/features/game/board_widget.dart';
-import 'package:card_jigsaw_world/features/game/game_screen.dart';
-import 'package:card_jigsaw_world/game/board.dart';
-import 'package:card_jigsaw_world/state/settings.dart';
-import 'package:card_jigsaw_world/state/rewards.dart';
-import 'package:card_jigsaw_world/state/unlocks.dart';
+import 'package:carden/app.dart';
+import 'package:carden/core/sfx.dart';
+import 'package:carden/data/local_store.dart';
+import 'package:carden/features/game/board_widget.dart';
+import 'package:carden/features/game/game_screen.dart';
+import 'package:carden/game/board.dart';
+import 'package:carden/state/settings.dart';
+import 'package:carden/state/rewards.dart';
+import 'package:carden/state/unlocks.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -131,7 +131,7 @@ void main() {
         openFeaturesProvider.overrideWithValue(OpenFeatures.all),
         pendingUnlockIntroProvider.overrideWithValue(null),
       ],
-      child: const CardJigsawApp(),
+      child: const CardenApp(),
     ));
     await settle(tester, 1500);
     await shot(tester, '01_onboarding');

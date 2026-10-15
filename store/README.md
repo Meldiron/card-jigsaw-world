@@ -18,7 +18,7 @@ ratings or awards. The research and reasoning are in
 | `raw/boards.json` | Board rectangle (physical px: left, top, width, height) of every game capture, written by the capture driver; the composer crops boards with it. | |
 | `collage/*.jpg` | Pack covers for the slide-2 wall, downloaded from our Storage bucket (`--refresh-collage`; pack ids in `COLLAGE_PACKS`). | 600 px wide |
 | `screenshots/iphone-6.9/01.png` ... `09.png` | Marketing screenshots for the App Store "iPhone 6.9-inch Display" slot. Upload in numeric order. | 1320x2868, RGB |
-| `review/subscription-review.png` | Store screen scrolled to the "Card Jigsaw World VIP" card, for the App Store Connect subscription "Review screenshot" field (min 640x920). Same pixels as `raw/12_store_vip.png`. | 1320x2868 |
+| `review/subscription-review.png` | Store screen scrolled to the "Carden VIP" card, for the App Store Connect subscription "Review screenshot" field (min 640x920). Same pixels as `raw/12_store_vip.png`. | 1320x2868 |
 | `promo/app-icon-1024.png` | The app icon flattened to RGB (App Store rejects alpha). | 1024x1024 |
 | `promo/vip-promotional-1024.png` | Promotional image for the VIP subscription (icon, "VIP" word mark, one-line benefit). | 1024x1024 |
 
@@ -98,7 +98,7 @@ simulator, and a Python 3 with Pillow (`pip install pillow`).
    run also leaves its guest in the live league (about 430 XP); guests with
    equal XP make the league header's "#N" disagree with the row, so check
    slide 8 after a rerun. If the
-   simulator shows a stuck "Open in Card Jigsaw World?" prompt, `xcrun simctl
+   simulator shows a stuck "Open in Carden?" prompt, `xcrun simctl
    shutdown` it and boot again. Any `raw/zz_diag_*.png` files are
    diagnostics the test writes when a step failed; delete them, they are not
    assets.

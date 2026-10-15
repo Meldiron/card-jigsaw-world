@@ -1,8 +1,17 @@
-# Card Jigsaw World — project instructions for Claude Code
+# Carden — project instructions for Claude Code
 
 Flutter card-swapping picture puzzle game (iOS first, web secondary, Android builds in CI only) with an
 Appwrite backend. Owner: Matej Bačo (GitHub `Meldiron`). Read this file fully before any work; the
 skills under `.claude/skills/` hold the detailed workflows.
+
+**Name** (owner, 2026-10-15): the game is **Carden** ("Carden: Your calm picture puzzle"; App Store name
+"Carden: Calm Picture Puzzle", the 30-character limit). It was Card Jigsaw World until build 118. Renamed: app
+and Home Screen name, Flutter package `carden` (`CardenApp`), link scheme `carden://`, web address
+https://carden.appwrite.network, repo `Meldiron/carden`, Appwrite project/site/platform names, store copy. Kept on
+purpose (old builds, Apple records, data): bundle id `com.matejbaco.cardjigsawworld`, the Services ID and product
+ids, the Appwrite project/site/database ids (`card-jigsaw-world` site id, database `cjw`), the `CJW_` dart-defines,
+the old scheme `cardjigsaw://` and the old address card-jigsaw-world.appwrite.network (both still open the game;
+web guests keep their saves per address), and the local folder and `~/.local/share/card-jigsaw-world`.
 
 ## Skills (load them when the task matches)
 
@@ -88,7 +97,7 @@ skills under `.claude/skills/` hold the detailed workflows.
   UDID 00008110-000024E63650401E). `--wipe` reinstalls fresh (onboarding), `--no-build` pushes the
   last build. Release builds keep sound; debug runs are muted.
 - **Commits**: `git -c user.name="Matej Bačo" -c user.email="matej@appwrite.io" commit ...`, push to
-  `origin main` (public repo `Meldiron/card-jigsaw-world`). End messages with the Co-Authored-By
+  `origin main` (public repo `Meldiron/carden`). End messages with the Co-Authored-By
   trailer the harness gives you. Never `git add -A` while another agent works in the repo; add paths.
 
 ## Toolchain
@@ -105,7 +114,7 @@ skills under `.claude/skills/` hold the detailed workflows.
   `integration_test/social_profile_test.dart`, `merge_sheet_test.dart`.
   Quirks: capture is in-app (host `simctl io screenshot` fires too late); uninstall the app before a
   second same-day run (`xcrun simctl uninstall <udid> com.matejbaco.cardjigsawworld`, the daily gift is
-  otherwise already claimed); a stuck "Open in Card Jigsaw World?" prompt needs a simulator reboot; started
+  otherwise already claimed); a stuck "Open in Carden?" prompt needs a simulator reboot; started
   puzzles resume directly, so tests needing the difficulty screen open an untouched picture.
 - Board shape harness: `flutter test test/board_widget_test.dart` renders fused-group shapes for all
   modes to `build/board_shapes/`.
@@ -185,7 +194,7 @@ skills under `.claude/skills/` hold the detailed workflows.
   `lib/features/events/quest_rewards.dart` (`questsFor`, `readyGoals`, `readyEventsProvider`, Claim all).
   Integration suites that play every shape override `openFeaturesProvider` and `pendingUnlockIntroProvider`.
 - Deep links (`docs/deep-links.md`): `lib/core/app_links.dart` (`AppLink.parse`: one path set for the web
-  address, `cardjigsaw://` and universal links; kinds page/overlay/action) and
+  address, `carden://` (and the first name's `cardjigsaw://`) and universal links; kinds page/overlay/action) and
   `lib/features/links/deep_links.dart` (`DeepLinks.show`: Home beneath overlays, sheets for `/redeem?code=`,
   `/add-friend?code=`, `/gift`, `/piggy`; a picture in a pack the player has not opened shows the pack). iPhone
   links arrive in `CardJigsawApp.didPushRouteInformation`, a web visit's start address in `routerProvider`.
@@ -244,7 +253,8 @@ skills under `.claude/skills/` hold the detailed workflows.
   secret variable `APPLE_SIGNIN_KEY` (contents of `AuthKey_2QJPJFW8JW.p8`, set 2026-10-15) revokes Sign in
   with Apple tokens; without it the revoke is skipped and logged; it also deletes the player's reports and
   blocks). Deploy functions with the Appwrite CLI (`appwrite functions create-deployment --code functions/<name>`). There is no image proxy: pictures load straight from Storage on every platform.
-- Site `card-jigsaw-world` → https://card-jigsaw-world.appwrite.network (static, fallback index.html),
+- Site `card-jigsaw-world` (named Carden) → https://carden.appwrite.network, and the old address
+  https://card-jigsaw-world.appwrite.network still serves it (static, fallback index.html),
   deployed by `tools/dev/deploy-web.sh` (chunked upload). Web build hides purchases, gift codes,
   widgets. Apple sign-in on web (configured 2026-10-13): Services ID `com.matejbaco.cardjigsawworld.signin`,
   key `secrets/AuthKey_2QJPJFW8JW.p8`, team `C24QP73SQM`. **Web OAuth must use the token flow** (owner

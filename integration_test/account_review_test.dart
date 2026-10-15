@@ -10,19 +10,19 @@
 //                           their photo are gone (tools/dev/cjw_admin.py)
 // Integration runs ask iOS for quiet (provisional) notification permission, so no prompt is left
 // on the simulator; the rating prompt belongs to the app and goes when the run ends.
-import 'package:card_jigsaw_world/app.dart';
-import 'package:card_jigsaw_world/core/image_files.dart';
-import 'package:card_jigsaw_world/core/reminders.dart';
-import 'package:card_jigsaw_world/core/sfx.dart';
-import 'package:card_jigsaw_world/data/local_store.dart';
-import 'package:card_jigsaw_world/data/repositories.dart';
-import 'package:card_jigsaw_world/features/onboarding/onboarding_screen.dart';
-import 'package:card_jigsaw_world/models/models.dart';
-import 'package:card_jigsaw_world/state/auth.dart';
-import 'package:card_jigsaw_world/state/catalog.dart';
-import 'package:card_jigsaw_world/state/reminders.dart';
-import 'package:card_jigsaw_world/state/review_prompt.dart';
-import 'package:card_jigsaw_world/state/settings.dart';
+import 'package:carden/app.dart';
+import 'package:carden/core/image_files.dart';
+import 'package:carden/core/reminders.dart';
+import 'package:carden/core/sfx.dart';
+import 'package:carden/data/local_store.dart';
+import 'package:carden/data/repositories.dart';
+import 'package:carden/features/onboarding/onboarding_screen.dart';
+import 'package:carden/models/models.dart';
+import 'package:carden/state/auth.dart';
+import 'package:carden/state/catalog.dart';
+import 'package:carden/state/reminders.dart';
+import 'package:carden/state/review_prompt.dart';
+import 'package:carden/state/settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -64,7 +64,7 @@ void main() {
     await settle(tester, ms);
   }
 
-  ProviderContainer container(WidgetTester tester) => ProviderScope.containerOf(tester.element(find.byType(CardJigsawApp)));
+  ProviderContainer container(WidgetTester tester) => ProviderScope.containerOf(tester.element(find.byType(CardenApp)));
 
   testWidgets('rating prompt, event reminders, delete account', (tester) async {
     SharedPreferences.setMockInitialValues({});
@@ -73,7 +73,7 @@ void main() {
     Sfx.instance.musicEnabled = false;
     await tester.pumpWidget(ProviderScope(
       overrides: [localStoreProvider.overrideWithValue(store)],
-      child: const CardJigsawApp(),
+      child: const CardenApp(),
     ));
     await settle(tester, 1500);
     await tapText(tester, 'Continue');

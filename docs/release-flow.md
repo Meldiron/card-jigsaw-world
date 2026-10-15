@@ -97,7 +97,7 @@ debug symbols: `ios/ExportOptions.plist` has `uploadSymbols`, the Dart code is n
 is a warning in the run) and keeps them as the run artifact `dsyms-<version>-<build>` for 90 days.
 
 Where to read them:
-- Xcode > Window > Organizer > Crashes, select Card Jigsaw World and a version or build (signed in with the
+- Xcode > Window > Organizer > Crashes, select Carden and a version or build (signed in with the
   team account). Reports arrive a day or so after the crash and are symbolicated with the uploaded dSYMs.
 - App Store Connect > TestFlight > Crashes (crashes testers sent with feedback) and App Analytics > Crashes.
 - For an old report that is not symbolicated, download the run's `dsyms-...` artifact and drag the report

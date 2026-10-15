@@ -1,13 +1,13 @@
 import 'dart:math';
 
-import 'package:card_jigsaw_world/data/sync/changes.dart';
-import 'package:card_jigsaw_world/data/sync/ops.dart';
-import 'package:card_jigsaw_world/game/board.dart';
-import 'package:card_jigsaw_world/models/models.dart';
-import 'package:card_jigsaw_world/state/giant.dart';
-import 'package:card_jigsaw_world/state/merge.dart';
-import 'package:card_jigsaw_world/state/profile.dart';
-import 'package:card_jigsaw_world/state/quick_play.dart';
+import 'package:carden/data/sync/changes.dart';
+import 'package:carden/data/sync/ops.dart';
+import 'package:carden/game/board.dart';
+import 'package:carden/models/models.dart';
+import 'package:carden/state/giant.dart';
+import 'package:carden/state/merge.dart';
+import 'package:carden/state/profile.dart';
+import 'package:carden/state/quick_play.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// The value an op writes to [key] of a progress row.

@@ -195,7 +195,7 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
       return;
     }
     final trial = 'after a ${StoreProducts.vipTrialDays}-day trial';
-    if (!await _sandboxConfirm('Card Jigsaw World VIP', productId == ProductIds.vipYearly ? '${StoreProducts.price(ProductIds.vipYearly)} / year $trial' : '${StoreProducts.price(ProductIds.vipMonthly)} / month $trial')) return;
+    if (!await _sandboxConfirm('Carden VIP', productId == ProductIds.vipYearly ? '${StoreProducts.price(ProductIds.vipYearly)} / year $trial' : '${StoreProducts.price(ProductIds.vipMonthly)} / month $trial')) return;
     await ref.read(profileProvider.notifier).setVip(true);
     if (!mounted) return;
     Sfx.instance.win();
@@ -634,7 +634,7 @@ class _VipCardState extends State<_VipCard> {
             children: [
               VipCrown(size: 44),
               SizedBox(width: 12),
-              Expanded(child: Text('Card Jigsaw World VIP', style: TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.title3, letterSpacing: -0.3, color: Vip.fg))),
+              Expanded(child: Text('Carden VIP', style: TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.title3, letterSpacing: -0.3, color: Vip.fg))),
             ],
           ),
           const SizedBox(height: 16),

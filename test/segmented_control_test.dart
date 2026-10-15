@@ -1,5 +1,5 @@
-import 'package:card_jigsaw_world/core/theme/app_theme.dart';
-import 'package:card_jigsaw_world/widgets/ui.dart';
+import 'package:carden/core/theme/app_theme.dart';
+import 'package:carden/widgets/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

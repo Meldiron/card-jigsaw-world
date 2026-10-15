@@ -1,6 +1,6 @@
 # Web build
 
-Card Jigsaw World runs in the browser as the same Flutter app, built with
+Carden runs in the browser as the same Flutter app, built with
 `flutter build web`. The web version is deliberately limited to what works
 without native plugins; everything else is the iPhone app.
 

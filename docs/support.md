@@ -1,6 +1,6 @@
 # Support
 
-Card Jigsaw World is made by one person. Questions and bug reports go to **support@almostapps.eu**. Replies usually take a day or two.
+Carden is made by one person. Questions and bug reports go to **support@almostapps.eu**. Replies usually take a day or two.
 
 ## Frequently asked questions
 
@@ -35,7 +35,7 @@ Subscriptions are managed by Apple, not inside the game:
 
 1. Open the Settings app on your iPhone.
 2. Tap your name, then Subscriptions.
-3. Choose Card Jigsaw World and tap Cancel.
+3. Choose Carden and tap Cancel.
 
 VIP stays active until the end of the period you already paid for. Cancelling during the 7-day free trial means you are never charged. Refunds are requested from Apple at [reportaproblem.apple.com](https://reportaproblem.apple.com).
 

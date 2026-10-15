@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:card_jigsaw_world/models/models.dart';
-import 'package:card_jigsaw_world/state/account_deletion.dart';
-import 'package:card_jigsaw_world/state/review_prompt.dart';
+import 'package:carden/models/models.dart';
+import 'package:carden/state/account_deletion.dart';
+import 'package:carden/state/review_prompt.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 final _now = DateTime(2026, 10, 14, 20);

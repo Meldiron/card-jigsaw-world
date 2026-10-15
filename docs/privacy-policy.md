@@ -1,6 +1,6 @@
 # Privacy policy
 
-Card Jigsaw World ("the app", on iPhone and at card-jigsaw-world.appwrite.network) is made by Matej
+Carden ("the app", formerly Card Jigsaw World, on iPhone and at carden.appwrite.network) is made by Matej
 Baco. This policy explains what the app stores, where, who can see it, and how to delete it.
 Last updated 15 October 2026.
 

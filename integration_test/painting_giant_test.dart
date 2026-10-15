@@ -7,22 +7,22 @@
 // Until the Giant pack is in the catalogue, the second picture of Wild Nature stands in for a
 // Giant pack picture (the provider that says so is overridden); its 1200 px picture is soft
 // when zoomed in, but the ladder, the full-size decode, zoom, moves and resume are the same.
-import 'package:card_jigsaw_world/app.dart';
-import 'package:card_jigsaw_world/core/sfx.dart';
-import 'package:card_jigsaw_world/data/local_store.dart';
-import 'package:card_jigsaw_world/features/game/board_widget.dart';
-import 'package:card_jigsaw_world/features/game/difficulty_screen.dart';
-import 'package:card_jigsaw_world/game/board.dart';
-import 'package:card_jigsaw_world/models/models.dart';
-import 'package:card_jigsaw_world/router.dart';
-import 'package:card_jigsaw_world/state/catalog.dart';
-import 'package:card_jigsaw_world/state/giant.dart';
-import 'package:card_jigsaw_world/state/profile.dart';
-import 'package:card_jigsaw_world/state/progress.dart';
-import 'package:card_jigsaw_world/state/settings.dart';
-import 'package:card_jigsaw_world/state/rewards.dart';
-import 'package:card_jigsaw_world/state/unlocks.dart';
-import 'package:card_jigsaw_world/state/social.dart';
+import 'package:carden/app.dart';
+import 'package:carden/core/sfx.dart';
+import 'package:carden/data/local_store.dart';
+import 'package:carden/features/game/board_widget.dart';
+import 'package:carden/features/game/difficulty_screen.dart';
+import 'package:carden/game/board.dart';
+import 'package:carden/models/models.dart';
+import 'package:carden/router.dart';
+import 'package:carden/state/catalog.dart';
+import 'package:carden/state/giant.dart';
+import 'package:carden/state/profile.dart';
+import 'package:carden/state/progress.dart';
+import 'package:carden/state/settings.dart';
+import 'package:carden/state/rewards.dart';
+import 'package:carden/state/unlocks.dart';
+import 'package:carden/state/social.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -56,7 +56,7 @@ void main() {
     await settle(tester, ms);
   }
 
-  ProviderContainer container(WidgetTester tester) => ProviderScope.containerOf(tester.element(find.byType(CardJigsawApp)));
+  ProviderContainer container(WidgetTester tester) => ProviderScope.containerOf(tester.element(find.byType(CardenApp)));
   BoardWidget board(WidgetTester tester) => tester.widget<BoardWidget>(find.byType(BoardWidget).first);
 
   /// Where slot [slot] of the board is on screen, with the board's zoom.
@@ -101,7 +101,7 @@ void main() {
           return puzzle != null && packs.any((p) => p.id == puzzle.packId && isGiantPack(p));
         }),
       ],
-      child: const CardJigsawApp(),
+      child: const CardenApp(),
     ));
     await settle(tester, 1500);
     await tapText(tester, 'Continue');

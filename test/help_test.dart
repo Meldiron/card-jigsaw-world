@@ -1,12 +1,12 @@
 import 'dart:io' show Directory;
 
 import 'package:appwrite/appwrite.dart';
-import 'package:card_jigsaw_world/core/links.dart';
-import 'package:card_jigsaw_world/core/theme/app_theme.dart';
-import 'package:card_jigsaw_world/data/repositories.dart';
-import 'package:card_jigsaw_world/features/profile/help.dart';
-import 'package:card_jigsaw_world/features/profile/settings_screen.dart';
-import 'package:card_jigsaw_world/state/auth.dart';
+import 'package:carden/core/links.dart';
+import 'package:carden/core/theme/app_theme.dart';
+import 'package:carden/data/repositories.dart';
+import 'package:carden/features/profile/help.dart';
+import 'package:carden/features/profile/settings_screen.dart';
+import 'package:carden/state/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -36,7 +36,7 @@ void main() {
     final mail = AppLinks.supportMail(version: '1.7.0 (118)', platform: 'iPhone', playerId: 'abc123');
     expect(mail.scheme, 'mailto');
     expect(mail.path, AppLinks.supportEmail);
-    expect(mail.queryParameters['subject'], 'Card Jigsaw World support');
+    expect(mail.queryParameters['subject'], 'Carden support');
     expect(mail.queryParameters['body'], '\n\n\n---\nVersion 1.7.0 (118) · iPhone\nPlayer id: abc123');
     expect(mail.toString(), isNot(contains('+')), reason: 'mail apps show a "+" for a space encoded the form way');
     expect(AppLinks.supportMail().queryParameters.containsKey('body'), isFalse);

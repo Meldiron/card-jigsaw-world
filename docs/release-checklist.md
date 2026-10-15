@@ -23,7 +23,7 @@ from the same commit (`tools/dev/deploy-web.sh`).
 ### One-time setup (manual)
 
 1. **Apple Developer Program**: the team `C24QP73SQM` must have an active membership. Accept the latest agreements in App Store Connect (Agreements, Tax, and Banking), including the Paid Applications agreement for in-app purchases.
-2. **App record**: done. App Store Connect app "Card Jigsaw World", bundle id `com.matejbaco.cardjigsawworld`, Apple ID `6821644423`. The app is iPhone-only (no iPad screenshots are needed).
+2. **App record**: done. App Store Connect app "Carden", bundle id `com.matejbaco.cardjigsawworld`, Apple ID `6821644423`. The app is iPhone-only (no iPad screenshots are needed).
 3. **App Store Connect API key**: Users and Access > Integrations > App Store Connect API > Team keys > Generate (role **App Manager** or Admin). Download the `.p8` once. Add these repository secrets (Settings > Secrets and variables > Actions):
    - `APP_STORE_CONNECT_KEY_ID` – the key id
    - `APP_STORE_CONNECT_ISSUER_ID` – the issuer id shown above the key list
@@ -72,11 +72,11 @@ the developer portal (no API), so three manual steps:
 
 1. developer.apple.com > Certificates, Identifiers & Profiles > Identifiers >
    **+** > Services IDs. Identifier `com.matejbaco.cardjigsawworld.signin`,
-   description "Card Jigsaw World Web". Enable **Sign in with Apple**,
+   description "Carden Web". Enable **Sign in with Apple**,
    Configure: primary App ID `com.matejbaco.cardjigsawworld`, domain
    `fra.cloud.appwrite.io`, return URL
    `https://fra.cloud.appwrite.io/v1/account/sessions/oauth2/callback/apple/6acb4de5003e38d5ebd9`.
-2. Keys > **+** > name "Card Jigsaw World Sign in with Apple", tick Sign in
+2. Keys > **+** > name "Carden Sign in with Apple", tick Sign in
    with Apple, configure with the same primary App ID, register, download the
    `.p8` once. Note the Key ID.
 3. Send the Services ID, Key ID and the `.p8` file (team id is `C24QP73SQM`);
@@ -88,7 +88,7 @@ Done 2026-10-13: Services ID `com.matejbaco.cardjigsawworld.signin`, Key ID
 `2QJPJFW8JW` (`secrets/AuthKey_2QJPJFW8JW.p8`), browser sign-in enabled on the
 Appwrite Apple provider (native sign-in settings unchanged). The redirect from
 the web app reaches Apple's page "Use your Apple Account to sign in to
-'Card Jigsaw World Web'".
+'Carden Web'".
 
 ## Possible future improvements (not started)
 

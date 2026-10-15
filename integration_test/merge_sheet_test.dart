@@ -2,10 +2,10 @@
 // can check it. Captures land in store/raw/ via test_driver/store_screenshots.dart:
 //   tools/dev/qa-run.sh drive --driver=test_driver/store_screenshots.dart \
 //     --target=integration_test/merge_sheet_test.dart -d CDD7317C-19D6-486D-B258-8AB8A607297D
-import 'package:card_jigsaw_world/core/theme/app_theme.dart';
-import 'package:card_jigsaw_world/core/theme/tokens.dart';
-import 'package:card_jigsaw_world/features/profile/merge_sheet.dart';
-import 'package:card_jigsaw_world/state/merge.dart';
+import 'package:carden/core/theme/app_theme.dart';
+import 'package:carden/core/theme/tokens.dart';
+import 'package:carden/features/profile/merge_sheet.dart';
+import 'package:carden/state/merge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';

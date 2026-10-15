@@ -8,16 +8,16 @@
 // When no pack has been added since the launch catalogue, the test marks one library pack as
 // New on this device only, so the badge and the filter can still be looked at
 // (`si_08_new_filter_simulated`).
-import 'package:card_jigsaw_world/app.dart';
-import 'package:card_jigsaw_world/core/appwrite.dart';
-import 'package:card_jigsaw_world/core/sfx.dart';
-import 'package:card_jigsaw_world/data/local_store.dart';
-import 'package:card_jigsaw_world/features/game/board_widget.dart';
-import 'package:card_jigsaw_world/models/models.dart';
-import 'package:card_jigsaw_world/state/catalog.dart';
-import 'package:card_jigsaw_world/state/settings.dart';
-import 'package:card_jigsaw_world/state/rewards.dart';
-import 'package:card_jigsaw_world/state/unlocks.dart';
+import 'package:carden/app.dart';
+import 'package:carden/core/appwrite.dart';
+import 'package:carden/core/sfx.dart';
+import 'package:carden/data/local_store.dart';
+import 'package:carden/features/game/board_widget.dart';
+import 'package:carden/models/models.dart';
+import 'package:carden/state/catalog.dart';
+import 'package:carden/state/settings.dart';
+import 'package:carden/state/rewards.dart';
+import 'package:carden/state/unlocks.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -53,7 +53,7 @@ void main() {
 
   TextEditingController search(WidgetTester tester) => tester.widget<CupertinoSearchTextField>(find.byKey(const ValueKey('library-search'))).controller!;
 
-  ProviderContainer container(WidgetTester tester) => ProviderScope.containerOf(tester.element(find.byType(CardJigsawApp)));
+  ProviderContainer container(WidgetTester tester) => ProviderScope.containerOf(tester.element(find.byType(CardenApp)));
 
   Future<void> solveBoard(WidgetTester tester) async {
     for (var guard = 0; guard < 80; guard++) {
@@ -97,7 +97,7 @@ void main() {
           return [...list]..[i] = Pack.fromRow(list[i].id, {...row, r'$createdAt': now.toUtc().toIso8601String()});
         }),
       ],
-      child: const CardJigsawApp(),
+      child: const CardenApp(),
     ));
     await settle(tester, 1500);
     await tapText(tester, 'Continue');
@@ -196,7 +196,7 @@ void main() {
     await settle(tester, 1500);
     await tester.dragUntilVisible(find.byKey(const ValueKey('settings-version')), find.byType(Scrollable).first, const Offset(0, -300));
     await settle(tester, 1200);
-    expect(find.text('Rate Card Jigsaw World'), findsOneWidget);
+    expect(find.text('Rate Carden'), findsOneWidget);
     expect(find.textContaining(RegExp(r'^\d+\.\d+\.\d+ \(\d+\)$')), findsOneWidget);
     expect(find.text('1.6.0 (9)'), findsNothing);
     await shot(tester, 'si_09_settings_about');

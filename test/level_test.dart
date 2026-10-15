@@ -1,5 +1,5 @@
-import 'package:card_jigsaw_world/models/models.dart';
-import 'package:card_jigsaw_world/state/rewards.dart';
+import 'package:carden/models/models.dart';
+import 'package:carden/state/rewards.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// The level is derived from XP in one place. Every screen (HUD, profile,

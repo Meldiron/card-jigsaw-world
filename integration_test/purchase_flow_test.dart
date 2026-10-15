@@ -12,17 +12,17 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:appwrite/appwrite.dart';
-import 'package:card_jigsaw_world/app.dart';
-import 'package:card_jigsaw_world/core/appwrite.dart';
-import 'package:card_jigsaw_world/core/sfx.dart';
-import 'package:card_jigsaw_world/data/local_store.dart';
-import 'package:card_jigsaw_world/data/purchases.dart';
-import 'package:card_jigsaw_world/data/sync/backend.dart';
-import 'package:card_jigsaw_world/router.dart';
-import 'package:card_jigsaw_world/state/auth.dart';
-import 'package:card_jigsaw_world/state/profile.dart';
-import 'package:card_jigsaw_world/state/purchases.dart';
-import 'package:card_jigsaw_world/state/settings.dart';
+import 'package:carden/app.dart';
+import 'package:carden/core/appwrite.dart';
+import 'package:carden/core/sfx.dart';
+import 'package:carden/data/local_store.dart';
+import 'package:carden/data/purchases.dart';
+import 'package:carden/data/sync/backend.dart';
+import 'package:carden/router.dart';
+import 'package:carden/state/auth.dart';
+import 'package:carden/state/profile.dart';
+import 'package:carden/state/purchases.dart';
+import 'package:carden/state/settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -120,7 +120,7 @@ void main() {
     await settle(tester, 600);
   }
 
-  ProviderContainer container(WidgetTester tester) => ProviderScope.containerOf(tester.element(find.byType(CardJigsawApp)));
+  ProviderContainer container(WidgetTester tester) => ProviderScope.containerOf(tester.element(find.byType(CardenApp)));
 
   testWidgets('buying tickets: the tile waits, the sheet adds them, the header shows them', (tester) async {
     SharedPreferences.setMockInitialValues({});
@@ -133,7 +133,7 @@ void main() {
         localStoreProvider.overrideWithValue(store),
         purchaseServiceProvider.overrideWith((ref) => qa = _QaStore(ref)),
       ],
-      child: const CardJigsawApp(),
+      child: const CardenApp(),
     ));
     await settle(tester, 1500);
     await tapText(tester, 'Continue');

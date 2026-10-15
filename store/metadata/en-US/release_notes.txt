@@ -1,5 +1,7 @@
 Version 1.7.0
 
+Card Jigsaw World is now Carden, your calm picture puzzle. Your progress, coins and packs stay as they are.
+
 New ways to play
 - Painting: cards start in black and white and get their colour back as they lock. Pays 25% more.
 - Giant boards of 100 to 300 cards, with pinch to zoom, an overview map that shows where a tapped card belongs, Gather (which shuffles the loose cards when they are all in view), and a board that opens where you left it. Magic puts the selected card in its place.
@@ -24,7 +26,7 @@ Reminders and account
 - New events: a reminder the evening before a world-day event opens, if you have not played for a while.
 - Delete your account in the app: Profile > Account > Delete account.
 - Report or block a player from their page; blocked players leave your leaderboard.
-- Settings: Rate Card Jigsaw World, the real app version, and Redeem a pack code for special packs. Dark and tinted Home Screen icons on iOS 18.
+- Settings: Rate Carden, the real app version, and Redeem a pack code for special packs. Dark and tinted Home Screen icons on iOS 18.
 - Links to packs, pictures, player profiles, the store and pack codes open the matching screen, in the app and on the web site.
 
 Pictures and sync

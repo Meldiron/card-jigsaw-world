@@ -1,9 +1,9 @@
 ---
 name: giant-packs
-description: Build, extend, repair and audit Giant packs for Card Jigsaw World (category Giant, boards of about 100 to 300 cards). Use for any request to add a giant pack, add or replace pictures in one, source very large and highly detailed pictures, or check that a picture is good enough for a 300-card board.
+description: Build, extend, repair and audit Giant packs for Carden (category Giant, boards of about 100 to 300 cards). Use for any request to add a giant pack, add or replace pictures in one, source very large and highly detailed pictures, or check that a picture is good enough for a 300-card board.
 ---
 
-# Giant packs for Card Jigsaw World
+# Giant packs for Carden
 
 A Giant pack is a library pack in category **`Giant`** (exactly that string: the app offers its giant
 board ladder, about 100 to 300 cards, only for this category). Each picture is cut into up to ~300 cards

@@ -1,25 +1,25 @@
-// Links into the game (docs/deep-links.md): the web address, the cardjigsaw:// scheme and the bare
+// Links into the game (docs/deep-links.md): the web address, the carden:// scheme and the bare
 // path read the same (AppLink.parse); the apple-app-site-association file sends every one of them
 // to the iPhone app and keeps the web sign-in in the browser; DeepLinks puts each kind on screen.
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:appwrite/models.dart' as models;
-import 'package:card_jigsaw_world/core/app_links.dart';
-import 'package:card_jigsaw_world/core/theme/app_theme.dart';
-import 'package:card_jigsaw_world/data/local_store.dart';
-import 'package:card_jigsaw_world/features/gallery/library_screen.dart';
-import 'package:card_jigsaw_world/features/links/deep_links.dart';
-import 'package:card_jigsaw_world/features/onboarding/onboarding_screen.dart';
-import 'package:card_jigsaw_world/features/social/social_screen.dart';
-import 'package:card_jigsaw_world/models/models.dart';
-import 'package:card_jigsaw_world/router.dart';
-import 'package:card_jigsaw_world/state/auth.dart';
-import 'package:card_jigsaw_world/state/catalog.dart';
-import 'package:card_jigsaw_world/state/profile.dart';
-import 'package:card_jigsaw_world/state/progress.dart';
-import 'package:card_jigsaw_world/state/settings.dart';
-import 'package:card_jigsaw_world/state/social.dart';
+import 'package:carden/core/app_links.dart';
+import 'package:carden/core/theme/app_theme.dart';
+import 'package:carden/data/local_store.dart';
+import 'package:carden/features/gallery/library_screen.dart';
+import 'package:carden/features/links/deep_links.dart';
+import 'package:carden/features/onboarding/onboarding_screen.dart';
+import 'package:carden/features/social/social_screen.dart';
+import 'package:carden/models/models.dart';
+import 'package:carden/router.dart';
+import 'package:carden/state/auth.dart';
+import 'package:carden/state/catalog.dart';
+import 'package:carden/state/profile.dart';
+import 'package:carden/state/progress.dart';
+import 'package:carden/state/settings.dart';
+import 'package:carden/state/social.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -104,11 +104,15 @@ void main() {
       for (final input in _links.keys) {
         final bare = _parse(input);
         final web = _parse('${AppLink.webOrigin}$input');
-        final app = _parse('cardjigsaw:/$input');
-        final appSlash = _parse('cardjigsaw://$input');
+        final app = _parse('carden:/$input');
+        final appSlash = _parse('carden://$input');
+        final legacy = _parse('cardjigsaw://$input');
+        final oldSite = _parse('https://card-jigsaw-world.appwrite.network$input');
         expect(web, bare, reason: 'web $input');
-        expect(app, bare, reason: 'cardjigsaw:/$input');
-        expect(appSlash, bare, reason: 'cardjigsaw://$input');
+        expect(app, bare, reason: 'carden:/$input');
+        expect(appSlash, bare, reason: 'carden://$input');
+        expect(legacy, bare, reason: 'cardjigsaw://$input (the first name)');
+        expect(oldSite, bare, reason: 'the old web address $input');
         // Sharing round trips: the address a link shares opens the same screen.
         expect(_parse(bare!.webUrl.toString()), bare, reason: 'webUrl $input');
         expect(_parse(bare.appUrl.toString()), bare, reason: 'appUrl $input');
@@ -116,6 +120,11 @@ void main() {
     });
 
     test('links already in use: the widget and the In-App Events', () {
+      expect(_parse('carden://play/abc123'), _parse('/play/abc123'));
+      expect(_parse('carden://library/pack/evpack-coffee-2026')!.location.toString(), '/library/pack/evpack-coffee-2026');
+      expect(_parse('carden://')!.location.toString(), '/home');
+      expect(_parse('Carden://Store')!.location.toString(), '/store');
+      // Links made while the game was Card Jigsaw World.
       expect(_parse('cardjigsaw://play/abc123'), _parse('/play/abc123'));
       expect(_parse('cardjigsaw://library/pack/evpack-coffee-2026')!.location.toString(), '/library/pack/evpack-coffee-2026');
       expect(_parse('cardjigsaw://')!.location.toString(), '/home');
@@ -271,7 +280,7 @@ void main() {
 
     testWidgets('a plain Home link leaves a new player on the welcome screens', (tester) async {
       final (container, router) = await pump(tester, onboarded: false);
-      await open(tester, container, 'cardjigsaw://');
+      await open(tester, container, 'carden://');
       expect(top(router), '/welcome');
       expect(container.read(settingsProvider).onboarded, isFalse);
     });

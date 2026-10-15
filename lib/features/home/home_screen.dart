@@ -85,7 +85,7 @@ class HomeScreen extends ConsumerWidget {
         child: CustomScrollView(
           physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
           slivers: [
-            const HeaderBar(title: 'Card Jigsaw World'),
+            const HeaderBar(title: 'Carden'),
             // Large title, as on the other tabs: the date and a greeting, so Home opens on "today".
             SliverToBoxAdapter(child: _Greeting(name: profile?.displayName)),
             // The first-time intro of a shape or option the player's level just opened.

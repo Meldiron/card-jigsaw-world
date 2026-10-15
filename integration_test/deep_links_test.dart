@@ -1,22 +1,22 @@
 // Links into the game on the real app (live Appwrite backend), delivered the way iOS delivers them:
 // the engine's `pushRouteInformation` on flutter/navigation with the link's full address, for the
-// app's cardjigsaw:// scheme and for universal links to the web site. A new player on the welcome
+// app's carden:// scheme and for universal links to the web site. A new player on the welcome
 // screens follows links to a pack, the store, profiles, pictures (one in a pack they have not
 // opened), a pack code and a friend code (both filled in), today's picture, Quick play, the wheel,
 // Quests, a Library filter, the daily gift, the piggy bank, Settings, and links that are out of date.
 //
 // Run: tools/dev/qa-run.sh drive --driver=test_driver/integration_test.dart \
 //        --target=integration_test/deep_links_test.dart -d <simulator>
-import 'package:card_jigsaw_world/app.dart';
-import 'package:card_jigsaw_world/core/sfx.dart';
-import 'package:card_jigsaw_world/data/local_store.dart';
-import 'package:card_jigsaw_world/features/gallery/library_screen.dart';
-import 'package:card_jigsaw_world/features/social/social_screen.dart';
-import 'package:card_jigsaw_world/router.dart';
-import 'package:card_jigsaw_world/state/catalog.dart';
-import 'package:card_jigsaw_world/state/rewards.dart';
-import 'package:card_jigsaw_world/state/settings.dart';
-import 'package:card_jigsaw_world/state/unlocks.dart';
+import 'package:carden/app.dart';
+import 'package:carden/core/sfx.dart';
+import 'package:carden/data/local_store.dart';
+import 'package:carden/features/gallery/library_screen.dart';
+import 'package:carden/features/social/social_screen.dart';
+import 'package:carden/router.dart';
+import 'package:carden/state/catalog.dart';
+import 'package:carden/state/rewards.dart';
+import 'package:carden/state/settings.dart';
+import 'package:carden/state/unlocks.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,7 +33,7 @@ Future<void> settle(WidgetTester tester, [int ms = 1500]) async {
   }
 }
 
-const _web = 'https://card-jigsaw-world.appwrite.network';
+const _web = 'https://carden.appwrite.network';
 const _owner = '6acbbf8a8898f585d3ca'; // a public profile to open and to add as a friend
 
 void main() {
@@ -45,7 +45,7 @@ void main() {
     await binding.takeScreenshot(name);
   }
 
-  ProviderContainer container(WidgetTester tester) => ProviderScope.containerOf(tester.element(find.byType(CardJigsawApp)));
+  ProviderContainer container(WidgetTester tester) => ProviderScope.containerOf(tester.element(find.byType(CardenApp)));
   String top(WidgetTester tester) => container(tester).read(routerProvider).state.uri.toString();
 
   /// Sends [url] as iOS does when a link opens the app, and returns whether the app took it.
@@ -91,7 +91,7 @@ void main() {
         openFeaturesProvider.overrideWithValue(OpenFeatures.all),
         pendingUnlockIntroProvider.overrideWithValue(null),
       ],
-      child: const CardJigsawApp(),
+      child: const CardenApp(),
     ));
     await settle(tester, 2500);
     expect(top(tester), '/welcome');
@@ -100,7 +100,7 @@ void main() {
     final owl = puzzles.firstWhere((z) => z.packId == 'pack-owls'); // priced since 2026-10-14
 
     // ---- A pack from an In-App Event, straight from the welcome screens.
-    expect(await link(tester, 'cardjigsaw://library/pack/pack-butterflies', ms: 4000), isTrue);
+    expect(await link(tester, 'carden://library/pack/pack-butterflies', ms: 4000), isTrue);
     expect(top(tester), '/library/pack/pack-butterflies');
     expect(container(tester).read(settingsProvider).onboarded, isTrue);
     await shot(tester, 'dl_01_pack_from_welcome');
@@ -113,14 +113,14 @@ void main() {
     await back(tester);
     expect(top(tester), '/library/pack/pack-butterflies');
 
-    await link(tester, 'cardjigsaw://vip');
+    await link(tester, 'carden://vip');
     expect(top(tester), '/store?vip=1');
-    expect(onScreen(tester, find.text('Card Jigsaw World VIP')), isTrue, reason: 'the store opens at VIP');
+    expect(onScreen(tester, find.text('Carden VIP')), isTrue, reason: 'the store opens at VIP');
     await shot(tester, 'dl_03_vip');
     await back(tester);
 
     // ---- My profile, another player's profile.
-    await link(tester, 'cardjigsaw://profile');
+    await link(tester, 'carden://profile');
     expect(top(tester), '/profile');
     await shot(tester, 'dl_04_profile');
     await link(tester, '$_web/player/$_owner', ms: 4000);
@@ -131,7 +131,7 @@ void main() {
     expect(top(tester), '/profile');
 
     // ---- A picture (the widget's link), and one in a pack this player has not opened.
-    await link(tester, 'cardjigsaw://play/${butterfly.id}', ms: 4000);
+    await link(tester, 'carden://play/${butterfly.id}', ms: 4000);
     expect(top(tester), '/play/${butterfly.id}');
     expect(find.text(butterfly.title), findsWidgets);
     await shot(tester, 'dl_06_picture');
@@ -149,7 +149,7 @@ void main() {
     await close(tester);
 
     // ---- A friend code, filled in on Social > Friends.
-    await link(tester, 'cardjigsaw://add-friend?code=$_owner');
+    await link(tester, 'carden://add-friend?code=$_owner');
     expect(top(tester), '/social');
     expect(container(tester).read(socialTabProvider), SocialTab.friends);
     expect(tester.widget<CupertinoTextField>(find.byKey(const ValueKey('add-friend-field'))).controller!.text, _owner);
@@ -158,12 +158,12 @@ void main() {
     await settle(tester, 900);
 
     // ---- Today's picture and Quick play.
-    await link(tester, 'cardjigsaw://daily', ms: 4000);
+    await link(tester, 'carden://daily', ms: 4000);
     final daily = container(tester).read(dailyPuzzleProvider)!;
     expect(top(tester), '/play/${daily.id}');
     await shot(tester, 'dl_10_daily');
     await back(tester);
-    await link(tester, 'cardjigsaw://quick', ms: 4000);
+    await link(tester, 'carden://quick', ms: 4000);
     expect(top(tester), startsWith('/play/'));
     expect(top(tester), contains('from=quick'));
     expect(find.text('Another picture'), findsWidgets);
@@ -171,7 +171,7 @@ void main() {
     await back(tester);
 
     // ---- The wheel, Quests, a Library filter.
-    await link(tester, 'cardjigsaw://wheel');
+    await link(tester, 'carden://wheel');
     expect(top(tester), '/wheel');
     expect(find.text('Lucky Wheel'), findsWidgets);
     await shot(tester, 'dl_12_wheel');
@@ -179,19 +179,19 @@ void main() {
     await link(tester, '$_web/quests');
     expect(top(tester), '/events');
     await shot(tester, 'dl_13_quests');
-    await link(tester, 'cardjigsaw://library?filter=giant');
+    await link(tester, 'carden://library?filter=giant');
     expect(top(tester), '/library');
     expect(container(tester).read(libraryFilterProvider), 'Giant');
     expect(onScreen(tester, find.byKey(const ValueKey('library-chip-Giant'))), isTrue, reason: 'the chip scrolls into view');
     await shot(tester, 'dl_14_library_giant');
 
     // ---- Home sheets: the daily gift and the piggy bank.
-    await link(tester, 'cardjigsaw://gift');
+    await link(tester, 'carden://gift');
     expect(top(tester), '/home');
     expect(find.text('Daily gift'), findsWidgets);
     await shot(tester, 'dl_15_daily_gift');
     await close(tester);
-    await link(tester, 'cardjigsaw://piggy');
+    await link(tester, 'carden://piggy');
     expect(find.text('Piggy bank'), findsWidgets);
     await shot(tester, 'dl_16_piggy');
     await close(tester);
@@ -200,11 +200,11 @@ void main() {
     await link(tester, '$_web/settings');
     expect(top(tester), '/profile/settings');
     await shot(tester, 'dl_17_settings');
-    await link(tester, 'cardjigsaw://pack/pack-that-does-not-exist', ms: 3000);
+    await link(tester, 'carden://pack/pack-that-does-not-exist', ms: 3000);
     expect(top(tester), '/library/pack/pack-that-does-not-exist');
     expect(find.text('Pack not available'), findsOneWidget);
     await shot(tester, 'dl_18_pack_not_available');
-    await link(tester, 'cardjigsaw://play/picture-that-does-not-exist', ms: 4000);
+    await link(tester, 'carden://play/picture-that-does-not-exist', ms: 4000);
     expect(find.text('Picture not available'), findsOneWidget);
     await shot(tester, 'dl_19_picture_not_available');
     await back(tester);
@@ -216,9 +216,9 @@ void main() {
     expect(top(tester), '/home');
     await shot(tester, 'dl_20_home');
 
-    // ---- Through iOS itself: the app opens its own cardjigsaw:// link (UIApplication.open), so
+    // ---- Through iOS itself: the app opens its own carden:// link (UIApplication.open), so
     // the scene delegate and the Flutter engine deliver it as they do for a tapped link.
-    expect(await launchUrl(Uri.parse('cardjigsaw://wheel'), mode: LaunchMode.externalApplication), isTrue);
+    expect(await launchUrl(Uri.parse('carden://wheel'), mode: LaunchMode.externalApplication), isTrue);
     await settle(tester, 5000);
     expect(top(tester), '/wheel');
     await shot(tester, 'dl_21_wheel_through_ios');

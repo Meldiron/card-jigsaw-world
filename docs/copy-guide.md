@@ -1,4 +1,4 @@
-# Card Jigsaw World — UI copy guide
+# Carden — UI copy guide
 
 Voice: calm, warm, precise. A good friend who knows the game. No hype, no exclamation stacks, no "awesome".
 

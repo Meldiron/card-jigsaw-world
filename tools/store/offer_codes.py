@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Subscription offer codes (gift codes) for Card Jigsaw World VIP.
+"""Subscription offer codes (gift codes) for Carden VIP.
 
 Apple's native mechanism: a subscription "offer code" (free, 1 month or 1 year)
 plus custom codes attached to it. Each custom code gets a redemption limit of 1,

@@ -5,9 +5,9 @@ import 'dart:io';
 
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
-import 'package:card_jigsaw_world/core/qa.dart';
-import 'package:card_jigsaw_world/data/repositories.dart';
-import 'package:card_jigsaw_world/models/models.dart';
+import 'package:carden/core/qa.dart';
+import 'package:carden/data/repositories.dart';
+import 'package:carden/models/models.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// A client that is never asked for anything (the fakes answer first).

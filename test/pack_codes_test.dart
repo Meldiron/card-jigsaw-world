@@ -1,7 +1,7 @@
-import 'package:card_jigsaw_world/core/appwrite.dart';
-import 'package:card_jigsaw_world/core/image_files.dart';
-import 'package:card_jigsaw_world/data/pack_codes.dart';
-import 'package:card_jigsaw_world/models/models.dart';
+import 'package:carden/core/appwrite.dart';
+import 'package:carden/core/image_files.dart';
+import 'package:carden/data/pack_codes.dart';
+import 'package:carden/models/models.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Hidden packs and pack codes (function `redeem-code`, docs/pack-codes.md).

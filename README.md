@@ -1,10 +1,10 @@
-# Card Jigsaw World
+# Carden
 
-[![CI](https://github.com/Meldiron/card-jigsaw-world/actions/workflows/ci.yml/badge.svg)](https://github.com/Meldiron/card-jigsaw-world/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![CI](https://github.com/Meldiron/carden/actions/workflows/ci.yml/badge.svg)](https://github.com/Meldiron/carden/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 <img src="docs/images/app-icon.png" width="96" alt="App icon" align="right" />
 
-A cozy picture-puzzle game for iOS, Android and (soon) web, built with Flutter and backed by [Appwrite](https://appwrite.io).
+**Your calm picture puzzle.** Carden (until October 2026 called Card Jigsaw World) is a picture-puzzle game for iOS, Android and the web ([carden.appwrite.network](https://carden.appwrite.network)), built with Flutter and backed by [Appwrite](https://appwrite.io).
 Every puzzle is a photo cut into cards and shuffled on a board. Tap a card and then where it should go, or drag it there.
 Cards that belong next to each other **snap together anywhere on the board** and move as one group; a card that lands in its true spot **locks** into the picture. Fewer moves earn more stars.
 
@@ -29,7 +29,7 @@ Cards that belong next to each other **snap together anywhere on the board** and
 | Account | Instant guest play (anonymous session) with a generated display name such as "Brave Otter", upgrade to email account without losing progress, sign in / out |
 | My Puzzles | Upload your own photos to Appwrite Storage and play them as puzzles |
 | Store | Coin and ticket bundles, two hint packs and VIP, which unlocks every pack including past monthly packs (sandbox purchases until StoreKit is wired) |
-| iOS extras | Home Screen widget (small, medium and large) showing today's daily picture, fetched straight from the public catalogue and deep-linking into the puzzle (`cardjigsaw://play/<id>`); a Home Screen quick action "One last game?" that opens today's puzzle |
+| iOS extras | Home Screen widget (small, medium and large) showing today's daily picture, fetched straight from the public catalogue and deep-linking into the puzzle (`carden://play/<id>`); a Home Screen quick action "One last game?" that opens today's puzzle |
 | House ads | No ad network. A 15-second rewarded offer card (40 coins, 5 per day), a closable interstitial after every 4th puzzle, and a dismissible VIP banner, all promoting in-app purchases. Never shown to VIP. See `docs/house-ads.md` |
 | Settings | Light / dark / auto theme, classic or minimal card style, music, sound effects, haptics, timer, reminders, account, credits |
 

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:card_jigsaw_world/state/paged.dart';
+import 'package:carden/state/paged.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 

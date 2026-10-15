@@ -1,9 +1,9 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:card_jigsaw_world/game/board.dart';
-import 'package:card_jigsaw_world/game/game_controller.dart';
-import 'package:card_jigsaw_world/game/gather.dart';
+import 'package:carden/game/board.dart';
+import 'package:carden/game/game_controller.dart';
+import 'package:carden/game/gather.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 

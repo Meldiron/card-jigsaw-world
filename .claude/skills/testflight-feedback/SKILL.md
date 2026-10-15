@@ -1,6 +1,6 @@
 ---
 name: testflight-feedback
-description: Handle a round of TestFlight tester feedback for Card Jigsaw World end to end - fetch feedback and screenshots from App Store Connect, triage, fix, QA the exact reported path on the simulator, ship a TestFlight build plus web deploy, and resolve the items on Apple. Use when the owner says "check feedback", "address feedback", "new feedback on Apple", or sends iOS screenshots with requests.
+description: Handle a round of TestFlight tester feedback for Carden end to end - fetch feedback and screenshots from App Store Connect, triage, fix, QA the exact reported path on the simulator, ship a TestFlight build plus web deploy, and resolve the items on Apple. Use when the owner says "check feedback", "address feedback", "new feedback on Apple", or sends iOS screenshots with requests.
 ---
 
 # TestFlight feedback round

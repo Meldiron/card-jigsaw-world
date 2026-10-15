@@ -1,6 +1,6 @@
-import 'package:card_jigsaw_world/data/sync/changes.dart';
-import 'package:card_jigsaw_world/data/sync/ops.dart';
-import 'package:card_jigsaw_world/models/models.dart';
+import 'package:carden/data/sync/changes.dart';
+import 'package:carden/data/sync/ops.dart';
+import 'package:carden/models/models.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 PuzzleProgress row(Map<String, dynamic> d) => PuzzleProgress.fromRow('r', {'userId': 'u', 'puzzleId': 'p', ...d});

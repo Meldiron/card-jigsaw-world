@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 import 'package:appwrite/appwrite.dart' show Client, Storage, TablesDB;
-import 'package:card_jigsaw_world/core/appwrite.dart';
-import 'package:card_jigsaw_world/data/local_store.dart';
-import 'package:card_jigsaw_world/data/repositories.dart';
-import 'package:card_jigsaw_world/state/catalog.dart';
-import 'package:card_jigsaw_world/state/catalog_sync.dart';
-import 'package:card_jigsaw_world/state/settings.dart';
+import 'package:carden/core/appwrite.dart';
+import 'package:carden/data/local_store.dart';
+import 'package:carden/data/repositories.dart';
+import 'package:carden/state/catalog.dart';
+import 'package:carden/state/catalog_sync.dart';
+import 'package:carden/state/settings.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';

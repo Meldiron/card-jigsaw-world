@@ -2,8 +2,8 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:card_jigsaw_world/models/models.dart';
-import 'package:card_jigsaw_world/state/rewards.dart';
+import 'package:carden/models/models.dart';
+import 'package:carden/state/rewards.dart';
 
 /// Scene time: every scene runs "now", but rows are written relative to it.
 DateTime get now => DateTime.now();

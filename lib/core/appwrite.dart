@@ -1,7 +1,7 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// Central Appwrite configuration for Card Jigsaw World.
+/// Central Appwrite configuration for Carden.
 class AppwriteConfig {
   static const endpoint = 'https://fra.cloud.appwrite.io/v1';
   static const projectId = '6acb4de5003e38d5ebd9';

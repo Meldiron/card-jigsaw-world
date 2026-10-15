@@ -1,7 +1,7 @@
-import 'package:card_jigsaw_world/features/events/quest_rewards.dart';
-import 'package:card_jigsaw_world/game/modes.dart';
-import 'package:card_jigsaw_world/models/models.dart';
-import 'package:card_jigsaw_world/state/rewards.dart';
+import 'package:carden/features/events/quest_rewards.dart';
+import 'package:carden/game/modes.dart';
+import 'package:carden/models/models.dart';
+import 'package:carden/state/rewards.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 final _now = DateTime(2026, 10, 13, 15);

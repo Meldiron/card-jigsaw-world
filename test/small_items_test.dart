@@ -1,17 +1,17 @@
 // Unit and widget tests for the small items of 2026-10-14: picture search, the New badge and
 // filter, Lucky Wheel odds, the reminder offer, tomorrow's preview and the build version.
-import 'package:card_jigsaw_world/core/reminders.dart';
-import 'package:card_jigsaw_world/core/theme/app_theme.dart';
-import 'package:card_jigsaw_world/data/local_store.dart';
-import 'package:card_jigsaw_world/features/daily/wheel_screen.dart';
-import 'package:card_jigsaw_world/features/gallery/library_screen.dart';
-import 'package:card_jigsaw_world/features/gallery/pack_progress.dart';
-import 'package:card_jigsaw_world/features/home/tomorrow_preview.dart';
-import 'package:card_jigsaw_world/features/profile/settings_screen.dart';
-import 'package:card_jigsaw_world/models/models.dart';
-import 'package:card_jigsaw_world/state/catalog_sync.dart';
-import 'package:card_jigsaw_world/state/reminders.dart';
-import 'package:card_jigsaw_world/widgets/icons.dart';
+import 'package:carden/core/reminders.dart';
+import 'package:carden/core/theme/app_theme.dart';
+import 'package:carden/data/local_store.dart';
+import 'package:carden/features/daily/wheel_screen.dart';
+import 'package:carden/features/gallery/library_screen.dart';
+import 'package:carden/features/gallery/pack_progress.dart';
+import 'package:carden/features/home/tomorrow_preview.dart';
+import 'package:carden/features/profile/settings_screen.dart';
+import 'package:carden/models/models.dart';
+import 'package:carden/state/catalog_sync.dart';
+import 'package:carden/state/reminders.dart';
+import 'package:carden/widgets/icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';

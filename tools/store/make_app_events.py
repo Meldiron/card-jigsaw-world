@@ -7,7 +7,7 @@
 
 Every world-day event (table `events`, with its free event pack) becomes one In-App Event: the event's
 own name, a short and a long description written from the pack, the event window as the event dates,
-publishing a week before it opens, and a deep link to the pack (cardjigsaw://library/pack/<packId>).
+publishing a week before it opens, and a deep link to the pack (carden://library/pack/<packId>).
 `asc_publish.py events` turns the next few into drafts in App Store Connect; nothing is ever submitted
 from here (see tools/store/README.md, "In-App Events").
 
@@ -118,7 +118,7 @@ def entry(ev: dict, pack: dict, puzzles: list[dict]) -> dict:
         "purpose": "APPROPRIATE_FOR_ALL_USERS",
         "priority": "NORMAL",
         "purchaseRequirement": "NO_COST_ASSOCIATED" if pack.get("isFree") else "IN_APP_PURCHASE",
-        "deepLink": f"cardjigsaw://library/pack/{pack['$id']}",
+        "deepLink": f"carden://library/pack/{pack['$id']}",
         "publishStart": (start - dt.timedelta(days=PUBLISH_DAYS_BEFORE)).isoformat().replace("+00:00", "Z"),
         "eventStart": start.isoformat().replace("+00:00", "Z"),
         "eventEnd": end.isoformat().replace("+00:00", "Z"),

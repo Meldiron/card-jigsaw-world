@@ -188,7 +188,7 @@ class SettingsScreen extends ConsumerWidget {
               _NavRow(
                 key: const ValueKey('settings-rate'), external: true,
                 icon: AppIcons.starOutline,
-                label: 'Rate Card Jigsaw World',
+                label: 'Rate Carden',
                 onTap: () async {
                   var opened = false;
                   try {
@@ -228,7 +228,7 @@ class SettingsScreen extends ConsumerWidget {
     final open = await showAppAlert(
       context,
       title: 'Notifications are off',
-      message: 'Allow notifications for Card Jigsaw World in iOS Settings to get a daily reminder.',
+      message: 'Allow notifications for Carden in iOS Settings to get a daily reminder.',
       confirmLabel: 'Open Settings',
       cancelLabel: 'Not now',
     );

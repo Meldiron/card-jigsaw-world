@@ -1,5 +1,5 @@
-import 'package:card_jigsaw_world/core/platform.dart';
-import 'package:card_jigsaw_world/features/ads/house_ads.dart';
+import 'package:carden/core/platform.dart';
+import 'package:carden/features/ads/house_ads.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';

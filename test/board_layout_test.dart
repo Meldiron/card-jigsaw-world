@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 import 'dart:ui';
 
-import 'package:card_jigsaw_world/game/board.dart';
+import 'package:carden/game/board.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Boards follow the picture: squares stay square, cards keep playing-card

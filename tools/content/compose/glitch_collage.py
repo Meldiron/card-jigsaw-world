@@ -65,7 +65,7 @@ SVG_CACHE = GLITCH / 'cache' / 'svg'
 ITEM_GROUPS = ['food', 'drink', 'herbs', 'spice', 'seeds', 'beans', 'alchemy', 'tools', 'keys', 'harvestable_resources', 'artifacts',
                'compounds', 'quest_items', 'furniture']
 SVG_MAX = 6.0          # an SVG-faithful item may be drawn up to 6x its 2x PNG export
-CREDIT = dict(author='Tiny Speck (Glitch), composed by Card Jigsaw World', licence='CC0', source='Tiny Speck (Glitch), CC0',
+CREDIT = dict(author='Tiny Speck (Glitch), composed by Carden', licence='CC0', source='Tiny Speck (Glitch), CC0',
               page='https://github.com/tinyspeck/glitch-items')
 
 

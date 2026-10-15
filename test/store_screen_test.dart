@@ -1,17 +1,17 @@
 import 'dart:io' show Directory, File;
 
 import 'package:appwrite/appwrite.dart';
-import 'package:card_jigsaw_world/core/links.dart';
-import 'package:card_jigsaw_world/core/platform.dart';
-import 'package:card_jigsaw_world/core/theme/app_theme.dart';
-import 'package:card_jigsaw_world/data/local_store.dart';
-import 'package:card_jigsaw_world/data/purchases.dart';
-import 'package:card_jigsaw_world/features/store/store_screen.dart';
-import 'package:card_jigsaw_world/models/models.dart';
-import 'package:card_jigsaw_world/state/auth.dart';
-import 'package:card_jigsaw_world/state/profile.dart';
-import 'package:card_jigsaw_world/state/purchases.dart';
-import 'package:card_jigsaw_world/state/settings.dart';
+import 'package:carden/core/links.dart';
+import 'package:carden/core/platform.dart';
+import 'package:carden/core/theme/app_theme.dart';
+import 'package:carden/data/local_store.dart';
+import 'package:carden/data/purchases.dart';
+import 'package:carden/features/store/store_screen.dart';
+import 'package:carden/models/models.dart';
+import 'package:carden/state/auth.dart';
+import 'package:carden/state/profile.dart';
+import 'package:carden/state/purchases.dart';
+import 'package:carden/state/settings.dart';
 import 'package:flutter/cupertino.dart' show CupertinoActivityIndicator;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

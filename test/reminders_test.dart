@@ -1,5 +1,5 @@
-import 'package:card_jigsaw_world/models/models.dart';
-import 'package:card_jigsaw_world/state/reminders.dart';
+import 'package:carden/models/models.dart';
+import 'package:carden/state/reminders.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// 13 October 2026, 09:00 local; the reminder time is 19:00.

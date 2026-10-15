@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:card_jigsaw_world/core/numbers.dart';
+import 'package:carden/core/numbers.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// One number style in the app: `formatCount` in lib/core/numbers.dart (design QA 160).

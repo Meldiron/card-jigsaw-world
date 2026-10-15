@@ -24,7 +24,7 @@ import '../social/social_screen.dart';
 final deepLinksProvider = Provider<DeepLinks>(DeepLinks.new);
 
 /// Puts a link (`lib/core/app_links.dart`, docs/deep-links.md) on screen. Links reach it from
-/// outside the app on iPhone (`CardJigsawApp.didPushRouteInformation`: the `cardjigsaw://` scheme,
+/// outside the app on iPhone (`CardenApp.didPushRouteInformation`: the `carden://` scheme,
 /// universal links, the widget), from the address a web visit starts on (`routerProvider`), and
 /// from paths the router has no page for (`onException`).
 class DeepLinks {

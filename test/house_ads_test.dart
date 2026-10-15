@@ -1,8 +1,8 @@
-import 'package:card_jigsaw_world/core/theme/app_theme.dart';
-import 'package:card_jigsaw_world/core/numbers.dart';
-import 'package:card_jigsaw_world/data/purchases.dart';
-import 'package:card_jigsaw_world/features/ads/house_ads.dart';
-import 'package:card_jigsaw_world/state/profile.dart';
+import 'package:carden/core/theme/app_theme.dart';
+import 'package:carden/core/numbers.dart';
+import 'package:carden/data/purchases.dart';
+import 'package:carden/features/ads/house_ads.dart';
+import 'package:carden/state/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';

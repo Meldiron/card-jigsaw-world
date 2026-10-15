@@ -1,10 +1,10 @@
 // "Total Completion" on the profile and on other players' profiles.
-import 'package:card_jigsaw_world/core/numbers.dart';
-import 'package:card_jigsaw_world/core/theme/app_theme.dart';
-import 'package:card_jigsaw_world/features/profile/stats.dart';
-import 'package:card_jigsaw_world/models/models.dart';
-import 'package:card_jigsaw_world/state/completion.dart';
-import 'package:card_jigsaw_world/state/merge.dart';
+import 'package:carden/core/numbers.dart';
+import 'package:carden/core/theme/app_theme.dart';
+import 'package:carden/features/profile/stats.dart';
+import 'package:carden/models/models.dart';
+import 'package:carden/state/completion.dart';
+import 'package:carden/state/merge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

@@ -1,4 +1,4 @@
-import 'package:card_jigsaw_world/core/dates.dart';
+import 'package:carden/core/dates.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// One style for time left and dates (design QA 161).

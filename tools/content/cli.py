@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Card Jigsaw World content CLI. Run with the venv python that has Pillow, numpy, requests.
+"""Carden content CLI. Run with the venv python that has Pillow, numpy, requests.
 
   cli.py dump                         snapshot the live catalogue into the cache
   cli.py host [--pack ID] [--dry]     copy pictures and covers into Appwrite Storage, rows point there

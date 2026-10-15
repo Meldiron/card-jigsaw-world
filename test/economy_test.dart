@@ -2,11 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math' as math;
 
-import 'package:card_jigsaw_world/core/numbers.dart';
-import 'package:card_jigsaw_world/data/purchases.dart';
-import 'package:card_jigsaw_world/models/models.dart';
-import 'package:card_jigsaw_world/state/profile.dart';
-import 'package:card_jigsaw_world/state/rewards.dart';
+import 'package:carden/core/numbers.dart';
+import 'package:carden/data/purchases.dart';
+import 'package:carden/models/models.dart';
+import 'package:carden/state/profile.dart';
+import 'package:carden/state/rewards.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Guards for the economy described in docs/economy.md.

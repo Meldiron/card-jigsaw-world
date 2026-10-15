@@ -1,7 +1,7 @@
 // Six starter packs are free since 2026-10-14; the library packs that were free before are priced,
 // but a player who had played one keeps it open (lib/state/starter_packs.dart).
-import 'package:card_jigsaw_world/models/models.dart';
-import 'package:card_jigsaw_world/state/starter_packs.dart';
+import 'package:carden/models/models.dart';
+import 'package:carden/state/starter_packs.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'support/fake_sync.dart';

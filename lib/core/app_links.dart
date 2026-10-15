@@ -1,7 +1,9 @@
 /// Links into the game (docs/deep-links.md). One set of paths works everywhere:
 ///
-/// - the web site: `https://card-jigsaw-world.appwrite.network/library/pack/pack-owls`
-/// - the app's own scheme: `cardjigsaw://library/pack/pack-owls` (the widget, In-App Events)
+/// - the web site: `https://carden.appwrite.network/library/pack/pack-owls` (the old address,
+///   card-jigsaw-world.appwrite.network, serves the same site and reads the same paths)
+/// - the app's own scheme: `carden://library/pack/pack-owls` (the widget, In-App Events); the scheme
+///   of the game's first name, `cardjigsaw://`, still opens the same screens
 /// - universal links: the web address opens the iPhone app where it is installed
 ///   (`web/.well-known/apple-app-site-association`, `applinks:` in `Runner.entitlements`).
 ///
@@ -32,8 +34,11 @@ class AppLink {
   final Uri location;
   final LinkKind kind;
 
-  static const webOrigin = 'https://card-jigsaw-world.appwrite.network';
-  static const scheme = 'cardjigsaw';
+  static const webOrigin = 'https://carden.appwrite.network';
+  static const scheme = 'carden';
+
+  /// The scheme the game had as Card Jigsaw World; links made with it keep working.
+  static const legacyScheme = 'cardjigsaw';
 
   String get path => location.path;
   Map<String, String> get query => location.queryParameters;
@@ -56,14 +61,14 @@ class AppLink {
   /// Pack, picture and player ids (Appwrite ids and the catalogue's slugs).
   static final _id = RegExp(r'^[A-Za-z0-9._-]{1,64}$');
 
-  /// Reads [uri] (web address, `cardjigsaw://` link or a bare path) into the link it opens, or
+  /// Reads [uri] (web address, `carden://` or `cardjigsaw://` link, or a bare path) into the link it opens, or
   /// null when it is not one of the game's links: another scheme (the Appwrite sign-in redirect),
   /// the web sign-in callback, site files, or a path the app has no screen for.
   static AppLink? parse(Uri uri) {
     final List<String> raw;
     switch (uri.scheme.toLowerCase()) {
-      case scheme:
-        // cardjigsaw://library/pack/x puts "library" in the host; cardjigsaw:///library/pack/x does not.
+      case scheme || legacyScheme:
+        // carden://library/pack/x puts "library" in the host; carden:///library/pack/x does not.
         raw = [if (uri.host.isNotEmpty) uri.host, ...uri.pathSegments];
       case 'http' || 'https' || '':
         raw = uri.pathSegments;

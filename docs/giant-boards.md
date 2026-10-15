@@ -4,7 +4,7 @@ Pictures of a pack with category `Giant` deal only four giant sizes (Large, Huge
 about 100 to 300 cards in Cards, more cells in the other shapes; `BoardSpec.giantTiers`). The
 pictures are hosted at up to 4096 px on the long side and decoded at full size, so the board can be
 zoomed in and stay sharp. This page records how other big-board jigsaw apps help players on a phone
-and what Card Jigsaw World does on a giant board.
+and what Carden does on a giant board.
 
 Giant boards open at level 10 (`Unlock.giant`). Before that a Giant pack's page shows the gate
 (`GiantGateCard`, `lib/features/gallery/giant_gate.dart`): the way to level 10, and two ways in side

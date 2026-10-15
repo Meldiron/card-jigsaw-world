@@ -1,7 +1,7 @@
 // "Quests completed" and the public completion numbers on the profile row.
-import 'package:card_jigsaw_world/models/models.dart';
-import 'package:card_jigsaw_world/state/completion.dart';
-import 'package:card_jigsaw_world/state/rewards.dart';
+import 'package:carden/models/models.dart';
+import 'package:carden/state/completion.dart';
+import 'package:carden/state/rewards.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'support/fake_sync.dart';

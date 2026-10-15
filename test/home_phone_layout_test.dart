@@ -3,16 +3,16 @@
 // a layout error (overflow, unbounded flex). The test font is wider than SF, so a pass here leaves
 // room on a phone.
 import 'package:appwrite/models.dart' as models;
-import 'package:card_jigsaw_world/core/theme/app_theme.dart';
-import 'package:card_jigsaw_world/data/local_store.dart';
-import 'package:card_jigsaw_world/features/home/home_screen.dart';
-import 'package:card_jigsaw_world/models/models.dart';
-import 'package:card_jigsaw_world/state/auth.dart';
-import 'package:card_jigsaw_world/state/catalog.dart';
-import 'package:card_jigsaw_world/state/profile.dart';
-import 'package:card_jigsaw_world/state/progress.dart';
-import 'package:card_jigsaw_world/state/settings.dart';
-import 'package:card_jigsaw_world/state/unlocks.dart';
+import 'package:carden/core/theme/app_theme.dart';
+import 'package:carden/data/local_store.dart';
+import 'package:carden/features/home/home_screen.dart';
+import 'package:carden/models/models.dart';
+import 'package:carden/state/auth.dart';
+import 'package:carden/state/catalog.dart';
+import 'package:carden/state/profile.dart';
+import 'package:carden/state/progress.dart';
+import 'package:carden/state/settings.dart';
+import 'package:carden/state/unlocks.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';

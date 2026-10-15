@@ -4,8 +4,12 @@ One set of paths opens the same screen everywhere:
 
 | Form | Example | Where it works |
 | --- | --- | --- |
-| Web address | `https://card-jigsaw-world.appwrite.network/library/pack/pack-owls` | The web site; on an iPhone with the app installed it opens the app (universal link) |
-| App scheme | `cardjigsaw://library/pack/pack-owls` | The iPhone app (and Android builds); used by the widget and the App Store In-App Events |
+| Web address | `https://carden.appwrite.network/library/pack/pack-owls` | The web site; on an iPhone with the app installed it opens the app (universal link) |
+| App scheme | `carden://library/pack/pack-owls` | The iPhone app (and Android builds); used by the widget and the App Store In-App Events |
+
+The game was called Card Jigsaw World until build 118. Its links keep working: the app still registers and reads
+`cardjigsaw://` (`AppLink.legacyScheme`), and the old web address, `https://card-jigsaw-world.appwrite.network`,
+serves the same site. New links use `carden://` and `https://carden.appwrite.network`.
 
 Share the web address: it works for everyone, in the app where it is installed and in the
 browser everywhere else. `AppLink.webUrl` / `AppLink.appUrl` (`lib/core/app_links.dart`) build
@@ -41,7 +45,7 @@ Keywords are case-insensitive; ids keep their case. Anything else (unknown paths
 
 ## How a link is shown
 
-`AppLink.parse` reads the web address, the `cardjigsaw://` form (where the first word lands in the
+`AppLink.parse` reads the web address, the `carden://` form (where the first word lands in the
 URL's host) or a bare path into a route and a kind; `DeepLinks.show`
 (`lib/features/links/deep_links.dart`) puts it on screen:
 
@@ -72,21 +76,21 @@ Where links come in:
 
 Status (2026-10-14): waiting for the Associated Domains capability on the App ID and a new App Store
 profile (step 1 below). Until then `Runner.entitlements` has no `applinks:` entry, so the builds
-sign as before and web addresses open the web site; `cardjigsaw://` links work.
+sign as before and web addresses open the web site; `carden://` links work.
 
 The web address opens the app when:
 
-1. the app carries `applinks:card-jigsaw-world.appwrite.network` (`ios/Runner/Runner.entitlements`);
+1. the app carries `applinks:carden.appwrite.network` (`ios/Runner/Runner.entitlements`);
    the App ID needs the Associated Domains capability and the App Store profile used by CI must be
    made after it was turned on (see "expected 2 profiles" in the apple-release skill), and
 2. the site serves `web/.well-known/apple-app-site-association` (deployed with the site by
    `tools/dev/deploy-web.sh`). It lists the link paths above and keeps `/auth/*` (the web sign-in
    callback) in the browser. Apple's CDN caches it; after a change it can take a day to reach
    devices. Check what Apple sees with
-   `curl https://app-site-association.cdn-apple.com/a/v1/card-jigsaw-world.appwrite.network`.
+   `curl https://app-site-association.cdn-apple.com/a/v1/carden.appwrite.network`.
 
 A link typed into Safari's address bar, or tapped on a page of the site itself, stays in the
-browser (iOS rule). Long-press a link and choose "Open in Card Jigsaw World" to switch; iOS
+browser (iOS rule). Long-press a link and choose "Open in Carden" to switch; iOS
 remembers the choice.
 
 `test/deep_links_test.dart` checks that every link reads the same in all three forms, that the
@@ -95,11 +99,11 @@ association file covers every link path and nothing else, and how `DeepLinks` sh
 
 ## Trying a link
 
-- iPhone: type `cardjigsaw://daily` into Safari's address bar (iOS asks to open the app), or tap a
+- iPhone: type `carden://daily` into Safari's address bar (iOS asks to open the app), or tap a
   link in Notes or Messages.
-- Simulator: `xcrun simctl openurl booted 'cardjigsaw://redeem?code=ABCD-EFGH-JKLM-NPQR'` while the
+- Simulator: `xcrun simctl openurl booted 'carden://redeem?code=ABCD-EFGH-JKLM-NPQR'` while the
   app runs (start it with `tools/dev/qa-run.sh run -d <udid>`).
-- Web: open the address, e.g. `https://card-jigsaw-world.appwrite.network/quests`.
+- Web: open the address, e.g. `https://carden.appwrite.network/quests`.
 
 ## Adding a link
 

@@ -5,20 +5,20 @@
 // it still sees its own row), and captures Profile > Statistics (Total Completion, Quests
 // completed) and another player's profile to screenshots/qa_*.png. Facts go to
 // build/integration_response_data.json.
-import 'package:card_jigsaw_world/app.dart';
-import 'package:card_jigsaw_world/core/appwrite.dart';
-import 'package:card_jigsaw_world/core/qa.dart';
-import 'package:card_jigsaw_world/core/sfx.dart';
-import 'package:card_jigsaw_world/data/local_store.dart';
-import 'package:card_jigsaw_world/data/repositories.dart';
-import 'package:card_jigsaw_world/models/models.dart';
-import 'package:card_jigsaw_world/router.dart';
-import 'package:card_jigsaw_world/state/auth.dart';
-import 'package:card_jigsaw_world/state/catalog.dart';
-import 'package:card_jigsaw_world/state/profile.dart';
-import 'package:card_jigsaw_world/state/progress.dart';
-import 'package:card_jigsaw_world/state/settings.dart';
-import 'package:card_jigsaw_world/state/social.dart';
+import 'package:carden/app.dart';
+import 'package:carden/core/appwrite.dart';
+import 'package:carden/core/qa.dart';
+import 'package:carden/core/sfx.dart';
+import 'package:carden/data/local_store.dart';
+import 'package:carden/data/repositories.dart';
+import 'package:carden/models/models.dart';
+import 'package:carden/router.dart';
+import 'package:carden/state/auth.dart';
+import 'package:carden/state/catalog.dart';
+import 'package:carden/state/profile.dart';
+import 'package:carden/state/progress.dart';
+import 'package:carden/state/settings.dart';
+import 'package:carden/state/social.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -65,7 +65,7 @@ void main() {
     final store = await LocalStore.open();
     Sfx.instance.soundEnabled = false;
     Sfx.instance.musicEnabled = false;
-    await tester.pumpWidget(ProviderScope(overrides: [localStoreProvider.overrideWithValue(store)], child: const CardJigsawApp()));
+    await tester.pumpWidget(ProviderScope(overrides: [localStoreProvider.overrideWithValue(store)], child: const CardenApp()));
     await settle(tester, 1500);
     await tapText(tester, 'Continue');
     await tapText(tester, 'Continue');

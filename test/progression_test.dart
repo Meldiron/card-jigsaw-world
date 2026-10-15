@@ -1,13 +1,13 @@
 import 'dart:math';
 
-import 'package:card_jigsaw_world/data/sync/changes.dart';
-import 'package:card_jigsaw_world/data/sync/ops.dart';
-import 'package:card_jigsaw_world/game/board.dart';
-import 'package:card_jigsaw_world/game/game_controller.dart';
-import 'package:card_jigsaw_world/models/models.dart';
-import 'package:card_jigsaw_world/state/merge.dart';
-import 'package:card_jigsaw_world/state/profile.dart';
-import 'package:card_jigsaw_world/state/rewards.dart';
+import 'package:carden/data/sync/changes.dart';
+import 'package:carden/data/sync/ops.dart';
+import 'package:carden/game/board.dart';
+import 'package:carden/game/game_controller.dart';
+import 'package:carden/models/models.dart';
+import 'package:carden/state/merge.dart';
+import 'package:carden/state/profile.dart';
+import 'package:carden/state/rewards.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 

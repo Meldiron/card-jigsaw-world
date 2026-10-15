@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:card_jigsaw_world/core/appwrite.dart';
-import 'package:card_jigsaw_world/core/image_files.dart';
-import 'package:card_jigsaw_world/data/repositories.dart';
-import 'package:card_jigsaw_world/models/models.dart';
-import 'package:card_jigsaw_world/state/social.dart';
+import 'package:carden/core/appwrite.dart';
+import 'package:carden/core/image_files.dart';
+import 'package:carden/data/repositories.dart';
+import 'package:carden/models/models.dart';
+import 'package:carden/state/social.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

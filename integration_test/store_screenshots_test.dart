@@ -15,20 +15,20 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:card_jigsaw_world/app.dart';
-import 'package:card_jigsaw_world/core/appwrite.dart';
-import 'package:card_jigsaw_world/core/sfx.dart';
-import 'package:card_jigsaw_world/data/local_store.dart';
-import 'package:card_jigsaw_world/data/repositories.dart';
-import 'package:card_jigsaw_world/features/gallery/library_screen.dart';
-import 'package:card_jigsaw_world/features/game/board_widget.dart';
-import 'package:card_jigsaw_world/game/board.dart';
-import 'package:card_jigsaw_world/router.dart';
-import 'package:card_jigsaw_world/state/auth.dart';
-import 'package:card_jigsaw_world/state/settings.dart';
-import 'package:card_jigsaw_world/state/rewards.dart';
-import 'package:card_jigsaw_world/state/unlocks.dart';
-import 'package:card_jigsaw_world/state/social.dart';
+import 'package:carden/app.dart';
+import 'package:carden/core/appwrite.dart';
+import 'package:carden/core/sfx.dart';
+import 'package:carden/data/local_store.dart';
+import 'package:carden/data/repositories.dart';
+import 'package:carden/features/gallery/library_screen.dart';
+import 'package:carden/features/game/board_widget.dart';
+import 'package:carden/game/board.dart';
+import 'package:carden/router.dart';
+import 'package:carden/state/auth.dart';
+import 'package:carden/state/settings.dart';
+import 'package:carden/state/rewards.dart';
+import 'package:carden/state/unlocks.dart';
+import 'package:carden/state/social.dart';
 import 'package:flutter/foundation.dart' show consolidateHttpClientResponseBytes;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' show MaterialApp;
@@ -364,7 +364,7 @@ void main() {
         openFeaturesProvider.overrideWithValue(OpenFeatures.all),
         pendingUnlockIntroProvider.overrideWithValue(null),
       ],
-      child: const CardJigsawApp(),
+      child: const CardenApp(),
     ));
     await settle(tester, 1500);
     await tapText(tester, 'Continue');
@@ -436,7 +436,7 @@ void main() {
     // Store, then scrolled to the VIP card (also the subscription review shot).
     await push(tester, '/store', ms: 2500);
     await shot(tester, '11_store');
-    await tester.dragUntilVisible(find.text('Card Jigsaw World VIP'), find.byType(Scrollable).first, const Offset(0, -300));
+    await tester.dragUntilVisible(find.text('Carden VIP'), find.byType(Scrollable).first, const Offset(0, -300));
     await tester.drag(find.byType(Scrollable).first, const Offset(0, -600));
     await settle(tester, 1200);
     // Start the view at the Hints heading, not halfway through its subtitle.

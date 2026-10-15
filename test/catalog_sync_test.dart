@@ -1,6 +1,6 @@
-import 'package:card_jigsaw_world/data/local_store.dart';
-import 'package:card_jigsaw_world/data/repositories.dart';
-import 'package:card_jigsaw_world/state/catalog_sync.dart';
+import 'package:carden/data/local_store.dart';
+import 'package:carden/data/repositories.dart';
+import 'package:carden/state/catalog_sync.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

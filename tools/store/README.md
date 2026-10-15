@@ -182,7 +182,7 @@ the key was added.
 
 Every world-day event (table `events` with its free event pack) can be an
 In-App Event card on the App Store and in search, opening the pack
-(`cardjigsaw://library/pack/<packId>`; every link the app reads is in
+(`carden://library/pack/<packId>`; every link the app reads is in
 `docs/deep-links.md`).
 
 1. `.venv/bin/python tools/store/make_app_events.py` writes

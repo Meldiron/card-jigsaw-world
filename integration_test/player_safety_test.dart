@@ -8,17 +8,17 @@
 // Run: tools/dev/qa-run.sh drive --driver=test_driver/integration_test.dart \
 //        --target=integration_test/player_safety_test.dart -d <simulator>
 import 'package:appwrite/appwrite.dart';
-import 'package:card_jigsaw_world/app.dart';
-import 'package:card_jigsaw_world/core/appwrite.dart';
-import 'package:card_jigsaw_world/core/sfx.dart';
-import 'package:card_jigsaw_world/data/local_store.dart';
-import 'package:card_jigsaw_world/features/onboarding/onboarding_screen.dart';
-import 'package:card_jigsaw_world/router.dart';
-import 'package:card_jigsaw_world/state/auth.dart';
-import 'package:card_jigsaw_world/state/rewards.dart';
-import 'package:card_jigsaw_world/state/settings.dart';
-import 'package:card_jigsaw_world/state/social.dart';
-import 'package:card_jigsaw_world/state/unlocks.dart';
+import 'package:carden/app.dart';
+import 'package:carden/core/appwrite.dart';
+import 'package:carden/core/sfx.dart';
+import 'package:carden/data/local_store.dart';
+import 'package:carden/features/onboarding/onboarding_screen.dart';
+import 'package:carden/router.dart';
+import 'package:carden/state/auth.dart';
+import 'package:carden/state/rewards.dart';
+import 'package:carden/state/settings.dart';
+import 'package:carden/state/social.dart';
+import 'package:carden/state/unlocks.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -57,7 +57,7 @@ void main() {
     await settle(tester, ms);
   }
 
-  ProviderContainer container(WidgetTester tester) => ProviderScope.containerOf(tester.element(find.byType(CardJigsawApp)));
+  ProviderContainer container(WidgetTester tester) => ProviderScope.containerOf(tester.element(find.byType(CardenApp)));
 
   Future<List<String>> leaderboardIds(WidgetTester tester) async {
     final c = container(tester);
@@ -76,7 +76,7 @@ void main() {
         openFeaturesProvider.overrideWithValue(OpenFeatures.all),
         pendingUnlockIntroProvider.overrideWithValue(null),
       ],
-      child: const CardJigsawApp(),
+      child: const CardenApp(),
     ));
     await settle(tester, 1500);
     await tapText(tester, 'Continue');

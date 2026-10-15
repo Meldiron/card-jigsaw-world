@@ -6,9 +6,9 @@ import 'dart:typed_data';
 
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
-import 'package:card_jigsaw_world/data/purchases.dart';
-import 'package:card_jigsaw_world/data/repositories.dart';
-import 'package:card_jigsaw_world/models/models.dart';
+import 'package:carden/data/purchases.dart';
+import 'package:carden/data/repositories.dart';
+import 'package:carden/models/models.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
 class NoClient implements Client {

@@ -1,4 +1,6 @@
-Thank you for reviewing Card Jigsaw World.
+Thank you for reviewing Carden.
+
+Carden was called Card Jigsaw World in earlier TestFlight builds. Only the name changed; the bundle ID and every feature are the same.
 
 ACCOUNTS
 No account is required. The first launch creates an anonymous guest session on our backend (Appwrite, EU region) and the whole game is playable immediately. No demo credentials are needed. Sign in with Apple and email sign-up are optional and only move the same guest progress onto a permanent account (Profile > Settings > Account).

@@ -8,18 +8,18 @@
 //        --target=integration_test/giant_ux_test.dart -d <simulator>
 import 'dart:ui' as ui;
 
-import 'package:card_jigsaw_world/app.dart';
-import 'package:card_jigsaw_world/core/sfx.dart';
-import 'package:card_jigsaw_world/data/local_store.dart';
-import 'package:card_jigsaw_world/features/game/board_widget.dart';
-import 'package:card_jigsaw_world/models/models.dart';
-import 'package:card_jigsaw_world/router.dart';
-import 'package:card_jigsaw_world/state/catalog.dart';
-import 'package:card_jigsaw_world/state/giant.dart';
-import 'package:card_jigsaw_world/state/profile.dart';
-import 'package:card_jigsaw_world/state/settings.dart';
-import 'package:card_jigsaw_world/state/rewards.dart';
-import 'package:card_jigsaw_world/state/unlocks.dart';
+import 'package:carden/app.dart';
+import 'package:carden/core/sfx.dart';
+import 'package:carden/data/local_store.dart';
+import 'package:carden/features/game/board_widget.dart';
+import 'package:carden/models/models.dart';
+import 'package:carden/router.dart';
+import 'package:carden/state/catalog.dart';
+import 'package:carden/state/giant.dart';
+import 'package:carden/state/profile.dart';
+import 'package:carden/state/settings.dart';
+import 'package:carden/state/rewards.dart';
+import 'package:carden/state/unlocks.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -53,7 +53,7 @@ void main() {
     await settle(tester, ms);
   }
 
-  ProviderContainer container(WidgetTester tester) => ProviderScope.containerOf(tester.element(find.byType(CardJigsawApp)));
+  ProviderContainer container(WidgetTester tester) => ProviderScope.containerOf(tester.element(find.byType(CardenApp)));
   BoardWidget board(WidgetTester tester) => tester.widget<BoardWidget>(find.byType(BoardWidget).first);
   BoardZoom zoomOf(WidgetTester tester) => board(tester).zoom!;
   Rect boardRect(WidgetTester tester) => tester.getRect(find.byType(BoardWidget).first);
@@ -143,7 +143,7 @@ void main() {
           openFeaturesProvider.overrideWithValue(OpenFeatures.all),
           pendingUnlockIntroProvider.overrideWithValue(null),
         ],
-        child: const CardJigsawApp(),
+        child: const CardenApp(),
       ),
     );
     await settle(tester, 1500);

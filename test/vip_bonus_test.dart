@@ -1,4 +1,4 @@
-import 'package:card_jigsaw_world/state/rewards.dart';
+import 'package:carden/state/rewards.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

@@ -13,7 +13,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>card_jigsaw_world</string>
+	<string>Carden</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -69,7 +69,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Take a photo to turn it into a card puzzle.</string>
 	<key>CFBundleDisplayName</key>
-	<string>Card Jigsaw World</string>
+	<string>Carden</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleURLTypes</key>
@@ -91,6 +91,7 @@
 			<string>com.matejbaco.cardjigsawworld</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
+				<string>carden</string>
 				<string>cardjigsaw</string>
 			</array>
 		</dict>

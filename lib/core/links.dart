@@ -5,7 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 /// address as the App Store listing, `store/metadata/en-US/privacy_url.txt`); the terms of use are
 /// Apple's standard licence agreement, as the listing says.
 abstract final class AppLinks {
-  static final privacyPolicy = Uri.parse('https://github.com/Meldiron/card-jigsaw-world/blob/main/docs/privacy-policy.md');
+  static final privacyPolicy = Uri.parse('https://github.com/Meldiron/carden/blob/main/docs/privacy-policy.md');
   static final termsOfUse = Uri.parse('https://www.apple.com/legal/internet-services/itunes/dev/stdeula/');
 
   /// The App Store's subscription management (opens the system sheet on iPhone).
@@ -22,7 +22,7 @@ abstract final class AppLinks {
     ];
     final body = details.isEmpty ? '' : '\n\n\n---\n${details.join('\n')}';
     // Encoded by hand: mail apps show a "+" for a space encoded the form way.
-    return Uri.parse('mailto:$supportEmail?subject=${Uri.encodeComponent('Card Jigsaw World support')}${body.isEmpty ? '' : '&body=${Uri.encodeComponent(body)}'}');
+    return Uri.parse('mailto:$supportEmail?subject=${Uri.encodeComponent('Carden support')}${body.isEmpty ? '' : '&body=${Uri.encodeComponent(body)}'}');
   }
 }
 

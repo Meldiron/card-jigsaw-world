@@ -24,7 +24,7 @@ Future<void> main() async {
   runApp(
     ProviderScope(
       overrides: [localStoreProvider.overrideWithValue(store)],
-      child: const CardJigsawApp(),
+      child: const CardenApp(),
     ),
   );
 }

@@ -1,15 +1,15 @@
 // The reminder question after a daily gift names event notes, which promote events: Turn on is the
 // explicit yes to them (guideline 4.5.4); Not now leaves them off.
 import 'package:appwrite/models.dart' as models;
-import 'package:card_jigsaw_world/core/platform.dart';
-import 'package:card_jigsaw_world/core/theme/app_theme.dart';
-import 'package:card_jigsaw_world/data/local_store.dart';
-import 'package:card_jigsaw_world/features/daily/daily_reward_sheet.dart';
-import 'package:card_jigsaw_world/models/models.dart';
-import 'package:card_jigsaw_world/state/auth.dart';
-import 'package:card_jigsaw_world/state/profile.dart';
-import 'package:card_jigsaw_world/state/reminders.dart';
-import 'package:card_jigsaw_world/state/settings.dart';
+import 'package:carden/core/platform.dart';
+import 'package:carden/core/theme/app_theme.dart';
+import 'package:carden/data/local_store.dart';
+import 'package:carden/features/daily/daily_reward_sheet.dart';
+import 'package:carden/models/models.dart';
+import 'package:carden/state/auth.dart';
+import 'package:carden/state/profile.dart';
+import 'package:carden/state/reminders.dart';
+import 'package:carden/state/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

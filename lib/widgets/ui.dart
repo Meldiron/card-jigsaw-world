@@ -1180,7 +1180,7 @@ Future<T?> showAppSheet<T>(BuildContext context, {required WidgetBuilder builder
   );
 }
 
-/// Root messenger; `CardJigsawApp` hosts a Scaffold above the Navigator for
+/// Root messenger; `CardenApp` hosts a Scaffold above the Navigator for
 /// it. Toasts no longer use it (see [showToast]); kept for the host.
 final appMessengerKey = GlobalKey<ScaffoldMessengerState>();
 

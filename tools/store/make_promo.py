@@ -72,7 +72,7 @@ def vip_promo(icon: Image.Image) -> Image.Image:
     d.text(((S - sw) / 2, y + size + 36 + 232), sub, font=f_sub, fill=INK)
 
     f_name = font(34, "Regular")
-    name = "Card Jigsaw World"
+    name = "Carden"
     nw = d.textlength(name, font=f_name)
     d.text(((S - nw) / 2, S - 86), name, font=f_name, fill=MUTED)
     return im

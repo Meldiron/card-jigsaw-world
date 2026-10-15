@@ -1,4 +1,4 @@
-import 'package:card_jigsaw_world/state/merge.dart';
+import 'package:carden/state/merge.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 final t0 = DateTime.utc(2026, 10, 1);

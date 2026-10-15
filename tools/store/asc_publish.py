@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""App Store Connect publisher for Card Jigsaw World.
+"""App Store Connect publisher for Carden.
 
 Idempotent: every subcommand looks up what already exists and creates or
 updates only what differs, so it is safe to run again after a partial failure.
@@ -1813,7 +1813,7 @@ def cmd_events(s: Store) -> int:
 
 
 PLATFORM_STEPS = """  App Store availability on Macs and Apple Vision Pro is not in the App Store Connect API. Once, by hand
-  (role Account Holder, Admin or App Manager): App Store Connect > Apps > Card Jigsaw World > Pricing and
+  (role Account Holder, Admin or App Manager): App Store Connect > Apps > Carden > Pricing and
   Availability >
     - "iPhone and iPad Apps on Apple Silicon Mac": tick "Make this app available", Save
     - "iPhone and iPad Apps on Apple Vision Pro": tick "Make this app available", Save

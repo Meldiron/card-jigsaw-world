@@ -1,34 +1,35 @@
-Card Jigsaw World is a picture puzzle with a twist. Every photo is cut into cards and shuffled across a board. Tap a card and then the spot where it belongs, or drag it there. Cards that belong next to each other snap together anywhere on the board and move as one group. A card that lands in its true spot locks into the picture. Fewer moves earn more stars.
+Carden is your calm picture puzzle.
 
-WHAT YOU PLAY
-- Four ways to cut a picture: cards, squares, triangles and hexagons. Each mode has its own difficulty ladder and a reward multiplier.
-- Difficulty tiers that unlock as you level up, from a quick 3x3 to boards that fill an evening.
-- A daily puzzle every day, with monthly packs going back to January 2023. The current month is free.
-- Curated packs: museum paintings, wildlife, deep space, cities, kitchens, seasons and more. Every picture shows its author and licence.
-- World-day live events with a themed pack, open for a few days around each date.
+Every photo is cut into cards and shuffled across the board. Tap a card, then the place it belongs, or drag it there. Cards that belong together snap into groups and move as one. A card in its true place locks into the picture, until the whole photo is back. Fewer moves earn more stars.
+
+WAYS TO PLAY
+- Cards, squares, triangles and hexagons: four ways to cut every picture, each with its own ladder from a quick 3x3 to a board that fills an evening.
+- Painting: cards start in black and white and take their colour back as they lock.
+- Giant boards of 100 to 300 cards, with pinch to zoom and a map of the whole picture.
+- A daily puzzle every day, with monthly packs back to January 2023. The current month is free.
+- Packs of museum paintings, wildlife, deep space, cities, seasons and more. Every picture names its author and licence.
+- Live events for world days, each with its own pack for a few days around the date.
 - Your own photos, turned into puzzles.
 
-HELPERS
-Peek, Hint and Magic Lock for stubborn boards. Undo is always free. Leave any board and resume it later.
+HELP WHEN YOU WANT IT
+Peek shows where every card belongs for a moment. Hint and Magic help with a stubborn card. Undo is always free, and every board waits for you to come back.
 
-PROGRESS AND REWARDS
-- Coins, tickets and hints are earned by playing: level rewards, daily quests, weekly quests, a daily gift streak and a piggy bank that fills with every completed puzzle.
-- Spin the Lucky Wheel for coins, hints, Peeks and Magic.
-- 24 achievement families and 55 avatars to collect.
-- A leaderboard and friend codes to compare progress with people you know.
+PROGRESS
+- Earn coins, tickets and hints as you play: levels, daily and weekly quests, a daily gift and a piggy bank that fills with every puzzle.
+- Spin the Lucky Wheel, collect avatars and achievements, and compare progress with friends on the leaderboard.
 
 ON IPHONE
-- Home Screen widgets show today's daily picture. Tap to play.
-- A "One last game?" shortcut on the app icon opens today's puzzle.
-- Light and dark mode, with music, sound and haptics you can switch off.
+- Home Screen widgets with today's picture.
+- "One last game?" on the app icon opens today's puzzle.
+- Light and dark mode. Music, sounds and haptics can each be turned off.
 
 NO ACCOUNT NEEDED
-Start as a guest in one tap. Sign in with Apple or create an email account whenever you want your progress on more than one device.
+Start as a guest in one tap. Sign in with Apple or with email when you want your progress on more than one device.
 
 VIP
-VIP unlocks every pack, including past monthly packs, adds a fourth daily quest and a sixth weekly quest, pays 500 bonus coins every week, allows unlimited My Puzzles uploads and turns off the game's own store promotions. Monthly and yearly plans both begin with a 7-day free trial. Payment is charged to your Apple ID account when the trial ends or at confirmation of purchase. The subscription renews automatically unless it is cancelled at least 24 hours before the end of the current period. Manage or cancel it in your App Store account settings.
+VIP opens every pack, including past months, adds a daily and a weekly quest, pays 500 bonus coins every week, allows unlimited My Puzzles photos and turns off the game's own promotions. VIP can be shared with your family through Family Sharing. Monthly and yearly plans both begin with a 7-day free trial. Payment is charged to your Apple ID account when the trial ends or at confirmation of purchase. The subscription renews automatically unless it is cancelled at least 24 hours before the end of the current period. Manage or cancel it in your App Store account settings.
 
 No third-party ads, no tracking, no analytics SDKs.
 
-Privacy policy: https://github.com/Meldiron/card-jigsaw-world/blob/main/docs/privacy-policy.md
+Privacy policy: https://github.com/Meldiron/carden/blob/main/docs/privacy-policy.md
 Terms of use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/

@@ -2,13 +2,13 @@
 // default and the largest text size the app allows (1.35), in the states a player meets: day 1, mid-week,
 // day 7, claimed today, and a lost streak that can be restored with today's claim. It renders without a
 // layout error, lists the whole week, marks today, and the claim stays reachable.
-import 'package:card_jigsaw_world/core/theme/app_theme.dart';
-import 'package:card_jigsaw_world/data/local_store.dart';
-import 'package:card_jigsaw_world/features/daily/daily_reward_sheet.dart';
-import 'package:card_jigsaw_world/models/models.dart';
-import 'package:card_jigsaw_world/state/profile.dart';
-import 'package:card_jigsaw_world/state/settings.dart';
-import 'package:card_jigsaw_world/widgets/ui.dart';
+import 'package:carden/core/theme/app_theme.dart';
+import 'package:carden/data/local_store.dart';
+import 'package:carden/features/daily/daily_reward_sheet.dart';
+import 'package:carden/models/models.dart';
+import 'package:carden/state/profile.dart';
+import 'package:carden/state/settings.dart';
+import 'package:carden/widgets/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';

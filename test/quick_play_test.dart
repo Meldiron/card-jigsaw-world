@@ -1,8 +1,8 @@
 import 'dart:math';
 
-import 'package:card_jigsaw_world/game/board.dart';
-import 'package:card_jigsaw_world/models/models.dart';
-import 'package:card_jigsaw_world/state/quick_play.dart';
+import 'package:carden/game/board.dart';
+import 'package:carden/models/models.dart';
+import 'package:carden/state/quick_play.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 final _now = DateTime(2026, 10, 13, 9);

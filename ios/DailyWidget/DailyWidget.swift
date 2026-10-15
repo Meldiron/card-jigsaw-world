@@ -102,7 +102,7 @@ struct DailyWidgetView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
-        .widgetURL(URL(string: "cardjigsaw://play/\(entry.puzzleId)"))
+        .widgetURL(URL(string: "carden://play/\(entry.puzzleId)"))
         .containerBackground(for: .widget) {
             ZStack {
                 if let img = entry.image {

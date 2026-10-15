@@ -6,10 +6,10 @@
 //     --target=integration_test/help_test.dart -d <simulator>
 //   python3 tools/dev/feedback.py            the message, from a [QA] player
 //   python3 tools/dev/purge_test_players.py purge --apply
-import 'package:card_jigsaw_world/app.dart';
-import 'package:card_jigsaw_world/core/sfx.dart';
-import 'package:card_jigsaw_world/data/local_store.dart';
-import 'package:card_jigsaw_world/state/settings.dart';
+import 'package:carden/app.dart';
+import 'package:carden/core/sfx.dart';
+import 'package:carden/data/local_store.dart';
+import 'package:carden/state/settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -46,7 +46,7 @@ void main() {
     final store = await LocalStore.open();
     Sfx.instance.soundEnabled = false;
     Sfx.instance.musicEnabled = false;
-    await tester.pumpWidget(ProviderScope(overrides: [localStoreProvider.overrideWithValue(store)], child: const CardJigsawApp()));
+    await tester.pumpWidget(ProviderScope(overrides: [localStoreProvider.overrideWithValue(store)], child: const CardenApp()));
     await settle(tester, 1500);
     await tapText(tester, 'Continue');
     await tapText(tester, 'Continue');

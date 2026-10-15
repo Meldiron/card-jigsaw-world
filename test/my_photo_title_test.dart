@@ -1,4 +1,4 @@
-import 'package:card_jigsaw_world/models/models.dart';
+import 'package:carden/models/models.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

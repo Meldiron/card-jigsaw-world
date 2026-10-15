@@ -23,14 +23,14 @@ import 'state/settings.dart';
 import 'state/sync.dart';
 import 'widgets/ui.dart';
 
-class CardJigsawApp extends ConsumerStatefulWidget {
-  const CardJigsawApp({super.key});
+class CardenApp extends ConsumerStatefulWidget {
+  const CardenApp({super.key});
 
   @override
-  ConsumerState<CardJigsawApp> createState() => _CardJigsawAppState();
+  ConsumerState<CardenApp> createState() => _CardenAppState();
 }
 
-class _CardJigsawAppState extends ConsumerState<CardJigsawApp> with WidgetsBindingObserver {
+class _CardenAppState extends ConsumerState<CardenApp> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
@@ -87,7 +87,7 @@ class _CardJigsawAppState extends ConsumerState<CardJigsawApp> with WidgetsBindi
     });
   }
 
-  /// Links opened from outside the app on iPhone (the `cardjigsaw://` scheme, universal links to
+  /// Links opened from outside the app on iPhone (the `carden://` scheme, universal links to
   /// the web site, the widget) reach this observer before the router's: [DeepLinks] shows them,
   /// with Home beneath a sheet or a page that opens above the tabs. Other schemes (the Appwrite
   /// sign-in redirect) go on to the router. On the web the link is the address the visit starts
@@ -129,7 +129,7 @@ class _CardJigsawAppState extends ConsumerState<CardJigsawApp> with WidgetsBindi
     final settings = ref.watch(settingsProvider);
     final router = ref.watch(routerProvider);
     return MaterialApp.router(
-      title: 'Card Jigsaw World',
+      title: 'Carden',
       debugShowCheckedModeBanner: false,
       scaffoldMessengerKey: appMessengerKey,
       theme: AppTheme.light(),
