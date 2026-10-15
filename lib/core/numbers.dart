@@ -26,3 +26,29 @@ String formatCount(int v) {
 /// A count with its noun: `1 ticket`, `3 tickets`, `12,000 coins`.
 /// [many] defaults to [one] + "s".
 String countOf(int n, String one, [String? many]) => '${formatCount(n)} ${n == 1 ? one : (many ?? '${one}s')}';
+
+/// A count short enough for a tight spot (the header pills): exact and grouped up to 99,999, then
+/// three figures at most: `123K`, `1.23M`, `12.3M`, `123M`, `1.23B`. Always rounded down, so it
+/// never shows more than there is (235,999 -> `235K`, 1,239,999 -> `1.23M`).
+String compactCount(int v) {
+  final a = v.abs();
+  final sign = v < 0 ? '-' : '';
+  if (a < 100000) return formatCount(v);
+  if (a < 1000000) return '$sign${a ~/ 1000}K';
+  // Three significant figures, cut (not rounded) and without trailing zeros: 1.20M -> 1.2M.
+  String cut(int unit, String suffix) {
+    final whole = a ~/ unit;
+    final decimals = whole < 10 ? 2 : (whole < 100 ? 1 : 0);
+    if (decimals == 0) return '$sign$whole$suffix';
+    final step = unit ~/ (decimals == 2 ? 100 : 10);
+    final frac = (a % unit) ~/ step;
+    var f = frac.toString().padLeft(decimals, '0');
+    while (f.isNotEmpty && f.endsWith('0')) {
+      f = f.substring(0, f.length - 1);
+    }
+    return '$sign$whole${f.isEmpty ? '' : '.$f'}$suffix';
+  }
+
+  if (a < 1000000000) return cut(1000000, 'M');
+  return cut(1000000000, 'B');
+}

@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -8,10 +10,10 @@ import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 
-/// Top bar shared by tabs: avatar + level on the left, tickets and coins on
-/// the right. As a sliver it stays pinned and turns to glass once the page
-/// scrolls under it; `sliver: false` gives a plain box for non-scrolling
-/// layouts.
+/// Top bar shared by tabs: the avatar inside a ring that fills with the level's XP (the level
+/// number in a badge on the ring) on the left, tickets and coins on the right. As a sliver it
+/// stays pinned and turns to glass once the page scrolls under it; `sliver: false` gives a plain
+/// box for non-scrolling layouts.
 class HeaderBar extends ConsumerWidget {
   const HeaderBar({super.key, required this.title, this.sliver = true});
   final String title;
@@ -24,42 +26,29 @@ class HeaderBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) => ChromeText(child: Builder(builder: (context) => _build(context, ref)));
 
   Widget _build(BuildContext context, WidgetRef ref) {
-    final c = context.colors;
     final profile = ref.watch(profileProvider).value;
+    final level = profile?.level ?? 1;
     final row = Padding(
-      // The row is 44 pt high (the pills' touch boxes); the bar keeps its 50 pt height.
-      padding: const EdgeInsets.fromLTRB(20, 4, 20, 2),
+      // The row is 44 pt high (the pills' touch boxes); the bar keeps its 50 pt height. The level
+      // badge hangs below the ring, so the row sits 1 pt above the bar's middle and the badge
+      // stays 2 pt clear of the bar's bottom edge.
+      padding: const EdgeInsets.fromLTRB(20, 2, 20, 4),
       child: Row(
         children: [
           Pressable(
             onTap: () => context.go('/profile'),
-            child: TapTarget(
-              child: Row(
-              children: [
-                AvatarCircle(avatarKey: profile?.avatar, size: 38),
-                const SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('LV ${profile?.level ?? 1}', style: TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.footnote, letterSpacing: -0.2, color: c.textPrimary)),
-                    const SizedBox(height: 4),
-                    SizedBox(width: 56, child: ProgressBar(value: profile?.levelProgress ?? 0, height: 4)),
-                  ],
-                ),
-              ],
-            ),
+            child: Semantics(
+              button: true,
+              label: 'Level $level, profile',
+              child: TapTarget(child: LevelAvatar(avatar: profile?.avatar, level: level, progress: profile?.levelProgress ?? 0)),
             ),
           ),
-          const SizedBox(width: 12),
-          // Balances too long for the bar shrink the capsule a little instead of pushing it off screen.
-          Expanded(
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              alignment: Alignment.centerRight,
-              child: _BalancePill(tickets: profile?.tickets ?? 0, coins: profile?.coins ?? 0, onTap: () => context.push('/store')),
-            ),
-          ),
+          const Spacer(),
+          // Balances from 100,000 are written short ("123K", "1.23M"), so the pills never push off
+          // the screen; the exact numbers are in the Store.
+          CurrencyPill(currency: Currency.tickets, value: profile?.tickets ?? 0, abbreviate: true, onAdd: () => context.push('/store')),
+          const SizedBox(width: 8),
+          CurrencyPill(currency: Currency.coins, value: profile?.coins ?? 0, abbreviate: true, onAdd: () => context.push('/store')),
         ],
       ),
     );
@@ -68,52 +57,88 @@ class HeaderBar extends ConsumerWidget {
   }
 }
 
-/// Tickets and coins in one capsule with one "+" (both lead to the Store). Two pills with a "+"
-/// each repeated the same action and took the width long balances need.
-class _BalancePill extends StatelessWidget {
-  const _BalancePill({required this.tickets, required this.coins, required this.onTap});
-  final int tickets;
-  final int coins;
-  final VoidCallback onTap;
+/// The player's avatar inside a ring that fills with the level's XP, the level number in a
+/// small cobalt badge on the ring's lower edge: level and progress at a glance, in a third of
+/// the width the "LV 5" label and bar took.
+class LevelAvatar extends StatelessWidget {
+  const LevelAvatar({super.key, required this.avatar, required this.level, required this.progress, this.size = 40});
+  final String? avatar;
+  final int level;
+
+  /// XP into the level, 0..1.
+  final double progress;
+  final double size;
 
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    final number = TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body, color: c.textPrimary, letterSpacing: -0.2);
-    return Pressable(
-      onTap: onTap,
-      scale: 0.95,
-      child: Semantics(
-        button: true,
-        label: '${countOf(tickets, 'ticket')}, ${countOf(coins, 'coin')}, open the Store',
-        // 168: a 44 pt touch box around the 34 pt capsule; the bar keeps its 50 pt height.
-        child: TapTarget(
-          child: Container(
-          height: 34,
-          padding: const EdgeInsets.only(left: 10, right: 5),
-          decoration: BoxDecoration(color: c.card, borderRadius: BorderRadius.circular(Radii.pill), border: Border.all(color: c.stroke)),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              currencyIcon(Currency.tickets, size: 16),
-              const SizedBox(width: 5),
-              AnimatedCounter(value: tickets, style: number),
-              Container(width: 1, height: 16, margin: const EdgeInsets.symmetric(horizontal: 10), color: c.stroke),
-              currencyIcon(Currency.coins, size: 16),
-              const SizedBox(width: 5),
-              AnimatedCounter(value: coins, style: number),
-              const SizedBox(width: 8),
-              Container(
-                width: 24,
-                height: 24,
-                decoration: BoxDecoration(color: c.accentTint, shape: BoxShape.circle),
-                child: Icon(AppIcons.plus, size: 14, color: context.accent),
-              ),
-            ],
+    // The badge is cut out of what is behind it (the bar's canvas) by a ring of that colour.
+    final cutout = c.canvas;
+    return SizedBox.square(
+      dimension: size,
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          Positioned.fill(
+            child: TweenAnimationBuilder<double>(
+              tween: Tween(end: progress.clamp(0, 1).toDouble()),
+              duration: const Duration(milliseconds: 700),
+              curve: Curves.easeOutCubic,
+              builder: (_, v, _) => CustomPaint(painter: _RingPainter(value: v, track: c.stroke, fill: context.accent)),
+            ),
           ),
-        ),
-        ),
+          AvatarCircle(avatarKey: avatar, size: size - 9),
+          Positioned(
+            bottom: -4,
+            child: Container(
+              height: 16,
+              constraints: const BoxConstraints(minWidth: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 4.5),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: context.accentFill,
+                borderRadius: BorderRadius.circular(Radii.pill),
+                border: Border.all(color: cutout, width: 1.5),
+              ),
+              child: Text(
+                formatCount(level),
+                style: TextStyle(color: context.onAccent, fontSize: TypeSize.micro, fontWeight: FontWeight.w700, height: 1.1, letterSpacing: -0.2),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
+}
+
+class _RingPainter extends CustomPainter {
+  _RingPainter({required this.value, required this.track, required this.fill});
+  final double value;
+  final Color track;
+  final Color fill;
+
+  static const stroke = 3.0;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final rect = (Offset.zero & size).deflate(stroke / 2);
+    canvas.drawArc(rect, 0, 2 * math.pi, false, Paint()..style = PaintingStyle.stroke..strokeWidth = stroke..color = track);
+    if (value <= 0) return;
+    canvas.drawArc(
+      rect,
+      -math.pi / 2,
+      2 * math.pi * value,
+      false,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = stroke
+        ..strokeCap = StrokeCap.round
+        ..color = fill,
+    );
+  }
+
+  @override
+  bool shouldRepaint(_RingPainter o) => o.value != value || o.track != track || o.fill != fill;
 }
