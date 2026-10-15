@@ -21,6 +21,7 @@ import 'package:card_jigsaw_world/state/catalog.dart';
 import 'package:card_jigsaw_world/widgets/icons.dart';
 import 'package:card_jigsaw_world/widgets/ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 typedef Hook = Future<void> Function(BuildContext context, ProviderContainer c, Map<String, dynamic> args);
@@ -54,6 +55,8 @@ PuzzleProgress _row(String puzzleId, {required List<int> layout, int moves = 20,
     });
 
 final hooks = <String, Hook>{
+  // Shows the status bar again (a variant that hides it leaves it hidden across hot restarts).
+  'statusBar': (ctx, c, a) async => SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge),
   'alert': (ctx, c, a) => showAppAlert(
         ctx,
         title: a['title'] as String? ?? 'Discard progress?',
