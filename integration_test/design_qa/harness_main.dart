@@ -80,6 +80,9 @@ class _DqaRootState extends State<DqaRoot> {
   /// bigger simulator. Crop the screenshot to 375x667 pt.
   String? _emulate;
 
+  /// `"textScale": 1.2` in a scene: the system text size (the app clamps it to 0.9-1.2).
+  double? _textScale;
+
   @override
   void initState() {
     super.initState();
@@ -124,6 +127,7 @@ class _DqaRootState extends State<DqaRoot> {
       _container = container;
       _appKey = UniqueKey();
       _emulate = scene['emulate'] as String?;
+      _textScale = (scene['textScale'] as num?)?.toDouble();
     });
     await WidgetsBinding.instance.endOfFrame;
     final out = <String, dynamic>{'nonce': scene['nonce'], 'scene': scene['id']};
@@ -159,9 +163,11 @@ class _DqaRootState extends State<DqaRoot> {
   Widget build(BuildContext context) {
     final c = _container;
     if (c == null) return const ColoredBox(color: Colors.black);
-    final app = UncontrolledProviderScope(container: c, child: CardJigsawApp(key: _appKey));
-    if (_emulate != 'se') return app;
     final mq = MediaQuery.of(context);
+    final scale = _textScale;
+    Widget app = UncontrolledProviderScope(container: c, child: CardJigsawApp(key: _appKey));
+    if (scale != null) app = MediaQuery(data: mq.copyWith(textScaler: TextScaler.linear(scale)), child: app);
+    if (_emulate != 'se') return app;
     const size = Size(375, 667);
     const pad = EdgeInsets.only(top: 20);
     return ColoredBox(
@@ -170,7 +176,10 @@ class _DqaRootState extends State<DqaRoot> {
         alignment: Alignment.topLeft,
         child: SizedBox.fromSize(
           size: size,
-          child: MediaQuery(data: mq.copyWith(size: size, padding: pad, viewPadding: pad), child: app),
+          child: MediaQuery(
+            data: mq.copyWith(size: size, padding: pad, viewPadding: pad, textScaler: scale == null ? mq.textScaler : TextScaler.linear(scale)),
+            child: app,
+          ),
         ),
       ),
     );
