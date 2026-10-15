@@ -154,6 +154,7 @@ cheap farming trick to worry about; replays pay 40% and are not worth farming.
 | Magic Lock | 300 coins (was 120) | `Economy.magicLockCostCoins` |
 | Peek | 10 coins on every board (was 75; owner, 2026-10-14), or one from stock (Lucky Wheel prize) | `Economy.peekCostCoins` |
 | Early board tier (before its level) | `600 + 300 x tier`: 1,500 / 1,800 / 2,100 / 2,400 / 2,700 for tiers 3 to 7 (levels 2, 3, 5, 7, 10) | `Economy.tierUnlockCoins` |
+| Giant boards before level 10 (with a Giant pack) | the pack's price (12 tickets) plus 1 ticket for every level to go: level 7 pays 12 + 3, level 1 pays 12 + 9; a player who has the pack (VIP) pays the levels only; paid once, giant boards then stay open (owner, 2026-10-15) | `Economy.giantEarlyFee`, `ProfileNotifier.openGiantEarly` (key `early:giant` in `profiles.unlockedTiers`) |
 | Avatars (28 for coins) | 900 coins each, 25,200 for all | `Economy.avatarCoins` |
 | Lucky Wheel spin | 1 ticket | `Economy.wheelSpinTickets` |
 | Opening the piggy bank | 1 ticket | `Economy.piggyOpenTickets` |
@@ -606,7 +607,10 @@ VIP 1), so the totals above still hold. What changed is which quest fills a slot
 Shapes and options open as levels rise (`Unlocks.levels` in `lib/state/rewards.dart`): Squares at
 level 2, Triangles 4, Hexagons 6, Painting 8, giant boards 10. A player who plays about 20 minutes a day
 earns roughly 1,000 XP a day, so the first comes after the second picture and the rest about a day apart.
-Anything a player already used (a board finished or in progress) stays open whatever the level. A
+Anything a player already used (a board finished or in progress) stays open whatever the level.
+Giant boards can also be opened early from a Giant pack's page: the pack's price plus 1 ticket for
+every level still to go (see "Everything players can spend on"); before that the pack is not sold
+at its plain price, since nothing in it could be played. A
 quest never asks for something locked: the shape or Painting quest falls back to "Lock 5 cards in one
 move", and a slot keeps the quest already claimed in it, so a level-up that changes the pick never pays
 twice.

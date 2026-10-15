@@ -2,6 +2,7 @@ import 'package:appwrite/models.dart' as models;
 import 'package:card_jigsaw_world/core/theme/app_theme.dart';
 import 'package:card_jigsaw_world/core/theme/tokens.dart';
 import 'package:card_jigsaw_world/data/local_store.dart';
+import 'package:card_jigsaw_world/features/gallery/giant_gate.dart';
 import 'package:card_jigsaw_world/features/gallery/library_screen.dart';
 import 'package:card_jigsaw_world/features/gallery/pack_progress.dart';
 import 'package:card_jigsaw_world/models/models.dart';
@@ -9,6 +10,7 @@ import 'package:card_jigsaw_world/state/auth.dart';
 import 'package:card_jigsaw_world/state/catalog.dart';
 import 'package:card_jigsaw_world/state/profile.dart';
 import 'package:card_jigsaw_world/state/progress.dart';
+import 'package:card_jigsaw_world/state/rewards.dart';
 import 'package:card_jigsaw_world/state/settings.dart';
 import 'package:card_jigsaw_world/widgets/icons.dart';
 import 'package:card_jigsaw_world/widgets/ui.dart';
@@ -261,6 +263,41 @@ void main() {
     testWidgets('a ticket on a plain surface or a ghost button keeps its colours', (tester) async {
       expect(await inkOf(tester, BigButton.cost(label: 'Spin for', currency: Currency.tickets, amount: 1, kind: ButtonKind.ghost, onTap: () {})), isNull);
       expect(await inkOf(tester, const Amount(currency: Currency.tickets, value: 3)), isNull);
+    });
+  });
+
+  group('Giant pack gate (027)', () {
+    Future<void> pumpGate(WidgetTester tester, GiantGate gate, {VoidCallback? onOpenNow}) async {
+      tester.view.physicalSize = const Size(375, 900);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      await tester.pumpWidget(MaterialApp(theme: AppTheme.light(), home: Scaffold(body: Padding(padding: const EdgeInsets.all(20), child: GiantGateCard(gate: gate, onOpenNow: onOpenNow ?? () {})))));
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('level 5: at level 10 for the usual 12, or now for 12 + 5, side by side', (tester) async {
+      var tapped = false;
+      final xp = LevelRewards.xpToReach(5);
+      await pumpGate(tester, GiantGate(xp: xp, price: 12 + Economy.giantEarlyFee(5), packTickets: 12, owned: false, balance: 4), onOpenNow: () => tapped = true);
+      expect(find.text('Giant boards open at level 10'), findsOneWidget);
+      expect(find.text('Level 5'), findsOneWidget);
+      expect(find.text('At level 10'), findsOneWidget);
+      expect(find.text('The usual price'), findsOneWidget);
+      expect(find.text('Now'), findsOneWidget);
+      expect(find.text('5 levels early'), findsOneWidget);
+      expect(find.text('17'), findsNWidgets(2), reason: 'the Now tile and the button');
+      expect(find.text('You have 4 tickets'), findsOneWidget);
+      await tester.tap(find.byKey(const ValueKey('giant-open-now')));
+      expect(tapped, isTrue);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('a pack the player has (VIP): the wait is included, now costs the levels only', (tester) async {
+      await pumpGate(tester, GiantGate(xp: LevelRewards.xpToReach(9), price: Economy.giantEarlyFee(9), packTickets: 0, owned: true, balance: 20));
+      expect(find.text('Included'), findsOneWidget);
+      expect(find.text('1 level early'), findsOneWidget);
+      expect(find.textContaining('You have'), findsNothing);
+      expect(tester.takeException(), isNull);
     });
   });
 }

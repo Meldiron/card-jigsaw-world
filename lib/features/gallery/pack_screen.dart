@@ -19,7 +19,7 @@ import '../../state/unlocks.dart';
 import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
-import '../game/unlock_intro.dart' show showLockedInfo;
+import 'giant_gate.dart';
 import 'pack_progress.dart';
 
 /// Pack detail: image hero, access state, and a grid of puzzles with stars.
@@ -131,7 +131,7 @@ class PackScreen extends ConsumerWidget {
             ),
             title: _CollapsedTitle(
               pack.name,
-              subtitle: !unlocked ? 'Locked' : (packProgress.complete ? 'Finished · ${packProgress.stars} of ${packProgress.maxStars} stars' : '${packProgress.solved} of ${packProgress.total} solved'),
+              subtitle: giantClosed ? 'Opens at level ${Unlock.giant.level}' : !unlocked ? 'Locked' : (packProgress.complete ? 'Finished · ${packProgress.stars} of ${packProgress.maxStars} stars' : '${packProgress.solved} of ${packProgress.total} solved'),
             ),
             flexibleSpace: _CollapsedGlass(
               child: FlexibleSpaceBar(
@@ -197,7 +197,7 @@ class PackScreen extends ConsumerWidget {
                 children: [
                   // A locked pack leads with the way in; the description and stats follow.
                   if (giantClosed) ...[
-                    _GiantGateCard(xp: profile?.xp ?? 0, owned: unlocked).animate().fadeIn().slideY(begin: 0.1),
+                    GiantGateCard(gate: GiantGate.of(ref, pack), onOpenNow: () => openGiantEarly(context, ref, pack)).animate().fadeIn().slideY(begin: 0.1),
                     const SizedBox(height: 16),
                   ] else if (!unlocked) ...[
                     _accessCard(context, pack, priceCurrency, priceValue, balance, goVip, unlock, getMore).animate().fadeIn().slideY(begin: 0.1),
@@ -230,7 +230,7 @@ class PackScreen extends ConsumerWidget {
                         children: [
                           Icon(AppIcons.bigBoard, color: context.accent, size: 18),
                           const SizedBox(width: 6),
-                          Expanded(child: Text('Giant boards of 100 to 300 cards · pinch to zoom', style: TextStyle(color: c.textSecondary, fontWeight: FontWeight.w500))),
+                          Expanded(child: Text('Boards of 100 to 300 cards · pinch to zoom', style: TextStyle(color: c.textSecondary, fontWeight: FontWeight.w500))),
                         ],
                       )
                     else if (pack.isDaily && list.any((p) => p.isToday))
@@ -306,7 +306,7 @@ class PackScreen extends ConsumerWidget {
                       }
                       if (giantClosed) {
                         Haptics.medium();
-                        showLockedInfo(context, ref, Unlock.giant);
+                        showGiantGateSheet(context, ref, pack);
                         return;
                       }
                       if (!unlocked) {
@@ -586,58 +586,6 @@ class _AccessCard extends StatelessWidget {
             const SizedBox(height: 14),
             BigButton(label: ghost!.$1, kind: ButtonKind.ghost, onTap: ghost!.$2),
           ],
-        ],
-      ),
-    );
-  }
-}
-
-/// A Giant pack before giant boards open: what the pack is, the level it
-/// needs and how far the player is, and no price yet.
-class _GiantGateCard extends StatelessWidget {
-  const _GiantGateCard({required this.xp, this.owned = false});
-  final int xp;
-
-  /// Already unlocked (bought before this gate existed, or with VIP): no price to come.
-  final bool owned;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.colors;
-    final need = LevelRewards.xpToReach(Unlock.giant.level);
-    final level = LevelRewards.levelForXp(xp);
-    return SoftCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const IconTile(icon: AppIcons.bigBoard, size: IconTile.medium),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Opens at level ${Unlock.giant.level}', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body, letterSpacing: -0.2)),
-                    const SizedBox(height: 2),
-                    Text(owned ? 'A Giant pack: every picture is a board of 100 to 300 cards. It is yours; its boards open at level ${Unlock.giant.level}.' : 'A Giant pack: every picture is a board of 100 to 300 cards. You can unlock it once giant boards open.', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote, height: 1.35)),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 14),
-          Row(
-            children: [
-              Text('Level $level', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body)),
-              Text(' of ${Unlock.giant.level}', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.body)),
-              const Spacer(),
-              Text('${formatCount((need - xp).clamp(0, need))} XP to go', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote)),
-            ],
-          ),
-          const SizedBox(height: 8),
-          ProgressBar(value: need == 0 ? 1 : (xp / need).clamp(0.0, 1.0), height: 6),
         ],
       ),
     );

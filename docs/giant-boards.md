@@ -6,6 +6,14 @@ pictures are hosted at up to 4096 px on the long side and decoded at full size, 
 zoomed in and stay sharp. This page records how other big-board jigsaw apps help players on a phone
 and what Card Jigsaw World does on a giant board.
 
+Giant boards open at level 10 (`Unlock.giant`). Before that a Giant pack's page shows the gate
+(`GiantGateCard`, `lib/features/gallery/giant_gate.dart`): the way to level 10, and two ways in side
+by side, "At level 10" for the pack's usual price or "Now" for that price plus 1 ticket for every
+level to go (`Economy.giantEarlyFee`). Opening now buys the pack and records `early:giant` in
+`profiles.unlockedTiers`, which `OpenFeatures.forPlayer` reads, so giant boards stay open on every
+device. The Library card says "Opens at level 10", and a picture of the pack (a tile, a search
+result, a link, the difficulty screen's locked button) leads to the gate.
+
 ## What other games do (research, October 2026)
 
 | App | What it offers for big puzzles | Source |

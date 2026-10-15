@@ -10,6 +10,7 @@ import 'package:card_jigsaw_world/models/models.dart';
 import 'package:card_jigsaw_world/state/profile.dart';
 import 'package:card_jigsaw_world/state/rewards.dart';
 import 'package:card_jigsaw_world/state/sync.dart';
+import 'package:card_jigsaw_world/state/unlocks.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'support/fake_sync.dart';
@@ -385,6 +386,40 @@ void main() {
     expect(row['coins'], 100);
     expect(phone.me.unlockedPacks, ['pa']);
     expect(phone.container.read(syncNoticeProvider).skipped, [SkipReason.notEnough]);
+  });
+
+  test('giant boards opened early: one payment for the pack and the wait, open on every device', () async {
+    final server = FakeServer();
+    final user = testUser('player-giant');
+    final houses = Pack.fromRow('houses', {'name': 'Colourful Houses', 'category': 'Giant', 'priceTickets': 12, 'imageCount': 24});
+    final phone = await Device(server, user, packs: [houses]).open();
+    final laptop = await Device(server, user, packs: [houses]).open();
+    addTearDown(phone.close);
+    addTearDown(laptop.close);
+    await phone.profile.addTickets(30, reason: 'test');
+    await phone.settle();
+    final before = server.profiles['player-giant']!['tickets'] as int;
+    final level = phone.me.level;
+    expect(level, lessThan(Unlock.giant.level));
+    expect(phone.container.read(openFeaturesProvider).giant, isFalse);
+    final price = 12 + Economy.giantEarlyFee(level);
+    expect(phone.profile.giantEarlyPrice(houses), price);
+
+    expect(await phone.profile.openGiantEarly(houses), isTrue);
+    expect(phone.container.read(openFeaturesProvider).giant, isTrue, reason: 'open on this device at once');
+    expect(phone.profile.isUnlocked(houses), isTrue);
+    await phone.settle();
+    final row = server.profiles['player-giant']!;
+    expect(row['tickets'], before - price);
+    expect(row['unlockedPacks'], contains('houses'));
+    expect(row['unlockedTiers'], contains(Unlocks.earlyKey(Unlock.giant)));
+    final spent = server.ledger.values.where((l) => l['currency'] == 'tickets' && (l['amount'] as num) < 0).map((l) => (l['reason'], l['amount'])).toList();
+    expect(spent, containsAll([('unlock:houses', -12), (Unlocks.earlyKey(Unlock.giant), -Economy.giantEarlyFee(level))]));
+
+    await laptop.resume();
+    expect(laptop.container.read(openFeaturesProvider).giant, isTrue);
+    // Paid once: nothing is left to pay for this pack.
+    expect(laptop.profile.giantEarlyPrice(houses), 0);
   });
 
   test('an event step whose answer was lost counts once', () async {

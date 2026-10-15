@@ -9,10 +9,12 @@ import '../../core/app_links.dart';
 import '../../models/models.dart';
 import '../../router.dart';
 import '../../state/catalog.dart';
+import '../../state/giant.dart';
 import '../../state/profile.dart';
 import '../../state/progress.dart';
 import '../../state/quick_play.dart';
 import '../../state/settings.dart';
+import '../../state/unlocks.dart';
 import '../daily/daily_reward_sheet.dart';
 import '../daily/piggy_sheet.dart';
 import '../gallery/library_screen.dart';
@@ -150,6 +152,8 @@ class DeepLinks {
     final pack = (_ref.read(packsProvider).value ?? const <Pack>[]).where((p) => p.id == puzzle.packId).firstOrNull;
     if (pack == null || puzzle.isLockedByDate) return puzzle.packId;
     if (_ref.read(profileProvider).value == null) return puzzle.packId;
+    // A Giant pack's picture before giant boards open: the pack page explains the gate (027).
+    if (isGiantPack(pack) && !_ref.read(openFeaturesProvider).giant) return pack.id;
     return _ref.read(profileProvider.notifier).isUnlocked(pack) ? null : pack.id;
   }
 

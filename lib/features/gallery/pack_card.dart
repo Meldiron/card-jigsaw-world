@@ -3,8 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/theme/tokens.dart';
 import '../../models/models.dart';
+import '../../state/giant.dart';
 import '../../state/profile.dart';
+import '../../state/rewards.dart';
 import '../../state/starter_packs.dart';
+import '../../state/unlocks.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 import 'pack_progress.dart';
@@ -25,6 +28,9 @@ class PackCard extends ConsumerWidget {
     final vip = profile?.isVip ?? false;
     final showLock = !unlocked && !vip && !pack.hasWindow;
     final progress = ref.watch(packProgressProvider(pack.id));
+    // A Giant pack before giant boards open says when it opens instead of a price (027): its
+    // page offers the early opening.
+    final giantClosed = isGiantPack(pack) && !ref.watch(openFeaturesProvider).giant;
 
     return Pressable(
       onTap: onTap,
@@ -82,7 +88,20 @@ class PackCard extends ConsumerWidget {
                   const SizedBox(height: 6),
                   // A locked pack shows its price where an open one shows its progress (0/24 says
                   // nothing yet), so the photo carries one chip, the category.
-                  if (showLock)
+                  if (giantClosed)
+                    SizedBox(
+                      height: 16,
+                      child: Row(
+                        children: [
+                          Icon(AppIcons.lock, size: 12, color: c.textSecondary),
+                          const SizedBox(width: 6),
+                          Flexible(
+                            child: Text('Opens at level ${Unlock.giant.level}', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote, fontWeight: FontWeight.w600)),
+                          ),
+                        ],
+                      ),
+                    )
+                  else if (showLock)
                     SizedBox(
                       height: 16,
                       child: Row(

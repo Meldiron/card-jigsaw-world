@@ -7,13 +7,14 @@ import 'rewards.dart';
 import 'settings.dart';
 
 /// What the player can pick now: the shapes, Painting and giant boards their level has reached,
-/// plus anything they already used (see [OpenFeatures.forPlayer]). Before the profile loads
-/// everything counts as open, so a slow start never locks a board the player is used to.
+/// plus anything they already used or opened early with tickets (see [OpenFeatures.forPlayer]).
+/// Before the profile loads everything counts as open, so a slow start never locks a board the
+/// player is used to.
 final openFeaturesProvider = Provider<OpenFeatures>((ref) {
   final profile = ref.watch(profileProvider).value;
   if (profile == null) return OpenFeatures.all;
   final rows = ref.watch(progressProvider).value?.values ?? const <PuzzleProgress>[];
-  return OpenFeatures.forPlayer(level: profile.level, progress: rows, solvedByMode: profile.solvedByMode);
+  return OpenFeatures.forPlayer(level: profile.level, progress: rows, solvedByMode: profile.solvedByMode, unlockedTiers: profile.unlockedTiers);
 });
 
 /// Unlocks whose one-screen intro was shown on this device.

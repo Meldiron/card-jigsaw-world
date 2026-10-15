@@ -195,12 +195,14 @@ void main() {
     final packs = [
       Pack.fromRow('free', {'name': 'Free pack', 'category': 'Nature', 'imageCount': 2, 'isFree': true}),
       Pack.fromRow('owls', {'name': 'Owls', 'category': 'Animals', 'imageCount': 2, 'isFree': false, 'priceCoins': 2000}),
+      Pack.fromRow('houses', {'name': 'Colourful Houses', 'category': 'Giant', 'imageCount': 1, 'isFree': true}),
     ];
     final now = DateTime.now();
     final pictures = [
       Puzzle.fromRow('free-1', {'packId': 'free', 'title': 'Fields', 'imageUrl': 'https://example.invalid/1.jpg', 'date': DateTime(now.year, now.month, now.day).toIso8601String()}),
       Puzzle.fromRow('free-2', {'packId': 'free', 'title': 'Hills', 'imageUrl': 'https://example.invalid/2.jpg'}),
       Puzzle.fromRow('owls-1', {'packId': 'owls', 'title': 'Barn owl', 'imageUrl': 'https://example.invalid/3.jpg'}),
+      Puzzle.fromRow('houses-1', {'packId': 'houses', 'title': 'Canal houses', 'imageUrl': 'https://example.invalid/4.jpg'}),
     ];
 
     Future<(ProviderContainer, GoRouter)> pump(WidgetTester tester, {bool onboarded = true}) async {
@@ -303,6 +305,8 @@ void main() {
       expect(top(router), '/library/pack/owls', reason: 'it opened above what was on screen');
       await open(tester, container, '/play/unknown-id');
       expect(top(router), '/play/unknown-id', reason: 'the picture screen says it is not available');
+      await open(tester, container, '/play/houses-1');
+      expect(top(router), '/library/pack/houses', reason: 'giant boards open at level 10: the pack shows the gate');
     });
 
     testWidgets("today's picture and Quick play", (tester) async {

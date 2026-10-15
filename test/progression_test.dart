@@ -6,6 +6,7 @@ import 'package:card_jigsaw_world/game/board.dart';
 import 'package:card_jigsaw_world/game/game_controller.dart';
 import 'package:card_jigsaw_world/models/models.dart';
 import 'package:card_jigsaw_world/state/merge.dart';
+import 'package:card_jigsaw_world/state/profile.dart';
 import 'package:card_jigsaw_world/state/rewards.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -67,6 +68,25 @@ void main() {
       expect(OpenFeatures.forPlayer(level: 1, solvedByMode: {'triangles': 2}).mode(GameMode.triangles), isTrue);
       // Rows with nothing played (a discarded board) do not.
       expect(OpenFeatures.forPlayer(level: 1, progress: [_row('d', mode: 'squares')]).mode(GameMode.squares), isFalse);
+    });
+
+    test('giant boards opened early with tickets are open at any level; nothing else is', () {
+      final early = OpenFeatures.forPlayer(level: 3, unlockedTiers: [Unlocks.earlyKey(Unlock.giant), 'cards:4']);
+      expect(early.giant, isTrue);
+      expect(early.painting, isFalse);
+      expect(early.mode(GameMode.hexagons), isFalse);
+      expect(early.used, isEmpty, reason: 'bought, not played: the intro still greets the first giant board');
+      // Early board tiers (`<mode>:<index>`) share the list and open no feature.
+      expect(OpenFeatures.forPlayer(level: 3, unlockedTiers: ['cards:4', 'squares:5']).giant, isFalse);
+    });
+
+    test('opening giant boards early: the usual price plus 1 ticket a level to go', () {
+      expect(Economy.giantEarlyTicketsPerLevel, 1);
+      expect(Economy.giantEarlyFee(7), 3, reason: 'level 7: 12 + 3 = 15 for a 12-ticket pack');
+      expect(Economy.giantEarlyFee(1), 9);
+      expect(Economy.giantEarlyFee(9), 1);
+      expect(Economy.giantEarlyFee(10), 0);
+      expect(Economy.giantEarlyFee(24), 0);
     });
 
     test('level rewards name what opens', () {

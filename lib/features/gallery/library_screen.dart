@@ -7,10 +7,12 @@ import 'package:go_router/go_router.dart';
 import '../../core/theme/tokens.dart';
 import '../../models/models.dart';
 import '../../state/catalog.dart';
+import '../../state/giant.dart';
 import '../../state/profile.dart';
 import '../../state/progress.dart';
 import '../../state/settings.dart';
 import '../../state/starter_packs.dart';
+import '../../state/unlocks.dart';
 import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
@@ -479,7 +481,10 @@ class _PictureRow extends ConsumerWidget {
     ref.watch(profileProvider);
     final pack = this.pack;
     if (pack != null && formerlyFreePacks.contains(pack.id)) ref.watch(playedPacksProvider); // stays open once played
-    final open = pack != null && ref.read(profileProvider.notifier).isUnlocked(pack) && !puzzle.isLockedByDate;
+    // A Giant pack's picture before giant boards open shows its pack, where the gate explains
+    // level 10 and the early opening.
+    final giantClosed = pack != null && isGiantPack(pack) && !ref.watch(openFeaturesProvider).giant;
+    final open = pack != null && ref.read(profileProvider.notifier).isUnlocked(pack) && !puzzle.isLockedByDate && !giantClosed;
     final saved = ref.watch(progressProvider.select((m) => m.value?[puzzle.id]));
     final stars = saved != null && saved.completed ? saved.stars : 0;
     return Pressable(
