@@ -795,6 +795,45 @@ class PhotoChip extends StatelessWidget {
   }
 }
 
+/// The one round button over a photo (the picture credit on the difficulty
+/// preview, the back button over the finished picture): frosted dark glass
+/// with a hairline and a white mark, the [PhotoChip]'s material, so it reads
+/// on light and dark photos alike. Drawn at [size], tapped in 44 pt.
+class PhotoButton extends StatelessWidget {
+  const PhotoButton({super.key, required this.icon, required this.onTap, this.size = 36, this.semanticLabel});
+  final IconData icon;
+  final VoidCallback onTap;
+  final double size;
+  final String? semanticLabel;
+
+  @override
+  Widget build(BuildContext context) => Semantics(
+        button: true,
+        label: semanticLabel,
+        child: Pressable(
+          onTap: onTap,
+          scale: 0.9,
+          child: TapTarget(
+            child: ClipOval(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+                child: Container(
+                  width: size,
+                  height: size,
+                  decoration: BoxDecoration(
+                    color: Colors.black.withValues(alpha: 0.34),
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.2), width: 0.5),
+                  ),
+                  child: Icon(icon, size: size * 0.48, color: Colors.white),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+}
+
 /// The title block every sheet starts with: one title style (20 pt bold) and
 /// one subtitle style (14 pt, secondary), so sheets read as one family.
 /// Sheets that are a list or a choice align it left; sheets that lead with

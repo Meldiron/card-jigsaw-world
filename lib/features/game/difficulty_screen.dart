@@ -139,6 +139,60 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
     stream.addListener(listener);
   }
 
+  /// Who took the picture and where it is from: the credit its licence asks
+  /// for, in full however long it is.
+  Future<void> _showCredit(Puzzle puzzle) => showAppSheet(
+        context,
+        builder: (ctx) {
+          final c = ctx.colors;
+          // The name above the value (the iOS contact-card field), so a long
+          // source or licence wraps under its own name.
+          Widget row(String label, String value) => Padding(
+                padding: const EdgeInsets.fromLTRB(16, 11, 16, 12),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(label, style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w500, color: c.textSecondary)),
+                      const SizedBox(height: 2),
+                      Text(value, style: const TextStyle(fontSize: TypeSize.callout, height: 1.3, fontWeight: FontWeight.w500)),
+                    ],
+                  ),
+                ),
+              );
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    const IconTile(icon: AppIcons.credit, size: IconTile.medium),
+                    const SizedBox(width: 12),
+                    Expanded(child: SheetHeader(title: 'Picture credit', subtitle: puzzle.title)),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                SoftCard(
+                  padding: EdgeInsets.zero,
+                  child: Column(
+                    children: [
+                      row('Photographer', puzzle.author),
+                      Divider(height: 0.5, thickness: 0.5, indent: 16, color: c.stroke),
+                      row('Source', puzzle.source),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                BigButton(label: 'Done', kind: ButtonKind.secondary, onTap: () => Navigator.pop(ctx)),
+              ],
+            ),
+          );
+        },
+      );
+
   Future<void> _discard(PuzzleProgress saved, BoardSpec savedSpec) async {
     final ok = await showAppAlert(
       context,
@@ -410,15 +464,28 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                                           placed: saved?.layout == null ? null : {for (var i = 0; i < saved!.layout!.length; i++) if (saved.layout![i] == i) i},
                                         ),
                                       ),
+                                      // The credit waits behind a small camera button in the corner: the
+                                      // photo and its cut lines stay clear, and a tap shows it in full.
+                                      Positioned(
+                                        right: 0,
+                                        bottom: 0,
+                                        child: PhotoButton(
+                                          key: const ValueKey('picture-credit'),
+                                          icon: AppIcons.credit,
+                                          size: 30,
+                                          semanticLabel: 'Picture credit',
+                                          onTap: () => _showCredit(puzzle),
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
                               ),
                             ),
                           ).animate().fadeIn(duration: 120.ms),
-                          const SizedBox(height: 6),
-                          // A solved picture: its best result, above the credit.
+                          // A solved picture: its best result under the preview.
                           if (progress?.completed == true) ...[
+                            const SizedBox(height: 8),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -430,24 +497,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 2),
                           ],
-                          // The credit the licence asks for, quietly under the picture.
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(AppIcons.credit, size: 12, color: c.textTertiary),
-                              const SizedBox(width: 5),
-                              Flexible(
-                                child: Text(
-                                  '${puzzle.author} · ${puzzle.source}',
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(fontSize: TypeSize.caption, color: c.textTertiary),
-                                ),
-                              ),
-                            ],
-                          ),
                           SizedBox(height: compact ? 14 : 20),
                           // A board in progress: what it is and how far along, instead of
                           // pickers that cannot be used until it is discarded.
