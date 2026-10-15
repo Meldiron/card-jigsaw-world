@@ -412,12 +412,12 @@ VisibleText? findText(String text, {bool contains = false, int index = 0}) {
 
 int _pointer = 1000;
 
-Future<void> tapAt(Offset p) async {
+Future<void> tapAt(Offset p, {int holdMs = 60}) async {
   final id = _pointer++;
   final b = GestureBinding.instance;
   b.handlePointerEvent(PointerAddedEvent(pointer: id, position: p, viewId: _viewId()));
   b.handlePointerEvent(PointerDownEvent(pointer: id, position: p, viewId: _viewId()));
-  await Future<void>.delayed(const Duration(milliseconds: 60));
+  await Future<void>.delayed(Duration(milliseconds: holdMs));
   b.handlePointerEvent(PointerUpEvent(pointer: id, position: p, viewId: _viewId()));
 }
 
@@ -470,6 +470,12 @@ Future<void> act(Map<String, dynamic> a, ProviderContainer c) async {
   if (a.containsKey('tapAt')) {
     final p = a['tapAt'] as List;
     await tapAt(Offset((p[0] as num).toDouble(), (p[1] as num).toDouble()));
+    return pause();
+  }
+  // {"holdAt": [x, y], "ms": 900}: a long press (context menus, long-press actions).
+  if (a.containsKey('holdAt')) {
+    final p = a['holdAt'] as List;
+    await tapAt(Offset((p[0] as num).toDouble(), (p[1] as num).toDouble()), holdMs: (a['ms'] as int?) ?? 900);
     return pause();
   }
   if (a.containsKey('drag')) {
