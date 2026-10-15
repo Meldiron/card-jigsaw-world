@@ -1126,16 +1126,20 @@ class _PauseSheet extends ConsumerWidget {
           const SizedBox(height: 20),
           BigButton(label: 'Resume', icon: AppIcons.playFill, onTap: onResume),
           const SizedBox(height: 12),
-          // The other ways out, as one grouped list: one primary action above it.
+          // The other ways out, under the one primary action: leaving keeps the
+          // board; the two that throw it away are red, in their own group, and ask first.
+          SoftCard(
+            padding: EdgeInsets.zero,
+            child: _PauseAction(icon: AppIcons.squareArrowLeft, label: 'Save & quit', onTap: onQuit),
+          ),
+          const SizedBox(height: 12),
           SoftCard(
             padding: EdgeInsets.zero,
             child: Column(
               children: [
-                _PauseAction(icon: AppIcons.shuffle, label: 'Shuffle and restart', onTap: onRestart),
+                _PauseAction(icon: AppIcons.shuffle, label: 'Shuffle and restart', destructive: true, onTap: onRestart),
                 _PauseDivider(),
-                _PauseAction(icon: AppIcons.sliderHorizontal3, label: 'Change mode or board', onTap: onChangeDifficulty),
-                _PauseDivider(),
-                _PauseAction(icon: AppIcons.squareArrowLeft, label: 'Save & quit', onTap: onQuit),
+                _PauseAction(icon: AppIcons.sliderHorizontal3, label: 'Change mode or board', destructive: true, onTap: onChangeDifficulty),
               ],
             ),
           ),
@@ -1187,29 +1191,34 @@ class _PauseToggle extends StatelessWidget {
   }
 }
 
-/// A row in the pause sheet's grouped list.
+/// A row in the pause sheet's grouped list. [destructive] rows (they throw
+/// the board away, after asking) are red, the iOS destructive action.
 class _PauseAction extends StatelessWidget {
-  const _PauseAction({required this.icon, required this.label, required this.onTap});
+  const _PauseAction({required this.icon, required this.label, required this.onTap, this.destructive = false});
   final IconData icon;
   final String label;
   final VoidCallback onTap;
+  final bool destructive;
 
   @override
-  Widget build(BuildContext context) => Pressable(
-        onTap: onTap,
-        scale: 0.99,
-        child: SizedBox(
-          height: 50,
-          child: Row(
-            children: [
-              const SizedBox(width: 16),
-              Icon(icon, size: 20, color: context.accent),
-              const SizedBox(width: 14),
-              Expanded(child: Text(label, style: const TextStyle(fontSize: TypeSize.callout, fontWeight: FontWeight.w500))),
-            ],
-          ),
+  Widget build(BuildContext context) {
+    final tone = destructive ? context.colors.danger : null;
+    return Pressable(
+      onTap: onTap,
+      scale: 0.99,
+      child: SizedBox(
+        height: 50,
+        child: Row(
+          children: [
+            const SizedBox(width: 16),
+            Icon(icon, size: 20, color: tone ?? context.accent),
+            const SizedBox(width: 14),
+            Expanded(child: Text(label, style: TextStyle(fontSize: TypeSize.callout, fontWeight: FontWeight.w500, color: tone))),
+          ],
         ),
-      );
+      ),
+    );
+  }
 }
 
 class _PauseDivider extends StatelessWidget {
