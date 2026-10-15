@@ -1,6 +1,6 @@
 // The Lucky Wheel's booster prizes on the real app (live Appwrite backend): the odds sheet lists
 // 5 and 10 Peeks and 1 and 3 Magic, spins until a Peek or a Magic is won, the stock reaches the
-// profile row on the server, and in a game the booster bar shows "N left" and uses the stock
+// profile row on the server, and in a game the booster bar shows the stock as a count badge and uses it
 // before coins.
 //
 // Run: tools/dev/qa-run.sh drive --driver=test_driver/integration_test.dart \

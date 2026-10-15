@@ -257,12 +257,17 @@ void main() {
     await shot(tester, 'lib_25_piggy');
     await closeSheet(tester);
 
-    // A lost streak: "Restore for [ticket] N".
-    patchProfile(tester, {'streak': 1, 'longestStreak': 9, 'lastStreakRestore': null});
+    // A streak lost to a missed day (001 B): "Restore [ticket] N" restores it with today's claim.
+    patchProfile(tester, {
+      'streak': 9,
+      'longestStreak': 9,
+      'lastDailyClaim': DateTime.now().subtract(const Duration(days: 2)).toUtc().toIso8601String(),
+      'lastStreakRestore': null,
+    });
     await settle(tester, 300);
     showDailyRewardSheet(tester.element(find.byType(Navigator).last));
     await settle(tester, 1800);
-    expect(find.text('Restore for'), findsOneWidget);
+    expect(find.descendant(of: find.byType(DailyRewardSheet), matching: find.text('Restore')), findsOneWidget);
     await shot(tester, 'lib_26_streak_restore');
     await closeSheet(tester);
 
