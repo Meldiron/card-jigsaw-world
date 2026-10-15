@@ -153,7 +153,7 @@ Future<void> showWheelOdds(BuildContext context) => showAppSheet(
                             Expanded(
                               child: Row(
                                 children: [
-                                  Text(formatCount(odds[i].segment.amount), style: const TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w600, fontFeatures: tabularFigures)),
+                                  Text(formatCount(odds[i].segment.amount), style: const TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w600)),
                                   const SizedBox(width: 4),
                                   Flexible(child: Text(odds[i].segment.name ?? 'coins', maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w600))),
                                   if (odds[i].segment.jackpot) ...[const SizedBox(width: 8), Chip2(label: 'Jackpot', color: Brand.coin.withValues(alpha: 0.16), foreground: ctx.isDark ? Brand.coin : Brand.coinDeep)],
@@ -176,7 +176,7 @@ Future<void> showWheelOdds(BuildContext context) => showAppSheet(
                             ),
                             SizedBox(
                               width: 52,
-                              child: Text(formatOdds(odds[i].percent), textAlign: TextAlign.right, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body, fontFeatures: tabularFigures)),
+                              child: Text(formatOdds(odds[i].percent), textAlign: TextAlign.right, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body)),
                             ),
                           ],
                         ),
@@ -499,7 +499,7 @@ class _PrizeMark extends StatelessWidget {
       children: [
         mark,
         const SizedBox(height: 3),
-        Text(segment.label, style: TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body, height: 1.1, color: ink, letterSpacing: -0.2, fontFeatures: tabularFigures)),
+        Text(segment.label, style: TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body, height: 1.1, color: ink, letterSpacing: -0.2)),
       ],
     );
   }
