@@ -19,8 +19,13 @@ skills under `.claude/skills/` hold the detailed workflows.
   photos. One accent: cobalt `Brand.accent` 0xFF2F4FBF (dark 0xFF7C9AFF) in `lib/core/theme/tokens.dart`.
   Icons only from `lib/widgets/icons.dart` (CoinIcon, TicketIcon = upright "pass" design, HintIcon,
   AppIcons). Native iOS 26 feel: glass bars/sheets (`lib/widgets/glass.dart`), every confirmation via
-  `showAppAlert` and every sheet via `showAppSheet` in `lib/widgets/ui.dart`. Costs on buttons use
-  `BigButton.cost` / `CostLabel` (currency icon + amount). See `docs/native-ui.md`.
+  `showAppAlert`, every sheet via `showAppSheet` and every menu of actions via `showAppActionSheet` in
+  `lib/widgets/ui.dart`; switches are the glass `AppSegmentedControl`, round buttons over photos `PhotoButton`,
+  the VIP card family is `lib/widgets/vip.dart`, and counts go through `formatCount` / `compactCount`
+  (`lib/core/numbers.dart`). Costs on buttons use `BigButton.cost` / `CostLabel` (currency icon + amount);
+  destructive actions are red and always ask first. See `docs/native-ui.md`.
+- **Onboarding is instant** (owner, 2026-10-15): every picture the welcome pages show is bundled in
+  `assets/welcome/` (PD/CC0 catalogue picks), never loaded from Storage.
 - **Copy**: calm, precise, short; terms and CTA style in `docs/copy-guide.md`. The `/events` tab is
   called **Quests**: daily quests, weekly quests and the world-day "Live events" section.
 - **QA is silent**: never start the app without `--dart-define=CJW_MUTE=true` (or `tools/dev/qa.sh`).
@@ -171,6 +176,8 @@ skills under `.claude/skills/` hold the detailed workflows.
 - Progression: `lib/state/unlocks.dart` (`openFeaturesProvider`, intro bookkeeping) and `Unlocks` /
   `OpenFeatures` in `lib/state/rewards.dart`: Squares, Triangles, Hexagons, Painting and giant boards open at
   levels 2/4/6/8/10 or once used; `lib/features/game/unlock_intro.dart` (intro sheet, `UnlockIntroHost`).
+  Giant boards can be opened early from a giant pack's gate: the pack's tickets plus `Economy.giantEarlyFee`
+  (1 ticket per level to go), recorded as `early:giant` in `profiles.unlockedTiers`.
   Quests: `Goals.daily` / `weekly` rotate by day and week and take `open`, `level`, `claimed` (and the
   daily puzzle); each quest comes from a different lane, chosen against the player's `PlayHabits`, so
   ordinary play finishes only "Solve 3 puzzles" and one board never finishes two (docs/economy.md, "Quests
