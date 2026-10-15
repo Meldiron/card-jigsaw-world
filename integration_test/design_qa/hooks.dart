@@ -24,6 +24,7 @@ import 'package:card_jigsaw_world/models/models.dart';
 import 'package:card_jigsaw_world/state/merge.dart';
 import 'package:card_jigsaw_world/state/catalog.dart';
 import 'package:card_jigsaw_world/state/rewards.dart';
+import 'package:card_jigsaw_world/widgets/glass.dart';
 import 'package:card_jigsaw_world/widgets/icons.dart';
 import 'package:card_jigsaw_world/widgets/ui.dart';
 import 'package:flutter/material.dart';
@@ -62,6 +63,22 @@ PuzzleProgress _row(String puzzleId, {required List<int> layout, int moves = 20,
       'elapsedSeconds': seconds,
     });
 
+/// A context inside the tab shell's body (under the floating tab bar).
+BuildContext? _tabPageContext() {
+  BuildContext? found;
+  void visit(Element e) {
+    if (found != null) return;
+    if (e.widget is GlassTabBarScope) {
+      e.visitChildElements((c) => found ??= c);
+      return;
+    }
+    e.visitChildElements(visit);
+  }
+
+  WidgetsBinding.instance.rootElement?.visitChildElements(visit);
+  return found;
+}
+
 /// A `releases` row for [IosUpdateSource] (the update prompt's real copy).
 class _ReleaseTables implements TablesDB {
   _ReleaseTables(this.build, this.version);
@@ -88,7 +105,9 @@ final hooks = <String, Hook>{
   // {"text": "...", "delay": 1500}: the toast lasts 2 s, so it is shown late enough to be on screen at the shot.
   'toast': (ctx, c, a) async {
     await Future<void>.delayed(Duration(milliseconds: a['delay'] as int? ?? 1300));
-    if (ctx.mounted) showToast(ctx, a['text'] as String? ?? 'Saved', icon: a['icon'] == 'signal' ? AppIcons.signal : null);
+    // "page": true shows it from a context under the tab bar (as a tab page's own call would).
+    final from = a['page'] == true ? _tabPageContext() ?? ctx : ctx;
+    if (from.mounted) showToast(from, a['text'] as String? ?? 'Saved', icon: a['icon'] == 'signal' ? AppIcons.signal : null);
   },
   'dailyGift': (ctx, c, a) => showDailyRewardSheet(ctx),
   'piggy': (ctx, c, a) => showPiggySheet(ctx),
