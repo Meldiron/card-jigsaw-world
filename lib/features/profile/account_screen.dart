@@ -552,7 +552,7 @@ class _EmailButton extends StatelessWidget {
           children: [
             Icon(AppIcons.mail, color: c.textPrimary, size: 19),
             const SizedBox(width: 8),
-            Text('Continue with email', style: TextStyle(color: c.textPrimary, fontWeight: FontWeight.w600, fontSize: TypeSize.title3 - 3, letterSpacing: -0.3)),
+            Text('Continue with email', style: TextStyle(color: c.textPrimary, fontWeight: FontWeight.w600, fontSize: TypeSize.headline, letterSpacing: -0.3)),
           ],
         ),
       ),
@@ -602,7 +602,7 @@ class _Field extends StatelessWidget {
       textInputAction: action,
       onSubmitted: onSubmitted,
       cursorColor: context.accent,
-      style: TextStyle(fontSize: TypeSize.body + 1, color: c.textPrimary),
+      style: TextStyle(fontSize: TypeSize.callout, color: c.textPrimary),
       decoration: InputDecoration(
         hintText: hint,
         filled: false,
@@ -611,7 +611,7 @@ class _Field extends StatelessWidget {
         enabledBorder: InputBorder.none,
         focusedBorder: InputBorder.none,
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-        hintStyle: TextStyle(fontSize: TypeSize.body + 1, color: c.textTertiary),
+        hintStyle: TextStyle(fontSize: TypeSize.callout, color: c.textTertiary),
       ),
     );
   }
