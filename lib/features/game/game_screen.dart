@@ -385,7 +385,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   Future<void> _onWin() async {
     if (_completionHandled) return;
     _completionHandled = true;
-    // The first board is done: the coach line has done its job.
+    // The first board is done: no need to explain it again.
     if (_showTutorial) {
       ref.read(settingsProvider.notifier).setTutorialSeen();
       _showTutorial = false;
@@ -641,15 +641,6 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                   title: puzzle.title,
                   painting: _painting,
                 ),
-                // First game: one line that teaches the next thing to do, while playing.
-                if (_showTutorial && image.hasValue && state.status != GameStatus.won)
-                  _CoachLine(
-                    state: state,
-                    onDone: () {
-                      ref.read(settingsProvider.notifier).setTutorialSeen();
-                      setState(() => _showTutorial = false);
-                    },
-                  ),
                 Expanded(
                   child: LayoutBuilder(
                     builder: (context, cons) {
@@ -806,6 +797,14 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
               ],
             ),
           ),
+          // First game: how to play, in a card at the bottom; the board it talks about stays in view.
+          if (_showTutorial && image.hasValue && state.status != GameStatus.won)
+            _HowToPlay(
+              onDone: () {
+                ref.read(settingsProvider.notifier).setTutorialSeen();
+                setState(() => _showTutorial = false);
+              },
+            ),
           if (state.status == GameStatus.won && image.hasValue)
             _CompletionOverlay(
               puzzle: puzzle,
@@ -1186,46 +1185,76 @@ class _PauseDivider extends StatelessWidget {
   Widget build(BuildContext context) => Divider(height: 0.5, thickness: 0.5, indent: 50, color: context.colors.stroke);
 }
 
-/// First game: a coach line between the HUD and the board that follows the
-/// player: pick a card, place it, then how groups and locks work. It never
-/// covers the board; "Got it" (or the first locked card's step) ends it.
-class _CoachLine extends StatelessWidget {
-  const _CoachLine({required this.state, required this.onDone});
-  final GameState state;
+/// First game: "How to play" in three short steps, each with its mark, and
+/// one line about stars, in a card at the bottom over the tools (they wait
+/// until it is read anyway). A light dim keeps the board in view above it.
+/// "Got it", or a tap anywhere, closes it for good.
+class _HowToPlay extends StatelessWidget {
+  const _HowToPlay({required this.onDone});
   final VoidCallback onDone;
 
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    final b = state.board;
-    final (IconData icon, String text) = b.lockedCount > 0
-        ? (AppIcons.lock, 'A card in its true spot locks in place. Fewer moves earn more stars.')
-        : state.moves > 0
-        ? (AppIcons.group, 'Neighbours in the picture snap into a group and move together.')
-        : state.selected != null
-        ? (AppIcons.tapCard, 'Now tap the place where it belongs. Or drag it there.')
-        : (AppIcons.tapCard, 'Tap a card to pick it up.');
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 0, 12, 4),
-      child: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 220),
-        child: Container(
-          key: ValueKey(text),
-          padding: const EdgeInsets.fromLTRB(12, 8, 6, 8),
-          decoration: BoxDecoration(color: c.accentTint, borderRadius: BorderRadius.circular(Radii.md)),
+    Widget step(IconData icon, String text) => Padding(
+          padding: const EdgeInsets.only(bottom: 12),
           child: Row(
             children: [
-              Icon(icon, size: 18, color: context.accent),
-              const SizedBox(width: 10),
-              Expanded(child: Text(text, style: TextStyle(fontSize: TypeSize.footnote, height: 1.3, fontWeight: FontWeight.w500, color: c.textPrimary))),
-              Pressable(
-                onTap: onDone,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                  child: Text('Got it', style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w700, color: context.accent)),
-                ),
-              ),
+              IconTile(icon: icon, size: IconTile.small, radius: 9),
+              const SizedBox(width: 12),
+              Expanded(child: Text(text, style: TextStyle(fontSize: TypeSize.body, height: 1.3, color: c.textPrimary))),
             ],
+          ),
+        );
+    return Positioned.fill(
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: onDone,
+        child: ColoredBox(
+          color: Colors.black.withValues(alpha: context.isDark ? 0.4 : 0.25),
+          child: SafeArea(
+            top: false,
+            minimum: const EdgeInsets.only(bottom: 8),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Elevated(
+                  child: Builder(
+                    builder: (context) => Container(
+                      key: const ValueKey('how-to-play'),
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
+                      decoration: BoxDecoration(
+                        color: context.colors.card,
+                        borderRadius: BorderRadius.circular(28),
+                        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: context.isDark ? 0.5 : 0.14), blurRadius: 30, offset: const Offset(0, 8))],
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SheetHeader(title: 'How to play'),
+                          const SizedBox(height: 14),
+                          step(AppIcons.tapCard, 'Tap a card, then tap where it belongs. Or drag it there.'),
+                          step(AppIcons.group, 'Neighbours in the picture snap into a group and move together.'),
+                          step(AppIcons.lock, 'A card in its true spot locks in place.'),
+                          Row(
+                            children: [
+                              const SizedBox(width: 8),
+                              Icon(AppIcons.star, size: 15, color: Brand.star),
+                              const SizedBox(width: 21),
+                              Expanded(child: Text('Fewer moves earn more stars. No time limit.', style: TextStyle(fontSize: TypeSize.footnote, color: context.colors.textSecondary))),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          BigButton(label: 'Got it', onTap: onDone),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ).animate().slideY(begin: 0.25, curve: Curves.easeOutCubic, duration: 350.ms).fadeIn(duration: 200.ms),
+            ),
           ),
         ),
       ),
