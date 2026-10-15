@@ -297,7 +297,7 @@ Future<ProviderContainer> buildContainer(Map<String, dynamic> scene) async {
     )),
     uploadRepositoryProvider.overrideWithValue(FakeUploadRepo([
       // Titles as the app writes them on upload ('My photo <day>/<month>').
-      for (var i = 0; i < ((scene['myPuzzles'] as int?) ?? 0); i++) MyPuzzle(id: 'my-$i', fileId: 'file-$i', title: 'My photo ${12 - i % 9}/10'),
+      for (var i = 0; i < ((scene['myPuzzles'] as int?) ?? 0); i++) MyPuzzle.fromRow('my-$i', {'fileId': 'file-$i', 'title': 'My photo ${12 - i % 9}/10'}),
     ])),
     catalogRepositoryProvider.overrideWithValue(FakeCatalogRepo(SnapshotCatalogSource(catalogPath))),
     storeAvailableProvider.overrideWith((ref) async => store != 'down'),
