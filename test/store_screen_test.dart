@@ -98,15 +98,22 @@ void main() {
     );
   }
 
-  testWidgets('without App Store prices the tiles show the amounts, no placeholder price, and the Store says why', (tester) async {
+  testWidgets('without App Store prices nothing is for sale: one panel says why, and the free ways stay', (tester) async {
     await _pumpStore(tester);
-    for (final id in [ProductIds.coins1000, ProductIds.coins3000]) {
-      expect(find.text(StoreProducts.grant(id).label), findsOneWidget, reason: id);
+    expect(find.text('Purchases are unavailable'), findsOneWidget);
+    expect(find.text('Try again'), findsOneWidget);
+    // No bundle, no placeholder price and no VIP plan is offered while the App Store is away.
+    for (final id in ProductIds.consumables) {
+      expect(find.text(StoreProducts.grant(id).label), findsNothing, reason: id);
+      expect(find.text(StoreProducts.price(id)), findsNothing, reason: id);
     }
-    expect(find.text(StoreProducts.price(ProductIds.coins3000)), findsNothing);
-    expect(find.text('Unavailable'), findsWidgets);
-    expect(find.text('The App Store is not responding'), findsOneWidget);
-    expect(find.text('+${StoreProducts.coinBonusPercent(ProductIds.coins5500)}%'), findsOneWidget);
+    expect(find.text('Start 7-day free trial'), findsNothing);
+    // The free video and the free sources are still there.
+    expect(find.text('Earn for free'), findsOneWidget);
+    expect(find.text('Watch'), findsOneWidget);
+    await tester.drag(find.byType(ListView), const Offset(0, -6000));
+    await tester.pumpAndSettle();
+    expect(find.text('Lucky Wheel'), findsOneWidget);
   });
 
   testWidgets('terms of use and privacy policy are linked where VIP is sold', (tester) async {
@@ -123,8 +130,8 @@ void main() {
     await _pumpStore(tester);
     await tester.drag(find.byType(ListView), const Offset(0, -6000));
     await tester.pumpAndSettle();
-    // The footer line is the list's last row (debug wording: no store in tests).
-    final footer = find.textContaining('Store unavailable on this device');
+    // The Terms and Privacy links are the list's last row (no store in tests: the unavailable layout).
+    final footer = find.byKey(const ValueKey('store-terms'));
     expect(footer, findsOneWidget);
     final bottom = tester.getBottomLeft(footer).dy;
     expect(bottom, lessThanOrEqualTo(874 - _homeIndicator - 8), reason: 'footer ends at $bottom');
@@ -162,14 +169,19 @@ void main() {
       expect(find.text('1,09 €'), findsOneWidget);
     });
 
-    testWidgets('a tap asks again before saying the App Store is not available', (tester) async {
+    testWidgets('Try again asks the App Store again; the bundles come back and a tap buys', (tester) async {
       final service = _LateStore(emptyAnswers: 2);
       await pumpLate(tester, service);
       expect(find.text('1,09 €'), findsNothing, reason: 'still no products when the store opened');
+      expect(find.text('Purchases are unavailable'), findsOneWidget);
+      await tester.tap(find.text('Try again'));
+      await tester.pumpAndSettle();
+      expect(service.queries, 3);
+      expect(find.text('Purchases are unavailable'), findsNothing);
+      expect(find.text('1,09 €'), findsOneWidget);
       await tester.tap(find.text(StoreProducts.grant(ProductIds.coins1000).label));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
-      expect(service.queries, 3);
       expect(service.bought?.id, ProductIds.coins1000);
       expect(find.textContaining('not available right now'), findsNothing);
       // The tapped tile waits for the App Store with a spinner in place of its price.

@@ -294,7 +294,6 @@ class GlassTabBar extends StatelessWidget {
   Widget build(BuildContext context) => ChromeText(child: Builder(builder: _build));
 
   Widget _build(BuildContext context) {
-    final c = context.colors;
     final safe = MediaQuery.paddingOf(context).bottom;
     final bottom = bottomGap(safe);
     final isDark = context.isDark;
@@ -342,7 +341,7 @@ class GlassTabBar extends StatelessWidget {
                               child: GestureDetector(
                                 behavior: HitTestBehavior.opaque,
                                 onTap: () => onTap(i),
-                                child: _TabCell(item: items[i], selected: i == currentIndex, tintColor: c.card),
+                                child: _TabCell(item: items[i], selected: i == currentIndex),
                               ),
                             ),
                           ),
@@ -382,10 +381,9 @@ class GlassTabItem {
 }
 
 class _TabCell extends StatelessWidget {
-  const _TabCell({required this.item, required this.selected, required this.tintColor});
+  const _TabCell({required this.item, required this.selected});
   final GlassTabItem item;
   final bool selected;
-  final Color tintColor;
 
   @override
   Widget build(BuildContext context) {
@@ -398,16 +396,13 @@ class _TabCell extends StatelessWidget {
           clipBehavior: Clip.none,
           children: [
             Icon(selected ? item.activeIcon : item.icon, color: color, size: 23),
-            // Something waits on that tab. Not on the tab being shown: its own screen says so.
+            // Something waits on that tab: a small cobalt dot (the one accent), no ring, clear of the
+            // glyph's top-right corner. Not on the tab being shown: its own screen says so.
             if (item.badge && !selected)
               Positioned(
-                right: -7,
-                top: -3,
-                child: Container(
-                  width: 9,
-                  height: 9,
-                  decoration: BoxDecoration(color: Brand.live, shape: BoxShape.circle, border: Border.all(color: tintColor, width: 1.5)),
-                ),
+                right: -6,
+                top: -1,
+                child: Container(width: 7, height: 7, decoration: BoxDecoration(color: context.accent, shape: BoxShape.circle)),
               ),
           ],
         ),

@@ -233,34 +233,7 @@ class HomeScreen extends ConsumerWidget {
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-                  // A caution, not an offer: a guest's coins and puzzles are
-                  // lost with this device until they create an account.
-                  child: SoftCard(
-                    onTap: () => context.push('/account'),
-                    // Still a caution (warning tint and outline), in one compact row.
-                    color: context.colors.warningTint,
-                    borderColor: context.colors.warning.withValues(alpha: 0.45),
-                    padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
-                    child: Row(
-                      children: [
-                        IconTile(icon: AppIcons.save, size: IconTile.small, color: context.colors.warning.withValues(alpha: 0.16), iconColor: context.colors.warning),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Save progress', maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.titleMedium?.copyWith(color: context.colors.warning)),
-                              const SizedBox(height: 2),
-                              Text('Stored on this device only',
-                                  style: TextStyle(fontSize: TypeSize.footnote, color: context.colors.textSecondary)),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Icon(AppIcons.chevronRight, size: 16, color: context.colors.warning),
-                      ],
-                    ),
-                  ),
+                  child: _GuestSaveCard(onSave: () => context.push('/account')),
                 ),
               ),
             if (livePacks.isNotEmpty) ...[
@@ -782,8 +755,52 @@ class _StreakCard extends ConsumerWidget {
   }
 }
 
-/// Level: progress, then the next three levels side by side with what each
-/// one brings, the nearest one highlighted.
+/// A guest's caution: their coins and puzzles live on this device only until they create an
+/// account. A calm card like the rest of Home (no orange fill), made a caution by the warning
+/// outline and mark and a line that says what is at stake, with one clear action.
+class _GuestSaveCard extends StatelessWidget {
+  const _GuestSaveCard({required this.onSave});
+  final VoidCallback onSave;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return SoftCard(
+      onTap: onSave,
+      padding: Insets.cardCompact,
+      borderColor: c.warning.withValues(alpha: 0.45),
+      child: Row(
+        children: [
+          IconTile(
+            icon: AppIcons.caution,
+            size: IconTile.medium,
+            color: c.warning.withValues(alpha: context.isDark ? 0.2 : 0.14),
+            iconColor: c.warning,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Not backed up', maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.titleMedium),
+                const SizedBox(height: 2),
+                Text(
+                  'Lost if this app is deleted',
+                  style: TextStyle(fontSize: TypeSize.footnote, height: 1.3, color: c.textSecondary),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 12),
+          BigButton(label: 'Save', kind: ButtonKind.secondary, height: 36, expand: false, onTap: onSave),
+        ],
+      ),
+    );
+  }
+}
+
+/// Level: progress, the next level's rewards as chips (what opens first, in cobalt, then the
+/// currencies), and the two after it as rows in the same marks, smaller.
 class _LevelCard extends StatelessWidget {
   const _LevelCard({required this.profile});
   final Profile profile;
@@ -792,8 +809,8 @@ class _LevelCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.colors;
     final level = profile.level;
-    final toGo = Profile.xpForLevel(level) - profile.xpIntoLevel;
-    final steps = [for (var i = 1; i <= 3; i++) LevelRewards.forLevel(level + i)];
+    final next = LevelRewards.forLevel(level + 1);
+    final later = LevelRewards.upcoming(level + 1, count: 2);
     return SoftCard(
       padding: Insets.card,
       child: Column(
@@ -803,13 +820,19 @@ class _LevelCard extends StatelessWidget {
             children: [
               const IconTile(icon: AppIcons.level, size: IconTile.medium),
               const SizedBox(width: 12),
+              // The XP sits at the end of the title's line; with Larger Text on a small phone it moves
+              // under the title instead of pushing the row off the card.
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Wrap(
+                  alignment: WrapAlignment.spaceBetween,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  spacing: 8,
                   children: [
                     Text('Level $level', style: Theme.of(context).textTheme.titleLarge),
-                    const SizedBox(height: 2),
-                    Text('${formatCount(toGo)} XP to level ${level + 1}', style: TextStyle(fontSize: TypeSize.footnote, color: c.textSecondary)),
+                    Text(
+                      '${formatCount(profile.xpIntoLevel)} / ${formatCount(Profile.xpForLevel(level))} XP',
+                      style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w500, color: c.textSecondary),
+                    ),
                   ],
                 ),
               ),
@@ -818,72 +841,146 @@ class _LevelCard extends StatelessWidget {
           const SizedBox(height: 12),
           ProgressBar(value: profile.levelProgress, height: 8),
           const SizedBox(height: 14),
-          IntrinsicHeight(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                for (var i = 0; i < steps.length; i++) ...[
-                  if (i > 0) const SizedBox(width: 8),
-                  Expanded(child: _LevelStep(reward: steps[i], next: i == 0)),
-                ],
-              ],
-            ),
+          Text(
+            'Next: level ${level + 1}',
+            style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: c.textPrimary),
           ),
+          const SizedBox(height: 8),
+          _LevelRewardChips(reward: next, keyed: true),
+          const SizedBox(height: 12),
+          Container(height: 1, color: c.stroke),
+          const SizedBox(height: 10),
+          Text(
+            'Coming up',
+            style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: c.textSecondary),
+          ),
+          const SizedBox(height: 8),
+          for (final r in later)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // A column for the level names (wider with Larger Text, so a name never runs into its marks).
+                  ConstrainedBox(
+                    constraints: BoxConstraints(minWidth: MediaQuery.textScalerOf(context).scale(64)),
+                    child: Text(
+                      'Level ${r.level}',
+                      style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: c.textSecondary),
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  Expanded(child: _LevelRewardMarks(reward: r)),
+                ],
+              ),
+            ),
         ],
       ),
     );
   }
 }
 
-/// One level of the Level card's road: its number and each reward on a line.
-class _LevelStep extends StatelessWidget {
-  const _LevelStep({required this.reward, required this.next});
+/// A reward as chips: what it opens first (cobalt), then coins, tickets and hints in neutral
+/// chips with their currency marks. The Level card's next level; achievements use the same
+/// look for what a step gives. [keyed] keys each unlock `next-unlock-<name>` (tests scroll to it).
+class _LevelRewardChips extends StatelessWidget {
+  const _LevelRewardChips({required this.reward, this.keyed = false});
   final LevelReward reward;
-  final bool next;
+  final bool keyed;
 
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
     final r = reward;
-    Widget line(Widget icon, String text, {Color? color}) => Padding(
-          padding: const EdgeInsets.only(top: 6),
-          child: Row(
-            children: [
-              SizedBox(width: 15, child: Center(child: icon)),
-              const SizedBox(width: 4),
-              // Scales down a little rather than cutting "Hexagons" on a 97 pt SE tile.
-              Flexible(
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  alignment: Alignment.centerLeft,
-                  child: Text(text, maxLines: 1, style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600, color: color ?? c.textPrimary)),
-                ),
-              ),
-            ],
+    // A chip wider than the card (Larger Text on a small phone) scales down instead of overflowing.
+    Widget fit(Widget chip) => FittedBox(fit: BoxFit.scaleDown, alignment: Alignment.centerLeft, child: chip);
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        for (final u in r.unlocks) fit(Chip2(key: keyed ? ValueKey('next-unlock-${u.name}') : null, label: u.label, icon: _unlockIcon(u), color: c.accentTint, foreground: context.accent)),
+        if (r.tier != null) fit(Chip2(label: '${r.tier!.code} ${r.tier!.label} boards', icon: AppIcons.bigBoard, color: c.accentTint, foreground: context.accent)),
+        _RewardChip(
+          child: Amount(currency: Currency.coins, value: r.coins, size: 14, fontSize: TypeSize.footnote),
+        ),
+        if (r.tickets > 0)
+          _RewardChip(
+            child: Amount(currency: Currency.tickets, value: r.tickets, size: 14, fontSize: TypeSize.footnote),
           ),
-        );
+        if (r.hints > 0)
+          _RewardChip(
+            child: Amount(currency: Currency.hints, value: r.hints, size: 14, fontSize: TypeSize.footnote),
+          ),
+      ],
+    );
+  }
+}
+
+/// A reward in a row of marks without chips (the Level card's "Coming up"): cobalt unlocks, then
+/// currency marks with their numbers in secondary text, so the next level keeps the emphasis.
+class _LevelRewardMarks extends StatelessWidget {
+  const _LevelRewardMarks({required this.reward});
+  final LevelReward reward;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final r = reward;
+    return Wrap(
+      spacing: 12,
+      runSpacing: 6,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        for (final u in r.unlocks) _UnlockMark(icon: _unlockIcon(u), label: u.label),
+        if (r.tier != null) _UnlockMark(icon: AppIcons.bigBoard, label: '${r.tier!.code} ${r.tier!.label}'),
+        Amount(currency: Currency.coins, value: r.coins, size: 14, fontSize: TypeSize.footnote, weight: FontWeight.w600, color: c.textSecondary),
+        if (r.tickets > 0) Amount(currency: Currency.tickets, value: r.tickets, size: 14, fontSize: TypeSize.footnote, weight: FontWeight.w600, color: c.textSecondary),
+        if (r.hints > 0) Amount(currency: Currency.hints, value: r.hints, size: 14, fontSize: TypeSize.footnote, weight: FontWeight.w600, color: c.textSecondary),
+      ],
+    );
+  }
+}
+
+/// An unlock in a row of reward marks: cobalt icon and name.
+class _UnlockMark extends StatelessWidget {
+  const _UnlockMark({required this.icon, required this.label});
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) => FittedBox(
+    fit: BoxFit.scaleDown,
+    alignment: Alignment.centerLeft,
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 13, color: context.accent),
+        const SizedBox(width: 4),
+        Text(
+          label,
+          style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: context.accent),
+        ),
+      ],
+    ),
+  );
+}
+
+/// A neutral chip around a currency amount (reward lists).
+class _RewardChip extends StatelessWidget {
+  const _RewardChip({required this.child});
+  final Widget child;
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
     return Container(
-      padding: const EdgeInsets.fromLTRB(9, 9, 6, 10),
+      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
       decoration: BoxDecoration(
-        color: next ? c.accentTint : c.canvas,
-        borderRadius: BorderRadius.circular(Radii.md),
-        border: Border.all(color: next ? context.accent.withValues(alpha: 0.35) : c.stroke),
+        color: c.canvas,
+        borderRadius: BorderRadius.circular(Radii.pill),
+        border: Border.all(color: c.stroke),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Level ${r.level}', style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w700, color: next ? context.accent : c.textSecondary)),
-          for (final u in r.unlocks)
-            KeyedSubtree(
-              key: next ? ValueKey('next-unlock-${u.name}') : null,
-              child: line(Icon(_unlockIcon(u), size: 14, color: context.accent), u == Unlock.giant ? 'Giant' : u.label, color: context.accent),
-            ),
-          if (r.tier != null) line(Icon(AppIcons.bigBoard, size: 14, color: context.accent), r.tier!.code, color: context.accent),
-          line(const CoinIcon(size: 14), formatCount(r.coins)),
-          if (r.tickets > 0) line(const TicketIcon(size: 14), formatCount(r.tickets)),
-          if (r.hints > 0) line(const HintIcon(size: 14), formatCount(r.hints)),
-        ],
-      ),
+      child: child,
     );
   }
 }

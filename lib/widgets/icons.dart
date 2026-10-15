@@ -90,6 +90,8 @@ class AppIcons {
   static const swaps = CupertinoIcons.arrow_right_arrow_left;
   static const time = CupertinoIcons.time;
   static const save = CupertinoIcons.cloud_upload_fill;
+  /// A caution that is not an error (a guest's progress lives on this device only).
+  static const caution = CupertinoIcons.exclamationmark_triangle_fill;
   static const signal = CupertinoIcons.antenna_radiowaves_left_right;
   static const wave = CupertinoIcons.hand_raised_fill;
   static const sparkle = CupertinoIcons.sparkles;

@@ -344,12 +344,16 @@ class RoundIconButton extends StatelessWidget {
 
 /// Coins / tickets / hints pill shown in headers.
 class CurrencyPill extends StatelessWidget {
-  const CurrencyPill({super.key, required this.currency, required this.value, this.onAdd, this.color = Brand.coin, this.compact = false});
+  const CurrencyPill({super.key, required this.currency, required this.value, this.onAdd, this.color = Brand.coin, this.compact = false, this.abbreviate = false});
   final Currency currency;
   final int value;
   final VoidCallback? onAdd;
   final Color color;
   final bool compact;
+
+  /// Balances from 100,000 written short ([compactCount]: "123K", "1.23M"), so the pill keeps its
+  /// width in the header; the exact number is in the Store.
+  final bool abbreviate;
 
   @override
   Widget build(BuildContext context) {
@@ -367,7 +371,11 @@ class CurrencyPill extends StatelessWidget {
           children: [
             currencyIcon(currency, size: 16),
             const SizedBox(width: 6),
-            AnimatedCounter(value: value, style: TextStyle(fontWeight: FontWeight.w700, fontSize: compact ? TypeSize.footnote : TypeSize.body, color: c.textPrimary, letterSpacing: -0.2)),
+            AnimatedCounter(
+              value: value,
+              format: abbreviate ? compactCount : null,
+              style: TextStyle(fontWeight: FontWeight.w700, fontSize: compact ? TypeSize.footnote : TypeSize.body, color: c.textPrimary, letterSpacing: -0.2),
+            ),
             if (onAdd != null) ...[
               const SizedBox(width: 6),
               Container(
@@ -387,16 +395,19 @@ class CurrencyPill extends StatelessWidget {
 
 /// Number that counts up/down when changed.
 class AnimatedCounter extends StatelessWidget {
-  const AnimatedCounter({super.key, required this.value, this.style});
+  const AnimatedCounter({super.key, required this.value, this.style, this.format});
   final int value;
   final TextStyle? style;
+
+  /// How the number is written ([formatCount] by default).
+  final String Function(int value)? format;
   @override
   Widget build(BuildContext context) {
     return TweenAnimationBuilder<double>(
       tween: Tween(end: value.toDouble()),
       duration: const Duration(milliseconds: 600),
       curve: Curves.easeOutCubic,
-      builder: (_, v, _) => Text(formatCount(v.round()), style: (style ?? const TextStyle()).copyWith(fontFeatures: tabularFigures)),
+      builder: (_, v, _) => Text((format ?? formatCount)(v.round()), style: (style ?? const TextStyle()).copyWith(fontFeatures: tabularFigures)),
     );
   }
 }

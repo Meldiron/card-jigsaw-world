@@ -153,8 +153,8 @@ void main() {
       await tester.pumpWidget(await _app(const StoreScreen(), caps: PlatformCaps.web));
       await tester.pumpAndSettle();
       expect(find.text(StoreWebNotice.message), findsOneWidget);
-      expect(find.text('Free coins'), findsOneWidget);
-      expect(find.textContaining('Free coins: daily quests'), findsOneWidget);
+      // The free video is the first coin offer; the free sources follow what is for sale.
+      expect(find.textContaining('coins, free'), findsOneWidget);
       final seen = <String>{};
       // Scroll the whole store, collecting every line drawn on the way.
       for (var i = 0; i < 12; i++) {
@@ -168,6 +168,7 @@ void main() {
         expect(seen, contains(StoreProducts.grant(id).label), reason: id);
       }
       expect(seen, contains('Card Jigsaw World VIP'));
+      expect(seen, containsAll(['Earn for free', 'Daily gift', 'Lucky Wheel']));
       expect(seen, contains('Available on iPhone'));
       expect(seen.where((t) => t.contains(r'$')), isEmpty, reason: 'no price on web');
       expect(seen, isNot(contains('Start 7-day free trial')));

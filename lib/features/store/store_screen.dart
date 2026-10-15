@@ -21,7 +21,10 @@ import '../../state/settings.dart';
 import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
+import '../../widgets/vip.dart';
 import '../ads/house_ads.dart';
+import '../daily/daily_reward_sheet.dart';
+import '../daily/piggy_sheet.dart';
 
 /// Store: free bonus video (capped per day), coin bundles, ticket bundles,
 /// hint packs, VIP. Purchases go through StoreKit and are verified by the
@@ -223,16 +226,44 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
     final caps = ref.watch(platformCapsProvider);
     final productsAsync = caps.purchases ? ref.watch(productsProvider) : null;
     final products = productsAsync?.value ?? const <String, ProductDetails>{};
-    final storeUp = caps.purchases && (ref.watch(storeAvailableProvider).value ?? false);
-    // The App Store answered without prices (offline, or not serving the products): say so,
-    // instead of showing the placeholder US prices as if they could be bought.
-    final pricesDown = caps.purchases && !(productsAsync?.isLoading ?? false) && products.isEmpty;
+    // The App Store answered without prices (offline, or not serving the products): nothing can be
+    // bought, so nothing is shown for sale; the free ways to earn stay. While it is asked again the
+    // panel stays (its button waits) instead of flashing the catalogue with placeholder prices.
+    final pricesDown = caps.purchases && (productsAsync?.hasValue ?? false) && products.isEmpty;
+    final retrying = pricesDown && (productsAsync?.isLoading ?? false);
     final adsLeft = profile?.adsLeftToday ?? Profile.adsPerDay;
     final isVip = profile?.isVip ?? false;
     final flow = ref.watch(purchaseFlowProvider);
     final busy = _querying != null || flow.busy;
     // The row that waits: its products asked for again, or its App Store sheet open.
     final activeId = _querying ?? (flow.stage == PurchaseStage.paying ? flow.productId : null);
+    Widget grid(List<_Product> list) => _ProductGrid(products: list, onBuy: _buy, priceOf: (p) => _price(p, products), rawPriceOf: (p) => _rawPrice(p, products), busy: busy, activeId: activeId, purchasable: caps.purchases);
+    final freeVideo = _FreeVideoOffer(adsLeft: adsLeft, busy: _adBusy, onWatch: _watchAd);
+    final legal = <Widget>[
+      if (!pricesDown) ...[
+        const SizedBox(height: 16),
+        Text(
+          !caps.purchases
+              ? 'VIP and bundles are sold in the iPhone app. A VIP subscription bought there is active here too.'
+              : isVip
+                  ? 'Payment is charged to your Apple ID when you confirm. VIP renews automatically unless cancelled at least 24 hours before the period ends; manage it in your App Store account settings.'
+                  : 'Payment is charged to your Apple ID when you confirm, or when the free trial ends. VIP renews automatically unless cancelled at least 24 hours before the period ends; manage it in your App Store account settings.',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: TypeSize.caption, height: 1.35, color: c.textTertiary),
+        ),
+      ],
+      // Apple asks for both links where a subscription is sold (guideline 3.1.2).
+      const SizedBox(height: 6),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _FooterLink(key: const ValueKey('store-terms'), label: 'Terms of use', url: AppLinks.termsOfUse),
+          Text('·', style: TextStyle(fontSize: TypeSize.caption, color: c.textTertiary)),
+          _FooterLink(key: const ValueKey('store-privacy'), label: 'Privacy policy', url: AppLinks.privacyPolicy),
+        ],
+      ),
+    ];
+    const header = EdgeInsets.fromLTRB(0, 24, 0, 12);
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: GlassAppBar(
@@ -263,87 +294,70 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
             const StoreWebNotice(),
             const SizedBox(height: 12),
           ],
-          if (pricesDown) ...[
-            _StoreDownNotice(onRetry: () => ref.invalidate(storeAvailableProvider)),
-            const SizedBox(height: 12),
-          ],
           // A member sees their membership first, small; the sales card is for everyone else.
           if (isVip) ...[
             _VipMemberCard(key: _vipKey, until: profile?.vipExpiresAt, manage: caps.purchases),
             const SizedBox(height: 12),
           ],
-          // Free coins via bonus video, limited per day and spaced by a cooldown.
-          _FreeCoinsRow(adsLeft: adsLeft, busy: _adBusy, onWatch: _watchAd),
-          const SectionHeader(title: 'Coins', subtitle: 'Unlock packs and boosters', padding: EdgeInsets.fromLTRB(0, 24, 0, 8)),
-          _FreeNote(text: 'Free coins: daily quests, the daily gift, level-ups, the piggy bank and the Lucky Wheel.'),
-          _ProductGrid(products: _coinProducts, onBuy: _buy, priceOf: (p) => _price(p, products), rawPriceOf: (p) => _rawPrice(p, products), busy: busy, activeId: activeId, purchasable: caps.purchases, unavailable: pricesDown),
-          const SectionHeader(title: 'Tickets', subtitle: 'Premium packs and the piggy bank', padding: EdgeInsets.fromLTRB(0, 24, 0, 8)),
-          _FreeNote(text: 'Free tickets: the daily gift, weekly quests, world-day events and every third level.'),
-          _ProductGrid(products: _ticketProducts, onBuy: _buy, priceOf: (p) => _price(p, products), rawPriceOf: (p) => _rawPrice(p, products), busy: busy, activeId: activeId, purchasable: caps.purchases, unavailable: pricesDown),
-          const SectionHeader(title: 'Hints', subtitle: 'Show a card its place', padding: EdgeInsets.fromLTRB(0, 24, 0, 8)),
-          _FreeNote(text: 'Free hints: the daily gift on even days, every second level and the Lucky Wheel.'),
-          _ProductGrid(products: _boosterProducts, onBuy: _buy, priceOf: (p) => _price(p, products), rawPriceOf: (p) => _rawPrice(p, products), busy: busy, activeId: activeId, purchasable: caps.purchases, unavailable: pricesDown),
-          if (!isVip) ...[
-            const SizedBox(height: 24),
-            _VipCard(
-              key: _vipKey,
-              isVip: isVip,
-              vipUntil: profile?.vipExpiresAt,
-              monthlyPrice: products[ProductIds.vipMonthly]?.price ?? StoreProducts.price(ProductIds.vipMonthly),
-              yearlyPrice: products[ProductIds.vipYearly]?.price ?? StoreProducts.price(ProductIds.vipYearly),
-              yearlySaving: _yearlySaving(products),
-              busy: busy,
-              activeId: activeId,
-              purchasable: caps.purchases,
-              unavailable: pricesDown,
-              onBuyMonthly: () => _buyVip(ProductIds.vipMonthly),
-              onBuyYearly: () => _buyVip(ProductIds.vipYearly),
-              onRedeem: _redeemCode,
-            ),
-          ],
-          const SizedBox(height: 16),
-          Center(
-            child: Text(
-              !caps.purchases
-                  ? 'VIP and bundles are sold in the iPhone app. A VIP subscription bought there is active here too.'
-                  : isVip && storeUp
-                      ? 'Payment is charged to your Apple ID when you confirm. VIP renews automatically unless cancelled at least 24 hours before the period ends; manage it in your App Store account settings.'
-                      : storeUp || !pricesDown
-                      ? 'Payment is charged to your Apple ID when you confirm, or when the free trial ends. VIP renews automatically unless cancelled at least 24 hours before the period ends; manage it in your App Store account settings.'
-                      : (kDebugMode ? 'Store unavailable on this device. Debug sandbox purchases grant items locally.' : 'The App Store is not available right now.'),
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: TypeSize.caption, color: c.textTertiary),
-            ),
-          ),
-          // Apple asks for both links where a subscription is sold (guideline 3.1.2).
-          const SizedBox(height: 6),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _FooterLink(key: const ValueKey('store-terms'), label: 'Terms of use', url: AppLinks.termsOfUse),
-              Text('·', style: TextStyle(fontSize: TypeSize.caption, color: c.textTertiary)),
-              _FooterLink(key: const ValueKey('store-privacy'), label: 'Privacy policy', url: AppLinks.privacyPolicy),
+          if (pricesDown) ...[
+            // Nothing for sale while the App Store is away: one panel says so, then what is free.
+            _StoreDownPanel(retrying: retrying, onRetry: () => ref.invalidate(storeAvailableProvider)),
+            const SectionHeader(title: 'Earn for free', subtitle: 'Coins, tickets and hints without paying', padding: header),
+            freeVideo,
+            const SizedBox(height: 12),
+            const _FreeWays(),
+          ] else ...[
+            // What can be bought first; the free video is the first coin offer, styled like a bundle.
+            SectionHeader(title: 'Coins', subtitle: 'Unlock packs and boosters', padding: header.copyWith(top: isVip || !caps.purchases ? 12 : 4)),
+            freeVideo,
+            const SizedBox(height: 12),
+            grid(_coinProducts),
+            const SectionHeader(title: 'Tickets', subtitle: 'Premium packs and the piggy bank', padding: header),
+            grid(_ticketProducts),
+            const SectionHeader(title: 'Hints', subtitle: 'Show a card its place', padding: header),
+            grid(_boosterProducts),
+            if (!isVip) ...[
+              const SizedBox(height: 24),
+              _VipCard(
+                key: _vipKey,
+                monthlyPrice: products[ProductIds.vipMonthly]?.price ?? StoreProducts.price(ProductIds.vipMonthly),
+                yearlyPrice: products[ProductIds.vipYearly]?.price ?? StoreProducts.price(ProductIds.vipYearly),
+                yearlySaving: _yearlySaving(products),
+                busy: busy,
+                activeId: activeId,
+                purchasable: caps.purchases,
+                onBuyMonthly: () => _buyVip(ProductIds.vipMonthly),
+                onBuyYearly: () => _buyVip(ProductIds.vipYearly),
+                onRedeem: _redeemCode,
+              ),
             ],
-          ),
+            // The terms sit with what they are about: right under the last thing for sale.
+            ...legal,
+            // Then how to get things without paying.
+            const SectionHeader(title: 'Earn for free', subtitle: 'Coins, tickets and hints without paying', padding: header),
+            const _FreeWays(),
+          ],
+          if (pricesDown) ...[const SizedBox(height: 16), ...legal],
         ],
       ),
     );
   }
 }
 
-/// The free video row: one line of detail and one honest state on the right:
-/// "Watch +40", the minutes until the next one, or "Back tomorrow" as plain text.
-class _FreeCoinsRow extends ConsumerStatefulWidget {
-  const _FreeCoinsRow({required this.adsLeft, required this.busy, required this.onWatch});
+/// The free video as the first coin offer, styled like a bundle: the coin art with a play mark,
+/// the amount, how many are left today, and the "price" (Watch) as the tile's button. One honest
+/// state in its place: Watch, the minutes until the next one, or Back tomorrow.
+class _FreeVideoOffer extends ConsumerStatefulWidget {
+  const _FreeVideoOffer({required this.adsLeft, required this.busy, required this.onWatch});
   final int adsLeft;
   final bool busy;
   final VoidCallback onWatch;
 
   @override
-  ConsumerState<_FreeCoinsRow> createState() => _FreeCoinsRowState();
+  ConsumerState<_FreeVideoOffer> createState() => _FreeVideoOfferState();
 }
 
-class _FreeCoinsRowState extends ConsumerState<_FreeCoinsRow> {
+class _FreeVideoOfferState extends ConsumerState<_FreeVideoOffer> {
   Timer? _tick;
 
   @override
@@ -356,42 +370,79 @@ class _FreeCoinsRowState extends ConsumerState<_FreeCoinsRow> {
   Widget build(BuildContext context) {
     final c = context.colors;
     final wait = HouseAdPolicy.rewardedWaitLeft(ref.read(localStoreProvider).lastRewardedAt);
-    // While a cooldown runs, look again every 20 s so the row turns back into Watch by itself.
+    // While a cooldown runs, look again every 20 s so the tile turns back into Watch by itself.
     _tick?.cancel();
     if (wait > Duration.zero && widget.adsLeft > 0) _tick = Timer(const Duration(seconds: 20), () => mounted ? setState(() {}) : null);
-    final Widget trailing;
-    if (widget.adsLeft == 0) {
-      trailing = Text('Back tomorrow', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.body, fontWeight: FontWeight.w600));
-    } else if (wait > Duration.zero) {
-      trailing = Text('Next in ${formatTimeLeft(wait)}', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.body, fontWeight: FontWeight.w600));
-    } else {
-      trailing = BigButton.cost(label: 'Watch', currency: Currency.coins, amount: Economy.adRewardCoins, amountPrefix: '+', height: 40, expand: false, onTap: widget.busy ? null : widget.onWatch);
-    }
-    return SoftCard(
-      padding: Insets.cardCompact,
-      child: Row(
-        children: [
-          const IconTile(icon: AppIcons.video, size: IconTile.medium),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Free coins', style: Theme.of(context).textTheme.titleMedium),
-                const SizedBox(height: 2),
-                Text(
-                  // The play mark and Watch say it is a video; the line keeps to what changes.
-                  widget.adsLeft > 0 ? '${widget.adsLeft} left today' : 'All ${Profile.adsPerDay} used today',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote),
-                ),
-              ],
+    final ready = widget.adsLeft > 0 && wait <= Duration.zero;
+    final status = widget.adsLeft == 0 ? 'Back tomorrow' : (wait > Duration.zero ? 'Next in ${formatTimeLeft(wait)}' : null);
+    return Pressable(
+      onTap: ready && !widget.busy ? widget.onWatch : null,
+      scale: 0.99,
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(16, 12, 12, 12),
+        decoration: BoxDecoration(color: c.card, borderRadius: BorderRadius.circular(Radii.lg), border: Border.all(color: c.stroke)),
+        child: Row(
+          children: [
+            // A coin with a small play mark: a bundle paid for with a short video.
+            SizedBox(
+              width: 46,
+              height: 42,
+              child: Stack(
+                children: [
+                  const Positioned(left: 0, top: 3, child: CoinIcon(size: 36)),
+                  Positioned(
+                    right: 0,
+                    bottom: 0,
+                    child: Container(
+                      width: 20,
+                      height: 20,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(color: context.accentFill, shape: BoxShape.circle, border: Border.all(color: c.card, width: 2)),
+                      child: Padding(padding: const EdgeInsets.only(left: 1), child: Icon(AppIcons.playFill, size: 9, color: context.onAccent)),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(width: 10),
-          trailing,
-        ],
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Two lines at most (Larger Text on a small phone), never cut.
+                  Text('${formatCount(Economy.adRewardCoins)} coins, free', maxLines: 2, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.callout, letterSpacing: -0.2)),
+                  const SizedBox(height: 2),
+                  Text(
+                    // The play mark and Watch say it is a video; the line keeps to what changes.
+                    widget.adsLeft > 0 ? '${widget.adsLeft} of ${Profile.adsPerDay} left today' : 'All ${Profile.adsPerDay} used today',
+                    maxLines: 2,
+                    style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 10),
+            // The tile's "price": a button like the bundles' price buttons, or the state as text.
+            if (status != null)
+              Padding(
+                padding: const EdgeInsets.only(right: 4),
+                child: Text(status, style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote, fontWeight: FontWeight.w600)),
+              )
+            else
+              _PriceButton(
+                width: 96,
+                busy: widget.busy,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(AppIcons.playFill, size: 12, color: context.accent),
+                    const SizedBox(width: 6),
+                    Text('Watch', style: TextStyle(color: context.accent, fontWeight: FontWeight.w700, fontSize: TypeSize.body)),
+                  ],
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -446,42 +497,39 @@ class StoreWebNotice extends StatelessWidget {
   }
 }
 
-/// Top of the Store when the App Store gave no prices: what happened, that the
-/// game itself is not affected, and a way to ask again.
-class _StoreDownNotice extends StatelessWidget {
-  const _StoreDownNotice({required this.onRetry});
+/// In place of the bundles and VIP when the App Store gave no prices: what happened, that the game
+/// itself is not affected, and the one action that can help.
+class _StoreDownPanel extends StatelessWidget {
+  const _StoreDownPanel({required this.retrying, required this.onRetry});
+  final bool retrying;
   final VoidCallback onRetry;
 
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
     return SoftCard(
-      padding: Insets.card,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
+      child: Column(
         children: [
-          const IconTile(icon: AppIcons.signal, size: IconTile.small),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('The App Store is not responding', style: Theme.of(context).textTheme.titleMedium),
-                const SizedBox(height: 3),
-                Text('Prices and purchases come back when it answers. Free coins and everything you own work as usual.', style: TextStyle(fontSize: TypeSize.footnote, height: 1.35, color: c.textSecondary)),
-                const SizedBox(height: 10),
-                BigButton(label: 'Try again', kind: ButtonKind.secondary, height: 36, expand: false, onTap: onRetry),
-              ],
-            ),
+          const IconTile(icon: AppIcons.signal, size: IconTile.tool),
+          const SizedBox(height: 12),
+          Text('Purchases are unavailable', textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleLarge),
+          const SizedBox(height: 6),
+          Text(
+            'The App Store is not responding, so coins, tickets, hints and VIP cannot be bought right now. Everything you own works as usual.',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: TypeSize.footnote, height: 1.4, color: c.textSecondary),
           ),
+          const SizedBox(height: 16),
+          BigButton(label: 'Try again', kind: ButtonKind.secondary, height: 44, loading: retrying, onTap: retrying ? null : onRetry),
         ],
       ),
     );
   }
 }
 
-/// The Store's first row for a VIP member: what they have, until when, and where to
-/// manage it. One quiet card instead of the sales pitch.
+/// The Store's first row for a VIP member: what they have, until when, and where to manage it.
+/// A small card in the VIP look (lib/widgets/vip.dart) instead of the sales pitch.
 class _VipMemberCard extends StatelessWidget {
   const _VipMemberCard({super.key, required this.until, required this.manage});
   final DateTime? until;
@@ -490,61 +538,63 @@ class _VipMemberCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final c = context.colors;
-    return SoftCard(
-      padding: Insets.card,
+    return VipSurface(
+      padding: Insets.cardCompact,
       child: Row(
         children: [
-          IconTile(icon: AppIcons.vip, size: IconTile.medium, color: Brand.coin.withValues(alpha: context.isDark ? 0.18 : 0.14), iconColor: context.isDark ? Brand.coin : Brand.coinDeep),
+          const VipCrown(size: IconTile.medium),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('VIP', style: Theme.of(context).textTheme.titleLarge),
+                const Text('VIP', style: TextStyle(color: Vip.fg, fontWeight: FontWeight.w700, fontSize: TypeSize.headline, letterSpacing: -0.2)),
                 const SizedBox(height: 2),
+                // On a narrow phone the line breaks before the date, never inside it.
                 Text(
-                  until != null ? 'Active until ${formatDate(until!)}' : 'Active',
-                  style: TextStyle(fontSize: TypeSize.footnote, color: c.textSecondary),
+                  until != null ? 'Active until ${formatDate(until!).replaceAll(' ', '\u00A0')}' : 'Active',
+                  maxLines: 2,
+                  style: TextStyle(fontSize: TypeSize.footnote, color: Vip.fgSecondary),
                 ),
               ],
             ),
           ),
-          if (manage)
-            CupertinoButton(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-              minimumSize: const Size(44, 44),
-              onPressed: () async {
+          if (manage) ...[
+            const SizedBox(width: 12),
+            BigButton(
+              label: 'Manage',
+              kind: ButtonKind.ghostLight,
+              height: 36,
+              expand: false,
+              onTap: () async {
                 if (!await openLink(AppLinks.manageSubscriptions) && context.mounted) {
                   showToast(context, 'The page could not open. Check your connection and try again.', icon: AppIcons.signal);
                 }
               },
-              child: Text('Manage', style: TextStyle(color: context.accent, fontSize: TypeSize.body, fontWeight: FontWeight.w600)),
             ),
+          ],
         ],
       ),
     );
   }
 }
 
+/// VIP for everyone who does not have it, in the VIP look (lib/widgets/vip.dart): the benefits,
+/// then the two plans with their prices as the most prominent pricing on the card, one gold button
+/// that starts the selected plan's free trial, and the exact line of what follows (App Review 3.1.2).
 class _VipCard extends StatefulWidget {
   const _VipCard({
     super.key,
-    required this.isVip,
-    required this.vipUntil,
     required this.monthlyPrice,
     required this.yearlyPrice,
     this.yearlySaving,
     required this.busy,
     this.activeId,
     this.purchasable = true,
-    this.unavailable = false,
     required this.onBuyMonthly,
     required this.onBuyYearly,
     required this.onRedeem,
   });
-  final bool isVip;
-  final DateTime? vipUntil;
   final String monthlyPrice;
   final String yearlyPrice;
   /// Whole percent the yearly plan saves over twelve months, when known.
@@ -559,9 +609,6 @@ class _VipCard extends StatefulWidget {
   /// prices and the gift-code link are replaced by an "Available on iPhone"
   /// label.
   final bool purchasable;
-
-  /// The App Store gave no prices: the plans are not offered until it answers.
-  final bool unavailable;
   final VoidCallback onBuyMonthly;
   final VoidCallback onBuyYearly;
   final VoidCallback onRedeem;
@@ -577,25 +624,20 @@ class _VipCardState extends State<_VipCard> {
   @override
   Widget build(BuildContext context) {
     final w = widget;
-    final isVip = w.isVip, vipUntil = w.vipUntil, purchasable = w.purchasable, busy = w.busy;
-    final c = context.colors;
-    // A quiet card like the rest of the Store: the crown keeps its gold, actions are cobalt.
-    final fg = c.textPrimary;
-    return Container(
+    final busy = w.busy;
+    return VipSurface(
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(color: c.card, borderRadius: BorderRadius.circular(Radii.lg), border: Border.all(color: c.stroke)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          const Row(
             children: [
-              IconTile(icon: AppIcons.vip, size: IconTile.medium, color: Brand.coin.withValues(alpha: context.isDark ? 0.18 : 0.14), iconColor: context.isDark ? Brand.coin : Brand.coinDeep),
-              const SizedBox(width: 12),
-              Expanded(child: Text('Card Jigsaw World VIP', style: TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.title3, letterSpacing: -0.3, color: fg))),
-              if (isVip) const Chip2(label: 'Active', icon: AppIcons.checkmarkAlt),
+              VipCrown(size: 44),
+              SizedBox(width: 12),
+              Expanded(child: Text('Card Jigsaw World VIP', style: TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.title3, letterSpacing: -0.3, color: Vip.fg))),
             ],
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
           for (final line in const [
             'Every pack and every past monthly pack unlocked',
             'A 4th daily quest and a 6th weekly quest',
@@ -606,34 +648,22 @@ class _VipCardState extends State<_VipCard> {
             Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(AppIcons.checkmarkCircleFill, color: context.accent, size: 16),
+                  const Padding(padding: EdgeInsets.only(top: 1), child: Icon(AppIcons.checkmarkCircleFill, color: Vip.gold, size: 16)),
                   const SizedBox(width: 8),
-                  Expanded(child: Text(line, style: TextStyle(color: fg, fontSize: TypeSize.footnote))),
+                  Expanded(child: Text(line, style: TextStyle(color: Vip.fg.withValues(alpha: 0.92), fontSize: TypeSize.footnote, height: 1.3))),
                 ],
               ),
             ),
           const SizedBox(height: 10),
-          if (isVip)
-            Text(
-              vipUntil != null ? 'VIP is active until ${formatDate(vipUntil)}. Thank you for supporting the game.' : 'VIP is active. Thank you for supporting the game.',
-              style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote),
-            )
-          else if (purchasable && w.unavailable)
+          if (!w.purchasable)
             Row(
               children: [
-                Icon(AppIcons.signal, size: 16, color: c.textSecondary),
-                const SizedBox(width: 8),
-                Expanded(child: Text('Plans and prices show here once the App Store answers.', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote))),
-              ],
-            )
-          else if (!purchasable)
-            Row(
-              children: [
-                Chip2(label: 'Available on iPhone', icon: AppIcons.devicePhonePortrait, color: c.accentTint, foreground: context.accent),
+                Chip2(label: 'Available on iPhone', icon: AppIcons.devicePhonePortrait, color: Colors.white.withValues(alpha: 0.12), foreground: Vip.fg),
                 const SizedBox(width: 10),
                 // No price on web: the App Store shows it on iPhone.
-                Expanded(child: Text('Starts with a ${StoreProducts.vipTrialDays}-day free trial.', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.caption))),
+                Expanded(child: Text('Starts with a ${StoreProducts.vipTrialDays}-day free trial.', style: TextStyle(color: Vip.fgSecondary, fontSize: TypeSize.caption))),
               ],
             )
           else ...[
@@ -657,10 +687,11 @@ class _VipCardState extends State<_VipCard> {
               selected: !_yearly,
               onTap: busy ? null : () => setState(() => _yearly = false),
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 16),
             // One button starts the selected plan; it waits while either plan's App Store sheet is open.
             BigButton(
               label: 'Start ${StoreProducts.vipTrialDays}-day free trial',
+              kind: ButtonKind.gold,
               loading: w.activeId == ProductIds.vipYearly || w.activeId == ProductIds.vipMonthly,
               onTap: busy ? null : (_yearly ? w.onBuyYearly : w.onBuyMonthly),
             ),
@@ -669,24 +700,24 @@ class _VipCardState extends State<_VipCard> {
               child: Text(
                 '${StoreProducts.vipTrialDays} days free, then ${_yearly ? '${w.yearlyPrice} a year' : '${w.monthlyPrice} a month'}. Cancel anytime.',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote),
+                style: TextStyle(color: Vip.fgSecondary, fontSize: TypeSize.footnote),
               ),
             ),
-          ],
-          if (purchasable && !w.unavailable) ...[
-            const SizedBox(height: 14),
+            const SizedBox(height: 10),
             Center(
               child: Pressable(
                 onTap: w.onRedeem,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(AppIcons.gift, size: 16, color: context.accent),
-                      const SizedBox(width: 6),
-                      Flexible(child: Text('Have a gift code? Redeem it', style: TextStyle(color: context.accent, fontSize: TypeSize.footnote, fontWeight: FontWeight.w600))),
-                    ],
+                child: TapTarget(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(AppIcons.gift, size: 16, color: Vip.fgSecondary),
+                        const SizedBox(width: 6),
+                        Flexible(child: Text('Have a gift code? Redeem it', style: TextStyle(color: Vip.fg.withValues(alpha: 0.86), fontSize: TypeSize.footnote, fontWeight: FontWeight.w600))),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -698,8 +729,8 @@ class _VipCardState extends State<_VipCard> {
   }
 }
 
-/// One VIP plan: a radio mark, the plan name (with its saving) and its price, large.
-/// The selected plan is tinted and outlined in the accent.
+/// One VIP plan on the VIP card: a radio mark, the plan name (with its saving in gold) and its
+/// price, large. The selected plan gets a gold outline on a faint white fill.
 class _PlanRow extends StatelessWidget {
   const _PlanRow({super.key, required this.title, required this.price, required this.period, this.badge, required this.selected, required this.onTap});
   final String title;
@@ -711,9 +742,6 @@ class _PlanRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final c = context.colors;
-    final accent = context.accent;
-    final fg = c.textPrimary;
     return Semantics(
       selected: selected,
       button: true,
@@ -725,20 +753,20 @@ class _PlanRow extends StatelessWidget {
           duration: const Duration(milliseconds: 180),
           padding: const EdgeInsets.fromLTRB(12, 12, 14, 12),
           decoration: BoxDecoration(
-            color: selected ? c.accentTint : c.card,
+            color: Colors.white.withValues(alpha: selected ? 0.08 : 0.0),
             borderRadius: BorderRadius.circular(Radii.md),
-            border: Border.all(color: selected ? accent : c.stroke, width: selected ? 2 : 1),
+            border: Border.all(color: selected ? Vip.gold : Vip.line, width: selected ? 2 : 1),
           ),
           child: Row(
             children: [
-              Icon(selected ? AppIcons.checkmarkCircleFill : AppIcons.circle, size: 22, color: selected ? accent : c.textTertiary),
+              Icon(selected ? AppIcons.checkmarkCircleFill : AppIcons.circle, size: 22, color: selected ? Vip.gold : Vip.fgTertiary),
               const SizedBox(width: 10),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(title, style: TextStyle(color: fg, fontSize: TypeSize.body, fontWeight: FontWeight.w600)),
-                    if (badge != null) Text(badge!, style: TextStyle(color: accent, fontSize: TypeSize.caption, fontWeight: FontWeight.w700)),
+                    Text(title, style: const TextStyle(color: Vip.fg, fontSize: TypeSize.body, fontWeight: FontWeight.w600)),
+                    if (badge != null) Text(badge!, style: const TextStyle(color: Vip.gold, fontSize: TypeSize.caption, fontWeight: FontWeight.w700)),
                   ],
                 ),
               ),
@@ -746,9 +774,9 @@ class _PlanRow extends StatelessWidget {
               Text.rich(
                 TextSpan(children: [
                   TextSpan(text: price, style: const TextStyle(fontSize: TypeSize.headline, fontWeight: FontWeight.w700, letterSpacing: -0.3)),
-                  TextSpan(text: ' $period', style: TextStyle(fontSize: TypeSize.footnote, color: c.textSecondary)),
+                  TextSpan(text: ' $period', style: TextStyle(fontSize: TypeSize.footnote, color: Vip.fgSecondary)),
                 ]),
-                style: TextStyle(color: fg),
+                style: const TextStyle(color: Vip.fg),
               ),
             ],
           ),
@@ -763,29 +791,28 @@ enum _Art { coin, coins, coinsLarge, coinsHuge, ticket, tickets, hints, hintsLar
 /// A store tile. Amounts and fallback prices come from [StoreProducts], the
 /// one table the server grant and the App Store metadata are checked against.
 class _Product {
-  const _Product(this.id, {this.art = _Art.coin, this.badge});
+  const _Product(this.id, {this.art = _Art.coin});
   final String id;
   final _Art art;
-  final String? badge;
 
   ProductGrant get grant => StoreProducts.grant(id);
   String get title => grant.label;
   String get price => StoreProducts.price(id);
 }
 
-final _coinProducts = [
-  const _Product(ProductIds.coins1000, art: _Art.coin),
-  const _Product(ProductIds.coins3000, art: _Art.coins, badge: 'Popular'),
-  _Product(ProductIds.coins5500, art: _Art.coinsLarge, badge: '+${StoreProducts.coinBonusPercent(ProductIds.coins5500)}%'),
-  const _Product(ProductIds.coins12000, art: _Art.coinsHuge, badge: 'Best value'),
+const _coinProducts = [
+  _Product(ProductIds.coins1000, art: _Art.coin),
+  _Product(ProductIds.coins3000, art: _Art.coins),
+  _Product(ProductIds.coins5500, art: _Art.coinsLarge),
+  _Product(ProductIds.coins12000, art: _Art.coinsHuge),
 ];
 const _ticketProducts = [
   _Product(ProductIds.tickets5, art: _Art.ticket),
-  _Product(ProductIds.tickets15, art: _Art.tickets, badge: 'Popular'),
+  _Product(ProductIds.tickets15, art: _Art.tickets),
 ];
 const _boosterProducts = [
   _Product(ProductIds.hints5, art: _Art.hints),
-  _Product(ProductIds.hints15, art: _Art.hintsLarge, badge: 'Popular'),
+  _Product(ProductIds.hints15, art: _Art.hintsLarge),
 ];
 
 /// Product artwork: stacked currency marks whose count grows with the bundle.
@@ -833,32 +860,68 @@ class _Ringed extends StatelessWidget {
       );
 }
 
-/// Quiet reminder that every currency can be earned without paying: one caption under
-/// the section title. It is information, not a button (it used to close the Store and
-/// jump to another tab).
-class _FreeNote extends StatelessWidget {
-  const _FreeNote({required this.text});
-  final String text;
+/// Every way to earn without paying, each row naming where it leads: the daily gift and the piggy
+/// bank open as sheets over the Store, the Lucky Wheel on top of it, the quests on their tab.
+/// Level-ups are information only.
+class _FreeWays extends StatelessWidget {
+  const _FreeWays();
 
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 0, 8, 12),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    Widget divider() => Divider(height: 1, thickness: 1, color: c.stroke, indent: 16 + IconTile.small + 12);
+    return SoftCard(
+      padding: EdgeInsets.zero,
+      child: Column(
         children: [
-          Padding(padding: const EdgeInsets.only(top: 1), child: Icon(AppIcons.dailyGift, size: 15, color: c.textTertiary)),
-          const SizedBox(width: 6),
-          Expanded(child: Text(text, style: TextStyle(fontSize: TypeSize.footnote, height: 1.35, color: c.textSecondary))),
+          ListRow(icon: AppIcons.dailyGift, title: 'Daily gift', subtitle: 'Coins daily, plus tickets and hints', onTap: () => showDailyRewardSheet(context)),
+          divider(),
+          ListRow(
+            icon: AppIcons.quests,
+            title: 'Quests',
+            subtitle: 'Coins daily, tickets weekly',
+            onTap: () {
+              context.pop();
+              context.go('/events');
+            },
+          ),
+          divider(),
+          ListRow(icon: AppIcons.piggy, title: 'Piggy bank', subtitle: '${Economy.piggyPerPuzzle} coins for every picture, up to ${formatCount(Profile.piggyCapacity)}', onTap: () => showPiggySheet(context)),
+          divider(),
+          ListRow(icon: AppIcons.wheel, title: 'Lucky Wheel', subtitle: 'Coins, hints and boosters for a ticket', onTap: () => context.push('/wheel')),
+          divider(),
+          const ListRow(icon: AppIcons.level, title: 'Level-ups', subtitle: 'Coins, hints and tickets as you level', trailing: SizedBox.shrink()),
         ],
       ),
     );
   }
 }
 
+/// A tile's price: a full-width button in the accent tint, or filled (the one primary) for the
+/// section's best deal. While its App Store sheet is open, a spinner keeps its place.
+class _PriceButton extends StatelessWidget {
+  const _PriceButton({required this.child, this.filled = false, this.busy = false, this.width});
+  final Widget child;
+  final bool filled;
+  final bool busy;
+  final double? width;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return Container(
+      height: 36,
+      width: width,
+      alignment: Alignment.center,
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(color: filled ? context.accentFill : c.accentTint, borderRadius: BorderRadius.circular(Radii.md)),
+      child: busy ? SizedBox(height: 18, child: CupertinoActivityIndicator(radius: 7, color: filled ? context.onAccent : null)) : FittedBox(fit: BoxFit.scaleDown, child: child),
+    );
+  }
+}
+
 class _ProductGrid extends StatelessWidget {
-  const _ProductGrid({required this.products, required this.onBuy, required this.priceOf, required this.rawPriceOf, this.busy = false, this.activeId, this.purchasable = true, this.unavailable = false});
+  const _ProductGrid({required this.products, required this.onBuy, required this.priceOf, required this.rawPriceOf, this.busy = false, this.activeId, this.purchasable = true});
   final List<_Product> products;
   final void Function(_Product) onBuy;
   final String Function(_Product) priceOf;
@@ -873,65 +936,65 @@ class _ProductGrid extends StatelessWidget {
     return ((_amount(p) / rawPriceOf(p) / base - 1) * 100).floor();
   }
 
-  /// A purchase is under way: no row takes a tap, and the others dim.
+  /// A purchase is under way: no tile takes a tap, and the others dim.
   final bool busy;
 
-  /// The row whose purchase is under way: a spinner in place of its price.
+  /// The tile whose purchase is under way: a spinner in place of its price.
   final String? activeId;
 
   /// False on web: each tile shows "Available on iPhone" instead of its
   /// price, and a tap says where to buy it.
   final bool purchasable;
 
-  /// No prices from the App Store: the rows stay as information, with no price.
-  final bool unavailable;
   @override
   Widget build(BuildContext context) {
-    final c = context.colors;
-    // One grouped list per section, as in the App Store's in-app purchase list: art,
-    // amount and what makes it special on the left, the price as a button on the right.
-    return Padding(
-      padding: const EdgeInsets.only(top: 4),
-      child: SoftCard(
-        padding: EdgeInsets.zero,
-        child: Column(
+    // Two centred tiles a row: the measured saving in its own line on top (never over the art),
+    // the art, the amount, and the price as a full-width button. The section's best deal is the
+    // one filled price: the value speaks, no outline or label needed.
+    final bestIndex = products.length > 1 && _bonus(products.last) >= 3 ? products.length - 1 : -1;
+    return LayoutBuilder(
+      builder: (context, box) {
+        const gap = 12.0;
+        final width = (box.maxWidth - gap) / 2;
+        return Wrap(
+          spacing: gap,
+          runSpacing: gap,
           children: [
-            for (var i = 0; i < products.length; i++) ...[
-              if (i > 0) Divider(height: 1, thickness: 1, color: c.stroke, indent: 16 + 72 + 12),
-              _ProductRow(
-                product: products[i],
-                price: priceOf(products[i]),
-                bonus: _bonus(products[i]),
-                best: products.length > 1 && i == products.length - 1 && _bonus(products[i]) >= 3,
-                purchasable: purchasable,
-                unavailable: unavailable,
-                active: products[i].id == activeId,
-                dimmed: busy && products[i].id != activeId,
-                onTap: !purchasable
-                    ? () => showToast(context, purchasesOnIphoneMessage, icon: AppIcons.devicePhonePortrait)
-                    : (busy ? null : () => onBuy(products[i])),
+            for (var i = 0; i < products.length; i++)
+              SizedBox(
+                width: width,
+                child: _ProductTile(
+                  product: products[i],
+                  price: priceOf(products[i]),
+                  bonus: _bonus(products[i]),
+                  best: i == bestIndex,
+                  purchasable: purchasable,
+                  active: products[i].id == activeId,
+                  dimmed: busy && products[i].id != activeId,
+                  onTap: !purchasable
+                      ? () => showToast(context, purchasesOnIphoneMessage, icon: AppIcons.devicePhonePortrait)
+                      : (busy ? null : () => onBuy(products[i])),
+                ),
               ),
-            ],
           ],
-        ),
-      ),
+        );
+      },
     );
   }
 }
 
-class _ProductRow extends StatelessWidget {
-  const _ProductRow({required this.product, required this.price, required this.bonus, required this.best, required this.purchasable, this.unavailable = false, this.active = false, this.dimmed = false, required this.onTap});
+class _ProductTile extends StatelessWidget {
+  const _ProductTile({required this.product, required this.price, required this.bonus, required this.best, required this.purchasable, this.active = false, this.dimmed = false, required this.onTap});
   final _Product product;
   final String price;
   final int bonus;
   final bool best;
   final bool purchasable;
-  final bool unavailable;
 
   /// Its App Store sheet is open: a spinner in place of the price.
   final bool active;
 
-  /// Another row's purchase is under way.
+  /// Another tile's purchase is under way.
   final bool dimmed;
   final VoidCallback? onTap;
 
@@ -941,61 +1004,47 @@ class _ProductRow extends StatelessWidget {
     final p = product;
     return Pressable(
       onTap: onTap,
-      scale: 0.99,
+      scale: 0.98,
       child: AnimatedOpacity(
         opacity: dimmed ? 0.5 : 1,
         duration: const Duration(milliseconds: 200),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 12, 14, 12),
-          child: Row(
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
+          decoration: BoxDecoration(color: c.card, borderRadius: BorderRadius.circular(Radii.lg), border: Border.all(color: c.stroke)),
+          child: Column(
             children: [
-              SizedBox(width: 72, height: 40, child: Align(alignment: Alignment.centerLeft, child: _ProductArt(art: p.art))),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(p.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.callout, letterSpacing: -0.2)),
-                    if (bonus >= 3) ...[
-                      const SizedBox(height: 2),
-                      Row(
-                        children: [
-                          Text('+$bonus%', style: TextStyle(color: context.accent, fontWeight: FontWeight.w600, fontSize: TypeSize.footnote)),
-                          Flexible(
-                            child: Text(
-                              ' more ${p.grant.coins > 0 ? 'coins' : p.grant.tickets > 0 ? 'tickets' : 'hints'}',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(color: context.accent, fontWeight: FontWeight.w600, fontSize: TypeSize.footnote),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ],
-                ),
+              // The saving has its own line, so it never sits on the art; empty for the base bundle
+              // (and on web, where no price is shown to compare).
+              SizedBox(
+                // The chip's own height (it grows with Larger Text), the same in every tile of a row.
+                height: MediaQuery.textScalerOf(context).scale(TypeSize.caption * 1.2) + 10,
+                child: bonus >= 3 && purchasable
+                    ? Center(child: Chip2(label: '+$bonus% more', color: c.accentTint, foreground: context.accent))
+                    : null,
               ),
-              const SizedBox(width: 10),
-              if (purchasable && unavailable)
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  decoration: BoxDecoration(color: c.canvas, borderRadius: BorderRadius.circular(999), border: Border.all(color: c.stroke)),
-                  child: Text('Unavailable', maxLines: 1, style: TextStyle(color: c.textTertiary, fontWeight: FontWeight.w600, fontSize: TypeSize.footnote)),
-                )
-              else if (purchasable)
-                Container(
-                  constraints: const BoxConstraints(minWidth: 76),
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                  alignment: Alignment.center,
-                  // The best deal of the section is the one filled price: the value speaks, no label needed.
-                  decoration: BoxDecoration(color: best ? context.accentFill : c.accentTint, borderRadius: BorderRadius.circular(999)),
-                  // The pill keeps its place while the spinner waits in it.
-                  child: active
-                      ? SizedBox(height: 18, child: CupertinoActivityIndicator(radius: 7, color: best ? context.onAccent : null))
-                      : Text(price, style: TextStyle(color: best ? context.onAccent : context.accent, fontWeight: FontWeight.w700, fontSize: TypeSize.body)),
+              const SizedBox(height: 10),
+              SizedBox(height: 42, child: Center(child: _ProductArt(art: p.art))),
+              const SizedBox(height: 12),
+              // The amount is never cut: with Larger Text on a small phone it scales down a little.
+              FittedBox(fit: BoxFit.scaleDown, child: Text(p.title, maxLines: 1, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.callout, letterSpacing: -0.2))),
+              const SizedBox(height: 12),
+              if (purchasable)
+                _PriceButton(
+                  filled: best,
+                  busy: active,
+                  child: Text(price, maxLines: 1, style: TextStyle(color: best ? context.onAccent : context.accent, fontWeight: FontWeight.w700, fontSize: TypeSize.body)),
                 )
               else
-                Icon(AppIcons.devicePhonePortrait, size: 18, color: c.textTertiary),
+                _PriceButton(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(AppIcons.devicePhonePortrait, size: 13, color: context.accent),
+                      const SizedBox(width: 4),
+                      Text('Available on iPhone', maxLines: 1, style: TextStyle(color: context.accent, fontWeight: FontWeight.w600, fontSize: TypeSize.caption)),
+                    ],
+                  ),
+                ),
             ],
           ),
         ),
