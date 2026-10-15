@@ -78,7 +78,6 @@ final routerProvider = Provider<GoRouter>((ref) {
               pageBuilder: (c, s) => _noAnim(const ProfileScreen(), s),
               routes: [
                 GoRoute(path: 'settings', pageBuilder: (c, s) => _cupertino(const SettingsScreen(), s)),
-                GoRoute(path: 'account', pageBuilder: (c, s) => _cupertino(const AccountScreen(), s)),
                 GoRoute(path: 'my-puzzles', pageBuilder: (c, s) => _cupertino(const MyPuzzlesScreen(), s)),
               ],
             ),
