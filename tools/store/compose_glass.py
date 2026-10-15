@@ -6,7 +6,7 @@
     .venv/bin/python tools/store/compose_glass.py --font newyork    # rounded (default) | display | newyork
     .venv/bin/python tools/store/compose_glass.py --out /tmp/x --sheet /tmp/sheet.png
 
-Edit the copy and the slides in SLIDES below, the pane colours in GLASS; the look (panes, halo,
+Edit the copy and the slides in SLIDES below, the pane colours in GLASS_BASE; the look (panes, halo,
 headline, phones, break-out cards) is in tools/store/glass/slides.html. The app parts come from the
 raw captures of integration_test/store_screenshots_test.dart in store/raw/: light slides use the
 `<name>_light.png` captures (run the test with --dart-define=CJW_STORE_THEME=light), dark slides the
@@ -32,48 +32,83 @@ W, H = cs.W, cs.H
 
 # --------------------------------------------------------------------------------------------
 # The slides. Layouts: "A" headline on top, flat phone below; "B" phone from the top edge, headline
-# below; "C" headline on top, phone tilted `tilt` degrees (5-15; alternate the direction).
-# `phone`/`second`: capture names in store/raw (without _light). `out`: break-out cards cut from a
-# capture: `crop` is (capture, (left, top, right, bottom) in capture px) or (capture, "board");
-# x is slide px, y is measured from the phone's top edge, w is the card width. A card that
-# enlarges part of the same screen sits centred over that part (y = 37 + centre_px * 0.7015
-# - card_h / 2 for a flat phone), so it never shows twice. `second` puts a second phone behind.
+# below, a row of pictures under it; "C" headline on top, phone tilted `tilt` degrees (5-15;
+# alternate the direction). Slides 1-3 stay flat: search results show them as thumbnails.
+# `phone`/`second`: capture names in store/raw (without _light).
+# `out`: cards lifted out of the phone, cut from a capture: `crop` is (capture, (left, top, right,
+#   bottom) in capture px) or (capture, "board"); `w` is the card width. Without x/y the card sits
+#   centred over the same part of the phone's screen (so it never shows twice); with x/y it is
+#   placed in phone px (0,0 = the phone's top-left, before any tilt). Cards tilt with their phone.
+# `pics`: pictures on the slide itself: ("covers", ...) for pack covers from store/collage, or
+#   capture crops; laid out by `fan()` as a neat row, or at fixed spots.
 # Headlines: 2 lines, about five words; "\n" breaks the line. No subtext (illegible in search).
+
+DAILY = "18_daily_month_grid"
+STARRED = [(62, 840, 340, 1176), (674, 840, 952, 1176), (368, 1208, 646, 1546), (980, 1208, 1258, 1546), (368, 1576, 646, 1914)]
 
 SLIDES = [
     {"layout": "A", "head": "Swap cards.\nReveal the picture.", "phone": "03_game_cards", "brand": True},
-    {"layout": "B", "head": "Thousands\nof pictures", "phone": "15_library", "covers": True},
-    {"layout": "A", "head": "A new picture\nevery day", "phone": "18_daily_month_grid",
-     "out": [{"crop": ("18_daily_month_grid", (60, 530, 1260, 775)), "x": 70, "y": 374, "w": 1180, "radius": 44}]},
+    {"layout": "B", "head": "Thousands\nof pictures", "phone": "15_library",
+     "pics": [{"covers": [0, 3, 6, 9], "spots": [(-50, 300, 330, -8), (1040, 230, 380, 7), (-70, 1120, 330, 6), (1060, 1060, 380, -6)]},
+              {"covers": [12, 15, 18, 1, 4], "fan": {"w": 228, "h": 296, "top": 2480, "step": 244, "spread": 9, "drop": 50}}]},
+    {"layout": "A", "head": "A new picture\nevery day", "phone": DAILY,
+     "out": [{"crop": (DAILY, (60, 530, 1260, 775)), "w": 1180, "radius": 44}]},
     {"layout": "C", "head": "Four ways\nto play", "phone": "09_mode_hexagons", "tilt": -7,
-     "out": [{"crop": ("06_mode_cards", "board"), "x": 40, "y": 872, "w": 430, "rot": -9, "label": "Cards"},
-             {"crop": ("07_mode_squares", "board"), "x": 860, "y": 572, "w": 400, "rot": 8, "label": "Squares"},
-             {"crop": ("08_mode_triangles", "board"), "x": 880, "y": 1472, "w": 400, "rot": 5, "label": "Triangles"}]},
+     "out": [{"crop": ("06_mode_cards", "board"), "x": -60, "y": 880, "w": 430, "rot": -9, "label": "Cards"},
+             {"crop": ("07_mode_squares", "board"), "x": 690, "y": 560, "w": 400, "rot": 8, "label": "Squares"},
+             {"crop": ("08_mode_triangles", "board"), "x": 680, "y": 1440, "w": 400, "rot": 5, "label": "Triangles"}]},
     {"layout": "A", "head": "Puzzle your\nown photos", "phone": "20_my_puzzles",
-     "out": [{"crop": ("21_my_puzzle_game", "board"), "x": 700, "y": 1060, "w": 560, "rot": 4, "radius": 40}]},
+     "out": [{"crop": ("21_my_puzzle_game", "board"), "x": 540, "y": 1060, "w": 560, "rot": 4, "radius": 40}]},
     {"layout": "B", "head": "Fewer moves,\nmore stars", "phone": "04_complete",
-     "out": [{"crop": ("04_complete", (40, 1400, 1280, 1890)), "x": 60, "y": 954, "w": 1200, "radius": 48}]},
+     "out": [{"crop": ("04_complete", (40, 1400, 1280, 1890)), "w": 1200, "radius": 48}],
+     "pics": [{"crops": [(DAILY, b) for b in STARRED], "fan": {"w": 228, "h": 276, "top": 2480, "step": 250, "spread": 8, "drop": 44}, "radius": 22}]},
     {"layout": "C", "head": "Quests and\nlive events", "phone": "13_quests", "tilt": 7,
-     "out": [{"crop": ("14_quests_live", (60, 1440, 1260, 2480)), "x": 110, "y": 1130, "w": 900, "rot": -4, "radius": 44}]},
-    {"layout": "B", "head": "Climb the\nleaderboard", "phone": "22_social_league",
-     "out": [{"crop": ("22_social_league", (60, 720, 1260, 1200)), "x": 70, "y": 474, "w": 1180, "radius": 48}]},
-    {"layout": "C", "head": "Every pack\nwith VIP", "phone": "12_store_vip", "tilt": -7},
+     "out": [{"crop": ("14_quests_live", (60, 1440, 1260, 2480)), "x": 50, "y": 1180, "w": 900, "radius": 44}]},
+    {"layout": "A", "head": "Climb the\nleaderboard", "phone": "22_social_league",
+     "out": [{"crop": ("22_social_league", (60, 720, 1260, 1200)), "w": 1180, "radius": 48}]},
+    {"layout": "C", "head": "Every pack\nwith VIP", "phone": "12_store_vip", "tilt": -7,
+     "out": [{"crop": ("12_store_vip", (60, 670, 1260, 990)), "w": 1080, "radius": 40}]},
     {"layout": "A", "head": "Just as calm\nin the dark", "phone": "03_game_cards", "dark": True},
 ]
 
-# Pack covers floating beside the Library phone (slide px; height; rotation).
-COVER_SPOTS = [(-40, 380, 330, -8), (1040, 300, 380, 7), (-60, 1180, 330, 6), (1060, 1120, 380, -6), (20, 1960, 330, -4), (1000, 1900, 380, 9)]
-
-# Lotus glass: (light end, deep end) of each pane colour, as in the app icon.
-GLASS = {"pink": ("#FFA3C3", "#FF4F8B"), "gold": ("#FFDB80", "#F2A516"), "blue": ("#A9D8FF", "#2F86F2"), "teal": ("#8BE8CF", "#14A58B")}
+# Lotus glass, as in the app icon: the light and deep end of each pane colour.
+GLASS_BASE = {"pink": ("#FF8FB5", "#FF4F8B"), "gold": ("#FFD36A", "#F0A30F"), "blue": ("#8CCBFF", "#2F86F2"), "teal": ("#7FE3C9", "#16927E")}
 PANE_COLOURS = ["blue", "pink", "gold", "teal"]
+BODY_OPACITY = (.5, .74)  # light end, deep end of a pane's tinted body
+SHADOW_OPACITY = .2
+
+
+def mix(a: str, b: str, t: float) -> str:
+    x, y = (tuple(int(c[i:i + 2], 16) for i in (1, 3, 5)) for c in (a, b))
+    return "#" + "".join(f"{round(p + (q - p) * t):02x}" for p, q in zip(x, y))
+
+
+def glass_tones() -> dict:
+    """The tones of each glass colour (icon-glass.js): body ends, edge zone, crisp line, shadow."""
+    return {k: {"hi": mix(c0, "#ffffff", .22), "lo": mix(c1, "#000000", .1), "edge": mix(c0, "#ffffff", .7),
+                "line": mix(c1, "#000000", .3), "shadow": mix(c1, "#000000", .45)} for k, (c0, c1) in GLASS_BASE.items()}
 
 
 def panes(n: int) -> list[dict]:
-    """One huge pane centred on every seam (and both outer edges), so every screenshot shows two big
-    panes meeting on a diagonal and a pane cut by an edge goes on in the next screenshot."""
-    return [{"x": k * W - 980 + (60 if k % 2 else -60), "y": -420 + (k % 3) * 170, "w": 1960, "h": 3500,
-             "r": [11, -9, 13, -11][k % 4], "c": PANE_COLOURS[k % len(PANE_COLOURS)]} for k in range(n + 1)]
+    """Two panes on every seam (and both outer edges): a large one and a smaller one on the other
+    band, alternating up and down, so white canvas shows between them, a pane cut by a slide edge
+    goes on in the next slide, and only the background ever crosses a seam."""
+    out = []
+    for k in range(n + 1):
+        up = k % 2 == 0
+        out.append({"x": k * W - 590 + (50 if k % 2 else -50), "y": 150 if up else 1120, "w": 1180, "h": 1600,
+                    "rx": 120, "r": [12, -10, 10, -12][k % 4], "c": PANE_COLOURS[k % 4]})
+        out.append({"x": k * W - 380 + (-80 if k % 2 else 80), "y": 1850 if up else 110, "w": 760, "h": 900,
+                    "rx": 100, "r": [-9, 8, -7, 9][k % 4], "c": PANE_COLOURS[(k + 2) % 4]})
+    return out
+
+
+def fan(items: list[str], w: int, h: int, top: int, step: int, spread: float, drop: float, radius: int) -> list[dict]:
+    """A neat row of pictures centred on the slide, on a gentle arc: the middle one highest and
+    straight, the outer ones lower and turned outwards."""
+    mid = (len(items) - 1) / 2 or 1
+    return [{"src": src, "x": round(W / 2 + (i - mid) * step - w / 2), "y": round(top + drop * ((i - mid) / mid) ** 2),
+             "w": w, "h": h, "r": round(spread * (i - mid) / mid, 1), "radius": radius} for i, src in enumerate(items)]
 
 
 FONTS = {  # headline face: file, weight, tracking (em)
@@ -105,13 +140,21 @@ def board(name: str) -> tuple[int, int, int, int]:
     return round(left), round(top), round(left + w), round(top + h)
 
 
+def phone_screen() -> tuple[float, float]:
+    """Where a capture sits inside the phone frame of compose_screenshots.phone(): offset, scale."""
+    band, bezel = round(PHONE_W * 0.011), round(PHONE_W * 0.026)
+    return band + bezel, (PHONE_W - 2 * (band + bezel)) / cs.RAW_W
+
+
 def export_parts(parts: Path) -> list[dict]:
-    """Phones (one size) and break-out crops for every slide, as files the template loads."""
+    """Phones (one size), lifted cards and slide pictures for every slide, as files the template loads."""
+    off, k = phone_screen()
+    covers = [cs.COLLAGE / f"{p}.jpg" for p in cs.COLLAGE_PACKS if (cs.COLLAGE / f"{p}.jpg").exists()]
     slides = []
     for i, s in enumerate(SLIDES, start=1):
         dark = bool(s.get("dark"))
         edge = (20, 20, 24) if dark else (240, 240, 244)
-        d = {k: s[k] for k in ("layout", "head", "brand", "tilt", "dark") if k in s}
+        d = {key: s[key] for key in ("layout", "head", "brand", "tilt", "dark") if key in s}
         for key in ("phone", "second"):
             if key in s:
                 n = capture(s[key], dark)
@@ -120,19 +163,34 @@ def export_parts(parts: Path) -> list[dict]:
                     cs.phone(cs.load_raw(n), PHONE_W, edge).save(parts / f)
                 d[key] = f
         d["out"] = []
-        for k, o in enumerate(s.get("out", [])):
+        for j, o in enumerate(s.get("out", [])):
             n = capture(o["crop"][0], dark)
             box = board(n) if o["crop"][1] == "board" else o["crop"][1]
-            f = f"crop-{i}-{k}.png"
+            f = f"crop-{i}-{j}.png"
             cs.load_raw(n).crop(box).save(parts / f)
-            d["out"].append({"img": f, "x": o["x"], "y": o["y"], "w": o["w"], "rot": o.get("rot", 0),
+            h = (box[3] - box[1]) * o["w"] / (box[2] - box[0])
+            x = o.get("x", off + (box[0] + box[2]) / 2 * k - o["w"] / 2)
+            y = o.get("y", off + (box[1] + box[3]) / 2 * k - h / 2)
+            d["out"].append({"img": f, "x": round(x), "y": round(y), "w": o["w"], "rot": o.get("rot", 0),
                              "radius": o.get("radius", 34), "label": o.get("label", "")})
-        if s.get("covers"):
-            covers = [cs.COLLAGE / f"{p}.jpg" for p in cs.COLLAGE_PACKS if (cs.COLLAGE / f"{p}.jpg").exists()]
-            if not covers:
-                sys.exit("no pack covers in store/collage/; run tools/store/compose_screenshots.py --refresh-collage")
-            d["covers"] = [{"src": str(covers[j * 3 % len(covers)]), "x": x, "y": y, "h": h, "r": r}
-                           for j, (x, y, h, r) in enumerate(COVER_SPOTS)]
+        d["pics"] = []
+        for j, g in enumerate(s.get("pics", [])):
+            if "covers" in g:
+                if not covers:
+                    sys.exit("no pack covers in store/collage/; run tools/store/compose_screenshots.py --refresh-collage")
+                srcs = [str(covers[c % len(covers)]) for c in g["covers"]]
+            else:
+                srcs = []
+                for m, (name, box) in enumerate(g["crops"]):
+                    f = f"pic-{i}-{j}-{m}.png"
+                    cs.load_raw(capture(name, dark)).crop(box).save(parts / f)
+                    srcs.append(str(parts / f))
+            radius = g.get("radius", 30)
+            if "fan" in g:
+                d["pics"] += fan(srcs, radius=radius, **g["fan"])
+            else:
+                d["pics"] += [{"src": src, "x": x, "y": y, "w": round(hh * .8), "h": hh, "r": r, "radius": radius}
+                              for src, (x, y, hh, r) in zip(srcs, g["spots"])]
         slides.append(d)
     return slides
 
@@ -177,7 +235,8 @@ def main(argv: list[str]) -> None:
     for f in parts.glob("*.png"):
         f.unlink()
     font_file, weight, track = FONTS[a.font]
-    data = {"W": W, "H": H, "slides": export_parts(parts), "panes": panes(len(SLIDES)), "glass": GLASS,
+    data = {"W": W, "H": H, "slides": export_parts(parts), "panes": panes(len(SLIDES)), "glass": glass_tones(),
+            "body": BODY_OPACITY, "shadow": SHADOW_OPACITY,
             "parts": str(parts), "icon": str(ICON), "phone_w": PHONE_W,
             "phone_h": Image.open(next(parts.glob("phone-*.png"))).height,
             "head_size": HEAD_SIZE, "measure": MEASURE, "layout": LAYOUT,

@@ -17,16 +17,24 @@ in `tools/store/glass/slides.html`, then rerun the script.
   its product page preview (October 2026) only shows how the page looks in Dark
   Mode. So slides 1-9 show the light app on a light canvas and slide 10 switches
   to the dark app on a dark canvas ("Just as calm in the dark").
-- **Large glass panes** in the lotus colours (pink, gold, blue, teal), one
-  centred on every seam, so the set reads as one strip while each slide stands
-  alone: only the background crosses a seam, never a headline or a phone.
+- **Glass panes on white**: two large panes in the lotus colours (pink, gold,
+  blue, teal) on every seam, drawn with the app icon's glass recipe (see-through
+  tinted body, top sheen, light edge zone, rim of light, crisp edge, tinted
+  shadow). The bodies multiply on the white canvas, so overlaps mix like stained
+  glass, and white shows between them. The set reads as one strip while each
+  slide stands alone: only the background crosses a seam. The dark finale draws
+  the same panes as deep jewel tones.
 - **One phone size** everywhere: 1,000 px wide on the 1,320 px canvas.
-- **Three layouts:** A headline on top with a flat phone (1, 3, 5, 10); B phone
-  from the top edge with the headline below (2, 6, 8); C a phone tilted 7 degrees,
+- **Three layouts:** A headline on top with a flat phone (1, 3, 5, 8, 10); B phone
+  from the top edge, the headline below and a neat row of pictures under it (2:
+  pack covers, 6: solved pictures with their stars); C a phone tilted 7 degrees,
   alternating direction (4, 7, 9). Slides 1-3 stay flat, since search results
   show them as thumbnails.
 - **Break-out cards** lift one real part of the app out of the phone (today's
-  puzzle, the other three shapes, your own photo, Picture complete, the podium).
+  puzzle, the other three shapes, your own photo, Picture complete, the live
+  event, the podium, the VIP trial). A card that enlarges part of the same screen
+  sits centred over that part, and every card shares its phone's frame, so it
+  tilts with a tilted phone.
 - **Headlines only:** 2 lines of about five words, 136 px (a slide shrinks only
   if a line would pass 1,180 px), on a soft frosted halo. No subtext: it is
   unreadable at thumbnail size.

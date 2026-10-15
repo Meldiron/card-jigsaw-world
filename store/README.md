@@ -3,8 +3,8 @@
 Everything in this folder is generated. Edit the sources under `tools/store/`
 and the capture test, then rerun; do not hand-edit the PNGs.
 
-Design rules (glass set, `tools/store/compose_glass.py`): large panes of
-coloured glass in the lotus colours running across the whole set, light app
+Design rules (glass set, `tools/store/compose_glass.py`): panes of coloured
+glass in the lotus colours on a white canvas, running across the whole set, light app
 captures on a light canvas for slides 1-9 and a dark finale (slide 10), one
 phone size, three layouts, two-line headlines in SF Pro Rounded sized for
 search-result thumbnails, no subtext, no emoji, no ratings or awards. The
@@ -30,14 +30,14 @@ daily hook.
 | Slide | Headline | Layout | Shows (light captures unless noted) |
 | --- | --- | --- | --- |
 | `01.png` | Swap cards. Reveal the picture. | A + icon | `raw/03_game_cards`: Monarch butterfly, most cards placed |
-| `02.png` | Thousands of pictures | B | `raw/15_library` with real pack covers (`collage/`) floating beside it |
+| `02.png` | Thousands of pictures | B | `raw/15_library`, pack covers (`collage/`) beside it and in a row below |
 | `03.png` | A new picture every day | A | `raw/18_daily_month_grid`, today's card lifted out |
 | `04.png` | Four ways to play | C, -7 deg | `raw/09_mode_hexagons`, with the cards, squares and triangles boards (`raw/06`-`08`) lifted out |
 | `05.png` | Puzzle your own photos | A | `raw/20_my_puzzles`, the Corgi board of `raw/21_my_puzzle_game` lifted out |
-| `06.png` | Fewer moves, more stars | B | `raw/04_complete`, the Picture complete card lifted out |
-| `07.png` | Quests and live events | C, two phones | `raw/13_quests` in front of `raw/14_quests_live` |
-| `08.png` | Climb the leaderboard | B | `raw/22_social_league` (real player names, approved by the owner), the podium lifted out |
-| `09.png` | Every pack with VIP | C, -7 deg | `raw/12_store_vip` |
+| `06.png` | Fewer moves, more stars | B | `raw/04_complete`, Picture complete lifted out; a row of solved daily pictures with stars below |
+| `07.png` | Quests and live events | C, +7 deg | `raw/13_quests`, the World Food Day event of `raw/14_quests_live` lifted out |
+| `08.png` | Climb the leaderboard | A | `raw/22_social_league` (real player names, approved by the owner), the podium lifted out |
+| `09.png` | Every pack with VIP | C, -7 deg | `raw/12_store_vip`, the 7-day trial lifted out |
 | `10.png` | Just as calm in the dark | A, dark | `raw/03_game_cards` in the dark theme |
 
 Raw captures (dark theme; a `--dart-define=CJW_STORE_THEME=light` run writes
