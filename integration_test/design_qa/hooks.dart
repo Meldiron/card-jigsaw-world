@@ -14,6 +14,7 @@ import 'package:card_jigsaw_world/features/social/player_safety.dart';
 import 'package:card_jigsaw_world/features/social/social_screen.dart';
 import 'package:card_jigsaw_world/features/sync/board_choice_sheet.dart';
 import 'package:card_jigsaw_world/models/models.dart';
+import 'package:card_jigsaw_world/router.dart';
 import 'package:card_jigsaw_world/state/merge.dart';
 import 'package:card_jigsaw_world/state/rewards.dart';
 import 'package:card_jigsaw_world/widgets/ui.dart';
@@ -24,14 +25,15 @@ typedef Hook = Future<void> Function(BuildContext context, ProviderContainer c, 
 
 /// Runs [fn] with a [WidgetRef] (some sheets need one): a hidden overlay entry lends its ref.
 Future<void> withRef(BuildContext context, Future<void> Function(BuildContext context, WidgetRef ref) fn) async {
-  final overlay = Overlay.of(context, rootOverlay: true);
+  // The root navigator's own overlay (the navigator's context has no Overlay above it).
+  final overlay = rootNavigatorKey.currentState!.overlay!;
   late OverlayEntry entry;
   var started = false;
   entry = OverlayEntry(
     builder: (_) => Consumer(builder: (ctx, ref, _) {
       if (!started) {
         started = true;
-        WidgetsBinding.instance.addPostFrameCallback((_) => unawaited(fn(context, ref)));
+        WidgetsBinding.instance.addPostFrameCallback((_) => unawaited(fn(ctx, ref)));
       }
       return const SizedBox.shrink();
     }),
