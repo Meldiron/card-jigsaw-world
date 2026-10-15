@@ -118,27 +118,53 @@ void main() {
         expect((o.percent - o.segment.weight / total * 100).abs(), lessThanOrEqualTo(0.05 + 1e-9), reason: o.segment.label);
       }
       expect(odds.fold<double>(0, (s, o) => s + o.percent), closeTo(100, 1e-9));
-      expect(odds.firstWhere((o) => o.segment.jackpot).percent, 2.3);
+      expect(odds.firstWhere((o) => o.segment.jackpot).percent, 1);
       expect(formatOdds(22.7), '22.7%');
+      expect(formatOdds(23), '23%');
+      expect(formatOdds(1), '1%');
     });
 
-    test('Peeks (5, 10) and Magic (1, 3) took four coin slices; a spin is worth about as much as before', () {
+    test('the odds sheet lists the most likely prize first (112)', () {
+      final odds = wheelOdds();
+      for (var i = 1; i < odds.length; i++) {
+        expect(odds[i].percent, lessThanOrEqualTo(odds[i - 1].percent));
+      }
+      expect([for (final o in odds) '${o.segment.amount} ${o.segment.name ?? 'coins'} ${formatOdds(o.percent)}'], [
+        '100 coins 23%',
+        '250 coins 23%',
+        '5 Peeks 18%',
+        '10 Peeks 14%',
+        '1 Magic 10%',
+        '3 Hints 9%',
+        '3 Magic 2%',
+        '1000 coins 1%',
+      ]);
+    });
+
+    test('the prize table the owner approved (2026-10-15): a 1,000-coin jackpot at exactly 1%, 3 Magic more likely', () {
       List<int> amounts(Currency kind) => [for (final s in wheelSegments) if (s.kind == kind) s.amount];
       expect(amounts(Currency.peeks), [5, 10]);
       expect(amounts(Currency.magics), [1, 3]);
-      expect(amounts(Currency.hints), [2]);
-      expect(amounts(Currency.coins), [60, 120, 500]);
+      expect(amounts(Currency.hints), [3]);
+      expect(amounts(Currency.coins), [100, 250, 1000]);
       expect(amounts(Currency.tickets), isEmpty, reason: 'the wheel never pays for itself');
       final total = wheelSegments.fold<double>(0, (s, e) => s + e.weight);
+      double chance(WheelSegment s) => s.weight / total;
+      final jackpot = wheelSegments.where((s) => s.jackpot).single;
+      expect(jackpot.amount, 1000);
+      expect(chance(jackpot), closeTo(0.01, 1e-12));
+      final threeMagic = wheelSegments.firstWhere((s) => s.kind == Currency.magics && s.amount == 3);
+      expect(chance(threeMagic), greaterThan(chance(jackpot)));
+      final coins = wheelSegments.where((s) => s.kind == Currency.coins).fold<double>(0, (v, s) => v + chance(s) * s.amount);
+      expect(coins, closeTo(90.5, 0.01), reason: 'about 90 coins a spin (docs/economy.md)');
       final value = wheelSegments.fold<double>(0, (s, e) => s + e.weight * e.coinValue) / total;
-      expect(value, inInclusiveRange(140, 160), reason: 'about 150 coins a spin, boosters at their price');
-      expect(wheelSegments.where((s) => s.jackpot).single.amount, 500);
+      expect(value, inInclusiveRange(195, 210), reason: 'about 200 coins a spin, boosters at their price');
       expect([for (final s in wheelSegments) s.name], [null, 'Peeks', null, 'Hints', 'Peeks', 'Magic', null, 'Magic']);
     });
 
     test('the spin draws each slice in proportion to its weight', () {
       final counts = List.filled(wheelSegments.length, 0);
-      const steps = 22000;
+      const steps = 20000;
       for (var i = 0; i < steps; i++) {
         counts[wheelPick((i + 0.5) / steps)]++;
       }

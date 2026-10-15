@@ -575,7 +575,9 @@ class _QuickTile extends StatelessWidget {
       child: Container(
         // 167: the tiles grow with Larger Text, both by the same amount, so their figures still line up.
         height: MediaQuery.textScalerOf(context).scale(112),
-        padding: Insets.cardCompact,
+        // 14 pt sides and a 6 pt gap after the icon: "Lucky Wheel" fits on an SE (was "Lucky Wh...")
+        // with the same icon tile, type and tile height as before.
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: Spacing.md),
         decoration: BoxDecoration(
           color: c.card,
           borderRadius: BorderRadius.circular(Radii.lg),
@@ -587,7 +589,7 @@ class _QuickTile extends StatelessWidget {
             Row(
               children: [
                 IconTile(icon: icon, size: IconTile.small),
-                const SizedBox(width: 8),
+                const SizedBox(width: 6),
                 Flexible(
                   child: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis,
                       style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body, letterSpacing: -0.2)),

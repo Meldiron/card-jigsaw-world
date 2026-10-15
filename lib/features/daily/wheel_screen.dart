@@ -11,8 +11,6 @@ import 'package:go_router/go_router.dart';
 import '../../core/haptics.dart';
 import '../../core/sfx.dart';
 import '../../core/theme/tokens.dart';
-import '../../models/models.dart';
-import '../../state/catalog.dart';
 import '../../state/profile.dart';
 import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
@@ -28,7 +26,7 @@ class WheelSegment {
   final double weight;
   final bool jackpot;
 
-  String get label => '$amount';
+  String get label => formatCount(amount);
 
   /// What the prize is, after its icon and number ("2 Hints", "5 Peeks",
   /// "1 Magic"). Coins carry the coin mark only.
@@ -50,25 +48,26 @@ class WheelSegment {
       };
 }
 
-/// Balance: a spin costs 1 Ticket. Since 2026-10-14 (owner) four coin slices
-/// are boosters for the stock: 5 and 10 Peeks, 1 and 3 Magic, used in a game
-/// before coins. Expected value per spin, boosters at their price in coins
-/// (Peek 10, Hint 150, Magic 300):
-///   coins    = (60·5 + 120·5 + 500·0.5) / 22 ≈ 52 coins
-///   boosters = (5·10·4 + 2·150·2 + 10·10·3 + 300·2 + 900·0.5) / 22 ≈ 98 coins
-///   together ≈ 150 coins (149 before, when the wheel paid mostly coins)
-/// with a 2.3% chance (0.5/22) of the 500-Coin jackpot. Tickets are never a
-/// reward, so the wheel cannot pay for itself. The odds sheet reads this same
-/// table ([wheelOdds]), so what players are shown is what the spin draws.
+/// Balance: a spin costs 1 Ticket. The weights are the chances in percent
+/// (owner, 2026-10-15): 100 and 250 coins 23% each, 5 Peeks 18%, 10 Peeks 14%,
+/// 1 Magic 10%, 3 Hints 9%, 3 Magic 2% and the 1,000-coin jackpot exactly 1%.
+/// Expected value per spin, boosters at their price in coins (Peek 10, Hint 150,
+/// Magic 300):
+///   coins    = 100·0.23 + 250·0.23 + 1000·0.01 ≈ 90 coins
+///   boosters = 50·0.18 + 100·0.14 + 300·0.10 + 450·0.09 + 900·0.02 ≈ 112 coins
+///   together ≈ 200 coins (150 before, with 60, 120 and a 500 jackpot at 2.3%)
+/// Tickets are never a reward, so the wheel cannot pay for itself. The odds
+/// sheet reads this same table ([wheelOdds]), so what players are shown is what
+/// the spin draws. Old builds keep their own table: the spin is drawn on the device.
 const wheelSegments = [
-  WheelSegment(Currency.coins, 60, Color(0xFFD97706), weight: 5),
-  WheelSegment(Currency.peeks, 5, Color(0xFF64748B), weight: 4),
-  WheelSegment(Currency.coins, 120, Color(0xFF0F9D8F), weight: 5),
-  WheelSegment(Currency.hints, 2, Brand.accent, weight: 2),
-  WheelSegment(Currency.peeks, 10, Color(0xFF475569), weight: 3),
-  WheelSegment(Currency.magics, 1, Color(0xFFB45309), weight: 2),
-  WheelSegment(Currency.coins, 500, Color(0xFF3730A3), weight: 0.5, jackpot: true),
-  WheelSegment(Currency.magics, 3, Color(0xFF0B7A70), weight: 0.5),
+  WheelSegment(Currency.coins, 100, Color(0xFFD97706), weight: 23),
+  WheelSegment(Currency.peeks, 5, Color(0xFF64748B), weight: 18),
+  WheelSegment(Currency.coins, 250, Color(0xFF0F9D8F), weight: 23),
+  WheelSegment(Currency.hints, 3, Brand.accent, weight: 9),
+  WheelSegment(Currency.peeks, 10, Color(0xFF475569), weight: 14),
+  WheelSegment(Currency.magics, 1, Color(0xFFB45309), weight: 10),
+  WheelSegment(Currency.coins, 1000, Color(0xFF3730A3), weight: 1, jackpot: true),
+  WheelSegment(Currency.magics, 3, Color(0xFF0B7A70), weight: 2),
 ];
 
 const _segments = wheelSegments;
@@ -87,7 +86,7 @@ int wheelPick(double r, [List<WheelSegment> segments = wheelSegments]) {
 /// One prize on the odds sheet and its chance in percent (one decimal).
 typedef WheelOdd = ({WheelSegment segment, double percent});
 
-/// Every prize with its chance, smallest prize first. Percentages carry one
+/// Every prize with its chance, the most likely first. Percentages carry one
 /// decimal and are rounded by largest remainder, so they add up to exactly 100.
 List<WheelOdd> wheelOdds([List<WheelSegment> segments = wheelSegments]) {
   final total = segments.fold<double>(0, (s, e) => s + e.weight);
@@ -101,13 +100,20 @@ List<WheelOdd> wheelOdds([List<WheelSegment> segments = wheelSegments]) {
     missing--;
   }
   final odds = [for (var i = 0; i < segments.length; i++) (segment: segments[i], percent: floors[i] / 10)];
-  // Coins by amount, then hints, Peeks and Magic.
-  odds.sort((a, b) => a.segment.kind != b.segment.kind ? a.segment.kind.index.compareTo(b.segment.kind.index) : a.segment.amount.compareTo(b.segment.amount));
+  // Most likely first (owner, 112); equal chances in prize order: coins by amount, then hints, Peeks and Magic.
+  odds.sort((a, b) {
+    if (a.percent != b.percent) return b.percent.compareTo(a.percent);
+    if (a.segment.kind != b.segment.kind) return a.segment.kind.index.compareTo(b.segment.kind.index);
+    return a.segment.amount.compareTo(b.segment.amount);
+  });
   return odds;
 }
 
-/// "22.7%", "9.1%", "2.3%".
-String formatOdds(double percent) => '${percent.toStringAsFixed(1)}%';
+/// "23%", "1%", "22.7%": one decimal only when the chance has one.
+String formatOdds(double percent) {
+  final tenths = (percent * 10).round();
+  return tenths % 10 == 0 ? '${tenths ~/ 10}%' : '${(tenths / 10).toStringAsFixed(1)}%';
+}
 
 /// The odds sheet, opened from "See odds" on the wheel (App Review guideline
 /// 3.1.1: the odds of a paid random reward are shown before spending).
@@ -116,6 +122,7 @@ Future<void> showWheelOdds(BuildContext context) => showAppSheet(
       builder: (ctx) {
         final c = ctx.colors;
         final odds = wheelOdds();
+        final most = odds.map((o) => o.percent).reduce(math.max);
         return Padding(
           padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
           child: Column(
@@ -140,15 +147,37 @@ Future<void> showWheelOdds(BuildContext context) => showAppSheet(
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
                         child: Row(
                           children: [
-                            // Mark, then the prize in words at one weight: "60 coins", "2 Hints".
+                            // Mark, then the prize in words at one weight: "100 coins", "3 Hints".
                             currencyIcon(odds[i].segment.kind, size: 20),
                             const SizedBox(width: 10),
-                            Text('${odds[i].segment.amount}', style: const TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w600, fontFeatures: tabularFigures)),
-                            const SizedBox(width: 4),
-                            Text(odds[i].segment.name ?? 'coins', style: const TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w600)),
-                            if (odds[i].segment.jackpot) ...[const SizedBox(width: 8), Chip2(label: 'Jackpot', color: Brand.coin.withValues(alpha: 0.16), foreground: ctx.isDark ? Brand.coin : Brand.coinDeep)],
-                            const Spacer(),
-                            Text(formatOdds(odds[i].percent), style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body, fontFeatures: tabularFigures)),
+                            Expanded(
+                              child: Row(
+                                children: [
+                                  Text(formatCount(odds[i].segment.amount), style: const TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w600, fontFeatures: tabularFigures)),
+                                  const SizedBox(width: 4),
+                                  Flexible(child: Text(odds[i].segment.name ?? 'coins', maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w600))),
+                                  if (odds[i].segment.jackpot) ...[const SizedBox(width: 8), Chip2(label: 'Jackpot', color: Brand.coin.withValues(alpha: 0.16), foreground: ctx.isDark ? Brand.coin : Brand.coinDeep)],
+                                ],
+                              ),
+                            ),
+                            // 112 B: a short bar beside each chance, scaled to the most likely prize,
+                            // so 23% and 1% also read as large and small at a glance (never less than a dot).
+                            SizedBox(
+                              width: 56,
+                              height: 6,
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: FractionallySizedBox(
+                                  heightFactor: 1,
+                                  widthFactor: (odds[i].percent / most).clamp(6 / 56, 1.0),
+                                  child: DecoratedBox(decoration: BoxDecoration(color: ctx.accent.withValues(alpha: ctx.isDark ? 0.5 : 0.35), borderRadius: BorderRadius.circular(3))),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 52,
+                              child: Text(formatOdds(odds[i].percent), textAlign: TextAlign.right, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body, fontFeatures: tabularFigures)),
+                            ),
                           ],
                         ),
                       ),
@@ -293,7 +322,7 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
                         ),
                         AnimatedBuilder(
                           animation: _c,
-                          builder: (_, _) => _WheelFace(angle: _angle, size: size, photo: ref.watch(dailyPuzzleProvider)),
+                          builder: (_, _) => _WheelFace(angle: _angle, size: size),
                         ),
                         // A plain cap on the axle: the old wheel glyph there read as a loading spinner.
                         Container(
@@ -418,10 +447,9 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
 /// (coin, hint, Peek, Magic) laid on top. The slices turn with [angle]; each prize
 /// moves with its slice but stays upright, so no amount is ever upside down.
 class _WheelFace extends StatelessWidget {
-  const _WheelFace({required this.angle, required this.size, this.photo});
+  const _WheelFace({required this.angle, required this.size});
   final double angle;
   final double size;
-  final Puzzle? photo;
 
   @override
   Widget build(BuildContext context) {
@@ -434,21 +462,7 @@ class _WheelFace extends StatelessWidget {
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          Transform.rotate(
-            angle: angle,
-            child: Stack(
-              children: [
-                // Colour from the photos: the slices are pieces of today's picture.
-                ClipOval(
-                  child: SizedBox.square(
-                    dimension: size,
-                    child: photo == null ? ColoredBox(color: c.boardBackground) : NetImage(url: photo!.thumbUrl, blurhash: photo!.blurhash),
-                  ),
-                ),
-                CustomPaint(size: Size.square(size), painter: _SlicePainter(palette: palette, ring: c.card)),
-              ],
-            ),
-          ),
+          Transform.rotate(angle: angle, child: CustomPaint(size: Size.square(size), painter: _SlicePainter(palette: palette, ring: c.card))),
           for (var i = 0; i < _segments.length; i++)
             Builder(builder: (context) {
               final a = -math.pi / 2 + i * seg + seg / 2 + angle;
@@ -485,24 +499,35 @@ class _PrizeMark extends StatelessWidget {
       children: [
         mark,
         const SizedBox(height: 3),
-        Text(segment.label, style: TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body, height: 1.1, color: ink, letterSpacing: -0.2, fontFeatures: tabularFigures, shadows: const [Shadow(color: Color(0x99000000), blurRadius: 6)])),
+        Text(segment.label, style: TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body, height: 1.1, color: ink, letterSpacing: -0.2, fontFeatures: tabularFigures)),
       ],
     );
   }
 }
 
-/// Today's picture under the slices: alternate slices darkened a little more than
-/// the others, the jackpot washed in coin gold. White amounts with a soft shadow; the
-/// marks get a white ring so they read on any picture.
+/// 105 A: calm slices in two neutral tones from the theme, the jackpot in a soft
+/// coin gold. The colour on the wheel comes from the prizes' own marks.
 class _WheelPalette {
-  const _WheelPalette();
+  const _WheelPalette({required this.a, required this.b, required this.jackpot, required this.spoke, required this.text});
+  final Color a, b, jackpot, spoke, text;
 
-  static _WheelPalette of(BuildContext context) => const _WheelPalette();
+  /// The marks keep their own colours on these light slices.
+  Color? get markRing => null;
 
-  Color get spoke => Colors.white.withValues(alpha: 0.7);
-  Color? get markRing => Colors.white;
-  Color fill(int i) => _segments[i].jackpot ? Brand.coin.withValues(alpha: 0.62) : Colors.black.withValues(alpha: i.isEven ? 0.30 : 0.48);
-  Color ink(int i) => Colors.white;
+  static _WheelPalette of(BuildContext context) {
+    final c = context.colors;
+    return context.isDark
+        ? _WheelPalette(a: c.cardElevated, b: c.card, jackpot: const Color(0xFF3A2E10), spoke: c.stroke, text: c.textPrimary)
+        : _WheelPalette(a: Colors.white, b: const Color(0xFFECEFF5), jackpot: const Color(0xFFFFEFC2), spoke: c.stroke, text: c.textPrimary);
+  }
+
+  Color fill(int i) => _segments[i].jackpot ? jackpot : (i.isEven ? a : b);
+  Color ink(int i) => text;
+
+  @override
+  bool operator ==(Object other) => other is _WheelPalette && other.a == a && other.b == b && other.jackpot == jackpot && other.spoke == spoke && other.text == text;
+  @override
+  int get hashCode => Object.hash(a, b, jackpot, spoke, text);
 }
 
 class _SlicePainter extends CustomPainter {
@@ -533,7 +558,7 @@ class _SlicePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_SlicePainter old) => old.ring != ring;
+  bool shouldRepaint(_SlicePainter old) => old.palette != palette || old.ring != ring;
 }
 
 class _PointerPainter extends CustomPainter {
