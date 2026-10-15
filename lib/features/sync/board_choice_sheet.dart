@@ -42,21 +42,26 @@ class BoardChoiceSheet extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SheetHeader(
-              title: 'Two boards in progress',
-              subtitle: 'You played $name on another device too. Keep one board; stars and records from both stay.',
-              center: false,
-            ),
+            SheetHeader(title: 'Two boards in progress', subtitle: 'You played $name on another device too. Choose the board to keep; stars and records from both stay.'),
             const SizedBox(height: 16),
-            // The choice is made on the board itself: each card keeps its own.
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(child: _BoardCard(label: 'This device', board: device, primary: true, onKeep: () => Navigator.of(context).pop(BoardChoice.device))),
-                const SizedBox(width: 12),
-                Expanded(child: _BoardCard(label: 'Other device', board: other, onKeep: () => Navigator.of(context).pop(BoardChoice.other))),
-              ],
+            IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    child: _BoardCard(label: 'This device', board: device),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _BoardCard(label: 'Other device', board: other),
+                  ),
+                ],
+              ),
             ),
+            const SizedBox(height: 20),
+            BigButton(key: const ValueKey('keep-this-board'), label: "Keep this device's board", onTap: () => Navigator.of(context).pop(BoardChoice.device)),
+            const SizedBox(height: 10),
+            BigButton(key: const ValueKey('keep-other-board'), label: "Keep the other device's board", kind: ButtonKind.secondary, onTap: () => Navigator.of(context).pop(BoardChoice.other)),
           ],
         ),
       ),
@@ -64,32 +69,39 @@ class BoardChoiceSheet extends StatelessWidget {
   }
 }
 
-/// One of the two boards as it stands: the real board in miniature (cards in
-/// place fill their cell, loose cards keep their frame), how many cards are
-/// in place, and the moves and time so far.
+/// One of the two boards as it stands, drawn exactly as the game draws it (cards locked in
+/// place, groups with their cobalt outline, loose cards in their frames, Painting in black and
+/// white), then how far it is: the game's own "10/16 locked" line and bar, and the moves and time.
 class _BoardCard extends ConsumerWidget {
-  const _BoardCard({required this.label, required this.board, this.onKeep, this.primary = false});
+  const _BoardCard({required this.label, required this.board});
   final String label;
   final PuzzleProgress board;
 
-  /// Keeps this board (the card is the choice); null when buttons below choose.
-  final VoidCallback? onKeep;
-  final bool primary;
+  static const previewHeight = 132.0;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final c = context.colors;
     final mode = GameMode.fromCode(board.mode);
-    final spec = BoardSpec.fromCells(mode, board.gridSize);
     final layout = board.layout;
-    final inPlace = layout == null ? null : [for (var i = 0; i < layout.length; i++) if (layout[i] == i) i].length;
     final puzzle = ref.watch(resolvedPuzzleProvider(board.puzzleId));
-    final image = puzzle == null ? null : ref.watch(puzzleImageProvider(puzzle.imageUrl));
+    final img = puzzle == null ? null : ref.watch(puzzleImageProvider(puzzle.imageUrl)).value;
+    // The board this save was dealt on: settled by the picture's shape once it is decoded, as
+    // the game does; until then the best guess from the piece count.
+    final spec = (img == null ? null : BoardSpec.fromSaved(mode, board.gridSize, img.width / img.height)) ?? BoardSpec.fromCells(mode, board.gridSize);
+    final b = layout != null && layout.length == spec.cells ? Board(spec, layout) : null;
+    final locked =
+        b?.lockedCount ??
+        (layout == null
+            ? 0
+            : [
+                for (var i = 0; i < layout.length; i++)
+                  if (layout[i] == i) i,
+              ].length);
     final style = ref.watch(settingsProvider).cardStyle;
-    const previewHeight = 118.0;
+
     Widget preview() {
-      final img = image?.value;
-      if (img == null || layout == null || layout.length != spec.cells) {
+      if (img == null || b == null) {
         // Until the picture is decoded: its colours, in the board's shape.
         return SizedBox(
           height: previewHeight,
@@ -100,65 +112,100 @@ class _BoardCard extends ConsumerWidget {
           ),
         );
       }
-      final b = Board(spec, layout);
-      final size = b.tiling.fit(const Size(double.infinity, previewHeight), img.width / img.height);
-      return IgnorePointer(
-        child: BoardWidget(
-          image: img,
-          state: GameState(
-            board: b,
-            par: b.par,
-            moves: board.moves,
-            elapsed: board.elapsedSeconds,
-            status: GameStatus.paused,
-            selected: null,
-            hintsUsed: 0,
-            history: const [],
-            justLocked: const {},
-            justJoined: const {},
-            hintSlot: null,
-            hintTarget: null,
-            peeking: false,
-            chain: 0,
-            tick: 0,
+      // Drawn at the size the game gives this board on this phone and scaled down, so gaps,
+      // corners and group outlines keep the proportions the player saw.
+      final screen = MediaQuery.sizeOf(context);
+      final full = b.tiling.fit(Size(screen.width - 24, screen.height * 0.62), img.width / img.height);
+      return FittedBox(
+        child: SizedBox.fromSize(
+          size: full,
+          child: IgnorePointer(
+            child: BoardWidget(
+              image: img,
+              state: GameState(
+                board: b,
+                par: b.par,
+                moves: board.moves,
+                elapsed: board.elapsedSeconds,
+                status: GameStatus.paused,
+                selected: null,
+                hintsUsed: 0,
+                history: const [],
+                justLocked: const {},
+                justJoined: const {},
+                hintSlot: null,
+                hintTarget: null,
+                peeking: false,
+                chain: 0,
+                tick: 0,
+              ),
+              width: full.width,
+              height: full.height,
+              painting: board.painting,
+              cardStyle: style,
+              onTap: (_) {},
+              onDrop: (_, _) {},
+            ),
           ),
-          width: size.width,
-          height: size.height,
-          cardStyle: style,
-          onTap: (_) {},
-          onDrop: (_, _) {},
         ),
       );
     }
 
-    final card = Container(
+    return Container(
       padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
-      decoration: BoxDecoration(color: c.card, borderRadius: BorderRadius.circular(Radii.lg), border: Border.all(color: c.stroke)),
+      decoration: BoxDecoration(
+        color: c.card,
+        borderRadius: BorderRadius.circular(Radii.lg),
+        border: Border.all(color: c.stroke),
+      ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(label, style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: c.textPrimary)),
-          Text('${mode.label} ${spec.code}', style: TextStyle(fontSize: TypeSize.caption, color: c.textSecondary)),
-          const SizedBox(height: 8),
-          SizedBox(height: previewHeight, child: Center(child: preview())),
-          const SizedBox(height: 10),
           Text(
-            inPlace == null ? '${board.gridSize} cards' : '$inPlace of ${board.gridSize} in place',
-            style: TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w700, color: c.textPrimary),
+            label,
+            style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: c.textPrimary),
           ),
-          const SizedBox(height: 2),
+          Text(
+            '${mode.label} ${spec.code}${board.painting ? ' · Painting' : ''}',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(fontSize: TypeSize.caption, color: c.textSecondary),
+          ),
+          const SizedBox(height: 8),
+          SizedBox(
+            height: previewHeight,
+            width: double.infinity,
+            child: Center(child: preview()),
+          ),
+          const Spacer(),
+          const SizedBox(height: 12),
+          Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                  text: '$locked',
+                  style: TextStyle(fontSize: TypeSize.headline, fontWeight: FontWeight.w700, color: c.textPrimary),
+                ),
+                TextSpan(
+                  text: ' of ${board.gridSize} locked',
+                  style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: c.textPrimary),
+                ),
+              ],
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: 6),
+          ProgressBar(value: board.gridSize == 0 ? 0 : locked / board.gridSize, height: 6),
+          const SizedBox(height: 6),
           Text(
             '${countOf(board.moves, 'move')} · ${formatDuration(board.elapsedSeconds)}',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(fontSize: TypeSize.caption, color: c.textSecondary),
           ),
-          if (onKeep != null) ...[
-            const SizedBox(height: 12),
-            BigButton(key: ValueKey(primary ? 'keep-this-board' : 'keep-other-board'), label: 'Keep', height: 40, kind: primary ? ButtonKind.primary : ButtonKind.secondary, onTap: onKeep),
-          ],
         ],
       ),
     );
-    return onKeep == null ? card : Pressable(onTap: onKeep, scale: 0.98, child: card);
   }
 }
