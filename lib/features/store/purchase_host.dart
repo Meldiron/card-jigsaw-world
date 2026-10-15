@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/haptics.dart';
-import '../../core/links.dart';
 import '../../core/sfx.dart';
 import '../../core/theme/tokens.dart';
 import '../../data/purchases.dart';
@@ -15,6 +14,7 @@ import '../../state/profile.dart';
 import '../../state/purchases.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
+import '../profile/help.dart';
 
 /// Shows the purchase flow ([purchaseFlowProvider]) wherever the player is: the purchase sheet
 /// for a purchase they follow (waiting for the App Store, adding, added), a toast for one that
@@ -165,9 +165,7 @@ class PurchaseSheet extends ConsumerWidget {
             BigButton(label: 'Close', onTap: () => Navigator.of(context).pop()),
             const SizedBox(height: 6),
             CupertinoButton(
-              onPressed: () async {
-                if (!await openLink(AppLinks.support) && context.mounted) showToast(context, AppLinks.supportEmail, icon: AppIcons.mail);
-              },
+              onPressed: () => contactSupport(context, ref),
               child: Text('Contact support', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: context.accent)),
             ),
           ],

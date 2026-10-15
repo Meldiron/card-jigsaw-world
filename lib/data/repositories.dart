@@ -436,6 +436,26 @@ class ProgressRepository {
 // ---------------------------------------------------------------------------
 // Social: friends + event progress
 // ---------------------------------------------------------------------------
+/// Settings > Send feedback: one row per message, with no permissions, so only the server reads it
+/// (`tools/dev/feedback.py`). Deleted with the player's account.
+class FeedbackRepository {
+  FeedbackRepository(this._tables);
+  final TablesDB _tables;
+
+  /// Longest message the sheet takes.
+  static const maxLength = 2000;
+
+  Future<void> send({required String userId, required String message, String? appVersion, String? platform}) async {
+    await _tables.createRow(
+      databaseId: _db,
+      tableId: AppwriteConfig.feedback,
+      rowId: ID.unique(),
+      data: {'userId': userId, 'message': message, 'appVersion': appVersion, 'platform': platform},
+      permissions: const [],
+    );
+  }
+}
+
 class SocialRepository {
   SocialRepository(this._tables);
   final TablesDB _tables;
@@ -588,5 +608,6 @@ final profileRepositoryProvider = Provider((ref) => ProfileRepository(ref.watch(
 final catalogRepositoryProvider = Provider((ref) => CatalogRepository(ref.watch(tablesProvider), ref.watch(storageProvider)));
 final progressRepositoryProvider = Provider((ref) => ProgressRepository(ref.watch(tablesProvider)));
 final socialRepositoryProvider = Provider((ref) => SocialRepository(ref.watch(tablesProvider)));
+final feedbackRepositoryProvider = Provider((ref) => FeedbackRepository(ref.watch(tablesProvider)));
 final uploadRepositoryProvider = Provider((ref) => UploadRepository(ref.watch(storageProvider), ref.watch(tablesProvider)));
 final accountDeletionRepositoryProvider = Provider((ref) => AccountDeletionRepository(Functions(ref.watch(appwriteClientProvider))));

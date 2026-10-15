@@ -19,6 +19,7 @@ import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 import '../social/player_safety.dart';
+import 'help.dart';
 import 'redeem_code_sheet.dart';
 
 /// The App Store page where a player writes a review of the game.
@@ -168,16 +169,12 @@ class SettingsScreen extends ConsumerWidget {
               },
             ),
           ]),
+          group('Help', [
+            _NavRow(key: const ValueKey('settings-support'), icon: AppIcons.mail, label: 'Contact support', onTap: () => contactSupport(context, ref)),
+            _NavRow(key: const ValueKey('settings-feedback'), icon: CupertinoIcons.chat_bubble_text, label: 'Send feedback', onTap: () => showFeedbackSheet(context)),
+          ]),
           group('About', [
             _NavRow(icon: CupertinoIcons.doc_text, label: 'Image credits and licences', onTap: () => _showCredits(context)),
-            _NavRow(
-              key: const ValueKey('settings-support'),
-              icon: CupertinoIcons.question_circle,
-              label: 'Support',
-              onTap: () async {
-                if (!await openLink(AppLinks.support) && context.mounted) showToast(context, AppLinks.supportEmail, icon: AppIcons.mail);
-              },
-            ),
             _NavRow(key: const ValueKey('settings-privacy'), icon: CupertinoIcons.lock_shield, label: 'Privacy policy', onTap: () => _open(context, AppLinks.privacyPolicy)),
             _NavRow(key: const ValueKey('settings-terms'), icon: CupertinoIcons.doc_plaintext, label: 'Terms of use', onTap: () => _open(context, AppLinks.termsOfUse)),
             // App Store features (gift codes, reviews) exist on Apple platforms only.

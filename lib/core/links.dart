@@ -9,6 +9,18 @@ abstract final class AppLinks {
   static final termsOfUse = Uri.parse('https://www.apple.com/legal/internet-services/itunes/dev/stdeula/');
   static const supportEmail = 'support@almostapps.eu';
   static final support = Uri(scheme: 'mailto', path: supportEmail);
+
+  /// An email to support with a subject, and below the space for the message the app version and
+  /// the player id, so support can find the account.
+  static Uri supportMail({String? version, String? platform, String? playerId}) {
+    final details = [
+      if (version != null && version.isNotEmpty) 'Version $version${platform == null ? '' : ' · $platform'}',
+      if (playerId != null) 'Player id: $playerId',
+    ];
+    final body = details.isEmpty ? '' : '\n\n\n---\n${details.join('\n')}';
+    // Encoded by hand: mail apps show a "+" for a space encoded the form way.
+    return Uri.parse('mailto:$supportEmail?subject=${Uri.encodeComponent('Card Jigsaw World support')}${body.isEmpty ? '' : '&body=${Uri.encodeComponent(body)}'}');
+  }
 }
 
 /// Opens [url] in the in-app browser (Safari view on iPhone, a new tab on the web); false when

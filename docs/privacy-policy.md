@@ -28,6 +28,7 @@ All game data is stored in an [Appwrite](https://appwrite.io) project hosted in 
 | Friends list (the friend codes you added) | So you can open your friends' profiles | When you add a friend |
 | Players you block | So they no longer show on your leaderboard | When you block someone |
 | Reports you send about a player (who, the name they had and the reason) | So we can act on offensive names and cheating | When you report someone |
+| Feedback you send from Settings (your message, your account id, the app version and whether it came from iPhone or the web) | So we can read your ideas and problems | When you send feedback |
 | Pack codes you redeem | So a code opens its pack once per account | When you redeem a code |
 | Purchase records: Apple transaction ids, product, date, what was granted, and Apple's per-account app identifier used for Family Sharing | To grant purchases once, restore them, share VIP with your family and handle refunds and renewals | When you buy something |
 | Photos you upload in My Puzzles | To play them as puzzles | When you upload them. They are private to your account and are never shown to other players |
@@ -36,7 +37,7 @@ Stored on the device only, never sent to us: settings (theme, sound, music, hapt
 
 ## What other players can see
 
-Your display name, avatar, level, XP, streak, achievements and play statistics are visible to other players on the leaderboard and on your player page (anyone with your friend code can open it too). Your email, Apple identity, purchases, photos, friends, blocks and reports are never shown to anyone.
+Your display name, avatar, level, XP, streak, achievements and play statistics are visible to other players on the leaderboard and on your player page (anyone with your friend code can open it too). Your email, Apple identity, purchases, photos, friends, blocks, reports and feedback are never shown to anyone.
 
 Players can report a display name or unfair play, and block a player so they no longer see them on their leaderboard. Reports are read only by us; the reported player is not told who reported them.
 
@@ -76,7 +77,7 @@ We keep your data while your account exists. Reports are kept until we have look
 
 ## Security
 
-Every player table has row-level permissions, so only your account can read or change your progress, and nobody but us can read reports. Connections use HTTPS. Uploaded photos carry file-level permissions limited to your account.
+Every player table has row-level permissions, so only your account can read or change your progress, and nobody but us can read reports or feedback. Connections use HTTPS. Uploaded photos carry file-level permissions limited to your account.
 
 ## Changes
 
@@ -84,6 +85,7 @@ If this policy changes, the new version will be published at this address and th
 
 ## Contact
 
-support@almostapps.eu
+support@almostapps.eu (Settings > Contact support). The email the app prepares adds the app version and
+your player id below your message, so we can find your account; you can delete them before sending.
 
 Matej Baco, Slovakia

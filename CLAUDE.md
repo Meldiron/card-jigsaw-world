@@ -199,7 +199,7 @@ skills under `.claude/skills/` hold the detailed workflows.
 
 - Endpoint `https://fra.cloud.appwrite.io/v1`, project `6acb4de5003e38d5ebd9`, database `cjw`
   (tables profiles, packs, puzzles, progress, events, event_progress, friends, ledger, my_puzzles,
-  purchases, meta, releases, reports, blocks). Profiles are readable by anyone; `level` mirrors XP; aggregates `totalMoves`,
+  purchases, meta, releases, reports, blocks, feedback). Profiles are readable by anyone; `level` mirrors XP; aggregates `totalMoves`,
   `totalSeconds`, `solvedByMode`, `questsCompleted` and the "Total Completion" numbers
   (`picturesSolved`, `picturesPerfect`, `packsCompleted`, `packsPerfect`, kept in step by
   `ProfileNotifier.syncCompletion`, backfill `tools/dev/backfill_profile_stats.py`) are public.
@@ -215,6 +215,11 @@ skills under `.claude/skills/` hold the detailed workflows.
   `Query.notEqual('$id')` each) and their friendship ends; Settings > Blocked players unblocks. Both tables are
   deleted in both directions with an account (`delete-account`, `PAIR_TABLES` in `tools/dev/cjw_admin.py`).
   `lib/state/social.dart` (`PlayerSafety`, `blockedPlayersProvider`), `lib/features/social/player_safety.dart`.
+- Help (owner, 2026-10-15): Settings > Help > Contact support opens an email to support@almostapps.eu with
+  the version and player id below the message (copies the address when there is no mail app); Send
+  feedback writes a `feedback` row (userId, message, appVersion, platform) with no permissions, so only the
+  server reads it: `tools/dev/feedback.py` lists and closes them. Deleted with the account (`delete-account`)
+  and with QA players. `lib/features/profile/help.dart`.
 - Legal links: `AppLinks` in `lib/core/links.dart` (privacy policy = `docs/privacy-policy.md` on GitHub, the
   same URL as the listing; terms of use = Apple's standard EULA) in Settings > About, under the VIP plans in
   the store and on the sign-in screen. Keep `docs/privacy-policy.md` true to what the app does.
