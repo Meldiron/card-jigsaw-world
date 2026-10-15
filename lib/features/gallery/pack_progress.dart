@@ -130,12 +130,14 @@ class _DoneBadge extends StatelessWidget {
         key: ValueKey(perfect ? 'pack-perfect-badge' : 'pack-done-badge'),
         width: size,
         height: size,
+        // Perfect: a gold star on white with a gold ring, so it is not mistaken for the coin mark
+        // (a gold disc with a star).
         decoration: BoxDecoration(
-          color: perfect ? Brand.star : Brand.success,
+          color: perfect ? Colors.white : Brand.success,
           shape: BoxShape.circle,
-          border: Border.all(color: Colors.white.withValues(alpha: 0.9), width: 1.5),
+          border: Border.all(color: perfect ? Brand.star : Colors.white.withValues(alpha: 0.9), width: perfect ? 2 : 1.5),
         ),
-        child: Icon(perfect ? CupertinoIcons.star_fill : CupertinoIcons.checkmark, size: size * (perfect ? 0.5 : 0.54), color: Colors.white),
+        child: Icon(perfect ? CupertinoIcons.star_fill : CupertinoIcons.checkmark, size: size * (perfect ? 0.56 : 0.54), color: perfect ? Brand.star : Colors.white),
       ),
     );
   }

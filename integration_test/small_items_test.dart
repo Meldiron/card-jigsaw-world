@@ -138,7 +138,7 @@ void main() {
     await shot(tester, 'si_03_home_tomorrow');
 
     // Lucky Wheel odds.
-    await tapText(tester, 'Wheel', ms: 1800);
+    await tapText(tester, 'Lucky Wheel', ms: 1800);
     await shot(tester, 'si_04_wheel');
     await tapText(tester, 'See odds', ms: 1500);
     expect(find.text('Lucky Wheel odds'), findsOneWidget);

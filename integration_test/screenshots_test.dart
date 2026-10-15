@@ -299,7 +299,7 @@ void main() {
 
     // Home → wheel.
     await tapText(tester, 'Home', ms: 2000);
-    await tapText(tester, 'Wheel', ms: 1500);
+    await tapText(tester, 'Lucky Wheel', ms: 1500);
     await shot(tester, '13_wheel');
     if (find.text('Spin for 1 ticket').evaluate().isNotEmpty) {
       await tapText(tester, 'Spin for 1 ticket', ms: 5500);

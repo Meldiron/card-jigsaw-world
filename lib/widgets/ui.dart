@@ -379,6 +379,24 @@ class SectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
+    final titleText = Text(title, style: Theme.of(context).textTheme.headlineSmall);
+    // A text action sits on the title's baseline, as iOS places "See All"; a trailing widget (a
+    // countdown chip) stays aligned to the bottom of the title block.
+    final Widget titleRow = action == null || trailing != null
+        ? titleText
+        : Row(
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              Expanded(child: titleText),
+              const SizedBox(width: 12),
+              Pressable(
+                onTap: onAction,
+                // No padding: it would move the title's baseline. The text plus the 12 pt gap is the target.
+                child: Text(action!, style: TextStyle(color: context.accent, fontWeight: FontWeight.w600, fontSize: 15)),
+              ),
+            ],
+          );
     return Padding(
       padding: padding,
       child: Row(
@@ -388,7 +406,7 @@ class SectionHeader extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: Theme.of(context).textTheme.headlineSmall),
+                titleRow,
                 if (subtitle != null) ...[
                   const SizedBox(height: 2),
                   Text(subtitle!, style: TextStyle(color: c.textSecondary, fontSize: 13)),
@@ -396,16 +414,7 @@ class SectionHeader extends StatelessWidget {
               ],
             ),
           ),
-          if (trailing != null)
-            Padding(padding: const EdgeInsets.only(bottom: 2), child: trailing!)
-          else if (action != null)
-            Pressable(
-              onTap: onAction,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: Text(action!, style: TextStyle(color: context.accent, fontWeight: FontWeight.w600, fontSize: 14)),
-              ),
-            ),
+          if (trailing != null) Padding(padding: const EdgeInsets.only(bottom: 2), child: trailing!),
         ],
       ),
     );

@@ -25,8 +25,11 @@ class Economy {
   /// Early unlock of a board tier that is still above the player's level.
   static int tierUnlockCoins(int tierIndex) => 600 + 300 * tierIndex;
 
-  /// Restoring a lost streak to the player's longest.
-  static int streakRestoreTickets(int longest) => (3 + longest ~/ 7).clamp(3, 10);
+  /// Restoring a lost streak of [lost] days with the next daily gift.
+  static int streakRestoreTickets(int lost) => (3 + lost ~/ 7).clamp(3, 10);
+
+  /// A lost streak can be restored while at most this many days were missed.
+  static const streakRestoreMissedDays = 2;
 
   static const avatarCoins = 900;
 
@@ -202,35 +205,34 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
     return bonus;
   }
 
-  /// Daily reward: streak day index (0-6) determines the reward.
-  Future<({int coins, int tickets, int hints, int day})?> claimDaily() async {
+  /// Daily reward: streak day index (0-6) determines the reward. With [restore] (see
+  /// [canRestoreStreak]) the lost streak is restored for tickets and today's gift continues it.
+  Future<({int coins, int tickets, int hints, int day})?> claimDaily({bool restore = false}) async {
     final p = _p;
     if (!p.dailyAvailable) return null;
     final now = DateTime.now();
     final last = p.lastDailyClaim;
     final consecutive = last != null && now.difference(DateTime(last.year, last.month, last.day)).inDays == 1;
-    final streak = consecutive ? p.streak + 1 : 1;
+    final restoring = restore && !consecutive && canRestoreStreak;
+    final cost = restoring ? Economy.streakRestoreTickets(p.streak) : 0;
+    if (restoring && p.tickets < cost) return null;
+    final streak = consecutive || restoring ? p.streak + 1 : 1;
     final day = (streak - 1) % 7;
     final r = Economy.dailyRewards[day];
-    _do(SyncOp.daily(day: day, coins: r.coins, tickets: r.tickets, hints: r.hints));
+    _do(SyncOp.daily(day: day, coins: r.coins, tickets: r.tickets, hints: r.hints, restoreTarget: restoring ? p.streak : 0, restoreCost: cost));
     return (coins: r.coins, tickets: r.tickets, hints: r.hints, day: day);
   }
 
-  /// A broken streak can be restored to the player's longest, for tickets.
+  /// A streak of 3 days or more that was lost to missed days can be restored with the next claim,
+  /// for tickets ([Economy.streakRestoreTickets] of the lost streak): today's gift then continues
+  /// it instead of starting again at day 1. Offered while at most [Economy.streakRestoreMissedDays]
+  /// days were missed, once a day. A running streak shorter than the longest is not a lost one.
   bool get canRestoreStreak {
     final p = _p;
-    if (p.longestStreak <= p.streak || p.longestStreak < 3) return false;
+    final since = p.daysSinceDailyClaim;
+    if (since == null || p.streakAlive || since > Economy.streakRestoreMissedDays + 1 || p.streak < 3) return false;
     final last = p.lastStreakRestore;
     return last == null || DateTime.now().difference(last).inDays >= 1;
-  }
-
-  Future<bool> restoreStreak() async {
-    final p = _p;
-    if (!canRestoreStreak) return false;
-    final cost = Economy.streakRestoreTickets(p.longestStreak);
-    if (p.tickets < cost) return false;
-    _do(SyncOp.restoreStreak(cost: cost, target: p.longestStreak));
-    return true;
   }
 
   /// Early unlock of a board tier (`<mode>:<index>`).

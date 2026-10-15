@@ -333,6 +333,28 @@ class Profile {
     return !(last.year == now.year && last.month == now.month && last.day == now.day);
   }
 
+  /// Calendar days since the last daily gift (0 today, 1 yesterday), or null before the first one.
+  int? get daysSinceDailyClaim {
+    final last = lastDailyClaim;
+    if (last == null) return null;
+    final now = DateTime.now();
+    return DateTime.utc(now.year, now.month, now.day).difference(DateTime.utc(last.year, last.month, last.day)).inDays;
+  }
+
+  /// The streak still counts: a gift was claimed today or yesterday. After a missed day the
+  /// stored [streak] is the one that was lost, and the next claim starts again at day 1.
+  bool get streakAlive => (daysSinceDailyClaim ?? 2) <= 1;
+
+  /// The streak to show: 0 once a day was missed.
+  int get currentStreak => streakAlive ? streak : 0;
+
+  /// The day (0-6) of the 7-day round whose gift comes next: today's while [dailyAvailable],
+  /// otherwise tomorrow's. It is what the next claim pays.
+  int get nextGiftDay => currentStreak % 7;
+
+  /// Gifts of the current 7-day round already claimed (0-7).
+  int get giftsClaimedThisRound => dailyAvailable ? currentStreak % 7 : (currentStreak - 1) % 7 + 1;
+
   bool get wheelAvailable {
     final last = lastWheelSpin;
     if (last == null) return true;

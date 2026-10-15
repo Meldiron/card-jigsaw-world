@@ -70,21 +70,28 @@ class _DailyRewardSheetState extends ConsumerState<DailyRewardSheet> {
   bool _restoring = false;
   ({int coins, int tickets, int hints, int day})? _claimed;
 
+  /// Restores the lost streak and claims today's gift with it.
   Future<void> _restore() async {
-    final n = ref.read(profileProvider.notifier);
     final p = ref.read(profileProvider).value;
     if (p == null) return;
-    final cost = Economy.streakRestoreTickets(p.longestStreak);
+    final cost = Economy.streakRestoreTickets(p.streak);
     if (p.tickets < cost) {
       showToast(context, 'You need $cost tickets to restore the streak.', leading: const TicketIcon(size: 18));
       context.push('/store');
       return;
     }
     setState(() => _restoring = true);
-    final ok = await n.restoreStreak();
+    final r = await ref.read(profileProvider.notifier).claimDaily(restore: true);
+    if (r != null) {
+      final store = ref.read(localStoreProvider);
+      store.giftClaimDays = store.giftClaimDays + 1;
+    }
     if (!mounted) return;
-    setState(() => _restoring = false);
-    if (ok) {
+    setState(() {
+      _restoring = false;
+      _claimed = r;
+    });
+    if (r != null) {
       Sfx.instance.coin();
       Haptics.success();
       showToast(context, 'Streak restored', icon: AppIcons.streak);
@@ -117,7 +124,10 @@ class _DailyRewardSheetState extends ConsumerState<DailyRewardSheet> {
     final profile = ref.watch(profileProvider).value;
     final available = profile?.dailyAvailable ?? false;
     final streak = profile?.streak ?? 0;
-    final todayIdx = available ? (streak % 7) : ((streak - 1) % 7).clamp(0, 6);
+    // After a missed day the next claim starts again at day 1, whatever the stored streak says.
+    final todayIdx = profile == null ? 0 : (available ? profile.nextGiftDay : profile.giftsClaimedThisRound - 1);
+    final missed = profile != null && !profile.streakAlive && profile.streak > 0;
+    final canRestore = profile != null && ref.read(profileProvider.notifier).canRestoreStreak;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
@@ -129,7 +139,11 @@ class _DailyRewardSheetState extends ConsumerState<DailyRewardSheet> {
           Text('Daily gift', style: Theme.of(context).textTheme.headlineMedium),
           const SizedBox(height: 4),
           Text(
-            available ? 'Come back every day to grow your streak.' : 'Claimed · Streak: $streak day${streak == 1 ? '' : 's'}. Back tomorrow.',
+            !available
+                ? 'Claimed · Streak: $streak day${streak == 1 ? '' : 's'}. Back tomorrow.'
+                : missed
+                    ? (canRestore ? 'You missed a day. Restore your streak or start again.' : 'You missed a day, so the streak starts again.')
+                    : 'Come back every day to grow your streak.',
             textAlign: TextAlign.center,
             style: TextStyle(color: c.textSecondary),
           ),
@@ -150,7 +164,7 @@ class _DailyRewardSheetState extends ConsumerState<DailyRewardSheet> {
             ],
           ),
           const SizedBox(height: 20),
-          if (profile != null && ref.read(profileProvider.notifier).canRestoreStreak)
+          if (profile != null && canRestore)
             Padding(
               padding: const EdgeInsets.only(bottom: 16),
               child: SoftCard(
@@ -166,10 +180,10 @@ class _DailyRewardSheetState extends ConsumerState<DailyRewardSheet> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Restore your ${profile.longestStreak}-day streak', style: Theme.of(context).textTheme.titleMedium),
+                              Text('Keep your ${profile.streak}-day streak', style: Theme.of(context).textTheme.titleMedium),
                               const SizedBox(height: 2),
                               Text(
-                                'Your streak reset to ${profile.streak}. Bring it back to ${profile.longestStreak} days.',
+                                'Restore it and today\'s gift is day ${profile.streak % 7 + 1}.',
                                 style: TextStyle(fontSize: 12.5, color: c.textSecondary),
                               ),
                             ],
@@ -179,9 +193,10 @@ class _DailyRewardSheetState extends ConsumerState<DailyRewardSheet> {
                     ),
                     const SizedBox(height: 12),
                     BigButton.cost(
-                      label: 'Restore for',
+                      label: 'Restore and claim for',
+                      kind: ButtonKind.secondary,
                       currency: Currency.tickets,
-                      amount: Economy.streakRestoreTickets(profile.longestStreak),
+                      amount: Economy.streakRestoreTickets(profile.streak),
                       loading: _restoring,
                       onTap: _restore,
                     ),

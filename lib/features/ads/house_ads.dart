@@ -537,36 +537,39 @@ class _HouseBannerState extends ConsumerState<HouseBanner> {
     _creative ??= houseCreatives.firstWhere((c) => c.kind == CreativeKind.vip);
     final c = _creative!;
     final colors = context.colors;
+    final price = ((ref.watch(platformCapsProvider).purchases ? c.price : null) ?? c.body).replaceAll('/', '\u2060/\u2060');
+    // A quiet card like the others on Home: gold only on the crown, the action in cobalt, the price
+    // in full (word joiners keep "$2.99/month" together), and "Not now" instead of a small cross.
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(14, 12, 8, 12),
-        decoration: BoxDecoration(
-          color: context.isDark ? colors.cardElevated : colors.textPrimary,
-          borderRadius: BorderRadius.circular(Radii.lg),
-        ),
-        child: Row(
+      child: SoftCard(
+        padding: const EdgeInsets.fromLTRB(14, 14, 14, 12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(AppIcons.vip, color: Brand.coin, size: 22),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(c.headline, style: TextStyle(color: context.isDark ? colors.textPrimary : Colors.white, fontWeight: FontWeight.w700, fontSize: 14)),
-                  Text((ref.watch(platformCapsProvider).purchases ? c.price : null) ?? c.body, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: (context.isDark ? colors.textPrimary : Colors.white).withValues(alpha: 0.7), fontSize: 12)),
-                ],
-              ),
+            Row(
+              children: [
+                IconTile(icon: AppIcons.vip, size: 36, radius: 10, color: Brand.coin.withValues(alpha: 0.16), iconColor: Brand.coinDeep),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(c.headline, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
+                      const SizedBox(height: 2),
+                      Text(price, style: TextStyle(color: colors.textSecondary, fontSize: 12.5, height: 1.3)),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(width: 8),
-            BigButton(label: 'Go VIP', kind: ButtonKind.gold, height: 36, expand: false, onTap: () => openCreative(context, ref, c)),
-            const SizedBox(width: 4),
-            Pressable(
-              onTap: () => setState(() => _dismissedThisSession = true),
-              child: Padding(
-                padding: const EdgeInsets.all(6),
-                child: Icon(Icons.close_rounded, size: 18, color: (context.isDark ? colors.textPrimary : Colors.white).withValues(alpha: 0.6)),
-              ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(child: BigButton(label: 'Go VIP', kind: ButtonKind.secondary, height: 40, onTap: () => openCreative(context, ref, c))),
+                const SizedBox(width: 8),
+                BigButton(label: 'Not now', kind: ButtonKind.ghost, height: 40, expand: false, onTap: () => setState(() => _dismissedThisSession = true)),
+              ],
             ),
           ],
         ),

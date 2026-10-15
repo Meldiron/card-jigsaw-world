@@ -4,8 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 import '../../core/haptics.dart';
+import '../../data/purchases.dart' show groupThousands;
 import '../../core/theme/tokens.dart';
 import '../../game/board.dart';
 import '../../models/models.dart';
@@ -21,6 +23,7 @@ import '../../widgets/ui.dart';
 import '../ads/house_ads.dart';
 import '../daily/daily_reward_sheet.dart';
 import '../daily/piggy_sheet.dart';
+import '../daily/wheel_screen.dart' show wheelSegments;
 import '../../widgets/glass.dart';
 import '../gallery/library_screen.dart';
 import '../gallery/pack_card.dart';
@@ -61,6 +64,12 @@ class HomeScreen extends ConsumerWidget {
             .toList();
 
     final piggyFull = profile?.piggyFull ?? false;
+    // Riverpod retries a failed catalogue read and keeps the value "loading" meanwhile (dependent
+    // providers wait), so while the packs are missing the catalogue's own error is looked at
+    // instead of waiting for AsyncValue.when to reach its error branch.
+    // (`exists`: only read it when something already started it, never start a read from here.)
+    final catalogFailed = !packs.hasValue && ref.exists(catalogProvider) && ref.watch(catalogProvider.select((v) => v.hasError && !v.hasValue));
+    void retryCatalog() => ref.invalidate(catalogProvider);
     final livePacks = ref.watch(eventPacksProvider).where((p) => p.isLive).toList();
     final packRows = ref.watch(homePackRowsProvider);
     final packProgress = ref.watch(allPackProgressProvider);
@@ -78,12 +87,16 @@ class HomeScreen extends ConsumerWidget {
           physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
           slivers: [
             const HeaderBar(title: 'Card Jigsaw World'),
+            // Large title, as on the other tabs: the date and a greeting, so Home opens on "today".
+            SliverToBoxAdapter(child: _Greeting(name: profile?.displayName)),
             // The first-time intro of a shape or option the player's level just opened.
             SliverToBoxAdapter(child: UnlockIntroHost(at: (path) => path == '/home')),
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
-                child: _DailyHero(puzzle: daily, progress: daily == null ? null : progress[daily.id]),
+                child: daily == null
+                    ? _HeroPlaceholder(failed: catalogFailed, onRetry: retryCatalog)
+                    : _DailyHero(puzzle: daily, progress: progress[daily.id]),
               ),
             ),
             // Today's daily puzzle is solved: a blurred look at tomorrow's.
@@ -94,38 +107,22 @@ class HomeScreen extends ConsumerWidget {
                   child: TomorrowPreview(puzzle: tomorrow),
                 ),
               ),
+            // One tap back into the board closest to done; the full row is further down.
+            if (inProgress.isNotEmpty)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                  child: Builder(builder: (context) {
+                    final p = _closestToDone(inProgress, progress);
+                    final pr = progress[p.id]!;
+                    return _ResumeCard(puzzle: p, progress: pr, others: inProgress.length - 1, onTap: () => context.push('/game/${p.id}/${_gridCode(pr)}'));
+                  }),
+                ),
+              ),
             const SliverToBoxAdapter(
               child: Padding(
                 padding: EdgeInsets.fromLTRB(20, 12, 20, 0),
                 child: _QuickPlayCard(),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: _QuickTile(
-                        icon: AppIcons.wheel,
-                        title: 'Wheel',
-                        status: '1 ticket per spin',
-                        ready: false,
-                        onTap: () => context.push('/wheel'),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: _QuickTile(
-                        icon: AppIcons.piggy,
-                        title: 'Piggy bank',
-                        status: piggyFull ? 'Full' : '${profile?.piggyCoins ?? 0} / ${Profile.piggyCapacity}',
-                        ready: piggyFull,
-                        onTap: () => showPiggySheet(context),
-                      ),
-                    ),
-                  ],
-                ),
               ),
             ),
             if (profile != null)
@@ -133,33 +130,6 @@ class HomeScreen extends ConsumerWidget {
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
                   child: _StreakCard(profile: profile, onTap: () => showDailyRewardSheet(context)),
-                ),
-              ),
-            if (profile != null)
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-                  child: _LevelCard(profile: profile),
-                ),
-              ),
-            if (isGuest)
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-                  // A caution, not an offer: a guest's coins and puzzles are
-                  // lost with this device until they create an account.
-                  child: SoftCard(
-                    padding: EdgeInsets.zero,
-                    color: context.colors.warningTint,
-                    borderColor: context.colors.warning.withValues(alpha: 0.45),
-                    child: ListRow(
-                      icon: AppIcons.save,
-                      tone: context.colors.warning,
-                      title: 'Save progress',
-                      subtitle: 'Your progress is tied to this device. Create a free account to keep coins and puzzles on every device.',
-                      onTap: () => context.push('/account'),
-                    ),
-                  ),
                 ),
               ),
             if (inProgress.isNotEmpty) ...[
@@ -171,7 +141,7 @@ class HomeScreen extends ConsumerWidget {
               ),
               SliverToBoxAdapter(
                 child: SizedBox(
-                  height: 170,
+                  height: _CoverTile.size,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -206,6 +176,95 @@ class HomeScreen extends ConsumerWidget {
                 ),
               ),
             ],
+            // Extras after the boards and packs the player is working on.
+            const SliverToBoxAdapter(child: SizedBox(height: 16)),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: _QuickTile(
+                        icon: AppIcons.wheel,
+                        title: 'Lucky Wheel',
+                        value: Row(
+                          crossAxisAlignment: CrossAxisAlignment.baseline,
+                          textBaseline: TextBaseline.alphabetic,
+                          children: [
+                            Text('Up to', style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: context.colors.textSecondary)),
+                            const SizedBox(width: 6),
+                            Amount(currency: Currency.coins, value: _wheelJackpot, size: 18, fontSize: 19, weight: FontWeight.w700),
+                          ],
+                        ),
+                        footer: CostLabel(label: 'Spin for', currency: Currency.tickets, amount: Economy.wheelSpinTickets, fontSize: 12.5, color: context.colors.textSecondary),
+                        onTap: () => context.push('/wheel'),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _QuickTile(
+                        icon: AppIcons.piggy,
+                        title: 'Piggy bank',
+                        ready: piggyFull,
+                        value: Row(
+                          crossAxisAlignment: CrossAxisAlignment.baseline,
+                          textBaseline: TextBaseline.alphabetic,
+                          children: [
+                            Text(groupThousands(profile?.piggyCoins ?? 0), style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w700, letterSpacing: -0.3)),
+                            Text(' / ${groupThousands(Profile.piggyCapacity)}', style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: context.colors.textSecondary)),
+                          ],
+                        ),
+                        footer: piggyFull
+                            ? CostLabel(label: 'Full · open for', currency: Currency.tickets, amount: Economy.piggyOpenTickets, fontSize: 12.5, color: context.accent)
+                            : ProgressBar(value: (profile?.piggyCoins ?? 0) / Profile.piggyCapacity, height: 5),
+                        onTap: () => showPiggySheet(context),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            if (profile != null)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                  child: _LevelCard(profile: profile),
+                ),
+              ),
+            if (isGuest)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                  // A caution, not an offer: a guest's coins and puzzles are
+                  // lost with this device until they create an account.
+                  child: SoftCard(
+                    onTap: () => context.push('/account'),
+                    // Still a caution (warning tint and outline), in one compact row.
+                    color: context.colors.warningTint,
+                    borderColor: context.colors.warning.withValues(alpha: 0.45),
+                    padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
+                    child: Row(
+                      children: [
+                        IconTile(icon: AppIcons.save, size: 36, radius: 10, color: context.colors.warning.withValues(alpha: 0.16), iconColor: context.colors.warning),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Save progress', maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.titleMedium?.copyWith(color: context.colors.warning)),
+                              const SizedBox(height: 2),
+                              Text('Stored on this device only',
+                                  style: TextStyle(fontSize: 12.5, color: context.colors.textSecondary)),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Icon(CupertinoIcons.chevron_right, size: 16, color: context.colors.warning),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             if (livePacks.isNotEmpty) ...[
               SliverToBoxAdapter(
                 child: SectionHeader(
@@ -289,6 +348,16 @@ class HomeScreen extends ConsumerWidget {
                 },
               ),
             ),
+            if (!packs.hasValue && (packs.hasError || catalogFailed))
+              SliverToBoxAdapter(
+                child: EmptyState(
+                  icon: AppIcons.signal,
+                  title: 'Could not load packs',
+                  message: 'Check your connection and try again.',
+                  action: BigButton(label: 'Try again', kind: ButtonKind.secondary, expand: false, height: 40, onTap: retryCatalog),
+                ),
+              )
+            else
             packs.when(
               loading: () => const SliverToBoxAdapter(child: Padding(padding: EdgeInsets.all(40), child: Loader())),
               error: (e, _) => const SliverToBoxAdapter(
@@ -351,17 +420,45 @@ class HomeScreen extends ConsumerWidget {
   }
 }
 
+/// "Thursday 15 October" over "Good evening, Mia" (first name; none while it is the default "Player").
+class _Greeting extends StatelessWidget {
+  const _Greeting({required this.name});
+  final String? name;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final now = DateTime.now();
+    final part = now.hour < 5 ? 'Good evening' : (now.hour < 12 ? 'Good morning' : (now.hour < 18 ? 'Good afternoon' : 'Good evening'));
+    // First name only: "Maximilian", not "Maximilian Alexander von Habsburg".
+    final n = (name?.trim() ?? '').split(RegExp(r'\s+')).first;
+    final title = n.isEmpty || n == 'Player' ? part : '$part, $n';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 4),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(DateFormat('EEEE d MMMM').format(now), style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: c.textSecondary)),
+          const SizedBox(height: 2),
+          Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.headlineLarge),
+        ],
+      ),
+    );
+  }
+}
+
 class _DailyHero extends StatelessWidget {
   const _DailyHero({required this.puzzle, required this.progress});
-  final Puzzle? puzzle;
+  final Puzzle puzzle;
   final PuzzleProgress? progress;
 
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
     final done = progress?.completed ?? false;
+    final stars = progress?.stars ?? 0;
     return Pressable(
-      onTap: puzzle == null ? null : () => context.push('/play/${puzzle!.id}'),
+      onTap: () => context.push('/play/${puzzle.id}'),
       scale: 0.985,
       child: Container(
         height: 220,
@@ -374,12 +471,12 @@ class _DailyHero extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            if (puzzle != null) NetImage(url: puzzle!.imageUrl, blurhash: puzzle!.blurhash),
+            NetImage(url: puzzle.imageUrl, blurhash: puzzle.blurhash),
             DecoratedBox(decoration: BoxDecoration(gradient: Brand.scrim(strength: 0.8))),
             Positioned(
               left: 14,
               top: 14,
-              child: Chip2(label: done ? 'Today · solved' : 'Today', icon: AppIcons.dailyPuzzle, onImage: true),
+              child: Chip2(label: 'Today', icon: AppIcons.dailyPuzzle, onImage: true),
             ),
             Positioned(
               left: 16,
@@ -394,15 +491,24 @@ class _DailyHero extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          puzzle?.title ?? 'Loading…',
+                          puzzle.title,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Colors.white),
                         ),
                         const SizedBox(height: 4),
                         if (done)
-                          Text('Solved · replay for more stars',
-                              style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 13, fontWeight: FontWeight.w500))
+                          // The stars earned, and the reason to replay only while one is missing.
+                          Row(
+                            children: [
+                              for (var i = 0; i < 3; i++)
+                                Icon(i < stars ? AppIcons.star : AppIcons.starOutline, size: 14,
+                                    color: i < stars ? Brand.star : Colors.white.withValues(alpha: 0.6)),
+                              const SizedBox(width: 8),
+                              Text(stars >= 3 ? 'Solved' : 'Solved · replay for 3 stars',
+                                  style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 13, fontWeight: FontWeight.w500)),
+                            ],
+                          )
                         else
                           Row(
                             children: [
@@ -432,11 +538,53 @@ class _DailyHero extends StatelessWidget {
   }
 }
 
+/// The daily puzzle's place while the catalogue loads (a quiet empty frame with
+/// a spinner, no title or button that would do nothing), or, when it could not
+/// be read, what happened and a way to try again.
+class _HeroPlaceholder extends StatelessWidget {
+  const _HeroPlaceholder({required this.failed, required this.onRetry});
+  final bool failed;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return Container(
+      height: 220,
+      decoration: BoxDecoration(
+        color: c.boardBackground,
+        borderRadius: BorderRadius.circular(Radii.lg),
+        border: Border.all(color: c.stroke),
+      ),
+      child: !failed
+          ? const Loader()
+          : Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(AppIcons.signal, size: 26, color: c.textTertiary),
+                  const SizedBox(height: 10),
+                  Text("Today's puzzle could not load", textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleMedium),
+                  const SizedBox(height: 4),
+                  Text('Check your connection and try again.', textAlign: TextAlign.center, style: TextStyle(fontSize: 13, color: c.textSecondary)),
+                  const SizedBox(height: 14),
+                  BigButton(label: 'Try again', kind: ButtonKind.secondary, expand: false, height: 40, onTap: onRetry),
+                ],
+              ),
+            ),
+    );
+  }
+}
+
+/// Wheel and piggy bank: a small widget-style tile, the name at the top, the
+/// figure that matters in the middle, what it costs or how full it is below.
 class _QuickTile extends StatelessWidget {
-  const _QuickTile({required this.icon, required this.title, required this.status, required this.ready, required this.onTap});
+  const _QuickTile({required this.icon, required this.title, required this.value, required this.footer, required this.onTap, this.ready = false});
   final IconData icon;
   final String title;
-  final String status;
+  final Widget value;
+  final Widget footer;
   final bool ready;
   final VoidCallback onTap;
 
@@ -447,7 +595,7 @@ class _QuickTile extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: 112,
-        padding: const EdgeInsets.fromLTRB(12, 12, 12, 10),
+        padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
         decoration: BoxDecoration(
           color: c.card,
           borderRadius: BorderRadius.circular(Radii.lg),
@@ -456,23 +604,25 @@ class _QuickTile extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            IconTile(icon: icon, size: 34, radius: 10),
-            const Spacer(),
             Row(
               children: [
+                IconTile(icon: icon, size: 28, radius: 8),
+                const SizedBox(width: 8),
                 Flexible(
                   child: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13.5, letterSpacing: -0.2)),
+                      style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, letterSpacing: -0.2)),
                 ),
                 if (ready) ...[
-                  const SizedBox(width: 5),
+                  const SizedBox(width: 6),
                   Container(width: 6, height: 6, decoration: const BoxDecoration(color: Brand.live, shape: BoxShape.circle)),
                 ],
               ],
             ),
-            const SizedBox(height: 2),
-            Text(status, maxLines: 1, overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w500, color: ready ? context.accent : c.textSecondary)),
+            const Spacer(),
+            value,
+            const SizedBox(height: 6),
+            // Same height for a price line and a progress bar, so both tiles' figures line up.
+            SizedBox(height: 18, child: Align(alignment: Alignment.centerLeft, child: footer)),
           ],
         ),
       ),
@@ -480,7 +630,12 @@ class _QuickTile extends StatelessWidget {
   }
 }
 
-/// Streak: week dots and what today's or tomorrow's gift is worth.
+/// The Lucky Wheel's top prize, for the Home tile.
+final int _wheelJackpot = wheelSegments.where((s) => s.kind == Currency.coins).map((s) => s.amount).reduce(max);
+
+/// Streak: week dots and what today's or tomorrow's gift is worth. After
+/// missed days a lost streak can be restored with today's gift: the dots give
+/// way to that offer.
 class _StreakCard extends ConsumerWidget {
   const _StreakCard({required this.profile, required this.onTap});
   final Profile profile;
@@ -490,10 +645,18 @@ class _StreakCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final c = context.colors;
     final canRestore = ref.read(profileProvider.notifier).canRestoreStreak;
-    final streak = profile.streak;
-    final nextIdx = profile.dailyAvailable ? streak % 7 : streak % 7;
-    final filled = profile.dailyAvailable ? streak % 7 : ((streak - 1) % 7) + 1;
+    final streak = profile.currentStreak;
+    final available = profile.dailyAvailable;
+    final missed = !profile.streakAlive && profile.streak > 0;
+    final nextIdx = profile.nextGiftDay;
+    final filled = profile.giftsClaimedThisRound;
     final next = Economy.dailyRewards[nextIdx];
+    final title = streak > 0 ? '$streak-day streak' : (missed ? 'Streak ended' : 'Start a streak');
+    final status = missed
+        ? (canRestore ? 'Missed a day after ${profile.streak} days' : 'Missed a day · claim to start again')
+        : !available
+            ? 'Claimed · back tomorrow'
+            : (streak > 0 ? 'Claim today to keep it going' : 'Claim a gift every day');
     return SoftCard(
       onTap: onTap,
       padding: const EdgeInsets.all(14),
@@ -508,65 +671,91 @@ class _StreakCard extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('$streak-day streak', style: Theme.of(context).textTheme.titleLarge),
+                    Text(title, style: Theme.of(context).textTheme.titleLarge),
                     const SizedBox(height: 2),
-                    Text(
-                      canRestore
-                          ? 'Streak reset · restore ${profile.longestStreak} days'
-                          : (profile.dailyAvailable ? 'Claim today to keep it going' : 'Claimed · back tomorrow'),
-                      style: TextStyle(fontSize: 12.5, color: c.textSecondary),
-                    ),
+                    Text(status, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12.5, color: c.textSecondary)),
                   ],
                 ),
               ),
-              if (canRestore)
-                BigButton(label: 'Restore', kind: ButtonKind.secondary, height: 30, expand: false, onTap: onTap)
-              else
-                Icon(CupertinoIcons.chevron_right, size: 16, color: c.textTertiary),
+              const SizedBox(width: 8),
+              Icon(CupertinoIcons.chevron_right, size: 16, color: c.textTertiary),
             ],
           ),
           const SizedBox(height: 14),
-          Row(
-            children: [
-              for (var i = 0; i < 7; i++) ...[
-                Expanded(
-                  child: Column(
-                    children: [
-                      Container(
-                        width: 22,
-                        height: 22,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: i < filled ? context.accent : Colors.transparent,
-                          border: Border.all(color: i < filled ? context.accent : (i == nextIdx ? context.accent : c.stroke), width: i == nextIdx && i >= filled ? 1.5 : 1),
-                        ),
-                        child: i < filled ? const Icon(CupertinoIcons.checkmark, size: 12, color: Colors.white) : null,
-                      ),
-                      const SizedBox(height: 4),
-                      Text('${i + 1}', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: c.textTertiary)),
-                    ],
+          if (canRestore)
+            // The offer opens the Daily gift sheet, which asks once more before the tickets are spent.
+            Container(
+              padding: const EdgeInsets.fromLTRB(12, 10, 10, 10),
+              decoration: BoxDecoration(color: c.canvas, borderRadius: BorderRadius.circular(Radii.md), border: Border.all(color: c.stroke)),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Keep your streak',
+                            maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600)),
+                        const SizedBox(height: 1),
+                        Text('Today becomes day ${profile.streak % 7 + 1}',
+                            maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, color: c.textSecondary)),
+                      ],
+                    ),
                   ),
-                ),
+                  const SizedBox(width: 10),
+                  BigButton.cost(
+                    label: 'Restore',
+                    currency: Currency.tickets,
+                    amount: Economy.streakRestoreTickets(profile.streak),
+                    kind: ButtonKind.secondary,
+                    height: 36,
+                    expand: false,
+                    onTap: onTap,
+                  ),
+                ],
+              ),
+            )
+          else
+            Row(
+              children: [
+                for (var i = 0; i < 7; i++) ...[
+                  Expanded(
+                    child: Column(
+                      children: [
+                        Container(
+                          width: 22,
+                          height: 22,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: i < filled ? context.accent : Colors.transparent,
+                            border: Border.all(color: i < filled ? context.accent : (i == nextIdx ? context.accent : c.stroke), width: i == nextIdx && i >= filled ? 1.5 : 1),
+                          ),
+                          child: i < filled ? const Icon(CupertinoIcons.checkmark, size: 12, color: Colors.white) : null,
+                        ),
+                        const SizedBox(height: 4),
+                        Text('${i + 1}', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: c.textTertiary)),
+                      ],
+                    ),
+                  ),
+                ],
               ],
-            ],
-          ),
+            ),
           const SizedBox(height: 12),
           Container(height: 1, color: c.stroke),
           const SizedBox(height: 10),
           Row(
             children: [
-              if (profile.dailyAvailable) ...[
+              if (available) ...[
                 Container(width: 6, height: 6, decoration: const BoxDecoration(color: Brand.live, shape: BoxShape.circle)),
                 const SizedBox(width: 6),
               ],
-              Text(profile.dailyAvailable ? "Today's gift" : "Tomorrow's gift",
-                  style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: profile.dailyAvailable ? c.textPrimary : c.textSecondary)),
+              Text(available ? "Today's gift" : "Tomorrow's gift",
+                  style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: available ? c.textPrimary : c.textSecondary)),
               const SizedBox(width: 10),
               Amount(currency: Currency.coins, value: next.coins, size: 15, fontSize: 13),
               if (next.tickets > 0) ...[const SizedBox(width: 8), Amount(currency: Currency.tickets, value: next.tickets, size: 15, fontSize: 13)],
               if (next.hints > 0) ...[const SizedBox(width: 8), Amount(currency: Currency.hints, value: next.hints, size: 15, fontSize: 13)],
               const Spacer(),
-              if (profile.dailyAvailable) BigButton(label: 'Claim', height: 36, expand: false, onTap: onTap),
+              if (available) BigButton(label: 'Claim', height: 36, expand: false, onTap: onTap),
             ],
           ),
         ],
@@ -575,7 +764,8 @@ class _StreakCard extends ConsumerWidget {
   }
 }
 
-/// Level: progress plus what the next levels unlock.
+/// Level: progress, then the next three levels side by side with what each
+/// one brings, the nearest one highlighted.
 class _LevelCard extends StatelessWidget {
   const _LevelCard({required this.profile});
   final Profile profile;
@@ -584,8 +774,8 @@ class _LevelCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.colors;
     final level = profile.level;
-    final next = LevelRewards.forLevel(level + 1);
-    final later = LevelRewards.upcoming(level + 1, count: 2);
+    final toGo = Profile.xpForLevel(level) - profile.xpIntoLevel;
+    final steps = [for (var i = 1; i <= 3; i++) LevelRewards.forLevel(level + i)];
     return SoftCard(
       padding: const EdgeInsets.all(14),
       child: Column(
@@ -595,49 +785,85 @@ class _LevelCard extends StatelessWidget {
             children: [
               const IconTile(icon: AppIcons.level, size: 36, radius: 10),
               const SizedBox(width: 12),
-              Expanded(child: Text('Level $level', style: Theme.of(context).textTheme.titleLarge)),
-              Text('${profile.xpIntoLevel} / ${Profile.xpForLevel(level)} XP',
-                  style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: c.textSecondary)),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Level $level', style: Theme.of(context).textTheme.titleLarge),
+                    const SizedBox(height: 2),
+                    Text('${groupThousands(toGo)} XP to level ${level + 1}', style: TextStyle(fontSize: 12.5, color: c.textSecondary)),
+                  ],
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 12),
           ProgressBar(value: profile.levelProgress, height: 8),
           const SizedBox(height: 14),
-          Text('Next: level ${level + 1}', style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: c.textSecondary)),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            crossAxisAlignment: WrapCrossAlignment.center,
+          IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                for (var i = 0; i < steps.length; i++) ...[
+                  if (i > 0) const SizedBox(width: 8),
+                  Expanded(child: _LevelStep(reward: steps[i], next: i == 0)),
+                ],
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// One level of the Level card's road: its number and each reward on a line.
+class _LevelStep extends StatelessWidget {
+  const _LevelStep({required this.reward, required this.next});
+  final LevelReward reward;
+  final bool next;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final r = reward;
+    Widget line(Widget icon, String text, {Color? color}) => Padding(
+          padding: const EdgeInsets.only(top: 6),
+          child: Row(
             children: [
-              _RewardChip(child: Amount(currency: Currency.coins, value: next.coins, size: 14, fontSize: 12.5)),
-              if (next.tickets > 0) _RewardChip(child: Amount(currency: Currency.tickets, value: next.tickets, size: 14, fontSize: 12.5)),
-              if (next.hints > 0) _RewardChip(child: Amount(currency: Currency.hints, value: next.hints, size: 14, fontSize: 12.5)),
-              if (next.tier != null) Chip2(label: '${next.tier!.code} ${next.tier!.label} boards', icon: AppIcons.bigBoard),
-              for (final u in next.unlocks) Chip2(key: ValueKey('next-unlock-${u.name}'), label: u.label, icon: _unlockIcon(u), color: c.accentTint, foreground: context.accent),
+              SizedBox(width: 15, child: Center(child: icon)),
+              const SizedBox(width: 4),
+              // Scales down a little rather than cutting "Hexagons" on a 97 pt SE tile.
+              Flexible(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Text(text, maxLines: 1, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: color ?? c.textPrimary)),
+                ),
+              ),
             ],
           ),
-          const SizedBox(height: 12),
-          Container(height: 1, color: c.stroke),
-          const SizedBox(height: 10),
-          Text('Coming up', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: c.textTertiary)),
-          const SizedBox(height: 6),
-          for (final r in later)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 6),
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 64,
-                    child: Text('Level ${r.level}', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: c.textSecondary)),
-                  ),
-                  Expanded(
-                    child: Text(r.lines.join(' · '), maxLines: 2, overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontSize: 12, height: 1.3, color: c.textTertiary)),
-                  ),
-                ],
-              ),
+        );
+    return Container(
+      padding: const EdgeInsets.fromLTRB(9, 9, 6, 10),
+      decoration: BoxDecoration(
+        color: next ? c.accentTint : c.canvas,
+        borderRadius: BorderRadius.circular(Radii.md),
+        border: Border.all(color: next ? context.accent.withValues(alpha: 0.35) : c.stroke),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Level ${r.level}', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: next ? context.accent : c.textSecondary)),
+          for (final u in r.unlocks)
+            KeyedSubtree(
+              key: next ? ValueKey('next-unlock-${u.name}') : null,
+              child: line(Icon(_unlockIcon(u), size: 14, color: context.accent), u == Unlock.giant ? 'Giant' : u.label, color: context.accent),
             ),
+          if (r.tier != null) line(Icon(AppIcons.bigBoard, size: 14, color: context.accent), r.tier!.code, color: context.accent),
+          line(const CoinIcon(size: 14), groupThousands(r.coins)),
+          if (r.tickets > 0) line(const TicketIcon(size: 14), '${r.tickets}'),
+          if (r.hints > 0) line(const HintIcon(size: 14), '${r.hints}'),
         ],
       ),
     );
@@ -649,20 +875,6 @@ IconData _unlockIcon(Unlock u) => switch (u) {
       Unlock.giant => AppIcons.bigBoard,
       _ => AppIcons.unlock,
     };
-
-class _RewardChip extends StatelessWidget {
-  const _RewardChip({required this.child});
-  final Widget child;
-  @override
-  Widget build(BuildContext context) {
-    final c = context.colors;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
-      decoration: BoxDecoration(color: c.canvas, borderRadius: BorderRadius.circular(999), border: Border.all(color: c.stroke)),
-      child: child,
-    );
-  }
-}
 
 /// Month tile for the daily puzzle row: cover, name and the same progress
 /// line and completion badges as the library cards.
@@ -678,7 +890,7 @@ class _MonthCard extends ConsumerWidget {
     return _CoverTile(
       pack: pack,
       progress: progress,
-      chip: current ? const Chip2(label: 'This month', color: Brand.live, foreground: Colors.white) : null,
+      chip: current ? const _StatusChip('This month') : null,
       onTap: onTap,
     );
   }
@@ -696,7 +908,7 @@ class _EventPackCard extends ConsumerWidget {
     return _CoverTile(
       pack: pack,
       progress: progress,
-      chip: Chip2(label: _endsIn(pack), color: Brand.live, foreground: Colors.white),
+      chip: _StatusChip(_endsIn(pack)),
       nameLines: 2,
       onTap: onTap,
     );
@@ -711,6 +923,28 @@ String _endsIn(Pack pack) {
   if (d.inDays >= 1) return 'Ends in ${d.inDays}d';
   if (d.inHours >= 1) return 'Ends in ${d.inHours}h';
   return 'Ends soon';
+}
+
+/// Status on a cover photo ("Ends in 5d", "This month"): the dark glass chip
+/// used for labels on pictures, with a small red dot for "live". The photo
+/// keeps the colour; the red is a marker, not a fill.
+class _StatusChip extends StatelessWidget {
+  const _StatusChip(this.label);
+  final String label;
+
+  @override
+  Widget build(BuildContext context) => Container(
+        padding: const EdgeInsets.fromLTRB(8, 5, 9, 5),
+        decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.5), borderRadius: BorderRadius.circular(Radii.pill)),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(width: 6, height: 6, decoration: const BoxDecoration(color: Brand.live, shape: BoxShape.circle)),
+            const SizedBox(width: 5),
+            Text(label, style: const TextStyle(color: Colors.white, fontSize: 11.5, fontWeight: FontWeight.w600)),
+          ],
+        ),
+      );
 }
 
 /// Square cover tile shared by the Home event and month rows: picture with
@@ -782,6 +1016,9 @@ class _CoverTile extends StatelessWidget {
   }
 }
 
+/// A board in progress as a square picture tile, the same shape as the pack
+/// covers below it: the shape (when not cards) top left, the title on up to
+/// two lines and the cards in place at the bottom.
 class _ContinueCard extends StatelessWidget {
   const _ContinueCard({required this.puzzle, required this.progress, required this.onTap});
   final Puzzle puzzle;
@@ -793,33 +1030,120 @@ class _ContinueCard extends StatelessWidget {
     final c = context.colors;
     final locked = progress.layout == null ? 0 : [for (var i = 0; i < progress.layout!.length; i++) if (progress.layout![i] == i) i].length;
     final total = progress.layout?.length ?? progress.gridSize;
+    final mode = GameMode.fromCode(progress.mode);
     return Pressable(
       onTap: onTap,
       child: Container(
-        width: 150,
+        width: _CoverTile.size,
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
-          color: c.card,
+          color: c.boardBackground,
           borderRadius: BorderRadius.circular(Radii.lg),
           border: Border.all(color: c.stroke),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Stack(
+          fit: StackFit.expand,
           children: [
-            Expanded(child: NetImage(url: puzzle.thumbUrl, blurhash: puzzle.blurhash, width: double.infinity)),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10, 8, 10, 10),
+            NetImage(url: puzzle.thumbUrl, blurhash: puzzle.blurhash),
+            DecoratedBox(decoration: BoxDecoration(gradient: Brand.scrim(strength: 0.8))),
+            // The shape when it is not plain cards, and Painting: what the board will feel like.
+            if (mode != GameMode.cards || progress.painting)
+              Positioned(
+                left: 8,
+                top: 8,
+                child: Chip2(label: [if (mode != GameMode.cards) mode.label, if (progress.painting) 'Painting'].join(' · '), onImage: true),
+              ),
+            Positioned(
+              left: 10,
+              right: 10,
+              bottom: 10,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(puzzle.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+                  Text(puzzle.title, maxLines: 2, overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 14, letterSpacing: -0.2, height: 1.15)),
                   const SizedBox(height: 6),
-                  ProgressBar(value: total == 0 ? 0 : locked / total, height: 5),
+                  Row(
+                    children: [
+                      Expanded(child: ProgressBar(value: total == 0 ? 0 : locked / total, height: 4, color: Colors.white, background: Colors.white.withValues(alpha: 0.3))),
+                      const SizedBox(width: 6),
+                      Text('$locked/$total', style: const TextStyle(color: Colors.white, fontSize: 10.5, fontWeight: FontWeight.w600)),
+                    ],
+                  ),
                 ],
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Share of a saved board's cards already in their place.
+double _lockedShare(PuzzleProgress pr) {
+  final layout = pr.layout;
+  if (layout == null || layout.isEmpty) return 0;
+  var locked = 0;
+  for (var i = 0; i < layout.length; i++) {
+    if (layout[i] == i) locked++;
+  }
+  return locked / layout.length;
+}
+
+/// The board in progress with the largest share of cards in place.
+Puzzle _closestToDone(List<Puzzle> boards, Map<String, PuzzleProgress> progress) =>
+    boards.reduce((a, b) => _lockedShare(progress[b.id]!) > _lockedShare(progress[a.id]!) ? b : a);
+
+/// Continue: the board closest to done, in the shape of the Quick play card,
+/// with how far along it is.
+class _ResumeCard extends StatelessWidget {
+  const _ResumeCard({required this.puzzle, required this.progress, required this.others, required this.onTap});
+  final Puzzle puzzle;
+  final PuzzleProgress progress;
+  final int others;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final share = _lockedShare(progress);
+    return SoftCard(
+      key: const ValueKey('home-resume'),
+      onTap: onTap,
+      padding: const EdgeInsets.fromLTRB(10, 10, 12, 10),
+      child: Row(
+        children: [
+          SizedBox(width: 52, height: 52, child: NetImage(url: puzzle.thumbUrl, blurhash: puzzle.blurhash, radius: 10)),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(others > 0 ? 'Continue · ${others + 1} boards' : 'Continue',
+                    style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w600, color: context.accent, letterSpacing: -0.1)),
+                const SizedBox(height: 1),
+                Text(puzzle.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.titleMedium),
+                const SizedBox(height: 6),
+                Row(
+                  children: [
+                    Expanded(child: ProgressBar(value: share, height: 5)),
+                    const SizedBox(width: 8),
+                    Text('${(share * 100).round()}%', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: c.textSecondary)),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 12),
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(color: context.accent, shape: BoxShape.circle),
+            child: const Icon(CupertinoIcons.play_fill, color: Colors.white, size: 18),
+          ),
+        ],
       ),
     );
   }
@@ -851,7 +1175,7 @@ class _QuickPlayCard extends ConsumerWidget {
       QuickPlayTier.fresh => 'A picture you have not played yet',
       QuickPlayTier.improve => 'A picture still short of 3 stars',
       QuickPlayTier.any => 'A random picture to replay',
-      null => 'Loading pictures…',
+      null => ref.exists(catalogProvider) && ref.watch(catalogProvider.select((v) => v.hasError && !v.hasValue)) ? 'Pictures could not load' : 'Loading pictures…',
     };
     return SoftCard(
       key: const ValueKey('home-quick-play'),
@@ -873,11 +1197,12 @@ class _QuickPlayCard extends ConsumerWidget {
             ),
           ),
           const SizedBox(width: 10),
+          // Greyed until there are pictures to pick from.
           Container(
             width: 40,
             height: 40,
-            decoration: BoxDecoration(color: context.accent, shape: BoxShape.circle),
-            child: const Icon(CupertinoIcons.play_fill, color: Colors.white, size: 18),
+            decoration: BoxDecoration(color: pool == null ? c.stroke : context.accent, shape: BoxShape.circle),
+            child: Icon(CupertinoIcons.play_fill, color: pool == null ? c.textTertiary : Colors.white, size: 18),
           ),
         ],
       ),
@@ -907,7 +1232,7 @@ class _PackCoverRow extends StatelessWidget {
           return _CoverTile(
             pack: pack,
             progress: progressOf(pack),
-            chip: pack.hasWindow && pack.isLive ? Chip2(label: _endsIn(pack), color: Brand.live, foreground: Colors.white) : null,
+            chip: pack.hasWindow && pack.isLive ? _StatusChip(_endsIn(pack)) : null,
             nameLines: 2,
             onTap: () => context.push('/library/pack/${pack.id}'),
           );
@@ -938,12 +1263,16 @@ class _FinishedPacksCard extends StatelessWidget {
       padding: EdgeInsets.zero,
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 14, 16, 12),
+          // Three equal cells split by hairlines; labels may wrap to a second line instead of
+          // being cut ("With every st...") on a small screen or with larger text.
+          IntrinsicHeight(
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Expanded(child: _StatCell(value: s.packs, label: s.packs == 1 ? 'Pack finished' : 'Packs finished')),
+                VerticalDivider(width: 1, thickness: 1, indent: 14, endIndent: 14, color: c.stroke),
                 Expanded(child: _StatCell(value: s.perfect, label: 'With every star', star: true)),
+                VerticalDivider(width: 1, thickness: 1, indent: 14, endIndent: 14, color: c.stroke),
                 Expanded(child: _StatCell(value: s.pictures, label: 'Pictures solved')),
               ],
             ),
@@ -967,18 +1296,21 @@ class _StatCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Text('$value', style: Theme.of(context).textTheme.titleLarge),
-            if (star) ...[const SizedBox(width: 4), const Icon(AppIcons.star, size: 14, color: Brand.star)],
-          ],
-        ),
-        const SizedBox(height: 2),
-        Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w500, color: c.textSecondary)),
-      ],
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8, 12, 8, 12),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(groupThousands(value), style: Theme.of(context).textTheme.titleLarge),
+              if (star) ...[const SizedBox(width: 4), const Icon(AppIcons.star, size: 14, color: Brand.star)],
+            ],
+          ),
+          const SizedBox(height: 2),
+          Text(label, maxLines: 2, textAlign: TextAlign.center, style: TextStyle(fontSize: 11.5, height: 1.2, fontWeight: FontWeight.w500, color: c.textSecondary)),
+        ],
+      ),
     );
   }
 }

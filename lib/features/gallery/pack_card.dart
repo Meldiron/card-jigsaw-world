@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/theme/tokens.dart';
+import '../../data/purchases.dart' show groupThousands;
 import '../../models/models.dart';
 import '../../state/profile.dart';
 import '../../state/starter_packs.dart';
@@ -50,30 +51,6 @@ class PackCard extends ConsumerWidget {
                     child: Chip2(label: pack.category, icon: AppIcons.category(pack.category), onImage: true),
                   ),
                   if (progress.complete && !showLock) Positioned(right: 8, top: 8, child: PackDoneBadges(progress: progress)),
-                  if (showLock)
-                    Positioned(
-                      right: 8,
-                      top: 8,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-                        decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.45), borderRadius: BorderRadius.circular(999)),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(AppIcons.lock, size: 11, color: Colors.white),
-                            const SizedBox(width: 5),
-                            Amount(
-                              currency: pack.priceTickets > 0 ? Currency.tickets : Currency.coins,
-                              value: pack.priceTickets > 0 ? pack.priceTickets : pack.priceCoins,
-                              size: 12,
-                              color: Colors.white,
-                              fontSize: 11,
-                              weight: FontWeight.w600,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
                   if (pack.isNew)
                     const Positioned(
                       left: 8,
@@ -104,7 +81,27 @@ class PackCard extends ConsumerWidget {
                 children: [
                   Text(pack.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15, letterSpacing: -0.2)),
                   const SizedBox(height: 6),
-                  PackProgressLine(progress: progress),
+                  // A locked pack shows its price where an open one shows its progress (0/24 says
+                  // nothing yet), so the photo carries one chip, the category.
+                  if (showLock)
+                    SizedBox(
+                      height: 16,
+                      child: Row(
+                        children: [
+                          Icon(AppIcons.lock, size: 12, color: c.textSecondary),
+                          const SizedBox(width: 6),
+                          Amount(
+                            currency: pack.priceTickets > 0 ? Currency.tickets : Currency.coins,
+                            value: groupThousands(pack.priceTickets > 0 ? pack.priceTickets : pack.priceCoins),
+                            size: 14,
+                            fontSize: 13,
+                            weight: FontWeight.w700,
+                          ),
+                        ],
+                      ),
+                    )
+                  else
+                    SizedBox(height: 16, child: Center(child: PackProgressLine(progress: progress))),
                 ],
               ),
             ),

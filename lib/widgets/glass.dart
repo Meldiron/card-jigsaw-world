@@ -355,13 +355,14 @@ class _TabCell extends StatelessWidget {
           clipBehavior: Clip.none,
           children: [
             Icon(selected ? item.activeIcon : item.icon, color: color, size: 23),
-            if (item.badge)
+            // Something waits on that tab. Not on the tab being shown: its own screen says so.
+            if (item.badge && !selected)
               Positioned(
-                right: -4,
-                top: -2,
+                right: -7,
+                top: -3,
                 child: Container(
-                  width: 8,
-                  height: 8,
+                  width: 9,
+                  height: 9,
                   decoration: BoxDecoration(color: Brand.live, shape: BoxShape.circle, border: Border.all(color: tintColor, width: 1.5)),
                 ),
               ),

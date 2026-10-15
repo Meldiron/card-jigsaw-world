@@ -123,8 +123,19 @@ class SyncOp {
   factory SyncOp.vipBonus(String key, int coins) => SyncOp(OpKind.vipBonus, {'key': key, 'coins': coins});
 
   /// The daily gift as shown to the player (the streak is worked out from the server's last claim).
-  factory SyncOp.daily({required int day, required int coins, required int tickets, required int hints}) =>
-      SyncOp(OpKind.daily, {'day': day, 'coins': coins, 'tickets': tickets, 'hints': hints});
+  /// A [restoreTarget] restores a streak lost to missed days with the claim, for [restoreCost]
+  /// tickets, so the gift continues it instead of starting again at day 1.
+  factory SyncOp.daily({required int day, required int coins, required int tickets, required int hints, int restoreTarget = 0, int restoreCost = 0}) =>
+      SyncOp(OpKind.daily, {
+        'day': day,
+        'coins': coins,
+        'tickets': tickets,
+        'hints': hints,
+        if (restoreTarget > 0) 'restoreTarget': restoreTarget,
+        if (restoreTarget > 0) 'restoreCost': restoreCost,
+      });
+
+  /// Older builds restored a streak on its own, after the claim; kept for ops they queued.
   factory SyncOp.restoreStreak({required int cost, required int target}) => SyncOp(OpKind.streak, {'cost': cost, 'target': target});
 
   /// Adds [key] to the list column [list] (`unlockedPacks`, `unlockedTiers`, `unlockedAvatars`) for
@@ -301,6 +312,22 @@ class SyncOp {
         // streak and the last claim stay as they are.
         if (last != null && last.isAfter(day)) return OpPlan(gift, ledger: ledger);
         final consecutive = last != null && dayIndex(day) - dayIndex(last) == 1;
+        final restore = _a('restoreTarget'), restoreCost = _a('restoreCost');
+        if (restore > 0 && !consecutive) {
+          // Restored with the claim: the lost streak goes on, and the tickets are paid net of the gift's.
+          if (asInt(row['tickets']) + tickets < restoreCost) return const OpPlan.skip(SkipReason.notEnough);
+          final net = tickets - restoreCost;
+          final streak = restore + 1;
+          return OpPlan({
+            for (final e in gift.entries)
+              if (e.key != 'tickets') e.key: e.value,
+            if (net != 0) 'tickets': net > 0 ? Inc(net) : Dec(-net),
+            'streak': Put(streak),
+            'longestStreak': Put(max(asInt(row['longestStreak']), streak)),
+            'lastDailyClaim': Put(at.toIso8601String()),
+            'lastStreakRestore': Put(at.toIso8601String()),
+          }, ledger: [...ledger, LedgerLine(-restoreCost, 'tickets', 'streak-restore')]);
+        }
         final streak = consecutive ? asInt(row['streak']) + 1 : 1;
         return OpPlan({
           ...gift,
