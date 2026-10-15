@@ -8,6 +8,7 @@
 import 'package:card_jigsaw_world/app.dart';
 import 'package:card_jigsaw_world/core/appwrite.dart';
 import 'package:card_jigsaw_world/core/sfx.dart';
+import 'package:card_jigsaw_world/features/daily/wheel_screen.dart';
 import 'package:card_jigsaw_world/data/local_store.dart';
 import 'package:card_jigsaw_world/features/game/board_widget.dart';
 import 'package:card_jigsaw_world/router.dart';
@@ -91,7 +92,8 @@ void main() {
     int magics() => container(tester).read(profileProvider).value?.magics ?? 0;
     var spins = 0;
     while (spins < 10 && peeks() == 0 && magics() == 0) {
-      await tester.tap(find.text('Spin for'), warnIfMissed: false);
+      // Home's Lucky Wheel tile (003 B) also says "Spin for" and stays under the wheel's sheet.
+      await tester.tap(find.descendant(of: find.byType(WheelScreen), matching: find.text('Spin for')), warnIfMissed: false);
       spins++;
       await settle(tester, 5600);
       final won = find.text('You won').evaluate().isNotEmpty;

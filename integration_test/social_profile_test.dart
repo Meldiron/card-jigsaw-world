@@ -180,10 +180,13 @@ void main() {
       await tapText(tester, 'Not now', ms: 800);
     }
 
-    // Profile statistics.
+    // Profile statistics: the page keeps the headline rows (081 C); the per-mode table is under "See all".
     await tapText(tester, 'Profile', ms: 2500);
     await shot(tester, 's11_profile');
-    await tester.dragUntilVisible(find.text('Hexagons'), find.byType(CustomScrollView).last, const Offset(0, -200));
+    await tester.dragUntilVisible(find.text('See all'), find.byType(CustomScrollView).last, const Offset(0, -200));
+    await settle(tester, 800);
+    await tapText(tester, 'See all', ms: 1500);
+    await tester.dragUntilVisible(find.text('Hexagons'), find.byType(ListView).last, const Offset(0, -200));
     await settle(tester, 1500);
     await shot(tester, 's12_profile_stats');
   }, timeout: const Timeout(Duration(minutes: 8)));
