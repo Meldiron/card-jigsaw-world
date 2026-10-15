@@ -121,13 +121,13 @@ Future<void> showWheelOdds(BuildContext context) => showAppSheet(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Centred like the other sheets (daily gift, piggy bank).
-              Text('Lucky Wheel odds', textAlign: TextAlign.center, style: Theme.of(ctx).textTheme.headlineSmall),
-              const SizedBox(height: 4),
-              Text(
-                'Every spin costs ${Economy.wheelSpinTickets} ticket and pays one prize. Each spin is drawn on its own with these chances.',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: c.textSecondary, fontSize: 13.5, height: 1.35),
+              // The shared sheet header (130): a table, so left-aligned.
+              SizedBox(
+                width: double.infinity,
+                child: SheetHeader(
+                  title: 'Lucky Wheel odds',
+                  subtitle: 'Every spin costs ${Economy.wheelSpinTickets} ticket and pays one prize. Each spin is drawn on its own with these chances.',
+                ),
               ),
               const SizedBox(height: 14),
               SoftCard(

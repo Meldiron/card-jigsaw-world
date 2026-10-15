@@ -890,7 +890,7 @@ class _MonthCard extends ConsumerWidget {
     return _CoverTile(
       pack: pack,
       progress: progress,
-      chip: current ? const _StatusChip('This month') : null,
+      chip: current ? const LiveChip('This month') : null,
       onTap: onTap,
     );
   }
@@ -908,7 +908,7 @@ class _EventPackCard extends ConsumerWidget {
     return _CoverTile(
       pack: pack,
       progress: progress,
-      chip: _StatusChip(_endsIn(pack)),
+      chip: LiveChip(_endsIn(pack)),
       nameLines: 2,
       onTap: onTap,
     );
@@ -918,33 +918,7 @@ class _EventPackCard extends ConsumerWidget {
 /// "Ends in 3d" for an event pack's chip.
 String _endsIn(Pack pack) {
   final end = pack.endAt;
-  if (end == null) return 'Live';
-  final d = end.difference(DateTime.now());
-  if (d.inDays >= 1) return 'Ends in ${d.inDays}d';
-  if (d.inHours >= 1) return 'Ends in ${d.inHours}h';
-  return 'Ends soon';
-}
-
-/// Status on a cover photo ("Ends in 5d", "This month"): the dark glass chip
-/// used for labels on pictures, with a small red dot for "live". The photo
-/// keeps the colour; the red is a marker, not a fill.
-class _StatusChip extends StatelessWidget {
-  const _StatusChip(this.label);
-  final String label;
-
-  @override
-  Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.fromLTRB(8, 5, 9, 5),
-        decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.5), borderRadius: BorderRadius.circular(Radii.pill)),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(width: 6, height: 6, decoration: const BoxDecoration(color: Brand.live, shape: BoxShape.circle)),
-            const SizedBox(width: 5),
-            Text(label, style: const TextStyle(color: Colors.white, fontSize: 11.5, fontWeight: FontWeight.w600)),
-          ],
-        ),
-      );
+  return end == null ? 'Live' : LiveChip.endsIn(end.difference(DateTime.now()));
 }
 
 /// Square cover tile shared by the Home event and month rows: picture with
@@ -1232,7 +1206,7 @@ class _PackCoverRow extends StatelessWidget {
           return _CoverTile(
             pack: pack,
             progress: progressOf(pack),
-            chip: pack.hasWindow && pack.isLive ? _StatusChip(_endsIn(pack)) : null,
+            chip: pack.hasWindow && pack.isLive ? LiveChip(_endsIn(pack)) : null,
             nameLines: 2,
             onTap: () => context.push('/library/pack/${pack.id}'),
           );

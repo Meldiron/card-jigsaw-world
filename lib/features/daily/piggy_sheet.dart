@@ -28,12 +28,10 @@ class PiggySheet extends ConsumerWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text('Piggy bank', style: Theme.of(context).textTheme.headlineMedium),
-          const SizedBox(height: 4),
-          Text(
-            'Every solved picture adds ${Economy.piggyPerPuzzle} coins, up to ${Profile.piggyCapacity}. Open it with ${Economy.piggyOpenTickets} ticket whenever you like.',
-            textAlign: TextAlign.center,
-            style: TextStyle(color: c.textSecondary),
+          SheetHeader(
+            title: 'Piggy bank',
+            subtitle: 'Every solved picture adds ${Economy.piggyPerPuzzle} coins, up to ${Profile.piggyCapacity}. Open it with ${Economy.piggyOpenTickets} ticket whenever you like.',
+            center: true,
           ),
           const SizedBox(height: 20),
           // The bank itself: a ring that fills with the coins inside, the amount in its middle.

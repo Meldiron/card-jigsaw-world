@@ -123,13 +123,12 @@ class _AvatarPickerState extends ConsumerState<AvatarPicker> {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 4, 20, 0),
-            child: Column(
-              children: [
-                Text('Choose an avatar', style: Theme.of(context).textTheme.headlineSmall),
-                const SizedBox(height: 4),
-                Text('Tap one to wear it.', style: TextStyle(color: c.textSecondary, fontSize: 13)),
-                const SizedBox(height: 6),
-              ],
+            child: const SizedBox(
+              width: double.infinity,
+              child: Padding(
+                padding: EdgeInsets.only(bottom: 6),
+                child: SheetHeader(title: 'Choose an avatar', subtitle: 'Tap one to wear it.'),
+              ),
             ),
           ),
           Expanded(

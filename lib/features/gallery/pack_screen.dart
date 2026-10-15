@@ -4,11 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart' show NumberFormat;
 
 import '../../core/haptics.dart';
 import '../../core/sfx.dart';
 import '../../core/theme/tokens.dart';
+import '../../data/purchases.dart' show groupThousands;
 import '../../game/board.dart';
 import '../../models/models.dart';
 import '../../state/catalog.dart';
@@ -84,12 +84,12 @@ class PackScreen extends ConsumerWidget {
 
     Future<void> unlock() async {
       final unit = priceCurrency == Currency.tickets ? 'Ticket' : 'Coin';
-      final amount = '${_grouped(priceValue)} $unit${priceValue == 1 ? '' : 's'}';
+      final amount = '${groupThousands(priceValue)} $unit${priceValue == 1 ? '' : 's'}';
       if (balance >= priceValue) {
         final sure = await showAppAlert(
           context,
           title: 'Unlock ${pack.name}?',
-          message: 'This costs $amount. You have ${_grouped(balance)}.',
+          message: 'This costs $amount. You have ${groupThousands(balance)}.',
           confirmLabel: 'Pay $amount',
         );
         if (!sure || !context.mounted) return;
@@ -174,7 +174,7 @@ class PackScreen extends ConsumerWidget {
                               const SizedBox(width: 6),
                               pack.isUpcoming
                                   ? Chip2(label: 'Opens in ${_countdown(pack.startAt!)}', icon: AppIcons.time, onImage: true)
-                                  : _LiveChip('Ends ${_endsIn(pack.endAt!)}'),
+                                  : LiveChip(LiveChip.endsIn(pack.endAt!.difference(DateTime.now()))),
                             ],
                           ],
                         ),
@@ -368,7 +368,7 @@ class PackScreen extends ConsumerWidget {
       return _AccessCard(
         icon: AppIcons.lock,
         title: 'Locked pack',
-        reason: '${_grouped(missing)} more ${tickets ? 'Tickets' : 'Coins'} needed, or play every pack with VIP.',
+        reason: '${groupThousands(missing)} more ${tickets ? 'Tickets' : 'Coins'} needed, or play every pack with VIP.',
         meter: (currency, balance, price),
         primary: (tickets ? 'Get tickets' : 'Get coins', null, null, () => wrap(onGetMore)),
         secondary: ('Go VIP', AppIcons.vip, null, () => wrap(onVip)),
@@ -383,8 +383,6 @@ class PackScreen extends ConsumerWidget {
     );
   }
 
-  static String _grouped(int v) => NumberFormat.decimalPattern('en').format(v);
-
   static void _showAccessSheet(BuildContext context, Pack pack, Currency currency, int price, int balance, VoidCallback onVip, VoidCallback onUnlock, VoidCallback onGetMore) {
     showAppSheet(
       context,
@@ -394,7 +392,7 @@ class PackScreen extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(pack.name, style: Theme.of(ctx).textTheme.headlineSmall),
+            SheetHeader(title: pack.name),
             const SizedBox(height: 12),
             _accessCard(ctx, pack, currency, price, balance, onVip, onUnlock, onGetMore, onClose: () => Navigator.pop(ctx)),
           ],
@@ -411,14 +409,6 @@ class PackScreen extends ConsumerWidget {
     return '${d.inMinutes}m';
   }
 
-  /// "in 6d", "in 5h", "soon": the same wording as the event tiles on Home.
-  static String _endsIn(DateTime at) {
-    final d = at.difference(DateTime.now());
-    if (d.inDays >= 1) return 'in ${d.inDays}d';
-    if (d.inHours >= 1) return 'in ${d.inHours}h';
-    return 'soon';
-  }
-
   static String _monthName(int m) => const ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][m - 1];
 
   /// Route path for resuming a saved board (mode + ladder entry by cell count).
@@ -426,27 +416,6 @@ class PackScreen extends ConsumerWidget {
     final mode = GameMode.fromCode(pr.mode);
     return BoardCode.toPath(BoardSpec.fromCells(mode, pr.gridSize).fullCode);
   }
-}
-
-/// A live event's countdown on the cover: the dark chip used for every label on
-/// a photo, with a small red dot as the "live" marker instead of a red fill.
-class _LiveChip extends StatelessWidget {
-  const _LiveChip(this.label);
-  final String label;
-
-  @override
-  Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.fromLTRB(8, 5, 9, 5),
-        decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.45), borderRadius: BorderRadius.circular(Radii.pill)),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(width: 6, height: 6, decoration: const BoxDecoration(color: Brand.live, shape: BoxShape.circle)),
-            const SizedBox(width: 5),
-            Text(label, style: const TextStyle(color: Colors.white, fontSize: 11.5, fontWeight: FontWeight.w600)),
-          ],
-        ),
-      );
 }
 
 /// The pack's name in the bar: it fades in while the cover's last quarter
@@ -598,7 +567,7 @@ class _AccessCard extends StatelessWidget {
               children: [
                 CostLabel(label: 'Unlock for', currency: meter!.$1, amount: meter!.$3, fontSize: 14),
                 const Spacer(),
-                Text('You have ${PackScreen._grouped(meter!.$2)}', style: TextStyle(color: c.textSecondary, fontSize: 13.5, fontWeight: FontWeight.w500)),
+                Text('You have ${groupThousands(meter!.$2)}', style: TextStyle(color: c.textSecondary, fontSize: 13.5, fontWeight: FontWeight.w500)),
               ],
             ),
             const SizedBox(height: 8),
@@ -663,7 +632,7 @@ class _GiantGateCard extends StatelessWidget {
               Text('Level $level', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
               Text(' of ${Unlock.giant.level}', style: TextStyle(color: c.textSecondary, fontSize: 14)),
               const Spacer(),
-              Text('${NumberFormat.decimalPattern('en').format((need - xp).clamp(0, need))} XP to go', style: TextStyle(color: c.textSecondary, fontSize: 13)),
+              Text('${groupThousands((need - xp).clamp(0, need))} XP to go', style: TextStyle(color: c.textSecondary, fontSize: 13)),
             ],
           ),
           const SizedBox(height: 8),

@@ -46,9 +46,7 @@ class _ReportPanelState extends State<_ReportPanel> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Report $name', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700, letterSpacing: -0.3)),
-          const SizedBox(height: 6),
-          Text('What is wrong? We read every report.', style: TextStyle(fontSize: 14, color: c.textSecondary)),
+          SheetHeader(title: 'Report $name', subtitle: 'What is wrong? We read every report.'),
           const SizedBox(height: 16),
           // Reasons: a single choice, like a settings list.
           Container(
@@ -141,7 +139,6 @@ class BlockedPlayersPanel extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final c = context.colors;
     final blocked = ref.watch(blockedPlayersProvider);
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
@@ -149,9 +146,7 @@ class BlockedPlayersPanel extends ConsumerWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Blocked players', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, letterSpacing: -0.3)),
-          const SizedBox(height: 6),
-          Text('They do not show on your leaderboard.', style: TextStyle(fontSize: 14, color: c.textSecondary)),
+          const SheetHeader(title: 'Blocked players', subtitle: 'They do not show on your leaderboard.'),
           const SizedBox(height: 12),
           blocked.when(
             loading: () => const Padding(padding: EdgeInsets.all(24), child: Loader()),

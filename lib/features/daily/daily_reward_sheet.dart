@@ -139,16 +139,14 @@ class _DailyRewardSheetState extends ConsumerState<DailyRewardSheet> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text('Daily gift', textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineSmall),
-          const SizedBox(height: 4),
-          Text(
-            !available
+          SheetHeader(
+            title: 'Daily gift',
+            subtitle: !available
                 ? 'Streak: $streak day${streak == 1 ? '' : 's'}. Back tomorrow.'
                 : missed
                     ? (canRestore ? 'You missed a day. Restore your streak or start again.' : 'You missed a day, so the streak starts again.')
                     : 'Come back every day to grow your streak.',
-            textAlign: TextAlign.center,
-            style: TextStyle(color: c.textSecondary, fontSize: 14),
+            center: true,
           ),
           const SizedBox(height: 18),
           _StreakTrack(todayIdx: todayIdx, claimedToday: !available),

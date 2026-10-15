@@ -615,6 +615,36 @@ class Chip2 extends StatelessWidget {
   }
 }
 
+/// Status on a cover photo ("Ends in 5d", "This month"): the dark chip used for
+/// labels on pictures, with a small red dot as the "live" marker. The photo keeps
+/// the colour; the red is a marker, not a fill. Home, the event pack page and the
+/// Quests event cards share it.
+class LiveChip extends StatelessWidget {
+  const LiveChip(this.label, {super.key});
+  final String label;
+
+  /// "Ends in 3d", "Ends in 5h", "Ends soon" for the time an event has left.
+  static String endsIn(Duration left) {
+    if (left.inDays >= 1) return 'Ends in ${left.inDays}d';
+    if (left.inHours >= 1) return 'Ends in ${left.inHours}h';
+    return 'Ends soon';
+  }
+
+  @override
+  Widget build(BuildContext context) => Container(
+        padding: const EdgeInsets.fromLTRB(8, 5, 9, 5),
+        decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.5), borderRadius: BorderRadius.circular(Radii.pill)),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(width: 6, height: 6, decoration: const BoxDecoration(color: Brand.live, shape: BoxShape.circle)),
+            const SizedBox(width: 5),
+            Text(label, style: const TextStyle(color: Colors.white, fontSize: 11.5, fontWeight: FontWeight.w600)),
+          ],
+        ),
+      );
+}
+
 /// The title block every sheet starts with: one title style (20 pt bold) and
 /// one subtitle style (14 pt, secondary), so sheets read as one family.
 /// Sheets that are a list or a choice align it left; sheets that lead with

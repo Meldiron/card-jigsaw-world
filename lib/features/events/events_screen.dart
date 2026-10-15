@@ -375,7 +375,7 @@ class _EventCard extends ConsumerWidget {
     final description = isPackQuest ? 'Finish all $target pictures in the ${event.name} pack while the event is live.' : event.description;
     // Same wording as the event tiles on Home and the event pack page.
     final left = event.timeLeft;
-    final leftLabel = left.inDays >= 1 ? 'Ends in ${left.inDays}d' : (left.inHours >= 1 ? 'Ends in ${left.inHours}h' : 'Ends soon');
+    final leftLabel = LiveChip.endsIn(left);
     final community = event.type == EventType.social ? ref.watch(communityProgressProvider(event.id)).value : null;
 
     Future<void> claim() async {
@@ -401,7 +401,7 @@ class _EventCard extends ConsumerWidget {
                 Positioned(
                   left: 14,
                   top: 12,
-                  child: _LiveChip(leftLabel),
+                  child: LiveChip(leftLabel),
                 ),
                 if (isPackQuest && pack.complete) Positioned(right: 14, top: 12, child: PackDoneBadges(progress: pack)),
                 Positioned(
@@ -470,28 +470,6 @@ class _EventCard extends ConsumerWidget {
       ),
     );
   }
-}
-
-
-/// A live event's countdown on the cover: the dark chip used for every label on a photo, with a
-/// small red dot as the "live" marker (as on Home and the event pack page).
-class _LiveChip extends StatelessWidget {
-  const _LiveChip(this.label);
-  final String label;
-
-  @override
-  Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.fromLTRB(8, 5, 9, 5),
-        decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.5), borderRadius: BorderRadius.circular(Radii.pill)),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(width: 6, height: 6, decoration: const BoxDecoration(color: Brand.live, shape: BoxShape.circle)),
-            const SizedBox(width: 5),
-            Text(label, style: const TextStyle(color: Colors.white, fontSize: 11.5, fontWeight: FontWeight.w600)),
-          ],
-        ),
-      );
 }
 
 /// Compact row for an event that opens within the next three days.

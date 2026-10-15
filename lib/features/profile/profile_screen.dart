@@ -89,9 +89,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             padding: const EdgeInsets.fromLTRB(20, 4, 20, 32),
             physics: const BouncingScrollPhysics(),
             children: [
-              Text('Statistics', style: Theme.of(ctx).textTheme.headlineSmall),
-              const SizedBox(height: 2),
-              Text('Everything you have played so far', style: TextStyle(color: ctx.colors.textSecondary, fontSize: 13)),
+              const SheetHeader(title: 'Statistics', subtitle: 'Everything you have played so far'),
               const SizedBox(height: 14),
               StatisticsSection(stats: ref.watch(playerStatsProvider)),
             ],

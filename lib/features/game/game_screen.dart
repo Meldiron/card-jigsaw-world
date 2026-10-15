@@ -1076,7 +1076,7 @@ class _PauseSheet extends ConsumerWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text('Paused', style: Theme.of(context).textTheme.headlineMedium),
+          const SheetHeader(title: 'Paused', center: true),
           const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

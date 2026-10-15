@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show ScrollCacheExtent;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart' show NumberFormat;
 
 import '../../core/theme/tokens.dart';
+import '../../data/purchases.dart' show groupThousands;
 import '../../models/models.dart';
 import '../../state/catalog.dart';
 import '../../state/profile.dart';
@@ -491,7 +491,7 @@ class _PackRow extends ConsumerWidget {
                   const SizedBox(width: 6),
                   currencyIcon(tickets ? Currency.tickets : Currency.coins, size: 14),
                   const SizedBox(width: 4),
-                  Text(NumberFormat.decimalPattern('en').format(tickets ? pack.priceTickets : pack.priceCoins), style: TextStyle(color: c.textSecondary, fontSize: 13, fontWeight: FontWeight.w600)),
+                  Text(groupThousands(tickets ? pack.priceTickets : pack.priceCoins), style: TextStyle(color: c.textSecondary, fontSize: 13, fontWeight: FontWeight.w600)),
                 ],
               )
             else if (progress.started)

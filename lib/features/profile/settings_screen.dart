@@ -248,11 +248,9 @@ class SettingsScreen extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Reminder time', style: Theme.of(ctx).textTheme.headlineSmall),
-            const SizedBox(height: 2),
-            Text(
-              "One a day with the daily puzzle. None on days you have already claimed your daily gift.",
-              style: TextStyle(color: ctx.colors.textSecondary, fontSize: 13.5, height: 1.35),
+            const SheetHeader(
+              title: 'Reminder time',
+              subtitle: 'One a day with the daily puzzle. None on days you have already claimed your daily gift.',
             ),
             SizedBox(
               height: 180,
@@ -334,11 +332,9 @@ class _CreditsSheet extends ConsumerWidget {
         padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
         physics: const BouncingScrollPhysics(),
         children: [
-          Text('Image credits and licences', style: Theme.of(context).textTheme.headlineSmall),
-          const SizedBox(height: 4),
-          Text(
-            'The pictures come from these open collections, each in the public domain or under a licence that allows this use.',
-            style: TextStyle(color: c.textSecondary, fontSize: 13.5, height: 1.4),
+          const SheetHeader(
+            title: 'Image credits and licences',
+            subtitle: 'The pictures come from these open collections, each in the public domain or under a licence that allows this use.',
           ),
           const SizedBox(height: 14),
           if (sources.isEmpty)

@@ -66,11 +66,9 @@ class MergeSheet extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Two saves found', style: Theme.of(context).textTheme.titleLarge),
-            const SizedBox(height: 6),
-            Text(
-              'Pictures, stars and badges from both are already combined. Choose which coins, level and streak to keep.',
-              style: TextStyle(color: c.textSecondary, fontSize: 13.5, height: 1.4),
+            const SheetHeader(
+              title: 'Two saves found',
+              subtitle: 'Pictures, stars and badges from both are already combined. Choose which coins, level and streak to keep.',
             ),
             const SizedBox(height: 16),
             SoftCard(

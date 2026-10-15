@@ -200,16 +200,9 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                 const IconTile(icon: AppIcons.lock, size: 44),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Unlock ${t.label} now', style: Theme.of(ctx).textTheme.headlineSmall),
-                      const SizedBox(height: 2),
-                      Text(
-                        '${t.code} ${_mode.label.toLowerCase()} boards open at level $level. Unlock them early and keep the bigger rewards.',
-                        style: TextStyle(color: ctx.colors.textSecondary, fontSize: 13.5, height: 1.35),
-                      ),
-                    ],
+                  child: SheetHeader(
+                    title: 'Unlock ${t.label} now',
+                    subtitle: '${t.code} ${_mode.label.toLowerCase()} boards open at level $level. Unlock them early and keep the bigger rewards.',
                   ),
                 ),
               ],
