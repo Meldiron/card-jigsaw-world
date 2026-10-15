@@ -298,7 +298,7 @@ class CostLabel extends StatelessWidget {
         SizedBox(width: fontSize * 0.5),
         currencyIcon(currency, size: mark, mono: fg.computeLuminance() > 0.8, monoColor: fg),
         SizedBox(width: fontSize * 0.3),
-        Text('$prefix${formatCount(amount)}', style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.w700, letterSpacing: -0.2, color: fg, fontFeatures: tabularFigures)),
+        Text('$prefix${formatCount(amount)}', style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.w700, letterSpacing: -0.2, color: fg)),
       ],
     );
   }

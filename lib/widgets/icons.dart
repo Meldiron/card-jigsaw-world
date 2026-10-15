@@ -509,7 +509,7 @@ class Amount extends StatelessWidget {
       children: [
         currencyIcon(currency, size: size),
         SizedBox(width: size * 0.3),
-        Text('$prefix${value is int ? formatCount(value as int) : value}$suffix', style: TextStyle(fontWeight: weight, fontSize: fontSize ?? size * 0.95, color: color ?? context.colors.textPrimary, fontFeatures: tabularFigures)),
+        Text('$prefix${value is int ? formatCount(value as int) : value}$suffix', style: TextStyle(fontWeight: weight, fontSize: fontSize ?? size * 0.95, color: color ?? context.colors.textPrimary)),
       ],
     );
   }
