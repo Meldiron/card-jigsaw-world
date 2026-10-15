@@ -40,7 +40,7 @@ class _SyncHostState extends ConsumerState<SyncHost> {
 
   @override
   void dispose() {
-    _router?.routerDelegate.removeListener(_maybeShow);
+    _router?.routerDelegate.removeListener(_onRoute);
     if (_sync.resolver == _resolve) _sync.resolver = null;
     super.dispose();
   }
@@ -54,9 +54,16 @@ class _SyncHostState extends ConsumerState<SyncHost> {
 
   /// Not during a game, a sign-in or the welcome screens.
   bool get _calm {
-    final path = _router?.routerDelegate.currentConfiguration.uri.path ?? '';
+    // The top-most route, pushes included (the configuration's own uri stays on the tab below,
+    // so a game opened with push would count as Home).
+    final router = _router;
+    final path = router == null || router.routerDelegate.currentConfiguration.isEmpty ? '' : router.state.uri.path;
     return path.isNotEmpty && !path.startsWith('/game/') && !path.startsWith('/auth/') && !path.startsWith('/welcome');
   }
+
+  /// A route change can arrive from inside the navigator (a pop notifies while it is still
+  /// popping, and an alert pushed then would fail): the check waits a moment.
+  void _onRoute() => Future.delayed(const Duration(milliseconds: 300), _maybeShow);
 
   Future<void> _maybeShow() async {
     if (_showing || !mounted || !_calm || ref.read(syncNoticeProvider).isEmpty) return;
@@ -80,8 +87,8 @@ class _SyncHostState extends ConsumerState<SyncHost> {
   Widget build(BuildContext context) {
     final router = ref.watch(routerProvider);
     if (router != _router) {
-      _router?.routerDelegate.removeListener(_maybeShow);
-      _router = router..routerDelegate.addListener(_maybeShow);
+      _router?.routerDelegate.removeListener(_onRoute);
+      _router = router..routerDelegate.addListener(_onRoute);
     }
     ref.listen(syncNoticeProvider, (_, n) {
       if (!n.isEmpty) Future.delayed(const Duration(milliseconds: 600), _maybeShow);

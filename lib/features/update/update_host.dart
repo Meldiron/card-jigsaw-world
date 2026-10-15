@@ -39,14 +39,21 @@ class _UpdateHostState extends ConsumerState<UpdateHost> {
   @override
   void dispose() {
     _tick?.cancel();
-    _router?.routerDelegate.removeListener(_maybeAsk);
+    _router?.routerDelegate.removeListener(_onRoute);
     super.dispose();
   }
 
   bool get _calm {
-    final path = _router?.routerDelegate.currentConfiguration.uri.path ?? '';
+    // The top-most route, pushes included (the configuration's own uri stays on the tab below,
+    // so a game opened with push would count as Home).
+    final router = _router;
+    final path = router == null || router.routerDelegate.currentConfiguration.isEmpty ? '' : router.state.uri.path;
     return path.isNotEmpty && !path.startsWith('/game/') && !path.startsWith('/auth/') && !path.startsWith('/welcome');
   }
+
+  /// A route change can arrive from inside the navigator (a pop notifies while it is still
+  /// popping, and an alert pushed then would fail): the check waits a moment.
+  void _onRoute() => Future.delayed(const Duration(milliseconds: 300), _maybeAsk);
 
   Future<void> _maybeAsk() async {
     final update = ref.read(appUpdateProvider);
@@ -70,8 +77,8 @@ class _UpdateHostState extends ConsumerState<UpdateHost> {
   Widget build(BuildContext context) {
     final router = ref.watch(routerProvider);
     if (router != _router) {
-      _router?.routerDelegate.removeListener(_maybeAsk);
-      _router = router..routerDelegate.addListener(_maybeAsk);
+      _router?.routerDelegate.removeListener(_onRoute);
+      _router = router..routerDelegate.addListener(_onRoute);
     }
     ref.listen(appUpdateProvider, (_, u) {
       if (u != null) Future.delayed(const Duration(milliseconds: 600), _maybeAsk);

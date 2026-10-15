@@ -74,6 +74,11 @@ class _Account {
   /// Newest `$updatedAt` among the progress rows (the next fetch reads from there).
   String? cursor;
 
+  /// When this run last read every row ([SyncController._fetch]), and when it last read or wrote
+  /// each picture's row: a board is saved against a row that recent, or the save is read first.
+  DateTime? fetchedAt;
+  final Map<String, DateTime> readAt = {};
+
   /// The rows came from the server before, so a later fetch can tell what changed elsewhere.
   bool synced = false;
 
@@ -294,7 +299,7 @@ class SyncController extends Notifier<SyncState> {
     if (_qaGuest && fresh['isTest'] != true) fresh = await _backend.updateProfile(a.userId, {'isTest': true});
     final since = !full && a.cursor != null ? _before(a.cursor!) : null;
     final rows = await _backend.progressRows(a.userId, since: since);
-    _lastFetch = DateTime.now();
+    _lastFetch = a.fetchedAt = DateTime.now();
     final quiet = _quietUntil != null && DateTime.now().isBefore(_quietUntil!);
     final known = a.synced, tell = a.synced && !silent && !quiet;
     var notice = SyncNotice.empty;
@@ -328,9 +333,16 @@ class SyncController extends Notifier<SyncState> {
     for (final pid in known ? after.keys : const <String>[]) {
       final r = after[pid]!;
       final remote = (r['layout'] ?? '').toString();
-      if (remote.isEmpty) continue;
       final pending = a.ops.where((o) => o.kind == OpKind.board && o.puzzleId == pid).lastOrNull;
       final old = before[pid]!.isEmpty ? null : _parse(a.userId, pid, before[pid]!);
+      if (remote.isEmpty) {
+        // The board this device has (unsent, or the one it saved last) was finished on another
+        // device: an open game of it closes. Its unsent saves change nothing when they are sent.
+        final had = before[pid]!;
+        final here = pending?.args['session'] ?? ((had['layout'] ?? '').toString().isNotEmpty ? had['session'] : null);
+        if (boardFinished(r, here)) updates.add(BoardUpdate(puzzleId: pid, before: old, after: _parse(a.userId, pid, r)));
+        continue;
+      }
       if (pending == null) {
         updates.add(BoardUpdate(puzzleId: pid, before: old, after: _parse(a.userId, pid, r)));
         continue;
@@ -378,9 +390,30 @@ class SyncController extends Notifier<SyncState> {
     return false;
   }
 
+  /// How long a row read or written by this device counts as the server's for a board save.
+  /// Saves during play keep it fresh with their own answers, so only a save after a pause reads.
+  @visibleForTesting
+  static Duration boardFreshFor = const Duration(seconds: 30);
+
+  bool _fresh(_Account a, String pid) {
+    final now = DateTime.now();
+    bool recent(DateTime? t) => t != null && now.difference(t) < boardFreshFor;
+    return recent(a.fetchedAt) || recent(a.readAt[pid]);
+  }
+
   Future<void> _flush(_Account a) async {
+    var read = false;
     while (a.ops.isNotEmpty) {
       final op = a.ops.first;
+      if (!read && op.kind == OpKind.board && !_fresh(a, op.puzzleId!)) {
+        // A board saved after a while without hearing from the server (a tab left open, a
+        // reconnect): another device may have gone on with it or finished it meanwhile. The read
+        // decides first (a newer board, the player's choice, a finished play-through); one read
+        // covers every row, so once per pass.
+        read = true;
+        await _fetch(a, full: false, silent: false);
+        continue;
+      }
       try {
         _inFlight = op;
         await _send(a, op);
@@ -453,14 +486,21 @@ class SyncController extends Notifier<SyncState> {
               _tell(a, SyncNotice.progress({pid: row}, {pid: fresh}));
             }
             a.progress[pid] = row = fresh;
+            a.readAt[pid] = DateTime.now();
           }
         }
         final plan = op.build(row ?? const {});
+        if (plan.isEmpty) {
+          // A board of a play-through already finished: nothing to write.
+          _finish(a, op, const [], null);
+          return;
+        }
         if (op.kind == OpKind.win && plan.alreadySolved) _paysAsReplay(a, pid);
         final res = await _backend.upsertProgress(a.userId, pid, wireData(plan.changes));
         // The fetch cursor moves only with rows read from the server, or another device's rows
         // written before this one would be skipped by the next read.
         a.progress[pid] = res;
+        a.readAt[pid] = DateTime.now();
         _finish(a, op, const [], null);
       case OpTarget.event:
         final eventId = op.args['eventId'] as String;

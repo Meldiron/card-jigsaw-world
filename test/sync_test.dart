@@ -239,6 +239,78 @@ void main() {
     expect(phone.rows['pic6']!.moves, 7);
   });
 
+  // A giant board played on the laptop, finished on the phone, then the laptop's tab (still open on
+  // the old board) saved it again: the win must stay, and the open game must hear it was solved.
+  Future<(FakeServer, Device, Device)> finishedOnPhone() async {
+    final (server, phone, laptop) = await _twoDevices();
+    laptop.progress.saveBoard('giant', gridSize: 195, mode: 'cards', layout: [1, 0, 2, 3], moves: 344, seconds: 9000, hints: 0, session: 'run', resumed: false);
+    await laptop.settle();
+    await phone.resume();
+    phone.progress.saveBoard('giant', gridSize: 195, mode: 'cards', layout: [0, 1, 3, 2], moves: 400, seconds: 15000, hints: 0, session: 'run', resumed: true);
+    phone.progress.complete('giant', gridSize: 195, mode: 'cards', moves: 468, seconds: 20869, hints: 0, stars: 3, session: 'run', resumed: true);
+    await phone.settle();
+    expect(server.progressOf('player1', 'giant')!['layout'], '');
+    return (server, phone, laptop);
+  }
+
+  void expectWinKept(FakeServer server, Device laptop) {
+    final row = server.progressOf('player1', 'giant')!;
+    expect(row['layout'], '', reason: 'the old board must not come back over the win');
+    expect(row['completed'], isTrue);
+    expect(row['moves'], 468);
+    expect(row['elapsedSeconds'], 20869);
+    expect(row['totalMoves'], 468);
+    expect(row['totalSeconds'], 20869);
+    expect(row['bestMoves'], 468);
+    expect(laptop.rows['giant']!.inProgress, isFalse, reason: 'Home must not offer Continue on a solved picture');
+    expect(laptop.rows['giant']!.completed, isTrue);
+  }
+
+  test('a board finished on another device never comes back from a device that has read the save', () async {
+    final (server, phone, laptop) = await finishedOnPhone();
+    final updates = <BoardUpdate>[];
+    final sub = laptop.sync.boardUpdates.listen(updates.add);
+    addTearDown(sub.cancel);
+    await laptop.resume();
+    expect(updates.single.after.completed, isTrue, reason: 'the open game hears its board was solved');
+    expect(updates.single.after.session, 'run');
+    expect(updates.single.after.inProgress, isFalse);
+    // The tab loses the focus: the game would save its old board.
+    laptop.progress.saveBoard('giant', gridSize: 195, mode: 'cards', layout: [1, 0, 2, 3], moves: 344, seconds: 25872, hints: 0, session: 'run', resumed: true);
+    expect(laptop.rows['giant']!.inProgress, isFalse, reason: 'the unsent save already shows as nothing');
+    await laptop.settle();
+    expect(laptop.sync.debugOps, isEmpty);
+    expectWinKept(server, laptop);
+  });
+
+  test('a device that has not heard from the server for a while reads the save before saving a board', () async {
+    final (server, phone, laptop) = await finishedOnPhone();
+    // Time has passed since the laptop last read or wrote the row (a tab left open, a reconnect).
+    SyncController.boardFreshFor = Duration.zero;
+    addTearDown(() => SyncController.boardFreshFor = const Duration(seconds: 30));
+    final updates = <BoardUpdate>[];
+    final sub = laptop.sync.boardUpdates.listen(updates.add);
+    addTearDown(sub.cancel);
+    laptop.progress.saveBoard('giant', gridSize: 195, mode: 'cards', layout: [1, 0, 2, 3], moves: 344, seconds: 25872, hints: 0, session: 'run', resumed: true);
+    await laptop.settle();
+    expect(laptop.sync.debugOps, isEmpty);
+    expectWinKept(server, laptop);
+    expect(updates.single.after.completed, isTrue);
+  });
+
+  test('a new play-through of a solved picture still saves its board', () async {
+    final (server, _, laptop) = await finishedOnPhone();
+    await laptop.resume();
+    laptop.progress.saveBoard('giant', gridSize: 195, mode: 'cards', layout: [3, 2, 1, 0], moves: 12, seconds: 60, hints: 0, session: 'replay', resumed: false);
+    await laptop.settle();
+    final row = server.progressOf('player1', 'giant')!;
+    expect(row['layout'], '3,2,1,0');
+    expect(row['completed'], isTrue);
+    expect(row['bestMoves'], 468);
+    expect(row['totalMoves'], 468 + 12, reason: 'a replay adds to the picture totals');
+    expect(laptop.rows['giant']!.inProgress, isTrue);
+  });
+
   test("today's daily gift claimed on both devices pays once", () async {
     final (server, phone, laptop) = await _twoDevices();
     laptop.backend.online = false;

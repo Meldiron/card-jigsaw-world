@@ -5,7 +5,8 @@
 // and the same session, is the player's laptop on the web site. Covers: what the laptop did
 // shows on the iPhone after it comes back to the foreground; play without a connection is sent
 // later and adds up with the laptop's; two different boards of one picture ask the player; the
-// laptop going on with the board open on the iPhone reloads it there. Captures
+// laptop going on with the board open on the iPhone reloads it there; the laptop finishing that
+// board closes it on the iPhone, whose later save of the old board leaves the win alone. Captures
 // screenshots/sync_*.png; facts go to build/integration_response_data.json.
 import 'package:carden/app.dart';
 import 'package:carden/core/appwrite.dart';
@@ -110,6 +111,15 @@ void main() {
     await settle(tester, ms);
   }
 
+  /// An alert's button: the alert is on top, so its label is the last match (Home behind it can
+  /// show the same word, as the Continue card of a board in progress).
+  Future<void> tapAlert(WidgetTester tester, String label, {int ms = 1200}) async {
+    final f = find.text(label);
+    expect(f, findsWidgets, reason: 'expected "$label" on screen');
+    await tester.tap(f.last, warnIfMissed: false);
+    await settle(tester, ms);
+  }
+
   /// The iPhone leaves the foreground and comes back (what a player switching devices does).
   /// Only as far as inactive: hidden and paused stop the frames the test pumps, and inactive is
   /// where the app already saves and syncs.
@@ -200,7 +210,7 @@ void main() {
     expect(find.text('Unlocked: ${pack.name}'), findsOneWidget);
     expect(find.text('1 picture solved'), findsOneWidget);
     await shot(tester, 'sync_01_from_laptop');
-    await tapText(tester, 'Continue');
+    await tapAlert(tester, 'Continue');
     expect(phone.read(profileProvider).value!.coins, afterLaptop.coins);
     expect(phone.read(profileProvider).value!.unlockedPacks, contains(pack.id));
     expect(phone.read(progressProvider).value![pics[0].id]?.completed, isTrue);
@@ -230,7 +240,8 @@ void main() {
     await settle(tester, 4000);
     expect(find.text('Synced from another device'), findsOneWidget);
     await shot(tester, 'sync_03_after_offline');
-    await tapText(tester, 'Continue');
+    await tapAlert(tester, 'Continue');
+    expect(find.text('Synced from another device'), findsNothing);
     await laptop.read(syncProvider.notifier).sync();
     final expected = afterLaptop.coins + 100 - 75;
     expect(phone.read(profileProvider).value!.coins, expected, reason: 'offline play and the laptop add up');
@@ -267,6 +278,42 @@ void main() {
     // The game on screen is the laptop's board: its move count is in the HUD.
     expect(find.text('${saved.moves + 6}'), findsWidgets);
     await shot(tester, 'sync_05_game_after');
+
+    // 4. The laptop finishes that same board while the iPhone still has it open. Later the iPhone
+    //    leaves the foreground, and its game saves the old board: the win stays, and the game closes.
+    debugPrint('QA sync: board reload checked');
+    final open = phone.read(progressProvider).value![pics[2].id]!;
+    await (() async {
+      await laptop.read(syncProvider.notifier).sync();
+      laptop.read(progressProvider.notifier).complete(pics[2].id, gridSize: open.gridSize, mode: open.mode, moves: open.moves + 9, seconds: open.elapsedSeconds + 50, hints: 0, stars: 3, session: open.session, resumed: true);
+      await laptop.read(syncProvider.notifier).flush();
+    })();
+    // Hours later on the player's clock: the iPhone has not heard from the server since.
+    SyncController.boardFreshFor = Duration.zero;
+    addTearDown(() => SyncController.boardFreshFor = const Duration(seconds: 30));
+    await background(tester);
+    await foreground(tester, ms: 5000);
+    expect(find.text('Solved on another device'), findsOneWidget);
+    await shot(tester, 'sync_06_solved_elsewhere');
+    await tapAlert(tester, 'Close board', ms: 3000);
+    // What the laptop did while the game was open shows once the board is closed.
+    expect(find.text('Synced from another device'), findsOneWidget);
+    expect(find.text('1 picture solved'), findsOneWidget);
+    await shot(tester, 'sync_07_solved_notice');
+    await tapAlert(tester, 'Continue');
+    await phone.read(syncProvider.notifier).flush();
+    await laptop.read(syncProvider.notifier).sync();
+    for (final (name, device) in [('iPhone', phone), ('laptop', laptop)]) {
+      final row = device.read(progressProvider).value![pics[2].id]!;
+      expect(row.completed, isTrue, reason: 'solved on the $name');
+      expect(row.inProgress, isFalse, reason: 'no old board on the $name');
+      expect(row.moves, open.moves + 9, reason: "the laptop's win on the $name");
+    }
+    expect(phone.read(syncProvider).pending, 0);
+    expect(find.text('Solved on another device'), findsNothing);
+    expect(find.text('Synced from another device'), findsNothing);
+    await shot(tester, 'sync_08_after_close');
+    facts['solvedElsewhere'] = open.moves + 9;
 
     binding.reportData = {...?binding.reportData, 'facts': facts};
   });

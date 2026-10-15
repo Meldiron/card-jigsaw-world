@@ -427,6 +427,9 @@ class SyncOp {
           'bestLock': Put(0),
         });
       case OpKind.board:
+        // A play-through already finished (on another device, say): its old board must not come
+        // back over the win. A new play-through has a new session and saves as usual.
+        if (boardFinished(row, args['session'])) return const OpPlan({});
         return OpPlan({
           'gridSize': Put(_a('gridSize')),
           'mode': Put(args['mode']),
@@ -513,6 +516,13 @@ class SyncOp {
 /// A picture counts as solved once it was finished; older versions wrote `completed: false` while a
 /// solved picture was replayed, so a finish time also counts.
 bool rowSolved(Map<String, dynamic> row) => row['completed'] == true || rowDate(row['completedAt']) != null;
+
+/// The row holds the win of play-through [session]: a win writes its session and clears the board,
+/// and nothing else leaves a solved row with that session and no board (a discard clears the session).
+bool boardFinished(Map<String, dynamic> row, dynamic session) {
+  final s = (session ?? '').toString();
+  return s.isNotEmpty && row['session'] == s && (row['layout'] ?? '').toString().isEmpty && rowSolved(row);
+}
 
 DateTime? rowDate(dynamic v) => v == null || v.toString().isEmpty ? null : DateTime.tryParse(v.toString())?.toLocal();
 

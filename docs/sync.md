@@ -38,7 +38,13 @@ sometimes without a connection. This is how the save stays correct (since 2026-1
 7. **The player picks when the game cannot.** Two different boards in progress for one picture
    (one of them unsent) ask "Two boards in progress" (`BoardChoiceSheet`). An open game whose
    board was continued on another device reloads it with a short "Board updated" alert; a
-   different board there asks the same question. Signing in from a guest to an existing account
+   different board there asks the same question. A board finished on another device stays
+   finished (since 2026-10-15, after a tester's solved giant board came back from a laptop tab left
+   open on it): a board save of a play-through the row shows as won (same `session`, no layout,
+   solved) changes nothing, a board save after 30 seconds without reading or writing that row
+   reads the save first, and an open game of that play-through closes with "Solved on another
+   device" and saves nothing more. A new play-through (replay, restart) has its own session and
+   saves as usual. Signing in from a guest to an existing account
    asks "Two saves found" when neither save clearly wins, and also when the save that would be
    dropped holds more Coins, Tickets or Hints (`decide` in `lib/state/merge.dart`).
 
@@ -89,6 +95,9 @@ for the quests; the stars still use the par recomputed on resume.
 
 - A guarded op is checked and then written: two devices claiming the same quest within one round
   trip can both be paid. The window is a fraction of a second.
+- A board saved within 30 seconds of this device's last read or write of the row is not read
+  first: a board finished on another device in those seconds can still be written over by this
+  one (two devices playing the same board at the same time).
 - Two browser tabs of the web site share one queue in localStorage; if both queue changes while
   offline and one closes before the connection returns, its queue can be overwritten by the other.
 - The `verify-purchase` function still adds a purchase with a read and a write of the profile row
@@ -100,11 +109,12 @@ for the quests; the stars still use the par recomputed on resume.
 - `test/sync_test.dart`: two devices on an in-memory server (`test/support/fake_sync.dart`) that
   applies the operators as above: balances add up, unlocks are not lost, offline play survives a
   restart, double claims pay once, a lost answer is not applied twice, the notice, records, board
-  conflicts, levels, the `local` hand-over, tidying.
+  conflicts, a board finished elsewhere staying finished, levels, the `local` hand-over, tidying.
 - `integration_test/sync_devices_test.dart`: the app on the simulator is the iPhone, a second
   sync in the same process (own storage, same session) is the laptop, on the live backend:
   `tools/dev/qa-run.sh drive --driver=test_driver/integration_test.dart
-  --target=integration_test/sync_devices_test.dart -d <udid>` → `screenshots/sync_*.png`.
+  --target=integration_test/sync_devices_test.dart -d <udid>` → `screenshots/sync_*.png` (step 4:
+  a board finished on the laptop closes on the iPhone, `sync_06_solved_elsewhere.png`).
 
 ## Adding a new kind of change
 

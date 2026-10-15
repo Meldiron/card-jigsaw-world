@@ -92,6 +92,9 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   StreamSubscription<BoardUpdate>? _boardSub;
   bool _askingBoard = false;
 
+  /// This play-through was finished on another device: the board here is not saved any more.
+  bool _solvedElsewhere = false;
+
   /// Each screen counts its sessions from its own base: a screen that replaces another one for the
   /// same picture and board (another device's board reopened) must not get the old screen's
   /// controller, which is still alive while the two swap.
@@ -300,7 +303,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   void _saveNow() {
     // Nothing to save before the board is settled for the picture (and a
     // save then could overwrite the one being resumed).
-    if (_args == null || !mounted || !_fitted) return;
+    if (_args == null || !mounted || !_fitted || _solvedElsewhere) return;
     final s = ref.read(gameControllerProvider(_args!));
     if (s.status == GameStatus.won) return;
     ref.read(progressProvider.notifier).saveBoard(
@@ -324,7 +327,13 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   Future<void> _onBoardUpdate(BoardUpdate u) async {
     if (u.puzzleId != widget.puzzleId || !mounted || !_fitted || _args == null || _askingBoard) return;
     final s = ref.read(gameControllerProvider(_args!));
-    if (s.status == GameStatus.won) return;
+    if (s.status == GameStatus.won || _solvedElsewhere) return;
+    if (!u.after.inProgress) {
+      // The picture's board was finished elsewhere. When it was this play-through, nothing is left
+      // to play here, and a save from this screen would bring the old board back.
+      if (u.after.completed && u.after.session == _playId) _closeSolvedElsewhere();
+      return;
+    }
     // Already the board on screen (this device's own save coming back).
     if (u.after.layout?.join(',') == s.board.slots.join(',')) return;
     if (u.chosen) {
@@ -367,6 +376,25 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
       _ctrl.resume();
       _saveNow();
     }
+  }
+
+  /// The player finished this board on another device: the clock stops, the screen closes.
+  Future<void> _closeSolvedElsewhere() async {
+    _solvedElsewhere = true;
+    _saveDebounce?.cancel();
+    _ctrl.pause();
+    final route = ModalRoute.of(context);
+    await showAppAlert(
+      context,
+      title: 'Solved on another device',
+      message: 'You finished this board on another device. Its stars and time are saved.',
+      confirmLabel: 'Close board',
+      cancelLabel: null,
+    );
+    if (!mounted) return;
+    // A sheet open over the board (the pause menu) closes with it.
+    if (route != null) Navigator.of(context).popUntil((r) => r == route);
+    context.pop();
   }
 
   /// A new play-through (restart, replay): its moves and time add to the picture's totals.
