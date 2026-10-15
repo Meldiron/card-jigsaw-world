@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/theme/tokens.dart';
+import '../../data/purchases.dart' show groupThousands;
 import '../../state/achievements.dart';
 import '../../state/auth.dart';
 import '../../state/completion.dart';
@@ -31,7 +32,13 @@ class PlayerScreen extends ConsumerWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: GlassAppBar(
-        title: const Text('Player'),
+        title: ScrolledUnder(
+          builder: (context, under) => AnimatedOpacity(
+            opacity: under ? 1 : 0,
+            duration: const Duration(milliseconds: 180),
+            child: Text(profile.value?.displayName ?? 'Player', maxLines: 1, overflow: TextOverflow.ellipsis),
+          ),
+        ),
         leading: Padding(padding: const EdgeInsets.only(left: 12), child: RoundIconButton(icon: CupertinoIcons.back, size: 38, onTap: () => context.pop())),
       ),
       body: profile.when(
@@ -70,7 +77,7 @@ class PlayerScreen extends ConsumerWidget {
                               const SizedBox(height: 4),
                               Row(
                                 children: [
-                                  Text('Level ${p.level}', style: TextStyle(color: c.textSecondary, fontSize: 12.5)),
+                                  Flexible(child: Text('Level ${p.level} · ${groupThousands(p.xp)} XP', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontSize: 13, fontWeight: FontWeight.w500))),
                                   if (p.isVip) ...[
                                     const SizedBox(width: 8),
                                     Chip2(label: 'VIP', icon: AppIcons.vip, color: c.accentTint, foreground: context.accent),
@@ -78,49 +85,39 @@ class PlayerScreen extends ConsumerWidget {
                                 ],
                               ),
                               const SizedBox(height: 10),
-                              Row(
-                                children: [
-                                  Text('LV ${p.level}', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
-                                  const SizedBox(width: 8),
-                                  Expanded(child: ProgressBar(value: p.levelProgress, height: 6)),
-                                  const SizedBox(width: 8),
-                                  Text('${p.xp} XP', style: TextStyle(color: c.textSecondary, fontSize: 11, fontWeight: FontWeight.w600)),
-                                ],
-                              ),
+                              ProgressBar(value: p.levelProgress, height: 6),
                             ],
                           ),
                         ),
                       ],
                     ),
+                    const SizedBox(height: 14),
+                    Divider(height: 1, thickness: 1, color: c.stroke),
+                    const SizedBox(height: 12),
+                    IntrinsicHeight(
+                      child: Row(
+                        children: [
+                          _SummaryStat(icon: AppIcons.puzzle, value: groupThousands(p.puzzlesCompleted), label: 'Solved'),
+                          VerticalDivider(width: 1, thickness: 1, color: c.stroke),
+                          _SummaryStat(icon: AppIcons.star, iconColor: Brand.star, value: groupThousands(p.totalStars), label: 'Stars'),
+                          VerticalDivider(width: 1, thickness: 1, color: c.stroke),
+                          _SummaryStat(icon: AppIcons.streak, value: groupThousands(p.streak), label: 'Day streak'),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  _BigStat(icon: AppIcons.puzzle, value: '${p.puzzlesCompleted}', label: 'Solved'),
-                  const SizedBox(width: 12),
-                  _BigStat(icon: AppIcons.star, iconColor: Brand.star, value: '${p.totalStars}', label: 'Stars'),
-                  const SizedBox(width: 12),
-                  _BigStat(icon: AppIcons.level, value: '${badges.length}', label: 'Badges'),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  _BigStat(icon: AppIcons.streak, value: '${p.streak}', label: 'Streak'),
-                  const SizedBox(width: 12),
-                  _BigStat(icon: AppIcons.streak, value: '${p.longestStreak}', label: 'Longest streak'),
-                  const SizedBox(width: 12),
-                  _BigStat(icon: AppIcons.xp, value: '${p.xp}', label: 'XP'),
-                ],
               ),
               SectionHeader(
                 padding: const EdgeInsets.fromLTRB(0, 28, 0, 12),
                 title: 'Statistics',
                 subtitle: isMe ? 'Everything you have played so far' : 'Everything ${p.displayName} has played so far',
               ),
-              StatisticsSection(stats: isMe ? ref.watch(playerStatsProvider) : PlayerStats.fromProfile(p, catalogue: ref.watch(catalogueSizeProvider))),
+              // The three headline numbers and the level are shown above; the section has the rest.
+              StatisticsSection(
+                stats: isMe ? ref.watch(playerStatsProvider) : PlayerStats.fromProfile(p, catalogue: ref.watch(catalogueSizeProvider)),
+                omit: const {'solved', 'stars', 'streak', 'level'},
+              ),
               SectionHeader(padding: const EdgeInsets.fromLTRB(0, 28, 0, 12), title: 'Achievements', subtitle: badges.isEmpty ? 'Nothing claimed yet' : '${badges.length} of ${achievementFamilies.length} families claimed'),
               if (badges.isEmpty)
                 const EmptyState(icon: AppIcons.level, title: 'No badges yet', message: 'Claimed achievement tiers show up here.')
@@ -136,42 +133,37 @@ class PlayerScreen extends ConsumerWidget {
                     return _BadgeTile(family: b.family, tier: b.tier);
                   },
                 ),
-              // Report and block (guideline 1.2), for another player's profile.
+              // Report and block (guideline 1.2), for another player's profile: quiet rows at the
+              // end of the page, as iOS does for "Block this Caller".
               if (!isMe && ref.watch(currentUserIdProvider) != null) ...[
                 const SizedBox(height: 28),
-                Row(
-                  children: [
-                    Expanded(
-                      child: BigButton(
+                SoftCard(
+                  padding: EdgeInsets.zero,
+                  child: Column(
+                    children: [
+                      _SafetyRow(
                         key: const ValueKey('player-report'),
-                        label: 'Report',
                         icon: AppIcons.report,
-                        kind: ButtonKind.secondary,
-                        height: 46,
+                        label: 'Report ${p.displayName}',
                         onTap: () => showReportSheet(context, p),
                       ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: ref.watch(blockedPlayersProvider).value?.any((b) => b.playerId == p.userId) ?? false
-                          ? BigButton(
+                      Divider(height: 1, thickness: 1, indent: 50, color: c.stroke),
+                      ref.watch(blockedPlayersProvider).value?.any((b) => b.playerId == p.userId) ?? false
+                          ? _SafetyRow(
                               key: const ValueKey('player-unblock'),
-                              label: 'Unblock',
                               icon: AppIcons.block,
-                              kind: ButtonKind.secondary,
-                              height: 46,
+                              label: 'Unblock ${p.displayName}',
                               onTap: () => unblockPlayer(context, p.userId, p.displayName),
                             )
-                          : BigButton(
+                          : _SafetyRow(
                               key: const ValueKey('player-block'),
-                              label: 'Block',
                               icon: AppIcons.block,
-                              kind: ButtonKind.secondary,
-                              height: 46,
+                              label: 'Block ${p.displayName}',
+                              danger: true,
                               onTap: () => confirmBlock(context, p),
                             ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ],
@@ -182,8 +174,9 @@ class PlayerScreen extends ConsumerWidget {
   }
 }
 
-class _BigStat extends StatelessWidget {
-  const _BigStat({required this.icon, required this.value, required this.label, this.iconColor});
+/// One of the three headline numbers in the profile card: icon and value on one line, label under it.
+class _SummaryStat extends StatelessWidget {
+  const _SummaryStat({required this.icon, required this.value, required this.label, this.iconColor});
   final IconData icon;
   final Color? iconColor;
   final String value;
@@ -192,14 +185,45 @@ class _BigStat extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.colors;
     return Expanded(
-      child: SoftCard(
-        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 6),
-        child: Column(
+      child: Column(
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, size: 16, color: iconColor ?? context.accent),
+              const SizedBox(width: 5),
+              Text(value, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 17, letterSpacing: -0.3)),
+            ],
+          ),
+          const SizedBox(height: 2),
+          Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 11.5, color: c.textSecondary)),
+        ],
+      ),
+    );
+  }
+}
+
+/// A plain row for Report / Block: icon and label in the text colour (Block in the danger colour).
+class _SafetyRow extends StatelessWidget {
+  const _SafetyRow({super.key, required this.icon, required this.label, required this.onTap, this.danger = false});
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+  final bool danger;
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final tone = danger ? c.danger : c.textPrimary;
+    return Pressable(
+      onTap: onTap,
+      scale: 0.99,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        child: Row(
           children: [
-            Icon(icon, size: 22, color: iconColor ?? context.accent),
-            const SizedBox(height: 6),
-            Text(value, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 18)),
-            Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 11, color: c.textSecondary)),
+            Icon(icon, size: 20, color: danger ? c.danger : c.textSecondary),
+            const SizedBox(width: 14),
+            Expanded(child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: tone))),
           ],
         ),
       ),

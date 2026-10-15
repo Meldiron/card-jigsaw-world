@@ -9,40 +9,96 @@ import '../../state/social.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 
-/// Player > Report: pick a reason; the report goes to the developer (table `reports`), and the
-/// player is told it was sent. Reporting never blocks by itself.
+/// Player > Report: pick a reason, optionally block too, then Send report. The report goes to the
+/// developer (table `reports`) and the player is told it was sent.
 Future<void> showReportSheet(BuildContext context, Profile player) async {
-  final reason = await showAppSheet<ReportReason>(
-    context,
-    builder: (ctx) {
-      final c = ctx.colors;
-      return Padding(
-        padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Report ${player.displayName}', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700, letterSpacing: -0.3)),
-            const SizedBox(height: 6),
-            Text('What is wrong? We read every report.', style: TextStyle(fontSize: 14, color: c.textSecondary)),
-            const SizedBox(height: 16),
-            for (final r in ReportReason.values) ...[
-              BigButton(key: ValueKey('report-${r.code}'), label: r.label, kind: ButtonKind.secondary, height: 48, onTap: () => Navigator.of(ctx).pop(r)),
-              const SizedBox(height: 8),
-            ],
-          ],
-        ),
-      );
-    },
-  );
-  if (reason == null || !context.mounted) return;
+  final choice = await showAppSheet<({ReportReason reason, bool block})>(context, builder: (_) => _ReportPanel(player: player));
+  if (choice == null || !context.mounted) return;
   final container = ProviderScope.containerOf(context, listen: false);
   try {
-    await container.read(playerSafetyProvider).report(player, reason);
+    await container.read(playerSafetyProvider).report(player, choice.reason);
+    if (choice.block) await container.read(playerSafetyProvider).block(player);
     Haptics.success();
-    if (context.mounted) showToast(context, 'Report sent. Thank you.', icon: AppIcons.report);
+    if (context.mounted) showToast(context, choice.block ? 'Report sent and ${player.displayName} blocked.' : 'Report sent. Thank you.', icon: AppIcons.report);
   } catch (e) {
     if (context.mounted) showToast(context, 'The report could not be sent. Check your connection and try again.', icon: AppIcons.signal);
+  }
+}
+
+class _ReportPanel extends StatefulWidget {
+  const _ReportPanel({required this.player});
+  final Profile player;
+  @override
+  State<_ReportPanel> createState() => _ReportPanelState();
+}
+
+class _ReportPanelState extends State<_ReportPanel> {
+  ReportReason? _reason;
+  bool _block = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final name = widget.player.displayName;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Report $name', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700, letterSpacing: -0.3)),
+          const SizedBox(height: 6),
+          Text('What is wrong? We read every report.', style: TextStyle(fontSize: 14, color: c.textSecondary)),
+          const SizedBox(height: 16),
+          // Reasons: a single choice, like a settings list.
+          Container(
+            decoration: BoxDecoration(color: c.card.withValues(alpha: 0.7), borderRadius: BorderRadius.circular(Radii.md)),
+            child: Column(
+              children: [
+                for (final (i, r) in ReportReason.values.indexed) ...[
+                  if (i > 0) Divider(height: 1, thickness: 0.5, indent: 16, color: c.stroke),
+                  Pressable(
+                    key: ValueKey('report-${r.code}'),
+                    scale: 0.99,
+                    onTap: () => setState(() => _reason = r),
+                    child: SizedBox(
+                      height: 48,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Row(
+                          children: [
+                            Expanded(child: Text(r.label, style: const TextStyle(fontSize: 15.5, fontWeight: FontWeight.w500))),
+                            if (_reason == r) Icon(CupertinoIcons.checkmark_alt, size: 20, color: context.accent),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          Container(
+            height: 52,
+            padding: const EdgeInsets.only(left: 16, right: 8),
+            decoration: BoxDecoration(color: c.card.withValues(alpha: 0.7), borderRadius: BorderRadius.circular(Radii.md)),
+            child: Row(
+              children: [
+                Expanded(child: Text('Also block $name', maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 15.5, fontWeight: FontWeight.w500))),
+                CupertinoSwitch(key: const ValueKey('report-block'), value: _block, activeTrackColor: context.accent, onChanged: (v) => setState(() => _block = v)),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          BigButton(
+            key: const ValueKey('report-send'),
+            label: 'Send report',
+            onTap: _reason == null ? null : () => Navigator.of(context).pop((reason: _reason!, block: _block)),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -99,7 +155,12 @@ class BlockedPlayersPanel extends ConsumerWidget {
           const SizedBox(height: 12),
           blocked.when(
             loading: () => const Padding(padding: EdgeInsets.all(24), child: Loader()),
-            error: (e, _) => const EmptyState(icon: AppIcons.signal, title: 'Could not load', message: 'Check your connection and try again.'),
+            error: (e, _) => EmptyState(
+              icon: AppIcons.signal,
+              title: 'Blocked players could not load',
+              message: 'Check your connection and try again.',
+              action: BigButton(label: 'Try again', kind: ButtonKind.secondary, height: 44, expand: false, onTap: () => ref.invalidate(blockedPlayersProvider)),
+            ),
             data: (list) => list.isEmpty
                 ? const Padding(
                     padding: EdgeInsets.symmetric(vertical: 12),

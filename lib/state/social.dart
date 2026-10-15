@@ -10,28 +10,26 @@ import 'paged.dart';
 import 'profile.dart';
 import 'sync.dart';
 
+/// One quick retry, then the error reaches the screen (which offers Try again). Riverpod's default
+/// retries for about 40 s, and the lists below kept spinning, or showed "No friends yet", meanwhile.
+Duration? socialRetry(int retryCount, Object error) => retryCount < 1 ? const Duration(seconds: 2) : null;
+
+/// The player's friends. A failed read is an error (the Friends tab says it could not load), never
+/// an empty list, so an offline player is not told they have no friends.
 final friendsProvider = FutureProvider<List<Friend>>((ref) async {
   final userId = ref.watch(currentUserIdProvider);
   if (userId == null) return const [];
-  try {
-    return await ref.watch(socialRepositoryProvider).friends(userId);
-  } catch (e) {
-    debugPrint('friends failed: $e');
-    return const [];
-  }
-});
+  return ref.watch(socialRepositoryProvider).friends(userId);
+}, retry: socialRetry);
 
-/// Players the signed-in player blocked (Player > Block), newest first.
+/// Players the signed-in player blocked (Player > Block), newest first. Errors reach the Blocked
+/// players sheet at once (no retry: the league reads this first and must not wait on it); the
+/// league treats a failed read as "nobody blocked" (see [LeaderboardNotifier]).
 final blockedPlayersProvider = FutureProvider<List<BlockedPlayer>>((ref) async {
   final userId = ref.watch(currentUserIdProvider);
   if (userId == null) return const [];
-  try {
-    return await ref.watch(socialRepositoryProvider).blocks(userId);
-  } catch (e) {
-    debugPrint('blocks failed: $e');
-    return const [];
-  }
-});
+  return ref.watch(socialRepositoryProvider).blocks(userId);
+}, retry: (_, _) => null);
 
 /// The league, most XP first, loaded a page at a time as the list scrolls, without the players the
 /// viewer blocked.
@@ -46,7 +44,12 @@ class LeaderboardNotifier extends PagedNotifier<Profile> {
     try {
       me = await ref.read(profileProvider.future);
     } catch (_) {}
-    final blocked = {for (final b in await ref.read(blockedPlayersProvider.future)) b.playerId};
+    var blocked = <String>{};
+    try {
+      blocked = {for (final b in await ref.read(blockedPlayersProvider.future)) b.playerId};
+    } catch (e) {
+      debugPrint('blocks failed: $e');
+    }
     return ref.read(profileRepositoryProvider).leaderboardPage(limit: pageSize, after: after, viewer: me, excluding: blocked);
   }
 }
@@ -94,7 +97,7 @@ class PlayerSafety {
 
 final playerSafetyProvider = Provider<PlayerSafety>(PlayerSafety.new);
 
-final leaderboardProvider = AsyncNotifierProvider<LeaderboardNotifier, Paged<Profile>>(LeaderboardNotifier.new);
+final leaderboardProvider = AsyncNotifierProvider<LeaderboardNotifier, Paged<Profile>>(LeaderboardNotifier.new, retry: socialRetry);
 
 /// The player's place in the league and its size (server-side counts, independent of paging).
 /// League place of the row at [index]: players with equal XP share a place (1, 2, 2, 4), the same

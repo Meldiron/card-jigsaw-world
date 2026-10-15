@@ -100,7 +100,8 @@ void main() {
     await tapKey(tester, 'player-report');
     expect(find.text('Report ${target.displayName}'), findsOneWidget);
     await shot(tester, 'ps_02_report_reasons');
-    await tapKey(tester, 'report-name', ms: 2500);
+    await tapKey(tester, 'report-name', ms: 600);
+    await tapKey(tester, 'report-send', ms: 2500);
     expect(find.text('Report sent. Thank you.'), findsOneWidget);
     var readable = 0;
     try {

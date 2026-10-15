@@ -303,7 +303,7 @@ class Goals {
     final shapeOrTechnique = [
       mode == null
           ? lock
-          : Goal(key: 'd:$k:mode-${mode.code}', title: 'Finish a ${mode.label.toLowerCase()} board', progress: count((p) => p.mode == mode.code), target: 1, coins: 100, icon: 'puzzle', mode: mode),
+          : Goal(key: 'd:$k:mode-${mode.code}', title: 'Finish a ${mode.label} board', progress: count((p) => p.mode == mode.code), target: 1, coins: 100, icon: 'puzzle', mode: mode),
       lock,
       open.painting ? Goal(key: 'd:$k:paint1', title: 'Solve a Painting board', progress: count((p) => p.painting), target: 1, coins: 100, icon: 'painting', painting: true) : lock,
     ];
@@ -352,7 +352,7 @@ class Goals {
         ? Goal(key: '$k:solve15', title: 'Solve 15 puzzles this week', progress: week.length, target: 15, coins: 0, tickets: 1, icon: 'puzzle', vipOnly: true)
         : Goal(
             key: vipMode == GameMode.hexagons ? '$k:hex2' : '$k:mode2-${vipMode.code}',
-            title: 'Finish 2 ${vipMode == GameMode.hexagons ? 'hexagon' : vipMode.label.toLowerCase()} boards',
+            title: 'Finish 2 ${vipMode.label} boards',
             progress: count((p) => p.mode == vipMode.code),
             target: 2,
             coins: 0,
@@ -387,8 +387,10 @@ class Goals {
   /// "5h 12m" / "3d 4h" style remaining time, never negative.
   static String formatLeft(Duration d) {
     if (d.isNegative) d = Duration.zero;
-    if (d.inDays > 0) return '${d.inDays}d ${d.inHours % 24}h';
-    if (d.inHours > 0) return '${d.inHours}h ${d.inMinutes % 60}m';
-    return '${d.inMinutes}m';
+    // Two units at most and never a zero one: "6d", "6d 4h", "5h", "5h 12m", "12m", "<1m".
+    final hours = d.inHours % 24, minutes = d.inMinutes % 60;
+    if (d.inDays > 0) return hours > 0 ? '${d.inDays}d ${hours}h' : '${d.inDays}d';
+    if (d.inHours > 0) return minutes > 0 ? '${d.inHours}h ${minutes}m' : '${d.inHours}h';
+    return d.inMinutes > 0 ? '${d.inMinutes}m' : '<1m';
   }
 }

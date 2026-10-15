@@ -123,7 +123,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
                         ),
                       ),
                     if (upcoming.isNotEmpty) ...[
-                      const SectionHeader(title: 'Coming up', subtitle: 'Opens three days before the day'),
+                      const SectionHeader(title: 'Coming up', subtitle: 'Each event opens three days before its day'),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: SoftCard(
@@ -191,8 +191,9 @@ class _GoalList extends ConsumerWidget {
   }
 }
 
-/// The extra quest non-VIP players see: locked, labelled VIP, opens the
-/// Store's VIP card.
+/// The extra quest non-VIP players see, in the checklist style of the other quests (066 C with
+/// 065 B): an empty ring with the VIP mark, the quest, its reward and "VIP members", and a chevron
+/// to the Store's VIP card.
 class _VipGoalRow extends StatelessWidget {
   const _VipGoalRow({required this.goal});
   final Goal goal;
@@ -201,36 +202,42 @@ class _VipGoalRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.colors;
     final reward = goal.coins > 0
-        ? Amount(currency: Currency.coins, value: goal.coins, prefix: '+', size: 14, fontSize: 12.5, color: c.textTertiary)
-        : Amount(currency: Currency.tickets, value: goal.tickets, prefix: '+', size: 14, fontSize: 12.5, color: c.textTertiary);
+        ? Amount(currency: Currency.coins, value: goal.coins, prefix: '+', size: 13, fontSize: 12, weight: FontWeight.w800)
+        : Amount(currency: Currency.tickets, value: goal.tickets, prefix: '+', size: 13, fontSize: 12, weight: FontWeight.w800);
     return Pressable(
       onTap: () => context.push('/store?vip=1'),
       scale: 0.99,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 12, 14, 12),
+        padding: const EdgeInsets.fromLTRB(14, 11, 14, 11),
         child: Row(
           children: [
-            Icon(AppIcons.lock, size: 16, color: c.textTertiary),
-            const SizedBox(width: 10),
+            Container(
+              width: 38,
+              height: 38,
+              decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: c.stroke, width: 3)),
+              child: Icon(AppIcons.vip, size: 17, color: c.textTertiary),
+            ),
+            const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(goal.title, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: c.textSecondary)),
-                  const SizedBox(height: 4),
-                  Text('Extra quest for VIP members', style: TextStyle(fontSize: 12, color: c.textTertiary)),
+                  Text(goal.title, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14.5, color: c.textSecondary)),
+                  const SizedBox(height: 3),
+                  Row(
+                    children: [
+                      Opacity(opacity: 0.6, child: reward),
+                      Text('  ·  ', style: TextStyle(fontSize: 12, color: c.textSecondary)),
+                      Icon(AppIcons.vip, size: 13, color: context.accent),
+                      const SizedBox(width: 3),
+                      Text('VIP members', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: context.accent)),
+                    ],
+                  ),
                 ],
               ),
             ),
-            const SizedBox(width: 12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                reward,
-                const SizedBox(height: 6),
-                const Chip2(label: 'VIP', icon: AppIcons.vip, color: Brand.coin, foreground: Color(0xFF2A1F00)),
-              ],
-            ),
+            const SizedBox(width: 10),
+            Icon(CupertinoIcons.chevron_right, size: 15, color: c.textTertiary),
           ],
         ),
       ),
@@ -265,44 +272,83 @@ class _GoalRow extends ConsumerWidget {
       }
     }
 
-    final reward = goal.coins > 0
-        ? Amount(currency: Currency.coins, value: goal.coins, prefix: '+', size: 14, fontSize: 12.5)
-        : Amount(currency: Currency.tickets, value: goal.tickets, prefix: '+', size: 14, fontSize: 12.5);
+    final ready = goal.done && !claimed;
+    final currency = goal.coins > 0 ? Currency.coins : Currency.tickets;
+    final amount = goal.coins > 0 ? goal.coins : goal.tickets;
+    final status = claimed ? 'Claimed' : (ready ? 'Ready to claim' : (goal.target > 1 ? '${goal.progress.clamp(0, goal.target)} of ${goal.target}' : 'Not done yet'));
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 12, 14, 12),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(goal.title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
-                const SizedBox(height: 7),
-                Row(
-                  children: [
-                    Expanded(child: ProgressBar(value: goal.progress / goal.target, height: 6, color: goal.done ? c.success : null)),
-                    const SizedBox(width: 8),
-                    Text('${goal.progress.clamp(0, goal.target)}/${goal.target}', style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w600, color: c.textSecondary)),
-                  ],
-                ),
-              ],
+    // A checklist row: progress ring with the quest's icon, the quest, its reward and status; the
+    // only button is Claim. An open quest is a tap target that starts a fitting board.
+    return Pressable(
+      onTap: ready ? claim : (claimed ? null : play),
+      scale: 0.99,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(14, 11, 14, 11),
+        child: Row(
+          children: [
+            _QuestRing(value: claimed ? 1 : goal.progress / goal.target, done: claimed || goal.done, icon: claimed ? CupertinoIcons.checkmark_alt : _questIcon(goal.icon)),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(goal.title, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14.5, color: claimed ? c.textSecondary : c.textPrimary)),
+                  const SizedBox(height: 3),
+                  Row(
+                    children: [
+                      Opacity(opacity: claimed ? 0.5 : 1, child: Amount(currency: currency, value: amount, prefix: '+', size: 13, fontSize: 12, weight: FontWeight.w800)),
+                      Text('  ·  $status', style: TextStyle(fontSize: 12, color: ready ? c.success : c.textSecondary, fontWeight: ready ? FontWeight.w600 : FontWeight.w500)),
+                    ],
+                  ),
+                ],
+              ),
             ),
+            const SizedBox(width: 10),
+            if (ready)
+              BigButton(label: 'Claim', height: 34, expand: false, onTap: claim)
+            else if (!claimed)
+              Icon(CupertinoIcons.chevron_right, size: 15, color: c.textTertiary),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Icon for a quest's kind (`Goal.icon`).
+IconData _questIcon(String name) => switch (name) {
+      'star' => AppIcons.star,
+      'eye' => AppIcons.peek,
+      'swaps' => AppIcons.swaps,
+      // "Lock 5 cards in one move": a big move, not a locked quest.
+      'lock' => AppIcons.sparkle,
+      'streak' => AppIcons.streak,
+      'bigBoard' => AppIcons.bigBoard,
+      'painting' => AppIcons.painting,
+      _ => AppIcons.puzzle,
+    };
+
+/// Progress ring around a quest's icon: accent while running, success green once done.
+class _QuestRing extends StatelessWidget {
+  const _QuestRing({required this.value, required this.done, required this.icon});
+  final double value;
+  final bool done;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final tone = done ? c.success : context.accent;
+    return SizedBox(
+      width: 38,
+      height: 38,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          SizedBox.expand(
+            child: CircularProgressIndicator(value: value.clamp(0.0, 1.0), strokeWidth: 3, strokeCap: StrokeCap.round, backgroundColor: c.stroke, color: tone),
           ),
-          const SizedBox(width: 12),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              reward,
-              const SizedBox(height: 6),
-              if (claimed)
-                Icon(CupertinoIcons.checkmark_circle_fill, color: c.success, size: 22)
-              else if (goal.done)
-                BigButton(label: 'Claim', height: 34, expand: false, onTap: claim)
-              else
-                BigButton(label: 'Play', kind: ButtonKind.secondary, height: 34, expand: false, onTap: play),
-            ],
-          ),
+          Icon(icon, size: 17, color: done ? tone : c.textSecondary),
         ],
       ),
     );
@@ -327,8 +373,9 @@ class _EventCard extends ConsumerWidget {
     final done = value >= target;
     final claimed = progress?.claimed ?? false;
     final description = isPackQuest ? 'Finish all $target pictures in the ${event.name} pack while the event is live.' : event.description;
+    // Same wording as the event tiles on Home and the event pack page.
     final left = event.timeLeft;
-    final leftLabel = left.inDays > 0 ? 'Ends in ${left.inDays}d' : 'Ends in ${left.inHours}h';
+    final leftLabel = left.inDays >= 1 ? 'Ends in ${left.inDays}d' : (left.inHours >= 1 ? 'Ends in ${left.inHours}h' : 'Ends soon');
     final community = event.type == EventType.social ? ref.watch(communityProgressProvider(event.id)).value : null;
 
     Future<void> claim() async {
@@ -354,7 +401,7 @@ class _EventCard extends ConsumerWidget {
                 Positioned(
                   left: 14,
                   top: 12,
-                  child: Chip2(label: leftLabel, icon: AppIcons.eventType(event.type), onImage: true),
+                  child: _LiveChip(leftLabel),
                 ),
                 if (isPackQuest && pack.complete) Positioned(right: 14, top: 12, child: PackDoneBadges(progress: pack)),
                 Positioned(
@@ -426,6 +473,27 @@ class _EventCard extends ConsumerWidget {
 }
 
 
+/// A live event's countdown on the cover: the dark chip used for every label on a photo, with a
+/// small red dot as the "live" marker (as on Home and the event pack page).
+class _LiveChip extends StatelessWidget {
+  const _LiveChip(this.label);
+  final String label;
+
+  @override
+  Widget build(BuildContext context) => Container(
+        padding: const EdgeInsets.fromLTRB(8, 5, 9, 5),
+        decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.5), borderRadius: BorderRadius.circular(Radii.pill)),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(width: 6, height: 6, decoration: const BoxDecoration(color: Brand.live, shape: BoxShape.circle)),
+            const SizedBox(width: 5),
+            Text(label, style: const TextStyle(color: Colors.white, fontSize: 11.5, fontWeight: FontWeight.w600)),
+          ],
+        ),
+      );
+}
+
 /// Compact row for an event that opens within the next three days.
 class _UpcomingRow extends ConsumerWidget {
   const _UpcomingRow({required this.event});
@@ -434,8 +502,7 @@ class _UpcomingRow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final c = context.colors;
-    final d = event.startsIn;
-    final opens = d.inDays > 0 ? 'Opens in ${d.inDays}d ${d.inHours % 24}h' : 'Opens in ${d.inHours}h ${d.inMinutes % 60}m';
+    final opens = 'Opens in ${Goals.formatLeft(event.startsIn)}';
     final pack = _packProgress(ref, event);
     final showPack = pack != null;
     return Pressable(
@@ -461,9 +528,15 @@ class _UpcomingRow extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(event.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
+                  Text(event.name, maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
                   const SizedBox(height: 3),
-                  Text(event.description, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12.5, color: c.textSecondary)),
+                  Row(
+                    children: [
+                      Icon(AppIcons.time, size: 12, color: c.textSecondary),
+                      const SizedBox(width: 4),
+                      Text(opens, style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: c.textSecondary)),
+                    ],
+                  ),
                   if (showPack) ...[
                     const SizedBox(height: 6),
                     PackProgressLine(progress: pack, height: 4),
@@ -471,8 +544,7 @@ class _UpcomingRow extends ConsumerWidget {
                 ],
               ),
             ),
-            const SizedBox(width: 10),
-            Chip2(label: opens, icon: AppIcons.time),
+            if (event.packId != null) ...[const SizedBox(width: 8), Icon(CupertinoIcons.chevron_right, size: 14, color: c.textTertiary)],
           ],
         ),
       ),

@@ -159,27 +159,30 @@ String formatPlayTime(int seconds) {
 /// own profile and other players' profiles; tiles whose number is not
 /// available are simply left out.
 class StatisticsSection extends StatelessWidget {
-  const StatisticsSection({super.key, required this.stats});
+  const StatisticsSection({super.key, required this.stats, this.omit = const {}});
   final PlayerStats stats;
+
+  /// Tiles the page already shows elsewhere: 'solved', 'stars', 'streak', 'longestStreak', 'level'.
+  final Set<String> omit;
 
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
     final s = stats;
     final tiles = <(IconData, Color?, String, String)>[
-      (AppIcons.puzzle, null, '${s.solved}', 'Puzzles solved'),
-      if (s.perfect != null) (AppIcons.star, Brand.star, '${s.perfect}', '3-star solves'),
-      (AppIcons.star, Brand.star, '${s.stars}', 'Stars collected'),
-      (AppIcons.streak, null, '${s.streak}', 'Current streak'),
-      (AppIcons.streak, null, '${s.longestStreak}', 'Longest streak'),
-      (AppIcons.level, null, 'LV ${s.level}', '${s.xp} XP'),
+      if (!omit.contains('solved')) (AppIcons.puzzle, null, _n(s.solved), 'Puzzles solved'),
+      if (s.perfect != null) (AppIcons.star, Brand.star, _n(s.perfect!), '3-star solves'),
+      if (!omit.contains('stars')) (AppIcons.star, Brand.star, _n(s.stars), 'Stars collected'),
+      if (!omit.contains('streak')) (AppIcons.streak, null, _n(s.streak), 'Current streak'),
+      if (!omit.contains('longestStreak')) (AppIcons.streak, null, _n(s.longestStreak), 'Longest streak'),
+      if (!omit.contains('level')) (AppIcons.level, null, 'LV ${s.level}', '${_n(s.xp)} XP'),
       (AppIcons.swaps, null, _n(s.moves), 'Moves made'),
       (AppIcons.time, null, formatPlayTime(s.seconds), 'Time played'),
-      if (s.hints != null) (AppIcons.hint, Brand.hint, '${s.hints}', 'Hints used'),
-      if (s.peeks != null) (AppIcons.peek, null, '${s.peeks}', 'Peeks used'),
-      if (s.magic != null) (AppIcons.magic, null, '${s.magic}', 'Magic used'),
+      if (s.hints != null) (AppIcons.hint, Brand.hint, _n(s.hints!), 'Hints used'),
+      if (s.peeks != null) (AppIcons.peek, null, _n(s.peeks!), 'Peeks used'),
+      if (s.magic != null) (AppIcons.magic, null, _n(s.magic!), 'Magic used'),
       if (s.packsCompleted != null) (AppIcons.library, null, '${s.packsCompleted}/${s.packsTotal ?? 0}', 'Packs completed'),
-      if (s.eventsCompleted != null) (AppIcons.events, null, '${s.eventsCompleted}', 'Events completed'),
+      if (s.eventsCompleted != null) (AppIcons.events, null, _n(s.eventsCompleted!), 'Events completed'),
       (AppIcons.quests, null, _n(s.quests), 'Quests completed'),
     ];
     final best = s.bestSecondsByMode;
@@ -244,7 +247,7 @@ class StatisticsSection extends StatelessWidget {
                       Icon(_modeIcon(m), size: 16, color: c.textSecondary),
                       const SizedBox(width: 8),
                       Expanded(child: Text(m.label, style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w500))),
-                      Text('${s.solvedByMode[m] ?? 0}', style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600)),
+                      Text(_n(s.solvedByMode[m] ?? 0), style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600)),
                       if (best != null)
                         SizedBox(
                           width: 72,

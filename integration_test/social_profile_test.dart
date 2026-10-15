@@ -135,9 +135,10 @@ void main() {
 
     // League row opens the player's profile.
     await tapText(tester, 'Social', ms: 3500);
-    final chevron = find.byIcon(CupertinoIcons.chevron_right);
-    if (chevron.evaluate().isNotEmpty) {
-      await tester.tap(chevron.first, warnIfMissed: false);
+    // The first league row (rows have no chevron; the avatar is inside the row).
+    final row = find.descendant(of: find.byType(ListView), matching: find.byType(AvatarCircle));
+    if (row.evaluate().isNotEmpty) {
+      await tester.tap(row.first, warnIfMissed: false);
       await settle(tester, 3000);
       await shot(tester, 's05_player');
       await back(tester);
@@ -149,12 +150,15 @@ void main() {
     final me = container.read(currentUserIdProvider);
     final leaders = container.read(leaderboardProvider).value?.items ?? const [];
     final other = leaders.where((p) => p.userId != me).firstOrNull;
-    await tapText(tester, 'Add friend by code', ms: 1200);
+    await tester.tap(find.byKey(const ValueKey('add-friend-open')), warnIfMissed: false);
+    await settle(tester, 1200);
     await shot(tester, 's06_add_friend_alert');
     if (other != null) {
       await tester.enterText(find.byType(CupertinoTextField).last, other.userId);
       await settle(tester, 400);
-      await tapText(tester, 'Add friend', ms: 3500);
+      // The alert's confirm (the card's button behind it has the same label).
+      await tester.tap(find.text('Add friend').last, warnIfMissed: false);
+      await settle(tester, 3500);
       final row = find.byType(Dismissible);
       if (row.evaluate().isNotEmpty) {
         await shot(tester, 's07_friends');
