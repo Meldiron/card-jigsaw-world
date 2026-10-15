@@ -207,6 +207,9 @@ class LibraryScreen extends ConsumerStatefulWidget {
 }
 
 class _LibraryScreenState extends ConsumerState<LibraryScreen> {
+  /// Width of a pack on the search shelf: two and a bit fit an SE, so the next one peeks.
+  static const _shelfCardWidth = 150.0;
+
   final _search = TextEditingController();
   final _searchFocus = FocusNode();
 
@@ -356,9 +359,9 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
         if (filtered.isEmpty && found.total == 0)
           SliverToBoxAdapter(child: _empty(filter, hideFinished: hideFinished, view: view))
         else if (searching && filtered.isNotEmpty) ...[
-          // While searching, packs and pictures are results of one list: packs as compact
-          // rows, so the matching pictures start on the first screen instead of under a
-          // page of large covers.
+          // While searching, the matching packs are a shelf that scrolls sideways: the covers
+          // look as they do everywhere else, and the matching pictures start on the first
+          // screen instead of under a page of large covers.
           SliverToBoxAdapter(
             child: SectionHeader(
               key: const ValueKey('library-packs'),
@@ -367,18 +370,20 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
               padding: const EdgeInsets.fromLTRB(20, 14, 20, 10),
             ),
           ),
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            sliver: SliverToBoxAdapter(
-              child: SoftCard(
-                padding: EdgeInsets.zero,
-                child: Column(
-                  children: [
-                    for (var i = 0; i < filtered.length; i++) ...[
-                      _PackRow(pack: filtered[i]),
-                      if (i < filtered.length - 1) Divider(height: 1, color: c.stroke, indent: 76),
-                    ],
-                  ],
+          SliverToBoxAdapter(
+            child: SizedBox(
+              // A grid card's shape (0.78) at shelf width.
+              height: _shelfCardWidth / 0.78,
+              child: ListView.separated(
+                key: const ValueKey('library-pack-shelf'),
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                physics: const BouncingScrollPhysics(),
+                itemCount: filtered.length,
+                separatorBuilder: (_, _) => const SizedBox(width: 12),
+                itemBuilder: (_, i) => SizedBox(
+                  width: _shelfCardWidth,
+                  child: PackCard(key: ValueKey('library-pack-${filtered[i].id}'), pack: filtered[i], onTap: () => context.go('/library/pack/${filtered[i].id}')),
                 ),
               ),
             ),
@@ -457,63 +462,6 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
       LibraryFilter.fresh => const EmptyState(icon: AppIcons.filterNew, title: 'No new packs this week', message: 'Packs added in the last seven days show up here.'),
       _ => const EmptyState(icon: AppIcons.library, title: 'Nothing here yet', message: 'New packs arrive with events and every month.'),
     };
-  }
-}
-
-/// A pack found by the search: cover, name, category and size, and its
-/// state (price, progress or finished) on the right.
-class _PackRow extends ConsumerWidget {
-  const _PackRow({required this.pack});
-  final Pack pack;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final c = context.colors;
-    final profile = ref.watch(profileProvider).value;
-    if (formerlyFreePacks.contains(pack.id)) ref.watch(playedPacksProvider); // stays open once played
-    final open = profile != null && ref.read(profileProvider.notifier).isUnlocked(pack);
-    final progress = ref.watch(packProgressProvider(pack.id));
-    final tickets = pack.priceTickets > 0;
-    return Pressable(
-      key: ValueKey('library-pack-${pack.id}'),
-      scale: 0.99,
-      onTap: () => context.go('/library/pack/${pack.id}'),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        child: Row(
-          children: [
-            NetImage(url: pack.coverUrl, blurhash: pack.blurhash, width: 52, height: 52, radius: 10),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(pack.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body)),
-                  const SizedBox(height: 2),
-                  Text('${pack.category} · ${progress.total} pictures', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote)),
-                ],
-              ),
-            ),
-            const SizedBox(width: 8),
-            if (!open && !pack.hasWindow)
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(AppIcons.lock, size: 12, color: c.textTertiary),
-                  const SizedBox(width: 6),
-                  currencyIcon(tickets ? Currency.tickets : Currency.coins, size: 14),
-                  const SizedBox(width: 4),
-                  Text(formatCount(tickets ? pack.priceTickets : pack.priceCoins), style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote, fontWeight: FontWeight.w600)),
-                ],
-              )
-            else if (progress.started)
-              Text('${progress.solved}/${progress.total}', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote, fontWeight: FontWeight.w600))
-            else
-              Icon(AppIcons.chevronRight, size: 16, color: c.textTertiary),
-          ],
-        ),
-      ),
-    );
   }
 }
 
