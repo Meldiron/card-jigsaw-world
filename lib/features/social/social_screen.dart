@@ -438,7 +438,7 @@ class _FriendsState extends ConsumerState<_Friends> {
             children: [
               Text('Invite friends', style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 4),
-              Text('Friends who open your link can add you in one tap.', style: TextStyle(fontSize: TypeSize.footnote, color: c.textSecondary)),
+              Text('Your link lets friends add you in one tap.', style: TextStyle(fontSize: TypeSize.footnote, color: c.textSecondary)),
               const SizedBox(height: 14),
               Row(
                 children: [
