@@ -155,7 +155,8 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(seconds: 3));
     expect(stages()['rich'], AchievementStage.complete);
-    expect(find.descendant(of: find.byKey(const ValueKey('rich')), matching: find.text('Done')), findsOneWidget);
+    // A finished family is one compact line and a check (design QA 083), no bar.
+    expect(find.descendant(of: find.byKey(const ValueKey('rich')), matching: find.text('Every tier claimed')), findsOneWidget);
     expect(shownOrder(), initial, reason: 'no card moves while the player is on the screen');
 
     // Claim the first tier of Solver: the card updates to its next tier in place.

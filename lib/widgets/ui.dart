@@ -929,6 +929,45 @@ class _SegmentThumb extends StatelessWidget {
   }
 }
 
+/// A reward as a chip, the Home level card's style (design QA 006 C): a currency amount in a
+/// neutral pill ([RewardChip.amount]); something that opens or is given (an avatar, a shape, a
+/// board size) in a cobalt-tinted pill ([RewardChip.unlock]). Achievements, the level card and
+/// Claim all use the same marks, so a reward reads the same wherever it is promised.
+class RewardChip extends StatelessWidget {
+  const RewardChip.amount({super.key, required Currency this.currency, required int this.value})
+      : leading = null,
+        label = null;
+  const RewardChip.unlock({super.key, required Widget this.leading, required String this.label})
+      : currency = null,
+        value = null;
+
+  final Currency? currency;
+  final int? value;
+  final Widget? leading;
+  final String? label;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final unlock = currency == null;
+    return Container(
+      height: 24,
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      decoration: BoxDecoration(
+        color: unlock ? c.accentTint : c.canvas,
+        borderRadius: BorderRadius.circular(Radii.pill),
+        border: unlock ? null : Border.all(color: c.stroke),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: unlock
+            ? [leading!, const SizedBox(width: 4), Text(label!, style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600, color: context.accent))]
+            : [Amount(currency: currency!, value: value!, size: 14, fontSize: TypeSize.caption, weight: FontWeight.w700)],
+      ),
+    );
+  }
+}
+
 /// Small label chip (category, status). On a photo ([onImage]) it is a
 /// [PhotoChip]: the one style for anything drawn over a picture.
 class Chip2 extends StatelessWidget {
