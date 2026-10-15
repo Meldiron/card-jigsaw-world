@@ -144,6 +144,7 @@ class _DqaRootState extends State<DqaRoot> {
       for (final t in visibleTexts())
         {'text': t.text, 'rect': [t.rect.left.round(), t.rect.top.round(), t.rect.width.round(), t.rect.height.round()]},
     ];
+    if (scene['targets'] == true) out['targets'] = tapTargets();
     _writeReady(out);
   }
 
@@ -404,6 +405,40 @@ List<VisibleText> visibleTexts() {
       if (ro is RenderBox && ro.attached && ro.hasSize) {
         final rect = MatrixUtils.transformRect(ro.getTransformTo(null), Offset.zero & ro.size);
         if (_hits(ro, rect.center)) out.add(VisibleText(w.text.toPlainText(), rect, e));
+      }
+    }
+    e.visitChildren(visit);
+  }
+
+  WidgetsBinding.instance.rootElement?.visitChildren(visit);
+  return out;
+}
+
+/// `"targets": true` in a scene: every visible tap target (GestureDetector with onTap) with its
+/// size and a label (its first text, or the icon code point), for touch-target checks.
+List<Map<String, dynamic>> tapTargets() {
+  final out = <Map<String, dynamic>>[];
+  String label(Element e) {
+    String? found;
+    void v(Element c) {
+      if (found != null) return;
+      final w = c.widget;
+      if (w is RichText) found = w.text.toPlainText();
+      c.visitChildren(v);
+    }
+    v(e);
+    return (found ?? '?').replaceAll('\n', ' ');
+  }
+
+  void visit(Element e) {
+    final w = e.widget;
+    if (w is GestureDetector && (w.onTap != null || w.onTapDown != null)) {
+      final ro = e.renderObject;
+      if (ro is RenderBox && ro.attached && ro.hasSize) {
+        final rect = MatrixUtils.transformRect(ro.getTransformTo(null), Offset.zero & ro.size);
+        if (rect.width > 0 && _hits(ro, rect.center)) {
+          out.add({'label': label(e), 'rect': [rect.left.round(), rect.top.round(), rect.width.round(), rect.height.round()]});
+        }
       }
     }
     e.visitChildren(visit);
