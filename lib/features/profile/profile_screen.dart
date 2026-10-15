@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/haptics.dart';
 import '../../core/sfx.dart';
 import '../../core/theme/tokens.dart';
+import '../../data/purchases.dart' show groupThousands;
 import '../../models/models.dart';
 import '../../state/achievements.dart';
 import '../../state/auth.dart';
@@ -75,6 +76,29 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     try {
       await ref.read(authProvider.notifier).updateName(name);
     } catch (_) {}
+  }
+
+  /// Every statistic (boosters, packs, events, quests, best times by mode) in a tall sheet.
+  void _showAllStatistics(BuildContext context) {
+    showAppSheet(
+      context,
+      builder: (ctx) => SizedBox(
+        height: MediaQuery.sizeOf(ctx).height * 0.86,
+        child: Consumer(
+          builder: (ctx, ref, _) => ListView(
+            padding: const EdgeInsets.fromLTRB(20, 4, 20, 32),
+            physics: const BouncingScrollPhysics(),
+            children: [
+              Text('Statistics', style: Theme.of(ctx).textTheme.headlineSmall),
+              const SizedBox(height: 2),
+              Text('Everything you have played so far', style: TextStyle(color: ctx.colors.textSecondary, fontSize: 13)),
+              const SizedBox(height: 14),
+              StatisticsSection(stats: ref.watch(playerStatsProvider)),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -150,7 +174,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                   const SizedBox(width: 8),
                                   Expanded(child: ProgressBar(value: profile.levelProgress, height: 6)),
                                   const SizedBox(width: 8),
-                                  Text('${profile.xpIntoLevel}/${Profile.xpForLevel(profile.level)}', style: TextStyle(color: c.textSecondary, fontSize: 11, fontWeight: FontWeight.w600)),
+                                  Text('${groupThousands(profile.xpIntoLevel)}/${groupThousands(Profile.xpForLevel(profile.level))}', style: TextStyle(color: c.textSecondary, fontSize: 11, fontWeight: FontWeight.w600)),
                                 ],
                               ),
                             ],
@@ -161,13 +185,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     const SizedBox(height: 14),
                     Divider(height: 1, color: c.stroke),
                     const SizedBox(height: 12),
-                    Row(
-                      children: [
-                        _Stat(value: '${profile.coins}', label: 'Coins', icon: const CoinIcon(size: 14)),
-                        _Stat(value: '${profile.tickets}', label: 'Tickets', icon: const TicketIcon(size: 13)),
-                        _Stat(value: '${profile.hints}', label: 'Hints', icon: const HintIcon(size: 14)),
-                        _Stat(value: '${profile.streak}', label: 'Streak', icon: Icon(AppIcons.streak, size: 15, color: c.textSecondary)),
-                      ],
+                    // The wallet: three columns split by hairlines. The streak lives in Statistics
+                    // (and on Home), so each balance gets a third of the card at full size.
+                    IntrinsicHeight(
+                      child: Row(
+                        children: [
+                          _Stat(value: groupThousands(profile.coins), label: 'Coins', icon: const CoinIcon(size: 14)),
+                          VerticalDivider(width: 1, thickness: 1, color: c.stroke),
+                          _Stat(value: groupThousands(profile.tickets), label: 'Tickets', icon: const TicketIcon(size: 13)),
+                          VerticalDivider(width: 1, thickness: 1, color: c.stroke),
+                          _Stat(value: groupThousands(profile.hints), label: 'Hints', icon: const HintIcon(size: 14)),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -178,31 +207,24 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-                child: BigButton(label: 'Save progress · create account', icon: AppIcons.save, onTap: () => context.go('/profile/account')),
+                child: BigButton(label: 'Save progress · create account', icon: AppIcons.save, onTap: () => context.push('/account')),
               ),
             ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-              child: Row(
-                children: [
-                  _BigStat(icon: AppIcons.puzzle, value: '${profile.puzzlesCompleted}', label: 'Solved'),
-                  const SizedBox(width: 12),
-                  _BigStat(icon: AppIcons.star, iconColor: Brand.star, value: '${profile.totalStars}', label: 'Stars'),
-                  const SizedBox(width: 12),
-                  _BigStat(icon: AppIcons.level, value: '$claimedSteps', label: 'Badges'),
-                ],
-              ),
-            ),
-          ),
-          const SliverToBoxAdapter(child: SectionHeader(title: 'Statistics', subtitle: 'Everything you have played so far')),
-          SliverToBoxAdapter(child: Padding(padding: const EdgeInsets.symmetric(horizontal: 20), child: StatisticsSection(stats: ref.watch(playerStatsProvider)))),
+          SliverToBoxAdapter(child: SectionHeader(title: 'Statistics', action: 'See all', onAction: () => _showAllStatistics(context))),
+          SliverToBoxAdapter(child: Padding(padding: const EdgeInsets.symmetric(horizontal: 20), child: StatisticsSection(stats: ref.watch(playerStatsProvider), compact: true))),
           SliverToBoxAdapter(
             child: SectionHeader(
               title: 'Achievements',
               subtitle: readyToClaim > 0 ? '$claimedSteps of $totalSteps claimed · $readyToClaim ready' : '$claimedSteps of $totalSteps claimed',
             ),
           ),
+          if (readyToClaim > 1)
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+                child: _ClaimAllCard(ready: [for (final a in achievements) if (a.done) a]),
+              ),
+            ),
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             sliver: SliverList.separated(
@@ -221,7 +243,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   children: [
                     ListRow(icon: AppIcons.photo, title: 'My Puzzles', subtitle: 'Create puzzles from your photos', onTap: () => context.go('/profile/my-puzzles')),
                     Divider(height: 1, color: c.stroke, indent: 62),
-                    ListRow(icon: AppIcons.profile, title: 'Account', subtitle: isGuest ? 'Guest · sign in to save progress' : 'Signed in', onTap: () => context.go('/profile/account')),
+                    ListRow(icon: AppIcons.profile, title: 'Account', subtitle: isGuest ? 'Guest · sign in to save progress' : 'Signed in', onTap: () => context.push('/account')),
                     Divider(height: 1, color: c.stroke, indent: 62),
                     ListRow(icon: CupertinoIcons.bag_fill, title: 'Store', subtitle: 'Coins, Tickets, Hints and VIP', onTap: () => context.push('/store')),
                     Divider(height: 1, color: c.stroke, indent: 62),
@@ -249,7 +271,7 @@ class _Stat extends StatelessWidget {
     return Expanded(
       child: Column(
         children: [
-          Text(value, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 17)),
+          FittedBox(fit: BoxFit.scaleDown, child: Text(value, maxLines: 1, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 18, letterSpacing: -0.3))),
           const SizedBox(height: 2),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -265,26 +287,84 @@ class _Stat extends StatelessWidget {
   }
 }
 
-class _BigStat extends StatelessWidget {
-  const _BigStat({required this.icon, required this.value, required this.label, this.iconColor});
-  final IconData icon;
-  final Color? iconColor;
-  final String value;
-  final String label;
+/// "12 rewards ready": what the ready tiers pay together, and one button that claims them all
+/// (including the next tiers they unlock that are already reached).
+class _ClaimAllCard extends ConsumerStatefulWidget {
+  const _ClaimAllCard({required this.ready});
+  final List<AchievementStatus> ready;
+  @override
+  ConsumerState<_ClaimAllCard> createState() => _ClaimAllCardState();
+}
+
+class _ClaimAllCardState extends ConsumerState<_ClaimAllCard> {
+  bool _busy = false;
+
+  Future<void> _claimAll() async {
+    setState(() => _busy = true);
+    final notifier = ref.read(profileProvider.notifier);
+    var coins = 0, tickets = 0, avatars = 0, count = 0;
+    // Claiming a tier can make the next tier ready too: keep going until none is left.
+    for (var guard = 0; guard < 200; guard++) {
+      final next = ref.read(achievementsProvider).where((a) => a.done).firstOrNull;
+      final step = next?.step;
+      if (next == null || step == null) break;
+      final ok = await notifier.claimAchievement(next.stepKey, coins: step.coins, tickets: step.tickets, avatar: step.avatarKey);
+      if (!ok) break;
+      count++;
+      coins += step.coins;
+      tickets += step.tickets;
+      if (step.avatarKey != null) avatars++;
+    }
+    if (!mounted) return;
+    setState(() => _busy = false);
+    if (count == 0) return;
+    Sfx.instance.coin();
+    Haptics.success();
+    final parts = [
+      if (coins > 0) '${groupThousands(coins)} coins',
+      if (tickets > 0) '$tickets ticket${tickets == 1 ? '' : 's'}',
+      if (avatars > 0) '$avatars avatar${avatars == 1 ? '' : 's'}',
+    ];
+    showToast(context, '$count rewards claimed: ${parts.join(', ')}', icon: AppIcons.check);
+  }
+
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    return Expanded(
-      child: SoftCard(
-        padding: const EdgeInsets.symmetric(vertical: 14),
-        child: Column(
-          children: [
-            Icon(icon, size: 22, color: iconColor ?? context.accent),
-            const SizedBox(height: 6),
-            Text(value, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 18)),
-            Text(label, style: TextStyle(fontSize: 11, color: c.textSecondary)),
-          ],
-        ),
+    var coins = 0, tickets = 0, avatars = 0;
+    for (final a in widget.ready) {
+      coins += a.step?.coins ?? 0;
+      tickets += a.step?.tickets ?? 0;
+      if (a.step?.avatarKey != null) avatars++;
+    }
+    return SoftCard(
+      color: c.accentTint,
+      border: false,
+      padding: const EdgeInsets.fromLTRB(16, 12, 12, 12),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('${widget.ready.length} rewards ready', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                const SizedBox(height: 4),
+                Wrap(
+                  spacing: 10,
+                  runSpacing: 4,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    if (coins > 0) Amount(currency: Currency.coins, value: groupThousands(coins), size: 14, fontSize: 13, weight: FontWeight.w600),
+                    if (tickets > 0) Amount(currency: Currency.tickets, value: tickets, size: 14, fontSize: 13, weight: FontWeight.w600),
+                    if (avatars > 0) Text('$avatars avatar${avatars == 1 ? '' : 's'}', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: c.textSecondary)),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 12),
+          BigButton(label: 'Claim all', height: 40, expand: false, loading: _busy, onTap: _claimAll),
+        ],
       ),
     );
   }
@@ -327,46 +407,88 @@ class _AchievementCard extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // The title, then one dot per tier (filled once claimed) instead of a second fraction.
                 Row(
                   children: [
-                    Expanded(child: Text(f.title, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15))),
-                    if (f.steps.length > 1)
-                      Text('${status.claimedSteps}/${f.steps.length}', style: TextStyle(fontSize: 11.5, color: c.textTertiary, fontWeight: FontWeight.w600)),
+                    Flexible(child: Text(f.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15))),
+                    if (f.steps.length > 1) ...[const SizedBox(width: 8), _TierDots(claimed: status.claimedSteps, total: f.steps.length)],
                   ],
                 ),
                 const SizedBox(height: 2),
-                Text(all ? 'All tiers claimed' : status.description, style: TextStyle(fontSize: 12.5, color: c.textSecondary)),
+                Text(all ? 'Every tier claimed' : status.description, style: TextStyle(fontSize: 12.5, color: c.textSecondary)),
+                // A ready tier needs no full bar next to its Claim button.
+                if (!done) ...[
                 const SizedBox(height: 8),
                 Row(
                   children: [
                     Expanded(child: ProgressBar(value: ratio, height: 6, color: all ? Brand.success : null)),
                     const SizedBox(width: 8),
-                    Text(all ? 'Done' : '${status.progress.clamp(0, status.target)}/${status.target}', style: TextStyle(fontSize: 11, color: c.textSecondary, fontWeight: FontWeight.w600)),
+                    Text(
+                      all ? 'Done' : '${groupThousands(status.progress.clamp(0, status.target))} / ${groupThousands(status.target)}',
+                      style: TextStyle(fontSize: 11.5, color: c.textSecondary, fontWeight: FontWeight.w600, fontFeatures: const [FontFeature.tabularFigures()]),
+                    ),
                   ],
                 ),
+                ],
+                if (!all) ...[
+                  const SizedBox(height: 8),
+                  // What the next tier pays, as one quiet line (wraps when space is short).
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 4,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Text('Reward', style: TextStyle(fontSize: 11.5, color: c.textTertiary, fontWeight: FontWeight.w500)),
+                      if (step!.coins > 0) Amount(currency: Currency.coins, value: groupThousands(step.coins), size: 13, fontSize: 12, weight: FontWeight.w600),
+                      if (step.tickets > 0) Amount(currency: Currency.tickets, value: step.tickets, size: 13, fontSize: 12, weight: FontWeight.w600),
+                      if (step.avatarKey != null)
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            AvatarCircle(avatarKey: step.avatarKey, size: 16),
+                            const SizedBox(width: 4),
+                            Text('Avatar', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: c.textPrimary)),
+                          ],
+                        ),
+                    ],
+                  ),
+                ],
               ],
             ),
           ),
-          const SizedBox(width: 12),
-          if (all)
-            const Icon(CupertinoIcons.checkmark_circle_fill, color: Brand.success, size: 22)
-          else
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (step!.avatarKey != null) ...[AvatarCircle(avatarKey: step.avatarKey, size: 22), const SizedBox(width: 6)],
-                    if (step.coins > 0) Amount(currency: Currency.coins, value: step.coins, size: 13, fontSize: 12, weight: FontWeight.w600),
-                    if (step.tickets > 0) ...[const SizedBox(width: 6), Amount(currency: Currency.tickets, value: step.tickets, size: 13, fontSize: 12, weight: FontWeight.w600)],
-                  ],
-                ),
-                if (done) ...[
-                  const SizedBox(height: 6),
-                  BigButton(label: 'Claim', height: 34, expand: false, onTap: () => _claim(context, ref)),
-                ],
-              ],
+          if (all) ...[
+            const SizedBox(width: 12),
+            const Icon(CupertinoIcons.checkmark_circle_fill, color: Brand.success, size: 22),
+          ] else if (done) ...[
+            const SizedBox(width: 12),
+            BigButton(label: 'Claim', height: 34, expand: false, onTap: () => _claim(context, ref)),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+/// One small dot per tier of an achievement, filled for the tiers already claimed.
+class _TierDots extends StatelessWidget {
+  const _TierDots({required this.claimed, required this.total});
+  final int claimed;
+  final int total;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return Semantics(
+      label: 'Tier ${claimed.clamp(0, total)} of $total claimed',
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (var i = 0; i < total; i++)
+            Container(
+              width: 6,
+              height: 6,
+              margin: const EdgeInsets.only(right: 3),
+              decoration: BoxDecoration(shape: BoxShape.circle, color: i < claimed ? context.accent : c.stroke),
             ),
         ],
       ),

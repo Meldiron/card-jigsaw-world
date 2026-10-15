@@ -155,114 +155,114 @@ String formatPlayTime(int seconds) {
   return '${m}m';
 }
 
-/// Two-column grid of small stat tiles plus a per-mode table. Shared by the
-/// own profile and other players' profiles; tiles whose number is not
-/// available are simply left out.
+/// Statistics as inset grouped lists (the iOS Settings and Health idiom): label on the left,
+/// value on the right, in small titled groups, plus a per-mode table in the same style. Shared by
+/// the own profile and other players' profiles; rows whose number is not available are left
+/// out. Level and packs are not repeated here: the header shows the level and Total
+/// Completion shows the packs.
 class StatisticsSection extends StatelessWidget {
-  const StatisticsSection({super.key, required this.stats, this.omit = const {}});
+  const StatisticsSection({super.key, required this.stats, this.omit = const {}, this.compact = false});
   final PlayerStats stats;
 
   /// Tiles the page already shows elsewhere: 'solved', 'stars', 'streak', 'longestStreak', 'level'.
   final Set<String> omit;
 
+  /// Total Completion and four headline rows only (own Profile); the rest opens from "See all".
+  final bool compact;
+
+  static String _days(int v) => '${formatCount(v)} ${v == 1 ? 'day' : 'days'}';
+
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
     final s = stats;
-    final tiles = <(IconData, Color?, String, String)>[
-      if (!omit.contains('solved')) (AppIcons.puzzle, null, _n(s.solved), 'Puzzles solved'),
-      if (s.perfect != null) (AppIcons.star, Brand.star, _n(s.perfect!), '3-star solves'),
-      if (!omit.contains('stars')) (AppIcons.star, Brand.star, _n(s.stars), 'Stars collected'),
-      if (!omit.contains('streak')) (AppIcons.streak, null, _n(s.streak), 'Current streak'),
-      if (!omit.contains('longestStreak')) (AppIcons.streak, null, _n(s.longestStreak), 'Longest streak'),
-      if (!omit.contains('level')) (AppIcons.level, null, 'LV ${s.level}', '${_n(s.xp)} XP'),
-      (AppIcons.swaps, null, _n(s.moves), 'Moves made'),
-      (AppIcons.time, null, formatPlayTime(s.seconds), 'Time played'),
-      if (s.hints != null) (AppIcons.hint, Brand.hint, _n(s.hints!), 'Hints used'),
-      if (s.peeks != null) (AppIcons.peek, null, _n(s.peeks!), 'Peeks used'),
-      if (s.magic != null) (AppIcons.magic, null, _n(s.magic!), 'Magic used'),
-      if (s.packsCompleted != null) (AppIcons.library, null, '${s.packsCompleted}/${s.packsTotal ?? 0}', 'Packs completed'),
-      if (s.eventsCompleted != null) (AppIcons.events, null, _n(s.eventsCompleted!), 'Events completed'),
-      (AppIcons.quests, null, _n(s.quests), 'Quests completed'),
+    final groups = <(String, List<(IconData, Color?, String, String)>)>[
+      ('Puzzles', [
+        if (!omit.contains('solved')) (AppIcons.puzzle, null, 'Puzzles solved', _n(s.solved)),
+        if (s.perfect != null) (AppIcons.star, Brand.star, '3-star solves', _n(s.perfect!)),
+        if (!omit.contains('stars')) (AppIcons.star, Brand.star, 'Stars collected', _n(s.stars)),
+        (AppIcons.swaps, null, 'Moves made', _n(s.moves)),
+        (AppIcons.time, null, 'Time played', formatPlayTime(s.seconds)),
+      ]),
+      ('Streaks and quests', [
+        if (!omit.contains('streak')) (AppIcons.streak, null, 'Current streak', _days(s.streak)),
+        if (!omit.contains('longestStreak')) (AppIcons.trophy, null, 'Longest streak', _days(s.longestStreak)),
+        (AppIcons.quests, null, 'Quests completed', _n(s.quests)),
+        if (s.eventsCompleted != null) (AppIcons.events, null, 'Events completed', _n(s.eventsCompleted!)),
+      ]),
+      if (s.hints != null || s.peeks != null || s.magic != null)
+        ('Boosters used', [
+          if (s.hints != null) (AppIcons.hint, Brand.hint, 'Hints', _n(s.hints!)),
+          if (s.peeks != null) (AppIcons.peek, null, 'Peeks', _n(s.peeks!)),
+          if (s.magic != null) (AppIcons.magic, null, 'Magic', _n(s.magic!)),
+        ]),
     ];
+    if (compact) {
+      const keep = {'Puzzles solved', 'Stars collected', 'Current streak', 'Time played'};
+      final rows = [for (final g in groups) ...g.$2.where((t) => keep.contains(t.$3))];
+      groups
+        ..clear()
+        ..add(('', rows));
+    }
     final best = s.bestSecondsByMode;
-    return Column(
-      children: [
-        if (s.completion != null) ...[
-          TotalCompletion(totals: s.completion!),
-          const SizedBox(height: 10),
-        ],
-        GridView.builder(
+    const figures = [FontFeature.tabularFigures()];
+    Widget label(String text) => Padding(
+          padding: const EdgeInsets.fromLTRB(4, 18, 4, 8),
+          child: Text(text.toUpperCase(), style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 0.6, color: c.textTertiary)),
+        );
+    Widget card(List<Widget> rows) => SoftCard(
           padding: EdgeInsets.zero,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 10, crossAxisSpacing: 10, mainAxisExtent: 64),
-          itemCount: tiles.length,
-          itemBuilder: (_, i) {
-            final t = tiles[i];
-            return SoftCard(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Row(
-                children: [
-                  Container(
-                    width: 34,
-                    height: 34,
-                    decoration: BoxDecoration(shape: BoxShape.circle, color: c.boardBackground),
-                    child: Icon(t.$1, size: 17, color: t.$2 ?? context.accent),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(t.$3, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16, letterSpacing: -0.3)),
-                        Text(t.$4, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 11, color: c.textSecondary)),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-        const SizedBox(height: 10),
-        SoftCard(
-          padding: const EdgeInsets.fromLTRB(14, 12, 14, 6),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  const Expanded(child: Text('By mode', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14))),
-                  Text(best == null ? 'Solved' : 'Solved · Best time', style: TextStyle(fontSize: 11, color: c.textTertiary, fontWeight: FontWeight.w500)),
-                ],
-              ),
-              const SizedBox(height: 4),
-              for (final m in GameMode.values)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6),
-                  child: Row(
-                    children: [
-                      Icon(_modeIcon(m), size: 16, color: c.textSecondary),
-                      const SizedBox(width: 8),
-                      Expanded(child: Text(m.label, style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w500))),
-                      Text(_n(s.solvedByMode[m] ?? 0), style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600)),
-                      if (best != null)
-                        SizedBox(
-                          width: 72,
-                          child: Text(
-                            best[m] == null ? '—' : formatDuration(best[m]!),
-                            textAlign: TextAlign.right,
-                            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: c.textSecondary, fontFeatures: const [FontFeature.tabularFigures()]),
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
+              for (var i = 0; i < rows.length; i++) ...[
+                rows[i],
+                if (i < rows.length - 1) Divider(height: 1, color: c.stroke, indent: 46),
+              ],
+            ],
+          ),
+        );
+    Widget row(IconData icon, Color? tint, String name, List<Widget> values) => Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
+          child: Row(
+            children: [
+              SizedBox(width: 20, child: Icon(icon, size: 18, color: tint ?? context.accent)),
+              const SizedBox(width: 12),
+              Expanded(child: Text(name, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500))),
+              ...values,
+            ],
+          ),
+        );
+    Widget value(String text, {double? width, Color? color}) => SizedBox(
+          width: width,
+          child: Text(text, textAlign: TextAlign.right, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: color, fontFeatures: figures)),
+        );
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (s.completion != null) TotalCompletion(totals: s.completion!),
+        for (final g in groups.where((g) => g.$2.isNotEmpty)) ...[
+          if (g.$1.isEmpty) const SizedBox(height: 10) else label(g.$1),
+          card([for (final t in g.$2) row(t.$1, t.$2, t.$3, [value(t.$4)])]),
+        ],
+        if (!compact) ...[
+        Padding(
+          padding: const EdgeInsets.fromLTRB(4, 18, 14, 8),
+          child: Row(
+            children: [
+              Expanded(child: Text('BY MODE', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 0.6, color: c.textTertiary))),
+              SizedBox(width: 64, child: Text('SOLVED', textAlign: TextAlign.right, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 0.6, color: c.textTertiary))),
+              if (best != null) SizedBox(width: 72, child: Text('BEST', textAlign: TextAlign.right, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 0.6, color: c.textTertiary))),
             ],
           ),
         ),
+        card([
+          for (final m in GameMode.values)
+            row(_modeIcon(m), c.textSecondary, m.label, [
+              value(_n(s.solvedByMode[m] ?? 0), width: 64),
+              if (best != null) value(best[m] == null ? '—' : formatDuration(best[m]!), width: 72, color: c.textSecondary),
+            ]),
+        ]),
+        ],
       ],
     );
   }

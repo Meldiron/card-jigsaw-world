@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../data/purchases.dart' show groupThousands;
 import '../game/board.dart';
 import '../models/models.dart';
 import '../widgets/icons.dart';
@@ -111,10 +112,10 @@ final achievementFamilies = <AchievementFamily>[
   AchievementFamily(id: 'marathon', title: 'Marathon', icon: Icons.directions_run_rounded, describe: (t) => 'Solve $t puzzles in one day', steps: _tiered([10, 25], 'marathon', coins: 200), progress: (f) => f.marathon),
   AchievementFamily(id: 'allmodes', title: 'All Shapes', icon: Icons.category_rounded, describe: (t) => 'Finish a board in every mode', steps: [AchievementStep(GameMode.values.length, coins: 200, tickets: 1, avatarKey: 'shapes')], progress: (f) => f.modes),
   AchievementFamily(id: 'starhoarder', title: 'Star Hoarder', icon: Icons.stars_rounded, describe: (t) => 'Collect $t stars', steps: _tiered([50, 250, 1000], 'stars', coins: 150), progress: (f) => f.profile.totalStars),
-  AchievementFamily(id: 'rich', title: 'Well Off', icon: AppIcons.piggy, describe: (t) => 'Hold $t coins at once', steps: const [AchievementStep(5000, tickets: 2, avatarKey: 'vault')], progress: (f) => f.profile.coins),
+  AchievementFamily(id: 'rich', title: 'Well Off', icon: AppIcons.piggy, describe: (t) => 'Hold ${groupThousands(t)} coins at once', steps: const [AchievementStep(5000, tickets: 2, avatarKey: 'vault')], progress: (f) => f.profile.coins),
   AchievementFamily(id: 'vip', title: 'VIP member', icon: AppIcons.vip, describe: (t) => 'Join VIP', steps: const [AchievementStep(1, coins: 300, avatarKey: 'vip')], progress: (f) => f.profile.isVip ? 1 : 0),
   AchievementFamily(id: 'social', title: 'Good Company', icon: AppIcons.friends, describe: (t) => 'Add $t friend${t == 1 ? '' : 's'}', steps: _tiered([1, 5], 'friends', coins: 100), progress: (f) => f.friends),
-  AchievementFamily(id: 'piggy', title: 'Piggy Breaker', icon: AppIcons.piggy, describe: (t) => 'Fill the piggy bank to $t coins', steps: const [AchievementStep(Profile.piggyCapacity, coins: 100)], progress: (f) => f.profile.piggyCoins),
+  AchievementFamily(id: 'piggy', title: 'Piggy Breaker', icon: AppIcons.piggy, describe: (t) => 'Fill the piggy bank to ${groupThousands(t)} coins', steps: const [AchievementStep(Profile.piggyCapacity, coins: 100)], progress: (f) => f.profile.piggyCoins),
 ];
 
 /// Live status of every family, from the profile and progress rows.

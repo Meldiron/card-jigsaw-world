@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -23,8 +22,6 @@ class AvatarPicker extends ConsumerStatefulWidget {
 }
 
 class _AvatarPickerState extends ConsumerState<AvatarPicker> {
-  _Tab _tab = _Tab.all;
-
   /// Every selectable key: plain keys for starters/shop, `family@tier` for
   /// each achievement step.
   List<String> _keysFor(_Tab tab, Set<String> owned) {
@@ -95,48 +92,72 @@ class _AvatarPickerState extends ConsumerState<AvatarPicker> {
     final profile = ref.watch(profileProvider).value;
     if (profile == null) return const SizedBox(height: 200, child: Loader());
     final owned = ownedAvatarKeys(profile);
-    final keys = _keysFor(_tab, owned);
+    final all = _keysFor(_Tab.all, owned);
+    // Three sections instead of tabs: what the player can wear, what coins buy, what achievements give.
+    final yours = all.where(owned.contains).toList();
+    final shop = all.where((k) => !owned.contains(k) && AppIcons.avatar(k).source == AvatarSource.coins).toList();
+    final rewards = all.where((k) => !owned.contains(k) && AppIcons.avatar(k).source == AvatarSource.achievement).toList();
     final height = MediaQuery.sizeOf(context).height * 0.78;
+    const grid = SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4, mainAxisSpacing: 14, crossAxisSpacing: 8, childAspectRatio: 0.8);
+    Widget header(String title, {Widget? trailing}) => SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(4, 18, 4, 10),
+            child: Row(
+              children: [
+                Expanded(child: Text(title.toUpperCase(), style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 0.6, color: c.textTertiary))),
+                ?trailing,
+              ],
+            ),
+          ),
+        );
+    Widget section(List<String> keys) => SliverGrid(
+          gridDelegate: grid,
+          delegate: SliverChildBuilderDelegate(
+            (_, i) => _AvatarTile(avatarKey: keys[i], selected: keys[i] == profile.avatar, owned: owned.contains(keys[i]), onTap: () => _tap(keys[i], owned)),
+            childCount: keys.length,
+          ),
+        );
     return SizedBox(
       height: height,
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
+            padding: const EdgeInsets.fromLTRB(20, 4, 20, 0),
             child: Column(
               children: [
                 Text('Choose an avatar', style: Theme.of(context).textTheme.headlineSmall),
                 const SizedBox(height: 4),
-                Text('${owned.length} owned · tap to wear, buy or see how to earn', style: TextStyle(color: c.textSecondary, fontSize: 12.5)),
-                const SizedBox(height: 12),
-                SizedBox(
-                  width: double.infinity,
-                  child: CupertinoSlidingSegmentedControl<_Tab>(
-                    groupValue: _tab,
-                    backgroundColor: c.boardBackground,
-                    thumbColor: c.card,
-                    children: const {
-                      _Tab.all: Padding(padding: EdgeInsets.symmetric(vertical: 6), child: Text('All', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13))),
-                      _Tab.owned: Padding(padding: EdgeInsets.symmetric(vertical: 6), child: Text('Owned', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13))),
-                      _Tab.shop: Padding(padding: EdgeInsets.symmetric(vertical: 6), child: Text('Shop', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13))),
-                      _Tab.rewards: Padding(padding: EdgeInsets.symmetric(vertical: 6), child: Text('Rewards', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13))),
-                    },
-                    onValueChanged: (v) => setState(() => _tab = v ?? _Tab.all),
-                  ),
-                ),
+                Text('Tap one to wear it.', style: TextStyle(color: c.textSecondary, fontSize: 13)),
+                const SizedBox(height: 6),
               ],
             ),
           ),
           Expanded(
-            child: keys.isEmpty
-                ? const EmptyState(icon: AppIcons.lock, title: 'Nothing here yet', message: 'Finish achievements or visit the shop to add avatars.')
-                : GridView.builder(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
-                    physics: const BouncingScrollPhysics(),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4, mainAxisSpacing: 12, crossAxisSpacing: 12, childAspectRatio: 0.74),
-                    itemCount: keys.length,
-                    itemBuilder: (_, i) => _AvatarTile(avatarKey: keys[i], selected: keys[i] == profile.avatar, owned: owned.contains(keys[i]), onTap: () => _tap(keys[i], owned)),
+            child: CustomScrollView(
+              physics: const BouncingScrollPhysics(),
+              slivers: [
+                SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
+                  sliver: SliverMainAxisGroup(
+                    slivers: [
+                      header('Yours · ${yours.length}'),
+                      section(yours),
+                      if (shop.isNotEmpty) ...[
+                        header('Shop', trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+                          Text('each ', style: TextStyle(fontSize: 12, color: c.textTertiary, fontWeight: FontWeight.w600)),
+                          const Amount(currency: Currency.coins, value: Economy.avatarCoins, size: 13, fontSize: 12, weight: FontWeight.w700),
+                        ])),
+                        section(shop),
+                      ],
+                      if (rewards.isNotEmpty) ...[
+                        header('Achievement rewards'),
+                        section(rewards),
+                      ],
+                    ],
                   ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -151,16 +172,19 @@ class _AvatarTile extends StatelessWidget {
   final bool owned;
   final VoidCallback onTap;
 
+  /// Full colour for what can be worn or bought; achievement rewards not earned yet are grey.
+  static const _grey = ColorFilter.matrix([0.33, 0.33, 0.33, 0, 0, 0.33, 0.33, 0.33, 0, 0, 0.33, 0.33, 0.33, 0, 0, 0, 0, 0, 1, 0]);
+
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
     final def = AppIcons.avatar(avatarKey);
     final tier = AppIcons.splitAvatarKey(avatarKey).tier;
-    final Widget caption = switch (def.source) {
-      AvatarSource.free => Text(def.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 11, color: c.textSecondary)),
-      AvatarSource.coins => owned ? Text(def.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 11, color: c.textSecondary)) : const Amount(currency: Currency.coins, value: Economy.avatarCoins, size: 12, fontSize: 11, weight: FontWeight.w600),
-      AvatarSource.achievement => Text(owned ? def.name : (tier > 1 ? 'Tier $tier' : 'Reward'), maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 11, color: c.textSecondary)),
-    };
+    final reward = def.source == AvatarSource.achievement;
+    final locked = !owned && reward;
+    final name = reward && tier > 1 ? '${def.name} $tier' : def.name;
+    Widget avatar = AvatarCircle(avatarKey: avatarKey, size: 54);
+    if (locked) avatar = Opacity(opacity: 0.55, child: ColorFiltered(colorFilter: _grey, child: avatar));
     return Pressable(
       onTap: onTap,
       child: Column(
@@ -171,23 +195,23 @@ class _AvatarTile extends StatelessWidget {
             child: Stack(
               clipBehavior: Clip.none,
               children: [
-                Opacity(opacity: owned ? 1 : 0.45, child: AvatarCircle(avatarKey: avatarKey, size: 52)),
-                if (!owned)
+                avatar,
+                if (locked)
                   Positioned(
                     right: -2,
-                    top: -2,
+                    bottom: -2,
                     child: Container(
-                      width: 20,
-                      height: 20,
+                      width: 22,
+                      height: 22,
                       decoration: BoxDecoration(shape: BoxShape.circle, color: c.card, border: Border.all(color: c.stroke)),
-                      child: Icon(def.source == AvatarSource.coins ? CupertinoIcons.bag_fill : AppIcons.lock, size: 11, color: c.textSecondary),
+                      child: Icon(AppIcons.lock, size: 11, color: c.textSecondary),
                     ),
                   ),
               ],
             ),
           ),
-          const SizedBox(height: 6),
-          caption,
+          const SizedBox(height: 5),
+          Text(name, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 11.5, color: owned ? c.textPrimary : c.textSecondary, fontWeight: selected ? FontWeight.w700 : FontWeight.w500)),
         ],
       ),
     );

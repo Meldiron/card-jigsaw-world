@@ -841,5 +841,20 @@ class MyPuzzle {
   final String fileId;
   final String title;
   factory MyPuzzle.fromRow(String id, Map<String, dynamic> d) =>
-      MyPuzzle(id: id, fileId: _s(d['fileId']), title: _s(d['title'], 'My photo'));
+      MyPuzzle(id: id, fileId: _s(d['fileId']), title: myPhotoTitle(_s(d['title'], 'My photo')));
+}
+
+const _monthsShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+/// Title of a new My Puzzles photo: "Photo, 12 Oct".
+String newMyPhotoTitle(DateTime at) => 'Photo, ${at.day} ${_monthsShort[at.month - 1]}';
+
+/// Older uploads were titled "My photo 12/10" (day/month, read as a date only by half the world):
+/// shown as "Photo, 12 Oct". Any other title is the player's own and stays.
+String myPhotoTitle(String stored) {
+  final m = RegExp(r'^My photo (\d{1,2})/(\d{1,2})$').firstMatch(stored.trim());
+  if (m == null) return stored;
+  final day = int.parse(m.group(1)!), month = int.parse(m.group(2)!);
+  if (day < 1 || day > 31 || month < 1 || month > 12) return stored;
+  return 'Photo, $day ${_monthsShort[month - 1]}';
 }

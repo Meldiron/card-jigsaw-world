@@ -11,6 +11,9 @@ import '../../core/reminders.dart';
 import '../../core/theme/tokens.dart';
 import '../../state/auth.dart';
 import '../../state/sync.dart';
+import '../../state/catalog.dart';
+import '../../models/models.dart';
+import 'stats.dart' show formatCount;
 import '../../state/purchases.dart';
 import '../../state/reminders.dart';
 import '../../state/settings.dart';
@@ -59,7 +62,7 @@ class SettingsScreen extends ConsumerWidget {
                   children: [
                     for (var i = 0; i < rows.length; i++) ...[
                       rows[i],
-                      if (i < rows.length - 1) Divider(height: 1, color: c.stroke, indent: 16),
+                      if (i < rows.length - 1) Divider(height: 1, color: c.stroke, indent: _Row.textInset),
                     ],
                   ],
                 ),
@@ -80,6 +83,7 @@ class SettingsScreen extends ConsumerWidget {
         children: [
           group('Appearance', [
             _SegRow(
+              icon: CupertinoIcons.circle_lefthalf_fill,
               label: 'Theme',
               value: s.themeMode,
               options: const {ThemeMode.system: 'Auto', ThemeMode.light: 'Light', ThemeMode.dark: 'Dark'},
@@ -87,25 +91,26 @@ class SettingsScreen extends ConsumerWidget {
             ),
           ]),
           group('Sound', [
-            _SwitchRow(icon: CupertinoIcons.music_note_2, label: 'Music', value: s.music, onChanged: n.setMusic),
-            _SwitchRow(icon: CupertinoIcons.speaker_2_fill, label: 'Sound effects', value: s.sound, onChanged: n.setSound),
+            _SwitchRow(icon: CupertinoIcons.music_note, label: 'Music', value: s.music, onChanged: n.setMusic),
+            _SwitchRow(icon: CupertinoIcons.speaker_2, label: 'Sound effects', value: s.sound, onChanged: n.setSound),
             _SwitchRow(icon: CupertinoIcons.waveform, label: 'Haptics', value: s.haptics, onChanged: n.setHaptics),
           ]),
           group('Gameplay', [
-            _SwitchRow(icon: CupertinoIcons.time, label: 'Show timer', value: s.showTimer, onChanged: n.setShowTimer),
+            _SwitchRow(icon: CupertinoIcons.timer, label: 'Show timer', value: s.showTimer, onChanged: n.setShowTimer),
             // Reminders are local iOS notifications; the rows are hidden elsewhere.
             if (caps.notifications) ...[
               _SwitchRow(
                 key: const ValueKey('settings-reminders'),
-                icon: CupertinoIcons.bell_fill,
+                icon: CupertinoIcons.bell,
                 label: 'Daily reminders',
+                subtitle: 'One a day with the daily puzzle',
                 value: s.reminders,
                 onChanged: (v) => _toggleReminders(context, ref, v),
               ),
               if (s.reminders)
                 _ValueRow(
                   key: const ValueKey('settings-reminder-time'),
-                  icon: CupertinoIcons.clock_fill,
+                  icon: CupertinoIcons.clock,
                   label: 'Reminder time',
                   value: _minutesOfDay(s.reminderMinutes).format(context),
                   onTap: () => _pickReminderTime(context, ref, s.reminderMinutes),
@@ -114,8 +119,9 @@ class SettingsScreen extends ConsumerWidget {
               if (s.reminders)
                 _SwitchRow(
                   key: const ValueKey('settings-event-reminders'),
-                  icon: CupertinoIcons.flag_fill,
+                  icon: CupertinoIcons.flag,
                   label: 'New events',
+                  subtitle: 'The evening before an event opens',
                   value: ref.watch(eventRemindersProvider),
                   onChanged: (v) {
                     ref.read(eventRemindersProvider.notifier).set(v);
@@ -171,19 +177,19 @@ class SettingsScreen extends ConsumerWidget {
           group('About', [
             _NavRow(icon: CupertinoIcons.doc_text, label: 'Image credits and licences', onTap: () => _showCredits(context)),
             _NavRow(
-              key: const ValueKey('settings-support'),
+              key: const ValueKey('settings-support'), external: true,
               icon: CupertinoIcons.question_circle,
               label: 'Support',
               onTap: () async {
                 if (!await openLink(AppLinks.support) && context.mounted) showToast(context, AppLinks.supportEmail, icon: AppIcons.mail);
               },
             ),
-            _NavRow(key: const ValueKey('settings-privacy'), icon: CupertinoIcons.lock_shield, label: 'Privacy policy', onTap: () => _open(context, AppLinks.privacyPolicy)),
-            _NavRow(key: const ValueKey('settings-terms'), icon: CupertinoIcons.doc_plaintext, label: 'Terms of use', onTap: () => _open(context, AppLinks.termsOfUse)),
+            _NavRow(key: const ValueKey('settings-privacy'), external: true, icon: CupertinoIcons.lock_shield, label: 'Privacy policy', onTap: () => _open(context, AppLinks.privacyPolicy)),
+            _NavRow(key: const ValueKey('settings-terms'), external: true, icon: CupertinoIcons.doc_plaintext, label: 'Terms of use', onTap: () => _open(context, AppLinks.termsOfUse)),
             // App Store features (gift codes, reviews) exist on Apple platforms only.
             if (caps.giftCodes)
               _NavRow(
-                key: const ValueKey('settings-rate'),
+                key: const ValueKey('settings-rate'), external: true,
                 icon: CupertinoIcons.star,
                 label: 'Rate Card Jigsaw World',
                 onTap: () async {
@@ -194,7 +200,7 @@ class SettingsScreen extends ConsumerWidget {
                   if (!opened && context.mounted) showToast(context, 'The App Store could not open. Try again later.', icon: CupertinoIcons.star);
                 },
               ),
-            _InfoRow(key: const ValueKey('settings-version'), label: 'Version', value: ref.watch(appVersionProvider).value ?? ''),
+            _InfoRow(key: const ValueKey('settings-version'), icon: CupertinoIcons.info_circle, label: 'Version', value: ref.watch(appVersionProvider).value ?? ''),
           ]),
         ],
       ),
@@ -269,94 +275,208 @@ class SettingsScreen extends ConsumerWidget {
   }
 
   void _showCredits(BuildContext context) {
-    showAppSheet(
-      context,
-      builder: (_) => Padding(
+    showAppSheet(context, builder: (_) => const _CreditsSheet());
+  }
+}
+
+/// One picture source of the catalogue: its name, how many pictures it gave and their licences.
+typedef CreditSource = ({String name, int count, List<String> licences});
+
+/// The catalogue's picture sources, read from each puzzle's `source` ("Wikimedia Commons, CC BY-SA
+/// 4.0", "flickr via Openverse, CC BY"), largest first, licences without versions. Built from the
+/// catalogue itself, so the credits stay true as packs change.
+List<CreditSource> creditSources(Iterable<Puzzle> puzzles) {
+  const known = {'Unsplash via Lorem Picsum': 'Unsplash License', 'NASA Image and Video Library': 'Public domain'};
+  const hosts = {'flickr': 'Flickr', 'stocksnap': 'StockSnap', 'rawpixel': 'rawpixel', 'wordpress': 'WordPress', 'inaturalist': 'iNaturalist'};
+  String licence(String l) {
+    l = l.replaceAll(' (AI-generated)', '').replaceAll('CC CC0', 'CC0').trim();
+    final low = l.toLowerCase();
+    if (low.contains('public domain') || low.startsWith('pdm') || low == 'cc pdm') return 'Public domain';
+    if (l == 'Attribution') return 'CC BY';
+    return RegExp(r'^CC BY(-SA)?').firstMatch(l)?.group(0) ?? l;
+  }
+
+  final counts = <String, int>{};
+  final licences = <String, Set<String>>{};
+  for (final p in puzzles) {
+    final raw = p.source.trim();
+    if (raw.isEmpty) continue;
+    final cut = raw.lastIndexOf(', ');
+    final tail = cut > 0 ? raw.substring(cut + 2) : '';
+    final hasLicence = RegExp(r'CC|[Pp]ublic|Attribution|PDM').hasMatch(tail);
+    var name = hasLicence ? raw.substring(0, cut) : raw;
+    if (name == 'NASA Image Library') name = 'NASA Image and Video Library';
+    if (name == 'Lorem Picsum / Unsplash') name = 'Unsplash via Lorem Picsum';
+    final via = RegExp(r'^(\w+) via Openverse$').firstMatch(name);
+    if (via != null) name = '${hosts[via.group(1)!.toLowerCase()] ?? via.group(1)!} via Openverse';
+    final lic = hasLicence ? licence(tail) : known[name];
+    counts[name] = (counts[name] ?? 0) + 1;
+    if (lic != null) (licences[name] ??= <String>{}).add(lic);
+  }
+  const order = ['CC0', 'Public domain', 'CC BY', 'CC BY-SA'];
+  int rank(String l) => order.contains(l) ? order.indexOf(l) : order.length;
+  return [
+    for (final e in counts.entries) (name: e.key, count: e.value, licences: (licences[e.key]?.toList() ?? [])..sort((a, b) => rank(a).compareTo(rank(b)))),
+  ]..sort((a, b) => b.count.compareTo(a.count));
+}
+
+class _CreditsSheet extends ConsumerWidget {
+  const _CreditsSheet();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final c = context.colors;
+    final sources = creditSources(ref.watch(allPuzzlesProvider).value ?? const <Puzzle>[]);
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.82),
+      child: ListView(
+        shrinkWrap: true,
         padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Image credits', style: Theme.of(context).textTheme.headlineSmall),
-            const SizedBox(height: 10),
-            Text(
-              'Photo packs use images from Lorem Picsum (Unsplash License). '
-              'The Masterpieces pack uses public-domain works from the Cleveland Museum of Art (CC0). '
-              'Deep Space uses imagery from the NASA Image and Video Library. '
-              'Each puzzle shows its author on the difficulty and completion screens.',
-              style: TextStyle(color: context.colors.textSecondary, height: 1.45),
+        physics: const BouncingScrollPhysics(),
+        children: [
+          Text('Image credits and licences', style: Theme.of(context).textTheme.headlineSmall),
+          const SizedBox(height: 4),
+          Text(
+            'The pictures come from these open collections, each in the public domain or under a licence that allows this use.',
+            style: TextStyle(color: c.textSecondary, fontSize: 13.5, height: 1.4),
+          ),
+          const SizedBox(height: 14),
+          if (sources.isEmpty)
+            const Padding(padding: EdgeInsets.all(20), child: Loader())
+          else
+            SoftCard(
+              padding: EdgeInsets.zero,
+              child: Column(
+                children: [
+                  for (var i = 0; i < sources.length; i++) ...[
+                    if (i > 0) Divider(height: 1, color: c.stroke, indent: 14),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(sources[i].name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14.5)),
+                                if (sources[i].licences.isNotEmpty)
+                                  Text(sources[i].licences.join(', '), style: TextStyle(fontSize: 12.5, color: c.textSecondary)),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Text(
+                            formatCount(sources[i].count),
+                            style: TextStyle(fontSize: 13, color: c.textTertiary, fontWeight: FontWeight.w600, fontFeatures: const [FontFeature.tabularFigures()]),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ],
+              ),
             ),
-          ],
-        ),
+          const SizedBox(height: 12),
+          Text(
+            'Every picture names its author and licence on the difficulty and completion screens.',
+            style: TextStyle(color: c.textSecondary, fontSize: 13, height: 1.4),
+          ),
+        ],
       ),
     );
   }
 }
 
+/// The one settings row: a 22 pt icon column, the label (with an optional line under it), and a
+/// trailing control, at least 52 pt high whatever the control (switch, chevron, value, segmented),
+/// so every row lines up.
+class _Row extends StatelessWidget {
+  const _Row({required this.icon, required this.label, this.subtitle, this.trailing, this.onTap});
+  final IconData icon;
+  final String label;
+
+  /// What the row does, when the label alone does not say it.
+  final String? subtitle;
+  final Widget? trailing;
+  final VoidCallback? onTap;
+
+  /// Where the label starts; dividers start here too, as in iOS lists.
+  static const textInset = 16.0 + 22 + 12;
+
+  @override
+  Widget build(BuildContext context) {
+    final row = ConstrainedBox(
+      constraints: const BoxConstraints(minHeight: 52),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        child: Row(
+          children: [
+            SizedBox(width: 22, child: Icon(icon, size: 20, color: context.accent)),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(label, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
+                  if (subtitle != null) Text(subtitle!, style: TextStyle(fontSize: 12.5, color: context.colors.textSecondary)),
+                ],
+              ),
+            ),
+            ?trailing,
+          ],
+        ),
+      ),
+    );
+    return onTap == null ? row : Pressable(onTap: onTap, scale: 0.99, child: row);
+  }
+}
+
 class _SwitchRow extends StatelessWidget {
-  const _SwitchRow({super.key, required this.icon, required this.label, required this.value, required this.onChanged});
+  const _SwitchRow({super.key, required this.icon, required this.label, required this.value, required this.onChanged, this.subtitle});
   final IconData icon;
   final String label;
   final bool value;
   final ValueChanged<bool> onChanged;
+  final String? subtitle;
   @override
-  Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Row(
-          children: [
-            Icon(icon, size: 20, color: context.accent),
-            const SizedBox(width: 12),
-            Expanded(child: Text(label, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15))),
-            CupertinoSwitch(value: value, activeTrackColor: Brand.success, onChanged: onChanged),
-          ],
-        ),
-      );
+  Widget build(BuildContext context) => _Row(icon: icon, label: label, subtitle: subtitle, trailing: CupertinoSwitch(value: value, activeTrackColor: Brand.success, onChanged: onChanged));
 }
 
 class _SegRow<T extends Object> extends StatelessWidget {
-  const _SegRow({required this.label, required this.value, required this.options, required this.onChanged});
+  const _SegRow({required this.icon, required this.label, required this.value, required this.options, required this.onChanged});
+  final IconData icon;
   final String label;
   final T value;
   final Map<T, String> options;
   final ValueChanged<T> onChanged;
   @override
-  Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Row(
-          children: [
-            Expanded(child: Text(label, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15))),
-            CupertinoSlidingSegmentedControl<T>(
-              groupValue: value,
-              backgroundColor: context.colors.boardBackground,
-              thumbColor: context.colors.card,
-              children: {for (final e in options.entries) e.key: Padding(padding: const EdgeInsets.symmetric(horizontal: 8), child: Text(e.value, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)))},
-              onValueChanged: (v) => v == null ? null : onChanged(v),
-            ),
-          ],
+  Widget build(BuildContext context) => _Row(
+        icon: icon,
+        label: label,
+        trailing: CupertinoSlidingSegmentedControl<T>(
+          groupValue: value,
+          backgroundColor: context.colors.boardBackground,
+          thumbColor: context.colors.card,
+          children: {for (final e in options.entries) e.key: Padding(padding: const EdgeInsets.symmetric(horizontal: 8), child: Text(e.value, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)))},
+          onValueChanged: (v) => v == null ? null : onChanged(v),
         ),
       );
 }
 
 class _NavRow extends StatelessWidget {
-  const _NavRow({super.key, required this.icon, required this.label, required this.onTap});
+  const _NavRow({super.key, required this.icon, required this.label, required this.onTap, this.external = false});
   final IconData icon;
   final String label;
   final VoidCallback onTap;
+
+  /// Opens a web page, mail or the App Store: an arrow out of the app instead of a chevron.
+  final bool external;
   @override
-  Widget build(BuildContext context) => Pressable(
+  Widget build(BuildContext context) => _Row(
+        icon: icon,
+        label: label,
         onTap: onTap,
-        scale: 0.99,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          child: Row(
-            children: [
-              Icon(icon, size: 20, color: context.accent),
-              const SizedBox(width: 12),
-              Expanded(child: Text(label, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15))),
-              Icon(CupertinoIcons.chevron_right, size: 16, color: context.colors.textTertiary),
-            ],
-          ),
-        ),
+        trailing: Icon(external ? CupertinoIcons.arrow_up_right : CupertinoIcons.chevron_right, size: external ? 14 : 16, color: context.colors.textTertiary),
       );
 }
 
@@ -368,37 +488,26 @@ class _ValueRow extends StatelessWidget {
   final String value;
   final VoidCallback onTap;
   @override
-  Widget build(BuildContext context) => Pressable(
+  Widget build(BuildContext context) => _Row(
+        icon: icon,
+        label: label,
         onTap: onTap,
-        scale: 0.99,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          child: Row(
-            children: [
-              Icon(icon, size: 20, color: context.accent),
-              const SizedBox(width: 12),
-              Expanded(child: Text(label, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15))),
-              Text(value, style: TextStyle(color: context.colors.textSecondary, fontSize: 15)),
-              const SizedBox(width: 6),
-              Icon(CupertinoIcons.chevron_right, size: 16, color: context.colors.textTertiary),
-            ],
-          ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(value, style: TextStyle(color: context.colors.textSecondary, fontSize: 15)),
+            const SizedBox(width: 6),
+            Icon(CupertinoIcons.chevron_right, size: 16, color: context.colors.textTertiary),
+          ],
         ),
       );
 }
 
 class _InfoRow extends StatelessWidget {
-  const _InfoRow({super.key, required this.label, required this.value});
+  const _InfoRow({super.key, required this.icon, required this.label, required this.value});
+  final IconData icon;
   final String label;
   final String value;
   @override
-  Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        child: Row(
-          children: [
-            Expanded(child: Text(label, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15))),
-            Text(value, style: TextStyle(color: context.colors.textSecondary)),
-          ],
-        ),
-      );
+  Widget build(BuildContext context) => _Row(icon: icon, label: label, trailing: Text(value, style: TextStyle(color: context.colors.textSecondary, fontSize: 15)));
 }

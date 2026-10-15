@@ -7,6 +7,7 @@ import 'package:appwrite/enums.dart' as enums;
 import 'package:crypto/crypto.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/gestures.dart' show TapGestureRecognizer;
@@ -58,6 +59,8 @@ class AccountScreen extends ConsumerStatefulWidget {
 class _AccountScreenState extends ConsumerState<AccountScreen> {
   bool _signUp = true;
   bool _busy = false;
+  bool _emailOpen = false;
+  late final Future<bool> _withApple = ref.read(authRepositoryProvider).hasAppleIdentity();
   final _name = TextEditingController();
   final _email = TextEditingController();
   final _password = TextEditingController();
@@ -214,28 +217,26 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
   /// Players who signed in with Apple confirm with Apple once more, so the server can revoke the
   /// game's access to their Apple ID.
   Future<void> _deleteAccount() async {
-    final isVip = ref.read(profileProvider).value?.isVip ?? false;
-    if (isVip && !kIsWeb) {
-      final manage = await showAppAlert(
-        context,
-        title: 'VIP is billed by Apple',
-        message: 'Deleting your account does not cancel your VIP subscription. Cancel it in your App Store subscriptions first, or Apple keeps billing it.',
-        confirmLabel: 'Manage subscription',
-        cancelLabel: 'Continue',
-      );
-      if (manage) {
-        await launchUrl(Uri.parse('https://apps.apple.com/account/subscriptions'), mode: LaunchMode.externalApplication);
-        return;
-      }
-      if (!mounted) return;
-    }
+    final isVip = (ref.read(profileProvider).value?.isVip ?? false) && !kIsWeb;
     final withApple = !kIsWeb && (Platform.isIOS || Platform.isMacOS) && await ref.read(authRepositoryProvider).hasAppleIdentity();
     if (!mounted) return;
+    // One confirmation that says everything: what goes, that it is final, and for VIP members
+    // that Apple keeps billing until they cancel there (with a link to do it now).
     final ok = await showAppAlert(
       context,
       title: 'Delete your account?',
-      message: 'Your profile, progress, coins and unlocks, purchase records, My Puzzles photos and friends are deleted on every device. This cannot be undone.'
-          '${withApple ? ' You will confirm with Apple once more.' : ''}',
+      message: 'Your progress, coins, purchases, unlocks, photos and friends are removed from every device. This cannot be undone.'
+          '${withApple ? ' Apple asks you to confirm once more.' : ''}'
+          '${isVip ? '\n\nVIP is billed by Apple and is not cancelled by this. Cancel it in your App Store subscriptions.' : ''}',
+      child: isVip
+          ? Pressable(
+              onTap: () => launchUrl(Uri.parse('https://apps.apple.com/account/subscriptions'), mode: LaunchMode.externalApplication),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 2),
+                child: Text('Manage subscription', style: TextStyle(color: context.accent, fontWeight: FontWeight.w600, fontSize: 15)),
+              ),
+            )
+          : null,
       confirmLabel: 'Delete account',
       cancelLabel: 'Keep account',
       destructive: true,
@@ -325,54 +326,75 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
       extendBodyBehindAppBar: true,
       appBar: GlassAppBar(
         title: const Text('Account'),
-        leading: Padding(padding: const EdgeInsets.only(left: 12), child: RoundIconButton(icon: CupertinoIcons.xmark, size: 38, onTap: () => context.pop())),
+        // Close (X) when presented as a sheet (Home, Settings, links), Back when pushed as a page
+        // in the Profile tab.
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 12),
+          child: RoundIconButton(icon: ModalRoute.of(context) is CupertinoSheetRoute ? CupertinoIcons.xmark : CupertinoIcons.back, size: 38, onTap: () => context.pop()),
+        ),
       ),
       body: ListView(
         physics: const BouncingScrollPhysics(),
         padding: EdgeInsets.fromLTRB(20, MediaQuery.paddingOf(context).top + kToolbarHeight + 8, 20, GlassTabBar.scrollEndPadding(context)),
         children: [
           if (!isGuest) ...[
+            // The Apple ID page idiom: who you are, centred, then grouped rows; actions are rows too.
+            const SizedBox(height: 8),
+            Center(child: AvatarCircle(avatarKey: profile?.avatar, size: 76, border: true)),
+            const SizedBox(height: 10),
+            Text(user?.name.isNotEmpty == true ? user!.name : 'Player', textAlign: TextAlign.center, maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.headlineSmall),
+            const SizedBox(height: 2),
+            Text(user?.email ?? '', textAlign: TextAlign.center, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontSize: 14)),
+            const SizedBox(height: 20),
             SoftCard(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      Icon(CupertinoIcons.checkmark_seal_fill, color: c.success),
-                      const SizedBox(width: 8),
-                      Text('Signed in', style: Theme.of(context).textTheme.titleLarge),
-                      if (profile?.isVip == true) ...[
-                        const Spacer(),
-                        Chip2(label: 'VIP member', icon: AppIcons.vip, color: c.accentTint, foreground: context.accent),
-                      ],
-                    ],
+                  FutureBuilder<bool>(
+                    future: _withApple,
+                    builder: (context, snap) => _AccountLine(label: 'Signed in with', value: snap.data == true ? 'Apple' : 'Email', icon: snap.data == true ? Icons.apple : AppIcons.mail),
                   ),
-                  const SizedBox(height: 8),
-                  Text(user?.name.isNotEmpty == true ? user!.name : 'Player', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
-                  Text(user?.email ?? '', style: TextStyle(color: c.textSecondary)),
-                  const SizedBox(height: 6),
-                  Text('Game ID: ${user?.$id ?? ''}', style: TextStyle(fontSize: 11.5, color: c.textTertiary, fontFamily: 'Menlo')),
-                  const SizedBox(height: 16),
-                  BigButton(
-                    label: 'Sign out',
-                    kind: ButtonKind.ghost,
-                    icon: CupertinoIcons.square_arrow_right,
+                  Divider(height: 1, color: c.stroke),
+                  if (profile?.isVip == true) ...[
+                    _AccountLine(label: 'VIP', value: 'Active', icon: AppIcons.vip),
+                    Divider(height: 1, color: c.stroke),
+                  ],
+                  _AccountLine(
+                    label: 'Game ID',
+                    value: user?.$id ?? '',
+                    icon: AppIcons.copy,
                     onTap: () async {
-                      final ok = await showAppAlert(
-                        context,
-                        title: 'Sign out?',
-                        message: 'You will continue as a guest. Progress saved to this account stays safe.',
-                        cancelLabel: 'Stay signed in',
-                        confirmLabel: 'Sign out',
-                        destructive: true,
-                      );
-                      if (!ok) return;
-                      await ref.read(authProvider.notifier).signOut();
-                      _afterAuth();
-                      if (context.mounted) context.pop();
+                      await Clipboard.setData(ClipboardData(text: user?.$id ?? ''));
+                      if (context.mounted) showToast(context, 'Game ID copied', icon: AppIcons.copy);
                     },
                   ),
                 ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            SoftCard(
+              padding: EdgeInsets.zero,
+              child: Pressable(
+                scale: 0.99,
+                onTap: () async {
+                  final ok = await showAppAlert(
+                    context,
+                    title: 'Sign out?',
+                    message: 'You will continue as a guest. Progress saved to this account stays safe.',
+                    cancelLabel: 'Stay signed in',
+                    confirmLabel: 'Sign out',
+                    destructive: true,
+                  );
+                  if (!ok) return;
+                  await ref.read(authProvider.notifier).signOut();
+                  _afterAuth();
+                  if (context.mounted) context.pop();
+                },
+                child: SizedBox(
+                  height: 50,
+                  width: double.infinity,
+                  child: Center(child: Text('Sign out', style: TextStyle(color: context.accent, fontWeight: FontWeight.w600, fontSize: 16))),
+                ),
               ),
             ),
           ] else ...[
@@ -389,7 +411,7 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
                       children: [
                         Text('Save your progress', style: Theme.of(context).textTheme.titleLarge),
                         const SizedBox(height: 4),
-                        Text('You are playing as a guest. Create a free account to keep coins, stars and puzzles on every device. Everything you have earned comes with you.', style: TextStyle(color: c.textSecondary, height: 1.4, fontSize: 13.5)),
+                        Text('Create a free account to keep your coins, stars and puzzles on every device.', style: TextStyle(color: c.textSecondary, height: 1.4, fontSize: 13.5)),
                       ],
                     ),
                   ),
@@ -399,16 +421,21 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
             if (_appleAvailable) ...[
               const SizedBox(height: 16),
               _AppleButton(onTap: _busy ? null : _apple),
-              const SizedBox(height: 18),
-              Row(
-                children: [
-                  Expanded(child: Divider(color: c.stroke)),
-                  Padding(padding: const EdgeInsets.symmetric(horizontal: 12), child: Text('or with email', style: TextStyle(color: c.textTertiary, fontWeight: FontWeight.w500, fontSize: 12))),
-                  Expanded(child: Divider(color: c.stroke)),
-                ],
-              ),
+              const SizedBox(height: 10),
+              // Email is the second way in: one quiet button until the player picks it, so the
+              // sheet opens on two clear choices instead of a form.
+              if (!_emailOpen)
+                BigButton(
+                  key: const ValueKey('account-email-open'),
+                  label: 'Continue with email',
+                  icon: AppIcons.mail,
+                  kind: ButtonKind.ghost,
+                  height: 50,
+                  onTap: () => setState(() => _emailOpen = true),
+                ),
             ] else
               const SizedBox(height: 16),
+            if (_emailOpen || !_appleAvailable) ...[
             const SizedBox(height: 14),
             CupertinoSlidingSegmentedControl<bool>(
               groupValue: _signUp,
@@ -434,13 +461,15 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
             ],
             const SizedBox(height: 16),
             BigButton(label: _signUp ? 'Create account' : 'Sign in', loading: _busy, onTap: _submit),
+            ],
             const SizedBox(height: 12),
             Center(
               child: Text.rich(
                 TextSpan(
-                  style: TextStyle(fontSize: 11.5, color: c.textTertiary),
+                  style: TextStyle(fontSize: 12, height: 1.45, color: c.textTertiary),
                   children: [
-                    const TextSpan(text: 'By continuing you agree to the '),
+                    // Two balanced lines instead of a lone "policy." on the second.
+                    const TextSpan(text: 'By continuing you agree to the\n'),
                     TextSpan(text: 'Terms of use', recognizer: _termsTap, style: TextStyle(color: context.accent, fontWeight: FontWeight.w600)),
                     const TextSpan(text: ' and the '),
                     TextSpan(text: 'Privacy policy', recognizer: _privacyTap, style: TextStyle(color: context.accent, fontWeight: FontWeight.w600)),
@@ -454,6 +483,36 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
           ],
           _deleteButton(context),
         ],
+      ),
+    );
+  }
+}
+
+/// "Label ............ value [icon]": one fact about the signed-in account; tappable when [onTap] is set.
+class _AccountLine extends StatelessWidget {
+  const _AccountLine({required this.label, required this.value, required this.icon, this.onTap});
+  final String label;
+  final String value;
+  final IconData icon;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return Pressable(
+      onTap: onTap,
+      scale: 0.99,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        child: Row(
+          children: [
+            Text(label, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
+            const SizedBox(width: 12),
+            Expanded(child: Text(value, textAlign: TextAlign.right, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 15, color: c.textSecondary))),
+            const SizedBox(width: 8),
+            Icon(icon, size: 17, color: onTap == null ? c.textTertiary : context.accent),
+          ],
+        ),
       ),
     );
   }
@@ -479,9 +538,10 @@ class _AppleButton extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.apple, color: fg, size: 24),
-              const SizedBox(width: 8),
-              Text('Continue with Apple', style: TextStyle(color: fg, fontWeight: FontWeight.w600, fontSize: 15)),
+              // Apple's proportions: the title is about 40% of the button height, the logo matches it.
+              Icon(Icons.apple, color: fg, size: 22),
+              const SizedBox(width: 6),
+              Text('Continue with Apple', style: TextStyle(color: fg, fontWeight: FontWeight.w500, fontSize: 19, letterSpacing: -0.3)),
             ],
           ),
         ),

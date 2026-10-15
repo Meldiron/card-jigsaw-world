@@ -54,7 +54,7 @@ void main() {
     GoRouter.of(tester.element(find.text('Social').last)).push('/profile/my-puzzles');
     await settle(tester, 5000);
     expect(find.text('Add photo'), findsOneWidget);
-    expect(find.textContaining('0 of 5 photos'), findsOneWidget);
+    expect(find.textContaining('5 photos free'), findsOneWidget);
     await binding.takeScreenshot('41c_my_puzzles');
 
     // Private photos: five uploads (the free limit) must still show for their owner, who loads
@@ -70,7 +70,7 @@ void main() {
       container.invalidate(myPuzzlesProvider);
       container.invalidate(myPuzzleCountProvider);
       await settle(tester, 8000);
-      expect(find.textContaining('5 of 5 photos'), findsOneWidget);
+      expect(find.textContaining('All 5 free photos used'), findsOneWidget);
       await binding.takeScreenshot('41d_my_puzzles_private');
       await tapText(tester, 'Add photo', ms: 2500);
       expect(find.text('Photo limit reached'), findsOneWidget);

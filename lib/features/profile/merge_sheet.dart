@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -28,6 +27,37 @@ class MergeSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
+    final n = NumberFormat.decimalPattern();
+    String days(int v) => v == 1 ? '1 day' : '${n.format(v)} days';
+    // What the choice decides, side by side; the larger number of a row is in full ink.
+    final rows = <(Widget, String, int, int, String Function(int))>[
+      (Icon(AppIcons.level, size: 15, color: c.textTertiary), 'Level', device.level, account.level, (v) => '$v'),
+      (currencyIcon(Currency.coins, size: 15), 'Coins', device.coins, account.coins, n.format),
+      (currencyIcon(Currency.tickets, size: 15), 'Tickets', device.tickets, account.tickets, n.format),
+      (currencyIcon(Currency.hints, size: 15), 'Hints', device.hints, account.hints, n.format),
+      (Icon(AppIcons.streak, size: 15, color: c.textTertiary), 'Streak', device.streak, account.streak, days),
+    ];
+    const figures = [FontFeature.tabularFigures()];
+    Widget value(String text, bool more) => Expanded(
+          flex: 3,
+          child: Text(
+            text,
+            textAlign: TextAlign.right,
+            style: TextStyle(fontSize: 14, fontWeight: more ? FontWeight.w700 : FontWeight.w500, color: more ? c.textPrimary : c.textSecondary, fontFeatures: figures),
+          ),
+        );
+    Widget head(SaveSnapshot s, String label) => Expanded(
+          flex: 3,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              AvatarCircle(avatarKey: s.avatar, size: 30),
+              const SizedBox(height: 6),
+              Text(label, maxLines: 1, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+              Text(relativeTime(s.lastPlayed), style: TextStyle(fontSize: 11.5, color: c.textSecondary), maxLines: 1, overflow: TextOverflow.ellipsis),
+            ],
+          ),
+        );
     return PopScope(
       canPop: false,
       child: Padding(
@@ -39,82 +69,56 @@ class MergeSheet extends StatelessWidget {
             Text('Two saves found', style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 6),
             Text(
-              'Pictures, badges and unlocks from both are already combined. Choose whose coins, level and streak to keep.',
+              'Pictures, stars and badges from both are already combined. Choose which coins, level and streak to keep.',
               style: TextStyle(color: c.textSecondary, fontSize: 13.5, height: 1.4),
             ),
             const SizedBox(height: 16),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(child: _SaveCard(label: 'This device', save: device)),
-                const SizedBox(width: 12),
-                Expanded(child: _SaveCard(label: 'Your account', save: account)),
-              ],
+            SoftCard(
+              padding: const EdgeInsets.fromLTRB(14, 12, 14, 8),
+              child: Column(
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      const Expanded(flex: 4, child: SizedBox()),
+                      head(device, 'This device'),
+                      const SizedBox(width: 12),
+                      head(account, 'Account'),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  for (final r in rows) ...[
+                    Divider(height: 1, color: c.stroke),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 9),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 4,
+                            child: Row(
+                              children: [
+                                SizedBox(width: 18, child: Center(child: r.$1)),
+                                const SizedBox(width: 8),
+                                Flexible(child: Text(r.$2, style: TextStyle(fontSize: 14, color: c.textSecondary), maxLines: 1, overflow: TextOverflow.ellipsis)),
+                              ],
+                            ),
+                          ),
+                          value(r.$5(r.$3), r.$3 > r.$4),
+                          const SizedBox(width: 12),
+                          value(r.$5(r.$4), r.$4 > r.$3),
+                        ],
+                      ),
+                    ),
+                  ],
+                ],
+              ),
             ),
             const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(child: BigButton(label: "Keep this device's", kind: ButtonKind.secondary, onTap: () => Navigator.of(context).pop(MergeChoice.guest))),
-                const SizedBox(width: 10),
-                Expanded(child: BigButton(label: "Keep account's", onTap: () => Navigator.of(context).pop(MergeChoice.account))),
-              ],
-            ),
+            BigButton(label: "Keep my account's save", onTap: () => Navigator.of(context).pop(MergeChoice.account)),
+            const SizedBox(height: 10),
+            BigButton(label: "Keep this device's save", kind: ButtonKind.secondary, onTap: () => Navigator.of(context).pop(MergeChoice.guest)),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _SaveCard extends StatelessWidget {
-  const _SaveCard({required this.label, required this.save});
-  final String label;
-  final SaveSnapshot save;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.colors;
-    final n = NumberFormat.decimalPattern();
-    Widget stat(Widget icon, String name, String value) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4),
-          child: Row(
-            children: [
-              SizedBox(width: 18, child: Center(child: icon)),
-              const SizedBox(width: 6),
-              Expanded(child: Text(name, style: TextStyle(fontSize: 12.5, color: c.textSecondary), maxLines: 1, overflow: TextOverflow.ellipsis)),
-              const SizedBox(width: 6),
-              Text(value, style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: c.textPrimary)),
-            ],
-          ),
-        );
-    Widget mono(IconData i) => Icon(i, size: 15, color: c.textTertiary);
-    return Container(
-      padding: const EdgeInsets.fromLTRB(12, 12, 12, 10),
-      decoration: BoxDecoration(color: c.card, borderRadius: BorderRadius.circular(Radii.lg), border: Border.all(color: c.stroke)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(label.toUpperCase(), style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w700, letterSpacing: 0.6, color: c.textTertiary)),
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              AvatarCircle(avatarKey: save.avatar, size: 34),
-              const SizedBox(width: 8),
-              Expanded(child: Text(save.displayName, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14), maxLines: 1, overflow: TextOverflow.ellipsis)),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Divider(height: 1, color: c.stroke),
-          const SizedBox(height: 6),
-          stat(mono(AppIcons.puzzle), 'Solved', n.format(save.solved)),
-          stat(Icon(AppIcons.star, size: 15, color: Brand.star), 'Stars', n.format(save.stars)),
-          stat(mono(AppIcons.level), 'Level', '${save.level}'),
-          stat(mono(AppIcons.xp), 'XP', n.format(save.xp)),
-          stat(currencyIcon(Currency.coins, size: 15), 'Coins', n.format(save.coins)),
-          stat(currencyIcon(Currency.tickets, size: 15), 'Tickets', n.format(save.tickets)),
-          stat(currencyIcon(Currency.hints, size: 15), 'Hints', n.format(save.hints)),
-          stat(mono(CupertinoIcons.time), 'Played', relativeTime(save.lastPlayed)),
-        ],
       ),
     );
   }

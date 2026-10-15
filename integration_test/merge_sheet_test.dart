@@ -42,8 +42,8 @@ void main() {
       showMergeSheet(context, device: device, account: account);
       await tester.pumpAndSettle();
       expect(find.text('Two saves found'), findsOneWidget);
-      expect(find.text("Keep this device's"), findsOneWidget);
-      expect(find.text("Keep account's"), findsOneWidget);
+      expect(find.text("Keep this device's save"), findsOneWidget);
+      expect(find.text("Keep my account's save"), findsOneWidget);
       await binding.convertFlutterSurfaceToImage();
       await tester.pumpAndSettle();
       await binding.takeScreenshot('merge_sheet_${dark ? 'dark' : 'light'}');
