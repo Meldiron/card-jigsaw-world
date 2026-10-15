@@ -85,4 +85,17 @@ final hooks = <String, Hook>{
         device: SaveSnapshot(userId: 'dqa-player', profile: {'coins': 1240, 'tickets': 4, 'hints': 2, 'xp': 2200, 'puzzlesCompleted': 17, 'streak': 3}, progress: const []),
         account: SaveSnapshot(userId: 'acc', profile: {'coins': 5400, 'tickets': 11, 'hints': 6, 'xp': 9100, 'puzzlesCompleted': 88, 'streak': 12}, progress: const [], updatedAt: DateTime.now().subtract(const Duration(days: 2))),
       ),
+  // Types into the focused text field (else the first one on screen): {"hook": "type", "args": {"text": "owl"}}.
+  'type': (ctx, c, a) async {
+    final fields = <EditableTextState>[];
+    void visit(Element e) {
+      if (e is StatefulElement && e.state is EditableTextState) fields.add(e.state as EditableTextState);
+      e.visitChildren(visit);
+    }
+
+    WidgetsBinding.instance.rootElement?.visitChildren(visit);
+    if (fields.isEmpty) throw StateError('type: no text field');
+    final field = fields.firstWhere((f) => f.widget.focusNode.hasFocus, orElse: () => fields.first);
+    field.widget.controller.text = a['text'] as String? ?? '';
+  },
 };
