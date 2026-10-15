@@ -503,8 +503,12 @@ class _DailyHero extends StatelessWidget {
                                 Icon(i < stars ? AppIcons.star : AppIcons.starOutline, size: 14,
                                     color: i < stars ? Brand.star : Colors.white.withValues(alpha: 0.6)),
                               const SizedBox(width: 8),
-                              Text(stars >= 3 ? 'Solved' : 'Solved · replay for 3 stars',
-                                  style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: TypeSize.footnote, fontWeight: FontWeight.w500)),
+                              Flexible(
+                                child: Text(stars >= 3 ? 'Solved' : 'Solved · replay for 3 stars',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: TypeSize.footnote, fontWeight: FontWeight.w500)),
+                              ),
                             ],
                           )
                         else
@@ -512,8 +516,12 @@ class _DailyHero extends StatelessWidget {
                             children: [
                               Amount(currency: Currency.coins, value: 50, prefix: '+', size: 14, fontSize: TypeSize.footnote, color: Colors.white, weight: FontWeight.w600),
                               const SizedBox(width: 6),
-                              Text('bonus today',
-                                  style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: TypeSize.footnote, fontWeight: FontWeight.w500)),
+                              Flexible(
+                                child: Text('bonus today',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: TypeSize.footnote, fontWeight: FontWeight.w500)),
+                              ),
                             ],
                           ),
                       ],
@@ -592,7 +600,8 @@ class _QuickTile extends StatelessWidget {
     return Pressable(
       onTap: onTap,
       child: Container(
-        height: 112,
+        // 167: the tiles grow with Larger Text, both by the same amount, so their figures still line up.
+        height: MediaQuery.textScalerOf(context).scale(112),
         padding: Insets.cardCompact,
         decoration: BoxDecoration(
           color: c.card,
@@ -617,10 +626,11 @@ class _QuickTile extends StatelessWidget {
               ],
             ),
             const Spacer(),
-            value,
+            // A long figure shrinks a little instead of running past the tile's edge.
+            FittedBox(fit: BoxFit.scaleDown, alignment: Alignment.centerLeft, child: value),
             const SizedBox(height: 6),
             // Same height for a price line and a progress bar, so both tiles' figures line up.
-            SizedBox(height: 18, child: Align(alignment: Alignment.centerLeft, child: footer)),
+            SizedBox(height: MediaQuery.textScalerOf(context).scale(18), child: Align(alignment: Alignment.centerLeft, child: footer)),
           ],
         ),
       ),
@@ -724,10 +734,10 @@ class _StreakCard extends ConsumerWidget {
                           height: 22,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: i < filled ? context.accent : Colors.transparent,
-                            border: Border.all(color: i < filled ? context.accent : (i == nextIdx ? context.accent : c.stroke), width: i == nextIdx && i >= filled ? 1.5 : 1),
+                            color: i < filled ? context.accentFill : Colors.transparent,
+                            border: Border.all(color: i < filled ? context.accentFill : (i == nextIdx ? context.accent : c.stroke), width: i == nextIdx && i >= filled ? 1.5 : 1),
                           ),
-                          child: i < filled ? const Icon(AppIcons.checkmark, size: 12, color: Colors.white) : null,
+                          child: i < filled ? Icon(AppIcons.checkmark, size: 12, color: context.onAccent) : null,
                         ),
                         const SizedBox(height: 4),
                         Text('${i + 1}', style: TextStyle(fontSize: TypeSize.micro, fontWeight: FontWeight.w600, color: c.textTertiary)),
@@ -1122,8 +1132,8 @@ class _ResumeCard extends StatelessWidget {
           Container(
             width: 40,
             height: 40,
-            decoration: BoxDecoration(color: context.accent, shape: BoxShape.circle),
-            child: const Icon(AppIcons.playFill, color: Colors.white, size: 18),
+            decoration: BoxDecoration(color: context.accentFill, shape: BoxShape.circle),
+            child: Icon(AppIcons.playFill, color: context.onAccent, size: 18),
           ),
         ],
       ),
@@ -1183,8 +1193,8 @@ class _QuickPlayCard extends ConsumerWidget {
           Container(
             width: 40,
             height: 40,
-            decoration: BoxDecoration(color: pool == null ? c.stroke : context.accent, shape: BoxShape.circle),
-            child: Icon(AppIcons.playFill, color: pool == null ? c.textTertiary : Colors.white, size: 18),
+            decoration: BoxDecoration(color: pool == null ? c.stroke : context.accentFill, shape: BoxShape.circle),
+            child: Icon(AppIcons.playFill, color: pool == null ? c.textTertiary : context.onAccent, size: 18),
           ),
         ],
       ),

@@ -437,15 +437,11 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
               const SizedBox(height: 16),
             if (_emailOpen || !_appleAvailable) ...[
             const SizedBox(height: 14),
-            CupertinoSlidingSegmentedControl<bool>(
-              groupValue: _signUp,
-              backgroundColor: c.boardBackground,
-              thumbColor: c.card,
-              children: const {
-                true: Padding(padding: EdgeInsets.symmetric(vertical: 6), child: Text('Create account', style: TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.footnote))),
-                false: Padding(padding: EdgeInsets.symmetric(vertical: 6), child: Text('Sign in', style: TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.footnote))),
-              },
-              onValueChanged: (v) => setState(() => _signUp = v ?? true),
+            AppSegmentedControl<bool>(
+              value: _signUp,
+              segments: const {true: 'Create account', false: 'Sign in'},
+              segmentPadding: const EdgeInsets.symmetric(vertical: 6),
+              onChanged: (v) => setState(() => _signUp = v),
             ),
             const SizedBox(height: 14),
             if (_signUp) ...[

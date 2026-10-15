@@ -10,6 +10,13 @@ class Brand {
   static const accent = Color(0xFF2F4FBF);
   static const accentDark = Color(0xFF7C9AFF);
 
+  /// The accent as a fill under white text in dark mode (buttons, selected
+  /// chips and tiles, play discs). [accentDark] is tuned for text and icons on
+  /// the dark canvas; as a fill it leaves white labels at 2.6:1. This deeper
+  /// cobalt keeps white labels at 5.1:1 and still stands off the canvas
+  /// (3.8:1). Light mode fills with [accent] (white 7:1).
+  static const accentFillDark = Color(0xFF4065DD);
+
   /// Semantic colours. Used small (icons, badges), never as large fills.
   static const coin = Color(0xFFE0A200);
   static const coinDeep = Color(0xFFB97800);
@@ -172,7 +179,9 @@ class AppColors extends ThemeExtension<AppColors> {
     stroke: Color(0xFF2A2A33),
     textPrimary: Color(0xFFF2F2F5),
     textSecondary: Color(0xFFA6A6B4),
-    textTertiary: Color(0xFF6E6E7C),
+    // 4.9:1 on cards and 5.4:1 on the canvas: tertiary text carries real
+    // information at 10-12 pt (counts, costs, captions, legal lines).
+    textTertiary: Color(0xFF86868F),
     boardBackground: Color(0xFF15151A),
     cardFace: Color(0xFF2A2A33),
     shadow: Color(0x55000000),
@@ -181,6 +190,30 @@ class AppColors extends ThemeExtension<AppColors> {
     warning: Color(0xFFF2B045),
     warningTint: Color(0xFF261E10),
     accentTint: Color(0xFF1C2440),
+  );
+
+  /// Dark mode one level up: the colours for content on a raised surface
+  /// (content sheets, alerts, the full-height Store, Wheel and Account
+  /// sheets). In dark mode a surface shows its height by being lighter, as
+  /// iOS's elevated colours do; with the page colours, cards, round buttons,
+  /// chips and tonal buttons inside a sheet were darker than the sheet and
+  /// looked sunk into it. Text and semantic colours are unchanged.
+  static const darkElevated = AppColors(
+    canvas: Color(0xFF1C1C22),
+    card: Color(0xFF28282F),
+    cardElevated: Color(0xFF303038),
+    stroke: Color(0xFF3A3A44),
+    textPrimary: Color(0xFFF2F2F5),
+    textSecondary: Color(0xFFA6A6B4),
+    textTertiary: Color(0xFF92929E), // 4.8:1 on raised cards (145)
+    boardBackground: Color(0xFF222228),
+    cardFace: Color(0xFF34343D),
+    shadow: Color(0x55000000),
+    success: Color(0xFF4ADE80),
+    danger: Color(0xFFF87171),
+    warning: Color(0xFFF2B045),
+    warningTint: Color(0xFF2E2414),
+    accentTint: Color(0xFF263463),
   );
 
   @override
@@ -213,4 +246,12 @@ extension AppColorsX on BuildContext {
   AppColors get colors => Theme.of(this).extension<AppColors>()!;
   bool get isDark => Theme.of(this).brightness == Brightness.dark;
   Color get accent => isDark ? Brand.accentDark : Brand.accent;
+
+  /// The accent as a fill with white content on top: buttons, selected chips
+  /// and tiles, play discs, the off-screen pointer. Use [accent] for text,
+  /// icons, outlines and progress.
+  Color get accentFill => isDark ? Brand.accentFillDark : Brand.accent;
+
+  /// Text and icons on an [accentFill] surface.
+  Color get onAccent => Colors.white;
 }

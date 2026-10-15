@@ -612,7 +612,7 @@ class _FilterChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    final fg = selected ? Colors.white : c.textSecondary;
+    final fg = selected ? context.onAccent : c.textSecondary;
     return Pressable(
       onTap: onTap,
       child: TapTarget(
@@ -622,9 +622,9 @@ class _FilterChip extends StatelessWidget {
         padding: EdgeInsets.only(left: icon == null ? 14 : 11, right: 14),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: selected ? context.accent : c.card,
+          color: selected ? context.accentFill : c.card,
           borderRadius: BorderRadius.circular(999),
-          border: Border.all(color: selected ? context.accent : c.stroke),
+          border: Border.all(color: selected ? context.accentFill : c.stroke),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

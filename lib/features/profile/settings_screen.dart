@@ -448,13 +448,7 @@ class _SegRow<T extends Object> extends StatelessWidget {
   Widget build(BuildContext context) => _Row(
         icon: icon,
         label: label,
-        trailing: CupertinoSlidingSegmentedControl<T>(
-          groupValue: value,
-          backgroundColor: context.colors.boardBackground,
-          thumbColor: context.colors.card,
-          children: {for (final e in options.entries) e.key: Padding(padding: const EdgeInsets.symmetric(horizontal: 8), child: Text(e.value, style: const TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600)))},
-          onValueChanged: (v) => v == null ? null : onChanged(v),
-        ),
+        trailing: AppSegmentedControl<T>(value: value, segments: options, onChanged: onChanged),
       );
 }
 

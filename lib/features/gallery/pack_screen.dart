@@ -727,7 +727,7 @@ class _PuzzleTile extends StatelessWidget {
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     // Today is marked in the accent only (badge and outline agree).
-                    color: puzzle.isToday ? context.accent : (dateLocked ? c.card : Colors.black.withValues(alpha: 0.5)),
+                    color: puzzle.isToday ? context.accentFill : (dateLocked ? c.card : Colors.black.withValues(alpha: 0.5)),
                     shape: BoxShape.circle,
                     border: dateLocked ? Border.all(color: c.stroke) : null,
                   ),

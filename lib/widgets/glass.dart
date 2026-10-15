@@ -22,9 +22,13 @@ class GlassSurface extends StatelessWidget {
     this.sigma = 24,
     this.borderRadius,
     this.hairline,
+    this.tint,
   });
 
   final Widget child;
+
+  /// Surface colour under the blur; [tintColor] by default.
+  final Color? tint;
 
   /// When false the surface is fully transparent (nothing drawn, no blur)
   /// so a bar sitting over nothing stays invisible, like iOS bars do at the
@@ -61,7 +65,7 @@ class GlassSurface extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tint = tintColor(context);
+    final tint = this.tint ?? tintColor(context);
     final alpha = opacity ?? defaultOpacity(context);
     return TweenAnimationBuilder<double>(
       tween: Tween(end: visible ? 1 : 0),
@@ -89,6 +93,30 @@ class GlassSurface extends StatelessWidget {
   static Border _scaledBorder(Border b, double t) {
     BorderSide s(BorderSide side) => side == BorderSide.none ? side : side.copyWith(color: side.color.withValues(alpha: side.color.a * t));
     return Border(top: s(b.top), bottom: s(b.bottom), left: s(b.left), right: s(b.right));
+  }
+}
+
+/// Gives [child] the colours of a raised surface in dark mode
+/// ([AppColors.darkElevated]): content sheets, alerts and the full-height
+/// sheets wrap their content in it, so cards and buttons inside sit above the
+/// surface. With [background] the Scaffold background follows too (the
+/// full-height sheets). Light mode is unchanged.
+class Elevated extends StatelessWidget {
+  const Elevated({super.key, required this.child, this.background = false});
+  final Widget child;
+  final bool background;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!context.isDark) return child;
+    final theme = Theme.of(context);
+    return Theme(
+      data: theme.copyWith(
+        extensions: const [AppColors.darkElevated],
+        scaffoldBackgroundColor: background ? AppColors.darkElevated.canvas : theme.scaffoldBackgroundColor,
+      ),
+      child: child,
+    );
   }
 }
 
@@ -429,7 +457,7 @@ class GlassSheet extends StatelessWidget {
               const SizedBox(height: 14),
             // Scrolls only when the content does not fit; otherwise a drag
             // still moves the whole sheet (drag to dismiss).
-            Flexible(child: _SheetScroll(child: child)),
+            Flexible(child: _SheetScroll(child: Elevated(child: child))),
           ],
         ),
       ),

@@ -179,7 +179,8 @@ class BigButton extends StatelessWidget {
       case ButtonKind.primary:
       case ButtonKind.coral:
       case ButtonKind.teal:
-        bg = context.accent;
+        bg = context.accentFill;
+        fg = context.onAccent;
       case ButtonKind.gold:
         bg = Brand.coin;
         fg = const Color(0xFF2A1F00);
@@ -200,6 +201,17 @@ class BigButton extends StatelessWidget {
         bg = Colors.transparent;
         fg = Colors.white;
         border = Border.all(color: Colors.white.withValues(alpha: 0.45));
+    }
+    // Disabled (and not busy): every kind turns into the same neutral slab
+    // with a tertiary label, the iOS disabled button. Fading the kind's own
+    // colour instead left a dimmed cobalt that read as an enabled tonal
+    // button in dark mode, and a brown "gold".
+    final inactive = disabled && !loading;
+    if (inactive) {
+      final onDark = context.isDark || kind == ButtonKind.ghostLight;
+      bg = onDark ? Colors.white.withValues(alpha: 0.08) : Colors.black.withValues(alpha: 0.05);
+      fg = kind == ButtonKind.ghostLight ? Colors.white.withValues(alpha: 0.45) : c.textTertiary;
+      border = null;
     }
     // On a filled button a ticket mark (in a cost label or a trailing
     // [Amount]) is drawn in the label colour, never teal on cobalt.
@@ -227,19 +239,26 @@ class BigButton extends StatelessWidget {
       // Compact buttons (Claim, Play: 34-36 pt) keep their look and get a 44 pt touch box.
       child: TapTarget(
         minSize: height < 44 ? 44 : 0,
-        child: Opacity(
-        opacity: disabled ? 0.45 : 1,
         child: Container(
           height: height,
           padding: EdgeInsets.symmetric(horizontal: expand ? 16 : 20),
           decoration: BoxDecoration(color: bg, border: border, borderRadius: BorderRadius.circular(Radii.md)),
-          child: filled ? CurrencyInk(color: fg, child: content) : content,
+          // Gold coins and amber hints go grey with the label when disabled.
+          child: inactive
+              ? ColorFiltered(colorFilter: _greyscale, child: Opacity(opacity: 0.7, child: CurrencyInk(color: fg, child: content)))
+              : (filled ? CurrencyInk(color: fg, child: content) : content),
         ),
-      ),
       ),
     );
   }
 }
+
+const _greyscale = ColorFilter.matrix(<double>[
+  0.2126, 0.7152, 0.0722, 0, 0,
+  0.2126, 0.7152, 0.0722, 0, 0,
+  0.2126, 0.7152, 0.0722, 0, 0,
+  0, 0, 0, 1, 0,
+]);
 
 /// "Label [currency mark] amount" for anything that costs or pays coins,
 /// tickets or hints. Used inside [BigButton.cost]; also usable on its own in
@@ -663,6 +682,42 @@ class ProgressBar extends StatelessWidget {
   }
 }
 
+/// The app's segmented control (Settings > Theme, Social tabs, the account
+/// form). One look in both themes: a quiet track and a thumb that stands
+/// clearly off it, the selected label in the primary text colour and the
+/// others in secondary. In dark mode the track is a white wash, so it sits on
+/// cards, sheets and the canvas alike, and the thumb is a lighter grey.
+class AppSegmentedControl<T extends Object> extends StatelessWidget {
+  const AppSegmentedControl({super.key, required this.value, required this.segments, required this.onChanged, this.segmentPadding = const EdgeInsets.symmetric(horizontal: 8, vertical: 2)});
+  final T value;
+  final Map<T, String> segments;
+  final ValueChanged<T> onChanged;
+  final EdgeInsetsGeometry segmentPadding;
+
+  static Color trackColor(BuildContext context) => context.isDark ? Colors.white.withValues(alpha: 0.08) : context.colors.boardBackground;
+  static Color thumbColor(BuildContext context) => context.isDark ? const Color(0xFF55555F) : Colors.white;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return CupertinoSlidingSegmentedControl<T>(
+      groupValue: value,
+      backgroundColor: trackColor(context),
+      thumbColor: thumbColor(context),
+      children: {
+        for (final e in segments.entries)
+          e.key: Padding(
+            padding: segmentPadding,
+            child: Text(e.value, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: e.key == value ? c.textPrimary : c.textSecondary)),
+          ),
+      },
+      onValueChanged: (v) {
+        if (v != null) onChanged(v);
+      },
+    );
+  }
+}
+
 /// Small label chip (category, status). On a photo ([onImage]) it is a
 /// [PhotoChip]: the one style for anything drawn over a picture.
 class Chip2 extends StatelessWidget {
@@ -786,7 +841,8 @@ Future<T?> showAppSheet<T>(BuildContext context, {required WidgetBuilder builder
     showDragHandle: false,
     shape: const RoundedRectangleBorder(),
     clipBehavior: Clip.none,
-    barrierColor: Colors.black.withValues(alpha: 0.32),
+    // The dim has to be stronger in dark mode to separate the sheet from a dark page.
+    barrierColor: Colors.black.withValues(alpha: context.isDark ? 0.5 : 0.32),
     builder: (ctx) => GlassSheet(
       grabber: dismissible,
       bottomInset: MediaQuery.viewInsetsOf(ctx).bottom,
@@ -1040,7 +1096,7 @@ Future<bool> showAppAlert(
     useRootNavigator: true,
     barrierDismissible: cancelLabel != null,
     barrierLabel: 'Dismiss',
-    barrierColor: Colors.black.withValues(alpha: 0.28),
+    barrierColor: Colors.black.withValues(alpha: context.isDark ? 0.5 : 0.28),
     transitionDuration: const Duration(milliseconds: 240),
     transitionBuilder: (ctx, anim, _, widget) {
       final curved = CurvedAnimation(parent: anim, curve: Curves.easeOutCubic, reverseCurve: Curves.easeIn);
@@ -1145,7 +1201,9 @@ class _AppAlert extends StatelessWidget {
                 ),
                 child: GlassSurface(
                   sigma: 36,
-                  opacity: isDark ? 0.78 : 0.86,
+                  // Dark alerts sit one level above sheets: a lighter tint.
+                  tint: isDark ? AppColors.darkElevated.cardElevated : null,
+                  opacity: isDark ? 0.9 : 0.86,
                   borderRadius: BorderRadius.circular(radius),
                   hairline: Border.all(color: isDark ? Colors.white.withValues(alpha: 0.14) : Colors.white.withValues(alpha: 0.8), width: 0.5),
                   child: Column(

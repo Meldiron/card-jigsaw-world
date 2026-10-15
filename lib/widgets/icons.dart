@@ -552,6 +552,10 @@ class AvatarCircle extends StatelessWidget {
     final parts = AppIcons.splitAvatarKey(avatarKey);
     final a = AppIcons.avatar(parts.family);
     final t = tier ?? parts.tier;
+    // Dark mode: discs darker than 30% lightness (VIP, Night Owl, Snowflake,
+    // Rocket, Book, Anchor) are lifted to it, keeping their hue, so they do
+    // not melt into dark cards. White icons stay above 7:1.
+    final color = context.isDark ? _lift(a.color) : a.color;
     final ring = switch (t) { <= 1 => 0.0, 2 => size * 0.06, _ => size * 0.08 };
     final disc = Container(
       width: size,
@@ -559,14 +563,14 @@ class AvatarCircle extends StatelessWidget {
       alignment: Alignment.center,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: a.color,
+        color: color,
         border: border && t <= 1 ? Border.all(color: context.colors.card, width: 3) : null,
       ),
       child: Container(
         width: size * 0.78,
         height: size * 0.78,
         alignment: Alignment.center,
-        decoration: BoxDecoration(shape: BoxShape.circle, color: t >= 2 ? Color.lerp(a.color, Colors.black, 0.22) : a.color),
+        decoration: BoxDecoration(shape: BoxShape.circle, color: t >= 2 ? Color.lerp(color, Colors.black, 0.22) : color),
         child: Icon(a.icon, size: size * 0.5, color: Colors.white),
       ),
     );
@@ -595,6 +599,11 @@ class AvatarCircle extends StatelessWidget {
       ),
     );
   }
+}
+
+Color _lift(Color c) {
+  final hsl = HSLColor.fromColor(c);
+  return hsl.lightness >= 0.30 ? c : hsl.withLightness(0.30).toColor();
 }
 
 class _TierRingPainter extends CustomPainter {

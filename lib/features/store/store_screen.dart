@@ -999,8 +999,8 @@ class _ProductRow extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                 alignment: Alignment.center,
                 // The best deal of the section is the one filled price: the value speaks, no label needed.
-                decoration: BoxDecoration(color: best ? context.accent : c.accentTint, borderRadius: BorderRadius.circular(999)),
-                child: Text(price, style: TextStyle(color: best ? Colors.white : context.accent, fontWeight: FontWeight.w700, fontSize: TypeSize.body)),
+                decoration: BoxDecoration(color: best ? context.accentFill : c.accentTint, borderRadius: BorderRadius.circular(999)),
+                child: Text(price, style: TextStyle(color: best ? context.onAccent : context.accent, fontWeight: FontWeight.w700, fontSize: TypeSize.body)),
               )
             else
               Icon(AppIcons.devicePhonePortrait, size: 18, color: c.textTertiary),

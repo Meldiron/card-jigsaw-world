@@ -90,7 +90,6 @@ class SocialScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final c = context.colors;
     final tab = ref.watch(socialTabProvider);
     return Scaffold(
       body: Column(
@@ -105,21 +104,11 @@ class SocialScreen extends ConsumerWidget {
                 // pattern): neither squeezes the other at any text size.
                 const PageTitle('Social'),
                 const SizedBox(height: 10),
-                CupertinoSlidingSegmentedControl<int>(
-                  groupValue: tab,
-                  backgroundColor: c.boardBackground,
-                  thumbColor: c.card,
-                  children: const {
-                    0: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Text('Leaderboard', style: TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.footnote)),
-                    ),
-                    1: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Text('Friends', style: TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.footnote)),
-                    ),
-                  },
-                  onValueChanged: (v) => ref.read(socialTabProvider.notifier).select(v ?? SocialTab.leaderboard),
+                AppSegmentedControl<int>(
+                  value: tab,
+                  segments: const {0: 'Leaderboard', 1: 'Friends'},
+                  segmentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                  onChanged: (v) => ref.read(socialTabProvider.notifier).select(v),
                 ),
               ],
             ),

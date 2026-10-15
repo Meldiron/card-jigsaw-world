@@ -88,7 +88,7 @@ Future<void> showUnlockIntro(BuildContext context, WidgetRef ref, Unlock u, {Voi
                   const SizedBox(width: 4),
                   Icon(AppIcons.xp, size: 16, color: ctx.accent),
                   const SizedBox(width: 8),
-                  Text(bonus[0].toUpperCase() + bonus.substring(1), style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: ctx.accent)),
+                  Flexible(child: Text(bonus[0].toUpperCase() + bonus.substring(1), textAlign: TextAlign.center, style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: ctx.accent))),
                 ],
               ),
             ),

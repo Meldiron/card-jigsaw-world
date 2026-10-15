@@ -294,9 +294,9 @@ class _Stop extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.colors;
     final accent = context.accent;
-    final fill = done ? accent : (today ? c.accentTint : c.card);
+    final fill = done ? context.accentFill : (today ? c.accentTint : c.card);
     final Widget mark = done
-        ? const Icon(AppIcons.checkmarkAlt, size: 18, color: Colors.white)
+        ? Icon(AppIcons.checkmarkAlt, size: 18, color: context.onAccent)
         : big
             ? Icon(AppIcons.crown, size: 18, color: today ? accent : accent.withValues(alpha: 0.8))
             : Text('$day', style: TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w700, color: today ? accent : c.textSecondary));

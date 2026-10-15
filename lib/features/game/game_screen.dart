@@ -1142,8 +1142,8 @@ class _PauseToggle extends StatelessWidget {
                 duration: const Duration(milliseconds: 160),
                 width: 52,
                 height: 52,
-                decoration: BoxDecoration(color: on ? context.accent : (context.isDark ? c.cardElevated : const Color(0xFFE6E6EB)), shape: BoxShape.circle),
-                child: Icon(icon, size: 23, color: on ? Colors.white : c.textSecondary),
+                decoration: BoxDecoration(color: on ? context.accentFill : (context.isDark ? c.cardElevated : const Color(0xFFE6E6EB)), shape: BoxShape.circle),
+                child: Icon(icon, size: 23, color: on ? context.onAccent : c.textSecondary),
               ),
               const SizedBox(height: 5),
               Text(label, style: const TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600)),
@@ -1556,12 +1556,13 @@ class _OverlayPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fg = primary ? context.onAccent : Colors.white;
     final row = Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, size: small ? 13 : 17, color: Colors.white),
+        Icon(icon, size: small ? 13 : 17, color: fg),
         SizedBox(width: small ? 5 : 7),
-        Text(label, style: TextStyle(color: Colors.white, fontWeight: small ? FontWeight.w600 : FontWeight.w700, fontSize: small ? TypeSize.caption : TypeSize.body)),
+        Text(label, style: TextStyle(color: fg, fontWeight: small ? FontWeight.w600 : FontWeight.w700, fontSize: small ? TypeSize.caption : TypeSize.body)),
       ],
     );
     final padding = small ? const EdgeInsets.symmetric(horizontal: 10, vertical: 6) : const EdgeInsets.symmetric(horizontal: 16, vertical: 10);
@@ -1570,7 +1571,7 @@ class _OverlayPill extends StatelessWidget {
       child: primary
           ? Container(
               padding: padding,
-              decoration: BoxDecoration(color: context.accent, borderRadius: BorderRadius.circular(Radii.pill)),
+              decoration: BoxDecoration(color: context.accentFill, borderRadius: BorderRadius.circular(Radii.pill)),
               child: row,
             )
           : Glass(dark: true, radius: Radii.pill, padding: padding, opacity: 0.45, child: row),

@@ -210,7 +210,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
             const SizedBox(height: 18),
             BigButton(
               label: 'Unlock for',
-              trailing: Amount(currency: Currency.coins, value: cost, size: 18, color: Colors.white),
+              trailing: Amount(currency: Currency.coins, value: cost, size: 18, color: context.onAccent),
               onTap: () async {
                 final ok = await ref.read(profileProvider.notifier).unlockTier(_mode, tierIndex);
                 if (!ctx.mounted || !mounted) return;

@@ -22,6 +22,7 @@ import 'features/social/player_screen.dart';
 import 'features/social/social_screen.dart';
 import 'features/store/store_screen.dart';
 import 'state/settings.dart';
+import 'widgets/glass.dart';
 
 /// The app's root navigator (alerts and sheets raised outside a screen, e.g. by the save sync).
 final rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -155,5 +156,5 @@ class _SheetPage<T> extends Page<T> {
   final Widget child;
 
   @override
-  Route<T> createRoute(BuildContext context) => CupertinoSheetRoute<T>(settings: this, scrollableBuilder: (_, _) => child);
+  Route<T> createRoute(BuildContext context) => CupertinoSheetRoute<T>(settings: this, scrollableBuilder: (_, _) => Elevated(background: true, child: child));
 }

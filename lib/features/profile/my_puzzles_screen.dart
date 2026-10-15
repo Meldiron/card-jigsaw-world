@@ -208,8 +208,8 @@ class _MyPuzzlesScreenState extends ConsumerState<MyPuzzlesScreen> {
                                     Container(
                                       width: 48,
                                       height: 48,
-                                      decoration: BoxDecoration(color: context.accent, shape: BoxShape.circle),
-                                      child: const Icon(AppIcons.plus, color: Colors.white, size: 24),
+                                      decoration: BoxDecoration(color: context.accentFill, shape: BoxShape.circle),
+                                      child: Icon(AppIcons.plus, color: context.onAccent, size: 24),
                                     ),
                                   const SizedBox(height: 12),
                                   Text(_uploading ? 'Uploading…' : 'Add photo', style: TextStyle(color: context.accent, fontWeight: FontWeight.w700, fontSize: TypeSize.callout)),

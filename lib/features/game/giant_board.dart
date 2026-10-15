@@ -368,12 +368,12 @@ class OffscreenSelection extends StatelessWidget {
               width: _size,
               height: _size,
               decoration: BoxDecoration(
-                color: context.accent,
+                color: context.accentFill,
                 shape: BoxShape.circle,
                 border: Border.all(color: Colors.white, width: 2),
                 boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.25), blurRadius: 10, offset: const Offset(0, 3))],
               ),
-              child: Transform.rotate(angle: angle, child: const Icon(AppIcons.towards, size: 18, color: Colors.white)),
+              child: Transform.rotate(angle: angle, child: Icon(AppIcons.towards, size: 18, color: context.onAccent)),
             ),
           ),
         );
