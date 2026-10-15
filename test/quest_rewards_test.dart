@@ -1,4 +1,5 @@
 import 'package:card_jigsaw_world/features/events/quest_rewards.dart';
+import 'package:card_jigsaw_world/game/modes.dart';
 import 'package:card_jigsaw_world/models/models.dart';
 import 'package:card_jigsaw_world/state/rewards.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -23,21 +24,36 @@ void main() {
     expect(anyGoalReady(Goals.weekly(const [], _now), Goals.weeklyFree, _profile()), isFalse);
   });
 
-  test('a finished quest is ready until it is claimed', () {
+  test('three ordinary boards finish "Solve 3 puzzles" and nothing else', () {
     final daily = Goals.daily([_solved(1), _solved(2), _solved(3)], _now);
     final solve3 = daily.first;
     expect(solve3.done, isTrue);
     expect(anyGoalReady(daily, Goals.dailyFree, _profile()), isTrue);
-    // "Earn 3 stars twice" is done too: both have to be claimed.
-    expect(anyGoalReady(daily, Goals.dailyFree, _profile(claimed: [solve3.key])), isTrue);
-    expect(anyGoalReady(daily, Goals.dailyFree, _profile(claimed: [solve3.key, daily[1].key])), isFalse);
+    expect(anyGoalReady(daily, Goals.dailyFree, _profile(claimed: [solve3.key])), isFalse);
   });
 
   test('the VIP extra quest is ready only for VIP members', () {
-    final daily = Goals.daily([_solved(1, cells: 25, stars: 1)], _now);
+    final vip = Goals.daily(const [], _now, dailyPuzzle: 'today').last;
+    expect(vip.vipOnly, isTrue);
+    // A board that does what the VIP quest asks.
+    final title = vip.title;
+    final row = PuzzleProgress.fromRow('row-vip', {
+      'userId': 'u',
+      'puzzleId': vip.puzzleId ?? 'p-vip',
+      'gridSize': vip.minCells > 0 ? vip.minCells : 16,
+      'mode': (vip.mode ?? GameMode.cards).code,
+      'completed': true,
+      'stars': 3,
+      'painting': vip.painting,
+      'par': 12,
+      'moves': title.contains('at par') ? 12 : 30,
+      'bestLock': 9,
+      'elapsedSeconds': 1,
+      'completedAt': _now.toIso8601String(),
+    });
+    final daily = Goals.daily([row], _now, dailyPuzzle: 'today');
     final big = daily.last;
-    expect(big.vipOnly && big.done, isTrue);
-    // Its mode quest may be done as well; claim everything else first.
+    expect(big.done, isTrue, reason: big.title);
     final others = [for (final g in daily) if (g.key != big.key) g.key];
     expect(goalLocked(big, daily.length - 1, Goals.dailyFree, _profile(claimed: others)), isTrue);
     expect(anyGoalReady(daily, Goals.dailyFree, _profile(claimed: others)), isFalse);

@@ -399,7 +399,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     final profileBefore = ref.read(profileProvider).value;
     final open = ref.read(openFeaturesProvider);
     final rows = {...?ref.read(progressProvider).value};
-    final readyBefore = {for (final g in readyGoals(rows.values, profileBefore, open, now)) g.key};
+    final readyBefore = {for (final g in readyGoals(rows.values, profileBefore, open, now, dailyPuzzle: daily?.id)) g.key};
     rows[widget.puzzleId] = PuzzleProgress.fromRow(existing?.id ?? '', {
       ...?existing?.toData(),
       'puzzleId': widget.puzzleId,
@@ -415,7 +415,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
       'peeked': s.peeked,
       'bestLock': s.bestLock,
     });
-    final questsReady = [for (final g in readyGoals(rows.values, profileBefore, open, now)) if (!readyBefore.contains(g.key)) g];
+    final questsReady = [for (final g in readyGoals(rows.values, profileBefore, open, now, dailyPuzzle: daily?.id)) if (!readyBefore.contains(g.key)) g];
     ref.read(progressProvider.notifier).complete(
       widget.puzzleId,
       gridSize: _spec.cells,

@@ -125,7 +125,7 @@ void main() {
     // The second time the last board (Cards, Cozy) is preselected.
     await quickPlay(tester, shotName: 'qr_03_quick_play_preselected');
 
-    // Two 3-star boards finish "Earn 3 stars twice"; play on until a quest is ready.
+    // Three boards finish "Solve 3 puzzles"; play on until a quest is ready.
     for (var i = 0; i < 3 && !container(tester).read(questRewardReadyProvider); i++) {
       await quickPlay(tester, shotName: 'qr_03b_quick_play_more_$i');
     }

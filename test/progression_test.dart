@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:card_jigsaw_world/data/sync/changes.dart';
 import 'package:card_jigsaw_world/data/sync/ops.dart';
 import 'package:card_jigsaw_world/game/board.dart';
@@ -79,7 +81,27 @@ void main() {
   });
 
   group('Quest pools', () {
-    test('six or more kinds turn up across a few weeks, rewards stay the same per slot', () {
+    // A player's history: [n] boards finished yesterday, slower than [seconds] at best.
+    List<PuzzleProgress> history({String mode = 'cards', int cells = 16, int n = 20, bool painting = false, int seconds = 60}) => [
+          for (var i = 0; i < n; i++)
+            PuzzleProgress.fromRow('h$i', {
+              'userId': 'u', 'puzzleId': 'h$i', 'gridSize': cells, 'mode': mode, 'completed': true, 'stars': 3, 'moves': 30, 'par': 12,
+              'painting': painting, 'elapsedSeconds': seconds + i, 'completedAt': now.subtract(Duration(days: 1, minutes: i)).toUtc().toIso8601String(),
+            }),
+        ];
+    PuzzleProgress board(String id, DateTime at, {String mode = 'cards', int cells = 16, bool painting = false, bool atPar = false, int lock = 0, int seconds = 600, String? puzzle}) =>
+        PuzzleProgress.fromRow('row-$id', {
+          'userId': 'u', 'puzzleId': puzzle ?? id, 'gridSize': cells, 'mode': mode, 'completed': true, 'stars': 3, 'par': 12, 'moves': atPar ? 12 : 30,
+          'painting': painting, 'bestLock': lock, 'elapsedSeconds': seconds, 'completedAt': at.toUtc().toIso8601String(),
+        });
+    final players = {
+      'level 3, Cards 4x4': (3, history()),
+      'level 9, Cards 4x4': (9, history()),
+      'level 20, Hexagons 5x5': (20, history(mode: 'hexagons', cells: 25)),
+      'level 20, Cards 3x3': (20, history(cells: 9, seconds: 15)),
+    };
+
+    test('rewards stay the same per slot, and many kinds turn up', () {
       final daily = <String>{}, weekly = <String>{};
       for (var d = 0; d < 28; d++) {
         final day = DateTime(2026, 10, 1 + d, 12);
@@ -87,15 +109,75 @@ void main() {
         expect(goals.length, Goals.dailyFree + 1);
         expect([for (final g in goals.take(Goals.dailyFree)) g.coins], [60, 80, 100], reason: '$day');
         expect(goals.last.vipOnly, isTrue);
+        expect({for (final g in goals) g.title}.length, goals.length, reason: 'no quest twice: $day');
         daily.addAll(goals.map(_type));
         final week = Goals.weekly(const [], day);
         expect([for (final g in week.take(Goals.weeklyFree)) g.tickets], [1, 1, 2, 2, 2], reason: '$day');
         expect(week.last.vipOnly, isTrue);
+        expect({for (final g in week) g.title}.length, week.length, reason: 'no quest twice: $day');
         weekly.addAll(week.map(_type));
       }
-      expect(daily.length, greaterThanOrEqualTo(6), reason: '$daily');
-      expect(daily, containsAll(['nopeek2', 'par1', 'lock5', 'paint1', 'mode']));
-      expect(weekly, containsAll(['nopeek5', 'par3', 'lock5x3', 'paint3']));
+      expect(daily, containsAll(['solve3', 'mode', 'size', 'paint', 'par', 'lock']));
+      expect(weekly, containsAll(['solve10', 'days4', 'modes', 'size', 'paint', 'par', 'lock']));
+    });
+
+    test('playing as usual finishes "Solve 3 puzzles" and nothing else', () {
+      for (final e in players.entries) {
+        final (level, past) = e.value;
+        final usual = past.first;
+        for (var d = 0; d < 28; d++) {
+          final day = DateTime(now.year, now.month, now.day + d, 15);
+          final today = [for (var i = 0; i < 6; i++) board('t$d-$i', day.subtract(Duration(minutes: i)), mode: usual.mode, cells: usual.gridSize, seconds: 999)];
+          final goals = Goals.daily([...past, ...today], day, open: OpenFeatures.forPlayer(level: level), level: level, dailyPuzzle: 'daily-$d');
+          expect([for (final g in goals) if (g.done) _type(g)], ['solve3'], reason: '${e.key}, $day: ${[for (final g in goals) g.title]}');
+        }
+      }
+    });
+
+    test('a board that changes one thing finishes at most one of the day\'s quests', () {
+      for (final e in players.entries) {
+        final (level, past) = e.value;
+        final usual = past.first;
+        final other = usual.mode == 'cards' ? 'triangles' : 'cards';
+        for (var d = 0; d < 28; d++) {
+          final day = DateTime(now.year, now.month, now.day + d, 15);
+          final boards = {
+            'shape': board('a', day, mode: other, cells: usual.gridSize),
+            'big': board('b', day, mode: usual.mode, cells: 48),
+            'big with 8 locked': board('c', day, mode: usual.mode, cells: 48, lock: 8),
+            'painting': board('d', day, mode: usual.mode, cells: usual.gridSize, painting: true),
+            'at par': board('e', day, mode: usual.mode, cells: max(16, usual.gridSize), atPar: true),
+            'fast': board('f', day, mode: usual.mode, cells: usual.gridSize, seconds: 1),
+            'daily puzzle': board('g', day, mode: usual.mode, cells: usual.gridSize, puzzle: 'daily-$d'),
+          };
+          for (final b in boards.entries) {
+            final goals = Goals.daily([...past, b.value], day, open: OpenFeatures.forPlayer(level: level), level: level, dailyPuzzle: 'daily-$d');
+            final done = [for (final g in goals.skip(1)) if (g.done) g.title];
+            expect(done.length, lessThanOrEqualTo(1), reason: '${e.key}, $day, ${b.key}: $done');
+          }
+        }
+      }
+    });
+
+    test('quests ask for what the player does not usually do', () {
+      for (var d = 0; d < 28; d++) {
+        final day = DateTime(now.year, now.month, now.day + d, 15);
+        // A Hexagons player on 5x5 is never asked for Hexagons or a board they already play, and
+        // gets the bigger lock (5 comes by itself on their boards).
+        final hex = Goals.daily(history(mode: 'hexagons', cells: 25), day, level: 20);
+        for (final g in hex) {
+          expect(g.mode, isNot(GameMode.hexagons), reason: g.title);
+          if (_type(g) == 'size') expect(g.minCells, greaterThan(25), reason: g.title);
+          if (_type(g) == 'lock') expect(g.title, 'Lock ${Goals.bigLockRun} cards in one move');
+        }
+        // A Painting player is not asked for Painting.
+        expect(Goals.daily(history(painting: true), day, level: 20).where((g) => g.painting), isEmpty);
+        // A 4x4 player: lock 5, and the time to beat is their second-best 4x4 time.
+        for (final g in Goals.daily(history(seconds: 40), day, level: 20)) {
+          if (_type(g) == 'lock') expect(g.title, 'Lock ${Goals.lockRun} cards in one move');
+          if (_type(g) == 'fast') expect(g.title, 'Solve a 4x4 board in under 41 seconds');
+        }
+      }
     });
 
     test('a level 1 player is never asked for a shape or Painting they do not have', () {
@@ -106,44 +188,54 @@ void main() {
           expect(g.mode == null || g.mode == GameMode.cards, isTrue, reason: '${g.key} asks for ${g.mode}');
           expect(g.painting, isFalse, reason: g.key);
           expect(g.title.toLowerCase(), isNot(contains('every mode')), reason: g.key);
-          // Big boards follow the level: Relaxed (4x4) until Tricky opens.
+          // Nothing bigger than the level has: Relaxed (4x4) at level 1.
           if (g.minCells > 0) expect(g.minCells, GridSpec.tiers[2].cells, reason: g.key);
         }
       }
       final two = OpenFeatures.forPlayer(level: 2);
-      final modes = Goals.weekly(const [], now, open: two, level: 2).firstWhere((g) => g.key.endsWith(':modes'));
-      expect(modes.target, 2);
-      expect(modes.title, 'Play 2 modes this week');
-      expect(Goals.weekly(const [], now).firstWhere((g) => g.key.endsWith(':modes')).title, 'Play every mode once');
+      Goal modes(OpenFeatures open, int level) => [
+            for (var w = 0; w < 6; w++) ...Goals.weekly(const [], now.add(Duration(days: 7 * w)), open: open, level: level),
+          ].firstWhere((g) => g.key.endsWith(':modes'));
+      expect(modes(two, 2).target, 2);
+      expect(modes(two, 2).title, 'Play 2 modes this week');
+      expect(modes(OpenFeatures.all, 99).title, 'Play every mode once');
     });
 
-    test('new quest kinds count what the finished boards did', () {
-      final today = [
-        _row('a', at: now, peeked: false, par: 10, moves: 10, bestLock: 5),
-        _row('b', at: now, peeked: true, par: 8, moves: 12, painting: true),
-        _row('c', at: now, peeked: false, par: 0, moves: 3), // an older row: par unknown
-      ];
-      int progressOf(List<Goal> goals, String type) => goals.firstWhere((g) => _type(g) == type).progress;
-      // Find days that rotate each kind in, then check its progress.
-      for (var d = 0; d < 3; d++) {
-        final day = DateTime(now.year, now.month, now.day + d, 15);
-        final rows = [for (final r in today) _row(r.puzzleId, at: day, peeked: r.peeked, par: r.par, moves: r.moves, bestLock: r.bestLock, painting: r.painting)];
-        final goals = Goals.daily(rows, day);
-        final types = goals.map(_type).toSet();
-        if (types.contains('nopeek2')) expect(progressOf(goals, 'nopeek2'), 2);
-        if (types.contains('par1')) expect(progressOf(goals, 'par1'), 1);
-        if (types.contains('lock5')) expect(progressOf(goals, 'lock5'), 1);
-        if (types.contains('paint1')) expect(progressOf(goals, 'paint1'), 1);
-      }
-    });
-
-    test('a slot keeps the quest already claimed in it', () {
-      final goals = Goals.daily(const [], now);
+    test('each kind counts the boards it asks for', () {
       final k = Goals.dayKey(now);
-      final shown = goals[1].key;
-      final others = ['d:$k:stars2', 'd:$k:nopeek2', 'd:$k:par1'].where((key) => key != shown).toList();
-      final kept = Goals.daily(const [], now, claimed: {others.first});
-      expect(kept[1].key, others.first);
+      final today = [
+        board('a', now, mode: 'squares'),
+        board('b', now, cells: 25, lock: 5),
+        board('c', now, painting: true),
+        board('d', now, cells: 9, atPar: true), // par on the smallest boards does not count
+        board('e', now, cells: 16, atPar: true, seconds: 30),
+        board('f', now, cells: 36, lock: 8, puzzle: 'today'),
+      ];
+      int progress(String kind) => Goals.daily(today, now, claimed: {'d:$k:s2:$kind'}, dailyPuzzle: 'today')[1].progress;
+      expect(progress('mode-squares'), 1);
+      expect(progress('size-5x5'), 2);
+      expect(progress('paint'), 1);
+      expect(progress('par'), 1);
+      expect(progress('lock-5'), 2);
+      expect(progress('lock-8'), 1);
+      expect(progress('fast-4x4-41'), 1);
+      expect(progress('daily'), 1);
+      final daily = Goals.daily(today, now, claimed: {'d:$k:s4:daily'}, dailyPuzzle: 'today').last;
+      expect(daily.puzzleId, 'today', reason: 'Play opens the daily puzzle');
+    });
+
+    test('a slot keeps the quest already claimed in it, and the others make room', () {
+      for (var d = 0; d < 14; d++) {
+        final day = DateTime(now.year, now.month, now.day + d, 15);
+        final k = Goals.dayKey(day);
+        // Claimed at level 2, before level 3 opens 5x5 and the lock quest.
+        final before = Goals.daily(const [], day, open: OpenFeatures.forPlayer(level: 2), level: 2);
+        final claimed = {before[1].key, before[2].key};
+        final after = Goals.daily(const [], day, open: OpenFeatures.forPlayer(level: 3), level: 3, claimed: claimed);
+        expect([after[1].key, after[2].key], [before[1].key, before[2].key], reason: '$day');
+        expect({for (final g in after) _type(g)}.length, after.length, reason: 'no lane twice: ${after.map((g) => g.key)}');
+        expect(after[1].key, startsWith('d:$k:s2:'));
+      }
     });
 
     test('week keys do not move across a daylight saving change', () {

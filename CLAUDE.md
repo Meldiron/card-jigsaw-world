@@ -171,7 +171,10 @@ skills under `.claude/skills/` hold the detailed workflows.
 - Progression: `lib/state/unlocks.dart` (`openFeaturesProvider`, intro bookkeeping) and `Unlocks` /
   `OpenFeatures` in `lib/state/rewards.dart`: Squares, Triangles, Hexagons, Painting and giant boards open at
   levels 2/4/6/8/10 or once used; `lib/features/game/unlock_intro.dart` (intro sheet, `UnlockIntroHost`).
-  Quests: `Goals.daily` / `weekly` rotate by day and week and take `open`, `level` and `claimed`;
+  Quests: `Goals.daily` / `weekly` rotate by day and week and take `open`, `level`, `claimed` (and the
+  daily puzzle); each quest comes from a different lane, chosen against the player's `PlayHabits`, so
+  ordinary play finishes only "Solve 3 puzzles" and one board never finishes two (docs/economy.md, "Quests
+  that do not overlap");
   `lib/features/events/quest_rewards.dart` (`questsFor`, `readyGoals`, `readyEventsProvider`, Claim all).
   Integration suites that play every shape override `openFeaturesProvider` and `pendingUnlockIntroProvider`.
 - Deep links (`docs/deep-links.md`): `lib/core/app_links.dart` (`AppLink.parse`: one path set for the web

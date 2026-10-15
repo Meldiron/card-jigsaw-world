@@ -546,7 +546,45 @@ each, 10 minutes apart). The regular player above already watched 3 a day, so th
 heavy player watched 5: they now earn 840 instead of 1,400 coins a week from videos, 560 less, about 0.5% of
 their weekly coins in the model above.
 
-## Quest pool and unlocks (2026-10-14)
+## Quests that do not overlap (owner request, 2026-10-15)
+
+The owner found that ordinary play finished two or three daily quests at once: "Earn 3 stars twice"
+and "Solve 2 pictures without Peek" came with any two boards (3 stars on 86% of boards, Peek unused on
+98%), and the shape, big board and lock quests often with them. On the real players' busy days the old
+rules finished 2 or 3 of the 3 free daily quests on 9 days out of 10, and 10 single boards finished two
+quests each; the new rules, on the same days, finish all three on 1 day of 10 (a 40-board day), and no
+single board finishes two.
+
+Rewards per slot are unchanged (daily 60 + 80 + 100 coins, VIP 120; weekly 1 + 1 + 2 + 2 + 2 tickets,
+VIP 1). Besides the quests that are always there, each quest comes from a different lane:
+
+| Slot | Reward | Quest |
+|---|---|---|
+| Daily 1 | 60 | Solve 3 puzzles (the quest ordinary play finishes) |
+| Daily 2 | 80 | A way of playing: a board in the shape the player plays least (never their usual one), a board two sizes above their usual one (and one above their bigger boards), or a Painting board (not for players who mostly paint) |
+| Daily 3 | 100 | A skill: a 4x4 or bigger board at par, 5 cards locked in one move (8 for players whose boards are mostly 25 cards or more, where 5 comes by itself), or a Cards board of the size they play most under their second-best time on it |
+| Daily VIP | 120 | The other skill, else a second shape, else today's daily puzzle |
+| Weekly 1 | 1 | Solve 10 puzzles this week |
+| Weekly 2 | 1 | A skill: two 4x4 or bigger boards at par, the lock on two pictures, or two boards under the time to beat |
+| Weekly 3 | 2 | Play on 4 different days |
+| Weekly 4, 5 | 2 each | Two ways of playing: every mode once, three boards of the bigger size, three Painting boards (never the bigger boards with Painting) |
+| Weekly VIP | 1 | The other skill, else the third way of playing |
+
+Rules (`Goals.daily`, `Goals.weekly`, `PlayHabits`, `_Lanes` in `lib/state/rewards.dart`):
+
+- "Usual" comes from the player's last 20 boards finished before today (before Monday for the week):
+  the shape most of them have, the middle size, the size four fifths of the way up, Painting or not,
+  the time to beat. So the day's quests do not move while the player plays.
+- Quests that one board does together never share a day: a bigger board with a shape, Painting or a
+  lock; Painting with a shape; a time to beat (always on Cards) with "a board in Cards"; and, for a
+  player on boards smaller than 4x4, a bigger board with par (they go up a size for par too).
+- The rotation changes the way of playing every day and, where there are two or more, the skill too.
+- Only what the level opens is asked for. A level 1 player, with nothing to change yet, gets "Earn 3
+  stars twice" (the fallbacks: that, "Solve 5 puzzles", "Solve 2 pictures without Peek").
+- Keys carry the slot (`d:2026-10-15:s2:mode-hexagons`, `w2026-10-12:s4:paint`); a slot keeps a quest
+  claimed in it, so a level-up during the day never pays a slot twice.
+
+## Quest pool and unlocks (2026-10-14, replaced by the section above)
 
 Rewards per slot are unchanged (daily 60 + 80 + 100 coins, VIP 120; weekly 1 + 1 + 2 + 2 + 2 tickets,
 VIP 1), so the totals above still hold. What changed is which quest fills a slot (`Goals.daily`,
