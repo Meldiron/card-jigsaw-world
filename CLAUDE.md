@@ -21,6 +21,7 @@ web guests keep their saves per address), and the local folder and `~/.local/sha
 | `.claude/skills/apple-release/` | Any build, TestFlight push, version bump, App Store submission |
 | `.claude/skills/pack-making/` | Picture packs: adding, repairing, auditing, sources, licences |
 | `.claude/skills/giant-packs/` | Giant packs (category Giant, 100-300 card boards): sources, `giantcheck`, 4096 px hosting |
+| `.claude/skills/store-screenshots/` | App Store screenshots: captures, the glass slides (`tools/store/compose_glass.py`), copy and story, preview, upload |
 
 ## Owner rules (non-negotiable, learned from feedback)
 

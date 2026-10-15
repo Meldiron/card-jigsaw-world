@@ -835,7 +835,7 @@ def cmd_screenshots(s: Store) -> None:
     log("== screenshots")
     files = sorted(SCREENSHOT_DIR.glob("*.png"))
     if not files:
-        log(f"  no PNGs in {SCREENSHOT_DIR.relative_to(ROOT)}; run tools/store/compose_screenshots.py first")
+        log(f"  no PNGs in {SCREENSHOT_DIR.relative_to(ROOT)}; run tools/store/compose_glass.py first")
         return
     version = s.version(create=True)
     loc = s.version_localization(version, create=True)

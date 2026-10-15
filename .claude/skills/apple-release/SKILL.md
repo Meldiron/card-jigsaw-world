@@ -69,9 +69,9 @@ whole version. `asc_publish.py --build N build-notes` rewrites one existing buil
 
 ## Before an App Store submission
 On top of the TestFlight checks below (the guideline review of 2026-10-15 found these gaps):
-1. Retake the store screenshots from the build you submit (`test_driver/store_screenshots.dart` +
-   `integration_test/store_screenshots_test.dart`, then `asc_publish.py screenshots`). They must show
-   the current app; the 2026-10-13 set still showed a seasonal league that no longer exists.
+1. Retake the store screenshots from the build you submit (the store-screenshots skill: captures,
+   `tools/store/compose_glass.py`, then `asc_publish.py screenshots`). They must show the current
+   app; the 2026-10-13 set still showed a seasonal league that no longer exists.
 2. Rewrite `store/metadata/en-US/review_notes.txt` so every feature is described specifically
    (purchases and how to test them, pack codes, the Lucky Wheel odds, sources of the pictures).
 3. Check `docs/privacy-policy.md`, the App Privacy answers in App Store Connect and the age rating
