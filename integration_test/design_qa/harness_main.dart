@@ -214,7 +214,11 @@ Future<ProviderContainer> buildContainer(Map<String, dynamic> scene) async {
   });
   if (scene['introsSeen'] ?? true) prefs.values['unlockIntros'] = jsonEncode({'seen': [for (final u in Unlock.values) u.name]});
   for (final e in ((scene['prefs'] as Map?) ?? const {}).entries) {
-    prefs.values[e.key as String] = e.value as Object;
+    // Relative times work here too ("NOW", "DAYS:-0.003"), written as local ISO strings like LocalStore does.
+    final v = e.value;
+    prefs.values[e.key as String] = v is String && (v == 'NOW' || v.startsWith('DAYS:'))
+        ? (v == 'NOW' ? DateTime.now() : DateTime.now().add(Duration(seconds: (double.parse(v.substring(5)) * 86400).round()))).toIso8601String()
+        : v as Object;
   }
 
   final server = FakeServer();
