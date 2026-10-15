@@ -474,41 +474,19 @@ class _CollapsedGlass extends StatelessWidget {
   }
 }
 
-/// The back button of the pack cover: frosted dark glass with a white
-/// chevron while it sits on the photo (like the category chip), the plain
-/// round button once the cover has collapsed into the glass bar.
+/// The back button of the pack cover: the shared [PhotoButton] (frosted dark
+/// glass, white chevron) while it sits on the photo, the plain round button
+/// once the cover has collapsed into the glass bar.
 class _HeroBackButton extends StatelessWidget {
   const _HeroBackButton({required this.onTap});
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final c = context.colors;
     final bar = context.dependOnInheritedWidgetOfExactType<FlexibleSpaceBarSettings>();
     final onPhoto = bar == null || bar.currentExtent > bar.minExtent + 1;
-    const size = 38.0;
     return Center(
-      child: Pressable(
-        onTap: onTap,
-        scale: 0.9,
-        child: ClipOval(
-          child: BackdropFilter(
-            enabled: onPhoto,
-            filter: GlassSurface.filter(12),
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              width: size,
-              height: size,
-              decoration: BoxDecoration(
-                color: onPhoto ? Colors.black.withValues(alpha: 0.32) : c.card,
-                shape: BoxShape.circle,
-                border: Border.all(color: onPhoto ? Colors.white.withValues(alpha: 0.18) : c.stroke),
-              ),
-              child: Icon(AppIcons.back, size: size * 0.48, color: onPhoto ? Colors.white : c.textPrimary),
-            ),
-          ),
-        ),
-      ),
+      child: PhotoButton(icon: AppIcons.back, size: 38, semanticLabel: 'Back', onPhoto: onPhoto, onTap: onTap),
     );
   }
 }

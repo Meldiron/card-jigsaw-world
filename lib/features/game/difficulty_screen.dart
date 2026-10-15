@@ -139,6 +139,60 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
     stream.addListener(listener);
   }
 
+  /// Who took the picture and where it is from: the credit its licence asks
+  /// for, in full however long it is.
+  Future<void> _showCredit(Puzzle puzzle) => showAppSheet(
+        context,
+        builder: (ctx) {
+          final c = ctx.colors;
+          // The name above the value (the iOS contact-card field), so a long
+          // source or licence wraps under its own name.
+          Widget row(String label, String value) => Padding(
+                padding: const EdgeInsets.fromLTRB(16, 11, 16, 12),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(label, style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w500, color: c.textSecondary)),
+                      const SizedBox(height: 2),
+                      Text(value, style: const TextStyle(fontSize: TypeSize.callout, height: 1.3, fontWeight: FontWeight.w500)),
+                    ],
+                  ),
+                ),
+              );
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    const IconTile(icon: AppIcons.credit, size: IconTile.medium),
+                    const SizedBox(width: 12),
+                    Expanded(child: SheetHeader(title: 'Picture credit', subtitle: puzzle.title)),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                SoftCard(
+                  padding: EdgeInsets.zero,
+                  child: Column(
+                    children: [
+                      row('Photographer', puzzle.author),
+                      Divider(height: 0.5, thickness: 0.5, indent: 16, color: c.stroke),
+                      row('Source', puzzle.source),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                BigButton(label: 'Done', kind: ButtonKind.secondary, onTap: () => Navigator.pop(ctx)),
+              ],
+            ),
+          );
+        },
+      );
+
   Future<void> _discard(PuzzleProgress saved, BoardSpec savedSpec) async {
     final ok = await showAppAlert(
       context,
@@ -324,7 +378,8 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
             context.pushReplacement('/game/${widget.puzzleId}/${BoardCode.toPath(spec.fullCode)}$flag');
           },
         ),
-        if (saved != null) ...[const SizedBox(height: 8), BigButton(label: 'Discard progress', kind: ButtonKind.ghost, icon: AppIcons.trash, onTap: () => _discard(saved, spec))],
+        // The way to throw the board away: small, red, and it always asks first.
+        if (saved != null) ...[const SizedBox(height: 4), _DiscardButton(onTap: () => _discard(saved, spec))],
         if (widget.fromQuick) ...[
           const SizedBox(height: 4),
           BigButton(
@@ -410,15 +465,28 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                                           placed: saved?.layout == null ? null : {for (var i = 0; i < saved!.layout!.length; i++) if (saved.layout![i] == i) i},
                                         ),
                                       ),
+                                      // The credit waits behind a small camera button in the corner: the
+                                      // photo and its cut lines stay clear, and a tap shows it in full.
+                                      Positioned(
+                                        right: 0,
+                                        bottom: 0,
+                                        child: PhotoButton(
+                                          key: const ValueKey('picture-credit'),
+                                          icon: AppIcons.credit,
+                                          size: 30,
+                                          semanticLabel: 'Picture credit',
+                                          onTap: () => _showCredit(puzzle),
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
                               ),
                             ),
                           ).animate().fadeIn(duration: 120.ms),
-                          const SizedBox(height: 6),
-                          // A solved picture: its best result, above the credit.
+                          // A solved picture: its best result under the preview.
                           if (progress?.completed == true) ...[
+                            const SizedBox(height: 8),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -430,24 +498,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 2),
                           ],
-                          // The credit the licence asks for, quietly under the picture.
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(AppIcons.credit, size: 12, color: c.textTertiary),
-                              const SizedBox(width: 5),
-                              Flexible(
-                                child: Text(
-                                  '${puzzle.author} · ${puzzle.source}',
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(fontSize: TypeSize.caption, color: c.textTertiary),
-                                ),
-                              ),
-                            ],
-                          ),
                           SizedBox(height: compact ? 14 : 20),
                           // A board in progress: what it is and how far along, instead of
                           // pickers that cannot be used until it is discarded.
@@ -464,11 +515,10 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                           ] else ...[
                           const _SectionLabel('Mode'),
                           const SizedBox(height: 8),
-                          _ModeSegments(
+                          _ModePicker(
                             selected: mode,
-                            frozen: saved != null,
-                            isOpen: (m) => saved != null || open.mode(m),
-                            onTap: (m) => saved == null && !open.mode(m) ? showLockedInfo(context, ref, Unlocks.ofMode(m)!) : _pickMode(m),
+                            isOpen: open.mode,
+                            onTap: (m) => !open.mode(m) ? showLockedInfo(context, ref, Unlocks.ofMode(m)!) : _pickMode(m),
                           ),
                           SizedBox(height: compact ? 14 : 20),
                           const _SectionLabel('Board'),
@@ -487,8 +537,9 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                           const SizedBox(height: 8),
                           // Runs to the screen edges, so the next size peeks in as a hint to scroll.
                           SizedBox(
-                            // 167: the chips' two lines grow with Larger Text; so does the row.
-                            height: MediaQuery.textScalerOf(context).scale(56),
+                            // 167: the chips' two lines grow with Larger Text; so does the row
+                            // (the ladder meter under them keeps its 18 pt).
+                            height: MediaQuery.textScalerOf(context).scale(52) + 18,
                             child: OverflowBox(
                               maxWidth: MediaQuery.sizeOf(context).width,
                               child: ListView.separated(
@@ -502,12 +553,11 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                                   final locked = giant ? giantLocked : i >= maxTier && !profileN.hasTier(mode, i);
                                   return _BoardChip(
                                     spec: t,
+                                    step: i,
+                                    steps: tiers.length,
                                     selected: t == spec,
                                     locked: locked,
-                                    frozen: saved != null,
-                                    onTap: saved != null
-                                        ? null
-                                        : locked
+                                    onTap: locked
                                         ? () => giant ? showLockedInfo(context, ref, Unlock.giant) : _offerUnlock(i, t)
                                         : () {
                                             Haptics.selection();
@@ -554,6 +604,9 @@ class _PaintingTile extends StatelessWidget {
   final bool locked;
   final VoidCallback? onLocked;
 
+  /// What Painting is, in one line under its name (locked or open).
+  static const explainer = 'Black and white until cards lock';
+
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
@@ -562,11 +615,11 @@ class _PaintingTile extends StatelessWidget {
       onTap: locked ? onLocked : (enabled ? () => onChanged(!on) : null),
       scale: 0.99,
       child: Opacity(
-        // Locked is said by the lock and the level, not by fading the text.
+        // Locked is said by the level chip, not by fading the text.
         opacity: locked ? 1 : (enabled || on ? 1 : 0.45),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 180),
-          padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+          padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
           decoration: BoxDecoration(
             color: on ? c.accentTint : c.card,
             borderRadius: BorderRadius.circular(Radii.md),
@@ -574,17 +627,24 @@ class _PaintingTile extends StatelessWidget {
           ),
           child: Row(
             children: [
-              const IconTile(icon: AppIcons.painting, size: IconTile.small),
+              // Sized to the two lines beside it.
+              const IconTile(icon: AppIcons.painting, size: IconTile.medium),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Keyed while on: the bonus is part of the rewards in the footer.
-                    Text('Painting · x${_DifficultyScreenState._fmtMult(Economy.paintingMultiplier)}', key: on ? const ValueKey('painting-bonus') : null, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body)),
-                    const SizedBox(height: 2),
+                    Row(
+                      children: [
+                        // Keyed while on: the bonus is part of the rewards in the footer.
+                        Expanded(child: Text('Painting · x${_DifficultyScreenState._fmtMult(Economy.paintingMultiplier)}', key: on ? const ValueKey('painting-bonus') : null, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body))),
+                        // Locked: the level chip beside the name, so the line under it runs the full width.
+                        if (locked) ...[const SizedBox(width: 8), _LevelChip(level: Unlock.painting.level)],
+                      ],
+                    ),
+                    const SizedBox(height: 1),
                     Text(
-                      locked ? 'Opens at level ${Unlock.painting.level}' : 'Colour returns as cards lock',
+                      explainer,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(fontSize: TypeSize.footnote, height: 1.3, color: c.textSecondary),
@@ -592,14 +652,41 @@ class _PaintingTile extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(width: 10),
-              if (locked)
-                Icon(AppIcons.lock, size: 18, color: c.textTertiary)
-              else
+              if (!locked) ...[
+                const SizedBox(width: 8),
                 CupertinoSwitch(value: on, activeTrackColor: Brand.success, onChanged: enabled ? onChanged : null),
+              ],
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// "[lock] Level 8" beside Painting's name until it opens: a quiet grey chip,
+/// readable at full strength instead of a faded row.
+class _LevelChip extends StatelessWidget {
+  const _LevelChip({required this.level});
+  final int level;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return Container(
+      height: 24,
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      decoration: BoxDecoration(
+        color: context.isDark ? Colors.white.withValues(alpha: 0.08) : Colors.black.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(Radii.pill),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(AppIcons.lock, size: 11, color: c.textSecondary),
+          const SizedBox(width: 4),
+          Text('Level $level', style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600, color: c.textSecondary)),
+        ],
       ),
     );
   }
@@ -618,14 +705,15 @@ class _ModePreview extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.6
       ..strokeJoin = StrokeJoin.round;
+    // About the same footprint for every mode, so no drawing looks heavier than another.
     final (cols, rows) = switch (mode) {
-      GameMode.cards => (2, 3),
-      GameMode.squares => (3, 3),
+      GameMode.cards => (3, 2),
+      GameMode.squares => (3, 2),
       GameMode.triangles => (5, 2),
-      GameMode.hexagons => (3, 3),
+      GameMode.hexagons => (3, 2),
     };
     final tiling = Tiling.of(mode, cols, rows);
-    final box = mode == GameMode.cards ? Rect.fromLTWH(6, 0, size.width - 12, size.height) : Offset.zero & size;
+    final box = Offset.zero & size;
     // Regular cells, centred in the icon box.
     final fitted = tiling.fit(box.size, box.width / box.height);
     final area = Rect.fromCenter(center: box.center, width: fitted.width, height: fitted.height);
@@ -739,67 +827,86 @@ class _SectionLabel extends StatelessWidget {
       );
 }
 
-/// The four modes as one segmented control: a track with a raised segment
-/// for the choice, each with its cut drawn small and its multiplier.
-class _ModeSegments extends StatelessWidget {
-  const _ModeSegments({required this.selected, required this.frozen, required this.isOpen, required this.onTap});
+/// The four modes. Each says what it cuts the picture into (its cells drawn
+/// small), what it pays (the multiplier) and, until it opens, the level it
+/// opens at. The choice is the tinted tile with the cobalt outline, the same
+/// selected state as the board sizes below.
+class _ModePicker extends StatelessWidget {
+  const _ModePicker({required this.selected, required this.isOpen, required this.onTap});
   final GameMode selected;
-
-  /// A board is in progress: only its mode shows as chosen, the rest rest.
-  final bool frozen;
   final bool Function(GameMode) isOpen;
   final ValueChanged<GameMode> onTap;
 
   @override
-  Widget build(BuildContext context) {
-    final c = context.colors;
-    return Container(
-      padding: const EdgeInsets.all(3),
-      decoration: BoxDecoration(color: context.isDark ? c.card : const Color(0xFFE9E9EE), borderRadius: BorderRadius.circular(Radii.md)),
-      child: Row(
+  Widget build(BuildContext context) => Row(
         children: [
-          for (final m in GameMode.values)
+          for (final m in GameMode.values) ...[
+            if (m != GameMode.cards) const SizedBox(width: 8),
             Expanded(
-              child: Pressable(
-                key: ValueKey('mode-${m.code}'),
-                onTap: frozen ? null : () => onTap(m),
-                scale: 0.96,
-                child: Opacity(
-                  opacity: frozen && m != selected ? 0.4 : 1,
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 180),
-                    padding: const EdgeInsets.symmetric(vertical: 7),
-                    decoration: BoxDecoration(
-                      // The raised segment is lighter than the track in both themes.
-                      color: m == selected ? (context.isDark ? Color.lerp(c.cardElevated, Colors.white, 0.08) : c.card) : Colors.transparent,
-                      borderRadius: BorderRadius.circular(Radii.md - 3),
-                      boxShadow: m == selected ? [BoxShadow(color: Colors.black.withValues(alpha: context.isDark ? 0.3 : 0.08), blurRadius: 6, offset: const Offset(0, 1))] : null,
-                    ),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          width: 26,
-                          height: 22,
-                          child: isOpen(m)
-                              ? CustomPaint(painter: _ModePreview(mode: m, color: m == selected ? context.accent : c.textSecondary))
-                              : Icon(AppIcons.lock, size: 15, color: c.textTertiary),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          m.label,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: TypeSize.footnote, fontWeight: m == selected ? FontWeight.w700 : FontWeight.w600, color: isOpen(m) ? c.textPrimary : c.textTertiary),
-                        ),
-                        Text(
-                          isOpen(m) ? 'x${_DifficultyScreenState._fmtMult(m.multiplier)}' : 'Level ${Unlocks.ofMode(m)!.level}',
-                          style: TextStyle(fontSize: TypeSize.micro, color: m == selected ? context.accent : c.textTertiary, fontWeight: FontWeight.w500),
-                        ),
-                      ],
-                    ),
-                  ),
+              child: Semantics(
+                button: true,
+                selected: m == selected,
+                child: Pressable(
+                  key: ValueKey('mode-${m.code}'),
+                  onTap: () => onTap(m),
+                  scale: 0.96,
+                  child: _ModeTile(mode: m, selected: m == selected, open: isOpen(m)),
                 ),
               ),
+            ),
+          ],
+        ],
+      );
+}
+
+String _modeMult(GameMode m) => 'x${_DifficultyScreenState._fmtMult(m.multiplier)}';
+
+/// One mode, a card like the board sizes below: its cells drawn small (cobalt
+/// when chosen), its name, its multiplier; until it opens, the drawing fades
+/// and a lock and the level take the multiplier's place.
+class _ModeTile extends StatelessWidget {
+  const _ModeTile({required this.mode, required this.selected, required this.open});
+  final GameMode mode;
+  final bool selected;
+  final bool open;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 180),
+      height: MediaQuery.textScalerOf(context).scale(84),
+      decoration: BoxDecoration(
+        color: selected ? c.accentTint : c.card,
+        borderRadius: BorderRadius.circular(Radii.md),
+        border: Border.all(color: selected ? context.accent : c.stroke, width: selected ? 1.5 : 1),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: 34,
+            height: 26,
+            child: CustomPaint(painter: _ModePreview(mode: mode, color: !open ? c.textTertiary.withValues(alpha: 0.5) : (selected ? context.accent : c.textSecondary))),
+          ),
+          const SizedBox(height: 7),
+          Text(
+            mode.label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w700, letterSpacing: -0.2, color: !open ? c.textTertiary : (selected ? context.accent : c.textPrimary)),
+          ),
+          const SizedBox(height: 1),
+          if (open)
+            Text(_modeMult(mode), style: TextStyle(fontSize: TypeSize.micro, fontWeight: FontWeight.w600, color: selected ? context.accent : c.textTertiary))
+          else
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(AppIcons.lock, size: 10, color: c.textTertiary),
+                const SizedBox(width: 3),
+                Flexible(child: Text('Level ${Unlocks.ofMode(mode)!.level}', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: TypeSize.micro, fontWeight: FontWeight.w600, color: c.textTertiary))),
+              ],
             ),
         ],
       ),
@@ -807,14 +914,19 @@ class _ModeSegments extends StatelessWidget {
   }
 }
 
-/// One board size: its cut ("5x4") over its name ("Relaxed"). Locked sizes
-/// carry a small lock; a tap offers the unlock.
+/// One board size: its cut ("5x4") over its name ("Relaxed"), and a ladder
+/// meter under them: one rising bar per size, this size's steps lit, so the
+/// row reads as a ladder at a glance. Locked sizes show a lock instead of the
+/// meter; a tap offers the unlock.
 class _BoardChip extends StatelessWidget {
-  const _BoardChip({required this.spec, required this.selected, required this.locked, required this.frozen, this.onTap});
+  const _BoardChip({required this.spec, required this.step, required this.steps, required this.selected, required this.locked, this.onTap});
   final BoardSpec spec;
+
+  /// Place on the ladder shown (0-based) and its length.
+  final int step;
+  final int steps;
   final bool selected;
   final bool locked;
-  final bool frozen;
   final VoidCallback? onTap;
 
   @override
@@ -823,34 +935,58 @@ class _BoardChip extends StatelessWidget {
     final fg = selected ? context.accent : (locked ? c.textTertiary : c.textPrimary);
     return Pressable(
       onTap: onTap,
-      child: Opacity(
-        opacity: frozen && !selected ? 0.4 : 1,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 180),
-          constraints: const BoxConstraints(minWidth: 74),
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          decoration: BoxDecoration(
-            color: selected ? c.accentTint : c.card,
-            borderRadius: BorderRadius.circular(Radii.md),
-            border: Border.all(color: selected ? context.accent : c.stroke, width: selected ? 1.5 : 1),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (locked) ...[Icon(AppIcons.lock, size: 11, color: fg), const SizedBox(width: 3)],
-                  Text(spec.code, style: TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body, letterSpacing: -0.2, color: fg)),
-                ],
-              ),
-              Text(spec.label, style: TextStyle(fontSize: TypeSize.micro, color: selected ? context.accent : c.textTertiary)),
-            ],
-          ),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        constraints: const BoxConstraints(minWidth: 74),
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        decoration: BoxDecoration(
+          color: selected ? c.accentTint : c.card,
+          borderRadius: BorderRadius.circular(Radii.md),
+          border: Border.all(color: selected ? context.accent : c.stroke, width: selected ? 1.5 : 1),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(spec.code, style: TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body, letterSpacing: -0.2, color: fg)),
+            Text(spec.label, style: TextStyle(fontSize: TypeSize.micro, fontWeight: FontWeight.w500, color: selected ? context.accent : c.textTertiary)),
+            const SizedBox(height: 6),
+            SizedBox(
+              height: 12,
+              child: locked
+                  ? Icon(AppIcons.lock, size: 11, color: c.textTertiary)
+                  : _LadderSteps(step: step, of: steps, color: context.accent, rest: selected ? context.accent.withValues(alpha: 0.22) : c.stroke),
+            ),
+          ],
         ),
       ),
     );
   }
+}
+
+/// A row of short rising bars, the first [step] + 1 lit: how far up the size
+/// ladder a board is, like a signal meter.
+class _LadderSteps extends StatelessWidget {
+  const _LadderSteps({required this.step, required this.of, required this.color, required this.rest});
+  final int step;
+  final int of;
+  final Color color;
+  final Color rest;
+
+  @override
+  Widget build(BuildContext context) => Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          for (var k = 0; k < of; k++) ...[
+            if (k > 0) const SizedBox(width: 2),
+            Container(
+              width: 4,
+              height: 4 + 8 * (k + 1) / of,
+              decoration: BoxDecoration(color: k <= step ? color : rest, borderRadius: BorderRadius.circular(1)),
+            ),
+          ],
+        ],
+      );
 }
 
 /// "Up to [coin] 40 · 80 XP · [piggy] +5": what a 3-star solve pays.
@@ -881,6 +1017,34 @@ class _RewardsLine extends StatelessWidget {
         const SizedBox(width: 3),
         Text('+$piggy', style: style.copyWith(color: c.textPrimary, fontWeight: FontWeight.w700)),
       ],
+      ),
+    );
+  }
+}
+
+/// "Discard progress" under Continue: a quiet destructive text button (red,
+/// 44 pt to tap) instead of a second full-size button next to the primary.
+class _DiscardButton extends StatelessWidget {
+  const _DiscardButton({required this.onTap});
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final red = context.colors.danger;
+    return Pressable(
+      key: const ValueKey('discard-progress'),
+      onTap: onTap,
+      child: SizedBox(
+        height: 44,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(AppIcons.trash, size: 16, color: red),
+            const SizedBox(width: 6),
+            Text('Discard progress', style: TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w600, color: red)),
+          ],
+        ),
       ),
     );
   }

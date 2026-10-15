@@ -385,7 +385,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   Future<void> _onWin() async {
     if (_completionHandled) return;
     _completionHandled = true;
-    // The first board is done: the coach line has done its job.
+    // The first board is done: no need to explain it again.
     if (_showTutorial) {
       ref.read(settingsProvider.notifier).setTutorialSeen();
       _showTutorial = false;
@@ -641,15 +641,6 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                   title: puzzle.title,
                   painting: _painting,
                 ),
-                // First game: one line that teaches the next thing to do, while playing.
-                if (_showTutorial && image.hasValue && state.status != GameStatus.won)
-                  _CoachLine(
-                    state: state,
-                    onDone: () {
-                      ref.read(settingsProvider.notifier).setTutorialSeen();
-                      setState(() => _showTutorial = false);
-                    },
-                  ),
                 Expanded(
                   child: LayoutBuilder(
                     builder: (context, cons) {
@@ -806,6 +797,14 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
               ],
             ),
           ),
+          // First game: how to play, in a card at the bottom; the board it talks about stays in view.
+          if (_showTutorial && image.hasValue && state.status != GameStatus.won)
+            _HowToPlay(
+              onDone: () {
+                ref.read(settingsProvider.notifier).setTutorialSeen();
+                setState(() => _showTutorial = false);
+              },
+            ),
           if (state.status == GameStatus.won && image.hasValue)
             _CompletionOverlay(
               puzzle: puzzle,
@@ -883,28 +882,42 @@ class _Hud extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(12, 6, 12, 8),
       child: Column(
         children: [
-          Row(
-            children: [
-              RoundIconButton(icon: AppIcons.pauseFill, size: 40, onTap: onPause),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          // One glass bar, the same material as the toolbar under the board.
+          DecoratedBox(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(Radii.pill),
+              boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: context.isDark ? 0.35 : 0.06), blurRadius: 14, offset: const Offset(0, 3))],
+            ),
+            child: GlassSurface(
+              borderRadius: BorderRadius.circular(Radii.pill),
+              opacity: context.isDark ? 0.7 : 0.82,
+              hairline: Border.all(color: c.stroke, width: 0.5),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(4, 4, 18, 4),
+                child: Row(
                   children: [
-                    Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body)),
-                    Text('${b.spec.mode.label} · ${b.spec.code} · ${b.spec.label}${painting ? ' · Painting' : ''}', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontSize: TypeSize.caption)),
+                    _PauseButton(onTap: onPause),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body, letterSpacing: -0.2)),
+                          Text('${b.spec.mode.label} · ${b.spec.code} · ${b.spec.label}${painting ? ' · Painting' : ''}', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontSize: TypeSize.caption)),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    // Moves against par ("14 / 18": three stars while within it), then time.
+                    _HudStat(label: 'Moves', value: formatCount(state.moves), sub: '/${state.par}'),
+                    if (showTimer) ...[
+                      const SizedBox(width: 16),
+                      _HudStat(label: 'Time', value: formatDuration(state.elapsed)),
+                    ],
                   ],
                 ),
               ),
-              const SizedBox(width: 10),
-              // Moves against par ("14 / 18": three stars while within it), then time.
-              _HudStat(label: 'Moves', value: formatCount(state.moves), sub: '/${state.par}'),
-              if (showTimer) ...[
-                const SizedBox(width: 16),
-                _HudStat(label: 'Time', value: formatDuration(state.elapsed)),
-              ],
-              const SizedBox(width: 4),
-            ],
+            ),
           ),
           const SizedBox(height: 10),
           Row(
@@ -920,6 +933,30 @@ class _Hud extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Pause, at the start of the HUD capsule: a tinted 40 pt circle, 44 pt to tap.
+class _PauseButton extends StatelessWidget {
+  const _PauseButton({required this.onTap});
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) => Semantics(
+        button: true,
+        label: 'Pause',
+        child: Pressable(
+          onTap: onTap,
+          scale: 0.9,
+          child: TapTarget(
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(color: context.colors.accentTint, shape: BoxShape.circle),
+              child: Icon(AppIcons.pauseFill, size: 18, color: context.accent),
+            ),
+          ),
+        ),
+      );
 }
 
 /// A HUD figure without a box: the name small above, the number below
@@ -969,38 +1006,46 @@ class _BoosterBar extends StatelessWidget {
   Widget build(BuildContext context) => ChromeText(child: Builder(builder: _build));
 
   Widget _build(BuildContext context) {
-    final c = context.colors;
-    final row = Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+    final undo = _Booster(icon: AppIcons.undo, label: 'Undo', enabled: canUndo, onTap: onUndo);
+    final paid = [
+      _Booster(key: const ValueKey('booster-peek'), icon: AppIcons.peek, label: 'Peek', stock: peeks, price: Economy.peekCostCoins, enabled: playing, onTap: onPeek),
+      _Booster(key: const ValueKey('booster-magic'), icon: AppIcons.magic, label: 'Magic', stock: magics, price: Economy.magicLockCostCoins, enabled: playing, onTap: onMagic),
+      _Booster(icon: AppIcons.hint, label: 'Hint', stock: hints, price: Economy.hintCostCoins, enabled: playing, onTap: onHint),
+    ];
+    // A floating glass capsule, the same material, shape and shadow as the tab bar.
+    Widget capsule(Widget child, {EdgeInsets padding = const EdgeInsets.symmetric(horizontal: 6)}) => DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(Radii.pill),
+            boxShadow: [
+              BoxShadow(color: Colors.black.withValues(alpha: context.isDark ? 0.4 : 0.09), blurRadius: 20, offset: const Offset(0, 6)),
+              BoxShadow(color: Colors.black.withValues(alpha: context.isDark ? 0.2 : 0.04), blurRadius: 2, offset: const Offset(0, 1)),
+            ],
+          ),
+          child: GlassSurface(
+            borderRadius: BorderRadius.circular(Radii.pill),
+            opacity: context.isDark ? 0.7 : 0.82,
+            hairline: Border.all(color: context.isDark ? Colors.white.withValues(alpha: 0.10) : Colors.black.withValues(alpha: 0.06), width: 0.5),
+            child: SizedBox(height: _Booster.barHeight, child: Padding(padding: padding, child: child)),
+          ),
+        );
+    // Undo, free and about the moves, in its own round glass button; the three
+    // helpers, which come from stock or cost coins, together in a capsule.
+    final bar = Row(
       children: [
-        _Booster(icon: AppIcons.undo, label: 'Undo', enabled: canUndo, onTap: onUndo),
-        _Booster(key: const ValueKey('booster-peek'), icon: AppIcons.peek, label: 'Peek', stock: peeks, price: Economy.peekCostCoins, enabled: playing, onTap: onPeek),
-        _Booster(key: const ValueKey('booster-magic'), icon: AppIcons.magic, label: 'Magic', stock: magics, price: Economy.magicLockCostCoins, enabled: playing, onTap: onMagic),
-        _Booster(icon: AppIcons.hint, label: 'Hint', stock: hints, price: Economy.hintCostCoins, enabled: playing, onTap: onHint),
+        capsule(SizedBox(width: _Booster.barHeight - 4, child: undo), padding: const EdgeInsets.symmetric(horizontal: 2)),
+        const SizedBox(width: 10),
+        Expanded(child: capsule(Row(children: [for (final b in paid) Expanded(child: b)]))),
       ],
     );
-    // A floating glass toolbar, the same material and shape as the tab bar.
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(Radii.pill),
-          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: context.isDark ? 0.35 : 0.08), blurRadius: 18, offset: const Offset(0, 4))],
-        ),
-        child: GlassSurface(
-          borderRadius: BorderRadius.circular(Radii.pill),
-          opacity: context.isDark ? 0.7 : 0.82,
-          hairline: Border.all(color: c.stroke, width: 0.5),
-          child: Padding(padding: const EdgeInsets.fromLTRB(10, 8, 10, 7), child: row),
-        ),
-      ),
-    );
+    return Padding(padding: const EdgeInsets.fromLTRB(16, 4, 16, 8), child: bar);
   }
 }
 
-/// One tool. What it costs reads the same on every tool: a count on its
-/// corner while there are some in stock, else its price in coins under the
-/// label. Undo is free and shows neither.
+/// One tool: its mark over its name, and one badge on the mark's corner that
+/// says what using it takes: how many are in stock (ink count, "999+" above
+/// that, as iOS badges do), or once the stock is out, its price (a coin and
+/// the amount). Undo is free and has no badge. Every tool has the same two
+/// lines, so marks and names align.
 class _Booster extends StatelessWidget {
   const _Booster({super.key, required this.icon, required this.label, required this.enabled, required this.onTap, this.stock, this.price});
   final IconData icon;
@@ -1014,51 +1059,75 @@ class _Booster extends StatelessWidget {
   /// Coins per use once the stock is out.
   final int? price;
 
+  /// Height of the toolbar capsule.
+  static const barHeight = 58.0;
+
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
     final count = stock ?? 0;
     final buying = stock != null && count == 0 && price != null;
-    return Pressable(
-      onTap: enabled ? onTap : null,
-      scale: 0.9,
-      child: Opacity(
-        opacity: enabled ? 1 : 0.4,
-        child: SizedBox(
-          width: 64,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  SizedBox(width: 40, height: 30, child: Icon(icon, size: 26, color: context.accent)),
-                  if (count > 0)
-                    Positioned(
-                      right: -11,
-                      top: -6,
-                      child: Container(
-                        constraints: const BoxConstraints(minWidth: 18),
-                        height: 18,
-                        padding: const EdgeInsets.symmetric(horizontal: 5),
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: c.textPrimary,
-                          borderRadius: BorderRadius.circular(Radii.pill),
-                          border: Border.all(color: c.card, width: 1.5),
-                        ),
-                        child: Text('$count', style: TextStyle(fontSize: TypeSize.micro, fontWeight: FontWeight.w700, color: c.card, height: 1.1)),
-                      ),
-                    ),
-                ],
-              ),
-              const SizedBox(height: 2),
-              Text(label, style: const TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600)),
-              SizedBox(
-                height: 14,
-                child: buying ? Amount(currency: Currency.coins, value: price!, size: 12, fontSize: TypeSize.micro, weight: FontWeight.w600, color: c.textSecondary) : null,
-              ),
-            ],
+    // The badge cuts out of the glass with a ring of the surface colour.
+    final ring = GlassSurface.tintColor(context);
+    Widget? badge;
+    if (count > 0) {
+      badge = Container(
+        constraints: const BoxConstraints(minWidth: 18),
+        height: 18,
+        padding: const EdgeInsets.symmetric(horizontal: 5),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(color: c.textPrimary, borderRadius: BorderRadius.circular(Radii.pill), border: Border.all(color: ring, width: 1.5)),
+        child: Text(count > 999 ? '999+' : '$count', style: TextStyle(fontSize: TypeSize.micro, fontWeight: FontWeight.w700, color: ring, height: 1.1, fontFeatures: tabularFigures)),
+      );
+    } else if (buying) {
+      badge = Container(
+        height: 18,
+        padding: const EdgeInsets.fromLTRB(3, 0, 6, 0),
+        decoration: BoxDecoration(
+          color: context.isDark ? c.cardElevated : Colors.white,
+          borderRadius: BorderRadius.circular(Radii.pill),
+          border: Border.all(color: c.stroke, width: 0.5),
+          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: context.isDark ? 0.3 : 0.08), blurRadius: 3, offset: const Offset(0, 1))],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const CoinIcon(size: 12),
+            const SizedBox(width: 2),
+            Text(formatCount(price!), style: TextStyle(fontSize: TypeSize.micro, fontWeight: FontWeight.w700, color: c.textPrimary, height: 1.1, fontFeatures: tabularFigures)),
+          ],
+        ),
+      );
+    }
+    return Semantics(
+      button: true,
+      enabled: enabled,
+      label: count > 0 ? '$label, $count left' : (buying ? '$label, ${countOf(price!, 'coin')}' : label),
+      child: Pressable(
+        onTap: enabled ? onTap : null,
+        scale: 0.9,
+        child: Opacity(
+          opacity: enabled ? 1 : 0.35,
+          child: SizedBox(
+            height: barHeight,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 26,
+                  height: 26,
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Icon(icon, size: 24, color: context.accent),
+                      if (badge != null) Positioned(left: 14, top: -4, child: badge),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 3),
+                Text(label, maxLines: 1, style: const TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600, letterSpacing: -0.1)),
+              ],
+            ),
           ),
         ),
       ),
@@ -1095,16 +1164,20 @@ class _PauseSheet extends ConsumerWidget {
           const SizedBox(height: 20),
           BigButton(label: 'Resume', icon: AppIcons.playFill, onTap: onResume),
           const SizedBox(height: 12),
-          // The other ways out, as one grouped list: one primary action above it.
+          // The other ways out, under the one primary action: leaving keeps the
+          // board; the two that throw it away are red, in their own group, and ask first.
+          SoftCard(
+            padding: EdgeInsets.zero,
+            child: _PauseAction(icon: AppIcons.squareArrowLeft, label: 'Save & quit', onTap: onQuit),
+          ),
+          const SizedBox(height: 12),
           SoftCard(
             padding: EdgeInsets.zero,
             child: Column(
               children: [
-                _PauseAction(icon: AppIcons.shuffle, label: 'Shuffle and restart', onTap: onRestart),
+                _PauseAction(icon: AppIcons.shuffle, label: 'Shuffle and restart', destructive: true, onTap: onRestart),
                 _PauseDivider(),
-                _PauseAction(icon: AppIcons.sliderHorizontal3, label: 'Change mode or board', onTap: onChangeDifficulty),
-                _PauseDivider(),
-                _PauseAction(icon: AppIcons.squareArrowLeft, label: 'Save & quit', onTap: onQuit),
+                _PauseAction(icon: AppIcons.sliderHorizontal3, label: 'Change mode or board', destructive: true, onTap: onChangeDifficulty),
               ],
             ),
           ),
@@ -1156,29 +1229,34 @@ class _PauseToggle extends StatelessWidget {
   }
 }
 
-/// A row in the pause sheet's grouped list.
+/// A row in the pause sheet's grouped list. [destructive] rows (they throw
+/// the board away, after asking) are red, the iOS destructive action.
 class _PauseAction extends StatelessWidget {
-  const _PauseAction({required this.icon, required this.label, required this.onTap});
+  const _PauseAction({required this.icon, required this.label, required this.onTap, this.destructive = false});
   final IconData icon;
   final String label;
   final VoidCallback onTap;
+  final bool destructive;
 
   @override
-  Widget build(BuildContext context) => Pressable(
-        onTap: onTap,
-        scale: 0.99,
-        child: SizedBox(
-          height: 50,
-          child: Row(
-            children: [
-              const SizedBox(width: 16),
-              Icon(icon, size: 20, color: context.accent),
-              const SizedBox(width: 14),
-              Expanded(child: Text(label, style: const TextStyle(fontSize: TypeSize.callout, fontWeight: FontWeight.w500))),
-            ],
-          ),
+  Widget build(BuildContext context) {
+    final tone = destructive ? context.colors.danger : null;
+    return Pressable(
+      onTap: onTap,
+      scale: 0.99,
+      child: SizedBox(
+        height: 50,
+        child: Row(
+          children: [
+            const SizedBox(width: 16),
+            Icon(icon, size: 20, color: tone ?? context.accent),
+            const SizedBox(width: 14),
+            Expanded(child: Text(label, style: TextStyle(fontSize: TypeSize.callout, fontWeight: FontWeight.w500, color: tone))),
+          ],
         ),
-      );
+      ),
+    );
+  }
 }
 
 class _PauseDivider extends StatelessWidget {
@@ -1186,46 +1264,76 @@ class _PauseDivider extends StatelessWidget {
   Widget build(BuildContext context) => Divider(height: 0.5, thickness: 0.5, indent: 50, color: context.colors.stroke);
 }
 
-/// First game: a coach line between the HUD and the board that follows the
-/// player: pick a card, place it, then how groups and locks work. It never
-/// covers the board; "Got it" (or the first locked card's step) ends it.
-class _CoachLine extends StatelessWidget {
-  const _CoachLine({required this.state, required this.onDone});
-  final GameState state;
+/// First game: "How to play" in three short steps, each with its mark, and
+/// one line about stars, in a card at the bottom over the tools (they wait
+/// until it is read anyway). A light dim keeps the board in view above it.
+/// "Got it", or a tap anywhere, closes it for good.
+class _HowToPlay extends StatelessWidget {
+  const _HowToPlay({required this.onDone});
   final VoidCallback onDone;
 
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    final b = state.board;
-    final (IconData icon, String text) = b.lockedCount > 0
-        ? (AppIcons.lock, 'A card in its true spot locks in place. Fewer moves earn more stars.')
-        : state.moves > 0
-        ? (AppIcons.group, 'Neighbours in the picture snap into a group and move together.')
-        : state.selected != null
-        ? (AppIcons.tapCard, 'Now tap the place where it belongs. Or drag it there.')
-        : (AppIcons.tapCard, 'Tap a card to pick it up.');
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 0, 12, 4),
-      child: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 220),
-        child: Container(
-          key: ValueKey(text),
-          padding: const EdgeInsets.fromLTRB(12, 8, 6, 8),
-          decoration: BoxDecoration(color: c.accentTint, borderRadius: BorderRadius.circular(Radii.md)),
+    Widget step(IconData icon, String text) => Padding(
+          padding: const EdgeInsets.only(bottom: 12),
           child: Row(
             children: [
-              Icon(icon, size: 18, color: context.accent),
-              const SizedBox(width: 10),
-              Expanded(child: Text(text, style: TextStyle(fontSize: TypeSize.footnote, height: 1.3, fontWeight: FontWeight.w500, color: c.textPrimary))),
-              Pressable(
-                onTap: onDone,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                  child: Text('Got it', style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w700, color: context.accent)),
-                ),
-              ),
+              IconTile(icon: icon, size: IconTile.small, radius: 9),
+              const SizedBox(width: 12),
+              Expanded(child: Text(text, style: TextStyle(fontSize: TypeSize.body, height: 1.3, color: c.textPrimary))),
             ],
+          ),
+        );
+    return Positioned.fill(
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: onDone,
+        child: ColoredBox(
+          color: Colors.black.withValues(alpha: context.isDark ? 0.4 : 0.25),
+          child: SafeArea(
+            top: false,
+            minimum: const EdgeInsets.only(bottom: 8),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Elevated(
+                  child: Builder(
+                    builder: (context) => Container(
+                      key: const ValueKey('how-to-play'),
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
+                      decoration: BoxDecoration(
+                        color: context.colors.card,
+                        borderRadius: BorderRadius.circular(28),
+                        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: context.isDark ? 0.5 : 0.14), blurRadius: 30, offset: const Offset(0, 8))],
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SheetHeader(title: 'How to play'),
+                          const SizedBox(height: 14),
+                          step(AppIcons.tapCard, 'Tap a card, then tap where it belongs. Or drag it there.'),
+                          step(AppIcons.group, 'Neighbours in the picture snap into a group and move together.'),
+                          step(AppIcons.lock, 'A card in its true spot locks in place.'),
+                          Row(
+                            children: [
+                              const SizedBox(width: 8),
+                              Icon(AppIcons.star, size: 15, color: Brand.star),
+                              const SizedBox(width: 21),
+                              Expanded(child: Text('Fewer moves earn more stars. No time limit.', style: TextStyle(fontSize: TypeSize.footnote, color: context.colors.textSecondary))),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          BigButton(label: 'Got it', onTap: onDone),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ).animate().slideY(begin: 0.25, curve: Curves.easeOutCubic, duration: 350.ms).fadeIn(duration: 200.ms),
+            ),
           ),
         ),
       ),
@@ -1444,38 +1552,57 @@ class _CompletionOverlayState extends State<_CompletionOverlay> {
       ),
     ).animate().slideY(begin: 0.25, duration: 350.ms, curve: Curves.easeOutCubic).fadeIn(duration: 200.ms);
 
-    final results = Container(
-      color: c.canvas,
-      child: Column(
+    // The finished picture runs full-bleed from the very top of the screen
+    // (under a light status bar and a glass back button, like a pack's cover)
+    // down behind the results panel's rounded corners.
+    final top = MediaQuery.paddingOf(context).top;
+    final photo = GestureDetector(
+      onTap: _view,
+      child: Stack(
+        fit: StackFit.expand,
         children: [
-          Expanded(
-            child: SafeArea(
-              bottom: false,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
-                child: Center(
-                  child: GestureDetector(
-                    onTap: _view,
-                    child: Stack(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(Radii.lg),
-                          child: RawImage(image: widget.image, fit: BoxFit.contain, filterQuality: FilterQuality.medium),
-                        ),
-                        Positioned(
-                          right: 10,
-                          bottom: 10,
-                          child: _OverlayPill(icon: AppIcons.arrowUpLeftArrowDownRight, label: 'View picture', onTap: _view, small: true),
-                        ),
-                      ],
-                    ),
-                  ),
+          RawImage(image: widget.image, fit: BoxFit.cover, filterQuality: FilterQuality.medium),
+          // A soft shade under the status bar and the back button, so both read on bright pictures.
+          Positioned(
+            left: 0,
+            right: 0,
+            top: 0,
+            height: top + 72,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Colors.black.withValues(alpha: 0.36), Colors.transparent],
                 ),
               ),
             ),
           ),
-          panel,
+          Positioned(
+            left: 10,
+            top: top + 4,
+            child: PhotoButton(key: const ValueKey('completion-back'), icon: AppIcons.back, size: 38, semanticLabel: 'Back to pack', onTap: widget.onHome),
+          ),
+          Positioned(
+            right: 14,
+            // Clear of the panel's rounded corners, which the photo runs behind.
+            bottom: _CompletionLayout.overlap + 12,
+            child: _OverlayPill(icon: AppIcons.arrowUpLeftArrowDownRight, label: 'View picture', onTap: _view, small: true),
+          ),
         ],
+      ),
+    );
+    final results = AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light.copyWith(statusBarColor: Colors.transparent),
+      child: ColoredBox(
+        color: c.card,
+        child: CustomMultiChildLayout(
+          delegate: _CompletionLayout(minPhoto: top + 120),
+          children: [
+            LayoutId(id: _CompletionLayout.photo, child: photo),
+            LayoutId(id: _CompletionLayout.panel, child: panel),
+          ],
+        ),
       ),
     );
 
@@ -1540,6 +1667,32 @@ class _CompletionOverlayState extends State<_CompletionOverlay> {
       ),
     );
   }
+}
+
+/// The completion page: the results panel at the bottom at its own height
+/// (it scrolls inside when taller than the screen allows), the picture
+/// filling everything above it and running [overlap] pt behind the panel's
+/// rounded top corners.
+class _CompletionLayout extends MultiChildLayoutDelegate {
+  _CompletionLayout({required this.minPhoto});
+
+  /// The picture never gets shorter than this (status bar and a strip of photo).
+  final double minPhoto;
+
+  static const photo = 'photo';
+  static const panel = 'panel';
+  static const overlap = 28.0;
+
+  @override
+  void performLayout(Size size) {
+    final p = layoutChild(panel, BoxConstraints(minWidth: size.width, maxWidth: size.width, maxHeight: math.max(0, size.height - minPhoto)));
+    positionChild(panel, Offset(0, size.height - p.height));
+    layoutChild(photo, BoxConstraints.tight(Size(size.width, math.max(0, size.height - p.height + overlap))));
+    positionChild(photo, Offset.zero);
+  }
+
+  @override
+  bool shouldRelayout(_CompletionLayout old) => old.minPhoto != minPhoto;
 }
 
 /// Compact pill over the finished picture: frosted glass, or solid accent

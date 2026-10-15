@@ -145,7 +145,7 @@ void main() {
     await tapText(tester, 'Got it');
     await tester.dragUntilVisible(find.byKey(const ValueKey('painting-option')), find.byType(Scrollable).first, const Offset(0, -200));
     await settle(tester, 500);
-    expect(find.textContaining('Opens at level ${Unlock.painting.level}'), findsOneWidget);
+    expect(find.text('Level ${Unlock.painting.level}'), findsOneWidget);
     await shot(tester, 'pq_03b_painting_locked');
 
     // Another picture: a new one from the Quick play pool, same board.

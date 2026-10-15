@@ -1075,6 +1075,55 @@ class PhotoChip extends StatelessWidget {
   }
 }
 
+/// The one round button over a photo (the picture credit on the difficulty
+/// preview, the back button over the finished picture and on the pack cover):
+/// frosted dark glass with a hairline and a white mark, the [PhotoChip]'s
+/// material, so it reads on light and dark photos alike. Drawn at [size],
+/// tapped in 44 pt.
+class PhotoButton extends StatelessWidget {
+  const PhotoButton({super.key, required this.icon, required this.onTap, this.size = 36, this.semanticLabel, this.onPhoto = true});
+  final IconData icon;
+  final VoidCallback onTap;
+  final double size;
+  final String? semanticLabel;
+
+  /// False once the photo has gone from under it (the pack cover collapsed into the glass bar):
+  /// the plain round bar button, card fill, hairline and an ink mark. The change animates.
+  final bool onPhoto;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return Semantics(
+      button: true,
+      label: semanticLabel,
+      child: Pressable(
+        onTap: onTap,
+        scale: 0.9,
+        child: TapTarget(
+          child: ClipOval(
+            child: BackdropFilter(
+              enabled: onPhoto,
+              filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                width: size,
+                height: size,
+                decoration: BoxDecoration(
+                  color: onPhoto ? Colors.black.withValues(alpha: 0.34) : c.card,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: onPhoto ? Colors.white.withValues(alpha: 0.2) : c.stroke, width: onPhoto ? 0.5 : 1),
+                ),
+                child: Icon(icon, size: size * 0.48, color: onPhoto ? Colors.white : c.textPrimary),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 /// The title block every sheet starts with: one title style (20 pt bold) and
 /// one subtitle style (14 pt, secondary), so sheets read as one family.
 /// Sheets that are a list or a choice align it left; sheets that lead with

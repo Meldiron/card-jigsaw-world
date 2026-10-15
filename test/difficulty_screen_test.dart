@@ -149,7 +149,9 @@ void main() {
     expect(find.text('Level ${Unlock.squares.level}'), findsOneWidget);
     expect(find.text('Level ${Unlock.triangles.level}'), findsOneWidget);
     expect(find.text('Level ${Unlock.hexagons.level}'), findsOneWidget);
-    expect(find.textContaining('Opens at level ${Unlock.painting.level}'), findsOneWidget);
+    // Painting: a "[lock] Level 8" chip, and one line on what it is.
+    expect(find.text('Level ${Unlock.painting.level}'), findsOneWidget);
+    expect(find.text('Black and white until cards lock'), findsOneWidget);
     await dump(tester, key, 'difficulty_level1_locked');
     // A locked shape explains itself instead of being picked.
     await tester.tap(find.byKey(const ValueKey('mode-squares')));
