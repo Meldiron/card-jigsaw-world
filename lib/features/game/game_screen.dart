@@ -882,28 +882,42 @@ class _Hud extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(12, 6, 12, 8),
       child: Column(
         children: [
-          Row(
-            children: [
-              RoundIconButton(icon: AppIcons.pauseFill, size: 40, onTap: onPause),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          // One glass bar, the same material as the toolbar under the board.
+          DecoratedBox(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(Radii.pill),
+              boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: context.isDark ? 0.35 : 0.06), blurRadius: 14, offset: const Offset(0, 3))],
+            ),
+            child: GlassSurface(
+              borderRadius: BorderRadius.circular(Radii.pill),
+              opacity: context.isDark ? 0.7 : 0.82,
+              hairline: Border.all(color: c.stroke, width: 0.5),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(4, 4, 18, 4),
+                child: Row(
                   children: [
-                    Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body)),
-                    Text('${b.spec.mode.label} · ${b.spec.code} · ${b.spec.label}${painting ? ' · Painting' : ''}', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontSize: TypeSize.caption)),
+                    _PauseButton(onTap: onPause),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body, letterSpacing: -0.2)),
+                          Text('${b.spec.mode.label} · ${b.spec.code} · ${b.spec.label}${painting ? ' · Painting' : ''}', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontSize: TypeSize.caption)),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    // Moves against par ("14 / 18": three stars while within it), then time.
+                    _HudStat(label: 'Moves', value: formatCount(state.moves), sub: '/${state.par}'),
+                    if (showTimer) ...[
+                      const SizedBox(width: 16),
+                      _HudStat(label: 'Time', value: formatDuration(state.elapsed)),
+                    ],
                   ],
                 ),
               ),
-              const SizedBox(width: 10),
-              // Moves against par ("14 / 18": three stars while within it), then time.
-              _HudStat(label: 'Moves', value: formatCount(state.moves), sub: '/${state.par}'),
-              if (showTimer) ...[
-                const SizedBox(width: 16),
-                _HudStat(label: 'Time', value: formatDuration(state.elapsed)),
-              ],
-              const SizedBox(width: 4),
-            ],
+            ),
           ),
           const SizedBox(height: 10),
           Row(
@@ -919,6 +933,30 @@ class _Hud extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Pause, at the start of the HUD capsule: a tinted 40 pt circle, 44 pt to tap.
+class _PauseButton extends StatelessWidget {
+  const _PauseButton({required this.onTap});
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) => Semantics(
+        button: true,
+        label: 'Pause',
+        child: Pressable(
+          onTap: onTap,
+          scale: 0.9,
+          child: TapTarget(
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(color: context.colors.accentTint, shape: BoxShape.circle),
+              child: Icon(AppIcons.pauseFill, size: 18, color: context.accent),
+            ),
+          ),
+        ),
+      );
 }
 
 /// A HUD figure without a box: the name small above, the number below
