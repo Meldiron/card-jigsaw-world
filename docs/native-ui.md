@@ -12,16 +12,16 @@ What is used where:
 
 | Component | Implementation |
 | --- | --- |
-| Confirmations, destructive prompts, text-entry prompts (rename, friend code) | `showCupertinoDialog` + `CupertinoAlertDialog`. Flutter draws the system alert (blurred popup surface, hairlines, bold default action). Cancel left, confirm right, destructive in red. |
+| Confirmations, destructive prompts, text-entry prompts (rename, friend code) | `showAppAlert` in `lib/widgets/ui.dart`: the iOS 26 alert drawn in Flutter. A glass card (28pt radius; in dark mode the elevated tint, one level above sheets, with a 50% dim) with a centred title and message and capsule actions (48pt): Cancel neutral, the action tinted cobalt, or red when destructive (never the default look). Side by side when both labels fit, otherwise stacked with the action on top. Every label names its action (never "OK"). Text fields inside use `AlertTextField`. |
 | Pickers and menus (add a photo) | `showCupertinoModalPopup` + `CupertinoActionSheet`. |
-| Content-sized sheets (pause menu, daily gift, piggy bank, tier unlock, pack access, avatar picker, credits) | `showAppSheet` in `lib/widgets/ui.dart`: a modal bottom sheet rendered on `GlassSheet` (28pt top radius, grabber, 32% dim, blur + saturation + tint, home-indicator inset). This is what iOS 26 partial-height sheets look like. |
+| Content-sized sheets (pause menu, daily gift, piggy bank, tier unlock, pack access, avatar picker, credits) | `showAppSheet` in `lib/widgets/ui.dart`: a modal bottom sheet rendered on `GlassSheet` (28pt top radius, grabber, 32% dim, blur + saturation + tint, home-indicator inset). This is what iOS 26 partial-height sheets look like. Every sheet starts with `SheetHeader` (20pt title, 15pt subtitle): left-aligned for lists and choices, centred for sheets that lead with a picture or an icon. |
 | Full-height modals (Store, Wheel, Account) | `CupertinoSheetRoute` via `_SheetPage` in `lib/router.dart`: the real stacked-sheet presentation. The sheet stops below the status bar, the page behind scales back, drag down to dismiss. |
 | Bottom tab bar | `GlassTabBar`: floating capsule inset 16pt from the edges, hovering above the home indicator, blurred content underneath, soft tinted pill behind the selected tab (iOS 26 shape). Icons and labels unchanged. `Scaffold.extendBody: true` so pages scroll beneath it. |
 | Tab headers (Home, Library, Events, Profile) | `GlassSliverHeader` / `HeaderBar`: pinned, transparent while the list is at the top, glass with a hairline once content scrolls under. Same rule as `CupertinoNavigationBar.automaticBackgroundVisibility`. |
 | App bars on pushed pages (Settings, Store, Account, My Puzzles, Difficulty, Wheel) | `GlassAppBar` with `extendBodyBehindAppBar: true`. Transparent at rest, glass when scrolled under. |
 | Pack cover | `SliverAppBar` whose collapsed state turns into glass over the blurred top of the cover. |
 | Segmented switches (Social tabs, Account form, Settings > Theme) | `AppSegmentedControl` in `lib/widgets/ui.dart`: the iOS 26 shape drawn in Flutter. Capsule track in the system tertiary fill, glass thumb (white in light, light grey in dark, brighter rim on its upper edge) that springs to the segment, stretches while it travels, lifts under the finger and can be dragged. Use it for every new switch. |
-| Toasts | Material floating `SnackBar`, shown through the root `ScaffoldMessenger` so it sits on the outermost Scaffold: above the floating tab bar and above sheet barriers. |
+| Toasts | `showToast` in `lib/widgets/ui.dart`: a glass capsule that drops in under the status bar, above every screen, sheet and alert; one at a time, tap or swipe up to close. |
 
 ## Why not a package
 
@@ -70,7 +70,7 @@ simulator, because it is all drawn by Flutter.
 
 - No emoji, no gradients; the only colour in chrome is the cobalt accent on
   the selected tab and default buttons.
-- Alerts keep platform order: Cancel left, confirm right (bold).
+- Alerts keep platform order: Cancel left, confirm right; stacked, the action on top and Cancel last.
 - Pages that scroll under a bar pad their first item with
   `MediaQuery.paddingOf(context).top`. Every scrollable page ends with
   `GlassTabBar.scrollEndPadding(context)`: the floating tab bar's height plus
