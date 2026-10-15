@@ -22,7 +22,7 @@ REVIEW = ROOT / "store/review"
 BG = (242, 242, 244)
 INK = (17, 24, 39)
 MUTED = (107, 114, 128)
-ACCENT = (0x4F, 0x46, 0xE5)
+ACCENT = (0x2F, 0x4F, 0xBF)  # Brand.accent (cobalt)
 EDGE = (205, 205, 210)
 SF = "/System/Library/Fonts/SFNS.ttf"
 
