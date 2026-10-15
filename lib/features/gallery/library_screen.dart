@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show ScrollCacheExtent;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart' show NumberFormat;
 
 import '../../core/theme/tokens.dart';
 import '../../models/models.dart';
@@ -275,6 +276,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
         ? libraryPictures(ref.watch(allPuzzlesProvider).value ?? const <Puzzle>[], packs: view(q: ''), query: _query, now: DateTime.now())
         : (pictures: const <Puzzle>[], total: 0);
     final packById = {for (final p in list) p.id: p};
+    final lead = !searching && filter == LibraryFilter.all ? 1 : 0;
 
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
@@ -339,31 +341,48 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
             ),
           ),
         ),
-        if (!searching)
+        if (filtered.isEmpty && found.total == 0)
+          SliverToBoxAdapter(child: _empty(filter, hideFinished: hideFinished, view: view))
+        else if (searching && filtered.isNotEmpty) ...[
+          // While searching, packs and pictures are results of one list: packs as compact
+          // rows, so the matching pictures start on the first screen instead of under a
+          // page of large covers.
           SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 6, 20, 0),
+            child: SectionHeader(
+              key: const ValueKey('library-packs'),
+              title: 'Packs',
+              subtitle: '${filtered.length} ${filtered.length == 1 ? 'pack' : 'packs'}',
+              padding: const EdgeInsets.fromLTRB(20, 14, 20, 10),
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            sliver: SliverToBoxAdapter(
               child: SoftCard(
                 padding: EdgeInsets.zero,
-                child: ListRow(
-                  icon: AppIcons.photo,
-                  title: 'My Puzzles',
-                  subtitle: 'Turn your photos into puzzles',
-                  onTap: () => context.go('/profile/my-puzzles'),
+                child: Column(
+                  children: [
+                    for (var i = 0; i < filtered.length; i++) ...[
+                      _PackRow(pack: filtered[i]),
+                      if (i < filtered.length - 1) Divider(height: 1, color: c.stroke, indent: 76),
+                    ],
+                  ],
                 ),
               ),
             ),
           ),
-        if (filtered.isEmpty && found.total == 0)
-          SliverToBoxAdapter(child: _empty(filter, hideFinished: hideFinished, view: view))
-        else if (filtered.isNotEmpty)
+        ] else if (filtered.isNotEmpty)
           SliverPadding(
             padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
             sliver: SliverGrid(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 12, crossAxisSpacing: 12, childAspectRatio: 0.78),
+              // In All, My Puzzles is the first tile of the grid instead of a card above it,
+              // so the packs start right under the chips.
               delegate: SliverChildBuilderDelegate(
-                (_, i) => PackCard(pack: filtered[i], onTap: () => context.go('/library/pack/${filtered[i].id}')),
-                childCount: filtered.length,
+                (_, i) => i < lead
+                    ? _MyPuzzlesTile(onTap: () => context.go('/profile/my-puzzles'))
+                    : PackCard(pack: filtered[i - lead], onTap: () => context.go('/library/pack/${filtered[i - lead].id}')),
+                childCount: filtered.length + lead,
               ),
             ),
           ),
@@ -429,6 +448,63 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
   }
 }
 
+/// A pack found by the search: cover, name, category and size, and its
+/// state (price, progress or finished) on the right.
+class _PackRow extends ConsumerWidget {
+  const _PackRow({required this.pack});
+  final Pack pack;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final c = context.colors;
+    final profile = ref.watch(profileProvider).value;
+    if (formerlyFreePacks.contains(pack.id)) ref.watch(playedPacksProvider); // stays open once played
+    final open = profile != null && ref.read(profileProvider.notifier).isUnlocked(pack);
+    final progress = ref.watch(packProgressProvider(pack.id));
+    final tickets = pack.priceTickets > 0;
+    return Pressable(
+      key: ValueKey('library-pack-${pack.id}'),
+      scale: 0.99,
+      onTap: () => context.go('/library/pack/${pack.id}'),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        child: Row(
+          children: [
+            NetImage(url: pack.coverUrl, blurhash: pack.blurhash, width: 52, height: 52, radius: 10),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(pack.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
+                  const SizedBox(height: 2),
+                  Text('${pack.category} · ${progress.total} pictures', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontSize: 13)),
+                ],
+              ),
+            ),
+            const SizedBox(width: 8),
+            if (!open && !pack.hasWindow)
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(AppIcons.lock, size: 12, color: c.textTertiary),
+                  const SizedBox(width: 6),
+                  currencyIcon(tickets ? Currency.tickets : Currency.coins, size: 14),
+                  const SizedBox(width: 4),
+                  Text(NumberFormat.decimalPattern('en').format(tickets ? pack.priceTickets : pack.priceCoins), style: TextStyle(color: c.textSecondary, fontSize: 13, fontWeight: FontWeight.w600)),
+                ],
+              )
+            else if (progress.started)
+              Text('${progress.solved}/${progress.total}', style: TextStyle(color: c.textSecondary, fontSize: 13, fontWeight: FontWeight.w600))
+            else
+              Icon(CupertinoIcons.chevron_right, size: 16, color: c.textTertiary),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 /// A picture found by the search: thumbnail, title, pack, and its state.
 /// It opens the picture when its pack is open and its day has come, else the
 /// pack page (which explains the price or the date).
@@ -473,6 +549,50 @@ class _PictureRow extends ConsumerWidget {
               Row(mainAxisSize: MainAxisSize.min, children: [for (var i = 0; i < 3; i++) Icon(i < stars ? AppIcons.star : AppIcons.starOutline, size: 14, color: i < stars ? Brand.star : c.textTertiary)])
             else
               Icon(CupertinoIcons.chevron_right, size: 16, color: c.textTertiary),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// My Puzzles as the first tile of the All grid: the same card shape as a
+/// pack, with the photo mark on the accent tint where a cover would be.
+class _MyPuzzlesTile extends StatelessWidget {
+  const _MyPuzzlesTile({required this.onTap});
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return Pressable(
+      key: const ValueKey('library-my-puzzles'),
+      onTap: onTap,
+      child: Container(
+        clipBehavior: Clip.antiAlias,
+        decoration: BoxDecoration(color: c.card, borderRadius: BorderRadius.circular(Radii.lg), border: Border.all(color: c.stroke)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                color: c.accentTint,
+                alignment: Alignment.center,
+                child: Icon(AppIcons.photo, size: 44, color: context.accent),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('My Puzzles', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15, letterSpacing: -0.2)),
+                  const SizedBox(height: 4),
+                  Text('Your own photos', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontSize: 12.5)),
+                ],
+              ),
+            ),
           ],
         ),
       ),

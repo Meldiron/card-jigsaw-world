@@ -107,18 +107,15 @@ class AppIcons {
   static const hint = Icons.lightbulb_rounded;
   static const magic = Icons.auto_fix_high_rounded;
 
-  /// Icon for a pack category.
-  static IconData category(String category) => switch (category.toLowerCase()) {
-        'nature' => Icons.landscape_rounded,
-        'animals' => Icons.pets_rounded,
-        'food' => Icons.local_cafe_rounded,
-        'travel' => Icons.location_city_rounded,
-        'premium' => Icons.ac_unit_rounded,
-        'art' => Icons.palette_rounded,
-        'space' => Icons.rocket_launch_rounded,
-        'seasonal' => Icons.eco_rounded,
+  /// Icon for a pack category chip, or none: themed categories (Nature,
+  /// Cities, Abstract...) are plain words, like the Library's category chips;
+  /// only the kinds of pack that play or are made differently carry a mark.
+  static IconData? category(String category) => switch (category.toLowerCase()) {
+        'ai' => Icons.auto_awesome_rounded, // generated pictures
         'daily' => Icons.calendar_month_rounded,
-        _ => Icons.extension_rounded,
+        'event' => Icons.celebration_rounded,
+        'giant' => Icons.grid_on_rounded, // 100-300 card boards
+        _ => null,
       };
 
   /// Icon for a board tier (index into GridSpec.tiers).

@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart' show NumberFormat;
 
 import '../../core/haptics.dart';
 import '../../core/sfx.dart';
@@ -10,12 +12,16 @@ import '../../core/theme/tokens.dart';
 import '../../game/board.dart';
 import '../../models/models.dart';
 import '../../state/catalog.dart';
+import '../../state/giant.dart';
 import '../../state/profile.dart';
 import '../../state/progress.dart';
+import '../../state/rewards.dart';
 import '../../state/starter_packs.dart';
+import '../../state/unlocks.dart';
 import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
+import '../game/unlock_intro.dart' show showLockedInfo;
 import 'pack_progress.dart';
 
 /// Pack detail: image hero, access state, and a grid of puzzles with stars.
@@ -62,16 +68,19 @@ class PackScreen extends ConsumerWidget {
     final available = list.where((p) => !p.isLockedByDate).length;
     final priceCurrency = pack.priceTickets > 0 ? Currency.tickets : Currency.coins;
     final priceValue = pack.priceTickets > 0 ? pack.priceTickets : pack.priceCoins;
+    final balance = priceCurrency == Currency.tickets ? (profile?.tickets ?? 0) : (profile?.coins ?? 0);
+    // A Giant pack plays only on giant boards, which open at a level: before it,
+    // the pack is not sold (nothing in it could be played yet).
+    final giantClosed = isGiantPack(pack) && !ref.watch(openFeaturesProvider).giant;
 
     Future<void> unlock() async {
-      final balance = priceCurrency == Currency.tickets ? (profile?.tickets ?? 0) : (profile?.coins ?? 0);
       final unit = priceCurrency == Currency.tickets ? 'Ticket' : 'Coin';
-      final amount = '$priceValue $unit${priceValue == 1 ? '' : 's'}';
+      final amount = '${_grouped(priceValue)} $unit${priceValue == 1 ? '' : 's'}';
       if (balance >= priceValue) {
         final sure = await showAppAlert(
           context,
           title: 'Unlock ${pack.name}?',
-          message: 'This costs $amount. You have $balance.',
+          message: 'This costs $amount. You have ${_grouped(balance)}.',
           confirmLabel: 'Pay $amount',
         );
         if (!sure || !context.mounted) return;
@@ -95,20 +104,27 @@ class PackScreen extends ConsumerWidget {
     }
 
     void goVip() => context.push('/store');
+    void getMore() => context.push('/store');
 
     return Scaffold(
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
           SliverAppBar(
-            expandedHeight: 280,
+            // About a third of the screen: 280 on a Pro, 220 on an SE (where 280 took 42%
+            // and pushed a locked pack's button under the tab bar), at most 300.
+            expandedHeight: (MediaQuery.sizeOf(context).height * 0.32).clamp(220.0, 300.0),
             pinned: true,
             stretch: true,
             backgroundColor: Colors.transparent,
             scrolledUnderElevation: 0,
             leading: Padding(
               padding: const EdgeInsets.only(left: 12),
-              child: RoundIconButton(icon: CupertinoIcons.back, size: 38, onTap: () => context.pop()),
+              child: _HeroBackButton(onTap: () => context.pop()),
+            ),
+            title: _CollapsedTitle(
+              pack.name,
+              subtitle: !unlocked ? 'Locked' : (packProgress.complete ? 'Finished · ${packProgress.stars} of ${packProgress.maxStars} stars' : '${packProgress.solved} of ${packProgress.total} solved'),
             ),
             flexibleSpace: _CollapsedGlass(
               child: FlexibleSpaceBar(
@@ -118,6 +134,23 @@ class PackScreen extends ConsumerWidget {
                 children: [
                   NetImage(url: pack.coverUrl, blurhash: pack.blurhash),
                   DecoratedBox(decoration: BoxDecoration(gradient: Brand.scrim(strength: 0.7))),
+                  // A soft shade under the status bar and the back button, so the white
+                  // status bar text reads on bright covers (sky, snow, a white plate).
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    height: MediaQuery.paddingOf(context).top + kToolbarHeight + 24,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [Colors.black.withValues(alpha: 0.36), Colors.transparent],
+                        ),
+                      ),
+                    ),
+                  ),
                   Positioned(
                     left: 20,
                     right: 20,
@@ -130,12 +163,9 @@ class PackScreen extends ConsumerWidget {
                             Chip2(label: pack.category, icon: AppIcons.category(pack.category), onImage: true),
                             if (pack.hasWindow && !pack.isExpired) ...[
                               const SizedBox(width: 6),
-                              Chip2(
-                                label: pack.isUpcoming ? 'Opens in ${_countdown(pack.startAt!)}' : 'Ends in ${_countdown(pack.endAt!)}',
-                                icon: pack.isUpcoming ? AppIcons.time : AppIcons.balloon,
-                                color: pack.isUpcoming ? Colors.black.withValues(alpha: 0.45) : Brand.live,
-                                foreground: Colors.white,
-                              ),
+                              pack.isUpcoming
+                                  ? Chip2(label: 'Opens in ${_countdown(pack.startAt!)}', icon: AppIcons.time, onImage: true)
+                                  : _LiveChip('Ends ${_endsIn(pack.endAt!)}'),
                             ],
                           ],
                         ),
@@ -155,26 +185,75 @@ class PackScreen extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // A locked pack leads with the way in; the description and stats follow.
+                  if (giantClosed) ...[
+                    _GiantGateCard(xp: profile?.xp ?? 0, owned: unlocked).animate().fadeIn().slideY(begin: 0.1),
+                    const SizedBox(height: 16),
+                  ] else if (!unlocked) ...[
+                    _accessCard(context, pack, priceCurrency, priceValue, balance, goVip, unlock, getMore).animate().fadeIn().slideY(begin: 0.1),
+                    const SizedBox(height: 16),
+                  ],
                   Text(pack.description, style: TextStyle(color: c.textSecondary, fontSize: 14.5, height: 1.4)),
                   const SizedBox(height: 14),
+                  // One progress line instead of three boxed numbers: solved and stars,
+                  // one bar. It reads like the progress line on the pack cards.
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
                     children: [
-                      _Stat(label: pack.isDaily ? 'Available' : 'Puzzles', value: pack.isDaily ? '$available/${list.length}' : '${list.length}', progress: pack.isDaily ? _ratio(available, list.length) : null),
-                      _Stat(label: 'Solved', value: '${packProgress.solved}/${packProgress.total}', progress: packProgress.solvedRatio),
-                      _Stat(label: 'Stars', value: '${packProgress.stars}/${packProgress.maxStars}', progress: packProgress.starRatio, color: Brand.star, last: true),
+                      Text('${packProgress.solved}', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 17, letterSpacing: -0.3)),
+                      Text(' of ${packProgress.total} solved', style: TextStyle(color: c.textSecondary, fontSize: 14.5, fontWeight: FontWeight.w500)),
+                      const Spacer(),
+                      const Icon(AppIcons.star, size: 14, color: Brand.star),
+                      const SizedBox(width: 4),
+                      Text('${packProgress.stars}', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                      Text(' of ${packProgress.maxStars}', style: TextStyle(color: c.textSecondary, fontSize: 14.5, fontWeight: FontWeight.w500)),
                     ],
                   ),
-                  const SizedBox(height: 16),
-                  if (!unlocked)
-                    _accessCard(context, pack, priceCurrency, priceValue, goVip, unlock).animate().fadeIn().slideY(begin: 0.1)
-                  else
+                  const SizedBox(height: 8),
+                  ProgressBar(value: packProgress.complete ? packProgress.starRatio : packProgress.solvedRatio, height: 6, color: packProgress.complete ? Brand.star : null),
+                  if (unlocked && !giantClosed) ...[
+                    const SizedBox(height: 16),
+                    if (isGiantPack(pack))
+                      // A Giant pack says what kind of board waits behind every picture.
+                      Row(
+                        children: [
+                          Icon(AppIcons.bigBoard, color: context.accent, size: 18),
+                          const SizedBox(width: 6),
+                          Expanded(child: Text('Giant boards of 100 to 300 cards · pinch to zoom', style: TextStyle(color: c.textSecondary, fontWeight: FontWeight.w500))),
+                        ],
+                      )
+                    else if (pack.isDaily && list.any((p) => p.isToday))
+                      // The current month leads with today's picture, the reason to open it.
+                      Builder(builder: (context) {
+                        final today = list.firstWhere((p) => p.isToday);
+                        final pr = progress[today.id];
+                        return _TodayCard(
+                          puzzle: today,
+                          progress: pr,
+                          onTap: () => pr != null && pr.inProgress ? context.push('/game/${today.id}/${_gridCodeFor(pr)}') : context.push('/play/${today.id}'),
+                        );
+                      })
+                    else
                     Row(
                       children: [
-                        Icon(AppIcons.check, color: c.success, size: 18),
+                        Icon(packProgress.perfect ? AppIcons.star : AppIcons.check, color: packProgress.perfect ? Brand.star : c.success, size: 18),
                         const SizedBox(width: 6),
-                        Text('Unlocked · tap any picture to play', style: TextStyle(color: c.textSecondary, fontWeight: FontWeight.w500)),
+                        Expanded(
+                          child: Text(
+                            packProgress.perfect
+                                ? 'Finished with every star · replay any picture'
+                                : packProgress.complete
+                                    ? 'Finished · replay a picture for more stars'
+                                    : pack.isDaily && available < list.length
+                                        ? '$available of ${list.length} days open · a new picture every day'
+                                        : 'Unlocked · tap any picture to play',
+                            style: TextStyle(color: c.textSecondary, fontWeight: FontWeight.w500),
+                          ),
+                        ),
                       ],
                     ),
+                  ],
                 ],
               ),
             ),
@@ -189,7 +268,8 @@ class PackScreen extends ConsumerWidget {
                   crossAxisCount: pack.isDaily ? 4 : 3,
                   mainAxisSpacing: 10,
                   crossAxisSpacing: 10,
-                  childAspectRatio: pack.isDaily ? 0.8 : 0.72,
+                  // Photo plus a two-line caption under it.
+                  childAspectRatio: pack.isDaily ? 0.66 : 0.62,
                 ),
                 delegate: SliverChildBuilderDelegate((_, i) {
                   final p = list[i];
@@ -197,7 +277,7 @@ class PackScreen extends ConsumerWidget {
                   return _PuzzleTile(
                     puzzle: p,
                     progress: pr,
-                    locked: !unlocked,
+                    locked: !unlocked || giantClosed,
                     dateLocked: p.isLockedByDate,
                     daily: pack.isDaily,
                     onTap: () {
@@ -206,9 +286,14 @@ class PackScreen extends ConsumerWidget {
                         showToast(context, 'Opens on ${p.date!.day} ${_monthName(p.date!.month)}. Today\'s puzzle is ready now.', icon: AppIcons.lock);
                         return;
                       }
+                      if (giantClosed) {
+                        Haptics.medium();
+                        showLockedInfo(context, ref, Unlock.giant);
+                        return;
+                      }
                       if (!unlocked) {
                         Haptics.medium();
-                        _showAccessSheet(context, pack, priceCurrency, priceValue, goVip, unlock);
+                        _showAccessSheet(context, pack, priceCurrency, priceValue, balance, goVip, unlock, getMore);
                         return;
                       }
                       if (pr != null && pr.inProgress) {
@@ -228,7 +313,7 @@ class PackScreen extends ConsumerWidget {
   }
 
   /// Builds the single access card used for every locked state.
-  static Widget _accessCard(BuildContext context, Pack pack, Currency currency, int price, VoidCallback onVip, VoidCallback onUnlock, {VoidCallback? onClose}) {
+  static Widget _accessCard(BuildContext context, Pack pack, Currency currency, int price, int balance, VoidCallback onVip, VoidCallback onUnlock, VoidCallback onGetMore, {VoidCallback? onClose}) {
     void wrap(VoidCallback f) {
       onClose?.call();
       f();
@@ -259,6 +344,20 @@ class PackScreen extends ConsumerWidget {
         secondary: ('Unlock for', null, (currency, price), () => wrap(onUnlock)),
       );
     }
+    final tickets = currency == Currency.tickets;
+    if (balance < price) {
+      // Short of the price: say how far off the player is and lead to where the
+      // currency comes from, instead of a button that can only fail.
+      final missing = price - balance;
+      return _AccessCard(
+        icon: AppIcons.lock,
+        title: 'Locked pack',
+        reason: '${_grouped(missing)} more ${tickets ? 'Tickets' : 'Coins'} needed, or play every pack with VIP.',
+        meter: (currency, balance, price),
+        primary: (tickets ? 'Get tickets' : 'Get coins', null, null, () => wrap(onGetMore)),
+        secondary: ('Go VIP', AppIcons.vip, null, () => wrap(onVip)),
+      );
+    }
     return _AccessCard(
       icon: AppIcons.lock,
       title: 'Locked pack',
@@ -268,7 +367,9 @@ class PackScreen extends ConsumerWidget {
     );
   }
 
-  static void _showAccessSheet(BuildContext context, Pack pack, Currency currency, int price, VoidCallback onVip, VoidCallback onUnlock) {
+  static String _grouped(int v) => NumberFormat.decimalPattern('en').format(v);
+
+  static void _showAccessSheet(BuildContext context, Pack pack, Currency currency, int price, int balance, VoidCallback onVip, VoidCallback onUnlock, VoidCallback onGetMore) {
     showAppSheet(
       context,
       builder: (ctx) => Padding(
@@ -279,7 +380,7 @@ class PackScreen extends ConsumerWidget {
           children: [
             Text(pack.name, style: Theme.of(ctx).textTheme.headlineSmall),
             const SizedBox(height: 12),
-            _accessCard(ctx, pack, currency, price, onVip, onUnlock, onClose: () => Navigator.pop(ctx)),
+            _accessCard(ctx, pack, currency, price, balance, onVip, onUnlock, onGetMore, onClose: () => Navigator.pop(ctx)),
           ],
         ),
       ),
@@ -294,7 +395,13 @@ class PackScreen extends ConsumerWidget {
     return '${d.inMinutes}m';
   }
 
-  static double _ratio(int a, int b) => b == 0 ? 0 : (a / b).clamp(0.0, 1.0);
+  /// "in 6d", "in 5h", "soon": the same wording as the event tiles on Home.
+  static String _endsIn(DateTime at) {
+    final d = at.difference(DateTime.now());
+    if (d.inDays >= 1) return 'in ${d.inDays}d';
+    if (d.inHours >= 1) return 'in ${d.inHours}h';
+    return 'soon';
+  }
 
   static String _monthName(int m) => const ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][m - 1];
 
@@ -305,8 +412,59 @@ class PackScreen extends ConsumerWidget {
   }
 }
 
+/// A live event's countdown on the cover: the dark chip used for every label on
+/// a photo, with a small red dot as the "live" marker instead of a red fill.
+class _LiveChip extends StatelessWidget {
+  const _LiveChip(this.label);
+  final String label;
+
+  @override
+  Widget build(BuildContext context) => Container(
+        padding: const EdgeInsets.fromLTRB(8, 5, 9, 5),
+        decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.45), borderRadius: BorderRadius.circular(Radii.pill)),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(width: 6, height: 6, decoration: const BoxDecoration(color: Brand.live, shape: BoxShape.circle)),
+            const SizedBox(width: 5),
+            Text(label, style: const TextStyle(color: Colors.white, fontSize: 11.5, fontWeight: FontWeight.w600)),
+          ],
+        ),
+      );
+}
+
+/// The pack's name in the bar: it fades in while the cover's last quarter
+/// scrolls away (when the big name on the photo has gone under the bar), so
+/// the page never loses its title, the same hand-over as an iOS large title.
+class _CollapsedTitle extends StatelessWidget {
+  const _CollapsedTitle(this.text, {this.subtitle});
+  final String text;
+
+  /// Where the player is in the pack ("3 of 24 solved", "Locked"), under the name.
+  final String? subtitle;
+
+  @override
+  Widget build(BuildContext context) {
+    final bar = context.dependOnInheritedWidgetOfExactType<FlexibleSpaceBarSettings>();
+    final range = bar == null ? 0.0 : bar.maxExtent - bar.minExtent;
+    final open = bar == null || range <= 0 ? 0.0 : ((bar.currentExtent - bar.minExtent) / range).clamp(0.0, 1.0);
+    return Opacity(
+      opacity: (1 - open / 0.2).clamp(0.0, 1.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(text, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700, letterSpacing: -0.2)),
+          if (subtitle != null) Text(subtitle!, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: context.colors.textSecondary)),
+        ],
+      ),
+    );
+  }
+}
+
 /// Once the cover has collapsed into a plain bar it becomes glass, with the
-/// top of the picture blurred behind the title.
+/// top of the picture blurred behind the title. While the cover shows under
+/// the status bar, the status bar text is white (it sits on the photo); on the
+/// collapsed glass bar it follows the theme again.
 class _CollapsedGlass extends StatelessWidget {
   const _CollapsedGlass({required this.child});
   final Widget child;
@@ -317,14 +475,57 @@ class _CollapsedGlass extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, cons) {
         final collapsed = cons.maxHeight <= MediaQuery.paddingOf(context).top + kToolbarHeight + 1;
-        return Stack(
-          fit: StackFit.expand,
-          children: [
-            child,
-            GlassSurface(visible: collapsed, hairline: Border(bottom: BorderSide(color: c.stroke, width: 0.5)), child: const SizedBox.expand()),
-          ],
+        final lightText = !collapsed || context.isDark;
+        return AnnotatedRegion<SystemUiOverlayStyle>(
+          value: (lightText ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark).copyWith(statusBarColor: Colors.transparent),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              child,
+              GlassSurface(visible: collapsed, hairline: Border(bottom: BorderSide(color: c.stroke, width: 0.5)), child: const SizedBox.expand()),
+            ],
+          ),
         );
       },
+    );
+  }
+}
+
+/// The back button of the pack cover: frosted dark glass with a white
+/// chevron while it sits on the photo (like the category chip), the plain
+/// round button once the cover has collapsed into the glass bar.
+class _HeroBackButton extends StatelessWidget {
+  const _HeroBackButton({required this.onTap});
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final bar = context.dependOnInheritedWidgetOfExactType<FlexibleSpaceBarSettings>();
+    final onPhoto = bar == null || bar.currentExtent > bar.minExtent + 1;
+    const size = 38.0;
+    return Center(
+      child: Pressable(
+        onTap: onTap,
+        scale: 0.9,
+        child: ClipOval(
+          child: BackdropFilter(
+            enabled: onPhoto,
+            filter: GlassSurface.filter(12),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              width: size,
+              height: size,
+              decoration: BoxDecoration(
+                color: onPhoto ? Colors.black.withValues(alpha: 0.32) : c.card,
+                shape: BoxShape.circle,
+                border: Border.all(color: onPhoto ? Colors.white.withValues(alpha: 0.18) : c.stroke),
+              ),
+              child: Icon(CupertinoIcons.back, size: size * 0.48, color: onPhoto ? Colors.white : c.textPrimary),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -334,10 +535,13 @@ class _CollapsedGlass extends StatelessWidget {
 /// visually identical. An action with a cost is a [BigButton.cost]
 /// ("Unlock for [ticket] 10"): no leading icon, the price says it all.
 class _AccessCard extends StatelessWidget {
-  const _AccessCard({required this.icon, required this.title, required this.reason, this.primary, this.secondary, this.ghost});
+  const _AccessCard({required this.icon, required this.title, required this.reason, this.meter, this.primary, this.secondary, this.ghost});
   final IconData icon;
   final String title;
   final String reason;
+
+  /// Balance against the price ("[coin] 1,240 of 3,300" and a bar), when the player is short.
+  final (Currency, int, int)? meter;
   final (String, IconData?, (Currency, int)?, VoidCallback)? primary;
   final (String, IconData?, (Currency, int)?, VoidCallback)? secondary;
   final (String, VoidCallback)? ghost;
@@ -372,6 +576,18 @@ class _AccessCard extends StatelessWidget {
               ),
             ],
           ),
+          if (meter != null) ...[
+            const SizedBox(height: 14),
+            Row(
+              children: [
+                CostLabel(label: 'Unlock for', currency: meter!.$1, amount: meter!.$3, fontSize: 14),
+                const Spacer(),
+                Text('You have ${PackScreen._grouped(meter!.$2)}', style: TextStyle(color: c.textSecondary, fontSize: 13.5, fontWeight: FontWeight.w500)),
+              ],
+            ),
+            const SizedBox(height: 8),
+            ProgressBar(value: meter!.$3 == 0 ? 0 : (meter!.$2 / meter!.$3).clamp(0.0, 1.0), height: 6, color: meter!.$1 == Currency.tickets ? Brand.ticket : Brand.coin),
+          ],
           if (primary != null) ...[
             const SizedBox(height: 14),
             _action(primary!, ButtonKind.primary),
@@ -390,30 +606,94 @@ class _AccessCard extends StatelessWidget {
   }
 }
 
-class _Stat extends StatelessWidget {
-  const _Stat({required this.label, required this.value, this.progress, this.color, this.last = false});
-  final String label;
-  final String value;
-  /// 0..1 fill of the thin bar under the label; null keeps the space empty.
-  final double? progress;
-  final Color? color;
-  final bool last;
+/// A Giant pack before giant boards open: what the pack is, the level it
+/// needs and how far the player is, and no price yet.
+class _GiantGateCard extends StatelessWidget {
+  const _GiantGateCard({required this.xp, this.owned = false});
+  final int xp;
+
+  /// Already unlocked (bought before this gate existed, or with VIP): no price to come.
+  final bool owned;
+
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    return Expanded(
-      child: Container(
-        margin: EdgeInsets.only(right: last ? 0 : 8),
-        padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
-        decoration: BoxDecoration(color: c.card, borderRadius: BorderRadius.circular(Radii.md), border: Border.all(color: c.stroke)),
-        child: Column(
-          children: [
-            Text(value, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 18, letterSpacing: -0.3)),
-            Text(label, style: TextStyle(color: c.textSecondary, fontSize: 11.5)),
-            const SizedBox(height: 8),
-            if (progress != null) ProgressBar(value: progress!, height: 3, color: color) else const SizedBox(height: 3),
-          ],
-        ),
+    final need = LevelRewards.xpToReach(Unlock.giant.level);
+    final level = LevelRewards.levelForXp(xp);
+    return SoftCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const IconTile(icon: AppIcons.bigBoard, size: 40, radius: 12),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Opens at level ${Unlock.giant.level}', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15, letterSpacing: -0.2)),
+                    const SizedBox(height: 2),
+                    Text(owned ? 'A Giant pack: every picture is a board of 100 to 300 cards. It is yours; its boards open at level ${Unlock.giant.level}.' : 'A Giant pack: every picture is a board of 100 to 300 cards. You can unlock it once giant boards open.', style: TextStyle(color: c.textSecondary, fontSize: 13, height: 1.35)),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          Row(
+            children: [
+              Text('Level $level', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
+              Text(' of ${Unlock.giant.level}', style: TextStyle(color: c.textSecondary, fontSize: 14)),
+              const Spacer(),
+              Text('${NumberFormat.decimalPattern('en').format((need - xp).clamp(0, need))} XP to go', style: TextStyle(color: c.textSecondary, fontSize: 13)),
+            ],
+          ),
+          const SizedBox(height: 8),
+          ProgressBar(value: need == 0 ? 1 : (xp / need).clamp(0.0, 1.0), height: 6),
+        ],
+      ),
+    );
+  }
+}
+
+/// Today's picture of the current month: thumbnail, date, title and the one
+/// action (Play, Continue, or its stars once solved).
+class _TodayCard extends StatelessWidget {
+  const _TodayCard({required this.puzzle, required this.progress, required this.onTap});
+  final Puzzle puzzle;
+  final PuzzleProgress? progress;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final solved = progress?.completed == true;
+    final playing = progress?.inProgress == true;
+    final d = puzzle.date!;
+    return SoftCard(
+      onTap: onTap,
+      padding: const EdgeInsets.all(10),
+      child: Row(
+        children: [
+          NetImage(url: puzzle.thumbUrl, blurhash: puzzle.blurhash, width: 56, height: 56, radius: Radii.sm + 2),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Today · ${d.day} ${PackScreen._monthName(d.month)}', style: TextStyle(color: context.accent, fontSize: 12.5, fontWeight: FontWeight.w600)),
+                const SizedBox(height: 2),
+                Text(puzzle.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, letterSpacing: -0.2)),
+              ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          if (solved)
+            Stars(count: progress!.stars, size: 16)
+          else
+            BigButton(label: playing ? 'Continue' : 'Play', expand: false, height: 38, onTap: onTap),
+        ],
       ),
     );
   }
@@ -433,9 +713,7 @@ class _PuzzleTile extends StatelessWidget {
     final c = context.colors;
     final completed = progress?.completed == true;
     final started = progress?.inProgress == true;
-    return Pressable(
-      onTap: onTap,
-      child: Container(
+    final photo = Container(
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
           color: c.card,
@@ -445,13 +723,18 @@ class _PuzzleTile extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
+            // A day still to come is a plain calendar cell: its date, nothing to tap into.
             if (dateLocked)
-              Container(color: c.boardBackground, child: Icon(AppIcons.lock, color: c.textTertiary, size: 18))
+              Container(
+                color: c.boardBackground,
+                alignment: Alignment.center,
+                child: Text('${puzzle.date!.day}', style: TextStyle(color: c.textTertiary, fontSize: 18, fontWeight: FontWeight.w600, letterSpacing: -0.3)),
+              )
             else
               NetImage(url: puzzle.thumbUrl, blurhash: puzzle.blurhash),
             if (locked && !dateLocked)
               Container(color: Colors.black.withValues(alpha: 0.4), child: const Icon(AppIcons.lock, color: Colors.white, size: 18)),
-            if (daily && puzzle.date != null)
+            if (daily && puzzle.date != null && !dateLocked)
               Positioned(
                 right: 6,
                 top: 6,
@@ -460,7 +743,8 @@ class _PuzzleTile extends StatelessWidget {
                   height: 24,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: puzzle.isToday ? Brand.live : (dateLocked ? c.card : Colors.black.withValues(alpha: 0.5)),
+                    // Today is marked in the accent only (badge and outline agree).
+                    color: puzzle.isToday ? context.accent : (dateLocked ? c.card : Colors.black.withValues(alpha: 0.5)),
                     shape: BoxShape.circle,
                     border: dateLocked ? Border.all(color: c.stroke) : null,
                   ),
@@ -485,29 +769,42 @@ class _PuzzleTile extends StatelessWidget {
                   ),
                 ),
               ),
-            if (!dateLocked)
+            if (completed)
               Positioned(
-                left: 0,
-                right: 0,
-                bottom: 0,
+                left: 6,
+                bottom: 6,
                 child: Container(
-                  padding: const EdgeInsets.fromLTRB(6, 12, 6, 6),
-                  decoration: BoxDecoration(gradient: Brand.scrim(strength: 0.7)),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(puzzle.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600)),
-                      const SizedBox(height: 2),
-                      if (completed)
-                        Stars(count: progress!.stars, size: 11)
-                      else
-                        Text(puzzle.author, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: Colors.white.withValues(alpha: 0.75), fontSize: 9.5)),
-                    ],
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+                  decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.45), borderRadius: BorderRadius.circular(Radii.pill)),
+                  child: Stars(count: progress!.stars, size: 10),
                 ),
               ),
           ],
         ),
+      );
+    // The caption sits under the photo, like an album in Photos: two lines of
+    // real text instead of a clipped line on the picture. The photographer is
+    // credited where the picture is played (difficulty and game screens).
+    return Pressable(
+      onTap: onTap,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(child: photo),
+          const SizedBox(height: 6),
+          SizedBox(
+            height: 30,
+            // A day still to come keeps its title secret (the day badge says when).
+            child: dateLocked
+                ? null
+                : Text(
+                    puzzle.title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: c.textPrimary, fontSize: 12, fontWeight: FontWeight.w600, height: 1.2, letterSpacing: -0.1),
+                  ),
+          ),
+        ],
       ),
     );
   }
