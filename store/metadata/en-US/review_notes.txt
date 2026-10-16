@@ -2,13 +2,16 @@ Thank you for reviewing Carden.
 
 Carden was called Card Jigsaw World in earlier TestFlight builds. Only the name and the icon changed; the bundle ID is the same.
 
+GUIDED START
+New players go from the welcome pages into a first 9-card puzzle, then a simple Home; the rest opens as pictures are solved (Library 3, daily puzzle 5, daily gift 10, Lucky Wheel 15, Quests 20, achievements 25, piggy bank 30, live events 35, Social 50). To open everything: Profile > Settings > Guided start off, or "Unlock anyway" at the end of Home. The Store is always open from the coin balance.
+
 ACCOUNTS
-No account is required. The first launch creates an anonymous guest session on our backend (Appwrite, EU region) and the whole game is playable immediately. No demo credentials are needed. Sign in with Apple and email sign-up are optional and only move the same guest progress onto a permanent account (Profile > Settings > Account). The account and everything stored for it can be deleted in the app: Profile > Settings > Manage account (for a guest: Sign in or create account) > Delete account.
+No account is required. The first launch creates an anonymous guest session on our backend (Appwrite, EU region); no demo credentials are needed. Sign in with Apple and email sign-up are optional and only move the same guest progress onto a permanent account (Profile > Settings > Account). The account and everything stored for it can be deleted in the app: Profile > Settings > Manage account (for a guest: Sign in or create account) > Delete account.
 
 PURCHASES
-In-app purchases are StoreKit 2 consumables (coins, tickets, hints) and two auto-renewable subscriptions in the "VIP" group (vip_monthly, vip_yearly), both with a 7-day free introductory offer. VIP is shared through Family Sharing. Nothing is granted on the device: each finished transaction is sent to our Appwrite Function "verify-purchase", which verifies Apple's signed transaction (JWS) against Apple Root CA G3 and applies the grant once. The function runs in the Production environment and falls back to Sandbox for sandbox transactions, so purchases made with a Sandbox Apple ID verify end to end and credit the account within a few seconds.
+In-app purchases are StoreKit 2 consumables (coins, tickets, hints) and two auto-renewable subscriptions in the "VIP" group (vip_monthly, vip_yearly), both with a 7-day free introductory offer. VIP is shared through Family Sharing. Nothing is granted on the device: our server function "verify-purchase" verifies Apple's signed transaction (JWS, Apple Root CA G3) and applies each grant once. It runs in Production and falls back to Sandbox, so Sandbox purchases verify end to end within seconds.
 
-How to test a purchase: on Home tap the coin balance to open the Store, choose "2,500 coins" or a VIP plan, and confirm with a Sandbox Apple ID. The balance at the top of the screen updates after verification. "Restore purchases" and "Redeem a gift code" (Apple offer codes) are in Profile > Settings > Account.
+How to test a purchase: tap the coin balance at the top to open the Store, choose a coin pack or a VIP plan, and confirm with a Sandbox Apple ID. The balance updates after verification. "Restore purchases" and "Redeem a gift code" (Apple offer codes) are in Profile > Settings > Account.
 
 LUCKY WHEEL
 Home > Lucky Wheel (also in the Store). A spin costs 1 ticket and pays one random prize: coins, Peeks, Hints or Magic. Tickets can be bought, so the age rating declares a loot box. "See odds" on the wheel lists every prize and its exact chance before the player spins. Tickets are never a prize.
@@ -17,16 +20,16 @@ ADS
 There is no ad network and no third-party SDK for ads, analytics or tracking. The "rewarded video" and break cards are house ads: short, closable promotions of the game's own store. They never appear for VIP players.
 
 NOTIFICATIONS
-Only local notifications, planned on the device. Daily reminders (Settings > Daily reminders) are off until the player turns them on. Event reminders (the evening before a new event, for players who have been away) are promotional: their own switch, off until the player says yes.
+Only local notifications, planned on the device. Daily reminders (Settings > Daily reminders) are off until the player turns them on. Event reminders (the evening before a new event, for players who have been away) are promotional, with their own switch, off until the player says yes.
 
 CONTENT
-Catalogue pictures are public-domain or openly licensed (Wikimedia Commons, Openverse, Flickr, iNaturalist, Pixabay, NASA, museum open-access collections); some are AI-generated or made by us. A copy of each is hosted on our own storage, and the author and licence are shown with every picture. Players can also upload their own photos (My Puzzles); these are private to the uploader and never shown to other players.
+Catalogue pictures are public-domain or openly licensed (Wikimedia Commons, Openverse, Flickr, Pixabay, NASA, museum collections); some are AI-generated or made by us. Each is hosted on our own storage, with its author and licence shown. Players' own photos (My Puzzles) are private to them.
 
 PRIVATE PACKS
-A few packs are free gifts (for example a giveaway) that open with a code. Codes are redeemed only on the web version of the game (play.carden.page); the iPhone app has no code entry. A pack redeemed on the web also shows in that account's library on iPhone. Nothing about these packs is sold.
+A few free gift packs open with a code, redeemed only on the web version (play.carden.page); the iPhone app has no code entry. A pack redeemed on the web also shows on iPhone. Nothing about them is sold.
 
 SOCIAL
-The leaderboard and player pages show display names, chosen avatars and play statistics. Friends are added by friend code. There is no chat and no messaging; the display name is the only text players share. Names are checked against a list of offensive words when they are chosen (such a name cannot be saved), and a name that fails the check shows as "Player". On any player's page, Report (offensive name or unfair play) sends a report we read, and Block removes the player from the blocker's leaderboard; Settings > Blocked players lists and unblocks them. Contact: contact@almostapps.eu.
+The leaderboard and player pages show names, avatars and play statistics. Friends are added by friend code. There is no chat between players; the display name is the only text they share. Social > Inbox shows messages from us (news, sometimes a gift of coins), which players cannot answer. Names are checked against a list of offensive words when they are chosen (such a name cannot be saved), and a name that fails the check shows as "Player". On any player's page, Report (offensive name or unfair play) sends a report we read, and Block removes the player from the blocker's leaderboard; Settings > Blocked players lists and unblocks them. Contact: contact@almostapps.eu.
 
 LINKS
 Links to play.carden.page open the app when it is installed (universal links), otherwise the web version.

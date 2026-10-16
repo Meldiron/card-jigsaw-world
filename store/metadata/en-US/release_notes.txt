@@ -2,6 +2,10 @@ Version 2.0.0
 
 Card Jigsaw World is now Carden, your calm picture puzzle, with a new icon: a lotus in coloured glass. Your progress, coins and packs stay as they are.
 
+A calmer start
+- New players begin with a first picture right after the welcome, and a simple Home. The Library, daily puzzle, daily gift, Lucky Wheel, Quests and the rest open as you solve pictures, or right away with Unlock anyway.
+- Inbox in the Social tab: messages from Carden, sometimes with a gift.
+
 New ways to play
 - Painting: cards start in black and white and get their colour back as they lock. Pays 25% more.
 - Giant boards of 100 to 300 cards, with pinch to zoom, an overview map that shows where a tapped card belongs, Gather (which shuffles the loose cards when they are all in view), and a board that opens where you left it. Magic puts the selected card in its place.
@@ -24,7 +28,7 @@ Home and Library
 Reminders and account
 - Daily reminders: turn them on in Settings and choose the time. None on days you have already claimed your daily gift.
 - New events: a reminder the evening before a world-day event opens, if you have not played for a while.
-- Delete your account in the app: Profile > Account > Delete account.
+- Delete your account in the app: Profile > Settings > Manage account > Delete account.
 - Report or block a player from their page; blocked players leave your leaderboard.
 - Settings: Rate Carden and the real app version. Dark and tinted Home Screen icons on iOS 18.
 - Links to packs, pictures, player profiles and the store open the matching screen; a link to play.carden.page opens the app when it is installed.

@@ -146,7 +146,7 @@ class _DailyRewardSheetState extends ConsumerState<DailyRewardSheet> {
           ],
           const SizedBox(height: 16),
           BigButton(
-            label: available ? 'Claim day ${todayIdx + 1} gift' : 'Done',
+            label: available ? 'Claim day ${todayIdx + 1} gift' : 'Close',
             icon: available ? AppIcons.dailyGift : null,
             kind: available ? ButtonKind.primary : ButtonKind.secondary,
             loading: _claiming,

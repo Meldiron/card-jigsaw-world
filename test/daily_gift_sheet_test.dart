@@ -85,7 +85,7 @@ void main() {
             expect(find.descendant(of: sheet, matching: find.text(tag)), findsOneWidget);
             if (claim == null) {
               expect(find.descendant(of: sheet, matching: find.text('Tomorrow')), findsOneWidget);
-              expect(find.descendant(of: sheet, matching: find.text('Done')), findsOneWidget);
+              expect(find.descendant(of: sheet, matching: find.text('Close')), findsOneWidget);
             } else {
               // The claim may sit below the fold at the largest text size; the sheet scrolls to it (100 A).
               final button = find.descendant(of: sheet, matching: find.text(claim));

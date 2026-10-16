@@ -1,7 +1,6 @@
-Carden 2.0, the version going to the App Store:
-- A new picture opens on the mode, board size and Painting you chose last.
-- Settings > Accessibility: text size up to 200%, Reduce motion, Increase contrast and Differentiate without colour. All are off until you turn them on.
-- Links to play.carden.page open the app when it is installed (packs, pictures, profiles, the store).
-- Player names are checked for offensive words: such a name cannot be chosen, and one set earlier shows as "Player".
+What is new since the last build:
+- A calmer start for new players: straight into a first picture after the welcome, then a simple Home. The Library, daily puzzle, daily gift, Lucky Wheel, Quests, achievements, piggy bank, live events and Social open as you solve pictures (3 to 50); locked tabs say how many pictures are left, and Unlock anyway opens them early.
+- Social > Inbox: messages from Carden, some with a gift to claim.
+- Profile has no More section (Settings is the gear at the top; Account is in Settings), and the daily gift's button says Close.
 
-Please try: a puzzle in Squares or with Painting, then another picture (it should open on the same choice), each Accessibility option on a few screens (a puzzle, the Lucky Wheel, the Store), and tap a play.carden.page link in Notes or Messages to check that Carden opens on the right screen.
+You already play, so you see the whole app as before. Please try: open play.carden.page in a private browser window (or delete and reinstall the app) to play the new start as a new player, and open the inbox in the Social tab.
