@@ -141,12 +141,11 @@ void main() {
     expect(find.textContaining('Unlock for'), findsWidgets);
     await shot(tester, 'dl_07_closed_pack_picture');
 
-    // ---- A pack code, filled in.
-    await link(tester, '$_web/redeem?code=abcd-efgh-jklm-npqr');
-    expect(find.text('Redeem a pack code'), findsOneWidget);
-    expect(tester.widget<CupertinoTextField>(find.byKey(const ValueKey('redeem-code-field'))).controller!.text, 'ABCD-EFGH-JKLM-NPQR');
-    await shot(tester, 'dl_08_redeem_code');
-    await close(tester);
+    // ---- A pack code: redeemed on the web only, so on iPhone the link opens no code entry.
+    await link(tester, 'carden://redeem?code=abcd-efgh-jklm-npqr');
+    expect(find.text('Redeem a pack code'), findsNothing);
+    expect(find.byKey(const ValueKey('redeem-code-field')), findsNothing);
+    await shot(tester, 'dl_08_redeem_link_no_entry');
 
     // ---- A friend code, filled in on Social > Friends.
     await link(tester, 'carden://add-friend?code=$_owner');

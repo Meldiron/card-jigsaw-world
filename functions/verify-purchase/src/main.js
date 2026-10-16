@@ -3,7 +3,7 @@
 // Routes:
 //   POST /verify         { jws, productId }        called by the app after StoreKit reports a purchase
 //   POST /notifications  { signedPayload }         App Store Server Notifications V2
-//   GET  /health
+//   GET  /health                                   { ok, environment }: the APPLE_ENVIRONMENT in use
 //
 // Every transaction is verified with Apple's App Store Server Library
 // (certificate chain back to Apple Root CA G3), checked against the bundle id,
@@ -331,7 +331,7 @@ async function profilesFor(db, tx, originalId, ownership) {
 export default async ({ req, res, log, error }) => {
   const path = (req.path || '/').replace(/\/+$/, '') || '/';
   try {
-    if (req.method === 'GET' && (path === '/health' || path === '/')) return res.json({ ok: true });
+    if (req.method === 'GET' && (path === '/health' || path === '/')) return res.json({ ok: true, environment: ENVIRONMENT === Environment.PRODUCTION ? 'Production' : 'Sandbox' });
     if (req.method === 'POST' && path === '/verify') return await handleVerify(req, res, log, error);
     if (req.method === 'POST' && path === '/notifications') return await handleNotification(req, res, log, error);
     return res.json({ ok: false, error: 'Not found' }, 404);

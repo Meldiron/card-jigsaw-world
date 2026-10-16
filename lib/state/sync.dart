@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/guest_names.dart';
+import '../core/name_filter.dart';
 import '../core/qa.dart';
 import '../data/local_store.dart';
 import '../data/repositories.dart' show deterministicId;
@@ -734,7 +735,7 @@ class SyncController extends Notifier<SyncState> {
 
   Map<String, dynamic> _newProfile(String userId) {
     final u = _user;
-    final name = u != null && u.$id == userId && u.name.isNotEmpty ? u.name : GuestNames.next();
+    final name = u != null && u.$id == userId && u.name.isNotEmpty && !NameFilter.isOffensive(u.name) ? u.name : GuestNames.next();
     return Profile.guest(userId).copyWith(displayName: name, isTest: _qaGuest).toData();
   }
 

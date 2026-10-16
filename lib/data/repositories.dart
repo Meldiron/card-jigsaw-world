@@ -10,6 +10,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/appwrite.dart';
+import '../core/name_filter.dart';
 import '../core/qa.dart';
 import '../models/models.dart';
 import 'web_redirect.dart' as web_redirect;
@@ -235,7 +236,7 @@ class ProfileRepository {
 
   /// Creates the player's profile row. [isTest] marks a QA run's guest (kept out of the league).
   Future<Profile> create(String userId, {String? name, bool isTest = false}) async {
-    final p = Profile.guest(userId).copyWith(displayName: name?.trim().isNotEmpty == true ? name!.trim() : 'Player', isTest: isTest);
+    final p = Profile.guest(userId).copyWith(displayName: name?.trim().isNotEmpty == true ? NameFilter.shown(name!.trim()) : 'Player', isTest: isTest);
     final row = await _tables.createRow(
       databaseId: _db,
       tableId: AppwriteConfig.profiles,

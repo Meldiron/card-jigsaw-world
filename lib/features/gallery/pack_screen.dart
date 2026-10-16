@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/haptics.dart';
+import '../../core/platform.dart';
 import '../../core/sfx.dart';
 import '../../core/theme/tokens.dart';
 import '../../game/board.dart';
@@ -55,11 +56,14 @@ class PackScreen extends ConsumerWidget {
                 action: BigButton(label: 'Try again', expand: false, onTap: () => ref.invalidate(catalogProvider)),
               )
             : missing
-                ? const EmptyState(
-                    key: ValueKey('pack-not-available'),
+                ? EmptyState(
+                    key: const ValueKey('pack-not-available'),
                     icon: AppIcons.library,
                     title: 'Pack not available',
-                    message: 'The link may be out of date. A pack from a pack code shows here once the code is redeemed.',
+                    // Pack codes exist on the web only; the iPhone app never mentions them.
+                    message: ref.read(platformCapsProvider).isWeb
+                        ? 'The link may be out of date. A pack from a pack code shows here once the code is redeemed.'
+                        : 'The link may be out of date.',
                   )
                 : const _PackSkeleton(),
       );

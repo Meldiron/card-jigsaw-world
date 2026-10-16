@@ -6,6 +6,7 @@ import 'dart:io';
 
 import 'package:appwrite/models.dart' as models;
 import 'package:carden/core/app_links.dart';
+import 'package:carden/core/platform.dart';
 import 'package:carden/core/theme/app_theme.dart';
 import 'package:carden/data/local_store.dart';
 import 'package:carden/features/gallery/library_screen.dart';
@@ -181,10 +182,19 @@ void main() {
       expect(details['appIDs'], ['C24QP73SQM.com.matejbaco.cardjigsawworld']);
     });
 
-    test('every link opens the app', () {
+    /// Pack codes are redeemed on the web only: their links stay in the browser.
+    bool isPackCode(String path) => path == '/redeem' || path == '/code' || path.startsWith('/redeem/') || path.startsWith('/code/');
+
+    test('every link opens the app, except pack codes', () {
       for (final input in _links.keys) {
         final path = Uri.parse(input).path;
-        expect(opensApp(path), isTrue, reason: path);
+        expect(opensApp(path), !isPackCode(path), reason: path);
+      }
+    });
+
+    test('pack code links stay in the browser', () {
+      for (final path in ['/redeem', '/redeem/ABCD-EFGH-JKLM-NPQR', '/code', '/code/abcdefghjklmnpqr']) {
+        expect(opensApp(path), isFalse, reason: path);
       }
     });
 
@@ -216,7 +226,7 @@ void main() {
       Puzzle.fromRow('houses-1', {'packId': 'houses', 'title': 'Canal houses', 'imageUrl': 'https://example.invalid/4.jpg'}),
     ];
 
-    Future<(ProviderContainer, GoRouter)> pump(WidgetTester tester, {bool onboarded = true}) async {
+    Future<(ProviderContainer, GoRouter)> pump(WidgetTester tester, {bool onboarded = true, PlatformCaps caps = PlatformCaps.ios}) async {
       SharedPreferences.setMockInitialValues({'onboarded': onboarded});
       final store = await LocalStore.open();
       Widget page(String name) => Scaffold(body: Center(child: Text(name)));
@@ -242,6 +252,7 @@ void main() {
       addTearDown(router.dispose);
       await tester.pumpWidget(ProviderScope(
         overrides: [
+          platformCapsProvider.overrideWithValue(caps),
           localStoreProvider.overrideWithValue(store),
           routerProvider.overrideWithValue(router),
           authProvider.overrideWith(_NoAuth.new),
@@ -331,12 +342,23 @@ void main() {
       expect(top(router), contains('from=quick'));
     });
 
-    testWidgets('a pack code link opens the code sheet with the code filled in', (tester) async {
-      final (container, router) = await pump(tester);
+    testWidgets('on the web a pack code link opens the code sheet with the code filled in', (tester) async {
+      final (container, router) = await pump(tester, caps: PlatformCaps.web);
       await open(tester, container, '/redeem/abcdefghjklmnpqr');
       expect(top(router), '/home');
       final field = tester.widget<CupertinoTextField>(find.byKey(const ValueKey('redeem-code-field')));
       expect(field.controller!.text, 'ABCD-EFGH-JKLM-NPQR');
+    });
+
+    testWidgets('on iPhone a pack code link only opens Home: codes are redeemed on the web', (tester) async {
+      final (container, router) = await pump(tester);
+      router.go('/library');
+      await tester.pumpAndSettle();
+      await open(tester, container, '/redeem/abcdefghjklmnpqr');
+      await tester.pumpAndSettle();
+      expect(top(router), '/library', reason: 'a code link on iPhone does not move the player');
+      expect(find.byKey(const ValueKey('redeem-code-field')), findsNothing);
+      expect(find.text('Redeem a pack code'), findsNothing);
     });
 
     testWidgets('a friend link opens Social > Friends with the code filled in', (tester) async {

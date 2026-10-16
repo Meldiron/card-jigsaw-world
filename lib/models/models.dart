@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../core/dates.dart';
+import '../core/name_filter.dart';
 import '../state/rewards.dart';
 
 int _i(dynamic v, [int d = 0]) => v is num ? v.toInt() : (v is String ? int.tryParse(v) ?? d : d);
@@ -154,7 +155,8 @@ class Profile {
   factory Profile.fromRow(String id, Map<String, dynamic> d) => Profile(
         id: id,
         userId: _s(d['userId']),
-        displayName: _s(d['displayName'], 'Player'),
+        // Names are filtered where they show (guideline 1.2), so names set before the filter are too.
+        displayName: NameFilter.shown(_s(d['displayName'], 'Player')),
         avatar: _s(d['avatar'], 'fox'),
         coins: _i(d['coins']),
         tickets: _i(d['tickets']),
@@ -804,7 +806,7 @@ class Friend {
   factory Friend.fromRow(String id, Map<String, dynamic> d) => Friend(
         id: id,
         friendId: _s(d['friendId']),
-        name: _s(d['friendName'], 'Friend'),
+        name: NameFilter.shown(_s(d['friendName'], 'Friend')),
         avatar: _s(d['friendAvatar'], 'fox'),
       );
 }
@@ -819,7 +821,7 @@ class BlockedPlayer {
   factory BlockedPlayer.fromRow(String id, Map<String, dynamic> d) => BlockedPlayer(
         id: id,
         playerId: _s(d['blockedId']),
-        name: _s(d['blockedName'], 'Player'),
+        name: NameFilter.shown(_s(d['blockedName'], 'Player')),
         avatar: _s(d['blockedAvatar'], 'fox'),
       );
 }

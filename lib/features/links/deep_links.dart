@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/app_links.dart';
+import '../../core/platform.dart';
 import '../../models/models.dart';
 import '../../router.dart';
 import '../../state/catalog.dart';
@@ -81,7 +82,10 @@ class DeepLinks {
   Future<void> _action(GoRouter router, AppLink link) async {
     switch (link.path) {
       case '/redeem':
+        // Pack codes are redeemed on the web only (owner, 2026-10-16; guideline 3.1.1): the iPhone
+        // app has no code entry, so the link only opens Home there.
         await _onPage(router);
+        if (!_ref.read(platformCapsProvider).isWeb) return;
         final ctx = rootNavigatorKey.currentContext;
         if (ctx != null && ctx.mounted) await showRedeemCodeSheet(ctx, code: link.query['code']);
       case '/add-friend':

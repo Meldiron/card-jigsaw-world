@@ -139,8 +139,8 @@ class SettingsScreen extends ConsumerWidget {
           group('Account', [
             _NavRow(icon: AppIcons.personCropCircle, label: isGuest ? 'Sign in or create account' : 'Manage account', onTap: () => context.push('/account')),
             _NavRow(key: const ValueKey('settings-blocked'), icon: AppIcons.block, label: 'Blocked players', onTap: () => showBlockedPlayersSheet(context)),
-            // Pack codes (giveaways, special posts): a row on the web only. On iPhone a code opens
-            // through its link (`/redeem?code=`, docs/deep-links.md), never from a menu (owner, 2026-10-15).
+            // Pack codes (giveaways, special posts): redeemed on the web only, here or through a
+            // `/redeem?code=` link. The iPhone app has no code entry at all (owner, 2026-10-16).
             if (caps.isWeb)
               _NavRow(
                 key: const ValueKey('settings-redeem-pack-code'),

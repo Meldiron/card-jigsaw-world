@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/haptics.dart';
+import '../../core/name_filter.dart';
 import '../../core/sfx.dart';
 import '../../core/theme/tokens.dart';
 import '../../models/models.dart';
@@ -62,6 +63,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
     final name = ok ? controller.text.trim() : null;
     if (name == null || name.isEmpty) return;
+    if (NameFilter.isOffensive(name)) {
+      if (context.mounted) showToast(context, 'That name is not allowed. Choose another one.', icon: AppIcons.report);
+      return;
+    }
     await ref.read(profileProvider.notifier).setIdentity(name: name);
     try {
       await ref.read(authProvider.notifier).updateName(name);

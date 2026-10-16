@@ -103,7 +103,7 @@ What `isVip` unlocks in the app (keep this list, the `_VipCard` bullets in `lib/
 | `APPLE_BUNDLE_ID` | `com.matejbaco.cardjigsawworld` |
 | `APPLE_APP_ID` | `6821644423` |
 | `APPLE_APP_ID` | the app's numeric Apple ID from App Store Connect (required for Production) |
-| `APPLE_ENVIRONMENT` | `Sandbox` while testing, `Production` once live (sandbox receipts still verify, the function falls back automatically) |
+| `APPLE_ENVIRONMENT` | `Production` since 2026-10-16 (sandbox transactions from TestFlight and App Review still verify: the function falls back to Sandbox automatically). `GET /health` answers `{"ok":true,"environment":"Production"}` |
 | `APPWRITE_DATABASE_ID` | `cjw` |
 
 Runtime Node 22, entrypoint `src/main.js`, build command `npm install`, scopes `rows.read`, `rows.write`, `users.read`, execute permission `users`. Deploy by packing `functions/verify-purchase` (without `node_modules`) and creating a deployment:
@@ -128,7 +128,7 @@ The execution URL (`/v1/functions/verify-purchase/executions`) is not a public e
 ## Local testing
 
 - Simulator: the Runner scheme references `ios/Runner/Products.storekit`, so debug runs use local StoreKit testing with fake products; transactions are signed by Xcode and the function cannot verify them (expect "Transaction could not be verified"). Use Xcode's Transaction Manager to inspect them.
-- Device with a sandbox tester account: purchases are real sandbox transactions and verify end to end with `APPLE_ENVIRONMENT=Sandbox`.
+- Device with a sandbox tester account: purchases are real sandbox transactions and verify end to end (the Sandbox fallback).
 - Debug builds without any store (plain simulator with no StoreKit config) fall back to a dialog titled "Sandbox purchase (debug build)" that grants items locally. This path is compiled out of release builds.
 
 

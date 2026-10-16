@@ -75,19 +75,19 @@ Where links come in:
 
 ## Universal links (iPhone)
 
-Status (2026-10-14): waiting for the Associated Domains capability on the App ID and a new App Store
-profile (step 1 below). Until then `Runner.entitlements` has no `applinks:` entry, so the builds
-sign as before and web addresses open the web site; `carden://` links work.
+Status (2026-10-16): on from version 2.0.0. The App ID has the Associated Domains capability, the App Store
+profile was remade after it, and `Runner.entitlements` claims play.carden.page, carden.appwrite.network and
+card-jigsaw-world.appwrite.network. Builds before 2.0.0 open web addresses in the browser; `carden://` links
+work everywhere.
 
 The web address opens the app when:
 
-1. the app carries `applinks:play.carden.page` (`ios/Runner/Runner.entitlements`; as of 2026-10-16 the
-   entitlements hold only Sign in with Apple, so universal links are not on yet: adding the key needs a build);
-   the App ID needs the Associated Domains capability and the App Store profile used by CI must be
-   made after it was turned on (see "expected 2 profiles" in the apple-release skill), and
+1. the app carries `applinks:play.carden.page` (`ios/Runner/Runner.entitlements`); the App ID needs the
+   Associated Domains capability and the App Store profile used by CI must be made after it was turned on
+   (see "expected 2 profiles" in the apple-release skill), and
 2. the site serves `web/.well-known/apple-app-site-association` (deployed with the site by
    `tools/dev/deploy-web.sh`). It lists the link paths above and keeps `/auth/*` (the web sign-in
-   callback) in the browser. Apple's CDN caches it; after a change it can take a day to reach
+   callback) and the pack code links `/redeem*` and `/code*` (redeemed on the web only) in the browser. Apple's CDN caches it; after a change it can take a day to reach
    devices. Check what Apple sees with
    `curl https://app-site-association.cdn-apple.com/a/v1/play.carden.page`.
 

@@ -18,6 +18,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/haptics.dart';
 import '../../core/links.dart';
+import '../../core/name_filter.dart';
 import '../../core/theme/tokens.dart';
 import '../../data/repositories.dart';
 import '../../models/models.dart';
@@ -110,6 +111,10 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
   }
 
   Future<void> _submit() async {
+    if (_signUp && NameFilter.isOffensive(_name.text)) {
+      setState(() => _error = 'That name is not allowed. Choose another one.');
+      return;
+    }
     setState(() {
       _busy = true;
       _error = null;

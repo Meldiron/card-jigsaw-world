@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../core/name_filter.dart';
 import '../data/repositories.dart';
 import '../data/sync/ops.dart';
 import '../game/modes.dart';
@@ -156,7 +157,12 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
     return spendCoins(Economy.magicLockCostCoins, reason: 'magic-lock');
   }
 
-  Future<void> setIdentity({String? name, String? avatar}) async => _do(SyncOp.put({'displayName': ?name, 'avatar': ?avatar}));
+  /// An offensive [name] is not saved (the name alert says so before it gets here).
+  Future<void> setIdentity({String? name, String? avatar}) async {
+    if (name != null && NameFilter.isOffensive(name)) name = null;
+    if (name == null && avatar == null) return;
+    _do(SyncOp.put({'displayName': ?name, 'avatar': ?avatar}));
+  }
 
   Future<bool> unlockPack(Pack pack) async {
     if (_p.unlockedPacks.contains(pack.id)) return true;

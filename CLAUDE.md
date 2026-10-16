@@ -201,10 +201,12 @@ carden.page redirects there.
   Integration suites that play every shape override `openFeaturesProvider` and `pendingUnlockIntroProvider`.
 - Deep links (`docs/deep-links.md`): `lib/core/app_links.dart` (`AppLink.parse`: one path set for the web
   address, `carden://` (and the first name's `cardjigsaw://`) and universal links; kinds page/overlay/action) and
-  `lib/features/links/deep_links.dart` (`DeepLinks.show`: Home beneath overlays, sheets for `/redeem?code=`,
-  `/add-friend?code=`, `/gift`, `/piggy`; a picture in a pack the player has not opened shows the pack). iPhone
+  `lib/features/links/deep_links.dart` (`DeepLinks.show`: Home beneath overlays, sheets for `/redeem?code=` (web
+  only), `/add-friend?code=`, `/gift`, `/piggy`; a picture in a pack the player has not opened shows the pack). iPhone
   links arrive in `CardJigsawApp.didPushRouteInformation`, a web visit's start address in `routerProvider`.
-  Universal links: `applinks:` in `Runner.entitlements` + `web/.well-known/apple-app-site-association`. A new
+  Universal links (on from 2.0.0; Associated Domains on the App ID since 2026-10-16): `applinks:` for
+  play.carden.page and both appwrite.network addresses in `Runner.entitlements` +
+  `web/.well-known/apple-app-site-association` (keeps `/auth/*`, `/redeem*` and `/code*` in the browser). A new
   link goes into `AppLink.parse`, the association file, the doc and `test/deep_links_test.dart`.
 - `lib/state/app_update.dart` + `lib/features/update/update_host.dart`: update prompt (above).
   Web-only page helpers (fetch past the cache, reload) in `lib/core/web_page.dart`; Safari trackpad
@@ -237,6 +239,9 @@ carden.page redirects there.
   `Query.notEqual('$id')` each) and their friendship ends; Settings > Blocked players unblocks. Both tables are
   deleted in both directions with an account (`delete-account`, `PAIR_TABLES` in `tools/dev/cjw_admin.py`).
   `lib/state/social.dart` (`PlayerSafety`, `blockedPlayersProvider`), `lib/features/social/player_safety.dart`.
+  Offensive names (owner, 2026-10-16): `lib/core/name_filter.dart` (`NameFilter`) refuses them where a name is
+  chosen (name alert, sign-up, new profiles) and shows names that fail as "Player" (`Profile.fromRow`, friends,
+  blocks, merge), so names set by older builds are covered on 2.0+. `test/name_filter_test.dart`.
 - Help (owner, 2026-10-15): Settings > Help > Contact support opens an email to contact@almostapps.eu with
   the version and player id below the message (copies the address when there is no mail app); Send
   feedback writes a `feedback` row (userId, message, appVersion, platform) with no permissions, so only the
@@ -247,13 +252,14 @@ carden.page redirects there.
   the store and on the sign-in screen. Keep `docs/privacy-policy.md` true to what the app does.
 - Pack codes (`docs/pack-codes.md`): `packs.hidden` packs are listed only for players who own them;
   codes in the server-only `pack_codes` table (SHA-256 hashes) and `code_claims`; function `redeem-code`
-  (`/redeem?code=` links everywhere; the Settings row exists on the web only, never in the iPhone app
-  (owner, 2026-10-15; guideline 3.1.1)); private pack pictures in bucket `private-packs`, readable
+  (redeemed on the web only: the Settings row and `/redeem?code=` links; the iPhone app has no code entry and a
+  code link opens nothing there (owner, 2026-10-16; guideline 3.1.1)); private pack pictures in bucket `private-packs`, readable
   per claimant. Tools: `tools/dev/private_pack.py`, `tools/dev/pack_codes.py`. The Hidden Object Adventure
   test pack (`pack-hidden-object-test`) is unlicensed art for an internal test only: never make it public.
 - Functions: `verify-purchase` (StoreKit 2 JWS verification, grants, App Store Server Notifications at
   `https://cjw-verify-purchase.fra.appwrite.run/notifications`; secret vars can only be updated with
-  `secret: true`); `catalog-snapshot` (daily 03:00 UTC: catalogue file in bucket `catalog`, pointer row
+  `secret: true`; `APPLE_ENVIRONMENT=Production` since 2026-10-16, falling back to Sandbox for sandbox
+  transactions, and `/health` reports the environment in use); `catalog-snapshot` (daily 03:00 UTC: catalogue file in bucket `catalog`, pointer row
   `meta/catalog`; see `docs/catalog-sync.md`; pack rows keep `$createdAt` for the New badge); `delete-account`
   (Profile > Account > Delete account: deletes the caller's rows, uploads and user with a per-execution key;
   secret variable `APPLE_SIGNIN_KEY` (contents of `AuthKey_2QJPJFW8JW.p8`, set 2026-10-15) revokes Sign in
@@ -278,10 +284,10 @@ carden.page redirects there.
 ## App Store / TestFlight
 
 - Bundle `com.matejbaco.cardjigsawworld` (widget `.DailyWidget`), team `C24QP73SQM`, app id
-  `6821644423`, primary locale en-GB, iPhone only. Current cycle: version **1.7.0**; build 103 passed the
-  full Beta App Review. Apple still wants a beta review submission for every later 1.7.0 build (the workflow
-  files it; the log says WAITING_FOR_REVIEW), but those are approved automatically within minutes (108-118
-  all were), so public testers get each build shortly after it processes. Apple may still hold any build
+  `6821644423`, primary locale en-GB, iPhone only. Current cycle: version **2.0.0** (owner, 2026-10-16), the first
+  App Store release; pubspec and the App Store version record say 2.0.0, and its first build gets a full Beta
+  App Review again (1.7.0: build 103 passed it, later builds 108-120 were approved within minutes). Later builds
+  of a version still get a beta review submission (the workflow files it), usually approved within minutes. Apple may still hold any build
   for a real review, most often one that adds a permission prompt or entitlement.
 - Groups: "Internal testers" (all builds instantly), "Public testers"
   (https://testflight.apple.com/join/7nPCfg6A).

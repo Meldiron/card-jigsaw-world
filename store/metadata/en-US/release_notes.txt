@@ -1,4 +1,4 @@
-Version 1.7.0
+Version 2.0.0
 
 Card Jigsaw World is now Carden, your calm picture puzzle, with a new icon: a lotus in coloured glass. Your progress, coins and packs stay as they are.
 
@@ -26,8 +26,9 @@ Reminders and account
 - New events: a reminder the evening before a world-day event opens, if you have not played for a while.
 - Delete your account in the app: Profile > Account > Delete account.
 - Report or block a player from their page; blocked players leave your leaderboard.
-- Settings: Rate Carden, the real app version, and Redeem a pack code for special packs. Dark and tinted Home Screen icons on iOS 18.
-- Links to packs, pictures, player profiles, the store and pack codes open the matching screen, in the app and on the web site.
+- Settings: Rate Carden and the real app version. Dark and tinted Home Screen icons on iOS 18.
+- Links to packs, pictures, player profiles and the store open the matching screen; a link to play.carden.page opens the app when it is installed.
+- Player names are checked for offensive words.
 
 Pictures and sync
 - New Illustration packs: Big Buck Bunny, Fantasy Worlds, Pantry Shelves, Tinker's Workshop, Garden Plots and House and Home.

@@ -12,6 +12,26 @@
             "comment": "web sign-in callback stays in the browser"
           },
           {
+            "/": "/redeem",
+            "exclude": true,
+            "comment": "pack codes are redeemed on the web only"
+          },
+          {
+            "/": "/redeem/*",
+            "exclude": true,
+            "comment": "pack codes are redeemed on the web only"
+          },
+          {
+            "/": "/code",
+            "exclude": true,
+            "comment": "pack codes are redeemed on the web only"
+          },
+          {
+            "/": "/code/*",
+            "exclude": true,
+            "comment": "pack codes are redeemed on the web only"
+          },
+          {
             "/": "/"
           },
           {
@@ -112,18 +132,6 @@
           },
           {
             "/": "/lucky-wheel"
-          },
-          {
-            "/": "/redeem"
-          },
-          {
-            "/": "/redeem/*"
-          },
-          {
-            "/": "/code"
-          },
-          {
-            "/": "/code/*"
           },
           {
             "/": "/daily"

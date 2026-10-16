@@ -1,9 +1,12 @@
 # Pack codes and hidden packs
 
 A pack code opens a pack that is otherwise hidden: a giveaway on social media, a pack for testers, or
-an internal test of art we have not licensed yet. Players type the code in **Settings > Redeem a pack
-code** (iPhone and web), or open a link `/redeem?code=ABCD-EFGH-JKMN-PQRS`, which shows the same sheet
-with the code filled in.
+an internal test of art we have not licensed yet. Codes are redeemed on the **web only** (owner, 2026-10-16;
+App Review guideline 3.1.1): players type the code in **Settings > Redeem a pack code** on
+play.carden.page, or open a link `/redeem?code=ABCD-EFGH-JKMN-PQRS`, which shows the same sheet with the
+code filled in. The iPhone app has no code entry: a `carden://redeem` link opens nothing there, and the
+association file keeps `/redeem*` and `/code*` web links in the browser. A pack redeemed on the web shows in
+the account's library on iPhone too (the review notes say so).
 
 ## Pieces
 

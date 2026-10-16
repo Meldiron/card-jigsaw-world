@@ -6,5 +6,11 @@
 	<array>
 		<string>Default</string>
 	</array>
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>applinks:play.carden.page</string>
+		<string>applinks:carden.appwrite.network</string>
+		<string>applinks:card-jigsaw-world.appwrite.network</string>
+	</array>
 </dict>
 </plist>

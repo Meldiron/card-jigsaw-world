@@ -46,7 +46,7 @@ review notes, privacy policy and App Privacy answers that match the build).
 See `docs/purchases.md` for product ids and the verification function. In short:
 
 1. App Store Connect > your app > In-App Purchases: create the consumables `coins_1000`, `coins_3000`, `coins_5500`, `coins_12000`, `tickets_5`, `tickets_15`, `hints_5`, `hints_15`, and a subscription group "VIP" with `vip_monthly` (7-day free introductory offer) and `vip_yearly`. Fill in localisations and screenshots, then submit them with the first app version.
-2. Appwrite function variables are set: `APPLE_ENVIRONMENT=Sandbox` (switch to `Production` once the store build is live), `APPLE_APP_ID=6821644423`, `APPLE_BUNDLE_ID=com.matejbaco.cardjigsawworld`, `APPWRITE_DATABASE_ID=cjw`.
+2. Appwrite function variables are set: `APPLE_ENVIRONMENT=Production` (since 2026-10-16; sandbox purchases still verify through the fallback), `APPLE_APP_ID=6821644423`, `APPLE_BUNDLE_ID=com.matejbaco.cardjigsawworld`, `APPWRITE_DATABASE_ID=cjw`.
 3. **App Store Server Notifications**: App Store Connect > App > App Information > App Store Server Notifications: set both the Production and Sandbox URL to `https://cjw-verify-purchase.fra.appwrite.run/notifications` (version 2 notifications).
 3. Appwrite console > Functions > `verify-purchase` > Domains: enable the function domain, then in App Store Connect > App Information > App Store Server Notifications set the Production and Sandbox URLs to `https://<function-domain>/notifications` (version 2).
 4. Create a Sandbox tester (Users and Access > Sandbox) and sign in with it on a device to test real purchases before release.

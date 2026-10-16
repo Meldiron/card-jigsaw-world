@@ -2,7 +2,7 @@
 
 Carden ("the app", formerly Card Jigsaw World, on iPhone and at play.carden.page) is made by Matej
 Baco. This policy explains what the app stores, where, who can see it, and how to delete it.
-Last updated 15 October 2026.
+Last updated 16 October 2026.
 
 ## The short version
 
@@ -29,7 +29,7 @@ All game data is stored in an [Appwrite](https://appwrite.io) project hosted in 
 | Players you block | So they no longer show on your leaderboard | When you block someone |
 | Reports you send about a player (who, the name they had and the reason) | So we can act on offensive names and cheating | When you report someone |
 | Feedback you send from Settings (your message, your account id, the app version and whether it came from iPhone or the web) | So we can read your ideas and problems | When you send feedback |
-| Pack codes you redeem | So a code opens its pack once per account | When you redeem a code |
+| Pack codes you redeem (on the web version) | So a code opens its pack once per account | When you redeem a code |
 | Purchase records: Apple transaction ids, product, date, what was granted, and Apple's per-account app identifier used for Family Sharing | To grant purchases once, restore them, share VIP with your family and handle refunds and renewals | When you buy something |
 | Photos you upload in My Puzzles | To play them as puzzles | When you upload them. They are private to your account and are never shown to other players |
 

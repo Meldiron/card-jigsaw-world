@@ -1,6 +1,7 @@
-New in this build:
-- New app icon: the Carden lotus in coloured glass, with matching dark and tinted versions for the Home Screen. The web site and its tab icon use it too.
-- A board you finished on another device stays finished: if an older copy is still open somewhere (a browser tab, a second phone), it closes with "Solved on another device" instead of coming back as Continue.
-- Sync notices and the update prompt no longer appear in the middle of a game.
+Carden 2.0, the version going to the App Store:
+- Links to play.carden.page open the app when it is installed (packs, pictures, profiles, the store).
+- Player names are checked for offensive words: such a name cannot be chosen, and one set earlier shows as "Player".
+- Pack codes are redeemed on the web site only; the iPhone app no longer opens a code entry.
+- The contact address is now contact@almostapps.eu.
 
-Please try: the new icon on your Home Screen in light, dark and tinted mode, and finishing a board on one device while it is still open on another.
+Please try: tap a play.carden.page link (for example in Notes or Messages) and check that Carden opens on the right screen, and try renaming yourself in Profile.

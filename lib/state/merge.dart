@@ -9,6 +9,8 @@ library;
 
 import 'dart:math';
 
+import '../core/name_filter.dart';
+
 /// Which save supplies the scalar parts (coins, level, streak, identity).
 enum MergeChoice { guest, account }
 
@@ -45,7 +47,7 @@ class SaveSnapshot {
   int get piggyCoins => _i(profile['piggyCoins']);
   int get streak => _i(profile['streak']);
   int get longestStreak => _i(profile['longestStreak']);
-  String get displayName => (profile['displayName'] ?? 'Player').toString();
+  String get displayName => NameFilter.shown((profile['displayName'] ?? 'Player').toString());
   String get avatar => (profile['avatar'] ?? 'fox').toString();
 
   /// Most recent activity: the newest progress row, or the profile row.
