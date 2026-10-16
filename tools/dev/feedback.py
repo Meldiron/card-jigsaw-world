@@ -5,7 +5,7 @@
     python3 tools/dev/feedback.py --player ID     everything one player sent
     python3 tools/dev/feedback.py --close ROWID   delete a message you have handled
 
-Feedback has no reply channel: the sheet tells players to use Contact support (support@almostapps.eu)
+Feedback has no reply channel: the sheet tells players to use Contact support (contact@almostapps.eu)
 for an answer. Messages are deleted with the player's account (function `delete-account`) and with
 QA players (tools/dev/purge_test_players.py).
 Key: secrets/appwrite-users-key.txt (rows read/write); values are never printed.

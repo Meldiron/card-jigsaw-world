@@ -85,7 +85,7 @@ If this policy changes, the new version will be published at this address and th
 
 ## Contact
 
-support@almostapps.eu (Settings > Contact support). The email the app prepares adds the app version and
+contact@almostapps.eu (Settings > Contact support). The email the app prepares adds the app version and
 your player id below your message, so we can find your account; you can delete them before sending.
 
 Matej Baco, Slovakia

@@ -237,7 +237,7 @@ carden.page redirects there.
   `Query.notEqual('$id')` each) and their friendship ends; Settings > Blocked players unblocks. Both tables are
   deleted in both directions with an account (`delete-account`, `PAIR_TABLES` in `tools/dev/cjw_admin.py`).
   `lib/state/social.dart` (`PlayerSafety`, `blockedPlayersProvider`), `lib/features/social/player_safety.dart`.
-- Help (owner, 2026-10-15): Settings > Help > Contact support opens an email to support@almostapps.eu with
+- Help (owner, 2026-10-15): Settings > Help > Contact support opens an email to contact@almostapps.eu with
   the version and player id below the message (copies the address when there is no mail app); Send
   feedback writes a `feedback` row (userId, message, appVersion, platform) with no permissions, so only the
   server reads it: `tools/dev/feedback.py` lists and closes them. Deleted with the account (`delete-account`)

@@ -10,7 +10,7 @@ abstract final class AppLinks {
 
   /// The App Store's subscription management (opens the system sheet on iPhone).
   static final manageSubscriptions = Uri.parse('https://apps.apple.com/account/subscriptions');
-  static const supportEmail = 'support@almostapps.eu';
+  static const supportEmail = 'contact@almostapps.eu';
   static final support = Uri(scheme: 'mailto', path: supportEmail);
 
   /// An email to support with a subject, and below the space for the message the app version and

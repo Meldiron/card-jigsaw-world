@@ -23,7 +23,7 @@ String get platformName => isWeb
         final p => p.name,
       };
 
-/// Settings > Contact support: an email to support@almostapps.eu, with the app version and the
+/// Settings > Contact support: an email to contact@almostapps.eu, with the app version and the
 /// player id below the message so support can find the account. Without a mail app (a simulator,
 /// a browser with no mail client) the address is copied instead.
 Future<void> contactSupport(BuildContext context, WidgetRef ref) async {

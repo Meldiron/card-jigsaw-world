@@ -64,8 +64,8 @@ void main() {
     // Contact support: no mail app on the simulator, so the address is copied.
     await tester.tap(find.byKey(const ValueKey('settings-support')), warnIfMissed: false);
     await settle(tester, 1500);
-    expect(find.text('Email address copied: support@almostapps.eu'), findsOneWidget);
-    expect((await Clipboard.getData('text/plain'))?.text, 'support@almostapps.eu');
+    expect(find.text('Email address copied: contact@almostapps.eu'), findsOneWidget);
+    expect((await Clipboard.getData('text/plain'))?.text, 'contact@almostapps.eu');
     await shot(tester, 'help_02_support_copied', wait: 0);
     await settle(tester, 2500);
 

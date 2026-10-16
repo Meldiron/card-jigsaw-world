@@ -1,6 +1,6 @@
 # Support
 
-Carden is made by one person. Questions and bug reports go to **support@almostapps.eu**. Replies usually take a day or two.
+Carden is made by one person. Questions and bug reports go to **contact@almostapps.eu**. Replies usually take a day or two.
 
 ## Frequently asked questions
 
