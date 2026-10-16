@@ -9,7 +9,6 @@ import 'core/platform.dart';
 import 'core/reminders.dart';
 import 'core/sfx.dart';
 import 'core/theme/app_theme.dart';
-import 'core/theme/tokens.dart';
 import 'features/links/deep_links.dart';
 import 'features/store/purchase_host.dart';
 import 'features/sync/sync_host.dart';
@@ -149,53 +148,10 @@ class _CardenAppState extends ConsumerState<CardenApp> with WidgetsBindingObserv
           body: ScaffoldMessenger(child: UpdateHost(child: SyncHost(child: PurchaseHost(child: child!)))),
         );
         // Text follows the system size up to iOS "xxxLarge" (1.35); bars cap themselves at 1.2 (ChromeText).
+        // Wider windows (the web on a tablet or desktop) get their own layouts, see widgets/adaptive.dart.
         final data = mq.copyWith(textScaler: mq.textScaler.clamp(minScaleFactor: 0.9, maxScaleFactor: 1.35));
-        if (!ref.watch(platformCapsProvider).isWeb) return MediaQuery(data: data, child: host);
-        return PhoneFrame(mediaQuery: data, child: host);
+        return MediaQuery(data: data, child: host);
       },
-    );
-  }
-}
-
-/// Web only: keeps the phone layout at phone width on desktop browsers.
-///
-/// Centres the app in a column of at most [maxWidth] logical pixels with the
-/// canvas colour around it, and narrows the inherited [MediaQuery] so screens
-/// that size themselves from `MediaQuery.sizeOf` see the column, not the
-/// window. Narrow windows (phones) are untouched.
-class PhoneFrame extends StatelessWidget {
-  const PhoneFrame({super.key, required this.mediaQuery, required this.child});
-
-  static const double maxWidth = 520;
-
-  final MediaQueryData mediaQuery;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    final canvas = Theme.of(context).extension<AppColors>()?.canvas ?? Theme.of(context).scaffoldBackgroundColor;
-    return ColoredBox(
-      color: canvas,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final width = constraints.maxWidth.isFinite ? constraints.maxWidth : mediaQuery.size.width;
-          final height = constraints.maxHeight.isFinite ? constraints.maxHeight : mediaQuery.size.height;
-          final framed = width > maxWidth;
-          final size = Size(framed ? maxWidth : width, height);
-          final body = MediaQuery(data: mediaQuery.copyWith(size: size), child: child);
-          if (!framed) return body;
-          return Center(
-            child: SizedBox(
-              width: maxWidth,
-              height: height,
-              child: DecoratedBox(
-                decoration: BoxDecoration(border: Border.symmetric(vertical: BorderSide(color: Theme.of(context).extension<AppColors>()?.stroke ?? Colors.transparent))),
-                child: body,
-              ),
-            ),
-          );
-        },
-      ),
     );
   }
 }

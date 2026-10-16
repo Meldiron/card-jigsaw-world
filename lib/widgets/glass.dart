@@ -267,6 +267,9 @@ class GlassTabBar extends StatelessWidget {
   static const double barHeight = 60;
   static const double sideInset = 16;
 
+  /// Widest the capsule gets (a wide window, the web on a tablet).
+  static const double maxWidth = 520;
+
   /// Gap between the capsule and the screen bottom for a given safe inset.
   static double bottomGap(double safeBottom) => safeBottom > 0 ? safeBottom - 6 : 12;
 
@@ -300,56 +303,63 @@ class GlassTabBar extends StatelessWidget {
     const radius = BorderRadius.all(Radius.circular(barHeight / 2));
     return SizedBox(
       height: barHeight + bottom + 8,
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(sideInset, 8, sideInset, bottom),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            borderRadius: radius,
-            boxShadow: [
-              BoxShadow(color: Colors.black.withValues(alpha: isDark ? 0.45 : 0.10), blurRadius: 22, offset: const Offset(0, 8)),
-              BoxShadow(color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04), blurRadius: 2, offset: const Offset(0, 1)),
-            ],
-          ),
-          child: GlassSurface(
-            borderRadius: radius,
-            hairline: Border.all(color: isDark ? Colors.white.withValues(alpha: 0.10) : Colors.black.withValues(alpha: 0.06), width: 0.5),
-            child: LayoutBuilder(
-              builder: (context, cons) {
-                final n = items.length;
-                final cell = cons.maxWidth / n;
-                return Stack(
-                  children: [
-                    AnimatedPositioned(
-                      duration: const Duration(milliseconds: 260),
-                      curve: Curves.easeOutCubic,
-                      left: cell * currentIndex + 5,
-                      top: 6,
-                      bottom: 6,
-                      width: cell - 10,
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(color: context.accent.withValues(alpha: isDark ? 0.18 : 0.10), borderRadius: radius),
-                      ),
-                    ),
-                    Row(
+      // On a phone the capsule spans the screen less the insets; on a wider window (the web on a
+      // tablet) it keeps a phone's width in the middle.
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: maxWidth + 2 * sideInset),
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(sideInset, 8, sideInset, bottom),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: radius,
+                boxShadow: [
+                  BoxShadow(color: Colors.black.withValues(alpha: isDark ? 0.45 : 0.10), blurRadius: 22, offset: const Offset(0, 8)),
+                  BoxShadow(color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04), blurRadius: 2, offset: const Offset(0, 1)),
+                ],
+              ),
+              child: GlassSurface(
+                borderRadius: radius,
+                hairline: Border.all(color: isDark ? Colors.white.withValues(alpha: 0.10) : Colors.black.withValues(alpha: 0.06), width: 0.5),
+                child: LayoutBuilder(
+                  builder: (context, cons) {
+                    final n = items.length;
+                    final cell = cons.maxWidth / n;
+                    return Stack(
                       children: [
-                        for (var i = 0; i < n; i++)
-                          Expanded(
-                            child: Semantics(
-                              button: true,
-                              selected: i == currentIndex,
-                              label: items[i].label,
-                              child: GestureDetector(
-                                behavior: HitTestBehavior.opaque,
-                                onTap: () => onTap(i),
-                                child: _TabCell(item: items[i], selected: i == currentIndex),
-                              ),
-                            ),
+                        AnimatedPositioned(
+                          duration: const Duration(milliseconds: 260),
+                          curve: Curves.easeOutCubic,
+                          left: cell * currentIndex + 5,
+                          top: 6,
+                          bottom: 6,
+                          width: cell - 10,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(color: context.accent.withValues(alpha: isDark ? 0.18 : 0.10), borderRadius: radius),
                           ),
+                        ),
+                        Row(
+                          children: [
+                            for (var i = 0; i < n; i++)
+                              Expanded(
+                                child: Semantics(
+                                  button: true,
+                                  selected: i == currentIndex,
+                                  label: items[i].label,
+                                  child: GestureDetector(
+                                    behavior: HitTestBehavior.opaque,
+                                    onTap: () => onTap(i),
+                                    child: _TabCell(item: items[i], selected: i == currentIndex),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
                       ],
-                    ),
-                  ],
-                );
-              },
+                    );
+                  },
+                ),
+              ),
             ),
           ),
         ),
@@ -421,35 +431,39 @@ class _TabCell extends StatelessWidget {
 /// restore), it scrolls under the grabber instead of overflowing, so the
 /// last button can always be reached.
 class GlassSheet extends StatelessWidget {
-  const GlassSheet({super.key, required this.child, this.grabber = true, this.bottomInset = 0});
+  const GlassSheet({super.key, required this.child, this.grabber = true, this.bottomInset = 0, this.panel = false});
   final Widget child;
   final bool grabber;
 
   /// Extra space at the bottom outside the scrolling area (the keyboard).
   final double bottomInset;
 
+  /// A centred panel (the sheet on a wide window, see `showAppSheet`): rounded on every corner,
+  /// no grabber (nothing to drag) and no home-indicator inset.
+  final bool panel;
+
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
     final isDark = context.isDark;
-    const radius = BorderRadius.vertical(top: Radius.circular(28));
+    final radius = panel ? const BorderRadius.all(Radius.circular(28)) : const BorderRadius.vertical(top: Radius.circular(28));
     return GlassSurface(
       borderRadius: radius,
       sigma: 30,
-      opacity: isDark ? 0.80 : 0.84,
-      hairline: Border.all(color: isDark ? Colors.white.withValues(alpha: 0.12) : Colors.white.withValues(alpha: 0.7), width: 0.5),
+      opacity: isDark ? (panel ? 0.92 : 0.80) : (panel ? 0.94 : 0.84),
+      hairline: Border.all(color: isDark ? Colors.white.withValues(alpha: 0.12) : (panel ? Colors.black.withValues(alpha: 0.06) : Colors.white.withValues(alpha: 0.7)), width: 0.5),
       child: Padding(
-        padding: EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom + bottomInset),
+        padding: EdgeInsets.only(bottom: (panel ? 12 : MediaQuery.paddingOf(context).bottom) + bottomInset),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (grabber)
+            if (grabber && !panel)
               Padding(
                 padding: const EdgeInsets.only(top: 8, bottom: 6),
                 child: Container(width: 36, height: 5, decoration: BoxDecoration(color: c.textTertiary.withValues(alpha: 0.45), borderRadius: BorderRadius.circular(999))),
               )
             else
-              const SizedBox(height: 14),
+              SizedBox(height: panel ? 20 : 14),
             // Scrolls only when the content does not fit; otherwise a drag
             // still moves the whole sheet (drag to dismiss).
             Flexible(child: _SheetScroll(child: Elevated(child: child))),

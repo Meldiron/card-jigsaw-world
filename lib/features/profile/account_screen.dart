@@ -312,7 +312,7 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
         // ever pushes it.
         leading: Padding(
           padding: const EdgeInsets.only(left: 12),
-          child: RoundIconButton(icon: ModalRoute.of(context) is CupertinoSheetRoute ? AppIcons.xmark : AppIcons.back, size: 38, onTap: () => context.pop()),
+          child: RoundIconButton(icon: isSheetRoute(context) ? AppIcons.xmark : AppIcons.back, size: 38, onTap: () => context.pop()),
         ),
       ),
       body: isGuest ? _guest(context, top) : _signedIn(context, top, user, profile),

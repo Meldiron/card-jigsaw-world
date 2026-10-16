@@ -227,7 +227,8 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
 
   void _revealChip(String chip) {
     final ctx = _chipKeys[chip]?.currentContext;
-    if (ctx == null || !ctx.mounted || chip == LibraryFilter.all) return;
+    // On a wide window every chip is in view already (they wrap); scrolling would move the page.
+    if (ctx == null || !ctx.mounted || chip == LibraryFilter.all || context.isWide) return;
     Scrollable.ensureVisible(ctx, alignment: 0.5, duration: const Duration(milliseconds: 300), curve: Curves.easeOutCubic);
   }
 
@@ -293,143 +294,167 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
         : (pictures: const <Puzzle>[], total: 0);
     final packById = {for (final p in list) p.id: p};
     final lead = !searching && filter == LibraryFilter.all ? 1 : 0;
+    final wide = context.isExpanded;
+    final shelfCardWidth = context.isWide ? 184.0 : _shelfCardWidth;
+    final searchField = CupertinoSearchTextField(
+      key: const ValueKey('library-search'),
+      controller: _search,
+      focusNode: _searchFocus,
+      placeholder: 'Search packs and pictures',
+      onSubmitted: (_) => _searchFocus.unfocus(),
+      style: TextStyle(color: c.textPrimary, fontSize: TypeSize.callout, letterSpacing: -0.2),
+      placeholderStyle: TextStyle(color: c.textTertiary, fontSize: TypeSize.callout, letterSpacing: -0.2),
+      itemColor: c.textTertiary,
+      decoration: BoxDecoration(color: c.card, borderRadius: BorderRadius.circular(10), border: Border.all(color: c.stroke)),
+      padding: const EdgeInsetsDirectional.fromSTEB(6, 9, 6, 9),
+    );
+    Widget chipFor(String chip) => KeyedSubtree(
+          key: _chipKeys.putIfAbsent(chip, GlobalKey.new),
+          child: _FilterChip(
+            key: ValueKey('library-chip-$chip'),
+            label: chip,
+            icon: libraryChipIcon(chip),
+            selected: chip == filter,
+            onTap: () => ref.read(libraryFilterProvider.notifier).select(chip),
+          ),
+        );
+    // Search results on a wide window: the pictures in two columns.
+    final pictureColumns = context.isWide ? 2 : 1;
+    Widget pictureCard(List<Puzzle> pictures) => SoftCard(
+          padding: EdgeInsets.zero,
+          child: Column(
+            children: [
+              for (var i = 0; i < pictures.length; i++) ...[
+                _PictureRow(puzzle: pictures[i], pack: packById[pictures[i].packId]),
+                if (i < pictures.length - 1) Divider(height: 1, color: c.stroke, indent: 76),
+              ],
+            ],
+          ),
+        );
 
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       slivers: [
         const HeaderBar(title: 'Library'),
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 5, 20, 0),
-            child: Row(
-              crossAxisAlignment: inFinished ? CrossAxisAlignment.end : CrossAxisAlignment.center,
-              children: [
-                const Expanded(child: PageTitle('Library')),
-                // In Finished, hiding finished packs would empty the view; the count says more.
-                if (inFinished)
-                  Text('$finishedCount finished', key: const ValueKey('library-finished-count'), style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote))
-                else
-                  _HideFinishedToggle(value: hideFinished, onChanged: ref.read(settingsProvider.notifier).setHideFinished),
-              ],
-            ),
-          ),
-        ),
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-            child: CupertinoSearchTextField(
-              key: const ValueKey('library-search'),
-              controller: _search,
-              focusNode: _searchFocus,
-              placeholder: 'Search packs and pictures',
-              onSubmitted: (_) => _searchFocus.unfocus(),
-              style: TextStyle(color: c.textPrimary, fontSize: TypeSize.callout, letterSpacing: -0.2),
-              placeholderStyle: TextStyle(color: c.textTertiary, fontSize: TypeSize.callout, letterSpacing: -0.2),
-              itemColor: c.textTertiary,
-              decoration: BoxDecoration(color: c.card, borderRadius: BorderRadius.circular(10), border: Border.all(color: c.stroke)),
-              padding: const EdgeInsetsDirectional.fromSTEB(6, 9, 6, 9),
-            ),
-          ),
-        ),
-        SliverToBoxAdapter(
-          child: SizedBox(
-            height: 54,
-            child: ListView.separated(
-              key: const ValueKey('library-chips'),
-              scrollDirection: Axis.horizontal,
-              // Chips are 36 pt with a 44 pt touch box (TapTarget); the row keeps its 54 pt.
-              padding: const EdgeInsets.fromLTRB(20, 8, 20, 2),
-              physics: const BouncingScrollPhysics(),
-              // Every chip is built, so any of them can be scrolled to.
-              scrollCacheExtent: const ScrollCacheExtent.pixels(4000),
-              itemCount: chips.length,
-              separatorBuilder: (_, _) => const SizedBox(width: 8),
-              itemBuilder: (_, i) => KeyedSubtree(
-                key: _chipKeys.putIfAbsent(chips[i], GlobalKey.new),
-                child: _FilterChip(
-                  key: ValueKey('library-chip-${chips[i]}'),
-                  label: chips[i],
-                  icon: libraryChipIcon(chips[i]),
-                  selected: chips[i] == filter,
-                  onTap: () => ref.read(libraryFilterProvider.notifier).select(chips[i]),
-                ),
-              ),
-            ),
-          ),
-        ),
-        if (filtered.isEmpty && found.total == 0)
-          SliverToBoxAdapter(child: _empty(filter, hideFinished: hideFinished, view: view))
-        else if (searching && filtered.isNotEmpty) ...[
-          // While searching, the matching packs are a shelf that scrolls sideways: the covers
-          // look as they do everywhere else, and the matching pictures start on the first
-          // screen instead of under a page of large covers.
-          SliverToBoxAdapter(
-            child: SectionHeader(
-              key: const ValueKey('library-packs'),
-              title: 'Packs',
-              subtitle: '${filtered.length} ${filtered.length == 1 ? 'pack' : 'packs'}',
-              padding: const EdgeInsets.fromLTRB(20, 14, 20, 10),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: SizedBox(
-              // A grid card's shape (0.78) at shelf width.
-              height: _shelfCardWidth / 0.78,
-              child: ListView.separated(
-                key: const ValueKey('library-pack-shelf'),
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                physics: const BouncingScrollPhysics(),
-                itemCount: filtered.length,
-                separatorBuilder: (_, _) => const SizedBox(width: 12),
-                itemBuilder: (_, i) => SizedBox(
-                  width: _shelfCardWidth,
-                  child: PackCard(key: ValueKey('library-pack-${filtered[i].id}'), pack: filtered[i], onTap: () => context.go('/library/pack/${filtered[i].id}')),
-                ),
-              ),
-            ),
-          ),
-        ] else if (filtered.isNotEmpty)
-          SliverPadding(
-            padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-            sliver: SliverGrid(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 12, crossAxisSpacing: 12, childAspectRatio: 0.78),
-              // In All, My Puzzles is the first tile of the grid instead of a card above it,
-              // so the packs start right under the chips.
-              delegate: SliverChildBuilderDelegate(
-                (_, i) => i < lead
-                    ? _MyPuzzlesTile(onTap: () => context.go('/profile/my-puzzles'))
-                    : PackCard(pack: filtered[i - lead], onTap: () => context.go('/library/pack/${filtered[i - lead].id}')),
-                childCount: filtered.length + lead,
-              ),
-            ),
-          ),
-        if (found.total > 0) ...[
-          SliverToBoxAdapter(
-            child: SectionHeader(
-              key: const ValueKey('library-pictures'),
-              title: 'Pictures',
-              subtitle: found.total > found.pictures.length ? '${found.pictures.length} of ${found.total} · add a word to narrow it down' : '${found.total} ${found.total == 1 ? 'picture' : 'pictures'}',
-            ),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            sliver: SliverToBoxAdapter(
-              child: SoftCard(
-                padding: EdgeInsets.zero,
-                child: Column(
+        SliverPage(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 5, 20, 0),
+                child: Row(
+                  crossAxisAlignment: inFinished ? CrossAxisAlignment.end : CrossAxisAlignment.center,
                   children: [
-                    for (var i = 0; i < found.pictures.length; i++) ...[
-                      _PictureRow(puzzle: found.pictures[i], pack: packById[found.pictures[i].packId]),
-                      if (i < found.pictures.length - 1) Divider(height: 1, color: c.stroke, indent: 76),
-                    ],
+                    const Expanded(child: PageTitle('Library')),
+                    // A website puts the search beside the title.
+                    if (wide) ...[SizedBox(width: 360, child: searchField), const SizedBox(width: 20)],
+                    // In Finished, hiding finished packs would empty the view; the count says more.
+                    if (inFinished)
+                      Text('$finishedCount finished', key: const ValueKey('library-finished-count'), style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote))
+                    else
+                      _HideFinishedToggle(value: hideFinished, onChanged: ref.read(settingsProvider.notifier).setHideFinished),
                   ],
                 ),
               ),
             ),
-          ),
-        ],
+            if (!wide)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                  child: searchField,
+                ),
+              ),
+            SliverToBoxAdapter(
+              child: context.isWide
+                  // Every chip in view at once: they wrap instead of scrolling sideways.
+                  ? Padding(
+                      key: const ValueKey('library-chips'),
+                      padding: const EdgeInsets.fromLTRB(20, 12, 20, 2),
+                      child: Wrap(spacing: 8, runSpacing: 0, children: [for (final chip in chips) IntrinsicWidth(child: chipFor(chip))]),
+                    )
+                  : SizedBox(
+                      height: 54,
+                      child: ListView.separated(
+                        key: const ValueKey('library-chips'),
+                        scrollDirection: Axis.horizontal,
+                        // Chips are 36 pt with a 44 pt touch box (TapTarget); the row keeps its 54 pt.
+                        padding: const EdgeInsets.fromLTRB(20, 8, 20, 2),
+                        physics: const BouncingScrollPhysics(),
+                        // Every chip is built, so any of them can be scrolled to.
+                        scrollCacheExtent: const ScrollCacheExtent.pixels(4000),
+                        itemCount: chips.length,
+                        separatorBuilder: (_, _) => const SizedBox(width: 8),
+                        itemBuilder: (_, i) => chipFor(chips[i]),
+                      ),
+                    ),
+            ),
+            if (filtered.isEmpty && found.total == 0)
+              SliverToBoxAdapter(child: _empty(filter, hideFinished: hideFinished, view: view))
+            else if (searching && filtered.isNotEmpty) ...[
+              // While searching, the matching packs are a shelf that scrolls sideways: the covers
+              // look as they do everywhere else, and the matching pictures start on the first
+              // screen instead of under a page of large covers.
+              SliverToBoxAdapter(
+                child: SectionHeader(
+                  key: const ValueKey('library-packs'),
+                  title: 'Packs',
+                  subtitle: '${filtered.length} ${filtered.length == 1 ? 'pack' : 'packs'}',
+                  padding: const EdgeInsets.fromLTRB(20, 14, 20, 10),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: Shelf(
+                  listKey: const ValueKey('library-pack-shelf'),
+                  // A grid card's shape (0.78) at shelf width.
+                  height: shelfCardWidth / 0.78,
+                  itemCount: filtered.length,
+                  itemBuilder: (_, i) => SizedBox(
+                    width: shelfCardWidth,
+                    child: PackCard(key: ValueKey('library-pack-${filtered[i].id}'), pack: filtered[i], onTap: () => context.go('/library/pack/${filtered[i].id}')),
+                  ),
+                ),
+              ),
+            ] else if (filtered.isNotEmpty)
+              SliverPadding(
+                padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                sliver: SliverGrid(
+                  gridDelegate: const AdaptiveGridDelegate(childAspectRatio: 0.78),
+                  // In All, My Puzzles is the first tile of the grid instead of a card above it,
+                  // so the packs start right under the chips.
+                  delegate: SliverChildBuilderDelegate(
+                    (_, i) => i < lead
+                        ? _MyPuzzlesTile(onTap: () => context.go('/profile/my-puzzles'))
+                        : PackCard(pack: filtered[i - lead], onTap: () => context.go('/library/pack/${filtered[i - lead].id}')),
+                    childCount: filtered.length + lead,
+                  ),
+                ),
+              ),
+            if (found.total > 0) ...[
+              SliverToBoxAdapter(
+                child: SectionHeader(
+                  key: const ValueKey('library-pictures'),
+                  title: 'Pictures',
+                  subtitle: found.total > found.pictures.length ? '${found.pictures.length} of ${found.total} · add a word to narrow it down' : '${found.total} ${found.total == 1 ? 'picture' : 'pictures'}',
+                ),
+              ),
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                sliver: SliverToBoxAdapter(
+                  child: pictureColumns == 1
+                      ? pictureCard(found.pictures)
+                      : Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(child: pictureCard(found.pictures.sublist(0, (found.pictures.length + 1) ~/ 2))),
+                            const SizedBox(width: 12),
+                            Expanded(child: found.pictures.length < 2 ? const SizedBox.shrink() : pictureCard(found.pictures.sublist((found.pictures.length + 1) ~/ 2))),
+                          ],
+                        ),
+                ),
+              ),
+            ],
+          ],
+        ),
         SliverToBoxAdapter(child: SizedBox(height: GlassTabBar.scrollEndPadding(context))),
       ],
     );
@@ -649,25 +674,29 @@ class _LibrarySkeleton extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         slivers: [
           const HeaderBar(title: 'Library'),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 10, 20, 12),
-              child: Text('Library', style: Theme.of(context).textTheme.headlineLarge),
-            ),
-          ),
-          const SliverToBoxAdapter(child: Padding(padding: EdgeInsets.fromLTRB(20, 0, 20, 0), child: Skeleton(height: 40, radius: Radii.md))),
-          const SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(20, 18, 20, 6),
-              child: Row(children: [Skeleton(width: 64, height: 32, radius: 16), SizedBox(width: 8), Skeleton(width: 72, height: 32, radius: 16), SizedBox(width: 8), Skeleton(width: 92, height: 32, radius: 16)]),
-            ),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-            sliver: SliverGrid(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 12, crossAxisSpacing: 12, childAspectRatio: 0.78),
-              delegate: SliverChildBuilderDelegate((_, _) => const SkeletonPackCard(), childCount: 6),
-            ),
+          SliverPage(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 12),
+                  child: Text('Library', style: Theme.of(context).textTheme.headlineLarge),
+                ),
+              ),
+              const SliverToBoxAdapter(child: Padding(padding: EdgeInsets.fromLTRB(20, 0, 20, 0), child: Skeleton(height: 40, radius: Radii.md))),
+              const SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(20, 18, 20, 6),
+                  child: Row(children: [Skeleton(width: 64, height: 32, radius: 16), SizedBox(width: 8), Skeleton(width: 72, height: 32, radius: 16), SizedBox(width: 8), Skeleton(width: 92, height: 32, radius: 16)]),
+                ),
+              ),
+              SliverPadding(
+                padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                sliver: SliverGrid(
+                  gridDelegate: const AdaptiveGridDelegate(childAspectRatio: 0.78),
+                  delegate: SliverChildBuilderDelegate((_, _) => const SkeletonPackCard(), childCount: context.isWide ? 10 : 6),
+                ),
+              ),
+            ],
           ),
         ],
       );

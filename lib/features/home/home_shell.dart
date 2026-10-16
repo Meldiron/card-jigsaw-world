@@ -12,8 +12,10 @@ import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 import '../events/quest_rewards.dart';
+import 'header_bar.dart';
 
-/// Bottom tab shell: Home · Library · Quests · Social · Profile.
+/// Bottom tab shell: Home · Library · Quests · Social · Profile. On an expanded window (the web
+/// on a desktop) the tabs move to [WideTopBar] at the top of the window.
 ///
 /// The tab bar is a floating glass capsule (iOS 26). The body extends under
 /// it, so every tab's scroll view (and every page pushed inside a tab) pads
@@ -68,17 +70,24 @@ class _HomeShellState extends ConsumerState<HomeShell> {
       const GlassTabItem(icon: AppIcons.person2, activeIcon: AppIcons.social, label: 'Social'),
       GlassTabItem(icon: AppIcons.personCropCircle, activeIcon: AppIcons.profile, label: 'Profile', badge: rewardReady),
     ];
+    void select(int i) {
+      Haptics.selection();
+      widget.shell.goBranch(i, initialLocation: i == widget.shell.currentIndex);
+    }
+
+    // The website layout (the web on a desktop): the tabs in a top bar across the window, the
+    // pages under it, nothing floating over the bottom of the page.
+    if (context.isExpanded) {
+      return Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: WideTopBar(items: tabs, currentIndex: widget.shell.currentIndex, onTap: select),
+        body: widget.shell,
+      );
+    }
     return Scaffold(
       extendBody: true,
       body: GlassTabBarScope(child: widget.shell),
-      bottomNavigationBar: GlassTabBar(
-        items: tabs,
-        currentIndex: widget.shell.currentIndex,
-        onTap: (i) {
-          Haptics.selection();
-          widget.shell.goBranch(i, initialLocation: i == widget.shell.currentIndex);
-        },
-      ),
+      bottomNavigationBar: GlassTabBar(items: tabs, currentIndex: widget.shell.currentIndex, onTap: select),
     );
   }
 }

@@ -75,6 +75,105 @@ class HomeScreen extends ConsumerWidget {
     PackProgress progressOf(Pack p) => packProgress[p.id] ?? const PackProgress(solved: 0, total: 0, stars: 0);
     final missingStars = packRows.missingStars.fold<int>(0, (sum, p) => sum + progressOf(p).maxStars - progressOf(p).stars);
 
+    final wide = context.isExpanded;
+    final hero = daily == null
+        ? _HeroPlaceholder(failed: catalogFailed, onRetry: retryCatalog, height: wide ? _DailyHero.wideHeight : _DailyHero.phoneHeight)
+        : _DailyHero(puzzle: daily, progress: progress[daily.id], height: wide ? _DailyHero.wideHeight : _DailyHero.phoneHeight);
+    Widget? resume;
+    if (inProgress.isNotEmpty) {
+      final p = _closestToDone(inProgress, progress);
+      final pr = progress[p.id]!;
+      resume = _ResumeCard(puzzle: p, progress: pr, others: inProgress.length - 1, onTap: () => context.push('/game/${p.id}/${_gridCode(pr)}'));
+    }
+    final streak = profile == null ? null : _StreakCard(profile: profile, onTap: () => showDailyRewardSheet(context));
+    final Widget extras = Row(
+      children: [
+        Expanded(
+          child: _QuickTile(
+            icon: AppIcons.wheel,
+            title: 'Lucky Wheel',
+            value: Row(
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              textBaseline: TextBaseline.alphabetic,
+              children: [
+                Text('Up to', style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w500, color: context.colors.textSecondary)),
+                const SizedBox(width: 6),
+                Amount(currency: Currency.coins, value: _wheelJackpot, size: 18, fontSize: TypeSize.title3, weight: FontWeight.w700),
+              ],
+            ),
+            footer: CostLabel(label: 'Spin for', currency: Currency.tickets, amount: Economy.wheelSpinTickets, fontSize: TypeSize.footnote, color: context.colors.textSecondary),
+            onTap: () => context.push('/wheel'),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: _QuickTile(
+            icon: AppIcons.piggy,
+            title: 'Piggy bank',
+            ready: piggyFull,
+            value: Row(
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              textBaseline: TextBaseline.alphabetic,
+              children: [
+                Text(formatCount(profile?.piggyCoins ?? 0), style: const TextStyle(fontSize: TypeSize.title3, fontWeight: FontWeight.w700, letterSpacing: -0.3)),
+                Text(' / ${formatCount(Profile.piggyCapacity)}', style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w500, color: context.colors.textSecondary)),
+              ],
+            ),
+            footer: piggyFull
+                ? CostLabel(label: 'Full · open for', currency: Currency.tickets, amount: Economy.piggyOpenTickets, fontSize: TypeSize.footnote, color: context.accent)
+                : ProgressBar(value: (profile?.piggyCoins ?? 0) / Profile.piggyCapacity, height: 5),
+            onTap: () => showPiggySheet(context),
+          ),
+        ),
+      ],
+    );
+    final level = profile == null ? null : _LevelCard(profile: profile);
+    final guest = isGuest ? _GuestSaveCard(onSave: () => context.push('/account')) : null;
+    final packRowSlivers = <Widget>[
+      if (inProgress.isNotEmpty) ...[
+        SliverToBoxAdapter(
+          child: SectionHeader(
+            title: 'Continue solving',
+            subtitle: '${inProgress.length} unfinished puzzle${inProgress.length == 1 ? '' : 's'}',
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: Shelf(
+            height: _CoverTile.sizeOf(context),
+            itemCount: inProgress.length,
+            itemBuilder: (_, i) {
+              final p = inProgress[i];
+              final pr = progress[p.id]!;
+              return _ContinueCard(
+                puzzle: p,
+                progress: pr,
+                onTap: () => context.push('/game/${p.id}/${_gridCode(pr)}'),
+              );
+            },
+          ),
+        ),
+      ],
+      if (packRows.inProgress.isNotEmpty) ...[
+        SliverToBoxAdapter(
+          child: SectionHeader(
+            title: 'Packs in progress',
+            subtitle: '${packRows.inProgress.length} ${packRows.inProgress.length == 1 ? 'pack' : 'packs'} to finish',
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: _PackCoverRow(
+            key: const ValueKey('home-packs-in-progress'),
+            packs: packRows.inProgress,
+            progressOf: progressOf,
+          ),
+        ),
+      ],
+    ];
+    // Library packs in the Featured grid: six on a phone (three rows), two full rows once a wider
+    // window fits four or more in a row.
+    final columns = gridColumns(contentWidthOf(context, maxWidth: wide ? PageWidth.wide : PageWidth.reading));
+    final featuredCount = context.isWide && columns > 3 ? 2 * columns : HomeScreen.featuredCount;
+
     return Scaffold(
       body: RefreshIndicator.adaptive(
         edgeOffset: MediaQuery.paddingOf(context).top + HeaderBar.height,
@@ -86,294 +185,225 @@ class HomeScreen extends ConsumerWidget {
           physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
           slivers: [
             const HeaderBar(title: 'Carden'),
-            // Large title, as on the other tabs: the date and a greeting, so Home opens on "today".
-            SliverToBoxAdapter(child: _Greeting(name: profile?.displayName)),
-            // The first-time intro of a shape or option the player's level just opened.
-            SliverToBoxAdapter(child: UnlockIntroHost(at: (path) => path == '/home')),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
-                child: daily == null
-                    ? _HeroPlaceholder(failed: catalogFailed, onRetry: retryCatalog)
-                    : _DailyHero(puzzle: daily, progress: progress[daily.id]),
-              ),
-            ),
-            // Today's daily puzzle is solved: a blurred look at tomorrow's.
-            if (tomorrow != null)
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-                  child: TomorrowPreview(puzzle: tomorrow),
-                ),
-              ),
-            // One tap back into the board closest to done; the full row is further down.
-            if (inProgress.isNotEmpty)
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-                  child: Builder(builder: (context) {
-                    final p = _closestToDone(inProgress, progress);
-                    final pr = progress[p.id]!;
-                    return _ResumeCard(puzzle: p, progress: pr, others: inProgress.length - 1, onTap: () => context.push('/game/${p.id}/${_gridCode(pr)}'));
-                  }),
-                ),
-              ),
-            const SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(20, 12, 20, 0),
-                child: _QuickPlayCard(),
-              ),
-            ),
-            if (profile != null)
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-                  child: _StreakCard(profile: profile, onTap: () => showDailyRewardSheet(context)),
-                ),
-              ),
-            if (inProgress.isNotEmpty) ...[
-              SliverToBoxAdapter(
-                child: SectionHeader(
-                  title: 'Continue solving',
-                  subtitle: '${inProgress.length} unfinished puzzle${inProgress.length == 1 ? '' : 's'}',
-                ),
-              ),
-              SliverToBoxAdapter(
-                child: SizedBox(
-                  height: _CoverTile.size,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    physics: const BouncingScrollPhysics(),
-                    itemCount: inProgress.length,
-                    separatorBuilder: (_, _) => const SizedBox(width: 12),
-                    itemBuilder: (_, i) {
-                      final p = inProgress[i];
-                      final pr = progress[p.id]!;
-                      return _ContinueCard(
-                        puzzle: p,
-                        progress: pr,
-                        onTap: () => context.push('/game/${p.id}/${_gridCode(pr)}'),
-                      );
+            SliverPage(
+              maxWidth: wide ? PageWidth.wide : PageWidth.reading,
+              slivers: [
+                // Large title, as on the other tabs: the date and a greeting, so Home opens on "today".
+                SliverToBoxAdapter(child: _Greeting(name: profile?.displayName)),
+                // The first-time intro of a shape or option the player's level just opened.
+                SliverToBoxAdapter(child: UnlockIntroHost(at: (path) => path == '/home')),
+                if (wide) ...[
+                  // The website layout: today's picture beside the day's plays, then the extras beside
+                  // the level, then the rows.
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(flex: 7, child: Column(children: [hero, if (tomorrow != null) ...[const SizedBox(height: 12), TomorrowPreview(puzzle: tomorrow)]])),
+                          const SizedBox(width: 16),
+                          Expanded(flex: 5, child: Column(children: [if (resume != null) ...[resume, const SizedBox(height: 12)], const _QuickPlayCard(), if (streak != null) ...[const SizedBox(height: 12), streak]])),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(flex: 7, child: Column(children: [extras, if (guest != null) ...[const SizedBox(height: 12), guest]])),
+                          const SizedBox(width: 16),
+                          Expanded(flex: 5, child: level ?? const SizedBox.shrink()),
+                        ],
+                      ),
+                    ),
+                  ),
+                  ...packRowSlivers,
+                ] else ...[
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
+                      child: hero,
+                    ),
+                  ),
+                  // Today's daily puzzle is solved: a blurred look at tomorrow's.
+                  if (tomorrow != null)
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                        child: TomorrowPreview(puzzle: tomorrow),
+                      ),
+                    ),
+                  // One tap back into the board closest to done; the full row is further down.
+                  if (resume != null)
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                        child: resume,
+                      ),
+                    ),
+                  const SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(20, 12, 20, 0),
+                      child: _QuickPlayCard(),
+                    ),
+                  ),
+                  if (streak != null)
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                        child: streak,
+                      ),
+                    ),
+                  ...packRowSlivers,
+                  // Extras after the boards and packs the player is working on.
+                  const SliverToBoxAdapter(child: SizedBox(height: 16)),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                      child: extras,
+                    ),
+                  ),
+                  if (level != null)
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                        child: level,
+                      ),
+                    ),
+                  if (guest != null)
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                        child: guest,
+                      ),
+                    ),
+                ],
+                if (livePacks.isNotEmpty) ...[
+                  SliverToBoxAdapter(
+                    child: SectionHeader(
+                      title: 'Live events',
+                      subtitle: 'Limited-time packs',
+                      action: 'All events',
+                      onAction: () => context.go('/events'),
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: Shelf(
+                      height: _CoverTile.sizeOf(context),
+                      itemCount: livePacks.length,
+                      itemBuilder: (_, i) => _EventPackCard(
+                        pack: livePacks[i],
+                        onTap: () => context.push('/library/pack/${livePacks[i].id}'),
+                      ),
+                    ),
+                  ),
+                ],
+                if (dailyPacks.isNotEmpty) ...[
+                  SliverToBoxAdapter(
+                    child: SectionHeader(
+                      title: 'Daily puzzles',
+                      subtitle: 'A new picture every day',
+                      action: 'All months',
+                      onAction: () {
+                        ref.read(libraryFilterProvider.notifier).select(LibraryFilter.daily);
+                        context.go('/library');
+                      },
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: Shelf(
+                      height: _CoverTile.sizeOf(context),
+                      itemCount: dailyPacks.length.clamp(0, 12),
+                      itemBuilder: (_, i) => _MonthCard(
+                        pack: dailyPacks[i],
+                        current: i == 0,
+                        onTap: () => context.push('/library/pack/${dailyPacks[i].id}'),
+                      ),
+                    ),
+                  ),
+                ],
+                if (packRows.missingStars.isNotEmpty) ...[
+                  SliverToBoxAdapter(
+                    child: SectionHeader(
+                      title: 'Missing stars',
+                      subtitle: '$missingStars ${missingStars == 1 ? 'star' : 'stars'} to earn in ${packRows.missingStars.length} '
+                          '${packRows.missingStars.length == 1 ? 'pack' : 'packs'}',
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: _PackCoverRow(
+                      key: const ValueKey('home-missing-stars'),
+                      packs: packRows.missingStars,
+                      progressOf: progressOf,
+                    ),
+                  ),
+                ],
+                const SliverToBoxAdapter(child: HouseBanner()),
+                SliverToBoxAdapter(
+                  child: SectionHeader(
+                    title: 'Featured packs',
+                    action: 'See all',
+                    onAction: () {
+                      ref.read(libraryFilterProvider.notifier).select(LibraryFilter.all);
+                      context.go('/library');
                     },
                   ),
                 ),
-              ),
-            ],
-            if (packRows.inProgress.isNotEmpty) ...[
-              SliverToBoxAdapter(
-                child: SectionHeader(
-                  title: 'Packs in progress',
-                  subtitle: '${packRows.inProgress.length} ${packRows.inProgress.length == 1 ? 'pack' : 'packs'} to finish',
-                ),
-              ),
-              SliverToBoxAdapter(
-                child: _PackCoverRow(
-                  key: const ValueKey('home-packs-in-progress'),
-                  packs: packRows.inProgress,
-                  progressOf: progressOf,
-                ),
-              ),
-            ],
-            // Extras after the boards and packs the player is working on.
-            const SliverToBoxAdapter(child: SizedBox(height: 16)),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: _QuickTile(
-                        icon: AppIcons.wheel,
-                        title: 'Lucky Wheel',
-                        value: Row(
-                          crossAxisAlignment: CrossAxisAlignment.baseline,
-                          textBaseline: TextBaseline.alphabetic,
-                          children: [
-                            Text('Up to', style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w500, color: context.colors.textSecondary)),
-                            const SizedBox(width: 6),
-                            Amount(currency: Currency.coins, value: _wheelJackpot, size: 18, fontSize: TypeSize.title3, weight: FontWeight.w700),
-                          ],
-                        ),
-                        footer: CostLabel(label: 'Spin for', currency: Currency.tickets, amount: Economy.wheelSpinTickets, fontSize: TypeSize.footnote, color: context.colors.textSecondary),
-                        onTap: () => context.push('/wheel'),
-                      ),
+                if (!packs.hasValue && (packs.hasError || catalogFailed))
+                  SliverToBoxAdapter(
+                    child: EmptyState(
+                      icon: AppIcons.signal,
+                      title: 'Could not load packs',
+                      message: 'Check your connection and try again.',
+                      action: BigButton(label: 'Try again', kind: ButtonKind.secondary, expand: false, height: 40, onTap: retryCatalog),
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: _QuickTile(
-                        icon: AppIcons.piggy,
-                        title: 'Piggy bank',
-                        ready: piggyFull,
-                        value: Row(
-                          crossAxisAlignment: CrossAxisAlignment.baseline,
-                          textBaseline: TextBaseline.alphabetic,
-                          children: [
-                            Text(formatCount(profile?.piggyCoins ?? 0), style: const TextStyle(fontSize: TypeSize.title3, fontWeight: FontWeight.w700, letterSpacing: -0.3)),
-                            Text(' / ${formatCount(Profile.piggyCapacity)}', style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w500, color: context.colors.textSecondary)),
-                          ],
-                        ),
-                        footer: piggyFull
-                            ? CostLabel(label: 'Full · open for', currency: Currency.tickets, amount: Economy.piggyOpenTickets, fontSize: TypeSize.footnote, color: context.accent)
-                            : ProgressBar(value: (profile?.piggyCoins ?? 0) / Profile.piggyCapacity, height: 5),
-                        onTap: () => showPiggySheet(context),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            if (profile != null)
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-                  child: _LevelCard(profile: profile),
-                ),
-              ),
-            if (isGuest)
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-                  child: _GuestSaveCard(onSave: () => context.push('/account')),
-                ),
-              ),
-            if (livePacks.isNotEmpty) ...[
-              SliverToBoxAdapter(
-                child: SectionHeader(
-                  title: 'Live events',
-                  subtitle: 'Limited-time packs',
-                  action: 'All events',
-                  onAction: () => context.go('/events'),
-                ),
-              ),
-              SliverToBoxAdapter(
-                child: SizedBox(
-                  height: _CoverTile.size,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    physics: const BouncingScrollPhysics(),
-                    itemCount: livePacks.length,
-                    separatorBuilder: (_, _) => const SizedBox(width: 12),
-                    itemBuilder: (_, i) => _EventPackCard(
-                      pack: livePacks[i],
-                      onTap: () => context.push('/library/pack/${livePacks[i].id}'),
-                    ),
+                  )
+                else
+                packs.when(
+                  loading: () => const SliverToBoxAdapter(child: Padding(padding: EdgeInsets.all(40), child: Loader())),
+                  error: (e, _) => const SliverToBoxAdapter(
+                    child: EmptyState(icon: AppIcons.signal, title: 'Could not load packs', message: 'Check your connection and pull to refresh.'),
                   ),
-                ),
-              ),
-            ],
-            if (dailyPacks.isNotEmpty) ...[
-              SliverToBoxAdapter(
-                child: SectionHeader(
-                  title: 'Daily puzzles',
-                  subtitle: 'A new picture every day',
-                  action: 'All months',
-                  onAction: () {
-                    ref.read(libraryFilterProvider.notifier).select(LibraryFilter.daily);
-                    context.go('/library');
+                  data: (all) {
+                    // Library packs only (no daily months, no event packs), in catalogue order.
+                    final list = all.where((p) => !p.isDaily && !p.hasWindow).toList()
+                      ..sort((a, b) => a.sortOrder != b.sortOrder ? a.sortOrder.compareTo(b.sortOrder) : a.id.compareTo(b.id));
+                    return SliverPadding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      sliver: SliverGrid(
+                        gridDelegate: const AdaptiveGridDelegate(childAspectRatio: 0.78),
+                        delegate: SliverChildBuilderDelegate(
+                          (_, i) => PackCard(pack: list[i], onTap: () => context.push('/library/pack/${list[i].id}')),
+                          childCount: list.length.clamp(0, featuredCount),
+                        ),
+                      ),
+                    );
                   },
                 ),
-              ),
-              SliverToBoxAdapter(
-                child: SizedBox(
-                  height: _CoverTile.size,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    physics: const BouncingScrollPhysics(),
-                    itemCount: dailyPacks.length.clamp(0, 12),
-                    separatorBuilder: (_, _) => const SizedBox(width: 12),
-                    itemBuilder: (_, i) => _MonthCard(
-                      pack: dailyPacks[i],
-                      current: i == 0,
-                      onTap: () => context.push('/library/pack/${dailyPacks[i].id}'),
+                if (packRows.finished.isNotEmpty) ...[
+                  SliverToBoxAdapter(
+                    child: SectionHeader(
+                      title: 'Finished packs',
+                      action: 'See all',
+                      onAction: () {
+                        ref.read(libraryFilterProvider.notifier).select(LibraryFilter.finished);
+                        context.go('/library');
+                      },
                     ),
                   ),
-                ),
-              ),
-            ],
-            if (packRows.missingStars.isNotEmpty) ...[
-              SliverToBoxAdapter(
-                child: SectionHeader(
-                  title: 'Missing stars',
-                  subtitle: '$missingStars ${missingStars == 1 ? 'star' : 'stars'} to earn in ${packRows.missingStars.length} '
-                      '${packRows.missingStars.length == 1 ? 'pack' : 'packs'}',
-                ),
-              ),
-              SliverToBoxAdapter(
-                child: _PackCoverRow(
-                  key: const ValueKey('home-missing-stars'),
-                  packs: packRows.missingStars,
-                  progressOf: progressOf,
-                ),
-              ),
-            ],
-            const SliverToBoxAdapter(child: HouseBanner()),
-            SliverToBoxAdapter(
-              child: SectionHeader(
-                title: 'Featured packs',
-                action: 'See all',
-                onAction: () {
-                  ref.read(libraryFilterProvider.notifier).select(LibraryFilter.all);
-                  context.go('/library');
-                },
-              ),
-            ),
-            if (!packs.hasValue && (packs.hasError || catalogFailed))
-              SliverToBoxAdapter(
-                child: EmptyState(
-                  icon: AppIcons.signal,
-                  title: 'Could not load packs',
-                  message: 'Check your connection and try again.',
-                  action: BigButton(label: 'Try again', kind: ButtonKind.secondary, expand: false, height: 40, onTap: retryCatalog),
-                ),
-              )
-            else
-            packs.when(
-              loading: () => const SliverToBoxAdapter(child: Padding(padding: EdgeInsets.all(40), child: Loader())),
-              error: (e, _) => const SliverToBoxAdapter(
-                child: EmptyState(icon: AppIcons.signal, title: 'Could not load packs', message: 'Check your connection and pull to refresh.'),
-              ),
-              data: (all) {
-                // Library packs only (no daily months, no event packs), in catalogue order.
-                final list = all.where((p) => !p.isDaily && !p.hasWindow).toList()
-                  ..sort((a, b) => a.sortOrder != b.sortOrder ? a.sortOrder.compareTo(b.sortOrder) : a.id.compareTo(b.id));
-                return SliverPadding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  sliver: SliverGrid(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 12,
-                      crossAxisSpacing: 12,
-                      childAspectRatio: 0.78,
-                    ),
-                    delegate: SliverChildBuilderDelegate(
-                      (_, i) => PackCard(pack: list[i], onTap: () => context.push('/library/pack/${list[i].id}')),
-                      childCount: list.length.clamp(0, featuredCount),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: _FinishedPacksCard(rows: packRows, progressOf: progressOf),
                     ),
                   ),
-                );
-              },
+                ],
+              ],
             ),
-            if (packRows.finished.isNotEmpty) ...[
-              SliverToBoxAdapter(
-                child: SectionHeader(
-                  title: 'Finished packs',
-                  action: 'See all',
-                  onAction: () {
-                    ref.read(libraryFilterProvider.notifier).select(LibraryFilter.finished);
-                    context.go('/library');
-                  },
-                ),
-              ),
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: _FinishedPacksCard(rows: packRows, progressOf: progressOf),
-                ),
-              ),
-            ],
             SliverToBoxAdapter(child: SizedBox(height: GlassTabBar.scrollEndPadding(context))),
           ],
         ),
@@ -381,7 +411,7 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
-  /// Library packs in the Featured grid.
+  /// Library packs in the Featured grid on a phone.
   static const featuredCount = 6;
 
   /// Route path for resuming a saved board (mode + ladder entry by cell count).
@@ -420,9 +450,14 @@ class _Greeting extends StatelessWidget {
 }
 
 class _DailyHero extends StatelessWidget {
-  const _DailyHero({required this.puzzle, required this.progress});
+  const _DailyHero({required this.puzzle, required this.progress, required this.height});
   final Puzzle puzzle;
   final PuzzleProgress? progress;
+  final double height;
+
+  /// On a phone; [wideHeight] in the website layout, beside the day's plays.
+  static const double phoneHeight = 220;
+  static const double wideHeight = 274;
 
   @override
   Widget build(BuildContext context) {
@@ -433,7 +468,7 @@ class _DailyHero extends StatelessWidget {
       onTap: () => context.push('/play/${puzzle.id}'),
       scale: 0.985,
       child: Container(
-        height: 220,
+        height: height,
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
           color: c.boardBackground,
@@ -522,15 +557,16 @@ class _DailyHero extends StatelessWidget {
 /// a spinner, no title or button that would do nothing), or, when it could not
 /// be read, what happened and a way to try again.
 class _HeroPlaceholder extends StatelessWidget {
-  const _HeroPlaceholder({required this.failed, required this.onRetry});
+  const _HeroPlaceholder({required this.failed, required this.onRetry, required this.height});
   final bool failed;
   final VoidCallback onRetry;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
     return Container(
-      height: 220,
+      height: height,
       decoration: BoxDecoration(
         color: c.boardBackground,
         borderRadius: BorderRadius.circular(Radii.lg),
@@ -1031,13 +1067,16 @@ class _CoverTile extends StatelessWidget {
 
   static const double size = 150;
 
+  /// The tile's side: larger on a wider window, where the rows have the room.
+  static double sizeOf(BuildContext context) => context.isWide ? 184 : size;
+
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
     return Pressable(
       onTap: onTap,
       child: Container(
-        width: size,
+        width: sizeOf(context),
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
           color: c.boardBackground,
@@ -1105,7 +1144,7 @@ class _ContinueCard extends StatelessWidget {
     return Pressable(
       onTap: onTap,
       child: Container(
-        width: _CoverTile.size,
+        width: _CoverTile.sizeOf(context),
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
           color: c.boardBackground,
@@ -1290,25 +1329,19 @@ class _PackCoverRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: _CoverTile.size,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        physics: const BouncingScrollPhysics(),
-        itemCount: packs.length,
-        separatorBuilder: (_, _) => const SizedBox(width: 12),
-        itemBuilder: (_, i) {
-          final pack = packs[i];
-          return _CoverTile(
-            pack: pack,
-            progress: progressOf(pack),
-            chip: pack.hasWindow && pack.isLive ? Chip2(label: _endsIn(pack), onImage: true, dot: Brand.live) : null,
-            nameLines: 2,
-            onTap: () => context.push('/library/pack/${pack.id}'),
-          );
-        },
-      ),
+    return Shelf(
+      height: _CoverTile.sizeOf(context),
+      itemCount: packs.length,
+      itemBuilder: (_, i) {
+        final pack = packs[i];
+        return _CoverTile(
+          pack: pack,
+          progress: progressOf(pack),
+          chip: pack.hasWindow && pack.isLive ? Chip2(label: _endsIn(pack), onImage: true, dot: Brand.live) : null,
+          nameLines: 2,
+          onTap: () => context.push('/library/pack/${pack.id}'),
+        );
+      },
     );
   }
 }

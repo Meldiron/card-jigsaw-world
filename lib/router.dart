@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart' show Colors;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -22,6 +23,8 @@ import 'features/social/player_screen.dart';
 import 'features/social/social_screen.dart';
 import 'features/store/store_screen.dart';
 import 'state/settings.dart';
+import 'core/theme/tokens.dart';
+import 'widgets/adaptive.dart';
 import 'widgets/glass.dart';
 
 /// The app's root navigator (alerts and sheets raised outside a screen, e.g. by the save sync).
@@ -149,11 +152,23 @@ Page<T> _fade<T>(Widget child, GoRouterState s) => CustomTransitionPage<T>(
 Page<T> _sheet<T>(Widget child, GoRouterState s) => _SheetPage<T>(key: s.pageKey, child: child);
 
 /// iOS stacked sheet (UISheetPresentationController look): slides up to just
-/// below the status bar, the page behind scales back, drag down to dismiss.
+/// below the status bar, the page behind scales back, drag down to dismiss. On a wide window
+/// (the web on a tablet or desktop) a centred panel instead, as iPad shows a page sheet.
 class _SheetPage<T> extends Page<T> {
   const _SheetPage({required this.child, super.key});
   final Widget child;
 
   @override
-  Route<T> createRoute(BuildContext context) => CupertinoSheetRoute<T>(settings: this, scrollableBuilder: (_, _) => Elevated(background: true, child: child));
+  Route<T> createRoute(BuildContext context) {
+    if (context.isWide) {
+      return PanelRoute<T>(
+        settings: this,
+        full: true,
+        maxWidth: PageWidth.panel,
+        barrierColor: Colors.black.withValues(alpha: context.isDark ? 0.5 : 0.32),
+        builder: (_) => Elevated(background: true, child: child),
+      );
+    }
+    return CupertinoSheetRoute<T>(settings: this, scrollableBuilder: (_, _) => Elevated(background: true, child: child));
+  }
 }

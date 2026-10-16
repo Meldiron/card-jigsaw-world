@@ -10,6 +10,7 @@ import '../core/haptics.dart';
 import '../core/numbers.dart';
 import '../core/sfx.dart';
 import '../core/theme/tokens.dart';
+import 'adaptive.dart';
 import 'cached_url_image.dart';
 import 'glass.dart';
 import 'hash_image.dart';
@@ -17,6 +18,7 @@ import 'icons.dart';
 
 export '../core/dates.dart';
 export '../core/numbers.dart';
+export 'adaptive.dart';
 
 /// A tappable surface that scales down slightly while pressed (iOS-style).
 class Pressable extends StatefulWidget {
@@ -38,7 +40,10 @@ class _PressableState extends State<Pressable> {
   @override
   Widget build(BuildContext context) {
     final enabled = widget.onTap != null || widget.onLongPress != null;
-    return GestureDetector(
+    // A pointer (the web on a desktop) shows the hand over anything tappable, as on a website.
+    return MouseRegion(
+      cursor: enabled ? SystemMouseCursors.click : MouseCursor.defer,
+      child: GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTapDown: enabled ? (_) => setState(() => _down = true) : null,
       onTapUp: enabled ? (_) => setState(() => _down = false) : null,
@@ -56,6 +61,7 @@ class _PressableState extends State<Pressable> {
         duration: const Duration(milliseconds: 110),
         curve: Curves.easeOut,
         child: AnimatedOpacity(opacity: _down ? 0.85 : 1, duration: const Duration(milliseconds: 110), child: widget.child),
+      ),
       ),
     );
   }
@@ -1155,7 +1161,18 @@ class SheetHeader extends StatelessWidget {
 /// Content-sized modal sheet in the iOS 26 style: glass surface, grabber,
 /// light dim behind it, drag or tap outside to dismiss. For full-height
 /// modals (Store, Wheel, Account) the router uses a CupertinoSheetRoute.
+///
+/// On a wide window (the web on a tablet or desktop) the same sheet opens as a centred panel
+/// ([PanelRoute]), the way iPad shows a form sheet, instead of stretching along the bottom.
 Future<T?> showAppSheet<T>(BuildContext context, {required WidgetBuilder builder, bool scrollable = false, bool dismissible = true}) {
+  if (context.isWide) {
+    return Navigator.of(context, rootNavigator: true).push<T>(PanelRoute<T>(
+      maxWidth: PageWidth.sheet,
+      dismissible: dismissible,
+      barrierColor: Colors.black.withValues(alpha: context.isDark ? 0.5 : 0.32),
+      builder: (ctx) => GlassSheet(panel: true, child: builder(ctx)),
+    ));
+  }
   return showModalBottomSheet<T>(
     context: context,
     isScrollControlled: true,
@@ -1645,7 +1662,8 @@ class _AppActionSheet<T> extends StatelessWidget {
     return SafeArea(
       minimum: const EdgeInsets.only(bottom: 8),
       child: Align(
-        alignment: Alignment.bottomCenter,
+        // On a wide window the menu opens in the middle, like the alerts, not at a far-away edge.
+        alignment: context.isWide ? Alignment.center : Alignment.bottomCenter,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: ConstrainedBox(

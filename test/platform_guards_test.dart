@@ -6,7 +6,6 @@
 import 'dart:io' show Directory;
 
 import 'package:appwrite/appwrite.dart';
-import 'package:carden/app.dart';
 import 'package:carden/core/platform.dart';
 import 'package:carden/data/local_store.dart';
 import 'package:carden/data/purchases.dart';
@@ -239,39 +238,6 @@ void main() {
         await tester.dragUntilVisible(find.byKey(ValueKey(key)), find.byType(Scrollable).first, const Offset(0, -200));
         expect(find.byKey(ValueKey(key)), findsOneWidget, reason: key);
       }
-    });
-  });
-
-  group('PhoneFrame', () {
-    Widget probe(Size window) => MaterialApp(
-          theme: AppTheme.light(),
-          home: MediaQuery(
-            data: MediaQueryData(size: window),
-            child: Builder(
-              builder: (context) => PhoneFrame(
-                mediaQuery: MediaQuery.of(context),
-                child: Builder(builder: (context) => Text('w=${MediaQuery.sizeOf(context).width.round()}')),
-              ),
-            ),
-          ),
-        );
-
-    testWidgets('caps the layout at 520 px on a wide window', (tester) async {
-      tester.view.physicalSize = const Size(1400, 900);
-      tester.view.devicePixelRatio = 1;
-      addTearDown(tester.view.reset);
-      await tester.pumpWidget(probe(const Size(1400, 900)));
-      expect(find.text('w=520'), findsOneWidget);
-      expect(tester.getSize(find.byType(Text)).width, lessThanOrEqualTo(PhoneFrame.maxWidth));
-      expect(tester.getRect(find.byType(Text)).left, closeTo((1400 - PhoneFrame.maxWidth) / 2, 1));
-    });
-
-    testWidgets('leaves phone-width windows alone', (tester) async {
-      tester.view.physicalSize = const Size(390, 844);
-      tester.view.devicePixelRatio = 1;
-      addTearDown(tester.view.reset);
-      await tester.pumpWidget(probe(const Size(390, 844)));
-      expect(find.text('w=390'), findsOneWidget);
     });
   });
 }

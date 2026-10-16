@@ -132,6 +132,7 @@ class AppIcons {
   static const bellFill = CupertinoIcons.bell_fill;
   static const checkmark = CupertinoIcons.checkmark;
   static const checkmarkAlt = CupertinoIcons.checkmark_alt;
+  static const chevronLeft = CupertinoIcons.chevron_left;
   static const chevronRight = CupertinoIcons.chevron_right;
   static const clockFill = CupertinoIcons.clock_fill;
   static const coinGlyph = Icons.monetization_on_rounded;
