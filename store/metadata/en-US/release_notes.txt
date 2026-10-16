@@ -16,7 +16,7 @@ Quests and rewards
 - VIP members get their 500 bonus coins automatically once a week, and VIP can be shared with your family through Family Sharing.
 
 Home and Library
-- Quick play opens the mode and board picker with your last board selected, and Another picture draws a new one.
+- Every new picture opens on the mode, board size and Painting you chose last; Quick play too, and Another picture draws a new one.
 - Once today's daily puzzle is solved, Home shows tomorrow's as a blurred preview.
 - Library search finds pictures by title, new packs carry a New badge, and there are Finished, New and Hide finished filters.
 - Home shows your packs in progress, packs missing stars and finished packs.

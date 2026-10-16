@@ -13,10 +13,12 @@ import 'package:carden/state/rewards.dart';
 import 'package:carden/state/settings.dart';
 import 'package:carden/state/social.dart';
 import 'package:carden/state/unlocks.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'support/seed_save.dart';
@@ -36,13 +38,21 @@ void main() {
     }
   }
 
-  Future<GlobalKey> pumpScreen(WidgetTester tester, {required double width, required double height, Map<String, PuzzleProgress> progress = const {}, OpenFeatures open = OpenFeatures.all}) async {
+  late LocalStore store;
+
+  Future<GlobalKey> pumpScreen(WidgetTester tester, {required double width, required double height, Map<String, PuzzleProgress> progress = const {}, OpenFeatures open = OpenFeatures.all, Map<String, Object> prefs = const {}, bool router = false}) async {
     tester.view.physicalSize = Size(width, height);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
-    SharedPreferences.setMockInitialValues(seededSave(progress: {for (final e in progress.entries) e.key: e.value.toData()}));
-    final store = await LocalStore.open();
+    SharedPreferences.setMockInitialValues({...seededSave(progress: {for (final e in progress.entries) e.key: e.value.toData()}), ...prefs});
+    store = await LocalStore.open();
     final key = GlobalKey();
+    // With [router], Play can leave for the game (a stand-in page).
+    final routes = GoRouter(initialLocation: '/play/p1', routes: [
+      GoRoute(path: '/play/:id', builder: (_, s) => DifficultyScreen(puzzleId: s.pathParameters['id']!)),
+      GoRoute(path: '/game/:id/:grid', builder: (_, s) => Scaffold(body: Text('game ${s.uri}'))),
+    ]);
+    if (router) addTearDown(routes.dispose);
     await tester.pumpWidget(ProviderScope(
       overrides: [
         localStoreProvider.overrideWithValue(store),
@@ -55,10 +65,12 @@ void main() {
         publicPuzzlesProvider.overrideWith((ref) async => const <Puzzle>[]),
         // Every shape and option open unless a test says otherwise (they open as levels rise).
         openFeaturesProvider.overrideWithValue(open),
+        // No first-time intro sheets over the choices.
+        pendingUnlockIntroProvider.overrideWithValue(null),
       ],
       child: RepaintBoundary(
         key: key,
-        child: MaterialApp(theme: AppTheme.light(), home: const DifficultyScreen(puzzleId: 'p1')),
+        child: router ? MaterialApp.router(theme: AppTheme.light(), routerConfig: routes) : MaterialApp(theme: AppTheme.light(), home: const DifficultyScreen(puzzleId: 'p1')),
       ),
     ));
     await settle(tester, 12);
@@ -106,6 +118,45 @@ void main() {
       await dump(tester, key, 'difficulty_mode_${mode.code}');
     }
     expect(tester.takeException(), isNull);
+  });
+
+  bool paintingOn(WidgetTester tester) => tester.widget<CupertinoSwitch>(find.byType(CupertinoSwitch)).value;
+
+  testWidgets('a new picture opens on the board chosen last: mode, size and Painting', (tester) async {
+    await pumpScreen(tester, width: 402, height: 874, prefs: {'lastBoard': '{"mode":"squares","tier":0,"painting":true}'});
+    final cozy = BoardSpec.tiers(GameMode.squares, BoardSpec.referenceAspect)[0];
+    expect(find.text('${cozy.cells} squares · Play'), findsOneWidget, reason: 'Squares ${cozy.code} is preselected');
+    expect(paintingOn(tester), isTrue);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('without a board chosen yet the screen opens on Cards, Relaxed, no Painting', (tester) async {
+    await pumpScreen(tester, width: 402, height: 874);
+    final relaxed = BoardSpec.tiers(GameMode.cards, BoardSpec.referenceAspect)[2];
+    expect(find.text('${relaxed.cells} cards · Play'), findsOneWidget);
+    expect(paintingOn(tester), isFalse);
+  });
+
+  testWidgets('Play remembers the mode, size and Painting for the next picture', (tester) async {
+    await pumpScreen(tester, width: 402, height: 874, router: true);
+    await tester.tap(find.text('Triangles'));
+    await settle(tester);
+    final cozy = BoardSpec.tiers(GameMode.triangles, BoardSpec.referenceAspect)[0];
+    await tester.tap(find.text(cozy.code).first);
+    await settle(tester);
+    await tester.tap(find.byType(CupertinoSwitch));
+    await settle(tester);
+    await tester.tap(find.text('${cozy.cells} triangles · Play'));
+    await settle(tester);
+    expect(find.textContaining('game /game/p1/'), findsOneWidget);
+    final last = LastBoard.fromJson(store.getJson('lastBoard'));
+    expect(last, const LastBoard(mode: 'triangles', tier: 0, painting: true));
+  });
+
+  test('the last board survives a round trip through the store', () {
+    const giant = LastBoard(mode: 'squares', tier: 3, giantTier: BoardSpec.firstGiantTier + 1, painting: true);
+    expect(LastBoard.fromJson(giant.toJson()), giant);
+    expect(LastBoard.fromJson(const {'mode': 'cards'}), isNull, reason: 'an incomplete entry is ignored');
   });
 
   testWidgets('a saved board pins the choice; Discard progress reopens it', (tester) async {

@@ -1,7 +1,7 @@
 Carden 2.0, the version going to the App Store:
+- A new picture opens on the mode, board size and Painting you chose last.
 - Settings > Accessibility: text size up to 200%, Reduce motion, Increase contrast and Differentiate without colour. All are off until you turn them on.
 - Links to play.carden.page open the app when it is installed (packs, pictures, profiles, the store).
 - Player names are checked for offensive words: such a name cannot be chosen, and one set earlier shows as "Player".
-- Pack codes are redeemed on the web site only, and the contact address is now contact@almostapps.eu.
 
-Please try: each Accessibility option on a few screens (a puzzle, the Lucky Wheel, the Store), and tap a play.carden.page link in Notes or Messages to check that Carden opens on the right screen.
+Please try: a puzzle in Squares or with Painting, then another picture (it should open on the same choice), each Accessibility option on a few screens (a puzzle, the Lucky Wheel, the Store), and tap a play.carden.page link in Notes or Messages to check that Carden opens on the right screen.

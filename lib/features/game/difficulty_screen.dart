@@ -70,7 +70,11 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
   late int _tier;
 
   /// Painting chosen for a new board.
-  late bool _painting = widget.initialPainting;
+  late bool _painting;
+
+  /// The giant ladder step to open a Giant pack picture on (the last one chosen), when [_tier] is
+  /// a normal step.
+  int? _giantTier;
 
   /// Decoded picture size (full resolution), once the image is in.
   Size? _imageSize;
@@ -95,11 +99,18 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
     final hasGrid = grid != null && grid.isNotEmpty;
     final decoded = hasGrid ? BoardSpec.fromCode(grid) : null;
     final modeArg = widget.initialMode;
-    _mode = modeArg != null && modeArg.isNotEmpty ? GameMode.fromCode(modeArg) : (decoded?.mode ?? GameMode.cards);
+    // A new picture opens on the board the player last chose (mode, size, Painting), unless the
+    // link names one (a quest shortcut, Quick play).
+    final last = ref.read(settingsProvider).lastBoard;
+    _mode = modeArg != null && modeArg.isNotEmpty ? GameMode.fromCode(modeArg) : (decoded?.mode ?? (last != null ? GameMode.fromCode(last.mode) : GameMode.cards));
+    _giantTier = last?.giantTier;
+    _painting = widget.initialPainting || (last?.painting ?? false);
     if (decoded != null) {
       // A code names its tier (legacy codes such as 5x5 map onto the ladder
       // step they were); the same step is kept for another mode.
       _tier = decoded.tierIndex < 0 ? 2 : decoded.tierIndex;
+    } else if (last != null) {
+      _tier = last.tier;
     } else {
       final idx = GridSpec.tiers.indexWhere((t) => t.cells == ref.read(settingsProvider).defaultGrid);
       _tier = idx < 0 ? 2 : idx;
@@ -329,12 +340,22 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
     final tiers = BoardSpec.ladder(mode, imageAspect, giant: giant);
     // A size picked on the other ladder (a normal tier carried to a Giant
     // pack picture, say) falls back to that ladder's first giant or Relaxed size.
-    final pick = giant ? (BoardSpec.isGiantTier(_tier) ? _tier - BoardSpec.firstGiantTier : 0) : (BoardSpec.isGiantTier(_tier) ? 2 : _tier);
-    final spec = saved != null ? savedSpec! : tiers[pick.clamp(0, tiers.length - 1)];
+    // A Giant pack picture opens on the giant size chosen last (or the first one).
+    final giantPick = BoardSpec.isGiantTier(_tier) ? _tier : (_giantTier ?? BoardSpec.firstGiantTier);
+    final pick = giant ? giantPick - BoardSpec.firstGiantTier : (BoardSpec.isGiantTier(_tier) ? 2 : _tier);
+    final maxTier = LevelRewards.maxTierIndex(profile?.level ?? 1) + 1;
+    // A remembered size this player cannot play (another account on this device) steps down to
+    // the largest open one.
+    var at = pick.clamp(0, tiers.length - 1);
+    if (!giant) {
+      while (at > 0 && at >= maxTier && !profileN.hasTier(mode, at)) {
+        at--;
+      }
+    }
+    final spec = saved != null ? savedSpec! : tiers[at];
     final painting = saved != null ? saved.painting : (_painting && open.painting);
     final coins = Economy.completionCoins(spec.cells, 3, mode: mode, painting: painting);
     final xp = Economy.completionXp(spec.cells, 3, mode: mode, painting: painting);
-    final maxTier = LevelRewards.maxTierIndex(profile?.level ?? 1) + 1;
     final boardAspect = spec.tiling.boardAspect(imageAspect);
     // Short phones (SE, mini): a smaller preview, so every choice sits above Play.
     final compact = MediaQuery.sizeOf(context).height < 740;
@@ -371,11 +392,18 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
               : '${spec.cells} ${mode == GameMode.cards ? 'cards' : mode.label.toLowerCase()} · Play',
           icon: AppIcons.playFill,
           onTap: () {
-            // The default size follows normal boards only.
-            if (!spec.isGiant) {
-              final idx = spec.tierIndex < 0 ? 2 : spec.tierIndex;
-              ref.read(settingsProvider.notifier).setDefaultGrid(GridSpec.tiers[idx].cells);
-            }
+            // Remember this board (mode, size, Painting) for the next picture; a giant size is kept
+            // apart from the normal one, each for its own kind of picture.
+            final n = ref.read(settingsProvider.notifier);
+            final last = ref.read(settingsProvider).lastBoard;
+            final idx = spec.tierIndex < 0 ? 2 : spec.tierIndex;
+            n.setLastBoard(LastBoard(
+              mode: mode.code,
+              tier: spec.isGiant ? (last?.tier ?? 2) : idx,
+              giantTier: spec.isGiant ? idx : last?.giantTier,
+              painting: painting,
+            ));
+            if (!spec.isGiant) n.setDefaultGrid(GridSpec.tiers[idx].cells);
             // A saved board resumes the way it was saved, so only a new one carries the choice.
             final flag = saved == null && painting ? '?painting=1' : '';
             context.pushReplacement('/game/${widget.puzzleId}/${BoardCode.toPath(spec.fullCode)}$flag');

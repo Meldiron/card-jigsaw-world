@@ -9,6 +9,34 @@ final localStoreProvider = Provider<LocalStore>((ref) => throw UnimplementedErro
 
 enum CardStyle { classic, minimal }
 
+/// The board the player last chose (owner, 2026-10-16): the difficulty screen opens a new
+/// picture on the same mode, size and Painting, and Quick play preselects it. Saved on the device
+/// whenever Play starts a board. [tier] is the normal ladder step, [giantTier] the step on the
+/// giant ladder (BoardSpec.firstGiantTier and up), each kept for its own kind of picture.
+@immutable
+class LastBoard {
+  const LastBoard({required this.mode, required this.tier, this.giantTier, this.painting = false});
+
+  /// Mode code (`cards`, `squares`, `triangles`, `hexagons`).
+  final String mode;
+  final int tier;
+  final int? giantTier;
+  final bool painting;
+
+  static LastBoard? fromJson(Map<String, dynamic>? j) {
+    if (j == null || j['mode'] is! String || j['tier'] is! int) return null;
+    return LastBoard(mode: j['mode'] as String, tier: j['tier'] as int, giantTier: j['giantTier'] as int?, painting: j['painting'] == true);
+  }
+
+  Map<String, dynamic> toJson() => {'mode': mode, 'tier': tier, 'giantTier': ?giantTier, 'painting': painting};
+
+  @override
+  bool operator ==(Object other) => other is LastBoard && other.mode == mode && other.tier == tier && other.giantTier == giantTier && other.painting == painting;
+
+  @override
+  int get hashCode => Object.hash(mode, tier, giantTier, painting);
+}
+
 /// Settings > Accessibility: text size. [standard] follows the iPhone's text size within the
 /// app's usual range; the others are fixed sizes for players who need them (Apple's Larger Text:
 /// at least 200%).
@@ -97,6 +125,7 @@ class Settings {
     required this.tutorialSeen,
     this.hideFinished = false,
     this.accessibility = const Accessibility(),
+    this.lastBoard,
   });
 
   final ThemeMode themeMode;
@@ -119,6 +148,9 @@ class Settings {
 
   final Accessibility accessibility;
 
+  /// The last board chosen with Play, or null before the first one (then [defaultGrid] gives the size).
+  final LastBoard? lastBoard;
+
   Settings copyWith({
     ThemeMode? themeMode,
     bool? sound,
@@ -133,6 +165,7 @@ class Settings {
     bool? tutorialSeen,
     bool? hideFinished,
     Accessibility? accessibility,
+    LastBoard? lastBoard,
   }) =>
       Settings(
         themeMode: themeMode ?? this.themeMode,
@@ -148,6 +181,7 @@ class Settings {
         tutorialSeen: tutorialSeen ?? this.tutorialSeen,
         hideFinished: hideFinished ?? this.hideFinished,
         accessibility: accessibility ?? this.accessibility,
+        lastBoard: lastBoard ?? this.lastBoard,
       );
 }
 
@@ -169,6 +203,7 @@ class SettingsNotifier extends Notifier<Settings> {
       tutorialSeen: s.tutorialSeen,
       hideFinished: s.getJson(_libraryKey)?['hideFinished'] == true,
       accessibility: Accessibility.fromJson(s.getJson(_accessibilityKey)),
+      lastBoard: LastBoard.fromJson(s.getJson(_lastBoardKey)),
     );
     Haptics.enabled = settings.haptics;
     Sfx.instance.soundEnabled = settings.sound;
@@ -183,6 +218,9 @@ class SettingsNotifier extends Notifier<Settings> {
 
   /// Settings > Accessibility, one JSON entry.
   static const _accessibilityKey = 'accessibility';
+
+  /// The last board chosen with Play (LastBoard), one JSON entry.
+  static const _lastBoardKey = 'lastBoard';
 
   void setThemeMode(ThemeMode m) {
     _s.themeMode = m.name;
@@ -242,6 +280,12 @@ class SettingsNotifier extends Notifier<Settings> {
   void setTutorialSeen() {
     _s.tutorialSeen = true;
     state = state.copyWith(tutorialSeen: true);
+  }
+
+  void setLastBoard(LastBoard v) {
+    if (v == state.lastBoard) return;
+    _s.setJson(_lastBoardKey, v.toJson());
+    state = state.copyWith(lastBoard: v);
   }
 
   void setAccessibility(Accessibility v) {

@@ -9,6 +9,7 @@ import 'catalog.dart';
 import 'giant.dart';
 import 'profile.dart';
 import 'progress.dart';
+import 'settings.dart';
 import 'rewards.dart';
 
 /// Which pictures Quick play draws from, in order of preference.
@@ -123,7 +124,10 @@ final quickPlayPoolProvider = Provider<QuickPlayPool?>((ref) {
   );
 });
 
-/// The board Quick play preselects, when the player has finished a game.
+/// The board Quick play preselects: the one the player last chose with Play (Settings.lastBoard),
+/// else the board of their last finished game.
 final quickPlayBoardProvider = Provider<BoardSpec?>((ref) {
+  final last = ref.watch(settingsProvider.select((s) => s.lastBoard));
+  if (last != null) return BoardSpec.forPicture(GameMode.fromCode(last.mode), last.tier, BoardSpec.referenceAspect);
   return lastFinishedBoard(ref.watch(progressProvider).value ?? const {});
 });
