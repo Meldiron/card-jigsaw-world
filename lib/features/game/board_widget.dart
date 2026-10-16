@@ -7,10 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 
+import '../../core/a11y.dart';
 import '../../core/theme/tokens.dart';
 import '../../game/board.dart';
 import '../../game/game_controller.dart';
 import '../../state/settings.dart';
+import '../../widgets/icons.dart';
 
 /// Interactive board for every tiling (cards, squares, triangles, hexagons).
 ///
@@ -77,6 +79,10 @@ class BoardZoom extends ChangeNotifier {
 
   /// The most any board zooms in.
   static const maxZoom = 4.0;
+
+  /// Settings > Accessibility > Reduce motion (the game screen keeps it current): the zoom
+  /// buttons, the map and Locate move the view at once instead of gliding there.
+  bool reduceMotion = false;
 
   /// Zoom the zoom-in button goes to from the whole board.
   static const stepZoom = 2.5;
@@ -210,6 +216,11 @@ class BoardZoom extends ChangeNotifier {
   void reset() => _animateTo(1, Offset.zero);
 
   void _animateTo(double zoom, Offset pan) {
+    if (reduceMotion) {
+      _anim.stop();
+      _apply(zoom, pan);
+      return;
+    }
     _from = (_zoom, _pan);
     _to = (zoom, pan);
     _anim.forward(from: 0);
@@ -525,6 +536,13 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
             if (rank(slot) <= 1) card(slot),
           for (final slot in order)
             if (rank(slot) >= 2) card(slot),
+          // Differentiate without colour: the hint's target also carries the hint glyph, above the
+          // cards, so it does not rest on the amber outline alone.
+          if (widget.state.hintTarget != null && !widget.state.peeking && A11y.symbolsOf(context))
+            Positioned.fromRect(
+              rect: tiling.cellBounds(widget.state.hintTarget!, boardSize),
+              child: const IgnorePointer(child: Center(child: _BoardGlyph(AppIcons.hint))),
+            ),
         ],
       );
     // Nothing is played while Peek shows the picture. Always in the tree, so
@@ -684,13 +702,19 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
       strokeScale: strokeScale,
       thinFrame: widget.zoom != null,
     );
+    // Differentiate without colour: a blocked drop target also shows a no-entry sign, not only a red edge.
+    if (hovered == _Hover.blocked && A11y.symbolsOf(context)) {
+      child = Stack(fit: StackFit.expand, children: [child, const IgnorePointer(child: Center(child: _BoardGlyph(AppIcons.noEntry)))]);
+    }
     if (justLocked || justJoined) {
       child = _LockPulse(key: ValueKey('pulse-$slot-${state.tick}'), strong: justLocked, child: child);
     }
 
+    // Reduce motion: cards (and Peek) jump to their places; the lock flash still marks a change.
+    final still = A11y.reduceMotionOf(context);
     return AnimatedPositioned(
       key: ValueKey('card-$card'),
-      duration: dragging ? Duration.zero : (flight ? _flightOf(card) : const Duration(milliseconds: 280)),
+      duration: dragging || still ? Duration.zero : (flight ? _flightOf(card) : const Duration(milliseconds: 280)),
       curve: flight ? Curves.easeInOutCubic : Curves.easeOutBack,
       left: origin.dx,
       top: origin.dy,
@@ -747,7 +771,7 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
             }
           },
           child: AnimatedScale(
-            scale: dragging ? 1.06 : (selected ? 1.03 : 1),
+            scale: still ? 1 : (dragging ? 1.06 : (selected ? 1.03 : 1)),
             duration: const Duration(milliseconds: 140),
             child: child,
           ),
@@ -936,7 +960,7 @@ class _CardFace extends StatelessWidget {
         // Each edge's gutter slides shut as the card snaps to its group, in
         // step with the card's own move.
         tween: _EdgeInsetsTween(end: _EdgeInsets([for (final fused in fusedEdges) fused ? -_overlap : (locked || dragging ? 0.0 : half)])),
-        duration: const Duration(milliseconds: 280),
+        duration: A11y.motion(context, const Duration(milliseconds: 280)),
         curve: Curves.easeOutCubic,
         builder: (_, insets, _) {
           // Interaction language: a picked-up card lifts (shadow + scale) and
@@ -1520,7 +1544,8 @@ class _LockPulseState extends State<_LockPulse> with SingleTickerProviderStateMi
       animation: _c,
       builder: (_, child) {
         final t = _c.value;
-        final scale = 1 + math.sin(t * math.pi) * (widget.strong ? 0.1 : 0.05);
+        // Reduce motion: the flash and glow only, no pop.
+        final scale = A11y.reduceMotionOf(context) ? 1.0 : 1 + math.sin(t * math.pi) * (widget.strong ? 0.1 : 0.05);
         return Transform.scale(
           scale: scale,
           child: Stack(
@@ -1544,6 +1569,15 @@ class _LockPulseState extends State<_LockPulse> with SingleTickerProviderStateMi
   }
 }
 
+/// A white glyph with a soft shadow, readable on any picture (Differentiate without colour).
+class _BoardGlyph extends StatelessWidget {
+  const _BoardGlyph(this.icon);
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) => Icon(icon, size: 26, color: Colors.white, shadows: const [Shadow(color: Color(0xB3000000), blurRadius: 8)]);
+}
+
 /// Pulsing outline used to show where a hinted card belongs.
 class _PulseRing extends StatefulWidget {
   const _PulseRing({required this.color, required this.polygon});
@@ -1554,7 +1588,7 @@ class _PulseRing extends StatefulWidget {
 }
 
 class _PulseRingState extends State<_PulseRing> with SingleTickerProviderStateMixin {
-  late final _c = AnimationController(vsync: this, duration: const Duration(milliseconds: 900))..repeat(reverse: true);
+  late final _c = AnimationController(vsync: this, duration: const Duration(milliseconds: 900));
   @override
   void dispose() {
     _c.dispose();
@@ -1563,6 +1597,12 @@ class _PulseRingState extends State<_PulseRing> with SingleTickerProviderStateMi
 
   @override
   Widget build(BuildContext context) {
+    // Reduce motion: a steady outline instead of the pulse.
+    if (A11y.reduceMotionOf(context)) {
+      if (_c.isAnimating) _c.stop();
+      return CustomPaint(painter: _PulsePainter(polygon: widget.polygon, color: widget.color, t: 1));
+    }
+    if (!_c.isAnimating) _c.repeat(reverse: true);
     return AnimatedBuilder(
       animation: _c,
       builder: (_, _) => CustomPaint(painter: _PulsePainter(polygon: widget.polygon, color: widget.color, t: _c.value)),

@@ -5,6 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
+import '../core/a11y.dart';
 import '../core/theme/tokens.dart';
 import 'glass.dart';
 import 'icons.dart';
@@ -195,6 +196,10 @@ class _ShelfState extends State<Shelf> {
     if (!_controller.hasClients) return;
     final p = _controller.position;
     final target = (p.pixels + direction * p.viewportDimension * 0.8).clamp(p.minScrollExtent, p.maxScrollExtent);
+    if (A11y.reduceMotionOf(context)) {
+      _controller.jumpTo(target);
+      return;
+    }
     _controller.animateTo(target, duration: const Duration(milliseconds: 420), curve: Curves.easeOutCubic);
   }
 
@@ -299,6 +304,7 @@ class PanelRoute<T> extends RawDialogRoute<T> {
           transitionDuration: const Duration(milliseconds: 260),
           transitionBuilder: (ctx, anim, _, child) {
             final curved = CurvedAnimation(parent: anim, curve: Curves.easeOutCubic, reverseCurve: Curves.easeInCubic);
+            if (A11y.reduceMotionOf(ctx)) return FadeTransition(opacity: curved, child: child);
             return FadeTransition(
               opacity: curved,
               child: SlideTransition(
@@ -315,7 +321,21 @@ class PanelRoute<T> extends RawDialogRoute<T> {
 /// wide window (a close button instead of a back arrow).
 bool isSheetRoute(BuildContext context) {
   final route = ModalRoute.of(context);
-  return route is CupertinoSheetRoute || route is PanelRoute;
+  return route is CupertinoSheetRoute || route is PanelRoute || route is FadeSheetRoute;
+}
+
+/// The full-height sheets (Store, Wheel, Account) on a phone with Settings > Accessibility >
+/// Reduce motion: the page fades in over the screen instead of sliding up while the page behind
+/// shrinks back (a depth effect).
+class FadeSheetRoute<T> extends PageRouteBuilder<T> {
+  FadeSheetRoute({required WidgetBuilder builder, super.settings})
+      : super(
+          fullscreenDialog: true,
+          transitionDuration: const Duration(milliseconds: 260),
+          reverseTransitionDuration: const Duration(milliseconds: 200),
+          pageBuilder: (ctx, _, _) => builder(ctx),
+          transitionsBuilder: (_, anim, _, child) => FadeTransition(opacity: CurvedAnimation(parent: anim, curve: Curves.easeOut), child: child),
+        );
 }
 
 class _PanelFrame extends StatelessWidget {

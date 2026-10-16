@@ -177,7 +177,7 @@ class PackProgressLine extends StatelessWidget {
         ? ProgressBar(
             value: p.starRatio,
             height: height,
-            color: Brand.star,
+            color: context.star,
             background: onImage ? Colors.white.withValues(alpha: 0.35) : context.accent.withValues(alpha: 0.28),
           )
         : ProgressBar(
@@ -215,7 +215,7 @@ class PackProgressLine extends StatelessWidget {
             SizedBox(width: gap),
             Text(fits ? full : '${p.stars}/${p.maxStars}', style: style),
             const SizedBox(width: 2),
-            Icon(AppIcons.star, size: starSize, color: Brand.star),
+            Icon(AppIcons.star, size: starSize, color: context.star),
           ],
         );
       },

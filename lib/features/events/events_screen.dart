@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/haptics.dart';
 import '../../core/sfx.dart';
+import '../../core/a11y.dart';
 import '../../core/theme/tokens.dart';
 import '../../models/models.dart';
 import '../../state/catalog.dart';
@@ -364,7 +365,9 @@ class _GoalRow extends ConsumerWidget {
                 children: [
                   Text(goal.title, style: TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body, color: claimed ? c.textSecondary : c.textPrimary)),
                   const SizedBox(height: 3),
-                  Row(
+                  // Wraps the status under the reward when a large text size leaves no room.
+                  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       Opacity(opacity: claimed ? 0.5 : 1, child: Amount(currency: currency, value: amount, prefix: '+', size: 13, fontSize: TypeSize.caption, weight: FontWeight.w700)),
                       Text('  ·  $status', style: TextStyle(fontSize: TypeSize.caption, color: ready ? c.success : c.textSecondary, fontWeight: ready ? FontWeight.w600 : FontWeight.w500)),
@@ -470,7 +473,7 @@ class _EventCard extends ConsumerWidget {
               fit: StackFit.expand,
               children: [
                 NetImage(url: event.coverUrl, blurhash: _coverHash(ref, event)),
-                DecoratedBox(decoration: BoxDecoration(gradient: Brand.scrim(strength: 0.7))),
+                DecoratedBox(decoration: BoxDecoration(gradient: Brand.scrim(strength: 0.7, contrast: A11y.increaseContrastOf(context)))),
                 Positioned(
                   left: 14,
                   top: 12,

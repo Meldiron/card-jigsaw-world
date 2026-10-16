@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../core/links.dart';
 import '../../core/platform.dart';
 import '../../core/reminders.dart';
+import '../../core/a11y.dart';
 import '../../core/theme/tokens.dart';
 import '../../state/auth.dart';
 import '../../state/sync.dart';
@@ -178,6 +179,41 @@ class SettingsScreen extends ConsumerWidget {
                 await Future.delayed(const Duration(seconds: 1));
                 await sub.cancel();
               },
+            ),
+          ]),
+          // Off until the player turns them on (owner, 2026-10-16): the usual game stays as it is.
+          group('Accessibility', [
+            _SegRow(
+              key: const ValueKey('settings-text-size'),
+              icon: AppIcons.textSize,
+              label: 'Text size',
+              value: s.accessibility.textSize,
+              options: {for (final t in TextSize.values) t: t.label},
+              onChanged: (v) => n.setAccessibility(s.accessibility.copyWith(textSize: v)),
+            ),
+            _SwitchRow(
+              key: const ValueKey('settings-reduce-motion'),
+              icon: AppIcons.reduceMotion,
+              label: 'Reduce motion',
+              subtitle: 'Fades instead of spinning, zooming and sliding',
+              value: s.accessibility.reduceMotion,
+              onChanged: (v) => n.setAccessibility(s.accessibility.copyWith(reduceMotion: v)),
+            ),
+            _SwitchRow(
+              key: const ValueKey('settings-increase-contrast'),
+              icon: AppIcons.contrast,
+              label: 'Increase contrast',
+              subtitle: 'Darker text and solid backgrounds',
+              value: s.accessibility.increaseContrast,
+              onChanged: (v) => n.setAccessibility(s.accessibility.copyWith(increaseContrast: v)),
+            ),
+            _SwitchRow(
+              key: const ValueKey('settings-differentiate'),
+              icon: AppIcons.shapes,
+              label: 'Differentiate without colour',
+              subtitle: 'Symbols wherever colour shows a state',
+              value: s.accessibility.differentiateWithoutColour,
+              onChanged: (v) => n.setAccessibility(s.accessibility.copyWith(differentiateWithoutColour: v)),
             ),
           ]),
           group('Help', [
@@ -390,9 +426,12 @@ class _CreditsSheet extends ConsumerWidget {
 /// trailing control, at least 52 pt high whatever the control (switch, chevron, value, segmented),
 /// so every row lines up.
 class _Row extends StatelessWidget {
-  const _Row({required this.icon, required this.label, this.subtitle, this.trailing, this.onTap});
+  const _Row({required this.icon, required this.label, this.subtitle, this.trailing, this.onTap, this.stackTrailing = false});
   final IconData icon;
   final String label;
+
+  /// Puts [trailing] under the label instead of beside it (a wide control at a large text size).
+  final bool stackTrailing;
 
   /// What the row does, when the label alone does not say it.
   final String? subtitle;
@@ -418,10 +457,11 @@ class _Row extends StatelessWidget {
                 children: [
                   Text(label, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body)),
                   if (subtitle != null) Text(subtitle!, style: TextStyle(fontSize: TypeSize.footnote, color: context.colors.textSecondary)),
+                  if (stackTrailing && trailing != null) Padding(padding: const EdgeInsets.only(top: 8, bottom: 4), child: trailing),
                 ],
               ),
             ),
-            ?trailing,
+            if (!stackTrailing) ?trailing,
           ],
         ),
       ),
@@ -438,11 +478,11 @@ class _SwitchRow extends StatelessWidget {
   final ValueChanged<bool> onChanged;
   final String? subtitle;
   @override
-  Widget build(BuildContext context) => _Row(icon: icon, label: label, subtitle: subtitle, trailing: CupertinoSwitch(value: value, activeTrackColor: Brand.success, onChanged: onChanged));
+  Widget build(BuildContext context) => _Row(icon: icon, label: label, subtitle: subtitle, trailing: CupertinoSwitch(value: value, activeTrackColor: context.highContrast ? context.colors.success : Brand.success, onChanged: onChanged));
 }
 
 class _SegRow<T extends Object> extends StatelessWidget {
-  const _SegRow({required this.icon, required this.label, required this.value, required this.options, required this.onChanged});
+  const _SegRow({super.key, required this.icon, required this.label, required this.value, required this.options, required this.onChanged});
   final IconData icon;
   final String label;
   final T value;
@@ -452,6 +492,8 @@ class _SegRow<T extends Object> extends StatelessWidget {
   Widget build(BuildContext context) => _Row(
         icon: icon,
         label: label,
+        // Above the usual text sizes the control goes under its label, so neither is squeezed.
+        stackTrailing: A11y.largeText(context),
         trailing: AppSegmentedControl<T>(value: value, segments: options, onChanged: onChanged),
       );
 }

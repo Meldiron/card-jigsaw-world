@@ -119,7 +119,7 @@ class PlayerScreen extends ConsumerWidget {
                         children: [
                           _SummaryStat(icon: AppIcons.puzzle, value: compactCount(p.puzzlesCompleted), label: 'Solved'),
                           VerticalDivider(width: 1, thickness: 1, color: c.stroke),
-                          _SummaryStat(icon: AppIcons.star, iconColor: Brand.star, value: compactCount(p.totalStars), label: 'Stars'),
+                          _SummaryStat(icon: AppIcons.star, iconColor: context.star, value: compactCount(p.totalStars), label: 'Stars'),
                           VerticalDivider(width: 1, thickness: 1, color: c.stroke),
                           _SummaryStat(icon: AppIcons.streak, value: compactCount(p.streak), label: 'Day streak'),
                         ],

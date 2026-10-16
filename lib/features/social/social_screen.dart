@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/app_links.dart';
 import '../../core/haptics.dart';
+import '../../core/a11y.dart';
 import '../../core/theme/tokens.dart';
 import '../../data/repositories.dart';
 import '../../models/models.dart';
@@ -224,10 +225,10 @@ class _LeaderboardState extends ConsumerState<_Leaderboard> {
       // ensureVisible place it exactly.
       final start = _podiumCount(list);
       final offset = index < start ? 30.0 : 30.0 + (start > 0 ? 200 : 0) + (index - start) * 57;
-      await _scroll.animateTo(offset.clamp(0, _scroll.position.maxScrollExtent), duration: const Duration(milliseconds: 350), curve: Curves.easeOutCubic);
+      await _scroll.animateTo(offset.clamp(0, _scroll.position.maxScrollExtent), duration: A11y.motion(context, const Duration(milliseconds: 350)), curve: Curves.easeOutCubic);
     }
     final ctx = _meKey.currentContext;
-    if (ctx != null && ctx.mounted) await Scrollable.ensureVisible(ctx, alignment: 0.4, duration: const Duration(milliseconds: 250), curve: Curves.easeOut);
+    if (ctx != null && ctx.mounted) await Scrollable.ensureVisible(ctx, alignment: 0.4, duration: A11y.motion(ctx, const Duration(milliseconds: 250)), curve: Curves.easeOut);
   }
 
   @override
@@ -347,7 +348,7 @@ class _LeaderboardState extends ConsumerState<_Leaderboard> {
               child: IgnorePointer(
                 ignoring: !showBar,
                 child: AnimatedSlide(
-                  offset: showBar ? Offset.zero : const Offset(0, 0.3),
+                  offset: showBar || A11y.reduceMotionOf(context) ? Offset.zero : const Offset(0, 0.3),
                   duration: const Duration(milliseconds: 220),
                   curve: Curves.easeOutCubic,
                   child: AnimatedOpacity(
@@ -600,7 +601,7 @@ class _SubStats extends StatelessWidget {
     return Text.rich(
       TextSpan(children: [
         TextSpan(text: '${formatCount(solved)} solved · ${formatCount(stars)} '),
-        const WidgetSpan(alignment: PlaceholderAlignment.middle, child: Icon(AppIcons.star, size: 11, color: Brand.star)),
+        WidgetSpan(alignment: PlaceholderAlignment.middle, child: Icon(AppIcons.star, size: 11, color: context.star)),
       ]),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,

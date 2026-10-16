@@ -7,12 +7,13 @@ import 'tokens.dart';
 /// Builds light/dark themes. Everything uses the platform font (SF on iOS,
 /// Roboto on Android); hierarchy comes from weight and size, not typefaces.
 class AppTheme {
-  static ThemeData light() => _build(Brightness.light, AppColors.light);
-  static ThemeData dark() => _build(Brightness.dark, AppColors.dark);
+  /// [highContrast]: Settings > Accessibility > Increase contrast (AppColors.*Contrast).
+  static ThemeData light({bool highContrast = false}) => _build(Brightness.light, highContrast ? AppColors.lightContrast : AppColors.light);
+  static ThemeData dark({bool highContrast = false}) => _build(Brightness.dark, highContrast ? AppColors.darkContrast : AppColors.dark);
 
   static ThemeData _build(Brightness b, AppColors c) {
     final isDark = b == Brightness.dark;
-    final accent = isDark ? Brand.accentDark : Brand.accent;
+    final accent = isDark ? (c.highContrast ? const Color(0xFF8CA7FF) : Brand.accentDark) : Brand.accent;
     final scheme = ColorScheme.fromSeed(
       seedColor: accent,
       brightness: b,
@@ -93,15 +94,15 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: isDark ? c.cardElevated : c.canvas,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(Radii.md), borderSide: BorderSide(color: c.stroke)),
-        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(Radii.md), borderSide: BorderSide(color: c.stroke)),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(Radii.md), borderSide: BorderSide(color: c.controlStroke)),
+        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(Radii.md), borderSide: BorderSide(color: c.controlStroke)),
         focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(Radii.md), borderSide: BorderSide(color: accent, width: 1.5)),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         hintStyle: TextStyle(color: c.textTertiary),
       ),
       switchTheme: SwitchThemeData(
         thumbColor: WidgetStateProperty.all(Colors.white),
-        trackColor: WidgetStateProperty.resolveWith((s) => s.contains(WidgetState.selected) ? Brand.success : c.stroke),
+        trackColor: WidgetStateProperty.resolveWith((s) => s.contains(WidgetState.selected) ? (c.highContrast ? c.success : Brand.success) : c.controlStroke),
         trackOutlineColor: WidgetStateProperty.all(Colors.transparent),
       ),
       snackBarTheme: SnackBarThemeData(

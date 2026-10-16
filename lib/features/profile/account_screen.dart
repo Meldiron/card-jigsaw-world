@@ -557,7 +557,7 @@ class _EmailButton extends StatelessWidget {
           children: [
             Icon(AppIcons.mail, color: c.textPrimary, size: 19),
             const SizedBox(width: 8),
-            Text('Continue with email', style: TextStyle(color: c.textPrimary, fontWeight: FontWeight.w600, fontSize: TypeSize.headline, letterSpacing: -0.3)),
+            Flexible(child: FittedBox(fit: BoxFit.scaleDown, child: Text('Continue with email', maxLines: 1, style: TextStyle(color: c.textPrimary, fontWeight: FontWeight.w600, fontSize: TypeSize.headline, letterSpacing: -0.3)))),
           ],
         ),
       ),
@@ -782,7 +782,8 @@ class _AppleButton extends StatelessWidget {
               // Apple's proportions: the title is about 40% of the button height, the logo matches it.
               Icon(AppIcons.appleLogo, color: fg, size: 22),
               const SizedBox(width: 6),
-              Text('Continue with Apple', style: TextStyle(color: fg, fontWeight: FontWeight.w500, fontSize: TypeSize.title3, letterSpacing: -0.3)),
+              // Apple's button keeps its size; with a large text size the title shrinks to fit it.
+              Flexible(child: FittedBox(fit: BoxFit.scaleDown, child: Text('Continue with Apple', maxLines: 1, style: TextStyle(color: fg, fontWeight: FontWeight.w500, fontSize: TypeSize.title3, letterSpacing: -0.3)))),
             ],
           ),
         ),

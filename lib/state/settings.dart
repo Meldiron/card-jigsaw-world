@@ -9,6 +9,79 @@ final localStoreProvider = Provider<LocalStore>((ref) => throw UnimplementedErro
 
 enum CardStyle { classic, minimal }
 
+/// Settings > Accessibility: text size. [standard] follows the iPhone's text size within the
+/// app's usual range; the others are fixed sizes for players who need them (Apple's Larger Text:
+/// at least 200%).
+enum TextSize {
+  standard(null, 'Default'),
+  large(1.5, 'Large'),
+  largest(2.0, 'Largest');
+
+  const TextSize(this.scale, this.label);
+
+  /// The text scale, or null for the usual range.
+  final double? scale;
+  final String label;
+}
+
+/// Settings > Accessibility (owner, 2026-10-16). Every option is off until the player turns it on
+/// here, so the usual game is unchanged; the iPhone's own accessibility switches do not turn them
+/// on. Kept on the device, like the other settings.
+@immutable
+class Accessibility {
+  const Accessibility({
+    this.textSize = TextSize.standard,
+    this.reduceMotion = false,
+    this.increaseContrast = false,
+    this.differentiateWithoutColour = false,
+  });
+
+  final TextSize textSize;
+
+  /// No spinning, zooming, sliding or looping motion: cross-fades instead (Apple's Reduced Motion).
+  final bool reduceMotion;
+
+  /// Stronger text and outline colours and solid surfaces instead of glass (Sufficient Contrast).
+  final bool increaseContrast;
+
+  /// A symbol or text next to every state that colour alone shows (Differentiate Without Color).
+  final bool differentiateWithoutColour;
+
+  bool get isDefault => this == const Accessibility();
+
+  factory Accessibility.fromJson(Map<String, dynamic>? j) => Accessibility(
+        textSize: TextSize.values.where((v) => v.name == j?['textSize']).firstOrNull ?? TextSize.standard,
+        reduceMotion: j?['reduceMotion'] == true,
+        increaseContrast: j?['increaseContrast'] == true,
+        differentiateWithoutColour: j?['differentiateWithoutColour'] == true,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'textSize': textSize.name,
+        'reduceMotion': reduceMotion,
+        'increaseContrast': increaseContrast,
+        'differentiateWithoutColour': differentiateWithoutColour,
+      };
+
+  Accessibility copyWith({TextSize? textSize, bool? reduceMotion, bool? increaseContrast, bool? differentiateWithoutColour}) => Accessibility(
+        textSize: textSize ?? this.textSize,
+        reduceMotion: reduceMotion ?? this.reduceMotion,
+        increaseContrast: increaseContrast ?? this.increaseContrast,
+        differentiateWithoutColour: differentiateWithoutColour ?? this.differentiateWithoutColour,
+      );
+
+  @override
+  bool operator ==(Object other) =>
+      other is Accessibility &&
+      other.textSize == textSize &&
+      other.reduceMotion == reduceMotion &&
+      other.increaseContrast == increaseContrast &&
+      other.differentiateWithoutColour == differentiateWithoutColour;
+
+  @override
+  int get hashCode => Object.hash(textSize, reduceMotion, increaseContrast, differentiateWithoutColour);
+}
+
 class Settings {
   const Settings({
     required this.themeMode,
@@ -23,6 +96,7 @@ class Settings {
     required this.onboarded,
     required this.tutorialSeen,
     this.hideFinished = false,
+    this.accessibility = const Accessibility(),
   });
 
   final ThemeMode themeMode;
@@ -43,6 +117,8 @@ class Settings {
   /// Library: leave finished packs out of every filter except Finished.
   final bool hideFinished;
 
+  final Accessibility accessibility;
+
   Settings copyWith({
     ThemeMode? themeMode,
     bool? sound,
@@ -56,6 +132,7 @@ class Settings {
     bool? onboarded,
     bool? tutorialSeen,
     bool? hideFinished,
+    Accessibility? accessibility,
   }) =>
       Settings(
         themeMode: themeMode ?? this.themeMode,
@@ -70,6 +147,7 @@ class Settings {
         onboarded: onboarded ?? this.onboarded,
         tutorialSeen: tutorialSeen ?? this.tutorialSeen,
         hideFinished: hideFinished ?? this.hideFinished,
+        accessibility: accessibility ?? this.accessibility,
       );
 }
 
@@ -90,6 +168,7 @@ class SettingsNotifier extends Notifier<Settings> {
       onboarded: s.onboarded,
       tutorialSeen: s.tutorialSeen,
       hideFinished: s.getJson(_libraryKey)?['hideFinished'] == true,
+      accessibility: Accessibility.fromJson(s.getJson(_accessibilityKey)),
     );
     Haptics.enabled = settings.haptics;
     Sfx.instance.soundEnabled = settings.sound;
@@ -101,6 +180,9 @@ class SettingsNotifier extends Notifier<Settings> {
 
   /// Library view preferences, one JSON entry so new ones need no new store field.
   static const _libraryKey = 'libraryPrefs';
+
+  /// Settings > Accessibility, one JSON entry.
+  static const _accessibilityKey = 'accessibility';
 
   void setThemeMode(ThemeMode m) {
     _s.themeMode = m.name;
@@ -160,6 +242,11 @@ class SettingsNotifier extends Notifier<Settings> {
   void setTutorialSeen() {
     _s.tutorialSeen = true;
     state = state.copyWith(tutorialSeen: true);
+  }
+
+  void setAccessibility(Accessibility v) {
+    _s.setJson(_accessibilityKey, v.toJson());
+    state = state.copyWith(accessibility: v);
   }
 
   void setHideFinished(bool v) {

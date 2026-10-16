@@ -9,6 +9,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/a11y.dart';
 import '../../core/haptics.dart';
 import '../../core/sfx.dart';
 import '../../core/theme/tokens.dart';
@@ -421,7 +422,8 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     _saveDebounce?.cancel();
     Sfx.instance.win();
     Haptics.success();
-    _confetti.play();
+    // Reduce motion: no confetti (decorative motion); the completion card says it all.
+    if (!A11y.reduceMotionOf(context)) _confetti.play();
     final s = ref.read(gameControllerProvider(_args!));
     final existing = ref.read(puzzleProgressProvider(widget.puzzleId));
     final firstTime = existing?.completed != true;
@@ -636,6 +638,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
+    _zoom.reduceMotion = A11y.reduceMotionOf(context);
     final puzzle = ref.watch(resolvedPuzzleProvider(widget.puzzleId));
     final settings = ref.watch(settingsProvider);
     final profile = ref.watch(profileProvider).value;
@@ -793,13 +796,20 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                               ),
                               if (_chainFlash > 0)
                                 IgnorePointer(
-                                  child: Text('×2 DOUBLE LOCK', key: ValueKey(_chainFlash), style: TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.title2, letterSpacing: -0.3, color: Brand.star, shadows: [Shadow(color: Colors.black.withValues(alpha: 0.4), blurRadius: 12)]))
-                                      .animate()
-                                      .fadeIn(duration: 150.ms)
-                                      .scale(begin: const Offset(0.6, 0.6), end: const Offset(1.1, 1.1), curve: Curves.easeOutBack)
-                                      .then(delay: 500.ms)
-                                      .fadeOut(duration: 300.ms)
-                                      .slideY(end: -0.6),
+                                  child: A11y.reduceMotionOf(context)
+                                      // Reduce motion: the words fade in and out without the pop and drift.
+                                      ? Text('×2 DOUBLE LOCK', key: ValueKey(_chainFlash), style: TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.title2, letterSpacing: -0.3, color: Brand.star, shadows: [Shadow(color: Colors.black.withValues(alpha: 0.4), blurRadius: 12)]))
+                                          .animate()
+                                          .fadeIn(duration: 150.ms)
+                                          .then(delay: 650.ms)
+                                          .fadeOut(duration: 300.ms)
+                                      : Text('×2 DOUBLE LOCK', key: ValueKey(_chainFlash), style: TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.title2, letterSpacing: -0.3, color: Brand.star, shadows: [Shadow(color: Colors.black.withValues(alpha: 0.4), blurRadius: 12)]))
+                                          .animate()
+                                          .fadeIn(duration: 150.ms)
+                                          .scale(begin: const Offset(0.6, 0.6), end: const Offset(1.1, 1.1), curve: Curves.easeOutBack)
+                                          .then(delay: 500.ms)
+                                          .fadeOut(duration: 300.ms)
+                                          .slideY(end: -0.6),
                                 ),
                             ],
                           ),
@@ -1346,7 +1356,10 @@ class _HowToPlay extends StatelessWidget {
                           borderRadius: BorderRadius.circular(28),
                           boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: context.isDark ? 0.5 : 0.14), blurRadius: 30, offset: const Offset(0, 8))],
                         ),
-                        child: Column(
+                        // Scrolls when a large text size makes the card taller than the screen.
+                        child: SingleChildScrollView(
+                          physics: const ClampingScrollPhysics(),
+                          child: Column(
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -1358,7 +1371,7 @@ class _HowToPlay extends StatelessWidget {
                             Row(
                               children: [
                                 const SizedBox(width: 8),
-                                Icon(AppIcons.star, size: 15, color: Brand.star),
+                                Icon(AppIcons.star, size: 15, color: context.star),
                                 const SizedBox(width: 21),
                                 Expanded(child: Text('Fewer moves earn more stars. No time limit.', style: TextStyle(fontSize: TypeSize.footnote, color: context.colors.textSecondary))),
                               ],
@@ -1367,11 +1380,12 @@ class _HowToPlay extends StatelessWidget {
                             BigButton(label: 'Got it', onTap: onDone),
                           ],
                         ),
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ).animate().slideY(begin: 0.25, curve: Curves.easeOutCubic, duration: 350.ms).fadeIn(duration: 200.ms),
+              ).animate().slideY(begin: A11y.reduceMotionOf(context) ? 0 : 0.25, curve: Curves.easeOutCubic, duration: 350.ms).fadeIn(duration: 200.ms),
             ),
           ),
         ),
@@ -1470,13 +1484,15 @@ class _CompletionOverlayState extends State<_CompletionOverlay> {
 
     // The finished picture is the reward: it stays in full colour above a
     // results panel (no scrim over it). A tap on it shows it on its own.
+    // Each figure shrinks a little when a large text size leaves the four too little room.
+    Widget fit(Widget stat) => Flexible(child: FittedBox(fit: BoxFit.scaleDown, child: stat));
     final stats = Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        _RewardStat(icon: const CoinIcon(size: 17), label: 'Coins', value: reward == null ? '…' : '+${formatCount(reward.coins)}'),
-        _RewardStat(icon: Icon(AppIcons.xp, size: 17, color: context.accent), label: 'XP', value: reward == null ? '…' : '+${formatCount(reward.xp)}'),
-        _RewardStat(label: 'Moves', value: formatCount(state.moves)),
-        _RewardStat(label: 'Time', value: formatDuration(state.elapsed)),
+        fit(_RewardStat(icon: const CoinIcon(size: 17), label: 'Coins', value: reward == null ? '…' : '+${formatCount(reward.coins)}')),
+        fit(_RewardStat(icon: Icon(AppIcons.xp, size: 17, color: context.accent), label: 'XP', value: reward == null ? '…' : '+${formatCount(reward.xp)}')),
+        fit(_RewardStat(label: 'Moves', value: formatCount(state.moves))),
+        fit(_RewardStat(label: 'Time', value: formatDuration(state.elapsed))),
       ],
     );
     // A wide window puts the results in a sidebar beside the picture (see _CompletionLayout).
@@ -1509,8 +1525,16 @@ class _CompletionOverlayState extends State<_CompletionOverlay> {
                               child: Icon(
                                 i < state.stars ? AppIcons.star : AppIcons.starOutline,
                                 size: i == 1 ? 34 : 28,
-                                color: i < state.stars ? Brand.star : c.stroke,
-                              ).animate().scale(delay: (300 + i * 150).ms, begin: const Offset(0, 0), curve: Curves.easeOutBack, duration: 450.ms),
+                                color: i < state.stars ? context.star : (c.highContrast ? c.textTertiary : c.stroke),
+                              ).animate().custom(
+                                    delay: (300 + i * 150).ms,
+                                    duration: 450.ms,
+                                    curve: A11y.reduceMotionOf(context) ? Curves.easeOut : Curves.easeOutBack,
+                                    // Reduce motion: each star fades in instead of popping.
+                                    builder: (_, v, child) => A11y.reduceMotionOf(context)
+                                        ? Opacity(opacity: v.clamp(0.0, 1.0), child: child)
+                                        : Transform.scale(scale: v, child: child),
+                                  ),
                             ),
                         ],
                       ),
@@ -1533,7 +1557,7 @@ class _CompletionOverlayState extends State<_CompletionOverlay> {
                               ),
                             ),
                             const SizedBox(width: 10),
-                            Icon(AppIcons.star, size: 13, color: Brand.star),
+                            Icon(AppIcons.star, size: 13, color: context.star),
                             const SizedBox(width: 4),
                             Text('${formatCount(pack.stars)}/${formatCount(pack.total * 3)}', style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w700, color: c.textPrimary)),
                           ],
@@ -1591,7 +1615,7 @@ class _CompletionOverlayState extends State<_CompletionOverlay> {
           ),
         ),
       ),
-    ).animate().slideY(begin: 0.25, duration: 350.ms, curve: Curves.easeOutCubic).fadeIn(duration: 200.ms);
+    ).animate().slideY(begin: A11y.reduceMotionOf(context) ? 0 : 0.25, duration: 350.ms, curve: Curves.easeOutCubic).fadeIn(duration: 200.ms);
 
     // The finished picture runs full-bleed from the very top of the screen
     // (under a light status bar and a glass back button, like a pack's cover)
@@ -1701,7 +1725,7 @@ class _CompletionOverlayState extends State<_CompletionOverlay> {
                 onEnd: () {
                   if (!_viewing && mounted) setState(() => _pictureMounted = false);
                 },
-                child: AnimatedScale(scale: _viewing ? 1 : 0.96, duration: _swap, curve: Curves.easeOut, child: picture),
+                child: AnimatedScale(scale: _viewing || A11y.reduceMotionOf(context) ? 1 : 0.96, duration: _swap, curve: Curves.easeOut, child: picture),
               ),
             ),
         ],

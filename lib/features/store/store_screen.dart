@@ -12,6 +12,7 @@ import '../../core/haptics.dart';
 import '../../core/links.dart';
 import '../../core/platform.dart';
 import '../../core/sfx.dart';
+import '../../core/a11y.dart';
 import '../../core/theme/tokens.dart';
 import '../../data/purchases.dart';
 import '../../models/models.dart';
@@ -84,7 +85,11 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
     if (viewport == null) return;
     final bar = MediaQuery.paddingOf(context).top + kToolbarHeight + 12;
     final to = (viewport.getOffsetToReveal(box, 0).offset - bar).clamp(position.minScrollExtent, position.maxScrollExtent);
-    position.animateTo(to, duration: const Duration(milliseconds: 450), curve: Curves.easeOutCubic);
+    if (A11y.reduceMotionOf(context)) {
+      position.jumpTo(to);
+    } else {
+      position.animateTo(to, duration: const Duration(milliseconds: 450), curve: Curves.easeOutCubic);
+    }
   }
 
   Future<void> _watchAd() async {
@@ -755,11 +760,11 @@ class _PlanRow extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.white.withValues(alpha: selected ? 0.08 : 0.0),
             borderRadius: BorderRadius.circular(Radii.md),
-            border: Border.all(color: selected ? Vip.gold : Vip.line, width: selected ? 2 : 1),
+            border: Border.all(color: selected ? Vip.gold : Vip.lineOf(context), width: selected ? 2 : 1),
           ),
           child: Row(
             children: [
-              Icon(selected ? AppIcons.checkmarkCircleFill : AppIcons.circle, size: 22, color: selected ? Vip.gold : Vip.fgTertiary),
+              Icon(selected ? AppIcons.checkmarkCircleFill : AppIcons.circle, size: 22, color: selected ? Vip.gold : Vip.fgTertiaryOf(context)),
               const SizedBox(width: 10),
               Expanded(
                 child: Column(
@@ -1032,7 +1037,14 @@ class _ProductTile extends StatelessWidget {
                 _PriceButton(
                   filled: best,
                   busy: active,
-                  child: Text(price, maxLines: 1, style: TextStyle(color: best ? context.onAccent : context.accent, fontWeight: FontWeight.w700, fontSize: TypeSize.body)),
+                  // Differentiate without colour: the best deal also carries a rosette, not only the fill.
+                  child: best && A11y.symbolsOf(context)
+                      ? Row(mainAxisSize: MainAxisSize.min, children: [
+                          Icon(AppIcons.level, size: 14, color: context.onAccent),
+                          const SizedBox(width: 4),
+                          Text(price, maxLines: 1, style: TextStyle(color: context.onAccent, fontWeight: FontWeight.w700, fontSize: TypeSize.body)),
+                        ])
+                      : Text(price, maxLines: 1, style: TextStyle(color: best ? context.onAccent : context.accent, fontWeight: FontWeight.w700, fontSize: TypeSize.body)),
                 )
               else
                 _PriceButton(

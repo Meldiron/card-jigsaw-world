@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/a11y.dart';
 import '../../core/theme/tokens.dart';
 import '../../game/game_controller.dart' show formatDuration;
 import '../../game/modes.dart';
@@ -170,8 +171,8 @@ class StatisticsSection extends StatelessWidget {
     final groups = <(String, List<(IconData, Color?, String, String)>)>[
       ('Puzzles', [
         if (!omit.contains('solved')) (AppIcons.puzzle, null, 'Puzzles solved', formatCount(s.solved)),
-        if (s.perfect != null) (AppIcons.star, Brand.star, '3-star solves', formatCount(s.perfect!)),
-        if (!omit.contains('stars')) (AppIcons.star, Brand.star, 'Stars collected', formatCount(s.stars)),
+        if (s.perfect != null) (AppIcons.star, context.star, '3-star solves', formatCount(s.perfect!)),
+        if (!omit.contains('stars')) (AppIcons.star, context.star, 'Stars collected', formatCount(s.stars)),
         (AppIcons.swaps, null, 'Moves made', formatCount(s.moves)),
         (AppIcons.time, null, 'Time played', formatPlayTime(s.seconds)),
       ]),
@@ -332,8 +333,8 @@ class _CompletionLine extends StatelessWidget {
           spacing: 14,
           runSpacing: 2,
           children: [
-            _Legend(color: c.success, text: '${formatCount(shownDone)} of ${formatCount(total)} $doneWord'),
-            _Legend(color: Brand.star, text: '${formatCount(shownPerfect)} with every star'),
+            _Legend(color: c.success, symbol: AppIcons.checkmarkCircleFill, text: '${formatCount(shownDone)} of ${formatCount(total)} $doneWord'),
+            _Legend(color: context.star, symbol: AppIcons.star, text: '${formatCount(shownPerfect)} with every star'),
           ],
         ),
       ],
@@ -342,8 +343,11 @@ class _CompletionLine extends StatelessWidget {
 }
 
 class _Legend extends StatelessWidget {
-  const _Legend({required this.color, required this.text});
+  const _Legend({required this.color, required this.symbol, required this.text});
   final Color color;
+
+  /// Shown instead of the dot with Settings > Accessibility > Differentiate without colour.
+  final IconData symbol;
   final String text;
 
   @override
@@ -351,7 +355,10 @@ class _Legend extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(width: 8, height: 8, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
+        if (A11y.symbolsOf(context))
+          Icon(symbol, size: 11, color: color)
+        else
+          Container(width: 8, height: 8, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
         const SizedBox(width: 5),
         Text(text, style: TextStyle(fontSize: TypeSize.caption, color: context.colors.textSecondary)),
       ],
@@ -391,7 +398,10 @@ class TwoToneBar extends StatelessWidget {
               children: [
                 Positioned.fill(child: ColoredBox(color: c.stroke)),
                 if (green > 0) Positioned(left: 0, top: 0, bottom: 0, width: green, child: _Segment(color: c.success, radius: height)),
-                if (yellow > 0) Positioned(left: 0, top: 0, bottom: 0, width: yellow, child: _Segment(color: Brand.star, radius: height)),
+                if (yellow > 0) Positioned(left: 0, top: 0, bottom: 0, width: yellow, child: _Segment(color: context.star, radius: height)),
+                // Differentiate without colour: a gap where the starred part ends and the solved part goes on.
+                if (A11y.symbolsOf(context) && yellow > 0 && green > yellow + 2)
+                  Positioned(left: yellow, top: 0, bottom: 0, width: 2, child: ColoredBox(color: c.card)),
               ],
             ),
           ),

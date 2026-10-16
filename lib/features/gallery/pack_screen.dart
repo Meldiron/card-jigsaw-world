@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/haptics.dart';
 import '../../core/platform.dart';
 import '../../core/sfx.dart';
+import '../../core/a11y.dart';
 import '../../core/theme/tokens.dart';
 import '../../game/board.dart';
 import '../../models/models.dart';
@@ -121,9 +122,9 @@ class PackScreen extends ConsumerWidget {
     final wide = context.isExpanded;
     final inset = pageInsetOf(context);
     final Widget? access = giantClosed
-        ? GiantGateCard(gate: GiantGate.of(ref, pack), onOpenNow: () => openGiantEarly(context, ref, pack)).animate().fadeIn().slideY(begin: 0.1)
+        ? GiantGateCard(gate: GiantGate.of(ref, pack), onOpenNow: () => openGiantEarly(context, ref, pack)).animate().fadeIn().slideY(begin: A11y.reduceMotionOf(context) ? 0 : 0.1)
         : !unlocked
-            ? _accessCard(context, pack, priceCurrency, priceValue, balance, goVip, unlock, getMore).animate().fadeIn().slideY(begin: 0.1)
+            ? _accessCard(context, pack, priceCurrency, priceValue, balance, goVip, unlock, getMore).animate().fadeIn().slideY(begin: A11y.reduceMotionOf(context) ? 0 : 0.1)
             : null;
     final Widget details = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -137,21 +138,43 @@ class PackScreen extends ConsumerWidget {
         const SizedBox(height: 14),
         // One progress line instead of three boxed numbers: solved and stars,
         // one bar. It reads like the progress line on the pack cards.
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.baseline,
-          textBaseline: TextBaseline.alphabetic,
+        // Solved on the left, stars on the right; the stars wrap under when a large text size
+        // leaves no room for both.
+        Wrap(
+          alignment: WrapAlignment.spaceBetween,
+          crossAxisAlignment: WrapCrossAlignment.end,
+          spacing: 12,
           children: [
-            Text('${packProgress.solved}', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.headline, letterSpacing: -0.3)),
-            Text(' of ${packProgress.total} solved', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.body, fontWeight: FontWeight.w500)),
-            const Spacer(),
-            const Icon(AppIcons.star, size: 14, color: Brand.star),
-            const SizedBox(width: 4),
-            Text('${packProgress.stars}', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body)),
-            Text(' of ${packProgress.maxStars}', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.body, fontWeight: FontWeight.w500)),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              textBaseline: TextBaseline.alphabetic,
+              children: [
+                Text('${packProgress.solved}', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.headline, letterSpacing: -0.3)),
+                Text(' of ${packProgress.total} solved', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.body, fontWeight: FontWeight.w500)),
+              ],
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              textBaseline: TextBaseline.alphabetic,
+              children: [
+                Icon(AppIcons.star, size: 14, color: context.star),
+                const SizedBox(width: 4),
+                Text('${packProgress.stars}', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body)),
+                Text(' of ${packProgress.maxStars}', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.body, fontWeight: FontWeight.w500)),
+              ],
+            ),
           ],
         ),
         const SizedBox(height: 8),
-        ProgressBar(value: packProgress.complete ? packProgress.starRatio : packProgress.solvedRatio, height: 6, color: packProgress.complete ? Brand.star : null),
+        Row(
+          children: [
+            Expanded(child: ProgressBar(value: packProgress.complete ? packProgress.starRatio : packProgress.solvedRatio, height: 6, color: packProgress.complete ? context.star : null)),
+            // Differentiate without colour: a star says the bar counts stars, not solved pictures.
+            if (packProgress.complete && A11y.symbolsOf(context)) ...[const SizedBox(width: 6), Icon(AppIcons.star, size: 12, color: context.star)],
+          ],
+        ),
         if (unlocked && !giantClosed) ...[
           const SizedBox(height: 16),
           if (isGiantPack(pack))
@@ -177,7 +200,7 @@ class PackScreen extends ConsumerWidget {
           else
           Row(
             children: [
-              Icon(packProgress.perfect ? AppIcons.star : AppIcons.check, color: packProgress.perfect ? Brand.star : c.success, size: 18),
+              Icon(packProgress.perfect ? AppIcons.star : AppIcons.check, color: packProgress.perfect ? context.star : c.success, size: 18),
               const SizedBox(width: 6),
               Expanded(
                 child: Text(
@@ -220,12 +243,14 @@ class PackScreen extends ConsumerWidget {
             ),
             flexibleSpace: _CollapsedGlass(
               child: FlexibleSpaceBar(
-              stretchModes: const [StretchMode.zoomBackground],
+              // Reduce motion: the cover neither drifts (parallax) nor zooms when pulled.
+              collapseMode: A11y.reduceMotionOf(context) ? CollapseMode.pin : CollapseMode.parallax,
+              stretchModes: A11y.reduceMotionOf(context) ? const [] : const [StretchMode.zoomBackground],
               background: Stack(
                 fit: StackFit.expand,
                 children: [
                   NetImage(url: pack.coverUrl, blurhash: pack.blurhash),
-                  DecoratedBox(decoration: BoxDecoration(gradient: Brand.scrim(strength: 0.7))),
+                  DecoratedBox(decoration: BoxDecoration(gradient: Brand.scrim(strength: 0.7, contrast: A11y.increaseContrastOf(context)))),
                   // A soft shade under the status bar and the back button, so the white
                   // status bar text reads on bright covers (sky, snow, a white plate).
                   Positioned(
@@ -572,10 +597,14 @@ class _AccessCard extends StatelessWidget {
           ),
           if (meter != null) ...[
             const SizedBox(height: 14),
-            Row(
+            // Wraps onto two lines when a large text size leaves no room for both.
+            Wrap(
+              alignment: WrapAlignment.spaceBetween,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              spacing: 12,
+              runSpacing: 4,
               children: [
                 CostLabel(label: 'Unlock for', currency: meter!.$1, amount: meter!.$3, fontSize: TypeSize.body),
-                const Spacer(),
                 Text('You have ${formatCount(meter!.$2)}', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote, fontWeight: FontWeight.w500)),
               ],
             ),
@@ -716,6 +745,8 @@ class _PuzzleTile extends StatelessWidget {
                       // Today is marked in the accent only (badge and outline agree).
                       color: puzzle.isToday ? context.accentFill : Colors.black.withValues(alpha: 0.5),
                       shape: BoxShape.circle,
+                      // Differentiate without colour: today's disc also gets a white ring.
+                      border: puzzle.isToday && A11y.symbolsOf(context) ? Border.all(color: Colors.white, width: 1.5) : null,
                     ),
                     child: Text('${puzzle.date!.day}', style: const TextStyle(color: Colors.white, fontSize: TypeSize.micro, fontWeight: FontWeight.w600)),
                   ),

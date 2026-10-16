@@ -7,6 +7,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/a11y.dart';
 import '../../core/theme/tokens.dart';
 import '../../game/board.dart';
 import '../../game/game_controller.dart';
@@ -111,7 +112,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                             ),
                           ),
                           Expanded(
-                            child: Padding(
+                            // Scrolls when Settings > Accessibility > Text size makes the words taller than the space.
+                            child: SingleChildScrollView(
+                              physics: const ClampingScrollPhysics(),
                               padding: const EdgeInsets.fromLTRB(28, 20, 28, 0),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,12 +122,12 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                                   Text(
                                     s.title,
                                     style: Theme.of(context).textTheme.displaySmall,
-                                  ).animate(key: ValueKey('t$i')).fadeIn(delay: 80.ms, duration: 350.ms).slideY(begin: 0.08, curve: Curves.easeOut),
+                                  ).animate(key: ValueKey('t$i')).fadeIn(delay: 80.ms, duration: 350.ms).slideY(begin: A11y.reduceMotionOf(context) ? 0 : 0.08, curve: Curves.easeOut),
                                   const SizedBox(height: 12),
                                   Text(
                                     s.body,
                                     style: TextStyle(fontSize: TypeSize.callout, height: 1.45, color: c.textSecondary),
-                                  ).animate(key: ValueKey('b$i')).fadeIn(delay: 160.ms, duration: 350.ms).slideY(begin: 0.08, curve: Curves.easeOut),
+                                  ).animate(key: ValueKey('b$i')).fadeIn(delay: 160.ms, duration: 350.ms).slideY(begin: A11y.reduceMotionOf(context) ? 0 : 0.08, curve: Curves.easeOut),
                                 ],
                               ),
                             ),
@@ -163,7 +166,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                           if (last) {
                             _finish();
                           } else {
-                            _page.nextPage(duration: const Duration(milliseconds: 350), curve: Curves.easeOutCubic);
+                            A11y.reduceMotionOf(context) ? _page.jumpToPage(_page.page!.round() + 1) : _page.nextPage(duration: const Duration(milliseconds: 350), curve: Curves.easeOutCubic);
                           }
                         },
                       ),
@@ -235,7 +238,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       if (last) {
         _finish();
       } else {
-        _page.nextPage(duration: const Duration(milliseconds: 350), curve: Curves.easeOutCubic);
+        A11y.reduceMotionOf(context) ? _page.jumpToPage(_page.page!.round() + 1) : _page.nextPage(duration: const Duration(milliseconds: 350), curve: Curves.easeOutCubic);
       }
     }
 
@@ -277,12 +280,12 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                         Text(s.title, style: Theme.of(context).textTheme.displaySmall)
                             .animate(key: ValueKey('t$_index'))
                             .fadeIn(delay: 80.ms, duration: 350.ms)
-                            .slideY(begin: 0.08, curve: Curves.easeOut),
+                            .slideY(begin: A11y.reduceMotionOf(context) ? 0 : 0.08, curve: Curves.easeOut),
                         const SizedBox(height: 12),
                         Text(s.body, style: TextStyle(fontSize: TypeSize.callout, height: 1.45, color: c.textSecondary))
                             .animate(key: ValueKey('b$_index'))
                             .fadeIn(delay: 160.ms, duration: 350.ms)
-                            .slideY(begin: 0.08, curve: Curves.easeOut),
+                            .slideY(begin: A11y.reduceMotionOf(context) ? 0 : 0.08, curve: Curves.easeOut),
                         const SizedBox(height: 32),
                         Row(
                           children: [

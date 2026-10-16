@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/a11y.dart';
 import '../../core/theme/tokens.dart';
 import '../../state/profile.dart';
 import '../../widgets/glass.dart';
@@ -291,7 +292,7 @@ class _TopTabState extends State<_TopTab> {
     final isDark = context.isDark;
     final selected = widget.selected;
     final color = selected ? context.accent : (_hover ? c.textPrimary : c.textSecondary);
-    final fill = selected ? context.accent.withValues(alpha: isDark ? 0.18 : 0.10) : (_hover ? c.textPrimary.withValues(alpha: 0.05) : Colors.transparent);
+    final fill = selected ? context.accent.withValues(alpha: c.highContrast ? (isDark ? 0.22 : 0.14) : (isDark ? 0.18 : 0.10)) : (_hover ? c.textPrimary.withValues(alpha: 0.05) : Colors.transparent);
     return Semantics(
       button: true,
       selected: selected,
@@ -313,7 +314,8 @@ class _TopTabState extends State<_TopTab> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(widget.item.label, style: TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w600, color: color, letterSpacing: -0.1)),
+                // Differentiate without colour: the selected tab is also underlined.
+                Text(widget.item.label, style: TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w600, color: color, letterSpacing: -0.1, decoration: selected && A11y.symbolsOf(context) ? TextDecoration.underline : null, decorationColor: color, decorationThickness: 2)),
                 // Something waits on that tab (as on the floating tab bar): a small cobalt dot.
                 if (widget.item.badge && !selected) ...[
                   const SizedBox(width: 6),

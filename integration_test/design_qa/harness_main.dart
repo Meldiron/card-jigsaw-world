@@ -59,7 +59,9 @@ Future<void> main() async {
   Sfx.instance.init();
   final report = FlutterError.onError;
   FlutterError.onError = (details) {
-    _errors.add('${details.exceptionAsString()}\n${details.context ?? ''}'.trim());
+    // The widget that caused it (`lib/...dart:line`), so a layout error can be found without the log.
+    final at = RegExp(r'lib/[\w/]+\.dart:\d+').firstMatch(details.toString())?.group(0);
+    _errors.add('${details.exceptionAsString()}${at == null ? '' : ' @ $at'}\n${details.context ?? ''}'.trim());
     report?.call(details);
   };
   runApp(const DqaRoot());

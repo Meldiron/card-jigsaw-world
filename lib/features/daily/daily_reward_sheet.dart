@@ -6,6 +6,7 @@ import '../../core/haptics.dart';
 import '../../core/platform.dart';
 import '../../core/reminders.dart';
 import '../../core/sfx.dart';
+import '../../core/a11y.dart';
 import '../../core/theme/tokens.dart';
 import '../../state/profile.dart';
 import '../../state/reminders.dart';
@@ -233,6 +234,9 @@ class _DayRow extends StatelessWidget {
     final labelFont = today ? TypeSize.headline : TypeSize.body;
     final scaler = MediaQuery.textScalerOf(context);
     final height = scaler.scale(today ? 60.0 : 40.0);
+    // The reward columns grow with the text up to 135%; past that (Settings > Accessibility > Text
+    // size) the amounts shrink to fit them, so the day keeps its room on a small phone.
+    double column(double w) => w * scaler.scale(1).clamp(1.0, 1.35);
 
     final Widget mark = switch (state) {
       _DayState.claimed || _DayState.claimedToday => Container(
@@ -278,17 +282,17 @@ class _DayRow extends StatelessWidget {
       ),
     );
 
-    final label = Text(
+    // With a large text size the label shrinks to fit beside the rewards instead of being cut.
+    final label = FittedBox(fit: BoxFit.scaleDown, alignment: Alignment.centerLeft, child: Text(
       'Day $day',
       maxLines: 1,
-      overflow: TextOverflow.ellipsis,
       style: TextStyle(
         fontSize: labelFont,
         fontWeight: today ? FontWeight.w700 : FontWeight.w500,
         color: done ? c.textTertiary : c.textPrimary,
         letterSpacing: today ? -0.2 : 0,
       ),
-    );
+    ));
     // Today's label on two lines (with the largest text sizes on a small phone it scales down rather
     // than cut); the others on one, with "Tomorrow" after the day once today is claimed, which moves
     // under the day when the line is too short.
@@ -331,7 +335,7 @@ class _DayRow extends StatelessWidget {
                 child: AnimatedSwitcher(
                   duration: const Duration(milliseconds: 260),
                   switchInCurve: Curves.easeOutBack,
-                  transitionBuilder: (child, a) => ScaleTransition(scale: a, child: child),
+                  transitionBuilder: (child, a) => A11y.reduceMotionOf(context) ? FadeTransition(opacity: a, child: child) : ScaleTransition(scale: a, child: child),
                   child: KeyedSubtree(key: ValueKey(state), child: mark),
                 ),
               ),
@@ -341,15 +345,15 @@ class _DayRow extends StatelessWidget {
               child: Align(alignment: Alignment.centerLeft, child: title),
             ),
             SizedBox(
-              width: scaler.scale(_coinsColumn),
+              width: column(_coinsColumn),
               child: Align(alignment: Alignment.centerRight, child: amount(Currency.coins, reward.coins)),
             ),
             SizedBox(
-              width: scaler.scale(_extraColumn),
+              width: column(_extraColumn),
               child: reward.tickets > 0 ? Align(alignment: Alignment.centerRight, child: amount(Currency.tickets, reward.tickets)) : null,
             ),
             SizedBox(
-              width: scaler.scale(_extraColumn),
+              width: column(_extraColumn),
               child: reward.hints > 0 ? Align(alignment: Alignment.centerRight, child: amount(Currency.hints, reward.hints)) : null,
             ),
           ],

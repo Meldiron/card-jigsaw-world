@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/haptics.dart';
 import '../../core/name_filter.dart';
 import '../../core/sfx.dart';
+import '../../core/a11y.dart';
 import '../../core/theme/tokens.dart';
 import '../../models/models.dart';
 import '../../state/achievements.dart';
@@ -142,6 +143,19 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       ],
                     ),
                     const SizedBox(height: 10),
+                    // Large text: the level and its XP on one line, the bar under them.
+                    if (A11y.largeText(context)) ...[
+                      Wrap(
+                        spacing: 8,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          Text('Level ${profile.level}', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.footnote)),
+                          Text('${formatCount(profile.xpIntoLevel)}/${formatCount(Profile.xpForLevel(profile.level))}', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.micro, fontWeight: FontWeight.w600)),
+                        ],
+                      ),
+                      const SizedBox(height: 6),
+                      ProgressBar(value: profile.levelProgress, height: 6),
+                    ] else
                     Row(
                       children: [
                         Text('Level ${profile.level}', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.footnote)),
@@ -487,7 +501,8 @@ class _AchievementCard extends ConsumerWidget {
                     Expanded(
                       child: Row(
                         children: [
-                          Flexible(child: Text(f.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body))),
+                          // Up to two lines with a large text size, so the title is never cut to a few letters.
+                          Flexible(child: Text(f.title, maxLines: A11y.largeText(context) ? 2 : 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body))),
                           if (f.steps.length > 1) ...[const SizedBox(width: 8), _TierDots(claimed: status.claimedSteps, total: f.steps.length)],
                         ],
                       ),
@@ -549,7 +564,10 @@ class _TierDots extends StatelessWidget {
               width: 6,
               height: 6,
               margin: const EdgeInsets.only(right: 3),
-              decoration: BoxDecoration(shape: BoxShape.circle, color: i < claimed ? context.accent : c.stroke),
+              // Differentiate without colour: unclaimed tiers are rings, claimed ones filled.
+              decoration: A11y.symbolsOf(context) && i >= claimed
+                  ? BoxDecoration(shape: BoxShape.circle, border: Border.all(color: c.textTertiary, width: 1.2))
+                  : BoxDecoration(shape: BoxShape.circle, color: i < claimed ? context.accent : c.stroke),
             ),
         ],
       ),

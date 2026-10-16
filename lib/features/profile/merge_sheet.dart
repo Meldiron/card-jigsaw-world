@@ -38,12 +38,18 @@ class MergeSheet extends StatelessWidget {
       (Icon(AppIcons.streak, size: 15, color: c.textTertiary), 'Streak', device.streak, account.streak, days),
     ];
     const figures = tabularFigures;
+    // A figure never breaks over two lines: with a large text size it shrinks to fit its column.
     Widget value(String text, bool more) => Expanded(
           flex: 3,
-          child: Text(
-            text,
-            textAlign: TextAlign.right,
-            style: TextStyle(fontSize: TypeSize.body, fontWeight: more ? FontWeight.w700 : FontWeight.w500, color: more ? c.textPrimary : c.textSecondary, fontFeatures: figures),
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerRight,
+            child: Text(
+              text,
+              maxLines: 1,
+              textAlign: TextAlign.right,
+              style: TextStyle(fontSize: TypeSize.body, fontWeight: more ? FontWeight.w700 : FontWeight.w500, color: more ? c.textPrimary : c.textSecondary, fontFeatures: figures),
+            ),
           ),
         );
     Widget head(SaveSnapshot s, String label) => Expanded(
@@ -54,7 +60,7 @@ class MergeSheet extends StatelessWidget {
               AvatarCircle(avatarKey: s.avatar, size: 30),
               const SizedBox(height: 6),
               Text(label, maxLines: 1, style: const TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w700)),
-              Text(relativeTime(s.lastPlayed), style: TextStyle(fontSize: TypeSize.caption, color: c.textSecondary), maxLines: 1, overflow: TextOverflow.ellipsis),
+              FittedBox(fit: BoxFit.scaleDown, alignment: Alignment.centerRight, child: Text(relativeTime(s.lastPlayed), style: TextStyle(fontSize: TypeSize.caption, color: c.textSecondary), maxLines: 1)),
             ],
           ),
         );

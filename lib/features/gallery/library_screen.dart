@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart' show ScrollCacheExtent;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/a11y.dart';
 import '../../core/theme/tokens.dart';
 import '../../models/models.dart';
 import '../../state/catalog.dart';
@@ -229,7 +230,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
     final ctx = _chipKeys[chip]?.currentContext;
     // On a wide window every chip is in view already (they wrap); scrolling would move the page.
     if (ctx == null || !ctx.mounted || chip == LibraryFilter.all || context.isWide) return;
-    Scrollable.ensureVisible(ctx, alignment: 0.5, duration: const Duration(milliseconds: 300), curve: Curves.easeOutCubic);
+    Scrollable.ensureVisible(ctx, alignment: 0.5, duration: A11y.motion(context, const Duration(milliseconds: 300)), curve: Curves.easeOutCubic);
   }
 
   String _query = '';
@@ -536,7 +537,7 @@ class _PictureRow extends ConsumerWidget {
             if (!open)
               Icon(AppIcons.lock, size: 16, color: c.textTertiary)
             else if (stars > 0)
-              Row(mainAxisSize: MainAxisSize.min, children: [for (var i = 0; i < 3; i++) Icon(i < stars ? AppIcons.star : AppIcons.starOutline, size: 14, color: i < stars ? Brand.star : c.textTertiary)])
+              Row(mainAxisSize: MainAxisSize.min, children: [for (var i = 0; i < 3; i++) Icon(i < stars ? AppIcons.star : AppIcons.starOutline, size: 14, color: i < stars ? context.star : c.textTertiary)])
             else
               Icon(AppIcons.chevronRight, size: 16, color: c.textTertiary),
           ],
@@ -614,11 +615,13 @@ class _FilterChip extends StatelessWidget {
         decoration: BoxDecoration(
           color: selected ? context.accentFill : c.card,
           borderRadius: BorderRadius.circular(999),
-          border: Border.all(color: selected ? context.accentFill : c.stroke),
+          border: Border.all(color: selected ? context.accentFill : c.controlStroke),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
+            // Differentiate without colour: a check on the chosen filter, not only the fill.
+            if (selected && A11y.symbolsOf(context)) ...[Icon(AppIcons.checkmark, size: 13, color: fg), const SizedBox(width: 4)],
             if (icon != null) ...[Icon(icon, size: 15, color: fg), const SizedBox(width: 5)],
             Text(label, style: TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.footnote, color: fg)),
           ],
@@ -657,7 +660,7 @@ class _HideFinishedToggle extends StatelessWidget {
             width: 51 * 0.8,
             height: 31 * 0.8,
             child: FittedBox(
-              child: CupertinoSwitch(key: const ValueKey('library-hide-finished'), value: value, activeTrackColor: Brand.success, onChanged: onChanged),
+              child: CupertinoSwitch(key: const ValueKey('library-hide-finished'), value: value, activeTrackColor: context.highContrast ? context.colors.success : Brand.success, onChanged: onChanged),
             ),
           ),
         ],

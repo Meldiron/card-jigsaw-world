@@ -202,7 +202,7 @@ class _SyncNoticeListState extends State<SyncNoticeList> {
           SyncLineIcon.hints => const HintIcon(size: 18),
           SyncLineIcon.peeks => const BoosterIcon(AppIcons.peek, size: 18),
           SyncLineIcon.magics => const BoosterIcon(AppIcons.magic, size: 18),
-          SyncLineIcon.star => const Icon(AppIcons.star, size: 17, color: Brand.star),
+          SyncLineIcon.star => Icon(AppIcons.star, size: 17, color: context.star),
           _ => Icon(
               switch (i) {
                 SyncLineIcon.level => AppIcons.level,

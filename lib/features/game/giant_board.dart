@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
+import '../../core/a11y.dart';
 import '../../core/theme/tokens.dart';
 import '../../game/board.dart';
 import '../../widgets/icons.dart';
@@ -70,7 +71,8 @@ class GiantBoardBar extends StatelessWidget {
               if (zoom.zoomed) ...[
                 RoundIconButton(
                   key: const ValueKey('giant-map'),
-                  icon: AppIcons.minimap,
+                  // Differentiate without colour: the map glyph fills in while the map is on.
+                  icon: showMap && A11y.symbolsOf(context) ? AppIcons.minimapOn : AppIcons.minimap,
                   size: 34,
                   color: showMap ? c.accentTint : null,
                   iconColor: showMap ? context.accent : c.textSecondary,

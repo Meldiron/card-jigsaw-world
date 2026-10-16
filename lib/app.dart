@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quick_actions/quick_actions.dart';
 
+import 'core/a11y.dart';
 import 'core/app_links.dart';
 import 'core/appwrite.dart';
 import 'core/image_files.dart';
@@ -131,8 +132,8 @@ class _CardenAppState extends ConsumerState<CardenApp> with WidgetsBindingObserv
       title: 'Carden',
       debugShowCheckedModeBanner: false,
       scaffoldMessengerKey: appMessengerKey,
-      theme: AppTheme.light(),
-      darkTheme: AppTheme.dark(),
+      theme: AppTheme.light(highContrast: settings.accessibility.increaseContrast),
+      darkTheme: AppTheme.dark(highContrast: settings.accessibility.increaseContrast),
       themeMode: settings.themeMode,
       routerConfig: router,
       builder: (context, child) {
@@ -147,10 +148,19 @@ class _CardenAppState extends ConsumerState<CardenApp> with WidgetsBindingObserv
           backgroundColor: Colors.transparent,
           body: ScaffoldMessenger(child: UpdateHost(child: SyncHost(child: PurchaseHost(child: child!)))),
         );
-        // Text follows the system size up to iOS "xxxLarge" (1.35); bars cap themselves at 1.2 (ChromeText).
+        // Text follows the system size up to iOS "xxxLarge" (1.35), unless Settings > Accessibility
+        // picks Large (150%) or Largest (200%); bars cap themselves at 1.2 (ChromeText).
         // Wider windows (the web on a tablet or desktop) get their own layouts, see widgets/adaptive.dart.
-        final data = mq.copyWith(textScaler: mq.textScaler.clamp(minScaleFactor: 0.9, maxScaleFactor: 1.35));
-        return MediaQuery(data: data, child: host);
+        final a11y = settings.accessibility;
+        final size = a11y.textSize.scale;
+        final data = mq.copyWith(
+          textScaler: size == null ? mq.textScaler.clamp(minScaleFactor: 0.9, maxScaleFactor: 1.35) : TextScaler.linear(size),
+          // Flutter's own widgets follow these too; the app's changes read the settings (A11y).
+          disableAnimations: mq.disableAnimations || a11y.reduceMotion,
+          highContrast: mq.highContrast || a11y.increaseContrast,
+          onOffSwitchLabels: mq.onOffSwitchLabels || a11y.differentiateWithoutColour,
+        );
+        return A11y(prefs: a11y, child: MediaQuery(data: data, child: host));
       },
     );
   }

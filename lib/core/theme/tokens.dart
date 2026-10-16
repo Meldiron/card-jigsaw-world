@@ -48,11 +48,20 @@ class Brand {
   static const gradientGold = LinearGradient(colors: [coin, coin]);
   static const gradientTeal = LinearGradient(colors: [ticket, ticket]);
 
-  static LinearGradient scrim({double strength = 0.75}) => LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        colors: [Colors.transparent, Colors.black.withValues(alpha: strength)],
-      );
+  /// The dark fade under text on a photo. With Settings > Accessibility > Increase contrast
+  /// ([contrast]) it darkens sooner and further, so every line on it reads at 4.5:1 or better.
+  static LinearGradient scrim({double strength = 0.75, bool contrast = false}) => contrast
+      ? LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          stops: const [0, 0.30, 0.55, 1.0],
+          colors: [Colors.transparent, Colors.black.withValues(alpha: 0.30), Colors.black.withValues(alpha: 0.62), Colors.black.withValues(alpha: 0.85)],
+        )
+      : LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Colors.transparent, Colors.black.withValues(alpha: strength)],
+        );
 }
 
 class Radii {
@@ -132,7 +141,11 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.warning,
     required this.warningTint,
     required this.accentTint,
-  });
+    this.highContrast = false,
+    Color? controlStroke,
+    Color? track,
+  })  : controlStroke = controlStroke ?? stroke,
+        track = track ?? stroke;
 
   final Color canvas;
   final Color card;
@@ -153,6 +166,20 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color warning;
   final Color warningTint;
   final Color accentTint;
+
+  /// Settings > Accessibility > Increase contrast: the palettes below marked Contrast. Every text
+  /// colour reads at 4.5:1 or better on its surfaces, and meaningful outlines at 3:1.
+  final bool highContrast;
+
+  /// The outline of a control when it is the control's only edge (text fields, outlined chips and
+  /// buttons, the segmented control's thumb); [stroke] stays for hairlines and dividers.
+  final Color controlStroke;
+
+  /// The empty part of a progress bar or meter.
+  final Color track;
+
+  /// The same palette one level up (dark sheets and alerts), keeping [highContrast].
+  AppColors get elevated => highContrast ? darkElevatedContrast : darkElevated;
 
   static const light = AppColors(
     canvas: Color(0xFFF6F6F8),
@@ -216,6 +243,72 @@ class AppColors extends ThemeExtension<AppColors> {
     accentTint: Color(0xFF263463),
   );
 
+  /// Increase contrast, light (values checked against WCAG: text 4.5:1, outlines 3:1).
+  static const lightContrast = AppColors(
+    canvas: Color(0xFFF6F6F8),
+    card: Colors.white,
+    cardElevated: Colors.white,
+    stroke: Color(0xFFC8C8D0),
+    textPrimary: Color(0xFF111118),
+    textSecondary: Color(0xFF4B4B57),
+    textTertiary: Color(0xFF616170),
+    boardBackground: Color(0xFFECECF1),
+    cardFace: Colors.white,
+    shadow: Color(0x0F101020),
+    success: Color(0xFF107736),
+    danger: Color(0xFFB91C1C),
+    warning: Color(0xFF9F4908),
+    warningTint: Color(0xFFFFF6E5),
+    accentTint: Color(0xFFE9EEFB),
+    highContrast: true,
+    controlStroke: Color(0xFF80808C),
+    track: Color(0xFFE7E7EC),
+  );
+
+  /// Increase contrast, dark.
+  static const darkContrast = AppColors(
+    canvas: Color(0xFF0D0D11),
+    card: Color(0xFF17171C),
+    cardElevated: Color(0xFF1F1F26),
+    stroke: Color(0xFF3A3A45),
+    textPrimary: Color(0xFFF2F2F5),
+    textSecondary: Color(0xFFC0C0CA),
+    textTertiary: Color(0xFFA2A2AC),
+    boardBackground: Color(0xFF15151A),
+    cardFace: Color(0xFF2A2A33),
+    shadow: Color(0x55000000),
+    success: Color(0xFF4ADE80),
+    danger: Color(0xFFF98B8B),
+    warning: Color(0xFFF2B045),
+    warningTint: Color(0xFF261E10),
+    accentTint: Color(0xFF1C2440),
+    highContrast: true,
+    controlStroke: Color(0xFF7A7A86),
+    track: Color(0xFF2A2A33),
+  );
+
+  /// Increase contrast, dark, one level up.
+  static const darkElevatedContrast = AppColors(
+    canvas: Color(0xFF1C1C22),
+    card: Color(0xFF28282F),
+    cardElevated: Color(0xFF303038),
+    stroke: Color(0xFF4A4A55),
+    textPrimary: Color(0xFFF2F2F5),
+    textSecondary: Color(0xFFC0C0CA),
+    textTertiary: Color(0xFFA2A2AC),
+    boardBackground: Color(0xFF222228),
+    cardFace: Color(0xFF34343D),
+    shadow: Color(0x55000000),
+    success: Color(0xFF4ADE80),
+    danger: Color(0xFFF98B8B),
+    warning: Color(0xFFF2B045),
+    warningTint: Color(0xFF2E2414),
+    accentTint: Color(0xFF263463),
+    highContrast: true,
+    controlStroke: Color(0xFF888894),
+    track: Color(0xFF3A3A44),
+  );
+
   @override
   AppColors copyWith({Color? canvas}) => this;
 
@@ -238,6 +331,9 @@ class AppColors extends ThemeExtension<AppColors> {
       warning: Color.lerp(warning, other.warning, t)!,
       warningTint: Color.lerp(warningTint, other.warningTint, t)!,
       accentTint: Color.lerp(accentTint, other.accentTint, t)!,
+      highContrast: t < 0.5 ? highContrast : other.highContrast,
+      controlStroke: Color.lerp(controlStroke, other.controlStroke, t)!,
+      track: Color.lerp(track, other.track, t)!,
     );
   }
 }
@@ -245,12 +341,16 @@ class AppColors extends ThemeExtension<AppColors> {
 extension AppColorsX on BuildContext {
   AppColors get colors => Theme.of(this).extension<AppColors>()!;
   bool get isDark => Theme.of(this).brightness == Brightness.dark;
-  Color get accent => isDark ? Brand.accentDark : Brand.accent;
+  bool get highContrast => colors.highContrast;
+  Color get accent => isDark ? (highContrast ? const Color(0xFF8CA7FF) : Brand.accentDark) : Brand.accent;
 
   /// The accent as a fill with white content on top: buttons, selected chips
   /// and tiles, play discs, the off-screen pointer. Use [accent] for text,
   /// icons, outlines and progress.
-  Color get accentFill => isDark ? Brand.accentFillDark : Brand.accent;
+  Color get accentFill => isDark ? (highContrast ? const Color(0xFF3F62D6) : Brand.accentFillDark) : Brand.accent;
+
+  /// Star gold; a deeper gold with Increase contrast in light mode (3:1 on white).
+  Color get star => highContrast && !isDark ? const Color(0xFFA97C01) : Brand.star;
 
   /// Text and icons on an [accentFill] surface.
   Color get onAccent => Colors.white;

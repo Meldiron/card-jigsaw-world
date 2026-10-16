@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../core/a11y.dart';
 import '../core/numbers.dart';
 import '../core/theme/tokens.dart';
 import '../models/models.dart';
@@ -65,6 +66,7 @@ class AppIcons {
   static const addFriend = CupertinoIcons.person_add_solid;
   static const report = CupertinoIcons.exclamationmark_bubble;
   static const block = CupertinoIcons.hand_raised;
+  static const noEntry = CupertinoIcons.nosign;
   static const copy = CupertinoIcons.doc_on_doc;
   static const video = CupertinoIcons.play_circle_fill;
   static const bundle = CupertinoIcons.cube_box_fill;
@@ -80,6 +82,7 @@ class AppIcons {
 
   /// Giant boards: the overview map, and Locate (a tapped card's place on the map).
   static const minimap = CupertinoIcons.map;
+  static const minimapOn = CupertinoIcons.map_fill;
 
   /// Gather (giant boards): bring the cards that belong in view into it.
   static const gather = Icons.zoom_in_map_rounded;
@@ -184,6 +187,11 @@ class AppIcons {
   static const checkmarkCircleFill = CupertinoIcons.checkmark_circle_fill;
   static const circle = CupertinoIcons.circle;
   static const circleLefthalfFill = CupertinoIcons.circle_lefthalf_fill;
+  // Settings > Accessibility.
+  static const textSize = CupertinoIcons.textformat_size;
+  static const reduceMotion = CupertinoIcons.slowmo;
+  static const contrast = CupertinoIcons.circle_righthalf_fill;
+  static const shapes = CupertinoIcons.square_on_circle;
   static const clock = CupertinoIcons.clock;
   static const delete = CupertinoIcons.delete;
   static const docPlaintext = CupertinoIcons.doc_plaintext;
@@ -312,18 +320,33 @@ enum Currency { coins, tickets, hints, peeks, magics }
 
 /// Round gold coin with an embossed star – the app's coin mark.
 class CoinIcon extends StatelessWidget {
-  const CoinIcon({super.key, this.size = 18});
+  const CoinIcon({super.key, this.size = 18, this.mono = false, this.color});
   final double size;
+
+  /// With Increase contrast, a silhouette on a filled surface (white unless [color] is given, or
+  /// the [CurrencyInk]); otherwise the coin keeps its gold.
+  final bool mono;
+  final Color? color;
   @override
-  Widget build(BuildContext context) => CustomPaint(size: Size.square(size), painter: _CoinPainter());
+  Widget build(BuildContext context) {
+    final contrast = A11y.increaseContrastOf(context);
+    final ink = contrast ? (color ?? (mono ? Colors.white : CurrencyInk.of(context))) : null;
+    if (ink != null) return Icon(CupertinoIcons.star_circle_fill, size: size, color: ink);
+    // Increase contrast in light mode: a deeper rim, 3:1 on white.
+    final edge = contrast && !context.isDark ? const Color(0xFFAD7A00) : const Color(0xFFE09E00);
+    return CustomPaint(size: Size.square(size), painter: _CoinPainter(edge));
+  }
 }
 
 class _CoinPainter extends CustomPainter {
+  _CoinPainter(this.edge);
+  final Color edge;
+
   @override
   void paint(Canvas canvas, Size size) {
     final c = size.center(Offset.zero);
     final r = size.width / 2;
-    canvas.drawCircle(c, r, Paint()..color = const Color(0xFFE09E00));
+    canvas.drawCircle(c, r, Paint()..color = edge);
     canvas.drawCircle(
       c.translate(0, -r * 0.06),
       r * 0.92,
@@ -347,7 +370,7 @@ class _CoinPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter o) => false;
+  bool shouldRepaint(covariant _CoinPainter o) => o.edge != edge;
 }
 
 /// Monochrome ink for currency marks drawn on a filled surface (a primary
@@ -380,15 +403,18 @@ class TicketIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ink = color ?? (mono ? Colors.white : CurrencyInk.of(context));
-    return CustomPaint(size: Size(size * 0.8, size), painter: _TicketPainter(ink));
+    // Increase contrast in light mode: a deeper teal, 3:1 on white.
+    final body = A11y.increaseContrastOf(context) && !context.isDark ? const Color(0xFF0F8A7E) : Brand.ticket;
+    return CustomPaint(size: Size(size * 0.8, size), painter: _TicketPainter(ink, body));
   }
 }
 
 /// Upright pass with notches top and bottom, a star and a short tear line.
 class _TicketPainter extends CustomPainter {
-  _TicketPainter(this.ink);
+  _TicketPainter(this.ink, this.fill);
   /// Null: the teal ticket with a white star. Otherwise a silhouette in this colour.
   final Color? ink;
+  final Color fill;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -410,7 +436,7 @@ class _TicketPainter extends CustomPainter {
 
     final mono = ink;
     if (mono == null) {
-      canvas.drawPath(shape, Paint()..color = Brand.ticket);
+      canvas.drawPath(shape, Paint()..color = fill);
       canvas.drawPath(star, Paint()..color = Colors.white);
       tearLine(Paint()
         ..color = Colors.white.withValues(alpha: 0.85)
@@ -442,20 +468,33 @@ class _TicketPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant _TicketPainter o) => o.ink != ink;
+  bool shouldRepaint(covariant _TicketPainter o) => o.ink != ink || o.fill != fill;
 }
 
 /// Amber bulb mark for hints.
 class HintIcon extends StatelessWidget {
-  const HintIcon({super.key, this.size = 18});
+  const HintIcon({super.key, this.size = 18, this.mono = false, this.color});
   final double size;
+
+  /// With Increase contrast, the bulb alone on a filled surface (white unless [color] is given,
+  /// or the [CurrencyInk]).
+  final bool mono;
+  final Color? color;
   @override
-  Widget build(BuildContext context) => Container(
-        width: size,
-        height: size,
-        decoration: const BoxDecoration(shape: BoxShape.circle, color: Brand.hint),
-        child: Icon(Icons.lightbulb_rounded, size: size * 0.62, color: Colors.white),
-      );
+  Widget build(BuildContext context) {
+    final contrast = A11y.increaseContrastOf(context);
+    final ink = contrast ? (color ?? (mono ? Colors.white : CurrencyInk.of(context))) : null;
+    if (ink != null) return Icon(Icons.lightbulb_rounded, size: size, color: ink);
+    // Increase contrast: a deeper amber disc in light mode, a dark bulb in dark mode.
+    final disc = contrast && !context.isDark ? const Color(0xFFB67507) : Brand.hint;
+    final bulb = contrast && context.isDark ? const Color(0xFF2A1F00) : Colors.white;
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(shape: BoxShape.circle, color: disc),
+      child: Icon(Icons.lightbulb_rounded, size: size * 0.62, color: bulb),
+    );
+  }
 }
 
 /// A Peek or a Magic in stock: the booster's glyph on a cobalt disc, the same size as [HintIcon].
@@ -464,21 +503,25 @@ class BoosterIcon extends StatelessWidget {
   final IconData icon;
   final double size;
   @override
-  Widget build(BuildContext context) => Container(
-        width: size,
-        height: size,
-        decoration: const BoxDecoration(shape: BoxShape.circle, color: Brand.accent),
-        child: Icon(icon, size: size * 0.62, color: Colors.white),
-      );
+  Widget build(BuildContext context) {
+    // Increase contrast: the theme's accent fill, which keeps 3:1 on dark cards too.
+    final contrast = A11y.increaseContrastOf(context);
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(shape: BoxShape.circle, color: contrast ? context.accentFill : Brand.accent),
+      child: Icon(icon, size: size * 0.62, color: contrast ? context.onAccent : Colors.white),
+    );
+  }
 }
 
 /// [mono] draws the ticket as a silhouette for accent buttons (white, or
 /// [monoColor]); coins and hints keep their own colours, which already read
 /// well on the accent. Inside a [CurrencyInk] the ticket is a silhouette anyway.
 Widget currencyIcon(Currency c, {double size = 18, bool mono = false, Color? monoColor}) => switch (c) {
-      Currency.coins => CoinIcon(size: size),
+      Currency.coins => CoinIcon(size: size, mono: mono, color: mono ? monoColor : null),
       Currency.tickets => TicketIcon(size: size, mono: mono, color: mono ? monoColor : null),
-      Currency.hints => HintIcon(size: size),
+      Currency.hints => HintIcon(size: size, mono: mono, color: mono ? monoColor : null),
       Currency.peeks => BoosterIcon(AppIcons.peek, size: size),
       Currency.magics => BoosterIcon(AppIcons.magic, size: size),
     };

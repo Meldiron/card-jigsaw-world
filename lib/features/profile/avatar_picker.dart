@@ -210,7 +210,8 @@ class _AvatarTile extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 5),
-          Text(name, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: TypeSize.caption, color: owned ? c.textPrimary : c.textSecondary, fontWeight: selected ? FontWeight.w700 : FontWeight.w500)),
+          // The grid cell keeps its size: with a large text size the name shrinks to fit under the avatar.
+          Flexible(child: FittedBox(fit: BoxFit.scaleDown, child: Text(name, maxLines: 1, style: TextStyle(fontSize: TypeSize.caption, color: owned ? c.textPrimary : c.textSecondary, fontWeight: selected ? FontWeight.w700 : FontWeight.w500)))),
         ],
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/a11y.dart';
 import '../../core/theme/tokens.dart';
 import '../../models/models.dart';
 import '../../state/giant.dart';
@@ -69,6 +70,13 @@ class PackCard extends ConsumerWidget {
                       child: pack.isUpcoming
                           ? const Chip2(label: 'Soon', icon: AppIcons.time, onImage: true)
                           : const Chip2(label: 'Live', onImage: true, dot: Brand.live),
+                    )
+                  else if (pack.hasWindow && pack.isExpired && !unlocked && A11y.symbolsOf(context))
+                    // Differentiate without colour: an event that is over says so, not only by darkening.
+                    const Positioned(
+                      right: 8,
+                      bottom: 8,
+                      child: Chip2(label: 'Ended', icon: AppIcons.lock, onImage: true),
                     )
                   else if (pack.isSeasonal)
                     const Positioned(

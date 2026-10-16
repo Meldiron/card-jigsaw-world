@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../core/haptics.dart';
 import '../../core/platform.dart';
+import '../../core/a11y.dart';
 import '../../core/theme/tokens.dart';
 import '../../data/repositories.dart';
 import '../../models/models.dart' show MyPuzzle, newMyPhotoTitle;
@@ -257,7 +258,7 @@ class _MyPuzzlesScreenState extends ConsumerState<MyPuzzlesScreen> {
                                 bottom: 0,
                                 child: Container(
                                   padding: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(gradient: Brand.scrim(strength: 0.7)),
+                                  decoration: BoxDecoration(gradient: Brand.scrim(strength: 0.7, contrast: A11y.increaseContrastOf(context))),
                                   child: Row(
                                     children: [
                                       Expanded(child: Text(m.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: TypeSize.caption))),

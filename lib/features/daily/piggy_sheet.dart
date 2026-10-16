@@ -42,8 +42,13 @@ class PiggySheet extends ConsumerWidget {
               duration: const Duration(milliseconds: 700),
               curve: Curves.easeOutCubic,
               builder: (context, v, child) => CustomPaint(painter: _RingPainter(value: v, track: c.stroke, fill: context.accent), child: child),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+              // The ring keeps its size: with a large text size its middle shrinks to fit.
+              child: Padding(
+                padding: const EdgeInsets.all(18),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(AppIcons.piggy, size: 22, color: context.accent),
                   const SizedBox(height: 2),
@@ -57,6 +62,8 @@ class PiggySheet extends ConsumerWidget {
                   ),
                   Text('of ${formatCount(Profile.piggyCapacity)}', style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w500, color: c.textSecondary)),
                 ],
+              ),
+                ),
               ),
             ),
           ),

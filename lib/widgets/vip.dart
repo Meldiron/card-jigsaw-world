@@ -15,8 +15,14 @@ class Vip {
   static Color get fgSecondary => Colors.white.withValues(alpha: 0.72);
   static Color get fgTertiary => Colors.white.withValues(alpha: 0.5);
 
+  /// [fgTertiary], stronger with Settings > Accessibility > Increase contrast.
+  static Color fgTertiaryOf(BuildContext context) => context.highContrast ? Colors.white.withValues(alpha: 0.62) : fgTertiary;
+
   /// Hairlines and quiet outlines on the card (unselected plans, dividers).
   static Color get line => Colors.white.withValues(alpha: 0.16);
+
+  /// [line], stronger with Increase contrast.
+  static Color lineOf(BuildContext context) => context.highContrast ? Colors.white.withValues(alpha: 0.42) : line;
 
   /// The gold of the crown, the selected plan and the gold button.
   static const gold = Brand.coin;

@@ -9,6 +9,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/haptics.dart';
 import '../../core/sfx.dart';
+import '../../core/a11y.dart';
 import '../../core/theme/tokens.dart';
 import '../../game/board.dart';
 import '../../game/game_controller.dart' show formatDuration;
@@ -399,7 +400,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
     // Preview in the real board's proportions with the chosen tiling drawn over the same centre
     // crop the board will use (BoxFit.cover == Tiling.crop), at most [maxHeight] tall.
     Widget preview(double maxHeight) => AnimatedSize(
-      duration: const Duration(milliseconds: 220),
+      duration: A11y.motion(context, const Duration(milliseconds: 220)),
       curve: Curves.easeOutCubic,
       alignment: Alignment.topCenter,
       child: ConstrainedBox(
@@ -718,7 +719,7 @@ class _PaintingTile extends StatelessWidget {
               ),
               if (!locked) ...[
                 const SizedBox(width: 8),
-                CupertinoSwitch(value: on, activeTrackColor: Brand.success, onChanged: enabled ? onChanged : null),
+                CupertinoSwitch(value: on, activeTrackColor: context.highContrast ? context.colors.success : Brand.success, onChanged: enabled ? onChanged : null),
               ],
             ],
           ),
@@ -937,13 +938,15 @@ class _ModeTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    return AnimatedContainer(
+    return _SelectedBadge(
+      selected: selected,
+      child: AnimatedContainer(
       duration: const Duration(milliseconds: 180),
       height: MediaQuery.textScalerOf(context).scale(84),
       decoration: BoxDecoration(
         color: selected ? c.accentTint : c.card,
         borderRadius: BorderRadius.circular(Radii.md),
-        border: Border.all(color: selected ? context.accent : c.stroke, width: selected ? 1.5 : 1),
+        border: Border.all(color: selected ? context.accent : c.controlStroke, width: selected ? 1.5 : 1),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -974,6 +977,29 @@ class _ModeTile extends StatelessWidget {
             ),
         ],
       ),
+      ),
+    );
+  }
+}
+
+/// Settings > Accessibility > Differentiate without colour: a check in the corner of the selected
+/// tile or chip, so the choice does not rest on the accent colour alone.
+class _SelectedBadge extends StatelessWidget {
+  const _SelectedBadge({required this.selected, required this.child});
+  final bool selected;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!selected || !A11y.symbolsOf(context)) return child;
+    return Stack(
+      // Passthrough: the tile keeps the size its row gives it.
+      fit: StackFit.passthrough,
+      clipBehavior: Clip.none,
+      children: [
+        child,
+        Positioned(top: 4, right: 4, child: Icon(AppIcons.checkmarkCircleFill, size: 14, color: context.accent)),
+      ],
     );
   }
 }
@@ -999,14 +1025,16 @@ class _BoardChip extends StatelessWidget {
     final fg = selected ? context.accent : (locked ? c.textTertiary : c.textPrimary);
     return Pressable(
       onTap: onTap,
-      child: AnimatedContainer(
+      child: _SelectedBadge(
+        selected: selected,
+        child: AnimatedContainer(
         duration: const Duration(milliseconds: 180),
         constraints: const BoxConstraints(minWidth: 74),
         padding: const EdgeInsets.symmetric(horizontal: 12),
         decoration: BoxDecoration(
           color: selected ? c.accentTint : c.card,
           borderRadius: BorderRadius.circular(Radii.md),
-          border: Border.all(color: selected ? context.accent : c.stroke, width: selected ? 1.5 : 1),
+          border: Border.all(color: selected ? context.accent : c.controlStroke, width: selected ? 1.5 : 1),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -1022,6 +1050,7 @@ class _BoardChip extends StatelessWidget {
             ),
           ],
         ),
+      ),
       ),
     );
   }
@@ -1046,7 +1075,10 @@ class _LadderSteps extends StatelessWidget {
             Container(
               width: 4,
               height: 4 + 8 * (k + 1) / of,
-              decoration: BoxDecoration(color: k <= step ? color : rest, borderRadius: BorderRadius.circular(1)),
+              // Differentiate without colour: the steps above this size are outlines, not fills.
+              decoration: k > step && A11y.symbolsOf(context)
+                  ? BoxDecoration(border: Border.all(color: context.colors.textTertiary, width: 1), borderRadius: BorderRadius.circular(1))
+                  : BoxDecoration(color: k <= step ? color : rest, borderRadius: BorderRadius.circular(1)),
             ),
           ],
         ],

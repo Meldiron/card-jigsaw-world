@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
+import '../core/a11y.dart';
 import '../core/theme/tokens.dart';
 import 'adaptive.dart';
 
@@ -67,10 +68,14 @@ class GlassSurface extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tint = this.tint ?? tintColor(context);
-    final alpha = opacity ?? defaultOpacity(context);
+    // Increase contrast: a solid surface with an outline instead of see-through glass, so text on
+    // it reads the same over any content (it also stands in for iOS's Reduce Transparency).
+    final solid = A11y.increaseContrastOf(context);
+    final alpha = solid ? 1.0 : opacity ?? defaultOpacity(context);
+    final hairline = solid ? (this.hairline ?? (borderRadius != null ? Border.all(color: context.colors.stroke) : null)) : this.hairline;
     return TweenAnimationBuilder<double>(
       tween: Tween(end: visible ? 1 : 0),
-      duration: const Duration(milliseconds: 200),
+      duration: A11y.motion(context, const Duration(milliseconds: 200)),
       curve: Curves.easeOut,
       child: child,
       builder: (context, t, child) {
@@ -79,10 +84,11 @@ class GlassSurface extends StatelessWidget {
           decoration: BoxDecoration(
             color: tint.withValues(alpha: alpha * t),
             borderRadius: borderRadius,
-            border: hairline == null ? null : _scaledBorder(hairline!, t),
+            border: hairline == null ? null : _scaledBorder(hairline, t),
           ),
           child: child,
         );
+        if (solid) return ClipRRect(borderRadius: borderRadius ?? BorderRadius.zero, child: box);
         return ClipRRect(
           borderRadius: borderRadius ?? BorderRadius.zero,
           child: BackdropFilter(filter: filter(sigma * t), child: box),
@@ -113,8 +119,8 @@ class Elevated extends StatelessWidget {
     final theme = Theme.of(context);
     return Theme(
       data: theme.copyWith(
-        extensions: const [AppColors.darkElevated],
-        scaffoldBackgroundColor: background ? AppColors.darkElevated.canvas : theme.scaffoldBackgroundColor,
+        extensions: [context.colors.elevated],
+        scaffoldBackgroundColor: background ? context.colors.elevated.canvas : theme.scaffoldBackgroundColor,
       ),
       child: child,
     );
@@ -335,14 +341,18 @@ class GlassTabBar extends StatelessWidget {
                     return Stack(
                       children: [
                         AnimatedPositioned(
-                          duration: const Duration(milliseconds: 260),
+                          duration: A11y.motion(context, const Duration(milliseconds: 260)),
                           curve: Curves.easeOutCubic,
                           left: cell * currentIndex + 5,
                           top: 6,
                           bottom: 6,
                           width: cell - 10,
                           child: DecoratedBox(
-                            decoration: BoxDecoration(color: context.accent.withValues(alpha: isDark ? 0.18 : 0.10), borderRadius: radius),
+                            decoration: BoxDecoration(
+                              color: context.accent.withValues(alpha: context.highContrast ? (isDark ? 0.22 : 0.14) : (isDark ? 0.18 : 0.10)),
+                              borderRadius: radius,
+                              border: context.highContrast ? Border.all(color: context.accent) : null,
+                            ),
                           ),
                         ),
                         Row(

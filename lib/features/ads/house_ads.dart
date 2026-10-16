@@ -10,6 +10,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/haptics.dart';
 import '../../core/platform.dart';
 import '../../core/sfx.dart';
+import '../../core/a11y.dart';
 import '../../core/theme/tokens.dart';
 import '../../data/purchases.dart';
 import '../../models/models.dart';
@@ -409,8 +410,13 @@ class _HouseAdScreenState extends ConsumerState<HouseAdScreen> {
                       ],
                     ),
                   ),
-                  const Spacer(),
-                  Padding(
+                  // The copy sits at the bottom and scrolls when a large text size makes it taller
+                  // than the space under the chips.
+                  Expanded(
+                    child: SingleChildScrollView(
+                      reverse: true,
+                      physics: const ClampingScrollPhysics(),
+                      child: Padding(
                     padding: EdgeInsets.fromLTRB(24 + inset, 0, 24 + inset, 16),
                     child: ConstrainedBox(
                     // On a wide window the copy and its buttons keep a phone's measure.
@@ -420,7 +426,7 @@ class _HouseAdScreenState extends ConsumerState<HouseAdScreen> {
                       children: [
                         _KindBadge(kind: c.kind),
                         const SizedBox(height: 14),
-                        Text(c.headline, style: Theme.of(context).textTheme.displaySmall?.copyWith(color: Colors.white, shadows: _textShadow)).animate().fadeIn(delay: 150.ms).slideY(begin: 0.1),
+                        Text(c.headline, style: Theme.of(context).textTheme.displaySmall?.copyWith(color: Colors.white, shadows: _textShadow)).animate().fadeIn(delay: 150.ms).slideY(begin: A11y.reduceMotionOf(context) ? 0 : 0.1),
                         const SizedBox(height: 8),
                         Text(c.body, style: TextStyle(color: Colors.white.withValues(alpha: 0.9), fontSize: TypeSize.callout, height: 1.4, shadows: _textShadow)).animate().fadeIn(delay: 250.ms),
                         // No prices on web, where nothing can be bought, and only the App Store's own.
@@ -452,6 +458,8 @@ class _HouseAdScreenState extends ConsumerState<HouseAdScreen> {
                         ],
                       ],
                     ),
+                    ),
+                  ),
                     ),
                   ),
                 ],
@@ -509,7 +517,7 @@ class _CollectButton extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       if (done) ...[const Icon(AppIcons.checkmark, color: Colors.white, size: 19), const SizedBox(width: 8)],
-                      Text(done ? 'Collect ${countOf(coins, 'coin')}' : 'Collect ${countOf(coins, 'coin')} in ${left}s', style: const TextStyle(color: Colors.white, fontSize: TypeSize.callout, fontWeight: FontWeight.w600, letterSpacing: -0.2)),
+                      Flexible(child: FittedBox(fit: BoxFit.scaleDown, child: Text(done ? 'Collect ${countOf(coins, 'coin')}' : 'Collect ${countOf(coins, 'coin')} in ${left}s', maxLines: 1, style: const TextStyle(color: Colors.white, fontSize: TypeSize.callout, fontWeight: FontWeight.w600, letterSpacing: -0.2)))),
                     ],
                   ),
                 ),

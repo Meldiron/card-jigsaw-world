@@ -168,6 +168,14 @@ carden.page redirects there.
 - `lib/widgets/adaptive.dart`: wide windows on the web (top bar from 900 px, centred pages, adaptive
   grids, shelves with arrows, sheets as centred panels); phones keep their layout. `docs/web.md`, "Layout".
 - `lib/core/platform.dart`: web capability flags.
+- Accessibility (`docs/accessibility.md`, owner 2026-10-16): Settings > Accessibility has Text size (Default /
+  Large 150% / Largest 200%), Reduce motion, Increase contrast and Differentiate without colour, all off until the
+  player turns them on (the iPhone's own switches do not). App code reads them only through `A11y`
+  (`lib/core/a11y.dart`: `reduceMotionOf`, `increaseContrastOf`, `symbolsOf`, `motion`, `largeText`). New UI must
+  keep them working: colours from `context.colors` / `context.accent` / `context.star` (Contrast palettes), no
+  spin, zoom or slide without an `A11y.reduceMotionOf` fallback, a symbol or text beside any state shown by colour
+  under `symbolsOf`, and no layout errors at Largest on the SE frame (design QA harness, scene pref
+  `accessibility`). `test/accessibility_test.dart` checks defaults and Contrast ratios.
   `lib/core/sfx.dart`: `CJW_MUTE`. `lib/core/qa.dart`: `CJW_QA` / `CJW_QA_RUN` (test players).
 - Daily reminders: local iOS notifications, no server. `lib/state/reminders.dart` (`planReminders`: one a
   day for a week at the Settings time, none on a day the daily gift is claimed; replanned on start, resume
@@ -295,9 +303,11 @@ carden.page redirects there.
   eight consumables (see `lib/data/purchases.dart`). Gift offer codes exist ("VIP Monthly gift", "VIP Yearly
   gift"); single-use codes can only be minted after the app is live (`tools/store/offer_codes.py`).
 - `tools/store/asc_publish.py`: `audit`, `status`, `feedback [--resolve IDS --note TEXT]`,
-  `testflight`, `release`, `submit`, metadata/screenshots/iap/subscriptions commands, `events --window N`
-  (In-App Event drafts from `store/metadata/app_events.json`, made by `tools/store/make_app_events.py`;
-  never submits; Apple allows 15 approved / 10 published), `platforms` (Mac and Vision Pro: TestFlight on;
+  `testflight`, `release`, `submit`, metadata/screenshots/iap/subscriptions commands,
+  `events --window N --primary N` (In-App Event drafts from `store/metadata/app_events.json`, made by
+  `tools/store/make_app_events.py`: the next 10 events plus the next 5 major holidays, `"primary": true`; each
+  publishes 3 days before it starts, the day the app lists its pack; never submits; Apple allows 15 approved /
+  10 published), `platforms` (Mac and Vision Pro: TestFlight on;
   App Store availability is two manual ticks in Pricing and Availability). Win-back offers are recorded in
   `store/metadata/subscriptions/vip_*.json`; `subscriptions` creates them once Apple approves the plans. Docs:
   `tools/store/README.md`, `docs/release-flow.md`, `docs/release-checklist.md`.
@@ -346,7 +356,7 @@ tree, so dispatch the workflow directly as described in the testflight-feedback 
 
 ## Docs index
 
-`docs/native-ui.md` (glass components), `docs/copy-guide.md`, `docs/sync.md` (save sync), `docs/catalog-sync.md`, `docs/deep-links.md`, `docs/house-ads.md`,
+`docs/native-ui.md` (glass components), `docs/accessibility.md`, `docs/copy-guide.md`, `docs/sync.md` (save sync), `docs/catalog-sync.md`, `docs/deep-links.md`, `docs/house-ads.md`,
 `docs/purchases.md`, `docs/web.md`, `docs/app-updates.md`, `docs/release-flow.md`, `docs/release-checklist.md`,
 `docs/content-rules.md`, `docs/content-sources.md`, `store/README.md` (store assets),
 `tools/store/README.md`, `README.md`.

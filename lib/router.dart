@@ -3,6 +3,7 @@ import 'package:flutter/material.dart' show Colors;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'core/a11y.dart';
 import 'core/app_links.dart';
 import 'core/platform.dart';
 import 'features/daily/wheel_screen.dart';
@@ -169,6 +170,7 @@ class _SheetPage<T> extends Page<T> {
         builder: (_) => Elevated(background: true, child: child),
       );
     }
+    if (A11y.reduceMotionOf(context)) return FadeSheetRoute<T>(settings: this, builder: (_) => Elevated(background: true, child: child));
     return CupertinoSheetRoute<T>(settings: this, scrollableBuilder: (_, _) => Elevated(background: true, child: child));
   }
 }

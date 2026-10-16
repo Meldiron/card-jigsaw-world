@@ -8,6 +8,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/a11y.dart';
 import '../../core/haptics.dart';
 import '../../core/sfx.dart';
 import '../../core/theme/tokens.dart';
@@ -151,12 +152,15 @@ Future<void> showWheelOdds(BuildContext context) => showAppSheet(
                             currencyIcon(odds[i].segment.kind, size: 20),
                             const SizedBox(width: 10),
                             Expanded(
-                              child: Row(
+                              // Wraps (the Jackpot chip onto its own line) with a large text size.
+                              child: Wrap(
+                                crossAxisAlignment: WrapCrossAlignment.center,
+                                spacing: 4,
+                                runSpacing: 4,
                                 children: [
                                   Text(formatCount(odds[i].segment.amount), style: const TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w600)),
-                                  const SizedBox(width: 4),
-                                  Flexible(child: Text(odds[i].segment.name ?? 'coins', maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w600))),
-                                  if (odds[i].segment.jackpot) ...[const SizedBox(width: 8), Chip2(label: 'Jackpot', color: Brand.coin.withValues(alpha: 0.16), foreground: ctx.isDark ? Brand.coin : Brand.coinDeep)],
+                                  Text(odds[i].segment.name ?? 'coins', style: const TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w600)),
+                                  if (odds[i].segment.jackpot) ...[const SizedBox(width: 4), Chip2(label: 'Jackpot', color: Brand.coin.withValues(alpha: 0.16), foreground: ctx.isDark ? Brand.coin : (ctx.highContrast ? const Color(0xFF966100) : Brand.coinDeep))],
                                 ],
                               ),
                             ),
@@ -175,8 +179,9 @@ Future<void> showWheelOdds(BuildContext context) => showAppSheet(
                               ),
                             ),
                             SizedBox(
-                              width: 52,
-                              child: Text(formatOdds(odds[i].percent), textAlign: TextAlign.right, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body)),
+                              // The chance column grows with the text size, so "23%" stays on one line.
+                              width: MediaQuery.textScalerOf(ctx).scale(52),
+                              child: Text(formatOdds(odds[i].percent), maxLines: 1, softWrap: false, textAlign: TextAlign.right, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body)),
                             ),
                           ],
                         ),
@@ -246,11 +251,17 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
     final seg = 2 * math.pi / _segments.length;
     // Pointer is at top (-pi/2). Segment i spans [i*seg, (i+1)*seg) starting at -pi/2 when rotation=0.
     final target = -(idx * seg + seg / 2) + (math.Random().nextDouble() - 0.5) * seg * 0.6;
+    // Reduce motion: the wheel does not spin. It turns to the prize at once and, after a short
+    // pause, the prize fades in below it.
+    if (!mounted) return;
+    final still = A11y.reduceMotionOf(context);
+    _c.duration = still ? const Duration(milliseconds: 500) : const Duration(milliseconds: 4200);
     setState(() {
       _spinning = true;
       _result = null;
       _from = _angle % (2 * math.pi);
       _to = _from + 2 * math.pi * 6 + ((target - _from) % (2 * math.pi));
+      if (still) _from = _to;
     });
     _c.forward(from: 0).whenComplete(() async {
       final won = _segments[idx];
@@ -270,7 +281,7 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
       Sfx.instance.win();
       if (won.jackpot) {
         Haptics.heavy();
-        _confetti.play();
+        if (!A11y.reduceMotionOf(context)) _confetti.play();
       } else {
         Haptics.success();
       }
@@ -344,9 +355,10 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
                               height: size + 20,
                               decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: Brand.coin, width: 4)),
                             )
-                                .animate(onPlay: (ctrl) => ctrl.repeat(count: 3))
+                                .animate(onPlay: (ctrl) => ctrl.repeat(count: A11y.reduceMotionOf(context) ? 1 : 3))
                                 .fadeIn(duration: 200.ms)
-                                .scale(begin: const Offset(0.96, 0.96), end: const Offset(1.06, 1.06), duration: 600.ms, curve: Curves.easeOut)
+                                // Reduce motion: one glow that fades, without growing.
+                                .scale(begin: const Offset(0.96, 0.96), end: A11y.reduceMotionOf(context) ? const Offset(0.96, 0.96) : const Offset(1.06, 1.06), duration: 600.ms, curve: Curves.easeOut)
                                 .fadeOut(delay: 300.ms, duration: 300.ms),
                           ),
                         ConfettiWidget(
@@ -380,8 +392,10 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
               child: Center(
                 child: AnimatedSwitcher(
                   duration: const Duration(milliseconds: 250),
-                  switchInCurve: Curves.easeOutBack,
-                  transitionBuilder: (child, a) => FadeTransition(opacity: a, child: ScaleTransition(scale: Tween(begin: 0.9, end: 1.0).animate(a), child: child)),
+                  switchInCurve: A11y.reduceMotionOf(context) ? Curves.easeOut : Curves.easeOutBack,
+                  transitionBuilder: (child, a) => A11y.reduceMotionOf(context)
+                      ? FadeTransition(opacity: a, child: child)
+                      : FadeTransition(opacity: a, child: ScaleTransition(scale: Tween(begin: 0.9, end: 1.0).animate(a), child: child)),
                   child: _result == null
                       ? Row(
                           key: const ValueKey('jackpot'),
@@ -494,13 +508,18 @@ class _PrizeMark extends StatelessWidget {
     if (ring != null) {
       mark = DecoratedBox(decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: ring!, width: 1.5)), child: mark);
     }
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        mark,
-        const SizedBox(height: 3),
-        Text(segment.label, style: TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body, height: 1.1, color: ink, letterSpacing: -0.2)),
-      ],
+    // The wheel keeps its size: with a large text size the prize shrinks to fit its slice (the odds
+    // sheet lists every prize in full).
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          mark,
+          const SizedBox(height: 3),
+          Text(segment.label, style: TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body, height: 1.1, color: ink, letterSpacing: -0.2)),
+        ],
+      ),
     );
   }
 }

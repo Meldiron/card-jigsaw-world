@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart' show SpringDescription, SpringSimulation;
 
+import '../core/a11y.dart';
 import '../core/haptics.dart';
 import '../core/numbers.dart';
 import '../core/sfx.dart';
@@ -57,7 +58,8 @@ class _PressableState extends State<Pressable> {
             },
       onLongPress: widget.onLongPress,
       child: AnimatedScale(
-        scale: _down ? widget.scale : 1,
+        // Reduce motion: no shrink; the dim below still shows the press.
+        scale: _down && !A11y.reduceMotionOf(context) ? widget.scale : 1,
         duration: const Duration(milliseconds: 110),
         curve: Curves.easeOut,
         child: AnimatedOpacity(opacity: _down ? 0.85 : 1, duration: const Duration(milliseconds: 110), child: widget.child),
@@ -206,7 +208,7 @@ class BigButton extends StatelessWidget {
       case ButtonKind.ghost:
         bg = Colors.transparent;
         fg = c.textPrimary;
-        border = Border.all(color: c.stroke);
+        border = Border.all(color: c.controlStroke);
       case ButtonKind.ghostLight:
         // For always-dark surfaces such as the VIP card.
         bg = Colors.transparent;
@@ -495,10 +497,12 @@ class SectionHeader extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(subtitle!, style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote)),
                 ],
+                // Large text: the trailing chip goes under the title instead of squeezing it.
+                if (trailing != null && A11y.largeText(context)) Padding(padding: const EdgeInsets.only(top: 8), child: trailing!),
               ],
             ),
           ),
-          if (trailing != null) Padding(padding: const EdgeInsets.only(bottom: 2), child: trailing!),
+          if (trailing != null && !A11y.largeText(context)) Padding(padding: const EdgeInsets.only(bottom: 2), child: trailing!),
         ],
       ),
     );
@@ -517,6 +521,8 @@ class Glass extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final base = dark ? Colors.black : (context.isDark ? const Color(0xFF17171C) : Colors.white);
+    // Increase contrast: dark glass on a photo is at least 62% black, so white text on it reads.
+    final alpha = A11y.increaseContrastOf(context) ? math.max(opacity, dark ? 0.62 : 0.9) : opacity;
     return ClipRRect(
       borderRadius: BorderRadius.circular(radius),
       child: BackdropFilter(
@@ -524,7 +530,7 @@ class Glass extends StatelessWidget {
         child: Container(
           padding: padding,
           decoration: BoxDecoration(
-            color: base.withValues(alpha: opacity),
+            color: base.withValues(alpha: alpha),
             borderRadius: BorderRadius.circular(radius),
             border: Border.all(color: Colors.white.withValues(alpha: dark ? 0.12 : 0.35)),
           ),
@@ -592,7 +598,7 @@ class _Shimmer extends StatefulWidget {
 }
 
 class _ShimmerState extends State<_Shimmer> with SingleTickerProviderStateMixin {
-  late final _c = AnimationController(vsync: this, duration: const Duration(milliseconds: 1400))..repeat();
+  late final _c = AnimationController(vsync: this, duration: const Duration(milliseconds: 1400));
   @override
   void dispose() {
     _c.dispose();
@@ -602,6 +608,12 @@ class _ShimmerState extends State<_Shimmer> with SingleTickerProviderStateMixin 
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
+    // Reduce motion: no sweeping highlight, a still placeholder.
+    if (A11y.reduceMotionOf(context)) {
+      if (_c.isAnimating) _c.stop();
+      return ColoredBox(color: c.boardBackground);
+    }
+    if (!_c.isAnimating) _c.repeat();
     return AnimatedBuilder(
       animation: _c,
       builder: (_, _) => DecoratedBox(
@@ -671,7 +683,7 @@ class Stars extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         for (var i = 0; i < max; i++)
-          Icon(i < count ? AppIcons.star : AppIcons.starOutline, size: size, color: i < count ? Brand.star : context.colors.textTertiary.withValues(alpha: 0.5)),
+          Icon(i < count ? AppIcons.star : AppIcons.starOutline, size: size, color: i < count ? context.star : context.colors.textTertiary.withValues(alpha: context.highContrast ? 1 : 0.5)),
       ],
     );
   }
@@ -694,7 +706,7 @@ class ProgressBar extends StatelessWidget {
         height: height,
         child: Stack(
           children: [
-            Container(color: background ?? context.colors.stroke),
+            Container(color: background ?? context.colors.track),
             TweenAnimationBuilder<double>(
               tween: Tween(end: value.clamp(0, 1)),
               duration: const Duration(milliseconds: 700),
@@ -762,7 +774,14 @@ class _AppSegmentedControlState<T extends Object> extends State<AppSegmentedCont
     super.dispose();
   }
 
-  void _springTo(int i) => _pos.animateWith(SpringSimulation(_spring, _pos.value, i.toDouble(), _pos.velocity));
+  void _springTo(int i) {
+    // Reduce motion: the thumb moves to the segment at once, without the spring.
+    if (A11y.reduceMotionOf(context)) {
+      _pos.value = i.toDouble();
+      return;
+    }
+    _pos.animateWith(SpringSimulation(_spring, _pos.value, i.toDouble(), _pos.velocity));
+  }
 
   int _segmentAt(double x, double width) {
     final n = widget.segments.length;
@@ -867,9 +886,9 @@ class _AppSegmentedControlState<T extends Object> extends State<AppSegmentedCont
                           bottom: _inset,
                           width: seg,
                           child: Transform.scale(
-                            scaleX: stretch,
+                            scaleX: A11y.reduceMotionOf(context) ? 1 : stretch,
                             child: AnimatedScale(
-                              scale: _lifted ? 1.06 : 1,
+                              scale: _lifted && !A11y.reduceMotionOf(context) ? 1.06 : 1,
                               duration: const Duration(milliseconds: 160),
                               curve: Curves.easeOutCubic,
                               child: _SegmentThumb(dark: dark, lifted: _lifted, radius: radius),
@@ -940,13 +959,17 @@ class _SegmentThumb extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fill = AppSegmentedControl.thumbColor(context).withValues(alpha: lifted ? (dark ? 0.78 : 0.82) : 1);
-    final rim = dark
-        ? [Colors.white.withValues(alpha: 0.34), Colors.white.withValues(alpha: 0.06)]
-        : [Colors.white, Colors.black.withValues(alpha: 0.07)];
+    // Increase contrast: a solid outline, so the selected segment stands out from the track at 3:1.
+    final contrast = context.highContrast;
+    final rim = contrast
+        ? [context.colors.controlStroke, context.colors.controlStroke]
+        : dark
+            ? [Colors.white.withValues(alpha: 0.34), Colors.white.withValues(alpha: 0.06)]
+            : [Colors.white, Colors.black.withValues(alpha: 0.07)];
     return AnimatedContainer(
       duration: const Duration(milliseconds: 160),
       curve: Curves.easeOutCubic,
-      padding: const EdgeInsets.all(0.75),
+      padding: EdgeInsets.all(contrast ? 1 : 0.75),
       decoration: BoxDecoration(
         borderRadius: radius,
         gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: rim),
@@ -997,8 +1020,8 @@ class RewardChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: unlock
-            ? [leading!, const SizedBox(width: 4), Text(label!, style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600, color: context.accent))]
-            : [Amount(currency: currency!, value: value!, size: 14, fontSize: large ? TypeSize.footnote : TypeSize.caption, weight: FontWeight.w700)],
+            ? [leading!, const SizedBox(width: 4), Flexible(child: FittedBox(fit: BoxFit.scaleDown, child: Text(label!, maxLines: 1, style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600, color: context.accent))))]
+            : [Flexible(child: FittedBox(fit: BoxFit.scaleDown, child: Amount(currency: currency!, value: value!, size: 14, fontSize: large ? TypeSize.footnote : TypeSize.caption, weight: FontWeight.w700)))],
       ),
     );
   }
@@ -1035,13 +1058,14 @@ class Chip2 extends StatelessWidget {
     final fg = foreground ?? c.textSecondary;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
-      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(999), border: color != null ? null : Border.all(color: c.stroke)),
+      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(999), border: color != null ? null : Border.all(color: c.controlStroke)),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           if (dot != null) ...[Container(width: 6, height: 6, decoration: BoxDecoration(color: dot, shape: BoxShape.circle)), const SizedBox(width: 5)],
           if (icon != null) ...[Icon(icon, size: 12, color: fg), const SizedBox(width: 4)],
-          Text(label, style: TextStyle(color: fg, fontSize: TypeSize.caption, fontWeight: FontWeight.w600)),
+          // A chip in a narrow place shrinks its words with a large text size instead of overflowing.
+          Flexible(child: FittedBox(fit: BoxFit.scaleDown, child: Text(label, maxLines: 1, style: TextStyle(color: fg, fontSize: TypeSize.caption, fontWeight: FontWeight.w600)))),
         ],
       ),
     );
@@ -1066,7 +1090,7 @@ class PhotoChip extends StatelessWidget {
       height: 24,
       padding: EdgeInsets.only(left: dot != null ? 8 : 9, right: 9),
       decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.5),
+        color: Colors.black.withValues(alpha: A11y.increaseContrastOf(context) ? 0.66 : 0.5),
         borderRadius: BorderRadius.circular(Radii.pill),
         border: Border.all(color: Colors.white.withValues(alpha: 0.18), width: 0.5),
       ),
@@ -1116,7 +1140,7 @@ class PhotoButton extends StatelessWidget {
                 width: size,
                 height: size,
                 decoration: BoxDecoration(
-                  color: onPhoto ? Colors.black.withValues(alpha: 0.34) : c.card,
+                  color: onPhoto ? Colors.black.withValues(alpha: A11y.increaseContrastOf(context) ? 0.55 : 0.34) : c.card,
                   shape: BoxShape.circle,
                   border: Border.all(color: onPhoto ? Colors.white.withValues(alpha: 0.2) : c.stroke, width: onPhoto ? 0.5 : 1),
                 ),
@@ -1288,7 +1312,7 @@ class _ToastState extends State<_Toast> with SingleTickerProviderStateMixin {
         child: FadeTransition(
           opacity: _curve,
           child: SlideTransition(
-            position: Tween(begin: const Offset(0, -0.5), end: Offset.zero).animate(_curve),
+            position: Tween(begin: A11y.reduceMotionOf(context) ? Offset.zero : const Offset(0, -0.5), end: Offset.zero).animate(_curve),
             child: GestureDetector(
               onTap: _close,
               onVerticalDragUpdate: (d) {
@@ -1446,6 +1470,8 @@ Future<bool> showAppAlert(
     transitionDuration: const Duration(milliseconds: 240),
     transitionBuilder: (ctx, anim, _, widget) {
       final curved = CurvedAnimation(parent: anim, curve: Curves.easeOutCubic, reverseCurve: Curves.easeIn);
+      // Reduce motion: a fade without the zoom.
+      if (A11y.reduceMotionOf(ctx)) return FadeTransition(opacity: curved, child: widget);
       return FadeTransition(opacity: curved, child: ScaleTransition(scale: Tween(begin: 1.06, end: 1.0).animate(curved), child: widget));
     },
     pageBuilder: (ctx, _, _) => _AppAlert(
@@ -1548,16 +1574,20 @@ class _AppAlert extends StatelessWidget {
                 child: GlassSurface(
                   sigma: 36,
                   // Dark alerts sit one level above sheets: a lighter tint.
-                  tint: isDark ? AppColors.darkElevated.cardElevated : null,
+                  tint: isDark ? context.colors.elevated.cardElevated : null,
                   opacity: isDark ? 0.9 : 0.86,
                   borderRadius: BorderRadius.circular(radius),
                   hairline: Border.all(color: isDark ? Colors.white.withValues(alpha: 0.14) : Colors.white.withValues(alpha: 0.8), width: 0.5),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(22, 24, 22, 20),
-                        child: Column(
+                      // The text and field scroll when a large text size (or the keyboard) leaves too
+                      // little room; the buttons below always stay on screen.
+                      Flexible(
+                        child: SingleChildScrollView(
+                          physics: const ClampingScrollPhysics(),
+                          padding: const EdgeInsets.fromLTRB(22, 24, 22, 20),
+                          child: Column(
                           children: [
                             Text(title, textAlign: TextAlign.center, style: TextStyle(fontSize: TypeSize.headline, fontWeight: FontWeight.w700, color: c.textPrimary, letterSpacing: -0.3, height: 1.25)),
                             if (message != null) ...[
@@ -1566,6 +1596,7 @@ class _AppAlert extends StatelessWidget {
                             ],
                             if (child != null) ...[const SizedBox(height: 16), child!],
                           ],
+                        ),
                         ),
                       ),
                       // iOS 26 alert actions: capsules, side by side when both
@@ -1638,6 +1669,7 @@ Future<T?> showAppActionSheet<T>(BuildContext context, {String? title, String? m
     transitionDuration: const Duration(milliseconds: 280),
     transitionBuilder: (ctx, anim, _, widget) {
       final curved = CurvedAnimation(parent: anim, curve: Curves.easeOutCubic, reverseCurve: Curves.easeInCubic);
+      if (A11y.reduceMotionOf(ctx)) return FadeTransition(opacity: curved, child: widget);
       return FadeTransition(
         opacity: curved,
         child: SlideTransition(position: Tween(begin: const Offset(0, 0.25), end: Offset.zero).animate(curved), child: widget),
@@ -1677,7 +1709,7 @@ class _AppActionSheet<T> extends StatelessWidget {
                 ),
                 child: GlassSurface(
                   sigma: 36,
-                  tint: isDark ? AppColors.darkElevated.cardElevated : null,
+                  tint: isDark ? context.colors.elevated.cardElevated : null,
                   opacity: isDark ? 0.9 : 0.86,
                   borderRadius: BorderRadius.circular(radius),
                   hairline: Border.all(color: isDark ? Colors.white.withValues(alpha: 0.14) : Colors.white.withValues(alpha: 0.8), width: 0.5),

@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/haptics.dart';
+import '../../core/a11y.dart';
 import '../../core/theme/tokens.dart';
 import '../../game/board.dart';
 import '../../models/models.dart';
@@ -479,7 +480,7 @@ class _DailyHero extends StatelessWidget {
           fit: StackFit.expand,
           children: [
             NetImage(url: puzzle.imageUrl, blurhash: puzzle.blurhash),
-            DecoratedBox(decoration: BoxDecoration(gradient: Brand.scrim(strength: 0.8))),
+            DecoratedBox(decoration: BoxDecoration(gradient: Brand.scrim(strength: 0.8, contrast: A11y.increaseContrastOf(context)))),
             Positioned(
               left: 14,
               top: 14,
@@ -576,8 +577,15 @@ class _HeroPlaceholder extends StatelessWidget {
           ? const Loader()
           : Padding(
               padding: const EdgeInsets.all(20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+              // The card keeps its height: with a large text size the message shrinks to fit (at the
+              // card's width, so it still wraps as usual).
+              child: LayoutBuilder(
+                builder: (context, box) => FittedBox(
+                fit: BoxFit.scaleDown,
+                child: SizedBox(
+                  width: box.maxWidth,
+                  child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(AppIcons.signal, size: 26, color: c.textTertiary),
                   const SizedBox(height: 10),
@@ -587,6 +595,9 @@ class _HeroPlaceholder extends StatelessWidget {
                   const SizedBox(height: 14),
                   BigButton(label: 'Try again', kind: ButtonKind.secondary, expand: false, height: 40, onTap: onRetry),
                 ],
+              ),
+                ),
+              ),
               ),
             ),
     );
@@ -749,7 +760,10 @@ class _StreakCard extends ConsumerWidget {
                             color: i < filled ? context.accentFill : Colors.transparent,
                             border: Border.all(color: i < filled ? context.accentFill : (i == nextIdx ? context.accent : c.stroke), width: i == nextIdx && i >= filled ? 1.5 : 1),
                           ),
-                          child: i < filled ? Icon(AppIcons.checkmark, size: 12, color: context.onAccent) : null,
+                          child: i < filled
+                              ? Icon(AppIcons.checkmark, size: 12, color: context.onAccent)
+                              // Differentiate without colour: the next gift's ring has a dot inside.
+                              : (i == nextIdx && A11y.symbolsOf(context) ? Center(child: Container(width: 6, height: 6, decoration: BoxDecoration(color: context.accent, shape: BoxShape.circle))) : null),
                         ),
                         const SizedBox(height: 4),
                         Text('${i + 1}', style: TextStyle(fontSize: TypeSize.micro, fontWeight: FontWeight.w600, color: c.textTertiary)),
@@ -807,7 +821,7 @@ class _GuestSaveCard extends StatelessWidget {
     return SoftCard(
       onTap: onSave,
       padding: Insets.cardCompact,
-      borderColor: c.warning.withValues(alpha: 0.45),
+      borderColor: c.warning.withValues(alpha: c.highContrast ? 1 : 0.45),
       child: Row(
         children: [
           IconTile(
@@ -1087,7 +1101,7 @@ class _CoverTile extends StatelessWidget {
           fit: StackFit.expand,
           children: [
             NetImage(url: pack.coverUrl, blurhash: pack.blurhash),
-            DecoratedBox(decoration: BoxDecoration(gradient: Brand.scrim(strength: 0.8))),
+            DecoratedBox(decoration: BoxDecoration(gradient: Brand.scrim(strength: 0.8, contrast: A11y.increaseContrastOf(context)))),
             Positioned(
               left: 8,
               top: 8,
@@ -1155,7 +1169,7 @@ class _ContinueCard extends StatelessWidget {
           fit: StackFit.expand,
           children: [
             NetImage(url: puzzle.thumbUrl, blurhash: puzzle.blurhash),
-            DecoratedBox(decoration: BoxDecoration(gradient: Brand.scrim(strength: 0.8))),
+            DecoratedBox(decoration: BoxDecoration(gradient: Brand.scrim(strength: 0.8, contrast: A11y.increaseContrastOf(context)))),
             // The shape when it is not plain cards, and Painting: what the board will feel like.
             if (mode != GameMode.cards || progress.painting)
               Positioned(
@@ -1408,7 +1422,7 @@ class _StatCell extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(formatCount(value), style: Theme.of(context).textTheme.titleLarge),
-              if (star) ...[const SizedBox(width: 4), const Icon(AppIcons.star, size: 14, color: Brand.star)],
+              if (star) ...[const SizedBox(width: 4), Icon(AppIcons.star, size: 14, color: context.star)],
             ],
           ),
           const SizedBox(height: 2),
