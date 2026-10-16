@@ -9,6 +9,7 @@ updates only what differs, so it is safe to run again after a partial failure.
     asc_publish.py audit                  # submission checklist, no writes
     asc_publish.py testflight --build 103 # wait for build 103, add to the groups, beta review
     asc_publish.py release --version 1.7.0 --build 103   # prepare the App Store version
+    asc_publish.py draft [--events]       # fill the review draft (version, products, events); never submits
     asc_publish.py submit --yes           # create and submit the review submission
     asc_publish.py events [--window 10] [--primary 5]   # In-App Event drafts: the next world-day events and the
                                           # next major holidays after them (never submitted)
@@ -60,7 +61,8 @@ BASE_TERRITORY = "USA"
 SCREENSHOT_TYPE = "APP_IPHONE_67"
 BETA_GROUP_NAME = "Public testers"
 NOTIFICATIONS_URL = "https://cjw-verify-purchase.fra.appwrite.run/notifications"  # verify-purchase Appwrite Function
-EDITABLE_VERSION_STATES = ("PREPARE_FOR_SUBMISSION", "DEVELOPER_REJECTED", "REJECTED", "METADATA_REJECTED", "INVALID_BINARY")
+# READY_FOR_REVIEW: in a review draft that has not been sent; still editable until it is submitted.
+EDITABLE_VERSION_STATES = ("PREPARE_FOR_SUBMISSION", "READY_FOR_REVIEW", "DEVELOPER_REJECTED", "REJECTED", "METADATA_REJECTED", "INVALID_BINARY")
 # Review submissions that are still open (not yet sent to Apple, or sent and not finished).
 PENDING_SUBMISSION_STATES = ("READY_FOR_REVIEW", "UNRESOLVED_ISSUES")
 ACTIVE_SUBMISSION_STATES = ("WAITING_FOR_REVIEW", "IN_REVIEW")
@@ -1613,7 +1615,7 @@ def cmd_release(s: Store) -> None:
     log("  next: `submit` (preview) then `submit --yes` to send it to App Review")
 
 
-ITEM_RELATIONSHIPS = ("appStoreVersion", "inAppPurchaseVersion", "subscriptionVersion", "subscriptionGroupVersion")
+ITEM_RELATIONSHIPS = ("appStoreVersion", "inAppPurchaseVersion", "subscriptionVersion", "subscriptionGroupVersion", "appEvent")
 
 
 def submission_items(s: Store, submission: dict) -> dict[str, list[str]]:
@@ -1695,8 +1697,7 @@ def cmd_submit(s: Store) -> int:
     absent = [pid for id_, pid in {**iap_by_id, **sub_by_id}.items() if id_ not in covered_iaps | covered_subs]
     if absent:
         log(f"  {len(absent)} product(s) are READY_TO_SUBMIT but not in the submission: {', '.join(absent)}")
-        log("  the API cannot add them (no product -> version link); open each product in App Store Connect and press"
-            " 'Submit for Review', which adds it to the open submission, then rerun")
+        log("  run `draft` first: it adds every READY_TO_SUBMIT product to the open submission")
         if not s.opt("without_iap") and not s.c.dry_run:
             sys.exit("refusing to submit without them; pass --without-iap to submit the app alone")
 
@@ -1730,6 +1731,75 @@ def cmd_submit(s: Store) -> int:
     result = s.c.update("reviewSubmissions", sid, {"submitted": True})
     log(f"  submitted: state {attr(result, 'state') or 'unknown'}; follow it in App Store Connect > App Review")
     log("  after approval the version waits for a manual release (releaseType MANUAL) unless `release --auto-release` was used")
+    return 0
+
+
+def cmd_draft(s: Store) -> int:
+    """Fill the open review draft without submitting it: the editable version (with its attached
+    build), every in-app purchase, subscription and subscription group that is READY_TO_SUBMIT, and
+    with --events the In-App Event drafts. Creates the draft when there is none. The owner reviews it
+    in App Store Connect (Draft Submissions) and presses Submit there, or runs `submit --yes`."""
+    global VERSION_STRING
+    log("== draft")
+    version = s.editable_version()
+    if version is None:
+        sys.exit("no editable appStoreVersion; run `release` first")
+    VERSION_STRING = attr(version, "versionString")
+    attached = s.c.get_one(f"/v1/appStoreVersions/{version['id']}/build")
+    if attached is None or attr(attached, "version") is None:
+        sys.exit("the version has no build; run `release --build N` first")
+    log(f"  appStoreVersion {VERSION_STRING} ({version_state(version)}), build {attr(attached, 'version')}")
+    submissions = s.c.get_list(f"/v1/apps/{APP_ID}/reviewSubmissions", {"filter[platform]": PLATFORM})
+    if any(attr(r, "state") in ACTIVE_SUBMISSION_STATES for r in submissions):
+        sys.exit("a review submission is already with Apple; nothing to draft")
+    pending = [r for r in submissions if attr(r, "state") in PENDING_SUBMISSION_STATES]
+    if pending:
+        submission = pending[0]
+        log(f"  open draft {submission['id']}")
+    else:
+        submission = s.c.create("reviewSubmissions", {"platform": PLATFORM}, {"app": rel("apps", APP_ID)})
+        log(f"  draft created {submission['id']}")
+    sid = submission["id"]
+    items = submission_items(s, submission)
+
+    def add(kind: str, type_: str, id_: str, label: str) -> None:
+        if id_ in items[kind]:
+            log(f"  {label}: in the draft")
+            return
+        try:
+            s.c.create("reviewSubmissionItems", None, {"reviewSubmission": rel("reviewSubmissions", sid), kind: rel(type_, id_)})
+            log(f"  {label}: added")
+        except ApiError as err:
+            log(f"  {label}: Apple refused ({err.status}: {str(err)[:160]})")
+
+    def editable(versions: list[dict]) -> dict | None:
+        # The version not yet sent: PREPARE_FOR_SUBMISSION, else the newest.
+        return next((v for v in versions if attr(v, "state") in (None, "PREPARE_FOR_SUBMISSION", "READY_TO_SUBMIT")), versions[0] if versions else None)
+
+    add("appStoreVersion", "appStoreVersions", version["id"], f"version {VERSION_STRING}")
+    for p in s.c.get_list(f"/v1/apps/{APP_ID}/inAppPurchasesV2"):
+        if attr(p, "state") != "READY_TO_SUBMIT":
+            continue
+        v = editable(s.c.get_list(f"/v2/inAppPurchases/{p['id']}/versions"))
+        if v:
+            add("inAppPurchaseVersion", "inAppPurchaseVersions", v["id"], f"in-app purchase {attr(p, 'productId')}")
+    for g in s.c.get_list(f"/v1/apps/{APP_ID}/subscriptionGroups"):
+        for sub in s.c.get_list(f"/v1/subscriptionGroups/{g['id']}/subscriptions"):
+            if attr(sub, "state") != "READY_TO_SUBMIT":
+                continue
+            v = editable(s.c.get_list(f"/v1/subscriptions/{sub['id']}/versions"))
+            if v:
+                add("subscriptionVersion", "subscriptionVersions", v["id"], f"subscription {attr(sub, 'productId')}")
+        gv = editable(s.c.get_list(f"/v1/subscriptionGroups/{g['id']}/versions"))
+        if gv:
+            add("subscriptionGroupVersion", "subscriptionGroupVersions", gv["id"], f"subscription group {attr(g, 'referenceName')}")
+    if s.opt("events"):
+        for e in s.c.get_list(f"/v1/apps/{APP_ID}/appEvents"):
+            if attr(e, "eventState") not in ("DRAFT", "READY_FOR_REVIEW"):
+                continue
+            add("appEvent", "appEvents", e["id"], f"In-App Event {attr(e, 'referenceName')}")
+    total = len(s.c.request("GET", f"/v1/reviewSubmissions/{sid}/items").get("data") or [])
+    log(f"  draft {sid}: {total} item(s); not submitted (App Store Connect > Draft Submissions, or `submit --yes`)")
     return 0
 
 
@@ -1861,6 +1931,7 @@ COMMANDS: dict[str, Callable[[Store], Any]] = {
     "build-notes": cmd_build_notes,
     "release": cmd_release,
     "submit": cmd_submit,
+    "draft": cmd_draft,
 }
 
 
@@ -1880,6 +1951,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--yes", action="store_true", help="with `submit`: really submit (without it only a preview is printed)")
     parser.add_argument("--resolve", metavar="ID[,ID]", help="with `feedback`: resolve these items (deletes them on Apple, records them locally)")
     parser.add_argument("--note", metavar="TEXT", help="with `feedback --resolve`: what was done about it")
+    parser.add_argument("--events", action="store_true", help="with `draft`: also add the In-App Event drafts")
     parser.add_argument("--without-iap", action="store_true", help="with `submit`: proceed even if ready products are not in the submission")
     parser.add_argument("--window", type=int, metavar="N", help=f"with `events`: how many upcoming events to draft (default {EVENT_WINDOW})")
     parser.add_argument("--primary", type=int, metavar="N", help=f"with `events`: how many major holidays after the window to draft too (default {EVENT_PRIMARY})")
