@@ -15,7 +15,7 @@ in `tools/store/glass/slides.html`, then rerun the script.
 
 - **One set for both appearances.** App Store Connect takes one screenshot set;
   its product page preview (October 2026) only shows how the page looks in Dark
-  Mode. So slides 1-8 show the light app on a light canvas and the last slide switches
+  Mode. So slides 1-9 show the light app on a light canvas and the last slide switches
   to the dark app on a dark canvas ("Just as calm in the dark").
 - **Glass panes on white**: two large panes in the lotus colours (pink, gold,
   blue, teal) on every seam, drawn with the app icon's glass recipe (see-through
@@ -26,16 +26,21 @@ in `tools/store/glass/slides.html`, then rerun the script.
   the same panes as deep jewel tones.
 - **One phone size** everywhere: 1,000 px wide on the 1,320 px canvas.
 - **The story:** the hook (1-3: how it plays, how much there is, why you come
-  back; the three that search results show), the depth (4-8: four ways to cut a
-  picture, Painting, giant boards, your own photos, quests and world-day events)
-  and the dark finale (9). Read in order the headlines are one text: "Swap cards.
-  Reveal the picture. Thousands of pictures. A new picture every day. One
-  picture, four ways to cut it. Bring the colour back, card by card. Giant boards
-  of up to 300 cards. Puzzle your own photos. Quests and world-day events. Just as
-  calm in the dark." Dropped on the owner's word: the leaderboard (off-message for
-  a calm game), "Fewer moves, more stars" (a scoring rule) and VIP ("I don't like
-  talking about VIP"). No AI pictures anywhere; the Library capture is scrolled
-  past the two AI packs near its top.
+  back, with the streak; the three that search results show), the depth (4-8:
+  four ways to cut a picture, Painting, giant boards, your own photos, quests and
+  world-day events), friends and the leaderboard (9) and the dark finale (10).
+  Read in order the headlines are one text: "Swap cards. Reveal the picture.
+  Thousands of pictures. A new picture every day. One picture, four ways to cut
+  it. Bring the colour back, card by card. Giant boards of up to 300 cards. Puzzle
+  your own photos. Quests and world-day events. Climb the ranks with friends. Just
+  as calm in the dark." Dropped on the owner's word: "Fewer moves, more stars" (a
+  scoring rule) and VIP ("I don't like talking about VIP"). No AI pictures.
+- **The player grows** across the slides: level 4 in the Library, 9 on Quests and
+  17 (second on the podium) on the leaderboard, each with another avatar, and a
+  23-day streak on the daily slide.
+- **Contrast:** every headline is measured against what lies behind it
+  (`compose_glass.py --contrast`); all reach 4.5:1 or more (2026-10-16: 4.8 on
+  the dark slide, 5.7 to 12.3 on the others).
 - **Layouts take turns:** the headline sits top, bottom, middle, left or right,
   and the phones move with it (flat, tilted, pushed to one side, two phones split
   around the headline on slide 4, a phone in front of a wall of pack covers on

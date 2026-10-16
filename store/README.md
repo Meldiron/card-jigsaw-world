@@ -5,7 +5,7 @@ and the capture test, then rerun; do not hand-edit the PNGs.
 
 Design rules (glass set, `tools/store/compose_glass.py`): panes of coloured
 glass in the lotus colours on a white canvas, running across the whole set, light app
-captures on a light canvas for slides 1-8 and a dark finale (slide 9), one
+captures on a light canvas for slides 1-9 and a dark finale (slide 10), one
 phone size, varied layouts, boards mid-build, no AI pictures, two-line headlines in SF Pro Rounded sized for
 search-result thumbnails, no subtext, no emoji, no ratings or awards. The
 older dark gallery style is still `tools/store/compose_screenshots.py`. The
@@ -18,7 +18,7 @@ research and reasoning are in `docs/store-screenshots.md`.
 | `raw/*.png` | Untouched in-app captures from the iPhone 17 Pro Max simulator (6.9"), dark theme; `raw/*_light.png` the same screens in the light theme. Numbered in capture order; see the list below. | 1320x2868 |
 | `raw/boards.json` | Board rectangle (physical px: left, top, width, height) of every game capture, written by the capture driver; the composer crops boards with it. | |
 | `collage/*.jpg` | Pack covers for the slide-2 wall, downloaded from our Storage bucket (`--refresh-collage`; pack ids in `COLLAGE_PACKS`). | 600 px wide |
-| `screenshots/iphone-6.9/01.png` ... `09.png` | Marketing screenshots for the App Store "iPhone 6.9-inch Display" slot. Upload in numeric order. | 1320x2868, RGB |
+| `screenshots/iphone-6.9/01.png` ... `10.png` | Marketing screenshots for the App Store "iPhone 6.9-inch Display" slot. Upload in numeric order. | 1320x2868, RGB |
 | `review/subscription-review.png` | Store screen scrolled to the "Carden VIP" card, for the App Store Connect subscription "Review screenshot" field (min 640x920). Same pixels as `raw/12_store_vip.png`. | 1320x2868 |
 | `promo/app-icon-1024.png` | The app icon flattened to RGB (App Store rejects alpha). | 1024x1024 |
 | `promo/vip-promotional-1024.png` | Promotional image for the VIP subscription (icon, "VIP" word mark, one-line benefit). | 1024x1024 |
@@ -29,15 +29,16 @@ daily hook.
 
 | Slide | Headline | Headline and phones | Shows (light captures unless noted) |
 | --- | --- | --- | --- |
-| `01.png` | Swap cards. Reveal the picture. | top + icon, flat phone | `raw/25_hero`: Painted lady mid-build (12 of 24 locked, two joined groups) |
-| `02.png` | Thousands of pictures | bottom, flat phone on a wall of covers | `raw/28_library_more` (the Library past the AI packs) in front of a masonry wall of `collage/` covers |
-| `03.png` | A new picture every day | top right, phone pushed left | `raw/18_daily_month_grid`, today's card lifted; three solved days with stars on the right |
+| `01.png` | Swap cards. Reveal the picture. | top + icon, flat phone | `raw/25_hero`: Tulip Fields 8 mid-build |
+| `02.png` | Thousands of pictures | top, a hand of pack covers, phone from the bottom | seven pack covers at full resolution; `raw/15_library` (curated first packs) |
+| `03.png` | A new picture every day | top right, phone pushed left | `raw/18_daily_month_grid`, today's card and the 23-day streak card of `raw/31_home_streak` lifted; two solved days on the right |
 | `04.png` | One picture, four ways to cut it | middle, two phones | `raw/06_mode_cards` from the top, `raw/09_mode_hexagons` from the bottom, squares and triangles lifted, all four labelled |
-| `05.png` | Bring the colour back, card by card | lower middle, tilted phone from the top | `raw/26_painting`: Monet's chrysanthemums, 6 of 20 in colour; a loose and a locked card lifted |
-| `06.png` | Giant boards of up to 300 cards | top left, tilted phone pushed right | `raw/27_giant`: Hölderlin Tower, 210 tiny cards, 25 locked; a close-up lifted |
-| `07.png` | Puzzle your own photos | bottom left, phone pushed right | `raw/20_my_puzzles`, the corgi board of `raw/21_my_puzzle_game` lifted |
-| `08.png` | Quests and world-day events | top, tilted phone | `raw/13_quests`, the World Food Day card of `raw/14_quests_live` lifted |
-| `09.png` | Just as calm in the dark | top, flat phone, dark | `raw/29_dark_board`: the Monarch mid-build in the dark theme |
+| `05.png` | Bring the colour back, card by card | lower middle, phone straight from the top | `raw/26_painting`: Monet's chrysanthemums, 4 of 20 in colour; a loose and a locked card lifted |
+| `06.png` | Giant boards of up to 300 cards | top left, tilted phone pushed right | `raw/30_giant_zoom` (the overview map in the corner); the whole board of `raw/27_giant` lifted |
+| `07.png` | Puzzle your own photos | bottom left, phone pushed right | `raw/20_my_puzzles` (five photos), the corgi board of `raw/21_my_puzzle_game` lifted |
+| `08.png` | Quests and world-day events | top, tilted phone | `raw/13_quests` (level 9), the World Food Day card of `raw/14_quests_live` lifted |
+| `09.png` | Climb the ranks with friends | bottom right, tilted phone | `raw/22_social_league` (level 17, second on the podium), the podium lifted |
+| `10.png` | Just as calm in the dark | top, flat phone, dark | `raw/29_dark_board`: the Monarch mid-build in the dark theme |
 
 Raw captures (dark theme; a `--dart-define=CJW_STORE_THEME=light` run writes
 the same names with a `_light` suffix):
@@ -85,7 +86,7 @@ simulator, and a Python 3 with Pillow (`pip install pillow`).
      -d D03644FB-6169-4E87-8E0F-CCFC884FBE78
    # only some glass-set captures (25_hero, 26_painting, 27_giant, 28_library_more), others kept:
    #   add --dart-define=CJW_STORE_ONLY=25_hero,27_giant (about 4 minutes instead of 13)
-   # the light theme, written as raw/<name>_light.png (slides 1-8 of the glass set):
+   # the light theme, written as raw/<name>_light.png (slides 1-9 of the glass set):
    tools/dev/qa-run.sh drive --driver=test_driver/store_screenshots.dart \
      --target=integration_test/store_screenshots_test.dart \
      -d D03644FB-6169-4E87-8E0F-CCFC884FBE78 --dart-define=CJW_STORE_THEME=light

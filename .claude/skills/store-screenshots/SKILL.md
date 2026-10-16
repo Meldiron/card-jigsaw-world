@@ -25,23 +25,33 @@ rerun, never hand-edit a PNG. Research, story and design rules: `docs/store-scre
 ## The story (owner approved, 2026-10-16)
 
 Read in order the headlines are one text: the hook (1-3, what search results show), the depth
-(4-8), the dark finale (9). No VIP slide (the owner does not want to talk about VIP here), no
-leaderboard, no AI pictures anywhere.
+(4-8), friends (9), the dark finale (10). No VIP slide (the owner does not want to talk about VIP
+here), no AI pictures anywhere.
 
 | # | Headline | Headline position | Phones |
 | --- | --- | --- | --- |
-| 1 | Swap cards. / Reveal the picture. | top, centre, icon + name | `25_hero` flat, mid-build |
-| 2 | Thousands / of pictures | bottom, centre | `28_library_more` (Library past the AI packs) flat, in front of a masonry wall of pack covers |
-| 3 | A new picture / every day | top, right | `18_daily_month_grid` flat, pushed left, today's card lifted; solved days with stars down the right |
+| 1 | Swap cards. / Reveal the picture. | top, centre, icon + name | `25_hero` (Tulip Fields 8) flat, mid-build |
+| 2 | Thousands / of pictures | top, centre | a hand of seven pack covers (full resolution) fanned like cards; `15_library` (curated first packs) rising from the bottom edge |
+| 3 | A new picture / every day | top, right | `18_daily_month_grid` flat, pushed left, today's card and Home's 23-day streak card (`31_home_streak`) lifted; two solved days on the right |
 | 4 | One picture, / four ways to cut it | middle | split: `06_mode_cards` from the top, `09_mode_hexagons` from the bottom, squares and triangles lifted, labels |
-| 5 | Bring the colour / back, card by card | lower middle | `26_painting` tilted from the top, mostly grey; a loose and a locked card lifted |
-| 6 | Giant boards of / up to 300 cards | top, left | `27_giant` (Hölderlin Tower, 210 tiny cards, a small part solved) tilted, pushed right, a close-up lifted |
-| 7 | Puzzle your / own photos | bottom, left | `20_my_puzzles` pushed right, the corgi board lifted |
-| 8 | Quests and / world-day events | top, centre | `13_quests` tilted, the World Food Day card lifted |
-| 9 | Just as calm / in the dark | top, centre | `29_dark_board` (dark theme) flat, mid-build |
+| 5 | Bring the colour / back, card by card | lower middle | `26_painting` straight and centred from the top (owner: no tilt here), mostly grey; a loose and a locked card lifted |
+| 6 | Giant boards of / up to 300 cards | top, left | `30_giant_zoom` (zoomed in, the overview map in the corner) tilted, pushed right; the whole board of `27_giant` lifted |
+| 7 | Puzzle your / own photos | bottom, left | `20_my_puzzles` (five photos, no gap) pushed right, the corgi board lifted |
+| 8 | Quests and / world-day events | top, centre | `13_quests` tilted, the World Food Day card lifted, cut exactly at its own edges and corners |
+| 9 | Climb the ranks / with friends | bottom, right | `22_social_league` tilted from the top left, the podium lifted (the player second) |
+| 10 | Just as calm / in the dark | top, centre | `29_dark_board` (dark theme) flat, mid-build |
 
-Boards in play are shown mid-build: some cards locked, some loose, some joined (`midBuild()` in
-the capture test). Before changing the story, write the new running order as text and check it
+The player grows from slide to slide: the capture test sets XP, level and avatar before each
+screen with a header (`setProgress()`: level 4 and the leaf avatar in the Library, 9 and the
+flower on Quests, 17 and the diamond on the leaderboard), and a 23-day streak for Home.
+
+Boards in play are shown mid-build and clearly unfinished: about a third locked, the rest loose,
+two or three joined groups (`midBuild()` in the capture test; the owner asked twice for less
+finished boards). Pictures are chosen, not left to chance ("mocked"): the hero, Painting, giant and
+My Puzzles pictures are fixed ids at the top of the test (high resolution, public domain or CC0,
+no people, no AI), and `libraryFirst` puts the strongest pack covers first in the Library (a
+`packsProvider` override that only changes the order). My Puzzles gets five photos, so the grid
+with its Add photo tile has no empty slot. Before changing the story, write the new running order as text and check it
 reads as one story; every claim must be true in the code or the live catalogue (copy voice:
 `docs/copy-guide.md`).
 
@@ -57,7 +67,7 @@ reads as one story; every claim must be true in the code or the live catalogue (
      --dart-define=CJW_STORE_THEME=light --dart-define=CJW_STORE_SKIP_UPLOAD=true
    ```
    About 13 minutes. `--dart-define=CJW_STORE_ONLY=25_hero,27_giant` re-takes only those glass
-   captures (25-29) in about 4 minutes; such a run plays a level-1 guest, so board sizes past
+   captures (15_library, 25-30) in about 4 minutes; such a run plays a level-1 guest, so board sizes past
    Relaxed are locked there (giant sizes are open). Drop `CJW_STORE_SKIP_UPLOAD` only when the My Puzzles
    captures (20, 21) must change: it uploads four photos to live Storage. Without
    `CJW_STORE_THEME` the run writes the dark captures (slide 9: `CJW_STORE_ONLY=29_dark_board`).
@@ -68,14 +78,19 @@ reads as one story; every claim must be true in the code or the live catalogue (
 3. **Compose:** `.venv/bin/python tools/store/compose_glass.py` (all slides into the repo), or
    `... 3 5` for some, `--out /tmp/x --sheet /tmp/sheet.png` to try things without touching the
    set, `--font display|newyork` for the alternative headline faces (default SF Pro Rounded).
-4. **Check** a contact sheet of the whole set, then each changed slide at full size: headline fits and
+4. **Contrast:** `.venv/bin/python tools/store/compose_glass.py --contrast` renders each slide
+   without its headline and measures the ink against the darkest 2% behind each line (the
+   brightest for the dark slide). Every slide must reach 4.5:1; if one is low, move a pane away
+   from the headline (`panes()`), switch its colour, or move the headline, keeping the colour
+   balance across the strip.
+5. **Check** a contact sheet of the whole set, then each changed slide at full size: headline fits and
    reads on the panes, nothing clipped at the edges, lifted cards line up with their phone, no
    empty band at the bottom, the set still reads as one strip.
-5. **Show the owner** only the final slides (no before/after): a page of the images in order
+6. **Show the owner** only the final slides (no before/after): a page of the images in order
    with a full-size view of each file (the session's artifact viewer; reuse its URL when there is
    one).
-6. **Commit** the script, template, docs and `store/screenshots/iphone-6.9/` (paths, not `-A`).
-7. **Upload only when the owner asks**: `asc_publish.py screenshots`. Apple shows one set for light
+7. **Commit** the script, template, docs and `store/screenshots/iphone-6.9/` (paths, not `-A`).
+8. **Upload only when the owner asks**: `asc_publish.py screenshots`. Apple shows one set for light
    and dark mode; there are no separate dark-mode screenshots.
 
 ## How a slide is described (slides() in compose_glass.py)
@@ -86,8 +101,9 @@ reads as one story; every claim must be true in the code or the live catalogue (
   and `rot`. `out` = cards lifted from a capture (`crop` = (capture, box) or (capture, "board");
   without x/y a card centres over the same part of the screen; with x/y it sits in phone px);
   `tags` = small labels in phone px. Cards and tags turn with their phone.
-- `pics`: pictures behind the phones: pack covers (`covers`, indexes into `COLLAGE_PACKS`) or capture
-  crops, as a `masonry` wall, a `fan` row or at fixed `spots`. Fill the slide; empty bands look
+- `pics`: pictures behind the phones: pack covers at full resolution (`packs`: pack ids, fetched by
+  `cover()`), the small collage covers (`covers`) or capture crops, laid out as a `hand` of cards,
+  a `masonry` wall, a `fan` row or at fixed `spots`. Fill the slide; empty bands look
   unfinished.
 - `cell()` and `board_part()` give crop boxes of a board from `store/raw/boards.json`.
 
@@ -99,6 +115,8 @@ reads as one story; every claim must be true in the code or the live catalogue (
   real app on every slide, boards mid-build (locked, loose and joined cards).
 - No AI art and no VIP talk on the slides; the Library capture is scrolled past the AI packs.
 - Headlines only: two short lines, big, SF Pro Rounded. No subtext, no halo or glow behind text.
+- A lifted card is cut exactly at the edges and corners of the app's own card (no extra rounding
+  cutting into it); the player levels up across the slides.
 - Light app on light slides; one dark finale shows dark mode.
 - No emoji, ratings, awards, download prompts or web addresses on the slides.
 

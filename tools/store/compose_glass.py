@@ -46,6 +46,10 @@ W, H = cs.W, cs.H
 # Slides 1-3 keep their phones flat (search results show them as thumbnails). No AI pictures.
 
 DAILY = "18_daily_month_grid"
+# The world-day event card on Quests and the leaderboard's podium (capture px).
+EVENT_CARD = (60, 1608, 1260, 2532)
+PODIUM = (60, 720, 1260, 1200)
+STREAK_CARD = (60, 1485, 1260, 1997)  # Home's streak card in 31_home_streak
 # Solved daily pictures with their stars (days 1, 3, 6, 8, 10 of the calendar capture).
 STARRED = [(62, 840, 340, 1176), (674, 840, 952, 1176), (368, 1208, 646, 1546), (980, 1208, 1258, 1546), (368, 1576, 646, 1914)]
 
@@ -71,40 +75,51 @@ def slides() -> list[dict]:
         # 1. The mechanic, mid-build: some cards locked, some loose, some joined.
         {"head": "Swap cards.\nReveal the picture.", "brand": True, "text": ("top", 330, "center"),
          "phones": [{"capture": "25_hero", "x": 160, "y": 738}]},
-        # 2. How much there is: the Library (scrolled past the AI packs) in front of a wall of covers.
-        {"head": "Thousands\nof pictures", "text": ("bottom", 2740, "center"),
-         "pics": [{"covers": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
-                   "masonry": {"cols": 4, "w": 300, "gap": 24, "offsets": [-40, -170, -90, -220], "end": 2390}}],
-         "phones": [{"capture": "28_library_more", "x": 160, "y": 300}]},
-        # 3. Why you come back: the calendar pushed left, today's picture lifted, solved days on the right.
+        # 2. How much there is: a hand of pack covers fanned out like cards, the Library (its first
+        #    packs curated by the capture test, no AI) rising from the bottom edge.
+        {"head": "Thousands\nof pictures", "text": ("top", 200, "center"),
+         "pics": [{"packs": ["pack-japanese-prints", "pack-nebulae", "pack-sunflowers", "pack-hot-air-balloons", "pack-lavender", "pack-kyoto", "pack-santorini"],
+                   "hand": {"w": 340, "h": 456, "top": 660, "spread": 15, "radius_px": 1500}, "radius": 30}],
+         "phones": [{"capture": "15_library", "x": 160, "y": 1330}]},
+        # 3. Why you come back: the calendar pushed left, today's picture and the streak from Home
+        #    lifted, solved days with their stars on the right.
         {"head": "A new picture\nevery day", "text": ("top", 200, "right"),
-         "pics": [{"crops": [(DAILY, STARRED[0]), (DAILY, STARRED[3]), (DAILY, STARRED[4])],
-                   "spots": [(1000, 1360, 350, 6), (990, 1790, 350, -5), (1005, 2220, 350, 7)], "radius": 26}],
-         "phones": [{"capture": DAILY, "x": -60, "y": 600, "out": [{"crop": (DAILY, (60, 530, 1260, 775)), "x": 150, "w": 1140, "radius": 44}]}]},
+         "pics": [{"crops": [(DAILY, STARRED[0]), (DAILY, STARRED[3])],
+                   "spots": [(1000, 1330, 350, 6), (990, 1760, 350, -5)], "radius": 26}],
+         "phones": [{"capture": DAILY, "x": -60, "y": 600,
+                     "out": [{"crop": (DAILY, (60, 530, 1260, 775)), "x": 150, "w": 1140, "radius": 44},
+                             {"crop": ("31_home_streak", STREAK_CARD), "x": 120, "y": 1560, "w": 1040, "rot": -3, "radius": 40}]}]},
         # 4. The signature, split: cards above the headline, hexagons below, squares and triangles lifted.
         {"head": "One picture,\nfour ways to cut it", "text": ("center", 1600, "center"),
          "phones": [{"capture": "06_mode_cards", "x": 160, "y": -700, "rot": -3, "tags": [{"text": "Cards", "x": 500, "y": 1290}],
                      "out": [{"crop": ("07_mode_squares", "board"), "x": 700, "y": 1420, "w": 330, "rot": 8, "label": "Squares"}]},
                     {"capture": "09_mode_hexagons", "x": 160, "y": 1880, "rot": 3, "tags": [{"text": "Hexagons", "x": 560, "y": 520}],
                      "out": [{"crop": ("08_mode_triangles", "board"), "x": -100, "y": 430, "w": 380, "rot": -8, "label": "Triangles"}]}]},
-        # 5. Painting: Monet's chrysanthemums mostly grey, a few cards back in colour.
+        # 5. Painting: Monet's chrysanthemums mostly grey, a few cards back in colour; the phone straight
+        #    and centred (owner), a loose and a locked card lifted.
         {"head": "Bring the colour\nback, card by card", "text": ("center", 2390, "center"),
-         "phones": [{"capture": "26_painting", "x": 160, "y": -150, "rot": 5,
-                     "out": [{"crop": ("26_painting", cell("26_painting", 4, 5, 0, 0)), "x": -60, "y": 1640, "w": 300, "rot": -7, "radius": 26, "label": "Loose"},
-                             {"crop": ("26_painting", cell("26_painting", 4, 5, 1, 2)), "x": 720, "y": 1600, "w": 300, "rot": 6, "radius": 26, "label": "Locked"}]}]},
-        # 6. Giant boards: the whole picture in tiny cards, a small part solved, a close-up lifted.
+         "phones": [{"capture": "26_painting", "x": 160, "y": -150,
+                     "out": [{"crop": ("26_painting", cell("26_painting", 4, 5, 0, 0)), "x": -110, "y": 1560, "w": 300, "rot": -7, "radius": 26, "label": "Loose"},
+                             {"crop": ("26_painting", cell("26_painting", 4, 5, 1, 2)), "x": 810, "y": 1520, "w": 300, "rot": 6, "radius": 26, "label": "Locked"}]}]},
+        # 6. Giant boards: zoomed in with the overview map in the corner; the whole board in its
+        #    210 tiny cards (a small part solved) lifted beside it.
         {"head": "Giant boards of\nup to 300 cards", "text": ("top", 200, "left"),
-         "phones": [{"capture": "27_giant", "x": 360, "y": 620, "rot": 6,
-                     "out": [{"crop": ("27_giant", board_part("27_giant", .18, .34, .58, .64)), "x": -330, "y": 760, "w": 620, "rot": -4, "radius": 36}]}]},
+         "phones": [{"capture": "30_giant_zoom", "x": 360, "y": 620, "rot": 6,
+                     "out": [{"crop": ("27_giant", "board"), "x": -360, "y": 520, "w": 640, "rot": -5, "radius": 30}]}]},
         # 7. The personal one: your own photos, one played as a puzzle.
         {"head": "Puzzle your\nown photos", "text": ("bottom", 2740, "left"),
          "phones": [{"capture": "20_my_puzzles", "x": 380, "y": 140,
                      "out": [{"crop": ("21_my_puzzle_game", "board"), "x": -300, "y": 1000, "w": 600, "rot": -5, "radius": 40}]}]},
-        # 8. Quests, with a world-day event lifted out.
+        # 8. Quests, with the world-day event card lifted (cut exactly at the card's own edges and
+        #    corners, 48 px in the capture, so no rounding cuts into it).
         {"head": "Quests and\nworld-day events", "text": ("top", 200, "center"),
          "phones": [{"capture": "13_quests", "x": 120, "y": 620, "rot": -7,
-                     "out": [{"crop": ("14_quests_live", (60, 1440, 1260, 2480)), "x": 50, "y": 1180, "w": 900, "radius": 44}]}]},
-        # 9. The finale: the same calm in dark mode, a board mid-build.
+                     "out": [{"crop": ("14_quests_live", EVENT_CARD), "w": 900, "radius": round(48 * 900 / 1200)}]}]},
+        # 9. Friends and the leaderboard: the player (level 17 by now) second on the podium.
+        {"head": "Climb the ranks\nwith friends", "text": ("bottom", 2740, "right"),
+         "phones": [{"capture": "22_social_league", "x": -20, "y": -120, "rot": -5,
+                     "out": [{"crop": ("22_social_league", PODIUM), "w": 1120, "radius": 44}]}]},
+        # 10. The finale: the same calm in dark mode, a board mid-build.
         {"head": "Just as calm\nin the dark", "text": ("top", 200, "center"), "dark": True,
          "phones": [{"capture": "29_dark_board", "x": 160, "y": 608}]},
     ]
@@ -148,6 +163,34 @@ def fan(items: list[str], w: int, h: int, top: int, step: int, spread: float, dr
     mid = (len(items) - 1) / 2 or 1
     return [{"src": src, "x": round(W / 2 + (i - mid) * step - w / 2), "y": round(top + drop * ((i - mid) / mid) ** 2),
              "w": w, "h": h, "r": round(spread * (i - mid) / mid, 1), "radius": radius} for i, src in enumerate(items)]
+
+
+def hand(items: list[str], w: int, h: int, top: int, spread: float, radius_px: int, radius: int) -> list[dict]:
+    """A hand of cards: the pictures fanned from one pivot far below, the middle one upright and
+    highest, the outer ones turned out and lower (like cards held in one hand)."""
+    import math
+    mid = (len(items) - 1) / 2 or 1
+    pivot_y = top + h / 2 + radius_px
+    out = []
+    for i, src in enumerate(items):
+        a = math.radians(spread * (i - mid) / mid)
+        cx, cy = W / 2 + radius_px * math.sin(a), pivot_y - radius_px * math.cos(a)
+        out.append({"src": src, "x": round(cx - w / 2), "y": round(cy - h / 2), "w": w, "h": h, "r": round(math.degrees(a), 1), "radius": radius})
+    return out
+
+
+def cover(pack_id: str, width: int = 900) -> str:
+    """A pack's cover from our Storage at [width] px, cached in build/store-glass/covers."""
+    import urllib.request
+    cache = ROOT / "build" / "store-glass" / "covers"
+    cache.mkdir(parents=True, exist_ok=True)
+    f = cache / f"{pack_id}-{width}.jpg"
+    if not f.exists():
+        req = urllib.request.Request(f"{cs.APPWRITE}/tablesdb/cjw/tables/packs/rows/{pack_id}", headers={"X-Appwrite-Project": cs.PROJECT})
+        url = json.load(urllib.request.urlopen(req))["coverUrl"]
+        url = re.sub(r"width=\d+", f"width={width}", url) if "width=" in url else url.replace("/view?", "/preview?") + f"&width={width}"
+        f.write_bytes(urllib.request.urlopen(url, timeout=60).read())
+    return str(f)
 
 
 def masonry(items: list[str], cols: int, w: int, gap: int, offsets: list[int], end: int, radius: int) -> list[dict]:
@@ -228,7 +271,9 @@ def export_parts(parts: Path, slide_list: list[dict]) -> list[dict]:
             d["phones"].append({"img": f, "x": ph["x"], "y": ph["y"], "rot": ph.get("rot", 0), "out": outs, "tags": ph.get("tags", [])})
         d["pics"] = []
         for j, g in enumerate(s.get("pics", [])):
-            if "covers" in g:
+            if "packs" in g:
+                srcs = [cover(pid) for pid in g["packs"]]
+            elif "covers" in g:
                 if not covers:
                     sys.exit("no pack covers in store/collage/; run tools/store/compose_screenshots.py --refresh-collage")
                 srcs = [str(covers[c % len(covers)]) for c in g["covers"]]
@@ -239,7 +284,9 @@ def export_parts(parts: Path, slide_list: list[dict]) -> list[dict]:
                     cs.load_raw(capture(name, dark)).crop(box).save(parts / f)
                     srcs.append(str(parts / f))
             radius = g.get("radius", 30)
-            if "masonry" in g:
+            if "hand" in g:
+                d["pics"] += hand(srcs, radius=radius, **g["hand"])
+            elif "masonry" in g:
                 d["pics"] += masonry(srcs, radius=radius, **g["masonry"])
             elif "fan" in g:
                 d["pics"] += fan(srcs, radius=radius, **g["fan"])
@@ -262,7 +309,7 @@ def chrome() -> str:
     sys.exit("no Chromium found: set CHROME=/path/to/chrome")
 
 
-def render(page: Path, n: int, out: Path) -> None:
+def render(page: Path, n, out: Path) -> None:
     """Screenshot slide n. The window is taller than the slide (headless Chrome paints a little less
     than its window) and the result is cropped, flattened and saved without alpha (App Store)."""
     with tempfile.TemporaryDirectory() as d:
@@ -276,12 +323,65 @@ def render(page: Path, n: int, out: Path) -> None:
         Image.open(shot).convert("RGB").crop((0, 0, W, H)).save(out, "PNG", optimize=True)
 
 
+INK = {"light": (0x11, 0x11, 0x18), "dark": (0xF5, 0xF5, 0xF8)}  # headline colours (slides.html)
+MIN_CONTRAST = 4.5  # headline ink against the 2% of its background that is closest to the ink
+
+
+def luminance(rgb) -> "object":
+    import numpy as np
+    c = np.asarray(rgb, dtype=float) / 255
+    c = np.where(c <= 0.03928, c / 12.92, ((c + 0.055) / 1.055) ** 2.4)
+    return 0.2126 * c[..., 0] + 0.7152 * c[..., 1] + 0.0722 * c[..., 2]
+
+
+def contrast_report(page: Path, slide_list: list[dict], weight: int, track: float, font_file: str) -> list[tuple]:
+    """Renders every slide without its headline and measures the headline ink against what lies
+    behind each line (the 2nd percentile: the worst small area, not the average)."""
+    import numpy as np
+    from PIL import ImageFont
+    font = ImageFont.truetype(font_file, HEAD_SIZE)
+    try:
+        font.set_variation_by_axes([400, weight])
+    except Exception:
+        pass
+    rows = []
+    with tempfile.TemporaryDirectory() as d:
+        for n, sl in enumerate(slide_list, start=1):
+            out = Path(d) / f"{n}.png"
+            render(page, f"{n}-notext", out)
+            bg = np.asarray(Image.open(out).convert("RGB"))
+            lines = sl["head"].split("\n")
+            anchor, ty, align = sl["text"]
+            widths = [font.getlength(l) * (1 + track) for l in lines]
+            measure = MEASURE if align == "center" else MEASURE - 40
+            size = min(HEAD_SIZE, int(HEAD_SIZE * measure / max(widths)))
+            k, lh = size / HEAD_SIZE, size * 1.06
+            top = ty if anchor == "top" else ty - len(lines) * lh if anchor == "bottom" else ty - len(lines) * lh / 2
+            ink = INK["dark" if sl.get("dark") else "light"]
+            li = (luminance(ink) + 0.05)
+            worst = 99.0
+            for i, wpx in enumerate(widths):
+                wpx *= k
+                x0 = 90 if align == "left" else W - 90 - wpx if align == "right" else (W - wpx) / 2
+                y0 = top + i * lh + size * 0.12
+                box = bg[int(y0):int(y0 + size * 0.86), int(max(0, x0)):int(min(W, x0 + wpx))]
+                lum = luminance(box).ravel()
+                if sl.get("dark"):  # light ink: the brightest bits behind it are the worst
+                    c = li / (np.percentile(lum, 98) + 0.05)
+                else:  # dark ink: the darkest bits are the worst
+                    c = (np.percentile(lum, 2) + 0.05) / li
+                worst = min(worst, c)
+            rows.append((n, sl["head"].replace("\n", " "), round(worst, 2)))
+    return rows
+
+
 def main(argv: list[str]) -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("only", nargs="*", type=int, help="slide numbers to render (default: all)")
     ap.add_argument("--font", choices=FONTS, default="rounded")
     ap.add_argument("--out", type=Path, default=OUT)
     ap.add_argument("--sheet", type=Path, help="also write a contact sheet of the whole set")
+    ap.add_argument("--contrast", action="store_true", help="measure every headline against its background and stop")
     a = ap.parse_args(argv)
 
     build = ROOT / "build" / "store-glass"
@@ -300,6 +400,10 @@ def main(argv: list[str]) -> None:
     page = build / "slides.html"
     page.write_text(TEMPLATE.read_text().replace("__DATA__", json.dumps(data)).replace("__FONT__", font_file))
 
+    if a.contrast:
+        for n, head, c in contrast_report(page, slide_list, weight, track, font_file):
+            print(f"{n:02d}  {c:5.2f}  {'ok' if c >= MIN_CONTRAST else 'LOW'}  {head}")
+        return
     a.out.mkdir(parents=True, exist_ok=True)
     todo = a.only or list(range(1, len(slide_list) + 1))
     for n in todo:

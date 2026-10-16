@@ -36,7 +36,9 @@ h1 { position: absolute; left: 70px; right: 70px; margin: 0; text-align: center;
 .pic { position: absolute; object-fit: cover; box-shadow: 0 36px 70px -20px rgba(20,22,50,.38), 0 0 0 6px rgba(255,255,255,.95); }
 </style></head><body><div id="root"></div><script>
 const S = __DATA__;
-const n = +(decodeURIComponent(location.hash.slice(1)) || 1), sl = S.slides[n - 1], W = S.W, H = S.H;
+// #<n> renders slide n; #<n>-notext leaves the headline out (compose_glass.py measures its contrast).
+const [nArg, mode] = (decodeURIComponent(location.hash.slice(1)) || "1").split("-");
+const n = +nArg, sl = S.slides[n - 1], W = S.W, H = S.H, noText = mode === "notext";
 const file = f => S.parts + "/" + f;
 document.documentElement.style.setProperty("--weight", S.font.weight);
 document.documentElement.style.setProperty("--track", S.font.track + "em");
@@ -73,8 +75,8 @@ function render(size) {
   const top = T.anchor === "top" ? T.y : T.anchor === "bottom" ? T.y - blockH : T.y - blockH / 2;
   const side = T.align === "left" ? "left:90px;right:auto;" : T.align === "right" ? "left:auto;right:90px;" : "";
   h += (sl.pics || []).map(c => `<img class="pic" src="${c.src}" style="left:${c.x}px;top:${c.y}px;width:${c.w}px;height:${c.h}px;border-radius:${c.radius}px;transform:rotate(${c.r}deg)">`).join("");
-  if (sl.brand) h += `<div class="brand" style="top:${top - 190}px;justify-content:${T.align === "left" ? "flex-start;padding-left:90px" : T.align === "right" ? "flex-end;padding-right:90px" : "center"}"><img src="${S.icon}"><span>Carden</span></div>`;
-  h += `<h1 style="top:${top}px;font-size:${size}px;text-align:${T.align};${side}">${sl.head.replace(/\n/g, "<br>")}</h1>`;
+  if (sl.brand && !noText) h += `<div class="brand" style="top:${top - 190}px;justify-content:${T.align === "left" ? "flex-start;padding-left:90px" : T.align === "right" ? "flex-end;padding-right:90px" : "center"}"><img src="${S.icon}"><span>Carden</span></div>`;
+  if (!noText) h += `<h1 style="top:${top}px;font-size:${size}px;text-align:${T.align};${side}">${sl.head.replace(/\n/g, "<br>")}</h1>`;
   // Phones: each in its own frame with the cards lifted out of it and its labels, so they tilt together.
   for (const p of sl.phones) {
     const outs = (p.out || []).map(o => `<div class="out" style="left:${o.x}px;top:${o.y}px;width:${o.w}px;border-radius:${o.radius}px;transform:rotate(${o.rot}deg)"><img src="${file(o.img)}">${o.label ? `<b>${o.label}</b>` : ""}</div>`).join("");
