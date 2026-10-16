@@ -6,8 +6,8 @@
     .venv/bin/python tools/store/compose_glass.py --font newyork    # rounded (default) | display | newyork
     .venv/bin/python tools/store/compose_glass.py --out /tmp/x --sheet /tmp/sheet.png
 
-Edit the copy and the slides in SLIDES below, the pane colours in GLASS_BASE; the look (panes, halo,
-headline, phones, break-out cards) is in tools/store/glass/slides.html. The app parts come from the
+Edit the copy and the slides in slides() below, the pane colours in GLASS_BASE; the look (panes,
+headline, phones, lifted cards, pictures) is in tools/store/glass/slides.html. The app parts come from the
 raw captures of integration_test/store_screenshots_test.dart in store/raw/: light slides use the
 `<name>_light.png` captures (run the test with --dart-define=CJW_STORE_THEME=light), dark slides the
 plain ones. Phone frames and the status bar come from compose_screenshots.py, so both styles draw
@@ -31,63 +31,84 @@ ICON = ROOT / "tools" / "brand" / "out" / "carden-icon-light.svg"
 W, H = cs.W, cs.H
 
 # --------------------------------------------------------------------------------------------
-# The slides. Layouts: "A" headline on top, flat phone below; "B" phone from the top edge, headline
-# below, a row of pictures under it; "C" headline on top, phone tilted `tilt` degrees (5-15;
-# alternate the direction). Slides 1-3 stay flat: search results show them as thumbnails.
-# `phone`/`second`: capture names in store/raw (without _light).
-# `out`: cards lifted out of the phone, cut from a capture: `crop` is (capture, (left, top, right,
-#   bottom) in capture px) or (capture, "board"); `w` is the card width. Without x/y the card sits
-#   centred over the same part of the phone's screen (so it never shows twice); with x/y it is
-#   placed in phone px (0,0 = the phone's top-left, before any tilt). Cards tilt with their phone.
-# `pics`: pictures on the slide itself: ("covers", ...) for pack covers from store/collage, or
-#   capture crops; laid out by `fan()` as a neat row, or at fixed spots.
-# Headlines: 2 lines, about five words; "\n" breaks the line. No subtext (illegible in search).
+# The slides. Every slide places its own headline and phones, so the layouts take turns:
+# `text`: (anchor, y, align): the headline's "top", "bottom" or "center" at y, aligned "left",
+#   "center" or "right" (90 px margin). Two lines, about five words; "\n" breaks the line. No
+#   subtext: it is illegible in search results.
+# `phones`: [{capture, x, y, rot, out, tags}], all the same size (PHONE_W); x, y = the phone's
+#   top-left in slide px (it may run off an edge), rot in degrees about 40% of its height.
+#   `out`: cards lifted out of that phone, cut from a capture: `crop` = (capture, (l, t, r, b) in
+#   capture px) or (capture, "board"); `w` = card width. Without x/y a card centres itself over
+#   the same part of the phone's screen (it never shows twice); with x/y it sits in phone px.
+#   `tags`: small labels in phone px. Cards and tags turn with their phone.
+# `pics`: pictures on the slide behind the phones: pack covers (`covers`, indexes into
+#   compose_screenshots.COLLAGE_PACKS) or capture crops, as a `masonry` wall or at fixed `spots`.
+# Slides 1-3 keep their phones flat (search results show them as thumbnails). No AI pictures.
 
 DAILY = "18_daily_month_grid"
-# Crop boxes (capture px) of the newer captures; check them after a recapture.
-# 26_painting: a 5x5 board; a grey loose card (top-left cell) and a locked one in colour (centre cell).
-PAINTING_OUT = [{"crop": ("26_painting", (36, 582, 286, 837)), "x": -40, "y": 1500, "w": 300, "rot": -7, "radius": 26, "label": "Loose"},
-                {"crop": ("26_painting", (536, 1092, 785, 1347)), "x": 740, "y": 1440, "w": 300, "rot": 6, "radius": 26, "label": "Locked"}]
-# 27_giant: the overview map in the board's corner, enlarged over itself.
-GIANT_OUT = [{"crop": ("27_giant", (1000, 666, 1256, 1050)), "w": 440, "radius": 36}]
-# 28_library_more: four locked pack tiles (cover, name, lock and price).
-LOCKED_PACKS = [(62, 540, 640, 1290), (680, 540, 1258, 1290), (62, 1320, 640, 2070), (680, 1320, 1258, 2070)]
+# Solved daily pictures with their stars (days 1, 3, 6, 8, 10 of the calendar capture).
+STARRED = [(62, 840, 340, 1176), (674, 840, 952, 1176), (368, 1208, 646, 1546), (980, 1208, 1258, 1546), (368, 1576, 646, 1914)]
 
-# The story (2026-10-16): the hook (1-3: how it plays, how much there is, why you come back; the
-# three that search results show), the depth (4-8: ways to play that grow with you, ending on the
-# personal one), the close (9 VIP, 10 the dark finale). Read in order, the headlines are one text.
-SLIDES = [
-    # 1. The mechanic and the payoff in one look: a bright picture nearly whole, a group joined.
-    {"layout": "A", "head": "Swap cards.\nReveal the picture.", "phone": "25_hero", "brand": True},
-    # 2. How much there is: the Library, covers from every category beside it and in a row below.
-    {"layout": "B", "head": "Thousands\nof pictures", "phone": "15_library",
-     "pics": [{"covers": [0, 2, 5, 10], "spots": [(-50, 300, 330, -8), (1040, 230, 380, 7), (-70, 1120, 330, 6), (1060, 1060, 380, -6)]},
-              {"covers": [12, 3, 1, 19, 15], "fan": {"w": 228, "h": 296, "top": 2480, "step": 244, "spread": 9, "drop": 50}}]},
-    # 3. Why you come back: this month's calendar, today's picture lifted out.
-    {"layout": "A", "head": "A new picture\nevery day", "phone": DAILY,
-     "out": [{"crop": (DAILY, (60, 530, 1260, 775)), "w": 1180, "radius": 44}]},
-    # 4. The signature: one lagoon cut four ways.
-    {"layout": "C", "head": "One picture,\nfour ways to cut it", "phone": "09_mode_hexagons", "tilt": -7,
-     "out": [{"crop": ("06_mode_cards", "board"), "x": -60, "y": 880, "w": 430, "rot": -9, "label": "Cards"},
-             {"crop": ("07_mode_squares", "board"), "x": 690, "y": 560, "w": 400, "rot": 8, "label": "Squares"},
-             {"crop": ("08_mode_triangles", "board"), "x": 680, "y": 1440, "w": 400, "rot": 5, "label": "Triangles"}]},
-    # 5. Painting: Monet's chrysanthemums, locked cards in colour, loose ones grey.
-    {"layout": "A", "head": "Bring the colour\nback, card by card", "phone": "26_painting", "out": PAINTING_OUT},
-    # 6. Giant boards: the middle assembled, zoomed in, the overview map lifted out.
-    {"layout": "C", "head": "Giant boards of\nup to 300 cards", "phone": "27_giant", "tilt": 7, "out": GIANT_OUT},
-    # 7. The personal one: your own photos, one played as a puzzle.
-    {"layout": "A", "head": "Puzzle your\nown photos", "phone": "20_my_puzzles",
-     "out": [{"crop": ("21_my_puzzle_game", "board"), "x": 540, "y": 1060, "w": 560, "rot": 4, "radius": 40}]},
-    # 8. Quests, with a world-day event lifted out.
-    {"layout": "C", "head": "Quests and\nworld-day events", "phone": "13_quests", "tilt": -7,
-     "out": [{"crop": ("14_quests_live", (60, 1440, 1260, 2480)), "x": 50, "y": 1180, "w": 900, "radius": 44}]},
-    # 9. VIP as a benefit: the trial lifted out, the packs it opens in a row below.
-    {"layout": "B", "head": "Open every pack\nwith VIP", "phone": "12_store_vip",
-     "out": [{"crop": ("12_store_vip", (60, 670, 1260, 990)), "w": 1080, "radius": 40}],
-     "pics": [{"crops": [("28_library_more", b) for b in LOCKED_PACKS], "fan": {"w": 236, "h": 306, "top": 2440, "step": 272, "spread": 7, "drop": 40}, "radius": 26}]},
-    # 10. The finale: the same calm in dark mode (the Monarch, which slide 1 no longer uses).
-    {"layout": "A", "head": "Just as calm\nin the dark", "phone": "03_game_cards", "dark": True},
-]
+
+def cell(name: str, cols: int, rows: int, c: int, r: int, inset: int = 4) -> tuple:
+    """Capture box of one card of a cols x rows Cards board (from store/raw/boards.json)."""
+    l, t, rr, b = board(name + "_light") if (cs.RAW / f"{name}_light.png").exists() else board(name)
+    cw, ch = (rr - l) / cols, (b - t) / rows
+    return (round(l + c * cw + inset), round(t + r * ch + inset), round(l + (c + 1) * cw - inset), round(t + (r + 1) * ch - inset))
+
+
+def board_part(name: str, fx0: float, fy0: float, fx1: float, fy1: float) -> tuple:
+    """Capture box of a part of a board, as fractions of the board."""
+    l, t, r, b = board(name + "_light") if (cs.RAW / f"{name}_light.png").exists() else board(name)
+    return (round(l + (r - l) * fx0), round(t + (b - t) * fy0), round(l + (r - l) * fx1), round(t + (b - t) * fy1))
+
+
+def slides() -> list[dict]:
+    """The story (2026-10-16): the hook (1-3: how it plays, how much there is, why you come back;
+    the three search results show), the depth (4-8), the dark finale (9). Read in order, the
+    headlines are one text."""
+    return [
+        # 1. The mechanic, mid-build: some cards locked, some loose, some joined.
+        {"head": "Swap cards.\nReveal the picture.", "brand": True, "text": ("top", 330, "center"),
+         "phones": [{"capture": "25_hero", "x": 160, "y": 738}]},
+        # 2. How much there is: the Library (scrolled past the AI packs) in front of a wall of covers.
+        {"head": "Thousands\nof pictures", "text": ("bottom", 2740, "center"),
+         "pics": [{"covers": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
+                   "masonry": {"cols": 4, "w": 300, "gap": 24, "offsets": [-40, -170, -90, -220], "end": 2390}}],
+         "phones": [{"capture": "28_library_more", "x": 160, "y": 300}]},
+        # 3. Why you come back: the calendar pushed left, today's picture lifted, solved days on the right.
+        {"head": "A new picture\nevery day", "text": ("top", 200, "right"),
+         "pics": [{"crops": [(DAILY, STARRED[0]), (DAILY, STARRED[3]), (DAILY, STARRED[4])],
+                   "spots": [(1000, 1360, 350, 6), (990, 1790, 350, -5), (1005, 2220, 350, 7)], "radius": 26}],
+         "phones": [{"capture": DAILY, "x": -60, "y": 600, "out": [{"crop": (DAILY, (60, 530, 1260, 775)), "x": 150, "w": 1140, "radius": 44}]}]},
+        # 4. The signature, split: cards above the headline, hexagons below, squares and triangles lifted.
+        {"head": "One picture,\nfour ways to cut it", "text": ("center", 1600, "center"),
+         "phones": [{"capture": "06_mode_cards", "x": 160, "y": -700, "rot": -3, "tags": [{"text": "Cards", "x": 500, "y": 1290}],
+                     "out": [{"crop": ("07_mode_squares", "board"), "x": 700, "y": 1420, "w": 330, "rot": 8, "label": "Squares"}]},
+                    {"capture": "09_mode_hexagons", "x": 160, "y": 1880, "rot": 3, "tags": [{"text": "Hexagons", "x": 560, "y": 520}],
+                     "out": [{"crop": ("08_mode_triangles", "board"), "x": -100, "y": 430, "w": 380, "rot": -8, "label": "Triangles"}]}]},
+        # 5. Painting: Monet's chrysanthemums mostly grey, a few cards back in colour.
+        {"head": "Bring the colour\nback, card by card", "text": ("center", 2390, "center"),
+         "phones": [{"capture": "26_painting", "x": 160, "y": -150, "rot": 5,
+                     "out": [{"crop": ("26_painting", cell("26_painting", 4, 5, 0, 0)), "x": -60, "y": 1640, "w": 300, "rot": -7, "radius": 26, "label": "Loose"},
+                             {"crop": ("26_painting", cell("26_painting", 4, 5, 1, 2)), "x": 720, "y": 1600, "w": 300, "rot": 6, "radius": 26, "label": "Locked"}]}]},
+        # 6. Giant boards: the whole picture in tiny cards, a small part solved, a close-up lifted.
+        {"head": "Giant boards of\nup to 300 cards", "text": ("top", 200, "left"),
+         "phones": [{"capture": "27_giant", "x": 360, "y": 620, "rot": 6,
+                     "out": [{"crop": ("27_giant", board_part("27_giant", .18, .34, .58, .64)), "x": -330, "y": 760, "w": 620, "rot": -4, "radius": 36}]}]},
+        # 7. The personal one: your own photos, one played as a puzzle.
+        {"head": "Puzzle your\nown photos", "text": ("bottom", 2740, "left"),
+         "phones": [{"capture": "20_my_puzzles", "x": 380, "y": 140,
+                     "out": [{"crop": ("21_my_puzzle_game", "board"), "x": -300, "y": 1000, "w": 600, "rot": -5, "radius": 40}]}]},
+        # 8. Quests, with a world-day event lifted out.
+        {"head": "Quests and\nworld-day events", "text": ("top", 200, "center"),
+         "phones": [{"capture": "13_quests", "x": 120, "y": 620, "rot": -7,
+                     "out": [{"crop": ("14_quests_live", (60, 1440, 1260, 2480)), "x": 50, "y": 1180, "w": 900, "radius": 44}]}]},
+        # 9. The finale: the same calm in dark mode, a board mid-build.
+        {"head": "Just as calm\nin the dark", "text": ("top", 200, "center"), "dark": True,
+         "phones": [{"capture": "29_dark_board", "x": 160, "y": 608}]},
+    ]
+
 
 # Lotus glass, as in the app icon: the light and deep end of each pane colour.
 GLASS_BASE = {"pink": ("#FF8FB5", "#FF4F8B"), "gold": ("#FFD36A", "#F0A30F"), "blue": ("#8CCBFF", "#2F86F2"), "teal": ("#7FE3C9", "#16927E")}
@@ -129,6 +150,21 @@ def fan(items: list[str], w: int, h: int, top: int, step: int, spread: float, dr
              "w": w, "h": h, "r": round(spread * (i - mid) / mid, 1), "radius": radius} for i, src in enumerate(items)]
 
 
+def masonry(items: list[str], cols: int, w: int, gap: int, offsets: list[int], end: int, radius: int) -> list[dict]:
+    """A wall of pictures in staggered columns across the slide, down to y = end."""
+    heights = [380, 300, 420, 330, 360, 400]
+    x0 = (W - (cols * w + (cols - 1) * gap)) / 2
+    out, k = [], 0
+    for c in range(cols):
+        y = offsets[c % len(offsets)]
+        n = c
+        while y < end - 120:
+            h = heights[n % len(heights)]
+            out.append({"src": items[k % len(items)], "x": round(x0 + c * (w + gap)), "y": y, "w": w, "h": min(h, end - y), "r": 0, "radius": radius})
+            y += h + gap; n += 1; k += 1
+    return out
+
+
 FONTS = {  # headline face: file, weight, tracking (em)
     "rounded": ("/System/Library/Fonts/SFNSRounded.ttf", 700, -0.012),
     "display": ("/System/Library/Fonts/SFNS.ttf", 700, -0.018),
@@ -136,7 +172,6 @@ FONTS = {  # headline face: file, weight, tracking (em)
 }
 PHONE_W = 1000  # outer phone width on every slide
 HEAD_SIZE, MEASURE = 136, 1180  # headline px; widest line allowed
-LAYOUT = {"a_head_top": 200, "a_head_top_brand": 330, "a_gap": 120, "b_phone_top": -150, "b_gap": 150}
 
 
 # --------------------------------------------------------------------------------------------
@@ -164,33 +199,33 @@ def phone_screen() -> tuple[float, float]:
     return band + bezel, (PHONE_W - 2 * (band + bezel)) / cs.RAW_W
 
 
-def export_parts(parts: Path) -> list[dict]:
+def export_parts(parts: Path, slide_list: list[dict]) -> list[dict]:
     """Phones (one size), lifted cards and slide pictures for every slide, as files the template loads."""
     off, k = phone_screen()
     covers = [cs.COLLAGE / f"{p}.jpg" for p in cs.COLLAGE_PACKS if (cs.COLLAGE / f"{p}.jpg").exists()]
-    slides = []
-    for i, s in enumerate(SLIDES, start=1):
+    out_slides = []
+    for i, s in enumerate(slide_list, start=1):
         dark = bool(s.get("dark"))
         edge = (20, 20, 24) if dark else (240, 240, 244)
-        d = {key: s[key] for key in ("layout", "head", "brand", "tilt", "dark") if key in s}
-        for key in ("phone", "second"):
-            if key in s:
-                n = capture(s[key], dark)
-                f = f"phone-{n}.png"
-                if not (parts / f).exists():
-                    cs.phone(cs.load_raw(n), PHONE_W, edge).save(parts / f)
-                d[key] = f
-        d["out"] = []
-        for j, o in enumerate(s.get("out", [])):
-            n = capture(o["crop"][0], dark)
-            box = board(n) if o["crop"][1] == "board" else o["crop"][1]
-            f = f"crop-{i}-{j}.png"
-            cs.load_raw(n).crop(box).save(parts / f)
-            h = (box[3] - box[1]) * o["w"] / (box[2] - box[0])
-            x = o.get("x", off + (box[0] + box[2]) / 2 * k - o["w"] / 2)
-            y = o.get("y", off + (box[1] + box[3]) / 2 * k - h / 2)
-            d["out"].append({"img": f, "x": round(x), "y": round(y), "w": o["w"], "rot": o.get("rot", 0),
+        anchor, ty, align = s["text"]
+        d = {"head": s["head"], "brand": s.get("brand", False), "dark": dark, "text": {"anchor": anchor, "y": ty, "align": align}, "phones": []}
+        for pi, ph in enumerate(s["phones"]):
+            n = capture(ph["capture"], dark)
+            f = f"phone-{n}.png"
+            if not (parts / f).exists():
+                cs.phone(cs.load_raw(n), PHONE_W, edge).save(parts / f)
+            outs = []
+            for j, o in enumerate(ph.get("out", [])):
+                cn = capture(o["crop"][0], dark)
+                box = board(cn) if o["crop"][1] == "board" else o["crop"][1]
+                cf = f"crop-{i}-{pi}-{j}.png"
+                cs.load_raw(cn).crop(box).save(parts / cf)
+                h = (box[3] - box[1]) * o["w"] / (box[2] - box[0])
+                x = o.get("x", off + (box[0] + box[2]) / 2 * k - o["w"] / 2)
+                y = o.get("y", off + (box[1] + box[3]) / 2 * k - h / 2)
+                outs.append({"img": cf, "x": round(x), "y": round(y), "w": o["w"], "rot": o.get("rot", 0),
                              "radius": o.get("radius", 34), "label": o.get("label", "")})
+            d["phones"].append({"img": f, "x": ph["x"], "y": ph["y"], "rot": ph.get("rot", 0), "out": outs, "tags": ph.get("tags", [])})
         d["pics"] = []
         for j, g in enumerate(s.get("pics", [])):
             if "covers" in g:
@@ -204,13 +239,15 @@ def export_parts(parts: Path) -> list[dict]:
                     cs.load_raw(capture(name, dark)).crop(box).save(parts / f)
                     srcs.append(str(parts / f))
             radius = g.get("radius", 30)
-            if "fan" in g:
+            if "masonry" in g:
+                d["pics"] += masonry(srcs, radius=radius, **g["masonry"])
+            elif "fan" in g:
                 d["pics"] += fan(srcs, radius=radius, **g["fan"])
             else:
-                d["pics"] += [{"src": src, "x": x, "y": y, "w": round(hh * .8), "h": hh, "r": r, "radius": radius}
+                d["pics"] += [{"src": src, "x": x, "y": y, "w": round(hh * .83), "h": hh, "r": r, "radius": radius}
                               for src, (x, y, hh, r) in zip(srcs, g["spots"])]
-        slides.append(d)
-    return slides
+        out_slides.append(d)
+    return out_slides
 
 
 def chrome() -> str:
@@ -253,23 +290,24 @@ def main(argv: list[str]) -> None:
     for f in parts.glob("*.png"):
         f.unlink()
     font_file, weight, track = FONTS[a.font]
-    data = {"W": W, "H": H, "slides": export_parts(parts), "panes": panes(len(SLIDES)), "glass": glass_tones(),
+    slide_list = slides()
+    data = {"W": W, "H": H, "slides": export_parts(parts, slide_list), "panes": panes(len(slide_list)), "glass": glass_tones(),
             "body": BODY_OPACITY, "shadow": SHADOW_OPACITY,
             "parts": str(parts), "icon": str(ICON), "phone_w": PHONE_W,
             "phone_h": Image.open(next(parts.glob("phone-*.png"))).height,
-            "head_size": HEAD_SIZE, "measure": MEASURE, "layout": LAYOUT,
+            "head_size": HEAD_SIZE, "measure": MEASURE,
             "font": {"weight": weight, "track": track}}
     page = build / "slides.html"
     page.write_text(TEMPLATE.read_text().replace("__DATA__", json.dumps(data)).replace("__FONT__", font_file))
 
     a.out.mkdir(parents=True, exist_ok=True)
-    todo = a.only or list(range(1, len(SLIDES) + 1))
+    todo = a.only or list(range(1, len(slide_list) + 1))
     for n in todo:
         render(page, n, a.out / f"{n:02d}.png")
-        print(f"{n:02d}  {SLIDES[n - 1]['head'].replace(chr(10), ' ')}")
+        print(f"{n:02d}  {slide_list[n - 1]['head'].replace(chr(10), ' ')}")
     if not a.only:  # a shorter set: drop numbered slides past the end
         for f in a.out.glob("[0-9][0-9].png"):
-            if int(f.stem) > len(SLIDES):
+            if int(f.stem) > len(slide_list):
                 f.unlink()
                 print(f"removed {f.name}")
     if a.sheet:

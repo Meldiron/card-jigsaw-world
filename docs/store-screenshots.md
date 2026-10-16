@@ -15,7 +15,7 @@ in `tools/store/glass/slides.html`, then rerun the script.
 
 - **One set for both appearances.** App Store Connect takes one screenshot set;
   its product page preview (October 2026) only shows how the page looks in Dark
-  Mode. So slides 1-9 show the light app on a light canvas and slide 10 switches
+  Mode. So slides 1-8 show the light app on a light canvas and the last slide switches
   to the dark app on a dark canvas ("Just as calm in the dark").
 - **Glass panes on white**: two large panes in the lotus colours (pink, gold,
   blue, teal) on every seam, drawn with the app icon's glass recipe (see-through
@@ -27,19 +27,23 @@ in `tools/store/glass/slides.html`, then rerun the script.
 - **One phone size** everywhere: 1,000 px wide on the 1,320 px canvas.
 - **The story:** the hook (1-3: how it plays, how much there is, why you come
   back; the three that search results show), the depth (4-8: four ways to cut a
-  picture, Painting, giant boards, your own photos, quests and world-day events),
-  the close (9: what VIP opens, 10: the dark finale). Read in order the headlines
-  are one text: "Swap cards. Reveal the picture. Thousands of pictures. A new
-  picture every day. One picture, four ways to cut it. Bring the colour back,
-  card by card. Giant boards of up to 300 cards. Puzzle your own photos. Quests
-  and world-day events. Open every pack with VIP. Just as calm in the dark." The
-  leaderboard and "Fewer moves, more stars" slides were dropped: competition is
-  off-message for a calm game, and a scoring rule is not a reason to download.
-- **Three layouts:** A headline on top with a flat phone (1, 3, 5, 7, 10); B phone
-  from the top edge, the headline below and a neat row of pictures under it (2:
-  pack covers, 9: the locked packs VIP opens); C a phone tilted 7 degrees,
-  alternating direction (4, 6, 8). Slides 1-3 stay flat, since search results
-  show them as thumbnails.
+  picture, Painting, giant boards, your own photos, quests and world-day events)
+  and the dark finale (9). Read in order the headlines are one text: "Swap cards.
+  Reveal the picture. Thousands of pictures. A new picture every day. One
+  picture, four ways to cut it. Bring the colour back, card by card. Giant boards
+  of up to 300 cards. Puzzle your own photos. Quests and world-day events. Just as
+  calm in the dark." Dropped on the owner's word: the leaderboard (off-message for
+  a calm game), "Fewer moves, more stars" (a scoring rule) and VIP ("I don't like
+  talking about VIP"). No AI pictures anywhere; the Library capture is scrolled
+  past the two AI packs near its top.
+- **Layouts take turns:** the headline sits top, bottom, middle, left or right,
+  and the phones move with it (flat, tilted, pushed to one side, two phones split
+  around the headline on slide 4, a phone in front of a wall of pack covers on
+  slide 2). The owner found "headline on top, phone below" on every slide boring.
+  Slides 1-3 keep their phones flat.
+- **Boards mid-build:** every board in play shows some cards locked, some loose
+  and some joined (Painting mostly still grey; the giant board in 210 tiny cards
+  with only a small part solved).
 - **Break-out cards** lift one real part of the app out of the phone (today's
   puzzle, the other three shapes, a loose and a locked Painting card, the giant
   board's map, your own photo, the live event, the VIP trial). A card that enlarges part of the same screen
