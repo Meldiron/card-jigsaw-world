@@ -1,0 +1,26 @@
+{
+  "referenceName": "Winter holidays",
+  "order": 8,
+  "audience": "A seasonal page for December (Apple Ads and links from 1 December to early January): people looking for winter, Christmas and holiday puzzles.",
+  "story": "Winter pictures and the season's world-day packs first, how it plays, quests and events, giant boards for long evenings, the daily picture, the dark finale.",
+  "promotionalText": "Winter in pictures: snowy towns, winter scenes from art and a pack for each world day of the season, from the Winter Solstice to Christmas and New Year.",
+  "deepLink": "https://play.carden.page/events",
+  "deepLinkNote": "Opens Quests, where the season's live events are listed.",
+  "keywords": [],
+  "keywordsNote": "A seasonal page: use it through Apple Ads and links rather than organic keywords.",
+  "season": {"from": "12-01", "to": "01-06"},
+  "adSearchTerms": ["christmas puzzle", "winter puzzle", "holiday puzzle", "snow puzzle", "new year puzzle"],
+  "slides": [
+    {"note": "The hook: an endless row of winter covers (library packs and the season's event packs) above the Library.",
+     "head": "Winter in\npictures", "text": ["top", 200, "center"],
+     "pics": [{"packs": ["pack-snowy-peaks", "evpack-new-years-eve-2026", "pack-snowy-villages", "evpack-christmas-2026", "pack-winter-scenes", "evpack-winter-solstice-2026", "evpack-new-year-2027"],
+               "row": {"w": 360, "h": 480, "gap": 28, "y": 640}, "radius": 30}],
+     "phones": [{"capture": "15_library", "x": 160, "y": 1300}]},
+    {"note": "How it plays (the default hero), without the brand line.",
+     "default": 1, "brand": false, "text": ["top", 260, "center"]},
+    {"default": 8},
+    {"default": 6},
+    {"default": 3},
+    {"default": 10}
+  ]
+}

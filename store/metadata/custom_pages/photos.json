@@ -1,0 +1,24 @@
+{
+  "referenceName": "Your own photos",
+  "order": 6,
+  "audience": "People who want to turn their own photos (pets, trips, family) into puzzles: searches for photo puzzles; family, pets and photography interests; gift-season and social posts.",
+  "story": "Your photos first, then that they stay private, then the shapes, the library, the daily picture and the dark finale.",
+  "promotionalText": "Turn a favourite photo into a puzzle: a pet, a trip, a family moment. Only you can see your photos. Cut them into cards, then swap until the picture is whole.",
+  "deepLink": "https://play.carden.page/my-puzzles",
+  "deepLinkNote": "Opens My Puzzles with Add photo.",
+  "keywords": ["family"],
+  "adSearchTerms": ["photo puzzle", "puzzle from photo", "make your own puzzle", "custom jigsaw", "pet photo puzzle", "family photo puzzle"],
+  "slides": [
+    {"note": "The hook: My Puzzles with five photos, flat, with the brand.",
+     "head": "Puzzle your\nown photos", "brand": true, "text": ["top", 330, "center"],
+     "phones": [{"capture": "20_my_puzzles", "x": 160, "y": 738}]},
+    {"note": "A photo played as a puzzle, its joined group (the corgi) lifted.",
+     "head": "Only you can\nsee your photos", "text": ["top", 200, "right"],
+     "phones": [{"capture": "21_my_puzzle_game", "x": 260, "y": 600,
+                 "out": [{"crop": ["21_my_puzzle_game", {"part": [0.25, 0.167, 0.75, 0.832]}], "x": -340, "y": 860, "w": 500, "rot": -5, "radius": 24}]}]},
+    {"default": 4},
+    {"default": 2},
+    {"default": 3},
+    {"default": 10}
+  ]
+}

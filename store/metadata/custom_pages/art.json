@@ -1,0 +1,24 @@
+{
+  "referenceName": "Art and museum paintings",
+  "order": 2,
+  "audience": "Art lovers and museum visitors: searches for art, paintings, museum and famous painters; art and culture interests in Apple Ads, museum newsletters and art communities.",
+  "story": "The paintings first: a Monet coming back into colour, the art packs by painter, then the daily picture, the four shapes, giant boards and the dark finale.",
+  "promotionalText": "Paintings by Monet, Van Gogh, Hiroshige and more. Swap cards until the masterpiece is whole, at your own pace. Every picture names its author and licence.",
+  "deepLink": "https://play.carden.page/library/pack/pack-impressionists",
+  "deepLinkNote": "Impressionists is one of the six free starter packs, so a new player can play it at once.",
+  "keywords": ["art", "museum", "painting"],
+  "adSearchTerms": ["art puzzle", "painting puzzle", "museum puzzle", "monet", "van gogh", "impressionism", "art games", "famous paintings"],
+  "slides": [
+    {"note": "The hook: Monet's chrysanthemums with Painting on, a loose and a locked card lifted.",
+     "default": 5, "head": "Museum paintings,\ncard by card"},
+    {"note": "The art packs as an endless row of covers above the Library.",
+     "head": "Monet, Van Gogh,\nHiroshige and more", "text": ["top", 200, "center"],
+     "pics": [{"packs": ["pack-botanical", "pack-impressionists", "masterpieces", "pack-japanese-prints", "pack-still-life", "pack-gardens-art", "pack-oil-landscapes"],
+               "row": {"w": 360, "h": 480, "gap": 28, "y": 640}, "radius": 30}],
+     "phones": [{"capture": "15_library", "x": 160, "y": 1300}]},
+    {"default": 3},
+    {"default": 4},
+    {"default": 6},
+    {"default": 10}
+  ]
+}

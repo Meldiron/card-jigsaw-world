@@ -70,6 +70,8 @@ secrets/*
 
 # Raw simulator captures for store screenshots (regenerate with flutter drive)
 store/raw/
+# Custom product page slides: rebuilt by tools/store/custom_pages.py compose (about 150 MB).
+store/custom/
 
 # TestFlight feedback ledger and screenshots (tester emails, keep private)
 store/feedback/

@@ -1,0 +1,50 @@
+{
+  "calm": {
+    "id": "d661b456-5c72-4f6e-b748-7ef53440bc06",
+    "name": "Calm and cozy",
+    "url": "https://apps.apple.com/us/app/card-jigsaw-world/id6821644423?ppid=d661b456-5c72-4f6e-b748-7ef53440bc06",
+    "shortUrl": "https://apps.apple.com/app/id6821644423?ppid=d661b456-5c72-4f6e-b748-7ef53440bc06"
+  },
+  "art": {
+    "id": "727f0b51-d3de-423e-b960-3dd143308213",
+    "name": "Art and museum paintings",
+    "url": "https://apps.apple.com/us/app/card-jigsaw-world/id6821644423?ppid=727f0b51-d3de-423e-b960-3dd143308213",
+    "shortUrl": "https://apps.apple.com/app/id6821644423?ppid=727f0b51-d3de-423e-b960-3dd143308213"
+  },
+  "nature": {
+    "id": "94f85ded-2c08-4d28-b75d-06a0411f1b0f",
+    "name": "Nature and animals",
+    "url": "https://apps.apple.com/us/app/card-jigsaw-world/id6821644423?ppid=94f85ded-2c08-4d28-b75d-06a0411f1b0f",
+    "shortUrl": "https://apps.apple.com/app/id6821644423?ppid=94f85ded-2c08-4d28-b75d-06a0411f1b0f"
+  },
+  "giant": {
+    "id": "d737b351-7e26-4c6d-90ef-4c6ddfa6e8b3",
+    "name": "Giant puzzles",
+    "url": "https://apps.apple.com/us/app/card-jigsaw-world/id6821644423?ppid=d737b351-7e26-4c6d-90ef-4c6ddfa6e8b3",
+    "shortUrl": "https://apps.apple.com/app/id6821644423?ppid=d737b351-7e26-4c6d-90ef-4c6ddfa6e8b3"
+  },
+  "daily": {
+    "id": "146ac6a3-0999-4fee-86b9-44d9bf314f7a",
+    "name": "Daily puzzle",
+    "url": "https://apps.apple.com/us/app/card-jigsaw-world/id6821644423?ppid=146ac6a3-0999-4fee-86b9-44d9bf314f7a",
+    "shortUrl": "https://apps.apple.com/app/id6821644423?ppid=146ac6a3-0999-4fee-86b9-44d9bf314f7a"
+  },
+  "photos": {
+    "id": "82e880a7-8851-46b2-b295-df7c1e52476e",
+    "name": "Your own photos",
+    "url": "https://apps.apple.com/us/app/card-jigsaw-world/id6821644423?ppid=82e880a7-8851-46b2-b295-df7c1e52476e",
+    "shortUrl": "https://apps.apple.com/app/id6821644423?ppid=82e880a7-8851-46b2-b295-df7c1e52476e"
+  },
+  "shapes": {
+    "id": "d6ef6326-235c-40f0-98c1-d06345e8cadc",
+    "name": "Four shapes",
+    "url": "https://apps.apple.com/us/app/card-jigsaw-world/id6821644423?ppid=d6ef6326-235c-40f0-98c1-d06345e8cadc",
+    "shortUrl": "https://apps.apple.com/app/id6821644423?ppid=d6ef6326-235c-40f0-98c1-d06345e8cadc"
+  },
+  "winter": {
+    "id": "fe0c4980-b110-43e0-bea5-d92f7695c6df",
+    "name": "Winter holidays",
+    "url": "https://apps.apple.com/us/app/card-jigsaw-world/id6821644423?ppid=fe0c4980-b110-43e0-bea5-d92f7695c6df",
+    "shortUrl": "https://apps.apple.com/app/id6821644423?ppid=fe0c4980-b110-43e0-bea5-d92f7695c6df"
+  }
+}

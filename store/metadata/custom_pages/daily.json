@@ -1,0 +1,31 @@
+{
+  "referenceName": "Daily puzzle",
+  "order": 5,
+  "audience": "People who like a small daily ritual (a puzzle of the day, streaks): searches for daily puzzle games; re-engagement and newsletter links.",
+  "story": "Today's picture, the streak and the daily gift, every month back to 2023, how it plays, quests, the dark finale.",
+  "promotionalText": "A new picture every day. Keep your streak, claim the daily gift and catch up on any day this month. Every month back to 2023 waits in the Library.",
+  "deepLink": "https://play.carden.page/daily",
+  "deepLinkNote": "Opens today's picture.",
+  "keywords": ["daily"],
+  "adSearchTerms": ["daily puzzle", "puzzle of the day", "daily games", "brain games daily", "morning puzzle"],
+  "slides": [
+    {"note": "The hook: the month's calendar with today's picture lifted and solved days with their stars.",
+     "head": "A new picture\nevery day", "brand": true, "text": ["top", 330, "right"],
+     "pics": [{"crops": [["18_daily_month_grid", "STARRED_0"], ["18_daily_month_grid", "STARRED_3"]],
+               "spots": [[1000, 1430, 350, 6], [990, 1860, 350, -5]], "radius": 26}],
+     "phones": [{"capture": "18_daily_month_grid", "x": -60, "y": 700,
+                 "out": [{"crop": ["18_daily_month_grid", "TODAY_CARD"], "x": 150, "w": 1140, "radius": 44}]}]},
+    {"note": "The streak card from Home lifted, with tomorrow's gift.",
+     "head": "Keep your\nstreak going", "text": ["center", 2380, "center"],
+     "phones": [{"capture": "31_home_streak", "x": 160, "y": -260,
+                 "out": [{"crop": ["31_home_streak", "STREAK_CARD"], "w": 1180, "radius": 46}]}]},
+    {"note": "The Daily chip in the Library: one pack per month, August lifted.",
+     "head": "Every month\nback to 2023", "text": ["top", 200, "left"],
+     "phones": [{"capture": "16_library_daily", "x": 360, "y": 600,
+                 "out": [{"crop": ["16_library_daily", "AUGUST_TILE"], "x": -330, "y": 1150, "w": 560, "rot": -6, "radius": 40}]}]},
+    {"note": "How it plays (the default hero), without the brand line.",
+     "default": 1, "brand": false, "text": ["top", 260, "center"]},
+    {"default": 8},
+    {"default": 10}
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "referenceName": "Four shapes",
+  "order": 7,
+  "audience": "Puzzle fans looking for something new: searches for hexagon, triangle, mosaic or tile puzzles; the game's own signature for ads.",
+  "story": "One picture cut four ways, the hexagon board up close, then Painting, giant boards, the daily picture and the dark finale.",
+  "promotionalText": "One picture, four ways to cut it: cards, squares, triangles and hexagons. New shapes open as you level up, and the trickier ones pay a little more.",
+  "deepLink": null,
+  "deepLinkNote": "None: the shapes open by level, so there is no screen that shows all four to a new player.",
+  "keywords": ["hexagon", "mosaic", "tiles", "swap"],
+  "adSearchTerms": ["hexagon puzzle", "triangle puzzle", "mosaic puzzle", "tile puzzle", "swap puzzle", "shape puzzle"],
+  "slides": [
+    {"note": "The hook: the default four-shapes slide.", "default": 4},
+    {"note": "The hexagon board mid-build: locked, loose and joined hexagons.",
+     "head": "Six sides\nto join on", "text": ["top", 200, "left"],
+     "phones": [{"capture": "10_game_hexagons", "x": 260, "y": 600}]},
+    {"default": 5},
+    {"default": 6},
+    {"default": 3},
+    {"default": 10}
+  ]
+}

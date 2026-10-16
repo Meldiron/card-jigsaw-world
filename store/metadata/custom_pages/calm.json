@@ -1,0 +1,23 @@
+{
+  "referenceName": "Calm and cozy",
+  "order": 1,
+  "audience": "People looking for a relaxing, low-pressure game for quiet moments: searches for relaxing, cozy or zen games, mindfulness and cozy-game audiences in Apple Ads.",
+  "story": "Calm first: the mechanic in a calm hook, help that is always there, Painting, the size of the library, the daily habit, the dark finale.",
+  "promotionalText": "A calm picture puzzle for quiet moments. Swap cards until the picture is whole, at your own pace: Undo is always free and every board waits for you.",
+  "deepLink": null,
+  "keywords": ["relax", "cozy", "zen", "casual"],
+  "adSearchTerms": ["relaxing puzzle", "relaxing games", "cozy games", "calm games", "stress relief games", "zen puzzle", "jigsaw puzzles for adults"],
+  "slides": [
+    {"note": "The hook: the mechanic, framed as calm.",
+     "head": "A calm puzzle\nfor quiet moments", "brand": true, "text": ["top", 330, "center"],
+     "phones": [{"capture": "25_hero", "x": 160, "y": 738}]},
+    {"note": "Help when you want it: the game toolbar (Undo, Peek, Magic, Hint) lifted out of a board mid-build.",
+     "head": "Help when\nyou want it", "text": ["top", 200, "left"],
+     "phones": [{"capture": "06_mode_cards", "x": 260, "y": 600,
+                 "out": [{"crop": ["06_mode_cards", "TOOLBAR"], "x": -220, "y": 1800, "w": 1240, "radius": 56}]}]},
+    {"default": 5},
+    {"default": 2},
+    {"default": 3},
+    {"default": 10}
+  ]
+}
