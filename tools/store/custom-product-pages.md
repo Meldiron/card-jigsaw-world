@@ -133,6 +133,87 @@ work today. Move both tools together when Apple turns the old one off [6].
   does not.
 - The game itself shows no custom pages: it has no in-app App Store sheets, and it talks only to Appwrite and Apple.
 
+## Header and search-result art (iOS 27)
+
+Since 5 October 2026 a product page carries two creative assets: a **header** at the top of the page, and a
+**search-result** image that replaces the screenshot row in search results. Both show on iOS 27 and iPadOS 27
+and later. The default page, every custom page and every product page optimization treatment can each have
+one header and one search asset per localization. Pages without a search asset keep showing their
+screenshots [17][18][19].
+
+**Specs** (App Store Connect API reference data, `GET /v1/appAssetLibraryRefData`, and Apple's help [17]):
+
+| Slot | Image | Video |
+| --- | --- | --- |
+| Header | 5244 x 2950 PNG (16:9, "universal": it can also fill the search slot), **or** 3840 x 1646 PNG (21:9, header only). One header per page | 3840 x 1646, 30 or 60 fps, 5-30 s, .mov/.m4v/.mp4, loops, starts muted |
+| Search result | 3:2 from 1920 x 1280 to 3840 x 2560, JPEG or PNG, or the 5244 x 2950 universal PNG | 3:2, same sizes, 5-30 s, always muted |
+
+There is no alpha channel, the limit is 500 MB, and one file serves every device (placement group
+`DEFAULT_PROFILE`).
+
+**Safe areas.** These come from the "Art Safe Area" layer of Apple's templates. Only this part shows on
+every device; the rest can be cropped.
+
+| File | Safe area (x0, y0, x1, y1) |
+| --- | --- |
+| 5244 x 2950 | 1921, 660, 3323, 1622 (1402 x 962, centred, above the middle) |
+| 3840 x 1646 | 1097, 493, 2743, 1154 (1646 x 661, centred) |
+| 3840 x 2560 | 836, 765, 3004, 1795 (2168 x 1030, centred) |
+
+**How Apple shows them.** On an iPhone, the header runs edge to edge at the very top of the page, behind the
+status bar, with the glass Back and Share buttons over its top corners. The icon, name, subtitle and Get
+button sit below it on the page, not on the art. The search result is a full-width card with rounded
+corners, about 3:2 and about 365 pt wide, below the app's row. A useful check is to shrink it to 384 px and
+see if the text still reads [19].
+
+**Apple's advice.**
+- Header: one clear idea, set the tone, keep the focal point centred.
+- Search result: "state the obvious" and show the real interface.
+- Text is allowed but optional. Use a short phrase that enhances the visual, localized.
+- Never include prices, URLs, copyright symbols, other platforms, awards or Apple recognitions, and keep
+  everything suitable for 4+.
+
+In the first weeks, most adopters used brand key art for the header, and real UI with a short line for the
+search asset [19][20].
+
+**Our art** (`tools/store/header_assets.py`, definitions in `store/metadata/custom_pages/header_assets.json`,
+files in `store/custom/header/<page>/`, git-ignored):
+- **Header.** The lotus mark and one short line ("Your calm picture puzzle", or the custom page's own
+  line) sit in the safe area, on white. Real pack pictures fan out as cards on both sides, real board
+  groups are lifted out of captures, and the slides' glass panes sit behind. The 21:9 file renders the
+  same scene for its own safe area.
+- **Search result.** The page's first headline ("Swap cards. Reveal the picture." on the default page)
+  sits on the left of the safe area. The real app is on the right, in the slides' phone frame, with a
+  lifted card and two pictures behind.
+- **Checks.** Every line is measured against what is behind it (all 16:1 or better). `preview` writes the
+  safe area over each file, and writes the files at iPhone and iPad size and at 384 px.
+
+Commands:
+
+```sh
+.venv/bin/python tools/store/header_assets.py compose [PAGE ...]   # PAGE: default or a custom page slug
+.venv/bin/python tools/store/header_assets.py preview [PAGE ...]
+.venv/bin/python tools/store/header_assets.py list [PAGE ...]      # what is placed on Apple
+.venv/bin/python tools/store/header_assets.py plan [PAGE ...]      # what upload would send
+.venv/bin/python tools/store/header_assets.py upload [PAGE ...] --yes [--header 16x9|21x9]
+```
+
+`upload` goes through the App Asset Library in five steps:
+1. `POST /v1/appAssetLibraryImages` (category `CREATIVE_ASSETS`, linked to the app's asset library).
+2. Upload the file to the presigned URLs.
+3. `PATCH uploaded: true`.
+4. Wait until Apple has checked the file.
+5. `POST /v1/appAssetLibraryPlacements` (`PRODUCT_PAGE_HEADER_ASSET` or `APP_STORE_SEARCH_RESULTS_ASSET`,
+   group `DEFAULT_PROFILE`) on the page's en-GB localization.
+
+The default page uses the editable App Store version (2.0.0). A custom page uses its draft version. A
+changed file replaces its placement; an unchanged one is kept. The header placed is the 16:9 universal
+file unless you pass `--header 21x9`. `upload` submits nothing.
+
+Review: the art is reviewed with the version or page it is placed on. Before the app's first approval it
+can only go with that first version. After that it can also be submitted on its own from the Asset
+Library [18].
+
 ## Sources
 
 1. https://developer.apple.com/app-store/custom-product-pages/
@@ -152,3 +233,9 @@ work today. Move both tools together when Apple turns the old one off [6].
 14. https://www.apptweak.com/en/aso-blog/how-mobile-games-use-custom-product-pages-for-apple-search-ads
 15. https://www.mobileaction.co/report/2026-aso-report/custom-product-pages/
 16. https://splitmetrics.com/custom-product-pages-from-ideas-to-results/
+17. https://developer.apple.com/help/app-store-connect/reference/app-information/creative-assets-specifications
+18. https://developer.apple.com/help/app-store-connect/manage-app-information/manage-your-app-store-assets and
+    https://developer.apple.com/help/app-store-connect/manage-submissions-to-app-review/submit-assets-from-asset-library
+19. https://developer.apple.com/app-store/asset-best-practices/ (templates: creative_assets-universal_asset_template,
+    -product_page_header_template and -search_results_template on devimages-cdn.apple.com)
+20. https://objectgraph.com/blog/ios-27-app-store-header-and-search-results-art/ and https://neoads.substack.com/p/app-store-creative-assets

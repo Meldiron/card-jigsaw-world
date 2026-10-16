@@ -1,0 +1,67 @@
+<!doctype html>
+<!-- Carden header and search-result art (App Store "Header and Search Results", iOS 27 and later) in the
+     glass style of the store slides (slides.html): white canvas, big panes of lotus-coloured glass drawn with
+     the app icon's recipe, real pack pictures, real app captures in the same phone frame, lifted cards and an
+     optional headline in SF Pro Rounded. tools/store/header_assets.py fills in __DATA__ and __FONT__ and
+     renders one canvas of any size; "#notext" leaves the headline out (contrast is measured without it). -->
+<html><head><meta charset="utf-8"><style>
+@font-face { font-family: "Head"; src: url("__FONT__"); font-weight: 100 1000; }
+* { box-sizing: border-box; }
+html, body { margin: 0; background: transparent; }
+.canvas { position: relative; overflow: hidden; background: #FFFFFF; --ink: #111118; --shade: rgba(28,30,60,.22); }
+.world { position: absolute; left: 0; top: 0; }
+.body { mix-blend-mode: multiply; }
+h1 { position: absolute; margin: 0; white-space: nowrap; font-family: "Head"; line-height: 1.06; color: var(--ink); }
+.mark { position: absolute; mix-blend-mode: multiply; }
+.phonebox { position: absolute; transform-origin: 50% 40%; }
+.phone { position: absolute; left: 0; top: 0; }
+.out { position: absolute; }
+.out img { display: block; width: 100%; border-radius: inherit; }
+.pic { position: absolute; object-fit: cover; }
+</style></head><body><div id="root"></div><script>
+const S = __DATA__;
+const noText = location.hash === "#notext";
+const k = S.unit;  // shadows, rims and blurs scale with the art (1 = a 1320 px slide)
+const file = f => f.startsWith("/") ? f : S.parts + "/" + f;
+
+function panesSVG() {
+  const defs = [], body = [], top = [];
+  S.panes.forEach((p, i) => {
+    const t = S.glass[p.c], cx = p.x + p.w / 2, cy = p.y + p.h / 2;
+    const rot = `rotate(${p.r} ${cx} ${cy})`, rect = a => `<rect x="${p.x}" y="${p.y}" width="${p.w}" height="${p.h}" rx="${p.rx}" ${a}/>`;
+    defs.push(`<linearGradient id="b${i}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${t.hi}" stop-opacity="${S.body[0]}"/><stop offset="1" stop-color="${t.lo}" stop-opacity="${S.body[1]}"/></linearGradient>`,
+      `<linearGradient id="s${i}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".42"/><stop offset=".38" stop-color="#fff" stop-opacity="0"/></linearGradient>`,
+      `<linearGradient id="g${i}" x1=".1" y1="0" x2=".9" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="1"/><stop offset=".3" stop-color="#fff" stop-opacity=".5"/><stop offset=".62" stop-color="#fff" stop-opacity=".12"/><stop offset="1" stop-color="#fff" stop-opacity=".6"/></linearGradient>`,
+      `<clipPath id="c${i}">${rect("")}</clipPath>`);
+    body.push(`<g transform="${rot}">${rect(`fill="${t.shadow}" opacity="${S.shadow}" filter="url(#blur)" transform="translate(0 ${70 * k})"`)}</g>`,
+      `<g class="body" transform="${rot}">${rect(`fill="url(#b${i})"`)}</g>`);
+    top.push(`<g transform="${rot}">${rect(`fill="url(#s${i})"`)}` +
+      `<g clip-path="url(#c${i})">${rect(`fill="none" stroke="${t.edge}" stroke-width="${70 * k}" opacity=".55" filter="url(#soft)"`)}</g>` +
+      rect(`fill="none" stroke="url(#g${i})" stroke-width="${7 * k}"`) + rect(`fill="none" stroke="${t.line}" stroke-width="${2.5 * k}" opacity=".42"`) + `</g>`);
+  });
+  return `<svg class="world" width="${S.W}" height="${S.H}" viewBox="0 0 ${S.W} ${S.H}">` +
+    `<defs><filter id="blur" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="${55 * k}"/></filter>` +
+    `<filter id="soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="${14 * k}"/></filter>${defs.join("")}</defs>` +
+    body.join("") + top.join("") + `</svg>`;
+}
+
+const shadowPic = `0 ${36 * k}px ${70 * k}px ${-20 * k}px rgba(20,22,50,.38), 0 0 0 ${6 * k}px rgba(255,255,255,.95)`;
+const shadowCard = `0 ${46 * k}px ${90 * k}px ${-24 * k}px rgba(20,22,50,.42), 0 0 0 ${6 * k}px rgba(255,255,255,.95)`;
+
+let h = panesSVG();
+h += (S.pics || []).map(c => `<img class="pic" src="${file(c.src)}" style="left:${c.x}px;top:${c.y}px;width:${c.w}px;height:${c.h}px;border-radius:${c.radius}px;transform:rotate(${c.r}deg);box-shadow:${shadowPic}">`).join("");
+for (const p of S.phones || []) {
+  const outs = (p.out || []).map(o => `<div class="out" style="left:${o.x}px;top:${o.y}px;width:${o.w}px;border-radius:${o.radius}px;transform:rotate(${o.rot}deg)"><img src="${file(o.img)}" style="box-shadow:${shadowCard}"></div>`).join("");
+  h += `<div class="phonebox" style="left:${p.x}px;top:${p.y}px;width:${p.w}px;height:${p.h}px;transform:rotate(${p.rot}deg)"><img class="phone" src="${file(p.img)}" style="width:${p.w}px;filter:drop-shadow(0 ${60 * k}px ${80 * k}px var(--shade))">${outs}</div>`;
+}
+h += (S.cards || []).map(o => `<div class="out" style="left:${o.x}px;top:${o.y}px;width:${o.w}px;border-radius:${o.radius}px;transform:rotate(${o.rot}deg)"><img src="${file(o.img)}" style="box-shadow:${shadowCard}"></div>`).join("");
+if (S.mark) h += `<img class="mark" src="${file(S.mark.src)}" style="left:${S.mark.x}px;top:${S.mark.y}px;width:${S.mark.w}px">`;
+const T = S.text;
+if (T && !noText) {
+  const side = T.align === "left" ? `left:${T.x}px;` : T.align === "right" ? `right:${S.W - T.x}px;` : `left:${T.x}px;transform:translateX(-50%);`;
+  h += `<h1 style="top:${T.y}px;${side}font-size:${T.size}px;font-weight:${S.font.weight};letter-spacing:${S.font.track}em;text-align:${T.align}">${T.lines.join("<br>")}</h1>`;
+}
+const root = document.getElementById("root");
+root.innerHTML = `<div class="canvas" style="width:${S.W}px;height:${S.H}px">${h}</div>`;
+document.fonts.load(`${S.font.weight} 100px Head`).then(() => { document.title = "ready"; });
+</script></body></html>

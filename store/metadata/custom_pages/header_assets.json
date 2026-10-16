@@ -1,0 +1,92 @@
+{
+  "_note": "Header and search-result art per product page, composed by tools/store/header_assets.py. Header: `headerLine` (one short line under the lotus, in Apple's safe area), `covers` (pack ids) and/or `crops` ([capture, box]) as the pictures around it, `pic` (picture size), `lift` (real board parts lifted, master px). Search result: `searchLine` (the page's first headline), `phone` (capture), `focusY` (capture y placed at the top of the safe area), `searchLift` (cards lifted out of that phone, phone px). Boxes: capture px, \"board\", {\"cell\": [cols, rows, c, r]} or {\"part\": [fx0, fy0, fx1, fy1]}; `group` names one of `groups`.",
+  "groups": {
+    "hero_wide": ["25_hero", [664, 503, 1280, 900]],
+    "hero_tall": ["25_hero", [40, 503, 344, 1305]],
+    "painting_loose": ["26_painting", {"cell": [4, 5, 0, 0]}],
+    "painting_locked": ["26_painting", {"cell": [4, 5, 1, 2]}],
+    "giant_part": ["27_giant", {"part": [0.0, 0.0, 0.5, 0.33]}],
+    "giant_map": ["30_giant_zoom", [992, 636, 1262, 1048]],
+    "today_card": ["18_daily_month_grid", [60, 530, 1260, 775]],
+    "streak_card": ["31_home_streak", [60, 1485, 1260, 1997]],
+    "corgi_group": ["21_my_puzzle_game", {"part": [0.25, 0.167, 0.75, 0.832]}],
+    "event_card": ["14_quests_live", [60, 1608, 1260, 2532]]
+  },
+  "pages": {
+    "default": {
+      "headerLine": "Your calm picture puzzle",
+      "covers": ["pack-japanese-prints", "pack-northern-lights", "pack-tulip-fields", "pack-venice", "pack-nebulae", "pack-lavender", "pack-sunflowers", "pack-parrots", "pack-islands", "pack-cherry-blossom"],
+      "lift": [{"group": "hero_tall", "x": 1530, "y": 1640, "w": 330, "rot": -7}, {"group": "hero_wide", "x": 3330, "y": 1760, "w": 640, "rot": 6}],
+      "searchLine": "Swap cards.\nReveal the picture.",
+      "phone": "25_hero",
+      "searchLift": [{"group": "hero_wide", "x": -420, "y": 1500, "w": 640, "rot": -8}]
+    },
+    "calm": {
+      "headerLine": "Take your time",
+      "covers": ["pack-misty-forests", "pack-alpine-lakes", "pack-lavender", "pack-cherry-blossom", "pack-starry-nights", "pack-tropical-beaches", "pack-sunsets", "pack-lighthouses", "pack-rolling-hills", "pack-northern-lights"],
+      "lift": [{"group": "hero_tall", "x": 1530, "y": 1640, "w": 330, "rot": -7}, {"group": "hero_wide", "x": 3330, "y": 1760, "w": 640, "rot": 6}],
+      "searchLine": "A calm puzzle\nfor quiet moments",
+      "phone": "25_hero",
+      "searchLift": [{"group": "hero_wide", "x": -420, "y": 1500, "w": 640, "rot": -8}]
+    },
+    "art": {
+      "headerLine": "Paintings, card by card",
+      "covers": ["pack-japanese-prints", "pack-impressionists", "masterpieces", "pack-still-life", "pack-botanical", "pack-gardens-art", "pack-oil-landscapes", "pack-winter-scenes", "pack-portraits", "pack-seascapes"],
+      "lift": [{"group": "painting_loose", "x": 1560, "y": 1700, "w": 360, "rot": -7}, {"group": "painting_locked", "x": 3380, "y": 1760, "w": 360, "rot": 6}],
+      "searchLine": "Museum paintings,\ncard by card",
+      "phone": "26_painting",
+      "searchLift": [{"group": "painting_locked", "x": -300, "y": 1420, "w": 380, "rot": -8}]
+    },
+    "nature": {
+      "headerLine": "Wildlife and wild places",
+      "covers": ["pack-owls", "pack-northern-lights", "pack-parrots", "pack-foxes", "pack-hummingbirds", "pack-alpine-lakes", "pack-penguins", "pack-butterflies", "pack-waterfalls", "pack-big-cats"],
+      "searchLine": "Wildlife and\nwild places",
+      "phone": "19_pack",
+      "focusY": 430
+    },
+    "giant": {
+      "headerLine": "Hundreds of cards",
+      "covers": ["pack-market-stalls", "pack-colourful-houses", "pack-curiosity-shops", "pack-painted-paradises", "pack-night-markets", "pack-moroccan-souks", "pack-fruit-markets", "pack-libraries", "pack-tiles", "pack-cozy-interiors"],
+      "lift": [{"group": "giant_part", "x": 1440, "y": 1700, "w": 560, "rot": -6}, {"group": "giant_map", "x": 3360, "y": 1700, "w": 420, "rot": 6}],
+      "searchLine": "Giant boards of\nhundreds of cards",
+      "phone": "27_giant",
+      "focusY": 600,
+      "searchLift": [{"group": "giant_map", "x": -380, "y": 1380, "w": 420, "rot": -7}]
+    },
+    "daily": {
+      "headerLine": "A new picture every day",
+      "covers": ["daily-2026-10", "daily-2026-09", "daily-2026-08", "daily-2026-07", "daily-2026-06", "daily-2026-05", "daily-2026-04", "daily-2026-03", "daily-2026-02", "daily-2026-01"],
+      "lift": [{"group": "streak_card", "x": 1250, "y": 1880, "w": 760, "rot": -5}, {"group": "today_card", "x": 3260, "y": 1880, "w": 760, "rot": 5}],
+      "searchLine": "A new picture\nevery day",
+      "phone": "18_daily_month_grid",
+      "focusY": 500,
+      "searchLift": [{"group": "streak_card", "x": -560, "y": 1600, "w": 900, "rot": -6}]
+    },
+    "photos": {
+      "headerLine": "Your photos, card by card",
+      "crops": [["20_my_puzzles", [60, 1244, 642, 1922]], ["20_my_puzzles", [678, 1244, 1260, 1922]], ["20_my_puzzles", [60, 2026, 642, 2600]], ["20_my_puzzles", [678, 462, 1260, 1140]], ["20_my_puzzles", [678, 2026, 1260, 2600]]],
+      "pic": [600, 760],
+      "lift": [{"group": "corgi_group", "x": 3360, "y": 1560, "w": 440, "rot": 6}],
+      "searchLine": "Puzzle your\nown photos",
+      "phone": "20_my_puzzles",
+      "focusY": 300,
+      "searchLift": [{"group": "corgi_group", "x": -380, "y": 1150, "w": 420, "rot": -7}]
+    },
+    "shapes": {
+      "headerLine": "Four ways to cut it",
+      "crops": [["06_mode_cards", "board"], ["07_mode_squares", "board"], ["08_mode_triangles", "board"], ["09_mode_hexagons", "board"]],
+      "covers": ["pack-tiles", "pack-quilts", "pack-textiles", "pack-folk-art", "pack-wallpapers", "pack-embroidery"],
+      "searchLine": "One picture,\nfour ways to cut it",
+      "phone": "10_game_hexagons",
+      "focusY": 640,
+      "searchLift": [{"capture": "08_mode_triangles", "box": "board", "x": -360, "y": 1700, "w": 440, "rot": -8}]
+    },
+    "winter": {
+      "headerLine": "Winter in pictures",
+      "covers": ["pack-snowy-villages", "evpack-christmas-2026", "pack-winter-scenes", "evpack-new-years-eve-2026", "pack-snowy-peaks", "evpack-winter-solstice-2026", "evpack-new-year-2027", "pack-mountain-huts", "pack-starry-nights", "pack-northern-lights"],
+      "searchLine": "Winter in\npictures",
+      "phone": "14_quests_live",
+      "focusY": 1380
+    }
+  }
+}

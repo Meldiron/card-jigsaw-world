@@ -38,6 +38,7 @@ from asc_publish import ApiError, attr, log, md5_of, rel, rel_many  # noqa: E402
 ROOT = ap.ROOT
 DEFS = ROOT / "store" / "metadata" / "custom_pages"
 APPLE_FILE = DEFS / "apple.json"
+NOT_PAGES = {"apple.json", "header_assets.json"}  # files in DEFS that are not page definitions
 OUT = ROOT / "store" / "custom"
 BUILD = ROOT / "build" / "store-custom"
 SCREENSHOT_TYPE = ap.SCREENSHOT_TYPE  # the 6.9-inch iPhone set, as on the default product page
@@ -64,7 +65,7 @@ BOXES = {
 def load_defs(slugs: list[str] | None = None) -> list[dict]:
     pages = []
     for f in sorted(DEFS.glob("*.json")):
-        if f.name == APPLE_FILE.name:
+        if f.name in NOT_PAGES:
             continue
         d = json.loads(f.read_text(encoding="utf-8"))
         d["slug"] = f.stem
