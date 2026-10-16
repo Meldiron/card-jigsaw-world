@@ -61,6 +61,32 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
     final daily = quests.daily, weekly = quests.weekly;
     final readyQuests = readyGoals(progress.values, profile, open, now, dailyPuzzle: dailyPuzzle);
     final readyEvents = ref.watch(readyEventsProvider);
+    // The website layout: daily and weekly quests side by side, the live events beside what is
+    // coming up.
+    final wide = context.isExpanded;
+    final dailyHeader = SectionHeader(
+      title: 'Daily quests',
+      subtitle: 'Coins · new every day',
+      trailing: _ResetsIn(at: Goals.nextDailyReset(now), now: now),
+      padding: EdgeInsets.fromLTRB(wide ? 0 : 20, 20, wide ? 0 : 20, 12),
+    );
+    final weeklyHeader = SectionHeader(
+      title: 'Weekly quests',
+      subtitle: 'Tickets · new every week',
+      trailing: _ResetsIn(at: Goals.nextWeeklyReset(now), now: now),
+      padding: wide ? const EdgeInsets.fromLTRB(0, 20, 0, 12) : const EdgeInsets.fromLTRB(20, 28, 20, 12),
+    );
+    Widget side(List<Widget> left, List<Widget> right) => Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: left)),
+              const SizedBox(width: 16),
+              Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: right)),
+            ],
+          ),
+        );
 
     return Scaffold(
       body: RefreshIndicator.adaptive(
@@ -72,76 +98,121 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
         child: CustomScrollView(
           physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
           slivers: [
-            const HeaderBar(title: 'Quests'),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                child: const PageTitle('Quests'),
-              ),
-            ),
-            // Two or more rewards waiting: one tap claims them all.
-            if (readyQuests.length + readyEvents.length >= 2)
-              SliverToBoxAdapter(child: _ClaimAllCard(goals: readyQuests, events: readyEvents)),
-            SliverToBoxAdapter(
-              child: SectionHeader(
-                title: 'Daily quests',
-                subtitle: 'Coins · new every day',
-                trailing: _ResetsIn(at: Goals.nextDailyReset(now), now: now),
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 12),
-              ),
-            ),
-            SliverToBoxAdapter(child: _GoalList(goals: daily, freeCount: Goals.dailyFree)),
-            SliverToBoxAdapter(
-              child: SectionHeader(title: 'Weekly quests', subtitle: 'Tickets · new every week', trailing: _ResetsIn(at: Goals.nextWeeklyReset(now), now: now)),
-            ),
-            SliverToBoxAdapter(child: _GoalList(goals: weekly, freeCount: Goals.weeklyFree, weekly: true)),
-            const SliverToBoxAdapter(child: SectionHeader(title: 'Live events', subtitle: 'World-day events, one week each')),
-            events.when(
-              loading: () => const SliverToBoxAdapter(child: Padding(padding: EdgeInsets.all(40), child: Loader())),
-              error: (e, _) => const SliverToBoxAdapter(child: EmptyState(icon: AppIcons.signal, title: 'Events could not load', message: 'Check your connection and pull to refresh.')),
-              data: (list) {
-                final active = list.where((e) => e.isActive).toList();
-                final upcoming = list.where((e) => e.isUpcoming).toList()..sort((a, b) => a.startAt!.compareTo(b.startAt!));
-                if (active.isEmpty && upcoming.isEmpty) {
-                  return const SliverToBoxAdapter(
-                    child: EmptyState(icon: AppIcons.balloon, title: 'No events this week', message: 'New world-day events open every few days.'),
-                  );
-                }
-                return SliverList(
-                  delegate: SliverChildListDelegate([
-                    for (var i = 0; i < active.length; i++)
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(20, i == 0 ? 0 : 12, 20, 0),
-                        child: _EventCard(event: active[i], progress: eventProgress[active[i].id]),
-                      ),
-                    if (active.isEmpty)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: SoftCard(
-                          padding: Insets.cardCompact,
-                          child: Text('Nothing live right now. The next event opens soon.', style: TextStyle(color: context.colors.textSecondary, fontSize: TypeSize.footnote)),
+            const HeaderBar(title: 'Quests', contentWidth: PageWidth.reading),
+            SliverPage(
+              maxWidth: wide ? PageWidth.wide : PageWidth.reading,
+              slivers: [
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                    child: const PageTitle('Quests'),
+                  ),
+                ),
+                // Two or more rewards waiting: one tap claims them all.
+                if (readyQuests.length + readyEvents.length >= 2)
+                  SliverToBoxAdapter(child: _ClaimAllCard(goals: readyQuests, events: readyEvents)),
+                if (wide)
+                  SliverToBoxAdapter(
+                    child: side(
+                      [dailyHeader, _GoalList(goals: daily, freeCount: Goals.dailyFree, inset: 0)],
+                      [weeklyHeader, _GoalList(goals: weekly, freeCount: Goals.weeklyFree, weekly: true, inset: 0)],
+                    ),
+                  )
+                else ...[
+                  SliverToBoxAdapter(child: dailyHeader),
+                  SliverToBoxAdapter(child: _GoalList(goals: daily, freeCount: Goals.dailyFree)),
+                  SliverToBoxAdapter(child: weeklyHeader),
+                  SliverToBoxAdapter(child: _GoalList(goals: weekly, freeCount: Goals.weeklyFree, weekly: true)),
+                ],
+                if (!wide) const SliverToBoxAdapter(child: SectionHeader(title: 'Live events', subtitle: 'World-day events, one week each')),
+                events.when(
+                  loading: () => const SliverToBoxAdapter(child: Padding(padding: EdgeInsets.all(40), child: Loader())),
+                  error: (e, _) => const SliverToBoxAdapter(child: EmptyState(icon: AppIcons.signal, title: 'Events could not load', message: 'Check your connection and pull to refresh.')),
+                  data: (list) {
+                    final active = list.where((e) => e.isActive).toList();
+                    final upcoming = list.where((e) => e.isUpcoming).toList()..sort((a, b) => a.startAt!.compareTo(b.startAt!));
+                    if (active.isEmpty && upcoming.isEmpty) {
+                      return SliverToBoxAdapter(
+                        child: Column(
+                          children: [
+                            if (wide) const SectionHeader(title: 'Live events', subtitle: 'World-day events, one week each'),
+                            const EmptyState(icon: AppIcons.balloon, title: 'No events this week', message: 'New world-day events open every few days.'),
+                          ],
                         ),
-                      ),
-                    if (upcoming.isNotEmpty) ...[
-                      const SectionHeader(title: 'Coming up', subtitle: 'Each event opens three days before its day'),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: SoftCard(
-                          padding: EdgeInsets.zero,
-                          child: Column(
-                            children: [
-                              for (var i = 0; i < upcoming.length; i++) ...[
-                                _UpcomingRow(event: upcoming[i]),
-                                if (i < upcoming.length - 1) Divider(height: 1, color: context.colors.stroke, indent: 76),
-                              ],
+                      );
+                    }
+                    if (wide) {
+                      const live = SectionHeader(title: 'Live events', subtitle: 'World-day events, one week each', padding: EdgeInsets.fromLTRB(0, 28, 0, 12));
+                      return SliverToBoxAdapter(
+                        child: side(
+                          [
+                            live,
+                            for (var i = 0; i < active.length; i++) ...[
+                              if (i > 0) const SizedBox(height: 12),
+                              _EventCard(event: active[i], progress: eventProgress[active[i].id]),
                             ],
-                          ),
+                            if (active.isEmpty)
+                              SoftCard(
+                                padding: Insets.cardCompact,
+                                child: Text('Nothing live right now. The next event opens soon.', style: TextStyle(color: context.colors.textSecondary, fontSize: TypeSize.footnote)),
+                              ),
+                          ],
+                          [
+                            if (upcoming.isNotEmpty) ...[
+                              const SectionHeader(title: 'Coming up', subtitle: 'Each event opens three days before its day', padding: EdgeInsets.fromLTRB(0, 28, 0, 12)),
+                              SoftCard(
+                                padding: EdgeInsets.zero,
+                                child: Column(
+                                  children: [
+                                    for (var i = 0; i < upcoming.length; i++) ...[
+                                      _UpcomingRow(event: upcoming[i]),
+                                      if (i < upcoming.length - 1) Divider(height: 1, color: context.colors.stroke, indent: 76),
+                                    ],
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ],
                         ),
-                      ),
-                    ],
-                  ]),
-                );
-              },
+                      );
+                    }
+                    return SliverList(
+                      delegate: SliverChildListDelegate([
+                        for (var i = 0; i < active.length; i++)
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(20, i == 0 ? 0 : 12, 20, 0),
+                            child: _EventCard(event: active[i], progress: eventProgress[active[i].id]),
+                          ),
+                        if (active.isEmpty)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: SoftCard(
+                              padding: Insets.cardCompact,
+                              child: Text('Nothing live right now. The next event opens soon.', style: TextStyle(color: context.colors.textSecondary, fontSize: TypeSize.footnote)),
+                            ),
+                          ),
+                        if (upcoming.isNotEmpty) ...[
+                          const SectionHeader(title: 'Coming up', subtitle: 'Each event opens three days before its day'),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: SoftCard(
+                              padding: EdgeInsets.zero,
+                              child: Column(
+                                children: [
+                                  for (var i = 0; i < upcoming.length; i++) ...[
+                                    _UpcomingRow(event: upcoming[i]),
+                                    if (i < upcoming.length - 1) Divider(height: 1, color: context.colors.stroke, indent: 76),
+                                  ],
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ]),
+                    );
+                  },
+                ),
+              ],
             ),
             SliverToBoxAdapter(child: SizedBox(height: GlassTabBar.scrollEndPadding(context))),
           ],
@@ -162,9 +233,12 @@ class _ResetsIn extends StatelessWidget {
 }
 
 class _GoalList extends ConsumerWidget {
-  const _GoalList({required this.goals, required this.freeCount, this.weekly = false});
+  const _GoalList({required this.goals, required this.freeCount, this.weekly = false, this.inset = 20});
   final List<Goal> goals;
   final bool weekly;
+
+  /// Side margin (none inside a column of the website layout, which has its own).
+  final double inset;
   /// Quests past this index are VIP-only: locked cards for everyone else.
   final int freeCount;
 
@@ -173,7 +247,7 @@ class _GoalList extends ConsumerWidget {
     final c = context.colors;
     final profile = ref.watch(profileProvider).value;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: inset),
       child: SoftCard(
         padding: EdgeInsets.zero,
         child: Column(

@@ -184,7 +184,7 @@ class HomeScreen extends ConsumerWidget {
         child: CustomScrollView(
           physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
           slivers: [
-            const HeaderBar(title: 'Carden'),
+            const HeaderBar(title: 'Carden', contentWidth: PageWidth.reading),
             SliverPage(
               maxWidth: wide ? PageWidth.wide : PageWidth.reading,
               slivers: [

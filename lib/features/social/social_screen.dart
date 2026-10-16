@@ -149,9 +149,11 @@ class SocialScreen extends ConsumerWidget {
     return Scaffold(
       body: Column(
         children: [
-          const HeaderBar(title: 'Social', sliver: false),
+          const HeaderBar(title: 'Social', sliver: false, contentWidth: PageWidth.reading),
+          // A wide window keeps the league in a reading column; the lists below scroll the whole
+          // window's width, so a mouse wheel works anywhere on the page.
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 10, 20, 12),
+            padding: EdgeInsets.fromLTRB(20 + pageInsetOf(context, maxWidth: PageWidth.reading), 10, 20 + pageInsetOf(context, maxWidth: PageWidth.reading), 12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -236,6 +238,7 @@ class _LeaderboardState extends ConsumerState<_Leaderboard> {
     final place = ref.watch(leaderboardRankProvider).value;
     final myProfile = ref.watch(profileProvider).value;
     final showBar = place != null && myProfile != null && !_meOnScreen;
+    final side = 20 + pageInsetOf(context, maxWidth: PageWidth.reading);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) _checkMe();
     });
@@ -279,7 +282,7 @@ class _LeaderboardState extends ConsumerState<_Leaderboard> {
             controller: _scroll,
             physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
             // Room for the pinned bar, so the last rows can scroll above it.
-            padding: EdgeInsets.fromLTRB(20, 0, 20, GlassTabBar.scrollEndPadding(context) + (place != null ? 72 : 0)),
+            padding: EdgeInsets.fromLTRB(side, 0, side, GlassTabBar.scrollEndPadding(context) + (place != null ? 72 : 0)),
             itemCount: rowCount + 1 + (podium ? 1 : 0) + (paged.hasMore ? 1 : 0),
             itemBuilder: (_, i) {
               // Next page when the list nears its end (infinite scroll).
@@ -338,8 +341,8 @@ class _LeaderboardState extends ConsumerState<_Leaderboard> {
           children: [
             listView,
             Positioned(
-              left: 20,
-              right: 20,
+              left: side,
+              right: side,
               bottom: GlassTabBar.scrollEndPadding(context, margin: 0),
               child: IgnorePointer(
                 ignoring: !showBar,
@@ -425,9 +428,10 @@ class _FriendsState extends ConsumerState<_Friends> {
     final c = context.colors;
     final friends = ref.watch(friendsProvider);
     final me = ref.watch(currentUserIdProvider);
+    final side = 20 + pageInsetOf(context, maxWidth: PageWidth.reading);
     return ListView(
       physics: const BouncingScrollPhysics(),
-      padding: EdgeInsets.fromLTRB(20, 0, 20, GlassTabBar.scrollEndPadding(context)),
+      padding: EdgeInsets.fromLTRB(side, 0, side, GlassTabBar.scrollEndPadding(context)),
       children: [
         // Invite: the link opens the game with this player's code filled in (Social > Friends >
         // Add friend by code), in the app where it is installed and on the web elsewhere.

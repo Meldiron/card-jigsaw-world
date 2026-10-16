@@ -162,6 +162,8 @@ web guests keep their saves per address), and the local folder and `~/.local/sha
   launch, checks open transactions on resume and retries checks without an answer; `PurchaseFlow`
   (`lib/state/purchases.dart`) and `PurchaseHost` (`lib/features/store/purchase_host.dart`) show the tile
   spinner, the purchase sheet ("Adding 10 tickets" > "10 tickets added") and toasts. Flow: `docs/purchases.md`.
+- `lib/widgets/adaptive.dart`: wide windows on the web (top bar from 900 px, centred pages, adaptive
+  grids, shelves with arrows, sheets as centred panels); phones keep their layout. `docs/web.md`, "Layout".
 - `lib/core/platform.dart`: web capability flags.
   `lib/core/sfx.dart`: `CJW_MUTE`. `lib/core/qa.dart`: `CJW_QA` / `CJW_QA_RUN` (test players).
 - Daily reminders: local iOS notifications, no server. `lib/state/reminders.dart` (`planReminders`: one a

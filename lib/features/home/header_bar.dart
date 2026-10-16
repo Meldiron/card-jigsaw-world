@@ -15,9 +15,12 @@ import '../../widgets/ui.dart';
 /// stays pinned and turns to glass once the page scrolls under it; `sliver: false` gives a plain
 /// box for non-scrolling layouts.
 class HeaderBar extends ConsumerWidget {
-  const HeaderBar({super.key, required this.title, this.sliver = true});
+  const HeaderBar({super.key, required this.title, this.sliver = true, this.contentWidth = PageWidth.wide});
   final String title;
   final bool sliver;
+
+  /// The page's content column on a wider window: the avatar and the balances line up with it.
+  final double contentWidth;
 
   /// Content height below the status bar.
   static const double height = 50;
@@ -36,11 +39,12 @@ class HeaderBar extends ConsumerWidget {
   Widget _build(BuildContext context, WidgetRef ref) {
     final profile = ref.watch(profileProvider).value;
     final level = profile?.level ?? 1;
+    final side = 20 + pageInsetOf(context, maxWidth: contentWidth);
     final row = Padding(
       // The row is 44 pt high (the pills' touch boxes); the bar keeps its 50 pt height. The level
       // badge hangs below the ring, so the row sits 1 pt above the bar's middle and the badge
       // stays 2 pt clear of the bar's bottom edge.
-      padding: const EdgeInsets.fromLTRB(20, 2, 20, 4),
+      padding: EdgeInsets.fromLTRB(side, 2, side, 4),
       child: Row(
         children: [
           Pressable(

@@ -21,6 +21,7 @@ What is used where:
 | App bars on pushed pages (Settings, Store, Account, My Puzzles, Difficulty, Wheel) | `GlassAppBar` with `extendBodyBehindAppBar: true`. Transparent at rest, glass when scrolled under. |
 | Pack cover | `SliverAppBar` whose collapsed state turns into glass over the blurred top of the cover. |
 | Segmented switches (Social tabs, Account form, Settings > Theme) | `AppSegmentedControl` in `lib/widgets/ui.dart`: the iOS 26 shape drawn in Flutter. Capsule track in the system tertiary fill, glass thumb (white in light, light grey in dark, brighter rim on its upper edge) that springs to the segment, stretches while it travels, lifts under the finger and can be dragged. Use it for every new switch. |
+| Wide windows (the web on a tablet or desktop) | `lib/widgets/adaptive.dart`: from 900 px the floating tab bar becomes `WideTopBar` (the iPadOS 26 top tab bar: tabs in a glass capsule in the middle of a glass bar), `showAppSheet` opens a centred panel (an iPad form sheet) and the full-height modals a centred page sheet (`PanelRoute`). Details in `docs/web.md`, "Layout". |
 | Toasts | `showToast` in `lib/widgets/ui.dart`: a glass capsule that drops in under the status bar, above every screen, sheet and alert; one at a time, tap or swipe up to close. |
 
 ## Why not a package

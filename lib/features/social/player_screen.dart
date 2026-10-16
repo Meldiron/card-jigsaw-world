@@ -71,9 +71,10 @@ class PlayerScreen extends ConsumerWidget {
             badges.putIfAbsent(b.family.id, () => b);
           }
           final top = MediaQuery.paddingOf(context).top + kToolbarHeight;
+          final side = 20 + pageInsetOf(context, maxWidth: PageWidth.reading);
           return ListView(
             physics: const BouncingScrollPhysics(),
-            padding: EdgeInsets.fromLTRB(20, top + 12, 20, GlassTabBar.scrollEndPadding(context)),
+            padding: EdgeInsets.fromLTRB(side, top + 12, side, GlassTabBar.scrollEndPadding(context)),
             children: [
               SoftCard(
                 padding: Insets.card,

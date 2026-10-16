@@ -112,6 +112,86 @@ class PackScreen extends ConsumerWidget {
 
     void goVip() => context.push('/store');
     void getMore() => context.push('/store');
+    // The website layout: the cover runs across the window, its name and the back button line up
+    // with the content column under it.
+    final wide = context.isExpanded;
+    final inset = pageInsetOf(context);
+    final Widget? access = giantClosed
+        ? GiantGateCard(gate: GiantGate.of(ref, pack), onOpenNow: () => openGiantEarly(context, ref, pack)).animate().fadeIn().slideY(begin: 0.1)
+        : !unlocked
+            ? _accessCard(context, pack, priceCurrency, priceValue, balance, goVip, unlock, getMore).animate().fadeIn().slideY(begin: 0.1)
+            : null;
+    final Widget details = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // A locked pack leads with the way in; the description and stats follow.
+        if (access != null && !wide) ...[
+          access,
+          const SizedBox(height: 16),
+        ],
+        Text(pack.description, style: TextStyle(color: c.textSecondary, fontSize: TypeSize.body, height: 1.4)),
+        const SizedBox(height: 14),
+        // One progress line instead of three boxed numbers: solved and stars,
+        // one bar. It reads like the progress line on the pack cards.
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.baseline,
+          textBaseline: TextBaseline.alphabetic,
+          children: [
+            Text('${packProgress.solved}', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.headline, letterSpacing: -0.3)),
+            Text(' of ${packProgress.total} solved', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.body, fontWeight: FontWeight.w500)),
+            const Spacer(),
+            const Icon(AppIcons.star, size: 14, color: Brand.star),
+            const SizedBox(width: 4),
+            Text('${packProgress.stars}', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body)),
+            Text(' of ${packProgress.maxStars}', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.body, fontWeight: FontWeight.w500)),
+          ],
+        ),
+        const SizedBox(height: 8),
+        ProgressBar(value: packProgress.complete ? packProgress.starRatio : packProgress.solvedRatio, height: 6, color: packProgress.complete ? Brand.star : null),
+        if (unlocked && !giantClosed) ...[
+          const SizedBox(height: 16),
+          if (isGiantPack(pack))
+            // A Giant pack says what kind of board waits behind every picture.
+            Row(
+              children: [
+                Icon(AppIcons.bigBoard, color: context.accent, size: 18),
+                const SizedBox(width: 6),
+                Expanded(child: Text('Boards of 100 to 300 cards · pinch to zoom', style: TextStyle(color: c.textSecondary, fontWeight: FontWeight.w500))),
+              ],
+            )
+          else if (pack.isDaily && list.any((p) => p.isToday))
+            // The current month leads with today's picture, the reason to open it.
+            Builder(builder: (context) {
+              final today = list.firstWhere((p) => p.isToday);
+              final pr = progress[today.id];
+              return _TodayCard(
+                puzzle: today,
+                progress: pr,
+                onTap: () => pr != null && pr.inProgress ? context.push('/game/${today.id}/${_gridCodeFor(pr)}') : context.push('/play/${today.id}'),
+              );
+            })
+          else
+          Row(
+            children: [
+              Icon(packProgress.perfect ? AppIcons.star : AppIcons.check, color: packProgress.perfect ? Brand.star : c.success, size: 18),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  packProgress.perfect
+                      ? 'Finished with every star · replay any picture'
+                      : packProgress.complete
+                          ? 'Finished · replay a picture for more stars'
+                          : pack.isDaily && available < list.length
+                              ? '$available of ${list.length} days open · a new picture every day'
+                              : 'Unlocked · tap any picture to play',
+                  style: TextStyle(color: c.textSecondary, fontWeight: FontWeight.w500),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ],
+    );
 
     return Scaffold(
       body: CustomScrollView(
@@ -125,8 +205,9 @@ class PackScreen extends ConsumerWidget {
             stretch: true,
             backgroundColor: Colors.transparent,
             scrolledUnderElevation: 0,
+            leadingWidth: inset > 0 ? inset + kToolbarHeight : null,
             leading: Padding(
-              padding: const EdgeInsets.only(left: 12),
+              padding: EdgeInsets.only(left: inset + 12),
               child: _HeroBackButton(onTap: () => context.pop()),
             ),
             title: _CollapsedTitle(
@@ -159,8 +240,8 @@ class PackScreen extends ConsumerWidget {
                     ),
                   ),
                   Positioned(
-                    left: 20,
-                    right: 20,
+                    left: inset + 20,
+                    right: inset + 20,
                     bottom: 18,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -189,141 +270,84 @@ class PackScreen extends ConsumerWidget {
             ),
             ),
           ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // A locked pack leads with the way in; the description and stats follow.
-                  if (giantClosed) ...[
-                    GiantGateCard(gate: GiantGate.of(ref, pack), onOpenNow: () => openGiantEarly(context, ref, pack)).animate().fadeIn().slideY(begin: 0.1),
-                    const SizedBox(height: 16),
-                  ] else if (!unlocked) ...[
-                    _accessCard(context, pack, priceCurrency, priceValue, balance, goVip, unlock, getMore).animate().fadeIn().slideY(begin: 0.1),
-                    const SizedBox(height: 16),
-                  ],
-                  Text(pack.description, style: TextStyle(color: c.textSecondary, fontSize: TypeSize.body, height: 1.4)),
-                  const SizedBox(height: 14),
-                  // One progress line instead of three boxed numbers: solved and stars,
-                  // one bar. It reads like the progress line on the pack cards.
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.baseline,
-                    textBaseline: TextBaseline.alphabetic,
-                    children: [
-                      Text('${packProgress.solved}', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.headline, letterSpacing: -0.3)),
-                      Text(' of ${packProgress.total} solved', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.body, fontWeight: FontWeight.w500)),
-                      const Spacer(),
-                      const Icon(AppIcons.star, size: 14, color: Brand.star),
-                      const SizedBox(width: 4),
-                      Text('${packProgress.stars}', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body)),
-                      Text(' of ${packProgress.maxStars}', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.body, fontWeight: FontWeight.w500)),
-                    ],
+          SliverPage(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+                  child: wide && access != null
+                      // A desktop puts the way in beside what the pack is.
+                      ? Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(flex: 7, child: details),
+                            const SizedBox(width: 24),
+                            Expanded(flex: 5, child: access),
+                          ],
+                        )
+                      : wide
+                          ? Align(alignment: Alignment.centerLeft, child: ConstrainedBox(constraints: const BoxConstraints(maxWidth: PageWidth.reading), child: details))
+                          : details,
+                ),
+              ),
+              puzzles.when(
+                // 169: the grid's shape while the pictures load (023's photo tiles).
+                loading: () => SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                  sliver: SliverGrid(
+                    gridDelegate: _gridShape(pack),
+                    delegate: SliverChildBuilderDelegate((_, _) => const Skeleton(radius: Radii.md), childCount: pack.isDaily ? 8 : 9),
                   ),
-                  const SizedBox(height: 8),
-                  ProgressBar(value: packProgress.complete ? packProgress.starRatio : packProgress.solvedRatio, height: 6, color: packProgress.complete ? Brand.star : null),
-                  if (unlocked && !giantClosed) ...[
-                    const SizedBox(height: 16),
-                    if (isGiantPack(pack))
-                      // A Giant pack says what kind of board waits behind every picture.
-                      Row(
-                        children: [
-                          Icon(AppIcons.bigBoard, color: context.accent, size: 18),
-                          const SizedBox(width: 6),
-                          Expanded(child: Text('Boards of 100 to 300 cards · pinch to zoom', style: TextStyle(color: c.textSecondary, fontWeight: FontWeight.w500))),
-                        ],
-                      )
-                    else if (pack.isDaily && list.any((p) => p.isToday))
-                      // The current month leads with today's picture, the reason to open it.
-                      Builder(builder: (context) {
-                        final today = list.firstWhere((p) => p.isToday);
-                        final pr = progress[today.id];
-                        return _TodayCard(
-                          puzzle: today,
-                          progress: pr,
-                          onTap: () => pr != null && pr.inProgress ? context.push('/game/${today.id}/${_gridCodeFor(pr)}') : context.push('/play/${today.id}'),
-                        );
-                      })
-                    else
-                    Row(
-                      children: [
-                        Icon(packProgress.perfect ? AppIcons.star : AppIcons.check, color: packProgress.perfect ? Brand.star : c.success, size: 18),
-                        const SizedBox(width: 6),
-                        Expanded(
-                          child: Text(
-                            packProgress.perfect
-                                ? 'Finished with every star · replay any picture'
-                                : packProgress.complete
-                                    ? 'Finished · replay a picture for more stars'
-                                    : pack.isDaily && available < list.length
-                                        ? '$available of ${list.length} days open · a new picture every day'
-                                        : 'Unlocked · tap any picture to play',
-                            style: TextStyle(color: c.textSecondary, fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ],
+                ),
+                error: (e, _) => SliverToBoxAdapter(
+                  child: EmptyState(
+                    icon: AppIcons.signal,
+                    title: 'Pictures did not load',
+                    message: 'Check your connection and try again.',
+                    action: BigButton(label: 'Try again', expand: false, onTap: () => ref.invalidate(catalogProvider)),
+                  ),
+                ),
+                data: (list) => SliverPadding(
+                  padding: EdgeInsets.fromLTRB(20, 20, 20, GlassTabBar.scrollEndPadding(context)),
+                  sliver: SliverGrid(
+                    gridDelegate: _gridShape(pack),
+                    delegate: SliverChildBuilderDelegate((_, i) {
+                      final p = list[i];
+                      final pr = progress[p.id];
+                      return _PuzzleTile(
+                        puzzle: p,
+                        progress: pr,
+                        locked: !unlocked || giantClosed,
+                        dateLocked: p.isLockedByDate,
+                        daily: pack.isDaily,
+                        onTap: () {
+                          if (p.isLockedByDate) {
+                            Haptics.medium();
+                            showToast(context, 'Opens on ${formatDate(p.date!, year: false)}. Today\'s puzzle is ready now.', icon: AppIcons.lock);
+                            return;
+                          }
+                          if (giantClosed) {
+                            Haptics.medium();
+                            showGiantGateSheet(context, ref, pack);
+                            return;
+                          }
+                          if (!unlocked) {
+                            Haptics.medium();
+                            _showAccessSheet(context, pack, priceCurrency, priceValue, balance, goVip, unlock, getMore);
+                            return;
+                          }
+                          if (pr != null && pr.inProgress) {
+                            context.push('/game/${p.id}/${_gridCodeFor(pr)}');
+                          } else {
+                            context.push('/play/${p.id}');
+                          }
+                        },
+                      );
+                    }, childCount: list.length),
+                  ),
+                ),
               ),
-            ),
-          ),
-          puzzles.when(
-            // 169: the grid's shape while the pictures load (023's photo tiles).
-            loading: () => SliverPadding(
-              padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-              sliver: SliverGrid(
-                gridDelegate: _gridShape(pack),
-                delegate: SliverChildBuilderDelegate((_, _) => const Skeleton(radius: Radii.md), childCount: pack.isDaily ? 8 : 9),
-              ),
-            ),
-            error: (e, _) => SliverToBoxAdapter(
-              child: EmptyState(
-                icon: AppIcons.signal,
-                title: 'Pictures did not load',
-                message: 'Check your connection and try again.',
-                action: BigButton(label: 'Try again', expand: false, onTap: () => ref.invalidate(catalogProvider)),
-              ),
-            ),
-            data: (list) => SliverPadding(
-              padding: EdgeInsets.fromLTRB(20, 20, 20, GlassTabBar.scrollEndPadding(context)),
-              sliver: SliverGrid(
-                gridDelegate: _gridShape(pack),
-                delegate: SliverChildBuilderDelegate((_, i) {
-                  final p = list[i];
-                  final pr = progress[p.id];
-                  return _PuzzleTile(
-                    puzzle: p,
-                    progress: pr,
-                    locked: !unlocked || giantClosed,
-                    dateLocked: p.isLockedByDate,
-                    daily: pack.isDaily,
-                    onTap: () {
-                      if (p.isLockedByDate) {
-                        Haptics.medium();
-                        showToast(context, 'Opens on ${formatDate(p.date!, year: false)}. Today\'s puzzle is ready now.', icon: AppIcons.lock);
-                        return;
-                      }
-                      if (giantClosed) {
-                        Haptics.medium();
-                        showGiantGateSheet(context, ref, pack);
-                        return;
-                      }
-                      if (!unlocked) {
-                        Haptics.medium();
-                        _showAccessSheet(context, pack, priceCurrency, priceValue, balance, goVip, unlock, getMore);
-                        return;
-                      }
-                      if (pr != null && pr.inProgress) {
-                        context.push('/game/${p.id}/${_gridCodeFor(pr)}');
-                      } else {
-                        context.push('/play/${p.id}');
-                      }
-                    },
-                  );
-                }, childCount: list.length),
-              ),
-            ),
+            ],
           ),
         ],
       ),
@@ -405,8 +429,10 @@ class PackScreen extends ConsumerWidget {
 
   /// The picture grid: a month is a four-column calendar of nearly square days, other packs three
   /// columns of 3:4 photos. Tiles carry no caption (023), so the photos get the whole cell.
-  static SliverGridDelegate _gridShape(Pack pack) => SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: pack.isDaily ? 4 : 3,
+  /// On a wider window the grid takes as many columns as fit.
+  static SliverGridDelegate _gridShape(Pack pack) => AdaptiveGridDelegate(
+        compact: pack.isDaily ? 4 : 3,
+        target: pack.isDaily ? 140 : 180,
         mainAxisSpacing: pack.isDaily ? 8 : 10,
         crossAxisSpacing: pack.isDaily ? 8 : 10,
         childAspectRatio: pack.isDaily ? 0.82 : 0.75,
@@ -751,27 +777,26 @@ class _PuzzleTile extends StatelessWidget {
 class _PackSkeleton extends StatelessWidget {
   const _PackSkeleton();
   @override
-  Widget build(BuildContext context) => ListView(
-        padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
-        physics: const NeverScrollableScrollPhysics(),
-        children: [
-          const Skeleton(height: 180, radius: Radii.lg),
-          const SizedBox(height: 20),
-          const Skeleton(width: 180, height: 28, radius: Radii.sm),
-          const SizedBox(height: 12),
-          const Skeleton(height: 14),
-          const SizedBox(height: 8),
-          const Skeleton(width: 240, height: 14),
-          const SizedBox(height: 24),
-          GridView.count(
-            crossAxisCount: 3,
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 10,
-            childAspectRatio: 0.75,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            children: [for (var i = 0; i < 9; i++) const Skeleton(radius: Radii.md)],
-          ),
-        ],
+  Widget build(BuildContext context) => PageColumn(
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
+          physics: const NeverScrollableScrollPhysics(),
+          children: [
+            const Skeleton(height: 180, radius: Radii.lg),
+            const SizedBox(height: 20),
+            const Skeleton(width: 180, height: 28, radius: Radii.sm),
+            const SizedBox(height: 12),
+            const Skeleton(height: 14),
+            const SizedBox(height: 8),
+            const Skeleton(width: 240, height: 14),
+            const SizedBox(height: 24),
+            GridView(
+              gridDelegate: const AdaptiveGridDelegate(compact: 3, target: 180, mainAxisSpacing: 10, crossAxisSpacing: 10, childAspectRatio: 0.75),
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              children: [for (var i = 0; i < (context.isWide ? 12 : 9); i++) const Skeleton(radius: Radii.md)],
+            ),
+          ],
+        ),
       );
 }

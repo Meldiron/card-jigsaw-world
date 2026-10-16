@@ -53,9 +53,39 @@ former `image-proxy` function was removed (2026-10-13).
 
 ## Layout
 
-On wide windows the app is centred in a 520 px column on the canvas colour
-(`PhoneFrame` in `lib/app.dart`), and the inherited `MediaQuery` is narrowed to
-that column so the phone layout is not stretched. Narrow windows are untouched.
+The web build lays itself out like a website on wider windows
+(`lib/widgets/adaptive.dart`); a phone-width window, and the iPhone app (portrait
+only, at most 440 pt), get the phone layout exactly as before. Two breakpoints:
+
+| Window | Layout |
+| --- | --- |
+| Under 600 px (compact) | The phone layout. |
+| 600 px and up (medium) | Still the floating tab bar, at a phone's width in the middle. Pages centre their content (`SliverPage`, `PageColumn`), grids add columns (`AdaptiveGridDelegate`), home shelves get arrow buttons and mouse drag (`Shelf`), sheets open as centred panels. |
+| 900 px and up (expanded) | The website layout: a full-width glass top bar (`WideTopBar` in `lib/features/home/header_bar.dart`: the Carden mark, the five tabs in a capsule, balances and avatar) instead of the floating tab bar, content centred at up to 1200 px (`PageWidth.wide`) or 720 px for lists and forms (`PageWidth.reading`), and two columns where a page has two parts. |
+
+What each screen does on an expanded window:
+
+- Home: a dashboard. Today's picture beside Quick play and the streak, the Wheel and the piggy
+  bank beside the level, then the shelves and Featured in two full rows.
+- Library: the search beside the title, every chip in view (they wrap), as many pack columns as fit.
+- A pack: the cover runs across the window as a banner, the way in (price, gate) beside the
+  description, the pictures in as many columns as fit.
+- Quests: daily and weekly side by side, live events beside "Coming up".
+- Profile: the profile card and its links beside the statistics, achievements in two columns.
+- Social, a player, Settings: one reading column; the lists still scroll anywhere in the window.
+- Difficulty: the preview large on the left, the mode, board and Play beside it.
+- A game: the HUD and the tools keep a phone's width over a board that uses the window; the
+  results put the finished picture beside a results sidebar.
+- Store, Wheel and Account open as a centred page sheet (`PanelRoute`, 580 px, so the screen inside
+  keeps its phone layout); every `showAppSheet` as a centred panel (520 px); action sheets in the
+  middle. A tap outside or Escape closes them.
+- Onboarding: the art on the left, the page's text and the buttons on the right.
+
+Everything tappable shows the hand cursor (`Pressable`). New screens: put the page's slivers in a
+`SliverPage` (the pinned header stays outside, so its glass runs edge to edge), use
+`AdaptiveGridDelegate` for card grids and `Shelf` for sideways rows, and gate a two-column layout
+on `context.isExpanded`. Keep every wide change behind `context.isWide` / `context.isExpanded` so
+the phone layout does not move. `test/adaptive_layout_test.dart` covers the helpers and the panels.
 
 ## Routing
 

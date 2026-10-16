@@ -71,6 +71,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     final textBlock = MediaQuery.textScalerOf(context).scale(196);
     // Starts decoding page 2's picture on page 1 and keeps it for the welcome.
     ref.watch(_boardPicture);
+    if (context.isExpanded) return _wide(context);
 
     return Scaffold(
       backgroundColor: c.canvas,
@@ -220,6 +221,105 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  /// The welcome on a desktop: the art large on the left (it still turns page by page), the
+  /// page's title and text with the controls on the right.
+  Widget _wide(BuildContext context) {
+    final c = context.colors;
+    final last = _index == _slides.length - 1;
+    final s = _slides[_index];
+    void next() {
+      if (last) {
+        _finish();
+      } else {
+        _page.nextPage(duration: const Duration(milliseconds: 350), curve: Curves.easeOutCubic);
+      }
+    }
+
+    return Scaffold(
+      backgroundColor: c.canvas,
+      body: SafeArea(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 1120, maxHeight: 760),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 32),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 6,
+                    child: PageView.builder(
+                      controller: _page,
+                      itemCount: _slides.length,
+                      onPageChanged: (i) => setState(() => _index = i),
+                      itemBuilder: (_, i) {
+                        final Widget art = switch (i) {
+                          0 => const _CardFan(pictures: _Welcome.firstFan),
+                          1 => const _DemoBoard(),
+                          _ => const _CardFan(pictures: _Welcome.dailyFan),
+                        };
+                        return i == 1
+                            ? art.animate(key: ValueKey('a$i')).fadeIn(duration: 400.ms)
+                            : _FadeToCanvas(child: art.animate(key: ValueKey('a$i')).fadeIn(duration: 400.ms));
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 56),
+                  Expanded(
+                    flex: 5,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(s.title, style: Theme.of(context).textTheme.displaySmall)
+                            .animate(key: ValueKey('t$_index'))
+                            .fadeIn(delay: 80.ms, duration: 350.ms)
+                            .slideY(begin: 0.08, curve: Curves.easeOut),
+                        const SizedBox(height: 12),
+                        Text(s.body, style: TextStyle(fontSize: TypeSize.callout, height: 1.45, color: c.textSecondary))
+                            .animate(key: ValueKey('b$_index'))
+                            .fadeIn(delay: 160.ms, duration: 350.ms)
+                            .slideY(begin: 0.08, curve: Curves.easeOut),
+                        const SizedBox(height: 32),
+                        Row(
+                          children: [
+                            for (var i = 0; i < _slides.length; i++)
+                              AnimatedContainer(
+                                duration: const Duration(milliseconds: 250),
+                                margin: const EdgeInsets.only(right: 8),
+                                width: i == _index ? 20 : 6,
+                                height: 6,
+                                decoration: BoxDecoration(color: i == _index ? context.accent : c.textTertiary.withValues(alpha: 0.45), borderRadius: BorderRadius.circular(6)),
+                              ),
+                          ],
+                        ),
+                        const SizedBox(height: 24),
+                        Row(
+                          children: [
+                            SizedBox(width: 240, child: BigButton(label: last ? 'Start playing' : 'Continue', icon: last ? AppIcons.playFill : null, onTap: next)),
+                            const SizedBox(width: 12),
+                            // "Start playing" already finishes on the last page.
+                            if (!last)
+                              Pressable(
+                                onTap: _finish,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12),
+                                  child: Text('Skip', style: TextStyle(color: c.textSecondary, fontWeight: FontWeight.w600)),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

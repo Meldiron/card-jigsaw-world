@@ -359,6 +359,7 @@ class _HouseAdScreenState extends ConsumerState<HouseAdScreen> {
   Widget build(BuildContext context) {
     final c = widget.creative;
     final progress = 1 - _left / _total;
+    final inset = pageInsetOf(context);
     final priceLine = ref.watch(platformCapsProvider).purchases ? c.priceLine(_appStorePrices(ref)) : null;
     // Light status bar: the card is dark (scrim or ground) whatever the app theme.
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -393,7 +394,7 @@ class _HouseAdScreenState extends ConsumerState<HouseAdScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                    padding: EdgeInsets.fromLTRB(16 + inset, 8, 16 + inset, 0),
                     child: Row(
                       children: [
                         const Chip2(label: 'Offer', onImage: true),
@@ -410,7 +411,10 @@ class _HouseAdScreenState extends ConsumerState<HouseAdScreen> {
                   ),
                   const Spacer(),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
+                    padding: EdgeInsets.fromLTRB(24 + inset, 0, 24 + inset, 16),
+                    child: ConstrainedBox(
+                    // On a wide window the copy and its buttons keep a phone's measure.
+                    constraints: const BoxConstraints(maxWidth: PageWidth.sheet),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -447,6 +451,7 @@ class _HouseAdScreenState extends ConsumerState<HouseAdScreen> {
                           ),
                         ],
                       ],
+                    ),
                     ),
                   ),
                 ],
@@ -631,38 +636,52 @@ class _HouseBannerState extends ConsumerState<HouseBanner> {
     final price = ((ref.watch(platformCapsProvider).purchases ? c.priceLine(_appStorePrices(ref)) : null) ?? c.body).replaceAll('/', '\u2060/\u2060');
     // The VIP card (lib/widgets/vip.dart), stacked: the crown, the headline and the full price on
     // top (word joiners keep "$2.99/month" together), then the action and "Not now" as real buttons.
+    final copy = Row(
+      children: [
+        const VipCrown(size: IconTile.medium),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(c.headline, style: const TextStyle(color: Vip.fg, fontWeight: FontWeight.w600, fontSize: TypeSize.body)),
+              const SizedBox(height: 2),
+              Text(price, style: TextStyle(color: Vip.fgSecondary, fontSize: TypeSize.footnote, height: 1.3)),
+            ],
+          ),
+        ),
+      ],
+    );
+    final goVip = BigButton(label: 'Go VIP', kind: ButtonKind.gold, height: 40, onTap: () => openCreative(context, ref, c));
+    final notNow = BigButton(label: 'Not now', kind: ButtonKind.ghostLight, height: 40, expand: false, onTap: () => setState(() => _dismissedThisSession = true));
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
       child: VipSurface(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const VipCrown(size: IconTile.medium),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+        // A wide window has the room for one line: the copy, then the two buttons beside it.
+        child: context.isWide
+            ? Row(
+                children: [
+                  Expanded(child: copy),
+                  const SizedBox(width: 16),
+                  SizedBox(width: 180, child: goVip),
+                  const SizedBox(width: 8),
+                  notNow,
+                ],
+              )
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  copy,
+                  const SizedBox(height: 14),
+                  Row(
                     children: [
-                      Text(c.headline, style: const TextStyle(color: Vip.fg, fontWeight: FontWeight.w600, fontSize: TypeSize.body)),
-                      const SizedBox(height: 2),
-                      Text(price, style: TextStyle(color: Vip.fgSecondary, fontSize: TypeSize.footnote, height: 1.3)),
+                      Expanded(child: goVip),
+                      const SizedBox(width: 8),
+                      notNow,
                     ],
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 14),
-            Row(
-              children: [
-                Expanded(child: BigButton(label: 'Go VIP', kind: ButtonKind.gold, height: 40, onTap: () => openCreative(context, ref, c))),
-                const SizedBox(width: 8),
-                BigButton(label: 'Not now', kind: ButtonKind.ghostLight, height: 40, expand: false, onTap: () => setState(() => _dismissedThisSession = true)),
-              ],
-            ),
-          ],
-        ),
+                ],
+              ),
       ),
     );
   }

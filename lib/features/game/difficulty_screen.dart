@@ -396,12 +396,159 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
       ],
     );
 
+    // Preview in the real board's proportions with the chosen tiling drawn over the same centre
+    // crop the board will use (BoxFit.cover == Tiling.crop), at most [maxHeight] tall.
+    Widget preview(double maxHeight) => AnimatedSize(
+      duration: const Duration(milliseconds: 220),
+      curve: Curves.easeOutCubic,
+      alignment: Alignment.topCenter,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxHeight: maxHeight),
+        child: AspectRatio(
+          aspectRatio: boardAspect,
+          child: Container(
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(Radii.lg),
+              border: Border.all(color: c.stroke),
+            ),
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                NetImage(url: puzzle!.imageUrl, blurhash: puzzle.blurhash),
+                CustomPaint(
+                  // A board in progress: the cards not in place yet are dimmed, so the
+                  // preview shows how far along it is.
+                  painter: _CutOverlay(
+                    spec: spec,
+                    imageAspect: imageAspect,
+                    color: Colors.white.withValues(alpha: 0.7),
+                    placed: saved?.layout == null ? null : {for (var i = 0; i < saved!.layout!.length; i++) if (saved.layout![i] == i) i},
+                  ),
+                ),
+                // The credit waits behind a small camera button in the corner: the
+                // photo and its cut lines stay clear, and a tap shows it in full.
+                Positioned(
+                  right: 0,
+                  bottom: 0,
+                  child: PhotoButton(
+                    key: const ValueKey('picture-credit'),
+                    icon: AppIcons.credit,
+                    size: 30,
+                    semanticLabel: 'Picture credit',
+                    onTap: () => _showCredit(puzzle),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    ).animate().fadeIn(duration: 120.ms);
+
+    Widget boardChip(int i) {
+      final t = tiers[i];
+      final locked = giant ? giantLocked : i >= maxTier && !profileN.hasTier(mode, i);
+      return _BoardChip(
+        spec: t,
+        step: i,
+        steps: tiers.length,
+        selected: t == spec,
+        locked: locked,
+        onTap: locked
+            ? () => giant ? showLockedInfo(context, ref, Unlock.giant) : _offerUnlock(i, t)
+            : () {
+                Haptics.selection();
+                setState(() => _tier = t.tier);
+              },
+      );
+    }
+
+    // The choices under the preview (beside it on a wide window).
+    List<Widget> options({required bool wide}) => [
+      // A board in progress: what it is and how far along, instead of
+      // pickers that cannot be used until it is discarded.
+      if (saved != null) ...[
+        _InProgressCard(spec: spec, saved: saved, painting: painting),
+        const SizedBox(height: 10),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'Continue where you left off, or discard it to pick another mode or size.',
+            style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote),
+          ),
+        ),
+      ] else ...[
+      const _SectionLabel('Mode'),
+      const SizedBox(height: 8),
+      _ModePicker(
+        selected: mode,
+        isOpen: open.mode,
+        onTap: (m) => !open.mode(m) ? showLockedInfo(context, ref, Unlocks.ofMode(m)!) : _pickMode(m),
+      ),
+      SizedBox(height: compact ? 14 : 20),
+      const _SectionLabel('Board'),
+      if (giant) ...[
+        const SizedBox(height: 2),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            giantLocked
+                ? 'Giant boards of 100 cards and more open at level ${Unlock.giant.level}. This pack is ready for you then.'
+                : 'Giant boards of 100 cards and more, all open with this pack. Pinch to zoom in while you play.',
+            style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote),
+          ),
+        ),
+      ],
+      const SizedBox(height: 8),
+      // On a phone the row runs to the screen edges, so the next size peeks in as a
+      // hint to scroll; a wide window shows every size at once.
+      if (wide)
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Wrap(spacing: 8, runSpacing: 8, children: [for (var i = 0; i < tiers.length; i++) boardChip(i)]),
+        )
+      else
+      SizedBox(
+        // 167: the chips' two lines grow with Larger Text; so does the row
+        // (the ladder meter under them keeps its 18 pt).
+        height: MediaQuery.textScalerOf(context).scale(52) + 18,
+        child: OverflowBox(
+          maxWidth: MediaQuery.sizeOf(context).width,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            physics: const BouncingScrollPhysics(),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            itemCount: tiers.length,
+            separatorBuilder: (_, _) => const SizedBox(width: 8),
+            itemBuilder: (_, i) => boardChip(i),
+          ),
+        ),
+      ),
+      SizedBox(height: compact ? 12 : 16),
+      _PaintingTile(
+        on: painting,
+        enabled: saved == null,
+        locked: saved == null && !open.painting,
+        onLocked: () => showLockedInfo(context, ref, Unlock.painting),
+        onChanged: (v) {
+          Haptics.selection();
+          setState(() => _painting = v);
+        },
+      ),
+      ],
+    ];
+
+    // The website layout: the preview large on the left, the choices and Play beside it.
+    final wide = context.isExpanded && puzzle != null;
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       // The footer floats over the page and the choices scroll under it.
       extendBody: true,
-      bottomNavigationBar: puzzle == null ? null : _GlassFooter(glass: _moreBelow, child: footer),
+      bottomNavigationBar: puzzle == null || wide ? null : _GlassFooter(glass: _moreBelow, child: footer),
       appBar: GlassAppBar(
+        contentWidth: PageWidth.wide,
         leading: Padding(
           padding: const EdgeInsets.only(left: 12),
           child: RoundIconButton(icon: AppIcons.back, size: 38, onTap: () => context.canPop() ? context.pop() : context.go('/home')),
@@ -419,6 +566,49 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                   message: 'The link may be out of date, or the picture belongs to another player.',
                 )
               : const Loader())
+          : wide
+              // The body's top padding is the bar's height.
+              ? Builder(
+                  builder: (context) => Padding(
+                    padding: EdgeInsets.fromLTRB(20 + pageInsetOf(context), MediaQuery.paddingOf(context).top + 8, 20 + pageInsetOf(context), 24),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          flex: 7,
+                          child: Column(
+                            children: [
+                              preview(MediaQuery.sizeOf(context).height - MediaQuery.paddingOf(context).top - 80),
+                              // A solved picture: its best result under the preview.
+                              if (progress?.completed == true) ...[
+                                const SizedBox(height: 8),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Stars(count: progress!.stars, size: 13),
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      'Best ${countOf(progress.bestMoves ?? progress.moves, 'move')}',
+                                      style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: c.textSecondary),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 40),
+                        Expanded(
+                          flex: 5,
+                          child: SingleChildScrollView(
+                            physics: const BouncingScrollPhysics(),
+                            child: Column(children: [...options(wide: true), const SizedBox(height: 28), footer]),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+              )
           : NotificationListener<ScrollMetricsNotification>(
               onNotification: (n) {
                 if (n.depth == 0) _onMetrics(n.metrics);
@@ -436,56 +626,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                       padding: EdgeInsets.fromLTRB(20, MediaQuery.paddingOf(context).top + 4, 20, MediaQuery.paddingOf(context).bottom + 16),
                       child: Column(
                         children: [
-                          // Preview in the real board's proportions with the
-                          // chosen tiling drawn over the same centre crop the
-                          // board will use (BoxFit.cover == Tiling.crop).
-                          AnimatedSize(
-                            duration: const Duration(milliseconds: 220),
-                            curve: Curves.easeOutCubic,
-                            alignment: Alignment.topCenter,
-                            child: ConstrainedBox(
-                              constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * (compact ? 0.24 : 0.32)),
-                              child: AspectRatio(
-                                aspectRatio: boardAspect,
-                                child: Container(
-                                  clipBehavior: Clip.antiAlias,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(Radii.lg),
-                                    border: Border.all(color: c.stroke),
-                                  ),
-                                  child: Stack(
-                                    fit: StackFit.expand,
-                                    children: [
-                                      NetImage(url: puzzle.imageUrl, blurhash: puzzle.blurhash),
-                                      CustomPaint(
-                                        // A board in progress: the cards not in place yet are dimmed, so the
-                                        // preview shows how far along it is.
-                                        painter: _CutOverlay(
-                                          spec: spec,
-                                          imageAspect: imageAspect,
-                                          color: Colors.white.withValues(alpha: 0.7),
-                                          placed: saved?.layout == null ? null : {for (var i = 0; i < saved!.layout!.length; i++) if (saved.layout![i] == i) i},
-                                        ),
-                                      ),
-                                      // The credit waits behind a small camera button in the corner: the
-                                      // photo and its cut lines stay clear, and a tap shows it in full.
-                                      Positioned(
-                                        right: 0,
-                                        bottom: 0,
-                                        child: PhotoButton(
-                                          key: const ValueKey('picture-credit'),
-                                          icon: AppIcons.credit,
-                                          size: 30,
-                                          semanticLabel: 'Picture credit',
-                                          onTap: () => _showCredit(puzzle),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ).animate().fadeIn(duration: 120.ms),
+                          preview(MediaQuery.sizeOf(context).height * (compact ? 0.24 : 0.32)),
                           // A solved picture: its best result under the preview.
                           if (progress?.completed == true) ...[
                             const SizedBox(height: 8),
@@ -502,86 +643,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                             ),
                           ],
                           SizedBox(height: compact ? 14 : 20),
-                          // A board in progress: what it is and how far along, instead of
-                          // pickers that cannot be used until it is discarded.
-                          if (saved != null) ...[
-                            _InProgressCard(spec: spec, saved: saved, painting: painting),
-                            const SizedBox(height: 10),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                'Continue where you left off, or discard it to pick another mode or size.',
-                                style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote),
-                              ),
-                            ),
-                          ] else ...[
-                          const _SectionLabel('Mode'),
-                          const SizedBox(height: 8),
-                          _ModePicker(
-                            selected: mode,
-                            isOpen: open.mode,
-                            onTap: (m) => !open.mode(m) ? showLockedInfo(context, ref, Unlocks.ofMode(m)!) : _pickMode(m),
-                          ),
-                          SizedBox(height: compact ? 14 : 20),
-                          const _SectionLabel('Board'),
-                          if (giant) ...[
-                            const SizedBox(height: 2),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                giantLocked
-                                    ? 'Giant boards of 100 cards and more open at level ${Unlock.giant.level}. This pack is ready for you then.'
-                                    : 'Giant boards of 100 cards and more, all open with this pack. Pinch to zoom in while you play.',
-                                style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote),
-                              ),
-                            ),
-                          ],
-                          const SizedBox(height: 8),
-                          // Runs to the screen edges, so the next size peeks in as a hint to scroll.
-                          SizedBox(
-                            // 167: the chips' two lines grow with Larger Text; so does the row
-                            // (the ladder meter under them keeps its 18 pt).
-                            height: MediaQuery.textScalerOf(context).scale(52) + 18,
-                            child: OverflowBox(
-                              maxWidth: MediaQuery.sizeOf(context).width,
-                              child: ListView.separated(
-                                scrollDirection: Axis.horizontal,
-                                physics: const BouncingScrollPhysics(),
-                                padding: const EdgeInsets.symmetric(horizontal: 20),
-                                itemCount: tiers.length,
-                                separatorBuilder: (_, _) => const SizedBox(width: 8),
-                                itemBuilder: (_, i) {
-                                  final t = tiers[i];
-                                  final locked = giant ? giantLocked : i >= maxTier && !profileN.hasTier(mode, i);
-                                  return _BoardChip(
-                                    spec: t,
-                                    step: i,
-                                    steps: tiers.length,
-                                    selected: t == spec,
-                                    locked: locked,
-                                    onTap: locked
-                                        ? () => giant ? showLockedInfo(context, ref, Unlock.giant) : _offerUnlock(i, t)
-                                        : () {
-                                            Haptics.selection();
-                                            setState(() => _tier = t.tier);
-                                          },
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: compact ? 12 : 16),
-                          _PaintingTile(
-                            on: painting,
-                            enabled: saved == null,
-                            locked: saved == null && !open.painting,
-                            onLocked: () => showLockedInfo(context, ref, Unlock.painting),
-                            onChanged: (v) {
-                              Haptics.selection();
-                              setState(() => _painting = v);
-                            },
-                          ),
-                          ],
+                          ...options(wide: false),
                         ],
                       ),
                     ),

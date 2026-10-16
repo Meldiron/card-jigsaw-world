@@ -129,6 +129,7 @@ class _MyPuzzlesScreenState extends ConsumerState<MyPuzzlesScreen> {
       extendBodyBehindAppBar: true,
       appBar: GlassAppBar(
         title: const Text('My Puzzles'),
+        contentWidth: PageWidth.wide,
         leading: Padding(padding: const EdgeInsets.only(left: 12), child: RoundIconButton(icon: AppIcons.back, size: 38, onTap: () => context.pop())),
       ),
       body: mine.when(
@@ -136,6 +137,7 @@ class _MyPuzzlesScreenState extends ConsumerState<MyPuzzlesScreen> {
         error: (e, _) => EmptyState(icon: AppIcons.signal, title: 'Photos did not load', message: 'Check your connection and pull to refresh.'),
         data: (paged) {
           final list = paged.items;
+          final side = 20 + pageInsetOf(context);
           return RefreshIndicator.adaptive(
             edgeOffset: MediaQuery.paddingOf(context).top + kToolbarHeight,
             onRefresh: () async {
@@ -172,14 +174,14 @@ class _MyPuzzlesScreenState extends ConsumerState<MyPuzzlesScreen> {
                 // (the Photos album idiom), so it sits where the photos go.
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(20, MediaQuery.paddingOf(context).top + kToolbarHeight + 4, 20, 0),
+                    padding: EdgeInsets.fromLTRB(side, MediaQuery.paddingOf(context).top + kToolbarHeight + 4, side, 0),
                     child: Text('Only you can see your photos. Tap to play, hold for more.', style: TextStyle(fontSize: TypeSize.footnote, height: 1.4, color: c.textSecondary)),
                   ),
                 ),
                 SliverPadding(
-                  padding: EdgeInsets.fromLTRB(20, 14, 20, GlassTabBar.scrollEndPadding(context)),
+                  padding: EdgeInsets.fromLTRB(side, 14, side, GlassTabBar.scrollEndPadding(context)),
                   sliver: SliverGrid(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 12, crossAxisSpacing: 12, childAspectRatio: 0.78),
+                    gridDelegate: const AdaptiveGridDelegate(childAspectRatio: 0.78),
                     delegate: SliverChildBuilderDelegate(
                       (_, index) {
                         if (index == 0) {

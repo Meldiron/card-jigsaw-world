@@ -903,10 +903,13 @@ class _Hud extends StatelessWidget {
   // Chrome keeps its size above the text-size cap of the bars (see ChromeText).
   Widget build(BuildContext context) => ChromeText(child: Builder(builder: _build));
 
+  /// Widest the HUD gets (a wide window, the web on a desktop): the board takes the room.
+  static const double maxWidth = 760;
+
   Widget _build(BuildContext context) {
     final c = context.colors;
     final b = state.board;
-    return Padding(
+    final hud = Padding(
       padding: const EdgeInsets.fromLTRB(12, 6, 12, 8),
       child: Column(
         children: [
@@ -960,6 +963,8 @@ class _Hud extends StatelessWidget {
         ],
       ),
     );
+    if (!context.isWide) return hud;
+    return Center(child: ConstrainedBox(constraints: const BoxConstraints(maxWidth: maxWidth), child: hud));
   }
 }
 
@@ -1065,7 +1070,10 @@ class _BoosterBar extends StatelessWidget {
         Expanded(child: capsule(Row(children: [for (final b in paid) Expanded(child: b)]))),
       ],
     );
-    return Padding(padding: const EdgeInsets.fromLTRB(16, 4, 16, 8), child: bar);
+    final padded = Padding(padding: const EdgeInsets.fromLTRB(16, 4, 16, 8), child: bar);
+    // A wide window keeps the tools at a phone's width under the board.
+    if (!context.isWide) return padded;
+    return Center(child: ConstrainedBox(constraints: const BoxConstraints(maxWidth: 560), child: padded));
   }
 }
 
@@ -1326,36 +1334,39 @@ class _HowToPlay extends StatelessWidget {
               alignment: Alignment.bottomCenter,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Elevated(
-                  child: Builder(
-                    builder: (context) => Container(
-                      key: const ValueKey('how-to-play'),
-                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
-                      decoration: BoxDecoration(
-                        color: context.colors.card,
-                        borderRadius: BorderRadius.circular(28),
-                        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: context.isDark ? 0.5 : 0.14), blurRadius: 30, offset: const Offset(0, 8))],
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SheetHeader(title: 'How to play'),
-                          const SizedBox(height: 14),
-                          step(AppIcons.tapCard, 'Tap a card, then tap where it belongs. Or drag it there.'),
-                          step(AppIcons.group, 'Neighbours in the picture snap into a group and move together.'),
-                          step(AppIcons.lock, 'A card in its true spot locks in place.'),
-                          Row(
-                            children: [
-                              const SizedBox(width: 8),
-                              Icon(AppIcons.star, size: 15, color: Brand.star),
-                              const SizedBox(width: 21),
-                              Expanded(child: Text('Fewer moves earn more stars. No time limit.', style: TextStyle(fontSize: TypeSize.footnote, color: context.colors.textSecondary))),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-                          BigButton(label: 'Got it', onTap: onDone),
-                        ],
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: PageWidth.sheet),
+                  child: Elevated(
+                    child: Builder(
+                      builder: (context) => Container(
+                        key: const ValueKey('how-to-play'),
+                        padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
+                        decoration: BoxDecoration(
+                          color: context.colors.card,
+                          borderRadius: BorderRadius.circular(28),
+                          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: context.isDark ? 0.5 : 0.14), blurRadius: 30, offset: const Offset(0, 8))],
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SheetHeader(title: 'How to play'),
+                            const SizedBox(height: 14),
+                            step(AppIcons.tapCard, 'Tap a card, then tap where it belongs. Or drag it there.'),
+                            step(AppIcons.group, 'Neighbours in the picture snap into a group and move together.'),
+                            step(AppIcons.lock, 'A card in its true spot locks in place.'),
+                            Row(
+                              children: [
+                                const SizedBox(width: 8),
+                                Icon(AppIcons.star, size: 15, color: Brand.star),
+                                const SizedBox(width: 21),
+                                Expanded(child: Text('Fewer moves earn more stars. No time limit.', style: TextStyle(fontSize: TypeSize.footnote, color: context.colors.textSecondary))),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                            BigButton(label: 'Got it', onTap: onDone),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -1468,11 +1479,13 @@ class _CompletionOverlayState extends State<_CompletionOverlay> {
         _RewardStat(label: 'Time', value: formatDuration(state.elapsed)),
       ],
     );
+    // A wide window puts the results in a sidebar beside the picture (see _CompletionLayout).
+    final side = context.isExpanded;
     final panel = Container(
       decoration: BoxDecoration(
         color: c.card,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
-        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: context.isDark ? 0.4 : 0.1), blurRadius: 24, offset: const Offset(0, -4))],
+        borderRadius: side ? null : const BorderRadius.vertical(top: Radius.circular(28)),
+        boxShadow: side ? null : [BoxShadow(color: Colors.black.withValues(alpha: context.isDark ? 0.4 : 0.1), blurRadius: 24, offset: const Offset(0, -4))],
       ),
       child: SafeArea(
         top: false,
@@ -1614,7 +1627,7 @@ class _CompletionOverlayState extends State<_CompletionOverlay> {
           Positioned(
             right: 14,
             // Clear of the panel's rounded corners, which the photo runs behind.
-            bottom: _CompletionLayout.overlap + 12,
+            bottom: side ? 16 : _CompletionLayout.overlap + 12,
             child: _OverlayPill(icon: AppIcons.arrowUpLeftArrowDownRight, label: 'View picture', onTap: _view, small: true),
           ),
         ],
@@ -1625,7 +1638,7 @@ class _CompletionOverlayState extends State<_CompletionOverlay> {
       child: ColoredBox(
         color: c.card,
         child: CustomMultiChildLayout(
-          delegate: _CompletionLayout(minPhoto: top + 120),
+          delegate: _CompletionLayout(minPhoto: top + 120, side: side),
           children: [
             LayoutId(id: _CompletionLayout.photo, child: photo),
             LayoutId(id: _CompletionLayout.panel, child: panel),
@@ -1702,10 +1715,15 @@ class _CompletionOverlayState extends State<_CompletionOverlay> {
 /// filling everything above it and running [overlap] pt behind the panel's
 /// rounded top corners.
 class _CompletionLayout extends MultiChildLayoutDelegate {
-  _CompletionLayout({required this.minPhoto});
+  _CompletionLayout({required this.minPhoto, this.side = false});
 
   /// The picture never gets shorter than this (status bar and a strip of photo).
   final double minPhoto;
+
+  /// A wide window: the picture on the left, the results in a [sideWidth] sidebar on the right
+  /// at the window's height, their content in the middle.
+  final bool side;
+  static const sideWidth = 440.0;
 
   static const photo = 'photo';
   static const panel = 'panel';
@@ -1713,6 +1731,13 @@ class _CompletionLayout extends MultiChildLayoutDelegate {
 
   @override
   void performLayout(Size size) {
+    if (side) {
+      final p = layoutChild(panel, BoxConstraints(minWidth: sideWidth, maxWidth: sideWidth, maxHeight: size.height));
+      positionChild(panel, Offset(size.width - sideWidth, (size.height - p.height) / 2));
+      layoutChild(photo, BoxConstraints.tight(Size(size.width - sideWidth, size.height)));
+      positionChild(photo, Offset.zero);
+      return;
+    }
     final p = layoutChild(panel, BoxConstraints(minWidth: size.width, maxWidth: size.width, maxHeight: math.max(0, size.height - minPhoto)));
     positionChild(panel, Offset(0, size.height - p.height));
     layoutChild(photo, BoxConstraints.tight(Size(size.width, math.max(0, size.height - p.height + overlap))));
@@ -1720,7 +1745,7 @@ class _CompletionLayout extends MultiChildLayoutDelegate {
   }
 
   @override
-  bool shouldRelayout(_CompletionLayout old) => old.minPhoto != minPhoto;
+  bool shouldRelayout(_CompletionLayout old) => old.minPhoto != minPhoto || old.side != side;
 }
 
 /// Compact pill over the finished picture: frosted glass, or solid accent

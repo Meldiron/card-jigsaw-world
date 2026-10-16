@@ -100,6 +100,104 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     final totalSteps = achievements.fold<int>(0, (s, a) => s + a.family.steps.length);
     final claimedSteps = achievements.fold<int>(0, (s, a) => s + a.claimedSteps);
     final readyToClaim = achievements.where((a) => a.done).length;
+    final wide = context.isExpanded;
+    final Widget profileCard = SoftCard(
+      padding: Insets.card,
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Pressable(
+                onTap: () => showAvatarPicker(context),
+                child: AvatarCircle(avatarKey: profile.avatar, size: 72, border: true),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Pressable(
+                      onTap: () => _editName(context, ref, profile),
+                      child: Row(
+                        children: [
+                          Flexible(child: Text(profile.displayName, maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.headlineSmall)),
+                          const SizedBox(width: 6),
+                          Icon(AppIcons.pencil, color: c.textTertiary, size: 16),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Row(
+                      children: [
+                        Flexible(child: Text(isGuest ? 'Guest account' : (user?.email ?? ''), maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote))),
+                        if (profile.isVip) ...[
+                          const SizedBox(width: 8),
+                          Chip2(label: 'VIP', icon: AppIcons.vip, color: c.accentTint, foreground: context.accent),
+                        ],
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Text('Level ${profile.level}', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.footnote)),
+                        const SizedBox(width: 8),
+                        Expanded(child: ProgressBar(value: profile.levelProgress, height: 6)),
+                        const SizedBox(width: 8),
+                        Text('${formatCount(profile.xpIntoLevel)}/${formatCount(Profile.xpForLevel(profile.level))}', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.micro, fontWeight: FontWeight.w600)),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          Divider(height: 1, color: c.stroke),
+          const SizedBox(height: 12),
+          // The wallet: three columns split by hairlines. The streak lives in Statistics
+          // (and on Home), so each balance gets a third of the card at full size; from
+          // 100,000 a balance is written short ("235K", "1.2M") and keeps that size.
+          IntrinsicHeight(
+            child: Row(
+              children: [
+                _Stat(value: compactCount(profile.coins), label: 'Coins', icon: const CoinIcon(size: 14)),
+                VerticalDivider(width: 1, thickness: 1, color: c.stroke),
+                _Stat(value: compactCount(profile.tickets), label: 'Tickets', icon: const TicketIcon(size: 13)),
+                VerticalDivider(width: 1, thickness: 1, color: c.stroke),
+                _Stat(value: compactCount(profile.hints), label: 'Hints', icon: const HintIcon(size: 14)),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+    final saveButton = BigButton(label: 'Save progress · create account', icon: AppIcons.save, onTap: () => context.push('/account'));
+    final achievementsHeader = SliverToBoxAdapter(
+      child: SectionHeader(
+        title: 'Achievements',
+        subtitle: readyToClaim > 0 ? '$claimedSteps of $totalSteps claimed · $readyToClaim ready' : '$claimedSteps of $totalSteps claimed',
+      ),
+    );
+    final claimAll = SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+        child: _ClaimAllCard(ready: [for (final a in achievements) if (a.done) a]),
+      ),
+    );
+    final Widget moreCard = SoftCard(
+      padding: EdgeInsets.zero,
+      child: Column(
+        children: [
+          ListRow(icon: AppIcons.photo, title: 'My Puzzles', subtitle: 'Create puzzles from your photos', onTap: () => context.go('/profile/my-puzzles')),
+          Divider(height: 1, color: c.stroke, indent: 62),
+          ListRow(icon: AppIcons.profile, title: 'Account', subtitle: isGuest ? 'Guest · sign in to save progress' : 'Signed in', onTap: () => context.push('/account')),
+          Divider(height: 1, color: c.stroke, indent: 62),
+          ListRow(icon: AppIcons.bagFill, title: 'Store', subtitle: 'Coins, tickets, hints and VIP', onTap: () => context.push('/store')),
+          Divider(height: 1, color: c.stroke, indent: 62),
+          ListRow(icon: AppIcons.gearAltFill, title: 'Settings', subtitle: 'Theme, sound, haptics', onTap: () => context.go('/profile/settings')),
+        ],
+      ),
+    );
 
     return Scaffold(
       body: CustomScrollView(
@@ -108,7 +206,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           GlassSliverHeader(
             height: 52,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 4, 20, 4),
+              padding: EdgeInsets.fromLTRB(20 + pageInsetOf(context), 4, 20 + pageInsetOf(context), 4),
               child: Row(
                 children: [
                   const Expanded(child: PageTitle('Profile')),
@@ -117,130 +215,104 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               ),
             ),
           ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-              child: SoftCard(
-                padding: Insets.card,
-                child: Column(
-                  children: [
-                    Row(
+          SliverPage(
+            slivers: [
+              if (wide) ...[
+                // The website layout: who the player is and the way to everything else beside the
+                // statistics; the achievements in two columns under them.
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Pressable(
-                          onTap: () => showAvatarPicker(context),
-                          child: AvatarCircle(avatarKey: profile.avatar, size: 72, border: true),
-                        ),
-                        const SizedBox(width: 14),
                         Expanded(
+                          flex: 5,
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              Pressable(
-                                onTap: () => _editName(context, ref, profile),
-                                child: Row(
-                                  children: [
-                                    Flexible(child: Text(profile.displayName, maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.headlineSmall)),
-                                    const SizedBox(width: 6),
-                                    Icon(AppIcons.pencil, color: c.textTertiary, size: 16),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(height: 2),
-                              Row(
-                                children: [
-                                  Flexible(child: Text(isGuest ? 'Guest account' : (user?.email ?? ''), maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote))),
-                                  if (profile.isVip) ...[
-                                    const SizedBox(width: 8),
-                                    Chip2(label: 'VIP', icon: AppIcons.vip, color: c.accentTint, foreground: context.accent),
-                                  ],
-                                ],
-                              ),
-                              const SizedBox(height: 10),
-                              Row(
-                                children: [
-                                  Text('Level ${profile.level}', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.footnote)),
-                                  const SizedBox(width: 8),
-                                  Expanded(child: ProgressBar(value: profile.levelProgress, height: 6)),
-                                  const SizedBox(width: 8),
-                                  Text('${formatCount(profile.xpIntoLevel)}/${formatCount(Profile.xpForLevel(profile.level))}', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.micro, fontWeight: FontWeight.w600)),
-                                ],
-                              ),
+                              profileCard,
+                              if (isGuest) ...[const SizedBox(height: 12), saveButton],
+                              const SizedBox(height: 16),
+                              moreCard,
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          flex: 7,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              SectionHeader(title: 'Statistics', action: 'See all', onAction: () => _showAllStatistics(context), padding: const EdgeInsets.fromLTRB(0, 2, 0, 12)),
+                              StatisticsSection(stats: ref.watch(playerStatsProvider), compact: true),
                             ],
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 14),
-                    Divider(height: 1, color: c.stroke),
-                    const SizedBox(height: 12),
-                    // The wallet: three columns split by hairlines. The streak lives in Statistics
-                    // (and on Home), so each balance gets a third of the card at full size; from
-                    // 100,000 a balance is written short ("235K", "1.2M") and keeps that size.
-                    IntrinsicHeight(
-                      child: Row(
-                        children: [
-                          _Stat(value: compactCount(profile.coins), label: 'Coins', icon: const CoinIcon(size: 14)),
-                          VerticalDivider(width: 1, thickness: 1, color: c.stroke),
-                          _Stat(value: compactCount(profile.tickets), label: 'Tickets', icon: const TicketIcon(size: 13)),
-                          VerticalDivider(width: 1, thickness: 1, color: c.stroke),
-                          _Stat(value: compactCount(profile.hints), label: 'Hints', icon: const HintIcon(size: 14)),
+                  ),
+                ),
+                achievementsHeader,
+                if (readyToClaim > 1) claimAll,
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        for (var col = 0; col < 2; col++) ...[
+                          if (col > 0) const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              children: [
+                                for (var i = col; i < achievements.length; i += 2) ...[
+                                  if (i > col) const SizedBox(height: 8),
+                                  _AchievementCard(key: ValueKey(achievements[i].family.id), status: achievements[i]),
+                                ],
+                              ],
+                            ),
+                          ),
                         ],
-                      ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          ),
-          if (isGuest)
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-                child: BigButton(label: 'Save progress · create account', icon: AppIcons.save, onTap: () => context.push('/account')),
-              ),
-            ),
-          SliverToBoxAdapter(child: SectionHeader(title: 'Statistics', action: 'See all', onAction: () => _showAllStatistics(context))),
-          SliverToBoxAdapter(child: Padding(padding: const EdgeInsets.symmetric(horizontal: 20), child: StatisticsSection(stats: ref.watch(playerStatsProvider), compact: true))),
-          SliverToBoxAdapter(
-            child: SectionHeader(
-              title: 'Achievements',
-              subtitle: readyToClaim > 0 ? '$claimedSteps of $totalSteps claimed · $readyToClaim ready' : '$claimedSteps of $totalSteps claimed',
-            ),
-          ),
-          if (readyToClaim > 1)
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
-                child: _ClaimAllCard(ready: [for (final a in achievements) if (a.done) a]),
-              ),
-            ),
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            sliver: SliverList.separated(
-              itemCount: achievements.length,
-              separatorBuilder: (_, _) => const SizedBox(height: 8),
-              itemBuilder: (_, i) => _AchievementCard(key: ValueKey(achievements[i].family.id), status: achievements[i]),
-            ),
-          ),
-          const SliverToBoxAdapter(child: SectionHeader(title: 'More')),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: SoftCard(
-                padding: EdgeInsets.zero,
-                child: Column(
-                  children: [
-                    ListRow(icon: AppIcons.photo, title: 'My Puzzles', subtitle: 'Create puzzles from your photos', onTap: () => context.go('/profile/my-puzzles')),
-                    Divider(height: 1, color: c.stroke, indent: 62),
-                    ListRow(icon: AppIcons.profile, title: 'Account', subtitle: isGuest ? 'Guest · sign in to save progress' : 'Signed in', onTap: () => context.push('/account')),
-                    Divider(height: 1, color: c.stroke, indent: 62),
-                    ListRow(icon: AppIcons.bagFill, title: 'Store', subtitle: 'Coins, tickets, hints and VIP', onTap: () => context.push('/store')),
-                    Divider(height: 1, color: c.stroke, indent: 62),
-                    ListRow(icon: AppIcons.gearAltFill, title: 'Settings', subtitle: 'Theme, sound, haptics', onTap: () => context.go('/profile/settings')),
-                  ],
+              ] else ...[
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+                    child: profileCard,
+                  ),
                 ),
-              ),
-            ),
+                if (isGuest)
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                      child: saveButton,
+                    ),
+                  ),
+                SliverToBoxAdapter(child: SectionHeader(title: 'Statistics', action: 'See all', onAction: () => _showAllStatistics(context))),
+                SliverToBoxAdapter(child: Padding(padding: const EdgeInsets.symmetric(horizontal: 20), child: StatisticsSection(stats: ref.watch(playerStatsProvider), compact: true))),
+                achievementsHeader,
+                if (readyToClaim > 1) claimAll,
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  sliver: SliverList.separated(
+                    itemCount: achievements.length,
+                    separatorBuilder: (_, _) => const SizedBox(height: 8),
+                    itemBuilder: (_, i) => _AchievementCard(key: ValueKey(achievements[i].family.id), status: achievements[i]),
+                  ),
+                ),
+                const SliverToBoxAdapter(child: SectionHeader(title: 'More')),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: moreCard,
+                  ),
+                ),
+              ],
+            ],
           ),
           SliverToBoxAdapter(child: SizedBox(height: GlassTabBar.scrollEndPadding(context))),
         ],

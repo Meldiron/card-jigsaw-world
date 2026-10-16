@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 import '../core/theme/tokens.dart';
+import 'adaptive.dart';
 
 /// iOS bar material: the content behind is blurred and slightly saturated,
 /// then tinted with the surface colour. Used for the tab bar, headers and
@@ -164,11 +165,15 @@ class _ScrolledUnderState extends State<ScrolledUnder> {
 /// with `Scaffold.extendBodyBehindAppBar: true`; the body then receives the
 /// bar height as `MediaQuery.padding.top`.
 class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const GlassAppBar({super.key, this.title, this.leading, this.actions, this.centerTitle = true});
+  const GlassAppBar({super.key, this.title, this.leading, this.actions, this.centerTitle = true, this.contentWidth = PageWidth.reading});
   final Widget? title;
   final Widget? leading;
   final List<Widget>? actions;
   final bool centerTitle;
+
+  /// The page's content column on a wide window: the back button and the actions line up with
+  /// its edges instead of the window's.
+  final double contentWidth;
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -176,10 +181,12 @@ class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
+    final inset = pageInsetOf(context, maxWidth: contentWidth);
     return AppBar(
       title: title,
-      leading: leading,
-      actions: actions,
+      leading: leading == null || inset == 0 ? leading : Padding(padding: EdgeInsets.only(left: inset), child: leading),
+      leadingWidth: leading == null || inset == 0 ? null : kToolbarHeight + inset,
+      actions: actions == null || inset == 0 ? actions : [...actions!, SizedBox(width: inset)],
       centerTitle: centerTitle,
       backgroundColor: Colors.transparent,
       scrolledUnderElevation: 0,

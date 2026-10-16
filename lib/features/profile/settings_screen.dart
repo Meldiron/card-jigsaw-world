@@ -79,7 +79,13 @@ class SettingsScreen extends ConsumerWidget {
       ),
       body: ListView(
         physics: const BouncingScrollPhysics(),
-        padding: EdgeInsets.only(top: MediaQuery.paddingOf(context).top + kToolbarHeight, bottom: GlassTabBar.scrollEndPadding(context)),
+        // A wide window keeps the groups in a reading column; the list still scrolls everywhere.
+        padding: EdgeInsets.only(
+          left: pageInsetOf(context, maxWidth: PageWidth.reading),
+          right: pageInsetOf(context, maxWidth: PageWidth.reading),
+          top: MediaQuery.paddingOf(context).top + kToolbarHeight,
+          bottom: GlassTabBar.scrollEndPadding(context),
+        ),
         children: [
           group('Appearance', [
             _SegRow(
