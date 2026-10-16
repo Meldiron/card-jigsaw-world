@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/haptics.dart';
 import '../../core/sfx.dart';
 import '../../state/achievements.dart';
+import '../../state/inbox.dart';
 import '../../state/profile.dart';
 import '../../state/review_prompt.dart';
 import '../../state/settings.dart';
@@ -61,13 +62,15 @@ class _HomeShellState extends ConsumerState<HomeShell> {
     final rewardReady = ref.watch(achievementsProvider.select((list) => list.any((a) => a.done)));
     // Quests dot: a quest or live event reward is waiting to be claimed.
     final questReady = ref.watch(questRewardReadyProvider);
+    // Social dot: a message in the inbox not opened yet.
+    final inboxNew = ref.watch(inboxUnseenProvider);
     // Asks for an App Store rating after a happy moment (rules in ReviewRules).
     ref.watch(reviewPromptProvider);
     final tabs = [
       GlassTabItem(icon: AppIcons.house, activeIcon: AppIcons.home, label: 'Home', badge: dailyReady),
       const GlassTabItem(icon: AppIcons.squareGrid2x2, activeIcon: AppIcons.library, label: 'Library'),
       GlassTabItem(icon: AppIcons.questsOutline, activeIcon: AppIcons.quests, label: 'Quests', badge: questReady),
-      const GlassTabItem(icon: AppIcons.person2, activeIcon: AppIcons.social, label: 'Social'),
+      GlassTabItem(icon: AppIcons.person2, activeIcon: AppIcons.social, label: 'Social', badge: inboxNew),
       GlassTabItem(icon: AppIcons.personCropCircle, activeIcon: AppIcons.profile, label: 'Profile', badge: rewardReady),
     ];
     void select(int i) {

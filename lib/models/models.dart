@@ -63,6 +63,7 @@ class Profile {
     this.peeks = 0,
     this.magics = 0,
     this.claimedAchievements = const [],
+    this.inbox = const [],
     this.totalMoves = 0,
     this.totalSeconds = 0,
     this.solvedByMode = const {},
@@ -114,6 +115,10 @@ class Profile {
   final DateTime? lastStreakRestore;
   /// Achievement step keys whose reward was claimed, e.g. `solver:2`.
   final List<String> claimedAchievements;
+
+  /// Inbox state, one entry per message and state: `seen:<id>`, `claimed:<id>`, `deleted:<id>`
+  /// (the messages themselves are read-only rows of the `messages` table; lib/state/inbox.dart).
+  final List<String> inbox;
 
   /// Public aggregates bumped on every solve so other players can see them
   /// (progress rows are owner-only): moves and seconds spent on boards that
@@ -183,6 +188,7 @@ class Profile {
         magics: _i(d['magics']),
         lastStreakRestore: _dt(d['lastStreakRestore']),
         claimedAchievements: _strings(d['claimedAchievements']),
+        inbox: _strings(d['inbox']),
         totalMoves: _i(d['totalMoves']),
         totalSeconds: _i(d['totalSeconds']),
         solvedByMode: _modeCounts(d['solvedByMode']),
@@ -252,6 +258,7 @@ class Profile {
         'longestStreak': longestStreak,
         'lastStreakRestore': lastStreakRestore?.toUtc().toIso8601String(),
         'claimedAchievements': claimedAchievements,
+        'inbox': inbox,
         'totalMoves': totalMoves,
         'totalSeconds': totalSeconds,
         'solvedByMode': solvedByMode.isEmpty ? null : jsonEncode(solvedByMode),
@@ -264,6 +271,7 @@ class Profile {
       };
 
   Profile copyWith({
+    List<String>? inbox,
     String? displayName,
     String? avatar,
     int? coins,
@@ -313,6 +321,7 @@ class Profile {
         magics: magics ?? this.magics,
         lastStreakRestore: lastStreakRestore,
         claimedAchievements: claimedAchievements,
+        inbox: inbox ?? this.inbox,
         totalMoves: totalMoves,
         totalSeconds: totalSeconds,
         solvedByMode: solvedByMode,

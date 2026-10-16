@@ -24,6 +24,7 @@ carden.page redirects there.
 | `.claude/skills/apple-release/` | Any build, TestFlight push, version bump, App Store submission |
 | `.claude/skills/pack-making/` | Picture packs: adding, repairing, auditing, sources, licences |
 | `.claude/skills/giant-packs/` | Giant packs (category Giant, 100-300 card boards): sources, `giantcheck`, 4096 px hosting |
+| `.claude/skills/inbox-messages/` | Messages to players (Social > Inbox): send with a gift and a button, list, expire, delete (`tools/dev/inbox.py`) |
 | `.claude/skills/store-screenshots/` | App Store screenshots: captures, the glass slides (`tools/store/compose_glass.py`), copy and story, preview, upload |
 
 ## Owner rules (non-negotiable, learned from feedback)
@@ -231,7 +232,7 @@ carden.page redirects there.
 
 - Endpoint `https://fra.cloud.appwrite.io/v1`, project `6acb4de5003e38d5ebd9`, database `cjw`
   (tables profiles, packs, puzzles, progress, events, event_progress, friends, ledger, my_puzzles,
-  purchases, meta, releases, reports, blocks, feedback). Profiles are readable by anyone; `level` mirrors XP; aggregates `totalMoves`,
+  purchases, meta, releases, reports, blocks, feedback, messages). Profiles are readable by anyone; `level` mirrors XP; aggregates `totalMoves`,
   `totalSeconds`, `solvedByMode`, `questsCompleted` and the "Total Completion" numbers
   (`picturesSolved`, `picturesPerfect`, `packsCompleted`, `packsPerfect`, kept in step by
   `ProfileNotifier.syncCompletion`, backfill `tools/dev/backfill_profile_stats.py`) are public.
@@ -250,6 +251,11 @@ carden.page redirects there.
   Offensive names (owner, 2026-10-16): `lib/core/name_filter.dart` (`NameFilter`) refuses them where a name is
   chosen (name alert, sign-up, new profiles) and shows names that fail as "Player" (`Profile.fromRow`, friends,
   blocks, merge), so names set by older builds are covered on 2.0+. `test/name_filter_test.dart`.
+- Inbox (owner, 2026-10-16): Social > Inbox shows messages from the owner to one player. Table `messages`
+  (one row per player, `read("user:<id>")` only: subject, body, `sentAt`, `expiresAt`, rewards, `ctaLabel`/`ctaLink`
+  any app link), written only by `tools/dev/inbox.py` (skill `inbox-messages`). Seen, claimed and deleted live in
+  `profiles.inbox` through `SyncOp.inbox` (a gift is paid once per message on every device). An unopened message
+  dots the Social tab. `lib/state/inbox.dart`, `lib/features/social/inbox.dart`. Deleted with the account.
 - Help (owner, 2026-10-15): Settings > Help > Contact support opens an email to contact@almostapps.eu with
   the version and player id below the message (copies the address when there is no mail app); Send
   feedback writes a `feedback` row (userId, message, appVersion, platform) with no permissions, so only the

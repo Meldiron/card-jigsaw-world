@@ -73,6 +73,9 @@ Where links come in:
 - **Inside the app**: a `go` or `push` to a path the router has no page for (an alias, `/redeem`)
   reaches `onException`, which passes it to `DeepLinks`.
 
+Inbox links (2026-10-16): `/inbox` (and `/messages`, `/social?tab=inbox`) opens Social > Inbox, and
+`/feedback` opens the Send feedback sheet; inbox messages use any of these paths as their button.
+
 ## Universal links (iPhone)
 
 Status (2026-10-16): on from version 2.0.0. The App ID has the Associated Domains capability, the App Store

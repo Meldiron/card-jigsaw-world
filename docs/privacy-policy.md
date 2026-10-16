@@ -28,6 +28,7 @@ All game data is stored in an [Appwrite](https://appwrite.io) project hosted in 
 | Friends list (the friend codes you added) | So you can open your friends' profiles | When you add a friend |
 | Players you block | So they no longer show on your leaderboard | When you block someone |
 | Reports you send about a player (who, the name they had and the reason) | So we can act on offensive names and cheating | When you report someone |
+| Messages we send you in Social > Inbox (subject, text, an optional gift and link), and which ones you opened, claimed or deleted | So we can tell you about the game, say thank you or send a gift | When we send a message |
 | Feedback you send from Settings (your message, your account id, the app version and whether it came from iPhone or the web) | So we can read your ideas and problems | When you send feedback |
 | Pack codes you redeem (on the web version) | So a code opens its pack once per account | When you redeem a code |
 | Purchase records: Apple transaction ids, product, date, what was granted, and Apple's per-account app identifier used for Family Sharing | To grant purchases once, restore them, share VIP with your family and handle refunds and renewals | When you buy something |

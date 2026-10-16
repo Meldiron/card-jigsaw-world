@@ -110,9 +110,14 @@ class AppLink {
       case 'events' || 'quests' when rest.isEmpty:
         return page('/events');
       case 'social' || 'leaderboard' || 'league' when rest.isEmpty:
-        return page('/social', q['tab']?.toLowerCase() == 'friends' ? const {'tab': 'friends'} : null);
+        final tab = q['tab']?.toLowerCase();
+        return page('/social', tab == 'friends' || tab == 'inbox' ? {'tab': tab!} : null);
       case 'friends' when rest.isEmpty:
         return page('/social', const {'tab': 'friends'});
+      case 'inbox' || 'messages' when rest.isEmpty:
+        return page('/social', const {'tab': 'inbox'});
+      case 'feedback' when rest.isEmpty:
+        return action('/feedback');
       case 'add-friend' || 'friend' when rest.length <= 1:
         final c = code();
         return action('/add-friend', c == null ? null : {'code': c});

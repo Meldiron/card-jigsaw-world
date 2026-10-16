@@ -307,6 +307,23 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
     return true;
   }
 
+  /// Social > Inbox: a message opened, deleted or its reward claimed (lib/state/inbox.dart). The
+  /// state lives in `profiles.inbox`, so it follows the player to every device; a reward is paid
+  /// once per message.
+  void markMessageSeen(String id) {
+    if (!_p.inbox.contains('seen:$id')) _do(SyncOp.inbox(id, 'seen'));
+  }
+
+  void deleteMessage(String id) {
+    if (!_p.inbox.contains('deleted:$id')) _do(SyncOp.inbox(id, 'deleted'));
+  }
+
+  bool claimMessage(String id, {int coins = 0, int tickets = 0, int hints = 0, int peeks = 0, int magics = 0}) {
+    if (_p.inbox.contains('claimed:$id')) return false;
+    _do(SyncOp.inbox(id, 'claimed', coins: coins, tickets: tickets, hints: hints, peeks: peeks, magics: magics));
+    return true;
+  }
+
   Future<void> markWheelSpun() async => _do(SyncOp.put({'lastWheelSpin': DateTime.now().toUtc().toIso8601String()}));
 
   Future<bool> openPiggy() async {

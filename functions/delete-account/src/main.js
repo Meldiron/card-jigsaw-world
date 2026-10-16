@@ -16,7 +16,7 @@ import { Client, TablesDB, Storage, Users, Query } from 'node-appwrite';
 const DB = process.env.APPWRITE_DATABASE_ID || 'cjw';
 const UPLOADS = 'user-uploads';
 // Every table keyed by a player's user id; profiles also use the user id as the row id.
-const PLAYER_TABLES = ['progress', 'ledger', 'event_progress', 'friends', 'my_puzzles', 'purchases', 'code_claims', 'feedback'];
+const PLAYER_TABLES = ['progress', 'ledger', 'event_progress', 'friends', 'my_puzzles', 'purchases', 'code_claims', 'feedback', 'messages'];
 // Tables keyed by two player columns (reports made and received, blocks made and received).
 const PAIR_TABLES = { reports: ['reporterId', 'reportedId'], blocks: ['blockerId', 'blockedId'] };
 const PAGE = 100;

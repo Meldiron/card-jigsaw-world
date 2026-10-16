@@ -17,12 +17,14 @@ import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 import '../home/header_bar.dart';
+import 'inbox.dart';
 
-/// Social's tab: 0 the leaderboard, 1 friends. A provider, so a link (`/social?tab=friends`,
-/// `/add-friend?code=...`) can pick it.
+/// Social's tab: 0 the leaderboard, 1 friends, 2 the inbox. A provider, so a link
+/// (`/social?tab=friends`, `/inbox`, `/add-friend?code=...`) can pick it.
 class SocialTab extends Notifier<int> {
   static const leaderboard = 0;
   static const friends = 1;
+  static const inbox = 2;
 
   @override
   int build() => leaderboard;
@@ -140,7 +142,8 @@ class _YourCodeState extends State<_YourCode> {
   }
 }
 
-/// Social: the leaderboard (every player by total XP) and friends (add by friend code).
+/// Social: the leaderboard (every player by total XP), friends (add by friend code) and the inbox
+/// (messages from Carden, lib/features/social/inbox.dart).
 class SocialScreen extends ConsumerWidget {
   const SocialScreen({super.key});
 
@@ -164,14 +167,20 @@ class SocialScreen extends ConsumerWidget {
                 const SizedBox(height: 10),
                 AppSegmentedControl<int>(
                   value: tab,
-                  segments: const {0: 'Leaderboard', 1: 'Friends'},
+                  segments: const {0: 'Leaderboard', 1: 'Friends', 2: 'Inbox'},
                   segmentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
                   onChanged: (v) => ref.read(socialTabProvider.notifier).select(v),
                 ),
               ],
             ),
           ),
-          Expanded(child: tab == SocialTab.leaderboard ? const _Leaderboard() : _Friends(onAdd: () => showAddFriendAlert(context))),
+          Expanded(
+            child: switch (tab) {
+              SocialTab.leaderboard => const _Leaderboard(),
+              SocialTab.inbox => const InboxList(),
+              _ => _Friends(onAdd: () => showAddFriendAlert(context)),
+            },
+          ),
         ],
       ),
     );

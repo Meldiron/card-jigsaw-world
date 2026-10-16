@@ -89,6 +89,15 @@
             "/": "/friend/*"
           },
           {
+            "/": "/inbox"
+          },
+          {
+            "/": "/messages"
+          },
+          {
+            "/": "/feedback"
+          },
+          {
             "/": "/profile"
           },
           {

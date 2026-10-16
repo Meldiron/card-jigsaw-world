@@ -24,6 +24,9 @@ class AppwriteConfig {
 
   /// Settings > Send feedback: rows only the server reads (`tools/dev/feedback.py`).
   static const feedback = 'feedback';
+
+  /// Messages to one player (Social > Inbox): read-only rows written by `tools/dev/inbox.py`.
+  static const messages = 'messages';
   static const ledger = 'ledger';
   static const myPuzzles = 'my_puzzles';
   static const meta = 'meta';

@@ -18,7 +18,7 @@ import 'changes.dart';
 enum OpTarget { profile, progress, event, ledger }
 
 /// Why an op was dropped when it was sent: another device had already done the same thing.
-enum SkipReason { questClaimed, vipBonusPaid, dailyClaimed, streakRestored, unlocked, achievementClaimed, piggyEmpty, notEnough }
+enum SkipReason { questClaimed, vipBonusPaid, dailyClaimed, streakRestored, unlocked, achievementClaimed, piggyEmpty, notEnough, messageClaimed }
 
 /// A ledger entry written once its op is confirmed (`balanceAfter` comes from the server's row).
 /// The currencies the ledger records (its `currency` column is an enum of these). Peeks and Magic
@@ -55,6 +55,7 @@ abstract final class OpKind {
   // Profile.
   static const earn = 'earn', spend = 'spend', put = 'put', ad = 'ad', quest = 'quest', vipBonus = 'vipBonus', daily = 'daily';
   static const streak = 'streak', unlock = 'unlock', achievement = 'achievement', piggy = 'piggy', solve = 'solve', questCount = 'questCount';
+  static const inbox = 'inbox';
   // Progress, event progress, ledger.
   static const board = 'board', win = 'win', discard = 'discard', event = 'event', ledger = 'ledger';
 }
@@ -107,7 +108,7 @@ class SyncOp {
 
   /// Built against the row as the server has it right now (guards, records, values derived from
   /// the row). The others are built against the last row the server returned.
-  bool get needsFresh => const {OpKind.spend, OpKind.ad, OpKind.quest, OpKind.vipBonus, OpKind.daily, OpKind.streak, OpKind.unlock, OpKind.achievement, OpKind.piggy, OpKind.solve, OpKind.questCount, OpKind.win}.contains(kind);
+  bool get needsFresh => const {OpKind.spend, OpKind.ad, OpKind.quest, OpKind.vipBonus, OpKind.daily, OpKind.streak, OpKind.unlock, OpKind.achievement, OpKind.piggy, OpKind.solve, OpKind.questCount, OpKind.win, OpKind.inbox}.contains(kind);
 
   // ---- profile ----
 
@@ -145,6 +146,19 @@ class SyncOp {
   factory SyncOp.achievement(String key, {int coins = 0, int tickets = 0, String? avatar}) =>
       SyncOp(OpKind.achievement, {'key': key, 'coins': coins, 'tickets': tickets, 'avatar': ?avatar});
   factory SyncOp.piggy({required int amount, required int tickets}) => SyncOp(OpKind.piggy, {'amount': amount, 'tickets': tickets});
+
+  /// An inbox message [state] (`seen`, `deleted` or `claimed`) for message [id]. A claim pays the
+  /// message's reward, once per message on every device (`claimed:<id>` in `profiles.inbox`); the
+  /// amounts come from the read-only message row, never typed in by the player.
+  factory SyncOp.inbox(String id, String state, {int coins = 0, int tickets = 0, int hints = 0, int peeks = 0, int magics = 0}) => SyncOp(OpKind.inbox, {
+        'id': id,
+        'state': state,
+        'coins': coins,
+        'tickets': tickets,
+        'hints': hints,
+        'peeks': peeks,
+        'magics': magics,
+      });
 
   /// A finished board. [coins] is paid on a first solve and [replayCoins] when the picture was
   /// solved before (on this device or, found out when sending, another one). Level rewards follow
@@ -374,6 +388,26 @@ class SyncOp {
             ledger: [LedgerLine(credit, 'coins', 'piggy')]);
       case OpKind.solve:
         return _solve(row);
+      case OpKind.inbox:
+        final key = '${args['state']}:${args['id']}';
+        final claim = args['state'] == 'claimed';
+        // Seen or deleted on another device already: nothing to do, and nothing to tell.
+        if (asStrings(row['inbox']).contains(key)) return claim ? const OpPlan.skip(SkipReason.messageClaimed) : const OpPlan({});
+        if (!claim) return OpPlan({'inbox': Append([key])});
+        final coins = _a('coins'), tickets = _a('tickets'), hints = _a('hints'), peeks = _a('peeks'), magics = _a('magics');
+        final reason = 'inbox:${args['id']}';
+        return OpPlan({
+          'inbox': Append([key]),
+          if (coins > 0) 'coins': Inc(coins),
+          if (tickets > 0) 'tickets': Inc(tickets),
+          if (hints > 0) 'hints': Inc(hints),
+          if (peeks > 0) 'peeks': Inc(peeks),
+          if (magics > 0) 'magics': Inc(magics),
+        }, ledger: [
+          if (coins > 0) LedgerLine(coins, 'coins', reason),
+          if (tickets > 0) LedgerLine(tickets, 'tickets', reason),
+          if (hints > 0) LedgerLine(hints, 'hints', reason),
+        ]);
       case OpKind.questCount:
         final n = _a('count');
         return asInt(row['questsCompleted']) >= n ? const OpPlan({}) : OpPlan({'questsCompleted': Put(n)});

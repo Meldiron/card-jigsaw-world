@@ -19,6 +19,7 @@ import '../../state/unlocks.dart';
 import '../daily/daily_reward_sheet.dart';
 import '../daily/piggy_sheet.dart';
 import '../gallery/library_screen.dart';
+import '../profile/help.dart';
 import '../profile/redeem_code_sheet.dart';
 import '../social/social_screen.dart';
 
@@ -57,7 +58,11 @@ class DeepLinks {
         final filter = link.query['filter'];
         if (filter != null) await _libraryFilter(filter);
       case '/social':
-        _ref.read(socialTabProvider.notifier).select(link.query['tab'] == 'friends' ? SocialTab.friends : SocialTab.leaderboard);
+        _ref.read(socialTabProvider.notifier).select(switch (link.query['tab']) {
+          'friends' => SocialTab.friends,
+          'inbox' => SocialTab.inbox,
+          _ => SocialTab.leaderboard,
+        });
     }
     // The query was for the screen state above; the route itself is the path.
     router.go(link.path);
@@ -88,6 +93,10 @@ class DeepLinks {
         if (!_ref.read(platformCapsProvider).isWeb) return;
         final ctx = rootNavigatorKey.currentContext;
         if (ctx != null && ctx.mounted) await showRedeemCodeSheet(ctx, code: link.query['code']);
+      case '/feedback':
+        await _onPage(router);
+        final ctx = rootNavigatorKey.currentContext;
+        if (ctx != null && ctx.mounted) await showFeedbackSheet(ctx);
       case '/add-friend':
         _ref.read(socialTabProvider.notifier).select(SocialTab.friends);
         await _onPage(router, '/social');

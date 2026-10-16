@@ -150,6 +150,7 @@ String skipText(SkipReason r) => switch (r) {
       SkipReason.achievementClaimed => 'An achievement reward claimed on both devices, paid once',
       SkipReason.piggyEmpty => 'Piggy bank already opened on the other device',
       SkipReason.notEnough => 'One purchase here was undone: not enough was left after spending on the other device',
+      SkipReason.messageClaimed => 'A message reward claimed on both devices, paid once',
     };
 
 class SyncNoticeList extends StatefulWidget {

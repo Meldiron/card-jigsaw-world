@@ -17,6 +17,7 @@ import 'features/update/update_host.dart';
 import 'router.dart';
 import 'state/auth.dart';
 import 'state/catalog.dart';
+import 'state/inbox.dart';
 import 'state/purchases.dart';
 import 'state/reminders.dart';
 import 'state/settings.dart';
@@ -113,6 +114,8 @@ class _CardenAppState extends ConsumerState<CardenApp> with WidgetsBindingObserv
     if (state == AppLifecycleState.resumed) {
       if (ref.read(settingsProvider).music) Sfx.instance.startMusic();
       ref.read(syncProvider.notifier).onResume();
+      // New messages in the inbox (Social > Inbox and the tab's dot).
+      ref.invalidate(inboxMessagesProvider);
       if (supportsPurchases) ref.read(purchaseFlowProvider.notifier).onResume();
       // Picks up a permission change made in iOS Settings.
       if (supportsNotifications) ref.read(remindersProvider).refresh();

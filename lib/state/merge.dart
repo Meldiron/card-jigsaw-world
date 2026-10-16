@@ -114,7 +114,7 @@ MergeDecision decide({required SaveSnapshot guest, required SaveSnapshot account
 const scalarKeys = ['coins', 'tickets', 'hints', 'piggyCoins', 'xp', 'level', 'streak', 'lastDailyClaim', 'displayName', 'avatar'];
 
 /// Profile lists that are always combined.
-const unionKeys = ['unlockedPacks', 'unlockedTiers', 'unlockedAvatars', 'claimedAchievements', 'claimedGoals'];
+const unionKeys = ['unlockedPacks', 'unlockedTiers', 'unlockedAvatars', 'claimedAchievements', 'claimedGoals', 'inbox'];
 
 List<String> unionOf(dynamic a, dynamic b) {
   final out = <String>[];

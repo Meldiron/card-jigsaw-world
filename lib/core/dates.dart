@@ -38,6 +38,20 @@ String formatDate(DateTime d, {bool year = true, bool short = false}) {
   return year ? '${d.day} $m ${d.year}' : '${d.day} $m';
 }
 
+/// When a message arrived: `Today, 21:05`, `Yesterday, 9:30`, `12 Oct, 21:05`, or with the year
+/// when it is not this year. [time] is the time of day as the device writes it (12 or 24 hours).
+String formatMessageDate(DateTime local, String time, {DateTime? now}) {
+  final today = now ?? DateTime.now();
+  final d = DateTime(local.year, local.month, local.day);
+  final t = DateTime(today.year, today.month, today.day);
+  final day = switch (t.difference(d).inDays) {
+    0 => 'Today',
+    1 => 'Yesterday',
+    _ => formatDate(local, year: local.year != today.year, short: true),
+  };
+  return '$day, $time';
+}
+
 /// Total time played: `45s`, `13m`, `6h 23m`, `2d 4h`.
 String formatPlayTime(int seconds) {
   if (seconds < 60) return '${seconds}s';
