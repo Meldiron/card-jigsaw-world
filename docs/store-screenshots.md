@@ -31,7 +31,7 @@ in `tools/store/glass/slides.html`, then rerun the script.
   world-day events), friends and the leaderboard (9) and the dark finale (10).
   Read in order the headlines are one text: "Swap cards. Reveal the picture.
   Thousands of pictures. A new picture every day. One picture, four ways to cut
-  it. Bring the colour back, card by card. Giant boards of up to 300 cards. Puzzle
+  it. Bring the colour back, card by card. Giant boards of hundreds of cards. Puzzle
   your own photos. Quests and world-day events. Climb the ranks with friends. Just
   as calm in the dark." Dropped on the owner's word: "Fewer moves, more stars" (a
   scoring rule) and VIP ("I don't like talking about VIP"). No AI pictures.

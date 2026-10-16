@@ -31,14 +31,14 @@ here), no AI pictures anywhere.
 | # | Headline | Headline position | Phones |
 | --- | --- | --- | --- |
 | 1 | Swap cards. / Reveal the picture. | top, centre, icon + name | `25_hero` (Tulip Fields 8) flat, mid-build |
-| 2 | Thousands / of pictures | top, centre | a hand of seven pack covers (full resolution) fanned like cards; `15_library` (curated first packs) rising from the bottom edge |
-| 3 | A new picture / every day | top, right | `18_daily_month_grid` flat, pushed left, today's card and Home's 23-day streak card (`31_home_streak`) lifted; two solved days on the right |
-| 4 | One picture, / four ways to cut it | middle | split: `06_mode_cards` from the top, `09_mode_hexagons` from the bottom, squares and triangles lifted, labels |
+| 2 | Thousands / of pictures | top, centre | one straight row of full-resolution pack covers running off both edges (endless); `15_library` (curated packs, scrolled one row so no My Puzzles tile shows) rising from the bottom edge |
+| 3 | A new picture / every day | top, right | `18_daily_month_grid` flat, pushed left, today's card and Home's 23-day streak card (`31_home_streak`, straight, low) lifted; two solved days on the right |
+| 4 | One picture, / four ways to cut it | middle | split: `06_mode_cards` from the top, `09_mode_hexagons` from the bottom, squares and triangles lifted; big mode badges on the edge of each board or card that faces the headline |
 | 5 | Bring the colour / back, card by card | lower middle | `26_painting` straight and centred from the top (owner: no tilt here), mostly grey; a loose and a locked card lifted |
-| 6 | Giant boards of / up to 300 cards | top, left | `30_giant_zoom` (zoomed in, the overview map in the corner) tilted, pushed right; the whole board of `27_giant` lifted |
-| 7 | Puzzle your / own photos | bottom, left | `20_my_puzzles` (five photos, no gap) pushed right, the corgi board lifted |
+| 6 | Giant boards of / hundreds of cards | top, left | Squares, Giant size (345 squares): `30_giant_zoom` (zoomed in, the overview map in the corner) tilted, pushed right; the whole board of `27_giant` lifted |
+| 7 | Puzzle your / own photos | bottom, right | `20_my_puzzles` (five photos, no gap) pushed left, the corgi board lifted on the right |
 | 8 | Quests and / world-day events | top, centre | `13_quests` tilted, the World Food Day card lifted, cut exactly at its own edges and corners |
-| 9 | Climb the ranks / with friends | bottom, right | `22_social_league` tilted from the top left, the podium lifted (the player second) |
+| 9 | Climb the ranks / with friends | bottom, right | `22_social_league` tilted from the top left, the podium lifted (the player second); the league is filled with made-up players and varied avatars (`leagueExtras`, a `leaderboardProvider` override) |
 | 10 | Just as calm / in the dark | top, centre | `29_dark_board` (dark theme) flat, mid-build |
 
 The player grows from slide to slide: the capture test sets XP, level and avatar before each

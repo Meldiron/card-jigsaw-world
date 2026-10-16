@@ -27,6 +27,7 @@ import 'package:carden/game/board.dart';
 import 'package:carden/models/models.dart';
 import 'package:carden/router.dart';
 import 'package:carden/state/auth.dart';
+import 'package:carden/state/paged.dart';
 import 'package:carden/state/catalog.dart';
 import 'package:carden/state/profile.dart';
 import 'package:carden/state/settings.dart';
@@ -82,7 +83,7 @@ const theme = String.fromEnvironment('CJW_STORE_THEME', defaultValue: 'dark');
 const skipUpload = bool.fromEnvironment('CJW_STORE_SKIP_UPLOAD');
 const suffix = theme == 'light' ? '_light' : '';
 
-/// `--dart-define=CJW_STORE_ONLY=25_hero,27_giant` re-takes only those glass-set captures (15_library, 25-31)
+/// `--dart-define=CJW_STORE_ONLY=25_hero,27_giant` re-takes only those glass-set captures (15_library, 22_social_league, 25-31)
 /// after onboarding and leaves every other file as it is: a quick rerun for one slide.
 const only = String.fromEnvironment('CJW_STORE_ONLY');
 bool want(String name) => only.isEmpty || only.split(',').contains(name);
@@ -93,6 +94,33 @@ Future<void> settle(WidgetTester tester, [int ms = 1500]) async {
   final end = DateTime.now().add(Duration(milliseconds: ms));
   while (DateTime.now().isBefore(end)) {
     await tester.pump(const Duration(milliseconds: 100));
+  }
+}
+
+/// The league as the screenshots show it: the real players plus these made-up ones (name, XP,
+/// avatar), so the board is full and varied; players on the default avatar get another one.
+const leagueExtras = [
+  ('Quiet Heron', 8640, 'rocket'), ('Brave Otter', 7320, 'heart'), ('Gentle Lynx', 6180, 'sun'),
+  ('Sunny Koala', 5240, 'palette'), ('Calm Finch', 3760, 'moon'), ('Bright Ibis', 3180, 'music'),
+  ('Lucky Puffin', 1940, 'camera'), ('Swift Marten', 1380, 'anchor'), ('Clever Wren', 860, 'snow'), ('Happy Gecko', 410, 'pizza'),
+];
+const leagueAvatars = ['wave', 'cake', 'globe', 'bike', 'coffee', 'umbrella', 'key', 'mountain'];
+
+class _StoreLeaderboard extends LeaderboardNotifier {
+  @override
+  Future<PageResult<Profile>> fetchPage(String? after) async {
+    final page = await super.fetchPage(after);
+    if (after != null || page.items.isEmpty) return page;
+    final me = ref.read(currentUserIdProvider);
+    var n = 0;
+    final real = [
+      for (final p in page.items) p.userId == me || p.avatar != 'fox' ? p : p.copyWith(avatar: leagueAvatars[n++ % leagueAvatars.length]),
+    ];
+    final made = [
+      for (final (i, (name, xp, avatar)) in leagueExtras.indexed)
+        page.items.first.copyWith(id: 'store-$i', userId: 'store-$i', displayName: name, xp: xp, avatar: avatar, puzzlesCompleted: xp ~/ 70, totalStars: xp ~/ 26, isTest: false),
+    ];
+    return (items: [...real, ...made]..sort((a, b) => b.xp.compareTo(a.xp)), lastId: null);
   }
 }
 
@@ -265,6 +293,16 @@ void main() {
   }
 
   /// (Board sizes past Relaxed open with levels: a quick CJW_STORE_ONLY run plays a level-1 guest.)
+  /// The Library scrolled one row down, so the grid starts with packs (the My Puzzles tile, the
+  /// first of the All grid, has no picture of its own).
+  Future<void> libraryPacksFirst(WidgetTester tester) async {
+    final tile = find.byKey(const ValueKey('library-my-puzzles'));
+    if (tile.evaluate().isEmpty) return;
+    // The glass bar ends at y 111; a drag stops about 17 short, so this leaves the row under the bar.
+    await tester.drag(find.byType(Scrollable).first, Offset(0, -(tester.getRect(tile).bottom - 84)));
+    await settle(tester, 2500);
+  }
+
   /// Sets the player's XP (and the level it gives), avatar and streak through the save sync, so the
   /// screenshots show the player growing from slide to slide.
   Future<void> setProgress(WidgetTester tester, {int? xp, String? avatar, int? streak}) async {
@@ -272,6 +310,9 @@ void main() {
     container.read(syncProvider.notifier).enqueue(SyncOp.put({
       'xp': ?xp,
       'level': ?(xp == null ? null : LevelRewards.levelForXp(xp)),
+      // Solved pictures in step with the XP (the league lists players who have solved one).
+      'puzzlesCompleted': ?(xp == null ? null : xp ~/ 70),
+      'totalStars': ?(xp == null ? null : xp ~/ 26),
       'avatar': ?avatar,
       'streak': ?streak,
       'longestStreak': ?streak,
@@ -378,6 +419,14 @@ void main() {
         // Shapes and options open as levels rise (lib/state/unlocks.dart); these suites play every one, so all are open and no intro sheet interrupts them.
         openFeaturesProvider.overrideWithValue(OpenFeatures.all),
         pendingUnlockIntroProvider.overrideWithValue(null),
+        // A full, varied league (leagueExtras) and its count.
+        leaderboardProvider.overrideWith(_StoreLeaderboard.new),
+        leaderboardRankProvider.overrideWith((ref) async {
+          final rows = (await ref.watch(leaderboardProvider.future)).items;
+          final me = ref.watch(currentUserIdProvider);
+          final i = rows.indexWhere((p) => p.userId == me);
+          return i < 0 ? null : (rank: i + 1, total: rows.length);
+        }),
         // The Library's first packs are the curated ones (libraryFirst); nothing else changes.
         packsProvider.overrideWith((ref) async {
           final rows = await ref.watch(packRowsProvider.future);
@@ -453,7 +502,7 @@ void main() {
         await profile.addTickets(pack.priceTickets, reason: 'qa:store-giant');
         await settle(tester, 800);
         await profile.unlockPack(pack);
-        await startGame(tester, giantPuzzle, 'Cards', 'Giant');
+        await startGame(tester, giantPuzzle, 'Squares', 'Giant');
         await midBuild(tester, 0.1, 3);
         await shot(tester, '27_giant');
         // Zoomed in on the edge of the solved part, so the overview map shows in the corner.
@@ -487,8 +536,15 @@ void main() {
     await go(tester, '/home', ms: 2000);
     if (only.isNotEmpty) {
       if (want('15_library')) {
+        await setProgress(tester, xp: 600, avatar: 'leaf');
         await go(tester, '/library', ms: 4500);
+        await libraryPacksFirst(tester);
         await shot(tester, '15_library');
+      }
+      if (want('22_social_league')) {
+        await setProgress(tester, xp: 9000, avatar: 'diamond');
+        await go(tester, '/social', ms: 4500);
+        await shot(tester, '22_social_league');
       }
       return;
     }
@@ -592,7 +648,10 @@ void main() {
     // Library, the daily calendar (top, then scrolled to the day grid), a pack.
     await setProgress(tester, xp: 600, avatar: 'leaf');
     await go(tester, '/library', ms: 3500);
+    await libraryPacksFirst(tester);
     await shot(tester, '15_library');
+    await tester.drag(find.byType(Scrollable).first, const Offset(0, 1500));
+    await settle(tester, 1200);
     // The Daily chip sits past the screen's edge among the other chips; pick it the way a link does
     // (the row then scrolls it into view).
     ProviderScope.containerOf(tester.element(find.byType(MaterialApp))).read(libraryFilterProvider.notifier).select(LibraryFilter.daily);

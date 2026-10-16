@@ -75,12 +75,12 @@ def slides() -> list[dict]:
         # 1. The mechanic, mid-build: some cards locked, some loose, some joined.
         {"head": "Swap cards.\nReveal the picture.", "brand": True, "text": ("top", 330, "center"),
          "phones": [{"capture": "25_hero", "x": 160, "y": 738}]},
-        # 2. How much there is: a hand of pack covers fanned out like cards, the Library (its first
-        #    packs curated by the capture test, no AI) rising from the bottom edge.
+        # 2. How much there is: one straight row of pack covers running off both edges (endless), the
+        #    Library rising from the bottom edge, scrolled so its grid starts with packs.
         {"head": "Thousands\nof pictures", "text": ("top", 200, "center"),
-         "pics": [{"packs": ["pack-japanese-prints", "pack-nebulae", "pack-sunflowers", "pack-hot-air-balloons", "pack-lavender", "pack-kyoto", "pack-santorini"],
-                   "hand": {"w": 340, "h": 456, "top": 660, "spread": 15, "radius_px": 1500}, "radius": 30}],
-         "phones": [{"capture": "15_library", "x": 160, "y": 1330}]},
+         "pics": [{"packs": ["pack-venice", "pack-lavender", "pack-japanese-prints", "pack-nebulae", "pack-northern-lights", "pack-sunflowers", "pack-islands"],
+                   "row": {"w": 360, "h": 480, "gap": 28, "y": 640}, "radius": 30}],
+         "phones": [{"capture": "15_library", "x": 160, "y": 1300}]},
         # 3. Why you come back: the calendar pushed left, today's picture and the streak from Home
         #    lifted, solved days with their stars on the right.
         {"head": "A new picture\nevery day", "text": ("top", 200, "right"),
@@ -88,13 +88,14 @@ def slides() -> list[dict]:
                    "spots": [(1000, 1330, 350, 6), (990, 1760, 350, -5)], "radius": 26}],
          "phones": [{"capture": DAILY, "x": -60, "y": 600,
                      "out": [{"crop": (DAILY, (60, 530, 1260, 775)), "x": 150, "w": 1140, "radius": 44},
-                             {"crop": ("31_home_streak", STREAK_CARD), "x": 120, "y": 1560, "w": 1040, "rot": -3, "radius": 40}]}]},
-        # 4. The signature, split: cards above the headline, hexagons below, squares and triangles lifted.
+                             {"crop": ("31_home_streak", STREAK_CARD), "x": 120, "y": 1700, "w": 1040, "radius": 40}]}]},
+        # 4. The signature, split around the headline: cards above, hexagons below, squares and
+        #    triangles lifted; every badge sits on the edge of its board or card that faces the headline.
         {"head": "One picture,\nfour ways to cut it", "text": ("center", 1600, "center"),
-         "phones": [{"capture": "06_mode_cards", "x": 160, "y": -700, "rot": -3, "tags": [{"text": "Cards", "x": 500, "y": 1290}],
-                     "out": [{"crop": ("07_mode_squares", "board"), "x": 700, "y": 1420, "w": 330, "rot": 8, "label": "Squares"}]},
-                    {"capture": "09_mode_hexagons", "x": 160, "y": 1880, "rot": 3, "tags": [{"text": "Hexagons", "x": 560, "y": 520}],
-                     "out": [{"crop": ("08_mode_triangles", "board"), "x": -100, "y": 430, "w": 380, "rot": -8, "label": "Triangles"}]}]},
+         "phones": [{"capture": "06_mode_cards", "x": 160, "y": -700, "rot": -3, "tags": [{"text": "Cards", "edge": "bottom"}],
+                     "out": [{"crop": ("07_mode_squares", "board"), "x": 640, "y": 1330, "w": 400, "rot": 6, "label": "Squares"}]},
+                    {"capture": "09_mode_hexagons", "x": 160, "y": 1880, "rot": 3, "tags": [{"text": "Hexagons", "edge": "top"}],
+                     "out": [{"crop": ("08_mode_triangles", "board"), "x": -60, "y": 430, "w": 400, "rot": -6, "label": "Triangles", "label_at": "top"}]}]},
         # 5. Painting: Monet's chrysanthemums mostly grey, a few cards back in colour; the phone straight
         #    and centred (owner), a loose and a locked card lifted.
         {"head": "Bring the colour\nback, card by card", "text": ("center", 2390, "center"),
@@ -102,14 +103,15 @@ def slides() -> list[dict]:
                      "out": [{"crop": ("26_painting", cell("26_painting", 4, 5, 0, 0)), "x": -110, "y": 1560, "w": 300, "rot": -7, "radius": 26, "label": "Loose"},
                              {"crop": ("26_painting", cell("26_painting", 4, 5, 1, 2)), "x": 810, "y": 1520, "w": 300, "rot": 6, "radius": 26, "label": "Locked"}]}]},
         # 6. Giant boards: zoomed in with the overview map in the corner; the whole board in its
-        #    210 tiny cards (a small part solved) lifted beside it.
-        {"head": "Giant boards of\nup to 300 cards", "text": ("top", 200, "left"),
+        #    hundreds of tiny squares (a small part solved) lifted beside it.
+        {"head": "Giant boards of\nhundreds of cards", "text": ("top", 200, "left"),
          "phones": [{"capture": "30_giant_zoom", "x": 360, "y": 620, "rot": 6,
                      "out": [{"crop": ("27_giant", "board"), "x": -360, "y": 520, "w": 640, "rot": -5, "radius": 30}]}]},
-        # 7. The personal one: your own photos, one played as a puzzle.
-        {"head": "Puzzle your\nown photos", "text": ("bottom", 2740, "left"),
-         "phones": [{"capture": "20_my_puzzles", "x": 380, "y": 140,
-                     "out": [{"crop": ("21_my_puzzle_game", "board"), "x": -300, "y": 1000, "w": 600, "rot": -5, "radius": 40}]}]},
+        # 7. The personal one: your own photos, one played as a puzzle; the headline bottom right (like
+        #    slide 9), the phone pushed left and the corgi board lifted on the right.
+        {"head": "Puzzle your\nown photos", "text": ("bottom", 2740, "right"),
+         "phones": [{"capture": "20_my_puzzles", "x": -60, "y": 140,
+                     "out": [{"crop": ("21_my_puzzle_game", "board"), "x": 660, "y": 980, "w": 600, "rot": 5, "radius": 40}]}]},
         # 8. Quests, with the world-day event card lifted (cut exactly at the card's own edges and
         #    corners, 48 px in the capture, so no rounding cuts into it).
         {"head": "Quests and\nworld-day events", "text": ("top", 200, "center"),
@@ -177,6 +179,14 @@ def hand(items: list[str], w: int, h: int, top: int, spread: float, radius_px: i
         cx, cy = W / 2 + radius_px * math.sin(a), pivot_y - radius_px * math.cos(a)
         out.append({"src": src, "x": round(cx - w / 2), "y": round(cy - h / 2), "w": w, "h": h, "r": round(math.degrees(a), 1), "radius": radius})
     return out
+
+
+def row(items: list[str], w: int, h: int, gap: int, y: int, radius: int) -> list[dict]:
+    """One straight row of pictures running off both edges of the slide (it reads as endless):
+    centred on the middle picture, so both edges cut a picture in half."""
+    mid = (len(items) - 1) / 2
+    return [{"src": src, "x": round(W / 2 + (i - mid) * (w + gap) - w / 2), "y": y, "w": w, "h": h, "r": 0, "radius": radius}
+            for i, src in enumerate(items)]
 
 
 def cover(pack_id: str, width: int = 900) -> str:
@@ -267,8 +277,15 @@ def export_parts(parts: Path, slide_list: list[dict]) -> list[dict]:
                 x = o.get("x", off + (box[0] + box[2]) / 2 * k - o["w"] / 2)
                 y = o.get("y", off + (box[1] + box[3]) / 2 * k - h / 2)
                 outs.append({"img": cf, "x": round(x), "y": round(y), "w": o["w"], "rot": o.get("rot", 0),
-                             "radius": o.get("radius", 34), "label": o.get("label", "")})
-            d["phones"].append({"img": f, "x": ph["x"], "y": ph["y"], "rot": ph.get("rot", 0), "out": outs, "tags": ph.get("tags", [])})
+                             "radius": o.get("radius", 34), "label": o.get("label", ""), "label_at": o.get("label_at", "bottom")})
+            tags = []
+            for t in ph.get("tags", []):
+                if "edge" in t:  # centred on the board's top or bottom edge
+                    bl, bt, br, bb = board(n)
+                    tags.append({"text": t["text"], "x": round(off + (bl + br) / 2 * k), "y": round(off + (bt if t["edge"] == "top" else bb) * k)})
+                else:
+                    tags.append(t)
+            d["phones"].append({"img": f, "x": ph["x"], "y": ph["y"], "rot": ph.get("rot", 0), "out": outs, "tags": tags})
         d["pics"] = []
         for j, g in enumerate(s.get("pics", [])):
             if "packs" in g:
@@ -284,7 +301,9 @@ def export_parts(parts: Path, slide_list: list[dict]) -> list[dict]:
                     cs.load_raw(capture(name, dark)).crop(box).save(parts / f)
                     srcs.append(str(parts / f))
             radius = g.get("radius", 30)
-            if "hand" in g:
+            if "row" in g:
+                d["pics"] += row(srcs, radius=radius, **g["row"])
+            elif "hand" in g:
                 d["pics"] += hand(srcs, radius=radius, **g["hand"])
             elif "masonry" in g:
                 d["pics"] += masonry(srcs, radius=radius, **g["masonry"])

@@ -26,13 +26,15 @@ h1 { position: absolute; left: 70px; right: 70px; margin: 0; text-align: center;
 /* A phone and the cards lifted out of it share one frame, so a tilted phone tilts its cards too. */
 .phonebox { position: absolute; transform-origin: 50% 40%; }
 .phone { position: absolute; left: 0; top: 0; filter: drop-shadow(0 60px 80px var(--shade)); }
-.out { position: absolute; overflow: hidden; box-shadow: 0 46px 90px -24px rgba(20,22,50,.42), 0 0 0 6px rgba(255,255,255,.95); }
-.dark .out { box-shadow: 0 46px 90px -24px rgba(0,0,0,.7), 0 0 0 5px rgba(255,255,255,.3); }
-.out img { display: block; width: 100%; }
-.tag { position: absolute; transform: translateX(-50%); padding: 12px 26px; border-radius: 999px; background: rgba(255,255,255,.92);
-  box-shadow: 0 10px 24px -8px rgba(20,22,50,.35); font: 600 40px/1 "Head"; color: #111118; white-space: nowrap; }
-.out b { position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%); padding: 12px 26px; border-radius: 999px;
-  background: rgba(255,255,255,.9); font: 600 40px/1 "Head"; color: #111118; white-space: nowrap; }
+.out { position: absolute; }
+.out img { display: block; width: 100%; border-radius: inherit; box-shadow: 0 46px 90px -24px rgba(20,22,50,.42), 0 0 0 6px rgba(255,255,255,.95); }
+.dark .out img { box-shadow: 0 46px 90px -24px rgba(0,0,0,.7), 0 0 0 5px rgba(255,255,255,.3); }
+/* Mode badges: big white pills sitting on the edge of their board or card, half outside. */
+.badge { position: absolute; left: 50%; padding: 18px 40px; border-radius: 999px; background: #fff; white-space: nowrap;
+  box-shadow: 0 16px 34px -10px rgba(20,22,50,.45), 0 0 0 1px rgba(17,17,24,.06); font: 700 56px/1 "Head"; color: #111118; letter-spacing: -0.01em; }
+.badge.bottom { bottom: 0; transform: translate(-50%, 50%); }
+.badge.top { top: 0; transform: translate(-50%, -50%); }
+.badge.at { left: auto; transform: translate(-50%, -50%); }
 .pic { position: absolute; object-fit: cover; box-shadow: 0 36px 70px -20px rgba(20,22,50,.38), 0 0 0 6px rgba(255,255,255,.95); }
 </style></head><body><div id="root"></div><script>
 const S = __DATA__;
@@ -79,8 +81,8 @@ function render(size) {
   if (!noText) h += `<h1 style="top:${top}px;font-size:${size}px;text-align:${T.align};${side}">${sl.head.replace(/\n/g, "<br>")}</h1>`;
   // Phones: each in its own frame with the cards lifted out of it and its labels, so they tilt together.
   for (const p of sl.phones) {
-    const outs = (p.out || []).map(o => `<div class="out" style="left:${o.x}px;top:${o.y}px;width:${o.w}px;border-radius:${o.radius}px;transform:rotate(${o.rot}deg)"><img src="${file(o.img)}">${o.label ? `<b>${o.label}</b>` : ""}</div>`).join("");
-    const tags = (p.tags || []).map(t => `<b class="tag" style="left:${t.x}px;top:${t.y}px">${t.text}</b>`).join("");
+    const outs = (p.out || []).map(o => `<div class="out" style="left:${o.x}px;top:${o.y}px;width:${o.w}px;border-radius:${o.radius}px;transform:rotate(${o.rot}deg)"><img src="${file(o.img)}">${o.label ? `<b class="badge ${o.label_at || "bottom"}">${o.label}</b>` : ""}</div>`).join("");
+    const tags = (p.tags || []).map(t => `<b class="badge at" style="left:${t.x}px;top:${t.y}px">${t.text}</b>`).join("");
     h += `<div class="phonebox" style="left:${p.x}px;top:${p.y}px;width:${S.phone_w}px;height:${S.phone_h}px;transform:rotate(${p.rot}deg)"><img class="phone" src="${file(p.img)}" style="width:${S.phone_w}px">${tags}${outs}</div>`;
   }
   document.getElementById("root").innerHTML = `<div class="slide${sl.dark ? " dark" : ""}">${h}</div>`;

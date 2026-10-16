@@ -30,14 +30,14 @@ daily hook.
 | Slide | Headline | Headline and phones | Shows (light captures unless noted) |
 | --- | --- | --- | --- |
 | `01.png` | Swap cards. Reveal the picture. | top + icon, flat phone | `raw/25_hero`: Tulip Fields 8 mid-build |
-| `02.png` | Thousands of pictures | top, a hand of pack covers, phone from the bottom | seven pack covers at full resolution; `raw/15_library` (curated first packs) |
+| `02.png` | Thousands of pictures | top, an endless row of covers, phone from the bottom | pack covers at full resolution in one row off both edges; `raw/15_library` (curated packs, scrolled past the My Puzzles tile) |
 | `03.png` | A new picture every day | top right, phone pushed left | `raw/18_daily_month_grid`, today's card and the 23-day streak card of `raw/31_home_streak` lifted; two solved days on the right |
 | `04.png` | One picture, four ways to cut it | middle, two phones | `raw/06_mode_cards` from the top, `raw/09_mode_hexagons` from the bottom, squares and triangles lifted, all four labelled |
 | `05.png` | Bring the colour back, card by card | lower middle, phone straight from the top | `raw/26_painting`: Monet's chrysanthemums, 4 of 20 in colour; a loose and a locked card lifted |
-| `06.png` | Giant boards of up to 300 cards | top left, tilted phone pushed right | `raw/30_giant_zoom` (the overview map in the corner); the whole board of `raw/27_giant` lifted |
-| `07.png` | Puzzle your own photos | bottom left, phone pushed right | `raw/20_my_puzzles` (five photos), the corgi board of `raw/21_my_puzzle_game` lifted |
+| `06.png` | Giant boards of hundreds of cards | top left, tilted phone pushed right | `raw/30_giant_zoom` (Squares, Giant: 345 squares; the overview map in the corner); the whole board of `raw/27_giant` lifted |
+| `07.png` | Puzzle your own photos | bottom right, phone pushed left | `raw/20_my_puzzles` (five photos), the corgi board of `raw/21_my_puzzle_game` lifted |
 | `08.png` | Quests and world-day events | top, tilted phone | `raw/13_quests` (level 9), the World Food Day card of `raw/14_quests_live` lifted |
-| `09.png` | Climb the ranks with friends | bottom right, tilted phone | `raw/22_social_league` (level 17, second on the podium), the podium lifted |
+| `09.png` | Climb the ranks with friends | bottom right, tilted phone | `raw/22_social_league` (level 17, second on the podium; 17 players, made-up ones added by the test), the podium lifted |
 | `10.png` | Just as calm in the dark | top, flat phone, dark | `raw/29_dark_board`: the Monarch mid-build in the dark theme |
 
 Raw captures (dark theme; a `--dart-define=CJW_STORE_THEME=light` run writes
