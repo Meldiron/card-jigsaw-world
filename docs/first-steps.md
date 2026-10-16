@@ -28,44 +28,49 @@ guided again.
 2. **One hint per step on the first board** (until `tutorialSeen`), where the tools will be (the
    tool bar stays laid out but hidden, so the board keeps its size): "Tap a card to pick it up",
    then the picked card's place is outlined (`GameController.guide`, free, not a Hint) with "Now
-   tap the outlined spot", then "It locked in place..." (or "They joined..."). The next move ends
-   the hints, the tools fade in, and a toast says "Fewer moves earn more stars. Take your time."
-   The close button ends them at once. They never come back.
-3. **The finish** says "Your first picture. Home has something new." and its way out is **Home**
-   (the board was opened over it).
-4. **A calm Home**: today's picture, Continue, one **next step** (`nextStepProvider`: the first
-   picture, then the next picture of the first pack, then "Try Squares" once Squares open, then
-   "Find a pack you like"), and at the end the rest of Home **blurred** under "More opens as you
-   play", which lists what opens when and has **Unlock anyway** (opens everything).
-5. **Home and the tabs grow** ([`Reveal`], counted in pictures solved and levels; a 3x3 board is
-   about 50 XP, so level 3 is about 5 pictures, level 4 about 8, level 5 about 12):
+   tap the outlined spot", then "It locked in place..." (or "They joined..."). No title or step
+   count, only the line (owner). The next move ends the hints, the tools fade in, and a toast says
+   "Fewer moves earn more stars. Take your time." The close button ends them at once. They never
+   come back.
+3. **The finish**: its way out is **Home** (the board was opened over it).
+4. **A calm Home**: until the daily puzzle opens, the **next step** takes the top of Home as a
+   large picture (`NextStepCard(heroHeight:)`; `nextStepProvider`: the first picture, then the next
+   picture of the first pack, then "Try Squares" once Squares open, then "Find a pack you like");
+   afterwards today's picture is on top and the next step is a card under it. Continue shows a
+   board in progress. At the end, the rest of Home is **blurred** under "More opens as you play",
+   which says how many pictures the player has solved, lists what opens next and has **Unlock
+   anyway** (opens everything).
+5. **Everything opens by pictures solved** ([`Reveal`]; owner, 2026-10-16; levels do not count):
 
-   | Opens | What |
+   | Pictures | What opens |
    | --- | --- |
-   | 1st picture | daily gift (streak card, Home dot) |
-   | 2 pictures | packs on Home (all the pack rows), the Quests tab |
-   | 3 pictures | Quick play |
-   | level 3 | Lucky Wheel and piggy bank, the level card, the guest "Save your progress" card |
-   | level 4 | the Social tab (league, friends, inbox) |
-   | level 5 | achievements on Profile (and its dot), store offers (VIP banner, break offers) |
+   | 2 | packs on Home (all the pack rows) |
+   | 3 | Quick play |
+   | 5 | the daily puzzle (Home's picture of the day, the daily months on Home and in the Library, the Daily chip), the guest "Save your progress" card |
+   | 10 | the daily gift (streak card, Home dot) |
+   | 15 | the Lucky Wheel, the level card |
+   | 20 | the Quests tab (daily and weekly quests); store offers (VIP banner, break offers) |
+   | 25 | achievements on Profile (and its dot) |
+   | 30 | the piggy bank |
+   | 35 | live events (Home's shelf, the Quests section, event packs in the Library) |
+   | 50 | the Social tab (league, friends, inbox) |
 
-6. **Locked tabs** are drawn faded with a small lock and keep their place in the bar. A tap shows
-   "Quests open after 2 pictures" with **Unlock anyway** (that tab only) or Not now. A tab that
-   opened by playing carries a dot until it is visited. Profile shows achievements as one locked
-   card with Unlock anyway.
-7. **Tips at the moment they matter**, each once: "Just opened" on Home when something opens (with
-   a button to it; closing it settles older ones), the Library's "Start with the free packs...",
-   the board picker's "Pick a shape and a size...", and "Stuck? Hint shows where one card belongs"
-   after six moves in a row without a lock or join. Shapes keep their own intros
-   (`UnlockIntroHost`).
+   Nothing is announced when something opens (owner: no "Just opened" card or alert).
+6. **Locked places say when they open**: locked tabs are drawn faded with a small lock and keep
+   their place in the bar; a tap shows "Quests open after 20 pictures" with **Unlock anyway** (that
+   tab only) or Not now. A tab that opened by playing carries a dot until it is visited. Profile shows
+   achievements, and Quests shows live events, as one locked card with Unlock anyway.
+7. **Tips at the moment they matter**, each once: the Library's "Start with the free packs...", the
+   board picker's "Pick a shape and a size...", and "Stuck? Hint shows where one card belongs" after
+   six moves in a row without a lock or join. Shapes keep their own intros (`UnlockIntroHost`).
 8. The board picker opens on **Easy** (one step up from nine cards) until the player picks a board.
 
 Settings > Gameplay > **Guided start** (shown to guided players) turns it off (everything open)
-or back on (what the player reached stays open and is not announced again).
+or back on (what the player reached stays open).
 
 ## Tests
 
-- `test/first_steps_test.dart`: the rules (who is guided, what opens when, Unlock anyway, tips).
+- `test/first_steps_test.dart`: the rules (who is guided, the schedule, Unlock anyway, tab dots).
 - `test/guided_home_layout_test.dart`: the guided Home at SE, Pro and website sizes, both themes,
   text 100% and 200%, before and after the first picture, without layout errors.
 - `integration_test/first_steps_test.dart`: the whole path on the simulator with a QA guest

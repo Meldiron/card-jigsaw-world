@@ -8,6 +8,7 @@ import '../../core/a11y.dart';
 import '../../core/theme/tokens.dart';
 import '../../models/models.dart';
 import '../../state/catalog.dart';
+import '../../state/first_steps.dart';
 import '../../state/giant.dart';
 import '../../state/profile.dart';
 import '../../state/progress.dart';
@@ -266,14 +267,20 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
     );
   }
 
-  Widget _library(List<Pack> list) {
+  Widget _library(List<Pack> all) {
     final c = context.colors;
+    // Guided start: daily months join after 5 pictures, event packs after 35.
+    final open = ref.watch(revealsProvider);
+    final list = [
+      for (final p in all)
+        if ((open.contains(Reveal.daily) || !p.isDaily) && (open.contains(Reveal.liveEvents) || !p.hasWindow)) p,
+    ];
     final profile = ref.watch(profileProvider).value;
     final progress = ref.watch(allPackProgressProvider);
     final hideFinished = ref.watch(settingsProvider.select((s) => s.hideFinished));
     final profileN = ref.read(profileProvider.notifier);
     // VIP opens everything, so the "Unlocked" chip only helps everyone else.
-    final chips = libraryChips(list, showUnlocked: profile != null && !profile.isVip);
+    final chips = libraryChips(list, showUnlocked: profile != null && !profile.isVip)..removeWhere((c) => c == LibraryFilter.daily && !open.contains(Reveal.daily));
     // A chip that is no longer offered (e.g. Unlocked after going VIP) falls back to All.
     final selected = ref.watch(libraryFilterProvider);
     final filter = chips.contains(selected) ? selected : LibraryFilter.all;

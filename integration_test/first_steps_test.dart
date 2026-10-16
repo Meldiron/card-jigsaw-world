@@ -1,8 +1,8 @@
 // A new player's first steps (owner, 2026-10-16), on the real app with a QA guest and no shortcuts:
 // the welcome pages lead into a first board with a hint per step, the finish leads Home, Home starts
-// calm and grows with the second picture, locked tabs explain themselves and open with "Unlock
-// anyway", one-time tips show in the Library and on the board picker, and "Unlock anyway" on Home
-// opens everything.
+// calm (the next picture on top, the rest blurred) and grows with the second picture, locked tabs
+// explain themselves and open with "Unlock anyway", Quests keeps live events locked, one-time tips
+// show in the Library and on the board picker, and "Unlock anyway" on Home opens everything.
 //
 //   tools/dev/qa-run.sh drive --driver=test_driver/integration_test.dart \
 //     --target=integration_test/first_steps_test.dart -d <simulator>
@@ -137,18 +137,17 @@ void main() {
     expect(c.read(settingsProvider).tutorialSeen, isTrue);
     await shot(tester, 'fs_04_tools');
 
-    // 5. Finish: the first-picture line, and the way out is Home.
+    // 5. Finish: the way out is Home.
     await solve(tester);
     await settle(tester, 4000);
-    expect(shown('first-board-line'), isTrue);
     expect(find.text('Home'), findsWidgets);
     await shot(tester, 'fs_05_complete');
     await tapKey(tester, 'completion-back', ms: 3500);
 
-    // 6. A calm Home: today's picture, the next step and the daily gift that just opened; no Quick
-    //    play or pack rows yet; Quests and Social locked.
+    // 6. A calm Home: the next picture on top, the rest blurred below; no Just opened card, no Quick
+    //    play, pack rows or daily puzzle yet; Quests and Social locked.
     expect(find.byType(GameScreen), findsNothing);
-    expect(shown('reveal-tip-dailyGift'), isTrue, reason: 'the daily gift just opened');
+    expect(find.textContaining('Just opened'), findsNothing);
     expect(shown('next-step-pack'), isTrue);
     expect(shown('home-quick-play'), isFalse);
     expect(find.text('Featured packs'), findsNothing);
@@ -163,7 +162,7 @@ void main() {
 
     // 7. A locked tab says when it opens; Not now keeps it closed.
     await tapTab(tester, 'Quests', ms: 1200);
-    expect(find.text('Quests open after 2 pictures'), findsOneWidget);
+    expect(find.text('Quests open after 20 pictures'), findsOneWidget);
     await shot(tester, 'fs_08_locked_tab');
     await tester.tap(find.text('Not now').last, warnIfMissed: false);
     await settle(tester, 1000);
@@ -171,7 +170,7 @@ void main() {
 
     // 8. Unlock anyway on Social opens that tab only.
     await tapTab(tester, 'Social', ms: 1200);
-    expect(find.text('Social opens at level 4'), findsOneWidget);
+    expect(find.text('Social opens after 50 pictures'), findsOneWidget);
     // The alert's button (Home's own "Unlock anyway" is built under the alert).
     await tester.tap(find.text('Unlock anyway').last, warnIfMissed: false);
     await settle(tester, 2500);
@@ -180,17 +179,26 @@ void main() {
     expect(shown('tab-lock-Quests'), isTrue);
     await shot(tester, 'fs_09_social_open');
 
-    // 9. The Library's one-time tip.
+    // 8b. Quests with Unlock anyway: the quests are there, live events wait (35 pictures).
+    await tapTab(tester, 'Quests', ms: 1200);
+    await tester.tap(find.text('Unlock anyway').last, warnIfMissed: false);
+    await settle(tester, 2500);
+    await scrollTo(tester, find.byKey(const ValueKey('locked-liveEvents')));
+    expect(find.text('Live events open after 35 pictures'), findsOneWidget);
+    await shot(tester, 'fs_09b_quests_events_locked');
+
+    // 9. The Library's one-time tip; no daily months yet.
     await tapTab(tester, 'Library', ms: 2500);
     expect(shown('tip-library'), isTrue);
+    expect(find.text('Daily'), findsNothing, reason: 'the Daily chip waits for 5 pictures');
     await shot(tester, 'fs_10_library_tip');
     await tapKey(tester, 'tip-library-close', ms: 800);
     expect(shown('tip-library'), isFalse);
 
-    // 10. Home: close the tip, follow the next step to the board picker and its one-time tip.
+    // 10. Home: follow the next step to the board picker and its one-time tip.
     await tapTab(tester, 'Home', ms: 2000);
-    await tapKey(tester, 'reveal-tip-close', ms: 800);
-    expect(shown('reveal-tip-dailyGift'), isFalse);
+    await tester.drag(find.byType(Scrollable).first, const Offset(0, 3000));
+    await settle(tester, 800);
     await tapKey(tester, 'next-step-pack', ms: 3500);
     expect(find.byType(DifficultyScreen), findsOneWidget);
     expect(shown('tip-board'), isTrue);
@@ -204,16 +212,15 @@ void main() {
     await tapKey(tester, 'completion-back', ms: 3500);
     if (shown('unlock-try')) await tapText(tester, 'Later', ms: 1200);
 
-    // 11. Two pictures: packs on Home and Quests open, with what just opened said once.
-    expect(shown('tab-lock-Quests'), isFalse);
-    expect(shown('reveal-tip-quests'), isTrue);
+    // 11. Two pictures: the packs join Home; nothing is announced.
+    expect(find.textContaining('Just opened'), findsNothing);
     await tester.drag(find.byType(Scrollable).first, const Offset(0, 3000));
     await settle(tester, 800);
     await shot(tester, 'fs_13_home_grows');
-    await tapKey(tester, 'reveal-tip-action', ms: 2500);
-    expect(find.text('Quests'), findsWidgets);
-    expect(c.read(firstStepsProvider).tips.contains('tab:quests'), isTrue, reason: 'visited: the new-tab dot goes');
-    await tapTab(tester, 'Home', ms: 2000);
+    await scrollTo(tester, find.text('Featured packs'));
+    expect(find.text('Featured packs'), findsOneWidget);
+    await tester.drag(find.byType(Scrollable).first, const Offset(0, 3000));
+    await settle(tester, 800);
 
     // 12. Unlock anyway on Home opens everything.
     await scrollTo(tester, find.byKey(const ValueKey('unlock-anyway')));

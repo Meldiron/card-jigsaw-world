@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/a11y.dart';
 import '../../core/haptics.dart';
 import '../../core/theme/tokens.dart';
 import '../../state/first_steps.dart';
@@ -11,12 +12,14 @@ import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 
 /// The guided start on screen (lib/state/first_steps.dart, docs/first-steps.md): the next step on
-/// Home, the tip when something opens, the blurred look at what is still to come with "Unlock
+/// Home, the blurred look at what is still to come with "Unlock
 /// anyway", locked sections and tabs that say when they open, and one-time tips.
 
-/// Home's one suggestion: the next small thing worth doing, with its picture.
+/// Home's one suggestion: the next small thing worth doing, with its picture. With [heroHeight]
+/// it takes the top of Home as a large picture (while the daily puzzle is not open yet).
 class NextStepCard extends ConsumerWidget {
-  const NextStepCard({super.key});
+  const NextStepCard({super.key, this.heroHeight});
+  final double? heroHeight;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -24,16 +27,66 @@ class NextStepCard extends ConsumerWidget {
     if (step == null) return const SizedBox.shrink();
     final c = context.colors;
     final puzzle = step.puzzle;
+    void open() {
+      Haptics.light();
+      if (step.route == '/library') {
+        context.go('/library');
+      } else {
+        context.push(step.route);
+      }
+    }
+
+    if (heroHeight != null && puzzle != null) {
+      return Pressable(
+        key: ValueKey('next-step-${step.key}'),
+        onTap: open,
+        scale: 0.985,
+        child: Container(
+          height: heroHeight,
+          clipBehavior: Clip.antiAlias,
+          decoration: BoxDecoration(color: c.boardBackground, borderRadius: BorderRadius.circular(Radii.lg), border: Border.all(color: c.stroke)),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              NetImage(url: puzzle.imageUrl, blurhash: puzzle.blurhash),
+              DecoratedBox(decoration: BoxDecoration(gradient: Brand.scrim(strength: 0.8, contrast: A11y.increaseContrastOf(context)))),
+              Positioned(left: 14, top: 14, child: Chip2(label: step.label, icon: AppIcons.playFill, onImage: true)),
+              Positioned(
+                left: 16,
+                right: 16,
+                bottom: 16,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(step.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Colors.white)),
+                          const SizedBox(height: 4),
+                          Text(step.subtitle, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: TypeSize.footnote, fontWeight: FontWeight.w500)),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Container(
+                      width: 46,
+                      height: 46,
+                      decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+                      child: const Icon(AppIcons.playFill, color: Colors.black, size: 20),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
     return SoftCard(
       key: ValueKey('next-step-${step.key}'),
-      onTap: () {
-        Haptics.light();
-        if (step.route == '/library') {
-          context.go('/library');
-        } else {
-          context.push(step.route);
-        }
-      },
+      onTap: open,
       padding: const EdgeInsets.fromLTRB(10, 10, 12, 10),
       child: Row(
         children: [
@@ -68,64 +121,6 @@ class NextStepCard extends ConsumerWidget {
   }
 }
 
-/// Said once on Home when something opens: what it is, a button to it, and a close.
-class RevealTipCard extends ConsumerWidget {
-  const RevealTipCard({super.key, this.padding = const EdgeInsets.fromLTRB(20, 8, 20, 4)});
-  final EdgeInsets padding;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final r = ref.watch(pendingRevealTipProvider);
-    if (r == null) return const SizedBox.shrink();
-    final c = context.colors;
-    void done() => ref.read(firstStepsProvider.notifier).sawReveal(r);
-    return Padding(
-      padding: padding,
-      child: SoftCard(
-        key: ValueKey('reveal-tip-${r.name}'),
-        padding: const EdgeInsets.fromLTRB(14, 12, 6, 12),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Padding(padding: EdgeInsets.only(top: 2), child: IconTile(icon: AppIcons.sparkle, size: IconTile.small, radius: 9)),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Just opened', style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600, color: context.accent, letterSpacing: -0.1)),
-                  const SizedBox(height: 2),
-                  Text(r.tip, style: TextStyle(fontSize: TypeSize.body, height: 1.3, color: c.textPrimary)),
-                  if (r.action != null) ...[
-                    const SizedBox(height: 10),
-                    BigButton(
-                      key: const ValueKey('reveal-tip-action'),
-                      label: r.action!,
-                      kind: ButtonKind.secondary,
-                      expand: false,
-                      height: 36,
-                      onTap: () {
-                        done();
-                        context.go(r.route!);
-                      },
-                    ),
-                  ],
-                ],
-              ),
-            ),
-            IconButton(
-              key: const ValueKey('reveal-tip-close'),
-              tooltip: 'Close',
-              onPressed: done,
-              icon: Icon(AppIcons.xmark, size: 18, color: c.textSecondary),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 /// The end of the guided Home: what is still to come, blurred and fading behind a card that
 /// says why it waits, lists what opens when, and offers "Unlock anyway".
 class MoreToComeCard extends ConsumerWidget {
@@ -138,6 +133,7 @@ class MoreToComeCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final upcoming = ref.watch(upcomingRevealsProvider);
     if (upcoming.isEmpty) return const SizedBox.shrink();
+    final solved = ref.watch(solvedCountProvider);
     final c = context.colors;
     final shown = upcoming.take(4).toList();
     return Stack(
@@ -198,7 +194,8 @@ class MoreToComeCard extends ConsumerWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Carden starts simple, so there is time to settle in. The rest opens a little at a time.',
+                      'Carden starts simple, so there is time to settle in. The rest opens as you solve pictures; '
+                      'you have solved ${solved == 1 ? '1 picture' : '$solved pictures'} so far.',
                       style: TextStyle(fontSize: TypeSize.footnote, height: 1.35, color: c.textSecondary),
                     ),
                     const SizedBox(height: 12),

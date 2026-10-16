@@ -55,7 +55,7 @@ class HomeScreen extends ConsumerWidget {
     final open = ref.watch(revealsProvider);
     final calm = ref.watch(firstStepsProvider.select((s) => s.calm));
     final dailySolved = daily != null && daily.isToday && (progress[daily.id]?.completed ?? false);
-    final tomorrow = dailySolved ? tomorrowsDaily(puzzles.value ?? const <Puzzle>[], DateTime.now()) : null;
+    final tomorrow = dailySolved && open.contains(Reveal.daily) ? tomorrowsDaily(puzzles.value ?? const <Puzzle>[], DateTime.now()) : null;
 
     final inProgress = puzzles.value == null
         ? const <Puzzle>[]
@@ -84,9 +84,13 @@ class HomeScreen extends ConsumerWidget {
     final missingStars = packRows.missingStars.fold<int>(0, (sum, p) => sum + progressOf(p).maxStars - progressOf(p).stars);
 
     final wide = context.isExpanded;
-    final hero = daily == null
-        ? _HeroPlaceholder(failed: catalogFailed, onRetry: retryCatalog, height: wide ? _DailyHero.wideHeight : _DailyHero.phoneHeight)
-        : _DailyHero(puzzle: daily, progress: progress[daily.id], height: wide ? _DailyHero.wideHeight : _DailyHero.phoneHeight);
+    // Guided start: until the daily puzzle opens, the next step takes the top of Home as a picture.
+    final showDaily = open.contains(Reveal.daily);
+    final heroHeight = wide ? _DailyHero.wideHeight : _DailyHero.phoneHeight;
+    final dailyHero = daily == null
+        ? _HeroPlaceholder(failed: catalogFailed, onRetry: retryCatalog, height: heroHeight)
+        : _DailyHero(puzzle: daily, progress: progress[daily.id], height: heroHeight);
+    final Widget hero = showDaily ? dailyHero : NextStepCard(heroHeight: heroHeight);
     Widget? resume;
     if (inProgress.isNotEmpty) {
       final p = _closestToDone(inProgress, progress);
@@ -94,12 +98,9 @@ class HomeScreen extends ConsumerWidget {
       resume = _ResumeCard(puzzle: p, progress: pr, others: inProgress.length - 1, onTap: () => context.push('/game/${p.id}/${_gridCode(pr)}'));
     }
     final streakCard = profile == null ? null : _StreakCard(profile: profile, onTap: () => showDailyRewardSheet(context));
-    final streak = open.contains(Reveal.dailyGift) ? streakCard : null;
+    final streak = open.contains(Reveal.streak) ? streakCard : null;
     final quickPlay = open.contains(Reveal.quickPlay) ? const _QuickPlayCard() : null;
-    final Widget extras = Row(
-      children: [
-        Expanded(
-          child: _QuickTile(
+    final Widget wheelTile = _QuickTile(
             icon: AppIcons.wheel,
             title: 'Lucky Wheel',
             value: Row(
@@ -113,11 +114,8 @@ class HomeScreen extends ConsumerWidget {
             ),
             footer: CostLabel(label: 'Spin for', currency: Currency.tickets, amount: Economy.wheelSpinTickets, fontSize: TypeSize.footnote, color: context.colors.textSecondary),
             onTap: () => context.push('/wheel'),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: _QuickTile(
+          );
+    final Widget piggyTile = _QuickTile(
             icon: AppIcons.piggy,
             title: 'Piggy bank',
             ready: piggyFull,
@@ -133,21 +131,31 @@ class HomeScreen extends ConsumerWidget {
                 ? CostLabel(label: 'Full · open for', currency: Currency.tickets, amount: Economy.piggyOpenTickets, fontSize: TypeSize.footnote, color: context.accent)
                 : ProgressBar(value: (profile?.piggyCoins ?? 0) / Profile.piggyCapacity, height: 5),
             onTap: () => showPiggySheet(context),
-          ),
-        ),
-      ],
-    );
+          );
+    // The Lucky Wheel and the piggy bank side by side (the guided start opens them apart).
+    Widget tiles({required bool wheel, required bool piggy}) => Row(
+          children: [
+            if (wheel) Expanded(child: wheelTile),
+            if (wheel && piggy) const SizedBox(width: 12),
+            if (piggy) Expanded(child: piggyTile),
+          ],
+        );
+    final showWheel = open.contains(Reveal.wheel), showPiggy = open.contains(Reveal.piggy);
+    final showExtras = showWheel || showPiggy;
+    final Widget extras = tiles(wheel: showWheel, piggy: showPiggy);
     final levelCard = profile == null ? null : _LevelCard(profile: profile);
-    final showExtras = open.contains(Reveal.wheelPiggy);
-    final level = showExtras ? levelCard : null;
+    final level = showWheel ? levelCard : null;
     final guest = isGuest && open.contains(Reveal.saveProgress) ? _GuestSaveCard(onSave: () => context.push('/account')) : null;
     final showPacks = open.contains(Reveal.packs);
-    final next = calm ? const NextStepCard() : null;
+    // The next step as a card under today's picture (before it opens, the next step is the picture).
+    final next = calm && showDaily ? const NextStepCard() : null;
     // What the guided start still keeps back, drawn blurred under "More opens as you play".
     final libraryPacks = (packs.value ?? const <Pack>[]).where((p) => !p.isDaily && !p.hasWindow).take(3).toList();
     final preview = Column(
       children: [
-        if (!showExtras) ...[extras, const SizedBox(height: 12)],
+        if (!showDaily) ...[dailyHero, const SizedBox(height: 12)],
+        if (!showWheel || !showPiggy) ...[tiles(wheel: !showWheel, piggy: !showPiggy), const SizedBox(height: 12)],
+        if (!open.contains(Reveal.streak) && streakCard != null) ...[streakCard, const SizedBox(height: 12)],
         if (!showPacks && libraryPacks.isNotEmpty) ...[
           Row(
             children: [
@@ -159,7 +167,7 @@ class HomeScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 12),
         ],
-        if (!showExtras && levelCard != null) levelCard,
+        if (!showWheel && levelCard != null) levelCard,
       ],
     );
     final packRowSlivers = <Widget>[
@@ -225,8 +233,6 @@ class HomeScreen extends ConsumerWidget {
                 SliverToBoxAdapter(child: _Greeting(name: profile?.displayName)),
                 // The first-time intro of a shape or option the player's level just opened.
                 SliverToBoxAdapter(child: UnlockIntroHost(at: (path) => path == '/home')),
-                // Guided start: what just opened, said once.
-                const SliverToBoxAdapter(child: RevealTipCard()),
                 if (wide) ...[
                   // The website layout: today's picture beside the day's plays, then the extras beside
                   // the level, then the rows.
@@ -337,7 +343,7 @@ class HomeScreen extends ConsumerWidget {
                       ),
                     ),
                 ],
-                if (showPacks && livePacks.isNotEmpty) ...[
+                if (open.contains(Reveal.liveEvents) && livePacks.isNotEmpty) ...[
                   SliverToBoxAdapter(
                     child: SectionHeader(
                       title: 'Live events',
@@ -357,7 +363,7 @@ class HomeScreen extends ConsumerWidget {
                     ),
                   ),
                 ],
-                if (showPacks && dailyPacks.isNotEmpty) ...[
+                if (showDaily && dailyPacks.isNotEmpty) ...[
                   SliverToBoxAdapter(
                     child: SectionHeader(
                       title: 'Daily puzzles',

@@ -39,7 +39,7 @@ void main() {
     expect(c.read(firstStepsProvider).calm, isFalse);
     expect(c.read(revealsProvider), Reveal.values.toSet());
     expect(c.read(nextStepProvider), isNull);
-    expect(c.read(pendingRevealTipProvider), isNull);
+    expect(c.read(upcomingRevealsProvider), isEmpty);
   });
 
   test('onboarding marks a new player once, and a device that already chose keeps its choice', () async {
@@ -56,26 +56,45 @@ void main() {
   });
 
   test('the record survives a round trip', () {
-    const s = FirstSteps(guided: true, showEverything: false, firstBoard: false, tips: {'stuck', 'reveal:quests'}, early: {'social'});
+    const s = FirstSteps(guided: true, showEverything: false, firstBoard: false, tips: {'stuck', 'tab:quests'}, early: {'social'});
     final back = FirstSteps.fromJson(s.toJson());
     expect((back.guided, back.showEverything, back.firstBoard), (true, false, false));
-    expect(back.tips, {'stuck', 'reveal:quests'});
+    expect(back.tips, {'stuck', 'tab:quests'});
     expect(back.early, {'social'});
   });
 
-  test('a new player starts with only the basics; Home and the tabs grow with pictures and levels', () async {
-    expect((await container(prefs: guided)).read(revealsProvider), isEmpty);
-    expect((await container(prefs: guided, solved: 1)).read(revealsProvider), {Reveal.dailyGift});
-    expect((await container(prefs: guided, solved: 2, level: 2)).read(revealsProvider), {Reveal.dailyGift, Reveal.packs, Reveal.quests});
-    expect((await container(prefs: guided, solved: 3, level: 2)).read(revealsProvider).contains(Reveal.quickPlay), isTrue);
-    final l3 = (await container(prefs: guided, solved: 5, level: 3)).read(revealsProvider);
-    expect(l3.containsAll({Reveal.wheelPiggy, Reveal.saveProgress}), isTrue);
-    expect(l3.contains(Reveal.social), isFalse);
-    expect((await container(prefs: guided, solved: 8, level: 4)).read(revealsProvider).contains(Reveal.social), isTrue);
-    expect((await container(prefs: guided, solved: 12, level: 5)).read(revealsProvider), Reveal.values.toSet());
+  test('the owner\'s schedule: each thing opens after a number of pictures solved', () {
+    expect({for (final r in Reveal.values) r.name: r.solves}, {
+      'packs': 2,
+      'quickPlay': 3,
+      'daily': 5,
+      'saveProgress': 5,
+      'streak': 10,
+      'wheel': 15,
+      'quests': 20,
+      'promos': 20,
+      'achievements': 25,
+      'piggy': 30,
+      'liveEvents': 35,
+      'social': 50,
+    });
   });
 
-  test('Unlock anyway opens one tab, or everything from Home', () async {
+  test('a new player starts with only the basics; Home and the tabs grow with pictures solved', () async {
+    Future<Set<Reveal>> at(int solved) async => (await container(prefs: guided, solved: solved)).read(revealsProvider);
+    expect(await at(0), isEmpty);
+    expect(await at(1), isEmpty);
+    expect(await at(2), {Reveal.packs});
+    expect(await at(5), {Reveal.packs, Reveal.quickPlay, Reveal.daily, Reveal.saveProgress});
+    expect((await at(10)).contains(Reveal.streak), isTrue);
+    expect((await at(19)).containsAll({Reveal.wheel}) && !(await at(19)).contains(Reveal.quests), isTrue);
+    expect((await at(49)).contains(Reveal.social), isFalse);
+    expect(await at(50), Reveal.values.toSet());
+    // The level does not count: a level-12 player with 3 pictures still waits for the daily puzzle.
+    expect((await container(prefs: guided, solved: 3, level: 12)).read(revealsProvider).contains(Reveal.daily), isFalse);
+  });
+
+  test('Unlock anyway opens one tab or section, or everything from Home', () async {
     final c = await container(prefs: guided);
     c.read(firstStepsProvider.notifier).openEarly(Reveal.social);
     expect(c.read(revealsProvider), {Reveal.social});
@@ -84,41 +103,35 @@ void main() {
     c.read(firstStepsProvider.notifier).showEverything();
     expect(c.read(revealsProvider), Reveal.values.toSet());
     expect(c.read(upcomingRevealsProvider), isEmpty);
-    expect(c.read(pendingRevealTipProvider), isNull);
   });
 
-  test('Settings > Guided start back on keeps what the player reached, with nothing announced again', () async {
-    final c = await container(prefs: {'firstSteps': '{"guided":true,"showEverything":true}'}, solved: 3, level: 2);
+  test('Settings > Guided start back on keeps what the player reached, with no "new" dots', () async {
+    final c = await container(prefs: {'firstSteps': '{"guided":true,"showEverything":true}'}, solved: 22);
     c.read(firstStepsProvider.notifier).setGuided(true);
     expect(c.read(firstStepsProvider).calm, isTrue);
-    expect(c.read(revealsProvider), {Reveal.dailyGift, Reveal.quickPlay, Reveal.packs, Reveal.quests});
-    expect(c.read(pendingRevealTipProvider), isNull);
+    expect(c.read(revealsProvider).containsAll({Reveal.daily, Reveal.streak, Reveal.wheel, Reveal.quests}), isTrue);
+    expect(c.read(revealsProvider).contains(Reveal.achievements), isFalse);
     expect(c.read(newTabsProvider), isEmpty);
   });
 
-  test('what just opened is said once, newest first, and never to a player far past it', () async {
-    final c = await container(prefs: guided, solved: 2, level: 2);
-    expect(c.read(pendingRevealTipProvider), Reveal.quests);
+  test('a tab that opens by playing keeps a dot until it is visited', () async {
+    final c = await container(prefs: guided, solved: 20);
     expect(c.read(newTabsProvider), {Reveal.quests.tab});
-    c.read(firstStepsProvider.notifier).sawReveal(Reveal.quests);
-    expect(c.read(pendingRevealTipProvider), isNull, reason: 'closing the newest tip also settles the older ones');
     c.read(firstStepsProvider.notifier).sawTip('tab:quests');
     expect(c.read(newTabsProvider), isEmpty);
-    // A returning account at level 12 on a new device: nothing to announce.
-    expect((await container(prefs: guided, solved: 40, level: 12)).read(pendingRevealTipProvider), isNull);
+  });
+
+  test('the list of what is to come shows the nearest first', () async {
+    final c = await container(prefs: guided, solved: 1);
+    expect(c.read(upcomingRevealsProvider).take(4), [Reveal.packs, Reveal.daily, Reveal.streak, Reveal.wheel]);
   });
 
   test('alerts and the list say when each thing opens', () {
-    expect(Reveal.quests.opensTitle, 'Quests open after 2 pictures');
-    expect(Reveal.social.opensTitle, 'Social opens at level 4');
-    expect(Reveal.dailyGift.opensTitle, 'Daily gift opens after your first picture');
-    expect(Reveal.achievements.short, 'Level 5');
-    expect(Reveal.dailyGift.short, 'First picture');
-    expect([for (final r in Reveal.values) if (r.listed) r.name], ['dailyGift', 'packs', 'quests', 'wheelPiggy', 'social', 'achievements']);
-    for (final r in Reveal.values.where((r) => r.listed)) {
-      expect(r.tip, isNotEmpty, reason: '${r.name} is announced when it opens');
-      expect(r.tip.contains('!'), isFalse, reason: 'calm copy');
-    }
+    expect(Reveal.quests.opensTitle, 'Quests open after 20 pictures');
+    expect(Reveal.social.opensTitle, 'Social opens after 50 pictures');
+    expect(Reveal.daily.opensTitle, 'Daily puzzle opens after 5 pictures');
+    expect(Reveal.liveEvents.short, '35 pictures');
+    expect([for (final r in Reveal.values) if (r.listed) r.name], ['packs', 'daily', 'streak', 'wheel', 'quests', 'achievements', 'piggy', 'liveEvents', 'social']);
   });
 
   test('the first board is nine cards on Cards, the smallest board', () {

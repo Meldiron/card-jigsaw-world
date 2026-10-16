@@ -10,6 +10,7 @@ import '../../core/a11y.dart';
 import '../../core/theme/tokens.dart';
 import '../../models/models.dart';
 import '../../state/catalog.dart';
+import '../../state/first_steps.dart';
 import '../../state/profile.dart';
 import '../../state/progress.dart';
 import '../../state/rewards.dart';
@@ -20,6 +21,7 @@ import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 import '../gallery/pack_progress.dart';
+import '../home/guided_start.dart';
 import '../home/header_bar.dart';
 import 'quest_rewards.dart';
 
@@ -62,6 +64,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
     final daily = quests.daily, weekly = quests.weekly;
     final readyQuests = readyGoals(progress.values, profile, open, now, dailyPuzzle: dailyPuzzle);
     final readyEvents = ref.watch(readyEventsProvider);
+    final eventsOpen = ref.watch(revealsProvider).contains(Reveal.liveEvents);
     // The website layout: daily and weekly quests side by side, the live events beside what is
     // coming up.
     final wide = context.isExpanded;
@@ -126,6 +129,21 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
                   SliverToBoxAdapter(child: _GoalList(goals: weekly, freeCount: Goals.weeklyFree, weekly: true)),
                 ],
                 if (!wide) const SliverToBoxAdapter(child: SectionHeader(title: 'Live events', subtitle: 'World-day events, one week each')),
+                // Guided start: live events open after 35 pictures; one card says so, with Unlock anyway.
+                if (!eventsOpen)
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(20, wide ? 28 : 0, 20, 0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          if (wide) const SectionHeader(title: 'Live events', subtitle: 'World-day events, one week each', padding: EdgeInsets.fromLTRB(0, 0, 0, 12)),
+                          const LockedSectionCard(reveal: Reveal.liveEvents),
+                        ],
+                      ),
+                    ),
+                  )
+                else
                 events.when(
                   loading: () => const SliverToBoxAdapter(child: Padding(padding: EdgeInsets.all(40), child: Loader())),
                   error: (e, _) => const SliverToBoxAdapter(child: EmptyState(icon: AppIcons.signal, title: 'Events could not load', message: 'Check your connection and pull to refresh.')),

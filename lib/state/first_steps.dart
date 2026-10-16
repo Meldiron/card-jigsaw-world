@@ -30,7 +30,7 @@ class FirstSteps {
   /// The welcome pages end on a first board (integration suites of the whole app turn it off).
   final bool firstBoard;
 
-  /// One-time tips already shown (`reveal:<name>`, `tab:<name>`, `stuck`, `library`, ...).
+  /// One-time tips already shown (`tab:<name>` for a tab's "new" dot, `stuck`, `tip:library`, ...).
   final Set<String> tips;
 
   /// [Reveal]s opened early with "Unlock anyway" (a locked tab).
@@ -96,20 +96,19 @@ class FirstStepsNotifier extends Notifier<FirstSteps> {
   /// "Unlock anyway" on Home: everything opens now, with no tips about it.
   void showEverything() => _save(state.copyWith(showEverything: true));
 
-  /// "Unlock anyway" on a locked tab or section: [r] opens now (its tip is not needed).
-  void openEarly(Reveal r) => _save(state.copyWith(early: {...state.early, r.name}, tips: {...state.tips, r.tipKey, if (r.tab != null) 'tab:${r.name}'}));
+  /// "Unlock anyway" on a locked tab or section: [r] opens now (no "new" dot for a tab).
+  void openEarly(Reveal r) => _save(state.copyWith(early: {...state.early, r.name}, tips: {...state.tips, if (r.tab != null) 'tab:${r.name}'}));
 
-  /// Settings > Guided start. Turning it on keeps what the player has reached open and says
-  /// nothing about it again.
+  /// Settings > Guided start. Turning it on keeps what the player has reached open, with no
+  /// "new" dots for tabs they had.
   void setGuided(bool on) {
     final solved = ref.read(solvedCountProvider);
-    final level = ref.read(profileProvider).value?.level ?? 1;
-    final reached = [for (final r in Reveal.values) if (solved >= r.solves && level >= r.level) r];
+    final reached = [for (final r in Reveal.values) if (solved >= r.solves && r.tab != null) r];
     _save(state.copyWith(
       guided: on || state.guided,
       showEverything: !on,
       early: on ? const {} : state.early,
-      tips: on ? {...state.tips, for (final r in reached) r.tipKey, for (final r in reached) 'tab:${r.name}'} : state.tips,
+      tips: on ? {...state.tips, for (final r in reached) 'tab:${r.name}'} : state.tips,
     ));
   }
 
@@ -117,62 +116,51 @@ class FirstStepsNotifier extends Notifier<FirstSteps> {
     if (state.tips.contains(key)) return;
     _save(state.copyWith(tips: {...state.tips, key}));
   }
-
-  /// A Home tip was closed: it and every earlier one are done (a player who jumps ahead hears
-  /// only the newest).
-  void sawReveal(Reveal r) => _save(state.copyWith(tips: {...state.tips, for (final o in Reveal.values) if (o.index <= r.index) o.tipKey}));
 }
 
 final firstStepsProvider = NotifierProvider<FirstStepsNotifier, FirstSteps>(FirstStepsNotifier.new);
 
-/// What the guided start keeps back until the player is ready for it, in the order it opens.
-/// Pictures solved and the level both count; a 3x3 Cards board gives about 50 XP, so level 3 comes
-/// after about 5 pictures, level 4 after 8 and level 5 after 12 (fewer on bigger boards).
+/// What the guided start keeps back until the player is ready for it, in the order it opens, by
+/// pictures solved (owner, 2026-10-16: daily 5, daily gift 10, Lucky Wheel 15, Quests 20,
+/// achievements 25, piggy bank 30, live events 35, Social 50).
 enum Reveal {
-  dailyGift(solves: 1, label: 'Daily gift', blurb: 'A gift every day you play, bigger with your streak.', tip: 'New on Home: a daily gift. Open it each day you play; it grows with your streak.'),
+  packs(solves: 2, label: 'Packs on Home', plural: true, blurb: 'The packs you play, new packs and the ones you finish.'),
   quickPlay(solves: 3, label: 'Quick play'),
-  packs(solves: 2, label: 'Packs on Home', plural: true, blurb: 'Your packs, new packs and the daily months.', tip: 'Home now shows your packs, new packs and the daily months.'),
-  quests(solves: 2, label: 'Quests', plural: true, tab: 2, blurb: 'Small daily and weekly goals that pay coins.', tip: 'Quests are open: small daily and weekly goals that pay coins.', action: 'Open Quests', route: '/events'),
-  wheelPiggy(level: 3, label: 'Lucky Wheel and piggy bank', blurb: 'Spin for coins, and save a few with every picture.', tip: 'New on Home: the Lucky Wheel, and a piggy bank that fills a little with every picture.'),
-  saveProgress(level: 3, label: 'Save your progress'),
-  social(level: 4, label: 'Social', tab: 3, blurb: 'A weekly league, friends and messages from Carden.', tip: 'Social is open: a weekly league, friends and messages from Carden.', action: 'Open Social', route: '/social'),
-  achievements(level: 5, label: 'Achievements', plural: true, blurb: 'Goals across all your play, each with a reward.', tip: 'Achievements are open on your Profile, each with a reward to claim.', action: 'Open Profile', route: '/profile'),
-  promos(level: 5, label: 'Store offers', plural: true);
+  daily(solves: 5, label: 'Daily puzzle', blurb: 'A new picture every day, the same for everyone, with a bonus.'),
+  saveProgress(solves: 5, label: 'Save your progress'),
+  streak(solves: 10, label: 'Daily gift', blurb: 'A gift every day you play, bigger with your streak.'),
+  wheel(solves: 15, label: 'Lucky Wheel', blurb: 'Spin for coins, tickets and hints.'),
+  quests(solves: 20, label: 'Quests', plural: true, tab: 2, blurb: 'Daily and weekly goals that pay coins and tickets.'),
+  promos(solves: 20, label: 'Store offers', plural: true),
+  achievements(solves: 25, label: 'Achievements', plural: true, blurb: 'Goals across all your play, each with a reward.'),
+  piggy(solves: 30, label: 'Piggy bank', blurb: 'Saves a few coins from every picture.'),
+  liveEvents(solves: 35, label: 'Live events', plural: true, blurb: 'World-day packs, each open for a week.'),
+  social(solves: 50, label: 'Social', tab: 3, blurb: 'A weekly league, friends and messages from Carden.');
 
-  const Reveal({this.solves = 0, this.level = 1, required this.label, this.plural = false, this.blurb = '', this.tip = '', this.tab, this.action, this.route});
+  const Reveal({required this.solves, required this.label, this.plural = false, this.blurb = '', this.tab});
 
-  /// Pictures solved, and level, it waits for.
+  /// Pictures solved it waits for.
   final int solves;
-  final int level;
   final String label;
   final bool plural;
 
   /// What it is, in one line (the Home list of what is to come, the locked tab's alert).
   final String blurb;
 
-  /// Said once on Home when it opens ('' for nothing to say).
-  final String tip;
-
   /// Its tab in the tab bar (Quests 2, Social 3), when it is one.
   final int? tab;
-
-  /// The tip's button and where it goes.
-  final String? action;
-  final String? route;
 
   /// Listed under "More opens as you play".
   bool get listed => blurb.isNotEmpty;
 
   /// When it opens, as the alerts and the list say it.
-  String get when => solves > 0 ? (solves == 1 ? 'after your first picture' : 'after $solves pictures') : 'at level $level';
+  String get when => solves == 1 ? 'after your first picture' : 'after $solves pictures';
 
-  /// "Quests open after 2 pictures", "Social opens at level 4".
+  /// "Quests open after 20 pictures", "Social opens after 50 pictures".
   String get opensTitle => '$label ${plural ? 'open' : 'opens'} $when';
 
   /// The chip in the list of what is to come.
-  String get short => solves > 0 ? (solves == 1 ? 'First picture' : '$solves pictures') : 'Level $level';
-
-  String get tipKey => 'reveal:$name';
+  String get short => '$solves pictures';
 }
 
 /// Pictures the player has finished (local progress, so a first solve counts at once).
@@ -182,37 +170,18 @@ final solvedCountProvider = Provider<int>((ref) {
 });
 
 /// Is [r] open? Always, unless the guided start applies and the player has not reached it.
-bool revealOpen(Reveal r, {required FirstSteps steps, required int solved, required int level}) =>
-    !steps.calm || steps.early.contains(r.name) || solved >= r.solves && level >= r.level;
+bool revealOpen(Reveal r, {required FirstSteps steps, required int solved}) => !steps.calm || steps.early.contains(r.name) || solved >= r.solves;
 
 final revealsProvider = Provider<Set<Reveal>>((ref) {
   final steps = ref.watch(firstStepsProvider);
   final solved = ref.watch(solvedCountProvider);
-  final level = ref.watch(profileProvider.select((p) => p.value?.level ?? 1));
-  return {for (final r in Reveal.values) if (revealOpen(r, steps: steps, solved: solved, level: level)) r};
+  return {for (final r in Reveal.values) if (revealOpen(r, steps: steps, solved: solved)) r};
 });
 
 /// What is still to come, in the order it opens ("More opens as you play" on Home).
 final upcomingRevealsProvider = Provider<List<Reveal>>((ref) {
   final open = ref.watch(revealsProvider);
   return [for (final r in Reveal.values) if (!open.contains(r) && r.listed) r];
-});
-
-/// The newest thing that opened by playing and has not been announced. A player far past it
-/// (a returning account) is not told about it.
-final pendingRevealTipProvider = Provider<Reveal?>((ref) {
-  final steps = ref.watch(firstStepsProvider);
-  if (!steps.calm) return null;
-  final open = ref.watch(revealsProvider);
-  final solved = ref.watch(solvedCountProvider);
-  final level = ref.watch(profileProvider.select((p) => p.value?.level ?? 1));
-  for (final r in Reveal.values.reversed) {
-    if (!open.contains(r) || r.tip.isEmpty || steps.early.contains(r.name)) continue;
-    if (steps.tips.contains(r.tipKey)) return null;
-    final stale = r.solves > 0 ? solved > r.solves + 3 : level > r.level + 1;
-    return stale ? null : r;
-  }
-  return null;
 });
 
 /// A tab that opened by playing and has not been visited: it carries a dot until then.

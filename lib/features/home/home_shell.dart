@@ -68,7 +68,7 @@ class _HomeShellState extends ConsumerState<HomeShell> {
       final r = Reveal.values.firstWhere((r) => r.tab == current);
       WidgetsBinding.instance.addPostFrameCallback((_) => ref.read(firstStepsProvider.notifier).sawTip('tab:${r.name}'));
     }
-    final dailyReady = open.contains(Reveal.dailyGift) && (profile?.dailyAvailable ?? false);
+    final dailyReady = open.contains(Reveal.streak) && (profile?.dailyAvailable ?? false);
     // Profile dot: an achievement reward is waiting to be claimed.
     final rewardReady = open.contains(Reveal.achievements) && ref.watch(achievementsProvider.select((list) => list.any((a) => a.done)));
     // Quests dot: a quest or live event reward is waiting to be claimed.

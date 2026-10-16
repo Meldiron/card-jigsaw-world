@@ -90,7 +90,7 @@ void main() {
               await tester.pumpAndSettle();
               final seen = <String>{};
               for (var i = 0; i < 12; i++) {
-                for (final k in const ['next-step-first', 'next-step-pack', 'more-to-come', 'reveal-tip-dailyGift']) {
+                for (final k in const ['next-step-first', 'next-step-pack', 'more-to-come']) {
                   if (find.byKey(ValueKey(k)).evaluate().isNotEmpty) seen.add(k);
                 }
                 await tester.drag(find.byType(CustomScrollView).first, const Offset(0, -500));
@@ -99,7 +99,8 @@ void main() {
               FlutterError.onError = previous;
               expect(seen.contains('more-to-come'), isTrue, reason: 'what is still to come, blurred, with Unlock anyway');
               expect(seen.contains(s.value.isEmpty ? 'next-step-first' : 'next-step-pack'), isTrue);
-              if (s.value.isNotEmpty) expect(seen.contains('reveal-tip-dailyGift'), isTrue);
+              expect(find.text('Today').evaluate().length, find.descendant(of: find.byKey(const ValueKey('more-to-come')), matching: find.text('Today')).evaluate().length,
+                  reason: 'the daily puzzle opens after 5 pictures: only its blurred look under More opens as you play');
               expect(find.text('Featured packs'), findsNothing, reason: 'packs join Home after 2 pictures');
               expect(errors, isEmpty);
             });
@@ -127,11 +128,12 @@ void main() {
         ),
       ));
       await tester.pumpAndSettle();
-      expect(find.text('Achievements open at level 5'), findsOneWidget);
+      final title = find.text('Achievements open after 25 pictures').evaluate().length;
       final c = ProviderScope.containerOf(tester.element(find.byType(LockedSectionCard)));
       await tester.tap(find.text('Unlock anyway'));
       await tester.pumpAndSettle();
       FlutterError.onError = previous;
+      expect(title, 1);
       expect(c.read(revealsProvider).contains(Reveal.achievements), isTrue, reason: 'Unlock anyway opens it');
       expect(errors, isEmpty);
     });

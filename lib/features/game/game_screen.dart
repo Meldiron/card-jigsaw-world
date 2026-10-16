@@ -1399,12 +1399,12 @@ class _Coach extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    final (icon, count, text) = switch (step) {
-      _CoachStep.pick => (AppIcons.tapCard, 1, 'Tap a card to pick it up.'),
-      _CoachStep.place => (AppIcons.tapToPlace, 2, 'Now tap the outlined spot. That is where it belongs.'),
-      _CoachStep.retry => (AppIcons.tapCard, 1, 'Not its place yet. Tap a card, then tap its outlined spot.'),
-      _CoachStep.locked => (AppIcons.lock, 3, 'It locked in place. Cards that belong side by side also join and move together.'),
-      _CoachStep.joined => (AppIcons.group, 3, 'They joined and now move together. A card in its right spot locks in place.'),
+    final (icon, text) = switch (step) {
+      _CoachStep.pick => (AppIcons.tapCard, 'Tap a card to pick it up.'),
+      _CoachStep.place => (AppIcons.tapToPlace, 'Now tap the outlined spot. That is where it belongs.'),
+      _CoachStep.retry => (AppIcons.tapCard, 'Not its place yet. Tap a card, then tap its outlined spot.'),
+      _CoachStep.locked => (AppIcons.lock, 'It locked in place. Cards that belong side by side also join and move together.'),
+      _CoachStep.joined => (AppIcons.group, 'They joined and now move together. A card in its right spot locks in place.'),
     };
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 8),
@@ -1429,15 +1429,7 @@ class _Coach extends StatelessWidget {
                   IconTile(icon: icon, size: IconTile.medium),
                   const SizedBox(width: 12),
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text('How to play · $count of 3', style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600, color: context.accent, letterSpacing: -0.1)),
-                        const SizedBox(height: 2),
-                        Text(text, style: TextStyle(fontSize: TypeSize.body, height: 1.3, fontWeight: FontWeight.w500, color: c.textPrimary)),
-                      ],
-                    ),
+                    child: Text(text, style: TextStyle(fontSize: TypeSize.body, height: 1.3, fontWeight: FontWeight.w500, color: c.textPrimary)),
                   ),
                   IconButton(
                     key: const ValueKey('coach-close'),
@@ -1499,8 +1491,7 @@ class _CompletionOverlay extends StatefulWidget {
   final List<Unlock> unlocked;
   final VoidCallback? onQuests;
 
-  /// The first board: "Home" instead of "Back to pack" (the board was opened over Home), and a
-  /// line that Home has something new.
+  /// The first board: "Home" instead of "Back to pack" (the board was opened over Home).
   final bool first;
   String get backLabel => first ? 'Home' : 'Back to pack';
   final _PackProgress pack;
@@ -1640,15 +1631,6 @@ class _CompletionOverlayState extends State<_CompletionOverlay> {
                           text: widget.unlocked.isEmpty
                               ? 'Level ${reward!.level} reached'
                               : 'Level ${reward!.level} · ${widget.unlocked.map((u) => u == Unlock.painting ? 'Painting is open' : '${u.label} are open').join(' · ')}',
-                          tinted: true,
-                        ).animate().fadeIn(),
-                      ],
-                      if (widget.first) ...[
-                        const SizedBox(height: 12),
-                        const _ResultLine(
-                          key: ValueKey('first-board-line'),
-                          icon: AppIcons.sparkle,
-                          text: 'Your first picture. Home has something new.',
                           tinted: true,
                         ).animate().fadeIn(),
                       ],
