@@ -12,6 +12,7 @@ import '../../game/board.dart';
 import '../../models/models.dart';
 import '../../state/auth.dart';
 import '../../state/catalog.dart';
+import '../../state/first_steps.dart';
 import '../../state/profile.dart';
 import '../../state/progress.dart';
 import '../../state/quick_play.dart';
@@ -28,13 +29,17 @@ import '../../widgets/glass.dart';
 import '../gallery/library_screen.dart';
 import '../gallery/pack_card.dart';
 import '../gallery/pack_progress.dart';
+import 'guided_start.dart';
 import 'header_bar.dart';
 import 'home_pack_rows.dart';
 import 'tomorrow_preview.dart';
 
 /// Home: today's puzzle, Quick play, Wheel and piggy bank, streak, level,
 /// boards to continue, packs in progress, live events, daily months, packs
-/// missing stars, featured packs and finished packs.
+/// missing stars, featured packs and finished packs. During the guided start
+/// (lib/state/first_steps.dart) it begins with today's picture, Continue and
+/// the next step, and each section joins as it opens ([Reveal]); the rest
+/// shows blurred under "More opens as you play".
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
@@ -47,6 +52,8 @@ class HomeScreen extends ConsumerWidget {
     final progress = ref.watch(progressProvider).value ?? {};
     final daily = ref.watch(dailyPuzzleProvider);
     final isGuest = ref.watch(isGuestProvider);
+    final open = ref.watch(revealsProvider);
+    final calm = ref.watch(firstStepsProvider.select((s) => s.calm));
     final dailySolved = daily != null && daily.isToday && (progress[daily.id]?.completed ?? false);
     final tomorrow = dailySolved ? tomorrowsDaily(puzzles.value ?? const <Puzzle>[], DateTime.now()) : null;
 
@@ -86,7 +93,9 @@ class HomeScreen extends ConsumerWidget {
       final pr = progress[p.id]!;
       resume = _ResumeCard(puzzle: p, progress: pr, others: inProgress.length - 1, onTap: () => context.push('/game/${p.id}/${_gridCode(pr)}'));
     }
-    final streak = profile == null ? null : _StreakCard(profile: profile, onTap: () => showDailyRewardSheet(context));
+    final streakCard = profile == null ? null : _StreakCard(profile: profile, onTap: () => showDailyRewardSheet(context));
+    final streak = open.contains(Reveal.dailyGift) ? streakCard : null;
+    final quickPlay = open.contains(Reveal.quickPlay) ? const _QuickPlayCard() : null;
     final Widget extras = Row(
       children: [
         Expanded(
@@ -128,10 +137,33 @@ class HomeScreen extends ConsumerWidget {
         ),
       ],
     );
-    final level = profile == null ? null : _LevelCard(profile: profile);
-    final guest = isGuest ? _GuestSaveCard(onSave: () => context.push('/account')) : null;
+    final levelCard = profile == null ? null : _LevelCard(profile: profile);
+    final showExtras = open.contains(Reveal.wheelPiggy);
+    final level = showExtras ? levelCard : null;
+    final guest = isGuest && open.contains(Reveal.saveProgress) ? _GuestSaveCard(onSave: () => context.push('/account')) : null;
+    final showPacks = open.contains(Reveal.packs);
+    final next = calm ? const NextStepCard() : null;
+    // What the guided start still keeps back, drawn blurred under "More opens as you play".
+    final libraryPacks = (packs.value ?? const <Pack>[]).where((p) => !p.isDaily && !p.hasWindow).take(3).toList();
+    final preview = Column(
+      children: [
+        if (!showExtras) ...[extras, const SizedBox(height: 12)],
+        if (!showPacks && libraryPacks.isNotEmpty) ...[
+          Row(
+            children: [
+              for (var i = 0; i < libraryPacks.length; i++) ...[
+                if (i > 0) const SizedBox(width: 12),
+                Expanded(child: AspectRatio(aspectRatio: 0.78, child: PackCard(pack: libraryPacks[i], onTap: () {}))),
+              ],
+            ],
+          ),
+          const SizedBox(height: 12),
+        ],
+        if (!showExtras && levelCard != null) levelCard,
+      ],
+    );
     final packRowSlivers = <Widget>[
-      if (inProgress.isNotEmpty) ...[
+      if (showPacks && inProgress.isNotEmpty) ...[
         SliverToBoxAdapter(
           child: SectionHeader(
             title: 'Continue solving',
@@ -154,7 +186,7 @@ class HomeScreen extends ConsumerWidget {
           ),
         ),
       ],
-      if (packRows.inProgress.isNotEmpty) ...[
+      if (showPacks && packRows.inProgress.isNotEmpty) ...[
         SliverToBoxAdapter(
           child: SectionHeader(
             title: 'Packs in progress',
@@ -193,6 +225,8 @@ class HomeScreen extends ConsumerWidget {
                 SliverToBoxAdapter(child: _Greeting(name: profile?.displayName)),
                 // The first-time intro of a shape or option the player's level just opened.
                 SliverToBoxAdapter(child: UnlockIntroHost(at: (path) => path == '/home')),
+                // Guided start: what just opened, said once.
+                const SliverToBoxAdapter(child: RevealTipCard()),
                 if (wide) ...[
                   // The website layout: today's picture beside the day's plays, then the extras beside
                   // the level, then the rows.
@@ -204,24 +238,33 @@ class HomeScreen extends ConsumerWidget {
                         children: [
                           Expanded(flex: 7, child: Column(children: [hero, if (tomorrow != null) ...[const SizedBox(height: 12), TomorrowPreview(puzzle: tomorrow)]])),
                           const SizedBox(width: 16),
-                          Expanded(flex: 5, child: Column(children: [if (resume != null) ...[resume, const SizedBox(height: 12)], const _QuickPlayCard(), if (streak != null) ...[const SizedBox(height: 12), streak]])),
+                          Expanded(
+                            flex: 5,
+                            child: Column(children: [
+                              if (resume != null) ...[resume, const SizedBox(height: 12)],
+                              if (next != null) ...[next, const SizedBox(height: 12)],
+                              ?quickPlay,
+                              if (streak != null) ...[const SizedBox(height: 12), streak],
+                            ]),
+                          ),
                         ],
                       ),
                     ),
                   ),
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(flex: 7, child: Column(children: [extras, if (guest != null) ...[const SizedBox(height: 12), guest]])),
-                          const SizedBox(width: 16),
-                          Expanded(flex: 5, child: level ?? const SizedBox.shrink()),
-                        ],
+                  if (showExtras || guest != null)
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(flex: 7, child: Column(children: [if (showExtras) extras, if (guest != null) ...[if (showExtras) const SizedBox(height: 12), guest]])),
+                            const SizedBox(width: 16),
+                            Expanded(flex: 5, child: level ?? const SizedBox.shrink()),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
                   ...packRowSlivers,
                 ] else ...[
                   SliverToBoxAdapter(
@@ -246,12 +289,21 @@ class HomeScreen extends ConsumerWidget {
                         child: resume,
                       ),
                     ),
-                  const SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(20, 12, 20, 0),
-                      child: _QuickPlayCard(),
+                  // Guided start: the one next step.
+                  if (next != null)
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                        child: next,
+                      ),
                     ),
-                  ),
+                  if (quickPlay != null)
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                        child: quickPlay,
+                      ),
+                    ),
                   if (streak != null)
                     SliverToBoxAdapter(
                       child: Padding(
@@ -261,13 +313,15 @@ class HomeScreen extends ConsumerWidget {
                     ),
                   ...packRowSlivers,
                   // Extras after the boards and packs the player is working on.
-                  const SliverToBoxAdapter(child: SizedBox(height: 16)),
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-                      child: extras,
+                  if (showExtras) ...[
+                    const SliverToBoxAdapter(child: SizedBox(height: 16)),
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                        child: extras,
+                      ),
                     ),
-                  ),
+                  ],
                   if (level != null)
                     SliverToBoxAdapter(
                       child: Padding(
@@ -283,7 +337,7 @@ class HomeScreen extends ConsumerWidget {
                       ),
                     ),
                 ],
-                if (livePacks.isNotEmpty) ...[
+                if (showPacks && livePacks.isNotEmpty) ...[
                   SliverToBoxAdapter(
                     child: SectionHeader(
                       title: 'Live events',
@@ -303,7 +357,7 @@ class HomeScreen extends ConsumerWidget {
                     ),
                   ),
                 ],
-                if (dailyPacks.isNotEmpty) ...[
+                if (showPacks && dailyPacks.isNotEmpty) ...[
                   SliverToBoxAdapter(
                     child: SectionHeader(
                       title: 'Daily puzzles',
@@ -327,7 +381,7 @@ class HomeScreen extends ConsumerWidget {
                     ),
                   ),
                 ],
-                if (packRows.missingStars.isNotEmpty) ...[
+                if (showPacks && packRows.missingStars.isNotEmpty) ...[
                   SliverToBoxAdapter(
                     child: SectionHeader(
                       title: 'Missing stars',
@@ -344,6 +398,7 @@ class HomeScreen extends ConsumerWidget {
                   ),
                 ],
                 const SliverToBoxAdapter(child: HouseBanner()),
+                if (showPacks)
                 SliverToBoxAdapter(
                   child: SectionHeader(
                     title: 'Featured packs',
@@ -354,7 +409,9 @@ class HomeScreen extends ConsumerWidget {
                     },
                   ),
                 ),
-                if (!packs.hasValue && (packs.hasError || catalogFailed))
+                if (!showPacks)
+                  const SliverToBoxAdapter(child: SizedBox.shrink())
+                else if (!packs.hasValue && (packs.hasError || catalogFailed))
                   SliverToBoxAdapter(
                     child: EmptyState(
                       icon: AppIcons.signal,
@@ -385,7 +442,7 @@ class HomeScreen extends ConsumerWidget {
                     );
                   },
                 ),
-                if (packRows.finished.isNotEmpty) ...[
+                if (showPacks && packRows.finished.isNotEmpty) ...[
                   SliverToBoxAdapter(
                     child: SectionHeader(
                       title: 'Finished packs',
@@ -403,6 +460,8 @@ class HomeScreen extends ConsumerWidget {
                     ),
                   ),
                 ],
+                // Guided start: the rest of Home, blurred, with when it opens and "Unlock anyway".
+                if (calm) SliverToBoxAdapter(child: Padding(padding: const EdgeInsets.only(top: 8), child: MoreToComeCard(preview: preview))),
               ],
             ),
             SliverToBoxAdapter(child: SizedBox(height: GlassTabBar.scrollEndPadding(context))),

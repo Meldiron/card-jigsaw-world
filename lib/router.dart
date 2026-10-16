@@ -109,7 +109,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         // new board in Painting (a saved board resumes as it was saved).
         path: '/game/:puzzleId/:grid',
         parentNavigatorKey: rootNavigatorKey,
-        pageBuilder: (c, s) => _fade(GameScreen(puzzleId: s.pathParameters['puzzleId']!, gridCode: s.pathParameters['grid']!, painting: s.uri.queryParameters['painting'] == '1'), s),
+        pageBuilder: (c, s) => _fade(GameScreen(puzzleId: s.pathParameters['puzzleId']!, gridCode: s.pathParameters['grid']!, painting: s.uri.queryParameters['painting'] == '1', first: s.uri.queryParameters['first'] == '1'), s),
       ),
       GoRoute(path: '/store', parentNavigatorKey: rootNavigatorKey, pageBuilder: (c, s) => _sheet(StoreScreen(showVip: s.uri.queryParameters['vip'] == '1'), s)),
       GoRoute(path: '/wheel', parentNavigatorKey: rootNavigatorKey, pageBuilder: (c, s) => _sheet(const WheelScreen(), s)),

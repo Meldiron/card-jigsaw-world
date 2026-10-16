@@ -20,6 +20,7 @@ import 'package:carden/features/events/events_screen.dart';
 import 'package:carden/features/events/quest_rewards.dart';
 import 'package:carden/features/game/board_widget.dart';
 import 'package:carden/features/game/difficulty_screen.dart';
+import 'package:carden/state/first_steps.dart';
 import 'package:carden/state/reminders.dart';
 import 'package:carden/state/settings.dart';
 import 'package:carden/state/rewards.dart';
@@ -102,6 +103,7 @@ void main() {
   testWidgets('quick play, quests dot, leaderboard, daily reminders', (tester) async {
     SharedPreferences.setMockInitialValues({});
     final store = await LocalStore.open();
+    await FirstSteps.skipFor(store); // the whole app; integration_test/first_steps_test.dart plays the first steps
     Sfx.instance.soundEnabled = false;
     Sfx.instance.musicEnabled = false;
     await tester.pumpWidget(ProviderScope(

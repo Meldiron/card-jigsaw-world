@@ -7,6 +7,7 @@ import 'package:carden/data/local_store.dart';
 import 'package:carden/features/game/board_widget.dart';
 import 'package:carden/features/game/game_screen.dart';
 import 'package:carden/game/board.dart';
+import 'package:carden/state/first_steps.dart';
 import 'package:carden/state/settings.dart';
 import 'package:carden/state/rewards.dart';
 import 'package:carden/state/unlocks.dart';
@@ -122,6 +123,7 @@ void main() {
 
     SharedPreferences.setMockInitialValues({});
     final store = await LocalStore.open();
+    await FirstSteps.skipFor(store); // the whole app; integration_test/first_steps_test.dart plays the first steps
     Sfx.instance.soundEnabled = false;
     Sfx.instance.musicEnabled = false;
     await tester.pumpWidget(ProviderScope(

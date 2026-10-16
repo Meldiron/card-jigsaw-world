@@ -14,6 +14,7 @@ import 'package:carden/features/game/giant_board.dart';
 import 'package:carden/models/models.dart';
 import 'package:carden/router.dart';
 import 'package:carden/state/catalog.dart';
+import 'package:carden/state/first_steps.dart';
 import 'package:carden/state/settings.dart';
 import 'package:carden/state/profile.dart';
 import 'package:carden/state/rewards.dart';
@@ -129,6 +130,7 @@ void main() {
   testWidgets('giant boards: Peek, Locate, Gather and its shuffle, Magic', (tester) async {
     SharedPreferences.setMockInitialValues({});
     final store = await LocalStore.open();
+    await FirstSteps.skipFor(store); // the whole app; integration_test/first_steps_test.dart plays the first steps
     Sfx.instance.soundEnabled = false;
     Sfx.instance.musicEnabled = false;
     await tester.pumpWidget(

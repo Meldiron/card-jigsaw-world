@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/haptics.dart';
 import '../core/sfx.dart';
 import '../data/local_store.dart';
+import 'first_steps.dart';
 
 final localStoreProvider = Provider<LocalStore>((ref) => throw UnimplementedError('override in main'));
 
@@ -275,6 +276,8 @@ class SettingsNotifier extends Notifier<Settings> {
   void setOnboarded() {
     _s.onboarded = true;
     state = state.copyWith(onboarded: true);
+    // A player new on this device gets the guided start (lib/state/first_steps.dart).
+    FirstSteps.markNewPlayer(_s).then((_) => ref.read(firstStepsProvider.notifier).reload());
   }
 
   void setTutorialSeen() {

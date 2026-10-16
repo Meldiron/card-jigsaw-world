@@ -6,6 +6,7 @@ import 'package:carden/data/local_store.dart';
 import 'package:carden/data/repositories.dart';
 import 'package:carden/state/catalog.dart';
 import 'package:carden/state/catalog_sync.dart';
+import 'package:carden/state/first_steps.dart';
 import 'package:carden/state/settings.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -48,6 +49,7 @@ void main() {
   testWidgets('catalogue snapshot + delta sync', (tester) async {
     SharedPreferences.setMockInitialValues({});
     final store = await LocalStore.open();
+    await FirstSteps.skipFor(store); // the whole app; integration_test/first_steps_test.dart plays the first steps
     final client = Client().setEndpoint(AppwriteConfig.endpoint).setProject(AppwriteConfig.projectId);
     final catalog = CountingCatalog(TablesDB(client), Storage(client));
     final container = ProviderContainer(overrides: [

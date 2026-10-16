@@ -20,6 +20,7 @@ import 'package:carden/data/purchases.dart';
 import 'package:carden/data/sync/backend.dart';
 import 'package:carden/router.dart';
 import 'package:carden/state/auth.dart';
+import 'package:carden/state/first_steps.dart';
 import 'package:carden/state/profile.dart';
 import 'package:carden/state/purchases.dart';
 import 'package:carden/state/settings.dart';
@@ -125,6 +126,7 @@ void main() {
   testWidgets('buying tickets: the tile waits, the sheet adds them, the header shows them', (tester) async {
     SharedPreferences.setMockInitialValues({});
     final store = await LocalStore.open();
+    await FirstSteps.skipFor(store); // the whole app; integration_test/first_steps_test.dart plays the first steps
     Sfx.instance.soundEnabled = false;
     Sfx.instance.musicEnabled = false;
     late _QaStore qa;

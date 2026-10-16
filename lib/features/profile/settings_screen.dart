@@ -11,6 +11,7 @@ import '../../core/reminders.dart';
 import '../../core/a11y.dart';
 import '../../core/theme/tokens.dart';
 import '../../state/auth.dart';
+import '../../state/first_steps.dart';
 import '../../state/sync.dart';
 import '../../state/catalog.dart';
 import '../../models/models.dart';
@@ -45,6 +46,7 @@ class SettingsScreen extends ConsumerWidget {
     final c = context.colors;
     final s = ref.watch(settingsProvider);
     final n = ref.read(settingsProvider.notifier);
+    final steps = ref.watch(firstStepsProvider);
     final isGuest = ref.watch(isGuestProvider);
     final caps = ref.watch(platformCapsProvider);
 
@@ -104,6 +106,16 @@ class SettingsScreen extends ConsumerWidget {
           ]),
           group('Gameplay', [
             _SwitchRow(icon: AppIcons.timer, label: 'Show timer', value: s.showTimer, onChanged: n.setShowTimer),
+            // A player who started with the guided start can bring it back, or open everything.
+            if (steps.guided)
+              _SwitchRow(
+                key: const ValueKey('settings-guided'),
+                icon: AppIcons.sparkle,
+                label: 'Guided start',
+                subtitle: 'Home and tabs open step by step as you play',
+                value: steps.calm,
+                onChanged: ref.read(firstStepsProvider.notifier).setGuided,
+              ),
             // Reminders are local iOS notifications; the rows are hidden elsewhere.
             if (caps.notifications) ...[
               _SwitchRow(

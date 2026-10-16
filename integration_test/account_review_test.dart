@@ -20,6 +20,7 @@ import 'package:carden/features/onboarding/onboarding_screen.dart';
 import 'package:carden/models/models.dart';
 import 'package:carden/state/auth.dart';
 import 'package:carden/state/catalog.dart';
+import 'package:carden/state/first_steps.dart';
 import 'package:carden/state/reminders.dart';
 import 'package:carden/state/review_prompt.dart';
 import 'package:carden/state/settings.dart';
@@ -69,6 +70,7 @@ void main() {
   testWidgets('rating prompt, event reminders, delete account', (tester) async {
     SharedPreferences.setMockInitialValues({});
     final store = await LocalStore.open();
+    await FirstSteps.skipFor(store); // the whole app; integration_test/first_steps_test.dart plays the first steps
     Sfx.instance.soundEnabled = false;
     Sfx.instance.musicEnabled = false;
     await tester.pumpWidget(ProviderScope(

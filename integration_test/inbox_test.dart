@@ -12,6 +12,7 @@
 import 'package:carden/app.dart';
 import 'package:carden/core/sfx.dart';
 import 'package:carden/data/local_store.dart';
+import 'package:carden/state/first_steps.dart';
 import 'package:carden/state/inbox.dart';
 import 'package:carden/state/profile.dart';
 import 'package:carden/state/settings.dart';
@@ -48,6 +49,7 @@ void main() {
   testWidgets('inbox: list, open, claim, button, delete', (tester) async {
     SharedPreferences.setMockInitialValues({});
     final store = await LocalStore.open();
+    await FirstSteps.skipFor(store); // the whole app; integration_test/first_steps_test.dart plays the first steps
     Sfx.instance.soundEnabled = false;
     Sfx.instance.musicEnabled = false;
     await tester.pumpWidget(ProviderScope(overrides: [localStoreProvider.overrideWithValue(store)], child: const CardenApp()));

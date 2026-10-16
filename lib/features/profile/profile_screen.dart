@@ -10,11 +10,13 @@ import '../../core/theme/tokens.dart';
 import '../../models/models.dart';
 import '../../state/achievements.dart';
 import '../../state/auth.dart';
+import '../../state/first_steps.dart';
 import '../../state/profile.dart';
 import '../../state/progress.dart';
 import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
+import '../home/guided_start.dart';
 import 'achievement_order.dart';
 import 'avatar_picker.dart';
 import 'stats.dart';
@@ -106,6 +108,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     final totalSteps = achievements.fold<int>(0, (s, a) => s + a.family.steps.length);
     final claimedSteps = achievements.fold<int>(0, (s, a) => s + a.claimedSteps);
     final readyToClaim = achievements.where((a) => a.done).length;
+    // The guided start keeps achievements back until level 5: one card says when, with "Unlock anyway".
+    final achievementsOpen = ref.watch(revealsProvider).contains(Reveal.achievements);
     final wide = context.isExpanded;
     final Widget profileCard = SoftCard(
       padding: Insets.card,
@@ -272,6 +276,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     ),
                   ),
                 ),
+                if (!achievementsOpen) ...[
+                  const SliverToBoxAdapter(child: SectionHeader(title: 'Achievements')),
+                  const SliverToBoxAdapter(child: Padding(padding: EdgeInsets.symmetric(horizontal: 20), child: LockedSectionCard(reveal: Reveal.achievements))),
+                ] else ...[
                 achievementsHeader,
                 if (readyToClaim > 1) claimAll,
                 SliverToBoxAdapter(
@@ -297,6 +305,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     ),
                   ),
                 ),
+                ],
               ] else ...[
                 SliverToBoxAdapter(
                   child: Padding(
@@ -313,16 +322,21 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   ),
                 SliverToBoxAdapter(child: SectionHeader(title: 'Statistics', action: 'See all', onAction: () => _showAllStatistics(context))),
                 SliverToBoxAdapter(child: Padding(padding: const EdgeInsets.symmetric(horizontal: 20), child: StatisticsSection(stats: ref.watch(playerStatsProvider), compact: true))),
-                achievementsHeader,
-                if (readyToClaim > 1) claimAll,
-                SliverPadding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  sliver: SliverList.separated(
-                    itemCount: achievements.length,
-                    separatorBuilder: (_, _) => const SizedBox(height: 8),
-                    itemBuilder: (_, i) => _AchievementCard(key: ValueKey(achievements[i].family.id), status: achievements[i]),
+                if (!achievementsOpen) ...[
+                  const SliverToBoxAdapter(child: SectionHeader(title: 'Achievements')),
+                  const SliverToBoxAdapter(child: Padding(padding: EdgeInsets.symmetric(horizontal: 20), child: LockedSectionCard(reveal: Reveal.achievements))),
+                ] else ...[
+                  achievementsHeader,
+                  if (readyToClaim > 1) claimAll,
+                  SliverPadding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    sliver: SliverList.separated(
+                      itemCount: achievements.length,
+                      separatorBuilder: (_, _) => const SizedBox(height: 8),
+                      itemBuilder: (_, i) => _AchievementCard(key: ValueKey(achievements[i].family.id), status: achievements[i]),
+                    ),
                   ),
-                ),
+                ],
                 const SliverToBoxAdapter(child: SectionHeader(title: 'More')),
                 SliverToBoxAdapter(
                   child: Padding(

@@ -291,12 +291,14 @@ class _TopTabState extends State<_TopTab> {
     final c = context.colors;
     final isDark = context.isDark;
     final selected = widget.selected;
-    final color = selected ? context.accent : (_hover ? c.textPrimary : c.textSecondary);
+    // Kept back by the guided start: faded, with a small lock after the label.
+    final locked = widget.item.locked != null && !selected;
+    final color = selected ? context.accent : (_hover ? c.textPrimary : (locked ? c.textTertiary : c.textSecondary));
     final fill = selected ? context.accent.withValues(alpha: c.highContrast ? (isDark ? 0.22 : 0.14) : (isDark ? 0.18 : 0.10)) : (_hover ? c.textPrimary.withValues(alpha: 0.05) : Colors.transparent);
     return Semantics(
       button: true,
       selected: selected,
-      label: widget.item.label,
+      label: widget.item.locked == null ? widget.item.label : '${widget.item.label}, ${widget.item.locked}',
       excludeSemantics: true,
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
@@ -318,7 +320,10 @@ class _TopTabState extends State<_TopTab> {
                 Text(widget.item.label, style: TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w600, color: color, letterSpacing: -0.1, decoration: selected && A11y.symbolsOf(context) ? TextDecoration.underline : null, decorationColor: color, decorationThickness: 2)),
                 // Something waits on that tab (as on the floating tab bar): a small cobalt dot, also on
                 // the tab being shown, until the thing is dealt with.
-                if (widget.item.badge) ...[
+                if (locked) ...[
+                  const SizedBox(width: 5),
+                  Icon(AppIcons.lock, size: 12, color: color),
+                ] else if (widget.item.badge) ...[
                   const SizedBox(width: 6),
                   Container(width: 7, height: 7, decoration: BoxDecoration(color: context.accent, shape: BoxShape.circle)),
                 ],

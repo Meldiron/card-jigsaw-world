@@ -15,6 +15,7 @@ import 'package:carden/features/game/board_widget.dart';
 import 'package:carden/models/models.dart';
 import 'package:carden/router.dart';
 import 'package:carden/state/catalog.dart';
+import 'package:carden/state/first_steps.dart';
 import 'package:carden/state/giant.dart';
 import 'package:carden/state/profile.dart';
 import 'package:carden/state/settings.dart';
@@ -133,6 +134,7 @@ void main() {
   testWidgets('giant boards with the real Giant pack', (tester) async {
     SharedPreferences.setMockInitialValues({});
     final store = await LocalStore.open();
+    await FirstSteps.skipFor(store); // the whole app; integration_test/first_steps_test.dart plays the first steps
     Sfx.instance.soundEnabled = false;
     Sfx.instance.musicEnabled = false;
     await tester.pumpWidget(

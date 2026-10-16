@@ -14,6 +14,7 @@ import 'package:carden/features/gallery/library_screen.dart';
 import 'package:carden/features/social/social_screen.dart';
 import 'package:carden/router.dart';
 import 'package:carden/state/catalog.dart';
+import 'package:carden/state/first_steps.dart';
 import 'package:carden/state/rewards.dart';
 import 'package:carden/state/settings.dart';
 import 'package:carden/state/unlocks.dart';
@@ -83,6 +84,7 @@ void main() {
   testWidgets('links open their screens, from the welcome screens on', (tester) async {
     SharedPreferences.setMockInitialValues({});
     final store = await LocalStore.open();
+    await FirstSteps.skipFor(store); // the whole app; integration_test/first_steps_test.dart plays the first steps
     Sfx.instance.soundEnabled = false;
     Sfx.instance.musicEnabled = false;
     await tester.pumpWidget(ProviderScope(

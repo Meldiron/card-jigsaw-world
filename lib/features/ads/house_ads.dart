@@ -14,6 +14,7 @@ import '../../core/a11y.dart';
 import '../../core/theme/tokens.dart';
 import '../../data/purchases.dart';
 import '../../models/models.dart';
+import '../../state/first_steps.dart';
 import '../../state/catalog.dart';
 import '../../state/profile.dart';
 import '../../state/purchases.dart';
@@ -228,6 +229,12 @@ Future<Creative?> maybeShowInterstitial(BuildContext context, WidgetRef ref) asy
   store.completionsSinceAd = store.completionsSinceAd + 1;
   if (profile?.isVip == true) return null;
   if (store.lifetimeCompletions <= HouseAdPolicy.skipFirstCompletions) return null;
+  // The guided start keeps offers back until level 5 (lib/state/first_steps.dart); nothing piles
+  // up meanwhile.
+  if (!ref.read(revealsProvider).contains(Reveal.promos)) {
+    store.completionsSinceAd = 0;
+    return null;
+  }
   if (HouseAdPolicy.interstitialsThisSession >= HouseAdPolicy.maxPerSession) return null;
   // A break follows every Nth completion, or the current one when the last
   // break is more than [minGap] ago (first completion of a session counts).
@@ -639,6 +646,8 @@ class _HouseBannerState extends ConsumerState<HouseBanner> {
   Widget build(BuildContext context) {
     final profile = ref.watch(profileProvider).value;
     if (_dismissedThisSession || profile == null || profile.isVip) return const SizedBox.shrink();
+    // Not during the guided start (offers open at level 5).
+    if (!ref.watch(revealsProvider).contains(Reveal.promos)) return const SizedBox.shrink();
     _creative ??= houseCreatives.firstWhere((c) => c.kind == CreativeKind.vip);
     final c = _creative!;
     final price = ((ref.watch(platformCapsProvider).purchases ? c.priceLine(_appStorePrices(ref)) : null) ?? c.body).replaceAll('/', '\u2060/\u2060');

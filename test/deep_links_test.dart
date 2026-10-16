@@ -386,6 +386,8 @@ void main() {
           authProvider.overrideWith(_NoAuth.new),
           profileProvider.overrideWith(_GuestProfile.new),
           packsProvider.overrideWith((ref) async => const <Pack>[]),
+          // The welcome pages load the first board's picture from the catalogue.
+          allPuzzlesProvider.overrideWith((ref) async => const <Puzzle>[]),
           playerProfileProvider.overrideWith((ref, id) async => null),
         ],
         child: Consumer(builder: (context, ref, _) => MaterialApp.router(theme: AppTheme.light(), routerConfig: ref.watch(routerProvider))),

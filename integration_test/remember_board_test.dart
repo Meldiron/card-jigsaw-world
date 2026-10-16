@@ -11,6 +11,7 @@ import 'package:carden/features/game/board_widget.dart';
 import 'package:carden/features/game/difficulty_screen.dart';
 import 'package:carden/game/board.dart';
 import 'package:carden/state/catalog.dart';
+import 'package:carden/state/first_steps.dart';
 import 'package:carden/state/progress.dart';
 import 'package:carden/state/rewards.dart';
 import 'package:carden/state/settings.dart';
@@ -81,6 +82,7 @@ void main() {
     final semantics = tester.ensureSemantics();
     SharedPreferences.setMockInitialValues({});
     final store = await LocalStore.open();
+    await FirstSteps.skipFor(store); // the whole app; integration_test/first_steps_test.dart plays the first steps
     Sfx.instance.soundEnabled = false;
     Sfx.instance.musicEnabled = false;
     await tester.pumpWidget(ProviderScope(

@@ -9,6 +9,7 @@ import 'package:carden/core/sfx.dart';
 import 'package:carden/data/local_store.dart';
 import 'package:carden/router.dart';
 import 'package:carden/state/catalog.dart';
+import 'package:carden/state/first_steps.dart';
 import 'package:carden/state/profile.dart';
 import 'package:carden/state/progress.dart';
 import 'package:carden/state/rewards.dart';
@@ -52,6 +53,7 @@ void main() {
   testWidgets('six starter packs; a formerly free pack stays open once played', (tester) async {
     SharedPreferences.setMockInitialValues({});
     final store = await LocalStore.open();
+    await FirstSteps.skipFor(store); // the whole app; integration_test/first_steps_test.dart plays the first steps
     Sfx.instance.soundEnabled = false;
     Sfx.instance.musicEnabled = false;
     await tester.pumpWidget(ProviderScope(

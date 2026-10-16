@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/repositories.dart';
 import 'auth.dart';
+import 'first_steps.dart';
 import 'merge_flow.dart';
 import 'profile.dart';
 import 'progress.dart';
@@ -42,6 +43,7 @@ class AccountDeletion {
       }
     }
     await store.remove(SaveMerge.pendingKey);
+    await store.remove(FirstSteps.storeKey);
     store
       ..onboarded = false
       ..tutorialSeen = false
@@ -52,6 +54,7 @@ class AccountDeletion {
       ..lastInterstitialAt = null
       ..lastRewardedAt = null;
     _ref
+      ..invalidate(firstStepsProvider)
       ..invalidate(profileProvider)
       ..invalidate(progressProvider)
       ..invalidate(friendsProvider)

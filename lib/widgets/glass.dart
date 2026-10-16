@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../core/a11y.dart';
 import '../core/theme/tokens.dart';
 import 'adaptive.dart';
+import 'icons.dart';
 
 /// iOS bar material: the content behind is blurred and slightly saturated,
 /// then tinted with the surface colour. Used for the tab bar, headers and
@@ -362,7 +363,7 @@ class GlassTabBar extends StatelessWidget {
                                 child: Semantics(
                                   button: true,
                                   selected: i == currentIndex,
-                                  label: items[i].label,
+                                  label: items[i].locked == null ? items[i].label : '${items[i].label}, ${items[i].locked}',
                                   child: GestureDetector(
                                     behavior: HitTestBehavior.opaque,
                                     onTap: () => onTap(i),
@@ -400,11 +401,15 @@ class GlassTabBarScope extends InheritedWidget {
 }
 
 class GlassTabItem {
-  const GlassTabItem({required this.icon, required this.activeIcon, required this.label, this.badge = false});
+  const GlassTabItem({required this.icon, required this.activeIcon, required this.label, this.badge = false, this.locked});
   final IconData icon;
   final IconData activeIcon;
   final String label;
   final bool badge;
+
+  /// The guided start keeps this tab back: drawn faded with a small lock, and this says when it
+  /// opens (read by VoiceOver). Tapping it still calls onTap, which explains and offers "Unlock anyway".
+  final String? locked;
 }
 
 class _TabCell extends StatelessWidget {
@@ -415,18 +420,28 @@ class _TabCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    final color = selected ? context.accent : c.textSecondary;
-    return Column(
+    final locked = item.locked != null && !selected;
+    final color = selected ? context.accent : (locked ? c.textTertiary : c.textSecondary);
+    return Opacity(
+      opacity: locked ? 0.55 : 1,
+      child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Stack(
           clipBehavior: Clip.none,
           children: [
             Icon(selected ? item.activeIcon : item.icon, color: color, size: 23),
+            // Kept back by the guided start: a small lock where a dot would be.
+            if (locked)
+              Positioned(
+                right: -8,
+                top: -3,
+                child: Icon(AppIcons.lock, key: ValueKey('tab-lock-${item.label}'), size: 11, color: c.textSecondary),
+              ),
             // Something waits on that tab: a small cobalt dot (the one accent), no ring, clear of the
             // glyph's top-right corner. It stays on the tab being shown until the thing is dealt with
             // (owner, 2026-10-16).
-            if (item.badge)
+            if (item.badge && !locked)
               Positioned(
                 right: -6,
                 top: -1,
@@ -437,6 +452,7 @@ class _TabCell extends StatelessWidget {
         const SizedBox(height: 3),
         Text(item.label, style: TextStyle(fontSize: TypeSize.micro, fontWeight: FontWeight.w600, color: color, letterSpacing: -0.1)),
       ],
+      ),
     );
   }
 }

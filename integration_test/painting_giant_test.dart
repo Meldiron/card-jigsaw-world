@@ -16,6 +16,7 @@ import 'package:carden/game/board.dart';
 import 'package:carden/models/models.dart';
 import 'package:carden/router.dart';
 import 'package:carden/state/catalog.dart';
+import 'package:carden/state/first_steps.dart';
 import 'package:carden/state/giant.dart';
 import 'package:carden/state/profile.dart';
 import 'package:carden/state/progress.dart';
@@ -86,6 +87,7 @@ void main() {
   testWidgets('painting board, giant board: zoom, move while zoomed, resume', (tester) async {
     SharedPreferences.setMockInitialValues({});
     final store = await LocalStore.open();
+    await FirstSteps.skipFor(store); // the whole app; integration_test/first_steps_test.dart plays the first steps
     Sfx.instance.soundEnabled = false;
     Sfx.instance.musicEnabled = false;
     await tester.pumpWidget(ProviderScope(

@@ -5,6 +5,7 @@ import 'package:carden/data/repositories.dart';
 import 'package:carden/data/local_store.dart';
 import 'package:carden/state/auth.dart';
 import 'package:carden/state/catalog.dart';
+import 'package:carden/state/first_steps.dart';
 import 'package:carden/state/settings.dart';
 import 'package:carden/state/social.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +37,7 @@ void main() {
   testWidgets('league and my puzzles', (tester) async {
     SharedPreferences.setMockInitialValues({});
     final store = await LocalStore.open();
+    await FirstSteps.skipFor(store); // the whole app; integration_test/first_steps_test.dart plays the first steps
     Sfx.instance.soundEnabled = false;
     Sfx.instance.musicEnabled = false;
     await tester.pumpWidget(ProviderScope(overrides: [localStoreProvider.overrideWithValue(store)], child: const CardenApp()));

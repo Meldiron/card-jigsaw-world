@@ -150,6 +150,12 @@ carden.page redirects there.
   read a whole catalogue table on launch (8k+ rows, each one a billed read). The content tool sets
   `packs.puzzlesUpdatedAt` whenever it changes a pack's puzzles (`finalize_pack`): that is how devices
   and the snapshot see removed puzzles. Its duplicate check uses `catalog.sync()`, not a full dump.
+- **First steps** (owner, 2026-10-16; `docs/first-steps.md`): new players go from the welcome pages straight into a
+  first board (Pink Sands Beach, 3x3) with one hint per step, then a calm Home (today's picture, Continue, one next
+  step, the rest blurred under "More opens as you play" with Unlock anyway). Home sections, the Quests and Social tabs,
+  achievements and offers open by pictures and levels (`Reveal` in `lib/state/first_steps.dart`); locked tabs are
+  faded with a lock and offer Unlock anyway; tips show once where they matter. Players from before have no record and
+  see everything. Integration suites call `FirstSteps.skipFor(store)`; `integration_test/first_steps_test.dart` plays the path.
 - `lib/state/`: `profile.dart` (`Economy` constants, VIP, piggy 5/picture up to 500), `rewards.dart`
   (level curve `LevelRewards.levelForXp`, daily 3 + 1 VIP / weekly 5 + 1 VIP quests), `achievements.dart`,
   `progress.dart`, `merge.dart` + `merge_flow.dart` (guest→account save merge), `auth.dart`, `social.dart`.
@@ -364,7 +370,7 @@ tree, so dispatch the workflow directly as described in the testflight-feedback 
 
 ## Docs index
 
-`docs/native-ui.md` (glass components), `docs/accessibility.md`, `docs/copy-guide.md`, `docs/sync.md` (save sync), `docs/catalog-sync.md`, `docs/deep-links.md`, `docs/house-ads.md`,
+`docs/native-ui.md` (glass components), `docs/accessibility.md`, `docs/first-steps.md` (guided start), `docs/copy-guide.md`, `docs/sync.md` (save sync), `docs/catalog-sync.md`, `docs/deep-links.md`, `docs/house-ads.md`,
 `docs/purchases.md`, `docs/web.md`, `docs/app-updates.md`, `docs/release-flow.md`, `docs/release-checklist.md`,
 `docs/content-rules.md`, `docs/content-sources.md`, `store/README.md` (store assets),
 `tools/store/README.md`, `README.md`.

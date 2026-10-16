@@ -16,6 +16,7 @@ import '../../game/game_controller.dart' show formatDuration;
 import '../../game/image_loader.dart';
 import '../../models/models.dart';
 import '../../state/catalog.dart';
+import '../../state/first_steps.dart';
 import '../../state/giant.dart';
 import '../../state/profile.dart';
 import '../../state/progress.dart';
@@ -30,6 +31,7 @@ import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 import '../gallery/giant_gate.dart' show showGiantGateFor;
 import 'unlock_intro.dart';
+import '../home/guided_start.dart';
 
 /// Pre-game screen: preview with the cut overlay, mode picker, board picker
 /// with reward preview, play button. This is the only place the cut preview
@@ -111,6 +113,9 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
       _tier = decoded.tierIndex < 0 ? 2 : decoded.tierIndex;
     } else if (last != null) {
       _tier = last.tier;
+    } else if (ref.read(firstStepsProvider).calm) {
+      // Guided start: one step up from the first board's nine cards.
+      _tier = 1;
     } else {
       final idx = GridSpec.tiers.indexWhere((t) => t.cells == ref.read(settingsProvider).defaultGrid);
       _tier = idx < 0 ? 2 : idx;
@@ -508,6 +513,8 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
           ),
         ),
       ] else ...[
+      // Guided start: said once, the first time the player picks a board.
+      const OneTimeTip(id: 'board', icon: AppIcons.bigBoard, text: 'Pick a shape and a size. Bigger boards take longer and pay more coins and XP.', padding: EdgeInsets.only(bottom: 14)),
       const _SectionLabel('Mode'),
       const SizedBox(height: 8),
       _ModePicker(

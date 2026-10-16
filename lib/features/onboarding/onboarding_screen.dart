@@ -11,6 +11,8 @@ import '../../core/a11y.dart';
 import '../../core/theme/tokens.dart';
 import '../../game/board.dart';
 import '../../game/game_controller.dart';
+import '../../state/first_steps.dart';
+import '../../state/profile.dart';
 import '../../state/settings.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
@@ -57,9 +59,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     super.dispose();
   }
 
+  /// "Start playing": a new player goes straight into a first board (Home waits under it, for
+  /// when they leave it); anyone else, or a catalogue not in yet, lands on Home.
   void _finish() {
     ref.read(settingsProvider.notifier).setOnboarded();
-    context.go('/home');
+    final router = GoRouter.of(context);
+    final first = ref.read(firstBoardProvider);
+    final play = first != null && ref.read(firstStepsProvider).firstBoard && ref.read(solvedCountProvider) == 0 && (ref.read(profileProvider).value?.level ?? 1) <= 1;
+    router.go('/home');
+    if (play) WidgetsBinding.instance.addPostFrameCallback((_) => router.push(first.route));
   }
 
   @override
@@ -72,6 +80,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     final textBlock = MediaQuery.textScalerOf(context).scale(196);
     // Starts decoding page 2's picture on page 1 and keeps it for the welcome.
     ref.watch(_boardPicture);
+    // The first board's picture loads meanwhile, so the cards are dealt at once.
+    ref.watch(firstBoardPrefetchProvider);
     if (context.isExpanded) return _wide(context);
 
     return Scaffold(

@@ -318,6 +318,13 @@ class GameController extends Notifier<GameState> {
     _events.add(GameEventKind.undo);
   }
 
+  /// The first board's hints: outlines where the picked card belongs (free, not a Hint), or
+  /// clears the outline.
+  void guide(int? target) {
+    if (state.status != GameStatus.playing) return;
+    state = target == null ? state.copyWith(clearHint: true) : state.copyWith(hintTarget: target);
+  }
+
   /// Highlights a misplaced card and where it belongs. The caller handles
   /// payment before invoking this.
   bool showHint() {

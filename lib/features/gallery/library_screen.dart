@@ -20,6 +20,7 @@ import '../../widgets/ui.dart';
 import '../home/header_bar.dart';
 import 'pack_card.dart';
 import 'pack_progress.dart';
+import '../home/guided_start.dart';
 
 /// The Library's selected chip. Other tabs set it before switching to the
 /// Library, e.g. Home's "All months" opens it on Daily and the finished
@@ -356,6 +357,15 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
                       _HideFinishedToggle(value: hideFinished, onChanged: ref.read(settingsProvider.notifier).setHideFinished),
                   ],
                 ),
+              ),
+            ),
+            // Guided start: said once, the first time the player opens the Library.
+            const SliverToBoxAdapter(
+              child: OneTimeTip(
+                id: 'library',
+                icon: AppIcons.library,
+                text: 'Start with the free packs. The others open with coins or tickets, and every picture earns coins.',
+                padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
               ),
             ),
             if (!wide)

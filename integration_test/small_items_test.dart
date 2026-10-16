@@ -15,6 +15,7 @@ import 'package:carden/data/local_store.dart';
 import 'package:carden/features/game/board_widget.dart';
 import 'package:carden/models/models.dart';
 import 'package:carden/state/catalog.dart';
+import 'package:carden/state/first_steps.dart';
 import 'package:carden/state/settings.dart';
 import 'package:carden/state/rewards.dart';
 import 'package:carden/state/unlocks.dart';
@@ -75,6 +76,7 @@ void main() {
     // One daily gift claimed on an earlier day: today's claim is the second day.
     SharedPreferences.setMockInitialValues({'giftClaimDays': 1});
     final store = await LocalStore.open();
+    await FirstSteps.skipFor(store); // the whole app; integration_test/first_steps_test.dart plays the first steps
     Sfx.instance.soundEnabled = false;
     Sfx.instance.musicEnabled = false;
     await tester.pumpWidget(ProviderScope(

@@ -20,6 +20,7 @@ import '../../game/image_loader.dart';
 import '../../models/models.dart';
 import '../../router.dart' show rootNavigatorKey;
 import '../../state/catalog.dart';
+import '../../state/first_steps.dart';
 import '../../state/giant.dart';
 import '../../state/profile.dart';
 import '../../state/progress.dart';
@@ -40,9 +41,13 @@ import 'giant_board.dart';
 
 /// The play screen: HUD, board, booster bar, pause and completion overlays.
 class GameScreen extends ConsumerStatefulWidget {
-  const GameScreen({super.key, required this.puzzleId, required this.gridCode, this.painting = false});
+  const GameScreen({super.key, required this.puzzleId, required this.gridCode, this.painting = false, this.first = false});
   final String puzzleId;
   final String gridCode;
+
+  /// The guided start's first board, opened by the welcome pages over a Home the player has not
+  /// seen yet (`?first=1`): the way out is called Home.
+  final bool first;
 
   /// A new board starts in Painting (a saved board resumes the way it was saved).
   final bool painting;
@@ -83,7 +88,12 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   /// Quests this win finished (ready to claim) and what the level-up opened, for the overlay.
   List<Goal> _questsReady = const [];
   List<Unlock> _unlocked = const [];
-  bool _showTutorial = false;
+  /// The first board's hints, one per step (null when the player has had them).
+  _CoachStep? _coach;
+  Timer? _coachTimer;
+
+  /// Moves since the last lock or join: six in a row bring the one-time "Stuck?" tip.
+  int _dryMoves = 0;
   int _chainFlash = 0;
 
   /// The play-through being saved (lifetime totals add up per play-through), and whether it
@@ -107,7 +117,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _args = _argsFor(_spec, resume: true, session: _base);
-    _showTutorial = !ref.read(settingsProvider).tutorialSeen;
+    _coach = ref.read(settingsProvider).tutorialSeen || _spec.isGiant ? null : _CoachStep.pick;
     _boardSub = ref.read(syncProvider.notifier).boardUpdates.listen(_onBoardUpdate);
     _zoom.addListener(_onZoomChanged);
     WidgetsBinding.instance.addPostFrameCallback((_) => _listen());
@@ -243,6 +253,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     }
     _zoom.removeListener(_onZoomChanged);
     _zoom.dispose();
+    _coachTimer?.cancel();
     super.dispose();
   }
 
@@ -294,6 +305,58 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
       case GameEventKind.win:
         _onWin();
     }
+    if (_coach != null) _coachOn(e);
+    _maybeStuckTip(e);
+  }
+
+  /// The first board's hints follow what the player does: pick a card (its place is outlined),
+  /// put it there, see it lock or join, then the tools come in.
+  void _coachOn(GameEventKind e) {
+    final s = ref.read(gameControllerProvider(_args!));
+    final moved = e == GameEventKind.move || e == GameEventKind.join || e == GameEventKind.lock || e == GameEventKind.doubleLock;
+    switch (_coach!) {
+      case _CoachStep.pick || _CoachStep.retry || _CoachStep.place:
+        if (e == GameEventKind.pick && s.selected != null) {
+          _ctrl.guide(s.board.homeOf(s.selected!));
+          _setCoach(_CoachStep.place);
+        } else if (moved) {
+          _ctrl.guide(null);
+          final locked = e == GameEventKind.lock || e == GameEventKind.doubleLock;
+          _setCoach(locked ? _CoachStep.locked : e == GameEventKind.join ? _CoachStep.joined : _CoachStep.retry);
+          if (locked || e == GameEventKind.join) _coachTimer = Timer(const Duration(seconds: 6), () => _finishCoach(toast: true));
+        }
+      case _CoachStep.locked || _CoachStep.joined:
+        if (moved) _finishCoach(toast: true);
+    }
+  }
+
+  void _setCoach(_CoachStep step) {
+    _coachTimer?.cancel();
+    if (mounted) setState(() => _coach = step);
+  }
+
+  /// The hints are done (or closed): the tools come in, and the board is never explained again.
+  void _finishCoach({bool toast = false}) {
+    _coachTimer?.cancel();
+    if (_coach == null || !mounted) return;
+    ref.read(settingsProvider.notifier).setTutorialSeen();
+    if (_args != null) _ctrl.guide(null);
+    setState(() => _coach = null);
+    if (toast) showToast(context, 'Fewer moves earn more stars. Take your time.', icon: AppIcons.star);
+  }
+
+  /// A new player making move after move without a lock or join hears once where help is.
+  void _maybeStuckTip(GameEventKind e) {
+    if (e == GameEventKind.join || e == GameEventKind.lock || e == GameEventKind.doubleLock || e == GameEventKind.undo) {
+      _dryMoves = 0;
+      return;
+    }
+    if (e != GameEventKind.move || _coach != null) return;
+    if (++_dryMoves < 6) return;
+    final steps = ref.read(firstStepsProvider);
+    if (!steps.guided || steps.tips.contains('stuck')) return;
+    ref.read(firstStepsProvider.notifier).sawTip('stuck');
+    showToast(context, 'Stuck? Hint shows where one card belongs.', icon: AppIcons.hint);
   }
 
   void _scheduleSave() {
@@ -415,10 +478,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     if (_completionHandled) return;
     _completionHandled = true;
     // The first board is done: no need to explain it again.
-    if (_showTutorial) {
-      ref.read(settingsProvider.notifier).setTutorialSeen();
-      _showTutorial = false;
-    }
+    if (_coach != null) _finishCoach();
     _saveDebounce?.cancel();
     Sfx.instance.win();
     Haptics.success();
@@ -657,6 +717,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     final sel = state.selected;
     // Locate: while the map is on, the selected card's place shows on it.
     final locate = sel != null && sel < state.board.cells && !state.board.isLocked(sel) ? sel : null;
+    final coaching = _coach != null && image.hasValue && state.status == GameStatus.playing;
 
     return Scaffold(
       backgroundColor: c.canvas,
@@ -819,30 +880,40 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                   ),
                 ),
                 if (state.status != GameStatus.won)
-                  _BoosterBar(
-                    hints: profile?.hints ?? 0,
-                    peeks: profile?.peeks ?? 0,
-                    magics: profile?.magics ?? 0,
-                    canUndo: state.canUndo,
-                    playing: state.status == GameStatus.playing && !state.peeking,
-                    onHint: _hint,
-                    onMagic: _magic,
-                    onPeek: _peek,
-                    onUndo: _ctrl.undo,
+                  // The first board's hints sit where the tools are; the tools come in after them.
+                  // Both stay laid out, so the board keeps its size.
+                  Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: [
+                      IgnorePointer(
+                        ignoring: coaching,
+                        child: AnimatedOpacity(
+                          opacity: coaching ? 0 : 1,
+                          duration: const Duration(milliseconds: 350),
+                          child: ExcludeSemantics(
+                            excluding: coaching,
+                            child: _BoosterBar(
+                              hints: profile?.hints ?? 0,
+                              peeks: profile?.peeks ?? 0,
+                              magics: profile?.magics ?? 0,
+                              canUndo: state.canUndo,
+                              playing: state.status == GameStatus.playing && !state.peeking,
+                              onHint: _hint,
+                              onMagic: _magic,
+                              onPeek: _peek,
+                              onUndo: _ctrl.undo,
+                            ),
+                          ),
+                        ),
+                      ),
+                      if (coaching) _Coach(step: _coach!, onClose: _finishCoach),
+                    ],
                   )
                 else
                   const SizedBox(height: 120),
               ],
             ),
           ),
-          // First game: how to play, in a card at the bottom; the board it talks about stays in view.
-          if (_showTutorial && image.hasValue && state.status != GameStatus.won)
-            _HowToPlay(
-              onDone: () {
-                ref.read(settingsProvider.notifier).setTutorialSeen();
-                setState(() => _showTutorial = false);
-              },
-            ),
           if (state.status == GameStatus.won && image.hasValue)
             _CompletionOverlay(
               puzzle: puzzle,
@@ -851,6 +922,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
               reward: _reward,
               questsReady: _questsReady,
               unlocked: _unlocked,
+              first: widget.first,
               pack: _packProgress(puzzle, state),
               onQuests: () => context.go('/events'),
               onReplay: () {
@@ -1314,83 +1386,72 @@ class _PauseDivider extends StatelessWidget {
 /// one line about stars, in a card at the bottom over the tools (they wait
 /// until it is read anyway). A light dim keeps the board in view above it.
 /// "Got it", or a tap anywhere, closes it for good.
-class _HowToPlay extends StatelessWidget {
-  const _HowToPlay({required this.onDone});
-  final VoidCallback onDone;
+/// The first board's steps.
+enum _CoachStep { pick, place, retry, locked, joined }
+
+/// One hint per step on the first board, where the tools will be: what to do now, in a line.
+/// It never covers the board and goes away with the first lock or join.
+class _Coach extends StatelessWidget {
+  const _Coach({required this.step, required this.onClose});
+  final _CoachStep step;
+  final VoidCallback onClose;
 
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    Widget step(IconData icon, String text) => Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: Row(
-            children: [
-              IconTile(icon: icon, size: IconTile.small, radius: 9),
-              const SizedBox(width: 12),
-              Expanded(child: Text(text, style: TextStyle(fontSize: TypeSize.body, height: 1.3, color: c.textPrimary))),
-            ],
-          ),
-        );
-    return Positioned.fill(
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: onDone,
-        child: ColoredBox(
-          color: Colors.black.withValues(alpha: context.isDark ? 0.4 : 0.25),
-          child: SafeArea(
-            top: false,
-            minimum: const EdgeInsets.only(bottom: 8),
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: PageWidth.sheet),
-                  child: Elevated(
-                    child: Builder(
-                      builder: (context) => Container(
-                        key: const ValueKey('how-to-play'),
-                        padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
-                        decoration: BoxDecoration(
-                          color: context.colors.card,
-                          borderRadius: BorderRadius.circular(28),
-                          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: context.isDark ? 0.5 : 0.14), blurRadius: 30, offset: const Offset(0, 8))],
-                        ),
-                        // Scrolls when a large text size makes the card taller than the screen.
-                        child: SingleChildScrollView(
-                          physics: const ClampingScrollPhysics(),
-                          child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SheetHeader(title: 'How to play'),
-                            const SizedBox(height: 14),
-                            step(AppIcons.tapCard, 'Tap a card, then tap where it belongs. Or drag it there.'),
-                            step(AppIcons.group, 'Neighbours in the picture snap into a group and move together.'),
-                            step(AppIcons.lock, 'A card in its true spot locks in place.'),
-                            Row(
-                              children: [
-                                const SizedBox(width: 8),
-                                Icon(AppIcons.star, size: 15, color: context.star),
-                                const SizedBox(width: 21),
-                                Expanded(child: Text('Fewer moves earn more stars. No time limit.', style: TextStyle(fontSize: TypeSize.footnote, color: context.colors.textSecondary))),
-                              ],
-                            ),
-                            const SizedBox(height: 16),
-                            BigButton(label: 'Got it', onTap: onDone),
-                          ],
-                        ),
-                        ),
-                      ),
+    final (icon, count, text) = switch (step) {
+      _CoachStep.pick => (AppIcons.tapCard, 1, 'Tap a card to pick it up.'),
+      _CoachStep.place => (AppIcons.tapToPlace, 2, 'Now tap the outlined spot. That is where it belongs.'),
+      _CoachStep.retry => (AppIcons.tapCard, 1, 'Not its place yet. Tap a card, then tap its outlined spot.'),
+      _CoachStep.locked => (AppIcons.lock, 3, 'It locked in place. Cards that belong side by side also join and move together.'),
+      _CoachStep.joined => (AppIcons.group, 3, 'They joined and now move together. A card in its right spot locks in place.'),
+    };
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 8),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: PageWidth.sheet),
+        child: Semantics(
+          liveRegion: true,
+          child: Container(
+            key: const ValueKey('coach'),
+            padding: const EdgeInsets.fromLTRB(14, 12, 6, 12),
+            decoration: BoxDecoration(
+              color: c.card,
+              borderRadius: BorderRadius.circular(22),
+              border: c.highContrast ? Border.all(color: c.stroke) : null,
+              boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: context.isDark ? 0.45 : 0.12), blurRadius: 24, offset: const Offset(0, 6))],
+            ),
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 250),
+              child: Row(
+                key: ValueKey('coach-${step.name}'),
+                children: [
+                  IconTile(icon: icon, size: IconTile.medium),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text('How to play · $count of 3', style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600, color: context.accent, letterSpacing: -0.1)),
+                        const SizedBox(height: 2),
+                        Text(text, style: TextStyle(fontSize: TypeSize.body, height: 1.3, fontWeight: FontWeight.w500, color: c.textPrimary)),
+                      ],
                     ),
                   ),
-                ),
-              ).animate().slideY(begin: A11y.reduceMotionOf(context) ? 0 : 0.25, curve: Curves.easeOutCubic, duration: 350.ms).fadeIn(duration: 200.ms),
+                  IconButton(
+                    key: const ValueKey('coach-close'),
+                    tooltip: 'Close the hints',
+                    onPressed: onClose,
+                    icon: Icon(AppIcons.xmark, size: 18, color: c.textSecondary),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
       ),
-    );
+    ).animate().fadeIn(duration: 250.ms).slideY(begin: A11y.reduceMotionOf(context) ? 0 : 0.3, curve: Curves.easeOutCubic, duration: 350.ms);
   }
 }
 
@@ -1424,6 +1485,7 @@ class _CompletionOverlay extends StatefulWidget {
     this.questsReady = const [],
     this.unlocked = const [],
     this.onQuests,
+    this.first = false,
   });
   final Puzzle puzzle;
   final ui.Image image;
@@ -1436,6 +1498,11 @@ class _CompletionOverlay extends StatefulWidget {
   /// What the level-up opened (Squares, Painting...).
   final List<Unlock> unlocked;
   final VoidCallback? onQuests;
+
+  /// The first board: "Home" instead of "Back to pack" (the board was opened over Home), and a
+  /// line that Home has something new.
+  final bool first;
+  String get backLabel => first ? 'Home' : 'Back to pack';
   final _PackProgress pack;
   final VoidCallback onReplay;
   final void Function(Puzzle? next) onNext;
@@ -1576,6 +1643,15 @@ class _CompletionOverlayState extends State<_CompletionOverlay> {
                           tinted: true,
                         ).animate().fadeIn(),
                       ],
+                      if (widget.first) ...[
+                        const SizedBox(height: 12),
+                        const _ResultLine(
+                          key: ValueKey('first-board-line'),
+                          icon: AppIcons.sparkle,
+                          text: 'Your first picture. Home has something new.',
+                          tinted: true,
+                        ).animate().fadeIn(),
+                      ],
                       if (widget.questsReady.isNotEmpty) ...[
                         const SizedBox(height: 8),
                         _ResultLine(
@@ -1599,7 +1675,7 @@ class _CompletionOverlayState extends State<_CompletionOverlay> {
                   const SizedBox(width: 10),
                   Expanded(
                     child: backIsPrimary
-                        ? BigButton(label: 'Back to pack', icon: AppIcons.squareGrid2x2, onTap: widget.onHome)
+                        ? BigButton(label: widget.backLabel, icon: widget.first ? AppIcons.house : AppIcons.squareGrid2x2, onTap: widget.onHome)
                         : BigButton(label: 'Next puzzle', icon: AppIcons.arrowRight, onTap: () => widget.onNext(pack.next)),
                   ),
                 ],
@@ -1610,7 +1686,7 @@ class _CompletionOverlayState extends State<_CompletionOverlay> {
                   child: Text(pack.complete ? 'Every picture in this pack is solved' : 'Nothing else to play here yet', style: TextStyle(color: c.textSecondary, fontWeight: FontWeight.w600)),
                 )
               else
-                Pressable(onTap: widget.onHome, child: Padding(padding: const EdgeInsets.all(10), child: Text('Back to pack', style: TextStyle(color: context.accent, fontWeight: FontWeight.w600)))),
+                Pressable(key: const ValueKey('completion-back'), onTap: widget.onHome, child: Padding(padding: const EdgeInsets.all(10), child: Text(widget.backLabel, style: TextStyle(color: context.accent, fontWeight: FontWeight.w600)))),
             ],
           ),
         ),
@@ -1695,7 +1771,7 @@ class _CompletionOverlayState extends State<_CompletionOverlay> {
                     credit,
                     const SizedBox(height: 10),
                     backIsPrimary
-                        ? _OverlayPill(icon: AppIcons.squareGrid2x2, label: 'Back to pack', primary: true, onTap: widget.onHome)
+                        ? _OverlayPill(icon: widget.first ? AppIcons.house : AppIcons.squareGrid2x2, label: widget.backLabel, primary: true, onTap: widget.onHome)
                         : _OverlayPill(icon: AppIcons.arrowRight, label: 'Next puzzle', primary: true, onTap: () => widget.onNext(pack.next)),
                   ],
                 ),
