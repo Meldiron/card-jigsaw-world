@@ -8,13 +8,13 @@
       "name": "2,500 coins",
       "description": "Enough for a standard pack",
       "customerPrice": "0.99",
-      "reviewNote": "Consumable. Adds 2,500 coins to the player's balance once our Appwrite Function has verified the signed transaction (Sandbox during review). Coins buy puzzle packs, past monthly packs, avatars and boosters. The product id is historical; the amount is 2,500."
+      "reviewNote": "Consumable. Adds 2,500 coins to the player's balance once our Appwrite Function has verified the signed transaction (Production, falling back to Sandbox for sandbox transactions such as App Review's). Coins buy puzzle packs, past monthly packs, avatars and boosters. The product id is historical; the amount is 2,500."
     },
     {
       "referenceName": "Coins 8,000 (coins_3000)",
       "productId": "coins_3000",
       "name": "8,000 coins",
-      "description": "Up to three packs or 66 Magic Locks",
+      "description": "Up to three packs, or Magic for stubborn cards",
       "customerPrice": "2.99",
       "reviewNote": "Consumable. Adds 8,000 coins after server-side verification."
     },
@@ -22,7 +22,7 @@
       "referenceName": "Coins 14,000 (coins_5500)",
       "productId": "coins_5500",
       "name": "14,000 coins",
-      "description": "Big bundle with 11 percent extra",
+      "description": "A big bundle with 11% more coins",
       "customerPrice": "4.99",
       "reviewNote": "Consumable. Adds 14,000 coins after server-side verification."
     },
@@ -30,7 +30,7 @@
       "referenceName": "Coins 30,000 (coins_12000)",
       "productId": "coins_12000",
       "name": "30,000 coins",
-      "description": "Best value, 18 percent extra",
+      "description": "The best value, with 18% more coins",
       "customerPrice": "9.99",
       "reviewNote": "Consumable. Adds 30,000 coins after server-side verification."
     },
@@ -38,7 +38,7 @@
       "referenceName": "Tickets 10 (tickets_5)",
       "productId": "tickets_5",
       "name": "10 tickets",
-      "description": "Most premium packs or ten wheel spins",
+      "description": "Most premium packs, or ten Lucky Wheel spins",
       "customerPrice": "1.99",
       "reviewNote": "Consumable. Adds 10 tickets after server-side verification. Tickets pay for premium (ticket-priced) packs, Lucky Wheel spins, opening the piggy bank and streak restores."
     },

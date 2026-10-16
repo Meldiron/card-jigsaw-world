@@ -1,12 +1,12 @@
-Thanks for testing Carden 1.7.0 (until now Card Jigsaw World). Please try:
+Thanks for testing Carden 2.0. Please try:
 
 1. Play today's daily puzzle from Home and finish it.
-2. Open Library, pick a pack and play one board in each mode: Cards, Squares, Triangles, Hexagons. Check that squares are square, cards are card-shaped, and triangles and hexagons show the whole picture.
-3. Drag a card next to its neighbour so they snap into a group, then move the group.
-4. Open the Store (tap the coin balance on Home) and start the VIP free trial with your Sandbox Apple ID. The VIP badge should appear on Home within a few seconds.
-5. Profile > Settings > Account: Sign in with Apple. Your coins and progress should stay.
-6. Add the Carden widget to your Home Screen and tap it; it should open today's puzzle.
-7. Long-press the app icon and tap "One last game?".
-8. Check the new prices: packs in Library, boosters in a game, and bundles in the Store.
+2. Open the Library, pick a pack and play a board in Squares or with Painting. Then open another picture: it should start on the same choice.
+3. Drag a card next to its neighbour so they join into a group, then move the group.
+4. Profile > Settings > Accessibility: try a larger text size, Reduce motion, Increase contrast and Differentiate without colour on a few screens.
+5. Open the Store (tap the coin balance on Home) and start the VIP free trial with your Sandbox Apple ID. The VIP badge should appear within a few seconds.
+6. Profile > Settings > Sign in or create account: Sign in with Apple. Your coins and progress should stay.
+7. Add the Carden widget to your Home Screen and tap it; it should open today's puzzle.
+8. Tap a play.carden.page link in Notes or Messages: Carden should open on that screen.
 
 Anything that crashes, freezes, shows a wrong balance or a picture that does not load: use the TestFlight feedback button with a screenshot.
