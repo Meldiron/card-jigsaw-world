@@ -731,10 +731,14 @@ class ProgressBar extends StatelessWidget {
 /// specular edge of iOS glass; the selected label is in the primary text colour and a step
 /// heavier, the others in secondary. Right in light and dark, on cards, sheets and the canvas.
 class AppSegmentedControl<T extends Object> extends StatefulWidget {
-  const AppSegmentedControl({super.key, required this.value, required this.segments, required this.onChanged, this.height = 36, this.segmentPadding = const EdgeInsets.symmetric(horizontal: 10)});
+  const AppSegmentedControl({super.key, required this.value, required this.segments, required this.onChanged, this.height = 36, this.segmentPadding = const EdgeInsets.symmetric(horizontal: 10), this.badges = const {}});
   final T value;
   final Map<T, String> segments;
   final ValueChanged<T> onChanged;
+
+  /// Segments with something new behind them (an unopened message): a small accent dot after the
+  /// label, shown whether or not the segment is selected, until the thing is dealt with.
+  final Set<T> badges;
 
   /// Capsule height at the default text size (it grows with Larger Text).
   final double height;
@@ -917,14 +921,28 @@ class _AppSegmentedControlState<T extends Object> extends State<AppSegmentedCont
                                       child: Center(
                                         child: FittedBox(
                                           fit: BoxFit.scaleDown,
-                                          child: Text(
-                                            label,
-                                            maxLines: 1,
-                                            softWrap: false,
-                                            style: labelStyle.copyWith(
-                                              fontWeight: FontWeight.lerp(FontWeight.w500, FontWeight.w600, on),
-                                              color: Color.lerp(c.textSecondary, c.textPrimary, on),
-                                            ),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(
+                                                label,
+                                                maxLines: 1,
+                                                softWrap: false,
+                                                style: labelStyle.copyWith(
+                                                  fontWeight: FontWeight.lerp(FontWeight.w500, FontWeight.w600, on),
+                                                  color: Color.lerp(c.textSecondary, c.textPrimary, on),
+                                                ),
+                                              ),
+                                              if (widget.badges.contains(_keys[i])) ...[
+                                                const SizedBox(width: 6),
+                                                Container(
+                                                  key: ValueKey('segment-badge-${_keys[i]}'),
+                                                  width: 7,
+                                                  height: 7,
+                                                  decoration: BoxDecoration(color: context.accent, shape: BoxShape.circle),
+                                                ),
+                                              ],
+                                            ],
                                           ),
                                         ),
                                       ),

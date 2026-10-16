@@ -8,9 +8,9 @@ import '../widgets/icons.dart' show Currency;
 import 'auth.dart';
 import 'profile.dart';
 
-/// A message from Carden to one player (Social > Inbox, owner 2026-10-16). Rows of the `messages`
-/// table are written by `tools/dev/inbox.py` (skill: .claude/skills/inbox-messages) and readable
-/// only by their player; what the player did with one (opened, claimed, deleted) is kept in
+/// A message from Carden (Social > Inbox, owner 2026-10-16). Rows of the `messages` table are
+/// written by `tools/dev/inbox.py` (skill: .claude/skills/inbox-messages) and readable only by the
+/// players their row permissions name (one player, a label such as `early`, or everyone); what the player did with one (opened, claimed, deleted) is kept in
 /// `profiles.inbox`, so nobody can change a reward and every device agrees.
 class InboxMessage {
   const InboxMessage({
@@ -95,8 +95,9 @@ class InboxItem {
 final inboxMessagesProvider = FutureProvider<List<InboxMessage>>((ref) async {
   final userId = ref.watch(currentUserIdProvider);
   if (userId == null) return const [];
+  // Row-level permissions decide what a player gets: messages to them (`user:<id>`), to a label
+  // they carry (`label:early`) and to everyone (`users`).
   final rows = await listAllRows(ref.read(tablesProvider), AppwriteConfig.messages, [
-    Query.equal('userId', userId),
     Query.lessThanEqual('sentAt', DateTime.now().toUtc().toIso8601String()),
     Query.orderDesc('sentAt'),
   ]);

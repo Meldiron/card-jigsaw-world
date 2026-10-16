@@ -11,6 +11,7 @@ import '../../core/theme/tokens.dart';
 import '../../data/repositories.dart';
 import '../../models/models.dart';
 import '../../state/auth.dart';
+import '../../state/inbox.dart';
 import '../../state/profile.dart';
 import '../../state/social.dart';
 import '../../widgets/glass.dart';
@@ -168,6 +169,8 @@ class SocialScreen extends ConsumerWidget {
                 AppSegmentedControl<int>(
                   value: tab,
                   segments: const {0: 'Leaderboard', 1: 'Friends', 2: 'Inbox'},
+                  // An unopened message: a dot on Inbox until it is opened.
+                  badges: {if (ref.watch(inboxUnseenProvider)) SocialTab.inbox},
                   segmentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
                   onChanged: (v) => ref.read(socialTabProvider.notifier).select(v),
                 ),

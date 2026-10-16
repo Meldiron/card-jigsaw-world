@@ -1,11 +1,12 @@
 // Social > Inbox on the real app (live Appwrite, a QA guest). The messages come from outside the
-// app, as in real life: while this test waits on the inbox, send some to its guest with
-//   python3 tools/dev/inbox.py send --qa --subject "Welcome to Carden" --body "..." --coins 500 --tickets 2 \
-//     --cta-label "Open Impressionists" --cta-link /library/pack/pack-impressionists --yes
-//   python3 tools/dev/inbox.py send --qa --subject "How is Carden so far?" --body "..." \
+// app, as in real life: while this test waits on the inbox (it prints INBOX_QA_USER <id>), give
+// the guest a label and send two label messages, and keep a message to every player in the table:
+//   python3 tools/dev/inbox.py labels <id> --add early --yes
+//   python3 tools/dev/inbox.py send --label early --subject "Thanks for testing early" --body "..." \
 //     --cta-label "Send feedback" --cta-link /feedback --yes
-// It then opens the welcome message, claims its gift (the button turns to Close), follows the
-// feedback button, and deletes a message.
+//   python3 tools/dev/inbox.py send --label girlfriend --subject "Only for the girlfriend label" --body "..." --yes
+// (delete the two label messages afterwards). It checks what row-level permissions let through,
+// the Inbox dot, Claim in the gift card, the feedback button and Delete.
 //
 //   tools/dev/qa-run.sh drive --driver=test_driver/integration_test.dart --target=integration_test/inbox_test.dart -d <simulator>
 import 'package:carden/app.dart';
@@ -62,46 +63,51 @@ void main() {
     await tapText(tester, 'Inbox', ms: 2000);
     await shot(tester, 'ib_00_empty');
 
-    // Wait for the messages sent from outside (up to 4 minutes), reading the inbox again as a pull would.
-    for (var i = 0; i < 80 && find.text('Welcome to Carden').evaluate().isEmpty; i++) {
+    // Wait for the messages sent from outside (up to 4 minutes), reading the inbox again as a pull would:
+    // the launch message to every player, one to the label `early` this guest was given, and one to
+    // the label `girlfriend` it does not carry, which must never show.
+    bool ready() => find.text('Celebrating Carden 2.0').evaluate().isNotEmpty && find.text('Thanks for testing early').evaluate().isNotEmpty;
+    for (var i = 0; i < 80 && !ready(); i++) {
       c.invalidate(inboxMessagesProvider);
       await settle(tester, 3000);
     }
-    expect(find.text('Welcome to Carden'), findsWidgets);
-    await settle(tester, 2000);
-    expect(c.read(inboxUnseenProvider), isTrue, reason: 'new messages: the Social tab has its dot');
+    expect(find.text('Celebrating Carden 2.0'), findsWidgets, reason: 'a message to every player');
+    expect(find.text('Thanks for testing early'), findsWidgets, reason: 'a message to a label this player carries');
+    expect(find.text('Only for the girlfriend label'), findsNothing, reason: 'row-level permissions keep other labels out');
+    expect(c.read(inboxUnseenProvider), isTrue);
+    expect(find.byKey(const ValueKey('segment-badge-2')), findsOneWidget, reason: 'the Inbox segment has its dot');
     await shot(tester, 'ib_01_list');
 
-    // Open the welcome message: Claim, then Close.
+    // The launch message: Claim in its gift card, then Claimed; Close below.
     final coins = c.read(profileProvider).value!.coins;
-    await tapText(tester, 'Welcome to Carden', ms: 1500);
+    await tapText(tester, 'Celebrating Carden 2.0', ms: 1500);
     expect(find.byKey(const ValueKey('message-claim')), findsOneWidget);
     await shot(tester, 'ib_02_message');
     await tester.tap(find.byKey(const ValueKey('message-claim')), warnIfMissed: false);
     await settle(tester, 2500);
-    expect(find.byKey(const ValueKey('message-close')), findsOneWidget, reason: 'claimed: the button says Close');
+    expect(find.byKey(const ValueKey('message-claimed')), findsOneWidget, reason: 'the card says Claimed');
     expect(c.read(profileProvider).value!.coins, coins + 500);
     await shot(tester, 'ib_03_claimed');
     await tester.tap(find.byKey(const ValueKey('message-close')), warnIfMissed: false);
     await settle(tester, 1500);
 
-    // The feedback message's button opens Send feedback.
-    if (find.text('How is Carden so far?').evaluate().isNotEmpty) {
-      await tapText(tester, 'How is Carden so far?', ms: 1500);
-      await tester.tap(find.byKey(const ValueKey('message-cta')), warnIfMissed: false);
-      await settle(tester, 2500);
-      expect(find.byKey(const ValueKey('feedback-field')), findsOneWidget, reason: 'the button opened the feedback sheet');
-      await shot(tester, 'ib_04_feedback');
-      Navigator.of(tester.element(find.byKey(const ValueKey('feedback-field')))).pop();
-      await settle(tester, 1500);
-    }
+    // The early message's button opens Send feedback; opening it was the last unseen message.
+    await tapText(tester, 'Thanks for testing early', ms: 1500);
+    await tester.tap(find.byKey(const ValueKey('message-cta')), warnIfMissed: false);
+    await settle(tester, 2500);
+    expect(find.byKey(const ValueKey('feedback-field')), findsOneWidget, reason: 'the button opened the feedback sheet');
+    await shot(tester, 'ib_04_feedback');
+    Navigator.of(tester.element(find.byKey(const ValueKey('feedback-field')))).pop();
+    await settle(tester, 1500);
+    expect(c.read(inboxUnseenProvider), isFalse);
+    expect(find.byKey(const ValueKey('segment-badge-2')), findsNothing, reason: 'every message opened: no dot');
 
-    // Delete the welcome message (asks first).
-    await tapText(tester, 'Welcome to Carden', ms: 1500);
+    // Delete the early message (asks first).
+    await tapText(tester, 'Thanks for testing early', ms: 1500);
     await tester.tap(find.byKey(const ValueKey('message-delete')), warnIfMissed: false);
     await settle(tester, 1200);
     await tapText(tester, 'Delete', ms: 2000);
-    expect(find.text('Welcome to Carden'), findsNothing);
+    expect(find.text('Thanks for testing early'), findsNothing);
     await shot(tester, 'ib_05_deleted');
   });
 }

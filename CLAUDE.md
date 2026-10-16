@@ -251,11 +251,13 @@ carden.page redirects there.
   Offensive names (owner, 2026-10-16): `lib/core/name_filter.dart` (`NameFilter`) refuses them where a name is
   chosen (name alert, sign-up, new profiles) and shows names that fail as "Player" (`Profile.fromRow`, friends,
   blocks, merge), so names set by older builds are covered on 2.0+. `test/name_filter_test.dart`.
-- Inbox (owner, 2026-10-16): Social > Inbox shows messages from the owner to one player. Table `messages`
-  (one row per player, `read("user:<id>")` only: subject, body, `sentAt`, `expiresAt`, rewards, `ctaLabel`/`ctaLink`
-  any app link), written only by `tools/dev/inbox.py` (skill `inbox-messages`). Seen, claimed and deleted live in
-  `profiles.inbox` through `SyncOp.inbox` (a gift is paid once per message on every device). An unopened message
-  dots the Social tab. `lib/state/inbox.dart`, `lib/features/social/inbox.dart`. Deleted with the account.
+- Inbox (owner, 2026-10-16): Social > Inbox shows messages from the owner. Table `messages` (subject, body,
+  `sentAt`, `expiresAt`, rewards, `ctaLabel`/`ctaLink` any app link), row-level permissions only: one player
+  (`user:<id>`), an Appwrite label (`label:early`) or everyone (`users`); the app reads whatever it may read.
+  Written only by `tools/dev/inbox.py` (skill `inbox-messages`, also player labels). Seen, claimed and deleted live
+  in `profiles.inbox` through `SyncOp.inbox` (a gift is paid once per message and player). An unopened message dots
+  the Social tab and the Inbox segment (tab dots stay on the tab being shown until resolved). `lib/state/inbox.dart`,
+  `lib/features/social/inbox.dart`. A player's own rows are deleted with the account.
 - Help (owner, 2026-10-15): Settings > Help > Contact support opens an email to contact@almostapps.eu with
   the version and player id below the message (copies the address when there is no mail app); Send
   feedback writes a `feedback` row (userId, message, appVersion, platform) with no permissions, so only the

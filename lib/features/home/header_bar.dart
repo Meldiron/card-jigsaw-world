@@ -316,8 +316,9 @@ class _TopTabState extends State<_TopTab> {
               children: [
                 // Differentiate without colour: the selected tab is also underlined.
                 Text(widget.item.label, style: TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w600, color: color, letterSpacing: -0.1, decoration: selected && A11y.symbolsOf(context) ? TextDecoration.underline : null, decorationColor: color, decorationThickness: 2)),
-                // Something waits on that tab (as on the floating tab bar): a small cobalt dot.
-                if (widget.item.badge && !selected) ...[
+                // Something waits on that tab (as on the floating tab bar): a small cobalt dot, also on
+                // the tab being shown, until the thing is dealt with.
+                if (widget.item.badge) ...[
                   const SizedBox(width: 6),
                   Container(width: 7, height: 7, decoration: BoxDecoration(color: context.accent, shape: BoxShape.circle)),
                 ],

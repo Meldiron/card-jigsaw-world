@@ -105,17 +105,14 @@ class _MessageRow extends StatelessWidget {
         onTap: () => showMessageSheet(context, m.id),
         child: Container(
           color: c.card,
-          padding: const EdgeInsets.fromLTRB(10, 12, 14, 12),
+          padding: const EdgeInsets.fromLTRB(10, 10, 14, 10),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // The dot of a message not opened yet (with the bold subject, so it never rests on colour).
               SizedBox(
                 width: 20,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 6),
-                  child: unseen ? Center(child: Container(width: 9, height: 9, decoration: BoxDecoration(color: context.accent, shape: BoxShape.circle))) : null,
-                ),
+                child: unseen ? Center(child: Container(width: 9, height: 9, decoration: BoxDecoration(color: context.accent, shape: BoxShape.circle))) : null,
               ),
               Expanded(
                 child: Column(
@@ -127,28 +124,92 @@ class _MessageRow extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(m.subject,
-                              maxLines: 2,
+                              maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(fontSize: TypeSize.body, fontWeight: unseen ? FontWeight.w700 : FontWeight.w500, color: c.textPrimary)),
                         ),
                         const SizedBox(width: 8),
+                        // A gift still waiting: a small gift mark before the time.
+                        if (item.claimable) ...[Icon(AppIcons.gift, size: 13, color: context.accent), const SizedBox(width: 4)],
                         Text(_when(context, m.sentAt), style: TextStyle(fontSize: TypeSize.caption, color: c.textSecondary)),
                       ],
                     ),
-                    const SizedBox(height: 3),
-                    Text(m.body, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: TypeSize.footnote, height: 1.35, color: c.textSecondary)),
-                    if (item.claimable) ...[
-                      const SizedBox(height: 8),
-                      _RewardChips(message: m),
-                    ],
+                    const SizedBox(height: 2),
+                    Text(m.body, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: TypeSize.footnote, color: c.textSecondary)),
                   ],
                 ),
               ),
               const SizedBox(width: 6),
-              Padding(padding: const EdgeInsets.only(top: 3), child: Icon(AppIcons.chevronRight, size: 15, color: c.textTertiary)),
+              Icon(AppIcons.chevronRight, size: 15, color: c.textTertiary),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// A message's gift: what it is, what claiming does, the amounts and the Claim button; once
+/// claimed, a check and where it went.
+class _GiftCard extends StatelessWidget {
+  const _GiftCard({required this.item, required this.onClaim});
+  final InboxItem item;
+  final VoidCallback onClaim;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final claimed = item.claimed;
+    return Container(
+      key: const ValueKey('message-gift'),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+      decoration: BoxDecoration(
+        color: c.accentTint,
+        borderRadius: BorderRadius.circular(Radii.lg),
+        border: Border.all(color: context.accent.withValues(alpha: 0.25)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(color: context.accentFill, shape: BoxShape.circle),
+                child: Icon(AppIcons.gift, size: 18, color: context.onAccent),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('A gift from Carden', style: TextStyle(fontSize: TypeSize.headline, fontWeight: FontWeight.w700, color: c.textPrimary)),
+                    const SizedBox(height: 2),
+                    Text(
+                      claimed ? 'Claimed. It is in your balance, ready for your next pack.' : 'Claim it to add it to your balance. It stays here until you do.',
+                      style: TextStyle(fontSize: TypeSize.footnote, height: 1.35, color: c.textSecondary),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          _RewardChips(message: item.message, large: true),
+          const SizedBox(height: 14),
+          if (claimed)
+            Row(
+              key: const ValueKey('message-claimed'),
+              children: [
+                Icon(AppIcons.checkmarkCircleFill, size: 18, color: c.success),
+                const SizedBox(width: 6),
+                Text('Claimed', style: TextStyle(fontSize: TypeSize.callout, fontWeight: FontWeight.w600, color: c.textPrimary)),
+              ],
+            )
+          else
+            BigButton(key: const ValueKey('message-claim'), label: 'Claim', icon: AppIcons.gift, onTap: onClaim),
+        ],
       ),
     );
   }
@@ -168,7 +229,7 @@ class _RewardChips extends StatelessWidget {
           for (final (currency, amount) in message.reward)
             Container(
               padding: EdgeInsets.symmetric(horizontal: large ? 12 : 9, vertical: large ? 7 : 4),
-              decoration: BoxDecoration(color: context.colors.accentTint, borderRadius: BorderRadius.circular(Radii.pill)),
+              decoration: BoxDecoration(color: large ? context.colors.card : context.colors.accentTint, borderRadius: BorderRadius.circular(Radii.pill)),
               child: Amount(currency: currency, value: amount, size: large ? 18 : 14, fontSize: large ? TypeSize.body : TypeSize.footnote, weight: FontWeight.w700),
             ),
         ],
@@ -253,33 +314,16 @@ class _MessageSheetState extends ConsumerState<_MessageSheet> {
             Text('In your inbox until ${_when(context, m.expiresAt!)}', style: TextStyle(fontSize: TypeSize.footnote, color: c.textTertiary)),
           ],
           if (m.hasReward) ...[
-            const SizedBox(height: 16),
-            SoftCard(
-              padding: Insets.cardCompact,
-              child: Row(
-                children: [
-                  Icon(AppIcons.gift, size: 20, color: context.accent),
-                  const SizedBox(width: 10),
-                  Expanded(child: _RewardChips(message: m, large: true)),
-                  if (item.claimed) ...[
-                    const SizedBox(width: 8),
-                    Icon(AppIcons.checkmarkCircleFill, size: 16, color: c.success),
-                    const SizedBox(width: 4),
-                    Text('Claimed', style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: c.textSecondary)),
-                  ],
-                ],
-              ),
-            ),
+            const SizedBox(height: 18),
+            _GiftCard(item: item, onClaim: () => _claim(m)),
           ],
           const SizedBox(height: 20),
           if (link != null) ...[
             BigButton(key: const ValueKey('message-cta'), label: m.ctaLabel ?? 'Open', kind: ButtonKind.secondary, onTap: () => _openLink(link)),
             const SizedBox(height: 10),
           ],
-          if (item.claimable)
-            BigButton(key: const ValueKey('message-claim'), label: 'Claim', icon: AppIcons.gift, onTap: () => _claim(m))
-          else
-            BigButton(key: const ValueKey('message-close'), label: 'Close', kind: link == null ? ButtonKind.primary : ButtonKind.ghost, onTap: () => Navigator.of(context).pop()),
+          // The gift is claimed in its card; this one closes the message.
+          BigButton(key: const ValueKey('message-close'), label: 'Close', kind: link == null && !item.claimable ? ButtonKind.primary : ButtonKind.ghost, onTap: () => Navigator.of(context).pop()),
           const SizedBox(height: 6),
           Center(
             child: Pressable(

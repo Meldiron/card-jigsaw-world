@@ -424,8 +424,9 @@ class _TabCell extends StatelessWidget {
           children: [
             Icon(selected ? item.activeIcon : item.icon, color: color, size: 23),
             // Something waits on that tab: a small cobalt dot (the one accent), no ring, clear of the
-            // glyph's top-right corner. Not on the tab being shown: its own screen says so.
-            if (item.badge && !selected)
+            // glyph's top-right corner. It stays on the tab being shown until the thing is dealt with
+            // (owner, 2026-10-16).
+            if (item.badge)
               Positioned(
                 right: -6,
                 top: -1,
