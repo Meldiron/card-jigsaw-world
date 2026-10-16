@@ -4,7 +4,7 @@
 
 <img src="docs/images/app-icon.png" width="96" alt="App icon" align="right" />
 
-**Your calm picture puzzle.** Carden (until October 2026 called Card Jigsaw World) is a picture-puzzle game for iOS, Android and the web ([carden.appwrite.network](https://carden.appwrite.network)), built with Flutter and backed by [Appwrite](https://appwrite.io).
+**Your calm picture puzzle.** Carden (until October 2026 called Card Jigsaw World) is a picture-puzzle game for iOS, Android and the web ([play.carden.page](https://play.carden.page); homepage [www.carden.page](https://www.carden.page)), built with Flutter and backed by [Appwrite](https://appwrite.io).
 Every puzzle is a photo cut into cards and shuffled on a board. Tap a card and then where it should go, or drag it there.
 Cards that belong next to each other **snap together anywhere on the board** and move as one group; a card that lands in its true spot **locks** into the picture. Fewer moves earn more stars.
 

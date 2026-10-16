@@ -108,11 +108,13 @@ void main() {
         final appSlash = _parse('carden://$input');
         final legacy = _parse('cardjigsaw://$input');
         final oldSite = _parse('https://card-jigsaw-world.appwrite.network$input');
+        final firstCarden = _parse('https://carden.appwrite.network$input');
         expect(web, bare, reason: 'web $input');
         expect(app, bare, reason: 'carden:/$input');
         expect(appSlash, bare, reason: 'carden://$input');
         expect(legacy, bare, reason: 'cardjigsaw://$input (the first name)');
         expect(oldSite, bare, reason: 'the old web address $input');
+        expect(firstCarden, bare, reason: 'the first Carden web address $input');
         // Sharing round trips: the address a link shares opens the same screen.
         expect(_parse(bare!.webUrl.toString()), bare, reason: 'webUrl $input');
         expect(_parse(bare.appUrl.toString()), bare, reason: 'appUrl $input');

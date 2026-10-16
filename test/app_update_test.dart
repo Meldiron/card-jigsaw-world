@@ -94,7 +94,7 @@ void main() {
     });
 
     test('the version file is read from the site root past every cache', () {
-      final url = Uri.parse(WebUpdateSource.versionUrl(Uri.parse('https://carden.appwrite.network/library/pack/x?y=1#z'), now));
+      final url = Uri.parse(WebUpdateSource.versionUrl(Uri.parse('https://play.carden.page/library/pack/x?y=1#z'), now));
       expect(url.path, '/app-version.json');
       expect(url.queryParameters['t'], '${now.millisecondsSinceEpoch}');
       expect(url.fragment, isEmpty);

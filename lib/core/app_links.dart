@@ -1,7 +1,8 @@
 /// Links into the game (docs/deep-links.md). One set of paths works everywhere:
 ///
-/// - the web site: `https://carden.appwrite.network/library/pack/pack-owls` (the old address,
-///   card-jigsaw-world.appwrite.network, serves the same site and reads the same paths)
+/// - the web site: `https://play.carden.page/library/pack/pack-owls` (the earlier addresses,
+///   carden.appwrite.network and card-jigsaw-world.appwrite.network, serve the same site and read the
+///   same paths)
 /// - the app's own scheme: `carden://library/pack/pack-owls` (the widget, In-App Events); the scheme
 ///   of the game's first name, `cardjigsaw://`, still opens the same screens
 /// - universal links: the web address opens the iPhone app where it is installed
@@ -34,7 +35,7 @@ class AppLink {
   final Uri location;
   final LinkKind kind;
 
-  static const webOrigin = 'https://carden.appwrite.network';
+  static const webOrigin = 'https://play.carden.page';
   static const scheme = 'carden';
 
   /// The scheme the game had as Card Jigsaw World; links made with it keep working.

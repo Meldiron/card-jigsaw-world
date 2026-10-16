@@ -7,11 +7,14 @@ skills under `.claude/skills/` hold the detailed workflows.
 **Name** (owner, 2026-10-15): the game is **Carden** ("Carden: Your calm picture puzzle"; App Store name
 "Carden: Calm Picture Puzzle", the 30-character limit). It was Card Jigsaw World until build 118. Renamed: app
 and Home Screen name, Flutter package `carden` (`CardenApp`), link scheme `carden://`, web address
-https://carden.appwrite.network, repo `Meldiron/carden`, Appwrite project/site/platform names, store copy. Kept on
+https://play.carden.page (domain carden.page bought on Appwrite, 2026-10-16), repo `Meldiron/carden`, Appwrite
+project/site/platform names, store copy. Kept on
 purpose (old builds, Apple records, data): bundle id `com.matejbaco.cardjigsawworld`, the Services ID and product
 ids, the Appwrite project/site/database ids (`card-jigsaw-world` site id, database `cjw`), the `CJW_` dart-defines,
-the old scheme `cardjigsaw://` and the old address card-jigsaw-world.appwrite.network (both still open the game;
-web guests keep their saves per address), and the local folder and `~/.local/share/card-jigsaw-world`.
+the old scheme `cardjigsaw://` and the old addresses carden.appwrite.network and card-jigsaw-world.appwrite.network
+(all still open the game; web guests keep their saves per address), and the local folder and
+`~/.local/share/card-jigsaw-world`. The homepage (repo `Meldiron/carden-website`) is https://www.carden.page;
+carden.page redirects there.
 
 ## Skills (load them when the task matches)
 
@@ -256,8 +259,9 @@ web guests keep their saves per address), and the local folder and `~/.local/sha
   secret variable `APPLE_SIGNIN_KEY` (contents of `AuthKey_2QJPJFW8JW.p8`, set 2026-10-15) revokes Sign in
   with Apple tokens; without it the revoke is skipped and logged; it also deletes the player's reports and
   blocks). Deploy functions with the Appwrite CLI (`appwrite functions create-deployment --code functions/<name>`). There is no image proxy: pictures load straight from Storage on every platform.
-- Site `card-jigsaw-world` (named Carden) → https://carden.appwrite.network, and the old address
-  https://card-jigsaw-world.appwrite.network still serves it (static, fallback index.html),
+- Site `card-jigsaw-world` (named Carden) → https://play.carden.page (proxy rule; web platform `carden-play`
+  allows the origin), and the earlier addresses https://carden.appwrite.network and
+  https://card-jigsaw-world.appwrite.network still serve it (static, fallback index.html),
   deployed by `tools/dev/deploy-web.sh` (chunked upload). Web build hides purchases, gift codes,
   widgets. Apple sign-in on web (configured 2026-10-13): Services ID `com.matejbaco.cardjigsawworld.signin`,
   key `secrets/AuthKey_2QJPJFW8JW.p8`, team `C24QP73SQM`. **Web OAuth must use the token flow** (owner

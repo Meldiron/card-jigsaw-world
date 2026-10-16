@@ -33,7 +33,7 @@ Future<void> settle(WidgetTester tester, [int ms = 1500]) async {
   }
 }
 
-const _web = 'https://carden.appwrite.network';
+const _web = 'https://play.carden.page';
 const _owner = '6acbbf8a8898f585d3ca'; // a public profile to open and to add as a friend
 
 void main() {

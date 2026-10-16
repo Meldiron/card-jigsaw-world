@@ -59,7 +59,7 @@ Run scripts with the venv python that has pyjwt/requests (see tools/store/README
 or plain python3 with those packages installed. Credentials live in `secrets/`.
 
 ## Every build also updates the web site
-After `tools/dev/testflight.sh` always run `tools/dev/deploy-web.sh` so https://carden.appwrite.network ships the same commit (owner rule, 2026-10-12). Both can run in parallel only if the Flutter builds do not overlap; run the web deploy after the device/TestFlight build finishes.
+After `tools/dev/testflight.sh` always run `tools/dev/deploy-web.sh` so https://play.carden.page ships the same commit (owner rule, 2026-10-12). Both can run in parallel only if the Flutter builds do not overlap; run the web deploy after the device/TestFlight build finishes.
 
 ## Per-build "What to Test"
 Before each build rewrite `store/metadata/en-US/testflight_build_notes.txt` with a TL;DR of what

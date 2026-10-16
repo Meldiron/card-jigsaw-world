@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Build the web app and deploy it to Appwrite Sites
-# (site "card-jigsaw-world" -> https://carden.appwrite.network).
+# (site "card-jigsaw-world" -> https://play.carden.page; carden.appwrite.network serves it too).
 # The site is a static adapter, so we upload the finished build/web folder.
 #   tools/dev/deploy-web.sh            build + deploy + wait until live
 #   tools/dev/deploy-web.sh --no-build deploy the existing build/web
@@ -31,7 +31,7 @@ echo "deployment $ID"
 for i in $(seq 1 60); do
   S=$(curl -sS "$EP/sites/$SITE/deployments/$ID" -H "X-Appwrite-Project: $PROJECT" -H "X-Appwrite-Key: $KEY" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("status"))')
   case "$S" in
-    ready) echo "live: https://carden.appwrite.network"; exit 0 ;;
+    ready) echo "live: https://play.carden.page"; exit 0 ;;
     failed) echo "build failed; see Appwrite console > Sites > $SITE > deployment $ID" >&2; exit 1 ;;
     *) sleep 5 ;;
   esac
