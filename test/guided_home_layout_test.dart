@@ -1,6 +1,8 @@
 // The guided start's Home (lib/state/first_steps.dart) at the iPhone SE, a Pro and a website window,
 // in both themes, at the default and the Largest text size (200%): it renders and scrolls to the end
 // without a layout error, before the first picture and after it. Also Profile's locked achievements.
+import 'dart:async';
+
 import 'package:appwrite/models.dart' as models;
 import 'package:carden/core/theme/app_theme.dart';
 import 'package:carden/data/local_store.dart';
@@ -14,6 +16,7 @@ import 'package:carden/state/profile.dart';
 import 'package:carden/state/progress.dart';
 import 'package:carden/state/settings.dart';
 import 'package:carden/state/unlocks.dart';
+import 'package:carden/widgets/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -145,4 +148,35 @@ void main() {
       expect(errors, isEmpty);
     });
   }
+
+  testWidgets('while the catalogue loads, the top of the guided Home shows the loading frame', (tester) async {
+    tester.view.physicalSize = const Size(402, 874);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    SharedPreferences.setMockInitialValues({'firstSteps': '{"guided":true}'});
+    final store = await LocalStore.open();
+    final never = Completer<List<Puzzle>>();
+    final router = GoRouter(initialLocation: '/home', routes: [GoRoute(path: '/home', builder: (_, _) => const HomeScreen())]);
+    await tester.pumpWidget(ProviderScope(
+      overrides: [
+        localStoreProvider.overrideWithValue(store),
+        authProvider.overrideWith(_NoAuth.new),
+        profileProvider.overrideWith(_Profile.new),
+        progressProvider.overrideWith(() => _Rows(const {})),
+        packsProvider.overrideWith((ref) async => packs),
+        allPuzzlesProvider.overrideWith((ref) => never.future),
+        eventsProvider.overrideWith((ref) async => const <GameEvent>[]),
+        pendingUnlockIntroProvider.overrideWithValue(null),
+      ],
+      child: MaterialApp.router(theme: AppTheme.dark(), routerConfig: router),
+    ));
+    await tester.pump(const Duration(milliseconds: 300));
+    final more = tester.getTopLeft(find.byKey(const ValueKey('more-to-come'))).dy;
+    final loader = find.byType(Loader).evaluate().map((e) => tester.getTopLeft(find.byWidget(e.widget)).dy).where((y) => y < more);
+    expect(loader, isNotEmpty, reason: 'the loading frame sits above "More opens as you play", where the picture will be');
+    expect(find.descendant(of: find.byKey(const ValueKey('more-to-come')), matching: find.byType(Loader)), findsNothing, reason: 'no spinner under the blur');
+    never.complete(pictures);
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('next-step-first')), findsOneWidget, reason: 'then the first picture takes its place');
+  });
 }

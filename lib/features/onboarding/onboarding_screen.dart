@@ -11,6 +11,7 @@ import '../../core/a11y.dart';
 import '../../core/theme/tokens.dart';
 import '../../game/board.dart';
 import '../../game/game_controller.dart';
+import '../../state/catalog.dart';
 import '../../state/first_steps.dart';
 import '../../state/profile.dart';
 import '../../state/settings.dart';
@@ -59,13 +60,26 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     super.dispose();
   }
 
+  /// "Start playing" is waiting for the catalogue (a slow first visit): the button shows a spinner.
+  bool _starting = false;
+
   /// "Start playing": a new player goes straight into a first board (Home waits under it, for
-  /// when they leave it); anyone else, or a catalogue not in yet, lands on Home.
-  void _finish() {
-    ref.read(settingsProvider.notifier).setOnboarded();
+  /// when they leave it); anyone else lands on Home. A catalogue still loading (a slow first visit
+  /// on the web) is waited for up to 10 seconds, so the first board is not skipped.
+  Future<void> _finish() async {
+    if (_starting) return;
     final router = GoRouter.of(context);
+    bool newPlayer() => ref.read(firstStepsProvider).firstBoard && ref.read(solvedCountProvider) == 0 && (ref.read(profileProvider).value?.level ?? 1) <= 1;
+    if (ref.read(firstBoardProvider) == null && newPlayer()) {
+      setState(() => _starting = true);
+      try {
+        await ref.read(allPuzzlesProvider.future).timeout(const Duration(seconds: 10));
+      } catch (_) {}
+      if (!mounted) return;
+    }
+    ref.read(settingsProvider.notifier).setOnboarded();
     final first = ref.read(firstBoardProvider);
-    final play = first != null && ref.read(firstStepsProvider).firstBoard && ref.read(solvedCountProvider) == 0 && (ref.read(profileProvider).value?.level ?? 1) <= 1;
+    final play = first != null && newPlayer();
     router.go('/home');
     if (play) WidgetsBinding.instance.addPostFrameCallback((_) => router.push(first.route));
   }
@@ -172,6 +186,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                       BigButton(
                         label: last ? 'Start playing' : 'Continue',
                         icon: last ? AppIcons.playFill : null,
+                        loading: last && _starting,
                         onTap: () {
                           if (last) {
                             _finish();
@@ -312,7 +327,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                         const SizedBox(height: 24),
                         Row(
                           children: [
-                            SizedBox(width: 240, child: BigButton(label: last ? 'Start playing' : 'Continue', icon: last ? AppIcons.playFill : null, onTap: next)),
+                            SizedBox(width: 240, child: BigButton(label: last ? 'Start playing' : 'Continue', icon: last ? AppIcons.playFill : null, loading: last && _starting, onTap: next)),
                             const SizedBox(width: 12),
                             // "Start playing" already finishes on the last page.
                             if (!last)

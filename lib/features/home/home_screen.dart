@@ -90,7 +90,17 @@ class HomeScreen extends ConsumerWidget {
     final dailyHero = daily == null
         ? _HeroPlaceholder(failed: catalogFailed, onRetry: retryCatalog, height: heroHeight)
         : _DailyHero(puzzle: daily, progress: progress[daily.id], height: heroHeight);
-    final Widget hero = showDaily ? dailyHero : NextStepCard(heroHeight: heroHeight);
+    // Before the daily puzzle opens the next step is the picture on top; while the catalogue loads
+    // (or could not), its place shows the loading frame (or Try again), never an empty top.
+    final hasNext = ref.watch(nextStepProvider) != null;
+    final Widget hero = showDaily
+        ? dailyHero
+        : hasNext
+            ? NextStepCard(heroHeight: heroHeight)
+            : !puzzles.hasValue || catalogFailed
+                ? _HeroPlaceholder(failed: catalogFailed, onRetry: retryCatalog, height: heroHeight)
+                // The first board already started: Continue (right below) is the way on.
+                : const SizedBox.shrink();
     Widget? resume;
     if (inProgress.isNotEmpty) {
       final p = _closestToDone(inProgress, progress);
@@ -153,7 +163,8 @@ class HomeScreen extends ConsumerWidget {
     final libraryPacks = (packs.value ?? const <Pack>[]).where((p) => !p.isDaily && !p.hasWindow).take(3).toList();
     final preview = Column(
       children: [
-        if (!showDaily) ...[dailyHero, const SizedBox(height: 12)],
+        // Today's picture once it is in (no spinner under the blur).
+        if (!showDaily && daily != null) ...[dailyHero, const SizedBox(height: 12)],
         if (!showWheel || !showPiggy) ...[tiles(wheel: !showWheel, piggy: !showPiggy), const SizedBox(height: 12)],
         if (!open.contains(Reveal.streak) && streakCard != null) ...[streakCard, const SizedBox(height: 12)],
         if (!showPacks && libraryPacks.isNotEmpty) ...[
