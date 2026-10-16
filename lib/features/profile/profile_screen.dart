@@ -207,21 +207,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         child: _ClaimAllCard(ready: [for (final a in achievements) if (a.done) a]),
       ),
     );
-    final Widget moreCard = SoftCard(
-      padding: EdgeInsets.zero,
-      child: Column(
-        children: [
-          ListRow(icon: AppIcons.photo, title: 'My Puzzles', subtitle: 'Create puzzles from your photos', onTap: () => context.go('/profile/my-puzzles')),
-          Divider(height: 1, color: c.stroke, indent: 62),
-          ListRow(icon: AppIcons.profile, title: 'Account', subtitle: isGuest ? 'Guest · sign in to save progress' : 'Signed in', onTap: () => context.push('/account')),
-          Divider(height: 1, color: c.stroke, indent: 62),
-          ListRow(icon: AppIcons.bagFill, title: 'Store', subtitle: 'Coins, tickets, hints and VIP', onTap: () => context.push('/store')),
-          Divider(height: 1, color: c.stroke, indent: 62),
-          ListRow(icon: AppIcons.gearAltFill, title: 'Settings', subtitle: 'Theme, sound, haptics', onTap: () => context.go('/profile/settings')),
-        ],
-      ),
-    );
-
     return Scaffold(
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
@@ -256,8 +241,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             children: [
                               profileCard,
                               if (isGuest) ...[const SizedBox(height: 12), saveButton],
-                              const SizedBox(height: 16),
-                              moreCard,
                             ],
                           ),
                         ),
@@ -337,13 +320,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     ),
                   ),
                 ],
-                const SliverToBoxAdapter(child: SectionHeader(title: 'More')),
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: moreCard,
-                  ),
-                ),
               ],
             ],
           ),

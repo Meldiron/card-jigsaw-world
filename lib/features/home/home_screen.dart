@@ -146,7 +146,7 @@ class HomeScreen extends ConsumerWidget {
     final levelCard = profile == null ? null : _LevelCard(profile: profile);
     final level = showWheel ? levelCard : null;
     final guest = isGuest && open.contains(Reveal.saveProgress) ? _GuestSaveCard(onSave: () => context.push('/account')) : null;
-    final showPacks = open.contains(Reveal.packs);
+    final showPacks = open.contains(Reveal.library);
     // The next step as a card under today's picture (before it opens, the next step is the picture).
     final next = calm && showDaily ? const NextStepCard() : null;
     // What the guided start still keeps back, drawn blurred under "More opens as you play".

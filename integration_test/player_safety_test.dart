@@ -14,6 +14,7 @@ import 'package:carden/core/sfx.dart';
 import 'package:carden/data/local_store.dart';
 import 'package:carden/features/onboarding/onboarding_screen.dart';
 import 'package:carden/router.dart';
+import 'package:carden/widgets/icons.dart';
 import 'package:carden/state/auth.dart';
 import 'package:carden/state/first_steps.dart';
 import 'package:carden/state/rewards.dart';
@@ -166,10 +167,15 @@ void main() {
     expect((await c.read(blockedPlayersProvider.future)).map((b) => b.playerId), [target.id]);
     router.go('/profile');
     await settle(tester, 2500);
-    final profileList = find.byWidgetPredicate((w) => w is Scrollable && w.axisDirection == AxisDirection.down).first;
-    await tester.dragUntilVisible(find.text('Account'), profileList, const Offset(0, -250));
+    // Profile > Settings (the gear) > Account.
+    await tester.tap(find.byIcon(AppIcons.gearAltFill).first, warnIfMissed: false);
+    await settle(tester, 2000);
+    final settingsList = find.byWidgetPredicate((w) => w is Scrollable && w.axisDirection == AxisDirection.down).last;
+    final accountRow = find.textContaining(RegExp('Manage account|Sign in or create account'));
+    await tester.dragUntilVisible(accountRow, settingsList, const Offset(0, -250));
     await settle(tester, 800);
-    await tapText(tester, 'Account', ms: 2500);
+    await tester.tap(accountRow.first, warnIfMissed: false);
+    await settle(tester, 2500);
     final accountList = find.byWidgetPredicate((w) => w is Scrollable && w.axisDirection == AxisDirection.down).last;
     await tester.dragUntilVisible(find.byKey(const ValueKey('account-delete')), accountList, const Offset(0, -300));
     await settle(tester, 1000);

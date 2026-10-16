@@ -151,12 +151,14 @@ carden.page redirects there.
   `packs.puzzlesUpdatedAt` whenever it changes a pack's puzzles (`finalize_pack`): that is how devices
   and the snapshot see removed puzzles. Its duplicate check uses `catalog.sync()`, not a full dump.
 - **First steps** (owner, 2026-10-16; `docs/first-steps.md`): new players go from the welcome pages straight into a
-  first board (Pink Sands Beach, 3x3) with one hint line per step, then a calm Home (the next picture on top, Continue,
-  the rest blurred under "More opens as you play" with Unlock anyway). Everything opens by pictures solved (`Reveal` in
-  `lib/state/first_steps.dart`): daily puzzle 5, daily gift 10, Lucky Wheel 15, Quests 20, achievements 25, piggy bank
-  30, live events 35, Social 50 (packs on Home 2, Quick play 3, offers 20); nothing is announced when it opens.
-  Locked tabs are faded with a lock and offer Unlock anyway; one-time tips in the Library, the board picker and
-  "Stuck?". Players from before have no record and see everything. Integration suites call
+  first board (Pink Sands Beach, 3x3) with one hint line per step, then a calm Home (the suggested picture on top, the
+  only thing to play until the Library opens; the rest blurred under "More opens as you play"). Only the first picture
+  counts until Home is first on screen, then every one (`countedFinishesProvider`). Everything opens by pictures
+  counted (`Reveal` in `lib/state/first_steps.dart`): Library tab and Quick play 3, daily puzzle 5, daily gift 10, Lucky
+  Wheel 15, Quests 20, achievements 25, piggy bank 30, live events 35, Social 50 (offers 20); nothing is announced.
+  Quests and achievements count only pictures finished after they open (`countsFromProvider`). Locked tabs and
+  sections say "N more pictures" and offer Unlock anyway, which always asks "Are you sure?" (Home's first lets the
+  player pick what to unlock). Players from before have no record and see everything. Integration suites call
   `FirstSteps.skipFor(store)`; `integration_test/first_steps_test.dart` plays the path.
 - `lib/state/`: `profile.dart` (`Economy` constants, VIP, piggy 5/picture up to 500), `rewards.dart`
   (level curve `LevelRewards.levelForXp`, daily 3 + 1 VIP / weekly 5 + 1 VIP quests), `achievements.dart`,

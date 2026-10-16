@@ -133,7 +133,7 @@ class MoreToComeCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final upcoming = ref.watch(upcomingRevealsProvider);
     if (upcoming.isEmpty) return const SizedBox.shrink();
-    final solved = ref.watch(solvedCountProvider);
+    final counted = ref.watch(countedSolvesProvider);
     final c = context.colors;
     final shown = upcoming.take(4).toList();
     return Stack(
@@ -194,8 +194,7 @@ class MoreToComeCard extends ConsumerWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Carden starts simple, so there is time to settle in. The rest opens as you solve pictures; '
-                      'you have solved ${solved == 1 ? '1 picture' : '$solved pictures'} so far.',
+                      'Carden starts simple, so there is time to settle in. The rest opens a little at a time as you solve pictures.',
                       style: TextStyle(fontSize: TypeSize.footnote, height: 1.35, color: c.textSecondary),
                     ),
                     const SizedBox(height: 12),
@@ -212,7 +211,7 @@ class MoreToComeCard extends ConsumerWidget {
                               crossAxisAlignment: WrapCrossAlignment.center,
                               children: [
                                 Text(r.label, style: TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w600, color: c.textPrimary)),
-                                Chip2(label: r.short),
+                                Chip2(label: r.more(counted)),
                               ],
                             ),
                             const SizedBox(height: 2),
@@ -228,8 +227,7 @@ class MoreToComeCard extends ConsumerWidget {
                       height: 44,
                       onTap: () {
                         Haptics.light();
-                        ref.read(firstStepsProvider.notifier).showEverything();
-                        showToast(context, 'Everything is open. Settings > Guided start brings the steps back.', icon: AppIcons.unlock);
+                        unlockFromHome(context, ref);
                       },
                     ),
                   ],
@@ -251,6 +249,7 @@ class LockedSectionCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final c = context.colors;
+    final counted = ref.watch(countedSolvesProvider);
     return SoftCard(
       key: ValueKey('locked-${reveal.name}'),
       padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
@@ -266,7 +265,7 @@ class LockedSectionCard extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(reveal.opensTitle, style: Theme.of(context).textTheme.titleMedium),
+                    Text(reveal.opensTitle(counted), style: Theme.of(context).textTheme.titleMedium),
                     const SizedBox(height: 2),
                     Text(reveal.blurb, style: TextStyle(fontSize: TypeSize.footnote, height: 1.3, color: c.textSecondary)),
                   ],
@@ -280,7 +279,7 @@ class LockedSectionCard extends ConsumerWidget {
             label: 'Unlock anyway',
             kind: ButtonKind.secondary,
             height: 40,
-            onTap: () => ref.read(firstStepsProvider.notifier).openEarly(reveal),
+            onTap: () => confirmUnlock(context, ref, [reveal]),
           ),
         ],
       ),
@@ -288,17 +287,161 @@ class LockedSectionCard extends ConsumerWidget {
   }
 }
 
-/// A locked tab was tapped: what it is, when it opens, and "Unlock anyway". True when it opened.
+/// A locked tab was tapped: what it is, when it opens, and "Unlock anyway" (which asks first). True
+/// when it opened.
 Future<bool> askUnlockEarly(BuildContext context, WidgetRef ref, Reveal r) async {
   final yes = await showAppAlert(
     context,
-    title: r.opensTitle,
+    title: r.opensTitle(ref.read(countedSolvesProvider)),
     message: '${r.blurb} ${r.plural ? 'They wait' : 'It waits'} until then to keep the start simple.',
     confirmLabel: 'Unlock anyway',
     cancelLabel: 'Not now',
   );
-  if (yes) ref.read(firstStepsProvider.notifier).openEarly(r);
-  return yes;
+  if (!yes || !context.mounted) return false;
+  return confirmUnlock(context, ref, [r]);
+}
+
+/// "Unlock anyway" on Home: with more than one thing still to come, a sheet lists them with a
+/// check each, only the nearest picked (owner, 2026-10-16); then the confirmation.
+Future<void> unlockFromHome(BuildContext context, WidgetRef ref) async {
+  final upcoming = ref.read(upcomingRevealsProvider);
+  if (upcoming.isEmpty) return;
+  final picked = upcoming.length == 1
+      ? upcoming
+      : await showAppSheet<List<Reveal>>(context, scrollable: true, builder: (_) => _UnlockPicker(upcoming: upcoming, counted: ref.read(countedSolvesProvider)));
+  if (picked == null || picked.isEmpty || !context.mounted) return;
+  final everything = picked.length == upcoming.length;
+  if (await confirmUnlock(context, ref, picked, everything: everything) && context.mounted) {
+    showToast(
+      context,
+      everything ? 'Everything is open. Settings > Guided start brings the steps back.' : '${_names(picked)} ${picked.length == 1 && !picked.first.plural ? 'is' : 'are'} open',
+      icon: AppIcons.unlock,
+    );
+  }
+}
+
+String _names(List<Reveal> rs) => rs.length == 1 ? rs.first.label : '${rs.take(rs.length - 1).map((r) => r.label).join(', ')} and ${rs.last.label}';
+
+/// Every "Unlock anyway" asks first (owner, 2026-10-16) and says what waiting gives. [everything]
+/// opens all that is left (Home's list with every item picked). True when it opened.
+Future<bool> confirmUnlock(BuildContext context, WidgetRef ref, List<Reveal> picked, {bool everything = false}) async {
+  final counted = ref.read(countedSolvesProvider);
+  final one = picked.length == 1 ? picked.first : null;
+  final yes = await showAppAlert(
+    context,
+    title: 'Are you sure?',
+    message: '${one != null ? '${one.label} ${one.plural ? 'open' : 'opens'} by ${one.plural ? 'themselves' : 'itself'} after ${one.more(counted)}.' : 'They open by themselves as you solve pictures.'} '
+        'Waiting keeps the start calm: one new thing at a time, each when you are ready for it, and quests and '
+        'achievements count only from the moment they open.',
+    confirmLabel: everything ? 'Unlock everything' : one != null ? 'Unlock ${one.label}' : 'Unlock ${picked.length}',
+    cancelLabel: 'Keep waiting',
+  );
+  if (!yes) return false;
+  final steps = ref.read(firstStepsProvider.notifier);
+  if (everything) {
+    steps.showEverything();
+  } else {
+    for (final r in picked) {
+      steps.openEarly(r);
+    }
+  }
+  return true;
+}
+
+/// The sheet behind Home's "Unlock anyway": what is still to come, each with a check (the nearest
+/// picked), and Unlock, which asks once more.
+class _UnlockPicker extends StatefulWidget {
+  const _UnlockPicker({required this.upcoming, required this.counted});
+  final List<Reveal> upcoming;
+  final int counted;
+
+  @override
+  State<_UnlockPicker> createState() => _UnlockPickerState();
+}
+
+class _UnlockPickerState extends State<_UnlockPicker> {
+  late final Set<Reveal> _picked = {widget.upcoming.first};
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final picked = [for (final r in widget.upcoming) if (_picked.contains(r)) r];
+    return Padding(
+      key: const ValueKey('unlock-picker'),
+      padding: const EdgeInsets.fromLTRB(20, 4, 20, 16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const SheetHeader(title: 'Unlock early', subtitle: 'Pick what to open now. The rest keeps opening as you solve pictures.'),
+          const SizedBox(height: 12),
+          SoftCard(
+            padding: EdgeInsets.zero,
+            child: Column(
+              children: [
+                for (var i = 0; i < widget.upcoming.length; i++) ...[
+                  if (i > 0) Divider(height: 1, color: c.stroke, indent: 52),
+                  _row(context, widget.upcoming[i]),
+                ],
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          BigButton(
+            key: const ValueKey('unlock-picked'),
+            label: picked.isEmpty ? 'Pick something to unlock' : picked.length == widget.upcoming.length ? 'Unlock everything' : picked.length == 1 ? 'Unlock ${picked.first.label}' : 'Unlock ${picked.length}',
+            onTap: picked.isEmpty ? null : () => Navigator.of(context).pop(picked),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _row(BuildContext context, Reveal r) {
+    final c = context.colors;
+    final on = _picked.contains(r);
+    return Semantics(
+      checked: on,
+      button: true,
+      label: '${r.label}, opens after ${r.more(widget.counted)}',
+      excludeSemantics: true,
+      child: Pressable(
+        key: ValueKey('unlock-pick-${r.name}'),
+        onTap: () => setState(() => on ? _picked.remove(r) : _picked.add(r)),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 1),
+                child: Icon(on ? AppIcons.checkmarkCircleFill : AppIcons.circle, size: 24, color: on ? context.accent : c.textTertiary),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 4,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        Text(r.label, style: TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w600, color: c.textPrimary)),
+                        Chip2(label: r.more(widget.counted)),
+                      ],
+                    ),
+                    const SizedBox(height: 2),
+                    Text(r.blurb, style: TextStyle(fontSize: TypeSize.footnote, height: 1.3, color: c.textSecondary)),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 /// A tip said once, where it matters (the Library, the board picker), with a close.

@@ -137,94 +137,155 @@ void main() {
     expect(c.read(settingsProvider).tutorialSeen, isTrue);
     await shot(tester, 'fs_04_tools');
 
-    // 5. Finish: the way out is Home.
+    // 5. Finish: the way out is Home, but the player plays on with Next puzzle first. That second
+    //    picture does not count: until Home is reached, only the first board does.
     await solve(tester);
     await settle(tester, 4000);
     expect(find.text('Home'), findsWidgets);
     await shot(tester, 'fs_05_complete');
+    await tapText(tester, 'Next puzzle', ms: 6000);
+    expect(find.byType(GameScreen), findsOneWidget);
+    await solve(tester);
+    await settle(tester, 4000);
+    expect(c.read(solvedCountProvider), 2);
+    expect(c.read(countedSolvesProvider), 1, reason: 'only the first board counts before Home');
     await tapKey(tester, 'completion-back', ms: 3500);
+    expect(c.read(firstStepsProvider).homeAt, isNotNull, reason: 'Home reached: from now on every picture counts');
+    expect(shown('unlock-try'), isFalse, reason: 'level 2 opened Squares, and nothing pops up about it');
 
-    // 6. A calm Home: the next picture on top, the rest blurred below; no Just opened card, no Quick
-    //    play, pack rows or daily puzzle yet; Quests and Social locked.
+    // 6. A calm Home: the next picture on top (the only thing to play), the rest blurred below; no
+    //    Quick play, pack rows or daily puzzle; Library, Quests and Social locked.
     expect(find.byType(GameScreen), findsNothing);
     expect(find.textContaining('Just opened'), findsNothing);
-    expect(shown('next-step-pack'), isTrue);
+    expect(find.byWidgetPredicate((w) => w.key is ValueKey<String> && (w.key! as ValueKey<String>).value.startsWith('next-step-')), findsWidgets, reason: 'the suggested picture leads Home');
     expect(shown('home-quick-play'), isFalse);
     expect(find.text('Featured packs'), findsNothing);
-    expect(shown('tab-lock-Quests') && shown('tab-lock-Social'), isTrue);
+    expect(shown('tab-lock-Library') && shown('tab-lock-Quests') && shown('tab-lock-Social'), isTrue);
     await shot(tester, 'fs_06_home');
     await scrollTo(tester, find.byKey(const ValueKey('more-to-come')));
     await tester.ensureVisible(find.byKey(const ValueKey('unlock-anyway')));
     await settle(tester, 600);
+    expect(find.text('2 more pictures'), findsWidgets, reason: 'the Library chip says how many are left');
     await shot(tester, 'fs_07_more_to_come');
     await tester.drag(find.byType(Scrollable).first, const Offset(0, 3000));
     await settle(tester, 800);
 
-    // 7. A locked tab says when it opens; Not now keeps it closed.
+    // 7. A locked tab says how many pictures are left; Not now keeps it closed.
     await tapTab(tester, 'Quests', ms: 1200);
-    expect(find.text('Quests open after 20 pictures'), findsOneWidget);
+    expect(find.text('Quests open after 19 more pictures'), findsOneWidget);
     await shot(tester, 'fs_08_locked_tab');
     await tester.tap(find.text('Not now').last, warnIfMissed: false);
     await settle(tester, 1000);
     expect(shown('tab-lock-Quests'), isTrue);
 
-    // 8. Unlock anyway on Social opens that tab only.
-    await tapTab(tester, 'Social', ms: 1200);
-    expect(find.text('Social opens after 50 pictures'), findsOneWidget);
-    // The alert's button (Home's own "Unlock anyway" is built under the alert).
+    // 8. Unlock anyway asks first; Keep waiting keeps the Library closed.
+    await tapTab(tester, 'Library', ms: 1200);
+    expect(find.text('Library opens after 2 more pictures'), findsOneWidget);
     await tester.tap(find.text('Unlock anyway').last, warnIfMissed: false);
+    await settle(tester, 1200);
+    expect(find.text('Are you sure?'), findsOneWidget);
+    await shot(tester, 'fs_08b_are_you_sure');
+    await tester.tap(find.text('Keep waiting').last, warnIfMissed: false);
+    await settle(tester, 1000);
+    expect(shown('tab-lock-Library'), isTrue);
+
+    // 9. Unlock anyway, then yes, opens Social only.
+    await tapTab(tester, 'Social', ms: 1200);
+    expect(find.text('Social opens after 49 more pictures'), findsOneWidget);
+    await tester.tap(find.text('Unlock anyway').last, warnIfMissed: false);
+    await settle(tester, 1200);
+    await tester.tap(find.text('Unlock Social').last, warnIfMissed: false);
     await settle(tester, 2500);
-    expect(find.text('Social'), findsWidgets);
     expect(shown('tab-lock-Social'), isFalse);
-    expect(shown('tab-lock-Quests'), isTrue);
+    expect(shown('tab-lock-Quests') && shown('tab-lock-Library'), isTrue);
     await shot(tester, 'fs_09_social_open');
 
-    // 8b. Quests with Unlock anyway: the quests are there, live events wait (35 pictures).
+    // 10. Quests opened early count from now: the pictures so far do not count; live events wait.
     await tapTab(tester, 'Quests', ms: 1200);
     await tester.tap(find.text('Unlock anyway').last, warnIfMissed: false);
+    await settle(tester, 1200);
+    await tester.tap(find.text('Unlock Quests').last, warnIfMissed: false);
     await settle(tester, 2500);
+    expect(find.textContaining('0 of 10'), findsWidgets, reason: 'Solve 10 puzzles this week starts at 0');
+    await shot(tester, 'fs_09b_quests_from_now');
     await scrollTo(tester, find.byKey(const ValueKey('locked-liveEvents')));
-    expect(find.text('Live events open after 35 pictures'), findsOneWidget);
-    await shot(tester, 'fs_09b_quests_events_locked');
+    expect(find.text('Live events open after 34 more pictures'), findsOneWidget);
 
-    // 9. The Library's one-time tip; no daily months yet.
-    await tapTab(tester, 'Library', ms: 2500);
-    expect(shown('tip-library'), isTrue);
-    expect(find.text('Daily'), findsNothing, reason: 'the Daily chip waits for 5 pictures');
-    await shot(tester, 'fs_10_library_tip');
-    await tapKey(tester, 'tip-library-close', ms: 800);
-    expect(shown('tip-library'), isFalse);
+    // 11. Two more pictures, each from Home's suggestion, the board picker's tip the first time.
+    Future<void> playSuggested(String name) async {
+      await tapTab(tester, 'Home', ms: 2000);
+      await tester.drag(find.byType(Scrollable).first, const Offset(0, 3000));
+      await settle(tester, 800);
+      final step = find.byWidgetPredicate((w) => w.key is ValueKey<String> && (w.key! as ValueKey<String>).value.startsWith('next-step-'));
+      expect(step, findsWidgets, reason: 'Home suggests the next picture');
+      await tester.tap(step.first, warnIfMissed: false);
+      await settle(tester, 3500);
+      expect(find.byType(DifficultyScreen), findsOneWidget);
+      if (name == 'second') {
+        expect(shown('tip-board'), isTrue);
+        await shot(tester, 'fs_11_board_tip');
+      }
+      await tester.tap(find.textContaining('· Play').first, warnIfMissed: false);
+      await settle(tester, 6000);
+      expect(shown('coach'), isFalse, reason: 'the hints are for the first board only');
+      await solve(tester);
+      await settle(tester, 4000);
+      await shot(tester, 'fs_12_${name}_complete');
+      await tapKey(tester, 'completion-back', ms: 3500);
+      expect(shown('unlock-try'), isFalse);
+    }
 
-    // 10. Home: follow the next step to the board picker and its one-time tip.
-    await tapTab(tester, 'Home', ms: 2000);
-    await tester.drag(find.byType(Scrollable).first, const Offset(0, 3000));
-    await settle(tester, 800);
-    await tapKey(tester, 'next-step-pack', ms: 3500);
-    expect(find.byType(DifficultyScreen), findsOneWidget);
-    expect(shown('tip-board'), isTrue);
-    await shot(tester, 'fs_11_board_tip');
-    await tester.tap(find.textContaining('· Play').first, warnIfMissed: false);
-    await settle(tester, 6000);
-    expect(shown('coach'), isFalse, reason: 'the hints are for the first board only');
-    await solve(tester);
-    await settle(tester, 4000);
-    await shot(tester, 'fs_12_second_complete');
-    await tapKey(tester, 'completion-back', ms: 3500);
-    if (shown('unlock-try')) await tapText(tester, 'Later', ms: 1200);
+    await playSuggested('second');
+    expect(c.read(countedSolvesProvider), 2);
+    expect(shown('tab-lock-Library'), isTrue, reason: 'two counted: the Library waits for the third');
+    await playSuggested('third');
 
-    // 11. Two pictures: the packs join Home; nothing is announced.
+    // 12. Three counted: the Library opens (with a dot until visited), the packs join Home and
+    //     Quick play is there; nothing is announced.
+    expect(c.read(countedSolvesProvider), 3);
+    expect(shown('tab-lock-Library'), isFalse);
+    expect(c.read(newTabsProvider).contains(Reveal.library.tab), isTrue);
     expect(find.textContaining('Just opened'), findsNothing);
-    await tester.drag(find.byType(Scrollable).first, const Offset(0, 3000));
-    await settle(tester, 800);
+    expect(shown('home-quick-play'), isTrue);
     await shot(tester, 'fs_13_home_grows');
     await scrollTo(tester, find.text('Featured packs'));
     expect(find.text('Featured packs'), findsOneWidget);
     await tester.drag(find.byType(Scrollable).first, const Offset(0, 3000));
     await settle(tester, 800);
+    await tapTab(tester, 'Library', ms: 2500);
+    expect(shown('tip-library'), isTrue);
+    expect(find.text('Daily'), findsNothing, reason: 'the Daily chip waits for 5 pictures');
+    expect(c.read(newTabsProvider).contains(Reveal.library.tab), isFalse, reason: 'visited: the dot goes');
+    await shot(tester, 'fs_10_library_tip');
+    await tapKey(tester, 'tip-library-close', ms: 800);
 
-    // 12. Unlock anyway on Home opens everything.
+    // 13. Unlock anyway on Home: a sheet with a check per thing, only the nearest picked; then the
+    //     confirmation. First only the daily puzzle, then everything.
+    await tapTab(tester, 'Home', ms: 2000);
     await scrollTo(tester, find.byKey(const ValueKey('unlock-anyway')));
-    await tapKey(tester, 'unlock-anyway', ms: 2000);
+    await tapKey(tester, 'unlock-anyway', ms: 1500);
+    expect(shown('unlock-picker'), isTrue);
+    expect(find.text('Unlock Daily puzzle'), findsOneWidget, reason: 'only the nearest is picked');
+    await shot(tester, 'fs_15_unlock_picker');
+    await tapKey(tester, 'unlock-picked', ms: 1500);
+    expect(find.text('Are you sure?'), findsOneWidget);
+    await shot(tester, 'fs_16_unlock_confirm');
+    await tester.tap(find.text('Unlock Daily puzzle').last, warnIfMissed: false);
+    await settle(tester, 2000);
+    expect(c.read(revealsProvider).contains(Reveal.daily), isTrue);
+    expect(c.read(revealsProvider).contains(Reveal.streak), isFalse);
+    expect(c.read(firstStepsProvider).calm, isTrue);
+
+    await scrollTo(tester, find.byKey(const ValueKey('unlock-anyway')));
+    await tapKey(tester, 'unlock-anyway', ms: 1500);
+    for (final r in c.read(upcomingRevealsProvider).skip(1)) {
+      await tester.ensureVisible(find.byKey(ValueKey('unlock-pick-${r.name}')));
+      await tapKey(tester, 'unlock-pick-${r.name}', ms: 300);
+    }
+    expect(find.text('Unlock everything'), findsOneWidget);
+    await tapKey(tester, 'unlock-picked', ms: 1500);
+    await tester.tap(find.text('Unlock everything').last, warnIfMissed: false);
+    await settle(tester, 2000);
     expect(c.read(firstStepsProvider).calm, isFalse);
     expect(shown('more-to-come'), isFalse);
     await tester.drag(find.byType(Scrollable).first, const Offset(0, 3000));

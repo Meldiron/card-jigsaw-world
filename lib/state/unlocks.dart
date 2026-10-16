@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/models.dart';
+import 'first_steps.dart';
 import 'profile.dart';
 import 'progress.dart';
 import 'rewards.dart';
@@ -46,6 +47,9 @@ final unlockIntrosProvider = NotifierProvider<UnlockIntros, Set<Unlock>>(UnlockI
 /// introduce shapes the player already used).
 final pendingUnlockIntroProvider = Provider<Unlock?>((ref) {
   if (ref.watch(profileProvider).value == null || ref.watch(progressProvider).value == null) return null;
+  // The guided start announces nothing (owner, 2026-10-16: no "just opened" alerts); Home's next
+  // step suggests a new shape instead ("Try Squares").
+  if (ref.watch(firstStepsProvider.select((s) => s.guided))) return null;
   final open = ref.watch(openFeaturesProvider);
   final seen = ref.watch(unlockIntrosProvider);
   for (final u in Unlock.values) {

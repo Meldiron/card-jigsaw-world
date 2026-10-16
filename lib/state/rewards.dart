@@ -325,8 +325,9 @@ class Goals {
   /// the boards finished before today, so the quests stay the same all day. Only what [open] and
   /// [level] allow is asked for; a level 1 player, with nothing to change yet, gets "Earn 3 stars
   /// twice". A slot keeps the quest already claimed in it today.
-  static List<Goal> daily(Iterable<PuzzleProgress> all, DateTime now, {OpenFeatures open = OpenFeatures.all, int level = 99, Set<String> claimed = const {}, String? dailyPuzzle}) {
-    final today = all.where((p) => p.completed && p.completedAt != null && sameDay(p.completedAt!, now)).toList();
+  static List<Goal> daily(Iterable<PuzzleProgress> all, DateTime now, {OpenFeatures open = OpenFeatures.all, int level = 99, Set<String> claimed = const {}, String? dailyPuzzle, DateTime? since}) {
+    // [since]: the guided start counts only pictures finished after Quests opened.
+    final today = all.where((p) => p.completed && p.completedAt != null && sameDay(p.completedAt!, now) && (since == null || p.completedAt!.isAfter(since))).toList();
     int count(bool Function(PuzzleProgress p) test) => today.where(test).length;
     final k = dayKey(now);
     final day = dayIndex(now);
@@ -389,9 +390,9 @@ class Goals {
   /// ways of playing that one board cannot do together
   /// (2 each: every mode once with three bigger boards or three Painting boards; never the bigger
   /// boards with Painting), and the VIP extra (1).
-  static List<Goal> weekly(Iterable<PuzzleProgress> all, DateTime now, {OpenFeatures open = OpenFeatures.all, int level = 99, Set<String> claimed = const {}}) {
+  static List<Goal> weekly(Iterable<PuzzleProgress> all, DateTime now, {OpenFeatures open = OpenFeatures.all, int level = 99, Set<String> claimed = const {}, DateTime? since}) {
     final monday = mondayOf(now);
-    final week = all.where((p) => p.completed && p.completedAt != null && !p.completedAt!.isBefore(monday)).toList();
+    final week = all.where((p) => p.completed && p.completedAt != null && !p.completedAt!.isBefore(monday) && (since == null || p.completedAt!.isAfter(since))).toList();
     int count(bool Function(PuzzleProgress p) test) => week.where(test).length;
     final days = {for (final p in week) dayKey(p.completedAt!)}.length;
     final k = weekKey(now);

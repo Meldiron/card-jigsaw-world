@@ -128,12 +128,19 @@ void main() {
         ),
       ));
       await tester.pumpAndSettle();
-      final title = find.text('Achievements open after 25 pictures').evaluate().length;
+      final title = find.text('Achievements open after 25 more pictures').evaluate().length;
       final c = ProviderScope.containerOf(tester.element(find.byType(LockedSectionCard)));
+      // Unlock anyway asks first, saying what waiting gives.
       await tester.tap(find.text('Unlock anyway'));
+      await tester.pumpAndSettle();
+      final asked = find.text('Are you sure?').evaluate().length;
+      final waitFirst = c.read(revealsProvider).contains(Reveal.achievements);
+      await tester.tap(find.text('Unlock Achievements'));
       await tester.pumpAndSettle();
       FlutterError.onError = previous;
       expect(title, 1);
+      expect(asked, 1);
+      expect(waitFirst, isFalse, reason: 'nothing opens before the player says yes');
       expect(c.read(revealsProvider).contains(Reveal.achievements), isTrue, reason: 'Unlock anyway opens it');
       expect(errors, isEmpty);
     });

@@ -14,6 +14,7 @@ import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 import '../events/quest_rewards.dart';
+import '../../router.dart' show routerProvider;
 import 'guided_start.dart';
 import 'header_bar.dart';
 
@@ -34,13 +35,29 @@ class HomeShell extends ConsumerStatefulWidget {
 
 class _HomeShellState extends ConsumerState<HomeShell> {
   bool _vipBonusChecked = false;
+  GoRouter? _router;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (ref.read(settingsProvider).music) Sfx.instance.startMusic();
+      _onRoute();
     });
+  }
+
+  @override
+  void dispose() {
+    _router?.routerDelegate.removeListener(_onRoute);
+    super.dispose();
+  }
+
+  /// The guided start counts every picture from the moment Home is on screen (the top-most route;
+  /// the first board is pushed over a Home the player has not seen yet).
+  void _onRoute() {
+    final router = _router;
+    if (!mounted || router == null || router.routerDelegate.currentConfiguration.isEmpty) return;
+    if (router.state.uri.path == '/home') ref.read(firstStepsProvider.notifier).arrivedHome();
   }
 
   /// VIP members get their weekly bonus once a week when the app opens.
@@ -54,6 +71,11 @@ class _HomeShellState extends ConsumerState<HomeShell> {
 
   @override
   Widget build(BuildContext context) {
+    final router = ref.watch(routerProvider);
+    if (router != _router) {
+      _router?.routerDelegate.removeListener(_onRoute);
+      _router = router..routerDelegate.addListener(_onRoute);
+    }
     final profile = ref.watch(profileProvider).value;
     if (!_vipBonusChecked && profile != null && profile.isVip) {
       _vipBonusChecked = true;
@@ -75,12 +97,13 @@ class _HomeShellState extends ConsumerState<HomeShell> {
     final questReady = ref.watch(questRewardReadyProvider) || newTabs.contains(Reveal.quests.tab);
     // Social dot: a message in the inbox not opened yet.
     final inboxNew = ref.watch(inboxUnseenProvider) || newTabs.contains(Reveal.social.tab);
-    String? lockedUntil(Reveal r) => open.contains(r) ? null : 'opens ${r.when}';
+    final counted = ref.watch(countedSolvesProvider);
+    String? lockedUntil(Reveal r) => open.contains(r) ? null : '${r.plural ? 'open' : 'opens'} after ${r.more(counted)}';
     // Asks for an App Store rating after a happy moment (rules in ReviewRules).
     ref.watch(reviewPromptProvider);
     final tabs = [
       GlassTabItem(icon: AppIcons.house, activeIcon: AppIcons.home, label: 'Home', badge: dailyReady),
-      const GlassTabItem(icon: AppIcons.squareGrid2x2, activeIcon: AppIcons.library, label: 'Library'),
+      GlassTabItem(icon: AppIcons.squareGrid2x2, activeIcon: AppIcons.library, label: 'Library', badge: newTabs.contains(Reveal.library.tab), locked: lockedUntil(Reveal.library)),
       GlassTabItem(icon: AppIcons.questsOutline, activeIcon: AppIcons.quests, label: 'Quests', badge: questReady, locked: lockedUntil(Reveal.quests)),
       GlassTabItem(icon: AppIcons.person2, activeIcon: AppIcons.social, label: 'Social', badge: inboxNew, locked: lockedUntil(Reveal.social)),
       GlassTabItem(icon: AppIcons.personCropCircle, activeIcon: AppIcons.profile, label: 'Profile', badge: rewardReady),

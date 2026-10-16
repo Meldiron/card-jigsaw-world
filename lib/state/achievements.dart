@@ -5,6 +5,7 @@ import '../core/numbers.dart';
 import '../game/board.dart';
 import '../models/models.dart';
 import '../widgets/icons.dart';
+import 'first_steps.dart';
 import 'profile.dart';
 import 'progress.dart';
 import 'social.dart';
@@ -57,10 +58,14 @@ class AchievementStatus {
 
 /// Derived numbers every family reads from.
 class AchievementFacts {
-  AchievementFacts(this.profile, this.done, this.friends);
+  AchievementFacts(this.profile, this.done, this.friends, {this.starsFromPictures = false});
   final Profile profile;
   final List<PuzzleProgress> done;
   final int friends;
+
+  /// Stars collected: the profile's total, or (guided start) the stars of [done] only.
+  final bool starsFromPictures;
+  late final int stars = starsFromPictures ? done.fold<int>(0, (s, p) => s + p.stars) : profile.totalStars;
 
   late final int perfect = done.where((p) => p.stars == 3).length;
   late final int noHints = done.where((p) => p.hintsUsed == 0).length;
@@ -111,7 +116,7 @@ final achievementFamilies = <AchievementFamily>[
   AchievementFamily(id: 'speed', title: 'Quick Hands', icon: AppIcons.speed, describe: (t) => 'Finish $t puzzles in under 4 seconds per card', steps: _tiered([10, 50], 'speed', coins: 120), progress: (f) => f.speed),
   AchievementFamily(id: 'marathon', title: 'Marathon', icon: AppIcons.marathon, describe: (t) => 'Solve $t puzzles in one day', steps: _tiered([10, 25], 'marathon', coins: 200), progress: (f) => f.marathon),
   AchievementFamily(id: 'allmodes', title: 'All Shapes', icon: AppIcons.allModes, describe: (t) => 'Finish a board in every mode', steps: [AchievementStep(GameMode.values.length, coins: 200, tickets: 1, avatarKey: 'shapes')], progress: (f) => f.modes),
-  AchievementFamily(id: 'starhoarder', title: 'Star Hoarder', icon: AppIcons.starHoarder, describe: (t) => 'Collect $t stars', steps: _tiered([50, 250, 1000], 'stars', coins: 150), progress: (f) => f.profile.totalStars),
+  AchievementFamily(id: 'starhoarder', title: 'Star Hoarder', icon: AppIcons.starHoarder, describe: (t) => 'Collect $t stars', steps: _tiered([50, 250, 1000], 'stars', coins: 150), progress: (f) => f.stars),
   AchievementFamily(id: 'rich', title: 'Well Off', icon: AppIcons.piggy, describe: (t) => 'Hold ${formatCount(t)} coins at once', steps: const [AchievementStep(5000, tickets: 2, avatarKey: 'vault')], progress: (f) => f.profile.coins),
   AchievementFamily(id: 'vip', title: 'VIP member', icon: AppIcons.vip, describe: (t) => 'Join VIP', steps: const [AchievementStep(1, coins: 300, avatarKey: 'vip')], progress: (f) => f.profile.isVip ? 1 : 0),
   AchievementFamily(id: 'social', title: 'Good Company', icon: AppIcons.friends, describe: (t) => 'Add $t friend${t == 1 ? '' : 's'}', steps: _tiered([1, 5], 'friends', coins: 100), progress: (f) => f.friends),
@@ -123,7 +128,13 @@ final achievementsProvider = Provider<List<AchievementStatus>>((ref) {
   final profile = ref.watch(profileProvider).value ?? Profile.guest('local');
   final progress = ref.watch(progressProvider).value ?? const <String, PuzzleProgress>{};
   final friends = ref.watch(friendsProvider).value?.length ?? 0;
-  final facts = AchievementFacts(profile, progress.values.where((p) => p.completed).toList(), friends);
+  // Guided start: only pictures finished after achievements opened count (owner, 2026-10-16), so
+  // they do not open full of rewards; states such as the level, the streak or the coins held stay
+  // what they are.
+  final since = ref.watch(countsFromProvider(Reveal.achievements));
+  final counted = since.millisecondsSinceEpoch == 0;
+  final done = [for (final p in progress.values) if (p.completed && (counted || (p.completedAt != null && p.completedAt!.isAfter(since)))) p];
+  final facts = AchievementFacts(profile, done, friends, starsFromPictures: !counted);
   return [
     for (final f in achievementFamilies)
       () {

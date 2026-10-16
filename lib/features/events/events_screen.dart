@@ -60,9 +60,11 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
     final profile = ref.watch(profileProvider).value;
     final open = ref.watch(openFeaturesProvider);
     final dailyPuzzle = ref.watch(dailyPuzzleProvider)?.id;
-    final quests = questsFor(progress.values, profile, open, now, dailyPuzzle: dailyPuzzle);
+    // Guided start: only pictures finished after Quests opened count.
+    final since = ref.watch(countsFromProvider(Reveal.quests));
+    final quests = questsFor(progress.values, profile, open, now, dailyPuzzle: dailyPuzzle, since: since);
     final daily = quests.daily, weekly = quests.weekly;
-    final readyQuests = readyGoals(progress.values, profile, open, now, dailyPuzzle: dailyPuzzle);
+    final readyQuests = readyGoals(progress.values, profile, open, now, dailyPuzzle: dailyPuzzle, since: since);
     final readyEvents = ref.watch(readyEventsProvider);
     final eventsOpen = ref.watch(revealsProvider).contains(Reveal.liveEvents);
     // The website layout: daily and weekly quests side by side, the live events beside what is
