@@ -2,14 +2,21 @@
 """App Store In-App Event metadata and media for the world-day events.
 
     make_app_events.py                    # write store/metadata/app_events.json from the live catalogue
-    make_app_events.py --media-next 10    # also build the images of the next 10 events (starting 2+ days from now)
+    make_app_events.py --media-next 10    # also build the images of the events `asc_publish.py events` drafts:
+                                          # the next 10 (starting 2+ days from now) and the next 5 major holidays after them
     make_app_events.py --media ev-halloween-2026 ev-diwali-2026
 
 Every world-day event (table `events`, with its free event pack) becomes one In-App Event: the event's
 own name, a short and a long description written from the pack, the event window as the event dates,
-publishing a week before it opens, and a deep link to the pack (carden://library/pack/<packId>).
+publishing 3 days before it opens (the day the app lists the event pack: Pack.isReleasedAt, soonWindow),
+and a deep link to the pack (carden://library/pack/<packId>).
 `asc_publish.py events` turns the next few into drafts in App Store Connect; nothing is ever submitted
 from here (see tools/store/README.md, "In-App Events").
+
+Major holidays (PRIMARY: Christmas, New Year's Eve, Lunar New Year, Valentine's Day, Easter, ...) are marked
+"primary": true. Apple keeps 15 approved events but publishes only 10 at a time, so the drafts are the next
+10 events plus the next 5 major holidays after them (`pick`, shared with asc_publish.py): the big days get
+their slot months ahead instead of waiting for the date window to reach them.
 
 Media (Apple's sizes, JPEG, no text on the art):
   event card    1920x1080 (16:9): three of the pack's pictures side by side, the pack cover in the middle
@@ -45,12 +52,25 @@ KEY_FILE = ROOT / "secrets" / "appwrite-api-key.txt"
 
 # Apple's limits (App Store Connect help, In-App Event metadata) and our defaults.
 NAME_MAX, SHORT_MAX, LONG_MAX, REF_MAX = 30, 50, 120, 64
-PUBLISH_DAYS_BEFORE = 7          # Apple allows up to 14
+PUBLISH_DAYS_BEFORE = 3          # = Pack.soonWindow: the app lists an event pack 3 days before it opens, so
+                                 # an earlier App Store card would link to a pack the app does not show yet
+                                 # (Apple allows up to 14)
 CARD = (1920, 1080)
 DETAILS = (1080, 1920)
 GAP = 12                         # dark gap between the card's three pictures
 BACKDROP = (18, 19, 22)
 OPEN_LINE = " Open for one week."
+
+# Major holidays (event id without the year): the extra In-App Event slots go to these. One New Year
+# (the Eve: fireworks and champagne; New Year's Day stays an ordinary event). Regional days
+# (St Patrick's, Independence Day) and world days (Earth Day, Women's Day) stay in the date window.
+PRIMARY = frozenset({
+    "ev-christmas", "ev-new-years-eve", "ev-lunar-new-year", "ev-valentines", "ev-easter",
+    "ev-mothers-day", "ev-fathers-day", "ev-halloween", "ev-diwali", "ev-thanksgiving",
+})
+WINDOW = 10                      # Apple publishes at most 10 events at a time
+PRIMARY_SLOTS = 5                # and keeps 15 approved: the other 5 go to the next major holidays
+LEAD_DAYS = 2                    # events starting sooner are left alone (too late for review)
 
 
 def snapshot() -> dict:
@@ -65,6 +85,28 @@ def snapshot() -> dict:
     data = json.loads(raw)
     tables = data.get("tables", data)
     return {t: (v["rows"] if isinstance(v, dict) else v) for t, v in tables.items()}
+
+
+def is_primary(event_id: str) -> bool:
+    return re.sub(r"-\d{4}$", "", event_id) in PRIMARY
+
+
+def pick(events: list[dict], now: dt.datetime, window: int = WINDOW, primary: int = PRIMARY_SLOTS,
+         lead_days: int = LEAD_DAYS) -> list[dict]:
+    """The events to keep as In-App Event drafts, by start date: the next `window` events starting at
+    least `lead_days` from now, then the next `primary` major holidays ("primary": true) after them."""
+    soon = now + dt.timedelta(days=lead_days)
+    upcoming = sorted((e for e in events if _utc(e["eventStart"]) >= soon), key=lambda e: e["eventStart"])
+    extra = [e for e in upcoming[window:] if e.get("primary")][:primary]
+    return upcoming[:window] + extra
+
+
+def _utc(value: str) -> dt.datetime:
+    return dt.datetime.fromisoformat(value.replace("Z", "+00:00"))
+
+
+def _z(t: dt.datetime) -> str:
+    return t.isoformat().replace("+00:00", "Z")
 
 
 def short_text(n: int, name: str) -> str:
@@ -113,15 +155,16 @@ def entry(ev: dict, pack: dict, puzzles: list[dict]) -> dict:
     return {
         "eventId": ev["$id"],
         "packId": pack["$id"],
+        **({"primary": True} if is_primary(ev["$id"]) else {}),
         "referenceName": ev["$id"][:REF_MAX],
         "badge": "SPECIAL_EVENT",
         "purpose": "APPROPRIATE_FOR_ALL_USERS",
         "priority": "NORMAL",
         "purchaseRequirement": "NO_COST_ASSOCIATED" if pack.get("isFree") else "IN_APP_PURCHASE",
         "deepLink": f"carden://library/pack/{pack['$id']}",
-        "publishStart": (start - dt.timedelta(days=PUBLISH_DAYS_BEFORE)).isoformat().replace("+00:00", "Z"),
-        "eventStart": start.isoformat().replace("+00:00", "Z"),
-        "eventEnd": end.isoformat().replace("+00:00", "Z"),
+        "publishStart": _z(start - dt.timedelta(days=PUBLISH_DAYS_BEFORE)),
+        "eventStart": _z(start),
+        "eventEnd": _z(end),
         "localization": {
             "name": name[:NAME_MAX],
             "shortDescription": short_text(len(pics), name),
@@ -183,7 +226,9 @@ def build_media(e: dict, by_id: dict[str, dict]) -> None:
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--media", nargs="*", metavar="EVENT_ID", default=[], help="build images for these events")
-    ap.add_argument("--media-next", type=int, metavar="N", default=0, help="build images for the next N events starting at least 2 days from now")
+    ap.add_argument("--media-next", type=int, metavar="N", default=0, help="build images for the next N events starting at least 2 days from now, "
+                    "plus the next --primary major holidays after them (the events `asc_publish.py events --window N` drafts)")
+    ap.add_argument("--primary", type=int, metavar="N", default=PRIMARY_SLOTS, help=f"with --media-next: how many major holidays after the window (default {PRIMARY_SLOTS})")
     args = ap.parse_args(argv)
 
     tables = snapshot()
@@ -203,7 +248,16 @@ def main(argv: list[str] | None = None) -> int:
             print(f"  {ev['$id']}: no pack or no dates, skipped")
             continue
         prev = old.get(ev["$id"])
-        events.append(prev if prev and prev.get("locked") else entry(ev, pack, by_pack.get(pack["$id"], [])))
+        if prev and prev.get("locked"):
+            # A hand-edited entry keeps its text and pictures; its publish date follows PUBLISH_DAYS_BEFORE
+            # and its major-holiday mark follows PRIMARY.
+            prev = {k: v for k, v in prev.items() if k != "primary"}
+            prev["publishStart"] = _z(_utc(prev["eventStart"]) - dt.timedelta(days=PUBLISH_DAYS_BEFORE))
+            if is_primary(ev["$id"]):
+                prev = {"eventId": prev["eventId"], "packId": prev["packId"], "primary": True, **prev}
+            events.append(prev)
+        else:
+            events.append(entry(ev, pack, by_pack.get(pack["$id"], [])))
     OUT.write_text(json.dumps({
         "about": "In-App Events for the world-day events. Written by tools/store/make_app_events.py; "
                  "set \"locked\": true on an entry to keep hand edits. asc_publish.py events creates drafts.",
@@ -217,10 +271,8 @@ def main(argv: list[str] | None = None) -> int:
     now = dt.datetime.now(dt.timezone.utc)
     wanted = set(args.media)
     if args.media_next:
-        # The same events `asc_publish.py events` drafts: those starting at least two days from now.
-        soon = now + dt.timedelta(days=2)
-        upcoming = [e for e in events if dt.datetime.fromisoformat(e["eventStart"].replace("Z", "+00:00")) >= soon]
-        wanted |= {e["eventId"] for e in upcoming[: args.media_next]}
+        # The same events `asc_publish.py events` drafts (see pick).
+        wanted |= {e["eventId"] for e in pick(events, now, args.media_next, args.primary)}
     for e in events:
         if e["eventId"] in wanted:
             build_media(e, by_id)

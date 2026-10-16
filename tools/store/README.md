@@ -48,7 +48,7 @@ Below, `asc` stands for `.venv/bin/python tools/store/asc_publish.py`.
 | `iap` | the eight consumables from `subscriptions/consumables.json` (`/v2/inAppPurchases`), localizations, USD price equalised to all territories through `inAppPurchasePricePoints/{id}/equalizations`, availability, optional review screenshot |
 | `subscriptions` | group `VIP` and its localization, `vip_monthly` / `vip_yearly` attributes (Family Sharing on) and localizations, one `subscriptionPrices` per territory from `subscriptionPricePoints/{id}/equalizations`, one `subscriptionIntroductoryOffers` (1 week free) per territory, the `winBackOffers` from each file (only once the subscription is APPROVED: Apple refuses offers before), review screenshot, promotional image, availability. A field Apple refuses to change while the subscription sits in the open review draft (Family Sharing did) is patched by lifting the subscription's item out of the draft and putting it back |
 | `review-info` | `appStoreReviewDetails`: contact from `review_contact.json` and `review_notes.txt` |
-| `events` | In-App Event drafts (`appEvents`, their `appEventLocalizations` and the two `appEventScreenshots`) for the next world-day events from `store/metadata/app_events.json`; `--window N` (default 10). Never submits. See "In-App Events" below |
+| `events` | In-App Event drafts (`appEvents`, their `appEventLocalizations` and the two `appEventScreenshots`) from `store/metadata/app_events.json`: the next world-day events (`--window N`, default 10) and the next major holidays after them (`--primary N`, default 5). Never submits. See "In-App Events" below |
 | `platforms` | TestFlight on Macs and Apple Vision Pro for every beta group (`iosBuildsAvailableForAppleSiliconMac`, `iosBuildsAvailableForAppleVision`), then prints the App Store availability steps (no API for those) |
 | `testflight` | `betaAppLocalizations` (feedback email, what to test, URLs), `betaAppReviewDetails`, `betaLicenseAgreements`, the build's `usesNonExemptEncryption=false` and what-to-test text, the build added to the external `betaGroups` "Public testers" (public link) and to every internal group that does not already get all builds, then a `betaAppReviewSubmissions` for the build. `--build N` waits for build N to appear and finish processing (30 s polls, `--timeout` minutes, default 40; fails on INVALID/FAILED); without it the latest build is used. `--whats-new-file PATH` replaces `release_notes.txt` as the what-to-test text (an empty file leaves it untouched). `ASC_BUILD_NUMBER` is the env fallback for `--build` |
 | `build-notes` | Only the "What to Test" text (`betaBuildLocalizations.whatsNew`) of one build: `--build N` (default the latest), text from `--whats-new-file` or `store/metadata/en-US/testflight_build_notes.txt`. The release workflow sends that file for every new build, so rewrite it before each build with a TL;DR of what changed since the previous one. Visible to testers. |
@@ -189,22 +189,37 @@ In-App Event card on the App Store and in search, opening the pack
    `store/metadata/app_events.json` from the live catalogue (one billed read:
    the snapshot pointer). Per event: reference name = event id, badge Special
    Event, purpose "appropriate for all users", priority normal, no purchase
-   needed (event packs are free), the event window as the event dates, publish a
-   week before it opens, the event's name (30 characters), "24 pictures for
-   World Food Day" (50) and the pack's subjects (120). Hand edits survive a
-   re-run when the entry has `"locked": true` (three long names are shortened
-   that way, and the Thanksgiving card avoids a watermarked picture).
-2. `make_app_events.py --media-next 10` builds the images for the next 10
-   events: the event card (1920x1080, three of the pack's pictures with the
-   cover in the middle) and the details page (1080x1920, the cover), JPEG, no
-   text. They live in `~/.local/share/card-jigsaw-world/app-events/` (outside
-   git; `CJW_APP_EVENT_MEDIA` overrides), built from our hosted pictures.
+   needed (event packs are free), the event window as the event dates, publish
+   3 days before it opens (`PUBLISH_DAYS_BEFORE`: the day the app starts
+   listing the event pack, `Pack.soonWindow`; an earlier card would link to a
+   pack the app does not show yet), the event's name (30 characters), "24
+   pictures for World Food Day" (50) and the pack's subjects (120). Hand edits
+   survive a re-run when the entry has `"locked": true` (three long names are
+   shortened that way; the Thanksgiving, Christmas 2026 and New Year's Eve 2026
+   cards avoid pictures with a watermark, a brand logo or the wrong occasion;
+   the entry's `note` says why); a locked entry's publish date still follows
+   the 3-day rule. Major holidays (`PRIMARY` in the script:
+   Christmas, New Year's Eve, Lunar New Year, Valentine's Day, Easter,
+   Mother's Day, Father's Day, Halloween, Diwali, Thanksgiving) are marked
+   `"primary": true`.
+2. `make_app_events.py --media-next 10` builds the images for the events the
+   next step drafts (the next 10 and the next 5 major holidays after them;
+   `--primary N` changes the 5): the event card (1920x1080, three of the
+   pack's pictures with the cover in the middle) and the details page
+   (1080x1920, the cover), JPEG, no text. They live in
+   `~/.local/share/card-jigsaw-world/app-events/` (outside git;
+   `CJW_APP_EVENT_MEDIA` overrides), built from our hosted pictures. Look at
+   every new card before uploading: pack pictures can carry logos,
+   watermarks or a frame edge that reads as a border.
 3. `asc_publish.py events` creates or updates the drafts for the next 10
-   events that start at least two days from now (Apple publishes at most 10
-   events at a time and keeps 15 approved). Accepted, published or past events
-   are left alone. Nothing is ever submitted: an unreleased app must send its
-   first events with its first version; afterwards events can go to review on
-   their own. Re-run both steps every few weeks to roll the window forward.
+   events that start at least two days from now, plus the next 5 major
+   holidays after them (`pick` in `make_app_events.py`; `--window`,
+   `--primary`). Apple publishes at most 10 events at a time and keeps 15
+   approved, so the 5 extra slots let the big days be reviewed months ahead.
+   Accepted, published or past events are left alone. Nothing is ever
+   submitted: an unreleased app must send its first events with its first
+   version; afterwards events can go to review on their own. Re-run both
+   steps every few weeks to roll the window forward.
 
 Apple's rules (2026): event at most 31 days, shown up to 14 days before it
 starts, no prices or app name in the text, no text or borders on the art.

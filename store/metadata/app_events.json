@@ -10,7 +10,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-coffee-2026",
-   "publishStart": "2026-09-21T00:00:00Z",
+   "publishStart": "2026-09-25T00:00:00Z",
    "eventStart": "2026-09-28T00:00:00Z",
    "eventEnd": "2026-10-05T23:59:59Z",
    "localization": {
@@ -37,7 +37,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-smile-day-2026",
-   "publishStart": "2026-09-22T00:00:00Z",
+   "publishStart": "2026-09-26T00:00:00Z",
    "eventStart": "2026-09-29T00:00:00Z",
    "eventEnd": "2026-10-06T23:59:59Z",
    "localization": {
@@ -64,7 +64,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-animal-day-2026",
-   "publishStart": "2026-09-24T00:00:00Z",
+   "publishStart": "2026-09-28T00:00:00Z",
    "eventStart": "2026-10-01T00:00:00Z",
    "eventEnd": "2026-10-08T23:59:59Z",
    "localization": {
@@ -91,7 +91,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-teachers-2026",
-   "publishStart": "2026-09-25T00:00:00Z",
+   "publishStart": "2026-09-29T00:00:00Z",
    "eventStart": "2026-10-02T00:00:00Z",
    "eventEnd": "2026-10-09T23:59:59Z",
    "localization": {
@@ -118,7 +118,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-mental-health-2026",
-   "publishStart": "2026-09-30T00:00:00Z",
+   "publishStart": "2026-10-04T00:00:00Z",
    "eventStart": "2026-10-07T00:00:00Z",
    "eventEnd": "2026-10-14T23:59:59Z",
    "localization": {
@@ -145,7 +145,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-food-day-2026",
-   "publishStart": "2026-10-06T00:00:00Z",
+   "publishStart": "2026-10-10T00:00:00Z",
    "eventStart": "2026-10-13T00:00:00Z",
    "eventEnd": "2026-10-20T23:59:59Z",
    "localization": {
@@ -172,7 +172,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-un-day-2026",
-   "publishStart": "2026-10-14T00:00:00Z",
+   "publishStart": "2026-10-18T00:00:00Z",
    "eventStart": "2026-10-21T00:00:00Z",
    "eventEnd": "2026-10-28T23:59:59Z",
    "localization": {
@@ -193,13 +193,14 @@
   {
    "eventId": "ev-halloween-2026",
    "packId": "evpack-halloween-2026",
+   "primary": true,
    "referenceName": "ev-halloween-2026",
    "badge": "SPECIAL_EVENT",
    "purpose": "APPROPRIATE_FOR_ALL_USERS",
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-halloween-2026",
-   "publishStart": "2026-10-21T00:00:00Z",
+   "publishStart": "2026-10-25T00:00:00Z",
    "eventStart": "2026-10-28T00:00:00Z",
    "eventEnd": "2026-11-04T23:59:59Z",
    "localization": {
@@ -226,7 +227,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-vegan-2026",
-   "publishStart": "2026-10-22T00:00:00Z",
+   "publishStart": "2026-10-26T00:00:00Z",
    "eventStart": "2026-10-29T00:00:00Z",
    "eventEnd": "2026-11-05T23:59:59Z",
    "localization": {
@@ -247,13 +248,14 @@
   {
    "eventId": "ev-diwali-2026",
    "packId": "evpack-diwali-2026",
+   "primary": true,
    "referenceName": "ev-diwali-2026",
    "badge": "SPECIAL_EVENT",
    "purpose": "APPROPRIATE_FOR_ALL_USERS",
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-diwali-2026",
-   "publishStart": "2026-10-29T00:00:00Z",
+   "publishStart": "2026-11-02T00:00:00Z",
    "eventStart": "2026-11-05T00:00:00Z",
    "eventEnd": "2026-11-12T23:59:59Z",
    "localization": {
@@ -280,7 +282,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-remembrance-2026",
-   "publishStart": "2026-11-01T00:00:00Z",
+   "publishStart": "2026-11-05T00:00:00Z",
    "eventStart": "2026-11-08T00:00:00Z",
    "eventEnd": "2026-11-15T23:59:59Z",
    "localization": {
@@ -307,7 +309,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-kindness-2026",
-   "publishStart": "2026-11-03T00:00:00Z",
+   "publishStart": "2026-11-07T00:00:00Z",
    "eventStart": "2026-11-10T00:00:00Z",
    "eventEnd": "2026-11-17T23:59:59Z",
    "localization": {
@@ -334,7 +336,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-universal-childrens-2026",
-   "publishStart": "2026-11-10T00:00:00Z",
+   "publishStart": "2026-11-14T00:00:00Z",
    "eventStart": "2026-11-17T00:00:00Z",
    "eventEnd": "2026-11-24T23:59:59Z",
    "localization": {
@@ -355,13 +357,14 @@
   {
    "eventId": "ev-thanksgiving-2026",
    "packId": "evpack-thanksgiving-2026",
+   "primary": true,
    "referenceName": "ev-thanksgiving-2026",
    "badge": "SPECIAL_EVENT",
    "purpose": "APPROPRIATE_FOR_ALL_USERS",
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-thanksgiving-2026",
-   "publishStart": "2026-11-16T00:00:00Z",
+   "publishStart": "2026-11-20T00:00:00Z",
    "eventStart": "2026-11-23T00:00:00Z",
    "eventEnd": "2026-11-30T23:59:59Z",
    "localization": {
@@ -390,7 +393,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-volunteer-2026",
-   "publishStart": "2026-11-25T00:00:00Z",
+   "publishStart": "2026-11-29T00:00:00Z",
    "eventStart": "2026-12-02T00:00:00Z",
    "eventEnd": "2026-12-09T23:59:59Z",
    "localization": {
@@ -417,7 +420,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-mountain-day-2026",
-   "publishStart": "2026-12-01T00:00:00Z",
+   "publishStart": "2026-12-05T00:00:00Z",
    "eventStart": "2026-12-08T00:00:00Z",
    "eventEnd": "2026-12-15T23:59:59Z",
    "localization": {
@@ -444,7 +447,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-tea-day-2026",
-   "publishStart": "2026-12-05T00:00:00Z",
+   "publishStart": "2026-12-09T00:00:00Z",
    "eventStart": "2026-12-12T00:00:00Z",
    "eventEnd": "2026-12-19T23:59:59Z",
    "localization": {
@@ -471,7 +474,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-winter-solstice-2026",
-   "publishStart": "2026-12-11T00:00:00Z",
+   "publishStart": "2026-12-15T00:00:00Z",
    "eventStart": "2026-12-18T00:00:00Z",
    "eventEnd": "2026-12-25T23:59:59Z",
    "localization": {
@@ -492,13 +495,14 @@
   {
    "eventId": "ev-christmas-2026",
    "packId": "evpack-christmas-2026",
+   "primary": true,
    "referenceName": "ev-christmas-2026",
    "badge": "SPECIAL_EVENT",
    "purpose": "APPROPRIATE_FOR_ALL_USERS",
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-christmas-2026",
-   "publishStart": "2026-12-15T00:00:00Z",
+   "publishStart": "2026-12-19T00:00:00Z",
    "eventStart": "2026-12-22T00:00:00Z",
    "eventEnd": "2026-12-29T23:59:59Z",
    "localization": {
@@ -508,24 +512,27 @@
    },
    "pictures": [
     "evpack-christmas-2026-02",
-    "evpack-christmas-2026-08",
-    "evpack-christmas-2026-13"
+    "p-5303d1e35d68",
+    "p-a974fa32a5ba"
    ],
    "media": {
     "card": "ev-christmas-2026/ev-christmas-2026-card.jpg",
     "details": "ev-christmas-2026/ev-christmas-2026-details.jpg"
-   }
+   },
+   "locked": true,
+   "note": "Card pictures changed by hand 2026-10-16: the tree cookie shows M&M's logos and a signature watermark, and the lit tree's door frame reads as a border at the card's edge; poinsettia and baubles in a glass instead."
   },
   {
    "eventId": "ev-new-years-eve-2026",
    "packId": "evpack-new-years-eve-2026",
+   "primary": true,
    "referenceName": "ev-new-years-eve-2026",
    "badge": "SPECIAL_EVENT",
    "purpose": "APPROPRIATE_FOR_ALL_USERS",
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-new-years-eve-2026",
-   "publishStart": "2026-12-21T00:00:00Z",
+   "publishStart": "2026-12-25T00:00:00Z",
    "eventStart": "2026-12-28T00:00:00Z",
    "eventEnd": "2027-01-04T23:59:59Z",
    "localization": {
@@ -535,13 +542,15 @@
    },
    "pictures": [
     "evpack-new-years-eve-2026-01",
-    "evpack-new-years-eve-2026-09",
-    "p-b6d5485b89ae"
+    "p-d08896baa59c",
+    "p-0cf11be86b39"
    ],
    "media": {
     "card": "ev-new-years-eve-2026/ev-new-years-eve-2026-card.jpg",
     "details": "ev-new-years-eve-2026/ev-new-years-eve-2026-details.jpg"
-   }
+   },
+   "locked": true,
+   "note": "Card pictures changed by hand 2026-10-16: the Eiffel Tower light show is the pink October ribbon (not New Year), and the Sydney picture is grainy; sparkler and fireworks in Prague instead."
   },
   {
    "eventId": "ev-new-year-2027",
@@ -552,7 +561,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-new-year-2027",
-   "publishStart": "2026-12-22T00:00:00Z",
+   "publishStart": "2026-12-26T00:00:00Z",
    "eventStart": "2026-12-29T00:00:00Z",
    "eventEnd": "2027-01-05T23:59:59Z",
    "localization": {
@@ -579,7 +588,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-bean-day-2027",
-   "publishStart": "2026-12-27T00:00:00Z",
+   "publishStart": "2026-12-31T00:00:00Z",
    "eventStart": "2027-01-03T00:00:00Z",
    "eventEnd": "2027-01-10T23:59:59Z",
    "localization": {
@@ -606,7 +615,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-hot-tea-2027",
-   "publishStart": "2027-01-02T00:00:00Z",
+   "publishStart": "2027-01-06T00:00:00Z",
    "eventStart": "2027-01-09T00:00:00Z",
    "eventEnd": "2027-01-16T23:59:59Z",
    "localization": {
@@ -633,7 +642,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-squirrel-2027",
-   "publishStart": "2027-01-11T00:00:00Z",
+   "publishStart": "2027-01-15T00:00:00Z",
    "eventStart": "2027-01-18T00:00:00Z",
    "eventEnd": "2027-01-25T23:59:59Z",
    "localization": {
@@ -660,7 +669,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-education-2027",
-   "publishStart": "2027-01-14T00:00:00Z",
+   "publishStart": "2027-01-18T00:00:00Z",
    "eventStart": "2027-01-21T00:00:00Z",
    "eventEnd": "2027-01-28T23:59:59Z",
    "localization": {
@@ -687,7 +696,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-croissant-2027",
-   "publishStart": "2027-01-20T00:00:00Z",
+   "publishStart": "2027-01-24T00:00:00Z",
    "eventStart": "2027-01-27T00:00:00Z",
    "eventEnd": "2027-02-03T23:59:59Z",
    "localization": {
@@ -714,7 +723,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-wetlands-2027",
-   "publishStart": "2027-01-23T00:00:00Z",
+   "publishStart": "2027-01-27T00:00:00Z",
    "eventStart": "2027-01-30T00:00:00Z",
    "eventEnd": "2027-02-06T23:59:59Z",
    "localization": {
@@ -735,13 +744,14 @@
   {
    "eventId": "ev-lunar-new-year-2027",
    "packId": "evpack-lunar-new-year-2027",
+   "primary": true,
    "referenceName": "ev-lunar-new-year-2027",
    "badge": "SPECIAL_EVENT",
    "purpose": "APPROPRIATE_FOR_ALL_USERS",
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-lunar-new-year-2027",
-   "publishStart": "2027-01-27T00:00:00Z",
+   "publishStart": "2027-01-31T00:00:00Z",
    "eventStart": "2027-02-03T00:00:00Z",
    "eventEnd": "2027-02-10T23:59:59Z",
    "localization": {
@@ -768,7 +778,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-pizza-2027",
-   "publishStart": "2027-01-30T00:00:00Z",
+   "publishStart": "2027-02-03T00:00:00Z",
    "eventStart": "2027-02-06T00:00:00Z",
    "eventEnd": "2027-02-13T23:59:59Z",
    "localization": {
@@ -789,13 +799,14 @@
   {
    "eventId": "ev-valentines-2027",
    "packId": "evpack-valentines-2027",
+   "primary": true,
    "referenceName": "ev-valentines-2027",
    "badge": "SPECIAL_EVENT",
    "purpose": "APPROPRIATE_FOR_ALL_USERS",
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-valentines-2027",
-   "publishStart": "2027-02-04T00:00:00Z",
+   "publishStart": "2027-02-08T00:00:00Z",
    "eventStart": "2027-02-11T00:00:00Z",
    "eventEnd": "2027-02-18T23:59:59Z",
    "localization": {
@@ -822,7 +833,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-love-your-pet-2027",
-   "publishStart": "2027-02-10T00:00:00Z",
+   "publishStart": "2027-02-14T00:00:00Z",
    "eventStart": "2027-02-17T00:00:00Z",
    "eventEnd": "2027-02-24T23:59:59Z",
    "localization": {
@@ -849,7 +860,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-polar-bear-2027",
-   "publishStart": "2027-02-17T00:00:00Z",
+   "publishStart": "2027-02-21T00:00:00Z",
    "eventStart": "2027-02-24T00:00:00Z",
    "eventEnd": "2027-03-03T23:59:59Z",
    "localization": {
@@ -876,7 +887,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-wildlife-2027",
-   "publishStart": "2027-02-21T00:00:00Z",
+   "publishStart": "2027-02-25T00:00:00Z",
    "eventStart": "2027-02-28T00:00:00Z",
    "eventEnd": "2027-03-07T23:59:59Z",
    "localization": {
@@ -903,7 +914,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-womens-day-2027",
-   "publishStart": "2027-02-26T00:00:00Z",
+   "publishStart": "2027-03-02T00:00:00Z",
    "eventStart": "2027-03-05T00:00:00Z",
    "eventEnd": "2027-03-12T23:59:59Z",
    "localization": {
@@ -930,7 +941,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-pi-day-2027",
-   "publishStart": "2027-03-04T00:00:00Z",
+   "publishStart": "2027-03-08T00:00:00Z",
    "eventStart": "2027-03-11T00:00:00Z",
    "eventEnd": "2027-03-18T23:59:59Z",
    "localization": {
@@ -957,7 +968,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-st-patricks-2027",
-   "publishStart": "2027-03-07T00:00:00Z",
+   "publishStart": "2027-03-11T00:00:00Z",
    "eventStart": "2027-03-14T00:00:00Z",
    "eventEnd": "2027-03-21T23:59:59Z",
    "localization": {
@@ -984,7 +995,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-happiness-2027",
-   "publishStart": "2027-03-10T00:00:00Z",
+   "publishStart": "2027-03-14T00:00:00Z",
    "eventStart": "2027-03-17T00:00:00Z",
    "eventEnd": "2027-03-24T23:59:59Z",
    "localization": {
@@ -1011,7 +1022,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-forests-2027",
-   "publishStart": "2027-03-11T00:00:00Z",
+   "publishStart": "2027-03-15T00:00:00Z",
    "eventStart": "2027-03-18T00:00:00Z",
    "eventEnd": "2027-03-25T23:59:59Z",
    "localization": {
@@ -1038,7 +1049,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-water-day-2027",
-   "publishStart": "2027-03-12T00:00:00Z",
+   "publishStart": "2027-03-16T00:00:00Z",
    "eventStart": "2027-03-19T00:00:00Z",
    "eventEnd": "2027-03-26T23:59:59Z",
    "localization": {
@@ -1059,13 +1070,14 @@
   {
    "eventId": "ev-easter-2027",
    "packId": "evpack-easter-2027",
+   "primary": true,
    "referenceName": "ev-easter-2027",
    "badge": "SPECIAL_EVENT",
    "purpose": "APPROPRIATE_FOR_ALL_USERS",
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-easter-2027",
-   "publishStart": "2027-03-18T00:00:00Z",
+   "publishStart": "2027-03-22T00:00:00Z",
    "eventStart": "2027-03-25T00:00:00Z",
    "eventEnd": "2027-04-01T23:59:59Z",
    "localization": {
@@ -1092,7 +1104,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-childrens-book-2027",
-   "publishStart": "2027-03-23T00:00:00Z",
+   "publishStart": "2027-03-27T00:00:00Z",
    "eventStart": "2027-03-30T00:00:00Z",
    "eventEnd": "2027-04-06T23:59:59Z",
    "localization": {
@@ -1120,7 +1132,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-health-2027",
-   "publishStart": "2027-03-28T00:00:00Z",
+   "publishStart": "2027-04-01T00:00:00Z",
    "eventStart": "2027-04-04T00:00:00Z",
    "eventEnd": "2027-04-11T23:59:59Z",
    "localization": {
@@ -1147,7 +1159,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-pet-day-2027",
-   "publishStart": "2027-04-01T00:00:00Z",
+   "publishStart": "2027-04-05T00:00:00Z",
    "eventStart": "2027-04-08T00:00:00Z",
    "eventEnd": "2027-04-15T23:59:59Z",
    "localization": {
@@ -1174,7 +1186,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-art-day-2027",
-   "publishStart": "2027-04-05T00:00:00Z",
+   "publishStart": "2027-04-09T00:00:00Z",
    "eventStart": "2027-04-12T00:00:00Z",
    "eventEnd": "2027-04-19T23:59:59Z",
    "localization": {
@@ -1201,7 +1213,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-earth-day-2027",
-   "publishStart": "2027-04-12T00:00:00Z",
+   "publishStart": "2027-04-16T00:00:00Z",
    "eventStart": "2027-04-19T00:00:00Z",
    "eventEnd": "2027-04-26T23:59:59Z",
    "localization": {
@@ -1228,7 +1240,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-book-day-2027",
-   "publishStart": "2027-04-13T00:00:00Z",
+   "publishStart": "2027-04-17T00:00:00Z",
    "eventStart": "2027-04-20T00:00:00Z",
    "eventEnd": "2027-04-27T23:59:59Z",
    "localization": {
@@ -1255,7 +1267,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-dance-2027",
-   "publishStart": "2027-04-19T00:00:00Z",
+   "publishStart": "2027-04-23T00:00:00Z",
    "eventStart": "2027-04-26T00:00:00Z",
    "eventEnd": "2027-05-03T23:59:59Z",
    "localization": {
@@ -1282,7 +1294,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-may-day-2027",
-   "publishStart": "2027-04-21T00:00:00Z",
+   "publishStart": "2027-04-25T00:00:00Z",
    "eventStart": "2027-04-28T00:00:00Z",
    "eventEnd": "2027-05-05T23:59:59Z",
    "localization": {
@@ -1309,7 +1321,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-star-wars-day-2027",
-   "publishStart": "2027-04-24T00:00:00Z",
+   "publishStart": "2027-04-28T00:00:00Z",
    "eventStart": "2027-05-01T00:00:00Z",
    "eventEnd": "2027-05-08T23:59:59Z",
    "localization": {
@@ -1330,13 +1342,14 @@
   {
    "eventId": "ev-mothers-day-2027",
    "packId": "evpack-mothers-day-2027",
+   "primary": true,
    "referenceName": "ev-mothers-day-2027",
    "badge": "SPECIAL_EVENT",
    "purpose": "APPROPRIATE_FOR_ALL_USERS",
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-mothers-day-2027",
-   "publishStart": "2027-04-29T00:00:00Z",
+   "publishStart": "2027-05-03T00:00:00Z",
    "eventStart": "2027-05-06T00:00:00Z",
    "eventEnd": "2027-05-13T23:59:59Z",
    "localization": {
@@ -1363,7 +1376,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-families-2027",
-   "publishStart": "2027-05-05T00:00:00Z",
+   "publishStart": "2027-05-09T00:00:00Z",
    "eventStart": "2027-05-12T00:00:00Z",
    "eventEnd": "2027-05-19T23:59:59Z",
    "localization": {
@@ -1390,7 +1403,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-bee-day-2027",
-   "publishStart": "2027-05-10T00:00:00Z",
+   "publishStart": "2027-05-14T00:00:00Z",
    "eventStart": "2027-05-17T00:00:00Z",
    "eventEnd": "2027-05-24T23:59:59Z",
    "localization": {
@@ -1417,7 +1430,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-biodiversity-2027",
-   "publishStart": "2027-05-12T00:00:00Z",
+   "publishStart": "2027-05-16T00:00:00Z",
    "eventStart": "2027-05-19T00:00:00Z",
    "eventEnd": "2027-05-26T23:59:59Z",
    "localization": {
@@ -1445,7 +1458,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-hamburger-2027",
-   "publishStart": "2027-05-18T00:00:00Z",
+   "publishStart": "2027-05-22T00:00:00Z",
    "eventStart": "2027-05-25T00:00:00Z",
    "eventEnd": "2027-06-01T23:59:59Z",
    "localization": {
@@ -1472,7 +1485,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-childrens-day-2027",
-   "publishStart": "2027-05-22T00:00:00Z",
+   "publishStart": "2027-05-26T00:00:00Z",
    "eventStart": "2027-05-29T00:00:00Z",
    "eventEnd": "2027-06-05T23:59:59Z",
    "localization": {
@@ -1499,7 +1512,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-bicycle-2027",
-   "publishStart": "2027-05-24T00:00:00Z",
+   "publishStart": "2027-05-28T00:00:00Z",
    "eventStart": "2027-05-31T00:00:00Z",
    "eventEnd": "2027-06-07T23:59:59Z",
    "localization": {
@@ -1526,7 +1539,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-environment-2027",
-   "publishStart": "2027-05-26T00:00:00Z",
+   "publishStart": "2027-05-30T00:00:00Z",
    "eventStart": "2027-06-02T00:00:00Z",
    "eventEnd": "2027-06-09T23:59:59Z",
    "localization": {
@@ -1553,7 +1566,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-oceans-2027",
-   "publishStart": "2027-05-29T00:00:00Z",
+   "publishStart": "2027-06-02T00:00:00Z",
    "eventStart": "2027-06-05T00:00:00Z",
    "eventEnd": "2027-06-12T23:59:59Z",
    "localization": {
@@ -1574,13 +1587,14 @@
   {
    "eventId": "ev-fathers-day-2027",
    "packId": "evpack-fathers-day-2027",
+   "primary": true,
    "referenceName": "ev-fathers-day-2027",
    "badge": "SPECIAL_EVENT",
    "purpose": "APPROPRIATE_FOR_ALL_USERS",
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-fathers-day-2027",
-   "publishStart": "2027-06-10T00:00:00Z",
+   "publishStart": "2027-06-14T00:00:00Z",
    "eventStart": "2027-06-17T00:00:00Z",
    "eventEnd": "2027-06-24T23:59:59Z",
    "localization": {
@@ -1607,7 +1621,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-yoga-2027",
-   "publishStart": "2027-06-11T00:00:00Z",
+   "publishStart": "2027-06-15T00:00:00Z",
    "eventStart": "2027-06-18T00:00:00Z",
    "eventEnd": "2027-06-25T23:59:59Z",
    "localization": {
@@ -1634,7 +1648,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-pride-2027",
-   "publishStart": "2027-06-18T00:00:00Z",
+   "publishStart": "2027-06-22T00:00:00Z",
    "eventStart": "2027-06-25T00:00:00Z",
    "eventEnd": "2027-07-02T23:59:59Z",
    "localization": {
@@ -1661,7 +1675,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-independence-day-2027",
-   "publishStart": "2027-06-24T00:00:00Z",
+   "publishStart": "2027-06-28T00:00:00Z",
    "eventStart": "2027-07-01T00:00:00Z",
    "eventEnd": "2027-07-08T23:59:59Z",
    "localization": {
@@ -1688,7 +1702,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-chocolate-2027",
-   "publishStart": "2027-06-27T00:00:00Z",
+   "publishStart": "2027-07-01T00:00:00Z",
    "eventStart": "2027-07-04T00:00:00Z",
    "eventEnd": "2027-07-11T23:59:59Z",
    "localization": {
@@ -1715,7 +1729,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-fries-2027",
-   "publishStart": "2027-07-03T00:00:00Z",
+   "publishStart": "2027-07-07T00:00:00Z",
    "eventStart": "2027-07-10T00:00:00Z",
    "eventEnd": "2027-07-17T23:59:59Z",
    "localization": {
@@ -1742,7 +1756,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-moon-day-2027",
-   "publishStart": "2027-07-10T00:00:00Z",
+   "publishStart": "2027-07-14T00:00:00Z",
    "eventStart": "2027-07-17T00:00:00Z",
    "eventEnd": "2027-07-24T23:59:59Z",
    "localization": {
@@ -1769,7 +1783,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-friendship-2027",
-   "publishStart": "2027-07-20T00:00:00Z",
+   "publishStart": "2027-07-24T00:00:00Z",
    "eventStart": "2027-07-27T00:00:00Z",
    "eventEnd": "2027-08-03T23:59:59Z",
    "localization": {
@@ -1797,7 +1811,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-cat-day-2027",
-   "publishStart": "2027-07-29T00:00:00Z",
+   "publishStart": "2027-08-02T00:00:00Z",
    "eventStart": "2027-08-05T00:00:00Z",
    "eventEnd": "2027-08-12T23:59:59Z",
    "localization": {
@@ -1824,7 +1838,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-youth-2027",
-   "publishStart": "2027-08-02T00:00:00Z",
+   "publishStart": "2027-08-06T00:00:00Z",
    "eventStart": "2027-08-09T00:00:00Z",
    "eventEnd": "2027-08-16T23:59:59Z",
    "localization": {
@@ -1851,7 +1865,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-photography-2027",
-   "publishStart": "2027-08-09T00:00:00Z",
+   "publishStart": "2027-08-13T00:00:00Z",
    "eventStart": "2027-08-16T00:00:00Z",
    "eventEnd": "2027-08-23T23:59:59Z",
    "localization": {
@@ -1878,7 +1892,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-dog-day-2027",
-   "publishStart": "2027-08-16T00:00:00Z",
+   "publishStart": "2027-08-20T00:00:00Z",
    "eventStart": "2027-08-23T00:00:00Z",
    "eventEnd": "2027-08-30T23:59:59Z",
    "localization": {
@@ -1905,7 +1919,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-beach-day-2027",
-   "publishStart": "2027-08-20T00:00:00Z",
+   "publishStart": "2027-08-24T00:00:00Z",
    "eventStart": "2027-08-27T00:00:00Z",
    "eventEnd": "2027-09-03T23:59:59Z",
    "localization": {
@@ -1932,7 +1946,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-literacy-2027",
-   "publishStart": "2027-08-29T00:00:00Z",
+   "publishStart": "2027-09-02T00:00:00Z",
    "eventStart": "2027-09-05T00:00:00Z",
    "eventEnd": "2027-09-12T23:59:59Z",
    "localization": {
@@ -1959,7 +1973,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-grandparents-2027",
-   "publishStart": "2027-09-02T00:00:00Z",
+   "publishStart": "2027-09-06T00:00:00Z",
    "eventStart": "2027-09-09T00:00:00Z",
    "eventEnd": "2027-09-16T23:59:59Z",
    "localization": {
@@ -1986,7 +2000,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-cheeseburger-2027",
-   "publishStart": "2027-09-05T00:00:00Z",
+   "publishStart": "2027-09-09T00:00:00Z",
    "eventStart": "2027-09-12T00:00:00Z",
    "eventEnd": "2027-09-19T23:59:59Z",
    "localization": {
@@ -2013,7 +2027,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-peace-2027",
-   "publishStart": "2027-09-11T00:00:00Z",
+   "publishStart": "2027-09-15T00:00:00Z",
    "eventStart": "2027-09-18T00:00:00Z",
    "eventEnd": "2027-09-25T23:59:59Z",
    "localization": {
@@ -2040,7 +2054,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-autumn-2027",
-   "publishStart": "2027-09-12T00:00:00Z",
+   "publishStart": "2027-09-16T00:00:00Z",
    "eventStart": "2027-09-19T00:00:00Z",
    "eventEnd": "2027-09-26T23:59:59Z",
    "localization": {
@@ -2067,7 +2081,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-heart-day-2027",
-   "publishStart": "2027-09-19T00:00:00Z",
+   "publishStart": "2027-09-23T00:00:00Z",
    "eventStart": "2027-09-26T00:00:00Z",
    "eventEnd": "2027-10-03T23:59:59Z",
    "localization": {
@@ -2094,7 +2108,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-coffee-2027",
-   "publishStart": "2027-09-21T00:00:00Z",
+   "publishStart": "2027-09-25T00:00:00Z",
    "eventStart": "2027-09-28T00:00:00Z",
    "eventEnd": "2027-10-05T23:59:59Z",
    "localization": {
@@ -2121,7 +2135,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-smile-day-2027",
-   "publishStart": "2027-09-21T00:00:00Z",
+   "publishStart": "2027-09-25T00:00:00Z",
    "eventStart": "2027-09-28T00:00:00Z",
    "eventEnd": "2027-10-05T23:59:59Z",
    "localization": {
@@ -2148,7 +2162,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-animal-day-2027",
-   "publishStart": "2027-09-24T00:00:00Z",
+   "publishStart": "2027-09-28T00:00:00Z",
    "eventStart": "2027-10-01T00:00:00Z",
    "eventEnd": "2027-10-08T23:59:59Z",
    "localization": {
@@ -2175,7 +2189,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-teachers-2027",
-   "publishStart": "2027-09-25T00:00:00Z",
+   "publishStart": "2027-09-29T00:00:00Z",
    "eventStart": "2027-10-02T00:00:00Z",
    "eventEnd": "2027-10-09T23:59:59Z",
    "localization": {
@@ -2202,7 +2216,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-mental-health-2027",
-   "publishStart": "2027-09-30T00:00:00Z",
+   "publishStart": "2027-10-04T00:00:00Z",
    "eventStart": "2027-10-07T00:00:00Z",
    "eventEnd": "2027-10-14T23:59:59Z",
    "localization": {
@@ -2229,7 +2243,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-food-day-2027",
-   "publishStart": "2027-10-06T00:00:00Z",
+   "publishStart": "2027-10-10T00:00:00Z",
    "eventStart": "2027-10-13T00:00:00Z",
    "eventEnd": "2027-10-20T23:59:59Z",
    "localization": {
@@ -2256,7 +2270,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-un-day-2027",
-   "publishStart": "2027-10-14T00:00:00Z",
+   "publishStart": "2027-10-18T00:00:00Z",
    "eventStart": "2027-10-21T00:00:00Z",
    "eventEnd": "2027-10-28T23:59:59Z",
    "localization": {
@@ -2277,13 +2291,14 @@
   {
    "eventId": "ev-diwali-2027",
    "packId": "evpack-diwali-2027",
+   "primary": true,
    "referenceName": "ev-diwali-2027",
    "badge": "SPECIAL_EVENT",
    "purpose": "APPROPRIATE_FOR_ALL_USERS",
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-diwali-2027",
-   "publishStart": "2027-10-19T00:00:00Z",
+   "publishStart": "2027-10-23T00:00:00Z",
    "eventStart": "2027-10-26T00:00:00Z",
    "eventEnd": "2027-11-02T23:59:59Z",
    "localization": {
@@ -2304,13 +2319,14 @@
   {
    "eventId": "ev-halloween-2027",
    "packId": "evpack-halloween-2027",
+   "primary": true,
    "referenceName": "ev-halloween-2027",
    "badge": "SPECIAL_EVENT",
    "purpose": "APPROPRIATE_FOR_ALL_USERS",
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-halloween-2027",
-   "publishStart": "2027-10-21T00:00:00Z",
+   "publishStart": "2027-10-25T00:00:00Z",
    "eventStart": "2027-10-28T00:00:00Z",
    "eventEnd": "2027-11-04T23:59:59Z",
    "localization": {
@@ -2337,7 +2353,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-vegan-2027",
-   "publishStart": "2027-10-22T00:00:00Z",
+   "publishStart": "2027-10-26T00:00:00Z",
    "eventStart": "2027-10-29T00:00:00Z",
    "eventEnd": "2027-11-05T23:59:59Z",
    "localization": {
@@ -2364,7 +2380,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-remembrance-2027",
-   "publishStart": "2027-11-01T00:00:00Z",
+   "publishStart": "2027-11-05T00:00:00Z",
    "eventStart": "2027-11-08T00:00:00Z",
    "eventEnd": "2027-11-15T23:59:59Z",
    "localization": {
@@ -2391,7 +2407,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-kindness-2027",
-   "publishStart": "2027-11-03T00:00:00Z",
+   "publishStart": "2027-11-07T00:00:00Z",
    "eventStart": "2027-11-10T00:00:00Z",
    "eventEnd": "2027-11-17T23:59:59Z",
    "localization": {
@@ -2418,7 +2434,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-universal-childrens-2027",
-   "publishStart": "2027-11-10T00:00:00Z",
+   "publishStart": "2027-11-14T00:00:00Z",
    "eventStart": "2027-11-17T00:00:00Z",
    "eventEnd": "2027-11-24T23:59:59Z",
    "localization": {
@@ -2439,24 +2455,25 @@
   {
    "eventId": "ev-thanksgiving-2027",
    "packId": "evpack-thanksgiving-2027",
+   "primary": true,
    "referenceName": "ev-thanksgiving-2027",
    "badge": "SPECIAL_EVENT",
    "purpose": "APPROPRIATE_FOR_ALL_USERS",
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-thanksgiving-2027",
-   "publishStart": "2027-11-15T00:00:00Z",
+   "publishStart": "2027-11-19T00:00:00Z",
    "eventStart": "2027-11-22T00:00:00Z",
    "eventEnd": "2027-11-29T23:59:59Z",
    "localization": {
     "name": "Thanksgiving",
-    "shortDescription": "24 pictures for Thanksgiving",
+    "shortDescription": "23 pictures for Thanksgiving",
     "longDescription": "Wild turkeys, pumpkin, pecan and apple pies, stuffing, cranberries, corn, squash soups, sweet potatoes and acorns."
    },
    "pictures": [
     "p-d8adf9b12888",
     "p-d1278428ab70",
-    "p-567c062846a4"
+    "p-16aae4226883"
    ],
    "media": {
     "card": "ev-thanksgiving-2027/ev-thanksgiving-2027-card.jpg",
@@ -2472,7 +2489,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-volunteer-2027",
-   "publishStart": "2027-11-25T00:00:00Z",
+   "publishStart": "2027-11-29T00:00:00Z",
    "eventStart": "2027-12-02T00:00:00Z",
    "eventEnd": "2027-12-09T23:59:59Z",
    "localization": {
@@ -2499,7 +2516,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-mountain-day-2027",
-   "publishStart": "2027-12-01T00:00:00Z",
+   "publishStart": "2027-12-05T00:00:00Z",
    "eventStart": "2027-12-08T00:00:00Z",
    "eventEnd": "2027-12-15T23:59:59Z",
    "localization": {
@@ -2526,7 +2543,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-tea-day-2027",
-   "publishStart": "2027-12-05T00:00:00Z",
+   "publishStart": "2027-12-09T00:00:00Z",
    "eventStart": "2027-12-12T00:00:00Z",
    "eventEnd": "2027-12-19T23:59:59Z",
    "localization": {
@@ -2553,7 +2570,7 @@
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-winter-solstice-2027",
-   "publishStart": "2027-12-11T00:00:00Z",
+   "publishStart": "2027-12-15T00:00:00Z",
    "eventStart": "2027-12-18T00:00:00Z",
    "eventEnd": "2027-12-25T23:59:59Z",
    "localization": {
@@ -2574,13 +2591,14 @@
   {
    "eventId": "ev-christmas-2027",
    "packId": "evpack-christmas-2027",
+   "primary": true,
    "referenceName": "ev-christmas-2027",
    "badge": "SPECIAL_EVENT",
    "purpose": "APPROPRIATE_FOR_ALL_USERS",
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-christmas-2027",
-   "publishStart": "2027-12-15T00:00:00Z",
+   "publishStart": "2027-12-19T00:00:00Z",
    "eventStart": "2027-12-22T00:00:00Z",
    "eventEnd": "2027-12-29T23:59:59Z",
    "localization": {
@@ -2601,13 +2619,14 @@
   {
    "eventId": "ev-new-years-eve-2027",
    "packId": "evpack-new-years-eve-2027",
+   "primary": true,
    "referenceName": "ev-new-years-eve-2027",
    "badge": "SPECIAL_EVENT",
    "purpose": "APPROPRIATE_FOR_ALL_USERS",
    "priority": "NORMAL",
    "purchaseRequirement": "NO_COST_ASSOCIATED",
    "deepLink": "carden://library/pack/evpack-new-years-eve-2027",
-   "publishStart": "2027-12-21T00:00:00Z",
+   "publishStart": "2027-12-25T00:00:00Z",
    "eventStart": "2027-12-28T00:00:00Z",
    "eventEnd": "2028-01-04T23:59:59Z",
    "localization": {

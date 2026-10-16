@@ -10,7 +10,8 @@ updates only what differs, so it is safe to run again after a partial failure.
     asc_publish.py testflight --build 103 # wait for build 103, add to the groups, beta review
     asc_publish.py release --version 1.7.0 --build 103   # prepare the App Store version
     asc_publish.py submit --yes           # create and submit the review submission
-    asc_publish.py events [--window 10]   # In-App Event drafts for the next world-day events (never submitted)
+    asc_publish.py events [--window 10] [--primary 5]   # In-App Event drafts: the next world-day events and the
+                                          # next major holidays after them (never submitted)
 
 Reads metadata from store/metadata (see tools/store/README.md). Credentials:
 the team API key secrets/AuthKey_9QC72A5QMN.p8 (override with ASC_KEY_ID and
@@ -71,6 +72,7 @@ API = "https://api.appstoreconnect.apple.com"
 APP_EVENTS = META / "app_events.json"
 EVENT_MEDIA = Path(os.environ.get("CJW_APP_EVENT_MEDIA", "~/.local/share/card-jigsaw-world/app-events")).expanduser()
 EVENT_WINDOW = 10        # Apple publishes at most 10 events at a time (15 approved)
+EVENT_PRIMARY = 5        # the other 5 approved slots: the next major holidays after the window
 EVENT_LEAD_DAYS = 2      # events starting sooner are left alone (too late for review)
 EVENT_EDITABLE_STATES = ("DRAFT", "REJECTED")
 # Asset types whose upload commit takes only `uploaded` (Apple rejects sourceFileChecksum on them).
@@ -1756,18 +1758,21 @@ def _same_schedule(a: list | None, b: list) -> bool:
 
 
 def cmd_events(s: Store) -> int:
-    """In-App Events for the next world-day events, as drafts. Never submits: Apple reviews events with an
-    app version (the first one must go with the first App Store submission) or on their own later, and the
-    owner starts that. Events Apple has already accepted are left alone."""
+    """In-App Events for the next world-day events and the next major holidays after them, as drafts.
+    Never submits: Apple reviews events with an app version (the first one must go with the first App
+    Store submission) or on their own later, and the owner starts that. Events Apple has already accepted
+    are left alone."""
     import datetime as dt
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from make_app_events import pick  # the same choice the media step makes
     log("== in-app events (drafts only, never submitted)")
     if not APP_EVENTS.exists():
         sys.exit(f"{APP_EVENTS.relative_to(ROOT)} is missing: run tools/store/make_app_events.py first")
     events = read_json(APP_EVENTS)["events"]
-    window = int(s.opt("window") or EVENT_WINDOW)
+    window = EVENT_WINDOW if s.opt("window") is None else int(s.opt("window"))
+    primary = EVENT_PRIMARY if s.opt("primary") is None else int(s.opt("primary"))
     now = dt.datetime.now(dt.timezone.utc)
-    todo = sorted((e for e in events if _utc(e["eventStart"]) >= now + dt.timedelta(days=EVENT_LEAD_DAYS)),
-                  key=lambda e: e["eventStart"])[:window]
+    todo = pick(events, now, window, primary, EVENT_LEAD_DAYS)
     existing = {attr(x, "referenceName"): x for x in s.c.get_list(f"/v1/apps/{APP_ID}/appEvents")}
     territories = s.territories()
     missing_media = []
@@ -1787,7 +1792,7 @@ def cmd_events(s: Store) -> int:
                  "territorySchedules": schedule}
         ev = existing.get(ref)
         state = attr(ev, "eventState")
-        log(f"  -- {ref} ({e['eventStart'][:10]}, {state or 'new'})")
+        log(f"  -- {ref} ({e['eventStart'][:10]}, {state or 'new'}{', major holiday' if e.get('primary') else ''})")
         if ev and state not in EVENT_EDITABLE_STATES:
             log(f"    {state}: left alone")
             continue
@@ -1816,7 +1821,8 @@ def cmd_events(s: Store) -> int:
     if missing_media:
         ids = " ".join(sorted(set(missing_media)))
         log(f"  media missing for {len(set(missing_media))} event(s): tools/store/make_app_events.py --media {ids}")
-    log(f"  {len(todo)} event(s) in the window (next {window} starting {EVENT_LEAD_DAYS}+ days from now); nothing was submitted")
+    log(f"  {len(todo)} event(s): the next {window} starting {EVENT_LEAD_DAYS}+ days from now and the next {primary} "
+        "major holidays after them; nothing was submitted")
     return 0
 
 
@@ -1876,6 +1882,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--note", metavar="TEXT", help="with `feedback --resolve`: what was done about it")
     parser.add_argument("--without-iap", action="store_true", help="with `submit`: proceed even if ready products are not in the submission")
     parser.add_argument("--window", type=int, metavar="N", help=f"with `events`: how many upcoming events to draft (default {EVENT_WINDOW})")
+    parser.add_argument("--primary", type=int, metavar="N", help=f"with `events`: how many major holidays after the window to draft too (default {EVENT_PRIMARY})")
     args = parser.parse_args(argv)
 
     client = Client(dry_run=args.dry_run, verbose=args.verbose)
