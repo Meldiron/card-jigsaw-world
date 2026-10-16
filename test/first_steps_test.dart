@@ -1,6 +1,7 @@
 import 'package:carden/data/local_store.dart';
 import 'package:carden/game/board.dart';
 import 'package:carden/models/models.dart';
+import 'package:carden/state/catalog.dart';
 import 'package:carden/state/first_steps.dart';
 import 'package:carden/state/achievements.dart';
 import 'package:carden/state/profile.dart';
@@ -29,6 +30,8 @@ void main() {
     final c = ProviderContainer(overrides: [
       localStoreProvider.overrideWithValue(store),
       countedSolvesProvider.overrideWith((ref) => solved),
+      // A first pack with a picture left (an empty or finished one opens the Library by itself).
+      allPuzzlesProvider.overrideWith((ref) async => [_unsolved]),
       profileProvider.overrideWith(() => _Profile(xpFor(level))),
     ]);
     addTearDown(c.dispose);
@@ -165,6 +168,7 @@ void main() {
         progressProvider.overrideWith(() => _Rows(progress)),
         profileProvider.overrideWith(() => _Profile(0)),
         friendsProvider.overrideWith((ref) async => const []),
+        allPuzzlesProvider.overrideWith((ref) async => [_unsolved]),
       ]);
       addTearDown(c.dispose);
       await c.read(progressProvider.future);
@@ -232,6 +236,55 @@ void main() {
     });
   });
 
+  group('the first pack played through before Home', () {
+    final start = DateTime(2026, 10, 12, 8);
+    final pack = [for (var i = 1; i <= 24; i++) Puzzle.fromRow(i == 1 ? firstBoardPuzzle : 'tb-$i', {'packId': firstBoardPack, 'title': 'Beach $i', 'sortOrder': i})];
+    final other = Puzzle.fromRow('other-1', {'packId': 'wild-nature', 'title': 'Other', 'sortOrder': 1});
+    PuzzleProgress solved(Puzzle z, int i) => PuzzleProgress.fromRow('r$i', {
+          'userId': 'u',
+          'puzzleId': z.id,
+          'gridSize': 9,
+          'completed': true,
+          'stars': 3,
+          'completedAt': start.add(Duration(minutes: 5 * i)).toIso8601String(),
+        });
+
+    Future<ProviderContainer> after(int finished) async {
+      // Onboarding just before the first picture; Home reached only after all of them.
+      final prefs = {'firstSteps': '{"guided":true,"startedAt":"${start.toUtc().toIso8601String()}","homeAt":"${start.add(const Duration(hours: 5)).toUtc().toIso8601String()}"}'};
+      SharedPreferences.setMockInitialValues(prefs);
+      final store = await LocalStore.open();
+      final c = ProviderContainer(overrides: [
+        localStoreProvider.overrideWithValue(store),
+        progressProvider.overrideWith(() => _Rows({for (var i = 0; i < finished; i++) pack[i].id: solved(pack[i], i + 1)})),
+        profileProvider.overrideWith(() => _Profile(xpFor(4))),
+        allPuzzlesProvider.overrideWith((ref) async => [...pack, other]),
+        packsProvider.overrideWith((ref) async => const <Pack>[]),
+      ]);
+      addTearDown(c.dispose);
+      await c.read(progressProvider.future);
+      await c.read(allPuzzlesProvider.future);
+      await c.read(profileProvider.future);
+      return c;
+    }
+
+    test('one picture counts, but with nothing left in the pack the Library opens by itself', () async {
+      final c = await after(24);
+      expect(c.read(countedSolvesProvider), 1);
+      expect(c.read(firstPackDoneProvider), isTrue);
+      expect(c.read(revealsProvider), {Reveal.library}, reason: 'only the Library: Quick play and the rest keep their counts');
+      expect(c.read(newTabsProvider), {Reveal.library.tab}, reason: 'the Library tab gets its dot');
+      expect(c.read(nextStepProvider)?.route, '/library', reason: 'Home points to the Library, which is open');
+    });
+
+    test('with a picture left in the pack, it is still the next step and the Library waits', () async {
+      final c = await after(23);
+      expect(c.read(firstPackDoneProvider), isFalse);
+      expect(c.read(revealsProvider).contains(Reveal.library), isFalse);
+      expect(c.read(nextStepProvider)?.puzzle?.id, pack.last.id);
+    });
+  });
+
   test('the first board is nine cards on Cards, the smallest board', () {
     expect(firstBoardSpec.cells, 9);
     expect(BoardCode.toPath(firstBoardSpec.fullCode), 'cards-3x3');
@@ -239,6 +292,8 @@ void main() {
     expect((back.mode, back.cols, back.rows), (firstBoardSpec.mode, 3, 3));
   });
 }
+
+final _unsolved = Puzzle.fromRow('tb-left', {'packId': firstBoardPack, 'title': 'Left to play', 'sortOrder': 99});
 
 class _Rows extends ProgressNotifier {
   _Rows(this.rows);

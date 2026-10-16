@@ -229,7 +229,19 @@ bool revealOpen(Reveal r, {required FirstSteps steps, required int solved}) => !
 final revealsProvider = Provider<Set<Reveal>>((ref) {
   final steps = ref.watch(firstStepsProvider);
   final solved = ref.watch(countedSolvesProvider);
-  return {for (final r in Reveal.values) if (revealOpen(r, steps: steps, solved: solved)) r};
+  final packDone = steps.calm && ref.watch(firstPackDoneProvider);
+  return {for (final r in Reveal.values) if (revealOpen(r, steps: steps, solved: solved) || (r == Reveal.library && packDone)) r};
+});
+
+/// The first pack has no picture left to suggest: every one finished (owner, 2026-10-17: a player
+/// who plays the whole pack with Next puzzle before ever reaching Home has 1 picture counted and
+/// nothing left to play). The Library then opens by itself, so the guided start never leaves a
+/// player with only Unlock anyway. Also when the pack is missing from the catalogue.
+final firstPackDoneProvider = Provider<bool>((ref) {
+  final puzzles = ref.watch(allPuzzlesProvider).value;
+  if (puzzles == null) return false;
+  final rows = ref.watch(progressProvider).value ?? const <String, PuzzleProgress>{};
+  return puzzles.where((z) => z.packId == firstBoardPack).every((z) => rows[z.id]?.completed == true);
 });
 
 /// When [r] started to count for this player: quests and achievements count only pictures finished

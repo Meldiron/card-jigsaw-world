@@ -59,6 +59,10 @@ guided again.
    | 35 | live events (Home's shelf, the Quests section, event packs in the Library) |
    | 50 | the Social tab (league, friends, inbox) |
 
+   The Library also opens by itself when the first pack has nothing left to play
+   (`firstPackDoneProvider`): a player who plays all of it with Next puzzle before ever reaching Home
+   has one picture counted and would otherwise be left with only Unlock anyway (owner, 2026-10-17).
+
    Nothing is announced when something opens: no "Just opened" card, and no level intro sheets
    ("Squares are open") for guided players (`pendingUnlockIntroProvider`).
 7. **Quests and achievements count only after they open** (`countsFromProvider`): pictures finished

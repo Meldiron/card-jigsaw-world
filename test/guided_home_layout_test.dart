@@ -124,7 +124,7 @@ void main() {
       SharedPreferences.setMockInitialValues({'firstSteps': '{"guided":true}'});
       final store = await LocalStore.open();
       await tester.pumpWidget(ProviderScope(
-        overrides: [localStoreProvider.overrideWithValue(store), profileProvider.overrideWith(_Profile.new), progressProvider.overrideWith(() => _Rows(const {}))],
+        overrides: [localStoreProvider.overrideWithValue(store), profileProvider.overrideWith(_Profile.new), progressProvider.overrideWith(() => _Rows(const {})), allPuzzlesProvider.overrideWith((ref) async => pictures)],
         child: MediaQuery(
           data: MediaQueryData(size: const Size(375, 667), textScaler: TextScaler.linear(scale)),
           child: MaterialApp(theme: AppTheme.light(), home: const Scaffold(body: SingleChildScrollView(padding: EdgeInsets.all(20), child: LockedSectionCard(reveal: Reveal.achievements)))),
