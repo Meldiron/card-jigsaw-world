@@ -714,7 +714,7 @@ twice.
 ## Square boards (owner, 2026-10-17)
 
 Every size is now the same N x N board in every mode (`docs/boards.md`): Cozy 3x3, Relaxed 4x4,
-Tricky 5x5, Expert 6x6, Master 7x7 (Triangles have no 3x3, Hexagons only 5x5 and 7x7). The Cards
+Tricky 5x5, Expert 6x6, Master 7x7 (Hexagons have no 3x3; see "Pre-set pieces" below). The Cards
 counts are the Cards ladder's square steps, which is what the model above plays (`CARD_CELLS` at
 tiers 2, 4 and 6: 16, 25, 36), so its results stand; Master is 49 cards instead of 48. A triangle
 column is one up and one down triangle, so Triangles keep about the counts they had per size (36,
@@ -735,6 +735,24 @@ no square board and no Expand size: the level rewards at levels 2 and 5 no longe
 the early unlocks of tiers 3 and 5 (1,500 and 2,100 coins) are no longer offered (boards saved on
 them still resume). Size quests name square sizes and count a square board as its side squared
 (`Goals.sizeOf`).
+
+### Pre-set pieces pay nothing (owner, 2026-10-17)
+
+Triangles 3x3, Hexagons 4x4 and Hexagons 6x6 fill the sizes those shapes lacked; a piece that is
+the only one of its shape is dealt in its place and not played (`docs/boards.md`, "Pre-set pieces").
+A board pays for the pieces the player plays (`BoardSpec.playableCells`: the difficulty screen's
+"3 stars pay up to", `recordCompletion`, a guest's co-op reward); its quest size is its side squared
+as for every square board, and `progress.gridSize` stays the full piece count, which names the board.
+
+| Board, 3 stars, first time | Pieces played (of all) | Coins | XP | The same size in Cards |
+| --- | --- | --- | --- | --- |
+| Triangles 3x3 | 19 (of 21) | 50 | 105 | 3x3: 17 coins |
+| Hexagons 4x4 | 14 (of 18) | 41 | 98 | 4x4: 31 coins |
+| Hexagons 6x6 | 37 (of 39) | 108 | 185 | 6x6: 71 coins |
+
+They sit between the sizes around them in their mode (Triangles 4x4: 96 coins; Hexagons 5x5: 78,
+7x7: 153), so nothing about the earnings model changes; a player on Hexagons' Relaxed who was dealt
+the 5x5 honeycomb before (78 coins) now gets the 4x4 one (41) for a shorter board.
 
 ## Level-ups capped at 300 (owner request, 2026-10-17)
 
