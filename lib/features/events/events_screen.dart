@@ -363,6 +363,29 @@ class _GoalRow extends ConsumerWidget {
       }
     }
 
+    // Swapped for another for a ticket, asked first; short of tickets, the store.
+    Future<void> swap() async {
+      final next = goal.swap;
+      if (next == null) return;
+      final tickets = ref.read(profileProvider).value?.tickets ?? 0;
+      if (tickets < QuestSwap.tickets) {
+        Sfx.instance.error();
+        showToast(context, 'Not enough tickets. Finish weekly quests or level up to earn more.', leading: const TicketIcon(size: 20));
+        context.push('/store');
+        return;
+      }
+      final sure = await showAppAlert(
+        context,
+        title: 'Swap this quest?',
+        message: '“${goal.title}” becomes “${next.nextTitle}”, for the same reward. This costs ${countOf(QuestSwap.tickets, 'ticket')}. You have ${formatCount(tickets)}.',
+        confirmLabel: 'Swap for ${countOf(QuestSwap.tickets, 'ticket')}',
+      );
+      if (!sure || !context.mounted) return;
+      if (!await ref.read(profileProvider.notifier).swapQuest(goal) || !context.mounted) return;
+      Haptics.success();
+      showToast(context, 'Quest swapped', icon: AppIcons.check);
+    }
+
     final ready = goal.done && !claimed;
     final currency = goal.coins > 0 ? Currency.coins : Currency.tickets;
     final amount = goal.coins > 0 ? goal.coins : goal.tickets;
@@ -399,9 +422,39 @@ class _GoalRow extends ConsumerWidget {
             const SizedBox(width: 10),
             if (ready)
               BigButton(label: 'Claim', height: 34, expand: false, onTap: claim)
-            else if (!claimed)
+            else if (!claimed) ...[
+              if (goal.swap != null) ...[_SwapButton(key: ValueKey('quest-swap-${goal.swap!.slot}'), onTap: swap), const SizedBox(width: 8)],
               Icon(AppIcons.chevronRight, size: 15, color: c.textTertiary),
+            ],
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// A quest's swap: "Swap [ticket] 1", small, in the accent tint, so the row's own tap still plays.
+class _SwapButton extends StatelessWidget {
+  const _SwapButton({super.key, required this.onTap});
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      button: true,
+      label: 'Swap this quest for ${countOf(QuestSwap.tickets, 'ticket')}',
+      child: ExcludeSemantics(
+        child: Pressable(
+          onTap: onTap,
+          child: TapTarget(
+            child: Container(
+              height: 30,
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(color: context.colors.accentTint, borderRadius: BorderRadius.circular(Radii.pill)),
+              child: CostLabel(label: 'Swap', currency: Currency.tickets, amount: QuestSwap.tickets, color: context.accent, fontSize: TypeSize.footnote),
+            ),
+          ),
         ),
       ),
     );

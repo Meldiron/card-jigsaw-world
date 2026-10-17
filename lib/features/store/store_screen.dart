@@ -31,7 +31,7 @@ import '../daily/piggy_sheet.dart';
 import '../links/deep_links.dart';
 
 /// Store: free bonus video (capped per day), coin bundles, ticket bundles,
-/// hint packs, VIP. Purchases go through StoreKit and are verified by the
+/// booster bundles (Peek, Hint and Magic), VIP. Purchases go through StoreKit and are verified by the
 /// `verify-purchase` Appwrite Function before anything is granted; the tapped
 /// row waits while the App Store sheet is open, then [PurchaseHost] shows the
 /// purchase sheet ([purchaseFlowProvider]). In debug
@@ -173,6 +173,8 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
     if (g.coins > 0) await n.addCoins(g.coins, reason: 'sandbox:${p.id}');
     if (g.tickets > 0) await n.addTickets(g.tickets, reason: 'sandbox:${p.id}');
     if (g.hints > 0) await n.addHints(g.hints, reason: 'sandbox:${p.id}');
+    if (g.peeks > 0) await n.addPeeks(g.peeks, reason: 'sandbox:${p.id}');
+    if (g.magics > 0) await n.addMagics(g.magics, reason: 'sandbox:${p.id}');
     if (!mounted) return;
     Sfx.instance.coin();
     Haptics.success();
@@ -322,7 +324,7 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
             grid(_coinProducts),
             const SectionHeader(title: 'Tickets', subtitle: 'Premium packs and the piggy bank', padding: header),
             grid(_ticketProducts),
-            const SectionHeader(title: 'Hints', subtitle: 'Show a card its place', padding: header),
+            const SectionHeader(title: 'Boosters', subtitle: 'Peek, Hint and Magic for any board', padding: header),
             grid(_boosterProducts),
             if (!isVip) ...[
               const SizedBox(height: 24),
@@ -524,7 +526,7 @@ class _StoreDownPanel extends StatelessWidget {
           Text('Purchases are unavailable', textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: 6),
           Text(
-            'The App Store is not responding, so coins, tickets, hints and VIP cannot be bought right now. Everything you own works as usual.',
+            'The App Store is not responding, so coins, tickets, boosters and VIP cannot be bought right now. Everything you own works as usual.',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: TypeSize.footnote, height: 1.4, color: c.textSecondary),
           ),
@@ -794,7 +796,7 @@ class _PlanRow extends StatelessWidget {
   }
 }
 
-enum _Art { coin, coins, coinsLarge, coinsHuge, ticket, tickets, hints, hintsLarge }
+enum _Art { coin, coins, coinsLarge, coinsHuge, ticket, tickets, helpers }
 
 /// A store tile. Amounts and fallback prices come from [StoreProducts], the
 /// one table the server grant and the App Store metadata are checked against.
@@ -819,8 +821,8 @@ const _ticketProducts = [
   _Product(ProductIds.tickets15, art: _Art.tickets),
 ];
 const _boosterProducts = [
-  _Product(ProductIds.hints5, art: _Art.hints),
-  _Product(ProductIds.hints15, art: _Art.hintsLarge),
+  _Product(ProductIds.hints5, art: _Art.helpers),
+  _Product(ProductIds.hints15, art: _Art.helpers),
 ];
 
 /// Product artwork: stacked currency marks whose count grows with the bundle.
@@ -846,26 +848,48 @@ class _ProductArt extends StatelessWidget {
       _Art.coinsHuge => stack((s) => CoinIcon(size: s), 4, 30),
       _Art.ticket => stack((s) => TicketIcon(size: s), 1, 32),
       _Art.tickets => stack((s) => TicketIcon(size: s), 3, 28),
-      // Each disc sits on a ring in the card colour, so the next one does not cut its bulb.
-      _Art.hints => stack((s) => _Ringed(size: s, child: HintIcon(size: s)), 2, 32),
-      _Art.hintsLarge => stack((s) => _Ringed(size: s, child: HintIcon(size: s)), 4, 28),
+      // A helper bundle shows its three helpers with their counts instead ([_HelperCounts]).
+      _Art.helpers => const SizedBox.shrink(),
     };
   }
 }
 
-/// A round mark with a 2 pt ring in the card colour around it (stacked artwork).
-class _Ringed extends StatelessWidget {
-  const _Ringed({required this.size, required this.child});
-  final double size;
-  final Widget child;
+/// A helper bundle's contents in place of the artwork and the title: Peek, Hint and Magic, each
+/// with its mark, its count and its name, one under the other.
+class _HelperCounts extends StatelessWidget {
+  const _HelperCounts({required this.grant});
+  final ProductGrant grant;
 
   @override
-  Widget build(BuildContext context) => Container(
-        width: size,
-        height: size,
-        decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: context.colors.card, width: 2)),
-        child: child,
-      );
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    Widget row(Currency kind, int n, String name) => Padding(
+          padding: const EdgeInsets.symmetric(vertical: 2),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              currencyIcon(kind, size: 20),
+              const SizedBox(width: 8),
+              Text(formatCount(n), style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.callout, letterSpacing: -0.2)),
+              const SizedBox(width: 4),
+              Text(name, style: TextStyle(fontWeight: FontWeight.w500, fontSize: TypeSize.footnote, color: c.textSecondary)),
+            ],
+          ),
+        );
+    // The block is centred in the tile, its rows aligned on their marks; with Larger Text on a small
+    // phone it scales down rather than wrap.
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          row(Currency.peeks, grant.peeks, grant.peeks == 1 ? 'Peek' : 'Peeks'),
+          row(Currency.hints, grant.hints, grant.hints == 1 ? 'Hint' : 'Hints'),
+          row(Currency.magics, grant.magics, 'Magic'),
+        ],
+      ),
+    );
+  }
 }
 
 /// Every way to earn without paying, each row naming where it leads: playing first (the Store
@@ -903,7 +927,7 @@ class _FreeWays extends ConsumerWidget {
             },
           ),
           divider(),
-          ListRow(icon: AppIcons.piggy, title: 'Piggy bank', subtitle: '${Economy.piggyPerPuzzle} coins for every picture, up to ${formatCount(Profile.piggyCapacity)}', onTap: () => showPiggySheet(context)),
+          Consumer(builder: (context, ref, _) => ListRow(icon: AppIcons.piggy, title: 'Piggy bank', subtitle: '${Economy.piggyPerPuzzle} coins for every picture, up to ${formatCount(ref.watch(profileProvider).value?.piggyCapacity ?? Profile.basePiggyCapacity)}', onTap: () => showPiggySheet(context))),
           divider(),
           ListRow(icon: AppIcons.wheel, title: 'Lucky Wheel', subtitle: 'Coins, hints and boosters for a ticket', onTap: () => context.push('/wheel')),
           divider(),
@@ -966,7 +990,12 @@ class _ProductGrid extends StatelessWidget {
   final String Function(_Product) priceOf;
   final double Function(_Product) rawPriceOf;
 
-  static double _amount(_Product p) => (p.grant.coins + p.grant.tickets + p.grant.hints).toDouble();
+  /// What a bundle holds, in coins: tickets at [StoreProducts.ticketCoinValue], helpers at what they
+  /// cost in a game. Bundles are compared within their own section only.
+  static double _amount(_Product p) {
+    final g = p.grant;
+    return (g.coins + g.tickets * StoreProducts.ticketCoinValue + g.hints * Economy.hintCostCoins + g.peeks * Economy.peekCostCoins + g.magics * Economy.magicLockCostCoins).toDouble();
+  }
 
   /// How much more a bundle gives per unit of money than the smallest one, in whole
   /// percent rounded down: a fact the player can check, instead of a "Popular" label.
@@ -1062,10 +1091,15 @@ class _ProductTile extends StatelessWidget {
                     : null,
               ),
               const SizedBox(height: 10),
-              SizedBox(height: 42, child: Center(child: _ProductArt(art: p.art))),
-              const SizedBox(height: 12),
-              // The amount is never cut: with Larger Text on a small phone it scales down a little.
-              FittedBox(fit: BoxFit.scaleDown, child: Text(p.title, maxLines: 1, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.callout, letterSpacing: -0.2))),
+              if (p.grant.helpers)
+                // Peek, Hint and Magic with their counts take the place of the artwork and the title.
+                Semantics(label: p.title, child: ExcludeSemantics(child: SizedBox(height: 74, child: Center(child: _HelperCounts(grant: p.grant)))))
+              else ...[
+                SizedBox(height: 42, child: Center(child: _ProductArt(art: p.art))),
+                const SizedBox(height: 12),
+                // The amount is never cut: with Larger Text on a small phone it scales down a little.
+                FittedBox(fit: BoxFit.scaleDown, child: Text(p.title, maxLines: 1, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.callout, letterSpacing: -0.2))),
+              ],
               const SizedBox(height: 12),
               if (purchasable)
                 _PriceButton(

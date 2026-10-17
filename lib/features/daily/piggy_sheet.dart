@@ -12,17 +12,47 @@ import '../../widgets/ui.dart';
 
 Future<void> showPiggySheet(BuildContext context) => showAppSheet(context, builder: (_) => const PiggySheet());
 
-/// Piggy bank fills with every completed puzzle; break it open with a ticket.
+/// Piggy bank fills with every completed puzzle; break it open with a ticket. Five upgrades make it
+/// hold more (500 to 1,000), for coins.
 class PiggySheet extends ConsumerWidget {
   const PiggySheet({super.key});
+
+  /// Asks first, then upgrades; short of coins, the store (as for packs and boosters).
+  Future<void> _upgrade(BuildContext context, WidgetRef ref, Profile profile) async {
+    const price = Economy.piggyUpgradeCoins;
+    final next = Profile.piggyCapacityAt(profile.piggyLevel + 1);
+    if (profile.coins < price) {
+      Sfx.instance.error();
+      showToast(context, 'Not enough coins. Play more puzzles or visit the store.', leading: const CoinIcon(size: 20));
+      final router = GoRouter.of(context);
+      Navigator.pop(context);
+      router.push('/store');
+      return;
+    }
+    final sure = await showAppAlert(
+      context,
+      title: 'Upgrade the piggy bank?',
+      message: 'It holds ${formatCount(next)} coins instead of ${formatCount(profile.piggyCapacity)}. This costs ${countOf(price, 'coin')}. You have ${formatCount(profile.coins)}.',
+      confirmLabel: 'Pay ${countOf(price, 'coin')}',
+    );
+    if (!sure || !context.mounted) return;
+    if (!await ref.read(profileProvider.notifier).upgradePiggy() || !context.mounted) return;
+    Sfx.instance.coin();
+    Haptics.success();
+    showToast(context, 'Your piggy bank holds ${formatCount(next)} coins now', icon: AppIcons.piggy);
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final c = context.colors;
     final profile = ref.watch(profileProvider).value;
     final coins = profile?.piggyCoins ?? 0;
+    final capacity = profile?.piggyCapacity ?? Profile.basePiggyCapacity;
     final full = profile?.piggyFull ?? false;
     final tickets = profile?.tickets ?? 0;
     final canOpen = coins > 0 && tickets >= Economy.piggyOpenTickets;
+    // The next size, while there is one.
+    final upgrade = profile != null && profile.piggyLevel < Profile.maxPiggyLevel ? profile.piggyLevel + 1 : null;
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
       child: Column(
@@ -30,7 +60,7 @@ class PiggySheet extends ConsumerWidget {
         children: [
           SheetHeader(
             title: 'Piggy bank',
-            subtitle: 'Every solved picture adds ${countOf(Economy.piggyPerPuzzle, 'coin')}, up to ${formatCount(Profile.piggyCapacity)}. Open it with ${countOf(Economy.piggyOpenTickets, 'ticket')} whenever you like.',
+            subtitle: 'Every solved picture adds ${countOf(Economy.piggyPerPuzzle, 'coin')}, up to ${formatCount(capacity)}. Open it with ${countOf(Economy.piggyOpenTickets, 'ticket')} whenever you like.',
             center: true,
           ),
           const SizedBox(height: 20),
@@ -38,7 +68,7 @@ class PiggySheet extends ConsumerWidget {
           SizedBox.square(
             dimension: 148,
             child: TweenAnimationBuilder<double>(
-              tween: Tween(end: (coins / Profile.piggyCapacity).clamp(0.0, 1.0)),
+              tween: Tween(end: (coins / capacity).clamp(0.0, 1.0)),
               duration: const Duration(milliseconds: 700),
               curve: Curves.easeOutCubic,
               builder: (context, v, child) => CustomPaint(painter: _RingPainter(value: v, track: c.stroke, fill: context.accent), child: child),
@@ -60,7 +90,7 @@ class PiggySheet extends ConsumerWidget {
                       AnimatedCounter(value: coins, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.largeTitle, letterSpacing: -0.8)),
                     ],
                   ),
-                  Text('of ${formatCount(Profile.piggyCapacity)}', style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w500, color: c.textSecondary)),
+                  Text('of ${formatCount(capacity)}', style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w500, color: c.textSecondary)),
                 ],
               ),
                 ),
@@ -106,6 +136,24 @@ class PiggySheet extends ConsumerWidget {
             ),
             const SizedBox(height: 10),
             Text('You have ${countOf(tickets, 'ticket')}', textAlign: TextAlign.center, style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w500, color: c.textSecondary)),
+          ],
+          // A bigger piggy bank, one size at a time; not offered at the largest size.
+          if (upgrade != null) ...[
+            SizedBox(height: coins == 0 ? 0 : 20),
+            BigButton.cost(
+              key: const ValueKey('piggy-upgrade'),
+              label: 'Upgrade to ${formatCount(Profile.piggyCapacityAt(upgrade))} for',
+              currency: Currency.coins,
+              amount: Economy.piggyUpgradeCoins,
+              kind: ButtonKind.secondary,
+              onTap: () => _upgrade(context, ref, profile!),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Upgrade $upgrade of ${Profile.maxPiggyLevel}: holds ${formatCount(Profile.piggyStep)} coins more',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w500, color: c.textSecondary),
+            ),
           ],
         ],
       ),

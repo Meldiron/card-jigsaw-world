@@ -10,6 +10,7 @@ import 'package:carden/features/home/tomorrow_preview.dart';
 import 'package:carden/features/profile/settings_screen.dart';
 import 'package:carden/models/models.dart';
 import 'package:carden/state/catalog_sync.dart';
+import 'package:carden/state/profile.dart';
 import 'package:carden/state/reminders.dart';
 import 'package:carden/widgets/icons.dart';
 import 'package:flutter/material.dart';
@@ -160,6 +161,18 @@ void main() {
       final value = wheelSegments.fold<double>(0, (s, e) => s + e.weight * e.coinValue) / total;
       expect(value, inInclusiveRange(195, 210), reason: 'about 200 coins a spin, boosters at their price');
       expect([for (final s in wheelSegments) s.name], [null, 'Peeks', null, 'Hints', 'Peeks', 'Magic', null, 'Magic']);
+    });
+
+    test('a ×5 spin (owner, 2026-10-17): five tickets, the same odds, every prize five times', () {
+      expect(Economy.wheelBigSpin, 5);
+      final jackpot = wheelSegments.where((s) => s.jackpot).single;
+      expect(jackpot.amountFor(Economy.wheelBigSpin), 5000);
+      expect([for (final s in wheelSegments) s.amountFor(5)], [for (final s in wheelSegments) s.amount * 5]);
+      expect([for (final s in wheelSegments) s.amountFor(1)], [for (final s in wheelSegments) s.amount]);
+      // The value per ticket does not change: five times the prize for five times the price.
+      final total = wheelSegments.fold<double>(0, (s, e) => s + e.weight);
+      double perTicket(int times) => wheelSegments.fold<double>(0, (s, e) => s + e.weight * e.amountFor(times)) / total / (times * Economy.wheelSpinTickets);
+      expect(perTicket(5), closeTo(perTicket(1), 1e-9));
     });
 
     test('the spin draws each slice in proportion to its weight', () {

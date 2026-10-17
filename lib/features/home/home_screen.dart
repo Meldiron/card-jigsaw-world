@@ -134,12 +134,12 @@ class HomeScreen extends ConsumerWidget {
               textBaseline: TextBaseline.alphabetic,
               children: [
                 Text(formatCount(profile?.piggyCoins ?? 0), style: const TextStyle(fontSize: TypeSize.title3, fontWeight: FontWeight.w700, letterSpacing: -0.3)),
-                Text(' / ${formatCount(Profile.piggyCapacity)}', style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w500, color: context.colors.textSecondary)),
+                Text(' / ${formatCount(profile?.piggyCapacity ?? Profile.basePiggyCapacity)}', style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w500, color: context.colors.textSecondary)),
               ],
             ),
             footer: piggyFull
                 ? CostLabel(label: 'Full · open for', currency: Currency.tickets, amount: Economy.piggyOpenTickets, fontSize: TypeSize.footnote, color: context.accent)
-                : ProgressBar(value: (profile?.piggyCoins ?? 0) / Profile.piggyCapacity, height: 5),
+                : ProgressBar(value: (profile?.piggyCoins ?? 0) / (profile?.piggyCapacity ?? Profile.basePiggyCapacity), height: 5),
             onTap: () => showPiggySheet(context),
           );
     // The Lucky Wheel and the piggy bank side by side (the guided start opens them apart).

@@ -233,8 +233,8 @@ final fakeProducts = <String, ProductDetails>{
   ProductIds.coins12000: _product(ProductIds.coins12000, '12,000 Coins', 9.99),
   ProductIds.tickets5: _product(ProductIds.tickets5, '5 Tickets', 1.99),
   ProductIds.tickets15: _product(ProductIds.tickets15, '15 Tickets', 4.99),
-  ProductIds.hints5: _product(ProductIds.hints5, '5 Hints', 0.99),
-  ProductIds.hints15: _product(ProductIds.hints15, '15 Hints', 2.99),
+  ProductIds.hints5: _product(ProductIds.hints5, '15 Peeks, 10 Hints, 5 Magic', 0.99),
+  ProductIds.hints15: _product(ProductIds.hints15, '50 Peeks, 30 Hints, 15 Magic', 2.49),
   ProductIds.vipMonthly: _product(ProductIds.vipMonthly, 'VIP Monthly', 2.99),
   ProductIds.vipYearly: _product(ProductIds.vipYearly, 'VIP Yearly', 14.99),
 };
