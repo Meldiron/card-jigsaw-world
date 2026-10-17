@@ -484,6 +484,8 @@ class GameController extends Notifier<GameState> {
     if (!Board.isValidLayout(args.spec, layout)) return;
     final before = state.board;
     final after = Board(args.spec, layout);
+    // Twins that traded identities on the other player's screen keep their places here too.
+    final keys = sharedCardKeys(state.twins, before.slots, after.slots, state.cardKeys);
     final locked = <int>{for (var i = 0; i < after.cells; i++) if (after.isLocked(i) && !before.isLocked(i)) i};
     final sel = state.selected, hint = state.hintSlot;
     bool moved(int? s) => s != null && (s >= before.cells || before.slots[s] != after.slots[s]);
@@ -497,6 +499,7 @@ class GameController extends Notifier<GameState> {
       clearSelected: moved(sel) || (sel != null && after.isLocked(sel)),
       clearHint: moved(hint),
       status: won ? GameStatus.won : state.status,
+      cardKeys: keys,
     );
     if (won) {
       _events.add(GameEventKind.win);
@@ -504,6 +507,62 @@ class GameController extends Notifier<GameState> {
     } else if (locked.isNotEmpty) {
       _events.add(GameEventKind.lock);
     }
+  }
+
+  /// The board widget's keys after another player's change ([before] to [after], slot to card), so
+  /// that cards which look the same do not fly across the board (docs/twins.md, docs/multiplayer.md).
+  /// A change can hold twin trades (`Twins.settle` on the mover's screen: the dropped card took its
+  /// twin's identity, the twin kept its place). Within each class of twins any widget may show any
+  /// card of the class, so: a card that stayed keeps its widget; a card now where a twin of it was
+  /// takes that twin's widget (it stays put, and `_TwinFade` changes the picture); the rest keep
+  /// their own widget where it is free, else take a free one of the class. Without twins (or before
+  /// they are measured on this device) the keys stay as they are.
+  @visibleForTesting
+  static List<int>? sharedCardKeys(Twins? twins, List<int> before, List<int> after, List<int>? keys) {
+    if (twins == null || twins.isEmpty || before.length != after.length) return keys;
+    final n = after.length;
+    final posBefore = List<int>.filled(n, 0), posAfter = List<int>.filled(n, 0);
+    for (var s = 0; s < n; s++) {
+      posBefore[before[s]] = s;
+      posAfter[after[s]] = s;
+    }
+    final k = keys ?? List<int>.generate(n, (i) => i);
+    List<int>? out;
+    for (final cls in twins.classes) {
+      if (!cls.any((c) => posAfter[c] != posBefore[c])) continue;
+      final widgetOf = <int, int>{}; // card -> the card whose widget it takes
+      final used = <int>{};
+      for (final c in cls) {
+        if (posAfter[c] == posBefore[c]) {
+          widgetOf[c] = c;
+          used.add(c);
+        }
+      }
+      for (final c in cls) {
+        if (widgetOf.containsKey(c)) continue;
+        final d = before[posAfter[c]];
+        if (d != c && twins.same(c, d) && !used.contains(d)) {
+          widgetOf[c] = d;
+          used.add(d);
+        }
+      }
+      for (final c in cls) {
+        if (!widgetOf.containsKey(c) && !used.contains(c)) {
+          widgetOf[c] = c;
+          used.add(c);
+        }
+      }
+      final free = [for (final c in cls) if (!used.contains(c)) c];
+      var i = 0;
+      for (final c in cls) {
+        widgetOf[c] ??= free[i++];
+      }
+      for (final MapEntry(key: c, value: d) in widgetOf.entries) {
+        if (c == d) continue;
+        (out ??= List<int>.from(k))[c] = k[d];
+      }
+    }
+    return out ?? keys;
   }
 
   void restart() {

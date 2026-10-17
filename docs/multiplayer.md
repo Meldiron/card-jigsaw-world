@@ -199,6 +199,15 @@ board on that screen and hands it to the game). What the screen does in a game:
   theirs locked a card.
 - The host's finish is the normal completion card; Next puzzle (and Replay) deal the next board,
   `coop.nextBoard`, and move the guests onto it.
+- Twin cards (`docs/twins.md`): a board dealt here is dealt again once its twins are measured, so
+  Play together and the next board wait for that (`awaitsTwins`) and share the final deal; a guest's
+  board is made from the shared layout and is never dealt again. A move can trade two twins'
+  identities on the mover's screen (`Twins.settle`); the change then holds the two cards exchanging
+  slots, and `GameController.sharedCardKeys` keeps their widgets where the mover's screen keeps them
+  (the dropped card's widget lands, the twin's widget stays and fades to its new picture) instead of
+  flying them across the board. Twins are measured on each device from its own decode of the picture:
+  if two devices ever disagree, the shared log still decides the board (changes are slot
+  permutations, checked card by card), so only that animation differs. Old rows need nothing new.
 
 ### The seam
 

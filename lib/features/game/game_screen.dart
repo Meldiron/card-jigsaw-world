@@ -352,9 +352,11 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   Future<void> _handNextBoard() async {
     if (!_coopNextPending || !_fitted || _args == null || _listening != _args) return;
     _coopNextPending = false;
-    final s = ref.read(gameControllerProvider(_args!));
     setState(() => _coopStarting = true);
     try {
+      await _dealtWithTwins();
+      if (!mounted) return;
+      final s = ref.read(gameControllerProvider(_args!));
       final g = await ref.read(coopProvider.notifier).nextBoard(puzzleId: widget.puzzleId, grid: BoardCode.toPath(_spec.fullCode), layout: s.board.slots, painting: _painting);
       if (mounted) _attachCoop(g.id);
     } on CoopRefusal catch (e) {
@@ -377,8 +379,19 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     return true;
   }
 
+  /// A board dealt here is dealt again once its twins are measured (docs/twins.md): the layout
+  /// shared with a game is the final deal, so this waits for it (a moment; the measure gives up
+  /// after 8 s and the board then keeps its deal).
+  Future<void> _dealtWithTwins() async {
+    for (var i = 0; i < 120 && mounted && _args != null && ref.read(gameControllerProvider(_args!).notifier).awaitsTwins; i++) {
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+    }
+  }
+
   /// Pause > Play together: the game starts on this board as it is, and the share sheet opens.
   Future<void> _playTogether() async {
+    await _dealtWithTwins();
+    if (!mounted) return;
     final puzzle = ref.read(resolvedPuzzleProvider(widget.puzzleId));
     if (puzzle == null || _args == null) return;
     final s = ref.read(gameControllerProvider(_args!));
