@@ -41,6 +41,9 @@ class LocalStore {
   set onboarded(bool v) => _prefs.setBool('onboarded', v);
   bool get tutorialSeen => _prefs.getBool('tutorialSeen') ?? false;
   set tutorialSeen(bool v) => _prefs.setBool('tutorialSeen', v);
+  /// The player swiped a quest on the Quests tab once: the line that explains swaps is gone.
+  bool get questSwipeSeen => _prefs.getBool('questSwipeSeen') ?? false;
+  set questSwipeSeen(bool v) => _prefs.setBool('questSwipeSeen', v);
   /// Settings > Privacy > Share usage data (Appwrite Analytics, lib/core/analytics.dart); on until
   /// the player turns it off.
   bool get shareUsage => _prefs.getBool('shareUsage') ?? true;

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -14,6 +15,7 @@ import '../../state/first_steps.dart';
 import '../../state/profile.dart';
 import '../../state/progress.dart';
 import '../../state/rewards.dart';
+import '../../state/settings.dart';
 import '../../state/social.dart';
 import '../../state/unlocks.dart';
 import '../../game/board.dart';
@@ -67,6 +69,9 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
     final readyQuests = readyGoals(progress.values, profile, open, now, dailyPuzzle: dailyPuzzle, since: since);
     final readyEvents = ref.watch(readyEventsProvider);
     final eventsOpen = ref.watch(revealsProvider).contains(Reveal.liveEvents);
+    // Swaps are a swipe: one line under the daily quests says so until the player swipes one.
+    bool swappable(List<Goal> goals, int free) => goals.indexed.any((e) => e.$2.swap != null && !goalLocked(e.$2, e.$1, free, profile));
+    final swipeHint = !ref.watch(questSwipeLearnedProvider) && (swappable(daily, Goals.dailyFree) || swappable(weekly, Goals.weeklyFree));
     // The website layout: daily and weekly quests side by side, the live events beside what is
     // coming up.
     final wide = context.isExpanded;
@@ -120,13 +125,14 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
                 if (wide)
                   SliverToBoxAdapter(
                     child: side(
-                      [dailyHeader, _GoalList(goals: daily, freeCount: Goals.dailyFree, inset: 0)],
+                      [dailyHeader, _GoalList(goals: daily, freeCount: Goals.dailyFree, inset: 0), if (swipeHint) const _SwipeHint(inset: 0)],
                       [weeklyHeader, _GoalList(goals: weekly, freeCount: Goals.weeklyFree, weekly: true, inset: 0)],
                     ),
                   )
                 else ...[
                   SliverToBoxAdapter(child: dailyHeader),
                   SliverToBoxAdapter(child: _GoalList(goals: daily, freeCount: Goals.dailyFree)),
+                  if (swipeHint) const SliverToBoxAdapter(child: _SwipeHint()),
                   SliverToBoxAdapter(child: weeklyHeader),
                   SliverToBoxAdapter(child: _GoalList(goals: weekly, freeCount: Goals.weeklyFree, weekly: true)),
                 ],
@@ -364,10 +370,12 @@ class _GoalRow extends ConsumerWidget {
       }
     }
 
-    // Swapped for another for a ticket, asked first; short of tickets, the store.
+    // Swapped for another for a ticket (a swipe to the left, or the VoiceOver action), asked first;
+    // short of tickets, the store.
     Future<void> swap() async {
       final next = goal.swap;
       if (next == null) return;
+      ref.read(questSwipeLearnedProvider.notifier).learn();
       final tickets = ref.read(profileProvider).value?.tickets ?? 0;
       if (tickets < QuestSwap.tickets) {
         Sfx.instance.error();
@@ -395,8 +403,9 @@ class _GoalRow extends ConsumerWidget {
     final status = claimed ? 'Claimed' : (ready ? 'Ready to claim' : (goal.target > 1 ? '${goal.progress.clamp(0, goal.target)} of ${goal.target}' : 'Not done yet'));
 
     // A checklist row: progress ring with the quest's icon, the quest, its reward and status; the
-    // only button is Claim. An open quest is a tap target that starts a fitting board.
-    return Pressable(
+    // only button is Claim. An open quest is a tap target that starts a fitting board, and swipes
+    // left to be swapped (as a friend swipes away on Social).
+    final row = Pressable(
       onTap: ready ? claim : (claimed ? null : play),
       scale: 0.99,
       child: Padding(
@@ -425,10 +434,51 @@ class _GoalRow extends ConsumerWidget {
             const SizedBox(width: 10),
             if (ready)
               BigButton(label: 'Claim', height: 34, expand: false, onTap: claim)
-            else if (!claimed) ...[
-              if (goal.swap != null) ...[_SwapButton(key: ValueKey('quest-swap-${goal.swap!.slot}'), onTap: swap), const SizedBox(width: 8)],
+            else if (!claimed)
               Icon(AppIcons.chevronRight, size: 15, color: c.textTertiary),
-            ],
+          ],
+        ),
+      ),
+    );
+    final s = goal.swap;
+    if (s == null || ready || claimed) return row;
+    // The swipe goes as far as the action, which asks first; the row then slides back, showing the
+    // quest that came (or the same one, cancelled). VoiceOver: the row's "Swap for 1 ticket" action.
+    return Semantics(
+      customSemanticsActions: {CustomSemanticsAction(label: 'Swap for ${countOf(QuestSwap.tickets, 'ticket')}'): () => swap()},
+      child: Dismissible(
+        key: ValueKey('quest-swap-${s.slot}'),
+        direction: DismissDirection.endToStart,
+        // Reduce motion: the row jumps out and back instead of sliding (the swipe itself follows the finger).
+        movementDuration: A11y.reduceMotionOf(context) ? Duration.zero : const Duration(milliseconds: 200),
+        background: const _SwapAction(),
+        confirmDismiss: (_) async {
+          await swap();
+          return false;
+        },
+        child: ColoredBox(color: c.card, child: row),
+      ),
+    );
+  }
+}
+
+/// What a quest shows as it is swiped left: the swap and its price, white on the accent.
+class _SwapAction extends StatelessWidget {
+  const _SwapAction();
+
+  @override
+  Widget build(BuildContext context) {
+    return ExcludeSemantics(
+      child: Container(
+        color: context.accentFill,
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.only(right: 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(AppIcons.swaps, size: 20, color: context.onAccent),
+            const SizedBox(height: 4),
+            CostLabel(label: 'Swap', currency: Currency.tickets, amount: QuestSwap.tickets, color: context.onAccent, fontSize: TypeSize.footnote),
           ],
         ),
       ),
@@ -436,31 +486,48 @@ class _GoalRow extends ConsumerWidget {
   }
 }
 
-/// A quest's swap: "Swap [ticket] 1", small, in the accent tint, so the row's own tap still plays.
-class _SwapButton extends StatelessWidget {
-  const _SwapButton({super.key, required this.onTap});
-  final VoidCallback onTap;
+/// Under the daily quests until the player first swipes one: how a quest is swapped.
+class _SwipeHint extends StatelessWidget {
+  const _SwipeHint({this.inset = 20});
+
+  /// Side margin, as the quest list's.
+  final double inset;
 
   @override
   Widget build(BuildContext context) {
-    return Semantics(
-      button: true,
-      label: 'Swap this quest for ${countOf(QuestSwap.tickets, 'ticket')}',
-      child: ExcludeSemantics(
-        child: Pressable(
-          onTap: onTap,
-          child: TapTarget(
-            child: Container(
-              height: 30,
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(color: context.colors.accentTint, borderRadius: BorderRadius.circular(Radii.pill)),
-              child: CostLabel(label: 'Swap', currency: Currency.tickets, amount: QuestSwap.tickets, color: context.accent, fontSize: TypeSize.footnote),
+    final c = context.colors;
+    return Padding(
+      key: const ValueKey('quest-swipe-hint'),
+      padding: EdgeInsets.fromLTRB(inset + 4, 10, inset + 4, 0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(padding: const EdgeInsets.only(top: 2), child: Icon(AppIcons.swaps, size: 14, color: c.textTertiary)),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              'Swipe left on a quest to swap it for another. A swap costs ${countOf(QuestSwap.tickets, 'ticket')}.',
+              style: TextStyle(fontSize: TypeSize.footnote, color: c.textSecondary),
             ),
           ),
-        ),
+        ],
       ),
     );
+  }
+}
+
+/// The player has swiped a quest once: the line under the daily quests that explains swaps is gone
+/// (on this device).
+final questSwipeLearnedProvider = NotifierProvider<QuestSwipeLearned, bool>(QuestSwipeLearned.new);
+
+class QuestSwipeLearned extends Notifier<bool> {
+  @override
+  bool build() => ref.read(localStoreProvider).questSwipeSeen;
+
+  void learn() {
+    if (state) return;
+    ref.read(localStoreProvider).questSwipeSeen = true;
+    state = true;
   }
 }
 

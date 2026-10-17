@@ -260,7 +260,8 @@ void main() {
         };
     final before = titles();
     final q0 = me();
-    await tester.tap(swaps.at(1), warnIfMissed: false);
+    // A swipe to the left, as far as the swap (TestFlight, 2026-10-17: a swipe, not a button).
+    await tester.drag(swaps.at(1), const Offset(-320, 0), warnIfMissed: false);
     await settle(tester, 1200);
     expect(find.text('Swap this quest?'), findsOneWidget);
     await shot(tester, 'ee_14_swap_confirm');
