@@ -12,10 +12,15 @@
 //                                                   (was coop-game /<action>)
 //   POST /gift/send                gift/send.js     a friend gift (was send-gift /send)
 //   POST /coop/cleanup             coop/cleanup.js  the hourly co-op cleanup on demand; only for a caller
-//                                                   who is not a player (the owner's CLI, a server key)
+//                                                   who is not a player (the owner's CLI)
 //   POST /admin/sweep              sweep/run.js     the integrity sweep on demand, same callers:
 //                                                   { dryRun = true, full, qaOnly }
 //   GET  /health                   { ok, environment, maxPlayers, appleSignIn }
+//   GET  join.carden.page/<code>   invite/page.js   a Play together invite's page and link preview
+//                                                   (also /join/<code> and the association file)
+//
+// Execute is `any` since the invites got their own domain (2026-10-17): calls without a session
+// reach the router, so every route checks its caller itself.
 //
 // A scheduled execution (trigger `schedule`: the function's hourly `0 * * * *`) runs the co-op cleanup
 // (it was the coop-cleanup function) and the integrity sweep, whatever its path; the sweep changes
@@ -27,6 +32,7 @@
 // call needs (the App Store library only for purchases). Each module answers its own failures as its
 // old function did, so the app reads the same answers.
 import { MAX_PLAYERS } from './coop/rules.js';
+import { isInviteRequest } from './invite/paths.js';
 
 const purchase = () => import('./purchase.js');
 const account = () => import('./account.js');
@@ -35,6 +41,8 @@ const coop = () => import('./coop/game.js');
 const cleanup = () => import('./coop/cleanup.js');
 const gift = () => import('./gift/send.js');
 const sweeper = () => import('./sweep/run.js');
+const invite = () => import('./invite/page.js');
+const inviteCards = () => import('./invite/store.js');
 
 /// Whether the sweep may change rows when it runs by itself (schedule, events).
 const sweepApplies = () => process.env.SWEEP_APPLY === 'true';
@@ -94,6 +102,11 @@ async function scheduled({ req, res, log, error }) {
     error(`integrity sweep: ${e?.stack ?? e}`);
     out.ok = false;
   }
+  try {
+    out.inviteCards = await (await inviteCards()).cleanCards(req, log);
+  } catch (e) {
+    error(`invite cards: ${e?.stack ?? e}`);
+  }
   return res.json(out, out.ok ? 200 : 500);
 }
 
@@ -113,11 +126,12 @@ async function event({ req, res, log }) {
   return res.json({ ok: true, ...result });
 }
 
-/// Whether the caller is not one of the game's players: no user (a server key) or a console user
-/// (the owner's CLI, whose id Appwrite passes too but is no user of this project).
+/// Whether the caller is the owner's console: a user id that is no user of this project (the CLI
+/// signed in as the owner). A call without a user is refused: with execute `any` (the invites'
+/// domain) that is anyone on the internet.
 async function notAPlayer(req) {
   const userId = req.headers['x-appwrite-user-id'];
-  if (!userId) return true;
+  if (!userId) return false;
   const { Client, Users } = await import('node-appwrite');
   const client = new Client()
     .setEndpoint(process.env.APPWRITE_FUNCTION_API_ENDPOINT)
@@ -144,6 +158,7 @@ export default async (context) => {
     const trigger = req.headers?.['x-appwrite-trigger'];
     if (trigger === 'schedule') return await scheduled(context);
     if (trigger === 'event') return await event(context);
+    if (isInviteRequest(req)) return await (await invite()).serve(context);
     const handler = ROUTES[routeOf(req)];
     if (!handler) return notFound(context);
     return await handler(context);

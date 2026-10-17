@@ -121,11 +121,16 @@ test('the manual sweep is for callers who are not players, and a dry run unless 
   assert.deepEqual([r.status, r.body.ok, r.body.apply, r.body.full], [200, true, false, true]);
 });
 
-test('the manual cleanup is for callers who are not players only', async () => {
+test('the manual cleanup is for the owner\'s console only', async () => {
   assert.deepEqual(await run('POST', '/coop/cleanup', { headers: player }), { status: 404, body: { ok: false, error: 'Not found' } });
-  for (const headers of [{ 'x-appwrite-trigger': 'http' }, { 'x-appwrite-trigger': 'http', 'x-appwrite-user-id': 'console-owner' }]) {
-    const r = await run('POST', '/coop/cleanup', { headers });
-    assert.equal(r.status, 200, JSON.stringify(headers));
-    assert.equal(r.body.ok, true);
+  const r = await run('POST', '/coop/cleanup', { headers: { 'x-appwrite-trigger': 'http', 'x-appwrite-user-id': 'console-owner' } });
+  assert.equal(r.status, 200);
+  assert.equal(r.body.ok, true);
+});
+
+test('the owner\'s routes refuse calls without a user (execute is `any` for the invites\' domain)', async () => {
+  const anon = { 'x-appwrite-trigger': 'http' };
+  for (const path of ['/coop/cleanup', '/admin/sweep']) {
+    assert.deepEqual(await run('POST', path, { headers: anon, body: { dryRun: false } }), { status: 404, body: { ok: false, error: 'Not found' } }, path);
   }
 });

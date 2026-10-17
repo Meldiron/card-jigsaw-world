@@ -383,6 +383,8 @@ export async function coopAction(name, { req, res, log, error }) {
   }
   try {
     const result = await action(services(req), userId, body || {});
+    // The invite is shared a moment later: draw its link preview now, without waiting (invite/store.js).
+    if ((name === 'create' || name === 'next') && result?.id) import('../invite/store.js').then((m) => m.prepareCard(req, result, log)).catch(() => {});
     return res.json({ ok: true, game: result?.id ? result : undefined, ...(result?.id ? {} : result) });
   } catch (e) {
     if (e instanceof Refusal) {
