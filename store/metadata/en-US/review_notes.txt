@@ -17,7 +17,7 @@ LUCKY WHEEL
 Home > Lucky Wheel (also in the Store). A spin costs 1 ticket and pays one random prize: coins, Peeks, Hints or Magic. Tickets can be bought, so the age rating declares a loot box. "See odds" on the wheel lists every prize and its exact chance before the player spins. Tickets are never a prize.
 
 ADS
-There is no ad network and no third-party SDK for ads, analytics or tracking. The "rewarded video" and break cards are house ads: short, closable promotions of the game's own store. They never appear for VIP players.
+There is no ad network and no third-party SDK for ads, analytics or tracking. The "rewarded video" and break cards are house ads: short, closable promotions of the game's own store. They never appear for VIP players. Usage analytics (screens and game events) go only to our own backend (Appwrite Analytics), are not used for tracking, and can be turned off in Settings > Privacy > Share usage data.
 
 NOTIFICATIONS
 Only local notifications, planned on the device. Daily reminders (Settings > Daily reminders) are off until the player turns them on. Event reminders (the evening before a new event, for players who have been away) are promotional, with their own switch, off until the player says yes.
