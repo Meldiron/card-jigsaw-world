@@ -119,7 +119,7 @@ void main() {
     await settle(tester, 800);
     expect(paintingOn(tester), isTrue);
     await shot(tester, 'rb_01_chosen');
-    await tester.tap(find.textContaining('squares · Play'), warnIfMissed: false);
+    await tester.tap(find.byKey(const ValueKey('play-board')), warnIfMissed: false);
     await settle(tester, 6000);
     if (find.text('Got it').evaluate().isNotEmpty) await tapText(tester, 'Got it');
     expect(board(tester).state.board.spec.mode, GameMode.squares);
@@ -136,15 +136,15 @@ void main() {
     final other = pictures.firstWhere((z) => z.id != pictures[0].id && played[z.id] == null);
     await tapPicture(tester, other.title);
     expect(find.byType(DifficultyScreen), findsOneWidget);
-    expect(find.textContaining('squares · Play'), findsOneWidget, reason: 'Squares is preselected');
+    expect(tester.widget<Semantics>(find.ancestor(of: find.byKey(const ValueKey('mode-squares')), matching: find.byType(Semantics)).first).properties.selected, isTrue, reason: 'Squares is preselected');
     final selected = tester.widgetList<Text>(find.text('Cozy'));
     expect(selected, isNotEmpty);
     await tester.dragUntilVisible(find.byKey(const ValueKey('painting-option')), find.byType(Scrollable).first, const Offset(0, -200));
     expect(paintingOn(tester), isTrue, reason: 'Painting is preselected');
     final last = c.read(settingsProvider).lastBoard!;
     expect((last.mode, last.tier, last.painting), ('squares', 0, true));
-    final cozy = BoardSpec.tiers(GameMode.squares, BoardSpec.referenceAspect)[0];
-    expect(find.textContaining('· Play'), findsOneWidget);
+    final cozy = BoardSpec.squareTiers(GameMode.squares)[0];
+    expect(find.descendant(of: find.byKey(const ValueKey('play-board')), matching: find.text('Play')), findsOneWidget);
     await shot(tester, 'rb_03_next_picture_${cozy.code}');
     semantics.dispose();
   });

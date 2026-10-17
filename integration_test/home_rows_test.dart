@@ -139,7 +139,7 @@ void main() {
     debugPrint('home QA packs: perfect ${perfect.id} (${of(perfect).length}), short ${short.id} (${of(short).length}), '
         'started ${started.map((p) => p.id).join(', ')}');
     final progress = c.read(progressProvider.notifier);
-    final easySquares = BoardSpec.tiers(GameMode.squares)[1];
+    final easySquares = BoardSpec.squareTiers(GameMode.squares)[1];
     var minute = 0;
     Future<void> solve(Puzzle z, int stars, {GameMode mode = GameMode.cards, int? cells}) async => progress.complete(
           z.id,
@@ -200,9 +200,9 @@ void main() {
     await settle(tester, 1500);
     await tapText(tester, 'Quick play', ms: 4000);
     expect(find.byType(DifficultyScreen), findsOneWidget, reason: 'Quick play opens the mode and board screen');
-    expect(find.textContaining('squares · Play'), findsOneWidget, reason: 'the last mode is preselected');
+    expect(tester.widget<Semantics>(find.ancestor(of: find.byKey(const ValueKey('mode-squares')), matching: find.byType(Semantics)).first).properties.selected, isTrue, reason: 'the last mode is preselected');
     await shot(tester, 'home_09_quick_play_preselected');
-    await tester.tap(find.textContaining('· Play'), warnIfMissed: false);
+    await tester.tap(find.byKey(const ValueKey('play-board')), warnIfMissed: false);
     await settle(tester, 6000);
     if (find.text('Got it').evaluate().isNotEmpty) await tapText(tester, 'Got it');
     expect(find.byType(BoardWidget), findsOneWidget);

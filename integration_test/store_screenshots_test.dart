@@ -369,7 +369,7 @@ void main() {
     await tester.drag(find.byType(Scrollable).first, const Offset(0, 1200));
     await settle(tester, 700);
     if (difficultyShot != null) await shot(tester, difficultyShot);
-    await tester.tap(find.textContaining('Play'), warnIfMissed: false);
+    await tester.tap(find.byKey(const ValueKey('play-board')), warnIfMissed: false);
     await settle(tester, 6000);
     // Giant pictures are 4096 px: the full-size download and decode take a moment longer.
     for (var i = 0; i < 30 && boardFinder().evaluate().isEmpty; i++) {
@@ -554,7 +554,7 @@ void main() {
 
     // Hero: the Monarch on a 12-card board, mostly placed, one fused group,
     // one card lifted. Then finish it (pack progress, quest progress).
-    await startGame(tester, heroPuzzle, 'Cards', 'Easy', difficultyShot: '02_difficulty');
+    await startGame(tester, heroPuzzle, 'Cards', 'Relaxed', difficultyShot: '02_difficulty');
     // Everything placed but the two top corners (swapped), the left one lifted.
     await swapCornersOnly(tester);
     await tester.tapAt(center(tester, 0));
@@ -568,7 +568,7 @@ void main() {
 
     // A finished picture with three stars: Key West sunset in hexagons,
     // solved in the fewest moves.
-    await startGame(tester, hexPuzzle, 'Hexagons', 'Cozy');
+    await startGame(tester, hexPuzzle, 'Hexagons', 'Tricky');
     await solve(tester);
     await settle(tester, 3500);
     await shot(tester, '04_complete');
@@ -580,10 +580,10 @@ void main() {
 
     // One picture, four ways to cut it (Bora Bora lagoon), each mid-game.
     for (final (mode, tier, name) in [
-      ('Cards', 'Easy', '06_mode_cards'),
-      ('Squares', 'Easy', '07_mode_squares'),
-      ('Triangles', 'Cozy', '08_mode_triangles'),
-      ('Hexagons', 'Easy', '09_mode_hexagons'),
+      ('Cards', 'Relaxed', '06_mode_cards'),
+      ('Squares', 'Relaxed', '07_mode_squares'),
+      ('Triangles', 'Relaxed', '08_mode_triangles'),
+      ('Hexagons', 'Tricky', '09_mode_hexagons'),
     ]) {
       try {
         await startGame(tester, modesPuzzle, mode, tier);
@@ -694,7 +694,7 @@ void main() {
       }
       if (lastId != null) {
         try {
-          await startGame(tester, lastId, 'Squares', 'Easy');
+          await startGame(tester, lastId, 'Squares', 'Relaxed');
           await midBuild(tester, 0.35, 2);
           await selectOne(tester);
           await shot(tester, '21_my_puzzle_game');

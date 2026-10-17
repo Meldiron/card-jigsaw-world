@@ -114,7 +114,7 @@ void main() {
     await tapText(tester, mode, ms: 800);
     await tester.dragUntilVisible(find.text(size), find.byType(Scrollable).first, const Offset(0, -200));
     await tapText(tester, size, ms: 800);
-    await tester.tap(find.textContaining('· Play'), warnIfMissed: false);
+    await tester.tap(find.byKey(const ValueKey('play-board')), warnIfMissed: false);
     // 4096 px pictures: the full-size download and decode take a moment.
     for (var i = 0; i < 40 && find.byType(BoardWidget).evaluate().isEmpty; i++) {
       await settle(tester, 500);
@@ -240,7 +240,7 @@ void main() {
     await leaveBoard(tester);
     container(tester).read(routerProvider).push('/play/${pictures[0].id}');
     await settle(tester, 6000);
-    await tester.tap(find.textContaining('Continue ·'), warnIfMissed: false);
+    await tester.tap(find.byKey(const ValueKey('play-board')), warnIfMissed: false);
     for (var i = 0; i < 40 && find.byType(BoardWidget).evaluate().isEmpty; i++) {
       await settle(tester, 500);
     }

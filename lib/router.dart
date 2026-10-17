@@ -98,6 +98,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             initialGrid: s.uri.queryParameters['grid'],
             initialMode: s.uri.queryParameters['mode'],
             initialPainting: s.uri.queryParameters['painting'] == '1',
+            initialExpand: s.uri.queryParameters['expand'] == '1',
             // Opened by Quick play (`?from=quick`): offers Another picture.
             fromQuick: s.uri.queryParameters['from'] == 'quick',
           ),
@@ -105,11 +106,21 @@ final routerProvider = Provider<GoRouter>((ref) {
         ),
       ),
       GoRoute(
-        // :grid is a BoardCode path form, e.g. hexagons-5x6 or 4x4 (cards); `?painting=1` starts a
-        // new board in Painting (a saved board resumes as it was saved).
+        // :grid is a BoardCode path form, e.g. hexagons-5x5t4 or 4x4 (cards); `?painting=1` starts a
+        // new board in Painting (a saved board resumes as it was saved); `?expand=1` deals the next
+        // picture with Expand too (a board that is not square is an Expand board anyway).
         path: '/game/:puzzleId/:grid',
         parentNavigatorKey: rootNavigatorKey,
-        pageBuilder: (c, s) => _fade(GameScreen(puzzleId: s.pathParameters['puzzleId']!, gridCode: s.pathParameters['grid']!, painting: s.uri.queryParameters['painting'] == '1', first: s.uri.queryParameters['first'] == '1'), s),
+        pageBuilder: (c, s) => _fade(
+          GameScreen(
+            puzzleId: s.pathParameters['puzzleId']!,
+            gridCode: s.pathParameters['grid']!,
+            painting: s.uri.queryParameters['painting'] == '1',
+            expand: s.uri.queryParameters['expand'] == '1',
+            first: s.uri.queryParameters['first'] == '1',
+          ),
+          s,
+        ),
       ),
       GoRoute(path: '/store', parentNavigatorKey: rootNavigatorKey, pageBuilder: (c, s) => _sheet(StoreScreen(showVip: s.uri.queryParameters['vip'] == '1'), s)),
       GoRoute(path: '/wheel', parentNavigatorKey: rootNavigatorKey, pageBuilder: (c, s) => _sheet(const WheelScreen(), s)),

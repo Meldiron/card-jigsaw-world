@@ -123,7 +123,7 @@ void main() {
     await tester.dragUntilVisible(find.text('Large'), find.byType(Scrollable).first, const Offset(0, -200));
     await tapText(tester, 'Large', ms: 800);
     await shot(tester, 'pc_04_difficulty');
-    await tester.tap(find.textContaining('· Play'), warnIfMissed: false);
+    await tester.tap(find.byKey(const ValueKey('play-board')), warnIfMissed: false);
     for (var i = 0; i < 40 && find.byType(BoardWidget).evaluate().isEmpty; i++) {
       await settle(tester, 500);
     }

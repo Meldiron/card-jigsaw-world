@@ -78,7 +78,7 @@ void main() {
     await tester.dragUntilVisible(find.text('Cozy'), find.byType(Scrollable).first, const Offset(0, -200));
     await settle(tester, 500);
     await tapText(tester, 'Cozy', ms: 600);
-    await tester.tap(find.textContaining('· Play'), warnIfMissed: false);
+    await tester.tap(find.byKey(const ValueKey('play-board')), warnIfMissed: false);
     await settle(tester, 6000);
     if (find.text('Got it').evaluate().isNotEmpty) await tapText(tester, 'Got it');
     await solveBoard(tester);
@@ -187,7 +187,7 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('unlock-try')), warnIfMissed: false);
     await settle(tester, 4000);
     expect(find.byType(DifficultyScreen), findsOneWidget);
-    expect(find.textContaining('squares · Play'), findsOneWidget);
+    expect(tester.widget<Semantics>(find.ancestor(of: find.byKey(const ValueKey('mode-squares')), matching: find.byType(Semantics)).first).properties.selected, isTrue);
     await shot(tester, 'pq_09_try_squares');
     await tester.tap(find.byIcon(CupertinoIcons.back).first, warnIfMissed: false);
     await settle(tester, 1500);

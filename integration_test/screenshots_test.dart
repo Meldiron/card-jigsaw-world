@@ -187,7 +187,7 @@ void main() {
     await settle(tester, 600);
     await tapText(tester, 'Cozy');
     await settle(tester, 500);
-    await tester.tap(find.textContaining('Play'), warnIfMissed: false);
+    await tester.tap(find.byKey(const ValueKey('play-board')), warnIfMissed: false);
     await settle(tester, 6000);
     if (find.text('Got it').evaluate().isNotEmpty) {
       await shot(tester, '07_tutorial');
@@ -235,7 +235,7 @@ void main() {
     await shot(tester, '11d_discard_alert');
     await tapText(tester, 'Discard', ms: 1200);
     await shot(tester, '11e_difficulty_after_discard');
-    await tester.tap(find.textContaining('Play'), warnIfMissed: false);
+    await tester.tap(find.byKey(const ValueKey('play-board')), warnIfMissed: false);
     await settle(tester, 1500);
     await tester.tap(find.byIcon(CupertinoIcons.pause_fill), warnIfMissed: false);
     await settle(tester, 900);
@@ -360,11 +360,11 @@ void main() {
     await tapText(tester, 'Wild Nature', ms: 3000);
     await shot(tester, '24_pack_dark');
     await tapText(tester, 'Hidden Waterfall', ms: 3000);
-    if (find.text('Easy').evaluate().isNotEmpty) {
-      await tester.dragUntilVisible(find.text('Easy'), find.byType(Scrollable).first, const Offset(0, -200));
+    if (find.text('Relaxed').evaluate().isNotEmpty) {
+      await tester.dragUntilVisible(find.text('Relaxed'), find.byType(Scrollable).first, const Offset(0, -200));
       await settle(tester, 600);
-      await tapText(tester, 'Easy');
-      await tester.tap(find.textContaining('Play'), warnIfMissed: false);
+      await tapText(tester, 'Relaxed');
+      await tester.tap(find.byKey(const ValueKey('play-board')), warnIfMissed: false);
     }
     await settle(tester, 6000);
     await shot(tester, '25_game_dark');
@@ -373,7 +373,7 @@ void main() {
     await tester.tap(find.byIcon(CupertinoIcons.pause_fill), warnIfMissed: false);
     await settle(tester, 800);
     await tapText(tester, 'Save & quit', ms: 2000);
-    // The last entry picks the smallest honeycomb (Cozy 3x4), which once
+    // The last entry picks the smallest honeycomb (Tricky 5x5), whose old 3x4 once
     // collapsed into a strip on a handscroll picture and must stay regular.
     // Each mode also assembles fused groups of telling shapes (an L and a T
     // in squares, a row of three triangles, a bent chain of hexagons) so the
@@ -383,7 +383,7 @@ void main() {
       ('Squares', 'Green Valley', null, [('L', [0, 1, 4]), ('T', [0, 1, 2, 5])]),
       ('Triangles', 'Snowy Peaks', null, [('row3', [0, 1, 2])]),
       ('Hexagons', 'Canyon Glow', null, [('bent', [0, 1, 5])]),
-      ('Hexagons', 'Rolling Hills', 'Cozy', const []),
+      ('Hexagons', 'Rolling Hills', 'Tricky', const []),
     ]) {
       // Back on the pack page? Capture whatever is there otherwise and try
       // to get back (a dialog, the game screen or a sheet may linger).
@@ -422,7 +422,7 @@ void main() {
         await tapText(tester, tier);
       }
       await shot(tester, '26_difficulty_$suffix');
-      await tester.tap(find.textContaining('Play'), warnIfMissed: false);
+      await tester.tap(find.byKey(const ValueKey('play-board')), warnIfMissed: false);
       await settle(tester, 6000);
       if (find.text('Got it').evaluate().isNotEmpty) await tapText(tester, 'Got it');
       final bf = find.byType(BoardWidget);

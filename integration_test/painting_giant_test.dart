@@ -124,7 +124,7 @@ void main() {
     expect(find.byKey(const ValueKey('painting-bonus')), findsOneWidget, reason: 'the rewards show the Painting bonus');
     await shot(tester, 'pg_01_difficulty_painting');
     final coinsBefore = container(tester).read(profileProvider).value!.coins;
-    await tester.tap(find.textContaining('· Play'), warnIfMissed: false);
+    await tester.tap(find.byKey(const ValueKey('play-board')), warnIfMissed: false);
     await settle(tester, 6000);
     if (find.text('Got it').evaluate().isNotEmpty) await tapText(tester, 'Got it');
     expect(board(tester).painting, isTrue);
@@ -153,7 +153,7 @@ void main() {
     expect(find.textContaining('in Painting is in progress'), findsOneWidget);
     expect(find.byKey(const ValueKey('painting-bonus')), findsOneWidget);
     await shot(tester, 'pg_03b_painting_resume_difficulty');
-    await tester.tap(find.textContaining('Continue ·'), warnIfMissed: false);
+    await tester.tap(find.byKey(const ValueKey('play-board')), warnIfMissed: false);
     await settle(tester, 5000);
     expect(board(tester).painting, isTrue, reason: 'resumes in Painting');
     await solve(tester);
@@ -192,7 +192,7 @@ void main() {
     await tester.dragUntilVisible(find.text('Colossal'), find.byType(Scrollable).first, const Offset(0, -200));
     await tapText(tester, 'Colossal', ms: 800);
     await shot(tester, 'pg_05b_giant_colossal');
-    await tester.tap(find.textContaining('· Play'), warnIfMissed: false);
+    await tester.tap(find.byKey(const ValueKey('play-board')), warnIfMissed: false);
     await settle(tester, 8000);
     final spec = board(tester).state.board.spec;
     debugPrint('QA giant board: ${spec.fullCode} ${spec.cells} cards');
@@ -285,9 +285,9 @@ void main() {
     expect(container(tester).read(puzzleProgressProvider(target.id))!.layout!.join(','), layout);
     container(tester).read(routerProvider).push('/play/${target.id}');
     await settle(tester, 6000);
-    expect(find.textContaining('Continue ·'), findsOneWidget);
+    expect(find.descendant(of: find.byKey(const ValueKey('play-board')), matching: find.text('Continue')), findsOneWidget);
     await shot(tester, 'pg_11_giant_resume_difficulty');
-    await tester.tap(find.textContaining('Continue ·'), warnIfMissed: false);
+    await tester.tap(find.byKey(const ValueKey('play-board')), warnIfMissed: false);
     await settle(tester, 8000);
     expect(board(tester).state.board.spec, spec, reason: 'same giant board');
     expect(board(tester).state.moves, moves);
