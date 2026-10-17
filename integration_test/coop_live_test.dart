@@ -246,8 +246,14 @@ void main() {
     await bot('/remove?user=$me');
     expect(await until(tester, () => find.text('Removed from the game').evaluate().isNotEmpty, seconds: 30), isTrue);
     await shot(tester, 'coop2_12_removed', 300);
+    // Behind the alert the board is still the host's: the guest's finish, not a completion card of
+    // this player's own.
+    expect(find.byKey(const ValueKey('coop-guest-finish')), findsOneWidget);
+    expect(find.text('Next puzzle'), findsNothing);
+    final removedFrom = s().game?.puzzleId;
     await tapText(tester, 'Close', ms: 2500);
     expect(router.state.uri.path, '/welcome');
+    if (removedFrom != null) expect(c.read(progressProvider).value?[removedFrom], isNull, reason: 'nothing of the shared board saved');
 
     debugPrint('COOP_STEP 12');
     // 12. A new game: this player locks a card, the host finishes: rewards as for a board of their own,
@@ -276,6 +282,8 @@ void main() {
     await bot('/end');
     expect(await until(tester, () => find.text('Game ended').evaluate().isNotEmpty, seconds: 30), isTrue);
     await shot(tester, 'coop2_14_ended', 300);
+    expect(find.byKey(const ValueKey('coop-guest-finish')), findsOneWidget);
+    expect(find.text('Next puzzle'), findsNothing);
     await tapText(tester, 'Close', ms: 2500);
 
     debugPrint('COOP_STEP 14');

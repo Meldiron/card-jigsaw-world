@@ -15,8 +15,11 @@ import 'coop_routes.dart';
 /// [rewards] is the completion card's rewards row (phase 2 passes it); null when the guest earns
 /// none (no card of theirs locked: a guest earns the board's rewards with at least one).
 class CoopGuestFinish extends ConsumerWidget {
-  const CoopGuestFinish({super.key, this.rewards});
+  const CoopGuestFinish({super.key, this.rewards, this.waiting = true});
   final Widget? rewards;
+
+  /// Waiting for the host's next board (false once the game is over).
+  final bool waiting;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,7 +31,11 @@ class CoopGuestFinish extends ConsumerWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text('Picture complete', textAlign: TextAlign.center, style: TextStyle(fontSize: TypeSize.title2, fontWeight: FontWeight.w700, letterSpacing: -0.3, color: c.textPrimary)),
+        Text(
+          'Picture complete',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: TypeSize.title2, fontWeight: FontWeight.w700, letterSpacing: -0.3, color: c.textPrimary),
+        ),
         const SizedBox(height: 14),
         if (rewards != null)
           rewards!
@@ -39,20 +46,21 @@ class CoopGuestFinish extends ConsumerWidget {
             style: TextStyle(fontSize: TypeSize.body, color: c.textSecondary),
           ),
         const SizedBox(height: 22),
-        Semantics(
-          liveRegion: true,
-          child: Column(
-            children: [
-              const CupertinoActivityIndicator(radius: 9),
-              const SizedBox(height: 10),
-              Text(
-                'Waiting for $host to pick the next board',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w500, color: c.textSecondary),
-              ),
-            ],
+        if (waiting)
+          Semantics(
+            liveRegion: true,
+            child: Column(
+              children: [
+                const CupertinoActivityIndicator(radius: 9),
+                const SizedBox(height: 10),
+                Text(
+                  'Waiting for $host to pick the next board',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w500, color: c.textSecondary),
+                ),
+              ],
+            ),
           ),
-        ),
         const SizedBox(height: 18),
         BigButton(
           key: const ValueKey('coop-finish-leave'),

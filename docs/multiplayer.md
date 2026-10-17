@@ -6,9 +6,11 @@ Up to five players play one board at the same time (owner-approved design, 2026-
 rest. Whoever opens it joins the board: in the app where it is installed (universal link), else in the
 web game. Everyone moves cards at once.
 
-Status: **phase 1** is done (backend live, engine, links, share, link preview, the co-op screens as
-widgets). **Phase 2** wires the shared board into the game screen (`game_screen.dart`,
-`game_controller.dart`, `board_widget.dart`); see "The seam" below.
+Status: done in the app (2026-10-17). Phase 1: backend live, engine, links, share, link preview, the
+co-op screens as widgets. Phase 2: the shared board wired into the game screen (`game_screen.dart`, one
+method in `game_controller.dart`, `board_widget.dart`, `giant_board.dart`); see "The game screen"
+below. It reaches players with the first build after the site is deployed (the association file and
+the invite page).
 
 ## What players see
 
@@ -24,8 +26,9 @@ widgets). **Phase 2** wires the shared board into the game screen (`game_screen.
   Here / Away. A tap on another player opens their profile (Report and Block are there). The host has
   **Remove** on each player, **Invite** while a seat is free and **End game for everyone**; a guest has
   **Leave game**. All three ask first (`coop_alerts.dart`).
-- In the pause sheet (phase 2), during a game "Play together" becomes "End game for everyone" (host) or
-  "Leave game" (guest), red, confirmed.
+- In the pause sheet, during a game "Play together" becomes "End game for everyone" (host) or
+  "Leave game" (guest), red, confirmed. A guest's "Save & quit" is "Quit": leaving the board keeps the
+  seat, and a toast offers Return.
 - Tools: Shuffle, Magic and Gather change the shared board (sent as changes; whoever uses Magic pays).
   Hint and Peek only show to the player who used them. No Undo in a shared game.
 - Finish: the host sees the normal completion card. Guests see their rewards, "Waiting for <host> to
@@ -36,8 +39,15 @@ widgets). **Phase 2** wires the shared board into the game screen (`game_screen.
   guest's quests, achievements, pack progress or first-steps counted pictures (`CoopState.isGuest`).
   The host's board is the host's normal board, saved and counted as always.
 - Removed: "Removed from the game" (the player cannot rejoin that game). Ended: "Game ended" with the
-  reason (the host ended it, the host left, a day without play). After either, a guest goes to Home, or
-  to the welcome pages when they came straight in from an invite.
+  reason (the host ended it, the host left, a day without play). Behind the alert the guest's board
+  keeps its guest look (no completion card of their own, nothing saved); after Close a guest goes to
+  Home, or to the welcome pages when they came straight in from an invite. The host keeps the board
+  ("Game ended. The board is yours.").
+- Return to game: the game is remembered on the device (`coop.active` in the local store) while the
+  player has a seat. Leaving the board (Quit) shows "The game goes on. Return to it any time." with
+  Return; after a restart, the first screen that is not the welcome pages or a board shows "Your game
+  with <host> is still on" with Return (`offerReturnToGame`). Forgotten when the game ends, or the
+  player leaves or is removed.
 - Disconnects: switching apps keeps the seat (the others see Away); on return the app reconnects and
   catches up. If the host's app closes, guests can finish the board. A host leaving on purpose (after
   confirming) ends the game. A game idle for a day ends itself.
@@ -167,7 +177,30 @@ one). At most one update per 3 s (`CoopTiming.presenceGap`): a socket may send a
 minute and the SDK's heartbeat takes 3. Gone when the socket closes (checked live: the others get a
 `delete` event). In the background the app sends `away`; on resume `online` and a catch-up.
 
-### The seam (phase 2)
+### The game screen (phase 2, wired)
+
+`/game/<puzzleId>/<grid>?coop=<id>` plays the game's shared board (`&next=1`: the host deals the next
+board on that screen and hands it to the game). What the screen does in a game:
+
+- The board starts from the shared layout (`CoopLog.layout`); the host keeps their moves and time, a
+  guest starts at 0. The first-board coach and the fit-to-picture step are skipped.
+- Every local change (a move, a drop, Magic, Shuffle, Gather) goes through `bridge.localChange` with
+  its kind; the others' changes come in through `_SharedBoard.showShared`, which calls
+  `GameController.showShared(layout)`: the board changes without a move, without Undo history, and
+  with the lock and win events (the only change in `game_controller.dart`).
+- Picking a card up sends `coop.hold(card)`; the board draws `coopCardMarks` (outline in the player's
+  colour and their initial; held cards solid, just moved ones faded). Giant boards: marks at any zoom,
+  the others' held cards as dots on the overview map and an off-screen pointer with the player's
+  initial.
+- No Undo anywhere (toolbar, the Gather toast); Hint and Peek stay local.
+- The host's board is saved and counted as always (also after the others' changes). A guest's board is
+  never saved, and its finish is `CoopGuestFinish`: rewards (`ProfileNotifier.recordCoopReward`, sync
+  op `coopReward`: coins, XP, level and its rewards, piggy bank; nothing else) only when a move of
+  theirs locked a card.
+- The host's finish is the normal completion card; Next puzzle (and Replay) deal the next board,
+  `coop.nextBoard`, and move the guests onto it.
+
+### The seam
 
 The game screen makes a `CoopBridge(ref.read(coopProvider.notifier), target)` while `?coop=<id>` is
 in its route (`CoopGame.route` = `/game/<puzzleId>/<grid>?coop=<id>`, plus `&painting=1`), where
@@ -251,6 +284,20 @@ includes the test's HTTP request to the bot on the Mac and the bot's own create.
   writes and 2.3M messages a month); about 600 games a day reach the included writes (750k) and 800 the
   included messages (6M).
 
+## Analytics
+
+`coop_game_created`, `coop_invite_shared`, `coop_game_joined` (fresh install or not, app or web),
+`coop_game_left`, `coop_game_ended` (by the host, or heard: host, host-left, idle, replaced),
+`coop_player_removed`, `coop_next_board`, `coop_returned`; props are counts and board sizes only (no
+codes, game ids or player ids). Table in `docs/analytics.md`.
+
+## Get Carden
+
+Until the App Store release, "Get Carden" (the invite page's fallback, `GET_CARDEN` in
+`web/index.html`, and `AppLinks.getCarden`) opens the public TestFlight link; both switch to the App
+Store page at launch (`docs/release-checklist.md`, "After approval"). `test/deep_links_test.dart` keeps
+the two equal.
+
 ## QA
 
 - Unit: `test/coop_log_test.dart` (100 seeds of three players moving at random with random delivery
@@ -267,7 +314,21 @@ includes the test's HTTP request to the bot on the Mac and the bot's own create.
   list as guest and host, removed, full, ended, dark and Increase contrast at Largest text
   (`screenshots/coop_*.png`). The bot cleans up its players when the test sends `/quit`. Passed on
   2026-10-17 (iPhone 17 Pro, iOS 26.5).
+- Phase 2, on the real game screen (the bot plays the other player; the same `node tools/dev/coop_bot.mjs &`):
+  `integration_test/coop_live_test.dart` is the guest (a fresh install joins by link; the host's moves
+  and held card with colour and initial; a move of its own; a conflict slides back; Magic and Shuffle;
+  background and catch-up; Quit and Return; Return to game after a restart; the player list; next
+  board; a finish without and with rewards, the rewards rule checked on the profile and progress;
+  removed; ended; Gather on a giant board; Leave game; `screenshots/coop2_*.png`), and
+  `integration_test/coop_host_test.dart` is the host (Play together from the pause sheet, the share
+  text, the friend joins and moves, the host's move reaches the friend, the completion card, Next
+  puzzle moves the friend, Remove, End game for everyone; `screenshots/coop2h_*.png`). The share sheet
+  is replaced by a recorder (`share_plus_platform_interface`, a dev dependency).
+- `test/coop_board_test.dart`: `GameController.showShared` (no move, no history, selection kept unless
+  its card moved) and two screens converging through the bridge.
+- Store: `32_coop_board` in `integration_test/store_screenshots_test.dart` (a scripted game with two
+  made-up friends on a stage backend; `CJW_STORE_ONLY=32_coop_board`).
 - The invite page: serve a copy of `web/` with `<base href="/">` and the single-page fallback, open
   `/join/<code>` in the simulator's Safari (`xcrun simctl openurl`): the card shows and the game does
   not load (`flutter_bootstrap.js` is not requested) until Play in the browser; `?open=1` shows the
-  fallback (Play in the browser first, Get Carden on the App Store).
+  fallback (Play in the browser first, then Get Carden).

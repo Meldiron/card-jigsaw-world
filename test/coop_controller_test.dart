@@ -233,8 +233,11 @@ void main() {
     await _settle();
     expect(host.notices.whereType<CoopLeft>().map((n) => n.userId), ['cat']);
     expect(host.state.game!.playerIds, ['amy', 'bob']);
+    // The ended row reaches the host before the function's answer: still no alert for the host.
+    host.backend.answerAfter = const Duration(milliseconds: 30);
     await host.coop.endForEveryone();
     await _settle();
+    expect(host.notices.whereType<CoopEnded>(), isEmpty, reason: 'the host ended it');
     final ended = guests.first.notices.whereType<CoopEnded>().single;
     expect(ended.game.endReason, 'host');
     expect(guests.first.state.phase, CoopPhase.ended);

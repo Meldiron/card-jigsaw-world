@@ -11,6 +11,7 @@
 // with a `_light` suffix. Navigation goes through the router so a changed
 // pack order or a moved button does not derail the run; every board is set
 // up by tapping real moves on the live board.
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
@@ -18,6 +19,7 @@ import 'dart:typed_data';
 import 'package:carden/app.dart';
 import 'package:carden/core/appwrite.dart';
 import 'package:carden/core/sfx.dart';
+import 'package:carden/data/coop_repository.dart';
 import 'package:carden/data/local_store.dart';
 import 'package:carden/data/repositories.dart';
 import 'package:carden/data/sync/ops.dart';
@@ -36,6 +38,10 @@ import 'package:carden/state/rewards.dart';
 import 'package:carden/state/unlocks.dart';
 import 'package:carden/state/social.dart';
 import 'package:carden/state/sync.dart';
+import 'package:carden/state/coop/board_change.dart';
+import 'package:carden/state/coop/coop_backend.dart';
+import 'package:carden/state/coop/coop_controller.dart';
+import 'package:carden/state/coop/coop_models.dart';
 import 'package:flutter/foundation.dart' show consolidateHttpClientResponseBytes;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' show MaterialApp;
@@ -43,6 +49,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:integration_test/integration_test.dart';
+import 'package:share_plus_platform_interface/share_plus_platform_interface.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Pictures used on the slides (people-free, vivid, free packs).
@@ -84,7 +91,7 @@ const theme = String.fromEnvironment('CJW_STORE_THEME', defaultValue: 'dark');
 const skipUpload = bool.fromEnvironment('CJW_STORE_SKIP_UPLOAD');
 const suffix = theme == 'light' ? '_light' : '';
 
-/// `--dart-define=CJW_STORE_ONLY=25_hero,27_giant` re-takes only those glass-set captures (15_library, 22_social_league, 25-31)
+/// `--dart-define=CJW_STORE_ONLY=25_hero,27_giant` re-takes only those glass-set captures (15_library, 22_social_league, 25-32)
 /// after onboarding and leaves every other file as it is: a quick rerun for one slide.
 const only = String.fromEnvironment('CJW_STORE_ONLY');
 bool want(String name) => only.isEmpty || only.split(',').contains(name);
@@ -106,6 +113,81 @@ const leagueExtras = [
   ('Lucky Puffin', 1940, 'camera'), ('Swift Marten', 1380, 'anchor'), ('Clever Wren', 860, 'snow'), ('Happy Gecko', 410, 'pizza'),
 ];
 const leagueAvatars = ['wave', 'cake', 'globe', 'bike', 'coffee', 'umbrella', 'key', 'mountain'];
+
+/// Play together for the store (`32_coop_board`): a game played on this device with two made-up
+/// players, scripted here instead of the live backend, so the slide shows a calm moment of a shared
+/// board (the players chip, a card one friend holds and a card the other just moved).
+const coopPuzzle = 'p-00df45e91273'; // Tropical Beaches: Bora Bora lagoon
+const coopFriends = {'stage-maya': ('Maya', 'flower'), 'stage-leo': ('Leo', 'sun')};
+
+class _StageCoop implements CoopBackend {
+  final _events = StreamController<CoopEvent>.broadcast();
+  CoopGame? game;
+  String me = '';
+  var _seq = 100;
+
+  @override
+  Future<CoopGame?> call(String action, Map<String, dynamic> body) async {
+    if (action != 'create') return null;
+    final layout = (body['layout'] as List).cast<int>();
+    game = CoopGame(id: 'stage', code: 'GAMEABCD', hostId: me, players: [me, '', '', '', ''], removed: const [], ended: false, board: 1, puzzleId: '${body['puzzleId']}', grid: '${body['grid']}', painting: false, layout: layout);
+    return game;
+  }
+
+  Map<String, dynamic> _row() => {
+        r'$id': 'stage',
+        'code': game!.code,
+        'hostId': me,
+        'players': game!.players,
+        'removed': const <String>[],
+        'status': 'playing',
+        'board': 1,
+        'puzzleId': game!.puzzleId,
+        'grid': game!.grid,
+        'layout': game!.layout.join(','),
+      };
+
+  /// The two friends take their seats.
+  void seat() {
+    game = game!.copyWith(players: [me, ...coopFriends.keys, '', '']);
+    _events.add(CoopGameEvent(_row()));
+  }
+
+  /// A friend's move: [before] to [after].
+  void move(String userId, List<int> before, List<int> after) => _events.add(CoopMoveEvent({
+        r'$id': 'stage-${++_seq}',
+        r'$sequence': '$_seq',
+        r'$permissions': CoopOp.permissionsFor('stage', userId),
+        ...CoopOp(id: 'x', gameId: 'stage', board: 1, userId: userId, kind: CoopOpKind.move, change: BoardChange.between(before, after)).toData(),
+      }));
+
+  /// A friend picks a card up.
+  void hold(String userId, int card) => _events.add(CoopPresenceEvent({'userId': userId, 'status': 'online', 'metadata': {'g': 'stage', 'b': 1, 'h': card}}));
+
+  @override
+  Future<CoopGame?> readGame(String gameId) async => game;
+  @override
+  Future<Map<String, dynamic>> createMove(CoopOp op) async => {r'$id': op.id, r'$sequence': '${++_seq}', r'$permissions': CoopOp.permissionsFor(op.gameId, op.userId), ...op.toData()};
+  @override
+  Future<List<Map<String, dynamic>>> movesAfter(String gameId, int board, int afterSeq) async => const [];
+  @override
+  Stream<CoopEvent> listen(String gameId) => _events.stream;
+  @override
+  void setPresence(String presenceId, CoopPresence presence) {}
+  @override
+  Future<List<Map<String, dynamic>>> presences(List<String> userIds) async => [
+        for (final id in coopFriends.keys)
+          if (userIds.contains(id)) {'userId': id, 'status': 'online', 'metadata': {'g': 'stage', 'b': 1, 'h': -1}},
+      ];
+  @override
+  Future<void> close() async {}
+}
+
+/// The share sheet is the system's: the store capture keeps what would be shared instead.
+class _NoShare extends SharePlatform {
+  @override
+  Future<ShareResult> share(ShareParams params) async => const ShareResult('stage', ShareResultStatus.success);
+}
 
 class _StoreLeaderboard extends LeaderboardNotifier {
   @override
@@ -406,6 +488,8 @@ void main() {
   }
 
   testWidgets('capture store screens', (tester) async {
+    final stage = _StageCoop();
+    SharePlatform.instance = _NoShare();
     SharedPreferences.setMockInitialValues({
       'themeMode': theme,
       // No break offers between the captured completions.
@@ -421,6 +505,19 @@ void main() {
         // Shapes and options open as levels rise (lib/state/unlocks.dart); these suites play every one, so all are open and no intro sheet interrupts them.
         openFeaturesProvider.overrideWithValue(OpenFeatures.all),
         pendingUnlockIntroProvider.overrideWithValue(null),
+        // Play together's slide: a scripted game with two made-up friends (their profiles below), and
+        // their moved cards marked long enough to be captured.
+        coopBackendProvider.overrideWithValue(stage),
+        coopTimingProvider.overrideWithValue(const CoopTiming(markFor: Duration(minutes: 2))),
+        playerProfileProvider.overrideWith((ref, id) async {
+          final friend = coopFriends[id];
+          if (friend != null) return Profile.guest(id).copyWith(displayName: friend.$1, avatar: friend.$2);
+          if (id == ref.watch(currentUserIdProvider)) {
+            final mine = ref.watch(profileProvider).value;
+            if (mine != null) return mine;
+          }
+          return ref.watch(profileRepositoryProvider).findByUserId(id);
+        }),
         // A full, varied league (leagueExtras) and its count.
         leaderboardProvider.overrideWith(_StoreLeaderboard.new),
         leaderboardRankProvider.overrideWith((ref) async {
@@ -476,6 +573,41 @@ void main() {
         await saveAndQuit(tester);
       } catch (e) {
         await binding.takeScreenshot('zz_diag_hero');
+        await go(tester, '/home', ms: 2000);
+      }
+    }
+
+    // Play together: a shared board mid-game, the host's view, with two friends: the players chip,
+    // the card Maya holds and the card Leo just moved, each in their colour and with their initial.
+    if (want('32_coop_board')) {
+      try {
+        await startGame(tester, coopPuzzle, 'Cards', 'Relaxed');
+        await midBuild(tester, 0.35, 2);
+        stage.me = ProviderScope.containerOf(tester.element(find.byType(MaterialApp))).read(currentUserIdProvider) ?? '';
+        await tester.tap(find.byIcon(CupertinoIcons.pause_fill), warnIfMissed: false);
+        await settle(tester, 1200);
+        await tester.tap(find.byKey(const ValueKey('pause-play-together')), warnIfMissed: false);
+        await settle(tester, 3000);
+        stage.seat();
+        // The join toasts come and go before the capture.
+        await settle(tester, 7000);
+        final b = board(tester);
+        final singles = [for (var s = 0; s < b.cells; s++) if (single(b, s)) s];
+        // Leo moves a loose card next to the middle; Maya holds another one.
+        final from = singles.first, to = singles[singles.length ~/ 2];
+        final after = b.moveTo(from, to);
+        if (after != null) stage.move('stage-leo', b.slots, after.slots);
+        await settle(tester, 1500);
+        final now = board(tester);
+        final held = [for (var s = 0; s < now.cells; s++) if (single(now, s) && s != to && s != from) s];
+        if (held.isNotEmpty) stage.hold('stage-maya', now.slots[held.last]);
+        await settle(tester, 1500);
+        await shot(tester, '32_coop_board');
+        final c = ProviderScope.containerOf(tester.element(find.byType(MaterialApp)));
+        c.read(coopProvider.notifier).clear();
+        await saveAndQuit(tester);
+      } catch (e) {
+        await binding.takeScreenshot('zz_diag_coop');
         await go(tester, '/home', ms: 2000);
       }
     }

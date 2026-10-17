@@ -140,6 +140,11 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   /// Shuffle and Gather say so before they change the board), whether a shared change is being
   /// put on the board (not this player's, so not shared back), and the host dealing the next board.
   String? _coopGameId;
+
+  /// This screen shows a board shared by someone else (this player joined it as a guest). It stays
+  /// theirs after the game ends or this player is removed: nothing of it is saved here, and the
+  /// screen closes (`CoopHost`) once the alert is read.
+  bool _guestBoard = false;
   CoopBridge? _bridge;
   ProviderSubscription<GameState>? _stateSub;
   CoopOpKind _nextKind = CoopOpKind.move;
@@ -164,6 +169,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
       _coopNextPending = true;
     } else if (coopGame != null) {
       _coopGameId = coopGame.id;
+      _guestBoard = !coop.isHost;
       _spec = BoardSpec.fromCode(coopGame.grid);
     }
     _args = _coopGameId != null ? _coopArgs(_base) : _argsFor(_spec, resume: true, session: _base);
@@ -285,8 +291,9 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     return _coopGameId != null && coop.playing && coop.game?.id == _coopGameId;
   }
 
-  /// A guest on a shared board: nothing is saved, and the finish is the guest's.
-  bool get _coopGuest => _inCoop && !ref.read(coopProvider).isHost;
+  /// A guest on a shared board: nothing is saved, and the finish is the guest's (also once the game
+  /// is over, while its alert shows).
+  bool get _coopGuest => _guestBoard || (_inCoop && !ref.read(coopProvider).isHost);
 
   /// Shares this board from now on (Play together started here, or the next board handed over).
   void _attachCoop(String gameId) {
@@ -946,7 +953,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     final playing = ref.read(gameControllerProvider(_args!)).status != GameStatus.won;
     final together = shared
         ? (coop.isHost ? _Together.host : _Together.guest)
-        : !widget.first && playing && puzzle != null && canPlayTogether(ref, puzzle)
+        : !widget.first && !_guestBoard && playing && puzzle != null && canPlayTogether(ref, puzzle)
             ? _Together.start
             : _Together.none;
     showAppSheet(
@@ -1101,7 +1108,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
       for (final e in marks.entries)
         if (e.value.held && state.board.slotOfCard(e.key) >= 0) state.board.slotOfCard(e.key): e.value,
     };
-    final coopGuest = shared && !coopState.isHost;
+    final coopGuest = shared ? !coopState.isHost : _guestBoard;
 
     return Scaffold(
       backgroundColor: c.canvas,
@@ -1323,7 +1330,9 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                       padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
                       child: SoftCard(
                         child: CoopGuestFinish(
-                          rewards: coopState.placedACard
+                          // Over (ended, removed): no next board to wait for; the alert says why.
+                          waiting: shared,
+                          rewards: (shared && coopState.placedACard) || _coopReward != null
                               ? Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [

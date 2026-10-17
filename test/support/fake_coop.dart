@@ -154,6 +154,9 @@ class FakeCoopBackend implements CoopBackend {
   bool get listening => _events != null && !_events!.isClosed;
   int creates = 0;
 
+  /// How long the function's answers take after the server acted (its realtime events go first).
+  Duration answerAfter = Duration.zero;
+
   void _deliver(CoopEvent e) => _events?.add(e);
 
   void _online() {
@@ -165,6 +168,8 @@ class FakeCoopBackend implements CoopBackend {
     await Future<void>.delayed(Duration.zero);
     if (!connected) throw const CoopRefusal(CoopRefusalReason.offline);
     final out = server.handle(userId, action, body);
+    // The function's answer can come after its realtime events.
+    if (answerAfter > Duration.zero) await Future<void>.delayed(answerAfter);
     return out.isEmpty ? null : CoopGame.fromMap(out);
   }
 

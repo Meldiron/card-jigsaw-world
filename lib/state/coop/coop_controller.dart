@@ -277,11 +277,20 @@ class CoopController extends Notifier<CoopState> {
     }
   }
 
+  bool _endingHere = false;
+
   /// The host ends the game for everyone.
   Future<void> endForEveryone() async {
     final g = state.game;
     if (g == null) return;
-    await _backend.call('end', {'gameId': g.id});
+    // The ended row often arrives over realtime before the function answers: this player ended it,
+    // so no "Game ended" alert here.
+    _endingHere = true;
+    try {
+      await _backend.call('end', {'gameId': g.id});
+    } finally {
+      _endingHere = false;
+    }
     AppAnalytics.event('coop_game_ended', {'by': 'host', 'players': g.playerIds.length, 'board': g.board});
     _remember(null);
     _stop();
@@ -513,6 +522,10 @@ class CoopController extends Notifier<CoopState> {
     if (g.ended) {
       _remember(null);
       _stop();
+      if (_endingHere) {
+        state = CoopState(me: _me);
+        return;
+      }
       state = state.copyWith(phase: CoopPhase.ended, game: g);
       _notices.add(CoopEnded(g));
       return;

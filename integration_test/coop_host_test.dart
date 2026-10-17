@@ -113,6 +113,7 @@ void main() {
     expect(await until(tester, boardOn, seconds: 60), isTrue);
     await settle(tester, 2000);
 
+    debugPrint('COOP_STEP 1');
     // 1. Pause > Play together: the game starts on this board and the invite is shared.
     await tester.tap(find.byIcon(AppIcons.pauseFill));
     await settle(tester, 1200);
@@ -128,12 +129,14 @@ void main() {
     expect(find.byKey(const ValueKey('coop-players-chip')), findsOneWidget);
     final hostBoard = board();
 
+    debugPrint('COOP_STEP 2');
     // 2. The friend opens the link: a toast, two players, the same board.
     await bot('/friend?code=$code');
     expect(await until(tester, () => find.textContaining('joined').evaluate().isNotEmpty, seconds: 30), isTrue);
     await shot(tester, 'coop2h_02_friend_joined', 100);
     expect(await friendBoard(), hostBoard);
 
+    debugPrint('COOP_STEP 3');
     // 3. The friend's cards in the friend's colour, and the card the friend holds.
     final before = board();
     await bot('/swap?as=friend');
@@ -143,6 +146,7 @@ void main() {
     expect(await until(tester, () => find.byKey(ValueKey('coop-mark-${loose.first}')).evaluate().isNotEmpty), isTrue);
     await shot(tester, 'coop2h_03_friend_marks', 200);
 
+    debugPrint('COOP_STEP 4');
     // 4. The host's move reaches the friend.
     final b = board();
     for (final k in b.where((k) => b[k] != k && b.indexOf(k) != k).toList()) {
@@ -153,18 +157,21 @@ void main() {
     await settle(tester, 2000);
     expect(await friendBoard(), board());
 
+    debugPrint('COOP_STEP 5');
     // 5. The player list as the host.
     showCoopPlayersSheet(rootNavigatorKey.currentContext!);
     await shot(tester, 'coop2h_04_players_host', 2000);
     Navigator.of(rootNavigatorKey.currentContext!).pop();
     await settle(tester, 800);
 
+    debugPrint('COOP_STEP 6');
     // 6. The friend finishes the board: the host's normal completion card, the solve saved as the host's.
     await bot('/solve?as=friend');
     expect(await until(tester, () => find.text('Next puzzle').evaluate().isNotEmpty, seconds: 60), isTrue, reason: 'the completion card');
     await shot(tester, 'coop2h_05_host_completion', 1500);
     expect(await until(tester, () => c.read(progressProvider).value?[picture.id]?.completed == true, seconds: 20), isTrue, reason: 'the host\'s board is the host\'s own');
 
+    debugPrint('COOP_STEP 7');
     // 7. Next puzzle: dealt here, handed to the game, and the friend is on it.
     await tapText(tester, 'Next puzzle', ms: 2000);
     expect(await until(tester, () => s().game?.board == 2, seconds: 60), isTrue, reason: 'the next board went to the game');
@@ -176,6 +183,7 @@ void main() {
     expect((next['board'] as List).cast<int>(), board(), reason: 'the friend has this board');
     await shot(tester, 'coop2h_06_next_board', 500);
 
+    debugPrint('COOP_STEP 8');
     // 8. Remove the friend, after asking.
     showCoopPlayersSheet(rootNavigatorKey.currentContext!);
     await settle(tester, 2000);
@@ -190,6 +198,7 @@ void main() {
     if (find.text('Players').evaluate().isNotEmpty) Navigator.of(rootNavigatorKey.currentContext!).pop();
     await settle(tester, 800);
 
+    debugPrint('COOP_STEP 9');
     // 9. End game for everyone from the pause sheet: the board stays the host's.
     await tester.tap(find.byIcon(AppIcons.pauseFill));
     await settle(tester, 1200);
