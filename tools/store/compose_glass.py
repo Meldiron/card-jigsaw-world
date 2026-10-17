@@ -43,13 +43,23 @@ W, H = cs.W, cs.H
 #   `tags`: small labels in phone px. Cards and tags turn with their phone.
 # `pics`: pictures on the slide behind the phones: pack covers (`covers`, indexes into
 #   compose_screenshots.COLLAGE_PACKS) or capture crops, as a `masonry` wall or at fixed `spots`.
+# `key`: the slide's stable name; custom product pages reuse a slide by it ({"default": "daily"}).
 # Slides 1-3 keep their phones flat (search results show them as thumbnails). No AI pictures.
+# Apple takes at most 10 screenshots per set.
 
 DAILY = "18_daily_month_grid"
 # The world-day event card on Quests and the leaderboard's podium (capture px).
 EVENT_CARD = (60, 1608, 1260, 2532)
 PODIUM = (60, 720, 1260, 1200)
 STREAK_CARD = (60, 1485, 1260, 1997)  # Home's streak card in 31_home_streak
+# Play together (store capture scene with scripted players): a shared board mid-build with the players
+# chip in the top bar and another player's card in their colour with their initial, and the player list
+# (avatars in their colour rings, Host / You, Here). The boxes are provisional: set them on a coordinate
+# grid of the first captures.
+COOP_BOARD = "32_coop_board"
+COOP_PLAYERS = "33_coop_players"
+COOP_HELD = (520, 1180, 800, 1560)   # another player's card on COOP_BOARD, its colour outline and initial
+COOP_LIST = (60, 560, 1260, 1180)    # the first three rows of the player list on COOP_PLAYERS
 # Solved daily pictures with their stars (days 1, 3, 6, 8, 10 of the calendar capture).
 STARRED = [(62, 840, 340, 1176), (674, 840, 952, 1176), (368, 1208, 646, 1546), (980, 1208, 1258, 1546), (368, 1576, 646, 1914)]
 
@@ -68,63 +78,76 @@ def board_part(name: str, fx0: float, fy0: float, fx1: float, fy1: float) -> tup
 
 
 def slides() -> list[dict]:
-    """The story (2026-10-16): the hook (1-3: how it plays, how much there is, why you come back;
-    the three search results show), the depth (4-8), the dark finale (9). Read in order, the
-    headlines are one text."""
+    """The story (2.0.0, 2026-10-17): the hook (1-3: how it plays, how much there is, playing it
+    together; the three search results show), why you come back and the depth (4-9), the dark
+    finale (10). Read in order, the headlines are one text."""
     return [
         # 1. The mechanic, mid-build: some cards locked, some loose, some joined.
-        {"head": "Swap cards.\nReveal the picture.", "brand": True, "text": ("top", 330, "center"),
+        {"key": "hero", "head": "Swap cards.\nReveal the picture.", "brand": True, "text": ("top", 330, "center"),
          "phones": [{"capture": "25_hero", "x": 160, "y": 738}]},
         # 2. How much there is: one straight row of pack covers running off both edges (endless), the
         #    Library rising from the bottom edge, scrolled so its grid starts with packs.
-        {"head": "Thousands\nof pictures", "text": ("top", 200, "center"),
+        {"key": "library", "head": "Thousands\nof pictures", "text": ("top", 200, "center"),
          "pics": [{"packs": ["pack-venice", "pack-lavender", "pack-japanese-prints", "pack-nebulae", "pack-northern-lights", "pack-sunflowers", "pack-islands"],
                    "row": {"w": 360, "h": 480, "gap": 28, "y": 640}, "radius": 30}],
          "phones": [{"capture": "15_library", "x": 160, "y": 1300}]},
-        # 3. Why you come back: the calendar pushed left, today's picture and the streak from Home
+        # 3. Play together (new in 2.0.0): a shared board mid-build, flat and pushed right; another
+        #    player's card in their colour lifted on the left, the player list (colour rings, Host)
+        #    lifted below it. Headline top left, so slide 4 (top right) answers it.
+        {"key": "together", "head": "Play together\nwith friends", "text": ("top", 200, "left"),
+         "phones": [{"capture": COOP_BOARD, "x": 360, "y": 600,
+                     "out": [{"crop": (COOP_BOARD, COOP_HELD), "x": -330, "y": 1060, "w": 400, "rot": -6, "radius": 30},
+                             {"crop": (COOP_PLAYERS, COOP_LIST), "x": -300, "y": 1640, "w": 940, "radius": 44}]}]},
+        # 4. Why you come back: the calendar pushed left, today's picture and the streak from Home
         #    lifted, solved days with their stars on the right.
-        {"head": "A new picture\nevery day", "text": ("top", 200, "right"),
+        {"key": "daily", "head": "A new picture\nevery day", "text": ("top", 200, "right"),
          "pics": [{"crops": [(DAILY, STARRED[0]), (DAILY, STARRED[3])],
                    "spots": [(1000, 1330, 350, 6), (990, 1760, 350, -5)], "radius": 26}],
          "phones": [{"capture": DAILY, "x": -60, "y": 600,
                      "out": [{"crop": (DAILY, (60, 530, 1260, 775)), "x": 150, "w": 1140, "radius": 44},
                              {"crop": ("31_home_streak", STREAK_CARD), "x": 120, "y": 1700, "w": 1040, "radius": 40}]}]},
-        # 4. The signature, split around the headline: cards above, hexagons below, squares and
+        # 5. The signature, split around the headline: cards above, hexagons below, squares and
         #    triangles lifted; every badge sits on the edge of its board or card that faces the headline.
-        {"head": "One picture,\nfour ways to cut it", "text": ("center", 1600, "center"),
+        {"key": "shapes", "head": "One picture,\nfour ways to cut it", "text": ("center", 1600, "center"),
          "phones": [{"capture": "06_mode_cards", "x": 160, "y": -700, "rot": -3, "tags": [{"text": "Cards", "edge": "bottom"}],
                      "out": [{"crop": ("07_mode_squares", "board"), "x": 640, "y": 1330, "w": 400, "rot": 6, "label": "Squares"}]},
                     {"capture": "09_mode_hexagons", "x": 160, "y": 1880, "rot": 3, "tags": [{"text": "Hexagons", "edge": "top"}],
                      "out": [{"crop": ("08_mode_triangles", "board"), "x": -60, "y": 430, "w": 400, "rot": -6, "label": "Triangles", "label_at": "top"}]}]},
-        # 5. Painting: Monet's chrysanthemums mostly grey, a few cards back in colour; the phone straight
+        # 6. Painting: Monet's chrysanthemums mostly grey, a few cards back in colour; the phone straight
         #    and centred (owner), a loose and a locked card lifted.
-        {"head": "Bring the colour\nback, card by card", "text": ("center", 2390, "center"),
+        {"key": "painting", "head": "Bring the colour\nback, card by card", "text": ("center", 2390, "center"),
          "phones": [{"capture": "26_painting", "x": 160, "y": -150,
                      "out": [{"crop": ("26_painting", cell("26_painting", 4, 5, 0, 0)), "x": -110, "y": 1560, "w": 300, "rot": -7, "radius": 26, "label": "Loose"},
                              {"crop": ("26_painting", cell("26_painting", 4, 5, 1, 2)), "x": 810, "y": 1520, "w": 300, "rot": 6, "radius": 26, "label": "Locked"}]}]},
-        # 6. Giant boards: zoomed in with the overview map in the corner; the whole board in its
+        # 7. Giant boards: zoomed in with the overview map in the corner; the whole board in its
         #    hundreds of tiny squares (a small part solved) lifted beside it.
-        {"head": "Giant boards of\nhundreds of cards", "text": ("top", 200, "left"),
+        {"key": "giant", "head": "Giant boards of\nhundreds of cards", "text": ("top", 200, "left"),
          "phones": [{"capture": "30_giant_zoom", "x": 360, "y": 620, "rot": 6,
                      "out": [{"crop": ("27_giant", "board"), "x": -360, "y": 520, "w": 640, "rot": -5, "radius": 30}]}]},
-        # 7. The personal one: your own photos, one played as a puzzle; the headline bottom right (like
-        #    slide 9), the phone pushed left and the corgi board lifted on the right.
-        {"head": "Puzzle your\nown photos", "text": ("bottom", 2740, "right"),
+        # 8. The personal one: your own photos, one played as a puzzle; the headline bottom right, the
+        #    phone pushed left and the corgi board lifted on the right.
+        {"key": "photos", "head": "Puzzle your\nown photos", "text": ("bottom", 2740, "right"),
          "phones": [{"capture": "20_my_puzzles", "x": -60, "y": 140,
                      "out": [{"crop": ("21_my_puzzle_game", "board"), "x": 660, "y": 980, "w": 600, "rot": 5, "radius": 40}]}]},
-        # 8. Quests, with the world-day event card lifted (cut exactly at the card's own edges and
+        # 9. Quests, with the world-day event card lifted (cut exactly at the card's own edges and
         #    corners, 48 px in the capture, so no rounding cuts into it).
-        {"head": "Quests and\nworld-day events", "text": ("top", 200, "center"),
+        {"key": "quests", "head": "Quests and\nworld-day events", "text": ("top", 200, "center"),
          "phones": [{"capture": "13_quests", "x": 120, "y": 620, "rot": -7,
                      "out": [{"crop": ("14_quests_live", EVENT_CARD), "w": 900, "radius": round(48 * 900 / 1200)}]}]},
-        # 9. Friends and the leaderboard: the player (level 17 by now) second on the podium.
-        {"head": "Climb the ranks\nwith friends", "text": ("bottom", 2740, "right"),
-         "phones": [{"capture": "22_social_league", "x": -20, "y": -120, "rot": -5,
-                     "out": [{"crop": ("22_social_league", PODIUM), "w": 1120, "radius": 44}]}]},
         # 10. The finale: the same calm in dark mode, a board mid-build.
-        {"head": "Just as calm\nin the dark", "text": ("top", 200, "center"), "dark": True,
+        {"key": "dark", "head": "Just as calm\nin the dark", "text": ("top", 200, "center"), "dark": True,
          "phones": [{"capture": "29_dark_board", "x": 160, "y": 608}]},
     ]
+
+
+# Not in the set since 2.0.0 (Apple takes 10 screenshots; Play together carries friends now), kept for
+# custom product pages: {"default": "league"}.
+EXTRA_SLIDES = [
+    # Friends and the leaderboard: the player (level 17 by now) second on the podium.
+    {"key": "league", "head": "Climb the ranks\nwith friends", "text": ("bottom", 2740, "right"),
+     "phones": [{"capture": "22_social_league", "x": -20, "y": -120, "rot": -5,
+                 "out": [{"crop": ("22_social_league", PODIUM), "w": 1120, "radius": 44}]}]},
+]
 
 
 # Lotus glass, as in the app icon: the light and deep end of each pane colour.

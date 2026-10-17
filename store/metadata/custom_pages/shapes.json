@@ -6,16 +6,16 @@
   "promotionalText": "One picture, four ways to cut it: cards, squares, triangles and hexagons. New shapes open as you level up, and the trickier ones pay a little more.",
   "deepLink": null,
   "deepLinkNote": "None: the shapes open by level, so there is no screen that shows all four to a new player.",
-  "keywords": ["hexagon", "mosaic", "tiles", "swap"],
+  "keywords": ["tiles", "swap"],
   "adSearchTerms": ["hexagon puzzle", "triangle puzzle", "mosaic puzzle", "tile puzzle", "swap puzzle", "shape puzzle"],
   "slides": [
-    {"note": "The hook: the default four-shapes slide.", "default": 4},
+    {"note": "The hook: the default four-shapes slide.", "default": "shapes"},
     {"note": "The hexagon board mid-build: locked, loose and joined hexagons.",
      "head": "Six sides\nto join on", "text": ["top", 200, "left"],
      "phones": [{"capture": "10_game_hexagons", "x": 260, "y": 600}]},
-    {"default": 5},
-    {"default": 6},
-    {"default": 3},
-    {"default": 10}
+    {"default": "painting"},
+    {"default": "giant"},
+    {"default": "daily"},
+    {"default": "dark"}
   ]
 }

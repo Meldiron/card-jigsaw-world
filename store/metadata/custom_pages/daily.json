@@ -24,8 +24,8 @@
      "phones": [{"capture": "16_library_daily", "x": 360, "y": 600,
                  "out": [{"crop": ["16_library_daily", "AUGUST_TILE"], "x": -330, "y": 1150, "w": 560, "rot": -6, "radius": 40}]}]},
     {"note": "How it plays (the default hero), without the brand line.",
-     "default": 1, "brand": false, "text": ["top", 260, "center"]},
-    {"default": 8},
-    {"default": 10}
+     "default": "hero", "brand": false, "text": ["top", 260, "center"]},
+    {"default": "quests"},
+    {"default": "dark"}
   ]
 }

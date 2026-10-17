@@ -17,10 +17,10 @@
                "row": {"w": 360, "h": 480, "gap": 28, "y": 640}, "radius": 30}],
      "phones": [{"capture": "15_library", "x": 160, "y": 1300}]},
     {"note": "How it plays (the default hero), without the brand line.",
-     "default": 1, "brand": false, "text": ["top", 260, "center"]},
-    {"default": 8},
-    {"default": 6},
-    {"default": 3},
-    {"default": 10}
+     "default": "hero", "brand": false, "text": ["top", 260, "center"]},
+    {"default": "quests"},
+    {"default": "giant"},
+    {"default": "daily"},
+    {"default": "dark"}
   ]
 }

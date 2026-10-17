@@ -1,5 +1,8 @@
 Carden is a calm picture puzzle. Every picture is cut into cards and shuffled. Swap them back, one by one, until the picture is whole again.
 
+PLAY TOGETHER
+Share a link from any board and solve the same picture with up to four friends, live. Everyone moves cards at the same time, each in their own colour, on iPhone or in a web browser. When the picture is whole, the host picks the next one for everyone.
+
 HOW IT PLAYS
 Tap a card, then the place it belongs, or simply drag it there. Cards that belong together join up and glide around as one. A card in its true place locks in. Fewer moves earn more stars.
 
@@ -11,22 +14,25 @@ Museum paintings, wildlife, deep space, cities, gardens and the seasons, in pack
 
 WAYS TO PLAY
 - Cards, squares, triangles and hexagons: four ways to cut the same picture.
-- Boards from a quick 3x3 to one that fills an evening.
+- Boards from a quick 3x3 to 7x7, as many cards across as down. Expand cuts the whole picture in its own shape instead.
 - Painting: cards start in black and white and find their colour as they lock.
-- Giant boards of 100 to 300 cards, with pinch to zoom and a map of the whole picture.
+- Giant boards of hundreds of cards, with pinch to zoom and a map of the whole picture.
 - World days and holidays bring their own event packs, a week each.
 
 HELP WHEN YOU WANT IT
 Shuffle is always free, and every board waits for you to come back. Peek shows where every card belongs for a moment, a hint shows a stubborn card its place, and Magic puts a card and its neighbours in place.
 
 LITTLE REWARDS
-Coins, tickets and hints come from playing: levels, daily and weekly quests, the daily gift, a piggy bank that fills with every puzzle, and the Lucky Wheel. Collect avatars and achievements, and see how your friends are doing.
+Coins, tickets, hints and more come from playing: levels, daily and weekly quests, the daily gift, a piggy bank that fills with every puzzle, and the Lucky Wheel. Collect avatars and achievements along the way.
+
+FRIENDS
+Add friends with a friend code and see how you compare on the leaderboard. Once a day, send each friend a small gift: a ticket or 150 coins.
 
 MADE FOR IPHONE
 Home Screen widgets with today's picture, light and dark mode, and settings for larger text, less motion and stronger contrast. Music, sounds and haptics can each be turned off.
 
 NO ACCOUNT NEEDED
-Start as a guest in one tap. Sign in with Apple or email whenever you want your progress on more than one device. No ads from other companies, and no tracking.
+Start as a guest in one tap. Sign in with Apple or email whenever you want your progress on more than one device. No ads from other companies and no tracking; usage data stays with us, and you can turn it off in Settings.
 
 VIP
 VIP opens every pack, including past months, adds a daily and a weekly quest, gives 500 bonus coins every week, allows unlimited photos in My Puzzles and turns off the game's own promotions. VIP can be shared with your family through Family Sharing. Monthly and yearly plans both start with a 7-day free trial. Payment is charged to your Apple ID account at confirmation of purchase or when the trial ends. The subscription renews automatically unless it is cancelled at least 24 hours before the end of the current period. Manage or cancel it in your App Store account settings.

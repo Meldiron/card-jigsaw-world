@@ -9,8 +9,9 @@
 
 A page is defined in store/metadata/custom_pages/<slug>.json: its reference name (the name in App Store
 Connect), promotional text, optional deep link, the app keywords it should take over in search, and its
-slides. Slides use the format of slides() in tools/store/compose_glass.py, plus two shortcuts: {"default": N}
-reuses slide N of the default set (any other key given next to it overrides that key), and a crop box can be
+slides. Slides use the format of slides() in tools/store/compose_glass.py, plus two shortcuts: {"default": "daily"}
+reuses the default set's slide with that `key` (a number still picks a slide by position; any other key given
+next to it overrides that key), and a crop box can be
 a name from BOXES below, {"cell": [cols, rows, c, r]} or {"part": [fx0, fy0, fx1, fy1]} of the capture's board.
 Every slide is rendered with the default set's look (panes, phone, SF Pro Rounded) from the light captures in
 store/raw/ (the dark finale from the dark ones).
@@ -142,13 +143,22 @@ def resolve_box(cg, capture: str, box):
 
 
 def resolve_slide(cg, spec: dict, defaults: list[dict]) -> dict:
-    """A slide of the definition as compose_glass expects it (tuples, resolved crop boxes)."""
+    """A slide of the definition as compose_glass expects it (tuples, resolved crop boxes). `default`
+    names a slide of the default set by its key ("daily"; also compose_glass.EXTRA_SLIDES), or by its
+    number in the set."""
     spec = {k: v for k, v in spec.items() if k != "note"}
     if "default" in spec:
         n = spec.pop("default")
-        if not 1 <= n <= len(defaults):
-            sys.exit(f"there is no default slide {n} (the default set has {len(defaults)})")
-        out = copy.deepcopy(defaults[n - 1])
+        if isinstance(n, str):
+            named = {s["key"]: s for s in defaults + getattr(cg, "EXTRA_SLIDES", []) if "key" in s}
+            if n not in named:
+                sys.exit(f"there is no default slide {n!r} (keys: {', '.join(named)})")
+            out = copy.deepcopy(named[n])
+        else:
+            if not 1 <= n <= len(defaults):
+                sys.exit(f"there is no default slide {n} (the default set has {len(defaults)})")
+            out = copy.deepcopy(defaults[n - 1])
+        out.pop("key", None)
         out.update(copy.deepcopy(spec))
     else:
         out = copy.deepcopy(spec)

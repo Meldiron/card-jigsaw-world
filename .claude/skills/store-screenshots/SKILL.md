@@ -5,8 +5,8 @@ description: Make, change or refresh Carden's App Store screenshots (the glass s
 
 # App Store screenshots (the glass set)
 
-Nine 1320 x 2868 slides for the App Store "iPhone 6.9-inch Display" slot, in
-`store/screenshots/iphone-6.9/01.png` ... `09.png`. Everything is generated: edit the sources and
+Ten 1320 x 2868 slides (Apple's maximum) for the App Store "iPhone 6.9-inch Display" slot, in
+`store/screenshots/iphone-6.9/01.png` ... `10.png`. Everything is generated: edit the sources and
 rerun, never hand-edit a PNG. Research, story and design rules: `docs/store-screenshots.md`
 ("Glass set"); step-by-step commands: `store/README.md`.
 
@@ -14,7 +14,7 @@ rerun, never hand-edit a PNG. Research, story and design rules: `docs/store-scre
 
 | What | Where |
 | --- | --- |
-| The slides: copy, order, headline position, phones and their placement, lifted cards, pictures | `slides()` near the top of `tools/store/compose_glass.py` |
+| The slides: copy, order, headline position, phones and their placement, lifted cards, pictures | `slides()` near the top of `tools/store/compose_glass.py` (each with a `key` the custom pages reuse it by; `EXTRA_SLIDES` keeps slides out of the set) |
 | Pane colours and glass strength | `GLASS_BASE`, `PANE_COLOURS`, `BODY_OPACITY`, `SHADOW_OPACITY`, `panes()` in the same file |
 | The look (glass panes in SVG, headline, phones, lifted cards, picture rows) | `tools/store/glass/slides.html` (filled in and rendered by the script) |
 | Phone frame and clean 9:41 status bar | `phone()` / `draw_status_bar()` in `tools/store/compose_screenshots.py` (the older dark gallery composer; both share it) |
@@ -22,28 +22,31 @@ rerun, never hand-edit a PNG. Research, story and design rules: `docs/store-scre
 | Pack covers for slide 2 | `store/collage/` (`compose_screenshots.py --refresh-collage`) |
 | Upload | `.venv/bin/python tools/store/asc_publish.py screenshots` (replaces only changed slides) |
 
-## The story (owner approved, 2026-10-16)
+## The story (owner approved 2026-10-16; Play together added for 2.0.0, 2026-10-17)
 
-Read in order the headlines are one text: the hook (1-3, what search results show), the depth
-(4-8), friends (9), the dark finale (10). No VIP slide (the owner does not want to talk about VIP
-here), no AI pictures anywhere.
+Read in order the headlines are one text: the hook (1-3: how it plays, how much there is, playing it
+together; what search results show), why you come back and the depth (4-9), the dark finale (10). No VIP
+slide (the owner does not want to talk about VIP here), no AI pictures anywhere. Apple takes 10 slides, so
+Play together replaced "Climb the ranks with friends" (the leaderboard; kept as `EXTRA_SLIDES` key
+`league` for custom pages).
 
 | # | Headline | Headline position | Phones |
 | --- | --- | --- | --- |
 | 1 | Swap cards. / Reveal the picture. | top, centre, icon + name | `25_hero` (Tulip Fields 8) flat, mid-build |
 | 2 | Thousands / of pictures | top, centre | one straight row of full-resolution pack covers running off both edges (endless); `15_library` (curated packs, scrolled one row so no My Puzzles tile shows) rising from the bottom edge |
-| 3 | A new picture / every day | top, right | `18_daily_month_grid` flat, pushed left, today's card and Home's 23-day streak card (`31_home_streak`, straight, low) lifted; two solved days on the right |
-| 4 | One picture, / four ways to cut it | middle | split: `06_mode_cards` from the top, `09_mode_hexagons` from the bottom, squares and triangles lifted; big mode badges on the edge of each board or card that faces the headline |
-| 5 | Bring the colour / back, card by card | lower middle | `26_painting` straight and centred from the top (owner: no tilt here), mostly grey; a loose and a locked card lifted |
-| 6 | Giant boards of / hundreds of cards | top, left | Squares, Giant size (345 squares): `30_giant_zoom` (zoomed in, the overview map in the corner) tilted, pushed right; the whole board of `27_giant` lifted |
-| 7 | Puzzle your / own photos | bottom, right | `20_my_puzzles` (five photos, no gap) pushed left, the corgi board lifted on the right |
-| 8 | Quests and / world-day events | top, centre | `13_quests` tilted, the World Food Day card lifted, cut exactly at its own edges and corners |
-| 9 | Climb the ranks / with friends | bottom, right | `22_social_league` tilted from the top left, the podium lifted (the player second); the league is filled with made-up players and varied avatars (`leagueExtras`, a `leaderboardProvider` override) |
+| 3 | Play together / with friends | top, left | `32_coop_board` (a shared board mid-build, the players chip in the top bar, another player's card in their colour with their initial) flat, pushed right; that card (`COOP_HELD`) lifted on the left and the first rows of the player list (`33_coop_players`, `COOP_LIST`: colour rings, Host / You) lifted below it. Both captures come from the store capture scene with scripted players; the boxes are provisional until its first run |
+| 4 | A new picture / every day | top, right | `18_daily_month_grid` flat, pushed left, today's card and Home's 23-day streak card (`31_home_streak`, straight, low) lifted; two solved days on the right |
+| 5 | One picture, / four ways to cut it | middle | split: `06_mode_cards` from the top, `09_mode_hexagons` from the bottom, squares and triangles lifted; big mode badges on the edge of each board or card that faces the headline |
+| 6 | Bring the colour / back, card by card | lower middle | `26_painting` straight and centred from the top (owner: no tilt here), mostly grey; a loose and a locked card lifted |
+| 7 | Giant boards of / hundreds of cards | top, left | Squares, Giant size (345 squares): `30_giant_zoom` (zoomed in, the overview map in the corner) tilted, pushed right; the whole board of `27_giant` lifted |
+| 8 | Puzzle your / own photos | bottom, right | `20_my_puzzles` (five photos, no gap) pushed left, the corgi board lifted on the right |
+| 9 | Quests and / world-day events | top, centre | `13_quests` tilted, the World Food Day card lifted, cut exactly at its own edges and corners |
 | 10 | Just as calm / in the dark | top, centre | `29_dark_board` (dark theme) flat, mid-build |
 
 The player grows from slide to slide: the capture test sets XP, level and avatar before each
 screen with a header (`setProgress()`: level 4 and the leaf avatar in the Library, 9 and the
-flower on Quests, 17 and the diamond on the leaderboard), and a 23-day streak for Home.
+flower on Quests, 17 and the diamond on the leaderboard, which the website and the `league` slide
+still use), and a 23-day streak for Home.
 
 Boards in play are shown mid-build and clearly unfinished: about a third locked, the rest loose,
 two or three joined groups (`midBuild()` in the capture test; the owner asked twice for less
@@ -57,7 +60,7 @@ reads as one story; every claim must be true in the code or the live catalogue (
 
 ## Workflow
 
-1. **Captures.** Light captures for slides 1-8, dark for the last slide. Uninstall first (the test needs
+1. **Captures.** Light captures for slides 1-9, dark for the last slide. Uninstall first (the test needs
    a fresh guest), always through `tools/dev/qa-run.sh` (silent, flagged, purged):
    ```sh
    U=D03644FB-6169-4E87-8E0F-CCFC884FBE78   # iPhone 17 Pro Max
@@ -70,7 +73,7 @@ reads as one story; every claim must be true in the code or the live catalogue (
    captures (15_library, 25-30) in about 4 minutes; such a run plays a level-1 guest, so board sizes past
    Relaxed are locked there (giant sizes are open). Drop `CJW_STORE_SKIP_UPLOAD` only when the My Puzzles
    captures (20, 21) must change: it uploads four photos to live Storage. Without
-   `CJW_STORE_THEME` the run writes the dark captures (slide 9: `CJW_STORE_ONLY=29_dark_board`).
+   `CJW_STORE_THEME` the run writes the dark captures (the last slide: `CJW_STORE_ONLY=29_dark_board`).
 2. **Look at every new capture** before composing (contact sheet with Pillow). Check the board
    reads as a nearly whole picture, nothing private shows, and the crop boxes in `SLIDES` still
    match (a recapture can move a card or a tile; draw a coordinate grid on the capture to pick
