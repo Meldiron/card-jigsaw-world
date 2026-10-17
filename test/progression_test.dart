@@ -231,6 +231,53 @@ void main() {
       }
     });
 
+    test('the time to beat is one a player can beat alone (TestFlight, 2026-10-17: "a 3x3 board in under 4 seconds")', () {
+      // The least time per size: the play-time model at the owner's pace, up to 5 seconds.
+      expect([for (final t in GridSpec.square) Goals.fastFloor(t.cells)], [15, 35, 70, 125, 215]);
+      expect([for (final t in GridSpec.square) Goals.formatTime(Goals.fastFloor(t.cells))], ['15 seconds', '35 seconds', '1:10', '2:05', '3:35']);
+      String? timed(List<PuzzleProgress> rows) => [
+            for (var d = 0; d < 14; d++)
+              for (final g in [...Goals.daily(rows, now.add(Duration(days: d)), level: 20), ...Goals.weekly(rows, now.add(Duration(days: d)), level: 20)])
+                if (_type(g) == 'fast') g.title,
+          ].firstOrNull;
+      // Boards finished with help (a friend on a shared board, Magic) in 3 to 5 seconds.
+      expect(timed(history(cells: 9, seconds: 3)), 'Solve a 3x3 board in under 15 seconds');
+      expect(timed(history(cells: 16, seconds: 3)), 'Solve a 4x4 board in under 35 seconds');
+      // A player slower than that keeps their own second-best time.
+      expect(timed(history(cells: 9, seconds: 40)), 'Solve a 3x3 board in under 41 seconds');
+      // Each finish counts with its own time: the picture's best (`bestSeconds`) may be from a
+      // smaller board, and a replay in progress holds that board's size and time.
+      PuzzleProgress row(int i, {int seconds = 60, int? best, String layout = ''}) => PuzzleProgress.fromRow('b$i', {
+            'puzzleId': 'b$i', 'gridSize': 16, 'mode': 'cards', 'completed': true, 'stars': 3, 'elapsedSeconds': seconds, 'bestSeconds': ?best, 'layout': layout,
+            'completedAt': now.subtract(Duration(days: 1, minutes: i)).toUtc().toIso8601String(),
+          });
+      expect(timed([for (var i = 0; i < 5; i++) row(i, seconds: 60 + i, best: 12)]), 'Solve a 4x4 board in under 1:01');
+      expect(timed([for (var i = 0; i < 5; i++) row(i, seconds: 60 + i), for (var i = 5; i < 9; i++) row(i, seconds: 2, layout: '1,0')]), 'Solve a 4x4 board in under 1:01');
+      // Sizes from before square boards (3x4) cannot be dealt any more: no time to beat on them.
+      expect(timed(history(cells: 12, seconds: 30)), isNull);
+    });
+
+    test('timed quests stored by older builds read as fair ones, and a replay in progress is no finish', () {
+      final k = Goals.dayKey(now);
+      Goal slot3(String kind, [List<PuzzleProgress> today = const []]) => Goals.daily(today, now, claimed: {'d:$k:s3:$kind'})[2];
+      expect(slot3('fast-3x3-4').title, 'Solve a 3x3 board in under 15 seconds');
+      expect(slot3('fast-4x4-41').title, 'Solve a 4x4 board in under 41 seconds');
+      // A size with no square board names the square size above, its time scaled by the model.
+      expect(slot3('fast-4x5-60').title, 'Solve a 5x5 board in under 1:27');
+      expect(slot3('fast-6x8-200').title, 'Solve a 7x7 board in under 3:35');
+      expect(slot3('fast-4x5-60').minCells, 25);
+      // The old 3x3 quest counts a 3x3 Cards finish under 15 seconds; a replay of a picture finished
+      // today, 2 seconds into its board, is not one.
+      final finish = board('a', now, cells: 9, seconds: 12);
+      expect(slot3('fast-3x3-4', [finish]).progress, 1);
+      final replay = PuzzleProgress.fromRow('row-r', {...board('r', now, cells: 9, seconds: 2).toData(), 'layout': '1,0,2,3,4,5,6,7,8'});
+      expect(replay.inProgress, isTrue);
+      expect(slot3('fast-3x3-4', [replay]).progress, 0);
+      // Weekly keys too.
+      final w = Goals.weekly(const [], now, claimed: {'${Goals.weekKey(now)}:s2:fast-3x3-4'})[1];
+      expect(w.title, 'Solve two 3x3 boards in under 15 seconds');
+    });
+
     test('a level 1 player is never asked for a shape or Painting they do not have', () {
       final open = OpenFeatures.forPlayer(level: 1);
       for (var d = 0; d < 28; d++) {
@@ -292,9 +339,23 @@ void main() {
     // Lanes as the quests use them: the fixed quests are the solve and days lanes, shapes one lane.
     String lane(Goal g) => switch (_type(g)) { 'solve3' || 'solve10' || 'solve' => 'solve', 'days4' => 'days', 'mode' => 'shape', final t => t };
     Map<String, List<String>> swapped(Map<String, List<String>> swaps, QuestSwap s) => {...swaps, s.slot: [...(swaps[s.slot] ?? [s.base]), s.next]};
+    // A swapped-in quest takes a lane no other quest to do shows; only when every lane is taken (a
+    // new player's few kinds) a plain one comes asking for more than the same one on screen.
+    void expectNewLane(Goal swappedIn, Goal other, String why) {
+      if (lane(swappedIn) != lane(other)) return;
+      expect(['solve', 'stars', 'nopeek'], contains(lane(swappedIn)), reason: '$why: ${swappedIn.title} beside ${other.title}');
+      expect(swappedIn.target, greaterThan(other.target), reason: '$why: ${swappedIn.title} beside ${other.title}');
+    }
 
-    test('a swap changes only its own quest, to a lane the period has not shown, until none is left', () {
-      for (final e in players.entries) {
+    // Every player above plus the two smallest pools: Cards only, and Squares just opened.
+    final swapPlayers = {
+      ...players,
+      'level 1, no boards yet': (1, <PuzzleProgress>[]),
+      'level 2, Cards 3x3': (2, history(cells: 9, seconds: 20)),
+    };
+
+    test('a swap changes only its own quest, to a lane no other quest shows, and never runs out', () {
+      for (final e in swapPlayers.entries) {
         final (level, past) = e.value;
         final open = OpenFeatures.forPlayer(level: level);
         for (var d = 0; d < 14; d++) {
@@ -308,21 +369,35 @@ void main() {
               var swaps = <String, List<String>>{};
               var goals = first;
               final seen = {for (final g in goals) lane(g)};
-              for (var n = 0; goals[slot].swap != null; n++) {
-                expect(n, lessThan(12), reason: 'swaps run out');
-                final s = goals[slot].swap!;
-                expect(s.count, n);
+              var fresh = true;
+              for (var n = 0; n < 12; n++) {
+                final why = '${e.key}, $day, ${weekly ? 'weekly' : 'daily'} slot ${slot + 1}, swap ${n + 1}: ${[for (final g in goals) g.title]}';
+                // Finished already (this week's boards from yesterday): waiting for its Claim.
+                if (goals[slot].done) {
+                  expect(n, 0, reason: why);
+                  expect(goals[slot].swap, isNull, reason: why);
+                  break;
+                }
+                final s = goals[slot].swap;
+                expect(s, isNotNull, reason: '$why: every quest not finished or claimed can be swapped');
+                expect(s!.count, n);
                 expect(s.slot, weekly ? '${Goals.weekKey(day)}:s${slot + 1}' : 'd:${Goals.dayKey(day)}:s${slot + 1}');
                 swaps = swapped(swaps, s);
                 final next = deal(swaps);
-                final why = '${e.key}, $day, ${weekly ? 'weekly' : 'daily'} slot ${slot + 1}, swap ${n + 1}';
                 expect(next[slot].title, s.nextTitle, reason: why);
                 expect(next[slot].key, '${s.slot}:${s.next}', reason: why);
-                expect(seen, isNot(contains(lane(next[slot]))), reason: '$why: a lane not shown yet');
-                seen.add(lane(next[slot]));
+                expect(next[slot].done, isFalse, reason: '$why: a swap never brings a finished quest');
+                expect(lane(next[slot]), isNot(lane(goals[slot])), reason: '$why: a new lane');
                 for (var o = 0; o < first.length; o++) {
-                  if (o != slot) expect(next[o].key, first[o].key, reason: '$why: slot ${o + 1} stays');
+                  if (o == slot) continue;
+                  expect(next[o].key, first[o].key, reason: '$why: slot ${o + 1} stays');
+                  // A finished quest is done with: "Solve 20 puzzles this week" may come beside it.
+                  if (!next[o].done) expectNewLane(next[slot], next[o], why);
                 }
+                // Lanes the period has not shown come first; once they are used up, the others.
+                if (!fresh) expect(seen, contains(lane(next[slot])), reason: why);
+                fresh = !seen.contains(lane(next[slot]));
+                seen.add(lane(next[slot]));
                 // The reward belongs to the slot.
                 expect((next[slot].coins, next[slot].tickets, next[slot].vipOnly), (first[slot].coins, first[slot].tickets, first[slot].vipOnly), reason: why);
                 goals = next;
@@ -331,6 +406,55 @@ void main() {
           }
         }
       }
+    });
+
+    test('on a busy day every quest not finished or claimed can still be swapped (TestFlight, 2026-10-17)', () {
+      // The tester's day: a level 22 player on Cards 3x3, three 3-star boards without Peek today,
+      // "Solve 3 puzzles", today's daily puzzle and "Solve 10 puzzles this week" claimed. The timed
+      // quest had no swap: every quest left was in a lane on screen, did not fit "Finish a 4x4 or
+      // bigger board", or was finished already.
+      final past = history(cells: 9, seconds: 4);
+      final timed = <String>{};
+      for (var d = 0; d < 14; d++) {
+        final day = DateTime(now.year, now.month, now.day + d, 15);
+        final k = Goals.dayKey(day);
+        final today = [for (var i = 0; i < 3; i++) board('t$d-$i', day.subtract(Duration(minutes: 10 + i)), cells: 9, seconds: 30, puzzle: i == 0 ? 'daily-$d' : null)];
+        final all = [...past, ...today];
+        final claimed = {'d:$k:solve3', 'd:$k:s4:daily', '${Goals.weekKey(day)}:solve10'};
+        // The timed quests as dealt: fair times, and each one can be swapped.
+        for (final g in [...Goals.daily(all, day, level: 22, claimed: claimed, dailyPuzzle: 'daily-$d'), ...Goals.weekly(all, day, level: 22, claimed: claimed)]) {
+          if (_type(g) != 'fast') continue;
+          timed.add(g.title);
+          // (Done by this week's boards from before today: waiting for its Claim.)
+          if (!g.done) expect(g.swap, isNotNull, reason: '$day: ${g.title}');
+        }
+        for (final weekly in [false, true]) {
+          var swaps = <String, List<String>>{};
+          List<Goal> deal() => weekly
+              ? Goals.weekly(all, day, level: 22, claimed: claimed, swaps: swaps)
+              : Goals.daily(all, day, level: 22, claimed: claimed, dailyPuzzle: 'daily-$d', swaps: swaps);
+          // Every slot that can be swapped, three rounds over.
+          for (var round = 0; round < 3; round++) {
+            for (var slot = 0; slot < deal().length; slot++) {
+              final goals = deal();
+              final g = goals[slot];
+              final why = '$day, ${weekly ? 'weekly' : 'daily'} slot ${slot + 1}, round ${round + 1}: ${[for (final g in goals) g.title]}';
+              if (g.done || claimed.contains(g.key)) {
+                expect(g.swap, isNull, reason: why);
+                continue;
+              }
+              expect(g.swap, isNotNull, reason: why);
+              swaps = swapped(swaps, g.swap!);
+              final next = deal();
+              expect(next[slot].done, isFalse, reason: '$why: brought ${next[slot].title}, finished already');
+              for (var o = 0; o < next.length; o++) {
+                if (o != slot && !next[o].done && !claimed.contains(next[o].key)) expectNewLane(next[slot], next[o], why);
+              }
+            }
+          }
+        }
+      }
+      expect(timed, {'Solve a 3x3 board in under 15 seconds', 'Solve two 3x3 boards in under 15 seconds'});
     });
 
     test('after swaps one board still finishes at most one quest besides "Solve 3 puzzles"', () {
@@ -375,17 +499,31 @@ void main() {
       expect(claimed[2].swap, isNull);
       expect(claimed[1].swap, isNotNull);
       // Three 3-star boards today: "Earn 3 stars twice" and "Solve 2 pictures without Peek" are done
-      // already, so no swap brings them (they would pay for the ticket at once).
+      // already, so no swap brings them as they are (they would pay for the ticket at once); they
+      // come asking for more ("Earn 3 stars 5 times").
       final today = [for (var i = 0; i < 3; i++) board('s$i', day.subtract(Duration(minutes: i)))];
-      for (var slot = 0; slot < 4; slot++) {
+      final asked = <String>{};
+      for (var slot = 1; slot < 4; slot++) {
         var swaps = <String, List<String>>{};
         for (var n = 0; n < 12; n++) {
-          final s = Goals.daily(today, day, level: 20, swaps: swaps)[slot].swap;
-          if (s == null) break;
-          expect(s.next, isNot(anyOf('stars', 'nopeek', 'solve')), reason: 'slot ${slot + 1}');
+          final g0 = Goals.daily(today, day, level: 20, swaps: swaps)[slot];
+          // Finished already ("Earn 3 stars twice" dealt): waiting for its Claim, no swap.
+          if (g0.done) {
+            expect(g0.swap, isNull, reason: g0.title);
+            break;
+          }
+          final s = g0.swap;
+          expect(s, isNotNull, reason: 'slot ${slot + 1}, swap ${n + 1}');
+          expect(s!.next, isNot(anyOf('stars', 'nopeek')), reason: 'slot ${slot + 1}');
           swaps = swapped(swaps, s);
+          final g = Goals.daily(today, day, level: 20, swaps: swaps)[slot];
+          expect(g.done, isFalse, reason: '${g.title}, slot ${slot + 1}');
+          if (g.key.contains(':stars-') || g.key.contains(':nopeek-')) asked.add(g.title);
         }
       }
+      expect(asked, containsAll(['Earn 3 stars 5 times', 'Solve 5 pictures without Peek']));
+      // A finished quest waits for its Claim: no swap.
+      expect(Goals.daily(today, day, level: 20)[0].swap, isNull, reason: '"Solve 3 puzzles" is done');
       // A swap of a fixed quest names its claim key, which has no slot in it.
       expect(first[0].swap!.fixedKey, 'd:$k:solve3');
       final week = Goals.weekly(const [], day, level: 20);
