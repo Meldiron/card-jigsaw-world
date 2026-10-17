@@ -2,9 +2,11 @@ import 'dart:math';
 
 import 'modes.dart';
 import 'tiling.dart';
+import 'twins.dart';
 
 export 'modes.dart';
 export 'tiling.dart';
+export 'twins.dart' show Twins;
 
 /// A board layout: a game mode (tiling) with a column/row count, and the
 /// difficulty tier it belongs to (its label: Cozy ... Master, Large ...
@@ -936,7 +938,12 @@ class Board {
   /// resort does the board keep a join: a tiling whose edge pieces cannot all
   /// part (the five-row triangle board, [Tiling.unavoidableJoins]) keeps the
   /// fewest it must. It never keeps a fixed point.
-  factory Board.shuffled(BoardSpec spec, {int? seed}) {
+  ///
+  /// With [twins] (docs/twins.md) a card on its twin's place counts as in place and a card next
+  /// to a neighbour its twin would join counts as joined, so the deal avoids those too. Only a
+  /// twin class covering more than half of its shape (two of the three half pieces of an edge, say)
+  /// can force a card onto a twin's place; that card then starts in place, as it looks.
+  factory Board.shuffled(BoardSpec spec, {int? seed, Twins? twins}) {
     final rng = Random(seed);
     final tiling = spec.tiling;
     final n = spec.cells;
@@ -955,6 +962,40 @@ class Board {
       return perm;
     }
 
+    if (twins != null && !twins.isEmpty) {
+      // A twin class covering more than half of its shape cannot all leave its places: one
+      // round finds the fewest it can.
+      final crowded = twins.classes.any((k) => 2 * k.length > classes[tiling.classOf(k.first)].length);
+      List<int>? best;
+      var bestCost = 1 << 40;
+      for (var round = 0; round < (crowded ? 1 : 8); round++) {
+        final perm = random();
+        final (placed, joins) = _untwin(perm, tiling, classes, rng, twins);
+        if (placed == 0 && joins <= tiling.unavoidableJoins) return Board(spec, perm);
+        final cost = placed * (1 << 20) + joins;
+        if (cost < bestCost) {
+          bestCost = cost;
+          best = perm;
+        }
+        // On a giant board three rounds that leave a pair or two looking joined (a big plain sky)
+        // are enough: every round there takes a while.
+        if (round >= 2 && bestCost < 1 << 20 && n > 200) break;
+      }
+      // A card that has to stay on a twin's place looks in place, so it is: it takes the identity
+      // of the place's own card (the two look the same).
+      final perm = best!;
+      for (var changed = true; changed;) {
+        changed = false;
+        for (var s = 0; s < n; s++) {
+          if (perm[s] == s || !twins.looksPlaced(perm[s], s)) continue;
+          final t = perm.indexOf(s);
+          perm[t] = perm[s];
+          perm[s] = s;
+          changed = true;
+        }
+      }
+      return Board(spec, perm);
+    }
     for (var attempt = 0; attempt < 400; attempt++) {
       final perm = random();
       if (_fixedPoints(perm) == 0 && _joins(tiling, perm) <= tiling.unavoidableJoins) return Board(spec, perm);
@@ -1052,6 +1093,74 @@ class Board {
       joins += after - before;
     }
     return joins;
+  }
+
+  /// The deal's repair with twins: a local search that takes a card looking in place (on its own
+  /// or a twin's place) or looking joined, and trades it with the best of a few cards of its shape
+  /// when that leaves fewer such cards around the two. Returns how many of each are left.
+  static (int, int) _untwin(List<int> perm, Tiling tiling, List<List<int>> classes, Random rng, Twins twins) {
+    final n = perm.length;
+    final classOf = <int, List<int>>{};
+    for (final cls in classes) {
+      for (final s in cls) {
+        classOf[s] = cls;
+      }
+    }
+    bool placed(int s) => twins.looksPlaced(perm[s], s);
+    bool joinedAt(int a, int b) => twins.looksJoined(tiling, a, perm[a], b, perm[b]);
+    // A card looking in place weighs more than any number of joins around two cards.
+    int costAround(int x, int y) {
+      var c = (placed(x) ? 32 : 0) + (placed(y) ? 32 : 0);
+      for (final nb in tiling.neighbours(x)) {
+        if (joinedAt(x, nb)) c++;
+      }
+      for (final nb in tiling.neighbours(y)) {
+        if (nb != x && joinedAt(y, nb)) c++;
+      }
+      return c;
+    }
+
+    List<int> bad() => [
+          for (var s = 0; s < n; s++)
+            if (placed(s) || tiling.neighbours(s).any((nb) => joinedAt(s, nb))) s,
+        ];
+    void trade(int x, int y) {
+      final t = perm[x];
+      perm[x] = perm[y];
+      perm[y] = t;
+    }
+
+    var worst = bad();
+    final rounds = max(2000, 8 * n);
+    for (var iter = 0; iter < rounds && worst.isNotEmpty; iter++) {
+      if (iter % 32 == 31) worst = bad();
+      if (worst.isEmpty) break;
+      final x = worst[rng.nextInt(worst.length)];
+      final cls = classOf[x]!;
+      if (cls.length < 2) continue;
+      var best = -1, bestGain = -1 << 30;
+      for (var k = 0; k < 6; k++) {
+        final y = cls[rng.nextInt(cls.length)];
+        if (y == x) continue;
+        final before = costAround(x, y);
+        trade(x, y);
+        final gain = before - costAround(x, y);
+        trade(x, y);
+        if (gain > bestGain) {
+          bestGain = gain;
+          best = y;
+        }
+      }
+      if (best >= 0 && (bestGain > 0 || (bestGain == 0 && rng.nextInt(4) == 0))) trade(x, best);
+    }
+    var placedLeft = 0, joins = 0;
+    for (var s = 0; s < n; s++) {
+      if (placed(s)) placedLeft++;
+      for (final nb in tiling.neighbours(s)) {
+        if (nb > s && joinedAt(s, nb)) joins++;
+      }
+    }
+    return (placedLeft, joins);
   }
 
   /// Joined edges of a raw permutation (each pair once).

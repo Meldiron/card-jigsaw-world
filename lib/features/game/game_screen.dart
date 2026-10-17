@@ -19,6 +19,7 @@ import '../../game/board.dart';
 import '../../game/game_controller.dart';
 import '../../game/gather.dart';
 import '../../game/image_loader.dart';
+import '../../game/twins_loader.dart';
 import '../../models/models.dart';
 import '../../router.dart' show rootNavigatorKey;
 import '../../state/catalog.dart';
@@ -706,10 +707,11 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   void _checkGather() {
     final size = _boardSize;
     if (!mounted || _args == null || size == null || _zoom.viewport.isEmpty) return;
-    final board = ref.read(gameControllerProvider(_args!)).board;
+    final state = ref.read(gameControllerProvider(_args!));
+    final board = state.board;
     if (!board.spec.isGiant) return;
     _gatherChecked = board;
-    final can = canGather(board, _zoom.visible, size);
+    final can = canGather(board, _zoom.visible, size, twins: state.twins);
     if (can != _canGather) setState(() => _canGather = can);
   }
 
@@ -813,6 +815,16 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     final image = ref.watch(imageProvider);
     if (image.hasValue) _fitToPicture(image.requireValue, giant: giant);
     final state = ref.watch(gameControllerProvider(_args!));
+    // Twin cards (docs/twins.md), measured once the picture is decoded. A board dealt here waits
+    // for them (a moment longer under "Dealing the cards"), so the deal can take them into account.
+    final ctrl = ref.read(gameControllerProvider(_args!).notifier);
+    final twins = image.hasValue ? ref.watch(boardTwinsProvider((puzzle.imageUrl, giant, _args!.spec))).value : null;
+    if (twins != null && state.twins == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) ctrl.useTwins(twins);
+      });
+    }
+    final dealing = ctrl.awaitsTwins;
     final zoomable = state.board.spec.isGiant;
     if (zoomable && image.hasValue) _syncView(state);
     if (zoomable && image.hasValue && !identical(state.board, _gatherChecked) && !(_gatherCheck?.isActive ?? false)) _scheduleGatherCheck();
@@ -848,9 +860,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                       final fitted = state.board.tiling.fit(Size(cons.maxWidth - 24, cons.maxHeight - 16 - bar), imageAspect);
                       final w = fitted.width, h = fitted.height;
                       _boardSize = Size(w, h);
-                      return Center(
-                        child: image.when(
-                          loading: () => SizedBox(
+                      Widget loading() => SizedBox(
                             width: w,
                             height: h,
                             child: Stack(
@@ -871,14 +881,17 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                                 ),
                               ],
                             ),
-                          ),
+                          );
+                      return Center(
+                        child: image.when(
+                          loading: loading,
                           error: (e, _) => EmptyState(
                             icon: AppIcons.image,
                             title: 'Picture did not load',
                             message: 'Check your connection and try again.',
                             action: BigButton(label: 'Try again', expand: false, onTap: () => ref.invalidate(imageProvider)),
                           ),
-                          data: (img) => Stack(
+                          data: (img) => dealing ? loading() : Stack(
                             clipBehavior: Clip.none,
                             alignment: Alignment.center,
                             children: [

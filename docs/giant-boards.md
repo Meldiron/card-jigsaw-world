@@ -59,7 +59,8 @@ any other (`Board.shuffled`: no card in place, no pair joined).
   view comes into it. Each card in view that belongs elsewhere trades places with one that belongs
   here, chosen so the card leaving lands as close to its own place as it can. Cards in place, joined
   groups and trades that would put a card straight into its place are left alone: Gather sorts, it
-  never solves, so the last card or two may stay just outside the view. Gather only gathers (owner,
+  never solves, so the last card or two may stay just outside the view (nor puts a card on a twin's
+  place, `docs/twins.md`). Gather only gathers (owner,
   2026-10-17): the button is dimmed while the view has nothing to bring in (`canGather`, worked out
   150 ms after the view settles and after every change on the board, about 0.1 to 0.25 ms on the
   biggest boards; never per frame). It is not a move. Its toast ("12 cards gathered") has an
@@ -68,8 +69,8 @@ any other (`Board.shuffled`: no card in place, no pair joined).
 - **Shuffle** (owner, 2026-10-17: the round button left of the tools on every board, free, where Undo
   was): the loose cards trade places at random, so the board can be read afresh; on a giant board only
   the ones in view (the whole board when not zoomed in). Cards in place and joined groups (also ones
-  not yet in place) stay exactly where they are; every loose card moves, none lands in its place and,
-  where another order allows, no pair is joined. Not a move. "Nothing left to shuffle" when no card can
+  not yet in place) stay exactly where they are; every loose card moves, none lands in its place (or
+  a twin's, `docs/twins.md`) and, where another order allows, no pair is joined (or looks joined). Not a move. "Nothing left to shuffle" when no card can
   move. (`shuffleLoose` and `shuffleInView` in `lib/game/gather.dart`.)
 - **Magic** puts a card and its neighbours in place (owner, 2026-10-17): the selected card (with
   nothing selected, the card a Hint shows, else any card not in place), then each card whose place
