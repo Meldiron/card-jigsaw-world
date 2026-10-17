@@ -52,14 +52,17 @@ DAILY = "18_daily_month_grid"
 EVENT_CARD = (60, 1608, 1260, 2532)
 PODIUM = (60, 720, 1260, 1200)
 STREAK_CARD = (60, 1485, 1260, 1997)  # Home's streak card in 31_home_streak
-# Play together (store capture scene with scripted players): a shared board mid-build with the players
-# chip in the top bar and another player's card in their colour with their initial, and the player list
-# (avatars in their colour rings, Host / You, Here). The boxes are provisional: set them on a coordinate
-# grid of the first captures.
+# Play together (store capture scene with scripted players, Bora Bora lagoon in Cards 4x4): a shared
+# board mid-build with the players chip in the top bar, Leo's purple "L" on the cards he moved and
+# Ava's orange "A" on the card she holds; and the player list (avatars in their colour rings, Host /
+# You, Here, Remove). Boxes in capture px, checked on a coordinate grid of the 2026-10-17 captures.
 COOP_BOARD = "32_coop_board"
 COOP_PLAYERS = "33_coop_players"
-COOP_HELD = (520, 1180, 800, 1560)   # another player's card on COOP_BOARD, its colour outline and initial
-COOP_LIST = (60, 560, 1260, 1180)    # the first three rows of the player list on COOP_PLAYERS
+# Ava's held card with her orange outline: its slot changes from run to run, so the capture test records
+# its rectangle in boards.json (`recordCell`, per theme) and the box names that record.
+COOP_HELD = "rect:32_coop_held"
+COOP_LIST = (60, 1668, 1260, 2250)   # the player list's card: Mia (host, you), Ava, Leo
+COOP_LIST_RADIUS = 45                 # that card's corner radius in capture px
 # Solved daily pictures with their stars (days 1, 3, 6, 8, 10 of the calendar capture).
 STARRED = [(62, 840, 340, 1176), (674, 840, 952, 1176), (368, 1208, 646, 1546), (980, 1208, 1258, 1546), (368, 1576, 646, 1914)]
 
@@ -91,13 +94,15 @@ def slides() -> list[dict]:
          "pics": [{"packs": ["pack-venice", "pack-lavender", "pack-japanese-prints", "pack-nebulae", "pack-northern-lights", "pack-sunflowers", "pack-islands"],
                    "row": {"w": 360, "h": 480, "gap": 28, "y": 640}, "radius": 30}],
          "phones": [{"capture": "15_library", "x": 160, "y": 1300}]},
-        # 3. Play together (new in 2.0.0): a shared board mid-build, flat and pushed right; another
-        #    player's card in their colour lifted on the left, the player list (colour rings, Host)
-        #    lifted below it. Headline top left, so slide 4 (top right) answers it.
+        # 3. Play together (new in 2.0.0): a shared board mid-build, flat and pushed right, Leo's
+        #    purple cards in place on it; Ava's held card (orange, "A") lifted on the left, the player
+        #    list (colour rings, Host, Remove) lifted over the toolbar, just under the board. Headline
+        #    top left, so slide 4 (top right) answers it.
         {"key": "together", "head": "Play together\nwith friends", "text": ("top", 200, "left"),
          "phones": [{"capture": COOP_BOARD, "x": 360, "y": 600,
-                     "out": [{"crop": (COOP_BOARD, COOP_HELD), "x": -330, "y": 1060, "w": 400, "rot": -6, "radius": 30},
-                             {"crop": (COOP_PLAYERS, COOP_LIST), "x": -300, "y": 1640, "w": 940, "radius": 44}]}]},
+                     "out": [{"crop": (COOP_BOARD, COOP_HELD), "x": -320, "y": 640, "w": 380, "rot": -6, "radius": 6},
+                             {"crop": (COOP_PLAYERS, COOP_LIST), "x": -300, "y": 1700, "w": 940,
+                              "radius": round(COOP_LIST_RADIUS * 940 / 1200)}]}]},
         # 4. Why you come back: the calendar pushed left, today's picture and the streak from Home
         #    lifted, solved days with their stars on the right.
         {"key": "daily", "head": "A new picture\nevery day", "text": ("top", 200, "right"),
@@ -117,8 +122,8 @@ def slides() -> list[dict]:
         #    and centred (owner), a loose and a locked card lifted.
         {"key": "painting", "head": "Bring the colour\nback, card by card", "text": ("center", 2390, "center"),
          "phones": [{"capture": "26_painting", "x": 160, "y": -150,
-                     "out": [{"crop": ("26_painting", cell("26_painting", 4, 5, 0, 0)), "x": -110, "y": 1560, "w": 300, "rot": -7, "radius": 26, "label": "Loose"},
-                             {"crop": ("26_painting", cell("26_painting", 4, 5, 1, 2)), "x": 810, "y": 1520, "w": 300, "rot": 6, "radius": 26, "label": "Locked"}]}]},
+                     "out": [{"crop": ("26_painting", cell("26_painting", 4, 4, 0, 0)), "x": -110, "y": 1560, "w": 300, "rot": -7, "radius": 26, "label": "Loose"},
+                             {"crop": ("26_painting", cell("26_painting", 4, 4, 1, 1)), "x": 810, "y": 1520, "w": 300, "rot": 6, "radius": 26, "label": "Locked"}]}]},
         # 7. Giant boards: zoomed in with the overview map in the corner; the whole board in its
         #    hundreds of tiny squares (a small part solved) lifted beside it.
         {"key": "giant", "head": "Giant boards of\nhundreds of cards", "text": ("top", 200, "left"),
@@ -269,6 +274,16 @@ def board(name: str) -> tuple[int, int, int, int]:
     return round(left), round(top), round(left + w), round(top + h)
 
 
+def crop_box(capture_name: str, spec) -> tuple[int, int, int, int]:
+    """A crop box: "board" (the capture's board), "rect:<name>" (a rectangle the capture test recorded in
+    boards.json, in the capture's theme) or (l, t, r, b) in capture px."""
+    if spec == "board":
+        return board(capture_name)
+    if isinstance(spec, str) and spec.startswith("rect:"):
+        return board(spec[5:] + ("_light" if capture_name.endswith("_light") else ""))
+    return tuple(spec)
+
+
 def phone_screen() -> tuple[float, float]:
     """Where a capture sits inside the phone frame of compose_screenshots.phone(): offset, scale."""
     band, bezel = round(PHONE_W * 0.011), round(PHONE_W * 0.026)
@@ -293,7 +308,7 @@ def export_parts(parts: Path, slide_list: list[dict]) -> list[dict]:
             outs = []
             for j, o in enumerate(ph.get("out", [])):
                 cn = capture(o["crop"][0], dark)
-                box = board(cn) if o["crop"][1] == "board" else o["crop"][1]
+                box = crop_box(cn, o["crop"][1])
                 cf = f"crop-{i}-{pi}-{j}.png"
                 cs.load_raw(cn).crop(box).save(parts / cf)
                 h = (box[3] - box[1]) * o["w"] / (box[2] - box[0])

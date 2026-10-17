@@ -41,15 +41,15 @@ in `tools/store/glass/slides.html`, then rerun the script.
 - **The player grows** across the slides: level 4 in the Library and 9 on Quests,
   each with another avatar, and a 23-day streak on the daily slide.
 - **Contrast:** every headline is measured against what lies behind it
-  (`compose_glass.py --contrast`); all reach 4.5:1 or more (2026-10-16: 4.8 on
-  the dark slide, 5.7 to 12.3 on the others).
+  (`compose_glass.py --contrast`); all reach 4.5:1 or more (2026-10-17: 4.8 on
+  the dark slide, 5.3 to 12.3 on the others; Play together 10.7).
 - **Layouts take turns:** the headline sits top, bottom, middle, left or right,
   and the phones move with it (flat, tilted, pushed to one side, two phones split
   around the headline on slide 5, a phone in front of a wall of pack covers on
   slide 2). The owner found "headline on top, phone below" on every slide boring.
   Slides 1-3 keep their phones flat.
 - **Boards mid-build:** every board in play shows some cards locked, some loose
-  and some joined (Painting mostly still grey; the giant board in 210 tiny cards
+  and some joined (Painting mostly still grey; the giant board in 324 tiny squares
   with only a small part solved).
 - **Break-out cards** lift one real part of the app out of the phone (another
   player's card in their colour and the player list, today's puzzle, the other three shapes, a loose and a locked Painting card, the giant

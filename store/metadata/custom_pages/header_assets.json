@@ -3,8 +3,8 @@
   "groups": {
     "hero_wide": ["25_hero", [664, 503, 1280, 900]],
     "hero_tall": ["25_hero", [40, 503, 344, 1305]],
-    "painting_loose": ["26_painting", {"cell": [4, 5, 0, 0]}],
-    "painting_locked": ["26_painting", {"cell": [4, 5, 1, 2]}],
+    "painting_loose": ["26_painting", {"cell": [4, 4, 0, 0]}],
+    "painting_locked": ["26_painting", {"cell": [4, 4, 1, 1]}],
     "giant_part": ["27_giant", {"part": [0.0, 0.0, 0.5, 0.33]}],
     "giant_map": ["30_giant_zoom", [992, 636, 1262, 1048]],
     "today_card": ["18_daily_month_grid", [60, 530, 1260, 775]],
