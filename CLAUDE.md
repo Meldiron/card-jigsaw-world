@@ -33,11 +33,14 @@ carden.page redirects there.
   photos. One accent: cobalt `Brand.accent` 0xFF2F4FBF (dark 0xFF7C9AFF) in `lib/core/theme/tokens.dart`.
   Icons only from `lib/widgets/icons.dart` (CoinIcon, TicketIcon = upright "pass" design, HintIcon,
   AppIcons). Native iOS 26 feel: glass bars/sheets (`lib/widgets/glass.dart`), every confirmation via
-  `showAppAlert`, every sheet via `showAppSheet` and every menu of actions via `showAppActionSheet` in
-  `lib/widgets/ui.dart`; switches are the glass `AppSegmentedControl`, round buttons over photos `PhotoButton`,
+  `showAppAlert`, every sheet via `showAppSheet`, every menu of actions via `showAppActionSheet` and every
+  toast via `showToast` (optional `action:` text button, then at least 4 s) in `lib/widgets/ui.dart`; switches are the glass `AppSegmentedControl`, round buttons over photos `PhotoButton`,
   the VIP card family is `lib/widgets/vip.dart`, and counts go through `formatCount` / `compactCount`
   (`lib/core/numbers.dart`). Costs on buttons use `BigButton.cost` / `CostLabel` (currency icon + amount);
-  destructive actions are red and always ask first. See `docs/native-ui.md`.
+  destructive actions are red and always ask first. A finished pack shows the one done badge
+  `PackDoneBadges` (`lib/features/gallery/pack_progress.dart`: cobalt tick disc, gold star when perfect; no
+  green); celebrations use `showConfettiBurst` (`lib/widgets/confetti.dart`), never with Reduce motion. See
+  `docs/native-ui.md`.
 - **Onboarding is instant** (owner, 2026-10-15): every picture the welcome pages show is bundled in
   `assets/welcome/` (PD/CC0 catalogue picks), never loaded from Storage.
 - **Copy**: calm, precise, short; terms and CTA style in `docs/copy-guide.md`. The `/events` tab is
@@ -61,12 +64,16 @@ carden.page redirects there.
   `/preview?width=1080` for covers). Never write a third-party image URL to the database. The content
   tool hosts each pick on apply (`tools/content/cjw/host.py`); `tools/content/run.sh host` migrates
   anything left. The original address stays in `sourceUrl` (puzzles) / `coverSourceUrl` (packs, events).
-- **The app talks only to Appwrite and Apple** (owner rule, 2026-10-13): no analytics, crash or ad SDKs,
-  no CDNs. Pictures come from our Storage (above); the web build bundles CanvasKit
+- **The app talks only to Appwrite and Apple** (owner rule, 2026-10-13; analytics 2026-10-17): no
+  third-party analytics, crash or ad SDKs, no CDNs. Usage analytics go only to Appwrite Analytics (property
+  "Carden", tracking id 6ad3426500307dfae727) through `AppAnalytics` in `lib/core/analytics.dart`
+  (`docs/analytics.md`): never from debug/profile builds or QA runs, off with Settings > Privacy > Share usage
+  data; `--dart-define=CJW_ANALYTICS=true` only for a verification run. Pictures come from our Storage (above); the web build bundles CanvasKit
   (`--no-web-resources-cdn` in `tools/dev/deploy-web.sh`) and serves its default font from
   `web/fallback-fonts/` (`fontFallbackBaseUrl` in `web/flutter_bootstrap.js`). Apple traffic is
-  StoreKit, Sign in with Apple and the widget/App Store system services. Check new dependencies for
-  network use before adding them.
+  StoreKit, Sign in with Apple, push notifications (APNs, friend gifts) and the widget/App Store system
+  services. Check new dependencies for network use before adding them (share_plus: checked, no network of its
+  own, mailto fallback off).
 - **Builds only when the owner asks** (owner rule, 2026-10-13): never dispatch a TestFlight/App Store build
   (`gh workflow run`, `tools/dev/testflight.sh`, submissions) on your own initiative. Fix, QA, commit, push, then
   report that it is ready for a build. Same for installs on the owner's iPhone.
@@ -116,7 +123,11 @@ carden.page redirects there.
   → `screenshots/*.png`. Any other suite: `tools/dev/qa-run.sh drive --driver=... --target=... -d <udid>`
   (never a bare `flutter drive`/`flutter run`; `QA_KEEP=1` keeps the run's players for inspection). Store captures: `test_driver/store_screenshots.dart` +
   `integration_test/store_screenshots_test.dart` → `store/raw/`. Extra suites:
-  `integration_test/social_profile_test.dart`, `merge_sheet_test.dart`.
+  `integration_test/social_profile_test.dart`, `merge_sheet_test.dart`. QA runs send no analytics (`CJW_QA`); add
+  `--dart-define=CJW_ANALYTICS=true` to a qa-run.sh run only to check that events arrive. Friend gifts:
+  `tools/dev/gift_qa.py`, `integration_test/friend_gifts_test.dart`, `tools/dev/notification_check.sh <udid>`
+  (a temporary UI-test target, never committed). Chrome is not installed on this Mac: web QA runs
+  `-d web-server` and a headless browser. Parallel agents share the session scratchpad: unique file names.
   Quirks: capture is in-app (host `simctl io screenshot` fires too late); uninstall the app before a
   second same-day run (`xcrun simctl uninstall <udid> com.matejbaco.cardjigsawworld`, the daily gift is
   otherwise already claimed); a stuck "Open in Carden?" prompt needs a simulator reboot; started
@@ -131,15 +142,35 @@ carden.page redirects there.
 
 ## Code map
 
-- `lib/game/`: `board.dart` (permutation board; shuffle is a derangement with zero joined pairs),
+- `lib/game/`: `board.dart` (permutation board; shuffle is a derangement with zero joined pairs, except the
+  5x5 triangle board, which keeps one joined pair of halves on each side edge (`Tiling.unavoidableJoins`); a
+  group a move lands on shifts whole when it has room, else breaks as before (`moveGroup`); square sizes in
+  every mode, Cozy 3x3 to Master 7x7 (`BoardSpec.squareTiers` / `squareGiantTiers`), Triangles 4x4-7x7 with
+  NxN = N columns of an up and a down triangle (`BoardSpec.squareDims`, shown via `BoardSpec.size`),
+  Hexagons 5x5 and 7x7 (other sizes would need a card in place); Expand lays a size out for the picture's
+  shape (`BoardSpec.ladder` / `offersExpand`); the old picture-shaped ladder `BoardSpec.tiers` resumes old
+  saves, matched by count and layout (`fromSaved(layout:)`); docs/boards.md), `twins.dart` (twin cards:
+  `TwinFinder`, `Twins.settle`) and `twins_loader.dart` (`boardTwinsProvider`),
   `tiling.dart` (Grid/Triangle/Hex tilings, `fit`/`crop`, `boardAspect`, neighbours, vertex geometry),
   `modes.dart` (cards ×1.0, squares ×1.15, triangles ×1.35, hexagons ×1.5; route code
-  `<mode>-CxR`), `image_loader.dart`.
+  `<mode>-CxRtT`, `?expand=1`), `gather.dart` (`gatherInto`, `canGather`, `shuffleLoose` / `shuffleInView`),
+  `image_loader.dart`.
 - `lib/features/game/`: `board_widget.dart` (one render path for all modes: unplaced pieces dimmed
   16%, joined groups fused with a cobalt outer outline, locked clusters fused without outline),
-  `game_screen.dart` (HUD, toolbar Undo/Peek/Magic/Hint, pause sheet with "Change mode or board",
-  completion overlay with pack progress and "View picture"), `difficulty_screen.dart` (real-aspect
-  preview, rewards chips, Discard progress).
+  `game_screen.dart` (HUD, toolbar Shuffle/Peek/Magic/Hint: Shuffle is free and not a move, Magic places a
+  card and its picture neighbours, one move each, never a double lock; pause sheet with "Change mode or
+  board", completion overlay with pack progress and "View picture"), `difficulty_screen.dart` (real-aspect
+  preview of the part played, square sizes with the Expand switch, a plain Play / Continue button, Discard
+  progress).
+- **Twin cards** (owner, 2026-10-17; `docs/twins.md`): cards that look the same are twins (CIEDE2000 per
+  ~4 px box and outline strip: mean ≤ 1.0, 95% ≤ 1.8, max ≤ 3.0, specks ≤ 1.6 L or 3× grain). A move that
+  puts a loose card on a twin's place, or where a twin would join a neighbour, counts as placed or joined by
+  an identity swap of two loose cards (`Twins.settle` in `GameController._apply`; `GameState.cardKeys` keeps
+  each card's widget, `_TwinFade`). The deal, Shuffle and Gather avoid twin places and joins (a crowded twin
+  class on a small triangle or honeycomb board may start one card locked). A fresh board waits for its twins
+  (`useTwins`, `awaitsTwins`). Saves stay permutations. Integration suites find cards through
+  `GameState.cardKeys`, never `ValueKey('card-N')` alone. Report: `tools/dev/twins_report_test.dart` +
+  `tools/dev/twins_sheets.py`; QA: `integration_test/twins_test.dart`.
 - `lib/state/catalog.dart`: `catalogProvider` is the catalogue (packs, puzzles, events; refresh by
   invalidating it); `packRowsProvider`, `allPuzzlesProvider` and `eventsProvider` read it.
   `packsProvider` is what screens see: `Pack.isReleasedAt` hides daily months until their first day and
@@ -160,8 +191,11 @@ carden.page redirects there.
   sections say "N more pictures" and offer Unlock anyway, which always asks "Are you sure?" (Home's first lets the
   player pick what to unlock). Players from before have no record and see everything. Integration suites call
   `FirstSteps.skipFor(store)`; `integration_test/first_steps_test.dart` plays the path.
-- `lib/state/`: `profile.dart` (`Economy` constants, VIP, piggy 5/picture up to 500), `rewards.dart`
-  (level curve `LevelRewards.levelForXp`, daily 3 + 1 VIP / weekly 5 + 1 VIP quests), `achievements.dart`,
+- `lib/state/`: `profile.dart` (`Economy` constants, VIP, piggy 5/picture up to 500, five upgrades of 100
+  for 5,000 coins each up to 1,000: `profiles.piggyLevel`, `SyncOp.piggyUpgrade`; Lucky Wheel ×5 spin: 5
+  tickets, prize ×5, same odds, `Economy.wheelBigSpin`), `rewards.dart` (level curve
+  `LevelRewards.levelForXp`, level-up coins `LevelRewards.coinsForLevel`: 100 + 25 a level up to 300, 500
+  every 10th level; daily 3 + 1 VIP / weekly 5 + 1 VIP quests), `achievements.dart`,
   `progress.dart`, `merge.dart` + `merge_flow.dart` (guest→account save merge), `auth.dart`, `social.dart`.
 - **Save sync** (`docs/sync.md`): `lib/state/sync.dart` (`SyncController`: queued ops, fetch on start/resume/
   focus/sign-in, conflicts) + `lib/data/sync/` (`ops.dart` intents → atomic operators, `notice.dart`,
@@ -171,14 +205,17 @@ carden.page redirects there.
 - `lib/features/ads/house_ads.dart`: house ads only (no ad network). Break offer every 3rd completion
   or when the last break is 3+ minutes old, closable after 5 s, rewarded 15 s; the offer CTA never
   skips the rewarded countdown.
-- `lib/data/purchases.dart`: StoreKit products (coins_1000/3000/5500/12000, tickets_5/15, hints_5/15,
-  vip_monthly/yearly), verified server-side by the `verify-purchase` function. `PurchaseService` listens from
+- `lib/data/purchases.dart`: StoreKit products (coins_1000/3000/5500/12000, tickets_5/15, hints_5/15 =
+  booster bundles of Peeks, Hints and Magic (15/10/5 and 50/30/15), vip_monthly/yearly), verified server-side by the `verify-purchase` function. `PurchaseService` listens from
   launch, checks open transactions on resume and retries checks without an answer; `PurchaseFlow`
   (`lib/state/purchases.dart`) and `PurchaseHost` (`lib/features/store/purchase_host.dart`) show the tile
   spinner, the purchase sheet ("Adding 10 tickets" > "10 tickets added") and toasts. Flow: `docs/purchases.md`.
 - `lib/widgets/adaptive.dart`: wide windows on the web (top bar from 900 px, centred pages, adaptive
   grids, shelves with arrows, sheets as centred panels); phones keep their layout. `docs/web.md`, "Layout".
 - `lib/core/platform.dart`: web capability flags.
+- Analytics: `lib/core/analytics.dart` (`AppAnalytics.event` one-liners, `ScreenObserver` on the root and every
+  tab navigator, screen names from route patterns, never ids). New features add their events there and in
+  `docs/analytics.md`; the privacy policy's usage data section must match.
 - Accessibility (`docs/accessibility.md`, owner 2026-10-16): Settings > Accessibility has Text size (Default /
   Large 150% / Largest 200%), Reduce motion, Increase contrast and Differentiate without colour, all off until the
   player turns them on (the iPhone's own switches do not). App code reads them only through `A11y`
@@ -188,7 +225,8 @@ carden.page redirects there.
   under `symbolsOf`, and no layout errors at Largest on the SE frame (design QA harness, scene pref
   `accessibility`). `test/accessibility_test.dart` checks defaults and Contrast ratios.
   `lib/core/sfx.dart`: `CJW_MUTE`. `lib/core/qa.dart`: `CJW_QA` / `CJW_QA_RUN` (test players).
-- Daily reminders: local iOS notifications, no server. `lib/state/reminders.dart` (`planReminders`: one a
+- Daily reminders: local iOS notifications, no server (friend-gift notifications are pushes, see Friend
+  gifts). `lib/state/reminders.dart` (`planReminders`: one a
   day for a week at the Settings time, none on a day the daily gift is claimed; replanned on start, resume
   and background), `lib/core/reminders.dart` (channel `cjw/reminders`), native side `DailyReminders` in
   `ios/Runner/AppDelegate.swift`. Integration runs ask for provisional permission (no prompt to tap);
@@ -197,14 +235,15 @@ carden.page redirects there.
   They are promotional, so they are off until the player says yes (the switch, or Turn on in the reminder
   question, whose copy names them; guideline 4.5.4).
 - Painting and giant boards: `progress.painting`; `lib/state/giant.dart` (`isGiantPack`,
-  `isGiantPuzzleProvider`: packs of category `Giant` get the Large/Huge/Giant/Colossal ladder only, about
-  100-300 cards in Cards), `puzzleImageFullProvider` (full-resolution decode), `BoardZoom` in
+  `isGiantPuzzleProvider`: packs of category `Giant` get the Large/Huge/Giant/Colossal ladder only, square:
+  Cards 10x10 to 17x17 (100-289 cards), Triangles 10x10 to 18x18), `puzzleImageFullProvider` (full-resolution decode), `BoardZoom` in
   `board_widget.dart` (pinch, two-finger pan, `fitCell` zoom limit, auto-pan; no double tap); the bar,
   overview map, off-screen pointer and milestones in `lib/features/game/giant_board.dart`; saved views and
   the map switch in `GiantViews` (`lib/state/giant.dart`). No zones and no Edges (owner removed both
   2026-10-14): Locate (tap a card, the map shows its place, only while the map is on; always on),
-  Gather at any zoom (`lib/game/gather.dart`; with nothing to bring in it shuffles the loose cards in
-  view, `shuffleInView`), Magic puts the selected card in place, and Peek (10 coins on every board) flies
+  Gather at any zoom (`lib/game/gather.dart`; dimmed while the view has nothing to bring in, `canGather`;
+  its toast has the game's only Undo, while nothing else changed), Shuffle on a giant board deals only the
+  loose cards in view, Magic puts the selected card and its neighbours in place, and Peek (10 coins on every board) flies
   the cards to their places and back. Design and research: `docs/giant-boards.md`. QA:
   `integration_test/giant_ux_test.dart` (real Giant pack, about 4 minutes) and `giant_tools_test.dart`.
 - Progression: `lib/state/unlocks.dart` (`openFeaturesProvider`, intro bookkeeping) and `Unlocks` /
@@ -212,6 +251,8 @@ carden.page redirects there.
   levels 2/4/6/8/10 or once used; `lib/features/game/unlock_intro.dart` (intro sheet, `UnlockIntroHost`).
   Giant boards can be opened early from a giant pack's gate: the pack's tickets plus `Economy.giantEarlyFee`
   (1 ticket per level to go), recorded as `early:giant` in `profiles.unlockedTiers`.
+  Any quest not finished or claimed can be swapped for 1 ticket (`QuestSwap`, `Goal.swap`, `profiles.questSwaps`
+  JSON text, `SyncOp.questSwap`; only that quest changes; older builds show the first quest).
   Quests: `Goals.daily` / `weekly` rotate by day and week and take `open`, `level`, `claimed` (and the
   daily puzzle); each quest comes from a different lane, chosen against the player's `PlayHabits`, so
   ordinary play finishes only "Solve 3 puzzles" and one board never finishes two (docs/economy.md, "Quests
@@ -226,7 +267,9 @@ carden.page redirects there.
   Universal links (on from 2.0.0; Associated Domains on the App ID since 2026-10-16): `applinks:` for
   play.carden.page and both appwrite.network addresses in `Runner.entitlements` +
   `web/.well-known/apple-app-site-association` (keeps `/auth/*`, `/redeem*` and `/code*` in the browser). A new
-  link goes into `AppLink.parse`, the association file, the doc and `test/deep_links_test.dart`.
+  link goes into `AppLink.parse`, the association file, the doc and `test/deep_links_test.dart`. `/join/<code>`
+  invites to a shared game (a fresh install goes straight to the board; onboarding begins after leaving);
+  `/inbox?message=<id>` (also `/inbox/<id>`, `/messages/<id>`) opens one Inbox message (gift notifications).
 - `lib/state/app_update.dart` + `lib/features/update/update_host.dart`: update prompt (above).
   Web-only page helpers (fetch past the cache, reload) in `lib/core/web_page.dart`; Safari trackpad
   pinch (gesture events) is turned into Flutter's ctrl+wheel zoom by a script in `web/index.html`.
@@ -242,10 +285,16 @@ carden.page redirects there.
 
 - Endpoint `https://fra.cloud.appwrite.io/v1`, project `6acb4de5003e38d5ebd9`, database `cjw`
   (tables profiles, packs, puzzles, progress, events, event_progress, friends, ledger, my_puzzles,
-  purchases, meta, releases, reports, blocks, feedback, messages). Profiles are readable by anyone; `level` mirrors XP; aggregates `totalMoves`,
+  purchases, meta, releases, reports, blocks, feedback, messages, gifts, coop_games, coop_moves). Profiles are readable by anyone; `level` mirrors XP; aggregates `totalMoves`,
   `totalSeconds`, `solvedByMode`, `questsCompleted` and the "Total Completion" numbers
   (`picturesSolved`, `picturesPerfect`, `packsCompleted`, `packsPerfect`, kept in step by
   `ProfileNotifier.syncCompletion`, backfill `tools/dev/backfill_profile_stats.py`) are public.
+  `profiles.piggyLevel` (0-5) and `profiles.questSwaps` (text) since 2026-10-17. Analytics property "Carden"
+  (6ad3426500307dfae727, domain carden.page): `appwrite analytics list-metrics --property-id
+  6ad3426500307dfae727`. appwrite SDK 27.2.0 (28.0.0 breaks: Dart 3.10, plugin). Messaging push providers
+  `apns` (production) and `apns-sandbox`, key 2QJPJFW8JW (APNs on since 2026-10-17); the App ID has Push
+  Notifications and the CI profile "CJW AppStore cardjigsawworld" was remade with it; `aps-environment =
+  $(APS_ENVIRONMENT)` (Debug/Profile development, Release production).
   `isTest` marks QA players (excluded from the league). `profiles.appliedOps` / `event_progress.appliedOps` (ids
   of applied sync ops, exactly-once retries) and `progress.session` (play-through id) belong to the save sync.
   `progress.painting` marks a Painting board (x1.25); `progress.par` / `peeked` / `bestLock` feed the quests. `purchases.ownership` / `purchases.appTransactionId`
@@ -261,6 +310,12 @@ carden.page redirects there.
   Offensive names (owner, 2026-10-16): `lib/core/name_filter.dart` (`NameFilter`) refuses them where a name is
   chosen (name alert, sign-up, new profiles) and shows names that fail as "Player" (`Profile.fromRow`, friends,
   blocks, merge), so names set by older builds are covered on 2.0+. `test/name_filter_test.dart`.
+- Friend gifts (owner, 2026-10-17; `docs/friend-gifts.md`): Player > Send a gift (1 ticket or 150 coins, free,
+  one per friend per sender's local day; function `send-gift`, table `gifts`,
+  `messages.fromUserId/fromName/fromAvatar`, 24 h `expiresAt`). Push: `GiftPush` (`cjw/push`,
+  AppDelegate.swift) + `PushRegistration` (`lib/state/push.dart`) register the APNs token as an Appwrite push
+  target (provider from the build's embedded profile); Settings > Gifts from friends; a tap opens
+  `/inbox?message=<id>`. Permission is asked after a first gift or friend, never at launch.
 - Inbox (owner, 2026-10-16): Social > Inbox shows messages from the owner. Table `messages` (subject, body,
   `sentAt`, `expiresAt`, rewards, `ctaLabel`/`ctaLink` any app link), row-level permissions only: one player
   (`user:<id>`), an Appwrite label (`label:early`) or everyone (`users`); the app reads whatever it may read.
@@ -274,8 +329,10 @@ carden.page redirects there.
   server reads it: `tools/dev/feedback.py` lists and closes them. Deleted with the account (`delete-account`)
   and with QA players. `lib/features/profile/help.dart`.
 - Legal links: `AppLinks` in `lib/core/links.dart` (privacy policy = `docs/privacy-policy.md` on GitHub, the
-  same URL as the listing; terms of use = Apple's standard EULA) in Settings > About, under the VIP plans in
-  the store and on the sign-in screen. Keep `docs/privacy-policy.md` true to what the app does.
+  same URL as the listing; terms of use = `docs/terms-of-use.md` on GitHub, Carden's own terms on top of
+  Apple's standard EULA, which applies, the URL the listing's description gives) in Settings > About, under
+  the VIP plans in the store and on the sign-in screen. Keep `docs/privacy-policy.md` and
+  `docs/terms-of-use.md` true to what the app does (`test/legal_links_test.dart`).
 - Pack codes (`docs/pack-codes.md`): `packs.hidden` packs are listed only for players who own them;
   codes in the server-only `pack_codes` table (SHA-256 hashes) and `code_claims`; function `redeem-code`
   (redeemed on the web only: the Settings row and `/redeem?code=` links; the iPhone app has no code entry and a
@@ -290,11 +347,17 @@ carden.page redirects there.
   (Profile > Account > Delete account: deletes the caller's rows, uploads and user with a per-execution key;
   secret variable `APPLE_SIGNIN_KEY` (contents of `AuthKey_2QJPJFW8JW.p8`, set 2026-10-15) revokes Sign in
   with Apple tokens; without it the revoke is skipped and logged; it also deletes the player's reports and
-  blocks). Deploy functions with the Appwrite CLI (`appwrite functions create-deployment --code functions/<name>`). There is no image proxy: pictures load straight from Storage on every platform.
+  blocks, gifts both ways and messages sent as gifts, co-op moves and hosted games); `send-gift` (scopes
+  rows.read/write, messages.read/write; trims gift pushes older than a day from the messaging log);
+  `coop-game` (create/join/leave/remove/end/next; a team per game, seats in membership roles) and
+  `coop-cleanup` (hourly: idle games end after a day, ended ones go after an hour, orphan teams). verify-purchase
+  also credits Peeks and Magic (no ledger line). Deploy functions with the Appwrite CLI (`appwrite functions create-deployment --code functions/<name>`). There is no image proxy: pictures load straight from Storage on every platform.
 - Site `card-jigsaw-world` (named Carden) → https://play.carden.page (proxy rule; web platform `carden-play`
   allows the origin), and the earlier addresses https://carden.appwrite.network and
   https://card-jigsaw-world.appwrite.network still serve it (static, fallback index.html),
-  deployed by `tools/dev/deploy-web.sh` (chunked upload). Web build hides purchases, gift codes,
+  deployed by `tools/dev/deploy-web.sh` (chunked upload). `web/index.html` shows an invite card on iPhone/iPad
+  for `/join/` (Open in Carden via carden.appwrite.network, or Play in the browser, which only then loads the
+  game); og:image is `web/invite-card.jpg` (1200x630, `tools/brand/invite_card.py`). Web build hides purchases, gift codes,
   widgets. Apple sign-in on web (configured 2026-10-13): Services ID `com.matejbaco.cardjigsawworld.signin`,
   key `secrets/AuthKey_2QJPJFW8JW.p8`, team `C24QP73SQM`. **Web OAuth must use the token flow** (owner
   rule): full-page redirect to `/account/tokens/oauth2/apple` (the `createOAuth2Token` endpoint), then
@@ -329,11 +392,14 @@ carden.page redirects there.
   App Store availability is two manual ticks in Pricing and Availability). Win-back offers are recorded in
   `store/metadata/subscriptions/vip_*.json`; `subscriptions` creates them once Apple approves the plans. Docs:
   `tools/store/README.md`, `docs/release-flow.md`, `docs/release-checklist.md`.
-- Not yet done (owner): App Privacy questionnaire, App Store submission (Paid Apps agreement, banking and tax active since 2026-10-14),
+- Not yet done (owner): App Privacy questionnaire (add analytics: Usage Data > Product Interaction and Location >
+  Coarse Location, linked, not tracking; Analytics purpose on Purchase History and User ID), refreshing the local
+  team profile in Xcode before the next `tools/dev/device.sh` (it lacks Push Notifications and Associated
+  Domains), App Store submission (Paid Apps agreement, banking and tax active since 2026-10-14),
   Mac / Vision Pro availability ticks, restoring
   `secrets/appwrite-storage-key.txt` (the content tool falls back to the users key), pushing the local
   branch `workflow-dsym-check` (needs a GitHub token with the `workflow` scope: `gh auth refresh -s workflow`).
-- **Changing what a purchase gives** (coins, tickets, hints per product): three places must agree:
+- **Changing what a purchase gives** (coins, tickets, hints, Peeks, Magic per product): three places must agree:
   `functions/verify-purchase/src/main.js` (server grant, then redeploy the function as in
   `docs/purchases.md`), `lib/data/purchases.dart` (what the store screen shows) and
   `store/metadata/subscriptions/consumables.json` (App Store names and descriptions, pushed with
@@ -376,5 +442,7 @@ tree, so dispatch the workflow directly as described in the testflight-feedback 
 
 `docs/native-ui.md` (glass components), `docs/accessibility.md`, `docs/first-steps.md` (guided start), `docs/copy-guide.md`, `docs/sync.md` (save sync), `docs/catalog-sync.md`, `docs/deep-links.md`, `docs/house-ads.md`,
 `docs/purchases.md`, `docs/web.md`, `docs/app-updates.md`, `docs/release-flow.md`, `docs/release-checklist.md`,
-`docs/content-rules.md`, `docs/content-sources.md`, `store/README.md` (store assets),
+`docs/content-rules.md`, `docs/content-sources.md`, `docs/boards.md` (board sizes, Expand), `docs/twins.md`
+(twin cards), `docs/analytics.md`, `docs/friend-gifts.md`, `docs/multiplayer.md` (Play together),
+`docs/terms-of-use.md`, `store/README.md` (store assets),
 `tools/store/README.md`, `README.md`.
