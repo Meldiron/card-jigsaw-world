@@ -43,6 +43,7 @@ class Profile {
     required this.hints,
     required this.xp,
     required this.piggyCoins,
+    this.piggyLevel = 0,
     required this.streak,
     required this.lastDailyClaim,
     required this.lastWheelSpin,
@@ -89,6 +90,10 @@ class Profile {
   final int magics;
   final int xp;
   final int piggyCoins;
+
+  /// Piggy bank upgrades bought (0-[maxPiggyLevel]): each holds [piggyStep] coins more. Column
+  /// `piggyLevel` (default 0, since 2026-10-17); older builds ignore it and keep 500.
+  final int piggyLevel;
   final int streak;
   final DateTime? lastDailyClaim;
   final DateTime? lastWheelSpin;
@@ -147,7 +152,16 @@ class Profile {
   /// column is only a mirror for queries and older clients.
   int get level => LevelRewards.levelForXp(xp);
 
-  static const piggyCapacity = 500;
+  /// The piggy bank holds [basePiggyCapacity] coins, and [piggyStep] more for each upgrade, up to
+  /// [maxPiggyLevel] upgrades: 500, 600, ... 1,000 (owner, 2026-10-17).
+  static const basePiggyCapacity = 500;
+  static const piggyStep = 100;
+  static const maxPiggyLevel = 5;
+  static int piggyCapacityAt(int level) => basePiggyCapacity + piggyStep * level.clamp(0, maxPiggyLevel);
+
+  /// What this player's piggy bank holds.
+  int get piggyCapacity => piggyCapacityAt(piggyLevel);
+
   static const adsPerDay = 3;
 
   /// Rewarded videos still available today.
@@ -168,6 +182,7 @@ class Profile {
         hints: _i(d['hints']),
         xp: _i(d['xp']),
         piggyCoins: _i(d['piggyCoins']),
+        piggyLevel: _i(d['piggyLevel']).clamp(0, maxPiggyLevel),
         streak: _i(d['streak']),
         lastDailyClaim: _dt(d['lastDailyClaim']),
         lastWheelSpin: _dt(d['lastWheelSpin']),
@@ -240,6 +255,7 @@ class Profile {
         'xp': xp,
         'level': level,
         'piggyCoins': piggyCoins,
+        'piggyLevel': piggyLevel,
         'streak': streak,
         'lastDailyClaim': lastDailyClaim?.toUtc().toIso8601String(),
         'lastWheelSpin': lastWheelSpin?.toUtc().toIso8601String(),
@@ -301,6 +317,7 @@ class Profile {
         hints: hints ?? this.hints,
         xp: xp ?? this.xp,
         piggyCoins: piggyCoins ?? this.piggyCoins,
+        piggyLevel: piggyLevel,
         streak: streak ?? this.streak,
         lastDailyClaim: lastDailyClaim ?? this.lastDailyClaim,
         lastWheelSpin: lastWheelSpin ?? this.lastWheelSpin,

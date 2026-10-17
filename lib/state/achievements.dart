@@ -120,7 +120,7 @@ final achievementFamilies = <AchievementFamily>[
   AchievementFamily(id: 'rich', title: 'Well Off', icon: AppIcons.piggy, describe: (t) => 'Hold ${formatCount(t)} coins at once', steps: const [AchievementStep(5000, tickets: 2, avatarKey: 'vault')], progress: (f) => f.profile.coins),
   AchievementFamily(id: 'vip', title: 'VIP member', icon: AppIcons.vip, describe: (t) => 'Join VIP', steps: const [AchievementStep(1, coins: 300, avatarKey: 'vip')], progress: (f) => f.profile.isVip ? 1 : 0),
   AchievementFamily(id: 'social', title: 'Good Company', icon: AppIcons.friends, describe: (t) => 'Add $t friend${t == 1 ? '' : 's'}', steps: _tiered([1, 5], 'friends', coins: 100), progress: (f) => f.friends),
-  AchievementFamily(id: 'piggy', title: 'Piggy Breaker', icon: AppIcons.piggy, describe: (t) => 'Fill the piggy bank to ${formatCount(t)} coins', steps: const [AchievementStep(Profile.piggyCapacity, coins: 100)], progress: (f) => f.profile.piggyCoins),
+  AchievementFamily(id: 'piggy', title: 'Piggy Breaker', icon: AppIcons.piggy, describe: (t) => 'Fill the piggy bank to ${formatCount(t)} coins', steps: const [AchievementStep(Profile.basePiggyCapacity, coins: 100)], progress: (f) => f.profile.piggyCoins),
 ];
 
 /// Live status of every family, from the profile and progress rows.

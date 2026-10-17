@@ -178,10 +178,21 @@ final houseCreatives = <Creative>[
     price: StoreProducts.price(ProductIds.hints15),
     productId: ProductIds.hints15,
   ),
-  Creative(id: 'piggy', kind: CreativeKind.piggy, headline: 'Your piggy bank is filling up', body: 'Every finished puzzle adds ${countOf(Economy.piggyPerPuzzle, 'coin')}, up to ${formatCount(Profile.piggyCapacity)}. Open it with one ticket.', cta: 'See piggy bank', route: '/home'),
+  piggyCreative(Profile.basePiggyCapacity),
   Creative(id: 'monthly', kind: CreativeKind.monthly, headline: 'One new picture every day', body: 'This month’s album is free. Past months come with VIP.', cta: 'Open this month', route: '/library'),
   Creative(id: 'events', kind: CreativeKind.event, headline: 'A new world-day event every week', body: 'Themed packs that open for seven days. Finish every picture for a ticket.', cta: 'See events', route: '/events'),
 ];
+
+/// The piggy bank card for a piggy bank that holds [capacity] coins (the player's own size when it
+/// is picked, see [pickCreative]).
+Creative piggyCreative(int capacity) => Creative(
+      id: 'piggy',
+      kind: CreativeKind.piggy,
+      headline: 'Your piggy bank is filling up',
+      body: 'Every finished puzzle adds ${countOf(Economy.piggyPerPuzzle, 'coin')}, up to ${formatCount(capacity)}. Open it with one ticket.',
+      cta: 'See piggy bank',
+      route: '/home',
+    );
 
 ProductGrant get _tickets => StoreProducts.grant(ProductIds.tickets5);
 ProductGrant get _hints => StoreProducts.grant(ProductIds.hints15);
@@ -204,14 +215,15 @@ Creative pickCreative(WidgetRef ref) {
     if (p.hints == 0) pool.addAll(houseCreatives.where((c) => c.kind == CreativeKind.hints));
     if (p.tickets == 0) pool.addAll(houseCreatives.where((c) => c.kind == CreativeKind.tickets));
     if (p.puzzlesCompleted >= 10 && !p.isVip) pool.addAll(houseCreatives.where((c) => c.kind == CreativeKind.vip));
-    if (p.piggyCoins >= Profile.piggyCapacity * 0.6) pool.addAll(houseCreatives.where((c) => c.kind == CreativeKind.piggy));
+    if (p.piggyCoins >= p.piggyCapacity * 0.6) pool.addAll(houseCreatives.where((c) => c.kind == CreativeKind.piggy));
   }
   if (pool.isEmpty) pool.addAll(houseCreatives.where((c) => !(p?.isVip ?? false) || c.kind != CreativeKind.vip));
   final candidates = pool.where((c) => c.id != store.lastCreativeId).toList();
   final list = candidates.isEmpty ? pool : candidates;
   final pick = list[Random().nextInt(list.length)];
   store.lastCreativeId = pick.id;
-  return pick;
+  // The piggy bank card names the player's own size (upgrades make it hold more than 500).
+  return pick.kind == CreativeKind.piggy && p != null ? piggyCreative(p.piggyCapacity) : pick;
 }
 
 /// A cover image for the creative: event/monthly/VIP use real pack covers.

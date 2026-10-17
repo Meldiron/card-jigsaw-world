@@ -46,9 +46,13 @@ class Economy {
   /// limit ("Unlimited My Puzzles uploads").
   static const freeMyPuzzles = 5;
 
-  /// Piggy bank: +5 coins per solved picture, holds up to [piggyCapacity].
+  /// Piggy bank: +5 coins per solved picture, up to the player's [Profile.piggyCapacity] (500, and
+  /// [Profile.piggyStep] more for each upgrade).
   static const piggyPerPuzzle = 5;
-  static const piggyCapacity = Profile.piggyCapacity;
+
+  /// One piggy bank upgrade (owner, 2026-10-17: a coin sink): five of them take it from 500 to
+  /// 1,000 for 25,000 coins.
+  static const piggyUpgradeCoins = 5000;
   static const adRewardCoins = 40;
 
   static const dailyRewards = <({int coins, int tickets, int hints})>[
@@ -330,6 +334,16 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
     final p = _p;
     if (p.tickets < Economy.piggyOpenTickets || p.piggyCoins <= 0) return false;
     _do(SyncOp.piggy(amount: p.piggyCoins, tickets: Economy.piggyOpenTickets));
+    return true;
+  }
+
+  /// Makes the piggy bank hold [Profile.piggyStep] coins more, for [Economy.piggyUpgradeCoins]. False
+  /// at the largest size or when the coins are short. Upgraded on another device meanwhile, the server
+  /// charges nothing (the op names the level it raises to).
+  Future<bool> upgradePiggy() async {
+    final p = _p;
+    if (p.piggyLevel >= Profile.maxPiggyLevel || p.coins < Economy.piggyUpgradeCoins) return false;
+    _do(SyncOp.piggyUpgrade(level: p.piggyLevel + 1, price: Economy.piggyUpgradeCoins));
     return true;
   }
 

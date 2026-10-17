@@ -149,6 +149,17 @@ void main() {
       expect(patch.containsKey('vipExpiresAt'), isFalse);
     });
 
+    test('piggy bank upgrades bought on either save stay', () {
+      final guest = save('g', solved: 4, xp: 300, at: t1);
+      final account = save('a', solved: 8, xp: 900, at: t2);
+      guest.profile['piggyLevel'] = 2;
+      for (final choice in MergeChoice.values) {
+        expect(mergeProfile(guest: guest, account: account, choice: choice, mergedProgress: const {})['piggyLevel'], 2, reason: '$choice');
+      }
+      account.profile['piggyLevel'] = 3;
+      expect(mergeProfile(guest: guest, account: account, choice: MergeChoice.guest, mergedProgress: const {})['piggyLevel'], 3);
+    });
+
     test('choosing the device copies its scalars', () {
       final guest = save('g', solved: 4, xp: 300, coins: 1200, streak: 7, longestStreak: 7, name: 'Nia', at: t1);
       final account = save('a', solved: 8, xp: 900, coins: 90, streak: 1, longestStreak: 3, name: 'Old', at: t2);

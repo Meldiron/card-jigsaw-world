@@ -37,7 +37,7 @@ All numbers are read from the code. Formulas use the Dart rounding (`round()` = 
 | Today's daily puzzle | +50 the first time | - | - | `game_screen.dart` |
 | World-day event (finish all ~22 pictures of the pack in its 8-day window) | 300 | 1 | - | `events` rows (all 97: 300 + 1); 76 events in 2027 = **1.46 / week** |
 | Bonus video (rewarded house ad) | 40 each, 3 a day (5 until 2026-10-15), 10 min apart | - | - | `Economy.adRewardCoins`, `Profile.adsPerDay`, `HouseAdPolicy` |
-| Piggy bank | +5 per finished board (replays too), holds 500; opening costs 1 ticket | -1 to open | - | `Economy.piggyPerPuzzle`, `openPiggy` |
+| Piggy bank | +5 per finished board (replays too), holds 500 (up to 1,000 with upgrades, see section 5); opening costs 1 ticket | -1 to open | - | `Economy.piggyPerPuzzle`, `Profile.piggyCapacity`, `openPiggy` |
 | Achievements (24 families, one-time) | 60 to 1,000 per step; 13,170 coins in total | 29 in total | - | `lib/state/achievements.dart` |
 | Lucky Wheel (costs 1 ticket, no daily free spin) | expected about 90 per spin: 100 (23%), 250 (23%), jackpot 1,000 at 1% (owner, 2026-10-15; was 60, 120 and 500 at 2.3%) | never pays tickets | 3 hints (9%), 5 Peeks (18%), 10 Peeks (14%), 1 Magic (10%), 3 Magic (2%): about 200 coins of value a spin | `wheel_screen.dart` |
 | New profile | 500 | 3 | 3 | `Profile.guest` |
@@ -160,6 +160,7 @@ cheap farming trick to worry about; replays pay 40% and are not worth farming.
 | Avatars (28 for coins) | 900 coins each, 25,200 for all | `Economy.avatarCoins` |
 | Lucky Wheel spin | 1 ticket | `Economy.wheelSpinTickets` |
 | Opening the piggy bank | 1 ticket | `Economy.piggyOpenTickets` |
+| Piggy bank upgrade (owner, 2026-10-17: a coin sink) | 5,000 coins each, five of them: 500 -> 600 -> 700 -> 800 -> 900 -> 1,000 coins (25,000 for all five, about ten hours of a regular player's play) | `Economy.piggyUpgradeCoins`, `ProfileNotifier.upgradePiggy`, column `profiles.piggyLevel` |
 | Restoring a lost streak | `3 + longest ~/ 7` tickets, 3 to 10 | `Economy.streakRestoreTickets` |
 | VIP (real money) | $2.99 a month or $14.99 a year: every pack and every past month | App Store |
 

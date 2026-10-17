@@ -5,6 +5,7 @@
 /// (level mirror, public completion numbers, lifetime totals, `appliedOps`) never show.
 library;
 
+import '../../models/models.dart';
 import '../../state/rewards.dart';
 import 'changes.dart';
 import 'ops.dart';
@@ -26,6 +27,7 @@ class SyncNotice {
     this.quests = 0,
     this.achievements = 0,
     this.dailyStreak,
+    this.piggyCapacity,
     this.vipStarted = false,
     this.vipEnded = false,
     this.name,
@@ -53,6 +55,9 @@ class SyncNotice {
 
   /// The streak after a daily gift claimed elsewhere.
   final int? dailyStreak;
+
+  /// What the piggy bank holds after an upgrade bought elsewhere.
+  final int? piggyCapacity;
   final bool vipStarted, vipEnded;
 
   /// New display name.
@@ -78,6 +83,7 @@ class SyncNotice {
       quests == 0 &&
       achievements == 0 &&
       dailyStreak == null &&
+      piggyCapacity == null &&
       !vipStarted &&
       !vipEnded &&
       name == null &&
@@ -100,6 +106,7 @@ class SyncNotice {
         quests: quests + o.quests,
         achievements: achievements + o.achievements,
         dailyStreak: o.dailyStreak ?? dailyStreak,
+        piggyCapacity: o.piggyCapacity ?? piggyCapacity,
         vipStarted: (vipStarted || o.vipStarted) && !o.vipEnded,
         vipEnded: (vipEnded || o.vipEnded) && !o.vipStarted,
         name: o.name ?? name,
@@ -118,6 +125,7 @@ class SyncNotice {
     final d0 = rowDate(before['lastDailyClaim']), d1 = rowDate(after['lastDailyClaim']);
     final vip0 = _vip(before, now), vip1 = _vip(after, now);
     final name0 = (before['displayName'] ?? '').toString(), name1 = (after['displayName'] ?? '').toString();
+    final piggy0 = asInt(before['piggyLevel']), piggy1 = asInt(after['piggyLevel']);
     return SyncNotice(
       coins: asInt(after['coins']) - asInt(before['coins']),
       tickets: asInt(after['tickets']) - asInt(before['tickets']),
@@ -131,6 +139,7 @@ class SyncNotice {
       quests: added('claimedGoals').where((k) => !k.endsWith(':vipbonus')).length,
       achievements: added('claimedAchievements').length,
       dailyStreak: d1 != null && (d0 == null || d1.isAfter(d0)) ? asInt(after['streak']) : null,
+      piggyCapacity: piggy1 > piggy0 ? Profile.piggyCapacityAt(piggy1) : null,
       vipStarted: vip1 && !vip0,
       vipEnded: vip0 && !vip1,
       name: name1.isNotEmpty && name1 != name0 ? name1 : null,

@@ -915,7 +915,7 @@ class _FreeWays extends StatelessWidget {
             },
           ),
           divider(),
-          ListRow(icon: AppIcons.piggy, title: 'Piggy bank', subtitle: '${Economy.piggyPerPuzzle} coins for every picture, up to ${formatCount(Profile.piggyCapacity)}', onTap: () => showPiggySheet(context)),
+          Consumer(builder: (context, ref, _) => ListRow(icon: AppIcons.piggy, title: 'Piggy bank', subtitle: '${Economy.piggyPerPuzzle} coins for every picture, up to ${formatCount(ref.watch(profileProvider).value?.piggyCapacity ?? Profile.basePiggyCapacity)}', onTap: () => showPiggySheet(context))),
           divider(),
           ListRow(icon: AppIcons.wheel, title: 'Lucky Wheel', subtitle: 'Coins, hints and boosters for a ticket', onTap: () => context.push('/wheel')),
           divider(),

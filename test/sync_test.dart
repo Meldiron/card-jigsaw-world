@@ -494,6 +494,82 @@ void main() {
     expect(laptop.profile.giantEarlyPrice(houses), 0);
   });
 
+  test('a piggy bank upgrade bought on both devices is paid once, and the size follows the player', () async {
+    final (server, phone, laptop) = await _twoDevices();
+    await phone.profile.addCoins(12000, reason: 'test');
+    await phone.settle();
+    await laptop.resume();
+    laptop.container.read(syncNoticeProvider.notifier).take();
+    laptop.backend.online = false;
+    expect(await phone.profile.upgradePiggy(), isTrue);
+    expect(phone.me.piggyCapacity, 600, reason: 'bigger on this device at once');
+    expect(phone.me.coins, 12500 - Economy.piggyUpgradeCoins);
+    expect(await laptop.profile.upgradePiggy(), isTrue, reason: 'the laptop has not heard of it yet');
+    await phone.settle();
+    laptop.backend.online = true;
+    await laptop.resume();
+    final row = server.profiles['player1']!;
+    expect(row['piggyLevel'], 1);
+    expect(row['coins'], 12500 - Economy.piggyUpgradeCoins, reason: 'paid once');
+    expect(server.ledger.values.where((l) => l['reason'] == 'piggy-upgrade:1').map((l) => l['amount']), [-Economy.piggyUpgradeCoins]);
+    expect(laptop.me.piggyCapacity, 600);
+    expect(laptop.me.coins, 12500 - Economy.piggyUpgradeCoins);
+    expect(laptop.container.read(syncNoticeProvider).skipped, [SkipReason.piggyUpgraded]);
+    // The phone hears of the laptop's next upgrade.
+    phone.container.read(syncNoticeProvider.notifier).take();
+    expect(await laptop.profile.upgradePiggy(), isTrue);
+    await laptop.settle();
+    await phone.resume();
+    final notice = phone.container.read(syncNoticeProvider);
+    expect(notice.piggyCapacity, 700);
+    expect(syncNoticeLines(notice).map((l) => l.text), contains('Piggy bank upgraded · holds 700'));
+  });
+
+  test('an upgraded piggy bank fills to its new size, and five upgrades are the most', () async {
+    final (server, phone, _) = await _twoDevices();
+    await phone.profile.addCoins(30000, reason: 'test');
+    await phone.settle();
+    for (var i = 1; i <= Profile.maxPiggyLevel; i++) {
+      expect(await phone.profile.upgradePiggy(), isTrue, reason: 'upgrade $i');
+    }
+    expect(await phone.profile.upgradePiggy(), isFalse, reason: 'not offered past 1,000');
+    await phone.settle();
+    expect(server.profiles['player1']!['piggyLevel'], 5);
+    expect(phone.me.piggyCapacity, 1000);
+    expect(server.profiles['player1']!['coins'], 30500 - 5 * Economy.piggyUpgradeCoins);
+    // An op that asks past the largest size raises nothing and charges nothing.
+    phone.sync.enqueue(SyncOp.piggyUpgrade(level: 6, price: Economy.piggyUpgradeCoins));
+    await phone.settle();
+    expect(server.profiles['player1']!['piggyLevel'], 5);
+    expect(server.profiles['player1']!['coins'], 30500 - 5 * Economy.piggyUpgradeCoins);
+
+    server.profiles['player1']!['piggyCoins'] = 995;
+    await phone.resume();
+    for (final pid in ['pg1', 'pg2']) {
+      phone.progress.complete(pid, gridSize: 16, mode: 'cards', moves: 10, seconds: 10, hints: 0, stars: 3, session: pid, resumed: false);
+      await phone.profile.recordCompletion(puzzleId: pid, cells: 16, stars: 3, firstTime: true);
+    }
+    await phone.settle();
+    expect(server.profiles['player1']!['piggyCoins'], 1000, reason: '995 + 5, then full: past 500 since the upgrades');
+    expect(phone.me.piggyFull, isTrue);
+  });
+
+  test('an upgrade the coins can no longer pay for is undone', () async {
+    final (server, phone, laptop) = await _twoDevices();
+    await phone.profile.addCoins(Economy.piggyUpgradeCoins - 500, reason: 'test');
+    await phone.settle();
+    await laptop.resume();
+    phone.backend.online = false;
+    expect(await phone.profile.upgradePiggy(), isTrue);
+    expect(await laptop.profile.spendCoins(4000, reason: 'test'), isTrue);
+    await laptop.settle();
+    phone.backend.online = true;
+    await phone.resume();
+    expect(server.profiles['player1']!['piggyLevel'] ?? 0, 0);
+    expect(phone.me.piggyCapacity, Profile.basePiggyCapacity);
+    expect(phone.container.read(syncNoticeProvider).skipped, [SkipReason.notEnough]);
+  });
+
   test('an event step whose answer was lost counts once', () async {
     final (server, phone, _) = await _twoDevices();
     phone.backend.loseNextAnswer = true;

@@ -18,7 +18,7 @@ import 'changes.dart';
 enum OpTarget { profile, progress, event, ledger }
 
 /// Why an op was dropped when it was sent: another device had already done the same thing.
-enum SkipReason { questClaimed, vipBonusPaid, dailyClaimed, streakRestored, unlocked, achievementClaimed, piggyEmpty, notEnough, messageClaimed }
+enum SkipReason { questClaimed, vipBonusPaid, dailyClaimed, streakRestored, unlocked, achievementClaimed, piggyEmpty, notEnough, messageClaimed, piggyUpgraded }
 
 /// A ledger entry written once its op is confirmed (`balanceAfter` comes from the server's row).
 /// The currencies the ledger records (its `currency` column is an enum of these). Peeks and Magic
@@ -55,7 +55,7 @@ abstract final class OpKind {
   // Profile.
   static const earn = 'earn', spend = 'spend', put = 'put', ad = 'ad', quest = 'quest', vipBonus = 'vipBonus', daily = 'daily';
   static const streak = 'streak', unlock = 'unlock', achievement = 'achievement', piggy = 'piggy', solve = 'solve', questCount = 'questCount';
-  static const inbox = 'inbox';
+  static const inbox = 'inbox', piggyUpgrade = 'piggyUpgrade';
   // Progress, event progress, ledger.
   static const board = 'board', win = 'win', discard = 'discard', event = 'event', ledger = 'ledger';
 }
@@ -108,7 +108,7 @@ class SyncOp {
 
   /// Built against the row as the server has it right now (guards, records, values derived from
   /// the row). The others are built against the last row the server returned.
-  bool get needsFresh => const {OpKind.spend, OpKind.ad, OpKind.quest, OpKind.vipBonus, OpKind.daily, OpKind.streak, OpKind.unlock, OpKind.achievement, OpKind.piggy, OpKind.solve, OpKind.questCount, OpKind.win, OpKind.inbox}.contains(kind);
+  bool get needsFresh => const {OpKind.spend, OpKind.ad, OpKind.quest, OpKind.vipBonus, OpKind.daily, OpKind.streak, OpKind.unlock, OpKind.achievement, OpKind.piggy, OpKind.solve, OpKind.questCount, OpKind.win, OpKind.inbox, OpKind.piggyUpgrade}.contains(kind);
 
   // ---- profile ----
 
@@ -146,6 +146,10 @@ class SyncOp {
   factory SyncOp.achievement(String key, {int coins = 0, int tickets = 0, String? avatar}) =>
       SyncOp(OpKind.achievement, {'key': key, 'coins': coins, 'tickets': tickets, 'avatar': ?avatar});
   factory SyncOp.piggy({required int amount, required int tickets}) => SyncOp(OpKind.piggy, {'amount': amount, 'tickets': tickets});
+
+  /// Raises the piggy bank to upgrade [level] (`profiles.piggyLevel`, 1-5) for [price] coins. Named by
+  /// the level it reaches, so an upgrade bought on two devices is paid once.
+  factory SyncOp.piggyUpgrade({required int level, required int price}) => SyncOp(OpKind.piggyUpgrade, {'level': level, 'price': price});
 
   /// An inbox message [state] (`seen`, `deleted` or `claimed`) for message [id]. A claim pays the
   /// message's reward, once per message on every device (`claimed:<id>` in `profiles.inbox`); the
@@ -386,6 +390,12 @@ class SyncOp {
         if (asInt(row['tickets']) < _a('tickets')) return const OpPlan.skip(SkipReason.notEnough);
         return OpPlan({'coins': Inc(credit), 'piggyCoins': Dec(credit), 'tickets': Dec(_a('tickets'))},
             ledger: [LedgerLine(credit, 'coins', 'piggy')]);
+      case OpKind.piggyUpgrade:
+        final level = min(_a('level'), Profile.maxPiggyLevel), price = _a('price');
+        // Upgraded on another device first: nothing is charged twice.
+        if (asInt(row['piggyLevel']) >= level) return const OpPlan.skip(SkipReason.piggyUpgraded);
+        if (asInt(row['coins']) < price) return const OpPlan.skip(SkipReason.notEnough);
+        return OpPlan({'piggyLevel': Put(level), if (price > 0) 'coins': Dec(price)}, ledger: [if (price > 0) LedgerLine(-price, 'coins', 'piggy-upgrade:$level')]);
       case OpKind.solve:
         return _solve(row);
       case OpKind.inbox:
@@ -427,7 +437,9 @@ class SyncOp {
       hints += r.hints;
     }
     final coins = (first ? _a('coins') : _a('replayCoins')) + bonus;
-    final room = Profile.piggyCapacity - asInt(row['piggyCoins']);
+    // The piggy bank's size on the server (upgrades from any device count).
+    final capacity = Profile.piggyCapacityAt(asInt(row['piggyLevel']));
+    final room = capacity - asInt(row['piggyCoins']);
     final piggy = min(_a('piggy'), room);
     final modes = solvedModes(row['solvedByMode']);
     final mode = args['mode'] as String;
@@ -436,7 +448,7 @@ class SyncOp {
       if (coins > 0) 'coins': Inc(coins),
       'xp': Inc(_a('xp')),
       'level': Put(to),
-      if (piggy > 0) 'piggyCoins': Inc(piggy, max: Profile.piggyCapacity),
+      if (piggy > 0) 'piggyCoins': Inc(piggy, max: capacity),
       if (first) 'puzzlesCompleted': const Inc(1),
       if (first && _a('stars') > 0) 'totalStars': Inc(_a('stars')),
       if (_a('moves') > 0) 'totalMoves': Inc(_a('moves')),

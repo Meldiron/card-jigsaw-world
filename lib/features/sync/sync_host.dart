@@ -100,7 +100,7 @@ class _SyncHostState extends ConsumerState<SyncHost> {
 /// One line of the alert: what changed, with its icon.
 typedef SyncNoticeLine = ({SyncLineIcon icon, String text});
 
-enum SyncLineIcon { coins, tickets, hints, peeks, magics, level, puzzle, star, board, unlock, avatar, quest, achievement, dailyGift, vip, profile, check, undone }
+enum SyncLineIcon { coins, tickets, hints, peeks, magics, level, puzzle, star, board, unlock, avatar, quest, achievement, dailyGift, piggy, vip, profile, check, undone }
 
 String _count(int n, String one, String many) => '${formatCount(n)} ${n == 1 ? one : many}';
 
@@ -130,6 +130,7 @@ List<SyncNoticeLine> syncNoticeLines(SyncNotice n, {Map<String, String> packName
     if (n.quests > 0) (icon: SyncLineIcon.quest, text: '${_count(n.quests, 'quest', 'quests')} claimed'),
     if (n.achievements > 0) (icon: SyncLineIcon.achievement, text: '${_count(n.achievements, 'achievement reward', 'achievement rewards')} claimed'),
     if (n.dailyStreak != null) (icon: SyncLineIcon.dailyGift, text: 'Daily gift claimed · Streak: ${_count(n.dailyStreak!, 'day', 'days')}'),
+    if (n.piggyCapacity != null) (icon: SyncLineIcon.piggy, text: 'Piggy bank upgraded · holds ${formatCount(n.piggyCapacity!)}'),
     if (n.vipStarted) (icon: SyncLineIcon.vip, text: 'VIP active'),
     if (n.vipEnded) (icon: SyncLineIcon.vip, text: 'VIP ended'),
     if (n.name != null) (icon: SyncLineIcon.profile, text: 'Name: ${n.name}'),
@@ -151,6 +152,7 @@ String skipText(SkipReason r) => switch (r) {
       SkipReason.piggyEmpty => 'Piggy bank already opened on the other device',
       SkipReason.notEnough => 'One purchase here was undone: not enough was left after spending on the other device',
       SkipReason.messageClaimed => 'A message reward claimed on both devices, paid once',
+      SkipReason.piggyUpgraded => 'Piggy bank already upgraded on the other device, nothing charged',
     };
 
 class SyncNoticeList extends StatefulWidget {
@@ -214,6 +216,7 @@ class _SyncNoticeListState extends State<SyncNoticeList> {
                 SyncLineIcon.quest => AppIcons.quests,
                 SyncLineIcon.achievement => AppIcons.trophy,
                 SyncLineIcon.dailyGift => AppIcons.dailyGift,
+                SyncLineIcon.piggy => AppIcons.piggy,
                 SyncLineIcon.vip => AppIcons.vip,
                 SyncLineIcon.profile => AppIcons.profile,
                 SyncLineIcon.undone => AppIcons.undo,

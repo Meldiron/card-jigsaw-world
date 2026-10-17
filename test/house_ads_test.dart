@@ -83,6 +83,10 @@ void main() {
 
     test('piggy creative states the real fill rate', () {
       expect(byId('piggy').body, contains('adds ${Economy.piggyPerPuzzle} coins'));
+      expect(byId('piggy').body, contains('up to 500.'));
+      // Picked for a player, it names their own size (upgrades make it hold up to 1,000).
+      expect(piggyCreative(800).body, contains('up to 800.'));
+      expect(piggyCreative(1000).body, contains('up to 1,000.'));
     });
 
     test('every purchase creative opens the store', () {

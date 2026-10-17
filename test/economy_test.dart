@@ -180,7 +180,7 @@ Map<String, Map<String, int>> _serverGrants() {
     level = next;
   }
   final puzzlesPerWeek = puzzlesPerDay * 7;
-  final piggyOpens = puzzlesPerWeek * Economy.piggyPerPuzzle / Profile.piggyCapacity;
+  final piggyOpens = puzzlesPerWeek * Economy.piggyPerPuzzle / Profile.basePiggyCapacity;
   final coinsPerWeek = puzzlesPerWeek * coinsPerPuzzle +
       levelCoins / 4 +
       giftCoins +
@@ -188,7 +188,7 @@ Map<String, Map<String, int>> _serverGrants() {
       dailyPuzzleCoins * 7 +
       adsPerDay * adCoins * 7 +
       eventsPerWeek * eventCoins +
-      piggyOpens * Profile.piggyCapacity;
+      piggyOpens * Profile.basePiggyCapacity;
   final ticketsPerWeek = giftTickets + weeklyTickets + eventsPerWeek + levelTickets / 4;
   return (coinsPerHour: coinsPerWeek / (minutesPerDay * 7 / 60), ticketsPerWeek: math.max(0, ticketsPerWeek).toDouble());
 }
