@@ -108,12 +108,16 @@ for the quests; the stars still use the par recomputed on resume.
 `progress.finishes` (string 4000, optional, no default), added 2026-10-17 (Appwrite API): the picture's
 finished boards, each with the values it was finished with, a JSON list (`BoardFinish`,
 `lib/models/board_finish.dart`): `at` (UTC, to the millisecond), `mode`, `gridSize`, `painting`, `par`,
-`moves`, `seconds`, `peeked`, `bestLock`, `stars`. The board fields above belong to whatever board is on the
-row, so a replay overwrote what the quests read about a finish (shape, size, Painting, par, lock, time,
-Peek, stars); the quests now count these entries (docs/economy.md, "Quests that do not overlap"). A win
-`Put`s the log with its finish added, against the fresh row: one entry per finish time (a win sent twice is
-one), the 8 days before the newest finish plus the newest one before them (what the player usually plays
-looks before today or Monday), at most 16 entries in 4,000 characters. Rows from older builds have no log:
+`moves`, `seconds`, `peeked`, `bestLock`, `stars`, `hints`. The board fields above belong to whatever board
+is on the row, so a replay overwrote what the quests and achievements read about a finish (shape, size,
+Painting, par, lock, time, Peek, hints); both now count these entries (docs/economy.md, "Quests that do not
+overlap"; `AchievementFacts` in `lib/state/achievements.dart`: a picture counts once for a family when one
+of its boards does what it asks, so a replay never moves an achievement back, and the progress shown never
+falls below a step already claimed). A win `Put`s the log with its finish added, against the fresh row: one
+entry per finish time (a win sent twice is one), the 8 days before the newest finish plus the newest one
+before them (what the player usually plays looks before today or Monday), plus, from any time, the boards
+the achievements count a picture by (the newest of each shape, the biggest, the newest without hints, quick,
+at night, early); at most 16 entries in 4,000 characters, the oldest other entries going first. Rows from older builds have no log:
 their last finish is on the board fields until a board is saved over them; a board op from this build
 records it first (`BoardFinish.unrecorded`), and one saved by an older build leaves it a finish with no
 values (`known: false`, a solve on its day and nothing more). An older build finishing after this one moves

@@ -319,7 +319,9 @@ carden.page redirects there.
   `profiles.piggyLevel` (0-5) and `profiles.questSwaps` (text) since 2026-10-17. `progress.finishes` (string 4000,
   optional): each finished board with its own values (`BoardFinish`, `lib/models/board_finish.dart`, docs/sync.md);
   quests and `PlayHabits` count it, never the row's board fields, which a replay overwrites; the app retries a
-  write without it while the column is missing (`writeWithoutUnknown`). Analytics property "Carden"
+  write without it while the column is missing (`writeWithoutUnknown`).
+  Achievements (`AchievementFacts`) also count `PuzzleProgress.finishes`; the finish list keeps, from any time, the boards
+  they count a picture by; `achievementStatus` never takes back a claimed step. Analytics property "Carden"
   (6ad3426500307dfae727, domain carden.page): `appwrite analytics list-metrics --property-id
   6ad3426500307dfae727`. appwrite SDK 27.2.0 (28.0.0 breaks: Dart 3.10, plugin). Messaging push providers
   `apns` (production) and `apns-sandbox`, key 2QJPJFW8JW (APNs on since 2026-10-17); the App ID has Push
@@ -430,8 +432,9 @@ carden.page redirects there.
   `tools/store/README.md`, `docs/release-flow.md`, `docs/release-checklist.md`.
 - Project auth (2026-10-17): only email-password, anonymous, JWT and Apple are on; magic URL, email OTP, phone,
   invites and GraphQL are off (`docs/functions.md` "Project settings").
-- Not yet done (owner): merging the pushed branch `workflow-dsym-check` (dSYM check in the release workflow) if
-  wanted, refreshing the local
+- The release workflow checks the archive's dSYMs (a warning if one is missing) and keeps them as a 90-day artifact
+  (merged 2026-10-17).
+- Not yet done (owner): refreshing the local
   team profile in Xcode before the next `tools/dev/device.sh` (it lacks Push Notifications and Associated
   Domains), App Store submission (Paid Apps agreement, banking and tax active since 2026-10-14),
   Mac / Vision Pro availability ticks, restoring

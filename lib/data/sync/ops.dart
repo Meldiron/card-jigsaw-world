@@ -595,6 +595,7 @@ class SyncOp {
               peeked: args['peeked'] == true,
               bestLock: _a('bestLock'),
               stars: _a('stars'),
+              hints: _a('hints'),
             ),
           )),
           ..._totals(row),

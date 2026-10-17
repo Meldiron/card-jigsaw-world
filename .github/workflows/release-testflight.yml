@@ -91,6 +91,23 @@ jobs:
             archive 2>&1 | grep -E "error:|warning: .*(sign|profile)|ARCHIVE (SUCCEEDED|FAILED)|^\*\*" || true
           test -d build/Runner.xcarchive/Products/Applications/Runner.app
 
+      - name: Check debug symbols
+        # Xcode Organizer and App Store Connect symbolicate crash reports with the dSYMs that
+        # ios/ExportOptions.plist (uploadSymbols) sends with the IPA. The Dart code is not
+        # obfuscated, so App.framework.dSYM is all the Dart frames need. A missing dSYM is a
+        # warning, not a failure: the build still ships, its crashes just read as addresses.
+        run: |
+          ls -1 build/Runner.xcarchive/dSYMs || true
+          for d in Runner.app.dSYM DailyWidget.appex.dSYM App.framework.dSYM Flutter.framework.dSYM; do
+            if [ ! -d "build/Runner.xcarchive/dSYMs/$d" ]; then echo "::warning::$d is missing from the archive; crash reports for it will not be symbolicated"; fi
+          done
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dsyms-${{ steps.ver.outputs.version }}-${{ steps.ver.outputs.build }}
+          path: build/Runner.xcarchive/dSYMs
+          retention-days: 90
+
       - name: Export IPA
         run: |
           xcodebuild -exportArchive \
