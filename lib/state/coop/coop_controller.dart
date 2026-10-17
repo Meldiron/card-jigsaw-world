@@ -302,9 +302,10 @@ class CoopController extends Notifier<CoopState> {
     return updated;
   }
 
-  /// Back to no game on this device (after the removed or ended alert).
-  void clear() {
-    _remember(null);
+  /// Back to no game on this device (after the removed or ended alert). [forget] false keeps the
+  /// game remembered for Return to game (what an app that was closed finds on its next start).
+  void clear({bool forget = true}) {
+    if (forget) _remember(null);
     _stop();
     state = CoopState(me: _me);
   }

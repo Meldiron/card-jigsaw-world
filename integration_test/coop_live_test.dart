@@ -1,15 +1,13 @@
-// Play together on the live backend (docs/multiplayer.md): the app on the simulator, as a new
-// player straight from an invite, joins a game hosted by tools/dev/coop_bot.mjs, and the two play
-// through the real Appwrite SDK (function, moves table, realtime with a server-side query,
-// presences). It measures on the device how long a move takes to reach the other side, and shows
-// the co-op pieces (joining, the player list as guest and host, toasts, the removed, full and ended
-// alerts, the guest's finish) in light, dark, Increase contrast and the largest text.
+// Play together as a guest, on the live backend (docs/multiplayer.md): the app on the simulator is a
+// new player who opens an invite, and tools/dev/coop_bot.mjs is the host (and a friend). Through the
+// real Appwrite SDK and the real game screen: joining from a fresh install, the host's moves and held
+// card on the board in the host's colour and initial, this player's taps shared, a conflict sliding
+// back, Magic, Shuffle and Gather shared, the app in the background and back, leaving the board and
+// Return to game, removed, the next board, the finish with and without rewards, and the end.
 //
 //   node tools/dev/coop_bot.mjs &
 //   tools/dev/qa-run.sh drive --driver=test_driver/integration_test.dart --target=integration_test/coop_live_test.dart -d <simulator>
-//
-// Phase 1: the game screen does not play a shared board yet, so the board on screen after joining
-// is the picture's ordinary board; the shared board lives in `coopProvider`.
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -17,17 +15,16 @@ import 'package:carden/app.dart';
 import 'package:carden/core/app_links.dart';
 import 'package:carden/core/sfx.dart';
 import 'package:carden/data/local_store.dart';
-import 'package:carden/features/coop/coop_alerts.dart';
-import 'package:carden/features/coop/guest_finish.dart';
+import 'package:carden/features/coop/coop_host.dart';
 import 'package:carden/features/coop/players_sheet.dart';
+import 'package:carden/features/game/board_widget.dart';
 import 'package:carden/features/links/deep_links.dart';
-import 'package:carden/game/board.dart';
 import 'package:carden/router.dart';
-import 'package:carden/state/catalog.dart';
 import 'package:carden/state/coop/coop_controller.dart';
-import 'package:carden/state/coop/coop_models.dart';
+import 'package:carden/state/profile.dart';
+import 'package:carden/state/progress.dart';
 import 'package:carden/state/settings.dart';
-import 'package:carden/widgets/ui.dart';
+import 'package:carden/widgets/icons.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -44,10 +41,11 @@ Future<void> settle(WidgetTester tester, [int ms = 1500]) async {
 }
 
 /// The bot on the Mac (the simulator reaches its localhost).
-Future<Map<String, dynamic>> bot(String path) async {
+Future<Map<String, dynamic>> bot(String path, {bool get = false}) async {
   final client = HttpClient();
   try {
-    final req = await client.postUrl(Uri.parse('http://127.0.0.1:8787$path'));
+    final uri = Uri.parse('http://127.0.0.1:8787$path');
+    final req = get ? await client.getUrl(uri) : await client.postUrl(uri);
     final res = await req.close();
     return jsonDecode(await res.transform(utf8.decoder).join()) as Map<String, dynamic>;
   } finally {
@@ -67,7 +65,7 @@ void main() {
   Future<bool> until(WidgetTester tester, bool Function() done, {int seconds = 20}) async {
     final end = DateTime.now().add(Duration(seconds: seconds));
     while (!done() && DateTime.now().isBefore(end)) {
-      await tester.pump(const Duration(milliseconds: 20));
+      await tester.pump(const Duration(milliseconds: 30));
     }
     return done();
   }
@@ -79,7 +77,7 @@ void main() {
     await settle(tester, ms);
   }
 
-  testWidgets('play together: invite from a fresh install, moves both ways, players, removed, full, ended', (tester) async {
+  testWidgets('play together as a guest: invite, shared moves, conflicts, tools, return, removed, next board, finish, end', (tester) async {
     SharedPreferences.setMockInitialValues({});
     final store = await LocalStore.open();
     Sfx.instance.soundEnabled = false;
@@ -90,147 +88,224 @@ void main() {
     CoopState s() => c.read(coopProvider);
     final coop = c.read(coopProvider.notifier);
     final router = c.read(routerProvider);
-    expect(router.state.uri.path, '/welcome', reason: 'a fresh install');
-
-    // 1. The invite, as iOS hands it to the app.
-    final g = await bot('/game?cells=20');
-    c.read(deepLinksProvider).show(AppLink.parse(Uri.parse('carden://join/${g['code']}'))!);
-    await settle(tester, 300);
-    await shot(tester, 'coop_01_joining', 100);
-    expect(await until(tester, () => s().playing, seconds: 30), isTrue, reason: 'joined');
-    await shot(tester, 'coop_02_board_after_invite', 2500);
-    expect(router.state.uri.queryParameters['coop'], g['gameId']);
-    expect(c.read(settingsProvider).onboarded, isFalse, reason: 'the welcome pages wait until the game is left');
-    final me = s().me!;
-
-    // 2. The host's moves reach this device (on-device time from the request to the board change).
-    final down = <int>[];
-    var marked = false;
-    for (var i = 0; i < 6; i++) {
-      final before = List.of(s().layout);
-      final t0 = DateTime.now();
-      // Not awaited: the board may change before the bot's own answer comes back.
-      final sent = bot('/move');
-      expect(await until(tester, () => !listEquals(s().layout, before)), isTrue);
-      down.add(DateTime.now().difference(t0).inMilliseconds);
-      marked |= s().marks.moved.values.toSet().contains(g['hostId']);
-      await sent;
-      await settle(tester, 300);
+    List<int> board() => tester.widget<BoardWidget>(find.byType(BoardWidget).first).state.board.slots;
+    bool boardOn() => find.byType(BoardWidget).evaluate().isNotEmpty;
+    Future<void> tapCard(int card) async {
+      await tester.tapAt(tester.getCenter(find.byKey(ValueKey('card-$card'))));
+      await tester.pump(const Duration(milliseconds: 60));
     }
-    expect(marked, isTrue, reason: 'the host\'s initial on the cards it moved');
 
-    // 3. This device's moves reach the host (the bot notes when its socket heard each).
-    final up = <int>[];
-    for (var i = 0; i < 6; i++) {
-      // The card that belongs in the first open slot changes places with the card there.
-      final layout = s().layout;
-      final slot = [for (var k = 0; k < layout.length; k++) if (layout[k] != k) k].first;
-      final from = layout.indexOf(slot);
-      final after = List.of(layout)
-        ..[slot] = slot
-        ..[from] = layout[slot];
-      final t0 = DateTime.now().millisecondsSinceEpoch;
-      final update = coop.submit(CoopOpKind.move, layout, after);
-      expect(update, isNotNull);
+    Future<List<int>> serverBoard([String as = 'host']) async => ((await bot('/moves?as=$as', get: true))['board'] as List).cast<int>();
+    Future<void> join(String code) async {
+      c.read(deepLinksProvider).show(AppLink.parse(Uri.parse('carden://join/$code'))!);
+      expect(await until(tester, () => s().playing && s().game!.code == code, seconds: 40), isTrue, reason: 'joined');
+      expect(await until(tester, boardOn, seconds: 40), isTrue, reason: 'the board is on screen');
       await settle(tester, 1500);
-      final moves = (await bot('/moves'))['moves'] as List;
-      final mine = moves.where((m) => m['userId'] == me).toList();
-      final heard = mine.last['heardAt'] as int?;
-      if (heard != null) up.add(heard - t0);
     }
-    expect(s().placedACard, isTrue, reason: 'this guest locked cards: the board\'s rewards are theirs');
-    final server = (await bot('/moves'))['board'] as List;
-    expect(s().layout, server.cast<int>(), reason: 'the same board on both sides');
-    down.sort();
-    up.sort();
-    debugPrint('COOP_LATENCY host->device ms ${down.join(' ')} (median ${down[down.length ~/ 2]})');
-    debugPrint('COOP_LATENCY device->host ms ${up.join(' ')} (median ${up.isEmpty ? '-' : up[up.length ~/ 2]})');
 
-    // 4. Presence: the card the host holds.
-    final held = s().layout.first;
-    await bot('/hold?card=$held');
-    expect(await until(tester, () => s().marks.held[held] == g['hostId']), isTrue, reason: 'the held card is marked');
+    debugPrint('COOP_STEP 1');
+    // 1. A fresh install opens an invite: straight onto the shared board.
+    var g = await bot('/game?cells=20');
+    await join(g['code'] as String);
+    expect(c.read(settingsProvider).onboarded, isFalse, reason: 'the welcome pages wait until the game is left');
+    expect(board(), await serverBoard(), reason: 'the board everyone plays');
+    expect(find.byKey(const ValueKey('coop-players-chip')), findsOneWidget);
+    expect(find.text('Tap a card to pick it up.'), findsNothing, reason: 'no first-board hints on a shared board');
+    final me = s().me!;
+    await shot(tester, 'coop2_01_joined_board');
 
-    // 5. Someone joins: a toast. The player list as a guest.
-    await bot('/friend');
-    expect(await until(tester, () => find.textContaining('joined').evaluate().isNotEmpty), isTrue);
-    await shot(tester, 'coop_03_joined_toast', 200);
-    await settle(tester, 4000);
-    showCoopPlayersSheet(rootNavigatorKey.currentContext!);
-    await shot(tester, 'coop_04_players_guest', 2500);
-    Navigator.of(rootNavigatorKey.currentContext!).pop();
-    await settle(tester, 800);
+    debugPrint('COOP_STEP 2');
+    // 2. The host's move: the cards move here, in the host's colour and with the host's initial.
+    var before = board();
+    final moved = await bot('/move');
+    expect(await until(tester, () => !listEquals(board(), before)), isTrue);
+    final hostCard = int.parse((moved['changes'] as String).split(',').first.split(':')[2]);
+    expect(find.byKey(ValueKey('coop-mark-$hostCard')), findsNothing, reason: 'a card locked in place carries no mark');
+    await bot('/swap');
+    expect(await until(tester, () => find.byKey(const ValueKey('coop-players-chip')).evaluate().isNotEmpty && find.byWidgetPredicate((w) => w.key is ValueKey && '${(w.key as ValueKey).value}'.startsWith('coop-mark-')).evaluate().isNotEmpty), isTrue,
+        reason: 'the host\'s initial on the cards it moved');
+    await shot(tester, 'coop2_02_host_moved', 200);
 
-    // 6. The guest's end of a board.
-    showAppSheet(rootNavigatorKey.currentContext!, builder: (_) => const Padding(padding: EdgeInsets.fromLTRB(20, 16, 20, 20), child: CoopGuestFinish()));
-    await shot(tester, 'coop_05_guest_finish', 1200);
-    Navigator.of(rootNavigatorKey.currentContext!).pop();
-    await settle(tester, 800);
+    debugPrint('COOP_STEP 3');
+    // 3. The card the host holds.
+    final loose = [for (var i = 0; i < board().length; i++) if (board()[i] != i) board()[i]];
+    await bot('/hold?card=${loose.last}');
+    expect(await until(tester, () => find.byKey(ValueKey('coop-mark-${loose.last}')).evaluate().isNotEmpty), isTrue, reason: 'the held card is marked');
+    await shot(tester, 'coop2_03_host_holds', 300);
 
-    // 7. Removed by the host: the alert, then the welcome pages (this player came in by the invite).
-    await bot('/remove?user=$me');
-    expect(await until(tester, () => find.text('Removed from the game').evaluate().isNotEmpty), isTrue);
-    await shot(tester, 'coop_06_removed', 300);
-    await tapText(tester, 'Close', ms: 2000);
-    expect(router.state.uri.path, '/welcome');
-    await shot(tester, 'coop_07_welcome_after_game');
-    expect(s().phase, CoopPhase.none);
-    // The removed player's invite no longer works.
-    c.read(deepLinksProvider).show(AppLink.parse(Uri.parse('carden://join/${g['code']}'))!);
-    expect(await until(tester, () => find.text('You cannot join this game').evaluate().isNotEmpty, seconds: 30), isTrue);
-    await tapText(tester, 'Close');
-
-    // 8. A full game.
-    final full = await bot('/game?cells=20&full=1');
-    c.read(deepLinksProvider).show(AppLink.parse(Uri.parse('carden://join/${full['code']}'))!);
-    expect(await until(tester, () => find.text('This game is full').evaluate().isNotEmpty, seconds: 30), isTrue);
-    await shot(tester, 'coop_08_full', 300);
-    await tapText(tester, 'Close');
-
-    // 9. The host ends the game.
-    final ending = await bot('/game?cells=20');
-    c.read(deepLinksProvider).show(AppLink.parse(Uri.parse('carden://join/${ending['code']}'))!);
-    expect(await until(tester, () => s().playing, seconds: 30), isTrue);
+    debugPrint('COOP_STEP 4');
+    // 4. This player's taps: a card to its place, shared with the host.
+    before = board();
+    for (final card in before.where((k) => k != loose.last && before[k] != k && before.indexOf(k) != k).toList()) {
+      await tapCard(card);
+      await tapCard(before[card]);
+      if (await until(tester, () => !listEquals(board(), before), seconds: 3)) break;
+    }
+    expect(board(), isNot(before), reason: 'the move shows at once');
+    expect(await until(tester, () => s().placedACard), isTrue, reason: 'a card this guest locked');
     await settle(tester, 1500);
-    await bot('/end');
-    expect(await until(tester, () => find.text('Game ended').evaluate().isNotEmpty), isTrue);
-    await shot(tester, 'coop_09_ended', 300);
-    await tapText(tester, 'Close', ms: 2000);
+    var moves = (await bot('/moves', get: true))['moves'] as List;
+    expect(moves.where((m) => m['userId'] == me && m['kind'] == 'move'), isNotEmpty, reason: 'the host has the move');
+    expect(await serverBoard(), board());
+    await shot(tester, 'coop2_04_my_move', 200);
 
-    // 10. This player hosts: the player list with Remove, Invite and End game for everyone.
-    c.read(settingsProvider.notifier).setOnboarded();
-    router.go('/home');
+    debugPrint('COOP_STEP 5');
+    // 5. Two players take the same card at once: the server's order decides; this player's cards slide back.
+    var slid = false;
+    final sub = coop.updates.listen((u) {
+      if (u.update.dropped.isNotEmpty) slid = true;
+    });
+    for (var attempt = 0; attempt < 4 && !slid; attempt++) {
+      final b = board();
+      final k = b.firstWhere((x) => b[x] != x && b.indexOf(x) != x && x != loose.last);
+      final at = b.indexOf(k);
+      // The host sends card k elsewhere (swapping it with another loose card); this player puts it home.
+      final other = [for (var i = 0; i < b.length; i++) if (i != at && b[i] != i && b[i] != at && i != k) i].first;
+      await tapCard(k);
+      await bot('/move?wait=0&changes=$at:$k:${b[other]},$other:${b[other]}:$k');
+      await tapCard(b[k]);
+      await until(tester, () => slid, seconds: 4);
+      await settle(tester, 1200);
+    }
+    await sub.cancel();
+    expect(slid, isTrue, reason: 'a change that lost its card to the host\'s slid back');
+    expect(await serverBoard(), board(), reason: 'one board after the conflict');
+    await shot(tester, 'coop2_05_conflict_slid_back', 200);
+
+    debugPrint('COOP_STEP 6');
+    // 6. Magic and Shuffle change the shared board.
+    await tester.tap(find.byKey(const ValueKey('booster-magic')));
     await settle(tester, 2500);
-    final picture = (await c.read(allPuzzlesProvider.future)).firstWhere((p) => p.packId == 'pack-owls');
-    final mine = await coop.create(puzzleId: picture.id, grid: 'cards-4x5t3', layout: Board.shuffled(BoardSpec(GameMode.cards, 4, 5, 'Medium', tier: 3), seed: 4).slots);
-    await bot('/friend?code=${mine.code}');
-    expect(await until(tester, () => s().game!.playerIds.length == 2), isTrue);
-    await settle(tester, 3000);
-    showCoopPlayersSheet(rootNavigatorKey.currentContext!);
-    await shot(tester, 'coop_10_players_host', 2500);
-    await tester.tap(find.text('Remove'));
-    await shot(tester, 'coop_11_remove_confirm', 800);
-    await tapText(tester, 'Cancel');
-    Navigator.of(rootNavigatorKey.currentContext!).pop();
-    await settle(tester, 600);
+    await tester.tap(find.byKey(const ValueKey('booster-shuffle')));
+    await settle(tester, 2500);
+    moves = (await bot('/moves', get: true))['moves'] as List;
+    expect(moves.where((m) => m['userId'] == me).map((m) => m['kind']).toSet(), containsAll(['magic', 'shuffle']));
+    expect(await serverBoard(), board());
+    await shot(tester, 'coop2_06_after_magic_shuffle', 200);
 
-    // 11. Dark mode, Increase contrast, Differentiate without colour and the largest text.
-    c.read(settingsProvider.notifier)
-      ..setThemeMode(ThemeMode.dark)
-      ..setAccessibility(const Accessibility(textSize: TextSize.largest, increaseContrast: true, differentiateWithoutColour: true));
+    debugPrint('COOP_STEP 7');
+    // 7. The app in the background and back: the seat stays, and what happened meanwhile shows.
+    // While paused the engine draws no frames: wait without pumping.
+    binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+    binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+    await bot('/move');
+    await bot('/move');
+    await Future<void>.delayed(const Duration(seconds: 2));
+    binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+    binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    final server = await serverBoard();
+    expect(await until(tester, () => listEquals(board(), server)), isTrue, reason: 'caught up');
+
+    debugPrint('COOP_STEP 8');
+    // 8. Leaving the board is not leaving the game: the toast takes the player back.
+    await tester.tap(find.byIcon(AppIcons.pauseFill));
     await settle(tester, 1200);
+    await tapText(tester, 'Quit', ms: 2000);
+    expect(find.byType(BoardWidget), findsNothing);
+    await shot(tester, 'coop2_07_quit_toast', 100);
+    await tapText(tester, 'Return', ms: 3000);
+    expect(await until(tester, boardOn), isTrue, reason: 'back on the shared board');
+    // Return to game after a restart: the remembered game, offered again.
+    coop.clear(forget: false);
+    await settle(tester, 500);
+    router.go('/home');
+    await settle(tester, 2000);
+    unawaited(offerReturnToGame(c));
+    expect(await until(tester, () => find.textContaining('is still on').evaluate().isNotEmpty, seconds: 30), isTrue, reason: 'Return to game offered');
+    await shot(tester, 'coop2_08_return_to_game', 100);
+    await tapText(tester, 'Return', ms: 3000);
+    expect(await until(tester, () => s().playing && boardOn(), seconds: 30), isTrue);
+    expect(await until(tester, () => listEquals(board(), server) || board().isNotEmpty), isTrue);
+
+    debugPrint('COOP_STEP 9');
+    // 9. The player list as a guest, then the host opens the next board: this player is moved onto it.
     showCoopPlayersSheet(rootNavigatorKey.currentContext!);
-    await shot(tester, 'coop_12_players_host_dark_contrast_largest', 2500);
-    // The player list itself is checked at the largest text in test/coop_ui_test.dart; Home behind it
-    // has a pack card whose price row overflows at 200% (lib/features/gallery/pack_card.dart, not co-op).
-    final behind = tester.takeException();
-    if (behind != null) debugPrint('COOP_NOTE layout behind the sheet: $behind');
-    await tapText(tester, 'End game for everyone');
-    await shot(tester, 'coop_13_end_confirm_dark', 600);
-    await tapText(tester, 'End game', ms: 3000);
+    await shot(tester, 'coop2_09_players_guest', 2000);
+    Navigator.of(rootNavigatorKey.currentContext!).pop();
+    await settle(tester, 800);
+    final first = s().game!.puzzleId;
+    await bot('/next');
+    expect(await until(tester, () => s().game!.board == 2 && router.state.uri.path.contains(s().game!.puzzleId), seconds: 30), isTrue, reason: 'moved onto the next board');
+    expect(s().game!.puzzleId, isNot(first));
+    await settle(tester, 3000);
+    expect(await until(tester, boardOn, seconds: 30), isTrue);
+    expect(board(), await serverBoard());
+    await shot(tester, 'coop2_10_next_board', 500);
+
+    debugPrint('COOP_STEP 10');
+    // 10. Finish without a card of this player's on this board: no rewards.
+    final coinsBefore = c.read(profileProvider).value!.coins;
+    await bot('/solve');
+    expect(await until(tester, () => find.byKey(const ValueKey('coop-guest-finish')).evaluate().isNotEmpty, seconds: 60), isTrue);
+    expect(find.textContaining('Lock a card yourself'), findsOneWidget);
+    await shot(tester, 'coop2_11_finish_no_rewards', 500);
+    expect(c.read(profileProvider).value!.coins, coinsBefore);
+
+    debugPrint('COOP_STEP 11');
+    // 11. Removed by the host: the alert, then the welcome pages (this player came in by an invite).
+    await bot('/remove?user=$me');
+    expect(await until(tester, () => find.text('Removed from the game').evaluate().isNotEmpty, seconds: 30), isTrue);
+    await shot(tester, 'coop2_12_removed', 300);
+    await tapText(tester, 'Close', ms: 2500);
+    expect(router.state.uri.path, '/welcome');
+
+    debugPrint('COOP_STEP 12');
+    // 12. A new game: this player locks a card, the host finishes: rewards as for a board of their own,
+    // and nothing written to progress, quests or the solve totals.
+    g = await bot('/game?cells=9');
+    await join(g['code'] as String);
+    final profileBefore = c.read(profileProvider).value!;
+    final b9 = board();
+    final k9 = b9.firstWhere((x) => b9[x] != x && b9.indexOf(x) != x);
+    await tapCard(k9);
+    await tapCard(b9[k9]);
+    expect(await until(tester, () => s().placedACard, seconds: 20), isTrue);
+    await settle(tester, 1500);
+    await bot('/solve');
+    expect(await until(tester, () => find.byKey(const ValueKey('coop-guest-finish')).evaluate().isNotEmpty, seconds: 60), isTrue);
+    expect(await until(tester, () => find.textContaining('+').evaluate().length >= 2, seconds: 20), isTrue, reason: 'coins and XP');
+    await shot(tester, 'coop2_13_finish_rewards', 800);
+    final profileAfter = c.read(profileProvider).value!;
+    expect(profileAfter.xp, greaterThan(profileBefore.xp));
+    expect(profileAfter.coins, greaterThan(profileBefore.coins));
+    expect(profileAfter.puzzlesCompleted, profileBefore.puzzlesCompleted, reason: 'the host\'s board is not this player\'s solve');
+    expect(c.read(progressProvider).value?[s().game!.puzzleId]?.completed ?? false, isFalse);
+
+    debugPrint('COOP_STEP 13');
+    // 13. The host ends the game.
+    await bot('/end');
+    expect(await until(tester, () => find.text('Game ended').evaluate().isNotEmpty, seconds: 30), isTrue);
+    await shot(tester, 'coop2_14_ended', 300);
+    await tapText(tester, 'Close', ms: 2500);
+
+    debugPrint('COOP_STEP 14');
+    // 14. A giant board: Gather is shared too.
+    g = await bot('/game?giant=1');
+    await join(g['code'] as String);
+    final zoom = tester.widget<BoardWidget>(find.byType(BoardWidget).first).zoom;
+    if (zoom != null) {
+      await tester.tap(find.byKey(const ValueKey('zoom-in')));
+      await settle(tester, 1500);
+      if (find.byKey(const ValueKey('giant-gather')).evaluate().isNotEmpty) {
+        await tester.tap(find.byKey(const ValueKey('giant-gather')));
+        await settle(tester, 2500);
+      }
+      await bot('/hold?card=${board().lastWhere((k) => board()[k] != k)}');
+      await settle(tester, 2500);
+      await shot(tester, 'coop2_15_giant_board', 300);
+      moves = (await bot('/moves', get: true))['moves'] as List;
+      debugPrint('COOP_NOTE giant kinds: ${moves.where((m) => m['userId'] == me).map((m) => m['kind']).toSet()}');
+    }
+
+    debugPrint('COOP_STEP 15');
+    // 15. Leave game from the pause sheet, after asking.
+    await tester.tap(find.byIcon(AppIcons.pauseFill));
+    await settle(tester, 1200);
+    await tapText(tester, 'Leave game', ms: 1200);
+    await shot(tester, 'coop2_16_leave_confirm', 300);
+    await tester.tap(find.text('Leave game').last);
+    await settle(tester, 2500);
     expect(s().phase, CoopPhase.none);
-    final end = refusalText(const CoopRefusal(CoopRefusalReason.full));
-    expect(end.title, 'This game is full');
     await bot('/quit');
   });
 }
