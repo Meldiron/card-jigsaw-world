@@ -66,8 +66,10 @@ TABLE = "packs"
 # Economy model, steady state of the regular player (1 hour a day, 5x5
 # boards): coins earned per hour of play, all sources included, and free
 # tickets per week. See docs/economy.md, "Model results". 6000 until
-# 2026-10-13, when the owner lowered the coins for finishing a puzzle.
-REGULAR_COINS_PER_HOUR = 3500
+# 2026-10-13, when the owner lowered the coins for finishing a puzzle; 3500
+# until 2026-10-17, when level-ups stopped growing past 300 coins (500 every
+# 10th level). Prices did not follow either change.
+REGULAR_COINS_PER_HOUR = 2500
 REGULAR_TICKETS_PER_WEEK = 16
 REFERENCE_PICTURES = 24  # a full library pack
 

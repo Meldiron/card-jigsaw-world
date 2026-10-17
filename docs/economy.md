@@ -8,6 +8,8 @@ gold and tickets, update pack prices and what purchases give, keep the prices").
 
 *Update 2026-10-13: finishing a puzzle now pays 1.2 coins per card (was 3.2) and replays pay 25% (was 40%), so a regular player earns about **3,500 coins per hour**; see "Lower puzzle rewards" at the end. The numbers below are the model before that change.*
 
+*Update 2026-10-17: level-ups pay at most 300 coins (500 every 10th level), so a regular player earns about **2,500 coins per hour** (17,700 a week instead of 24,700); see "Level-ups capped at 300" at the end.*
+
 A player earned about **6,000 coins per hour of play** (5,000 to 7,000 depending on how they play, and
 more in the first week), and about **15 to 18 tickets per week whatever they play**, because tickets come
 from logging in (daily gift, weekly quests), not from playing longer. Before this change a pack cost 300
@@ -28,7 +30,7 @@ All numbers are read from the code. Formulas use the Dart rounding (`round()` = 
 | Finishing a board (first time) | `base = round(cells x 3.2)`; `round((base + (stars - 1) x (base ~/ 3)) x mode multiplier)`. 4x4 three stars = 85, 5x5 = 132, 6x6 = 192 (cards). Replays pay 40% | - | - | `Economy.completionCoins`, `ProfileNotifier.recordCompletion` |
 | Mode multiplier | cards x1.0, squares x1.15, triangles x1.35, hexagons x1.5 (on coins and XP) | | | `lib/game/modes.dart` |
 | XP per board | `round((round(cells x 2.5) + stars x 10) x multiplier)`; level L needs `100 + 60 x (L - 1)` XP | | | `Economy.completionXp`, `Profile.xpForLevel` |
-| Level-up (each level L) | `100 + 25 x L` | 1 every 3rd level | 2 every 2nd level | `LevelRewards.forLevel` |
+| Level-up (each level L) | `min(300, 100 + 25 x L)`, 500 every 10th level (since 2026-10-17; `100 + 25 x L` without end before) | 1 every 3rd level | 2 every 2nd level | `LevelRewards.forLevel` |
 | Daily gift (7-day cycle) | 50, 75, 100, 125, 150, 200, 400 = **1,100 / week** | 0,0,1,0,1,1,2 = **5 / week** | 0,1,0,1,0,1,2 = **5 / week** | `Economy.dailyRewards` |
 | Daily quests (3 free) | 60 + 80 + 100 = **240 / day** (VIP 4th: +120) | - | - | `Goals.daily` |
 | Weekly quests (5 free) | - | 1 + 1 + 2 + 2 + 2 = **8 / week** (VIP 6th: +1) | - | `Goals.weekly` |
@@ -323,7 +325,8 @@ the new server only gets more than it shows, which is harmless.
   worth five minutes of play; 2,500 to 5,000 a week would match the new scale.
 - **Level-ups pay about a fifth of all coins forever** (100 + 25 x level, while the XP per level grows by
   60). That is the main reason earnings feel generous; the owner asked for price changes only, so it is
-  untouched.
+  untouched. *Addressed 2026-10-17: level-ups stop at 300 coins, 500 every 10th level (see "Level-ups
+  capped at 300").*
 - **Boosters were raised x2.5** (owner approved, 2026-10-12): hint 150, Magic Lock 300, Peek 75. Peek was
   then cut to 10 coins (owner, 2026-10-14), once it became the animated look; free on giant boards for a few hours, then priced
   like everywhere else (owner, the same day). Avatars
@@ -345,9 +348,11 @@ the new server only gets more than it shows, which is harmless.
 
 ## Appendix: the simulation
 
-`test/economy_test.dart` holds a compact copy of the regular player's steady state (it gives 5,928 coins
-an hour and 16.2 tickets a week, against 5,949 and 16.8 here) and fails when the earnings drift from the
-constants the price script uses. The full day-by-day model behind the tables above:
+`test/economy_test.dart` holds a compact copy of the regular player's steady state and fails when the
+earnings drift from the constants the price script uses (`REGULAR_COINS_PER_HOUR`,
+`REGULAR_TICKETS_PER_WEEK`). The full day-by-day model behind the tables above, brought up to date on
+2026-10-17 (1.2 coins per card, three bonus videos a day for everyone, level-ups capped at 300 coins); the
+tables in sections 2 and 3 are its 2026-10-12 run, the sections at the end give the current numbers:
 
 <details>
 <summary>model.py (Python 3, no dependencies): `python3 model.py`</summary>
@@ -362,6 +367,7 @@ DAILY_GIFT = [(50,0,0),(75,0,1),(100,1,0),(125,0,1),(150,1,0),(200,1,1),(400,2,2
 DAILY_QUEST_COINS = [60, 80, 100]          # Goals.daily free; VIP 4th = 120
 DAILY_PUZZLE_BONUS = 50
 AD_COINS = 40
+COINS_PER_CARD = 1.2                      # Economy.coinsPerCard since 2026-10-13 (3.2 before)
 WEEKLY_TICKETS = [1, 1, 2, 2, 2]           # Goals.weekly free; VIP 6th = 1
 EVENT_COINS, EVENT_TICKETS = 300, 1
 EVENTS_PER_WEEK = 76 / 52                  # 76 world-day events in 2027 (events table)
@@ -376,7 +382,7 @@ def r(x):  # Dart round(): half away from zero
     return int(math.floor(x + 0.5))
 
 def completion_coins(cells, stars, mult=1.0):
-    base = r(cells * 3.2)
+    base = r(cells * COINS_PER_CARD)
     return r((base + (stars - 1) * (base // 3)) * mult)
 
 def completion_xp(cells, stars, mult=1.0):
@@ -388,7 +394,9 @@ def level_for_xp(xp):
     while xp >= xp_for_level(l):
         xp -= xp_for_level(l); l += 1
     return l
-def level_reward(l): return (100 + 25 * l, 1 if l % 3 == 0 else 0, 2 if l % 2 == 0 else 0)
+def level_coins(l):  # LevelRewards.forLevel since 2026-10-17: up to 300, 500 every 10th level
+    return 500 if l % 10 == 0 else min(300, 100 + 25 * l)
+def level_reward(l): return (level_coins(l), 1 if l % 3 == 0 else 0, 2 if l % 2 == 0 else 0)
 def max_tier(level): return max(i for i, L in enumerate(TIER_LEVEL) if level >= L)
 
 def wheel_ev():
@@ -404,7 +412,7 @@ def puzzle_seconds(cells, pace): return OVERHEAD + board_seconds(cells, pace)
 TYPES = {
     'casual':  dict(minutes=20,  tier=2, pace=1.25, stars={3: .60, 2: .35, 1: .05}, ads=1, weekly=6, events=1.0, speed=.3),
     'regular': dict(minutes=60,  tier=4, pace=1.00, stars={3: .75, 2: .22, 1: .03}, ads=3, weekly=8, events=EVENTS_PER_WEEK, speed=.3),
-    'heavy':   dict(minutes=180, tier=6, pace=0.90, stars={3: .85, 2: .15},           ads=5, weekly=8, events=EVENTS_PER_WEEK, speed=.1),
+    'heavy':   dict(minutes=180, tier=6, pace=0.90, stars={3: .85, 2: .15},           ads=3, weekly=8, events=EVENTS_PER_WEEK, speed=.1),
 }
 # Achievement families (threshold lists, coins step, tickets param) from achievements.dart
 def tiered(th, coins, tickets=0): return [(t, coins*(i+1), tickets+1 if i >= 2 else tickets) for i, t in enumerate(th)]
@@ -618,3 +626,36 @@ at its plain price, since nothing in it could be played. A
 quest never asks for something locked: the shape or Painting quest falls back to "Lock 5 cards in one
 move", and a slot keeps the quest already claimed in it, so a level-up that changes the pick never pays
 twice.
+
+## Level-ups capped at 300 (owner request, 2026-10-17)
+
+TestFlight feedback AOJ3ZtYkey_byEt4aesj80o: "Coin level up rewards are too much. It should go only up to
+300, or maybe 500 in some major milestones." `LevelRewards.coinsForLevel`: a level-up pays `100 + 25 x L`
+until that reaches 300 (level 8), then 300; every 10th level pays 500. Tickets (1 every 3rd level) and hints
+(2 every 2nd level) are unchanged. Home's level card ("Next" and "Coming up") and the solve op read the same
+table.
+
+| Level | 2 | 5 | 8 | 9 | 10 | 11 | 20 | 30 | 64 |
+|---|---|---|---|---|---|---|---|---|---|
+| Before | 150 | 225 | 300 | 325 | 350 | 375 | 600 | 850 | 1,700 |
+| After | 150 | 225 | 300 | 300 | **500** | 300 | **500** | **500** | 300 |
+
+The model (appendix, current constants) before and after:
+
+| Coins a week | Casual (20 min a day) | Regular (1 h a day) | Heavy (3 h a day) |
+|---|---|---|---|
+| Week 1, before / after | 14,903 / 14,403 (-3%) | 34,907 / 31,032 (-11%) | 73,448 / 59,373 (-19%) |
+| Steady, before / after | 10,991 / **8,684** (-21%) | 24,669 / **17,682** (-28%) | 57,666 / **38,372** (-33%) |
+| Steady per hour of play | 4,710 / 3,722 | 3,524 / **2,526** | 2,746 / 1,827 |
+| Of which level-ups (steady) | 3,331 / 1,025 | 8,663 / 1,675 | 21,994 / 2,700 |
+
+The regular player loses about 7,000 coins a week (a quarter of their coins); the heavy player, who levels
+fastest, a third. Week 1 changes little, because the first levels pay as before. Finishing boards is now
+58% of a regular player's coins (was 42%), level-ups 9% (was 35%). Tickets and hints do not move.
+
+Pack prices stay as they are: a standard 2,400-coin pack now takes a regular player about 57 minutes of
+play (was 41), a 5,000-coin showcase pack about two hours. `tools/store/apply_pack_prices.py` records the new
+`REGULAR_COINS_PER_HOUR = 2500` (reports only; `test/economy_test.dart` checks it against the model).
+
+Older builds still pay the old curve on their own level-ups: the solve op computes level rewards on the
+device. The difference ends as testers update.

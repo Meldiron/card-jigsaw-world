@@ -99,6 +99,24 @@ void main() {
       expect(LevelRewards.levelForXp(LevelRewards.xpToReach(Unlock.giant.level) - 1), Unlock.giant.level - 1);
     });
 
+    test('level-up coins rise to 300 and stay there, every 10th level pays 500 (owner, 2026-10-17)', () {
+      expect([for (var l = 2; l <= 9; l++) LevelRewards.forLevel(l).coins], [150, 175, 200, 225, 250, 275, 300, 300]);
+      for (final l in const [10, 20, 30, 50, 100]) {
+        expect(LevelRewards.forLevel(l).coins, 500, reason: 'level $l is a milestone');
+      }
+      for (final l in const [11, 19, 21, 64, 99, 101]) {
+        expect(LevelRewards.forLevel(l).coins, 300, reason: 'level $l');
+      }
+      for (var l = 2; l <= 200; l++) {
+        expect(LevelRewards.forLevel(l).coins, lessThanOrEqualTo(500), reason: 'never more than 500');
+      }
+      // Tickets and hints keep their own rhythm.
+      expect((LevelRewards.forLevel(30).tickets, LevelRewards.forLevel(30).hints), (1, 2));
+      expect((LevelRewards.forLevel(31).tickets, LevelRewards.forLevel(31).hints), (0, 0));
+      // The Home level card reads the same table: the next level and the two after it.
+      expect([for (final r in LevelRewards.upcoming(8)) r.coins], [300, 500, 300]);
+    });
+
     test('a level reward does not promise what the player already opened (Home level card)', () {
       final opened = Unlocks.openedEarly([Unlocks.earlyKey(Unlock.giant), 'cards:4']);
       expect(opened, {Unlock.giant}, reason: 'only early:<unlock> keys; board tiers are not unlocks');

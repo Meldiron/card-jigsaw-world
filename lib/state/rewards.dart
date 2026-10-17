@@ -52,11 +52,18 @@ class LevelRewards {
     return idx;
   }
 
+  /// Coins a level-up pays: 100 + 25 per level until that reaches [levelCoinsCap] (level 8), then
+  /// the cap; every 10th level pays [milestoneLevelCoins] (owner, 2026-10-17: "only up to 300, or
+  /// 500 in some major milestones"; 100 + 25 per level without end before).
+  static const levelCoinsCap = 300;
+  static const milestoneLevelCoins = 500;
+  static int coinsForLevel(int level) => level % 10 == 0 ? milestoneLevelCoins : min(levelCoinsCap, 100 + 25 * level);
+
   static LevelReward forLevel(int level) {
     final tierIdx = tierUnlockLevel.indexOf(level);
     return LevelReward(
       level: level,
-      coins: 100 + 25 * level,
+      coins: coinsForLevel(level),
       tickets: level % 3 == 0 ? 1 : 0,
       hints: level % 2 == 0 ? 2 : 0,
       tier: tierIdx > 0 ? GridSpec.tiers[tierIdx] : null,
