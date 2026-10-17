@@ -213,6 +213,19 @@ carden.page redirects there.
 - `lib/widgets/adaptive.dart`: wide windows on the web (top bar from 900 px, centred pages, adaptive
   grids, shelves with arrows, sheets as centred panels); phones keep their layout. `docs/web.md`, "Layout".
 - `lib/core/platform.dart`: web capability flags.
+- **Play together** (co-op, owner 2026-10-17; `docs/multiplayer.md`): up to 5 players on one board. `lib/state/coop/`
+  (`CoopLog`: changes as slots with the card expected before and after, applied in `$sequence` order, a change
+  that no longer fits is skipped everywhere; `CoopController`/`coopProvider`; `CoopBridge`/`CoopBoardTarget`),
+  `lib/data/coop_repository.dart`, `lib/features/coop/` (`CoopHost` in app.dart, `CoopPlayersChip` and the player
+  list, alerts, `CoopGuestFinish`, `openInvite`, `startPlayTogether`, `shareInvite` via share_plus). Game screen
+  route `?coop=<id>` (`&next=1`); `GameController.showShared` / `sharedCardKeys` (twin trades). Player colours
+  `PlayerColors` in tokens.dart. Guest rewards via `SyncOp.coopReward` (coins, XP, level, piggy; only after a
+  lock of their own; nothing to progress, quests, achievements, pack progress or first-steps counts). Return to
+  game: `coop.active` in the local store. "Get Carden" is the public TestFlight link until launch
+  (`AppLinks.getCarden`, `GET_CARDEN` in web/index.html; docs/release-checklist.md). QA: `node
+  tools/dev/coop_bot.mjs &`, then `coop_live_test.dart` (guest), `coop_host_test.dart` (host) and
+  `coop_pair_test.dart` (two simulators, `CJW_COOP_ROLE=host|guest`; start the guest after the host's build).
+  Store capture `32_coop_board` (scripted stage backend).
 - Analytics: `lib/core/analytics.dart` (`AppAnalytics.event` one-liners, `ScreenObserver` on the root and every
   tab navigator, screen names from route patterns, never ids). New features add their events there and in
   `docs/analytics.md`; the privacy policy's usage data section must match.
