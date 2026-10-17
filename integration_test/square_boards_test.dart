@@ -21,6 +21,7 @@ import 'package:carden/router.dart';
 import 'package:carden/state/catalog.dart';
 import 'package:carden/state/first_steps.dart';
 import 'package:carden/state/giant.dart';
+import 'package:carden/state/profile.dart';
 import 'package:carden/state/progress.dart';
 import 'package:carden/state/rewards.dart';
 import 'package:carden/state/settings.dart';
@@ -182,6 +183,13 @@ void main() {
     debugPrint('QA square boards: tall ${tall?.id} ${aspects[tall?.id]}, wide ${wide?.id} ${aspects[wide?.id]}, square ${square?.id} ${aspects[square?.id]}');
     expect(tall, isNotNull, reason: 'a tall (2:3) picture among the free packs');
 
+    // Every size open: level 10 through the completion call a solve makes (a QA shortcut).
+    for (var i = 0; i < 4; i++) {
+      await c.read(profileProvider.notifier).recordCompletion(puzzleId: 'qa-xp-sb-$i', cells: 300, stars: 3, firstTime: true);
+      await settle(tester, 1500);
+    }
+    debugPrint('QA square boards: level ${c.read(profileProvider).value?.level}');
+
     // ---- A tall picture: every mode, square (cropped) and with Expand.
     await open(tester, '/play/${tall!.id}');
     expect(find.byType(DifficultyScreen), findsOneWidget);
@@ -190,8 +198,8 @@ void main() {
       await pickMode(tester, mode);
       await setExpand(tester, false);
       final sq = BoardSpec.squareTiers(mode);
-      expect(shownCodes(tester).intersection({for (final t in sq) t.code}), isNotEmpty, reason: '${mode.code}: square sizes');
-      expect(shownCodes(tester).every((code) => sq.any((t) => t.code == code)), isTrue, reason: '${mode.code}: only square sizes, ${shownCodes(tester)}');
+      expect(shownCodes(tester).intersection({for (final t in sq) t.size}), isNotEmpty, reason: '${mode.code}: square sizes');
+      expect(shownCodes(tester).every((size) => sq.any((t) => t.size == size)), isTrue, reason: '${mode.code}: only square sizes, ${shownCodes(tester)}');
       await tester.drag(find.byType(Scrollable).first, const Offset(0, 1200));
       await settle(tester, 600);
       await shot(tester, 'sb_tall_${mode.code}_square');
@@ -199,7 +207,7 @@ void main() {
       expect(await showExpand(tester), offered, reason: '${mode.code} on $ta: Expand ${offered ? 'offered' : 'hidden'}');
       if (offered) {
         await setExpand(tester, true);
-        final ex = {for (final t in BoardSpec.expandTiers(mode, ta)) t.code};
+        final ex = {for (final t in BoardSpec.expandTiers(mode, ta)) t.size};
         expect(shownCodes(tester).intersection(ex), isNotEmpty, reason: '${mode.code}: Expand sizes $ex, shown ${shownCodes(tester)}');
         await tester.drag(find.byType(Scrollable).first, const Offset(0, 1200));
         await settle(tester, 600);
@@ -208,6 +216,46 @@ void main() {
       }
     }
     await back(tester);
+
+    // ---- Triangles and Hexagons on the tall picture: every size, square and with Expand.
+    Future<void> pickSize(WidgetTester tester, String size) async {
+      final chip = find.text(size).first;
+      await tester.ensureVisible(chip);
+      await settle(tester, 400);
+      await tester.tap(chip, warnIfMissed: false);
+      await settle(tester, 900);
+      await tester.drag(find.byType(Scrollable).first, const Offset(0, 1200));
+      await settle(tester, 500);
+    }
+
+    await open(tester, '/play/${tall.id}');
+    for (final mode in [GameMode.triangles, GameMode.hexagons]) {
+      await pickMode(tester, mode);
+      for (final expand in [false, true]) {
+        await setExpand(tester, expand);
+        final ladder = expand ? BoardSpec.expandTiers(mode, ta) : BoardSpec.squareTiers(mode);
+        for (final t in ladder) {
+          await pickSize(tester, t.size);
+          await shot(tester, 'sb_${mode.code}_${expand ? 'expand' : 'square'}_${t.size}');
+        }
+      }
+      await setExpand(tester, false);
+    }
+    // The smallest triangle board (there is no 3x3 one) played to the end.
+    await pickMode(tester, GameMode.triangles);
+    await pickSize(tester, '4x4');
+    await tester.tap(play, warnIfMissed: false);
+    await settle(tester, 6000);
+    if (find.text('Got it').evaluate().isNotEmpty) await tapText(tester, 'Got it');
+    expect(board(tester).state.board.spec.size, '4x4');
+    expect(board(tester).state.board.cells, 36);
+    expect(board(tester).state.board.joinCount, 0);
+    await shot(tester, 'sb_triangles_4x4_board');
+    await solve(tester);
+    await settle(tester, 4000);
+    expect(find.text('Picture complete'), findsOneWidget);
+    await shot(tester, 'sb_triangles_4x4_complete');
+    await tapText(tester, 'Back to pack', ms: 3000);
 
     // ---- A wide picture (the catalogue is portrait or square, docs/content-rules.md; My Puzzles photos
     // can be wide): Expand where it shows more. test/difficulty_screen_test.dart covers it offline.
