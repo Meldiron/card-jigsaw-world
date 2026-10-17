@@ -382,7 +382,9 @@ class _GoalRow extends ConsumerWidget {
         confirmLabel: 'Swap for ${countOf(QuestSwap.tickets, 'ticket')}',
       );
       if (!sure || !context.mounted) return;
-      if (!await ref.read(profileProvider.notifier).swapQuest(goal) || !context.mounted) return;
+      if (!await ref.read(profileProvider.notifier).swapQuest(goal)) return;
+      questSwapped(goal, next);
+      if (!context.mounted) return;
       Haptics.success();
       showToast(context, 'Quest swapped', icon: AppIcons.check);
     }

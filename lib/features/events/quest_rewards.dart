@@ -106,6 +106,11 @@ Future<bool> claimEventReward(WidgetRef ref, GameEvent event, int value) async {
 void questClaimed(Goal g, {required bool all}) =>
     AppAnalytics.event('quest_claimed', {'period': g.key.startsWith('d:') ? 'daily' : 'weekly', 'quest': g.key.split(':').last, 'claimAll': all});
 
+/// `quest_swapped`: daily or weekly, the quest's kind before and after, and the swaps already made
+/// in that slot this period.
+void questSwapped(Goal g, QuestSwap s) => AppAnalytics.event('quest_swapped',
+    {'period': g.key.startsWith('d:') ? 'daily' : 'weekly', 'quest': g.key.split(':').last, 'to': s.next, 'swapsBefore': s.count, 'tickets': QuestSwap.tickets});
+
 /// "Claimed 140 coins and 2 tickets".
 String claimedLine(int coins, int tickets) {
   final parts = [

@@ -27,6 +27,9 @@ Dark Interface is supported as before (Settings > Theme).
   `context.accentFill` and `context.star` in `lib/core/theme/tokens.dart`; `Brand.scrim(contrast:)` for text on
   photos. Use them instead of fixed `Brand.*` colours on light surfaces.
 - `test/accessibility_test.dart` checks the defaults, the stored options and every Contrast text and outline ratio.
+- `test/largest_text_test.dart` checks, at Largest on the SE frame, that the pack card's price and progress row, the
+  chips over photos (`PhotoChip`: 24 pt, taller when the text needs it) and Home's greeting (wraps instead of
+  truncating) show their words whole.
 
 ## Motion
 

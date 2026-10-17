@@ -525,7 +525,8 @@ class _Greeting extends StatelessWidget {
         children: [
           Text(DateFormat('EEEE d MMMM').format(now), style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: c.textSecondary)),
           const SizedBox(height: 2),
-          Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.headlineLarge),
+          // One line at the usual sizes; with a large text size it wraps instead of losing the name.
+          Text(title, maxLines: A11y.largeText(context) ? 3 : 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.headlineLarge),
         ],
       ),
     );
