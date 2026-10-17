@@ -136,11 +136,12 @@ its predictable one is taken (`SocialRepository._ownRow`).
 most 5 a day per recipient (later gifts land in the inbox quietly); names with a link, an @handle or a
 domain show as "Player" in the message and the notification (docs/friend-gifts.md).
 
-### Project settings (not changed yet)
+### Project settings
 
 The app signs in only as a guest (anonymous), with e-mail and password, with Apple (OAuth and native
 ID token) and uses JWT; memberships of co-op teams are made by the server. Turning off what it never
-uses was approved but not done in this session (the change was not permitted from here). As the owner:
+uses was approved by the owner and done on 2026-10-17 (run from a directory with the project's
+appwrite.config.json):
 
 ```
 appwrite project update-auth-method --method-id magic-url --enabled=false
@@ -151,6 +152,10 @@ appwrite project update-protocol --protocol-id graphql --enabled=false
 ```
 
 Before (2026-10-17): every auth method on except passkey; protocols REST, GraphQL and WebSocket on.
+Now: email-password, anonymous and JWT on (Apple is an OAuth provider); magic URL, email OTP, phone, invites
+and passkey off; GraphQL off, REST and WebSocket on. `node tools/dev/api_check.mjs` passed afterwards (co-op
+create, join, rejoin, leave, remove, next board and end; account deletion): server-made team memberships do
+not need the invites method. To turn a method back on, run the same command with `--enabled=true`.
 
 ## Timings (live, 2026-10-17)
 

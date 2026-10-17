@@ -418,8 +418,9 @@ carden.page redirects there.
   App Store availability is two manual ticks in Pricing and Availability). Win-back offers are recorded in
   `store/metadata/subscriptions/vip_*.json`; `subscriptions` creates them once Apple approves the plans. Docs:
   `tools/store/README.md`, `docs/release-flow.md`, `docs/release-checklist.md`.
-- Not yet done (owner): turning off unused auth methods and GraphQL (approved 2026-10-17; the commands are in
-  `docs/functions.md` "Project settings"; not permitted from an agent session), a CI job running `npm test` in
+- Project auth (2026-10-17): only email-password, anonymous, JWT and Apple are on; magic URL, email OTP, phone,
+  invites and GraphQL are off (`docs/functions.md` "Project settings").
+- Not yet done (owner): a CI job running `npm test` in
   `functions/api` (needs the `workflow` token scope), App Privacy questionnaire (add analytics: Usage Data > Product Interaction and Location >
   Coarse Location, linked, not tracking; Analytics purpose on Purchase History and User ID), refreshing the local
   team profile in Xcode before the next `tools/dev/device.sh` (it lacks Push Notifications and Associated
