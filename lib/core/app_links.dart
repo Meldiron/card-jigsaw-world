@@ -50,6 +50,22 @@ class AppLink {
   /// The same link in the app's own scheme (App Store In-App Events, the widget).
   Uri get appUrl => Uri.parse('$scheme:/$location');
 
+  /// The Play together invite for the game with join [code] (docs/multiplayer.md): opens the app
+  /// where it is installed, the web game elsewhere.
+  static Uri joinUrl(String code) => Uri.parse('$webOrigin/join/${normaliseJoinCode(code) ?? code}');
+
+  /// The same invite on the first Carden address, which the app also claims. A link to another
+  /// domain than the page's own is handed to the app by iOS, so the web page of an invite offers
+  /// it as "Open in Carden" (Instagram and Snapchat open every link in their own browser).
+  static Uri openInAppUrl(String code) => Uri.parse('https://carden.appwrite.network/join/${normaliseJoinCode(code) ?? code}');
+
+  /// A join code as the server keeps it: 8 characters, upper case, from an alphabet without 0, O,
+  /// 1, I and L (function coop-game); null when [code] cannot be one.
+  static String? normaliseJoinCode(String code) {
+    final c = code.toUpperCase().replaceAll(RegExp('[^A-Z0-9]'), '');
+    return RegExp(r'^[A-HJ-KM-NP-Z2-9]{8}$').hasMatch(c) ? c : null;
+  }
+
   @override
   bool operator ==(Object other) => other is AppLink && other.location == location && other.kind == kind;
 
@@ -153,6 +169,9 @@ class AppLink {
         return action('/gift');
       case 'piggy' || 'piggy-bank' when rest.isEmpty:
         return action('/piggy');
+      // Play together: an invite to a game (docs/multiplayer.md).
+      case 'join' when rest.length == 1 && normaliseJoinCode(rest.first) != null:
+        return action('/join/${normaliseJoinCode(rest.first)}');
     }
     return null;
   }

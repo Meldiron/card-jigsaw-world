@@ -64,6 +64,32 @@ class Brand {
         );
 }
 
+/// Play together (docs/multiplayer.md): the other players' colours. Every player sees their own
+/// cards in the accent (cobalt) and the others in these four, by seat; never red (danger) or cobalt.
+/// The colour is never alone: the player's initial goes with it.
+///
+/// Light mode fills carry white text at 5:1 or better and outline cards at 4.4:1 or better on the
+/// board; dark mode fills are light and carry dark text ([onFill]) at 7:1 or better. The Contrast
+/// sets (Settings > Accessibility > Increase contrast) go further: 6:1 and more everywhere.
+class PlayerColors {
+  PlayerColors._();
+
+  static const count = 4;
+
+  /// Orange, purple, teal, pink.
+  static const light = [Color(0xFFC2410C), Color(0xFF7E22CE), Color(0xFF0F766E), Color(0xFFBE185D)];
+  static const lightContrast = [Color(0xFF9A3412), Color(0xFF6B21A8), Color(0xFF115E59), Color(0xFF9D174D)];
+  static const dark = [Color(0xFFFB923C), Color(0xFFC084FC), Color(0xFF2DD4BF), Color(0xFFF472B6)];
+  static const darkContrast = [Color(0xFFFDBA74), Color(0xFFD8B4FE), Color(0xFF5EEAD4), Color(0xFFF9A8D4)];
+
+  /// Text (the initial) on a player colour.
+  static const onLight = Colors.white;
+  static const onDark = Color(0xFF111118);
+
+  /// The palette for a theme.
+  static List<Color> of({required bool dark, required bool contrast}) => dark ? (contrast ? darkContrast : PlayerColors.dark) : (contrast ? lightContrast : PlayerColors.light);
+}
+
 class Radii {
   static const sm = 8.0;
   static const md = 12.0;
@@ -354,4 +380,10 @@ extension AppColorsX on BuildContext {
 
   /// Text and icons on an [accentFill] surface.
   Color get onAccent => Colors.white;
+
+  /// Play together: another player's colour ([PlayerColors]); [index] 0 to 3.
+  Color playerColor(int index) => PlayerColors.of(dark: isDark, contrast: highContrast)[index % PlayerColors.count];
+
+  /// Text (a player's initial) on [playerColor].
+  Color get onPlayerColor => isDark ? PlayerColors.onDark : PlayerColors.onLight;
 }

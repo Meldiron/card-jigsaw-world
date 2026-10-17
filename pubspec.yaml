@@ -61,6 +61,7 @@ dependencies:
   url_launcher: ^6.3.3
   # Web build only: fetches app-version.json from our own site and reloads the page (update prompt).
   web: ^1.1.1
+  share_plus: ^13.3.1
 
 dev_dependencies:
   flutter_test:
