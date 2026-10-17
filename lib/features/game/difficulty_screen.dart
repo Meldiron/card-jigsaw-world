@@ -35,16 +35,17 @@ import '../home/guided_start.dart';
 
 /// Pre-game screen: preview with the cut overlay, mode picker, board picker
 /// with reward preview, play button. This is the only place the cut preview
-/// lives. Each tier's columns and rows are chosen for this picture's
-/// proportions ([BoardSpec.forPicture]) from the same decoded image the
-/// game uses, the preview frame takes the aspect the real board will have
-/// (see [Tiling.boardAspect]) and the overlay is the real tiling, so what is
-/// shown is what gets dealt and the tier labels name the real board. While
-/// a board is in progress the choice is frozen on the saved mode and size:
-/// Continue resumes it, Discard progress throws it away and reopens the
-/// choice.
+/// lives. Boards are square (3x3, 4x4, ...) whatever the picture, which is
+/// centre-cropped to them; for a picture of another shape Expand deals the
+/// same sizes with the columns and rows that suit it ([BoardSpec.ladder]),
+/// read from the same decoded image the game uses. The preview frame takes
+/// the aspect the real board will have (see [Tiling.boardAspect]) and shows
+/// the part of the picture that is played, and the overlay is the real
+/// tiling, so what is shown is what gets dealt. While a board is in progress
+/// the choice is frozen on the saved mode and size: Continue resumes it,
+/// Discard progress throws it away and reopens the choice.
 class DifficultyScreen extends ConsumerStatefulWidget {
-  const DifficultyScreen({super.key, required this.puzzleId, this.initialGrid, this.initialMode, this.initialPainting = false, this.fromQuick = false});
+  const DifficultyScreen({super.key, required this.puzzleId, this.initialGrid, this.initialMode, this.initialPainting = false, this.initialExpand = false, this.fromQuick = false});
   final String puzzleId;
 
   /// Opened by Quick play: "Another picture" draws a new one from the same pool.
@@ -52,6 +53,9 @@ class DifficultyScreen extends ConsumerStatefulWidget {
 
   /// Painting preselected (`?painting=1`).
   final bool initialPainting;
+
+  /// Expand preselected (`?expand=1`, or a board that is not square in [initialGrid]).
+  final bool initialExpand;
 
   /// Optional tier code to preselect: legacy `5x5` or a full code such as
   /// `hexagons:5x6` / `hexagons-5x6` (used by goal shortcuts).
@@ -73,6 +77,9 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
 
   /// Painting chosen for a new board.
   late bool _painting;
+
+  /// Expand: the sizes laid out for the picture (when it offers Expand) instead of square.
+  late bool _expand;
 
   /// The giant ladder step to open a Giant pack picture on (the last one chosen), when [_tier] is
   /// a normal step.
@@ -107,6 +114,8 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
     _mode = modeArg != null && modeArg.isNotEmpty ? GameMode.fromCode(modeArg) : (decoded?.mode ?? (last != null ? GameMode.fromCode(last.mode) : GameMode.cards));
     _giantTier = last?.giantTier;
     _painting = widget.initialPainting || (last?.painting ?? false);
+    // Remembered with the board; a link to a board that is not square turns it on for this picture.
+    _expand = widget.initialExpand || (decoded?.expand ?? false) || (last?.expand ?? false);
     if (decoded != null) {
       // A code names its tier (legacy codes such as 5x5 map onto the ladder
       // step they were); the same step is kept for another mode.
@@ -225,6 +234,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
       _mode = savedSpec.mode;
       _tier = savedSpec.tierIndex < 0 ? 2 : savedSpec.tierIndex;
       _painting = saved.painting;
+      _expand = savedSpec.expand;
     });
     await ref.read(progressProvider.notifier).discard(widget.puzzleId);
     if (!mounted) return;
@@ -239,7 +249,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
   }
 
   /// Quick play's "Another picture": a new picture from the same pool, on the
-  /// same mode, size and Painting.
+  /// same mode, size, Painting and Expand.
   void _anotherPicture(BoardSpec spec, bool painting) {
     final pool = ref.read(quickPlayPoolProvider);
     if (pool == null) return;
@@ -251,7 +261,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
     }
     Haptics.light();
     final route = quickPlayRoute(next, saved: ref.read(puzzleProgressProvider(next.id)), board: spec.isGiant ? null : spec);
-    context.pushReplacement(painting ? '$route&painting=1' : route);
+    context.pushReplacement('$route${painting ? '&painting=1' : ''}${_expand ? '&expand=1' : ''}');
   }
 
   static final _random = math.Random();
@@ -342,18 +352,27 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
     final mode = saved != null ? savedSpec!.mode : (open.mode(_mode) ? _mode : GameMode.cards);
     // Giant pack pictures wait for giant boards to open (the pack itself can be bought before).
     final giantLocked = giant && saved == null && !open.giant;
-    final tiers = BoardSpec.ladder(mode, imageAspect, giant: giant);
+    // Square sizes, or with Expand (when this picture offers it) sizes laid out for the picture.
+    // Only once the picture's shape is known, so the switch does not come and go while it loads
+    // (until then the square sizes show; they do not depend on the picture). The boards carry the
+    // player's Expand either way, so the next picture is dealt the same way.
+    final shapeKnown = known || _imageSize != null;
+    final offersExpand = shapeKnown && BoardSpec.offersExpand(mode, imageAspect, giant: giant);
+    final tiers = [for (final t in BoardSpec.ladder(mode, imageAspect, giant: giant, expand: _expand && offersExpand)) t.withExpand(_expand)];
     // A size picked on the other ladder (a normal tier carried to a Giant
     // pack picture, say) falls back to that ladder's first giant or Relaxed size.
     // A Giant pack picture opens on the giant size chosen last (or the first one).
     final giantPick = BoardSpec.isGiantTier(_tier) ? _tier : (_giantTier ?? BoardSpec.firstGiantTier);
-    final pick = giant ? giantPick - BoardSpec.firstGiantTier : (BoardSpec.isGiantTier(_tier) ? 2 : _tier);
-    final maxTier = LevelRewards.maxTierIndex(profile?.level ?? 1) + 1;
-    // A remembered size this player cannot play (another account on this device) steps down to
-    // the largest open one.
-    var at = pick.clamp(0, tiers.length - 1);
+    final pick = giant ? giantPick : (BoardSpec.isGiantTier(_tier) ? 2 : _tier);
+    final maxTier = LevelRewards.maxTierIndex(profile?.level ?? 1);
+    // A shape's smallest size is always open (Hexagons start at 5x5, a level 3 size).
+    bool tierLocked(BoardSpec t) => giant ? giantLocked : t.tier > maxTier && t != tiers.first && !profileN.hasTier(mode, t.tier);
+    // A size this mode does not have (Triangles have no 5x5) gives the nearest one; a remembered
+    // size this player cannot play (another account on this device) steps down to the largest
+    // open one.
+    var at = tiers.indexOf(BoardSpec.nearest(tiers, pick));
     if (!giant) {
-      while (at > 0 && at >= maxTier && !profileN.hasTier(mode, at)) {
+      while (at > 0 && tierLocked(tiers[at])) {
         at--;
       }
     }
@@ -392,10 +411,9 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
           )
         else
         BigButton(
-          label: saved != null
-              ? 'Continue · ${saved.moves} ${saved.moves == 1 ? 'move' : 'moves'} in'
-              : '${spec.cells} ${mode == GameMode.cards ? 'cards' : mode.label.toLowerCase()} · Play',
-          icon: AppIcons.playFill,
+          key: const ValueKey('play-board'),
+          // Just the word (owner, 2026-10-17): the board and its progress are shown above.
+          label: saved != null ? 'Continue' : 'Play',
           onTap: () {
             // Remember this board (mode, size, Painting) for the next picture; a giant size is kept
             // apart from the normal one, each for its own kind of picture.
@@ -407,11 +425,13 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
               tier: spec.isGiant ? (last?.tier ?? 2) : idx,
               giantTier: spec.isGiant ? idx : last?.giantTier,
               painting: painting,
+              expand: _expand,
             ));
             if (!spec.isGiant) n.setDefaultGrid(GridSpec.tiers[idx].cells);
-            // A saved board resumes the way it was saved, so only a new one carries the choice.
-            final flag = saved == null && painting ? '?painting=1' : '';
-            context.pushReplacement('/game/${widget.puzzleId}/${BoardCode.toPath(spec.fullCode)}$flag');
+            // A saved board resumes the way it was saved, so only a new one carries Painting; Expand
+            // goes along so the next picture is dealt the same way.
+            final query = [if (saved == null && painting) 'painting=1', if (spec.expand) 'expand=1'];
+            context.pushReplacement('/game/${widget.puzzleId}/${BoardCode.toPath(spec.fullCode)}${query.isEmpty ? '' : '?${query.join('&')}'}');
           },
         ),
         // The way to throw the board away: small, red, and it always asks first.
@@ -482,7 +502,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
 
     Widget boardChip(int i) {
       final t = tiers[i];
-      final locked = giant ? giantLocked : i >= maxTier && !profileN.hasTier(mode, i);
+      final locked = tierLocked(t);
       return _BoardChip(
         spec: t,
         step: i,
@@ -490,7 +510,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
         selected: t == spec,
         locked: locked,
         onTap: locked
-            ? () => giant ? showLockedInfo(context, ref, Unlock.giant) : _offerUnlock(i, t)
+            ? () => giant ? showLockedInfo(context, ref, Unlock.giant) : _offerUnlock(t.tier, t)
             : () {
                 Haptics.selection();
                 setState(() => _tier = t.tier);
@@ -562,6 +582,17 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
         ),
       ),
       SizedBox(height: compact ? 12 : 16),
+      // A picture that is not square enough for its square boards: Expand plays it whole.
+      if (offersExpand) ...[
+        _ExpandTile(
+          on: _expand,
+          onChanged: (v) {
+            Haptics.selection();
+            setState(() => _expand = v);
+          },
+        ),
+        const SizedBox(height: 10),
+      ],
       _PaintingTile(
         on: painting,
         enabled: saved == null,
@@ -758,6 +789,56 @@ class _PaintingTile extends StatelessWidget {
               ],
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Expand: the sizes take the columns and rows that suit the picture, so the
+/// whole picture is played instead of the square board's crop. Shown only for
+/// a picture that offers it ([BoardSpec.offersExpand]); remembered with the
+/// board ([LastBoard.expand]). The same row as Painting.
+class _ExpandTile extends StatelessWidget {
+  const _ExpandTile({required this.on, required this.onChanged});
+  final bool on;
+  final ValueChanged<bool> onChanged;
+
+  /// What Expand does, in one line under its name.
+  static const explainer = 'Cut to fit the whole picture';
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return Pressable(
+      key: const ValueKey('expand-option'),
+      onTap: () => onChanged(!on),
+      scale: 0.99,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+        decoration: BoxDecoration(
+          color: on ? c.accentTint : c.card,
+          borderRadius: BorderRadius.circular(Radii.md),
+          border: Border.all(color: on ? context.accent : c.stroke),
+        ),
+        child: Row(
+          children: [
+            const IconTile(icon: AppIcons.expand, size: IconTile.medium),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Expand', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body)),
+                  const SizedBox(height: 1),
+                  Text(explainer, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: TypeSize.footnote, height: 1.3, color: c.textSecondary)),
+                ],
+              ),
+            ),
+            const SizedBox(width: 8),
+            CupertinoSwitch(value: on, activeTrackColor: context.highContrast ? context.colors.success : Brand.success, onChanged: onChanged),
+          ],
         ),
       ),
     );

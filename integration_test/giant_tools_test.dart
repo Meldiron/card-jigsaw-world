@@ -81,7 +81,7 @@ void main() {
     await tapText(tester, mode, ms: 800);
     await tester.dragUntilVisible(find.text(size), find.byType(Scrollable).first, const Offset(0, -200));
     await tapText(tester, size, ms: 800);
-    await tester.tap(find.textContaining('· Play'), warnIfMissed: false);
+    await tester.tap(find.byKey(const ValueKey('play-board')), warnIfMissed: false);
     for (var i = 0; i < 40 && find.byType(BoardWidget).evaluate().isEmpty; i++) {
       await settle(tester, 500);
     }
@@ -286,7 +286,7 @@ void main() {
     final normal = all.firstWhere((p) => p.packId != _packId && !p.isLockedByDate && (packs.where((k) => k.id == p.packId).firstOrNull?.isFree ?? false));
     container(tester).read(routerProvider).push('/play/${normal.id}');
     await settle(tester, 5000);
-    await tester.tap(find.textContaining('· Play'), warnIfMissed: false);
+    await tester.tap(find.byKey(const ValueKey('play-board')), warnIfMissed: false);
     for (var i = 0; i < 30 && find.byType(BoardWidget).evaluate().isEmpty; i++) {
       await settle(tester, 500);
     }

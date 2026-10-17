@@ -127,7 +127,7 @@ void main() {
     await tester.dragUntilVisible(find.text('Cozy'), find.byType(Scrollable).first, const Offset(0, -200));
     await settle(tester, 600);
     await tapText(tester, 'Cozy');
-    await tester.tap(find.textContaining('· Play'), warnIfMissed: false);
+    await tester.tap(find.byKey(const ValueKey('play-board')), warnIfMissed: false);
     await settle(tester, 6000);
     if (find.text('Got it').evaluate().isNotEmpty) await tapText(tester, 'Got it');
     await solveBoard(tester);

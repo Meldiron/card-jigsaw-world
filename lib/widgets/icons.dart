@@ -76,6 +76,9 @@ class AppIcons {
   /// Painting: cards start in black and white and get their colour back as they lock.
   static const painting = CupertinoIcons.paintbrush_fill;
 
+  /// Expand (difficulty screen): the whole picture, columns and rows to fit it.
+  static const expand = CupertinoIcons.arrow_up_left_arrow_down_right;
+
   /// Zoomed-in giant board: back to the whole board.
   static const wholeBoard = CupertinoIcons.arrow_down_right_arrow_up_left;
   static const zoom = CupertinoIcons.zoom_in;

@@ -90,7 +90,7 @@ void main() {
       await settle(tester, 600);
     }
     await shot(tester, shotName);
-    await tester.tap(find.textContaining('· Play'), warnIfMissed: false);
+    await tester.tap(find.byKey(const ValueKey('play-board')), warnIfMissed: false);
     await settle(tester, 6000);
     if (find.text('Got it').evaluate().isNotEmpty) await tapText(tester, 'Got it');
     await solveBoard(tester);
