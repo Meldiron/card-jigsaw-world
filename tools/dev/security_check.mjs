@@ -3,8 +3,9 @@
 // QA-flagged players on the live backend:
 //
 // 1. A squatter (Axel) creates rows at the ids the victim's app uses (Vera's block of him, her
-//    progress on a picture), names himself with a link and makes a photo of his public. Vera's
-//    writes are refused (401) and her reads find nothing (404).
+//    progress on a picture), names himself with a link and makes a photo of his public. The `blocks`
+//    create event removes the squatted block within seconds (`SWEEP_APPLY`), so Vera can block him;
+//    her progress write is refused (401) until the sweep runs.
 // 2. The sweep runs as the owner (Appwrite CLI): a QA-only dry run, which changes nothing, then a
 //    QA-only run for real. Vera can write her rows again, Axel's name is "Player", his photo is his
 //    only.
@@ -104,15 +105,21 @@ try {
 
   const blockVera = () => asPlayer(vera, 'PUT', `/tablesdb/cjw/tables/blocks/rows/${blockId}`, { data: { blockerId: vera.userId, blockedId: axel.userId, blockedName: 'Axel QA', blockedAvatar: 'fox' }, permissions: own(vera.userId) });
   const saveVera = () => asPlayer(vera, 'PUT', `/tablesdb/cjw/tables/progress/rows/${progressId}`, { data: { userId: vera.userId, puzzleId: 'qa-picture' }, permissions: own(vera.userId) });
-  expect('squatted: Vera cannot block Axel (401)', (await status(blockVera())) === 401);
+  // The blocks create event checks a new row at once and deletes one made in someone else's name.
+  let blockGone = false;
+  for (let i = 0; i < 20 && !blockGone; i++) {
+    await new Promise((r) => setTimeout(r, 500));
+    blockGone = (await status(call('GET', `/tablesdb/cjw/tables/blocks/rows/${blockId}`))) === 404;
+  }
+  expect('the blocks event removes the squatted block within 10 s', blockGone);
+  expect('then Vera blocks Axel', (await status(blockVera())) === 200);
   expect('squatted: Vera cannot save her picture (401)', (await status(saveVera())) === 401);
-  expect('squatted: Vera cannot read her block row (404)', (await status(asPlayer(vera, 'GET', `/tablesdb/cjw/tables/blocks/rows/${blockId}`))) === 404);
 
   // 2. The sweep: a dry run, then for real (QA players only).
   const dry = sweep({ full: true, qaOnly: true });
   console.log('     dry run:', JSON.stringify(dry.counts));
-  expect('dry run finds the squats, the name and the public photo', dry.counts['blocks:permissions'] === 1 && dry.counts['progress:id'] === 1 && dry.counts['profiles:name'] === 1 && dry.counts['files:repair'] === 1);
-  expect('dry run changes nothing', (await status(call('GET', `/tablesdb/cjw/tables/blocks/rows/${blockId}`))) === 200);
+  expect('dry run finds the squat, the name and the public photo (the block is already fixed)', !dry.counts['blocks:permissions'] && dry.counts['progress:id'] === 1 && dry.counts['profiles:name'] === 1 && dry.counts['files:repair'] === 1);
+  expect('dry run changes nothing', (await call('GET', `/tablesdb/cjw/tables/progress/rows/${progressId}`)).userId === axel.userId);
   const real = sweep({ full: true, qaOnly: true, dryRun: false });
   console.log('     run:', JSON.stringify(real.counts));
   expect('Vera blocks Axel again', (await status(blockVera())) === 200);

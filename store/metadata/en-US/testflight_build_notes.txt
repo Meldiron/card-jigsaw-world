@@ -1,6 +1,6 @@
 What is new since the last build:
-- Play together is live: when a friend picks up a card you see it at once in their colour, and when they drag it the card glides across your board as they move it.
-- Opening an invite link in Safari: Open in Carden now switches to the app.
-- Quests count each board as it was finished, so replaying a picture no longer changes them. The web version loads faster on later visits.
+- Play together: whoever grabs a card first keeps it, the other player's card slides back with a short note, and a drag never gets stuck. Invite links now show the real picture and board in the message preview and open the app directly.
+- New board sizes: Triangles 3x3 and Hexagons 4x4 and 6x6. A few edge pieces of a unique shape start in place, so the picture stays a full rectangle.
+- Night photos: dark sky cards that differ only by a star or two now count as the same card.
 
-Please try: start Play together, have a friend join, and both drag cards around the same board.
+Please try: send a Play together invite in Messages and check the preview, then both grab the same card at once.
