@@ -12,6 +12,7 @@ import 'package:carden/core/sfx.dart';
 import 'package:carden/data/local_store.dart';
 import 'package:carden/features/game/board_widget.dart';
 import 'package:carden/features/game/giant_board.dart';
+import 'package:carden/game/board.dart';
 import 'package:carden/models/models.dart';
 import 'package:carden/router.dart';
 import 'package:carden/state/catalog.dart';
@@ -64,6 +65,9 @@ void main() {
     return boardRect(tester).topLeft + (z == null ? content(tester, slot) : z.toViewport(content(tester, slot)));
   }
 
+  /// The widget that shows [card]: twins that traded identities keep their widgets (docs/twins.md).
+  Finder cardWidget(WidgetTester tester, int card) => find.byKey(ValueKey('card-${board(tester).state.cardKeys?[card] ?? card}'));
+
   bool inView(WidgetTester tester, int slot) => (Offset.zero & boardSize(tester)).deflate(10).contains(zoomOf(tester).toViewport(content(tester, slot)));
   int coins(WidgetTester tester) => container(tester).read(profileProvider).value?.coins ?? 0;
 
@@ -106,7 +110,7 @@ void main() {
                 (b.tiling.cellCenter(y, boardSize(tester)) - b.tiling.cellCenter(b.homeOf(y), boardSize(tester))).distance
             ? x
             : y);
-    final card = find.byKey(ValueKey('card-${b.slots[far]}'));
+    final card = cardWidget(tester, b.slots[far]);
     final start = tester.getTopLeft(card);
     debugPrint('QA_PEEK_AT ${DateTime.now().millisecondsSinceEpoch} $prefix');
     await tester.tap(find.byKey(const ValueKey('booster-peek')), warnIfMissed: false);
@@ -290,6 +294,8 @@ void main() {
       expected = expected.moveTo(expected.slotOfCard(n), n)!;
       sent++;
     }
+    // As the game settles a move with the picture's twins (docs/twins.md).
+    expected = (board(tester).state.twins ?? Twins.none).settle(b2, expected).board;
     final wallet0 = coins(tester);
     final moves0 = board(tester).state.moves;
     await tapSlot(tester, chosen, ms: 500);
