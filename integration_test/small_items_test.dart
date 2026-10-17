@@ -123,8 +123,8 @@ void main() {
     expect(store.reminderOfferShown, isTrue);
     await shot(tester, 'si_02_reminder_on');
 
-    // Today's daily puzzle, solved: Home shows tomorrow's blurred.
-    expect(find.text("Tomorrow's daily puzzle"), findsNothing);
+    // Today's daily puzzle, solved: Home's Today card says when the new picture comes.
+    expect(find.textContaining('New picture in'), findsNothing);
     await tester.tap(find.textContaining('bonus today'), warnIfMissed: false);
     await settle(tester, 4000);
     await tester.dragUntilVisible(find.text('Cozy'), find.byType(Scrollable).first, const Offset(0, -200));
@@ -138,9 +138,9 @@ void main() {
     expect(find.text('Picture complete'), findsOneWidget);
     await tapText(tester, 'Back to pack', ms: 2500);
     await tapText(tester, 'Home', ms: 3000);
-    expect(find.text("Tomorrow's daily puzzle"), findsOneWidget);
-    expect(find.textContaining('Opens in'), findsOneWidget);
-    await shot(tester, 'si_03_home_tomorrow');
+    expect(find.textContaining('New picture in'), findsOneWidget);
+    expect(find.text("Tomorrow's daily puzzle"), findsNothing, reason: 'the row is gone (owner, 2026-10-17)');
+    await shot(tester, 'si_03_home_new_picture');
 
     // Lucky Wheel odds.
     await tapText(tester, 'Lucky Wheel', ms: 1800);

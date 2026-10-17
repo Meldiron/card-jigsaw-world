@@ -6,7 +6,7 @@ import 'package:carden/data/local_store.dart';
 import 'package:carden/features/daily/wheel_screen.dart';
 import 'package:carden/features/gallery/library_screen.dart';
 import 'package:carden/features/gallery/pack_progress.dart';
-import 'package:carden/features/home/tomorrow_preview.dart';
+import 'package:carden/features/home/new_picture_in.dart';
 import 'package:carden/features/profile/settings_screen.dart';
 import 'package:carden/models/models.dart';
 import 'package:carden/state/catalog_sync.dart';
@@ -208,22 +208,15 @@ void main() {
     });
   });
 
-  group("Tomorrow's daily puzzle", () {
-    final month = [for (var d = 1; d <= 31; d++) _pic('d$d', 'daily-2026-10', 'Day $d', date: '2026-10-${d.toString().padLeft(2, '0')}')];
-
-    test('is the picture dated tomorrow, or none when the next month is not in the catalogue', () {
-      expect(tomorrowsDaily(month, DateTime(2026, 10, 20, 23, 50))?.id, 'd21');
-      expect(tomorrowsDaily(month, DateTime(2026, 10, 31, 9)), isNull);
-    });
-
-    testWidgets('shows only the blurred picture and the time until midnight', (tester) async {
-      final pic = Puzzle.fromRow('d21', {'packId': 'daily-2026-10', 'title': 'Secret title', 'date': '2026-10-21', 'blurhash': 'LEHV6nWB2yk8pyo0adR*.7kCMdnj', 'imageUrl': 'https://example.com/full.jpg'});
-      await tester.pumpWidget(MaterialApp(theme: AppTheme.light(), home: Scaffold(body: TomorrowPreview(puzzle: pic, clock: () => DateTime(2026, 10, 20, 18, 48)))));
-      expect(find.text("Tomorrow's daily puzzle"), findsOneWidget);
-      expect(find.text('Opens in 5h 12m'), findsOneWidget);
-      expect(find.text('Secret title'), findsNothing);
-      expect(find.byType(Image), findsNothing, reason: 'the real picture is never loaded');
-    });
+  // Home's Today card, once today's picture is solved (owner, 2026-10-17: it replaced the
+  // "Tomorrow's daily puzzle" row).
+  testWidgets('the Today card says when the new picture comes', (tester) async {
+    var now = DateTime(2026, 10, 20, 18, 48);
+    await tester.pumpWidget(MaterialApp(theme: AppTheme.light(), home: Scaffold(body: NewPictureIn(style: const TextStyle(), clock: () => now))));
+    expect(find.text('New picture in 5h 12m'), findsOneWidget);
+    now = DateTime(2026, 10, 20, 23, 59, 30);
+    await tester.pump(const Duration(seconds: 31));
+    expect(find.text('New picture in 1m'), findsOneWidget, reason: 'read again every 30 seconds');
   });
 
   test('Settings shows the build version and number', () {

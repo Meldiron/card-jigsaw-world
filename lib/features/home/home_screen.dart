@@ -33,7 +33,7 @@ import '../gallery/pack_progress.dart';
 import 'guided_start.dart';
 import 'header_bar.dart';
 import 'home_pack_rows.dart';
-import 'tomorrow_preview.dart';
+import 'new_picture_in.dart';
 
 /// Home: today's puzzle, Quick play, streak, boards to continue, Wheel and
 /// piggy bank, level, packs in progress, live events, daily months, packs
@@ -55,8 +55,6 @@ class HomeScreen extends ConsumerWidget {
     final isGuest = ref.watch(isGuestProvider);
     final open = ref.watch(revealsProvider);
     final calm = ref.watch(firstStepsProvider.select((s) => s.calm));
-    final dailySolved = daily != null && daily.isToday && (progress[daily.id]?.completed ?? false);
-    final tomorrow = dailySolved && open.contains(Reveal.daily) ? tomorrowsDaily(puzzles.value ?? const <Puzzle>[], DateTime.now()) : null;
 
     final inProgress = puzzles.value == null
         ? const <Puzzle>[]
@@ -257,7 +255,7 @@ class HomeScreen extends ConsumerWidget {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(flex: 7, child: Column(children: [hero, if (tomorrow != null) ...[const SizedBox(height: 12), TomorrowPreview(puzzle: tomorrow)]])),
+                          Expanded(flex: 7, child: hero),
                           const SizedBox(width: 16),
                           Expanded(
                             flex: 5,
@@ -294,14 +292,6 @@ class HomeScreen extends ConsumerWidget {
                       child: hero,
                     ),
                   ),
-                  // Today's daily puzzle is solved: a blurred look at tomorrow's.
-                  if (tomorrow != null)
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-                        child: TomorrowPreview(puzzle: tomorrow),
-                      ),
-                    ),
                   // One tap back into the board closest to done; the full row is further down.
                   if (resume != null)
                     SliverToBoxAdapter(
@@ -591,7 +581,7 @@ class _DailyHero extends StatelessWidget {
                           style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Colors.white),
                         ),
                         const SizedBox(height: 4),
-                        if (done)
+                        if (done) ...[
                           // The stars earned, and the reason to replay only while one is missing.
                           Row(
                             children: [
@@ -606,8 +596,11 @@ class _DailyHero extends StatelessWidget {
                                     style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: TypeSize.footnote, fontWeight: FontWeight.w500)),
                               ),
                             ],
-                          )
-                        else
+                          ),
+                          // When the next daily puzzle comes (owner, 2026-10-17).
+                          const SizedBox(height: 3),
+                          NewPictureIn(style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: TypeSize.footnote, fontWeight: FontWeight.w500)),
+                        ] else
                           Row(
                             children: [
                               Amount(currency: Currency.coins, value: 50, prefix: '+', size: 14, fontSize: TypeSize.footnote, color: Colors.white, weight: FontWeight.w600),
