@@ -4,7 +4,6 @@
 @TestOn('mac-os || linux')
 library;
 
-import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
