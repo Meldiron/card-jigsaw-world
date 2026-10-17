@@ -34,8 +34,8 @@ import 'header_bar.dart';
 import 'home_pack_rows.dart';
 import 'tomorrow_preview.dart';
 
-/// Home: today's puzzle, Quick play, Wheel and piggy bank, streak, level,
-/// boards to continue, packs in progress, live events, daily months, packs
+/// Home: today's puzzle, Quick play, streak, boards to continue, Wheel and
+/// piggy bank, level, packs in progress, live events, daily months, packs
 /// missing stars, featured packs and finished packs. During the guided start
 /// (lib/state/first_steps.dart) it begins with today's picture, Continue and
 /// the next step, and each section joins as it opens ([Reveal]); the rest
@@ -181,7 +181,7 @@ class HomeScreen extends ConsumerWidget {
         if (!showWheel && levelCard != null) levelCard,
       ],
     );
-    final packRowSlivers = <Widget>[
+    final continueSlivers = <Widget>[
       if (showPacks && inProgress.isNotEmpty) ...[
         SliverToBoxAdapter(
           child: SectionHeader(
@@ -205,6 +205,9 @@ class HomeScreen extends ConsumerWidget {
           ),
         ),
       ],
+    ];
+    // Packs in progress sit lower, just above the live events (owner, 2026-10-17).
+    final packsInProgress = <Widget>[
       if (showPacks && packRows.inProgress.isNotEmpty) ...[
         SliverToBoxAdapter(
           child: SectionHeader(
@@ -282,7 +285,7 @@ class HomeScreen extends ConsumerWidget {
                         ),
                       ),
                     ),
-                  ...packRowSlivers,
+                  ...continueSlivers,
                 ] else ...[
                   SliverToBoxAdapter(
                     child: Padding(
@@ -328,8 +331,8 @@ class HomeScreen extends ConsumerWidget {
                         child: streak,
                       ),
                     ),
-                  ...packRowSlivers,
-                  // Extras after the boards and packs the player is working on.
+                  ...continueSlivers,
+                  // Extras after the boards the player is working on; packs in progress further down.
                   if (showExtras) ...[
                     const SliverToBoxAdapter(child: SizedBox(height: 16)),
                     SliverToBoxAdapter(
@@ -354,6 +357,7 @@ class HomeScreen extends ConsumerWidget {
                       ),
                     ),
                 ],
+                ...packsInProgress,
                 if (open.contains(Reveal.liveEvents) && livePacks.isNotEmpty) ...[
                   SliverToBoxAdapter(
                     child: SectionHeader(
@@ -513,7 +517,8 @@ class _Greeting extends StatelessWidget {
     final n = (name?.trim() ?? '').split(RegExp(r'\s+')).first;
     final title = n.isEmpty || n == 'Player' ? part : '$part, $n';
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 8, 20, 4),
+      // Room above the date and under the greeting (owner, 2026-10-17: it felt compact).
+      padding: const EdgeInsets.fromLTRB(20, 18, 20, 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1100,7 +1105,7 @@ IconData _unlockIcon(Unlock u) => switch (u) {
     };
 
 /// Month tile for the daily puzzle row: cover, name and the same progress
-/// line and completion badges as the library cards.
+/// line and done badge as the library cards.
 class _MonthCard extends ConsumerWidget {
   const _MonthCard({required this.pack, required this.current, required this.onTap});
   final Pack pack;
@@ -1145,7 +1150,7 @@ String _endsIn(Pack pack) {
 }
 
 /// Square cover tile shared by the Home event and month rows: picture with
-/// a scrim, a status chip top left, the completion badges top right, and the
+/// a scrim, a status chip top left, the done badge top right, and the
 /// name over the pack's progress line.
 class _CoverTile extends StatelessWidget {
   const _CoverTile({required this.pack, required this.progress, required this.onTap, this.chip, this.nameLines = 1});
@@ -1191,7 +1196,7 @@ class _CoverTile extends StatelessWidget {
                       child: chip == null ? const SizedBox.shrink() : FittedBox(fit: BoxFit.scaleDown, alignment: Alignment.centerLeft, child: chip),
                     ),
                   ),
-                  if (progress.complete) ...[const SizedBox(width: 6), PackDoneBadges(progress: progress, size: 22)],
+                  if (progress.complete) ...[const SizedBox(width: 6), PackDoneBadges(progress: progress)],
                 ],
               ),
             ),
@@ -1509,7 +1514,7 @@ class _StatCell extends StatelessWidget {
   }
 }
 
-/// One finished pack: cover with the done badges, name, star progress line.
+/// One finished pack: cover, name with the done badge, star progress line.
 class _FinishedRow extends StatelessWidget {
   const _FinishedRow({required this.pack, required this.progress});
   final Pack pack;
@@ -1541,7 +1546,7 @@ class _FinishedRow extends StatelessWidget {
                         child: Text(pack.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body)),
                       ),
                       const SizedBox(width: 6),
-                      PackDoneBadges(progress: progress, size: 16),
+                      PackDoneBadges(progress: progress, size: 20, onImage: false),
                     ],
                   ),
                   const SizedBox(height: 6),

@@ -42,7 +42,8 @@ Reduce motion changes, by place:
 - Lucky Wheel: the wheel does not spin; it turns to the prize at once and the prize fades in. The jackpot glow
   fades once without growing; no confetti.
 - Elsewhere: pack covers do not drift or zoom (parallax, stretch), onboarding pages and texts change without
-  sliding, programmatic scrolls jump, the daily gift mark fades instead of popping.
+  sliding, programmatic scrolls jump, the daily gift mark fades instead of popping and a claimed gift plays no
+  confetti.
 - Kept: spinners (iOS keeps them too), the player's own drags, pinches and scrolls, fades and colour changes.
 
 ## Symbols

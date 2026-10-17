@@ -13,9 +13,11 @@ import '../../core/links.dart';
 import '../../core/platform.dart';
 import '../../core/sfx.dart';
 import '../../core/a11y.dart';
+import '../../core/app_links.dart';
 import '../../core/theme/tokens.dart';
 import '../../data/purchases.dart';
 import '../../models/models.dart';
+import '../../state/first_steps.dart';
 import '../../state/profile.dart';
 import '../../state/purchases.dart';
 import '../../state/settings.dart';
@@ -26,6 +28,7 @@ import '../../widgets/vip.dart';
 import '../ads/house_ads.dart';
 import '../daily/daily_reward_sheet.dart';
 import '../daily/piggy_sheet.dart';
+import '../links/deep_links.dart';
 
 /// Store: free bonus video (capped per day), coin bundles, ticket bundles,
 /// hint packs, VIP. Purchases go through StoreKit and are verified by the
@@ -865,20 +868,29 @@ class _Ringed extends StatelessWidget {
       );
 }
 
-/// Every way to earn without paying, each row naming where it leads: the daily gift and the piggy
-/// bank open as sheets over the Store, the Lucky Wheel on top of it, the quests on their tab.
-/// Level-ups are information only.
-class _FreeWays extends StatelessWidget {
+/// Every way to earn without paying, each row naming where it leads: playing first (the Store
+/// closes and a picture opens), the daily gift and the piggy bank as sheets over the Store, the
+/// Lucky Wheel on top of it, the quests on their tab. Level-ups are information only.
+class _FreeWays extends ConsumerWidget {
   const _FreeWays();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final c = context.colors;
     Widget divider() => Divider(height: 1, thickness: 1, color: c.stroke, indent: 16 + IconTile.small + 12);
     return SoftCard(
       padding: EdgeInsets.zero,
       child: Column(
         children: [
+          // Every picture pays coins (Economy.completionCoins: more for bigger boards and stars).
+          ListRow(
+            key: const ValueKey('store-play-puzzle'),
+            icon: AppIcons.shuffle,
+            title: 'Play a puzzle',
+            subtitle: 'Coins for every picture, more with 3 stars',
+            onTap: () => playFromStore(context, ref),
+          ),
+          divider(),
           ListRow(icon: AppIcons.dailyGift, title: 'Daily gift', subtitle: 'Coins daily, plus tickets and hints', onTap: () => showDailyRewardSheet(context)),
           divider(),
           ListRow(
@@ -899,6 +911,28 @@ class _FreeWays extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+/// Earn for free > Play a puzzle (owner feedback, 2026-10-17): closes the Store and starts Quick
+/// play, as on Home (the `/quick` link action: a random picture's board picker, never a board by
+/// itself). Before Quick play opens in the guided start (3 pictures, [Reveal.quickPlay]) it opens the
+/// picture Home suggests instead ([nextStepProvider]), or Home itself when there is none: the first
+/// board is under way and Home's Continue leads back to it.
+void playFromStore(BuildContext context, WidgetRef ref) {
+  final quickPlay = ref.read(revealsProvider).contains(Reveal.quickPlay);
+  final next = quickPlay ? null : ref.read(nextStepProvider);
+  // Read before the Store closes: its context and ref go with it.
+  final links = ref.read(deepLinksProvider);
+  final router = GoRouter.of(context);
+  context.pop();
+  if (quickPlay) {
+    unawaited(links.show(AppLink.parse(Uri(path: '/quick'))!));
+  } else if (next == null || next.route == '/library') {
+    // A tab is gone to, as Home's next-step card does; a picture opens on top.
+    router.go(next?.route ?? '/home');
+  } else {
+    unawaited(router.push(next.route));
   }
 }
 
