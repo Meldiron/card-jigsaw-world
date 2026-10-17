@@ -46,7 +46,8 @@ class CoopGame {
 
   final String id;
 
-  /// The join code in the link (`https://play.carden.page/join/<code>`).
+  /// The join code in the link (`https://join.carden.page/<code>`; builds up to 126 shared
+  /// `https://play.carden.page/join/<code>`, which still opens).
   final String code;
   final String hostId;
 

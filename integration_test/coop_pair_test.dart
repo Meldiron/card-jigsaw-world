@@ -180,7 +180,7 @@ void main() {
       await settle(tester, 1200);
       await tester.tap(find.byKey(const ValueKey('pause-play-together')));
       expect(await until(tester, () => recorder.shared.isNotEmpty, seconds: 60), isTrue);
-      final code = RegExp(r'play\.carden\.page/join/([A-Z0-9]{8})').firstMatch(recorder.shared.single)!.group(1)!;
+      final code = RegExp(r'join\.carden\.page/([A-Z0-9]{8})').firstMatch(recorder.shared.single)!.group(1)!;
       await relaySet('code', '$code@${DateTime.now().millisecondsSinceEpoch}');
       debugPrint('COOP_PAIR waiting for the guest');
       expect(await until(tester, () => (s().game?.playerIds.length ?? 0) == 2, seconds: 900), isTrue, reason: 'the guest joined');

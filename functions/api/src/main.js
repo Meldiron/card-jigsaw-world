@@ -17,6 +17,9 @@
 //   POST /admin/sweep              sweep/run.js     the integrity sweep on demand, same callers:
 //                                                   { dryRun = true, full, qaOnly }
 //   GET  /health                   { ok, environment, maxPlayers, appleSignIn }
+//   GET  /<code>, /join/<code>     invite/page.js   a Play together invite's page and link preview, for
+//                                                   anyone at https://join.carden.page (no session; it shows
+//                                                   only the shared card), and its association file
 //
 // A scheduled execution (trigger `schedule`: the function's hourly `0 * * * *`) runs the co-op cleanup
 // (it was the coop-cleanup function) and the integrity sweep, whatever its path; the sweep changes
@@ -28,6 +31,7 @@
 // call needs (the App Store library only for purchases). Each module answers its own failures as its
 // old function did, so the app reads the same answers.
 import { MAX_PLAYERS } from './coop/rules.js';
+import { isInviteRequest, onJoinHost } from './invite/paths.js';
 
 const purchase = () => import('./purchase.js');
 const account = () => import('./account.js');
@@ -36,6 +40,8 @@ const coop = () => import('./coop/game.js');
 const cleanup = () => import('./coop/cleanup.js');
 const gift = () => import('./gift/send.js');
 const sweeper = () => import('./sweep/run.js');
+const invite = () => import('./invite/page.js');
+const inviteCards = () => import('./invite/store.js');
 
 /// Whether the sweep may change rows when it runs by itself (schedule, events).
 const sweepApplies = () => process.env.SWEEP_APPLY === 'true';
@@ -95,6 +101,11 @@ async function scheduled({ req, res, log, error }) {
     error(`integrity sweep: ${e?.stack ?? e}`);
     out.ok = false;
   }
+  try {
+    out.inviteCards = await (await inviteCards()).cleanCards(req, log);
+  } catch (e) {
+    error(`invite cards: ${e?.stack ?? e}`);
+  }
   return res.json(out, out.ok ? 200 : 500);
 }
 
@@ -146,6 +157,8 @@ export default async (context) => {
     const trigger = req.headers?.['x-appwrite-trigger'];
     if (trigger === 'schedule') return await scheduled(context);
     if (trigger === 'event') return await event(context);
+    if (isInviteRequest(req)) return await (await invite()).serve(context);
+    if (onJoinHost(req)) return notFound(context);
     const handler = ROUTES[routeOf(req)];
     if (!handler) return notFound(context);
     return await handler(context);

@@ -6,6 +6,7 @@ One set of paths opens the same screen everywhere:
 | --- | --- | --- |
 | Web address | `https://play.carden.page/library/pack/pack-owls` | The web site; on an iPhone with the app installed it opens the app (universal link) |
 | App scheme | `carden://library/pack/pack-owls` | The iPhone app (and Android builds); used by the widget and the App Store In-App Events |
+| Invite address | `https://join.carden.page/K7QH2MXP` | Play together invites only (below): the invite's own page with its link preview; opens the app from build 127 |
 
 The game was called Card Jigsaw World until build 118. Its links keep working: the app still registers and reads
 `cardjigsaw://` (`AppLink.legacyScheme`), and the earlier web addresses, `https://carden.appwrite.network` and
@@ -41,7 +42,7 @@ either form from a link.
 | `/inbox?message=<id>` (also `/inbox/<id>`, `/messages/<id>`) | Social > Inbox with that message open | The friend gift notification's link (docs/friend-gifts.md); "Message not available" once it expired or was deleted. Without a valid id, the Inbox |
 | `/gift` | Home with the daily gift | |
 | `/piggy` | Home with the piggy bank | |
-| `/join/<code>` | Play together: joins the game of the invite and opens its shared board | The code is 8 characters (any case, dashes ignored). A new install goes straight to the board; the welcome pages begin after the game. The web page first offers Open in Carden or Play in the browser on an iPhone or iPad. See [multiplayer.md](multiplayer.md) |
+| `/join/<code>` | Play together: joins the game of the invite and opens its shared board | The code is 8 characters (any case, dashes ignored). A new install goes straight to the board; the welcome pages begin after the game. The web page first offers Open in Carden or Play in the browser on an iPhone or iPad (`?play=1`, from an invite's own page, starts the game at once). Shared since build 127 as `https://join.carden.page/<code>` (below). See [multiplayer.md](multiplayer.md) |
 
 Keywords are case-insensitive; ids keep their case. Anything else (unknown paths, site files,
 `/auth/callback`) is not a link: the web site shows Home for an unknown path.
@@ -97,6 +98,15 @@ The web address opens the app when:
    callback) and the pack code links `/redeem*` and `/code*` (redeemed on the web only) in the browser. Apple's CDN caches it; after a change it can take a day to reach
    devices. Check what Apple sees with
    `curl https://app-site-association.cdn-apple.com/a/v1/play.carden.page`.
+
+Invites have an address of their own, `https://join.carden.page/<code>` (`AppLink.joinHost`; the
+link the app shares from build 127, docs/multiplayer.md, "Invite links"). It is a domain of the `api`
+function, which makes each invite's page (its link preview) and serves the domain's association file
+(`ASSOCIATION` in `functions/api/src/invite/page.js`: `/????????` and `/join/*` open the app, `/` does
+not). `applinks:join.carden.page` is in `Runner.entitlements` from build 127 (the App ID already has
+Associated Domains, so the profile does not change); builds before open its page, whose Open in Carden
+is `carden://join/<code>`. `AppLink.parse` reads a bare code only on that host. Check Apple's copy with
+`curl https://app-site-association.cdn-apple.com/a/v1/join.carden.page`.
 
 A link typed into Safari's address bar, or tapped on a page of the site itself, stays in the
 browser (iOS rule). Long-press a link and choose "Open in Carden" to switch; iOS

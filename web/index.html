@@ -23,8 +23,11 @@
   <link rel="manifest" href="manifest.json">
 
   <!-- Social preview. Messages and WhatsApp read these tags only (no script runs), so every link of
-       the site, a Play together invite included, shows the same card: web/invite-card.jpg, 1200 x 630
-       (iMessage wants 900 px or wider, WhatsApp under 600 KB), made by tools/brand/invite_card.py. -->
+       the site shows the same card: web/invite-card.jpg, 1200 x 630 (iMessage wants 900 px or wider,
+       WhatsApp under 600 KB), drawn by tools/brand/invite_card.py with the invite cards' own code.
+       Invites shared from build 127 on are https://join.carden.page/<code>, a page made per invite
+       by the api function with the game's own card (docs/multiplayer.md, "Invite links"); builds up
+       to 126 share /join/<code> here and get this card. -->
   <meta property="og:title" content="Carden: Your calm picture puzzle">
   <meta property="og:description" content="Swap cards until the picture is whole, on your own or together. A new puzzle every day.">
   <meta property="og:type" content="website">
@@ -34,7 +37,7 @@
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="A picture dealt as cards beside the name Carden">
+  <meta property="og:image:alt" content="A red panda dealt as nine cards, one lifted, beside the name Carden">
   <meta name="twitter:card" content="summary_large_image">
 
   <title>Carden: Your calm picture puzzle</title>
@@ -187,7 +190,7 @@
     <div class="card">
       <img src="icons/Icon-192.png" alt="" width="84" height="84">
       <h1 id="invite-title">Play together in Carden</h1>
-      <p id="invite-text">You are invited to a shared picture. Open it in the Carden app, or play it here in the browser.</p>
+      <p id="invite-text">You are invited to play a picture together. Open it in the Carden app, or play it here in the browser.</p>
       <a id="invite-app" class="primary" href="https://play.carden.page/">Open in Carden</a>
       <button id="invite-web" class="secondary" type="button">Play in the browser</button>
     </div>
@@ -262,9 +265,15 @@
         document.body.appendChild(s);
       }
       var m = /^\/join\/([A-Za-z0-9-]{4,20})\/?$/.exec(location.pathname);
+      var code = m ? m[1].toUpperCase().replace(/[^A-Z0-9]/g, '') : '';
+      // Play in the browser on an invite's own page (join.carden.page, made by the api function)
+      // comes here with ?play=1: the choice is made, so the game starts at once.
+      if (m && /[?&]play=1(&|$)/.test(location.search)) {
+        try { history.replaceState(null, '', '/join/' + code); } catch (e) {}
+        return start();
+      }
       var apple = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
       if (!m || !apple) return start();
-      var code = m[1].toUpperCase().replace(/[^A-Z0-9]/g, '');
       var invite = document.getElementById('invite');
       var app = document.getElementById('invite-app');
       var web = document.getElementById('invite-web');

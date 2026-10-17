@@ -13,6 +13,7 @@
 		<string>applinks:play.carden.page</string>
 		<string>applinks:carden.appwrite.network</string>
 		<string>applinks:card-jigsaw-world.appwrite.network</string>
+		<string>applinks:join.carden.page</string>
 	</array>
 </dict>
 </plist>

@@ -2,8 +2,9 @@
 
 Up to five players play one board at the same time (owner-approved design, 2026-10-17). The host taps
 **Play together** in a board's pause menu; the game starts and the share sheet opens with a link,
-`https://play.carden.page/join/<code>`, for Messages, WhatsApp, Messenger, Instagram, Snapchat and the
-rest. Whoever opens it joins the board: in the app where it is installed (universal link), else in the
+`https://join.carden.page/<code>` (build 127 on; earlier builds share `https://play.carden.page/join/<code>`,
+which still works), for Messages, WhatsApp, Messenger, Instagram, Snapchat and the rest; its preview
+shows the game's own picture, board and host ("Invite links"). Whoever opens it joins the board: in the app where it is installed (universal link), else in the
 web game. Everyone moves cards at once.
 
 Status: done in the app (2026-10-17). Phase 1: backend live, engine, links, share, link preview, the
@@ -347,7 +348,8 @@ in its route (`CoopGame.route` = `/game/<puzzleId>/<grid>?coop=<id>`, plus `&pai
 ### Links
 
 `/join/<code>` (`AppLink.parse`, kind action, code normalised to upper case) on the web address,
-`carden://` and `cardjigsaw://`; `/join/*` in `web/.well-known/apple-app-site-association` (the site
+`carden://` and `cardjigsaw://`, and `/<code>` on `join.carden.page` (the shared link from build 127,
+"Invite links" below); `/join/*` in `web/.well-known/apple-app-site-association` (the site
 must be deployed before a build that shares links). `DeepLinks.show` hands it to `openInvite`: a
 "Joining the game" sheet (the function can take seconds to wake up), the function, then the board's
 route above what is on screen. A new install goes straight to the board; onboarding is not set, so the
@@ -370,9 +372,39 @@ Messenger's only sometimes, hence the page.
 `shareInvite` (share_plus 13.3.1): "Play <picture> with me in Carden" and the link, on the iPhone's
 share sheet or the browser's (Web Share API); without one the link is copied. share_plus was read
 before it was added: on iOS it opens `UIActivityViewController` and builds the preview title itself
-(no metadata fetch); on the web its mailto fallback is turned off. The link preview is
-`web/invite-card.jpg` (1200 x 630, 92 KB; `tools/brand/invite_card.py`), the `og:image` of every page
-with `og:image:width/height`: Messages and WhatsApp read static tags only.
+(no metadata fetch); on the web its mailto fallback is turned off.
+
+### Invite links (owner, 2026-10-17)
+
+"Make it dynamic and show what the game is actually about: correct shapes, correct size, correct
+image." Every invite has its own preview:
+
+- The link is `https://join.carden.page/<code>` (`AppLink.joinUrl`, build 127 on). Messages, WhatsApp
+  and Messenger read a link's preview from static meta tags (no script runs), and play.carden.page is a
+  static site with one `index.html` for every path, so the invite needs an address of its own: a
+  domain of the `api` function, which makes the page per invite (docs/functions.md, "Invite pages").
+  Preview (the same for every reader, crawler or person): title "Mia invites you to play Red Panda"
+  (the host's display name through the name filter; "Play Red Panda together" without one),
+  description "Play together in Carden · Cards 7x7 · 2 of 5 players" (Painting named when on), and the
+  game's card. Nothing else about the game or its players.
+- The card (1200 x 630, 50-140 KB; WhatsApp wants under 600 KB, Messages 900 px or wider): the design of
+  the site's card (the pieces, the picture blurred and zoomed behind, the logo), drawn for the real
+  board: its picture, its mode's shapes, its size and number of pieces, a few pieces still to swap and
+  one lifted, grey ones on a Painting board, and the board in words. Samples:
+  `node tools/brand/invite_card.mjs --samples-only` writes `build/invite_cards/`.
+- Timing: a new game's card is drawn as `/coop/create` answers, so it is ready by the time the host has
+  picked Messages; a reader who comes sooner waits for it (1.6-2.7 s measured at 1.5 s after create).
+  The edge keeps a page ten minutes, so the friend's tap is answered in about 25 ms, cold or not.
+- People: on an iPhone or iPad the page offers **Open in Carden** (`carden://join/<code>`, read by every
+  build with Play together) and **Play in the browser**
+  (`https://play.carden.page/join/<code>?play=1`, which starts the web game at once); if the page is
+  still there 2.5 s after Open in Carden, the app is not installed and it offers the browser, then Get
+  Carden. Elsewhere: Play in the browser. Build 127 claims the domain (`applinks:join.carden.page`;
+  the association file comes from the function), so a tap in Messages or Safari opens the app without
+  the page. An ended or unknown code shows "This game has ended" and the site's card.
+- Builds up to 126 share `https://play.carden.page/join/<code>`: the static site's own card and words
+  (`web/invite-card.jpg`, drawn by the same code with the red panda of the welcome pages), and its
+  invite card on an iPhone, as before.
 
 ## Measured (live backend, QA players, 2026-10-17)
 
@@ -463,7 +495,16 @@ the two equal.
   bridge), `test/coop_ui_test.dart` (colours and contrast, the chip, the list as host and guest, the
   guest's finish at the SE size, both themes, Increase contrast, Largest text), `test/deep_links_test.dart`
   (`/join` links, the association file, an invite from a fresh install, a full game).
-- `functions/api`: `npm test` (co-op rules in `test/coop-rules.test.mjs`); live, every co-op route: `node tools/dev/api_check.mjs`.
+- `functions/api`: `npm test` (co-op rules in `test/coop-rules.test.mjs`, invite pages and cards in
+  `test/invite.test.mjs`); live, every co-op route and the invite page as Messages, WhatsApp, Facebook
+  and Safari read it: `node tools/dev/api_check.mjs`.
+- Invite links on the app: `integration_test/invite_link_test.dart` (with `node tools/dev/coop_bot.mjs &`):
+  a fresh install gets `https://join.carden.page/<code>` the way iOS hands over a universal link and
+  joins the bot's game. `coop_host_test.dart` checks the shared text ends with that link. Passed on
+  2026-10-18 (iPhone 17 Pro simulator). On the simulator, `xcrun simctl openurl` of the link opens
+  Safari (a development build is not given the domain), where the page shows; its Open in Carden asks
+  "Open in Carden?", which no tool here can tap, and an unanswered prompt blocks the screen until the
+  simulator is restarted.
 - Live: `node tools/dev/coop_bot.mjs &` then `tools/dev/qa-run.sh drive
   --driver=test_driver/integration_test.dart --target=integration_test/coop_live_test.dart -d <sim>`:
   a fresh install joins the bot's game from an invite, moves go both ways, presence, a toast, the player
