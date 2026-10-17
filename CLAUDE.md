@@ -236,7 +236,11 @@ carden.page redirects there.
   fractions), picks sent at once, drag positions 5 a second within Appwrite's 120 updates a minute per player
   (`lib/state/coop/coop_live.dart`); others see the card glide about 0.25-0.5 s behind the finger. Deploy `api`
   before a build that sends live rows, then `node tools/dev/api_check.mjs`. QA: `integration_test/coop_drag_test.dart`
-  (the bot's `/pick`, `/drag`, `/live`, `/liverows`).
+  (the bot's `/pick`, `/drag`, `/live`, `/liverows`). First grab wins: a card or group another player picked or drags can't be grabbed
+  here (`LiveClaim`, `CoopController.claims`, `BoardWidget.blocked` / `onDragRefused` / `onDragLost`; ties go to the
+  earlier `$updatedAt`); the board follows a drag by card and never leaves one stuck; moved marks fade over 1.5 s
+  with no initial and catch-ups add none. QA: `integration_test/coop_race_test.dart`, `coop_pair_test` (same-card
+  grab), `coop_drag_test` steps 6b/6c.
 - Analytics: `lib/core/analytics.dart` (`AppAnalytics.event` one-liners, `ScreenObserver` on the root and every
   tab navigator, screen names from route patterns, never ids). New features add their events there and in
   `docs/analytics.md`; the privacy policy's usage data section must match.
