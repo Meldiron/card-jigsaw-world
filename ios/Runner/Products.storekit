@@ -98,13 +98,13 @@
       "internalID": "70399064-9614-4E2C-AC66-3BFFF1E3F249",
       "localizations": [
         {
-          "description": "5 hints",
-          "displayName": "16 hints",
+          "description": "Help for any board, all three kinds",
+          "displayName": "15 Peeks, 10 Hints, 5 Magic",
           "locale": "en_US"
         }
       ],
       "productID": "hints_5",
-      "referenceName": "16 hints",
+      "referenceName": "15 Peeks, 10 Hints, 5 Magic",
       "type": "Consumable"
     },
     {
@@ -113,13 +113,13 @@
       "internalID": "891385AC-4ADE-45A8-9608-FA718722C93F",
       "localizations": [
         {
-          "description": "15 hints",
-          "displayName": "48 hints",
+          "description": "Plenty of help for the biggest boards",
+          "displayName": "50 Peeks, 30 Hints, 15 Magic",
           "locale": "en_US"
         }
       ],
       "productID": "hints_15",
-      "referenceName": "48 hints",
+      "referenceName": "50 Peeks, 30 Hints, 15 Magic",
       "type": "Consumable"
     }
   ],

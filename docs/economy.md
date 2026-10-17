@@ -272,8 +272,8 @@ a ticket as 500 coins and a hint as 150 coins, and the bigger bundles add up to 
 | `coins_12000` | $9.99 | 12,000 coins | **30,000 coins** | 3,003 (+18%) | about nine packs, five hours of play |
 | `tickets_5` | $1.99 | 5 tickets | **10 tickets** | 2,513 | most premium packs, or ten spins |
 | `tickets_15` | $4.99 | 15 tickets | **30 tickets** | 3,006 (+19%) | two to three premium packs |
-| `hints_5` | $0.99 | 5 hints | **16 hints** | 2,424 | |
-| `hints_15` | $2.49 | 15 hints | **48 hints** | 2,892 (+15%) | |
+| `hints_5` | $0.99 | 5 hints | **15 Peeks, 10 Hints, 5 Magic** (16 hints until 2026-10-17) | 3,182 | a booster bundle, about a quarter better than coins |
+| `hints_15` | $2.49 | 15 hints | **50 Peeks, 30 Hints, 15 Magic** (48 hints until 2026-10-17) | 3,815 (+19%) | half again as good as coins |
 | `vip_monthly` / `vip_yearly` | $2.99 / $14.99 | VIP | unchanged | | every pack |
 
 Why hint bundles grow: the game sells a hint for 150 coins whenever a player has none (60 before the
@@ -281,9 +281,30 @@ owner approved the booster prices on 2026-10-12), so 5 hints for $0.99 was worth
 dollar spent on coins. A hint bundle that is worse than buying coins and letting the game spend them is
 not worth offering, so the bundles are sized to the same value per dollar as coins.
 
+**Booster bundles (owner, 2026-10-17).** The store sold only hints. The two `hints_*` products now give
+all three helpers, and on purpose more per dollar than coins (Peek at 10 coins, Hint 150, Magic 300, the
+prices a game charges when the stock is empty):
+
+| Product | Peeks | Hints | Magic | Coin value | Per dollar | Against `coins_1000` |
+|---|---|---|---|---|---|---|
+| `hints_5` ($0.99) | 15 (150) | 10 (1,500) | 5 (1,500) | 3,150 | 3,182 | +26% |
+| `hints_15` ($2.49) | 50 (500) | 30 (4,500) | 15 (4,500) | 9,500 | 3,815 | +51% |
+
+Hints and Magic carry the value; Peeks are cheap (10 coins) but the most used. The store shows them as
+"Boosters" (`_HelperCounts` in `store_screen.dart`: each helper's mark, count and name), the purchase sheet
+says "Adding 15 Peeks, 10 Hints, 5 Magic" and "You now have ...", and the house ad `hints-15` names the
+three. `test/economy_test.dart` keeps the coin and ticket bundles at 0.9 to 1.3 times `coins_1000` per
+dollar and the booster bundles at 1.2 to 1.6.
+
+Older builds show the old tile ("16 hints") and, after paying, the server's grant ("Added 10 hints" in
+their wording: they read only coins, tickets and hints from the answer); the Peeks and Magic land in the
+stock all the same. Only sandbox purchases are possible until the App Store release, so this only reaches
+testers who buy on a build from before the change.
+
 The three places that hold the amounts now agree and are checked by `test/economy_test.dart`:
 `StoreProducts.grants` in `lib/data/purchases.dart` (store screen, house ads, the debug sandbox),
-`GRANTS` in `functions/verify-purchase/src/main.js` (what the server credits) and
+`GRANTS` in `functions/verify-purchase/src/main.js` (what the server credits; Peeks and Magic go to the
+profile's `peeks` and `magics` columns with atomic increments and leave no ledger line, as in the app) and
 `store/metadata/subscriptions/consumables.json` (App Store names, descriptions, review notes). All eight
 consumables are `READY_TO_SUBMIT` on Apple (never reviewed), so changing their names costs no review.
 

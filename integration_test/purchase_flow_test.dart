@@ -83,10 +83,10 @@ class _QaStore extends PurchaseService {
       return (a as int, jsonEncode({'ok': false, 'error': 'Transaction could not be verified'}));
     }
     final g = StoreProducts.grant(productId);
-    final grant = {if (g.coins > 0) 'coins': g.coins, if (g.tickets > 0) 'tickets': g.tickets, if (g.hints > 0) 'hints': g.hints};
+    final grant = {if (g.coins > 0) 'coins': g.coins, if (g.tickets > 0) 'tickets': g.tickets, if (g.hints > 0) 'hints': g.hints, if (g.peeks > 0) 'peeks': g.peeks, if (g.magics > 0) 'magics': g.magics};
     final uid = ref.read(authProvider).value!.$id;
     final row = await ref.read(syncBackendProvider).updateProfile(uid, {for (final e in grant.entries) e.key: Operator.increment(e.value)});
-    return (200, jsonEncode({'ok': true, 'grant': grant, 'balances': {'coins': row['coins'], 'tickets': row['tickets'], 'hints': row['hints']}}));
+    return (200, jsonEncode({'ok': true, 'grant': grant, 'balances': {for (final k in const ['coins', 'tickets', 'hints', 'peeks', 'magics']) k: row[k] ?? 0}}));
   }
 }
 
@@ -195,12 +195,13 @@ void main() {
     await tapText(tester, 'Close');
 
     // ---- Paid while the app was closed: it arrives on its own and a toast says so.
-    final hintsBefore = container(tester).read(profileProvider).value!.hints;
+    final stock = container(tester).read(profileProvider).value!;
     unawaited(qa.debugDeliver([qa.paid(ProductIds.hints5)]));
     await settle(tester, 2600);
-    expect(find.text('Added 16 hints'), findsOneWidget);
+    expect(find.text('Added 15 Peeks, 10 Hints, 5 Magic'), findsOneWidget);
     await shot(tester, 'pf_09_toast', wait: 0);
-    expect(container(tester).read(profileProvider).value!.hints, hintsBefore + 16);
+    final after = container(tester).read(profileProvider).value!;
+    expect((after.peeks, after.hints, after.magics), (stock.peeks + 15, stock.hints + 10, stock.magics + 5));
     await settle(tester, 2500);
   });
 }

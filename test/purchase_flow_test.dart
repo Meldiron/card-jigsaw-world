@@ -53,7 +53,9 @@ class _FakeStore extends PurchaseService {
     final g = StoreProducts.grant(productId);
     final vip = ProductIds.isSubscription(productId);
     final expires = DateTime.now().add(const Duration(days: 30)).toUtc().toIso8601String();
-    final grant = vip ? {'vipExpiresAt': expires} : {if (g.coins > 0) 'coins': g.coins, if (g.tickets > 0) 'tickets': g.tickets, if (g.hints > 0) 'hints': g.hints};
+    final grant = vip
+        ? {'vipExpiresAt': expires}
+        : {if (g.coins > 0) 'coins': g.coins, if (g.tickets > 0) 'tickets': g.tickets, if (g.hints > 0) 'hints': g.hints, if (g.peeks > 0) 'peeks': g.peeks, if (g.magics > 0) 'magics': g.magics};
     final already = !_granted.add(jws);
     if (!already) {
       server.profiles['player1'] = server.write(server.profiles['player1'], {
@@ -66,7 +68,7 @@ class _FakeStore extends PurchaseService {
       'ok': true,
       if (already) 'alreadyApplied': true,
       'grant': grant,
-      if (!already) 'balances': {'coins': row['coins'], 'tickets': row['tickets'], 'hints': row['hints']},
+      if (!already) 'balances': {'coins': row['coins'], 'tickets': row['tickets'], 'hints': row['hints'], 'peeks': row['peeks'] ?? 0, 'magics': row['magics'] ?? 0},
     }));
   }
 }
@@ -184,7 +186,10 @@ void main() {
     var s = phone.container.read(purchaseFlowProvider);
     expect(s.stage, PurchaseStage.added);
     expect(s.watching, isFalse, reason: 'nobody follows it: PurchaseHost shows a toast');
-    expect(s.grant!.hints, 16);
+    expect((s.grant!.peeks, s.grant!.hints, s.grant!.magics), (15, 10, 5), reason: 'the helper bundle gives all three');
+    expect(s.grant!.label, '15 Peeks, 10 Hints, 5 Magic');
+    expect((phone.me.peeks, phone.me.magics), (s.balances!.peeks, s.balances!.magics));
+    expect(phone.me.peeks, 15);
     phone.container.read(purchaseFlowProvider.notifier).clear();
 
     await store.debugDeliver([_paid(ProductIds.vipMonthly, 't6')]);

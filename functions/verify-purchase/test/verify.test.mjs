@@ -86,7 +86,7 @@ beforeEach(() => {
 test('grants a purchase once and answers with the new balances', async () => {
   const first = await verify(tx('t1'));
   assert.equal(first.status, 200);
-  assert.deepEqual(first.body, { ok: true, grant: { tickets: 10 }, balances: { coins: 100, tickets: 15, hints: 0 } });
+  assert.deepEqual(first.body, { ok: true, grant: { tickets: 10 }, balances: { coins: 100, tickets: 15, hints: 0, peeks: 0, magics: 0 } });
   const [ledger] = tables.ledger.values();
   assert.equal(ledger.balanceAfter, 15);
   assert.equal([...tables.purchases.values()][0].grant, '{"tickets":10}');
@@ -132,4 +132,14 @@ test('VIP sets the expiry from the transaction', async () => {
   const res = await verify(jws);
   assert.equal(res.body.grant.vipExpiresAt, '2026-11-15T10:00:00.000Z');
   assert.equal(tables.profiles.get('u1').appleOriginalTransactionId, 'o5');
+});
+
+test('a helper bundle adds Peeks, Hints and Magic, with a ledger line for the hints only', async () => {
+  tables.profiles.set('u1', { $id: 'u1', coins: 0, tickets: 0, hints: 2, peeks: 1, magics: 0 });
+  const res = await verify(tx('t6', 'hints_5'));
+  assert.deepEqual(res.body, { ok: true, grant: { hints: 10, peeks: 15, magics: 5 }, balances: { coins: 0, tickets: 0, hints: 12, peeks: 16, magics: 5 } });
+  assert.deepEqual([...tables.ledger.values()].map((l) => [l.currency, l.amount]), [['hints', 10]]);
+  const big = await verify(tx('t7', 'hints_15'));
+  assert.deepEqual(big.body.grant, { hints: 30, peeks: 50, magics: 15 });
+  assert.equal(tables.profiles.get('u1').magics, 20);
 });
