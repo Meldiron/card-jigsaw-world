@@ -164,4 +164,6 @@ Wall time of a call from this Mac (Appwrite's execution duration includes the co
 | `api`, every route (`tools/dev/api_check.mjs`) | | 0.1-1.5 s; a pack code 2.8 s (its first claim grants 7 files); an account deletion 4.6 s |
 
 A cold start costs the same as before (it is mostly Appwrite starting the runtime); what changes is
-how often a player meets one.
+how often a player meets one. A runtime stays warm for about ten minutes after its last call
+(`redeem-code` measured warm after 8 minutes idle, cold after 12; once still warm after 13), so with
+every call on `api`, one player's call keeps it warm for the next.
