@@ -30,6 +30,8 @@ class GameState {
     this.basePar = 0,
     this.peeked = false,
     this.bestLock = 0,
+    this.twins,
+    this.cardKeys,
   });
 
   final Board board;
@@ -57,6 +59,13 @@ class GameState {
 
   /// Most cards a single move of the player's locked in this play-through (Magic does not count).
   final int bestLock;
+
+  /// The board's twin cards (docs/twins.md): null until the picture has been measured.
+  final Twins? twins;
+
+  /// The board widget's key for each card, where twin swaps changed it: two twins that trade
+  /// identities stay where they are on screen, so each keeps its widget (null: every card its own).
+  final List<int>? cardKeys;
 
   /// Finished in no more moves than the dealt par.
   bool get atPar => basePar > 0 && moves <= basePar;
@@ -88,6 +97,8 @@ class GameState {
     int? basePar,
     bool? peeked,
     int? bestLock,
+    Twins? twins,
+    List<int>? cardKeys,
   }) =>
       GameState(
         board: board ?? this.board,
@@ -108,6 +119,8 @@ class GameState {
         basePar: basePar ?? this.basePar,
         peeked: peeked ?? this.peeked,
         bestLock: bestLock ?? this.bestLock,
+        twins: twins ?? this.twins,
+        cardKeys: cardKeys ?? this.cardKeys,
       );
 }
 
@@ -159,6 +172,9 @@ class GameController extends Notifier<GameState> {
 
   Timer? _timer;
   Timer? _peekTimer;
+
+  /// The board was dealt here (not resumed from a save).
+  bool _dealt = false;
   final _events = StreamController<GameEventKind>.broadcast();
   Stream<GameEventKind> get events => _events.stream;
 
@@ -173,6 +189,7 @@ class GameController extends Notifier<GameState> {
     // length, a permutation, every card in a slot of its own shape. Saves
     // from before a layout changed start fresh instead.
     final restore = Board.isValidLayout(args.spec, args.layout);
+    _dealt = !restore;
     final board = restore ? Board(args.spec, args.layout!) : Board.shuffled(args.spec);
     final par = restore ? args.moves + board.par : board.par;
     _startTimer();
@@ -188,7 +205,7 @@ class GameController extends Notifier<GameState> {
         : _fresh(board, par: max(par, 1));
   }
 
-  GameState _fresh(Board board, {required int par, int moves = 0, int elapsed = 0, int hintsUsed = 0, int? basePar, bool peeked = false, int bestLock = 0}) => GameState(
+  GameState _fresh(Board board, {required int par, int moves = 0, int elapsed = 0, int hintsUsed = 0, int? basePar, bool peeked = false, int bestLock = 0, Twins? twins}) => GameState(
         board: board,
         par: par,
         moves: moves,
@@ -207,6 +224,7 @@ class GameController extends Notifier<GameState> {
         basePar: basePar ?? par,
         peeked: peeked,
         bestLock: bestLock,
+        twins: twins,
       );
 
   void _startTimer() {
@@ -216,6 +234,24 @@ class GameController extends Notifier<GameState> {
         state = state.copyWith(elapsed: state.elapsed + 1);
       }
     });
+  }
+
+  /// A board dealt here waits for its twins before it is shown, so the deal can take them into
+  /// account ([useTwins]).
+  bool get awaitsTwins => _dealt && state.twins == null;
+
+  /// The board's twin cards, once the picture has been measured (docs/twins.md). A board dealt
+  /// here and not played yet is dealt again with them (it is not on screen yet, see
+  /// [awaitsTwins]); a resumed board keeps its cards where they are.
+  void useTwins(Twins twins) {
+    if (state.twins != null) return;
+    if (_dealt && state.moves == 0 && state.history.isEmpty && !twins.isEmpty) {
+      final board = Board.shuffled(args.spec, twins: twins);
+      final par = max(board.par, 1);
+      state = state.copyWith(board: board, par: par, basePar: par, twins: twins, clearSelected: true, clearHint: true);
+    } else {
+      state = state.copyWith(twins: twins);
+    }
   }
 
   void pause() {
@@ -260,14 +296,32 @@ class GameController extends Notifier<GameState> {
   /// Puts [after] on the table: [moves] is what it adds to the count (Magic counts each card it
   /// sends, Shuffle and Gather nothing). Only the player's own moves count as a chain (the double
   /// lock and the longest lock); a tool that locks cards plays the plain lock. [event] replaces
-  /// the move's own sound unless the board is finished.
-  void _apply(Board? after, {int moves = 1, bool byPlayer = true, GameEventKind? event}) {
-    if (after == null) {
+  /// the move's own sound unless the board is finished. A move [settle]s with the twins: a card
+  /// put on its twin's place or next to a twin's neighbour counts (docs/twins.md); Shuffle and
+  /// Gather never put one there.
+  void _apply(Board? moved, {int moves = 1, bool byPlayer = true, GameEventKind? event, bool settle = true}) {
+    if (moved == null) {
       state = state.copyWith(clearSelected: true);
       _events.add(GameEventKind.invalid);
       return;
     }
     final before = state.board;
+    var after = moved;
+    var keys = state.cardKeys;
+    final twins = state.twins;
+    if (settle && twins != null && !twins.isEmpty) {
+      final settled = twins.settle(before, moved);
+      after = settled.board;
+      // Two twins that trade identities keep their places on screen, so they trade widgets too.
+      if (settled.swaps.isNotEmpty) {
+        final k = keys = List<int>.from(keys ?? List<int>.generate(after.cells, (i) => i));
+        for (final (a, b) in settled.swaps) {
+          final t = k[a];
+          k[a] = k[b];
+          k[b] = t;
+        }
+      }
+    }
     final newlyLocked = <int>{for (var i = 0; i < after.cells; i++) if (after.isLocked(i) && !before.isLocked(i)) i};
     // Cards that gained a joined neighbour (new snap) – excluding in-place locks.
     final newlyJoined = <int>{};
@@ -291,6 +345,7 @@ class GameController extends Notifier<GameState> {
       clearSelected: true,
       clearHint: true,
       status: won ? GameStatus.won : state.status,
+      cardKeys: keys,
     );
     if (won) {
       _events.add(GameEventKind.win);
@@ -386,9 +441,10 @@ class GameController extends Notifier<GameState> {
   int shuffle({Rect? view, Size? size, Random? random}) {
     if (state.status != GameStatus.playing || state.peeking) return 0;
     final before = state.board;
-    final after = view != null && size != null ? shuffleInView(before, view, size, random: random) : shuffleLoose(before, random: random);
+    final twins = state.twins;
+    final after = view != null && size != null ? shuffleInView(before, view, size, random: random, twins: twins) : shuffleLoose(before, random: random, twins: twins);
     if (after == null) return 0;
-    _apply(after, moves: 0, byPlayer: false, event: GameEventKind.rearrange);
+    _apply(after, moves: 0, byPlayer: false, event: GameEventKind.rearrange, settle: false);
     return [for (var s = 0; s < after.cells; s++) if (after.slots[s] != before.slots[s]) s].length;
   }
 
@@ -415,9 +471,9 @@ class GameController extends Notifier<GameState> {
   int gather(Rect view, Size size) {
     if (state.status != GameStatus.playing || state.peeking) return 0;
     final before = state.board;
-    final after = gatherInto(before, view, size);
+    final after = gatherInto(before, view, size, twins: state.twins);
     if (after == null) return 0;
-    _apply(after, moves: 0, byPlayer: false, event: GameEventKind.rearrange);
+    _apply(after, moves: 0, byPlayer: false, event: GameEventKind.rearrange, settle: false);
     return [for (var s = 0; s < after.cells; s++) if (after.slots[s] != before.slots[s]) s].length ~/ 2;
   }
 
@@ -452,8 +508,9 @@ class GameController extends Notifier<GameState> {
 
   void restart() {
     _peekTimer?.cancel();
-    final board = Board.shuffled(args.spec);
-    state = _fresh(board, par: max(board.par, 1));
+    final twins = state.twins;
+    final board = Board.shuffled(args.spec, twins: twins);
+    state = _fresh(board, par: max(board.par, 1), twins: twins);
     _startTimer();
   }
 
