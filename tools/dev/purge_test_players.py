@@ -5,7 +5,8 @@ Every QA run (tools/dev/qa-run.sh, which passes --dart-define=CJW_QA=true) marks
 player it creates as a test player: the profile row gets `isTest: true` (kept out of the league)
 and the Appwrite user gets the prefs `{"qa": true, "qaRun": "<run id>"}`. This tool lists and
 purges them: the Appwrite user and every row they own (profiles, progress, ledger, event_progress,
-friends in both directions, my_puzzles and their photos in the user-uploads bucket). A JSON backup
+friends in both directions, my_puzzles and their photos in the user-uploads bucket, friend gifts
+sent and received and the inbox messages of gifts they sent; aw.PLAYER_TABLES has the full list). A JSON backup
 of each purged player is written to secrets/purged/<date>/ first (git-ignored).
 
   purge_test_players.py list                       flagged test players

@@ -18,9 +18,10 @@ UPLOADS_BUCKET = 'user-uploads'
 KEY_FILE = os.path.join(ROOT, 'secrets', 'appwrite-users-key.txt')
 
 # Every table keyed by a player's user id (profiles use the user id as the row id as well).
-PLAYER_TABLES = ['profiles', 'progress', 'ledger', 'event_progress', 'friends', 'my_puzzles', 'purchases', 'code_claims', 'reports', 'blocks', 'feedback', 'messages']
-# Tables keyed by two player columns instead of `userId` (both directions belong to the player).
-PAIR_TABLES = {'reports': ('reporterId', 'reportedId'), 'blocks': ('blockerId', 'blockedId')}
+PLAYER_TABLES = ['profiles', 'progress', 'ledger', 'event_progress', 'friends', 'my_puzzles', 'purchases', 'code_claims', 'reports', 'blocks', 'feedback', 'messages', 'gifts']
+# Tables keyed by two player columns instead of `userId` (both directions belong to the player;
+# messages: the player's inbox and the friend gifts they sent).
+PAIR_TABLES = {'reports': ('reporterId', 'reportedId'), 'blocks': ('blockerId', 'blockedId'), 'messages': ('userId', 'fromUserId'), 'gifts': ('senderId', 'recipientId')}
 
 
 class AppwriteError(Exception):
