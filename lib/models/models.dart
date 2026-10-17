@@ -43,6 +43,7 @@ class Profile {
     required this.hints,
     required this.xp,
     required this.piggyCoins,
+    this.piggyLevel = 0,
     required this.streak,
     required this.lastDailyClaim,
     required this.lastWheelSpin,
@@ -54,6 +55,7 @@ class Profile {
     this.vipExpiresAt,
     this.appleOriginalTransactionId,
     this.claimedGoals = const [],
+    this.questSwaps = const {},
     this.adsToday = 0,
     this.adsDate,
     this.unlockedTiers = const [],
@@ -89,6 +91,10 @@ class Profile {
   final int magics;
   final int xp;
   final int piggyCoins;
+
+  /// Piggy bank upgrades bought (0-[maxPiggyLevel]): each holds [piggyStep] coins more. Column
+  /// `piggyLevel` (default 0, since 2026-10-17); older builds ignore it and keep 500.
+  final int piggyLevel;
   final int streak;
   final DateTime? lastDailyClaim;
   final DateTime? lastWheelSpin;
@@ -105,6 +111,10 @@ class Profile {
   /// VIP is active while the flag is set or the subscription has not expired.
   bool get isVip => vipFlag || (vipExpiresAt != null && vipExpiresAt!.isAfter(DateTime.now()));
   final List<String> claimedGoals;
+
+  /// Quests swapped this day or week, by slot: the quests each slot has had, the one first dealt
+  /// first (`QuestSwap`, column `questSwaps`, a JSON text since 2026-10-17; older builds ignore it).
+  final Map<String, List<String>> questSwaps;
   final int adsToday;
   final DateTime? adsDate;
   /// Board tiers bought early, as `<mode>:<index>` (e.g. `cards:4`).
@@ -147,7 +157,16 @@ class Profile {
   /// column is only a mirror for queries and older clients.
   int get level => LevelRewards.levelForXp(xp);
 
-  static const piggyCapacity = 500;
+  /// The piggy bank holds [basePiggyCapacity] coins, and [piggyStep] more for each upgrade, up to
+  /// [maxPiggyLevel] upgrades: 500, 600, ... 1,000 (owner, 2026-10-17).
+  static const basePiggyCapacity = 500;
+  static const piggyStep = 100;
+  static const maxPiggyLevel = 5;
+  static int piggyCapacityAt(int level) => basePiggyCapacity + piggyStep * level.clamp(0, maxPiggyLevel);
+
+  /// What this player's piggy bank holds.
+  int get piggyCapacity => piggyCapacityAt(piggyLevel);
+
   static const adsPerDay = 3;
 
   /// Rewarded videos still available today.
@@ -168,6 +187,7 @@ class Profile {
         hints: _i(d['hints']),
         xp: _i(d['xp']),
         piggyCoins: _i(d['piggyCoins']),
+        piggyLevel: _i(d['piggyLevel']).clamp(0, maxPiggyLevel),
         streak: _i(d['streak']),
         lastDailyClaim: _dt(d['lastDailyClaim']),
         lastWheelSpin: _dt(d['lastWheelSpin']),
@@ -179,6 +199,7 @@ class Profile {
         vipExpiresAt: _dt(d['vipExpiresAt']),
         appleOriginalTransactionId: d['appleOriginalTransactionId']?.toString(),
         claimedGoals: _strings(d['claimedGoals']),
+        questSwaps: Goals.decodeSwaps(d['questSwaps']),
         adsToday: _i(d['adsToday']),
         adsDate: _dt(d['adsDate']),
         unlockedTiers: _strings(d['unlockedTiers']),
@@ -240,6 +261,7 @@ class Profile {
         'xp': xp,
         'level': level,
         'piggyCoins': piggyCoins,
+        'piggyLevel': piggyLevel,
         'streak': streak,
         'lastDailyClaim': lastDailyClaim?.toUtc().toIso8601String(),
         'lastWheelSpin': lastWheelSpin?.toUtc().toIso8601String(),
@@ -251,6 +273,7 @@ class Profile {
         'vipExpiresAt': vipExpiresAt?.toUtc().toIso8601String(),
         'appleOriginalTransactionId': appleOriginalTransactionId,
         'claimedGoals': claimedGoals,
+        'questSwaps': questSwaps.isEmpty ? null : jsonEncode(questSwaps),
         'adsToday': adsToday,
         'adsDate': adsDate?.toUtc().toIso8601String(),
         'unlockedTiers': unlockedTiers,
@@ -301,6 +324,7 @@ class Profile {
         hints: hints ?? this.hints,
         xp: xp ?? this.xp,
         piggyCoins: piggyCoins ?? this.piggyCoins,
+        piggyLevel: piggyLevel,
         streak: streak ?? this.streak,
         lastDailyClaim: lastDailyClaim ?? this.lastDailyClaim,
         lastWheelSpin: lastWheelSpin ?? this.lastWheelSpin,
@@ -312,6 +336,7 @@ class Profile {
         vipExpiresAt: vipExpiresAt,
         appleOriginalTransactionId: appleOriginalTransactionId,
         claimedGoals: claimedGoals,
+        questSwaps: questSwaps,
         adsToday: adsToday,
         adsDate: adsDate,
         unlockedTiers: unlockedTiers,

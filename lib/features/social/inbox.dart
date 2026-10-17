@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/analytics.dart';
 import '../../core/app_links.dart';
 import '../../core/haptics.dart';
 import '../../core/sfx.dart';
@@ -255,11 +256,13 @@ class _MessageSheetState extends ConsumerState<_MessageSheet> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) ref.read(profileProvider.notifier).markMessageSeen(widget.id);
     });
+    AppAnalytics.event('inbox_message_opened');
   }
 
   void _claim(InboxMessage m) {
     final paid = ref.read(profileProvider.notifier).claimMessage(m.id, coins: m.coins, tickets: m.tickets, hints: m.hints, peeks: m.peeks, magics: m.magics);
     if (!paid) return;
+    AppAnalytics.event('inbox_message_claimed', {'coins': m.coins, 'tickets': m.tickets, 'hints': m.hints, 'peeks': m.peeks, 'magics': m.magics});
     Sfx.instance.coin();
     Haptics.success();
     final words = [
@@ -286,6 +289,7 @@ class _MessageSheetState extends ConsumerState<_MessageSheet> {
   void _openLink(AppLink link) {
     final deepLinks = ref.read(deepLinksProvider);
     Navigator.of(context).pop();
+    AppAnalytics.event('inbox_button_tapped', {'to': DeepLinks.linkTarget(link.path)});
     deepLinks.show(link);
   }
 

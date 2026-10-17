@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/analytics.dart';
 import '../../router.dart';
 import '../../state/auth.dart';
 import '../../state/coop/coop_controller.dart';
@@ -70,6 +71,8 @@ class _CoopHostState extends ConsumerState<CoopHost> with WidgetsBindingObserver
         container.read(coopProvider.notifier).clear();
         CoopRoutes.exit(container);
       case CoopEnded(:final game):
+        // The host's own End game is counted where it happens; here the ends a player hears about.
+        AppAnalytics.event('coop_game_ended', {'by': game.endReason ?? 'gone', 'players': game.playerIds.length, 'board': game.board});
         final host = await coopNameOnce(container, game.hostId);
         if (ctx.mounted) await showEndedAlert(ctx, game, host);
         final me = container.read(coopProvider).me;
@@ -121,6 +124,7 @@ Future<void> offerReturnToGame(ProviderContainer container) async {
     action: (
       label: 'Return',
       onTap: () async {
+        AppAnalytics.event('coop_returned', {'from': 'launch', 'players': game.playerIds.length});
         await coop.rejoin(game);
         unawaited(router.push(game.route));
       },

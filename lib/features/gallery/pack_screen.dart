@@ -8,6 +8,7 @@ import '../../core/haptics.dart';
 import '../../core/platform.dart';
 import '../../core/sfx.dart';
 import '../../core/a11y.dart';
+import '../../core/analytics.dart';
 import '../../core/theme/tokens.dart';
 import '../../game/board.dart';
 import '../../models/models.dart';
@@ -24,6 +25,9 @@ import '../../widgets/ui.dart';
 import 'giant_gate.dart';
 import 'pack_progress.dart';
 
+/// `pack_opened`, once per visit to a pack's page (the provider lives as long as the page).
+final _packOpened = Provider.autoDispose.family<void, String>((ref, packId) => AppAnalytics.event('pack_opened', {'pack': packId}));
+
 /// Pack detail: image hero, access state, and a grid of puzzles with stars.
 /// Daily (monthly) packs render as a calendar; past months need VIP or coins.
 class PackScreen extends ConsumerWidget {
@@ -32,6 +36,7 @@ class PackScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(_packOpened(packId));
     final c = context.colors;
     final packsAsync = ref.watch(packsProvider);
     final packs = packsAsync.value ?? const [];
@@ -100,6 +105,7 @@ class PackScreen extends ConsumerWidget {
       final ok = await profileN.unlockPack(pack);
       if (!context.mounted) return;
       if (ok) {
+        AppAnalytics.event('pack_unlocked', {'pack': pack.id, 'paid': priceCurrency.name, 'price': priceValue});
         Haptics.success();
         Sfx.instance.coin();
         showToast(context, '${pack.name} unlocked', icon: AppIcons.check);

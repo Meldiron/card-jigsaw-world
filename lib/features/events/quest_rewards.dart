@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/analytics.dart';
 import '../../core/numbers.dart';
 import '../../data/repositories.dart';
 import '../../models/models.dart';
@@ -33,15 +34,16 @@ bool anyGoalReady(List<Goal> goals, int freeCount, Profile? profile) {
 }
 
 /// Today's daily and this week's weekly quests for [profile]: only what
-/// [open] allows, and a slot keeps the quest already claimed in it.
+/// [open] allows, a slot keeps the quest already claimed in it, and a swapped
+/// slot shows the quest swapped in (`Profile.questSwaps`).
 /// [dailyPuzzle] is today's daily puzzle (`dailyPuzzleProvider`). [since]: only pictures finished
 /// after it count (`countsFromProvider(Reveal.quests)`: the guided start counts from Quests opening).
 ({List<Goal> daily, List<Goal> weekly}) questsFor(Iterable<PuzzleProgress> rows, Profile? profile, OpenFeatures open, DateTime now, {String? dailyPuzzle, DateTime? since}) {
   final claimed = profile?.claimedGoals.toSet() ?? const <String>{};
   final level = profile?.level ?? 1;
   return (
-    daily: Goals.daily(rows, now, open: open, level: level, claimed: claimed, dailyPuzzle: dailyPuzzle, since: since),
-    weekly: Goals.weekly(rows, now, open: open, level: level, claimed: claimed, since: since),
+    daily: Goals.daily(rows, now, open: open, level: level, claimed: claimed, dailyPuzzle: dailyPuzzle, since: since, swaps: profile?.questSwaps ?? const {}),
+    weekly: Goals.weekly(rows, now, open: open, level: level, claimed: claimed, since: since, swaps: profile?.questSwaps ?? const {}),
   );
 }
 
@@ -95,8 +97,19 @@ Future<bool> claimEventReward(WidgetRef ref, GameEvent event, int value) async {
   if (event.rewardTickets > 0) await n.addTickets(event.rewardTickets, reason: 'event:${event.id}');
   await ref.read(socialRepositoryProvider).upsertEventProgress(userId, event.id, progress: value, claimed: true);
   ref.invalidate(eventProgressProvider);
+  AppAnalytics.event('event_reward_claimed', {'event': event.id});
   return true;
 }
+
+/// `quest_claimed`: daily or weekly and the quest's kind (the last part of its key, `solve3`),
+/// claimed on its own or with Claim all.
+void questClaimed(Goal g, {required bool all}) =>
+    AppAnalytics.event('quest_claimed', {'period': g.key.startsWith('d:') ? 'daily' : 'weekly', 'quest': g.key.split(':').last, 'claimAll': all});
+
+/// `quest_swapped`: daily or weekly, the quest's kind before and after, and the swaps already made
+/// in that slot this period.
+void questSwapped(Goal g, QuestSwap s) => AppAnalytics.event('quest_swapped',
+    {'period': g.key.startsWith('d:') ? 'daily' : 'weekly', 'quest': g.key.split(':').last, 'to': s.next, 'swapsBefore': s.count, 'tickets': QuestSwap.tickets});
 
 /// "Claimed 140 coins and 2 tickets".
 String claimedLine(int coins, int tickets) {

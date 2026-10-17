@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../core/analytics.dart';
 import '../../core/haptics.dart';
 import '../../core/a11y.dart';
 import '../../core/theme/tokens.dart';
@@ -134,12 +135,12 @@ class HomeScreen extends ConsumerWidget {
               textBaseline: TextBaseline.alphabetic,
               children: [
                 Text(formatCount(profile?.piggyCoins ?? 0), style: const TextStyle(fontSize: TypeSize.title3, fontWeight: FontWeight.w700, letterSpacing: -0.3)),
-                Text(' / ${formatCount(Profile.piggyCapacity)}', style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w500, color: context.colors.textSecondary)),
+                Text(' / ${formatCount(profile?.piggyCapacity ?? Profile.basePiggyCapacity)}', style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w500, color: context.colors.textSecondary)),
               ],
             ),
             footer: piggyFull
                 ? CostLabel(label: 'Full · open for', currency: Currency.tickets, amount: Economy.piggyOpenTickets, fontSize: TypeSize.footnote, color: context.accent)
-                : ProgressBar(value: (profile?.piggyCoins ?? 0) / Profile.piggyCapacity, height: 5),
+                : ProgressBar(value: (profile?.piggyCoins ?? 0) / (profile?.piggyCapacity ?? Profile.basePiggyCapacity), height: 5),
             onTap: () => showPiggySheet(context),
           );
     // The Lucky Wheel and the piggy bank side by side (the guided start opens them apart).
@@ -524,7 +525,8 @@ class _Greeting extends StatelessWidget {
         children: [
           Text(DateFormat('EEEE d MMMM').format(now), style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: c.textSecondary)),
           const SizedBox(height: 2),
-          Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.headlineLarge),
+          // One line at the usual sizes; with a large text size it wraps instead of losing the name.
+          Text(title, maxLines: A11y.largeText(context) ? 3 : 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.headlineLarge),
         ],
       ),
     );
@@ -547,7 +549,10 @@ class _DailyHero extends StatelessWidget {
     final done = progress?.completed ?? false;
     final stars = progress?.stars ?? 0;
     return Pressable(
-      onTap: () => context.push('/play/${puzzle.id}'),
+      onTap: () {
+        AppAnalytics.event('daily_puzzle_opened', {'from': 'home'});
+        context.push('/play/${puzzle.id}');
+      },
       scale: 0.985,
       child: Container(
         height: height,
@@ -1368,6 +1373,7 @@ class _QuickPlayCard extends ConsumerWidget {
     final puzzle = pickQuickPlay(ref.read(quickPlayPoolProvider), _quickPlayRandom);
     if (puzzle == null) return;
     Haptics.light();
+    AppAnalytics.event('quick_play', {'from': 'home', 'pool': ref.read(quickPlayPoolProvider)?.tier.name});
     final board = openQuickPlayBoard(ref.read(quickPlayBoardProvider), level: ref.read(profileProvider).value?.level ?? 1, hasTier: ref.read(profileProvider.notifier).hasTier);
     context.push(quickPlayRoute(puzzle, saved: ref.read(progressProvider).value?[puzzle.id], board: board));
   }

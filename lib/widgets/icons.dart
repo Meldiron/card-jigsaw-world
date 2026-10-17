@@ -202,6 +202,8 @@ class AppIcons {
   static const reduceMotion = CupertinoIcons.slowmo;
   static const contrast = CupertinoIcons.circle_righthalf_fill;
   static const shapes = CupertinoIcons.square_on_circle;
+  // Settings > Privacy.
+  static const usageData = CupertinoIcons.chart_bar;
   static const clock = CupertinoIcons.clock;
   static const delete = CupertinoIcons.delete;
   static const docPlaintext = CupertinoIcons.doc_plaintext;

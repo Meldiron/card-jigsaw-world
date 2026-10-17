@@ -124,7 +124,10 @@ class PurchaseSheet extends ConsumerWidget {
           'VIP is active',
           grant?.vipExpiresAt != null ? 'Until ${formatDate(grant!.vipExpiresAt!)}. Every pack is unlocked.' : 'Every pack is unlocked.',
         ),
-      PurchaseStage.added => ('${grant?.label ?? expected.label} added', _balanceLine(currency, s.balances, profile) ?? ''),
+      PurchaseStage.added => (
+          '${grant?.label ?? expected.label} added',
+          (grant?.product ?? expected).helpers ? _helpersLine(s.balances, profile) ?? '' : _balanceLine(currency, s.balances, profile) ?? '',
+        ),
       PurchaseStage.notAdded => (
           'Not added yet',
           '${_sentence(s.message)}Your purchase is saved and checked again the next time you open the app. If it does not arrive, contact support.',
@@ -189,6 +192,13 @@ class PurchaseSheet extends ConsumerWidget {
     return 'You now have ${countOf(n, noun)}.';
   }
 
+  /// "You now have 16 Peeks, 12 Hints and 5 Magic." after a helper bundle.
+  static String? _helpersLine(PurchaseBalances? balances, Profile? profile) {
+    final b = balances ?? (profile == null ? null : (coins: profile.coins, tickets: profile.tickets, hints: profile.hints, peeks: profile.peeks, magics: profile.magics));
+    if (b == null) return null;
+    return 'You now have ${countOf(b.peeks, 'Peek')}, ${countOf(b.hints, 'Hint')} and ${formatCount(b.magics)} Magic.';
+  }
+
   /// The server's reason as a sentence followed by a space ("Transaction could not be verified. ").
   static String _sentence(String? message) {
     final m = (message ?? '').trim();
@@ -197,4 +207,5 @@ class PurchaseSheet extends ConsumerWidget {
   }
 }
 
-Currency _currencyOf(PurchaseGrant g) => g.tickets > 0 ? Currency.tickets : (g.hints > 0 ? Currency.hints : Currency.coins);
+/// The mark a grant is shown with: a helper bundle (Peeks, Hints, Magic) shows the hint.
+Currency _currencyOf(PurchaseGrant g) => g.tickets > 0 ? Currency.tickets : (g.hints > 0 || g.product.helpers ? Currency.hints : Currency.coins);

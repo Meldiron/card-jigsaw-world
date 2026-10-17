@@ -5,6 +5,7 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/analytics.dart';
 import '../../data/coop_repository.dart';
 import '../auth.dart';
 import '../settings.dart';
@@ -263,6 +264,7 @@ class CoopController extends Notifier<CoopState> {
   /// A guest leaves (their seat frees up); the host leaving ends the game for everyone.
   Future<void> leave() async {
     final g = state.game;
+    if (g != null) AppAnalytics.event('coop_game_left', {'role': state.isHost ? 'host' : 'guest', 'players': g.playerIds.length});
     _remember(null);
     _stop();
     state = CoopState(me: _me);
@@ -280,6 +282,7 @@ class CoopController extends Notifier<CoopState> {
     final g = state.game;
     if (g == null) return;
     await _backend.call('end', {'gameId': g.id});
+    AppAnalytics.event('coop_game_ended', {'by': 'host', 'players': g.playerIds.length, 'board': g.board});
     _remember(null);
     _stop();
     state = CoopState(me: _me);
@@ -290,6 +293,7 @@ class CoopController extends Notifier<CoopState> {
     final g = state.game;
     if (g == null) return;
     final updated = await _backend.call('remove', {'gameId': g.id, 'userId': userId});
+    AppAnalytics.event('coop_player_removed', {'players': updated?.playerIds.length});
     if (updated != null) _onGame(updated);
   }
 
@@ -298,6 +302,7 @@ class CoopController extends Notifier<CoopState> {
     final g = state.game;
     if (g == null) throw const CoopRefusal(CoopRefusalReason.ended);
     final updated = (await _backend.call('next', {'gameId': g.id, 'puzzleId': puzzleId, 'grid': grid, 'layout': layout, 'painting': painting}))!;
+    AppAnalytics.event('coop_next_board', {'board': updated.board, 'cards': layout.length, 'players': updated.playerIds.length});
     _onGame(updated);
     return updated;
   }

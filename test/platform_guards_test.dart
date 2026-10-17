@@ -6,6 +6,7 @@
 import 'dart:io' show Directory;
 
 import 'package:appwrite/appwrite.dart';
+import 'package:carden/core/numbers.dart';
 import 'package:carden/core/platform.dart';
 import 'package:carden/data/local_store.dart';
 import 'package:carden/data/purchases.dart';
@@ -164,7 +165,9 @@ void main() {
         await tester.pumpAndSettle();
       }
       for (final id in ProductIds.consumables) {
-        expect(seen, contains(StoreProducts.grant(id).label), reason: id);
+        final g = StoreProducts.grant(id);
+        // A booster bundle lists Peek, Hint and Magic with their counts instead of one title.
+        expect(seen, g.helpers ? containsAll([formatCount(g.peeks), formatCount(g.hints), formatCount(g.magics), 'Peeks', 'Hints', 'Magic']) : contains(g.label), reason: id);
       }
       expect(seen, contains('Carden VIP'));
       expect(seen, containsAll(['Earn for free', 'Daily gift', 'Lucky Wheel']));

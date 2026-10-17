@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/a11y.dart';
+import '../../core/analytics.dart';
 import '../../core/haptics.dart';
 import '../../core/sfx.dart';
 import '../../core/theme/tokens.dart';
@@ -409,13 +410,29 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
         resume = true;
       }
     }
-    if (next == _spec && resume == (current.layout != null)) return;
+    if (next == _spec && resume == (current.layout != null)) return _started();
     _spec = next;
     _args = _argsFor(next, resume: resume, session: current.session + 1);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) _listen();
     });
+    _started();
   }
+
+  /// `puzzle_started`, once the board is settled for the picture (a board in progress resumes).
+  void _started() => AppAnalytics.event('puzzle_started', {..._boardProps(), 'resumed': _resumed, 'first': widget.first});
+
+  /// The board, for analytics: no ids but the catalogue pack's (player photos are `my-puzzles`).
+  Map<String, Object?> _boardProps() => {
+        'mode': _spec.mode.code,
+        'board': _spec.code,
+        'cards': _spec.cells,
+        'painting': _painting,
+        'giant': _spec.isGiant,
+        'expand': _spec.expand,
+        'daily': ref.read(dailyPuzzleProvider)?.id == widget.puzzleId,
+        'pack': ref.read(resolvedPuzzleProvider(widget.puzzleId))?.packId,
+      };
 
   /// Follows the events of the current session's controller.
   void _listen() {
@@ -719,6 +736,8 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
       'bestLock': s.bestLock,
     });
     final questsReady = [for (final g in readyGoals(rows.values, profileBefore, open, now, dailyPuzzle: daily?.id, since: questsSince)) if (!readyBefore.contains(g.key)) g];
+    AppAnalytics.event('puzzle_completed', {..._boardProps(), 'stars': stars, 'moves': s.moves, 'par': s.basePar, 'seconds': s.elapsed, 'hints': s.hintsUsed, 'resumed': _resumed, 'firstTime': firstTime});
+    if (widget.first) AppAnalytics.event('first_board_completed', {'moves': s.moves, 'seconds': s.elapsed, 'stars': stars});
     ref.read(progressProvider.notifier).complete(
       widget.puzzleId,
       gridSize: _spec.cells,
@@ -746,6 +765,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
           dailyBonus: daily != null && daily.id == widget.puzzleId ? 50 : 0,
         );
     unawaited(bumpEventProgress(ref, packId: puzzle?.packId));
+    if (reward.levelUp) AppAnalytics.event('level_up', {'level': reward.level});
     if (!mounted) return;
     final before = profileBefore?.level ?? reward.level;
     setState(() {
@@ -757,6 +777,9 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
             if (!open.has(u)) u,
       ];
     });
+    for (final u in _unlocked) {
+      AppAnalytics.event('feature_unlocked', {'feature': u.name, 'by': 'level'});
+    }
   }
 
   /// A guest finished a shared board. With a card of their own locked on it, they get what the board
@@ -795,12 +818,14 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
       _offerStore('No hints left. Buy one for ${countOf(Economy.hintCostCoins, 'coin')}.');
       return;
     }
+    _toolUsed('hint', stock: profile.hints);
     Sfx.instance.coin();
     _ctrl.showHint();
   }
 
   /// Magic: from stock (Lucky Wheel prizes) first, then for coins.
   Future<void> _magic() async {
+    final stock = ref.read(profileProvider).value?.magics ?? 0;
     final ok = await ref.read(profileProvider.notifier).useMagic();
     if (!mounted) return;
     if (!ok) {
@@ -808,6 +833,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
       _offerStore('Not enough coins. Magic costs ${countOf(Economy.magicLockCostCoins, 'coin')}.');
       return;
     }
+    _toolUsed('magic', stock: stock);
     Sfx.instance.coin();
     _nextKind = CoopOpKind.magic;
     if (!_ctrl.magicLock()) _nextKind = CoopOpKind.move;
@@ -820,6 +846,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     final state = ref.read(gameControllerProvider(_args!));
     if (state.peeking) return;
     final giant = state.board.spec.isGiant;
+    final stock = ref.read(profileProvider).value?.peeks ?? 0;
     final ok = await ref.read(profileProvider.notifier).usePeek();
     if (!mounted) return;
     if (!ok) {
@@ -827,6 +854,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
       _offerStore('Not enough coins. Peek costs ${countOf(Economy.peekCostCoins, 'coin')}.');
       return;
     }
+    _toolUsed('peek', stock: stock);
     Sfx.instance.whoosh();
     Haptics.light();
     _ctrl.peek(duration: giant ? GameController.giantPeekTime : GameController.peekTime);
@@ -840,8 +868,17 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     _nextKind = CoopOpKind.shuffle;
     final moved = giant && size != null ? _ctrl.shuffle(view: _zoom.visible, size: size) : _ctrl.shuffle();
     _nextKind = CoopOpKind.move;
-    if (moved == 0) showToast(context, 'Nothing left to shuffle', icon: AppIcons.shuffle);
+    if (moved == 0) {
+      showToast(context, 'Nothing left to shuffle', icon: AppIcons.shuffle);
+    } else {
+      _toolUsed('shuffle', cards: moved);
+    }
   }
+
+  /// `tool_used`: [stock] is what the player held before (a paid tool comes from stock while there
+  /// is any, else for coins); free tools give the cards they moved.
+  void _toolUsed(String tool, {int? stock, int? cards}) =>
+      AppAnalytics.event('tool_used', {'tool': tool, 'paid': stock == null ? 'free' : stock > 0 ? 'stock' : 'coins', 'cards': cards, 'giant': _spec.isGiant});
 
   /// Gather (giant boards, at any zoom): the cards that belong in view come into it. The toast
   /// offers Undo while nothing else has changed.
@@ -853,6 +890,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
       showToast(context, 'Every card for this view is here or nearby', icon: AppIcons.gather);
       return;
     }
+    _toolUsed('gather', cards: n);
     // A shared board has no Undo: the others may have moved since.
     if (_inCoop) {
       showToast(context, '${formatCount(n)} card${n == 1 ? '' : 's'} gathered', icon: AppIcons.gather);
@@ -874,6 +912,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
             return;
           }
           _ctrl.undo();
+          _toolUsed('gather_undo');
         },
       ),
     );
@@ -954,6 +993,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
             if (!ok || !mounted || !ctx.mounted) return;
           }
           Navigator.pop(ctx);
+          AppAnalytics.event('puzzle_restarted', {..._boardProps(), 'from': 'pause', 'moves': moves});
           _completionHandled = false;
           _newPlay();
           _ctrl.restart();
@@ -967,7 +1007,13 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
           final game = shared ? coop.game : null;
           final rctx = rootNavigatorKey.currentContext;
           if (game == null || rctx == null || !rctx.mounted) return;
-          showToast(rctx, 'The game goes on. Return to it any time.', icon: AppIcons.players, action: (label: 'Return', onTap: () => router.push(game.route)));
+          showToast(rctx, 'The game goes on. Return to it any time.', icon: AppIcons.players, action: (
+            label: 'Return',
+            onTap: () {
+              AppAnalytics.event('coop_returned', {'from': 'board', 'players': game.playerIds.length});
+              router.push(game.route);
+            },
+          ));
         },
         onChangeDifficulty: () async {
           final ok = await showAppAlert(
@@ -979,6 +1025,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
           );
           if (!ok || !mounted || !ctx.mounted) return;
           Navigator.pop(ctx);
+          AppAnalytics.event('puzzle_discarded', {..._boardProps(), 'from': 'game', 'moves': ref.read(gameControllerProvider(_args!)).moves});
           await ref.read(progressProvider.notifier).discard(widget.puzzleId);
           if (!mounted) return;
           context.pushReplacement('/play/${widget.puzzleId}');
@@ -1305,6 +1352,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
               pack: _packProgress(puzzle, state),
               onQuests: () => context.go('/events'),
               onReplay: () {
+                AppAnalytics.event('puzzle_restarted', {..._boardProps(), 'from': 'replay'});
                 _completionHandled = false;
                 setState(() {
                   _reward = null;

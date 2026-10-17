@@ -7,6 +7,7 @@ import '../../core/platform.dart';
 import '../../core/reminders.dart';
 import '../../core/sfx.dart';
 import '../../core/a11y.dart';
+import '../../core/analytics.dart';
 import '../../core/theme/tokens.dart';
 import '../../state/profile.dart';
 import '../../state/reminders.dart';
@@ -83,6 +84,7 @@ class _DailyRewardSheetState extends ConsumerState<DailyRewardSheet> {
     }
     setState(() => _restoring = true);
     final r = await ref.read(profileProvider.notifier).claimDaily(restore: true);
+    if (r != null) AppAnalytics.event('daily_gift_claimed', {'day': r.day + 1, 'streakRestored': true});
     if (r != null) {
       final store = ref.read(localStoreProvider);
       store.giftClaimDays = store.giftClaimDays + 1;
@@ -102,6 +104,7 @@ class _DailyRewardSheetState extends ConsumerState<DailyRewardSheet> {
   Future<void> _claim() async {
     setState(() => _claiming = true);
     final r = await ref.read(profileProvider.notifier).claimDaily();
+    if (r != null) AppAnalytics.event('daily_gift_claimed', {'day': r.day + 1, 'streakRestored': false});
     if (r != null) {
       final store = ref.read(localStoreProvider);
       store.giftClaimDays = store.giftClaimDays + 1;

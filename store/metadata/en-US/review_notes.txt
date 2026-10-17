@@ -9,15 +9,15 @@ ACCOUNTS
 No account is required. The first launch creates an anonymous guest session on our backend (Appwrite, EU region); no demo credentials are needed. Sign in with Apple and email sign-up are optional and only move the same guest progress onto a permanent account (Profile > Settings > Account). The account and everything stored for it can be deleted in the app: Profile > Settings > Manage account (for a guest: Sign in or create account) > Delete account.
 
 PURCHASES
-In-app purchases are StoreKit 2 consumables (coins, tickets, hints) and two auto-renewable subscriptions in the "VIP" group (vip_monthly, vip_yearly), both with a 7-day free introductory offer. VIP is shared through Family Sharing. Nothing is granted on the device: our server function "verify-purchase" verifies Apple's signed transaction (JWS, Apple Root CA G3) and applies each grant once. It runs in Production and falls back to Sandbox, so Sandbox purchases verify end to end within seconds.
+In-app purchases are StoreKit 2 consumables (coins, tickets, boosters) and two auto-renewable subscriptions in the "VIP" group (vip_monthly, vip_yearly), both with a 7-day free introductory offer. VIP is shared through Family Sharing. Nothing is granted on the device: our server function "verify-purchase" verifies Apple's signed transaction (JWS, Apple Root CA G3) and applies each grant once. It runs in Production and falls back to Sandbox, so Sandbox purchases verify within seconds.
 
-How to test a purchase: tap the coin balance at the top to open the Store, choose a coin pack or a VIP plan, and confirm with a Sandbox Apple ID. The balance updates after verification. "Restore purchases" and "Redeem a gift code" (Apple offer codes) are in Profile > Settings > Account.
+How to test a purchase: tap the coin balance at the top to open the Store, choose a coin pack or a VIP plan, and confirm with a Sandbox Apple ID. "Restore purchases" and "Redeem a gift code" (Apple offer codes) are in Profile > Settings > Account.
 
 LUCKY WHEEL
-Home > Lucky Wheel (also in the Store). A spin costs 1 ticket and pays one random prize: coins, Peeks, Hints or Magic. Tickets can be bought, so the age rating declares a loot box. "See odds" on the wheel lists every prize and its exact chance before the player spins. Tickets are never a prize.
+Home > Lucky Wheel (also in the Store). A spin costs 1 ticket and pays one random prize: coins, Peeks, Hints or Magic (a ×5 spin: 5 tickets, the prize paid five times, same odds). Tickets can be bought, so the age rating declares a loot box. "See odds" on the wheel lists every prize and its exact chance before the player spins. Tickets are never a prize.
 
 ADS
-There is no ad network and no third-party SDK for ads, analytics or tracking. The "rewarded video" and break cards are house ads: short, closable promotions of the game's own store. They never appear for VIP players.
+There is no ad network and no third-party SDK for ads, analytics or tracking. The "rewarded video" and break cards are house ads: short, closable promotions of the game's own store. They never appear for VIP players. Usage analytics (screens and game events) go only to our own backend (Appwrite Analytics), are not used for tracking, and can be turned off in Settings > Privacy > Share usage data.
 
 NOTIFICATIONS
 Only local notifications, planned on the device. Daily reminders (Settings > Daily reminders) are off until the player turns them on. Event reminders (the evening before a new event, for players who have been away) are promotional, with their own switch, off until the player says yes.

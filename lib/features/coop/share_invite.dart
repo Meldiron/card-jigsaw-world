@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../core/analytics.dart';
 import '../../state/coop/coop_models.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
@@ -31,6 +32,7 @@ Future<void> shareInvite(BuildContext context, CoopGame game, {String? pictureTi
       mailToFallbackEnabled: false,
       downloadFallbackEnabled: false,
     ));
+    AppAnalytics.event('coop_invite_shared', {'via': 'sheet', 'players': game.playerIds.length});
   } catch (_) {
     if (context.mounted) await copyInvite(context, game);
   }
@@ -39,5 +41,6 @@ Future<void> shareInvite(BuildContext context, CoopGame game, {String? pictureTi
 /// Copies the invite link (a browser without a share sheet).
 Future<void> copyInvite(BuildContext context, CoopGame game) async {
   await Clipboard.setData(ClipboardData(text: '${game.joinUrl}'));
+  AppAnalytics.event('coop_invite_shared', {'via': 'copy', 'players': game.playerIds.length});
   if (context.mounted) showToast(context, 'Invite link copied', icon: AppIcons.copy);
 }

@@ -7,6 +7,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/analytics.dart';
 import '../../core/haptics.dart';
 import '../../core/platform.dart';
 import '../../core/sfx.dart';
@@ -167,11 +168,32 @@ final houseCreatives = <Creative>[
     price: StoreProducts.price(ProductIds.tickets5),
     productId: ProductIds.tickets5,
   ),
-  Creative(id: 'hints-15', kind: CreativeKind.hints, headline: 'Stuck on a card?', body: '${formatCount(_hints.hints)} hints show exactly where a card belongs.', cta: 'Get ${_hints.label}', route: '/store', price: StoreProducts.price(ProductIds.hints15), productId: ProductIds.hints15),
-  Creative(id: 'piggy', kind: CreativeKind.piggy, headline: 'Your piggy bank is filling up', body: 'Every finished puzzle adds ${countOf(Economy.piggyPerPuzzle, 'coin')}, up to ${formatCount(Profile.piggyCapacity)}. Open it with one ticket.', cta: 'See piggy bank', route: '/home'),
+  // The bigger booster bundle (16 or 48 hints until 2026-10-17; now Peek, Hint and Magic).
+  Creative(
+    id: 'hints-15',
+    kind: CreativeKind.hints,
+    headline: 'Stuck on a card?',
+    body: '${countOf(_hints.peeks, 'Peek')}, ${countOf(_hints.hints, 'Hint')} and ${formatCount(_hints.magics)} Magic: see the picture, find a card’s place, or put it there.',
+    cta: 'Get boosters',
+    route: '/store',
+    price: StoreProducts.price(ProductIds.hints15),
+    productId: ProductIds.hints15,
+  ),
+  piggyCreative(Profile.basePiggyCapacity),
   Creative(id: 'monthly', kind: CreativeKind.monthly, headline: 'One new picture every day', body: 'This month’s album is free. Past months come with VIP.', cta: 'Open this month', route: '/library'),
   Creative(id: 'events', kind: CreativeKind.event, headline: 'A new world-day event every week', body: 'Themed packs that open for seven days. Finish every picture for a ticket.', cta: 'See events', route: '/events'),
 ];
+
+/// The piggy bank card for a piggy bank that holds [capacity] coins (the player's own size when it
+/// is picked, see [pickCreative]).
+Creative piggyCreative(int capacity) => Creative(
+      id: 'piggy',
+      kind: CreativeKind.piggy,
+      headline: 'Your piggy bank is filling up',
+      body: 'Every finished puzzle adds ${countOf(Economy.piggyPerPuzzle, 'coin')}, up to ${formatCount(capacity)}. Open it with one ticket.',
+      cta: 'See piggy bank',
+      route: '/home',
+    );
 
 ProductGrant get _tickets => StoreProducts.grant(ProductIds.tickets5);
 ProductGrant get _hints => StoreProducts.grant(ProductIds.hints15);
@@ -194,14 +216,15 @@ Creative pickCreative(WidgetRef ref) {
     if (p.hints == 0) pool.addAll(houseCreatives.where((c) => c.kind == CreativeKind.hints));
     if (p.tickets == 0) pool.addAll(houseCreatives.where((c) => c.kind == CreativeKind.tickets));
     if (p.puzzlesCompleted >= 10 && !p.isVip) pool.addAll(houseCreatives.where((c) => c.kind == CreativeKind.vip));
-    if (p.piggyCoins >= Profile.piggyCapacity * 0.6) pool.addAll(houseCreatives.where((c) => c.kind == CreativeKind.piggy));
+    if (p.piggyCoins >= p.piggyCapacity * 0.6) pool.addAll(houseCreatives.where((c) => c.kind == CreativeKind.piggy));
   }
   if (pool.isEmpty) pool.addAll(houseCreatives.where((c) => !(p?.isVip ?? false) || c.kind != CreativeKind.vip));
   final candidates = pool.where((c) => c.id != store.lastCreativeId).toList();
   final list = candidates.isEmpty ? pool : candidates;
   final pick = list[Random().nextInt(list.length)];
   store.lastCreativeId = pick.id;
-  return pick;
+  // The piggy bank card names the player's own size (upgrades make it hold more than 500).
+  return pick.kind == CreativeKind.piggy && p != null ? piggyCreative(p.piggyCapacity) : pick;
 }
 
 /// A cover image for the creative: event/monthly/VIP use real pack covers.
@@ -278,6 +301,7 @@ Future<bool> showRewardedHouseAd(BuildContext context, WidgetRef ref, {required 
     ),
   );
   if (result == true) ref.read(localStoreProvider).lastRewardedAt = DateTime.now();
+  if (result == true) AppAnalytics.event('house_ad_rewarded', {'coins': rewardCoins});
   return result == true;
 }
 
@@ -303,6 +327,7 @@ class _HouseAdScreenState extends ConsumerState<HouseAdScreen> {
   @override
   void initState() {
     super.initState();
+    AppAnalytics.event('house_ad_shown', {'creative': widget.creative.id, 'kind': widget.creative.kind.name, 'rewarded': widget.rewarded});
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
       if (!mounted) return;
       setState(() {
@@ -346,6 +371,7 @@ class _HouseAdScreenState extends ConsumerState<HouseAdScreen> {
   }
 
   void _cta() {
+    AppAnalytics.event('house_ad_tapped', {'creative': widget.creative.id, 'rewarded': widget.rewarded, 'countdownDone': _done});
     if (widget.rewarded && !_done) {
       // Opening the offer early must not short-circuit the reward: the store
       // opens on top while this card and its timer stay underneath, and the
@@ -616,7 +642,7 @@ class _KindBadge extends StatelessWidget {
       CreativeKind.vip => (const Icon(AppIcons.vip, size: 13, color: Brand.coin), 'VIP'),
       CreativeKind.coins => (const CoinIcon(size: 14), 'Coins'),
       CreativeKind.tickets => (const TicketIcon(size: 14), 'Tickets'),
-      CreativeKind.hints => (const HintIcon(size: 14), 'Hints'),
+      CreativeKind.hints => (const HintIcon(size: 14), 'Boosters'),
       CreativeKind.piggy => (const Icon(AppIcons.piggy, size: 13, color: Colors.white), 'Piggy bank'),
       CreativeKind.monthly => (const Icon(AppIcons.dailyPuzzle, size: 13, color: Colors.white), 'Daily puzzles'),
       CreativeKind.event => (const Icon(AppIcons.events, size: 13, color: Colors.white), 'Events'),
@@ -669,7 +695,15 @@ class _HouseBannerState extends ConsumerState<HouseBanner> {
         ),
       ],
     );
-    final goVip = BigButton(label: 'Go VIP', kind: ButtonKind.gold, height: 40, onTap: () => openCreative(context, ref, c));
+    final goVip = BigButton(
+      label: 'Go VIP',
+      kind: ButtonKind.gold,
+      height: 40,
+      onTap: () {
+        AppAnalytics.event('house_ad_tapped', {'creative': c.id, 'banner': true});
+        openCreative(context, ref, c);
+      },
+    );
     final notNow = BigButton(label: 'Not now', kind: ButtonKind.ghostLight, height: 40, expand: false, onTap: () => setState(() => _dismissedThisSession = true));
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),

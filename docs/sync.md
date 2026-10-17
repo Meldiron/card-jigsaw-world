@@ -91,6 +91,24 @@ win ops `Put` them, a discard clears them, ops queued by older builds write 0 / 
 sign-in merge takes them from the row whose board it keeps. A resumed board keeps its saved par
 for the quests; the stars still use the par recomputed on resume.
 
+`profiles.piggyLevel` (integer 0-5, default 0, optional), added 2026-10-17 (Appwrite CLI): piggy bank
+upgrades bought (`SyncOp.piggyUpgrade`, 5,000 coins each; the bank holds `500 + 100 x level`). The op
+names the level it raises to and is built against the fresh row: a level already reached (bought on
+another device) charges nothing (`SkipReason.piggyUpgraded`), coins spent elsewhere meanwhile undo it
+(`notEnough`), and nothing goes past 5. Solve ops fill the piggy bank up to the row's own size
+(`Inc(piggy, max: capacity)`), so an upgrade made on one device counts on every other. A sign-in merge
+keeps the larger level of the two saves, like unlocks. Older builds ignore the column: they show and
+fill a 500-coin bank (their solve op adds nothing past 500) and still open a bigger one in full.
+
+`profiles.questSwaps` (text, optional, no default), added 2026-10-17 (Appwrite CLI): quests swapped for
+a ticket, a JSON map of slot to the quests the slot has had this day or week (`Goals.decodeSwaps`,
+docs/economy.md "Swapping a quest"). `SyncOp.questSwap` is built against the fresh row and `Put`s the
+whole map: it names the number of swaps it saw in the slot, so a swap made meanwhile on another device
+wins and this one charges nothing (`SkipReason.questSwapped`); a quest claimed in the slot meanwhile
+skips it too (`questClaimed`). Two swaps of different slots on two devices within one round trip can
+overwrite each other's entry (the Put is last-writer-wins, like other guarded ops; the ticket stays
+spent). A sign-in merge takes the chosen save's map. Older builds ignore the column.
+
 ## Known limits
 
 - A guarded op is checked and then written: two devices claiming the same quest within one round

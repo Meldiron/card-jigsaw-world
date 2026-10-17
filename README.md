@@ -28,7 +28,7 @@ Cards that belong next to each other **snap together anywhere on the board** and
 | Social | Leaderboard by total XP (only profiles with at least one solved puzzle appear), friends by friend code, native Sign in with Apple (ID token session, no browser redirect) |
 | Account | Instant guest play (anonymous session) with a generated display name such as "Brave Otter", upgrade to email account without losing progress, sign in / out |
 | My Puzzles | Upload your own photos to Appwrite Storage and play them as puzzles |
-| Store | Coin and ticket bundles, two hint packs and VIP, which unlocks every pack including past monthly packs (sandbox purchases until StoreKit is wired) |
+| Store | Coin and ticket bundles, two booster bundles (Peeks, Hints and Magic) and VIP, which unlocks every pack including past monthly packs (sandbox purchases until StoreKit is wired) |
 | iOS extras | Home Screen widget (small, medium and large) showing today's daily picture, fetched straight from the public catalogue and deep-linking into the puzzle (`carden://play/<id>`); a Home Screen quick action "One last game?" that opens today's puzzle |
 | House ads | No ad network. A 15-second rewarded offer card (40 coins, 5 per day), a closable interstitial after every 4th puzzle, and a dismissible VIP banner, all promoting in-app purchases. Never shown to VIP. See `docs/house-ads.md` |
 | Settings | Light / dark / auto theme, classic or minimal card style, music, sound effects, haptics, timer, reminders, account, credits |

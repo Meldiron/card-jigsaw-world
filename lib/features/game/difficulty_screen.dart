@@ -7,6 +7,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/analytics.dart';
 import '../../core/haptics.dart';
 import '../../core/sfx.dart';
 import '../../core/a11y.dart';
@@ -236,6 +237,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
       _painting = saved.painting;
       _expand = savedSpec.expand;
     });
+    AppAnalytics.event('puzzle_discarded', {'from': 'setup', 'mode': savedSpec.mode.code, 'board': savedSpec.code, 'cards': savedSpec.cells, 'moves': saved.moves});
     await ref.read(progressProvider.notifier).discard(widget.puzzleId);
     if (!mounted) return;
     Haptics.medium();
@@ -260,6 +262,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
       return;
     }
     Haptics.light();
+    AppAnalytics.event('quick_play', {'from': 'another', 'pool': pool.tier.name});
     final route = quickPlayRoute(next, saved: ref.read(puzzleProgressProvider(next.id)), board: spec.isGiant ? null : spec);
     context.pushReplacement('$route${painting ? '&painting=1' : ''}${_expand ? '&expand=1' : ''}');
   }

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
@@ -52,11 +53,18 @@ class LevelRewards {
     return idx;
   }
 
+  /// Coins a level-up pays: 100 + 25 per level until that reaches [levelCoinsCap] (level 8), then
+  /// the cap; every 10th level pays [milestoneLevelCoins] (owner, 2026-10-17: "only up to 300, or
+  /// 500 in some major milestones"; 100 + 25 per level without end before).
+  static const levelCoinsCap = 300;
+  static const milestoneLevelCoins = 500;
+  static int coinsForLevel(int level) => level % 10 == 0 ? milestoneLevelCoins : min(levelCoinsCap, 100 + 25 * level);
+
   static LevelReward forLevel(int level) {
     final tierIdx = tierUnlockLevel.indexOf(level);
     return LevelReward(
       level: level,
-      coins: 100 + 25 * level,
+      coins: coinsForLevel(level),
       tickets: level % 3 == 0 ? 1 : 0,
       hints: level % 2 == 0 ? 2 : 0,
       // Levels 2 and 5 open Medium and Hard, which have no square board (old saves only).
@@ -237,6 +245,7 @@ class Goal {
     this.painting = false,
     this.vipOnly = false,
     this.puzzleId,
+    this.swap,
   });
   final String key;
   final String title;
@@ -256,7 +265,59 @@ class Goal {
 
   /// The "Play" CTA opens this picture (today's daily puzzle).
   final String? puzzleId;
+
+  /// The quest a swap would give in its place (Quests tab, for [QuestSwap.tickets]); null when the
+  /// quest is claimed or nothing suitable is left this period.
+  final QuestSwap? swap;
   bool get done => progress >= target;
+
+  Goal _withSwap(QuestSwap? swap) => Goal(
+        key: key,
+        title: title,
+        progress: progress,
+        target: target,
+        coins: coins,
+        tickets: tickets,
+        icon: icon,
+        minCells: minCells,
+        mode: mode,
+        painting: painting,
+        vipOnly: vipOnly,
+        puzzleId: puzzleId,
+        swap: swap,
+      );
+}
+
+/// Swapping a quest that is not finished for another (owner, 2026-10-17): every swap costs
+/// [tickets] and changes only that quest. Swaps live in `profiles.questSwaps`, a JSON map of slot
+/// (`d:2026-10-17:s2`, `w2026-10-12:s4`) to the quests the slot has had this period, the one first
+/// dealt first and the current one last ([Goals.decodeSwaps]). The next quest comes from a lane none
+/// of the period's quests used yet (shown now or swapped away), fits the other quests (one board
+/// never finishes two) and is not finished already. Older builds ignore the column and show the
+/// quest first dealt.
+@immutable
+class QuestSwap {
+  const QuestSwap({required this.slot, required this.base, required this.next, required this.nextTitle, required this.count, this.fixedKey});
+
+  /// Tickets one swap costs.
+  static const tickets = 1;
+
+  /// The period and slot: `d:2026-10-17:s2`, `w2026-10-12:s4`.
+  final String slot;
+
+  /// The quest first dealt in the slot (kept, so the other slots never move).
+  final String base;
+
+  /// The quest a swap gives, and its title.
+  final String next;
+  final String nextTitle;
+
+  /// Swaps already made in the slot this period.
+  final int count;
+
+  /// The claim key of the slot's fixed quest ("Solve 3 puzzles": `d:<day>:solve3`), whose key has
+  /// no slot in it.
+  final String? fixedKey;
 }
 
 class Goals {
@@ -331,7 +392,11 @@ class Goals {
   /// the boards finished before today, so the quests stay the same all day. Only what [open] and
   /// [level] allow is asked for; a level 1 player, with nothing to change yet, gets "Earn 3 stars
   /// twice". A slot keeps the quest already claimed in it today.
-  static List<Goal> daily(Iterable<PuzzleProgress> all, DateTime now, {OpenFeatures open = OpenFeatures.all, int level = 99, Set<String> claimed = const {}, String? dailyPuzzle, DateTime? since}) {
+  ///
+  /// [swaps] (`Profile.questSwaps`) replaces a slot's quest with the one swapped in last; the other
+  /// slots are dealt as if the slot still had the quest first dealt in it, so a swap changes only its
+  /// own quest. Each quest carries the swap it offers ([Goal.swap]).
+  static List<Goal> daily(Iterable<PuzzleProgress> all, DateTime now, {OpenFeatures open = OpenFeatures.all, int level = 99, Set<String> claimed = const {}, String? dailyPuzzle, DateTime? since, Map<String, List<String>> swaps = const {}}) {
     // [since]: the guided start counts only pictures finished after Quests opened.
     final today = all.where((p) => p.completed && p.completedAt != null && sameDay(p.completedAt!, now) && (since == null || p.completedAt!.isAfter(since))).toList();
     int count(bool Function(PuzzleProgress p) test) => today.where(test).length;
@@ -342,10 +407,13 @@ class Goals {
 
     Goal? build(int slot, String kind) {
       final key = 'd:$k:s$slot:$kind';
-      final coins = const {2: 80, 3: 100, 4: 120}[slot]!;
+      final coins = const {1: 60, 2: 80, 3: 100, 4: 120}[slot]!;
       final vip = slot == 4;
       final (name, arg) = _split(kind);
       switch (name) {
+        // The quest ordinary play finishes, always first dealt in slot 1 (its key has no slot).
+        case 'solve3':
+          return Goal(key: 'd:$k:solve3', title: 'Solve 3 puzzles', progress: today.length, target: 3, coins: 60, icon: 'puzzle');
         case 'mode':
           final m = GameMode.values.where((m) => m.code == arg).firstOrNull;
           if (m == null) return null;
@@ -378,16 +446,27 @@ class Goals {
       return null;
     }
 
+    final claimedKinds = _pinned(claimed, 'd:$k:s', 4);
+    final history = {for (var s = 1; s <= 4; s++) s: swaps['d:$k:s$s'] ?? const <String>[]};
     final picks = lanes.pick(
       day,
       slots: 3,
-      pinned: _pinned(claimed, 'd:$k:s', 4),
+      pinned: _dealtPins(claimedKinds, history, const [2, 3, 4]),
       fallbacks: const ['stars', 'solve', 'nopeek'],
     );
-    return [
-      Goal(key: 'd:$k:solve3', title: 'Solve 3 puzzles', progress: today.length, target: 3, coins: 60, icon: 'puzzle'),
-      for (var i = 0; i < picks.length; i++) build(i + 2, picks[i]) ?? build(i + 2, 'solve')!,
-    ];
+    final dealt = {1: 'solve3', for (var i = 0; i < picks.length; i++) i + 2: build(i + 2, picks[i]) != null ? picks[i] : 'solve'};
+    return _withSwaps(
+      lanes,
+      dealt: dealt,
+      claimedKinds: claimedKinds,
+      history: history,
+      slotKey: (s) => 'd:$k:s$s',
+      fixedKeys: {1: 'd:$k:solve3'},
+      claimed: claimed,
+      build: build,
+      pool: lanes.swapPool(day ~/ max(1, lanes.hows(0).length)),
+      turn: day,
+    );
   }
 
   /// Weekly quests: "Solve 10 puzzles" (1 ticket) and "Play on 4 different days" (2) stay; the
@@ -396,7 +475,8 @@ class Goals {
   /// ways of playing that one board cannot do together
   /// (2 each: every mode once with three bigger boards or three Painting boards; never the bigger
   /// boards with Painting), and the VIP extra (1).
-  static List<Goal> weekly(Iterable<PuzzleProgress> all, DateTime now, {OpenFeatures open = OpenFeatures.all, int level = 99, Set<String> claimed = const {}, DateTime? since}) {
+  /// [swaps] as in [daily].
+  static List<Goal> weekly(Iterable<PuzzleProgress> all, DateTime now, {OpenFeatures open = OpenFeatures.all, int level = 99, Set<String> claimed = const {}, DateTime? since, Map<String, List<String>> swaps = const {}}) {
     final monday = mondayOf(now);
     final week = all.where((p) => p.completed && p.completedAt != null && !p.completedAt!.isBefore(monday) && (since == null || p.completedAt!.isAfter(since))).toList();
     int count(bool Function(PuzzleProgress p) test) => week.where(test).length;
@@ -409,10 +489,15 @@ class Goals {
 
     Goal? build(int slot, String kind) {
       final key = '$k:s$slot:$kind';
-      final tickets = const {2: 1, 4: 2, 5: 2, 6: 1}[slot]!;
+      final tickets = const {1: 1, 2: 1, 3: 2, 4: 2, 5: 2, 6: 1}[slot]!;
       final vip = slot == 6;
       final (name, arg) = _split(kind);
       switch (name) {
+        // The two quests always first dealt in slots 1 and 3 (their keys have no slot).
+        case 'solve10':
+          return Goal(key: '$k:solve10', title: 'Solve 10 puzzles this week', progress: week.length, target: 10, coins: 0, tickets: 1, icon: 'puzzle');
+        case 'days4':
+          return Goal(key: '$k:days4', title: 'Play on 4 different days', progress: days, target: 4, coins: 0, tickets: 2, icon: 'streak');
         case 'modes':
           return Goal(
               key: key,
@@ -448,24 +533,109 @@ class Goals {
       return null;
     }
 
-    // Slots 2 (skill), 4 and 5 (ways of playing), 6 (VIP); 1 and 3 always stay.
+    // Slots 2 (skill), 4 and 5 (ways of playing), 6 (VIP); 1 and 3 are dealt the same every week.
+    final claimedKinds = _pinned(claimed, '$k:s', 6);
+    final history = {for (var s = 1; s <= 6; s++) s: swaps['$k:s$s'] ?? const <String>[]};
     final picks = lanes.pickWeek(
       weekIndex(now),
-      pinned: {
-        for (final e in _pinned(claimed, '$k:s', 6).entries)
-          if (e.key != 1 && e.key != 3) e.key: e.value,
-      },
+      pinned: _dealtPins(claimedKinds, history, const [2, 4, 5, 6]),
       fallbacks: const ['stars', 'solve', 'nopeek'],
     );
-    Goal slot(int s) => build(s, picks[s]!) ?? build(s, 'solve')!;
+    final dealt = {
+      1: 'solve10',
+      3: 'days4',
+      for (final s in const [2, 4, 5, 6]) s: build(s, picks[s]!) != null ? picks[s]! : 'solve',
+    };
+    return _withSwaps(
+      lanes,
+      dealt: dealt,
+      claimedKinds: claimedKinds,
+      history: history,
+      slotKey: (s) => '$k:s$s',
+      fixedKeys: {1: '$k:solve10', 3: '$k:days4'},
+      claimed: claimed,
+      build: build,
+      pool: lanes.swapPool(weekIndex(now)),
+      turn: weekIndex(now),
+    );
+  }
+
+  /// What the lane picks keep for [slots]: a swapped slot the quest first dealt in it (so the other
+  /// slots do not move), else a quest claimed in it.
+  static Map<int, String> _dealtPins(Map<int, String> claimedKinds, Map<int, List<String>> history, List<int> slots) => {
+        for (final s in slots)
+          if (history[s]!.isNotEmpty)
+            s: history[s]!.first
+          else if (claimedKinds[s] != null)
+            s: claimedKinds[s]!,
+      };
+
+  /// The period's quests in slot order: a claimed quest stays, a swapped slot shows the quest swapped
+  /// in last, the others what was [dealt]. Each unclaimed quest carries the swap it offers.
+  static List<Goal> _withSwaps(
+    _Lanes lanes, {
+    required Map<int, String> dealt,
+    required Map<int, String> claimedKinds,
+    required Map<int, List<String>> history,
+    required String Function(int slot) slotKey,
+    required Map<int, String> fixedKeys,
+    required Set<String> claimed,
+    required Goal? Function(int slot, String kind) build,
+    required List<String> pool,
+    required int turn,
+  }) {
+    final slots = dealt.keys.toList()..sort();
+    final current = {for (final s in slots) s: claimedKinds[s] ?? (history[s]!.isNotEmpty ? history[s]!.last : dealt[s]!)};
+    Goal goal(int s) => build(s, current[s]!) ?? build(s, 'solve')!;
+    // Every lane the period has shown: today's quests and every quest swapped in or away.
+    final shown = {
+      for (final s in slots) ...[current[s]!, dealt[s]!, ...history[s]!],
+    }.map(_Lanes.lane).toSet();
+    QuestSwap? swapOf(int s, Goal g) {
+      final fixed = fixedKeys[s];
+      if (claimedKinds.containsKey(s) || claimed.contains(g.key) || (fixed != null && claimed.contains(fixed))) return null;
+      final others = [for (final o in slots) if (o != s) current[o]!];
+      final h = history[s]!;
+      final order = pool.isEmpty ? pool : [for (var i = 0; i < pool.length; i++) pool[(turn + s + h.length + i) % pool.length]];
+      for (final kind in order) {
+        if (shown.contains(_Lanes.lane(kind)) || !lanes.fitsAll(kind, others)) continue;
+        final next = build(s, kind);
+        // A quest already finished would pay for the ticket at once: not a swap.
+        if (next == null || next.done) continue;
+        return QuestSwap(slot: slotKey(s), base: h.isEmpty ? current[s]! : h.first, next: kind, nextTitle: next.title, count: h.isEmpty ? 0 : h.length - 1, fixedKey: fixed);
+      }
+      return null;
+    }
+
     return [
-      Goal(key: '$k:solve10', title: 'Solve 10 puzzles this week', progress: week.length, target: 10, coins: 0, tickets: 1, icon: 'puzzle'),
-      slot(2),
-      Goal(key: '$k:days4', title: 'Play on 4 different days', progress: days, target: 4, coins: 0, tickets: 2, icon: 'streak'),
-      slot(4),
-      slot(5),
-      slot(6),
+      for (final s in slots)
+        () {
+          final g = goal(s);
+          return g._withSwap(swapOf(s, g));
+        }(),
     ];
+  }
+
+  /// `profiles.questSwaps` (a JSON map of slot to the quests it has had, see [QuestSwap]); anything
+  /// unreadable counts as no swaps.
+  static Map<String, List<String>> decodeSwaps(dynamic raw) {
+    if (raw == null) return const {};
+    try {
+      final m = raw is Map ? raw : jsonDecode(raw.toString());
+      if (m is! Map) return const {};
+      return {
+        for (final e in m.entries)
+          if (e.value is List && (e.value as List).isNotEmpty) e.key.toString(): [for (final v in e.value as List) v.toString()],
+      };
+    } catch (_) {
+      return const {};
+    }
+  }
+
+  /// The day (or the week's Monday) a swap slot belongs to: `d:2026-10-17:s2`, `w2026-10-12:s4`.
+  static DateTime? swapPeriod(String slot) {
+    final date = slot.startsWith('d:') ? slot.substring(2) : (slot.startsWith('w') ? slot.substring(1) : '');
+    return date.length < 10 ? null : DateTime.tryParse(date.substring(0, 10));
   }
 
   /// "4x4-41" -> the 4x4 tier and 41 seconds.
@@ -486,7 +656,9 @@ class Goals {
     return i < 0 ? (kind, '') : (kind.substring(0, i), kind.substring(i + 1));
   }
 
-  /// Quests already claimed in this period, by slot: `<prefix><slot>:<kind>` -> {slot: kind}.
+  /// Quests already claimed in this period, by slot: `<prefix><slot>:<kind>` -> {slot: kind}. The
+  /// quests first dealt in slots 1 (and 3, weekly) have keys without a slot and are not in here; a
+  /// quest swapped into those slots has one (`d:<day>:s1:<kind>`).
   static Map<int, String> _pinned(Set<String> claimed, String prefix, int maxSlot) {
     final out = <int, String>{};
     for (final key in claimed) {
@@ -494,7 +666,7 @@ class Goals {
       final rest = key.substring(prefix.length);
       final colon = rest.indexOf(':');
       final slot = colon < 0 ? null : int.tryParse(rest.substring(0, colon));
-      if (slot == null || slot < 2 || slot > maxSlot) continue;
+      if (slot == null || slot < 1 || slot > maxSlot) continue;
       out[slot] = rest.substring(colon + 1);
     }
     return out;
@@ -640,8 +812,29 @@ class _Lanes {
 
   static String lane(String kind) => switch (_Lanes._name(kind)) {
         'mode' => 'shape',
+        // The fixed quests: "Solve 3 puzzles" and "Solve 10 puzzles this week" are the solve lane.
+        'solve3' || 'solve10' => 'solve',
+        'days4' => 'days',
         final n => n,
       };
+
+  /// Every quest a swap can bring, in order: the ways of playing, the skills, every shape (daily),
+  /// today's daily puzzle, then the plain ones. [turn] picks the day's shape as [pick] does.
+  List<String> swapPool(int turn) {
+    final out = <String>[];
+    for (final k in [
+      ...hows(turn),
+      ...skills,
+      if (!weekly) for (final m in shapes) 'mode-${m.code}',
+      if (!weekly && dailyPuzzle) 'daily',
+      'stars',
+      'nopeek',
+      'solve',
+    ]) {
+      if (!out.contains(k)) out.add(k);
+    }
+    return out;
+  }
 
   static String _name(String kind) => kind.split('-').first;
 

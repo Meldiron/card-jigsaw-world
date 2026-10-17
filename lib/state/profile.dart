@@ -23,6 +23,10 @@ class Economy {
   static const piggyOpenTickets = 1;
   static const wheelSpinTickets = 1;
 
+  /// The Lucky Wheel's ×5 spin (owner, 2026-10-17): five times the tickets for one spin with the same
+  /// odds, paying the prize it lands on five times (the 1,000-coin jackpot pays 5,000).
+  static const wheelBigSpin = 5;
+
   /// Early unlock of a board tier that is still above the player's level.
   static int tierUnlockCoins(int tierIndex) => 600 + 300 * tierIndex;
 
@@ -46,9 +50,13 @@ class Economy {
   /// limit ("Unlimited My Puzzles uploads").
   static const freeMyPuzzles = 5;
 
-  /// Piggy bank: +5 coins per solved picture, holds up to [piggyCapacity].
+  /// Piggy bank: +5 coins per solved picture, up to the player's [Profile.piggyCapacity] (500, and
+  /// [Profile.piggyStep] more for each upgrade).
   static const piggyPerPuzzle = 5;
-  static const piggyCapacity = Profile.piggyCapacity;
+
+  /// One piggy bank upgrade (owner, 2026-10-17: a coin sink): five of them take it from 500 to
+  /// 1,000 for 25,000 coins.
+  static const piggyUpgradeCoins = 5000;
   static const adRewardCoins = 40;
 
   static const dailyRewards = <({int coins, int tickets, int hints})>[
@@ -234,6 +242,19 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
     return true;
   }
 
+  /// Swaps a quest that is not finished or claimed for [Goal.swap]'s quest, for [QuestSwap.tickets]
+  /// ticket. Only that quest changes; a swap made on another device first (or a claim there) charges
+  /// nothing. False when there is nothing to swap or the tickets are short.
+  Future<bool> swapQuest(Goal goal) async {
+    final p = _p;
+    final s = goal.swap;
+    if (s == null || goal.done || p.claimedGoals.contains(goal.key)) return false;
+    if (goal.vipOnly && !p.isVip) return false;
+    if (p.tickets < QuestSwap.tickets) return false;
+    _do(SyncOp.questSwap(slot: s.slot, base: s.base, kind: s.next, swaps: s.count, tickets: QuestSwap.tickets, fixedKey: s.fixedKey));
+    return true;
+  }
+
   /// Pays the VIP weekly bonus once per week; returns the coins paid (0 when
   /// the player is not VIP or already got this week's bonus).
   Future<int> claimVipWeeklyBonus() async {
@@ -330,6 +351,16 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
     final p = _p;
     if (p.tickets < Economy.piggyOpenTickets || p.piggyCoins <= 0) return false;
     _do(SyncOp.piggy(amount: p.piggyCoins, tickets: Economy.piggyOpenTickets));
+    return true;
+  }
+
+  /// Makes the piggy bank hold [Profile.piggyStep] coins more, for [Economy.piggyUpgradeCoins]. False
+  /// at the largest size or when the coins are short. Upgraded on another device meanwhile, the server
+  /// charges nothing (the op names the level it raises to).
+  Future<bool> upgradePiggy() async {
+    final p = _p;
+    if (p.piggyLevel >= Profile.maxPiggyLevel || p.coins < Economy.piggyUpgradeCoins) return false;
+    _do(SyncOp.piggyUpgrade(level: p.piggyLevel + 1, price: Economy.piggyUpgradeCoins));
     return true;
   }
 

@@ -38,4 +38,14 @@ void main() {
       expect(NameFilter.isOffensive(GuestNames.next()), isFalse);
     }
   });
+
+  test('generated guest names are whole words that fit in 20 characters', () {
+    // Cutting a long pair once left "Straightforward Cock": long pairs are drawn again instead.
+    final words = {for (final w in [...adjectives, ...animals]) w.toLowerCase()};
+    for (var i = 0; i < 2000; i++) {
+      final name = GuestNames.next();
+      expect(name.length, lessThanOrEqualTo(20), reason: name);
+      expect(words.contains(name.substring(name.indexOf(' ') + 1).toLowerCase()), isTrue, reason: name);
+    }
+  });
 }

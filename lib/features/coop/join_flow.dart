@@ -4,13 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/analytics.dart';
+import '../../core/platform.dart';
 import '../../core/theme/tokens.dart';
+import '../../game/board.dart';
 import '../../models/models.dart';
 import '../../router.dart';
 import '../../state/auth.dart';
 import '../../state/catalog.dart';
 import '../../state/coop/coop_controller.dart';
 import '../../state/coop/coop_models.dart';
+import '../../state/settings.dart';
 import '../../widgets/ui.dart';
 import 'coop_alerts.dart';
 import 'coop_routes.dart';
@@ -36,12 +40,15 @@ Future<void> openInvite(Ref ref, String code) async {
   try {
     await ref.read(authProvider.future).timeout(const Duration(seconds: 20));
   } catch (_) {}
+  final fresh = !ref.read(settingsProvider).onboarded;
   while (true) {
     final ctx = rootNavigatorKey.currentContext;
     if (ctx == null || !ctx.mounted) return;
     final result = await runWithProgress(ctx, title: 'Joining the game', task: () => coop.join(code));
     if (result.value != null) {
-      _show(router, result.value!);
+      final g = result.value!;
+      AppAnalytics.event('coop_game_joined', {'freshInstall': fresh, 'platform': isWeb ? 'web' : 'app', 'players': g.playerIds.length, 'cards': g.layout.length});
+      _show(router, g);
       return;
     }
     final again = rootNavigatorKey.currentContext;
@@ -80,6 +87,8 @@ Future<CoopGame?> startPlayTogether(BuildContext context, WidgetRef ref, {requir
     final result = await runWithProgress(context, title: 'Starting the game', task: () => coop.create(puzzleId: puzzle.id, grid: grid, layout: layout, painting: painting));
     if (!context.mounted) return result.value;
     if (result.value != null) {
+      final spec = BoardSpec.fromCode(grid);
+      AppAnalytics.event('coop_game_created', {'mode': spec.mode.code, 'board': spec.code, 'cards': layout.length, 'painting': painting, 'giant': spec.isGiant});
       await shareInvite(context, result.value!, pictureTitle: puzzle.title);
       return result.value;
     }

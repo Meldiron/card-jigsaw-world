@@ -1105,8 +1105,9 @@ class PhotoChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 24,
-      padding: EdgeInsets.only(left: dot != null ? 8 : 9, right: 9),
+      // 24 pt, taller only when a large text size needs it (the label is never cut off).
+      constraints: const BoxConstraints(minHeight: 24),
+      padding: EdgeInsets.only(left: dot != null ? 8 : 9, right: 9, top: 2, bottom: 2),
       decoration: BoxDecoration(
         color: Colors.black.withValues(alpha: A11y.increaseContrastOf(context) ? 0.66 : 0.5),
         borderRadius: BorderRadius.circular(Radii.pill),

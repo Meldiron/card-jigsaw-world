@@ -205,10 +205,13 @@ Map<String, dynamic> mergeProfile({
   for (final k in scalarKeys) {
     patch[k] = chosen.profile[k];
   }
-  // Peeks and Magic in stock follow the chosen save too (a row read before the columns existed has none).
-  for (final k in const ['peeks', 'magics']) {
+  // Peeks and Magic in stock and the quests swapped follow the chosen save too (a row read before the
+  // columns existed has none).
+  for (final k in const ['peeks', 'magics', 'questSwaps']) {
     if (chosen.profile[k] != null) patch[k] = chosen.profile[k];
   }
+  // Piggy bank upgrades were paid for on either save: the larger stays, as unlocks do.
+  patch['piggyLevel'] = max(SaveSnapshot._i(guest.profile['piggyLevel']), SaveSnapshot._i(account.profile['piggyLevel']));
   // The chosen streak must stay at or below the combined longest.
   patch['longestStreak'] = max(patch['longestStreak'] as int, SaveSnapshot._i(patch['streak']));
   return patch;

@@ -196,4 +196,59 @@ void main() {
       expect(find.text('1,09 €'), findsOneWidget);
     });
   });
+
+  group('booster bundles', () {
+    // An iPhone SE (320 x 568 pt) at the default size and at Largest (200%): the tiles list Peek, Hint
+    // and Magic with their counts, and no product tile overflows (the test font is wider than SF Pro,
+    // so only the tiles are checked here).
+    for (final scale in const [1.0, 2.0]) {
+      testWidgets('tiles show the three helpers, text ${scale}x on an SE', (tester) async {
+        SharedPreferences.setMockInitialValues({'onboarded': true});
+        final store = await LocalStore.open();
+        final errors = <String>[];
+        final previous = FlutterError.onError;
+        FlutterError.onError = (d) => errors.add(d.toString());
+        addTearDown(() => FlutterError.onError = previous);
+        tester.view.physicalSize = const Size(320 * 2, 568 * 2);
+        tester.view.devicePixelRatio = 2;
+        tester.view.padding = const FakeViewPadding(top: 20 * 2);
+        addTearDown(tester.view.reset);
+        final products = {
+          for (final id in ProductIds.all)
+            id: ProductDetails(id: id, title: id, description: '', price: StoreProducts.price(id), rawPrice: double.parse(StoreProducts.usdPrices[id]!), currencyCode: 'USD'),
+        };
+        await tester.pumpWidget(ProviderScope(
+          overrides: [
+            localStoreProvider.overrideWithValue(store),
+            platformCapsProvider.overrideWithValue(PlatformCaps.ios),
+            profileProvider.overrideWith(_GuestProfile.new),
+            isGuestProvider.overrideWithValue(true),
+            purchaseServiceProvider.overrideWith((ref) => _NoStore()),
+            storeAvailableProvider.overrideWith((ref) => true),
+            productsProvider.overrideWith((ref) => products),
+          ],
+          child: MaterialApp(
+            theme: AppTheme.light(),
+            builder: (context, child) => MediaQuery(data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(scale)), child: child!),
+            home: const StoreScreen(),
+          ),
+        ));
+        await tester.pumpAndSettle();
+        final seen = <String>{};
+        for (var i = 0; i < 30; i++) {
+          for (final t in tester.widgetList<Text>(find.byType(Text))) {
+            seen.add(t.data ?? t.textSpan?.toPlainText() ?? '');
+          }
+          await tester.drag(find.byType(ListView), const Offset(0, -250));
+          await tester.pumpAndSettle();
+        }
+        FlutterError.onError = previous;
+        expect([for (final e in errors) if (e.contains('_ProductTile') || e.contains('_HelperCounts')) e.split('\n').first], isEmpty);
+        expect(seen, containsAll(['Boosters', 'Peek, Hint and Magic for any board', '15', '10', '5', '50', '30', 'Peeks', 'Hints', 'Magic']));
+        expect(seen, contains(StoreProducts.price(ProductIds.hints15)));
+        // The better of the two names its saving (counting each helper at its price in a game).
+        expect(seen, contains('+19% more'));
+      });
+    }
+  });
 }
