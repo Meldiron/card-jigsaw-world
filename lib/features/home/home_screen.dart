@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../core/analytics.dart';
 import '../../core/haptics.dart';
 import '../../core/a11y.dart';
 import '../../core/theme/tokens.dart';
@@ -547,7 +548,10 @@ class _DailyHero extends StatelessWidget {
     final done = progress?.completed ?? false;
     final stars = progress?.stars ?? 0;
     return Pressable(
-      onTap: () => context.push('/play/${puzzle.id}'),
+      onTap: () {
+        AppAnalytics.event('daily_puzzle_opened', {'from': 'home'});
+        context.push('/play/${puzzle.id}');
+      },
       scale: 0.985,
       child: Container(
         height: height,
@@ -1368,6 +1372,7 @@ class _QuickPlayCard extends ConsumerWidget {
     final puzzle = pickQuickPlay(ref.read(quickPlayPoolProvider), _quickPlayRandom);
     if (puzzle == null) return;
     Haptics.light();
+    AppAnalytics.event('quick_play', {'from': 'home', 'pool': ref.read(quickPlayPoolProvider)?.tier.name});
     final board = openQuickPlayBoard(ref.read(quickPlayBoardProvider), level: ref.read(profileProvider).value?.level ?? 1, hasTier: ref.read(profileProvider.notifier).hasTier);
     context.push(quickPlayRoute(puzzle, saved: ref.read(progressProvider).value?[puzzle.id], board: board));
   }

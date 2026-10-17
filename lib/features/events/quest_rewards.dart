@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/analytics.dart';
 import '../../core/numbers.dart';
 import '../../data/repositories.dart';
 import '../../models/models.dart';
@@ -96,8 +97,14 @@ Future<bool> claimEventReward(WidgetRef ref, GameEvent event, int value) async {
   if (event.rewardTickets > 0) await n.addTickets(event.rewardTickets, reason: 'event:${event.id}');
   await ref.read(socialRepositoryProvider).upsertEventProgress(userId, event.id, progress: value, claimed: true);
   ref.invalidate(eventProgressProvider);
+  AppAnalytics.event('event_reward_claimed', {'event': event.id});
   return true;
 }
+
+/// `quest_claimed`: daily or weekly and the quest's kind (the last part of its key, `solve3`),
+/// claimed on its own or with Claim all.
+void questClaimed(Goal g, {required bool all}) =>
+    AppAnalytics.event('quest_claimed', {'period': g.key.startsWith('d:') ? 'daily' : 'weekly', 'quest': g.key.split(':').last, 'claimAll': all});
 
 /// "Claimed 140 coins and 2 tickets".
 String claimedLine(int coins, int tickets) {

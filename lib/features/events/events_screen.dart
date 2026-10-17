@@ -342,6 +342,7 @@ class _GoalRow extends ConsumerWidget {
     final c = context.colors;
     Future<void> claim() async {
       final ok = await ref.read(profileProvider.notifier).claimGoal(goal);
+      if (ok) questClaimed(goal, all: false);
       if (!context.mounted || !ok) return;
       Sfx.instance.coin();
       Haptics.success();
@@ -719,6 +720,7 @@ class _ClaimAllCardState extends ConsumerState<_ClaimAllCard> {
     final profile = ref.read(profileProvider.notifier);
     for (final g in widget.goals) {
       if (await profile.claimGoal(g)) {
+        questClaimed(g, all: true);
         coins += g.coins;
         tickets += g.tickets;
       }

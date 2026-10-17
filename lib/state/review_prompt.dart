@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+import '../core/analytics.dart';
 import '../core/app_review.dart';
 import '../core/qa.dart';
 import '../models/models.dart';
@@ -111,6 +112,8 @@ class ReviewPrompter {
       );
       if (!ask || WidgetsBinding.instance.lifecycleState != AppLifecycleState.resumed) return;
       if (await AppReviewChannel.request()) {
+        // iOS decides whether its rating sheet really shows (at most three times a year).
+        AppAnalytics.event('review_prompt_shown', {'solved': solved});
         await store.setText(_askedAtKey, now.toIso8601String());
         await store.setText(_askedVersionKey, version);
       }

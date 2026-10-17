@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
+import '../core/analytics.dart';
 import '../core/appwrite.dart';
 import '../core/platform.dart';
 import '../data/purchases.dart';
@@ -129,6 +130,7 @@ class PurchaseFlow extends Notifier<PurchaseFlowState> {
   /// Buys [product]: the App Store sheet opens and the stages follow its events.
   Future<void> buy(ProductDetails product) async {
     if (state.busy) return;
+    AppAnalytics.event('purchase_started', {'product': product.id});
     state = PurchaseFlowState(stage: PurchaseStage.paying, productId: product.id, watching: true);
     final started = await _service.buy(product);
     bool stillPaying() => state.stage == PurchaseStage.paying && state.productId == product.id;
@@ -196,11 +198,13 @@ class PurchaseFlow extends Notifier<PurchaseFlowState> {
       case PurchaseRetrying():
         break;
       case PurchaseFailed(:final productId, :final paid, :final message):
+        AppAnalytics.event('purchase_failed', {'product': productId, 'paid': paid});
         if (!_isCurrent(productId)) return;
         _slow?.cancel();
         _waitTimer?.cancel();
         state = state.copyWith(stage: paid ? PurchaseStage.notAdded : PurchaseStage.storeError, message: message);
       case PurchaseCanceled():
+        AppAnalytics.event('purchase_canceled', {'product': state.productId});
         if (state.stage == PurchaseStage.paying || state.stage == PurchaseStage.waiting) clear();
       case PurchasePending(:final productId):
         if (_isCurrent(productId)) state = state.copyWith(stage: PurchaseStage.awaitingApproval);
@@ -212,6 +216,9 @@ class PurchaseFlow extends Notifier<PurchaseFlowState> {
   Future<void> _added(PurchaseVerified e) async {
     final current = _isCurrent(e.productId);
     final wasVip = ref.read(profileProvider).value?.isVip ?? false;
+    // Once per purchase: a check repeated after a restart says it was applied already.
+    if (!e.alreadyApplied) AppAnalytics.event('purchase_completed', {'product': e.productId, 'followed': current});
+    if (!e.alreadyApplied && e.grant.vipExpiresAt != null && !wasVip) AppAnalytics.event('vip_started', {'product': e.productId});
     // Show it once the save has it, so the sheet and the header say the same.
     try {
       await ref.read(syncProvider.notifier).sync(silent: true).timeout(const Duration(seconds: 6));

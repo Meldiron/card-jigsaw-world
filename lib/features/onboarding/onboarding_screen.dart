@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/a11y.dart';
+import '../../core/analytics.dart';
 import '../../core/theme/tokens.dart';
 import '../../game/board.dart';
 import '../../game/game_controller.dart';
@@ -80,6 +81,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     ref.read(settingsProvider.notifier).setOnboarded();
     final first = ref.read(firstBoardProvider);
     final play = first != null && newPlayer();
+    AppAnalytics.event('onboarding_completed', {'firstBoard': play});
     router.go('/home');
     if (play) WidgetsBinding.instance.addPostFrameCallback((_) => router.push(first.route));
   }

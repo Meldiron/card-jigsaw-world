@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../core/analytics.dart';
 import '../../core/links.dart';
 import '../../core/platform.dart';
 import '../../core/reminders.dart';
@@ -181,6 +182,7 @@ class SettingsScreen extends ConsumerWidget {
                 final sub = service.events.listen((e) {
                   if (!context.mounted) return;
                   if (e is RestoreFinished) {
+                    AppAnalytics.event('purchase_restored', {'count': e.count});
                     ref.read(syncProvider.notifier).sync(silent: true);
                     showToast(context, e.count > 0 ? 'Purchases restored' : 'No purchases to restore', icon: AppIcons.receipt);
                   } else if (e is PurchaseFailed) {
@@ -226,6 +228,18 @@ class SettingsScreen extends ConsumerWidget {
               subtitle: 'Symbols wherever colour shows a state',
               value: s.accessibility.differentiateWithoutColour,
               onChanged: (v) => n.setAccessibility(s.accessibility.copyWith(differentiateWithoutColour: v)),
+            ),
+          ]),
+          // Usage analytics go only to our Appwrite project (lib/core/analytics.dart); on until the
+          // player turns them off, and off at once.
+          group('Privacy', [
+            _SwitchRow(
+              key: const ValueKey('settings-share-usage'),
+              icon: AppIcons.usageData,
+              label: 'Share usage data',
+              subtitle: 'Screens and features you use, sent only to Carden',
+              value: s.shareUsage,
+              onChanged: n.setShareUsage,
             ),
           ]),
           group('Help', [

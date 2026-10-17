@@ -7,6 +7,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/analytics.dart';
 import '../../core/haptics.dart';
 import '../../core/platform.dart';
 import '../../core/sfx.dart';
@@ -300,6 +301,7 @@ Future<bool> showRewardedHouseAd(BuildContext context, WidgetRef ref, {required 
     ),
   );
   if (result == true) ref.read(localStoreProvider).lastRewardedAt = DateTime.now();
+  if (result == true) AppAnalytics.event('house_ad_rewarded', {'coins': rewardCoins});
   return result == true;
 }
 
@@ -325,6 +327,7 @@ class _HouseAdScreenState extends ConsumerState<HouseAdScreen> {
   @override
   void initState() {
     super.initState();
+    AppAnalytics.event('house_ad_shown', {'creative': widget.creative.id, 'kind': widget.creative.kind.name, 'rewarded': widget.rewarded});
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
       if (!mounted) return;
       setState(() {
@@ -368,6 +371,7 @@ class _HouseAdScreenState extends ConsumerState<HouseAdScreen> {
   }
 
   void _cta() {
+    AppAnalytics.event('house_ad_tapped', {'creative': widget.creative.id, 'rewarded': widget.rewarded, 'countdownDone': _done});
     if (widget.rewarded && !_done) {
       // Opening the offer early must not short-circuit the reward: the store
       // opens on top while this card and its timer stay underneath, and the
@@ -691,7 +695,15 @@ class _HouseBannerState extends ConsumerState<HouseBanner> {
         ),
       ],
     );
-    final goVip = BigButton(label: 'Go VIP', kind: ButtonKind.gold, height: 40, onTap: () => openCreative(context, ref, c));
+    final goVip = BigButton(
+      label: 'Go VIP',
+      kind: ButtonKind.gold,
+      height: 40,
+      onTap: () {
+        AppAnalytics.event('house_ad_tapped', {'creative': c.id, 'banner': true});
+        openCreative(context, ref, c);
+      },
+    );
     final notNow = BigButton(label: 'Not now', kind: ButtonKind.ghostLight, height: 40, expand: false, onTap: () => setState(() => _dismissedThisSession = true));
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),

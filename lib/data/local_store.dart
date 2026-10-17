@@ -41,6 +41,10 @@ class LocalStore {
   set onboarded(bool v) => _prefs.setBool('onboarded', v);
   bool get tutorialSeen => _prefs.getBool('tutorialSeen') ?? false;
   set tutorialSeen(bool v) => _prefs.setBool('tutorialSeen', v);
+  /// Settings > Privacy > Share usage data (Appwrite Analytics, lib/core/analytics.dart); on until
+  /// the player turns it off.
+  bool get shareUsage => _prefs.getBool('shareUsage') ?? true;
+  set shareUsage(bool v) => _prefs.setBool('shareUsage', v);
 
   // ---- house ads ----
   int get completionsSinceAd => _prefs.getInt('completionsSinceAd') ?? 0;

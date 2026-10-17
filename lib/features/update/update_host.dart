@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/analytics.dart';
 import '../../router.dart';
 import '../../state/app_update.dart';
 import '../../state/sync.dart';
@@ -62,10 +63,12 @@ class _UpdateHostState extends ConsumerState<UpdateHost> {
     final ctx = rootNavigatorKey.currentContext;
     if (ctx == null || !ctx.mounted) return;
     _showing = true;
+    AppAnalytics.event('update_prompt_shown');
     final go = await showAppAlert(ctx, title: 'Update available', message: update.message, confirmLabel: 'Update', cancelLabel: 'Later');
     UpdateHost.lastAsked = DateTime.now();
     _showing = false;
     if (!go || !mounted) return;
+    AppAnalytics.event('update_accepted');
     // Anything still queued for the server goes first: on the web the page reloads.
     try {
       await ref.read(syncProvider.notifier).flush().timeout(const Duration(seconds: 4));
