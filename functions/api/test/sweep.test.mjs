@@ -94,7 +94,7 @@ const services = { tables: tablesFake, storage: storageFake, users: usersFake };
 const row = (table, id, data, permissions, at = NEW) => db[table].set(id, { $id: id, $createdAt: at, $updatedAt: at, $permissions: permissions, ...data });
 
 beforeEach(() => {
-  db = { progress: new Map(), event_progress: new Map(), friends: new Map(), blocks: new Map(), profiles: new Map(), my_puzzles: new Map() };
+  db = { progress: new Map(), event_progress: new Map(), friends: new Map(), blocks: new Map(), profiles: new Map(), my_puzzles: new Map(), coop_games: new Map(), coop_drags: new Map() };
   files = new Map();
   users = new Map();
   for (const [id, qa] of [['anna', false], ['ben', false], ['qa1', true], ['qa2', true]]) {
@@ -202,6 +202,28 @@ test('QA only: rows of real players are left alone', async () => {
   assert.equal(db.blocks.has(md5('qa1:qa2')), false);
   assert.equal(db.blocks.has(md5('anna:ben')), true, 'Anna\'s squatted row waits for a full run');
   assert.equal(db.profiles.get('anna').displayName, '@anna_on_insta');
+});
+
+test('Play together\'s live rows: a player\'s own row in a game they are in passes', () => {
+  const live = (gameId, userId, extra = {}) => ({ $id: md5(`live:${gameId}:${userId}`), gameId, userId, $permissions: [`read("team:${gameId}")`, `update("user:${userId}")`], ...extra });
+  const game = { $id: 'g1', players: ['anna', 'ben', '', '', ''] };
+  assert.equal(rules.liveVerdict(live('g1', 'anna'), game), null);
+  // Its player changed its columns (the id no longer fits), wrong permissions, no game, no seat.
+  assert.equal(rules.liveVerdict({ ...live('g1', 'anna'), userId: 'ben' }, game), 'id');
+  assert.equal(rules.liveVerdict(live('g1', 'anna', { $permissions: ['read("any")', 'update("user:anna")'] }), game), 'permissions');
+  assert.equal(rules.liveVerdict(live('g1', 'anna'), null), 'game');
+  assert.equal(rules.liveVerdict(live('g1', 'cat'), game), 'seat');
+});
+
+test('a run deletes live rows of players no longer in their game', async () => {
+  const perms = (g, u) => [`read("team:${g}")`, `update("user:${u}")`];
+  row('coop_games', 'g1', { players: ['anna', '', '', '', ''] }, ['read("team:g1")']);
+  row('coop_drags', md5('live:g1:anna'), { gameId: 'g1', userId: 'anna' }, perms('g1', 'anna'));
+  row('coop_drags', md5('live:g1:ben'), { gameId: 'g1', userId: 'ben' }, perms('g1', 'ben'));
+  row('coop_drags', md5('live:gone:anna'), { gameId: 'gone', userId: 'anna' }, perms('gone', 'anna'));
+  const r = await sweep(services, { apply: true, now: NOW });
+  assert.deepEqual(r.counts, { 'coop_drags:seat': 1, 'coop_drags:game': 1 });
+  assert.deepEqual([...db.coop_drags.keys()], [md5('live:g1:anna')]);
 });
 
 test('too many photos: the newest past the limit go', async () => {

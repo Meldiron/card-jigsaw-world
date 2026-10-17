@@ -2,8 +2,9 @@
 // as the host on one simulator and as the guest on another, and they hand codes and boards to each
 // other through tools/dev/coop_bot.mjs's relay. Both are the real app: the host starts the game from the
 // pause sheet, the guest (a fresh install) joins by the link, each sees the other's moves and held card,
-// the host finishes (the guest gets its rewards: it locked a card), Next puzzle moves the guest, and
-// the host ends the game.
+// the host drags a card slowly with the finger and the guest sees it travel (live drags), the host
+// finishes (the guest gets its rewards: it locked a card), Next puzzle moves the guest, and the host
+// ends the game. Delays between the two simulators (one Mac clock) are printed as `COOP_TIMING`.
 //
 //   node tools/dev/coop_bot.mjs &
 //   tools/dev/qa-run.sh drive --driver=test_driver/integration_test.dart --target=integration_test/coop_pair_test.dart \
@@ -137,7 +138,7 @@ void main() {
     List<int> decode(String v) => [for (final x in v.split(',')) int.parse(x)];
 
     if (role == 'host') {
-      for (final k in ['code', 'h-moved', 'g-moved', 'h-holds', 'g-saw-hold', 'h-done', 'g-finish', 'h-next', 'g-next', 'h-ended', 'g-ended']) {
+      for (final k in ['code', 'h-moved', 'g-moved', 'h-holds', 'g-saw-hold', 'h-drag', 'h-dragged', 'g-saw-drag', 'h-done', 'g-finish', 'h-next', 'g-next', 'h-ended', 'g-ended']) {
         await relaySet(k, '');
       }
       final pictures = (await c.read(allPuzzlesProvider.future)).where((p) => p.packId == 'pack-owls').toList()..sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
@@ -154,6 +155,9 @@ void main() {
       await relaySet('code', '$code@${DateTime.now().millisecondsSinceEpoch}');
       debugPrint('COOP_PAIR waiting for the guest');
       expect(await until(tester, () => (s().game?.playerIds.length ?? 0) == 2, seconds: 900), isTrue, reason: 'the guest joined');
+      // The api function makes every player's live row on create and join; until it is deployed with
+      // them, the bot makes them as it would.
+      await bot('/liverows?game=${s().game!.id}');
       await settle(tester, 4000);
       await shot(tester, 'pair_h01_guest_joined', 100);
 
@@ -170,10 +174,26 @@ void main() {
       final held = b.firstWhere((k) => b[k] != k);
       await tapCard(held);
       await settle(tester, 800);
-      await relaySet('h-holds', '$held');
+      await relaySet('h-holds', '$held@${DateTime.now().millisecondsSinceEpoch}');
       await wait(tester, 'g-saw-hold');
       await tapCard(held);
       await settle(tester, 800);
+
+      // 3b. A slow drag with the finger (about 3 s): the guest sees the card travel, then land.
+      final bd = board();
+      final dragged = bd.firstWhere((k) => bd[k] != k && bd.indexOf(k) != k && bd.indexOf(k) < bd.length ~/ 2);
+      final from = tester.getCenter(find.byKey(ValueKey('card-$dragged')));
+      final to = tester.getCenter(find.byKey(ValueKey('card-${bd[dragged]}')));
+      await relaySet('h-drag', '$dragged@${DateTime.now().millisecondsSinceEpoch}');
+      final gesture = await tester.startGesture(from);
+      for (var i = 1; i <= 180; i++) {
+        await gesture.moveTo(Offset.lerp(from, to, i / 180)!);
+        await tester.pump(const Duration(milliseconds: 16));
+      }
+      await gesture.up();
+      await relaySet('h-dragged', '${DateTime.now().millisecondsSinceEpoch}');
+      await settle(tester, 1500);
+      await wait(tester, 'g-saw-drag');
 
       // 4. The host finishes: the normal completion card here, the guest's finish there.
       for (var guard = 0; guard < 40 && find.text('Next puzzle').evaluate().isEmpty; guard++) {
@@ -224,10 +244,31 @@ void main() {
     expect(s().placedACard, isTrue);
     await relaySet('g-moved', encode(board()));
 
-    final held = int.parse(await wait(tester, 'h-holds'));
+    final hold = (await wait(tester, 'h-holds')).split('@');
+    final held = int.parse(hold[0]);
     expect(await until(tester, () => find.byKey(ValueKey('coop-mark-$held')).evaluate().isNotEmpty, seconds: 30), isTrue, reason: 'the host\'s held card');
+    debugPrint('COOP_TIMING host pick -> seen on the guest (incl. the relay poll): ${DateTime.now().millisecondsSinceEpoch - int.parse(hold[1])} ms');
     await shot(tester, 'pair_g03_host_holds', 300);
     await relaySet('g-saw-hold', '1');
+
+    // The host's finger drags a card: it travels here (screens mid-path), then lands.
+    final dragInfo = (await wait(tester, 'h-drag')).split('@');
+    final dragged = int.parse(dragInfo[0]);
+    expect(await until(tester, () => find.byKey(ValueKey('coop-drag-$dragged')).evaluate().isNotEmpty, seconds: 20), isTrue, reason: 'the host\'s dragged card');
+    debugPrint('COOP_TIMING host drag start -> lifted on the guest (incl. the relay poll): ${DateTime.now().millisecondsSinceEpoch - int.parse(dragInfo[1])} ms');
+    final travel = <Offset>[];
+    for (var i = 0; i < 4; i++) {
+      await settle(tester, 450);
+      travel.add(tester.getCenter(find.byKey(ValueKey('card-$dragged'))));
+      await shot(tester, 'pair_g03b_host_drag_${i + 1}', 0);
+    }
+    debugPrint('COOP_NOTE drag on the guest: ${travel.map((p) => '(${p.dx.round()},${p.dy.round()})').join(' ')}');
+    expect(travel.toSet().length, greaterThanOrEqualTo(3), reason: 'it travelled');
+    final dropped = int.parse(await wait(tester, 'h-dragged'));
+    expect(await until(tester, () => board()[dragged] == dragged && find.byKey(ValueKey('coop-drag-$dragged')).evaluate().isEmpty, seconds: 20), isTrue, reason: 'it landed in its place');
+    debugPrint('COOP_TIMING host drop -> landed on the guest: ${DateTime.now().millisecondsSinceEpoch - dropped} ms');
+    await shot(tester, 'pair_g03c_host_drag_landed', 600);
+    await relaySet('g-saw-drag', '1');
 
     await wait(tester, 'h-done', seconds: 300);
     expect(await until(tester, () => find.byKey(const ValueKey('coop-guest-finish')).evaluate().isNotEmpty, seconds: 40), isTrue);

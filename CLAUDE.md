@@ -229,7 +229,12 @@ carden.page redirects there.
   (`AppLinks.getCarden`, `GET_CARDEN` in web/index.html; docs/release-checklist.md). QA: `node
   tools/dev/coop_bot.mjs &`, then `coop_live_test.dart` (guest), `coop_host_test.dart` (host) and
   `coop_pair_test.dart` (two simulators, `CJW_COOP_ROLE=host|guest`; start the guest after the host's build).
-  Store capture `32_coop_board` (scripted stage backend).
+  Store capture `32_coop_board` (scripted stage backend). Live picks and drags (2026-10-17, build 126): one
+  `coop_drags` row per player and game (made by `api` on /coop/create and /join; card, phase, x/y as board
+  fractions), picks sent at once, drag positions 5 a second within Appwrite's 120 updates a minute per player
+  (`lib/state/coop/coop_live.dart`); others see the card glide about 0.25-0.5 s behind the finger. Deploy `api`
+  before a build that sends live rows, then `node tools/dev/api_check.mjs`. QA: `integration_test/coop_drag_test.dart`
+  (the bot's `/pick`, `/drag`, `/live`, `/liverows`).
 - Analytics: `lib/core/analytics.dart` (`AppAnalytics.event` one-liners, `ScreenObserver` on the root and every
   tab navigator, screen names from route patterns, never ids). New features add their events there and in
   `docs/analytics.md`; the privacy policy's usage data section must match.
@@ -305,7 +310,7 @@ carden.page redirects there.
 
 - Endpoint `https://fra.cloud.appwrite.io/v1`, project `6acb4de5003e38d5ebd9`, database `cjw`
   (tables profiles, packs, puzzles, progress, events, event_progress, friends, ledger, my_puzzles,
-  purchases, meta, releases, reports, blocks, feedback, messages, gifts, coop_games, coop_moves). Profiles are readable by anyone; `level` mirrors XP; aggregates `totalMoves`,
+  purchases, meta, releases, reports, blocks, feedback, messages, gifts, coop_games, coop_moves, coop_drags). Profiles are readable by anyone; `level` mirrors XP; aggregates `totalMoves`,
   `totalSeconds`, `solvedByMode`, `questsCompleted` and the "Total Completion" numbers
   (`picturesSolved`, `picturesPerfect`, `packsCompleted`, `packsPerfect`, kept in step by
   `ProfileNotifier.syncCompletion`, backfill `tools/dev/backfill_profile_stats.py`) are public.
@@ -420,14 +425,14 @@ carden.page redirects there.
   `tools/store/README.md`, `docs/release-flow.md`, `docs/release-checklist.md`.
 - Project auth (2026-10-17): only email-password, anonymous, JWT and Apple are on; magic URL, email OTP, phone,
   invites and GraphQL are off (`docs/functions.md` "Project settings").
-- Not yet done (owner): a CI job running `npm test` in
-  `functions/api` (needs the `workflow` token scope), App Privacy questionnaire (add analytics: Usage Data > Product Interaction and Location >
-  Coarse Location, linked, not tracking; Analytics purpose on Purchase History and User ID), refreshing the local
+- Not yet done (owner): merging the pushed branch `workflow-dsym-check` (dSYM check in the release workflow) if
+  wanted, refreshing the local
   team profile in Xcode before the next `tools/dev/device.sh` (it lacks Push Notifications and Associated
   Domains), App Store submission (Paid Apps agreement, banking and tax active since 2026-10-14),
   Mac / Vision Pro availability ticks, restoring
-  `secrets/appwrite-storage-key.txt` (the content tool falls back to the users key), pushing the local
-  branch `workflow-dsym-check` (needs a GitHub token with the `workflow` scope: `gh auth refresh -s workflow`).
+  `secrets/appwrite-storage-key.txt` (the content tool falls back to the users key). The App Privacy answers
+  (analytics, push token) were submitted by the owner on 2026-10-17; CI runs the `api` and `verify-purchase`
+  function tests (`.github/workflows/ci.yml`).
 - **Changing what a purchase gives** (coins, tickets, hints, Peeks, Magic per product): three places must agree
   (`GRANTS` lives in both `functions/api/src/purchase.js` and `functions/verify-purchase/src/main.js`, kept equal by
   `test/economy_test.dart`; redeploy both): the server grant (then redeploy as in

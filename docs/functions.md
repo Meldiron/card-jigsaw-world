@@ -48,6 +48,12 @@ below).
 
 Deployments: `6ad3928e2403472dffb0` (2026-10-17, the first live one), `6ad39945ee63affa160d` (2026-10-17:
 the integrity sweep with `SWEEP_APPLY`, the `blocks` event, gift limits, names without links).
+Waiting for its deployment (2026-10-17): Play together's live rows (`coop_drags`, docs/multiplayer.md,
+"Live picks and drags"): made on `/coop/create` and `/coop/join`, deleted on leave, remove, the
+cleanup, account deletion and by the sweep (`coop_drags:*`). The table exists already; deploy before a
+build that sends live rows, then `node tools/dev/api_check.mjs` (it checks the rows). Until then such a
+build finds no row and plays as before. `delete-account` holds the same account code (twins test);
+redeploying it is optional (builds up to 124 never get live rows).
 
 ## Which function serves which builds
 

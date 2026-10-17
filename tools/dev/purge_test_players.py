@@ -210,8 +210,8 @@ def player_rows(w, uid):
             rows[t] = list(found.values())
         elif t in aw.HOST_TABLES:
             rows[t] = w.c.rows(t, [aw.q('equal', aw.HOST_TABLES[t], [uid])])
-        elif t == 'coop_moves':
-            # The player's own moves and every move in the games they host (the games go too).
+        elif t in ('coop_moves', 'coop_drags'):
+            # The player's own moves (and live rows) and every one in the games they host (the games go too).
             found = {r['$id']: r for r in w.c.rows(t, [aw.q('equal', 'userId', [uid])])}
             for game in rows.get('coop_games', []):
                 for r in w.c.rows(t, [aw.q('equal', 'gameId', [game['$id']])]):

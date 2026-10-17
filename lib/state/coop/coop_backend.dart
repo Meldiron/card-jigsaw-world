@@ -1,3 +1,4 @@
+import 'coop_live.dart';
 import 'coop_models.dart';
 
 /// What reaches a game's players live (Appwrite Realtime): a move row, the game row, a presence.
@@ -23,6 +24,12 @@ class CoopPresenceEvent extends CoopEvent {
   const CoopPresenceEvent(this.presence, {this.deleted = false});
   final Map<String, dynamic> presence;
   final bool deleted;
+}
+
+/// A player's live row changed (`coop_drags`: the card they picked or drag, see `coop_live.dart`).
+class CoopLiveEvent extends CoopEvent {
+  const CoopLiveEvent(this.row);
+  final Map<String, dynamic> row;
 }
 
 /// The realtime connection reported an error (the SDK reconnects by itself; what was missed in
@@ -53,9 +60,15 @@ abstract class CoopBackend {
   /// page, cursor pagination).
   Future<List<Map<String, dynamic>>> movesAfter(String gameId, int board, int afterSeq);
 
-  /// Live events of game [gameId]: its moves (filtered on the server by `gameId`), its row and the
-  /// presences this player can read. The stream ends with [close].
-  Stream<CoopEvent> listen(String gameId);
+  /// Live events of game [gameId]: its moves (filtered on the server by `gameId`), its row, the
+  /// other players' live rows ([me] is left out on the server) and the presences this player can
+  /// read. The stream ends with [close].
+  Stream<CoopEvent> listen(String gameId, {String? me});
+
+  /// Writes this player's live row in game [gameId] (`coop_drags`, made by the function). Throws
+  /// `LiveRateLimited` when Appwrite refuses it for now and `LiveRowMissing` when the row is not
+  /// there or not this player's to write.
+  Future<void> updateLive(String gameId, CoopLive state);
 
   /// Sets this player's presence in game [gameId] (sent over the realtime socket, resent by the SDK
   /// after a reconnect, gone when the socket closes).

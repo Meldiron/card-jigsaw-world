@@ -11,12 +11,14 @@
 //    player's newest photos go with their rows.
 // 4. names: a profile name, or a name copied into friends and blocks, that the name filter refuses
 //    (offensive, a link, an @handle, a domain) becomes "Player".
+// 5. coop_drags (Play together's live rows): a row whose id, permissions, game or seat is wrong goes
+//    (liveVerdict): a player who left or was removed keeps no row the others still hear.
 //
 // Runs on api's hourly schedule (main.js) over rows written in the last two hours, and over
 // everything once a day (FULL_HOUR UTC) or when asked. `apply: false` only reports. `qaOnly` touches
 // only rows of QA players (prefs `qa`), for live checks. Reads are paged; deletes go 100 at a time.
 import { Client, TablesDB, Storage, Users, Query } from 'node-appwrite';
-import { OWNED, FILES_PER_PLAYER, HOUR, rowVerdict, profileVerdict, fileVerdict, nameVerdict, usersIn } from './rules.js';
+import { OWNED, FILES_PER_PLAYER, HOUR, rowVerdict, profileVerdict, fileVerdict, nameVerdict, liveVerdict, usersIn } from './rules.js';
 import { FALLBACK_NAME } from '../gift/gift.js';
 
 const DB = process.env.APPWRITE_DATABASE_ID || 'cjw';
@@ -177,6 +179,23 @@ export async function sweep({ tables, storage, users }, { apply = false, full = 
       await deleteRows('my_puzzles', extra.map((r) => r.$id));
     }
   }
+
+  // 5. Play together's live rows.
+  const liveRows = await rowsOf(tables, 'coop_drags', [...changed, Query.select(['$id', 'gameId', 'userId'])]);
+  const gamesById = new Map();
+  for (const part of chunks([...new Set(liveRows.map((r) => String(r.gameId ?? '')).filter((id) => id))])) {
+    for (const g of await rowsOf(tables, 'coop_games', [Query.equal('$id', part), Query.select(['$id', 'players'])])) gamesById.set(g.$id, g);
+  }
+  const deadLive = [];
+  for (const row of liveRows) {
+    if (!inScope([row.userId, ...usersIn(row.$permissions)])) continue;
+    const why = liveVerdict(row, gamesById.get(row.gameId) ?? null);
+    if (why) {
+      deadLive.push(row.$id);
+      note(`coop_drags:${why}`, row.$id);
+    }
+  }
+  await deleteRows('coop_drags', deadLive);
 
   log(`integrity sweep (${apply ? 'applied' : 'dry run'}${full ? ', full' : ''}${qaOnly ? ', QA only' : ''}): ${JSON.stringify(report.counts)}`);
   return report;

@@ -46,6 +46,19 @@ export function rowVerdict(spec, row) {
   return null;
 }
 
+/// Why a live row of Play together (`coop_drags`, made by the api function: one per player and game)
+/// must go, or null: `id` (not md5 of `live:<game>:<player>`: its player changed its columns), `permissions`
+/// (not read(team) and update(player)), `game` (the game is gone), `seat` (the player is no longer in
+/// it). [game] is the game row (`players`), or null when there is none.
+export function liveVerdict(row, game) {
+  const gameId = String(row.gameId ?? ''), userId = String(row.userId ?? '');
+  if (row.$id !== md5(`live:${gameId}:${userId}`)) return 'id';
+  if (!sameSet(row.$permissions || [], [`read("team:${gameId}")`, `update("user:${userId}")`])) return 'permissions';
+  if (!game) return 'game';
+  if (!(game.players || []).includes(userId)) return 'seat';
+  return null;
+}
+
 /// The permissions the app gives a profile (lib/data/sync/backend.dart, createProfile).
 export const profilePermissions = (id) => ['read("any")', `update("user:${id}")`, `delete("user:${id}")`];
 

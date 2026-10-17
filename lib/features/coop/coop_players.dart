@@ -116,6 +116,22 @@ class CoopCardMark {
   final bool held;
 }
 
+/// Another player's card being dragged ([LiveTracks] in `coop_live.dart`): drawn lifted at [at] (a
+/// fraction of the board, where their finger has it), outlined in their colour with their initial.
+@immutable
+class CoopGhost {
+  const CoopGhost({required this.card, required this.at, required this.mark});
+  final int card;
+  final Offset at;
+  final CoopCardMark mark;
+}
+
+/// Each other player's colour and initial, for their dragged cards.
+Map<String, CoopCardMark> coopPlayerMarks(BuildContext context, WidgetRef ref, CoopState s) => {
+      for (final seat in coopSeats(s))
+        if (!seat.isMe) seat.userId: CoopCardMark(userId: seat.userId, initial: coopInitial(coopName(ref, seat.userId)), color: seat.colorOf(context), onColor: seat.onColorOf(context), held: true),
+    };
+
 /// The marks for the board: card number to mark, for every card another player holds or moved a
 /// moment ago ([CoopState.marks]). Names come from the players' profiles.
 Map<int, CoopCardMark> coopCardMarks(BuildContext context, WidgetRef ref, CoopState s) {

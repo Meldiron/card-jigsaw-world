@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -40,6 +41,9 @@ class BoardWidget extends StatefulWidget {
     this.painting = false,
     this.zoom,
     this.marks = const {},
+    this.ghosts,
+    this.onDragMove,
+    this.onDragEnd,
   });
 
   final ui.Image image;
@@ -61,6 +65,17 @@ class BoardWidget extends StatefulWidget {
   /// Play together: cards other players hold or just moved, by card number, drawn with an outline
   /// in the player's colour and their initial (docs/multiplayer.md).
   final Map<int, CoopCardMark> marks;
+
+  /// Play together: other players' cards being dragged, by card number, drawn where their finger
+  /// has them (with their group) and redrawn whenever this changes (every frame while they move).
+  final ValueListenable<Map<int, CoopGhost>>? ghosts;
+
+  /// Where the card the finger holds is: its centre as a fraction of the board ([start] for the
+  /// first, when the drag begins), so the others can see it move.
+  final void Function(int slot, Offset at, bool start)? onDragMove;
+
+  /// The drag of the card that was at [slot] ended (after [onDrop], when it dropped somewhere).
+  final void Function(int slot)? onDragEnd;
 
   @override
   State<BoardWidget> createState() => _BoardWidgetState();
@@ -281,6 +296,19 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
   void initState() {
     super.initState();
     widget.zoom?.addListener(_onZoom);
+    widget.ghosts?.addListener(_onGhosts);
+  }
+
+  void _onGhosts() {
+    if (mounted) setState(() {});
+  }
+
+  /// Tells the game screen where the dragged card is (Play together).
+  void _reportDrag(int slot, {bool start = false}) {
+    final report = widget.onDragMove;
+    if (report == null) return;
+    final c = tiling.cellCenter(slot, boardSize) + _dragDelta;
+    report(slot, Offset(c.dx / boardSize.width, c.dy / boardSize.height), start);
   }
 
   @override
@@ -289,6 +317,10 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
     if (old.zoom != widget.zoom) {
       old.zoom?.removeListener(_onZoom);
       widget.zoom?.addListener(_onZoom);
+    }
+    if (old.ghosts != widget.ghosts) {
+      old.ghosts?.removeListener(_onGhosts);
+      widget.ghosts?.addListener(_onGhosts);
     }
     if (old.state.showingPicture && !widget.state.showingPicture) {
       _peekReturn = true;
@@ -308,6 +340,7 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
   @override
   void dispose() {
     widget.zoom?.removeListener(_onZoom);
+    widget.ghosts?.removeListener(_onGhosts);
     _autoPan.dispose();
     _bandTimer?.cancel();
     _peekReturnTimer?.cancel();
@@ -380,6 +413,7 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
       _dragDelta -= moved / zoom.zoom;
       _hoverSlot = tiling.slotAt(tiling.cellCenter(slot, boardSize) + _dragDelta, boardSize);
     });
+    _reportDrag(slot);
   }
 
   void _onZoom() {
@@ -402,7 +436,9 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
   static double _bandFor(double zoom) => zoom < 1.6 ? 1.0 : (zoom < 2.6 ? 2.0 : (zoom < 3.4 ? 3.0 : 4.0));
 
   void _cancelDrag() {
-    if (_dragSlot == null) return;
+    final slot = _dragSlot;
+    if (slot == null) return;
+    widget.onDragEnd?.call(slot);
     setState(() {
       _dragSlot = null;
       _hoverSlot = null;
@@ -522,24 +558,39 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
     final hintGroup = widget.state.hintSlot == null ? const <int>{} : {widget.state.hintSlot!};
     final targets = _hoverTargets();
     final targetsValid = targets.isNotEmpty && !targets.any((t) => board.isLocked(t) && !dragGroup.contains(t));
+    // Play together: the others' dragged cards (and their groups), moved by where their finger is.
+    final ghosts = <int, ({Offset delta, CoopGhost ghost, bool lead})>{};
+    if (!widget.state.showingPicture) {
+      for (final g in (widget.ghosts?.value ?? const <int, CoopGhost>{}).values) {
+        final slot = board.slotOfCard(g.card);
+        if (slot < 0 || board.isLocked(slot)) continue;
+        final group = board.groupOf(slot);
+        if (group.any((s) => board.isLocked(s) || dragGroup.contains(s) || ghosts.containsKey(s))) continue;
+        final delta = Offset(g.at.dx * boardSize.width, g.at.dy * boardSize.height) - tiling.cellCenter(slot, boardSize);
+        for (final s in group) {
+          ghosts[s] = (delta: delta, ghost: g, lead: s == slot);
+        }
+      }
+    }
 
-    // Render order: locked, free, (zone lines,) selected/hinted, dragged group last.
+    // Render order: locked, free, (zone lines,) selected/hinted, the others' dragged cards, this
+    // player's dragged group last.
     int rank(int s) {
-      if (dragGroup.contains(s)) return 3;
+      if (dragGroup.contains(s)) return 4;
+      if (ghosts.containsKey(s)) return 3;
       if (selectedGroup.contains(s) || hintGroup.contains(s)) return 2;
       return board.isLocked(s) ? 0 : 1;
     }
 
     final order = List<int>.generate(board.cells, (i) => i)..sort((a, b) => rank(a).compareTo(rank(b)));
-    Widget card(int slot) => _cachedCard(
-          slot,
-          gap,
-          radius,
-          strokeScale,
-          dragging: dragGroup.contains(slot),
-          selected: selectedGroup.contains(slot) || hintGroup.contains(slot),
-          hovered: targets.contains(slot) && !dragGroup.contains(slot) ? (targetsValid ? _Hover.ok : _Hover.blocked) : _Hover.none,
-        );
+    Widget card(int slot) {
+      final selected = selectedGroup.contains(slot) || hintGroup.contains(slot);
+      final hovered = targets.contains(slot) && !dragGroup.contains(slot) ? (targetsValid ? _Hover.ok : _Hover.blocked) : _Hover.none;
+      final ghost = ghosts[slot];
+      // Another player's dragged card moves every frame: always built afresh.
+      if (ghost != null) return _buildCard(slot, gap, radius, strokeScale, dragging: false, selected: selected, hovered: hovered, ghost: ghost);
+      return _cachedCard(slot, gap, radius, strokeScale, dragging: dragGroup.contains(slot), selected: selected, hovered: hovered);
+    }
 
     Widget content = Stack(
         clipBehavior: Clip.none,
@@ -690,7 +741,7 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
     return _Fan(_norm(start), span);
   }
 
-  Widget _buildCard(int slot, double gap, double radius, double strokeScale, {required bool dragging, required bool selected, required _Hover hovered}) {
+  Widget _buildCard(int slot, double gap, double radius, double strokeScale, {required bool dragging, required bool selected, required _Hover hovered, ({Offset delta, CoopGhost ghost, bool lead})? ghost}) {
     final state = widget.state;
     final board = state.board;
     final card = board.slots[slot];
@@ -704,7 +755,7 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
     final flight = !locked && (state.showingPicture || _peekReturn);
     final at = peek ? card : slot;
     final bounds = tiling.cellBounds(at, boardSize);
-    final origin = dragging ? bounds.topLeft + _dragDelta : bounds.topLeft;
+    final origin = dragging ? bounds.topLeft + _dragDelta : (ghost != null ? bounds.topLeft + ghost.delta : bounds.topLeft);
     final grouped = board.groupOf(slot).length > 1;
     final localPoly = _local(tiling.polygon(at, boardSize), bounds);
 
@@ -736,7 +787,7 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
           selected: !plain && (selected || dragging),
           dragging: !plain && dragging,
           hovered: plain ? _Hover.none : hovered,
-          lift: plain ? 0 : (dragging ? 1.0 : (selected ? 0.5 : 0)),
+          lift: plain ? 0 : (dragging || ghost != null ? 1.0 : (selected ? 0.5 : 0)),
           cardStyle: widget.cardStyle,
           fusedEdges: fusedEdges,
           fans: fans,
@@ -754,8 +805,9 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
     if (justLocked || justJoined) {
       child = _LockPulse(key: ValueKey('pulse-$slot-${state.tick}'), strong: justLocked, child: child);
     }
-    // Play together: another player's card, in their colour and with their initial.
-    final mark = peek || locked ? null : widget.marks[card];
+    // Play together: another player's card, in their colour and with their initial (on a dragged
+    // group, the initial goes on the card under their finger).
+    final mark = peek || locked ? null : (ghost?.ghost.mark ?? widget.marks[card]);
     if (mark != null && !dragging) {
       final badge = (math.min(bounds.width, bounds.height) * 0.42).clamp(8.0, 22.0);
       final centre = localPoly.fold(Offset.zero, (a, p) => a + p) / localPoly.length.toDouble();
@@ -764,16 +816,17 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
         children: [
           Positioned.fill(child: child),
           Positioned.fill(child: IgnorePointer(child: CustomPaint(painter: _MarkPainter(polygon: localPoly, color: mark.color, width: mark.held ? 3 * strokeScale : 2 * strokeScale, faded: !mark.held)))),
-          Positioned(
-            left: centre.dx - badge / 2,
-            top: centre.dy - badge / 2,
-            child: IgnorePointer(
-              child: Semantics(
-                label: mark.held ? 'Held by ${mark.initial}' : 'Moved by ${mark.initial}',
-                child: PlayerInitialBadge(key: ValueKey('coop-mark-$card'), initial: mark.initial, color: mark.color, onColor: mark.onColor, size: badge),
+          if (ghost == null || ghost.lead)
+            Positioned(
+              left: centre.dx - badge / 2,
+              top: centre.dy - badge / 2,
+              child: IgnorePointer(
+                child: Semantics(
+                  label: ghost != null ? 'Moved by ${mark.initial} now' : (mark.held ? 'Held by ${mark.initial}' : 'Moved by ${mark.initial}'),
+                  child: PlayerInitialBadge(key: ValueKey(ghost != null ? 'coop-drag-$card' : 'coop-mark-$card'), initial: mark.initial, color: mark.color, onColor: mark.onColor, size: badge),
+                ),
               ),
             ),
-          ),
         ],
       );
     }
@@ -783,7 +836,7 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
     return AnimatedPositioned(
       // Twins that traded identities keep their places on screen, so each keeps its widget (docs/twins.md).
       key: ValueKey('card-${state.cardKeys?[card] ?? card}'),
-      duration: dragging || still ? Duration.zero : (flight ? (_dealFlight ? _dealTime : _flightOf(card)) : const Duration(milliseconds: 280)),
+      duration: dragging || ghost != null || still ? Duration.zero : (flight ? (_dealFlight ? _dealTime : _flightOf(card)) : const Duration(milliseconds: 280)),
       curve: flight ? (_dealFlight ? _dealCurve(card) : Curves.easeInOutCubic) : Curves.easeOutBack,
       left: origin.dx,
       top: origin.dy,
@@ -805,6 +858,7 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
                     _dragDelta = Offset.zero;
                     _hoverSlot = slot;
                   });
+                  _reportDrag(slot, start: true);
                 },
           onPanUpdate: locked
               ? null
@@ -814,6 +868,7 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
                     _dragDelta += d.delta;
                     _hoverSlot = tiling.slotAt(tiling.cellCenter(slot, boardSize) + _dragDelta, boardSize);
                   });
+                  _reportDrag(slot);
                   _steerAutoPan(d.globalPosition);
                 },
           onPanEnd: locked
@@ -828,10 +883,12 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
                     _dragDelta = Offset.zero;
                   });
                   if (target != null && target != slot) widget.onDrop(slot, target);
+                  widget.onDragEnd?.call(slot);
                 },
           onPanCancel: () {
             _stopAutoPan();
             if (_dragSlot == slot) {
+              widget.onDragEnd?.call(slot);
               setState(() {
                 _dragSlot = null;
                 _hoverSlot = null;
@@ -840,7 +897,7 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
             }
           },
           child: AnimatedScale(
-            scale: still ? 1 : (dragging ? 1.06 : (selected ? 1.03 : 1)),
+            scale: still ? 1 : (dragging || ghost != null ? 1.06 : (selected ? 1.03 : 1)),
             duration: const Duration(milliseconds: 140),
             child: _TwinFade(card: card, face: () => face(plain: true), child: child),
           ),

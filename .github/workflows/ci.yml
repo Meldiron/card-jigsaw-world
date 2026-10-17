@@ -33,11 +33,16 @@ jobs:
           path: coverage/lcov.info
 
   function:
-    name: Appwrite function
+    name: Appwrite function (${{ matrix.dir }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # api serves every build from 125; verify-purchase stays for older builds and Apple's notifications.
+        dir: [functions/api, functions/verify-purchase]
     defaults:
       run:
-        working-directory: functions/verify-purchase
+        working-directory: ${{ matrix.dir }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

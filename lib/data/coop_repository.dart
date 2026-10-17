@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/appwrite.dart';
 import '../state/coop/coop_backend.dart';
+import '../state/coop/coop_live.dart';
 import '../state/coop/coop_models.dart';
 import 'repositories.dart';
 
@@ -31,6 +32,7 @@ class AppwriteCoopBackend implements CoopBackend {
   static const functionId = AppwriteConfig.apiFunction;
   static const games = 'coop_games';
   static const moves = 'coop_moves';
+  static const live = 'coop_drags';
 
   @override
   Future<CoopGame?> call(String action, Map<String, dynamic> body) async {
@@ -93,7 +95,18 @@ class AppwriteCoopBackend implements CoopBackend {
   }
 
   @override
-  Stream<CoopEvent> listen(String gameId) {
+  Future<void> updateLive(String gameId, CoopLive state) async {
+    try {
+      await _tables.updateRow(databaseId: AppwriteConfig.databaseId, tableId: live, rowId: CoopLive.rowId(gameId, state.userId), data: state.toData());
+    } on AppwriteException catch (e) {
+      if (e.code == 429) throw const LiveRateLimited();
+      if (e.code == 404 || e.code == 401 || e.code == 403) throw const LiveRowMissing();
+      rethrow;
+    }
+  }
+
+  @override
+  Stream<CoopEvent> listen(String gameId, {String? me}) {
     unawaited(close());
     final controller = StreamController<CoopEvent>.broadcast();
     _events = controller;
@@ -119,6 +132,14 @@ class AppwriteCoopBackend implements CoopBackend {
       (m) => m.events.any((e) => e.endsWith('.create')) ? CoopMoveEvent(m.payload) : null,
     );
     forward(realtime.subscribe(['tablesdb.${AppwriteConfig.databaseId}.tables.$games.rows.$gameId']), (m) => CoopGameEvent(m.payload, deleted: deleted(m)));
+    // The others' live rows (picks and drags): this game's, without this player's own echo.
+    forward(
+      realtime.subscribe(['tablesdb.${AppwriteConfig.databaseId}.tables.$live.rows'], queries: [
+        Query.equal('gameId', [gameId]),
+        if (me != null) Query.notEqual('userId', [me]),
+      ]),
+      (m) => m.events.any((e) => e.endsWith('.update') || e.endsWith('.create')) ? CoopLiveEvent(m.payload) : null,
+    );
     // Presences on their own subscription: a query on a subscription applies to every channel in it.
     forward(realtime.subscribe(['presences']), (m) => CoopPresenceEvent(m.payload, deleted: deleted(m)));
     return controller.stream;
