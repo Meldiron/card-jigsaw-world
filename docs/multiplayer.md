@@ -333,6 +333,18 @@ the two equal.
   text, the friend joins and moves, the host's move reaches the friend, the completion card, Next
   puzzle moves the friend, Remove, End game for everyone; `screenshots/coop2h_*.png`). The share sheet
   is replaced by a recorder (`share_plus_platform_interface`, a dev dependency).
+- Two simulators: `integration_test/coop_pair_test.dart` runs as the host on one
+  (`--dart-define=CJW_COOP_ROLE=host`) and, once its log says "COOP_PAIR waiting for the guest", as
+  the guest on the other (`CJW_COOP_ROLE=guest`, a fresh install); they hand the code and boards over
+  through the bot's `/relay`. Start the second run only after the first build has finished (two
+  builds at once in one checkout break each other). Screens: `screenshots/pair_*.png`.
+- Web: `tools/dev/qa-run.sh run -d web-server --web-port 8137`, the bot hosts (`/game`), a browser
+  opens `http://localhost:8137/join/<code>` (a fresh visit goes straight onto the board), then the
+  bot's `/move`, `/hold`, `/solve`, `/end`. A run stopped from outside keeps its guest: purge it with
+  `purge_test_players.py purge --run <id> --apply`.
+- Passed on 2026-10-17 (iPhone 17 Pro simulators, iOS 26.5, and Chromium): the guest, host and pair
+  suites, and the web flow (join, the host's moves and held card, a move from the browser, the
+  guest's finish with rewards, the end).
 - `test/coop_board_test.dart`: `GameController.showShared` (no move, no history, selection kept unless
   its card moved) and two screens converging through the bridge.
 - Store: `32_coop_board` in `integration_test/store_screenshots_test.dart` (a scripted game with two
