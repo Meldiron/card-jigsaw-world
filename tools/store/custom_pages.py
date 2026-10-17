@@ -48,13 +48,13 @@ EDITABLE_STATES = ("PREPARE_FOR_SUBMISSION", "REJECTED")
 IN_REVIEW_STATES = ("READY_FOR_REVIEW", "WAITING_FOR_REVIEW", "IN_REVIEW")
 LIVE_STATES = ("ACCEPTED", "APPROVED")
 
-# Named crop boxes (capture px, 1320 x 2868) for the custom slides. Check them on a coordinate grid after new
-# captures; the default set's own boxes (EVENT_CARD, PODIUM, STREAK_CARD) come from compose_glass.py.
+# Named crop boxes (capture px, 1320 x 2868) for the custom slides, checked on the 2026-10-17 captures. Check them
+# on a coordinate grid after new captures; the default set's own boxes (EVENT_CARD, PODIUM, STREAK_CARD) come from compose_glass.py.
 BOXES = {
-    "TOOLBAR": (14, 2578, 1306, 2780),       # Shuffle, Peek, Magic, Hint on any board
-    "ALPINE_TILE": (58, 604, 630, 1340),     # Alpine Lakes tile in 28_library_more
-    "AUGUST_TILE": (58, 1596, 630, 2340),    # August 2026 tile in 16_library_daily
-    "GIANT_MAP": (992, 636, 1262, 1048),     # overview map in 30_giant_zoom
+    "TOOLBAR": (30, 2556, 1290, 2762),       # Shuffle, Peek, Magic, Hint on any board, with a little page around
+    "ALPINE_TILE": (60, 1618, 642, 2362),    # Alpine Lakes tile in 28_library_nature (the Library on its Nature chip)
+    "AUGUST_TILE": (60, 1618, 642, 2362),    # August 2026 tile in 16_library_daily
+    "GIANT_MAP": (989, 969, 1260, 1244),     # overview map in 30_giant_zoom, its white frame included
     "TODAY_CARD": (60, 530, 1260, 775),      # today's picture on the daily calendar (18_daily_month_grid)
 }
 

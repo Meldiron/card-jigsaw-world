@@ -124,8 +124,8 @@ const leagueAvatars = ['wave', 'cake', 'globe', 'bike', 'coffee', 'umbrella', 'k
 const coopPuzzle = 'p-00df45e91273'; // Tropical Beaches: Bora Bora lagoon
 const coopFriends = {'stage-ava': ('Ava', 'flower'), 'stage-leo': ('Leo', 'sun')};
 
-/// The store player's name where other players see it (the co-op player list), instead of the random
-/// guest name; the name the design QA presets use. Its initial differs from the friends' (M, A, L).
+/// The store player's name (Home's greeting, the co-op player list) instead of a random guest name; the
+/// name the design QA presets use. Its initial differs from the co-op friends' (M, A, L).
 const storePlayerName = 'Mia';
 
 class _StageCoop implements CoopBackend {
@@ -422,6 +422,14 @@ void main() {
     await settle(tester, 2500);
   }
 
+  /// The custom product page "Nature and animals": the Library on its Nature chip (picked the way a
+  /// link does), so the grid is all nature packs.
+  Future<void> natureLibrary(WidgetTester tester) async {
+    ProviderScope.containerOf(tester.element(find.byType(MaterialApp))).read(libraryFilterProvider.notifier).select('Nature');
+    await settle(tester, 3000);
+    await shot(tester, '28_library_nature');
+  }
+
   /// Sets the player's XP (and the level it gives), avatar and streak through the save sync, so the
   /// screenshots show the player growing from slide to slide.
   Future<void> setProgress(WidgetTester tester, {int? xp, String? avatar, int? streak}) async {
@@ -613,6 +621,9 @@ void main() {
     await tapText(tester, 'Continue');
     await tapText(tester, 'Start playing', ms: 5000);
     await settle(tester, 6000); // let catalog + images load
+    // The store player has a name (Home greets it), not a random guest name.
+    ProviderScope.containerOf(tester.element(find.byType(MaterialApp))).read(syncProvider.notifier).enqueue(SyncOp.put({'displayName': storePlayerName}));
+    await settle(tester, 1500);
 
     // Claim the daily gift so the streak card shows a 1-day streak.
     if (await tapIfShown(tester, 'Claim')) {
@@ -817,6 +828,10 @@ void main() {
         await libraryPacksFirst(tester);
         await shot(tester, '15_library');
       }
+      if (want('28_library_nature')) {
+        await go(tester, '/library', ms: 4500);
+        await natureLibrary(tester);
+      }
       if (want('22_social_league')) {
         await setProgress(tester, xp: 9000, avatar: 'diamond');
         await go(tester, '/social', ms: 4500);
@@ -940,6 +955,7 @@ void main() {
     await shot(tester, '15_library');
     await tester.drag(find.byType(Scrollable).first, const Offset(0, 1500));
     await settle(tester, 1200);
+    await natureLibrary(tester);
     // The Daily chip sits past the screen's edge among the other chips; pick it the way a link does
     // (the row then scrolls it into view).
     ProviderScope.containerOf(tester.element(find.byType(MaterialApp))).read(libraryFilterProvider.notifier).select(LibraryFilter.daily);

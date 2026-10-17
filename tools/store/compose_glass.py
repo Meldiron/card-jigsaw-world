@@ -51,7 +51,7 @@ DAILY = "18_daily_month_grid"
 # The world-day event card on Quests and the leaderboard's podium (capture px).
 EVENT_CARD = (60, 1608, 1260, 2532)
 PODIUM = (60, 720, 1260, 1200)
-STREAK_CARD = (60, 1485, 1260, 1997)  # Home's streak card in 31_home_streak
+STREAK_CARD = (60, 1539, 1260, 2052)  # Home's streak card in 31_home_streak (2026-10-17 Home layout)
 # Play together (store capture scene with scripted players, Bora Bora lagoon in Cards 7x7 Master): a shared
 # board mid-build with the players chip in the top bar, Leo's purple "L" on the cards he moved and
 # Ava's orange "A" on the card she holds; and the player list (avatars in their colour rings, Host /

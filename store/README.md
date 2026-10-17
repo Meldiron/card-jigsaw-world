@@ -69,7 +69,8 @@ the same names with a `_light` suffix):
 | `22_social_league.png` | Social, league leaderboard |
 | `23_wheel.png` | Lucky Wheel sheet |
 | `24_profile.png` | Profile |
-| `25_hero.png` ... `31_home_streak.png` | The glass set's own scenes (hero, Painting, giant board and its zoom, the dark board, Home with a 23-day streak) |
+| `25_hero.png` ... `31_home_streak.png` | The glass set's own scenes (hero, Painting, giant board and its zoom, the dark board, Home with a 23-day streak greeting Mia, the store player's name) |
+| `28_library_nature.png` | The Library on its Nature chip (the custom page Nature and animals lifts the Alpine Lakes tile) |
 | `32_coop_board.png` | Play together, the host's view of a scripted game (no live backend): Bora Bora lagoon in Cards 7x7 Master mid-build (the middle and two corners locked), the players chip, Leo's purple "L" on the card he just moved, Ava's orange "A" on the card she holds |
 | `34_coop_clean.png` | The same board just before the friends' moves, without their marks (the homepage draws live cursors on it); `boards.json` lists its locked cards as `34_coop_locked` |
 | `33_coop_players.png` | The same game's player list, opened from the players chip |
@@ -91,7 +92,7 @@ simulator, and a Python 3 with Pillow (`pip install pillow`).
    tools/dev/qa-run.sh drive --driver=test_driver/store_screenshots.dart \
      --target=integration_test/store_screenshots_test.dart \
      -d D03644FB-6169-4E87-8E0F-CCFC884FBE78
-   # only some glass-set captures (25_hero, 26_painting, 27_giant, 28_library_more), others kept:
+   # only some glass-set captures (25_hero, 26_painting, 27_giant, 28_library_nature, 32_coop_board, ...), others kept:
    #   add --dart-define=CJW_STORE_ONLY=25_hero,27_giant (about 4 minutes instead of 13)
    # the light theme, written as raw/<name>_light.png (slides 1-9 of the glass set):
    tools/dev/qa-run.sh drive --driver=test_driver/store_screenshots.dart \

@@ -1,15 +1,15 @@
 {
   "_note": "Header and search-result art per product page, composed by tools/store/header_assets.py. Header: `headerLine` (one short line under the lotus, in Apple's safe area), `covers` (pack ids) and/or `crops` ([capture, box]) as the pictures around it, `pic` (picture size), `lift` (real board parts lifted, master px). Search result: `searchLine` (the page's first headline), `phone` (capture), `focusY` (capture y placed at the top of the safe area), `searchLift` (cards lifted out of that phone, phone px). Boxes: capture px, \"board\", {\"cell\": [cols, rows, c, r]} or {\"part\": [fx0, fy0, fx1, fy1]}; `group` names one of `groups`.",
   "groups": {
-    "hero_wide": ["25_hero", [664, 503, 1280, 900]],
-    "hero_tall": ["25_hero", [40, 503, 344, 1305]],
+    "hero_wide": ["25_hero", [49, 588, 647, 1030]],
+    "hero_tall": ["25_hero", [985, 1056, 1271, 1965]],
     "painting_loose": ["26_painting", {"cell": [4, 4, 0, 0]}],
     "painting_locked": ["26_painting", {"cell": [4, 4, 1, 1]}],
     "giant_part": ["27_giant", {"part": [0.0, 0.0, 0.5, 0.33]}],
-    "giant_map": ["30_giant_zoom", [992, 636, 1262, 1048]],
+    "giant_map": ["30_giant_zoom", [989, 969, 1260, 1244]],
     "today_card": ["18_daily_month_grid", [60, 530, 1260, 775]],
-    "streak_card": ["31_home_streak", [60, 1485, 1260, 1997]],
-    "corgi_group": ["21_my_puzzle_game", {"part": [0.25, 0.167, 0.75, 0.832]}],
+    "streak_card": ["31_home_streak", [60, 1539, 1260, 2052]],
+    "corgi_group": ["21_my_puzzle_game", {"part": [0.25, 0.25, 0.75, 0.75]}],
     "event_card": ["14_quests_live", [60, 1608, 1260, 2532]]
   },
   "pages": {
@@ -64,7 +64,7 @@
     },
     "photos": {
       "headerLine": "Your photos, card by card",
-      "crops": [["20_my_puzzles", [60, 1244, 642, 1922]], ["20_my_puzzles", [678, 1244, 1260, 1922]], ["20_my_puzzles", [60, 2026, 642, 2600]], ["20_my_puzzles", [678, 462, 1260, 1140]], ["20_my_puzzles", [678, 2026, 1260, 2600]]],
+      "crops": [["20_my_puzzles", [60, 1244, 642, 1990]], ["20_my_puzzles", [678, 1244, 1260, 1990]], ["20_my_puzzles", [60, 2026, 642, 2600]], ["20_my_puzzles", [678, 462, 1260, 1208]], ["20_my_puzzles", [678, 2026, 1260, 2600]]],
       "pic": [600, 760],
       "lift": [{"group": "corgi_group", "x": 3360, "y": 1560, "w": 440, "rot": 6}],
       "searchLine": "Puzzle your\nown photos",
@@ -86,7 +86,7 @@
       "covers": ["pack-snowy-villages", "evpack-christmas-2026", "pack-winter-scenes", "evpack-new-years-eve-2026", "pack-snowy-peaks", "evpack-winter-solstice-2026", "evpack-new-year-2027", "pack-mountain-huts", "pack-starry-nights", "pack-northern-lights"],
       "searchLine": "Winter in\npictures",
       "phone": "14_quests_live",
-      "focusY": 1380
+      "focusY": 1470
     }
   }
 }

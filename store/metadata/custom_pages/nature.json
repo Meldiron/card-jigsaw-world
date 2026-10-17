@@ -16,10 +16,10 @@
      "phones": [{"capture": "19_pack", "x": 160, "y": 1400}]},
     {"note": "How it plays (the default hero, Tulip Fields), without the brand line.",
      "default": "hero", "brand": false, "text": ["top", 260, "center"]},
-    {"note": "The Nature packs in the Library, the Alpine Lakes tile lifted.",
+    {"note": "The Library on its Nature chip, the Alpine Lakes tile lifted.",
      "head": "Quiet places\naround the world", "text": ["top", 200, "left"],
-     "phones": [{"capture": "28_library_more", "x": 360, "y": 600,
-                 "out": [{"crop": ["28_library_more", "ALPINE_TILE"], "x": -330, "y": 1150, "w": 560, "rot": -6, "radius": 40}]}]},
+     "phones": [{"capture": "28_library_nature", "x": 360, "y": 600,
+                 "out": [{"crop": ["28_library_nature", "ALPINE_TILE"], "x": -330, "y": 1150, "w": 560, "rot": -6, "radius": 40}]}]},
     {"default": "daily"},
     {"default": "shapes"},
     {"default": "dark"}
