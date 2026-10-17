@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -32,6 +34,9 @@ class PackCard extends ConsumerWidget {
     // A Giant pack before giant boards open says when it opens instead of a price (027): its
     // page offers the early opening.
     final giantClosed = isGiantPack(pack) && !ref.watch(openFeaturesProvider).giant;
+    // The row under the name (price, progress or level) is one height on every card, so the covers
+    // line up; it grows with the text size (32 pt at Largest), so its words are never cut off.
+    final rowHeight = math.max(16.0, MediaQuery.textScalerOf(context).scale(16));
 
     return Pressable(
       onTap: onTap,
@@ -98,7 +103,7 @@ class PackCard extends ConsumerWidget {
                   // nothing yet), so the photo carries one chip, the category.
                   if (giantClosed)
                     SizedBox(
-                      height: 16,
+                      height: rowHeight,
                       child: Row(
                         children: [
                           Icon(AppIcons.lock, size: 12, color: c.textSecondary),
@@ -111,23 +116,30 @@ class PackCard extends ConsumerWidget {
                     )
                   else if (showLock)
                     SizedBox(
-                      height: 16,
+                      height: rowHeight,
                       child: Row(
                         children: [
                           Icon(AppIcons.lock, size: 12, color: c.textSecondary),
                           const SizedBox(width: 6),
-                          Amount(
-                            currency: pack.priceTickets > 0 ? Currency.tickets : Currency.coins,
-                            value: formatCount(pack.priceTickets > 0 ? pack.priceTickets : pack.priceCoins),
-                            size: 14,
-                            fontSize: TypeSize.footnote,
-                            weight: FontWeight.w700,
+                          // A narrow card with a large text size shrinks the price to fit.
+                          Flexible(
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              alignment: Alignment.centerLeft,
+                              child: Amount(
+                                currency: pack.priceTickets > 0 ? Currency.tickets : Currency.coins,
+                                value: formatCount(pack.priceTickets > 0 ? pack.priceTickets : pack.priceCoins),
+                                size: 14,
+                                fontSize: TypeSize.footnote,
+                                weight: FontWeight.w700,
+                              ),
+                            ),
                           ),
                         ],
                       ),
                     )
                   else
-                    SizedBox(height: 16, child: Center(child: PackProgressLine(progress: progress))),
+                    SizedBox(height: rowHeight, child: Center(child: PackProgressLine(progress: progress))),
                 ],
               ),
             ),
