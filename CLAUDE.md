@@ -420,14 +420,14 @@ carden.page redirects there.
   `tools/store/README.md`, `docs/release-flow.md`, `docs/release-checklist.md`.
 - Project auth (2026-10-17): only email-password, anonymous, JWT and Apple are on; magic URL, email OTP, phone,
   invites and GraphQL are off (`docs/functions.md` "Project settings").
-- Not yet done (owner): a CI job running `npm test` in
-  `functions/api` (needs the `workflow` token scope), App Privacy questionnaire (add analytics: Usage Data > Product Interaction and Location >
-  Coarse Location, linked, not tracking; Analytics purpose on Purchase History and User ID), refreshing the local
+- Not yet done (owner): merging the pushed branch `workflow-dsym-check` (dSYM check in the release workflow) if
+  wanted, refreshing the local
   team profile in Xcode before the next `tools/dev/device.sh` (it lacks Push Notifications and Associated
   Domains), App Store submission (Paid Apps agreement, banking and tax active since 2026-10-14),
   Mac / Vision Pro availability ticks, restoring
-  `secrets/appwrite-storage-key.txt` (the content tool falls back to the users key), pushing the local
-  branch `workflow-dsym-check` (needs a GitHub token with the `workflow` scope: `gh auth refresh -s workflow`).
+  `secrets/appwrite-storage-key.txt` (the content tool falls back to the users key). The App Privacy answers
+  (analytics, push token) were submitted by the owner on 2026-10-17; CI runs the `api` and `verify-purchase`
+  function tests (`.github/workflows/ci.yml`).
 - **Changing what a purchase gives** (coins, tickets, hints, Peeks, Magic per product): three places must agree
   (`GRANTS` lives in both `functions/api/src/purchase.js` and `functions/verify-purchase/src/main.js`, kept equal by
   `test/economy_test.dart`; redeploy both): the server grant (then redeploy as in
