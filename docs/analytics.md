@@ -99,7 +99,7 @@ A route added later is named after its last fixed part (`/join/:code` is `join`)
 | `puzzle_started` | `mode`, `board` (`4x5`), `cards`, `painting`, `giant`, `expand`, `daily`, `pack`, `resumed`, `first` | The board is dealt or resumed for the picture (`game_screen.dart`) |
 | `puzzle_completed` | the board props, `stars`, `moves`, `par`, `seconds`, `hints`, `resumed`, `firstTime` | The last card locks |
 | `puzzle_restarted` | the board props, `from` (`pause`, `replay`), `moves` (pause) | Pause > Shuffle and restart, or Replay on the finish card |
-| `puzzle_discarded` | `from` (`game`, `setup`), `mode`, `board`, `cards`, `moves` (the game's adds the other board props) | Pause > Change mode or board, or Discard progress on the board picker |
+| `puzzle_discarded` | `from` (`game`, `setup`), `mode`, `board`, `cards`, `moves` (the game's adds the other board props) | Pause > Discard and pick a board, or Discard progress on the board picker |
 | `quick_play` | `from` (`home`, `another`, `store`), `pool` (`fresh`, `improve`, `any`) | Home's Quick play, the board picker's Another picture, Store > Play a puzzle (a `/quick` link is a `link_opened`) |
 | `daily_puzzle_opened` | `from` (`home`) | Home's picture of the day (a `/daily` link is a `link_opened`) |
 | `tool_used` | `tool` (`hint`, `magic`, `peek`, `shuffle`, `gather`, `gather_undo`), `paid` (`stock`, `coins`, `free`), `cards` (cards moved), `giant` | The tool did something (`game_screen.dart`) |

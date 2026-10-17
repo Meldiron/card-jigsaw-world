@@ -250,7 +250,7 @@ void main() {
     await settle(tester, 900);
     await shot(tester, '11_pause');
     // Discard the board from the pause menu, land on the difficulty screen, start again.
-    await tapText(tester, 'Change mode or board', ms: 800);
+    await tapText(tester, 'Discard and pick a board', ms: 800);
     await shot(tester, '11d_discard_alert');
     await tapText(tester, 'Discard', ms: 1200);
     await shot(tester, '11e_difficulty_after_discard');

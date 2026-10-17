@@ -1009,7 +1009,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
         },
         onResume: () => Navigator.pop(ctx),
         onRestart: () async {
-          // A started board is thrown away: ask first, like Change mode or board does.
+          // A started board is thrown away: ask first, like Discard and pick a board does.
           final moves = ref.read(gameControllerProvider(_args!)).moves;
           if (moves > 0) {
             final ok = await showAppAlert(
@@ -1044,20 +1044,27 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
             },
           ));
         },
+        // Discard and pick a board (owner, 2026-10-17): the way to throw a board away without
+        // dealing the same one again, and to change its mode or size. The board picker opens with
+        // nothing in progress, every mode and board free to pick.
         onChangeDifficulty: () async {
+          final moves = ref.read(gameControllerProvider(_args!)).moves;
           final ok = await showAppAlert(
             context,
-            title: 'Discard this board?',
-            message: 'Your moves and time on this picture are thrown away so you can pick another mode or board size. Stars and records stay.',
+            title: 'Discard progress?',
+            message: '${moves > 0 ? 'This board and its $moves ${moves == 1 ? 'move' : 'moves'} are' : 'This board is'} thrown away. Then pick any mode and board for this picture. Stars and records stay.',
             confirmLabel: 'Discard',
             destructive: true,
           );
           if (!ok || !mounted || !ctx.mounted) return;
           Navigator.pop(ctx);
-          AppAnalytics.event('puzzle_discarded', {..._boardProps(), 'from': 'game', 'moves': ref.read(gameControllerProvider(_args!)).moves});
+          AppAnalytics.event('puzzle_discarded', {..._boardProps(), 'from': 'game', 'moves': moves});
           await ref.read(progressProvider.notifier).discard(widget.puzzleId);
           if (!mounted) return;
           context.pushReplacement('/play/${widget.puzzleId}');
+          // The board picker's own Discard progress says the same.
+          final rctx = rootNavigatorKey.currentContext;
+          if (rctx != null && rctx.mounted) showToast(rctx, 'Progress discarded. Pick any mode or board.', icon: AppIcons.trash);
         },
       ),
     ).then((_) => _ctrl.resume());
@@ -1823,7 +1830,7 @@ class _PauseSheet extends ConsumerWidget {
                 else ...[
                   _PauseAction(icon: AppIcons.shuffle, label: 'Shuffle and restart', destructive: true, onTap: onRestart),
                   _PauseDivider(),
-                  _PauseAction(icon: AppIcons.sliderHorizontal3, label: 'Change mode or board', destructive: true, onTap: onChangeDifficulty),
+                  _PauseAction(key: const ValueKey('pause-discard'), icon: AppIcons.sliderHorizontal3, label: 'Discard and pick a board', destructive: true, onTap: onChangeDifficulty),
                 ],
               ],
             ),
@@ -1866,8 +1873,9 @@ class _PauseToggle extends StatelessWidget {
                 child: Icon(icon, size: 23, color: on ? context.onAccent : c.textSecondary),
               ),
               const SizedBox(height: 5),
-              Text(label, style: const TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600)),
-              Text(on ? 'On' : 'Off', style: TextStyle(fontSize: TypeSize.micro, fontWeight: FontWeight.w500, color: c.textTertiary)),
+              // A large text size shrinks the words to the button's width instead of breaking them.
+              FittedBox(fit: BoxFit.scaleDown, child: Text(label, maxLines: 1, style: const TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w600))),
+              FittedBox(fit: BoxFit.scaleDown, child: Text(on ? 'On' : 'Off', maxLines: 1, style: TextStyle(fontSize: TypeSize.micro, fontWeight: FontWeight.w500, color: c.textTertiary))),
             ],
           ),
         ),
@@ -1891,15 +1899,18 @@ class _PauseAction extends StatelessWidget {
     return Pressable(
       onTap: onTap,
       scale: 0.99,
-      child: SizedBox(
-        height: 50,
-        child: Row(
-          children: [
-            const SizedBox(width: 16),
-            Icon(icon, size: 20, color: tone ?? context.accent),
-            const SizedBox(width: 14),
-            Expanded(child: Text(label, style: TextStyle(fontSize: TypeSize.callout, fontWeight: FontWeight.w500, color: tone))),
-          ],
+      // 50 pt, taller when a large text size wraps the label.
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 50),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 12, 8),
+          child: Row(
+            children: [
+              Icon(icon, size: 20, color: tone ?? context.accent),
+              const SizedBox(width: 14),
+              Expanded(child: Text(label, style: TextStyle(fontSize: TypeSize.callout, fontWeight: FontWeight.w500, color: tone))),
+            ],
+          ),
         ),
       ),
     );
