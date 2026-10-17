@@ -38,6 +38,7 @@ either form from a link.
 | `/store` (also `/shop`) | Store | `?vip=1` (or `/vip`) opens at VIP |
 | `/wheel` | Lucky Wheel | |
 | `/redeem?code=<pack code>` (also `/redeem/<code>`, `/code/<code>`) | "Redeem a pack code" with the code filled in | The player still taps Redeem; without a code the field is empty |
+| `/inbox?message=<id>` (also `/inbox/<id>`, `/messages/<id>`) | Social > Inbox with that message open | The friend gift notification's link (docs/friend-gifts.md); "Message not available" once it expired or was deleted. Without a valid id, the Inbox |
 | `/gift` | Home with the daily gift | |
 | `/piggy` | Home with the piggy bank | |
 | `/join/<code>` | Play together: joins the game of the invite and opens its shared board | The code is 8 characters (any case, dashes ignored). A new install goes straight to the board; the welcome pages begin after the game. The web page first offers Open in Carden or Play in the browser on an iPhone or iPad. See [multiplayer.md](multiplayer.md) |
@@ -56,7 +57,7 @@ URL's host) or a bare path into a route and a kind; `DeepLinks.show`
   or above Home when the app has just started or shows the welcome screens. The same overlay is
   never stacked twice.
 - **action** (a pack code, a friend code, today's picture, Quick play, the daily gift, the piggy
-  bank): opens the sheet or alert over the screen it belongs to.
+  bank, one inbox message): opens the sheet or alert over the screen it belongs to.
 
 Any link other than plain Home counts as onboarding: a new install opened from a link goes
 straight to it.
@@ -76,6 +77,8 @@ Where links come in:
 
 Inbox links (2026-10-16): `/inbox` (and `/messages`, `/social?tab=inbox`) opens Social > Inbox, and
 `/feedback` opens the Send feedback sheet; inbox messages use any of these paths as their button.
+`/inbox?message=<id>` (2026-10-17, an action) opens one message over the Inbox, after reading the
+inbox again: a tapped gift notification arrives as this link (`PushRegistration`, docs/friend-gifts.md).
 
 ## Universal links (iPhone)
 

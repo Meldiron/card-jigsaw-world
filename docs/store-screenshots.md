@@ -25,32 +25,34 @@ in `tools/store/glass/slides.html`, then rerun the script.
   slide stands alone: only the background crosses a seam. The dark finale draws
   the same panes as deep jewel tones.
 - **One phone size** everywhere: 1,000 px wide on the 1,320 px canvas.
-- **The story:** the hook (1-3: how it plays, how much there is, why you come
-  back, with the streak; the three that search results show), the depth (4-8:
-  four ways to cut a picture, Painting, giant boards, your own photos, quests and
-  world-day events), friends and the leaderboard (9) and the dark finale (10).
-  Read in order the headlines are one text: "Swap cards. Reveal the picture.
-  Thousands of pictures. A new picture every day. One picture, four ways to cut
-  it. Bring the colour back, card by card. Giant boards of hundreds of cards. Puzzle
-  your own photos. Quests and world-day events. Climb the ranks with friends. Just
-  as calm in the dark." Dropped on the owner's word: "Fewer moves, more stars" (a
-  scoring rule) and VIP ("I don't like talking about VIP"). No AI pictures.
-- **The player grows** across the slides: level 4 in the Library, 9 on Quests and
-  17 (second on the podium) on the leaderboard, each with another avatar, and a
-  23-day streak on the daily slide.
+- **The story:** the hook (1-3: how it plays, how much there is, and playing it
+  together with friends, new in 2.0.0; the three that search results show), why
+  you come back (4: the daily picture and the streak), the depth (5-9: four ways
+  to cut a picture, Painting, giant boards, your own photos, quests and world-day
+  events) and the dark finale (10). Read in order the headlines are one text:
+  "Swap cards. Reveal the picture. Thousands of pictures. Play together with
+  friends. A new picture every day. One picture, four ways to cut it. Bring the
+  colour back, card by card. Giant boards of hundreds of cards. Puzzle your own
+  photos. Quests and world-day events. Just as calm in the dark." Dropped on the
+  owner's word: "Fewer moves, more stars" (a scoring rule) and VIP ("I don't like
+  talking about VIP"). Dropped for Play together (2026-10-17; Apple takes 10
+  slides and both are about friends): "Climb the ranks with friends", kept for
+  custom pages as `EXTRA_SLIDES` key `league`. No AI pictures.
+- **The player grows** across the slides: level 4 in the Library and 9 on Quests,
+  each with another avatar, and a 23-day streak on the daily slide.
 - **Contrast:** every headline is measured against what lies behind it
   (`compose_glass.py --contrast`); all reach 4.5:1 or more (2026-10-16: 4.8 on
   the dark slide, 5.7 to 12.3 on the others).
 - **Layouts take turns:** the headline sits top, bottom, middle, left or right,
   and the phones move with it (flat, tilted, pushed to one side, two phones split
-  around the headline on slide 4, a phone in front of a wall of pack covers on
+  around the headline on slide 5, a phone in front of a wall of pack covers on
   slide 2). The owner found "headline on top, phone below" on every slide boring.
   Slides 1-3 keep their phones flat.
 - **Boards mid-build:** every board in play shows some cards locked, some loose
   and some joined (Painting mostly still grey; the giant board in 210 tiny cards
   with only a small part solved).
-- **Break-out cards** lift one real part of the app out of the phone (today's
-  puzzle, the other three shapes, a loose and a locked Painting card, the giant
+- **Break-out cards** lift one real part of the app out of the phone (another
+  player's card in their colour and the player list, today's puzzle, the other three shapes, a loose and a locked Painting card, the giant
   board's map, your own photo, the live event, the VIP trial). A card that enlarges part of the same screen
   sits centred over that part, and every card shares its phone's frame, so it
   tilts with a tilted phone.

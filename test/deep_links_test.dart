@@ -21,6 +21,7 @@ import 'package:carden/state/auth.dart';
 import 'package:carden/state/catalog.dart';
 import 'package:carden/state/coop/coop_controller.dart';
 import 'package:carden/state/coop/coop_models.dart';
+import 'package:carden/state/inbox.dart';
 import 'package:carden/state/profile.dart';
 import 'package:carden/state/progress.dart';
 import 'package:carden/state/settings.dart';
@@ -80,6 +81,10 @@ const _links = <String, (LinkKind, String)>{
   '/inbox': (LinkKind.page, '/social?tab=inbox'),
   '/messages': (LinkKind.page, '/social?tab=inbox'),
   '/social?tab=inbox': (LinkKind.page, '/social?tab=inbox'),
+  '/inbox?message=6ad35c7d000375999a49': (LinkKind.action, '/inbox?message=6ad35c7d000375999a49'),
+  '/inbox/6ad35c7d000375999a49': (LinkKind.action, '/inbox?message=6ad35c7d000375999a49'),
+  '/messages/6ad35c7d000375999a49': (LinkKind.action, '/inbox?message=6ad35c7d000375999a49'),
+  '/inbox?message=bad%20id': (LinkKind.page, '/social?tab=inbox'),
   '/feedback': (LinkKind.action, '/feedback'),
   '/redeem': (LinkKind.action, '/redeem'),
   '/redeem?code=ABCD-EFGH-JKLM-NPQR': (LinkKind.action, '/redeem?code=ABCD-EFGH-JKLM-NPQR'),
@@ -169,6 +174,8 @@ void main() {
         '/play/bad%20id',
         '/player/%3Cscript%3E',
         '/store/extra',
+        '/inbox/a/b',
+        '/inbox/bad%20id',
         '/join',
         '/join/K7QH2MX',
         '/join/K7QH2MX0',
@@ -250,7 +257,7 @@ void main() {
       Puzzle.fromRow('houses-1', {'packId': 'houses', 'title': 'Canal houses', 'imageUrl': 'https://example.invalid/4.jpg'}),
     ];
 
-    Future<(ProviderContainer, GoRouter)> pump(WidgetTester tester, {bool onboarded = true, PlatformCaps caps = PlatformCaps.ios, FakeCoopServer? coop}) async {
+    Future<(ProviderContainer, GoRouter)> pump(WidgetTester tester, {bool onboarded = true, PlatformCaps caps = PlatformCaps.ios, FakeCoopServer? coop, List<InboxMessage> messages = const []}) async {
       SharedPreferences.setMockInitialValues({'onboarded': onboarded});
       final store = await LocalStore.open();
       Widget page(String name) => Scaffold(body: Center(child: Text(name)));
@@ -285,6 +292,7 @@ void main() {
           progressProvider.overrideWith(_NoRows.new),
           packsProvider.overrideWith((ref) async => packs),
           allPuzzlesProvider.overrideWith((ref) async => pictures),
+          inboxMessagesProvider.overrideWith((ref) async => messages),
           currentUserIdProvider.overrideWithValue('guest-1'),
           coopBackendProvider.overrideWithValue(FakeCoopBackend(coop ?? FakeCoopServer(), 'guest-1')),
         ],
@@ -386,6 +394,29 @@ void main() {
       expect(top(router), '/library', reason: 'a code link on iPhone does not move the player');
       expect(find.byKey(const ValueKey('redeem-code-field')), findsNothing);
       expect(find.text('Redeem a pack code'), findsNothing);
+    });
+
+    testWidgets("a gift notification's link opens its message in Social > Inbox", (tester) async {
+      final now = DateTime.now();
+      final gift = InboxMessage(
+        id: 'm1',
+        subject: 'Anna sent you a gift',
+        body: 'Anna sent you 1 ticket. Claim it within 24 hours.',
+        sentAt: now.subtract(const Duration(minutes: 1)),
+        expiresAt: now.add(const Duration(hours: 24)),
+        tickets: 1,
+        fromUserId: 'u-anna',
+        fromName: 'Anna',
+      );
+      final (container, router) = await pump(tester, messages: [gift]);
+      router.go('/library');
+      await tester.pumpAndSettle();
+      await open(tester, container, '/inbox?message=m1');
+      expect(top(router), '/social');
+      expect(container.read(socialTabProvider), SocialTab.inbox);
+      expect(find.byKey(const ValueKey('message-sheet-m1')), findsOneWidget);
+      expect(find.text('A gift from Anna'), findsOneWidget);
+      expect(find.byKey(const ValueKey('message-claim')), findsOneWidget);
     });
 
     testWidgets('an invite from a fresh install opens the shared board above the welcome pages', (tester) async {

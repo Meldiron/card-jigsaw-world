@@ -3,10 +3,14 @@ Thanks for testing Carden 2.0. Please try:
 1. Play today's daily puzzle from Home and finish it.
 2. Open the Library, pick a pack and play a board in Squares or with Painting. Then open another picture: it should start on the same choice.
 3. Drag a card next to its neighbour so they join into a group, then move the group.
-4. Profile > Settings > Accessibility: try a larger text size, Reduce motion, Increase contrast and Differentiate without colour on a few screens.
-5. Open the Store (tap the coin balance on Home) and start the VIP free trial with your Sandbox Apple ID. The VIP badge should appear within a few seconds.
-6. Profile > Settings > Sign in or create account: Sign in with Apple. Your coins and progress should stay.
-7. Add the Carden widget to your Home Screen and tap it; it should open today's puzzle.
-8. Tap a play.carden.page link in Notes or Messages: Carden should open on that screen.
+4. On any board, open the pause menu and tap Play together. Send the link to another tester, or open it in Safari on a second device, and move cards on both.
+5. Social > Friends: add another tester by friend code, then send them a gift from their page. It should arrive in their Inbox.
+6. Profile > Settings > Accessibility: try a larger text size, Reduce motion, Increase contrast and Differentiate without colour on a few screens.
+7. Open the Store (tap the coin balance on Home) and start the VIP free trial with your Sandbox Apple ID. The VIP badge should appear within a few seconds.
+8. Profile > Settings > Sign in or create account: Sign in with Apple. Your coins and progress should stay.
+9. Add the Carden widget to your Home Screen and tap it; it should open today's puzzle.
+10. Tap a play.carden.page link in Notes or Messages: Carden should open on that screen.
+
+New players start with a guided first few pictures; Profile > Settings > Guided start off opens everything at once.
 
 Anything that crashes, freezes, shows a wrong balance or a picture that does not load: use the TestFlight feedback button with a screenshot.

@@ -17,6 +17,7 @@ import '../../state/sync.dart';
 import '../../state/catalog.dart';
 import '../../models/models.dart';
 import '../../state/purchases.dart';
+import '../../state/push.dart';
 import '../../state/reminders.dart';
 import '../../state/settings.dart';
 import '../../data/purchases.dart';
@@ -148,6 +149,16 @@ class SettingsScreen extends ConsumerWidget {
                     ref.read(remindersProvider).refresh();
                   },
                 ),
+              // Gift notifications are pushes from the server (docs/friend-gifts.md); they share
+              // the iOS permission with the reminders.
+              _SwitchRow(
+                key: const ValueKey('settings-gift-notifications'),
+                icon: AppIcons.gift,
+                label: 'Gifts from friends',
+                subtitle: 'A notification when a friend sends you a gift',
+                value: ref.watch(giftNotificationsProvider) && ref.watch(notificationsAllowedProvider).value == true,
+                onChanged: (v) => _toggleGiftNotifications(context, ref, v),
+              ),
             ],
           ]),
           group('Account', [
@@ -297,6 +308,27 @@ class SettingsScreen extends ConsumerWidget {
       context,
       title: 'Notifications are off',
       message: 'Allow notifications for Carden in iOS Settings to get a daily reminder.',
+      confirmLabel: 'Open Settings',
+      cancelLabel: 'Not now',
+    );
+    if (open) await ReminderChannel.openSettings();
+  }
+
+  /// On: asks iOS the first time, then registers this iPhone; off: removes it, so no gift
+  /// notification reaches it. When iOS says no, the alert leads to iOS Settings.
+  Future<void> _toggleGiftNotifications(BuildContext context, WidgetRef ref, bool on) async {
+    final push = ref.read(pushRegistrationProvider);
+    if (!on) {
+      await push.disable();
+      return;
+    }
+    final granted = await push.enable();
+    ref.invalidate(notificationsAllowedProvider);
+    if (granted || !context.mounted) return;
+    final open = await showAppAlert(
+      context,
+      title: 'Notifications are off',
+      message: 'Allow notifications for Carden in iOS Settings to hear when a friend sends you a gift.',
       confirmLabel: 'Open Settings',
       cancelLabel: 'Not now',
     );

@@ -16,9 +16,9 @@
      "head": "Only you can\nsee your photos", "text": ["top", 200, "right"],
      "phones": [{"capture": "21_my_puzzle_game", "x": 260, "y": 600,
                  "out": [{"crop": ["21_my_puzzle_game", {"part": [0.25, 0.167, 0.75, 0.832]}], "x": -340, "y": 860, "w": 500, "rot": -5, "radius": 24}]}]},
-    {"default": 4},
-    {"default": 2},
-    {"default": 3},
-    {"default": 10}
+    {"default": "shapes"},
+    {"default": "library"},
+    {"default": "daily"},
+    {"default": "dark"}
   ]
 }

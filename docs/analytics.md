@@ -137,6 +137,10 @@ A route added later is named after its last fixed part (`/join/:code` is `join`)
 | `shortcut_opened` | `daily` | The Home Screen quick action |
 | `reminder_opened` | `daily` | A daily reminder tapped |
 | `my_puzzle_uploaded` | `source` (`gallery`, `camera`) | A photo added in My Puzzles |
+| `gift_sent` | `kind` (`ticket`, `coins`) | A friend gift the server accepted (Player > Send a gift, `friend_gifts.dart`; docs/friend-gifts.md) |
+| `gift_claimed` | `kind` (`ticket`, `coins`) | A friend's gift claimed in the inbox (after its `inbox_message_claimed`) |
+| `push_permission` | `result` (`granted`, `denied`) | The iOS notification prompt answered, from the gift question or Settings > Gifts from friends (`PushRegistration.enable`) |
+| `push_opened` | `kind` (`gift`) | A gift notification tapped (`app.dart`; its `/inbox?message=` link follows) |
 | `coop_game_created` | `mode`, `board` (`4x5`), `cards`, `painting`, `giant` | Pause > Play together started a game on the board (`join_flow.dart`) |
 | `coop_invite_shared` | `via` (`sheet`, `copy`), `players` | The invite went to the share sheet, or the link was copied (a browser without one) (`share_invite.dart`) |
 | `coop_game_joined` | `freshInstall` (opened before the welcome pages), `platform` (`app`, `web`), `players` (with this one), `cards` | An invite link joined a game (`join_flow.dart`) |
@@ -146,7 +150,6 @@ A route added later is named after its last fixed part (`/join/:code` is `join`)
 | `coop_next_board` | `board` (the game's board number), `cards`, `players` | The host handed the next board to the game (`coop_controller.dart`) |
 | `coop_returned` | `from` (`launch`: the toast after a restart; `board`: the toast after leaving the board), `players` | Return to game (`coop_host.dart`, `game_screen.dart`) |
 
-Gifts between friends and push add their own events (their agents' work, documented with them).
 Play together's events (`coop_*`) never carry a game code, a game id or a player id.
 
 ## Adding an event

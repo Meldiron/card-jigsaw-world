@@ -21,9 +21,11 @@ import 'state/auth.dart';
 import 'state/catalog.dart';
 import 'state/inbox.dart';
 import 'state/purchases.dart';
+import 'state/push.dart';
 import 'state/reminders.dart';
 import 'state/settings.dart';
 import 'state/sync.dart';
+import 'widgets/icons.dart';
 import 'widgets/ui.dart';
 
 class CardenApp extends ConsumerStatefulWidget {
@@ -45,7 +47,10 @@ class _CardenAppState extends ConsumerState<CardenApp> with WidgetsBindingObserv
     WidgetsBinding.instance.addObserver(this);
     ImageFiles.attach(ref.read(storageProvider));
     if (supportsQuickActions) _setUpQuickActions();
-    if (supportsNotifications) _setUpReminders();
+    if (supportsNotifications) {
+      _setUpReminders();
+      _setUpPush();
+    }
     // Apple: listen for transactions as soon as the app starts, so a purchase paid while the app
     // was closed, restarted or on another screen is added now. After the sign-in: the check needs
     // the session.
@@ -98,6 +103,32 @@ class _CardenAppState extends ConsumerState<CardenApp> with WidgetsBindingObserv
     });
   }
 
+  /// Gift notifications (docs/friend-gifts.md): this iPhone's token becomes a push target of the
+  /// player once notifications are allowed; a tapped notification opens its message in the inbox,
+  /// and one that arrives while the game is open refreshes the inbox and shows a toast instead of
+  /// a banner. After the sign-in: the target belongs to the session.
+  void _setUpPush() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      try {
+        await ref.read(authProvider.future);
+      } catch (_) {}
+      if (!mounted) return;
+      await ref.read(pushRegistrationProvider).start(
+        onOpen: (link) {
+          AppAnalytics.event('push_opened', {'kind': 'gift'});
+          final parsed = AppLink.parse(Uri.parse(link));
+          if (mounted && parsed != null) ref.read(deepLinksProvider).show(parsed);
+        },
+        onReceive: (note) {
+          if (!mounted) return;
+          ref.invalidate(inboxMessagesProvider);
+          final ctx = rootNavigatorKey.currentContext;
+          if (ctx != null && ctx.mounted && note.title.isNotEmpty) showToast(ctx, note.title, icon: AppIcons.gift);
+        },
+      );
+    });
+  }
+
   /// Links opened from outside the app on iPhone (the `carden://` scheme, universal links to
   /// the web site, the widget) reach this observer before the router's: [DeepLinks] shows them,
   /// with Home beneath a sheet or a page that opens above the tabs. Other schemes (the Appwrite
@@ -129,7 +160,11 @@ class _CardenAppState extends ConsumerState<CardenApp> with WidgetsBindingObserv
       ref.invalidate(inboxMessagesProvider);
       if (supportsPurchases) ref.read(purchaseFlowProvider.notifier).onResume();
       // Picks up a permission change made in iOS Settings.
-      if (supportsNotifications) ref.read(remindersProvider).refresh();
+      if (supportsNotifications) {
+        ref.read(remindersProvider).refresh();
+        ref.read(pushRegistrationProvider).refresh();
+        ref.invalidate(notificationsAllowedProvider);
+      }
     } else if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive || state == AppLifecycleState.hidden) {
       Sfx.instance.stopMusic();
       ref.read(syncProvider.notifier).onPause();
@@ -141,6 +176,8 @@ class _CardenAppState extends ConsumerState<CardenApp> with WidgetsBindingObserv
   @override
   Widget build(BuildContext context) {
     final settings = ref.watch(settingsProvider);
+    // Watched for the app's life, so it follows sign-ins (a provider nobody listens to is paused).
+    if (supportsNotifications) ref.watch(pushRegistrationProvider);
     final router = ref.watch(routerProvider);
     return MaterialApp.router(
       title: 'Carden',
