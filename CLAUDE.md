@@ -390,9 +390,9 @@ carden.page redirects there.
   Modules load lazily; a cold start is about 5 s, warm calls 0.1-0.5 s. Kept for builds up to 124 (retire only
   when no build that calls them can be used): `verify-purchase` (also Apple's App Store Server Notifications at
   `https://cjw-verify-purchase.fra.appwrite.run/notifications`; `APPLE_ENVIRONMENT=Production` since 2026-10-16,
-  falling back to Sandbox; secret vars can only be updated with `secret: true`; until `api` has execute `any`,
-  then Apple's URLs move to `https://cjw-api.fra.appwrite.run/purchase/notifications`, docs/functions.md "Apple's
-  notifications"; both functions share the purchase and notification code and the server-only
+  falling back to Sandbox; secret vars can only be updated with `secret: true`; Apple's App Store Server
+  Notifications go to `https://cjw-api.fra.appwrite.run/purchase/notifications` since 2026-10-17 (`api` has
+  execute `any`; a Sandbox TEST arrived `via api`), docs/functions.md "Apple's notifications"; both functions share the purchase and notification code and the server-only
   `apple_notifications` table, so each notification applies once), `delete-account`, `redeem-code`,
   `coop-game` (frozen) and `send-gift` (kept equal to api's gift code, limits included). `catalog-snapshot` stays
   separate (daily 03:00 UTC: catalogue file in bucket `catalog`, pointer row `meta/catalog`; see
@@ -441,9 +441,8 @@ carden.page redirects there.
   invites and GraphQL are off (`docs/functions.md` "Project settings").
 - The release workflow checks the archive's dSYMs (a warning if one is missing) and keeps them as a 90-day artifact
   (merged 2026-10-17).
-- Not yet done (owner): giving `api` execute `any` and moving Apple's notification URLs to it
-  (docs/functions.md "Retiring an old function"; the App Store Server API works with the App Store Connect key in
-  Sandbox only, Production needs an In-App Purchase key), refreshing the local
+- Not yet done (owner): an In-App Purchase key for the App Store Server API in Production (the App Store Connect key
+  works in Sandbox only; `tools/dev/apple_notifications.py`), refreshing the local
   team profile in Xcode before the next `tools/dev/device.sh` (it lacks Push Notifications and Associated
   Domains), App Store submission (Paid Apps agreement, banking and tax active since 2026-10-14),
   Mac / Vision Pro availability ticks, restoring
