@@ -61,7 +61,7 @@ You can invite friends to play a picture with you through an invite link; up to 
 
 ## Gifts between friends
 
-Where the game lets you send a gift to a friend, it leaves your balance when you send it and cannot be taken back. Gifts are for friends: they are not for sale or trade, and not a way to move items between your own accounts.
+Once a day you can send each friend a gift of 1 ticket or 150 coins. The game gives it; it does not leave your balance. A gift cannot be taken back once sent, and one your friend has not claimed within 24 hours expires. Gifts are for friends: they are not for sale or trade, and not a way to move items between your own accounts.
 
 ## Pictures and credits
 
