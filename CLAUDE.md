@@ -121,7 +121,8 @@ carden.page redirects there.
 - Screenshot QA: `tools/dev/qa.sh shots` = `tools/dev/qa-run.sh drive
   --driver=test_driver/integration_test.dart --target=integration_test/screenshots_test.dart -d <pro>`
   → `screenshots/*.png`. Any other suite: `tools/dev/qa-run.sh drive --driver=... --target=... -d <udid>`
-  (never a bare `flutter drive`/`flutter run`; `QA_KEEP=1` keeps the run's players for inspection). Store captures: `test_driver/store_screenshots.dart` +
+  (never a bare `flutter drive`/`flutter run`; `QA_KEEP=1` keeps the run's players for inspection; it purges once
+  on EXIT, HUP, INT and TERM, and a signal to qa-run.sh stops flutter too). Store captures: `test_driver/store_screenshots.dart` +
   `integration_test/store_screenshots_test.dart` → `store/raw/`. Extra suites:
   `integration_test/social_profile_test.dart`, `merge_sheet_test.dart`. QA runs send no analytics (`CJW_QA`); add
   `--dart-define=CJW_ANALYTICS=true` to a qa-run.sh run only to check that events arrive. Friend gifts:
@@ -179,7 +180,8 @@ carden.page redirects there.
   invalidating it); `packRowsProvider`, `allPuzzlesProvider` and `eventsProvider` read it.
   `packsProvider` is what screens see: `Pack.isReleasedAt` hides daily months until their first day and
   event packs until 3 days before they open (content is created up to a year ahead).
-- **Catalogue sync** (`docs/catalog-sync.md`): `lib/state/catalog_sync.dart` (`CatalogSync`, snapshot +
+- **Catalogue sync** (`docs/catalog-sync.md`; the copy on the device: SharedPreferences on the iPhone, IndexedDB on
+  the web, `CatalogCache`): `lib/state/catalog_sync.dart` (`CatalogSync`, snapshot +
   delta sync). A launch reads only rows changed since the newest one on the device (about 30 reads); the
   base comes from the daily snapshot file (function `catalog-snapshot`) on first launch and weekly. Never
   read a whole catalogue table on launch (8k+ rows, each one a billed read). The content tool sets
@@ -314,7 +316,10 @@ carden.page redirects there.
   `totalSeconds`, `solvedByMode`, `questsCompleted` and the "Total Completion" numbers
   (`picturesSolved`, `picturesPerfect`, `packsCompleted`, `packsPerfect`, kept in step by
   `ProfileNotifier.syncCompletion`, backfill `tools/dev/backfill_profile_stats.py`) are public.
-  `profiles.piggyLevel` (0-5) and `profiles.questSwaps` (text) since 2026-10-17. Analytics property "Carden"
+  `profiles.piggyLevel` (0-5) and `profiles.questSwaps` (text) since 2026-10-17. `progress.finishes` (string 4000,
+  optional): each finished board with its own values (`BoardFinish`, `lib/models/board_finish.dart`, docs/sync.md);
+  quests and `PlayHabits` count it, never the row's board fields, which a replay overwrites; the app retries a
+  write without it while the column is missing (`writeWithoutUnknown`). Analytics property "Carden"
   (6ad3426500307dfae727, domain carden.page): `appwrite analytics list-metrics --property-id
   6ad3426500307dfae727`. appwrite SDK 27.2.0 (28.0.0 breaks: Dart 3.10, plugin). Messaging push providers
   `apns` (production) and `apns-sandbox`, key 2QJPJFW8JW (APNs on since 2026-10-17); the App ID has Push
@@ -433,6 +438,10 @@ carden.page redirects there.
   `secrets/appwrite-storage-key.txt` (the content tool falls back to the users key). The App Privacy answers
   (analytics, push token) were submitted by the owner on 2026-10-17; CI runs the `api` and `verify-purchase`
   function tests (`.github/workflows/ci.yml`).
+- App Review screenshots for products are per product in `store/metadata/subscriptions/consumables.json`
+  (`store/review/iap-review.png` top of the store; `iap-review-boosters.png` from `raw/35_store_boosters_light` via
+  `tools/store/make_promo.py`); products sit in the review draft, so take them out and back in to upload
+  (apple-release skill).
 - **Changing what a purchase gives** (coins, tickets, hints, Peeks, Magic per product): three places must agree
   (`GRANTS` lives in both `functions/api/src/purchase.js` and `functions/verify-purchase/src/main.js`, kept equal by
   `test/economy_test.dart`; redeploy both): the server grant (then redeploy as in
