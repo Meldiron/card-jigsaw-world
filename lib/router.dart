@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'core/a11y.dart';
+import 'core/analytics.dart';
 import 'core/app_links.dart';
 import 'core/platform.dart';
 import 'features/daily/wheel_screen.dart';
@@ -36,6 +37,8 @@ final routerProvider = Provider<GoRouter>((ref) {
   final webLink = isWeb ? _webStartLink() : null;
   final router = GoRouter(
     navigatorKey: rootNavigatorKey,
+    // Screen views (lib/core/analytics.dart): one observer for this navigator, one per tab.
+    observers: AppAnalytics.observers(),
     // A web visit that starts on a link which needs Home beneath it (a picture, the store, a pack
     // code) starts on Home and hands the link to DeepLinks after the first frame.
     initialLocation: webLink != null || onboarded() ? '/home' : '/welcome',
@@ -46,6 +49,7 @@ final routerProvider = Provider<GoRouter>((ref) {
     onException: (context, state, router) {
       final link = AppLink.parse(state.uri);
       if (link != null && !(link.kind == LinkKind.page && link.path == '/home')) {
+        DeepLinks.reportOpened(link);
         ref.read(deepLinksProvider).show(link);
       } else {
         router.go(onboarded() ? '/home' : '/welcome');
@@ -62,10 +66,12 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(path: '/welcome', pageBuilder: (c, s) => _fade(const OnboardingScreen(), s)),
       StatefulShellRoute.indexedStack(
+        // Each tab's navigator has its own observer; the root's sees only the root navigator.
+        notifyRootObserver: false,
         builder: (context, state, shell) => HomeShell(shell: shell),
         branches: [
-          StatefulShellBranch(routes: [GoRoute(path: '/home', pageBuilder: (c, s) => _noAnim(const HomeScreen(), s))]),
-          StatefulShellBranch(routes: [
+          StatefulShellBranch(observers: AppAnalytics.observers(tab: 0), routes: [GoRoute(path: '/home', pageBuilder: (c, s) => _noAnim(const HomeScreen(), s))]),
+          StatefulShellBranch(observers: AppAnalytics.observers(tab: 1), routes: [
             GoRoute(
               path: '/library',
               pageBuilder: (c, s) => _noAnim(const LibraryScreen(), s),
@@ -74,9 +80,9 @@ final routerProvider = Provider<GoRouter>((ref) {
               ],
             ),
           ]),
-          StatefulShellBranch(routes: [GoRoute(path: '/events', pageBuilder: (c, s) => _noAnim(const EventsScreen(), s))]),
-          StatefulShellBranch(routes: [GoRoute(path: '/social', pageBuilder: (c, s) => _noAnim(const SocialScreen(), s))]),
-          StatefulShellBranch(routes: [
+          StatefulShellBranch(observers: AppAnalytics.observers(tab: 2), routes: [GoRoute(path: '/events', pageBuilder: (c, s) => _noAnim(const EventsScreen(), s))]),
+          StatefulShellBranch(observers: AppAnalytics.observers(tab: 3), routes: [GoRoute(path: '/social', pageBuilder: (c, s) => _noAnim(const SocialScreen(), s))]),
+          StatefulShellBranch(observers: AppAnalytics.observers(tab: 4), routes: [
             GoRoute(
               path: '/profile',
               pageBuilder: (c, s) => _noAnim(const ProfileScreen(), s),
@@ -135,6 +141,7 @@ final routerProvider = Provider<GoRouter>((ref) {
     if (was == true && !now) router.go('/welcome');
   });
   if (webLink != null) {
+    DeepLinks.reportOpened(webLink);
     WidgetsBinding.instance.addPostFrameCallback((_) => ref.read(deepLinksProvider).show(webLink));
   }
   ref.onDispose(router.dispose);
@@ -153,21 +160,22 @@ AppLink? _webStartLink() {
   return link;
 }
 
-Page<T> _cupertino<T>(Widget child, GoRouterState s) => CupertinoPage<T>(key: s.pageKey, child: child);
-Page<T> _noAnim<T>(Widget child, GoRouterState s) => NoTransitionPage<T>(key: s.pageKey, child: child);
+Page<T> _cupertino<T>(Widget child, GoRouterState s) => CupertinoPage<T>(key: s.pageKey, name: screenNameFor(s.fullPath), child: child);
+Page<T> _noAnim<T>(Widget child, GoRouterState s) => NoTransitionPage<T>(key: s.pageKey, name: screenNameFor(s.fullPath), child: child);
 Page<T> _fade<T>(Widget child, GoRouterState s) => CustomTransitionPage<T>(
       key: s.pageKey,
+      name: screenNameFor(s.fullPath),
       child: child,
       transitionDuration: const Duration(milliseconds: 320),
       transitionsBuilder: (_, a, _, c) => FadeTransition(opacity: CurveTween(curve: Curves.easeOut).animate(a), child: c),
     );
-Page<T> _sheet<T>(Widget child, GoRouterState s) => _SheetPage<T>(key: s.pageKey, child: child);
+Page<T> _sheet<T>(Widget child, GoRouterState s) => _SheetPage<T>(key: s.pageKey, name: screenNameFor(s.fullPath), child: child);
 
 /// iOS stacked sheet (UISheetPresentationController look): slides up to just
 /// below the status bar, the page behind scales back, drag down to dismiss. On a wide window
 /// (the web on a tablet or desktop) a centred panel instead, as iPad shows a page sheet.
 class _SheetPage<T> extends Page<T> {
-  const _SheetPage({required this.child, super.key});
+  const _SheetPage({required this.child, super.key, super.name});
   final Widget child;
 
   @override

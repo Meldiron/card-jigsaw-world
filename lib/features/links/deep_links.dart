@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/analytics.dart';
 import '../../core/app_links.dart';
 import '../../core/platform.dart';
 import '../../models/models.dart';
@@ -33,6 +34,18 @@ class DeepLinks {
   DeepLinks(this._ref);
   final Ref _ref;
   final _random = Random();
+
+  /// `link_opened` for a link from outside the app (the three callers that receive one: the
+  /// iPhone's links, a web visit's start address, a path the router has no page for). Links the app
+  /// opens itself (the Store's Play a puzzle, an inbox message's button) are not counted here.
+  static void reportOpened(AppLink link) => AppAnalytics.event('link_opened', {'kind': link.kind.name, 'to': linkTarget(link.path)});
+
+  /// Where a link leads, without ids or codes: `pack`, `play`, `daily`, `add_friend`.
+  static String linkTarget(String path) {
+    final parts = path.split('/').where((s) => s.isNotEmpty).toList();
+    if (parts.length > 1 && parts[0] == 'library' && parts[1] == 'pack') return 'pack';
+    return parts.isEmpty ? 'home' : parts.first.replaceAll('-', '_');
+  }
 
   Future<void> show(AppLink link) async {
     if (!_ref.read(settingsProvider).onboarded) {
