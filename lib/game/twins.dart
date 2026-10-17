@@ -173,13 +173,14 @@ class TwinPicture {
 
 /// How alike two cards are: the CIEDE2000 colour differences between matching samples of the two
 /// cards (boxes of about 2 pt on screen inside the card, and thin strips along its outline).
-/// [edge] is the 95th percentile along the outline, the part a player compares with neighbours;
-/// [speck] the biggest difference in how far a sample's darkest or lightest pixel stands out from
-/// its mean (a thin wire, a bird or a speck of dust shows there while the mean hides it), and
-/// [grain] how far they usually stand out on the grainier of the two cards (a photo's grain, which
-/// hides faint specks from the eye as well).
+/// The colour differences are as seen ([TwinFinder.seen]: lowered near black). [edge] is the 95th
+/// percentile along the outline, the part a player compares with neighbours; [speck] the biggest
+/// difference in how far a sample's darkest or lightest spot stands out from its mean (a thin wire,
+/// a bird, a star or a lit window shows there while the mean hides it), measured against what
+/// that sample may have, [speckAllowed] (more on grainy cards, whose grain hides as much from the
+/// eye; on near-black cards a spot counts by its light over a few pixels: [TwinFinder.spotLimit]).
 class TwinPair {
-  const TwinPair(this.a, this.b, {required this.mean, required this.p95, required this.max, required this.edge, required this.speck, required this.grain});
+  const TwinPair(this.a, this.b, {required this.mean, required this.p95, required this.max, required this.edge, required this.speck, required this.speckAllowed});
   final int a;
   final int b;
   final double mean;
@@ -187,10 +188,7 @@ class TwinPair {
   final double max;
   final double edge;
   final double speck;
-  final double grain;
-
-  /// The [speck] two cards with this [grain] may differ by ([TwinFinder.speckLimit]).
-  double get speckAllowed => math.max(TwinFinder.speckLimit, TwinFinder.speckGrain * grain);
+  final double speckAllowed;
 
   /// How close to the limits: twins at 1 or less ([TwinFinder.meanLimit], [TwinFinder.p95Limit]
   /// for the whole card and its outline, [TwinFinder.maxLimit], [speckAllowed]).
@@ -214,6 +212,11 @@ class TwinPair {
 /// faint cloud or a change in a gradient on one card and not the other keeps them apart. Each
 /// sample also notes how far its darkest and lightest pixels stand out from its mean, so a thin
 /// wire, a bird or a speck that the mean would hide keeps them apart too ([speckLimit]).
+///
+/// Near black the eye tells much less apart (and a phone's black level and reflections hide more):
+/// differences count less below [darkBelow] ([seen]), and on near-black samples a spot counts by
+/// the light it gives over 3 x 3 pixels, so the grain and faint dust of a night photo do not keep
+/// cards apart while a star, a lamp or a lit window does ([spotLimit]).
 /// Twin classes are built so that every two cards of a class are twins. Cards are first sorted by
 /// their mean colour, so only near neighbours are compared (a 666-piece board compares a few
 /// thousand pairs).
@@ -242,6 +245,48 @@ class TwinFinder {
   static const speckLimit = 1.6;
   static const speckGrain = 3.0;
 
+  /// Below this lightness (L*) a colour difference counts less, down to [darkFloor] of itself at
+  /// black ([seen]).
+  static const darkBelow = 20.0;
+  static const darkFloor = 0.7;
+
+  /// Samples of both cards at or below this lightness compare their spots ([spotLimit]) instead of
+  /// single pixels.
+  static const spotBelow = 15.0;
+
+  /// How much more (in glow, the brightest channel, 0 to 100) the brightest or darkest 3 x 3
+  /// pixels of a near-black sample may stand out on one card than on the other: above a faint star
+  /// or dust, below a star that shows, a lamp, a lit window or a light trail. Grainy cards may
+  /// differ by [speckGrain] times their grain.
+  static const spotLimit = 3.4;
+
+  /// How much a difference between colours of lightness up to [l] counts (near black, less).
+  static double darkness(double l) => l >= darkBelow ? 1.0 : darkFloor + (1 - darkFloor) * math.max(0.0, l) / darkBelow;
+
+  /// The CIEDE2000 difference between two colours as seen: lowered near black ([darkness]), where
+  /// colour fades first (the eye sees little hue in the dark: chroma counts [darkChroma] of itself),
+  /// and a little near white ([brightness]).
+  static double seen(double l1, double a1, double b1, double l2, double a2, double b2) {
+    final l = math.max(l1, l2);
+    if (l < darkBelow) {
+      final c = darkChroma + (1 - darkChroma) * math.max(0.0, l) / darkBelow;
+      return deltaE00(l1, a1 * c, b1 * c, l2, a2 * c, b2 * c) * darkness(l);
+    }
+    return deltaE00(l1, a1, b1, l2, a2, b2) * brightness(math.min(l1, l2));
+  }
+
+  /// Above this lightness (L*) a difference counts a little less, down to [brightFloor] of itself
+  /// at white: pale skies, snow and paper, where a screen's whites and a photo's compression leave
+  /// faint bands the eye does not hold against each other.
+  static const brightAbove = 90.0;
+  static const brightFloor = 0.8;
+
+  /// How much a difference between colours of lightness [l] and up counts (near white, a little less).
+  static double brightness(double l) => l <= brightAbove ? 1.0 : 1 - (1 - brightFloor) * (math.min(l, 100.0) - brightAbove) / (100 - brightAbove);
+
+  /// How much of a colour's chroma counts at black (all of it from [darkBelow] up).
+  static const darkChroma = 0.25;
+
   /// Boxes across a card's longer side: from [minBoxes] to [maxBoxes], about one per 4 pixels.
   static const minBoxes = 12;
   static const maxBoxes = 32;
@@ -258,8 +303,14 @@ class TwinFinder {
   late final List<Float64List> _lab;
   late final List<(double, double, double)> _mean;
 
-  /// Per card: how far a box's darkest and lightest pixels usually stand out (the median).
+  /// Per card: how far a box's darkest and lightest pixels usually stand out (the median), and
+  /// the same for the 3 x 3 spots of its near-black boxes.
   late final Float64List _grain;
+  late final Float64List _grain3;
+
+  /// The mean colour (L, a, b) of [card]'s boxes, and how grainy it is (for the report).
+  (double, double, double) meanOf(int card) => _mean[card];
+  double grainOf(int card) => _grain[card];
 
   /// Per card: the mean colour of each part of a 4 x 4 grid over it (L, a, b), and per shape class
   /// the part each box lies in and how many boxes each part has. Two cards whose parts differ
@@ -274,28 +325,40 @@ class TwinFinder {
     _lab = List.filled(n, Float64List(0));
     _mean = List.filled(n, (0.0, 0.0, 0.0));
     _grain = Float64List(n);
+    _grain3 = Float64List(n);
     _parts = List.filled(n, Float64List(0));
     for (var card = 0; card < n; card++) {
       final cls = tiling.classOf(card);
       if (!_boxes.containsKey(cls)) _layout(card, cls);
       final boxes = _boxes[cls]!, strips = _strips[cls]!;
-      final origin = tiling.cellBounds(card, _size).topLeft;
+      final cell = tiling.cellBounds(card, _size);
+      final origin = cell.topLeft;
+      // Spots look no further than the card's own pixels, so a light just across its edge does not
+      // count for it.
+      final window = (
+        cell.left.round().clamp(0, picture.width - 1),
+        cell.top.round().clamp(0, picture.height - 1),
+        cell.right.round().clamp(1, picture.width),
+        cell.bottom.round().clamp(1, picture.height),
+      );
       final lab = Float64List((boxes.length + strips.length) * _stride);
       var ml = 0.0, ma = 0.0, mb = 0.0;
       for (var i = 0; i < boxes.length; i++) {
-        _store(lab, i, _boxPixels(boxes[i].shift(origin)));
+        _store(lab, i, _boxPixels(boxes[i].shift(origin), window));
         ml += lab[_stride * i];
         ma += lab[_stride * i + 1];
         mb += lab[_stride * i + 2];
       }
       for (var j = 0; j < strips.length; j++) {
-        _store(lab, boxes.length + j, _pointPixels(strips[j], origin));
+        _store(lab, boxes.length + j, _pointPixels(strips[j], origin, window));
       }
       final k = math.max(1, boxes.length);
       _lab[card] = lab;
       _mean[card] = (ml / k, ma / k, mb / k);
       final spread = [for (var i = 0; i < boxes.length; i++) (lab[_stride * i + 3] + lab[_stride * i + 4]) / 2]..sort();
       _grain[card] = spread.isEmpty ? 0 : spread[spread.length ~/ 2];
+      final spread3 = [for (var i = 0; i < boxes.length; i++) if (lab[_stride * i + 5] >= 0) (lab[_stride * i + 5] + lab[_stride * i + 6]) / 2]..sort();
+      _grain3[card] = spread3.isEmpty ? 0 : spread3[spread3.length ~/ 2];
       final partOf = _partOf[cls]!, partBoxes = _partBoxes[cls]!;
       final parts = Float64List(_grid * _grid * 3);
       for (var i = 0; i < boxes.length; i++) {
@@ -408,8 +471,14 @@ class TwinFinder {
     return true;
   }
 
-  /// Values kept per sample: L, a, b, and how far the darkest and the lightest pixel stand out.
-  static const _stride = 5;
+  /// Values kept per sample: L, a, b, how far the darkest and the lightest pixel stand out, and
+  /// how far the darkest and the brightest 3 x 3 spot stand out by their glow (-1 on a sample that
+  /// is not dark).
+  static const _stride = 7;
+
+  /// Samples darker than this (mean lightness, 0 to 100, from the gamma-encoded values) note their
+  /// spots: every sample of L* [spotBelow] or less is.
+  static const _spotLuma = 30.0;
 
   void _store(Float64List into, int i, _Pixels p) {
     final k = math.max(1, p.count);
@@ -420,10 +489,39 @@ class TwinFinder {
     into[_stride * i + 2] = b;
     into[_stride * i + 3] = luma - p.darkest;
     into[_stride * i + 4] = p.lightest - luma;
+    // A spot reaches past the sample, so it may not stand out at all: 0 then.
+    final glow = p.spots ? p.glow / p.spotCount : 0.0;
+    into[_stride * i + 5] = p.spots ? math.max(0.0, glow - p.darkest3) : -1;
+    into[_stride * i + 6] = p.spots ? math.max(0.0, p.lightest3 - glow) : -1;
   }
 
-  /// The pixels in [r].
-  _Pixels _boxPixels(Rect r) {
+  /// How bright the pixel at [x], [y] shines (its brightest channel, 0 to 100): in the dark a red
+  /// light trail shows as much as a white star, though its lightness is low.
+  double _glow(int x, int y) {
+    final i = (y * picture.width + x) * 4, px = picture.rgba;
+    return math.max(px[i], math.max(px[i + 1], px[i + 2])) / 2.55;
+  }
+
+  /// Mean glow of the 3 x 3 pixels around [x], [y] that lie in [window] (left, top, right,
+  /// bottom; right and bottom exclusive).
+  double _spot(int x, int y, (int, int, int, int) window) {
+    final (wx0, wy0, wx1, wy1) = window;
+    var sum = 0.0;
+    var count = 0;
+    for (var yy = math.max(wy0, y - 1); yy <= math.min(wy1 - 1, y + 1); yy++) {
+      for (var xx = math.max(wx0, x - 1); xx <= math.min(wx1 - 1, x + 1); xx++) {
+        sum += _glow(xx, yy);
+        count++;
+      }
+    }
+    return count == 0 ? _glow(x, y) : sum / count;
+  }
+
+  /// How many of the three positions around [i] lie from [lo] to [hi] - 1.
+  static int _inside3(int i, int lo, int hi) => math.max(1, 3 - (i <= lo ? 1 : 0) - (i >= hi - 1 ? 1 : 0));
+
+  /// The pixels in [r], and on a dark one its 3 x 3 spots within [window].
+  _Pixels _boxPixels(Rect r, (int, int, int, int) window) {
     final w = picture.width, h = picture.height;
     final x0 = r.left.round().clamp(0, w - 1), y0 = r.top.round().clamp(0, h - 1);
     final x1 = math.max(x0 + 1, r.right.round().clamp(0, w)), y1 = math.max(y0 + 1, r.bottom.round().clamp(0, h));
@@ -435,16 +533,51 @@ class TwinFinder {
         i += 4;
       }
     }
+    if (p.luma / math.max(1, p.count) < _spotLuma) {
+      // The 3 x 3 means over the box (of the pixels inside the window): rows of three sums, then
+      // columns of three of those.
+      final (wx0, wy0, wx1, wy1) = window;
+      final bw = x1 - x0, bh = y1 - y0;
+      final rows = Float64List((bw + 2) * bh);
+      for (var y = -1; y <= bh; y++) {
+        final yy = y0 + y;
+        if (yy < wy0 || yy >= wy1) continue;
+        final band = Float64List(bw + 2);
+        for (var x = -1; x <= bw; x++) {
+          final xx = x0 + x;
+          if (xx >= wx0 && xx < wx1) band[x + 1] = _glow(xx, yy);
+        }
+        for (var x = 0; x < bw; x++) {
+          final row3 = band[x] + band[x + 1] + band[x + 2];
+          // Each row of sums counts for the box rows it touches.
+          for (var r = y - 1; r <= y + 1; r++) {
+            if (r >= 0 && r < bh) rows[r * (bw + 2) + x] += row3;
+          }
+        }
+      }
+      for (var r = 0; r < bh; r++) {
+        final rowsIn = _inside3(y0 + r, wy0, wy1);
+        for (var x = 0; x < bw; x++) {
+          p.addSpot(rows[r * (bw + 2) + x] / (rowsIn * _inside3(x0 + x, wx0, wx1)));
+        }
+      }
+    }
     return p;
   }
 
-  /// The pixels under [points] (shifted by [origin]).
-  _Pixels _pointPixels(List<Offset> points, Offset origin) {
+  /// The pixels under [points] (shifted by [origin]), and on a dark sample their 3 x 3 spots
+  /// within [window].
+  _Pixels _pointPixels(List<Offset> points, Offset origin, (int, int, int, int) window) {
     final w = picture.width, h = picture.height;
     final p = _Pixels();
     for (final q in points) {
       final x = (q.dx + origin.dx).floor().clamp(0, w - 1), y = (q.dy + origin.dy).floor().clamp(0, h - 1);
       p.add(picture.rgba, (y * w + x) * 4);
+    }
+    if (p.luma / math.max(1, p.count) < _spotLuma) {
+      for (final q in points) {
+        p.addSpot(_spot((q.dx + origin.dx).floor().clamp(0, w - 1), (q.dy + origin.dy).floor().clamp(0, h - 1), window));
+      }
     }
     return p;
   }
@@ -527,23 +660,25 @@ class TwinFinder {
       var sum = 0.0, count = 0;
       for (var q = 0; q < weights.length; q++) {
         if (weights[q] == 0) continue;
-        final d = deltaE00(pa[3 * q], pa[3 * q + 1], pa[3 * q + 2], pb[3 * q], pb[3 * q + 1], pb[3 * q + 2]);
-        if (d > maxLimit) return TwinPair(a, b, mean: d, p95: d, max: d, edge: d, speck: 0, grain: 0);
+        final d = seen(pa[3 * q], pa[3 * q + 1], pa[3 * q + 2], pb[3 * q], pb[3 * q + 1], pb[3 * q + 2]);
+        if (d > maxLimit) return TwinPair(a, b, mean: d, p95: d, max: d, edge: d, speck: 0, speckAllowed: 1);
         sum += d * weights[q];
         count += weights[q];
       }
-      if (count > 0 && sum / count > 1.15 * meanLimit) return TwinPair(a, b, mean: sum / count, p95: 0, max: 0, edge: 0, speck: 0, grain: 0);
+      if (count > 0 && sum / count > 1.15 * meanLimit) return TwinPair(a, b, mean: sum / count, p95: 0, max: 0, edge: 0, speck: 0, speckAllowed: 1);
     }
     final boxes = _boxes[cls]!.length, total = boxes + _strips[cls]!.length;
     final allowedOver = (total * 0.05).floor(), allowedEdgeOver = ((total - boxes) * 0.05).floor();
-    var sum = 0.0, worst = 0.0, speck = 0.0;
-    final grain = math.max(_grain[a], _grain[b]);
-    final speckAllowed = math.max(speckLimit, speckGrain * grain);
+    var sum = 0.0, worst = 0.0;
+    // The worst speck against what its sample may have.
+    var speck = 0.0, speckAllowed = 1.0;
+    final pixelAllowed = math.max(speckLimit, speckGrain * math.max(_grain[a], _grain[b]));
+    final spotAllowed = math.max(spotLimit, speckGrain * math.max(_grain3[a], _grain3[b]));
     var over = 0, edgeOver = 0;
     final diffs = stopEarly ? null : Float64List(total);
     for (var i = 0; i < total; i++) {
       final j = _stride * i;
-      final d = deltaE00(la[j], la[j + 1], la[j + 2], lb[j], lb[j + 1], lb[j + 2]);
+      final d = seen(la[j], la[j + 1], la[j + 2], lb[j], lb[j + 1], lb[j + 2]);
       diffs?[i] = d;
       sum += d;
       if (d > worst) worst = d;
@@ -551,29 +686,36 @@ class TwinFinder {
         over++;
         if (i >= boxes) edgeOver++;
       }
-      final s = math.max((la[j + 3] - lb[j + 3]).abs(), (la[j + 4] - lb[j + 4]).abs());
-      if (s > speck) speck = s;
+      // Near black a spot counts by its light over 3 x 3 pixels; elsewhere every pixel counts.
+      final spots = la[j] <= spotBelow && lb[j] <= spotBelow && la[j + 5] >= 0 && lb[j + 5] >= 0;
+      final s = spots ? math.max((la[j + 5] - lb[j + 5]).abs(), (la[j + 6] - lb[j + 6]).abs()) : math.max((la[j + 3] - lb[j + 3]).abs(), (la[j + 4] - lb[j + 4]).abs());
+      final allowed = spots ? spotAllowed : pixelAllowed;
+      if (s / allowed > speck / speckAllowed) {
+        speck = s;
+        speckAllowed = allowed;
+      }
       if (stopEarly && (d > maxLimit || over > allowedOver || edgeOver > allowedEdgeOver || speck > speckAllowed || sum > meanLimit * total)) {
-        return TwinPair(a, b, mean: sum / (i + 1), p95: d, max: worst, edge: d, speck: speck, grain: grain);
+        return TwinPair(a, b, mean: sum / (i + 1), p95: d, max: worst, edge: d, speck: speck, speckAllowed: speckAllowed);
       }
     }
     final mean = total == 0 ? 0.0 : sum / total;
     // Stopped early or not, the counts above say whether 95% stay within the limit.
-    if (diffs == null) return TwinPair(a, b, mean: mean, p95: 0, max: worst, edge: 0, speck: speck, grain: grain);
+    if (diffs == null) return TwinPair(a, b, mean: mean, p95: 0, max: worst, edge: 0, speck: speck, speckAllowed: speckAllowed);
     double p95(Float64List xs) {
       if (xs.isEmpty) return 0;
       final s = Float64List.fromList(xs)..sort();
       return s[math.min(s.length - 1, (s.length * 0.95).ceil() - 1)];
     }
 
-    return TwinPair(a, b, mean: mean, p95: p95(diffs), max: worst, edge: p95(Float64List.sublistView(diffs, boxes)), speck: speck, grain: grain);
+    return TwinPair(a, b, mean: mean, p95: p95(diffs), max: worst, edge: p95(Float64List.sublistView(diffs, boxes)), speck: speck, speckAllowed: speckAllowed);
   }
 
   /// Pairs worth comparing: same shape class, and mean colours no further apart than the mean
   /// difference allows (with some room: for colours this close CIEDE2000 behaves like a distance,
   /// and the mean of the differences is at least the difference of the means). Cards are scanned
-  /// in order of lightness, within the CIE76 distance that can hold such a pair.
-  Iterable<(int, int)> candidates({double reach = 6 * meanLimit}) sync* {
+  /// in order of lightness, within the CIE76 distance that can hold such a pair (twice as far near
+  /// black, where differences count half).
+  Iterable<(int, int)> candidates({double reach = 12 * meanLimit}) sync* {
     final n = tiling.cells;
     final order = List<int>.generate(n, (i) => i)..sort((x, y) => _mean[x].$1.compareTo(_mean[y].$1));
     for (var i = 0; i < n; i++) {
@@ -585,7 +727,7 @@ class TwinFinder {
         if (lb - la > reach) break;
         if (tiling.classOf(a) != tiling.classOf(b)) continue;
         final d2 = (lb - la) * (lb - la) + (ab - aa) * (ab - aa) + (bb - ba) * (bb - ba);
-        if (d2 > reach * reach || deltaE00(la, aa, ba, lb, ab, bb) > 1.15 * meanLimit) continue;
+        if (d2 > reach * reach || seen(la, aa, ba, lb, ab, bb) > 1.15 * meanLimit) continue;
         yield a < b ? (a, b) : (b, a);
       }
     }
@@ -631,6 +773,19 @@ class _Pixels {
   int count = 0;
   int r = 0, g = 0, b = 0;
   double luma = 0, darkest = double.infinity, lightest = double.negativeInfinity;
+
+  /// The darkest and lightest 3 x 3 spot (by glow, the brightest channel), on a dark sample.
+  bool spots = false;
+  int spotCount = 0;
+  double glow = 0, darkest3 = double.infinity, lightest3 = double.negativeInfinity;
+
+  void addSpot(double y) {
+    spots = true;
+    spotCount++;
+    glow += y;
+    if (y < darkest3) darkest3 = y;
+    if (y > lightest3) lightest3 = y;
+  }
 
   void add(Uint8List px, int i) {
     final pr = px[i], pg = px[i + 1], pb = px[i + 2];
