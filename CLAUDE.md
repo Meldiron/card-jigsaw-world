@@ -432,8 +432,9 @@ carden.page redirects there.
   `tools/store/README.md`, `docs/release-flow.md`, `docs/release-checklist.md`.
 - Project auth (2026-10-17): only email-password, anonymous, JWT and Apple are on; magic URL, email OTP, phone,
   invites and GraphQL are off (`docs/functions.md` "Project settings").
-- Not yet done (owner): merging the pushed branch `workflow-dsym-check` (dSYM check in the release workflow) if
-  wanted, refreshing the local
+- The release workflow checks the archive's dSYMs (a warning if one is missing) and keeps them as a 90-day artifact
+  (merged 2026-10-17).
+- Not yet done (owner): refreshing the local
   team profile in Xcode before the next `tools/dev/device.sh` (it lacks Push Notifications and Associated
   Domains), App Store submission (Paid Apps agreement, banking and tax active since 2026-10-14),
   Mac / Vision Pro availability ticks, restoring
