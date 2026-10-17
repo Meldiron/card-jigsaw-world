@@ -100,6 +100,15 @@ another device) charges nothing (`SkipReason.piggyUpgraded`), coins spent elsewh
 keeps the larger level of the two saves, like unlocks. Older builds ignore the column: they show and
 fill a 500-coin bank (their solve op adds nothing past 500) and still open a bigger one in full.
 
+`profiles.questSwaps` (text, optional, no default), added 2026-10-17 (Appwrite CLI): quests swapped for
+a ticket, a JSON map of slot to the quests the slot has had this day or week (`Goals.decodeSwaps`,
+docs/economy.md "Swapping a quest"). `SyncOp.questSwap` is built against the fresh row and `Put`s the
+whole map: it names the number of swaps it saw in the slot, so a swap made meanwhile on another device
+wins and this one charges nothing (`SkipReason.questSwapped`); a quest claimed in the slot meanwhile
+skips it too (`questClaimed`). Two swaps of different slots on two devices within one round trip can
+overwrite each other's entry (the Put is last-writer-wins, like other guarded ops; the ticket stays
+spent). A sign-in merge takes the chosen save's map. Older builds ignore the column.
+
 ## Known limits
 
 - A guarded op is checked and then written: two devices claiming the same quest within one round

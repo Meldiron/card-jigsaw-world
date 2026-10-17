@@ -162,6 +162,7 @@ cheap farming trick to worry about; replays pay 40% and are not worth farming.
 | Opening the piggy bank | 1 ticket | `Economy.piggyOpenTickets` |
 | Piggy bank upgrade (owner, 2026-10-17: a coin sink) | 5,000 coins each, five of them: 500 -> 600 -> 700 -> 800 -> 900 -> 1,000 coins (25,000 for all five, about ten hours of a regular player's play) | `Economy.piggyUpgradeCoins`, `ProfileNotifier.upgradePiggy`, column `profiles.piggyLevel` |
 | Restoring a lost streak | `3 + longest ~/ 7` tickets, 3 to 10 | `Economy.streakRestoreTickets` |
+| Swapping a quest (owner, 2026-10-17) | 1 ticket a swap, any quest not finished or claimed | `QuestSwap.tickets`, `ProfileNotifier.swapQuest`, column `profiles.questSwaps` |
 | VIP (real money) | $2.99 a month or $14.99 a year: every pack and every past month | App Store |
 
 Free: six starter packs, one per category (Wild Nature, Butterflies, Paris, Fruit Markets,
@@ -618,6 +619,31 @@ Rules (`Goals.daily`, `Goals.weekly`, `PlayHabits`, `_Lanes` in `lib/state/rewar
   stars twice" (the fallbacks: that, "Solve 5 puzzles", "Solve 2 pictures without Peek").
 - Keys carry the slot (`d:2026-10-15:s2:mode-hexagons`, `w2026-10-12:s4:paint`); a slot keeps a quest
   claimed in it, so a level-up during the day never pays a slot twice.
+
+### Swapping a quest (owner request, 2026-10-17)
+
+Any daily or weekly quest that is not finished and not claimed can be swapped for another for 1 ticket
+(every swap costs 1 ticket, and only that quest changes). The Quests tab shows a small "Swap [ticket] 1"
+on each such row; it asks first ("Swap this quest?" names the quest that comes), and a player without a
+ticket gets the store, as elsewhere. VIP members can swap the VIP quests too.
+
+- **What comes**: the next quest, in a rotation by day (or week) and slot, from a lane none of the
+  period's quests has used, shown now or swapped away, that fits the other quests (one board still never
+  finishes two) and is not finished already (it would pay for the ticket at once). The pool is the
+  ways of playing and skills the player has, every open shape and today's daily puzzle (daily), and the
+  plain ones ("Earn 3 stars twice", "Solve 2 pictures without Peek", "Collect 15 stars"). When nothing is
+  left, the quest has no swap. The fixed quests ("Solve 3 puzzles", "Solve 10 puzzles this week", "Play
+  on 4 different days") can be swapped too; their slot keeps its reward (60 coins, 1 and 2 tickets).
+- **Only that quest changes**: the other slots are dealt as if the swapped slot still had the quest first
+  dealt in it, also once the swapped quest is claimed.
+- **Storage**: `profiles.questSwaps` (text, default empty), a JSON map of slot (`d:2026-10-17:s2`,
+  `w2026-10-12:s4`) to the quests the slot has had, the first dealt first and the current one last.
+  `SyncOp.questSwap` names the swaps it saw in the slot: a swap made meanwhile on another device wins and
+  this one charges nothing (`SkipReason.questSwapped`), as does a quest claimed there; the ticket is
+  checked on the fresh row (`notEnough`). Entries older than a week are dropped with each swap.
+- **Earnings**: a sink for tickets only; quest rewards per slot are unchanged, so the model does not move.
+- **Older builds** ignore the column and show the quest first dealt in each slot; a quest claimed there
+  stays claimed here (the slot shows what was claimed).
 
 ## Quest pool and unlocks (2026-10-14, replaced by the section above)
 

@@ -33,15 +33,16 @@ bool anyGoalReady(List<Goal> goals, int freeCount, Profile? profile) {
 }
 
 /// Today's daily and this week's weekly quests for [profile]: only what
-/// [open] allows, and a slot keeps the quest already claimed in it.
+/// [open] allows, a slot keeps the quest already claimed in it, and a swapped
+/// slot shows the quest swapped in (`Profile.questSwaps`).
 /// [dailyPuzzle] is today's daily puzzle (`dailyPuzzleProvider`). [since]: only pictures finished
 /// after it count (`countsFromProvider(Reveal.quests)`: the guided start counts from Quests opening).
 ({List<Goal> daily, List<Goal> weekly}) questsFor(Iterable<PuzzleProgress> rows, Profile? profile, OpenFeatures open, DateTime now, {String? dailyPuzzle, DateTime? since}) {
   final claimed = profile?.claimedGoals.toSet() ?? const <String>{};
   final level = profile?.level ?? 1;
   return (
-    daily: Goals.daily(rows, now, open: open, level: level, claimed: claimed, dailyPuzzle: dailyPuzzle, since: since),
-    weekly: Goals.weekly(rows, now, open: open, level: level, claimed: claimed, since: since),
+    daily: Goals.daily(rows, now, open: open, level: level, claimed: claimed, dailyPuzzle: dailyPuzzle, since: since, swaps: profile?.questSwaps ?? const {}),
+    weekly: Goals.weekly(rows, now, open: open, level: level, claimed: claimed, since: since, swaps: profile?.questSwaps ?? const {}),
   );
 }
 

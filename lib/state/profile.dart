@@ -242,6 +242,19 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
     return true;
   }
 
+  /// Swaps a quest that is not finished or claimed for [Goal.swap]'s quest, for [QuestSwap.tickets]
+  /// ticket. Only that quest changes; a swap made on another device first (or a claim there) charges
+  /// nothing. False when there is nothing to swap or the tickets are short.
+  Future<bool> swapQuest(Goal goal) async {
+    final p = _p;
+    final s = goal.swap;
+    if (s == null || goal.done || p.claimedGoals.contains(goal.key)) return false;
+    if (goal.vipOnly && !p.isVip) return false;
+    if (p.tickets < QuestSwap.tickets) return false;
+    _do(SyncOp.questSwap(slot: s.slot, base: s.base, kind: s.next, swaps: s.count, tickets: QuestSwap.tickets, fixedKey: s.fixedKey));
+    return true;
+  }
+
   /// Pays the VIP weekly bonus once per week; returns the coins paid (0 when
   /// the player is not VIP or already got this week's bonus).
   Future<int> claimVipWeeklyBonus() async {

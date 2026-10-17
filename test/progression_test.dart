@@ -289,6 +289,130 @@ void main() {
       }
     });
 
+    // Lanes as the quests use them: the fixed quests are the solve and days lanes, shapes one lane.
+    String lane(Goal g) => switch (_type(g)) { 'solve3' || 'solve10' || 'solve' => 'solve', 'days4' => 'days', 'mode' => 'shape', final t => t };
+    Map<String, List<String>> swapped(Map<String, List<String>> swaps, QuestSwap s) => {...swaps, s.slot: [...(swaps[s.slot] ?? [s.base]), s.next]};
+
+    test('a swap changes only its own quest, to a lane the period has not shown, until none is left', () {
+      for (final e in players.entries) {
+        final (level, past) = e.value;
+        final open = OpenFeatures.forPlayer(level: level);
+        for (var d = 0; d < 14; d++) {
+          final day = DateTime(now.year, now.month, now.day + d, 15);
+          for (final weekly in [false, true]) {
+            List<Goal> deal(Map<String, List<String>> swaps) => weekly
+                ? Goals.weekly(past, day, open: open, level: level, swaps: swaps)
+                : Goals.daily(past, day, open: open, level: level, dailyPuzzle: 'daily-$d', swaps: swaps);
+            final first = deal(const {});
+            for (var slot = 0; slot < first.length; slot++) {
+              var swaps = <String, List<String>>{};
+              var goals = first;
+              final seen = {for (final g in goals) lane(g)};
+              for (var n = 0; goals[slot].swap != null; n++) {
+                expect(n, lessThan(12), reason: 'swaps run out');
+                final s = goals[slot].swap!;
+                expect(s.count, n);
+                expect(s.slot, weekly ? '${Goals.weekKey(day)}:s${slot + 1}' : 'd:${Goals.dayKey(day)}:s${slot + 1}');
+                swaps = swapped(swaps, s);
+                final next = deal(swaps);
+                final why = '${e.key}, $day, ${weekly ? 'weekly' : 'daily'} slot ${slot + 1}, swap ${n + 1}';
+                expect(next[slot].title, s.nextTitle, reason: why);
+                expect(next[slot].key, '${s.slot}:${s.next}', reason: why);
+                expect(seen, isNot(contains(lane(next[slot]))), reason: '$why: a lane not shown yet');
+                seen.add(lane(next[slot]));
+                for (var o = 0; o < first.length; o++) {
+                  if (o != slot) expect(next[o].key, first[o].key, reason: '$why: slot ${o + 1} stays');
+                }
+                // The reward belongs to the slot.
+                expect((next[slot].coins, next[slot].tickets, next[slot].vipOnly), (first[slot].coins, first[slot].tickets, first[slot].vipOnly), reason: why);
+                goals = next;
+              }
+            }
+          }
+        }
+      }
+    });
+
+    test('after swaps one board still finishes at most one quest besides "Solve 3 puzzles"', () {
+      for (final e in players.entries) {
+        final (level, past) = e.value;
+        final usual = past.first;
+        final other = usual.mode == 'cards' ? 'triangles' : 'cards';
+        final open = OpenFeatures.forPlayer(level: level);
+        for (var d = 0; d < 14; d++) {
+          final day = DateTime(now.year, now.month, now.day + d, 15);
+          // Swap the way of playing, the skill and the VIP quest once each.
+          var swaps = <String, List<String>>{};
+          for (final slot in [1, 2, 3]) {
+            final s = Goals.daily(past, day, open: open, level: level, dailyPuzzle: 'daily-$d', swaps: swaps)[slot].swap;
+            if (s != null) swaps = swapped(swaps, s);
+          }
+          final boards = [
+            board('a', day, mode: other, cells: usual.gridSize),
+            board('b', day, mode: usual.mode, cells: 48),
+            board('c', day, mode: usual.mode, cells: 48, lock: 8),
+            board('d', day, mode: usual.mode, cells: usual.gridSize, painting: true),
+            board('e', day, mode: usual.mode, cells: max(16, usual.gridSize), atPar: true),
+            board('f', day, mode: usual.mode, cells: usual.gridSize, seconds: 1),
+            board('g', day, mode: usual.mode, cells: usual.gridSize, puzzle: 'daily-$d'),
+          ];
+          for (final b in boards) {
+            final goals = Goals.daily([...past, b], day, open: open, level: level, dailyPuzzle: 'daily-$d', swaps: swaps);
+            final done = [for (final g in goals.skip(1)) if (g.done && !['stars', 'nopeek'].contains(_type(g))) g.title];
+            expect(done.length, lessThanOrEqualTo(1), reason: '${e.key}, $day, ${b.puzzleId}: $done');
+          }
+        }
+      }
+    });
+
+    test('no swap for a claimed quest, and never into a quest already finished', () {
+      final day = DateTime(now.year, now.month, now.day, 15);
+      final k = Goals.dayKey(day);
+      final first = Goals.daily(const [], day, level: 20);
+      expect([for (final g in first) g.swap != null], everyElement(isTrue), reason: 'every quest can be swapped at first');
+      final claimed = Goals.daily(const [], day, level: 20, claimed: {'d:$k:solve3', first[2].key});
+      expect(claimed[0].swap, isNull, reason: '"Solve 3 puzzles" claimed');
+      expect(claimed[2].swap, isNull);
+      expect(claimed[1].swap, isNotNull);
+      // Three 3-star boards today: "Earn 3 stars twice" and "Solve 2 pictures without Peek" are done
+      // already, so no swap brings them (they would pay for the ticket at once).
+      final today = [for (var i = 0; i < 3; i++) board('s$i', day.subtract(Duration(minutes: i)))];
+      for (var slot = 0; slot < 4; slot++) {
+        var swaps = <String, List<String>>{};
+        for (var n = 0; n < 12; n++) {
+          final s = Goals.daily(today, day, level: 20, swaps: swaps)[slot].swap;
+          if (s == null) break;
+          expect(s.next, isNot(anyOf('stars', 'nopeek', 'solve')), reason: 'slot ${slot + 1}');
+          swaps = swapped(swaps, s);
+        }
+      }
+      // A swap of a fixed quest names its claim key, which has no slot in it.
+      expect(first[0].swap!.fixedKey, 'd:$k:solve3');
+      final week = Goals.weekly(const [], day, level: 20);
+      expect([week[0].swap!.fixedKey, week[2].swap!.fixedKey], ['${Goals.weekKey(day)}:solve10', '${Goals.weekKey(day)}:days4']);
+      expect(week[1].swap!.fixedKey, isNull);
+    });
+
+    test('the stored swaps: read leniently, written as the slot\'s quests in order, old periods dropped', () {
+      expect(Goals.decodeSwaps(null), isEmpty);
+      expect(Goals.decodeSwaps('not json'), isEmpty);
+      expect(Goals.decodeSwaps('[1,2]'), isEmpty);
+      expect(Goals.decodeSwaps('{"d:2026-10-14:s2":["paint","par"],"x":[]}'), {'d:2026-10-14:s2': ['paint', 'par']});
+      expect(Goals.swapPeriod('d:2026-10-14:s2'), DateTime(2026, 10, 14));
+      expect(Goals.swapPeriod('w2026-10-12:s4'), DateTime(2026, 10, 12));
+      final op = SyncOp('questSwap', {'slot': 'd:2026-10-14:s2', 'base': 'paint', 'kind': 'par', 'swaps': 0, 'tickets': 1}, at: DateTime(2026, 10, 14, 15));
+      final plan = op.build({
+        'tickets': 3,
+        'questSwaps': '{"d:2026-09-30:s3":["lock","stars"],"w2026-10-12:s4":["modes","paint"]}',
+      });
+      expect(Goals.decodeSwaps(_written(op, 'questSwaps', {'tickets': 3, 'questSwaps': '{"d:2026-09-30:s3":["lock","stars"],"w2026-10-12:s4":["modes","paint"]}'})), {
+        'w2026-10-12:s4': ['modes', 'paint'],
+        'd:2026-10-14:s2': ['paint', 'par'],
+      });
+      expect(plan.ledger.single.amount, -1);
+      expect(plan.ledger.single.reason, 'quest-swap:d:2026-10-14:s2');
+    });
+
     test('week keys do not move across a daylight saving change', () {
       // Europe goes back an hour on Sunday 25 October 2026.
       expect(Goals.weekKey(DateTime(2026, 10, 25, 23, 30)), 'w2026-10-19');

@@ -5,6 +5,8 @@
 /// (level mirror, public completion numbers, lifetime totals, `appliedOps`) never show.
 library;
 
+import 'dart:math';
+
 import '../../models/models.dart';
 import '../../state/rewards.dart';
 import 'changes.dart';
@@ -25,6 +27,7 @@ class SyncNotice {
     this.avatars = 0,
     this.tiers = 0,
     this.quests = 0,
+    this.swaps = 0,
     this.achievements = 0,
     this.dailyStreak,
     this.piggyCapacity,
@@ -52,6 +55,9 @@ class SyncNotice {
   /// Pack ids unlocked elsewhere.
   final List<String> packs;
   final int avatars, tiers, quests, achievements;
+
+  /// Quests swapped elsewhere.
+  final int swaps;
 
   /// The streak after a daily gift claimed elsewhere.
   final int? dailyStreak;
@@ -81,6 +87,7 @@ class SyncNotice {
       avatars == 0 &&
       tiers == 0 &&
       quests == 0 &&
+      swaps == 0 &&
       achievements == 0 &&
       dailyStreak == null &&
       piggyCapacity == null &&
@@ -104,6 +111,7 @@ class SyncNotice {
         avatars: avatars + o.avatars,
         tiers: tiers + o.tiers,
         quests: quests + o.quests,
+        swaps: swaps + o.swaps,
         achievements: achievements + o.achievements,
         dailyStreak: o.dailyStreak ?? dailyStreak,
         piggyCapacity: o.piggyCapacity ?? piggyCapacity,
@@ -137,6 +145,7 @@ class SyncNotice {
       avatars: added('unlockedAvatars').length,
       tiers: added('unlockedTiers').length,
       quests: added('claimedGoals').where((k) => !k.endsWith(':vipbonus')).length,
+      swaps: max(0, _swapCount(after['questSwaps']) - _swapCount(before['questSwaps'])),
       achievements: added('claimedAchievements').length,
       dailyStreak: d1 != null && (d0 == null || d1.isAfter(d0)) ? asInt(after['streak']) : null,
       piggyCapacity: piggy1 > piggy0 ? Profile.piggyCapacityAt(piggy1) : null,
@@ -164,6 +173,9 @@ class SyncNotice {
     }
     return SyncNotice(solved: solved, betterStars: better, boards: boards);
   }
+
+  /// Swaps made in the slots a `questSwaps` value holds (each slot lists its first quest too).
+  static int _swapCount(dynamic raw) => Goals.decodeSwaps(raw).values.fold(0, (n, h) => n + h.length - 1);
 
   static bool _vip(Map<String, dynamic> row, DateTime? now) {
     if (row['isVip'] == true) return true;

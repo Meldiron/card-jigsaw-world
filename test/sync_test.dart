@@ -570,6 +570,61 @@ void main() {
     expect(phone.container.read(syncNoticeProvider).skipped, [SkipReason.notEnough]);
   });
 
+  test('a quest swap costs a ticket, shows at once, and a swap made on both devices is paid once', () async {
+    final (server, phone, laptop) = await _twoDevices();
+    final now = DateTime.now();
+    List<Goal> quests(Device d) => Goals.daily(const [], now, swaps: d.me.questSwaps);
+    final before = quests(phone);
+    final swap = before[1].swap!;
+    laptop.container.read(syncNoticeProvider.notifier).take();
+    laptop.backend.online = false;
+    expect(await phone.profile.swapQuest(before[1]), isTrue);
+    expect(quests(phone)[1].title, swap.nextTitle, reason: 'the new quest shows at once');
+    expect(phone.me.tickets, 2);
+    expect(await laptop.profile.swapQuest(quests(laptop)[1]), isTrue, reason: 'the laptop has not heard of it yet');
+    await phone.settle();
+    laptop.backend.online = true;
+    await laptop.resume();
+    final row = server.profiles['player1']!;
+    expect(row['tickets'], 2, reason: 'one ticket for the one swap');
+    expect(Goals.decodeSwaps(row['questSwaps']), {swap.slot: [swap.base, swap.next]});
+    expect(server.ledger.values.where((l) => l['reason'] == 'quest-swap:${swap.slot}').map((l) => l['amount']), [-1]);
+    expect(laptop.container.read(syncNoticeProvider).skipped, [SkipReason.questSwapped]);
+    expect([for (final g in quests(laptop)) g.key], [for (final g in quests(phone)) g.key]);
+    for (var i = 0; i < before.length; i++) {
+      if (i != 1) expect(quests(phone)[i].key, before[i].key, reason: 'only the swapped quest changes');
+    }
+
+    // The phone's next swap reaches the laptop as news.
+    expect(await phone.profile.swapQuest(quests(phone)[2]), isTrue);
+    await phone.settle();
+    laptop.container.read(syncNoticeProvider.notifier).take();
+    await laptop.resume();
+    final notice = laptop.container.read(syncNoticeProvider);
+    expect(notice.swaps, 1);
+    expect(syncNoticeLines(notice).map((l) => l.text), containsAll(['−1 Ticket', '1 quest swapped']));
+  });
+
+  test('a quest claimed elsewhere is not swapped here, nothing is charged, and no swap without a ticket', () async {
+    final (server, phone, laptop) = await _twoDevices();
+    final now = DateTime.now();
+    final goal = Goals.daily(const [], now)[2];
+    laptop.backend.online = false;
+    // Claimed on the phone (a quest done there): the laptop's swap of it charges nothing.
+    phone.sync.enqueue(SyncOp.quest(goal.key, coins: goal.coins));
+    expect(await laptop.profile.swapQuest(goal), isTrue);
+    await phone.settle();
+    laptop.backend.online = true;
+    await laptop.resume();
+    expect(server.profiles['player1']!['tickets'], 3);
+    expect(Goals.decodeSwaps(server.profiles['player1']!['questSwaps']), isEmpty);
+    expect(laptop.container.read(syncNoticeProvider).skipped, contains(SkipReason.questClaimed));
+    // Short of tickets: refused here, and an op that gets through anyway is undone.
+    await phone.profile.spendTickets(3, reason: 'test');
+    await phone.settle();
+    expect(await phone.profile.swapQuest(Goals.daily(const [], now)[1]), isFalse);
+  });
+
   test('an event step whose answer was lost counts once', () async {
     final (server, phone, _) = await _twoDevices();
     phone.backend.loseNextAnswer = true;

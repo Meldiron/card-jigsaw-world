@@ -18,7 +18,7 @@ import 'changes.dart';
 enum OpTarget { profile, progress, event, ledger }
 
 /// Why an op was dropped when it was sent: another device had already done the same thing.
-enum SkipReason { questClaimed, vipBonusPaid, dailyClaimed, streakRestored, unlocked, achievementClaimed, piggyEmpty, notEnough, messageClaimed, piggyUpgraded }
+enum SkipReason { questClaimed, vipBonusPaid, dailyClaimed, streakRestored, unlocked, achievementClaimed, piggyEmpty, notEnough, messageClaimed, piggyUpgraded, questSwapped }
 
 /// A ledger entry written once its op is confirmed (`balanceAfter` comes from the server's row).
 /// The currencies the ledger records (its `currency` column is an enum of these). Peeks and Magic
@@ -55,7 +55,7 @@ abstract final class OpKind {
   // Profile.
   static const earn = 'earn', spend = 'spend', put = 'put', ad = 'ad', quest = 'quest', vipBonus = 'vipBonus', daily = 'daily';
   static const streak = 'streak', unlock = 'unlock', achievement = 'achievement', piggy = 'piggy', solve = 'solve', questCount = 'questCount';
-  static const inbox = 'inbox', piggyUpgrade = 'piggyUpgrade';
+  static const inbox = 'inbox', piggyUpgrade = 'piggyUpgrade', questSwap = 'questSwap';
   // Progress, event progress, ledger.
   static const board = 'board', win = 'win', discard = 'discard', event = 'event', ledger = 'ledger';
 }
@@ -108,7 +108,7 @@ class SyncOp {
 
   /// Built against the row as the server has it right now (guards, records, values derived from
   /// the row). The others are built against the last row the server returned.
-  bool get needsFresh => const {OpKind.spend, OpKind.ad, OpKind.quest, OpKind.vipBonus, OpKind.daily, OpKind.streak, OpKind.unlock, OpKind.achievement, OpKind.piggy, OpKind.solve, OpKind.questCount, OpKind.win, OpKind.inbox, OpKind.piggyUpgrade}.contains(kind);
+  bool get needsFresh => const {OpKind.spend, OpKind.ad, OpKind.quest, OpKind.vipBonus, OpKind.daily, OpKind.streak, OpKind.unlock, OpKind.achievement, OpKind.piggy, OpKind.solve, OpKind.questCount, OpKind.win, OpKind.inbox, OpKind.piggyUpgrade, OpKind.questSwap}.contains(kind);
 
   // ---- profile ----
 
@@ -150,6 +150,13 @@ class SyncOp {
   /// Raises the piggy bank to upgrade [level] (`profiles.piggyLevel`, 1-5) for [price] coins. Named by
   /// the level it reaches, so an upgrade bought on two devices is paid once.
   factory SyncOp.piggyUpgrade({required int level, required int price}) => SyncOp(OpKind.piggyUpgrade, {'level': level, 'price': price});
+
+  /// Swaps the quest in [slot] (`d:2026-10-17:s2`) for [kind], for [tickets]. [base] is the quest
+  /// first dealt there and [swaps] the swaps this device had seen in the slot: one made meanwhile on
+  /// another device wins and this one charges nothing, as does a quest claimed there. [fixedKey] is
+  /// the claim key of the slot's fixed quest ("Solve 3 puzzles"), whose key has no slot.
+  factory SyncOp.questSwap({required String slot, required String base, required String kind, required int swaps, required int tickets, String? fixedKey}) =>
+      SyncOp(OpKind.questSwap, {'slot': slot, 'base': base, 'kind': kind, 'swaps': swaps, 'tickets': tickets, 'fixedKey': ?fixedKey});
 
   /// An inbox message [state] (`seen`, `deleted` or `claimed`) for message [id]. A claim pays the
   /// message's reward, once per message on every device (`claimed:<id>` in `profiles.inbox`); the
@@ -396,6 +403,8 @@ class SyncOp {
         if (asInt(row['piggyLevel']) >= level) return const OpPlan.skip(SkipReason.piggyUpgraded);
         if (asInt(row['coins']) < price) return const OpPlan.skip(SkipReason.notEnough);
         return OpPlan({'piggyLevel': Put(level), if (price > 0) 'coins': Dec(price)}, ledger: [if (price > 0) LedgerLine(-price, 'coins', 'piggy-upgrade:$level')]);
+      case OpKind.questSwap:
+        return _questSwap(row);
       case OpKind.solve:
         return _solve(row);
       case OpKind.inbox:
@@ -423,6 +432,26 @@ class SyncOp {
         return asInt(row['questsCompleted']) >= n ? const OpPlan({}) : OpPlan({'questsCompleted': Put(n)});
     }
     return const OpPlan({});
+  }
+
+  OpPlan _questSwap(Map<String, dynamic> row) {
+    final slot = args['slot'] as String, fixed = args['fixedKey'] as String?;
+    final swaps = Goals.decodeSwaps(row['questSwaps']);
+    final had = swaps[slot] ?? const <String>[];
+    // Swapped on another device meanwhile: that swap stands, this one is not charged.
+    if ((had.isEmpty ? 0 : had.length - 1) != _a('swaps')) return const OpPlan.skip(SkipReason.questSwapped);
+    if (asStrings(row['claimedGoals']).any((c) => c.startsWith('$slot:') || c == fixed)) return const OpPlan.skip(SkipReason.questClaimed);
+    final tickets = _a('tickets');
+    if (asInt(row['tickets']) < tickets) return const OpPlan.skip(SkipReason.notEnough);
+    // Only this week's slots and the days since are kept: the column stays small.
+    final from = at.toLocal().subtract(const Duration(days: 7));
+    final kept = {
+      for (final e in swaps.entries)
+        if (!(Goals.swapPeriod(e.key)?.isBefore(DateTime(from.year, from.month, from.day)) ?? true)) e.key: e.value,
+      slot: [...(had.isEmpty ? [args['base'] as String] : had), args['kind'] as String],
+    };
+    return OpPlan({'questSwaps': Put(jsonEncode(kept)), if (tickets > 0) 'tickets': Dec(tickets)},
+        ledger: [if (tickets > 0) LedgerLine(-tickets, 'tickets', 'quest-swap:$slot')]);
   }
 
   OpPlan _solve(Map<String, dynamic> row) {

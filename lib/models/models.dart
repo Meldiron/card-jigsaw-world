@@ -55,6 +55,7 @@ class Profile {
     this.vipExpiresAt,
     this.appleOriginalTransactionId,
     this.claimedGoals = const [],
+    this.questSwaps = const {},
     this.adsToday = 0,
     this.adsDate,
     this.unlockedTiers = const [],
@@ -110,6 +111,10 @@ class Profile {
   /// VIP is active while the flag is set or the subscription has not expired.
   bool get isVip => vipFlag || (vipExpiresAt != null && vipExpiresAt!.isAfter(DateTime.now()));
   final List<String> claimedGoals;
+
+  /// Quests swapped this day or week, by slot: the quests each slot has had, the one first dealt
+  /// first (`QuestSwap`, column `questSwaps`, a JSON text since 2026-10-17; older builds ignore it).
+  final Map<String, List<String>> questSwaps;
   final int adsToday;
   final DateTime? adsDate;
   /// Board tiers bought early, as `<mode>:<index>` (e.g. `cards:4`).
@@ -194,6 +199,7 @@ class Profile {
         vipExpiresAt: _dt(d['vipExpiresAt']),
         appleOriginalTransactionId: d['appleOriginalTransactionId']?.toString(),
         claimedGoals: _strings(d['claimedGoals']),
+        questSwaps: Goals.decodeSwaps(d['questSwaps']),
         adsToday: _i(d['adsToday']),
         adsDate: _dt(d['adsDate']),
         unlockedTiers: _strings(d['unlockedTiers']),
@@ -267,6 +273,7 @@ class Profile {
         'vipExpiresAt': vipExpiresAt?.toUtc().toIso8601String(),
         'appleOriginalTransactionId': appleOriginalTransactionId,
         'claimedGoals': claimedGoals,
+        'questSwaps': questSwaps.isEmpty ? null : jsonEncode(questSwaps),
         'adsToday': adsToday,
         'adsDate': adsDate?.toUtc().toIso8601String(),
         'unlockedTiers': unlockedTiers,
@@ -329,6 +336,7 @@ class Profile {
         vipExpiresAt: vipExpiresAt,
         appleOriginalTransactionId: appleOriginalTransactionId,
         claimedGoals: claimedGoals,
+        questSwaps: questSwaps,
         adsToday: adsToday,
         adsDate: adsDate,
         unlockedTiers: unlockedTiers,

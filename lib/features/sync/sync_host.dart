@@ -128,6 +128,7 @@ List<SyncNoticeLine> syncNoticeLines(SyncNotice n, {Map<String, String> packName
     if (n.tiers > 0) (icon: SyncLineIcon.unlock, text: '${_count(n.tiers, 'board size', 'board sizes')} unlocked'),
     if (n.avatars > 0) (icon: SyncLineIcon.avatar, text: '${_count(n.avatars, 'avatar', 'avatars')} unlocked'),
     if (n.quests > 0) (icon: SyncLineIcon.quest, text: '${_count(n.quests, 'quest', 'quests')} claimed'),
+    if (n.swaps > 0) (icon: SyncLineIcon.quest, text: '${_count(n.swaps, 'quest', 'quests')} swapped'),
     if (n.achievements > 0) (icon: SyncLineIcon.achievement, text: '${_count(n.achievements, 'achievement reward', 'achievement rewards')} claimed'),
     if (n.dailyStreak != null) (icon: SyncLineIcon.dailyGift, text: 'Daily gift claimed · Streak: ${_count(n.dailyStreak!, 'day', 'days')}'),
     if (n.piggyCapacity != null) (icon: SyncLineIcon.piggy, text: 'Piggy bank upgraded · holds ${formatCount(n.piggyCapacity!)}'),
@@ -153,6 +154,7 @@ String skipText(SkipReason r) => switch (r) {
       SkipReason.notEnough => 'One purchase here was undone: not enough was left after spending on the other device',
       SkipReason.messageClaimed => 'A message reward claimed on both devices, paid once',
       SkipReason.piggyUpgraded => 'Piggy bank already upgraded on the other device, nothing charged',
+      SkipReason.questSwapped => 'A quest already swapped on the other device, nothing charged',
     };
 
 class SyncNoticeList extends StatefulWidget {
