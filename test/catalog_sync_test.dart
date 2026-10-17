@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:carden/data/catalog_cache.dart';
 import 'package:carden/data/local_store.dart';
 import 'package:carden/data/repositories.dart';
 import 'package:carden/state/catalog_sync.dart';
@@ -60,6 +63,25 @@ class FakeCatalog implements CatalogSource {
 
   @override
   Future<List<Map<String, dynamic>>> puzzleRowsOfPacks(List<String> packIds) async => _read(tables['puzzles']!.values.where((r) => packIds.contains(r['packId'])));
+}
+
+/// A cache with room for the catalogue (IndexedDB on the web), or, with [full], one that refuses it
+/// (localStorage on the web: `QuotaExceededError`).
+class _Cache implements CatalogCache {
+  _Cache({this.full = false});
+  final bool full;
+  Map<String, dynamic>? stored;
+  var writes = 0;
+
+  @override
+  Future<Map<String, dynamic>?> read() async => stored == null ? null : jsonDecode(jsonEncode(stored)) as Map<String, dynamic>;
+
+  @override
+  Future<void> write(Map<String, dynamic> json) async {
+    writes++;
+    if (full) throw Exception("QuotaExceededError: Setting the value of 'flutter.catalog' exceeded the quota.");
+    stored = json;
+  }
 }
 
 void main() {
@@ -164,12 +186,44 @@ void main() {
   test('old caches are replaced, and cached() serves the catalogue offline', () async {
     SharedPreferences.setMockInitialValues({'packs': '[]', 'puzzles': '[]', 'puzzleCatalog': '{}'});
     store = await LocalStore.open();
-    expect(sync().cached(), isNull);
+    expect(await sync().cached(), isNull);
     server.takeSnapshot();
     await sync().sync();
     for (final key in ['packs', 'puzzles', 'puzzleCatalog']) {
       expect(store.getJson(key) ?? store.getJsonList(key), isNull, reason: '$key is removed');
     }
-    expect(sync().cached()!['puzzles'], hasLength(48));
+    expect((await sync().cached())!['puzzles'], hasLength(48));
+  });
+
+  group('where the copy is kept', () {
+    test('the iPhone keeps it in SharedPreferences under `catalog`, as before', () async {
+      server.takeSnapshot();
+      await sync().sync();
+      expect(CatalogCache.of(store), isA<PrefsCatalogCache>());
+      expect(store.getJson('catalog')?['tables'], isNotNull);
+    });
+
+    test('a cache with room (IndexedDB on the web): the second launch reads only the delta', () async {
+      final cache = _Cache();
+      server.takeSnapshot();
+      await CatalogSync(store, server, clock: () => now, cache: cache).sync();
+      expect(server.snapshotDownloads, 1);
+      server.reads = 0;
+      final second = await CatalogSync(store, server, clock: () => now, cache: cache).sync();
+      expect(second['puzzles'], hasLength(48));
+      expect(server.snapshotDownloads, 1, reason: 'no second download');
+      expect(server.fullReads, 0);
+      expect(server.reads, lessThan(4), reason: 'the overlap window only');
+      expect(store.getText('catalog'), isNull, reason: 'nothing in SharedPreferences (localStorage on the web)');
+      expect((await CatalogSync(store, server, clock: () => now, cache: cache).cached())!['puzzles'], hasLength(48));
+    });
+
+    test('a cache without room (localStorage on the web) does not stop the launch, but every launch starts over', () async {
+      final cache = _Cache(full: true);
+      server.takeSnapshot();
+      expect(await CatalogSync(store, server, clock: () => now, cache: cache).sync(), isNotEmpty);
+      await CatalogSync(store, server, clock: () => now, cache: cache).sync();
+      expect(server.snapshotDownloads, 2, reason: 'the bug the web cache fixes');
+    });
   });
 }

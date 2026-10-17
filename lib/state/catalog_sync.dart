@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 import '../core/appwrite.dart';
+import '../data/catalog_cache.dart';
 import '../data/local_store.dart';
 import '../data/repositories.dart';
 
@@ -18,14 +19,20 @@ typedef CatalogTables = Map<String, List<Map<String, dynamic>>>;
 /// updates a pack's row whenever it removes or replaces puzzles, so every pack whose `$updatedAt`
 /// moved has its puzzles read again whole. Packs and events are never deleted by the content tool;
 /// rows deleted by hand disappear with the next base.
+///
+/// The copy lives in [CatalogCache]: SharedPreferences on the iPhone, IndexedDB on the web (where
+/// localStorage is too small for it).
 class CatalogSync {
-  CatalogSync(this._store, this._source, {DateTime Function()? clock}) : _clock = clock ?? DateTime.now;
+  CatalogSync(this._store, this._source, {DateTime Function()? clock, CatalogCache? cache})
+      : _clock = clock ?? DateTime.now,
+        _cache = cache ?? CatalogCache.of(_store);
   final LocalStore _store;
   final CatalogSource _source;
   final DateTime Function() _clock;
+  final CatalogCache _cache;
 
   static const tables = [AppwriteConfig.packs, AppwriteConfig.puzzles, AppwriteConfig.events];
-  static const cacheKey = 'catalog';
+  static const cacheKey = PrefsCatalogCache.key;
   static const _legacyCacheKeys = ['packs', 'puzzles', 'puzzleCatalog'];
   static const _version = 1;
   static const rebaseEvery = Duration(days: 7);
@@ -40,12 +47,21 @@ class CatalogSync {
   static const _keepCreatedAt = {AppwriteConfig.packs};
 
   /// The catalogue on the device, for when the server cannot be reached.
-  CatalogTables? cached() => _CatalogState.fromJson(_store.getJson(cacheKey))?.tables;
+  Future<CatalogTables?> cached() async => _CatalogState.fromJson(await _read())?.tables;
+
+  Future<Map<String, dynamic>?> _read() async {
+    try {
+      return await _cache.read();
+    } catch (e) {
+      debugPrint('catalogue cache not read: $e');
+      return null;
+    }
+  }
 
   /// Brings the device copy in step with the server and returns it.
   Future<CatalogTables> sync() async {
     final now = _clock();
-    var state = _CatalogState.fromJson(_store.getJson(cacheKey));
+    var state = _CatalogState.fromJson(await _read());
     var dirty = false;
     if (state == null || now.difference(state.baseAt).abs() > rebaseEvery) {
       state = await _base(now);
@@ -89,7 +105,7 @@ class CatalogSync {
         for (final key in _legacyCacheKeys) {
           await _store.remove(key);
         }
-        await _store.setJson(cacheKey, state.toJson(_version));
+        await _cache.write(state.toJson(_version));
       } catch (e) {
         debugPrint('catalogue cache not saved: $e');
       }

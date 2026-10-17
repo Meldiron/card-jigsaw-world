@@ -20,7 +20,7 @@ final catalogProvider = FutureProvider<CatalogTables>((ref) async {
     return await sync.sync();
   } catch (e) {
     debugPrint('catalogue sync failed: $e');
-    final cached = sync.cached();
+    final cached = await sync.cached();
     if (cached != null) return cached;
     rethrow;
   }

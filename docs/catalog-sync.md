@@ -18,8 +18,11 @@ uses snapshot + delta sync instead: a launch reads about 30 rows.
 3. **Delta (every launch and pull to refresh).** Per table, rows with `$updatedAt` at or after the newest
    row on the device, minus a 10-second overlap for writes that landed out of order. A pack whose row
    changed has its puzzles read again whole, which is how removed puzzles disappear.
-4. **Offline.** The copy on the device (`catalog` in SharedPreferences / localStorage) is served when the
-   server cannot be reached.
+4. **Offline.** The copy on the device is served when the server cannot be reached. The iPhone keeps
+   it in SharedPreferences (`catalog`); the web build in IndexedDB (`carden` / `cache` / `catalog`,
+   `lib/data/catalog_cache_web.dart`), because localStorage (5 MB, shared with the save) refused it
+   with `QuotaExceededError` and web players downloaded the snapshot on every launch until
+   2026-10-17. `CatalogCache` (`lib/data/catalog_cache.dart`) picks the store per platform.
 
 ## Rules
 
@@ -44,6 +47,8 @@ uses snapshot + delta sync instead: a launch reads about 30 rows.
 | First launch (snapshot + delta) | 26, plus 1 pointer read and a 0.96 MB download |
 | Next launch | 26 |
 | Snapshot run, nothing changed | 39 (no new file) |
+| Web, first launch (2026-10-17, headless Chromium) | 82, plus 1 pointer read and a 0.98 MB download; 5.6 million characters stored in IndexedDB |
+| Web, next launch | 82, no pointer read, no download (the 82 are the 10-second overlap window: 42 packs and 39 puzzles were written within 10 seconds of the newest row) |
 | Snapshot run, one pack changed | 71 |
 | Full snapshot (weekly) | 8,742 |
 

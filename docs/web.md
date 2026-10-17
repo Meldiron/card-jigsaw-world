@@ -30,6 +30,17 @@ Every one of these is gated by `lib/core/platform.dart`:
 no-op, `isAvailable()` is false, `queryProducts()` is empty,
 `presentCodeRedemptionSheet()` is false and `restorePurchases()` reports zero.
 
+## Storage in the browser
+
+SharedPreferences is localStorage on the web (`flutter.<key>`), about 5 MB per site and shared by
+the save, the sync queue and the settings. The catalogue copy (`CatalogSync`, docs/catalog-sync.md)
+is about 5.6 million characters, so it lives in IndexedDB instead (`lib/data/catalog_cache_web.dart`:
+database `carden`, store `cache`, key `catalog`; through `package:web`, no new package and nothing
+leaves the browser). Before 2026-10-17 it was written to localStorage, which refused it
+(`QuotaExceededError`), and every launch downloaded the snapshot again. A copy an earlier build left
+in localStorage moves to IndexedDB on the first launch and leaves localStorage; where IndexedDB
+cannot be opened, localStorage is used as before. The iPhone keeps SharedPreferences.
+
 ## Known gap: images without CORS headers
 
 The browser only lets Flutter decode an image into a puzzle board when the
@@ -125,7 +136,10 @@ with Pillow. Regenerate them if the icon changes.
 
 ```sh
 tools/dev/qa-run.sh run -d chrome   # silent QA run, test player purged afterwards
+tools/dev/qa-run.sh run -d web-server --web-port 8461 --release   # no Chrome on this Mac: a headless browser opens it
 ```
+
+Stopping the run (Ctrl-C, or TERM to qa-run.sh) stops the server and purges the guest.
 
 `CJW_MUTE=true` silences music and effects; `CJW_QA=true` keeps the guest out of the league
 (both passed by `tools/dev/qa-run.sh`). To test the release bundle with
