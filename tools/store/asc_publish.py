@@ -60,10 +60,9 @@ LOCALE = "en-US"  # replaced at startup by the app's primaryLocale (en-GB for th
 BASE_TERRITORY = "USA"
 SCREENSHOT_TYPE = "APP_IPHONE_67"
 BETA_GROUP_NAME = "Public testers"
-# verify-purchase Appwrite Function. Moves to "https://cjw-api.fra.appwrite.run/purchase/notifications" only
-# after `api` has execute `any` (docs/functions.md, "Retiring an old function"): until then that domain
-# answers 403 and Apple's notifications would be lost.
-NOTIFICATIONS_URL = "https://cjw-verify-purchase.fra.appwrite.run/notifications"
+# The `api` Appwrite Function (execute `any` since 2026-10-17; docs/functions.md, "Apple's notifications").
+# verify-purchase keeps the same code, so retries Apple sent to its old address still apply once.
+NOTIFICATIONS_URL = "https://cjw-api.fra.appwrite.run/purchase/notifications"
 # READY_FOR_REVIEW: in a review draft that has not been sent; still editable until it is submitted.
 EDITABLE_VERSION_STATES = ("PREPARE_FOR_SUBMISSION", "READY_FOR_REVIEW", "DEVELOPER_REJECTED", "REJECTED", "METADATA_REJECTED", "INVALID_BINARY")
 # Review submissions that are still open (not yet sent to Apple, or sent and not finished).
@@ -685,7 +684,14 @@ def cmd_app_info(s: Store) -> None:
         "subscriptionStatusUrlForSandbox": NOTIFICATIONS_URL,
         "subscriptionStatusUrlVersionForSandbox": "V2",
     }
-    s.c.upsert("apps", app, app_attrs, label="app (content rights, App Store Server Notification URLs)")
+    # Apple wants each notification URL together with its version, so a changed URL sends all four.
+    current = app.get("attributes") or {}
+    if app.get("id") and any(current.get(k) != v for k, v in app_attrs.items() if k.startswith("subscriptionStatus")):
+        diff = {k: v for k, v in app_attrs.items() if k.startswith("subscriptionStatus") or current.get(k) != v}
+        log(f"  app (content rights, App Store Server Notification URLs): updating {', '.join(sorted(diff))}")
+        s.c.update("apps", app["id"], diff)
+    else:
+        s.c.upsert("apps", app, app_attrs, label="app (content rights, App Store Server Notification URLs)")
     info = s.app_info()
     cats = read_json(EN / "categories.json")
     rels = {k: rel("appCategories", v) for k, v in cats.items() if v}
