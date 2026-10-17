@@ -301,6 +301,29 @@ void main() {
     expect(find.text('game /game/p1/squares-4x4t2?expand=1'), findsOneWidget);
   });
 
+  testWidgets('a wide picture (a My Puzzles photo): square boards in Squares and Hexagons, Expand for Cards', (tester) async {
+    final key = await pumpScreen(tester, width: 402, height: 874, picture: (1500, 1000), prefs: {'lastBoard': '{"mode":"squares","tier":2,"painting":false}'});
+    // Expand would crop a landscape picture to a square board too: not offered in Squares.
+    expect(find.byKey(const ValueKey('expand-option')), findsNothing);
+    await dump(tester, key, 'difficulty_wide_squares');
+    // A square honeycomb is wide already.
+    await tester.tap(find.text('Hexagons'));
+    await settle(tester);
+    expect(find.byKey(const ValueKey('expand-option')), findsNothing);
+    await dump(tester, key, 'difficulty_wide_hexagons');
+    // Cards: 5:7 boards crop a wide picture by half; Expand lays them out square.
+    await tester.tap(find.text('Cards'));
+    await settle(tester);
+    expect(find.byKey(const ValueKey('expand-option')), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('expand-option')));
+    await settle(tester);
+    final relaxed = BoardSpec.expandTiers(GameMode.cards, 1.5).firstWhere((t) => t.tier == 2);
+    expect(relaxed.cols, greaterThan(relaxed.rows));
+    expect(xpOf(relaxed), findsOneWidget);
+    await dump(tester, key, 'difficulty_wide_cards_expand');
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('Expand at the largest text on the SE frame', (tester) async {
     final key = await pumpScreen(tester, width: 375, height: 667, picture: (900, 1200), textScale: 2, prefs: {'lastBoard': '{"mode":"squares","tier":2,"painting":false,"expand":true}'});
     expect(find.byKey(const ValueKey('expand-option')), findsOneWidget);
