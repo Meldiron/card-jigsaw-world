@@ -231,7 +231,12 @@ From this Mac (Node, raw protocol; rerun after the Mac's hibernation at 11:57, s
 `$sequence`: unique under 30 concurrent creates from two clients; HTTP answers came back out of order
 (9-10 of 30) and realtime events too (6-11 of 30 per socket); `$createdAt` order disagreed with
 `$sequence` 6-8 times (do not order by it). `Query.greaterThan('$sequence', n)` with `orderAsc` works.
-On the device: see the QA run below (`COOP_LATENCY` lines).
+On the iPhone 17 Pro simulator (the app's real SDK, `integration_test/coop_live_test.dart`, while the
+Mac ran other builds at a load of several hundred): a move of this device reached the host bot's socket
+in 100-206 ms (median 175); a host move reached the device's board in 199-666 ms (median 333), which
+includes the test's HTTP request to the bot on the Mac and the bot's own create. Also checked there:
+`Query.greaterThan('$sequence', 0)` is refused (400), so a catch-up from the start sends no
+`$sequence` filter.
 
 ## Limits and costs
 
@@ -260,4 +265,9 @@ On the device: see the QA run below (`COOP_LATENCY` lines).
   --driver=test_driver/integration_test.dart --target=integration_test/coop_live_test.dart -d <sim>`:
   a fresh install joins the bot's game from an invite, moves go both ways, presence, a toast, the player
   list as guest and host, removed, full, ended, dark and Increase contrast at Largest text
-  (`screenshots/coop_*.png`). The bot cleans up its players when the test sends `/quit`.
+  (`screenshots/coop_*.png`). The bot cleans up its players when the test sends `/quit`. Passed on
+  2026-10-17 (iPhone 17 Pro, iOS 26.5).
+- The invite page: serve a copy of `web/` with `<base href="/">` and the single-page fallback, open
+  `/join/<code>` in the simulator's Safari (`xcrun simctl openurl`): the card shows and the game does
+  not load (`flutter_bootstrap.js` is not requested) until Play in the browser; `?open=1` shows the
+  fallback (Play in the browser first, Get Carden on the App Store).
