@@ -95,15 +95,19 @@ void main() {
       expect(c.joined(0, 3), isFalse);
     });
 
-    test('a group moves as one and displaces cards into vacated cells', () {
+    test('a group moves as one; the group it lands on moves whole and loose cards fill the vacated cells', () {
       final b = Board(g3, [4, 5, 2, 3, 8, 7, 0, 1, 6]);
       final after = b.moveGroup(6, 0, -2)!;
       expect(after.slots[0], 0);
       expect(after.slots[1], 1);
-      expect(after.slots[6], 4);
-      expect(after.slots[7], 5);
       expect(after.isLocked(0), isTrue);
       expect(after.isLocked(1), isTrue);
+      // Cards 4, 5 and 8 (the L at 0, 1, 4) are pushed one step down and right, whole; the two
+      // loose cards they cover (7 and 6) take the cells the pair left, in reading order.
+      expect(after.slots.sublist(4, 6), [4, 5]);
+      expect(after.slots[8], 8);
+      expect(after.slots[6], 7);
+      expect(after.slots[7], 6);
     });
 
     test('a group can shift onto cells it already occupies', () {

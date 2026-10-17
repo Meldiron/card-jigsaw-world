@@ -543,11 +543,19 @@ class Board {
 
   // ---- moves ------------------------------------------------------------
 
-  /// Moves the whole group containing [slot] by a lattice delta. Cards that
-  /// were sitting in the destination cells are displaced into the cells the
-  /// group vacated, in reading order. Returns null when the move is not
-  /// allowed (out of bounds, placement rule broken, onto cards locked in
-  /// place, or the group itself is locked in place).
+  /// Moves the whole group containing [slot] by a lattice delta. Returns null
+  /// when the move is not allowed (out of bounds, placement rule broken, onto
+  /// cards locked in place, or the group itself is locked in place).
+  ///
+  /// The cards in the destination make room. Another group the move lands on
+  /// stays whole when it can (owner, 2026-10-17): largest first, it shifts by
+  /// one lattice step ([_pushStep]) onto cells that are free after the move
+  /// (the ones the moving group left, its own) or that hold loose cards, which
+  /// then make room in turn. A group with no such place breaks, as before.
+  /// The cards still without a cell fill the free cells in reading order, each
+  /// within its own shape class (a half piece only ever lands in a half slot),
+  /// so a move that lands on no other group is a plain swap or shift. Locked
+  /// cards never move, and the result depends only on the board and the move.
   Board? moveGroup(int slot, int dx, int dy) {
     if (dx == 0 && dy == 0) return null;
     final group = groupOf(slot);
@@ -564,22 +572,100 @@ class Board {
     }
     final next = List<int>.from(slots);
     final destSet = dest.toSet();
-    final vacated = group.where((s) => !destSet.contains(s)).toList()..sort();
-    final displaced = dest.where((d) => !groupSet.contains(d)).toList()..sort();
     for (var i = 0; i < group.length; i++) {
       next[dest[i]] = slots[group[i]];
     }
-    // Displaced cards fill the vacated cells in reading order, each within
-    // its own shape class (a half piece only ever lands in a half slot).
+    // Cells waiting for a card, and the cards waiting for a cell (by the slot each comes from).
+    final free = <int>{for (final s in group) if (!destSet.contains(s)) s};
+    final pool = <int>{for (final d in dest) if (!groupSet.contains(d)) d};
+    final pushed = <List<int>>[];
+    final seen = <int>{};
+    for (final d in pool) {
+      if (groupOf(d).length > 1 && seen.add(_groups[d])) pushed.add(groupOf(d));
+    }
+    if (pushed.isNotEmpty) {
+      pushed.sort((a, b) => a.length != b.length ? b.length - a.length : a.first - b.first);
+      // Loose cells a pushed group has already taken.
+      final taken = <int>{};
+      bool loose(int s) => !destSet.contains(s) && !groupSet.contains(s) && !taken.contains(s) && !isLocked(s) && groupOf(s).length == 1;
+      for (final g in pushed) {
+        final own = <int>{for (final s in g) if (!destSet.contains(s)) s};
+        final step = _pushStep(g, (s) => free.contains(s) || own.contains(s) || loose(s), loose, dx, dy);
+        if (step == null) continue;
+        for (final s in g) {
+          final to = tiling.apply(s, step.$1, step.$2)!;
+          next[to] = slots[s];
+          if (!free.remove(to) && !own.remove(to)) {
+            // A loose card makes room in turn.
+            taken.add(to);
+            pool.add(to);
+          }
+        }
+        pool.removeAll(g);
+        free.addAll(own);
+      }
+    }
+    final into = free.toList()..sort();
+    final from = pool.toList()..sort();
     for (var cls = 0; cls < tiling.classCount; cls++) {
-      final into = [for (final v in vacated) if (tiling.classOf(v) == cls) v];
-      final from = [for (final d in displaced) if (tiling.classOf(d) == cls) d];
-      for (var i = 0; i < into.length && i < from.length; i++) {
-        next[into[i]] = slots[from[i]];
+      final cells = [for (final v in into) if (tiling.classOf(v) == cls) v];
+      final cards = [for (final d in from) if (tiling.classOf(d) == cls) d];
+      for (var i = 0; i < cells.length && i < cards.length; i++) {
+        next[cells[i]] = slots[cards[i]];
       }
     }
     return Board(spec, next);
   }
+
+  /// The lattice step that keeps the pushed group [g] whole: every card lands
+  /// on a cell [open] allows, in a slot of its own shape. Of those, the step
+  /// that displaces the fewest [loose] cards, then the shortest, then the one
+  /// most against the move ([dx], [dy]), so two groups of one shape simply
+  /// trade places. Null when there is none.
+  (int, int)? _pushStep(List<int> g, bool Function(int slot) open, bool Function(int slot) loose, int dx, int dy) {
+    final anchor = g.first;
+    final cls = tiling.classOf(anchor);
+    final move = _stepVector(dx, dy);
+    (int, int)? best;
+    var bestLoose = 0;
+    var bestLength = 0.0, bestAgainst = 0.0;
+    for (var c = 0; c < cells; c++) {
+      if (c == anchor || tiling.classOf(c) != cls || !open(c)) continue;
+      final t = tiling.delta(anchor, c);
+      if (t == null) continue;
+      var displaced = 0;
+      var fits = true;
+      for (final s in g) {
+        final to = tiling.apply(s, t.$1, t.$2);
+        if (to == null || !open(to)) {
+          fits = false;
+          break;
+        }
+        if (loose(to)) displaced++;
+      }
+      if (!fits) continue;
+      final v = _stepVector(t.$1, t.$2);
+      final length = v.$1 * v.$1 + v.$2 * v.$2, against = v.$1 * move.$1 + v.$2 * move.$2;
+      const eps = 1e-9;
+      final better = best == null ||
+          displaced < bestLoose ||
+          (displaced == bestLoose && (length < bestLength - eps || ((length - bestLength).abs() <= eps && against < bestAgainst - eps)));
+      if (better) {
+        best = t;
+        bestLoose = displaced;
+        bestLength = length;
+        bestAgainst = against;
+      }
+    }
+    return best;
+  }
+
+  /// A lattice step as a distance on the picture, in cells, so steps compare
+  /// in every shape (triangle half-steps and rows, doubled hexagon columns).
+  (double, double) _stepVector(int dx, int dy) => switch (tiling) {
+        GridTiling(:final cellAspect) => (dx * cellAspect, dy.toDouble()),
+        _ => (dx * 0.5, dy * 0.866),
+      };
 
   /// Whether [layout] is a board state for [spec]: a permutation of the
   /// right length that keeps every card in a slot of its own shape. Saves
