@@ -10,7 +10,7 @@ shares everyone's calls, so a player meets a cold start far less often.
 | Path | Module | What | Was |
 | --- | --- | --- | --- |
 | `POST /purchase/verify` | `src/purchase.js` | a StoreKit transaction, granted once (docs/purchases.md) | `verify-purchase` `/verify` |
-| `POST /purchase/notifications` | `src/purchase.js` | App Store Server Notifications V2; Apple still sends them to `verify-purchase` (below) | `verify-purchase` `/notifications` |
+| `POST /purchase/notifications` | `src/purchase.js` | App Store Server Notifications V2, each applied once ("Apple's notifications", below); Apple still sends them to `verify-purchase` until `api` may be executed without a session | `verify-purchase` `/notifications` |
 | `POST /account/delete` | `src/account.js` | Account > Delete account | `delete-account` `/delete` |
 | `POST /code/redeem` | `src/code.js` | a pack code, on the web (docs/pack-codes.md) | `redeem-code` `/redeem` |
 | `POST /coop/create`, `/join`, `/leave`, `/remove`, `/end`, `/next` | `src/coop/game.js` (+ `rules.js`) | Play together (docs/multiplayer.md) | `coop-game` `/<action>` |
@@ -33,34 +33,68 @@ messages.write` (the union of the old functions'). Variables: `APPLE_BUNDLE_ID`,
 `APPLE_ENVIRONMENT` (`Production`), `APPWRITE_DATABASE_ID` (`cjw`), `APPLE_SIGNIN_KEY` (the contents of
 `secrets/AuthKey_2QJPJFW8JW.p8`; `/health` says `appleSignIn: "set"` when it reads), all secret, and
 `SWEEP_APPLY` (`true`: the scheduled and event sweeps change rows; anything else: they only report).
-A changed variable reaches the function with its next deployment.
+A changed variable reaches the function with its next deployment. Domain `https://cjw-api.fra.appwrite.run`
+(proxy rule, 2026-10-17, for Apple's notifications); it follows the active deployment and answers 403
+`router_unauthorized_execution` to every caller while execute is `users`.
 
 Deploy with the Appwrite CLI signed in as the owner, from a folder holding an `appwrite.config.json`
 with `{"projectId": "6acb4de5003e38d5ebd9", "endpoint": "https://fra.cloud.appwrite.io/v1"}`: copy
 `functions/api` without `node_modules`, then `appwrite functions create-deployment --function-id api
 --code <copy> --activate --entrypoint src/main.js --commands "npm install"`. A deployment changes only the
 code; the variables stay. Then `node tools/dev/api_check.mjs`: every route as QA players on the live
-backend (purchase and notification refusals, a pack code made for the run, gifts, a co-op game, an
-account deletion), answers and timings, everything cleaned up afterwards; `node
-tools/dev/security_check.mjs` for the sweep and the gift limits (below). Tests: `cd functions/api &&
-npm install && npm test` (router, purchases, co-op rules, gifts and their limits, the sweep, the twins
-below).
+backend (purchase and notification refusals, every route without a session through the REST API and
+the domain, a pack code made for the run, gifts, a co-op game, an account deletion), answers and
+timings, everything cleaned up afterwards; `node tools/dev/security_check.mjs` for the sweep and the
+gift limits (below). Tests: `cd functions/api && npm install && npm test` (router and callers without a
+user, purchases, notifications, co-op rules, gifts and their limits, the sweep, the twins below).
 
 Deployments: `6ad3928e2403472dffb0` (2026-10-17, the first live one), `6ad39945ee63affa160d` (2026-10-17:
-the integrity sweep with `SWEEP_APPLY`, the `blocks` event, gift limits, names without links).
-Waiting for its deployment (2026-10-17): Play together's live rows (`coop_drags`, docs/multiplayer.md,
-"Live picks and drags"): made on `/coop/create` and `/coop/join`, deleted on leave, remove, the
-cleanup, account deletion and by the sweep (`coop_drags:*`). The table exists already; deploy before a
-build that sends live rows, then `node tools/dev/api_check.mjs` (it checks the rows). Until then such a
-build finds no row and plays as before. `delete-account` holds the same account code (twins test);
-redeploying it is optional (builds up to 124 never get live rows).
+the integrity sweep with `SWEEP_APPLY`, the `blocks` event, gift limits, names without links),
+`6ad3b2b2b1585e1b9f4e` (2026-10-17: Play together's live rows, `coop_drags`, docs/multiplayer.md, "Live
+picks and drags": made on `/coop/create` and `/coop/join`, deleted on leave, remove, the cleanup,
+account deletion and by the sweep; `delete-account` holds the same account code, redeploying it is
+optional since builds up to 124 never get live rows), `6ad3e5a1ef69e35d38a6` (2026-10-17: Apple's
+notifications applied once, `/coop/cleanup` and `/admin/sweep` refuse calls without a user).
+
+### Apple's notifications
+
+App Store Server Notifications V2 (renewals, expiries, refunds, Family Sharing changes; docs/purchases.md)
+are applied once each. A notification's `notificationUUID` is the id of its row in `apple_notifications`
+(server only: no permissions, no row security), created before anything changes, as a purchase claims its
+transaction. Apple sends a notification again when it did not get a 200 (five more tries, 1, 12, 24, 48
+and 72 hours after the one before: about 6.5 days in all); a second delivery answers `{ ok: true, alreadyApplied: true }` and changes nothing. A failure half
+way deletes the row (Apple's next try applies it); a row still `pending` after 10 minutes belongs to a call
+that died and is taken over. Columns: `type`, `subtype`, `environment`, `signedAt`, `claimedAt`, `result`
+(`pending`, `applied`, `nothing`, `unmatched`, `ignored`, `test`), `profiles` (how many were updated) and
+`via` (the function that took it). No transaction id and no player, so nothing in it outlives an account
+deletion. `api` and `verify-purchase` share the table, so a notification is applied once whichever
+function gets it. Signatures are checked against Apple Root CA G3 in the configured environment
+(Production), then Sandbox (TestFlight, App Review); a payload Apple did not sign gets 401 and leaves no row.
+
+Moved 2026-10-17: `api` has execute `any`; Apple's production and sandbox URLs point at
+`https://cjw-api.fra.appwrite.run/purchase/notifications` (`asc_publish.py app-info`, read back from Apple).
+Apple kept delivering to the old address for about 25 minutes after the change (two TEST notifications
+`via verify-purchase`); the third arrived `via api` (`b1f167f7-...`). `verify-purchase` stays for builds up to
+124's `/verify` and for Apple's retries of older notifications (about a week).
+
+`.venv/bin/python tools/dev/apple_notifications.py test` asks Apple for a TEST notification to the
+Sandbox URL, waits for Apple's delivery result and reads its row (`test via <function>`); `history
+--days N` lists what Apple sent and the row each left. The App Store Connect key in `secrets/` works for
+Sandbox; Production needs an In-App Purchase key (the tool's docstring).
+
+Checked live (2026-10-17): Apple's Sandbox TEST notifications `2a24ee87-...` and `dc4ddda7-...` arrived
+at `verify-purchase` (delivery `SUCCESS`, row `test via verify-purchase`). A real Apple-signed Sandbox
+notification from Apple's history (`ONE_TIME_CHARGE`, `tickets_5`, no matching profile) was sent to
+`api`'s `/purchase/notifications` (as a QA player: verified with the Sandbox fallback, `unmatched`, row
+`via api`), then to `verify-purchase`'s `/notifications` and to `api` again: both answered
+`alreadyApplied`.
 
 ## Which function serves which builds
 
 | Function | Called by | Status |
 | --- | --- | --- |
 | `api` | builds after 124 and the web game from its next deploy | live |
-| `verify-purchase` | builds up to 124 (`/verify`, `/health`); Apple's App Store Server Notifications for every build (`https://cjw-verify-purchase.fra.appwrite.run/notifications`, also in `tools/store/asc_publish.py`) | frozen, deployed |
+| `verify-purchase` | builds up to 124 (`/verify`, `/health`); Apple's App Store Server Notifications for every build until their URL moves to `api` (`https://cjw-verify-purchase.fra.appwrite.run/notifications`, also in `tools/store/asc_publish.py`; below) | frozen, deployed, the same purchase and notification code as `api`: `6ad3e5a28fffd15bb600` |
 | `delete-account` | builds up to 124 | frozen, deployed |
 | `redeem-code` | builds up to 124 (the web game until its next deploy; iPhone builds from before 2026-10-16 had code entry too) | frozen, deployed |
 | `coop-game` | builds up to 124 that have Play together | frozen, deployed |
@@ -81,10 +115,38 @@ Delete an old function only when no build that calls it can still be used:
   dates), and not before the web game has been redeployed with `api`.
 - No App Store version has shipped yet. If one ships with a build up to 124, its functions stay until a
   minimum build ("Update required", docs/app-updates.md) moves its players on.
-- `verify-purchase` also stays until Apple's notification URL points elsewhere. Moving it to `api`:
-  give `api` execute `any` and a domain, check `POST /purchase/notifications` there, change
-  `NOTIFICATIONS_URL` in `tools/store/asc_publish.py`, run `asc_publish.py app-info` (Production and
-  Sandbox URLs) and send a test notification from App Store Connect.
+- `verify-purchase` also stays while Apple's notification URL points at it. Once the URL points at
+  `api`, it only serves `/verify` for builds up to 124 (and notifications Apple may still send again to
+  the old address, for about a week) and goes with the other frozen functions (the first rule).
+
+Moving Apple's notifications to `api` (2026-10-17). Done: `api` applies them as `verify-purchase` does
+(twins), both record each one in `apple_notifications` ("Apple's notifications", above), `api` has the
+domain `cjw-api.fra.appwrite.run`, `/coop/cleanup` and `/admin/sweep` refuse calls without a user, and
+`api_check.mjs` calls every route without a session. Left, for the owner (widening who may execute `api`
+on the live backend is the owner's call; the agent's run was not allowed to):
+
+1. Give `api` execute `any`. `functions update` puts every setting it is not given back to its default
+   (schedule, events, scopes, timeout), so pass them all, from a folder with the project's
+   `appwrite.config.json`:
+   `appwrite functions update --function-id api --name api --runtime node-22 --execute any --events
+   'databases.cjw.tables.blocks.rows.*.create' --schedule '0 * * * *' --timeout 300 --enabled --logging
+   --entrypoint src/main.js --commands 'npm install' --scopes rows.read --scopes rows.write --scopes
+   users.read --scopes users.write --scopes files.read --scopes files.write --scopes teams.read --scopes
+   teams.write --scopes messages.read --scopes messages.write --build-specification s-2vcpu-2gb
+   --runtime-specification s-0.5vcpu-512mb`, then `appwrite functions get --function-id api` and compare.
+   Only with a deployment that refuses calls without a user on the admin routes (`6ad3e5a1ef69e35d38a6` or
+   later; `router.test.mjs`): before it, a call without a user counted as the owner.
+2. `node tools/dev/api_check.mjs`: the no-session checks then expect each route's own refusal (only
+   `/health` and the notifications route answer), and that `x-appwrite-*` headers sent to the domain do
+   not count.
+3. Set `NOTIFICATIONS_URL` in `tools/store/asc_publish.py` to
+   `https://cjw-api.fra.appwrite.run/purchase/notifications` and run `.venv/bin/python
+   tools/store/asc_publish.py app-info --dry-run`, then without `--dry-run` (Production and Sandbox URLs;
+   it also syncs categories, name, subtitle and privacy URL, so read the dry run).
+4. `.venv/bin/python tools/dev/apple_notifications.py test`: the row must say `test via api`. Production
+   cannot be tested without an In-App Purchase key; it runs the same route.
+
+Back: point the URLs at `verify-purchase` again (step 3) and set execute back to `users` (step 1).
 
 ### Twins while old builds are in use
 
@@ -97,8 +159,9 @@ callable by any signed-in client, whatever build it is.
 - Friend gifts: `src/gift/` and `functions/send-gift/src/` hold the same code (the daily limit, the
   notification rules, the name filter; `twins.test.mjs`, and `test/friend_gifts_test.dart` for the
   app's side).
-- Purchase grants: `GRANTS` in `src/purchase.js` and `functions/verify-purchase/src/main.js`
-  (`test/economy_test.dart`).
+- Purchases and Apple's notifications: `src/purchase.js` and `functions/verify-purchase/src/main.js`
+  hold the same code from the imports to `environmentName` (the grants, the checks, the notification
+  record; `twins.test.mjs`; `GRANTS` also `test/economy_test.dart`).
 - Co-op: builds up to 124 (`coop-game`) and later builds (`api`) play in the same games (same rows and
   teams), so a change to the rules in `src/coop` must keep games made by either working.
 
@@ -141,6 +204,17 @@ its predictable one is taken (`SocialRepository._ownRow`).
 20 gifts a day per sender (`limit`); a notification only between friends who added each other, and at
 most 5 a day per recipient (later gifts land in the inbox quietly); names with a link, an @handle or a
 domain show as "Player" in the message and the notification (docs/friend-gifts.md).
+
+### Callers without a session
+
+Apple calls the notifications route without a session, so `api` is meant to be executable by anyone
+(execute `any`; still `users` until the owner's step above). Every route must then refuse such a caller
+itself: the player routes answer 401 (`x-appwrite-user-id` is empty), `/coop/cleanup` and `/admin/sweep`
+answer 404 unless the caller is a console user (the owner's CLI: a user id that is no user of the
+project; before deployment `6ad3e5a1ef69e35d38a6` a call without any user counted too), the notifications
+route needs Apple's signature, and only `/health` answers. Appwrite sets `x-appwrite-*` itself: the REST
+API refuses such headers from a caller (400, checked live), and `api_check.mjs` checks that the domain
+ignores them (a player's id, the `event` trigger) once it is open.
 
 ### Project settings
 

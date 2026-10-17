@@ -38,7 +38,7 @@ enum LivePhase {
 /// One state of a player's live row.
 @immutable
 class CoopLive {
-  const CoopLive({required this.userId, required this.board, required this.phase, this.card = -1, this.x = 0, this.y = 0, this.drag = 0, this.seq = 0, this.t = 0});
+  const CoopLive({required this.userId, required this.board, required this.phase, this.card = -1, this.x = 0, this.y = 0, this.drag = 0, this.seq = 0, this.t = 0, this.updatedAt});
 
   final String userId;
 
@@ -64,9 +64,16 @@ class CoopLive {
   /// at the pace it was made, whatever the network did to it.
   final int t;
 
+  /// When the server wrote this state (`$updatedAt`, one clock for every player): who claimed a card
+  /// first ([LiveClaim]). Null for a state not read from the server.
+  final DateTime? updatedAt;
+
   bool get dragging => phase == LivePhase.drag || phase == LivePhase.drop || phase == LivePhase.cancel;
 
-  CoopLive copyWith({int? seq}) => CoopLive(userId: userId, board: board, phase: phase, card: card, x: x, y: y, drag: drag, seq: seq ?? this.seq, t: t);
+  CoopLive copyWith({int? seq}) => CoopLive(userId: userId, board: board, phase: phase, card: card, x: x, y: y, drag: drag, seq: seq ?? this.seq, t: t, updatedAt: updatedAt);
+
+  /// A card in hand: picked with a tap, or being dragged.
+  bool get holds => phase == LivePhase.pick || phase == LivePhase.drag;
 
   Map<String, dynamic> toData() => {'board': board, 'phase': phase.code, 'card': card, 'x': x, 'y': y, 'drag': drag, 'seq': seq, 't': t};
 
@@ -99,11 +106,37 @@ class CoopLive {
       drag: (row['drag'] as num?)?.toInt() ?? 0,
       seq: (row['seq'] as num?)?.toInt() ?? 0,
       t: (row['t'] as num?)?.toInt() ?? 0,
+      updatedAt: DateTime.tryParse('${row[r'$updatedAt'] ?? ''}'),
     );
   }
 
   @override
   String toString() => 'CoopLive($userId ${phase.name} card $card drag $drag seq $seq t $t (${x.toStringAsFixed(3)}, ${y.toStringAsFixed(3)}))';
+}
+
+/// A card a player has in hand (picked or dragged): first grab wins (docs/multiplayer.md, "Who has a
+/// card"). [since] is the server's time of the first state that took it; null until the server has
+/// answered (this player's own) or for a pick known only from an old build's presence.
+@immutable
+class LiveClaim {
+  const LiveClaim({required this.userId, required this.card, this.since, this.dragging = false});
+  final String userId;
+  final int card;
+  final DateTime? since;
+  final bool dragging;
+
+  /// Whether this claim came first: the earlier server time, then the smaller player id. A claim
+  /// whose time is unknown never comes first.
+  bool before(LiveClaim other) {
+    final a = since, b = other.since;
+    if (a == null) return false;
+    if (b == null) return true;
+    if (a != b) return a.isBefore(b);
+    return userId.compareTo(other.userId) < 0;
+  }
+
+  @override
+  String toString() => 'LiveClaim($userId card $card since $since${dragging ? ' dragging' : ''})';
 }
 
 /// The live row refused an update for now (Appwrite's rate limit: 120 updates a minute per player).
@@ -125,7 +158,11 @@ class LiveRowMissing implements Exception {
 ///   budget is fresh, fewer as it runs low), only where it is now;
 /// - Appwrite allows 120 row updates a minute per player (measured: `X-RateLimit-Limit: 120`, a
 ///   fixed one-minute window): the sender keeps under [budget] in any minute, sends no positions when
-///   the budget is spent, and waits [blockFor] after a refusal.
+///   the budget is spent, and waits [blockFor] after a refusal;
+/// - it heals itself: a finger held still sends its position again every [keepAlive] (the others drop
+///   a drag not heard from for 2 s), a drag with no new position for [idleEnd] ends itself (and starts
+///   again if the finger moves on), and a pick made meanwhile goes as soon as the drag ends;
+/// - the card in hand is this player's [claim], with the server's time of the state that took it.
 class LiveSender {
   LiveSender({
     required this.userId,
@@ -135,11 +172,21 @@ class LiveSender {
     this.budget = 110,
     this.window = const Duration(seconds: 60),
     this.blockFor = const Duration(seconds: 10),
+    this.keepAlive = const Duration(milliseconds: 1500),
+    this.idleEnd = const Duration(seconds: 3),
+    this.onClaim,
   }) : _clock = clock ?? DateTime.now;
 
   final String userId;
   int board;
-  final Future<void> Function(CoopLive state) send;
+
+  /// Writes a state; returns the server's time of it (`$updatedAt`), when it says.
+  final Future<DateTime?> Function(CoopLive state) send;
+  final Duration keepAlive;
+  final Duration idleEnd;
+
+  /// The claim changed: taken, its server time known, or let go.
+  final void Function()? onClaim;
   final DateTime Function() _clock;
   final int budget;
   final Duration window;
@@ -163,6 +210,16 @@ class LiveSender {
   DateTime? _dragStart;
   double _x = 0, _y = 0;
   bool _disposed = false;
+  Timer? _idleTimer;
+  DateTime _movedAt = DateTime.fromMillisecondsSinceEpoch(0);
+
+  /// The card of a drag that ended itself (the finger held still): it starts again if it moves.
+  int? _paused;
+  int? _claimCard;
+  DateTime? _claimSince;
+
+  /// The card in hand (picked or dragged) and when the server took it (null until it answered).
+  LiveClaim? get claim => _claimCard == null ? null : LiveClaim(userId: userId, card: _claimCard!, since: _claimSince, dragging: dragging);
 
   /// Updates sent in the last [window].
   int get used {
@@ -197,6 +254,9 @@ class LiveSender {
   /// The finger took [card] at ([x], [y]) (fractions of the board).
   void dragStart(int card, double x, double y) {
     final now = _clock();
+    _paused = null;
+    _movedAt = now;
+    _watchIdle();
     _dragCard = card;
     _dragStart = now;
     _drag = math.max(_drag + 1, now.millisecondsSinceEpoch);
@@ -209,7 +269,10 @@ class LiveSender {
 
   /// The dragged card's centre is at ([x], [y]) now.
   void dragMove(double x, double y) {
+    final paused = _paused;
+    if (!dragging && paused != null) return dragStart(paused, x, y);
     if (!dragging) return;
+    _movedAt = _clock();
     _x = x;
     _y = y;
     _positionDirty = true;
@@ -218,15 +281,18 @@ class LiveSender {
 
   /// The drag ended: [dropped] when it moved the card (a move follows), else it goes back.
   void dragEnd({required bool dropped}) {
+    _paused = null;
     if (!dragging) return;
+    _idleTimer?.cancel();
+    _idleTimer = null;
     _positionTimer?.cancel();
     _positionTimer = null;
     _positionDirty = false;
     final end = _state(dropped ? LivePhase.drop : LivePhase.cancel, card: _dragCard!);
     _dragCard = null;
     _enqueue(end);
-    // A card still picked shows again after a cancelled drag.
-    if (!dropped && _picked != null) _enqueue(_state(LivePhase.pick, card: _picked!));
+    // A card picked meanwhile, or still picked after a cancelled drag, shows now.
+    if (_picked != null) _enqueue(_state(LivePhase.pick, card: _picked!));
   }
 
   /// A new board: nothing is in hand.
@@ -234,16 +300,69 @@ class LiveSender {
     this.board = board;
     _positionTimer?.cancel();
     _positionTimer = null;
+    _idleTimer?.cancel();
+    _idleTimer = null;
     _dragCard = null;
+    _paused = null;
     _picked = null;
     _queue.clear();
+    _setClaim(null);
+  }
+
+  /// The app is back in front: what is in hand is sent again (the others forgot it while away).
+  void resend() {
+    if (dragging) return;
+    final picked = _picked;
+    if (picked != null) _enqueue(_state(LivePhase.pick, card: picked));
   }
 
   void dispose() {
     _disposed = true;
     _positionTimer?.cancel();
+    _idleTimer?.cancel();
     _wake?.cancel();
     _queue.clear();
+  }
+
+  /// While dragging: the position again every [keepAlive] while the finger is still, and the end of
+  /// the drag after [idleEnd] without a new position.
+  void _watchIdle() {
+    _idleTimer?.cancel();
+    _idleTimer = Timer.periodic(keepAlive, (_) {
+      if (!dragging || _disposed) {
+        _idleTimer?.cancel();
+        _idleTimer = null;
+        return;
+      }
+      final now = _clock();
+      if (now.difference(_movedAt) >= idleEnd) {
+        final card = _dragCard!;
+        dragEnd(dropped: false);
+        _paused = card;
+        return;
+      }
+      if (now.difference(_positionAt) >= keepAlive - const Duration(milliseconds: 100) && interval != null) {
+        _positionAt = now;
+        _enqueue(_state(LivePhase.drag, card: _dragCard!));
+      }
+    });
+  }
+
+  void _setClaim(int? card, {DateTime? since}) {
+    if (_claimCard == card && (since == null || _claimSince == since)) return;
+    _claimCard = card;
+    _claimSince = card == null ? null : since;
+    onClaim?.call();
+  }
+
+  /// What a state does to the claim, as it is queued: a new card in hand starts a claim (its time
+  /// comes with the server's answer), nothing in hand ends it.
+  void _claimFor(CoopLive s) {
+    if (s.holds) {
+      if (_claimCard != s.card) _setClaim(s.card);
+    } else {
+      _setClaim(null);
+    }
   }
 
   CoopLive _state(LivePhase phase, {required int card}) {
@@ -281,6 +400,7 @@ class LiveSender {
   /// one drag, picks and put-downs, a pick followed by a drag. The end of a drag always stays.
   void _enqueue(CoopLive s) {
     if (disabled || _disposed) return;
+    _claimFor(s);
     if (_queue.isNotEmpty) {
       final last = _queue.last;
       final lastLoose = last.phase == LivePhase.none || last.phase == LivePhase.pick;
@@ -322,7 +442,9 @@ class LiveSender {
         final s = head.copyWith(seq: _seq);
         _sent.add(now);
         try {
-          await send(s);
+          final at = await send(s);
+          // The server's time of the state that took the card in hand: the claim's time.
+          if (at != null && s.holds && _claimCard == s.card && _claimSince == null) _setClaim(s.card, since: at);
         } on LiveRowMissing {
           disabled = true;
           _queue.clear();
@@ -441,6 +563,18 @@ class _PlayerLive {
   final paths = <int, DragPath>{};
   final done = <int>{};
 
+  /// The card in hand (a pick, a drag, a drop waiting for its move), when the server took it, and
+  /// when it was last heard of.
+  int? claimCard;
+  DateTime? claimSince;
+  DateTime claimHeard = DateTime.fromMillisecondsSinceEpoch(0);
+  bool claimDragging = false;
+
+  void endClaim() {
+    claimCard = null;
+    claimSince = null;
+  }
+
   void finish(int drag) {
     paths.remove(drag);
     done.add(drag);
@@ -468,6 +602,14 @@ class LiveTracks {
 
   bool get hasGhosts => _players.values.any((p) => p.paths.isNotEmpty);
 
+  /// The cards the others have in hand at [now]: picks until put down, drags and drops until their
+  /// move arrives or nothing is heard of them for [staleAfter].
+  List<LiveClaim> claims(DateTime now) => [
+        for (final e in _players.entries)
+          if (e.value.claimCard != null && (!e.value.claimDragging || now.difference(e.value.claimHeard) <= staleAfter))
+            LiveClaim(userId: e.key, card: e.value.claimCard!, since: e.value.claimSince, dragging: e.value.claimDragging),
+      ];
+
   /// Takes a state heard at [at]; true when what others hold changed (a pick, a drag that
   /// started or ended), false for a position or a state already superseded.
   bool add(CoopLive s, DateTime at) {
@@ -476,6 +618,20 @@ class LiveTracks {
     p.seq = s.seq;
     final before = p.current?.phase;
     p.current = s;
+    // The claim: a new card in hand starts one (at the server's time of this state); the same card
+    // goes on (a pick that becomes a drag); a drop holds it until the move; nothing in hand ends it.
+    if (s.holds) {
+      final ended = before == null || before == LivePhase.none || before == LivePhase.cancel || before == LivePhase.drop;
+      if (p.claimCard != s.card || ended) p.claimSince = s.updatedAt;
+      p.claimCard = s.card;
+      p.claimDragging = s.phase == LivePhase.drag;
+      p.claimHeard = at;
+    } else if (s.phase == LivePhase.drop && p.claimCard == s.card) {
+      p.claimDragging = true;
+      p.claimHeard = at;
+    } else {
+      p.endClaim();
+    }
     switch (s.phase) {
       case LivePhase.drag:
         if (p.done.contains(s.drag)) return false;
@@ -506,8 +662,12 @@ class LiveTracks {
   /// takes the cards from where they are drawn to their slots). True when a drag ended.
   bool onMove(String userId, Iterable<int> cards) {
     final p = _players[userId];
-    if (p == null || p.paths.isEmpty) return false;
+    if (p == null) return false;
     final set = cards.toSet();
+    // Their move took the card they held: in hand no more.
+    final claimed = p.claimCard;
+    if (claimed != null && set.contains(claimed) && p.current?.phase != LivePhase.pick) p.endClaim();
+    if (p.paths.isEmpty) return false;
     final over = [for (final e in p.paths.entries) if (set.contains(e.value.card)) e.key];
     for (final d in over) {
       p.finish(d);

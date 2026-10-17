@@ -44,6 +44,9 @@ class BoardWidget extends StatefulWidget {
     this.ghosts,
     this.onDragMove,
     this.onDragEnd,
+    this.blocked = const {},
+    this.onDragRefused,
+    this.onDragLost,
   });
 
   final ui.Image image;
@@ -74,11 +77,36 @@ class BoardWidget extends StatefulWidget {
   /// first, when the drag begins), so the others can see it move.
   final void Function(int slot, Offset at, bool start)? onDragMove;
 
-  /// The drag of the card that was at [slot] ended (after [onDrop], when it dropped somewhere).
+  /// The drag of the card that was at [slot] ended (after [onDrop], when it dropped somewhere), or
+  /// was given up ([onDragLost]).
   final void Function(int slot)? onDragEnd;
+
+  /// Play together: cards another player has in hand (and their groups). They cannot be dragged
+  /// ([onDragRefused]); a drag that comes to touch one is given up ([onDragLost], [DragLoss.claimed]).
+  final Set<int> blocked;
+
+  /// A drag of the card at [slot] was refused: another player has it ([blocked]).
+  final void Function(int slot)? onDragRefused;
+
+  /// The card this player was dragging was taken from under the finger: another player's move moved
+  /// it, put it in place or joined it to others, or another player holds it now. The drag ended
+  /// ([onDragEnd] came first) and the cards went back.
+  final void Function(int card, DragLoss reason)? onDragLost;
 
   @override
   State<BoardWidget> createState() => _BoardWidgetState();
+}
+
+/// Why a drag was given up ([BoardWidget.onDragLost]).
+enum DragLoss {
+  /// Another player's move moved the card or changed its group.
+  moved,
+
+  /// Another player's move put the card (or its group) in place.
+  locked,
+
+  /// Another player has the card in hand, and had it first.
+  claimed,
 }
 
 /// Whether [card] belongs on the edge of the board (a cell with a side on the
@@ -258,9 +286,17 @@ class BoardZoom extends ChangeNotifier {
 }
 
 class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStateMixin {
-  int? _dragSlot; // the card under the finger
+  int? _dragSlot; // the slot of the card under the finger
   Offset _dragDelta = Offset.zero; // how far the finger moved since pan start
   int? _hoverSlot; // slot under the dragged card's centre
+  // The drag by card (Play together: another player's move can change the board under the finger):
+  // the card under the finger, the cards of its group and their widget keys when it began.
+  int? _dragCard;
+  Set<int> _dragCards = const {};
+  Map<int, int> _dragKeys = const {};
+  // The finger of the drag, for the backstop that ends a drag whose card's gesture never saw it end.
+  int? _dragPointer;
+  final _down = <int>{};
 
   // Auto-pan (zoomed boards): while a dragged card is held near the edge of
   // the view, the board slides the other way under it, so a card can travel
@@ -303,6 +339,78 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
     if (mounted) setState(() {});
   }
 
+  /// Starts a drag of the card at [slot], unless another player has it.
+  bool _beginDrag(int slot) {
+    final board = widget.state.board;
+    final group = board.groupOf(slot);
+    if (group.any((s) => widget.blocked.contains(board.slots[s]))) {
+      widget.onDragRefused?.call(slot);
+      return false;
+    }
+    final keys = widget.state.cardKeys;
+    setState(() {
+      _dragSlot = slot;
+      _dragDelta = Offset.zero;
+      _hoverSlot = slot;
+      _dragCard = board.slots[slot];
+      _dragCards = {for (final s in group) board.slots[s]};
+      _dragKeys = {for (final c in _dragCards) c: keys?[c] ?? c};
+      _dragPointer = _down.length == 1 ? _down.first : null;
+    });
+    return true;
+  }
+
+  /// Ends the drag in progress where it is, without a drop (the cards go back), and says so.
+  void _endDrag() {
+    final slot = _dragSlot;
+    _stopAutoPan();
+    _clearDrag();
+    if (slot != null) widget.onDragEnd?.call(slot);
+  }
+
+  void _clearDrag() {
+    _dragSlot = null;
+    _hoverSlot = null;
+    _dragDelta = Offset.zero;
+    _dragCard = null;
+    _dragCards = const {};
+    _dragKeys = const {};
+    _dragPointer = null;
+    if (mounted) setState(() {});
+  }
+
+  /// After the board changed (another player's move, their hand): whether the drag in progress can
+  /// go on. It cannot when the dragged card moved, locked, joined or left a group, traded its widget
+  /// with a twin, or another player has any of its cards in hand: it ends, and the cards glide back.
+  DragLoss? _dragStillOk() {
+    final card = _dragCard;
+    if (card == null) return null;
+    final board = widget.state.board;
+    final slot = board.slotOfCard(card);
+    if (slot < 0) return DragLoss.moved;
+    final group = board.groupOf(slot);
+    if (group.any((s) => board.isLocked(s))) return DragLoss.locked;
+    final cards = {for (final s in group) board.slots[s]};
+    if (cards.any(widget.blocked.contains)) return DragLoss.claimed;
+    if (slot != _dragSlot || !setEquals(cards, _dragCards)) return DragLoss.moved;
+    final keys = widget.state.cardKeys;
+    if (cards.any((c) => (keys?[c] ?? c) != _dragKeys[c])) return DragLoss.moved;
+    return null;
+  }
+
+  void _trackDown(PointerDownEvent e) => _down.add(e.pointer);
+
+  /// The backstop: the finger of a drag lifted (or the system took it) and the card's own gesture did
+  /// not end the drag (its widget changed under the finger): end it now.
+  void _trackUp(PointerEvent e) {
+    _down.remove(e.pointer);
+    if (_dragSlot == null || (_dragPointer != null && e.pointer != _dragPointer)) return;
+    // The card's gesture hears this lift after the board's listeners: give it the first word.
+    scheduleMicrotask(() {
+      if (mounted && _dragSlot != null) _endDrag();
+    });
+  }
+
   /// Tells the game screen where the dragged card is (Play together).
   void _reportDrag(int slot, {bool start = false}) {
     final report = widget.onDragMove;
@@ -321,6 +429,27 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
     if (old.ghosts != widget.ghosts) {
       old.ghosts?.removeListener(_onGhosts);
       widget.ghosts?.addListener(_onGhosts);
+    }
+    // The board changed under a drag: it goes on only while its card is where it was.
+    if (_dragCard != null && (!identical(old.state.board, widget.state.board) || old.blocked != widget.blocked || old.state.cardKeys != widget.state.cardKeys)) {
+      final lost = _dragStillOk();
+      if (lost != null) {
+        final card = _dragCard!;
+        final slot = _dragSlot;
+        _stopAutoPan();
+        _dragSlot = null;
+        _hoverSlot = null;
+        _dragDelta = Offset.zero;
+        _dragCard = null;
+        _dragCards = const {};
+        _dragKeys = const {};
+        _dragPointer = null;
+        // Told after this frame: the game screen may change its own state in answer.
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (slot != null) widget.onDragEnd?.call(slot);
+          widget.onDragLost?.call(card, lost);
+        });
+      }
     }
     if (old.state.showingPicture && !widget.state.showingPicture) {
       _peekReturn = true;
@@ -435,16 +564,7 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
   Timer? _bandTimer;
   static double _bandFor(double zoom) => zoom < 1.6 ? 1.0 : (zoom < 2.6 ? 2.0 : (zoom < 3.4 ? 3.0 : 4.0));
 
-  void _cancelDrag() {
-    final slot = _dragSlot;
-    if (slot == null) return;
-    widget.onDragEnd?.call(slot);
-    setState(() {
-      _dragSlot = null;
-      _hoverSlot = null;
-      _dragDelta = Offset.zero;
-    });
-  }
+  void _cancelDrag() => _endDrag();
 
   void _pointerDown(PointerDownEvent e) {
     if (_pointers.isEmpty) _multiTouch = false;
@@ -553,7 +673,8 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
       _cacheKey = cacheKey;
       _cache.clear();
     }
-    final dragGroup = _dragSlot == null ? const <int>{} : board.groupOf(_dragSlot!).toSet();
+    // Never a card in place: a drag that came to touch one has ended (didUpdateWidget).
+    final dragGroup = _dragSlot == null ? const <int>{} : board.groupOf(_dragSlot!).where((s) => !board.isLocked(s)).toSet();
     final selectedGroup = widget.state.selectedGroup.toSet();
     final hintGroup = widget.state.hintSlot == null ? const <int>{} : {widget.state.hintSlot!};
     final targets = _hoverTargets();
@@ -661,6 +782,8 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
         ),
       );
     }
+    // Every finger on the board, so a drag always ends when its finger lifts (the backstop).
+    content = Listener(onPointerDown: _trackDown, onPointerUp: _trackUp, onPointerCancel: _trackUp, child: content);
     return SizedBox(width: widget.width, height: widget.height, child: content);
   }
 
@@ -811,19 +934,26 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
     if (mark != null && !dragging) {
       final badge = (math.min(bounds.width, bounds.height) * 0.42).clamp(8.0, 22.0);
       final centre = localPoly.fold(Offset.zero, (a, p) => a + p) / localPoly.length.toDouble();
+      final since = mark.since, fadeFor = mark.fadeFor;
+      Widget outline = IgnorePointer(key: mark.held ? null : ValueKey('coop-moved-$card'), child: CustomPaint(painter: _MarkPainter(polygon: localPoly, color: mark.color, width: mark.held ? 3 * strokeScale : 2 * strokeScale, faded: !mark.held)));
+      // A moved card's mark fades out from the moment it moved (also after a rebuild part way).
+      if (!mark.held && since != null && fadeFor != null && ghost == null) {
+        outline = _FadeOut(key: ValueKey('mark-fade-$card-${since.microsecondsSinceEpoch}'), since: since, duration: fadeFor, child: outline);
+      }
+      final badgeShown = ghost == null ? mark.badge : ghost.lead;
       child = Stack(
         clipBehavior: Clip.none,
         children: [
           Positioned.fill(child: child),
-          Positioned.fill(child: IgnorePointer(child: CustomPaint(painter: _MarkPainter(polygon: localPoly, color: mark.color, width: mark.held ? 3 * strokeScale : 2 * strokeScale, faded: !mark.held)))),
-          if (ghost == null || ghost.lead)
+          Positioned.fill(child: outline),
+          if (badgeShown)
             Positioned(
               left: centre.dx - badge / 2,
               top: centre.dy - badge / 2,
               child: IgnorePointer(
                 child: Semantics(
                   label: ghost != null ? 'Moved by ${mark.initial} now' : (mark.held ? 'Held by ${mark.initial}' : 'Moved by ${mark.initial}'),
-                  child: PlayerInitialBadge(key: ValueKey(ghost != null ? 'coop-drag-$card' : 'coop-mark-$card'), initial: mark.initial, color: mark.color, onColor: mark.onColor, size: badge),
+                  child: PlayerInitialBadge(key: ValueKey(ghost != null ? 'coop-drag-$card' : 'coop-mark-$card'), initial: mark.initial, color: mark.color, onColor: mark.onColor, size: mark.held || ghost != null ? badge : badge * 0.7),
                 ),
               ),
             ),
@@ -853,12 +983,7 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
               ? null
               : (_) {
                   if (_multiTouch) return;
-                  setState(() {
-                    _dragSlot = slot;
-                    _dragDelta = Offset.zero;
-                    _hoverSlot = slot;
-                  });
-                  _reportDrag(slot, start: true);
+                  if (_beginDrag(slot)) _reportDrag(slot, start: true);
                 },
           onPanUpdate: locked
               ? null
@@ -875,26 +1000,17 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
               ? null
               : (_) {
                   _stopAutoPan();
-                  if (_dragSlot != slot) return;
-                  final target = tiling.slotAt(tiling.cellCenter(slot, boardSize) + _dragDelta, boardSize);
-                  setState(() {
-                    _dragSlot = null;
-                    _hoverSlot = null;
-                    _dragDelta = Offset.zero;
-                  });
-                  if (target != null && target != slot) widget.onDrop(slot, target);
-                  widget.onDragEnd?.call(slot);
+                  final from = _dragSlot;
+                  if (from == null) return;
+                  // Not this card's drag (its card moved under the finger): it ends, with no drop.
+                  if (from != slot) return _endDrag();
+                  final target = tiling.slotAt(tiling.cellCenter(from, boardSize) + _dragDelta, boardSize);
+                  _clearDrag();
+                  if (target != null && target != from) widget.onDrop(from, target);
+                  widget.onDragEnd?.call(from);
                 },
           onPanCancel: () {
-            _stopAutoPan();
-            if (_dragSlot == slot) {
-              widget.onDragEnd?.call(slot);
-              setState(() {
-                _dragSlot = null;
-                _hoverSlot = null;
-                _dragDelta = Offset.zero;
-              });
-            }
+            if (_dragSlot != null) _endDrag();
           },
           child: AnimatedScale(
             scale: still ? 1 : (dragging || ghost != null ? 1.06 : (selected ? 1.03 : 1)),
@@ -1803,6 +1919,40 @@ class _PulseRingState extends State<_PulseRing> with SingleTickerProviderStateMi
 
 /// The outline of another player's card (Play together): solid while they hold it, lighter on a card
 /// they just moved.
+/// Fades its child out over [duration] from [since] (a moved card's mark, Play together), starting
+/// part way when it is built late. A fade, so it stays under Reduce motion.
+class _FadeOut extends StatefulWidget {
+  const _FadeOut({super.key, required this.since, required this.duration, required this.child});
+  final DateTime since;
+  final Duration duration;
+  final Widget child;
+
+  @override
+  State<_FadeOut> createState() => _FadeOutState();
+}
+
+class _FadeOutState extends State<_FadeOut> with SingleTickerProviderStateMixin {
+  late final AnimationController _c = AnimationController(vsync: this, duration: widget.duration);
+
+  @override
+  void initState() {
+    super.initState();
+    final total = widget.duration.inMicroseconds;
+    final gone = DateTime.now().difference(widget.since).inMicroseconds;
+    _c.value = total <= 0 ? 1 : (gone / total).clamp(0.0, 1.0);
+    _c.forward();
+  }
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => FadeTransition(opacity: ReverseAnimation(CurvedAnimation(parent: _c, curve: Curves.easeIn)), child: widget.child);
+}
+
 class _MarkPainter extends CustomPainter {
   _MarkPainter({required this.polygon, required this.color, required this.width, required this.faded});
   final List<Offset> polygon;

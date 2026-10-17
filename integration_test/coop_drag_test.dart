@@ -215,6 +215,47 @@ void main() {
     final moves = ((await bot('/moves', get: true))['moves'] as List).where((m) => m['userId'] == me).toList();
     expect(moves, isNotEmpty, reason: 'the move followed the drop');
 
+    debugPrint('COOP_STEP 6b');
+    // 6b. A card the host has picked cannot be taken here: it does not lift, a word says who has it,
+    // and a tap does not pick it either.
+    await settle(tester, 2500);
+    b = board();
+    final held = b.firstWhere((k) => b[k] != k && b.indexOf(k) != k);
+    await bot('/pick?card=$held');
+    expect(await until(tester, () => find.byKey(ValueKey('coop-mark-$held')).evaluate().isNotEmpty, seconds: 10), isNotNull);
+    final heldAt = tester.getTopLeft(find.byKey(ValueKey('card-$held')));
+    final grab = await tester.startGesture(tester.getCenter(find.byKey(ValueKey('card-$held'))));
+    for (var i = 0; i < 25; i++) {
+      await grab.moveBy(const Offset(3, 2));
+      await tester.pump(const Duration(milliseconds: 16));
+    }
+    await settle(tester, 300);
+    await shot(tester, 'live_06_claimed_refused');
+    expect(tester.getTopLeft(find.byKey(ValueKey('card-$held'))), heldAt, reason: 'it did not lift');
+    expect(find.textContaining('has this card'), findsOneWidget);
+    await grab.up();
+    await settle(tester, 300);
+    await tester.tapAt(tester.getCenter(find.byKey(ValueKey('card-$held'))));
+    await settle(tester, 300);
+    expect(tester.widget<BoardWidget>(find.byType(BoardWidget).first).state.selected, isNull, reason: 'a tap does not pick it');
+    await bot('/pick?card=-1');
+    expect(await until(tester, () => find.byKey(ValueKey('coop-mark-$held')).evaluate().isEmpty, seconds: 10), isNotNull);
+
+    debugPrint('COOP_STEP 6c');
+    // 6c. The host's move: its cards carry the host's colour, fading out in about 1.5 s, without the
+    // initial.
+    await settle(tester, 2500);
+    await bot('/swap');
+    bool movedMarks() => find.byWidgetPredicate((w) => w.key is ValueKey && '${(w.key as ValueKey).value}'.startsWith('coop-moved-')).evaluate().isNotEmpty;
+    expect(await until(tester, movedMarks, seconds: 10), isNotNull);
+    await shot(tester, 'live_07_marks_fade_1');
+    await settle(tester, 600);
+    await shot(tester, 'live_07_marks_fade_2');
+    await settle(tester, 600);
+    await shot(tester, 'live_07_marks_fade_3');
+    await settle(tester, 800);
+    expect(movedMarks(), isFalse, reason: 'gone');
+
     debugPrint('COOP_STEP 7');
     // 7. A giant board, zoomed in: the host's drag far away shows on the off-screen pointer and the map.
     await bot('/end');

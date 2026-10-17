@@ -236,7 +236,11 @@ carden.page redirects there.
   fractions), picks sent at once, drag positions 5 a second within Appwrite's 120 updates a minute per player
   (`lib/state/coop/coop_live.dart`); others see the card glide about 0.25-0.5 s behind the finger. Deploy `api`
   before a build that sends live rows, then `node tools/dev/api_check.mjs`. QA: `integration_test/coop_drag_test.dart`
-  (the bot's `/pick`, `/drag`, `/live`, `/liverows`).
+  (the bot's `/pick`, `/drag`, `/live`, `/liverows`). First grab wins: a card or group another player picked or drags can't be grabbed
+  here (`LiveClaim`, `CoopController.claims`, `BoardWidget.blocked` / `onDragRefused` / `onDragLost`; ties go to the
+  earlier `$updatedAt`); the board follows a drag by card and never leaves one stuck; moved marks fade over 1.5 s
+  with no initial and catch-ups add none. QA: `integration_test/coop_race_test.dart`, `coop_pair_test` (same-card
+  grab), `coop_drag_test` steps 6b/6c.
 - Analytics: `lib/core/analytics.dart` (`AppAnalytics.event` one-liners, `ScreenObserver` on the root and every
   tab navigator, screen names from route patterns, never ids). New features add their events there and in
   `docs/analytics.md`; the privacy policy's usage data section must match.
@@ -312,7 +316,7 @@ carden.page redirects there.
 
 - Endpoint `https://fra.cloud.appwrite.io/v1`, project `6acb4de5003e38d5ebd9`, database `cjw`
   (tables profiles, packs, puzzles, progress, events, event_progress, friends, ledger, my_puzzles,
-  purchases, meta, releases, reports, blocks, feedback, messages, gifts, coop_games, coop_moves, coop_drags). Profiles are readable by anyone; `level` mirrors XP; aggregates `totalMoves`,
+  purchases, meta, releases, reports, blocks, feedback, messages, gifts, coop_games, coop_moves, coop_drags, apple_notifications). Profiles are readable by anyone; `level` mirrors XP; aggregates `totalMoves`,
   `totalSeconds`, `solvedByMode`, `questsCompleted` and the "Total Completion" numbers
   (`picturesSolved`, `picturesPerfect`, `packsCompleted`, `packsPerfect`, kept in step by
   `ProfileNotifier.syncCompletion`, backfill `tools/dev/backfill_profile_stats.py`) are public.
@@ -382,11 +386,14 @@ carden.page redirects there.
   hourly schedule runs the co-op cleanup and the integrity sweep (`SWEEP_APPLY=true`: squatted or foreign-permission
   rows in progress/event_progress/friends/blocks, ghost profiles, orphan or public uploads, 500 photos per player,
   refused names; full pass daily 04:00 UTC), and a `blocks` create event checks new rows at once; `/admin/sweep` and
-  `/coop/cleanup` are for the owner's CLI. Live checks: `node tools/dev/api_check.mjs`, `security_check.mjs`.
+  `/coop/cleanup` are for the owner's CLI and refuse callers without a user. Live checks: `node tools/dev/api_check.mjs`, `security_check.mjs`.
   Modules load lazily; a cold start is about 5 s, warm calls 0.1-0.5 s. Kept for builds up to 124 (retire only
   when no build that calls them can be used): `verify-purchase` (also Apple's App Store Server Notifications at
   `https://cjw-verify-purchase.fra.appwrite.run/notifications`; `APPLE_ENVIRONMENT=Production` since 2026-10-16,
-  falling back to Sandbox; secret vars can only be updated with `secret: true`), `delete-account`, `redeem-code`,
+  falling back to Sandbox; secret vars can only be updated with `secret: true`; Apple's App Store Server
+  Notifications go to `https://cjw-api.fra.appwrite.run/purchase/notifications` since 2026-10-17 (`api` has
+  execute `any`; a Sandbox TEST arrived `via api`), docs/functions.md "Apple's notifications"; both functions share the purchase and notification code and the server-only
+  `apple_notifications` table, so each notification applies once), `delete-account`, `redeem-code`,
   `coop-game` (frozen) and `send-gift` (kept equal to api's gift code, limits included). `catalog-snapshot` stays
   separate (daily 03:00 UTC: catalogue file in bucket `catalog`, pointer row `meta/catalog`; see
   `docs/catalog-sync.md`; pack rows keep `$createdAt` for the New badge). `coop-cleanup` was deleted 2026-10-17. Deploy functions with the Appwrite CLI (`appwrite functions create-deployment --code functions/<name>`). There is no image proxy: pictures load straight from Storage on every platform.
@@ -434,7 +441,8 @@ carden.page redirects there.
   invites and GraphQL are off (`docs/functions.md` "Project settings").
 - The release workflow checks the archive's dSYMs (a warning if one is missing) and keeps them as a 90-day artifact
   (merged 2026-10-17).
-- Not yet done (owner): refreshing the local
+- Not yet done (owner): an In-App Purchase key for the App Store Server API in Production (the App Store Connect key
+  works in Sandbox only; `tools/dev/apple_notifications.py`), refreshing the local
   team profile in Xcode before the next `tools/dev/device.sh` (it lacks Push Notifications and Associated
   Domains), App Store submission (Paid Apps agreement, banking and tax active since 2026-10-14),
   Mac / Vision Pro availability ticks, restoring

@@ -15,7 +15,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'support/fake_coop.dart';
 
 /// A sender on a fake clock: what it sends lands in [sent] after [answer].
-({LiveSender sender, List<(Duration, CoopLive)> sent}) _sender(FakeAsync async, {Duration answer = const Duration(milliseconds: 80), Future<void> Function(CoopLive)? send}) {
+({LiveSender sender, List<(Duration, CoopLive)> sent}) _sender(FakeAsync async, {Duration answer = const Duration(milliseconds: 80), Future<DateTime?> Function(CoopLive)? send}) {
   final sent = <(Duration, CoopLive)>[];
   final start = DateTime.utc(2026, 10, 17, 12);
   final sender = LiveSender(
@@ -26,6 +26,7 @@ import 'support/fake_coop.dart';
         (s) async {
           await Future<void>.delayed(answer);
           sent.add((async.elapsed, s));
+          return start.add(async.elapsed);
         },
   );
   return (sender: sender, sent: sent);
@@ -152,6 +153,7 @@ void main() {
           await Future<void>.delayed(const Duration(milliseconds: 50));
           if (refuse) throw const LiveRateLimited();
           sent.add(s);
+          return null;
         });
         sender.pick(3);
         async.elapse(const Duration(seconds: 1));
@@ -164,6 +166,62 @@ void main() {
         other.pick(1);
         async.elapse(const Duration(seconds: 1));
         expect(other.disabled, isTrue);
+      });
+    });
+  });
+
+  group('the sender heals itself', () {
+    test('a finger held still keeps its drag alive, then after 3 s without a new position the drag ends; it starts again when the finger moves', () {
+      fakeAsync((async) {
+        final (:sender, :sent) = _sender(async);
+        sender.dragStart(2, 0.2, 0.2);
+        async.elapse(const Duration(milliseconds: 2900));
+        final kept = sent.where((e) => e.$2.phase == LivePhase.drag).length;
+        expect(kept, greaterThanOrEqualTo(2), reason: 'the start, and the position again while still (the others drop a drag silent for 2 s)');
+        async.elapse(const Duration(seconds: 2));
+        expect(sent.last.$2.phase, LivePhase.cancel, reason: 'ended by itself');
+        expect(sender.dragging, isFalse);
+        sender.dragMove(0.3, 0.2);
+        async.elapse(const Duration(milliseconds: 300));
+        expect(sent.last.$2.phase, LivePhase.drag);
+        expect(sent.last.$2.drag, isNot(sent.first.$2.drag), reason: 'a new drag');
+        sender.dragEnd(dropped: true);
+        async.elapse(const Duration(milliseconds: 300));
+        expect(sent.last.$2.phase, LivePhase.drop);
+      });
+    });
+
+    test('a pick made during a drag goes as soon as the drag ends, dropped or not', () {
+      fakeAsync((async) {
+        final (:sender, :sent) = _sender(async);
+        sender.dragStart(2, 0.2, 0.2);
+        async.elapse(const Duration(milliseconds: 200));
+        sender.pick(9);
+        async.elapse(const Duration(milliseconds: 200));
+        expect(sent.where((e) => e.$2.phase == LivePhase.pick), isEmpty, reason: 'the drag shows what is in hand meanwhile');
+        sender.dragEnd(dropped: true);
+        async.elapse(const Duration(milliseconds: 400));
+        expect(sent.map((e) => e.$2.phase).toList().reversed.take(2).toList(), [LivePhase.pick, LivePhase.drop]);
+        expect(sent.last.$2.card, 9);
+      });
+    });
+
+    test('the card in hand is the claim, timed by the server\'s answer; nothing in hand, no claim', () {
+      fakeAsync((async) {
+        final (:sender, sent: _) = _sender(async);
+        sender.pick(4);
+        expect(sender.claim!.card, 4);
+        expect(sender.claim!.since, isNull, reason: 'until the server answers');
+        async.elapse(const Duration(milliseconds: 100));
+        final since = sender.claim!.since;
+        expect(since, isNotNull);
+        sender.dragStart(4, 0.1, 0.1);
+        async.elapse(const Duration(milliseconds: 100));
+        expect(sender.claim!.since, since, reason: 'the picked card dragged: the same claim');
+        sender.dragEnd(dropped: false);
+        sender.pick(null);
+        async.elapse(const Duration(milliseconds: 300));
+        expect(sender.claim, isNull);
       });
     });
   });

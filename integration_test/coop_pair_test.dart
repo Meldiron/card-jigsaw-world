@@ -135,10 +135,39 @@ void main() {
     }
 
     String encode(List<int> b) => b.join(',');
+
+    /// Both simulators grab [card] at the same moment ([at], ms on the Mac's clock, which both share)
+    /// and drag it towards its place for about 2.5 s. First grab wins: the other's drag is given up,
+    /// the card slides back and a word says who took it. Returns whether this device gave way.
+    Future<bool> grabAt(int card, int at, String role) async {
+      while (DateTime.now().millisecondsSinceEpoch < at) {
+        await tester.pump(const Duration(milliseconds: 4));
+      }
+      final from = tester.getCenter(find.byKey(ValueKey('card-$card')));
+      final b = board();
+      final to = tester.getCenter(find.byKey(ValueKey('card-${b[card]}')));
+      final gesture = await tester.startGesture(from);
+      var lost = false;
+      for (var i = 1; i <= 150; i++) {
+        await gesture.moveTo(Offset.lerp(from, to, i / 150)!);
+        await tester.pump(const Duration(milliseconds: 16));
+        if (!lost && find.textContaining('took it first').evaluate().isNotEmpty) {
+          lost = true;
+          debugPrint('COOP_TIMING same card: $role gave way ${DateTime.now().millisecondsSinceEpoch - at} ms after both grabbed');
+          await binding.takeScreenshot('pair_${role}_same_card_lost_1');
+          await settle(tester, 250);
+          await binding.takeScreenshot('pair_${role}_same_card_lost_2');
+        }
+      }
+      await gesture.up();
+      await settle(tester, 1500);
+      if (!lost) await binding.takeScreenshot('pair_${role}_same_card_won');
+      return lost;
+    }
     List<int> decode(String v) => [for (final x in v.split(',')) int.parse(x)];
 
     if (role == 'host') {
-      for (final k in ['code', 'h-moved', 'g-moved', 'h-holds', 'g-saw-hold', 'h-drag', 'h-dragged', 'g-saw-drag', 'h-done', 'g-finish', 'h-next', 'g-next', 'h-ended', 'g-ended']) {
+      for (final k in ['code', 'h-moved', 'g-moved', 'h-holds', 'g-saw-hold', 'h-drag', 'h-dragged', 'g-saw-drag', 'same', 'h-same', 'g-same', 'h-done', 'g-finish', 'h-next', 'g-next', 'h-ended', 'g-ended']) {
         await relaySet(k, '');
       }
       final pictures = (await c.read(allPuzzlesProvider.future)).where((p) => p.packId == 'pack-owls').toList()..sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
@@ -194,6 +223,18 @@ void main() {
       await relaySet('h-dragged', '${DateTime.now().millisecondsSinceEpoch}');
       await settle(tester, 1500);
       await wait(tester, 'g-saw-drag');
+
+      // 3c. Both grab the same card at the same moment: one keeps it, the other gives way.
+      final bs = board();
+      final same = bs.firstWhere((k) => bs[k] != k && bs.indexOf(k) != k);
+      final at = DateTime.now().millisecondsSinceEpoch + 5000;
+      await relaySet('same', '$same@$at');
+      final hostLost = await grabAt(same, at, 'h');
+      await relaySet('h-same', hostLost ? 'lost' : 'won');
+      final guestSaid = await wait(tester, 'g-same');
+      debugPrint('COOP_NOTE same card: host ${hostLost ? 'lost' : 'won'}, guest $guestSaid');
+      expect({hostLost ? 'lost' : 'won', guestSaid}, {'lost', 'won'}, reason: 'exactly one player keeps the card');
+      await settle(tester, 1500);
 
       // 4. The host finishes: the normal completion card here, the guest's finish there.
       for (var guard = 0; guard < 40 && find.text('Next puzzle').evaluate().isEmpty; guard++) {
@@ -269,6 +310,13 @@ void main() {
     debugPrint('COOP_TIMING host drop -> landed on the guest: ${DateTime.now().millisecondsSinceEpoch - dropped} ms');
     await shot(tester, 'pair_g03c_host_drag_landed', 600);
     await relaySet('g-saw-drag', '1');
+
+    // Both grab the same card at the same moment.
+    final sameInfo = (await wait(tester, 'same')).split('@');
+    final guestLost = await grabAt(int.parse(sameInfo[0]), int.parse(sameInfo[1]), 'g');
+    await relaySet('g-same', guestLost ? 'lost' : 'won');
+    await wait(tester, 'h-same');
+    await settle(tester, 1500);
 
     await wait(tester, 'h-done', seconds: 300);
     expect(await until(tester, () => find.byKey(const ValueKey('coop-guest-finish')).evaluate().isNotEmpty, seconds: 40), isTrue);

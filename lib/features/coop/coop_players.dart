@@ -103,17 +103,27 @@ class PlayerInitialBadge extends StatelessWidget {
 }
 
 /// How the board marks a card another player holds or just moved: an outline in the player's
-/// colour and their initial in a corner (phase 2 draws it in `board_widget.dart`).
+/// colour, with their initial on the card they hold (`board_widget.dart` draws it).
 @immutable
 class CoopCardMark {
-  const CoopCardMark({required this.userId, required this.initial, required this.color, required this.onColor, required this.held});
+  const CoopCardMark({required this.userId, required this.initial, required this.color, required this.onColor, required this.held, this.badge = true, this.since, this.fadeFor});
   final String userId;
   final String initial;
   final Color color;
   final Color onColor;
 
-  /// Held (picked up) rather than just moved: a solid outline; a moved card's outline fades.
+  /// Held (picked up, or in the group of a card they hold) rather than just moved: a solid outline.
   final bool held;
+
+  /// Their initial on the card (the card they hold; on every marked card under Differentiate
+  /// without colour).
+  final bool badge;
+
+  /// A moved card: when it moved; its outline fades out over [fadeFor] from then.
+  final DateTime? since;
+  final Duration? fadeFor;
+
+  CoopCardMark copyWith({bool? badge}) => CoopCardMark(userId: userId, initial: initial, color: color, onColor: onColor, held: held, badge: badge ?? this.badge, since: since, fadeFor: fadeFor);
 }
 
 /// Another player's card being dragged ([LiveTracks] in `coop_live.dart`): drawn lifted at [at] (a
@@ -133,18 +143,31 @@ Map<String, CoopCardMark> coopPlayerMarks(BuildContext context, WidgetRef ref, C
     };
 
 /// The marks for the board: card number to mark, for every card another player holds or moved a
-/// moment ago ([CoopState.marks]). Names come from the players' profiles.
+/// moment ago ([CoopState.marks]). Names come from the players' profiles. A moved card's outline
+/// fades out over [CoopTiming.markFor] and carries no initial (only under Differentiate without
+/// colour, small), so it never looks held.
 Map<int, CoopCardMark> coopCardMarks(BuildContext context, WidgetRef ref, CoopState s) {
   if (s.marks.isEmpty) return const {};
   final seats = {for (final seat in coopSeats(s)) seat.userId: seat};
-  CoopCardMark? mark(String userId, bool held) {
+  final symbols = A11y.symbolsOf(context);
+  final fadeFor = ref.read(coopTimingProvider).markFor;
+  CoopCardMark? mark(String userId, bool held, {DateTime? since}) {
     final seat = seats[userId];
     if (seat == null || seat.isMe) return null;
-    return CoopCardMark(userId: userId, initial: coopInitial(coopName(ref, userId)), color: seat.colorOf(context), onColor: seat.onColorOf(context), held: held);
+    return CoopCardMark(
+      userId: userId,
+      initial: coopInitial(coopName(ref, userId)),
+      color: seat.colorOf(context),
+      onColor: seat.onColorOf(context),
+      held: held,
+      badge: held || symbols,
+      since: held ? null : since,
+      fadeFor: held ? null : fadeFor,
+    );
   }
 
   return {
-    for (final e in s.marks.moved.entries) e.key: ?mark(e.value, false),
+    for (final e in s.marks.moved.entries) e.key: ?mark(e.value, false, since: s.marks.movedAt[e.key]),
     for (final e in s.marks.held.entries) e.key: ?mark(e.value, true),
   };
 }
