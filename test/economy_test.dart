@@ -12,7 +12,9 @@ import 'package:flutter_test/flutter_test.dart';
 /// Guards for the economy described in docs/economy.md.
 ///
 /// * What a purchase gives is written in three places (the app, the server
-///   grant, the App Store metadata); they must say the same.
+///   grant, the App Store metadata); they must say the same. The server grant
+///   is in two functions: `api` (this build on) and `verify-purchase` (builds
+///   up to 124, docs/functions.md); both must credit the same.
 /// * The pack prices in the database come from tools/store/apply_pack_prices.py,
 ///   which is calibrated on the regular player's earnings. If a change to the
 ///   rewards moves those earnings, the model test below fails: re-run the
@@ -20,7 +22,7 @@ import 'package:flutter_test/flutter_test.dart';
 ///   the prices.
 void main() {
   group('purchase grants agree', () {
-    final serverGrants = _serverGrants();
+    final serverGrants = _serverGrants('functions/api/src/purchase.js');
     final metadata = jsonDecode(File('store/metadata/subscriptions/consumables.json').readAsStringSync()) as Map<String, dynamic>;
     final products = (metadata['products'] as List).cast<Map<String, dynamic>>();
 
@@ -37,6 +39,10 @@ void main() {
           if (app.magics > 0) 'magics': app.magics,
         }, reason: id);
       }
+    });
+
+    test('the old verify-purchase function grants the same as api', () {
+      expect(_serverGrants('functions/verify-purchase/src/main.js'), serverGrants);
     });
 
     test('App Store names and prices match the app', () {
@@ -134,9 +140,9 @@ void main() {
   });
 }
 
-/// `GRANTS` in the verify-purchase function, e.g. `coins_1000: { coins: 2500 }`.
-Map<String, Map<String, int>> _serverGrants() {
-  final js = File('functions/verify-purchase/src/main.js').readAsStringSync();
+/// `GRANTS` in a function's source at [path], e.g. `coins_1000: { coins: 2500 }`.
+Map<String, Map<String, int>> _serverGrants(String path) {
+  final js = File(path).readAsStringSync();
   final block = RegExp(r'const GRANTS = \{([\s\S]*?)\n\};').firstMatch(js)!.group(1)!;
   final out = <String, Map<String, int>>{};
   for (final m in RegExp(r'^\s*(\w+): \{ ([^}]*) \},?$', multiLine: true).allMatches(block)) {

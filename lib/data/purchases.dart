@@ -10,6 +10,7 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 import 'package:in_app_purchase_storekit/store_kit_2_wrappers.dart' show SK2Transaction;
 
+import '../core/appwrite.dart';
 import '../core/numbers.dart';
 import '../core/platform.dart';
 
@@ -66,7 +67,8 @@ class ProductGrant {
 ///
 /// Three places must agree on the grants (test/economy_test.dart checks
 /// them): this table (what the app shows), `GRANTS` in
-/// `functions/verify-purchase/src/main.js` (what the server credits) and
+/// `functions/api/src/purchase.js` and `functions/verify-purchase/src/main.js`
+/// (what the server credits; builds up to 124 call verify-purchase) and
 /// `store/metadata/subscriptions/consumables.json` (App Store names and
 /// prices). The amounts come from the economy model in docs/economy.md:
 /// every coin and ticket bundle is worth about the same per dollar, counting a
@@ -240,8 +242,8 @@ class RestoreFinished extends PurchaseEvent {
 }
 
 /// Wraps the `in_app_purchase` plugin (StoreKit 2 on iOS) and verifies every
-/// completed transaction with the `verify-purchase` Appwrite Function, which
-/// applies the grant server-side.
+/// completed transaction with the server (`/purchase/verify` on the `api`
+/// Appwrite Function), which applies the grant server-side.
 ///
 /// [start] runs at launch (Apple: listen for transactions as soon as the app starts), so a
 /// purchase paid while the app was closed, restarted or on another screen is added at once. A
@@ -342,16 +344,16 @@ class PurchaseService {
     }
   }
 
-  /// Wakes the verify-purchase function while the player is still in the App Store sheet, so the
-  /// check after the payment does not wait for a cold start (about 5 s). At most every 2 minutes.
+  /// Wakes the `api` function while the player is still in the App Store sheet, so the check after
+  /// the payment does not wait for a cold start (about 5 s). At most every 2 minutes.
   void warmUp() {
     if (!supportsPurchases) return;
     final now = DateTime.now();
     if (_warmedAt != null && now.difference(_warmedAt!) < const Duration(minutes: 2)) return;
     _warmedAt = now;
     Functions(_client)
-        .createExecution(functionId: 'verify-purchase', path: '/health', method: enums.ExecutionMethod.gET, xasync: true)
-        .then((_) {}, onError: (Object e) => debugPrint('verify-purchase warm-up: $e'));
+        .createExecution(functionId: AppwriteConfig.apiFunction, path: '/health', method: enums.ExecutionMethod.gET, xasync: true)
+        .then((_) {}, onError: (Object e) => debugPrint('api warm-up: $e'));
   }
 
   /// Opens the App Store sheet where a player types a VIP gift code (an
@@ -500,14 +502,14 @@ class PurchaseService {
     }
   }
 
-  /// `POST /verify` on the verify-purchase function: the answer's status and body.
+  /// `POST /purchase/verify` on the `api` function: the answer's status and body.
   @protected
   Future<(int, String)> sendForVerification(String jws, String productId) async {
     final exec = await Functions(_client).createExecution(
-      functionId: 'verify-purchase',
+      functionId: AppwriteConfig.apiFunction,
       body: jsonEncode({'jws': jws, 'productId': productId}),
       method: enums.ExecutionMethod.pOST,
-      path: '/verify',
+      path: '/purchase/verify',
     );
     return (exec.responseStatusCode, exec.responseBody);
   }

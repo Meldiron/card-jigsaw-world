@@ -195,7 +195,7 @@ class AuthRepository {
   Future<void> updatePrefs(Map<String, dynamic> prefs) => _account.updatePrefs(prefs: prefs);
 }
 
-/// What the `delete-account` function removed.
+/// What the server removed (`/account/delete`).
 class AccountDeletionResult {
   const AccountDeletionResult({required this.files, required this.rows, required this.apple});
   final int files;
@@ -205,22 +205,23 @@ class AccountDeletionResult {
   final String apple;
 }
 
-/// Deletes the signed-in player's account on the server: the `delete-account` Appwrite Function
-/// (functions/delete-account) removes their photos, their rows in every player table, the profile
+/// Deletes the signed-in player's account on the server: `/account/delete` on the `api` Appwrite
+/// Function (functions/api/src/account.js) removes their photos, their rows in every player table, the profile
 /// and the user, and revokes their Sign in with Apple tokens when [appleAuthorizationCode] is
 /// given. Only the caller's own account can go: the function reads the user from the session.
 class AccountDeletionRepository {
   AccountDeletionRepository(this._functions);
   final Functions _functions;
 
-  static const functionId = 'delete-account';
+  static const functionId = AppwriteConfig.apiFunction;
+  static const path = '/account/delete';
 
   Future<AccountDeletionResult> delete({String? appleAuthorizationCode}) async {
     final exec = await _functions.createExecution(
       functionId: functionId,
       body: jsonEncode({'appleAuthorizationCode': ?appleAuthorizationCode}),
       method: enums.ExecutionMethod.pOST,
-      path: '/delete',
+      path: path,
     );
     final body = exec.responseBody.isEmpty ? <String, dynamic>{} : jsonDecode(exec.responseBody) as Map<String, dynamic>;
     if (body['ok'] != true) {

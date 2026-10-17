@@ -9,7 +9,7 @@ A private pack is for pictures the game may not show publicly (an internal test 
 licensed yet) and for special packs given out with pack codes. `create` writes:
 - every FILE as a JPEG (at most --max-px on the long side, quality 90) into `private-packs` with NO
   permissions: only the server can read it until a player redeems one of the pack's codes (function
-  `redeem-code` adds read(user) per claimant);
+  `/code/redeem` on function `api` adds read(user) per claimant);
 - one puzzle row per picture and a pack row with `hidden: true`, so the app lists the pack only for
   players who own it. Rows stay readable like every catalogue row (names and titles are public data),
   the pictures do not.

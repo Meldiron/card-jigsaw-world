@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import '../../core/app_links.dart';
 import 'board_change.dart';
 
-/// Most players in one game, the host included (function coop-game, `MAX_PLAYERS`).
+/// Most players in one game, the host included (`MAX_PLAYERS` in functions/api/src/coop/rules.js).
 const coopMaxPlayers = 5;
 
 /// A game of Play together (docs/multiplayer.md): a row of `coop_games`, readable by its players.

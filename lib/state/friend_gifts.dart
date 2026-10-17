@@ -18,7 +18,7 @@ enum GiftKind {
 
   const GiftKind(this.amount, this.one, this.many);
 
-  /// The amounts the server grants (KINDS in functions/send-gift/src/gift.js).
+  /// The amounts the server grants (KINDS in functions/api/src/gift/gift.js).
   final int amount;
   final String one, many;
 
@@ -26,7 +26,7 @@ enum GiftKind {
   String get label => '$amount ${amount == 1 ? one : many}';
 }
 
-/// The one-a-day rule, as the `send-gift` function keeps it.
+/// The one-a-day rule, as the server keeps it (`/gift/send`).
 class FriendGifts {
   FriendGifts._();
 
@@ -64,14 +64,15 @@ class GiftResult {
         };
 }
 
-/// Sends gifts through the `send-gift` function (functions/send-gift) and reads whether today's
-/// gift to a friend is sent (the sender may read their own `gifts` rows).
+/// Sends gifts through `/gift/send` on the `api` function (functions/api/src/gift) and reads whether
+/// today's gift to a friend is sent (the sender may read their own `gifts` rows).
 class FriendGiftRepository {
   FriendGiftRepository(this._functions, this._tables);
   final Functions _functions;
   final TablesDB _tables;
 
-  static const functionId = 'send-gift';
+  static const functionId = AppwriteConfig.apiFunction;
+  static const path = '/gift/send';
   static const table = 'gifts';
 
   Future<GiftResult> send(String friendId, GiftKind kind, {DateTime? now}) async {
@@ -81,7 +82,7 @@ class FriendGiftRepository {
         functionId: functionId,
         body: jsonEncode({'friendId': friendId, 'kind': kind.name, 'utcOffset': FriendGifts.utcOffsetMinutes(local)}),
         method: enums.ExecutionMethod.pOST,
-        path: '/send',
+        path: path,
       );
       final body = exec.responseBody.isEmpty ? <String, dynamic>{} : jsonDecode(exec.responseBody) as Map<String, dynamic>;
       return GiftResult(

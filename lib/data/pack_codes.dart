@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/enums.dart' as enums;
 
+import '../core/appwrite.dart';
+
 /// What redeeming a pack code gave: the pack it opened, or why it did not.
 class PackCodeResult {
   const PackCodeResult({required this.ok, this.packId, this.packName, this.error});
@@ -24,7 +26,7 @@ class PackCodeResult {
       };
 }
 
-/// Pack codes (function `redeem-code`): 16 characters, typed with or without dashes in any case.
+/// Pack codes (`/code/redeem` on the `api` function): 16 characters, typed with or without dashes in any case.
 class PackCodes {
   PackCodes._();
 
@@ -46,10 +48,10 @@ class PackCodes {
     if (normal.length != length) return const PackCodeResult(ok: false, error: 'invalid');
     try {
       final exec = await Functions(client).createExecution(
-        functionId: 'redeem-code',
+        functionId: AppwriteConfig.apiFunction,
         body: jsonEncode({'code': normal}),
         method: enums.ExecutionMethod.pOST,
-        path: '/redeem',
+        path: '/code/redeem',
       );
       final body = exec.responseBody.isEmpty ? <String, dynamic>{} : jsonDecode(exec.responseBody) as Map<String, dynamic>;
       return PackCodeResult(

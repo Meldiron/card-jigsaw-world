@@ -188,7 +188,7 @@ class FakeUploadRepo extends UploadRepository {
 }
 
 /// The App Store without StoreKit or the network. The app listens for purchases from launch and
-/// wakes the verify-purchase function on Buy; here nothing does either. A Buy leaves the tapped row
+/// wakes the `api` function on Buy; here nothing does either. A Buy leaves the tapped row
 /// waiting, as while the App Store sheet is open, until the flow gives up (10 s).
 class FakePurchaseService extends PurchaseService {
   FakePurchaseService({required this.up, required this.products}) : super(NoClient());

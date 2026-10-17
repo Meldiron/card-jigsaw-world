@@ -33,7 +33,7 @@ import '../links/deep_links.dart';
 
 /// Store: free bonus video (capped per day), coin bundles, ticket bundles,
 /// booster bundles (Peek, Hint and Magic), VIP. Purchases go through StoreKit and are verified by the
-/// `verify-purchase` Appwrite Function before anything is granted; the tapped
+/// server (`/purchase/verify` on the `api` function) before anything is granted; the tapped
 /// row waits while the App Store sheet is open, then [PurchaseHost] shows the
 /// purchase sheet ([purchaseFlowProvider]). In debug
 /// builds without a store (plain simulator) a clearly labelled sandbox

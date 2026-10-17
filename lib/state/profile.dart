@@ -222,7 +222,7 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
   }
 
   /// Debug-only sandbox toggle. Real VIP comes from verified App Store
-  /// subscriptions (`vipExpiresAt`), applied by the verify-purchase function.
+  /// subscriptions (`vipExpiresAt`), applied by the server's purchase checks (docs/purchases.md).
   Future<void> setVip(bool vip) async => _do(SyncOp.put({'isVip': vip}));
 
   /// Records a rewarded video. Returns false when today's allowance is used up.

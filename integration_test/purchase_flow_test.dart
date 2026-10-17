@@ -1,6 +1,6 @@
 // The purchase flow on the real app (live Appwrite backend, a QA guest) with a stand-in App Store:
 // the tapped tile waits while the "App Store sheet" is open, the purchase sheet says "Adding 10
-// tickets", the grant lands on the profile row the way verify-purchase writes it (a server change
+// tickets", the grant lands on the profile row the way the server's purchase check writes it (a server change
 // this device did not make), and the sheet says "10 tickets added" once the header shows them. Then
 // a slow check (three tries without an answer), a refused one, and a purchase that arrives on its
 // own (a toast). StoreKit itself cannot be driven here: its sheet is another process, and the
@@ -31,7 +31,7 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// The App Store and the verify-purchase function for QA.
+/// The App Store and the server's purchase check (`/purchase/verify`) for QA.
 class _QaStore extends PurchaseService {
   _QaStore(this.ref) : super(ref.read(appwriteClientProvider));
   final Ref ref;
@@ -73,7 +73,7 @@ class _QaStore extends PurchaseService {
     );
   }
 
-  /// verify-purchase, warm: about a second and a half, then the grant on the profile row.
+  /// The purchase check, warm: about a second and a half, then the grant on the profile row.
   @override
   Future<(int, String)> sendForVerification(String jws, String productId) async {
     await Future<void>.delayed(const Duration(milliseconds: 1500));
