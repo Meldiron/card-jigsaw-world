@@ -291,10 +291,13 @@ class Goal {
 /// Swapping a quest that is not finished for another (owner, 2026-10-17): every swap costs
 /// [tickets] and changes only that quest. Swaps live in `profiles.questSwaps`, a JSON map of slot
 /// (`d:2026-10-17:s2`, `w2026-10-12:s4`) to the quests the slot has had this period, the one first
-/// dealt first and the current one last ([Goals.decodeSwaps]). The next quest comes from a lane none
-/// of the period's quests used yet (shown now or swapped away), fits the other quests (one board
-/// never finishes two) and is not finished already. Older builds ignore the column and show the
-/// quest first dealt.
+/// dealt first and the current one last ([Goals.decodeSwaps]). Every quest that is not finished or
+/// claimed has one (TestFlight feedback, 2026-10-17). The next quest is never finished already, fits
+/// the other quests still to do (one board never finishes two) and comes from a lane none of them
+/// shows: first one the period has not used yet, then a plain one (asking for more than is done,
+/// "Earn 3 stars 4 times" after two today), then one swapped away earlier; when every lane is taken,
+/// a plain one asking for more than the same one on screen. Older builds ignore the column and show
+/// the quest first dealt.
 @immutable
 class QuestSwap {
   const QuestSwap({required this.slot, required this.base, required this.next, required this.nextTitle, required this.count, this.fixedKey});
@@ -363,6 +366,23 @@ class Goals {
 
   /// "41 seconds", "2:05".
   static String formatTime(int seconds) => seconds < 60 ? '$seconds seconds' : '${seconds ~/ 60}:${(seconds % 60).toString().padLeft(2, '0')}';
+
+  /// The least time a timed quest asks to beat on a Cards board of [cells] cards: the play-time
+  /// model's time on the board (docs/economy.md, section 2: `cells x (1.3 + 0.1 x cells)` seconds)
+  /// at the owner's measured pace (0.7, the fastest real play we have), rounded up to 5 seconds:
+  /// 3x3 15 seconds, 4x4 35, 5x5 1:10, 6x6 2:05, 7x7 3:35. A time to beat taken from boards
+  /// finished with help (a friend on a shared board, Magic, cards that look the same) can be a few
+  /// seconds, which no one beats alone (TestFlight, 2026-10-17: "a 3x3 board in under 4 seconds").
+  static int fastFloor(int cells) => (cells * (13 + cells) * 7 / 500).ceil() * 5;
+
+  /// Plain quests that can ask for more when the usual number is done already (a swap brings
+  /// "Earn 3 stars 4 times" after two today): kind -> how many more, by day and by week. The
+  /// number asked for is the kind's argument (`stars-4`), which builds from before ignore.
+  static const _moreDaily = {'stars': 2, 'nopeek': 2, 'solve': 3};
+  static const _moreWeekly = {'stars': 15, 'nopeek': 5, 'solve': 5};
+
+  /// The number a plain quest asks for: its argument, never below the usual [n].
+  static int _target(String arg, int n) => max(n, int.tryParse(arg) ?? n);
 
   static bool _atPar(PuzzleProgress p) => p.par > 0 && p.moves <= p.par;
 
@@ -434,14 +454,17 @@ class Goals {
           if (f == null) return null;
           return Goal(key: key, title: 'Solve a ${f.tier.code} board in under ${formatTime(f.seconds)}', progress: count((p) => _fastEnough(p, f)), target: 1, coins: coins, icon: 'time', minCells: f.tier.cells, mode: GameMode.cards, vipOnly: vip);
         case 'nopeek':
-          return Goal(key: key, title: 'Solve 2 pictures without Peek', progress: count((p) => !p.peeked), target: 2, coins: coins, icon: 'eye', vipOnly: vip);
+          final n = _target(arg, 2);
+          return Goal(key: key, title: 'Solve $n pictures without Peek', progress: count((p) => !p.peeked), target: n, coins: coins, icon: 'eye', vipOnly: vip);
         case 'daily':
           if (dailyPuzzle == null) return null;
           return Goal(key: key, title: "Solve today's daily puzzle", progress: count((p) => p.puzzleId == dailyPuzzle), target: 1, coins: coins, icon: 'dailyPuzzle', puzzleId: dailyPuzzle, vipOnly: vip);
         case 'stars':
-          return Goal(key: key, title: 'Earn 3 stars twice', progress: count((p) => p.stars == 3), target: 2, coins: coins, icon: 'star', vipOnly: vip);
+          final n = _target(arg, 2);
+          return Goal(key: key, title: n == 2 ? 'Earn 3 stars twice' : 'Earn 3 stars $n times', progress: count((p) => p.stars == 3), target: n, coins: coins, icon: 'star', vipOnly: vip);
         case 'solve':
-          return Goal(key: key, title: 'Solve 5 puzzles', progress: today.length, target: 5, coins: coins, icon: 'puzzle', vipOnly: vip);
+          final n = _target(arg, 5);
+          return Goal(key: key, title: 'Solve $n puzzles', progress: today.length, target: n, coins: coins, icon: 'puzzle', vipOnly: vip);
       }
       return null;
     }
@@ -466,6 +489,7 @@ class Goals {
       build: build,
       pool: lanes.swapPool(day ~/ max(1, lanes.hows(0).length)),
       turn: day,
+      more: _moreDaily,
     );
   }
 
@@ -524,11 +548,14 @@ class Goals {
           if (f == null) return null;
           return Goal(key: key, title: 'Solve two ${f.tier.code} boards in under ${formatTime(f.seconds)}', progress: count((p) => _fastEnough(p, f)), target: 2, coins: 0, tickets: tickets, icon: 'time', minCells: f.tier.cells, mode: GameMode.cards, vipOnly: vip);
         case 'nopeek':
-          return Goal(key: key, title: 'Solve 5 pictures without Peek', progress: count((p) => !p.peeked), target: 5, coins: 0, tickets: tickets, icon: 'eye', vipOnly: vip);
+          final n = _target(arg, 5);
+          return Goal(key: key, title: 'Solve $n pictures without Peek', progress: count((p) => !p.peeked), target: n, coins: 0, tickets: tickets, icon: 'eye', vipOnly: vip);
         case 'stars':
-          return Goal(key: key, title: 'Collect 15 stars', progress: week.fold<int>(0, (s, p) => s + p.stars), target: 15, coins: 0, tickets: tickets, icon: 'star', vipOnly: vip);
+          final n = _target(arg, 15);
+          return Goal(key: key, title: 'Collect $n stars', progress: week.fold<int>(0, (s, p) => s + p.stars), target: n, coins: 0, tickets: tickets, icon: 'star', vipOnly: vip);
         case 'solve':
-          return Goal(key: key, title: 'Solve 15 puzzles this week', progress: week.length, target: 15, coins: 0, tickets: tickets, icon: 'puzzle', vipOnly: vip);
+          final n = _target(arg, 15);
+          return Goal(key: key, title: 'Solve $n puzzles this week', progress: week.length, target: n, coins: 0, tickets: tickets, icon: 'puzzle', vipOnly: vip);
       }
       return null;
     }
@@ -557,6 +584,7 @@ class Goals {
       build: build,
       pool: lanes.swapPool(weekIndex(now)),
       turn: weekIndex(now),
+      more: _moreWeekly,
     );
   }
 
@@ -571,7 +599,8 @@ class Goals {
       };
 
   /// The period's quests in slot order: a claimed quest stays, a swapped slot shows the quest swapped
-  /// in last, the others what was [dealt]. Each unclaimed quest carries the swap it offers.
+  /// in last, the others what was [dealt]. Each quest that is not finished or claimed carries the
+  /// swap it offers ([QuestSwap]); [more] names the plain quests that can ask for more.
   static List<Goal> _withSwaps(
     _Lanes lanes, {
     required Map<int, String> dealt,
@@ -583,37 +612,61 @@ class Goals {
     required Goal? Function(int slot, String kind) build,
     required List<String> pool,
     required int turn,
+    required Map<String, int> more,
   }) {
     final slots = dealt.keys.toList()..sort();
     final current = {for (final s in slots) s: claimedKinds[s] ?? (history[s]!.isNotEmpty ? history[s]!.last : dealt[s]!)};
-    Goal goal(int s) => build(s, current[s]!) ?? build(s, 'solve')!;
+    final goals = {for (final s in slots) s: build(s, current[s]!) ?? build(s, 'solve')!};
     // Every lane the period has shown: today's quests and every quest swapped in or away.
     final shown = {
       for (final s in slots) ...[current[s]!, dealt[s]!, ...history[s]!],
     }.map(_Lanes.lane).toSet();
-    QuestSwap? swapOf(int s, Goal g) {
+    // Quests still to do: a finished or claimed one cannot be finished again, so it neither takes a
+    // lane nor shares a board with the quest that comes.
+    bool open(int s) => !goals[s]!.done && !claimed.contains(goals[s]!.key) && !claimedKinds.containsKey(s) && !(fixedKeys[s] != null && claimed.contains(fixedKeys[s]));
+    QuestSwap? swapOf(int s) {
       final fixed = fixedKeys[s];
-      if (claimedKinds.containsKey(s) || claimed.contains(g.key) || (fixed != null && claimed.contains(fixed))) return null;
-      final others = [for (final o in slots) if (o != s) current[o]!];
+      if (!open(s)) return null;
+      final others = [for (final o in slots) if (o != s && open(o)) current[o]!];
+      // The lanes on screen now that a swap does not bring: the slot's own and the other quests'.
+      final showing = {_Lanes.lane(current[s]!), for (final o in others) _Lanes.lane(o)};
       final h = history[s]!;
       final order = pool.isEmpty ? pool : [for (var i = 0; i < pool.length; i++) pool[(turn + s + h.length + i) % pool.length]];
-      for (final kind in order) {
-        if (shown.contains(_Lanes.lane(kind)) || !lanes.fitsAll(kind, others)) continue;
-        final next = build(s, kind);
-        // A quest already finished would pay for the ticket at once: not a swap.
-        if (next == null || next.done) continue;
-        return QuestSwap(slot: slotKey(s), base: h.isEmpty ? current[s]! : h.first, next: kind, nextTitle: next.title, count: h.isEmpty ? 0 : h.length - 1, fixedKey: fixed);
+      // [kind] as the slot would have it: a quest already finished would pay for the ticket at once,
+      // so it is no swap, except a plain one, which then asks for more than is done.
+      (String, Goal)? offer(String kind) {
+        if (showing.contains(_Lanes.lane(kind)) || !lanes.fitsAll(kind, others)) return null;
+        var next = build(s, kind);
+        final step = more[kind];
+        if (next != null && next.done && step != null) next = build(s, kind = '$kind-${next.progress + step}');
+        return next == null || next.done ? null : (kind, next);
       }
-      return null;
+
+      // When every lane is taken (a new player has few kinds of quest; a bigger board leaves out the
+      // lock and Painting beside it): a plain quest of another lane than the slot's, asking for more
+      // than the same quest on screen ("Solve 6 puzzles" beside "Solve 3 puzzles"), as the dealing's
+      // fallbacks do.
+      (String, Goal)? beyond(String kind) {
+        final lane = _Lanes.lane(kind), step = more[kind]!;
+        if (lane == _Lanes.lane(current[s]!) || !lanes.fitsAll(kind, others.where((o) => _Lanes.lane(o) != lane))) return null;
+        final next = build(s, kind);
+        if (next == null) return null;
+        final above = [for (final o in slots) if (o != s && open(o) && _Lanes.lane(current[o]!) == lane) goals[o]!.target];
+        final ask = '$kind-${max(next.progress, above.fold(0, max)) + step}';
+        return (ask, build(s, ask)!);
+      }
+
+      // A lane the period has not shown yet; then the plain quests; then a lane swapped away earlier;
+      // then the plain quests beyond those on screen.
+      final pick = order.where((k) => !shown.contains(_Lanes.lane(k))).map(offer).nonNulls.firstOrNull ??
+          order.where(more.containsKey).map(offer).nonNulls.firstOrNull ??
+          order.map(offer).nonNulls.firstOrNull ??
+          ['solve', 'stars', 'nopeek'].where(more.containsKey).map(beyond).nonNulls.firstOrNull;
+      if (pick == null) return null;
+      return QuestSwap(slot: slotKey(s), base: h.isEmpty ? current[s]! : h.first, next: pick.$1, nextTitle: pick.$2.title, count: h.isEmpty ? 0 : h.length - 1, fixedKey: fixed);
     }
 
-    return [
-      for (final s in slots)
-        () {
-          final g = goal(s);
-          return g._withSwap(swapOf(s, g));
-        }(),
-    ];
+    return [for (final s in slots) goals[s]!._withSwap(swapOf(s))];
   }
 
   /// `profiles.questSwaps` (a JSON map of slot to the quests it has had, see [QuestSwap]); anything
@@ -638,17 +691,26 @@ class Goals {
     return date.length < 10 ? null : DateTime.tryParse(date.substring(0, 10));
   }
 
-  /// "4x4-41" -> the 4x4 tier and 41 seconds.
+  /// "4x4-41" -> the 4x4 size and 41 seconds. Keys stored before 2026-10-17 read as fair quests: a
+  /// size from before square boards (`4x5`, which no board has now) names the square size at least
+  /// as big, its time scaled to that board by the play-time model, and no time is below
+  /// [fastFloor] ("fast-3x3-4" reads as a 3x3 board in under 15 seconds).
   static ({GridSpec tier, int seconds})? _fast(String arg) {
     final parts = arg.split('-');
     if (parts.length != 2) return null;
-    final tier = GridSpec.byCode(parts[0]);
+    final named = GridSpec.byCode(parts[0]);
     final seconds = int.tryParse(parts[1]);
-    return tier == null || seconds == null ? null : (tier: tier, seconds: seconds);
+    if (named == null || seconds == null) return null;
+    final tier = GridSpec.atLeast(named.cells);
+    int model(int cells) => cells * (13 + cells);
+    final scaled = tier.cells == named.cells ? seconds : (seconds * model(tier.cells) / model(named.cells)).ceil();
+    return (tier: tier, seconds: max(scaled, fastFloor(tier.cells)));
   }
 
+  /// A finished Cards board of the quest's size under its time. A row with a board in progress (a
+  /// replay) holds that board's size and time, not a finish.
   static bool _fastEnough(PuzzleProgress p, ({GridSpec tier, int seconds}) f) =>
-      GameMode.fromCode(p.mode) == GameMode.cards && p.gridSize == f.tier.cells && p.elapsedSeconds > 0 && p.elapsedSeconds < f.seconds;
+      !p.inProgress && GameMode.fromCode(p.mode) == GameMode.cards && p.gridSize == f.tier.cells && p.elapsedSeconds > 0 && p.elapsedSeconds < f.seconds;
 
   /// "mode-hexagons" -> ("mode", "hexagons"); "par" -> ("par", "").
   static (String, String) _split(String kind) {
@@ -704,8 +766,8 @@ class PlayHabits {
   /// Boards per shape.
   final Map<GameMode, int> byMode;
 
-  /// The Cards size the player plays most and their second-best time on it (needs 3 timed
-  /// boards of that size): the time to beat.
+  /// The square Cards size the player plays most and their second-best time on it (needs 3 timed
+  /// boards of that size), never below [Goals.fastFloor]: the time to beat.
   final ({GridSpec tier, int seconds})? timed;
 
   factory PlayHabits.of(Iterable<PuzzleProgress> all, DateTime before) {
@@ -720,20 +782,25 @@ class PlayHabits {
     }
     final mode = byMode.entries.reduce((a, b) => b.value > a.value ? b : a).key;
     final sizes = [for (final p in last) Goals.sizeOf(p)]..sort();
-    // The time to beat: second-best time on the Cards size most recent Cards boards had.
+    // The time to beat: second-best time on the square Cards size most recent Cards boards had
+    // (boards of sizes from before square boards cannot be dealt any more), never below what a
+    // quick player does alone ([Goals.fastFloor]). Each finish counts with its own time: a row's
+    // `bestSeconds` is the picture's best on any size or shape, and a row with a replay in
+    // progress holds that board's size and time.
     ({GridSpec tier, int seconds})? timed;
+    bool cards(PuzzleProgress p) => !p.inProgress && GameMode.fromCode(p.mode) == GameMode.cards && GridSpec.square.any((t) => t.cells == p.gridSize);
     final cardSizes = <int, int>{};
     for (final p in last) {
-      if (GameMode.fromCode(p.mode) == GameMode.cards) cardSizes[p.gridSize] = (cardSizes[p.gridSize] ?? 0) + 1;
+      if (cards(p)) cardSizes[p.gridSize] = (cardSizes[p.gridSize] ?? 0) + 1;
     }
     if (cardSizes.isNotEmpty) {
       final cells = cardSizes.entries.reduce((a, b) => b.value > a.value ? b : a).key;
       final tier = GridSpec.byCells(cells);
       final times = [
         for (final p in done)
-          if (GameMode.fromCode(p.mode) == GameMode.cards && p.gridSize == cells && (p.bestSeconds ?? p.elapsedSeconds) > 0) p.bestSeconds ?? p.elapsedSeconds,
+          if (cards(p) && p.gridSize == cells && p.elapsedSeconds > 0) p.elapsedSeconds,
       ]..sort();
-      if (tier != null && times.length >= 3) timed = (tier: tier, seconds: times[1]);
+      if (tier != null && times.length >= 3) timed = (tier: tier, seconds: max(times[1], Goals.fastFloor(cells)));
     }
     return PlayHabits(
       mode: mode,

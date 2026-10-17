@@ -112,6 +112,65 @@ void main() {
       }
     });
 
+    // A night sky as a phone photo has it (owner, TestFlight build 124: "Top right corner is all
+    // black, as the picture is"): near black, a reddish cast, sensor noise and JPEG blocks of
+    // chroma, a few faint single-pixel stars.
+    (int, int, int) night(int x, int y, Random rng) {
+      final n = rng.nextInt(5) - 2;
+      // 8 x 8 blocks of slightly different chroma, as JPEG leaves them in the dark.
+      final block = ((x ~/ 8) * 7 + (y ~/ 8) * 13) % 5 - 2;
+      final star = (x * 31 + y * 17) % 997 == 0 ? 30 : 0;
+      return (7 + n + block + star, 4 + n + star, 3 + n - block ~/ 2 + star);
+    }
+
+    test('near-black cards with noise, chroma blocks and faint stars are twins', () {
+      final rng = Random(11);
+      final twins = TwinFinder(paint(w4, h4, (x, y) => night(x, y, rng)), cards4).find();
+      expect(twins.cards, 16, reason: 'every card of a plain night sky');
+    });
+
+    test('in the dark, a star, a lamp, a light trail or a faint structure still keeps a card apart', () {
+      final rng = Random(12);
+      final c1 = cell(1), c6 = cell(6), c9 = cell(9), c14 = cell(14);
+      final picture = paint(w4, h4, (x, y) {
+        var (r, g, b) = night(x, y, rng);
+        // Card 1: a star that shows (2 x 2 pixels).
+        if (x >= c1.x + 40 && x < c1.x + 42 && y >= c1.y + 50 && y < c1.y + 52) (r, g, b) = (150, 150, 140);
+        // Card 6: a thin red light trail across it.
+        if (x >= c6.x && x < c6.x + c6.w && y == c6.y + 60 + (x - c6.x) ~/ 3) (r, g, b) = (110, 25, 15);
+        // Card 9: a small lit window.
+        if (x >= c9.x + 60 && x < c9.x + 66 && y >= c9.y + 80 && y < c9.y + 88) (r, g, b) = (200, 160, 60);
+        // Card 14: a faint lattice, dark grey bars on the black.
+        if (x >= c14.x && x < c14.x + c14.w && y >= c14.y && y < c14.y + c14.h && ((x - c14.x) % 24 < 3 || (y - c14.y) % 24 < 3)) {
+          (r, g, b) = (r + 14, g + 13, b + 12);
+        }
+        return (r, g, b);
+      });
+      final twins = TwinFinder(picture, cards4).find();
+      for (final apart in [1, 6, 9, 14]) {
+        for (var c = 0; c < 16; c++) {
+          if (c != apart) expect(twins.same(apart, c), isFalse, reason: 'card $apart is not a twin of card $c');
+        }
+      }
+      expect(twins.cards, 12, reason: 'the other twelve stay twins');
+    });
+
+    test('near white, pale cards a hair apart in tone are twins; a speck on white is not', () {
+      final c5 = cell(5);
+      // A frosty sky: near white with a faint blue cast, a slow gradient and JPEG banding.
+      final picture = paint(w4, h4, (x, y) {
+        final band = (y ~/ 6) % 3 - 1;
+        var (r, g, b) = (236 + band - y ~/ 260, 238 + band - y ~/ 260, 247 + band);
+        if (x >= c5.x + 50 && x < c5.x + 52 && y >= c5.y + 70 && y < c5.y + 72) (r, g, b) = (120, 120, 125);
+        return (r, g, b);
+      });
+      final twins = TwinFinder(picture, cards4).find();
+      for (var c = 0; c < 16; c++) {
+        if (c != 5) expect(twins.same(5, c), isFalse, reason: 'card 5 has a speck');
+      }
+      expect(twins.cards, greaterThanOrEqualTo(12), reason: 'the pale cards are twins');
+    });
+
     test('the same picture gives the same twins every time', () {
       final rng = Random(8);
       final noise = List.generate(w4 * h4, (_) => rng.nextInt(5) - 2);

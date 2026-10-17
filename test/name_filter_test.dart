@@ -28,6 +28,22 @@ void main() {
     }
   });
 
+  // The same cases are in functions/api/test/gift.test.mjs (the server's copy of the filter).
+  test('contact details and links are refused, ordinary names with dots are not', () {
+    for (final name in [
+      'https://carden.page', 'http://x', 'www.example', 'carden.page', 'Visit t.me/anna', 'anna.sk', 'SHOP.COM', 'bit.ly/abc', 'discord.gg/x',
+      '@anna', 'Follow @anna_99', 'anna@mail', 'anna @ gmail', 'x dot com', 'anna(dot)com', 'anna [dot] net', 'Mr.Beast.tv', 'Anna.ŠK',
+    ]) {
+      expect(NameFilter.isContact(name), isTrue, reason: name);
+      expect(NameFilter.isRefused(name), isTrue, reason: name);
+      expect(NameFilter.shown(name), 'Player', reason: name);
+    }
+    for (final name in ['Mr. Bean', 'St. Ives', 'J.R.R. Tolkien', 'Dr. Who', 'Anna 1988', "O'Brien", 'Hi-Tech Fox', 'Polka Dots', 'Ann_Marie 77', 'Mr.Bean', 'Brave Otter', 'Comet', 'Dotty']) {
+      expect(NameFilter.isContact(name), isFalse, reason: name);
+      expect(NameFilter.shown(name), name);
+    }
+  });
+
   test('every word of the generated guest names passes', () {
     final flagged = [...adjectives, ...animals].where(NameFilter.isOffensive).toList();
     expect(flagged, isEmpty);

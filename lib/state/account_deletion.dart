@@ -14,7 +14,7 @@ import 'sync.dart';
 
 /// Account > Delete account (App Store guideline 5.1.1(v)). Two steps so the screen can tell the
 /// player before the app starts over: [deleteOnServer] removes the account and everything stored
-/// for it (the `delete-account` function), [startOver] gives this device a fresh start as a new
+/// for it (`/account/delete` on the `api` function), [startOver] gives this device a fresh start as a new
 /// guest on the welcome screens.
 class AccountDeletion {
   AccountDeletion(this._ref);

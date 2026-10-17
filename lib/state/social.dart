@@ -72,9 +72,9 @@ class PlayerSafety {
     final social = _ref.read(socialRepositoryProvider);
     await social.block(me, player);
     try {
-      await social.removeFriend(social.friendRowId(me, player.userId));
+      await social.removeFriendOf(me, player.userId);
     } catch (_) {
-      // Not a friend.
+      // The friend row goes the next time; the block stands.
     }
     _refresh();
   }
@@ -83,7 +83,7 @@ class PlayerSafety {
     final me = _ref.read(currentUserIdProvider);
     if (me == null) return;
     final social = _ref.read(socialRepositoryProvider);
-    await social.unblock(deterministicId(me, playerId));
+    await social.unblockPlayer(me, playerId);
     _refresh();
   }
 

@@ -4,7 +4,7 @@ import 'package:carden/data/pack_codes.dart';
 import 'package:carden/models/models.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// Hidden packs and pack codes (function `redeem-code`, docs/pack-codes.md).
+/// Hidden packs and pack codes (`/code/redeem` on the `api` function, docs/pack-codes.md).
 void main() {
   Pack pack(Map<String, dynamic> extra) => Pack.fromRow('pack-x', {'name': 'X', 'category': 'Giant', ...extra});
   final now = DateTime.utc(2026, 10, 14, 12);

@@ -133,6 +133,9 @@ class FakeSocialRepo extends SocialRepository {
   Future<void> removeFriend(String rowId) async => friendList = [for (final f in friendList) if (f.id != rowId) f];
 
   @override
+  Future<void> removeFriendOf(String userId, String friendId) async => friendList = [for (final f in friendList) if (f.friendId != friendId) f];
+
+  @override
   Future<void> report({required String reporterId, required Profile player, required ReportReason reason}) async {}
 
   @override
@@ -145,6 +148,9 @@ class FakeSocialRepo extends SocialRepository {
 
   @override
   Future<void> unblock(String rowId) async => blocked = [for (final b in blocked) if (b.id != rowId) b];
+
+  @override
+  Future<void> unblockPlayer(String userId, String playerId) async => blocked = [for (final b in blocked) if (b.playerId != playerId) b];
 
   @override
   Future<Map<String, EventProgress>> eventProgress(String userId) async => events;
@@ -188,7 +194,7 @@ class FakeUploadRepo extends UploadRepository {
 }
 
 /// The App Store without StoreKit or the network. The app listens for purchases from launch and
-/// wakes the verify-purchase function on Buy; here nothing does either. A Buy leaves the tapped row
+/// wakes the `api` function on Buy; here nothing does either. A Buy leaves the tapped row
 /// waiting, as while the App Store sheet is open, until the flow gives up (10 s).
 class FakePurchaseService extends PurchaseService {
   FakePurchaseService({required this.up, required this.products}) : super(NoClient());

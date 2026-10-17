@@ -2,7 +2,9 @@
 // in-memory server that applies Appwrite's operators the way the live backend does.
 import 'dart:convert';
 
+import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
+import 'package:carden/data/repositories.dart';
 import 'package:carden/data/sync/notice.dart';
 import 'package:carden/data/sync/ops.dart';
 import 'package:carden/features/sync/sync_host.dart';
@@ -658,4 +660,139 @@ void main() {
       'Already unlocked there, nothing charged',
     ]);
   });
+
+  // Security review 2026-10-17: another player can make a row at the id this player's app uses
+  // (md5 of player and picture); Appwrite then refuses this player's write with 401 although the
+  // session holds. The server's hourly sweep deletes such rows (functions/api/src/sweep).
+  group('a row another player made at this row\'s id', () {
+    Future<Device> squatted(FakeServer server, models.User user) async {
+      final phone = await Device(server, user).open();
+      server.squatted.add(deterministicId(user.$id, 'pic1'));
+      phone.progress.complete('pic1', gridSize: 16, mode: 'cards', moves: 30, seconds: 90, hints: 0, stars: 3, session: 's1', resumed: false);
+      await phone.profile.recordCompletion(puzzleId: 'pic1', cells: 16, stars: 3, firstTime: true);
+      await phone.profile.addCoins(40, reason: 'test');
+      await phone.settle();
+      return phone;
+    }
+
+    test('parks that save quietly: the rest of the queue goes on and the play stays on screen', () async {
+      final server = FakeServer();
+      final user = testUser('player9');
+      final phone = await squatted(server, user);
+      addTearDown(phone.close);
+      final shown = phone.me.coins;
+      expect(server.profiles['player9']!['coins'], shown, reason: 'the profile changes after it were sent');
+      expect(server.progressOf('player9', 'pic1'), isNull);
+      expect(phone.rows['pic1']!.completed, isTrue, reason: 'the solve is still shown');
+      final state = phone.container.read(syncProvider);
+      expect((state.pending, state.offline), (0, false), reason: 'nothing waits in front of the queue, nothing looks offline');
+      expect(phone.container.read(syncNoticeProvider).isEmpty, isTrue, reason: 'nothing alarming is said');
+      expect(phone.sync.debugOps.where((o) => o.puzzleId == 'pic1'), isNotEmpty, reason: 'the save is kept');
+
+      // Later play still goes through.
+      await phone.profile.addCoins(10, reason: 'test');
+      await phone.settle();
+      expect(server.profiles['player9']!['coins'], shown + 10);
+    });
+
+    test('the save lands on the next start once the row is gone', () async {
+      final server = FakeServer();
+      final user = testUser('player10');
+      final phone = await squatted(server, user);
+      phone.close();
+      server.squatted.clear(); // the sweep deleted the other player's row
+      final again = await Device(server, user, prefs: phone.prefs).open();
+      addTearDown(again.close);
+      expect(server.progressOf('player10', 'pic1')!['completed'], isTrue);
+      expect(again.sync.debugOps, isEmpty);
+    });
+
+    test('and on a resume after the parking time', () async {
+      final server = FakeServer();
+      final phone = await squatted(server, testUser('player11'));
+      addTearDown(phone.close);
+      final parkedFor = SyncController.parkedFor;
+      addTearDown(() => SyncController.parkedFor = parkedFor);
+      server.squatted.clear();
+      await phone.resume();
+      expect(server.progressOf('player11', 'pic1'), isNull, reason: 'parked for an hour');
+      SyncController.parkedFor = Duration.zero;
+      await phone.resume();
+      expect(server.progressOf('player11', 'pic1')!['completed'], isTrue);
+      expect(phone.sync.debugOps, isEmpty);
+    });
+
+    test('a friend or a block goes under a unique id when the predictable one is taken, and goes away again', () async {
+      final tables = _Tables();
+      final social = SocialRepository(tables);
+      final ben = Profile.fromRow('ben', {'userId': 'ben', 'displayName': 'Ben', 'avatar': 'fox'});
+      tables.squatted.addAll([deterministicId('anna', 'ben')]);
+      await social.block('anna', ben);
+      await social.addFriend('anna', ben);
+      final blocks = tables.rows.values.where((r) => r.$tableId == 'blocks').toList();
+      final friends = tables.rows.values.where((r) => r.$tableId == 'friends').toList();
+      expect([blocks.length, friends.length], [1, 1]);
+      expect(blocks.single.$id, isNot(deterministicId('anna', 'ben')));
+      expect(blocks.single.$permissions, contains('update("user:anna")'));
+      expect((await social.blocks('anna')).single.playerId, 'ben');
+      // Blocking again updates that row instead of adding one.
+      await social.block('anna', ben);
+      expect(tables.rows.values.where((r) => r.$tableId == 'blocks'), hasLength(1));
+      await social.unblockPlayer('anna', 'ben');
+      await social.removeFriendOf('anna', 'ben');
+      expect(tables.rows, isEmpty);
+      // Without a squat the predictable id is used, as before.
+      tables.squatted.clear();
+      await social.block('anna', ben);
+      expect(tables.rows.keys, [deterministicId('anna', 'ben')]);
+    });
+
+    test('a 401 without a session is still about the sign-in: the queue waits', () async {
+      final server = FakeServer();
+      final user = testUser('player12');
+      final phone = await Device(server, user).open();
+      addTearDown(phone.close);
+      server.squatted.add(deterministicId('player12', 'pic1'));
+      phone.backend.session = false;
+      phone.progress.complete('pic1', gridSize: 16, mode: 'cards', moves: 30, seconds: 90, hints: 0, stars: 3, session: 's1', resumed: false);
+      await phone.profile.addCoins(40, reason: 'test');
+      await phone.settle();
+      expect(phone.container.read(syncProvider).pending, 2);
+      expect(server.profiles['player12']!['coins'], 500, reason: 'nothing passes the board save');
+    });
+  });
+}
+
+/// Rows of friends and blocks in memory, where another player made some ids first.
+class _Tables implements TablesDB {
+  final rows = <String, models.Row>{};
+  final squatted = <String>{};
+  int _seq = 0;
+
+  @override
+  Future<models.Row> upsertRow({required String databaseId, required String tableId, required String rowId, Map<dynamic, dynamic>? data, List<String>? permissions, String? transactionId}) async {
+    if (squatted.contains(rowId)) throw AppwriteException('The current user is not authorized to perform the requested action.', 401);
+    final id = rowId == 'unique()' ? 'u${++_seq}' : rowId;
+    return rows[id] = models.Row(
+      $id: id, $sequence: '${++_seq}', $tableId: tableId, $databaseId: databaseId, $createdAt: '', $updatedAt: '',
+      $permissions: permissions ?? const [], data: Map<String, dynamic>.from(data ?? const {}),
+    );
+  }
+
+  @override
+  Future<models.RowList> listRows({required String databaseId, required String tableId, List<String>? queries, String? transactionId, bool? total, int? ttl}) async {
+    final equal = <String, String>{};
+    for (final q in queries ?? const <String>[]) {
+      final j = jsonDecode(q) as Map<String, dynamic>;
+      if (j['method'] == 'equal') equal[j['attribute'] as String] = (j['values'] as List).first.toString();
+    }
+    final out = [for (final r in rows.values) if (r.$tableId == tableId && equal.entries.every((e) => r.data[e.key]?.toString() == e.value)) r];
+    return models.RowList(total: out.length, rows: out);
+  }
+
+  @override
+  Future deleteRow({required String databaseId, required String tableId, required String rowId, String? transactionId}) async => rows.remove(rowId);
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => throw UnsupportedError('${invocation.memberName}');
 }

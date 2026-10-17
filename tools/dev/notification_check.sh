@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Friend gift notification on a simulator (docs/friend-gifts.md, "Checking it"): what Flutter
 # cannot drive. A fresh QA install turns on Settings > Gifts from friends, taps Allow on the iOS
-# prompt, goes to the background; a QA friend sends a ticket through the real send-gift function;
+# prompt, goes to the background; a QA friend sends a ticket through the real server (/gift/send on function api);
 # Apple's sandbox service delivers the push; the check taps the banner and claims the gift it
 # opens. Screenshots gift_10..15 land in screenshots/ (GIFT_QA_DIR to change).
 #

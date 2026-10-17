@@ -7,7 +7,7 @@
 A code is 16 characters from an alphabet without look-alikes (no 0/O, 1/I/L), printed as
 XXXX-XXXX-XXXX-XXXX; case and dashes do not matter when it is typed. Only its SHA-256 hash is stored
 (table `pack_codes`, readable by the server alone), so `create` prints the code once: keep it then.
-The function `redeem-code` checks it, records the claim in `code_claims` and unlocks the pack. Codes
+The server (`/code/redeem` on function `api`) checks it, records the claim in `code_claims` and unlocks the pack. Codes
 are made with the key in secrets/appwrite-users-key.txt (rows scope); key values are never printed.
 """
 import argparse, datetime, hashlib, os, re, secrets, sys
@@ -15,7 +15,7 @@ import argparse, datetime, hashlib, os, re, secrets, sys
 sys.path.insert(0, os.path.dirname(__file__))
 from cjw_admin import Client, q, AppwriteError  # noqa: E402
 
-ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'   # the same as functions/redeem-code
+ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'   # the same as functions/api/src/code.js
 LENGTH = 16
 TABLE = '/tablesdb/cjw/tables/pack_codes/rows'
 

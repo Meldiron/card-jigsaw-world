@@ -7,6 +7,12 @@ class AppwriteConfig {
   static const projectId = '6acb4de5003e38d5ebd9';
   static const databaseId = 'cjw';
 
+  /// The Appwrite Function every server call of the app goes to, by path (functions/api,
+  /// docs/functions.md): `/purchase/verify`, `/account/delete`, `/code/redeem`, `/coop/<action>`,
+  /// `/gift/send` and `/health`. One function stays warm with everyone's calls; builds up to 124 call
+  /// one function per feature (verify-purchase, delete-account, ...), which stay deployed for them.
+  static const apiFunction = 'api';
+
   // Tables
   static const profiles = 'profiles';
   static const packs = 'packs';
@@ -40,7 +46,7 @@ class AppwriteConfig {
   static const catalogBucket = 'catalog';
 
   /// Pictures of private packs (hidden packs opened with a pack code): each file is readable only by
-  /// the players who claimed one of its pack's codes (function `redeem-code`), fetched like player
+  /// the players who claimed one of its pack's codes (`/code/redeem` on [apiFunction]), fetched like player
   /// photos through the signed-in client (`ImageFiles`).
   static const privatePacksBucket = 'private-packs';
 

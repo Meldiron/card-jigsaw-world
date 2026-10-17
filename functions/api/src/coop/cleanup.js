@@ -1,4 +1,5 @@
-// Tidies the co-op games (Play together, function coop-game) every hour (schedule `0 * * * *`):
+// Tidies the co-op games (Play together, game.js) every hour: function `api`'s schedule (`0 * * * *`)
+// runs it (main.js tells a scheduled execution by its trigger). It was the coop-cleanup function.
 //
 // 1. A game nobody played for a day ends (`endReason: idle`); its players' apps say so.
 // 2. A game ended an hour ago or more goes: its moves, its team and its row. The hour lets every
@@ -6,9 +7,10 @@
 // 3. Moves of boards a game has moved past go (the host opened the next board).
 // 4. Teams of games that are gone (`Co-op <id>` without a row, an hour old) go.
 //
-// Activity is the newest of the row's `activeAt` (every coop-game action) and its newest move. Only
-// the server writes games; TablesDB has no row expiry, hence this function. POST /run does the same
-// on demand (`appwrite functions create-execution --function-id coop-cleanup --path /run`).
+// Activity is the newest of the row's `activeAt` (every co-op action) and its newest move. Only the
+// server writes games; TablesDB has no row expiry, hence this job. POST /coop/cleanup does the same
+// on demand, for a caller who is not a player (the owner's CLI: `appwrite functions create-execution
+// --function-id api --path /coop/cleanup --method POST`).
 import { Client, TablesDB, Teams, Query } from 'node-appwrite';
 
 const DB = process.env.APPWRITE_DATABASE_ID || 'cjw';
@@ -108,15 +110,14 @@ async function run({ tables, teams }, log) {
   return done;
 }
 
-export default async ({ req, res, log, error }) => {
-  const path = (req.path || '/').replace(/\/+$/, '') || '/';
-  if (req.method === 'GET' && path === '/health') return res.json({ ok: true });
+/// The cleanup for a request's key; returns what it did.
+export const runCleanup = (req, log) => run(services(req), log);
+
+export async function coopCleanup({ req, res, log, error }) {
   try {
-    // The schedule calls the root path; /run is the same on demand.
-    if (path === '/' || path === '/run') return res.json({ ok: true, ...(await run(services(req), log)) });
-    return res.json({ ok: false, error: 'Not found' }, 404);
+    return res.json({ ok: true, ...(await runCleanup(req, log)) });
   } catch (e) {
     error(e.stack || e.message);
     return res.json({ ok: false, error: e.message }, 500);
   }
-};
+}

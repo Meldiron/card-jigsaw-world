@@ -7,7 +7,7 @@ and the Appwrite user gets the prefs `{"qa": true, "qaRun": "<run id>"}`. This t
 purges them: the Appwrite user and every row they own (profiles, progress, ledger, event_progress,
 friends in both directions, my_puzzles and their photos in the user-uploads bucket, friend gifts
 sent and received and the inbox messages of gifts they sent, the co-op games they host with every
-move in them, and their own co-op moves; the games' teams are left to the coop-cleanup function, as
+move in them, and their own co-op moves; the games' teams are left to the hourly co-op cleanup (function api), as
 this key has no teams scope; aw.PLAYER_TABLES has the full list). A JSON backup
 of each purged player is written to secrets/purged/<date>/ first (git-ignored).
 

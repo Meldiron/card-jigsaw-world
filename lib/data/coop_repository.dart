@@ -11,7 +11,7 @@ import '../state/coop/coop_backend.dart';
 import '../state/coop/coop_models.dart';
 import 'repositories.dart';
 
-/// Play together on Appwrite (docs/multiplayer.md): the `coop-game` function for the game itself,
+/// Play together on Appwrite (docs/multiplayer.md): `/coop/<action>` on the `api` function for the game itself,
 /// rows of `coop_moves` for the moves, Realtime for what other players do and Presences for who is
 /// here. One realtime socket per game (the SDK's `Realtime`), closed when the player leaves it.
 class AppwriteCoopBackend implements CoopBackend {
@@ -28,7 +28,7 @@ class AppwriteCoopBackend implements CoopBackend {
   final _subscriptions = <RealtimeSubscription>[];
   StreamController<CoopEvent>? _events;
 
-  static const functionId = 'coop-game';
+  static const functionId = AppwriteConfig.apiFunction;
   static const games = 'coop_games';
   static const moves = 'coop_moves';
 
@@ -36,7 +36,7 @@ class AppwriteCoopBackend implements CoopBackend {
   Future<CoopGame?> call(String action, Map<String, dynamic> body) async {
     final Map<String, dynamic> out;
     try {
-      final exec = await _functions.createExecution(functionId: functionId, body: jsonEncode(body), method: enums.ExecutionMethod.pOST, path: '/$action');
+      final exec = await _functions.createExecution(functionId: functionId, body: jsonEncode(body), method: enums.ExecutionMethod.pOST, path: '/coop/$action');
       out = exec.responseBody.isEmpty ? <String, dynamic>{} : jsonDecode(exec.responseBody) as Map<String, dynamic>;
     } on AppwriteException catch (e) {
       throw CoopRefusal(e.code == 401 ? CoopRefusalReason.auth : CoopRefusalReason.server, e.message ?? '');

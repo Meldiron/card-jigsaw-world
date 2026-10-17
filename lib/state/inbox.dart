@@ -48,7 +48,7 @@ class InboxMessage {
   final String? ctaLabel;
   final String? ctaLink;
 
-  /// A friend gift (function `send-gift`, docs/friend-gifts.md): who sent it, their name then
+  /// A friend gift (`/gift/send`, docs/friend-gifts.md): who sent it, their name then
   /// (shown through [NameFilter]) and avatar. Null for messages from Carden.
   final String? fromUserId;
   final String? fromName;

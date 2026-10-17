@@ -305,7 +305,8 @@ testers who buy on a build from before the change.
 
 The three places that hold the amounts now agree and are checked by `test/economy_test.dart`:
 `StoreProducts.grants` in `lib/data/purchases.dart` (store screen, house ads, the debug sandbox),
-`GRANTS` in `functions/verify-purchase/src/main.js` (what the server credits; Peeks and Magic go to the
+`GRANTS` in `functions/api/src/purchase.js` and its frozen twin `functions/verify-purchase/src/main.js`
+(what the server credits, docs/functions.md; Peeks and Magic go to the
 profile's `peeks` and `magics` columns with atomic increments and leave no ledger line, as in the app) and
 `store/metadata/subscriptions/consumables.json` (App Store names, descriptions, review notes). All eight
 consumables are `READY_TO_SUBMIT` on Apple (never reviewed), so changing their names costs no review.
@@ -319,7 +320,8 @@ card says 5 coins per puzzle (it said 25).
 Order matters: the server must credit the new amounts before a build shows them. The old build reading
 the new server only gets more than it shows, which is harmless.
 
-1. **Deploy the function** (`verify-purchase`, Node 22, entrypoint `src/main.js`, build `npm install`).
+1. **Deploy the function** (`verify-purchase`, Node 22, entrypoint `src/main.js`, build `npm install`;
+   since 2026-10-17 also `api`, which later builds call: docs/functions.md).
    The repo's API keys have no function scope, so deploy through the Appwrite MCP or the console:
    ```
    COPYFILE_DISABLE=1 tar --exclude node_modules -czf /tmp/verify-purchase.tar.gz -C functions/verify-purchase .
@@ -598,7 +600,7 @@ VIP 1). Besides the quests that are always there, each quest comes from a differ
 |---|---|---|
 | Daily 1 | 60 | Solve 3 puzzles (the quest ordinary play finishes) |
 | Daily 2 | 80 | A way of playing: a board in the shape the player plays least (never their usual one), a board two sizes above their usual one (and one above their bigger boards), or a Painting board (not for players who mostly paint) |
-| Daily 3 | 100 | A skill: a 4x4 or bigger board at par, 5 cards locked in one move (8 for players whose boards are mostly 25 cards or more, where 5 comes by itself), or a Cards board of the size they play most under their second-best time on it |
+| Daily 3 | 100 | A skill: a 4x4 or bigger board at par, 5 cards locked in one move (8 for players whose boards are mostly 25 cards or more, where 5 comes by itself), or a Cards board of the size they play most under their second-best time on it (never under 15 s on 3x3, see below) |
 | Daily VIP | 120 | The other skill, else a second shape, else today's daily puzzle |
 | Weekly 1 | 1 | Solve 10 puzzles this week |
 | Weekly 2 | 1 | A skill: two 4x4 or bigger boards at par, the lock on two pictures, or two boards under the time to beat |
@@ -611,6 +613,16 @@ Rules (`Goals.daily`, `Goals.weekly`, `PlayHabits`, `_Lanes` in `lib/state/rewar
 - "Usual" comes from the player's last 20 boards finished before today (before Monday for the week):
   the shape most of them have, the middle size, the size four fifths of the way up, Painting or not,
   the time to beat. So the day's quests do not move while the player plays.
+- The time to beat (TestFlight feedback, 2026-10-17: "Solve a 3x3 board in under 4 seconds"): the
+  second-best time among the player's finishes on the square Cards size most of their recent Cards
+  boards had, each finish with its own time (not the picture's best, `bestSeconds`, which may come from
+  another size or shape, and not a replay in progress), and never less than `Goals.fastFloor`: the
+  model's time on the board (section 2) at the owner's pace (0.7), rounded up to 5 seconds: 3x3 15 s,
+  4x4 35 s, 5x5 1:10, 6x6 2:05, 7x7 3:35. Boards finished with help (a friend on a shared board, Magic,
+  cards that look the same) had left times of a few seconds that no one beats alone. Quest keys stored
+  before keep reading: `fast-3x3-4` is a 3x3 board under 15 seconds, and a size from before square
+  boards (`fast-4x5-60`) names the square size at least as big (5x5 under 1:27, the time scaled by the
+  model). A replay in progress does not count as a fast finish.
 - Quests that one board does together never share a day: a bigger board with a shape, Painting or a
   lock; Painting with a shape; a time to beat (always on Cards) with "a board in Cards"; and, for a
   player on boards smaller than 4x4, a bigger board with par (they go up a size for par too).
@@ -623,17 +635,32 @@ Rules (`Goals.daily`, `Goals.weekly`, `PlayHabits`, `_Lanes` in `lib/state/rewar
 ### Swapping a quest (owner request, 2026-10-17)
 
 Any daily or weekly quest that is not finished and not claimed can be swapped for another for 1 ticket
-(every swap costs 1 ticket, and only that quest changes). The Quests tab shows a small "Swap [ticket] 1"
-on each such row; it asks first ("Swap this quest?" names the quest that comes), and a player without a
-ticket gets the store, as elsewhere. VIP members can swap the VIP quests too.
+(every swap costs 1 ticket, and only that quest changes), timed, fixed and VIP quests included. A quest
+row swipes left to its swap ("Swap [ticket] 1", white on cobalt), the way a friend swipes away on
+Social (TestFlight feedback, 2026-10-17: a swipe, not a button); the swipe asks first ("Swap this
+quest?" names the quest that comes), then the row slides back with the new quest, and a player without
+a ticket gets the store, as elsewhere. VoiceOver offers "Swap for 1 ticket" as the row's action. One
+line under the daily quests ("Swipe left on a quest to swap it for another. A swap costs 1 ticket.")
+shows until the player first swipes (`LocalStore.questSwipeSeen`, per device). VIP members can swap the
+VIP quests too.
 
-- **What comes**: the next quest, in a rotation by day (or week) and slot, from a lane none of the
-  period's quests has used, shown now or swapped away, that fits the other quests (one board still never
-  finishes two) and is not finished already (it would pay for the ticket at once). The pool is the
+- **What comes**: the next quest, in a rotation by day (or week) and slot, never finished already (it
+  would pay for the ticket at once), fitting the other quests still to do (one board still never
+  finishes two) and from a lane none of them shows. First a lane the period has not used (shown now or
+  swapped away); when those are used up, a plain one; then one swapped away earlier; and when every lane
+  is taken (a new player has few kinds of quest, a bigger board leaves out the lock and Painting beside
+  it), a plain one of another lane asking for more than the same one on screen ("Solve 6 puzzles" beside
+  "Solve 3 puzzles"), as the dealing's fallbacks do. A plain quest finished already asks for more than
+  is done: "Earn 3 stars 5 times" after three today (daily +2 stars, +2 without Peek, +3 puzzles;
+  weekly +15 stars, +5 without Peek, +5 puzzles; the number is the kind's argument, `stars-5`, which
+  older builds ignore). A finished or claimed quest takes no lane: "Solve 15 puzzles this week" may
+  come beside a claimed "Solve 10 puzzles this week". So every quest still to do has a swap (TestFlight
+  feedback, 2026-10-17: "Solve a 3x3 board in under 4 seconds" had none: every quest left was in a lane
+  on screen, did not fit "Finish a 4x4 or bigger board", or was finished already). The pool is the
   ways of playing and skills the player has, every open shape and today's daily puzzle (daily), and the
-  plain ones ("Earn 3 stars twice", "Solve 2 pictures without Peek", "Collect 15 stars"). When nothing is
-  left, the quest has no swap. The fixed quests ("Solve 3 puzzles", "Solve 10 puzzles this week", "Play
-  on 4 different days") can be swapped too; their slot keeps its reward (60 coins, 1 and 2 tickets).
+  plain ones ("Earn 3 stars twice", "Solve 2 pictures without Peek", "Collect 15 stars", "Solve 5
+  puzzles"). The fixed quests ("Solve 3 puzzles", "Solve 10 puzzles this week", "Play on 4 different
+  days") can be swapped too; their slot keeps its reward (60 coins, 1 and 2 tickets).
 - **Only that quest changes**: the other slots are dealt as if the swapped slot still had the quest first
   dealt in it, also once the swapped quest is claimed.
 - **Storage**: `profiles.questSwaps` (text, default empty), a JSON map of slot (`d:2026-10-17:s2`,

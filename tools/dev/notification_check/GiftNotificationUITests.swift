@@ -28,14 +28,14 @@ final class GiftNotificationUITests: XCTestCase {
   private func sendGift(kind: String) throws -> String {
     let path = try XCTUnwrap(env["GIFT_QA_STATE"])
     let state = try JSONSerialization.jsonObject(with: Data(contentsOf: URL(fileURLWithPath: path))) as! [String: Any]
-    var req = URLRequest(url: URL(string: "https://fra.cloud.appwrite.io/v1/functions/send-gift/executions")!)
+    var req = URLRequest(url: URL(string: "https://fra.cloud.appwrite.io/v1/functions/api/executions")!)
     req.httpMethod = "POST"
     req.setValue("6acb4de5003e38d5ebd9", forHTTPHeaderField: "X-Appwrite-Project")
     req.setValue(state["secret"] as? String, forHTTPHeaderField: "X-Appwrite-Session")
     req.setValue("application/json", forHTTPHeaderField: "Content-Type")
     let body = try JSONSerialization.data(withJSONObject: ["friendId": state["playerId"]!, "kind": kind, "utcOffset": 120])
-    req.httpBody = try JSONSerialization.data(withJSONObject: ["path": "/send", "method": "POST", "body": String(data: body, encoding: .utf8)!, "async": false])
-    let done = expectation(description: "send-gift")
+    req.httpBody = try JSONSerialization.data(withJSONObject: ["path": "/gift/send", "method": "POST", "body": String(data: body, encoding: .utf8)!, "async": false])
+    let done = expectation(description: "gift/send")
     var answer = ""
     URLSession.shared.dataTask(with: req) { data, _, error in
       answer = data.flatMap { String(data: $0, encoding: .utf8) } ?? "\(String(describing: error))"

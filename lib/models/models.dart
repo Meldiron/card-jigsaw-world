@@ -103,7 +103,7 @@ class Profile {
   final int totalStars;
   final String? country;
   /// Manually set VIP flag (debug sandbox / console). Real subscriptions set
-  /// [vipExpiresAt] through the verify-purchase function.
+  /// [vipExpiresAt] through the server's purchase checks (docs/purchases.md).
   final bool vipFlag;
   final DateTime? vipExpiresAt;
   final String? appleOriginalTransactionId;

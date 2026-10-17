@@ -195,7 +195,7 @@ class AuthRepository {
   Future<void> updatePrefs(Map<String, dynamic> prefs) => _account.updatePrefs(prefs: prefs);
 }
 
-/// What the `delete-account` function removed.
+/// What the server removed (`/account/delete`).
 class AccountDeletionResult {
   const AccountDeletionResult({required this.files, required this.rows, required this.apple});
   final int files;
@@ -205,22 +205,23 @@ class AccountDeletionResult {
   final String apple;
 }
 
-/// Deletes the signed-in player's account on the server: the `delete-account` Appwrite Function
-/// (functions/delete-account) removes their photos, their rows in every player table, the profile
+/// Deletes the signed-in player's account on the server: `/account/delete` on the `api` Appwrite
+/// Function (functions/api/src/account.js) removes their photos, their rows in every player table, the profile
 /// and the user, and revokes their Sign in with Apple tokens when [appleAuthorizationCode] is
 /// given. Only the caller's own account can go: the function reads the user from the session.
 class AccountDeletionRepository {
   AccountDeletionRepository(this._functions);
   final Functions _functions;
 
-  static const functionId = 'delete-account';
+  static const functionId = AppwriteConfig.apiFunction;
+  static const path = '/account/delete';
 
   Future<AccountDeletionResult> delete({String? appleAuthorizationCode}) async {
     final exec = await _functions.createExecution(
       functionId: functionId,
       body: jsonEncode({'appleAuthorizationCode': ?appleAuthorizationCode}),
       method: enums.ExecutionMethod.pOST,
-      path: '/delete',
+      path: path,
     );
     final body = exec.responseBody.isEmpty ? <String, dynamic>{} : jsonDecode(exec.responseBody) as Map<String, dynamic>;
     if (body['ok'] != true) {
@@ -481,18 +482,18 @@ class SocialRepository {
   }
 
   Future<Friend> addFriend(String userId, Profile friend) async {
-    final row = await _tables.upsertRow(
-      databaseId: _db,
-      tableId: AppwriteConfig.friends,
-      rowId: deterministicId(userId, friend.userId),
-      data: {
+    final row = await _ownRow(
+      AppwriteConfig.friends,
+      deterministicId(userId, friend.userId),
+      {
         'userId': userId,
         'friendId': friend.userId,
         'friendName': friend.displayName,
         'friendAvatar': friend.avatar,
         'status': 'accepted',
       },
-      permissions: [Permission.read(Role.user(userId)), Permission.update(Role.user(userId)), Permission.delete(Role.user(userId))],
+      userId,
+      [Query.equal('userId', userId), Query.equal('friendId', friend.userId)],
     );
     return Friend.fromRow(row.$id, row.data);
   }
@@ -500,8 +501,31 @@ class SocialRepository {
   Future<void> removeFriend(String rowId) =>
       _tables.deleteRow(databaseId: _db, tableId: AppwriteConfig.friends, rowId: rowId);
 
-  /// The friend row [userId] keeps for [friendId], if any (rows have a deterministic id).
-  String friendRowId(String userId, String friendId) => deterministicId(userId, friendId);
+  /// Ends [userId]'s friendship with [friendId]: every row of theirs for it (found by its columns, as
+  /// it may have a unique id; see [_ownRow]). Nothing happens when they are not friends.
+  Future<void> removeFriendOf(String userId, String friendId) =>
+      _deleteOwn(AppwriteConfig.friends, [Query.equal('userId', userId), Query.equal('friendId', friendId)]);
+
+  /// Writes [userId]'s own row at its predictable [rowId]. When another player made a row at that id
+  /// first (Appwrite refuses the write with 401; security review 2026-10-17), the row goes under a
+  /// unique id instead (the one written before, if the player has one, found by [mine]). The server's
+  /// sweep deletes the other player's row later; rows with a unique id are left alone by it.
+  Future<models.Row> _ownRow(String tableId, String rowId, Map<String, dynamic> data, String userId, List<String> mine) async {
+    final permissions = [Permission.read(Role.user(userId)), Permission.update(Role.user(userId)), Permission.delete(Role.user(userId))];
+    try {
+      return await _tables.upsertRow(databaseId: _db, tableId: tableId, rowId: rowId, data: data, permissions: permissions);
+    } on AppwriteException catch (e) {
+      if (e.code != 401) rethrow;
+      final existing = await listAllRows(_tables, tableId, mine);
+      return _tables.upsertRow(databaseId: _db, tableId: tableId, rowId: existing.firstOrNull?.$id ?? ID.unique(), data: data, permissions: permissions);
+    }
+  }
+
+  Future<void> _deleteOwn(String tableId, List<String> queries) async {
+    for (final r in await listAllRows(_tables, tableId, queries)) {
+      await _tables.deleteRow(databaseId: _db, tableId: tableId, rowId: r.$id);
+    }
+  }
 
   /// Reports [player] for [reason]. The row carries no permissions: only the server reads it.
   Future<void> report({required String reporterId, required Profile player, required ReportReason reason}) async {
@@ -520,16 +544,20 @@ class SocialRepository {
   }
 
   Future<void> block(String userId, Profile player) async {
-    await _tables.upsertRow(
-      databaseId: _db,
-      tableId: AppwriteConfig.blocks,
-      rowId: deterministicId(userId, player.userId),
-      data: {'blockerId': userId, 'blockedId': player.userId, 'blockedName': player.displayName, 'blockedAvatar': player.avatar},
-      permissions: [Permission.read(Role.user(userId)), Permission.update(Role.user(userId)), Permission.delete(Role.user(userId))],
+    await _ownRow(
+      AppwriteConfig.blocks,
+      deterministicId(userId, player.userId),
+      {'blockerId': userId, 'blockedId': player.userId, 'blockedName': player.displayName, 'blockedAvatar': player.avatar},
+      userId,
+      [Query.equal('blockerId', userId), Query.equal('blockedId', player.userId)],
     );
   }
 
   Future<void> unblock(String rowId) => _tables.deleteRow(databaseId: _db, tableId: AppwriteConfig.blocks, rowId: rowId);
+
+  /// Unblocks [playerId] for [userId]: every row of theirs for it (found by its columns).
+  Future<void> unblockPlayer(String userId, String playerId) =>
+      _deleteOwn(AppwriteConfig.blocks, [Query.equal('blockerId', userId), Query.equal('blockedId', playerId)]);
 
   Future<Map<String, EventProgress>> eventProgress(String userId) async {
     final rows = await listAllRows(_tables, AppwriteConfig.eventProgress, [Query.equal('userId', userId)]);
