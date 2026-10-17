@@ -1,6 +1,6 @@
 // The router (src/main.js): every route reaches its module, nothing runs at the root, a scheduled
-// execution runs the co-op cleanup, the manual cleanup refuses players, and calls without a user are
-// refused as the old functions refused them.
+// execution runs the co-op cleanup, the manual cleanup and sweep refuse players and calls without a
+// user, and calls without a user are refused as the old functions refused them.
 //
 //   cd functions/api && npm install && npm test
 import { test, mock } from 'node:test';
@@ -43,11 +43,15 @@ mock.module('@apple/app-store-server-library', {
 const { default: handler, routeOf } = await import('../src/main.js');
 const { COOP_ACTIONS } = await import('../src/coop/game.js');
 
-async function run(method, path, { headers = {}, body } = {}) {
+async function run(method, path, { headers = {}, body, host } = {}) {
   let out;
   await handler({
-    req: { method, path, headers, body: body === undefined ? '' : JSON.stringify(body) },
-    res: { json: (b, status = 200) => (out = { status, body: b }) },
+    req: { method, path, headers, host, body: body === undefined ? '' : JSON.stringify(body) },
+    res: {
+      json: (b, status = 200) => (out = { status, body: b }),
+      text: (t, status = 200) => (out = { status, text: t }),
+      redirect: (url, status = 301) => (out = { status, redirect: url }),
+    },
     log: () => {},
     error: () => {},
   });
@@ -121,16 +125,37 @@ test('the manual sweep is for callers who are not players, and a dry run unless 
   assert.deepEqual([r.status, r.body.ok, r.body.apply, r.body.full], [200, true, false, true]);
 });
 
-test('the manual cleanup is for the owner\'s console only', async () => {
+test('the manual cleanup is for console users only', async () => {
   assert.deepEqual(await run('POST', '/coop/cleanup', { headers: player }), { status: 404, body: { ok: false, error: 'Not found' } });
   const r = await run('POST', '/coop/cleanup', { headers: { 'x-appwrite-trigger': 'http', 'x-appwrite-user-id': 'console-owner' } });
   assert.equal(r.status, 200);
   assert.equal(r.body.ok, true);
 });
 
-test('the owner\'s routes refuse calls without a user (execute is `any` for the invites\' domain)', async () => {
+// Anyone may execute `api` (execute `any`, for Apple's notifications at its domain and the invites at
+// join.carden.page): a call without a user reaches the function, so every route must refuse it
+// itself, except the notifications (Apple's signature), the health check and an invite's page.
+test('a caller without a user gets nothing but the health check, the notifications route and invite pages', async () => {
   const anon = { 'x-appwrite-trigger': 'http' };
-  for (const path of ['/coop/cleanup', '/admin/sweep']) {
-    assert.deepEqual(await run('POST', path, { headers: anon, body: { dryRun: false } }), { status: 404, body: { ok: false, error: 'Not found' } }, path);
+  const notFound = { status: 404, body: { ok: false, error: 'Not found' } };
+  assert.deepEqual(await run('POST', '/coop/cleanup', { headers: anon }), notFound);
+  assert.deepEqual(await run('POST', '/admin/sweep', { headers: anon, body: { dryRun: false, full: true } }), notFound);
+  for (const a of COOP_ACTIONS) assert.equal((await run('POST', `/coop/${a}`, { headers: anon, body: {} })).status, 401, a);
+  for (const path of ['/gift/send', '/code/redeem', '/account/delete', '/purchase/verify']) {
+    assert.equal((await run('POST', path, { headers: anon, body: {} })).status, 401, path);
+  }
+  assert.deepEqual(await run('POST', '/purchase/notifications', { headers: anon, body: {} }), { status: 400, body: { ok: false, error: 'Missing signedPayload' } });
+  assert.equal((await run('GET', '/health', { headers: anon })).status, 200);
+  // An invite's page (an unknown code here: the empty project has no games) is HTML with the site's
+  // card; every other GET on the invites' domain goes to the web game.
+  const page = await run('GET', '/K7QH2MXP', { headers: anon });
+  assert.equal(page.status, 200);
+  assert.match(page.text, /<meta property="og:image" content="https:\/\/play\.carden\.page\/invite-card\.jpg">/);
+  assert.deepEqual(await run('GET', '/', { headers: anon, host: 'join.carden.page' }), { status: 302, redirect: 'https://play.carden.page/' });
+  assert.deepEqual(await run('GET', '/coop/join', { headers: anon }), notFound, 'not on another domain');
+  assert.equal((await run('POST', '/K7QH2MXP', { headers: anon })).status, 404, 'GET only');
+  // The invites' domain opens nothing else, not even for a signed-in caller.
+  for (const [method, path] of [['POST', '/coop/join'], ['POST', '/purchase/notifications'], ['POST', '/gift/send']]) {
+    assert.deepEqual(await run(method, path, { headers: player, host: 'join.carden.page', body: {} }), notFound, `${method} ${path}`);
   }
 });

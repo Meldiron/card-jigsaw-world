@@ -181,7 +181,7 @@ class _StageCoop implements CoopBackend {
   @override
   Stream<CoopEvent> listen(String gameId, {String? me}) => _events.stream;
   @override
-  Future<void> updateLive(String gameId, CoopLive state) async {}
+  Future<DateTime?> updateLive(String gameId, CoopLive state) async => null;
   @override
   void setPresence(String presenceId, CoopPresence presence) {}
   @override

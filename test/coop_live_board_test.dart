@@ -123,6 +123,29 @@ void main() {
     expect(find.byKey(const ValueKey('coop-drag-1')), findsNothing, reason: 'one initial for the group');
   });
 
+  testWidgets('a moved card\'s mark fades out and carries no initial; a held card keeps its outline and initial', (tester) async {
+    final s = stateOf(_reversed());
+    final since = DateTime.now();
+    final moved = CoopCardMark(userId: 'amy', initial: 'A', color: const Color(0xFFE07A2F), onColor: Colors.white, held: false, badge: false, since: since, fadeFor: const Duration(milliseconds: 1500));
+    await tester.pumpWidget(MaterialApp(
+      theme: AppTheme.light(),
+      home: Align(
+        alignment: Alignment.topLeft,
+        child: BoardWidget(image: image, state: s, width: _size.width, height: _size.height, cardStyle: CardStyle.classic, onTap: (_) {}, onDrop: (_, _) {}, marks: {3: moved, 7: _mark}),
+      ),
+    ));
+    double opacity() => tester.widget<FadeTransition>(find.ancestor(of: find.byKey(const ValueKey('coop-moved-3')), matching: find.byType(FadeTransition)).first).opacity.value;
+    expect(find.byKey(const ValueKey('coop-mark-3')), findsNothing, reason: 'no initial on a moved card');
+    expect(find.byKey(const ValueKey('coop-mark-7')), findsOneWidget, reason: 'the held card keeps it');
+    final start = opacity();
+    await tester.pump(const Duration(milliseconds: 800));
+    final mid = opacity();
+    await tester.pump(const Duration(milliseconds: 800));
+    expect(start, greaterThan(0.9));
+    expect(mid, lessThan(start));
+    expect(opacity(), lessThan(0.05), reason: 'gone in about 1.5 s');
+  });
+
   testWidgets('this player\'s drag is reported as fractions of the board, and its end after the drop', (tester) async {
     final s = stateOf(_reversed());
     final events = <String>[];

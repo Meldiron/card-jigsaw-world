@@ -27,6 +27,10 @@ class FakeCoopServer {
   /// limit.
   int? liveAllowance;
   int liveUpdates = 0;
+  var _clock = DateTime.utc(2026, 10, 17, 12);
+
+  /// The server's time: a millisecond on per write, so two writes never share one.
+  DateTime now() => _clock = _clock.add(const Duration(milliseconds: 1));
 
   void _liveRow(String gameId, String userId) {
     live.putIfAbsent(CoopLive.rowId(gameId, userId), () => {
@@ -243,7 +247,7 @@ class FakeCoopBackend implements CoopBackend {
   final sentLive = <CoopLive>[];
 
   @override
-  Future<void> updateLive(String gameId, CoopLive state) async {
+  Future<DateTime?> updateLive(String gameId, CoopLive state) async {
     await Future<void>.delayed(Duration.zero);
     _online();
     final id = CoopLive.rowId(gameId, userId);
@@ -256,10 +260,13 @@ class FakeCoopBackend implements CoopBackend {
     }
     server.liveUpdates++;
     sentLive.add(state);
-    final updated = {...row, ...state.toData()};
+    // The server's clock: one for every player, strictly increasing.
+    final at = server.now();
+    final updated = {...row, ...state.toData(), r'$updatedAt': at.toIso8601String()};
     server.live[id] = updated;
     // The realtime subscription leaves this player's own row out.
     server._broadcast(gameId, CoopLiveEvent(updated), except: userId);
+    return at;
   }
 
   @override

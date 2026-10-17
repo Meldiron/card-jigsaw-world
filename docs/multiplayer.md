@@ -16,8 +16,11 @@ the invite page).
 
 - Their own picks and moves look as today (cobalt). Every other player has a fixed colour on this
   device, by seat: orange, purple, teal, pink (`PlayerColors` in `lib/core/theme/tokens.dart`; never red
-  or cobalt), and their **initial** on the card they hold and the cards they just moved
-  (`PlayerInitialBadge`, `CoopCardMark`), so players are told apart without colour too.
+  or cobalt), and their **initial** on the card they hold (`PlayerInitialBadge`, `CoopCardMark`), so
+  players are told apart without colour too. Cards they just moved carry their colour as an outline
+  that fades out in about 1.5 s, without the initial (with a small one under Differentiate without
+  colour), so a moved card never looks held. What is read again (joining, Return, the next board, a
+  reconnect) shows without marks.
 - Short toasts when someone joins or leaves ("Rowan joined", "Rowan left").
 - Live (owner, 2026-10-17): a card another player picks with a tap shows in their colour with their
   initial within a fraction of a second, and goes as soon as they put it down or place it. A card they
@@ -25,6 +28,12 @@ the invite page).
   colour with their initial; when their move arrives it lands from there in its slot. A drag they
   cancel, one not heard from for 2 s, or a drop whose move does not come within 2 s goes back. Reduce
   motion: the card is drawn at the newest position, without the glide. See "Live picks and drags".
+- First grab wins (owner, 2026-10-17): a card another player has in hand (picked or dragging), and its
+  group, cannot be picked, dragged or swapped here: it shows their colour and initial, and a touch
+  gives a light tap and "Rowan has this card". When two players grab the same card at the same moment,
+  the earlier one keeps it; the other's card slides back with "Rowan took it first". A drag whose card
+  another player's move takes (moved, placed, joined to others) ends the same way: the cards go back,
+  "Rowan placed this card" or "Rowan moved this card". See "Who has a card".
 - Moves at the same moment: the server's order decides. A move shows at once; if an earlier move took
   one of its cards, its cards slide back.
 - A players chip in the game's top bar (people icon and a count, `CoopPlayersChip`) opens the player
@@ -238,6 +247,47 @@ screen size and any zoom work), `phase` (`''` nothing in hand, `pick`, `drag`, `
   presence, every 3 s at most), and new builds see them that way.
 - Twin cards: a dragged card that lands on a twin's place traded identities on the mover's screen;
   the move carries both cards, so the drag ends there too and `sharedCardKeys` keeps the widgets.
+- The sender heals itself: a finger held still sends its position again every 1.5 s (the others drop
+  a drag not heard from for 2 s); a drag with no new position for 3 s ends itself (a cancel) and starts
+  again if the finger moves on; a pick made during a drag goes as soon as the drag ends; the screen
+  closing, the app going to the background and the game ending end any drag (and put the pick down).
+
+### Who has a card
+
+Build 126 let two players grab the same card, and a drag broke when another player's move changed the
+board under the finger: the board widget followed the drag by slot, so the drag's end was lost, the
+card that came into that slot was drawn floating where the finger had been until the next drag (a
+locked block too, once that slot locked), and the player's picks stopped reaching the others
+(TestFlight feedback AGyfyDbbHhCGY72W1h5num0; `test/coop_race_test.dart` and
+`integration_test/coop_race_test.dart` reproduced it).
+
+- The board follows a drag by card (`BoardWidget`): when another player's move moves, places or
+  regroups the dragged card or its group, or swaps its widget with a twin, or another player turns out
+  to have it first, the drag ends (`onDragEnd`, then `onDragLost` with `DragLoss.moved`, `locked` or
+  `claimed`): the cards glide back, a light tap, and a word of who did it. Every end path clears the
+  drag whatever slot the gesture thinks it has; a board-wide pointer listener ends a drag whose
+  finger lifted when the card's own gesture did not hear it. A card in place is never drawn dragged.
+- Claims ride on the live rows, with no extra write and no call to the function: the card in a
+  player's hand (`pick`, or a `drag`, held through its `drop` until the move arrives) is their claim,
+  from the server's time of the state that took it (`$updatedAt`, one clock for everyone, in every
+  realtime event; this player's own from the update's answer). A claim covers the card's group.
+  `LiveTracks.claims` and `CoopController.claims` list the others'; `LiveSender.claim` is this
+  player's own.
+- First grab wins: when this player's claim and another's overlap, the earlier server time keeps it
+  and a tie goes to the smaller player id (`LiveClaim.before`); both devices reach the same answer
+  alone. Until the server has answered this player's own grab nothing is decided. The one who gives
+  way: a drag ends (`DragLoss.claimed`), a pick is put down; "Rowan took it first". It took 0.47 s on
+  two simulators (`coop_pair_test.dart`, both grabbing at the same moment).
+- What another player holds cannot be taken: drags refuse to start (`BoardWidget.blocked`,
+  `onDragRefused`), taps neither pick it nor put a picked card there, drops onto it send the dragged
+  card back; "Rowan has this card" (once per 1.5 s per card). Its group shows their colour, the card
+  their initial (every card of it under Differentiate without colour).
+- Claims end with the put-down, the drop's move (or a move that skipped), 2 s without news of a drag,
+  and the player going away or leaving. Builds 124-125 say what they hold only in their presence (every
+  3 s at most): new builds honour it but those players never give way, so new builds do. Build 126
+  writes live rows but knows nothing of claims: new builds honour its picks and drags; it may still grab
+  what a new build holds (the moves stay safe: the server's order decides), and it keeps its own drag
+  bug until it updates.
 
 ### The game screen (phase 2, wired)
 
@@ -444,6 +494,18 @@ the two equal.
   guest's finish with rewards, the end).
 - `test/coop_board_test.dart`: `GameController.showShared` (no move, no history, selection kept unless
   its card moved) and two screens converging through the bridge.
+- Who has a card: `test/coop_race_test.dart` (build 126's races: a drag whose card another move took,
+  moved or placed ends and nothing floats, a locked block is never lifted, picks are not silenced; the
+  first drop wins; marks fade and catch-ups bring none), `test/coop_claims_test.dart` (first grab wins
+  by server time, claims begin and end, two devices agree, the board refuses a held card and gives up a
+  drag that lost), `test/coop_guest_rewards_test.dart` (a guest's shared board never counts toward the
+  guest's achievements: only coins, XP, level, piggy bank). On the simulators:
+  `integration_test/coop_race_test.dart` (the bot takes the card under the finger: "Juniper Host placed
+  this card", nothing floats, the host hears the cancel), `coop_drag_test.dart` steps 6b and 6c (a card
+  the bot holds refuses a drag and a tap, `live_06_claimed_refused.png`; marks fading,
+  `live_07_marks_fade_*.png`), `coop_pair_test.dart` step 3c (both simulators grab one card at one
+  moment: one keeps it, `pair_h_same_card_won.png`, the other gives way,
+  `pair_g_same_card_lost_*.png`).
 - Live picks and drags: `integration_test/coop_drag_test.dart` (the bot hosts and streams picks and
   drags: `/pick`, `/drag`; `/live` says what its socket heard, for the delays; `/liverows` makes the live
   rows as the api function does, for QA before the function is deployed with them): the host's pick

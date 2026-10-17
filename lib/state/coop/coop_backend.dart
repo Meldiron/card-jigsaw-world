@@ -65,10 +65,10 @@ abstract class CoopBackend {
   /// read. The stream ends with [close].
   Stream<CoopEvent> listen(String gameId, {String? me});
 
-  /// Writes this player's live row in game [gameId] (`coop_drags`, made by the function). Throws
-  /// `LiveRateLimited` when Appwrite refuses it for now and `LiveRowMissing` when the row is not
-  /// there or not this player's to write.
-  Future<void> updateLive(String gameId, CoopLive state);
+  /// Writes this player's live row in game [gameId] (`coop_drags`, made by the function) and returns
+  /// the server's time of the write (`$updatedAt`). Throws `LiveRateLimited` when Appwrite refuses it
+  /// for now and `LiveRowMissing` when the row is not there or not this player's to write.
+  Future<DateTime?> updateLive(String gameId, CoopLive state);
 
   /// Sets this player's presence in game [gameId] (sent over the realtime socket, resent by the SDK
   /// after a reconnect, gone when the socket closes).

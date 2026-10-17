@@ -11,13 +11,15 @@ export function codeOfPath(path) {
   return m ? normaliseCode(m[1]) : null;
 }
 
+/// Whether [req] came to the invites' domain (where nothing but the invite page answers).
+export const onJoinHost = (req) => String(req.host ?? req.headers?.host ?? '').toLowerCase().split(':')[0] === JOIN_HOST;
+
 /// Whether [req] is for the invite page: a GET or HEAD on the invites' domain, an invite's path or
 /// the association file.
 export function isInviteRequest(req) {
   const method = String(req.method || 'GET').toUpperCase();
   if (method !== 'GET' && method !== 'HEAD') return false;
-  const host = String(req.host ?? req.headers?.host ?? '').toLowerCase().split(':')[0];
-  if (host === JOIN_HOST) return true;
+  if (onJoinHost(req)) return true;
   const path = String(req.path || '/');
   return path === '/.well-known/apple-app-site-association' || codeOfPath(path) !== null;
 }

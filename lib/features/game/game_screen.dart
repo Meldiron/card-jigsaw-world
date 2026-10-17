@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'dart:ui' as ui;
 
 import 'package:confetti/confetti.dart';
+import 'package:flutter/foundation.dart' show setEquals;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart' show Ticker;
 import 'package:flutter/services.dart' show SystemUiOverlayStyle;
@@ -162,6 +163,16 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   StreamSubscription<void>? _liveWakeSub;
   Map<String, CoopCardMark> _playerMarks = const {};
   bool _dropMoved = false;
+
+  /// Who has a card (Play together, "first grab wins"): the cards another player holds and their
+  /// groups, by card, with the player; what moved each card last; the claim that beat this player's
+  /// own; when each card last said no (so a tapping finger hears it once).
+  Map<int, String> _holders = const {};
+  final _lastMover = <int, String>{};
+  final _saidNo = <int, DateTime>{};
+  String? _lostTo;
+  bool _puttingDown = false;
+  late final CoopController _coopCtrl = ref.read(coopProvider.notifier);
   ProviderSubscription<GameState>? _stateSub;
   CoopOpKind _nextKind = CoopOpKind.move;
   bool _showingShared = false;
@@ -179,6 +190,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _coopCtrl; // read now: dispose may not read providers
     _liveWakeSub = ref.read(coopProvider.notifier).liveWake.listen((_) {
       if (mounted && _inCoop && !_ghostTicker.isActive) _ghostTicker.start();
     });
@@ -364,18 +376,99 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
       for (final v in views)
         if (_playerMarks[v.userId] case final mark?) v.card: CoopGhost(card: v.card, at: Offset(v.x, v.y), mark: mark),
     };
+    // A drag that started or ended changes who has which card: the screen works it out again.
+    final changed = !setEquals(next.keys.toSet(), _ghosts.value.keys.toSet());
     if (next.isEmpty) {
       if (_ghosts.value.isNotEmpty) _ghosts.value = const {};
       _ghostTicker.stop();
+      if (changed) setState(() {});
       return;
     }
     _ghosts.value = next;
+    if (changed) setState(() {});
+  }
+
+  /// The cards another player has in hand at [board] (with their groups), and the claim of theirs
+  /// that beat this player's own (docs/multiplayer.md, "Who has a card"): first grab wins, by the
+  /// server's time; until the server has answered this player's own grab, nothing is decided.
+  ({Map<int, String> holders, LiveClaim? beat}) _claimsOn(Board board) {
+    final coop = ref.read(coopProvider.notifier);
+    final mine = coop.myClaim;
+    final mineSlot = mine == null ? -1 : board.slotOfCard(mine.card);
+    final mineCards = mineSlot < 0 ? const <int>{} : {for (final s in board.groupOf(mineSlot)) board.slots[s]};
+    final holders = <int, String>{};
+    LiveClaim? beat;
+    for (final c in coop.claims()) {
+      final slot = board.slotOfCard(c.card);
+      if (slot < 0 || board.isLocked(slot)) continue;
+      final cards = {for (final s in board.groupOf(slot)) board.slots[s]};
+      if (mine != null && cards.any(mineCards.contains)) {
+        if (mine.since == null && c.since != null) continue;
+        if (mine.before(c)) continue;
+        beat = c;
+      }
+      for (final k in cards) {
+        holders[k] = c.userId;
+      }
+    }
+    return (holders: holders, beat: beat);
+  }
+
+  String _nameOf(String userId) => ref.read(playerProfileProvider(userId)).value?.displayName ?? 'Player';
+
+  /// Another player has [card]: a light tap and a short word, once in a while.
+  void _sayHeld(int card) {
+    final holder = _holders[card];
+    if (holder == null) return;
+    Haptics.light();
+    final last = _saidNo[card];
+    if (last != null && DateTime.now().difference(last) < const Duration(milliseconds: 1500)) return;
+    _saidNo[card] = DateTime.now();
+    showToast(context, '${_nameOf(holder)} has this card', icon: AppIcons.players);
+  }
+
+  /// A tap: a card another player has cannot be picked, nor be the place a picked card goes.
+  void _tap(int slot) {
+    if (_inCoop && _holders.isNotEmpty) {
+      final board = ref.read(gameControllerProvider(_args!)).board;
+      if (slot < board.cells && _holders.containsKey(board.slots[slot])) return _sayHeld(board.slots[slot]);
+    }
+    _ctrl.tap(slot);
+  }
+
+  /// This player's drag was taken from under the finger: the cards went back; say why.
+  void _onDragLost(int card, DragLoss reason) {
+    if (!mounted || !_inCoop) return;
+    Haptics.light();
+    final who = reason == DragLoss.claimed ? (_holders[card] ?? _lostTo) : _lastMover[card];
+    if (who == null) return;
+    final name = _nameOf(who);
+    showToast(
+      context,
+      switch (reason) {
+        DragLoss.claimed => '$name took it first',
+        DragLoss.locked => '$name placed this card',
+        DragLoss.moved => '$name moved this card',
+      },
+      icon: AppIcons.players,
+    );
+  }
+
+  /// A drag refused at once: another player has the card.
+  void _onDragRefused(int slot) {
+    final board = ref.read(gameControllerProvider(_args!)).board;
+    if (slot < board.cells) _sayHeld(board.slots[slot]);
   }
 
   /// A drop on the board; [_dropMoved] says whether it moved anything (the others then wait for the
   /// move instead of sending the card back).
   void _drop(int from, int to) {
     final before = ref.read(gameControllerProvider(_args!)).board;
+    // Not onto a card another player has: the dragged card goes back.
+    if (_inCoop && to < before.cells && _holders.containsKey(before.slots[to])) {
+      _dropMoved = false;
+      return _sayHeld(before.slots[to]);
+    }
     _ctrl.drop(from, to);
     _dropMoved = !identical(before, ref.read(gameControllerProvider(_args!)).board);
   }
@@ -402,6 +495,11 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   /// Puts the shared board on the table (the others' changes, or this player's going back).
   void _showShared(CoopBoardUpdate u) {
     if (!mounted || _args == null) return;
+    for (final op in u.update.applied) {
+      for (final c in op.change.slots) {
+        _lastMover[c.after] = op.userId;
+      }
+    }
     _showingShared = true;
     try {
       _ctrl.showShared(u.update.after);
@@ -538,6 +636,11 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    // The board closes: nothing of it stays in this player's hand for the others.
+    if (_coopGameId != null) {
+      _coopCtrl.dragEnd(dropped: false);
+      _coopCtrl.hold(null);
+    }
     _liveWakeSub?.cancel();
     _ghostTicker.dispose();
     _ghosts.dispose();
@@ -1224,13 +1327,41 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
         if (mounted && _coopGameId != null && !_inCoop) _detachCoop();
       });
     }
-    final marks = shared ? coopCardMarks(context, ref, coopState) : const <int, CoopCardMark>{};
+    final ownMarks = shared ? coopCardMarks(context, ref, coopState) : const <int, CoopCardMark>{};
     final heldSlots = <int, CoopCardMark>{
-      for (final e in marks.entries)
+      for (final e in ownMarks.entries)
         if (e.value.held && state.board.slotOfCard(e.key) >= 0) state.board.slotOfCard(e.key): e.value,
     };
     final coopGuest = shared ? !coopState.isHost : _guestBoard;
     _playerMarks = shared ? coopPlayerMarks(context, ref, coopState) : const {};
+    // Who has which card: their cards (and groups) cannot be taken here; a grab of this player's that
+    // came second gives way.
+    final claims = shared ? _claimsOn(state.board) : (holders: const <int, String>{}, beat: null);
+    _holders = claims.holders;
+    final symbols = A11y.symbolsOf(context);
+    final marks = <int, CoopCardMark>{
+      ...ownMarks,
+      for (final e in claims.holders.entries)
+        if (!(ownMarks[e.key]?.held ?? false))
+          if (_playerMarks[e.value] case final m?) e.key: m.copyWith(badge: symbols),
+    };
+    final beat = claims.beat;
+    if (beat != null) {
+      final sel = state.selected;
+      final selCard = sel == null || sel >= state.board.cells ? null : state.board.slots[sel];
+      if (selCard != null && claims.holders.containsKey(selCard) && !_puttingDown) {
+        // This player's pick came second: it is put down, with a word of who has it.
+        _puttingDown = true;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _puttingDown = false;
+          if (!mounted) return;
+          _ctrl.clearSelection();
+          Haptics.light();
+          showToast(context, '${_nameOf(beat.userId)} took it first', icon: AppIcons.players);
+        });
+      }
+    }
+    _lostTo = beat?.userId;
 
     return Scaffold(
       backgroundColor: c.canvas,
@@ -1326,12 +1457,15 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                                         height: h,
                                         cardStyle: settings.cardStyle,
                                         painting: _painting,
-                                        onTap: _ctrl.tap,
+                                        onTap: _tap,
                                         onDrop: _drop,
                                         marks: marks,
                                         ghosts: shared ? _ghosts : null,
                                         onDragMove: shared ? _dragMove : null,
                                         onDragEnd: shared ? _dragEnd : null,
+                                        blocked: shared ? claims.holders.keys.toSet() : const {},
+                                        onDragRefused: shared ? _onDragRefused : null,
+                                        onDragLost: shared ? _onDragLost : null,
                                       ),
                                     )
                                   else
@@ -1349,12 +1483,15 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                                             cardStyle: settings.cardStyle,
                                             painting: _painting,
                                             zoom: _zoom,
-                                            onTap: _ctrl.tap,
+                                            onTap: _tap,
                                             onDrop: _drop,
                                             marks: marks,
                                             ghosts: shared ? _ghosts : null,
                                             onDragMove: shared ? _dragMove : null,
                                             onDragEnd: shared ? _dragEnd : null,
+                                            blocked: shared ? claims.holders.keys.toSet() : const {},
+                                            onDragRefused: shared ? _onDragRefused : null,
+                                            onDragLost: shared ? _onDragLost : null,
                                           ),
                                           OffscreenSelection(zoom: _zoom, board: state.board, boardSize: Size(w, h), selected: state.selected),
                                           // Play together: where the others' held cards are, off screen.
