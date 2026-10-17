@@ -12,6 +12,7 @@ import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 import '../profile/stats.dart';
+import 'friend_gifts.dart';
 import 'player_safety.dart';
 
 /// Read-only profile of another player: identity, headline numbers, the
@@ -128,6 +129,8 @@ class PlayerScreen extends ConsumerWidget {
                   ],
                 ),
               ),
+              // A friend's profile: Send a gift (lib/features/social/friend_gifts.dart).
+              if (!isMe && !blocked && ref.watch(currentUserIdProvider) != null) SendGiftButton(friend: p),
               SectionHeader(
                 padding: const EdgeInsets.fromLTRB(0, 28, 0, 12),
                 title: 'Statistics',

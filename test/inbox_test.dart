@@ -83,6 +83,44 @@ void main() {
     test('no messages, no dot', () {
       expect(items(const [], const []), isEmpty);
     });
+
+    test("a friend's gift leaves the inbox when it expires, also while the inbox is open", () async {
+      final c = ProviderContainer(overrides: [
+        inboxMessagesProvider.overrideWith((ref) async => [msg('gift', expiresIn: const Duration(milliseconds: 300), coins: 150), msg('note')]),
+        profileProvider.overrideWith(() => _Profile(const [])),
+      ]);
+      addTearDown(c.dispose);
+      final sub = c.listen(inboxProvider, (_, _) {});
+      addTearDown(sub.close);
+      await c.read(inboxMessagesProvider.future);
+      await c.read(profileProvider.future);
+      expect(c.read(inboxProvider).map((i) => i.message.id), ['gift', 'note']);
+      await Future<void>.delayed(const Duration(milliseconds: 1200));
+      expect(c.read(inboxProvider).map((i) => i.message.id), ['note'], reason: 'gone at its expiry, without a reload');
+    });
+
+    test('the next expiry is the soonest one still ahead', () {
+      expect(nextExpiry([msg('a'), msg('b', expiresIn: const Duration(hours: -1))], now), isNull);
+      final soon = msg('c', expiresIn: const Duration(hours: 2));
+      expect(nextExpiry([msg('d', expiresIn: const Duration(days: 1)), soon, msg('e')], now), soon.expiresAt);
+    });
+  });
+
+  test("a friend's gift names the friend (through the name filter)", () {
+    final m = InboxMessage.fromRow('g1', {
+      'subject': 'Anna sent you a gift',
+      'body': 'Anna sent you 1 ticket. Claim it within 24 hours.',
+      'sentAt': '2026-10-17T10:00:00.000+00:00',
+      'expiresAt': '2026-10-18T10:00:00.000+00:00',
+      'rewardTickets': 1,
+      'fromUserId': 'u-anna',
+      'fromName': 'Anna',
+      'fromAvatar': 'owl',
+    });
+    expect((m.fromFriend, m.sender, m.fromAvatar, m.tickets), (true, 'Anna', 'owl', 1));
+    expect(InboxMessage.fromRow('g2', {'subject': 's', 'body': 'b', 'sentAt': '2026-10-17T10:00:00Z', 'fromUserId': 'u', 'fromName': 'fuuuck'}).sender, 'Player');
+    final carden = InboxMessage.fromRow('c1', {'subject': 's', 'body': 'b', 'sentAt': '2026-10-17T10:00:00Z'});
+    expect((carden.fromFriend, carden.sender), (false, 'Carden'));
   });
 
   test('a message reads its row, gift and button', () {

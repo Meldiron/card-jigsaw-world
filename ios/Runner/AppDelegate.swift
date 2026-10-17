@@ -23,6 +23,121 @@ import UserNotifications
     if let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "AppReview") {
       AppReview.attach(messenger: registrar.messenger())
     }
+    if let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "GiftPush") {
+      GiftPush.shared.attach(messenger: registrar.messenger())
+    }
+  }
+
+  override func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+    super.application(application, didRegisterForRemoteNotificationsWithDeviceToken: deviceToken)
+    GiftPush.shared.registered(token: deviceToken)
+  }
+
+  override func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+    super.application(application, didFailToRegisterForRemoteNotificationsWithError: error)
+    GiftPush.shared.failed(error)
+  }
+}
+
+/// Gift notifications from friends (Dart side: lib/core/push.dart; docs/friend-gifts.md). Apple's
+/// own push service, no third-party SDK: iOS gives the app a device token, Dart registers it as an
+/// Appwrite push target, and Appwrite Messaging sends to it. Permission is the one the daily
+/// reminders ask for.
+///
+/// Channel `cjw/push`: `environment` (the APNs environment of this build's profile: `development`
+/// or `production`), `register` (asks iOS for the token; it comes back as `token`, or
+/// `tokenError`), `ready` (Dart is listening; returns the link of a notification tap that launched
+/// the app). A tap while Dart listens is sent as `open` with the notification's link, and a
+/// notification that arrives while the game is open as `received` ({title, body, link}).
+final class GiftPush {
+  static let shared = GiftPush()
+
+  private var channel: FlutterMethodChannel?
+  private var dartReady = false
+  private var pendingLink: String?
+  private var token: String?
+
+  func attach(messenger: FlutterBinaryMessenger) {
+    let channel = FlutterMethodChannel(name: "cjw/push", binaryMessenger: messenger)
+    channel.setMethodCallHandler { [weak self] call, result in
+      guard let self else { return result(nil) }
+      switch call.method {
+      case "environment":
+        result(Self.environment)
+      case "register":
+        UIApplication.shared.registerForRemoteNotifications()
+        // iOS calls back with the token (on every launch too); a token from earlier goes now.
+        if let token = self.token { self.channel?.invokeMethod("token", arguments: token) }
+        result(nil)
+      case "ready":
+        self.dartReady = true
+        result(self.pendingLink)
+        self.pendingLink = nil
+      default:
+        result(FlutterMethodNotImplemented)
+      }
+    }
+    self.channel = channel
+  }
+
+  func registered(token data: Data) {
+    let hex = data.map { String(format: "%02x", $0) }.joined()
+    token = hex
+    channel?.invokeMethod("token", arguments: hex)
+  }
+
+  func failed(_ error: Error) {
+    channel?.invokeMethod("tokenError", arguments: error.localizedDescription)
+  }
+
+  /// A tapped notification: its link goes to Dart now, or when Dart is ready (a cold start).
+  func opened(_ notification: UNNotification) {
+    guard let link = Self.link(of: notification.request.content.userInfo) else { return }
+    if dartReady, let channel {
+      channel.invokeMethod("open", arguments: link)
+    } else {
+      pendingLink = link
+    }
+  }
+
+  /// A notification while the game is open: Dart refreshes the inbox and shows a toast.
+  func received(_ notification: UNNotification) {
+    let content = notification.request.content
+    channel?.invokeMethod("received", arguments: [
+      "title": content.title,
+      "body": content.body,
+      "link": Self.link(of: content.userInfo) ?? "",
+    ])
+  }
+
+  static func isRemote(_ notification: UNNotification) -> Bool {
+    notification.request.trigger is UNPushNotificationTrigger
+  }
+
+  /// Appwrite Messaging puts a push's data under `data` (the APNs adapter of utopia-php/messaging).
+  private static func link(of userInfo: [AnyHashable: Any]) -> String? {
+    let link = (userInfo["data"] as? [String: Any])?["link"] as? String ?? userInfo["link"] as? String
+    return link?.isEmpty == false ? link : nil
+  }
+
+  /// The APNs environment this build's tokens belong to, from the `aps-environment` of the
+  /// embedded provisioning profile. Simulators use the development service; App Store and
+  /// TestFlight builds carry no embedded profile and use the production one.
+  static var environment: String {
+    #if targetEnvironment(simulator)
+    return "development"
+    #else
+    guard let url = Bundle.main.url(forResource: "embedded", withExtension: "mobileprovision"),
+          let data = try? Data(contentsOf: url),
+          let start = data.range(of: Data("<?xml".utf8)),
+          let end = data.range(of: Data("</plist>".utf8)),
+          start.lowerBound < end.upperBound,
+          let plist = try? PropertyListSerialization.propertyList(from: data.subdata(in: start.lowerBound..<end.upperBound), format: nil) as? [String: Any],
+          let entitlements = plist["Entitlements"] as? [String: Any],
+          let value = entitlements["aps-environment"] as? String
+    else { return "production" }
+    return value
+    #endif
   }
 }
 
@@ -170,12 +285,14 @@ final class DailyReminders: NSObject, UNUserNotificationCenterDelegate {
     }
   }
 
-  // The player is already in the game: no banner while it is open.
+  // The player is already in the game: no banner while it is open (a gift notification shows as
+  // a toast instead, see GiftPush).
   func userNotificationCenter(
     _ center: UNUserNotificationCenter,
     willPresent notification: UNNotification,
     withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
   ) {
+    if GiftPush.isRemote(notification) { GiftPush.shared.received(notification) }
     completionHandler([])
   }
 
@@ -184,6 +301,12 @@ final class DailyReminders: NSObject, UNUserNotificationCenterDelegate {
     didReceive response: UNNotificationResponse,
     withCompletionHandler completionHandler: @escaping () -> Void
   ) {
+    // Gift notifications come from the server and carry a link instead of a route.
+    if GiftPush.isRemote(response.notification) {
+      GiftPush.shared.opened(response.notification)
+      completionHandler()
+      return
+    }
     let route = response.notification.request.content.userInfo["route"] as? String ?? ""
     if !route.isEmpty {
       if dartReady, let channel {

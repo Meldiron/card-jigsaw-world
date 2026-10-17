@@ -11,6 +11,7 @@ import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 import '../links/deep_links.dart';
+import 'friend_gifts.dart';
 
 /// Social > Inbox (owner, 2026-10-16): messages from Carden to this player, newest first. A row
 /// shows the subject, when it came, the start of the text and a reward still waiting; an unopened
@@ -160,6 +161,7 @@ class _GiftCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.colors;
     final claimed = item.claimed;
+    final m = item.message;
     return Container(
       key: const ValueKey('message-gift'),
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
@@ -173,21 +175,29 @@ class _GiftCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Container(
-                width: 36,
-                height: 36,
-                decoration: BoxDecoration(color: context.accentFill, shape: BoxShape.circle),
-                child: Icon(AppIcons.gift, size: 18, color: context.onAccent),
-              ),
+              // A friend's gift shows the friend's avatar; Carden's, the gift mark.
+              if (m.fromFriend)
+                AvatarCircle(key: const ValueKey('message-gift-avatar'), avatarKey: m.fromAvatar ?? 'fox', size: 36)
+              else
+                Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(color: context.accentFill, shape: BoxShape.circle),
+                  child: Icon(AppIcons.gift, size: 18, color: context.onAccent),
+                ),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('A gift from Carden', style: TextStyle(fontSize: TypeSize.headline, fontWeight: FontWeight.w700, color: c.textPrimary)),
+                    Text('A gift from ${m.sender}', style: TextStyle(fontSize: TypeSize.headline, fontWeight: FontWeight.w700, color: c.textPrimary)),
                     const SizedBox(height: 2),
                     Text(
-                      claimed ? 'Claimed. It is in your balance, ready for your next pack.' : 'Claim it to add it to your balance. It stays here until you do.',
+                      claimed
+                          ? 'Claimed. It is in your balance, ready for your next pack.'
+                          : m.fromFriend
+                              ? 'Claim it to add it to your balance. It expires 24 hours after it was sent.'
+                              : 'Claim it to add it to your balance. It stays here until you do.',
                       style: TextStyle(fontSize: TypeSize.footnote, height: 1.35, color: c.textSecondary),
                     ),
                   ],
@@ -257,7 +267,13 @@ class _MessageSheetState extends ConsumerState<_MessageSheet> {
     });
   }
 
-  void _claim(InboxMessage m) {
+  Future<void> _claim(InboxMessage m) async {
+    // A gift past its time is gone (the sheet closes it a moment later on its own).
+    if (m.expiredAt(DateTime.now())) {
+      showToast(context, 'This gift has expired', icon: AppIcons.clock);
+      ref.invalidate(inboxProvider);
+      return;
+    }
     final paid = ref.read(profileProvider.notifier).claimMessage(m.id, coins: m.coins, tickets: m.tickets, hints: m.hints, peeks: m.peeks, magics: m.magics);
     if (!paid) return;
     Sfx.instance.coin();
@@ -266,6 +282,8 @@ class _MessageSheetState extends ConsumerState<_MessageSheet> {
       for (final (currency, amount) in m.reward) '${formatCount(amount)} ${_unit(currency, amount)}',
     ];
     showToast(context, 'Added ${words.join(', ')}', icon: AppIcons.gift);
+    // A friend's gift: the moment to offer gift notifications (asked once).
+    if (m.fromFriend) await offerGiftNotifications(context, ProviderScope.containerOf(context, listen: false));
   }
 
   static String _unit(Currency c, int n) => switch (c) {

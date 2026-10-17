@@ -17,6 +17,7 @@ import 'package:carden/models/models.dart';
 import 'package:carden/router.dart';
 import 'package:carden/state/auth.dart';
 import 'package:carden/state/catalog.dart';
+import 'package:carden/state/inbox.dart';
 import 'package:carden/state/profile.dart';
 import 'package:carden/state/progress.dart';
 import 'package:carden/state/settings.dart';
@@ -74,6 +75,10 @@ const _links = <String, (LinkKind, String)>{
   '/inbox': (LinkKind.page, '/social?tab=inbox'),
   '/messages': (LinkKind.page, '/social?tab=inbox'),
   '/social?tab=inbox': (LinkKind.page, '/social?tab=inbox'),
+  '/inbox?message=6ad35c7d000375999a49': (LinkKind.action, '/inbox?message=6ad35c7d000375999a49'),
+  '/inbox/6ad35c7d000375999a49': (LinkKind.action, '/inbox?message=6ad35c7d000375999a49'),
+  '/messages/6ad35c7d000375999a49': (LinkKind.action, '/inbox?message=6ad35c7d000375999a49'),
+  '/inbox?message=bad%20id': (LinkKind.page, '/social?tab=inbox'),
   '/feedback': (LinkKind.action, '/feedback'),
   '/redeem': (LinkKind.action, '/redeem'),
   '/redeem?code=ABCD-EFGH-JKLM-NPQR': (LinkKind.action, '/redeem?code=ABCD-EFGH-JKLM-NPQR'),
@@ -161,6 +166,8 @@ void main() {
         '/play/bad%20id',
         '/player/%3Cscript%3E',
         '/store/extra',
+        '/inbox/a/b',
+        '/inbox/bad%20id',
       ]) {
         expect(_parse(input), isNull, reason: input);
       }
@@ -230,7 +237,7 @@ void main() {
       Puzzle.fromRow('houses-1', {'packId': 'houses', 'title': 'Canal houses', 'imageUrl': 'https://example.invalid/4.jpg'}),
     ];
 
-    Future<(ProviderContainer, GoRouter)> pump(WidgetTester tester, {bool onboarded = true, PlatformCaps caps = PlatformCaps.ios}) async {
+    Future<(ProviderContainer, GoRouter)> pump(WidgetTester tester, {bool onboarded = true, PlatformCaps caps = PlatformCaps.ios, List<InboxMessage> messages = const []}) async {
       SharedPreferences.setMockInitialValues({'onboarded': onboarded});
       final store = await LocalStore.open();
       Widget page(String name) => Scaffold(body: Center(child: Text(name)));
@@ -264,6 +271,7 @@ void main() {
           progressProvider.overrideWith(_NoRows.new),
           packsProvider.overrideWith((ref) async => packs),
           allPuzzlesProvider.overrideWith((ref) async => pictures),
+          inboxMessagesProvider.overrideWith((ref) async => messages),
         ],
         child: MaterialApp.router(theme: AppTheme.light(), routerConfig: router),
       ));
@@ -363,6 +371,29 @@ void main() {
       expect(top(router), '/library', reason: 'a code link on iPhone does not move the player');
       expect(find.byKey(const ValueKey('redeem-code-field')), findsNothing);
       expect(find.text('Redeem a pack code'), findsNothing);
+    });
+
+    testWidgets("a gift notification's link opens its message in Social > Inbox", (tester) async {
+      final now = DateTime.now();
+      final gift = InboxMessage(
+        id: 'm1',
+        subject: 'Anna sent you a gift',
+        body: 'Anna sent you 1 ticket. Claim it within 24 hours.',
+        sentAt: now.subtract(const Duration(minutes: 1)),
+        expiresAt: now.add(const Duration(hours: 24)),
+        tickets: 1,
+        fromUserId: 'u-anna',
+        fromName: 'Anna',
+      );
+      final (container, router) = await pump(tester, messages: [gift]);
+      router.go('/library');
+      await tester.pumpAndSettle();
+      await open(tester, container, '/inbox?message=m1');
+      expect(top(router), '/social');
+      expect(container.read(socialTabProvider), SocialTab.inbox);
+      expect(find.byKey(const ValueKey('message-sheet-m1')), findsOneWidget);
+      expect(find.text('A gift from Anna'), findsOneWidget);
+      expect(find.byKey(const ValueKey('message-claim')), findsOneWidget);
     });
 
     testWidgets('a friend link opens Social > Friends with the code filled in', (tester) async {

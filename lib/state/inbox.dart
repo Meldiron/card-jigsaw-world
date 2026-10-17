@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/appwrite.dart';
+import '../core/name_filter.dart';
 import '../data/repositories.dart';
 import '../widgets/icons.dart' show Currency;
 import 'auth.dart';
@@ -26,6 +29,9 @@ class InboxMessage {
     this.magics = 0,
     this.ctaLabel,
     this.ctaLink,
+    this.fromUserId,
+    this.fromName,
+    this.fromAvatar,
   });
 
   final String id;
@@ -41,6 +47,17 @@ class InboxMessage {
   /// any path `AppLink.parse` reads).
   final String? ctaLabel;
   final String? ctaLink;
+
+  /// A friend gift (function `send-gift`, docs/friend-gifts.md): who sent it, their name then
+  /// (shown through [NameFilter]) and avatar. Null for messages from Carden.
+  final String? fromUserId;
+  final String? fromName;
+  final String? fromAvatar;
+
+  bool get fromFriend => fromUserId != null;
+
+  /// The sender's name as shown: the friend's (filtered), or Carden.
+  String get sender => fromFriend ? NameFilter.shown(fromName ?? NameFilter.fallback) : 'Carden';
 
   bool get hasReward => coins > 0 || tickets > 0 || hints > 0 || peeks > 0 || magics > 0;
 
@@ -75,6 +92,9 @@ class InboxMessage {
       magics: n('rewardMagics'),
       ctaLabel: s('ctaLabel'),
       ctaLink: s('ctaLink'),
+      fromUserId: s('fromUserId'),
+      fromName: s('fromName'),
+      fromAvatar: s('fromAvatar'),
     );
   }
 }
@@ -107,15 +127,32 @@ final inboxMessagesProvider = FutureProvider<List<InboxMessage>>((ref) async {
 });
 
 /// The inbox: messages not deleted and not past their expiry, with what the player did with each.
+/// A message leaves on the dot of its expiry (a friend's gift after 24 hours), also while the inbox
+/// or the message is on screen.
 final inboxProvider = Provider<List<InboxItem>>((ref) {
   final messages = ref.watch(inboxMessagesProvider).value ?? const <InboxMessage>[];
   final state = ref.watch(profileProvider.select((p) => p.value?.inbox ?? const <String>[])).toSet();
   final now = DateTime.now();
+  final next = nextExpiry(messages, now);
+  if (next != null) {
+    final timer = Timer(next.difference(now) + const Duration(milliseconds: 500), ref.invalidateSelf);
+    ref.onDispose(timer.cancel);
+  }
   return [
     for (final m in messages)
       if (!state.contains('deleted:${m.id}') && !m.expiredAt(now)) InboxItem(m, seen: state.contains('seen:${m.id}'), claimed: state.contains('claimed:${m.id}')),
   ];
 });
+
+/// The soonest expiry after [now] among [messages] (when the inbox must look again).
+DateTime? nextExpiry(Iterable<InboxMessage> messages, DateTime now) {
+  DateTime? next;
+  for (final m in messages) {
+    final at = m.expiresAt;
+    if (at != null && at.isAfter(now) && (next == null || at.isBefore(next))) next = at;
+  }
+  return next;
+}
 
 /// A message not opened yet: the Social tab shows a dot.
 final inboxUnseenProvider = Provider<bool>((ref) => ref.watch(inboxProvider).any((i) => !i.seen));

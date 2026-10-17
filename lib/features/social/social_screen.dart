@@ -18,6 +18,7 @@ import '../../widgets/glass.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 import '../home/header_bar.dart';
+import 'friend_gifts.dart';
 import 'inbox.dart';
 
 /// Social's tab: 0 the leaderboard, 1 friends, 2 the inbox. A provider, so a link
@@ -90,6 +91,8 @@ Future<void> showAddFriendAlert(BuildContext context, {String? code}) async {
     if (context.mounted) {
       Haptics.success();
       showToast(context, 'Added ${friend.displayName}', icon: AppIcons.addFriend);
+      // Friends send gifts: the moment to offer gift notifications (asked once).
+      await offerGiftNotifications(context, container);
     }
   } catch (e) {
     if (context.mounted) showToast(context, 'Could not add friend. Check your connection and try again.', icon: AppIcons.signal);

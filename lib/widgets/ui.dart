@@ -1664,13 +1664,16 @@ class _AppAlert extends StatelessWidget {
 
 /// One choice of [showAppActionSheet].
 class AppAction<T> {
-  const AppAction(this.label, this.value, {this.destructive = false, this.key});
+  const AppAction(this.label, this.value, {this.destructive = false, this.key, this.leading});
   final String label;
   final T value;
 
   /// Red: the choice throws something away or acts against someone (Delete, Block).
   final bool destructive;
   final Key? key;
+
+  /// A mark before the label (the ticket or coin of a gift).
+  final Widget? leading;
 }
 
 /// iOS 26 action sheet in the alert's family: a glass card at the bottom of the screen with an
@@ -1755,6 +1758,7 @@ class _AppActionSheet<T> extends StatelessWidget {
                           _AlertAction(
                             key: a.key,
                             label: a.label,
+                            leading: a.leading,
                             bold: true,
                             color: a.destructive ? (isDark ? c.danger : const Color(0xFFB91C1C)) : context.accent,
                             onTap: () => Navigator.of(context).pop(a.value),
@@ -1778,10 +1782,11 @@ class _AppActionSheet<T> extends StatelessWidget {
 /// One alert action: a 48 pt capsule. Cancel is neutral; the action is tinted
 /// with its colour (cobalt, or red when destructive), text in that colour.
 class _AlertAction extends StatelessWidget {
-  const _AlertAction({super.key, required this.label, required this.onTap, this.bold = false, this.color});
+  const _AlertAction({super.key, required this.label, required this.onTap, this.bold = false, this.color, this.leading});
   final String label;
   final VoidCallback onTap;
   final bool bold;
+  final Widget? leading;
 
   /// The action's colour; null for Cancel.
   final Color? color;
@@ -1816,7 +1821,16 @@ class _AlertAction extends StatelessWidget {
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(horizontal: padding),
         decoration: BoxDecoration(color: fill, borderRadius: BorderRadius.circular(Radii.pill)),
-        child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: _style(bold: bold, color: tone ?? c.textPrimary)),
+        child: leading == null
+            ? Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: _style(bold: bold, color: tone ?? c.textPrimary))
+            : Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  leading!,
+                  const SizedBox(width: 8),
+                  Flexible(child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: _style(bold: bold, color: tone ?? c.textPrimary))),
+                ],
+              ),
       ),
     );
   }
