@@ -6,6 +6,7 @@ import 'dart:io';
 
 import 'package:appwrite/models.dart' as models;
 import 'package:carden/core/app_links.dart';
+import 'package:carden/core/links.dart';
 import 'package:carden/core/platform.dart';
 import 'package:carden/core/theme/app_theme.dart';
 import 'package:carden/data/coop_repository.dart';
@@ -178,6 +179,13 @@ void main() {
       // A code too long to be one opens the empty code sheet.
       expect(_parse('/redeem/${'X' * 65}')!.location.toString(), '/redeem');
     });
+  });
+
+  test('the invite page offers the same Get Carden link as the app', () {
+    final html = File('web/index.html').readAsStringSync();
+    expect(RegExp(r"var GET_CARDEN = '([^']+)'").firstMatch(html)?.group(1), AppLinks.getCarden.toString());
+    expect(html.contains("flutter_bootstrap.js' async") || html.contains('<script src="flutter_bootstrap.js"'), isFalse,
+        reason: 'the game loads from the invite script, so an invite opened in the app never loads it in the browser too');
   });
 
   group('apple-app-site-association', () {

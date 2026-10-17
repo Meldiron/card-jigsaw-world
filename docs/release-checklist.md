@@ -62,6 +62,8 @@ See `docs/release-flow.md`: `tools/dev/device.sh` for the phone, `tools/dev/rele
 
 ## After approval
 
+- **Get Carden link**: switch `AppLinks.getCarden` (`lib/core/links.dart`) and `GET_CARDEN` in `web/index.html` (the Play together invite page) from the public TestFlight link to `https://apps.apple.com/app/id6821644423` once the app is live; `test/deep_links_test.dart` checks they are the same.
+
 - **VIP gift codes**: Apple only lets us mint offer codes once the app is live and the subscriptions are approved. Run `tools/store/offer_codes.py codes monthly 10` and `codes yearly 10` then (see `tools/store/README.md`). The offers themselves already exist.
 
 ## Sign in with Apple in the browser (web build)

@@ -165,6 +165,7 @@ class GiantMinimap extends StatelessWidget {
     this.selected,
     this.painting = false,
     this.locate,
+    this.others = const {},
   });
 
   final ui.Image image;
@@ -179,6 +180,9 @@ class GiantMinimap extends StatelessWidget {
 
   /// The located card's slot: the selected card (not in place).
   final int? locate;
+
+  /// Play together: where other players' held cards are (slot to the player's colour), as dots.
+  final Map<int, Color> others;
 
   @override
   Widget build(BuildContext context) {
@@ -221,6 +225,19 @@ class GiantMinimap extends StatelessWidget {
                   ),
                 ),
               ),
+              for (final e in others.entries)
+                if (e.key < board.cells)
+                  Positioned(
+                    left: board.tiling.cellCenter(e.key, boardSize).dx * scale - 3.5,
+                    top: board.tiling.cellCenter(e.key, boardSize).dy * scale - 3.5,
+                    child: IgnorePointer(
+                      child: Container(
+                        width: 7,
+                        height: 7,
+                        decoration: BoxDecoration(color: e.value, shape: BoxShape.circle, border: Border.all(color: Colors.white, width: 1)),
+                      ),
+                    ),
+                  ),
             ],
           ),
         ),
@@ -348,11 +365,17 @@ class _ViewPainter extends CustomPainter {
 /// pointer on the edge of the view, turned towards the card. Tap it to bring
 /// the card back into view.
 class OffscreenSelection extends StatelessWidget {
-  const OffscreenSelection({super.key, required this.zoom, required this.board, required this.boardSize, required this.selected});
+  const OffscreenSelection({super.key, required this.zoom, required this.board, required this.boardSize, required this.selected, this.color, this.onColor, this.label});
   final BoardZoom zoom;
   final Board board;
   final Size boardSize;
   final int? selected;
+
+  /// Play together: another player's held card, in their colour and with their initial instead of
+  /// the arrow (the pointer's place on the edge shows the way).
+  final Color? color;
+  final Color? onColor;
+  final String? label;
 
   static const _size = 36.0;
 
@@ -375,18 +398,21 @@ class OffscreenSelection extends StatelessWidget {
           left: at.dx - _size / 2,
           top: at.dy - _size / 2,
           child: Pressable(
-            key: const ValueKey('giant-offscreen-selection'),
+            key: ValueKey(label == null ? 'giant-offscreen-selection' : 'giant-offscreen-$label-$slot'),
             onTap: () => zoom.centreOn(centre),
             child: Container(
               width: _size,
               height: _size,
+              alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: context.accentFill,
+                color: color ?? context.accentFill,
                 shape: BoxShape.circle,
                 border: Border.all(color: Colors.white, width: 2),
                 boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.25), blurRadius: 10, offset: const Offset(0, 3))],
               ),
-              child: Transform.rotate(angle: angle, child: Icon(AppIcons.towards, size: 18, color: context.onAccent)),
+              child: label != null
+                  ? Text(label!, textScaler: TextScaler.noScaling, style: TextStyle(color: onColor ?? context.onAccent, fontSize: TypeSize.body, fontWeight: FontWeight.w700))
+                  : Transform.rotate(angle: angle, child: Icon(AppIcons.towards, size: 18, color: context.onAccent)),
             ),
           ),
         );

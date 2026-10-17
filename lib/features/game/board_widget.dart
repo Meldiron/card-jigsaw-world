@@ -13,6 +13,7 @@ import '../../game/board.dart';
 import '../../game/game_controller.dart';
 import '../../state/settings.dart';
 import '../../widgets/icons.dart';
+import '../coop/coop_players.dart';
 
 /// Interactive board for every tiling (cards, squares, triangles, hexagons).
 ///
@@ -38,6 +39,7 @@ class BoardWidget extends StatefulWidget {
     required this.height,
     this.painting = false,
     this.zoom,
+    this.marks = const {},
   });
 
   final ui.Image image;
@@ -55,6 +57,10 @@ class BoardWidget extends StatefulWidget {
   /// Zoom and pan for giant boards (pinch to zoom, two fingers to move); null
   /// on normal boards, which behave exactly as before.
   final BoardZoom? zoom;
+
+  /// Play together: cards other players hold or just moved, by card number, drawn with an outline
+  /// in the player's colour and their initial (docs/multiplayer.md).
+  final Map<int, CoopCardMark> marks;
 
   @override
   State<BoardWidget> createState() => _BoardWidgetState();
@@ -487,7 +493,7 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
     final gap = widget.cardStyle == CardStyle.classic ? (fine ? math.max(0.8, cell * 0.05) : math.max(6.0, cell * 0.08)) : (fine ? math.max(0.6, cell * 0.035) : 2.0);
     final radius = widget.cardStyle == CardStyle.classic ? (fine ? cell * 0.12 : math.min(18.0, cell * 0.17)) : (fine ? cell * 0.1 : 8.0);
     final strokeScale = fine ? (cell / 56).clamp(0.3, 1.0) / math.pow(band, 0.6) : 1.0;
-    final cacheKey = (widget.state, widget.cardStyle, boardSize, widget.image, widget.painting, gap, radius, strokeScale, _peekReturn);
+    final cacheKey = (widget.state, widget.cardStyle, boardSize, widget.image, widget.painting, gap, radius, strokeScale, _peekReturn, widget.marks);
     if (cacheKey != _cacheKey) {
       _cacheKey = cacheKey;
       _cache.clear();
@@ -708,6 +714,29 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
     }
     if (justLocked || justJoined) {
       child = _LockPulse(key: ValueKey('pulse-$slot-${state.tick}'), strong: justLocked, child: child);
+    }
+    // Play together: another player's card, in their colour and with their initial.
+    final mark = peek || locked ? null : widget.marks[card];
+    if (mark != null && !dragging) {
+      final badge = (math.min(bounds.width, bounds.height) * 0.42).clamp(8.0, 22.0);
+      final centre = localPoly.fold(Offset.zero, (a, p) => a + p) / localPoly.length.toDouble();
+      child = Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Positioned.fill(child: child),
+          Positioned.fill(child: IgnorePointer(child: CustomPaint(painter: _MarkPainter(polygon: localPoly, color: mark.color, width: mark.held ? 3 * strokeScale : 2 * strokeScale, faded: !mark.held)))),
+          Positioned(
+            left: centre.dx - badge / 2,
+            top: centre.dy - badge / 2,
+            child: IgnorePointer(
+              child: Semantics(
+                label: mark.held ? 'Held by ${mark.initial}' : 'Moved by ${mark.initial}',
+                child: PlayerInitialBadge(key: ValueKey('coop-mark-$card'), initial: mark.initial, color: mark.color, onColor: mark.onColor, size: badge),
+              ),
+            ),
+          ),
+        ],
+      );
     }
 
     // Reduce motion: cards (and Peek) jump to their places; the lock flash still marks a change.
@@ -1608,6 +1637,30 @@ class _PulseRingState extends State<_PulseRing> with SingleTickerProviderStateMi
       builder: (_, _) => CustomPaint(painter: _PulsePainter(polygon: widget.polygon, color: widget.color, t: _c.value)),
     );
   }
+}
+
+/// The outline of another player's card (Play together): solid while they hold it, lighter on a card
+/// they just moved.
+class _MarkPainter extends CustomPainter {
+  _MarkPainter({required this.polygon, required this.color, required this.width, required this.faded});
+  final List<Offset> polygon;
+  final Color color;
+  final double width;
+  final bool faded;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (polygon.isEmpty) return;
+    final path = Path()..addPolygon(polygon, true);
+    canvas.drawPath(path, Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeJoin = StrokeJoin.round
+      ..strokeWidth = width
+      ..color = faded ? color.withValues(alpha: 0.75) : color);
+  }
+
+  @override
+  bool shouldRepaint(_MarkPainter o) => o.color != color || o.width != width || o.faded != faded || o.polygon != polygon;
 }
 
 class _PulsePainter extends CustomPainter {

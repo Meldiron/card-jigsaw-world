@@ -9,6 +9,12 @@ abstract final class AppLinks {
   static final privacyPolicy = Uri.parse('https://github.com/Meldiron/carden/blob/main/docs/privacy-policy.md');
   static final termsOfUse = Uri.parse('https://github.com/Meldiron/carden/blob/main/docs/terms-of-use.md');
 
+  /// Where people get the app: the public TestFlight link until Carden is on the App Store, then
+  /// `https://apps.apple.com/app/id6821644423` (docs/release-checklist.md, "After approval"). The web
+  /// page of a Play together invite offers it too (`GET_CARDEN` in web/index.html, kept equal by
+  /// test/deep_links_test.dart).
+  static final getCarden = Uri.parse('https://testflight.apple.com/join/7nPCfg6A');
+
   /// The App Store's subscription management (opens the system sheet on iPhone).
   static final manageSubscriptions = Uri.parse('https://apps.apple.com/account/subscriptions');
   static const supportEmail = 'contact@almostapps.eu';

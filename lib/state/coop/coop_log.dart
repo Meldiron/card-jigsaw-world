@@ -88,6 +88,10 @@ class CoopLog {
   /// Highest server order seen.
   int get lastSeq => _log.isEmpty ? 0 : _log.last.op.seq!;
 
+  /// Changes that reached the board (every player's moves and tools): the board's move count, for
+  /// its stars.
+  int get applied => _log.where((e) => e.applied).length;
+
   bool get isSolved => _isSolved(_board);
 
   static bool _isSolved(List<int> b) {

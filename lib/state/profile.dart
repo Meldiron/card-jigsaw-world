@@ -373,6 +373,31 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
     return (coins: (firstTime ? full + dailyBonus : replay) + levelBonus, xp: xpGain, levelUp: level > p.level, level: level);
   }
 
+  /// A guest's rewards for a shared board (Play together): what the board would pay as the guest's
+  /// own ([firstTime]: the guest has not solved the picture before), coins, XP, piggy bank and
+  /// level, and nothing else (no progress row, no solve totals, no quests or achievements).
+  Future<({int coins, int xp, bool levelUp, int level})> recordCoopReward({
+    required String gameId,
+    required int board,
+    required int cells,
+    required int stars,
+    required bool firstTime,
+    GameMode mode = GameMode.cards,
+    bool painting = false,
+  }) async {
+    final p = _p;
+    final full = Economy.completionCoins(cells, stars, mode: mode, painting: painting);
+    final coins = firstTime ? full : (full * Economy.replayCoinShare).round();
+    final xpGain = Economy.completionXp(cells, stars, mode: mode, painting: painting);
+    final level = LevelRewards.levelForXp(p.xp + xpGain);
+    var levelBonus = 0;
+    for (var l = p.level + 1; l <= level; l++) {
+      levelBonus += LevelRewards.forLevel(l).coins;
+    }
+    _do(SyncOp.coopReward(gameId: gameId, board: board, coins: coins, xp: xpGain, piggy: Economy.piggyPerPuzzle));
+    return (coins: coins + levelBonus, xp: xpGain, levelUp: level > p.level, level: level);
+  }
+
   /// Writes the public "Total Completion" numbers ([Profile.picturesSolved] and the rest) when
   /// the player's own progress says something else: after a solve or a better score, when the
   /// catalogue changes, and on start for rows written by older versions. Skipped while progress

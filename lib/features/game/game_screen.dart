@@ -34,7 +34,16 @@ import '../../widgets/glass.dart';
 import '../../widgets/hash_image.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
+import '../../state/coop/coop_bridge.dart';
+import '../../state/coop/coop_controller.dart';
+import '../../state/coop/coop_models.dart';
 import '../ads/house_ads.dart';
+import '../coop/coop_alerts.dart';
+import '../coop/coop_players.dart';
+import '../coop/coop_routes.dart';
+import '../coop/guest_finish.dart';
+import '../coop/join_flow.dart';
+import '../coop/players_sheet.dart';
 import '../events/quest_rewards.dart';
 import '../sync/board_choice_sheet.dart';
 import 'board_widget.dart';
@@ -42,9 +51,15 @@ import 'giant_board.dart';
 
 /// The play screen: HUD, board, booster bar, pause and completion overlays.
 class GameScreen extends ConsumerStatefulWidget {
-  const GameScreen({super.key, required this.puzzleId, required this.gridCode, this.painting = false, this.expand = false, this.first = false});
+  const GameScreen({super.key, required this.puzzleId, required this.gridCode, this.painting = false, this.expand = false, this.first = false, this.coopId, this.coopNext = false});
   final String puzzleId;
   final String gridCode;
+
+  /// Play together (docs/multiplayer.md): the game whose shared board this is (`?coop=`).
+  final String? coopId;
+
+  /// The host's next board for the game (`&next=1`): dealt here as usual, then handed to the game.
+  final bool coopNext;
 
   /// The guided start's first board, opened by the welcome pages over a Home the player has not
   /// seen yet (`?first=1`): the way out is called Home.
@@ -119,6 +134,19 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   /// This play-through was finished on another device: the board here is not saved any more.
   bool _solvedElsewhere = false;
 
+  /// Play together: the game this board is shared with (null: the player's own board), the bridge
+  /// that shares this player's changes and shows the others', what the next change is (Magic,
+  /// Shuffle and Gather say so before they change the board), whether a shared change is being
+  /// put on the board (not this player's, so not shared back), and the host dealing the next board.
+  String? _coopGameId;
+  CoopBridge? _bridge;
+  ProviderSubscription<GameState>? _stateSub;
+  CoopOpKind _nextKind = CoopOpKind.move;
+  bool _showingShared = false;
+  bool _coopNextPending = false;
+  bool _coopStarting = false;
+  ({int coins, int xp})? _coopReward;
+
   /// Each screen counts its sessions from its own base: a screen that replaces another one for the
   /// same picture and board (another device's board reopened) must not get the old screen's
   /// controller, which is still alive while the two swap.
@@ -129,8 +157,17 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _args = _argsFor(_spec, resume: true, session: _base);
-    _coach = ref.read(settingsProvider).tutorialSeen || _spec.isGiant ? null : _CoachStep.pick;
+    final coop = ref.read(coopProvider);
+    final coopGame = coop.playing && coop.game!.id == widget.coopId ? coop.game : null;
+    if (coopGame != null && widget.coopNext && coop.isHost) {
+      _coopNextPending = true;
+    } else if (coopGame != null) {
+      _coopGameId = coopGame.id;
+      _spec = BoardSpec.fromCode(coopGame.grid);
+    }
+    _args = _coopGameId != null ? _coopArgs(_base) : _argsFor(_spec, resume: true, session: _base);
+    // No first-board hints on a shared board: the player came to play with someone.
+    _coach = ref.read(settingsProvider).tutorialSeen || _spec.isGiant || widget.coopId != null ? null : _CoachStep.pick;
     _boardSub = ref.read(syncProvider.notifier).boardUpdates.listen(_onBoardUpdate);
     _zoom.addListener(_onZoomChanged);
     WidgetsBinding.instance.addPostFrameCallback((_) => _listen());
@@ -215,6 +252,131 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     );
   }
 
+  /// Session arguments for the shared board: the board as everyone has it now. The host goes on with
+  /// their own saved moves and time on it (the board is the host's own); a guest starts at none.
+  GameArgs _coopArgs(int session) {
+    final coop = ref.read(coopProvider);
+    final shared = ref.read(coopProvider.notifier).log?.layout ?? coop.game!.layout;
+    if (coop.isHost) {
+      final own = _argsFor(_spec, resume: true, session: session);
+      _painting = coop.game!.painting;
+      return GameArgs(
+        puzzleId: widget.puzzleId,
+        spec: _spec,
+        layout: shared,
+        moves: own.moves,
+        elapsed: own.elapsed,
+        hintsUsed: own.hintsUsed,
+        session: session,
+        par: own.par,
+        peeked: own.peeked,
+        bestLock: own.bestLock,
+      );
+    }
+    _painting = coop.game!.painting;
+    _resumed = false;
+    _playId = SyncOp.newId();
+    return GameArgs(puzzleId: widget.puzzleId, spec: _spec, layout: shared, session: session);
+  }
+
+  bool get _inCoop {
+    final coop = ref.read(coopProvider);
+    return _coopGameId != null && coop.playing && coop.game?.id == _coopGameId;
+  }
+
+  /// A guest on a shared board: nothing is saved, and the finish is the guest's.
+  bool get _coopGuest => _inCoop && !ref.read(coopProvider).isHost;
+
+  /// Shares this board from now on (Play together started here, or the next board handed over).
+  void _attachCoop(String gameId) {
+    setState(() {
+      _coopGameId = gameId;
+      _coach = null;
+    });
+    _bridge?.dispose();
+    _bridge = CoopBridge(ref.read(coopProvider.notifier), _SharedBoard(this));
+    _bridge!.resync();
+  }
+
+  /// The game is over for this board (ended, left, removed): the host goes on alone; a guest's
+  /// screen is closed by `CoopHost`.
+  void _detachCoop() {
+    _bridge?.dispose();
+    _bridge = null;
+    if (mounted) setState(() => _coopGameId = null);
+  }
+
+  /// Every change of the board: this player's own are shared (a move, Magic, Shuffle, Gather), the
+  /// card picked up is shown to the others, and the host's board is saved after the others' changes.
+  void _onState(GameState? prev, GameState next) {
+    if (prev == null || !_inCoop) return;
+    final coop = ref.read(coopProvider.notifier);
+    if (!identical(prev.board, next.board) && prev.board.cells == next.board.cells) {
+      if (_showingShared) {
+        if (!_coopGuest) _scheduleSave();
+      } else {
+        final kind = _nextKind;
+        _nextKind = CoopOpKind.move;
+        _bridge?.localChange(kind, prev.board.slots, next.board.slots);
+      }
+    }
+    if (prev.selected != next.selected || !identical(prev.board, next.board)) {
+      final sel = next.selected;
+      coop.hold(sel == null || sel >= next.board.cells ? null : next.board.slots[sel]);
+    }
+  }
+
+  /// Puts the shared board on the table (the others' changes, or this player's going back).
+  void _showShared(CoopBoardUpdate u) {
+    if (!mounted || _args == null) return;
+    _showingShared = true;
+    try {
+      _ctrl.showShared(u.update.after);
+    } finally {
+      _showingShared = false;
+    }
+    // This player's change lost to an earlier one: its cards went back.
+    if (u.update.dropped.isNotEmpty) Haptics.light();
+  }
+
+  /// The host's next board: dealt here, then handed to the game, which moves the guests onto it.
+  Future<void> _handNextBoard() async {
+    if (!_coopNextPending || !_fitted || _args == null || _listening != _args) return;
+    _coopNextPending = false;
+    final s = ref.read(gameControllerProvider(_args!));
+    setState(() => _coopStarting = true);
+    try {
+      final g = await ref.read(coopProvider.notifier).nextBoard(puzzleId: widget.puzzleId, grid: BoardCode.toPath(_spec.fullCode), layout: s.board.slots, painting: _painting);
+      if (mounted) _attachCoop(g.id);
+    } on CoopRefusal catch (e) {
+      if (mounted) await showRefusal(context, e);
+    } finally {
+      if (mounted) setState(() => _coopStarting = false);
+    }
+  }
+
+  /// The host leaves a finished shared board: the guests are waiting for the next board, so leaving
+  /// ends the game for everyone (after asking). True when the host may go.
+  Future<bool> _endBeforeLeaving() async {
+    if (!await confirmEndForEveryone(context) || !mounted) return false;
+    try {
+      await ref.read(coopProvider.notifier).endForEveryone();
+    } on CoopRefusal catch (e) {
+      debugPrint('coop end: $e');
+    }
+    _detachCoop();
+    return true;
+  }
+
+  /// Pause > Play together: the game starts on this board as it is, and the share sheet opens.
+  Future<void> _playTogether() async {
+    final puzzle = ref.read(resolvedPuzzleProvider(widget.puzzleId));
+    if (puzzle == null || _args == null) return;
+    final s = ref.read(gameControllerProvider(_args!));
+    final game = await startPlayTogether(context, ref, puzzle: puzzle, grid: BoardCode.toPath(_spec.fullCode), layout: s.board.slots, painting: _painting);
+    if (game != null && mounted) _attachCoop(game.id);
+  }
+
   /// Settles the board for the decoded picture, once. A square board stays
   /// as it is; an Expand board follows the picture's proportions, so a board
   /// picked on the difficulty screen already matches (the same decode), while
@@ -225,6 +387,13 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   void _fitToPicture(ui.Image image, {required bool giant}) {
     if (_fitted) return;
     _fitted = true;
+    // A shared board is the host's board as dealt: it is not laid out again here.
+    if (_coopGameId != null) return;
+    if (_coopNextPending) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _handNextBoard();
+      });
+    }
     final aspect = image.width / image.height;
     final current = _args!;
     var next = _spec.fitTo(aspect);
@@ -254,12 +423,22 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     _sub?.cancel();
     _listening = _args;
     _sub = ref.read(gameControllerProvider(_args!).notifier).events.listen(_onEvent);
+    _stateSub?.close();
+    _stateSub = ref.listenManual(gameControllerProvider(_args!), _onState);
+    if (_coopGameId != null) {
+      _bridge?.dispose();
+      _bridge = CoopBridge(ref.read(coopProvider.notifier), _SharedBoard(this));
+      _bridge!.resync();
+    }
+    if (_coopNextPending && _fitted) _handNextBoard();
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _sub?.cancel();
+    _stateSub?.close();
+    _bridge?.dispose();
     _boardSub?.cancel();
     _saveDebounce?.cancel();
     _confetti.dispose();
@@ -389,6 +568,8 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     // Nothing to save before the board is settled for the picture (and a
     // save then could overwrite the one being resumed).
     if (_args == null || !mounted || !_fitted || _solvedElsewhere) return;
+    // A guest's shared board is the host's: nothing of it is saved for the guest.
+    if (_coopGuest) return;
     final s = ref.read(gameControllerProvider(_args!));
     if (s.status == GameStatus.won) return;
     ref.read(progressProvider.notifier).saveBoard(
@@ -411,6 +592,8 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   /// Another device changed this picture's board while it is open here.
   Future<void> _onBoardUpdate(BoardUpdate u) async {
     if (u.puzzleId != widget.puzzleId || !mounted || !_fitted || _args == null || _askingBoard) return;
+    // A shared board follows the game, not the saves of the player's other devices.
+    if (_coopGameId != null) return;
     final s = ref.read(gameControllerProvider(_args!));
     if (s.status == GameStatus.won || _solvedElsewhere) return;
     if (!u.after.inProgress) {
@@ -497,6 +680,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
 
   Future<void> _onWin() async {
     if (_completionHandled) return;
+    if (_coopGuest) return _onCoopWin();
     _completionHandled = true;
     // The first board is done: no need to explain it again.
     if (_coach != null) _finishCoach();
@@ -575,6 +759,32 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     });
   }
 
+  /// A guest finished a shared board. With a card of their own locked on it, they get what the board
+  /// would pay as their own (coins, XP, piggy bank, level); nothing else is written: no progress,
+  /// solve totals, quests, achievements, pack progress or first-steps counts.
+  Future<void> _onCoopWin() async {
+    _completionHandled = true;
+    _saveDebounce?.cancel();
+    Sfx.instance.win();
+    Haptics.success();
+    if (!A11y.reduceMotionOf(context)) _confetti.play();
+    final coop = ref.read(coopProvider);
+    final log = ref.read(coopProvider.notifier).log;
+    if (!coop.placedACard || log == null) return;
+    final stars = Board.starsFor(moves: log.applied, par: math.max(1, Board(_spec, log.base).par));
+    final firstTime = ref.read(puzzleProgressProvider(widget.puzzleId))?.completed != true;
+    final reward = await ref.read(profileProvider.notifier).recordCoopReward(
+          gameId: coop.game!.id,
+          board: coop.game!.board,
+          cells: _spec.cells,
+          stars: stars,
+          firstTime: firstTime,
+          mode: _spec.mode,
+          painting: _painting,
+        );
+    if (mounted) setState(() => _coopReward = (coins: reward.coins, xp: reward.xp));
+  }
+
   Future<void> _hint() async {
     final profile = ref.read(profileProvider).value;
     if (profile == null) return;
@@ -599,7 +809,8 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
       return;
     }
     Sfx.instance.coin();
-    _ctrl.magicLock();
+    _nextKind = CoopOpKind.magic;
+    if (!_ctrl.magicLock()) _nextKind = CoopOpKind.move;
   }
 
   /// Peek: the cards fly to their places for a moment and back (a little
@@ -626,16 +837,25 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   void _shuffle() {
     final giant = ref.read(gameControllerProvider(_args!)).board.spec.isGiant;
     final size = _boardSize;
+    _nextKind = CoopOpKind.shuffle;
     final moved = giant && size != null ? _ctrl.shuffle(view: _zoom.visible, size: size) : _ctrl.shuffle();
+    _nextKind = CoopOpKind.move;
     if (moved == 0) showToast(context, 'Nothing left to shuffle', icon: AppIcons.shuffle);
   }
 
   /// Gather (giant boards, at any zoom): the cards that belong in view come into it. The toast
   /// offers Undo while nothing else has changed.
   void _gather(Size boardSize) {
+    _nextKind = CoopOpKind.gather;
     final n = _ctrl.gather(_zoom.visible, boardSize);
+    _nextKind = CoopOpKind.move;
     if (n == 0) {
       showToast(context, 'Every card for this view is here or nearby', icon: AppIcons.gather);
+      return;
+    }
+    // A shared board has no Undo: the others may have moved since.
+    if (_inCoop) {
+      showToast(context, '${formatCount(n)} card${n == 1 ? '' : 's'} gathered', icon: AppIcons.gather);
       return;
     }
     final args = _args;
@@ -681,9 +901,44 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
 
   void _openPause() {
     _ctrl.pause();
+    final coop = ref.read(coopProvider);
+    final shared = _inCoop;
+    final puzzle = ref.read(resolvedPuzzleProvider(widget.puzzleId));
+    final playing = ref.read(gameControllerProvider(_args!)).status != GameStatus.won;
+    final together = shared
+        ? (coop.isHost ? _Together.host : _Together.guest)
+        : !widget.first && playing && puzzle != null && canPlayTogether(ref, puzzle)
+            ? _Together.start
+            : _Together.none;
     showAppSheet(
       context,
       builder: (ctx) => _PauseSheet(
+        together: together,
+        onTogether: () async {
+          final container = ProviderScope.containerOf(context, listen: false);
+          switch (together) {
+            case _Together.start:
+              Navigator.pop(ctx);
+              await _playTogether();
+            case _Together.host:
+              if (!await confirmEndForEveryone(context) || !mounted || !ctx.mounted) return;
+              Navigator.pop(ctx);
+              try {
+                await container.read(coopProvider.notifier).endForEveryone();
+                _detachCoop();
+                if (mounted) showToast(context, 'Game ended. The board is yours.', icon: AppIcons.players);
+              } on CoopRefusal catch (e) {
+                if (mounted) await showRefusal(context, e);
+              }
+            case _Together.guest:
+              if (!await confirmLeaveGame(context) || !mounted || !ctx.mounted) return;
+              Navigator.pop(ctx);
+              await container.read(coopProvider.notifier).leave();
+              CoopRoutes.exit(container);
+            case _Together.none:
+              return;
+          }
+        },
         onResume: () => Navigator.pop(ctx),
         onRestart: () async {
           // A started board is thrown away: ask first, like Change mode or board does.
@@ -706,7 +961,13 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
         onQuit: () {
           Navigator.pop(ctx);
           _saveNow();
+          final router = GoRouter.of(context);
           context.pop();
+          // Leaving the board is not leaving the game: the seat stays, and the board is a tap away.
+          final game = shared ? coop.game : null;
+          final rctx = rootNavigatorKey.currentContext;
+          if (game == null || rctx == null || !rctx.mounted) return;
+          showToast(rctx, 'The game goes on. Return to it any time.', icon: AppIcons.players, action: (label: 'Return', onTap: () => router.push(game.route)));
         },
         onChangeDifficulty: () async {
           final ok = await showAppAlert(
@@ -779,6 +1040,21 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     // Locate: while the map is on, the selected card's place shows on it.
     final locate = sel != null && sel < state.board.cells && !state.board.isLocked(sel) ? sel : null;
     final coaching = _coach != null && image.hasValue && state.status == GameStatus.playing;
+    // Play together: the shared game, the other players' cards on the board, and the end of the game
+    // for this board (the host goes on alone; a guest's screen is closed by CoopHost).
+    final coopState = ref.watch(coopProvider);
+    final shared = _coopGameId != null && coopState.playing && coopState.game?.id == _coopGameId;
+    if (_coopGameId != null && !shared) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && _coopGameId != null && !_inCoop) _detachCoop();
+      });
+    }
+    final marks = shared ? coopCardMarks(context, ref, coopState) : const <int, CoopCardMark>{};
+    final heldSlots = <int, CoopCardMark>{
+      for (final e in marks.entries)
+        if (e.value.held && state.board.slotOfCard(e.key) >= 0) state.board.slotOfCard(e.key): e.value,
+    };
+    final coopGuest = shared && !coopState.isHost;
 
     return Scaffold(
       backgroundColor: c.canvas,
@@ -793,6 +1069,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                   onPause: _openPause,
                   title: puzzle.title,
                   painting: _painting,
+                  players: shared ? const CoopPlayersChip() : null,
                 ),
                 Expanded(
                   child: LayoutBuilder(
@@ -856,15 +1133,20 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                                       onGather: state.status == GameStatus.playing && !state.peeking && _canGather ? () => _gather(Size(w, h)) : null,
                                     ),
                                   if (!zoomable)
-                                    BoardWidget(
-                                      image: img,
-                                      state: state,
-                                      width: w,
-                                      height: h,
-                                      cardStyle: settings.cardStyle,
-                                      painting: _painting,
-                                      onTap: _ctrl.tap,
-                                      onDrop: _ctrl.drop,
+                                    IgnorePointer(
+                                      // The host's next board waits until the game has it.
+                                      ignoring: _coopStarting,
+                                      child: BoardWidget(
+                                        image: img,
+                                        state: state,
+                                        width: w,
+                                        height: h,
+                                        cardStyle: settings.cardStyle,
+                                        painting: _painting,
+                                        onTap: _ctrl.tap,
+                                        onDrop: _ctrl.drop,
+                                        marks: marks,
+                                      ),
                                     )
                                   else
                                     SizedBox(
@@ -883,8 +1165,12 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                                             zoom: _zoom,
                                             onTap: _ctrl.tap,
                                             onDrop: _ctrl.drop,
+                                            marks: marks,
                                           ),
                                           OffscreenSelection(zoom: _zoom, board: state.board, boardSize: Size(w, h), selected: state.selected),
+                                          // Play together: where the others' held cards are, off screen.
+                                          for (final e in heldSlots.entries)
+                                            OffscreenSelection(zoom: _zoom, board: state.board, boardSize: Size(w, h), selected: e.key, color: e.value.color, onColor: e.value.onColor, label: e.value.initial),
                                           if (_showMap)
                                             Positioned(
                                               top: 8,
@@ -905,6 +1191,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                                                   selected: state.selected,
                                                   painting: _painting,
                                                   locate: locate,
+                                                  others: {for (final e in heldSlots.entries) e.key: e.value.color},
                                                 ),
                                               ),
                                             ),
@@ -975,7 +1262,38 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
               ],
             ),
           ),
-          if (state.status == GameStatus.won && image.hasValue)
+          if (state.status == GameStatus.won && image.hasValue && coopGuest)
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: SafeArea(
+                top: false,
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: PageWidth.sheet),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+                      child: SoftCard(
+                        child: CoopGuestFinish(
+                          rewards: coopState.placedACard
+                              ? Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    _RewardStat(icon: const CoinIcon(size: 17), label: 'Coins', value: _coopReward == null ? '…' : '+${formatCount(_coopReward!.coins)}'),
+                                    const SizedBox(width: 32),
+                                    _RewardStat(icon: Icon(AppIcons.xp, size: 17, color: context.accent), label: 'XP', value: _coopReward == null ? '…' : '+${formatCount(_coopReward!.xp)}'),
+                                  ],
+                                )
+                              : null,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            )
+          else if (state.status == GameStatus.won && image.hasValue)
             _CompletionOverlay(
               puzzle: puzzle,
               image: image.requireValue,
@@ -993,10 +1311,22 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                   _questsReady = const [];
                   _unlocked = const [];
                 });
+                if (shared) {
+                  // The same picture again, dealt anew for everyone.
+                  context.pushReplacement('/game/${widget.puzzleId}/${BoardCode.toPath(_spec.fullCode)}?coop=$_coopGameId&next=1${_painting ? '&painting=1' : ''}');
+                  return;
+                }
                 _newPlay();
                 _ctrl.restart();
               },
               onNext: (next) async {
+                if (shared && next != null) {
+                  // The host picks the next board; the guests are moved onto it once it is dealt.
+                  context.pushReplacement('/game/${next.id}/${BoardCode.toPath(_spec.fullCode)}?coop=$_coopGameId&next=1${_painting ? '&painting=1' : ''}');
+                  return;
+                }
+                if (shared && !await _endBeforeLeaving()) return;
+                if (!context.mounted) return;
                 final offer = await maybeShowInterstitial(context, ref);
                 if (!context.mounted) return;
                 if (offer != null && leaveGameForCreative(context, ref, offer)) return;
@@ -1009,6 +1339,8 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                 }
               },
               onHome: () async {
+                if (shared && !await _endBeforeLeaving()) return;
+                if (!context.mounted) return;
                 final offer = await maybeShowInterstitial(context, ref);
                 if (!context.mounted) return;
                 if (offer != null && leaveGameForCreative(context, ref, offer)) return;
@@ -1036,8 +1368,11 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
 }
 
 class _Hud extends StatelessWidget {
-  const _Hud({required this.state, required this.showTimer, required this.onPause, required this.title, this.painting = false});
+  const _Hud({required this.state, required this.showTimer, required this.onPause, required this.title, this.painting = false, this.players});
   final GameState state;
+
+  /// Play together: the players chip, beside the title.
+  final Widget? players;
   final bool showTimer;
   final VoidCallback onPause;
   final String title;
@@ -1082,6 +1417,7 @@ class _Hud extends StatelessWidget {
                         ],
                       ),
                     ),
+                    if (players != null) ...[const SizedBox(width: 8), players!],
                     const SizedBox(width: 10),
                     // Moves against par ("14 / 18": three stars while within it), then time.
                     _HudStat(label: 'Moves', value: formatCount(state.moves), sub: '/${state.par}'),
@@ -1314,12 +1650,18 @@ class _Booster extends StatelessWidget {
   }
 }
 
+/// Play together in the pause sheet: start a game on this board, or, during one, End game for
+/// everyone (the host) or Leave game (a guest).
+enum _Together { none, start, host, guest }
+
 class _PauseSheet extends ConsumerWidget {
-  const _PauseSheet({required this.onResume, required this.onRestart, required this.onQuit, required this.onChangeDifficulty});
+  const _PauseSheet({required this.onResume, required this.onRestart, required this.onQuit, required this.onChangeDifficulty, this.together = _Together.none, this.onTogether});
   final VoidCallback onChangeDifficulty;
   final VoidCallback onResume;
   final VoidCallback onRestart;
   final VoidCallback onQuit;
+  final _Together together;
+  final VoidCallback? onTogether;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(settingsProvider);
@@ -1347,16 +1689,32 @@ class _PauseSheet extends ConsumerWidget {
           // board; the two that throw it away are red, in their own group, and ask first.
           SoftCard(
             padding: EdgeInsets.zero,
-            child: _PauseAction(icon: AppIcons.squareArrowLeft, label: 'Save & quit', onTap: onQuit),
+            child: Column(
+              children: [
+                // A guest's board is the host's: nothing to save, and the seat stays theirs.
+                _PauseAction(icon: AppIcons.squareArrowLeft, label: together == _Together.guest ? 'Quit' : 'Save & quit', onTap: onQuit),
+                if (together == _Together.start) ...[
+                  _PauseDivider(),
+                  _PauseAction(key: const ValueKey('pause-play-together'), icon: AppIcons.players, label: 'Play together', onTap: onTogether!),
+                ],
+              ],
+            ),
           ),
           const SizedBox(height: 12),
           SoftCard(
             padding: EdgeInsets.zero,
             child: Column(
               children: [
-                _PauseAction(icon: AppIcons.shuffle, label: 'Shuffle and restart', destructive: true, onTap: onRestart),
-                _PauseDivider(),
-                _PauseAction(icon: AppIcons.sliderHorizontal3, label: 'Change mode or board', destructive: true, onTap: onChangeDifficulty),
+                // A shared board is never dealt again or changed: the others play it too.
+                if (together == _Together.host)
+                  _PauseAction(key: const ValueKey('pause-end-game'), icon: AppIcons.endGame, label: 'End game for everyone', destructive: true, onTap: onTogether!)
+                else if (together == _Together.guest)
+                  _PauseAction(key: const ValueKey('pause-leave-game'), icon: AppIcons.leaveGame, label: 'Leave game', destructive: true, onTap: onTogether!)
+                else ...[
+                  _PauseAction(icon: AppIcons.shuffle, label: 'Shuffle and restart', destructive: true, onTap: onRestart),
+                  _PauseDivider(),
+                  _PauseAction(icon: AppIcons.sliderHorizontal3, label: 'Change mode or board', destructive: true, onTap: onChangeDifficulty),
+                ],
               ],
             ),
           ),
@@ -1411,7 +1769,7 @@ class _PauseToggle extends StatelessWidget {
 /// A row in the pause sheet's grouped list. [destructive] rows (they throw
 /// the board away, after asking) are red, the iOS destructive action.
 class _PauseAction extends StatelessWidget {
-  const _PauseAction({required this.icon, required this.label, required this.onTap, this.destructive = false});
+  const _PauseAction({super.key, required this.icon, required this.label, required this.onTap, this.destructive = false});
   final IconData icon;
   final String label;
   final VoidCallback onTap;
@@ -1987,4 +2345,17 @@ class _ResultLine extends StatelessWidget {
     );
     return onTap == null ? row : Pressable(onTap: onTap, scale: 0.99, child: row);
   }
+}
+
+/// The board on screen as the shared game sees it ([CoopBridge]): the controller's board, and the
+/// others' changes put on it without counting a move.
+class _SharedBoard implements CoopBoardTarget {
+  _SharedBoard(this._screen);
+  final _GameScreenState _screen;
+
+  @override
+  List<int> get layout => _screen.ref.read(gameControllerProvider(_screen._args!)).board.slots;
+
+  @override
+  void showShared(CoopBoardUpdate update) => _screen._showShared(update);
 }

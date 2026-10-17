@@ -122,6 +122,10 @@ final routerProvider = Provider<GoRouter>((ref) {
             painting: s.uri.queryParameters['painting'] == '1',
             expand: s.uri.queryParameters['expand'] == '1',
             first: s.uri.queryParameters['first'] == '1',
+            // Play together: `?coop=<game id>` plays the game's shared board; with `&next=1` the host
+            // deals the next board here and hands it to the game (docs/multiplayer.md).
+            coopId: s.uri.queryParameters['coop'],
+            coopNext: s.uri.queryParameters['next'] == '1',
           ),
           s,
         ),

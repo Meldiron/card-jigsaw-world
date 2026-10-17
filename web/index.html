@@ -246,10 +246,13 @@
     // often Messenger open in the app's own browser, which never hands a link of this site to the
     // Carden app. "Open in Carden" points at the first Carden address, carden.appwrite.network, which
     // the app claims too: a link to another domain is handed to the app by iOS. Without the app that
-    // address loads this page again (?open=1), which then offers Safari, the browser and the App Store.
+    // address loads this page again (?open=1), which then offers Safari, the browser and the app.
     // The game loads only after "Play in the browser", so an invite opened in the app never takes a
     // seat in the browser as well.
     (function () {
+      // Where people get the app (AppLinks.getCarden in lib/core/links.dart): TestFlight until the
+      // App Store listing is live (docs/release-checklist.md, "After approval").
+      var GET_CARDEN = 'https://testflight.apple.com/join/7nPCfg6A';
       function start() {
         if (window.cardenStarted) return;
         window.cardenStarted = true;
@@ -267,8 +270,8 @@
       if (/(^|[?&])open=1(&|$)/.test(location.search.slice(1))) {
         document.getElementById('invite-title').textContent = 'Play here or in the app';
         document.getElementById('invite-text').textContent = 'If Carden is on this device, open this page in Safari to switch to the app. You can also play right here in the browser.';
-        app.textContent = 'Get Carden on the App Store';
-        app.href = 'https://apps.apple.com/app/id6821644423';
+        app.textContent = 'Get Carden';
+        app.href = GET_CARDEN;
         app.className = 'secondary';
         var web = document.getElementById('invite-web');
         web.className = 'primary';

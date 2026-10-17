@@ -56,6 +56,9 @@ abstract final class OpKind {
   static const earn = 'earn', spend = 'spend', put = 'put', ad = 'ad', quest = 'quest', vipBonus = 'vipBonus', daily = 'daily';
   static const streak = 'streak', unlock = 'unlock', achievement = 'achievement', piggy = 'piggy', solve = 'solve', questCount = 'questCount';
   static const inbox = 'inbox';
+
+  /// A guest's rewards for a shared board (Play together): coins, XP, piggy and level only.
+  static const coopReward = 'coopReward';
   // Progress, event progress, ledger.
   static const board = 'board', win = 'win', discard = 'discard', event = 'event', ledger = 'ledger';
 }
@@ -108,7 +111,7 @@ class SyncOp {
 
   /// Built against the row as the server has it right now (guards, records, values derived from
   /// the row). The others are built against the last row the server returned.
-  bool get needsFresh => const {OpKind.spend, OpKind.ad, OpKind.quest, OpKind.vipBonus, OpKind.daily, OpKind.streak, OpKind.unlock, OpKind.achievement, OpKind.piggy, OpKind.solve, OpKind.questCount, OpKind.win, OpKind.inbox}.contains(kind);
+  bool get needsFresh => const {OpKind.spend, OpKind.ad, OpKind.quest, OpKind.vipBonus, OpKind.daily, OpKind.streak, OpKind.unlock, OpKind.achievement, OpKind.piggy, OpKind.solve, OpKind.questCount, OpKind.win, OpKind.inbox, OpKind.coopReward}.contains(kind);
 
   // ---- profile ----
 
@@ -188,6 +191,13 @@ class SyncOp {
         'piggy': piggy,
       });
   factory SyncOp.questCount(int count) => SyncOp(OpKind.questCount, {'count': count});
+
+  /// A guest's rewards for a shared board (Play together, docs/multiplayer.md): the coins, XP and
+  /// piggy bank coins of a board of their own, and the level they bring, but none of the solve's
+  /// totals (pictures solved, stars, moves, time, modes) that quests and achievements read: the
+  /// board was the host's.
+  factory SyncOp.coopReward({required String gameId, required int board, required int coins, required int xp, required int piggy}) =>
+      SyncOp(OpKind.coopReward, {'gameId': gameId, 'board': board, 'coins': coins, 'xp': xp, 'piggy': piggy});
 
   // ---- progress ----
 
@@ -388,6 +398,8 @@ class SyncOp {
             ledger: [LedgerLine(credit, 'coins', 'piggy')]);
       case OpKind.solve:
         return _solve(row);
+      case OpKind.coopReward:
+        return _coopReward(row);
       case OpKind.inbox:
         final key = '${args['state']}:${args['id']}';
         final claim = args['state'] == 'claimed';
@@ -445,6 +457,28 @@ class SyncOp {
       if (tickets > 0) 'tickets': Inc(tickets),
       if (hints > 0) 'hints': Inc(hints),
     }, ledger: [LedgerLine(coins, 'coins', 'complete')]);
+  }
+
+  OpPlan _coopReward(Map<String, dynamic> row) {
+    final xp0 = asInt(row['xp']), xp1 = xp0 + _a('xp');
+    final from = LevelRewards.levelForXp(xp0), to = LevelRewards.levelForXp(xp1);
+    var bonus = 0, tickets = 0, hints = 0;
+    for (var l = from + 1; l <= to; l++) {
+      final r = LevelRewards.forLevel(l);
+      bonus += r.coins;
+      tickets += r.tickets;
+      hints += r.hints;
+    }
+    final coins = _a('coins') + bonus;
+    final piggy = min(_a('piggy'), Profile.piggyCapacity - asInt(row['piggyCoins']));
+    return OpPlan({
+      if (coins > 0) 'coins': Inc(coins),
+      'xp': Inc(_a('xp')),
+      'level': Put(to),
+      if (piggy > 0) 'piggyCoins': Inc(piggy, max: Profile.piggyCapacity),
+      if (tickets > 0) 'tickets': Inc(tickets),
+      if (hints > 0) 'hints': Inc(hints),
+    }, ledger: [if (coins > 0) LedgerLine(coins, 'coins', 'coop')]);
   }
 
   OpPlan _progress(Map<String, dynamic> row) {

@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/coop_repository.dart';
 import '../auth.dart';
+import '../settings.dart';
 import 'board_change.dart';
 import 'coop_backend.dart';
 import 'coop_log.dart';
@@ -262,6 +263,7 @@ class CoopController extends Notifier<CoopState> {
   /// A guest leaves (their seat frees up); the host leaving ends the game for everyone.
   Future<void> leave() async {
     final g = state.game;
+    _remember(null);
     _stop();
     state = CoopState(me: _me);
     if (g == null) return;
@@ -278,6 +280,7 @@ class CoopController extends Notifier<CoopState> {
     final g = state.game;
     if (g == null) return;
     await _backend.call('end', {'gameId': g.id});
+    _remember(null);
     _stop();
     state = CoopState(me: _me);
   }
@@ -301,6 +304,7 @@ class CoopController extends Notifier<CoopState> {
 
   /// Back to no game on this device (after the removed or ended alert).
   void clear() {
+    _remember(null);
     _stop();
     state = CoopState(me: _me);
   }
@@ -310,6 +314,7 @@ class CoopController extends Notifier<CoopState> {
     final me = _me;
     if (me == null) throw const CoopRefusal(CoopRefusalReason.auth);
     _newBoard(game);
+    _remember(game);
     state = CoopState(phase: CoopPhase.playing, game: game, me: me, layout: game.layout);
     _sub = _backend.listen(game.id).listen(_onEvent);
     _presence = CoopPresence(userId: me, gameId: game.id, board: game.board);
@@ -342,6 +347,54 @@ class CoopController extends Notifier<CoopState> {
     _echoMissed = false;
     _moved.clear();
   }
+
+  // ---- Return to game ------------------------------------------------------------------------
+
+  /// Where the game this device is in is remembered, so a player who closed the app can go back to
+  /// it (docs/multiplayer.md, "Return to game").
+  static const memoryKey = 'coop.active';
+
+  void _remember(CoopGame? game) {
+    try {
+      final store = ref.read(localStoreProvider);
+      if (game == null) {
+        unawaited(store.remove(memoryKey));
+      } else {
+        unawaited(store.setJson(memoryKey, {'id': game.id, 'code': game.code}));
+      }
+    } catch (_) {
+      // No store (tests without one): nothing to remember.
+    }
+  }
+
+  /// The remembered game when it is still on and this player still has a seat in it; null
+  /// otherwise (and then it is forgotten). Without a connection it stays remembered for later.
+  Future<CoopGame?> rememberedGame() async {
+    if (state.playing) return null;
+    Map<String, dynamic>? m;
+    try {
+      m = ref.read(localStoreProvider).getJson(memoryKey);
+    } catch (_) {
+      return null;
+    }
+    final id = m?['id'];
+    if (id is! String) return null;
+    try {
+      final g = await _backend.readGame(id);
+      final me = _me;
+      if (g == null || g.ended || me == null || !g.players.contains(me)) {
+        _remember(null);
+        return null;
+      }
+      return g;
+    } catch (e) {
+      debugPrint('coop remembered game: $e');
+      return null;
+    }
+  }
+
+  /// Back into [game] (Return to game): the seat is still this player's, so no join is needed.
+  Future<void> rejoin(CoopGame game) => _start(game);
 
   // ---- this player's changes -----------------------------------------------------------------
 
@@ -445,12 +498,14 @@ class CoopController extends Notifier<CoopState> {
     final me = _me;
     if (old == null || g.id != old.id || me == null || state.phase != CoopPhase.playing) return;
     if (g.removed.contains(me)) {
+      _remember(null);
       _stop();
       state = state.copyWith(phase: CoopPhase.removed, game: g);
       _notices.add(CoopRemoved(g));
       return;
     }
     if (g.ended) {
+      _remember(null);
       _stop();
       state = state.copyWith(phase: CoopPhase.ended, game: g);
       _notices.add(CoopEnded(g));
@@ -485,6 +540,7 @@ class CoopController extends Notifier<CoopState> {
   void _gone() {
     final g = state.game;
     if (g == null || state.phase != CoopPhase.playing) return;
+    _remember(null);
     _stop();
     final ended = g.copyWith(ended: true, endReason: g.endReason ?? 'ended');
     state = state.copyWith(phase: CoopPhase.ended, game: ended);

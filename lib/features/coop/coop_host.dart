@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../router.dart';
+import '../../state/auth.dart';
 import '../../state/coop/coop_controller.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
@@ -13,7 +14,7 @@ import 'coop_routes.dart';
 
 /// Play together above every screen (lib/app.dart): toasts when a player joins or leaves, the
 /// removed and ended alerts, guests moved onto the host's next board, and the app's life (away in
-/// the background, here again and caught up on return).
+/// the background, here again and caught up on return), and Return to game after a restart.
 class CoopHost extends ConsumerStatefulWidget {
   const CoopHost({super.key, required this.child});
   final Widget child;
@@ -30,6 +31,44 @@ class _CoopHostState extends ConsumerState<CoopHost> with WidgetsBindingObserver
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _sub = ref.read(coopProvider.notifier).notices.listen(_onNotice);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _offerReturn());
+  }
+
+  /// Return to game: a player who closed the app during a game finds it again on the next start,
+  /// when it is still on and their seat is still theirs. A calm toast with Return, once, as soon as
+  /// a screen of the app (not the welcome pages, not a board) is on top.
+  Future<void> _offerReturn() async {
+    try {
+      await ref.read(authProvider.future).timeout(const Duration(seconds: 20));
+    } catch (_) {}
+    if (!mounted) return;
+    final coop = ref.read(coopProvider.notifier);
+    final game = await coop.rememberedGame();
+    if (game == null || !mounted) return;
+    final router = ref.read(routerProvider);
+    for (var i = 0; i < 60; i++) {
+      final at = CoopRoutes.top(router);
+      if (at != null && at.path != '/welcome' && !at.path.startsWith('/game/') && !at.path.startsWith('/auth/')) break;
+      await Future<void>.delayed(const Duration(seconds: 2));
+      if (!mounted || ref.read(coopProvider).playing) return;
+    }
+    final container = ProviderScope.containerOf(context, listen: false);
+    final me = ref.read(coopProvider).me ?? ref.read(currentUserIdProvider);
+    final host = game.isHost(me ?? '') ? null : await coopNameOnce(container, game.hostId);
+    final ctx = rootNavigatorKey.currentContext;
+    if (ctx == null || !ctx.mounted || ref.read(coopProvider).playing) return;
+    showToast(
+      ctx,
+      host == null ? 'Your game is still on' : 'Your game with $host is still on',
+      icon: AppIcons.players,
+      action: (
+        label: 'Return',
+        onTap: () async {
+          await coop.rejoin(game);
+          unawaited(router.push(game.route));
+        },
+      ),
+    );
   }
 
   @override

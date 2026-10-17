@@ -421,6 +421,35 @@ class GameController extends Notifier<GameState> {
     return [for (var s = 0; s < after.cells; s++) if (after.slots[s] != before.slots[s]) s].length ~/ 2;
   }
 
+  /// Play together (docs/multiplayer.md): puts the shared board [layout] on the table, the other
+  /// players' changes or this player's own change going back. Not a move: nothing is counted and
+  /// nothing goes into the history; locks still flash, and a finished board is won.
+  void showShared(List<int> layout) {
+    if (!Board.isValidLayout(args.spec, layout)) return;
+    final before = state.board;
+    final after = Board(args.spec, layout);
+    final locked = <int>{for (var i = 0; i < after.cells; i++) if (after.isLocked(i) && !before.isLocked(i)) i};
+    final sel = state.selected, hint = state.hintSlot;
+    bool moved(int? s) => s != null && (s >= before.cells || before.slots[s] != after.slots[s]);
+    final won = after.isSolved && state.status != GameStatus.won;
+    state = state.copyWith(
+      board: after,
+      justLocked: locked,
+      justJoined: const {},
+      chain: 0,
+      tick: locked.isEmpty ? state.tick : state.tick + 1,
+      clearSelected: moved(sel) || (sel != null && after.isLocked(sel)),
+      clearHint: moved(hint),
+      status: won ? GameStatus.won : state.status,
+    );
+    if (won) {
+      _events.add(GameEventKind.win);
+      _timer?.cancel();
+    } else if (locked.isNotEmpty) {
+      _events.add(GameEventKind.lock);
+    }
+  }
+
   void restart() {
     _peekTimer?.cancel();
     final board = Board.shuffled(args.spec);
