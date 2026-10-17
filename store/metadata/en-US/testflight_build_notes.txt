@@ -1,7 +1,6 @@
 What is new since the last build:
-- A new board opens on its whole picture for a moment, then the cards deal out (tap to skip). A tap during Peek ends it at once.
-- Quests: swipe a quest left to swap it for 1 ticket; every quest you have not finished can be swapped, and timed quests ask for a time you can beat.
-- Home: the Today card says when the next picture comes (the Tomorrow row is gone). The Inbox has a calmer message sheet, Shuffle has room for its name, and the pause menu says "Discard and pick a board".
-- Cards that look the same now also count on dark pictures (night skies, black backgrounds). Friend gifts: up to 20 a day, with a notification only between friends who added each other.
+- Play together is live: when a friend picks up a card you see it at once in their colour, and when they drag it the card glides across your board as they move it.
+- Opening an invite link in Safari: Open in Carden now switches to the app.
+- Quests count each board as it was finished, so replaying a picture no longer changes them. The web version loads faster on later visits.
 
-Please try: open a few new boards and watch the picture deal out, swipe a quest left, and play a night picture at 7x7.
+Please try: start Play together, have a friend join, and both drag cards around the same board.
