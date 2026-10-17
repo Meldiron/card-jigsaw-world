@@ -10,6 +10,7 @@ import 'package:carden/app.dart';
 import 'package:carden/core/sfx.dart';
 import 'package:carden/data/local_store.dart';
 import 'package:carden/features/game/board_widget.dart';
+import 'package:carden/features/game/game_screen.dart';
 import 'package:carden/router.dart';
 import 'package:carden/state/first_steps.dart';
 import 'package:carden/state/rewards.dart';
@@ -32,6 +33,8 @@ Future<void> settle(WidgetTester tester, [int ms = 1500]) async {
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.fullyLive;
+  // Boards here are played the moment they show: no picture before the deal (GameScreen.dealPreview).
+  GameScreen.dealPreview = false;
 
   const puzzle = 'p-952b19c3ce8f';
 
