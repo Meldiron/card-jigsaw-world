@@ -167,6 +167,9 @@ void main() {
           expect(find.text('Invite'), findsOneWidget);
           expect(find.text('2 more players can join.'), findsOneWidget);
           expect(find.text('End game for everyone'), findsOneWidget);
+          final label = tester.getRect(find.text('End game for everyone'));
+          final row = tester.getRect(find.byKey(const ValueKey('coop-end')));
+          expect(row.top <= label.top && label.bottom <= row.bottom, isTrue, reason: 'the label wraps inside its row, never cut');
           expect(find.text('Leave game'), findsNothing);
           expect(find.text('Host · You'), findsOneWidget);
           expect(find.text('Here'), findsOneWidget);

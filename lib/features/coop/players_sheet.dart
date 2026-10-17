@@ -188,7 +188,7 @@ class _PlayerRow extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(name, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w600)),
+                Text(name, maxLines: A11y.largeText(context) ? 2 : 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w600)),
                 const SizedBox(height: 1),
                 Row(
                   children: [
@@ -269,11 +269,12 @@ class _DangerRow extends StatelessWidget {
         onTap: onTap,
         scale: 0.99,
         child: Container(
-          height: 50,
+          // At least a row's height; a label that wraps at the largest text size grows it.
+          constraints: const BoxConstraints(minHeight: 50),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           decoration: BoxDecoration(color: c.card.withValues(alpha: 0.7), borderRadius: BorderRadius.circular(Radii.md)),
           child: Row(
             children: [
-              const SizedBox(width: 16),
               Icon(icon, size: 20, color: c.danger),
               const SizedBox(width: 14),
               Expanded(child: Text(label, style: TextStyle(fontSize: TypeSize.callout, fontWeight: FontWeight.w500, color: c.danger))),

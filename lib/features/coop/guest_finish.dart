@@ -41,17 +41,14 @@ class CoopGuestFinish extends ConsumerWidget {
         const SizedBox(height: 22),
         Semantics(
           liveRegion: true,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: Column(
             children: [
-              const CupertinoActivityIndicator(radius: 8),
-              const SizedBox(width: 10),
-              Flexible(
-                child: Text(
-                  'Waiting for $host to pick the next board',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w500, color: c.textSecondary),
-                ),
+              const CupertinoActivityIndicator(radius: 9),
+              const SizedBox(height: 10),
+              Text(
+                'Waiting for $host to pick the next board',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w500, color: c.textSecondary),
               ),
             ],
           ),
