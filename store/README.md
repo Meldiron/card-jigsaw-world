@@ -67,7 +67,8 @@ the same names with a `_light` suffix):
 | `23_wheel.png` | Lucky Wheel sheet |
 | `24_profile.png` | Profile |
 | `25_hero.png` ... `31_home_streak.png` | The glass set's own scenes (hero, Painting, giant board and its zoom, the dark board, Home with a 23-day streak) |
-| `32_coop_board.png` | Play together, the host's view of a scripted game (no live backend): Bora Bora lagoon in Cards mid-build, the players chip, Leo's purple "L" on the card he just moved, Ava's orange "A" on the card she holds |
+| `32_coop_board.png` | Play together, the host's view of a scripted game (no live backend): Bora Bora lagoon in Cards 7x7 Master mid-build (the middle and two corners locked), the players chip, Leo's purple "L" on the card he just moved, Ava's orange "A" on the card she holds |
+| `34_coop_clean.png` | The same board just before the friends' moves, without their marks (the homepage draws live cursors on it); `boards.json` lists its locked cards as `34_coop_locked` |
 | `33_coop_players.png` | The same game's player list, opened from the players chip |
 | `boards.json` | Board rectangles of the game captures |
 

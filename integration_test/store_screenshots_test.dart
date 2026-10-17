@@ -92,7 +92,7 @@ const theme = String.fromEnvironment('CJW_STORE_THEME', defaultValue: 'dark');
 const skipUpload = bool.fromEnvironment('CJW_STORE_SKIP_UPLOAD');
 const suffix = theme == 'light' ? '_light' : '';
 
-/// `--dart-define=CJW_STORE_ONLY=25_hero,27_giant` re-takes only those glass-set captures (15_library, 22_social_league, 25-33)
+/// `--dart-define=CJW_STORE_ONLY=25_hero,27_giant` re-takes only those glass-set captures (15_library, 22_social_league, 25-34)
 /// after onboarding and leaves every other file as it is: a quick rerun for one slide.
 const only = String.fromEnvironment('CJW_STORE_ONLY');
 bool want(String name) => only.isEmpty || only.split(',').contains(name);
@@ -306,6 +306,17 @@ void main() {
       if (!single(b, from) || !single(b, home)) continue;
       await move(tester, from, home);
       if (board(tester).isLocked(home)) locked++;
+    }
+  }
+
+  /// Locks the cards whose home is one of [homes] (in that order), moving only single pieces.
+  Future<void> lockHomes(WidgetTester tester, List<int> homes) async {
+    for (final home in homes) {
+      final b = board(tester);
+      if (home >= b.cells || b.isLocked(home)) continue;
+      final from = b.slotOfCard(home);
+      if (!single(b, from) || !single(b, home)) continue;
+      await move(tester, from, home);
     }
   }
 
@@ -608,8 +619,26 @@ void main() {
     // the card Ava holds and the card Leo just moved, each in their colour and with their initial.
     if (want('32_coop_board') || want('33_coop_players')) {
       try {
-        await startGame(tester, coopPuzzle, 'Cards', 'Relaxed');
-        await midBuild(tester, 0.35, 2);
+        // A big board, as friends play one: Cards 7x7 (Master), opened on its route (a capture run's
+        // guest has not reached Master's level; the game screen does not ask).
+        await push(tester, '/game/$coopPuzzle/cards-7x7t7', ms: 6000);
+        for (var i = 0; i < 20 && boardFinder().evaluate().isEmpty; i++) {
+          await settle(tester, 500);
+        }
+        await tapIfShown(tester, 'Got it');
+        expect(boardFinder(), findsOneWidget, reason: 'co-op board');
+        // Several locked areas (the middle, two corners) and a few joined groups among the loose cards.
+        final n = board(tester).tiling.cols;
+        int at(int r, int c) => r * n + c;
+        await lockHomes(tester, [
+          for (var r = 2; r <= 4; r++)
+            for (var c = 2; c <= 4; c++) at(r, c),
+          at(0, 0), at(0, 1), at(1, 0), at(1, 1),
+          at(5, 5), at(5, 6), at(6, 5), at(6, 6),
+        ]);
+        for (var g = 0; g < 4; g++) {
+          if (!await buildAnyGroup(tester)) break;
+        }
         stage.me = ProviderScope.containerOf(tester.element(find.byType(MaterialApp))).read(currentUserIdProvider) ?? '';
         await tester.tap(find.byIcon(CupertinoIcons.pause_fill), warnIfMissed: false);
         await settle(tester, 1200);
@@ -618,31 +647,53 @@ void main() {
         stage.seat();
         // The join toasts come and go before the capture.
         await settle(tester, 7000);
-        final b = board(tester);
-        // Leo moves a loose card next to the middle; Ava holds another one. Single cards first; a board
-        // that left fewer than two (mid-build joins by chance) uses any loose card instead.
-        final loose = [for (var s = 0; s < b.cells; s++) if (!b.isLocked(s)) s];
-        final singles = loose.where((s) => single(b, s)).toList();
-        final pool = singles.length >= 2 ? singles : loose;
-        // A move that locks neither card, so Leo's marks stay on loose cards (first such pair).
-        var from = pool.first, to = pool[pool.length ~/ 2];
-        search:
-        for (final a in pool) {
-          for (final c in pool.reversed) {
-            final m = a == c ? null : b.moveTo(a, c);
-            if (m != null && !m.isLocked(a) && !m.isLocked(c)) {
-              (from, to) = (a, c);
-              break search;
+        // The same board before the friends' moves, without their marks (the homepage draws its own
+        // live cursors and marks on it), and which cards are locked there (they cannot be held).
+        await shot(tester, '34_coop_clean');
+        final clean = board(tester);
+        binding.reportData ??= <String, dynamic>{};
+        ((binding.reportData!['boards'] ??= <String, dynamic>{}) as Map<String, dynamic>)['34_coop_locked$suffix'] = [
+          for (var s = 0; s < clean.cells; s++)
+            if (clean.isLocked(s)) s.toDouble(),
+        ];
+        // Leo makes two moves (four cards with his purple "L"); Ava holds a card in an open area (no
+        // locked or marked card around it), so her orange outline reads at this card size. Single
+        // cards first; a board that left fewer than two uses any loose card instead.
+        final leo = <int>{};
+        for (var k = 0; k < 2; k++) {
+          final b = board(tester);
+          final loose = [for (var s = 0; s < b.cells; s++) if (!b.isLocked(s) && !leo.contains(s)) s];
+          final singles = loose.where((s) => single(b, s)).toList();
+          final pool = singles.length >= 2 ? singles : loose;
+          if (pool.length < 2) break;
+          // A move that locks neither card, so Leo's marks stay on loose cards (first such pair).
+          var from = pool.first, to = pool[pool.length ~/ 2];
+          search:
+          for (final a in pool) {
+            for (final c in pool.reversed) {
+              final m = a == c ? null : b.moveTo(a, c);
+              if (m != null && !m.isLocked(a) && !m.isLocked(c)) {
+                (from, to) = (a, c);
+                break search;
+              }
             }
           }
+          final after = b.moveTo(from, to);
+          if (after != null) stage.move('stage-leo', b.slots, after.slots);
+          leo.addAll([from, to]);
+          await settle(tester, 1500);
         }
-        final after = b.moveTo(from, to);
-        if (after != null) stage.move('stage-leo', b.slots, after.slots);
-        await settle(tester, 1500);
         final now = board(tester);
-        final free = [for (var s = 0; s < now.cells; s++) if (!now.isLocked(s) && s != to && s != from) s];
-        final freeSingles = free.where((s) => single(now, s)).toList();
-        final held = freeSingles.isNotEmpty ? freeSingles.last : (free.isNotEmpty ? free.last : null);
+        final cols = now.tiling.cols;
+        List<int> around(int s) => [
+              for (var dr = -1; dr <= 1; dr++)
+                for (var dc = -1; dc <= 1; dc++)
+                  if ((dr != 0 || dc != 0) && s ~/ cols + dr >= 0 && s ~/ cols + dr < now.cells ~/ cols && s % cols + dc >= 0 && s % cols + dc < cols) (s ~/ cols + dr) * cols + s % cols + dc,
+            ];
+        int crowd(int s) => around(s).where((x) => now.isLocked(x) || leo.contains(x)).length;
+        final free = [for (var s = 0; s < now.cells; s++) if (!now.isLocked(s) && !leo.contains(s)) s];
+        final freeSingles = free.where((s) => single(now, s)).toList()..sort((a, b) => crowd(a).compareTo(crowd(b)));
+        final held = freeSingles.isNotEmpty ? freeSingles.first : (free.isNotEmpty ? free.last : null);
         if (held != null) {
           stage.hold('stage-ava', now.slots[held]);
           // The store slide lifts Ava's card with her outline (drawn just outside the card).
