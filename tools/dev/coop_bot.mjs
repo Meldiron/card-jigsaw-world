@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 // Play together QA: players on the live backend for the app on the simulator to play with. It makes
 // QA-flagged players (prefs qa, qaRun coop-bot-<time>, a test profile), plays as them through the
-// coop-game function, the moves table and a realtime socket each, and is driven over HTTP on
+// `api` function (`/coop/<action>`), the moves table and a realtime socket each, and is driven over HTTP on
 // 127.0.0.1:8787 (the iOS simulator reaches the Mac's localhost): the integration tests
 // integration_test/coop_live_test.dart and coop_host_test.dart call it. On /quit (or Ctrl-C) it ends
 // its games and purges its players (tools/dev/purge_test_players.py, which deletes their games and
-// moves; teams go with coop-cleanup).
+// moves; teams go with the hourly co-op cleanup of the `api` function).
 //
 //   node tools/dev/coop_bot.mjs            then run an integration test through tools/dev/qa-run.sh
 //
@@ -65,7 +65,7 @@ async function makePlayer(name, avatar) {
 }
 
 async function fn(p, action, body) {
-  const exec = await call('POST', '/functions/coop-game/executions', { key: false, session: p.secret, body: { body: JSON.stringify(body), path: `/${action}`, method: 'POST', async: false } });
+  const exec = await call('POST', '/functions/api/executions', { key: false, session: p.secret, body: { body: JSON.stringify(body), path: `/coop/${action}`, method: 'POST', async: false } });
   return exec.responseBody ? JSON.parse(exec.responseBody) : {};
 }
 

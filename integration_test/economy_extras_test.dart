@@ -1,6 +1,6 @@
 // The economy changes of 2026-10-17 on the real app (live Appwrite backend, a QA guest): the level
 // card's capped level-up coins, the Lucky Wheel's ×5 spin and its odds, the store's booster bundles
-// (a purchase through a stand-in App Store, granted on the profile row the way verify-purchase does),
+// (a purchase through a stand-in App Store, granted on the profile row the way the server's purchase check does),
 // a piggy bank upgrade from 500 to 600 for 5,000 coins, and a quest swap for a ticket.
 //
 // Run: tools/dev/qa-run.sh drive --driver=test_driver/integration_test.dart \
@@ -34,7 +34,7 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// The App Store and the verify-purchase function for QA: paid after a moment, the grant added to
+/// The App Store and the server's purchase check for QA: paid after a moment, the grant added to
 /// the profile row with atomic increments (Peeks and Magic included), the answer as the function's.
 class _QaStore extends PurchaseService {
   _QaStore(this.ref) : super(ref.read(appwriteClientProvider));

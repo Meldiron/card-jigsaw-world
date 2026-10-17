@@ -23,7 +23,7 @@ PLAYER_TABLES = ['profiles', 'progress', 'ledger', 'event_progress', 'friends', 
 # messages: the player's inbox and the friend gifts they sent).
 PAIR_TABLES = {'reports': ('reporterId', 'reportedId'), 'blocks': ('blockerId', 'blockedId'), 'messages': ('userId', 'fromUserId'), 'gifts': ('senderId', 'recipientId')}
 # Tables keyed by the player as host: their co-op games (Play together). A game goes with every move
-# in it (`coop_moves.gameId`); its team is left to the coop-cleanup function (these keys have no
+# in it (`coop_moves.gameId`); its team is left to the hourly co-op cleanup (function `api`; these keys have no
 # teams scope), which deletes teams without a game.
 HOST_TABLES = {'coop_games': 'hostId'}
 

@@ -24,6 +24,10 @@ abstract class SyncBackend {
 
   /// Creates a ledger row with a fixed id; an existing row with that id counts as written.
   Future<void> createLedger(String userId, String rowId, Map<String, dynamic> data);
+
+  /// Whether the session still holds: a write refused with 401 while it does is about that row
+  /// (another player made a row at its id), not about the sign-in.
+  Future<bool> signedIn();
 }
 
 /// How a failed request is handled.
@@ -31,7 +35,8 @@ enum SyncFailure {
   /// No answer (offline, timeout, server busy): try again later; the server may have applied it.
   offline,
 
-  /// The session is gone: check the sign-in, then try again.
+  /// The session is gone: check the sign-in, then try again. (A row write refused while the session
+  /// holds is a row another player made at this row's id: the controller parks that op.)
   auth,
 
   /// The row does not exist.
@@ -55,8 +60,9 @@ SyncFailure classifyFailure(Object e) {
 Map<String, dynamic> _row(models.Row r) => {...r.data, '\$id': r.$id, '\$updatedAt': r.$updatedAt};
 
 class AppwriteSyncBackend implements SyncBackend {
-  AppwriteSyncBackend(this._tables);
+  AppwriteSyncBackend(this._tables, this._account);
   final TablesDB _tables;
+  final Account _account;
   static const _db = AppwriteConfig.databaseId;
 
   @override
@@ -151,6 +157,17 @@ class AppwriteSyncBackend implements SyncBackend {
       if (e.code != 409) rethrow;
     }
   }
+
+  @override
+  Future<bool> signedIn() async {
+    try {
+      await _account.get();
+      return true;
+    } on AppwriteException catch (e) {
+      if (e.code == 401) return false;
+      rethrow;
+    }
+  }
 }
 
-final syncBackendProvider = Provider<SyncBackend>((ref) => AppwriteSyncBackend(ref.watch(tablesProvider)));
+final syncBackendProvider = Provider<SyncBackend>((ref) => AppwriteSyncBackend(ref.watch(tablesProvider), ref.watch(accountProvider)));

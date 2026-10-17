@@ -35,7 +35,7 @@ class CoopConnectionEvent extends CoopEvent {
 /// against an in-memory server in tests (`test/support/fake_coop.dart`). The app's is
 /// `AppwriteCoopBackend` (`lib/data/coop_repository.dart`).
 abstract class CoopBackend {
-  /// Calls the `coop-game` function: `create`, `join`, `leave`, `remove`, `end` or `next`. Returns
+  /// Calls `/coop/<action>` on the `api` function: `create`, `join`, `leave`, `remove`, `end` or `next`. Returns
   /// the game (null for `leave`); throws [CoopRefusal] when the function refuses or cannot be
   /// reached ([CoopRefusalReason.offline]).
   Future<CoopGame?> call(String action, Map<String, dynamic> body);

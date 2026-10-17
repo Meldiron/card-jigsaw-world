@@ -165,9 +165,10 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
     return spendCoins(Economy.magicLockCostCoins, reason: 'magic-lock');
   }
 
-  /// An offensive [name] is not saved (the name alert says so before it gets here).
+  /// A refused [name] (offensive, or contact details) is not saved (the name alert says so before it
+  /// gets here).
   Future<void> setIdentity({String? name, String? avatar}) async {
-    if (name != null && NameFilter.isOffensive(name)) name = null;
+    if (name != null && NameFilter.isRefused(name)) name = null;
     if (name == null && avatar == null) return;
     _do(SyncOp.put({'displayName': ?name, 'avatar': ?avatar}));
   }
@@ -222,7 +223,7 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
   }
 
   /// Debug-only sandbox toggle. Real VIP comes from verified App Store
-  /// subscriptions (`vipExpiresAt`), applied by the verify-purchase function.
+  /// subscriptions (`vipExpiresAt`), applied by the server's purchase checks (docs/purchases.md).
   Future<void> setVip(bool vip) async => _do(SyncOp.put({'isVip': vip}));
 
   /// Records a rewarded video. Returns false when today's allowance is used up.

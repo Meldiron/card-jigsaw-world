@@ -1,6 +1,6 @@
-// Friend gifts (docs/friend-gifts.md): the app and the `send-gift` function agree on the gifts,
-// the day and the row id; the function's copy of the name filter keeps the app's lists; the push
-// registration follows the player from session to session.
+// Friend gifts (docs/friend-gifts.md): the app and the server (function `api`, and `send-gift` for
+// builds up to 124) agree on the gifts, the day and the row id; the server's copy of the name filter
+// keeps the app's lists; the push registration follows the player from session to session.
 import 'dart:convert';
 import 'dart:io';
 
@@ -15,7 +15,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final _giftJs = File('functions/send-gift/src/gift.js').readAsStringSync();
+const _giftPath = 'functions/api/src/gift/gift.js';
+final _giftJs = File(_giftPath).readAsStringSync();
+
+/// The frozen copy in the send-gift function, which builds up to 124 call (docs/functions.md).
+final _oldGiftJs = File('functions/send-gift/src/gift.js').readAsStringSync();
 
 /// The quoted words of the first `{ ... }` or `[ ... ]` block after [start] in [source].
 Set<String> _words(String source, String start, String close) {
@@ -33,7 +37,9 @@ void main() {
       expect(GiftKind.tickets.label, '1 ticket');
       expect(GiftKind.coins.label, '150 coins');
       for (final k in GiftKind.values) {
-        expect(RegExp('${k.name}: \\{ amount: ${k.amount},').hasMatch(_giftJs), isTrue, reason: '${k.name} in functions/send-gift/src/gift.js');
+        for (final (path, js) in [(_giftPath, _giftJs), ('functions/send-gift/src/gift.js', _oldGiftJs)]) {
+          expect(RegExp('${k.name}: \\{ amount: ${k.amount},').hasMatch(js), isTrue, reason: '${k.name} in $path');
+        }
       }
     });
 
@@ -48,6 +54,7 @@ void main() {
     test('what the sender reads after a send', () {
       expect(const GiftResult(ok: true).message('Anna'), 'Gift sent to Anna');
       expect(const GiftResult(ok: false, error: 'already').message('Anna'), 'You already sent Anna a gift today');
+      expect(const GiftResult(ok: false, error: 'limit').message('Anna'), "That's all your gifts for today. More tomorrow.");
       expect(const GiftResult(ok: false, error: 'unavailable').message('Anna'), 'This gift could not be sent');
       expect(const GiftResult(ok: false, error: 'network').message('Anna'), startsWith('Could not reach the server'));
     });
@@ -58,6 +65,10 @@ void main() {
     expect(_words(_giftJs, 'ROOTS = new Set([', ']);'), _words(dart, '_roots = {', '};'));
     expect(_words(_giftJs, 'WORDS = new Set([', ']);'), _words(dart, '_words = {', '};'));
     expect(_words(_giftJs, 'NUMBERS = [', '];'), _words(dart, '_numbers = [', '];'));
+    expect(_words(_giftJs, 'TLDS = [', '];'), _words(dart, '_tlds = [', '];'));
+    for (final (start, close) in [('ROOTS = new Set([', ']);'), ('WORDS = new Set([', ']);'), ('NUMBERS = [', '];'), ('TLDS = [', '];')]) {
+      expect(_words(_oldGiftJs, start, close), _words(_giftJs, start, close), reason: 'send-gift keeps the same $start');
+    }
   });
 
   test('a build signed for development pushes through the sandbox provider', () {

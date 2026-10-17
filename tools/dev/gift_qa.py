@@ -3,7 +3,7 @@
 
 The app on the simulator plays one QA guest; gifts need a friend. This makes a QA friend ("Bob QA")
 in the same QA run (prefs qa/qaRun, profile isTest), so tools/dev/qa-run.sh purges both at the end,
-and acts as that friend through the real `send-gift` function with the friend's own session.
+and acts as that friend through the real server (`/gift/send` on function `api`) with the friend's own session.
 
   gift_qa.py friend --to <userId> --run <qa run id> [--name "Bob QA"]   make the friend (both lists)
   gift_qa.py befriend-run --run <qa run id>                             wait for that run's guest, then befriend it
@@ -106,8 +106,8 @@ def cmd_befriend_run(c, a):
 
 def cmd_send(c, a):
     state = load()
-    ex = as_friend(state, 'POST', '/functions/send-gift/executions',
-                   {'path': '/send', 'method': 'POST', 'body': json.dumps({'friendId': state['playerId'], 'kind': a.kind, 'utcOffset': a.offset}), 'async': False})
+    ex = as_friend(state, 'POST', '/functions/api/executions',
+                   {'path': '/gift/send', 'method': 'POST', 'body': json.dumps({'friendId': state['playerId'], 'kind': a.kind, 'utcOffset': a.offset}), 'async': False})
     print(ex.get('responseStatusCode'), ex.get('responseBody'))
 
 

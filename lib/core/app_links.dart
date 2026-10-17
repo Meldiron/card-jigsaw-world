@@ -60,7 +60,7 @@ class AppLink {
   static Uri openInAppUrl(String code) => Uri.parse('https://carden.appwrite.network/join/${normaliseJoinCode(code) ?? code}');
 
   /// A join code as the server keeps it: 8 characters, upper case, from an alphabet without 0, O,
-  /// 1, I and L (function coop-game); null when [code] cannot be one.
+  /// 1, I and L (functions/api/src/coop/rules.js); null when [code] cannot be one.
   static String? normaliseJoinCode(String code) {
     final c = code.toUpperCase().replaceAll(RegExp('[^A-Z0-9]'), '');
     return RegExp(r'^[A-HJ-KM-NP-Z2-9]{8}$').hasMatch(c) ? c : null;

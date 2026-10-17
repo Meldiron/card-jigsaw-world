@@ -11,6 +11,11 @@
 /// - [_roots] match anywhere inside a word: they never occur in ordinary words.
 /// - [_words] match only a whole word (or its plural), because they hide inside innocent ones
 ///   (peacock, raccoon, grape, class, Sussex, canal).
+///
+/// Names are not for contact details or advertising either ([isContact], security review
+/// 2026-10-17): a web address, an @handle or e-mail, or a domain (`carden.page`, `t.me`). Both
+/// checks are copied in functions/api/src/gift/gift.js (the push and the server's sweep of stored
+/// names); test/friend_gifts_test.dart keeps the lists in step.
 class NameFilter {
   NameFilter._();
 
@@ -30,8 +35,23 @@ class NameFilter {
     return false;
   }
 
-  /// [name], or [fallback] when it is offensive.
-  static String shown(String name) => isOffensive(name) ? fallback : name;
+  /// True when [name] reads as contact details or a link: a web address (`http://`, `www.`), an
+  /// @handle or e-mail address, or a domain ([_tlds]: `carden.page`, `t.me`, `x dot com`).
+  static bool isContact(String name) {
+    final lower = _fold(name.toLowerCase());
+    if (lower.contains('://') || lower.contains('www.')) return true;
+    if (RegExp(r'@\s*[a-z0-9_]').hasMatch(lower)) return true;
+    return RegExp('[a-z0-9]$_dot(${_tlds.join('|')})(?![a-z0-9])').hasMatch(lower);
+  }
+
+  /// True when [name] may not be chosen or shown: offensive, or contact details.
+  static bool isRefused(String name) => isOffensive(name) || isContact(name);
+
+  /// [name], or [fallback] when it is refused ([isRefused]).
+  static String shown(String name) => isRefused(name) ? fallback : name;
+
+  /// A dot between a name and its top-level domain: `.`, or written out (`(dot)`, `[dot]`, ` dot `).
+  static const _dot = r'(\.|\s*[(\[]\s*dot\s*[)\]]\s*|\s+dot\s+)';
 
   /// The words of [lower]: runs of letters, with look-alike symbols read as letters and digits read
   /// as [digits] says; single letters in a row (`f u c k`) are joined into one word.
@@ -91,6 +111,15 @@ class NameFilter {
 
   /// Hate symbols written as numbers.
   static const _numbers = ['1488', '14/88', '14 88'];
+
+  /// Top-level domains that make a name a web address (`name.com`): the common ones and those of
+  /// link shorteners and social sites. Not every country code: `St. Ives`, `Mr. Bean` stay names.
+  static const _tlds = [
+    'com', 'net', 'org', 'info', 'biz', 'io', 'co', 'me', 'tv', 'gg', 'ly', 'be', 'ee', 'gl', 'to', 'sh',
+    'ai', 'cc', 'ws', 'fm', 'app', 'dev', 'page', 'link', 'site', 'online', 'shop', 'store', 'live', 'club',
+    'xyz', 'top', 'vip', 'pro', 'fun', 'click', 'chat', 'social', 'tk', 'ml', 'ga', 'cf', 'ru', 'cn', 'uk',
+    'de', 'fr', 'eu', 'us', 'sk', 'cz', 'pl', 'es', 'it', 'nl',
+  ];
 
   /// Offensive anywhere inside a word. Only roots that no ordinary word contains (so not "rapist",
   /// which is in "therapist", or "pica", which is in "Picasso" and "tropical").

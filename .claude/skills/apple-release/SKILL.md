@@ -135,9 +135,11 @@ DailyWidget`), `profileType: IOS_APP_STORE` and relationships `bundleId` + `cert
 App ID description was renamed.
 
 ## Payment function deploys
-The repo's API keys cannot deploy functions. Package with
-`COPYFILE_DISABLE=1 tar --exclude node_modules -czf verify-purchase.tar.gz -C functions/verify-purchase .`
-and create the deployment through the Appwrite MCP (`functions_create_deployment`, base64 content,
-`activate: true`, entrypoint `src/main.js`, commands `npm install`), then check
-`https://cjw-verify-purchase.fra.appwrite.run/health`. Deploy the function before a build that shows
-new amounts, so the server never credits less than the app displays.
+Purchases are checked by `api` (`/purchase/verify`, builds after 124) and by `verify-purchase` (builds up
+to 124, and Apple's notifications); both hold `GRANTS` (docs/functions.md). The repo's API keys cannot
+deploy functions: use the Appwrite CLI signed in as the owner (docs/functions.md has the command), the
+Appwrite MCP (`functions_create_deployment`, base64 content of
+`COPYFILE_DISABLE=1 tar --exclude node_modules -czf verify-purchase.tar.gz -C functions/verify-purchase .`,
+`activate: true`, entrypoint `src/main.js`, commands `npm install`) or the console. Then check
+`https://cjw-verify-purchase.fra.appwrite.run/health` and run `node tools/dev/api_check.mjs`. Deploy both
+before a build that shows new amounts, so the server never credits less than the app displays.

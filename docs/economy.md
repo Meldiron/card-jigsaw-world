@@ -305,7 +305,8 @@ testers who buy on a build from before the change.
 
 The three places that hold the amounts now agree and are checked by `test/economy_test.dart`:
 `StoreProducts.grants` in `lib/data/purchases.dart` (store screen, house ads, the debug sandbox),
-`GRANTS` in `functions/verify-purchase/src/main.js` (what the server credits; Peeks and Magic go to the
+`GRANTS` in `functions/api/src/purchase.js` and its frozen twin `functions/verify-purchase/src/main.js`
+(what the server credits, docs/functions.md; Peeks and Magic go to the
 profile's `peeks` and `magics` columns with atomic increments and leave no ledger line, as in the app) and
 `store/metadata/subscriptions/consumables.json` (App Store names, descriptions, review notes). All eight
 consumables are `READY_TO_SUBMIT` on Apple (never reviewed), so changing their names costs no review.
@@ -319,7 +320,8 @@ card says 5 coins per puzzle (it said 25).
 Order matters: the server must credit the new amounts before a build shows them. The old build reading
 the new server only gets more than it shows, which is harmless.
 
-1. **Deploy the function** (`verify-purchase`, Node 22, entrypoint `src/main.js`, build `npm install`).
+1. **Deploy the function** (`verify-purchase`, Node 22, entrypoint `src/main.js`, build `npm install`;
+   since 2026-10-17 also `api`, which later builds call: docs/functions.md).
    The repo's API keys have no function scope, so deploy through the Appwrite MCP or the console:
    ```
    COPYFILE_DISABLE=1 tar --exclude node_modules -czf /tmp/verify-purchase.tar.gz -C functions/verify-purchase .

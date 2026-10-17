@@ -1,6 +1,6 @@
 # In-app purchases
 
-Payment runs through StoreKit 2 (`in_app_purchase` plugin). Nothing is granted on the device: every finished transaction is sent to the `verify-purchase` Appwrite Function, which verifies Apple's signature and applies the grant to the player's profile exactly once.
+Payment runs through StoreKit 2 (`in_app_purchase` plugin). Nothing is granted on the device: every finished transaction is sent to the server, `POST /purchase/verify` on the `api` Appwrite Function (docs/functions.md), which verifies Apple's signature and applies the grant to the player's profile exactly once. Builds up to 124 send it to the `verify-purchase` function (`POST /verify`), which stays deployed with the same code and also receives Apple's notifications.
 
 ## Products
 
@@ -26,27 +26,27 @@ The store screen shows the localised App Store price once products load; the tab
 Three places hold the amounts and `test/economy_test.dart` fails unless they agree:
 
 1. `StoreProducts.grants` and `StoreProducts.usdPrices` in `lib/data/purchases.dart`: what the store screen, the house ads and the debug sandbox show.
-2. `GRANTS` in `functions/verify-purchase/src/main.js`: what the server credits. Redeploy the function (below) before the build that shows new amounts ships.
+2. `GRANTS` in `functions/api/src/purchase.js` and `functions/verify-purchase/src/main.js` (builds up to 124): what the server credits. Redeploy both functions (below, and docs/functions.md) before the build that shows new amounts ships.
 3. `store/metadata/subscriptions/consumables.json`: App Store display names (30 characters), descriptions (45) and review notes, pushed with `.venv/bin/python tools/store/asc_publish.py iap` (try `--dry-run` first).
 
 ## Sources of truth
 
 Two, and the app is neither: **Apple** for payments and subscription status (signed transactions,
 App Store Server Notifications), **our backend** for what a player owns (`profiles`, `purchases`,
-`ledger`, written only by `verify-purchase`). The app shows what the backend says; it never grants
+`ledger`, written only by the purchase code: `api`, and `verify-purchase` for builds up to 124). The app shows what the backend says; it never grants
 anything itself in a release build.
 
 ## Flow
 
 1. **At launch** (once the player is signed in) the app listens for transactions (StoreKit 2 `Transaction.updates`, as Apple asks) and checks every transaction the App Store still has open (`Transaction.unfinished`): a purchase paid while the app was closed or restarted, an approved Ask to Buy, a gift code redeemed in the App Store. It checks them again whenever the app comes back to the foreground (`PurchaseService.checkOpenPurchases`).
-2. **Buy**: the tapped tile shows a spinner while the App Store sheet is open (`PurchaseFlow.buy`, stage `paying`), and the app wakes the function with an async `GET /health` so the check after the payment does not wait for a cold start (about 5 s cold, under 1 s warm). If the sheet closes and the App Store is still processing (TestFlight's sandbox can take a while), the purchase sheet opens with "Waiting for the App Store".
-3. StoreKit delivers the transaction with `verificationData.serverVerificationData` = the signed JWS transaction. The purchase sheet says "Adding 10 tickets" and the app calls the function: `POST /verify` with `{ "jws": ..., "productId": ... }` (Appwrite `Functions.createExecution`, user session attached). The same transaction is never sent twice at once.
+2. **Buy**: the tapped tile shows a spinner while the App Store sheet is open (`PurchaseFlow.buy`, stage `paying`), and the app wakes the `api` function with an async `GET /health` so the check after the payment does not wait for a cold start (about 5 s cold, under 1 s warm). If the sheet closes and the App Store is still processing (TestFlight's sandbox can take a while), the purchase sheet opens with "Waiting for the App Store".
+3. StoreKit delivers the transaction with `verificationData.serverVerificationData` = the signed JWS transaction. The purchase sheet says "Adding 10 tickets" and the app calls the server: `POST /purchase/verify` on `api` with `{ "jws": ..., "productId": ... }` (Appwrite `Functions.createExecution`, user session attached). The same transaction is never sent twice at once.
 4. The function verifies the JWS against Apple Root CA G3 (bundled in `certs/`), checks bundle id, product id and revocation, then **claims** the transaction by creating its `purchases` row (unique index on `transactionId`): of two calls for one transaction only one grants, the other answers `alreadyApplied`. It adds the grant to `profiles/{userId}` with atomic increments (`Operator.increment`, like the app's own changes, so a coin or ticket spent at the same moment is never overwritten) or sets `vipExpiresAt` + `appleOriginalTransactionId`, writes `ledger` rows (coins, tickets and hints; Peeks and Magic have none, the ledger's `currency` enum stays as old builds know it) and returns `{ ok, grant, balances }` (`balances`: coins, tickets, hints, Peeks and Magic after the grant). If the grant fails, the claim is deleted so the next try applies it.
 5. On `ok` the app reads the save again (quietly: `SyncController.expectServerChange` keeps a purchase from showing as "Synced from another device"), then the sheet says "10 tickets added · You now have 15 tickets" (a booster bundle: "15 Peeks, 10 Hints, 5 Magic added · You now have 16 Peeks, 12 Hints and 5 Magic"), and only then calls `completePurchase`. A purchase the player did not follow (sheet closed, paid while the app was closed) ends in a toast ("Added 10 tickets"); a VIP renewal stays quiet.
 6. **No answer** (offline, 5xx, a timeout, no session yet): the check runs again after 2, 4, 8, 15, 30 and 60 s, then every minute, and at once when the app comes back; after 10 s the sheet says it is taking longer and that the purchase is saved. **Refused** (4xx: not verifiable, refunded, the family limit): the sheet says "Not added yet" with the reason; the transaction stays open with the App Store, so the next launch checks it again.
-7. Subscription renewals, refunds and expirations arrive through App Store Server Notifications V2 at `POST /notifications` and update `vipExpiresAt` on the matching profile (`appleOriginalTransactionId`).
+7. Subscription renewals, refunds and expirations arrive through App Store Server Notifications V2 at `POST /notifications` on `verify-purchase` (the same code is `POST /purchase/notifications` on `api`, for a later move; docs/functions.md) and update `vipExpiresAt` on the matching profile (`appleOriginalTransactionId`).
 
-Code: `PurchaseService` (`lib/data/purchases.dart`: StoreKit, the checks, retries), `PurchaseFlow` (`lib/state/purchases.dart`: the stages screens follow), `PurchaseHost` and `PurchaseSheet` (`lib/features/store/purchase_host.dart`, mounted in `app.dart`). Tests: `test/purchase_flow_test.dart`; the function's own `functions/verify-purchase/test/verify.test.mjs` (`cd functions/verify-purchase && npm install && node --test --experimental-test-module-mocks test/verify.test.mjs`); on the simulator `integration_test/purchase_flow_test.dart` drives the real app with a stand-in App Store (StoreKit's sheet cannot be driven, and Xcode-signed transactions do not verify).
+Code: `PurchaseService` (`lib/data/purchases.dart`: StoreKit, the checks, retries), `PurchaseFlow` (`lib/state/purchases.dart`: the stages screens follow), `PurchaseHost` and `PurchaseSheet` (`lib/features/store/purchase_host.dart`, mounted in `app.dart`). Tests: `test/purchase_flow_test.dart`; the server's own `functions/api/test/purchase.test.mjs` (`cd functions/api && npm install && npm test`; the frozen copy: `cd functions/verify-purchase && npm install && node --test --experimental-test-module-mocks test/verify.test.mjs`); on the simulator `integration_test/purchase_flow_test.dart` drives the real app with a stand-in App Store (StoreKit's sheet cannot be driven, and Xcode-signed transactions do not verify).
 
 `Profile.isVip` is true while `vipExpiresAt` is in the future (or while the debug `isVip` flag is set).
 
@@ -97,6 +97,8 @@ What `isVip` unlocks in the app (keep this list, the `_VipCard` bullets in `lib/
 - +500 coins every week: paid automatically once per week when a VIP member opens the app (`ProfileNotifier.claimVipWeeklyBonus`, called from `HomeShell`; marker `Goals.vipBonusKey` in `claimedGoals`). It is not a quest: VIP has exactly one extra weekly quest.
 
 ## Function configuration (Appwrite console → Functions → verify-purchase)
+
+`api` has the same variables and checks the same way; its settings and deploys are in docs/functions.md. This section is `verify-purchase`, kept for builds up to 124 and Apple's notifications.
 
 | Variable | Value |
 |---|---|

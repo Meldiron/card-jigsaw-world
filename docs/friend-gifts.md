@@ -1,8 +1,8 @@
 # Friend gifts
 
 Owner decisions (2026-10-17): on a friend's profile a player sends that friend a gift of **1 ticket or
-150 coins**, the sender's choice. It costs the sender nothing. **One gift per friend per day**, no other
-cap. The friend gets an Inbox message ("Anna sent you a gift") with the gift and a Claim button, and on
+150 coins**, the sender's choice. It costs the sender nothing. **One gift per friend per day**, and (security
+review, 2026-10-17) **at most 20 gifts a day** to all friends together. The friend gets an Inbox message ("Anna sent you a gift") with the gift and a Claim button, and on
 iPhone a notification at the same moment whose tap opens that message. The gift **expires 24 hours after
 it was sent**; after that it is gone and cannot be claimed. Web players get the message and the Inbox
 dot, no notification.
@@ -14,7 +14,7 @@ dot, no notification.
    and "150 coins" with their icons; the choice goes to the function, and a toast says what happened
    ("Gift sent to Anna", "You already sent Anna a gift today"). Once today's gift is sent the button
    reads "Next gift tomorrow".
-2. The function `send-gift` checks and writes everything (below) and sends the push.
+2. The server (`/gift/send` on the `api` function) checks and writes everything (below) and sends the push.
 3. The friend sees the message in Social > Inbox (the Social tab and the Inbox segment get the dot). Its
    gift card names the friend ("A gift from Anna", with their avatar) and holds **Claim**: the Inbox's
    own claim (`SyncOp.inbox`, `profiles.inbox`, ledger reason `inbox:<id>`), so a gift is paid once on
@@ -25,14 +25,13 @@ dot, no notification.
    Inbox with the message open. A notification that arrives while the game is open shows no banner (as
    the reminders); the inbox reloads and a toast names the gift.
 
-## The function `send-gift`
+## The server: `/gift/send`
 
-`functions/send-gift` (Node 22, `node-appwrite`), deployed with the Appwrite CLI like the others
-(`appwrite functions create-deployment --function-id send-gift --code functions/send-gift --activate`,
-run from the repo root with a config naming the project). Execute: `users` (guests too). Scopes:
-`rows.read`, `rows.write`, `messages.read`, `messages.write`.
+`functions/api/src/gift/send.js` and `gift.js` in the `api` function (docs/functions.md; execute `users`,
+guests too). Builds up to 124 call the function `send-gift` at `POST /send`: the same code, frozen,
+deployed for them (scopes `rows.read`, `rows.write`, `messages.read`, `messages.write`).
 
-`POST /send { friendId, kind: 'tickets' | 'coins', utcOffset }`, the caller from
+`POST /gift/send { friendId, kind: 'tickets' | 'coins', utcOffset }`, the caller from
 `x-appwrite-user-id`. In order:
 
 1. The caller has the friend in their friends list (a `friends` row `userId = caller`, `friendId =
@@ -45,16 +44,19 @@ run from the repo root with a config naming the project). Execute: `users` (gues
    `expiresAt` 24 hours later, `rewardTickets: 1` or `rewardCoins: 150`, `fromUserId`, `fromName` (the
    sender's name through the name filter) and `fromAvatar`. If it cannot be written, the gift row is
    taken back so the sender can try again.
-5. The push: Appwrite Messaging `createPush` to the friend's user (every push target they have),
+5. The push, only when the friend has the sender in their friends list too and has had at most 5
+   gifts in the last 24 hours (`shouldPush`; later gifts land in the inbox quietly, `pushed: false`):
+   Appwrite Messaging `createPush` to the friend's user (every push target they have),
    title "Anna sent you a gift", body "1 ticket is waiting in your inbox." (or "150 coins are
    waiting..."), data `{ link: '/inbox?message=<id>' }`, sound default. A friend with no device
    registered (web, notifications off) simply gets no push; the inbox has the gift either way.
 6. Answers `{ ok: true, kind, amount, friendName, day, messageId, pushed }` (`pushed`: Appwrite
-   accepted the push) or `{ ok: false, error }` with `not-friend`, `unavailable`, `already`, `kind`,
-   `signin` or `server`.
+   accepted the push) or `{ ok: false, error }` with `not-friend`, `unavailable`, `already`, `limit`
+   (20 sent today; the app says "That's all your gifts for today. More tomorrow."), `kind`, `signin` or
+   `server`. The daily limit is checked before the gift row is made.
 
-The amounts live in `KINDS` (`functions/send-gift/src/gift.js`); the app shows the same (`GiftKind`,
-`lib/state/friend_gifts.dart`; `test/friend_gifts_test.dart` checks they agree).
+The amounts live in `KINDS` (`functions/api/src/gift/gift.js`, and the frozen `functions/send-gift/src/gift.js`);
+the app shows the same (`GiftKind`, `lib/state/friend_gifts.dart`; `test/friend_gifts_test.dart` checks all three agree).
 
 **The day.** The limit counts the sender's own calendar day: the app sends its offset from UTC
 (`DateTime.timeZoneOffset`), the function keeps it within real time zones (UTC-12 to UTC+14, whole
@@ -64,14 +66,16 @@ device's time zone can send at most one extra gift in that day.
 
 **Names.** The push is drawn by iOS, not the app, so the function filters the sender's name with a copy
 of `NameFilter` (`shownName` in `gift.js`; `test/friend_gifts_test.dart` fails when the word lists
-differ). The app shows `fromName` through `NameFilter` again.
+differ): offensive names, and since 2026-10-17 names with a link, an @handle, an e-mail address or a
+domain (`isContact`, the `TLDS` list), show as "Player". The app shows `fromName` through `NameFilter`
+again.
 
 **The push log.** Appwrite keeps every push it sends (title, body, recipient) in Messaging's log. Each
 send deletes gift pushes older than a day from it (`cleanupPushLog`), so it never holds a gift for long.
 
 **QA.** A gift between QA players (or to or from one) carries `gifts.isTest`. The purge tool and
 account deletion remove gifts in both directions and the messages a player sent as gifts
-(`PAIR_TABLES` in `tools/dev/cjw_admin.py` and `functions/delete-account`).
+(`PAIR_TABLES` in `tools/dev/cjw_admin.py`, `functions/api/src/account.js` and its twin `functions/delete-account`).
 
 ## Tables
 
@@ -119,14 +123,14 @@ No third-party SDK: Apple's push service through Appwrite Messaging.
 
 ## Checking it
 
-- `node --test functions/send-gift/test/gift.test.mjs`: gifts, day, row id, copy, names.
+- `node --test functions/api/test/gift.test.mjs`: gifts, day, row id, copy, names. Live: `node tools/dev/api_check.mjs`.
 - `test/friend_gifts_test.dart`: the app agrees with the function; push registration follows sign-ins,
   updates on a conflict, stops when switched off. `test/inbox_test.dart`: gifts leave on time, the
   friend's name. `test/deep_links_test.dart`: `/inbox?message=` in every form, and the sheet it opens.
 - `integration_test/friend_gifts_test.dart` (through `tools/dev/qa-run.sh drive`): Player > Send a gift,
   the action sheet, "Next gift tomorrow", the server refusing a second gift, the friend's gift in the
   inbox, its link opening the message, Claim. The friend comes from `tools/dev/gift_qa.py` (a QA player
-  in the same run, acting through the real function with its own session; `end` before the purge).
+  in the same run, acting through the real server (`/gift/send` on `api`) with its own session; `end` before the purge).
 - `tools/dev/notification_check.sh <simulator>`: the parts Flutter cannot drive, on a real push. A fresh
   QA install turns on Settings > Gifts from friends, taps Allow on the iOS prompt and goes to the
   background; a QA friend sends a ticket; the banner shows; its tap opens the message; Claim. It adds a

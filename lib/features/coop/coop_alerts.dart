@@ -69,7 +69,7 @@ String endedMessage(String? reason, String hostName) => switch (reason) {
       _ => 'This game has ended.',
     };
 
-/// Title and line of an alert for a refusal of the `coop-game` function.
+/// Title and line of an alert for a refusal of the server's co-op calls (`/coop/<action>`).
 ({String title, String message, bool retry}) refusalText(CoopRefusal r) => switch (r.reason) {
       CoopRefusalReason.full => (title: 'This game is full', message: 'Up to $coopMaxPlayers players can play together.', retry: false),
       CoopRefusalReason.removed => (title: 'You cannot join this game', message: 'The host removed you from it.', retry: false),

@@ -32,6 +32,10 @@ class FakeServer {
   final progress = <String, Map<String, dynamic>>{};
   final events = <String, Map<String, dynamic>>{};
   final ledger = <String, Map<String, dynamic>>{};
+
+  /// Row ids another player made first (security review 2026-10-17): writing one is refused with
+  /// 401 and reading it finds nothing, as on Appwrite.
+  final squatted = <String>{};
   int _clock = 0;
 
   /// Five minutes per write, so a read that starts from the wrong time misses rows.
@@ -131,6 +135,7 @@ class FakeBackend implements SyncBackend {
   @override
   Future<Map<String, dynamic>?> getProgress(String userId, String puzzleId) async {
     _reach();
+    if (server.squatted.contains(deterministicId(userId, puzzleId))) return null;
     final r = server.progressOf(userId, puzzleId);
     return r == null ? null : {...r};
   }
@@ -139,6 +144,7 @@ class FakeBackend implements SyncBackend {
   Future<Map<String, dynamic>> upsertProgress(String userId, String puzzleId, Map<String, dynamic> data) async {
     _reach();
     final id = deterministicId(userId, puzzleId);
+    if (server.squatted.contains(id)) throw AppwriteException('The current user is not authorized to perform the requested action.', 401);
     server.progress[id] = server.write(server.progress[id], {...data, 'userId': userId, 'puzzleId': puzzleId}, id);
     return _answer({...server.progress[id]!});
   }
@@ -147,6 +153,7 @@ class FakeBackend implements SyncBackend {
   Future<void> upsertEvent(String userId, String eventId, Map<String, dynamic> data) async {
     _reach();
     final id = deterministicId(userId, eventId);
+    if (server.squatted.contains(id)) throw AppwriteException('The current user is not authorized to perform the requested action.', 401);
     server.events[id] = server.write(server.events[id], {...data, 'userId': userId, 'eventId': eventId}, id);
     _answer(null);
   }
@@ -162,6 +169,15 @@ class FakeBackend implements SyncBackend {
   Future<void> createLedger(String userId, String rowId, Map<String, dynamic> data) async {
     _reach();
     server.ledger.putIfAbsent(rowId, () => {...data, 'userId': userId});
+  }
+
+  /// False: the session is gone (every refused write is then about the sign-in).
+  bool session = true;
+
+  @override
+  Future<bool> signedIn() async {
+    _reach();
+    return session;
   }
 }
 

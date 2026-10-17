@@ -48,6 +48,20 @@ sometimes without a connection. This is how the save stays correct (since 2026-1
    asks "Two saves found" when neither save clearly wins, and also when the save that would be
    dropped holds more Coins, Tickets or Hints (`decide` in `lib/state/merge.dart`).
 
+## A row another player made first
+
+Progress and event rows have predictable ids (md5 of player and picture or event), so another player
+can create a row at that id before this player does (security review, 2026-10-17). Appwrite then
+refuses this player's write with 401 while the session is fine. A 401 on a progress, event or ledger
+write is checked against the session (`SyncBackend.signedIn`, `account.get`): when it holds, the op is
+**parked** (`_Account.parked`, in memory): it stays queued, so the screens still show it and nothing
+is lost, but the queue goes on without it and nothing is said to the player. It is sent again on the
+next start, or on a resume an hour later (`SyncController.parkedFor`); the server's hourly sweep
+deletes the other player's row meanwhile (docs/functions.md, "Integrity sweep"), so it lands then. A
+401 without a session is still about the sign-in (the queue waits and the app signs in again). Friend
+and block rows go under a unique id when their predictable one is taken (`SocialRepository._ownRow`)
+and are found by their columns when removed.
+
 ## Exactly once
 
 A request can reach the server and lose its answer. Every profile op appends its id to
@@ -118,16 +132,19 @@ spent). A sign-in merge takes the chosen save's map. Older builds ignore the col
   one (two devices playing the same board at the same time).
 - Two browser tabs of the web site share one queue in localStorage; if both queue changes while
   offline and one closes before the connection returns, its queue can be overwritten by the other.
-- The `verify-purchase` function still adds a purchase with a read and a write of the profile row
-  (not an operator); a change from the player's device in the same instant can be lost. Switching
-  it to operators needs a function redeploy.
+- Purchases (`/purchase/verify` on `api`, and `verify-purchase` for builds up to 124) add the grant
+  with atomic increments (`Operator.increment`), so a change from the player's device in the same
+  instant is kept.
 
 ## Tests
 
 - `test/sync_test.dart`: two devices on an in-memory server (`test/support/fake_sync.dart`) that
   applies the operators as above: balances add up, unlocks are not lost, offline play survives a
   restart, double claims pay once, a lost answer is not applied twice, the notice, records, board
-  conflicts, a board finished elsewhere staying finished, levels, the `local` hand-over, tidying.
+  conflicts, a board finished elsewhere staying finished, levels, the `local` hand-over, tidying, and a
+  row another player made first (the op parked quietly, the rest sent, the save landing on the next
+  start or a later resume, a 401 without a session still waiting; friend and block rows under a unique
+  id).
 - `integration_test/sync_devices_test.dart`: the app on the simulator is the iPhone, a second
   sync in the same process (own storage, same session) is the laptop, on the live backend:
   `tools/dev/qa-run.sh drive --driver=test_driver/integration_test.dart

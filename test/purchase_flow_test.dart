@@ -19,7 +19,7 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 
 import 'support/fake_sync.dart';
 
-/// The App Store and the verify-purchase function in memory. A check adds the grant to the fake
+/// The App Store and the server's purchase check (`/purchase/verify`) in memory. A check adds the grant to the fake
 /// server's profile once per transaction, as the function does, and answers with what it gave.
 class _FakeStore extends PurchaseService {
   _FakeStore(this.server) : super(Client());

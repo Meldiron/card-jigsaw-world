@@ -7,7 +7,7 @@ import 'dart:math';
 import 'package:carden/state/coop/coop_backend.dart';
 import 'package:carden/state/coop/coop_models.dart';
 
-/// The join codes' alphabet (function coop-game).
+/// The join codes' alphabet (functions/api/src/coop/rules.js).
 const _alphabet = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
 
 class FakeCoopServer {

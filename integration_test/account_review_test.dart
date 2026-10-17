@@ -158,6 +158,9 @@ void main() {
     final settingsList = find.byWidgetPredicate((w) => w is Scrollable && w.axisDirection == AxisDirection.down).last;
     final accountRow = find.textContaining(RegExp('Manage account|Sign in or create account'));
     await tester.dragUntilVisible(accountRow, settingsList, const Offset(0, -250));
+    // The row can sit under the floating tab bar once it is in the list's viewport: bring it to the
+    // middle of the list.
+    await Scrollable.ensureVisible(tester.element(accountRow.first), alignment: 0.5);
     await settle(tester, 800);
     await tester.tap(accountRow.first, warnIfMissed: false);
     await settle(tester, 2500);
