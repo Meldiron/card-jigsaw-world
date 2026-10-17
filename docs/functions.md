@@ -18,6 +18,7 @@ shares everyone's calls, so a player meets a cold start far less often.
 | `POST /coop/cleanup` | `src/coop/cleanup.js` | the co-op cleanup on demand, for a caller who is not a player (the owner's CLI) | `coop-cleanup` `/run` |
 | `POST /admin/sweep` | `src/sweep/run.js` | the integrity sweep on demand, same callers: `{dryRun = true, full, qaOnly}` (below) | new |
 | `GET /health` | `src/main.js` | `{ok, environment, maxPlayers, appleSignIn}`; the app's warm-up call | every function's `/health` |
+| `GET /<code>`, `/join/<code>`, `/.well-known/apple-app-site-association` | `src/invite/` | a Play together invite's page and link preview at `https://join.carden.page/<code>`, for anyone ("Invite pages", below) | new |
 | schedule `0 * * * *` | `src/coop/cleanup.js`, `src/sweep/run.js` | every hour: the co-op cleanup, then the integrity sweep (an execution with trigger `schedule`, whatever its path) | `coop-cleanup` |
 | event `tablesdb.cjw.tables.blocks.rows.*.create` | `src/sweep/run.js` | a new `blocks` row is checked at once (subscribed as `databases.cjw.tables.blocks.rows.*.create`) | new |
 
@@ -35,7 +36,10 @@ messages.write` (the union of the old functions'). Variables: `APPLE_BUNDLE_ID`,
 `SWEEP_APPLY` (`true`: the scheduled and event sweeps change rows; anything else: they only report).
 A changed variable reaches the function with its next deployment. Domain `https://cjw-api.fra.appwrite.run`
 (proxy rule, 2026-10-17, for Apple's notifications); it follows the active deployment and answers 403
-`router_unauthorized_execution` to every caller while execute is `users`.
+`router_unauthorized_execution` to every caller while execute is `users`. Domain `https://join.carden.page`
+(proxy rule `2bde7e62412563d6f56a0542b454d9ab`, 2026-10-17, the invites' own address; the DNS record
+came with it, carden.page being on Appwrite): there the router answers invite pages and nothing else
+(any other path 404, `/` goes to the web game). Both domains need execute `any`.
 
 Deploy with the Appwrite CLI signed in as the owner, from a folder holding an `appwrite.config.json`
 with `{"projectId": "6acb4de5003e38d5ebd9", "endpoint": "https://fra.cloud.appwrite.io/v1"}`: copy
@@ -54,7 +58,46 @@ the integrity sweep with `SWEEP_APPLY`, the `blocks` event, gift limits, names w
 picks and drags": made on `/coop/create` and `/coop/join`, deleted on leave, remove, the cleanup,
 account deletion and by the sweep; `delete-account` holds the same account code, redeploying it is
 optional since builds up to 124 never get live rows), `6ad3e5a1ef69e35d38a6` (2026-10-17: Apple's
-notifications applied once, `/coop/cleanup` and `/admin/sweep` refuse calls without a user).
+notifications applied once, `/coop/cleanup` and `/admin/sweep` refuse calls without a user),
+`6ad3eca5f014b66715bb` (2026-10-17: invite pages and cards, below).
+
+### Invite pages
+
+`https://join.carden.page/<code>` is the address the app shares for Play together from build 127
+(docs/multiplayer.md, "Invite links"). Messages, WhatsApp, Messenger and the rest read a link's preview
+from the page's static meta tags, so this page is made per invite, for crawlers and people alike (no
+redirect, no user-agent test): "Mia invites you to play Red Panda", "Play together in Carden · Cards
+7x7 · 2 of 5 players" and the game's own card as `og:image`. It reads three rows (the game by its code,
+the picture, the host's display name through the name filter) and shows nothing else: no player id, no
+game id. An ended or unknown code gets the site's own card and words ("This game has ended" on the page).
+
+- `src/invite/paths.js` decides, without loading anything, which requests are the page's (a GET on
+  `join.carden.page`, `/<code>` or `/join/<code>` on any domain, the association file); `page.js` makes
+  the page and the association file (`/????????` and `/join/*` open the app; the root stays in the browser).
+- The card (`card.js`, 1200 x 630 JPEG, 50-140 KB): the picture dealt in the board's real shapes and size
+  (`tiling.js`, a port of `lib/game/tiling.dart`: piece counts and shapes are the game's), a few pieces of
+  the same shape swapped and one lifted, the picture blurred and zoomed behind, the logo and the board in
+  words ("Cards 7x7", "49 cards", "Painting"). The words come from an atlas set in SF Pro Rounded
+  (`assets/invite/`, made by `tools/brand/invite_card.py`), so only words listed there can be drawn.
+  Drawing is plain JavaScript (`raster.js`: PNG decode with Node's zlib, resampling, blurs, rounded pieces
+  by signed distance; `jpeg.js`: a 4:2:0 baseline encoder). A native library was tried first: Skia
+  (`@napi-rs/canvas`, an 18 MB build) made every cold start of `api` about 1.2 s slower (measured on a probe
+  function: 5.4-6.1 s against 3.7-5.6 s), for every call of the app; this adds 0.1 MB.
+- Cards live in the public bucket `invite-cards` (read `any`, written only by `api`), keyed by picture,
+  board, Painting and week (`store.js`, `cardId`), so games on the same picture and board share one. A new
+  game's card is drawn right after `/coop/create` answers (`prepareCard`, not awaited), in a worker thread
+  so the function's other calls keep their event loop; a next board's card is drawn when its page is first
+  asked for. Drawing takes about 2 s of the runtime's half CPU (a worker cannot lower its share inside the
+  container's CPU quota: measured, `setPriority` changes nothing), so calls on the same instance run slower
+  for those seconds. The page waits for a card being drawn up to 8 s, then shows the site's card (and is
+  not kept). The hourly run deletes cards older than ten days (`cleanCards`; a page names only this week's).
+- Appwrite's edge keeps a page as `Cache-Control` says (`s-maxage=600`; measured: later readers get it in
+  20-30 ms without an execution), so the friend who taps a link after its preview was read never waits for
+  the function, cold or not.
+- Checked by `functions/api/test/invite.test.mjs` (piece counts and coverage against the game, the words,
+  the page's tags and what it leaves out, the association file, the card's size, the bucket) and live by
+  `tools/dev/api_check.mjs` (the page as Messages, WhatsApp, Facebook and Safari read it, the card, the
+  domain answering nothing else, an ended and an unknown code).
 
 ### Apple's notifications
 
@@ -206,7 +249,8 @@ Apple calls the notifications route without a session, so `api` is meant to be e
 itself: the player routes answer 401 (`x-appwrite-user-id` is empty), `/coop/cleanup` and `/admin/sweep`
 answer 404 unless the caller is a console user (the owner's CLI: a user id that is no user of the
 project; before deployment `6ad3e5a1ef69e35d38a6` a call without any user counted too), the notifications
-route needs Apple's signature, and only `/health` answers. Appwrite sets `x-appwrite-*` itself: the REST
+route needs Apple's signature, and only `/health` and the invite pages answer (a GET; they show only what
+an invite shares, "Invite pages" above). Appwrite sets `x-appwrite-*` itself: the REST
 API refuses such headers from a caller (400, checked live), and `api_check.mjs` checks that the domain
 ignores them (a player's id, the `event` trigger) once it is open.
 
@@ -241,6 +285,9 @@ Wall time of a call from this Mac (Appwrite's execution duration includes the co
 | `coop-game` create (docs/multiplayer.md) | 7.4 s | 0.1-1.2 s |
 | `api`, `GET /health` (loads the purchase and account modules) | 5.2 s | 0.16-0.44 s |
 | `api`, every route (`tools/dev/api_check.mjs`) | | 0.1-1.5 s; a pack code 2.8 s (its first claim grants 7 files); an account deletion 4.6 s |
+| invite page, first reader 1.5 s after `/coop/create` (it waits for the card being drawn) | | 1.6-2.7 s (7 boards, 9 to 666 pieces) |
+| invite page, a card already kept / the edge's copy | | 0.25-0.35 s / 0.02-0.03 s |
+| invite card (Storage, 50-140 KB) | | 0.2-0.3 s |
 
 A cold start costs the same as before (it is mostly Appwrite starting the runtime); what changes is
 how often a player meets one. A runtime stays warm for about ten minutes after its last call

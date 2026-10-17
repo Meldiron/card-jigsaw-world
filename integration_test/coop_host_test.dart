@@ -126,7 +126,7 @@ void main() {
     final text = recorder.shared.single;
     debugPrint('COOP_NOTE shared: $text');
     expect(text, startsWith('Play ${picture.title} with me in Carden'));
-    final code = RegExp(r'play\.carden\.page/join/([A-Z0-9]{8})').firstMatch(text)!.group(1)!;
+    final code = RegExp(r'https://join\.carden\.page/([A-Z0-9]{8})$').firstMatch(text)!.group(1)!;
     expect(s().playing && s().isHost, isTrue);
     await settle(tester, 1500);
     expect(find.byKey(const ValueKey('coop-players-chip')), findsOneWidget);

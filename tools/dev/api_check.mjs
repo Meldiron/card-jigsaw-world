@@ -140,6 +140,77 @@ async function checkWithoutSession(spoofAs) {
   expectTrue(`no session (domain): x-appwrite-trigger event is ignored (${asEvent.status})`, asEvent.status === 404 && !asEvent.body.ignored);
 }
 
+// Invite pages (docs/multiplayer.md, "Invite links"): what Messages, WhatsApp and Facebook read at
+// https://join.carden.page/<code>, without a session. Messages sends a Safari user agent with
+// facebookexternalhit and Twitterbot in it; WhatsApp and Facebook their own.
+const JOIN = 'https://join.carden.page';
+const READERS = {
+  messages: 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Mobile/15E148 Safari/604.1 facebookexternalhit/1.1 Facebot Twitterbot/1.0',
+  whatsapp: 'WhatsApp/2.25.21.80 i',
+  facebook: 'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)',
+  safari: 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Mobile/15E148 Safari/604.1',
+};
+
+/// The invite page of [code] as [reader] sees it: status, meta tags, size, time.
+async function invitePage(code, reader, query = '') {
+  const t0 = Date.now();
+  const r = await fetch(`${JOIN}/${code}${query}`, { headers: { 'user-agent': READERS[reader] }, redirect: 'manual' });
+  const html = await r.text();
+  const meta = {};
+  for (const m of html.matchAll(/<meta property="(og:[a-z:_]+)" content="([^"]*)">/g)) meta[m[1]] = m[2].replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+  return { status: r.status, type: r.headers.get('content-type'), edge: r.headers.get('cf-cache-status'), html, meta, bytes: Buffer.byteLength(html), wall: Date.now() - t0 };
+}
+
+/// Width and height of a JPEG (its SOF marker).
+function jpegSize(b) {
+  for (let i = 2; i < b.length - 9; ) {
+    if (b[i] !== 0xff) return null;
+    const marker = b[i + 1];
+    const len = b.readUInt16BE(i + 2);
+    if (marker >= 0xc0 && marker <= 0xc3) return [b.readUInt16BE(i + 7), b.readUInt16BE(i + 5)];
+    i += 2 + len;
+  }
+  return null;
+}
+
+/// The invite of [game] (hosted by [host], picture [title]) as every reader sees it, and its card.
+async function checkInvite(game, host, title, board) {
+  const probe = await fetch(`${JOIN}/.well-known/apple-app-site-association`).catch((e) => e);
+  if (!(probe instanceof Response)) {
+    console.log(`note invite page: ${JOIN} does not answer yet (${probe.cause?.code ?? probe.message}); skipped`);
+    return;
+  }
+  const aasa = await probe.json().catch(() => ({}));
+  expectTrue(`invite: association file names the app and invites (${probe.status})`, probe.status === 200 && JSON.stringify(aasa).includes('C24QP73SQM.com.matejbaco.cardjigsawworld') && JSON.stringify(aasa).includes('/????????'));
+  let image = null;
+  for (const reader of Object.keys(READERS)) {
+    const p = await invitePage(game.code, reader);
+    const ok = p.status === 200 && p.type?.startsWith('text/html') && p.meta['og:title'] === `${host.name} invites you to play ${title}` && p.meta['og:description'] === `Play together in Carden · ${board} · 1 of 5 players` && p.meta['og:url'] === `${JOIN}/${game.code}` && /\/storage\/buckets\/invite-cards\/files\/[0-9a-f]{32}\/view\?project=/.test(p.meta['og:image'] ?? '') && p.bytes < 300 * 1024 && !p.html.includes(host.userId) && !p.html.includes(game.id);
+    expectTrue(`invite page as ${reader.padEnd(9)} ${String(p.status)} ${String(p.wall).padStart(5)} ms (edge ${p.edge ?? '-'}), ${p.bytes} bytes: "${p.meta['og:title']}" / "${p.meta['og:description']}"`, ok);
+    image ??= p.meta['og:image'];
+  }
+  if (image) {
+    const t0 = Date.now();
+    const r = await fetch(image, { headers: { 'user-agent': READERS.whatsapp } });
+    const bytes = Buffer.from(await r.arrayBuffer());
+    const size = jpegSize(bytes);
+    expectTrue(`invite card: ${r.status} ${r.headers.get('content-type')} ${Math.round(bytes.length / 1024)} KB ${size?.join(' x ')} in ${Date.now() - t0} ms (WhatsApp: under 600 KB; Messages: 900 px wide or more)`, r.status === 200 && r.headers.get('content-type') === 'image/jpeg' && bytes.length < 600 * 1024 && size?.[0] === 1200 && size?.[1] === 630);
+  }
+  // The domain answers invites and nothing else.
+  const post = await fetch(`${JOIN}/coop/join`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ code: game.code }) });
+  expectTrue(`invite domain: POST /coop/join is not found there (${post.status})`, post.status === 404);
+  const root = await fetch(`${JOIN}/`, { redirect: 'manual' });
+  expectTrue(`invite domain: the root goes to the web game (${root.status} ${root.headers.get('location')})`, root.status >= 300 && root.status < 400 && root.headers.get('location') === 'https://play.carden.page/');
+}
+
+/// An ended or unknown invite: the site's own card and words.
+async function checkEndedInvite(code, label) {
+  // A query of its own, past the edge's copy of the live page (kept ten minutes).
+  const p = await invitePage(code, 'messages', `?check=${Date.now()}`).catch(() => null);
+  if (!p) return;
+  expectTrue(`invite page, ${label}: the site's card (${p.status}, "${p.meta['og:title']}")`, p.status === 200 && p.meta['og:image'] === 'https://play.carden.page/invite-card.jpg' && p.meta['og:title'] === 'Carden: Your calm picture puzzle' && p.html.includes('This game has ended'));
+}
+
 async function makePlayer(name, avatar) {
   const userId = 'qaapi' + randomBytes(8).toString('hex');
   await call('POST', '/users', { body: { userId, name } });
@@ -205,9 +276,11 @@ try {
   expectTrue('gift: in the friend\'s inbox, from Ada, 1 ticket', inbox.some((m) => m.fromUserId === ada.userId && m.rewardTickets === 1));
 
   // Play together.
-  const puzzleId = (await rows('puzzles', [q('equal', 'packId', ['pack-owls']), q('limit', undefined, [2])])).rows.map((r) => r.$id);
+  const owls = (await rows('puzzles', [q('equal', 'packId', ['pack-owls']), q('limit', undefined, [2])])).rows;
+  const puzzleId = owls.map((r) => r.$id);
   const layout = (n) => Array.from({ length: n }, (_, i) => (i + 1) % n);
   const game = (await check('coop: create', ada, 'POST', '/coop/create', { puzzleId: puzzleId[0], grid: 'cards-3x3t0', layout: layout(9), painting: false }, { status: 200, body: { ok: true }, test: (b) => b.game?.players?.[0] === ada.userId })).game;
+  if (FUNCTION === 'api') await checkInvite(game, ada, owls[0].title, 'Cards 3x3');
   await check('coop: join', ben, 'POST', '/coop/join', { code: game.code }, { status: 200, test: (b) => b.game?.players?.includes(ben.userId) });
   await check('coop: join (Dee)', dee, 'POST', '/coop/join', { code: game.code }, { status: 200, test: (b) => b.game?.players?.includes(dee.userId) });
   await check('coop: join again keeps the seat', ben, 'POST', '/coop/join', { code: game.code }, { status: 200, test: (b) => b.game?.players?.[1] === ben.userId });
@@ -242,6 +315,10 @@ try {
   });
 
   await check('coop: end', ada, 'POST', '/coop/end', { gameId: game.id }, { status: 200, test: (b) => b.game?.status === 'ended' && b.game?.endReason === 'host' });
+  if (FUNCTION === 'api') {
+    await checkEndedInvite(game.code, 'ended game');
+    await checkEndedInvite('ZZZZZZZZ', 'unknown code');
+  }
   await check('coop cleanup: refused for a player', ada, 'POST', '/coop/cleanup', undefined, { status: 404 });
   await check('nothing at the root', ada, 'POST', '/', {}, { status: 404 });
   await check('old paths are not routes', ada, 'POST', '/delete', {}, { status: 404 });
