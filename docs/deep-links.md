@@ -23,8 +23,8 @@ either form from a link.
 | `/` or `/home` | Home | A new player still sees the welcome screens |
 | `/library` | Library | `?filter=` picks a chip: `all`, `new`, `finished`, `started`, `unlocked`, `daily` or a category with a chip (`giant`, `ai`, `animals`), any case; anything else (`event`: events live on Home and in Quests) opens All |
 | `/library/pack/<packId>` (also `/pack/<packId>`) | A pack | "Pack not available" for a pack the catalogue does not list (removed, an event not announced yet, a pack-code pack not redeemed) |
-| `/play/<puzzleId>` (also `/picture/<id>`) | A picture's mode and board picker | `?grid=hexagons-5x6`, `?mode=triangles`, `?painting=1` preselect. A picture in a pack the player has not opened (or a daily picture not out yet) shows its pack instead, with the price. "Picture not available" for an unknown id |
-| `/game/<puzzleId>/<grid>` | The same picker, that board chosen | Never starts a board directly, so board and pack locks apply |
+| `/play/<puzzleId>` (also `/picture/<id>`) | A picture's mode and board picker | `?grid=hexagons-5x5t4`, `?mode=triangles`, `?painting=1`, `?expand=1` preselect (a grid that is not its size's square board, such as an old `hexagons-5x6` or `cards-3x4t1`, turns Expand on; docs/boards.md). A picture in a pack the player has not opened (or a daily picture not out yet) shows its pack instead, with the price. "Picture not available" for an unknown id |
+| `/game/<puzzleId>/<grid>` | The same picker, that board chosen | Never starts a board directly, so board and pack locks apply; `?painting=1` and `?expand=1` go along |
 | `/daily` (also `/today`) | Today's picture | |
 | `/quick` | Quick play | A random picture, as the Home card picks it |
 | `/events` (also `/quests`) | Quests | |

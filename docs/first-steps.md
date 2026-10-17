@@ -81,7 +81,7 @@ guided again.
 10. **Tips at the moment they matter**, each once: the Library's "Start with the free packs...", the
     board picker's "Pick a shape and a size...", and "Stuck? Hint shows where one card belongs" after
     six moves in a row without a lock or join.
-11. The board picker opens on **Easy** (one step up from nine cards) until the player picks a board.
+11. The board picker opens one step up from nine cards (**Relaxed**, 4x4) until the player picks a board.
 
 Settings > Gameplay > **Guided start** (shown to guided players) turns it off (everything open)
 or back on (what the player reached stays open).

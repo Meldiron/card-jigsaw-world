@@ -1,10 +1,14 @@
 # Giant boards
 
-Pictures of a pack with category `Giant` deal only four giant sizes (Large, Huge, Giant, Colossal:
-about 100 to 300 cards in Cards, more cells in the other shapes; `BoardSpec.giantTiers`). The
-pictures are hosted at up to 4096 px on the long side and decoded at full size, so the board can be
-zoomed in and stay sharp. This page records how other big-board jigsaw apps help players on a phone
-and what Carden does on a giant board.
+Pictures of a pack with category `Giant` deal only four giant sizes (Large, Huge, Giant, Colossal).
+Like every board they are square (owner, 2026-10-17; `docs/boards.md`): in Cards 10x10, 12x12,
+14x14 and 17x17 (100 to 289 cards); Squares 13x13 to 22x22, Triangles 15x15 to 26x26 and Hexagons
+13x13 to 23x23, the squares nearest the counts those shapes had (`BoardSpec.squareGiantTiers`). The
+picture is centre-cropped to the board; Expand, where the picture's shape asks for it, deals the
+picture-shaped giant sizes of before (`BoardSpec.giantTiers`). The pictures are hosted at up to
+4096 px on the long side and decoded at full size, so the board can be zoomed in and stay sharp.
+This page records how other big-board jigsaw apps help players on a phone and what Carden does on
+a giant board.
 
 Giant boards open at level 10 (`Unlock.giant`). Before that a Giant pack's page shows the gate
 (`GiantGateCard`, `lib/features/gallery/giant_gate.dart`): the way to level 10, and two ways in side
