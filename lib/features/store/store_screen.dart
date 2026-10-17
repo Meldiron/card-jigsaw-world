@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
+import '../../core/analytics.dart';
 import '../../core/haptics.dart';
 import '../../core/links.dart';
 import '../../core/platform.dart';
@@ -60,6 +61,8 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
   @override
   void initState() {
     super.initState();
+    // Where the store was opened from: the screen before it (its own screen view came first).
+    AppAnalytics.event('store_opened', {'from': AppAnalytics.previousScreen, 'vip': widget.showVip});
     if (ref.read(platformCapsProvider).purchases) {
       ref.read(purchaseServiceProvider).start();
       // Opened after an answer without products: ask the App Store again, so the prices load.
@@ -927,6 +930,7 @@ void playFromStore(BuildContext context, WidgetRef ref) {
   final router = GoRouter.of(context);
   context.pop();
   if (quickPlay) {
+    AppAnalytics.event('quick_play', {'from': 'store'});
     unawaited(links.show(AppLink.parse(Uri(path: '/quick'))!));
   } else if (next == null || next.route == '/library') {
     // A tab is gone to, as Home's next-step card does; a picture opens on top.

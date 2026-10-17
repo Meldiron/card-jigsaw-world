@@ -2,6 +2,7 @@ import 'package:appwrite/appwrite.dart' show Operator;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../core/analytics.dart';
 import '../data/repositories.dart';
 import 'auth.dart';
 import 'merge.dart';
@@ -127,6 +128,7 @@ class SaveMerge {
       }
     }
     if (data.isNotEmpty) await profiles.update(accountId, data);
+    AppAnalytics.event('guest_merge', {'kept': choice.name});
     return choice == MergeChoice.guest ? MergeOutcome.keptGuest : MergeOutcome.keptAccount;
   }
 }

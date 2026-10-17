@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../core/analytics.dart';
 import '../../core/haptics.dart';
 import '../../core/platform.dart';
 import '../../core/a11y.dart';
@@ -41,6 +42,7 @@ class _MyPuzzlesScreenState extends ConsumerState<MyPuzzlesScreen> {
     try {
       final bytes = await file.readAsBytes();
       await ref.read(uploadRepositoryProvider).upload(userId, bytes: bytes, filename: file.name.isEmpty ? 'photo.jpg' : file.name, title: newMyPhotoTitle(DateTime.now()));
+      AppAnalytics.event('my_puzzle_uploaded', {'source': source.name});
       ref.invalidate(myPuzzlesProvider);
       ref.invalidate(myPuzzleCountProvider);
       if (mounted) {
