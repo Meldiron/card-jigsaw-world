@@ -34,7 +34,8 @@ class GiantBoardBar extends StatelessWidget {
   final bool showMap;
   final VoidCallback onMap;
 
-  /// Gather: brings the cards that belong in view into it, or shuffles the loose ones (at any zoom).
+  /// Gather: brings the cards that belong in view into it (at any zoom). Null while there is
+  /// nothing to gather for the view: the button stays, dimmed.
   final VoidCallback? onGather;
 
   static const height = 44.0;
@@ -53,7 +54,7 @@ class GiantBoardBar extends StatelessWidget {
           final canZoomIn = zoom.zoom < zoom.limit - 0.01;
           return Row(
             children: [
-              if (onGather != null) _BarChip(key: const ValueKey('giant-gather'), icon: AppIcons.gather, label: 'Gather', compact: compact, onTap: onGather!),
+              _BarChip(key: const ValueKey('giant-gather'), icon: AppIcons.gather, label: 'Gather', compact: compact, onTap: onGather),
               const SizedBox(width: 10),
               Expanded(
                 child: LayoutBuilder(
@@ -103,35 +104,45 @@ class GiantBoardBar extends StatelessWidget {
   }
 }
 
-/// A small capsule button: icon and label (Gather).
+/// A small capsule button: icon and label (Gather). Dimmed and still while [onTap] is null.
 class _BarChip extends StatelessWidget {
   const _BarChip({super.key, required this.icon, required this.label, this.compact = false, required this.onTap});
   final IconData icon;
   final String label;
   final bool compact;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
     final fg = c.textSecondary;
-    return Pressable(
-      onTap: onTap,
-      child: Container(
-        height: 34,
-        padding: EdgeInsets.symmetric(horizontal: compact ? 9 : 12),
-        decoration: BoxDecoration(
-          color: c.card,
-          borderRadius: BorderRadius.circular(17),
-          border: Border.all(color: c.stroke),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 16, color: fg),
-            SizedBox(width: compact ? 4 : 6),
-            Text(label, style: TextStyle(fontSize: compact ? TypeSize.caption : TypeSize.footnote, fontWeight: FontWeight.w600, color: fg)),
-          ],
+    return Semantics(
+      button: true,
+      enabled: onTap != null,
+      label: label,
+      excludeSemantics: true,
+      child: Pressable(
+        onTap: onTap,
+        child: AnimatedOpacity(
+          opacity: onTap == null ? 0.4 : 1,
+          duration: const Duration(milliseconds: 160),
+          child: Container(
+            height: 34,
+            padding: EdgeInsets.symmetric(horizontal: compact ? 9 : 12),
+            decoration: BoxDecoration(
+              color: c.card,
+              borderRadius: BorderRadius.circular(17),
+              border: Border.all(color: c.stroke),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(icon, size: 16, color: fg),
+                SizedBox(width: compact ? 4 : 6),
+                Text(label, style: TextStyle(fontSize: compact ? TypeSize.caption : TypeSize.footnote, fontWeight: FontWeight.w600, color: fg)),
+              ],
+            ),
+          ),
         ),
       ),
     );

@@ -7,8 +7,8 @@ import 'package:carden/game/gather.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// Giant boards: Gather, its shuffle, Magic on the selected card and the animated Peek
-/// (docs/giant-boards.md).
+/// The board tools: Gather (giant boards) and its Undo, Shuffle, Magic on the selected card and its
+/// neighbours, and the animated Peek (docs/giant-boards.md).
 void main() {
   group('gather', () {
     test('brings the cards that belong in view into it, without solving any', () {
@@ -40,9 +40,41 @@ void main() {
       final spec = BoardSpec.giantTiers(GameMode.cards).first;
       final solved = Board(spec, List.generate(spec.cells, (i) => i));
       expect(gatherInto(solved, const Rect.fromLTWH(0, 0, 100, 100), const Size(300, 400)), isNull);
+      expect(canGather(solved, const Rect.fromLTWH(0, 0, 100, 100), const Size(300, 400)), isFalse);
+      // The whole board in view: every card already belongs in it.
+      final dealt = Board.shuffled(spec, seed: 4);
+      expect(canGather(dealt, const Rect.fromLTWH(0, 0, 360, 480), const Size(360, 480)), isFalse);
     });
 
-    test('Gather is not a move and Undo takes it back', () {
+    test('canGather says exactly when Gather has something to do', () {
+      final rng = Random(5);
+      const size = Size(360, 480);
+      var some = 0, none = 0;
+      for (final mode in GameMode.values) {
+        for (final spec in BoardSpec.giantTiers(mode)) {
+          var b = Board.shuffled(spec, seed: rng.nextInt(1000));
+          for (var i = 0; i < 6; i++) {
+            final w = 40 + rng.nextDouble() * 320, h = 50 + rng.nextDouble() * 430;
+            final view = Rect.fromLTWH(rng.nextDouble() * (size.width - w), rng.nextDouble() * (size.height - h), w, h);
+            // Gather on the same view until it has nothing left to bring in.
+            for (var round = 0; round < 6; round++) {
+              final after = gatherInto(b, view, size);
+              expect(canGather(b, view, size), after != null, reason: '$mode ${spec.code} $view round $round');
+              if (after == null) {
+                none++;
+                break;
+              }
+              some++;
+              b = after;
+            }
+          }
+        }
+      }
+      expect(some, greaterThan(10));
+      expect(none, greaterThan(10));
+    });
+
+    test('Gather is not a move and Undo takes it back without adding one', () async {
       final spec = BoardSpec.giantTiers(GameMode.cards).last;
       final layout = Board.shuffled(spec, seed: 12).slots;
       final container = ProviderContainer();
@@ -50,17 +82,39 @@ void main() {
       final args = GameArgs(puzzleId: 'p', spec: spec, layout: layout, moves: 3);
       final ctrl = container.read(gameControllerProvider(args).notifier);
       container.listen(gameControllerProvider(args), (_, _) {});
-      final n = ctrl.gather(const Rect.fromLTWH(0, 0, 120, 160), const Size(360, 480)).gathered;
+      final events = <GameEventKind>[];
+      final sub = ctrl.events.listen(events.add);
+      addTearDown(sub.cancel);
+      final n = ctrl.gather(const Rect.fromLTWH(0, 0, 120, 160), const Size(360, 480));
       final s = container.read(gameControllerProvider(args));
       expect(n, greaterThan(0));
       expect(s.moves, 3);
       expect(s.history, hasLength(1));
       ctrl.undo();
-      expect(container.read(gameControllerProvider(args)).board.slots, layout);
+      final back = container.read(gameControllerProvider(args));
+      expect(back.board.slots, layout);
+      expect(back.moves, 3, reason: 'Undo is not a move either');
+      await pumpEventQueue();
+      expect(events, [GameEventKind.rearrange, GameEventKind.undo]);
+    });
+
+    test('Gather does nothing when the view holds its cards: no shuffle any more', () {
+      final spec = BoardSpec.giantTiers(GameMode.cards).first;
+      final layout = Board.shuffled(spec, seed: 12).slots;
+      final container = ProviderContainer();
+      addTearDown(container.dispose);
+      final args = GameArgs(puzzleId: 'p', spec: spec, layout: layout, moves: 2);
+      final ctrl = container.read(gameControllerProvider(args).notifier);
+      container.listen(gameControllerProvider(args), (_, _) {});
+      const size = Size(360, 480);
+      expect(ctrl.gather(Offset.zero & size, size), 0);
+      final s = container.read(gameControllerProvider(args));
+      expect(s.board.slots, layout);
+      expect(s.history, isEmpty);
     });
   });
 
-  group('shuffle (a Gather with nothing to bring in)', () {
+  group('shuffle', () {
     Board joinedPairAndPlaced(BoardSpec spec) {
       // A shuffled board with one card in place and, where the shape allows it, a pair of cards
       // joined together away from their places.
@@ -131,30 +185,75 @@ void main() {
       }
     });
 
-    test('Gather shuffles when the view already holds its cards; Undo takes it back', () {
-      final spec = BoardSpec.giantTiers(GameMode.cards).first;
-      final layout = Board.shuffled(spec, seed: 12).slots;
+    test('on a normal board every loose card moves; cards in place and groups stay', () {
+      for (final mode in GameMode.values) {
+        for (final spec in [BoardSpec.tiers(mode)[0], BoardSpec.tiers(mode)[4]]) {
+          final before = joinedPairAndPlaced(spec);
+          final after = shuffleLoose(before, random: Random(2))!;
+          expect(Board.isValidLayout(spec, after.slots), isTrue);
+          var moved = 0, loose = 0;
+          for (var s = 0; s < spec.cells; s++) {
+            final fixed = before.isLocked(s) || before.groupOf(s).length > 1;
+            if (fixed) expect(after.slots[s], before.slots[s], reason: '${spec.fullCode}: slot $s is in place or joined');
+            if (!fixed) {
+              loose++;
+              if (after.slots[s] != before.slots[s]) moved++;
+            }
+          }
+          // A shape with a single loose card (a lone half piece) cannot move; every other one does.
+          expect(moved, greaterThan(loose * 3 ~/ 4), reason: '${spec.fullCode}: the loose cards move');
+          expect(after.lockedCount, before.lockedCount, reason: '${spec.fullCode}: the shuffle never puts a card in place');
+        }
+      }
+    });
+
+    test('Shuffle is not a move; it says when nothing is left to shuffle', () {
+      final spec = BoardSpec.tiers(GameMode.cards)[2];
+      final layout = Board.shuffled(spec, seed: 6).slots;
       final container = ProviderContainer();
       addTearDown(container.dispose);
-      final args = GameArgs(puzzleId: 'p', spec: spec, layout: layout, moves: 2);
+      final args = GameArgs(puzzleId: 'p', spec: spec, layout: layout, moves: 5);
       final ctrl = container.read(gameControllerProvider(args).notifier);
       container.listen(gameControllerProvider(args), (_, _) {});
-      // The whole board in view: every card belongs here, so nothing is gathered.
-      const size = Size(360, 480);
-      final r = ctrl.gather(Offset.zero & size, size, random: Random(3));
-      expect(r.gathered, 0);
-      expect(r.shuffled, greaterThan(spec.cells ~/ 2));
+      final moved = ctrl.shuffle(random: Random(1));
       final s = container.read(gameControllerProvider(args));
-      expect(s.moves, 2, reason: 'not a move');
+      expect(moved, spec.cells, reason: 'every card was loose');
+      expect(s.moves, 5);
       expect(s.board.slots, isNot(layout));
-      ctrl.undo();
-      expect(container.read(gameControllerProvider(args)).board.slots, layout);
+      expect(s.board.lockedCount, 0);
+      // Two loose cards that belong in each other's places cannot move without one landing home.
+      final last = List<int>.generate(spec.cells, (i) => i);
+      last[0] = 1;
+      last[1] = 0;
+      final args2 = GameArgs(puzzleId: 'q', spec: spec, layout: last);
+      final ctrl2 = container.read(gameControllerProvider(args2).notifier);
+      container.listen(gameControllerProvider(args2), (_, _) {});
+      expect(ctrl2.shuffle(), 0);
+      expect(container.read(gameControllerProvider(args2)).board.slots, last);
+    });
+
+    test('Shuffle on a giant board keeps to the view', () {
+      final spec = BoardSpec.giantTiers(GameMode.cards).first;
+      final layout = Board.shuffled(spec, seed: 3).slots;
+      final container = ProviderContainer();
+      addTearDown(container.dispose);
+      final args = GameArgs(puzzleId: 'p', spec: spec, layout: layout);
+      final ctrl = container.read(gameControllerProvider(args).notifier);
+      container.listen(gameControllerProvider(args), (_, _) {});
+      const size = Size(360, 480);
+      const view = Rect.fromLTWH(100, 100, 120, 160);
+      expect(ctrl.shuffle(view: view, size: size, random: Random(2)), greaterThan(4));
+      final after = container.read(gameControllerProvider(args)).board;
+      for (var s = 0; s < spec.cells; s++) {
+        if (!view.contains(spec.tiling.cellCenter(s, size))) expect(after.slots[s], layout[s]);
+      }
     });
 
     test('nothing to shuffle: a solved board or a single loose card', () {
       final spec = BoardSpec.giantTiers(GameMode.cards).first;
       final solved = Board(spec, List.generate(spec.cells, (i) => i));
       expect(shuffleInView(solved, const Rect.fromLTWH(0, 0, 360, 480), const Size(360, 480)), isNull);
+      expect(shuffleLoose(solved), isNull);
     });
   });
 
@@ -177,6 +276,67 @@ void main() {
       expect(ctrl.magicLock(), isTrue);
       final after = container.read(gameControllerProvider(args)).board;
       expect(after.slots[card], card, reason: 'the selected card is now in its place');
+      for (final n in spec.tiling.neighbours(card)) {
+        expect(after.slots[n], n, reason: 'and its picture neighbour $n');
+      }
+    });
+
+    test('Magic places the selected card and its neighbours: one move each, a lock but never a double lock', () async {
+      const spec = GridSpec(4, 4, 'Relaxed');
+      for (final card in [5, 0, 15, 6]) {
+        final layout = Board.shuffled(spec, seed: card).slots;
+        final container = ProviderContainer();
+        addTearDown(container.dispose);
+        final args = GameArgs(puzzleId: 'p$card', spec: spec, layout: layout, moves: 2);
+        final ctrl = container.read(gameControllerProvider(args).notifier);
+        container.listen(gameControllerProvider(args), (_, _) {});
+        final events = <GameEventKind>[];
+        final sub = ctrl.events.listen(events.add);
+        addTearDown(sub.cancel);
+        final b = container.read(gameControllerProvider(args)).board;
+        // What Magic should send: the card, then each neighbour not in place by then.
+        var expected = b.moveTo(b.slotOfCard(card), card)!;
+        var sent = 1;
+        for (final n in spec.tiling.neighbours(card)) {
+          if (expected.isLocked(n)) continue;
+          expected = expected.moveTo(expected.slotOfCard(n), n)!;
+          sent++;
+        }
+        ctrl.tap(b.slotOfCard(card));
+        expect(ctrl.magicLock(), isTrue);
+        final s = container.read(gameControllerProvider(args));
+        expect(s.board.slots, expected.slots);
+        for (final c in [card, ...spec.tiling.neighbours(card)]) {
+          expect(s.board.isLocked(c), isTrue, reason: 'card $c in place');
+        }
+        expect(s.moves, 2 + sent, reason: 'one move per card Magic sends');
+        expect(s.hintsUsed, 1);
+        expect(s.history, hasLength(1), reason: 'one step on the board');
+        expect(s.chain, 0, reason: 'no ×2 DOUBLE LOCK for Magic');
+        expect(s.bestLock, 0, reason: 'the longest lock stays the player\'s');
+        expect(s.justLocked.length, greaterThanOrEqualTo(spec.tiling.neighbours(card).length + 1));
+        await pumpEventQueue();
+        expect(events.last, GameEventKind.lock);
+        expect(events, isNot(contains(GameEventKind.doubleLock)));
+      }
+    });
+
+    test('on a 3x3, Magic places up to 5 of the 9 cards', () {
+      const spec = GridSpec(3, 3, 'Cozy');
+      final container = ProviderContainer();
+      addTearDown(container.dispose);
+      // Every card one cell along (a single cycle): no card in place, no pair joined.
+      final layout = [for (var s = 0; s < 9; s++) (s + 4) % 9];
+      final args = GameArgs(puzzleId: 'p', spec: spec, layout: layout);
+      final ctrl = container.read(gameControllerProvider(args).notifier);
+      container.listen(gameControllerProvider(args), (_, _) {});
+      ctrl.tap(layout.indexOf(4));
+      ctrl.magicLock();
+      final b = container.read(gameControllerProvider(args)).board;
+      for (final c in [4, 1, 3, 5, 7]) {
+        expect(b.isLocked(c), isTrue, reason: 'card $c');
+      }
+      expect(container.read(gameControllerProvider(args)).moves, inInclusiveRange(1, 5));
     });
   });
 

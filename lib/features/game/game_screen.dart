@@ -16,6 +16,7 @@ import '../../core/theme/tokens.dart';
 import '../../data/sync/ops.dart';
 import '../../game/board.dart';
 import '../../game/game_controller.dart';
+import '../../game/gather.dart';
 import '../../game/image_loader.dart';
 import '../../models/models.dart';
 import '../../router.dart' show rootNavigatorKey;
@@ -76,6 +77,15 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   bool _viewCleared = false;
   String? _viewId;
   Timer? _viewSave;
+
+  /// The board's size on screen at zoom 1 (from the layout), for Shuffle and Gather on a giant board.
+  Size? _boardSize;
+
+  /// Giant boards: whether Gather has anything to do for the view (the button is dimmed
+  /// otherwise), worked out once the view settles and after the board changes, never per frame.
+  bool _canGather = false;
+  Board? _gatherChecked;
+  Timer? _gatherCheck;
   GameArgs? _args;
   bool _fitted = false;
   GameArgs? _listening;
@@ -124,6 +134,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   }
 
   void _onZoomChanged() {
+    _scheduleGatherCheck();
     _maybeLocateTip();
     if (_viewId == null || _viewCleared) return;
     _viewSave?.cancel();
@@ -254,6 +265,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     _zoom.removeListener(_onZoomChanged);
     _zoom.dispose();
     _coachTimer?.cancel();
+    _gatherCheck?.cancel();
     super.dispose();
   }
 
@@ -298,6 +310,10 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
       case GameEventKind.undo:
         Sfx.instance.whoosh();
         Haptics.light();
+        _scheduleSave();
+      case GameEventKind.rearrange:
+        Sfx.instance.whoosh();
+        Haptics.medium();
         _scheduleSave();
       case GameEventKind.invalid:
         Sfx.instance.error();
@@ -600,20 +616,57 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     _ctrl.peek(duration: giant ? GameController.giantPeekTime : GameController.peekTime);
   }
 
-  /// Gather (zoomed giant board): the cards that belong in view come into it.
-  /// Gather (giant boards, at any zoom): the cards that belong in view come into it; when they
-  /// are all here or nearby already, the loose ones in view are shuffled instead.
+  /// Shuffle (free, owner 2026-10-17): the loose cards trade places; on a giant board only the
+  /// ones in view. Cards in place and joined groups stay.
+  void _shuffle() {
+    final giant = ref.read(gameControllerProvider(_args!)).board.spec.isGiant;
+    final size = _boardSize;
+    final moved = giant && size != null ? _ctrl.shuffle(view: _zoom.visible, size: size) : _ctrl.shuffle();
+    if (moved == 0) showToast(context, 'Nothing left to shuffle', icon: AppIcons.shuffle);
+  }
+
+  /// Gather (giant boards, at any zoom): the cards that belong in view come into it. The toast
+  /// offers Undo while nothing else has changed.
   void _gather(Size boardSize) {
-    final r = _ctrl.gather(_zoom.visible, boardSize);
-    if (r.gathered > 0) {
-      Haptics.medium();
-      showToast(context, '${r.gathered} card${r.gathered == 1 ? '' : 's'} gathered', icon: AppIcons.gather);
-    } else if (r.shuffled > 0) {
-      Haptics.medium();
-      showToast(context, 'Every card for this view is here or nearby. The loose ones were shuffled.', icon: AppIcons.gather);
-    } else {
+    final n = _ctrl.gather(_zoom.visible, boardSize);
+    if (n == 0) {
       showToast(context, 'Every card for this view is here or nearby', icon: AppIcons.gather);
+      return;
     }
+    final args = _args;
+    final mark = ref.read(gameControllerProvider(args!)).history.length;
+    showToast(
+      context,
+      '${formatCount(n)} card${n == 1 ? '' : 's'} gathered',
+      icon: AppIcons.gather,
+      action: (
+        label: 'Undo',
+        onTap: () {
+          if (!mounted || _args != args) return;
+          final s = ref.read(gameControllerProvider(args));
+          if (s.history.length != mark || s.status != GameStatus.playing) {
+            showToast(context, 'The board has changed since, so the gather stays', icon: AppIcons.gather);
+            return;
+          }
+          _ctrl.undo();
+        },
+      ),
+    );
+  }
+
+  void _scheduleGatherCheck() {
+    _gatherCheck?.cancel();
+    _gatherCheck = Timer(const Duration(milliseconds: 150), _checkGather);
+  }
+
+  void _checkGather() {
+    final size = _boardSize;
+    if (!mounted || _args == null || size == null || _zoom.viewport.isEmpty) return;
+    final board = ref.read(gameControllerProvider(_args!)).board;
+    if (!board.spec.isGiant) return;
+    _gatherChecked = board;
+    final can = canGather(board, _zoom.visible, size);
+    if (can != _canGather) setState(() => _canGather = can);
   }
 
   void _offerStore(String message) {
@@ -716,6 +769,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     final state = ref.watch(gameControllerProvider(_args!));
     final zoomable = state.board.spec.isGiant;
     if (zoomable && image.hasValue) _syncView(state);
+    if (zoomable && image.hasValue && !identical(state.board, _gatherChecked) && !(_gatherCheck?.isActive ?? false)) _scheduleGatherCheck();
     final sel = state.selected;
     // Locate: while the map is on, the selected card's place shows on it.
     final locate = sel != null && sel < state.board.cells && !state.board.isLocked(sel) ? sel : null;
@@ -747,6 +801,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                       final bar = zoomable && image.hasValue ? GiantBoardBar.height : 0.0;
                       final fitted = state.board.tiling.fit(Size(cons.maxWidth - 24, cons.maxHeight - 16 - bar), imageAspect);
                       final w = fitted.width, h = fitted.height;
+                      _boardSize = Size(w, h);
                       return Center(
                         child: image.when(
                           loading: () => SizedBox(
@@ -793,7 +848,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                                         setState(() => _showMap = !_showMap);
                                         ref.read(giantViewsProvider).showMap = _showMap;
                                       },
-                                      onGather: state.status == GameStatus.playing ? () => _gather(Size(w, h)) : null,
+                                      onGather: state.status == GameStatus.playing && !state.peeking && _canGather ? () => _gather(Size(w, h)) : null,
                                     ),
                                   if (!zoomable)
                                     BoardWidget(
@@ -898,12 +953,11 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                               hints: profile?.hints ?? 0,
                               peeks: profile?.peeks ?? 0,
                               magics: profile?.magics ?? 0,
-                              canUndo: state.canUndo,
                               playing: state.status == GameStatus.playing && !state.peeking,
                               onHint: _hint,
                               onMagic: _magic,
                               onPeek: _peek,
-                              onUndo: _ctrl.undo,
+                              onShuffle: _shuffle,
                             ),
                           ),
                         ),
@@ -1104,26 +1158,25 @@ class _HudStat extends StatelessWidget {
 }
 
 class _BoosterBar extends StatelessWidget {
-  const _BoosterBar({required this.hints, this.peeks = 0, this.magics = 0, required this.canUndo, required this.playing, required this.onHint, required this.onMagic, required this.onPeek, required this.onUndo});
+  const _BoosterBar({required this.hints, this.peeks = 0, this.magics = 0, required this.playing, required this.onHint, required this.onMagic, required this.onPeek, required this.onShuffle});
   final int hints;
 
   /// Peeks and Magic in stock: used before coins, shown as a count on the tool.
   final int peeks;
   final int magics;
-  final bool canUndo;
   final bool playing;
 
   final VoidCallback onHint;
   final VoidCallback onMagic;
   final VoidCallback onPeek;
-  final VoidCallback onUndo;
+  final VoidCallback onShuffle;
 
   @override
   // Chrome keeps its size above the text-size cap of the bars (see ChromeText).
   Widget build(BuildContext context) => ChromeText(child: Builder(builder: _build));
 
   Widget _build(BuildContext context) {
-    final undo = _Booster(icon: AppIcons.undo, label: 'Undo', enabled: canUndo, onTap: onUndo);
+    final shuffle = _Booster(key: const ValueKey('booster-shuffle'), icon: AppIcons.shuffle, label: 'Shuffle', enabled: playing, onTap: onShuffle);
     final paid = [
       _Booster(key: const ValueKey('booster-peek'), icon: AppIcons.peek, label: 'Peek', stock: peeks, price: Economy.peekCostCoins, enabled: playing, onTap: onPeek),
       _Booster(key: const ValueKey('booster-magic'), icon: AppIcons.magic, label: 'Magic', stock: magics, price: Economy.magicLockCostCoins, enabled: playing, onTap: onMagic),
@@ -1145,11 +1198,11 @@ class _BoosterBar extends StatelessWidget {
             child: SizedBox(height: _Booster.barHeight, child: Padding(padding: padding, child: child)),
           ),
         );
-    // Undo, free and about the moves, in its own round glass button; the three
-    // helpers, which come from stock or cost coins, together in a capsule.
+    // Shuffle, free and not a move, in its own round glass button (owner, 2026-10-17: it replaced
+    // Undo); the three helpers, which come from stock or cost coins, together in a capsule.
     final bar = Row(
       children: [
-        capsule(SizedBox(width: _Booster.barHeight - 4, child: undo), padding: const EdgeInsets.symmetric(horizontal: 2)),
+        capsule(SizedBox(width: _Booster.barHeight - 4, child: shuffle), padding: const EdgeInsets.symmetric(horizontal: 2)),
         const SizedBox(width: 10),
         Expanded(child: capsule(Row(children: [for (final b in paid) Expanded(child: b)]))),
       ],
@@ -1164,7 +1217,7 @@ class _BoosterBar extends StatelessWidget {
 /// One tool: its mark over its name, and one badge on the mark's corner that
 /// says what using it takes: how many are in stock (ink count, "999+" above
 /// that, as iOS badges do), or once the stock is out, its price (a coin and
-/// the amount). Undo is free and has no badge. Every tool has the same two
+/// the amount). Shuffle is free and has no badge. Every tool has the same two
 /// lines, so marks and names align.
 class _Booster extends StatelessWidget {
   const _Booster({super.key, required this.icon, required this.label, required this.enabled, required this.onTap, this.stock, this.price});
