@@ -517,7 +517,8 @@ class _Greeting extends StatelessWidget {
     final n = (name?.trim() ?? '').split(RegExp(r'\s+')).first;
     final title = n.isEmpty || n == 'Player' ? part : '$part, $n';
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 8, 20, 4),
+      // Room above the date and under the greeting (owner, 2026-10-17: it felt compact).
+      padding: const EdgeInsets.fromLTRB(20, 18, 20, 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
