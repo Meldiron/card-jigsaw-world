@@ -60,7 +60,10 @@ LOCALE = "en-US"  # replaced at startup by the app's primaryLocale (en-GB for th
 BASE_TERRITORY = "USA"
 SCREENSHOT_TYPE = "APP_IPHONE_67"
 BETA_GROUP_NAME = "Public testers"
-NOTIFICATIONS_URL = "https://cjw-verify-purchase.fra.appwrite.run/notifications"  # verify-purchase Appwrite Function
+# verify-purchase Appwrite Function. Moves to "https://cjw-api.fra.appwrite.run/purchase/notifications" only
+# after `api` has execute `any` (docs/functions.md, "Retiring an old function"): until then that domain
+# answers 403 and Apple's notifications would be lost.
+NOTIFICATIONS_URL = "https://cjw-verify-purchase.fra.appwrite.run/notifications"
 # READY_FOR_REVIEW: in a review draft that has not been sent; still editable until it is submitted.
 EDITABLE_VERSION_STATES = ("PREPARE_FOR_SUBMISSION", "READY_FOR_REVIEW", "DEVELOPER_REJECTED", "REJECTED", "METADATA_REJECTED", "INVALID_BINARY")
 # Review submissions that are still open (not yet sent to Apple, or sent and not finished).

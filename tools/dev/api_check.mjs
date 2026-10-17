@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // Live check of the `api` function (docs/functions.md): every route, called the way the app calls
-// it (Functions.createExecution with a player's session), by QA-flagged players on the live backend.
+// it (Functions.createExecution with a player's session), by QA-flagged players on the live backend,
+// and every route without a session (the REST API and the function's domain, as Apple calls it).
 // Prints each call's answer and time (wall time on this Mac and the execution's own duration), then
 // cleans up: the pack code it made, the private-pack read access its player got, and its players
 // (tools/dev/purge_test_players.py; the account-deletion player deletes itself through the api).
@@ -78,6 +79,67 @@ function expectTrue(label, value) {
   console.log(`${value ? 'ok  ' : 'FAIL'} ${label}`);
 }
 
+// Callers without a session. Once anyone may execute `api` (execute `any`, so that Apple can send its
+// notifications to the function's domain, https://cjw-api.fra.appwrite.run), such a caller, through the
+// REST API or the domain, must reach nothing but /health and the notifications route (which needs
+// Apple's signature), and x-appwrite-* headers it sends must not count. Before that, Appwrite must
+// refuse every such call.
+const DOMAIN = 'https://cjw-api.fra.appwrite.run';
+const NO_SESSION = [
+  ['GET', '/health', undefined, 200],
+  ['POST', '/purchase/notifications', { signedPayload: 'a.b.c' }, 401],
+  ['POST', '/purchase/notifications', {}, 400],
+  ['POST', '/purchase/verify', { jws: 'a.b.c' }, 401],
+  ['POST', '/account/delete', {}, 401],
+  ['POST', '/code/redeem', { code: 'AAAA-BBBB-CCCC-DDDD' }, 401],
+  ['POST', '/gift/send', { friendId: 'x', kind: 'coins' }, 401],
+  ...['create', 'join', 'leave', 'remove', 'end', 'next'].map((a) => ['POST', `/coop/${a}`, {}, 401]),
+  ['POST', '/coop/cleanup', {}, 404],
+  ['POST', '/admin/sweep', { dryRun: false, full: true }, 404],
+  ['POST', '/', {}, 404],
+];
+
+/// One call without a session: `rest` through Functions.createExecution, `domain` straight to the
+/// function's domain (as Apple calls it). Appwrite's own refusal comes back as `{ appwrite: status }`.
+async function anonymous(via, method, path, body, headers = {}) {
+  const t0 = Date.now();
+  if (via === 'domain') {
+    const r = await fetch(DOMAIN + path, { method, headers: { 'Content-Type': 'application/json', ...headers }, body: body === undefined ? undefined : JSON.stringify(body) });
+    const text = await r.text();
+    let answer = {};
+    try { answer = text ? JSON.parse(text) : {}; } catch { answer = { text: text.slice(0, 80) }; }
+    if (answer.type?.startsWith('router_')) return { appwrite: r.status, body: answer, wall: Date.now() - t0 };
+    return { status: r.status, body: answer, wall: Date.now() - t0 };
+  }
+  try {
+    const exec = await call('POST', `/functions/${FUNCTION}/executions`, { key: false, body: { path, method, body: body === undefined ? '' : JSON.stringify(body), async: false } });
+    return { status: exec.responseStatusCode, body: exec.responseBody ? JSON.parse(exec.responseBody) : {}, wall: Date.now() - t0 };
+  } catch (e) {
+    return { appwrite: e.code, body: { error: e.message }, wall: Date.now() - t0 };
+  }
+}
+
+async function checkWithoutSession(spoofAs) {
+  // Until execute is `any`, Appwrite refuses every call without a session before the function runs.
+  const open = (await anonymous('domain', 'GET', '/health')).status === 200;
+  if (!open) console.log('note no session: api is not executable without a session (execute is not `any`), so Apple cannot reach its domain; its notification URL stays on verify-purchase (docs/functions.md)');
+  for (const via of ['rest', 'domain']) {
+    for (const [method, path, body, want] of NO_SESSION) {
+      const r = await anonymous(via, method, path, body);
+      const ok = open ? r.status === want : Boolean(r.appwrite);
+      if (!ok) failures++;
+      const got = r.appwrite ? `refused by Appwrite ${r.appwrite}` : `${r.status}`;
+      console.log(`${ok ? 'ok  ' : 'FAIL'} ${`no session (${via})`.padEnd(44)} ${method} ${path.padEnd(18)} ${got.padEnd(4)} wall ${String(r.wall).padStart(5)} ms  ${JSON.stringify(r.body).slice(0, 100)}${ok ? '' : `  <- expected ${open ? `${want} from the function` : 'a refusal by Appwrite'}`}`);
+    }
+  }
+  if (!open) return;
+  // Headers a caller sends through the domain do not make it a player, an event or the schedule.
+  const asPlayer = await anonymous('domain', 'POST', '/coop/join', { code: 'ZZZZZZZZ' }, { 'x-appwrite-user-id': spoofAs });
+  expectTrue(`no session (domain): x-appwrite-user-id of a player is ignored (${asPlayer.status} ${asPlayer.body.reason ?? ''})`, asPlayer.status === 401 && asPlayer.body.reason === 'auth');
+  const asEvent = await anonymous('domain', 'POST', '/', {}, { 'x-appwrite-trigger': 'event', 'x-appwrite-event': 'tablesdb.cjw.tables.friends.rows.x.create' });
+  expectTrue(`no session (domain): x-appwrite-trigger event is ignored (${asEvent.status})`, asEvent.status === 404 && !asEvent.body.ignored);
+}
+
 async function makePlayer(name, avatar) {
   const userId = 'qaapi' + randomBytes(8).toString('hex');
   await call('POST', '/users', { body: { userId, name } });
@@ -113,6 +175,9 @@ try {
   await check('purchase: no transaction', ada, 'POST', '/purchase/verify', {}, { status: 400, body: { ok: false, error: 'Missing transaction' } });
   await check('purchase: not signed by Apple', ada, 'POST', '/purchase/verify', { jws: 'a.b.c', productId: 'tickets_5' }, { status: 400, body: { ok: false, error: 'Transaction could not be verified' } });
   await check('notification: not signed by Apple', ada, 'POST', '/purchase/notifications', { signedPayload: 'a.b.c' }, { status: 401, body: { ok: false } });
+
+  // Callers without a session (Apple, and anyone else).
+  if (FUNCTION === 'api') await checkWithoutSession(ada.userId);
 
   // Pack codes: a wrong code, then a code made for this run (one use).
   await check('code: wrong', ada, 'POST', '/code/redeem', { code: 'AAAA-BBBB-CCCC-DDDD' }, { status: 200, body: { ok: false, error: 'invalid' } });
@@ -172,7 +237,7 @@ try {
   expectTrue("account: Ada's friend link to Dee is gone", (await rows('friends', [q('equal', 'friendId', [deeId])])).total === 0);
   expectTrue("account: Dee's seat in Ada's game is empty", !((await row('coop_games', game.id))?.players || []).includes(deeId));
   await check('account: without a session', { secret: '' }, 'POST', '/account/delete', {}, { status: 401 }).catch((e) => {
-    // Appwrite refuses a guest without a session before the function runs (execute: users).
+    // Appwrite refuses a call without a session before the function runs while execute is `users`.
     expectTrue(`account: a call without a session is refused by Appwrite (${e.code})`, e.code === 401);
   });
 

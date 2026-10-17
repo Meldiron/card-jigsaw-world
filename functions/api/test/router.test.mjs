@@ -1,6 +1,6 @@
 // The router (src/main.js): every route reaches its module, nothing runs at the root, a scheduled
-// execution runs the co-op cleanup, the manual cleanup refuses players, and calls without a user are
-// refused as the old functions refused them.
+// execution runs the co-op cleanup, the manual cleanup and sweep refuse players and calls without a
+// user, and calls without a user are refused as the old functions refused them.
 //
 //   cd functions/api && npm install && npm test
 import { test, mock } from 'node:test';
@@ -121,11 +121,25 @@ test('the manual sweep is for callers who are not players, and a dry run unless 
   assert.deepEqual([r.status, r.body.ok, r.body.apply, r.body.full], [200, true, false, true]);
 });
 
-test('the manual cleanup is for callers who are not players only', async () => {
+test('the manual cleanup is for console users only', async () => {
   assert.deepEqual(await run('POST', '/coop/cleanup', { headers: player }), { status: 404, body: { ok: false, error: 'Not found' } });
-  for (const headers of [{ 'x-appwrite-trigger': 'http' }, { 'x-appwrite-trigger': 'http', 'x-appwrite-user-id': 'console-owner' }]) {
-    const r = await run('POST', '/coop/cleanup', { headers });
-    assert.equal(r.status, 200, JSON.stringify(headers));
-    assert.equal(r.body.ok, true);
+  const r = await run('POST', '/coop/cleanup', { headers: { 'x-appwrite-trigger': 'http', 'x-appwrite-user-id': 'console-owner' } });
+  assert.equal(r.status, 200);
+  assert.equal(r.body.ok, true);
+});
+
+// Anyone may execute `api` (execute `any`, for Apple's notifications at its domain): a call without a
+// user reaches the function, so every route must refuse it itself, except the notifications (Apple's
+// signature) and the health check.
+test('a caller without a user gets nothing but the health check and the notifications route', async () => {
+  const anon = { 'x-appwrite-trigger': 'http' };
+  const notFound = { status: 404, body: { ok: false, error: 'Not found' } };
+  assert.deepEqual(await run('POST', '/coop/cleanup', { headers: anon }), notFound);
+  assert.deepEqual(await run('POST', '/admin/sweep', { headers: anon, body: { dryRun: false, full: true } }), notFound);
+  for (const a of COOP_ACTIONS) assert.equal((await run('POST', `/coop/${a}`, { headers: anon, body: {} })).status, 401, a);
+  for (const path of ['/gift/send', '/code/redeem', '/account/delete', '/purchase/verify']) {
+    assert.equal((await run('POST', path, { headers: anon, body: {} })).status, 401, path);
   }
+  assert.deepEqual(await run('POST', '/purchase/notifications', { headers: anon, body: {} }), { status: 400, body: { ok: false, error: 'Missing signedPayload' } });
+  assert.equal((await run('GET', '/health', { headers: anon })).status, 200);
 });
