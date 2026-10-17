@@ -200,7 +200,11 @@ class PackScreen extends ConsumerWidget {
           else
           Row(
             children: [
-              Icon(packProgress.perfect ? AppIcons.star : AppIcons.check, color: packProgress.perfect ? context.star : c.success, size: 18),
+              // A finished pack shows the same done badge as its cover.
+              if (packProgress.complete)
+                PackDoneBadges(progress: packProgress, size: 20, onImage: false)
+              else
+                Icon(AppIcons.check, color: context.accent, size: 18),
               const SizedBox(width: 6),
               Expanded(
                 child: Text(

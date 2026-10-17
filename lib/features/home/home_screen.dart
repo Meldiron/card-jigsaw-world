@@ -1100,7 +1100,7 @@ IconData _unlockIcon(Unlock u) => switch (u) {
     };
 
 /// Month tile for the daily puzzle row: cover, name and the same progress
-/// line and completion badges as the library cards.
+/// line and done badge as the library cards.
 class _MonthCard extends ConsumerWidget {
   const _MonthCard({required this.pack, required this.current, required this.onTap});
   final Pack pack;
@@ -1145,7 +1145,7 @@ String _endsIn(Pack pack) {
 }
 
 /// Square cover tile shared by the Home event and month rows: picture with
-/// a scrim, a status chip top left, the completion badges top right, and the
+/// a scrim, a status chip top left, the done badge top right, and the
 /// name over the pack's progress line.
 class _CoverTile extends StatelessWidget {
   const _CoverTile({required this.pack, required this.progress, required this.onTap, this.chip, this.nameLines = 1});
@@ -1191,7 +1191,7 @@ class _CoverTile extends StatelessWidget {
                       child: chip == null ? const SizedBox.shrink() : FittedBox(fit: BoxFit.scaleDown, alignment: Alignment.centerLeft, child: chip),
                     ),
                   ),
-                  if (progress.complete) ...[const SizedBox(width: 6), PackDoneBadges(progress: progress, size: 22)],
+                  if (progress.complete) ...[const SizedBox(width: 6), PackDoneBadges(progress: progress)],
                 ],
               ),
             ),
@@ -1509,7 +1509,7 @@ class _StatCell extends StatelessWidget {
   }
 }
 
-/// One finished pack: cover with the done badges, name, star progress line.
+/// One finished pack: cover, name with the done badge, star progress line.
 class _FinishedRow extends StatelessWidget {
   const _FinishedRow({required this.pack, required this.progress});
   final Pack pack;
@@ -1541,7 +1541,7 @@ class _FinishedRow extends StatelessWidget {
                         child: Text(pack.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body)),
                       ),
                       const SizedBox(width: 6),
-                      PackDoneBadges(progress: progress, size: 16),
+                      PackDoneBadges(progress: progress, size: 20, onImage: false),
                     ],
                   ),
                   const SizedBox(height: 6),

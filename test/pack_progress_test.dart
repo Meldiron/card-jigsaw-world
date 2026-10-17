@@ -1,5 +1,7 @@
 import 'package:appwrite/models.dart' as models;
+import 'package:carden/core/a11y.dart';
 import 'package:carden/core/theme/app_theme.dart';
+import 'package:carden/core/theme/tokens.dart';
 import 'package:carden/data/local_store.dart';
 import 'package:carden/features/events/events_screen.dart';
 import 'package:carden/features/gallery/pack_progress.dart';
@@ -11,6 +13,7 @@ import 'package:carden/state/profile.dart';
 import 'package:carden/state/progress.dart';
 import 'package:carden/state/settings.dart';
 import 'package:carden/widgets/glass.dart';
+import 'package:carden/widgets/icons.dart';
 import 'package:carden/widgets/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -87,7 +90,7 @@ void main() {
       expect(find.byKey(const ValueKey('pack-perfect-badge')), findsNothing);
     });
 
-    testWidgets('complete: check badge, star bar and both counts where they fit', (tester) async {
+    testWidgets('complete: done badge, star bar and both counts where they fit', (tester) async {
       const p = PackProgress(solved: 30, total: 30, stars: 88);
       await tester.pumpWidget(_host(const Column(children: [PackDoneBadges(progress: p), PackProgressLine(progress: p)])));
       expect(find.byKey(const ValueKey('pack-done-badge')), findsOneWidget);
@@ -104,12 +107,44 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('three stars everywhere adds the star badge', (tester) async {
+    testWidgets('three stars everywhere adds a star inside the same badge', (tester) async {
       const p = PackProgress(solved: 30, total: 30, stars: 90);
       await tester.pumpWidget(_host(const PackDoneBadges(progress: p)));
-      expect(find.byKey(const ValueKey('pack-perfect-badge')), findsOneWidget);
       expect(find.byKey(const ValueKey('pack-done-badge')), findsOneWidget);
+      expect(find.descendant(of: find.byKey(const ValueKey('pack-done-badge')), matching: find.byKey(const ValueKey('pack-perfect-badge'))), findsOneWidget);
     });
+
+    // Owner, 2026-10-17: one badge in the app's style instead of a green check and a gold star circle.
+    for (final onImage in [true, false]) {
+      for (final dark in [false, true]) {
+        for (final contrast in [false, true]) {
+          testWidgets('one badge, no green: ${onImage ? 'on a photo' : 'in a row'}, ${dark ? 'dark' : 'light'}${contrast ? ', increase contrast' : ''}', (tester) async {
+            const p = PackProgress(solved: 30, total: 30, stars: 90);
+            await tester.pumpWidget(MaterialApp(
+              theme: dark ? AppTheme.dark(highContrast: contrast) : AppTheme.light(highContrast: contrast),
+              home: A11y(
+                prefs: Accessibility(increaseContrast: contrast),
+                child: Scaffold(body: Center(child: PackDoneBadges(progress: p, onImage: onImage))),
+              ),
+            ));
+            final badge = find.byKey(const ValueKey('pack-done-badge'));
+            final colours = <Color>[
+              for (final icon in tester.widgetList<Icon>(find.descendant(of: badge, matching: find.byType(Icon)))) icon.color!,
+              for (final box in tester.widgetList<Container>(find.descendant(of: badge, matching: find.byType(Container))))
+                if (box.decoration case BoxDecoration(:final color?)) color,
+            ];
+            final ctx = tester.element(badge);
+            expect(tester.widgetList<Icon>(find.descendant(of: badge, matching: find.byType(Icon))).map((i) => i.icon), [AppIcons.checkmarkAlt, AppIcons.star]);
+            expect(colours, contains(ctx.accentFill), reason: 'the done mark is the cobalt disc');
+            for (final green in [Brand.success, ctx.colors.success]) {
+              expect(colours, isNot(contains(green)));
+            }
+            expect(tester.getSize(badge).height, 24);
+            expect(tester.takeException(), isNull);
+          });
+        }
+      }
+    }
   });
 
   testWidgets('Home: live event and month tiles show pack progress; a finished month reads as complete', (tester) async {
@@ -159,7 +194,7 @@ void main() {
     // This month, in progress.
     expect(inTile('October 2026', find.text('9/31')), findsOneWidget);
     expect(inTile('October 2026', find.byKey(const ValueKey('pack-done-badge'))), findsNothing);
-    // September 2026, every picture solved: check badge and the star count.
+    // September 2026, every picture solved: the done badge (no star inside) and the star count.
     expect(inTile('September 2026', find.byKey(const ValueKey('pack-done-badge'))), findsOneWidget);
     expect(inTile('September 2026', find.byKey(const ValueKey('pack-perfect-badge'))), findsNothing);
     expect(inTile('September 2026', find.textContaining('88/90')), findsOneWidget);
@@ -209,7 +244,7 @@ void main() {
     ));
     await tester.pumpAndSettle();
 
-    // Finished pack, three stars everywhere: both badges, star count, Claim.
+    // Finished pack, three stars everywhere: the done badge with its star, star count, Claim.
     expect(find.byKey(const ValueKey('pack-done-badge')), findsOneWidget);
     expect(find.byKey(const ValueKey('pack-perfect-badge')), findsOneWidget);
     expect(find.text('14/14 · 42/42'), findsOneWidget);
