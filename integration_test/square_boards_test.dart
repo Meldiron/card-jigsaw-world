@@ -6,14 +6,16 @@
 //
 //   tools/dev/qa-run.sh drive --driver=test_driver/integration_test.dart \
 //     --target=integration_test/square_boards_test.dart -d <simulator>
+import 'dart:ui' as ui;
+
 import 'package:carden/app.dart';
+import 'package:carden/core/image_files.dart';
 import 'package:carden/core/sfx.dart';
 import 'package:carden/data/local_store.dart';
 import 'package:carden/data/sync/ops.dart';
 import 'package:carden/features/game/board_widget.dart';
 import 'package:carden/features/game/difficulty_screen.dart';
 import 'package:carden/game/board.dart';
-import 'package:carden/game/image_loader.dart';
 import 'package:carden/models/models.dart';
 import 'package:carden/router.dart';
 import 'package:carden/state/catalog.dart';
@@ -136,21 +138,45 @@ void main() {
     await tapText(tester, 'Start playing', ms: 5000);
     await settle(tester, 5000);
 
-    // Pictures of the free packs by shape, read from their tiles.
+    // Pictures by shape, from the sizes in their files' headers (nothing decoded): the two known
+    // ones first (a 2:3 beach and a square butterfly), then the free packs, then the rest.
     final c = container(tester);
     final packs = c.read(packsProvider).value!;
     final all = c.read(allPuzzlesProvider).value!;
+    final giantPacks = {for (final p in packs) if (isGiantPack(p)) p.id};
     final free = {for (final p in packs) if (p.isFree && !p.hasWindow && !isGiantPack(p)) p.id};
+    Future<double?> aspectOf(Puzzle z) async {
+      try {
+        return await tester.runAsync(() async {
+          final bytes = await ImageFiles.bytes(z.thumbUrl.isEmpty ? z.imageUrl : z.thumbUrl).timeout(const Duration(seconds: 15));
+          final buffer = await ui.ImmutableBuffer.fromUint8List(bytes);
+          final d = await ui.ImageDescriptor.encoded(buffer);
+          final a = d.width / d.height;
+          d.dispose();
+          buffer.dispose();
+          return a;
+        });
+      } catch (e) {
+        debugPrint('QA square boards: no size for ${z.id}: $e');
+        return null;
+      }
+    }
+
     Puzzle? tall, wide, square;
     final aspects = <String, double>{};
-    for (final z in all.where((z) => free.contains(z.packId)).take(150)) {
+    final candidates = [
+      ...all.where((z) => z.id == 'pack-tropical-beaches-01' || z.id == 'pack-butterflies-01'),
+      ...all.where((z) => free.contains(z.packId)),
+      ...all.where((z) => !free.contains(z.packId) && !giantPacks.contains(z.packId)),
+    ];
+    for (final z in candidates.take(60)) {
       if (tall != null && wide != null && square != null) break;
-      final img = await tester.runAsync(() => c.read(puzzleImageProvider(z.thumbUrl.isEmpty ? z.imageUrl : z.thumbUrl).future));
-      if (img == null) continue;
-      final a = img.width / img.height;
+      if (aspects.containsKey(z.id)) continue;
+      final a = await aspectOf(z);
+      if (a == null) continue;
       aspects[z.id] = a;
       if (tall == null && a > 0.6 && a < 0.7) tall = z;
-      if (wide == null && a > 1.3 && a < 1.6) wide = z;
+      if (wide == null && a > 1.2 && a < 1.8) wide = z;
       if (square == null && (a - 1).abs() < 0.02) square = z;
     }
     debugPrint('QA square boards: tall ${tall?.id} ${aspects[tall?.id]}, wide ${wide?.id} ${aspects[wide?.id]}, square ${square?.id} ${aspects[square?.id]}');
@@ -183,7 +209,8 @@ void main() {
     }
     await back(tester);
 
-    // ---- A wide picture: landscape boards only where the tiling is (hexagons); Expand where it shows more.
+    // ---- A wide picture (the catalogue is portrait or square, docs/content-rules.md; My Puzzles photos
+    // can be wide): Expand where it shows more. test/difficulty_screen_test.dart covers it offline.
     if (wide != null) {
       final wa = aspects[wide.id]!;
       await open(tester, '/play/${wide.id}');
@@ -240,12 +267,11 @@ void main() {
     await shot(tester, 'sb_3x3_complete');
     expect(c.read(progressProvider).value![tall.id]!.gridSize, 9);
 
-    // ---- A board an older build saved: 3x4 Cards on another tall picture, three moves in.
+    // ---- A board an older build saved: the first of its sizes for this picture that is not square, three moves in.
     final other = all.firstWhere((z) => z.id != tall!.id && free.contains(z.packId) && aspects[z.id] != null && (aspects[z.id]! - ta).abs() < 0.02, orElse: () => tall!);
     final oa = aspects[other.id]!;
-    final old = BoardSpec.tiers(GameMode.cards, oa)[1];
+    final old = BoardSpec.tiers(GameMode.cards, oa).firstWhere((t) => t.cols != t.rows);
     debugPrint('QA old board: ${other.id} on $oa, ${old.fullCode}');
-    expect(old.cols == old.rows, isFalse, reason: 'an old board that is not square (${old.code})');
     final layout = Board.shuffled(old, seed: 4).slots;
     c.read(progressProvider.notifier).saveBoard(other.id, gridSize: old.cells, mode: 'cards', layout: layout, moves: 3, seconds: 20, hints: 0, session: SyncOp.newId(), resumed: false);
     await settle(tester, 2500);
@@ -276,12 +302,26 @@ void main() {
       final sq = BoardSpec.squareGiantTiers(GameMode.cards);
       expect(find.text(sq.first.code), findsWidgets, reason: 'Large is ${sq.first.code}');
       await shot(tester, 'sb_giant_square');
+      debugPrint('QA giant: ${giantPack.id} ${g.id}, Expand in Cards ${expandTile.evaluate().isNotEmpty}');
+      // Squares: square giant boards, and Expand for a picture that is not square.
+      await pickMode(tester, GameMode.squares);
+      expect(find.text(BoardSpec.squareGiantTiers(GameMode.squares).first.code), findsWidgets);
+      await tester.drag(find.byType(Scrollable).first, const Offset(0, 1200));
+      await settle(tester, 600);
+      await shot(tester, 'sb_giant_squares_square');
       if (await showExpand(tester)) {
         await setExpand(tester, true);
-        await shot(tester, 'sb_giant_expand');
-        await setExpand(tester, false);
+        await tester.drag(find.byType(Scrollable).first, const Offset(0, 1200));
+        await settle(tester, 600);
+        await shot(tester, 'sb_giant_squares_expand');
+        // Play deals the giant Expand board.
+        await tester.tap(play, warnIfMissed: false);
+        await settle(tester, 9000);
+        final spec = board(tester).state.board.spec;
+        debugPrint('QA giant Expand board: ${spec.fullCode} ${spec.cells}');
+        expect(spec.isGiant, isTrue);
+        await shot(tester, 'sb_giant_squares_expand_board');
       }
-      debugPrint('QA giant: ${giantPack.id} ${g.id}, Expand ${expandTile.evaluate().isNotEmpty}');
     }
   });
 }
