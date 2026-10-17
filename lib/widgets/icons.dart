@@ -109,6 +109,13 @@ class AppIcons {
   static const mail = CupertinoIcons.envelope_fill;
   static const receipt = CupertinoIcons.doc_plaintext;
 
+  // Play together (docs/multiplayer.md).
+  static const players = CupertinoIcons.person_2_fill;
+  static const invite = CupertinoIcons.person_badge_plus;
+  static const share = CupertinoIcons.share;
+  static const leaveGame = CupertinoIcons.square_arrow_left;
+  static const endGame = CupertinoIcons.xmark_circle;
+
   // Library filters that are not pack categories (drawn before the label).
   static const filterAll = CupertinoIcons.square_grid_2x2_fill;
   /// New packs: a burst, so it never reads as the AI mark (sparkles) in the same row.

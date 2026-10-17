@@ -40,6 +40,7 @@ either form from a link.
 | `/redeem?code=<pack code>` (also `/redeem/<code>`, `/code/<code>`) | "Redeem a pack code" with the code filled in | The player still taps Redeem; without a code the field is empty |
 | `/gift` | Home with the daily gift | |
 | `/piggy` | Home with the piggy bank | |
+| `/join/<code>` | Play together: joins the game of the invite and opens its shared board | The code is 8 characters (any case, dashes ignored). A new install goes straight to the board; the welcome pages begin after the game. The web page first offers Open in Carden or Play in the browser on an iPhone or iPad. See [multiplayer.md](multiplayer.md) |
 
 Keywords are case-insensitive; ids keep their case. Anything else (unknown paths, site files,
 `/auth/callback`) is not a link: the web site shows Home for an unknown path.

@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'core/a11y.dart';
 import 'core/app_links.dart';
 import 'core/platform.dart';
+import 'features/coop/coop_routes.dart';
 import 'features/daily/wheel_screen.dart';
 import 'features/events/events_screen.dart';
 import 'features/gallery/library_screen.dart';
@@ -38,7 +39,8 @@ final routerProvider = Provider<GoRouter>((ref) {
     navigatorKey: rootNavigatorKey,
     // A web visit that starts on a link which needs Home beneath it (a picture, the store, a pack
     // code) starts on Home and hands the link to DeepLinks after the first frame.
-    initialLocation: webLink != null || onboarded() ? '/home' : '/welcome',
+    // An invite (Play together) opens its board above the welcome pages of a new visitor.
+    initialLocation: onboarded() || (webLink != null && !webLink.path.startsWith('/join/')) ? '/home' : '/welcome',
     overridePlatformDefaultLocation: webLink != null,
     // Unknown paths (typed URLs on web, stale links) land on Home instead of the framework's
     // error page; a link the router has no page for (/quests, /redeem, /daily, see AppLink) goes
@@ -54,7 +56,9 @@ final routerProvider = Provider<GoRouter>((ref) {
     redirect: (context, state) {
       // A link into the game (the widget's /play/<id>, a pack from an In-App Event, a web
       // address) goes straight to its screen, even for a new install, and counts as onboarding.
-      if (!onboarded() && state.uri.path != '/home' && AppLink.parse(state.uri) != null) {
+      // A shared board (Play together) is not one: a player who came in by an invite starts the
+      // welcome pages after leaving the game.
+      if (!onboarded() && state.uri.path != '/home' && !CoopRoutes.isCoop(state.uri) && AppLink.parse(state.uri) != null) {
         ref.read(settingsProvider.notifier).setOnboarded();
       }
       return null;

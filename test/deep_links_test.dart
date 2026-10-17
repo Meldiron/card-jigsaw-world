@@ -8,6 +8,7 @@ import 'package:appwrite/models.dart' as models;
 import 'package:carden/core/app_links.dart';
 import 'package:carden/core/platform.dart';
 import 'package:carden/core/theme/app_theme.dart';
+import 'package:carden/data/coop_repository.dart';
 import 'package:carden/data/local_store.dart';
 import 'package:carden/features/gallery/library_screen.dart';
 import 'package:carden/features/links/deep_links.dart';
@@ -17,6 +18,8 @@ import 'package:carden/models/models.dart';
 import 'package:carden/router.dart';
 import 'package:carden/state/auth.dart';
 import 'package:carden/state/catalog.dart';
+import 'package:carden/state/coop/coop_controller.dart';
+import 'package:carden/state/coop/coop_models.dart';
 import 'package:carden/state/profile.dart';
 import 'package:carden/state/progress.dart';
 import 'package:carden/state/settings.dart';
@@ -27,6 +30,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'support/fake_coop.dart';
 
 AppLink? _parse(String s) => AppLink.parse(Uri.parse(s));
 
@@ -88,6 +93,8 @@ const _links = <String, (LinkKind, String)>{
   '/daily-gift': (LinkKind.action, '/gift'),
   '/piggy': (LinkKind.action, '/piggy'),
   '/piggy-bank': (LinkKind.action, '/piggy'),
+  '/join/K7QH2MXP': (LinkKind.action, '/join/K7QH2MXP'),
+  '/join/k7qh-2mxp': (LinkKind.action, '/join/K7QH2MXP'),
 };
 
 /// Apple's component pattern: `*` any run of characters, `?` one character.
@@ -161,6 +168,10 @@ void main() {
         '/play/bad%20id',
         '/player/%3Cscript%3E',
         '/store/extra',
+        '/join',
+        '/join/K7QH2MX',
+        '/join/K7QH2MX0',
+        '/join/a/b',
       ]) {
         expect(_parse(input), isNull, reason: input);
       }
@@ -210,7 +221,8 @@ void main() {
 
     test('every component the file lists is a link the app reads', () {
       for (final c in components.where((c) => c['exclude'] != true)) {
-        final sample = (c['/'] as String).replaceAll('*', 'abc123');
+        // An invite's code is 8 characters of its own alphabet.
+        final sample = (c['/'] as String).replaceAll('*', c['/'] == '/join/*' ? 'K7QH2MXP' : 'abc123');
         expect(_parse(sample), isNotNull, reason: c['/'] as String);
       }
     });
@@ -230,7 +242,7 @@ void main() {
       Puzzle.fromRow('houses-1', {'packId': 'houses', 'title': 'Canal houses', 'imageUrl': 'https://example.invalid/4.jpg'}),
     ];
 
-    Future<(ProviderContainer, GoRouter)> pump(WidgetTester tester, {bool onboarded = true, PlatformCaps caps = PlatformCaps.ios}) async {
+    Future<(ProviderContainer, GoRouter)> pump(WidgetTester tester, {bool onboarded = true, PlatformCaps caps = PlatformCaps.ios, FakeCoopServer? coop}) async {
       SharedPreferences.setMockInitialValues({'onboarded': onboarded});
       final store = await LocalStore.open();
       Widget page(String name) => Scaffold(body: Center(child: Text(name)));
@@ -251,6 +263,7 @@ void main() {
           route('/wheel'),
           route('/account'),
           route('/player/:userId'),
+          route('/game/:puzzleId/:grid'),
         ],
       );
       addTearDown(router.dispose);
@@ -264,6 +277,8 @@ void main() {
           progressProvider.overrideWith(_NoRows.new),
           packsProvider.overrideWith((ref) async => packs),
           allPuzzlesProvider.overrideWith((ref) async => pictures),
+          currentUserIdProvider.overrideWithValue('guest-1'),
+          coopBackendProvider.overrideWithValue(FakeCoopBackend(coop ?? FakeCoopServer(), 'guest-1')),
         ],
         child: MaterialApp.router(theme: AppTheme.light(), routerConfig: router),
       ));
@@ -363,6 +378,41 @@ void main() {
       expect(top(router), '/library', reason: 'a code link on iPhone does not move the player');
       expect(find.byKey(const ValueKey('redeem-code-field')), findsNothing);
       expect(find.text('Redeem a pack code'), findsNothing);
+    });
+
+    testWidgets('an invite from a fresh install opens the shared board above the welcome pages', (tester) async {
+      final server = FakeCoopServer();
+      final game = CoopGame.fromMap(server.handle('host-1', 'create', {'puzzleId': 'free-2', 'grid': 'cards-3x3t0', 'layout': [1, 2, 0, 4, 5, 3, 7, 8, 6]}));
+      final (container, router) = await pump(tester, onboarded: false, coop: server);
+      container.read(deepLinksProvider).show(_parse('/join/${game.code}')!);
+      for (var i = 0; i < 40; i++) {
+        await tester.pump(const Duration(milliseconds: 50));
+      }
+      expect(top(router), '/game/free-2/cards-3x3t0?coop=${game.id}');
+      expect(container.read(settingsProvider).onboarded, isFalse, reason: 'the welcome pages begin after the game');
+      expect(container.read(coopProvider).game?.id, game.id);
+      expect(server.games[game.id]!['players'], ['host-1', 'guest-1', '', '', '']);
+      router.pop();
+      await tester.pumpAndSettle();
+      expect(top(router), '/welcome');
+      container.read(coopProvider.notifier).clear();
+    });
+
+    testWidgets('an invite to a full game says so', (tester) async {
+      final server = FakeCoopServer();
+      final game = CoopGame.fromMap(server.handle('host-1', 'create', {'puzzleId': 'free-2', 'grid': 'cards-3x3t0', 'layout': [1, 2, 0, 4, 5, 3, 7, 8, 6]}));
+      for (final id in ['b', 'c', 'd', 'e']) {
+        server.handle(id, 'join', {'code': game.code});
+      }
+      final (container, router) = await pump(tester, coop: server);
+      container.read(deepLinksProvider).show(_parse('/join/${game.code}')!);
+      for (var i = 0; i < 40; i++) {
+        await tester.pump(const Duration(milliseconds: 50));
+      }
+      expect(find.text('This game is full'), findsOneWidget);
+      expect(top(router), '/home');
+      await tester.tap(find.text('Close'));
+      await tester.pumpAndSettle();
     });
 
     testWidgets('a friend link opens Social > Friends with the code filled in', (tester) async {

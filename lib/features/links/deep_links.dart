@@ -16,6 +16,7 @@ import '../../state/progress.dart';
 import '../../state/quick_play.dart';
 import '../../state/settings.dart';
 import '../../state/unlocks.dart';
+import '../coop/join_flow.dart';
 import '../daily/daily_reward_sheet.dart';
 import '../daily/piggy_sheet.dart';
 import '../gallery/library_screen.dart';
@@ -35,6 +36,13 @@ class DeepLinks {
   final _random = Random();
 
   Future<void> show(AppLink link) async {
+    // Play together: an invite opens its board at once, even on a fresh install; the welcome pages
+    // and the guided start begin when the player leaves the game (docs/multiplayer.md).
+    if (link.path.startsWith('/join/')) {
+      if (_ref.read(settingsProvider).onboarded) await _onPage(_ref.read(routerProvider));
+      await openInvite(_ref, link.path.substring('/join/'.length));
+      return;
+    }
     if (!_ref.read(settingsProvider).onboarded) {
       // A plain Home link leaves a new player on the welcome screens; any other link counts as
       // onboarding, so the welcome screens never cover where it leads.
