@@ -12,13 +12,14 @@ Code: `lib/game/twins.dart` (`Twins`, `TwinFinder`), `lib/game/twins_loader.dart
 in `lib/game/board.dart`, `shuffleLoose` / `gatherInto` / `canGather` in `lib/game/gather.dart`,
 `GameController.useTwins` and `_apply` in `lib/game/game_controller.dart`, the widget keys and
 `_TwinFade` in `lib/features/game/board_widget.dart`. Tests: `test/twins_test.dart`; on the
-simulator `integration_test/twins_test.dart`. Evidence: `tools/dev/twins_report_test.dart` and
+simulator `integration_test/twins_test.dart` (a sky) and `twins_night_test.dart` (a night sky). Evidence: `tools/dev/twins_report_test.dart` and
 `tools/dev/twins_sheets.py` (below).
 
 ## The rules
 
 1. **Twins look the same to the eye**, not "95% of pixels" (see the measure). A faint cloud, a wire,
-   a bird or a speck on one card and not the other keeps them apart.
+   a bird or a speck on one card and not the other keeps them apart; noise and the faintest stars of
+   a night sky do not (near black the eye tells much less apart).
 2. **Only cards of one shape** (`Tiling.classOf`: Cards and Squares have one; triangles up, down and
    each kind of half piece; hexagons whole and each kind of cut piece). A class of twins is a set in
    which every two cards are twins (built in card order, so every device builds the same classes).
@@ -66,7 +67,10 @@ simulator `integration_test/twins_test.dart`. Evidence: `tools/dev/twins_report_
 - **Outline strips**: each edge in pieces one box long, the outermost two pixels and the band inside
   them, where a line or the start of a neighbouring shape shows (a player compares the edges with
   the neighbours).
-- **Specks**: for every sample, how far its darkest and its lightest pixel stand out from its mean.
+- **Specks**: for every sample, how far its darkest and its lightest pixel stand out from its mean,
+  and on a near-black sample how far its darkest and brightest 3 x 3 spot stand out by their glow
+  (the brightest channel, so a red light trail counts like a white star), looking no further than
+  the card's own pixels.
 
 Two cards of one shape are compared sample by sample in CIELAB with **CIEDE2000** (ΔE00; about 1 is
 a just-noticeable difference side by side). They are twins only when all of these hold:
@@ -77,14 +81,55 @@ a just-noticeable difference side by side). They are twins only when all of thes
 | 95% of samples, and 95% of the outline's | 1.8 | a faint cloud or haze over part of the card, a band along an edge |
 | Every sample | 3.0 | anything distinct |
 | Speck: a sample's darkest or lightest pixel stands out more on one card | 1.6 lightness, or 3x the card's grain | a wire, a bird, a speck of dust; grainy cards may differ by their grain, which hides as much from the eye |
+| Spot, on samples of both cards at L* 15 or less: the brightest or darkest 3 x 3 pixels stand out more on one card | 3.4 glow, or 3x the card's spot grain | a star that shows, a lamp, a lit window, a light trail; not sensor noise, JPEG blocks or the faintest stars |
+
+### Near black and near white
+
+Owner, TestFlight build 124 (Sydney Opera House night, 7x7 Cards): "Top right corner is all black,
+as the picture is. The system that makes cards work when they are similar enough is not working,
+or is still too strict." On that board no card had a twin: the night sky's cards differ by sensor
+noise, JPEG chroma blocks and single-pixel stars, which CIEDE2000 and the pixel speck count in full
+though nobody sees them on a phone. Near black the eye tells much less apart (low light, little
+colour vision, and a screen's black level and reflections), so a difference between two colours
+counts as seen (`TwinFinder.seen`):
+
+- below L* 20 it counts less, down to 0.7 of itself at black (`darkBelow`, `darkFloor`), and their
+  chroma counts less, down to a quarter at black (`darkChroma`: colour fades first in the dark);
+- on samples of both cards at L* 15 or less a speck counts by its glow over 3 x 3 pixels instead of
+  single pixels (`spotBelow`, `spotLimit`): a 1-pixel star loses most of its weight, a star that
+  shows, a lamp, a window or a light trail does not;
+- above L* 90 a difference counts a little less, down to 0.8 of itself at white (`brightAbove`,
+  `brightFloor`): pale skies, snow and paper keep faint bands of a screen's whites and a photo's
+  compression that the eye does not hold against each other. Specks on white count in full.
+
+Evidence: the Sydney picture and 24 more of the darkest catalogue pictures (night cities, Milky Way,
+aurora, fireworks, lanterns, nebulae) and 24 of the brightest (frost, snow, white walls, paper), on
+every square board, with the contact sheets of the pairs nearest the limits.
+
+| | Before | Now |
+| --- | --- | --- |
+| Sydney night, 7x7 Cards | no twins | 9 black cards in one class: 0, 1, 2, 3, 8, 11 (sky), 35, 42, 48 (water) |
+| 25 dark pictures, boards with twins | Cards 16%, Squares 14%, Triangles 21%, Hexagons 16% | 33%, 28%, 43%, 38% |
+| 25 dark pictures, cards that have a twin | 2.2% | 6.7% |
+| 24 bright pictures | Cards 18%, Squares 8%, Triangles 15%, Hexagons 4% of boards with twins; 183 twin pairs | the same boards; 209 twin pairs |
+| 83 pictures of the first sample (mid tones unchanged), boards with twins | Cards 25%, Squares 21%, Triangles 32%, Hexagons 27% | 28%, 24%, 35%, 29% (its dark backgrounds) |
+
+On the Sydney board the cards that show something stay apart: the bridge's truss and lamp (5, 6),
+its edge (4, 12, 13), a star (7) and a few stars together (14): `docs/images/twins-night-sydney.jpg`
+shows each as on a phone and with the darks lifted 5x. Three tries were rejected by the sheets:
+relaxing differences to half at black let the truss through; a spot limit of 4.5 let a firework's
+thin red light trail and a launch tower's lattice through; measuring spots by lightness instead of
+glow let the red trail through at 3.2. Sheets: `docs/images/twins-dark-accepted-borderline.jpg`,
+`twins-dark-rejected-borderline.jpg`, `twins-dark-speck-rejected.jpg`,
+`twins-bright-accepted-borderline.jpg`.
 
 Cards are compared only when their mean colours are close (a pair whose means differ more than the
 mean limit allows cannot pass), and a 4 x 4 grid of part colours rejects most other pairs at once,
 so even a 666-piece board compares only the near pairs in full. Timings in a debug test run (the
-app's release build is faster): a normal board 5 to 170 ms, the sample's giant boards 220 to
-575 ms, a synthetic 666-piece board with a plain sky over a third of it about 1 s, and its deal
-with 222 twin cards 150 ms (measured once per picture and board, in an isolate; the deal on the
-UI thread while "Dealing the cards" shows).
+app's release build is faster): a normal board 5 to 170 ms (a dark one up to about 250 ms: its
+spots are read too), the sample's giant boards 220 to 575 ms, a synthetic 666-piece board with a
+plain sky over a third of it about 1 s, and its deal with 222 twin cards 150 ms (measured once per
+picture and board, in an isolate; the deal on the UI thread while "Dealing the cards" shows).
 
 ## The evidence (October 2026)
 

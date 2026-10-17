@@ -16,14 +16,11 @@ import sys
 from PIL import Image, ImageChops, ImageDraw, ImageOps
 
 TILE = 132
-# TwinFinder.speckLimit and speckGrain in lib/game/twins.dart.
-SPECK = float(sys.argv[3]) if len(sys.argv) > 3 else 1.6
-GRAIN = float(sys.argv[4]) if len(sys.argv) > 4 else 3.0
 
 
 def speck_ratio(p):
-    """The speck against what the pair may have (TwinPair.speckAllowed): twins at 1 or less."""
-    return p['speck'] / max(SPECK, GRAIN * p['grain'])
+    """The speck against what its sample may have (TwinPair.speckAllowed): twins at 1 or less."""
+    return p['speck'] / p['speckAllowed']
 AMPLIFY = 8
 
 
@@ -64,7 +61,7 @@ def sheet(pairs, title, path, cache):
         for k, im in enumerate([a, b, ImageOps.invert(diff)]):
             out.paste(fit(im), (x0 + k * (TILE + 4), y0))
         label = f"{board['id'][:18]} {board['spec'].split(':')[0][:3]} {board['spec'].split(':')[1]}  s={p['score']:.2f}"
-        nums = f"mean {p['mean']:.2f} p95 {p['p95']:.2f} max {p['max']:.2f} edge {p['edge']:.2f} speck {p['speck']:.1f}/{max(SPECK, GRAIN * p['grain']):.1f}"
+        nums = f"mean {p['mean']:.2f} p95 {p['p95']:.2f} max {p['max']:.2f} edge {p['edge']:.2f} speck {p['speck']:.1f}/{p['speckAllowed']:.1f}"
         d.text((x0, y0 + TILE + 2), label, fill=(0, 0, 0))
         d.text((x0, y0 + TILE + 16), nums, fill=(60, 60, 60))
     out.save(path)
