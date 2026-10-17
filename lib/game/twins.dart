@@ -179,8 +179,11 @@ class TwinPicture {
 /// a bird, a star or a lit window shows there while the mean hides it), measured against what
 /// that sample may have, [speckAllowed] (more on grainy cards, whose grain hides as much from the
 /// eye; on near-black cards a spot counts by its light over a few pixels: [TwinFinder.spotLimit]).
+/// [shape], on dark cards only, is how steeply the difference between the two changes where it
+/// changes most (an edge, a silhouette or a band on one card and not the other), against what the
+/// pair may have, [shapeAllowed] ([TwinFinder.shapeLimit], more on grainy cards).
 class TwinPair {
-  const TwinPair(this.a, this.b, {required this.mean, required this.p95, required this.max, required this.edge, required this.speck, required this.speckAllowed});
+  const TwinPair(this.a, this.b, {required this.mean, required this.p95, required this.max, required this.edge, required this.speck, required this.speckAllowed, this.shape = 0, this.shapeAllowed = TwinFinder.shapeLimit});
   final int a;
   final int b;
   final double mean;
@@ -189,11 +192,14 @@ class TwinPair {
   final double edge;
   final double speck;
   final double speckAllowed;
+  final double shape;
+  final double shapeAllowed;
 
   /// How close to the limits: twins at 1 or less ([TwinFinder.meanLimit], [TwinFinder.p95Limit]
-  /// for the whole card and its outline, [TwinFinder.maxLimit], [speckAllowed]).
+  /// for the whole card and its outline, [TwinFinder.maxLimit], [speckAllowed],
+  /// [TwinFinder.shapeLimit]).
   double get score => math.max(
-        math.max(mean / TwinFinder.meanLimit, max / TwinFinder.maxLimit),
+        math.max(math.max(mean / TwinFinder.meanLimit, max / TwinFinder.maxLimit), shape / shapeAllowed),
         math.max(math.max(p95, edge) / TwinFinder.p95Limit, speck / speckAllowed),
       );
 
@@ -287,6 +293,28 @@ class TwinFinder {
   /// How much of a colour's chroma counts at black (all of it from [darkBelow] up).
   static const darkChroma = 0.25;
 
+  /// Specks on black (owner, 2026-10-17: "the middle option"): a few pin-point stars or a sensor's
+  /// hot pixels do not keep a card apart from a plain black one; a line, an edge, a shape, a
+  /// texture or a larger light does. A speck is a pixel that is the brightest of its 3 x 3 and
+  /// shines at least [speckMin] (glow, 0 to 100) above the 5 x 5 ring around them (its median),
+  /// while no pixel of that ring shines more than [speckRing] above it, or [speckRingShare] of
+  /// the speck's own light for a bright star's halo: its light stays within 3 x 3 pixels. Only on
+  /// dark ground (the ring at L* [spotBelow] or less). A card with at most [maxSpecks] of them is
+  /// measured with them put out (the 3 x 3 painted with the ring's colour, [specksOf]); a card with
+  /// more (a starfield, a grainy night) is measured as it is.
+  static const speckMin = 6.0;
+  static const speckRing = 4.0;
+  static const speckRingShare = 0.25;
+  static const maxSpecks = 8;
+
+  /// Dark cards (both at L* [darkBelow] or less) may differ by a shape (an edge, the start of a
+  /// silhouette, a band of light) this much at most: how steeply the difference in their
+  /// lightness as a screen shows it (0 to 100, averaged over 3 x 3 boxes) changes across two
+  /// boxes, along a quarter of the card ([_shapeDifference]). In the dark the eye adapts and sees
+  /// a long edge a few code values high that CIELAB, made for a white page, calls invisible.
+  static const shapeLimit = 1.0;
+  static const shapeGrain = 3.0;
+
   /// Boxes across a card's longer side: from [minBoxes] to [maxBoxes], about one per 4 pixels.
   static const minBoxes = 12;
   static const maxBoxes = 32;
@@ -308,9 +336,16 @@ class TwinFinder {
   late final Float64List _grain;
   late final Float64List _grain3;
 
+  /// Per card: the specks on black put out before it was sampled, or [maxSpecks] + 1 when it had
+  /// more and was sampled as it is.
+  late final Int32List _specks;
+
   /// The mean colour (L, a, b) of [card]'s boxes, and how grainy it is (for the report).
   (double, double, double) meanOf(int card) => _mean[card];
   double grainOf(int card) => _grain[card];
+
+  /// How many specks on black [card] had put out ([maxSpecks] + 1: more than that, none put out).
+  int specksOf(int card) => _specks[card];
 
   /// Per card: the mean colour of each part of a 4 x 4 grid over it (L, a, b), and per shape class
   /// the part each box lies in and how many boxes each part has. Two cards whose parts differ
@@ -327,6 +362,8 @@ class TwinFinder {
     _grain = Float64List(n);
     _grain3 = Float64List(n);
     _parts = List.filled(n, Float64List(0));
+    _specks = Int32List(n);
+    final whole = _Source(picture.rgba, 0, 0, picture.width);
     for (var card = 0; card < n; card++) {
       final cls = tiling.classOf(card);
       if (!_boxes.containsKey(cls)) _layout(card, cls);
@@ -341,16 +378,20 @@ class TwinFinder {
         cell.right.round().clamp(1, picture.width),
         cell.bottom.round().clamp(1, picture.height),
       );
+      // Near black, a few specks are put out first (a copy of the card's pixels).
+      final (clean, specks) = _despeckle(window);
+      _specks[card] = specks;
+      final src = clean ?? whole;
       final lab = Float64List((boxes.length + strips.length) * _stride);
       var ml = 0.0, ma = 0.0, mb = 0.0;
       for (var i = 0; i < boxes.length; i++) {
-        _store(lab, i, _boxPixels(boxes[i].shift(origin), window));
+        _store(lab, i, _boxPixels(src, boxes[i].shift(origin), window));
         ml += lab[_stride * i];
         ma += lab[_stride * i + 1];
         mb += lab[_stride * i + 2];
       }
       for (var j = 0; j < strips.length; j++) {
-        _store(lab, boxes.length + j, _pointPixels(strips[j], origin, window));
+        _store(lab, boxes.length + j, _pointPixels(src, strips[j], origin, window));
       }
       final k = math.max(1, boxes.length);
       _lab[card] = lab;
@@ -382,31 +423,46 @@ class TwinFinder {
     var across = (long / 4).round().clamp(minBoxes, maxBoxes);
     var boxes = <Rect>[];
     var step = long / across;
+    // Where each box lies on the grid (row * cols + column), for the shape test.
+    var cells = <int>[];
+    var gridCols = 1, gridRows = 1;
     // Thin pieces (half triangles, cut hexagons) get a finer grid until enough boxes fit.
     for (var tries = 0; tries < 4; tries++) {
       step = long / across;
       boxes = [];
+      cells = [];
       if (rect) {
         final cols = math.max(1, (bounds.width / step).round()), rows = math.max(1, (bounds.height / step).round());
         final w = bounds.width / cols, h = bounds.height / rows;
+        (gridCols, gridRows) = (cols, rows);
         for (var r = 0; r < rows; r++) {
           for (var c = 0; c < cols; c++) {
             boxes.add(Rect.fromLTWH(c * w, r * h, w, h));
+            cells.add(r * cols + c);
           }
         }
       } else {
         final cols = math.max(1, (bounds.width / step).floor()), rows = math.max(1, (bounds.height / step).floor());
         final sx = (bounds.width - cols * step) / 2, sy = (bounds.height - rows * step) / 2;
+        (gridCols, gridRows) = (cols, rows);
         for (var r = 0; r < rows; r++) {
           for (var c = 0; c < cols; c++) {
             final box = Rect.fromLTWH(sx + c * step, sy + r * step, step, step);
-            if (_inside(box.topLeft, poly) && _inside(box.topRight, poly) && _inside(box.bottomLeft, poly) && _inside(box.bottomRight, poly)) boxes.add(box);
+            if (_inside(box.topLeft, poly) && _inside(box.topRight, poly) && _inside(box.bottomLeft, poly) && _inside(box.bottomRight, poly)) {
+              boxes.add(box);
+              cells.add(r * cols + c);
+            }
           }
         }
       }
       if (boxes.length >= 24 || across >= maxBoxes * 2) break;
       across = (across * 1.5).round();
     }
+    final grid = Int32List(gridCols * gridRows)..fillRange(0, gridCols * gridRows, -1);
+    for (var i = 0; i < cells.length; i++) {
+      grid[cells[i]] = i;
+    }
+    _grids[cls] = (cols: gridCols, rows: gridRows, box: grid, cell: Int32List.fromList(cells));
     // Strips: points one pixel apart along each edge, at depths 0.5 and 1.5 px (the outermost
     // pixels) and from 2.5 px to the box size (the band the boxes may not reach).
     var cx = 0.0, cy = 0.0;
@@ -471,10 +527,10 @@ class TwinFinder {
     return true;
   }
 
-  /// Values kept per sample: L, a, b, how far the darkest and the lightest pixel stand out, and
-  /// how far the darkest and the brightest 3 x 3 spot stand out by their glow (-1 on a sample that
-  /// is not dark).
-  static const _stride = 7;
+  /// Values kept per sample: L, a, b, how far the darkest and the lightest pixel stand out, how
+  /// far the darkest and the brightest 3 x 3 spot stand out by their glow (-1 on a sample that is
+  /// not dark), and its lightness from the gamma-encoded values (as a screen shows it).
+  static const _stride = 8;
 
   /// Samples darker than this (mean lightness, 0 to 100, from the gamma-encoded values) note their
   /// spots: every sample of L* [spotBelow] or less is.
@@ -493,43 +549,255 @@ class TwinFinder {
     final glow = p.spots ? p.glow / p.spotCount : 0.0;
     into[_stride * i + 5] = p.spots ? math.max(0.0, glow - p.darkest3) : -1;
     into[_stride * i + 6] = p.spots ? math.max(0.0, p.lightest3 - glow) : -1;
+    into[_stride * i + 7] = luma;
   }
 
-  /// How bright the pixel at [x], [y] shines (its brightest channel, 0 to 100): in the dark a red
-  /// light trail shows as much as a white star, though its lightness is low.
-  double _glow(int x, int y) {
-    final i = (y * picture.width + x) * 4, px = picture.rgba;
+  /// How bright the pixel at [x], [y] of [src] shines (its brightest channel, 0 to 100): in the
+  /// dark a red light trail shows as much as a white star, though its lightness is low.
+  static double _glow(_Source src, int x, int y) {
+    final i = src.index(x, y), px = src.px;
     return math.max(px[i], math.max(px[i + 1], px[i + 2])) / 2.55;
   }
 
   /// Mean glow of the 3 x 3 pixels around [x], [y] that lie in [window] (left, top, right,
   /// bottom; right and bottom exclusive).
-  double _spot(int x, int y, (int, int, int, int) window) {
+  static double _spot(_Source src, int x, int y, (int, int, int, int) window) {
     final (wx0, wy0, wx1, wy1) = window;
     var sum = 0.0;
     var count = 0;
     for (var yy = math.max(wy0, y - 1); yy <= math.min(wy1 - 1, y + 1); yy++) {
       for (var xx = math.max(wx0, x - 1); xx <= math.min(wx1 - 1, x + 1); xx++) {
-        sum += _glow(xx, yy);
+        sum += _glow(src, xx, yy);
         count++;
       }
     }
-    return count == 0 ? _glow(x, y) : sum / count;
+    return count == 0 ? _glow(src, x, y) : sum / count;
+  }
+
+  /// The ring around a speck's 3 x 3: the pixels two steps from its centre.
+  static const _ring = [
+    (-2, -2), (-1, -2), (0, -2), (1, -2), (2, -2), //
+    (-2, -1), (2, -1), (-2, 0), (2, 0), (-2, 1), (2, 1), //
+    (-2, 2), (-1, 2), (0, 2), (1, 2), (2, 2),
+  ];
+
+  /// Specks are looked for in blocks of this many pixels with dark ground.
+  static const _block = 16;
+
+  /// Every speck on black in the picture ([speckMin] and the rest), found once: its centre and
+  /// the colour of the ring around it (what its 3 x 3 is painted with), and per block of
+  /// [_block] x [_block] pixels the specks whose centre lies in it.
+  late final (List<(int, int, (int, int, int))>, List<List<int>?>) _speckMap = _findSpecks();
+
+  (List<(int, int, (int, int, int))>, List<List<int>?>) _findSpecks() {
+    final w = picture.width, h = picture.height, px = picture.rgba;
+    final bw = (w + _block - 1) ~/ _block, bh = (h + _block - 1) ~/ _block;
+    final byBlock = List<List<int>?>.filled(bw * bh, null);
+    final found = <(int, int, (int, int, int))>[];
+    // Blocks of dark ground: a quarter of them at least, by a look at every fourth pixel each way
+    // (gamma-encoded luma near black is close to L*).
+    final dark = Uint8List(bw * bh);
+    final groundLuma = (spotBelow * 2.55 * 256).round();
+    var any = false;
+    for (var by = 0; by < bh; by++) {
+      for (var bx = 0; bx < bw; bx++) {
+        var seen = 0, dim = 0;
+        for (var y = by * _block; y < math.min(h, (by + 1) * _block); y += 4) {
+          for (var x = bx * _block; x < math.min(w, (bx + 1) * _block); x += 4) {
+            final i = (y * w + x) * 4;
+            seen++;
+            if (54 * px[i] + 183 * px[i + 1] + 19 * px[i + 2] <= groundLuma) dim++;
+          }
+        }
+        if (4 * dim >= seen) {
+          dark[by * bw + bx] = 1;
+          any = true;
+        }
+      }
+    }
+    if (!any) return (found, byBlock);
+    // Glow (the brightest channel) and whether a pixel is dim ground (gamma-encoded luma a little
+    // above L* [spotBelow]; the exact test on the ring's colour decides), over the dark blocks and
+    // the blocks around them (a ring reaches two pixels out). Elsewhere glow stays at its top, so
+    // no ring reaching there passes.
+    final glow = Uint8List(w * h)..fillRange(0, w * h, 255);
+    final dim = Uint8List(w * h);
+    // Luma times 256 (0.2126, 0.7152 and 0.0722 in 256ths).
+    final darkLuma = ((spotBelow + 10) * 2.55 * 256).round();
+    for (var by = 0; by < bh; by++) {
+      for (var bx = 0; bx < bw; bx++) {
+        var near = false;
+        for (var ny = math.max(0, by - 1); ny <= math.min(bh - 1, by + 1) && !near; ny++) {
+          for (var nx = math.max(0, bx - 1); nx <= math.min(bw - 1, bx + 1); nx++) {
+            if (dark[ny * bw + nx] == 1) {
+              near = true;
+              break;
+            }
+          }
+        }
+        if (!near) continue;
+        final xa = bx * _block, xb = math.min(w, xa + _block), ya = by * _block, yb = math.min(h, ya + _block);
+        for (var y = ya; y < yb; y++) {
+          var j = y * w + xa;
+          for (var x = xa; x < xb; x++, j++) {
+            final i = j * 4;
+            final r = px[i], g = px[i + 1], b = px[i + 2];
+            glow[j] = r > g ? (r > b ? r : b) : (g > b ? g : b);
+            if (54 * r + 183 * g + 19 * b <= darkLuma) dim[j] = 1;
+          }
+        }
+      }
+    }
+    final least = (speckMin * 2.55).ceil();
+    final ring = Int32List(_ring.length), sorted = Int32List(_ring.length);
+    final rs = Int32List(_ring.length), gs = Int32List(_ring.length), bs = Int32List(_ring.length);
+    var k = 0;
+    int median(Int32List xs) {
+      // An insertion sort of the few values.
+      for (var j = 0; j < k; j++) {
+        final u = xs[j];
+        var m = j;
+        while (m > 0 && sorted[m - 1] > u) {
+          sorted[m] = sorted[m - 1];
+          m--;
+        }
+        sorted[m] = u;
+      }
+      return sorted[k ~/ 2];
+    }
+
+    for (var by = 0; by < bh; by++) {
+      for (var bx = 0; bx < bw; bx++) {
+        if (dark[by * bw + bx] == 0) continue;
+        final xa = bx * _block, xb = math.min(w, xa + _block), ya = by * _block, yb = math.min(h, ya + _block);
+        for (var y = ya; y < yb; y++) {
+          final row = y * w;
+          for (var x = xa; x < xb; x++) {
+            final v = glow[row + x];
+            if (v < least) continue;
+            // Its neighbours to the left and right first (most pixels stop here).
+            if ((x > 0 && glow[row + x - 1] >= v) || (x + 1 < w && glow[row + x + 1] > v)) continue;
+            // On dim ground: two of the four ring pixels straight across from it at least.
+            var dims = 0;
+            if (x >= 2 && dim[y * w + x - 2] == 1) dims++;
+            if (x + 2 < w && dim[y * w + x + 2] == 1) dims++;
+            if (y >= 2 && dim[(y - 2) * w + x] == 1) dims++;
+            if (y + 2 < h && dim[(y + 2) * w + x] == 1) dims++;
+            if (dims < 2) continue;
+            // The brightest of its 3 x 3 (of equals, the first in reading order).
+            var top = true;
+            for (var dy = -1; dy <= 1 && top; dy++) {
+              final yy = y + dy;
+              if (yy < 0 || yy >= h) continue;
+              for (var dx = -1; dx <= 1; dx++) {
+                final xx = x + dx;
+                if ((dx == 0 && dy == 0) || xx < 0 || xx >= w) continue;
+                final u = glow[yy * w + xx];
+                if (u > v || (u == v && (dy < 0 || (dy == 0 && dx < 0)))) {
+                  top = false;
+                  break;
+                }
+              }
+            }
+            if (!top) continue;
+            k = 0;
+            var dimmest = 255, brightest = 0;
+            for (final (dx, dy) in _ring) {
+              final xx = x + dx, yy = y + dy;
+              if (xx < 0 || xx >= w || yy < 0 || yy >= h) continue;
+              final u = ring[k++] = glow[yy * w + xx];
+              if (u < dimmest) dimmest = u;
+              if (u > brightest) brightest = u;
+            }
+            // At the picture's edge the ring must still go most of the way round; and the speck
+            // must stand out from the ring's dimmest pixel at least as much as from its median.
+            if (k < 10 || v - dimmest < least) continue;
+            final ground = median(ring);
+            final light = v - ground;
+            if (light < least) continue;
+            // Its light stays within the 3 x 3: no line, edge or halo of a lamp runs through the
+            // ring.
+            if (brightest - ground > math.max(speckRing * 2.55, speckRingShare * light)) continue;
+            var m = 0;
+            for (final (dx, dy) in _ring) {
+              final xx = x + dx, yy = y + dy;
+              if (xx < 0 || xx >= w || yy < 0 || yy >= h) continue;
+              final i = (yy * w + xx) * 4;
+              rs[m] = px[i];
+              gs[m] = px[i + 1];
+              bs[m] = px[i + 2];
+              m++;
+            }
+            final fill = (median(rs), median(gs), median(bs));
+            if (lab(fill.$1.toDouble(), fill.$2.toDouble(), fill.$3.toDouble()).$1 > spotBelow) continue;
+            (byBlock[by * bw + bx] ??= []).add(found.length);
+            found.add((x, y, fill));
+          }
+        }
+      }
+    }
+    return (found, byBlock);
+  }
+
+  /// The specks on black whose centre lies in [window]: a copy of the card's pixels (the window
+  /// and two pixels around it) with each speck's 3 x 3 painted with its ring's colour, and how
+  /// many there were. No copy when there is none or more than [maxSpecks] (then the count is
+  /// [maxSpecks] + 1).
+  (_Source?, int) _despeckle((int, int, int, int) window) {
+    final (wx0, wy0, wx1, wy1) = window;
+    final (all, byBlock) = _speckMap;
+    if (all.isEmpty || wx1 - wx0 < 5 || wy1 - wy0 < 5) return (null, 0);
+    final w = picture.width, px = picture.rgba;
+    final bw = (w + _block - 1) ~/ _block;
+    final mine = <int>[];
+    for (var by = wy0 ~/ _block; by <= (wy1 - 1) ~/ _block; by++) {
+      for (var bx = wx0 ~/ _block; bx <= (wx1 - 1) ~/ _block; bx++) {
+        for (final s in byBlock[by * bw + bx] ?? const <int>[]) {
+          final (x, y, _) = all[s];
+          if (x >= wx0 && x < wx1 && y >= wy0 && y < wy1) mine.add(s);
+        }
+      }
+    }
+    if (mine.length > maxSpecks) return (null, maxSpecks + 1);
+    final centres = [for (final s in mine) all[s].$2 * w + all[s].$1];
+    final fills = [for (final s in mine) all[s].$3];
+    if (centres.isEmpty) return (null, 0);
+    // The copy: the window and two pixels around it, so a box rounded past the window still reads.
+    final cx0 = math.max(0, wx0 - 2), cy0 = math.max(0, wy0 - 2);
+    final cx1 = math.min(w, wx1 + 2), cy1 = math.min(picture.height, wy1 + 2);
+    final cw = cx1 - cx0;
+    final copy = Uint8List(cw * (cy1 - cy0) * 4);
+    for (var y = cy0; y < cy1; y++) {
+      copy.setRange((y - cy0) * cw * 4, (y - cy0 + 1) * cw * 4, px, (y * w + cx0) * 4);
+    }
+    for (var s = 0; s < centres.length; s++) {
+      final x = centres[s] % w, y = centres[s] ~/ w;
+      final (r, g, b) = fills[s];
+      for (var yy = math.max(wy0, y - 1); yy <= math.min(wy1 - 1, y + 1); yy++) {
+        for (var xx = math.max(wx0, x - 1); xx <= math.min(wx1 - 1, x + 1); xx++) {
+          final i = ((yy - cy0) * cw + xx - cx0) * 4;
+          copy[i] = r;
+          copy[i + 1] = g;
+          copy[i + 2] = b;
+        }
+      }
+    }
+    return (_Source(copy, cx0, cy0, cw), centres.length);
   }
 
   /// How many of the three positions around [i] lie from [lo] to [hi] - 1.
   static int _inside3(int i, int lo, int hi) => math.max(1, 3 - (i <= lo ? 1 : 0) - (i >= hi - 1 ? 1 : 0));
 
-  /// The pixels in [r], and on a dark one its 3 x 3 spots within [window].
-  _Pixels _boxPixels(Rect r, (int, int, int, int) window) {
+  /// The pixels of [src] in [r], and on a dark one its 3 x 3 spots within [window].
+  _Pixels _boxPixels(_Source src, Rect r, (int, int, int, int) window) {
     final w = picture.width, h = picture.height;
     final x0 = r.left.round().clamp(0, w - 1), y0 = r.top.round().clamp(0, h - 1);
     final x1 = math.max(x0 + 1, r.right.round().clamp(0, w)), y1 = math.max(y0 + 1, r.bottom.round().clamp(0, h));
-    final p = _Pixels();
+    final p = _Pixels(), spx = src.px;
     for (var y = y0; y < y1; y++) {
-      var i = (y * w + x0) * 4;
+      var i = src.index(x0, y);
       for (var x = x0; x < x1; x++) {
-        p.add(picture.rgba, i);
+        p.add(spx, i);
         i += 4;
       }
     }
@@ -545,7 +813,9 @@ class TwinFinder {
         final band = Float64List(bw + 2);
         for (var x = -1; x <= bw; x++) {
           final xx = x0 + x;
-          if (xx >= wx0 && xx < wx1) band[x + 1] = _glow(xx, yy);
+          if (xx < wx0 || xx >= wx1) continue;
+          final i = src.index(xx, yy);
+          band[x + 1] = math.max(spx[i], math.max(spx[i + 1], spx[i + 2])) / 2.55;
         }
         for (var x = 0; x < bw; x++) {
           final row3 = band[x] + band[x + 1] + band[x + 2];
@@ -565,18 +835,18 @@ class TwinFinder {
     return p;
   }
 
-  /// The pixels under [points] (shifted by [origin]), and on a dark sample their 3 x 3 spots
-  /// within [window].
-  _Pixels _pointPixels(List<Offset> points, Offset origin, (int, int, int, int) window) {
+  /// The pixels of [src] under [points] (shifted by [origin]), and on a dark sample their 3 x 3
+  /// spots within [window].
+  _Pixels _pointPixels(_Source src, List<Offset> points, Offset origin, (int, int, int, int) window) {
     final w = picture.width, h = picture.height;
     final p = _Pixels();
     for (final q in points) {
       final x = (q.dx + origin.dx).floor().clamp(0, w - 1), y = (q.dy + origin.dy).floor().clamp(0, h - 1);
-      p.add(picture.rgba, (y * w + x) * 4);
+      p.add(src.px, src.index(x, y));
     }
     if (p.luma / math.max(1, p.count) < _spotLuma) {
       for (final q in points) {
-        p.addSpot(_spot((q.dx + origin.dx).floor().clamp(0, w - 1), (q.dy + origin.dy).floor().clamp(0, h - 1), window));
+        p.addSpot(_spot(src, (q.dx + origin.dx).floor().clamp(0, w - 1), (q.dy + origin.dy).floor().clamp(0, h - 1), window));
       }
     }
     return p;
@@ -699,15 +969,90 @@ class TwinFinder {
       }
     }
     final mean = total == 0 ? 0.0 : sum / total;
+    // Dark cards: a broad shape one card has and the other has not (the last test, the dearest).
+    final (shape, shapeAllowed) = _mean[a].$1 <= darkBelow && _mean[b].$1 <= darkBelow ? _shapeDifference(a, b, cls, stopEarly: stopEarly) : (0.0, shapeLimit);
     // Stopped early or not, the counts above say whether 95% stay within the limit.
-    if (diffs == null) return TwinPair(a, b, mean: mean, p95: 0, max: worst, edge: 0, speck: speck, speckAllowed: speckAllowed);
+    if (diffs == null) return TwinPair(a, b, mean: mean, p95: 0, max: worst, edge: 0, speck: speck, speckAllowed: speckAllowed, shape: shape, shapeAllowed: shapeAllowed);
     double p95(Float64List xs) {
       if (xs.isEmpty) return 0;
       final s = Float64List.fromList(xs)..sort();
       return s[math.min(s.length - 1, (s.length * 0.95).ceil() - 1)];
     }
 
-    return TwinPair(a, b, mean: mean, p95: p95(diffs), max: worst, edge: p95(Float64List.sublistView(diffs, boxes)), speck: speck, speckAllowed: speckAllowed);
+    return TwinPair(a, b, mean: mean, p95: p95(diffs), max: worst, edge: p95(Float64List.sublistView(diffs, boxes)), speck: speck, speckAllowed: speckAllowed, shape: shape, shapeAllowed: shapeAllowed);
+  }
+
+  /// Per card: the lightness (from the gamma-encoded values, 0 to 100) of each box averaged with
+  /// the 3 x 3 boxes around it (about 6 pt on screen), and its grain (the median of how far a
+  /// box's own lightness is from that), worked out for dark cards when first compared.
+  final _shade = <int, Float64List>{};
+  final _shadeGrain = <int, double>{};
+
+  /// Per shape class: the grid the boxes lie on (its size, the box in each place or -1, and the
+  /// place of each box).
+  final _grids = <int, ({int cols, int rows, Int32List box, Int32List cell})>{};
+
+  Float64List _shadeOf(int card, int cls) => _shade[card] ??= () {
+        final grid = _grids[cls]!;
+        final lab = _lab[card];
+        final n = grid.cell.length;
+        final out = Float64List(n);
+        for (var i = 0; i < n; i++) {
+          final c = grid.cell[i] % grid.cols, r = grid.cell[i] ~/ grid.cols;
+          var sum = 0.0, count = 0;
+          for (var rr = math.max(0, r - 1); rr <= math.min(grid.rows - 1, r + 1); rr++) {
+            for (var cc = math.max(0, c - 1); cc <= math.min(grid.cols - 1, c + 1); cc++) {
+              final j = grid.box[rr * grid.cols + cc];
+              if (j < 0) continue;
+              sum += lab[_stride * j + 7];
+              count++;
+            }
+          }
+          out[i] = sum / count;
+        }
+        final rough = Float64List.fromList([for (var i = 0; i < n; i++) (lab[_stride * i + 7] - out[i]).abs()])..sort();
+        _shadeGrain[card] = n == 0 ? 0 : rough[n ~/ 2];
+        return out;
+      }();
+
+  /// How far a shape (an edge, a silhouette, a band) differs between dark cards [a] and [b]:
+  /// their lightness as a screen shows it, box by box averaged over 3 x 3 boxes (noise, JPEG
+  /// blocks and the specks left average out), the difference of the two, and how steeply that
+  /// difference changes from box to box (across two boxes, about 4 pt on screen): an edge on one
+  /// card and not the other changes it steeply along the edge, an even change in tone or a smooth
+  /// gradient hardly at all. Returns that steepness at the k-th steepest box (k about half the
+  /// boxes across, so an edge counts once it runs a quarter of the card), and what it may be:
+  /// [shapeLimit], or on grainy cards [shapeGrain] times their grain, which the averaging only
+  /// thins out.
+  (double, double) _shapeDifference(int a, int b, int cls, {bool stopEarly = false}) {
+    final sa = _shadeOf(a, cls), sb = _shadeOf(b, cls);
+    final grid = _grids[cls]!;
+    final n = sa.length;
+    if (n < 9) return (0.0, shapeLimit);
+    double diff(int c, int r) {
+      if (c < 0 || r < 0 || c >= grid.cols || r >= grid.rows) return double.nan;
+      final j = grid.box[r * grid.cols + c];
+      return j < 0 ? double.nan : sa[j] - sb[j];
+    }
+
+    final steep = Float64List(n);
+    for (var i = 0; i < n; i++) {
+      final c = grid.cell[i] % grid.cols, r = grid.cell[i] ~/ grid.cols;
+      final dx = (diff(c + 1, r) - diff(c - 1, r)).abs(), dy = (diff(c, r + 1) - diff(c, r - 1)).abs();
+      steep[i] = math.max(dx.isNaN ? 0.0 : dx, dy.isNaN ? 0.0 : dy);
+    }
+    final k = math.max(4, (math.sqrt(n) / 2).round());
+    final allowed = math.max(shapeLimit, shapeGrain * math.max(_shadeGrain[a]!, _shadeGrain[b]!));
+    if (stopEarly) {
+      // Only whether fewer than k boxes are steeper than allowed (the value is then partial).
+      var over = 0;
+      for (final v in steep) {
+        if (v > allowed) over++;
+      }
+      return (over >= k ? allowed * 1.01 : allowed, allowed);
+    }
+    steep.sort();
+    return (steep[n - k], allowed);
   }
 
   /// Pairs worth comparing: same shape class, and mean colours no further apart than the mean
@@ -766,6 +1111,19 @@ class TwinFinder {
 
 /// [TwinFinder.find] for [spec] on [picture], as one call (for an isolate).
 Twins findTwins((TwinPicture, BoardSpec) job) => TwinFinder(job.$1, job.$2).find();
+
+/// Pixels to sample: the picture ([left] and [top] 0, [width] its width), or a copy of part of it
+/// ([TwinFinder._despeckle]), RGBA row by row.
+class _Source {
+  const _Source(this.px, this.left, this.top, this.width);
+  final Uint8List px;
+  final int left;
+  final int top;
+  final int width;
+
+  /// Where the pixel at [x], [y] of the picture starts in [px].
+  int index(int x, int y) => ((y - top) * width + x - left) * 4;
+}
 
 /// Sums of a sample's pixels: colour, lightness (0 to 100, from the gamma-encoded values) and its
 /// extremes.

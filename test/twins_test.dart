@@ -115,11 +115,12 @@ void main() {
     // A night sky as a phone photo has it (owner, TestFlight build 124: "Top right corner is all
     // black, as the picture is"): near black, a reddish cast, sensor noise and JPEG blocks of
     // chroma, a few faint single-pixel stars.
-    (int, int, int) night(int x, int y, Random rng) {
+    (int, int, int) night(int x, int y, Random rng, {bool stars = true}) {
       final n = rng.nextInt(5) - 2;
       // 8 x 8 blocks of slightly different chroma, as JPEG leaves them in the dark.
       final block = ((x ~/ 8) * 7 + (y ~/ 8) * 13) % 5 - 2;
-      final star = (x * 31 + y * 17) % 997 == 0 ? 30 : 0;
+      // About 20 faint single-pixel stars a card.
+      final star = stars && (x * 31 + y * 17) % 997 == 0 ? 30 : 0;
       return (7 + n + block + star, 4 + n + star, 3 + n - block ~/ 2 + star);
     }
 
@@ -129,17 +130,58 @@ void main() {
       expect(twins.cards, 16, reason: 'every card of a plain night sky');
     });
 
-    test('in the dark, a star, a lamp, a light trail or a faint structure still keeps a card apart', () {
+    /// [specks] on the picture: (x, y, size, colour) squares of one or two pixels.
+    (int, int, int)? speckAt(int x, int y, List<(int, int, int, (int, int, int))> specks) {
+      for (final (sx, sy, size, colour) in specks) {
+        if (x >= sx && x < sx + size && y >= sy && y < sy + size) return colour;
+      }
+      return null;
+    }
+
+    test('near black, a few pin-point stars or hot pixels do not keep a card apart (owner, 2026-10-17)', () {
+      // Sydney Opera House night, 7x7 Cards: the corner cards with a few pin-point stars are twins
+      // of the black sky cards.
+      final rng = Random(13);
+      final c1 = cell(1), c2 = cell(2), c5 = cell(5), c11 = cell(11);
+      final specks = [
+        // Card 1: a bright star of 2 x 2 pixels and a faint one.
+        (c1.x + 40, c1.y + 50, 2, (150, 150, 140)), (c1.x + 90, c1.y + 120, 1, (60, 55, 50)),
+        // Card 2: six stars of one or two pixels, one of them reddish.
+        for (final (dx, dy, s) in [(12, 20, 1), (40, 31, 2), (77, 64, 1), (101, 90, 1), (30, 140, 2), (88, 150, 1)])
+          (c2.x + dx, c2.y + dy, s, dy == 64 ? (120, 50, 40) : (110, 105, 100)),
+        // Card 5: a sensor's hot pixel.
+        (c5.x + 70, c5.y + 70, 1, (255, 40, 40)),
+        // Card 11: a single star at full white.
+        (c11.x + 60, c11.y + 100, 1, (255, 255, 255)),
+      ];
+      final picture = paint(w4, h4, (x, y) => speckAt(x, y, specks) ?? night(x, y, rng, stars: false));
+      final finder = TwinFinder(picture, cards4);
+      final twins = finder.find();
+      expect(twins.classes, [List.generate(16, (i) => i)], reason: 'every card of the night sky, the ones with specks too');
+      expect([finder.specksOf(1), finder.specksOf(2), finder.specksOf(5), finder.specksOf(11)], [2, 6, 1, 1]);
+    });
+
+    test('in the dark, a lamp, a light trail, a short line, a starfield or a faint structure still keeps a card apart', () {
       final rng = Random(12);
-      final c1 = cell(1), c6 = cell(6), c9 = cell(9), c14 = cell(14);
+      final c1 = cell(1), c3 = cell(3), c6 = cell(6), c9 = cell(9), c10 = cell(10), c13 = cell(13), c14 = cell(14);
+      // Card 13: a starfield, forty pin-point stars.
+      final field = Random(5);
+      final stars = [for (var i = 0; i < 40; i++) (c13.x + 4 + field.nextInt(c13.w - 8), c13.y + 4 + field.nextInt(c13.h - 8), 1, (120, 120, 115))];
       final picture = paint(w4, h4, (x, y) {
-        var (r, g, b) = night(x, y, rng);
-        // Card 1: a star that shows (2 x 2 pixels).
-        if (x >= c1.x + 40 && x < c1.x + 42 && y >= c1.y + 50 && y < c1.y + 52) (r, g, b) = (150, 150, 140);
+        var (r, g, b) = speckAt(x, y, stars) ?? night(x, y, rng, stars: false);
+        // Card 1: a short line, ten pixels of a lit mast.
+        if (x == c1.x + 50 && y >= c1.y + 60 && y < c1.y + 70) (r, g, b) = (150, 150, 140);
+        // Card 3: the edge of a dark shape across it (the bridge's edge), a few code values lighter
+        // below it.
+        if (x >= c3.x && x < c3.x + c3.w && y >= c3.y && y < c3.y + c3.h && (y - c3.y) > 30 + (x - c3.x) * 0.9) (r, g, b) = (r + 8, g + 7, b + 6);
         // Card 6: a thin red light trail across it.
         if (x >= c6.x && x < c6.x + c6.w && y == c6.y + 60 + (x - c6.x) ~/ 3) (r, g, b) = (110, 25, 15);
         // Card 9: a small lit window.
         if (x >= c9.x + 60 && x < c9.x + 66 && y >= c9.y + 80 && y < c9.y + 88) (r, g, b) = (200, 160, 60);
+        // Card 10: a lamp, a bright core with a halo around it.
+        final lx = x - (c10.x + 60), ly = y - (c10.y + 90);
+        final glow = (220 * exp(-(lx * lx + ly * ly) / (2 * 2.5 * 2.5))).round();
+        if (glow > 0) (r, g, b) = (r + glow, g + (glow * 0.85).round(), b + (glow * 0.6).round());
         // Card 14: a faint lattice, dark grey bars on the black.
         if (x >= c14.x && x < c14.x + c14.w && y >= c14.y && y < c14.y + c14.h && ((x - c14.x) % 24 < 3 || (y - c14.y) % 24 < 3)) {
           (r, g, b) = (r + 14, g + 13, b + 12);
@@ -147,12 +189,13 @@ void main() {
         return (r, g, b);
       });
       final twins = TwinFinder(picture, cards4).find();
-      for (final apart in [1, 6, 9, 14]) {
+      const apart = [1, 3, 6, 9, 10, 13, 14];
+      for (final a in apart) {
         for (var c = 0; c < 16; c++) {
-          if (c != apart) expect(twins.same(apart, c), isFalse, reason: 'card $apart is not a twin of card $c');
+          if (c != a) expect(twins.same(a, c), isFalse, reason: 'card $a is not a twin of card $c');
         }
       }
-      expect(twins.cards, 12, reason: 'the other twelve stay twins');
+      expect(twins.classes, [[for (var c = 0; c < 16; c++) if (!apart.contains(c)) c]], reason: 'the other nine stay twins');
     });
 
     test('near white, pale cards a hair apart in tone are twins; a speck on white is not', () {

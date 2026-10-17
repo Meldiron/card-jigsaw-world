@@ -56,7 +56,21 @@ void main() {
           // The colour part of the score alone, so pairs kept apart by a speck show too.
           final colour = math.max(math.max(pair.mean / TwinFinder.meanLimit, pair.max / TwinFinder.maxLimit), math.max(pair.p95, pair.edge) / TwinFinder.p95Limit);
           if (colour <= 1.6) {
-            near.add({'a': a, 'b': b, 'mean': pair.mean, 'p95': pair.p95, 'max': pair.max, 'edge': pair.edge, 'speck': pair.speck, 'speckAllowed': pair.speckAllowed, 'colour': colour, 'score': pair.score});
+            near.add({
+              'a': a,
+              'b': b,
+              'mean': pair.mean,
+              'p95': pair.p95,
+              'max': pair.max,
+              'edge': pair.edge,
+              'speck': pair.speck,
+              'speckAllowed': pair.speckAllowed,
+              // A broad shape on dark cards against its limit, and the specks each card had put out.
+              'shape': pair.shape / pair.shapeAllowed,
+              'specks': [finder.specksOf(a), finder.specksOf(b)],
+              'colour': colour,
+              'score': pair.score,
+            });
           }
         }
         // Where each card's picture comes from, in the decoded picture's pixels.
