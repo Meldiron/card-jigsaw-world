@@ -158,12 +158,16 @@ carden.page redirects there.
 - `lib/features/game/`: `board_widget.dart` (one render path for all modes: unplaced pieces dimmed
   16%, joined groups fused with a cobalt outer outline, locked clusters fused without outline),
   `game_screen.dart` (HUD, toolbar Shuffle/Peek/Magic/Hint: Shuffle is free and not a move, Magic places a
-  card and its picture neighbours, one move each, never a double lock; pause sheet with "Change mode or
+  card and its picture neighbours, one move each, never a double lock; pause sheet with "Discard and pick a
   board", completion overlay with pack progress and "View picture"), `difficulty_screen.dart` (real-aspect
   preview of the part played, square sizes with the Expand switch, a plain Play / Continue button, Discard
   progress).
+- A board dealt on the device opens on its whole picture first, then the cards glide to their dealt places
+  (`GameState.previewing`; tap to skip; not a move, not a Peek; Reduce motion cross-fades); resumed and
+  Play together boards skip it; integration suites set `GameScreen.dealPreview = false`. A tap ends Peek.
 - **Twin cards** (owner, 2026-10-17; `docs/twins.md`): cards that look the same are twins (CIEDE2000 per
-  ~4 px box and outline strip: mean ≤ 1.0, 95% ≤ 1.8, max ≤ 3.0, specks ≤ 1.6 L or 3× grain). A move that
+  ~4 px box and outline strip: mean ≤ 1.0, 95% ≤ 1.8, max ≤ 3.0, specks ≤ 1.6 L or 3× grain; near black and
+  near white differences count less, `TwinFinder.seen`, specks in the dark over 3x3 pixels, limit 3.4). A move that
   puts a loose card on a twin's place, or where a twin would join a neighbour, counts as placed or joined by
   an identity swap of two loose cards (`Twins.settle` in `GameController._apply`; `GameState.cardKeys` keeps
   each card's widget, `_TwinFade`). The deal, Shuffle and Gather avoid twin places and joins (a crowded twin
@@ -206,7 +210,7 @@ carden.page redirects there.
   or when the last break is 3+ minutes old, closable after 5 s, rewarded 15 s; the offer CTA never
   skips the rewarded countdown.
 - `lib/data/purchases.dart`: StoreKit products (coins_1000/3000/5500/12000, tickets_5/15, hints_5/15 =
-  booster bundles of Peeks, Hints and Magic (15/10/5 and 50/30/15), vip_monthly/yearly), verified server-side by the `verify-purchase` function. `PurchaseService` listens from
+  booster bundles of Peeks, Hints and Magic (15/10/5 and 50/30/15), vip_monthly/yearly), verified server-side by `/purchase/verify` on `api`. `PurchaseService` listens from
   launch, checks open transactions on resume and retries checks without an answer; `PurchaseFlow`
   (`lib/state/purchases.dart`) and `PurchaseHost` (`lib/features/store/purchase_host.dart`) show the tile
   spinner, the purchase sheet ("Adding 10 tickets" > "10 tickets added") and toasts. Flow: `docs/purchases.md`.
@@ -264,8 +268,11 @@ carden.page redirects there.
   levels 2/4/6/8/10 or once used; `lib/features/game/unlock_intro.dart` (intro sheet, `UnlockIntroHost`).
   Giant boards can be opened early from a giant pack's gate: the pack's tickets plus `Economy.giantEarlyFee`
   (1 ticket per level to go), recorded as `early:giant` in `profiles.unlockedTiers`.
-  Any quest not finished or claimed can be swapped for 1 ticket (`QuestSwap`, `Goal.swap`, `profiles.questSwaps`
-  JSON text, `SyncOp.questSwap`; only that quest changes; older builds show the first quest).
+  Any quest not finished or claimed can be swapped for 1 ticket by swiping its row left (Dismissible like
+  Friends, then the showAppAlert confirmation; VoiceOver action "Swap for 1 ticket"; `QuestSwap`, `Goal.swap`,
+  `Goals._withSwaps`, `profiles.questSwaps` JSON text, `SyncOp.questSwap`; only that quest changes; older builds
+  show the first quest; docs/economy.md "Swapping a quest"). A timed quest's target never goes below
+  `Goals.fastFloor` (3x3 15 s ... 7x7 3:35).
   Quests: `Goals.daily` / `weekly` rotate by day and week and take `open`, `level`, `claimed` (and the
   daily puzzle); each quest comes from a different lane, chosen against the player's `PlayHabits`, so
   ordinary play finishes only "Solve 3 puzzles" and one board never finishes two (docs/economy.md, "Quests
@@ -318,13 +325,16 @@ carden.page redirects there.
   them with `tools/dev/reports.py` (look regularly: Apple wants timely responses). Player > Block writes a
   `blocks` row readable only by the blocker; blocked players are left out of their leaderboard (one
   `Query.notEqual('$id')` each) and their friendship ends; Settings > Blocked players unblocks. Both tables are
-  deleted in both directions with an account (`delete-account`, `PAIR_TABLES` in `tools/dev/cjw_admin.py`).
+  deleted in both directions with an account (`/account/delete` on `api`, `PAIR_TABLES` in `tools/dev/cjw_admin.py`).
   `lib/state/social.dart` (`PlayerSafety`, `blockedPlayersProvider`), `lib/features/social/player_safety.dart`.
   Offensive names (owner, 2026-10-16): `lib/core/name_filter.dart` (`NameFilter`) refuses them where a name is
   chosen (name alert, sign-up, new profiles) and shows names that fail as "Player" (`Profile.fromRow`, friends,
-  blocks, merge), so names set by older builds are covered on 2.0+. `test/name_filter_test.dart`.
+  blocks, merge), so names set by older builds are covered on 2.0+; links, @handles, e-mail addresses and
+  domains are refused too (`NameFilter.isRefused`), and the hourly sweep resets stored names that fail.
+  `test/name_filter_test.dart`.
 - Friend gifts (owner, 2026-10-17; `docs/friend-gifts.md`): Player > Send a gift (1 ticket or 150 coins, free,
-  one per friend per sender's local day; function `send-gift`, table `gifts`,
+  one per friend per sender's local day, 20 a day per sender; `/gift/send` on `api`, table `gifts`; a push only
+  between mutual friends, at most 5 a day per recipient;
   `messages.fromUserId/fromName/fromAvatar`, 24 h `expiresAt`). Push: `GiftPush` (`cjw/push`,
   AppDelegate.swift) + `PushRegistration` (`lib/state/push.dart`) register the APNs token as an Appwrite push
   target (provider from the build's embedded profile); Settings > Gifts from friends; a tap opens
@@ -347,24 +357,27 @@ carden.page redirects there.
   the VIP plans in the store and on the sign-in screen. Keep `docs/privacy-policy.md` and
   `docs/terms-of-use.md` true to what the app does (`test/legal_links_test.dart`).
 - Pack codes (`docs/pack-codes.md`): `packs.hidden` packs are listed only for players who own them;
-  codes in the server-only `pack_codes` table (SHA-256 hashes) and `code_claims`; function `redeem-code`
+  codes in the server-only `pack_codes` table (SHA-256 hashes) and `code_claims`; `/code/redeem` on `api`
   (redeemed on the web only: the Settings row and `/redeem?code=` links; the iPhone app has no code entry and a
   code link opens nothing there (owner, 2026-10-16; guideline 3.1.1)); private pack pictures in bucket `private-packs`, readable
   per claimant. Tools: `tools/dev/private_pack.py`, `tools/dev/pack_codes.py`. The Hidden Object Adventure
   test pack (`pack-hidden-object-test`) is unlicensed art for an internal test only: never make it public.
-- Functions: `verify-purchase` (StoreKit 2 JWS verification, grants, App Store Server Notifications at
-  `https://cjw-verify-purchase.fra.appwrite.run/notifications`; secret vars can only be updated with
-  `secret: true`; `APPLE_ENVIRONMENT=Production` since 2026-10-16, falling back to Sandbox for sandbox
-  transactions, and `/health` reports the environment in use); `catalog-snapshot` (daily 03:00 UTC: catalogue file in bucket `catalog`, pointer row
-  `meta/catalog`; see `docs/catalog-sync.md`; pack rows keep `$createdAt` for the New badge); `delete-account`
-  (Profile > Account > Delete account: deletes the caller's rows, uploads and user with a per-execution key;
-  secret variable `APPLE_SIGNIN_KEY` (contents of `AuthKey_2QJPJFW8JW.p8`, set 2026-10-15) revokes Sign in
-  with Apple tokens; without it the revoke is skipped and logged; it also deletes the player's reports and
-  blocks, gifts both ways and messages sent as gifts, co-op moves and hosted games); `send-gift` (scopes
-  rows.read/write, messages.read/write; trims gift pushes older than a day from the messaging log);
-  `coop-game` (create/join/leave/remove/end/next; a team per game, seats in membership roles) and
-  `coop-cleanup` (hourly: idle games end after a day, ended ones go after an hour, orphan teams). verify-purchase
-  also credits Peeks and Magic (no ledger line). Deploy functions with the Appwrite CLI (`appwrite functions create-deployment --code functions/<name>`). There is no image proxy: pictures load straight from Storage on every platform.
+- Functions (`docs/functions.md`): the app calls one function, `api` (`AppwriteConfig.apiFunction`), by path:
+  `/purchase/verify` (StoreKit 2 JWS verification, grants), `/account/delete` (the caller's rows, uploads and user;
+  secret `APPLE_SIGNIN_KEY` = contents of `AuthKey_2QJPJFW8JW.p8` revokes Sign in with Apple; also reports, blocks,
+  gifts both ways, messages sent as gifts, co-op moves and hosted games), `/code/redeem` (web), `/coop/<action>`
+  (create/join/leave/remove/end/next; a team per game, seats in membership roles), `/gift/send`, `/health`. Its
+  hourly schedule runs the co-op cleanup and the integrity sweep (`SWEEP_APPLY=true`: squatted or foreign-permission
+  rows in progress/event_progress/friends/blocks, ghost profiles, orphan or public uploads, 500 photos per player,
+  refused names; full pass daily 04:00 UTC), and a `blocks` create event checks new rows at once; `/admin/sweep` and
+  `/coop/cleanup` are for the owner's CLI. Live checks: `node tools/dev/api_check.mjs`, `security_check.mjs`.
+  Modules load lazily; a cold start is about 5 s, warm calls 0.1-0.5 s. Kept for builds up to 124 (retire only
+  when no build that calls them can be used): `verify-purchase` (also Apple's App Store Server Notifications at
+  `https://cjw-verify-purchase.fra.appwrite.run/notifications`; `APPLE_ENVIRONMENT=Production` since 2026-10-16,
+  falling back to Sandbox; secret vars can only be updated with `secret: true`), `delete-account`, `redeem-code`,
+  `coop-game` (frozen) and `send-gift` (kept equal to api's gift code, limits included). `catalog-snapshot` stays
+  separate (daily 03:00 UTC: catalogue file in bucket `catalog`, pointer row `meta/catalog`; see
+  `docs/catalog-sync.md`; pack rows keep `$createdAt` for the New badge). `coop-cleanup` was deleted 2026-10-17. Deploy functions with the Appwrite CLI (`appwrite functions create-deployment --code functions/<name>`). There is no image proxy: pictures load straight from Storage on every platform.
 - Site `card-jigsaw-world` (named Carden) → https://play.carden.page (proxy rule; web platform `carden-play`
   allows the origin), and the earlier addresses https://carden.appwrite.network and
   https://card-jigsaw-world.appwrite.network still serve it (static, fallback index.html),
@@ -405,15 +418,18 @@ carden.page redirects there.
   App Store availability is two manual ticks in Pricing and Availability). Win-back offers are recorded in
   `store/metadata/subscriptions/vip_*.json`; `subscriptions` creates them once Apple approves the plans. Docs:
   `tools/store/README.md`, `docs/release-flow.md`, `docs/release-checklist.md`.
-- Not yet done (owner): App Privacy questionnaire (add analytics: Usage Data > Product Interaction and Location >
+- Not yet done (owner): turning off unused auth methods and GraphQL (approved 2026-10-17; the commands are in
+  `docs/functions.md` "Project settings"; not permitted from an agent session), a CI job running `npm test` in
+  `functions/api` (needs the `workflow` token scope), App Privacy questionnaire (add analytics: Usage Data > Product Interaction and Location >
   Coarse Location, linked, not tracking; Analytics purpose on Purchase History and User ID), refreshing the local
   team profile in Xcode before the next `tools/dev/device.sh` (it lacks Push Notifications and Associated
   Domains), App Store submission (Paid Apps agreement, banking and tax active since 2026-10-14),
   Mac / Vision Pro availability ticks, restoring
   `secrets/appwrite-storage-key.txt` (the content tool falls back to the users key), pushing the local
   branch `workflow-dsym-check` (needs a GitHub token with the `workflow` scope: `gh auth refresh -s workflow`).
-- **Changing what a purchase gives** (coins, tickets, hints, Peeks, Magic per product): three places must agree:
-  `functions/verify-purchase/src/main.js` (server grant, then redeploy the function as in
+- **Changing what a purchase gives** (coins, tickets, hints, Peeks, Magic per product): three places must agree
+  (`GRANTS` lives in both `functions/api/src/purchase.js` and `functions/verify-purchase/src/main.js`, kept equal by
+  `test/economy_test.dart`; redeploy both): the server grant (then redeploy as in
   `docs/purchases.md`), `lib/data/purchases.dart` (what the store screen shows) and
   `store/metadata/subscriptions/consumables.json` (App Store names and descriptions, pushed with
   `asc_publish.py iap`). Product ids such as `coins_1000` cannot be renamed on Apple; keep them.
@@ -457,5 +473,6 @@ tree, so dispatch the workflow directly as described in the testflight-feedback 
 `docs/purchases.md`, `docs/web.md`, `docs/app-updates.md`, `docs/release-flow.md`, `docs/release-checklist.md`,
 `docs/content-rules.md`, `docs/content-sources.md`, `docs/boards.md` (board sizes, Expand), `docs/twins.md`
 (twin cards), `docs/analytics.md`, `docs/friend-gifts.md`, `docs/multiplayer.md` (Play together),
-`docs/terms-of-use.md`, `store/README.md` (store assets),
+`docs/terms-of-use.md`, `docs/functions.md` (the `api` function, old functions, retirement rule, integrity
+sweep), `store/README.md` (store assets),
 `tools/store/README.md`, `README.md`.
