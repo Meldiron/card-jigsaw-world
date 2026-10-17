@@ -835,6 +835,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
         peeked: s.peeked,
         bestLock: s.bestLock,
         stars: stars,
+        hints: s.hintsUsed,
       )),
     });
     final questsReady = [for (final g in readyGoals(rows.values, profileBefore, open, now, dailyPuzzle: daily?.id, since: questsSince)) if (!readyBefore.contains(g.key)) g];

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -57,38 +59,67 @@ class AchievementStatus {
 }
 
 /// Derived numbers every family reads from.
+///
+/// How a picture was played (shape, size, hints, time, the hour) comes from its finished boards
+/// ([PuzzleProgress.finishes]), each with its own values, never from the row's board fields, which
+/// a replay overwrites as soon as it is saved: a picture counts once for a family when one of its
+/// boards does what the family asks, so a replay in another shape or size never moves a count back.
+/// Rows from older builds read through the same fallbacks as the quests (their last finish on the
+/// board fields until a board is saved over them).
 class AchievementFacts {
-  AchievementFacts(this.profile, this.done, this.friends, {this.starsFromPictures = false});
+  AchievementFacts(this.profile, this.done, this.friends, {this.starsFromPictures = false, DateTime? since})
+      : _boards = {
+          for (final p in done) p.puzzleId: [for (final b in p.finishes) if (since == null || b.at.isAfter(since)) b],
+        };
   final Profile profile;
   final List<PuzzleProgress> done;
   final int friends;
+
+  /// Each solved picture's finished boards that count ([since]: the guided start counts only those
+  /// after achievements opened).
+  final Map<String, List<BoardFinish>> _boards;
 
   /// Stars collected: the profile's total, or (guided start) the stars of [done] only.
   final bool starsFromPictures;
   late final int stars = starsFromPictures ? done.fold<int>(0, (s, p) => s + p.stars) : profile.totalStars;
 
+  List<BoardFinish> _of(PuzzleProgress p) => _boards[p.puzzleId] ?? const [];
+
+  /// Pictures with a finished board, its values known, that passes [test].
+  int _pictures(bool Function(BoardFinish b) test) => done.where((p) => _of(p).any((b) => b.known && test(b))).length;
+
+  /// Pictures with a board finished at a time that passes [test] (the time is known also when the
+  /// values are not).
+  int _finishedAt(bool Function(BoardFinish b) test) => done.where((p) => _of(p).any(test)).length;
+
   late final int perfect = done.where((p) => p.stars == 3).length;
-  late final int noHints = done.where((p) => p.hintsUsed == 0).length;
-  late final int big = done.where((p) => p.gridSize >= 36).length;
-  late final int master = done.where((p) => p.gridSize >= GridSpec.tiers.last.cells).length;
+  late final int noHints = _pictures((b) => b.hints == 0);
+  late final int big = _pictures((b) => b.gridSize >= 36);
+  late final int master = _pictures((b) => b.gridSize >= GridSpec.tiers.last.cells);
   late final int packs = {for (final p in done) p.puzzleId.replaceAll(RegExp(r'-\d+$'), '')}.length;
   late final int daily = done.where((p) => p.puzzleId.startsWith('daily-')).length;
   late final int events = done.where((p) => p.puzzleId.startsWith('evpack-')).length;
-  late final int nightOwl = done.where((p) => p.completedAt != null && (p.completedAt!.hour >= 22 || p.completedAt!.hour < 5)).length;
-  late final int earlyBird = done.where((p) => p.completedAt != null && p.completedAt!.hour >= 5 && p.completedAt!.hour < 8).length;
-  late final int speed = done.where((p) => p.elapsedSeconds > 0 && p.elapsedSeconds < p.gridSize * 4).length;
+  late final int nightOwl = _finishedAt((b) => b.atNight);
+  late final int earlyBird = _finishedAt((b) => b.early);
+  late final int speed = _pictures((b) => b.quick);
+
+  /// The most pictures finished on one day (a picture counts on every day one of its boards was
+  /// finished).
   late final int marathon = () {
-    final byDay = <String, int>{};
+    final byDay = <String, Set<String>>{};
     for (final p in done) {
-      final d = p.completedAt;
-      if (d == null) continue;
-      final k = '${d.year}-${d.month}-${d.day}';
-      byDay[k] = (byDay[k] ?? 0) + 1;
+      for (final b in _of(p)) {
+        (byDay['${b.at.year}-${b.at.month}-${b.at.day}'] ??= {}).add(p.puzzleId);
+      }
     }
-    return byDay.values.fold<int>(0, (m, v) => v > m ? v : m);
+    return byDay.values.fold<int>(0, (m, v) => v.length > m ? v.length : m);
   }();
-  late final int modes = {for (final p in done) p.mode}.length;
-  int mode(GameMode m) => done.where((p) => p.mode == m.code).length;
+  late final int modes = {
+    for (final p in done)
+      for (final b in _of(p))
+        if (b.known) b.mode,
+  }.length;
+  int mode(GameMode m) => _pictures((b) => b.mode == m.code);
 }
 
 List<AchievementStep> _tiered(List<int> thresholds, String avatar, {int coins = 100, int tickets = 0}) => [
@@ -134,18 +165,22 @@ final achievementsProvider = Provider<List<AchievementStatus>>((ref) {
   final since = ref.watch(countsFromProvider(Reveal.achievements));
   final counted = since.millisecondsSinceEpoch == 0;
   final done = [for (final p in progress.values) if (p.completed && (counted || (p.completedAt != null && p.completedAt!.isAfter(since)))) p];
-  final facts = AchievementFacts(profile, done, friends, starsFromPictures: !counted);
-  return [
-    for (final f in achievementFamilies)
-      () {
-        var claimed = 0;
-        while (claimed < f.steps.length && profile.claimedAchievements.contains('${f.id}:${claimed + 1}')) {
-          claimed++;
-        }
-        return AchievementStatus(family: f, stepIndex: claimed, progress: f.progress(facts), claimedSteps: claimed);
-      }(),
-  ];
+  final facts = AchievementFacts(profile, done, friends, starsFromPictures: !counted, since: counted ? null : since);
+  return [for (final f in achievementFamilies) achievementStatus(f, facts, profile.claimedAchievements)];
 });
+
+/// [family]'s status: the next step not claimed and the progress towards it. A step claimed stays
+/// claimed whatever the count does later (a picture's boards read another way, a merge), and the
+/// progress shown never falls below the last step claimed.
+AchievementStatus achievementStatus(AchievementFamily family, AchievementFacts facts, Iterable<String> claimedKeys) {
+  final keys = claimedKeys.toSet();
+  var claimed = 0;
+  while (claimed < family.steps.length && keys.contains('${family.id}:${claimed + 1}')) {
+    claimed++;
+  }
+  final floor = claimed == 0 ? 0 : family.steps[claimed - 1].threshold;
+  return AchievementStatus(family: family, stepIndex: claimed, progress: max(family.progress(facts), floor), claimedSteps: claimed);
+}
 
 /// Avatar keys the player owns: starters, purchases, and claimed tiers.
 Set<String> ownedAvatarKeys(Profile profile) {

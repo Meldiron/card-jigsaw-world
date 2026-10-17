@@ -10,8 +10,9 @@ import 'dart:math';
 /// One finished board of a picture with the values it was finished with: an entry of the
 /// `finishes` column of a progress row, a JSON list every win adds to. The row's board fields
 /// (mode, size, Painting, par, moves, time, Peek, longest lock) belong to the board on the row, which
-/// a replay overwrites as soon as it is saved, so the quests count these instead (2026-10-17:
-/// replaying a picture finished today changed what the shape, size and Painting quests counted).
+/// a replay overwrites as soon as it is saved, so the quests and the achievements count these
+/// instead (2026-10-17: replaying a picture finished today changed what the shape, size and Painting
+/// quests counted, and a replay moved the per-shape and size achievements).
 class BoardFinish {
   const BoardFinish({
     required this.at,
@@ -24,6 +25,7 @@ class BoardFinish {
     this.peeked = false,
     this.bestLock = 0,
     this.stars = 0,
+    this.hints = 0,
     this.known = true,
   });
 
@@ -39,14 +41,27 @@ class BoardFinish {
   final int bestLock;
   final int stars;
 
+  /// Hints used on the board (entries written before 2026-10-17 evening have none: 0).
+  final int hints;
+
   /// False when the finish's values are lost: a build from before the log finished the board, and
   /// a board saved since (a replay) overwrote the row's board fields. It still counts as a solve on
   /// its day, and for nothing that asks how the board was played.
   final bool known;
 
+  /// Finished quickly, under 4 seconds a card (achievement "Quick Hands").
+  bool get quick => seconds > 0 && seconds < gridSize * 4;
+
+  /// Finished between 22:00 and 05:00 (achievement "Night Owl"); [early]: between 05:00 and 08:00
+  /// ("Early Bird"). The finish time is known also when the values are not.
+  bool get atNight => at.hour >= 22 || at.hour < 5;
+  bool get early => at.hour >= 5 && at.hour < 8;
+
   /// The log keeps the finishes of the [keep] days before the newest one (today's and this week's
   /// quests, with a day to spare), plus the newest one before those (what the player usually plays,
-  /// `PlayHabits`, looks before today or Monday).
+  /// `PlayHabits`, looks before today or Monday), plus the boards the achievements count a picture
+  /// by, whenever they were finished: the newest of each shape, the biggest, the newest without
+  /// hints, quick, at night and early (so a replay never moves an achievement back).
   static const keep = Duration(days: 8);
 
   /// At most this many finishes, in at most [maxChars] characters (the column is a string of 4,000).
@@ -68,6 +83,7 @@ class BoardFinish {
           'peeked': peeked,
           'bestLock': bestLock,
           'stars': stars,
+          'hints': hints,
         }
       : {'at': _time(at), 'known': false};
 
@@ -87,6 +103,7 @@ class BoardFinish {
       peeked: j['peeked'] == true,
       bestLock: _int(j['bestLock']),
       stars: _int(j['stars']),
+      hints: _int(j['hints']),
     );
   }
 
@@ -128,6 +145,7 @@ class BoardFinish {
               peeked: row['peeked'] == true,
               bestLock: _int(row['bestLock']),
               stars: _int(row['stars']),
+              hints: _int(row['hintsUsed']),
             )
           : BoardFinish(at: at, known: false),
     ];
@@ -149,8 +167,9 @@ class BoardFinish {
   }
 
   /// One entry per finish time (a win sent twice is one; of a known and an unknown one, the known),
-  /// oldest first: the [keep] days before the newest finish and the newest one before them, at most
-  /// [maxEntries] in [maxChars].
+  /// oldest first: the [keep] days before the newest finish, the newest one before them and the
+  /// boards the achievements count ([keep]), at most [maxEntries] in [maxChars] (the oldest of the
+  /// others go first, then the oldest of those).
   static String _log(Iterable<BoardFinish> finishes) {
     final byTime = <int, BoardFinish>{};
     for (final f in finishes) {
@@ -161,10 +180,22 @@ class BoardFinish {
     if (sorted.isEmpty) return '';
     final from = sorted.last.at.subtract(keep);
     final first = sorted.indexWhere((f) => !f.at.isBefore(from));
-    var kept = sorted.sublist(max(0, first - 1));
-    if (kept.length > maxEntries) kept = kept.sublist(kept.length - maxEntries);
-    while (kept.length > 1 && encode(kept).length > maxChars) {
-      kept = kept.sublist(1);
+    final recent = sorted.sublist(max(0, first - 1)).toSet();
+    final known = sorted.where((f) => f.known).toList();
+    BoardFinish? newest(Iterable<BoardFinish> list, bool Function(BoardFinish f) test) => list.where(test).lastOrNull;
+    final lasting = <BoardFinish>{
+      for (final mode in {for (final f in known) f.mode}) ?newest(known, (f) => f.mode == mode),
+      if (known.isNotEmpty) known.reduce((a, b) => b.gridSize >= a.gridSize ? b : a),
+      ?newest(known, (f) => f.hints == 0),
+      ?newest(known, (f) => f.quick),
+      ?newest(sorted, (f) => f.atNight),
+      ?newest(sorted, (f) => f.early),
+    };
+    var kept = [for (final f in sorted) if (recent.contains(f) || lasting.contains(f)) f];
+    bool over() => kept.length > maxEntries || encode(kept).length > maxChars;
+    while (kept.length > 1 && over()) {
+      final drop = kept.firstWhere((f) => !lasting.contains(f) && f != sorted.last, orElse: () => kept.first);
+      kept = [for (final f in kept) if (f != drop) f];
     }
     return encode(kept);
   }
