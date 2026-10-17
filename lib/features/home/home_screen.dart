@@ -34,8 +34,8 @@ import 'header_bar.dart';
 import 'home_pack_rows.dart';
 import 'tomorrow_preview.dart';
 
-/// Home: today's puzzle, Quick play, Wheel and piggy bank, streak, level,
-/// boards to continue, packs in progress, live events, daily months, packs
+/// Home: today's puzzle, Quick play, streak, boards to continue, Wheel and
+/// piggy bank, level, packs in progress, live events, daily months, packs
 /// missing stars, featured packs and finished packs. During the guided start
 /// (lib/state/first_steps.dart) it begins with today's picture, Continue and
 /// the next step, and each section joins as it opens ([Reveal]); the rest
@@ -181,7 +181,7 @@ class HomeScreen extends ConsumerWidget {
         if (!showWheel && levelCard != null) levelCard,
       ],
     );
-    final packRowSlivers = <Widget>[
+    final continueSlivers = <Widget>[
       if (showPacks && inProgress.isNotEmpty) ...[
         SliverToBoxAdapter(
           child: SectionHeader(
@@ -205,6 +205,9 @@ class HomeScreen extends ConsumerWidget {
           ),
         ),
       ],
+    ];
+    // Packs in progress sit lower, just above the live events (owner, 2026-10-17).
+    final packsInProgress = <Widget>[
       if (showPacks && packRows.inProgress.isNotEmpty) ...[
         SliverToBoxAdapter(
           child: SectionHeader(
@@ -282,7 +285,7 @@ class HomeScreen extends ConsumerWidget {
                         ),
                       ),
                     ),
-                  ...packRowSlivers,
+                  ...continueSlivers,
                 ] else ...[
                   SliverToBoxAdapter(
                     child: Padding(
@@ -328,8 +331,8 @@ class HomeScreen extends ConsumerWidget {
                         child: streak,
                       ),
                     ),
-                  ...packRowSlivers,
-                  // Extras after the boards and packs the player is working on.
+                  ...continueSlivers,
+                  // Extras after the boards the player is working on; packs in progress further down.
                   if (showExtras) ...[
                     const SliverToBoxAdapter(child: SizedBox(height: 16)),
                     SliverToBoxAdapter(
@@ -354,6 +357,7 @@ class HomeScreen extends ConsumerWidget {
                       ),
                     ),
                 ],
+                ...packsInProgress,
                 if (open.contains(Reveal.liveEvents) && livePacks.isNotEmpty) ...[
                   SliverToBoxAdapter(
                     child: SectionHeader(
