@@ -130,7 +130,7 @@ class PurchaseFlow extends Notifier<PurchaseFlowState> {
   /// Buys [product]: the App Store sheet opens and the stages follow its events.
   Future<void> buy(ProductDetails product) async {
     if (state.busy) return;
-    AppAnalytics.event('purchase_started', {'product': product.id});
+    AppAnalytics.event('purchase_started', {'product': product.id, 'bundle': purchaseBundle(product.id)});
     state = PurchaseFlowState(stage: PurchaseStage.paying, productId: product.id, watching: true);
     final started = await _service.buy(product);
     bool stillPaying() => state.stage == PurchaseStage.paying && state.productId == product.id;
@@ -217,7 +217,17 @@ class PurchaseFlow extends Notifier<PurchaseFlowState> {
     final current = _isCurrent(e.productId);
     final wasVip = ref.read(profileProvider).value?.isVip ?? false;
     // Once per purchase: a check repeated after a restart says it was applied already.
-    if (!e.alreadyApplied) AppAnalytics.event('purchase_completed', {'product': e.productId, 'followed': current});
+    final g = e.grant;
+    if (!e.alreadyApplied) {
+      AppAnalytics.event('purchase_completed', {
+        'product': e.productId,
+        'bundle': purchaseBundle(e.productId),
+        'followed': current,
+        // What it gave (the helper bundles give Peeks, Hints and Magic together); zeros left out.
+        for (final (k, v) in [('coins', g.coins), ('tickets', g.tickets), ('hints', g.hints), ('peeks', g.peeks), ('magics', g.magics)])
+          if (v > 0) k: v,
+      });
+    }
     if (!e.alreadyApplied && e.grant.vipExpiresAt != null && !wasVip) AppAnalytics.event('vip_started', {'product': e.productId});
     // Show it once the save has it, so the sheet and the header say the same.
     try {
@@ -236,3 +246,11 @@ class PurchaseFlow extends Notifier<PurchaseFlowState> {
 }
 
 final purchaseFlowProvider = NotifierProvider<PurchaseFlow, PurchaseFlowState>(PurchaseFlow.new);
+
+/// The kind of bundle a product is, for analytics: `coins`, `tickets`, `helpers` (the `hints_*`
+/// ids, which give Peeks, Hints and Magic since 2026-10-17) or `vip`.
+String purchaseBundle(String? productId) {
+  final id = productId ?? '';
+  if (id.startsWith('hints_')) return 'helpers';
+  return id.split('_').first;
+}

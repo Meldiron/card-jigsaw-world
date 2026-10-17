@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/analytics.dart';
 import '../../core/haptics.dart';
 import '../../core/sfx.dart';
 import '../../core/theme/tokens.dart';
@@ -36,7 +37,9 @@ class PiggySheet extends ConsumerWidget {
       confirmLabel: 'Pay ${countOf(price, 'coin')}',
     );
     if (!sure || !context.mounted) return;
-    if (!await ref.read(profileProvider.notifier).upgradePiggy() || !context.mounted) return;
+    if (!await ref.read(profileProvider.notifier).upgradePiggy()) return;
+    AppAnalytics.event('piggy_upgraded', {'level': profile.piggyLevel + 1, 'capacity': next, 'price': price});
+    if (!context.mounted) return;
     Sfx.instance.coin();
     Haptics.success();
     showToast(context, 'Your piggy bank holds ${formatCount(next)} coins now', icon: AppIcons.piggy);
@@ -125,6 +128,7 @@ class PiggySheet extends ConsumerWidget {
                   ? null
                   : () async {
                       final ok = await ref.read(profileProvider.notifier).openPiggy();
+                      if (ok) AppAnalytics.event('piggy_opened', {'coins': coins, 'capacity': capacity, 'full': coins >= capacity});
                       if (!context.mounted) return;
                       if (ok) {
                         Sfx.instance.coin();

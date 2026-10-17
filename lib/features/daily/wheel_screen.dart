@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/a11y.dart';
+import '../../core/analytics.dart';
 import '../../core/haptics.dart';
 import '../../core/sfx.dart';
 import '../../core/theme/tokens.dart';
@@ -121,7 +122,9 @@ String formatOdds(double percent) {
 
 /// The odds sheet, opened from "See odds" on the wheel (App Review guideline
 /// 3.1.1: the odds of a paid random reward are shown before spending).
-Future<void> showWheelOdds(BuildContext context) => showAppSheet(
+Future<void> showWheelOdds(BuildContext context) {
+  AppAnalytics.event('wheel_odds_opened');
+  return showAppSheet(
       context,
       builder: (ctx) {
         final c = ctx.colors;
@@ -200,6 +203,7 @@ Future<void> showWheelOdds(BuildContext context) => showAppSheet(
         );
       },
     );
+}
 
 /// "five times", "twice".
 String _times(int n) => switch (n) {
@@ -268,6 +272,8 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
     }
     // Weighted pick, from the same table the odds sheet shows.
     final idx = wheelPick(math.Random().nextDouble());
+    final prize = _segments[idx];
+    AppAnalytics.event('wheel_spun', {'spin': 'x$times', 'tickets': cost, 'prize': prize.kind.name, 'amount': prize.amountFor(times), 'jackpot': prize.jackpot});
     final seg = 2 * math.pi / _segments.length;
     // Pointer is at top (-pi/2). Segment i spans [i*seg, (i+1)*seg) starting at -pi/2 when rotation=0.
     final target = -(idx * seg + seg / 2) + (math.Random().nextDouble() - 0.5) * seg * 0.6;

@@ -107,8 +107,8 @@ A route added later is named after its last fixed part (`/join/:code` is `join`)
 | `pack_opened` | `pack` | A pack's page opens (once per visit) |
 | `pack_unlocked` | `pack`, `paid` (`coins`, `tickets`, `early_giant`), `price`, `levelsToGo` (early giant) | Unlock on the pack page, or a Giant pack opened early (`giant_gate.dart`) |
 | `store_opened` | `from` (the screen before), `vip` (opened at VIP) | The store opens (`store_screen.dart`) |
-| `purchase_started` | `product` | A bundle or VIP plan tapped: the App Store sheet opens (`state/purchases.dart`) |
-| `purchase_completed` | `product`, `followed` (the player was watching; false for a renewal or a purchase finished in the background) | The server added the purchase (once per transaction) |
+| `purchase_started` | `product`, `bundle` (`coins`, `tickets`, `helpers`, `vip`) | A bundle or VIP plan tapped: the App Store sheet opens (`state/purchases.dart`) |
+| `purchase_completed` | `product`, `bundle`, `followed` (the player was watching; false for a renewal or a purchase finished in the background), and what it gave: `coins`, `tickets`, `hints`, `peeks`, `magics` (zeros left out) | The server added the purchase (once per transaction). The helper bundles keep their product ids `hints_5` / `hints_15` and give Peeks, Hints and Magic together, so `bundle` says `helpers` |
 | `purchase_failed` | `product`, `paid` (paid but not added yet) | The App Store or the server failed |
 | `purchase_canceled` | `product` | The App Store sheet was closed without paying |
 | `purchase_restored` | `count` | Settings > Restore purchases finished |
@@ -116,6 +116,11 @@ A route added later is named after its last fixed part (`/join/:code` is `join`)
 | `daily_gift_claimed` | `day` (1-7), `streakRestored` | The daily gift (`daily_reward_sheet.dart`) |
 | `achievement_claimed` | `achievement` (`family:tier`), `claimAll` | Profile > achievements |
 | `quest_claimed` | `period` (`daily`, `weekly`), `quest` (its kind, the last part of its key), `claimAll` | Quests (`events_screen.dart`, `quest_rewards.dart`) |
+| `quest_swapped` | `period`, `quest` (the kind swapped away), `to` (the kind it became), `swapsBefore` (swaps already made in that slot this period), `tickets` | A quest swapped for a ticket (Quests) |
+| `wheel_spun` | `spin` (`x1`, `x5`), `tickets` (spent), `prize` (`coins`, `hints`, `peeks`, `magics`), `amount` (paid, the ×5 spin's five times over), `jackpot` | A spin of the Lucky Wheel, as the prize is drawn (`wheel_screen.dart`) |
+| `wheel_odds_opened` | | Lucky Wheel > See odds |
+| `piggy_opened` | `coins` (taken out), `capacity`, `full` | The piggy bank broken open (`piggy_sheet.dart`) |
+| `piggy_upgraded` | `level` (the new size's step), `capacity` (the new size), `price` | A bigger piggy bank bought |
 | `event_reward_claimed` | `event` | A live event's reward (Quests, Claim all) |
 | `friend_added` | `fromLink` | Add friend by code, typed or from an `/add-friend` link |
 | `inbox_opened` | | Social > Inbox shown (the segment, or a link to it) |
@@ -133,8 +138,8 @@ A route added later is named after its last fixed part (`/join/:code` is `join`)
 | `reminder_opened` | `daily` | A daily reminder tapped |
 | `my_puzzle_uploaded` | `source` (`gallery`, `camera`) | A photo added in My Puzzles |
 
-Not covered yet (a second pass once they are merged): the Lucky Wheel, piggy bank, quest swaps,
-gifts between friends and push, and co-op games.
+Gifts between friends, push and co-op games add their own events (their agents' work, documented
+with them).
 
 ## Adding an event
 

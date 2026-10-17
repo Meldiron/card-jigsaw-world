@@ -4,6 +4,7 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:carden/core/analytics.dart';
 import 'package:carden/data/local_store.dart';
+import 'package:carden/state/purchases.dart';
 import 'package:carden/state/settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -151,6 +152,13 @@ void main() {
         {'setting': 'reduce_motion', 'value': 'true'},
       ]);
     });
+  });
+
+  test('purchases name their bundle: the hints_* ids are the helper bundles', () {
+    expect(purchaseBundle('coins_3000'), 'coins');
+    expect(purchaseBundle('tickets_15'), 'tickets');
+    expect(purchaseBundle('hints_5'), 'helpers');
+    expect(purchaseBundle('vip_yearly'), 'vip');
   });
 
   group('screen names', () {
