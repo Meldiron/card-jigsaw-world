@@ -244,7 +244,8 @@ void main() {
       }
       await setExpand(tester, false);
     }
-    // The smallest triangle board (there is no 3x3 one) played to the end.
+    // A 4x4 triangle board played to the end (the 3x3 one, with its pre-set halves:
+    // integration_test/preset_pieces_test.dart).
     await pickMode(tester, GameMode.triangles);
     await pickSize(tester, '4x4');
     await tester.tap(play, warnIfMissed: false);

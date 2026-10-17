@@ -114,6 +114,12 @@ deletion. `api` and `verify-purchase` share the table, so a notification is appl
 function gets it. Signatures are checked against Apple Root CA G3 in the configured environment
 (Production), then Sandbox (TestFlight, App Review); a payload Apple did not sign gets 401 and leaves no row.
 
+Moved 2026-10-17: `api` has execute `any`; Apple's production and sandbox URLs point at
+`https://cjw-api.fra.appwrite.run/purchase/notifications` (`asc_publish.py app-info`, read back from Apple).
+Apple kept delivering to the old address for about 25 minutes after the change (two TEST notifications
+`via verify-purchase`); the third arrived `via api` (`b1f167f7-...`). `verify-purchase` stays for builds up to
+124's `/verify` and for Apple's retries of older notifications (about a week).
+
 `.venv/bin/python tools/dev/apple_notifications.py test` asks Apple for a TEST notification to the
 Sandbox URL, waits for Apple's delivery result and reads its row (`test via <function>`); `history
 --days N` lists what Apple sent and the row each left. The App Store Connect key in `secrets/` works for

@@ -695,14 +695,11 @@ class _PuzzleTile extends StatelessWidget {
   final bool daily;
   final VoidCallback onTap;
 
-  /// Share of the cards in place on a board in progress (0 before the first card locks).
-  static double placedShare(List<int> layout) {
-    if (layout.isEmpty) return 0;
-    var placed = 0;
-    for (var i = 0; i < layout.length; i++) {
-      if (layout[i] == i) placed++;
-    }
-    return placed / layout.length;
+  /// Share of the cards in place on a board in progress (0 before the first card locks; pre-set
+  /// pieces, docs/boards.md, count in neither number).
+  static double placedShare(GameMode mode, List<int> layout) {
+    final p = BoardSpec.progressOf(mode, layout);
+    return p.playable == 0 ? 0 : p.placed / p.playable;
   }
 
   @override
@@ -772,7 +769,7 @@ class _PuzzleTile extends StatelessWidget {
                     color: Colors.black.withValues(alpha: 0.45),
                     alignment: Alignment.centerLeft,
                     child: FractionallySizedBox(
-                      widthFactor: placedShare(progress!.layout!).clamp(0.06, 1.0),
+                      widthFactor: placedShare(GameMode.fromCode(progress!.mode), progress!.layout!).clamp(0.06, 1.0),
                       child: Container(color: context.accentFill),
                     ),
                   ),

@@ -39,6 +39,11 @@ class BoardSpec {
   /// Number of pieces.
   int get cells => Tiling.cellCount(mode, cols, rows);
 
+  /// Pieces the player plays: [cells] without the pre-set ones
+  /// ([Tiling.isPreset]). What a board pays per piece and what the game shows
+  /// as "locked of total".
+  int get playableCells => tiling.playableCells;
+
   /// Grid part only, e.g. `3x4` (for triangles, pieces in a row x rows).
   String get code => '${cols}x$rows';
 
@@ -65,17 +70,30 @@ class BoardSpec {
   /// have no square board; they remain on boards saved before.
   static const squareTierOfSide = <int, int>{3: 0, 4: 2, 5: 4, 6: 6, 7: 7};
 
-  /// The sides each mode can deal square: N columns and N rows ([squareDims]).
-  /// Cards and Squares deal every one. A size is left out only where some
-  /// piece would be one of a kind and so could only start in its own place:
-  /// Triangles have no 3x3 (three rows: each side edge holds one half
-  /// triangle of its shape), Hexagons no 3x3 (the middle row's two halves)
-  /// and no 4x4 or 6x6 (with an even number of rows the bottom corners are
-  /// one of a kind, and on 4x4 the halves of the second row too). The 5x5
-  /// triangle board starts with one joined pair of halves on each side edge,
-  /// the fewest five rows allow ([Tiling.unavoidableJoins]). Seven across
-  /// keeps cards about 55 pt wide on a phone; bigger boards are giant boards.
+  /// The sides each mode deals square: N columns and N rows ([squareDims]),
+  /// from 3x3 to 7x7. Where a piece is one of a kind (it could only sit in its
+  /// own place) the board stays a full rectangle and that piece is pre-set
+  /// (owner, 2026-10-17; [Tiling.isPreset]): the 3x3 triangle board's two
+  /// middle-row halves, the 4x4 honeycomb's second-row halves and bottom
+  /// corners, the 6x6 honeycomb's bottom corners. Some boards start with a
+  /// joined pair or two ([Tiling.unavoidableJoins]: the 5x5 triangle board one
+  /// pair of halves on each side edge, the 4x4 honeycomb one pair in its
+  /// bottom row of three). Hexagons have no 3x3: of its ten pieces two are
+  /// pre-set, and every one of the four deals of the other eight keeps six
+  /// joined pairs and is solved in one move (docs/boards.md); Cozy gives the
+  /// 4x4 honeycomb there ([nearest]). Seven across keeps cards about 55 pt
+  /// wide on a phone; bigger boards are giant boards.
   static const squareSides = <GameMode, List<int>>{
+    GameMode.cards: [3, 4, 5, 6, 7],
+    GameMode.squares: [3, 4, 5, 6, 7],
+    GameMode.triangles: [3, 4, 5, 6, 7],
+    GameMode.hexagons: [4, 5, 6, 7],
+  };
+
+  /// The sides each mode dealt square before the pre-set sizes were added
+  /// (builds up to 2026-10-17): their Expand boards stay exactly as they were,
+  /// so saves of them resume ([BoardLayouts.expandFor]).
+  static const _expandBaseSides = <GameMode, List<int>>{
     GameMode.cards: [3, 4, 5, 6, 7],
     GameMode.squares: [3, 4, 5, 6, 7],
     GameMode.triangles: [4, 5, 6, 7],
@@ -228,8 +246,8 @@ class BoardSpec {
   }
 
   /// The board of [ladder] nearest to [tier] (a tie goes to the bigger one):
-  /// a mode without that size offers the one next to it (Triangles have no
-  /// 5x5, so Tricky gives way to Expert).
+  /// a tier without a square board (Easy, Medium, Hard, remembered from
+  /// before) gives the size next to it.
   static BoardSpec nearest(List<BoardSpec> ladder, int tier) {
     var best = ladder.first;
     for (final t in ladder) {
@@ -367,6 +385,23 @@ class BoardSpec {
     return nearest(squareTiers(mode), 2);
   }
 
+  /// A saved board's progress as the player reads it: the cards of [layout] (a [mode] board,
+  /// found by its piece count as [fromCells] finds it) in their place, of the cards to play.
+  /// Pre-set pieces count in neither ([Tiling.isPreset]), so a board just dealt reads 0.
+  static ({int placed, int playable}) progressOf(GameMode mode, List<int> layout) {
+    final spec = fromCells(mode, layout.length);
+    final tiling = spec.cells == layout.length ? spec.tiling : null;
+    var placed = 0, preset = 0;
+    for (var i = 0; i < layout.length; i++) {
+      if (tiling != null && tiling.isPreset(i)) {
+        preset++;
+      } else if (layout[i] == i) {
+        placed++;
+      }
+    }
+    return (placed: placed, playable: layout.length - preset);
+  }
+
   @override
   bool operator ==(Object other) => other is BoardSpec && other.mode == mode && other.cols == cols && other.rows == rows;
   @override
@@ -417,11 +452,48 @@ class BoardLayouts {
   /// ([BoardSpec.squareTiers]) on a picture of [imageAspect], each aiming
   /// at its square board's piece count (at least [expandFloors]), chosen
   /// and shaped as [forAspect] chooses them.
+  ///
+  /// The sizes each mode had before the pre-set ones were added
+  /// ([BoardSpec._expandBaseSides]) are chosen exactly as they were, so a
+  /// board saved with Expand resumes; the added sizes (3x3 triangles, 4x4 and
+  /// 6x6 honeycombs) then fill the gaps between them, each at least
+  /// [minStep] apart from its neighbours where it can be, from the same
+  /// shapes, three-row triangle boards (with their two pre-set halves) and
+  /// the size's own square board.
   static List<(int, int)> expandFor(GameMode mode, double imageAspect) {
     final a = _clamp(imageAspect);
     return _cache.putIfAbsent('expand:${mode.code}:${a.toStringAsFixed(6)}', () {
       final square = BoardSpec.squareTiers(mode);
-      return _pick(mode, a, _expandCandidates(mode), [for (final t in square) t.cells], [for (final t in square) expandFloors[t.tier] ?? 0]);
+      final sides = BoardSpec._expandBaseSides[mode]!;
+      final base = [for (final t in square) if (sides.contains(t.rows)) t];
+      final picked = _pick(mode, a, _expandCandidates(mode, base), [for (final t in base) t.cells], [for (final t in base) expandFloors[t.tier] ?? 0])!;
+      final out = <int, (int, int)>{for (var i = 0; i < base.length; i++) base[i].tier: picked[i]};
+      int count((int, int) d) => Tiling.cellCount(mode, d.$1, d.$2);
+      for (var i = 0; i < square.length;) {
+        if (out.containsKey(square[i].tier)) {
+          i++;
+          continue;
+        }
+        var j = i;
+        while (j < square.length && !out.containsKey(square[j].tier)) {
+          j++;
+        }
+        // Sizes i to j - 1 were added: between the boards picked below and above them.
+        // Their own square boards are candidates too, so Expand never crops more than they do.
+        final run = square.sublist(i, j);
+        final below = i > 0 ? count(out[square[i - 1].tier]!) : 0, above = j < square.length ? count(out[square[j].tier]!) : 1 << 30;
+        final all = {..._expandCandidates(mode, square, preset: true), for (final t in run) (t.cols, t.rows)}.toList()..sort((x, y) => count(x) - count(y));
+        final targets = [for (final t in run) t.cells], floors = [for (final t in run) expandFloors[t.tier] ?? 0];
+        // A gap too narrow for [minStep] (Hexagons' Tricky and Master can be 40 and 49 pieces) takes
+        // any size strictly between.
+        final fill = _pick(mode, a, [for (final d in all) if (count(d) >= below * minStep && count(d) * minStep <= above) d], targets, floors) ??
+            _pick(mode, a, [for (final d in all) if (count(d) > below && count(d) < above) d], targets, floors);
+        for (var k = 0; k < run.length; k++) {
+          out[run[k].tier] = fill?[k] ?? (run[k].cols, run[k].rows);
+        }
+        i = j;
+      }
+      return List<(int, int)>.unmodifiable([for (final t in square) out[t.tier]!]);
     });
   }
 
@@ -442,20 +514,21 @@ class BoardLayouts {
 
   static final _candidates = <GameMode, List<(int, int)>>{};
 
-  /// Sizes the Expand ladder of [mode] chooses from: the same shapes around
-  /// the square boards' piece counts; triangle rows a whole number of
-  /// columns wide, so every size reads as columns x rows ([BoardSpec.size]).
-  static List<(int, int)> _expandCandidates(GameMode mode) => _expandCands.putIfAbsent(mode, () {
-        final square = BoardSpec.squareTiers(mode);
-        final clipped = mode == GameMode.triangles || mode == GameMode.hexagons;
-        return _shaped(mode, square.first.cells * 0.6, square.last.cells * (clipped ? 1.45 : 1.3), wholeColumns: true);
-      });
+  /// Sizes the Expand ladder of [mode] chooses from for the square boards
+  /// [square]: the same shapes around their piece counts; triangle rows a
+  /// whole number of columns wide, so every size reads as columns x rows
+  /// ([BoardSpec.size]). With [preset], three-row triangle boards too.
+  static List<(int, int)> _expandCandidates(GameMode mode, List<BoardSpec> square, {bool preset = false}) {
+    final clipped = mode == GameMode.triangles || mode == GameMode.hexagons;
+    final lo = square.first.cells * 0.6, hi = square.last.cells * (clipped ? 1.45 : 1.3);
+    return _expandCands.putIfAbsent('${mode.code}:$lo:$hi:$preset', () => _shaped(mode, lo, hi, wholeColumns: true, preset: preset));
+  }
 
-  static final _expandCands = <GameMode, List<(int, int)>>{};
+  static final _expandCands = <String, List<(int, int)>>{};
 
   /// Normal-sized boards of [mode] with [lo] to [hi] pieces that suit a
   /// picture: portrait or square, sorted by piece count.
-  static List<(int, int)> _shaped(GameMode mode, double lo, double hi, {bool wholeColumns = false}) {
+  static List<(int, int)> _shaped(GameMode mode, double lo, double hi, {bool wholeColumns = false, bool preset = false}) {
     final out = <(int, int)>[];
     void add(int c, int r) {
       final cells = Tiling.cellCount(mode, c, r);
@@ -477,9 +550,10 @@ class BoardLayouts {
       // Edge pieces must be able to leave home without forming a pair
       // (see TriangleTiling and HexTiling): no five-row triangle strips,
       // and no three-wide honeycombs, whose top row of three cannot be
-      // shuffled without two of them still side by side.
+      // shuffled without two of them still side by side. Three rows of
+      // triangles only with [preset]: their middle row's halves are pre-set.
       case GameMode.triangles:
-        for (var r = 4; r <= 12; r++) {
+        for (var r = preset ? 3 : 4; r <= 12; r++) {
           if (r == 5) continue;
           for (var c = 4; c <= 18; c++) {
             if (wholeColumns && (c - 1).isOdd) continue;
@@ -559,15 +633,16 @@ class BoardLayouts {
     return cropWeight * (f.crop + 3 * max(0, f.crop - 0.05)) + stretchWeight * f.stretch + countWeight * (log(cells / target)).abs();
   }
 
-  static List<(int, int)> _solve(GameMode mode, double aspect) => _pick(mode, aspect, candidates(mode), BoardSpec.targets[mode]!, minCells);
+  static List<(int, int)> _solve(GameMode mode, double aspect) => _pick(mode, aspect, candidates(mode), BoardSpec.targets[mode]!, minCells)!;
 
-  static List<(int, int)> _solveGiant(GameMode mode, double aspect) => _pick(mode, aspect, giantCandidates(mode), BoardSpec.giantTargets[mode]!, const [0, 0, 0, 0]);
+  static List<(int, int)> _solveGiant(GameMode mode, double aspect) => _pick(mode, aspect, giantCandidates(mode), BoardSpec.giantTargets[mode]!, const [0, 0, 0, 0])!;
 
   /// One size per entry of [targets] out of [cands] (sorted by piece count)
   /// at the lowest total [score], each at least [minStep] bigger than the one
-  /// before and at least [floors] pieces.
-  static List<(int, int)> _pick(GameMode mode, double aspect, List<(int, int)> cands, List<int> targets, List<int> floors) {
+  /// before and at least [floors] pieces; null when [cands] hold no such sizes.
+  static List<(int, int)>? _pick(GameMode mode, double aspect, List<(int, int)> cands, List<int> targets, List<int> floors) {
     final n = cands.length, k = targets.length;
+    if (n == 0) return null;
     final counts = [for (final d in cands) Tiling.cellCount(mode, d.$1, d.$2)];
     final best = List.generate(k, (_) => List<double>.filled(n, double.infinity));
     final prev = List.generate(k, (_) => List<int>.filled(n, -1));
@@ -593,6 +668,7 @@ class BoardLayouts {
     for (var i = 1; i < n; i++) {
       if (best[k - 1][i] < best[k - 1][end]) end = i;
     }
+    if (best[k - 1][end] == double.infinity) return null;
     final out = List<(int, int)>.filled(k, (0, 0));
     for (var t = k - 1; t >= 0; t--) {
       out[t] = cands[end];
@@ -685,7 +761,16 @@ class Board {
     return c;
   }
 
-  int get lockedCount => cells - misplaced;
+  /// Whether the piece at [slot] is pre-set ([Tiling.isPreset]): dealt in its place, part of the
+  /// picture's frame, never moved, picked or counted.
+  bool isPreset(int slot) => tiling.isPreset(slot);
+
+  /// Cards the player plays: every card but the pre-set ones.
+  int get playableCells => tiling.playableCells;
+
+  /// Cards the player has in place (pre-set pieces are not counted): "[lockedCount] of
+  /// [playableCells] locked".
+  int get lockedCount => playableCells - misplaced;
 
   /// Minimum number of single swaps to solve = n - (number of permutation cycles).
   int get par {
@@ -928,16 +1013,19 @@ class Board {
     return Board(spec, next);
   }
 
-  /// Builds a shuffled board. No card ever starts in place and no two
-  /// picture-neighbours start next to each other, so the player never finds
-  /// a locked card or a pre-made group on the table. Cards only move within
-  /// their placement class (triangle orientation).
+  /// Builds a shuffled board. No playable card ever starts in place and no
+  /// two picture-neighbours start next to each other, so the player never
+  /// finds a locked card or a pre-made group on the table. Cards only move
+  /// within their placement class (triangle orientation); a pre-set piece, the
+  /// only one of its shape ([Tiling.isPreset]), stays in its place and no
+  /// other card is ever dealt there.
   ///
   /// Random permutations are tried first; if none is clean, a derangement is
   /// repaired by targeted swaps until every join is broken. Only as a last
   /// resort does the board keep a join: a tiling whose edge pieces cannot all
-  /// part (the five-row triangle board, [Tiling.unavoidableJoins]) keeps the
-  /// fewest it must. It never keeps a fixed point.
+  /// part (the five-row triangle board, the smallest honeycombs,
+  /// [Tiling.unavoidableJoins]) keeps the fewest it must. It never keeps a
+  /// playable card in place.
   ///
   /// With [twins] (docs/twins.md) a card on its twin's place counts as in place and a card next
   /// to a neighbour its twin would join counts as joined, so the deal avoids those too. Only a
@@ -998,7 +1086,7 @@ class Board {
     }
     for (var attempt = 0; attempt < 400; attempt++) {
       final perm = random();
-      if (_fixedPoints(perm) == 0 && _joins(tiling, perm) <= tiling.unavoidableJoins) return Board(spec, perm);
+      if (_fixedPoints(perm, tiling) == 0 && _joins(tiling, perm) <= tiling.unavoidableJoins) return Board(spec, perm);
     }
     List<int>? best;
     var bestJoins = 1 << 30;
@@ -1076,7 +1164,8 @@ class Board {
       }
       if (x == null) break;
       final cls = classOf[x]!;
-      if (cls.length < 2) break;
+      // A pre-set piece never moves (and joins only a card in place, which the deal never leaves).
+      if (cls.length < 2) continue;
       var y = cls[rng.nextInt(cls.length)];
       if (y == x) continue;
       if (perm[y] == x || perm[x] == y) continue; // the swap would fix a card in place
@@ -1106,7 +1195,8 @@ class Board {
         classOf[s] = cls;
       }
     }
-    bool placed(int s) => twins.looksPlaced(perm[s], s);
+    // A pre-set piece is in its place by design, not by the deal.
+    bool placed(int s) => !tiling.isPreset(s) && twins.looksPlaced(perm[s], s);
     bool joinedAt(int a, int b) => twins.looksJoined(tiling, a, perm[a], b, perm[b]);
     // A card looking in place weighs more than any number of joins around two cards.
     int costAround(int x, int y) {
@@ -1174,10 +1264,11 @@ class Board {
     return c;
   }
 
-  static int _fixedPoints(List<int> p) {
+  /// Playable cards of a raw permutation in their own place (pre-set pieces always are).
+  static int _fixedPoints(List<int> p, Tiling tiling) {
     var c = 0;
     for (var i = 0; i < p.length; i++) {
-      if (p[i] == i) c++;
+      if (p[i] == i && !tiling.isPreset(i)) c++;
     }
     return c;
   }

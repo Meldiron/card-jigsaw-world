@@ -90,14 +90,10 @@ class _BoardCard extends ConsumerWidget {
     // the game does; until then the best guess from the piece count.
     final spec = (img == null ? null : BoardSpec.fromSaved(mode, board.gridSize, img.width / img.height, layout: layout)) ?? BoardSpec.fromCells(mode, board.gridSize);
     final b = layout != null && layout.length == spec.cells ? Board(spec, layout) : null;
-    final locked =
-        b?.lockedCount ??
-        (layout == null
-            ? 0
-            : [
-                for (var i = 0; i < layout.length; i++)
-                  if (layout[i] == i) i,
-              ].length);
+    // Pre-set pieces (docs/boards.md) count in neither number.
+    final progress = layout == null ? null : BoardSpec.progressOf(mode, layout);
+    final locked = b?.lockedCount ?? progress?.placed ?? 0;
+    final total = b?.playableCells ?? progress?.playable ?? board.gridSize;
     final style = ref.watch(settingsProvider).cardStyle;
 
     Widget preview() {
@@ -187,7 +183,7 @@ class _BoardCard extends ConsumerWidget {
                   style: TextStyle(fontSize: TypeSize.headline, fontWeight: FontWeight.w700, color: c.textPrimary),
                 ),
                 TextSpan(
-                  text: ' of ${board.gridSize} locked',
+                  text: ' of $total locked',
                   style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: c.textPrimary),
                 ),
               ],
@@ -196,7 +192,7 @@ class _BoardCard extends ConsumerWidget {
             overflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: 6),
-          ProgressBar(value: board.gridSize == 0 ? 0 : locked / board.gridSize, height: 6),
+          ProgressBar(value: total == 0 ? 0 : locked / total, height: 6),
           const SizedBox(height: 6),
           Text(
             '${countOf(board.moves, 'move')} · ${formatDuration(board.elapsedSeconds)}',

@@ -34,8 +34,24 @@ abstract class Tiling {
   int classOf(int slot) => 0;
   int get classCount => 1;
 
+  /// Pre-set pieces (owner, 2026-10-17; docs/boards.md): a piece no other
+  /// piece shares the shape of could only ever sit in its own place (pieces
+  /// never turn and move only within their shape), so it is dealt there, as
+  /// part of the picture's frame. It is drawn in place from the start, never
+  /// moves, is never picked, a twin or counted (locked/total, rewards per
+  /// piece). Grids have none; the 3x3 triangle board and the 4x4 and 6x6
+  /// honeycombs have a few half pieces on their edges.
+  bool isPreset(int slot) => false;
+
+  /// How many pieces are pre-set ([isPreset]).
+  int get presetCount => 0;
+
+  /// Pieces the player plays: every piece but the pre-set ones.
+  int get playableCells => cells - presetCount;
+
   /// Joined pairs every start shuffle of this board keeps, because some
-  /// edge pieces cannot all leave their neighbours (see [TriangleTiling]).
+  /// edge pieces cannot all leave their neighbours (see [TriangleTiling] and
+  /// [HexTiling]).
   int get unavoidableJoins => 0;
 
   // ---- lattice -----------------------------------------------------------
@@ -339,9 +355,9 @@ class GridTiling extends Tiling {
 ///
 /// Every piece keeps its lattice coordinates, so moves are lattice deltas
 /// and joins compare the lattice direction of the shared edge. A piece only
-/// ever sits in a slot of exactly its own shape ([classOf]); the layouts on
-/// offer are chosen so that every shape occurs at least twice, which lets
-/// the shuffle move every piece away from home.
+/// ever sits in a slot of exactly its own shape ([classOf]). A shape that
+/// occurs once is a pre-set piece ([isPreset]): it starts in its place and
+/// stays there; every other piece shuffles away from home.
 abstract class ClippedTiling extends Tiling {
   ClippedTiling(super.cols, super.rows);
 
@@ -389,6 +405,21 @@ abstract class ClippedTiling extends Tiling {
 
   @override
   int get classCount => _topology.classCount;
+
+  /// Pieces whose shape no other piece has (a board of one piece has none).
+  late final List<bool> _preset = () {
+    final size = List<int>.filled(classCount, 0);
+    for (var s = 0; s < cells; s++) {
+      size[classOf(s)]++;
+    }
+    return List<bool>.unmodifiable([for (var s = 0; s < cells; s++) cells > 1 && size[classOf(s)] == 1]);
+  }();
+
+  @override
+  bool isPreset(int slot) => _preset[slot];
+
+  @override
+  late final int presetCount = _preset.where((p) => p).length;
 
   /// Slots of every placement class.
   List<List<int>> get classMembers {
@@ -636,8 +667,8 @@ class _Topology {
 /// rows always keep one joined pair of halves on each side edge (of the two
 /// orders that move all three halves of a shape, each joins one pair), which
 /// only the 5x5 square board accepts ([unavoidableJoins]). Three rows hold a
-/// half of a shape no other piece has on each side edge, so it could only
-/// start in place: never offered.
+/// half of a shape no other piece has on each side edge (the middle row's):
+/// on the 3x3 square board those two are pre-set ([isPreset]).
 class TriangleTiling extends ClippedTiling {
   TriangleTiling(super.cols, super.rows);
   @override
@@ -730,11 +761,30 @@ class TriangleTiling extends ClippedTiling {
 ///
 /// With an odd row count of five or more no edge piece is a singleton:
 /// left halves, right halves, top pieces and bottom pieces each occur at
-/// least twice, and no corner is cut twice.
+/// least twice, and no corner is cut twice. The square 4x4 and 6x6 boards
+/// have singletons, which are pre-set ([isPreset]): with an even number of
+/// rows the bottom row is a shifted one, so its two corners are halves cut at
+/// the bottom too, and on 4x4 the second row's halves have no partner either
+/// (three rows would leave the middle row's two halves alone).
 class HexTiling extends ClippedTiling {
   HexTiling(super.cols, super.rows);
   @override
   GameMode get mode => GameMode.hexagons;
+
+  /// A row of exactly three pieces of one shape always keeps two of them side
+  /// by side in order (both orders that move all three do). The 4x4 board
+  /// has one such row (the bottom one, between its pre-set corners): one
+  /// joined pair. On the 3x3 board (not offered) both rows of three move one
+  /// step along and the middle row's two whole hexagons trade places, so
+  /// every deal keeps six joined pairs and is solved in one move (all four
+  /// deals there are; `test/preset_pieces_test.dart` searches every one).
+  /// Every board on offer but the 4x4 keeps none.
+  @override
+  int get unavoidableJoins => switch ((cols, rows)) {
+        (3, 3) => 6,
+        (4, 4) => 1,
+        _ => 0,
+      };
 
   /// Where the top edge cuts the first row, in hexagon heights from its
   /// centre (positive: the centre lies inside the board). From half a
