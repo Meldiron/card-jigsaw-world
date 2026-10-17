@@ -11,6 +11,7 @@ import '../../core/theme/tokens.dart';
 import '../../state/profile.dart';
 import '../../state/reminders.dart';
 import '../../state/settings.dart';
+import '../../widgets/confetti.dart';
 import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 
@@ -91,6 +92,7 @@ class _DailyRewardSheetState extends ConsumerState<DailyRewardSheet> {
     if (r != null) {
       Sfx.instance.coin();
       Haptics.success();
+      _celebrate();
       showToast(context, 'Streak restored', icon: AppIcons.streak);
     } else {
       showToast(context, 'The streak could not be restored right now.', icon: AppIcons.streak);
@@ -108,8 +110,17 @@ class _DailyRewardSheetState extends ConsumerState<DailyRewardSheet> {
     if (r != null) {
       Sfx.instance.coin();
       Haptics.success();
+      _celebrate();
     }
     setState(() => _claiming = false);
+  }
+
+  /// A claimed gift gets the finished board's confetti (owner, 2026-10-17), bursting from the top of
+  /// the sheet over the page behind it. None with Reduce motion.
+  void _celebrate() {
+    final box = context.findRenderObject();
+    final from = box is RenderBox && box.hasSize ? box.localToGlobal(Offset(box.size.width / 2, 0)) : null;
+    showConfettiBurst(context, from: from);
   }
 
   @override
