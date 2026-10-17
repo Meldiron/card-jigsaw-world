@@ -195,6 +195,24 @@ void main() {
     expect(bob.state.layout, _serverBoard(server, game.id, 1, base));
   });
 
+  test('a reconnect is noticed by the presence the SDK sends again, and what was missed is read', () async {
+    final (host, guests, game, base) = await start(1);
+    final bob = guests.single;
+    bob.backend.dropSocket();
+    final rnd = Random(21);
+    var made = 0;
+    while (made < 5) {
+      if (host.randomMove(spec, rnd)) made++;
+      await _settle();
+    }
+    expect(bob.state.layout, base);
+    await Future<void>.delayed(const Duration(milliseconds: 30));
+    bob.backend.reconnect();
+    await _settle();
+    expect(bob.state.layout, host.state.layout, reason: 'caught up without a resume');
+    expect(host.state.isHere('bob'), isTrue);
+  });
+
   test('a removed player hears it, stops sharing and cannot come back', () async {
     final (host, guests, game, base) = await start(2);
     final bob = guests.first;

@@ -157,7 +157,7 @@ class CoopBoardUpdate {
 class CoopTiming {
   const CoopTiming({
     this.presenceGap = const Duration(seconds: 3),
-    this.keepAlive = const Duration(seconds: 20),
+    this.keepAlive = const Duration(seconds: 60),
     this.safetyCatchUp = const Duration(minutes: 2),
     this.markFor = const Duration(milliseconds: 2500),
     this.retryFirst = const Duration(seconds: 1),
@@ -170,7 +170,8 @@ class CoopTiming {
 
   /// The presence is sent again this often while nothing changes; its echo on this device's own
   /// socket proves the socket works. A missing echo means events may have been missed: once the
-  /// echo is back, the moves are read again.
+  /// echo is back, the moves are read again. Every presence costs a realtime message per player,
+  /// hence a minute.
   final Duration keepAlive;
 
   /// Moves are read again this often anyway (realtime never replays what it lost).
@@ -513,8 +514,10 @@ class CoopController extends Notifier<CoopState> {
     if (p.userId == _me) {
       if (deleted) return;
       // This device's own presence came back over its socket: the socket works. Events may have
-      // been missed while it did not.
-      if (_echoMissed) {
+      // been missed while it did not. An echo nobody asked for is the SDK sending the presence again
+      // after it reconnected: events were missed in between.
+      final unasked = DateTime.now().difference(_presenceSentAt) > _timing.presenceGap * 3;
+      if (_echoMissed || unasked) {
         _echoMissed = false;
         unawaited(catchUp());
       }

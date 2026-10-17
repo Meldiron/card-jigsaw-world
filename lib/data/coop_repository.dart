@@ -85,7 +85,8 @@ class AppwriteCoopBackend implements CoopBackend {
     final rows = await listAllRows(_tables, moves, [
       Query.equal('gameId', [gameId]),
       Query.equal('board', [board]),
-      Query.greaterThan(r'$sequence', afterSeq),
+      // Appwrite refuses a `$sequence` below 1 in a query (400, checked live): from the start, no filter.
+      if (afterSeq > 0) Query.greaterThan(r'$sequence', afterSeq),
       Query.orderAsc(r'$sequence'),
     ]);
     return [for (final r in rows) r.data];

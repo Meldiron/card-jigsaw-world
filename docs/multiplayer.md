@@ -151,7 +151,8 @@ demand. TablesDB has no row expiry, hence this function.
   retried with backoff (1 s to 30 s); a refusal (not in the team any more) drops them all.
 - Catch-up (`movesAfter`, `$sequence` greater than n, every page): on start, on resume, after a
   realtime error, when this device's own presence stops coming back over its socket (the presence is
-  re-sent every 20 s as a keep-alive; its echo proves the socket), and every 2 minutes anyway. It starts
+  re-sent every minute as a keep-alive; its echo proves the socket; an echo nobody asked for is the
+  SDK re-sending it after a reconnect), and every 2 minutes anyway. It starts
   from the change received 30 s before the newest one (`catchUpFrom`), because a change committed a
   moment before another can arrive after it.
 - `locksBy(user)`: cards a player's own moves locked (Magic, Shuffle and Gather do not count).
@@ -238,7 +239,7 @@ On the device: see the QA run below (`COOP_LATENCY` lines).
   minute); about 32 socket messages a minute (presence throttled to 20 at most); Pro plan: 500
   concurrent realtime connections, 6M realtime messages and 750k writes a month.
 - A move = 1 write + 1 realtime message per connected player (the author's own echo included); a
-  presence update (a pick) = 1 message per player. A 20-card board with 3 players takes about 40 moves:
+  presence update (a pick, the keep-alive once a minute) = 1 message per player. A 20-card board with 3 players takes about 40 moves:
   about 40 writes, 120 move messages and up to 120 presence messages, plus a few dozen row reads
   (joining, catch-ups, the 2-minute safety read).
 - So one such game is about 40 writes and 250 messages: 300 games a day stay inside Pro (about 360k

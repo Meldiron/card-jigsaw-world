@@ -220,6 +220,7 @@ class FakeCoopBackend implements CoopBackend {
   void setPresence(String presenceId, CoopPresence presence) {
     if (!connected) return;
     final m = {r'$id': presenceId, 'userId': userId, 'status': presence.away ? 'away' : 'online', 'metadata': presence.metadata};
+    _lastPresence = m;
     server.presences[presenceId] = m;
     server._broadcast(presence.gameId, CoopPresenceEvent(m));
   }
@@ -229,6 +230,18 @@ class FakeCoopBackend implements CoopBackend {
     _online();
     return [for (final p in server.presences.values) if (userIds.contains(p['userId'])) p];
   }
+
+  /// The connection is back: the SDK subscribes again and sends this device's presence again (its
+  /// echo is how the controller notices a reconnect).
+  void reconnect() {
+    connected = true;
+    final mine = server.presences.values.where((p) => p['userId'] == userId).lastOrNull ?? _lastPresence;
+    if (mine == null) return;
+    server.presences['${mine[r'$id']}'] = mine;
+    server._broadcast((mine['metadata'] as Map)['g'] as String, CoopPresenceEvent(mine));
+  }
+
+  Map<String, dynamic>? _lastPresence;
 
   /// The socket closes: the presence goes, and the others hear it.
   void dropSocket() {
