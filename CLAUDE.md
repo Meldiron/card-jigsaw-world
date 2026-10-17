@@ -143,12 +143,16 @@ carden.page redirects there.
 
 ## Code map
 
-- `lib/game/`: `board.dart` (permutation board; shuffle is a derangement with zero joined pairs, except the
-  5x5 triangle board, which keeps one joined pair of halves on each side edge (`Tiling.unavoidableJoins`); a
+- `lib/game/`: `board.dart` (permutation board; the deal puts no playable card in place (pre-set pieces stay)
+  and leaves no joined pair, except the 5x5 triangle board, which keeps one joined pair of halves on each side edge (`Tiling.unavoidableJoins`); a
   group a move lands on shifts whole when it has room, else breaks as before (`moveGroup`); square sizes in
   every mode, Cozy 3x3 to Master 7x7 (`BoardSpec.squareTiers` / `squareGiantTiers`), Triangles 4x4-7x7 with
   NxN = N columns of an up and a down triangle (`BoardSpec.squareDims`, shown via `BoardSpec.size`),
-  Hexagons 5x5 and 7x7 (other sizes would need a card in place); Expand lays a size out for the picture's
+  Triangles from 3x3, Hexagons 4x4 to 7x7 (3x3 left out: every deal is solved in one move); pre-set pieces
+  (owner, 2026-10-17): Triangles 3x3 and Hexagons 4x4 and 6x6 keep a full rectangle with their one-of-a-kind
+  edge pieces (`Tiling.isPreset`) dealt in place, never picked, moved or counted (counts, progress and rewards
+  use `playableCells` / `BoardSpec.progressOf`; Hexagons 4x4 always starts with one joined pair; tests
+  `test/preset_pieces_test.dart`, `integration_test/preset_pieces_test.dart`); Expand lays a size out for the picture's
   shape (`BoardSpec.ladder` / `offersExpand`); the old picture-shaped ladder `BoardSpec.tiers` resumes old
   saves, matched by count and layout (`fromSaved(layout:)`); docs/boards.md), `twins.dart` (twin cards:
   `TwinFinder`, `Twins.settle`) and `twins_loader.dart` (`boardTwinsProvider`),
@@ -168,7 +172,9 @@ carden.page redirects there.
   Play together boards skip it; integration suites set `GameScreen.dealPreview = false`. A tap ends Peek.
 - **Twin cards** (owner, 2026-10-17; `docs/twins.md`): cards that look the same are twins (CIEDE2000 per
   ~4 px box and outline strip: mean ≤ 1.0, 95% ≤ 1.8, max ≤ 3.0, specks ≤ 1.6 L or 3× grain; near black and
-  near white differences count less, `TwinFinder.seen`, specks in the dark over 3x3 pixels, limit 3.4). A move that
+  near white differences count less, `TwinFinder.seen`, specks in the dark over 3x3 pixels, limit 3.4; on dark
+  ground 1 to 8 pin-point specks a card are painted out before measuring (a starfield is not), and dark pairs get
+  an edge test so silhouettes stay apart). A move that
   puts a loose card on a twin's place, or where a twin would join a neighbour, counts as placed or joined by
   an identity swap of two loose cards (`Twins.settle` in `GameController._apply`; `GameState.cardKeys` keeps
   each card's widget, `_TwinFade`). The deal, Shuffle and Gather avoid twin places and joins (a crowded twin
