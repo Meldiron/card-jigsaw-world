@@ -18,9 +18,13 @@ UPLOADS_BUCKET = 'user-uploads'
 KEY_FILE = os.path.join(ROOT, 'secrets', 'appwrite-users-key.txt')
 
 # Every table keyed by a player's user id (profiles use the user id as the row id as well).
-PLAYER_TABLES = ['profiles', 'progress', 'ledger', 'event_progress', 'friends', 'my_puzzles', 'purchases', 'code_claims', 'reports', 'blocks', 'feedback', 'messages']
+PLAYER_TABLES = ['profiles', 'progress', 'ledger', 'event_progress', 'friends', 'my_puzzles', 'purchases', 'code_claims', 'reports', 'blocks', 'feedback', 'messages', 'coop_games', 'coop_moves']
 # Tables keyed by two player columns instead of `userId` (both directions belong to the player).
 PAIR_TABLES = {'reports': ('reporterId', 'reportedId'), 'blocks': ('blockerId', 'blockedId')}
+# Tables keyed by the player as host: their co-op games (Play together). A game goes with every move
+# in it (`coop_moves.gameId`); its team is left to the coop-cleanup function (these keys have no
+# teams scope), which deletes teams without a game.
+HOST_TABLES = {'coop_games': 'hostId'}
 
 
 class AppwriteError(Exception):
