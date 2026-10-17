@@ -4,6 +4,7 @@
   store/promo/app-icon-1024.png          1024x1024 icon, RGB (no alpha)
   store/promo/vip-promotional-1024.png   1024x1024 VIP promotional image
   store/review/subscription-review.png   store screen showing the VIP card
+  store/review/iap-review-boosters.png   store scrolled to Tickets and Boosters (ticket and booster products)
 
 Usage (repo root, Pillow installed):  python tools/store/make_promo.py
 """
@@ -16,6 +17,7 @@ from PIL import Image, ImageDraw, ImageFont
 ROOT = Path(__file__).resolve().parents[2]
 ICON_SRC = ROOT / "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png"
 RAW_STORE_VIP = ROOT / "store/raw/12_store_vip.png"
+RAW_STORE_BOOSTERS = ROOT / "store/raw/35_store_boosters_light.png"
 PROMO = ROOT / "store/promo"
 REVIEW = ROOT / "store/review"
 
@@ -96,6 +98,14 @@ def main() -> None:
         print("wrote store/review/subscription-review.png", shot.size, shot.mode)
     else:
         print("skipped subscription-review.png: store/raw/12_store_vip.png missing")
+
+    # The App Review screenshot of the ticket and booster products (consumables.json names it).
+    if RAW_STORE_BOOSTERS.exists():
+        shot = Image.open(RAW_STORE_BOOSTERS).convert("RGB")
+        shot.save(REVIEW / "iap-review-boosters.png", "PNG", optimize=True)
+        print("wrote store/review/iap-review-boosters.png", shot.size, shot.mode)
+    else:
+        print("skipped iap-review-boosters.png: store/raw/35_store_boosters_light.png missing")
 
 
 if __name__ == "__main__":

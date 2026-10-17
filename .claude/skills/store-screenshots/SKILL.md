@@ -70,7 +70,8 @@ reads as one story; every claim must be true in the code or the live catalogue (
      --dart-define=CJW_STORE_THEME=light --dart-define=CJW_STORE_SKIP_UPLOAD=true
    ```
    About 13 minutes. `--dart-define=CJW_STORE_ONLY=25_hero,27_giant` re-takes only those glass
-   captures (15_library, 22_social_league, 25-33; 32 brings 33 with it) in about 4 minutes; such a run plays a level-1 guest, so board sizes past
+   captures (15_library, 22_social_league, 25-33; 32 brings 33 with it; 35_store_boosters, the App Review
+   screenshot of the ticket and booster products, then `tools/store/make_promo.py`) in about 4 minutes; such a run plays a level-1 guest, so board sizes past
    Relaxed are locked there (giant sizes are open). Drop `CJW_STORE_SKIP_UPLOAD` only when the My Puzzles
    captures (20, 21) must change: it uploads four photos to live Storage. Without
    `CJW_STORE_THEME` the run writes the dark captures (the last slide: `CJW_STORE_ONLY=29_dark_board`).

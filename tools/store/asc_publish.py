@@ -884,7 +884,6 @@ def cmd_screenshots(s: Store) -> None:
 def cmd_iap(s: Store) -> None:
     log("== iap")
     cfg = read_json(SUBS_DIR / "consumables.json")
-    review_png = ROOT / cfg["reviewScreenshot"] if cfg.get("reviewScreenshot") else None
     existing = {attr(p, "productId"): p for p in s.c.get_list(f"/v1/apps/{APP_ID}/inAppPurchasesV2")}
     for product in cfg["products"]:
         pid = product["productId"]
@@ -936,6 +935,10 @@ def cmd_iap(s: Store) -> None:
             s.c.create("inAppPurchaseAvailabilities", {"availableInNewTerritories": True},
                        {"inAppPurchase": rel("inAppPurchases", iid), "availableTerritories": rel_many("territories", territories)})
 
+        # The App Review screenshot: the product's own ("reviewScreenshot" on the product: the store
+        # scrolled to its section), else the file's default (the top of the store).
+        review = product.get("reviewScreenshot") or cfg.get("reviewScreenshot")
+        review_png = ROOT / review if review else None
         if review_png:
             shot = s.c.get_one(f"/v2/inAppPurchases/{iid}/appStoreReviewScreenshot")
             shot = s.drop_if_changed("inAppPurchaseAppStoreReviewScreenshots", shot, review_png)

@@ -22,6 +22,7 @@ import 'package:carden/core/appwrite.dart';
 import 'package:carden/core/sfx.dart';
 import 'package:carden/data/coop_repository.dart';
 import 'package:carden/data/local_store.dart';
+import 'package:carden/features/store/store_screen.dart';
 import 'package:carden/data/repositories.dart';
 import 'package:carden/data/sync/ops.dart';
 import 'package:carden/features/gallery/library_screen.dart';
@@ -93,7 +94,7 @@ const theme = String.fromEnvironment('CJW_STORE_THEME', defaultValue: 'dark');
 const skipUpload = bool.fromEnvironment('CJW_STORE_SKIP_UPLOAD');
 const suffix = theme == 'light' ? '_light' : '';
 
-/// `--dart-define=CJW_STORE_ONLY=25_hero,27_giant` re-takes only those glass-set captures (15_library, 22_social_league, 25-34)
+/// `--dart-define=CJW_STORE_ONLY=25_hero,27_giant` re-takes only those glass-set captures (15_library, 22_social_league, 25-35)
 /// after onboarding and leaves every other file as it is: a quick rerun for one slide.
 const only = String.fromEnvironment('CJW_STORE_ONLY');
 bool want(String name) => only.isEmpty || only.split(',').contains(name);
@@ -528,6 +529,31 @@ void main() {
     }
   }
 
+  /// The store scrolled to its Tickets and Boosters sections, every booster tile whole: the App
+  /// Review screenshot of the ticket and booster products (store/review/iap-review-boosters.png; the
+  /// coin products keep the top of the store, 11_store).
+  Future<void> storeBoosters(WidgetTester tester) async {
+    final list = find.descendant(of: find.byType(StoreScreen), matching: find.byType(Scrollable)).first;
+    final tickets = find.descendant(of: find.byType(StoreScreen), matching: find.text('Tickets'));
+    await tester.dragUntilVisible(tickets, list, const Offset(0, -200));
+    await settle(tester, 800);
+    // The Tickets heading a little under the bar (exactly: a drag loses some to the touch slop).
+    final position = tester.state<ScrollableState>(list).position;
+    void scrollBy(double dy) => position.jumpTo((position.pixels + dy).clamp(position.minScrollExtent, position.maxScrollExtent));
+    scrollBy(tester.getTopLeft(tickets.first).dy - 168);
+    await settle(tester, 1200);
+    final grids = find.byWidgetPredicate((w) => w.runtimeType.toString() == '_ProductGrid');
+    final floor = tester.view.physicalSize.height / tester.view.devicePixelRatio - 24;
+    final boosters = tester.getRect(grids.at(2));
+    if (boosters.bottom > floor) {
+      scrollBy(boosters.bottom - floor);
+      await settle(tester, 1200);
+    }
+    expect(tester.getRect(grids.at(2)).bottom, lessThanOrEqualTo(floor + 1), reason: 'every booster tile whole');
+    expect(tester.getTopLeft(tickets.first).dy, greaterThan(100), reason: 'the Tickets heading below the bar');
+    await shot(tester, '35_store_boosters');
+  }
+
   testWidgets('capture store screens', (tester) async {
     final stage = _StageCoop();
     SharePlatform.instance = _NoShare();
@@ -793,6 +819,17 @@ void main() {
         await go(tester, '/social', ms: 4500);
         await shot(tester, '22_social_league');
       }
+      if (want('35_store_boosters')) {
+        await push(tester, '/store', ms: 4000);
+        try {
+          await storeBoosters(tester);
+        } catch (e) {
+          debugPrint('store boosters: $e');
+          await binding.takeScreenshot('zz_diag_store_boosters');
+        }
+        await tester.tap(find.byIcon(CupertinoIcons.xmark).first, warnIfMissed: false);
+        await settle(tester, 1200);
+      }
       return;
     }
 
@@ -849,6 +886,7 @@ void main() {
     // Store, then scrolled to the VIP card (also the subscription review shot).
     await push(tester, '/store', ms: 2500);
     await shot(tester, '11_store');
+    await storeBoosters(tester);
     await tester.dragUntilVisible(find.text('Carden VIP'), find.byType(Scrollable).first, const Offset(0, -300));
     await tester.drag(find.byType(Scrollable).first, const Offset(0, -600));
     await settle(tester, 1200);

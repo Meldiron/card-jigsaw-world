@@ -20,6 +20,8 @@ research and reasoning are in `docs/store-screenshots.md`.
 | `collage/*.jpg` | Pack covers for the slide-2 wall, downloaded from our Storage bucket (`--refresh-collage`; pack ids in `COLLAGE_PACKS`). | 600 px wide |
 | `screenshots/iphone-6.9/01.png` ... `10.png` | Marketing screenshots for the App Store "iPhone 6.9-inch Display" slot. Upload in numeric order. | 1320x2868, RGB |
 | `review/subscription-review.png` | Store screen scrolled to the "Carden VIP" card, for the App Store Connect subscription "Review screenshot" field (min 640x920). Same pixels as `raw/12_store_vip.png`. | 1320x2868 |
+| `review/iap-review.png` | The top of the store (the coin bundles), the App Review screenshot of the four `coins_*` products (`consumables.json`, top-level `reviewScreenshot`). A copy of `raw/11_store.png`. | 1320x2868 |
+| `review/iap-review-boosters.png` | The store scrolled to its Tickets and Boosters sections, every booster tile whole (Peeks, Hints and Magic), light theme: the App Review screenshot of `tickets_5`, `tickets_15`, `hints_5` and `hints_15` (their own `reviewScreenshot`). `raw/35_store_boosters_light.png` in RGB, written by `make_promo.py`. | 1320x2868 |
 | `promo/app-icon-1024.png` | The app icon flattened to RGB (App Store rejects alpha). | 1024x1024 |
 | `promo/vip-promotional-1024.png` | Promotional image for the VIP subscription (icon, "VIP" word mark, one-line benefit). | 1024x1024 |
 
@@ -54,6 +56,7 @@ the same names with a `_light` suffix):
 | `10_game_hexagons.png` | The hexagons board of 09 with one piece lifted |
 | `11_store.png` | Store, top |
 | `12_store_vip.png` | Store, scrolled to the VIP card |
+| `35_store_boosters.png` | Store, scrolled to Tickets and Boosters (the booster tiles whole): the review screenshot of the ticket and booster products |
 | `13_quests.png` | Quests tab: daily and weekly quests with progress and two Claim buttons |
 | `14_quests_live.png` | Quests tab scrolled to the live (world-day) events |
 | `15_library.png` | Library, all packs |
@@ -138,7 +141,8 @@ simulator, and a Python 3 with Pillow (`pip install pillow`).
    Callout crops are given in raw-capture pixels; after a recapture, look at
    every slide at full size (a moved card shifts its crop).
 
-3. Rebuild the icon, VIP promo and the subscription review screenshot:
+3. Rebuild the icon, VIP promo, the subscription review screenshot and the
+   booster review screenshot (from `raw/35_store_boosters_light.png`):
 
    ```sh
    python3 tools/store/make_promo.py
@@ -146,9 +150,15 @@ simulator, and a Python 3 with Pillow (`pip install pillow`).
 
 4. Uploading: `asc_publish.py screenshots` replaces a slide whose file changed
    (by checksum), removes slides that are no longer in the folder and keeps the
-   file order. The review screenshots go up with `asc_publish.py iap`
-   (`review/iap-review.png`, the top of the store: copy `raw/11_store.png`) and
+   file order. The review screenshots go up with `asc_publish.py iap` and
    `subscriptions` (`review/subscription-review.png`), which also replace a
    changed file; while the products sit in the app's review draft Apple refuses
    that until they are taken out of it (apple-release skill, "Renaming in-app
-   purchases while they sit in a review draft").
+   purchases while they sit in a review draft"). Each in-app product names its
+   review screenshot in `store/metadata/subscriptions/consumables.json`: the
+   coins the top-level default `review/iap-review.png` (the top of the store:
+   copy `raw/11_store.png`), the tickets and the boosters (`hints_*`, which give
+   Peeks, Hints and Magic) their own `review/iap-review-boosters.png`
+   (`make_promo.py` writes it from `raw/35_store_boosters_light.png`; retake that alone with
+   `--dart-define=CJW_STORE_ONLY=35_store_boosters --dart-define=CJW_STORE_THEME=light
+   --dart-define=CJW_STORE_SKIP_UPLOAD=true`, about 4 minutes).

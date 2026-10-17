@@ -45,7 +45,7 @@ Below, `asc` stands for `.venv/bin/python tools/store/asc_publish.py`.
 | `age-rating` | `ageRatingDeclarations` from `age_rating.json` |
 | `price-free` | `appPriceSchedules` with the free USA price point (Apple equalises the rest) and `appAvailabilities` (v2) for every territory |
 | `screenshots` | one `appScreenshotSets` of type `APP_IPHONE_67` and every PNG in `store/screenshots/iphone-6.9/` in file order (reserve, upload, commit with MD5). The folder is the source of truth: an unchanged file is skipped, a changed one (MD5 differs) is replaced, and an uploaded screenshot with no file of its name is deleted |
-| `iap` | the eight consumables from `subscriptions/consumables.json` (`/v2/inAppPurchases`), localizations, USD price equalised to all territories through `inAppPurchasePricePoints/{id}/equalizations`, availability, optional review screenshot |
+| `iap` | the eight consumables from `subscriptions/consumables.json` (`/v2/inAppPurchases`), localizations, USD price equalised to all territories through `inAppPurchasePricePoints/{id}/equalizations`, availability, the review screenshot (`reviewScreenshot`: the file's default, `store/review/iap-review.png`, the top of the store, for the coins; a product's own replaces it: `store/review/iap-review-boosters.png`, the store scrolled to Tickets and Boosters, for `tickets_*` and `hints_*`; a changed file replaces the uploaded one) |
 | `subscriptions` | group `VIP` and its localization, `vip_monthly` / `vip_yearly` attributes (Family Sharing on) and localizations, one `subscriptionPrices` per territory from `subscriptionPricePoints/{id}/equalizations`, one `subscriptionIntroductoryOffers` (1 week free) per territory, the `winBackOffers` from each file (only once the subscription is APPROVED: Apple refuses offers before), review screenshot, promotional image, availability. A field Apple refuses to change while the subscription sits in the open review draft (Family Sharing did) is patched by lifting the subscription's item out of the draft and putting it back |
 | `review-info` | `appStoreReviewDetails`: contact from `review_contact.json` and `review_notes.txt` |
 | `events` | In-App Event drafts (`appEvents`, their `appEventLocalizations` and the two `appEventScreenshots`) from `store/metadata/app_events.json`: the next world-day events (`--window N`, default 10) and the next major holidays after them (`--primary N`, default 5). Never submits. See "In-App Events" below |
@@ -238,6 +238,8 @@ store/metadata/subscriptions/
 store/metadata/app_events.json   (make_app_events.py; media in ~/.local/share/card-jigsaw-world/app-events/)
 store/screenshots/iphone-6.9/*.png
 store/review/subscription-review.png
+store/review/iap-review.png            (coins_*: the top of the store, raw/11_store)
+store/review/iap-review-boosters.png   (tickets_*, hints_*: raw/35_store_boosters_light, by make_promo.py)
 store/promo/vip-promotional-1024.png
 ```
 

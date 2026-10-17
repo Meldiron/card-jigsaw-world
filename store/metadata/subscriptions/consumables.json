@@ -1,5 +1,5 @@
 {
-  "_note": "Eight consumables. Product ids are fixed on Apple and their numbers are historical: the amount each one grants is in lib/data/purchases.dart (StoreProducts.grants) and functions/verify-purchase/src/main.js (GRANTS); test/economy_test.dart checks that the three agree. Prices are USD; the script picks the matching App Store price point and equalises it across territories. Display name <= 30, description <= 45. reviewScreenshot is optional (set to a PNG path to upload one).",
+  "_note": "Eight consumables. Product ids are fixed on Apple and their numbers are historical: the amount each one grants is in lib/data/purchases.dart (StoreProducts.grants) and functions/verify-purchase/src/main.js (GRANTS); test/economy_test.dart checks that the three agree. Prices are USD; the script picks the matching App Store price point and equalises it across territories. Display name <= 30, description <= 45. reviewScreenshot is the App Review screenshot (a PNG path, optional): the top-level one is the default (the top of the store, for the coins), a product's own replaces it (the store scrolled to Tickets and Boosters for the ticket and booster products).",
   "reviewScreenshot": "store/review/iap-review.png",
   "products": [
     {
@@ -40,7 +40,8 @@
       "name": "10 tickets",
       "description": "Most premium packs, or ten Lucky Wheel spins",
       "customerPrice": "1.99",
-      "reviewNote": "Consumable. Adds 10 tickets after server-side verification. Tickets pay for premium (ticket-priced) packs, Lucky Wheel spins, opening the piggy bank and streak restores."
+      "reviewNote": "Consumable. Adds 10 tickets after server-side verification. Tickets pay for premium (ticket-priced) packs, Lucky Wheel spins, opening the piggy bank and streak restores.",
+      "reviewScreenshot": "store/review/iap-review-boosters.png"
     },
     {
       "referenceName": "Tickets 30 (tickets_15)",
@@ -48,7 +49,8 @@
       "name": "30 tickets",
       "description": "Premium packs, spins and piggy banks",
       "customerPrice": "4.99",
-      "reviewNote": "Consumable. Adds 30 tickets after server-side verification."
+      "reviewNote": "Consumable. Adds 30 tickets after server-side verification.",
+      "reviewScreenshot": "store/review/iap-review-boosters.png"
     },
     {
       "referenceName": "Helpers 15/10/5 (hints_5)",
@@ -56,7 +58,8 @@
       "name": "15 Peeks, 10 Hints, 5 Magic",
       "description": "Help for any board, all three kinds",
       "customerPrice": "0.99",
-      "reviewNote": "Consumable. Adds 15 Peeks, 10 Hints and 5 Magic to the player's stock after server-side verification. Peek shows the finished picture for a moment, a Hint shows where one card belongs, Magic puts a card in its place. The product id is historical; until October 2026 it gave hints only."
+      "reviewNote": "Consumable. Adds 15 Peeks, 10 Hints and 5 Magic to the player's stock after server-side verification. Peek shows the finished picture for a moment, a Hint shows where one card belongs, Magic puts a card in its place. The product id is historical; until October 2026 it gave hints only.",
+      "reviewScreenshot": "store/review/iap-review-boosters.png"
     },
     {
       "referenceName": "Helpers 50/30/15 (hints_15)",
@@ -64,7 +67,8 @@
       "name": "50 Peeks, 30 Hints, 15 Magic",
       "description": "Plenty of help for the biggest boards",
       "customerPrice": "2.49",
-      "reviewNote": "Consumable. Adds 50 Peeks, 30 Hints and 15 Magic after server-side verification."
+      "reviewNote": "Consumable. Adds 50 Peeks, 30 Hints and 15 Magic after server-side verification.",
+      "reviewScreenshot": "store/review/iap-review-boosters.png"
     }
   ]
 }
