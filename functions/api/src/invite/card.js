@@ -217,7 +217,7 @@ export function renderCard({ image: bytes, board, painting = false, kind = 'invi
   const aspect = tiling.boardAspect(pic.w / pic.h);
 
   // The words beside the board.
-  const lines = kind === 'site' ? { headline: ['Your calm picture puzzle'], detail: null, muted: ['play.carden.page'] } : inviteLines(board, cells, painting);
+  const lines = kind === 'site' ? { headline: ['Your calm picture puzzle'], detail: null, muted: ['play.carden.page'] } : inviteLines(board, tiling.playableCells, painting);
   for (const [style, words] of [['headline', lines.headline], ['detail', lines.detail], ['muted', lines.muted]]) {
     if (words && !canWrite(a.text, style, words)) throw new Error(`invite card: no lettering for "${words.join(' ')}"`);
   }

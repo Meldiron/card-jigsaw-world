@@ -59,7 +59,7 @@ export function inviteCopy({ hostName, title, grid, painting, players }) {
   const board = parseGrid(grid) ?? { mode: 'cards', cols: 4, rows: 4 };
   const boardText = `${MODES[board.mode].label} ${sizeLabel(board)}${painting ? ' · Painting' : ''}`;
   const seated = Math.max(1, Math.min(MAX_PLAYERS, players));
-  const cells = tilingOf(board).cells;
+  const cells = tilingOf(board).playableCells;
   return {
     title: who ? `${who} invites you to play ${what}` : what === 'a picture' ? 'Play a picture together' : `Play ${what} together`,
     description: `Play together in Carden · ${boardText} · ${seated} of ${MAX_PLAYERS} players`,

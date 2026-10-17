@@ -47,6 +47,22 @@ test('piece counts are the game\'s (Tiling.cellCount) and the pieces cover the b
   }
 });
 
+test('pre-set pieces are the game\'s (Tiling.isPreset, test/preset_pieces_test.dart) and are not counted', () => {
+  // The 3x3 triangle board (7 x 3 pieces): the middle row's two end halves.
+  assert.deepEqual(tilingOf(parseGrid('triangles-7x3t0')).presets, [7, 13]);
+  // The 4x4 honeycomb: the second row's halves and the bottom row's corners.
+  assert.deepEqual(tilingOf(parseGrid('hexagons-4x4t2')).presets, [4, 8, 13, 17]);
+  // The 6x6 honeycomb: the bottom row's corners.
+  assert.deepEqual(tilingOf(parseGrid('hexagons-6x6t6')).presets, [32, 38]);
+  for (const grid of ['cards-7x7', 'squares-5x5', 'triangles-9x4', 'triangles-11x5', 'hexagons-5x5', 'hexagons-7x7', 'hexagons-23x23']) {
+    assert.deepEqual(tilingOf(parseGrid(grid)).presets, [], grid);
+  }
+  const hex = parseGrid('hexagons-4x4t2');
+  assert.equal(tilingOf(hex).playableCells, tilingOf(hex).cells - 4);
+  assert.deepEqual(inviteLines(hex, tilingOf(hex).playableCells, false).muted, [String(tilingOf(hex).cells - 4), 'pieces']);
+  assert.match(inviteCopy({ hostName: 'Mia', title: 'Owls', grid: 'hexagons-4x4t2', painting: false, players: 1 }).alt, new RegExp(`board of ${tilingOf(hex).cells - 4} pieces`));
+});
+
 test('board proportions follow the picture within what the cells allow (Tiling.boardAspect)', () => {
   assert.equal(tilingOf(parseGrid('squares-5x5')).boardAspect(0.66), 1 * (1 - 0.009));
   const cards = tilingOf(parseGrid('cards-3x3'));

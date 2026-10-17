@@ -32,6 +32,8 @@ const samples = [
   ['amsterdam-canal', 'triangles-37x18t11', false],
   ['azure-window', 'hexagons-23x23t11', false],
   ['california-rolls', 'squares-6x4t3', false],
+  ['ammonoosuc-falls', 'triangles-7x3t0', false],
+  ['water-lilies', 'hexagons-4x4t2', false],
 ];
 const dir = join(ROOT, 'build', 'invite_cards');
 mkdirSync(dir, { recursive: true });

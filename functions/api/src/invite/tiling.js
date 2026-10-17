@@ -179,12 +179,27 @@ function hexagons(cols, rows) {
   };
 }
 
-/// The tiling of a board (Tiling.of).
+/// The tiling of a board (Tiling.of), with its pre-set pieces (Tiling.isPreset: the only piece of
+/// its shape, dealt in its place and not counted) and the pieces a player plays (playableCells).
 export function tilingOf({ mode, cols, rows }) {
   const c = Math.max(1, cols);
   const r = Math.max(1, rows);
   const t = mode === 'triangles' ? triangles(c, r) : mode === 'hexagons' ? hexagons(c, r) : grid(mode === 'squares' ? 'squares' : 'cards', c, r);
-  return { ...t, boardAspect: (imageAspect) => boardAspect(t, imageAspect) };
+  const presets = t.mode === 'triangles' || t.mode === 'hexagons' ? presetSlots(t) : [];
+  return { ...t, presets, playableCells: t.cells - presets.length, boardAspect: (imageAspect) => boardAspect(t, imageAspect) };
+}
+
+/// Slots whose shape no other piece has, on a board of the tiling's own proportions
+/// (ClippedTiling._computeTopology works them out at its canonicalSize).
+function presetSlots(t) {
+  if (t.cells <= 1) return [];
+  const [lo, hi] = t.naturalAspectRange;
+  const h = 1000;
+  const w = 1000 * Math.sqrt(lo * hi);
+  const keys = Array.from({ length: t.cells }, (_, s) => shapeOf(t.polygon(s, w, h), w).key);
+  const count = new Map();
+  for (const k of keys) count.set(k, (count.get(k) ?? 0) + 1);
+  return keys.flatMap((k, s) => (count.get(k) === 1 ? [s] : []));
 }
 
 /// The board's width / height for a picture of [imageAspect] (Tiling.boardAspect): the picture's
