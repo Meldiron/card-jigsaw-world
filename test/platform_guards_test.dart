@@ -198,7 +198,8 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text(StoreWebNotice.message), findsNothing);
       expect(find.text(StoreProducts.grant(ProductIds.coins1000).label), findsOneWidget);
-      await tester.drag(find.byType(ListView), const Offset(0, -3000));
+      // Down to the VIP card (the free ways to earn follow it).
+      await tester.scrollUntilVisible(find.text('Have a gift code? Redeem it'), 300, scrollable: find.byType(Scrollable).first);
       await tester.pumpAndSettle();
       expect(find.text('Available on iPhone'), findsNothing);
       expect(find.text('Have a gift code? Redeem it'), findsOneWidget);
