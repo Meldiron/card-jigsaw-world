@@ -80,6 +80,12 @@ class _Account {
   DateTime? fetchedAt;
   final Map<String, DateTime> readAt = {};
 
+  /// Ops the server refused although the session holds (a row another player made at the row's id;
+  /// security review 2026-10-17), by op id, with when. They stay queued, so the screens still show
+  /// them, but the queue goes on without them; they are tried again on the next start, or an hour
+  /// later on resume (the server's hourly sweep deletes such rows). Kept in memory only.
+  final Map<String, DateTime> parked = {};
+
   /// The rows came from the server before, so a later fetch can tell what changed elsewhere.
   bool synced = false;
 
@@ -211,6 +217,7 @@ class SyncController extends Notifier<SyncState> {
     _foreground = true;
     final a = _acct;
     if (a == null) return;
+    a.parked.removeWhere((_, at) => DateTime.now().difference(at) > parkedFor);
     if (a.isLocal) {
       unawaited(ref.read(authProvider.notifier).reconnect());
       return;
@@ -402,10 +409,15 @@ class SyncController extends Notifier<SyncState> {
     return recent(a.fetchedAt) || recent(a.readAt[pid]);
   }
 
+  /// How long a parked op waits before a resume tries it again.
+  @visibleForTesting
+  static Duration parkedFor = const Duration(hours: 1);
+
   Future<void> _flush(_Account a) async {
     var read = false;
-    while (a.ops.isNotEmpty) {
-      final op = a.ops.first;
+    for (;;) {
+      final op = a.ops.where((o) => !a.parked.containsKey(o.id)).firstOrNull;
+      if (op == null) break;
       if (!read && op.kind == OpKind.board && !_fresh(a, op.puzzleId!)) {
         // A board saved after a while without hearing from the server (a tab left open, a
         // reconnect): another device may have gone on with it or finished it meanwhile. The read
@@ -430,6 +442,14 @@ class SyncController extends Notifier<SyncState> {
         if (f == SyncFailure.missing) {
           // The profile row is gone (deleted elsewhere): start it again, then send.
           a.profile = await _backend.createProfile(a.userId, _newProfile(a.userId));
+          continue;
+        }
+        if (f == SyncFailure.auth && op.target != OpTarget.profile && await _signedIn()) {
+          // The session holds, so the row refused this player: another player made a row at its
+          // id. Park the op (quietly; it stays on screen) and send the rest.
+          debugPrint('sync: parked $op: $e');
+          a.parked[op.id] = DateTime.now();
+          if (_acct == a) _publish();
           continue;
         }
         op.tries++;
@@ -531,6 +551,14 @@ class SyncController extends Notifier<SyncState> {
         _saveOps(a);
         return;
       }
+    }
+  }
+
+  Future<bool> _signedIn() async {
+    try {
+      return await _backend.signedIn();
+    } catch (_) {
+      return false;
     }
   }
 
@@ -638,7 +666,7 @@ class SyncController extends Notifier<SyncState> {
       userId: a.userId,
       profile: _shown,
       progress: _shownProgress,
-      pending: a.ops.length,
+      pending: a.ops.where((o) => !a.parked.containsKey(o.id)).length,
       offline: _offline,
     );
   }

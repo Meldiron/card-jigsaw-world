@@ -49,7 +49,15 @@ class _Social extends SocialRepository {
   }
 
   @override
+  Future<void> unblockPlayer(String userId, String playerId) async {
+    calls.add('unblock $userId $playerId');
+    blocked.removeWhere((b) => b.playerId == playerId);
+  }
+
+  @override
   Future<void> removeFriend(String rowId) async => calls.add('unfriend $rowId');
+  @override
+  Future<void> removeFriendOf(String userId, String friendId) async => calls.add('unfriend $userId $friendId');
   @override
   Future<List<BlockedPlayer>> blocks(String userId) async => List.of(blocked);
   @override
@@ -104,7 +112,7 @@ void main() {
     await c.read(leaderboardProvider.future);
     expect(profiles.excluded, {'p2'});
     expect(board(), ['p1', 'p3']);
-    expect(social.calls, ['block me p2', 'unfriend ${deterministicId('me', 'p2')}'], reason: 'blocking ends a friendship too');
+    expect(social.calls, ['block me p2', 'unfriend me p2'], reason: 'blocking ends a friendship too');
     expect((await c.read(blockedPlayersProvider.future)).map((b) => b.playerId), ['p2']);
 
     await c.read(playerSafetyProvider).unblock('p2');

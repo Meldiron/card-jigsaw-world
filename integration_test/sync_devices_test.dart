@@ -94,6 +94,8 @@ class _Network implements SyncBackend {
   Future<Map<String, dynamic>?> getEvent(String userId, String eventId) => _go(() => inner.getEvent(userId, eventId));
   @override
   Future<void> createLedger(String userId, String rowId, Map<String, dynamic> data) => _go(() => inner.createLedger(userId, rowId, data));
+  @override
+  Future<bool> signedIn() => _go(() => inner.signedIn());
 }
 
 void main() {
@@ -146,7 +148,7 @@ void main() {
     late _Network net;
     await tester.pumpWidget(ProviderScope(overrides: [
       localStoreProvider.overrideWithValue(store),
-      syncBackendProvider.overrideWith((ref) => net = _Network(AppwriteSyncBackend(ref.watch(tablesProvider)))),
+      syncBackendProvider.overrideWith((ref) => net = _Network(AppwriteSyncBackend(ref.watch(tablesProvider), ref.watch(accountProvider)))),
     ], child: const CardenApp()));
     await settle(tester, 1500);
     await tapText(tester, 'Continue');

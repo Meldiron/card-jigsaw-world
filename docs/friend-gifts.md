@@ -1,8 +1,8 @@
 # Friend gifts
 
 Owner decisions (2026-10-17): on a friend's profile a player sends that friend a gift of **1 ticket or
-150 coins**, the sender's choice. It costs the sender nothing. **One gift per friend per day**, no other
-cap. The friend gets an Inbox message ("Anna sent you a gift") with the gift and a Claim button, and on
+150 coins**, the sender's choice. It costs the sender nothing. **One gift per friend per day**, and (security
+review, 2026-10-17) **at most 20 gifts a day** to all friends together. The friend gets an Inbox message ("Anna sent you a gift") with the gift and a Claim button, and on
 iPhone a notification at the same moment whose tap opens that message. The gift **expires 24 hours after
 it was sent**; after that it is gone and cannot be claimed. Web players get the message and the Inbox
 dot, no notification.
@@ -44,13 +44,16 @@ deployed for them (scopes `rows.read`, `rows.write`, `messages.read`, `messages.
    `expiresAt` 24 hours later, `rewardTickets: 1` or `rewardCoins: 150`, `fromUserId`, `fromName` (the
    sender's name through the name filter) and `fromAvatar`. If it cannot be written, the gift row is
    taken back so the sender can try again.
-5. The push: Appwrite Messaging `createPush` to the friend's user (every push target they have),
+5. The push, only when the friend has the sender in their friends list too and has had at most 5
+   gifts in the last 24 hours (`shouldPush`; later gifts land in the inbox quietly, `pushed: false`):
+   Appwrite Messaging `createPush` to the friend's user (every push target they have),
    title "Anna sent you a gift", body "1 ticket is waiting in your inbox." (or "150 coins are
    waiting..."), data `{ link: '/inbox?message=<id>' }`, sound default. A friend with no device
    registered (web, notifications off) simply gets no push; the inbox has the gift either way.
 6. Answers `{ ok: true, kind, amount, friendName, day, messageId, pushed }` (`pushed`: Appwrite
-   accepted the push) or `{ ok: false, error }` with `not-friend`, `unavailable`, `already`, `kind`,
-   `signin` or `server`.
+   accepted the push) or `{ ok: false, error }` with `not-friend`, `unavailable`, `already`, `limit`
+   (20 sent today; the app says "That's all your gifts for today. More tomorrow."), `kind`, `signin` or
+   `server`. The daily limit is checked before the gift row is made.
 
 The amounts live in `KINDS` (`functions/api/src/gift/gift.js`, and the frozen `functions/send-gift/src/gift.js`);
 the app shows the same (`GiftKind`, `lib/state/friend_gifts.dart`; `test/friend_gifts_test.dart` checks all three agree).
@@ -63,7 +66,9 @@ device's time zone can send at most one extra gift in that day.
 
 **Names.** The push is drawn by iOS, not the app, so the function filters the sender's name with a copy
 of `NameFilter` (`shownName` in `gift.js`; `test/friend_gifts_test.dart` fails when the word lists
-differ). The app shows `fromName` through `NameFilter` again.
+differ): offensive names, and since 2026-10-17 names with a link, an @handle, an e-mail address or a
+domain (`isContact`, the `TLDS` list), show as "Player". The app shows `fromName` through `NameFilter`
+again.
 
 **The push log.** Appwrite keeps every push it sends (title, body, recipient) in Messaging's log. Each
 send deletes gift pushes older than a day from it (`cleanupPushLog`), so it never holds a gift for long.
