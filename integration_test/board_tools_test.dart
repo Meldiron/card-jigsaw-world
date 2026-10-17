@@ -84,6 +84,10 @@ void main() {
 
   bool loose(Board b, int s) => !b.isLocked(s) && b.groupOf(s).length == 1;
 
+  /// The board a move from [before] leaves, as the game settles it with the picture's twins (a
+  /// card on a twin's place locks, one where a twin would join joins: docs/twins.md).
+  Board? settled(WidgetTester tester, Board before, Board? moved) => moved == null ? null : (widget(tester).state.twins ?? Twins.none).settle(before, moved).board;
+
   /// Joins two picture neighbours into a loose pair with one tap-tap move: the right-hand card goes
   /// beside the left one. Returns the pair's slots.
   Future<List<int>> makePair(WidgetTester tester) async {
@@ -95,7 +99,7 @@ void main() {
       final at = b.slotOfCard(card), from = b.slotOfCard(right);
       final to = t.apply(at, 1, 0);
       if (to == null || to == from || !loose(b, at) || !loose(b, from) || !loose(b, to)) continue;
-      final after = b.moveTo(from, to);
+      final after = settled(tester, b, b.moveTo(from, to));
       if (after == null) continue;
       final pair = after.groupOf(after.slotOfCard(card));
       if (pair.length != 2 || after.isLocked(pair.first)) continue;
@@ -140,7 +144,7 @@ void main() {
     await tapText(tester, 'Cards', ms: 800);
     await tester.dragUntilVisible(find.text('Relaxed'), find.byType(Scrollable).first, const Offset(0, -200));
     await tapText(tester, 'Relaxed', ms: 800);
-    await tester.tap(find.textContaining('· Play'), warnIfMissed: false);
+    await tester.tap(find.byKey(const ValueKey('play-board')), warnIfMissed: false);
     for (var i = 0; i < 30 && find.byType(BoardWidget).evaluate().isEmpty; i++) {
       await settle(tester, 500);
     }
@@ -191,6 +195,7 @@ void main() {
       expected = expected.moveTo(expected.slotOfCard(n), n)!;
       sent++;
     }
+    expected = settled(tester, b1, expected)!;
     final wallet = coins(tester);
     final moves1 = widget(tester).state.moves;
     await tapSlot(tester, b1.slotOfCard(card));
@@ -218,16 +223,18 @@ void main() {
     final pair2 = await makePair(tester);
     final b2 = board(tester);
     int? pusher, onto;
+    Board? pushed;
     for (final cell in pair2) {
       for (var x = 0; x < b2.cells && pusher == null; x++) {
         if (!loose(b2, x) || pair2.contains(x)) continue;
         final t = b2.tiling.delta(x, cell);
         // A neighbour of the pair, so the push is easy to follow.
         if (t == null || t.$1.abs() + t.$2.abs() != 1) continue;
-        final next = b2.moveTo(x, cell);
+        final next = settled(tester, b2, b2.moveTo(x, cell));
         if (next == null || stepOf(b2, next, pair2) == null || next.isLocked(next.slotOfCard(b2.slots[pair2.first]))) continue;
         pusher = x;
         onto = cell;
+        pushed = next;
       }
     }
     expect(pusher, isNotNull, reason: 'a loose card beside the pair');
@@ -237,7 +244,7 @@ void main() {
     final b3 = board(tester);
     final step = stepOf(b2, b3, pair2);
     expect(step, isNotNull, reason: 'the pair stays whole');
-    expect(b3.slots[onto], b2.slots[pusher]);
+    expect(b3.slots, pushed!.slots);
     debugPrint('QA_PUSH card at $pusher onto $onto: pair $pair2 moved by $step');
     await shot(tester, 'bt_07_pushed');
 
