@@ -2,6 +2,7 @@
 // default and the largest text size the app allows (1.35), in the states a player meets: day 1, mid-week,
 // day 7, claimed today, and a lost streak that can be restored with today's claim. It renders without a
 // layout error, lists the whole week, marks today, and the claim stays reachable.
+import 'package:carden/core/a11y.dart';
 import 'package:carden/core/theme/app_theme.dart';
 import 'package:carden/data/local_store.dart';
 import 'package:carden/features/daily/daily_reward_sheet.dart';
@@ -9,6 +10,7 @@ import 'package:carden/models/models.dart';
 import 'package:carden/state/profile.dart';
 import 'package:carden/state/settings.dart';
 import 'package:carden/widgets/ui.dart';
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -100,4 +102,51 @@ void main() {
       }
     }
   }
+
+  // Claiming plays the finished board's confetti over the sheet (owner, 2026-10-17); Reduce motion
+  // keeps it still.
+  for (final reduceMotion in [false, true]) {
+    testWidgets('a claimed gift ${reduceMotion ? 'with Reduce motion has no' : 'gets'} confetti', (tester) async {
+      tester.view.physicalSize = const Size(402, 874);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      SharedPreferences.setMockInitialValues({});
+      final store = await LocalStore.open();
+      late BuildContext host;
+      await tester.pumpWidget(ProviderScope(
+        overrides: [
+          localStoreProvider.overrideWithValue(store),
+          profileProvider.overrideWith(_Claims.new),
+        ],
+        child: MaterialApp(
+          theme: AppTheme.light(),
+          builder: (context, child) => A11y(prefs: Accessibility(reduceMotion: reduceMotion), child: child!),
+          home: Scaffold(body: Builder(builder: (context) {
+            host = context;
+            return const SizedBox.expand();
+          })),
+        ),
+      ));
+      await tester.pumpAndSettle();
+      showAppSheet(host, builder: (_) => const DailyRewardSheet());
+      await tester.pumpAndSettle();
+      expect(find.byType(ConfettiWidget), findsNothing);
+      await tester.tap(find.text('Claim day 1 gift'));
+      await tester.pump();
+      await tester.pump();
+      expect(find.byType(ConfettiWidget), reduceMotion ? findsNothing : findsOneWidget);
+      // The burst clears itself away.
+      await tester.pump(const Duration(seconds: 9));
+      await tester.pump();
+      expect(find.byType(ConfettiWidget), findsNothing);
+    });
+  }
+}
+
+class _Claims extends ProfileNotifier {
+  @override
+  Future<Profile> build() async => Profile.guest('local');
+
+  @override
+  Future<({int coins, int tickets, int hints, int day})?> claimDaily({bool restore = false}) async => (coins: 50, tickets: 0, hints: 0, day: 0);
 }

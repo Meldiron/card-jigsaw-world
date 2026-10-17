@@ -39,13 +39,13 @@ class GameState {
   final GameStatus status;
   final int? selected;
   final int hintsUsed;
-  final List<List<int>> history; // layout snapshots for undo
+  final List<List<int>> history; // layout snapshots (Gather's Undo takes the last one back)
   final Set<int> justLocked;
   final Set<int> justJoined;
   final int? hintSlot;
   final int? hintTarget;
   final bool peeking;
-  final int chain; // 2 when the last move locked 2+ cards in place
+  final int chain; // 2 when the player's last move locked 2+ cards in place
   final int tick; // increments on each lock/join, used to re-trigger animations
 
   /// Par of the play-through as dealt (a resumed board keeps the one it was saved with; [par]
@@ -149,8 +149,9 @@ class GameArgs {
   int get hashCode => Object.hash(puzzleId, spec, session);
 }
 
-/// Events the UI reacts to with sound/haptics/particles.
-enum GameEventKind { pick, move, join, lock, doubleLock, win, invalid, undo }
+/// Events the UI reacts to with sound/haptics/particles. [rearrange]: Shuffle or Gather moved
+/// cards (not a move).
+enum GameEventKind { pick, move, join, lock, doubleLock, win, invalid, undo, rearrange }
 
 class GameController extends Notifier<GameState> {
   GameController(this.args);
@@ -256,7 +257,11 @@ class GameController extends Notifier<GameState> {
     _apply(state.board.moveTo(from, to));
   }
 
-  void _apply(Board? after, {bool countMove = true, bool byPlayer = true}) {
+  /// Puts [after] on the table: [moves] is what it adds to the count (Magic counts each card it
+  /// sends, Shuffle and Gather nothing). Only the player's own moves count as a chain (the double
+  /// lock and the longest lock); a tool that locks cards plays the plain lock. [event] replaces
+  /// the move's own sound unless the board is finished.
+  void _apply(Board? after, {int moves = 1, bool byPlayer = true, GameEventKind? event}) {
     if (after == null) {
       state = state.copyWith(clearSelected: true);
       _events.add(GameEventKind.invalid);
@@ -276,11 +281,11 @@ class GameController extends Notifier<GameState> {
     final won = after.isSolved;
     state = state.copyWith(
       board: after,
-      moves: countMove ? state.moves + 1 : state.moves,
+      moves: state.moves + moves,
       history: [...state.history, before.slots],
       justLocked: newlyLocked,
       justJoined: newlyJoined,
-      chain: newlyLocked.length >= 2 ? 2 : 0,
+      chain: byPlayer && newlyLocked.length >= 2 ? 2 : 0,
       bestLock: byPlayer ? max(state.bestLock, newlyLocked.length) : state.bestLock,
       tick: newlyLocked.isEmpty && newlyJoined.isEmpty ? state.tick : state.tick + 1,
       clearSelected: true,
@@ -290,7 +295,9 @@ class GameController extends Notifier<GameState> {
     if (won) {
       _events.add(GameEventKind.win);
       _timer?.cancel();
-    } else if (newlyLocked.length >= 2) {
+    } else if (event != null) {
+      _events.add(event);
+    } else if (byPlayer && newlyLocked.length >= 2) {
       _events.add(GameEventKind.doubleLock);
     } else if (newlyLocked.isNotEmpty) {
       _events.add(GameEventKind.lock);
@@ -301,6 +308,8 @@ class GameController extends Notifier<GameState> {
     }
   }
 
+  /// Takes the last change back: Gather's Undo, offered on its toast while nothing else has
+  /// changed (owner, 2026-10-17: there is no Undo button any more). Not a move.
   void undo() {
     if (!state.canUndo) return;
     final previous = state.history.last;
@@ -308,7 +317,6 @@ class GameController extends Notifier<GameState> {
     state = state.copyWith(
       board: Board(state.board.spec, previous),
       history: history,
-      moves: state.moves + 1,
       justLocked: const {},
       justJoined: const {},
       chain: 0,
@@ -339,7 +347,10 @@ class GameController extends Notifier<GameState> {
     return true;
   }
 
-  /// Magic lock: sends one misplaced card (and its whole group) home. Counts as a move.
+  /// Magic (owner, 2026-10-17): puts one card in its place, then each of its picture neighbours
+  /// (the cards whose places border its own), every one with its group: up to 5 of the 9 cards on
+  /// a 3x3. One move per card it sends; a tool's lock, not the player's (no double lock, and the
+  /// longest lock stays the player's).
   bool magicLock() {
     if (state.status != GameStatus.playing) return false;
     final b = state.board;
@@ -349,9 +360,36 @@ class GameController extends Notifier<GameState> {
     // card a Hint is showing, else any card not in place.
     final sel = state.selected;
     final slot = sel != null && !b.isLocked(sel) ? sel : state.hintSlot ?? candidates[Random().nextInt(candidates.length)];
+    // A card's number is its place, so its picture neighbours are the cards numbered like the
+    // cells around that place.
+    final card = b.slots[slot];
+    final home = b.moveTo(slot, card);
+    if (home == null) return false;
+    var after = home;
+    var sent = 1;
+    for (final c in b.tiling.neighbours(card)) {
+      if (after.isLocked(c)) continue;
+      final next = after.moveTo(after.slotOfCard(c), c);
+      if (next == null) continue;
+      after = next;
+      sent++;
+    }
     state = state.copyWith(hintsUsed: state.hintsUsed + 1);
-    _apply(b.moveTo(slot, b.homeOf(slot)), byPlayer: false);
+    _apply(after, moves: sent, byPlayer: false);
     return true;
+  }
+
+  /// Shuffle (owner, 2026-10-17: the free round button left of the tools): the loose cards trade
+  /// places at random ([shuffleLoose]); on a giant board only the ones in [view] (board
+  /// coordinates at the board's [size]). Cards in place and joined groups stay. Not a move.
+  /// Returns how many cards moved: 0 when nothing is left to shuffle.
+  int shuffle({Rect? view, Size? size, Random? random}) {
+    if (state.status != GameStatus.playing || state.peeking) return 0;
+    final before = state.board;
+    final after = view != null && size != null ? shuffleInView(before, view, size, random: random) : shuffleLoose(before, random: random);
+    if (after == null) return 0;
+    _apply(after, moves: 0, byPlayer: false, event: GameEventKind.rearrange);
+    return [for (var s = 0; s < after.cells; s++) if (after.slots[s] != before.slots[s]) s].length;
   }
 
   /// Peek: every card not in place flies to its place, the picture shows for a moment and the
@@ -372,23 +410,15 @@ class GameController extends Notifier<GameState> {
 
   /// Gather (giant boards): brings the cards that belong in [view] (board coordinates at the
   /// board's [size]) into it, trading places with cards that belong elsewhere (see
-  /// [gatherInto]); `gathered` is how many came in. When none has to come in (the view holds its
-  /// cards already, or they are just outside it), the loose cards in view are shuffled instead
-  /// ([shuffleInView]); `shuffled` is how many moved. Neither is a move; Undo takes either back.
-  ({int gathered, int shuffled}) gather(Rect view, Size size, {Random? random}) {
-    const nothing = (gathered: 0, shuffled: 0);
-    if (state.status != GameStatus.playing || state.peeking) return nothing;
+  /// [gatherInto]). Returns how many came in: 0 when there is nothing to gather (the button is
+  /// off then, see [canGather]). Not a move; [undo] takes it back.
+  int gather(Rect view, Size size) {
+    if (state.status != GameStatus.playing || state.peeking) return 0;
     final before = state.board;
-    int changed(Board after) => [for (var s = 0; s < after.cells; s++) if (after.slots[s] != before.slots[s]) s].length;
     final after = gatherInto(before, view, size);
-    if (after != null) {
-      _apply(after, countMove: false, byPlayer: false);
-      return (gathered: changed(after) ~/ 2, shuffled: 0);
-    }
-    final mixed = shuffleInView(before, view, size, random: random);
-    if (mixed == null) return nothing;
-    _apply(mixed, countMove: false, byPlayer: false);
-    return (gathered: 0, shuffled: changed(mixed));
+    if (after == null) return 0;
+    _apply(after, moves: 0, byPlayer: false, event: GameEventKind.rearrange);
+    return [for (var s = 0; s < after.cells; s++) if (after.slots[s] != before.slots[s]) s].length ~/ 2;
   }
 
   void restart() {

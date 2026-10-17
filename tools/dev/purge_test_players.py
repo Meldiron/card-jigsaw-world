@@ -6,7 +6,9 @@ player it creates as a test player: the profile row gets `isTest: true` (kept ou
 and the Appwrite user gets the prefs `{"qa": true, "qaRun": "<run id>"}`. This tool lists and
 purges them: the Appwrite user and every row they own (profiles, progress, ledger, event_progress,
 friends in both directions, my_puzzles and their photos in the user-uploads bucket, friend gifts
-sent and received and the inbox messages of gifts they sent; aw.PLAYER_TABLES has the full list). A JSON backup
+sent and received and the inbox messages of gifts they sent, the co-op games they host with every
+move in them, and their own co-op moves; the games' teams are left to the coop-cleanup function, as
+this key has no teams scope; aw.PLAYER_TABLES has the full list). A JSON backup
 of each purged player is written to secrets/purged/<date>/ first (git-ignored).
 
   purge_test_players.py list                       flagged test players
@@ -204,6 +206,15 @@ def player_rows(w, uid):
             found = {}
             for col in aw.PAIR_TABLES[t]:
                 for r in w.c.rows(t, [aw.q('equal', col, [uid])]):
+                    found[r['$id']] = r
+            rows[t] = list(found.values())
+        elif t in aw.HOST_TABLES:
+            rows[t] = w.c.rows(t, [aw.q('equal', aw.HOST_TABLES[t], [uid])])
+        elif t == 'coop_moves':
+            # The player's own moves and every move in the games they host (the games go too).
+            found = {r['$id']: r for r in w.c.rows(t, [aw.q('equal', 'userId', [uid])])}
+            for game in rows.get('coop_games', []):
+                for r in w.c.rows(t, [aw.q('equal', 'gameId', [game['$id']])]):
                     found[r['$id']] = r
             rows[t] = list(found.values())
         else:

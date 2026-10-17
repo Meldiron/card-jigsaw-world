@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/a11y.dart';
 import '../../core/theme/tokens.dart';
 import '../../models/models.dart';
 import '../../state/catalog.dart';
@@ -95,48 +96,63 @@ final allPackProgressProvider = Provider<Map<String, PackProgress>>((ref) {
   return {for (final p in packs) p.id: PackProgress.of(byPack[p.id] ?? const [], rows, fallbackTotal: p.imageCount)};
 });
 
-/// Cover badges for a finished pack: a green check once every picture is
-/// solved, with a star badge before it when every picture also has three
-/// stars. Draws nothing until the pack is complete.
+/// The one mark of a finished pack, wherever a finished pack shows (pack cards, the Home covers and
+/// Finished packs rows, event cards, the pack page): a capsule holding the app's done mark (a cobalt
+/// disc with a white check, as on the daily gift and the streak), with a gold star after it once
+/// every picture also has three stars. Over a photo ([onImage]) it takes the photo chip's dark
+/// material, so it reads on light and dark pictures; in a row, the accent's tinted chip. The check
+/// and the star are shapes, so the state never rests on colour alone. Draws nothing until the pack
+/// is complete. (Owner, 2026-10-17: one badge instead of a green check and a gold star circle.)
 class PackDoneBadges extends StatelessWidget {
-  const PackDoneBadges({super.key, required this.progress, this.size = 26});
+  const PackDoneBadges({super.key, required this.progress, this.size = 24, this.onImage = true});
   final PackProgress progress;
+
+  /// The badge's height; 24 matches the photo chips beside it.
   final double size;
+
+  /// Over a photo (covers, thumbnails); false in a list row on a card.
+  final bool onImage;
 
   @override
   Widget build(BuildContext context) {
     if (!progress.complete) return const SizedBox.shrink();
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (progress.perfect) ...[_DoneBadge(size: size, perfect: true), SizedBox(width: (size * 0.23).roundToDouble())],
-        _DoneBadge(size: size, perfect: false),
-      ],
-    );
-  }
-}
-
-class _DoneBadge extends StatelessWidget {
-  const _DoneBadge({required this.size, required this.perfect});
-  final double size;
-  final bool perfect;
-
-  @override
-  Widget build(BuildContext context) {
+    final c = context.colors;
+    final perfect = progress.perfect;
+    final contrast = A11y.increaseContrastOf(context);
+    // The disc sits snug in the capsule, so a pack without every star is a round badge.
+    final inset = (size * 0.125).clamp(2.0, 4.0).toDouble();
+    final disc = size - inset * 2;
     return Semantics(
-      label: perfect ? 'Three stars on every picture' : 'Every picture solved',
+      label: perfect ? 'Finished, three stars on every picture' : 'Finished',
+      excludeSemantics: true,
       child: Container(
-        key: ValueKey(perfect ? 'pack-perfect-badge' : 'pack-done-badge'),
-        width: size,
+        key: const ValueKey('pack-done-badge'),
         height: size,
-        // Perfect: a gold star on white with a gold ring, so it is not mistaken for the coin mark
-        // (a gold disc with a star).
+        padding: EdgeInsets.only(left: inset, right: perfect ? (size * 0.28).roundToDouble() : inset),
         decoration: BoxDecoration(
-          color: perfect ? Colors.white : Brand.success,
-          shape: BoxShape.circle,
-          border: Border.all(color: perfect ? Brand.star : Colors.white.withValues(alpha: 0.9), width: perfect ? 2 : 1.5),
+          color: onImage ? Colors.black.withValues(alpha: contrast ? 0.66 : 0.5) : c.accentTint,
+          borderRadius: BorderRadius.circular(Radii.pill),
+          border: onImage
+              ? Border.all(color: Colors.white.withValues(alpha: contrast ? 0.4 : 0.18), width: 0.5)
+              : (contrast ? Border.all(color: c.controlStroke) : null),
         ),
-        child: Icon(perfect ? AppIcons.star : AppIcons.checkmark, size: size * (perfect ? 0.56 : 0.54), color: perfect ? Brand.star : Colors.white),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: disc,
+              height: disc,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(color: context.accentFill, shape: BoxShape.circle),
+              child: Icon(AppIcons.checkmarkAlt, size: disc * 0.66, color: context.onAccent),
+            ),
+            if (perfect) ...[
+              SizedBox(width: (size * 0.18).roundToDouble()),
+              // Over a photo the capsule is always dark, so the star keeps the bright gold.
+              Icon(AppIcons.star, key: const ValueKey('pack-perfect-badge'), size: size * 0.6, color: onImage ? Brand.star : context.star),
+            ],
+          ],
+        ),
       ),
     );
   }

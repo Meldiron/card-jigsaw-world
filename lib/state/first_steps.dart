@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../core/analytics.dart';
 import '../data/local_store.dart';
 import '../game/board.dart';
 import '../game/image_loader.dart';
@@ -131,6 +132,7 @@ class FirstStepsNotifier extends Notifier<FirstSteps> {
   /// Settings > Guided start. Turning it on keeps what the player has reached open, with no
   /// "new" dots for tabs they had.
   void setGuided(bool on) {
+    AppAnalytics.event('settings_changed', {'setting': 'guided_start', 'value': on});
     final solved = ref.read(countedSolvesProvider);
     final reached = [for (final r in Reveal.values) if (solved >= r.solves && r.tab != null) r];
     _save(state.copyWith(

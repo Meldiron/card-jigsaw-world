@@ -124,7 +124,7 @@ void main() {
     final free = all.firstWhere((p) => !p.isLockedByDate && (packs.where((k) => k.id == p.packId).firstOrNull?.isFree ?? false));
     container(tester).read(routerProvider).push('/play/${free.id}');
     await settle(tester, 5000);
-    await tester.tap(find.textContaining('· Play'), warnIfMissed: false);
+    await tester.tap(find.byKey(const ValueKey('play-board')), warnIfMissed: false);
     for (var i = 0; i < 30 && find.byType(BoardWidget).evaluate().isEmpty; i++) {
       await settle(tester, 500);
     }

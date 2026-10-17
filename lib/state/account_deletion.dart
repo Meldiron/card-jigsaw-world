@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../core/analytics.dart';
 import '../data/repositories.dart';
 import 'auth.dart';
 import 'first_steps.dart';
@@ -31,6 +32,7 @@ class AccountDeletion {
   /// After [deleteOnServer]: a new guest, the deleted player's save and device flags gone, and the
   /// welcome screens next (the router follows `onboarded`). Device settings (theme, sound) stay.
   Future<void> startOver() async {
+    AppAnalytics.event('account_deleted');
     final deletedId = _ref.read(currentUserIdProvider);
     final store = _ref.read(localStoreProvider);
     await _ref.read(remindersProvider).disable();

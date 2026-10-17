@@ -63,6 +63,10 @@ guided again.
    (`firstPackDoneProvider`): a player who plays all of it with Next puzzle before ever reaching Home
    has one picture counted and would otherwise be left with only Unlock anyway (owner, 2026-10-17).
 
+   Store > Earn for free > **Play a puzzle** closes the Store and starts Quick play once Quick play
+   is open; before that it opens the picture Home suggests (the next step), or Home itself when the
+   first board is under way and Continue leads back to it (`playFromStore`, owner, 2026-10-17).
+
    Nothing is announced when something opens: no "Just opened" card, and no level intro sheets
    ("Squares are open") for guided players (`pendingUnlockIntroProvider`).
 7. **Quests and achievements count only after they open** (`countsFromProvider`): pictures finished
@@ -81,7 +85,7 @@ guided again.
 10. **Tips at the moment they matter**, each once: the Library's "Start with the free packs...", the
     board picker's "Pick a shape and a size...", and "Stuck? Hint shows where one card belongs" after
     six moves in a row without a lock or join.
-11. The board picker opens on **Easy** (one step up from nine cards) until the player picks a board.
+11. The board picker opens one step up from nine cards (**Relaxed**, 4x4) until the player picks a board.
 
 Settings > Gameplay > **Guided start** (shown to guided players) turns it off (everything open)
 or back on (what the player reached stays open).

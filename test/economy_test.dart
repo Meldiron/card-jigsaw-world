@@ -29,7 +29,13 @@ void main() {
       expect(serverGrants.keys.toSet(), ProductIds.consumables);
       for (final id in ProductIds.consumables) {
         final app = StoreProducts.grant(id);
-        expect(serverGrants[id], {if (app.coins > 0) 'coins': app.coins, if (app.tickets > 0) 'tickets': app.tickets, if (app.hints > 0) 'hints': app.hints}, reason: id);
+        expect(serverGrants[id], {
+          if (app.coins > 0) 'coins': app.coins,
+          if (app.tickets > 0) 'tickets': app.tickets,
+          if (app.hints > 0) 'hints': app.hints,
+          if (app.peeks > 0) 'peeks': app.peeks,
+          if (app.magics > 0) 'magics': app.magics,
+        }, reason: id);
       }
     });
 
@@ -42,8 +48,10 @@ void main() {
         expect(p['customerPrice'], StoreProducts.usdPrices[id], reason: '$id price');
         expect((p['name'] as String).length, lessThanOrEqualTo(30), reason: '$id name length');
         expect((p['description'] as String).length, lessThanOrEqualTo(45), reason: '$id description length');
-        final amount = grant.coins + grant.tickets + grant.hints;
-        expect(p['reviewNote'], contains(formatCount(amount)), reason: '$id review note names the amount');
+        // The review note names every amount: "Adds 15 Peeks, 10 Hints and 5 Magic".
+        for (final (n, noun) in [(grant.coins, 'coins'), (grant.tickets, 'tickets'), (grant.hints, grant.helpers ? 'Hints' : 'hints'), (grant.peeks, 'Peeks'), (grant.magics, 'Magic')]) {
+          if (n > 0) expect(p['reviewNote'], contains('${formatCount(n)} $noun'), reason: '$id review note names $noun');
+        }
       }
       for (final id in ProductIds.subscriptions) {
         final sub = jsonDecode(File('store/metadata/subscriptions/$id.json').readAsStringSync()) as Map<String, dynamic>;
@@ -55,15 +63,30 @@ void main() {
   group('bundle value', () {
     double coinValue(String id) {
       final g = StoreProducts.grant(id);
-      return (g.coins + g.tickets * StoreProducts.ticketCoinValue + g.hints * Economy.hintCostCoins) / double.parse(StoreProducts.usdPrices[id]!);
+      return (g.coins +
+              g.tickets * StoreProducts.ticketCoinValue +
+              g.hints * Economy.hintCostCoins +
+              g.peeks * Economy.peekCostCoins +
+              g.magics * Economy.magicLockCostCoins) /
+          double.parse(StoreProducts.usdPrices[id]!);
     }
 
     final base = coinValue(ProductIds.coins1000);
 
-    test('every bundle is worth about the same per dollar as the smallest coin bundle', () {
-      for (final id in ProductIds.consumables) {
+    test('every coin and ticket bundle is worth about the same per dollar as the smallest coin bundle', () {
+      for (final id in ProductIds.consumables.where((id) => !StoreProducts.grant(id).helpers)) {
         expect(coinValue(id) / base, inInclusiveRange(0.9, 1.3), reason: id);
       }
+    });
+
+    test('the helper bundles give all three helpers and are the better deal (owner, 2026-10-17)', () {
+      expect(StoreProducts.grant(ProductIds.hints5), isA<ProductGrant>().having((g) => (g.peeks, g.hints, g.magics), 'helpers', (15, 10, 5)));
+      expect(StoreProducts.grant(ProductIds.hints15), isA<ProductGrant>().having((g) => (g.peeks, g.hints, g.magics), 'helpers', (50, 30, 15)));
+      for (final id in const [ProductIds.hints5, ProductIds.hints15]) {
+        expect(StoreProducts.grant(id).helpers, isTrue, reason: id);
+        expect(coinValue(id) / base, inInclusiveRange(1.2, 1.6), reason: '$id: more per dollar than coins, not a giveaway');
+      }
+      expect(StoreProducts.grant(ProductIds.hints5).label, '15 Peeks, 10 Hints, 5 Magic');
     });
 
     test('bigger bundles never give less per dollar', () {
@@ -157,7 +180,7 @@ Map<String, Map<String, int>> _serverGrants() {
     level = next;
   }
   final puzzlesPerWeek = puzzlesPerDay * 7;
-  final piggyOpens = puzzlesPerWeek * Economy.piggyPerPuzzle / Profile.piggyCapacity;
+  final piggyOpens = puzzlesPerWeek * Economy.piggyPerPuzzle / Profile.basePiggyCapacity;
   final coinsPerWeek = puzzlesPerWeek * coinsPerPuzzle +
       levelCoins / 4 +
       giftCoins +
@@ -165,7 +188,7 @@ Map<String, Map<String, int>> _serverGrants() {
       dailyPuzzleCoins * 7 +
       adsPerDay * adCoins * 7 +
       eventsPerWeek * eventCoins +
-      piggyOpens * Profile.piggyCapacity;
+      piggyOpens * Profile.basePiggyCapacity;
   final ticketsPerWeek = giftTickets + weeklyTickets + eventsPerWeek + levelTickets / 4;
   return (coinsPerHour: coinsPerWeek / (minutesPerDay * 7 / 60), ticketsPerWeek: math.max(0, ticketsPerWeek).toDouble());
 }

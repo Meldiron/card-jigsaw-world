@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/analytics.dart';
 import '../../core/haptics.dart';
 import '../../core/sfx.dart';
 import '../../core/theme/tokens.dart';
@@ -86,6 +87,7 @@ Future<void> openGiantEarly(BuildContext context, WidgetRef ref, Pack pack) asyn
   );
   if (!sure || !context.mounted) return;
   final ok = await profileN.openGiantEarly(pack);
+  if (ok) AppAnalytics.event('pack_unlocked', {'pack': pack.id, 'paid': 'early_giant', 'price': price, 'levelsToGo': levels});
   if (!context.mounted || !ok) return;
   Haptics.success();
   Sfx.instance.coin();

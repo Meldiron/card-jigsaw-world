@@ -8,6 +8,8 @@ gold and tickets, update pack prices and what purchases give, keep the prices").
 
 *Update 2026-10-13: finishing a puzzle now pays 1.2 coins per card (was 3.2) and replays pay 25% (was 40%), so a regular player earns about **3,500 coins per hour**; see "Lower puzzle rewards" at the end. The numbers below are the model before that change.*
 
+*Update 2026-10-17: level-ups pay at most 300 coins (500 every 10th level), so a regular player earns about **2,500 coins per hour** (17,700 a week instead of 24,700); see "Level-ups capped at 300" at the end.*
+
 A player earned about **6,000 coins per hour of play** (5,000 to 7,000 depending on how they play, and
 more in the first week), and about **15 to 18 tickets per week whatever they play**, because tickets come
 from logging in (daily gift, weekly quests), not from playing longer. Before this change a pack cost 300
@@ -28,16 +30,16 @@ All numbers are read from the code. Formulas use the Dart rounding (`round()` = 
 | Finishing a board (first time) | `base = round(cells x 3.2)`; `round((base + (stars - 1) x (base ~/ 3)) x mode multiplier)`. 4x4 three stars = 85, 5x5 = 132, 6x6 = 192 (cards). Replays pay 40% | - | - | `Economy.completionCoins`, `ProfileNotifier.recordCompletion` |
 | Mode multiplier | cards x1.0, squares x1.15, triangles x1.35, hexagons x1.5 (on coins and XP) | | | `lib/game/modes.dart` |
 | XP per board | `round((round(cells x 2.5) + stars x 10) x multiplier)`; level L needs `100 + 60 x (L - 1)` XP | | | `Economy.completionXp`, `Profile.xpForLevel` |
-| Level-up (each level L) | `100 + 25 x L` | 1 every 3rd level | 2 every 2nd level | `LevelRewards.forLevel` |
+| Level-up (each level L) | `min(300, 100 + 25 x L)`, 500 every 10th level (since 2026-10-17; `100 + 25 x L` without end before) | 1 every 3rd level | 2 every 2nd level | `LevelRewards.forLevel` |
 | Daily gift (7-day cycle) | 50, 75, 100, 125, 150, 200, 400 = **1,100 / week** | 0,0,1,0,1,1,2 = **5 / week** | 0,1,0,1,0,1,2 = **5 / week** | `Economy.dailyRewards` |
 | Daily quests (3 free) | 60 + 80 + 100 = **240 / day** (VIP 4th: +120) | - | - | `Goals.daily` |
 | Weekly quests (5 free) | - | 1 + 1 + 2 + 2 + 2 = **8 / week** (VIP 6th: +1) | - | `Goals.weekly` |
 | Today's daily puzzle | +50 the first time | - | - | `game_screen.dart` |
 | World-day event (finish all ~22 pictures of the pack in its 8-day window) | 300 | 1 | - | `events` rows (all 97: 300 + 1); 76 events in 2027 = **1.46 / week** |
 | Bonus video (rewarded house ad) | 40 each, 3 a day (5 until 2026-10-15), 10 min apart | - | - | `Economy.adRewardCoins`, `Profile.adsPerDay`, `HouseAdPolicy` |
-| Piggy bank | +5 per finished board (replays too), holds 500; opening costs 1 ticket | -1 to open | - | `Economy.piggyPerPuzzle`, `openPiggy` |
+| Piggy bank | +5 per finished board (replays too), holds 500 (up to 1,000 with upgrades, see section 5); opening costs 1 ticket | -1 to open | - | `Economy.piggyPerPuzzle`, `Profile.piggyCapacity`, `openPiggy` |
 | Achievements (24 families, one-time) | 60 to 1,000 per step; 13,170 coins in total | 29 in total | - | `lib/state/achievements.dart` |
-| Lucky Wheel (costs 1 ticket, no daily free spin) | expected about 90 per spin: 100 (23%), 250 (23%), jackpot 1,000 at 1% (owner, 2026-10-15; was 60, 120 and 500 at 2.3%) | never pays tickets | 3 hints (9%), 5 Peeks (18%), 10 Peeks (14%), 1 Magic (10%), 3 Magic (2%): about 200 coins of value a spin | `wheel_screen.dart` |
+| Lucky Wheel (costs 1 ticket, no daily free spin) | expected about 90 per spin: 100 (23%), 250 (23%), jackpot 1,000 at 1% (owner, 2026-10-15; was 60, 120 and 500 at 2.3%). A ×5 spin (owner, 2026-10-17) costs 5 tickets and pays the prize it lands on five times, with the same odds (jackpot 5,000): the same value per ticket | never pays tickets | 3 hints (9%), 5 Peeks (18%), 10 Peeks (14%), 1 Magic (10%), 3 Magic (2%): about 200 coins of value a spin (×5: 15 hints, 25 or 50 Peeks, 5 or 15 Magic) | `wheel_screen.dart`, `Economy.wheelBigSpin` |
 | New profile | 500 | 3 | 3 | `Profile.guest` |
 | VIP | "+500 coins every week" is promised on the store and the App Store page, **but no code grants it** (see section 9) | | | |
 
@@ -156,9 +158,11 @@ cheap farming trick to worry about; replays pay 40% and are not worth farming.
 | Early board tier (before its level) | `600 + 300 x tier`: 1,500 / 1,800 / 2,100 / 2,400 / 2,700 for tiers 3 to 7 (levels 2, 3, 5, 7, 10) | `Economy.tierUnlockCoins` |
 | Giant boards before level 10 (with a Giant pack) | the pack's price (12 tickets) plus 1 ticket for every level to go: level 7 pays 12 + 3, level 1 pays 12 + 9; a player who has the pack (VIP) pays the levels only; paid once, giant boards then stay open (owner, 2026-10-15) | `Economy.giantEarlyFee`, `ProfileNotifier.openGiantEarly` (key `early:giant` in `profiles.unlockedTiers`) |
 | Avatars (28 for coins) | 900 coins each, 25,200 for all | `Economy.avatarCoins` |
-| Lucky Wheel spin | 1 ticket | `Economy.wheelSpinTickets` |
+| Lucky Wheel spin | 1 ticket, or 5 for a ×5 spin (five times the prize) | `Economy.wheelSpinTickets`, `Economy.wheelBigSpin` |
 | Opening the piggy bank | 1 ticket | `Economy.piggyOpenTickets` |
+| Piggy bank upgrade (owner, 2026-10-17: a coin sink) | 5,000 coins each, five of them: 500 -> 600 -> 700 -> 800 -> 900 -> 1,000 coins (25,000 for all five, about ten hours of a regular player's play) | `Economy.piggyUpgradeCoins`, `ProfileNotifier.upgradePiggy`, column `profiles.piggyLevel` |
 | Restoring a lost streak | `3 + longest ~/ 7` tickets, 3 to 10 | `Economy.streakRestoreTickets` |
+| Swapping a quest (owner, 2026-10-17) | 1 ticket a swap, any quest not finished or claimed | `QuestSwap.tickets`, `ProfileNotifier.swapQuest`, column `profiles.questSwaps` |
 | VIP (real money) | $2.99 a month or $14.99 a year: every pack and every past month | App Store |
 
 Free: six starter packs, one per category (Wild Nature, Butterflies, Paris, Fruit Markets,
@@ -270,8 +274,8 @@ a ticket as 500 coins and a hint as 150 coins, and the bigger bundles add up to 
 | `coins_12000` | $9.99 | 12,000 coins | **30,000 coins** | 3,003 (+18%) | about nine packs, five hours of play |
 | `tickets_5` | $1.99 | 5 tickets | **10 tickets** | 2,513 | most premium packs, or ten spins |
 | `tickets_15` | $4.99 | 15 tickets | **30 tickets** | 3,006 (+19%) | two to three premium packs |
-| `hints_5` | $0.99 | 5 hints | **16 hints** | 2,424 | |
-| `hints_15` | $2.49 | 15 hints | **48 hints** | 2,892 (+15%) | |
+| `hints_5` | $0.99 | 5 hints | **15 Peeks, 10 Hints, 5 Magic** (16 hints until 2026-10-17) | 3,182 | a booster bundle, about a quarter better than coins |
+| `hints_15` | $2.49 | 15 hints | **50 Peeks, 30 Hints, 15 Magic** (48 hints until 2026-10-17) | 3,815 (+19%) | half again as good as coins |
 | `vip_monthly` / `vip_yearly` | $2.99 / $14.99 | VIP | unchanged | | every pack |
 
 Why hint bundles grow: the game sells a hint for 150 coins whenever a player has none (60 before the
@@ -279,9 +283,30 @@ owner approved the booster prices on 2026-10-12), so 5 hints for $0.99 was worth
 dollar spent on coins. A hint bundle that is worse than buying coins and letting the game spend them is
 not worth offering, so the bundles are sized to the same value per dollar as coins.
 
+**Booster bundles (owner, 2026-10-17).** The store sold only hints. The two `hints_*` products now give
+all three helpers, and on purpose more per dollar than coins (Peek at 10 coins, Hint 150, Magic 300, the
+prices a game charges when the stock is empty):
+
+| Product | Peeks | Hints | Magic | Coin value | Per dollar | Against `coins_1000` |
+|---|---|---|---|---|---|---|
+| `hints_5` ($0.99) | 15 (150) | 10 (1,500) | 5 (1,500) | 3,150 | 3,182 | +26% |
+| `hints_15` ($2.49) | 50 (500) | 30 (4,500) | 15 (4,500) | 9,500 | 3,815 | +51% |
+
+Hints and Magic carry the value; Peeks are cheap (10 coins) but the most used. The store shows them as
+"Boosters" (`_HelperCounts` in `store_screen.dart`: each helper's mark, count and name), the purchase sheet
+says "Adding 15 Peeks, 10 Hints, 5 Magic" and "You now have ...", and the house ad `hints-15` names the
+three. `test/economy_test.dart` keeps the coin and ticket bundles at 0.9 to 1.3 times `coins_1000` per
+dollar and the booster bundles at 1.2 to 1.6.
+
+Older builds show the old tile ("16 hints") and, after paying, the server's grant ("Added 10 hints" in
+their wording: they read only coins, tickets and hints from the answer); the Peeks and Magic land in the
+stock all the same. Only sandbox purchases are possible until the App Store release, so this only reaches
+testers who buy on a build from before the change.
+
 The three places that hold the amounts now agree and are checked by `test/economy_test.dart`:
 `StoreProducts.grants` in `lib/data/purchases.dart` (store screen, house ads, the debug sandbox),
-`GRANTS` in `functions/verify-purchase/src/main.js` (what the server credits) and
+`GRANTS` in `functions/verify-purchase/src/main.js` (what the server credits; Peeks and Magic go to the
+profile's `peeks` and `magics` columns with atomic increments and leave no ledger line, as in the app) and
 `store/metadata/subscriptions/consumables.json` (App Store names, descriptions, review notes). All eight
 consumables are `READY_TO_SUBMIT` on Apple (never reviewed), so changing their names costs no review.
 
@@ -323,7 +348,8 @@ the new server only gets more than it shows, which is harmless.
   worth five minutes of play; 2,500 to 5,000 a week would match the new scale.
 - **Level-ups pay about a fifth of all coins forever** (100 + 25 x level, while the XP per level grows by
   60). That is the main reason earnings feel generous; the owner asked for price changes only, so it is
-  untouched.
+  untouched. *Addressed 2026-10-17: level-ups stop at 300 coins, 500 every 10th level (see "Level-ups
+  capped at 300").*
 - **Boosters were raised x2.5** (owner approved, 2026-10-12): hint 150, Magic Lock 300, Peek 75. Peek was
   then cut to 10 coins (owner, 2026-10-14), once it became the animated look; free on giant boards for a few hours, then priced
   like everywhere else (owner, the same day). Avatars
@@ -345,9 +371,11 @@ the new server only gets more than it shows, which is harmless.
 
 ## Appendix: the simulation
 
-`test/economy_test.dart` holds a compact copy of the regular player's steady state (it gives 5,928 coins
-an hour and 16.2 tickets a week, against 5,949 and 16.8 here) and fails when the earnings drift from the
-constants the price script uses. The full day-by-day model behind the tables above:
+`test/economy_test.dart` holds a compact copy of the regular player's steady state and fails when the
+earnings drift from the constants the price script uses (`REGULAR_COINS_PER_HOUR`,
+`REGULAR_TICKETS_PER_WEEK`). The full day-by-day model behind the tables above, brought up to date on
+2026-10-17 (1.2 coins per card, three bonus videos a day for everyone, level-ups capped at 300 coins); the
+tables in sections 2 and 3 are its 2026-10-12 run, the sections at the end give the current numbers:
 
 <details>
 <summary>model.py (Python 3, no dependencies): `python3 model.py`</summary>
@@ -362,6 +390,7 @@ DAILY_GIFT = [(50,0,0),(75,0,1),(100,1,0),(125,0,1),(150,1,0),(200,1,1),(400,2,2
 DAILY_QUEST_COINS = [60, 80, 100]          # Goals.daily free; VIP 4th = 120
 DAILY_PUZZLE_BONUS = 50
 AD_COINS = 40
+COINS_PER_CARD = 1.2                      # Economy.coinsPerCard since 2026-10-13 (3.2 before)
 WEEKLY_TICKETS = [1, 1, 2, 2, 2]           # Goals.weekly free; VIP 6th = 1
 EVENT_COINS, EVENT_TICKETS = 300, 1
 EVENTS_PER_WEEK = 76 / 52                  # 76 world-day events in 2027 (events table)
@@ -376,7 +405,7 @@ def r(x):  # Dart round(): half away from zero
     return int(math.floor(x + 0.5))
 
 def completion_coins(cells, stars, mult=1.0):
-    base = r(cells * 3.2)
+    base = r(cells * COINS_PER_CARD)
     return r((base + (stars - 1) * (base // 3)) * mult)
 
 def completion_xp(cells, stars, mult=1.0):
@@ -388,7 +417,9 @@ def level_for_xp(xp):
     while xp >= xp_for_level(l):
         xp -= xp_for_level(l); l += 1
     return l
-def level_reward(l): return (100 + 25 * l, 1 if l % 3 == 0 else 0, 2 if l % 2 == 0 else 0)
+def level_coins(l):  # LevelRewards.forLevel since 2026-10-17: up to 300, 500 every 10th level
+    return 500 if l % 10 == 0 else min(300, 100 + 25 * l)
+def level_reward(l): return (level_coins(l), 1 if l % 3 == 0 else 0, 2 if l % 2 == 0 else 0)
 def max_tier(level): return max(i for i, L in enumerate(TIER_LEVEL) if level >= L)
 
 def wheel_ev():
@@ -404,7 +435,7 @@ def puzzle_seconds(cells, pace): return OVERHEAD + board_seconds(cells, pace)
 TYPES = {
     'casual':  dict(minutes=20,  tier=2, pace=1.25, stars={3: .60, 2: .35, 1: .05}, ads=1, weekly=6, events=1.0, speed=.3),
     'regular': dict(minutes=60,  tier=4, pace=1.00, stars={3: .75, 2: .22, 1: .03}, ads=3, weekly=8, events=EVENTS_PER_WEEK, speed=.3),
-    'heavy':   dict(minutes=180, tier=6, pace=0.90, stars={3: .85, 2: .15},           ads=5, weekly=8, events=EVENTS_PER_WEEK, speed=.1),
+    'heavy':   dict(minutes=180, tier=6, pace=0.90, stars={3: .85, 2: .15},           ads=3, weekly=8, events=EVENTS_PER_WEEK, speed=.1),
 }
 # Achievement families (threshold lists, coins step, tickets param) from achievements.dart
 def tiered(th, coins, tickets=0): return [(t, coins*(i+1), tickets+1 if i >= 2 else tickets) for i, t in enumerate(th)]
@@ -589,6 +620,31 @@ Rules (`Goals.daily`, `Goals.weekly`, `PlayHabits`, `_Lanes` in `lib/state/rewar
 - Keys carry the slot (`d:2026-10-15:s2:mode-hexagons`, `w2026-10-12:s4:paint`); a slot keeps a quest
   claimed in it, so a level-up during the day never pays a slot twice.
 
+### Swapping a quest (owner request, 2026-10-17)
+
+Any daily or weekly quest that is not finished and not claimed can be swapped for another for 1 ticket
+(every swap costs 1 ticket, and only that quest changes). The Quests tab shows a small "Swap [ticket] 1"
+on each such row; it asks first ("Swap this quest?" names the quest that comes), and a player without a
+ticket gets the store, as elsewhere. VIP members can swap the VIP quests too.
+
+- **What comes**: the next quest, in a rotation by day (or week) and slot, from a lane none of the
+  period's quests has used, shown now or swapped away, that fits the other quests (one board still never
+  finishes two) and is not finished already (it would pay for the ticket at once). The pool is the
+  ways of playing and skills the player has, every open shape and today's daily puzzle (daily), and the
+  plain ones ("Earn 3 stars twice", "Solve 2 pictures without Peek", "Collect 15 stars"). When nothing is
+  left, the quest has no swap. The fixed quests ("Solve 3 puzzles", "Solve 10 puzzles this week", "Play
+  on 4 different days") can be swapped too; their slot keeps its reward (60 coins, 1 and 2 tickets).
+- **Only that quest changes**: the other slots are dealt as if the swapped slot still had the quest first
+  dealt in it, also once the swapped quest is claimed.
+- **Storage**: `profiles.questSwaps` (text, default empty), a JSON map of slot (`d:2026-10-17:s2`,
+  `w2026-10-12:s4`) to the quests the slot has had, the first dealt first and the current one last.
+  `SyncOp.questSwap` names the swaps it saw in the slot: a swap made meanwhile on another device wins and
+  this one charges nothing (`SkipReason.questSwapped`), as does a quest claimed there; the ticket is
+  checked on the fresh row (`notEnough`). Entries older than a week are dropped with each swap.
+- **Earnings**: a sink for tickets only; quest rewards per slot are unchanged, so the model does not move.
+- **Older builds** ignore the column and show the quest first dealt in each slot; a quest claimed there
+  stays claimed here (the slot shows what was claimed).
+
 ## Quest pool and unlocks (2026-10-14, replaced by the section above)
 
 Rewards per slot are unchanged (daily 60 + 80 + 100 coins, VIP 120; weekly 1 + 1 + 2 + 2 + 2 tickets,
@@ -618,3 +674,61 @@ at its plain price, since nothing in it could be played. A
 quest never asks for something locked: the shape or Painting quest falls back to "Lock 5 cards in one
 move", and a slot keeps the quest already claimed in it, so a level-up that changes the pick never pays
 twice.
+
+## Square boards (owner, 2026-10-17)
+
+Every size is now the same N x N board in every mode (`docs/boards.md`): Cozy 3x3, Relaxed 4x4,
+Tricky 5x5, Expert 6x6, Master 7x7 (Triangles have no 3x3, Hexagons only 5x5 and 7x7). The Cards
+counts are the Cards ladder's square steps, which is what the model above plays (`CARD_CELLS` at
+tiers 2, 4 and 6: 16, 25, 36), so its results stand; Master is 49 cards instead of 48. A triangle
+column is one up and one down triangle, so Triangles keep about the counts they had per size (36,
+55, 78, 105 against 42, 60, 88, 108 before) and pay about as before. Squares and Hexagons had more
+pieces per size and now have about as many as Cards, so a size pays less there, in step with the
+shorter board (coins per hour per shape stay):
+
+| Master, 3 stars, first time | Before (3:4 picture) | Now |
+| --- | --- | --- |
+| Cards | 6x8 or 7x7 (48-49): 96-97 | 7x7 (49): 97 |
+| Squares | 8x11 (88): 202 | 7x7 (49): 112 |
+| Triangles | 12x9 (108): 292 | 7x7 (105): 284 |
+| Hexagons | 8x13 (110): 330 | 7x7 (52): 153 |
+
+Expand boards follow the picture and may have more pieces (Hexagons need more to cover a portrait
+picture whole); every piece pays as before. Easy, Medium and Hard (tiers 1, 3 and 5) have
+no square board and no Expand size: the level rewards at levels 2 and 5 no longer name a size, and
+the early unlocks of tiers 3 and 5 (1,500 and 2,100 coins) are no longer offered (boards saved on
+them still resume). Size quests name square sizes and count a square board as its side squared
+(`Goals.sizeOf`).
+
+## Level-ups capped at 300 (owner request, 2026-10-17)
+
+TestFlight feedback AOJ3ZtYkey_byEt4aesj80o: "Coin level up rewards are too much. It should go only up to
+300, or maybe 500 in some major milestones." `LevelRewards.coinsForLevel`: a level-up pays `100 + 25 x L`
+until that reaches 300 (level 8), then 300; every 10th level pays 500. Tickets (1 every 3rd level) and hints
+(2 every 2nd level) are unchanged. Home's level card ("Next" and "Coming up") and the solve op read the same
+table.
+
+| Level | 2 | 5 | 8 | 9 | 10 | 11 | 20 | 30 | 64 |
+|---|---|---|---|---|---|---|---|---|---|
+| Before | 150 | 225 | 300 | 325 | 350 | 375 | 600 | 850 | 1,700 |
+| After | 150 | 225 | 300 | 300 | **500** | 300 | **500** | **500** | 300 |
+
+The model (appendix, current constants) before and after:
+
+| Coins a week | Casual (20 min a day) | Regular (1 h a day) | Heavy (3 h a day) |
+|---|---|---|---|
+| Week 1, before / after | 14,903 / 14,403 (-3%) | 34,907 / 31,032 (-11%) | 73,448 / 59,373 (-19%) |
+| Steady, before / after | 10,991 / **8,684** (-21%) | 24,669 / **17,682** (-28%) | 57,666 / **38,372** (-33%) |
+| Steady per hour of play | 4,710 / 3,722 | 3,524 / **2,526** | 2,746 / 1,827 |
+| Of which level-ups (steady) | 3,331 / 1,025 | 8,663 / 1,675 | 21,994 / 2,700 |
+
+The regular player loses about 7,000 coins a week (a quarter of their coins); the heavy player, who levels
+fastest, a third. Week 1 changes little, because the first levels pay as before. Finishing boards is now
+58% of a regular player's coins (was 42%), level-ups 9% (was 35%). Tickets and hints do not move.
+
+Pack prices stay as they are: a standard 2,400-coin pack now takes a regular player about 57 minutes of
+play (was 41), a 5,000-coin showcase pack about two hours. `tools/store/apply_pack_prices.py` records the new
+`REGULAR_COINS_PER_HOUR = 2500` (reports only; `test/economy_test.dart` checks it against the model).
+
+Older builds still pay the old curve on their own level-ups: the solve op computes level rewards on the
+device. The difference ends as testers update.

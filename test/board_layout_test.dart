@@ -4,10 +4,12 @@ import 'dart:ui';
 import 'package:carden/game/board.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// Boards follow the picture: squares stay square, cards keep playing-card
-/// proportions, triangles and hexagons cover the whole picture with half
-/// pieces along the edges. Every board on offer must shuffle into a start
-/// with no card in place and no joined pair.
+/// Boards that follow the picture (Expand, and the ladder older builds
+/// dealt): squares stay square, cards keep playing-card proportions,
+/// triangles and hexagons cover the whole picture with half pieces along the
+/// edges. Every board on offer, square ones included, must shuffle into a
+/// start with no card in place and no joined pair. Square boards themselves:
+/// `test/square_boards_test.dart`.
 void main() {
   /// Portrait and square pictures every 0.01, plus landscape ones (cropped)
   /// and the extremes.
@@ -16,15 +18,20 @@ void main() {
     9 / 16, 2 / 3, 3 / 4, 4 / 5, 939 / 893, 4 / 3, 16 / 9, 0.3, 900 / 21,
   ];
 
-  /// Every distinct board offered for those pictures, per mode.
+  /// Every distinct board offered for those pictures, per mode: square,
+  /// Expand and the boards older builds dealt (they still resume).
   Map<GameMode, Set<BoardSpec>> offered() => {
         for (final mode in GameMode.values)
           mode: {
-            for (final a in aspects) ...BoardSpec.tiers(mode, a),
+            ...BoardSpec.squareTiers(mode),
+            for (final a in aspects) ...[...BoardSpec.expandTiers(mode, a), ...BoardSpec.tiers(mode, a)],
           },
       };
 
-  test('every tier list has eight boards with strictly growing piece counts', () {
+  /// The picture-shaped ladders: Expand and the old one.
+  List<BoardSpec> shaped(GameMode mode, double a) => [...BoardSpec.expandTiers(mode, a), ...BoardSpec.tiers(mode, a)];
+
+  test('the old ladder keeps eight boards with strictly growing piece counts', () {
     for (final mode in GameMode.values) {
       for (final a in aspects) {
         final tiers = BoardSpec.tiers(mode, a);
@@ -45,6 +52,10 @@ void main() {
         expect(tiers[4].cells, greaterThanOrEqualTo(25), reason: '${mode.code} at $a');
         expect(tiers[6].cells, greaterThanOrEqualTo(36), reason: '${mode.code} at $a');
         expect(tiers[7].cells, greaterThanOrEqualTo(48), reason: '${mode.code} at $a');
+        // Expand counts wherever its square board would (16 for Relaxed too).
+        for (final t in BoardSpec.expandTiers(mode, a)) {
+          expect(t.cells, greaterThanOrEqualTo(BoardLayouts.expandFloors[t.tier] ?? 0), reason: '${mode.code} ${t.label} at $a');
+        }
       }
     }
     // A quest's "5x5 or bigger" shortcut opens the Tricky tier.
@@ -53,7 +64,7 @@ void main() {
 
   test('squares cells are square within 1 % for every board on offer and every picture', () {
     for (final a in aspects) {
-      for (final spec in BoardSpec.tiers(GameMode.squares, a)) {
+      for (final spec in [...BoardSpec.squareTiers(GameMode.squares), ...shaped(GameMode.squares, a)]) {
         final size = spec.tiling.fit(const Size(369, 450), a);
         final cell = spec.tiling.cellBounds(0, size);
         expect(cell.width / cell.height, closeTo(1, 0.01), reason: '${spec.code} for a $a picture');
@@ -63,7 +74,7 @@ void main() {
 
   test('cards are portrait, close to 5:7 and never near square', () {
     for (final a in aspects) {
-      for (final spec in BoardSpec.tiers(GameMode.cards, a)) {
+      for (final spec in [...BoardSpec.squareTiers(GameMode.cards), ...shaped(GameMode.cards, a)]) {
         final size = spec.tiling.fit(const Size(369, 450), a);
         final cell = spec.tiling.cellBounds(0, size);
         final r = cell.width / cell.height;
@@ -74,19 +85,20 @@ void main() {
 
   test('the feedback picture (939 x 893) gets square squares and card-shaped cards', () {
     const a = 939 / 893;
-    final squares = BoardSpec.forPicture(GameMode.squares, 2, a);
+    final squares = BoardSpec.forPicture(GameMode.squares, 2, a, expand: true);
     expect(squares.cols, squares.rows, reason: 'a square picture is cut into a square grid of squares');
-    final cards = BoardSpec.forPicture(GameMode.cards, 2, a);
-    expect(cards.cols, greaterThan(cards.rows), reason: 'portrait cards on a square picture need more columns than rows');
-    for (final spec in [...BoardSpec.tiers(GameMode.squares, a), ...BoardSpec.tiers(GameMode.cards, a)]) {
+    expect(BoardSpec.offersExpand(GameMode.squares, a), isFalse, reason: 'square enough: no Expand in Squares');
+    final cards = BoardSpec.forPicture(GameMode.cards, 2, a, expand: true);
+    expect(cards.cols, greaterThan(cards.rows), reason: 'with Expand, portrait cards on a square picture need more columns than rows');
+    for (final spec in [...shaped(GameMode.squares, a), ...shaped(GameMode.cards, a)]) {
       expect(spec.tiling.fitFor(a).crop, lessThan(0.15), reason: '${spec.fullCode} crops little');
     }
   });
 
-  test('triangles and hexagons cover common portrait pictures nearly whole', () {
+  test('with Expand, triangles and hexagons cover common portrait pictures nearly whole', () {
     for (final mode in [GameMode.triangles, GameMode.hexagons]) {
       for (final a in [9 / 16, 2 / 3, 3 / 4, 4 / 5, 1.0]) {
-        for (final spec in BoardSpec.tiers(mode, a)) {
+        for (final spec in shaped(mode, a)) {
           final f = spec.tiling.fitFor(a);
           expect(f.crop, lessThan(0.07), reason: '${spec.fullCode} on $a crops ${f.crop}');
           expect(f.stretch, lessThanOrEqualTo(spec.tiling.stretchTolerance / (1 - spec.tiling.stretchTolerance) + 1e-9), reason: '${spec.fullCode} on $a');
@@ -119,7 +131,8 @@ void main() {
           final b = Board.shuffled(spec, seed: seed);
           final why = '${spec.fullCode} seed $seed';
           expect(b.lockedCount, 0, reason: '$why: a piece starts in place');
-          expect(b.joinCount, 0, reason: '$why: a pair starts joined');
+          // Only the 5x5 triangle board keeps a joined pair of halves on each side edge (Tiling.unavoidableJoins).
+          expect(b.joinCount, lessThanOrEqualTo(spec.tiling.unavoidableJoins), reason: '$why: a pair starts joined');
           expect(Board.isValidLayout(spec, b.slots), isTrue, reason: '$why: every piece sits in a slot of its own shape');
         }
       }
@@ -154,24 +167,32 @@ void main() {
   });
 
   test('codes carry the tier, and old codes and saves map onto a tier', () {
-    final spec = BoardSpec.forPicture(GameMode.squares, 3, 1.0);
-    expect(spec.fullCode, 'squares:${spec.code}t3');
+    final spec = BoardSpec.forPicture(GameMode.squares, 4, 0.75, expand: true);
+    expect(spec.fullCode, 'squares:${spec.code}t4');
     final back = BoardSpec.fromCode(BoardCode.toPath(spec.fullCode));
     expect(back, spec);
-    expect(back.tier, 3);
-    expect(back.label, 'Medium');
+    expect(back.tier, 4);
+    expect(back.label, 'Tricky');
+    expect(back.expand, isTrue, reason: 'a board that is not square is an Expand board');
+    // A code of the old ladder (Medium has no square board) is an Expand board of its tier.
+    final medium = BoardSpec.fromCode('squares-5x6t3');
+    expect(medium.expand, isTrue);
+    expect(medium.label, 'Medium');
     // Legacy codes: old fixed ladders.
     expect(BoardSpec.fromCode('squares-4x6').tierIndex, 2);
     expect(BoardSpec.fromCode('4x4').mode, GameMode.cards);
     expect(BoardSpec.fromCode('hexagons-7x10').tierIndex, 7);
-    // Following the next picture keeps the tier.
-    expect(spec.fitTo(0.75).tier, 3);
-    expect(spec.fitTo(0.75), BoardSpec.forPicture(GameMode.squares, 3, 0.75));
+    // Following the next picture keeps the tier and Expand.
+    expect(back.fitTo(2 / 3).tier, 4);
+    expect(back.fitTo(2 / 3), BoardSpec.forPicture(GameMode.squares, 4, 2 / 3, expand: true));
+    expect(back.fitTo(2 / 3).expand, isTrue);
+    expect(medium.fitTo(0.75).tier, anyOf(2, 4), reason: 'the nearest tier Expand deals');
     // A save resumes on the board with its piece count for this picture.
-    final t = BoardSpec.forPicture(GameMode.hexagons, 4, 0.75);
+    final t = BoardSpec.forPicture(GameMode.hexagons, 7, 0.75, expand: true);
     expect(BoardSpec.fromSaved(GameMode.hexagons, t.cells, 0.75), t);
     expect(BoardSpec.fromSaved(GameMode.hexagons, 30, 0.75), isNull, reason: 'the old 5x6 honeycomb no longer exists');
-    expect(BoardSpec.fromCells(GameMode.squares, BoardSpec.tiers(GameMode.squares)[5].cells), BoardSpec.tiers(GameMode.squares)[5]);
+    final old = BoardSpec.tiers(GameMode.squares)[5];
+    expect(BoardSpec.fromCells(GameMode.squares, old.cells), old);
   });
 
   test('saves from before a layout changed are rejected', () {

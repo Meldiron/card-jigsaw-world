@@ -76,6 +76,9 @@ class AppIcons {
   /// Painting: cards start in black and white and get their colour back as they lock.
   static const painting = CupertinoIcons.paintbrush_fill;
 
+  /// Expand (difficulty screen): the whole picture, columns and rows to fit it.
+  static const expand = CupertinoIcons.arrow_up_left_arrow_down_right;
+
   /// Zoomed-in giant board: back to the whole board.
   static const wholeBoard = CupertinoIcons.arrow_down_right_arrow_up_left;
   static const zoom = CupertinoIcons.zoom_in;
@@ -105,6 +108,13 @@ class AppIcons {
   static const image = CupertinoIcons.photo;
   static const mail = CupertinoIcons.envelope_fill;
   static const receipt = CupertinoIcons.doc_plaintext;
+
+  // Play together (docs/multiplayer.md).
+  static const players = CupertinoIcons.person_2_fill;
+  static const invite = CupertinoIcons.person_badge_plus;
+  static const share = CupertinoIcons.share;
+  static const leaveGame = CupertinoIcons.square_arrow_left;
+  static const endGame = CupertinoIcons.xmark_circle;
 
   // Library filters that are not pack categories (drawn before the label).
   static const filterAll = CupertinoIcons.square_grid_2x2_fill;
@@ -192,6 +202,8 @@ class AppIcons {
   static const reduceMotion = CupertinoIcons.slowmo;
   static const contrast = CupertinoIcons.circle_righthalf_fill;
   static const shapes = CupertinoIcons.square_on_circle;
+  // Settings > Privacy.
+  static const usageData = CupertinoIcons.chart_bar;
   static const clock = CupertinoIcons.clock;
   static const delete = CupertinoIcons.delete;
   static const docPlaintext = CupertinoIcons.doc_plaintext;

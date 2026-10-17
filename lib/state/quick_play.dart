@@ -72,8 +72,8 @@ Puzzle? pickQuickPlay(QuickPlayPool? pool, Random random) {
 /// The mode and board tier of the player's most recently finished game,
 /// the choice Quick play preselects. Null before the first finished game.
 ///
-/// The board's columns and rows are those of a reference picture; the game
-/// screen lays the same tier out for the picked picture's proportions.
+/// The square board of that tier (or the size next to it): Expand is the
+/// player's own choice, remembered with Play ([quickPlayBoardProvider]).
 BoardSpec? lastFinishedBoard(Map<String, PuzzleProgress> progress) {
   PuzzleProgress? last;
   for (final row in progress.values) {
@@ -81,7 +81,9 @@ BoardSpec? lastFinishedBoard(Map<String, PuzzleProgress> progress) {
     if (last == null || row.completedAt!.isAfter(last.completedAt!)) last = row;
   }
   if (last == null) return null;
-  return BoardSpec.fromCells(GameMode.fromCode(last.mode), last.gridSize);
+  final mode = GameMode.fromCode(last.mode);
+  final board = BoardSpec.fromCells(mode, last.gridSize);
+  return BoardSpec.nearest(board.isGiant ? BoardSpec.squareGiantTiers(mode) : BoardSpec.squareTiers(mode), board.tierIndex);
 }
 
 /// Where Quick play goes for [puzzle]: its difficulty screen, so the mode
@@ -128,6 +130,6 @@ final quickPlayPoolProvider = Provider<QuickPlayPool?>((ref) {
 /// else the board of their last finished game.
 final quickPlayBoardProvider = Provider<BoardSpec?>((ref) {
   final last = ref.watch(settingsProvider.select((s) => s.lastBoard));
-  if (last != null) return BoardSpec.forPicture(GameMode.fromCode(last.mode), last.tier, BoardSpec.referenceAspect);
+  if (last != null) return BoardSpec.forPicture(GameMode.fromCode(last.mode), last.tier, BoardSpec.referenceAspect, expand: last.expand);
   return lastFinishedBoard(ref.watch(progressProvider).value ?? const {});
 });

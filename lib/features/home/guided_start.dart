@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/a11y.dart';
+import '../../core/analytics.dart';
 import '../../core/haptics.dart';
 import '../../core/theme/tokens.dart';
 import '../../state/first_steps.dart';
@@ -340,9 +341,11 @@ Future<bool> confirmUnlock(BuildContext context, WidgetRef ref, List<Reveal> pic
   final steps = ref.read(firstStepsProvider.notifier);
   if (everything) {
     steps.showEverything();
+    AppAnalytics.event('feature_unlocked', {'feature': 'everything', 'by': 'unlock_anyway', 'pictures': counted});
   } else {
     for (final r in picked) {
       steps.openEarly(r);
+      AppAnalytics.event('feature_unlocked', {'feature': r.name, 'by': 'unlock_anyway', 'pictures': counted});
     }
   }
   return true;

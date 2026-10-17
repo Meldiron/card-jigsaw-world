@@ -6,6 +6,7 @@ import '../../core/haptics.dart';
 import '../../core/name_filter.dart';
 import '../../core/sfx.dart';
 import '../../core/a11y.dart';
+import '../../core/analytics.dart';
 import '../../core/theme/tokens.dart';
 import '../../models/models.dart';
 import '../../state/achievements.dart';
@@ -380,6 +381,7 @@ class _ClaimAllCardState extends ConsumerState<_ClaimAllCard> {
       if (next == null || step == null) break;
       final ok = await notifier.claimAchievement(next.stepKey, coins: step.coins, tickets: step.tickets, avatar: step.avatarKey);
       if (!ok) break;
+      AppAnalytics.event('achievement_claimed', {'achievement': next.stepKey, 'claimAll': true});
       count++;
       coins += step.coins;
       tickets += step.tickets;
@@ -445,6 +447,7 @@ class _AchievementCard extends ConsumerWidget {
     final step = status.step;
     if (step == null) return;
     final ok = await ref.read(profileProvider.notifier).claimAchievement(status.stepKey, coins: step.coins, tickets: step.tickets, avatar: step.avatarKey);
+    if (ok) AppAnalytics.event('achievement_claimed', {'achievement': status.stepKey, 'claimAll': false});
     if (!ok || !context.mounted) return;
     Sfx.instance.coin();
     Haptics.success();

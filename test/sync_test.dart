@@ -494,6 +494,137 @@ void main() {
     expect(laptop.profile.giantEarlyPrice(houses), 0);
   });
 
+  test('a piggy bank upgrade bought on both devices is paid once, and the size follows the player', () async {
+    final (server, phone, laptop) = await _twoDevices();
+    await phone.profile.addCoins(12000, reason: 'test');
+    await phone.settle();
+    await laptop.resume();
+    laptop.container.read(syncNoticeProvider.notifier).take();
+    laptop.backend.online = false;
+    expect(await phone.profile.upgradePiggy(), isTrue);
+    expect(phone.me.piggyCapacity, 600, reason: 'bigger on this device at once');
+    expect(phone.me.coins, 12500 - Economy.piggyUpgradeCoins);
+    expect(await laptop.profile.upgradePiggy(), isTrue, reason: 'the laptop has not heard of it yet');
+    await phone.settle();
+    laptop.backend.online = true;
+    await laptop.resume();
+    final row = server.profiles['player1']!;
+    expect(row['piggyLevel'], 1);
+    expect(row['coins'], 12500 - Economy.piggyUpgradeCoins, reason: 'paid once');
+    expect(server.ledger.values.where((l) => l['reason'] == 'piggy-upgrade:1').map((l) => l['amount']), [-Economy.piggyUpgradeCoins]);
+    expect(laptop.me.piggyCapacity, 600);
+    expect(laptop.me.coins, 12500 - Economy.piggyUpgradeCoins);
+    expect(laptop.container.read(syncNoticeProvider).skipped, [SkipReason.piggyUpgraded]);
+    // The phone hears of the laptop's next upgrade.
+    phone.container.read(syncNoticeProvider.notifier).take();
+    expect(await laptop.profile.upgradePiggy(), isTrue);
+    await laptop.settle();
+    await phone.resume();
+    final notice = phone.container.read(syncNoticeProvider);
+    expect(notice.piggyCapacity, 700);
+    expect(syncNoticeLines(notice).map((l) => l.text), contains('Piggy bank upgraded · holds 700'));
+  });
+
+  test('an upgraded piggy bank fills to its new size, and five upgrades are the most', () async {
+    final (server, phone, _) = await _twoDevices();
+    await phone.profile.addCoins(30000, reason: 'test');
+    await phone.settle();
+    for (var i = 1; i <= Profile.maxPiggyLevel; i++) {
+      expect(await phone.profile.upgradePiggy(), isTrue, reason: 'upgrade $i');
+    }
+    expect(await phone.profile.upgradePiggy(), isFalse, reason: 'not offered past 1,000');
+    await phone.settle();
+    expect(server.profiles['player1']!['piggyLevel'], 5);
+    expect(phone.me.piggyCapacity, 1000);
+    expect(server.profiles['player1']!['coins'], 30500 - 5 * Economy.piggyUpgradeCoins);
+    // An op that asks past the largest size raises nothing and charges nothing.
+    phone.sync.enqueue(SyncOp.piggyUpgrade(level: 6, price: Economy.piggyUpgradeCoins));
+    await phone.settle();
+    expect(server.profiles['player1']!['piggyLevel'], 5);
+    expect(server.profiles['player1']!['coins'], 30500 - 5 * Economy.piggyUpgradeCoins);
+
+    server.profiles['player1']!['piggyCoins'] = 995;
+    await phone.resume();
+    for (final pid in ['pg1', 'pg2']) {
+      phone.progress.complete(pid, gridSize: 16, mode: 'cards', moves: 10, seconds: 10, hints: 0, stars: 3, session: pid, resumed: false);
+      await phone.profile.recordCompletion(puzzleId: pid, cells: 16, stars: 3, firstTime: true);
+    }
+    await phone.settle();
+    expect(server.profiles['player1']!['piggyCoins'], 1000, reason: '995 + 5, then full: past 500 since the upgrades');
+    expect(phone.me.piggyFull, isTrue);
+  });
+
+  test('an upgrade the coins can no longer pay for is undone', () async {
+    final (server, phone, laptop) = await _twoDevices();
+    await phone.profile.addCoins(Economy.piggyUpgradeCoins - 500, reason: 'test');
+    await phone.settle();
+    await laptop.resume();
+    phone.backend.online = false;
+    expect(await phone.profile.upgradePiggy(), isTrue);
+    expect(await laptop.profile.spendCoins(4000, reason: 'test'), isTrue);
+    await laptop.settle();
+    phone.backend.online = true;
+    await phone.resume();
+    expect(server.profiles['player1']!['piggyLevel'] ?? 0, 0);
+    expect(phone.me.piggyCapacity, Profile.basePiggyCapacity);
+    expect(phone.container.read(syncNoticeProvider).skipped, [SkipReason.notEnough]);
+  });
+
+  test('a quest swap costs a ticket, shows at once, and a swap made on both devices is paid once', () async {
+    final (server, phone, laptop) = await _twoDevices();
+    final now = DateTime.now();
+    List<Goal> quests(Device d) => Goals.daily(const [], now, swaps: d.me.questSwaps);
+    final before = quests(phone);
+    final swap = before[1].swap!;
+    laptop.container.read(syncNoticeProvider.notifier).take();
+    laptop.backend.online = false;
+    expect(await phone.profile.swapQuest(before[1]), isTrue);
+    expect(quests(phone)[1].title, swap.nextTitle, reason: 'the new quest shows at once');
+    expect(phone.me.tickets, 2);
+    expect(await laptop.profile.swapQuest(quests(laptop)[1]), isTrue, reason: 'the laptop has not heard of it yet');
+    await phone.settle();
+    laptop.backend.online = true;
+    await laptop.resume();
+    final row = server.profiles['player1']!;
+    expect(row['tickets'], 2, reason: 'one ticket for the one swap');
+    expect(Goals.decodeSwaps(row['questSwaps']), {swap.slot: [swap.base, swap.next]});
+    expect(server.ledger.values.where((l) => l['reason'] == 'quest-swap:${swap.slot}').map((l) => l['amount']), [-1]);
+    expect(laptop.container.read(syncNoticeProvider).skipped, [SkipReason.questSwapped]);
+    expect([for (final g in quests(laptop)) g.key], [for (final g in quests(phone)) g.key]);
+    for (var i = 0; i < before.length; i++) {
+      if (i != 1) expect(quests(phone)[i].key, before[i].key, reason: 'only the swapped quest changes');
+    }
+
+    // The phone's next swap reaches the laptop as news.
+    expect(await phone.profile.swapQuest(quests(phone)[2]), isTrue);
+    await phone.settle();
+    laptop.container.read(syncNoticeProvider.notifier).take();
+    await laptop.resume();
+    final notice = laptop.container.read(syncNoticeProvider);
+    expect(notice.swaps, 1);
+    expect(syncNoticeLines(notice).map((l) => l.text), containsAll(['−1 Ticket', '1 quest swapped']));
+  });
+
+  test('a quest claimed elsewhere is not swapped here, nothing is charged, and no swap without a ticket', () async {
+    final (server, phone, laptop) = await _twoDevices();
+    final now = DateTime.now();
+    final goal = Goals.daily(const [], now)[2];
+    laptop.backend.online = false;
+    // Claimed on the phone (a quest done there): the laptop's swap of it charges nothing.
+    phone.sync.enqueue(SyncOp.quest(goal.key, coins: goal.coins));
+    expect(await laptop.profile.swapQuest(goal), isTrue);
+    await phone.settle();
+    laptop.backend.online = true;
+    await laptop.resume();
+    expect(server.profiles['player1']!['tickets'], 3);
+    expect(Goals.decodeSwaps(server.profiles['player1']!['questSwaps']), isEmpty);
+    expect(laptop.container.read(syncNoticeProvider).skipped, contains(SkipReason.questClaimed));
+    // Short of tickets: refused here, and an op that gets through anyway is undone.
+    await phone.profile.spendTickets(3, reason: 'test');
+    await phone.settle();
+    expect(await phone.profile.swapQuest(Goals.daily(const [], now)[1]), isFalse);
+  });
+
   test('an event step whose answer was lost counts once', () async {
     final (server, phone, _) = await _twoDevices();
     phone.backend.loseNextAnswer = true;

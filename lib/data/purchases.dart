@@ -38,16 +38,26 @@ class ProductIds {
 
 /// What one consumable purchase gives.
 class ProductGrant {
-  const ProductGrant({this.coins = 0, this.tickets = 0, this.hints = 0});
+  const ProductGrant({this.coins = 0, this.tickets = 0, this.hints = 0, this.peeks = 0, this.magics = 0});
   final int coins;
   final int tickets;
   final int hints;
 
-  /// "2,500 coins", "10 tickets", "16 hints".
+  /// Peeks and Magic in stock (the helper bundles since 2026-10-17).
+  final int peeks;
+  final int magics;
+
+  /// Gives the three helpers (Peek, Hint, Magic) rather than a currency.
+  bool get helpers => peeks > 0 || magics > 0;
+
+  /// "2,500 coins", "10 tickets", "15 Peeks, 10 Hints, 5 Magic". The helpers carry their names as
+  /// the game writes them (the Lucky Wheel, the toolbar).
   String get label => [
         if (coins > 0) '${formatCount(coins)} coins',
         if (tickets > 0) '${formatCount(tickets)} ticket${tickets == 1 ? '' : 's'}',
-        if (hints > 0) '${formatCount(hints)} hint${hints == 1 ? '' : 's'}',
+        if (peeks > 0) '${formatCount(peeks)} Peek${peeks == 1 ? '' : 's'}',
+        if (hints > 0) '${formatCount(hints)} Hint${hints == 1 ? '' : 's'}',
+        if (magics > 0) '${formatCount(magics)} Magic',
       ].join(', ');
 }
 
@@ -59,9 +69,11 @@ class ProductGrant {
 /// `functions/verify-purchase/src/main.js` (what the server credits) and
 /// `store/metadata/subscriptions/consumables.json` (App Store names and
 /// prices). The amounts come from the economy model in docs/economy.md:
-/// every bundle is worth about the same per dollar, counting a ticket as
-/// [ticketCoinValue] coins and a hint as its in-game price of 60 coins, and
-/// the bigger bundles add up to about a fifth more.
+/// every coin and ticket bundle is worth about the same per dollar, counting a
+/// ticket as [ticketCoinValue] coins, and the bigger bundles add up to about a
+/// fifth more. The two helper bundles (ids `hints_*`, owner 2026-10-17) give
+/// Peeks, Hints and Magic and are meant to be the better deal: about a quarter
+/// to a half more per dollar, counting each helper at its in-game price.
 class StoreProducts {
   StoreProducts._();
 
@@ -72,8 +84,9 @@ class StoreProducts {
     ProductIds.coins12000: ProductGrant(coins: 30000),
     ProductIds.tickets5: ProductGrant(tickets: 10),
     ProductIds.tickets15: ProductGrant(tickets: 30),
-    ProductIds.hints5: ProductGrant(hints: 16),
-    ProductIds.hints15: ProductGrant(hints: 48),
+    // 16 and 48 hints until 2026-10-17.
+    ProductIds.hints5: ProductGrant(peeks: 15, hints: 10, magics: 5),
+    ProductIds.hints15: ProductGrant(peeks: 50, hints: 30, magics: 15),
   };
 
   /// USD customer prices (consumables.json and vip_*.json `customerPrice`).
@@ -142,25 +155,32 @@ class PackPricePolicy {
 
 /// What the server granted for a verified purchase.
 class PurchaseGrant {
-  const PurchaseGrant({this.coins = 0, this.tickets = 0, this.hints = 0, this.vipExpiresAt});
+  const PurchaseGrant({this.coins = 0, this.tickets = 0, this.hints = 0, this.peeks = 0, this.magics = 0, this.vipExpiresAt});
   final int coins;
   final int tickets;
   final int hints;
+  final int peeks;
+  final int magics;
   final DateTime? vipExpiresAt;
 
   factory PurchaseGrant.fromJson(Map<String, dynamic> j) => PurchaseGrant(
         coins: (j['coins'] as num?)?.toInt() ?? 0,
         tickets: (j['tickets'] as num?)?.toInt() ?? 0,
         hints: (j['hints'] as num?)?.toInt() ?? 0,
+        peeks: (j['peeks'] as num?)?.toInt() ?? 0,
+        magics: (j['magics'] as num?)?.toInt() ?? 0,
         vipExpiresAt: j['vipExpiresAt'] == null ? null : DateTime.tryParse(j['vipExpiresAt'].toString())?.toLocal(),
       );
 
-  /// "10 tickets", "2,500 coins".
-  String get label => ProductGrant(coins: coins, tickets: tickets, hints: hints).label;
+  ProductGrant get product => ProductGrant(coins: coins, tickets: tickets, hints: hints, peeks: peeks, magics: magics);
+
+  /// "10 tickets", "2,500 coins", "15 Peeks, 10 Hints, 5 Magic".
+  String get label => product.label;
 }
 
-/// Coins, tickets and hints as the server has them after a grant.
-typedef PurchaseBalances = ({int coins, int tickets, int hints});
+/// Coins, tickets, hints, Peeks and Magic as the server has them after a grant (a function deployed
+/// before the helper bundles answers without Peeks and Magic: 0).
+typedef PurchaseBalances = ({int coins, int tickets, int hints, int peeks, int magics});
 
 /// Events surfaced to the UI.
 sealed class PurchaseEvent {
@@ -181,8 +201,8 @@ class PurchaseVerified extends PurchaseEvent {
   final bool alreadyApplied;
   final bool restored;
 
-  /// The player's coins, tickets and hints right after the grant (null when the purchase had been
-  /// added before).
+  /// The player's coins, tickets, hints, Peeks and Magic right after the grant (null when the
+  /// purchase had been added before).
   final PurchaseBalances? balances;
 }
 
@@ -458,7 +478,7 @@ class PurchaseService {
         _added.add(id);
         final grant = PurchaseGrant.fromJson((body['grant'] as Map?)?.cast<String, dynamic>() ?? const {});
         final b = body['balances'];
-        final balances = b is Map ? (coins: _int(b['coins']), tickets: _int(b['tickets']), hints: _int(b['hints'])) : null;
+        final balances = b is Map ? (coins: _int(b['coins']), tickets: _int(b['tickets']), hints: _int(b['hints']), peeks: _int(b['peeks']), magics: _int(b['magics'])) : null;
         if (restored || _restoring) _restoredCount++;
         _events.add(PurchaseVerified(p.productID, grant, alreadyApplied: body['alreadyApplied'] == true, restored: restored, balances: balances));
         await _complete(p);

@@ -85,8 +85,11 @@ void main() {
     });
 
     test("a friend's gift leaves the inbox when it expires, also while the inbox is open", () async {
+      // Its own clock: the group's `now` can be seconds old by the time this test runs.
+      final at = DateTime.now();
+      final gift = InboxMessage(id: 'gift', subject: 'Anna sent you a gift', body: 'b', sentAt: at, expiresAt: at.add(const Duration(seconds: 2)), coins: 150);
       final c = ProviderContainer(overrides: [
-        inboxMessagesProvider.overrideWith((ref) async => [msg('gift', expiresIn: const Duration(milliseconds: 300), coins: 150), msg('note')]),
+        inboxMessagesProvider.overrideWith((ref) async => [gift, msg('note')]),
         profileProvider.overrideWith(() => _Profile(const [])),
       ]);
       addTearDown(c.dispose);
@@ -95,7 +98,7 @@ void main() {
       await c.read(inboxMessagesProvider.future);
       await c.read(profileProvider.future);
       expect(c.read(inboxProvider).map((i) => i.message.id), ['gift', 'note']);
-      await Future<void>.delayed(const Duration(milliseconds: 1200));
+      await Future<void>.delayed(const Duration(milliseconds: 3000));
       expect(c.read(inboxProvider).map((i) => i.message.id), ['note'], reason: 'gone at its expiry, without a reload');
     });
 

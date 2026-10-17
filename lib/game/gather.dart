@@ -65,19 +65,42 @@ Board? gatherInto(Board board, Rect view, Size size) {
   return moved == 0 ? null : Board(board.spec, next);
 }
 
-/// Shuffle (a Gather that has nothing to bring in): the loose cards in [view] trade places among
-/// themselves at random, so the view can be read afresh. Cards in place and joined groups (even
-/// ones not yet in place) stay exactly where they are; every loose card moves, none lands in its
-/// own place and, where another order allows it, no pair ends up joined. Each shape class shuffles
-/// within itself (up and down triangles, the half cells on hexagon edges). Null when fewer than two
-/// loose cards are in view.
-Board? shuffleInView(Board board, Rect view, Size size, {Random? random}) {
+/// Whether [gatherInto] has anything to do for [view]: a loose card in view that belongs outside it
+/// can trade places with a loose card outside that belongs in it, without either landing in its
+/// own place. The Gather button is off otherwise. The same test as the gather's, without its
+/// sorting, so the game screen can ask whenever the view settles.
+bool canGather(Board board, Rect view, Size size) {
+  final tiling = board.tiling;
+  final here = List<bool>.generate(board.cells, (s) => view.contains(tiling.cellCenter(s, size)));
+  bool single(int slot) => !board.isLocked(slot) && board.groupOf(slot).length == 1;
+  final missing = <int, List<int>>{};
+  for (var s = 0; s < board.cells; s++) {
+    if (!here[s] && single(s) && here[board.homeOf(s)]) (missing[tiling.classOf(s)] ??= []).add(s);
+  }
+  if (missing.isEmpty) return false;
+  for (var f = 0; f < board.cells; f++) {
+    if (!here[f] || !single(f) || here[board.homeOf(f)]) continue;
+    for (final m in missing[tiling.classOf(f)] ?? const <int>[]) {
+      if (board.homeOf(m) != f && board.homeOf(f) != m) return true;
+    }
+  }
+  return false;
+}
+
+/// Shuffle (owner, 2026-10-17: the round button left of the tools, free): the loose cards trade
+/// places among themselves at random, so the board can be read afresh. Only slots [where] allows
+/// take part (every slot without it). Cards in place and joined groups (even ones not yet in place)
+/// stay exactly where they are; every loose card moves, none lands in its own place and, where
+/// another order allows it, no pair ends up joined. Each shape class shuffles within itself (up and
+/// down triangles, the half cells on hexagon edges). Null when nothing can move (fewer than two
+/// loose cards of a shape).
+Board? shuffleLoose(Board board, {bool Function(int slot)? where, Random? random}) {
   final rng = random ?? Random();
   final tiling = board.tiling;
   bool loose(int slot) => !board.isLocked(slot) && board.groupOf(slot).length == 1;
   final byClass = <int, List<int>>{};
   for (var s = 0; s < board.cells; s++) {
-    if (loose(s) && view.contains(tiling.cellCenter(s, size))) (byClass[tiling.classOf(s)] ??= []).add(s);
+    if (loose(s) && (where == null || where(s))) (byClass[tiling.classOf(s)] ??= []).add(s);
   }
   final next = List<int>.from(board.slots);
   // The card may go to [slot]: it moves, and not into its own place.
@@ -129,3 +152,8 @@ Board? shuffleInView(Board board, Rect view, Size size, {Random? random}) {
   }
   return moved == 0 ? null : Board(board.spec, next);
 }
+
+/// Shuffle on a giant board: only the loose cards in [view] (board coordinates at the board's
+/// [size]) trade places, so the part being looked at is dealt afresh and the rest stays put.
+Board? shuffleInView(Board board, Rect view, Size size, {Random? random}) =>
+    shuffleLoose(board, where: (slot) => view.contains(board.tiling.cellCenter(slot, size)), random: random);

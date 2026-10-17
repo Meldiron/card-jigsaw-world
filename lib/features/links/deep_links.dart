@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/analytics.dart';
 import '../../core/app_links.dart';
 import '../../core/platform.dart';
 import '../../models/models.dart';
@@ -18,6 +19,7 @@ import '../../state/progress.dart';
 import '../../state/quick_play.dart';
 import '../../state/settings.dart';
 import '../../state/unlocks.dart';
+import '../coop/join_flow.dart';
 import '../daily/daily_reward_sheet.dart';
 import '../daily/piggy_sheet.dart';
 import '../gallery/library_screen.dart';
@@ -37,7 +39,26 @@ class DeepLinks {
   final Ref _ref;
   final _random = Random();
 
+  /// `link_opened` for a link from outside the app (the three callers that receive one: the
+  /// iPhone's links, a web visit's start address, a path the router has no page for). Links the app
+  /// opens itself (the Store's Play a puzzle, an inbox message's button) are not counted here.
+  static void reportOpened(AppLink link) => AppAnalytics.event('link_opened', {'kind': link.kind.name, 'to': linkTarget(link.path)});
+
+  /// Where a link leads, without ids or codes: `pack`, `play`, `daily`, `add_friend`.
+  static String linkTarget(String path) {
+    final parts = path.split('/').where((s) => s.isNotEmpty).toList();
+    if (parts.length > 1 && parts[0] == 'library' && parts[1] == 'pack') return 'pack';
+    return parts.isEmpty ? 'home' : parts.first.replaceAll('-', '_');
+  }
+
   Future<void> show(AppLink link) async {
+    // Play together: an invite opens its board at once, even on a fresh install; the welcome pages
+    // and the guided start begin when the player leaves the game (docs/multiplayer.md).
+    if (link.path.startsWith('/join/')) {
+      if (_ref.read(settingsProvider).onboarded) await _onPage(_ref.read(routerProvider));
+      await openInvite(_ref, link.path.substring('/join/'.length));
+      return;
+    }
     if (!_ref.read(settingsProvider).onboarded) {
       // A plain Home link leaves a new player on the welcome screens; any other link counts as
       // onboarding, so the welcome screens never cover where it leads.

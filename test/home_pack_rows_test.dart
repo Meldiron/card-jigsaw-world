@@ -205,6 +205,17 @@ void main() {
       expect(find.text('A picture you have not played yet'), findsOneWidget);
       expect(tester.takeException(), isNull);
 
+      // Packs in progress sit lower, after the Lucky Wheel, the piggy bank and the level, just above
+      // the live events (owner, 2026-10-17).
+      double top(Finder f) => tester.getTopLeft(f).dy;
+      final packsInProgress = top(find.text('Packs in progress'));
+      expect(packsInProgress, greaterThan(top(find.text('Lucky Wheel'))));
+      expect(packsInProgress, greaterThan(top(find.text('Piggy bank'))));
+      expect(packsInProgress, lessThan(top(find.text('Live events'))));
+      for (final header in ['Daily puzzles', 'Missing stars', 'Featured packs', 'Finished packs']) {
+        expect(top(find.text(header)), greaterThan(top(find.text('Live events'))), reason: header);
+      }
+
       await tester.ensureVisible(find.text('See all').last);
       await tester.tap(find.text('See all').last);
       await tester.pumpAndSettle();

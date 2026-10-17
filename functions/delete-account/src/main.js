@@ -8,15 +8,17 @@
 // body never names a user. In order: Sign in with Apple tokens are revoked (when the player has an
 // Apple identity, the app sent a fresh authorization code and APPLE_SIGNIN_KEY is set), then their
 // My Puzzles photos, their rows in every player table (feedback, friend links, reports, blocks and friend
-// gifts in both directions, inbox messages to them and gifts they sent), the profile row and finally the Appwrite user. Every step ignores what is already gone, so a retry
-// after a failure finishes the job. The same tables as PLAYER_TABLES in tools/dev/cjw_admin.py.
+// gifts in both directions, inbox messages to them and gifts they sent), their co-op games (the games they
+// host with every move in them; their seat and name in other players' games), the profile row and finally
+// the Appwrite user. Every step ignores what is already gone, so a retry after a failure finishes the job.
+// The same tables as PLAYER_TABLES in tools/dev/cjw_admin.py.
 import { createPrivateKey, createSign } from 'node:crypto';
 import { Client, TablesDB, Storage, Users, Query } from 'node-appwrite';
 
 const DB = process.env.APPWRITE_DATABASE_ID || 'cjw';
 const UPLOADS = 'user-uploads';
 // Every table keyed by a player's user id; profiles also use the user id as the row id.
-const PLAYER_TABLES = ['progress', 'ledger', 'event_progress', 'friends', 'my_puzzles', 'purchases', 'code_claims', 'feedback', 'messages'];
+const PLAYER_TABLES = ['progress', 'ledger', 'event_progress', 'friends', 'my_puzzles', 'purchases', 'code_claims', 'feedback', 'messages', 'coop_moves'];
 // Tables keyed by two player columns (reports made and received, blocks made and received, friend
 // gifts sent and received); messages also go where the player is the sender (a friend's gift).
 const PAIR_TABLES = { reports: ['reporterId', 'reportedId'], blocks: ['blockerId', 'blockedId'], gifts: ['senderId', 'recipientId'], messages: ['fromUserId'] };
@@ -149,6 +151,50 @@ async function revokeApple(users, userId, code, log, error) {
   }
 }
 
+/// Co-op games (Play together): the games the player hosts go with all their moves (their teams are
+/// left to the coop-cleanup function, which deletes teams without a game); in other players' games
+/// their seat is emptied and their id leaves the removed list.
+async function deleteCoop(tables, userId) {
+  let hosted = 0;
+  for (;;) {
+    const page = await tables.listRows({ databaseId: DB, tableId: 'coop_games', queries: [Query.equal('hostId', userId), Query.limit(PAGE)], total: false });
+    for (const g of page.rows) {
+      await deleteRows(tables, 'coop_moves', [Query.equal('gameId', g.$id)]);
+      try {
+        await tables.deleteRow({ databaseId: DB, tableId: 'coop_games', rowId: g.$id });
+        hosted++;
+      } catch (e) {
+        if (!gone(e)) throw e;
+      }
+    }
+    if (page.rows.length < PAGE) break;
+  }
+  let seats = 0;
+  for (const col of ['players', 'removed']) {
+    let cursor = null;
+    for (;;) {
+      const page = await tables.listRows({
+        databaseId: DB,
+        tableId: 'coop_games',
+        queries: [Query.contains(col, [userId]), Query.orderAsc('$id'), Query.limit(PAGE), ...(cursor ? [Query.cursorAfter(cursor)] : [])],
+        total: false,
+      });
+      for (const g of page.rows) {
+        const data = col === 'players' ? { players: (g.players || []).map((p) => (p === userId ? '' : p)) } : { removed: (g.removed || []).filter((p) => p !== userId) };
+        try {
+          await tables.updateRow({ databaseId: DB, tableId: 'coop_games', rowId: g.$id, data });
+          seats++;
+        } catch (e) {
+          if (!gone(e)) throw e;
+        }
+      }
+      if (page.rows.length < PAGE) break;
+      cursor = page.rows[page.rows.length - 1].$id;
+    }
+  }
+  return { hosted, seats };
+}
+
 async function handleDelete(req, res, log, error) {
   const userId = req.headers['x-appwrite-user-id'];
   if (!userId) return res.json({ ok: false, error: 'Sign in required' }, 401);
@@ -183,6 +229,8 @@ async function handleDelete(req, res, log, error) {
     rows[t] = rows[t] ?? 0;
     for (const col of cols) rows[t] += await deleteRows(tables, t, [Query.equal(col, userId)]);
   }
+  const coop = await deleteCoop(tables, userId);
+  rows.coop_games = coop.hosted;
   try {
     await tables.deleteRow({ databaseId: DB, tableId: 'profiles', rowId: userId });
     rows.profiles = 1;

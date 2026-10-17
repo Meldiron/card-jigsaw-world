@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quick_actions/quick_actions.dart';
 
 import 'core/a11y.dart';
+import 'core/analytics.dart';
 import 'core/app_links.dart';
 import 'core/appwrite.dart';
 import 'core/image_files.dart';
@@ -10,6 +11,7 @@ import 'core/platform.dart';
 import 'core/reminders.dart';
 import 'core/sfx.dart';
 import 'core/theme/app_theme.dart';
+import 'features/coop/coop_host.dart';
 import 'features/links/deep_links.dart';
 import 'features/store/purchase_host.dart';
 import 'features/sync/sync_host.dart';
@@ -37,6 +39,11 @@ class _CardenAppState extends ConsumerState<CardenApp> with WidgetsBindingObserv
   @override
   void initState() {
     super.initState();
+    // Usage analytics on the app's Appwrite client, first (the settings bring the player's Share
+    // usage data switch): the router gives its navigators observers only once analytics is
+    // attached (lib/core/analytics.dart).
+    ref.read(settingsProvider);
+    AppAnalytics.attach(ref.read(appwriteClientProvider));
     WidgetsBinding.instance.addObserver(this);
     ImageFiles.attach(ref.read(storageProvider));
     if (supportsQuickActions) _setUpQuickActions();
@@ -68,8 +75,10 @@ class _CardenAppState extends ConsumerState<CardenApp> with WidgetsBindingObserv
         await ref.read(allPuzzlesProvider.future);
         await ref.read(packsProvider.future);
       } catch (_) {}
-      final puzzle = ref.read(dailyPuzzleProvider) ?? pickRandomPlayable(ref);
+      final daily = ref.read(dailyPuzzleProvider);
+      final puzzle = daily ?? pickRandomPlayable(ref);
       if (puzzle == null || !mounted) return;
+      AppAnalytics.event('shortcut_opened', {'daily': daily != null});
       ref.read(routerProvider).push('/play/${puzzle.id}');
     });
     // The shortcut itself is declared statically in Info.plist
@@ -82,6 +91,7 @@ class _CardenAppState extends ConsumerState<CardenApp> with WidgetsBindingObserv
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ReminderChannel.listen((route) {
         if (!mounted) return;
+        AppAnalytics.event('reminder_opened', {'daily': route.startsWith('/play/')});
         final router = ref.read(routerProvider);
         if (route.startsWith('/play/')) {
           router.push(route);
@@ -128,6 +138,7 @@ class _CardenAppState extends ConsumerState<CardenApp> with WidgetsBindingObserv
     if (isWeb) return false;
     final link = AppLink.parse(routeInformation.uri);
     if (link == null) return false;
+    DeepLinks.reportOpened(link);
     ref.read(deepLinksProvider).show(link);
     return true;
   }
@@ -185,7 +196,7 @@ class _CardenAppState extends ConsumerState<CardenApp> with WidgetsBindingObserv
         final host = Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.transparent,
-          body: ScaffoldMessenger(child: UpdateHost(child: SyncHost(child: PurchaseHost(child: child!)))),
+          body: ScaffoldMessenger(child: UpdateHost(child: SyncHost(child: PurchaseHost(child: CoopHost(child: child!))))),
         );
         // Text follows the system size up to iOS "xxxLarge" (1.35), unless Settings > Accessibility
         // picks Large (150%) or Largest (200%); bars cap themselves at 1.2 (ChromeText).

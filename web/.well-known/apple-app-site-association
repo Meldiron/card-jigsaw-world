@@ -171,6 +171,10 @@
           },
           {
             "/": "/piggy-bank"
+          },
+          {
+            "/": "/join/*",
+            "comment": "Play together invites"
           }
         ]
       }

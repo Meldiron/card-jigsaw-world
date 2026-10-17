@@ -7,16 +7,20 @@ export 'modes.dart';
 export 'tiling.dart';
 
 /// A board layout: a game mode (tiling) with a column/row count, and the
-/// difficulty tier it belongs to. Each mode has an eight-step ladder sharing
-/// the same labels.
+/// difficulty tier it belongs to (its label: Cozy ... Master, Large ...
+/// Colossal).
 ///
-/// The column/row count of a tier depends on the picture: squares must be
-/// square and cards card-shaped, triangles and hexagons must cover the whole
-/// picture, so each tier picks the layout that suits the picture's
-/// proportions with the least crop or stretch, keeping its piece count close
-/// to the tier's target ([forPicture]).
+/// Square boards (owner, 2026-10-17): a tier always deals the same board, as
+/// many pieces across as down (3x3, 4x4, ... in every mode, [squareTiers];
+/// giant packs 10x10 and up, [squareGiantTiers]), whatever the picture; a
+/// picture of another shape is centre-cropped to the board. **Expand** (a
+/// switch on the difficulty screen, [offersExpand]) deals the same tiers with
+/// the columns and rows that suit the picture's proportions instead, so the
+/// whole picture is played ([expandTiers], [giantTiers]). The eight-step
+/// picture-shaped ladder the game dealt before ([tiers]) is kept to resume
+/// boards saved by older builds and to read their codes. docs/boards.md.
 class BoardSpec {
-  const BoardSpec(this.mode, this.cols, this.rows, this.label, {this.tier = -1});
+  const BoardSpec(this.mode, this.cols, this.rows, this.label, {this.tier = -1, this.expand = false});
   final GameMode mode;
   final int cols;
   final int rows;
@@ -25,23 +29,79 @@ class BoardSpec {
   /// Index in the mode's ladder, or -1 for a custom size.
   final int tier;
 
+  /// Chosen with Expand on: the next picture is dealt from its Expand ladder
+  /// too. A board whose columns and rows differ from its tier's square board
+  /// (any board of an older build) is an Expand board.
+  final bool expand;
+
   /// Number of pieces.
   int get cells => Tiling.cellCount(mode, cols, rows);
 
-  /// Grid part only, e.g. `3x4`.
+  /// Grid part only, e.g. `3x4` (for triangles, pieces in a row x rows).
   String get code => '${cols}x$rows';
+
+  /// The size as players read it, columns x rows. A triangle column is one
+  /// up and one down triangle wide (two of [Tiling]'s half steps), so the 4x4
+  /// triangle board has nine pieces in a row (`9x4` in [code]); an old board
+  /// with an odd number of half steps counts the last half column as one.
+  String get size => mode == GameMode.triangles ? '${(cols) ~/ 2}x$rows' : code;
 
   /// Full code including the mode and the tier, e.g. `hexagons:5x7t3`.
   String get fullCode => BoardCode.encode(mode, cols, rows, tier: tier);
 
   Tiling get tiling => Tiling.of(mode, cols, rows);
 
+  /// This board with [expand] set (the same columns and rows).
+  BoardSpec withExpand(bool expand) => expand == this.expand ? this : BoardSpec(mode, cols, rows, label, tier: tier, expand: expand);
+
   static const labels = ['Cozy', 'Easy', 'Relaxed', 'Medium', 'Tricky', 'Hard', 'Expert', 'Master'];
+
+  /// Square boards: the tier of an N x N board, the same in every mode. They
+  /// keep the piece counts of the Cards ladder's square steps (Cozy 9,
+  /// Relaxed 16, Tricky 25, Expert 36, Master 48 -> 49), so quests, unlock
+  /// levels and rewards per tier stay as they were. Easy, Medium and Hard
+  /// have no square board; they remain on boards saved before.
+  static const squareTierOfSide = <int, int>{3: 0, 4: 2, 5: 4, 6: 6, 7: 7};
+
+  /// The sides each mode can deal square: N columns and N rows ([squareDims]).
+  /// Cards and Squares deal every one. A size is left out only where some
+  /// piece would be one of a kind and so could only start in its own place:
+  /// Triangles have no 3x3 (three rows: each side edge holds one half
+  /// triangle of its shape), Hexagons no 3x3 (the middle row's two halves)
+  /// and no 4x4 or 6x6 (with an even number of rows the bottom corners are
+  /// one of a kind, and on 4x4 the halves of the second row too). The 5x5
+  /// triangle board starts with one joined pair of halves on each side edge,
+  /// the fewest five rows allow ([Tiling.unavoidableJoins]). Seven across
+  /// keeps cards about 55 pt wide on a phone; bigger boards are giant boards.
+  static const squareSides = <GameMode, List<int>>{
+    GameMode.cards: [3, 4, 5, 6, 7],
+    GameMode.squares: [3, 4, 5, 6, 7],
+    GameMode.triangles: [4, 5, 6, 7],
+    GameMode.hexagons: [5, 7],
+  };
+
+  /// The square giant sizes (Large, Huge, Giant, Colossal) of each mode: the
+  /// side nearest each of [giantTargets] that the tiling can deal. Cards
+  /// 10x10 to 17x17 (100 to 289 cards); the other shapes keep their bigger
+  /// counts, above every normal board ([BoardLayouts.giantFloor]).
+  static const giantSquareSides = <GameMode, List<int>>{
+    GameMode.cards: [10, 12, 14, 17],
+    GameMode.squares: [13, 15, 18, 22],
+    GameMode.triangles: [10, 13, 15, 18],
+    GameMode.hexagons: [13, 15, 19, 23],
+  };
+
+  /// Columns and rows of the N x N board of [mode] (as [Tiling] counts them).
+  /// A triangle column is one up and one down triangle, so a row of N
+  /// columns holds 2N + 1 pieces (2N - 1 whole triangles and a half at each
+  /// end) and the board is about as wide as it is tall; the others count
+  /// pieces.
+  static (int, int) squareDims(GameMode mode, int side) => mode == GameMode.triangles ? (2 * side + 1, side) : (side, side);
 
   /// Giant boards: the pictures of the Giant pack (`Pack.isGiant`) offer
   /// only these four sizes, tiers [firstGiantTier] and up, from about 100 to
   /// 300 cards. The pictures are large enough to stay sharp when zoomed in;
-  /// every other picture keeps the eight-step ladder.
+  /// every other picture keeps the normal ladder.
   static const giantLabels = ['Large', 'Huge', 'Giant', 'Colossal'];
 
   /// Tier index of the first giant size; codes carry it (`cards:12x14t8`).
@@ -54,8 +114,8 @@ class BoardSpec {
   static String labelOf(int tier) =>
       isGiantTier(tier) ? giantLabels[(tier - firstGiantTier).clamp(0, giantLabels.length - 1)] : labels[tier.clamp(0, labels.length - 1)];
 
-  /// Piece counts the giant sizes aim for. The other shapes scale like the
-  /// normal ladders (smaller pieces, more of them).
+  /// Piece counts the giant sizes aim for (square and Expand alike). The
+  /// other shapes scale like the normal ladders (smaller pieces, more of them).
   static const giantTargets = <GameMode, List<int>>{
     GameMode.cards: [100, 150, 200, 300],
     GameMode.squares: [160, 240, 320, 480],
@@ -70,11 +130,11 @@ class BoardSpec {
   /// portrait, the catalogue's most common shape).
   static const referenceAspect = 3 / 4;
 
-  /// Piece count each tier aims for. Cards and squares keep the counts the
-  /// game always had. Triangles and hexagons cover the whole picture with
-  /// half pieces along the edges, which only shuffle cleanly from four rows
-  /// of triangles and five rows of hexagons; that sets their smallest
-  /// boards.
+  /// Piece count each tier of the picture-shaped ladder aims for ([tiers],
+  /// the boards of older builds). Cards and squares keep the counts the game
+  /// always had. Triangles and hexagons cover the whole picture with half
+  /// pieces along the edges, which only shuffle cleanly from four rows of
+  /// triangles and five rows of hexagons; that sets their smallest boards.
   static const targets = <GameMode, List<int>>{
     GameMode.cards: [9, 12, 16, 20, 25, 30, 36, 48],
     GameMode.squares: [12, 20, 24, 30, 35, 48, 63, 80],
@@ -90,48 +150,145 @@ class BoardSpec {
     GameMode.hexagons: [(3, 4), (4, 5), (4, 6), (5, 6), (5, 7), (6, 8), (6, 9), (7, 10)],
   };
 
-  /// The eight boards of [mode] for a picture of [aspect] (width ÷ height).
+  /// The square boards of [mode] ([squareSides]), the same for every picture.
+  static List<BoardSpec> squareTiers(GameMode mode) => _squares.putIfAbsent(
+        mode,
+        () => List.unmodifiable([
+          for (final n in squareSides[mode]!) BoardSpec(mode, squareDims(mode, n).$1, squareDims(mode, n).$2, labels[squareTierOfSide[n]!], tier: squareTierOfSide[n]!),
+        ]),
+      );
+
+  static final _squares = <GameMode, List<BoardSpec>>{};
+
+  /// The four square giant sizes of [mode] ([giantSquareSides]; tiers
+  /// [firstGiantTier] to [firstGiantTier] + 3).
+  static List<BoardSpec> squareGiantTiers(GameMode mode) => _giantSquares.putIfAbsent(mode, () {
+        final sides = giantSquareSides[mode]!;
+        return List.unmodifiable([
+          for (var i = 0; i < sides.length; i++) BoardSpec(mode, squareDims(mode, sides[i]).$1, squareDims(mode, sides[i]).$2, giantLabels[i], tier: firstGiantTier + i),
+        ]);
+      });
+
+  static final _giantSquares = <GameMode, List<BoardSpec>>{};
+
+  /// Expand: the tiers of [squareTiers] laid out for a picture of [aspect]
+  /// (width ÷ height), about as many pieces each, in the columns and rows
+  /// that suit the picture ([BoardLayouts.expandFor]).
+  static List<BoardSpec> expandTiers(GameMode mode, double aspect) {
+    final square = squareTiers(mode);
+    final dims = BoardLayouts.expandFor(mode, aspect);
+    return [for (var i = 0; i < dims.length; i++) BoardSpec(mode, dims[i].$1, dims[i].$2, square[i].label, tier: square[i].tier, expand: true)];
+  }
+
+  /// The eight-step ladder older builds dealt for a picture of [aspect]: its
+  /// columns and rows followed the picture. Kept so their saves resume as
+  /// they were and their codes still open (as Expand boards).
   static List<BoardSpec> tiers(GameMode mode, [double aspect = referenceAspect]) {
     final dims = BoardLayouts.forAspect(mode, aspect);
-    return [for (var i = 0; i < dims.length; i++) BoardSpec(mode, dims[i].$1, dims[i].$2, labels[i], tier: i)];
+    return [for (var i = 0; i < dims.length; i++) BoardSpec(mode, dims[i].$1, dims[i].$2, labels[i], tier: i, expand: true)];
   }
 
-  /// The four giant sizes of [mode] for a picture of [aspect] (tiers
-  /// [firstGiantTier] to [firstGiantTier] + 3).
+  /// Expand on a giant picture: the four giant sizes laid out for a picture
+  /// of [aspect] (the giant ladder older builds dealt; tiers [firstGiantTier]
+  /// to [firstGiantTier] + 3).
   static List<BoardSpec> giantTiers(GameMode mode, [double aspect = referenceAspect]) {
     final dims = BoardLayouts.forAspect(mode, aspect, giant: true);
-    return [for (var i = 0; i < dims.length; i++) BoardSpec(mode, dims[i].$1, dims[i].$2, giantLabels[i], tier: firstGiantTier + i)];
+    return [for (var i = 0; i < dims.length; i++) BoardSpec(mode, dims[i].$1, dims[i].$2, giantLabels[i], tier: firstGiantTier + i, expand: true)];
   }
 
-  /// The ladder a picture offers: the giant sizes for the Giant pack, else the eight normal ones.
-  static List<BoardSpec> ladder(GameMode mode, double aspect, {required bool giant}) => giant ? giantTiers(mode, aspect) : tiers(mode, aspect);
+  /// How much more of the picture (a share of its area) Expand must show on
+  /// some size for the switch to be offered.
+  static const expandMinGain = 0.05;
 
-  /// Tier [tier] of [mode] laid out for a picture of [aspect] (a giant tier
-  /// on the giant ladder).
-  static BoardSpec forPicture(GameMode mode, int tier, double aspect) => isGiantTier(tier)
-      ? giantTiers(mode, aspect)[(tier - firstGiantTier).clamp(0, giantLabels.length - 1)]
-      : tiers(mode, aspect)[tier.clamp(0, labels.length - 1)];
+  /// Whether a picture of [aspect] offers Expand in [mode]: some size of the
+  /// Expand ladder shows noticeably more of the picture than its square
+  /// board. Not when the square boards already suit the picture (a square
+  /// picture in Squares, a 3:4 one in Cards), nor when Expand would crop as
+  /// much (landscape pictures stay on portrait or square boards).
+  static bool offersExpand(GameMode mode, double aspect, {bool giant = false}) {
+    if (!aspect.isFinite || aspect <= 0) return false;
+    final square = giant ? squareGiantTiers(mode) : squareTiers(mode);
+    final natural = giant ? giantTiers(mode, aspect) : expandTiers(mode, aspect);
+    for (var i = 0; i < square.length && i < natural.length; i++) {
+      if (square[i].tiling.fitFor(aspect).crop - natural[i].tiling.fitFor(aspect).crop > expandMinGain) return true;
+    }
+    return false;
+  }
 
-  /// This board's tier laid out for a picture of [aspect].
-  BoardSpec fitTo(double aspect) => forPicture(mode, tierIndex < 0 ? 2 : tierIndex, aspect);
+  /// The ladder a picture of [aspect] offers: the giant sizes for the Giant
+  /// pack, else the normal ones; square, or with [expand] laid out for the
+  /// picture when it [offersExpand]. The boards carry [expand] either way, so
+  /// the next picture is dealt the same way.
+  static List<BoardSpec> ladder(GameMode mode, double aspect, {required bool giant, bool expand = false}) {
+    final natural = expand && offersExpand(mode, aspect, giant: giant);
+    final list = natural ? (giant ? giantTiers(mode, aspect) : expandTiers(mode, aspect)) : (giant ? squareGiantTiers(mode) : squareTiers(mode));
+    return [for (final t in list) t.withExpand(expand)];
+  }
+
+  /// The board of [ladder] nearest to [tier] (a tie goes to the bigger one):
+  /// a mode without that size offers the one next to it (Triangles have no
+  /// 5x5, so Tricky gives way to Expert).
+  static BoardSpec nearest(List<BoardSpec> ladder, int tier) {
+    var best = ladder.first;
+    for (final t in ladder) {
+      final d = (t.tier - tier).abs(), b = (best.tier - tier).abs();
+      if (d < b || (d == b && t.tier > best.tier)) best = t;
+    }
+    return best;
+  }
+
+  /// Tier [tier] of [mode] for a picture of [aspect] (a giant tier on the
+  /// giant ladder), square or with [expand]; the nearest size its ladder has.
+  static BoardSpec forPicture(GameMode mode, int tier, double aspect, {bool expand = false}) =>
+      nearest(ladder(mode, aspect, giant: isGiantTier(tier), expand: expand), tier);
+
+  /// This board's tier for a picture of [aspect], dealt the same way.
+  BoardSpec fitTo(double aspect) => forPicture(mode, tierIndex < 0 ? 2 : tierIndex, aspect, expand: expand);
 
   /// Index of this spec in its mode's ladder, or -1 for custom sizes.
   int get tierIndex => tier >= 0 ? tier : _tierOf(mode, cols, rows);
 
+  /// Pieces a finished board of [cells] pieces in [mode] counts as where a
+  /// quest names a size ("a 4x4 or bigger board"): a square board counts as
+  /// its side squared (the 4x4 triangle board, 36 pieces, is a 4x4; the 7x7
+  /// honeycomb, 52, a 7x7), any other board as its pieces.
+  static int sizeCells(GameMode mode, int cells) {
+    for (final t in [...squareTiers(mode), ...squareGiantTiers(mode)]) {
+      if (t.cells == cells) return t.rows * t.rows;
+    }
+    return cells;
+  }
+
+  /// The square board of [tier] in [mode], or null when the mode has none.
+  static BoardSpec? squareAt(GameMode mode, int tier) {
+    for (final t in isGiantTier(tier) ? squareGiantTiers(mode) : squareTiers(mode)) {
+      if (t.tier == tier) return t;
+    }
+    return null;
+  }
+
   /// Parses `mode:CxR`, `mode:CxRtT`, `CxR` (cards) or the URL forms
-  /// `mode-CxR` / `mode-CxRtT`.
-  static BoardSpec fromCode(String code) {
+  /// `mode-CxR` / `mode-CxRtT`. A board other than its tier's square board
+  /// is an Expand board; [expand] (a link's `?expand=1`) marks a square one
+  /// as chosen with Expand too.
+  static BoardSpec fromCode(String code, {bool expand = false}) {
     final d = BoardCode.decode(BoardCode.fromPath(code));
     final t = d.tier != null && d.tier! >= 0 && d.tier! < firstGiantTier + giantLabels.length ? d.tier! : _tierOf(d.mode, d.cols, d.rows);
-    return BoardSpec(d.mode, d.cols, d.rows, t >= 0 ? labelOf(t) : 'Custom', tier: t);
+    final square = t >= 0 ? squareAt(d.mode, t) : null;
+    final natural = expand || square == null || square.cols != d.cols || square.rows != d.rows;
+    return BoardSpec(d.mode, d.cols, d.rows, t >= 0 ? labelOf(t) : 'Custom', tier: t, expand: natural);
   }
 
   /// Ladder index of a board size given without a tier. Codes made by this
   /// version always carry the tier, so these are old links and saves (and
-  /// shortcuts such as a quest's `5x5`): the old fixed ladders first, then
-  /// the reference ladder and the ladders of the common picture shapes, then
-  /// the tier whose target piece count is nearest.
+  /// shortcuts such as a quest's `5x5`): the square boards first, then the
+  /// old fixed ladders, then the old ladders of the reference picture and
+  /// the common picture shapes, then the tier whose target piece count is
+  /// nearest.
   static int _tierOf(GameMode mode, int cols, int rows) {
+    for (final t in [...squareTiers(mode), ...squareGiantTiers(mode)]) {
+      if (t.cols == cols && t.rows == rows) return t.tier;
+    }
     final legacy = _legacyLadders[mode]!.indexWhere((d) => d.$1 == cols && d.$2 == rows);
     if (legacy >= 0) return legacy;
     for (final a in [referenceAspect, ...commonAspects]) {
@@ -165,26 +322,37 @@ class BoardSpec {
   static const commonAspects = [1.0, 4 / 5, 3 / 4, 2 / 3, 9 / 16];
 
   /// The board a saved game of [cells] pieces was dealt on, for a picture
-  /// of [aspect]; null when no tier of this picture has that many pieces
-  /// (the layout changed since, so the save cannot be resumed).
-  static BoardSpec? fromSaved(GameMode mode, int cells, double aspect) {
-    for (final t in tiers(mode, aspect)) {
-      if (t.cells == cells) return t;
+  /// of [aspect]: a square board, else an Expand board, else a board of the
+  /// ladder older builds dealt (their saves resume as they were, a 3x4 stays
+  /// 3x4); null when no board of this picture has that many pieces (the save
+  /// cannot be resumed). Where two boards of a picture have the same count
+  /// (the 4x4 triangle board and an old 6x6 strip, 36 each), the saved
+  /// [layout] names the one whose pieces it fits ([Board.isValidLayout];
+  /// `test/square_boards_test.dart`). The normal and giant counts never
+  /// overlap ([BoardLayouts.giantFloor]).
+  static BoardSpec? fromSaved(GameMode mode, int cells, double aspect, {List<int>? layout}) {
+    final giant = cells >= BoardLayouts.giantFloor(mode);
+    final candidates = giant
+        ? [...squareGiantTiers(mode), ...giantTiers(mode, aspect)]
+        : [...squareTiers(mode), ...expandTiers(mode, aspect), ...tiers(mode, aspect)];
+    BoardSpec? first;
+    for (final t in candidates) {
+      if (t.cells != cells) continue;
+      if (layout == null || Board.isValidLayout(t, layout)) return t;
+      first ??= t;
     }
-    // The two ladders' piece counts never overlap (see [BoardLayouts.giantFloor]).
-    if (cells >= BoardLayouts.giantFloor(mode)) {
-      for (final t in giantTiers(mode, aspect)) {
-        if (t.cells == cells) return t;
-      }
-    }
-    return null;
+    return layout == null ? first : null;
   }
 
   /// Best-effort recovery of a board from a saved cell count when the
-  /// picture is not at hand: a tier with that many pieces for a common
-  /// picture shape, else the old ladder, else the Relaxed tier. The game
-  /// screen settles the exact layout once the picture is loaded.
+  /// picture is not at hand: a square board with that many pieces, else a
+  /// board with that many pieces for a common picture shape, else the old
+  /// fixed ladder, else the Relaxed square board. The game screen settles
+  /// the exact layout once the picture is loaded.
   static BoardSpec fromCells(GameMode mode, int cells) {
+    for (final t in [...squareTiers(mode), ...squareGiantTiers(mode)]) {
+      if (t.cells == cells) return t;
+    }
     for (final a in [referenceAspect, ...commonAspects]) {
       final hit = fromSaved(mode, cells, a);
       if (hit != null) return hit;
@@ -192,9 +360,9 @@ class BoardSpec {
     final legacy = _legacyLadders[mode]!.indexWhere((d) => d.$1 * d.$2 == cells);
     if (legacy >= 0) {
       final d = _legacyLadders[mode]![legacy];
-      return BoardSpec(mode, d.$1, d.$2, labels[legacy], tier: legacy);
+      return BoardSpec(mode, d.$1, d.$2, labels[legacy], tier: legacy, expand: true);
     }
-    return tiers(mode)[2];
+    return nearest(squareTiers(mode), 2);
   }
 
   @override
@@ -203,7 +371,9 @@ class BoardSpec {
   int get hashCode => Object.hash(mode, cols, rows);
 }
 
-/// Chooses the eight boards of a mode for a picture's proportions.
+/// Chooses the boards of a mode for a picture's proportions: the Expand
+/// ladder ([expandFor]), and the picture-shaped ladders older builds dealt
+/// and giant pictures deal with Expand ([forAspect]).
 ///
 /// Every candidate size is scored per tier: the share of the picture its
 /// centre crop removes (heavily for triangles and hexagons, which are meant
@@ -220,20 +390,40 @@ class BoardLayouts {
   /// Smallest growth in pieces from one tier to the next.
   static const minStep = 1.1;
 
-  /// Fewest pieces a tier may have, whatever the picture: goals and
-  /// achievements count boards of 25 ("5x5 or bigger", reached from Tricky),
-  /// 36 (Expert) and 48 (Master) pieces.
+  /// Fewest pieces a tier of the old eight-step ladder may have, whatever
+  /// the picture: goals and achievements count boards of 25 ("5x5 or
+  /// bigger", reached from Tricky), 36 (Expert) and 48 (Master) pieces.
   static const minCells = [0, 0, 0, 0, 25, 0, 36, 48];
 
-  /// Column/row counts of the eight tiers of [mode] for a picture of
-  /// [imageAspect]. Landscape pictures are treated as square (the board
-  /// stays portrait or square and the picture is cropped); very tall ones
-  /// as 1:2.
+  /// Fewest pieces an Expand size may have, by tier: the counts quests and
+  /// achievements look for (16 for "4x4 or bigger", 25, 36 and 48), so an
+  /// Expand board counts wherever its square board would.
+  static const expandFloors = <int, int>{2: 16, 4: 25, 6: 36, 7: 48};
+
+  /// Column/row counts of the eight tiers of the ladder older builds dealt
+  /// for [mode] and a picture of [imageAspect], or with [giant] the four
+  /// giant sizes (Expand on a giant picture). Landscape pictures are treated
+  /// as square (the board stays portrait or square and the picture is
+  /// cropped); very tall ones as 1:2.
   static List<(int, int)> forAspect(GameMode mode, double imageAspect, {bool giant = false}) {
-    final a = (!imageAspect.isFinite || imageAspect <= 0 ? BoardSpec.referenceAspect : imageAspect).clamp(0.5, 1.0);
+    final a = _clamp(imageAspect);
     final key = '${giant ? 'giant:' : ''}${mode.code}:${a.toStringAsFixed(6)}';
     return _cache.putIfAbsent(key, () => giant ? _solveGiant(mode, a) : _solve(mode, a));
   }
+
+  /// Expand: column/row counts for the square tiers of [mode]
+  /// ([BoardSpec.squareTiers]) on a picture of [imageAspect], each aiming
+  /// at its square board's piece count (at least [expandFloors]), chosen
+  /// and shaped as [forAspect] chooses them.
+  static List<(int, int)> expandFor(GameMode mode, double imageAspect) {
+    final a = _clamp(imageAspect);
+    return _cache.putIfAbsent('expand:${mode.code}:${a.toStringAsFixed(6)}', () {
+      final square = BoardSpec.squareTiers(mode);
+      return _pick(mode, a, _expandCandidates(mode), [for (final t in square) t.cells], [for (final t in square) expandFloors[t.tier] ?? 0]);
+    });
+  }
+
+  static double _clamp(double aspect) => (!aspect.isFinite || aspect <= 0 ? BoardSpec.referenceAspect : aspect).clamp(0.5, 1.0);
 
   /// Most pieces a normal tier of [mode] may have.
   static double _normalCeiling(GameMode mode) {
@@ -245,55 +435,70 @@ class BoardLayouts {
   /// candidate, so a saved piece count always names one ladder.
   static int giantFloor(GameMode mode) => max(_normalCeiling(mode).floor() + 1, (BoardSpec.giantTargets[mode]!.first * 0.8).round());
 
-  static List<(int, int)> candidates(GameMode mode) => _candidates.putIfAbsent(mode, () {
-        final t = BoardSpec.targets[mode]!;
-        final lo = t.first * 0.6, hi = _normalCeiling(mode);
-        final out = <(int, int)>[];
-        void add(int c, int r) {
-          final cells = Tiling.cellCount(mode, c, r);
-          if (cells < lo || cells > hi) return;
-          final (a, b) = Tiling.of(mode, c, r).aspectRange;
-          // Portrait or square boards (a picture is cropped rather than the
-          // board turning landscape), down to 1:2.
-          if (a > 1.0 || b < 0.5) return;
-          out.add((c, r));
-        }
-
-        switch (mode) {
-          case GameMode.cards || GameMode.squares:
-            for (var r = 3; r <= 16; r++) {
-              for (var c = 3; c <= 14; c++) {
-                add(c, r);
-              }
-            }
-          // Edge pieces must be able to leave home without forming a pair
-          // (see TriangleTiling and HexTiling): no five-row triangle strips,
-          // and no three-wide honeycombs, whose top row of three cannot be
-          // shuffled without two of them still side by side.
-          case GameMode.triangles:
-            for (var r = 4; r <= 12; r++) {
-              if (r == 5) continue;
-              for (var c = 4; c <= 18; c++) {
-                add(c, r);
-              }
-            }
-          case GameMode.hexagons:
-            for (var r = 5; r <= 17; r += 2) {
-              for (var c = 2; c <= 10; c++) {
-                if (c == 3) continue;
-                add(c, r);
-              }
-            }
-        }
-        out.sort((x, y) {
-          final d = Tiling.cellCount(mode, x.$1, x.$2) - Tiling.cellCount(mode, y.$1, y.$2);
-          if (d != 0) return d;
-          return x.$1 != y.$1 ? x.$1 - y.$1 : x.$2 - y.$2;
-        });
-        return out;
-      });
+  /// Sizes the old eight-step ladder of [mode] chooses from.
+  static List<(int, int)> candidates(GameMode mode) => _candidates.putIfAbsent(mode, () => _shaped(mode, BoardSpec.targets[mode]!.first * 0.6, _normalCeiling(mode)));
 
   static final _candidates = <GameMode, List<(int, int)>>{};
+
+  /// Sizes the Expand ladder of [mode] chooses from: the same shapes around
+  /// the square boards' piece counts; triangle rows a whole number of
+  /// columns wide, so every size reads as columns x rows ([BoardSpec.size]).
+  static List<(int, int)> _expandCandidates(GameMode mode) => _expandCands.putIfAbsent(mode, () {
+        final square = BoardSpec.squareTiers(mode);
+        final clipped = mode == GameMode.triangles || mode == GameMode.hexagons;
+        return _shaped(mode, square.first.cells * 0.6, square.last.cells * (clipped ? 1.45 : 1.3), wholeColumns: true);
+      });
+
+  static final _expandCands = <GameMode, List<(int, int)>>{};
+
+  /// Normal-sized boards of [mode] with [lo] to [hi] pieces that suit a
+  /// picture: portrait or square, sorted by piece count.
+  static List<(int, int)> _shaped(GameMode mode, double lo, double hi, {bool wholeColumns = false}) {
+    final out = <(int, int)>[];
+    void add(int c, int r) {
+      final cells = Tiling.cellCount(mode, c, r);
+      if (cells < lo || cells > hi) return;
+      final (a, b) = Tiling.of(mode, c, r).aspectRange;
+      // Portrait or square boards (a picture is cropped rather than the
+      // board turning landscape), down to 1:2.
+      if (a > 1.0 || b < 0.5) return;
+      out.add((c, r));
+    }
+
+    switch (mode) {
+      case GameMode.cards || GameMode.squares:
+        for (var r = 3; r <= 16; r++) {
+          for (var c = 3; c <= 14; c++) {
+            add(c, r);
+          }
+        }
+      // Edge pieces must be able to leave home without forming a pair
+      // (see TriangleTiling and HexTiling): no five-row triangle strips,
+      // and no three-wide honeycombs, whose top row of three cannot be
+      // shuffled without two of them still side by side.
+      case GameMode.triangles:
+        for (var r = 4; r <= 12; r++) {
+          if (r == 5) continue;
+          for (var c = 4; c <= 18; c++) {
+            if (wholeColumns && (c - 1).isOdd) continue;
+            add(c, r);
+          }
+        }
+      case GameMode.hexagons:
+        for (var r = 5; r <= 17; r += 2) {
+          for (var c = 2; c <= 10; c++) {
+            if (c == 3) continue;
+            add(c, r);
+          }
+        }
+    }
+    out.sort((x, y) {
+      final d = Tiling.cellCount(mode, x.$1, x.$2) - Tiling.cellCount(mode, y.$1, y.$2);
+      if (d != 0) return d;
+      return x.$1 != y.$1 ? x.$1 - y.$1 : x.$2 - y.$2;
+    });
+    return out;
+  }
 
   /// Sizes the giant ladder of [mode] chooses from: the same shape rules as
   /// [candidates] with many more rows and columns.
@@ -340,38 +545,38 @@ class BoardLayouts {
 
   static final _giantCandidates = <GameMode, List<(int, int)>>{};
 
-  /// Score of [dims] as tier [tier] of [mode] for a picture of [aspect].
-  static double score(GameMode mode, (int, int) dims, int tier, double aspect, {bool giant = false}) {
+  /// Score of [dims] in [mode] for a picture of [aspect], as a size aiming
+  /// at [target] pieces.
+  static double score(GameMode mode, (int, int) dims, int target, double aspect) {
     final f = Tiling.of(mode, dims.$1, dims.$2).fitFor(aspect);
     final clipped = mode == GameMode.triangles || mode == GameMode.hexagons;
     final cropWeight = clipped ? 4.0 : 1.0;
     final stretchWeight = mode == GameMode.cards ? 0.5 : 0.3;
     final countWeight = clipped ? 0.15 : 0.25;
-    final target = (giant ? BoardSpec.giantTargets : BoardSpec.targets)[mode]![tier];
     final cells = Tiling.cellCount(mode, dims.$1, dims.$2);
     return cropWeight * (f.crop + 3 * max(0, f.crop - 0.05)) + stretchWeight * f.stretch + countWeight * (log(cells / target)).abs();
   }
 
-  static List<(int, int)> _solve(GameMode mode, double aspect) => _pick(mode, aspect, candidates(mode), BoardSpec.labels.length, minCells, giant: false);
+  static List<(int, int)> _solve(GameMode mode, double aspect) => _pick(mode, aspect, candidates(mode), BoardSpec.targets[mode]!, minCells);
 
-  static List<(int, int)> _solveGiant(GameMode mode, double aspect) =>
-      _pick(mode, aspect, giantCandidates(mode), BoardSpec.giantLabels.length, const [0, 0, 0, 0], giant: true);
+  static List<(int, int)> _solveGiant(GameMode mode, double aspect) => _pick(mode, aspect, giantCandidates(mode), BoardSpec.giantTargets[mode]!, const [0, 0, 0, 0]);
 
-  /// One size per tier out of [cands] (sorted by piece count) at the lowest
-  /// total [score], each tier at least [minStep] bigger than the one before
-  /// and at least [floors] pieces.
-  static List<(int, int)> _pick(GameMode mode, double aspect, List<(int, int)> cands, int k, List<int> floors, {required bool giant}) {
-    final n = cands.length;
+  /// One size per entry of [targets] out of [cands] (sorted by piece count)
+  /// at the lowest total [score], each at least [minStep] bigger than the one
+  /// before and at least [floors] pieces.
+  static List<(int, int)> _pick(GameMode mode, double aspect, List<(int, int)> cands, List<int> targets, List<int> floors) {
+    final n = cands.length, k = targets.length;
     final counts = [for (final d in cands) Tiling.cellCount(mode, d.$1, d.$2)];
     final best = List.generate(k, (_) => List<double>.filled(n, double.infinity));
     final prev = List.generate(k, (_) => List<int>.filled(n, -1));
     for (var i = 0; i < n; i++) {
-      best[0][i] = score(mode, cands[i], 0, aspect, giant: giant);
+      if (counts[i] < floors[0]) continue;
+      best[0][i] = score(mode, cands[i], targets[0], aspect);
     }
     for (var t = 1; t < k; t++) {
       for (var i = 0; i < n; i++) {
         if (counts[i] < floors[t]) continue;
-        final s = score(mode, cands[i], t, aspect, giant: giant);
+        final s = score(mode, cands[i], targets[t], aspect);
         for (var j = 0; j < n; j++) {
           if (counts[i] < counts[j] * minStep || best[t - 1][j] == double.infinity) continue;
           final v = best[t - 1][j] + s;
@@ -395,9 +600,11 @@ class BoardLayouts {
   }
 }
 
-/// Cards-mode spec on the original fixed ladder. Kept so the level-reward
-/// table and settings keep their tier names and sizes (`GridSpec.tiers`,
-/// `.code`, `.label`); boards themselves come from [BoardSpec.tiers].
+/// Cards-mode spec on the original fixed ladder. Kept so settings and quest
+/// keys made before square boards keep their tier names and sizes
+/// (`GridSpec.tiers`, `.code`, `.label`); the sizes quests and level rewards
+/// name now are the square ones ([square]). Boards themselves come from
+/// [BoardSpec.ladder].
 class GridSpec extends BoardSpec {
   const GridSpec(int cols, int rows, String label, {super.tier}) : super(GameMode.cards, cols, rows, label);
 
@@ -412,8 +619,27 @@ class GridSpec extends BoardSpec {
     GridSpec(6, 8, 'Master', tier: 7),
   ];
 
+  /// The square Cards boards (the Cards entries of [BoardSpec.squareTiers]):
+  /// 3x3 Cozy, 4x4 Relaxed, 5x5 Tricky, 6x6 Expert, 7x7 Master.
+  static const square = <GridSpec>[
+    GridSpec(3, 3, 'Cozy', tier: 0),
+    GridSpec(4, 4, 'Relaxed', tier: 2),
+    GridSpec(5, 5, 'Tricky', tier: 4),
+    GridSpec(6, 6, 'Expert', tier: 6),
+    GridSpec(7, 7, 'Master', tier: 7),
+  ];
+
   static GridSpec fromCells(int cells) => tiers.firstWhere((t) => t.cells == cells, orElse: () => tiers[2]);
   static GridSpec fromCode(String code) => tiers.firstWhere((t) => t.code == code, orElse: () => tiers[2]);
+
+  /// The size named by [code] (`5x5`, or `4x5` in a quest made before square boards), or null.
+  static GridSpec? byCode(String code) => square.where((t) => t.code == code).firstOrNull ?? tiers.where((t) => t.code == code).firstOrNull;
+
+  /// The Cards size with [cells] cards (square first), or null.
+  static GridSpec? byCells(int cells) => square.where((t) => t.cells == cells).firstOrNull ?? tiers.where((t) => t.cells == cells).firstOrNull;
+
+  /// The smallest square size of at least [cells] cards (a quest's "or bigger" shortcut), else Master.
+  static GridSpec atLeast(int cells) => square.firstWhere((t) => t.cells >= cells, orElse: () => square.last);
 }
 
 /// Immutable board: `slots[i]` is the index of the card currently sitting in
@@ -543,11 +769,19 @@ class Board {
 
   // ---- moves ------------------------------------------------------------
 
-  /// Moves the whole group containing [slot] by a lattice delta. Cards that
-  /// were sitting in the destination cells are displaced into the cells the
-  /// group vacated, in reading order. Returns null when the move is not
-  /// allowed (out of bounds, placement rule broken, onto cards locked in
-  /// place, or the group itself is locked in place).
+  /// Moves the whole group containing [slot] by a lattice delta. Returns null
+  /// when the move is not allowed (out of bounds, placement rule broken, onto
+  /// cards locked in place, or the group itself is locked in place).
+  ///
+  /// The cards in the destination make room. Another group the move lands on
+  /// stays whole when it can (owner, 2026-10-17): largest first, it shifts by
+  /// one lattice step ([_pushStep]) onto cells that are free after the move
+  /// (the ones the moving group left, its own) or that hold loose cards, which
+  /// then make room in turn. A group with no such place breaks, as before.
+  /// The cards still without a cell fill the free cells in reading order, each
+  /// within its own shape class (a half piece only ever lands in a half slot),
+  /// so a move that lands on no other group is a plain swap or shift. Locked
+  /// cards never move, and the result depends only on the board and the move.
   Board? moveGroup(int slot, int dx, int dy) {
     if (dx == 0 && dy == 0) return null;
     final group = groupOf(slot);
@@ -564,22 +798,100 @@ class Board {
     }
     final next = List<int>.from(slots);
     final destSet = dest.toSet();
-    final vacated = group.where((s) => !destSet.contains(s)).toList()..sort();
-    final displaced = dest.where((d) => !groupSet.contains(d)).toList()..sort();
     for (var i = 0; i < group.length; i++) {
       next[dest[i]] = slots[group[i]];
     }
-    // Displaced cards fill the vacated cells in reading order, each within
-    // its own shape class (a half piece only ever lands in a half slot).
+    // Cells waiting for a card, and the cards waiting for a cell (by the slot each comes from).
+    final free = <int>{for (final s in group) if (!destSet.contains(s)) s};
+    final pool = <int>{for (final d in dest) if (!groupSet.contains(d)) d};
+    final pushed = <List<int>>[];
+    final seen = <int>{};
+    for (final d in pool) {
+      if (groupOf(d).length > 1 && seen.add(_groups[d])) pushed.add(groupOf(d));
+    }
+    if (pushed.isNotEmpty) {
+      pushed.sort((a, b) => a.length != b.length ? b.length - a.length : a.first - b.first);
+      // Loose cells a pushed group has already taken.
+      final taken = <int>{};
+      bool loose(int s) => !destSet.contains(s) && !groupSet.contains(s) && !taken.contains(s) && !isLocked(s) && groupOf(s).length == 1;
+      for (final g in pushed) {
+        final own = <int>{for (final s in g) if (!destSet.contains(s)) s};
+        final step = _pushStep(g, (s) => free.contains(s) || own.contains(s) || loose(s), loose, dx, dy);
+        if (step == null) continue;
+        for (final s in g) {
+          final to = tiling.apply(s, step.$1, step.$2)!;
+          next[to] = slots[s];
+          if (!free.remove(to) && !own.remove(to)) {
+            // A loose card makes room in turn.
+            taken.add(to);
+            pool.add(to);
+          }
+        }
+        pool.removeAll(g);
+        free.addAll(own);
+      }
+    }
+    final into = free.toList()..sort();
+    final from = pool.toList()..sort();
     for (var cls = 0; cls < tiling.classCount; cls++) {
-      final into = [for (final v in vacated) if (tiling.classOf(v) == cls) v];
-      final from = [for (final d in displaced) if (tiling.classOf(d) == cls) d];
-      for (var i = 0; i < into.length && i < from.length; i++) {
-        next[into[i]] = slots[from[i]];
+      final cells = [for (final v in into) if (tiling.classOf(v) == cls) v];
+      final cards = [for (final d in from) if (tiling.classOf(d) == cls) d];
+      for (var i = 0; i < cells.length && i < cards.length; i++) {
+        next[cells[i]] = slots[cards[i]];
       }
     }
     return Board(spec, next);
   }
+
+  /// The lattice step that keeps the pushed group [g] whole: every card lands
+  /// on a cell [open] allows, in a slot of its own shape. Of those, the step
+  /// that displaces the fewest [loose] cards, then the shortest, then the one
+  /// most against the move ([dx], [dy]), so two groups of one shape simply
+  /// trade places. Null when there is none.
+  (int, int)? _pushStep(List<int> g, bool Function(int slot) open, bool Function(int slot) loose, int dx, int dy) {
+    final anchor = g.first;
+    final cls = tiling.classOf(anchor);
+    final move = _stepVector(dx, dy);
+    (int, int)? best;
+    var bestLoose = 0;
+    var bestLength = 0.0, bestAgainst = 0.0;
+    for (var c = 0; c < cells; c++) {
+      if (c == anchor || tiling.classOf(c) != cls || !open(c)) continue;
+      final t = tiling.delta(anchor, c);
+      if (t == null) continue;
+      var displaced = 0;
+      var fits = true;
+      for (final s in g) {
+        final to = tiling.apply(s, t.$1, t.$2);
+        if (to == null || !open(to)) {
+          fits = false;
+          break;
+        }
+        if (loose(to)) displaced++;
+      }
+      if (!fits) continue;
+      final v = _stepVector(t.$1, t.$2);
+      final length = v.$1 * v.$1 + v.$2 * v.$2, against = v.$1 * move.$1 + v.$2 * move.$2;
+      const eps = 1e-9;
+      final better = best == null ||
+          displaced < bestLoose ||
+          (displaced == bestLoose && (length < bestLength - eps || ((length - bestLength).abs() <= eps && against < bestAgainst - eps)));
+      if (better) {
+        best = t;
+        bestLoose = displaced;
+        bestLength = length;
+        bestAgainst = against;
+      }
+    }
+    return best;
+  }
+
+  /// A lattice step as a distance on the picture, in cells, so steps compare
+  /// in every shape (triangle half-steps and rows, doubled hexagon columns).
+  (double, double) _stepVector(int dx, int dy) => switch (tiling) {
+        GridTiling(:final cellAspect) => (dx * cellAspect, dy.toDouble()),
+        _ => (dx * 0.5, dy * 0.866),
+      };
 
   /// Whether [layout] is a board state for [spec]: a permutation of the
   /// right length that keeps every card in a slot of its own shape. Saves
@@ -621,7 +933,9 @@ class Board {
   ///
   /// Random permutations are tried first; if none is clean, a derangement is
   /// repaired by targeted swaps until every join is broken. Only as a last
-  /// resort does the board keep a join. It never keeps a fixed point.
+  /// resort does the board keep a join: a tiling whose edge pieces cannot all
+  /// part (the five-row triangle board, [Tiling.unavoidableJoins]) keeps the
+  /// fewest it must. It never keeps a fixed point.
   factory Board.shuffled(BoardSpec spec, {int? seed}) {
     final rng = Random(seed);
     final tiling = spec.tiling;
@@ -643,7 +957,7 @@ class Board {
 
     for (var attempt = 0; attempt < 400; attempt++) {
       final perm = random();
-      if (_fixedPoints(perm) == 0 && _joins(tiling, perm) == 0) return Board(spec, perm);
+      if (_fixedPoints(perm) == 0 && _joins(tiling, perm) <= tiling.unavoidableJoins) return Board(spec, perm);
     }
     List<int>? best;
     var bestJoins = 1 << 30;
@@ -651,7 +965,7 @@ class Board {
       final perm = random();
       _derange(perm, classes, rng);
       final joins = _breakJoins(perm, tiling, classes, rng);
-      if (joins == 0) return Board(spec, perm);
+      if (joins <= tiling.unavoidableJoins) return Board(spec, perm);
       if (joins < bestJoins) {
         bestJoins = joins;
         best = perm;
@@ -707,7 +1021,7 @@ class Board {
     }
 
     var joins = _joins(tiling, perm);
-    for (var iter = 0; iter < 4000 && joins > 0; iter++) {
+    for (var iter = 0; iter < 4000 && joins > tiling.unavoidableJoins; iter++) {
       // Pick a random joined edge and one of its ends.
       int? x;
       var seen = 0;

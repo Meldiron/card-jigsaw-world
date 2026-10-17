@@ -1,8 +1,9 @@
 // The giant board tools with the real Giant pack ("Colourful Houses") on the live backend: Peek's
 // flight (10 coins, as on every board), the one-time Locate tip, a tapped card's place on the
-// overview map (always on, no switch), no map while the map is off, no double tap, Gather zoomed
-// in and its shuffle on the whole board, Magic on the selected card, the other shapes at their
-// largest size, and Peek on a normal board.
+// overview map (always on, no switch), no map while the map is off, no double tap, Gather zoomed in
+// with the Undo on its toast and the button dimmed once the view has nothing to bring in, Shuffle in
+// view and on the whole board (which gives Gather something to do again), Magic on the selected
+// card and its neighbours, the other shapes at their largest size, and Peek on a normal board.
 //
 // Run: tools/dev/qa-run.sh drive --driver=test_driver/integration_test.dart \
 //        --target=integration_test/giant_tools_test.dart -d <simulator>
@@ -81,7 +82,7 @@ void main() {
     await tapText(tester, mode, ms: 800);
     await tester.dragUntilVisible(find.text(size), find.byType(Scrollable).first, const Offset(0, -200));
     await tapText(tester, size, ms: 800);
-    await tester.tap(find.textContaining('· Play'), warnIfMissed: false);
+    await tester.tap(find.byKey(const ValueKey('play-board')), warnIfMissed: false);
     for (var i = 0; i < 40 && find.byType(BoardWidget).evaluate().isEmpty; i++) {
       await settle(tester, 500);
     }
@@ -127,7 +128,7 @@ void main() {
     await shot(tester, '${prefix}d_back', wait: 0);
   }
 
-  testWidgets('giant boards: Peek, Locate, Gather and its shuffle, Magic', (tester) async {
+  testWidgets('giant boards: Peek, Locate, Gather and its Undo, Shuffle, Magic', (tester) async {
     SharedPreferences.setMockInitialValues({});
     final store = await LocalStore.open();
     await FirstSteps.skipFor(store); // the whole app; integration_test/first_steps_test.dart plays the first steps
@@ -226,40 +227,105 @@ void main() {
     await settle(tester, 500);
     expect(find.byType(GiantMinimap), findsOneWidget);
 
-    // ---- Gather: the cards that belong in view come into it (or, if they are here, a shuffle).
-    z.lookAt(boardSize(tester).center(Offset.zero));
+    // ---- Gather: the cards that belong in view come into it; the toast's Undo takes it back.
+    GiantBoardBar bar() => tester.widget<GiantBoardBar>(find.byType(GiantBoardBar));
+    final centre = boardSize(tester).center(Offset.zero);
+    z.lookAt(centre);
     await settle(tester, 700);
+    expect(bar().onGather, isNotNull, reason: 'a dealt board has cards to gather into a zoomed view');
     await shot(tester, 'gt_07_before_gather');
     final movesBefore = board(tester).state.moves;
+    final layoutBefore = board(tester).state.board.slots;
     await tester.tap(find.byKey(const ValueKey('giant-gather')), warnIfMissed: false);
-    await settle(tester, 300);
-    expect(find.textContaining('gathered').evaluate().isNotEmpty || find.textContaining('here or nearby').evaluate().isNotEmpty, isTrue);
-    await shot(tester, 'gt_08_gathered', wait: 500);
+    await settle(tester, 400);
+    expect(find.textContaining('gathered'), findsOneWidget);
+    expect(find.byKey(const ValueKey('toast-action')), findsOneWidget, reason: 'the toast offers Undo');
     expect(board(tester).state.moves, movesBefore, reason: 'Gather is not a move');
-    await settle(tester, 2500);
+    expect(board(tester).state.board.slots, isNot(layoutBefore));
+    await shot(tester, 'gt_08_gathered_undo', wait: 200);
+    await tester.tap(find.byKey(const ValueKey('toast-action')), warnIfMissed: false);
+    await settle(tester, 900);
+    expect(board(tester).state.board.slots, layoutBefore, reason: 'Undo took the gather back');
+    expect(board(tester).state.moves, movesBefore, reason: 'Undo is not a move either');
+    expect(find.byKey(const ValueKey('toast-action')), findsNothing, reason: 'the toast closed');
+    await shot(tester, 'gt_09_gather_undone');
+    // Gather until the view has nothing left to bring in: the button dims.
+    for (var i = 0; i < 8 && bar().onGather != null; i++) {
+      await tester.tap(find.byKey(const ValueKey('giant-gather')), warnIfMissed: false);
+      await settle(tester, 700);
+    }
+    expect(bar().onGather, isNull, reason: 'nothing left to gather for this view');
+    await settle(tester, 4500);
+    await shot(tester, 'gt_10_gather_dimmed', wait: 0);
 
-    // ---- Magic with a card selected puts that exact card in its place.
+    // ---- Shuffle zoomed in: only the loose cards in view move.
+    Rect visible() => zoomOf(tester).visible;
+    bool inside(int s) => visible().contains(board(tester).state.board.tiling.cellCenter(s, boardSize(tester)));
+    final v0 = board(tester).state.board;
+    final viewSlots = [for (var s = 0; s < v0.cells; s++) if (inside(s)) s];
+    await tester.tap(find.byKey(const ValueKey('booster-shuffle')), warnIfMissed: false);
+    await settle(tester, 900);
+    final v1 = board(tester).state.board;
+    var movedInView = 0;
+    for (var s = 0; s < v0.cells; s++) {
+      if (!viewSlots.contains(s) || v0.isLocked(s) || v0.groupOf(s).length > 1) {
+        expect(v1.slots[s], v0.slots[s], reason: 'slot $s is outside the view, in place or joined');
+      } else if (v1.slots[s] != v0.slots[s]) {
+        movedInView++;
+      }
+    }
+    debugPrint('QA_SHUFFLE_VIEW ${viewSlots.length} slots in view, $movedInView loose cards moved');
+    expect(movedInView, greaterThan(viewSlots.length ~/ 2));
+    expect(board(tester).state.moves, movesBefore, reason: 'Shuffle is not a move');
+    await shot(tester, 'gt_11_shuffled_in_view');
+
+    // ---- Magic with a card selected puts that exact card in its place, then its neighbours.
     final chosen = loneCardInView();
-    final chosenCard = board(tester).state.board.slots[chosen];
+    final b2 = board(tester).state.board;
+    final chosenCard = b2.slots[chosen];
+    var expected = b2.moveTo(chosen, chosenCard)!;
+    var sent = 1;
+    for (final n in b2.tiling.neighbours(chosenCard)) {
+      if (expected.isLocked(n)) continue;
+      expected = expected.moveTo(expected.slotOfCard(n), n)!;
+      sent++;
+    }
     final wallet0 = coins(tester);
+    final moves0 = board(tester).state.moves;
     await tapSlot(tester, chosen, ms: 500);
     expect(board(tester).state.selected, chosen);
     await tester.tap(find.byKey(const ValueKey('booster-magic')), warnIfMissed: false);
+    for (var i = 0; i < 10; i++) {
+      await tester.pump(const Duration(milliseconds: 50));
+      expect(find.text('×2 DOUBLE LOCK'), findsNothing);
+    }
     await settle(tester, 1500);
-    expect(board(tester).state.board.slots[chosenCard], chosenCard, reason: 'the selected card went to its place');
+    final b3 = board(tester).state.board;
+    expect(b3.slots[chosenCard], chosenCard, reason: 'the selected card went to its place');
+    for (final n in b2.tiling.neighbours(chosenCard)) {
+      expect(b3.isLocked(n), isTrue, reason: 'and its neighbour $n');
+    }
+    expect(b3.slots, expected.slots);
+    expect(board(tester).state.moves, moves0 + sent, reason: 'one move per card Magic sends');
     expect(wallet0 - coins(tester), Economy.magicLockCostCoins);
-    await shot(tester, 'gt_09_magic_selected');
+    debugPrint('QA_MAGIC card $chosenCard and ${sent - 1} neighbours sent');
+    if (!inView(tester, chosenCard)) {
+      z.lookAt(content(tester, chosenCard));
+      await settle(tester, 400);
+    }
+    await shot(tester, 'gt_12_magic_neighbours');
 
-    // ---- The whole board: Gather is there too; everything belongs in view, so the loose cards
-    // are shuffled, and cards in place and joined groups stay where they are.
+    // ---- The whole board: Gather is dimmed (everything belongs in view); Shuffle deals every
+    // loose card again, cards in place and joined groups stay where they are.
+    final zoomAt = z.zoom;
     z.reset();
     await settle(tester, 900);
     expect(find.byKey(const ValueKey('giant-gather')), findsOneWidget);
+    expect(bar().onGather, isNull, reason: 'the whole board holds all its cards');
     final b0 = board(tester).state.board;
-    await shot(tester, 'gt_10_whole_before_shuffle', wait: 0);
-    await tester.tap(find.byKey(const ValueKey('giant-gather')), warnIfMissed: false);
-    await settle(tester, 400);
-    expect(find.text('Every card for this view is here or nearby. The loose ones were shuffled.'), findsOneWidget);
+    await shot(tester, 'gt_13_whole_before_shuffle', wait: 0);
+    await tester.tap(find.byKey(const ValueKey('booster-shuffle')), warnIfMissed: false);
+    await settle(tester, 600);
     final b1 = board(tester).state.board;
     var movedLoose = 0;
     for (var s = 0; s < b0.cells; s++) {
@@ -271,14 +337,22 @@ void main() {
     expect(movedLoose, greaterThan(b0.cells ~/ 2));
     expect(b1.lockedCount, b0.lockedCount, reason: 'the shuffle never puts a card in place');
     expect(b1.joinCount, b0.joinCount, reason: 'the shuffle joins no new pair');
-    await shot(tester, 'gt_11_whole_shuffled', wait: 600);
+    await shot(tester, 'gt_14_whole_shuffled', wait: 600);
+
+    // ---- Back to the view Gather had emptied: after the shuffle it has cards to gather again.
+    z.zoomTo(zoomAt);
+    await settle(tester, 600);
+    z.lookAt(centre);
+    await settle(tester, 900);
+    expect(bar().onGather, isNotNull, reason: 'the shuffle brought in cards that belong elsewhere');
+    await shot(tester, 'gt_15_gather_on_again', wait: 0);
     await leaveBoard(tester);
 
     // ---- The other shapes at their largest giant size.
     var n = 3;
     for (final mode in ['Squares', 'Triangles', 'Hexagons']) {
       await openBoard(tester, pictures[n++], mode, 'Colossal');
-      await shot(tester, 'gt_12_${mode.toLowerCase()}_whole');
+      await shot(tester, 'gt_16_${mode.toLowerCase()}_whole');
       await leaveBoard(tester);
     }
 
@@ -286,16 +360,16 @@ void main() {
     final normal = all.firstWhere((p) => p.packId != _packId && !p.isLockedByDate && (packs.where((k) => k.id == p.packId).firstOrNull?.isFree ?? false));
     container(tester).read(routerProvider).push('/play/${normal.id}');
     await settle(tester, 5000);
-    await tester.tap(find.textContaining('· Play'), warnIfMissed: false);
+    await tester.tap(find.byKey(const ValueKey('play-board')), warnIfMissed: false);
     for (var i = 0; i < 30 && find.byType(BoardWidget).evaluate().isEmpty; i++) {
       await settle(tester, 500);
     }
     await settle(tester, 1500);
     if (find.text('Got it').evaluate().isNotEmpty) await tapText(tester, 'Got it');
     expect(board(tester).zoom, isNull);
-    await shot(tester, 'gt_13_normal_board');
+    await shot(tester, 'gt_17_normal_board');
     final wallet = coins(tester);
-    await peek(tester, 'gt_14', away: const Duration(milliseconds: 2400));
+    await peek(tester, 'gt_18', away: const Duration(milliseconds: 2400));
     expect(wallet - coins(tester), Economy.peekCostCoins);
     expect(Economy.peekCostCoins, 10);
     await leaveBoard(tester);

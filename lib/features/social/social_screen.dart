@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/analytics.dart';
 import '../../core/app_links.dart';
 import '../../core/haptics.dart';
 import '../../core/a11y.dart';
@@ -31,7 +32,10 @@ class SocialTab extends Notifier<int> {
   @override
   int build() => leaderboard;
 
-  void select(int tab) => state = tab;
+  void select(int tab) {
+    if (tab == inbox && state != inbox) AppAnalytics.event('inbox_opened');
+    state = tab;
+  }
 }
 
 final socialTabProvider = NotifierProvider<SocialTab, int>(SocialTab.new);
@@ -87,6 +91,7 @@ Future<void> showAddFriendAlert(BuildContext context, {String? code}) async {
       return;
     }
     await container.read(socialRepositoryProvider).addFriend(me, friend);
+    AppAnalytics.event('friend_added', {'fromLink': code != null && code.trim().isNotEmpty});
     container.invalidate(friendsProvider);
     if (context.mounted) {
       Haptics.success();

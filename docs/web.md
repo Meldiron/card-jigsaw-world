@@ -8,7 +8,7 @@ without native plugins; everything else is the iPhone app.
 
 | Feature | Web | Why |
 | --- | --- | --- |
-| Coin, ticket and hint bundles, VIP subscription | Not sold. The store shows a notice card, the free sources (bonus video, quests, piggy bank, Lucky Wheel) and the VIP benefits with an "Available on iPhone" label. | Purchases go through StoreKit and are verified by the `verify-purchase` Appwrite Function with a StoreKit 2 JWS. `in_app_purchase` has no web implementation. A VIP bought on iPhone is active on web too (it lives on the profile). |
+| Coin, ticket and booster bundles, VIP subscription | Not sold. The store shows a notice card, the free sources (bonus video, quests, piggy bank, Lucky Wheel) and the VIP benefits with an "Available on iPhone" label. | Purchases go through StoreKit and are verified by the `verify-purchase` Appwrite Function with a StoreKit 2 JWS. `in_app_purchase` has no web implementation. A VIP bought on iPhone is active on web too (it lives on the profile). |
 | Gift codes ("Redeem a gift code", "Have a gift code?") | Hidden. | App Store offer codes are redeemed through the StoreKit sheet. |
 | Restore purchases | Hidden. | StoreKit only. |
 | House ads | Shown. The rewarded "Watch" card still pays coins; CTAs that lead to a purchase show "Purchases are available in the iPhone app." instead of opening the store. | The ads are in-app promotions, not an ad network. |

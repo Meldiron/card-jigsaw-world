@@ -2,6 +2,7 @@ import 'package:appwrite/models.dart' as models;
 import 'package:flutter/foundation.dart' show debugPrint, kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../core/analytics.dart';
 import '../core/qa.dart';
 import '../data/repositories.dart';
 import 'settings.dart';
@@ -85,6 +86,7 @@ class AuthNotifier extends AsyncNotifier<models.User?> {
         ? await _repo.linkAnonymous(email: email, password: password, name: name)
         : await _repo.signUp(email: email, password: password, name: name);
     state = AsyncData(_remember(user));
+    AppAnalytics.event('sign_up', {'method': 'email', 'fromGuest': isAnon});
   }
 
   Future<void> signIn({required String email, required String password}) async {
@@ -92,6 +94,7 @@ class AuthNotifier extends AsyncNotifier<models.User?> {
     await _repo.signOut();
     final user = await _repo.signIn(email: email, password: password);
     state = AsyncData(_remember(user));
+    AppAnalytics.event('sign_in', {'method': 'email'});
   }
 
   /// Native Sign in with Apple: the credential comes from the system sheet,
@@ -102,6 +105,8 @@ class AuthNotifier extends AsyncNotifier<models.User?> {
   Future<bool> signInWithApple({required String idToken, required String nonce, String? name}) async {
     final result = await _repo.signInWithAppleIdToken(idToken: idToken, nonce: nonce, name: name);
     state = AsyncData(_remember(result.user));
+    // Linked to the guest: a new account; switched: the player's existing one.
+    AppAnalytics.event(result.switched ? 'sign_in' : 'sign_up', {'method': 'apple', 'fromGuest': !result.switched});
     return result.switched;
   }
 
@@ -113,6 +118,7 @@ class AuthNotifier extends AsyncNotifier<models.User?> {
     await _repo.signOut();
     final user = await _repo.createSessionFromToken(userId: userId, secret: secret);
     state = AsyncData(_remember(user));
+    AppAnalytics.event('sign_in', {'method': 'apple_web'});
     return user;
   }
 
@@ -124,6 +130,7 @@ class AuthNotifier extends AsyncNotifier<models.User?> {
   }
 
   Future<void> signOut() async {
+    AppAnalytics.event('sign_out');
     await _repo.signOut();
     state = const AsyncLoading();
     state = AsyncData(_remember(await _repo.signInAnonymously()));

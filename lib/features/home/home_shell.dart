@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/analytics.dart';
 import '../../core/haptics.dart';
 import '../../core/sfx.dart';
 import '../../state/achievements.dart';
@@ -86,6 +87,18 @@ class _HomeShellState extends ConsumerState<HomeShell> {
     final open = ref.watch(revealsProvider);
     final newTabs = ref.watch(newTabsProvider);
     final current = widget.shell.currentIndex;
+    // Screen views: a tab coming back into view reports its screen (lib/core/analytics.dart).
+    AppAnalytics.showTab(current);
+    // What the picture just finished opened (Unlock anyway reports itself, in guided_start.dart). A
+    // save loading with many pictures at once is not a picture opening them.
+    ref.listen(revealsProvider, (was, now) {
+      final steps = ref.read(firstStepsProvider);
+      final counted = ref.read(countedSolvesProvider);
+      if (was == null || !steps.calm) return;
+      for (final r in now.difference(was)) {
+        if (!steps.early.containsKey(r.name) && r.solves >= counted) AppAnalytics.event('feature_unlocked', {'feature': r.name, 'by': 'play', 'pictures': counted});
+      }
+    });
     if (newTabs.contains(current)) {
       final r = Reveal.values.firstWhere((r) => r.tab == current);
       WidgetsBinding.instance.addPostFrameCallback((_) => ref.read(firstStepsProvider.notifier).sawTip('tab:${r.name}'));

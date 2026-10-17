@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../core/analytics.dart';
 import '../core/haptics.dart';
 import '../core/sfx.dart';
 import '../data/local_store.dart';
@@ -16,7 +17,7 @@ enum CardStyle { classic, minimal }
 /// giant ladder (BoardSpec.firstGiantTier and up), each kept for its own kind of picture.
 @immutable
 class LastBoard {
-  const LastBoard({required this.mode, required this.tier, this.giantTier, this.painting = false});
+  const LastBoard({required this.mode, required this.tier, this.giantTier, this.painting = false, this.expand = false});
 
   /// Mode code (`cards`, `squares`, `triangles`, `hexagons`).
   final String mode;
@@ -24,18 +25,23 @@ class LastBoard {
   final int? giantTier;
   final bool painting;
 
+  /// Expand was on: pictures that offer it are dealt with the columns and rows that suit them
+  /// (`BoardSpec.ladder`). Off until the player turns it on (square boards).
+  final bool expand;
+
   static LastBoard? fromJson(Map<String, dynamic>? j) {
     if (j == null || j['mode'] is! String || j['tier'] is! int) return null;
-    return LastBoard(mode: j['mode'] as String, tier: j['tier'] as int, giantTier: j['giantTier'] as int?, painting: j['painting'] == true);
+    return LastBoard(mode: j['mode'] as String, tier: j['tier'] as int, giantTier: j['giantTier'] as int?, painting: j['painting'] == true, expand: j['expand'] == true);
   }
 
-  Map<String, dynamic> toJson() => {'mode': mode, 'tier': tier, 'giantTier': ?giantTier, 'painting': painting};
+  Map<String, dynamic> toJson() => {'mode': mode, 'tier': tier, 'giantTier': ?giantTier, 'painting': painting, 'expand': expand};
 
   @override
-  bool operator ==(Object other) => other is LastBoard && other.mode == mode && other.tier == tier && other.giantTier == giantTier && other.painting == painting;
+  bool operator ==(Object other) =>
+      other is LastBoard && other.mode == mode && other.tier == tier && other.giantTier == giantTier && other.painting == painting && other.expand == expand;
 
   @override
-  int get hashCode => Object.hash(mode, tier, giantTier, painting);
+  int get hashCode => Object.hash(mode, tier, giantTier, painting, expand);
 }
 
 /// Settings > Accessibility: text size. [standard] follows the iPhone's text size within the
@@ -127,6 +133,7 @@ class Settings {
     this.hideFinished = false,
     this.accessibility = const Accessibility(),
     this.lastBoard,
+    this.shareUsage = true,
   });
 
   final ThemeMode themeMode;
@@ -152,6 +159,10 @@ class Settings {
   /// The last board chosen with Play, or null before the first one (then [defaultGrid] gives the size).
   final LastBoard? lastBoard;
 
+  /// Settings > Privacy > Share usage data: screen views and game events go to Appwrite Analytics
+  /// (lib/core/analytics.dart). On until the player turns it off.
+  final bool shareUsage;
+
   Settings copyWith({
     ThemeMode? themeMode,
     bool? sound,
@@ -167,6 +178,7 @@ class Settings {
     bool? hideFinished,
     Accessibility? accessibility,
     LastBoard? lastBoard,
+    bool? shareUsage,
   }) =>
       Settings(
         themeMode: themeMode ?? this.themeMode,
@@ -183,6 +195,7 @@ class Settings {
         hideFinished: hideFinished ?? this.hideFinished,
         accessibility: accessibility ?? this.accessibility,
         lastBoard: lastBoard ?? this.lastBoard,
+        shareUsage: shareUsage ?? this.shareUsage,
       );
 }
 
@@ -205,8 +218,10 @@ class SettingsNotifier extends Notifier<Settings> {
       hideFinished: s.getJson(_libraryKey)?['hideFinished'] == true,
       accessibility: Accessibility.fromJson(s.getJson(_accessibilityKey)),
       lastBoard: LastBoard.fromJson(s.getJson(_lastBoardKey)),
+      shareUsage: s.shareUsage,
     );
     Haptics.enabled = settings.haptics;
+    AppAnalytics.shareUsage = settings.shareUsage;
     Sfx.instance.soundEnabled = settings.sound;
     Sfx.instance.musicEnabled = settings.music;
     return settings;
@@ -292,8 +307,21 @@ class SettingsNotifier extends Notifier<Settings> {
   }
 
   void setAccessibility(Accessibility v) {
+    final was = state.accessibility;
     _s.setJson(_accessibilityKey, v.toJson());
     state = state.copyWith(accessibility: v);
+    void changed(String setting, Object value) => AppAnalytics.event('settings_changed', {'setting': setting, 'value': value});
+    if (v.textSize != was.textSize) changed('text_size', v.textSize.name);
+    if (v.reduceMotion != was.reduceMotion) changed('reduce_motion', v.reduceMotion);
+    if (v.increaseContrast != was.increaseContrast) changed('increase_contrast', v.increaseContrast);
+    if (v.differentiateWithoutColour != was.differentiateWithoutColour) changed('differentiate_without_colour', v.differentiateWithoutColour);
+  }
+
+  /// Off stops analytics at once (lifecycle events too) and on every later launch.
+  void setShareUsage(bool v) {
+    _s.shareUsage = v;
+    AppAnalytics.shareUsage = v;
+    state = state.copyWith(shareUsage: v);
   }
 
   void setHideFinished(bool v) {

@@ -1105,8 +1105,9 @@ class PhotoChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 24,
-      padding: EdgeInsets.only(left: dot != null ? 8 : 9, right: 9),
+      // 24 pt, taller only when a large text size needs it (the label is never cut off).
+      constraints: const BoxConstraints(minHeight: 24),
+      padding: EdgeInsets.only(left: dot != null ? 8 : 9, right: 9, top: 2, bottom: 2),
       decoration: BoxDecoration(
         color: Colors.black.withValues(alpha: A11y.increaseContrastOf(context) ? 0.66 : 0.5),
         borderRadius: BorderRadius.circular(Radii.pill),
@@ -1247,6 +1248,9 @@ final appMessengerKey = GlobalKey<ScaffoldMessengerState>();
 /// 2.2 s at least and 5 s at most.
 Duration toastDuration(String message) => Duration(milliseconds: (1500 + message.length * 45).clamp(2200, 5000));
 
+/// The shortest a toast with an action stays, so there is time to reach it.
+const toastActionDuration = Duration(seconds: 4);
+
 OverlayEntry? _toastEntry;
 
 /// A short notice in an iOS 26 glass capsule that drops in under the status
@@ -1254,7 +1258,13 @@ OverlayEntry? _toastEntry;
 /// alert, and never over the tab bar, a game's tools or a sheet's buttons.
 /// One at a time: a new toast replaces the one on screen. Tap or swipe up to
 /// close it early; VoiceOver reads it out.
-void showToast(BuildContext context, String message, {IconData? icon, Widget? leading}) {
+///
+/// An [action] (Gather's Undo) is a text button at the end in the accent
+/// colour, 44 pt to tap and a button to VoiceOver; the toast then stays at
+/// least [toastActionDuration], and tapping the action runs it and closes the
+/// toast. The callback runs after the screen that showed the toast may have
+/// gone, so it checks `mounted` itself.
+void showToast(BuildContext context, String message, {IconData? icon, Widget? leading, ({String label, VoidCallback onTap})? action}) {
   // The root navigator's own context sits above its overlay.
   final overlay = context is StatefulElement && context.state is NavigatorState ? (context.state as NavigatorState).overlay : Overlay.maybeOf(context, rootOverlay: true);
   if (overlay == null) return;
@@ -1266,7 +1276,8 @@ void showToast(BuildContext context, String message, {IconData? icon, Widget? le
       message: message,
       icon: icon,
       leading: leading,
-      duration: toastDuration(message),
+      action: action,
+      duration: action == null || toastDuration(message) > toastActionDuration ? toastDuration(message) : toastActionDuration,
       onDone: () {
         if (_toastEntry == entry) _toastEntry = null;
         if (entry.mounted) entry.remove();
@@ -1278,10 +1289,11 @@ void showToast(BuildContext context, String message, {IconData? icon, Widget? le
 }
 
 class _Toast extends StatefulWidget {
-  const _Toast({super.key, required this.message, this.icon, this.leading, required this.duration, required this.onDone});
+  const _Toast({super.key, required this.message, this.icon, this.leading, this.action, required this.duration, required this.onDone});
   final String message;
   final IconData? icon;
   final Widget? leading;
+  final ({String label, VoidCallback onTap})? action;
   final Duration duration;
   final VoidCallback onDone;
 
@@ -1321,6 +1333,7 @@ class _ToastState extends State<_Toast> with SingleTickerProviderStateMixin {
     final c = context.colors;
     final isDark = context.isDark;
     final top = MediaQuery.viewPaddingOf(context).top;
+    final action = widget.action;
     return Positioned(
       top: top + 6,
       left: 16,
@@ -1353,14 +1366,35 @@ class _ToastState extends State<_Toast> with SingleTickerProviderStateMixin {
                         borderRadius: BorderRadius.circular(22),
                         hairline: Border.all(color: isDark ? Colors.white.withValues(alpha: 0.14) : Colors.black.withValues(alpha: 0.06), width: 0.5),
                         child: Padding(
-                          padding: const EdgeInsets.fromLTRB(16, 11, 18, 11),
+                          padding: EdgeInsets.fromLTRB(16, 0, action == null ? 18 : 4, 0),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               if (widget.leading != null) ...[widget.leading!, const SizedBox(width: 10)] else if (widget.icon != null) ...[Icon(widget.icon, size: 18, color: c.textSecondary), const SizedBox(width: 10)],
                               Flexible(
-                                child: Text(widget.message, maxLines: 3, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: TypeSize.body, height: 1.3, fontWeight: FontWeight.w600, color: c.textPrimary, letterSpacing: -0.1)),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 11),
+                                  child: Text(widget.message, maxLines: 3, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: TypeSize.body, height: 1.3, fontWeight: FontWeight.w600, color: c.textPrimary, letterSpacing: -0.1)),
+                                ),
                               ),
+                              if (action != null)
+                                Semantics(
+                                  container: true,
+                                  button: true,
+                                  child: Pressable(
+                                    key: const ValueKey('toast-action'),
+                                    onTap: () {
+                                      _close();
+                                      action.onTap();
+                                    },
+                                    child: TapTarget(
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                                        child: Text(action.label, style: TextStyle(fontSize: TypeSize.body, fontWeight: FontWeight.w700, color: context.accent, letterSpacing: -0.1)),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                             ],
                           ),
                         ),

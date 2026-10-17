@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/a11y.dart';
+import '../../core/analytics.dart';
 import '../../core/haptics.dart';
 import '../../core/sfx.dart';
 import '../../core/theme/tokens.dart';
@@ -28,6 +29,9 @@ class WheelSegment {
   final bool jackpot;
 
   String get label => formatCount(amount);
+
+  /// The prize of a spin that pays [times] over (the ×5 spin).
+  int amountFor(int times) => amount * times;
 
   /// What the prize is, after its icon and number ("2 Hints", "5 Peeks",
   /// "1 Magic"). Coins carry the coin mark only.
@@ -118,7 +122,9 @@ String formatOdds(double percent) {
 
 /// The odds sheet, opened from "See odds" on the wheel (App Review guideline
 /// 3.1.1: the odds of a paid random reward are shown before spending).
-Future<void> showWheelOdds(BuildContext context) => showAppSheet(
+Future<void> showWheelOdds(BuildContext context) {
+  AppAnalytics.event('wheel_odds_opened');
+  return showAppSheet(
       context,
       builder: (ctx) {
         final c = ctx.colors;
@@ -134,7 +140,8 @@ Future<void> showWheelOdds(BuildContext context) => showAppSheet(
                 width: double.infinity,
                 child: SheetHeader(
                   title: 'Lucky Wheel odds',
-                  subtitle: 'Every spin costs ${Economy.wheelSpinTickets} ticket and pays one prize. Each spin is drawn on its own with these chances.',
+                  subtitle: 'Every spin costs ${countOf(Economy.wheelSpinTickets, 'ticket')} and pays one prize. Each spin is drawn on its own with these chances. '
+                      'A ×${Economy.wheelBigSpin} spin costs ${countOf(Economy.wheelBigSpin * Economy.wheelSpinTickets, 'ticket')} and pays the prize it lands on ${_times(Economy.wheelBigSpin)}, with the same chances.',
                 ),
               ),
               const SizedBox(height: 14),
@@ -196,8 +203,17 @@ Future<void> showWheelOdds(BuildContext context) => showAppSheet(
         );
       },
     );
+}
 
-/// Lucky Wheel: every spin costs one Ticket.
+/// "five times", "twice".
+String _times(int n) => switch (n) {
+      1 => 'once',
+      2 => 'twice',
+      5 => 'five times',
+      _ => '$n times',
+    };
+
+/// Lucky Wheel: every spin costs one Ticket; a ×5 spin costs five and pays its prize five times.
 class WheelScreen extends ConsumerStatefulWidget {
   const WheelScreen({super.key});
   @override
@@ -214,6 +230,11 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
   WheelSegment? _result;
   int _lastTick = -1;
   int _spins = 0;
+
+  /// ×1 or ×[Economy.wheelBigSpin]: what the next spin costs and pays over. [_wonTimes] is the
+  /// multiplier the shown prize was won with.
+  int _times = 1;
+  int _wonTimes = 1;
 
   @override
   void initState() {
@@ -241,13 +262,18 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
   Future<void> _spin() async {
     if (_spinning) return;
     final n = ref.read(profileProvider.notifier);
-    final ok = await n.spendTickets(Economy.wheelSpinTickets, reason: 'wheel');
+    final times = _times;
+    final cost = times * Economy.wheelSpinTickets;
+    final reason = times == 1 ? 'wheel' : 'wheel-x$times';
+    final ok = await n.spendTickets(cost, reason: reason);
     if (!ok) {
-      if (mounted) showToast(context, 'You need 1 ticket to spin.', leading: const TicketIcon(size: 18));
+      if (mounted) showToast(context, times == 1 ? 'You need ${countOf(cost, 'ticket')} to spin.' : 'You need ${countOf(cost, 'ticket')} to spin ×$times.', leading: const TicketIcon(size: 18));
       return;
     }
     // Weighted pick, from the same table the odds sheet shows.
     final idx = wheelPick(math.Random().nextDouble());
+    final prize = _segments[idx];
+    AppAnalytics.event('wheel_spun', {'spin': 'x$times', 'tickets': cost, 'prize': prize.kind.name, 'amount': prize.amountFor(times), 'jackpot': prize.jackpot});
     final seg = 2 * math.pi / _segments.length;
     // Pointer is at top (-pi/2). Segment i spans [i*seg, (i+1)*seg) starting at -pi/2 when rotation=0.
     final target = -(idx * seg + seg / 2) + (math.Random().nextDouble() - 0.5) * seg * 0.6;
@@ -265,17 +291,19 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
     });
     _c.forward(from: 0).whenComplete(() async {
       final won = _segments[idx];
+      // The same ops as a single spin, the prize paid [times] over.
+      final amount = won.amountFor(times);
       switch (won.kind) {
         case Currency.coins:
-          await n.addCoins(won.amount, reason: 'wheel');
+          await n.addCoins(amount, reason: reason);
         case Currency.tickets:
-          await n.addTickets(won.amount, reason: 'wheel');
+          await n.addTickets(amount, reason: reason);
         case Currency.hints:
-          await n.addHints(won.amount, reason: 'wheel');
+          await n.addHints(amount, reason: reason);
         case Currency.peeks:
-          await n.addPeeks(won.amount, reason: 'wheel');
+          await n.addPeeks(amount, reason: reason);
         case Currency.magics:
-          await n.addMagics(won.amount, reason: 'wheel');
+          await n.addMagics(amount, reason: reason);
       }
       if (!mounted) return;
       Sfx.instance.win();
@@ -288,6 +316,7 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
       setState(() {
         _spinning = false;
         _result = won;
+        _wonTimes = times;
         _spins++;
       });
     });
@@ -298,7 +327,8 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
     final c = context.colors;
     final profile = ref.watch(profileProvider).value;
     final tickets = profile?.tickets ?? 0;
-    final canSpin = tickets >= Economy.wheelSpinTickets && !_spinning;
+    final cost = _times * Economy.wheelSpinTickets;
+    final canSpin = tickets >= cost && !_spinning;
     final jackpot = _result?.jackpot ?? false;
     return Scaffold(
       // The ticket balance sits in the bar, as in the Store, so the wheel gets the height.
@@ -333,7 +363,7 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
                         ),
                         AnimatedBuilder(
                           animation: _c,
-                          builder: (_, _) => _WheelFace(angle: _angle, size: size),
+                          builder: (_, _) => _WheelFace(angle: _angle, size: size, times: _times),
                         ),
                         // A plain cap on the axle: the old wheel glyph there read as a loading spinner.
                         Container(
@@ -398,16 +428,16 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
                       : FadeTransition(opacity: a, child: ScaleTransition(scale: Tween(begin: 0.9, end: 1.0).animate(a), child: child)),
                   child: _result == null
                       ? Row(
-                          key: const ValueKey('jackpot'),
+                          key: ValueKey('jackpot-$_times'),
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text('Jackpot', style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote, fontWeight: FontWeight.w600)),
                             const SizedBox(width: 8),
-                            Amount(currency: Currency.coins, value: _segments.firstWhere((s) => s.jackpot).amount, size: 16, fontSize: TypeSize.body, weight: FontWeight.w700),
+                            Amount(currency: Currency.coins, value: _segments.firstWhere((s) => s.jackpot).amountFor(_times), size: 16, fontSize: TypeSize.body, weight: FontWeight.w700),
                           ],
                         )
                       : SoftCard(
-                          key: ValueKey('won-${_result!.kind}-${_result!.amount}-$_spins'),
+                          key: ValueKey('won-${_result!.kind}-${_result!.amount}-$_wonTimes-$_spins'),
                           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
                           radius: Radii.pill,
                           child: Row(
@@ -415,8 +445,9 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
                             children: [
                               const Text('You won', style: TextStyle(fontWeight: FontWeight.w600, fontSize: TypeSize.body)),
                               const SizedBox(width: 10),
-                              Amount(currency: _result!.kind, value: _result!.amount, size: 18, fontSize: TypeSize.callout, weight: FontWeight.w700),
-                              if (_result!.name != null) ...[const SizedBox(width: 5), Text(_result!.name!, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body))],
+                              Amount(currency: _result!.kind, value: _result!.amountFor(_wonTimes), size: 18, fontSize: TypeSize.callout, weight: FontWeight.w700),
+                              // The name follows the amount paid ("5 Magic", "15 Peeks").
+                              if (_result!.name != null) ...[const SizedBox(width: 5), Text(WheelSegment(_result!.kind, _result!.amountFor(_wonTimes), _result!.color).name!, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body))],
                               if (jackpot) ...[const SizedBox(width: 8), const Chip2(label: 'Jackpot', color: Brand.coin, foreground: Color(0xFF2A1F00))],
                             ],
                           ),
@@ -428,16 +459,36 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
               child: Column(
                 children: [
+                  // One spin or a ×5 spin (five tickets, the prize paid five times, same odds).
+                  SizedBox(
+                    width: 180,
+                    child: AppSegmentedControl<int>(
+                      key: const ValueKey('wheel-times'),
+                      value: _times,
+                      segments: const {1: '×1', Economy.wheelBigSpin: '×${Economy.wheelBigSpin}'},
+                      onChanged: (v) {
+                        if (!_spinning) setState(() => _times = v);
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 12),
                   // Out of tickets: one clear way on instead of a disabled Spin above a second button.
-                  if (tickets < Economy.wheelSpinTickets && !_spinning) ...[
+                  if (tickets < cost && !_spinning) ...[
                     BigButton(label: 'Get tickets', onTap: () => context.push('/store')),
                     const SizedBox(height: 8),
-                    Text('A spin costs 1 ticket. Earn them from weekly quests, level-ups and events.', textAlign: TextAlign.center, style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote, height: 1.35)),
+                    Text(
+                      _times == 1
+                          ? 'A spin costs ${countOf(cost, 'ticket')}. Earn them from weekly quests, level-ups and events.'
+                          : 'A ×$_times spin costs ${countOf(cost, 'ticket')}. You have ${formatCount(tickets)}. Earn more from weekly quests, level-ups and events.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: c.textSecondary, fontSize: TypeSize.footnote, height: 1.35),
+                    ),
                   ] else
                     BigButton.cost(
-                      label: 'Spin for',
+                      key: const ValueKey('wheel-spin'),
+                      label: _times == 1 ? 'Spin for' : 'Spin ×$_times for',
                       currency: Currency.tickets,
-                      amount: Economy.wheelSpinTickets,
+                      amount: cost,
                       onTap: canSpin ? _spin : null,
                     ),
                   CupertinoButton(
@@ -461,9 +512,12 @@ class _WheelScreenState extends ConsumerState<WheelScreen> with SingleTickerProv
 /// (coin, hint, Peek, Magic) laid on top. The slices turn with [angle]; each prize
 /// moves with its slice but stays upright, so no amount is ever upside down.
 class _WheelFace extends StatelessWidget {
-  const _WheelFace({required this.angle, required this.size});
+  const _WheelFace({required this.angle, required this.size, this.times = 1});
   final double angle;
   final double size;
+
+  /// The spin's multiplier: each slice shows what it pays ×[times].
+  final int times;
 
   @override
   Widget build(BuildContext context) {
@@ -486,7 +540,7 @@ class _WheelFace extends StatelessWidget {
                 top: r + math.sin(a) * r * 0.64 - box / 2,
                 width: box,
                 height: box,
-                child: _PrizeMark(segment: _segments[i], ink: palette.ink(i), ring: palette.markRing),
+                child: _PrizeMark(segment: _segments[i], times: times, ink: palette.ink(i), ring: palette.markRing),
               );
             }),
         ],
@@ -497,8 +551,9 @@ class _WheelFace extends StatelessWidget {
 
 /// A prize on the wheel: its currency mark over its amount.
 class _PrizeMark extends StatelessWidget {
-  const _PrizeMark({required this.segment, required this.ink, this.ring});
+  const _PrizeMark({required this.segment, this.times = 1, required this.ink, this.ring});
   final WheelSegment segment;
+  final int times;
   final Color ink;
   final Color? ring;
 
@@ -517,7 +572,7 @@ class _PrizeMark extends StatelessWidget {
         children: [
           mark,
           const SizedBox(height: 3),
-          Text(segment.label, style: TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body, height: 1.1, color: ink, letterSpacing: -0.2)),
+          Text(formatCount(segment.amountFor(times)), style: TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body, height: 1.1, color: ink, letterSpacing: -0.2)),
         ],
       ),
     );

@@ -158,7 +158,8 @@ the key was added.
 - **App Privacy** (data collection questionnaire) has no public API: fill in
   App Store Connect > App Privacy. The honest answers for this app are in
   `docs/privacy-policy.md` (account id, email if given, purchase history,
-  gameplay content; no tracking, no third-party advertising).
+  gameplay content; usage data and coarse location for analytics, see
+  `docs/analytics.md`; no tracking, no third-party advertising).
 - **Agreements**: Paid Applications agreement, banking and tax forms
   (App Store Connect > Business).
 - **Products in the review submission**: press "Submit for Review" on each

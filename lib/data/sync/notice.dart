@@ -5,6 +5,9 @@
 /// (level mirror, public completion numbers, lifetime totals, `appliedOps`) never show.
 library;
 
+import 'dart:math';
+
+import '../../models/models.dart';
 import '../../state/rewards.dart';
 import 'changes.dart';
 import 'ops.dart';
@@ -24,8 +27,10 @@ class SyncNotice {
     this.avatars = 0,
     this.tiers = 0,
     this.quests = 0,
+    this.swaps = 0,
     this.achievements = 0,
     this.dailyStreak,
+    this.piggyCapacity,
     this.vipStarted = false,
     this.vipEnded = false,
     this.name,
@@ -51,8 +56,14 @@ class SyncNotice {
   final List<String> packs;
   final int avatars, tiers, quests, achievements;
 
+  /// Quests swapped elsewhere.
+  final int swaps;
+
   /// The streak after a daily gift claimed elsewhere.
   final int? dailyStreak;
+
+  /// What the piggy bank holds after an upgrade bought elsewhere.
+  final int? piggyCapacity;
   final bool vipStarted, vipEnded;
 
   /// New display name.
@@ -76,8 +87,10 @@ class SyncNotice {
       avatars == 0 &&
       tiers == 0 &&
       quests == 0 &&
+      swaps == 0 &&
       achievements == 0 &&
       dailyStreak == null &&
+      piggyCapacity == null &&
       !vipStarted &&
       !vipEnded &&
       name == null &&
@@ -98,8 +111,10 @@ class SyncNotice {
         avatars: avatars + o.avatars,
         tiers: tiers + o.tiers,
         quests: quests + o.quests,
+        swaps: swaps + o.swaps,
         achievements: achievements + o.achievements,
         dailyStreak: o.dailyStreak ?? dailyStreak,
+        piggyCapacity: o.piggyCapacity ?? piggyCapacity,
         vipStarted: (vipStarted || o.vipStarted) && !o.vipEnded,
         vipEnded: (vipEnded || o.vipEnded) && !o.vipStarted,
         name: o.name ?? name,
@@ -118,6 +133,7 @@ class SyncNotice {
     final d0 = rowDate(before['lastDailyClaim']), d1 = rowDate(after['lastDailyClaim']);
     final vip0 = _vip(before, now), vip1 = _vip(after, now);
     final name0 = (before['displayName'] ?? '').toString(), name1 = (after['displayName'] ?? '').toString();
+    final piggy0 = asInt(before['piggyLevel']), piggy1 = asInt(after['piggyLevel']);
     return SyncNotice(
       coins: asInt(after['coins']) - asInt(before['coins']),
       tickets: asInt(after['tickets']) - asInt(before['tickets']),
@@ -129,8 +145,10 @@ class SyncNotice {
       avatars: added('unlockedAvatars').length,
       tiers: added('unlockedTiers').length,
       quests: added('claimedGoals').where((k) => !k.endsWith(':vipbonus')).length,
+      swaps: max(0, _swapCount(after['questSwaps']) - _swapCount(before['questSwaps'])),
       achievements: added('claimedAchievements').length,
       dailyStreak: d1 != null && (d0 == null || d1.isAfter(d0)) ? asInt(after['streak']) : null,
+      piggyCapacity: piggy1 > piggy0 ? Profile.piggyCapacityAt(piggy1) : null,
       vipStarted: vip1 && !vip0,
       vipEnded: vip0 && !vip1,
       name: name1.isNotEmpty && name1 != name0 ? name1 : null,
@@ -155,6 +173,9 @@ class SyncNotice {
     }
     return SyncNotice(solved: solved, betterStars: better, boards: boards);
   }
+
+  /// Swaps made in the slots a `questSwaps` value holds (each slot lists its first quest too).
+  static int _swapCount(dynamic raw) => Goals.decodeSwaps(raw).values.fold(0, (n, h) => n + h.length - 1);
 
   static bool _vip(Map<String, dynamic> row, DateTime? now) {
     if (row['isVip'] == true) return true;

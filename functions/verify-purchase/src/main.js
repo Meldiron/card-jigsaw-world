@@ -38,7 +38,8 @@ const DB = process.env.APPWRITE_DATABASE_ID || 'cjw';
 // in a consumable id is historical. Keep in sync with StoreProducts.grants in
 // lib/data/purchases.dart and store/metadata/subscriptions/consumables.json
 // (test/economy_test.dart checks all three); the amounts are explained in
-// docs/economy.md.
+// docs/economy.md. The two helper bundles (ids hints_*) give Peeks, Hints and
+// Magic since 2026-10-17 (16 and 48 hints before).
 const GRANTS = {
   coins_1000: { coins: 2500 },
   coins_3000: { coins: 8000 },
@@ -46,8 +47,8 @@ const GRANTS = {
   coins_12000: { coins: 30000 },
   tickets_5: { tickets: 10 },
   tickets_15: { tickets: 30 },
-  hints_5: { hints: 16 },
-  hints_15: { hints: 48 },
+  hints_5: { peeks: 15, hints: 10, magics: 5 },
+  hints_15: { peeks: 50, hints: 30, magics: 15 },
   vip_monthly: { vip: true },
   vip_yearly: { vip: true },
 };
@@ -121,24 +122,29 @@ async function accountsOfSubscription(db, originalTransactionId) {
 
 const ownershipOf = (tx) => tx.inAppOwnershipType ?? 'PURCHASED';
 
+// The currencies the ledger records (its `currency` column is an enum of these).
 const CURRENCIES = ['coins', 'tickets', 'hints'];
+// Peeks and Magic in stock: boosters on the profile (columns `peeks`, `magics`), no ledger line,
+// as in the app (lib/data/sync/ops.dart, ledgerCurrencies).
+const BOOSTERS = ['peeks', 'magics'];
+const AMOUNTS = [...CURRENCIES, ...BOOSTERS];
 
-/// What a verified transaction gives the player: amounts of coins, tickets and hints, or the VIP
-/// expiry. Stored on the purchases row and returned to the app.
+/// What a verified transaction gives the player: amounts of coins, tickets, hints, Peeks and
+/// Magic, or the VIP expiry. Stored on the purchases row and returned to the app.
 function grantFor(tx, grant) {
   const out = {};
-  for (const c of CURRENCIES) if (grant[c]) out[c] = grant[c];
+  for (const c of AMOUNTS) if (grant[c]) out[c] = grant[c];
   if (grant.vip) out.vipExpiresAt = iso(tx.expiresDate);
   return out;
 }
 
-/// The player's coins, tickets and hints as the profile row has them.
-const balancesOf = (row) => Object.fromEntries(CURRENCIES.map((c) => [c, row[c] ?? 0]));
+/// The player's coins, tickets, hints, Peeks and Magic as the profile row has them.
+const balancesOf = (row) => Object.fromEntries(AMOUNTS.map((c) => [c, row[c] ?? 0]));
 
 /// Adds [applied] to the profile (atomic increments) and returns the row as it is now.
 async function applyGrant(db, userId, tx, applied) {
   const patch = {};
-  for (const c of CURRENCIES) if (applied[c]) patch[c] = Operator.increment(applied[c]);
+  for (const c of AMOUNTS) if (applied[c]) patch[c] = Operator.increment(applied[c]);
   if ('vipExpiresAt' in applied) {
     patch.vipExpiresAt = applied.vipExpiresAt;
     patch.appleOriginalTransactionId = tx.originalTransactionId ?? tx.transactionId;
@@ -146,7 +152,8 @@ async function applyGrant(db, userId, tx, applied) {
   return db.updateRow({ databaseId: DB, tableId: 'profiles', rowId: userId, data: patch });
 }
 
-/// One ledger row per currency granted. Bookkeeping only: the grant stands if a row fails.
+/// One ledger row per currency granted (Peeks and Magic have none). Bookkeeping only: the grant
+/// stands if a row fails.
 async function writeLedger(db, userId, tx, applied, profile, error) {
   for (const c of CURRENCIES) {
     if (!applied[c]) continue;

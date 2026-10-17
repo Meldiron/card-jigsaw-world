@@ -57,7 +57,6 @@ void main() {
         ('coins-3000', ProductIds.coins3000),
         ('coins-1000', ProductIds.coins1000),
         ('tickets-5', ProductIds.tickets5),
-        ('hints-15', ProductIds.hints15),
       ]) {
         final c = byId(id);
         final grant = StoreProducts.grant(product);
@@ -65,6 +64,15 @@ void main() {
         expect(c.price, StoreProducts.price(product), reason: id);
         expect(c.body, contains(formatCount(grant.coins + grant.tickets + grant.hints)), reason: id);
       }
+    });
+
+    test('the booster creative names all three helpers of the bigger bundle', () {
+      final c = byId('hints-15');
+      final grant = StoreProducts.grant(ProductIds.hints15);
+      expect(c.price, StoreProducts.price(ProductIds.hints15));
+      expect(c.productId, ProductIds.hints15);
+      expect(c.body, startsWith('${formatCount(grant.peeks)} Peeks, ${formatCount(grant.hints)} Hints and ${formatCount(grant.magics)} Magic'));
+      expect(c.cta, 'Get boosters');
     });
 
     test('coin creatives keep their claims true', () {
@@ -75,6 +83,10 @@ void main() {
 
     test('piggy creative states the real fill rate', () {
       expect(byId('piggy').body, contains('adds ${Economy.piggyPerPuzzle} coins'));
+      expect(byId('piggy').body, contains('up to 500.'));
+      // Picked for a player, it names their own size (upgrades make it hold up to 1,000).
+      expect(piggyCreative(800).body, contains('up to 800.'));
+      expect(piggyCreative(1000).body, contains('up to 1,000.'));
     });
 
     test('every purchase creative opens the store', () {

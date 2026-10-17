@@ -22,12 +22,20 @@
   <link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
   <link rel="manifest" href="manifest.json">
 
-  <!-- Social preview -->
+  <!-- Social preview. Messages and WhatsApp read these tags only (no script runs), so every link of
+       the site, a Play together invite included, shows the same card: web/invite-card.jpg, 1200 x 630
+       (iMessage wants 900 px or wider, WhatsApp under 600 KB), made by tools/brand/invite_card.py. -->
   <meta property="og:title" content="Carden: Your calm picture puzzle">
-  <meta property="og:description" content="Swap cards until the picture is whole. A new puzzle every day.">
+  <meta property="og:description" content="Swap cards until the picture is whole, on your own or together. A new puzzle every day.">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Carden">
   <meta property="og:url" content="https://play.carden.page/">
-  <meta property="og:image" content="https://play.carden.page/icons/Icon-512.png">
+  <meta property="og:image" content="https://play.carden.page/invite-card.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="A picture dealt as cards beside the name Carden">
+  <meta name="twitter:card" content="summary_large_image">
 
   <title>Carden: Your calm picture puzzle</title>
 
@@ -112,6 +120,58 @@
       #splash .bar::after { animation: none; width: 100%; }
     }
     noscript p { padding: 24px; text-align: center; }
+
+    /* Play together invite on an iPhone or iPad (see the script below): open it in the app, or play
+       here. Shown before the game loads, so an in-app browser does not load the game for nothing. */
+    #invite {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: var(--canvas);
+    }
+    #invite[hidden] { display: none; }
+    #invite .card {
+      width: 100%;
+      max-width: 360px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 12px;
+    }
+    #invite img {
+      width: 84px;
+      height: 84px;
+      border-radius: 20px;
+      box-shadow: 0 1px 0 rgba(16, 16, 32, 0.06), 0 8px 24px rgba(16, 16, 32, 0.08);
+      margin-bottom: 8px;
+    }
+    #invite h1 { margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
+    #invite p { margin: 0 0 12px; font-size: 15px; line-height: 1.4; color: var(--ink-secondary); }
+    #invite a, #invite button {
+      box-sizing: border-box;
+      width: 100%;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      border: 0;
+      font: inherit;
+      font-size: 16px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    #invite .primary { background: #2F4FBF; color: #FFFFFF; }
+    #invite .secondary { background: rgba(127, 127, 140, 0.14); color: var(--ink); }
+    @media (prefers-color-scheme: dark) {
+      #invite .primary { background: #4065DD; }
+    }
   </style>
 </head>
 <body>
@@ -122,6 +182,16 @@
     <div class="bar"></div>
   </div>
   <noscript><p>Carden needs JavaScript to run.</p></noscript>
+
+  <div id="invite" role="dialog" aria-labelledby="invite-title" hidden>
+    <div class="card">
+      <img src="icons/Icon-192.png" alt="" width="84" height="84">
+      <h1 id="invite-title">Play together in Carden</h1>
+      <p id="invite-text">You are invited to a shared picture. Open it in the Carden app, or play it here in the browser.</p>
+      <a id="invite-app" class="primary" href="https://play.carden.page/">Open in Carden</a>
+      <button id="invite-web" class="secondary" type="button">Play in the browser</button>
+    </div>
+  </div>
 
   <script>
     // Hide the splash once Flutter has drawn; fall back to a timeout so a
@@ -170,6 +240,48 @@
       }, { passive: false });
     })();
   </script>
-  <script src="flutter_bootstrap.js" async></script>
+  <script>
+    // Starts the game (flutter_bootstrap.js). A Play together invite (/join/<code>) opened on an
+    // iPhone or iPad first asks where to play (docs/multiplayer.md): links in Instagram, Snapchat and
+    // often Messenger open in the app's own browser, which never hands a link of this site to the
+    // Carden app. "Open in Carden" points at the first Carden address, carden.appwrite.network, which
+    // the app claims too: a link to another domain is handed to the app by iOS. Without the app that
+    // address loads this page again (?open=1), which then offers Safari, the browser and the App Store.
+    // The game loads only after "Play in the browser", so an invite opened in the app never takes a
+    // seat in the browser as well.
+    (function () {
+      function start() {
+        if (window.cardenStarted) return;
+        window.cardenStarted = true;
+        var s = document.createElement('script');
+        s.src = 'flutter_bootstrap.js';
+        s.async = true;
+        document.body.appendChild(s);
+      }
+      var m = /^\/join\/([A-Za-z0-9-]{4,20})\/?$/.exec(location.pathname);
+      var apple = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      if (!m || !apple) return start();
+      var code = m[1].toUpperCase().replace(/[^A-Z0-9]/g, '');
+      var invite = document.getElementById('invite');
+      var app = document.getElementById('invite-app');
+      if (/(^|[?&])open=1(&|$)/.test(location.search.slice(1))) {
+        document.getElementById('invite-title').textContent = 'Play here or in the app';
+        document.getElementById('invite-text').textContent = 'If Carden is on this device, open this page in Safari to switch to the app. You can also play right here in the browser.';
+        app.textContent = 'Get Carden on the App Store';
+        app.href = 'https://apps.apple.com/app/id6821644423';
+        app.className = 'secondary';
+        var web = document.getElementById('invite-web');
+        web.className = 'primary';
+        web.parentNode.insertBefore(web, app);
+      } else {
+        app.href = 'https://carden.appwrite.network/join/' + code + '?open=1';
+      }
+      invite.hidden = false;
+      document.getElementById('invite-web').addEventListener('click', function () {
+        invite.hidden = true;
+        start();
+      });
+    })();
+  </script>
 </body>
 </html>

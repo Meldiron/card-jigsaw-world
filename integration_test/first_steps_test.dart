@@ -225,7 +225,7 @@ void main() {
         expect(shown('tip-board'), isTrue);
         await shot(tester, 'fs_11_board_tip');
       }
-      await tester.tap(find.textContaining('· Play').first, warnIfMissed: false);
+      await tester.tap(find.byKey(const ValueKey('play-board')), warnIfMissed: false);
       await settle(tester, 6000);
       expect(shown('coach'), isFalse, reason: 'the hints are for the first board only');
       await solve(tester);
