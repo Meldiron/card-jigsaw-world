@@ -1645,11 +1645,16 @@ class _BoosterBar extends StatelessWidget {
             child: SizedBox(height: _Booster.barHeight, child: Padding(padding: padding, child: child)),
           ),
         );
-    // Shuffle, free and not a move, in its own round glass button (owner, 2026-10-17: it replaced
-    // Undo); the three helpers, which come from stock or cost coins, together in a capsule.
+    // Shuffle, free and not a move, in its own glass capsule of the toolbar's height (owner,
+    // 2026-10-17: it replaced Undo), as wide as its name needs with the room the tools have around
+    // theirs, never narrower than a circle; the three helpers, which come from stock or cost coins,
+    // together in the other capsule.
     final bar = Row(
       children: [
-        capsule(SizedBox(width: _Booster.barHeight - 4, child: shuffle), padding: const EdgeInsets.symmetric(horizontal: 2)),
+        capsule(
+          ConstrainedBox(constraints: const BoxConstraints(minWidth: _Booster.barHeight - 2 * 14), child: shuffle),
+          padding: const EdgeInsets.symmetric(horizontal: 14),
+        ),
         const SizedBox(width: 10),
         Expanded(child: capsule(Row(children: [for (final b in paid) Expanded(child: b)]))),
       ],
