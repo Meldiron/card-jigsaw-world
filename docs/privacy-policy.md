@@ -2,7 +2,7 @@
 
 Carden ("the app", formerly Card Jigsaw World, on iPhone and at play.carden.page) is made by Matej
 Baco. This policy explains what the app stores, where, who can see it, and how to delete it.
-Last updated 16 October 2026.
+Last updated 17 October 2026.
 
 ## The short version
 
@@ -29,6 +29,8 @@ All game data is stored in an [Appwrite](https://appwrite.io) project hosted in 
 | Players you block | So they no longer show on your leaderboard | When you block someone |
 | Reports you send about a player (who, the name they had and the reason) | So we can act on offensive names and cheating | When you report someone |
 | Messages we send you in Social > Inbox (subject, text, an optional gift and link), and which ones you opened, claimed or deleted | So we can tell you about the game, say thank you or send a gift | When we send a message |
+| Gifts between friends: who sent a gift to whom, on which day, what it was, and the Inbox message it became (with the sender's display name and avatar) | So a friend can claim your gift, and each friend gets at most one gift from you a day | When you send a gift |
+| Push token of your iPhone (a device address from Apple), linked to your account and sign-in session | To send you a notification when a friend sends you a gift | When you allow notifications and gift notifications are on (Settings > Gifts from friends) |
 | Feedback you send from Settings (your message, your account id, the app version and whether it came from iPhone or the web) | So we can read your ideas and problems | When you send feedback |
 | Pack codes you redeem (on the web version) | So a code opens its pack once per account | When you redeem a code |
 | Purchase records: Apple transaction ids, product, date, what was granted, and Apple's per-account app identifier used for Family Sharing | To grant purchases once, restore them, share VIP with your family and handle refunds and renewals | When you buy something |
@@ -38,7 +40,7 @@ Stored on the device only, never sent to us: settings (theme, sound, music, hapt
 
 ## What other players can see
 
-Your display name, avatar, level, XP, streak, achievements and play statistics are visible to other players on the leaderboard and on your player page (anyone with your friend code can open it too). Your email, Apple identity, purchases, photos, friends, blocks, reports and feedback are never shown to anyone.
+Your display name, avatar, level, XP, streak, achievements and play statistics are visible to other players on the leaderboard and on your player page (anyone with your friend code can open it too). When you send a friend a gift, they see your display name and avatar with it. Your email, Apple identity, purchases, photos, friends, blocks, reports, feedback and push token are never shown to anyone.
 
 Players can report a display name or unfair play, and block a player so they no longer see them on their leaderboard. Reports are read only by us; the reported player is not told who reported them.
 
@@ -54,6 +56,8 @@ In-app purchases and the VIP subscription are processed by Apple through the App
 
 Daily reminders and notes before a new event are local notifications: they are planned on your device, and nothing about them is sent to us. Both are off until you turn them on (event notes have their own switch in Settings), and both can be turned off at any time in Settings.
 
+Gift notifications ("Anna sent you a gift") come from our backend. When you allow notifications, the app stores your iPhone's push token with your account so our backend (Appwrite Messaging) can ask Apple's push service to deliver them; the notification shows the sender's display name and the gift. The token is deleted when you sign out, turn off Settings > Gifts from friends or delete your account, and the record of each notification sent is deleted from our backend after a day. The web version sends no notifications.
+
 ## Updates
 
 To tell you when a newer version is out, the app reads a public record of the latest build number from our backend (on the web, a small version file of the site). Nothing about you is sent with it.
@@ -63,7 +67,7 @@ To tell you when a newer version is out, the app reads a public record of the la
 - No advertising SDKs and no ad network. The promotional cards inside the game only advertise the game's own store.
 - No third-party analytics, crash reporters or tracking identifiers, and no tracking across apps or websites.
 - No selling or sharing of personal data.
-- No chat or messaging between players.
+- No chat or messaging between players. A gift to a friend carries only your display name, avatar and the gift.
 
 ## Children
 
@@ -73,7 +77,7 @@ The game is suitable for all ages. It contains no violent, sexual or frightening
 
 We keep your data while your account exists. Reports are kept until we have looked at them, and are deleted with the account of either player.
 
-- **Delete your account.** In the app: Profile > Account > Delete account, for guests and signed-in players. It deletes your account, profile, progress, history, purchase records, friends, blocks, reports and uploaded photos at once, on every device; if you signed in with Apple, the game's access to your Apple ID is revoked too. You can also contact us (below) from the email on your account, or with your friend code if you play as a guest, and we will do the same within 30 days. Deleting your account does not cancel a VIP subscription: cancel it in your App Store subscriptions. Purchases are refunded through Apple, not by us.
+- **Delete your account.** In the app: Profile > Account > Delete account, for guests and signed-in players. It deletes your account, profile, progress, history, purchase records, friends, blocks, reports, gifts sent and received, push tokens and uploaded photos at once, on every device; if you signed in with Apple, the game's access to your Apple ID is revoked too. You can also contact us (below) from the email on your account, or with your friend code if you play as a guest, and we will do the same within 30 days. Deleting your account does not cancel a VIP subscription: cancel it in your App Store subscriptions. Purchases are refunded through Apple, not by us.
 - **Export your data.** On request we will send you a copy of the data listed above.
 
 ## Security
