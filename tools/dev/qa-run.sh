@@ -7,16 +7,18 @@
 #   tools/dev/qa-run.sh drive --driver=test_driver/integration_test.dart \
 #       --target=integration_test/screenshots_test.dart -d <udid>
 #   tools/dev/qa-run.sh run -d <udid>             interactive run, purged when you quit
-#   tools/dev/qa-run.sh run -d chrome             web
+#   tools/dev/qa-run.sh run -d web-server --web-port 8123    web (a headless browser opens it)
 #   QA_KEEP=1 tools/dev/qa-run.sh ...             keep the run's players (purge them later)
 #
 # The run id reaches the app as CJW_QA_RUN and is stored on the guest, so the purge deletes only
-# this run's players and runs in other sessions keep theirs. Leftovers (a run killed hard):
+# this run's players and runs in other sessions keep theirs. The purge runs once on every way out
+# that can be caught: a normal end, Ctrl-C (INT), TERM, HUP (the terminal or the parent went away)
+# and any other exit of this script. Only a hard kill (KILL) skips it; leftovers:
 #   python3 tools/dev/purge_test_players.py purge --apply
 set -uo pipefail
 cd "$(dirname "$0")/../.."
 export PATH="$HOME/flutter/bin:$PATH"
-if [ $# -lt 1 ]; then sed -n '2,16p' "$0"; exit 2; fi
+if [ $# -lt 1 ]; then sed -n '2,17p' "$0"; exit 2; fi
 cmd=$1; shift
 case "$cmd" in
   run|drive|test) ;;
@@ -26,23 +28,46 @@ RUN_ID="qa-$(date +%Y%m%d-%H%M%S)-$$"
 PY=python3
 [ -x .venv/bin/python ] && PY=.venv/bin/python
 
+# Messages may have nowhere to go (the parent and its pipe are gone): a failed write must not
+# stop the purge.
+say() { echo "qa-run: $*" 2>/dev/null; }
+
+purged=
 purge() {
+  # Once only: a signal's trap purges, then its exit runs the EXIT trap, which must not purge again.
+  [ -n "$purged" ] && return
+  purged=1
+  # A closed output pipe must not kill the script halfway through the purge.
+  trap '' PIPE
   if [ -n "${QA_KEEP:-}" ]; then
-    echo "qa-run: kept the test players of $RUN_ID (QA_KEEP); purge later with tools/dev/purge_test_players.py purge --apply"
+    say "kept the test players of $RUN_ID (QA_KEEP); purge later with tools/dev/purge_test_players.py purge --apply"
     return
   fi
   if [ ! -f secrets/appwrite-users-key.txt ]; then
-    echo "qa-run: secrets/appwrite-users-key.txt missing, test players of $RUN_ID not purged" >&2
+    say "secrets/appwrite-users-key.txt missing, test players of $RUN_ID not purged" >&2
     return
   fi
-  "$PY" tools/dev/purge_test_players.py purge --run "$RUN_ID" --apply --quiet \
-    || echo "qa-run: purge failed; run tools/dev/purge_test_players.py purge --apply later" >&2
+  # The purge writes to a log first and the log is shown afterwards, so a closed terminal or pipe
+  # cannot stop it partway; the log stays when the purge fails.
+  local log="${TMPDIR:-/tmp}/qa-run-$RUN_ID.log"
+  if "$PY" tools/dev/purge_test_players.py purge --run "$RUN_ID" --apply --quiet >"$log" 2>&1; then
+    cat "$log" 2>/dev/null
+    rm -f "$log"
+  else
+    cat "$log" 2>/dev/null
+    say "purge failed (log: $log); run tools/dev/purge_test_players.py purge --apply later" >&2
+  fi
 }
 
-trap 'purge; exit 130' INT TERM
-echo "qa-run: $RUN_ID (silent, test player, purged afterwards)"
+# Every way out that can be caught purges (once). A signal arriving while flutter runs is handled
+# when flutter has ended (it gets the same signal from the terminal or the parent's process group).
+trap 'purge' EXIT
+trap 'purge; exit 129' HUP
+trap 'purge; exit 130' INT
+trap 'purge; exit 143' TERM
+
+say "$RUN_ID (silent, test player, purged afterwards)"
 flutter "$cmd" --dart-define=CJW_MUTE=true --dart-define=CJW_QA=true --dart-define=CJW_QA_RUN="$RUN_ID" "$@"
 code=$?
-trap - INT TERM
 purge
 exit $code
