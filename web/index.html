@@ -243,12 +243,12 @@
   <script>
     // Starts the game (flutter_bootstrap.js). A Play together invite (/join/<code>) opened on an
     // iPhone or iPad first asks where to play (docs/multiplayer.md): links in Instagram, Snapchat and
-    // often Messenger open in the app's own browser, which never hands a link of this site to the
-    // Carden app. "Open in Carden" points at the first Carden address, carden.appwrite.network, which
-    // the app claims too: a link to another domain is handed to the app by iOS. Without the app that
-    // address loads this page again (?open=1), which then offers Safari, the browser and the app.
-    // The game loads only after "Play in the browser", so an invite opened in the app never takes a
-    // seat in the browser as well.
+    // often Messenger open in the app's own browser, and Safari shows this page whenever the phone's
+    // copy of the association file predates /join (iOS refreshes it only on install, update or now and
+    // then). "Open in Carden" therefore opens carden://join/<code>, which iOS always hands to the
+    // installed app (it asks first); if this page is still on screen a moment later, the app is not
+    // there and the card offers the browser and Get Carden instead. The game loads only after "Play in
+    // the browser", so an invite opened in the app never takes a seat in the browser as well.
     (function () {
       // Where people get the app (AppLinks.getCarden in lib/core/links.dart): TestFlight until the
       // App Store listing is live (docs/release-checklist.md, "After approval").
@@ -267,18 +267,32 @@
       var code = m[1].toUpperCase().replace(/[^A-Z0-9]/g, '');
       var invite = document.getElementById('invite');
       var app = document.getElementById('invite-app');
-      if (/(^|[?&])open=1(&|$)/.test(location.search.slice(1))) {
-        document.getElementById('invite-title').textContent = 'Play here or in the app';
-        document.getElementById('invite-text').textContent = 'If Carden is on this device, open this page in Safari to switch to the app. You can also play right here in the browser.';
+      var web = document.getElementById('invite-web');
+      var scheme = 'carden://join/' + code;
+      var tried = false;
+      // No app here (still on this page after the try): the browser first, then Get Carden.
+      function offerBrowser() {
+        document.getElementById('invite-title').textContent = 'Play here or get the app';
+        document.getElementById('invite-text').textContent = 'If Carden did not open, play right here in the browser, or get the app and open the link again.';
         app.textContent = 'Get Carden';
         app.href = GET_CARDEN;
         app.className = 'secondary';
-        var web = document.getElementById('invite-web');
         web.className = 'primary';
         web.parentNode.insertBefore(web, app);
-      } else {
-        app.href = 'https://carden.appwrite.network/join/' + code + '?open=1';
       }
+      app.href = scheme;
+      app.addEventListener('click', function (e) {
+        if (tried) return;
+        e.preventDefault();
+        tried = true;
+        var left = false;
+        function away() { left = true; }
+        document.addEventListener('visibilitychange', function () { if (document.hidden) away(); });
+        window.addEventListener('pagehide', away);
+        location.href = scheme;
+        // iOS asks "Open in Carden?" first; give it time before deciding the app is not there.
+        setTimeout(function () { if (!left && !document.hidden) offerBrowser(); }, 2500);
+      });
       invite.hidden = false;
       document.getElementById('invite-web').addEventListener('click', function () {
         invite.hidden = true;

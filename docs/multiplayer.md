@@ -247,11 +247,14 @@ welcome pages and the guided start begin when the player leaves the game (the ro
 ignores `?coop=` routes; a web visit on `/join/` starts on the welcome pages).
 
 The web page of an invite (`web/index.html`): on an iPhone or iPad the page first offers **Open in
-Carden** (a link to `https://carden.appwrite.network/join/<code>?open=1`: another domain the app claims,
-which iOS hands to the app, also from in-app browsers that keep same-domain links) and **Play in the
-browser**; the game itself loads only after the second, so an invite opened in the app never takes a
-seat in the browser too. Without the app, that address shows the page again with "open this page in
-Safari", the browser and the App Store. Instagram's and Snapchat's browsers never open universal links,
+Carden** and **Play in the browser**; the game itself loads only after the second, so an invite opened in the
+app never takes a seat in the browser too. Open in Carden opens `carden://join/<code>`, which iOS always hands
+to the installed app (after asking "Open in Carden?"), whatever the phone's copy of the association file
+says: a phone whose copy predates `/join` (iOS fetches it on install or update and only now and then after)
+shows this page even with the app installed, and the universal-link route it used before (2026-10-17, build
+124: `https://carden.appwrite.network/join/<code>?open=1`) then did nothing for the owner's friend. If the
+page is still on screen 2.5 s after the try, the app is not there and the card offers Play in the browser
+first, then Get Carden. Instagram's and Snapchat's browsers never open universal links,
 Messenger's only sometimes, hence the page.
 
 ### Share and preview
@@ -356,5 +359,6 @@ the two equal.
   made-up friends on a stage backend; `CJW_STORE_ONLY=32_coop_board`).
 - The invite page: serve a copy of `web/` with `<base href="/">` and the single-page fallback, open
   `/join/<code>` in the simulator's Safari (`xcrun simctl openurl`): the card shows and the game does
-  not load (`flutter_bootstrap.js` is not requested) until Play in the browser; `?open=1` shows the
-  fallback (Play in the browser first, then Get Carden).
+  not load (`flutter_bootstrap.js` is not requested) until Play in the browser; Open in Carden opens
+  `carden://join/<code>` (with the app installed: the app joins; without it, after 2.5 s the card offers Play in
+  the browser first, then Get Carden).
