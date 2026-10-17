@@ -45,6 +45,20 @@ Future<List<models.Row>> listRowsPage(TablesDB tables, String tableId, List<Stri
   return res.rows;
 }
 
+/// Every presence matching [queries] the player can read, page by page (Play together: who is in
+/// a game).
+Future<List<models.Presence>> listAllPresences(Presences presences, List<String> queries, {int pageSize = 100}) async {
+  final out = <models.Presence>[];
+  String? cursor;
+  while (true) {
+    final res = await presences.list(queries: [...queries, Query.limit(pageSize), if (cursor != null) Query.cursorAfter(cursor)], total: false);
+    out.addAll(res.presences);
+    if (res.presences.length < pageSize) break;
+    cursor = res.presences.last.$id;
+  }
+  return out;
+}
+
 /// How many rows match [queries] (Appwrite counts them; no rows are transferred).
 Future<int> countRows(TablesDB tables, String tableId, List<String> queries) async {
   final res = await tables.listRows(databaseId: AppwriteConfig.databaseId, tableId: tableId, queries: [...queries, Query.limit(1), Query.select(['\$id'])]);
