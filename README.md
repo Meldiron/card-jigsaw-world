@@ -148,7 +148,7 @@ Regenerate launcher icons after editing `assets/icon/icon.png` with `dart run fl
 
 ## Releasing
 
-CI runs analysis, tests and unsigned builds on every push. Publishing a GitHub release tagged `vX.Y.Z` builds a signed archive and uploads it to TestFlight; the one-time secrets and App Store Connect steps are listed in `docs/release-checklist.md`. In-app purchases are verified server-side by the `verify-purchase` Appwrite Function (`docs/purchases.md`).
+CI runs analysis, tests and unsigned builds on every push. Publishing a GitHub release tagged `vX.Y.Z` builds a signed archive and uploads it to TestFlight; the one-time secrets and App Store Connect steps are listed in `docs/release-checklist.md`. In-app purchases are verified server-side by the `api` Appwrite Function (`docs/purchases.md`); every server call of the app goes to that one function (`docs/functions.md`).
 
 ## License
 

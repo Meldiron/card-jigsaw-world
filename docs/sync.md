@@ -118,9 +118,9 @@ spent). A sign-in merge takes the chosen save's map. Older builds ignore the col
   one (two devices playing the same board at the same time).
 - Two browser tabs of the web site share one queue in localStorage; if both queue changes while
   offline and one closes before the connection returns, its queue can be overwritten by the other.
-- The `verify-purchase` function still adds a purchase with a read and a write of the profile row
-  (not an operator); a change from the player's device in the same instant can be lost. Switching
-  it to operators needs a function redeploy.
+- Purchases (`/purchase/verify` on `api`, and `verify-purchase` for builds up to 124) add the grant
+  with atomic increments (`Operator.increment`), so a change from the player's device in the same
+  instant is kept.
 
 ## Tests
 

@@ -91,20 +91,23 @@ with `read("user:<someone else>")` is refused with 401), so `read("user:X")` on 
 `CoopOp.fromRow` drops a row whose `userId` is not backed by its permissions. A player who left or was
 removed is no longer in the team and cannot create a row with `read("team:<game>")` (checked live: 401).
 
-### Function `coop-game`
+### The co-op calls (`/coop/<action>` on function `api`)
 
-Node 22, `execute: users`, timeout 30 s, scopes `rows.read rows.write teams.read teams.write users.read`
-(per-execution key). Deployed 2026-10-17 (deployment `6ad3442da89202830eef`). Source
-`functions/coop-game`, rules without a database in `src/rules.js` (`node --test` in the folder).
+Since 2026-10-17 the game calls are paths of the `api` function (docs/functions.md): source
+`functions/api/src/coop/game.js`, rules without a database in `functions/api/src/coop/rules.js`
+(`functions/api/test/coop-rules.test.mjs`). Builds up to 124 call the function `coop-game` (Node 22,
+`execute: users`, scopes `rows.read rows.write teams.read teams.write users.read`, deployment
+`6ad3442da89202830eef`) at `/<action>`: the same code, frozen, deployed for them. Both write the same rows
+and teams, so players of old and new builds play in one game.
 
 | POST path | Body | Does |
 | --- | --- | --- |
-| `/create` | `puzzleId, grid, layout, painting` | checks the picture (a `puzzles` row in a pack that is not `hidden`, not in `private-packs`) and the layout (a permutation, 4-1000 cards), leaves the caller's other games (ends those they host, `replaced`), creates the team (`Co-op <id>`), the host's membership (`host`, `seat0`) and the row |
-| `/join` | `code` | refuses `ended`, `removed`, `full` (5) and `blocked` (either way, against every player), leaves the caller's other games, adds a membership with the smallest free seat and seats everyone again (below); a second tap on the link keeps the same seat |
-| `/leave` | `gameId` | a guest: membership gone, seat freed; the host: the game ends (`host-left`) |
-| `/remove` | `gameId, userId` | host only: the row first (`removed`, seat freed, so the player's app hears it), then the membership |
-| `/end` | `gameId` | host only: `status: ended`, `endReason: host` |
-| `/next` | `gameId, puzzleId, grid, layout, painting` | host only: `board + 1` and the new board |
+| `/coop/create` | `puzzleId, grid, layout, painting` | checks the picture (a `puzzles` row in a pack that is not `hidden`, not in `private-packs`) and the layout (a permutation, 4-1000 cards), leaves the caller's other games (ends those they host, `replaced`), creates the team (`Co-op <id>`), the host's membership (`host`, `seat0`) and the row |
+| `/coop/join` | `code` | refuses `ended`, `removed`, `full` (5) and `blocked` (either way, against every player), leaves the caller's other games, adds a membership with the smallest free seat and seats everyone again (below); a second tap on the link keeps the same seat |
+| `/coop/leave` | `gameId` | a guest: membership gone, seat freed; the host: the game ends (`host-left`) |
+| `/coop/remove` | `gameId, userId` | host only: the row first (`removed`, seat freed, so the player's app hears it), then the membership |
+| `/coop/end` | `gameId` | host only: `status: ended`, `endReason: host` |
+| `/coop/next` | `gameId, puzzleId, grid, layout, painting` | host only: `board + 1` and the new board |
 
 Answers: `{ok: true, game}` or `{ok: false, reason, error}` with `reason` one of `full`, `removed`,
 `ended`, `blocked`, `picture`, `board`, `host`, `auth`, `server` (the app's `CoopRefusalReason`).
@@ -116,19 +119,20 @@ later moves to the smallest free seat; past five, the latest are over and remove
 written twice (once more after a fresh read). Checked live: four players joining at once got four
 distinct seats, a fifth was refused as full.
 
-### Function `coop-cleanup`
+### The hourly cleanup (function `api`'s schedule)
 
-Hourly (`0 * * * *`), scopes `rows.read rows.write teams.read teams.write`, deployment
-`6ad3442e6d5e7af8c7a1`. Ends games idle for a day (the newest of `activeAt` and the newest move;
+Hourly (`0 * * * *`, function `api`: a scheduled execution runs `functions/api/src/coop/cleanup.js`;
+it was the function `coop-cleanup` until 2026-10-17). Ends games idle for a day (the newest of `activeAt` and the newest move;
 `endReason: idle`), deletes games ended an hour ago (moves, team, row), deletes the moves of boards a
-game has moved past, and teams `Co-op <id>` without a row (an hour old). `POST /run` does the same on
-demand. TablesDB has no row expiry, hence this function.
+game has moved past, and teams `Co-op <id>` without a row (an hour old). `POST /coop/cleanup` does the
+same on demand for a caller who is not a player (`appwrite functions create-execution --function-id api
+--path /coop/cleanup --method POST`). TablesDB has no row expiry, hence this job.
 
 ### Elsewhere
 
-- `delete-account` (redeployed 2026-10-17, `6ad34499b06c74cf5cab`): deletes the player's moves, the
-  games they host with every move in them, and empties their seat (and `removed` entry) in other games.
-  Teams left without a game go with `coop-cleanup`.
+- Account deletion (`/account/delete` on `api`; `delete-account` for builds up to 124): deletes the
+  player's moves, the games they host with every move in them, and empties their seat (and `removed`
+  entry) in other games. Teams left without a game go with the hourly cleanup.
 - `tools/dev/cjw_admin.py` (`PLAYER_TABLES`, `HOST_TABLES`) and `tools/dev/purge_test_players.py`:
   a QA player's moves and the games they host go with them (backup first, as for every table).
 - Old builds never read these tables or call these functions: nothing a live build reads changed.
@@ -269,6 +273,7 @@ From this Mac (Node, raw protocol; rerun after the Mac's hibernation at 11:57, s
 | create on one client to the realtime event on another | 101-129 ms | 188-275 ms | about 1.1 s (first) |
 | presence update to the other client | 127-149 ms | 207-254 ms | |
 | `coop-game`: create (cold) / create, join, leave, remove, end (warm) | 7.4 s cold; 0.1-1.2 s warm; 4 joins at once about 2 s each | | |
+| `api` `/coop/*` (warm, `tools/dev/api_check.mjs`) | create 0.9 s, join 0.8-1.3 s, leave 1.5 s, remove 0.9 s, next 0.6 s, end 0.3 s | | |
 
 `$sequence`: unique under 30 concurrent creates from two clients; HTTP answers came back out of order
 (9-10 of 30) and realtime events too (6-11 of 30 per socket); `$createdAt` order disagreed with
@@ -316,7 +321,7 @@ the two equal.
   bridge), `test/coop_ui_test.dart` (colours and contrast, the chip, the list as host and guest, the
   guest's finish at the SE size, both themes, Increase contrast, Largest text), `test/deep_links_test.dart`
   (`/join` links, the association file, an invite from a fresh install, a full game).
-- `functions/coop-game`: `node --test`.
+- `functions/api`: `npm test` (co-op rules in `test/coop-rules.test.mjs`); live, every co-op route: `node tools/dev/api_check.mjs`.
 - Live: `node tools/dev/coop_bot.mjs &` then `tools/dev/qa-run.sh drive
   --driver=test_driver/integration_test.dart --target=integration_test/coop_live_test.dart -d <sim>`:
   a fresh install joins the bot's game from an invite, moves go both ways, presence, a toast, the player
