@@ -183,7 +183,12 @@ ${line ? `<p class="line">${escape(line)}</p>` : ''}
 /// GET on this module's paths (see isInviteRequest).
 export async function serve({ req, res, log, error }) {
   const path = String(req.path || '/');
-  const html = (body, status = 200) => res.text(body, status, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'public, max-age=60', 'x-robots-tag': 'noindex' });
+  // Appwrite's edge keeps an answer as long as `s-maxage` says (measured: the second request is a
+  // cache hit and never reaches the function), so a friend who taps the link after the preview was
+  // read gets the page at once, cold or not. Ten minutes: the player count may be that old. An
+  // answer made while something failed is not kept.
+  const KEEP = 'public, max-age=60, s-maxage=600';
+  const html = (body, cache = KEEP) => res.text(body, 200, { 'content-type': 'text/html; charset=utf-8', 'cache-control': cache, 'x-robots-tag': 'noindex' });
   if (path === '/.well-known/apple-app-site-association' || path === '/apple-app-site-association') {
     return res.text(JSON.stringify(ASSOCIATION), 200, { 'content-type': 'application/json', 'cache-control': 'public, max-age=3600' });
   }
@@ -198,6 +203,7 @@ export async function serve({ req, res, log, error }) {
     game = (await s.tables.listRows({ databaseId: DB, tableId: 'coop_games', queries: [Query.equal('code', [code]), Query.limit(1)], total: false })).rows[0] ?? null;
   } catch (e) {
     error(`invite page: ${e?.message ?? e}`);
+    return html(renderPage({ code, game: null }), 'no-store');
   }
   if (!game || game.status !== 'playing') return html(renderPage({ code, game: null }));
 
@@ -206,7 +212,7 @@ export async function serve({ req, res, log, error }) {
     s.tables.getRow({ databaseId: DB, tableId: 'profiles', rowId: game.hostId, queries: [Query.select(['displayName'])] }).catch(() => null),
   ]);
   const read = Date.now() - t;
-  let image = SITE_CARD;
+  let image = null;
   try {
     // A crawler waits for the card at most a few seconds; the site's own card stands in after that.
     let timer;
@@ -227,5 +233,6 @@ export async function serve({ req, res, log, error }) {
     players: (game.players || []).filter((p) => p).length,
   });
   log(`invite page: ${Date.now() - t} ms (rows ${read} ms)`);
-  return html(renderPage({ code, game, copy, image }));
+  // Without its card (still drawing, or failed) the page shows the site's card and is not kept.
+  return html(renderPage({ code, game, copy, image: image ?? SITE_CARD }), image && puzzle ? KEEP : 'no-store');
 }

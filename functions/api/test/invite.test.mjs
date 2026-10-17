@@ -5,10 +5,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { loadImage } from '@napi-rs/canvas';
 import { parseGrid, sizeLabel, tilingOf, shapeOf } from '../src/invite/tiling.js';
 import { renderCard, inviteLines, canWrite, tokens, pickSwaps } from '../src/invite/card.js';
-import { cardId, cardUrl, pictureFile, CARD_VERSION } from '../src/invite/store.js';
+import { decode } from '../src/invite/raster.js';
+import { cardId, cardUrl, pictureFile, ensureCard, CARD_VERSION } from '../src/invite/store.js';
 import { inviteCopy, renderPage, ASSOCIATION, GET_CARDEN } from '../src/invite/page.js';
 import { codeOfPath, isInviteRequest } from '../src/invite/paths.js';
 
@@ -154,13 +154,46 @@ test('the lettering has every word a card can show', () => {
   assert.deepEqual(tokens(['Cards', '17x17']), ['Cards', ' ', '1', '7', 'x', '1', '7']);
 });
 
+test('a card is drawn once, in a worker, and kept in the bucket', async () => {
+  const files = new Map();
+  const asked = [];
+  const storage = {
+    getFile: async ({ fileId }) => {
+      if (!files.has(fileId)) throw Object.assign(new Error('not found'), { code: 404 });
+      return { $id: fileId };
+    },
+    getFilePreview: async (args) => {
+      asked.push(args);
+      return welcome('tulip-fields').buffer.slice(0);
+    },
+    createFile: async ({ bucketId, fileId, file }) => {
+      assert.equal(bucketId, 'invite-cards');
+      files.set(fileId, Buffer.from(await file.arrayBuffer()));
+      return { $id: fileId };
+    },
+  };
+  const puzzle = { imageUrl: 'https://fra.cloud.appwrite.io/v1/storage/buckets/puzzle-images/files/abc/view?project=p' };
+  const game = { puzzleId: 'pack-x-01', grid: 'hexagons-7x7t7', painting: true };
+  const [first, again] = await Promise.all([ensureCard({ storage, tables: null }, game, puzzle), ensureCard({ storage, tables: null }, game, puzzle)]);
+  assert.equal(first.made, true);
+  assert.deepEqual(again, first, 'a second call at the same moment waits for the first');
+  assert.equal(asked.length, 1);
+  assert.deepEqual(asked[0], { bucketId: 'puzzle-images', fileId: 'abc', width: 800, output: 'png' });
+  const jpeg = files.get(first.id);
+  assert.deepEqual([jpeg[0], jpeg[1]], [0xff, 0xd8], 'a JPEG');
+  assert.equal(first.url, cardUrl(first.id));
+  assert.equal((await ensureCard({ storage, tables: null }, game, puzzle)).made, false, 'kept');
+  // A picture outside the catalogue's bucket is never drawn.
+  await assert.rejects(ensureCard({ storage, tables: null }, { ...game, grid: 'cards-3x3' }, { imageUrl: 'https://fra.cloud.appwrite.io/v1/storage/buckets/private-packs/files/x/view' }));
+});
+
 test('cards: 1200 x 630 JPEG under WhatsApp\'s 600 KB, for every shape and a giant board', async () => {
   for (const [name, grid, painting] of [['red-panda', 'cards-7x7t7', false], ['tulip-fields', 'squares-5x5t4', true], ['parthenon', 'triangles-11x5t4', false], ['meerkat', 'hexagons-5x5t4', false], ['azure-window', 'hexagons-23x23t11', false]]) {
     const t = performance.now();
-    const card = await renderCard({ image: welcome(name), board: parseGrid(grid), painting, seed: 1 });
+    const card = renderCard({ image: welcome(name), board: parseGrid(grid), painting, seed: 1 });
     const ms = performance.now() - t;
-    const img = await loadImage(card.jpeg);
-    assert.deepEqual([img.width, img.height], [1200, 630], grid);
+    const img = decode(card.jpeg);
+    assert.deepEqual([img.w, img.h], [1200, 630], grid);
     assert.ok(card.jpeg.length < 600 * 1024, `${grid}: ${card.jpeg.length} bytes`);
     assert.equal(card.cells, tilingOf(parseGrid(grid)).cells);
     assert.ok(card.swapped >= 2, `${grid}: pieces still to swap`);

@@ -42,6 +42,7 @@ STYLES = {
 }
 
 PAD = 4
+LOGO = 96
 
 
 def font(size, weight):
@@ -87,9 +88,10 @@ def main():
         json.dump({'pad': PAD, 'styles': meta}, fh, indent=1, ensure_ascii=False)
         fh.write('\n')
 
-    icon = Image.open(ICON).convert('RGBA').resize((208, 208), Image.LANCZOS)
+    # The logo at the size the card draws it (no scaling there).
+    icon = Image.open(ICON).convert('RGBA').resize((LOGO, LOGO), Image.LANCZOS)
     icon.save(os.path.join(OUT_DIR, 'logo.png'), optimize=True)
-    print(f'{os.path.relpath(OUT_DIR, ROOT)}: text.png {atlas.size[0]}x{atlas.size[1]}, logo.png 208 px')
+    print(f'{os.path.relpath(OUT_DIR, ROOT)}: text.png {atlas.size[0]}x{atlas.size[1]}, logo.png {LOGO} px')
 
     subprocess.run(['node', os.path.join(ROOT, 'tools', 'brand', 'invite_card.mjs')], check=True, cwd=ROOT)
 

@@ -42,6 +42,27 @@ export function pictureFile(url) {
 const gone = (e) => e?.code === 404;
 const inflight = new Map();
 
+/// The swaps a card shows follow its key, so a card drawn twice comes out the same.
+const seedOf = (id) => parseInt(id.slice(0, 8), 16);
+
+/// Draws a card in a worker thread (worker.js), so the function's other calls do not wait; on the
+/// main thread if a worker cannot start.
+async function draw(args) {
+  let Worker;
+  try {
+    ({ Worker } = await import('node:worker_threads'));
+  } catch (_) {
+    Worker = null;
+  }
+  if (!Worker) return (await import('./card.js')).renderCard(args);
+  return new Promise((resolve, reject) => {
+    const w = new Worker(new URL('./worker.js', import.meta.url), { workerData: args });
+    w.once('message', (m) => resolve({ jpeg: Buffer.from(m.jpeg), cells: m.cells }));
+    w.once('error', reject);
+    w.once('exit', (code) => code !== 0 && reject(new Error(`invite card worker stopped (${code})`)));
+  });
+}
+
 /// The card of [game]'s board in Storage, drawn now if it is not there yet. Returns its address and
 /// whether this call drew it. [puzzle]: the game's `puzzles` row when the caller has it.
 export async function ensureCard({ tables, storage }, game, puzzle = null) {
@@ -59,13 +80,13 @@ export async function ensureCard({ tables, storage }, game, puzzle = null) {
     const file = pictureFile(row.imageUrl);
     // Only pictures of the catalogue's own bucket (the co-op calls refuse the others).
     if (!file || file.bucketId !== 'puzzle-images') throw new Error(`invite card: picture not in puzzle-images (${game.puzzleId})`);
-    const image = Buffer.from(await storage.getFilePreview({ bucketId: file.bucketId, fileId: file.fileId, width: 1200, quality: 90, output: 'jpg' }));
+    // 800 px wide is more than the board and the blurred backdrop need; a PNG decodes quickly here.
+    const image = Buffer.from(await storage.getFilePreview({ bucketId: file.bucketId, fileId: file.fileId, width: 800, output: 'png' }));
     const fetched = Date.now() - t;
-    const { renderCard, hashSeed } = await import('./card.js');
     const { parseGrid } = await import('./tiling.js');
     const board = parseGrid(game.grid);
     if (!board) throw new Error(`invite card: board ${game.grid}`);
-    const card = await renderCard({ image, board, painting: game.painting === true, seed: hashSeed(id) });
+    const card = await draw({ image, board, painting: game.painting === true, seed: seedOf(id) });
     const drawn = Date.now() - t - fetched;
     const { InputFile } = await import('node-appwrite/file');
     try {
