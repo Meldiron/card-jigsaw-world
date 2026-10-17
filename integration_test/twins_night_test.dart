@@ -1,10 +1,12 @@
 // Twin cards in the dark (owner, TestFlight build 124: "Top right corner is all black, as the
 // picture is. The system that makes cards work when they are similar enough is not working"), on
 // the real app with a QA guest: Sydney Opera House night on 7x7 Cards (Master), whose night sky and
-// dark water are near-black cards with noise and faint stars. A black card is dragged onto another
-// black card's place and locks there; the cards with a visible star, lamp or the bridge's truss are
-// not among the twins. Screenshots before, while the card is held over its target, just after the
-// drop and after.
+// dark water are near-black cards with noise and faint stars. Since the middle option (owner,
+// 2026-10-17: a few pin-point stars do not keep a card apart) the corner cards 7 and 14, a few stars
+// on the black, are twins of the black sky too, and the bridge's edge, truss and lamp (4, 5, 6, 12,
+// 13) stay apart. Card 0 (black sky) is dragged onto card 7's place and locks there; then a card of
+// the truss is dragged onto a black card's place and does not. Screenshots before, while the card is
+// held over its target, just after the drop and after, for both drops.
 //
 //   tools/dev/qa-run.sh drive --driver=test_driver/integration_test.dart \
 //     --target=integration_test/twins_night_test.dart -d <simulator>
@@ -91,50 +93,59 @@ void main() {
     debugPrint('QA twins night: ${state.board.spec.code}: ${twins.classes}');
     expect(state.board.spec.code, '7x7');
     // The plain night sky in the top left and the dark water: one class of black cards (the
-    // report finds 0, 1, 2, 3, 8, 11, 35, 42 and 48).
+    // report finds 0, 1, 2, 3, 7, 8, 11, 14, 35, 42 and 48).
     final black = twins.classes.reduce((a, b) => a.length >= b.length ? a : b);
     const plain = {0, 1, 2, 3, 8, 11, 35, 42, 48};
     expect(black.where(plain.contains).length, greaterThanOrEqualTo(6), reason: 'the black cards of the sky and the water are twins');
-    // A visible star (card 7) and the bridge's truss (cards 5 and 6, top right) stay apart.
-    for (final apart in [5, 6, 7]) {
-      expect(black.contains(apart), isFalse, reason: 'card $apart shows something');
+    // A few pin-point stars (cards 7 and 14) do not keep a card apart; the bridge's edge, truss and
+    // lamp (4, 5, 6, 12, 13) do.
+    for (final speckled in [7, 14]) {
+      expect(black.contains(speckled), isTrue, reason: 'card $speckled has only a few pin-point stars');
+    }
+    for (final apart in [4, 5, 6, 12, 13]) {
+      expect(black.contains(apart), isFalse, reason: 'card $apart shows the bridge');
     }
     await shot(tester, 'twins_night_1_dealt', ms: 800);
 
-    // A black card dragged onto another black card's place.
-    final b = state.board;
-    late int from, to;
-    search:
-    for (from = 0; from < b.cells; from++) {
-      if (!black.contains(b.slots[from])) continue;
-      for (final t in black) {
-        final moved = t == b.slots[from] ? null : b.moveTo(from, t);
-        if (moved != null && twins.settle(b, moved).board.isLocked(t)) {
-          to = t;
-          break search;
-        }
+    // Drags the card at slot [from] onto slot [to] the way a finger does, with screenshots while it
+    // is held over the target and just after the drop.
+    Future<void> drag(int from, int to, String name) async {
+      // The card starts following the finger once it has moved the pan slop, so the finger goes
+      // that much further for the card to land on the target's centre.
+      final start = onScreen(tester, from), aim = onScreen(tester, to);
+      final end = aim + (aim - start) / (aim - start).distance * kPanSlop;
+      final gesture = await tester.startGesture(start);
+      await tester.pump(const Duration(milliseconds: 100));
+      for (var i = 1; i <= 12; i++) {
+        await gesture.moveTo(Offset.lerp(start, end, i / 12)!);
+        await tester.pump(const Duration(milliseconds: 30));
       }
+      await settle(tester, 400);
+      await shot(tester, '${name}_held', ms: 0);
+      await gesture.up();
+      await tester.pump(const Duration(milliseconds: 60));
+      await shot(tester, '${name}_dropped', ms: 0);
+      await settle(tester, 1500);
     }
-    expect(from, lessThan(b.cells), reason: 'a black card that can go to another black card\'s place');
-    debugPrint('QA twins night: card ${b.slots[from]} from slot $from to slot $to (card $to\'s place)');
-    // The card starts following the finger once it has moved the pan slop, so the finger goes that
-    // much further for the card to land on the target's centre.
-    final start = onScreen(tester, from), aim = onScreen(tester, to);
-    final end = aim + (aim - start) / (aim - start).distance * kPanSlop;
-    final gesture = await tester.startGesture(start);
-    await tester.pump(const Duration(milliseconds: 100));
-    for (var i = 1; i <= 12; i++) {
-      await gesture.moveTo(Offset.lerp(start, end, i / 12)!);
-      await tester.pump(const Duration(milliseconds: 30));
-    }
-    await settle(tester, 400);
-    await shot(tester, 'twins_night_2_held', ms: 0);
-    await gesture.up();
-    await tester.pump(const Duration(milliseconds: 60));
-    await shot(tester, 'twins_night_3_dropped', ms: 0);
-    await settle(tester, 1500);
+
+    // Card 0, black sky, onto card 7's place (a few stars): it counts as placed.
+    var b = state.board;
+    final from0 = b.slotOfCard(0);
+    expect(b.isLocked(7), isFalse);
+    debugPrint('QA twins night: card 0 from slot $from0 to slot 7 (card 7\'s place)');
+    await drag(from0, 7, 'twins_night_2_card0_on_7');
     state = board(tester).state;
-    expect(state.board.isLocked(to), isTrue, reason: 'the black card counts as placed');
-    await shot(tester, 'twins_night_4_after');
+    expect(state.board.isLocked(7), isTrue, reason: 'the black card counts as placed on the place of the card with a few stars');
+    await shot(tester, 'twins_night_3_after');
+
+    // A card of the bridge's truss onto a black card's place: it does not.
+    b = state.board;
+    final truss = b.slotOfCard(5);
+    final target = black.firstWhere((t) => t != 7 && !b.isLocked(t) && b.slots[t] != 5 && t != truss);
+    debugPrint('QA twins night: card 5 (truss) from slot $truss to slot $target (card $target\'s place)');
+    await drag(truss, target, 'twins_night_4_truss');
+    state = board(tester).state;
+    expect(state.board.isLocked(target), isFalse, reason: 'the truss card does not count as placed on a black card\'s place');
+    await shot(tester, 'twins_night_5_after');
   });
 }
