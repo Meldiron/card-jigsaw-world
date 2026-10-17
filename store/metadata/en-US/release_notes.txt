@@ -11,7 +11,8 @@ A calmer start
 - Social > Inbox: messages from Carden, sometimes with a gift.
 
 New ways to play
-- Square boards: every size is as many cards across as down, from 3x3 to 7x7. Expand cuts the whole picture in its own shape instead.
+- Square boards: as many cards across as down, from 3x3 to 7x7. Expand cuts the whole picture in its own shape instead.
+- Cards that look the same count as placed in either place.
 - Painting: cards start in black and white and get their colour back as they lock. Pays 25% more.
 - Giant boards of hundreds of cards, with pinch to zoom, an overview map that shows where a tapped card belongs, Gather with Undo, and Giant packs of detailed pictures made for them.
 - Shuffle (free) replaces Undo, Magic places a card and its neighbours, Peek (10 coins) flies every card to its place for a moment, and a group you push moves aside whole.

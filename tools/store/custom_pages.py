@@ -124,8 +124,8 @@ def _glass():
 
 
 def resolve_box(cg, capture: str, box):
-    if box == "board":
-        return "board"
+    if box == "board" or (isinstance(box, str) and box.startswith("rect:")):
+        return box  # compose_glass.crop_box reads these per capture
     if isinstance(box, str):
         if box in BOXES:
             return BOXES[box]

@@ -12,6 +12,7 @@
 // pack order or a moved button does not derail the run; every board is set
 // up by tapping real moves on the live board.
 import 'dart:async';
+import 'dart:math' show max, min;
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
@@ -91,7 +92,7 @@ const theme = String.fromEnvironment('CJW_STORE_THEME', defaultValue: 'dark');
 const skipUpload = bool.fromEnvironment('CJW_STORE_SKIP_UPLOAD');
 const suffix = theme == 'light' ? '_light' : '';
 
-/// `--dart-define=CJW_STORE_ONLY=25_hero,27_giant` re-takes only those glass-set captures (15_library, 22_social_league, 25-32)
+/// `--dart-define=CJW_STORE_ONLY=25_hero,27_giant` re-takes only those glass-set captures (15_library, 22_social_league, 25-33)
 /// after onboarding and leaves every other file as it is: a quick rerun for one slide.
 const only = String.fromEnvironment('CJW_STORE_ONLY');
 bool want(String name) => only.isEmpty || only.split(',').contains(name);
@@ -225,6 +226,19 @@ void main() {
       map['$name$suffix'] = [r.left * dpr, r.top * dpr, r.width * dpr, r.height * dpr];
     }
     await binding.takeScreenshot('$name$suffix');
+  }
+
+  /// Records the rectangle of one card of the board on screen (physical px, grown by [pad] logical px)
+  /// as [name] in store/raw/boards.json, so the composer can lift exactly that card.
+  void recordCell(WidgetTester tester, String name, int slot, {double pad = 0}) {
+    final rect = tester.getRect(find.byType(BoardWidget).first);
+    final poly = tester.widget<BoardWidget>(find.byType(BoardWidget).first).state.board.tiling.polygon(slot, rect.size);
+    final xs = poly.map((p) => p.dx), ys = poly.map((p) => p.dy);
+    final r = Rect.fromLTRB(xs.reduce(min), ys.reduce(min), xs.reduce(max), ys.reduce(max)).shift(rect.topLeft).inflate(pad);
+    final dpr = tester.view.devicePixelRatio;
+    binding.reportData ??= <String, dynamic>{};
+    final map = (binding.reportData!['boards'] ??= <String, dynamic>{}) as Map<String, dynamic>;
+    map['$name$suffix'] = [r.left * dpr, r.top * dpr, r.width * dpr, r.height * dpr];
   }
 
   Future<void> tapText(WidgetTester tester, String text, {int ms = 1200}) async {
@@ -448,6 +462,15 @@ void main() {
     await tester.dragUntilVisible(find.text(tier), find.byType(Scrollable).first, const Offset(0, -200));
     await settle(tester, 500);
     await tapText(tester, tier, ms: 900);
+    // The screen remembers Painting from the last board (the Painting capture comes before the giant
+    // one): set it to what this capture asks for.
+    final paintingOption = find.byKey(const ValueKey('painting-option'));
+    if (paintingOption.evaluate().isNotEmpty && find.byKey(const ValueKey('painting-bonus')).evaluate().isNotEmpty != painting) {
+      await tester.ensureVisible(paintingOption);
+      await settle(tester, 400);
+      await tester.tap(paintingOption, warnIfMissed: false);
+      await settle(tester, 700);
+    }
     await tester.drag(find.byType(Scrollable).first, const Offset(0, 1200));
     await settle(tester, 700);
     if (difficultyShot != null) await shot(tester, difficultyShot);
@@ -579,7 +602,7 @@ void main() {
 
     // Play together: a shared board mid-game, the host's view, with two friends: the players chip,
     // the card Maya holds and the card Leo just moved, each in their colour and with their initial.
-    if (want('32_coop_board')) {
+    if (want('32_coop_board') || want('33_coop_players')) {
       try {
         await startGame(tester, coopPuzzle, 'Cards', 'Relaxed');
         await midBuild(tester, 0.35, 2);
@@ -592,17 +615,38 @@ void main() {
         // The join toasts come and go before the capture.
         await settle(tester, 7000);
         final b = board(tester);
-        final singles = [for (var s = 0; s < b.cells; s++) if (single(b, s)) s];
-        // Leo moves a loose card next to the middle; Maya holds another one.
-        final from = singles.first, to = singles[singles.length ~/ 2];
+        // Leo moves a loose card next to the middle; Maya holds another one. Single cards first; a board
+        // that left fewer than two (mid-build joins by chance) uses any loose card instead.
+        final loose = [for (var s = 0; s < b.cells; s++) if (!b.isLocked(s)) s];
+        final singles = loose.where((s) => single(b, s)).toList();
+        final pool = singles.length >= 2 ? singles : loose;
+        final from = pool.first, to = pool[pool.length ~/ 2];
         final after = b.moveTo(from, to);
         if (after != null) stage.move('stage-leo', b.slots, after.slots);
         await settle(tester, 1500);
         final now = board(tester);
-        final held = [for (var s = 0; s < now.cells; s++) if (single(now, s) && s != to && s != from) s];
-        if (held.isNotEmpty) stage.hold('stage-maya', now.slots[held.last]);
+        final free = [for (var s = 0; s < now.cells; s++) if (!now.isLocked(s) && s != to && s != from) s];
+        final freeSingles = free.where((s) => single(now, s)).toList();
+        final held = freeSingles.isNotEmpty ? freeSingles.last : (free.isNotEmpty ? free.last : null);
+        if (held != null) {
+          stage.hold('stage-maya', now.slots[held]);
+          // The store slide lifts Maya's card with her outline (drawn just outside the card).
+          recordCell(tester, '32_coop_held', held, pad: 1.5);
+        } else {
+          stage.hold('stage-maya', -1);
+        }
         await settle(tester, 1500);
         await shot(tester, '32_coop_board');
+        // The player list from the players chip: everyone's avatar in their colour ring, Host and You,
+        // Remove on the friends (the store slide lifts its rows). Taken with 32, from the same game.
+        // Leo is still at the board (his presence would otherwise read Away by now).
+        stage.hold('stage-leo', -1);
+        await settle(tester, 800);
+        await tester.tap(find.byKey(const ValueKey('coop-players-chip')), warnIfMissed: false);
+        await settle(tester, 1800);
+        await shot(tester, '33_coop_players');
+        await tester.tapAt(const Offset(200, 120));
+        await settle(tester, 1200);
         final c = ProviderScope.containerOf(tester.element(find.byType(MaterialApp)));
         c.read(coopProvider.notifier).clear();
         await saveAndQuit(tester);

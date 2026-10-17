@@ -10,7 +10,7 @@
   "keywordsNote": "'large' joined the app's keyword field for this page in 2.0.0 (2026-10-17).",
   "adSearchTerms": ["big jigsaw puzzles", "large jigsaw puzzle", "hard jigsaw puzzles", "300 piece puzzle", "detailed puzzle", "challenging puzzle"],
   "slides": [
-    {"note": "The hook: a whole giant board of 345 squares, flat, with the brand.",
+    {"note": "The hook: a whole giant board of 324 squares, flat, with the brand.",
      "head": "Giant boards of\nhundreds of cards", "brand": true, "text": ["top", 330, "center"],
      "phones": [{"capture": "27_giant", "x": 160, "y": 738}]},
     {"note": "Zoomed in, the overview map lifted out of the corner.",
