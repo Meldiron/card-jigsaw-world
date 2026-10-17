@@ -368,9 +368,9 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
     final giantPick = BoardSpec.isGiantTier(_tier) ? _tier : (_giantTier ?? BoardSpec.firstGiantTier);
     final pick = giant ? giantPick : (BoardSpec.isGiantTier(_tier) ? 2 : _tier);
     final maxTier = LevelRewards.maxTierIndex(profile?.level ?? 1);
-    // A shape's smallest size is always open (Hexagons start at 5x5, a level 3 size).
+    // A shape's smallest size is always open (Hexagons start at 4x4).
     bool tierLocked(BoardSpec t) => giant ? giantLocked : t.tier > maxTier && t != tiers.first && !profileN.hasTier(mode, t.tier);
-    // A size this mode does not have (Triangles have no 5x5) gives the nearest one; a remembered
+    // A size this mode does not have (Hexagons have no 3x3) gives the nearest one; a remembered
     // size this player cannot play (another account on this device) steps down to the largest
     // open one.
     var at = tiers.indexOf(BoardSpec.nearest(tiers, pick));
@@ -381,8 +381,9 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
     }
     final spec = saved != null ? savedSpec! : tiers[at];
     final painting = saved != null ? saved.painting : (_painting && open.painting);
-    final coins = Economy.completionCoins(spec.cells, 3, mode: mode, painting: painting);
-    final xp = Economy.completionXp(spec.cells, 3, mode: mode, painting: painting);
+    // Pre-set pieces (docs/boards.md) are not played, so they do not pay.
+    final coins = Economy.completionCoins(spec.playableCells, 3, mode: mode, painting: painting);
+    final xp = Economy.completionXp(spec.playableCells, 3, mode: mode, painting: painting);
     final boardAspect = spec.tiling.boardAspect(imageAspect);
     // Short phones (SE, mini): a smaller preview, so every choice sits above Play.
     final compact = MediaQuery.sizeOf(context).height < 740;
@@ -1277,8 +1278,10 @@ class _InProgressCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.colors;
     final layout = saved.layout ?? const <int>[];
-    final placed = [for (var i = 0; i < layout.length; i++) if (layout[i] == i) i].length;
-    final cells = spec.cells;
+    // Pre-set pieces (docs/boards.md) count in neither number.
+    final tiling = layout.length == spec.cells ? spec.tiling : null;
+    final placed = [for (var i = 0; i < layout.length; i++) if (layout[i] == i && !(tiling?.isPreset(i) ?? false)) i].length;
+    final cells = spec.playableCells;
     return SoftCard(
       key: const ValueKey('board-in-progress'),
       padding: Insets.card,

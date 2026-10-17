@@ -96,18 +96,25 @@ void main() {
   });
 
   test('with Expand, triangles and hexagons cover common portrait pictures nearly whole', () {
+    // The sizes added with pre-set pieces (3x3 triangles, 4x4 and 6x6 honeycombs) have fewer
+    // shapes to choose from: their Expand board never crops more than their square board.
+    const added = {GameMode.triangles: [0], GameMode.hexagons: [2, 6]};
     for (final mode in [GameMode.triangles, GameMode.hexagons]) {
       for (final a in [9 / 16, 2 / 3, 3 / 4, 4 / 5, 1.0]) {
         for (final spec in shaped(mode, a)) {
           final f = spec.tiling.fitFor(a);
-          expect(f.crop, lessThan(0.07), reason: '${spec.fullCode} on $a crops ${f.crop}');
+          if (spec.expand && added[mode]!.contains(spec.tier) && BoardSpec.expandTiers(mode, a).contains(spec)) {
+            expect(f.crop, lessThanOrEqualTo(BoardSpec.squareAt(mode, spec.tier)!.tiling.fitFor(a).crop + 0.01), reason: '${spec.fullCode} on $a crops ${f.crop}');
+          } else {
+            expect(f.crop, lessThan(0.07), reason: '${spec.fullCode} on $a crops ${f.crop}');
+          }
           expect(f.stretch, lessThanOrEqualTo(spec.tiling.stretchTolerance / (1 - spec.tiling.stretchTolerance) + 1e-9), reason: '${spec.fullCode} on $a');
         }
       }
     }
   });
 
-  test('every placement class has at least two slots on every board on offer', () {
+  test('a piece is one of a kind only where it is pre-set, and only on the small boards that need it', () {
     for (final entry in offered().entries) {
       for (final spec in entry.value) {
         final t = spec.tiling;
@@ -117,9 +124,18 @@ void main() {
           counts[t.classOf(s)] = (counts[t.classOf(s)] ?? 0) + 1;
         }
         expect(counts.length, t.classCount, reason: spec.fullCode);
-        for (final c in counts.entries) {
-          expect(c.value, greaterThanOrEqualTo(2), reason: '${spec.fullCode} class ${c.key} is one of a kind');
+        for (var s = 0; s < t.cells; s++) {
+          expect(t.isPreset(s), counts[t.classOf(s)] == 1, reason: '${spec.fullCode} slot $s');
         }
+        // Three rows of triangles (two middle halves), the 4x4 honeycomb (four) and the 6x6 one (two).
+        final expected = switch (spec.mode) {
+          GameMode.triangles when spec.rows == 3 => 2,
+          GameMode.hexagons when spec.cols == 4 && spec.rows == 4 => 4,
+          GameMode.hexagons when spec.cols == 6 && spec.rows == 6 => 2,
+          _ => 0,
+        };
+        expect(t.presetCount, expected, reason: spec.fullCode);
+        expect(spec.playableCells, spec.cells - expected);
       }
     }
   });
@@ -131,7 +147,8 @@ void main() {
           final b = Board.shuffled(spec, seed: seed);
           final why = '${spec.fullCode} seed $seed';
           expect(b.lockedCount, 0, reason: '$why: a piece starts in place');
-          // Only the 5x5 triangle board keeps a joined pair of halves on each side edge (Tiling.unavoidableJoins).
+          // Only the 5x5 triangle board (a pair of halves on each side edge) and the 4x4 honeycomb (a pair in
+          // its bottom row of three) keep joined pairs (Tiling.unavoidableJoins); pre-set pieces are not counted.
           expect(b.joinCount, lessThanOrEqualTo(spec.tiling.unavoidableJoins), reason: '$why: a pair starts joined');
           expect(Board.isValidLayout(spec, b.slots), isTrue, reason: '$why: every piece sits in a slot of its own shape');
         }

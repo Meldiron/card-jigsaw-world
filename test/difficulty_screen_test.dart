@@ -122,7 +122,7 @@ void main() {
   }
 
   /// The rewards line's XP: it names the board chosen.
-  Finder xpOf(BoardSpec spec, {bool painting = false}) => find.text('${Economy.completionXp(spec.cells, 3, mode: spec.mode, painting: painting)} XP');
+  Finder xpOf(BoardSpec spec, {bool painting = false}) => find.text('${Economy.completionXp(spec.playableCells, 3, mode: spec.mode, painting: painting)} XP');
 
   testWidgets('tier tiles name the square boards in every mode', (tester) async {
     final key = await pumpScreen(tester, width: 402, height: 874);
@@ -136,7 +136,7 @@ void main() {
       }
       // No picture yet: no Expand.
       expect(find.byKey(const ValueKey('expand-option')), findsNothing);
-      // Relaxed, or the size next to it (Hexagons start at 5x5).
+      // Relaxed (every mode has a 4x4 board).
       expect(xpOf(BoardSpec.forPicture(mode, 2, BoardSpec.referenceAspect)), findsOneWidget, reason: mode.code);
       await dump(tester, key, 'difficulty_mode_${mode.code}');
     }
@@ -165,7 +165,7 @@ void main() {
     await pumpScreen(tester, width: 402, height: 874, router: true);
     await tester.tap(find.text('Triangles'));
     await settle(tester);
-    final relaxed = BoardSpec.squareTiers(GameMode.triangles)[0];
+    final relaxed = BoardSpec.squareTiers(GameMode.triangles)[1];
     expect(relaxed.size, '4x4');
     await tester.tap(find.text(relaxed.size).first);
     await settle(tester);
@@ -250,7 +250,7 @@ void main() {
     expect(find.text('Level ${Unlock.squares.level}'), findsOneWidget);
     await tester.tap(find.byKey(const ValueKey('mode-hexagons')));
     await settle(tester);
-    // Hexagons start at 5x5 (Tricky, level 3): a shape's smallest size is always open.
+    // A shape's smallest size is always open (Hexagons start at 4x4, Relaxed).
     expect(xpOf(BoardSpec.squareTiers(GameMode.hexagons).first), findsOneWidget);
   });
 

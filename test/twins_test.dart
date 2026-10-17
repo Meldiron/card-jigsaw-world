@@ -387,7 +387,8 @@ void main() {
     return Twins.fromClasses(spec.cells, classes);
   }
 
-  int looksPlaced(Board b, Twins twins) => [for (var s = 0; s < b.cells; s++) if (twins.looksPlaced(b.slots[s], s)) s].length;
+  /// Playable cards that look in place (pre-set pieces are in place by design).
+  int looksPlaced(Board b, Twins twins) => [for (var s = 0; s < b.cells; s++) if (!b.isPreset(s) && twins.looksPlaced(b.slots[s], s)) s].length;
   int looksJoined(Board b, Twins twins) {
     var n = 0;
     for (var s = 0; s < b.cells; s++) {

@@ -1231,9 +1231,11 @@ class _ContinueCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    final locked = progress.layout == null ? 0 : [for (var i = 0; i < progress.layout!.length; i++) if (progress.layout![i] == i) i].length;
-    final total = progress.layout?.length ?? progress.gridSize;
     final mode = GameMode.fromCode(progress.mode);
+    // Pre-set pieces (docs/boards.md) count in neither number.
+    final counts = progress.layout == null ? null : BoardSpec.progressOf(mode, progress.layout!);
+    final locked = counts?.placed ?? 0;
+    final total = counts?.playable ?? progress.gridSize;
     return Pressable(
       onTap: onTap,
       child: Container(
@@ -1283,15 +1285,13 @@ class _ContinueCard extends StatelessWidget {
   }
 }
 
-/// Share of a saved board's cards already in their place.
+/// Share of a saved board's cards already in their place (pre-set pieces, docs/boards.md, count
+/// in neither number).
 double _lockedShare(PuzzleProgress pr) {
   final layout = pr.layout;
   if (layout == null || layout.isEmpty) return 0;
-  var locked = 0;
-  for (var i = 0; i < layout.length; i++) {
-    if (layout[i] == i) locked++;
-  }
-  return locked / layout.length;
+  final p = BoardSpec.progressOf(GameMode.fromCode(pr.mode), layout);
+  return p.playable == 0 ? 0 : p.placed / p.playable;
 }
 
 /// The board in progress with the largest share of cards in place.

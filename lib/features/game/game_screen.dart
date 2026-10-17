@@ -858,7 +858,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     );
     final reward = await ref.read(profileProvider.notifier).recordCompletion(
           puzzleId: widget.puzzleId,
-          cells: _spec.cells,
+          cells: _spec.playableCells,
           stars: stars,
           firstTime: firstTime,
           mode: _spec.mode,
@@ -902,7 +902,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     final reward = await ref.read(profileProvider.notifier).recordCoopReward(
           gameId: coop.game!.id,
           board: coop.game!.board,
-          cells: _spec.cells,
+          cells: _spec.playableCells,
           stars: stars,
           firstTime: firstTime,
           mode: _spec.mode,
@@ -1645,9 +1645,9 @@ class _Hud extends StatelessWidget {
           const SizedBox(height: 10),
           Row(
             children: [
-              Expanded(child: ProgressBar(value: b.lockedCount / b.cells, height: 6)),
+              Expanded(child: ProgressBar(value: b.lockedCount / b.playableCells, height: 6)),
               const SizedBox(width: 10),
-              Text('${b.lockedCount}/${b.cells} locked${b.floatingGroups > 0 ? ' · ${b.floatingGroups} group${b.floatingGroups == 1 ? '' : 's'}' : ''}', style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w500, color: c.textSecondary)),
+              Text('${b.lockedCount}/${b.playableCells} locked${b.floatingGroups > 0 ? ' · ${b.floatingGroups} group${b.floatingGroups == 1 ? '' : 's'}' : ''}', style: TextStyle(fontSize: TypeSize.caption, fontWeight: FontWeight.w500, color: c.textSecondary)),
               const SizedBox(width: 10),
               Stars(count: state.stars, size: 14),
             ],

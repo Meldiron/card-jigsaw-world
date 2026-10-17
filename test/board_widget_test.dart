@@ -180,7 +180,7 @@ void main() {
       for (final p in placed) {
         board = board.swap(board.slotOfCard(p), p);
       }
-      final locked = {for (var s = 0; s < spec.cells; s++) if (board.isLocked(s)) s};
+      final locked = {for (var s = 0; s < spec.cells; s++) if (board.isLocked(s) && !board.isPreset(s)) s};
       if (locked.length == placed.length && locked.containsAll(placed) && board.floatingGroups == 0 && Board.isValidLayout(spec, board.slots)) return board;
     }
     throw StateError('no clean layout with $placed on ${spec.fullCode}');
@@ -458,7 +458,8 @@ void main() {
     const area = Size(360, 460);
     final image = picture(900, 1200);
     for (final mode in [GameMode.cards, GameMode.hexagons]) {
-      final spec = BoardSpec.forPicture(mode, 2, 0.75);
+      // The 5x5 honeycomb: the 4x4 one always starts with a joined pair (docs/boards.md).
+      final spec = BoardSpec.forPicture(mode, mode == GameMode.hexagons ? 4 : 2, 0.75);
       final tiling = spec.tiling;
       final size = tiling.fit(area, 0.75);
       final w = size.width.roundToDouble(), h = size.height.roundToDouble();

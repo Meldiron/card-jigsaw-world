@@ -17,15 +17,19 @@ void main() {
   ];
 
   group('square ladder', () {
-    test('the same sides in every mode, as far as each tiling can deal them', () {
+    test('the same sides in every mode (pre-set pieces where a piece is one of a kind)', () {
       String sizes(GameMode m) => BoardSpec.squareTiers(m).map((t) => '${t.size} ${t.label}').join(', ');
       expect(sizes(GameMode.cards), '3x3 Cozy, 4x4 Relaxed, 5x5 Tricky, 6x6 Expert, 7x7 Master');
       expect(sizes(GameMode.squares), '3x3 Cozy, 4x4 Relaxed, 5x5 Tricky, 6x6 Expert, 7x7 Master');
-      expect(sizes(GameMode.triangles), '4x4 Relaxed, 5x5 Tricky, 6x6 Expert, 7x7 Master');
-      expect(sizes(GameMode.hexagons), '5x5 Tricky, 7x7 Master');
+      expect(sizes(GameMode.triangles), '3x3 Cozy, 4x4 Relaxed, 5x5 Tricky, 6x6 Expert, 7x7 Master');
+      // Every deal of the 3x3 honeycomb is solved in one move (test/preset_pieces_test.dart).
+      expect(sizes(GameMode.hexagons), '4x4 Relaxed, 5x5 Tricky, 6x6 Expert, 7x7 Master');
       // A triangle column is one up and one down triangle: 2N + 1 pieces in a row, about as wide as tall.
-      expect([for (final t in BoardSpec.squareTiers(GameMode.triangles)) t.code], ['9x4', '11x5', '13x6', '15x7']);
-      expect([for (final t in BoardSpec.squareTiers(GameMode.triangles)) t.cells], [36, 55, 78, 105]);
+      expect([for (final t in BoardSpec.squareTiers(GameMode.triangles)) t.code], ['7x3', '9x4', '11x5', '13x6', '15x7']);
+      expect([for (final t in BoardSpec.squareTiers(GameMode.triangles)) t.cells], [21, 36, 55, 78, 105]);
+      expect([for (final t in BoardSpec.squareTiers(GameMode.triangles)) t.playableCells], [19, 36, 55, 78, 105]);
+      expect([for (final t in BoardSpec.squareTiers(GameMode.hexagons)) t.cells], [18, 27, 39, 52]);
+      expect([for (final t in BoardSpec.squareTiers(GameMode.hexagons)) t.playableCells], [14, 27, 37, 52]);
       for (final t in BoardSpec.squareTiers(GameMode.triangles)) {
         expect(t.tiling.naturalAspect, closeTo(2 / 1.7320508, 0.001), reason: '${t.size} is about as wide as it is tall');
       }
@@ -51,9 +55,10 @@ void main() {
 
     test('a size a mode lacks gives the nearest one, a tie the bigger', () {
       expect(BoardSpec.forPicture(GameMode.triangles, 4, 0.75).size, '5x5');
-      expect(BoardSpec.forPicture(GameMode.triangles, 0, 0.75).size, '4x4', reason: 'no 3x3 triangle board');
-      expect(BoardSpec.forPicture(GameMode.hexagons, 0, 0.75).size, '5x5');
-      expect(BoardSpec.forPicture(GameMode.hexagons, 6, 0.75).size, '7x7');
+      expect(BoardSpec.forPicture(GameMode.triangles, 0, 0.75).size, '3x3');
+      expect(BoardSpec.forPicture(GameMode.hexagons, 0, 0.75).size, '4x4', reason: 'no 3x3 honeycomb');
+      expect(BoardSpec.forPicture(GameMode.hexagons, 2, 0.75).size, '4x4');
+      expect(BoardSpec.forPicture(GameMode.hexagons, 6, 0.75).size, '6x6');
       // The guided start opens one step up from the first board's nine cards: Easy gives 4x4.
       expect(BoardSpec.forPicture(GameMode.cards, 1, 0.75).code, '4x4');
       // Medium and Hard, remembered from before, give Tricky and Expert.
@@ -87,6 +92,10 @@ void main() {
       expect(BoardSpec.sizeCells(GameMode.triangles, 105), 49);
       expect(BoardSpec.sizeCells(GameMode.hexagons, 27), 25);
       expect(BoardSpec.sizeCells(GameMode.hexagons, 52), 49);
+      // The boards with pre-set pieces count by their side too (saves keep every piece in gridSize).
+      expect(BoardSpec.sizeCells(GameMode.triangles, 21), 9, reason: 'the 3x3 triangle board');
+      expect(BoardSpec.sizeCells(GameMode.hexagons, 18), 16, reason: 'the 4x4 honeycomb is a 4x4');
+      expect(BoardSpec.sizeCells(GameMode.hexagons, 39), 36, reason: 'the 6x6 honeycomb is a 6x6');
       expect(BoardSpec.sizeCells(GameMode.cards, 20), 20, reason: 'other boards count their pieces');
       BoardFinish row(String mode, int cells) => BoardFinish(at: DateTime(2026, 10, 17), gridSize: cells, mode: mode);
       expect(Goals.sizeOf(row('triangles', 36)), GridSpec.byCode('4x4')!.cells);
@@ -175,14 +184,23 @@ void main() {
     });
 
     test('an older build reading a square board resumes that very board or starts fresh', () {
-      // Older builds find a save's board by its piece count on the old ladder ([BoardSpec.tiers])
-      // and start fresh when the saved layout does not fit it.
+      // Older builds find a save's board by its piece count among their square boards, their
+      // Expand boards and the old ladder ([BoardSpec.tiers]), and start fresh when the saved
+      // layout does not fit it. Builds before the pre-set sizes had no 3x3 triangle board and only
+      // the 5x5 and 7x7 honeycombs; their Expand boards are the ones this build deals for those sizes.
+      const before = {GameMode.triangles: [4, 5, 6, 7], GameMode.hexagons: [5, 7]};
+      bool hadSize(BoardSpec t) => before[t.mode]?.contains(BoardSpec.squareAt(t.mode, t.tier)!.rows) ?? true;
       for (final mode in GameMode.values) {
         for (final a in aspects) {
-          final old = BoardSpec.tiers(mode, a);
+          final old = [
+            ...BoardSpec.squareTiers(mode).where(hadSize),
+            ...BoardSpec.expandTiers(mode, a).where(hadSize),
+            ...BoardSpec.tiers(mode, a),
+          ];
           for (final t in [...BoardSpec.squareTiers(mode), ...BoardSpec.expandTiers(mode, a)]) {
-            final hit = old.where((o) => o.cells == t.cells).firstOrNull;
-            if (hit != null && hit != t) apart(t, hit, '${mode.code} ${t.size} on $a');
+            for (final hit in old.where((o) => o.cells == t.cells && o != t)) {
+              apart(t, hit, '${mode.code} ${t.size} on $a');
+            }
           }
         }
         for (final a in [BoardSpec.referenceAspect, ...BoardSpec.commonAspects]) {
