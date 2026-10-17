@@ -14,6 +14,7 @@ export const CARD_VERSION = 1;
 export const PUBLIC_API = 'https://fra.cloud.appwrite.io/v1';
 
 const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+const PICTURE_WIDTH = 640;
 export const KEEP_MS = 10 * 24 * 60 * 60 * 1000;
 const DB = process.env.APPWRITE_DATABASE_ID || 'cjw';
 
@@ -80,8 +81,9 @@ export async function ensureCard({ tables, storage }, game, puzzle = null) {
     const file = pictureFile(row.imageUrl);
     // Only pictures of the catalogue's own bucket (the co-op calls refuse the others).
     if (!file || file.bucketId !== 'puzzle-images') throw new Error(`invite card: picture not in puzzle-images (${game.puzzleId})`);
-    // 800 px wide is more than the board and the blurred backdrop need; a PNG decodes quickly here.
-    const image = Buffer.from(await storage.getFilePreview({ bucketId: file.bucketId, fileId: file.fileId, width: 800, output: 'png' }));
+    // 640 px wide: about what the board needs (at most 620 x 520) and more than the blurred
+    // backdrop does; a PNG decodes quickly here (Node's zlib).
+    const image = Buffer.from(await storage.getFilePreview({ bucketId: file.bucketId, fileId: file.fileId, width: PICTURE_WIDTH, output: 'png' }));
     const fetched = Date.now() - t;
     const { parseGrid } = await import('./tiling.js');
     const board = parseGrid(game.grid);
@@ -105,8 +107,10 @@ export async function ensureCard({ tables, storage }, game, puzzle = null) {
   }
 }
 
-/// Starts drawing the card of a game's board without waiting (the co-op calls, after answering
-/// `create` and `next`): the invite is shared a moment later, and its page then finds the card.
+/// Starts drawing the card of a new game's board without waiting (after answering `/coop/create`):
+/// the invite is shared a moment later, and its page then finds the card. Drawing takes about 2 s
+/// of the runtime's half CPU (measured 2026-10-17), which slows the instance's other calls while it
+/// runs, so a next board's card is drawn only when its page is asked for.
 export function prepareCard(req, game, log = () => {}) {
   ensureCard(services(req), game)
     .then((r) => r.made && log(`invite card ${r.id}: ${r.ms} ms (picture ${r.fetched} ms, drawing ${r.drawn} ms, ${Math.round(r.bytes / 1024)} KB)`))

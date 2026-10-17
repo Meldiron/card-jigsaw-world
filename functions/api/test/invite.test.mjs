@@ -178,7 +178,7 @@ test('a card is drawn once, in a worker, and kept in the bucket', async () => {
   assert.equal(first.made, true);
   assert.deepEqual(again, first, 'a second call at the same moment waits for the first');
   assert.equal(asked.length, 1);
-  assert.deepEqual(asked[0], { bucketId: 'puzzle-images', fileId: 'abc', width: 800, output: 'png' });
+  assert.deepEqual(asked[0], { bucketId: 'puzzle-images', fileId: 'abc', width: 640, output: 'png' });
   const jpeg = files.get(first.id);
   assert.deepEqual([jpeg[0], jpeg[1]], [0xff, 0xd8], 'a JPEG');
   assert.equal(first.url, cardUrl(first.id));
