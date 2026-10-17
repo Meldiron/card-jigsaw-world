@@ -682,26 +682,29 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
         ? List<_Fan?>.filled(fusedEdges.length, null)
         : [for (var k = 0; k < fusedEdges.length; k++) _fan(board, slot, k, groupId, fusedEdges)];
 
-    Widget child = _CardFace(
-      image: widget.image,
-      polygon: localPoly,
-      source: tiling.sourceRect(card, imageCrop),
-      locked: locked || peek,
-      gap: gap,
-      radius: radius,
-      selected: selected || dragging,
-      dragging: dragging,
-      hovered: hovered,
-      lift: dragging ? 1.0 : (selected ? 0.5 : 0),
-      cardStyle: widget.cardStyle,
-      fusedEdges: fusedEdges,
-      fans: fans,
-      gutterHalf: gap / 2,
-      grouped: grouped,
-      painting: widget.painting,
-      strokeScale: strokeScale,
-      thinFrame: widget.zoom != null,
-    );
+    // [plain]: the face without the finger's marks (pick-up, outline, drop target), the one a twin
+    // swap fades out.
+    Widget face({bool plain = false}) => _CardFace(
+          image: widget.image,
+          polygon: localPoly,
+          source: tiling.sourceRect(card, imageCrop),
+          locked: locked || peek,
+          gap: gap,
+          radius: radius,
+          selected: !plain && (selected || dragging),
+          dragging: !plain && dragging,
+          hovered: plain ? _Hover.none : hovered,
+          lift: plain ? 0 : (dragging ? 1.0 : (selected ? 0.5 : 0)),
+          cardStyle: widget.cardStyle,
+          fusedEdges: fusedEdges,
+          fans: fans,
+          gutterHalf: gap / 2,
+          grouped: grouped,
+          painting: widget.painting,
+          strokeScale: strokeScale,
+          thinFrame: widget.zoom != null,
+        );
+    var child = face();
     // Differentiate without colour: a blocked drop target also shows a no-entry sign, not only a red edge.
     if (hovered == _Hover.blocked && A11y.symbolsOf(context)) {
       child = Stack(fit: StackFit.expand, children: [child, const IgnorePointer(child: Center(child: _BoardGlyph(AppIcons.noEntry)))]);
@@ -713,7 +716,8 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
     // Reduce motion: cards (and Peek) jump to their places; the lock flash still marks a change.
     final still = A11y.reduceMotionOf(context);
     return AnimatedPositioned(
-      key: ValueKey('card-$card'),
+      // Twins that traded identities keep their places on screen, so each keeps its widget (docs/twins.md).
+      key: ValueKey('card-${state.cardKeys?[card] ?? card}'),
       duration: dragging || still ? Duration.zero : (flight ? _flightOf(card) : const Duration(milliseconds: 280)),
       curve: flight ? Curves.easeInOutCubic : Curves.easeOutBack,
       left: origin.dx,
@@ -773,7 +777,7 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
           child: AnimatedScale(
             scale: still ? 1 : (dragging ? 1.06 : (selected ? 1.03 : 1)),
             duration: const Duration(milliseconds: 140),
-            child: child,
+            child: _TwinFade(card: card, face: () => face(plain: true), child: child),
           ),
         ),
       ),
@@ -1516,6 +1520,57 @@ class _CardPainter extends CustomPainter {
       if (a[i] != b[i]) return false;
     }
     return true;
+  }
+}
+
+/// Twin cards (docs/twins.md): when the card a widget shows becomes its twin (the two traded
+/// identities and stay where they are), the old face fades out over the new one, so not even a
+/// rendering difference flashes. The pictures look the same, so this is a fade, kept under Reduce
+/// motion like every fade.
+class _TwinFade extends StatefulWidget {
+  const _TwinFade({required this.card, required this.face, required this.child});
+  final int card;
+
+  /// The card's face alone, built to fade out when the card changes.
+  final Widget Function() face;
+  final Widget child;
+
+  @override
+  State<_TwinFade> createState() => _TwinFadeState();
+}
+
+class _TwinFadeState extends State<_TwinFade> with SingleTickerProviderStateMixin {
+  AnimationController? _fade;
+  Widget? _old;
+
+  @override
+  void didUpdateWidget(_TwinFade old) {
+    super.didUpdateWidget(old);
+    if (old.card == widget.card) return;
+    _old = old.face();
+    final fade = _fade ??= AnimationController(vsync: this, duration: const Duration(milliseconds: 180))
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed && mounted) setState(() => _old = null);
+      });
+    fade.forward(from: 0);
+  }
+
+  @override
+  void dispose() {
+    _fade?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final old = _old;
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        widget.child,
+        if (old != null) IgnorePointer(child: FadeTransition(opacity: ReverseAnimation(_fade!), child: old)),
+      ],
+    );
   }
 }
 
