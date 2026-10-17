@@ -88,7 +88,7 @@ void main() {
       expect(BoardSpec.sizeCells(GameMode.hexagons, 27), 25);
       expect(BoardSpec.sizeCells(GameMode.hexagons, 52), 49);
       expect(BoardSpec.sizeCells(GameMode.cards, 20), 20, reason: 'other boards count their pieces');
-      PuzzleProgress row(String mode, int cells) => PuzzleProgress.fromRow('r', {'puzzleId': 'p', 'gridSize': cells, 'mode': mode, 'completed': true});
+      BoardFinish row(String mode, int cells) => BoardFinish(at: DateTime(2026, 10, 17), gridSize: cells, mode: mode);
       expect(Goals.sizeOf(row('triangles', 36)), GridSpec.byCode('4x4')!.cells);
       expect(Goals.sizeOf(row('hexagons', 52)), greaterThanOrEqualTo(GridSpec.tiers.last.cells), reason: 'the 7x7 honeycomb is a Master board');
       expect(GridSpec.atLeast(20).code, '5x5', reason: 'an old "4x5 or bigger" quest opens 5x5');

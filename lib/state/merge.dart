@@ -10,6 +10,7 @@ library;
 import 'dart:math';
 
 import '../core/name_filter.dart';
+import '../models/board_finish.dart';
 
 /// Which save supplies the scalar parts (coins, level, streak, identity).
 enum MergeChoice { guest, account }
@@ -153,6 +154,9 @@ Map<String, dynamic> mergeProgressRow(Map<String, dynamic> a, Map<String, dynami
   if (ca != null || cb != null) {
     out['completedAt'] = (ca == null ? cb : (cb == null ? ca : (ca.isBefore(cb) ? ca : cb)))!.toIso8601String();
   }
+  // Boards finished on either save, each with its own values (the quests count them).
+  final finishes = BoardFinish.merged(a, b);
+  if (finishes.isNotEmpty) out['finishes'] = finishes;
   out.remove('\$updatedAt');
   return out;
 }

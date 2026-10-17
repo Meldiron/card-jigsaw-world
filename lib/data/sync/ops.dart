@@ -540,7 +540,11 @@ class SyncOp {
         // A play-through already finished (on another device, say): its old board must not come
         // back over the win. A new play-through has a new session and saves as usual.
         if (boardFinished(row, args['session'])) return const OpPlan({});
+        // A finish only the board fields hold (a row finished by a build from before the finish
+        // log) is recorded before this board is saved over them.
+        final kept = BoardFinish.unrecorded(row);
         return OpPlan({
+          'finishes': ?(kept == null ? null : Put(kept)),
           'gridSize': Put(_a('gridSize')),
           'mode': Put(args['mode']),
           // Ops queued by builds before Painting carry no flag: a plain board.
@@ -576,6 +580,23 @@ class SyncOp {
           'bestMoves': Put(best('bestMoves', moves)),
           'bestSeconds': Put(best('bestSeconds', seconds)),
           'completedAt': Put((last != null && last.isAfter(at) ? last.toUtc() : at).toIso8601String()),
+          // This board with its own values, which the quests count (the fields above belong to
+          // whatever board is saved next, a replay included).
+          'finishes': Put(BoardFinish.logWith(
+            row,
+            BoardFinish(
+              at: at,
+              mode: '${args['mode'] ?? 'cards'}',
+              gridSize: _a('gridSize'),
+              painting: args['painting'] == true,
+              par: _a('par'),
+              moves: moves,
+              seconds: seconds,
+              peeked: args['peeked'] == true,
+              bestLock: _a('bestLock'),
+              stars: _a('stars'),
+            ),
+          )),
           ..._totals(row),
         }, alreadySolved: solved);
     }

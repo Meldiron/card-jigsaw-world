@@ -116,12 +116,16 @@ class AppwriteSyncBackend implements SyncBackend {
   }
 
   @override
-  Future<Map<String, dynamic>> upsertProgress(String userId, String puzzleId, Map<String, dynamic> data) async => _row(await _tables.upsertRow(
-        databaseId: _db,
-        tableId: AppwriteConfig.progress,
-        rowId: deterministicId(userId, puzzleId),
-        data: {...data, 'userId': userId, 'puzzleId': puzzleId},
-        permissions: [Permission.read(Role.user(userId)), Permission.update(Role.user(userId)), Permission.delete(Role.user(userId))],
+  Future<Map<String, dynamic>> upsertProgress(String userId, String puzzleId, Map<String, dynamic> data) async => _row(await writeWithoutUnknown(
+        {...data, 'userId': userId, 'puzzleId': puzzleId},
+        newProgressColumns,
+        (data) => _tables.upsertRow(
+          databaseId: _db,
+          tableId: AppwriteConfig.progress,
+          rowId: deterministicId(userId, puzzleId),
+          data: data,
+          permissions: [Permission.read(Role.user(userId)), Permission.update(Role.user(userId)), Permission.delete(Role.user(userId))],
+        ),
       ));
 
   @override

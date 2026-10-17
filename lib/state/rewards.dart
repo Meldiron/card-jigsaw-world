@@ -194,13 +194,22 @@ class OpenFeatures {
       final u = e.value > 0 ? Unlocks.ofMode(GameMode.fromCode(e.key)) : null;
       if (u != null) used.add(u);
     }
-    for (final p in progress) {
-      if (!p.completed && !p.inProgress) continue;
-      final mode = GameMode.fromCode(p.mode);
+    void board(String code, int gridSize, bool painting) {
+      final mode = GameMode.fromCode(code);
       final u = Unlocks.ofMode(mode);
       if (u != null) used.add(u);
-      if (p.painting) used.add(Unlock.painting);
-      if (p.gridSize >= BoardLayouts.giantFloor(mode)) used.add(Unlock.giant);
+      if (painting) used.add(Unlock.painting);
+      if (gridSize >= BoardLayouts.giantFloor(mode)) used.add(Unlock.giant);
+    }
+
+    for (final p in progress) {
+      if (!p.completed && !p.inProgress) continue;
+      // The board on the row (in progress, or the last one finished) and the boards finished
+      // before it, which a replay's board does not show.
+      board(p.mode, p.gridSize, p.painting);
+      for (final b in p.finishes) {
+        if (b.known) board(b.mode, b.gridSize, b.painting);
+      }
     }
     final early = Unlocks.openedEarly(unlockedTiers);
     return OpenFeatures({for (final u in Unlock.values) if (level >= u.level || used.contains(u) || early.contains(u)) u}, used: used);
@@ -384,17 +393,29 @@ class Goals {
   /// The number a plain quest asks for: its argument, never below the usual [n].
   static int _target(String arg, int n) => max(n, int.tryParse(arg) ?? n);
 
-  static bool _atPar(PuzzleProgress p) => p.par > 0 && p.moves <= p.par;
+  static bool _atPar(BoardFinish b) => b.par > 0 && b.moves <= b.par;
 
   /// Par quests count boards of Relaxed (4x4) and up: on the two smallest boards par comes
   /// without trying.
   static final _parTier = GridSpec.tiers[2];
-  static bool _atParBig(PuzzleProgress p) => _atPar(p) && sizeOf(p) >= _parTier.cells;
+  static bool _atParBig(BoardFinish b) => _atPar(b) && sizeOf(b) >= _parTier.cells;
 
   /// The size a finished board counts as where a quest names one ("a 4x4 or bigger board"): a
   /// square board as its side squared (the 4x4 triangle strip has 14 pieces), any other as its
   /// pieces ([BoardSpec.sizeCells]).
-  static int sizeOf(PuzzleProgress p) => BoardSpec.sizeCells(GameMode.fromCode(p.mode), p.gridSize);
+  static int sizeOf(BoardFinish b) => BoardSpec.sizeCells(GameMode.fromCode(b.mode), b.gridSize);
+
+  /// The pictures with boards finished in a period ([inPeriod]; [since]: only after it), each with
+  /// those boards and the values each was finished with ([PuzzleProgress.finishes]), never the
+  /// row's board fields, which a replay in progress holds.
+  static List<_Finished> _finishedIn(Iterable<PuzzleProgress> all, bool Function(DateTime at) inPeriod, DateTime? since) {
+    final out = <_Finished>[];
+    for (final p in all) {
+      final boards = [for (final b in p.finishes) if (inPeriod(b.at) && (since == null || b.at.isAfter(since))) b];
+      if (boards.isNotEmpty) out.add(_Finished(p.puzzleId, boards));
+    }
+    return out;
+  }
 
   /// Daily quests. Besides "Solve 3 puzzles" (60 coins), each quest comes from a different lane,
   /// so one ordinary board never finishes two of them:
@@ -418,8 +439,8 @@ class Goals {
   /// own quest. Each quest carries the swap it offers ([Goal.swap]).
   static List<Goal> daily(Iterable<PuzzleProgress> all, DateTime now, {OpenFeatures open = OpenFeatures.all, int level = 99, Set<String> claimed = const {}, String? dailyPuzzle, DateTime? since, Map<String, List<String>> swaps = const {}}) {
     // [since]: the guided start counts only pictures finished after Quests opened.
-    final today = all.where((p) => p.completed && p.completedAt != null && sameDay(p.completedAt!, now) && (since == null || p.completedAt!.isAfter(since))).toList();
-    int count(bool Function(PuzzleProgress p) test) => today.where(test).length;
+    final today = _finishedIn(all, (at) => sameDay(at, now), since);
+    int count(bool Function(BoardFinish b) test) => today.where((d) => d.any(test)).length;
     final k = dayKey(now);
     final day = dayIndex(now);
     final h = PlayHabits.of(all, DateTime(now.year, now.month, now.day));
@@ -437,31 +458,31 @@ class Goals {
         case 'mode':
           final m = GameMode.values.where((m) => m.code == arg).firstOrNull;
           if (m == null) return null;
-          return Goal(key: key, title: 'Finish a board in ${m.label}', progress: count((p) => p.mode == m.code), target: 1, coins: coins, icon: 'puzzle', mode: m, vipOnly: vip);
+          return Goal(key: key, title: 'Finish a board in ${m.label}', progress: count((b) => b.mode == m.code), target: 1, coins: coins, icon: 'puzzle', mode: m, vipOnly: vip);
         case 'size':
           final t = GridSpec.byCode(arg);
           if (t == null) return null;
-          return Goal(key: key, title: 'Finish a ${t.code} or bigger board', progress: count((p) => sizeOf(p) >= t.cells), target: 1, coins: coins, icon: 'bigBoard', minCells: t.cells, vipOnly: vip);
+          return Goal(key: key, title: 'Finish a ${t.code} or bigger board', progress: count((b) => sizeOf(b) >= t.cells), target: 1, coins: coins, icon: 'bigBoard', minCells: t.cells, vipOnly: vip);
         case 'paint':
-          return Goal(key: key, title: 'Solve a Painting board', progress: count((p) => p.painting), target: 1, coins: coins, icon: 'painting', painting: true, vipOnly: vip);
+          return Goal(key: key, title: 'Solve a Painting board', progress: count((b) => b.painting), target: 1, coins: coins, icon: 'painting', painting: true, vipOnly: vip);
         case 'par':
           return Goal(key: key, title: 'Finish a ${_parTier.code} or bigger board at par', progress: count(_atParBig), target: 1, coins: coins, icon: 'swaps', minCells: _parTier.cells, vipOnly: vip);
         case 'lock':
           final n = int.tryParse(arg) ?? lockRun;
-          return Goal(key: key, title: 'Lock $n cards in one move', progress: count((p) => p.bestLock >= n), target: 1, coins: coins, icon: 'lock', minCells: GridSpec.tiers[4].cells, vipOnly: vip);
+          return Goal(key: key, title: 'Lock $n cards in one move', progress: count((b) => b.bestLock >= n), target: 1, coins: coins, icon: 'lock', minCells: GridSpec.tiers[4].cells, vipOnly: vip);
         case 'fast':
           final f = _fast(arg);
           if (f == null) return null;
-          return Goal(key: key, title: 'Solve a ${f.tier.code} board in under ${formatTime(f.seconds)}', progress: count((p) => _fastEnough(p, f)), target: 1, coins: coins, icon: 'time', minCells: f.tier.cells, mode: GameMode.cards, vipOnly: vip);
+          return Goal(key: key, title: 'Solve a ${f.tier.code} board in under ${formatTime(f.seconds)}', progress: count((b) => _fastEnough(b, f)), target: 1, coins: coins, icon: 'time', minCells: f.tier.cells, mode: GameMode.cards, vipOnly: vip);
         case 'nopeek':
           final n = _target(arg, 2);
-          return Goal(key: key, title: 'Solve $n pictures without Peek', progress: count((p) => !p.peeked), target: n, coins: coins, icon: 'eye', vipOnly: vip);
+          return Goal(key: key, title: 'Solve $n pictures without Peek', progress: count((b) => !b.peeked), target: n, coins: coins, icon: 'eye', vipOnly: vip);
         case 'daily':
           if (dailyPuzzle == null) return null;
-          return Goal(key: key, title: "Solve today's daily puzzle", progress: count((p) => p.puzzleId == dailyPuzzle), target: 1, coins: coins, icon: 'dailyPuzzle', puzzleId: dailyPuzzle, vipOnly: vip);
+          return Goal(key: key, title: "Solve today's daily puzzle", progress: today.where((d) => d.puzzleId == dailyPuzzle).length, target: 1, coins: coins, icon: 'dailyPuzzle', puzzleId: dailyPuzzle, vipOnly: vip);
         case 'stars':
           final n = _target(arg, 2);
-          return Goal(key: key, title: n == 2 ? 'Earn 3 stars twice' : 'Earn 3 stars $n times', progress: count((p) => p.stars == 3), target: n, coins: coins, icon: 'star', vipOnly: vip);
+          return Goal(key: key, title: n == 2 ? 'Earn 3 stars twice' : 'Earn 3 stars $n times', progress: count((b) => b.stars == 3), target: n, coins: coins, icon: 'star', vipOnly: vip);
         case 'solve':
           final n = _target(arg, 5);
           return Goal(key: key, title: 'Solve $n puzzles', progress: today.length, target: n, coins: coins, icon: 'puzzle', vipOnly: vip);
@@ -502,14 +523,14 @@ class Goals {
   /// [swaps] as in [daily].
   static List<Goal> weekly(Iterable<PuzzleProgress> all, DateTime now, {OpenFeatures open = OpenFeatures.all, int level = 99, Set<String> claimed = const {}, DateTime? since, Map<String, List<String>> swaps = const {}}) {
     final monday = mondayOf(now);
-    final week = all.where((p) => p.completed && p.completedAt != null && !p.completedAt!.isBefore(monday) && (since == null || p.completedAt!.isAfter(since))).toList();
-    int count(bool Function(PuzzleProgress p) test) => week.where(test).length;
-    final days = {for (final p in week) dayKey(p.completedAt!)}.length;
+    final week = _finishedIn(all, (at) => !at.isBefore(monday), since);
+    int count(bool Function(BoardFinish b) test) => week.where((d) => d.any(test)).length;
+    final days = {for (final d in week) for (final b in d.boards) dayKey(b.at)}.length;
     final k = weekKey(now);
     final h = PlayHabits.of(all, monday);
     final lanes = _Lanes(h, open, level, weekly: true);
     final modes = open.modes;
-    final played = {for (final p in week) p.mode};
+    final played = {for (final d in week) for (final b in d.boards) if (b.known) b.mode};
 
     Goal? build(int slot, String kind) {
       final key = '$k:s$slot:$kind';
@@ -535,24 +556,24 @@ class Goals {
         case 'size':
           final t = GridSpec.byCode(arg);
           if (t == null) return null;
-          return Goal(key: key, title: 'Finish 3 boards of ${t.code} or bigger', progress: count((p) => sizeOf(p) >= t.cells), target: 3, coins: 0, tickets: tickets, icon: 'bigBoard', minCells: t.cells, vipOnly: vip);
+          return Goal(key: key, title: 'Finish 3 boards of ${t.code} or bigger', progress: count((b) => sizeOf(b) >= t.cells), target: 3, coins: 0, tickets: tickets, icon: 'bigBoard', minCells: t.cells, vipOnly: vip);
         case 'paint':
-          return Goal(key: key, title: 'Solve 3 Painting boards', progress: count((p) => p.painting), target: 3, coins: 0, tickets: tickets, icon: 'painting', painting: true, vipOnly: vip);
+          return Goal(key: key, title: 'Solve 3 Painting boards', progress: count((b) => b.painting), target: 3, coins: 0, tickets: tickets, icon: 'painting', painting: true, vipOnly: vip);
         case 'par':
           return Goal(key: key, title: 'Finish two ${_parTier.code} or bigger boards at par', progress: count(_atParBig), target: 2, coins: 0, tickets: tickets, icon: 'swaps', minCells: _parTier.cells, vipOnly: vip);
         case 'lock':
           final n = int.tryParse(arg) ?? lockRun;
-          return Goal(key: key, title: 'Lock $n cards in one move on two pictures', progress: count((p) => p.bestLock >= n), target: 2, coins: 0, tickets: tickets, icon: 'lock', minCells: GridSpec.tiers[4].cells, vipOnly: vip);
+          return Goal(key: key, title: 'Lock $n cards in one move on two pictures', progress: count((b) => b.bestLock >= n), target: 2, coins: 0, tickets: tickets, icon: 'lock', minCells: GridSpec.tiers[4].cells, vipOnly: vip);
         case 'fast':
           final f = _fast(arg);
           if (f == null) return null;
-          return Goal(key: key, title: 'Solve two ${f.tier.code} boards in under ${formatTime(f.seconds)}', progress: count((p) => _fastEnough(p, f)), target: 2, coins: 0, tickets: tickets, icon: 'time', minCells: f.tier.cells, mode: GameMode.cards, vipOnly: vip);
+          return Goal(key: key, title: 'Solve two ${f.tier.code} boards in under ${formatTime(f.seconds)}', progress: count((b) => _fastEnough(b, f)), target: 2, coins: 0, tickets: tickets, icon: 'time', minCells: f.tier.cells, mode: GameMode.cards, vipOnly: vip);
         case 'nopeek':
           final n = _target(arg, 5);
-          return Goal(key: key, title: 'Solve $n pictures without Peek', progress: count((p) => !p.peeked), target: n, coins: 0, tickets: tickets, icon: 'eye', vipOnly: vip);
+          return Goal(key: key, title: 'Solve $n pictures without Peek', progress: count((b) => !b.peeked), target: n, coins: 0, tickets: tickets, icon: 'eye', vipOnly: vip);
         case 'stars':
           final n = _target(arg, 15);
-          return Goal(key: key, title: 'Collect $n stars', progress: week.fold<int>(0, (s, p) => s + p.stars), target: n, coins: 0, tickets: tickets, icon: 'star', vipOnly: vip);
+          return Goal(key: key, title: 'Collect $n stars', progress: week.fold<int>(0, (s, d) => s + d.stars), target: n, coins: 0, tickets: tickets, icon: 'star', vipOnly: vip);
         case 'solve':
           final n = _target(arg, 15);
           return Goal(key: key, title: 'Solve $n puzzles this week', progress: week.length, target: n, coins: 0, tickets: tickets, icon: 'puzzle', vipOnly: vip);
@@ -707,10 +728,10 @@ class Goals {
     return (tier: tier, seconds: max(scaled, fastFloor(tier.cells)));
   }
 
-  /// A finished Cards board of the quest's size under its time. A row with a board in progress (a
-  /// replay) holds that board's size and time, not a finish.
-  static bool _fastEnough(PuzzleProgress p, ({GridSpec tier, int seconds}) f) =>
-      !p.inProgress && GameMode.fromCode(p.mode) == GameMode.cards && p.gridSize == f.tier.cells && p.elapsedSeconds > 0 && p.elapsedSeconds < f.seconds;
+  /// A finished Cards board of the quest's size under its time (the finish's own time: a replay in
+  /// progress has a size and time of its own).
+  static bool _fastEnough(BoardFinish b, ({GridSpec tier, int seconds}) f) =>
+      GameMode.fromCode(b.mode) == GameMode.cards && b.gridSize == f.tier.cells && b.seconds > 0 && b.seconds < f.seconds;
 
   /// "mode-hexagons" -> ("mode", "hexagons"); "par" -> ("par", "").
   static (String, String) _split(String kind) {
@@ -744,6 +765,21 @@ class Goals {
   static String formatLeft(Duration d) => formatTimeLeft(d);
 }
 
+/// A picture's boards finished in a quest's period (today, this week): it counts once per quest,
+/// when one of its boards, as it was finished, does what the quest asks.
+class _Finished {
+  _Finished(this.puzzleId, this.boards);
+  final String puzzleId;
+  final List<BoardFinish> boards;
+
+  /// One of the boards passes [test]; a board whose values are lost ([BoardFinish.known]) passes
+  /// none.
+  bool any(bool Function(BoardFinish b) test) => boards.any((b) => b.known && test(b));
+
+  /// The most stars one of the boards earned.
+  int get stars => boards.fold(0, (m, b) => b.known ? max(m, b.stars) : m);
+}
+
 /// What a player usually plays, from their last [PlayHabits.recent] boards finished before a
 /// moment (the start of today, or of the week): the shape most of them have, their middle size
 /// and whether most were Painting boards. Quests ask for something else.
@@ -771,34 +807,37 @@ class PlayHabits {
   final ({GridSpec tier, int seconds})? timed;
 
   factory PlayHabits.of(Iterable<PuzzleProgress> all, DateTime before) {
-    final done = [for (final p in all) if (p.completed && p.completedAt != null && p.completedAt!.isBefore(before)) p]
-      ..sort((a, b) => b.completedAt!.compareTo(a.completedAt!));
+    // Each picture's last board finished before [before], with the values it was finished with
+    // (a replay since, in progress or finished today, does not move it), newest first.
+    final done = <BoardFinish>[
+      for (final p in all)
+        if (p.finishes.where((b) => b.at.isBefore(before)).lastOrNull case final b? when b.known) b,
+    ]..sort((a, b) => b.at.compareTo(a.at));
     final last = done.take(recent).toList();
     if (last.isEmpty) return const PlayHabits();
     final byMode = <GameMode, int>{};
-    for (final p in last) {
-      final m = GameMode.fromCode(p.mode);
+    for (final b in last) {
+      final m = GameMode.fromCode(b.mode);
       byMode[m] = (byMode[m] ?? 0) + 1;
     }
     final mode = byMode.entries.reduce((a, b) => b.value > a.value ? b : a).key;
-    final sizes = [for (final p in last) Goals.sizeOf(p)]..sort();
+    final sizes = [for (final b in last) Goals.sizeOf(b)]..sort();
     // The time to beat: second-best time on the square Cards size most recent Cards boards had
     // (boards of sizes from before square boards cannot be dealt any more), never below what a
-    // quick player does alone ([Goals.fastFloor]). Each finish counts with its own time: a row's
-    // `bestSeconds` is the picture's best on any size or shape, and a row with a replay in
-    // progress holds that board's size and time.
+    // quick player does alone ([Goals.fastFloor]). Each finish counts with its own time (a row's
+    // `bestSeconds` is the picture's best on any size or shape).
     ({GridSpec tier, int seconds})? timed;
-    bool cards(PuzzleProgress p) => !p.inProgress && GameMode.fromCode(p.mode) == GameMode.cards && GridSpec.square.any((t) => t.cells == p.gridSize);
+    bool cards(BoardFinish b) => GameMode.fromCode(b.mode) == GameMode.cards && GridSpec.square.any((t) => t.cells == b.gridSize);
     final cardSizes = <int, int>{};
-    for (final p in last) {
-      if (cards(p)) cardSizes[p.gridSize] = (cardSizes[p.gridSize] ?? 0) + 1;
+    for (final b in last) {
+      if (cards(b)) cardSizes[b.gridSize] = (cardSizes[b.gridSize] ?? 0) + 1;
     }
     if (cardSizes.isNotEmpty) {
       final cells = cardSizes.entries.reduce((a, b) => b.value > a.value ? b : a).key;
       final tier = GridSpec.byCells(cells);
       final times = [
-        for (final p in done)
-          if (cards(p) && p.gridSize == cells && p.elapsedSeconds > 0) p.elapsedSeconds,
+        for (final b in done)
+          if (cards(b) && b.gridSize == cells && b.seconds > 0) b.seconds,
       ]..sort();
       if (tier != null && times.length >= 3) timed = (tier: tier, seconds: max(times[1], Goals.fastFloor(cells)));
     }
@@ -806,7 +845,7 @@ class PlayHabits {
       mode: mode,
       cells: sizes[sizes.length ~/ 2],
       upper: sizes[((sizes.length - 1) * 4) ~/ 5],
-      paints: last.where((p) => p.painting).length * 2 > last.length,
+      paints: last.where((b) => b.painting).length * 2 > last.length,
       byMode: byMode,
       timed: timed,
     );

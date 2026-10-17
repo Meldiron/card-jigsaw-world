@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:appwrite/appwrite.dart' show AppwriteException;
+import 'package:carden/data/repositories.dart' show newProgressColumns, writeWithoutUnknown;
 import 'package:carden/data/sync/changes.dart';
 import 'package:carden/data/sync/ops.dart';
 import 'package:carden/game/board.dart';
@@ -248,7 +250,7 @@ void main() {
       // Each finish counts with its own time: the picture's best (`bestSeconds`) may be from a
       // smaller board, and a replay in progress holds that board's size and time.
       PuzzleProgress row(int i, {int seconds = 60, int? best, String layout = ''}) => PuzzleProgress.fromRow('b$i', {
-            'puzzleId': 'b$i', 'gridSize': 16, 'mode': 'cards', 'completed': true, 'stars': 3, 'elapsedSeconds': seconds, 'bestSeconds': ?best, 'layout': layout,
+            'puzzleId': 'b$i', 'gridSize': 16, 'mode': 'cards', 'completed': true, 'stars': 3, 'moves': 30, 'elapsedSeconds': seconds, 'bestSeconds': ?best, 'layout': layout,
             'completedAt': now.subtract(Duration(days: 1, minutes: i)).toUtc().toIso8601String(),
           });
       expect(timed([for (var i = 0; i < 5; i++) row(i, seconds: 60 + i, best: 12)]), 'Solve a 4x4 board in under 1:01');
@@ -613,6 +615,180 @@ void main() {
         {'puzzleId': 'p', 'par': 3, r'$updatedAt': '2026-10-01T10:00:00Z'},
       );
       expect((merged['par'], merged['peeked'], merged['bestLock']), (9, true, 5));
+    });
+  });
+
+  group('Quests count each finished board as it was finished (2026-10-17)', () {
+    // The day: Wednesday 14 October 2026, 15:00; the week began on Monday 12 October.
+    final k = Goals.dayKey(now);
+    Map<String, dynamic> apply(Map<String, dynamic> row, SyncOp op) => applyChanges(row, op.build(row).changes);
+    SyncOp win(DateTime at, {String mode = 'cards', int cells = 16, bool painting = false, int moves = 30, int par = 12, int seconds = 600, int stars = 3, int lock = 0, bool peeked = false, String session = 's1'}) =>
+        SyncOp.win(puzzleId: 'p', gridSize: cells, mode: mode, moves: moves, seconds: seconds, hints: 0, stars: stars, session: session, resumed: false, painting: painting, par: par, peeked: peeked, bestLock: lock, at: at);
+    SyncOp board({String mode = 'cards', int cells = 9, bool painting = false, String session = 's2'}) =>
+        SyncOp.board(puzzleId: 'p', gridSize: cells, mode: mode, layout: '1,0,2,3,4,5,6,7,8', moves: 2, seconds: 3, hints: 0, session: session, resumed: false, painting: painting, par: 9, bestLock: 9);
+    PuzzleProgress read(Map<String, dynamic> row) => PuzzleProgress.fromRow('r', {'userId': 'u', 'puzzleId': 'p', ...row});
+    // The daily quest of [kind] (in slot 2, as a claim pins it), counted on [rows].
+    int daily(String kind, List<PuzzleProgress> rows, {DateTime? since}) => Goals.daily(rows, now, claimed: {'d:$k:s2:$kind'}, since: since)[1].progress;
+    int weekly(String kind, List<PuzzleProgress> rows) => Goals.weekly(rows, now, claimed: {'${Goals.weekKey(now)}:s2:$kind'})[1].progress;
+    Map<String, int> shapeQuests(PuzzleProgress p) => {
+          for (final kind in ['mode-hexagons', 'mode-cards', 'size-5x5', 'paint', 'par', 'lock-5', 'fast-5x5-700', 'nopeek', 'stars']) kind: daily(kind, [p]),
+        };
+
+    test('a replay in progress leaves today\'s finish as it was: shape, size, Painting, par, lock, time', () {
+      // Finished at noon in Hexagons 5x5 with Painting, at par, 6 cards locked at once, in 5 minutes.
+      final finished = apply(const {}, win(now.subtract(const Duration(hours: 3)), mode: 'hexagons', cells: 27, painting: true, moves: 12, par: 12, seconds: 300, lock: 6));
+      final before = shapeQuests(read(finished));
+      expect(before, {'mode-hexagons': 1, 'mode-cards': 0, 'size-5x5': 1, 'paint': 1, 'par': 1, 'lock-5': 1, 'fast-5x5-700': 0, 'nopeek': 1, 'stars': 1});
+      // A replay of the picture on Cards 3x3 without Painting, saved a few moves in: the row's board
+      // fields are the replay's now.
+      final replay = apply(finished, board());
+      expect(read(replay).inProgress, isTrue);
+      expect((read(replay).mode, read(replay).gridSize, read(replay).painting), ('cards', 9, false));
+      expect(shapeQuests(read(replay)), before, reason: 'the quests read the finish, not the replay');
+      // A discard of the replay neither.
+      expect(shapeQuests(read(apply(replay, SyncOp.discard('p')))), before);
+      // "Solve 3 puzzles" counts the picture once.
+      expect(Goals.daily([read(replay)], now)[0].progress, 1);
+    });
+
+    test('a replay finished today counts with its own values, and the first finish still counts', () {
+      final first = apply(const {}, win(now.subtract(const Duration(hours: 3)), mode: 'hexagons', cells: 27));
+      final second = apply(apply(first, board()), win(now.subtract(const Duration(hours: 1)), cells: 9, stars: 1, peeked: true, session: 's2'));
+      final p = read(second);
+      expect(p.finishes, hasLength(2));
+      expect(daily('mode-hexagons', [p]), 1, reason: 'the morning board');
+      expect(daily('mode-cards', [p]), 1, reason: 'the replay');
+      expect(daily('size-5x5', [p]), 1);
+      // A picture counts once per quest, however many boards of it were finished.
+      expect(Goals.daily([p], now)[0].progress, 1);
+      // Stars are the finish's own: one 3-star board today, not two (the row keeps the best, 3).
+      expect(p.stars, 3);
+      expect(daily('stars', [p]), 1);
+      final onlyReplay = read({...second, 'finishes': BoardFinish.encode([p.finishes.last])});
+      expect(daily('stars', [onlyReplay]), 0, reason: 'a 1-star replay is no 3-star board');
+      expect(daily('nopeek', [onlyReplay]), 0, reason: 'Peek was used on it');
+    });
+
+    test('rows from older builds read as before, and a board saved over their finish keeps it', () {
+      // Finished by a build from before the log: the board fields hold the finish.
+      final old = <String, dynamic>{'completed': true, 'completedAt': now.subtract(const Duration(hours: 2)).toUtc().toIso8601String(), 'mode': 'hexagons', 'gridSize': 27,
+          'painting': true, 'moves': 30, 'par': 12, 'elapsedSeconds': 300, 'stars': 3, 'layout': '', 'session': 'old'};
+      expect(read(old).finishes.single.known, isTrue);
+      expect(shapeQuests(read(old))['mode-hexagons'], 1);
+      expect(shapeQuests(read(old))['paint'], 1);
+      // An older build saves a replay over it: the values are gone, the solve is not.
+      final overwritten = {...old, 'mode': 'cards', 'gridSize': 9, 'painting': false, 'layout': '1,0,2,3,4,5,6,7,8', 'session': 'replay'};
+      expect(read(overwritten).finishes.single.known, isFalse);
+      expect(Goals.daily([read(overwritten)], now)[0].progress, 1, reason: '"Solve 3 puzzles" still counts it');
+      expect(shapeQuests(read(overwritten)).values.every((v) => v == 0), isTrue, reason: 'nothing that asks how it was played: ${shapeQuests(read(overwritten))}');
+      // This build saving the replay records the finish first, so the quests keep it.
+      final kept = apply(old, board());
+      expect(BoardFinish.decode(kept['finishes']), hasLength(1));
+      expect(shapeQuests(read(kept))['mode-hexagons'], 1);
+      expect(shapeQuests(read(kept))['paint'], 1);
+      // An older build finishing after this one: the board fields hold that last finish.
+      final mixed = {
+        ...apply(const {}, win(now.subtract(const Duration(hours: 5)), mode: 'hexagons', cells: 27)),
+        'completedAt': now.subtract(const Duration(hours: 1)).toUtc().toIso8601String(),
+        'mode': 'triangles', 'gridSize': 36, 'layout': '', 'moves': 40,
+      };
+      expect([for (final f in read(mixed).finishes) f.mode], ['hexagons', 'triangles']);
+      expect(daily('mode-triangles', [read(mixed)]), 1);
+      expect(daily('mode-hexagons', [read(mixed)]), 1);
+    });
+
+    test('the week counts every finish: its days, its modes, the best stars of each picture', () {
+      final monday = apply(const {}, win(DateTime(2026, 10, 12, 10), mode: 'squares', stars: 2));
+      final wednesday = apply(apply(monday, board(mode: 'triangles')), win(now.subtract(const Duration(hours: 1)), mode: 'triangles', stars: 3, session: 's2'));
+      final p = read(wednesday);
+      expect(Goals.weekly([p], now).firstWhere((g) => g.key.endsWith(':days4')).progress, 2, reason: 'Monday and Wednesday');
+      expect(Goals.weekly([p], now)[0].progress, 1, reason: '"Solve 10 puzzles" counts the picture once');
+      expect(weekly('stars', [p]), 3, reason: 'the best of the week\'s boards of the picture');
+      final modes = Goals.weekly([p], now, claimed: {'${Goals.weekKey(now)}:s4:modes'})[3];
+      expect(modes.progress, 2, reason: 'Squares on Monday, Triangles today');
+      // A board finished last week does not count this week.
+      final lastWeek = apply(const {}, win(DateTime(2026, 10, 9, 10), mode: 'hexagons'));
+      expect(weekly('stars', [read(lastWeek)]), 0);
+    });
+
+    test('quests opened during the guided start count only boards finished after they opened', () {
+      final early = apply(const {}, win(now.subtract(const Duration(hours: 4)), mode: 'hexagons'));
+      final later = apply(apply(early, board()), win(now.subtract(const Duration(hours: 1)), mode: 'squares', session: 's2'));
+      final since = now.subtract(const Duration(hours: 2));
+      expect(daily('mode-hexagons', [read(later)], since: since), 0);
+      expect(daily('mode-squares', [read(later)], since: since), 1);
+    });
+
+    test('what the player usually plays does not move with a replay today', () {
+      // Twenty Cards 4x4 boards before today.
+      final rows = [
+        for (var i = 0; i < 20; i++) read({...apply(const {}, win(now.subtract(Duration(days: 1, minutes: i)), seconds: 60 + i)), 'puzzleId': 'h$i'}),
+      ];
+      List<String> titles(List<PuzzleProgress> all) => [for (final g in Goals.daily(all, now, level: 20)) g.title];
+      final usual = titles(rows);
+      // One of them replayed today on Hexagons 7x7, in progress, then finished.
+      final r0 = rows.first.toData();
+      final inProgress = read({...apply(r0, board(mode: 'hexagons', cells: 52)), 'puzzleId': 'h0'});
+      final finished = read({...apply(apply(r0, board(mode: 'hexagons', cells: 52)), win(now.subtract(const Duration(minutes: 5)), mode: 'hexagons', cells: 52, session: 's2')), 'puzzleId': 'h0'});
+      expect(titles([inProgress, ...rows.skip(1)]), usual);
+      expect(titles([finished, ...rows.skip(1)]), usual);
+      expect(PlayHabits.of([finished, ...rows.skip(1)], DateTime(now.year, now.month, now.day)).mode, GameMode.cards);
+    });
+
+    test('shapes finished before stay open while a replay of another shape is in progress', () {
+      final row = read(apply(apply(const {}, win(now.subtract(const Duration(days: 3)), mode: 'hexagons', cells: 27)), board()));
+      expect(row.mode, 'cards');
+      expect(OpenFeatures.forPlayer(level: 1, progress: [row]).mode(GameMode.hexagons), isTrue);
+    });
+
+    test('the log: one entry per finish, the last 8 days and the one before, within the column', () {
+      final once = win(DateTime(2026, 10, 14, 12));
+      final row = apply(const {}, once);
+      expect(BoardFinish.decode(apply(row, once)['finishes']), hasLength(1), reason: 'a win sent twice (its answer lost) is one finish');
+      // Finishes every day for three weeks: the last 8 days stay, plus the newest one before them.
+      var r = <String, dynamic>{};
+      for (var d = 0; d < 21; d++) {
+        r = apply(r, win(DateTime(2026, 10, 1 + d, 12), session: 's$d'));
+      }
+      final log = BoardFinish.decode(r['finishes']);
+      expect(log.first.at, DateTime(2026, 10, 12, 12));
+      expect(log.last.at, DateTime(2026, 10, 21, 12));
+      expect(log, hasLength(10));
+      // Many finishes in a day: at most 16, within 4,000 characters.
+      for (var i = 0; i < 40; i++) {
+        r = apply(r, win(DateTime(2026, 10, 21, 13, i), mode: 'triangles', cells: 105, session: 'x$i'));
+      }
+      expect(BoardFinish.decode(r['finishes']), hasLength(BoardFinish.maxEntries));
+      expect((r['finishes'] as String).length, lessThanOrEqualTo(BoardFinish.maxChars));
+      // Anything unreadable reads as no log (the board fields then describe the last finish).
+      expect(read({...row, 'finishes': '{oops'}).finishes.single.known, isTrue);
+      expect(BoardFinish.decode('[{"at":"x"},{"at":"2026-10-14T10:00:00Z","mode":"squares"}]').single.mode, 'squares');
+    });
+
+    test('a server without the column yet still gets the win, without the log', () async {
+      final sent = <Map<String, dynamic>>[];
+      Future<String> server(Map<String, dynamic> data) async {
+        sent.add(data);
+        if (data.containsKey('finishes')) throw AppwriteException('Invalid document structure: Unknown attribute: "finishes"', 400, 'document_invalid_structure');
+        return 'written';
+      }
+
+      expect(await writeWithoutUnknown({'moves': 3, 'finishes': '[]'}, newProgressColumns, server), 'written');
+      expect(sent.last, {'moves': 3});
+      // Any other refusal stays one.
+      await expectLater(writeWithoutUnknown({'moves': 3, 'finishes': '[]'}, newProgressColumns, (_) async => throw AppwriteException('Invalid `moves` param', 400)), throwsA(isA<AppwriteException>()));
+    });
+
+    test('a sign-in merge keeps the boards finished on both saves', () {
+      final guest = {...apply(const {}, win(now.subtract(const Duration(hours: 3)), mode: 'hexagons')), r'$updatedAt': now.toUtc().toIso8601String()};
+      final account = {
+        ...apply(const {}, win(now.subtract(const Duration(hours: 6)), mode: 'squares', session: 'a')),
+        r'$updatedAt': now.subtract(const Duration(hours: 6)).toUtc().toIso8601String(),
+      };
+      final merged = read(mergeProgressRow(guest, account));
+      expect([for (final f in merged.finishes) f.mode], ['squares', 'hexagons']);
+      expect(daily('mode-squares', [merged]), 1);
+      expect(daily('mode-hexagons', [merged]), 1);
     });
   });
 }

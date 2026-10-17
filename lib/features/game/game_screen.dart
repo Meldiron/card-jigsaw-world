@@ -755,6 +755,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
       'mode': _spec.mode.code,
       'layout': '',
       'moves': s.moves,
+      'elapsedSeconds': s.elapsed,
       'completed': true,
       'completedAt': now.toUtc().toIso8601String(),
       'stars': math.max(existing?.stars ?? 0, stars),
@@ -762,6 +763,19 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
       'par': s.basePar,
       'peeked': s.peeked,
       'bestLock': s.bestLock,
+      // This board as the quests count it, as the win op records it.
+      'finishes': BoardFinish.logWith(existing?.toData() ?? const {}, BoardFinish(
+        at: now,
+        mode: _spec.mode.code,
+        gridSize: _spec.cells,
+        painting: _painting,
+        par: s.basePar,
+        moves: s.moves,
+        seconds: s.elapsed,
+        peeked: s.peeked,
+        bestLock: s.bestLock,
+        stars: stars,
+      )),
     });
     final questsReady = [for (final g in readyGoals(rows.values, profileBefore, open, now, dailyPuzzle: daily?.id, since: questsSince)) if (!readyBefore.contains(g.key)) g];
     AppAnalytics.event('puzzle_completed', {..._boardProps(), 'stars': stars, 'moves': s.moves, 'par': s.basePar, 'seconds': s.elapsed, 'hints': s.hintsUsed, 'resumed': _resumed, 'firstTime': firstTime});

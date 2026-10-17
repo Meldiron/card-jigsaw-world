@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import '../core/dates.dart';
 import '../core/name_filter.dart';
 import '../state/rewards.dart';
+import 'board_finish.dart';
+
+export 'board_finish.dart';
 
 int _i(dynamic v, [int d = 0]) => v is num ? v.toInt() : (v is String ? int.tryParse(v) ?? d : d);
 String _s(dynamic v, [String d = '']) => v?.toString() ?? d;
@@ -649,6 +652,7 @@ class PuzzleProgress {
     this.par = 0,
     this.peeked = false,
     this.bestLock = 0,
+    this.finishLog = '',
   });
 
   final String id;
@@ -690,6 +694,15 @@ class PuzzleProgress {
   /// Most cards one move locked in that play-through (moves by Magic do not count).
   final int bestLock;
 
+  /// The `finishes` column as stored: the picture's recent finished boards with their own values
+  /// ([BoardFinish]). Empty on rows from older versions.
+  final String finishLog;
+
+  /// The picture's finished boards, oldest first, each with the mode, size, Painting, moves, time,
+  /// Peek, longest lock and stars it was finished with. The quests read these, never the board
+  /// fields above, which a replay in progress overwrites with its own board.
+  late final List<BoardFinish> finishes = BoardFinish.ofRow(toData());
+
   factory PuzzleProgress.fromRow(String id, Map<String, dynamic> d) {
     List<int>? layout;
     final raw = d['layout']?.toString();
@@ -721,6 +734,7 @@ class PuzzleProgress {
       par: _i(d['par']),
       peeked: _b(d['peeked']),
       bestLock: _i(d['bestLock']),
+      finishLog: _s(d['finishes']),
     );
   }
 
@@ -747,6 +761,7 @@ class PuzzleProgress {
         'par': par,
         'peeked': peeked,
         'bestLock': bestLock,
+        if (finishLog.isNotEmpty) 'finishes': finishLog,
       };
 
   /// A board is saved (a first play or a replay of a solved picture).

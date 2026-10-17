@@ -69,6 +69,28 @@ const _db = AppwriteConfig.databaseId;
 
 String deterministicId(String a, String b) => md5.convert(utf8.encode('$a:$b')).toString();
 
+/// Progress columns this build writes that the server may not have yet. A column is added on the
+/// server before the build that writes it ships (docs/sync.md); if that order slipped, a write
+/// naming one would be refused and the sync would drop it (a lost win), so it is written again
+/// without the columns the server calls unknown.
+const newProgressColumns = {'finishes'};
+
+/// [write] with [data]; when the server refuses a column of [optional] as unknown, again without it.
+Future<T> writeWithoutUnknown<T>(Map<String, dynamic> data, Set<String> optional, Future<T> Function(Map<String, dynamic> data) write) async {
+  try {
+    return await write(data);
+  } on AppwriteException catch (e) {
+    final message = e.message ?? '';
+    final unknown = {
+      for (final c in optional)
+        if (data.containsKey(c) && e.code == 400 && message.toLowerCase().contains('unknown') && message.contains(c)) c,
+    };
+    if (unknown.isEmpty) rethrow;
+    debugPrint('progress: the server has no ${unknown.join(', ')} column yet; written without it');
+    return write({...data}..removeWhere((k, _) => unknown.contains(k)));
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Auth
 // ---------------------------------------------------------------------------
@@ -434,16 +456,20 @@ class ProgressRepository {
 
   Future<PuzzleProgress> upsert(String userId, String puzzleId, Map<String, dynamic> data) async {
     final id = deterministicId(userId, puzzleId);
-    final row = await _tables.upsertRow(
-      databaseId: _db,
-      tableId: AppwriteConfig.progress,
-      rowId: id,
-      data: {'userId': userId, 'puzzleId': puzzleId, ...data},
-      permissions: [
-        Permission.read(Role.user(userId)),
-        Permission.update(Role.user(userId)),
-        Permission.delete(Role.user(userId)),
-      ],
+    final row = await writeWithoutUnknown(
+      {'userId': userId, 'puzzleId': puzzleId, ...data},
+      newProgressColumns,
+      (data) => _tables.upsertRow(
+        databaseId: _db,
+        tableId: AppwriteConfig.progress,
+        rowId: id,
+        data: data,
+        permissions: [
+          Permission.read(Role.user(userId)),
+          Permission.update(Role.user(userId)),
+          Permission.delete(Role.user(userId)),
+        ],
+      ),
     );
     return PuzzleProgress.fromRow(row.$id, row.data);
   }

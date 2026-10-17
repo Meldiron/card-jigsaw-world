@@ -610,9 +610,18 @@ VIP 1). Besides the quests that are always there, each quest comes from a differ
 
 Rules (`Goals.daily`, `Goals.weekly`, `PlayHabits`, `_Lanes` in `lib/state/rewards.dart`):
 
+- Every quest counts finished boards with the values each was finished with (shape, size, Painting,
+  par, longest lock, time, Peek, stars), from the picture's finish log (`progress.finishes`,
+  docs/sync.md), never the progress row's board fields: a replay overwrites those as soon as it is
+  saved, so replaying a picture finished today changed what the shape, size and Painting quests
+  counted (2026-10-17). A picture counts once per quest when one of its boards in the period does what
+  the quest asks ("Solve 3 puzzles" counts pictures, as before); "Play on 4 different days" counts the
+  days of every finish, "Collect 15 stars" the best board of each picture this week. A finish whose
+  values an older build overwrote counts as a solve on its day and for nothing else.
 - "Usual" comes from the player's last 20 boards finished before today (before Monday for the week):
   the shape most of them have, the middle size, the size four fifths of the way up, Painting or not,
-  the time to beat. So the day's quests do not move while the player plays.
+  the time to beat. So the day's quests do not move while the player plays (each picture counts with
+  its last board finished before then, which a replay today does not change).
 - The time to beat (TestFlight feedback, 2026-10-17: "Solve a 3x3 board in under 4 seconds"): the
   second-best time among the player's finishes on the square Cards size most of their recent Cards
   boards had, each finish with its own time (not the picture's best, `bestSeconds`, which may come from
