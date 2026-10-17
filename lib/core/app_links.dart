@@ -22,8 +22,8 @@ enum LinkKind {
   /// of what is on screen, or on top of Home when the app has just started.
   overlay,
 
-  /// An alert or sheet (pack code, friend code, daily gift, piggy bank) or a pick the device makes
-  /// (today's picture, Quick play).
+  /// An alert or sheet (pack code, friend code, daily gift, piggy bank, one inbox message) or a
+  /// pick the device makes (today's picture, Quick play).
   action,
 }
 
@@ -130,8 +130,13 @@ class AppLink {
         return page('/social', tab == 'friends' || tab == 'inbox' ? {'tab': tab!} : null);
       case 'friends' when rest.isEmpty:
         return page('/social', const {'tab': 'friends'});
+      // One message (a friend's gift notification): /inbox?message=<id> or /inbox/<id>; without
+      // a (valid) message id, the inbox.
       case 'inbox' || 'messages' when rest.isEmpty:
-        return page('/social', const {'tab': 'inbox'});
+        final message = q['message'];
+        return message != null && _id.hasMatch(message) ? action('/inbox', {'message': message}) : page('/social', const {'tab': 'inbox'});
+      case 'inbox' || 'messages' when rest.length == 1 && id(0) != null:
+        return action('/inbox', {'message': id(0)!});
       case 'feedback' when rest.isEmpty:
         return action('/feedback');
       case 'add-friend' || 'friend' when rest.length <= 1:

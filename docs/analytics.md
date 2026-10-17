@@ -137,9 +137,12 @@ A route added later is named after its last fixed part (`/join/:code` is `join`)
 | `shortcut_opened` | `daily` | The Home Screen quick action |
 | `reminder_opened` | `daily` | A daily reminder tapped |
 | `my_puzzle_uploaded` | `source` (`gallery`, `camera`) | A photo added in My Puzzles |
+| `gift_sent` | `kind` (`ticket`, `coins`) | A friend gift the server accepted (Player > Send a gift, `friend_gifts.dart`; docs/friend-gifts.md) |
+| `gift_claimed` | `kind` (`ticket`, `coins`) | A friend's gift claimed in the inbox (after its `inbox_message_claimed`) |
+| `push_permission` | `result` (`granted`, `denied`) | The iOS notification prompt answered, from the gift question or Settings > Gifts from friends (`PushRegistration.enable`) |
+| `push_opened` | `kind` (`gift`) | A gift notification tapped (`app.dart`; its `/inbox?message=` link follows) |
 
-Gifts between friends, push and co-op games add their own events (their agents' work, documented
-with them).
+Co-op games add their own events (their agent's work, documented with them).
 
 ## Adding an event
 

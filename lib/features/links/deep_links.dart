@@ -10,8 +10,10 @@ import '../../core/app_links.dart';
 import '../../core/platform.dart';
 import '../../models/models.dart';
 import '../../router.dart';
+import '../../state/auth.dart';
 import '../../state/catalog.dart';
 import '../../state/giant.dart';
+import '../../state/inbox.dart';
 import '../../state/profile.dart';
 import '../../state/progress.dart';
 import '../../state/quick_play.dart';
@@ -23,6 +25,7 @@ import '../daily/piggy_sheet.dart';
 import '../gallery/library_screen.dart';
 import '../profile/help.dart';
 import '../profile/redeem_code_sheet.dart';
+import '../social/inbox.dart';
 import '../social/social_screen.dart';
 
 final deepLinksProvider = Provider<DeepLinks>(DeepLinks.new);
@@ -114,6 +117,20 @@ class DeepLinks {
         if (!_ref.read(platformCapsProvider).isWeb) return;
         final ctx = rootNavigatorKey.currentContext;
         if (ctx != null && ctx.mounted) await showRedeemCodeSheet(ctx, code: link.query['code']);
+      case '/inbox':
+        // One message (a tapped gift notification): Social > Inbox with the message open. It may
+        // be newer than the inbox read at launch, so the inbox is read again first.
+        _ref.read(socialTabProvider.notifier).select(SocialTab.inbox);
+        await _onPage(router, '/social');
+        try {
+          await _ref.read(authProvider.future).timeout(const Duration(seconds: 15));
+          _ref.invalidate(inboxMessagesProvider);
+          await Future.wait<Object?>([_ref.read(inboxMessagesProvider.future), _ref.read(profileProvider.future)]).timeout(const Duration(seconds: 15));
+        } catch (_) {
+          // The sheet shows the message once it loads, or that it is not available.
+        }
+        final ctx = rootNavigatorKey.currentContext;
+        if (ctx != null && ctx.mounted) await showMessageSheet(ctx, link.query['message']!);
       case '/feedback':
         await _onPage(router);
         final ctx = rootNavigatorKey.currentContext;

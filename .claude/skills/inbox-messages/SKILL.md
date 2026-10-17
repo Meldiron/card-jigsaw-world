@@ -41,6 +41,9 @@ claimed and deleted state is their own, also for shared rows.
   (lib/state/inbox.dart). An unopened message puts a dot on the Social tab and on the Inbox
   segment, also while they are shown, until it is opened. A gift card in the message explains
   the gift and holds **Claim** (then "Claimed"); **Close** closes it. Players can delete messages.
+- Friend gifts (docs/friend-gifts.md) are messages too: rows the `send-gift` function writes for the
+  friend, with `fromUserId`, `fromName` and `fromAvatar` and a 24-hour `expiresAt`; `list --to`
+  shows them with the others. Never send a gift "from" a player with this tool.
 - Deleting an account deletes its own messages (`delete-account` function, `PLAYER_TABLES` in
   tools/dev/cjw_admin.py); QA purges remove them too. Shared rows (labels, everyone) stay until
   you delete or expire them.
