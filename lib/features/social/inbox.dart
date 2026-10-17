@@ -151,104 +151,117 @@ class _MessageRow extends StatelessWidget {
   }
 }
 
-/// A message's gift: what it is, what claiming does, the amounts and the Claim button; once
-/// claimed, a check and where it went.
+/// A message's gift, in the sheet's grouped style (owner, 2026-10-17: the cobalt box with chips and
+/// a green tick looked heavy): who it is from (Carden's gift mark or the friend's avatar) and the
+/// amounts, each with its currency mark. The Claim button under it is the sheet's main action;
+/// once claimed, the card ends in a quiet check and "Claimed".
 class _GiftCard extends StatelessWidget {
-  const _GiftCard({required this.item, required this.onClaim});
+  const _GiftCard({required this.item});
   final InboxItem item;
-  final VoidCallback onClaim;
 
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
     final claimed = item.claimed;
     final m = item.message;
-    return Container(
+    return SoftCard(
       key: const ValueKey('message-gift'),
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-      decoration: BoxDecoration(
-        color: c.accentTint,
-        borderRadius: BorderRadius.circular(Radii.lg),
-        border: Border.all(color: context.accent.withValues(alpha: 0.25)),
-      ),
+      padding: EdgeInsets.zero,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Row(
-            children: [
-              // A friend's gift shows the friend's avatar; Carden's, the gift mark.
-              if (m.fromFriend)
-                AvatarCircle(key: const ValueKey('message-gift-avatar'), avatarKey: m.fromAvatar ?? 'fox', size: 36)
-              else
-                Container(
-                  width: 36,
-                  height: 36,
-                  decoration: BoxDecoration(color: context.accentFill, shape: BoxShape.circle),
-                  child: Icon(AppIcons.gift, size: 18, color: context.onAccent),
-                ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('A gift from ${m.sender}', style: TextStyle(fontSize: TypeSize.headline, fontWeight: FontWeight.w700, color: c.textPrimary)),
-                    const SizedBox(height: 2),
-                    Text(
-                      claimed
-                          ? 'Claimed. It is in your balance, ready for your next pack.'
-                          : m.fromFriend
-                              ? 'Claim it to add it to your balance. It expires 24 hours after it was sent.'
-                              : 'Claim it to add it to your balance. It stays here until you do.',
-                      style: TextStyle(fontSize: TypeSize.footnote, height: 1.35, color: c.textSecondary),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 14),
-          _RewardChips(message: item.message, large: true),
-          const SizedBox(height: 14),
-          if (claimed)
-            Row(
-              key: const ValueKey('message-claimed'),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
+            child: Row(
               children: [
-                Icon(AppIcons.checkmarkCircleFill, size: 18, color: c.success),
-                const SizedBox(width: 6),
-                Text('Claimed', style: TextStyle(fontSize: TypeSize.callout, fontWeight: FontWeight.w600, color: c.textPrimary)),
+                // A friend's gift shows the friend's avatar; Carden's, the gift mark.
+                if (m.fromFriend)
+                  AvatarCircle(key: const ValueKey('message-gift-avatar'), avatarKey: m.fromAvatar ?? 'fox', size: IconTile.medium)
+                else
+                  const IconTile(icon: AppIcons.gift, size: IconTile.medium),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('A gift from ${m.sender}', style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w500, color: c.textSecondary)),
+                      const SizedBox(height: 3),
+                      Wrap(
+                        spacing: 14,
+                        runSpacing: 4,
+                        children: [
+                          for (final (currency, amount) in m.reward)
+                            Amount(currency: currency, value: amount, size: 18, fontSize: TypeSize.title3, weight: FontWeight.w700),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
               ],
-            )
-          else
-            BigButton(key: const ValueKey('message-claim'), label: 'Claim', icon: AppIcons.gift, onTap: onClaim),
+            ),
+          ),
+          if (claimed) ...[
+            Divider(height: 1, thickness: 0.5, indent: 14, color: c.stroke),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(14, 10, 14, 11),
+              child: Row(
+                key: const ValueKey('message-claimed'),
+                children: [
+                  Container(
+                    width: 20,
+                    height: 20,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(shape: BoxShape.circle, color: c.accentTint),
+                    child: Icon(AppIcons.checkmarkAlt, size: 13, color: context.accent),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(child: Text('Claimed · in your balance', style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: c.textSecondary))),
+                ],
+              ),
+            ),
+          ],
         ],
       ),
     );
   }
 }
 
-/// The gift of a message, one chip per currency.
-class _RewardChips extends StatelessWidget {
-  const _RewardChips({required this.message, this.large = false});
-  final InboxMessage message;
-  final bool large;
+/// A round button in the message sheet's header, the iOS 26 sheet's close button: a grey disc
+/// with a mark, 30 pt, 44 pt to tap.
+class _HeaderButton extends StatelessWidget {
+  const _HeaderButton({super.key, required this.icon, required this.label, required this.onTap, this.color});
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+  final Color? color;
 
   @override
-  Widget build(BuildContext context) => Wrap(
-        spacing: 6,
-        runSpacing: 6,
-        children: [
-          for (final (currency, amount) in message.reward)
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: large ? 12 : 9, vertical: large ? 7 : 4),
-              decoration: BoxDecoration(color: large ? context.colors.card : context.colors.accentTint, borderRadius: BorderRadius.circular(Radii.pill)),
-              child: Amount(currency: currency, value: amount, size: large ? 18 : 14, fontSize: large ? TypeSize.body : TypeSize.footnote, weight: FontWeight.w700),
-            ),
-        ],
-      );
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return Semantics(
+      button: true,
+      label: label,
+      excludeSemantics: true,
+      child: Pressable(
+        onTap: onTap,
+        scale: 0.9,
+        child: TapTarget(
+          child: Container(
+            width: 30,
+            height: 30,
+            decoration: BoxDecoration(color: c.track, shape: BoxShape.circle, border: c.highContrast ? Border.all(color: c.controlStroke) : null),
+            child: Icon(icon, size: 15, color: color ?? c.textSecondary),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
-/// A message on its own: subject, when it came, the whole text, its gift, an optional button that
-/// opens a place in the app, and Claim (a gift still waiting) or Close. Opening it marks it seen.
+/// A message on its own: subject, when it came, the whole text, its gift and one main action:
+/// Claim while the gift waits, else the message's button (a place in the app). The header's round
+/// buttons delete the message (after asking) and close the sheet, which also drags away. Opening
+/// it marks it seen.
 Future<void> showMessageSheet(BuildContext context, String id) => showAppSheet(context, scrollable: true, builder: (_) => _MessageSheet(id: id));
 
 class _MessageSheet extends ConsumerStatefulWidget {
@@ -282,13 +295,13 @@ class _MessageSheetState extends ConsumerState<_MessageSheet> {
     if (m.fromFriend) AppAnalytics.event('gift_claimed', {'kind': m.tickets > 0 ? 'ticket' : 'coins'});
     Sfx.instance.coin();
     Haptics.success();
-    final words = [
-      for (final (currency, amount) in m.reward) '${formatCount(amount)} ${_unit(currency, amount)}',
-    ];
-    showToast(context, 'Added ${words.join(', ')}', icon: AppIcons.gift);
+    showToast(context, 'Added ${_words(m)}', icon: AppIcons.gift);
     // A friend's gift: the moment to offer gift notifications (asked once).
     if (m.fromFriend) await offerGiftNotifications(context, ProviderScope.containerOf(context, listen: false));
   }
+
+  /// "500 coins, 2 tickets".
+  static String _words(InboxMessage m) => [for (final (currency, amount) in m.reward) '${formatCount(amount)} ${_unit(currency, amount)}'].join(', ');
 
   static String _unit(Currency c, int n) => switch (c) {
         Currency.coins => n == 1 ? 'coin' : 'coins',
@@ -322,47 +335,54 @@ class _MessageSheetState extends ConsumerState<_MessageSheet> {
     }
     final m = item.message;
     final link = m.ctaLink == null ? null : AppLink.parse(Uri.parse(m.ctaLink!));
+    // One gift kind claims with its amount ("Claim [coin] 500"); several say "Claim gift".
+    final reward = m.reward;
+    final claim = !item.claimable
+        ? null
+        : reward.length == 1
+            ? BigButton.cost(key: const ValueKey('message-claim'), label: 'Claim', currency: reward.first.$1, amount: reward.first.$2, onTap: () => _claim(m))
+            : BigButton(key: const ValueKey('message-claim'), label: 'Claim gift', icon: AppIcons.gift, onTap: () => _claim(m));
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
+      padding: const EdgeInsets.fromLTRB(20, 12, 16, 20),
       child: Column(
         key: ValueKey('message-sheet-${m.id}'),
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          SheetHeader(title: m.subject, subtitle: _when(context, m.sentAt)),
-          const SizedBox(height: 14),
-          Text(m.body, style: TextStyle(fontSize: TypeSize.callout, height: 1.45, color: c.textPrimary)),
-          if (m.expiresAt != null) ...[
-            const SizedBox(height: 10),
-            Text('In your inbox until ${_when(context, m.expiresAt!)}', style: TextStyle(fontSize: TypeSize.footnote, color: c.textTertiary)),
-          ],
-          if (m.hasReward) ...[
-            const SizedBox(height: 18),
-            _GiftCard(item: item, onClaim: () => _claim(m)),
-          ],
-          const SizedBox(height: 20),
-          if (link != null) ...[
-            BigButton(key: const ValueKey('message-cta'), label: m.ctaLabel ?? 'Open', kind: ButtonKind.secondary, onTap: () => _openLink(link)),
-            const SizedBox(height: 10),
-          ],
-          // The gift is claimed in its card; this one closes the message.
-          BigButton(key: const ValueKey('message-close'), label: 'Close', kind: link == null && !item.claimable ? ButtonKind.primary : ButtonKind.ghost, onTap: () => Navigator.of(context).pop()),
-          const SizedBox(height: 6),
-          Center(
-            child: Pressable(
-              key: const ValueKey('message-delete'),
-              onTap: () => _delete(item),
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(AppIcons.trash, size: 14, color: c.danger),
-                    const SizedBox(width: 6),
-                    Text('Delete message', style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: c.danger)),
-                  ],
-                ),
-              ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(child: SheetHeader(title: m.subject, subtitle: _when(context, m.sentAt))),
+              const SizedBox(width: 4),
+              _HeaderButton(key: const ValueKey('message-delete'), icon: AppIcons.trash, label: 'Delete message', color: c.danger, onTap: () => _delete(item)),
+              _HeaderButton(key: const ValueKey('message-close'), icon: AppIcons.xmark, label: 'Close', onTap: () => Navigator.of(context).pop()),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 4),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(height: 14),
+                Text(m.body, style: TextStyle(fontSize: TypeSize.callout, height: 1.45, color: c.textPrimary)),
+                if (m.expiresAt != null) ...[
+                  const SizedBox(height: 10),
+                  Text('In your inbox until ${_when(context, m.expiresAt!)}', style: TextStyle(fontSize: TypeSize.footnote, color: c.textTertiary)),
+                ],
+                if (m.hasReward) ...[
+                  const SizedBox(height: 18),
+                  _GiftCard(item: item),
+                ],
+                if (claim != null || link != null) const SizedBox(height: 20),
+                // One main action: Claim while the gift waits (the message's button under it, tinted),
+                // then the message's button.
+                ?claim,
+                if (link != null) ...[
+                  if (claim != null) const SizedBox(height: 10),
+                  BigButton(key: const ValueKey('message-cta'), label: m.ctaLabel ?? 'Open', kind: claim == null ? ButtonKind.primary : ButtonKind.secondary, onTap: () => _openLink(link)),
+                ],
+              ],
             ),
           ),
         ],
