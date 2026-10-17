@@ -140,7 +140,7 @@ void main() {
     test('invite and alerts', () {
       expect(inviteText('Barn owl'), 'Play Barn owl with me in Carden');
       expect(inviteText(null), 'Play a picture with me in Carden');
-      expect(_game.joinUrl.toString(), 'https://play.carden.page/join/K7QH2MXP');
+      expect(_game.joinUrl.toString(), 'https://join.carden.page/K7QH2MXP');
       expect(endedMessage('host', 'Amy'), 'Amy ended the game for everyone.');
       expect(endedMessage('idle', 'Amy'), 'The game ended after a day without play.');
       for (final r in CoopRefusalReason.values) {

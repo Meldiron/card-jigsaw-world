@@ -50,9 +50,15 @@ class AppLink {
   /// The same link in the app's own scheme (App Store In-App Events, the widget).
   Uri get appUrl => Uri.parse('$scheme:/$location');
 
-  /// The Play together invite for the game with join [code] (docs/multiplayer.md): opens the app
-  /// where it is installed, the web game elsewhere.
-  static Uri joinUrl(String code) => Uri.parse('$webOrigin/join/${normaliseJoinCode(code) ?? code}');
+  /// The invites' own address (docs/multiplayer.md, "Invite links"): a page made per invite by the
+  /// `api` function, so Messages, WhatsApp and the rest show the game's own preview. Universal links
+  /// claim it from build 127 (`applinks:join.carden.page`); earlier builds open its page, whose Open
+  /// in Carden button is `carden://join/<code>`.
+  static const joinHost = 'join.carden.page';
+
+  /// The Play together invite for the game with join [code]: opens the app where it is installed
+  /// (the invite's page elsewhere, which offers the app and the web game).
+  static Uri joinUrl(String code) => Uri.parse('https://$joinHost/${normaliseJoinCode(code) ?? code}');
 
   /// The same invite on the first Carden address, which the app also claims. A link to another
   /// domain than the page's own is handed to the app by iOS, so the web page of an invite offers
@@ -108,6 +114,11 @@ class AppLink {
     }
 
     Map<String, String> only(Iterable<String> keys) => {for (final k in keys) if (q[k] != null && q[k]!.isNotEmpty) k: q[k]!};
+
+    // An invite on its own address: join.carden.page/<code> (the long form, /join/<code>, reads below).
+    if (uri.host.toLowerCase() == joinHost && s.length == 1 && normaliseJoinCode(s.first) != null) {
+      return action('/join/${normaliseJoinCode(s.first)}');
+    }
 
     switch (head) {
       case '' || 'home' when rest.isEmpty:

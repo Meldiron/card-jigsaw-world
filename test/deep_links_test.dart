@@ -188,6 +188,40 @@ void main() {
     });
   });
 
+  group('invites on their own address (join.carden.page)', () {
+    test('the shared link is the invite\'s page, and opens the game in the app', () {
+      expect(AppLink.joinUrl('k7qh-2mxp').toString(), 'https://join.carden.page/K7QH2MXP');
+      final join = _parse('/join/K7QH2MXP');
+      for (final input in ['https://join.carden.page/K7QH2MXP', 'https://join.carden.page/k7qh-2mxp/', 'https://JOIN.carden.page/K7QH2MXP', 'https://join.carden.page/join/K7QH2MXP']) {
+        expect(_parse(input), join, reason: input);
+      }
+      expect(_parse(AppLink.joinUrl('K7QH2MXP').toString()), join, reason: 'round trip');
+      // Only that address reads a bare code; elsewhere a bare code is no link.
+      expect(_parse('https://play.carden.page/K7QH2MXP'), isNull);
+      expect(_parse('carden://K7QH2MXP'), isNull);
+      expect(_parse('https://join.carden.page/K7QH2MX0'), isNull);
+    });
+
+    test('the page (functions/api/src/invite/page.js) sends invites to the app and nothing else', () {
+      final page = File('functions/api/src/invite/page.js').readAsStringSync();
+      final components = RegExp(r"\{ '/': '([^']+)'(, exclude: true)?").allMatches(page).map((m) => (m.group(1)!, m.group(2) != null)).toList();
+      bool opensApp(String path) {
+        for (final (pattern, exclude) in components) {
+          if (_matches(pattern, path)) return !exclude;
+        }
+        return false;
+      }
+
+      expect(opensApp('/K7QH2MXP'), isTrue);
+      expect(opensApp('/join/K7QH2MXP'), isTrue);
+      expect(opensApp('/'), isFalse);
+      expect(opensApp('/robots.txt'), isFalse);
+      expect(File('ios/Runner/Runner.entitlements').readAsStringSync(), contains('<string>applinks:${AppLink.joinHost}</string>'));
+      expect(RegExp(r"GET_CARDEN = '([^']+)'").firstMatch(page)?.group(1), AppLinks.getCarden.toString(), reason: 'the same Get Carden link');
+      expect(page, contains("appIDs: ['C24QP73SQM.com.matejbaco.cardjigsawworld']"));
+    });
+  });
+
   test('the invite page offers the same Get Carden link as the app', () {
     final html = File('web/index.html').readAsStringSync();
     expect(RegExp(r"var GET_CARDEN = '([^']+)'").firstMatch(html)?.group(1), AppLinks.getCarden.toString());

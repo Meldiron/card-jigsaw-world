@@ -72,7 +72,7 @@ export function inviteCopy({ hostName, title, grid, painting, players }) {
 const GENERIC = {
   title: 'Carden: Your calm picture puzzle',
   description: 'Swap cards until the picture is whole, on your own or together. A new puzzle every day.',
-  alt: 'A picture dealt as cards beside the name Carden',
+  alt: 'A red panda dealt as nine cards, one lifted, beside the name Carden',
 };
 
 /// The page. [game]: null for an ended or unknown invite.
