@@ -54,15 +54,23 @@ any other (`Board.shuffled`: no card in place, no pair joined).
   view comes into it. Each card in view that belongs elsewhere trades places with one that belongs
   here, chosen so the card leaving lands as close to its own place as it can. Cards in place, joined
   groups and trades that would put a card straight into its place are left alone: Gather sorts, it
-  never solves, so the last card or two may stay just outside the view ("Every card for this view is
-  here or nearby"). (`gatherInto` in `lib/game/gather.dart`.)
-- **Shuffle** (owner, build 117): a Gather with nothing to bring in shuffles the loose cards in view
-  instead, so the view can be read afresh; on the whole board that is every loose card. Cards in place
-  and joined groups (also ones not yet in place) stay exactly where they are; every loose card moves,
-  none lands in its place and, where another order allows, no pair is joined. (`shuffleInView`.)
-  Neither Gather nor the shuffle is a move; Undo takes either back.
-- **Magic** puts the selected card in its place (owner, build 117); with nothing selected, the card a
-  Hint shows, else any card not in place.
+  never solves, so the last card or two may stay just outside the view. Gather only gathers (owner,
+  2026-10-17): the button is dimmed while the view has nothing to bring in (`canGather`, worked out
+  150 ms after the view settles and after every change on the board, about 0.1 to 0.25 ms on the
+  biggest boards; never per frame). It is not a move. Its toast ("12 cards gathered") has an
+  **Undo** that takes the gather back while nothing else has changed; that is the only Undo left in
+  the game. (`gatherInto` in `lib/game/gather.dart`.)
+- **Shuffle** (owner, 2026-10-17: the round button left of the tools on every board, free, where Undo
+  was): the loose cards trade places at random, so the board can be read afresh; on a giant board only
+  the ones in view (the whole board when not zoomed in). Cards in place and joined groups (also ones
+  not yet in place) stay exactly where they are; every loose card moves, none lands in its place and,
+  where another order allows, no pair is joined. Not a move. "Nothing left to shuffle" when no card can
+  move. (`shuffleLoose` and `shuffleInView` in `lib/game/gather.dart`.)
+- **Magic** puts a card and its neighbours in place (owner, 2026-10-17): the selected card (with
+  nothing selected, the card a Hint shows, else any card not in place), then each card whose place
+  borders its place, each with its group. Up to 5 of the 9 cards on a 3x3. One move per card it
+  sends; it plays a plain lock, never the "×2 DOUBLE LOCK", and does not count for the "Lock N cards
+  in one move" quests.
 - **Peek** (10 coins on every board; owner, 2026-10-14: no free Peek on giant boards): every card not in place flies to its place,
   the picture shows (3.2 s on a giant board, 2.4 s elsewhere) and the cards fly back, each a little
   later than the last, so the picture builds itself in a ripple. Using it still counts against the

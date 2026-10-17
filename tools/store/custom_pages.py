@@ -50,7 +50,7 @@ LIVE_STATES = ("ACCEPTED", "APPROVED")
 # Named crop boxes (capture px, 1320 x 2868) for the custom slides. Check them on a coordinate grid after new
 # captures; the default set's own boxes (EVENT_CARD, PODIUM, STREAK_CARD) come from compose_glass.py.
 BOXES = {
-    "TOOLBAR": (14, 2578, 1306, 2780),       # Undo, Peek, Magic, Hint on any board
+    "TOOLBAR": (14, 2578, 1306, 2780),       # Shuffle, Peek, Magic, Hint on any board
     "ALPINE_TILE": (58, 604, 630, 1340),     # Alpine Lakes tile in 28_library_more
     "AUGUST_TILE": (58, 1596, 630, 2340),    # August 2026 tile in 16_library_daily
     "GIANT_MAP": (992, 636, 1262, 1048),     # overview map in 30_giant_zoom
