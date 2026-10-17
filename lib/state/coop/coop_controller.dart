@@ -11,6 +11,7 @@ import '../auth.dart';
 import '../settings.dart';
 import 'board_change.dart';
 import 'coop_backend.dart';
+import 'coop_live.dart';
 import 'coop_log.dart';
 import 'coop_models.dart';
 
@@ -224,6 +225,9 @@ class CoopController extends Notifier<CoopState> {
   DateTime? _lastEcho;
   bool _echoMissed = false;
   final _moved = <int, ({String userId, DateTime until})>{};
+  LiveSender? _live;
+  final _tracks = LiveTracks();
+  final _liveWake = StreamController<void>.broadcast();
 
   /// Join and leave toasts, removed and ended alerts, the next board.
   Stream<CoopNotice> get notices => _notices.stream;
@@ -233,6 +237,17 @@ class CoopController extends Notifier<CoopState> {
 
   /// The shared board, for tests and the bridge.
   CoopLog? get log => _log;
+
+  /// The other players' picks and drags as they arrive (the game screen draws [LiveTracks.ghosts]
+  /// every frame while there are any).
+  LiveTracks get liveTracks => _tracks;
+
+  /// A drag of another player started or ended: the game screen starts drawing them.
+  Stream<void> get liveWake => _liveWake.stream;
+
+  /// This player's live sender, for tests.
+  @visibleForTesting
+  LiveSender? get liveSender => _live;
 
   @override
   CoopState build() {
@@ -331,7 +346,9 @@ class CoopController extends Notifier<CoopState> {
     _newBoard(game);
     _remember(game);
     state = CoopState(phase: CoopPhase.playing, game: game, me: me, layout: game.layout);
-    _sub = _backend.listen(game.id).listen(_onEvent);
+    _sub = _backend.listen(game.id, me: me).listen(_onEvent);
+    final backend = _backend;
+    _live = LiveSender(userId: me, board: game.board, send: (s) => backend.updateLive(game.id, s));
     _presence = CoopPresence(userId: me, gameId: game.id, board: game.board);
     _sendPresence();
     _keepAliveTimer = Timer.periodic(_timing.keepAlive, (_) => _keepAlive());
@@ -342,6 +359,8 @@ class CoopController extends Notifier<CoopState> {
   void _newBoard(CoopGame game) {
     _outbox.removeWhere((op) => op.board != game.board);
     _moved.clear();
+    _tracks.clear();
+    _live?.reset(game.board);
     _log = CoopLog(gameId: game.id, board: game.board, base: game.layout, me: _me ?? '');
   }
 
@@ -361,6 +380,9 @@ class CoopController extends Notifier<CoopState> {
     _lastEcho = null;
     _echoMissed = false;
     _moved.clear();
+    _live?.dispose();
+    _live = null;
+    _tracks.clear();
   }
 
   // ---- Return to game ------------------------------------------------------------------------
@@ -478,13 +500,25 @@ class CoopController extends Notifier<CoopState> {
   }
 
   /// The card this player holds (picked up, not yet placed), or null: the others see their colour on
-  /// it. Sent at most once per [CoopTiming.presenceGap].
+  /// it. Sent at once on the live row; also in the presence (at most once per
+  /// [CoopTiming.presenceGap]) for builds without live rows.
   void hold(int? card) {
+    _live?.pick(card);
     final p = _presence;
     if (p == null || p.held == card) return;
     _presence = CoopPresence(userId: p.userId, gameId: p.gameId, board: p.board, held: card, away: p.away);
     _sendPresence();
   }
+
+  /// This player's finger took [card] at ([x], [y]), fractions of the board: the others see the
+  /// card follow it.
+  void dragStart(int card, double x, double y) => _live?.dragStart(card, x, y);
+
+  /// The dragged card is at ([x], [y]) now.
+  void dragMove(double x, double y) => _live?.dragMove(x, y);
+
+  /// The drag ended: [dropped] when it moved the card (its move follows).
+  void dragEnd({required bool dropped}) => _live?.dragEnd(dropped: dropped);
 
   // ---- what comes from the server ------------------------------------------------------------
 
@@ -494,7 +528,12 @@ class CoopController extends Notifier<CoopState> {
         final log = _log;
         if (log == null) return;
         final op = CoopOp.fromRow(row, cells: log.base.length);
-        if (op != null) _emit(log.addRemote(op));
+        if (op == null) return;
+        // Their drag of these cards is over: the board takes the cards from where they are drawn.
+        if (op.board == log.board && _tracks.onMove(op.userId, [for (final c in op.change.slots) ...[c.before, c.after]])) _liveWake.add(null);
+        _emit(log.addRemote(op));
+      case CoopLiveEvent(:final row):
+        _onLive(row);
       case CoopGameEvent(:final row, :final deleted):
         if (deleted) {
           _gone();
@@ -550,6 +589,7 @@ class CoopController extends Notifier<CoopState> {
       _notices.add(CoopJoined(p));
     }
     for (final p in left) {
+      _tracks.forget(p);
       _notices.add(CoopLeft(p));
     }
   }
@@ -582,6 +622,18 @@ class CoopController extends Notifier<CoopState> {
     }
   }
 
+  void _onLive(Map<String, dynamic> row) {
+    final log = _log;
+    final g = state.game;
+    if (log == null || g == null) return;
+    final s = CoopLive.fromRow(row, cells: log.base.length);
+    if (s == null || s.userId == _me || s.board != log.board || !g.players.contains(s.userId)) return;
+    if (_tracks.add(s, DateTime.now())) {
+      _liveWake.add(null);
+      state = state.copyWith(marks: _marks(state.layout, state.presences));
+    }
+  }
+
   void _onPresence(Map<String, dynamic> map, {required bool deleted}) {
     final g = state.game;
     final p = CoopPresence.fromMap(map);
@@ -606,6 +658,8 @@ class CoopController extends Notifier<CoopState> {
     } else {
       presences[p.userId] = p;
     }
+    // Gone or away: nothing of theirs is in hand any more.
+    if (deleted || p.away) _tracks.forget(p.userId);
     state = state.copyWith(presences: presences, marks: _marks(state.layout, presences));
   }
 
@@ -692,10 +746,13 @@ class CoopController extends Notifier<CoopState> {
     final now = DateTime.now();
     _moved.removeWhere((_, m) => !m.until.isAfter(now));
     final board = _log?.board;
+    final live = _tracks.heard.toSet();
     return CoopMarks(
       held: {
+        // Builds without live rows say it in their presence (every 3 s at most).
         for (final p in presences.values)
-          if (!p.away && p.held != null && p.board == board) p.held!: p.userId,
+          if (!live.contains(p.userId) && !p.away && p.held != null && p.board == board) p.held!: p.userId,
+        for (final e in _tracks.picks.entries) e.value: e.key,
       },
       moved: {for (final e in _moved.entries) e.key: e.value.userId},
     );

@@ -5,6 +5,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:carden/state/coop/coop_backend.dart';
+import 'package:carden/state/coop/coop_live.dart';
 import 'package:carden/state/coop/coop_models.dart';
 
 /// The join codes' alphabet (functions/api/src/coop/rules.js).
@@ -18,6 +19,26 @@ class FakeCoopServer {
   final games = <String, Map<String, dynamic>>{};
   final teams = <String, List<String>>{};
   final moves = <Map<String, dynamic>>[];
+
+  /// Live rows (`coop_drags`) by row id, made on create and join as the `api` function does.
+  final live = <String, Map<String, dynamic>>{};
+
+  /// Live row updates the server still takes before refusing (Appwrite's 120 a minute); null: no
+  /// limit.
+  int? liveAllowance;
+  int liveUpdates = 0;
+
+  void _liveRow(String gameId, String userId) {
+    live.putIfAbsent(CoopLive.rowId(gameId, userId), () => {
+          r'$id': CoopLive.rowId(gameId, userId),
+          r'$permissions': CoopLive.permissionsFor(gameId, userId),
+          'gameId': gameId,
+          'userId': userId,
+          'board': 0,
+          'phase': '',
+          'card': -1,
+        });
+  }
   final presences = <String, Map<String, dynamic>>{};
   final devices = <FakeCoopBackend>[];
 
@@ -28,10 +49,11 @@ class FakeCoopServer {
   /// Games the server knows by code.
   String? gameOfCode(String code) => games.entries.where((e) => e.value['code'] == code).firstOrNull?.key;
 
-  void _broadcast(String gameId, CoopEvent e) {
+  void _broadcast(String gameId, CoopEvent e, {String? except}) {
     final members = teams[gameId] ?? const [];
     for (final d in devices) {
       if (!d.listening || d.listeningTo != gameId || !d.connected || !members.contains(d.userId)) continue;
+      if (except != null && d.userId == except) continue;
       if (hold) {
         _held.add((d, e));
       } else {
@@ -72,6 +94,7 @@ class FakeCoopServer {
           'layout': (body['layout'] as List).join(','),
         };
         teams[id] = [userId];
+        _liveRow(id, userId);
         return _row(id);
       case 'join':
         final id = gameOfCode(body['code'] as String);
@@ -85,6 +108,7 @@ class FakeCoopServer {
         if (seat < 0) throw const CoopRefusal(CoopRefusalReason.full);
         players[seat] = userId;
         teams[id]!.add(userId);
+        _liveRow(id, userId);
         _update(id, {'players': players});
         return _row(id);
       case 'leave':
@@ -96,6 +120,7 @@ class FakeCoopServer {
         } else {
           _update(id, {'players': [for (final p in g['players'] as List) p == userId ? '' : p]});
           teams[id]!.remove(userId);
+          live.remove(CoopLive.rowId(id, userId));
         }
         return const {};
       case 'remove':
@@ -108,6 +133,7 @@ class FakeCoopServer {
           'removed': [...g['removed'] as List, target],
         });
         teams[id]!.remove(target);
+        live.remove(CoopLive.rowId(id, target));
         return _row(id);
       case 'end':
         final id = body['gameId'] as String;
@@ -213,8 +239,31 @@ class FakeCoopBackend implements CoopBackend {
     ]..sort((a, b) => int.parse(a[r'$sequence'] as String).compareTo(int.parse(b[r'$sequence'] as String)));
   }
 
+  /// Live states this device sent, in order (what reached the server).
+  final sentLive = <CoopLive>[];
+
   @override
-  Stream<CoopEvent> listen(String gameId) {
+  Future<void> updateLive(String gameId, CoopLive state) async {
+    await Future<void>.delayed(Duration.zero);
+    _online();
+    final id = CoopLive.rowId(gameId, userId);
+    final row = server.live[id];
+    if (row == null || state.userId != userId || !(server.teams[gameId] ?? const []).contains(userId)) throw const LiveRowMissing();
+    final allowance = server.liveAllowance;
+    if (allowance != null) {
+      if (allowance <= 0) throw const LiveRateLimited();
+      server.liveAllowance = allowance - 1;
+    }
+    server.liveUpdates++;
+    sentLive.add(state);
+    final updated = {...row, ...state.toData()};
+    server.live[id] = updated;
+    // The realtime subscription leaves this player's own row out.
+    server._broadcast(gameId, CoopLiveEvent(updated), except: userId);
+  }
+
+  @override
+  Stream<CoopEvent> listen(String gameId, {String? me}) {
     _events?.close();
     final c = _events = StreamController<CoopEvent>.broadcast();
     listeningTo = gameId;

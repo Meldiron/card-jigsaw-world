@@ -1,5 +1,15 @@
 // The rules of a co-op game that need no database: join codes, board checks and seats. Kept apart
 // from game.js so `node --test` can check them without Appwrite (test/coop-rules.test.mjs).
+import { createHash } from 'node:crypto';
+
+/// Each player's live row in `coop_drags` (what they pick or drag right now, docs/multiplayer.md):
+/// md5 of `live:<game>:<player>`, the id the app writes to (CoopLive.rowId in the app).
+export const LIVE = 'coop_drags';
+export const liveRowId = (gameId, userId) => createHash('md5').update(`live:${gameId}:${userId}`).digest('hex');
+
+/// The game's players read a live row; only its player writes it (and cannot add rows: the table
+/// has no create permission).
+export const livePermissions = (gameId, userId) => [`read("team:${gameId}")`, `update("user:${userId}")`];
 
 /// Most players in one game, the host included.
 export const MAX_PLAYERS = 5;

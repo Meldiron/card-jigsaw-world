@@ -146,11 +146,19 @@ try {
   await check('coop: join', ben, 'POST', '/coop/join', { code: game.code }, { status: 200, test: (b) => b.game?.players?.includes(ben.userId) });
   await check('coop: join (Dee)', dee, 'POST', '/coop/join', { code: game.code }, { status: 200, test: (b) => b.game?.players?.includes(dee.userId) });
   await check('coop: join again keeps the seat', ben, 'POST', '/coop/join', { code: game.code }, { status: 200, test: (b) => b.game?.players?.[1] === ben.userId });
+  // Live rows (picks and drags): one per player, read by the game, written by its player.
+  const liveId = (u) => createHash('md5').update(`live:${game.id}:${u.userId}`).digest('hex');
+  for (const p of [ada, ben, dee]) {
+    const r = await row('coop_drags', liveId(p));
+    expectTrue(`coop: live row of ${p.name ?? p.userId}`, r && [...r.$permissions].sort().join() === [`read("team:${game.id}")`, `update("user:${p.userId}")`].sort().join());
+  }
   await check('coop: next board (guest refused)', ben, 'POST', '/coop/next', { gameId: game.id, puzzleId: puzzleId[1], grid: 'cards-4x5t3', layout: layout(20) }, { status: 403, body: { reason: 'host' } });
   await check('coop: next board', ada, 'POST', '/coop/next', { gameId: game.id, puzzleId: puzzleId[1] ?? puzzleId[0], grid: 'cards-4x5t3', layout: layout(20) }, { status: 200, test: (b) => b.game?.board === 2 });
   await check('coop: leave', ben, 'POST', '/coop/leave', { gameId: game.id }, { status: 200, body: { ok: true, left: true } });
+  expectTrue('coop: a guest who left has no live row', (await row('coop_drags', liveId(ben))) === null);
   await check('coop: back after leaving', ben, 'POST', '/coop/join', { code: game.code }, { status: 200, test: (b) => b.game?.players?.includes(ben.userId) });
   await check('coop: remove', ada, 'POST', '/coop/remove', { gameId: game.id, userId: ben.userId }, { status: 200, test: (b) => !b.game?.players?.includes(ben.userId) && b.game?.removed?.includes(ben.userId) });
+  expectTrue('coop: a removed player has no live row', (await row('coop_drags', liveId(ben))) === null);
   await check('coop: removed cannot come back', ben, 'POST', '/coop/join', { code: game.code }, { status: 403, body: { ok: false, reason: 'removed' } });
   await check('coop: a code that does not exist', ben, 'POST', '/coop/join', { code: 'ZZZZZZZZ' }, { status: 404, body: { ok: false, reason: 'ended' } });
   await check('coop: a picture outside the Library', ada, 'POST', '/coop/create', { puzzleId: 'no-such-picture', grid: 'cards-3x3t0', layout: layout(9) }, { status: 400, body: { reason: 'picture' } });

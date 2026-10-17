@@ -26,7 +26,7 @@
 // `isTest`. The hourly cleanup (cleanup.js) deletes ended games after an hour and ends games idle for a day.
 import { randomBytes } from 'node:crypto';
 import { Client, TablesDB, Teams, Users, Query, Permission, Role, ID } from 'node-appwrite';
-import { MAX_PLAYERS, newCode, normaliseCode, validGrid, parseLayout, encodeLayout, freeSeat, seating, without } from './rules.js';
+import { MAX_PLAYERS, LIVE, liveRowId, livePermissions, newCode, normaliseCode, validGrid, parseLayout, encodeLayout, freeSeat, seating, without } from './rules.js';
 
 const DB = process.env.APPWRITE_DATABASE_ID || 'cjw';
 const GAMES = 'coop_games';
@@ -171,6 +171,24 @@ async function blockedWith(tables, userId, others) {
   return (await one([Query.equal('blockerId', [userId]), Query.equal('blockedId', others)])) || (await one([Query.equal('blockerId', others), Query.equal('blockedId', [userId])]));
 }
 
+/// The player's live row in the game (picks and drags, see rules.js): made when they start or join
+/// it, gone when they leave or are removed (a removed player must not reach the others' screens).
+async function ensureLive(tables, gameId, userId) {
+  try {
+    await tables.createRow({ databaseId: DB, tableId: LIVE, rowId: liveRowId(gameId, userId), data: { gameId, userId }, permissions: livePermissions(gameId, userId) });
+  } catch (e) {
+    if (!exists(e)) throw e;
+  }
+}
+
+async function dropLive(tables, gameId, userId) {
+  try {
+    await tables.deleteRow({ databaseId: DB, tableId: LIVE, rowId: liveRowId(gameId, userId) });
+  } catch (e) {
+    if (!gone(e)) throw e;
+  }
+}
+
 async function endGame(tables, game, reason) {
   if (game.status === 'ended') return game;
   return tables.updateRow({ databaseId: DB, tableId: GAMES, rowId: game.$id, data: { status: 'ended', endedAt: nowIso(), endReason: reason, activeAt: nowIso() } });
@@ -178,6 +196,7 @@ async function endGame(tables, game, reason) {
 
 async function leaveGame(tables, teams, game, userId) {
   if (game.hostId === userId) return endGame(tables, game, 'host-left');
+  await dropLive(tables, game.$id, userId);
   for (const m of await memberships(teams, game.$id)) {
     if (m.userId !== userId) continue;
     try {
@@ -243,6 +262,7 @@ async function create({ tables, teams, users }, userId, body) {
           },
           permissions: [Permission.read(Role.team(gameId))],
         });
+        await ensureLive(tables, gameId, userId);
         return view(row);
       } catch (e) {
         // The code is taken (unique index): draw another.
@@ -266,7 +286,10 @@ async function join({ tables, teams }, userId, body) {
   if ((found.removed || []).includes(userId)) throw new Refusal(403, 'removed', 'The host removed you from this game.');
   const members = await memberships(teams, found.$id);
   // Back again (another device, a reinstall, a second tap on the link): the same seat.
-  if (members.some((m) => m.userId === userId)) return view(await reseat(tables, teams, found));
+  if (members.some((m) => m.userId === userId)) {
+    await ensureLive(tables, found.$id, userId);
+    return view(await reseat(tables, teams, found));
+  }
   if (members.length >= MAX_PLAYERS) throw new Refusal(409, 'full', 'This game is full.');
   if (await blockedWith(tables, userId, members.map((m) => m.userId))) throw new Refusal(403, 'blocked', 'You cannot join this game.');
   await leaveOthers(tables, teams, userId, found.$id);
@@ -277,6 +300,7 @@ async function join({ tables, teams }, userId, body) {
   }
   const game = await reseat(tables, teams, found);
   if (!(game.players || []).includes(userId)) throw new Refusal(409, 'full', 'This game is full.');
+  await ensureLive(tables, game.$id, userId);
   return view(game);
 }
 
@@ -305,6 +329,7 @@ async function remove({ tables, teams }, userId, body) {
     rowId: game.$id,
     data: { removed: [...new Set([...(game.removed || []), target])], players: without(game.players || [], target), activeAt: nowIso() },
   });
+  await dropLive(tables, game.$id, target);
   for (const m of await memberships(teams, game.$id)) {
     if (m.userId !== target) continue;
     try {

@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart' show Ticker;
 import 'package:flutter/services.dart' show SystemUiOverlayStyle;
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -38,6 +39,7 @@ import '../../widgets/icons.dart';
 import '../../widgets/ui.dart';
 import '../../state/coop/coop_bridge.dart';
 import '../../state/coop/coop_controller.dart';
+import '../../state/coop/coop_live.dart';
 import '../../state/coop/coop_models.dart';
 import '../ads/house_ads.dart';
 import '../coop/coop_alerts.dart';
@@ -152,6 +154,14 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   /// screen closes (`CoopHost`) once the alert is read.
   bool _guestBoard = false;
   CoopBridge? _bridge;
+
+  /// Play together, live: the others' dragged cards, redrawn every frame while they move
+  /// ([_tickGhosts]); each player's colour and initial; whether this player's last drop moved.
+  final _ghosts = ValueNotifier<Map<int, CoopGhost>>(const {});
+  late final Ticker _ghostTicker = createTicker(_tickGhosts);
+  StreamSubscription<void>? _liveWakeSub;
+  Map<String, CoopCardMark> _playerMarks = const {};
+  bool _dropMoved = false;
   ProviderSubscription<GameState>? _stateSub;
   CoopOpKind _nextKind = CoopOpKind.move;
   bool _showingShared = false;
@@ -169,6 +179,9 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _liveWakeSub = ref.read(coopProvider.notifier).liveWake.listen((_) {
+      if (mounted && _inCoop && !_ghostTicker.isActive) _ghostTicker.start();
+    });
     final coop = ref.read(coopProvider);
     final coopGame = coop.playing && coop.game!.id == widget.coopId ? coop.game : null;
     if (coopGame != null && widget.coopNext && coop.isHost) {
@@ -342,6 +355,50 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     }
   }
 
+  /// The others' dragged cards where they are now (on the path they are played back along; at the
+  /// newest position under Reduce motion). Runs every frame while there are any.
+  void _tickGhosts(Duration _) {
+    if (!mounted) return;
+    final views = _inCoop ? ref.read(coopProvider.notifier).liveTracks.ghosts(DateTime.now(), latest: A11y.reduceMotionOf(context)) : const <LiveGhost>[];
+    final next = <int, CoopGhost>{
+      for (final v in views)
+        if (_playerMarks[v.userId] case final mark?) v.card: CoopGhost(card: v.card, at: Offset(v.x, v.y), mark: mark),
+    };
+    if (next.isEmpty) {
+      if (_ghosts.value.isNotEmpty) _ghosts.value = const {};
+      _ghostTicker.stop();
+      return;
+    }
+    _ghosts.value = next;
+  }
+
+  /// A drop on the board; [_dropMoved] says whether it moved anything (the others then wait for the
+  /// move instead of sending the card back).
+  void _drop(int from, int to) {
+    final before = ref.read(gameControllerProvider(_args!)).board;
+    _ctrl.drop(from, to);
+    _dropMoved = !identical(before, ref.read(gameControllerProvider(_args!)).board);
+  }
+
+  /// This player's drag, for the others to see (Play together).
+  void _dragMove(int slot, Offset at, bool start) {
+    if (!_inCoop) return;
+    final coop = ref.read(coopProvider.notifier);
+    if (start) {
+      _dropMoved = false;
+      final board = ref.read(gameControllerProvider(_args!)).board;
+      if (slot < board.cells) coop.dragStart(board.slots[slot], at.dx, at.dy);
+    } else {
+      coop.dragMove(at.dx, at.dy);
+    }
+  }
+
+  void _dragEnd(int slot) {
+    if (!_inCoop) return;
+    ref.read(coopProvider.notifier).dragEnd(dropped: _dropMoved);
+    _dropMoved = false;
+  }
+
   /// Puts the shared board on the table (the others' changes, or this player's going back).
   void _showShared(CoopBoardUpdate u) {
     if (!mounted || _args == null) return;
@@ -481,6 +538,9 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _liveWakeSub?.cancel();
+    _ghostTicker.dispose();
+    _ghosts.dispose();
     _sub?.cancel();
     _stateSub?.close();
     _bridge?.dispose();
@@ -1155,6 +1215,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
         if (e.value.held && state.board.slotOfCard(e.key) >= 0) state.board.slotOfCard(e.key): e.value,
     };
     final coopGuest = shared ? !coopState.isHost : _guestBoard;
+    _playerMarks = shared ? coopPlayerMarks(context, ref, coopState) : const {};
 
     return Scaffold(
       backgroundColor: c.canvas,
@@ -1251,8 +1312,11 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                                         cardStyle: settings.cardStyle,
                                         painting: _painting,
                                         onTap: _ctrl.tap,
-                                        onDrop: _ctrl.drop,
+                                        onDrop: _drop,
                                         marks: marks,
+                                        ghosts: shared ? _ghosts : null,
+                                        onDragMove: shared ? _dragMove : null,
+                                        onDragEnd: shared ? _dragEnd : null,
                                       ),
                                     )
                                   else
@@ -1271,13 +1335,30 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                                             painting: _painting,
                                             zoom: _zoom,
                                             onTap: _ctrl.tap,
-                                            onDrop: _ctrl.drop,
+                                            onDrop: _drop,
                                             marks: marks,
+                                            ghosts: shared ? _ghosts : null,
+                                            onDragMove: shared ? _dragMove : null,
+                                            onDragEnd: shared ? _dragEnd : null,
                                           ),
                                           OffscreenSelection(zoom: _zoom, board: state.board, boardSize: Size(w, h), selected: state.selected),
                                           // Play together: where the others' held cards are, off screen.
                                           for (final e in heldSlots.entries)
                                             OffscreenSelection(zoom: _zoom, board: state.board, boardSize: Size(w, h), selected: e.key, color: e.value.color, onColor: e.value.onColor, label: e.value.initial),
+                                          // ... and the cards they are dragging, where their finger is.
+                                          if (shared)
+                                            Positioned.fill(
+                                              child: ValueListenableBuilder<Map<int, CoopGhost>>(
+                                                valueListenable: _ghosts,
+                                                builder: (context, ghosts, _) => Stack(
+                                                  clipBehavior: Clip.none,
+                                                  children: [
+                                                    for (final g in ghosts.values)
+                                                      OffscreenSelection(zoom: _zoom, board: state.board, boardSize: Size(w, h), selected: null, point: Offset(g.at.dx * w, g.at.dy * h), color: g.mark.color, onColor: g.mark.onColor, label: g.mark.initial),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
                                           if (_showMap)
                                             Positioned(
                                               top: 8,
@@ -1288,17 +1369,21 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                                                   ignoring: !_zoom.zoomed,
                                                   child: AnimatedOpacity(opacity: _zoom.zoomed ? 1 : 0, duration: const Duration(milliseconds: 180), child: child),
                                                 ),
-                                                child: GiantMinimap(
-                                                  image: img,
-                                                  board: state.board,
-                                                  boardSize: Size(w, h),
-                                                  zoom: _zoom,
-                                                  // Small enough to cover only a few cards in the corner.
-                                                  width: math.min(84.0, w * 0.22),
-                                                  selected: state.selected,
-                                                  painting: _painting,
-                                                  locate: locate,
-                                                  others: {for (final e in heldSlots.entries) e.key: e.value.color},
+                                                child: ValueListenableBuilder<Map<int, CoopGhost>>(
+                                                  valueListenable: _ghosts,
+                                                  builder: (context, ghosts, _) => GiantMinimap(
+                                                    image: img,
+                                                    board: state.board,
+                                                    boardSize: Size(w, h),
+                                                    zoom: _zoom,
+                                                    // Small enough to cover only a few cards in the corner.
+                                                    width: math.min(84.0, w * 0.22),
+                                                    selected: state.selected,
+                                                    painting: _painting,
+                                                    locate: locate,
+                                                    others: {for (final e in heldSlots.entries) e.key: e.value.color},
+                                                    otherPoints: [for (final g in ghosts.values) (Offset(g.at.dx * w, g.at.dy * h), g.mark.color)],
+                                                  ),
                                                 ),
                                               ),
                                             ),

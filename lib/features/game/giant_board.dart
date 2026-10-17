@@ -166,6 +166,7 @@ class GiantMinimap extends StatelessWidget {
     this.painting = false,
     this.locate,
     this.others = const {},
+    this.otherPoints = const [],
   });
 
   final ui.Image image;
@@ -183,6 +184,9 @@ class GiantMinimap extends StatelessWidget {
 
   /// Play together: where other players' held cards are (slot to the player's colour), as dots.
   final Map<int, Color> others;
+
+  /// Play together: other players' dragged cards, where their finger is (board coordinates).
+  final List<(Offset, Color)> otherPoints;
 
   @override
   Widget build(BuildContext context) {
@@ -225,19 +229,22 @@ class GiantMinimap extends StatelessWidget {
                   ),
                 ),
               ),
-              for (final e in others.entries)
-                if (e.key < board.cells)
-                  Positioned(
-                    left: board.tiling.cellCenter(e.key, boardSize).dx * scale - 3.5,
-                    top: board.tiling.cellCenter(e.key, boardSize).dy * scale - 3.5,
-                    child: IgnorePointer(
-                      child: Container(
-                        width: 7,
-                        height: 7,
-                        decoration: BoxDecoration(color: e.value, shape: BoxShape.circle, border: Border.all(color: Colors.white, width: 1)),
-                      ),
+              for (final (point, colour) in [
+                for (final e in others.entries)
+                  if (e.key < board.cells) (board.tiling.cellCenter(e.key, boardSize), e.value),
+                ...otherPoints,
+              ])
+                Positioned(
+                  left: point.dx * scale - 3.5,
+                  top: point.dy * scale - 3.5,
+                  child: IgnorePointer(
+                    child: Container(
+                      width: 7,
+                      height: 7,
+                      decoration: BoxDecoration(color: colour, shape: BoxShape.circle, border: Border.all(color: Colors.white, width: 1)),
                     ),
                   ),
+                ),
             ],
           ),
         ),
@@ -365,11 +372,15 @@ class _ViewPainter extends CustomPainter {
 /// pointer on the edge of the view, turned towards the card. Tap it to bring
 /// the card back into view.
 class OffscreenSelection extends StatelessWidget {
-  const OffscreenSelection({super.key, required this.zoom, required this.board, required this.boardSize, required this.selected, this.color, this.onColor, this.label});
+  const OffscreenSelection({super.key, required this.zoom, required this.board, required this.boardSize, required this.selected, this.point, this.color, this.onColor, this.label});
   final BoardZoom zoom;
   final Board board;
   final Size boardSize;
   final int? selected;
+
+  /// Play together: a card another player is dragging, where their finger is (board coordinates),
+  /// instead of [selected]'s slot.
+  final Offset? point;
 
   /// Play together: another player's held card, in their colour and with their initial instead of
   /// the arrow (the pointer's place on the edge shows the way).
@@ -382,12 +393,12 @@ class OffscreenSelection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final slot = selected;
-    if (slot == null) return const SizedBox.shrink();
+    if (slot == null && point == null) return const SizedBox.shrink();
     return ListenableBuilder(
       listenable: zoom,
       builder: (context, _) {
         if (!zoom.zoomed) return const SizedBox.shrink();
-        final centre = board.tiling.cellCenter(slot, boardSize);
+        final centre = point ?? board.tiling.cellCenter(slot!, boardSize);
         final p = zoom.toViewport(centre);
         final view = Offset.zero & boardSize;
         if (view.deflate(4).contains(p)) return const SizedBox.shrink();
@@ -398,7 +409,7 @@ class OffscreenSelection extends StatelessWidget {
           left: at.dx - _size / 2,
           top: at.dy - _size / 2,
           child: Pressable(
-            key: ValueKey(label == null ? 'giant-offscreen-selection' : 'giant-offscreen-$label-$slot'),
+            key: ValueKey(label == null ? 'giant-offscreen-selection' : 'giant-offscreen-$label-${slot ?? 'drag'}'),
             onTap: () => zoom.centreOn(centre),
             child: Container(
               width: _size,

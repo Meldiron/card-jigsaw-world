@@ -19,6 +19,12 @@ the invite page).
   or cobalt), and their **initial** on the card they hold and the cards they just moved
   (`PlayerInitialBadge`, `CoopCardMark`), so players are told apart without colour too.
 - Short toasts when someone joins or leaves ("Rowan joined", "Rowan left").
+- Live (owner, 2026-10-17): a card another player picks with a tap shows in their colour with their
+  initial within a fraction of a second, and goes as soon as they put it down or place it. A card they
+  drag lifts out of its slot and travels with their finger (with its joined group), outlined in their
+  colour with their initial; when their move arrives it lands from there in its slot. A drag they
+  cancel, one not heard from for 2 s, or a drop whose move does not come within 2 s goes back. Reduce
+  motion: the card is drawn at the newest position, without the glide. See "Live picks and drags".
 - Moves at the same moment: the server's order decides. A move shows at once; if an earlier move took
   one of its cards, its cards slide back.
 - A players chip in the game's top bar (people icon and a count, `CoopPlayersChip`) opens the player
@@ -131,10 +137,10 @@ same on demand for a caller who is not a player (`appwrite functions create-exec
 ### Elsewhere
 
 - Account deletion (`/account/delete` on `api`; `delete-account` for builds up to 124): deletes the
-  player's moves, the games they host with every move in them, and empties their seat (and `removed`
-  entry) in other games. Teams left without a game go with the hourly cleanup.
+  player's moves and live rows, the games they host with every move and live row in them, and empties
+  their seat (and `removed` entry) in other games. Teams left without a game go with the hourly cleanup.
 - `tools/dev/cjw_admin.py` (`PLAYER_TABLES`, `HOST_TABLES`) and `tools/dev/purge_test_players.py`:
-  a QA player's moves and the games they host go with them (backup first, as for every table).
+  a QA player's moves, live rows and the games they host go with them (backup first, as for every table).
 - Old builds never read these tables or call these functions: nothing a live build reads changed.
 
 ## The app
@@ -147,6 +153,7 @@ same on demand for a caller who is not a player (`appwrite functions create-exec
 | `lib/state/coop/coop_controller.dart` | `CoopController` / `coopProvider`: the game on this device, sending, realtime, catch-up, presence, notices |
 | `lib/state/coop/coop_backend.dart`, `lib/data/coop_repository.dart` | the server interface and its Appwrite implementation (`coopBackendProvider`) |
 | `lib/state/coop/coop_bridge.dart` | `CoopBridge` / `CoopBoardTarget`: the seam for the game screen |
+| `lib/state/coop/coop_live.dart` | live picks and drags: `CoopLive` (a live row's state), `LiveSender` (pace, budget, what goes at once), `DragPath` and `LiveTracks` (the others' drags played back) |
 | `lib/features/coop/` | `CoopHost` (toasts, alerts, next board, app life; in `lib/app.dart`), `players_sheet.dart` (chip and list), `coop_alerts.dart`, `guest_finish.dart`, `join_flow.dart` (`openInvite`, `startPlayTogether`, `canPlayTogether`), `share_invite.dart`, `coop_players.dart` (seats, colours, initials, card marks), `coop_routes.dart` |
 
 ### The shared board (`CoopLog`)
@@ -180,6 +187,57 @@ same on demand for a caller who is not a player (`appwrite functions create-exec
 one). At most one update per 3 s (`CoopTiming.presenceGap`): a socket may send about 32 messages a
 minute and the SDK's heartbeat takes 3. Gone when the socket closes (checked live: the others get a
 `delete` event). In the background the app sends `away`; on resume `online` and a catch-up.
+
+### Live picks and drags (`coop_drags`)
+
+Owner, 2026-10-17: "When I drag a piece and move it around the screen, it should also move around
+for the other players", and the card each player has picked must show at once too. Presence allows
+about 30 messages a minute per socket and is throttled to one per 3 s, so it now only says who is here
+or away (it still carries the picked card, `h`, for builds without live rows).
+
+**One row per player and game** in `coop_drags` (live since 2026-10-17; row security on, **no table
+permissions**: players cannot create rows). Row id = md5 of `live:<game>:<player>` (`CoopLive.rowId`,
+`liveRowId` in `functions/api/src/coop/rules.js`; both tests check one value). Permissions
+`read("team:<game>")` and `update("user:<player>")`, so a row proves its player and a player who left
+cannot reach the others through it. Columns: `gameId`, `userId` (varchar 36, required; indexes
+`idx_game`, `idx_user`), `board`, `drag` (the drag's start in ms), `seq` (increasing per player, in ms,
+so a restarted app still sends higher numbers), `t` (ms since the drag started, when the finger was
+there), `card` (-1: none), `x`, `y` (double: the card's centre as a fraction of the board, so any
+screen size and any zoom work), `phase` (`''` nothing in hand, `pick`, `drag`, `drop`, `cancel`).
+
+- The `api` function makes the row on `/coop/create` (the host) and `/coop/join` (also a second join
+  of the same player), and deletes it on `/coop/leave` (a guest) and `/coop/remove`. The hourly cleanup
+  deletes the rows of the games it deletes (and of teams without a game); account deletion and the
+  purge tool delete a player's rows and those of the games they host; the integrity sweep deletes a
+  row whose id, permissions, game or seat is wrong (`liveVerdict`: a player who changed its columns, a
+  player no longer in the game, a game that is gone).
+- Sending (`LiveSender`): a pick, a put-down, the start and the end of a drag go at once; positions
+  every 200 ms while the finger moves (the newest only). One update at a time; while one is on its way
+  only the newest state waits, but the end of a drag (drop or cancel) is never folded into what
+  follows. Appwrite allows **120 row updates a minute per player** (measured: `X-RateLimit-Limit: 120`,
+  a fixed one-minute window, the 121st refused with 429), so the sender keeps under 110 in any minute:
+  5 positions a second while under 45% of that, 3 under 70%, 2 under 85%, 1 under 95%, then no
+  positions (picks and drag ends still go, waiting for the minute if they must); after a 429 it waits
+  10 s. A missing row (a game made before live rows, or through `coop-game`) stops sending for that game.
+- Receiving: a third realtime subscription on `coop_drags` rows with `gameId = <game>` and
+  `userId != <me>` (checked live: no echo of the player's own updates). `CoopLive.fromRow` drops a row
+  whose `userId` is not backed by `update("user:...")`; states older than one already heard are
+  dropped (`seq`). Picks become the held marks (`CoopMarks.held`; the presence's `h` only for players
+  whose live row was never heard). A drag is played back (`DragPath`) on the sender's own clock (`t`),
+  150 to 600 ms behind the newest position (one gap between positions plus the network's jitter), with
+  straight lines between positions, never backwards. The others' move (or a skipped one) carrying the
+  card ends the drag: the board takes the card from where it is drawn to its slot.
+- The board (`BoardWidget.ghosts`, a `ValueListenable` the game screen updates every frame while a
+  drag is shown) draws the card and its joined group lifted at that place, above other cards and below
+  this player's own drag, in the player's colour with their initial (`coop-drag-<card>`); a card in
+  place is never lifted. This player's drags are reported by `BoardWidget.onDragMove` / `onDragEnd`
+  (fractions of the board, the end after the drop). Giant boards: the same fractions; a drag out of view
+  shows on the off-screen pointer (`OffscreenSelection.point`, their initial) and as a dot on the map
+  (`GiantMinimap.otherPoints`); picks there as before.
+- Builds up to 125 neither write nor read live rows: they play as before (their picks travel by
+  presence, every 3 s at most), and new builds see them that way.
+- Twin cards: a dragged card that lands on a twin's place traded identities on the mover's screen;
+  the move carries both cards, so the drag ends there too and `sharedCardKeys` keeps the widgets.
 
 ### The game screen (phase 2, wired)
 
@@ -290,6 +348,37 @@ includes the test's HTTP request to the bot on the Mac and the bot's own create.
 
 ## Limits and costs
 
+Live picks and drags (measured 2026-10-17; from this Mac, the app on the iPhone 17 Pro simulator):
+
+| What | Measured |
+| --- | --- |
+| row update on one client to the realtime event on another (Node, 5 a second for 25 s) | p50 108-119 ms, p90 230 ms; 1 in 82 took 2.2 s (a slow request); no event out of order |
+| the bot's pick to the mark on the app's board / its put-down to the mark gone (two runs, 5 each) | p50 157-225 ms (97-240) / p50 104-127 ms (95-138; once 2.0 s) |
+| the app's pick and put-down to the bot's socket | 92-194 ms (once 1.4 s) |
+| the app's drag positions to the bot's socket (two runs) | p50 98-124 ms, p90 171-208 ms, max 181-236 ms; 5 a second |
+| the bot's first drag update to the card lifted on the app / its move to the card landed in its slot | 103-156 ms (p50 145) / 110-369 ms (p50 125) |
+| two simulators, the host's finger to the guest's screen (`coop_pair_test.dart`, timed through the relay, which adds up to 0.7 s) | pick 358 ms, drag lifted 705 ms, drop to landed 333 ms |
+
+Now and then one request takes 1.4-2.2 s (seen in every kind of run, about 1 in 50-80): a pick or a
+put-down then shows that late; a drag stalls and catches up (it is never shown backwards).
+
+The card on the other screen follows the finger about a quarter to half a second behind: the network
+(about 0.1-0.25 s) plus the play-back buffer (0.15-0.3 s with these numbers), which turns 5 positions a
+second into a glide.
+
+Cost of live rows: every update is 1 write and 1 realtime message for each other player connected
+(no echo to the sender).
+
+- Worst case, 5 players dragging without a pause: at most 110 updates a minute each, so 550 writes and
+  2,200 messages a minute for the game.
+- Normal play: a drag of about a second is about 6 updates (start, 4 positions, drop), a tap-and-tap
+  move 2 (pick, put-down). A 20-card board with 3 players (about 40 moves, half of them dragged) adds
+  about 160 writes and 320 messages to the moves' 40 writes and 250 messages: about 200 writes and 570
+  messages a game.
+- So the included writes (750k a month on Pro) last for about 3,700 such games a month (about 125 a
+  day) before extra writes are billed, and the messages (6M) for about 10,000. Writes are the limit
+  now; if they matter, 3 positions a second cut a drag's writes by about a third.
+
 - Appwrite: 120 row creates a minute per user and IP (a fast player makes well under 60 moves a
   minute); about 32 socket messages a minute (presence throttled to 20 at most); Pro plan: 500
   concurrent realtime connections, 6M realtime messages and 750k writes a month.
@@ -355,6 +444,16 @@ the two equal.
   guest's finish with rewards, the end).
 - `test/coop_board_test.dart`: `GameController.showShared` (no move, no history, selection kept unless
   its card moved) and two screens converging through the bridge.
+- Live picks and drags: `integration_test/coop_drag_test.dart` (the bot hosts and streams picks and
+  drags: `/pick`, `/drag`; `/live` says what its socket heard, for the delays; `/liverows` makes the live
+  rows as the api function does, for QA before the function is deployed with them): the host's pick
+  and put-down, a drag across the board in five screenshots and its landing, timed drags, a cancelled
+  drag going back, this player's pick and drag reaching the host, and a giant board's off-screen
+  pointer for a drag (`screenshots/live_*.png`, delays as `COOP_TIMING`). `coop_pair_test.dart` drags a
+  card with the host's finger on one simulator while the other takes screenshots
+  (`pair_g03b_host_drag_*.png`). Unit tests: `test/coop_live_test.dart` (the row, the sender's pace,
+  budget and refusals on a fake clock, the play-back, the others' states, two devices on the fake
+  server), `test/coop_live_board_test.dart` (the board draws and drops a drag, a group, the reports).
 - Store: `32_coop_board` in `integration_test/store_screenshots_test.dart` (a scripted game with two
   made-up friends on a stage backend; `CJW_STORE_ONLY=32_coop_board`).
 - The invite page: serve a copy of `web/` with `<base href="/">` and the single-page fallback, open

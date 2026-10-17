@@ -23,13 +23,24 @@
 //   /remove?user=ID  /end  /next       the host removes a player, ends the game, opens the next board
 //   /relay?key=K&value=V   GET /relay?key=K    hands values between two simulators' tests
 //   GET /moves?as=host                 the moves of that player's game board, and the board they make
+//   /liverows?as=host|game=ID          live rows (coop_drags) for every player of that player's game,
+//                                      as the api function makes them on create and join (for QA
+//                                      before api is deployed with them; harmless after)
+//   /pick?as=host&card=N               the player picks card N with a tap (-1: puts it down): their live
+//                                      row at once; answers when the update is written, with its times
+//   /drag?as=host&card=N&to=S&ms=1500&rate=5&end=drop|cancel&wait=0
+//                                      the player drags card N to slot S over `ms`, `rate` positions a
+//                                      second, then drops it there (with the move) or cancels; `wait=0`
+//                                      answers at once and streams in the background
+//   GET /live?as=host                  what that player's socket heard of the others' live rows (with
+//                                      the time each arrived) and what the bot sent, for latencies
 //   /quit                              clean up and stop
 import { readFileSync } from 'node:fs';
 import { createServer } from 'node:http';
 import { execFileSync } from 'node:child_process';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { randomBytes } from 'node:crypto';
+import { randomBytes, createHash } from 'node:crypto';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const ENDPOINT = 'https://fra.cloud.appwrite.io/v1';
@@ -61,7 +72,7 @@ async function makePlayer(name, avatar) {
     body: { rowId: userId, data: { userId, displayName: name, avatar, isTest: true }, permissions: ['read("any")'] },
   }).catch((e) => console.log('profile:', e.message));
   const s = await call('POST', `/users/${userId}/sessions`, { body: {} });
-  return { userId, secret: s.secret, name, gameId: null, socket: null, heard: new Map() };
+  return { userId, secret: s.secret, name, gameId: null, socket: null, heard: new Map(), liveHeard: [], liveSent: [], seq: 0 };
 }
 
 async function fn(p, action, body) {
@@ -79,14 +90,88 @@ function connect(p) {
     if (d.type === 'connected') {
       ws.send(JSON.stringify({ type: 'authentication', data: { session: p.secret } }));
       ws.send(JSON.stringify({ type: 'subscribe', data: [{ subscriptionId: 'moves', channels: ['tablesdb.cjw.tables.coop_moves.rows'], queries: [q('equal', 'gameId', [p.gameId])] }] }));
+      ws.send(JSON.stringify({ type: 'subscribe', data: [{ subscriptionId: 'live', channels: ['tablesdb.cjw.tables.coop_drags.rows'], queries: [q('equal', 'gameId', [p.gameId]), q('notEqual', 'userId', [p.userId])] }] }));
     } else if (d.type === 'event' && d.data.payload?.gameId === p.gameId) {
-      p.heard.set(d.data.payload.$id, Date.now());
+      const row = d.data.payload;
+      if (d.data.channels?.some((c) => c.includes('coop_drags'))) {
+        p.liveHeard.push({ userId: row.userId, seq: row.seq, phase: row.phase, card: row.card, x: row.x, y: row.y, heardAt: Date.now() });
+      } else {
+        p.heard.set(row.$id, Date.now());
+      }
     }
   };
   return sleep(1200);
 }
 
 const players = { host: null, friend: null };
+
+const liveId = (gameId, userId) => createHash('md5').update(`live:${gameId}:${userId}`).digest('hex');
+
+/// The live row the api function makes for a player of a game (read by the game, written by them).
+async function liveRow(gameId, userId) {
+  try {
+    await call('POST', '/tablesdb/cjw/tables/coop_drags/rows', {
+      body: { rowId: liveId(gameId, userId), data: { gameId, userId }, permissions: [`read("team:${gameId}")`, `update("user:${userId}")`] },
+    });
+    return true;
+  } catch (e) {
+    if (e.code === 409) return false;
+    throw e;
+  }
+}
+
+/// Writes the player's live row as the app does; returns when the update is written.
+async function live(p, g, data) {
+  p.seq = Math.max(p.seq + 1, Date.now());
+  const sentAt = Date.now();
+  await call('PATCH', `/tablesdb/cjw/tables/coop_drags/rows/${liveId(g.$id, p.userId)}`, { key: false, session: p.secret, body: { data: { board: g.board, seq: p.seq, ...data } } });
+  const entry = { seq: p.seq, phase: data.phase, sentAt, answeredAt: Date.now() };
+  p.liveSent.push(entry);
+  return entry;
+}
+
+/// A slot's centre as a fraction of the board (Cards: a grid of `cols` x `rows`).
+function centre(grid, slot) {
+  const m = /(\d+)x(\d+)/.exec(grid);
+  const cols = Number(m[1]), rows = Number(m[2]);
+  return { x: ((slot % cols) + 0.5) / cols, y: (Math.floor(slot / cols) + 0.5) / rows };
+}
+
+/// The player drags `card` to slot `to`: positions along the way at `rate` a second, then a drop with
+/// the move, or a cancel. Returns what was sent.
+async function drag(p, card, to, ms, rate, end) {
+  const g = await gameOf(p);
+  const b = await boardOf(g);
+  const from = b.indexOf(card);
+  const a = centre(g.grid, from), z = centre(g.grid, to);
+  const id = Date.now();
+  const started = Date.now();
+  const sent = [];
+  const at = (f) => {
+    const e = f < 0.5 ? 2 * f * f : 1 - (-2 * f + 2) ** 2 / 2;
+    return { x: a.x + (z.x - a.x) * e, y: a.y + (z.y - a.y) * e };
+  };
+  sent.push(await live(p, g, { phase: 'drag', card, drag: id, t: 0, ...a }));
+  const gap = 1000 / rate;
+  for (let k = 1; ; k++) {
+    const due = started + k * gap;
+    const wait = due - Date.now();
+    if (wait > 0) await sleep(wait);
+    const t = Date.now() - started;
+    if (t >= ms) break;
+    sent.push(await live(p, g, { phase: 'drag', card, drag: id, t, ...at(t / ms) }));
+  }
+  const t = Date.now() - started;
+  if (end === 'cancel') {
+    sent.push(await live(p, g, { phase: 'cancel', card, drag: id, t, ...a }));
+    return { sent, from, to };
+  }
+  sent.push(await live(p, g, { phase: 'drop', card, drag: id, t, ...z }));
+  const changes = `${to}:${b[to]}:${card},${from}:${card}:${b[to]}`;
+  const moveAt = Date.now();
+  await send(p, g, changes);
+  return { sent, from, to, changes, moveAt };
+}
 const extras = [];
 let puzzles = { normal: [], giant: [] };
 
@@ -186,6 +271,7 @@ const server = createServer(async (req, res) => {
       const out = await fn(players.host, 'create', { puzzleId: giant ? puzzles.giant[0] : puzzles.normal[0], grid, layout: derange(cells) });
       if (!out.ok) throw new Error(JSON.stringify(out));
       players.host.gameId = out.game.id;
+      await liveRow(out.game.id, players.host.userId);
       await connect(players.host);
       if (arg('full') === '1') {
         for (const n of ['Basil', 'Clover', 'Dahlia', 'Fennel']) {
@@ -202,6 +288,7 @@ const server = createServer(async (req, res) => {
       const out = await fn(players.friend, 'join', { code });
       if (out.ok) {
         players.friend.gameId = out.game.id;
+        await liveRow(out.game.id, players.friend.userId);
         await connect(players.friend);
       }
       return send200({ ...out, userId: players.friend.userId });
@@ -246,6 +333,27 @@ const server = createServer(async (req, res) => {
       as.socket.send(JSON.stringify({ type: 'presence', data: { status: 'online', presenceId: `bot${as.userId}`, permissions: [`read("team:${g.$id}")`], metadata: { g: g.$id, b: g.board, h: Number(arg('card')) } } }));
       return send200({ ok: true });
     }
+    if (path === '/liverows') {
+      // ?game=<id>: a game of the apps' own (read with the key); else the bot player's game.
+      const g = arg('game') ? await call('GET', `/tablesdb/cjw/tables/coop_games/rows/${arg('game')}`) : await gameOf(as);
+      const made = [];
+      for (const u of g.players || []) if (u && (await liveRow(g.$id, u))) made.push(u);
+      return send200({ ok: true, made, players: (g.players || []).filter((u) => u) });
+    }
+    if (path === '/pick') {
+      const g = await gameOf(as);
+      const card = Number(arg('card'));
+      return send200({ ok: true, ...(await live(as, g, card < 0 ? { phase: '', card: -1, drag: 0, t: 0, x: 0, y: 0 } : { phase: 'pick', card, drag: 0, t: 0, x: 0, y: 0 })) });
+    }
+    if (path === '/drag') {
+      const run = drag(as, Number(arg('card')), Number(arg('to')), Number(arg('ms') || 1500), Number(arg('rate') || 5), arg('end') || 'drop');
+      if (arg('wait') === '0') {
+        run.then((r) => (as.lastDrag = r)).catch((e) => console.log('drag:', e.message));
+        return send200({ ok: true, startedAt: Date.now() });
+      }
+      return send200({ ok: true, ...(await run) });
+    }
+    if (path === '/live') return send200({ heard: as.liveHeard, sent: as.liveSent, lastDrag: as.lastDrag ?? null });
     if (path === '/remove') return send200(await fn(players.host, 'remove', { gameId: players.host.gameId, userId: arg('user') }));
     if (path === '/end') return send200(await fn(players.host, 'end', { gameId: players.host.gameId }));
     if (path === '/next') {

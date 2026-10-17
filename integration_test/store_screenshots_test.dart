@@ -43,6 +43,7 @@ import 'package:carden/state/sync.dart';
 import 'package:carden/state/coop/board_change.dart';
 import 'package:carden/state/coop/coop_backend.dart';
 import 'package:carden/state/coop/coop_controller.dart';
+import 'package:carden/state/coop/coop_live.dart';
 import 'package:carden/state/coop/coop_models.dart';
 import 'package:flutter/foundation.dart' show consolidateHttpClientResponseBytes;
 import 'package:flutter/cupertino.dart';
@@ -177,7 +178,9 @@ class _StageCoop implements CoopBackend {
   @override
   Future<List<Map<String, dynamic>>> movesAfter(String gameId, int board, int afterSeq) async => const [];
   @override
-  Stream<CoopEvent> listen(String gameId) => _events.stream;
+  Stream<CoopEvent> listen(String gameId, {String? me}) => _events.stream;
+  @override
+  Future<void> updateLive(String gameId, CoopLive state) async {}
   @override
   void setPresence(String presenceId, CoopPresence presence) {}
   @override

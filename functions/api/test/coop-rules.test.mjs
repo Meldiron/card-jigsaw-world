@@ -4,7 +4,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { randomBytes } from 'node:crypto';
-import { CODE_LENGTH, MAX_PLAYERS, newCode, normaliseCode, validGrid, parseLayout, seating, freeSeat, without } from '../src/coop/rules.js';
+import { CODE_LENGTH, MAX_PLAYERS, newCode, normaliseCode, validGrid, parseLayout, seating, freeSeat, without, liveRowId, livePermissions } from '../src/coop/rules.js';
 
 const member = (userId, seat, at, id = userId) => ({ $id: `m-${id}`, userId, roles: seat < 0 ? ['player'] : ['player', `seat${seat}`], $createdAt: `2026-10-17T10:00:0${at}.000+00:00` });
 
@@ -64,4 +64,10 @@ test('a seat left empty is taken by the next joiner, the others keep theirs', ()
   const { players, moves } = seating(ms);
   assert.deepEqual(players, ['host', 'new', 'c', '', '']);
   assert.deepEqual(moves.map((m) => m.seat), [1]);
+});
+
+test('live rows: the id the app writes to, readable by the game, written by its player', () => {
+  // test/coop_live_test.dart in the app checks the same value (CoopLive.rowId).
+  assert.equal(liveRowId('game1', 'amy'), '6d22d57a1a7f6d5cbd1c5ec49d7ee45b');
+  assert.deepEqual(livePermissions('g', 'amy'), ['read("team:g")', 'update("user:amy")']);
 });

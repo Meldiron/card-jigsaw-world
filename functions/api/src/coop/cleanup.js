@@ -2,7 +2,7 @@
 // runs it (main.js tells a scheduled execution by its trigger). It was the coop-cleanup function.
 //
 // 1. A game nobody played for a day ends (`endReason: idle`); its players' apps say so.
-// 2. A game ended an hour ago or more goes: its moves, its team and its row. The hour lets every
+// 2. A game ended an hour ago or more goes: its moves, its players' live rows, its team and its row. The hour lets every
 //    player's app hear that it ended and show the guests their rewards.
 // 3. Moves of boards a game has moved past go (the host opened the next board).
 // 4. Teams of games that are gone (`Co-op <id>` without a row, an hour old) go.
@@ -16,6 +16,7 @@ import { Client, TablesDB, Teams, Query } from 'node-appwrite';
 const DB = process.env.APPWRITE_DATABASE_ID || 'cjw';
 const GAMES = 'coop_games';
 const MOVES = 'coop_moves';
+const LIVE = 'coop_drags';
 const PAGE = 100;
 const HOUR = 60 * 60 * 1000;
 const IDLE = 24 * HOUR;
@@ -53,6 +54,7 @@ async function lastMoveAt(tables, gameId) {
 
 async function deleteGame(tables, teams, game) {
   await tables.deleteRows({ databaseId: DB, tableId: MOVES, queries: [Query.equal('gameId', [game.$id])] });
+  await tables.deleteRows({ databaseId: DB, tableId: LIVE, queries: [Query.equal('gameId', [game.$id])] });
   try {
     await teams.delete({ teamId: game.$id });
   } catch (e) {
@@ -102,6 +104,7 @@ async function run({ tables, teams }, log) {
     } catch (e) {
       if (!gone(e)) throw e;
       await tables.deleteRows({ databaseId: DB, tableId: MOVES, queries: [Query.equal('gameId', [t.$id])] });
+      await tables.deleteRows({ databaseId: DB, tableId: LIVE, queries: [Query.equal('gameId', [t.$id])] });
       await teams.delete({ teamId: t.$id });
       done.teams++;
     }
