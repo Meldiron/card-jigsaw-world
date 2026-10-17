@@ -13,7 +13,7 @@ const empty = new Proxy({}, {
   get: (_, method) => async (args) => {
     calls.push(method);
     if (method === 'get' && args?.userId !== 'u1') throw Object.assign(new Error('User not found'), { code: 404 });
-    return { total: 0, rows: [], teams: [], memberships: [], files: [], messages: [] };
+    return { total: 0, rows: [], teams: [], memberships: [], files: [], messages: [], users: [] };
   },
 });
 class Service { constructor() { return empty; } }
@@ -96,11 +96,29 @@ test('a co-op refusal keeps its reason', async () => {
   assert.deepEqual(r, { status: 404, body: { ok: false, reason: 'ended', error: 'This invite link does not work.' } });
 });
 
-test('a scheduled execution runs the co-op cleanup, whatever its path', async () => {
+test('a scheduled execution runs the co-op cleanup and the integrity sweep, whatever its path', async () => {
   calls.length = 0;
   const r = await run('POST', '/', { headers: { 'x-appwrite-trigger': 'schedule' } });
-  assert.deepEqual(r, { status: 200, body: { ok: true, ended: 0, deleted: 0, oldBoards: 0, teams: 0 } });
-  assert.ok(calls.includes('listRows') && calls.includes('list'), 'it read the games and the teams');
+  assert.equal(r.status, 200);
+  assert.equal(r.body.ok, true);
+  assert.deepEqual(r.body.coop, { ended: 0, deleted: 0, oldBoards: 0, teams: 0 });
+  assert.deepEqual([r.body.sweep.apply, r.body.sweep.counts], [false, {}], 'without SWEEP_APPLY the sweep only reports');
+  assert.ok(calls.includes('listRows') && calls.includes('list') && calls.includes('listFiles'), 'it read the games, the teams, the rows and the photos');
+});
+
+test('a new blocks row is checked by its create event; other events are ignored', async () => {
+  const squat = { $id: 'a'.repeat(32), blockerId: 'u1', blockedId: 'u2', $permissions: ['read("user:u2")', 'update("user:u2")'] };
+  const headers = { 'x-appwrite-trigger': 'event', 'x-appwrite-event': `tablesdb.cjw.tables.blocks.rows.${squat.$id}.create` };
+  const r = await run('POST', '/', { headers, body: squat });
+  assert.deepEqual(r.body, { ok: true, checked: true, verdict: 'permissions' });
+  const other = await run('POST', '/', { headers: { 'x-appwrite-trigger': 'event', 'x-appwrite-event': 'databases.cjw.tables.friends.rows.x.create' }, body: squat });
+  assert.equal(other.body.ignored, 'databases.cjw.tables.friends.rows.x.create');
+});
+
+test('the manual sweep is for callers who are not players, and a dry run unless asked', async () => {
+  assert.equal((await run('POST', '/admin/sweep', { headers: player, body: { dryRun: false } })).status, 404);
+  const r = await run('POST', '/admin/sweep', { headers: { 'x-appwrite-trigger': 'http', 'x-appwrite-user-id': 'console-owner' }, body: { full: true } });
+  assert.deepEqual([r.status, r.body.ok, r.body.apply, r.body.full], [200, true, false, true]);
 });
 
 test('the manual cleanup is for callers who are not players only', async () => {

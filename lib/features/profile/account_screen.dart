@@ -111,7 +111,7 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
   }
 
   Future<void> _submit() async {
-    if (_signUp && NameFilter.isOffensive(_name.text)) {
+    if (_signUp && NameFilter.isRefused(_name.text)) {
       setState(() => _error = 'That name is not allowed. Choose another one.');
       return;
     }

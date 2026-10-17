@@ -110,9 +110,12 @@ async function run({ tables, teams }, log) {
   return done;
 }
 
+/// The cleanup for a request's key; returns what it did.
+export const runCleanup = (req, log) => run(services(req), log);
+
 export async function coopCleanup({ req, res, log, error }) {
   try {
-    return res.json({ ok: true, ...(await run(services(req), log)) });
+    return res.json({ ok: true, ...(await runCleanup(req, log)) });
   } catch (e) {
     error(e.stack || e.message);
     return res.json({ ok: false, error: e.message }, 500);

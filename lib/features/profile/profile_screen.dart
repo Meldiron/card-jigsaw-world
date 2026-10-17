@@ -67,7 +67,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
     final name = ok ? controller.text.trim() : null;
     if (name == null || name.isEmpty) return;
-    if (NameFilter.isOffensive(name)) {
+    if (NameFilter.isRefused(name)) {
       if (context.mounted) showToast(context, 'That name is not allowed. Choose another one.', icon: AppIcons.report);
       return;
     }

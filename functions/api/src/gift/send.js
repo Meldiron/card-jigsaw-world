@@ -7,14 +7,17 @@
 //
 // Only the caller sends (x-appwrite-user-id, set by Appwrite). In order: the caller has the friend
 // in their friends list, neither player blocked the other, and the friend's profile exists; the
-// gift row (`gifts`, id from sender, friend and the sender's calendar day) is created, which fails
-// when today's gift to this friend is already sent; then the friend's inbox message (`messages`,
-// readable only by the friend, expiresAt = sentAt + 24 h, the reward claimed through the inbox's
-// own flow) and finally a push through Appwrite Messaging to the friend's push targets, whose tap
-// opens that message. A message that cannot be written takes the gift row back, so the sender can
-// try again; a push that fails changes nothing (the inbox still has the gift).
+// caller has sent fewer than DAILY_SENDS gifts today (`limit` otherwise); the gift row (`gifts`, id
+// from sender, friend and the sender's calendar day) is created, which fails when today's gift to
+// this friend is already sent; then the friend's inbox message (`messages`, readable only by the
+// friend, expiresAt = sentAt + 24 h, the reward claimed through the inbox's own flow) and finally a
+// push through Appwrite Messaging to the friend's push targets, whose tap opens that message: only
+// when the friend has the sender in their friends list too, and at most PUSHES_PER_DAY in 24 hours
+// (`shouldPush`; later gifts arrive quietly). A message that cannot be written takes the gift row
+// back, so the sender can try again; a push that fails changes nothing (the inbox still has the gift).
+// Names go through the name filter (offensive words, links, @handles, domains show as "Player").
 import { Client, TablesDB, Messaging, Query, Permission, Role, ID } from 'node-appwrite';
-import { KINDS, LIFETIME_MS, USER_ID, clampOffset, giftCopy, giftDay, giftRowId, messageLink, shownName } from './gift.js';
+import { DAILY_SENDS, KINDS, LIFETIME_MS, USER_ID, clampOffset, giftCopy, giftDay, giftRowId, messageLink, shouldPush, shownName } from './gift.js';
 
 const DB = process.env.APPWRITE_DATABASE_ID || 'cjw';
 
@@ -47,6 +50,12 @@ async function any(tables, tableId, pairs) {
     total: false,
   });
   return page.rows.length > 0;
+}
+
+/// How many rows of [tableId] match [queries] (Appwrite counts them; one row is read).
+async function count(tables, tableId, queries) {
+  const page = await tables.listRows({ databaseId: DB, tableId, queries: [...queries, Query.select(['$id']), Query.limit(1)] });
+  return page.total;
 }
 
 /// Appwrite keeps every push it sends (title, body, recipient) in its messaging log. Each send
@@ -106,6 +115,11 @@ async function handleSend(req, res, log, error) {
   const gift = KINDS[kind];
   const isTest = sender?.isTest === true || recipient.isTest === true;
 
+  if ((await count(tables, 'gifts', [Query.equal('senderId', [userId]), Query.equal('day', [day])])) >= DAILY_SENDS) {
+    log(`gift limit: ${userId} sent ${DAILY_SENDS} on ${day}`);
+    return res.json({ ok: false, error: 'limit', friendName, day }, 429);
+  }
+
   try {
     await tables.createRow({
       databaseId: DB,
@@ -146,22 +160,30 @@ async function handleSend(req, res, log, error) {
     throw e;
   }
 
-  // The friend's iPhones (every push target of the user; the web has none).
+  // The friend's iPhones (every push target of the user; the web has none), when they may get one.
   let pushed = false;
-  try {
-    await messaging.createPush({
-      messageId: ID.unique(),
-      title: copy.pushTitle,
-      body: copy.pushBody,
-      users: [friendId],
-      data: { link: messageLink(messageId) },
-      sound: 'default',
-    });
-    pushed = true;
-  } catch (e) {
-    log(`push to ${friendId} not sent: ${e.message}`);
+  const [mutual, received] = await Promise.all([
+    any(tables, 'friends', { userId: friendId, friendId: userId }),
+    count(tables, 'gifts', [Query.equal('recipientId', [friendId]), Query.greaterThan('sentAt', new Date(now.getTime() - LIFETIME_MS).toISOString())]),
+  ]);
+  if (shouldPush({ mutual, received })) {
+    try {
+      await messaging.createPush({
+        messageId: ID.unique(),
+        title: copy.pushTitle,
+        body: copy.pushBody,
+        users: [friendId],
+        data: { link: messageLink(messageId) },
+        sound: 'default',
+      });
+      pushed = true;
+    } catch (e) {
+      log(`push to ${friendId} not sent: ${e.message}`);
+    }
+    await cleanupPushLog(messaging, log);
+  } else {
+    log(`no push to ${friendId}: ${mutual ? `${received} gifts in 24 h` : 'not a mutual friend'}`);
   }
-  await cleanupPushLog(messaging, log);
   log(`gift ${kind} ${userId} -> ${friendId} day ${day} (offset ${offset}) message ${messageId} pushed ${pushed}${isTest ? ' [test]' : ''}`);
   return res.json({ ok: true, kind, amount: gift.amount, friendName, day, messageId, pushed });
 }

@@ -54,6 +54,7 @@ void main() {
     test('what the sender reads after a send', () {
       expect(const GiftResult(ok: true).message('Anna'), 'Gift sent to Anna');
       expect(const GiftResult(ok: false, error: 'already').message('Anna'), 'You already sent Anna a gift today');
+      expect(const GiftResult(ok: false, error: 'limit').message('Anna'), "That's all your gifts for today. More tomorrow.");
       expect(const GiftResult(ok: false, error: 'unavailable').message('Anna'), 'This gift could not be sent');
       expect(const GiftResult(ok: false, error: 'network').message('Anna'), startsWith('Could not reach the server'));
     });
@@ -64,7 +65,8 @@ void main() {
     expect(_words(_giftJs, 'ROOTS = new Set([', ']);'), _words(dart, '_roots = {', '};'));
     expect(_words(_giftJs, 'WORDS = new Set([', ']);'), _words(dart, '_words = {', '};'));
     expect(_words(_giftJs, 'NUMBERS = [', '];'), _words(dart, '_numbers = [', '];'));
-    for (final (start, close) in [('ROOTS = new Set([', ']);'), ('WORDS = new Set([', ']);'), ('NUMBERS = [', '];')]) {
+    expect(_words(_giftJs, 'TLDS = [', '];'), _words(dart, '_tlds = [', '];'));
+    for (final (start, close) in [('ROOTS = new Set([', ']);'), ('WORDS = new Set([', ']);'), ('NUMBERS = [', '];'), ('TLDS = [', '];')]) {
       expect(_words(_oldGiftJs, start, close), _words(_giftJs, start, close), reason: 'send-gift keeps the same $start');
     }
   });

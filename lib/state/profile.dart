@@ -165,9 +165,10 @@ class ProfileNotifier extends AsyncNotifier<Profile> {
     return spendCoins(Economy.magicLockCostCoins, reason: 'magic-lock');
   }
 
-  /// An offensive [name] is not saved (the name alert says so before it gets here).
+  /// A refused [name] (offensive, or contact details) is not saved (the name alert says so before it
+  /// gets here).
   Future<void> setIdentity({String? name, String? avatar}) async {
-    if (name != null && NameFilter.isOffensive(name)) name = null;
+    if (name != null && NameFilter.isRefused(name)) name = null;
     if (name == null && avatar == null) return;
     _do(SyncOp.put({'displayName': ?name, 'avatar': ?avatar}));
   }

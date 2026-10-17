@@ -47,8 +47,9 @@ class GiftResult {
   const GiftResult({required this.ok, this.error, this.friendName});
   final bool ok;
 
-  /// `already` (today's gift to this friend is sent), `not-friend`, `unavailable` (a block either
-  /// way, or the friend's account is gone), `signin`, `network` or `server`.
+  /// `already` (today's gift to this friend is sent), `limit` (the day's gifts to all friends are
+  /// sent, DAILY_SENDS in functions/api/src/gift/gift.js), `not-friend`, `unavailable` (a block
+  /// either way, or the friend's account is gone), `signin`, `network` or `server`.
   final String? error;
   final String? friendName;
 
@@ -57,6 +58,7 @@ class GiftResult {
       ? 'Gift sent to $name'
       : switch (error) {
           'already' => 'You already sent $name a gift today',
+          'limit' => "That's all your gifts for today. More tomorrow.",
           'not-friend' => 'Add $name as a friend to send a gift',
           'unavailable' => 'This gift could not be sent',
           'network' => 'Could not reach the server. Check your connection and try again.',

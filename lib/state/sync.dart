@@ -735,7 +735,7 @@ class SyncController extends Notifier<SyncState> {
 
   Map<String, dynamic> _newProfile(String userId) {
     final u = _user;
-    final name = u != null && u.$id == userId && u.name.isNotEmpty && !NameFilter.isOffensive(u.name) ? u.name : GuestNames.next();
+    final name = u != null && u.$id == userId && u.name.isNotEmpty && !NameFilter.isRefused(u.name) ? u.name : GuestNames.next();
     return Profile.guest(userId).copyWith(displayName: name, isTest: _qaGuest).toData();
   }
 

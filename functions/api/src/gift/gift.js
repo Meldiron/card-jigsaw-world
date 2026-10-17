@@ -14,6 +14,18 @@ export const KINDS = {
 /// A gift leaves the friend's inbox 24 hours after it was sent.
 export const LIFETIME_MS = 24 * 60 * 60 * 1000;
 
+/// Most gifts one player sends in a day (their own calendar day), to all friends together
+/// (security review 2026-10-17: gifts cost nothing, so many accounts could flood one player).
+export const DAILY_SENDS = 20;
+
+/// Most gift notifications a player gets in 24 hours; later gifts still land in the inbox, quietly.
+export const PUSHES_PER_DAY = 5;
+
+/// Whether a gift also sends a notification: only between friends who added each other, and only
+/// while the recipient has had at most [PUSHES_PER_DAY] gifts in the last 24 hours ([received]
+/// counts this one).
+export const shouldPush = ({ mutual, received }) => mutual === true && received <= PUSHES_PER_DAY;
+
 /// Appwrite user ids (and the friend codes, which are user ids).
 export const USER_ID = /^[A-Za-z0-9][A-Za-z0-9._-]{0,35}$/;
 
@@ -81,6 +93,18 @@ const ACCENTS = {
 
 /// Hate symbols written as numbers.
 export const NUMBERS = ['1488', '14/88', '14 88'];
+
+/// Top-level domains that make a name a web address (`name.com`), as `_tlds` in the Dart file.
+export const TLDS = [
+  'com', 'net', 'org', 'info', 'biz', 'io', 'co', 'me', 'tv', 'gg', 'ly', 'be', 'ee', 'gl', 'to', 'sh',
+  'ai', 'cc', 'ws', 'fm', 'app', 'dev', 'page', 'link', 'site', 'online', 'shop', 'store', 'live', 'club',
+  'xyz', 'top', 'vip', 'pro', 'fun', 'click', 'chat', 'social', 'tk', 'ml', 'ga', 'cf', 'ru', 'cn', 'uk',
+  'de', 'fr', 'eu', 'us', 'sk', 'cz', 'pl', 'es', 'it', 'nl',
+];
+
+/// A dot between a name and its top-level domain: `.`, or written out (`(dot)`, `[dot]`, ` dot `).
+const DOT = String.raw`(\.|\s*[(\[]\s*dot\s*[)\]]\s*|\s+dot\s+)`;
+const DOMAIN = new RegExp(`[a-z0-9]${DOT}(${TLDS.join('|')})(?![a-z0-9])`);
 
 /// Offensive anywhere inside a word.
 export const ROOTS = new Set([
@@ -164,8 +188,20 @@ export function isOffensive(name) {
   return false;
 }
 
-/// The name to show: trimmed, at most 64 characters, "Player" when empty or offensive.
+/// True when [name] reads as contact details or a link: a web address, an @handle or e-mail address,
+/// or a domain (the same reading as NameFilter.isContact; security review 2026-10-17).
+export function isContact(name) {
+  const lower = fold(String(name ?? '').toLowerCase());
+  if (lower.includes('://') || lower.includes('www.')) return true;
+  if (/@\s*[a-z0-9_]/.test(lower)) return true;
+  return DOMAIN.test(lower);
+}
+
+/// True when [name] may not be shown: offensive, or contact details (NameFilter.isRefused).
+export const isRefused = (name) => isOffensive(name) || isContact(name);
+
+/// The name to show: trimmed, at most 64 characters, "Player" when empty or refused.
 export function shownName(name) {
   const n = String(name ?? '').trim().slice(0, 64);
-  return !n || isOffensive(n) ? FALLBACK_NAME : n;
+  return !n || isRefused(n) ? FALLBACK_NAME : n;
 }

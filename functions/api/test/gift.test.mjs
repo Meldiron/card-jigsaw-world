@@ -2,7 +2,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { KINDS, clampOffset, giftCopy, giftDay, giftRowId, isOffensive, messageLink, shownName } from '../src/gift/gift.js';
+import { KINDS, clampOffset, giftCopy, giftDay, giftRowId, isContact, isOffensive, messageLink, shownName } from '../src/gift/gift.js';
 
 test('the two gifts', () => {
   assert.deepEqual(Object.keys(KINDS).sort(), ['coins', 'tickets']);
@@ -53,6 +53,21 @@ test('copy', () => {
     pushBody: '150 coins are waiting in your inbox.',
   });
   assert.equal(messageLink('6ad35b2402d213fe77bc'), '/inbox?message=6ad35b2402d213fe77bc');
+});
+
+// The same cases as test/name_filter_test.dart.
+test('names: contact details and links show as Player, ordinary names with dots do not', () => {
+  for (const name of [
+    'https://carden.page', 'http://x', 'www.example', 'carden.page', 'Visit t.me/anna', 'anna.sk', 'SHOP.COM', 'bit.ly/abc', 'discord.gg/x',
+    '@anna', 'Follow @anna_99', 'anna@mail', 'anna @ gmail', 'x dot com', 'anna(dot)com', 'anna [dot] net', 'Mr.Beast.tv', 'Anna.ŠK',
+  ]) {
+    assert.ok(isContact(name), name);
+    assert.equal(shownName(name), 'Player', name);
+  }
+  for (const name of ['Mr. Bean', 'St. Ives', 'J.R.R. Tolkien', 'Dr. Who', 'Anna 1988', "O'Brien", 'Hi-Tech Fox', 'Polka Dots', 'Ann_Marie 77', 'Mr.Bean', 'Brave Otter', 'Comet', 'Dotty']) {
+    assert.ok(!isContact(name), name);
+    assert.equal(shownName(name), name);
+  }
 });
 
 test('names: the same filter as the app', () => {
