@@ -54,14 +54,14 @@ PODIUM = (60, 720, 1260, 1200)
 STREAK_CARD = (60, 1485, 1260, 1997)  # Home's streak card in 31_home_streak
 # Play together (store capture scene with scripted players, Bora Bora lagoon in Cards 4x4): a shared
 # board mid-build with the players chip in the top bar, Leo's purple "L" on the cards he moved and
-# Maya's orange "M" on the card she holds; and the player list (avatars in their colour rings, Host /
+# Ava's orange "A" on the card she holds; and the player list (avatars in their colour rings, Host /
 # You, Here, Remove). Boxes in capture px, checked on a coordinate grid of the 2026-10-17 captures.
 COOP_BOARD = "32_coop_board"
 COOP_PLAYERS = "33_coop_players"
-# Maya's held card with her orange outline: its slot changes from run to run, so the capture test records
+# Ava's held card with her orange outline: its slot changes from run to run, so the capture test records
 # its rectangle in boards.json (`recordCell`, per theme) and the box names that record.
 COOP_HELD = "rect:32_coop_held"
-COOP_LIST = (60, 1668, 1260, 2250)   # the player list's card: Near (host, you), Maya, Leo
+COOP_LIST = (60, 1668, 1260, 2250)   # the player list's card: Mia (host, you), Ava, Leo
 COOP_LIST_RADIUS = 45                 # that card's corner radius in capture px
 # Solved daily pictures with their stars (days 1, 3, 6, 8, 10 of the calendar capture).
 STARRED = [(62, 840, 340, 1176), (674, 840, 952, 1176), (368, 1208, 646, 1546), (980, 1208, 1258, 1546), (368, 1576, 646, 1914)]
@@ -95,7 +95,7 @@ def slides() -> list[dict]:
                    "row": {"w": 360, "h": 480, "gap": 28, "y": 640}, "radius": 30}],
          "phones": [{"capture": "15_library", "x": 160, "y": 1300}]},
         # 3. Play together (new in 2.0.0): a shared board mid-build, flat and pushed right, Leo's
-        #    purple cards in place on it; Maya's held card (orange, "M") lifted on the left, the player
+        #    purple cards in place on it; Ava's held card (orange, "A") lifted on the left, the player
         #    list (colour rings, Host, Remove) lifted over the toolbar, just under the board. Headline
         #    top left, so slide 4 (top right) answers it.
         {"key": "together", "head": "Play together\nwith friends", "text": ("top", 200, "left"),

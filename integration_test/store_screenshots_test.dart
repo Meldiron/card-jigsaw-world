@@ -119,7 +119,11 @@ const leagueAvatars = ['wave', 'cake', 'globe', 'bike', 'coffee', 'umbrella', 'k
 /// players, scripted here instead of the live backend, so the slide shows a calm moment of a shared
 /// board (the players chip, a card one friend holds and a card the other just moved).
 const coopPuzzle = 'p-00df45e91273'; // Tropical Beaches: Bora Bora lagoon
-const coopFriends = {'stage-maya': ('Maya', 'flower'), 'stage-leo': ('Leo', 'sun')};
+const coopFriends = {'stage-ava': ('Ava', 'flower'), 'stage-leo': ('Leo', 'sun')};
+
+/// The store player's name where other players see it (the co-op player list), instead of the random
+/// guest name; the name the design QA presets use. Its initial differs from the friends' (M, A, L).
+const storePlayerName = 'Mia';
 
 class _StageCoop implements CoopBackend {
   final _events = StreamController<CoopEvent>.broadcast();
@@ -537,7 +541,7 @@ void main() {
           if (friend != null) return Profile.guest(id).copyWith(displayName: friend.$1, avatar: friend.$2);
           if (id == ref.watch(currentUserIdProvider)) {
             final mine = ref.watch(profileProvider).value;
-            if (mine != null) return mine;
+            if (mine != null) return mine.copyWith(displayName: storePlayerName);
           }
           return ref.watch(profileRepositoryProvider).findByUserId(id);
         }),
@@ -601,7 +605,7 @@ void main() {
     }
 
     // Play together: a shared board mid-game, the host's view, with two friends: the players chip,
-    // the card Maya holds and the card Leo just moved, each in their colour and with their initial.
+    // the card Ava holds and the card Leo just moved, each in their colour and with their initial.
     if (want('32_coop_board') || want('33_coop_players')) {
       try {
         await startGame(tester, coopPuzzle, 'Cards', 'Relaxed');
@@ -615,12 +619,23 @@ void main() {
         // The join toasts come and go before the capture.
         await settle(tester, 7000);
         final b = board(tester);
-        // Leo moves a loose card next to the middle; Maya holds another one. Single cards first; a board
+        // Leo moves a loose card next to the middle; Ava holds another one. Single cards first; a board
         // that left fewer than two (mid-build joins by chance) uses any loose card instead.
         final loose = [for (var s = 0; s < b.cells; s++) if (!b.isLocked(s)) s];
         final singles = loose.where((s) => single(b, s)).toList();
         final pool = singles.length >= 2 ? singles : loose;
-        final from = pool.first, to = pool[pool.length ~/ 2];
+        // A move that locks neither card, so Leo's marks stay on loose cards (first such pair).
+        var from = pool.first, to = pool[pool.length ~/ 2];
+        search:
+        for (final a in pool) {
+          for (final c in pool.reversed) {
+            final m = a == c ? null : b.moveTo(a, c);
+            if (m != null && !m.isLocked(a) && !m.isLocked(c)) {
+              (from, to) = (a, c);
+              break search;
+            }
+          }
+        }
         final after = b.moveTo(from, to);
         if (after != null) stage.move('stage-leo', b.slots, after.slots);
         await settle(tester, 1500);
@@ -629,11 +644,11 @@ void main() {
         final freeSingles = free.where((s) => single(now, s)).toList();
         final held = freeSingles.isNotEmpty ? freeSingles.last : (free.isNotEmpty ? free.last : null);
         if (held != null) {
-          stage.hold('stage-maya', now.slots[held]);
-          // The store slide lifts Maya's card with her outline (drawn just outside the card).
+          stage.hold('stage-ava', now.slots[held]);
+          // The store slide lifts Ava's card with her outline (drawn just outside the card).
           recordCell(tester, '32_coop_held', held, pad: 1.5);
         } else {
-          stage.hold('stage-maya', -1);
+          stage.hold('stage-ava', -1);
         }
         await settle(tester, 1500);
         await shot(tester, '32_coop_board');
