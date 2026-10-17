@@ -2,13 +2,9 @@
 // owner's "two players drag the same piece"): what happens on this device when another player's move
 // changes the board under this player's finger, and what the other devices are left with.
 //
-// The tests marked `_known` reproduce the reported bugs: they describe the right behaviour and fail
-// today, so they are skipped in the normal run. Run them with
-//
-//   flutter test --dart-define=CJW_RUN_KNOWN_FAILURES=true test/coop_race_test.dart
-//
-// and remove the skip once the fix is in. The others pass today: they pin what already works (the
-// shared board, the others' ghosts and marks always settle).
+// The first four reproduced the reported bugs before the fix (a card floating forever, a locked block
+// lifted, the drag's end lost, the player's picks silenced); the others pin what already settled (the
+// shared board, the others' ghosts and marks).
 import 'dart:ui' as ui;
 
 import 'package:carden/core/theme/app_theme.dart';
@@ -27,11 +23,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'support/fake_coop.dart';
-
-const _runKnown = bool.fromEnvironment('CJW_RUN_KNOWN_FAILURES');
-
-/// A reproduced bug's test is skipped unless the known failures are asked for.
-const _skipKnown = !_runKnown;
 
 final _spec = BoardSpec.squareTiers(GameMode.cards)[1]; // 4x4
 const _size = Size(240, 320);
@@ -135,7 +126,7 @@ void main() {
       await tester.pumpAndSettle();
       expectNothingFloats(tester, s1);
       expect(ended, isNotEmpty, reason: 'the drag was reported as over (the others stop seeing it)');
-    }, skip: _skipKnown); // Known failure (build 126): the card that took the dragged card's old slot floats where the finger was, forever (white outline in the screenshot)
+    }); // Was build 126's bug: the card that took the dragged card's old slot floats where the finger was, forever (white outline in the screenshot)
 
     testWidgets('the other player moves the dragged card elsewhere: the drag ends and nothing is left floating', (tester) async {
       final s0 = stateOf(_reversed());
@@ -154,7 +145,7 @@ void main() {
       await tester.pumpAndSettle();
       expectNothingFloats(tester, s1);
       expect(ended, isNotEmpty);
-    }, skip: _skipKnown); // Known failure (build 126): the drag never ends: onPanEnd sees another slot and returns before clearing it
+    }); // Was build 126's bug: the drag never ends: onPanEnd sees another slot and returns before clearing it
 
     testWidgets('after such a drag, cards that lock in its old slot are not lifted off their places', (tester) async {
       final s0 = stateOf(_reversed());
@@ -179,7 +170,7 @@ void main() {
       await tester.pumpWidget(board(s2));
       await tester.pumpAndSettle();
       expectNothingFloats(tester, s2);
-    }, skip: _skipKnown); // Known failure (build 126): a stuck drag lifts the locked cluster at its old slot ("a stuck moving piece of blocks already fixed in place")
+    }); // Was build 126's bug: a stuck drag lifts the locked cluster at its old slot ("a stuck moving piece of blocks already fixed in place")
   });
 
   group('this player\'s live row after such a drag', () {
@@ -187,7 +178,10 @@ void main() {
       fakeAsync((async) {
         final sent = <CoopLive>[];
         final start = DateTime.utc(2026, 10, 17, 12);
-        final sender = LiveSender(userId: 'bob', board: 1, clock: () => start.add(async.elapsed), send: (s) async => sent.add(s));
+        final sender = LiveSender(userId: 'bob', board: 1, clock: () => start.add(async.elapsed), send: (s) async {
+          sent.add(s);
+          return null;
+        });
         // The board lost the drag's end (above): no dragEnd reaches the sender.
         sender.dragStart(5, 0.6, 0.6);
         async.elapse(const Duration(seconds: 10));
@@ -195,7 +189,7 @@ void main() {
         async.elapse(const Duration(seconds: 1));
         expect(sent.last.phase, LivePhase.pick, reason: 'the others see the pick');
       });
-    }, skip: _skipKnown); // Known failure (build 126): the sender still thinks the finger holds card 5, so every later pick is held back and the others see none
+    }); // Was build 126's bug: the sender still thinks the finger holds card 5, so every later pick is held back and the others see none
   });
 
   group('the shared board and the others\' screens', () {
@@ -207,11 +201,11 @@ void main() {
       }
     }
 
-    ProviderContainer device(FakeCoopServer server, String id) => ProviderContainer(
+    ProviderContainer device(FakeCoopServer server, String id, {Duration markFor = const Duration(milliseconds: 60)}) => ProviderContainer(
       overrides: [
         coopBackendProvider.overrideWithValue(FakeCoopBackend(server, id)),
         currentUserIdProvider.overrideWithValue(id),
-        coopTimingProvider.overrideWithValue(const CoopTiming(presenceGap: Duration(milliseconds: 5), markFor: Duration(milliseconds: 60))),
+        coopTimingProvider.overrideWithValue(CoopTiming(presenceGap: const Duration(milliseconds: 5), markFor: markFor)),
       ],
     );
 
@@ -286,6 +280,44 @@ void main() {
       await Future<void>.delayed(const Duration(milliseconds: 150));
       await settle();
       expect(bob.read(coopProvider).marks.moved, isEmpty, reason: 'every mark faded, none came back with the catch-up');
+    });
+
+    test('what is read again (joining, a reconnect) shows without marks', () async {
+      final server = FakeCoopServer();
+      // Marks that would last a minute: none may show at all.
+      final amy = device(server, 'amy', markFor: const Duration(minutes: 1)), bob = device(server, 'bob', markFor: const Duration(minutes: 1));
+      addTearDown(amy.dispose);
+      addTearDown(bob.dispose);
+      final base = Board.shuffled(spec, seed: 14).slots;
+      final a = amy.read(coopProvider.notifier);
+      final game = await a.create(puzzleId: 'p1', grid: 'cards-4x5t3', layout: base);
+      // Amy plays before Bob joins.
+      var layout = base;
+      for (var i = 0; i < 3; i++) {
+        final b = Board(spec, layout);
+        final from = [for (var s = 0; s < b.cells; s++) if (!b.isLocked(s) && b.slots[s] != s) s].first;
+        final after = b.moveTo(from, b.slots[from])!;
+        a.submit(CoopOpKind.move, layout, after.slots);
+        layout = after.slots;
+      }
+      await settle();
+      await bob.read(coopProvider.notifier).join(game.code);
+      await settle();
+      expect(bob.read(coopProvider).layout, layout, reason: 'the board as it is');
+      expect(bob.read(coopProvider).marks.moved, isEmpty, reason: 'joining shows no marks');
+      // Bob loses the connection while Amy moves on; back, he reads it again.
+      final backend = bob.read(coopBackendProvider) as FakeCoopBackend;
+      backend.connected = false;
+      final b = Board(spec, layout);
+      final from = [for (var s = 0; s < b.cells; s++) if (!b.isLocked(s) && b.slots[s] != s) s].first;
+      final after = b.moveTo(from, b.slots[from])!;
+      a.submit(CoopOpKind.move, layout, after.slots);
+      await settle();
+      backend.connected = true;
+      await bob.read(coopProvider.notifier).catchUp();
+      await settle();
+      expect(bob.read(coopProvider).layout, after.slots);
+      expect(bob.read(coopProvider).marks.moved, isEmpty, reason: 'a catch-up shows no marks');
     });
 
     test('rapid picks, a drag and a put-down while updates are on their way end as nothing in hand on the other screen', () async {

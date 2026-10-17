@@ -35,9 +35,12 @@ enum CoopPhase {
 /// draws their colour and initial on them.
 @immutable
 class CoopMarks {
-  const CoopMarks({this.held = const {}, this.moved = const {}});
+  const CoopMarks({this.held = const {}, this.moved = const {}, this.movedAt = const {}});
   final Map<int, String> held;
   final Map<int, String> moved;
+
+  /// When each moved card was moved (its mark fades from then, [CoopTiming.markFor]).
+  final Map<int, DateTime> movedAt;
 
   bool get isEmpty => held.isEmpty && moved.isEmpty;
 
@@ -57,6 +60,7 @@ class CoopState {
     this.marks = const CoopMarks(),
     this.placedACard = false,
     this.solved = false,
+    this.liveTick = 0,
   });
 
   final CoopPhase phase;
@@ -76,6 +80,10 @@ class CoopState {
 
   /// Every device agrees the board is whole.
   final bool solved;
+
+  /// Changes whenever who has which card in hand may have changed (the game screen then works out
+  /// again which cards this player may take, `CoopController.claims`).
+  final int liveTick;
 
   bool get playing => phase == CoopPhase.playing && game != null;
   bool get isHost => game != null && me != null && game!.isHost(me!);
@@ -98,6 +106,7 @@ class CoopState {
     CoopMarks? marks,
     bool? placedACard,
     bool? solved,
+    int? liveTick,
   }) =>
       CoopState(
         phase: phase ?? this.phase,
@@ -108,6 +117,7 @@ class CoopState {
         marks: marks ?? this.marks,
         placedACard: placedACard ?? this.placedACard,
         solved: solved ?? this.solved,
+        liveTick: liveTick ?? this.liveTick,
       );
 }
 
@@ -162,7 +172,7 @@ class CoopTiming {
     this.presenceGap = const Duration(seconds: 3),
     this.keepAlive = const Duration(seconds: 60),
     this.safetyCatchUp = const Duration(minutes: 2),
-    this.markFor = const Duration(milliseconds: 2500),
+    this.markFor = const Duration(milliseconds: 1500),
     this.retryFirst = const Duration(seconds: 1),
     this.retryMax = const Duration(seconds: 30),
   });
@@ -180,7 +190,7 @@ class CoopTiming {
   /// Moves are read again this often anyway (realtime never replays what it lost).
   final Duration safetyCatchUp;
 
-  /// How long another player's initial stays on cards they moved.
+  /// How long another player's colour stays on cards they moved (it fades out over that time).
   final Duration markFor;
   final Duration retryFirst;
   final Duration retryMax;
@@ -224,7 +234,7 @@ class CoopController extends Notifier<CoopState> {
   DateTime _presenceSentAt = DateTime.fromMillisecondsSinceEpoch(0);
   DateTime? _lastEcho;
   bool _echoMissed = false;
-  final _moved = <int, ({String userId, DateTime until})>{};
+  final _moved = <int, ({String userId, DateTime at, DateTime until})>{};
   LiveSender? _live;
   final _tracks = LiveTracks();
   final _liveWake = StreamController<void>.broadcast();
@@ -348,7 +358,7 @@ class CoopController extends Notifier<CoopState> {
     state = CoopState(phase: CoopPhase.playing, game: game, me: me, layout: game.layout);
     _sub = _backend.listen(game.id, me: me).listen(_onEvent);
     final backend = _backend;
-    _live = LiveSender(userId: me, board: game.board, send: (s) => backend.updateLive(game.id, s));
+    _live = LiveSender(userId: me, board: game.board, send: (s) => backend.updateLive(game.id, s), onClaim: _liveChanged);
     _presence = CoopPresence(userId: me, gameId: game.id, board: game.board);
     _sendPresence();
     _keepAliveTimer = Timer.periodic(_timing.keepAlive, (_) => _keepAlive());
@@ -630,7 +640,7 @@ class CoopController extends Notifier<CoopState> {
     if (s == null || s.userId == _me || s.board != log.board || !g.players.contains(s.userId)) return;
     if (_tracks.add(s, DateTime.now())) {
       _liveWake.add(null);
-      state = state.copyWith(marks: _marks(state.layout, state.presences));
+      state = state.copyWith(marks: _marks(state.layout, state.presences), liveTick: state.liveTick + 1);
     }
   }
 
@@ -700,12 +710,17 @@ class CoopController extends Notifier<CoopState> {
         if (op != null) updates.add(log.addRemote(op));
       }
       if (updates.isNotEmpty) {
-        _emit(LogUpdate(
-          before: updates.first.before,
-          after: updates.last.after,
-          applied: [for (final u in updates) ...u.applied],
-          dropped: [for (final u in updates) ...u.dropped],
-        ));
+        // Read again (joining, Return, the next board, a reconnect): what the others did meanwhile
+        // shows without their marks, which would cover the board at once.
+        _emit(
+          LogUpdate(
+            before: updates.first.before,
+            after: updates.last.after,
+            applied: [for (final u in updates) ...u.applied],
+            dropped: [for (final u in updates) ...u.dropped],
+          ),
+          mark: false,
+        );
       }
     } catch (e) {
       debugPrint('coop catch-up: $e');
@@ -722,13 +737,16 @@ class CoopController extends Notifier<CoopState> {
 
   // ---- the board shown -----------------------------------------------------------------------
 
-  void _emit(LogUpdate u) {
+  void _emit(LogUpdate u, {bool mark = true}) {
     final log = _log;
     if (log == null) return;
     final now = DateTime.now();
     for (final op in u.applied) {
+      // Their cards are in hand no more (their move took them).
+      if (_tracks.onMove(op.userId, [for (final c in op.change.slots) ...[c.before, c.after]])) _liveWake.add(null);
+      if (!mark) continue;
       for (final c in op.change.slots) {
-        _moved[c.after] = (userId: op.userId, until: now.add(_timing.markFor));
+        _moved[c.after] = (userId: op.userId, at: now, until: now.add(_timing.markFor));
       }
     }
     if (u.applied.isNotEmpty) _scheduleMarks();
@@ -738,6 +756,7 @@ class CoopController extends Notifier<CoopState> {
       marks: _marks(log.layout, state.presences),
       placedACard: log.locksBy(me) > 0,
       solved: log.isSolved,
+      liveTick: state.liveTick + (u.applied.isEmpty ? 0 : 1),
     );
     if (u.changed || u.dropped.isNotEmpty || u.applied.isNotEmpty) _updates.add(CoopBoardUpdate(log.board, u));
   }
@@ -755,7 +774,33 @@ class CoopController extends Notifier<CoopState> {
         for (final e in _tracks.picks.entries) e.value: e.key,
       },
       moved: {for (final e in _moved.entries) e.key: e.value.userId},
+      movedAt: {for (final e in _moved.entries) e.key: e.value.at},
     );
+  }
+
+  /// Who has which card in hand, as far as this device knows (docs/multiplayer.md, "Who has a
+  /// card"): the others' picks and drags from their live rows; for players whose live row was never
+  /// heard (builds without one), the card in their presence. Those carry no time: such a player never
+  /// yields a card, so this player does.
+  List<LiveClaim> claims([DateTime? now]) {
+    final at = now ?? DateTime.now();
+    final g = state.game;
+    final board = _log?.board;
+    final live = _tracks.heard.toSet();
+    return [
+      ..._tracks.claims(at).where((c) => g == null || g.players.contains(c.userId)),
+      for (final p in state.presences.values)
+        if (!live.contains(p.userId) && !p.away && p.held != null && p.board == board && (g == null || g.players.contains(p.userId)))
+          LiveClaim(userId: p.userId, card: p.held!),
+    ];
+  }
+
+  /// The card this player has in hand, and when the server took it (null while it has not answered).
+  LiveClaim? get myClaim => _live?.claim;
+
+  void _liveChanged() {
+    if (_log == null) return;
+    state = state.copyWith(liveTick: state.liveTick + 1);
   }
 
   void _scheduleMarks() {
@@ -806,6 +851,7 @@ class CoopController extends Notifier<CoopState> {
     if (p == null) return;
     if (p.away) _presence = CoopPresence(userId: p.userId, gameId: p.gameId, board: p.board, held: p.held, away: false);
     _sendPresence(now: true);
+    _live?.resend();
     unawaited(catchUp());
     unawaited(_loadPresences());
   }
@@ -814,6 +860,8 @@ class CoopController extends Notifier<CoopState> {
   void onPause() {
     final p = _presence;
     if (p == null || p.away) return;
+    // A drag cannot go on in the background: the others see the card go back.
+    _live?.dragEnd(dropped: false);
     _presence = CoopPresence(userId: p.userId, gameId: p.gameId, board: p.board, away: true);
     _sendPresence(now: true);
   }

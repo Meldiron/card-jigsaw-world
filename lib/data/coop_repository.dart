@@ -95,9 +95,10 @@ class AppwriteCoopBackend implements CoopBackend {
   }
 
   @override
-  Future<void> updateLive(String gameId, CoopLive state) async {
+  Future<DateTime?> updateLive(String gameId, CoopLive state) async {
     try {
-      await _tables.updateRow(databaseId: AppwriteConfig.databaseId, tableId: live, rowId: CoopLive.rowId(gameId, state.userId), data: state.toData());
+      final row = await _tables.updateRow(databaseId: AppwriteConfig.databaseId, tableId: live, rowId: CoopLive.rowId(gameId, state.userId), data: state.toData());
+      return DateTime.tryParse(row.$updatedAt);
     } on AppwriteException catch (e) {
       if (e.code == 429) throw const LiveRateLimited();
       if (e.code == 404 || e.code == 401 || e.code == 403) throw const LiveRowMissing();

@@ -1,8 +1,8 @@
 // Build 126's stuck floating card (TestFlight feedback AGyfyDbbHhCGY72W1h5num0), on the live backend:
 // this player drags a card and tools/dev/coop_bot.mjs (the host) takes the same card into its place
 // in the middle of the drag, as a second player grabbing the same piece would. The screenshot shows
-// what the player is left with after letting go (`screenshots/race_*.png`); the reproduced bug is
-// printed as `COOP_RACE`. With `--dart-define=CJW_RUN_KNOWN_FAILURES=true` it fails until fixed.
+// what the player is left with after letting go (`screenshots/race_*.png`): the drag ended (the host
+// heard it), nothing floats, and a word says who placed the card. Build 126 left the card floating.
 //
 //   node tools/dev/coop_bot.mjs &
 //   tools/dev/qa-run.sh drive --driver=test_driver/integration_test.dart --target=integration_test/coop_race_test.dart -d <simulator>
@@ -23,8 +23,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-const _runKnown = bool.fromEnvironment('CJW_RUN_KNOWN_FAILURES');
 
 Future<void> settle(WidgetTester tester, [int ms = 1500]) async {
   await tester.pump(const Duration(milliseconds: 16));
@@ -85,6 +83,9 @@ void main() {
       await tester.pump(const Duration(milliseconds: 16));
     }
     expect(board()[x], x, reason: 'the host\'s move arrived');
+    await tester.pump(const Duration(milliseconds: 120));
+    await binding.takeScreenshot('race_00_card_taken');
+    debugPrint('COOP_RACE word on screen: ${find.textContaining('this card').evaluate().map((e) => (e.widget as Text).data).toList()}');
     for (var i = 0; i < 10; i++) {
       await gesture.moveBy(const Offset(4, 3));
       await tester.pump(const Duration(milliseconds: 16));
@@ -108,9 +109,7 @@ void main() {
     final mine = live.where((h) => h['userId'] == c.read(coopProvider).me).map((h) => h['phase']).toList();
     debugPrint('COOP_RACE this player\'s live states the host heard: $mine');
     await bot('/quit');
-    if (_runKnown) {
-      expect(floating, isEmpty);
-      expect(mine.last, isNot('drag'), reason: 'the drag was reported as over');
-    }
+    expect(floating, isEmpty);
+    expect(mine.last, isNot('drag'), reason: 'the drag was reported as over');
   });
 }

@@ -123,10 +123,10 @@ void main() {
     final moved = await bot('/move');
     expect(await until(tester, () => !listEquals(board(), before)), isTrue);
     final hostCard = int.parse((moved['changes'] as String).split(',').first.split(':')[2]);
-    expect(find.byKey(ValueKey('coop-mark-$hostCard')), findsNothing, reason: 'a card locked in place carries no mark');
+    expect(find.byKey(ValueKey('coop-moved-$hostCard')), findsNothing, reason: 'a card locked in place carries no mark');
     await bot('/swap');
-    expect(await until(tester, () => find.byKey(const ValueKey('coop-players-chip')).evaluate().isNotEmpty && find.byWidgetPredicate((w) => w.key is ValueKey && '${(w.key as ValueKey).value}'.startsWith('coop-mark-')).evaluate().isNotEmpty), isTrue,
-        reason: 'the host\'s initial on the cards it moved');
+    expect(await until(tester, () => find.byKey(const ValueKey('coop-players-chip')).evaluate().isNotEmpty && find.byWidgetPredicate((w) => w.key is ValueKey && '${(w.key as ValueKey).value}'.startsWith('coop-moved-')).evaluate().isNotEmpty), isTrue,
+        reason: 'the host\'s colour on the cards it moved');
     await shot(tester, 'coop2_02_host_moved', 200);
 
     debugPrint('COOP_STEP 3');
