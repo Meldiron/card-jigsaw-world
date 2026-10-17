@@ -73,6 +73,11 @@ class GameScreen extends ConsumerStatefulWidget {
   /// Chosen with Expand (`?expand=1`): the next picture is dealt with Expand too.
   final bool expand;
 
+  /// A board dealt here opens on its whole picture for a moment, then the cards are dealt (owner,
+  /// 2026-10-17; a resumed or shared board does not). Integration suites that play a board the
+  /// moment it shows turn it off.
+  static bool dealPreview = true;
+
   @override
   ConsumerState<GameScreen> createState() => _GameScreenState();
 }
@@ -257,6 +262,8 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
       par: ok ? existing.par : 0,
       peeked: ok && existing.peeked,
       bestLock: ok ? existing.bestLock : 0,
+      // A board dealt here opens on the picture; not the boards of a game of Play together.
+      preview: !ok && widget.coopId == null && GameScreen.dealPreview,
     );
   }
 
@@ -865,7 +872,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
   /// then for coins.
   Future<void> _peek() async {
     final state = ref.read(gameControllerProvider(_args!));
-    if (state.peeking) return;
+    if (state.showingPicture) return;
     final giant = state.board.spec.isGiant;
     final stock = ref.read(profileProvider).value?.peeks ?? 0;
     final ok = await ref.read(profileProvider.notifier).usePeek();
@@ -1018,7 +1025,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
           AppAnalytics.event('puzzle_restarted', {..._boardProps(), 'from': 'pause', 'moves': moves});
           _completionHandled = false;
           _newPlay();
-          _ctrl.restart();
+          _ctrl.restart(preview: GameScreen.dealPreview);
         },
         onQuit: () {
           Navigator.pop(ctx);
@@ -1119,6 +1126,13 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     // Locate: while the map is on, the selected card's place shows on it.
     final locate = sel != null && sel < state.board.cells && !state.board.isLocked(sel) ? sel : null;
     final coaching = _coach != null && image.hasValue && state.status == GameStatus.playing;
+    // A board dealt here opens on its picture: it shows from the first frame the cards are drawn.
+    final previewShown = state.previewing && image.hasValue && !dealing;
+    if (previewShown) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) ctrl.startPreview();
+      });
+    }
     // Play together: the shared game, the other players' cards on the board, and the end of the game
     // for this board (the host goes on alone; a guest's screen is closed by CoopHost).
     final coopState = ref.watch(coopProvider);
@@ -1137,7 +1151,13 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
 
     return Scaffold(
       backgroundColor: c.canvas,
-      body: Stack(
+      // While Peek or the preview shows the picture, a touch anywhere ends it (owner, 2026-10-17):
+      // the cards fly back at once. The touch goes on to what it hit (the pause button). Not while
+      // the cards are being dealt: the picture has not shown yet.
+      body: Listener(
+        behavior: HitTestBehavior.translucent,
+        onPointerDown: state.peeking || previewShown ? (_) => ctrl.endPeek() : null,
+        child: Stack(
         children: [
           SafeArea(
             child: Column(
@@ -1210,7 +1230,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                                         setState(() => _showMap = !_showMap);
                                         ref.read(giantViewsProvider).showMap = _showMap;
                                       },
-                                      onGather: state.status == GameStatus.playing && !state.peeking && _canGather ? () => _gather(Size(w, h)) : null,
+                                      onGather: state.status == GameStatus.playing && !state.showingPicture && _canGather ? () => _gather(Size(w, h)) : null,
                                     ),
                                   if (!zoomable)
                                     IgnorePointer(
@@ -1325,7 +1345,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                               hints: profile?.hints ?? 0,
                               peeks: profile?.peeks ?? 0,
                               magics: profile?.magics ?? 0,
-                              playing: state.status == GameStatus.playing && !state.peeking,
+                              playing: state.status == GameStatus.playing && !state.showingPicture,
                               onHint: _hint,
                               onMagic: _magic,
                               onPeek: _peek,
@@ -1334,7 +1354,8 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                           ),
                         ),
                       ),
-                      if (coaching) _Coach(step: _coach!, onClose: _finishCoach),
+                      // The first hint waits for the picture to be dealt.
+                      if (coaching && !state.previewing) _Coach(step: _coach!, onClose: _finishCoach),
                     ],
                   )
                 else
@@ -1400,7 +1421,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                   return;
                 }
                 _newPlay();
-                _ctrl.restart();
+                _ctrl.restart(preview: GameScreen.dealPreview);
               },
               onNext: (next) async {
                 if (shared && next != null) {
@@ -1445,6 +1466,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
             ),
           ),
         ],
+      ),
       ),
     );
   }

@@ -79,8 +79,16 @@ any other (`Board.shuffled`: no card in place, no pair joined).
   in one move" quests.
 - **Peek** (10 coins on every board; owner, 2026-10-14: no free Peek on giant boards): every card not in place flies to its place,
   the picture shows (3.2 s on a giant board, 2.4 s elsewhere) and the cards fly back, each a little
-  later than the last, so the picture builds itself in a ripple. Using it still counts against the
+  later than the last, so the picture builds itself in a ripple. A tap anywhere while the picture
+  shows sends the cards back at once (owner, 2026-10-17). Using it still counts against the
   "without Peek" quest (a fallback for level 1 players).
+- **The picture before the deal** (owner, 2026-10-17; every board dealt on the device, not a resumed
+  board or a shared one): the board opens on the whole picture, every card in its place, for 1.3 s
+  (1 s on a giant board), then the cards glide to where they were dealt in a sweep from the top left
+  corner (about 1 s). A tap deals at once. It is free, not a move and not a Peek, and the clock starts
+  after it (`GameState.previewing`, `GameController.startPreview`). Shuffle and restart and Replay
+  open on it too. Integration suites that play a board the moment it shows turn it off
+  (`GameScreen.dealPreview = false`).
 
 ### The other tools
 

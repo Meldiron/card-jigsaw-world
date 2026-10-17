@@ -267,8 +267,11 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
   final _cache = <int, (int, Widget)>{};
 
   // Peek: the cards fly to their places while the state peeks and back
-  // when it stops; [_peekReturn] marks the flight back.
+  // when it stops; [_peekReturn] marks the flight back. The preview's end
+  // is the same flight, the deal ([_dealFlight]): a slower sweep across the
+  // picture, so it comes apart card by card.
   bool _peekReturn = false;
+  bool _dealFlight = false;
   Timer? _peekReturnTimer;
 
   Tiling get tiling => widget.state.board.tiling;
@@ -287,11 +290,17 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
       old.zoom?.removeListener(_onZoom);
       widget.zoom?.addListener(_onZoom);
     }
-    if (old.state.peeking && !widget.state.peeking) {
+    if (old.state.showingPicture && !widget.state.showingPicture) {
       _peekReturn = true;
+      _dealFlight = old.state.previewing;
       _peekReturnTimer?.cancel();
-      _peekReturnTimer = Timer(_peekFlight + _peekSpread, () {
-        if (mounted) setState(() => _peekReturn = false);
+      _peekReturnTimer = Timer(_dealFlight ? _dealTime : _peekFlight + _peekSpread, () {
+        if (mounted) {
+          setState(() {
+            _peekReturn = false;
+            _dealFlight = false;
+          });
+        }
       });
     }
   }
@@ -311,6 +320,16 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
   static const _peekFlight = Duration(milliseconds: 420);
   static const _peekSpread = Duration(milliseconds: 320);
   static Duration _flightOf(int card) => _peekFlight + Duration(milliseconds: (card * 97 + 31) % 11 * _peekSpread.inMilliseconds ~/ 10);
+
+  /// The deal after the preview: every card leaves the picture within [_dealTime], in a sweep from
+  /// the top left corner to the bottom right one (a card's start waits up to 45% of the time, by
+  /// where its place is), then glides to where it was dealt, easing in and out.
+  static const _dealTime = Duration(milliseconds: 1050);
+  Curve _dealCurve(int card) {
+    final home = tiling.cellCenter(card, boardSize);
+    final t = ((home.dx + home.dy) / (boardSize.width + boardSize.height)).clamp(0.0, 1.0);
+    return Interval(0.45 * t, 1, curve: Curves.easeInOutCubic);
+  }
 
   /// A tap on [slot]: select, deselect or move (the controller decides). No
   /// double tap on giant boards (owner, 2026-10-14): two quick taps on a card
@@ -493,7 +512,7 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
     final gap = widget.cardStyle == CardStyle.classic ? (fine ? math.max(0.8, cell * 0.05) : math.max(6.0, cell * 0.08)) : (fine ? math.max(0.6, cell * 0.035) : 2.0);
     final radius = widget.cardStyle == CardStyle.classic ? (fine ? cell * 0.12 : math.min(18.0, cell * 0.17)) : (fine ? cell * 0.1 : 8.0);
     final strokeScale = fine ? (cell / 56).clamp(0.3, 1.0) / math.pow(band, 0.6) : 1.0;
-    final cacheKey = (widget.state, widget.cardStyle, boardSize, widget.image, widget.painting, gap, radius, strokeScale, _peekReturn, widget.marks);
+    final cacheKey = (widget.state, widget.cardStyle, boardSize, widget.image, widget.painting, gap, radius, strokeScale, _peekReturn, _dealFlight, widget.marks);
     if (cacheKey != _cacheKey) {
       _cacheKey = cacheKey;
       _cache.clear();
@@ -530,7 +549,7 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
               decoration: BoxDecoration(color: c.boardBackground, borderRadius: BorderRadius.circular(radius + 2)),
             ),
           ),
-          if (widget.state.hintTarget != null && !widget.state.peeking)
+          if (widget.state.hintTarget != null && !widget.state.showingPicture)
             Positioned.fromRect(
               rect: tiling.cellBounds(widget.state.hintTarget!, boardSize),
               child: _PulseRing(
@@ -544,16 +563,33 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
             if (rank(slot) >= 2) card(slot),
           // Differentiate without colour: the hint's target also carries the hint glyph, above the
           // cards, so it does not rest on the amber outline alone.
-          if (widget.state.hintTarget != null && !widget.state.peeking && A11y.symbolsOf(context))
+          if (widget.state.hintTarget != null && !widget.state.showingPicture && A11y.symbolsOf(context))
             Positioned.fromRect(
               rect: tiling.cellBounds(widget.state.hintTarget!, boardSize),
               child: const IgnorePointer(child: Center(child: _BoardGlyph(AppIcons.hint))),
             ),
+          // Reduce motion: the preview's picture fades into the dealt cards instead of breaking
+          // apart (the cards jump under it).
+          if (A11y.reduceMotionOf(context) && (widget.state.previewing || _dealFlight))
+            Positioned.fill(
+              key: const ValueKey('deal-preview-fade'),
+              child: IgnorePointer(
+                child: AnimatedOpacity(
+                  opacity: widget.state.previewing ? 1 : 0,
+                  duration: const Duration(milliseconds: 450),
+                  curve: Curves.easeInOut,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(radius + 2),
+                    child: CustomPaint(painter: _PicturePainter(widget.image, imageCrop)),
+                  ),
+                ),
+              ),
+            ),
         ],
       );
-    // Nothing is played while Peek shows the picture. Always in the tree, so
-    // the cards keep their elements and fly instead of jumping.
-    content = IgnorePointer(ignoring: widget.state.peeking, child: content);
+    // Nothing is played while Peek or the preview shows the picture. Always in
+    // the tree, so the cards keep their elements and fly instead of jumping.
+    content = IgnorePointer(ignoring: widget.state.showingPicture, child: content);
     if (zoom != null) {
       // The board is laid out at its size on screen and scaled, so every
       // card, gutter and stroke grows with the zoom and the picture is drawn
@@ -664,8 +700,8 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
     // Peek: every card not in place sits in its own place, drawn as if
     // locked, so the whole picture shows; the flight there and back is the
     // card's usual slide, a little slower and different for every card.
-    final peek = state.peeking && !locked;
-    final flight = !locked && (state.peeking || _peekReturn);
+    final peek = state.showingPicture && !locked;
+    final flight = !locked && (state.showingPicture || _peekReturn);
     final at = peek ? card : slot;
     final bounds = tiling.cellBounds(at, boardSize);
     final origin = dragging ? bounds.topLeft + _dragDelta : bounds.topLeft;
@@ -747,8 +783,8 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
     return AnimatedPositioned(
       // Twins that traded identities keep their places on screen, so each keeps its widget (docs/twins.md).
       key: ValueKey('card-${state.cardKeys?[card] ?? card}'),
-      duration: dragging || still ? Duration.zero : (flight ? _flightOf(card) : const Duration(milliseconds: 280)),
-      curve: flight ? Curves.easeInOutCubic : Curves.easeOutBack,
+      duration: dragging || still ? Duration.zero : (flight ? (_dealFlight ? _dealTime : _flightOf(card)) : const Duration(milliseconds: 280)),
+      curve: flight ? (_dealFlight ? _dealCurve(card) : Curves.easeInOutCubic) : Curves.easeOutBack,
       left: origin.dx,
       top: origin.dy,
       width: bounds.width,
@@ -815,6 +851,20 @@ class _BoardWidgetState extends State<BoardWidget> with SingleTickerProviderStat
 }
 
 enum _Hover { none, ok, blocked }
+
+/// The board's part of the picture, whole ([BoardWidget]'s crop): the preview's picture as it fades
+/// into the dealt cards when motion is reduced.
+class _PicturePainter extends CustomPainter {
+  const _PicturePainter(this.image, this.crop);
+  final ui.Image image;
+  final Rect crop;
+
+  @override
+  void paint(Canvas canvas, Size size) => canvas.drawImageRect(image, crop, Offset.zero & size, Paint()..filterQuality = FilterQuality.medium);
+
+  @override
+  bool shouldRepaint(_PicturePainter old) => old.image != image || old.crop != crop;
+}
 
 /// The group's angular coverage around one vertex of a card: a run of
 /// [span] radians clockwise on screen from [start], bounded by the two open

@@ -26,6 +26,7 @@ import 'package:carden/data/repositories.dart';
 import 'package:carden/data/sync/ops.dart';
 import 'package:carden/features/gallery/library_screen.dart';
 import 'package:carden/features/game/board_widget.dart';
+import 'package:carden/features/game/game_screen.dart';
 import 'package:carden/game/board.dart';
 import 'package:carden/models/models.dart';
 import 'package:carden/router.dart';
@@ -215,6 +216,8 @@ class _StoreLeaderboard extends LeaderboardNotifier {
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.fullyLive;
+  // Boards here are played the moment they show: no picture before the deal (GameScreen.dealPreview).
+  GameScreen.dealPreview = false;
 
   /// Captures the screen. On a game screen the board's rectangle (physical
   /// pixels: left, top, width, height) is recorded too; the driver writes

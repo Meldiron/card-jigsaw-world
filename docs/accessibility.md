@@ -38,7 +38,8 @@ Reduce motion changes, by place:
   control's thumb jumps without spring, stretch or lift, alerts, action sheets and toasts fade without zoom or
   slide, wide-window panels fade, the Store, Wheel and Account sheets fade in (`FadeSheetRoute`) instead of the
   sheet sliding up while the page behind shrinks, the tab pill and glass bars snap, shelves jump.
-- Board: cards and Peek jump to their places (the lock flash still marks a change), no lock pop, a steady hint
+- Board: cards and Peek jump to their places (the lock flash still marks a change), the picture before the deal
+  fades into the dealt cards, no lock pop, a steady hint
   outline instead of the pulse, no lift scale, zoom buttons, map and Locate move the view at once (`BoardZoom.reduceMotion`).
 - Game screen: no confetti, "×2 DOUBLE LOCK" fades without pop and drift, completion stars fade in, panels fade
   without sliding, the finished picture does not zoom.

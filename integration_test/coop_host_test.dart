@@ -15,6 +15,7 @@ import 'package:carden/core/sfx.dart';
 import 'package:carden/data/local_store.dart';
 import 'package:carden/features/coop/players_sheet.dart';
 import 'package:carden/features/game/board_widget.dart';
+import 'package:carden/features/game/game_screen.dart';
 import 'package:carden/router.dart';
 import 'package:carden/state/catalog.dart';
 import 'package:carden/state/coop/coop_controller.dart';
@@ -63,6 +64,8 @@ Future<Map<String, dynamic>> bot(String path, {bool get = false}) async {
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.fullyLive;
+  // Boards here are played the moment they show: no picture before the deal (GameScreen.dealPreview).
+  GameScreen.dealPreview = false;
   final recorder = _Recorder();
   SharePlatform.instance = recorder;
 

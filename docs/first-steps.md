@@ -26,7 +26,8 @@ guided again.
    packs for how clearly its nine cards differ in colour and detail; a picture of similar cards
    (rocks, bamboo, night sky) is hard on a first board.
 2. **One hint per step on the first board** (until `tutorialSeen`), where the tools will be (the
-   tool bar stays laid out but hidden, so the board keeps its size): "Tap a card to pick it up",
+   tool bar stays laid out but hidden, so the board keeps its size), once the board has shown its picture and dealt
+   the cards (docs/giant-boards.md, "The picture before the deal"): "Tap a card to pick it up",
    then the picked card's place is outlined (`GameController.guide`, free, not a Hint) with "Now
    tap the outlined spot", then "It locked in place..." (or "They joined..."). No title or step
    count, only the line (owner). The next move ends the hints, the tools fade in, and a toast says

@@ -32,6 +32,7 @@ class GameState {
     this.bestLock = 0,
     this.twins,
     this.cardKeys,
+    this.previewing = false,
   });
 
   final Board board;
@@ -67,6 +68,15 @@ class GameState {
   /// identities stay where they are on screen, so each keeps its widget (null: every card its own).
   final List<int>? cardKeys;
 
+  /// The picture before the deal (owner, 2026-10-17): a board dealt here first shows the whole
+  /// picture, every card in its place, then the cards glide to where they were dealt. Drawn like
+  /// Peek, but not a Peek: free, not [peeked], not a move, and the clock waits for it.
+  final bool previewing;
+
+  /// The board shows the picture instead of the cards as they lie (Peek or the preview): nothing is
+  /// played meanwhile, and a tap ends it.
+  bool get showingPicture => peeking || previewing;
+
   /// Finished in no more moves than the dealt par.
   bool get atPar => basePar > 0 && moves <= basePar;
 
@@ -99,6 +109,7 @@ class GameState {
     int? bestLock,
     Twins? twins,
     List<int>? cardKeys,
+    bool? previewing,
   }) =>
       GameState(
         board: board ?? this.board,
@@ -121,6 +132,7 @@ class GameState {
         bestLock: bestLock ?? this.bestLock,
         twins: twins ?? this.twins,
         cardKeys: cardKeys ?? this.cardKeys,
+        previewing: previewing ?? this.previewing,
       );
 }
 
@@ -138,6 +150,7 @@ class GameArgs {
     this.par = 0,
     this.peeked = false,
     this.bestLock = 0,
+    this.preview = false,
   });
   final String puzzleId;
   final BoardSpec spec;
@@ -150,6 +163,9 @@ class GameArgs {
   final int par;
   final bool peeked;
   final int bestLock;
+
+  /// A board dealt here (not resumed) opens on the picture ([GameState.previewing]).
+  final bool preview;
 
   /// Distinguishes sessions on the same board (the game screen bumps it when
   /// it settles the board for the loaded picture), so each gets its own
@@ -202,10 +218,11 @@ class GameController extends Notifier<GameState> {
             basePar: args.par > 0 ? args.par : max(par, 1),
             peeked: args.peeked,
             bestLock: args.bestLock)
-        : _fresh(board, par: max(par, 1));
+        // The preview waits for the board to be on screen ([startPreview]).
+        : _fresh(board, par: max(par, 1), previewing: args.preview);
   }
 
-  GameState _fresh(Board board, {required int par, int moves = 0, int elapsed = 0, int hintsUsed = 0, int? basePar, bool peeked = false, int bestLock = 0, Twins? twins}) => GameState(
+  GameState _fresh(Board board, {required int par, int moves = 0, int elapsed = 0, int hintsUsed = 0, int? basePar, bool peeked = false, int bestLock = 0, Twins? twins, bool previewing = false}) => GameState(
         board: board,
         par: par,
         moves: moves,
@@ -225,12 +242,13 @@ class GameController extends Notifier<GameState> {
         peeked: peeked,
         bestLock: bestLock,
         twins: twins,
+        previewing: previewing,
       );
 
   void _startTimer() {
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
-      if (state.status == GameStatus.playing) {
+      if (state.status == GameStatus.playing && !state.previewing) {
         state = state.copyWith(elapsed: state.elapsed + 1);
       }
     });
@@ -265,7 +283,7 @@ class GameController extends Notifier<GameState> {
   /// Tap-to-select (selects the whole group) then tap a destination for the
   /// tapped card; the group travels with it.
   void tap(int slot) {
-    if (state.status != GameStatus.playing) return;
+    if (state.status != GameStatus.playing || state.previewing) return;
     final b = state.board;
     final sel = state.selected;
     if (sel == null) {
@@ -285,7 +303,7 @@ class GameController extends Notifier<GameState> {
 
   /// Drag-and-drop: the card at [from] (and its group) lands on [to].
   void drop(int from, int to) {
-    if (state.status != GameStatus.playing) return;
+    if (state.status != GameStatus.playing || state.previewing) return;
     if (from == to) {
       state = state.copyWith(clearSelected: true);
       return;
@@ -439,7 +457,7 @@ class GameController extends Notifier<GameState> {
   /// coordinates at the board's [size]). Cards in place and joined groups stay. Not a move.
   /// Returns how many cards moved: 0 when nothing is left to shuffle.
   int shuffle({Rect? view, Size? size, Random? random}) {
-    if (state.status != GameStatus.playing || state.peeking) return 0;
+    if (state.status != GameStatus.playing || state.showingPicture) return 0;
     final before = state.board;
     final twins = state.twins;
     final after = view != null && size != null ? shuffleInView(before, view, size, random: random, twins: twins) : shuffleLoose(before, random: random, twins: twins);
@@ -452,24 +470,40 @@ class GameController extends Notifier<GameState> {
   /// cards fly back (the board draws the flight while [GameState.peeking] is on). [duration] is
   /// the time the cards spend away, the flight there included. The caller handles payment.
   void peek({Duration duration = peekTime}) {
-    if (state.status != GameStatus.playing || state.peeking) return;
+    if (state.status != GameStatus.playing || state.showingPicture) return;
     _peekTimer?.cancel();
     state = state.copyWith(peeking: true, peeked: true, clearSelected: true);
-    _peekTimer = Timer(duration, () {
-      if (!_events.isClosed) state = state.copyWith(peeking: false);
-    });
+    _peekTimer = Timer(duration, endPeek);
   }
 
   /// How long a Peek keeps the cards in their places, and the longer look on a giant board.
   static const peekTime = Duration(milliseconds: 2400);
   static const giantPeekTime = Duration(milliseconds: 3200);
 
+  /// Ends Peek or the preview now (owner, 2026-10-17: a tap while the picture shows): the cards
+  /// fly back to where they lie at once.
+  void endPeek() {
+    _peekTimer?.cancel();
+    if (_events.isClosed || !state.showingPicture) return;
+    state = state.copyWith(peeking: false, previewing: false);
+  }
+
+  /// The board is on screen: the preview's picture shows for a moment ([previewTime], shorter on
+  /// a giant board), then the cards are dealt. Called once the cards are drawn.
+  void startPreview() {
+    if (!state.previewing || (_peekTimer?.isActive ?? false)) return;
+    _peekTimer = Timer(args.spec.isGiant ? giantPreviewTime : previewTime, endPeek);
+  }
+
+  static const previewTime = Duration(milliseconds: 1300);
+  static const giantPreviewTime = Duration(milliseconds: 1000);
+
   /// Gather (giant boards): brings the cards that belong in [view] (board coordinates at the
   /// board's [size]) into it, trading places with cards that belong elsewhere (see
   /// [gatherInto]). Returns how many came in: 0 when there is nothing to gather (the button is
   /// off then, see [canGather]). Not a move; [undo] takes it back.
   int gather(Rect view, Size size) {
-    if (state.status != GameStatus.playing || state.peeking) return 0;
+    if (state.status != GameStatus.playing || state.showingPicture) return 0;
     final before = state.board;
     final after = gatherInto(before, view, size, twins: state.twins);
     if (after == null) return 0;
@@ -565,12 +599,15 @@ class GameController extends Notifier<GameState> {
     return out ?? keys;
   }
 
-  void restart() {
+  /// A new deal of the same board (Shuffle and restart, Replay); with [preview] it opens on the
+  /// picture, which shows at once (the board is on screen).
+  void restart({bool preview = false}) {
     _peekTimer?.cancel();
     final twins = state.twins;
     final board = Board.shuffled(args.spec, twins: twins);
-    state = _fresh(board, par: max(board.par, 1), twins: twins);
+    state = _fresh(board, par: max(board.par, 1), twins: twins, previewing: preview);
     _startTimer();
+    startPreview();
   }
 
   void clearSelection() {

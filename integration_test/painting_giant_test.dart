@@ -12,6 +12,7 @@ import 'package:carden/core/sfx.dart';
 import 'package:carden/data/local_store.dart';
 import 'package:carden/features/game/board_widget.dart';
 import 'package:carden/features/game/difficulty_screen.dart';
+import 'package:carden/features/game/game_screen.dart';
 import 'package:carden/game/board.dart';
 import 'package:carden/models/models.dart';
 import 'package:carden/router.dart';
@@ -44,6 +45,8 @@ String? _standIn;
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.fullyLive;
+  // Boards here are played the moment they show: no picture before the deal (GameScreen.dealPreview).
+  GameScreen.dealPreview = false;
 
   Future<void> shot(WidgetTester tester, String name) async {
     await settle(tester, 400);

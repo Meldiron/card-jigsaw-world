@@ -19,6 +19,7 @@ import 'package:carden/core/app_links.dart';
 import 'package:carden/core/sfx.dart';
 import 'package:carden/data/local_store.dart';
 import 'package:carden/features/game/board_widget.dart';
+import 'package:carden/features/game/game_screen.dart';
 import 'package:carden/features/links/deep_links.dart';
 import 'package:carden/router.dart';
 import 'package:carden/state/catalog.dart';
@@ -71,6 +72,8 @@ Future<String?> relayGet(String key) async => (await bot('/relay?key=pair-$key',
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.fullyLive;
+  // Boards here are played the moment they show: no picture before the deal (GameScreen.dealPreview).
+  GameScreen.dealPreview = false;
   final recorder = _Recorder();
   SharePlatform.instance = recorder;
 

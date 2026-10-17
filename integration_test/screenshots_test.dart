@@ -30,6 +30,8 @@ Future<void> settle(WidgetTester tester, [int ms = 1500]) async {
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.fullyLive;
+  // Boards here are played the moment they show: no picture before the deal (GameScreen.dealPreview).
+  GameScreen.dealPreview = false;
 
   Future<void> shot(WidgetTester tester, String name) async {
     await settle(tester, 400);
