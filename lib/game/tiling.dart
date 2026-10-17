@@ -34,6 +34,10 @@ abstract class Tiling {
   int classOf(int slot) => 0;
   int get classCount => 1;
 
+  /// Joined pairs every start shuffle of this board keeps, because some
+  /// edge pieces cannot all leave their neighbours (see [TriangleTiling]).
+  int get unavoidableJoins => 0;
+
   // ---- lattice -----------------------------------------------------------
 
   /// Lattice delta that takes [from] to [to], or null when no legal move
@@ -629,7 +633,11 @@ class _Topology {
 /// down, the left column pairs rows 1-2) or six and more; with four rows and
 /// an odd number of steps the right column would pair rows 0-1 and 2-3, so
 /// those halves are fused into two left-pointing triangles instead. Five
-/// rows never shuffle cleanly and are not offered.
+/// rows always keep one joined pair of halves on each side edge (of the two
+/// orders that move all three halves of a shape, each joins one pair), which
+/// only the 5x5 square board accepts ([unavoidableJoins]). Three rows hold a
+/// half of a shape no other piece has on each side edge, so it could only
+/// start in place: never offered.
 class TriangleTiling extends ClippedTiling {
   TriangleTiling(super.cols, super.rows);
   @override
@@ -644,6 +652,10 @@ class TriangleTiling extends ClippedTiling {
   static int countFor(int cols, int rows) => cols * rows - (fusesRightEdge(cols, rows) ? rows ~/ 2 : 0);
 
   bool get _fused => fusesRightEdge(cols, rows);
+
+  /// One joined pair of halves on each side edge of a five-row board.
+  @override
+  int get unavoidableJoins => rows == 5 ? 2 : 0;
 
   bool isUp(int slot) => (coords[slot].$1 + coords[slot].$2).isOdd;
 

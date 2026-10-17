@@ -88,7 +88,7 @@ class _BoardCard extends ConsumerWidget {
     final img = puzzle == null ? null : ref.watch(puzzleImageProvider(puzzle.imageUrl)).value;
     // The board this save was dealt on: settled by the picture's shape once it is decoded, as
     // the game does; until then the best guess from the piece count.
-    final spec = (img == null ? null : BoardSpec.fromSaved(mode, board.gridSize, img.width / img.height)) ?? BoardSpec.fromCells(mode, board.gridSize);
+    final spec = (img == null ? null : BoardSpec.fromSaved(mode, board.gridSize, img.width / img.height, layout: layout)) ?? BoardSpec.fromCells(mode, board.gridSize);
     final b = layout != null && layout.length == spec.cells ? Board(spec, layout) : null;
     final locked =
         b?.lockedCount ??
@@ -166,7 +166,7 @@ class _BoardCard extends ConsumerWidget {
             style: TextStyle(fontSize: TypeSize.footnote, fontWeight: FontWeight.w600, color: c.textPrimary),
           ),
           Text(
-            '${mode.label} ${spec.code}${board.painting ? ' · Painting' : ''}',
+            '${mode.label} ${spec.size}${board.painting ? ' · Painting' : ''}',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(fontSize: TypeSize.caption, color: c.textSecondary),

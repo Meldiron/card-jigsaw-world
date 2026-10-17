@@ -131,7 +131,8 @@ void main() {
           final b = Board.shuffled(spec, seed: seed);
           final why = '${spec.fullCode} seed $seed';
           expect(b.lockedCount, 0, reason: '$why: a piece starts in place');
-          expect(b.joinCount, 0, reason: '$why: a pair starts joined');
+          // Only the 5x5 triangle board keeps a joined pair of halves on each side edge (Tiling.unavoidableJoins).
+          expect(b.joinCount, lessThanOrEqualTo(spec.tiling.unavoidableJoins), reason: '$why: a pair starts joined');
           expect(Board.isValidLayout(spec, b.slots), isTrue, reason: '$why: every piece sits in a slot of its own shape');
         }
       }

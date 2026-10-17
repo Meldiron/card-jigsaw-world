@@ -37,8 +37,14 @@ class BoardSpec {
   /// Number of pieces.
   int get cells => Tiling.cellCount(mode, cols, rows);
 
-  /// Grid part only, e.g. `3x4`.
+  /// Grid part only, e.g. `3x4` (for triangles, pieces in a row x rows).
   String get code => '${cols}x$rows';
+
+  /// The size as players read it, columns x rows. A triangle column is one
+  /// up and one down triangle wide (two of [Tiling]'s half steps), so the 4x4
+  /// triangle board has nine pieces in a row (`9x4` in [code]); an old board
+  /// with an odd number of half steps counts the last half column as one.
+  String get size => mode == GameMode.triangles ? '${(cols) ~/ 2}x$rows' : code;
 
   /// Full code including the mode and the tier, e.g. `hexagons:5x7t3`.
   String get fullCode => BoardCode.encode(mode, cols, rows, tier: tier);
@@ -57,29 +63,40 @@ class BoardSpec {
   /// have no square board; they remain on boards saved before.
   static const squareTierOfSide = <int, int>{3: 0, 4: 2, 5: 4, 6: 6, 7: 7};
 
-  /// The sides each mode can deal square. Cards and squares deal every one.
-  /// A triangle strip of three or five rows and a honeycomb of an even number
-  /// of rows, or of three, cannot be shuffled without a piece in place or a
-  /// joined pair (see [TriangleTiling], [HexTiling]), so Triangles deal 4x4,
-  /// 6x6 and 7x7 and Hexagons 5x5 and 7x7. Seven across keeps cards about
-  /// 55 pt wide on a phone; bigger boards are giant boards.
+  /// The sides each mode can deal square: N columns and N rows ([squareDims]).
+  /// Cards and Squares deal every one. A size is left out only where some
+  /// piece would be one of a kind and so could only start in its own place:
+  /// Triangles have no 3x3 (three rows: each side edge holds one half
+  /// triangle of its shape), Hexagons no 3x3 (the middle row's two halves)
+  /// and no 4x4 or 6x6 (with an even number of rows the bottom corners are
+  /// one of a kind, and on 4x4 the halves of the second row too). The 5x5
+  /// triangle board starts with one joined pair of halves on each side edge,
+  /// the fewest five rows allow ([Tiling.unavoidableJoins]). Seven across
+  /// keeps cards about 55 pt wide on a phone; bigger boards are giant boards.
   static const squareSides = <GameMode, List<int>>{
     GameMode.cards: [3, 4, 5, 6, 7],
     GameMode.squares: [3, 4, 5, 6, 7],
-    GameMode.triangles: [4, 6, 7],
+    GameMode.triangles: [4, 5, 6, 7],
     GameMode.hexagons: [5, 7],
   };
 
   /// The square giant sizes (Large, Huge, Giant, Colossal) of each mode: the
-  /// square nearest each of [giantTargets] that the tiling can deal. Cards
+  /// side nearest each of [giantTargets] that the tiling can deal. Cards
   /// 10x10 to 17x17 (100 to 289 cards); the other shapes keep their bigger
   /// counts, above every normal board ([BoardLayouts.giantFloor]).
   static const giantSquareSides = <GameMode, List<int>>{
     GameMode.cards: [10, 12, 14, 17],
     GameMode.squares: [13, 15, 18, 22],
-    GameMode.triangles: [15, 18, 21, 26],
+    GameMode.triangles: [10, 13, 15, 18],
     GameMode.hexagons: [13, 15, 19, 23],
   };
+
+  /// Columns and rows of the N x N board of [mode] (as [Tiling] counts them).
+  /// A triangle column is one up and one down triangle, so a row of N
+  /// columns holds 2N + 1 pieces (2N - 1 whole triangles and a half at each
+  /// end) and the board is about as wide as it is tall; the others count
+  /// pieces.
+  static (int, int) squareDims(GameMode mode, int side) => mode == GameMode.triangles ? (2 * side + 1, side) : (side, side);
 
   /// Giant boards: the pictures of the Giant pack (`Pack.isGiant`) offer
   /// only these four sizes, tiers [firstGiantTier] and up, from about 100 to
@@ -137,7 +154,7 @@ class BoardSpec {
   static List<BoardSpec> squareTiers(GameMode mode) => _squares.putIfAbsent(
         mode,
         () => List.unmodifiable([
-          for (final n in squareSides[mode]!) BoardSpec(mode, n, n, labels[squareTierOfSide[n]!], tier: squareTierOfSide[n]!),
+          for (final n in squareSides[mode]!) BoardSpec(mode, squareDims(mode, n).$1, squareDims(mode, n).$2, labels[squareTierOfSide[n]!], tier: squareTierOfSide[n]!),
         ]),
       );
 
@@ -147,7 +164,9 @@ class BoardSpec {
   /// [firstGiantTier] to [firstGiantTier] + 3).
   static List<BoardSpec> squareGiantTiers(GameMode mode) => _giantSquares.putIfAbsent(mode, () {
         final sides = giantSquareSides[mode]!;
-        return List.unmodifiable([for (var i = 0; i < sides.length; i++) BoardSpec(mode, sides[i], sides[i], giantLabels[i], tier: firstGiantTier + i)]);
+        return List.unmodifiable([
+          for (var i = 0; i < sides.length; i++) BoardSpec(mode, squareDims(mode, sides[i]).$1, squareDims(mode, sides[i]).$2, giantLabels[i], tier: firstGiantTier + i),
+        ]);
       });
 
   static final _giantSquares = <GameMode, List<BoardSpec>>{};
@@ -231,11 +250,11 @@ class BoardSpec {
 
   /// Pieces a finished board of [cells] pieces in [mode] counts as where a
   /// quest names a size ("a 4x4 or bigger board"): a square board counts as
-  /// its side squared (the 4x4 triangle strip, 14 pieces, is a 4x4; the 7x7
+  /// its side squared (the 4x4 triangle board, 36 pieces, is a 4x4; the 7x7
   /// honeycomb, 52, a 7x7), any other board as its pieces.
   static int sizeCells(GameMode mode, int cells) {
     for (final t in [...squareTiers(mode), ...squareGiantTiers(mode)]) {
-      if (t.cells == cells) return t.cols * t.rows;
+      if (t.cells == cells) return t.rows * t.rows;
     }
     return cells;
   }
@@ -306,18 +325,23 @@ class BoardSpec {
   /// of [aspect]: a square board, else an Expand board, else a board of the
   /// ladder older builds dealt (their saves resume as they were, a 3x4 stays
   /// 3x4); null when no board of this picture has that many pieces (the save
-  /// cannot be resumed). A square board's piece count is never another
-  /// board's of the same picture (`test/square_boards_test.dart`), and the
-  /// normal and giant counts never overlap ([BoardLayouts.giantFloor]).
-  static BoardSpec? fromSaved(GameMode mode, int cells, double aspect) {
+  /// cannot be resumed). Where two boards of a picture have the same count
+  /// (the 4x4 triangle board and an old 6x6 strip, 36 each), the saved
+  /// [layout] names the one whose pieces it fits ([Board.isValidLayout];
+  /// `test/square_boards_test.dart`). The normal and giant counts never
+  /// overlap ([BoardLayouts.giantFloor]).
+  static BoardSpec? fromSaved(GameMode mode, int cells, double aspect, {List<int>? layout}) {
     final giant = cells >= BoardLayouts.giantFloor(mode);
     final candidates = giant
         ? [...squareGiantTiers(mode), ...giantTiers(mode, aspect)]
         : [...squareTiers(mode), ...expandTiers(mode, aspect), ...tiers(mode, aspect)];
+    BoardSpec? first;
     for (final t in candidates) {
-      if (t.cells == cells) return t;
+      if (t.cells != cells) continue;
+      if (layout == null || Board.isValidLayout(t, layout)) return t;
+      first ??= t;
     }
-    return null;
+    return layout == null ? first : null;
   }
 
   /// Best-effort recovery of a board from a saved cell count when the
@@ -417,18 +441,19 @@ class BoardLayouts {
   static final _candidates = <GameMode, List<(int, int)>>{};
 
   /// Sizes the Expand ladder of [mode] chooses from: the same shapes around
-  /// the square boards' piece counts.
+  /// the square boards' piece counts; triangle rows a whole number of
+  /// columns wide, so every size reads as columns x rows ([BoardSpec.size]).
   static List<(int, int)> _expandCandidates(GameMode mode) => _expandCands.putIfAbsent(mode, () {
         final square = BoardSpec.squareTiers(mode);
         final clipped = mode == GameMode.triangles || mode == GameMode.hexagons;
-        return _shaped(mode, square.first.cells * 0.6, square.last.cells * (clipped ? 1.45 : 1.3));
+        return _shaped(mode, square.first.cells * 0.6, square.last.cells * (clipped ? 1.45 : 1.3), wholeColumns: true);
       });
 
   static final _expandCands = <GameMode, List<(int, int)>>{};
 
   /// Normal-sized boards of [mode] with [lo] to [hi] pieces that suit a
   /// picture: portrait or square, sorted by piece count.
-  static List<(int, int)> _shaped(GameMode mode, double lo, double hi) {
+  static List<(int, int)> _shaped(GameMode mode, double lo, double hi, {bool wholeColumns = false}) {
     final out = <(int, int)>[];
     void add(int c, int r) {
       final cells = Tiling.cellCount(mode, c, r);
@@ -455,6 +480,7 @@ class BoardLayouts {
         for (var r = 4; r <= 12; r++) {
           if (r == 5) continue;
           for (var c = 4; c <= 18; c++) {
+            if (wholeColumns && (c - 1).isOdd) continue;
             add(c, r);
           }
         }
@@ -907,7 +933,9 @@ class Board {
   ///
   /// Random permutations are tried first; if none is clean, a derangement is
   /// repaired by targeted swaps until every join is broken. Only as a last
-  /// resort does the board keep a join. It never keeps a fixed point.
+  /// resort does the board keep a join: a tiling whose edge pieces cannot all
+  /// part (the five-row triangle board, [Tiling.unavoidableJoins]) keeps the
+  /// fewest it must. It never keeps a fixed point.
   factory Board.shuffled(BoardSpec spec, {int? seed}) {
     final rng = Random(seed);
     final tiling = spec.tiling;
@@ -929,7 +957,7 @@ class Board {
 
     for (var attempt = 0; attempt < 400; attempt++) {
       final perm = random();
-      if (_fixedPoints(perm) == 0 && _joins(tiling, perm) == 0) return Board(spec, perm);
+      if (_fixedPoints(perm) == 0 && _joins(tiling, perm) <= tiling.unavoidableJoins) return Board(spec, perm);
     }
     List<int>? best;
     var bestJoins = 1 << 30;
@@ -937,7 +965,7 @@ class Board {
       final perm = random();
       _derange(perm, classes, rng);
       final joins = _breakJoins(perm, tiling, classes, rng);
-      if (joins == 0) return Board(spec, perm);
+      if (joins <= tiling.unavoidableJoins) return Board(spec, perm);
       if (joins < bestJoins) {
         bestJoins = joins;
         best = perm;
@@ -993,7 +1021,7 @@ class Board {
     }
 
     var joins = _joins(tiling, perm);
-    for (var iter = 0; iter < 4000 && joins > 0; iter++) {
+    for (var iter = 0; iter < 4000 && joins > tiling.unavoidableJoins; iter++) {
       // Pick a random joined edge and one of its ends.
       int? x;
       var seen = 0;

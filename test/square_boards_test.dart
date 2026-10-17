@@ -18,11 +18,17 @@ void main() {
 
   group('square ladder', () {
     test('the same sides in every mode, as far as each tiling can deal them', () {
-      String codes(GameMode m) => BoardSpec.squareTiers(m).map((t) => '${t.code} ${t.label}').join(', ');
-      expect(codes(GameMode.cards), '3x3 Cozy, 4x4 Relaxed, 5x5 Tricky, 6x6 Expert, 7x7 Master');
-      expect(codes(GameMode.squares), '3x3 Cozy, 4x4 Relaxed, 5x5 Tricky, 6x6 Expert, 7x7 Master');
-      expect(codes(GameMode.triangles), '4x4 Relaxed, 6x6 Expert, 7x7 Master');
-      expect(codes(GameMode.hexagons), '5x5 Tricky, 7x7 Master');
+      String sizes(GameMode m) => BoardSpec.squareTiers(m).map((t) => '${t.size} ${t.label}').join(', ');
+      expect(sizes(GameMode.cards), '3x3 Cozy, 4x4 Relaxed, 5x5 Tricky, 6x6 Expert, 7x7 Master');
+      expect(sizes(GameMode.squares), '3x3 Cozy, 4x4 Relaxed, 5x5 Tricky, 6x6 Expert, 7x7 Master');
+      expect(sizes(GameMode.triangles), '4x4 Relaxed, 5x5 Tricky, 6x6 Expert, 7x7 Master');
+      expect(sizes(GameMode.hexagons), '5x5 Tricky, 7x7 Master');
+      // A triangle column is one up and one down triangle: 2N + 1 pieces in a row, about as wide as tall.
+      expect([for (final t in BoardSpec.squareTiers(GameMode.triangles)) t.code], ['9x4', '11x5', '13x6', '15x7']);
+      expect([for (final t in BoardSpec.squareTiers(GameMode.triangles)) t.cells], [36, 55, 78, 105]);
+      for (final t in BoardSpec.squareTiers(GameMode.triangles)) {
+        expect(t.tiling.naturalAspect, closeTo(2 / 1.7320508, 0.001), reason: '${t.size} is about as wide as it is tall');
+      }
       // The Cards entries are the square steps of the old fixed ladder (and 7x7 for 6x8).
       expect(BoardSpec.squareTiers(GameMode.cards), GridSpec.square);
       for (final t in GridSpec.square.take(4)) {
@@ -44,10 +50,10 @@ void main() {
     });
 
     test('a size a mode lacks gives the nearest one, a tie the bigger', () {
-      expect(BoardSpec.forPicture(GameMode.triangles, 4, 0.75).code, '6x6', reason: 'no 5x5 strip of triangles');
-      expect(BoardSpec.forPicture(GameMode.triangles, 0, 0.75).code, '4x4');
-      expect(BoardSpec.forPicture(GameMode.hexagons, 0, 0.75).code, '5x5');
-      expect(BoardSpec.forPicture(GameMode.hexagons, 6, 0.75).code, '7x7');
+      expect(BoardSpec.forPicture(GameMode.triangles, 4, 0.75).size, '5x5');
+      expect(BoardSpec.forPicture(GameMode.triangles, 0, 0.75).size, '4x4', reason: 'no 3x3 triangle board');
+      expect(BoardSpec.forPicture(GameMode.hexagons, 0, 0.75).size, '5x5');
+      expect(BoardSpec.forPicture(GameMode.hexagons, 6, 0.75).size, '7x7');
       // The guided start opens one step up from the first board's nine cards: Easy gives 4x4.
       expect(BoardSpec.forPicture(GameMode.cards, 1, 0.75).code, '4x4');
       // Medium and Hard, remembered from before, give Tricky and Expert.
@@ -77,12 +83,13 @@ void main() {
     });
 
     test('quests count a square board as its side squared', () {
-      expect(BoardSpec.sizeCells(GameMode.triangles, 14), 16, reason: 'the 4x4 strip of triangles is a 4x4');
+      expect(BoardSpec.sizeCells(GameMode.triangles, 36), 16, reason: 'the 4x4 triangle board (36 pieces) is a 4x4');
+      expect(BoardSpec.sizeCells(GameMode.triangles, 105), 49);
       expect(BoardSpec.sizeCells(GameMode.hexagons, 27), 25);
       expect(BoardSpec.sizeCells(GameMode.hexagons, 52), 49);
       expect(BoardSpec.sizeCells(GameMode.cards, 20), 20, reason: 'other boards count their pieces');
       PuzzleProgress row(String mode, int cells) => PuzzleProgress.fromRow('r', {'puzzleId': 'p', 'gridSize': cells, 'mode': mode, 'completed': true});
-      expect(Goals.sizeOf(row('triangles', 14)), greaterThanOrEqualTo(GridSpec.byCode('4x4')!.cells));
+      expect(Goals.sizeOf(row('triangles', 36)), GridSpec.byCode('4x4')!.cells);
       expect(Goals.sizeOf(row('hexagons', 52)), greaterThanOrEqualTo(GridSpec.tiers.last.cells), reason: 'the 7x7 honeycomb is a Master board');
       expect(GridSpec.atLeast(20).code, '5x5', reason: 'an old "4x5 or bigger" quest opens 5x5');
       expect(GridSpec.atLeast(16).code, '4x4');
@@ -102,7 +109,7 @@ void main() {
       expect(BoardSpec.offersExpand(GameMode.cards, 1.0), isTrue);
       expect(BoardSpec.offersExpand(GameMode.cards, 9 / 16), isTrue);
       expect(BoardSpec.offersExpand(GameMode.triangles, 3 / 4), isTrue);
-      expect(BoardSpec.offersExpand(GameMode.triangles, 1 / 2), isFalse, reason: 'square triangle strips are tall');
+      expect(BoardSpec.offersExpand(GameMode.triangles, 1.0), isFalse, reason: 'square triangle boards suit a square picture');
       expect(BoardSpec.offersExpand(GameMode.hexagons, 3 / 4), isTrue);
       expect(BoardSpec.offersExpand(GameMode.hexagons, 4 / 3), isFalse, reason: 'square honeycombs are wide');
       expect(BoardSpec.offersExpand(GameMode.cards, double.nan), isFalse);
@@ -140,16 +147,26 @@ void main() {
   });
 
   group('saves', () {
-    test('a piece count names one board of a picture: square, Expand or old, so saves resume exactly', () {
+    /// A shuffled layout of [a] is never a layout of [b] (their pieces' shapes tell them apart).
+    void apart(BoardSpec a, BoardSpec b, String why) {
+      for (var seed = 0; seed < 4; seed++) {
+        expect(Board.isValidLayout(b, Board.shuffled(a, seed: seed).slots), isFalse, reason: '$why: a ${a.fullCode} save would also fit ${b.fullCode}');
+      }
+    }
+
+    test('a save resumes on exactly the board it was dealt on: square, Expand or old', () {
       for (final mode in GameMode.values) {
         final square = BoardSpec.squareTiers(mode);
         for (final a in aspects) {
           final all = [...square, ...BoardSpec.expandTiers(mode, a), ...BoardSpec.tiers(mode, a)];
           for (final b in all) {
+            // Two boards of one picture with the same count (the 4x4 triangle board and an old
+            // 6x6 strip, 36 each) are told apart by the saved layout.
             for (final other in all) {
-              if (other.cells == b.cells) expect(other, b, reason: '${mode.code} on $a: ${b.code} and ${other.code} both have ${b.cells} pieces');
+              if (other.cells == b.cells && other != b) apart(b, other, '${mode.code} on $a');
             }
-            final back = BoardSpec.fromSaved(mode, b.cells, a);
+            final layout = Board.shuffled(b, seed: 1).slots;
+            final back = BoardSpec.fromSaved(mode, b.cells, a, layout: layout);
             expect(back, b, reason: '${mode.code} ${b.code} (${b.cells}) on $a resumes as it was dealt');
             expect(back!.expand, b.expand && !square.contains(b), reason: '${mode.code} ${b.code} on $a');
           }
@@ -158,26 +175,33 @@ void main() {
     });
 
     test('an older build reading a square board resumes that very board or starts fresh', () {
-      // Older builds find a save's board by its piece count on the old ladder ([BoardSpec.tiers]).
+      // Older builds find a save's board by its piece count on the old ladder ([BoardSpec.tiers])
+      // and start fresh when the saved layout does not fit it.
       for (final mode in GameMode.values) {
         for (final a in aspects) {
           final old = BoardSpec.tiers(mode, a);
-          for (final t in BoardSpec.squareTiers(mode)) {
+          for (final t in [...BoardSpec.squareTiers(mode), ...BoardSpec.expandTiers(mode, a)]) {
             final hit = old.where((o) => o.cells == t.cells).firstOrNull;
-            if (hit != null) expect(hit, t, reason: '${mode.code} ${t.code} on $a');
-          }
-          for (final t in BoardSpec.expandTiers(mode, a)) {
-            final hit = old.where((o) => o.cells == t.cells).firstOrNull;
-            if (hit != null) expect(hit, t, reason: '${mode.code} Expand ${t.code} on $a');
+            if (hit != null && hit != t) apart(t, hit, '${mode.code} ${t.size} on $a');
           }
         }
         for (final a in [BoardSpec.referenceAspect, ...BoardSpec.commonAspects]) {
           final old = BoardSpec.giantTiers(mode, a);
           for (final t in BoardSpec.squareGiantTiers(mode)) {
             final hit = old.where((o) => o.cells == t.cells).firstOrNull;
-            if (hit != null) expect(hit, t, reason: '${mode.code} ${t.code} on $a');
+            if (hit != null && hit != t) apart(t, hit, '${mode.code} ${t.size} on $a');
           }
         }
+      }
+    });
+
+    test('the 5x5 triangle board keeps one joined pair of halves on each side edge, and no card in place', () {
+      final t = BoardSpec.squareTiers(GameMode.triangles).firstWhere((t) => t.size == '5x5');
+      expect(t.tiling.unavoidableJoins, 2);
+      for (var seed = 0; seed < 12; seed++) {
+        final b = Board.shuffled(t, seed: seed);
+        expect(b.lockedCount, 0);
+        expect(b.joinCount, 2);
       }
     });
 

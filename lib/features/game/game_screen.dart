@@ -233,7 +233,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     if (next.isGiant != giant) next = BoardSpec.forPicture(next.mode, giant ? BoardSpec.firstGiantTier : 2, aspect, expand: _spec.expand);
     var resume = false;
     if (current.layout != null) {
-      final saved = BoardSpec.fromSaved(_spec.mode, _spec.cells, aspect);
+      final saved = BoardSpec.fromSaved(_spec.mode, _spec.cells, aspect, layout: current.layout);
       if (saved != null && Board.isValidLayout(saved, current.layout)) {
         // A square board saved with Expand on keeps Expand for the next picture.
         next = saved.withExpand(saved.expand || _spec.expand);
@@ -1078,7 +1078,7 @@ class _Hud extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body, letterSpacing: -0.2)),
-                          Text('${b.spec.mode.label} · ${b.spec.code} · ${b.spec.label}${painting ? ' · Painting' : ''}', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontSize: TypeSize.caption)),
+                          Text('${b.spec.mode.label} · ${b.spec.size} · ${b.spec.label}${painting ? ' · Painting' : ''}', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(color: c.textSecondary, fontSize: TypeSize.caption)),
                         ],
                       ),
                     ),

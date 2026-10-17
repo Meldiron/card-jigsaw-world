@@ -131,8 +131,8 @@ void main() {
       await settle(tester);
       // The first sizes (the row scrolls sideways).
       for (final t in BoardSpec.squareTiers(mode).take(3)) {
-        expect(find.text(t.code), findsWidgets, reason: '${mode.code} ${t.label} shows ${t.code}');
-        expect(t.cols, t.rows);
+        expect(find.text(t.size), findsWidgets, reason: '${mode.code} ${t.label} shows ${t.size}');
+        expect(t.size, '${t.rows}x${t.rows}');
       }
       // No picture yet: no Expand.
       expect(find.byKey(const ValueKey('expand-option')), findsNothing);
@@ -166,14 +166,14 @@ void main() {
     await tester.tap(find.text('Triangles'));
     await settle(tester);
     final relaxed = BoardSpec.squareTiers(GameMode.triangles)[0];
-    expect(relaxed.code, '4x4');
-    await tester.tap(find.text(relaxed.code).first);
+    expect(relaxed.size, '4x4');
+    await tester.tap(find.text(relaxed.size).first);
     await settle(tester);
     await tester.tap(find.byKey(const ValueKey('painting-option')));
     await settle(tester);
     await tester.tap(find.text('Play'));
     await settle(tester);
-    expect(find.text('game /game/p1/triangles-4x4t2?painting=1'), findsOneWidget);
+    expect(find.text('game /game/p1/triangles-9x4t2?painting=1'), findsOneWidget);
     final last = LastBoard.fromJson(store.getJson('lastBoard'));
     expect(last, const LastBoard(mode: 'triangles', tier: 2, painting: true));
   });
@@ -263,7 +263,7 @@ void main() {
     expect(find.byKey(const ValueKey('expand-option')), findsOneWidget);
     expect(expandOn(tester), isFalse);
     for (final t in BoardSpec.squareTiers(GameMode.squares).take(3)) {
-      expect(find.text(t.code), findsOneWidget);
+      expect(find.text(t.size), findsOneWidget);
     }
     expect(xpOf(BoardSpec.squareTiers(GameMode.squares)[1]), findsOneWidget);
     await dump(tester, key, 'difficulty_tall_square');
@@ -273,7 +273,7 @@ void main() {
     expect(expandOn(tester), isTrue);
     final expand = BoardSpec.expandTiers(GameMode.squares, aspect);
     for (final t in expand.take(3)) {
-      expect(find.text(t.code), findsOneWidget, reason: '${t.label} becomes ${t.code}');
+      expect(find.text(t.size), findsOneWidget, reason: '${t.label} becomes ${t.size}');
     }
     final relaxed = expand.firstWhere((t) => t.tier == 2);
     expect(xpOf(relaxed), findsOneWidget, reason: 'Relaxed stays chosen');

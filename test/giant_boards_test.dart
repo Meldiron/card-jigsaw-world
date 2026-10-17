@@ -12,7 +12,7 @@ void main() {
         final targets = BoardSpec.giantTargets[mode]!;
         for (var i = 0; i < giant.length; i++) {
           final g = giant[i];
-          expect(g.cols, g.rows, reason: '$mode ${g.code} is square');
+          expect(g.size, '${g.rows}x${g.rows}', reason: '$mode ${g.code} is square');
           expect(g.tier, BoardSpec.firstGiantTier + i);
           expect(g.label, BoardSpec.giantLabels[i]);
           expect(g.isGiant, isTrue);

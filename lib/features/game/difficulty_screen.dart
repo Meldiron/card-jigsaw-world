@@ -284,7 +284,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
                 Expanded(
                   child: SheetHeader(
                     title: 'Unlock ${t.label} now',
-                    subtitle: '${t.code} ${_mode.label.toLowerCase()} boards open at level $level. Unlock them early and keep the bigger rewards.',
+                    subtitle: '${t.size} ${_mode.label.toLowerCase()} boards open at level $level. Unlock them early and keep the bigger rewards.',
                   ),
                 ),
               ],
@@ -344,7 +344,7 @@ class _DifficultyScreenState extends ConsumerState<DifficultyScreen> {
     BoardSpec? savedSpec;
     if (savedRow != null) {
       final m = GameMode.fromCode(savedRow.mode);
-      savedSpec = BoardSpec.fromSaved(m, savedRow.gridSize, imageAspect) ?? (known ? null : BoardSpec.fromCells(m, savedRow.gridSize));
+      savedSpec = BoardSpec.fromSaved(m, savedRow.gridSize, imageAspect, layout: known ? savedRow.layout : null) ?? (known ? null : BoardSpec.fromCells(m, savedRow.gridSize));
       if (savedSpec != null && known && !Board.isValidLayout(savedSpec, savedRow.layout)) savedSpec = null;
     }
     final saved = savedSpec != null ? savedRow : null;
@@ -1155,7 +1155,7 @@ class _BoardChip extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(spec.code, style: TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body, letterSpacing: -0.2, color: fg)),
+            Text(spec.size, style: TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.body, letterSpacing: -0.2, color: fg)),
             Text(spec.label, style: TextStyle(fontSize: TypeSize.micro, fontWeight: FontWeight.w500, color: selected ? context.accent : c.textTertiary)),
             const SizedBox(height: 6),
             SizedBox(
@@ -1299,7 +1299,7 @@ class _InProgressCard extends StatelessWidget {
                     const Text('Board in progress', style: TextStyle(fontWeight: FontWeight.w700, fontSize: TypeSize.callout)),
                     const SizedBox(height: 2),
                     Text(
-                      '${spec.mode.label} · ${spec.code} ${spec.label}${painting ? ' · Painting' : ''}',
+                      '${spec.mode.label} · ${spec.size} ${spec.label}${painting ? ' · Painting' : ''}',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(fontSize: TypeSize.footnote, color: c.textSecondary),
