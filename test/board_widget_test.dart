@@ -386,23 +386,24 @@ void main() {
     }
   });
 
-  testWidgets('cut gallery: every mode on square, 3:4 and 9:16 pictures', (tester) async {
+  testWidgets('cut gallery: every mode on square, 3:4 and 9:16 pictures, square and with Expand', (tester) async {
     const area = Size(360, 460);
     for (final (pname, pw, ph) in [('square', 900, 900), ('3x4', 900, 1200), ('9x16', 900, 1600)]) {
       final image = picture(pw, ph);
       final aspect = pw / ph;
       for (final mode in GameMode.values) {
-        for (final tier in [0, 2, 5]) {
-          final spec = BoardSpec.forPicture(mode, tier, aspect);
+        for (final (tier, expand) in [(0, false), (2, false), (7, false), (0, true), (2, true), (7, true)]) {
+          final spec = BoardSpec.forPicture(mode, tier, aspect, expand: expand);
           final size = spec.tiling.fit(area, aspect);
           final w = size.width.roundToDouble(), h = size.height.roundToDouble();
+          final kind = expand ? 'expand' : 'square';
           final shuffled = Board.shuffled(spec, seed: 11);
           final img = await render(tester, shuffled, width: w, height: h, image: image);
-          await dump(tester, 'cut_${mode.code}_${pname}_t${tier}_${spec.code}_shuffled', img);
+          await dump(tester, 'cut_${mode.code}_${pname}_${kind}_t${tier}_${spec.code}_shuffled', img);
           if (tier == 2) {
             final solved = Board(spec, List.generate(spec.cells, (i) => i));
             final img2 = await render(tester, solved, width: w, height: h, image: image);
-            await dump(tester, 'cut_${mode.code}_${pname}_t${tier}_${spec.code}_solved', img2);
+            await dump(tester, 'cut_${mode.code}_${pname}_${kind}_t${tier}_${spec.code}_solved', img2);
             // Solved, every piece fills its cell: the picture reaches every
             // edge of the board, half pieces included (no board background).
             final data = await bytes(tester, img2);
@@ -423,7 +424,8 @@ void main() {
     const area = Size(360, 460);
     final image = picture(900, 1200);
     for (final mode in GameMode.values) {
-      final spec = BoardSpec.forPicture(mode, 2, 0.75);
+      // Boards of the picture-shaped ladder: big enough for a cluster away from the edges in every mode.
+      final spec = BoardSpec.tiers(mode, 0.75)[2];
       final tiling = spec.tiling;
       // A whole piece away from the edges.
       final whole = switch (mode) {

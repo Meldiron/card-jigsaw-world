@@ -15,7 +15,7 @@ class LevelReward {
   final int coins;
   final int tickets;
   final int hints;
-  /// Board tier unlocked at this level (index into GridSpec.tiers), if any.
+  /// Square board size opened at this level (one of GridSpec.square), if any.
   final GridSpec? tier;
 
   /// Shapes and options that open at this level ([Unlocks.levels]).
@@ -59,7 +59,8 @@ class LevelRewards {
       coins: 100 + 25 * level,
       tickets: level % 3 == 0 ? 1 : 0,
       hints: level % 2 == 0 ? 2 : 0,
-      tier: tierIdx > 0 ? GridSpec.tiers[tierIdx] : null,
+      // Levels 2 and 5 open Medium and Hard, which have no square board (old saves only).
+      tier: tierIdx > 0 ? GridSpec.square.where((t) => t.tier == tierIdx).firstOrNull : null,
       unlocks: Unlocks.atLevel(level),
     );
   }
@@ -307,13 +308,18 @@ class Goals {
   /// Par quests count boards of Relaxed (4x4) and up: on the two smallest boards par comes
   /// without trying.
   static final _parTier = GridSpec.tiers[2];
-  static bool _atParBig(PuzzleProgress p) => _atPar(p) && p.gridSize >= _parTier.cells;
+  static bool _atParBig(PuzzleProgress p) => _atPar(p) && sizeOf(p) >= _parTier.cells;
+
+  /// The size a finished board counts as where a quest names one ("a 4x4 or bigger board"): a
+  /// square board as its side squared (the 4x4 triangle strip has 14 pieces), any other as its
+  /// pieces ([BoardSpec.sizeCells]).
+  static int sizeOf(PuzzleProgress p) => BoardSpec.sizeCells(GameMode.fromCode(p.mode), p.gridSize);
 
   /// Daily quests. Besides "Solve 3 puzzles" (60 coins), each quest comes from a different lane,
   /// so one ordinary board never finishes two of them:
   ///
-  /// * **How you play** (80): a board in a shape the player does not usually play, a board two
-  ///   sizes above their usual one, or a Painting board. Rotates by day.
+  /// * **How you play** (80): a board in a shape the player does not usually play, a board a
+  ///   size above their usual ones, or a Painting board. Rotates by day.
   /// * **Skill** (100): finish a 4x4 or bigger board at par, lock 5 cards in one move (8 for a
   ///   player whose boards are mostly 25 cards or more, where 5 comes by itself), or beat the
   ///   player's second-best time on the Cards size they play most.
@@ -345,9 +351,9 @@ class Goals {
           if (m == null) return null;
           return Goal(key: key, title: 'Finish a board in ${m.label}', progress: count((p) => p.mode == m.code), target: 1, coins: coins, icon: 'puzzle', mode: m, vipOnly: vip);
         case 'size':
-          final t = GridSpec.tiers.where((t) => t.code == arg).firstOrNull;
+          final t = GridSpec.byCode(arg);
           if (t == null) return null;
-          return Goal(key: key, title: 'Finish a ${t.code} or bigger board', progress: count((p) => p.gridSize >= t.cells), target: 1, coins: coins, icon: 'bigBoard', minCells: t.cells, vipOnly: vip);
+          return Goal(key: key, title: 'Finish a ${t.code} or bigger board', progress: count((p) => sizeOf(p) >= t.cells), target: 1, coins: coins, icon: 'bigBoard', minCells: t.cells, vipOnly: vip);
         case 'paint':
           return Goal(key: key, title: 'Solve a Painting board', progress: count((p) => p.painting), target: 1, coins: coins, icon: 'painting', painting: true, vipOnly: vip);
         case 'par':
@@ -418,9 +424,9 @@ class Goals {
               icon: 'puzzle',
               vipOnly: vip);
         case 'size':
-          final t = GridSpec.tiers.where((t) => t.code == arg).firstOrNull;
+          final t = GridSpec.byCode(arg);
           if (t == null) return null;
-          return Goal(key: key, title: 'Finish 3 boards of ${t.code} or bigger', progress: count((p) => p.gridSize >= t.cells), target: 3, coins: 0, tickets: tickets, icon: 'bigBoard', minCells: t.cells, vipOnly: vip);
+          return Goal(key: key, title: 'Finish 3 boards of ${t.code} or bigger', progress: count((p) => sizeOf(p) >= t.cells), target: 3, coins: 0, tickets: tickets, icon: 'bigBoard', minCells: t.cells, vipOnly: vip);
         case 'paint':
           return Goal(key: key, title: 'Solve 3 Painting boards', progress: count((p) => p.painting), target: 3, coins: 0, tickets: tickets, icon: 'painting', painting: true, vipOnly: vip);
         case 'par':
@@ -466,7 +472,7 @@ class Goals {
   static ({GridSpec tier, int seconds})? _fast(String arg) {
     final parts = arg.split('-');
     if (parts.length != 2) return null;
-    final tier = GridSpec.tiers.where((t) => t.code == parts[0]).firstOrNull;
+    final tier = GridSpec.byCode(parts[0]);
     final seconds = int.tryParse(parts[1]);
     return tier == null || seconds == null ? null : (tier: tier, seconds: seconds);
   }
@@ -541,7 +547,7 @@ class PlayHabits {
       byMode[m] = (byMode[m] ?? 0) + 1;
     }
     final mode = byMode.entries.reduce((a, b) => b.value > a.value ? b : a).key;
-    final sizes = [for (final p in last) p.gridSize]..sort();
+    final sizes = [for (final p in last) Goals.sizeOf(p)]..sort();
     // The time to beat: second-best time on the Cards size most recent Cards boards had.
     ({GridSpec tier, int seconds})? timed;
     final cardSizes = <int, int>{};
@@ -550,7 +556,7 @@ class PlayHabits {
     }
     if (cardSizes.isNotEmpty) {
       final cells = cardSizes.entries.reduce((a, b) => b.value > a.value ? b : a).key;
-      final tier = GridSpec.tiers.where((t) => t.cells == cells).firstOrNull;
+      final tier = GridSpec.byCells(cells);
       final times = [
         for (final p in done)
           if (GameMode.fromCode(p.mode) == GameMode.cards && p.gridSize == cells && (p.bestSeconds ?? p.elapsedSeconds) > 0) p.bestSeconds ?? p.elapsedSeconds,
@@ -589,18 +595,16 @@ class _Lanes {
     return list;
   }
 
-  /// A size the player does not reach as it is: two above the middle board and one above their
-  /// bigger boards, as far as the level reaches; null when that is not bigger than those.
+  /// A size the player does not reach as it is: the square size above their bigger boards, as
+  /// far as the level reaches; null when that is not bigger than those.
   GridSpec? get stepUp {
-    int tierOf(int cells) {
-      var t = 0;
-      for (var i = 0; i < GridSpec.tiers.length; i++) {
-        if (GridSpec.tiers[i].cells <= cells) t = i;
-      }
-      return t;
+    const sizes = GridSpec.square;
+    var at = 0, top = 0;
+    for (var i = 0; i < sizes.length; i++) {
+      if (sizes[i].cells <= h.upper) at = i;
+      if (sizes[i].tier <= LevelRewards.maxTierIndex(level)) top = i;
     }
-
-    final t = GridSpec.tiers[min(max(tierOf(h.cells) + 2, tierOf(h.upper) + 1), LevelRewards.maxTierIndex(level))];
+    final t = sizes[min(at + 1, top)];
     return t.cells > h.upper ? t : null;
   }
 

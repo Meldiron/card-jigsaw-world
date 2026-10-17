@@ -16,7 +16,7 @@ enum CardStyle { classic, minimal }
 /// giant ladder (BoardSpec.firstGiantTier and up), each kept for its own kind of picture.
 @immutable
 class LastBoard {
-  const LastBoard({required this.mode, required this.tier, this.giantTier, this.painting = false});
+  const LastBoard({required this.mode, required this.tier, this.giantTier, this.painting = false, this.expand = false});
 
   /// Mode code (`cards`, `squares`, `triangles`, `hexagons`).
   final String mode;
@@ -24,18 +24,23 @@ class LastBoard {
   final int? giantTier;
   final bool painting;
 
+  /// Expand was on: pictures that offer it are dealt with the columns and rows that suit them
+  /// (`BoardSpec.ladder`). Off until the player turns it on (square boards).
+  final bool expand;
+
   static LastBoard? fromJson(Map<String, dynamic>? j) {
     if (j == null || j['mode'] is! String || j['tier'] is! int) return null;
-    return LastBoard(mode: j['mode'] as String, tier: j['tier'] as int, giantTier: j['giantTier'] as int?, painting: j['painting'] == true);
+    return LastBoard(mode: j['mode'] as String, tier: j['tier'] as int, giantTier: j['giantTier'] as int?, painting: j['painting'] == true, expand: j['expand'] == true);
   }
 
-  Map<String, dynamic> toJson() => {'mode': mode, 'tier': tier, 'giantTier': ?giantTier, 'painting': painting};
+  Map<String, dynamic> toJson() => {'mode': mode, 'tier': tier, 'giantTier': ?giantTier, 'painting': painting, 'expand': expand};
 
   @override
-  bool operator ==(Object other) => other is LastBoard && other.mode == mode && other.tier == tier && other.giantTier == giantTier && other.painting == painting;
+  bool operator ==(Object other) =>
+      other is LastBoard && other.mode == mode && other.tier == tier && other.giantTier == giantTier && other.painting == painting && other.expand == expand;
 
   @override
-  int get hashCode => Object.hash(mode, tier, giantTier, painting);
+  int get hashCode => Object.hash(mode, tier, giantTier, painting, expand);
 }
 
 /// Settings > Accessibility: text size. [standard] follows the iPhone's text size within the

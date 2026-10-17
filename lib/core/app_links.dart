@@ -103,10 +103,10 @@ class AppLink {
       case 'pack' || 'packs' when rest.length == 1 && id(0) != null:
         return page('/library/pack/${id(0)}');
       case 'play' || 'picture' || 'puzzle' when rest.length == 1 && id(0) != null:
-        return overlay('/play/${id(0)}', only(const ['grid', 'mode', 'painting']));
+        return overlay('/play/${id(0)}', only(const ['grid', 'mode', 'painting', 'expand']));
       // A board link opens the picture with that board chosen, so its locks still apply.
       case 'game' when rest.length == 2 && id(0) != null && id(1) != null:
-        return overlay('/play/${id(0)}', {'grid': id(1)!, ...only(const ['painting'])});
+        return overlay('/play/${id(0)}', {'grid': id(1)!, ...only(const ['painting', 'expand'])});
       case 'events' || 'quests' when rest.isEmpty:
         return page('/events');
       case 'social' || 'leaderboard' || 'league' when rest.isEmpty:

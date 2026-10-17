@@ -356,7 +356,7 @@ class _GoalRow extends ConsumerWidget {
       }
       final p = pickRandomPlayable(ref);
       if (p != null) {
-        final grid = goal.minCells > 0 ? GridSpec.fromCells(goal.minCells).code : '';
+        final grid = goal.minCells > 0 ? GridSpec.atLeast(goal.minCells).code : '';
         context.push('/play/${p.id}?grid=$grid${goal.mode != null ? '&mode=${goal.mode!.code}' : ''}${goal.painting ? '&painting=1' : ''}');
       } else {
         showToast(context, 'Unlock a pack to start playing', icon: AppIcons.lock);

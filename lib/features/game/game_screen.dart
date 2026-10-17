@@ -41,7 +41,7 @@ import 'giant_board.dart';
 
 /// The play screen: HUD, board, booster bar, pause and completion overlays.
 class GameScreen extends ConsumerStatefulWidget {
-  const GameScreen({super.key, required this.puzzleId, required this.gridCode, this.painting = false, this.first = false});
+  const GameScreen({super.key, required this.puzzleId, required this.gridCode, this.painting = false, this.expand = false, this.first = false});
   final String puzzleId;
   final String gridCode;
 
@@ -52,6 +52,9 @@ class GameScreen extends ConsumerStatefulWidget {
   /// A new board starts in Painting (a saved board resumes the way it was saved).
   final bool painting;
 
+  /// Chosen with Expand (`?expand=1`): the next picture is dealt with Expand too.
+  final bool expand;
+
   @override
   ConsumerState<GameScreen> createState() => _GameScreenState();
 }
@@ -59,7 +62,7 @@ class GameScreen extends ConsumerStatefulWidget {
 class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObserver, TickerProviderStateMixin {
   /// The board being played. It starts from the route code and is settled
   /// for the picture once the picture is decoded (see [_fitToPicture]).
-  late BoardSpec _spec = BoardSpec.fromCode(widget.gridCode);
+  late BoardSpec _spec = BoardSpec.fromCode(widget.gridCode, expand: widget.expand);
 
   /// Painting on this board: the saved board's choice when one resumes, else the route's.
   late bool _painting = widget.painting;
@@ -201,12 +204,13 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     );
   }
 
-  /// Settles the board for the decoded picture, once. Layouts follow the
-  /// picture's proportions, so a board picked on the difficulty screen
-  /// already matches (the same decode), while the next picture of a pack or
-  /// a board resumed from Home gets the size its tier has for this picture.
-  /// A save resumes only when this picture still deals its board; older
-  /// saves (a layout that changed) start fresh.
+  /// Settles the board for the decoded picture, once. A square board stays
+  /// as it is; an Expand board follows the picture's proportions, so a board
+  /// picked on the difficulty screen already matches (the same decode), while
+  /// the next picture of a pack gets the size its tier has for this picture.
+  /// A save resumes on the board it was dealt on (found by its piece count:
+  /// square, Expand or a board of an older build); a save no board of this
+  /// picture matches (a layout that changed) starts fresh.
   void _fitToPicture(ui.Image image, {required bool giant}) {
     if (_fitted) return;
     _fitted = true;
@@ -215,12 +219,13 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
     var next = _spec.fitTo(aspect);
     // A Giant pack picture deals only giant sizes and other pictures only
     // normal ones, whatever size the route named (a pack's next picture).
-    if (next.isGiant != giant) next = BoardSpec.forPicture(next.mode, giant ? BoardSpec.firstGiantTier : 2, aspect);
+    if (next.isGiant != giant) next = BoardSpec.forPicture(next.mode, giant ? BoardSpec.firstGiantTier : 2, aspect, expand: _spec.expand);
     var resume = false;
     if (current.layout != null) {
       final saved = BoardSpec.fromSaved(_spec.mode, _spec.cells, aspect);
       if (saved != null && Board.isValidLayout(saved, current.layout)) {
-        next = saved;
+        // A square board saved with Expand on keeps Expand for the next picture.
+        next = saved.withExpand(saved.expand || _spec.expand);
         resume = true;
       }
     }
@@ -942,8 +947,9 @@ class _GameScreenState extends ConsumerState<GameScreen> with WidgetsBindingObse
                 if (!context.mounted) return;
                 if (offer != null && leaveGameForCreative(context, ref, offer)) return;
                 if (next != null) {
-                  // Same mode, tier and Painting; the next picture settles its own size.
-                  context.pushReplacement('/game/${next.id}/${BoardCode.toPath(_spec.fullCode)}${_painting ? '?painting=1' : ''}');
+                  // Same mode, tier, Painting and Expand; the next picture settles its own size.
+                  final query = [if (_painting) 'painting=1', if (_spec.expand) 'expand=1'];
+                  context.pushReplacement('/game/${next.id}/${BoardCode.toPath(_spec.fullCode)}${query.isEmpty ? '' : '?${query.join('&')}'}');
                 } else {
                   context.pop();
                 }
