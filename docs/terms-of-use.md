@@ -42,7 +42,7 @@ Carden is made and published by Matej Baco, Slovakia ("we", "us"). Contact us at
 - VIP is an auto-renewing subscription, monthly or yearly. It renews automatically unless you cancel at least 24 hours before the end of the current period. Manage or cancel it in your App Store account settings; deleting the app or your Carden account does not cancel it.
 - A plan with a free trial starts with the trial; if you do not cancel at least 24 hours before the trial ends, the paid subscription begins. Apple decides who is eligible for a trial.
 - VIP is shared with your family through Apple's Family Sharing, for up to six Carden accounts per subscription. What VIP includes is listed in the Store.
-- Restore purchases (Settings > Account) brings back what the App Store has on record for your Apple ID.
+- Bundles are added to the Carden account you are playing on when you buy them. Restore purchases (Settings > Account) brings back a VIP subscription bought with your Apple ID.
 
 ## The Lucky Wheel
 

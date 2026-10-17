@@ -63,6 +63,10 @@ guided again.
    (`firstPackDoneProvider`): a player who plays all of it with Next puzzle before ever reaching Home
    has one picture counted and would otherwise be left with only Unlock anyway (owner, 2026-10-17).
 
+   Store > Earn for free > **Play a puzzle** closes the Store and starts Quick play once Quick play
+   is open; before that it opens the picture Home suggests (the next step), or Home itself when the
+   first board is under way and Continue leads back to it (`playFromStore`, owner, 2026-10-17).
+
    Nothing is announced when something opens: no "Just opened" card, and no level intro sheets
    ("Squares are open") for guided players (`pendingUnlockIntroProvider`).
 7. **Quests and achievements count only after they open** (`countsFromProvider`): pictures finished
