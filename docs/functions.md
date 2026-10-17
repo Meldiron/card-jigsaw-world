@@ -59,7 +59,7 @@ picks and drags": made on `/coop/create` and `/coop/join`, deleted on leave, rem
 account deletion and by the sweep; `delete-account` holds the same account code, redeploying it is
 optional since builds up to 124 never get live rows), `6ad3e5a1ef69e35d38a6` (2026-10-17: Apple's
 notifications applied once, `/coop/cleanup` and `/admin/sweep` refuse calls without a user),
-`6ad3eca5f014b66715bb` (2026-10-17: invite pages and cards, below).
+`6ad3f4f8d10fa43ea7be` (2026-10-18: invite pages and cards, below; first live as `6ad3eb9d92b6534bf740` on 2026-10-17).
 
 ### Invite pages
 
