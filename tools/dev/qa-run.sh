@@ -13,12 +13,13 @@
 # The run id reaches the app as CJW_QA_RUN and is stored on the guest, so the purge deletes only
 # this run's players and runs in other sessions keep theirs. The purge runs once on every way out
 # that can be caught: a normal end, Ctrl-C (INT), TERM, HUP (the terminal or the parent went away)
-# and any other exit of this script. Only a hard kill (KILL) skips it; leftovers:
+# and any other exit of this script; a signal to this script stops flutter too. Only a hard kill
+# (KILL) skips it; leftovers:
 #   python3 tools/dev/purge_test_players.py purge --apply
 set -uo pipefail
 cd "$(dirname "$0")/../.."
 export PATH="$HOME/flutter/bin:$PATH"
-if [ $# -lt 1 ]; then sed -n '2,17p' "$0"; exit 2; fi
+if [ $# -lt 1 ]; then sed -n '2,18p' "$0"; exit 2; fi
 cmd=$1; shift
 case "$cmd" in
   run|drive|test) ;;
@@ -59,15 +60,33 @@ purge() {
   fi
 }
 
-# Every way out that can be caught purges (once). A signal arriving while flutter runs is handled
-# when flutter has ended (it gets the same signal from the terminal or the parent's process group).
+# A signal stops the run: flutter gets a moment to end on its own (Ctrl-C and a closed terminal
+# reach it too), then TERM (a signal sent to this script alone, say by a parent stopping it, does
+# not), and the players are purged once flutter is gone.
+child=
+stop() {
+  if [ -n "$child" ] && kill -0 "$child" 2>/dev/null; then
+    for _ in 1 2 3 4; do
+      kill -0 "$child" 2>/dev/null || break
+      sleep 0.5
+    done
+    kill -TERM "$child" 2>/dev/null
+    wait "$child" 2>/dev/null
+  fi
+  purge
+  exit "$1"
+}
 trap 'purge' EXIT
-trap 'purge; exit 129' HUP
-trap 'purge; exit 130' INT
-trap 'purge; exit 143' TERM
+trap 'stop 129' HUP
+trap 'stop 130' INT
+trap 'stop 143' TERM
 
 say "$RUN_ID (silent, test player, purged afterwards)"
-flutter "$cmd" --dart-define=CJW_MUTE=true --dart-define=CJW_QA=true --dart-define=CJW_QA_RUN="$RUN_ID" "$@"
+# In the background so a signal is handled at once (bash runs traps only between commands); stdin
+# stays the terminal's, for flutter run's keys.
+flutter "$cmd" --dart-define=CJW_MUTE=true --dart-define=CJW_QA=true --dart-define=CJW_QA_RUN="$RUN_ID" "$@" <&0 &
+child=$!
+wait "$child"
 code=$?
 purge
 exit $code

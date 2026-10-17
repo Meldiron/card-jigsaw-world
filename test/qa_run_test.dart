@@ -1,6 +1,7 @@
 // tools/dev/qa-run.sh purges the run's test players once, however the run ends: a normal end, a
-// failing run, Ctrl-C, TERM, HUP (the terminal or the parent went away). Runs the real script in a
-// scratch folder with a fake flutter and a fake purge tool, so nothing reaches the backend.
+// failing run, Ctrl-C, TERM, HUP (the terminal or the parent went away), a signal to the script
+// alone (flutter is stopped too). Runs the real script in a scratch folder with a fake flutter and a
+// fake purge tool, so nothing reaches the backend.
 @TestOn('mac-os || linux')
 library;
 
@@ -27,8 +28,13 @@ void main() {
       Process.runSync('chmod', ['+x', path]);
     }
 
-    // The fake flutter runs for FAKE_SECONDS and ends with FAKE_CODE.
-    script('${root.path}/home/flutter/bin/flutter', r'sleep "${FAKE_SECONDS:-0}"; exit "${FAKE_CODE:-0}"');
+    // The fake flutter runs for FAKE_SECONDS and ends with FAKE_CODE; TERM or HUP ends it at once.
+    script('${root.path}/home/flutter/bin/flutter', r'''
+sleep "${FAKE_SECONDS:-0}" >/dev/null 2>&1 &
+s=$!
+trap 'kill $s 2>/dev/null; exit 143' TERM HUP
+wait $s
+exit "${FAKE_CODE:-0}"''');
     // The fake purge tool (run as `.venv/bin/python tools/dev/purge_test_players.py ...`) writes a
     // line, notes its arguments (the purge) and takes a moment, as the real one does. Writing to a
     // closed pipe would end it before the purge.
@@ -79,6 +85,17 @@ void main() {
       expect(purgeCalls(), hasLength(1), reason: 'the signal trap and the EXIT trap together purge once');
     });
   }
+
+  test('stopped from outside (TERM to the script alone), a long run ends at once and is purged', () async {
+    final p = await start(seconds: 30);
+    await Future<void>.delayed(const Duration(milliseconds: 600));
+    final t0 = DateTime.now();
+    p.kill(ProcessSignal.sigterm);
+    final (code, _) = await finish(p);
+    expect(code, 143);
+    expect(DateTime.now().difference(t0).inSeconds, lessThan(10), reason: 'flutter is stopped, not waited for');
+    expect(purgeCalls(), hasLength(1));
+  });
 
   test('QA_KEEP keeps the players', () async {
     final (code, out) = await finish(await start(env: {'QA_KEEP': '1'}));
