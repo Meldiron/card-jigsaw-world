@@ -32,4 +32,4 @@ VIP
 VIP opens every pack, including past months, adds a daily and a weekly quest, gives 500 bonus coins every week, allows unlimited photos in My Puzzles and turns off the game's own promotions. VIP can be shared with your family through Family Sharing. Monthly and yearly plans both start with a 7-day free trial. Payment is charged to your Apple ID account at confirmation of purchase or when the trial ends. The subscription renews automatically unless it is cancelled at least 24 hours before the end of the current period. Manage or cancel it in your App Store account settings.
 
 Privacy policy: https://github.com/Meldiron/carden/blob/main/docs/privacy-policy.md
-Terms of use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Terms of use: https://github.com/Meldiron/carden/blob/main/docs/terms-of-use.md

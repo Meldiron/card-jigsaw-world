@@ -3,10 +3,11 @@ import 'package:url_launcher/url_launcher.dart';
 
 /// Pages the app links to. The privacy policy is the repository's `docs/privacy-policy.md` (the same
 /// address as the App Store listing, `store/metadata/en-US/privacy_url.txt`); the terms of use are
-/// Apple's standard licence agreement, as the listing says.
+/// its `docs/terms-of-use.md` (Apple's standard licence agreement, which applies, plus Carden's own
+/// terms), the address the listing's description gives.
 abstract final class AppLinks {
   static final privacyPolicy = Uri.parse('https://github.com/Meldiron/carden/blob/main/docs/privacy-policy.md');
-  static final termsOfUse = Uri.parse('https://www.apple.com/legal/internet-services/itunes/dev/stdeula/');
+  static final termsOfUse = Uri.parse('https://github.com/Meldiron/carden/blob/main/docs/terms-of-use.md');
 
   /// The App Store's subscription management (opens the system sheet on iPhone).
   static final manageSubscriptions = Uri.parse('https://apps.apple.com/account/subscriptions');
