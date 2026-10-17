@@ -52,7 +52,7 @@ DAILY = "18_daily_month_grid"
 EVENT_CARD = (60, 1608, 1260, 2532)
 PODIUM = (60, 720, 1260, 1200)
 STREAK_CARD = (60, 1485, 1260, 1997)  # Home's streak card in 31_home_streak
-# Play together (store capture scene with scripted players, Bora Bora lagoon in Cards 4x4): a shared
+# Play together (store capture scene with scripted players, Bora Bora lagoon in Cards 7x7 Master): a shared
 # board mid-build with the players chip in the top bar, Leo's purple "L" on the cards he moved and
 # Ava's orange "A" on the card she holds; and the player list (avatars in their colour rings, Host /
 # You, Here, Remove). Boxes in capture px, checked on a coordinate grid of the 2026-10-17 captures.
@@ -100,7 +100,7 @@ def slides() -> list[dict]:
         #    top left, so slide 4 (top right) answers it.
         {"key": "together", "head": "Play together\nwith friends", "text": ("top", 200, "left"),
          "phones": [{"capture": COOP_BOARD, "x": 360, "y": 600,
-                     "out": [{"crop": (COOP_BOARD, COOP_HELD), "x": -320, "y": 640, "w": 380, "rot": -6, "radius": 6},
+                     "out": [{"crop": (COOP_BOARD, COOP_HELD), "x": -325, "y": 560, "w": 330, "rot": -6, "radius": 6},
                              {"crop": (COOP_PLAYERS, COOP_LIST), "x": -300, "y": 1700, "w": 940,
                               "radius": round(COOP_LIST_RADIUS * 940 / 1200)}]}]},
         # 4. Why you come back: the calendar pushed left, today's picture and the streak from Home
