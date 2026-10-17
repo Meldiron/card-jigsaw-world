@@ -4,15 +4,16 @@
 //
 // Routes (the caller is x-appwrite-user-id, set by Appwrite; bodies are JSON):
 //   POST /purchase/verify          purchase.js      a StoreKit transaction (was verify-purchase /verify)
-//   POST /purchase/notifications   purchase.js      App Store Server Notifications V2 (Apple still sends
-//                                                   them to verify-purchase; this route is for a later move)
+//   POST /purchase/notifications   purchase.js      App Store Server Notifications V2, for Apple without a
+//                                                   session at https://cjw-api.fra.appwrite.run once execute
+//                                                   is `any` (docs/functions.md; until then verify-purchase)
 //   POST /account/delete           account.js       Account > Delete account (was delete-account /delete)
 //   POST /code/redeem              code.js          a pack code, on the web (was redeem-code /redeem)
 //   POST /coop/<action>            coop/game.js     Play together: create, join, leave, remove, end, next
 //                                                   (was coop-game /<action>)
 //   POST /gift/send                gift/send.js     a friend gift (was send-gift /send)
-//   POST /coop/cleanup             coop/cleanup.js  the hourly co-op cleanup on demand; only for a caller
-//                                                   who is not a player (the owner's CLI, a server key)
+//   POST /coop/cleanup             coop/cleanup.js  the hourly co-op cleanup on demand; only for a console
+//                                                   user (the owner's CLI), never a player or a call without a user
 //   POST /admin/sweep              sweep/run.js     the integrity sweep on demand, same callers:
 //                                                   { dryRun = true, full, qaOnly }
 //   GET  /health                   { ok, environment, maxPlayers, appleSignIn }
@@ -113,11 +114,12 @@ async function event({ req, res, log }) {
   return res.json({ ok: true, ...result });
 }
 
-/// Whether the caller is not one of the game's players: no user (a server key) or a console user
-/// (the owner's CLI, whose id Appwrite passes too but is no user of this project).
+/// Whether the caller is not one of the game's players but a console user (the owner's CLI, whose id
+/// Appwrite passes too but is no user of this project). A call without a user is refused: once anyone
+/// may execute `api` (execute `any`, for Apple's notifications at its domain), it may come from anywhere.
 async function notAPlayer(req) {
   const userId = req.headers['x-appwrite-user-id'];
-  if (!userId) return true;
+  if (!userId) return false;
   const { Client, Users } = await import('node-appwrite');
   const client = new Client()
     .setEndpoint(process.env.APPWRITE_FUNCTION_API_ENDPOINT)

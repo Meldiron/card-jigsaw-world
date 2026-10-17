@@ -4,6 +4,8 @@
 // - Account deletion: src/account.js and functions/delete-account (what is deleted).
 // - Friend gifts: src/gift/ and functions/send-gift (the daily limit, notifications, the name filter;
 //   otherwise a client could call send-gift directly and skip them).
+// - Purchases and Apple's notifications: src/purchase.js and functions/verify-purchase (grants, the
+//   checks, the record that applies a notification once).
 //
 //   cd functions/api && node --test test/twins.test.mjs
 import { test } from 'node:test';
@@ -27,6 +29,18 @@ test('api and delete-account delete the same things the same way', () => {
   const api = code(read('../src/account.js'), '/// Whether the Sign in with Apple key');
   const old = code(read('../../delete-account/src/main.js'), 'export default');
   assert.ok(api.includes('PLAYER_TABLES') && api.includes('async function handleDelete'));
+  assert.equal(api, old);
+});
+
+// verify-purchase serves /verify for builds up to 124 and /notifications for notifications Apple sends
+// again to its old address; both functions record notifications in the same table, so one delivered to
+// each is applied once.
+test('api and verify-purchase verify, grant and apply notifications the same way', () => {
+  const api = code(read('../src/purchase.js'), '/// The Apple environment in use');
+  const old = code(read('../../verify-purchase/src/main.js'), 'export default');
+  for (const part of ['const GRANTS', 'async function handleVerify', 'async function handleNotification', 'async function claimNotification', "const NOTIFICATIONS = 'apple_notifications'", 'async function profilesFor']) {
+    assert.ok(api.includes(part), part);
+  }
   assert.equal(api, old);
 });
 

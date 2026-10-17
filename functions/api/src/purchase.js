@@ -1,13 +1,15 @@
 // Verify App Store purchases and apply grants server-side (moved from the verify-purchase function,
-// which stays deployed for builds up to 124 and for Apple's notifications; docs/functions.md).
+// which stays deployed for builds up to 124; docs/functions.md).
 //
 // Routes (function `api`, see main.js):
 //   POST /purchase/verify         { jws, productId }   called by the app after StoreKit reports a purchase
-//   POST /purchase/notifications  { signedPayload }    App Store Server Notifications V2 (Apple still
-//                                                      sends them to verify-purchase's domain)
+//   POST /purchase/notifications  { signedPayload }    App Store Server Notifications V2, for Apple at
+//                                                      https://cjw-api.fra.appwrite.run/purchase/notifications
+//                                                      once execute is `any` (until then verify-purchase)
 //   GET  /health                                       includes `environment`: the APPLE_ENVIRONMENT in use
 //
-// GRANTS below and in functions/verify-purchase/src/main.js must stay the same (test/economy_test.dart).
+// Everything from the imports to environmentName below is the same in
+// functions/verify-purchase/src/main.js (test/twins.test.mjs; GRANTS also test/economy_test.dart).
 //
 // Every transaction is verified with Apple's App Store Server Library
 // (certificate chain back to Apple Root CA G3), checked against the bundle id,
@@ -265,6 +267,75 @@ async function handleVerify(req, res, log, error) {
 const RENEW_TYPES = new Set(['DID_RENEW', 'DID_RECOVER', 'SUBSCRIBED', 'DID_CHANGE_RENEWAL_STATUS', 'OFFER_REDEEMED', 'RENEWAL_EXTENDED', 'RENEWAL_EXTENSION', 'REFUND_REVERSED']);
 const END_TYPES = new Set(['EXPIRED', 'REFUND', 'REVOKE', 'GRACE_PERIOD_EXPIRED']);
 
+// Every notification is applied once. Its notificationUUID is the id of its row in the server-only
+// table `apple_notifications`, created (claimed) before anything changes, as a purchase claims its
+// transaction: Apple sends a notification again when it did not get a 200 (after 1, 12, 24, 48 and
+// 72 hours), and a second delivery of one it did apply answers 200 without applying it again. A claim
+// still `pending` after STALE_CLAIM_MS belongs to a call that died half way and is taken over. The row
+// also records what Apple sent, what it changed and which function took it (`via`); no transaction id
+// or player, so nothing in it outlives an account deletion (docs/privacy-policy.md).
+const NOTIFICATIONS = 'apple_notifications';
+const STALE_CLAIM_MS = 10 * 60 * 1000;
+const ROW_ID = /^[a-zA-Z0-9][a-zA-Z0-9._-]{0,35}$/;
+
+/// Claims [payload]'s row: `{ id }` to apply it, `{ id, duplicate }` when it was taken already, `{ id:
+/// null }` for a notification without a usable UUID (applied without a record).
+async function claimNotification(db, payload, log) {
+  const id = payload.notificationUUID;
+  if (!id || !ROW_ID.test(id)) {
+    log(`notification without a usable UUID (${id}): applied without a record`);
+    return { id: null };
+  }
+  const claimedAt = new Date().toISOString();
+  try {
+    await db.createRow({
+      databaseId: DB,
+      tableId: NOTIFICATIONS,
+      rowId: id,
+      data: {
+        type: payload.notificationType ?? null,
+        subtype: payload.subtype ?? null,
+        environment: payload.data?.environment ?? null,
+        signedAt: iso(payload.signedDate),
+        claimedAt,
+        result: 'pending',
+        via: process.env.APPWRITE_FUNCTION_ID ?? null,
+      },
+    });
+    return { id };
+  } catch (e) {
+    if (e?.code !== 409) throw e;
+  }
+  const row = await db.getRow({ databaseId: DB, tableId: NOTIFICATIONS, rowId: id });
+  const age = Date.now() - Date.parse(row.claimedAt ?? row.$createdAt);
+  if (row.result === 'pending' && age > STALE_CLAIM_MS) {
+    log(`notification ${id}: its claim was left pending ${Math.round(age / 60000)} min ago; applying it now`);
+    await db.updateRow({ databaseId: DB, tableId: NOTIFICATIONS, rowId: id, data: { claimedAt, via: process.env.APPWRITE_FUNCTION_ID ?? null } });
+    return { id };
+  }
+  return { id, duplicate: row.result ?? 'pending' };
+}
+
+/// Writes what applying the notification did onto its row. Bookkeeping only: Apple gets its 200 anyway.
+async function settleNotification(db, claim, record, error) {
+  if (!claim.id) return;
+  try {
+    await db.updateRow({ databaseId: DB, tableId: NOTIFICATIONS, rowId: claim.id, data: record });
+  } catch (e) {
+    error(`notification ${claim.id}: record not updated: ${e}`);
+  }
+}
+
+/// Frees the claim of a notification that failed half way, so Apple's next try applies it.
+async function releaseNotification(db, claim, error) {
+  if (!claim.id) return;
+  try {
+    await db.deleteRow({ databaseId: DB, tableId: NOTIFICATIONS, rowId: claim.id });
+  } catch (e) {
+    error(`notification ${claim.id}: could not free the claim after a failure: ${e}`);
+  }
+}
+
 async function handleNotification(req, res, log, error) {
   let body;
   try { body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.bodyJson ?? req.body ?? {}); } catch { body = {}; }
@@ -276,11 +347,30 @@ async function handleNotification(req, res, log, error) {
     error(`notification verification failed: ${e}`);
     return res.json({ ok: false }, 401);
   }
+  log(`notification ${payload.notificationType} ${payload.subtype ?? ''} ${payload.notificationUUID ?? ''}`);
+  const db = tables(req);
+  const claim = await claimNotification(db, payload, log);
+  if (claim.duplicate) {
+    log(`notification ${claim.id} was taken already (${claim.duplicate}); not applied again`);
+    return res.json({ ok: true, alreadyApplied: true });
+  }
+  let outcome;
+  try {
+    outcome = await applyNotification(db, payload, log, error);
+  } catch (e) {
+    await releaseNotification(db, claim, error);
+    throw e;
+  }
+  await settleNotification(db, claim, outcome.record, error);
+  return res.json(outcome.answer);
+}
+
+/// What a verified notification changes: the answer for Apple and the record for its row.
+async function applyNotification(db, payload, log, error) {
   const type = payload.notificationType;
-  log(`notification ${type} ${payload.subtype ?? ''}`);
-  if (type === 'TEST') return res.json({ ok: true });
+  if (type === 'TEST') return { answer: { ok: true }, record: { result: 'test' } };
   const data = payload.data ?? {};
-  if (!data.signedTransactionInfo) return res.json({ ok: true, ignored: true });
+  if (!data.signedTransactionInfo) return { answer: { ok: true, ignored: true }, record: { result: 'ignored' } };
 
   const v = verifier(payload.data?.environment === 'Sandbox' ? Environment.SANDBOX : ENVIRONMENT);
   const tx = await v.verifyAndDecodeTransaction(data.signedTransactionInfo);
@@ -290,11 +380,10 @@ async function handleNotification(req, res, log, error) {
   }
   const originalId = tx.originalTransactionId ?? tx.transactionId;
   const ownership = ownershipOf(tx);
-  const db = tables(req);
   const profileIds = await profilesFor(db, tx, originalId, ownership);
   if (profileIds.length === 0) {
     log(`no profile for ${ownership} transaction ${tx.transactionId} (original ${originalId})`);
-    return res.json({ ok: true, unmatched: true });
+    return { answer: { ok: true, unmatched: true }, record: { result: 'unmatched', profiles: 0 } };
   }
   const patch = {};
   if (RENEW_TYPES.has(type)) {
@@ -320,7 +409,8 @@ async function handleNotification(req, res, log, error) {
       log(`profile ${id}: ${JSON.stringify(patch)} (${ownership})`);
     }
   }
-  return res.json({ ok: true, profiles: profileIds.length });
+  const result = Object.keys(patch).length > 0 ? 'applied' : 'nothing';
+  return { answer: { ok: true, profiles: profileIds.length }, record: { result, profiles: profileIds.length } };
 }
 
 /// The profiles a notification applies to. A family member's notification
