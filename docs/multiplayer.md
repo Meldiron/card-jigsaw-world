@@ -498,6 +498,13 @@ the two equal.
 - `functions/api`: `npm test` (co-op rules in `test/coop-rules.test.mjs`, invite pages and cards in
   `test/invite.test.mjs`); live, every co-op route and the invite page as Messages, WhatsApp, Facebook
   and Safari read it: `node tools/dev/api_check.mjs`.
+- Invite links on the app: `integration_test/invite_link_test.dart` (with `node tools/dev/coop_bot.mjs &`):
+  a fresh install gets `https://join.carden.page/<code>` the way iOS hands over a universal link and
+  joins the bot's game. `coop_host_test.dart` checks the shared text ends with that link. Passed on
+  2026-10-18 (iPhone 17 Pro simulator). On the simulator, `xcrun simctl openurl` of the link opens
+  Safari (a development build is not given the domain), where the page shows; its Open in Carden asks
+  "Open in Carden?", which no tool here can tap, and an unanswered prompt blocks the screen until the
+  simulator is restarted.
 - Live: `node tools/dev/coop_bot.mjs &` then `tools/dev/qa-run.sh drive
   --driver=test_driver/integration_test.dart --target=integration_test/coop_live_test.dart -d <sim>`:
   a fresh install joins the bot's game from an invite, moves go both ways, presence, a toast, the player
