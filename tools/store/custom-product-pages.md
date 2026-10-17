@@ -57,17 +57,18 @@ The first three slides carry each page: they are what search results and ads sho
 the default set's look (`tools/store/compose_glass.py`): glass panes, one phone size, SF Pro Rounded
 headlines, light app on light slides and the dark finale. Every slide shows the real app, with no VIP talk and no AI
 pictures (the owner's rules for the default set, `.claude/skills/store-screenshots/SKILL.md`). Slides 4 to 6
-reuse slides of the default set (`{"default": N}`).
+reuse slides of the default set by their key in `slides()` (`{"default": "daily"}`), so a new slide in the default
+set does not shift them.
 
 | Page (slug) | Audience | Slides 1-3 | Deep link | Keywords to take over |
 | --- | --- | --- | --- | --- |
-| Calm and cozy (`calm`) | Relaxing, cozy, zen players | A calm puzzle for quiet moments / Help when you want it / Bring the colour back | none (Home) | relax, cozy, zen, casual |
+| Calm and cozy (`calm`) | Relaxing, cozy, zen players | A calm puzzle for quiet moments / Help when you want it / Bring the colour back | none (Home) | relax, cozy, zen |
 | Art and museum paintings (`art`) | Art lovers, museum visitors | Museum paintings, card by card / Monet, Van Gogh, Hiroshige and more / A new picture every day | `/library/pack/pack-impressionists` (a free starter pack) | art, museum, painting |
-| Nature and animals (`nature`) | Wildlife, nature, photography | Wildlife and wild places / Swap cards. Reveal the picture. / Quiet places around the world | `/library/pack/pack-butterflies` (free, the pack on slide 1) | nature, travel |
-| Giant puzzles (`giant`) | Experienced jigsaw players | Giant boards of hundreds of cards / Pinch to zoom, follow the map / One picture, four ways | `/library?filter=giant` | none fits yet (suggest "large" or "hard" in the next keyword revision) |
+| Nature and animals (`nature`) | Wildlife, nature, photography | Wildlife and wild places / Swap cards. Reveal the picture. / Quiet places around the world | `/library/pack/pack-butterflies` (free, the pack on slide 1) | nature |
+| Giant puzzles (`giant`) | Experienced jigsaw players | Giant boards of hundreds of cards / Pinch to zoom, follow the map / One picture, four ways | `/library?filter=giant` | large (added to the keyword field in 2.0.0) |
 | Daily puzzle (`daily`) | Daily-ritual players, re-engagement | A new picture every day / Keep your streak going / Every month back to 2023 | `/daily` | daily |
 | Your own photos (`photos`) | Photo, pet and family puzzles; gift season | Puzzle your own photos / Only you can see your photos / One picture, four ways | `/my-puzzles` | family |
-| Four shapes (`shapes`) | Hexagon, mosaic, tile puzzle fans | One picture, four ways to cut it / Six sides to join on / Bring the colour back | none (shapes open by level) | hexagon, mosaic, tiles, swap |
+| Four shapes (`shapes`) | Hexagon, mosaic, tile puzzle fans | One picture, four ways to cut it / Six sides to join on / Bring the colour back | none (shapes open by level) | tiles, swap |
 | Winter holidays (`winter`) | Seasonal: 1 December to early January | Winter in pictures / Swap cards. Reveal the picture. / Quests and world-day events | `/events` | none (seasonal, for ads and links) |
 
 Each JSON also holds the promotional text (all under 170 characters), the audience, the story, search terms

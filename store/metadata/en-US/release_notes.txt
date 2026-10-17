@@ -2,44 +2,42 @@ Version 2.0.0
 
 Card Jigsaw World is now Carden, your calm picture puzzle, with a new icon: a lotus in coloured glass. Your progress, coins and packs stay as they are.
 
+Play together
+- Play together in a board's pause menu shares a link. Up to five people play the same picture live, in the app or in a browser, each in their own colour. The host can remove a player or end the game, and picks the next picture for everyone.
+- Friend gifts: once a day, send each friend 1 ticket or 150 coins from their page. It waits in their Inbox for 24 hours, with a notification on iPhone if they allow it.
+
 A calmer start
-- New players begin with a first picture right after the welcome, and a simple Home. The Library, daily puzzle, daily gift, Lucky Wheel, Quests and the rest open as you solve pictures, or right away with Unlock anyway.
-- Inbox in the Social tab: messages from Carden, sometimes with a gift.
+- New players begin with a first picture right after the welcome, and a simple Home. The Library, daily puzzle, Quests and the rest open as you solve pictures, or right away with Unlock anyway.
+- Social > Inbox: messages from Carden, sometimes with a gift.
 
 New ways to play
+- Square boards: every size is as many cards across as down, from 3x3 to 7x7. Expand cuts the whole picture in its own shape instead.
 - Painting: cards start in black and white and get their colour back as they lock. Pays 25% more.
-- Giant boards of 100 to 300 cards, with pinch to zoom, an overview map that shows where a tapped card belongs, Gather with Undo, and a board that opens where you left it.
-- Shuffle (free) deals the loose cards again, Magic places a card and its neighbours, and a group you push moves aside whole.
-- Peek costs 10 coins: every card flies to its place for a moment, then back.
-- Five Giant packs of detailed pictures made for the biggest boards: Colourful Houses, Painted Paradises, Market Stalls, Curiosity Shops and Treasure Trove.
-- Shapes and options open as you level up: Squares, Triangles, Hexagons, Painting, then giant boards, each with a short intro.
+- Giant boards of hundreds of cards, with pinch to zoom, an overview map that shows where a tapped card belongs, Gather with Undo, and Giant packs of detailed pictures made for them.
+- Shuffle (free) replaces Undo, Magic places a card and its neighbours, Peek (10 coins) flies every card to its place for a moment, and a group you push moves aside whole.
+- Squares, Triangles, Hexagons, Painting and giant boards open as you level up, each with a short intro.
 
 Quests and rewards
-- Quests that do not overlap: besides Solve 3 puzzles, each one asks for something different, like a shape you rarely play, a bigger board, Painting, a board at par, a time to beat or cards locked in one move.
-- Claim all on the Quests tab, a dot on the tab when a reward is ready, and the completion screen tells you when a quest is done.
-- Lucky Wheel: some coin prizes are now Peeks and Magic, kept for your next games and used before coins. See odds lists every prize and its chance.
-- VIP members get their 500 bonus coins automatically once a week, and VIP can be shared with your family through Family Sharing.
+- Quests that do not overlap, each asking for something different. Swap a quest you do not fancy for 1 ticket, and Claim all collects every reward.
+- Lucky Wheel: a ×5 spin for 5 tickets pays its prize five times. Some prizes are Peeks and Magic, and See odds lists every prize and its chance.
+- The piggy bank grows to 1,000 coins with upgrades, and booster bundles in the Store hold Peeks, Hints and Magic.
+- Level-ups pay up to 300 coins, 500 every 10th level. VIP members get their 500 bonus coins automatically each week, and VIP can be shared through Family Sharing.
 
 Home and Library
-- Every new picture opens on the mode, board size and Painting you chose last; Quick play too, and Another picture draws a new one.
+- Every new picture opens on the mode, board size and Painting you chose last; Quick play too.
 - Once today's daily puzzle is solved, Home shows tomorrow's as a blurred preview.
 - Library search finds pictures by title, new packs carry a New badge, and there are Finished, New and Hide finished filters.
-- Home shows your packs in progress, packs missing stars and finished packs.
 
-Reminders and account
-- Daily reminders: turn them on in Settings and choose the time. None on days you have already claimed your daily gift.
-- New events: a reminder the evening before a world-day event opens, if you have not played for a while.
-- Delete your account in the app: Profile > Settings > Manage account > Delete account.
-- Report or block a player from their page; blocked players leave your leaderboard.
-- Settings: Rate Carden and the real app version. Dark and tinted Home Screen icons on iOS 18.
-- Links to packs, pictures, player profiles and the store open the matching screen; a link to play.carden.page opens the app when it is installed.
-- Player names are checked for offensive words.
+Settings and account
+- Daily reminders at a time you choose, and a note the evening before a world-day event if you have been away. Both are off until you turn them on.
 - Settings > Accessibility: text size up to 200%, Reduce motion, Increase contrast and Differentiate without colour.
+- Settings > Privacy > Share usage data: usage data goes only to our own servers, and you can turn it off.
+- Delete your account in the app: Profile > Settings > Manage account > Delete account.
+- Report or block a player from their page; blocked players leave your leaderboard and cannot join your games. Player names are checked for offensive words.
+- Links to play.carden.page open the matching screen in the app. Dark and tinted Home Screen icons on iOS 18. Terms of use have their own page.
 
 Pictures and sync
-- New Illustration packs: Big Buck Bunny, Fantasy Worlds, Pantry Shelves, Tinker's Workshop, Garden Plots and House and Home.
-- Every picture is served from our own servers, and the catalogue is rebuilt: no people, no repeats, portrait or square only, at least 20 pictures per pack, new AI and Abstract categories.
-- One save on every device: progress from the iPhone and the web site adds up, play made offline is kept, and records only improve.
-- The Social tab shows one leaderboard, ranked by total XP; it and My Puzzles load more as you scroll.
-- My Puzzles photos are private to your account. Free players keep up to 5 photos; VIP has no limit.
+- A rebuilt catalogue served from our own servers: no people, no repeats, at least 20 pictures per pack, new Illustration, AI and Abstract packs.
+- One save on every device: progress from the iPhone and the web adds up, play made offline is kept, and records only improve.
+- One leaderboard, ranked by total XP; it and My Puzzles load more as you scroll. My Puzzles photos are private to your account; free players keep up to 5.
 - Finishing a puzzle pays fewer coins. Six starter packs, one per category, are free; the other library packs cost coins, and any pack you have already played stays open.

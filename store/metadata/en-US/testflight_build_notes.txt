@@ -1,6 +1,7 @@
 What is new since the last build:
-- A calmer start for new players: straight into a first picture after the welcome, then a simple Home. The Library, daily puzzle, daily gift, Lucky Wheel, Quests, achievements, piggy bank, live events and Social open as you solve pictures (3 to 50); locked tabs say how many pictures are left, and Unlock anyway opens them early.
-- Social > Inbox: messages from Carden, some with a gift to claim.
-- Profile has no More section (Settings is the gear at the top; Account is in Settings), and the daily gift's button says Close.
+- Play together: in a board's pause menu, Play together shares a link. Up to five people play the same board live, in the app or in a browser, each in their own colour. The players button at the top lists everyone; the host can remove a player or end the game.
+- Friend gifts: once a day, send a friend 1 ticket or 150 coins from their page. It arrives in their Inbox with a notification on iPhone and waits 24 hours. Settings > Gifts from friends turns the notifications off.
+- Square boards from 3x3 to 7x7 in every shape (Expand plays the whole picture in its own shape), Shuffle instead of Undo, Magic places a card and its neighbours, and a group you push moves aside whole.
+- Lucky Wheel ×5 spins, booster bundles (Peeks, Hints and Magic), piggy bank upgrades up to 1,000 coins, and Swap on a quest for 1 ticket. Level-ups pay up to 300 coins. Settings > Privacy > Share usage data.
 
-You already play, so you see the whole app as before. Please try: open play.carden.page in a private browser window (or delete and reinstall the app) to play the new start as a new player, and open the inbox in the Social tab.
+Please try: start Play together on a board and open the link on a second device or in Safari, then move cards on both. Add a friend by code and send them a gift.
