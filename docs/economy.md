@@ -39,7 +39,7 @@ All numbers are read from the code. Formulas use the Dart rounding (`round()` = 
 | Bonus video (rewarded house ad) | 40 each, 3 a day (5 until 2026-10-15), 10 min apart | - | - | `Economy.adRewardCoins`, `Profile.adsPerDay`, `HouseAdPolicy` |
 | Piggy bank | +5 per finished board (replays too), holds 500 (up to 1,000 with upgrades, see section 5); opening costs 1 ticket | -1 to open | - | `Economy.piggyPerPuzzle`, `Profile.piggyCapacity`, `openPiggy` |
 | Achievements (24 families, one-time) | 60 to 1,000 per step; 13,170 coins in total | 29 in total | - | `lib/state/achievements.dart` |
-| Lucky Wheel (costs 1 ticket, no daily free spin) | expected about 90 per spin: 100 (23%), 250 (23%), jackpot 1,000 at 1% (owner, 2026-10-15; was 60, 120 and 500 at 2.3%) | never pays tickets | 3 hints (9%), 5 Peeks (18%), 10 Peeks (14%), 1 Magic (10%), 3 Magic (2%): about 200 coins of value a spin | `wheel_screen.dart` |
+| Lucky Wheel (costs 1 ticket, no daily free spin) | expected about 90 per spin: 100 (23%), 250 (23%), jackpot 1,000 at 1% (owner, 2026-10-15; was 60, 120 and 500 at 2.3%). A ×5 spin (owner, 2026-10-17) costs 5 tickets and pays the prize it lands on five times, with the same odds (jackpot 5,000): the same value per ticket | never pays tickets | 3 hints (9%), 5 Peeks (18%), 10 Peeks (14%), 1 Magic (10%), 3 Magic (2%): about 200 coins of value a spin (×5: 15 hints, 25 or 50 Peeks, 5 or 15 Magic) | `wheel_screen.dart`, `Economy.wheelBigSpin` |
 | New profile | 500 | 3 | 3 | `Profile.guest` |
 | VIP | "+500 coins every week" is promised on the store and the App Store page, **but no code grants it** (see section 9) | | | |
 
@@ -158,7 +158,7 @@ cheap farming trick to worry about; replays pay 40% and are not worth farming.
 | Early board tier (before its level) | `600 + 300 x tier`: 1,500 / 1,800 / 2,100 / 2,400 / 2,700 for tiers 3 to 7 (levels 2, 3, 5, 7, 10) | `Economy.tierUnlockCoins` |
 | Giant boards before level 10 (with a Giant pack) | the pack's price (12 tickets) plus 1 ticket for every level to go: level 7 pays 12 + 3, level 1 pays 12 + 9; a player who has the pack (VIP) pays the levels only; paid once, giant boards then stay open (owner, 2026-10-15) | `Economy.giantEarlyFee`, `ProfileNotifier.openGiantEarly` (key `early:giant` in `profiles.unlockedTiers`) |
 | Avatars (28 for coins) | 900 coins each, 25,200 for all | `Economy.avatarCoins` |
-| Lucky Wheel spin | 1 ticket | `Economy.wheelSpinTickets` |
+| Lucky Wheel spin | 1 ticket, or 5 for a ×5 spin (five times the prize) | `Economy.wheelSpinTickets`, `Economy.wheelBigSpin` |
 | Opening the piggy bank | 1 ticket | `Economy.piggyOpenTickets` |
 | Piggy bank upgrade (owner, 2026-10-17: a coin sink) | 5,000 coins each, five of them: 500 -> 600 -> 700 -> 800 -> 900 -> 1,000 coins (25,000 for all five, about ten hours of a regular player's play) | `Economy.piggyUpgradeCoins`, `ProfileNotifier.upgradePiggy`, column `profiles.piggyLevel` |
 | Restoring a lost streak | `3 + longest ~/ 7` tickets, 3 to 10 | `Economy.streakRestoreTickets` |

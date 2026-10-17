@@ -23,6 +23,10 @@ class Economy {
   static const piggyOpenTickets = 1;
   static const wheelSpinTickets = 1;
 
+  /// The Lucky Wheel's ×5 spin (owner, 2026-10-17): five times the tickets for one spin with the same
+  /// odds, paying the prize it lands on five times (the 1,000-coin jackpot pays 5,000).
+  static const wheelBigSpin = 5;
+
   /// Early unlock of a board tier that is still above the player's level.
   static int tierUnlockCoins(int tierIndex) => 600 + 300 * tierIndex;
 
