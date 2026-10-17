@@ -14,7 +14,8 @@ ids, the Appwrite project/site/database ids (`card-jigsaw-world` site id, databa
 the old scheme `cardjigsaw://` and the old addresses carden.appwrite.network and card-jigsaw-world.appwrite.network
 (all still open the game; web guests keep their saves per address), and the local folder and
 `~/.local/share/card-jigsaw-world`. The homepage (repo `Meldiron/carden-website`) is https://www.carden.page;
-carden.page redirects there.
+carden.page redirects there. Play together invites are https://join.carden.page/<code> (a domain of `api`, shared
+from build 127; builds 124-126 share play.carden.page/join/<code>, which still works).
 
 ## Skills (load them when the task matches)
 
@@ -304,7 +305,8 @@ carden.page redirects there.
   Universal links (on from 2.0.0; Associated Domains on the App ID since 2026-10-16): `applinks:` for
   play.carden.page and both appwrite.network addresses in `Runner.entitlements` +
   `web/.well-known/apple-app-site-association` (keeps `/auth/*`, `/redeem*` and `/code*` in the browser). A new
-  link goes into `AppLink.parse`, the association file, the doc and `test/deep_links_test.dart`. `/join/<code>`
+  link goes into `AppLink.parse`, the association file, the doc and `test/deep_links_test.dart`;
+  `applinks:join.carden.page` from build 127, its association file served by `functions/api/src/invite/page.js`. `/join/<code>`
   invites to a shared game (a fresh install goes straight to the board; onboarding begins after leaving);
   `/inbox?message=<id>` (also `/inbox/<id>`, `/messages/<id>`) opens one Inbox message (gift notifications).
 - `lib/state/app_update.dart` + `lib/features/update/update_host.dart`: update prompt (above).
@@ -391,7 +393,13 @@ carden.page redirects there.
   (create/join/leave/remove/end/next; a team per game, seats in membership roles), `/gift/send`, `/health`. Its
   hourly schedule runs the co-op cleanup and the integrity sweep (`SWEEP_APPLY=true`: squatted or foreign-permission
   rows in progress/event_progress/friends/blocks, ghost profiles, orphan or public uploads, 500 photos per player,
-  refused names; full pass daily 04:00 UTC), and a `blocks` create event checks new rows at once; `/admin/sweep` and
+  refused names; full pass daily 04:00 UTC; invite cards older than 10 days), and a `blocks` create event checks new rows at once;
+  execute `any`, domains `cjw-api.fra.appwrite.run` and `join.carden.page` (invite pages only, edge-cached 10 min:
+  title and tags name the host, picture, board and players; no ids). Invite cards (1200x630 JPEG, today's design
+  with the real picture, shapes and count) are drawn in plain JS on `/coop/create` in a worker (`functions/api/src/invite/`:
+  raster, jpeg, and `tiling.js`, a port of `lib/game/tiling.dart` to keep in step, checked by `test/invite.test.mjs`)
+  into the public bucket `invite-cards` (keyed by picture, board, Painting and week); lettering atlas and
+  `web/invite-card.jpg` from `tools/brand/invite_card.py`. Any `api` deploy must include this code; `/admin/sweep` and
   `/coop/cleanup` are for the owner's CLI and refuse callers without a user. Live checks: `node tools/dev/api_check.mjs`, `security_check.mjs`.
   Modules load lazily; a cold start is about 5 s, warm calls 0.1-0.5 s. Kept for builds up to 124 (retire only
   when no build that calls them can be used): `verify-purchase` (also Apple's App Store Server Notifications at
