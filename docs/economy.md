@@ -622,21 +622,23 @@ twice.
 ## Square boards (owner, 2026-10-17)
 
 Every size is now the same N x N board in every mode (`docs/boards.md`): Cozy 3x3, Relaxed 4x4,
-Tricky 5x5, Expert 6x6, Master 7x7 (Triangles and Hexagons skip the sides their tilings cannot
-shuffle). The piece counts are the Cards ladder's square steps, which is what the model above plays
-(`CARD_CELLS` at tiers 2, 4 and 6: 16, 25, 36), so its results stand; Master is 49 cards instead of
-48. The other shapes had more pieces per size and now have about as many as Cards, so a size pays
-less there, in step with the shorter board (coins per hour per shape stay):
+Tricky 5x5, Expert 6x6, Master 7x7 (Triangles have no 3x3, Hexagons only 5x5 and 7x7). The Cards
+counts are the Cards ladder's square steps, which is what the model above plays (`CARD_CELLS` at
+tiers 2, 4 and 6: 16, 25, 36), so its results stand; Master is 49 cards instead of 48. A triangle
+column is one up and one down triangle, so Triangles keep about the counts they had per size (36,
+55, 78, 105 against 42, 60, 88, 108 before) and pay about as before. Squares and Hexagons had more
+pieces per size and now have about as many as Cards, so a size pays less there, in step with the
+shorter board (coins per hour per shape stay):
 
 | Master, 3 stars, first time | Before (3:4 picture) | Now |
 | --- | --- | --- |
 | Cards | 6x8 or 7x7 (48-49): 96-97 | 7x7 (49): 97 |
 | Squares | 8x11 (88): 202 | 7x7 (49): 112 |
-| Triangles | 12x9 (108): 292 | 7x7 (49): 131 |
+| Triangles | 12x9 (108): 292 | 7x7 (105): 284 |
 | Hexagons | 8x13 (110): 330 | 7x7 (52): 153 |
 
-Expand boards follow the picture and may have more pieces (Triangles and Hexagons need more to cover
-a portrait picture whole); every piece pays as before. Easy, Medium and Hard (tiers 1, 3 and 5) have
+Expand boards follow the picture and may have more pieces (Hexagons need more to cover a portrait
+picture whole); every piece pays as before. Easy, Medium and Hard (tiers 1, 3 and 5) have
 no square board and no Expand size: the level rewards at levels 2 and 5 no longer name a size, and
 the early unlocks of tiers 3 and 5 (1,500 and 2,100 coins) are no longer offered (boards saved on
 them still resume). Size quests name square sizes and count a square board as its side squared

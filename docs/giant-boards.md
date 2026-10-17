@@ -2,8 +2,9 @@
 
 Pictures of a pack with category `Giant` deal only four giant sizes (Large, Huge, Giant, Colossal).
 Like every board they are square (owner, 2026-10-17; `docs/boards.md`): in Cards 10x10, 12x12,
-14x14 and 17x17 (100 to 289 cards); Squares 13x13 to 22x22, Triangles 15x15 to 26x26 and Hexagons
-13x13 to 23x23, the squares nearest the counts those shapes had (`BoardSpec.squareGiantTiers`). The
+14x14 and 17x17 (100 to 289 cards); Squares 13x13 to 22x22, Triangles 10x10 to 18x18 (a column is
+one up and one down triangle) and Hexagons 13x13 to 23x23, the sizes nearest the counts those shapes
+had (`BoardSpec.squareGiantTiers`). The
 picture is centre-cropped to the board; Expand, where the picture's shape asks for it, deals the
 picture-shaped giant sizes of before (`BoardSpec.giantTiers`). The pictures are hosted at up to
 4096 px on the long side and decoded at full size, so the board can be zoomed in and stay sharp.
