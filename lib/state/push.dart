@@ -2,6 +2,7 @@ import 'package:appwrite/appwrite.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../core/analytics.dart';
 import '../core/appwrite.dart';
 import '../core/platform.dart';
 import '../core/push.dart';
@@ -155,6 +156,7 @@ class PushRegistration {
     var permission = await ReminderChannel.status();
     if (permission == ReminderPermission.notDetermined) {
       permission = await ReminderChannel.request(quiet: QaRun.enabled && QaRun.integrationRun) ? ReminderPermission.granted : ReminderPermission.denied;
+      AppAnalytics.event('push_permission', {'result': permission == ReminderPermission.granted ? 'granted' : 'denied'});
       _ref.invalidate(notificationsAllowedProvider);
     }
     if (permission != ReminderPermission.granted) return false;

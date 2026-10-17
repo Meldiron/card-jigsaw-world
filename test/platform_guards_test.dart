@@ -238,7 +238,8 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byKey(const ValueKey('settings-redeem-pack-code')), findsNothing);
       expect(find.text('Redeem a pack code'), findsNothing);
-      for (final key in ['settings-privacy', 'settings-terms', 'settings-support', 'settings-feedback', 'settings-blocked']) {
+      // In page order (Blocked players sits in Account, above About), dragging down only.
+      for (final key in ['settings-blocked', 'settings-privacy', 'settings-terms', 'settings-support', 'settings-feedback']) {
         await tester.dragUntilVisible(find.byKey(ValueKey(key)), find.byType(Scrollable).first, const Offset(0, -200));
         expect(find.byKey(ValueKey(key)), findsOneWidget, reason: key);
       }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/analytics.dart';
 import '../../core/haptics.dart';
 import '../../core/platform.dart';
 import '../../core/reminders.dart';
@@ -48,7 +49,10 @@ class _SendGiftButtonState extends ConsumerState<SendGiftButton> {
     // Sent now or earlier today (another device): the button turns to "Next gift tomorrow".
     if (result.ok || result.error == 'already') ref.invalidate(giftSentProvider(_key));
     final name = result.friendName ?? p.displayName;
-    if (result.ok) Haptics.success();
+    if (result.ok) {
+      Haptics.success();
+      AppAnalytics.event('gift_sent', {'kind': kind == GiftKind.tickets ? 'ticket' : 'coins'});
+    }
     showToast(context, result.message(name), icon: result.ok || result.error == 'already' ? AppIcons.gift : AppIcons.signal);
     if (result.ok) await offerGiftNotifications(context, ProviderScope.containerOf(context, listen: false));
   }

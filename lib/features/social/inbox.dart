@@ -279,6 +279,7 @@ class _MessageSheetState extends ConsumerState<_MessageSheet> {
     final paid = ref.read(profileProvider.notifier).claimMessage(m.id, coins: m.coins, tickets: m.tickets, hints: m.hints, peeks: m.peeks, magics: m.magics);
     if (!paid) return;
     AppAnalytics.event('inbox_message_claimed', {'coins': m.coins, 'tickets': m.tickets, 'hints': m.hints, 'peeks': m.peeks, 'magics': m.magics});
+    if (m.fromFriend) AppAnalytics.event('gift_claimed', {'kind': m.tickets > 0 ? 'ticket' : 'coins'});
     Sfx.instance.coin();
     Haptics.success();
     final words = [

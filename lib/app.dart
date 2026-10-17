@@ -115,6 +115,7 @@ class _CardenAppState extends ConsumerState<CardenApp> with WidgetsBindingObserv
       if (!mounted) return;
       await ref.read(pushRegistrationProvider).start(
         onOpen: (link) {
+          AppAnalytics.event('push_opened', {'kind': 'gift'});
           final parsed = AppLink.parse(Uri.parse(link));
           if (mounted && parsed != null) ref.read(deepLinksProvider).show(parsed);
         },
