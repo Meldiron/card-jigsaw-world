@@ -50,6 +50,17 @@ void main() {
     await binding.takeScreenshot(name);
   }
 
+  /// A pack page's picture tile shows no title (only VoiceOver reads it): find the tile by its
+  /// semantics label and scroll the grid until it is built and on screen.
+  Future<void> tapPicture(WidgetTester tester, String title, {int ms = 1200}) async {
+    final tile = find.byWidgetPredicate((w) => w is Semantics && (w.properties.label ?? '').split(', ').contains(title));
+    await tester.dragUntilVisible(tile, find.byType(Scrollable).first, const Offset(0, -250));
+    await settle(tester, 600);
+    expect(tile, findsWidgets, reason: 'expected the picture "$title" on screen');
+    await tester.tap(tile.first, warnIfMissed: false);
+    await settle(tester, ms);
+  }
+
   Future<void> tapText(WidgetTester tester, String text, {int ms = 1200}) async {
     final f = find.text(text);
     expect(f, findsWidgets, reason: 'expected "$text" on screen');
@@ -114,7 +125,7 @@ void main() {
     // ---- Painting: Library > Wild Nature > Hidden Waterfall > Cozy + Painting.
     await tapText(tester, 'Library', ms: 3000);
     await tapText(tester, 'Wild Nature', ms: 4000);
-    await tapText(tester, 'Hidden Waterfall', ms: 4000);
+    await tapPicture(tester, 'Hidden Waterfall', ms: 4000);
     expect(find.byType(DifficultyScreen), findsOneWidget);
     await tester.dragUntilVisible(find.text('Cozy'), find.byType(Scrollable).first, const Offset(0, -200));
     await tapText(tester, 'Cozy', ms: 600);

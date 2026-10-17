@@ -36,6 +36,17 @@ void main() {
     await binding.takeScreenshot(name);
   }
 
+  /// A pack page's picture tile shows no title (only VoiceOver reads it): find the tile by its
+  /// semantics label and scroll the grid until it is built and on screen.
+  Future<void> tapPicture(WidgetTester tester, String title, {int ms = 1200}) async {
+    final tile = find.byWidgetPredicate((w) => w is Semantics && (w.properties.label ?? '').split(', ').contains(title));
+    await tester.dragUntilVisible(tile, find.byType(Scrollable).first, const Offset(0, -250));
+    await settle(tester, 600);
+    expect(tile, findsWidgets, reason: 'expected the picture "$title" on screen');
+    await tester.tap(tile.first, warnIfMissed: false);
+    await settle(tester, ms);
+  }
+
   Future<void> tapText(WidgetTester tester, String text, {int ms = 1200}) async {
     final f = find.text(text);
     expect(f, findsWidgets, reason: 'expected "$text" on screen');
@@ -180,13 +191,15 @@ void main() {
     await tapText(tester, 'Wild Nature', ms: 4000);
     await shot(tester, '05_pack');
     // Open first puzzle tile via its title.
-    await tapText(tester, 'Hidden Waterfall', ms: 4000);
+    await tapPicture(tester, 'Hidden Waterfall', ms: 4000);
     await shot(tester, '06_difficulty');
     // Board sizes now depend on the picture's shape; pick the tier by name.
-    await tester.dragUntilVisible(find.text('Cozy'), find.byType(Scrollable).first, const Offset(0, -200));
-    await settle(tester, 600);
+    // ensureVisible, not a drag: a tap while the size row still glides only stops it.
+    await tester.ensureVisible(find.text('Cozy'));
+    await settle(tester, 1200);
     await tapText(tester, 'Cozy');
     await settle(tester, 500);
+    await shot(tester, '06b_difficulty_cozy');
     await tester.tap(find.byKey(const ValueKey('play-board')), warnIfMissed: false);
     await settle(tester, 6000);
     if (find.text('Got it').evaluate().isNotEmpty) {
@@ -198,7 +211,11 @@ void main() {
     final boardFinder = find.byWidgetPredicate((w) => w.runtimeType.toString() == 'BoardWidget');
     if (boardFinder.evaluate().isNotEmpty) {
       final rect = tester.getRect(boardFinder.first);
-      final cw = rect.width / 3, ch = rect.height / 3;
+      // Cozy is 3x3 on a fresh player, but the size a player last chose (or Expand) can differ:
+      // read the dealt board's own columns and rows.
+      final spec = tester.widget<BoardWidget>(boardFinder.first).state.board.spec;
+      final cols = spec.cols, rows = spec.rows;
+      final cw = rect.width / cols, ch = rect.height / rows;
       Offset cell(int c, int r) => Offset(rect.left + cw * (c + 0.5), rect.top + ch * (r + 0.5));
       await tester.tapAt(cell(0, 0));
       await settle(tester, 300);
@@ -210,19 +227,19 @@ void main() {
         final bw = tester.widget<BoardWidget>(boardFinder.first);
         final b = bw.state.board;
         final s0 = b.slotOfCard(0);
-        if (!b.isLocked(s0) && s0 % 3 < 2) {
+        if (!b.isLocked(s0) && s0 % cols < cols - 1) {
           final s1 = b.slotOfCard(1);
           if (s1 != s0 + 1 && !b.isLocked(s0 + 1)) {
-            await tester.tapAt(cell(s1 % 3, s1 ~/ 3));
+            await tester.tapAt(cell(s1 % cols, s1 ~/ cols));
             await settle(tester, 250);
-            await tester.tapAt(cell((s0 + 1) % 3, (s0 + 1) ~/ 3));
+            await tester.tapAt(cell((s0 + 1) % cols, (s0 + 1) ~/ cols));
             await settle(tester, 900);
           }
         }
       }
       await shot(tester, '09b_game_group');
       // Drag a card onto another.
-      await tester.timedDragFrom(cell(2, 2), cell(0, 2) - cell(2, 2), const Duration(milliseconds: 500));
+      await tester.timedDragFrom(cell(cols - 1, rows - 1), cell(0, rows - 1) - cell(cols - 1, rows - 1), const Duration(milliseconds: 500));
       await settle(tester, 900);
       await shot(tester, '10_game_progress');
     }
@@ -357,12 +374,17 @@ void main() {
     await tapText(tester, 'Home', ms: 2500);
     await shot(tester, '23_home_dark');
     await tapText(tester, 'Library', ms: 2500);
+    // The Library tab keeps its own pages (the picture opened earlier): back to its first page.
+    for (var i = 0; i < 4 && find.byIcon(CupertinoIcons.back).evaluate().isNotEmpty; i++) {
+      await tester.tap(find.byIcon(CupertinoIcons.back).first, warnIfMissed: false);
+      await settle(tester, 900);
+    }
     await tapText(tester, 'Wild Nature', ms: 3000);
     await shot(tester, '24_pack_dark');
-    await tapText(tester, 'Hidden Waterfall', ms: 3000);
+    await tapPicture(tester, 'Hidden Waterfall', ms: 3000);
     if (find.text('Relaxed').evaluate().isNotEmpty) {
-      await tester.dragUntilVisible(find.text('Relaxed'), find.byType(Scrollable).first, const Offset(0, -200));
-      await settle(tester, 600);
+      await tester.ensureVisible(find.text('Relaxed'));
+      await settle(tester, 1200);
       await tapText(tester, 'Relaxed');
       await tester.tap(find.byKey(const ValueKey('play-board')), warnIfMissed: false);
     }
